@@ -457,10 +457,17 @@ class VirtualConnection(object):
         # if needed
         if "domcaps" in opts:
             domcapsxml = file(opts.pop("domcaps")).read()
-            def fake_domcaps(*args, **kwargs):
-                ignore = args
-                ignore = kwargs
-                return domcapsxml
+            def fake_domcaps(emulator, arch, machine, virttype, flags=0):
+                ignore = emulator
+                ignore = flags
+                ignore = machine
+                ignore = virttype
+
+                ret = domcapsxml
+                if arch:
+                    ret = re.sub("arch>.+</arch", "arch>%s</arch" % arch, ret)
+                return ret
+
             conn.getDomainCapabilities = fake_domcaps
 
         if ("qemu" in opts) or ("xen" in opts) or ("lxc" in opts):

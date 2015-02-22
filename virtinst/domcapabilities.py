@@ -107,24 +107,24 @@ class DomainCapabilities(XMLBuilder):
         ],
     }
 
-    def find_uefi_path_for_arch(self, arch):
+    def find_uefi_path_for_arch(self):
         """
         Search the loader paths for one that matches the passed arch
         """
-        if not self.arch_can_uefi(arch):
+        if not self.arch_can_uefi():
             return
 
-        patterns = self._uefi_arch_patterns.get(arch)
+        patterns = self._uefi_arch_patterns.get(self.arch)
         for pattern in patterns:
             for path in [v.value for v in self.os.loader.values]:
                 if re.match(pattern, path):
                     return path
 
-    def arch_can_uefi(self, arch):
+    def arch_can_uefi(self):
         """
         Return True if we know how to setup UEFI for the passed arch
         """
-        return arch in self._uefi_arch_patterns.keys()
+        return self.arch in self._uefi_arch_patterns.keys()
 
     def supports_uefi_xml(self):
         """
@@ -137,3 +137,5 @@ class DomainCapabilities(XMLBuilder):
     _XML_ROOT_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
     devices = XMLChildProperty(_Devices, is_single=True)
+
+    arch = XMLProperty("./arch")

@@ -544,12 +544,12 @@ class Guest(XMLBuilder):
         if not domcaps.supports_uefi_xml():
             raise RuntimeError(_("Libvirt version does not support UEFI."))
 
-        if not domcaps.arch_can_uefi(self.os.arch):
+        if not domcaps.arch_can_uefi():
             raise RuntimeError(
                 _("Don't know how to setup UEFI for arch '%s'") %
                 self.os.arch)
 
-        path = domcaps.find_uefi_path_for_arch(self.os.arch)
+        path = domcaps.find_uefi_path_for_arch()
         if not path:
             raise RuntimeError(_("Did not find any UEFI binary path for "
                 "arch '%s'") % self.os.arch)
