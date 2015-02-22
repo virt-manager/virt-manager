@@ -18,16 +18,9 @@
 
 # End local config
 
-
-# This macro is used for the continuous automated builds. It just
-# allows an extra fragment based on the timestamp to be appended
-# to the release. This distinguishes automated builds, from formal
-# Fedora RPM builds
-%define _extra_release %{?dist:%{dist}}%{?extra_release:%{extra_release}}
-
 Name: virt-manager
 Version: @VERSION@
-Release: 1%{_extra_release}
+Release: 1%{?dist}
 %define verrel %{version}-%{release}
 
 Summary: Virtual Machine Manager
