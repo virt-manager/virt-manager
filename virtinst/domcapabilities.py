@@ -79,15 +79,19 @@ class _Devices(_CapsBlock):
 
 class DomainCapabilities(XMLBuilder):
     @staticmethod
-    def build_from_guest(guest):
-        if not guest.conn.check_support(
-            guest.conn.SUPPORT_CONN_DOMAIN_CAPABILITIES):
+    def build_from_params(conn, emulator, arch, machine, hvtype):
+        if not conn.check_support(
+            conn.SUPPORT_CONN_DOMAIN_CAPABILITIES):
             # If not supported, just use a stub object
-            return DomainCapabilities(guest.conn)
+            return DomainCapabilities(conn)
 
-        xml = guest.conn.getDomainCapabilities(
+        xml = conn.getDomainCapabilities(emulator, arch, machine, hvtype)
+        return DomainCapabilities(conn, parsexml=xml)
+
+    @staticmethod
+    def build_from_guest(guest):
+        return DomainCapabilities.build_from_params(guest.conn,
             guest.emulator, guest.os.arch, guest.os.machine, guest.type)
-        return DomainCapabilities(guest.conn, parsexml=xml)
 
     # Mapping of UEFI binary names to their associated architectures. We
     # only use this info to do things automagically for the user, it shouldn't

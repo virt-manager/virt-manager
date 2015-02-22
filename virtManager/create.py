@@ -420,6 +420,21 @@ class vmmCreate(vmmGObjectUI):
         installable_arch = (self.capsguest.arch in
                             ["i686", "x86_64", "ppc64", "ia64"])
 
+        if self.capsguest.arch == "aarch64":
+            try:
+                guest = self.conn.caps.build_virtinst_guest(
+                    self.conn.get_backend(), self.capsguest, self.capsdomain)
+                guest.set_uefi_default()
+                installable_arch = True
+                logging.debug("UEFI found for aarch64, setting it as default.")
+            except Exception, e:
+                installable_arch = False
+                logging.debug("Error checking for aarch64 UEFI default",
+                    exc_info=True)
+                msg = _("Failed to setup UEFI for AArch64: %s\n"
+                        "Install options are limited.") % e
+                self.startup_warning(msg)
+
         # Install Options
         method_tree = self.widget("method-tree")
         method_pxe = self.widget("method-pxe")
@@ -483,11 +498,10 @@ class vmmCreate(vmmGObjectUI):
         self.widget("virt-install-box").set_visible(not is_container)
         self.widget("container-install-box").set_visible(is_container)
 
-        show_kernel = (self.capsguest.arch not in ["x86_64", "i686"])
         show_dtb = ("arm" in self.capsguest.arch or
                     "microblaze" in self.capsguest.arch or
                     "ppc" in self.capsguest.arch)
-        self.widget("config-kernel-box").set_visible(show_kernel)
+        self.widget("config-kernel-box").set_visible(not installable_arch)
         uiutil.set_grid_row_visible(self.widget("config-dtb"), show_dtb)
 
     def set_conn_state(self):
@@ -1415,6 +1429,14 @@ class vmmCreate(vmmGObjectUI):
         except ValueError, e:
             self.err.show_err(_("Error setting OS information."), e)
             return None
+
+        if guest.os.is_arm64():
+            try:
+                guest.set_uefi_default()
+            except:
+                # If this errors we will have already informed the user
+                # on page 1.
+                pass
 
         # Set up default devices
         try:
