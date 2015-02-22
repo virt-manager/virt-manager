@@ -120,6 +120,24 @@ class DomainCapabilities(XMLBuilder):
                 if re.match(pattern, path):
                     return path
 
+    def label_for_firmware_path(self, path):
+        """
+        Return a pretty label for passed path, based on if we know
+        about it or not
+        """
+        if not path:
+            if self.arch in ["i686", "x86_64"]:
+                return _("BIOS")
+            return _("None")
+
+        for arch, patterns in self._uefi_arch_patterns.items():
+            for pattern in patterns:
+                if re.match(pattern, path):
+                    return (_("UEFI %(arch)s: %(path)s") %
+                        {"arch": arch, "path": path})
+
+        return _("Custom: %(path)s" % {"path": path})
+
     def arch_can_uefi(self):
         """
         Return True if we know how to setup UEFI for the passed arch

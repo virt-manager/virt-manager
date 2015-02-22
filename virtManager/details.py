@@ -302,18 +302,6 @@ def _warn_cpu_thread_topo(threads, cpu_model):
     return False
 
 
-def _firmware_label_from_loader(vm, loader, force_uefi=False):
-    domcaps = vm.get_domain_capabilities()
-    if (domcaps.os.loader.values and
-        loader == domcaps.os.loader.values[0].value) or force_uefi:
-        return "UEFI"
-
-    if loader is None:
-        return "BIOS"
-
-    return "Custom"
-
-
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
         "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
@@ -795,6 +783,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Firmware
         combo = self.widget("overview-firmware")
+        # [label, path, is_sensitive]
         model = Gtk.ListStore(str, str, bool)
         combo.set_model(model)
         text = Gtk.CellRendererText()
@@ -803,29 +792,30 @@ class vmmDetails(vmmGObjectUI):
         combo.add_attribute(text, "sensitive", 2)
 
         domcaps = self.vm.get_domain_capabilities()
-        uefipath = None
-        if domcaps.os.loader.values:
-            uefipath = domcaps.os.loader.values[0].value
+        uefipaths = [v.value for v in domcaps.os.loader.values]
 
         warn_icon = self.widget("overview-firmware-warn")
         hv_supports_uefi = domcaps.supports_uefi_xml()
         if not hv_supports_uefi:
             warn_icon.set_tooltip_text(
                 _("Libvirt or hypervisor does not support UEFI."))
-        elif not uefipath:
+        elif not uefipaths:
             warn_icon.set_tooltip_text(
                 _("Libvirt did not detect any UEFI/OVMF firmware image "
                   "installed on the host."))
 
-        model.append([_firmware_label_from_loader(self.vm, None),
-            None, True])
-        model.append([_firmware_label_from_loader(
-            self.vm, uefipath, force_uefi=True), uefipath,
-            bool(uefipath and hv_supports_uefi)])
+        model.append([domcaps.label_for_firmware_path(None), None, True])
+        if not uefipaths:
+            model.append([_("UEFI not found"), None, False])
+        else:
+            for path in uefipaths:
+                model.append([domcaps.label_for_firmware_path(path),
+                    path, True])
+
         combo.set_active(0)
 
         self.widget("overview-firmware-warn").set_visible(
-            not (uefipath and hv_supports_uefi) and self.is_customize_dialog)
+            not (uefipaths and hv_supports_uefi) and self.is_customize_dialog)
         self.widget("overview-firmware").set_visible(self.is_customize_dialog)
         self.widget("overview-firmware-label").set_visible(
             not self.is_customize_dialog)
@@ -2400,7 +2390,8 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-emulator").set_text(emu)
 
         # Firmware
-        firmware = _firmware_label_from_loader(self.vm,
+        domcaps = self.vm.get_domain_capabilities()
+        firmware = domcaps.label_for_firmware_path(
             self.vm.get_xmlobj().os.loader)
         if self.widget("overview-firmware").is_visible():
             uiutil.set_combo_entry(
