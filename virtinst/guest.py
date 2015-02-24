@@ -1,7 +1,7 @@
 #
 # Common code for all guests
 #
-# Copyright 2006-2009, 2013, 2014 Red Hat, Inc.
+# Copyright 2006-2009, 2013, 2014, 2015 Red Hat, Inc.
 # Jeremy Katz <katzj@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1065,6 +1065,8 @@ class Guest(XMLBuilder):
             self._add_spice_usbredir()
 
         video_model = self._os_object.get_videomodel(self)
+        if self.conn.stable_defaults() and video_model == 'vmvga':
+            video_model == 'vga'
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model
