@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006, 2012-2014 Red Hat, Inc.
+# Copyright (C) 2006, 2012-2015 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -155,7 +155,6 @@ class vmmConfig(object):
         self.keyring = None
 
         self.default_qemu_user = cliconfig.default_qemu_user
-        self.stable_defaults = cliconfig.stable_defaults
         self.preferred_distros = cliconfig.preferred_distros
         self.hv_packages = cliconfig.hv_packages
         self.libvirt_packages = cliconfig.libvirt_packages

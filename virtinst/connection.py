@@ -1,5 +1,5 @@
 #
-# Copyright 2013, 2014 Red Hat, Inc.
+# Copyright 2013, 2014, 2015 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ from .cli import VirtOptionString
 from .guest import Guest
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
+from virtcli import cliconfig
 
 _virtinst_uri_magic = "__virtinst_test__"
 
@@ -326,6 +327,18 @@ class VirtualConnection(object):
                 self._conn_version = self._libvirtconn.getVersion()
         return self._conn_version
 
+    def stable_defaults(self, emulator=None):
+        if not self.is_qemu_system():
+            return False
+        if emulator:
+            if not str(emulator).startswith("/usr/libexec"):
+                return False
+        else:
+            for guest in self.caps.guests:
+                for dom in guest.domains:
+                    if dom.emulator.startswith("/usr/libexec"):
+                        return self.config.stable_defaults
+        return cliconfig.stable_defaults
 
     ###################
     # Public URI bits #

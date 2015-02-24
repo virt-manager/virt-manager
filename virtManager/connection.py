@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006, 2013, 2014 Red Hat, Inc.
+# Copyright (C) 2006, 2013, 2014, 2015 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -314,18 +314,8 @@ class vmmConnection(vmmGObject):
 
 
     # Connection capabilities debug helpers
-    def stable_defaults(self, emulator=None):
-        if not self.is_qemu_system():
-            return False
-        if emulator:
-            if not str(emulator).startswith("/usr/libexec"):
-                return False
-        else:
-            for guest in self.caps.guests:
-                for dom in guest.domains:
-                    if dom.emulator.startswith("/usr/libexec"):
-                        return self.config.stable_defaults
-        return self.config.stable_defaults
+    def stable_defaults(self, *args, **kwargs):
+        return self._backend.stable_defaults(*args, **kwargs)
 
     def get_cache_dir(self):
         uri = self.get_uri().replace("/", "_")
