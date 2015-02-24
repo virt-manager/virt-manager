@@ -1066,7 +1066,7 @@ class Guest(XMLBuilder):
 
         video_model = self._os_object.get_videomodel(self)
         if self.conn.stable_defaults() and video_model == 'vmvga':
-            video_model == 'vga'
+            video_model = 'vga'
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model

@@ -20,6 +20,7 @@ import os
 
 import virtinst
 from virtinst import VirtualDisk
+from virtcli import cliconfig
 
 from tests import utils
 
@@ -296,6 +297,7 @@ class TestXMLMisc(unittest.TestCase):
 
         try:
             virtinst.stable_defaults = True
+            cliconfig.stable_defaults = True
             origemu = g.emulator
             g.emulator = "/usr/libexec/qemu-kvm"
             setattr(g.conn, "_support_cache", {})
@@ -303,7 +305,27 @@ class TestXMLMisc(unittest.TestCase):
             g.emulator = origemu
             setattr(g.conn, "_support_cache", {})
         finally:
+            cliconfig.stable_defaults = False
             virtinst.stable_defaults = False
 
         # Verify main guest wasn't polluted
         self._compare(g, "install-f11-norheldefaults", do_install)
+
+    def test_no_vmvga_RHEL(self):
+        # Test that vmvga is not used on RHEL
+
+        conn = utils.open_plainkvm(connver=12005)
+        g = _make_guest(conn=conn)
+
+        try:
+            virtinst.stable_defaults = True
+            cliconfig.stable_defaults = True
+            g.emulator = "/usr/libexec/qemu-kvm"
+            g.add_default_video_device()
+
+            g.os_variant = "ubuntu13.10"
+            g.get_install_xml(True)
+            self._compare(g, "install-novmvga-rhel", True)
+        finally:
+            cliconfig.stable_defaults = False
+            virtinst.stable_defaults = False
