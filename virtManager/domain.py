@@ -1513,7 +1513,9 @@ class vmmDomain(vmmLibvirtObject):
             pcentbase = (((cpuTime) * 100.0) /
                          ((now - prevTimestamp) * 1000.0 * 1000.0 * 1000.0))
             pcentHostCpu = pcentbase / hostcpus
-            pcentGuestCpu = pcentbase / guestcpus
+            # Under RHEL-5.9 using a XEN HV guestcpus can be 0 during shutdown
+            # so play safe and check it.
+            pcentGuestCpu = guestcpus > 0 and pcentbase / guestcpus or 0
 
         pcentHostCpu = max(0.0, min(100.0, pcentHostCpu))
         pcentGuestCpu = max(0.0, min(100.0, pcentGuestCpu))
