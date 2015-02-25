@@ -963,16 +963,18 @@ class Guest(XMLBuilder):
                 used_targets.append(disk.generate_target(used_targets))
 
     def _set_net_defaults(self):
+        net_model = None
+        variant = osdict.lookup_os(self.os_variant)
         if not self.os.is_hvm():
             net_model = None
         elif self._can_virtio("virtionet"):
             net_model = "virtio"
-        else:
+        elif variant and not variant.virtionet:
             net_model = self._lookup_osdict_key("netmodel", None)
-
-        for net in self.get_devices("interface"):
-            if net_model and not net.model:
-                net.model = net_model
+        if net_model:
+            for net in self.get_devices("interface"):
+                if not net.model:
+                    net.model = net_model
 
     def _set_input_defaults(self):
         input_type = self._lookup_osdict_key("inputtype", "mouse")
