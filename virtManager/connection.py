@@ -25,6 +25,7 @@ import os
 import socket
 import time
 import traceback
+from virtinst import support
 
 import libvirt
 import virtinst
@@ -752,6 +753,9 @@ class vmmConnection(vmmGObject):
             self.schedule_priority_tick(pollnet=True, force=True)
 
     def _add_conn_events(self):
+        if not self.check_support(support.SUPPORT_CONN_WORKING_XEN_EVENTS):
+            return
+
         try:
             if _disable_libvirt_events:
                 raise RuntimeError("_disable_libvirt_events = True")

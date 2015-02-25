@@ -262,6 +262,7 @@ SUPPORT_CONN_DEFAULT_QCOW2 = _make(
 SUPPORT_CONN_DEFAULT_USB2 = _make(
     version="0.9.7", hv_version={"qemu": "1.0.0", "test": 0})
 SUPPORT_CONN_CAN_ACPI = _make(hv_version={"xen": "3.1.0", "all": 0})
+SUPPORT_CONN_WORKING_XEN_EVENTS = _make(hv_version={"xen": "4.0.0", "all": 0})
 SUPPORT_CONN_SOUND_AC97 = _make(
     version="0.8.0", hv_version={"qemu": "0.11.0"})
 SUPPORT_CONN_SOUND_ICH6 = _make(
