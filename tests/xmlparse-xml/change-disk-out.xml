@@ -31,6 +31,12 @@
     <disk type="block" device="floppy">
       <target dev="fde" bus="fdc"/>
     </disk>
+    <disk type="block" device="lun" sgio="unfiltered">
+      <driver name="qemu" type="raw"/>
+      <source dev="/dev/sda"/>
+      <target dev="hdd" bus="scsi"/>
+      <readonly/>
+    </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source dev="/dev/null"/>

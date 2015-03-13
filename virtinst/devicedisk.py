@@ -742,6 +742,7 @@ class VirtualDisk(VirtualDevice):
     driver_type = XMLProperty("./driver/@type",
                               default_cb=_get_default_driver_type)
 
+    sgio = XMLProperty("./@sgio")
 
     bus = XMLProperty("./target/@bus")
     target = XMLProperty("./target/@dev")

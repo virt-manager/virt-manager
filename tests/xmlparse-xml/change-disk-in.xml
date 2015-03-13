@@ -34,6 +34,12 @@
       <driver name='phy' error_policy='stop'/>
       <readonly/>
     </disk>
+    <disk type="block" device="lun">
+      <driver name='qemu' type='raw'/>
+      <source dev='/dev/sda'/>
+      <target dev='hdd' bus='scsi'/>
+      <readonly/>
+    </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source dev="/dev/null"/>

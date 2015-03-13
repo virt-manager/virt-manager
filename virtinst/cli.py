@@ -1532,6 +1532,7 @@ class ParserDisk(VirtCLIParser):
         self.set_param("iotune_ris", "read_iops_sec")
         self.set_param("iotune_wis", "write_iops_sec")
         self.set_param("iotune_tis", "total_iops_sec")
+        self.set_param("sgio", "sgio")
 
 
     def _parse(self, opts, inst):

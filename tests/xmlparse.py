@@ -347,6 +347,12 @@ class XMLParseTest(unittest.TestCase):
         check("bus", "ide", "fdc")
         check("error_policy", "stop", None)
 
+        disk = _get_disk("hdd")
+        check = self._make_checker(disk)
+        check("type", "block")
+        check("device", "lun")
+        check("sgio", None, "unfiltered")
+
         disk = _get_disk("sda")
         check = self._make_checker(disk)
         check("path", None, "http://[1:2:3:4:5:6:7:8]:1122/my/file")
