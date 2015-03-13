@@ -75,6 +75,7 @@ EDIT_DISK_BUS,
 EDIT_DISK_SERIAL,
 EDIT_DISK_FORMAT,
 EDIT_DISK_IOTUNE,
+EDIT_DISK_SGIO,
 
 EDIT_SOUND_MODEL,
 
@@ -104,7 +105,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 45)
+) = range(1, 46)
 
 
 # Columns in hw list model
@@ -499,6 +500,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_format_changed": self.disk_format_changed,
             "on_disk_serial_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SERIAL),
             "on_disk_iotune_changed": self.iotune_changed,
+            "on_disk_sgio_entry_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SGIO),
 
             "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
 
@@ -2124,6 +2126,10 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_DISK_SERIAL):
             kwargs["serial"] = self.get_text("disk-serial")
 
+        if self.edited(EDIT_DISK_SGIO):
+            sgio = uiutil.get_combo_entry(self.widget("disk-sgio"))
+            kwargs["sgio"] = sgio
+
         if self.edited(EDIT_DISK_IOTUNE):
             kwargs["iotune_rbs"] = int(
                 self.widget("disk-iotune-rbs").get_value() * 1024)
@@ -2597,6 +2603,15 @@ class vmmDetails(vmmGObjectUI):
             ignore, upper = maxmem.get_range()
             maxmem.set_range(curmem.get_value(), upper)
 
+    @staticmethod
+    def build_disk_sgio(vm, combo):
+        ignore = vm
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uiutil.set_combo_text_column(combo, 1)
+        model.append([None, "default"])
+        model.append(["filtered", "filtered"])
+        model.append(["unfiltered", "unfiltered"])
 
     def refresh_disk_page(self):
         disk = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -2675,6 +2690,13 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-removable").set_active(removable)
         uiutil.set_grid_row_visible(self.widget("disk-removable"),
                                        can_set_removable)
+
+        is_lun = disk.device == virtinst.VirtualDisk.DEVICE_LUN
+        uiutil.set_grid_row_visible(self.widget("disk-sgio"), is_lun)
+        if is_lun:
+            self.build_disk_sgio(self.vm, self.widget("disk-sgio"))
+            uiutil.set_combo_entry(self.widget("disk-sgio"), disk.sgio)
+
         self.widget("disk-size").set_text(size)
         uiutil.set_combo_entry(self.widget("disk-cache"), cache)
         uiutil.set_combo_entry(self.widget("disk-io"), io)

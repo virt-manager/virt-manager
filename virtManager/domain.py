@@ -715,7 +715,8 @@ class vmmDomain(vmmLibvirtObject):
         shareable=_SENTINEL, removable=_SENTINEL, cache=_SENTINEL,
         io=_SENTINEL, driver_type=_SENTINEL, bus=_SENTINEL, addrstr=_SENTINEL,
         iotune_rbs=_SENTINEL, iotune_ris=_SENTINEL, iotune_tbs=_SENTINEL,
-        iotune_tis=_SENTINEL, iotune_wbs=_SENTINEL, iotune_wis=_SENTINEL):
+        iotune_tis=_SENTINEL, iotune_wbs=_SENTINEL, iotune_wis=_SENTINEL,
+        sgio=_SENTINEL):
         def _change_bus(editdev):
             oldprefix = editdev.get_target_prefix()[0]
             oldbus = editdev.bus
@@ -776,6 +777,8 @@ class vmmDomain(vmmLibvirtObject):
                 editdev.iotune_wbs = iotune_wbs
             if iotune_wis != _SENTINEL:
                 editdev.iotune_wis = iotune_wis
+            if sgio != _SENTINEL:
+                editdev.sgio = sgio or None
 
             if bus != _SENTINEL:
                 _change_bus(editdev)
