@@ -328,17 +328,21 @@ class VirtualConnection(object):
         return self._conn_version
 
     def stable_defaults(self, emulator=None):
+        if not cliconfig.stable_defaults:
+            return False
+
         if not self.is_qemu_system():
             return False
+
         if emulator:
-            if not str(emulator).startswith("/usr/libexec"):
-                return False
-        else:
-            for guest in self.caps.guests:
-                for dom in guest.domains:
-                    if dom.emulator.startswith("/usr/libexec"):
-                        return cliconfig.stable_defaults
-        return cliconfig.stable_defaults
+            return str(emulator).startswith("/usr/libexec")
+
+        for guest in self.caps.guests:
+            for dom in guest.domains:
+                if dom.emulator.startswith("/usr/libexec"):
+                    return True
+        return False
+
 
     ###################
     # Public URI bits #

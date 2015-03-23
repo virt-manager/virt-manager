@@ -285,7 +285,8 @@ class TestXMLMisc(unittest.TestCase):
         Make sure device defaults are properly changed if we change OS
         distro/variant mid process
         """
-        conn = utils.open_plainkvm(connver=12005)
+        # Use connver=12005 so that non-rhel displays ac97
+        conn = utils.open_rhelkvm(connver=12005)
         g = _make_guest(conn=conn)
         do_install = False
 
@@ -299,6 +300,8 @@ class TestXMLMisc(unittest.TestCase):
             cliconfig.stable_defaults = True
             origemu = g.emulator
             g.emulator = "/usr/libexec/qemu-kvm"
+            self.assertTrue(g.conn.stable_defaults())
+
             setattr(g.conn, "_support_cache", {})
             self._compare(g, "install-f11-rheldefaults", do_install)
             g.emulator = origemu
@@ -311,8 +314,7 @@ class TestXMLMisc(unittest.TestCase):
 
     def test_no_vmvga_RHEL(self):
         # Test that vmvga is not used on RHEL
-
-        conn = utils.open_plainkvm(connver=12005)
+        conn = utils.open_rhelkvm(connver=12005)
         g = _make_guest(conn=conn)
 
         try:
