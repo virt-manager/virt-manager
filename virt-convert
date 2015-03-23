@@ -98,6 +98,7 @@ def main(conn=None):
     if options.xmlonly:
         options.dry = True
         options.quiet = True
+        options.autoconsole = False
 
     print_cb = print_stdout
     if options.quiet:
