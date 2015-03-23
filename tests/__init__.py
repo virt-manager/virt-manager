@@ -24,9 +24,6 @@ os.environ["VIRTINST_TEST_SUITE"] = "1"
 os.environ["VIRTINST_TEST_URL_DIR"] = os.path.abspath(
     "tests/cli-test-xml/fakefedoratree/")
 
-import virtinst
-virtinst.stable_defaults = False
-
 from virtcli import cliconfig
 # This sets all the cli bits back to their defaults
 reload(cliconfig)
@@ -37,6 +34,7 @@ from tests import utils
 # Access to protected member, needed to unittest stuff
 
 # Force certain helpers to return consistent values
+import virtinst
 virtinst.util.is_blktap_capable = lambda ignore: False
 virtinst.util.default_bridge = lambda ignore1: "eth0"
 

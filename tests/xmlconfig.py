@@ -296,7 +296,6 @@ class TestXMLMisc(unittest.TestCase):
         self._compare(g, "install-f11-norheldefaults", do_install)
 
         try:
-            virtinst.stable_defaults = True
             cliconfig.stable_defaults = True
             origemu = g.emulator
             g.emulator = "/usr/libexec/qemu-kvm"
@@ -306,7 +305,6 @@ class TestXMLMisc(unittest.TestCase):
             setattr(g.conn, "_support_cache", {})
         finally:
             cliconfig.stable_defaults = False
-            virtinst.stable_defaults = False
 
         # Verify main guest wasn't polluted
         self._compare(g, "install-f11-norheldefaults", do_install)
@@ -318,7 +316,6 @@ class TestXMLMisc(unittest.TestCase):
         g = _make_guest(conn=conn)
 
         try:
-            virtinst.stable_defaults = True
             cliconfig.stable_defaults = True
             g.emulator = "/usr/libexec/qemu-kvm"
             g.add_default_video_device()
@@ -328,4 +325,3 @@ class TestXMLMisc(unittest.TestCase):
             self._compare(g, "install-novmvga-rhel", True)
         finally:
             cliconfig.stable_defaults = False
-            virtinst.stable_defaults = False
