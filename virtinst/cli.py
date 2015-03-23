@@ -24,6 +24,7 @@ import logging
 import logging.handlers
 import os
 import shlex
+import subprocess
 import sys
 import traceback
 
@@ -379,7 +380,7 @@ def _run_console(args):
 
 
 def _gfx_console(guest):
-    args = ["/usr/bin/virt-viewer",
+    args = ["virt-viewer",
             "--connect", guest.conn.uri,
             "--wait", guest.name]
 
@@ -389,7 +390,7 @@ def _gfx_console(guest):
 
 
 def _txt_console(guest):
-    args = ["/usr/bin/virsh",
+    args = ["virsh",
             "--connect", guest.conn.uri,
             "console", guest.name]
 
@@ -428,7 +429,9 @@ def get_console_cb(guest):
         logging.debug("No viewer to launch for graphics type '%s'", gtype)
         return
 
-    if not os.path.exists("/usr/bin/virt-viewer"):
+    try:
+        subprocess.check_output(["virt-viewer", "--version"])
+    except OSError:
         logging.warn(_("Unable to connect to graphical console: "
                        "virt-viewer not installed. Please install "
                        "the 'virt-viewer' package."))
