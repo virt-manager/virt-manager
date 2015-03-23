@@ -1591,7 +1591,7 @@ class ParserDisk(VirtCLIParser):
             logging.debug("Parsed --disk volume as: pool=%s vol=%s",
                           poolname, volname)
 
-        inst = VirtCLIParser._parse(self, opts, inst)
+        VirtCLIParser._parse(self, opts, inst)
 
         # Generate and fill in the disk source info
         newvolname = None
