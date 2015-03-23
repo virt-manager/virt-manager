@@ -786,7 +786,8 @@ class Guest(XMLBuilder):
 
         if not self.conn.is_test() and not self.conn.is_qemu():
             return
-        if self.cpu.get_xml_config().strip():
+        if (self.cpu.get_xml_config().strip() or
+            self.cpu.special_mode_was_set):
             # User already configured CPU
             return
 
@@ -801,11 +802,6 @@ class Guest(XMLBuilder):
 
         elif self.os.is_x86() and self.type == "kvm":
             if self.os.arch != self.conn.caps.host.cpu.arch:
-                return
-
-            # We need this check to handle the user setting --cpu none on
-            # the CLI to override our defaults
-            if self.cpu.special_mode_was_set:
                 return
             self.cpu.set_special_mode(self.x86_cpu_default)
 
