@@ -563,6 +563,9 @@ class Guest(XMLBuilder):
     # Device defaults #
     ###################
 
+    def stable_defaults(self):
+        return self.conn.stable_defaults(self.emulator)
+
     def add_default_input_device(self):
         if self.os.is_container():
             return
@@ -1067,7 +1070,7 @@ class Guest(XMLBuilder):
             self._add_spice_usbredir()
 
         video_model = self._os_object.get_videomodel(self)
-        if self.conn.stable_defaults() and video_model == 'vmvga':
+        if self.stable_defaults() and video_model == 'vmvga':
             video_model = 'vga'
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:

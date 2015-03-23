@@ -443,7 +443,7 @@ class vmmDomain(vmmLibvirtObject):
         return bool(self._install_abort)
 
     def stable_defaults(self):
-        return self.conn.stable_defaults(self.get_emulator())
+        return self.get_xmlobj().stable_defaults()
 
     def is_read_only(self):
         if self.is_management_domain():
