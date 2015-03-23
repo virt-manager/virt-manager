@@ -337,7 +337,7 @@ class VirtualConnection(object):
             for guest in self.caps.guests:
                 for dom in guest.domains:
                     if dom.emulator.startswith("/usr/libexec"):
-                        return self.config.stable_defaults
+                        return cliconfig.stable_defaults
         return cliconfig.stable_defaults
 
     ###################
