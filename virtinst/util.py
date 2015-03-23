@@ -217,6 +217,9 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
 
 
 def default_bridge(conn):
+    if "VIRTINST_TEST_SUITE" in os.environ:
+        return "eth0"
+
     if conn.is_remote():
         return None
 
@@ -327,11 +330,12 @@ def is_blktap_capable(conn):
     if _host_blktap_capable is not None:
         return _host_blktap_capable
 
-    lines = file("/proc/modules").readlines()
-    for line in lines:
-        if line.startswith("blktap ") or line.startswith("xenblktap "):
-            _host_blktap_capable = True
-            break
+    if "VIRTINST_TEST_SUITE" not in os.environ:
+        lines = file("/proc/modules").readlines()
+        for line in lines:
+            if line.startswith("blktap ") or line.startswith("xenblktap "):
+                _host_blktap_capable = True
+                break
 
     if not _host_blktap_capable:
         _host_blktap_capable = False

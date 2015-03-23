@@ -30,14 +30,6 @@ reload(cliconfig)
 
 from tests import utils
 
-# pylint: disable=protected-access
-# Access to protected member, needed to unittest stuff
-
-# Force certain helpers to return consistent values
-import virtinst
-virtinst.util.is_blktap_capable = lambda ignore: False
-virtinst.util.default_bridge = lambda ignore1: "eth0"
-
 # Setup logging
 rootLogger = logging.getLogger()
 for handler in rootLogger.handlers:
