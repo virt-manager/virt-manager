@@ -1,8 +1,7 @@
-# coding=utf-8
 #
 # Copyright 2011, 2013 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
-# Marc-André Lureau <marcandre.lureau@redhat.com>
+# Marc-Andre Lureau <marcandre.lureau@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

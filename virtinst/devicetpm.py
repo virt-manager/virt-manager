@@ -1,8 +1,7 @@
-# coding=utf-8
 #
 # Copyright 2011, 2013 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
-# Marc-André Lureau <marcandre.lureau@redhat.com>
+# Marc-Andre Lureau <marcandre.lureau@redhat.com>
 #
 # Copyright 2013 IBM Corporation
 # Author: Stefan Berger <stefanb@linux.vnet.ibm.com>

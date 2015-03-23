@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright (C) 2006-2008, 2013 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
-# Copyright (C) 2010 Marc-André Lureau <marcandre.lureau@redhat.com>
+# Copyright (C) 2010 Marc-Andre Lureau <marcandre.lureau@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

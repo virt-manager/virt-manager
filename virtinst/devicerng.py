@@ -1,4 +1,3 @@
-# coding=utf-8
 #
 # Copyright 2013 Red Hat, Inc.
 # Giuseppe Scrivano <gscrivan@redhat.com>

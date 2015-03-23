@@ -1,4 +1,3 @@
-# coding=utf-8
 #
 # Copyright 2013 Fujitsu Limited.
 # Chen Hanxiao <chenhanxiao at cn.fujitsu.com>
