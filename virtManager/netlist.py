@@ -208,11 +208,11 @@ class vmmNetworkList(vmmGObjectUI):
             if is_bridge:
                 nettype = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
                 if slave_names:
-                    extra = ("(%s)" % _("Host device %s") % slave_names[0])
+                    extra = (_("Host device %s") % slave_names[0])
                     can_default = True
                 else:
-                    extra = _("(Empty bridge)")
-                label = _("Bridge %s %s") % (name, extra)
+                    extra = _("Empty bridge")
+                label = _("Bridge %s: %s") % (name, extra)
 
             elif self.conn.check_support(
                     self.conn.SUPPORT_CONN_DIRECT_INTERFACE):
@@ -223,7 +223,7 @@ class vmmNetworkList(vmmGObjectUI):
                 nettype = None
                 sensitive = False
                 source_name = None
-                label += (" (%s)" % _("Not bridged"))
+                label += (": %s" % _("Not bridged"))
 
             if can_default and not default_label:
                 default_label = label
