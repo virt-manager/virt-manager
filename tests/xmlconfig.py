@@ -314,7 +314,7 @@ class TestXMLMisc(unittest.TestCase):
 
     def test_no_vmvga_RHEL(self):
         # Test that vmvga is not used on RHEL
-        conn = utils.open_rhelkvm(connver=12005)
+        conn = utils.open_rhelkvm()
         g = _make_guest(conn=conn)
 
         try:
