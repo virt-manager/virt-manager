@@ -318,12 +318,12 @@ class TestXMLMisc(unittest.TestCase):
         g = _make_guest(conn=conn)
 
         try:
-            cliconfig.stable_defaults = True
             g.emulator = "/usr/libexec/qemu-kvm"
             g.add_default_video_device()
-
             g.os_variant = "ubuntu13.10"
-            g.get_install_xml(True)
+
+            self._compare(g, "install-novmvga-rhel", True)
+            cliconfig.stable_defaults = True
             self._compare(g, "install-novmvga-rhel", True)
         finally:
             cliconfig.stable_defaults = False

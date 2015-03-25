@@ -327,8 +327,14 @@ class VirtualConnection(object):
                 self._conn_version = self._libvirtconn.getVersion()
         return self._conn_version
 
-    def stable_defaults(self, emulator=None):
-        if not cliconfig.stable_defaults:
+    def stable_defaults(self, emulator=None, force=False):
+        """
+        :param force: Just check if we are running on RHEL, regardless of
+            whether stable defaults are requested by the build. This is needed
+            to ensure we don't enable VM devices that are compiled out on
+            RHEL, like vmvga
+        """
+        if not cliconfig.stable_defaults and not force:
             return False
 
         if not self.is_qemu_system():
