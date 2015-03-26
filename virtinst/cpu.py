@@ -59,6 +59,10 @@ class CPU(XMLBuilder):
         if (val == self.SPECIAL_MODE_HOST_MODEL or
             val == self.SPECIAL_MODE_HOST_PASSTHROUGH):
             self.model = None
+            self.vendor = None
+            self.model_fallback = None
+            for f in self.features:
+                self.remove_feature(f)
             self.mode = val
         elif val == self.SPECIAL_MODE_HOST_COPY:
             self.copy_host_cpu()
@@ -161,6 +165,7 @@ class CPU(XMLBuilder):
                 self.match = "exact"
         return val
     model = XMLProperty("./model", set_converter=_set_model)
+    model_fallback = XMLProperty("./model/@fallback")
 
     match = XMLProperty("./@match")
     vendor = XMLProperty("./vendor")

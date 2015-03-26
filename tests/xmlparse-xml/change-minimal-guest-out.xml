@@ -23,7 +23,7 @@
     <label>frob</label>
   </seclabel>
   <cpu mode="custom" match="exact">
-    <model>foobar</model>
+    <model fallback="allow">foobar</model>
     <topology sockets="1" cores="4" threads="1"/>
     <feature policy="forbid" name="x2apic"/>
   </cpu>

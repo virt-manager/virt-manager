@@ -251,6 +251,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest.cpu)
         check("model", None, "foobar")
+        check("model_fallback", None, "allow")
         check("cores", None, 4)
         guest.cpu.add_feature("x2apic", "forbid")
         guest.cpu.set_topology_defaults(guest.vcpus)
