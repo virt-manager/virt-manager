@@ -979,7 +979,9 @@ class vmmManager(vmmGObjectUI):
     #################
 
     def vmlist_name_sorter(self, model, iter1, iter2, ignore):
-        return cmp(model[iter1][ROW_SORT_KEY], model[iter2][ROW_SORT_KEY])
+        key1 = str(model[iter1][ROW_SORT_KEY]).lower()
+        key2 = str(model[iter2][ROW_SORT_KEY]).lower()
+        return cmp(key1, key2)
 
     def vmlist_guest_cpu_usage_sorter(self, model, iter1, iter2, ignore):
         obj1 = model[iter1][ROW_HANDLE]
