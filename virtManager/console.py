@@ -47,14 +47,6 @@ from .sshtunnels import ConnectionInfo, SSHTunnels
  CONSOLE_PAGE_OFFSET) = range(4)
 
 
-def _has_property(obj, setting):
-    try:
-        obj.get_property(setting)
-    except TypeError:
-        return False
-    return True
-
-
 ##################################
 # VNC/Spice abstraction handling #
 ##################################
@@ -471,17 +463,14 @@ class SpiceViewer(Viewer):
             self.audio = SpiceClientGLib.Audio.get(self.spice_session, None)
 
     def get_desktop_resolution(self):
-        if (not self._display_channel or
-            not _has_property(self._display_channel, "width")):
+        if not self._display_channel:
             return None
         return self._display_channel.get_properties("width", "height")
 
     def has_agent(self):
-        if (not self.main_channel or
-            not _has_property(self.main_channel, "agent-connected")):
+        if not self.main_channel:
             return False
-        ret = self.main_channel.get_property("agent-connected")
-        return ret
+        return self.main_channel.get_property("agent-connected")
 
     def _agent_connected_cb(self, src, val):
         self.console.refresh_resizeguest_from_settings()
@@ -531,14 +520,9 @@ class SpiceViewer(Viewer):
             self.spice_session.connect()
 
     def get_scaling(self):
-        if not _has_property(self._display, "scaling"):
-            return False
         return self._display.get_property("scaling")
 
     def set_scaling(self, scaling):
-        if not _has_property(self._display, "scaling"):
-            logging.debug("Spice version doesn't support scaling.")
-            return
         self._display.set_property("scaling", scaling)
 
     def set_resizeguest(self, val):
@@ -811,10 +795,9 @@ class vmmConsolePages(vmmGObjectUI):
         self.gtk_settings_accel = settings.get_property('gtk-menu-bar-accel')
         settings.set_property('gtk-menu-bar-accel', None)
 
-        if _has_property(settings, "gtk-enable-mnemonics"):
-            self.gtk_settings_mnemonic = settings.get_property(
-                                                        "gtk-enable-mnemonics")
-            settings.set_property("gtk-enable-mnemonics", False)
+        self.gtk_settings_mnemonic = settings.get_property(
+            "gtk-enable-mnemonics")
+        settings.set_property("gtk-enable-mnemonics", False)
 
     def _enable_modifiers(self):
         if self.gtk_settings_accel is None:
