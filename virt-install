@@ -687,6 +687,13 @@ def domain_is_shutdown(domain):
     return state == libvirt.VIR_DOMAIN_NOSTATE and cpu_time == 0
 
 
+def domain_is_active(domain):
+    try:
+        return domain and domain.isActive()
+    except:
+        return False
+
+
 def start_install(guest, continue_inst, options):
     # There are two main cases we care about:
     #
@@ -753,15 +760,16 @@ def start_install(guest, continue_inst, options):
             dom = check_domain(guest, dom, conscb,
                                wait_on_install, wait_time, start_time)
 
-        if options.noreboot or not guest.installer.has_install_phase():
-            print_stdout(
-            _("Domain creation completed. You can restart your domain by "
-              "running:\n  %s") % cli.virsh_start_cmd(guest))
-        else:
-            print_stdout(
-                _("Guest installation complete... restarting guest."))
-            dom.create()
-            cli.connect_console(guest, conscb, True)
+        print_stdout(_("Domain creation completed."))
+        if not domain_is_active(dom):
+            if options.noreboot or not guest.installer.has_install_phase():
+                print_stdout(
+                    _("You can restart your domain by running:\n  %s") %
+                    cli.virsh_start_cmd(guest))
+            else:
+                print_stdout(_("Restarting guest."))
+                dom.create()
+                cli.connect_console(guest, conscb, True)
 
     except KeyboardInterrupt:
         logging.debug("", exc_info=True)
