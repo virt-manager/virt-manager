@@ -766,6 +766,18 @@ class vmmConsolePages(vmmGObjectUI):
                 serial.terminal.get_property("has-focus")):
                 return True
 
+    def viewer_is_visible(self):
+        return bool(self.viewer and self.viewer.get_visible())
+
+    def viewer_has_usb_redirection(self):
+        return bool(self.viewer and self.viewer.has_usb_redirection())
+
+    def viewer_get_usb_widget(self):
+        return self.viewer.get_usb_widget()
+
+    def viewer_get_pixbuf(self):
+        return self.viewer.get_pixbuf()
+
     def viewer_focus_changed(self, ignore1=None, ignore2=None):
         force_accel = self.config.get_console_accels()
 

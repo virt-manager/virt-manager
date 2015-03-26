@@ -618,7 +618,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         self.topwin.hide()
-        if self.console.viewer and self.console.viewer.get_visible():
+        if self.console.viewer_is_visible():
             try:
                 self.console.close_viewer()
             except:
@@ -1414,8 +1414,7 @@ class vmmDetails(vmmGObjectUI):
                       self.vm.get_connkey())
 
     def control_vm_menu(self, src_ignore):
-        can_usb = bool(self.console.viewer and
-                       self.console.viewer.has_usb_redirection() and
+        can_usb = bool(self.console.viewer_has_usb_redirection() and
                        self.vm.has_spicevmc_type_redirdev())
         self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
 
@@ -1466,7 +1465,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = src
         spice_usbdev_dialog = self.err
 
-        spice_usbdev_widget = self.console.viewer.get_usb_widget()
+        spice_usbdev_widget = self.console.viewer_get_usb_widget()
         if not spice_usbdev_widget:
             self.err.show_err(_("Error initializing spice USB device widget"))
             return
@@ -1476,7 +1475,7 @@ class vmmDetails(vmmGObjectUI):
                                       widget=spice_usbdev_widget)
 
     def _take_screenshot(self):
-        image = self.console.viewer.get_pixbuf()
+        image = self.console.viewer_get_pixbuf()
 
         metadata = {
             'tEXt::Hypervisor URI': self.vm.conn.get_uri(),
