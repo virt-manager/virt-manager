@@ -109,15 +109,10 @@ _set_distro(FedoraDistro)
 _add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14",
      i686=ARCHIVE_FEDORA_URL % ("14", "i386"))
 # 2 Latest releases
-_add(OLD_FEDORA_URL % ("19", "x86_64"), "fedora19")
 _add(OLD_FEDORA_URL % ("20", "x86_64"), "fedora20")
+_add(FEDORA_URL % ("21", "x86_64"), "fedora21")
 # Any Dev release
-_add(FEDORA_URL % ("21", "x86_64"), "fedora21", name="fedora21")
-# Rawhide w/ i686 test
-# XXX: Nowadays rawhide isn't a full install tree
-# _add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora20",
-#     i686=DEVFEDORA_URL % ("rawhide", "i386"),
-#     name="fedora-rawhide")
+_add(DEVFEDORA_URL % ("22", "x86_64"), "fedora21", name="fedora22")
 
 
 _set_distro(CentOSDistro)
