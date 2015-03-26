@@ -425,16 +425,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         return True
 
     def validate_miscellaneous(self):
-        domain_name = self.widget("net-domain-name").get_text()
-        if len(domain_name) > 0:
-            if len(domain_name) > 16:
-                return self.err.val_err(_("Invalid Domain Name"),
-                            _("Domain name must be less than 17 characters"))
-            if re.match("^[a-zA-Z0-9_]*$", domain_name) is None:
-                return self.err.val_err(_("Invalid Domain Name"),
-                            _("Domain name may contain alphanumeric and '_' "
-                              "characters only"))
-
         return True
 
     def validate(self, page_num):
