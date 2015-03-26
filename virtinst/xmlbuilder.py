@@ -23,6 +23,7 @@ import copy
 import logging
 import os
 import re
+import string  # pylint: disable=deprecated-module
 
 import libxml2
 
@@ -729,6 +730,14 @@ class XMLBuilder(object):
     # Name of the root XML element
     _XML_ROOT_NAME = None
 
+    # In some cases, libvirt can incorrectly generate unparseable XML.
+    # These are libvirt bugs, but this allows us to work around it in
+    # for specific XML classes.
+    #
+    # Example: nodedev 'system' XML:
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1184131
+    _XML_SANITIZE = False
+
     def __init__(self, conn, parsexml=None, parsexmlnode=None,
                  parent_xpath=None, relative_object_xpath=None):
         """
@@ -742,6 +751,10 @@ class XMLBuilder(object):
         The rest of the parameters are for internal use only
         """
         self.conn = conn
+
+        if self._XML_SANITIZE:
+            parsexml = parsexml.decode('ascii', 'ignore').encode('ascii')
+            parsexml = "".join([c for c in parsexml if c in string.printable])
 
         self._propstore = {}
         self._proporder = []

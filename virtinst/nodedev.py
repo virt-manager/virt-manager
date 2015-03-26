@@ -102,6 +102,10 @@ class NodeDevice(XMLBuilder):
 
     _XML_ROOT_NAME = "device"
 
+    # Libvirt can generate bogus 'system' XML:
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1184131
+    _XML_SANITIZE = True
+
     name = XMLProperty("./name")
     parent = XMLProperty("./parent")
     device_type = XMLProperty("./capability/@type")

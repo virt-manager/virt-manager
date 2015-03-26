@@ -1,3 +1,5 @@
+# encoding=utf-8
+#
 # Copyright (C) 2013 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -33,6 +35,26 @@ unknown_xml = """
     <hardware>
       <vendor>LENOVO</vendor>
     </hardware>
+  </capability>
+</device>
+"""
+
+# Requires XML_SANITIZE to parse correctly, see bug 1184131
+funky_chars_xml = """
+<device>
+  <name>computer</name>
+  <capability type='system'>
+    <hardware>
+      <vendor>LENOVOá</vendor>
+      <version>ThinkPad T61</version>
+      <serial>L3B2616</serial>
+      <uuid>97e80381-494f-11cb-8e0e-cbc168f7d753</uuid>
+    </hardware>
+    <firmware>
+      <vendor>LENOVO</vendor>
+      <version>7LET51WW (1.21 )</version>
+      <release_date>08/22/2007</release_date>
+    </firmware>
   </capability>
 </device>
 """
@@ -79,6 +101,16 @@ class TestNodeDev(unittest.TestCase):
                 "device_type": NodeDevice.CAPABILITY_TYPE_SYSTEM,
                 "name": "computer", "parent": None}
         self._testCompare(devname, vals)
+
+    def testFunkyChars(self):
+        vals = {"hw_vendor": "LENOVO", "hw_version": "ThinkPad T61",
+                "hw_serial": "L3B2616",
+                "hw_uuid": "97e80381-494f-11cb-8e0e-cbc168f7d753",
+                "fw_vendor": "LENOVO", "fw_version": "7LET51WW (1.21 )",
+                "fw_date": "08/22/2007",
+                "device_type": NodeDevice.CAPABILITY_TYPE_SYSTEM,
+                "name": "computer", "parent": None}
+        self._testCompare(None, vals, funky_chars_xml)
 
     def testNetDevice1(self):
         devname = "net_00_1c_25_10_b1_e4"
