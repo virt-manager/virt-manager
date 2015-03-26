@@ -24,9 +24,9 @@ guest.os.os_type = "hvm"
 guest.os.arch = "x86_64"
 meter = urlgrabber.progress.TextMeter(fo=sys.stdout)
 
-DEVFEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
-OLD_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"
-FEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
+DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
+OLD_FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
+FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Server/%s/os/"
 
 (WARN_RHEL4,
  WARN_RHEL5,
@@ -67,9 +67,9 @@ _add("centos-6-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/6/os/x86_64/",
      warntype=WARN_RHEL5)
 _add("centos-7-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/7/os/x86_64/",
      ks2=True)
-_add("fedora-19", FEDORA_URL % ("19", "x86_64"), ks2=True)
-_add("fedora-20", FEDORA_URL % ("20", "x86_64"), ks2=True)
-_add("fedora-21", DEVFEDORA_URL % ("21", "x86_64"), ks2=True)
+_add("fedora-20", OLD_FEDORA_URL % ("20", "x86_64"), ks2=True)
+_add("fedora-21", FEDORA_URL % ("21", "x86_64"), ks2=True)
+_add("fedora-22", DEVFEDORA_URL % ("22", "x86_64"), ks2=True)
 
 
 def exit_cleanup():
