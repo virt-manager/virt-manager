@@ -1879,11 +1879,23 @@ class vmmCreate(vmmGObjectUI):
     def do_install(self, asyncjob, guest):
         meter = asyncjob.get_meter()
 
+        # Build a list of pools we should refresh, if we are creating storage
+        refresh_pools = []
+        for disk in guest.get_devices("disk"):
+            if not disk.wants_storage_creation():
+                continue
+
+            pool = disk.get_parent_pool()
+            if not pool:
+                continue
+
+            poolname = pool.name()
+            if poolname not in refresh_pools:
+                refresh_pools.append(poolname)
+
         logging.debug("Starting background install process")
         guest.start_install(meter=meter)
         logging.debug("Install completed")
-
-        # Make sure we pick up the domain object
 
         # Wait for VM to show up
         self.conn.schedule_priority_tick(pollvm=True)
@@ -1917,6 +1929,15 @@ class vmmCreate(vmmGObjectUI):
                                    self.check_install_status, guest)
                 return False
             self.idle_add(cb)
+
+        # Kick off pool updates
+        for poolname in refresh_pools:
+            try:
+                pool = self.conn.get_pool(poolname)
+                self.idle_add(pool.refresh)
+            except:
+                logging.debug("Error looking up pool=%s for refresh after "
+                    "VM creation.", poolname, exc_info=True)
 
 
     def check_install_status(self, vm, ignore1, ignore2, virtinst_guest=None):

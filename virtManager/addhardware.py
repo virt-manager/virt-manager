@@ -1433,9 +1433,24 @@ class vmmAddHardware(vmmGObjectUI):
         return True
 
     def setup_device(self, asyncjob):
-        logging.debug("Running setup for device=%s", self._dev)
+        poolname = None
+        if (self._dev.virtual_device_type == "disk" and
+            self._dev.wants_storage_creation() and
+            self._dev.get_parent_pool()):
+            poolname = self._dev.get_parent_pool().name()
+
+        logging.debug("Running setup() for device=%s", self._dev)
         self._dev.setup(meter=asyncjob.get_meter())
-        logging.debug("Setup complete")
+        logging.debug("Device setup() complete")
+
+        if poolname:
+            try:
+                pool = self.conn.get_pool(poolname)
+                self.idle_add(pool.refresh)
+            except:
+                logging.debug("Error looking up pool=%s for refresh after "
+                    "storage creation.", poolname, exc_info=True)
+
 
     def add_device(self):
         self._dev.get_xml_config()
