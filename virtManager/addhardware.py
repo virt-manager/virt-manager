@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2007, 2012-2014 Red Hat, Inc.
+# Copyright (C) 2006-2007, 2012-2015 Red Hat, Inc.
 # Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -786,7 +786,15 @@ class vmmAddHardware(vmmGObjectUI):
         if self.conn.is_xen() or self.conn.is_test_conn():
             model.append(["xen", "Xen"])
 
-        if len(model) > 0:
+        default_bus = None
+        for i in self.vm.get_disk_devices():
+            if i.is_disk():
+                default_bus = i.bus
+                break
+
+        if default_bus:
+            uiutil.set_row_selection(widget, default_bus)
+        elif len(model) > 0:
             widget.set_active(0)
 
     def populate_disk_device(self, src):
