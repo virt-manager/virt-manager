@@ -884,49 +884,49 @@ class DebianDistro(Distro):
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
-        if self.uri.count("i386"):
-            self._treeArch = "i386"
-        elif self.uri.count("amd64"):
-            self._treeArch = "amd64"
-        elif self.uri.count("ppc64el"):
-            self._treeArch = "ppc64el"
-        else:
-            self._treeArch = "i386"
 
-        if re.match(r'i[4-9]86', self.arch):
-            self.arch = 'i386'
+        # Pull the tree's arch out of the URL text
+        self._treeArch = "i386"
+        for pattern in ["^.*/installer-(\w+)/?$",
+                        "^.*/daily-images/(\w+)/?$"]:
+            arch = re.findall(pattern, self.uri)
+            if arch:
+                self._treeArch = arch[0]
+                break
 
-        self._installer_name = self.name.lower() + "-" + "installer"
-        self._prefix = 'current/images'
+        self._url_prefix = 'current/images'
+        self._installer_dirname = self.name.lower() + "-installer"
         self._set_media_paths()
 
     def _set_media_paths(self):
-        # Use self._prefix to set media paths
-        self._boot_iso_paths   = ["%s/netboot/mini.iso" % self._prefix]
-        hvmroot = "%s/netboot/%s/%s/" % (self._prefix,
-                                         self._installer_name,
+        self._boot_iso_paths   = ["%s/netboot/mini.iso" % self._url_prefix]
+
+        hvmroot = "%s/netboot/%s/%s/" % (self._url_prefix,
+                                         self._installer_dirname,
                                          self._treeArch)
-        xenroot = "%s/netboot/xen/" % self._prefix
-        if self._treeArch == "ppc64el":
-            self._hvm_kernel_paths = [(hvmroot + "vmlinux", hvmroot + "initrd.gz")]
-        else:
-            self._hvm_kernel_paths = [(hvmroot + "linux", hvmroot + "initrd.gz")]
-        self._xen_kernel_paths = [(xenroot + "vmlinuz",
-                                    xenroot + "initrd.gz")]
+        initrd_basename = "initrd.gz"
+        kernel_basename = "linux"
+        if self._treeArch in ["ppc64el"]:
+            kernel_basename = "vmlinux"
+        self._hvm_kernel_paths = [
+            (hvmroot + kernel_basename, hvmroot + initrd_basename)]
+
+        xenroot = "%s/netboot/xen/" % self._url_prefix
+        self._xen_kernel_paths = [(xenroot + "vmlinuz", xenroot + "initrd.gz")]
 
     def isValidStore(self):
-        if self.fetcher.hasFile("%s/MANIFEST" % self._prefix):
+        if self.fetcher.hasFile("%s/MANIFEST" % self._url_prefix):
             # For regular trees
             pass
         elif self.fetcher.hasFile("daily/MANIFEST"):
             # For daily trees
-            self._prefix = "daily"
+            self._url_prefix = "daily"
             self._set_media_paths()
         else:
             return False
 
-        filename = "%s/MANIFEST" % self._prefix
-        regex = ".*%s.*" % self._installer_name
+        filename = "%s/MANIFEST" % self._url_prefix
+        regex = ".*%s.*" % self._installer_dirname
         if not self._fetchAndMatchRegex(filename, regex):
             logging.debug("Regex didn't match, not a %s distro", self.name)
             return False
@@ -943,7 +943,7 @@ class DebianDistro(Distro):
         root = self.name.lower()
         oses = [n for n in osdict.list_os() if n.name.startswith(root)]
 
-        if self._prefix == "daily":
+        if self._url_prefix == "daily":
             return oses[0].name
 
         for osobj in oses:
@@ -963,15 +963,15 @@ class UbuntuDistro(DebianDistro):
     urldistro = "ubuntu"
 
     def isValidStore(self):
-        if self.fetcher.hasFile("%s/MANIFEST" % self._prefix):
+        if self.fetcher.hasFile("%s/MANIFEST" % self._url_prefix):
             # For regular trees
-            filename = "%s/MANIFEST" % self._prefix
-            regex = ".*%s.*" % self._installer_name
+            filename = "%s/MANIFEST" % self._url_prefix
+            regex = ".*%s.*" % self._installer_dirname
         elif self.fetcher.hasFile("install/netboot/version.info"):
             # For trees based on ISO's
-            self._prefix = "install"
+            self._url_prefix = "install"
             self._set_media_paths()
-            filename = "%s/netboot/version.info" % self._prefix
+            filename = "%s/netboot/version.info" % self._url_prefix
             regex = "%s*" % self.name
         else:
             return False

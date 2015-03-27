@@ -157,6 +157,8 @@ _add(DEBIAN_URL % ("squeeze", "amd64"), "debian6")
 _add(DEBIAN_URL % ("wheezy", "amd64"), "debian7")
 # And daily builds, since we specially handle that URL
 _add(DAILY_DEBIAN_URL % ("amd64"), "debian7", name="debiandaily")
+_add(DAILY_DEBIAN_URL % ("arm64"), "debian7",
+    name="debiandailyarm64", hasxen=False)
 
 
 _set_distro(UbuntuDistro)
