@@ -43,7 +43,10 @@ Requires: dbus-x11
 # For console widget
 Requires: gtk-vnc2
 Requires: spice-gtk3
+
+%if 0%{?rhel} == 7
 Requires: gnome-icon-theme
+%endif
 
 
 BuildRequires: python
