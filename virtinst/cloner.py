@@ -1,5 +1,5 @@
 #
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013, 2015 Red Hat, Inc.
 # Copyright(c) FUJITSU Limited 2007.
 #
 # Cloning a virtual machine module.
@@ -347,9 +347,11 @@ class Cloner(object):
                 vol_install.name = clone_vol_install.name
             else:
                 # Cross pool cloning
-                # Deliberately don't sync input_vol params here
+                # Sync only the format of the image.
                 clone_vol_install.input_vol = orig_disk.get_vol_object()
                 vol_install = clone_vol_install
+                vol_install.input_vol = orig_disk.get_vol_object()
+                vol_install.sync_input_vol(only_format=True)
 
             vol_install.reflink = self.reflink
             clone_disk.set_vol_install(vol_install)

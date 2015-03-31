@@ -1,5 +1,5 @@
 #
-# Copyright 2008, 2013 Red Hat, Inc.
+# Copyright 2008, 2013, 2015 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -610,15 +610,17 @@ class StorageVolume(_StorageObject):
     reflink = property(_get_reflink, _set_reflink,
             doc="flags for VIR_STORAGE_VOL_CREATE_REFLINK")
 
-    def sync_input_vol(self):
+    def sync_input_vol(self, only_format=False):
         # Pull parameters from input vol into this class
         parsevol = StorageVolume(self.conn,
                                  parsexml=self._input_vol.XMLDesc(0))
 
+        self.format = parsevol.format
+        if only_format:
+            return
         self.pool = self._input_vol.storagePoolLookupByVolume()
         self.capacity = parsevol.capacity
         self.allocation = parsevol.allocation
-        self.format = parsevol.format
 
 
     ##########################
