@@ -23,13 +23,14 @@ from gi.repository import GObject
 import logging
 import os
 import socket
+import threading
 import time
 import traceback
-from virtinst import support
 
 import libvirt
 import virtinst
 from virtinst import pollhelpers
+from virtinst import support
 from virtinst import util
 
 from . import connectauth
@@ -118,6 +119,8 @@ class vmmConnection(vmmGObject):
         # Resource utilization statistics
         self.record = []
         self.hostinfo = None
+
+        self._tick_lock = threading.Lock()
 
         self.mediadev_initialized = False
         self.mediadev_error = ""
@@ -1144,21 +1147,31 @@ class vmmConnection(vmmGObject):
 
         self.hostinfo = self._backend.getInfo()
 
-        (goneNets, newNets, nets) = self._update_nets(pollnet)
-        self._refresh_new_objects(newNets.values())
-        (gonePools, newPools, pools) = self._update_pools(pollpool)
-        self._refresh_new_objects(newPools.values())
-        (goneInterfaces,
-         newInterfaces, interfaces) = self._update_interfaces(polliface)
-        self._refresh_new_objects(newInterfaces.values())
+        try:
+            # We take the ticklock before using the conn object lists
+            # like self._vms. This ensures that those lists were updated
+            # by tick_send_signals since the last time we ran tick()
+            # https://www.redhat.com/archives/virt-tools-list/2015-April/msg00009.html
+            self._tick_lock.acquire()
 
-        # Refreshing these is handled by the mediadev callback
-        (goneNodedevs,
-         newNodedevs, nodedevs) = self._update_nodedevs(pollnodedev)
+            (goneNets, newNets, nets) = self._update_nets(pollnet)
+            self._refresh_new_objects(newNets.values())
+            (gonePools, newPools, pools) = self._update_pools(pollpool)
+            self._refresh_new_objects(newPools.values())
+            (goneInterfaces,
+             newInterfaces, interfaces) = self._update_interfaces(polliface)
+            self._refresh_new_objects(newInterfaces.values())
 
-        # These are refreshing in their __init__ method, because the
-        # data is wanted immediately
-        (goneVMs, newVMs, vms) = self._update_vms(pollvm)
+            # Refreshing these is handled by the mediadev callback
+            (goneNodedevs,
+             newNodedevs, nodedevs) = self._update_nodedevs(pollnodedev)
+
+            # These are refreshing in their __init__ method, because the
+            # data is wanted immediately
+            (goneVMs, newVMs, vms) = self._update_vms(pollvm)
+        except:
+            self._tick_lock.release()
+            raise
 
         def tick_send_signals():
             """
@@ -1166,20 +1179,23 @@ class vmmConnection(vmmGObject):
             updates need to go here to enable threading that doesn't block the
             app with long tick operations.
             """
-            # Connection closed out from under us
-            if not self._backend.is_open():
-                return
+            try:
+                # Connection closed out from under us
+                if not self._backend.is_open():
+                    return
 
-            if pollvm:
-                self._vms = vms
-            if pollnet:
-                self._nets = nets
-            if polliface:
-                self._interfaces = interfaces
-            if pollpool:
-                self._pools = pools
-            if pollnodedev:
-                self._nodedevs = nodedevs
+                if pollvm:
+                    self._vms = vms
+                if pollnet:
+                    self._nets = nets
+                if polliface:
+                    self._interfaces = interfaces
+                if pollpool:
+                    self._pools = pools
+                if pollnodedev:
+                    self._nodedevs = nodedevs
+            finally:
+                self._tick_lock.release()
 
             if not self.mediadev_initialized:
                 self._init_mediadev()
@@ -1239,6 +1255,8 @@ class vmmConnection(vmmGObject):
             if finish_connecting:
                 self._change_state(self._STATE_ACTIVE)
 
+        # Anything that could possibly fail before this call needs to go
+        # in the try/except that handles the tick lock
         self.idle_add(tick_send_signals)
 
         ticklist = []
