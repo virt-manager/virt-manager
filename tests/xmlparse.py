@@ -40,8 +40,10 @@ class XMLParseTest(unittest.TestCase):
         actualXML = guest.get_xml_config()
         utils.diff_compare(actualXML, expect_out=expectXML)
 
-    def _alter_compare(self, actualXML, outfile):
+    def _alter_compare(self, actualXML, outfile, support_check=None):
         utils.diff_compare(actualXML, outfile)
+        if (support_check and not conn.check_support(support_check)):
+            return
         utils.test_create(conn, actualXML)
 
     def testRoundTrip(self):
@@ -222,7 +224,8 @@ class XMLParseTest(unittest.TestCase):
         check("nosharepages", False, True)
         check("locked", False, True)
 
-        self._alter_compare(guest.get_xml_config(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile,
+            support_check=conn.SUPPORT_CONN_VMPORT)
 
     def testAlterMinimalGuest(self):
         guest, outfile = self._get_test_content("change-minimal-guest")
