@@ -685,6 +685,9 @@ class Guest(XMLBuilder):
                 dev.path = None
 
     def _set_defaults(self):
+        # some options check for has_spice() which is resolved after this:
+        self._set_graphics_defaults()
+
         self._set_clock_defaults()
         self._set_emulator_defaults()
         self._set_cpu_defaults()
@@ -698,7 +701,6 @@ class Guest(XMLBuilder):
         self._add_implied_controllers()
         self._set_net_defaults()
         self._set_input_defaults()
-        self._set_graphics_defaults()
         self._set_video_defaults()
         self._set_sound_defaults()
 
