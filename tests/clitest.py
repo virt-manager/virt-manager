@@ -415,7 +415,7 @@ c.add_compare("""--pxe \
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40 \
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200 \
 --memorybacking size=1,unit='G',nodeset='1,2-5',nosharepages=yes,locked=yes \
---features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234 \
+--features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234,vmport=off \
 --clock offset=utc,hpet_present=no,rtc_tickpolicy=merge \
 --pm suspend_to_mem=yes,suspend_to_disk=no \
 --resource partition=/virtualmachines/production \

@@ -168,6 +168,7 @@ class XMLParseTest(unittest.TestCase):
         check("hyperv_vapic", False, None)
         check("hyperv_spinlocks", True, True)
         check("hyperv_spinlocks_retries", 12287, 54321)
+        check("vmport", False, True)
 
         check = self._make_checker(guest.cpu)
         check("match", "exact", "strict")
