@@ -838,6 +838,11 @@ class Guest(XMLBuilder):
         if self.features.pae == "default":
             self.features.pae = self.conn.caps.supports_pae()
 
+        if (self.features.vmport == "default" and
+            self.has_spice() and
+            self.conn.check_support(self.conn.SUPPORT_CONN_VMPORT)):
+            self.features.vmport = False
+
         if (self._os_object.is_windows() and
             self._hv_supported() and
             self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_VAPIC)):
