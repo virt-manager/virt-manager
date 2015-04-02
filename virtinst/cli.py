@@ -1497,6 +1497,8 @@ class ParserFeatures(VirtCLIParser):
         self.set_param("features.hyperv_spinlocks_retries",
             "hyperv_spinlocks_retries")
 
+        self.set_param("features.vmport", "vmport", is_onoff=True)
+
 
 ###################
 # --clock parsing #
