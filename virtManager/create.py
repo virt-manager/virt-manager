@@ -1743,7 +1743,10 @@ class vmmCreate(vmmGObjectUI):
         # HV + Arch selection
         name = self.get_config_name()
         if name != self.guest.name:
-            self.guest.name = name
+            try:
+                self.guest.name = name
+            except Exception, e:
+                return self.err.val_err(_("Invalid guest name"), str(e))
             if self.is_default_storage():
                 logging.debug("User changed VM name and using default storage,"
                     "re-validating with new default storage path.")

@@ -479,8 +479,6 @@ class vmmCreatePool(vmmGObjectUI):
 
     def _validate_page_name(self, usepool=None):
         name = self.get_config_name()
-        if not name:
-            return self.err.val_err(_("A name must be specified."))
 
         try:
             if usepool:

@@ -143,6 +143,9 @@ def validate_name(name_type, val):
     # Rather than try and match libvirt's regex, just forbid things we
     # know don't work
     forbid = [" "]
+    if not val:
+        raise ValueError(
+            _("A name must be specified for the %s") % name_type)
     for c in forbid:
         if c not in val:
             continue
