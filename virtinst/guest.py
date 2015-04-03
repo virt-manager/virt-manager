@@ -833,7 +833,7 @@ class Guest(XMLBuilder):
         if self.features.apic == "default":
             self.features.apic = self._lookup_osdict_key("apic", default)
         if self.features.pae == "default":
-            self.features.pae = self.conn.caps.support_pae()
+            self.features.pae = self.conn.caps.supports_pae()
 
         if (self._lookup_osdict_key("hyperv_features", False) and
             self._hv_supported() and

@@ -51,7 +51,7 @@ from virtinst.seclabel import Seclabel
 from virtinst.pm import PM
 from virtinst.idmap import IdMap
 
-from virtinst import capabilities as CapabilitiesParser
+from virtinst.capabilities import Capabilities
 from virtinst.domcapabilities import DomainCapabilities
 from virtinst.interface import Interface, InterfaceProtocol
 from virtinst.network import Network

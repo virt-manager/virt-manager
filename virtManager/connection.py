@@ -972,7 +972,7 @@ class vmmConnection(vmmGObject):
                       self._backend.daemon_version())
         logging.debug("conn version=%s", self._backend.conn_version())
         logging.debug("%s capabilities:\n%s",
-                      self.get_uri(), self.caps.xml)
+                      self.get_uri(), self.caps.get_xml_config())
         self._add_conn_events()
 
         # Prime CPU cache

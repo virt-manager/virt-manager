@@ -19,20 +19,19 @@ import os
 import unittest
 
 from tests import utils
-from virtinst import CapabilitiesParser as capabilities
-from virtinst.capabilities import _CPUMapFileValues
+
+from virtinst import Capabilities
 from virtinst import DomainCapabilities
+from virtinst.capabilities import _CPUMapFileValues
 
 
-def build_host_feature_dict(feature_list):
-    fdict = {}
-    for f in feature_list:
-        fdict[f] = capabilities.FEATURE_ON
-
-    return fdict
+conn = utils.open_testdriver()
 
 
 class TestCapabilities(unittest.TestCase):
+    def _buildCaps(self, filename):
+        path = os.path.join("tests/capabilities-xml", filename)
+        return Capabilities(conn, file(path).read())
 
     def _compareGuest(self, (arch, os_type, domains, features), guest):
         self.assertEqual(arch,            guest.arch)
@@ -44,13 +43,7 @@ class TestCapabilities(unittest.TestCase):
             self.assertEqual(domains[n][2], guest.domains[n].machines)
 
         for n in features:
-            self.assertEqual(features[n],        guest.features[n])
-
-    def _buildCaps(self, filename):
-        path = os.path.join("tests/capabilities-xml", filename)
-        xml = file(path).read()
-
-        return capabilities.Capabilities(xml)
+            self.assertEqual(features[n], getattr(guest.features, n))
 
     def _testCapabilities(self, path, (host_arch, host_features), guests,
                           secmodel=None):
@@ -59,28 +52,31 @@ class TestCapabilities(unittest.TestCase):
         if host_arch:
             self.assertEqual(host_arch, caps.host.cpu.arch)
             for n in host_features:
-                self.assertEqual(host_features[n], caps.host.cpu.features[n])
+                self.assertEqual(host_features[n], caps.host.cpu.has_feature(n))
 
         if secmodel:
-            self.assertEqual(secmodel[0], caps.host.secmodel.model)
-            self.assertEqual(secmodel[1], caps.host.secmodel.doi)
-            if secmodel[2]:
-                for k, v in secmodel[2].items():
-                    self.assertEqual(v, caps.host.secmodel.baselabels[k])
+            self.assertEqual(secmodel[0], caps.host.secmodels[0].model)
+            if secmodel[1]:
+                for idx, (t, v) in enumerate(secmodel[1].items()):
+                    self.assertEqual(t,
+                        caps.host.secmodels[0].baselabels[idx].type)
+                    self.assertEqual(v,
+                        caps.host.secmodels[0].baselabels[idx].content)
 
         for idx in range(len(guests)):
             self._compareGuest(guests[idx], caps.guests[idx])
 
     def testCapabilities1(self):
-        host = ('x86_64', {'vmx': capabilities.FEATURE_ON})
+        host = ('x86_64', {'vmx': True})
 
         guests = [
             ('x86_64', 'xen',
               [['xen', None, []]], {}),
             ('i686',   'xen',
-              [['xen', None, []]], {'pae': capabilities.FEATURE_ON}),
+                [['xen', None, []]], {'pae': True, 'nonpae': False}),
             ('i686',   'hvm',
-              [['xen', "/usr/lib64/xen/bin/qemu-dm", ['pc', 'isapc']]], {'pae': capabilities.FEATURE_ON | capabilities.FEATURE_OFF}),
+              [['xen', "/usr/lib64/xen/bin/qemu-dm", ['pc', 'isapc']]],
+              {'pae': True, 'nonpae': True}),
             ('x86_64', 'hvm',
               [['xen', "/usr/lib64/xen/bin/qemu-dm", ['pc', 'isapc']]], {})
        ]
@@ -89,7 +85,7 @@ class TestCapabilities(unittest.TestCase):
 
     def testCapabilities2(self):
         host = ('x86_64', {})
-        secmodel = ('selinux', '0', None)
+        secmodel = ('selinux', None)
 
         guests = [
             ('x86_64', 'hvm',
@@ -129,18 +125,17 @@ class TestCapabilities(unittest.TestCase):
                ['g3bw', 'mac99', 'prep']]], {}),
        ]
 
-        secmodel = ('dac', '0', {"kvm" : "+0:+0", "qemu" : "+0:+0"})
+        secmodel = ('dac', {"kvm" : "+0:+0", "qemu" : "+0:+0"})
 
         self._testCapabilities("capabilities-kvm.xml", host, guests, secmodel)
 
     def testCapabilities4(self):
-        host = ('i686',
-                 {'pae': capabilities.FEATURE_ON | capabilities.FEATURE_OFF})
+        host = ('i686', {'pae': True, 'nonpae': True})
 
         guests = [
             ('i686', 'linux',
               [['test', None, []]],
-              {'pae': capabilities.FEATURE_ON | capabilities.FEATURE_OFF}),
+              {'pae': True, 'nonpae': True}),
        ]
 
         self._testCapabilities("capabilities-test.xml", host, guests)
@@ -166,36 +161,33 @@ class TestCapabilities(unittest.TestCase):
     def testCapsCPUFeaturesOldSyntax(self):
         filename = "rhel5.4-xen-caps-virt-enabled.xml"
         host_feature_list = ["vmx"]
-        feature_dict = build_host_feature_dict(host_feature_list)
 
         caps = self._buildCaps(filename)
-        for f in feature_dict.keys():
-            self.assertEquals(caps.host.cpu.features[f], feature_dict[f])
+        for f in host_feature_list:
+            self.assertEquals(caps.host.cpu.has_feature(f), True)
 
     def testCapsCPUFeaturesOldSyntaxSVM(self):
         filename = "rhel5.4-xen-caps.xml"
         host_feature_list = ["svm"]
-        feature_dict = build_host_feature_dict(host_feature_list)
 
         caps = self._buildCaps(filename)
-        for f in feature_dict.keys():
-            self.assertEquals(caps.host.cpu.features[f], feature_dict[f])
+        for f in host_feature_list:
+            self.assertEquals(caps.host.cpu.has_feature(f), True)
 
     def testCapsCPUFeaturesNewSyntax(self):
         filename = "libvirt-0.7.6-qemu-caps.xml"
         host_feature_list = ['lahf_lm', 'xtpr', 'cx16', 'tm2', 'est', 'vmx',
-                             'ds_cpl', 'pbe', 'tm', 'ht', 'ss', 'acpi', 'ds']
-        feature_dict = build_host_feature_dict(host_feature_list)
+            'ds_cpl', 'pbe', 'tm', 'ht', 'ss', 'acpi', 'ds']
 
         caps = self._buildCaps(filename)
-        for f in feature_dict.keys():
-            self.assertEquals(caps.host.cpu.features[f], feature_dict[f])
+        for f in host_feature_list:
+            self.assertEquals(caps.host.cpu.has_feature(f), True)
 
         self.assertEquals(caps.host.cpu.model, "core2duo")
         self.assertEquals(caps.host.cpu.vendor, "Intel")
-        self.assertEquals(caps.host.cpu.threads, "3")
-        self.assertEquals(caps.host.cpu.cores, "5")
-        self.assertEquals(caps.host.cpu.sockets, "7")
+        self.assertEquals(caps.host.cpu.threads, 3)
+        self.assertEquals(caps.host.cpu.cores, 5)
+        self.assertEquals(caps.host.cpu.sockets, 7)
 
     def testCapsUtilFuncs(self):
         new_caps = self._buildCaps("libvirt-0.7.6-qemu-caps.xml")
@@ -246,7 +238,6 @@ class TestCapabilities(unittest.TestCase):
         test_cpu_map(cpu_64, x86_cpunames)
         test_cpu_map(cpu_random, [])
 
-        conn = utils.open_testdriver()
         cpu_64 = caps.get_cpu_values(conn, "x86_64")
         self.assertTrue(len(cpu_64) > 0)
 

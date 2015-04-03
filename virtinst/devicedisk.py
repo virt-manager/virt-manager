@@ -252,12 +252,15 @@ class VirtualDisk(VirtualDevice):
         from virtcli import cliconfig
         user = cliconfig.default_qemu_user
         try:
-            for i in conn.caps.host.secmodels:
-                if i.model != "dac":
+            for secmodel in conn.caps.host.secmodels:
+                if secmodel.model != "dac":
                     continue
 
-                label = (i.baselabels.get("kvm") or
-                         i.baselabels.get("qemu"))
+                label = None
+                for baselabel in secmodel.baselabels:
+                    if baselabel.type in ["qemu", "kvm"]:
+                        label = baselabel.content
+                        break
                 if not label:
                     continue
 

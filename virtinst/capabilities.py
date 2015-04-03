@@ -22,17 +22,14 @@
 import re
 
 from . import util
+from .cpu import CPU as DomainCPU
+from .xmlbuilder import XMLBuilder, XMLChildProperty
+from .xmlbuilder import XMLProperty as _XMLProperty
 
-# Whether a guest can be created with a certain feature on resp. off
-FEATURE_ON      = 0x01
-FEATURE_OFF     = 0x02
 
-
-def xpathString(node, path, default=None):
-    result = node.xpathEval("string(%s)" % path)
-    if len(result) == 0:
-        result = default
-    return result
+# Disable test suite property tracking
+class XMLProperty(_XMLProperty):
+    _track = False
 
 
 class CPUValuesModel(object):
@@ -141,252 +138,109 @@ class _CPUMapFileValues(_CPUAPIValues):
         return cpumap.cpus
 
 
-class Features(object):
-    """Represent a set of features. For each feature, store a bit mask of
-       FEATURE_ON and FEATURE_OFF to indicate whether the feature can
-       be turned on or off. For features for which toggling doesn't make sense
-       (e.g., 'vmx') store FEATURE_ON when the feature is present."""
+class _CapsCPU(DomainCPU):
+    arch = XMLProperty("./arch")
 
-    def __init__(self, node=None):
-        self.features = {}
-        if node is not None:
-            self.parseXML(node)
+    # capabilities used to just expose these properties as bools
+    _svm_bool = XMLProperty("./features/svm", is_bool=True)
+    _vmx_bool = XMLProperty("./features/vmx", is_bool=True)
+    _pae_bool = XMLProperty("./features/pae", is_bool=True)
+    _nonpae_bool = XMLProperty("./features/nonpae", is_bool=True)
 
-    def __getitem__(self, feature):
-        if feature in self.features:
-            return self.features[feature]
-        return 0
-
-    def names(self):
-        return self.features.keys()
-
-    def parseXML(self, node):
-        d = self.features
-
-        feature_list = []
-        if node.name == "features":
-            node_list = node.xpathEval("*")
-            for n in node_list:
-                feature_list.append(n.name)
-        else:
-            # New style features
-            node_list = node.xpathEval("feature/@name")
-            for n in node_list:
-                feature_list.append(n.content)
-
-        for feature in feature_list:
-            if feature not in d:
-                d[feature] = 0
-
-            self._extractFeature(feature, d, n)
-
-    def _extractFeature(self, feature, d, node):
-        """Extract the value of FEATURE from NODE and set DICT[FEATURE] to
-        its value. Abstract method, must be overridden"""
-        raise NotImplementedError("Abstract base class")
+    has_feature_block = XMLProperty("./features", is_bool=True)
 
 
-class CapabilityFeatures(Features):
-    def __init__(self, node=None):
-        Features.__init__(self, node)
+    ##############
+    # Public API #
+    ##############
 
-    def _extractFeature(self, feature, d, n):
-        default = xpathString(n, "@default")
-        toggle = xpathString(n, "@toggle")
+    def has_feature(self, name):
+        if name == "svm" and self._svm_bool:
+            return True
+        if name == "vmx" and self._vmx_bool:
+            return True
+        if name == "pae" and self._pae_bool:
+            return True
+        if name == "nonpae" and self._nonpae_bool:
+            return True
 
-        if default is not None:
-            # Format for guest features
-            if default == "on":
-                d[feature] = FEATURE_ON
-            elif default == "off":
-                d[feature] = FEATURE_OFF
-            else:
-                raise RuntimeError("Feature %s: value of default must "
-                                   "be 'on' or 'off', but is '%s'" %
-                                   (feature, default))
-            if toggle == "yes":
-                d[feature] |= d[feature] ^ (FEATURE_ON | FEATURE_OFF)
-        else:
-            # Format for old HOST features, on OLD old guest features
-            # back compat is just <$featurename>, like <svm/>
-            if feature == "nonpae":
-                d["pae"] |= FEATURE_OFF
-            else:
-                d[feature] |= FEATURE_ON
+        return name in [f.name for f in self.features]
 
 
-class CPU(object):
-    def __init__(self, node=None):
-        # e.g. "i686" or "x86_64"
-        self.arch = None
-        self.model = None
-        self.vendor = None
-        self.sockets = 1
-        self.cores = 1
-        self.threads = 1
-        self.features = CapabilityFeatures()
+###########################
+# Caps <topology> parsers #
+###########################
 
-        if node is not None:
-            self.parseXML(node)
-
-    def parseXML(self, node):
-        newstyle_features = False
-
-        child = node.children
-        while child:
-            # Do a first pass to try and detect new style features
-            if child.name == "feature":
-                newstyle_features = True
-                break
-            child = child.next
-
-        if newstyle_features:
-            self.features = CapabilityFeatures(node)
-
-        child = node.children
-        while child:
-            if child.name == "arch":
-                self.arch = child.content
-            elif child.name == "model":
-                self.model = child.content
-            elif child.name == "vendor":
-                self.vendor = child.content
-            elif child.name == "topology":
-                self.sockets = xpathString(child, "@sockets") or 1
-                self.cores = xpathString(child, "@cores") or 1
-                self.threads = xpathString(child, "@threads") or 1
-
-            elif child.name == "features" and not newstyle_features:
-                self.features = CapabilityFeatures(child)
-
-            child = child.next
+class _CapsTopologyCPU(XMLBuilder):
+    _XML_ROOT_NAME = "cpu"
+    id = XMLProperty("./@id")
 
 
-class Host(object):
-    def __init__(self, node=None):
-        self.cpu = CPU()
-        self.topology = None
-        self.secmodels = []
-
-        if node is not None:
-            self.parseXML(node)
-
-    def get_secmodel(self):
-        return self.secmodels and self.secmodels[0] or None
-    secmodel = property(get_secmodel)
-
-    def parseXML(self, node):
-        child = node.children
-        while child:
-            if child.name == "topology":
-                self.topology = Topology(child)
-
-            if child.name == "secmodel":
-                self.secmodels.append(SecurityModel(child))
-
-            if child.name == "cpu":
-                self.cpu = CPU(child)
-
-            child = child.next
+class _TopologyCell(XMLBuilder):
+    _XML_ROOT_NAME = "cell"
+    id = XMLProperty("./@id")
+    cpus = XMLChildProperty(_CapsTopologyCPU, relative_xpath="./cpus")
 
 
-class Guest(object):
-    def __init__(self, node=None):
-        # e.g. "xen" or "hvm"
-        self.os_type = None
-        # e.g. "i686" or "x86_64"
-        self.arch = None
-
-        self.domains = []
-
-        self.features = CapabilityFeatures()
-
-        if node is not None:
-            self.parseXML(node)
-
-    def parseXML(self, node):
-        child = node.children
-        while child:
-            if child.name == "os_type":
-                self.os_type = child.content
-            elif child.name == "features":
-                self.features = CapabilityFeatures(child)
-            elif child.name == "arch":
-                self.arch = child.prop("name")
-                machines = []
-                emulator = None
-                loader = None
-                n = child.children
-                while n:
-                    if n.name == "machine":
-                        machines.append(n.content)
-
-                        canon = n.prop("canonical")
-                        if canon:
-                            machines.append(canon)
-                    elif n.name == "emulator":
-                        emulator = n.content
-                    elif n.name == "loader":
-                        loader = n.content
-                    n = n.next
-
-                n = child.children
-                while n:
-                    if n.name == "domain":
-                        self.domains.append(Domain(n.prop("type"),
-                                            emulator, loader, machines, n))
-                    n = n.next
-
-            child = child.next
-
-    def _favoredDomain(self, domains):
-        """
-        Return the recommended domain for use if the user does not explicitly
-        request one.
-        """
-        if not domains:
-            return None
-
-        priority = ["kvm", "xen", "kqemu", "qemu"]
-
-        for t in priority:
-            for d in domains:
-                if d.hypervisor_type == t:
-                    return d
-
-        # Fallback, just return last item in list
-        return domains[-1]
-
-    def bestDomainType(self, dtype=None, machine=None):
-        domains = []
-        for d in self.domains:
-            d.set_recommended_machine(None)
-
-            if dtype and d.hypervisor_type != dtype.lower():
-                continue
-            if machine and machine not in d.machines:
-                continue
-
-            if machine:
-                d.set_recommended_machine(machine)
-            domains.append(d)
-
-        return self._favoredDomain(domains)
+class _CapsTopology(XMLBuilder):
+    _XML_ROOT_NAME = "topology"
+    cells = XMLChildProperty(_TopologyCell, relative_xpath="./cells")
 
 
-class Domain(object):
-    def __init__(self, hypervisor_type,
-                 emulator=None, loader=None,
-                 machines=None, node=None):
-        self.hypervisor_type = hypervisor_type
-        self.emulator = emulator
-        self.loader = loader
-        self.machines = machines
+######################################
+# Caps <host> and <secmodel> parsers #
+######################################
+
+class _CapsSecmodelBaselabel(XMLBuilder):
+    _XML_ROOT_NAME = "baselabel"
+    type = XMLProperty("./@type")
+    content = XMLProperty(".")
+
+
+class _CapsSecmodel(XMLBuilder):
+    _XML_ROOT_NAME = "secmodel"
+    model = XMLProperty("./model")
+    baselabels = XMLChildProperty(_CapsSecmodelBaselabel)
+
+
+class _CapsHost(XMLBuilder):
+    _XML_ROOT_NAME = "host"
+    secmodels = XMLChildProperty(_CapsSecmodel)
+    cpu = XMLChildProperty(_CapsCPU, is_single=True)
+    topology = XMLChildProperty(_CapsTopology, is_single=True)
+
+
+################################
+# <guest> and <domain> parsers #
+################################
+
+class _CapsMachine(XMLBuilder):
+    _XML_ROOT_NAME = "machine"
+    name = XMLProperty(".")
+    canonical = XMLProperty("./@canonical")
+
+
+class _CapsDomain(XMLBuilder):
+    def __init__(self, *args, **kwargs):
+        XMLBuilder.__init__(self, *args, **kwargs)
+
+        self.machines = []
+        for m in self._machines:
+            self.machines.append(m.name)
+            if m.canonical:
+                self.machines.append(m.canonical)
 
         self._recommended_machine = None
 
-        if node is not None:
-            self.parseXML(node)
+    _XML_ROOT_NAME = "domain"
+    hypervisor_type = XMLProperty("./@type")
+    emulator = XMLProperty("./emulator")
+    _machines = XMLChildProperty(_CapsMachine)
+
+
+    ###############
+    # Public APIs #
+    ###############
 
     def get_recommended_machine(self, conn, capsguest):
         if self._recommended_machine:
@@ -408,102 +262,102 @@ class Domain(object):
     def set_recommended_machine(self, machine):
         self._recommended_machine = machine
 
-    def parseXML(self, node):
-        child = node.children
-        machines = []
-        while child:
-            if child.name == "emulator":
-                self.emulator = child.content
-            elif child.name == "machine":
-                machines.append(child.content)
-
-                canon = child.prop("canonical")
-                if canon:
-                    machines.append(canon)
-                machines.append(child.content)
-            child = child.next
-
-        if len(machines) > 0:
-            self.machines = machines
-
     def is_accelerated(self):
         return self.hypervisor_type in ["kvm", "kqemu"]
 
 
-class Topology(object):
-    def __init__(self, node=None):
-        self.cells = []
+class _CapsGuestFeatures(XMLBuilder):
+    _XML_ROOT_NAME = "features"
 
-        if node is not None:
-            self.parseXML(node)
-
-    def parseXML(self, node):
-        child = node.children
-        if child.name == "cells":
-            for cell in child.children:
-                if cell.name == "cell":
-                    self.cells.append(TopologyCell(cell))
+    pae = XMLProperty("./pae", is_bool=True)
+    nonpae = XMLProperty("./nonpae", is_bool=True)
+    acpi = XMLProperty("./acpi", is_bool=True)
+    apic = XMLProperty("./apci", is_bool=True)
 
 
-class TopologyCell(object):
-    def __init__(self, node=None):
-        self.id = None
-        self.cpus = []
+class _CapsGuest(XMLBuilder):
+    def __init__(self, *args, **kwargs):
+        XMLBuilder.__init__(self, *args, **kwargs)
 
-        if node is not None:
-            self.parseXML(node)
+        self.machines = []
+        for m in self._machines:
+            self.machines.append(m.name)
+            if m.canonical:
+                self.machines.append(m.canonical)
 
-    def parseXML(self, node):
-        self.id = int(node.prop("id"))
-        for child in node.children:
-            if child.name == "cpus":
-                for cpu in child.children:
-                    if cpu.name == "cpu":
-                        self.cpus.append(TopologyCPU(cpu))
-
-
-class TopologyCPU(object):
-    def __init__(self, node=None):
-        self.id = None
-
-        if node is not None:
-            self.parseXML(node)
-
-    def parseXML(self, node):
-        self.id = int(node.prop("id"))
+        for d in self.domains:
+            if not d.emulator:
+                d.emulator = self.emulator
+            if not d.machines:
+                d.machines = self.machines
 
 
-class SecurityModel(object):
-    def __init__(self, node=None):
-        self.model = None
-        self.doi = None
-        self.baselabels = {}
+    _XML_ROOT_NAME = "guest"
 
-        if node is not None:
-            self.parseXML(node)
+    os_type = XMLProperty("./os_type")
+    arch = XMLProperty("./arch/@name")
+    loader = XMLProperty("./arch/loader")
+    emulator = XMLProperty("./arch/emulator")
 
-    def parseXML(self, node):
-        for child in node.children or []:
-            if child.name == "model":
-                self.model = child.content
-            elif child.name == "doi":
-                self.doi = child.content
-            elif child.name == "baselabel":
-                typ = child.prop("type")
-                self.baselabels[typ] = child.content
+    domains = XMLChildProperty(_CapsDomain, relative_xpath="./arch")
+    features = XMLChildProperty(_CapsGuestFeatures, is_single=True)
+    _machines = XMLChildProperty(_CapsMachine, relative_xpath="./arch")
 
 
-class Capabilities(object):
-    def __init__(self, xml):
-        self.host = None
-        self.guests = []
-        self.xml = xml
-        self._topology = None
+    ###############
+    # Public APIs #
+    ###############
+
+    def bestDomainType(self, dtype=None, machine=None):
+        """
+        Return the recommended domain for use if the user does not explicitly
+        request one.
+        """
+        domains = []
+        for d in self.domains:
+            d.set_recommended_machine(None)
+
+            if dtype and d.hypervisor_type != dtype.lower():
+                continue
+            if machine and machine not in d.machines:
+                continue
+
+            if machine:
+                d.set_recommended_machine(machine)
+            domains.append(d)
+
+        if not domains:
+            return None
+
+        priority = ["kvm", "xen", "kqemu", "qemu"]
+
+        for t in priority:
+            for d in domains:
+                if d.hypervisor_type == t:
+                    return d
+
+        # Fallback, just return last item in list
+        return domains[-1]
+
+
+############################
+# Main capabilities object #
+############################
+
+class Capabilities(XMLBuilder):
+    def __init__(self, *args, **kwargs):
+        XMLBuilder.__init__(self, *args, **kwargs)
         self._cpu_values = None
 
-        util.parse_node_helper(self.xml, "capabilities",
-                               self.parseXML,
-                               RuntimeError)
+    _XML_ROOT_NAME = "capabilities"
+
+    host = XMLChildProperty(_CapsHost, is_single=True)
+    guests = XMLChildProperty(_CapsGuest)
+
+
+    ###################
+    # Private helpers #
+    ###################
 
     def _is_xen(self):
         for g in self.guests:
@@ -515,6 +369,11 @@ class Capabilities(object):
                     return True
 
         return False
+
+
+    ##############
+    # Public API #
+    ##############
 
     def no_install_options(self):
         """
@@ -534,16 +393,16 @@ class Capabilities(object):
         sufficiently provided, so we will return True in cases that we
         aren't sure.
         """
+        # Obvious case of feature being specified
+        if (self.host.cpu.has_feature("vmx") or
+            self.host.cpu.has_feature("svm")):
+            return True
+
         has_hvm_guests = False
         for g in self.guests:
             if g.os_type == "hvm":
                 has_hvm_guests = True
                 break
-
-        # Obvious case of feature being specified
-        if (self.host.cpu.features["vmx"] == FEATURE_ON or
-            self.host.cpu.features["svm"] == FEATURE_ON):
-            return True
 
         # Xen seems to block the vmx/svm feature bits from cpuinfo?
         # so make sure no hvm guests are listed
@@ -552,7 +411,7 @@ class Capabilities(object):
 
         # If there is other features, but no virt bit, then HW virt
         # isn't supported
-        if len(self.host.cpu.features.names()):
+        if self.host.cpu.has_feature_block:
             return False
 
         # Xen caps have always shown this info, so if we didn't find any
@@ -617,35 +476,14 @@ class Capabilities(object):
 
         return True
 
-    def support_pae(self):
+    def supports_pae(self):
+        """
+        Return True if capabilities report support for PAE
+        """
         for g in self.guests:
-            if "pae" in g.features.names():
+            if g.features.pae:
                 return True
         return False
-
-    def _guestForOSType(self, typ=None, arch=None):
-        if self.host is None:
-            return None
-
-        if arch is None:
-            archs = [self.host.cpu.arch, None]
-        else:
-            archs = [arch]
-
-        for a in archs:
-            for g in self.guests:
-                if (typ is None or g.os_type == typ) and \
-                   (a is None or g.arch == a):
-                    return g
-
-    def parseXML(self, node):
-        child = node.children
-        while child:
-            if child.name == "host":
-                self.host = Host(child)
-            elif child.name == "guest":
-                self.guests.append(Guest(child))
-            child = child.next
 
     def get_cpu_values(self, conn, arch):
         if not arch:
@@ -662,6 +500,25 @@ class Capabilities(object):
                 return cpus
 
         return []
+
+
+    ############################
+    # Public XML building APIs #
+    ############################
+
+    def _guestForOSType(self, typ=None, arch=None):
+        if self.host is None:
+            return None
+
+        archs = [arch]
+        if arch is None:
+            archs = [self.host.cpu.arch, None]
+
+        for a in archs:
+            for g in self.guests:
+                if ((typ is None or g.os_type == typ) and
+                    (a is None or g.arch == a)):
+                    return g
 
     def guest_lookup(self, os_type=None, arch=None, typ=None, machine=None):
         """
@@ -714,12 +571,12 @@ class Capabilities(object):
         return (guest, domain)
 
     def build_virtinst_guest(self, conn, guest, domain):
-        from .guest import Guest as VMGuest
-        gobj = VMGuest(conn)
+        from .guest import Guest
+        gobj = Guest(conn)
         gobj.type = domain.hypervisor_type
         gobj.os.os_type = guest.os_type
         gobj.os.arch = guest.arch
-        gobj.os.loader = domain.loader
+        gobj.os.loader = guest.loader
         gobj.emulator = domain.emulator
         gobj.os.machine = domain.get_recommended_machine(conn, guest)
 

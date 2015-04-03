@@ -25,8 +25,8 @@ import libvirt
 from . import pollhelpers
 from . import support
 from . import util
-from . import capabilities as CapabilitiesParser
 from . import URISplit
+from . import Capabilities
 from .cli import VirtOptionString
 from .guest import Guest
 from .nodedev import NodeDevice
@@ -121,8 +121,8 @@ class VirtualConnection(object):
 
     def _get_caps(self):
         if not self._caps:
-            self._caps = CapabilitiesParser.Capabilities(
-                                        self._libvirtconn.getCapabilities())
+            self._caps = Capabilities(self,
+                self._libvirtconn.getCapabilities())
         return self._caps
     caps = property(_get_caps)
 
