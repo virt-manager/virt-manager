@@ -129,8 +129,6 @@ class _CapsCPU(DomainCPU):
     _pae_bool = XMLProperty("./features/pae", is_bool=True)
     _nonpae_bool = XMLProperty("./features/nonpae", is_bool=True)
 
-    has_feature_block = XMLProperty("./features", is_bool=True)
-
 
     ##############
     # Public API #
@@ -370,44 +368,6 @@ class Capabilities(XMLBuilder):
 
         return True
 
-    def hw_virt_supported(self):
-        """
-        Return True if the machine supports hardware virtualization.
-
-        For some cases (like qemu caps pre libvirt 0.7.4) this info isn't
-        sufficiently provided, so we will return True in cases that we
-        aren't sure.
-        """
-        # Obvious case of feature being specified
-        if (self.host.cpu.has_feature("vmx") or
-            self.host.cpu.has_feature("svm")):
-            return True
-
-        has_hvm_guests = False
-        for g in self.guests:
-            if g.os_type == "hvm":
-                has_hvm_guests = True
-                break
-
-        # Xen seems to block the vmx/svm feature bits from cpuinfo?
-        # so make sure no hvm guests are listed
-        if self._is_xen() and has_hvm_guests:
-            return True
-
-        # If there is other features, but no virt bit, then HW virt
-        # isn't supported
-        if self.host.cpu.has_feature_block:
-            return False
-
-        # Xen caps have always shown this info, so if we didn't find any
-        # features, the host really doesn't have the nec support
-        if self._is_xen():
-            return False
-
-        # Otherwise, we can't be sure, because there was a period for along
-        # time that qemu caps gave no indication one way or the other.
-        return True
-
     def is_kvm_available(self):
         """
         Return True if kvm guests can be installed
@@ -421,31 +381,6 @@ class Capabilities(XMLBuilder):
                     return True
 
         return False
-
-    def is_bios_virt_disabled(self):
-        """
-        Try to determine if fullvirt may be disabled in the bios.
-
-        Check is basically:
-            - We support HW virt
-            - We appear to be xen
-            - There are no HVM install options
-
-        We don't do this check for KVM, since no KVM options may mean
-        KVM isn't installed or the module isn't loaded (and loading the
-        module will give an appropriate error
-        """
-        if not self.hw_virt_supported():
-            return False
-
-        if not self._is_xen():
-            return False
-
-        for g in self.guests:
-            if g.os_type == "hvm":
-                return False
-
-        return True
 
     def supports_pae(self):
         """

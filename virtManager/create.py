@@ -538,16 +538,13 @@ class vmmCreate(vmmGObjectUI):
         uiutil.set_grid_row_visible(self.widget("arch-expander"), show_arch)
 
         if self.conn.is_xen():
-            if self.conn.caps.hw_virt_supported():
-                if self.conn.caps.is_bios_virt_disabled():
-                    error = _("Host supports full virtualization, but "
-                              "no related install options are available. "
-                              "This may mean support is disabled in your "
-                              "system BIOS.")
-                    self.startup_warning(error)
+            has_hvm_guests = False
+            for g in self.conn.caps.guests:
+                if g.os_type == "hvm":
+                    has_hvm_guests = True
 
-            else:
-                error = _("Host does not appear to support hardware "
+            if not has_hvm_guests:
+                error = _("Host is not advertising support for full "
                           "virtualization. Install options may be limited.")
                 self.startup_warning(error)
 
