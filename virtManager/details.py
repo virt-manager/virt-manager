@@ -539,8 +539,8 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_view_resizeguest_toggled": self.console.resizeguest_ui_changed_cb,
 
             "on_console_pages_switch_page": self.console.page_changed,
-            "on_console_auth_password_activate": self.console.auth_login,
-            "on_console_auth_login_clicked": self.console.auth_login,
+            "on_console_auth_password_activate": self.console.details_auth_login,
+            "on_console_auth_login_clicked": self.console.details_auth_login,
             "on_controller_model_combo_changed": lambda *x: self.enable_apply(x,
                                                   EDIT_CONTROLLER_MODEL),
         })
@@ -1252,7 +1252,7 @@ class vmmDetails(vmmGObjectUI):
         self.page_refresh(newpage)
 
         self.sync_details_console_view(newpage)
-        self.console.set_allow_fullscreen()
+        self.console.refresh_can_fullscreen()
 
     def change_run_text(self, can_restore):
         if can_restore:
