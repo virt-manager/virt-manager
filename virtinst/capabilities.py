@@ -245,7 +245,7 @@ class _CapsDomain(XMLBuilder):
         self._recommended_machine = machine
 
     def is_accelerated(self):
-        return self.hypervisor_type in ["kvm", "kqemu"]
+        return self.hypervisor_type in ["kvm"]
 
 
 class _CapsGuestFeatures(XMLBuilder):
@@ -311,7 +311,7 @@ class _CapsGuest(XMLBuilder):
         if not domains:
             return None
 
-        priority = ["kvm", "xen", "kqemu", "qemu"]
+        priority = ["kvm", "xen", "qemu"]
 
         for t in priority:
             for d in domains:
