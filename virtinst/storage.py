@@ -165,30 +165,33 @@ class StoragePool(_StorageObject):
                 return []
             raise
 
-        def source_parser(node):
-            ret = []
+        class _EnumerateSource(XMLBuilder):
+            _XML_ROOT_NAME = "source"
+        class _EnumerateSources(XMLBuilder):
+            _XML_ROOT_NAME = "sources"
+            sources = XMLChildProperty(_EnumerateSource)
 
-            child = node.children
-            while child:
-                if child.name == "source":
-                    xml = "<pool>\n%s\n</pool>" % (
-                        util.xml_indent(child.serialize(format=1), 2))
-                    parseobj = StoragePool(conn, parsexml=xml)
-                    parseobj.type = pool_type
 
-                    obj = StoragePool(conn)
-                    obj.type = pool_type
-                    obj.source_path = parseobj.source_path
-                    for host in parseobj.hosts:
-                        parseobj.remove_host(host)
-                        obj.add_host_obj(host)
-                    obj.source_name = parseobj.source_name
-                    obj.format = parseobj.format
-                    ret.append(obj)
-                child = child.next
-            return ret
+        ret = []
+        sources = _EnumerateSources(conn, xml)
+        for source in sources.sources:
+            source_xml = source.get_xml_config()
 
-        return util.parse_node_helper(xml, "sources", source_parser)
+            pool_xml = "<pool>\n%s\n</pool>" % (util.xml_indent(source_xml, 2))
+            parseobj = StoragePool(conn, parsexml=pool_xml)
+            parseobj.type = pool_type
+
+            obj = StoragePool(conn)
+            obj.type = pool_type
+            obj.source_path = parseobj.source_path
+            for host in parseobj.hosts:
+                parseobj.remove_host(host)
+                obj.add_host_obj(host)
+            obj.source_name = parseobj.source_name
+            obj.format = parseobj.format
+
+            ret.append(obj)
+        return ret
 
     @staticmethod
     def build_default_pool(conn):
