@@ -422,20 +422,6 @@ class Capabilities(XMLBuilder):
 
         return False
 
-    def is_xenner_available(self):
-        """
-        Return True if xenner install option is available
-        """
-        for g in self.guests:
-            if g.os_type != "xen":
-                continue
-
-            for d in g.domains:
-                if d.hypervisor_type == "kvm":
-                    return True
-
-        return False
-
     def is_bios_virt_disabled(self):
         """
         Try to determine if fullvirt may be disabled in the bios.

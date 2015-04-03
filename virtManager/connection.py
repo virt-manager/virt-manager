@@ -140,10 +140,7 @@ class vmmConnection(vmmGObject):
         domtype = domtype.lower()
 
         label = domtype
-        if domtype == "kvm":
-            if gtype == "xen":
-                label = "xenner"
-        elif domtype == "xen":
+        if domtype == "xen":
             if gtype == "xen":
                 label = "xen (paravirt)"
             elif gtype == "hvm":

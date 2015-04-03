@@ -199,20 +199,18 @@ class TestCapabilities(unittest.TestCase):
         rhel_xen_caps = self._buildCaps("rhel5.4-xen-caps.xml")
         rhel_kvm_caps = self._buildCaps("rhel5.4-kvm-caps.xml")
 
-        def test_utils(caps, no_guests, is_hvm, is_kvm, is_bios_disable,
-                       is_xenner):
+        def test_utils(caps, no_guests, is_hvm, is_kvm, is_bios_disable):
             self.assertEquals(caps.no_install_options(), no_guests)
             self.assertEquals(caps.hw_virt_supported(), is_hvm)
             self.assertEquals(caps.is_kvm_available(), is_kvm)
             self.assertEquals(caps.is_bios_virt_disabled(), is_bios_disable)
-            self.assertEquals(caps.is_xenner_available(), is_xenner)
 
-        test_utils(new_caps, False, True, True, False, True)
-        test_utils(empty_caps, True, False, False, False, False)
-        test_utils(rhel_xen_enable_hvm_caps, False, True, False, False, False)
-        test_utils(rhel_xen_caps, False, True, False, True, False)
-        test_utils(rhel_kvm_caps, False, True, True, False, False)
-        test_utils(new_caps_no_kvm, False, True, False, False, False)
+        test_utils(new_caps, False, True, True, False)
+        test_utils(empty_caps, True, False, False, False)
+        test_utils(rhel_xen_enable_hvm_caps, False, True, False, False)
+        test_utils(rhel_xen_caps, False, True, False, True)
+        test_utils(rhel_kvm_caps, False, True, True, False)
+        test_utils(new_caps_no_kvm, False, True, False, False)
 
     def _testCPUMap(self, api):
         caps = self._buildCaps("libvirt-0.7.6-qemu-caps.xml")
