@@ -478,8 +478,6 @@ class vmmCreatePool(vmmGObjectUI):
         return pool
 
     def _validate_page_name(self, usepool=None):
-        name = self.get_config_name()
-
         try:
             if usepool:
                 self._pool = usepool
