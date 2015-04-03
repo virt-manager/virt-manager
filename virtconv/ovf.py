@@ -316,8 +316,7 @@ def _import_file(doc, ctx, conn, input_file):
     ignore = os_id
     ignore = os_vmware
 
-    (capsguest, capsdomain) = conn.caps.guest_lookup()
-    guest = conn.caps.build_virtinst_guest(conn, capsguest, capsdomain)
+    guest = conn.caps.lookup_virtinst_guest()
     guest.installer = virtinst.ImportInstaller(conn)
 
     if not name:

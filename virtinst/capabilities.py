@@ -222,15 +222,17 @@ class _CapsDomain(XMLBuilder):
     # Public APIs #
     ###############
 
-    def get_recommended_machine(self, conn, capsguest):
+    def get_recommended_machine(self, capsguest):
         if self._recommended_machine:
             return self._recommended_machine
 
-        if not conn.is_test() and not conn.is_qemu():
+        if not self.conn.is_test() and not self.conn.is_qemu():
             return None
 
-        if capsguest.arch in ["ppc64", "ppc64le"] and "pseries" in self.machines:
+        if (capsguest.arch in ["ppc64", "ppc64le"] and
+            "pseries" in self.machines):
             return "pseries"
+
         if capsguest.arch in ["armv7l", "aarch64"]:
             if "virt" in self.machines:
                 return "virt"
@@ -241,9 +243,6 @@ class _CapsDomain(XMLBuilder):
 
     def set_recommended_machine(self, machine):
         self._recommended_machine = machine
-
-    def is_accelerated(self):
-        return self.hypervisor_type in ["kvm"]
 
 
 class _CapsGuestFeatures(XMLBuilder):
@@ -259,17 +258,17 @@ class _CapsGuest(XMLBuilder):
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
 
-        self.machines = []
+        machines = []
         for m in self._machines:
-            self.machines.append(m.name)
+            machines.append(m.name)
             if m.canonical:
-                self.machines.append(m.canonical)
+                machines.append(m.canonical)
 
         for d in self.domains:
             if not d.emulator:
-                d.emulator = self.emulator
+                d.emulator = self._emulator
             if not d.machines:
-                d.machines = self.machines
+                d.machines = machines
 
 
     _XML_ROOT_NAME = "guest"
@@ -277,7 +276,7 @@ class _CapsGuest(XMLBuilder):
     os_type = XMLProperty("./os_type")
     arch = XMLProperty("./arch/@name")
     loader = XMLProperty("./arch/loader")
-    emulator = XMLProperty("./arch/emulator")
+    _emulator = XMLProperty("./arch/emulator")
 
     domains = XMLChildProperty(_CapsDomain, relative_xpath="./arch")
     features = XMLChildProperty(_CapsGuestFeatures, is_single=True)
@@ -323,6 +322,30 @@ class _CapsGuest(XMLBuilder):
 ############################
 # Main capabilities object #
 ############################
+
+class _CapsInfo(object):
+    """
+    Container object to hold the results of guest_lookup, so users don't
+    need to juggle two objects
+    """
+    def __init__(self, guest, domain):
+        self._guest = guest
+        self._domain = domain
+
+        self.hypervisor_type = self._domain.hypervisor_type
+        self.os_type = self._guest.os_type
+        self.arch = self._guest.arch
+        self.loader = self._guest.loader
+
+        self.emulator = self._domain.emulator
+        self.machines = self._domain.machines[:]
+
+    def get_caps_objects(self):
+        return self._guest, self._domain
+
+    def get_recommended_machine(self):
+        return self._domain.get_recommended_machine(self._guest)
+
 
 class Capabilities(XMLBuilder):
     # Set by the test suite to force a particular code path
@@ -453,7 +476,7 @@ class Capabilities(XMLBuilder):
         @param os_type: Hypervisor name ('qemu', 'kvm', 'xen', ...)
         @param machine: Optional machine type to emulate
 
-        @returns: A (Capabilities Guest, Capabilities Domain) tuple
+        @returns: A _CapsInfo object containing the found guest and domain
         """
         guest = self._guestForOSType(os_type, arch)
         if not guest:
@@ -479,16 +502,31 @@ class Capabilities(XMLBuilder):
                                {'domain': typ, 'virttype': guest.os_type,
                                 'arch': guest.arch, 'machine': machinestr})
 
-        return (guest, domain)
+        capsinfo = _CapsInfo(guest, domain)
+        return capsinfo
 
-    def build_virtinst_guest(self, conn, guest, domain):
+    def build_virtinst_guest(self, capsinfo):
+        """
+        Fill in a new Guest() object from the results of guest_lookup
+        """
         from .guest import Guest
-        gobj = Guest(conn)
-        gobj.type = domain.hypervisor_type
-        gobj.os.os_type = guest.os_type
-        gobj.os.arch = guest.arch
-        gobj.os.loader = guest.loader
-        gobj.emulator = domain.emulator
-        gobj.os.machine = domain.get_recommended_machine(conn, guest)
+        gobj = Guest(self.conn)
+        gobj.type = capsinfo.hypervisor_type
+        gobj.os.os_type = capsinfo.os_type
+        gobj.os.arch = capsinfo.arch
+        gobj.os.loader = capsinfo.loader
+        gobj.emulator = capsinfo.emulator
+
+        gobj.os.machine = capsinfo.get_recommended_machine()
 
         return gobj
+
+    def lookup_virtinst_guest(self, *args, **kwargs):
+        """
+        Call guest_lookup and pass the results to build_virtinst_guest.
+
+        This is a shortcut for API users that don't need to do anything
+        with the output from guest_lookup
+        """
+        capsinfo = self.guest_lookup(*args, **kwargs)
+        return self.build_virtinst_guest(capsinfo)

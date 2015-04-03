@@ -82,8 +82,7 @@ class vmmCreate(vmmGObjectUI):
         self.engine = engine
 
         self.conn = None
-        self.capsguest = None
-        self.capsdomain = None
+        self.capsinfo = None
 
         self.guest = None
         self.disk = None
@@ -186,8 +185,7 @@ class vmmCreate(vmmGObjectUI):
         self.remove_conn()
 
         self.conn = None
-        self.capsguest = None
-        self.capsdomain = None
+        self.capsinfo = None
 
         self.guest = None
         self.disk = None
@@ -212,8 +210,7 @@ class vmmCreate(vmmGObjectUI):
 
     def remove_conn(self):
         self.conn = None
-        self.capsguest = None
-        self.capsdomain = None
+        self.capsinfo = None
 
     def set_conn(self, newconn, force_validate=False):
         if self.conn == newconn and not force_validate:
@@ -407,23 +404,22 @@ class vmmCreate(vmmGObjectUI):
         self.topwin.resize(1, 1)
 
     def set_caps_state(self):
-        # State that is dependent on when capsguest changes
+        # State that is dependent on when capsinfo changes
 
         # Helper state
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
         can_storage = (is_local or is_storage_capable)
-        is_pv = (self.capsguest.os_type == "xen")
+        is_pv = (self.capsinfo.os_type == "xen")
         is_container = self.conn.is_container()
         can_remote_url = self.conn.get_backend().support_remote_url_install()
 
-        installable_arch = (self.capsguest.arch in
+        installable_arch = (self.capsinfo.arch in
                             ["i686", "x86_64", "ppc64", "ia64"])
 
-        if self.capsguest.arch == "aarch64":
+        if self.capsinfo.arch == "aarch64":
             try:
-                guest = self.conn.caps.build_virtinst_guest(
-                    self.conn.get_backend(), self.capsguest, self.capsdomain)
+                guest = self.conn.caps.build_virtinst_guest(self.capsinfo)
                 guest.set_uefi_default()
                 installable_arch = True
                 logging.debug("UEFI found for aarch64, setting it as default.")
@@ -470,7 +466,7 @@ class vmmCreate(vmmGObjectUI):
 
         if not installable_arch:
             msg = (_("Architecture '%s' is not installable") %
-                   self.capsguest.arch)
+                   self.capsinfo.arch)
             tree_tt = msg
             local_tt = msg
             pxe_tt = msg
@@ -498,9 +494,9 @@ class vmmCreate(vmmGObjectUI):
         self.widget("virt-install-box").set_visible(not is_container)
         self.widget("container-install-box").set_visible(is_container)
 
-        show_dtb = ("arm" in self.capsguest.arch or
-                    "microblaze" in self.capsguest.arch or
-                    "ppc" in self.capsguest.arch)
+        show_dtb = ("arm" in self.capsinfo.arch or
+                    "microblaze" in self.capsinfo.arch or
+                    "ppc" in self.capsinfo.arch)
         self.widget("config-kernel-box").set_visible(not installable_arch)
         uiutil.set_grid_row_visible(self.widget("config-dtb"), show_dtb)
 
@@ -663,8 +659,8 @@ class vmmCreate(vmmGObjectUI):
                 continue
 
             # Determine if this is the default given by guest_lookup
-            if (gtype == self.capsguest.os_type and
-                self.capsdomain.hypervisor_type == domtype):
+            if (gtype == self.capsinfo.os_type and
+                self.capsinfo.hypervisor_type == domtype):
                 default = len(model)
 
             model.append([label, gtype])
@@ -682,7 +678,7 @@ class vmmCreate(vmmGObjectUI):
         default = 0
         archs = []
         for guest in self.conn.caps.guests:
-            if guest.os_type == self.capsguest.os_type:
+            if guest.os_type == self.capsinfo.os_type:
                 archs.append(guest.arch)
 
         # Combine x86/i686 to avoid confusion
@@ -706,8 +702,8 @@ class vmmCreate(vmmGObjectUI):
             archs = prios + archs
 
         default = 0
-        if self.capsguest.arch in archs:
-            default = archs.index(self.capsguest.arch)
+        if self.capsinfo.arch in archs:
+            default = archs.index(self.capsinfo.arch)
 
         for arch in archs:
             model.append([arch, pretty_arch(arch)])
@@ -721,15 +717,14 @@ class vmmCreate(vmmGObjectUI):
         model = lst.get_model()
         model.clear()
 
-        machines = self.capsdomain.machines[:]
-        if self.capsguest.arch in ["i686", "x86_64"]:
+        machines = self.capsinfo.machines[:]
+        if self.capsinfo.arch in ["i686", "x86_64"]:
             machines = []
         machines.sort()
 
         defmachine = None
         prios = []
-        recommended_machine = self.capsdomain.get_recommended_machine(
-            self.conn.get_backend(), self.capsguest)
+        recommended_machine = self.capsinfo.get_recommended_machine()
         if recommended_machine:
             defmachine = recommended_machine
             prios = [defmachine]
@@ -889,17 +884,19 @@ class vmmCreate(vmmGObjectUI):
                     gtype = "hvm"
                     break
 
-        (newg, newdom) = self.conn.caps.guest_lookup(os_type=gtype, arch=arch)
+        capsinfo = self.conn.caps.guest_lookup(os_type=gtype, arch=arch)
+        newg, newdom = capsinfo.get_caps_objects()
 
-        if self.capsguest == newg and self.capsdomain and newdom:
-            return
+        if self.capsinfo:
+            oldg, olddom = self.capsinfo.get_caps_objects()
+            if oldg == newg and olddom and newdom:
+                return
 
-        self.capsguest = newg
-        self.capsdomain = newdom
+        self.capsinfo = capsinfo
         logging.debug("Guest type set to os_type=%s, arch=%s, dom_type=%s",
-                      self.capsguest.os_type,
-                      self.capsguest.arch,
-                      self.capsdomain.hypervisor_type)
+                      self.capsinfo.os_type,
+                      self.capsinfo.arch,
+                      self.capsinfo.hypervisor_type)
         self.populate_machine()
         self.set_caps_state()
 
@@ -1108,7 +1105,7 @@ class vmmCreate(vmmGObjectUI):
 
     def machine_changed(self, ignore):
         machine = self.get_config_machine()
-        show_dtb_virtio = (self.capsguest.arch == "armv7l" and
+        show_dtb_virtio = (self.capsinfo.arch == "armv7l" and
                            machine in ["vexpress-a9", "vexpress-15"])
         uiutil.set_grid_row_visible(
             self.widget("config-dtb-warn-virtio"), show_dtb_virtio)
@@ -1154,7 +1151,7 @@ class vmmCreate(vmmGObjectUI):
         if not arch:
             return
 
-        self.change_caps(self.capsguest.os_type, arch)
+        self.change_caps(self.capsinfo.os_type, arch)
 
     def media_box_changed(self, widget):
         self.mediaDetected = False
@@ -1408,8 +1405,7 @@ class vmmCreate(vmmGObjectUI):
             page.set_visible(nr == pagenum)
 
     def build_guest(self, variant):
-        guest = self.conn.caps.build_virtinst_guest(
-            self.conn.get_backend(), self.capsguest, self.capsdomain)
+        guest = self.conn.caps.build_virtinst_guest(self.capsinfo)
         guest.os.machine = self.get_config_machine()
 
         # Generate UUID (makes customize dialog happy)
@@ -1627,11 +1623,11 @@ class vmmCreate(vmmGObjectUI):
             self.guest.os.dtb = dtb
             self.guest.os.kernel_args = kargs
 
-            require_kernel = ("arm" in self.capsguest.arch)
+            require_kernel = ("arm" in self.capsinfo.arch)
             if require_kernel and not kernel:
                 return self.err.val_err(
                     _("A kernel is required for %s guests.") %
-                    self.capsguest.arch)
+                    self.capsinfo.arch)
 
         try:
             name = self._generate_default_name(distro, variant)
@@ -2092,8 +2088,8 @@ class vmmCreate(vmmGObjectUI):
         emu = None
         if self.guest:
             emu = self.guest.emulator
-        elif self.capsdomain:
-            emu = self.capsdomain.emulator
+        elif self.capsinfo:
+            emu = self.capsinfo.emulator
 
         ret = self.conn.stable_defaults(emu)
         return ret

@@ -295,8 +295,7 @@ class vmx_parser(parser_class):
                 not os.path.exists(disk.path)):
                 disk.path = None
 
-        (capsguest, capsdomain) = conn.caps.guest_lookup()
-        guest = conn.caps.build_virtinst_guest(conn, capsguest, capsdomain)
+        guest = conn.caps.lookup_virtinst_guest()
         guest.installer = virtinst.ImportInstaller(conn)
 
         guest.name = name.replace(" ", "_")

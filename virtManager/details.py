@@ -758,13 +758,13 @@ class vmmDetails(vmmGObjectUI):
 
         machines = []
         try:
-            ignore, domain = caps.guest_lookup(
+            capsinfo = caps.guest_lookup(
                 os_type=self.vm.get_abi_type(),
                 arch=self.vm.get_arch(),
                 typ=self.vm.get_hv_type(),
                 machine=self.vm.get_machtype())
 
-            machines = domain.machines[:]
+            machines = capsinfo.machines[:]
         except:
             logging.exception("Error determining machine list")
 

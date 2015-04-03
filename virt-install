@@ -353,23 +353,21 @@ def get_guest(conn, options):
         arch = "i686"
 
     try:
-        (capsguest,
-         capsdomain) = conn.caps.guest_lookup(
-                        os_type=req_virt_type,
-                        arch=arch,
-                        typ=req_hv_type,
-                        machine=options.machine)
-        guest = conn.caps.build_virtinst_guest(conn, capsguest, capsdomain)
+        guest = conn.caps.lookup_virtinst_guest(
+            os_type=req_virt_type,
+            arch=arch,
+            typ=req_hv_type,
+            machine=options.machine)
     except Exception, e:
         fail(e)
 
     if (not req_virt_type and
         not req_hv_type and
         conn.is_qemu() and
-        capsguest.arch in ["i686", "x86_64"] and
-        not capsdomain.is_accelerated()):
+        guest.os.arch in ["i686", "x86_64"] and
+        not guest.type == "kvm"):
         logging.warn("KVM acceleration not available, using '%s'",
-                     capsdomain.hypervisor_type)
+                     guest.type)
 
     return guest
 
@@ -398,8 +396,7 @@ def set_install_media(guest, location, cdpath, distro_variant):
 
 
 def do_test_media_detection(conn, url):
-    (capsguest, capsdomain) = conn.caps.guest_lookup()
-    guest = conn.caps.build_virtinst_guest(conn, capsguest, capsdomain)
+    guest = conn.caps.lookup_virtinst_guest()
     guest.installer = virtinst.DistroInstaller(conn)
     guest.installer.location = url
     print_stdout(guest.installer.detect_distro(guest), do_force=True)
