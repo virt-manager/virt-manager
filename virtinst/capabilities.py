@@ -358,15 +358,15 @@ class Capabilities(XMLBuilder):
     # Public API #
     ##############
 
-    def no_install_options(self):
+    def has_install_options(self):
         """
-        Return True if there are no install options available
+        Return True if there are any install options available
         """
         for g in self.guests:
             if len(g.domains) > 0:
-                return False
+                return True
 
-        return True
+        return False
 
     def is_kvm_available(self):
         """

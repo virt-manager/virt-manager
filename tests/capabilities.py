@@ -199,16 +199,16 @@ class TestCapabilities(unittest.TestCase):
         rhel_xen_caps = self._buildCaps("rhel5.4-xen-caps.xml")
         rhel_kvm_caps = self._buildCaps("rhel5.4-kvm-caps.xml")
 
-        def test_utils(caps, no_guests, is_kvm):
-            self.assertEquals(caps.no_install_options(), no_guests)
+        def test_utils(caps, has_guests, is_kvm):
+            self.assertEquals(caps.has_install_options(), has_guests)
             self.assertEquals(caps.is_kvm_available(), is_kvm)
 
-        test_utils(new_caps, False, True)
-        test_utils(empty_caps, True, False)
-        test_utils(rhel_xen_enable_hvm_caps, False, False)
-        test_utils(rhel_xen_caps, False, False)
-        test_utils(rhel_kvm_caps, False, True)
-        test_utils(new_caps_no_kvm, False, False)
+        test_utils(new_caps, True, True)
+        test_utils(empty_caps, False, False)
+        test_utils(rhel_xen_enable_hvm_caps, True, False)
+        test_utils(rhel_xen_caps, True, False)
+        test_utils(rhel_kvm_caps, True, True)
+        test_utils(new_caps_no_kvm, True, False)
 
     def _testCPUMap(self, api):
         caps = self._buildCaps("libvirt-0.7.6-qemu-caps.xml")

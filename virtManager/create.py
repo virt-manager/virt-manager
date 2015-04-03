@@ -514,7 +514,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("startup-error-box").hide()
         self.widget("create-forward").set_sensitive(True)
 
-        if self.conn.caps.no_install_options():
+        if not self.conn.caps.has_install_options():
             error = _("No hypervisor options were found for this "
                       "connection.")
 
