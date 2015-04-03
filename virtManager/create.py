@@ -687,7 +687,7 @@ class vmmCreate(vmmGObjectUI):
             archs.remove("i686")
         archs.sort()
 
-        prios = ["x86_64", "i686", "armv7l", "ppc64"]
+        prios = ["x86_64", "i686", "aarch64", "armv7l", "ppc64"]
         if self.conn.caps.host.cpu.arch not in prios:
             prios = []
         else:
