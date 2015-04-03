@@ -214,15 +214,19 @@ class TestCapabilities(unittest.TestCase):
         test_utils(rhel_kvm_caps, False, True, True, False, False)
         test_utils(new_caps_no_kvm, False, True, False, False, False)
 
-    def testCPUMap(self):
-        _CPUMapFileValues.update_cpu_filename("tests/capabilities-xml/cpu_map.xml")
+    def _testCPUMap(self, api):
         caps = self._buildCaps("libvirt-0.7.6-qemu-caps.xml")
-        cpu_64 = caps.get_cpu_values(None, "x86_64")
-        cpu_32 = caps.get_cpu_values(None, "i486")
-        cpu_random = caps.get_cpu_values(None, "mips")
+
+        setattr(_CPUMapFileValues, "_cpu_filename",
+            "tests/capabilities-xml/cpu_map.xml")
+        setattr(caps, "_force_cpumap", not api)
+
+        cpu_64 = caps.get_cpu_values("x86_64")
+        cpu_32 = caps.get_cpu_values("i486")
+        cpu_random = caps.get_cpu_values("mips")
 
         def test_cpu_map(cpumap, cpus):
-            cpunames = sorted([c.model for c in cpumap], key=str.lower)
+            cpunames = sorted(cpumap, key=str.lower)
 
             for c in cpus:
                 self.assertTrue(c in cpunames)
@@ -238,8 +242,14 @@ class TestCapabilities(unittest.TestCase):
         test_cpu_map(cpu_64, x86_cpunames)
         test_cpu_map(cpu_random, [])
 
-        cpu_64 = caps.get_cpu_values(conn, "x86_64")
+        cpu_64 = caps.get_cpu_values("x86_64")
         self.assertTrue(len(cpu_64) > 0)
+
+    def testCPUMapFile(self):
+        self._testCPUMap(api=True)
+
+    def testCPUMapAPI(self):
+        self._testCPUMap(api=False)
 
     def testDomainCapabilities(self):
         xml = file("tests/capabilities-xml/domain-capabilities.xml").read()

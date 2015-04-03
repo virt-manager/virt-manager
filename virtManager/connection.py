@@ -976,7 +976,7 @@ class vmmConnection(vmmGObject):
         self._add_conn_events()
 
         # Prime CPU cache
-        self.caps.get_cpu_values(self.get_backend(), "x86_64")
+        self.caps.get_cpu_values("x86_64")
 
         try:
             self._backend.setKeepAlive(20, 1)

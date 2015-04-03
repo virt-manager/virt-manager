@@ -21,7 +21,6 @@
 
 import re
 
-from . import util
 from .cpu import CPU as DomainCPU
 from .xmlbuilder import XMLBuilder, XMLChildProperty
 from .xmlbuilder import XMLProperty as _XMLProperty
@@ -32,111 +31,94 @@ class XMLProperty(_XMLProperty):
     _track = False
 
 
-class CPUValuesModel(object):
+##########################
+# CPU model list objects #
+##########################
+
+class _CPUMapModel(XMLBuilder):
     """
-    Single CPU model
+    Single <model> instance from cpu_map.xml
     """
-    def __init__(self, model):
-        self.model = model
+    _XML_ROOT_NAME = "model"
+    name = XMLProperty("./@name")
 
 
-class CPUValuesArch(object):
+class _CPUMapArch(XMLBuilder):
     """
-    Single <arch> instance of valid CPUs
+    Single <arch> instance of valid CPU from cpu_map.xml
     """
-    def __init__(self, arch, node=None):
-        self.arch = arch
-        self.vendors = []
-        self.cpus = []
-
-        if node:
-            self._parseXML(node)
-
-    def _parseXML(self, node):
-        child = node.children
-        while child:
-            if child.name == "vendor":
-                self.vendors.append(child.prop("name"))
-            if child.name == "model":
-                newcpu = CPUValuesModel(child.prop("name"))
-                self.cpus.append(newcpu)
-
-            child = child.next
-
-        self.vendors.sort()
-
-    def get_cpu(self, model):
-        for c in self.cpus:
-            if c.model == model:
-                return c
-        raise ValueError(_("Unknown CPU model '%s'") % model)
+    _XML_ROOT_NAME = "arch"
+    arch = XMLProperty("./@name")
+    models = XMLChildProperty(_CPUMapModel)
 
 
-class _CPUAPIValues(object):
-    """
-    Lists valid values for cpu models obtained trough libvirt's getCPUModelNames
-    """
-    def __init__(self):
-        self._cpus = None
-
-    def get_cpus(self, arch, conn):
-        if self._cpus is not None:
-            return self._cpus
-
-        if (conn and conn.check_support(conn.SUPPORT_CONN_CPU_MODEL_NAMES)):
-            names = conn.getCPUModelNames(arch, 0)
-
-            # Bindings were broke for a long time, so catch -1
-            if names != -1:
-                self._cpus = [CPUValuesModel(i) for i in names]
-                return self._cpus
-
-        return []
-
-
-class _CPUMapFileValues(_CPUAPIValues):
+class _CPUMapFileValues(XMLBuilder):
     """
     Fallback method to lists cpu models, parsed directly from libvirt's local
     cpu_map.xml
     """
+    # This is overwritten as part of the test suite
     _cpu_filename = "/usr/share/libvirt/cpu_map.xml"
 
-    def __init__(self):
-        _CPUAPIValues.__init__(self)
-        self.archmap = {}
+    def __init__(self, conn):
         xml = file(self._cpu_filename).read()
+        XMLBuilder.__init__(self, conn, parsexml=xml)
 
-        util.parse_node_helper(xml, "cpus",
-                                self._parseXML,
-                                RuntimeError)
+        self._archmap = {}
 
-    @staticmethod
-    def update_cpu_filename(name):
-        _CPUMapFileValues._cpu_filename = name
+    _cpuvalues = XMLChildProperty(_CPUMapArch)
 
-    def _parseXML(self, node):
-        child = node.children
-        while child:
-            if child.name == "arch":
-                arch = child.prop("name")
-                self.archmap[arch] = CPUValuesArch(arch, child)
 
-            child = child.next
+    ##############
+    # Public API #
+    ##############
 
-    def get_cpus(self, arch, conn):
-        ignore = conn
+    def get_cpus(self, arch):
         if re.match(r'i[4-9]86', arch):
             arch = "x86"
         elif arch == "x86_64":
             arch = "x86"
 
-        cpumap = self.archmap.get(arch)
+        cpumap = self._archmap.get(arch)
         if not cpumap:
-            cpumap = CPUValuesArch(arch)
-            self.archmap[arch] = cpumap
+            for vals in self._cpuvalues:
+                if vals.arch == arch:
+                    cpumap = vals
 
-        return cpumap.cpus
+        if not cpumap:
+            # Create a stub object
+            cpumap = _CPUMapArch(self.conn)
 
+        self._archmap[arch] = cpumap
+        return [m.name for m in cpumap.models]
+
+
+class _CPUAPIValues(object):
+    """
+    Lists valid values for cpu models obtained from libvirt's getCPUModelNames
+    """
+    def __init__(self, conn):
+        self.conn = conn
+        self._cpus = None
+
+    def get_cpus(self, arch):
+        if self._cpus is not None:
+            return self._cpus
+
+        if self.conn.check_support(self.conn.SUPPORT_CONN_CPU_MODEL_NAMES):
+            names = self.conn.getCPUModelNames(arch, 0)
+
+            # Bindings were broke for a long time, so catch -1
+            if names != -1:
+                self._cpus = names
+                return self._cpus
+
+        return []
+
+
+###################################
+# capabilities host <cpu> parsing #
+###################################
 
 class _CapsCPU(DomainCPU):
     arch = XMLProperty("./arch")
@@ -345,6 +327,9 @@ class _CapsGuest(XMLBuilder):
 ############################
 
 class Capabilities(XMLBuilder):
+    # Set by the test suite to force a particular code path
+    _force_cpumap = False
+
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
         self._cpu_values = None
@@ -485,16 +470,21 @@ class Capabilities(XMLBuilder):
                 return True
         return False
 
-    def get_cpu_values(self, conn, arch):
+    def get_cpu_values(self, arch):
         if not arch:
             return []
         if self._cpu_values:
-            return self._cpu_values.get_cpus(arch, conn)
+            return self._cpu_values.get_cpus(arch)
+
+        order = [_CPUAPIValues, _CPUMapFileValues]
+        if self._force_cpumap:
+            order = [_CPUMapFileValues]
 
         # Iterate over the available methods until a set of CPU models is found
-        for mode in (_CPUAPIValues, _CPUMapFileValues):
-            cpu_values = mode()
-            cpus = cpu_values.get_cpus(arch, conn)
+        for mode in order:
+            cpu_values = mode(self.conn)
+            cpus = cpu_values.get_cpus(arch)
+
             if len(cpus) > 0:
                 self._cpu_values = cpu_values
                 return cpus
