@@ -210,39 +210,10 @@ class _CapsDomain(XMLBuilder):
             if m.canonical:
                 self.machines.append(m.canonical)
 
-        self._recommended_machine = None
-
     _XML_ROOT_NAME = "domain"
     hypervisor_type = XMLProperty("./@type")
     emulator = XMLProperty("./emulator")
     _machines = XMLChildProperty(_CapsMachine)
-
-
-    ###############
-    # Public APIs #
-    ###############
-
-    def get_recommended_machine(self, capsguest):
-        if self._recommended_machine:
-            return self._recommended_machine
-
-        if not self.conn.is_test() and not self.conn.is_qemu():
-            return None
-
-        if (capsguest.arch in ["ppc64", "ppc64le"] and
-            "pseries" in self.machines):
-            return "pseries"
-
-        if capsguest.arch in ["armv7l", "aarch64"]:
-            if "virt" in self.machines:
-                return "virt"
-            if "vexpress-a15" in self.machines:
-                return "vexpress-a15"
-
-        return None
-
-    def set_recommended_machine(self, machine):
-        self._recommended_machine = machine
 
 
 class _CapsGuestFeatures(XMLBuilder):
@@ -294,15 +265,11 @@ class _CapsGuest(XMLBuilder):
         """
         domains = []
         for d in self.domains:
-            d.set_recommended_machine(None)
-
             if dtype and d.hypervisor_type != dtype.lower():
                 continue
             if machine and machine not in d.machines:
                 continue
 
-            if machine:
-                d.set_recommended_machine(machine)
             domains.append(d)
 
         if not domains:
@@ -328,9 +295,11 @@ class _CapsInfo(object):
     Container object to hold the results of guest_lookup, so users don't
     need to juggle two objects
     """
-    def __init__(self, guest, domain):
+    def __init__(self, conn, guest, domain, requested_machine):
+        self.conn = conn
         self._guest = guest
         self._domain = domain
+        self._requested_machine = requested_machine
 
         self.hypervisor_type = self._domain.hypervisor_type
         self.os_type = self._guest.os_type
@@ -341,10 +310,37 @@ class _CapsInfo(object):
         self.machines = self._domain.machines[:]
 
     def get_caps_objects(self):
+        """
+        Return the raw backing caps objects
+        """
         return self._guest, self._domain
 
     def get_recommended_machine(self):
-        return self._domain.get_recommended_machine(self._guest)
+        """
+        Return the recommended machine type.
+
+        However, if the user already requested an explicit machine type,
+        via guest_lookup, return that instead.
+        """
+        if self._requested_machine:
+            return self._requested_machine
+
+        # For any other HV just let libvirt get us the default, these
+        # are the only ones we've tested.
+        if not self.conn.is_test() and not self.conn.is_qemu():
+            return None
+
+        if (self.arch in ["ppc64", "ppc64le"] and
+            "pseries" in self.machines):
+            return "pseries"
+
+        if self.arch in ["armv7l", "aarch64"]:
+            if "virt" in self.machines:
+                return "virt"
+            if "vexpress-a15" in self.machines:
+                return "vexpress-a15"
+
+        return None
 
 
 class Capabilities(XMLBuilder):
@@ -502,7 +498,7 @@ class Capabilities(XMLBuilder):
                                {'domain': typ, 'virttype': guest.os_type,
                                 'arch': guest.arch, 'machine': machinestr})
 
-        capsinfo = _CapsInfo(guest, domain)
+        capsinfo = _CapsInfo(self.conn, guest, domain, machine)
         return capsinfo
 
     def build_virtinst_guest(self, capsinfo):
