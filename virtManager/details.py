@@ -520,6 +520,8 @@ class vmmDetails(vmmGObjectUI):
 
             "on_hostdev_rombar_toggled": lambda *x: self.enable_apply(
                 x, EDIT_HOSTDEV_ROMBAR),
+            "on_controller_model_combo_changed": (lambda *x:
+                self.enable_apply(x, EDIT_CONTROLLER_MODEL)),
 
             "on_config_apply_clicked": self.config_apply,
             "on_config_cancel_clicked": self.config_cancel,
@@ -531,18 +533,25 @@ class vmmDetails(vmmGObjectUI):
             "on_hw_list_button_press_event": self.popup_addhw_menu,
 
             # Listeners stored in vmmConsolePages
-            "on_details_menu_view_fullscreen_activate": self.console.toggle_fullscreen,
-            "on_details_menu_view_size_to_vm_activate": self.console.size_to_vm,
-            "on_details_menu_view_scale_always_toggled": self.console.scaling_ui_changed_cb,
-            "on_details_menu_view_scale_fullscreen_toggled": self.console.scaling_ui_changed_cb,
-            "on_details_menu_view_scale_never_toggled": self.console.scaling_ui_changed_cb,
-            "on_details_menu_view_resizeguest_toggled": self.console.resizeguest_ui_changed_cb,
+            "on_details_menu_view_fullscreen_activate": (
+                self.console.details_toggle_fullscreen),
+            "on_details_menu_view_size_to_vm_activate": (
+                self.console.details_size_to_vm),
+            "on_details_menu_view_scale_always_toggled": (
+                self.console.details_scaling_ui_changed_cb),
+            "on_details_menu_view_scale_fullscreen_toggled": (
+                self.console.details_scaling_ui_changed_cb),
+            "on_details_menu_view_scale_never_toggled": (
+                self.console.details_scaling_ui_changed_cb),
+            "on_details_menu_view_resizeguest_toggled": (
+                self.console.details_resizeguest_ui_changed_cb),
 
-            "on_console_pages_switch_page": self.console.page_changed,
-            "on_console_auth_password_activate": self.console.details_auth_login,
-            "on_console_auth_login_clicked": self.console.details_auth_login,
-            "on_controller_model_combo_changed": lambda *x: self.enable_apply(x,
-                                                  EDIT_CONTROLLER_MODEL),
+            "on_console_pages_switch_page": (
+                self.console.details_page_changed),
+            "on_console_auth_password_activate": (
+                self.console.details_auth_login),
+            "on_console_auth_login_clicked": (
+                self.console.details_auth_login),
         })
 
         # Deliberately keep all this after signal connection
@@ -618,9 +627,9 @@ class vmmDetails(vmmGObjectUI):
             return
 
         self.topwin.hide()
-        if self.console.viewer_is_visible():
+        if self.console.details_viewer_is_visible():
             try:
-                self.console.close_viewer()
+                self.console.details_close_viewer()
             except:
                 logging.error("Failure when disconnecting from desktop server")
 
@@ -688,8 +697,8 @@ class vmmDetails(vmmGObjectUI):
                                     self.config.get_details_show_toolbar())
 
         # Keycombo menu (ctrl+alt+del etc.)
-        self.keycombo_menu = self.console.build_keycombo_menu(
-            self.console.send_key)
+        self.keycombo_menu = self.console.details_build_keycombo_menu(
+            self.console.details_send_key)
         self.widget("details-menu-send-key").set_submenu(self.keycombo_menu)
 
 
@@ -1252,7 +1261,7 @@ class vmmDetails(vmmGObjectUI):
         self.page_refresh(newpage)
 
         self.sync_details_console_view(newpage)
-        self.console.refresh_can_fullscreen()
+        self.console.details_refresh_can_fullscreen()
 
     def change_run_text(self, can_restore):
         if can_restore:
@@ -1297,12 +1306,11 @@ class vmmDetails(vmmGObjectUI):
         self.widget("config-maxmem").set_sensitive(not ro)
 
         # Disable send key menu entries for offline VM
-        self.console.send_key_button.set_sensitive(not (run or paused))
         send_key = self.widget("details-menu-send-key")
         for c in send_key.get_submenu().get_children():
             c.set_sensitive(not (run or paused))
 
-        self.console.update_widget_states(vm, status)
+        self.console.details_update_widget_states(vm, status)
         if not run:
             self.activate_default_console_page()
 
@@ -1346,7 +1354,7 @@ class vmmDetails(vmmGObjectUI):
         # when the user runs a VM while they are focused on the details page,
         # and we don't want to switch pages out from under them.
         origpage = pages.get_current_page()
-        self.console.activate_default_console_page()
+        self.console.details_activate_default_console_page()
         pages.set_current_page(origpage)
 
     # activate_* are called from engine.py via CLI options
@@ -1413,7 +1421,7 @@ class vmmDetails(vmmGObjectUI):
                       self.vm.get_connkey())
 
     def control_vm_menu(self, src_ignore):
-        can_usb = bool(self.console.viewer_has_usb_redirection() and
+        can_usb = bool(self.console.details_viewer_has_usb_redirection() and
                        self.vm.has_spicevmc_type_redirdev())
         self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
 
@@ -1464,7 +1472,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = src
         spice_usbdev_dialog = self.err
 
-        spice_usbdev_widget = self.console.viewer_get_usb_widget()
+        spice_usbdev_widget = self.console.details_viewer_get_usb_widget()
         if not spice_usbdev_widget:
             self.err.show_err(_("Error initializing spice USB device widget"))
             return
@@ -1474,7 +1482,7 @@ class vmmDetails(vmmGObjectUI):
                                       widget=spice_usbdev_widget)
 
     def _take_screenshot(self):
-        image = self.console.viewer_get_pixbuf()
+        image = self.console.details_viewer_get_pixbuf()
 
         metadata = {
             'tEXt::Hypervisor URI': self.vm.conn.get_uri(),
