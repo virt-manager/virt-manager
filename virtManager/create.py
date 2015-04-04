@@ -1192,7 +1192,8 @@ class vmmCreate(vmmGObjectUI):
         if not show_all:
             return
 
-        # Get previous
+        # 'show all OS' was clicked
+        # Get previous type to reselect it later
         type_row = self._selected_os_row()
         if not type_row:
             return
@@ -1201,6 +1202,7 @@ class vmmCreate(vmmGObjectUI):
         self.show_all_os = True
         self.populate_os_type_model()
 
+        # Reselect previous type row
         os_type_list = self.widget("install-os-type")
         os_type_model = os_type_list.get_model()
         for idx in range(len(os_type_model)):
@@ -1972,7 +1974,7 @@ class vmmCreate(vmmGObjectUI):
         # Helper method to set the OS Type/Variant selections to the passed
         # values, or -1 if not present.
         model = os_widget.get_model()
-        def set_val():
+        def find_row_value():
             for idx in range(len(model)):
                 row = model[idx]
                 if value and row[0] == value:
@@ -1980,10 +1982,16 @@ class vmmCreate(vmmGObjectUI):
                     return row[1]
             os_widget.set_active(0)
 
-        ret = set_val()
-        if not ret and not self.show_all_os:
-            os_widget.set_active(len(model) - 1)
-            ret = set_val()
+        ret = None
+        if value:
+            ret = find_row_value()
+
+            if not ret and not self.show_all_os:
+                # We didn't find the OS in the variant UI, but we are only
+                # showing the reduced OS list. Trigger the show_all_os option,
+                # and try again.
+                os_widget.set_active(len(model) - 1)
+                ret = find_row_value()
         return ret or _("Unknown")
 
     def set_distro_selection(self, variant):
@@ -1996,7 +2004,7 @@ class vmmCreate(vmmGObjectUI):
         distro_var = None
         if variant:
             osclass = virtinst.OSDB.lookup_os(variant)
-            distro_type = osclass.typename
+            distro_type = osclass.get_typename()
             distro_var = osclass.name
 
         dl = self.set_os_val(self.widget("install-os-type"), distro_type)
