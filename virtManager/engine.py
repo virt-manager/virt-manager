@@ -619,7 +619,12 @@ class vmmEngine(vmmGObject):
         details += tb
 
         if probe_connection:
-            msg += "\n\n%s" % _("Would you still like to remember this connection?")
+            msg += "\n\n"
+            msg += _("Would you still like to remember this connection?")
+
+        if (self.windowManager and
+            self.windowManager.is_visible()):
+            self.err.set_parent(self.windowManager.topwin)
 
         title = _("Virtual Machine Manager Connection Failure")
         if probe_connection:
@@ -636,6 +641,7 @@ class vmmEngine(vmmGObject):
                 self.idle_add(self.exit_app, conn)
             else:
                 self.err.show_err(msg, details, title)
+
 
     ####################
     # Dialog launchers #
