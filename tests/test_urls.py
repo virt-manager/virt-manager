@@ -125,10 +125,10 @@ _add(OLD_CENTOS_URL % ("5.0", "x86_64"), name="centos-5.0")
 _add(CENTOS_URL % ("5", "x86_64"), "rhel5.8", name="centos-5-latest",
      i686=CENTOS_URL % ("5", "i386"))
 # Latest centos 6 w/ i686
-_add(CENTOS_URL % ("6", "x86_64"), "rhel6.5", name="centos-6-latest",
+_add(CENTOS_URL % ("6", "x86_64"), "centos6.5", name="centos-6-latest",
      i686=CENTOS_URL % ("6", "i386"))
 # Latest centos 7, but no i686 as of 2014-09-06
-_add(CENTOS_URL % ("7", "x86_64"), "rhel7.0", name="centos-7-latest")
+_add(CENTOS_URL % ("7", "x86_64"), "centos7.0", name="centos-7-latest")
 
 
 _set_distro(SLDistro)

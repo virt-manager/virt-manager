@@ -795,7 +795,7 @@ class RHELDistro(RedHatDistro):
 # CentOS distro check
 class CentOSDistro(RHELDistro):
     name = "CentOS"
-    urldistro = None
+    urldistro = "centos"
 
     def isValidStore(self):
         if not self._hasTreeinfo():
@@ -805,6 +805,10 @@ class CentOSDistro(RHELDistro):
         ret = (m is not None)
         if ret:
             self._variantFromVersion()
+            if self.os_variant:
+                new_variant = self.os_variant.replace("rhel", "centos")
+                if self._check_osvariant_valid(new_variant):
+                    self.os_variant = new_variant
         return ret
 
 
