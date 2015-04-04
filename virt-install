@@ -101,9 +101,19 @@ def check_cdrom_option_error(options):
             fail("You specified -vcpus, you want --vcpus")
 
 
-##############################
-# Device validation wrappers #
-##############################
+#################################
+# Back compat option conversion #
+#################################
+
+def convert_old_printxml(options):
+    if options.xmlstep:
+        options.xmlonly = options.xmlstep
+        del(options.xmlstep)
+
+    # The case when someone specifies a bare --print-xml
+    if options.xmlonly is True:
+        options.xmlonly = "all"
+
 
 def convert_old_sound(options):
     if not options.sound:
@@ -423,7 +433,7 @@ def validate_required_options(options, guest):
             _("--disk storage must be specified (override with --disk none)"))
 
     if (not guest.os.is_container() and
-        not (options.xmlonly or options.xmlstep) and
+        not options.xmlonly and
         (not install_specified(options.location, options.cdrom,
                                options.pxe, options.import_install)) and
         (not cdrom_specified(guest, options.disk))):
@@ -565,7 +575,7 @@ def build_installer(options, conn, virt_type):
             fail(_("A disk device must be specified with --import."))
         options.import_install = True
         instclass = virtinst.ImportInstaller
-    elif options.xmlstep or options.xmlonly:
+    elif options.xmlonly:
         instclass = virtinst.ImportInstaller
     else:
         instclass = virtinst.DistroInstaller
@@ -870,7 +880,7 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
 # XML printing helpers #
 ########################
 
-def xml_to_print(guest, continue_inst, xmlonly, xmlstep, dry):
+def xml_to_print(guest, continue_inst, xmlonly, dry):
     start_xml, final_xml = guest.start_install(dry=dry, return_xml=True)
     second_xml = None
     if not start_xml:
@@ -881,26 +891,17 @@ def xml_to_print(guest, continue_inst, xmlonly, xmlstep, dry):
         second_xml, final_xml = guest.continue_install(dry=dry,
                                                        return_xml=True)
 
-    if dry and not (xmlonly or xmlstep):
+    if dry and not xmlonly:
         print_stdout(_("Dry run completed successfully"))
         return
 
-    # --print-xml
-    if xmlonly and not xmlstep:
-        if second_xml or final_xml:
-            fail(_("--print-xml can only be used with guests that do not have "
-                   "an installation phase (--import, --boot, etc.). To see all"
-                   " generated XML, please use --print-step all."))
+    if xmlonly == "1":
         return start_xml
-
-    # --print-step
-    if xmlstep == "1":
-        return start_xml
-    if xmlstep == "2":
+    if xmlonly == "2":
         if not (second_xml or final_xml):
             fail(_("Requested installation does not have XML step 2"))
         return second_xml or final_xml
-    if xmlstep == "3":
+    if xmlonly == "3":
         if not second_xml:
             fail(_("Requested installation does not have XML step 3"))
         return final_xml
@@ -1041,8 +1042,10 @@ def main(conn=None):
     cli.earlyLogging()
     options = parse_args()
 
+    convert_old_printxml(options)
+
     # Default setup options
-    options.quiet = (options.xmlstep or options.xmlonly or
+    options.quiet = (options.xmlonly or
         options.test_media_detection or options.quiet)
 
     cli.setupLogging("virt-install", options.debug, options.quiet)
@@ -1063,15 +1066,15 @@ def main(conn=None):
         do_test_media_detection(conn, options.test_media_detection)
         return 0
 
-    if options.xmlstep not in [None, "1", "2", "3", "all"]:
+    if options.xmlonly not in [False, "1", "2", "3", "all"]:
         fail(_("--print-step must be 1, 2, 3, or all"))
 
     guest = build_guest_instance(conn, options, parsermap)
     continue_inst = guest.get_continue_inst()
 
-    if options.xmlstep or options.xmlonly or options.dry:
+    if options.xmlonly or options.dry:
         xml = xml_to_print(guest, continue_inst,
-                           options.xmlonly, options.xmlstep, options.dry)
+                           options.xmlonly, options.dry)
         if xml:
             print_stdout(xml, do_force=True)
     else:

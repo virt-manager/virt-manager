@@ -483,13 +483,15 @@ def add_misc_options(grp, prompt=False, replace=False,
                    "with the same name."))
 
     if printxml:
-        grp.add_argument("--print-xml", action="store_true", dest="xmlonly",
+        grp.add_argument("--print-xml", nargs="?", dest="xmlonly",
+            default=False, const=True,
             help=_("Print the generated domain XML rather than create "
                    "the guest."))
         if printstep:
+            # Back compat, argparse allows us to use --print-xml
+            # for everything.
             grp.add_argument("--print-step", dest="xmlstep",
-                help=_("Print XML of a specific install step "
-                       "(1, 2, 3, all) rather than define the guest."))
+                help=argparse.SUPPRESS)
 
     if dryrun:
         grp.add_argument("--dry-run", action="store_true", dest="dry",

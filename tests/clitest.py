@@ -708,7 +708,6 @@ c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--paravirt --pxe")  # PXE w/ paravirt
 c.add_invalid("--import")  # Import with no disks
 c.add_invalid("--livecd")  # LiveCD with no media
-c.add_invalid("--pxe --print-xml")  # 2 stage install with --print-xml
 c.add_invalid("--pxe --os-variant farrrrrrrge")  # Bogus --os-variant
 c.add_invalid("--pxe --boot menu=foobar")
 c.add_invalid("--cdrom %(EXISTIMG1)s --extra-args console=ttyS0")  # cdrom fail w/ extra-args
@@ -720,7 +719,7 @@ c.add_valid("--hvm --import --prompt --force")  # Working scenario w/ prompt sho
 c.add_valid("--paravirt --import")  # PV Import install
 c.add_valid("--paravirt --print-xml")  # print single XML, implied import install
 c.add_compare("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
-c.add_invalid("--paravirt --import --print-step 2")  # PV Import install, no second XML step
+c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no second XML step
 
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom")  # Implied cdrom install

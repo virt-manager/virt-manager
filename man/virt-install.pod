@@ -1413,22 +1413,11 @@ Use --panic=? to see a list of all available sub options. Complete details at L<
 Set the autostart flag for a domain. This causes the domain to be started
 on host boot up.
 
-=item --print-xml
+=item --print-xml [STEP]
 
-If the requested guest has no install phase (--import, --boot), print the
-generated XML instead of defining the guest. By default this WILL do storage
-creation (can be disabled with --dry-run).
+Print the generated XML of the guest, instead of defining it. By default this WILL do storage creation (can be disabled with --dry-run). This option implies --quiet.
 
-If the guest has an install phase, you will need to use --print-step to
-specify exactly what XML output you want. This option implies --quiet.
-
-=item --print-step
-
-Acts similarly to --print-xml, except requires specifying which install step
-to print XML for. Possible values are 1, 2, 3, or all. Stage 1 is typically
-booting from the install media, and stage 2 is typically the final guest
-config booting off harddisk. Stage 3 is only relevant for windows installs,
-which by default have a second install stage. This option implies --quiet.
+If the VM install has multiple phases, by default this will print all generated XML. If you want to print a particular step, use --print-xml 2 (for the second phase XML).
 
 =item --noreboot
 
