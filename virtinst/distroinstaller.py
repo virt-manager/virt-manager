@@ -25,11 +25,11 @@ import tempfile
 
 import urlgrabber
 
-from . import osdict
 from . import urlfetcher
 from . import util
 from .devicedisk import VirtualDisk
 from .installer import Installer
+from .osdict import OSDB
 from .storage import StoragePool, StorageVolume
 
 
@@ -502,7 +502,7 @@ class DistroInstaller(Installer):
                 logging.debug("Can't detect distro for media on "
                     "remote connection.")
             else:
-                distro = osdict.lookup_os_by_media(self.location)
+                distro = OSDB.lookup_os_by_media(self.location)
         except:
             logging.debug("Error attempting to detect distro.", exc_info=True)
 

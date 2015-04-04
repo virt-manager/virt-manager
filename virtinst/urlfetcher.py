@@ -32,7 +32,7 @@ import urlparse
 
 import urlgrabber.grabber as grabber
 
-from . import osdict
+from .osdict import OSDB
 
 
 #########################################################################
@@ -326,7 +326,7 @@ def getDistroStore(guest, fetcher):
 
     urldistro = None
     if guest.os_variant:
-        urldistro = osdict.lookup_os(guest.os_variant).urldistro
+        urldistro = OSDB.lookup_os(guest.os_variant).urldistro
 
     dist = _distroFromTreeinfo(fetcher, arch, _type)
     if dist:
@@ -447,7 +447,7 @@ class Distro(object):
                                self.name))
 
     def _check_osvariant_valid(self, os_variant):
-        return osdict.lookup_os(os_variant) is not None
+        return OSDB.lookup_os(os_variant) is not None
 
     def get_osdict_info(self):
         """
@@ -667,7 +667,7 @@ class FedoraDistro(RedHatDistro):
         Search osdict list, find newest fedora version listed
         """
         ret = None
-        for osinfo in osdict.list_os(typename="linux"):
+        for osinfo in OSDB.list_os(typename="linux"):
             if osinfo.name.startswith("fedora") and "unknown" not in osinfo.name:
                 # First fedora* occurrence should be the newest
                 ret = osinfo.name
@@ -866,7 +866,7 @@ class SuseDistro(Distro):
 
     def _detect_osdict_from_url(self):
         root = "opensuse"
-        oses = [n for n in osdict.list_os() if n.name.startswith(root)]
+        oses = [n for n in OSDB.list_os() if n.name.startswith(root)]
 
         for osobj in oses:
             codename = osobj.name[len(root):]
@@ -941,7 +941,7 @@ class DebianDistro(Distro):
 
     def _detect_osdict_from_url(self):
         root = self.name.lower()
-        oses = [n for n in osdict.list_os() if n.name.startswith(root)]
+        oses = [n for n in OSDB.list_os() if n.name.startswith(root)]
 
         if self._url_prefix == "daily":
             return oses[0].name

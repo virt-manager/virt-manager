@@ -813,7 +813,7 @@ class vmmCreate(vmmGObjectUI):
                       STABLE_OS_SUPPORT or
                       None)
 
-        types = virtinst.osdict.list_os(list_types=True)
+        types = virtinst.OSDB.list_os(list_types=True)
         if not filtervars:
             # Kind of a hack, just show linux + windows by default since
             # that's all 98% of people care about
@@ -821,9 +821,9 @@ class vmmCreate(vmmGObjectUI):
         else:
             supportl = []
             for t in types:
-                l = virtinst.osdict.list_os(typename=t.name,
-                                            only_supported=True,
-                                            filtervars=filtervars)
+                l = virtinst.OSDB.list_os(typename=t.name,
+                    only_supported=True,
+                    filtervars=filtervars)
                 if l:
                     supportl.append(t.name)
 
@@ -852,9 +852,9 @@ class vmmCreate(vmmGObjectUI):
                       None)
         preferred = self.config.preferred_distros
 
-        variants = virtinst.osdict.list_os(typename=_type,
+        variants = virtinst.OSDB.list_os(typename=_type,
                                            sortpref=preferred)
-        supportl = virtinst.osdict.list_os(typename=_type,
+        supportl = virtinst.OSDB.list_os(typename=_type,
                                            sortpref=preferred,
                                            only_supported=True,
                                            filtervars=filtervars)
@@ -1653,7 +1653,10 @@ class vmmCreate(vmmGObjectUI):
             self.addstorage.check_path_search(
                 self, self.conn, path)
 
-        res = virtinst.osdict.get_recommended_resources(variant, self.guest)
+        res = None
+        osobj = virtinst.OSDB.lookup_os(variant)
+        if osobj:
+            res = osobj.get_recommended_resources(self.guest)
 
         # Change the default values suggested to the user.
         ram_size = DEFAULT_MEM
@@ -2014,7 +2017,7 @@ class vmmCreate(vmmGObjectUI):
         distro_type = None
         distro_var = None
         if variant:
-            osclass = virtinst.osdict.lookup_os(variant)
+            osclass = virtinst.OSDB.lookup_os(variant)
             distro_type = osclass.typename
             distro_var = osclass.name
 

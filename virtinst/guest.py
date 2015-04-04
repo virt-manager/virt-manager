@@ -26,9 +26,9 @@ import libvirt
 
 from virtcli import cliconfig
 
-from . import osdict
 from . import util
 from . import support
+from .osdict import OSDB
 from .clock import Clock
 from .cpu import CPU
 from .device import VirtualDevice
@@ -211,9 +211,9 @@ class Guest(XMLBuilder):
     ###############################
 
     def _set_os_object(self, variant):
-        obj = osdict.lookup_os(variant)
+        obj = OSDB.lookup_os(variant)
         if not obj:
-            obj = osdict.lookup_os("generic")
+            obj = OSDB.lookup_os("generic")
         self.__os_object = obj
     def _get_os_object(self):
         if not self.__os_object:
@@ -226,7 +226,7 @@ class Guest(XMLBuilder):
     def _set_os_variant(self, val):
         if val:
             val = val.lower()
-            if osdict.lookup_os(val) is None:
+            if OSDB.lookup_os(val) is None:
                 raise ValueError(
                     _("Distro '%s' does not exist in our dictionary") % val)
 

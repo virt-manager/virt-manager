@@ -124,13 +124,13 @@ class TestMisc(unittest.TestCase):
                 "\n".join([("%s version=%s" % tup) for tup in failures]))
 
     def test_libosinfo_aliases_ro(self):
-        from virtinst import osdict
-        aliases = getattr(osdict, "_aliases")
+        from virtinst import OSDB
+        aliases = getattr(OSDB, "_aliases")
 
         if len(aliases) != 40:
-            raise AssertionError(_("osdict._aliases changed size. It "
+            raise AssertionError(_("OSDB._aliases changed size. It "
                 "should never be extended, since it is only for back "
-                "compat with pre-libosinfo osdict."))
+                "compat with pre-libosinfo osdict.py"))
 
 
 class TestURI(unittest.TestCase):

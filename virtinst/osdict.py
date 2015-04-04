@@ -25,53 +25,9 @@ import re
 from gi.repository import Libosinfo as libosinfo
 
 
-# This is only for back compatibility with pre-libosinfo support.
-# This should never change.
-_aliases = {
-    "altlinux" : "altlinux1.0",
-    "debianetch" : "debian4",
-    "debianlenny" : "debian5",
-    "debiansqueeze" : "debian6",
-    "debianwheezy" : "debian7",
-    "freebsd10" : "freebsd10.0",
-    "freebsd6" : "freebsd6.0",
-    "freebsd7" : "freebsd7.0",
-    "freebsd8" : "freebsd8.0",
-    "freebsd9" : "freebsd9.0",
-    "mandriva2009" : "mandriva2009.0",
-    "mandriva2010" : "mandriva2010.0",
-    "mbs1" : "mbs1.0",
-    "msdos" : "msdos6.22",
-    "openbsd4" : "openbsd4.2",
-    "opensolaris" : "opensolaris2009.06",
-    "opensuse11" : "opensuse11.4",
-    "opensuse12" : "opensuse12.3",
-    "rhel4" : "rhel4.0",
-    "rhel5" : "rhel5.0",
-    "rhel6" : "rhel6.0",
-    "rhel7" : "rhel7.0",
-    "ubuntuhardy" : "ubuntu8.04",
-    "ubuntuintrepid" : "ubuntu8.10",
-    "ubuntujaunty" : "ubuntu9.04",
-    "ubuntukarmic" : "ubuntu9.10",
-    "ubuntulucid" : "ubuntu10.04",
-    "ubuntumaverick" : "ubuntu10.10",
-    "ubuntunatty" : "ubuntu11.04",
-    "ubuntuoneiric" : "ubuntu11.10",
-    "ubuntuprecise" : "ubuntu12.04",
-    "ubuntuquantal" : "ubuntu12.10",
-    "ubunturaring" : "ubuntu13.04",
-    "ubuntusaucy" : "ubuntu13.10",
-    "vista" : "winvista",
-    "winxp64" : "winxp",
-
-    "linux" : "generic",
-    "windows" : "winxp",
-    "solaris" : "solaris10",
-    "virtio26": "fedora10",
-}
-_allvariants = {}
-
+###################
+# Sorting helpers #
+###################
 
 def _remove_older_point_releases(distro_list):
     ret = distro_list[:]
@@ -161,17 +117,153 @@ def _sort(tosort, sortpref=None, limit_point_releases=False):
     return retlist
 
 
-class _OsVariantType(object):
+class _OSDB(object):
+    """
+    Entry point for the public API
+    """
+    def __init__(self):
+        self.__os_loader = None
+        self.__all_variants = None
 
-    def __init__(self, name, label, urldistro, sortby):
-        self.name = name
-        self.label = label
-        self.urldistro = urldistro
-        self.sortby = sortby
+    # This is only for back compatibility with pre-libosinfo support.
+    # This should never change.
+    _aliases = {
+        "altlinux" : "altlinux1.0",
+        "debianetch" : "debian4",
+        "debianlenny" : "debian5",
+        "debiansqueeze" : "debian6",
+        "debianwheezy" : "debian7",
+        "freebsd10" : "freebsd10.0",
+        "freebsd6" : "freebsd6.0",
+        "freebsd7" : "freebsd7.0",
+        "freebsd8" : "freebsd8.0",
+        "freebsd9" : "freebsd9.0",
+        "mandriva2009" : "mandriva2009.0",
+        "mandriva2010" : "mandriva2010.0",
+        "mbs1" : "mbs1.0",
+        "msdos" : "msdos6.22",
+        "openbsd4" : "openbsd4.2",
+        "opensolaris" : "opensolaris2009.06",
+        "opensuse11" : "opensuse11.4",
+        "opensuse12" : "opensuse12.3",
+        "rhel4" : "rhel4.0",
+        "rhel5" : "rhel5.0",
+        "rhel6" : "rhel6.0",
+        "rhel7" : "rhel7.0",
+        "ubuntuhardy" : "ubuntu8.04",
+        "ubuntuintrepid" : "ubuntu8.10",
+        "ubuntujaunty" : "ubuntu9.04",
+        "ubuntukarmic" : "ubuntu9.10",
+        "ubuntulucid" : "ubuntu10.04",
+        "ubuntumaverick" : "ubuntu10.10",
+        "ubuntunatty" : "ubuntu11.04",
+        "ubuntuoneiric" : "ubuntu11.10",
+        "ubuntuprecise" : "ubuntu12.04",
+        "ubuntuquantal" : "ubuntu12.10",
+        "ubunturaring" : "ubuntu13.04",
+        "ubuntusaucy" : "ubuntu13.10",
+        "vista" : "winvista",
+        "winxp64" : "winxp",
 
-    def is_type(self):
-        return self.__class__ == _OsVariantType
+        "linux" : "generic",
+        "windows" : "winxp",
+        "solaris" : "solaris10",
+        "virtio26": "fedora10",
+    }
 
+
+    #################
+    # Internal APIs #
+    #################
+
+    def _make_default_variants(self):
+        ret = {}
+
+        # Back compat 'types'
+        for name, label in [
+            ("linux", "Linux"),
+            ("windows", "Windows"),
+            ("solaris", "Solaris"),
+            ("unix", "UNIX"),
+            ("other", "Other")]:
+            ret[name] = _OsVariantType(name, label, None, None)
+
+        # Generic variant
+        v = _OsVariant(None)
+        ret[v.name] = v
+        return ret
+
+    @property
+    def _os_loader(self):
+        if not self.__os_loader:
+            loader = libosinfo.Loader()
+            loader.process_default_path()
+
+            self.__os_loader = loader
+        return self.__os_loader
+
+    @property
+    def _all_variants(self):
+        if not self.__all_variants:
+            loader = self._os_loader
+            allvariants = self._make_default_variants()
+            db = loader.get_db()
+            oslist = db.get_os_list()
+            for os in range(oslist.get_length()):
+                osi = _OsVariant(oslist.get_nth(os))
+                allvariants[osi.name] = osi
+
+            self.__all_variants = allvariants
+        return self.__all_variants
+
+
+    ###############
+    # Public APIs #
+    ###############
+
+    def lookup_os(self, key):
+        key = self._aliases.get(key) or key
+        ret = self._all_variants.get(key)
+        if ret is None or ret.is_type():
+            return None
+        return ret
+
+    def lookup_os_by_media(self, location):
+        media = libosinfo.Media.create_from_location(location, None)
+        ret = self._os_loader.get_db().guess_os_from_media(media)
+        if ret and len(ret) > 0 and ret[0]:
+            return ret[0].get_short_id()
+        return None
+
+    def list_os(self, list_types=False, typename=None,
+                filtervars=None, only_supported=False,
+                **kwargs):
+        sortmap = {}
+        filtervars = filtervars or []
+
+        for key, osinfo in self._all_variants.items():
+            is_type = osinfo.is_type()
+            if list_types and not is_type:
+                continue
+            if not list_types and is_type:
+                continue
+            if typename and typename != osinfo.typename:
+                continue
+            if filtervars:
+                filtervars = [self.lookup_os(x).name for x in filtervars]
+                if osinfo.name not in filtervars:
+                    continue
+            if only_supported and not osinfo.supported:
+                continue
+            sortmap[key] = osinfo
+
+        kwargs["limit_point_releases"] = only_supported
+        return _sort(sortmap, **kwargs)
+
+
+#####################
+# OsVariant classes #
+#####################
 
 def _is_os_related_to(o, related_os_list):
     if o.get_short_id() in related_os_list:
@@ -184,6 +276,17 @@ def _is_os_related_to(o, related_os_list):
             return True
 
     return False
+
+
+class _OsVariantType(object):
+    def __init__(self, name, label, urldistro, sortby):
+        self.name = name
+        self.label = label
+        self.urldistro = urldistro
+        self.sortby = sortby
+
+    def is_type(self):
+        return self.__class__ == _OsVariantType
 
 
 class _OsVariant(_OsVariantType):
@@ -486,100 +589,4 @@ class _OsVariant(_OsVariantType):
 
         return ret
 
-
-def _add_type(name, label, urldistro=None, sortby=None):
-    t = _OsVariantType(name, label, urldistro, sortby)
-    _allvariants[name] = t
-
-
-def _add_generic_variant():
-    v = _OsVariant(None)
-    _allvariants[v.name] = v
-
-
-_add_type("linux", "Linux")
-_add_type("windows", "Windows")
-_add_type("solaris", "Solaris")
-_add_type("unix", "UNIX")
-_add_type("other", "Other")
-_add_generic_variant()
-
-
-_os_data_loaded = False
-_os_loader = None
-
-
-def _get_os_loader():
-    global _os_loader
-    if _os_loader:
-        return _os_loader
-    _os_loader = libosinfo.Loader()
-    _os_loader.process_default_path()
-    return _os_loader
-
-
-def _load_os_data():
-    global _os_data_loaded
-    if _os_data_loaded:
-        return
-    loader = _get_os_loader()
-    db = loader.get_db()
-    oslist = db.get_os_list()
-    for os in range(oslist.get_length()):
-        osi = _OsVariant(oslist.get_nth(os))
-        _allvariants[osi.name] = osi
-    _os_data_loaded = True
-
-
-def lookup_os(key):
-    _load_os_data()
-    key = _aliases.get(key) or key
-    ret = _allvariants.get(key)
-    if ret is None or ret.is_type():
-        return None
-    return ret
-
-
-def list_os(list_types=False, typename=None,
-            filtervars=None, only_supported=False,
-            **kwargs):
-    _load_os_data()
-    sortmap = {}
-    filtervars = filtervars or []
-
-    for key, osinfo in _allvariants.items():
-        is_type = osinfo.is_type()
-        if list_types and not is_type:
-            continue
-        if not list_types and is_type:
-            continue
-        if typename and typename != osinfo.typename:
-            continue
-        if filtervars:
-            filtervars = [lookup_os(x).name for x in filtervars]
-            if osinfo.name not in filtervars:
-                continue
-        if only_supported and not osinfo.supported:
-            continue
-        sortmap[key] = osinfo
-
-    kwargs["limit_point_releases"] = only_supported
-    return _sort(sortmap, **kwargs)
-
-
-def get_recommended_resources(variant, guest):
-    _load_os_data()
-    v = _allvariants.get(variant)
-    if v is None:
-        return None
-
-    return v.get_recommended_resources(guest)
-
-
-def lookup_os_by_media(location):
-    loader = _get_os_loader()
-    media = libosinfo.Media.create_from_location(location, None)
-    ret = loader.get_db().guess_os_from_media(media)
-    if ret and len(ret) > 0 and ret[0]:
-        return ret[0].get_short_id()
-    return None
+OSDB = _OSDB()

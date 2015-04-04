@@ -37,6 +37,7 @@ stable_defaults = _cliconfig.stable_defaults
 from . import util
 from virtinst import support
 from virtinst.uri import URISplit
+from virtinst.osdict import OSDB
 
 from virtinst.osxml import OSXML
 from virtinst.domainfeatures import DomainFeatures
