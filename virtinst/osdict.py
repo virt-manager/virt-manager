@@ -250,7 +250,7 @@ class _OSDB(object):
         for name, osobj in self._all_variants.items():
             if typename and typename != osobj.get_typename():
                 continue
-            if only_supported and not osobj.supported:
+            if only_supported and not osobj.get_supported():
                 continue
             sortmap[name] = osobj
 
@@ -272,7 +272,47 @@ class _OsVariant(object):
 
         self.sortby = self._get_sortby()
         self.urldistro = self._get_urldistro()
-        self.supported = self._get_supported()
+        self._supported = None
+
+
+    ########################
+    # Internal helper APIs #
+    ########################
+
+    def _is_related_to(self, related_os_list, os=None,
+        check_derives=True, check_upgrades=True, check_clones=True):
+        os = os or self._os
+        if not os:
+            return False
+
+        if os.get_short_id() in related_os_list:
+            return True
+
+        check_list = []
+        def _extend(newl):
+            for obj in newl:
+                if obj not in check_list:
+                    check_list.append(obj)
+
+        if check_derives:
+            _extend(os.get_related(
+                libosinfo.ProductRelationship.DERIVES_FROM).get_elements())
+        if check_clones:
+            _extend(os.get_related(
+                libosinfo.ProductRelationship.CLONES).get_elements())
+        if check_upgrades:
+            _extend(os.get_related(
+                libosinfo.ProductRelationship.UPGRADES).get_elements())
+
+        for checkobj in check_list:
+            if (checkobj.get_short_id() in related_os_list or
+                self._is_related_to(related_os_list, os=checkobj,
+                    check_upgrades=check_upgrades,
+                    check_derives=check_derives,
+                    check_clones=check_clones)):
+                return True
+
+        return False
 
 
     ###############
@@ -300,20 +340,24 @@ class _OsVariant(object):
     def _get_supported(self):
         if not self._os:
             return True
-        d = self._os.get_eol_date_string()
+
+        eol_date = self._os.get_eol_date_string()
         name = self._os.get_short_id()
 
-        if d:
-            return (datetime.datetime.strptime(d, "%Y-%m-%d") >
+        if eol_date:
+            return (datetime.datetime.strptime(eol_date, "%Y-%m-%d") >
                     datetime.datetime.now())
+
+        if name == "fedora-unknown":
+            return False
 
         # As of libosinfo 2.11, many clearly EOL distros don't have an
         # EOL date. So assume None == EOL, add some manual work arounds.
         # We should fix this in a new libosinfo version, and then drop
         # this hack
-        if name in ["rhel7.0", "rhel7.1", "fedora19", "fedora20", "fedora21",
-            "debian6", "debian7", "ubuntu13.04", "ubuntu13.10", "ubuntu14.04",
-            "ubuntu14.10", "win8", "win8.1", "win2k12", "win2k12r2"]:
+        if self._is_related_to(["fedora20", "rhel7.0", "debian6",
+            "ubuntu13.04", "win8", "win2k12"],
+            check_clones=False, check_derives=False):
             return True
         return False
 
@@ -333,44 +377,14 @@ class _OsVariant(object):
         return urldistro
 
 
-    ########################
-    # Internal helper APIs #
-    ########################
-
-    def _is_related_to(self, related_os_list, os=None, check_upgrades=True):
-        os = os or self._os
-        if not os:
-            return False
-
-        if os.get_short_id() in related_os_list:
-            return True
-
-        check_list = []
-        def _extend(newl):
-            for obj in newl:
-                if obj not in check_list:
-                    check_list.append(obj)
-
-        _extend(os.get_related(
-            libosinfo.ProductRelationship.DERIVES_FROM).get_elements())
-        _extend(os.get_related(
-            libosinfo.ProductRelationship.CLONES).get_elements())
-        if check_upgrades:
-            _extend(os.get_related(
-                libosinfo.ProductRelationship.UPGRADES).get_elements())
-
-        for checkobj in check_list:
-            if (checkobj.get_short_id() in related_os_list or
-                self._is_related_to(related_os_list, os=checkobj,
-                                    check_upgrades=check_upgrades)):
-                return True
-
-        return False
-
-
     ###############
     # Public APIs #
     ###############
+
+    def get_supported(self):
+        if self._supported is None:
+            self._supported = self._get_supported()
+        return self._supported
 
     def get_typename(self):
         """
