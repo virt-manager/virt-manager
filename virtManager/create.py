@@ -1657,6 +1657,8 @@ class vmmCreate(vmmGObjectUI):
         osobj = virtinst.OSDB.lookup_os(variant)
         if osobj:
             res = osobj.get_recommended_resources(self.guest)
+            logging.debug("Recommended resources for variant=%s: %s",
+                variant, res)
 
         # Change the default values suggested to the user.
         ram_size = DEFAULT_MEM
