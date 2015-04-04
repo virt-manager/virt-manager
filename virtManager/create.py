@@ -60,11 +60,6 @@ INSTALL_PAGE_IMPORT = 3
 INSTALL_PAGE_CONTAINER_APP = 4
 INSTALL_PAGE_CONTAINER_OS = 5
 
-STABLE_OS_SUPPORT = [
-    "rhel3", "rhel4", "rhel5.4", "rhel6",
-    "win2k3", "winxp", "win2k8", "vista", "win7",
-]
-
 
 def pretty_arch(_a):
     if _a == "armv7l":
@@ -809,25 +804,15 @@ class vmmCreate(vmmGObjectUI):
         widget = self.widget("install-os-type")
         model = widget.get_model()
         model.clear()
-        filtervars = (self._stable_defaults() and
-                      STABLE_OS_SUPPORT or
-                      None)
 
+        # Kind of a hack, just show linux + windows by default since
+        # that's all 98% of people care about
+        supportl = ["generic", "linux", "windows"]
+
+        # Move 'generic' to the front of the list
         types = virtinst.OSDB.list_types()
-        if not filtervars:
-            # Kind of a hack, just show linux + windows by default since
-            # that's all 98% of people care about
-            supportl = ["linux", "windows"]
-        else:
-            supportl = []
-            for typename in types:
-                l = virtinst.OSDB.list_os(typename=typename,
-                    only_supported=True,
-                    filtervars=filtervars)
-                if l:
-                    supportl.append(typename)
-
-        self._add_os_row(model, None, _("Generic"), True)
+        types.remove("generic")
+        types.insert(0, "generic")
 
         for typename in types:
             supported = (typename in supportl)
@@ -837,40 +822,31 @@ class vmmCreate(vmmGObjectUI):
 
             self._add_os_row(model, typename, typelabel, supported)
 
-        # Add sep
         self._add_os_row(model, sep=True)
-        # Add action option
         self._add_os_row(model, label=_("Show all OS options"), action=True)
+
+        # Select 'generic' by default
         widget.set_active(0)
 
 
     def populate_os_variant_model(self, _type):
-        model = self.widget("install-os-version").get_model()
+        widget = self.widget("install-os-version")
+        model = widget.get_model()
         model.clear()
-        if not _type:
-            self._add_os_row(model, None, _("Generic"), True)
-            return
 
-        filtervars = (self._stable_defaults() and
-                      STABLE_OS_SUPPORT or
-                      None)
         preferred = self.config.preferred_distros
-
-        variants = virtinst.OSDB.list_os(typename=_type,
-                                           sortpref=preferred)
-        supportl = virtinst.OSDB.list_os(typename=_type,
-                                           sortpref=preferred,
-                                           only_supported=True,
-                                           filtervars=filtervars)
+        variants = virtinst.OSDB.list_os(typename=_type, sortpref=preferred)
+        supportl = virtinst.OSDB.list_os(typename=_type, sortpref=preferred,
+            only_supported=True)
 
         for v in variants:
-            supported = v in supportl
+            supported = v in supportl or v.name == "generic"
             self._add_os_row(model, v.name, v.label, supported)
 
-        # Add sep
         self._add_os_row(model, sep=True)
-        # Add action option
         self._add_os_row(model, label=_("Show all OS options"), action=True)
+
+        widget.set_active(0)
 
     def populate_media_model(self, model, urls):
         model.clear()
@@ -1210,10 +1186,6 @@ class vmmCreate(vmmGObjectUI):
                 self.show_all_os = True
                 self.populate_os_type_model()
                 return
-
-        self.widget("install-os-version-entry").set_text("")
-        if self.widget("install-os-version").get_visible():
-            self.widget("install-os-version-entry").grab_focus()
 
     def change_os_version(self, box):
         show_all = uiutil.get_list_selection(box, 3)

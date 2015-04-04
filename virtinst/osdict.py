@@ -234,24 +234,18 @@ class _OSDB(object):
             "solaris", "other", "generic"]
         return approved_types
 
-    def list_os(self, typename=None, filtervars=None,
-        only_supported=False, **kwargs):
+    def list_os(self, typename=None, only_supported=False, sortpref=None):
         sortmap = {}
-        filtervars = filtervars or []
 
         for key, osinfo in self._all_variants.items():
             if typename and typename != osinfo.get_typename():
                 continue
-            if filtervars:
-                filtervars = [self.lookup_os(x).name for x in filtervars]
-                if osinfo.name not in filtervars:
-                    continue
             if only_supported and not osinfo.supported:
                 continue
             sortmap[key] = osinfo
 
-        kwargs["limit_point_releases"] = only_supported
-        return _sort(sortmap, **kwargs)
+        return _sort(sortmap, sortpref=sortpref,
+            limit_point_releases=only_supported)
 
 
 #####################
