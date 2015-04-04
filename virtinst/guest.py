@@ -234,19 +234,6 @@ class Guest(XMLBuilder):
         self._set_os_object(val)
     os_variant = property(_get_os_variant, _set_os_variant)
 
-    def _lookup_osdict_key(self, key, default):
-        """
-        Use self.os_variant to find key in OSTYPES
-        @returns: dict value, or None if os_type/variant wasn't set
-        """
-        import inspect
-        ret = getattr(self._os_object, key)
-        if inspect.isfunction(ret):
-            ret = ret()
-        if ret == self._os_object.DEFAULT:
-            ret = default
-        return ret
-
 
     ########################################
     # Device Add/Remove Public API methods #
@@ -396,7 +383,7 @@ class Guest(XMLBuilder):
         if not self.installer.has_install_phase():
             return False
 
-        return self._lookup_osdict_key("three_stage_install", False)
+        return self._os_object.is_windows()
 
 
     ##########################
@@ -598,7 +585,7 @@ class Guest(XMLBuilder):
         dev.type = dev.TYPE_PTY
 
         if (self.os.is_x86() and
-            self._lookup_osdict_key("virtioconsole", False) and
+            self._os_object.supports_virtioconsole() and
             self.conn.check_support(
             self.conn.SUPPORT_CONN_VIRTIO_CONSOLE)):
             dev.target_type = "virtio"
@@ -636,7 +623,7 @@ class Guest(XMLBuilder):
         # Skip qemu-ga on ARM where virtio slots are currently limited
         if (self.conn.is_qemu() and
             not self.os.is_arm() and
-            self._lookup_osdict_key("qemu_ga", False) and
+            self._os_object.supports_qemu_ga() and
             self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
             dev = VirtualChannelDevice(self.conn)
             dev.type = "unix"
@@ -730,7 +717,7 @@ class Guest(XMLBuilder):
             return
 
         if self.clock.offset is None:
-            self.clock.offset = self._lookup_osdict_key("clock", "utc")
+            self.clock.offset = self._os_object.get_clock()
 
         if self.clock.timers:
             return
@@ -764,7 +751,7 @@ class Guest(XMLBuilder):
         hpet.name = "hpet"
         hpet.present = False
 
-        if (self._lookup_osdict_key("hyperv_features", False) and
+        if (self._os_object.is_windows() and
             self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK) and
             self._hv_supported()):
             hyperv = self.clock.add_timer()
@@ -828,18 +815,18 @@ class Guest(XMLBuilder):
             return
 
         default = True
-        if (self._lookup_osdict_key("xen_disable_acpi", False) and
+        if (self._os_object.need_old_xen_disable_acpi() and
             not self.conn.check_support(support.SUPPORT_CONN_CAN_ACPI)):
             default = False
 
         if self.features.acpi == "default":
-            self.features.acpi = self._lookup_osdict_key("acpi", default)
+            self.features.acpi = self._os_object.supports_acpi(default)
         if self.features.apic == "default":
-            self.features.apic = self._lookup_osdict_key("apic", default)
+            self.features.apic = self._os_object.supports_apic(default)
         if self.features.pae == "default":
             self.features.pae = self.conn.caps.supports_pae()
 
-        if (self._lookup_osdict_key("hyperv_features", False) and
+        if (self._os_object.is_windows() and
             self._hv_supported() and
             self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_VAPIC)):
             if self.features.hyperv_relaxed is None:
@@ -908,23 +895,23 @@ class Guest(XMLBuilder):
             if len(devs) > 1 and 0 in devs:
                 devs[0].address.multifunction = True
 
-    def _can_virtio(self, key):
+    def _hv_only_supports_virtio(self):
+        # Only supports virtio so we need to force it
+        return self.conn.is_qemu() and self.os.is_arm_machvirt()
+
+    def _hv_supports_virtio(self):
         if not self.conn.is_qemu():
             return False
 
-        if self.os.is_arm_machvirt():
-            # Only supports virtio
+        if self._hv_only_supports_virtio():
             return True
-
-        if not self._lookup_osdict_key(key, False):
-            return False
 
         if self.os.is_x86():
             return True
 
         if (self.os.is_arm_vexpress() and
             self.os.dtb and
-            self._lookup_osdict_key("virtiommio", False) and
+            self._os_object.supports_virtiommio() and
             self.conn.check_support(support.SUPPORT_CONN_VIRTIO_MMIO)):
             return True
 
@@ -945,7 +932,10 @@ class Guest(XMLBuilder):
             if self.os.is_arm_machvirt():
                 # We prefer virtio-scsi for machvirt, gets us hotplug
                 d.bus = "scsi"
-            elif self._can_virtio("virtiodisk") and d.is_disk():
+            elif (d.is_disk() and
+                  (self._hv_only_supports_virtio() or
+                   (self._hv_supports_virtio() and
+                    self._os_object.supports_virtiodisk()))):
                 d.bus = "virtio"
             elif self.os.is_pseries():
                 d.bus = "scsi"
@@ -967,21 +957,23 @@ class Guest(XMLBuilder):
 
     def _set_net_defaults(self):
         net_model = None
-        variant = osdict.lookup_os(self.os_variant)
         if not self.os.is_hvm():
             net_model = None
-        elif self._can_virtio("virtionet"):
+        elif (self._hv_only_supports_virtio() or
+              (self._hv_supports_virtio() and
+               self._os_object.supports_virtionet())):
             net_model = "virtio"
-        elif variant and not variant.virtionet:
-            net_model = self._lookup_osdict_key("netmodel", None)
+        else:
+            net_model = self._os_object.default_netmodel()
+
         if net_model:
             for net in self.get_devices("interface"):
                 if not net.model:
                     net.model = net_model
 
     def _set_input_defaults(self):
-        input_type = self._lookup_osdict_key("inputtype", "mouse")
-        input_bus = self._lookup_osdict_key("inputbus", "ps2")
+        input_type = self._os_object.default_inputtype()
+        input_bus = self._os_object.default_inputbus()
         if self.os.is_xenpv():
             input_type = VirtualInputDevice.TYPE_MOUSE
             input_bus = VirtualInputDevice.BUS_XEN
@@ -1069,7 +1061,7 @@ class Guest(XMLBuilder):
             self._add_spice_sound()
             self._add_spice_usbredir()
 
-        video_model = self._os_object.get_videomodel(self)
+        video_model = self._os_object.default_videomodel(self)
         if video_model == 'vmvga' and self.stable_defaults(force=True):
             video_model = 'vga'
 

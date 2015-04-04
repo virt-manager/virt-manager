@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from datetime import datetime
+import datetime
 import re
 
 from gi.repository import Libosinfo as libosinfo
@@ -173,190 +173,55 @@ class _OsVariantType(object):
         return self.__class__ == _OsVariantType
 
 
+def _is_os_related_to(o, related_os_list):
+    if o.get_short_id() in related_os_list:
+        return True
+    related = o.get_related(libosinfo.ProductRelationship.DERIVES_FROM)
+    clones = o.get_related(libosinfo.ProductRelationship.CLONES)
+    for r in related.get_elements() + clones.get_elements():
+        if (r.get_short_id() in related_os_list or
+            _is_os_related_to(r, related_os_list)):
+            return True
+
+    return False
+
+
 class _OsVariant(_OsVariantType):
-    DEFAULT = -1234
+    def __init__(self, o):
+        self._os = o
+        name = self._get_name()
+        if name != name.lower():
+            raise RuntimeError("OS dictionary wants lowercase name, not "
+                               "'%s'" % self.name)
+        self.typename = self._get_typename()
 
-    @staticmethod
-    def is_windows(o):
-        if o is None:
-            return False
-        return o.get_family() in ['win9x', 'winnt', 'win16']
+        # 'types' should rarely be altered, this check will make
+        # doubly sure that a new type isn't accidentally added
+        _approved_types = ["linux", "windows", "unix",
+                           "solaris", "other", "generic"]
+        if self.typename not in _approved_types:
+            raise RuntimeError("type '%s' for variant '%s' not in list "
+                               "of approved distro types %s" %
+                               (self.typename, self.name, _approved_types))
 
-    def _is_three_stage_install(self):
-        if _OsVariant.is_windows(self._os):
-            return True
-        return _OsVariant.DEFAULT
 
-    def _get_clock(self):
+        label = self._get_label()
+        sortby = self._get_sortby()
+        urldistro = self._get_urldistro()
+
+        _OsVariantType.__init__(self, name, label, urldistro, sortby)
+
+        self.supported = self._get_supported()
+
+
+    ###############
+    # Cached APIs #
+    ###############
+
+    def _get_label(self):
         if not self._os:
-            return _OsVariant.DEFAULT
-
-        if _OsVariant.is_windows(self._os) or \
-           self._os.get_family() in ['solaris']:
-            return "localtime"
-        return _OsVariant.DEFAULT
-
-    def _is_acpi(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-        if self._os.get_family() in ['msdos']:
-            return False
-        return _OsVariant.DEFAULT
-
-    def _is_apic(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-
-        if self._os.get_family() in ['msdos']:
-            return False
-        return _OsVariant.DEFAULT
-
-    def _get_netmodel(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-
-        if self._os.get_distro() == "fedora":
-            return _OsVariant.DEFAULT
-
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "net")
-        devs = self._os.get_all_devices(fltr)
-        if devs.get_length():
-            return devs.get_nth(0).get_name()
-        return _OsVariant.DEFAULT
-
-    def _get_inputtype(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "input")
-        devs = self._os.get_all_devices(fltr)
-        if devs.get_length():
-            return devs.get_nth(0).get_name()
-        return _OsVariant.DEFAULT
-
-    def get_inputbus(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "input")
-        devs = self._os.get_all_devices(fltr)
-        if devs.get_length():
-            return devs.get_nth(0).get_bus_type()
-        return _OsVariant.DEFAULT
-
-    @staticmethod
-    def is_os_related_to(o, related_os_list):
-        if o.get_short_id() in related_os_list:
-            return True
-        related = o.get_related(libosinfo.ProductRelationship.DERIVES_FROM)
-        clones = o.get_related(libosinfo.ProductRelationship.CLONES)
-        for r in related.get_elements() + clones.get_elements():
-            if r.get_short_id() in related_os_list or \
-               _OsVariant.is_os_related_to(r, related_os_list):
-                return True
-
-        return False
-
-    def _get_xen_disable_acpi(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-        if _OsVariant.is_os_related_to(self._os, ["winxp", "win2k"]):
-            return True
-        return _OsVariant.DEFAULT
-
-    def _is_virtiodisk(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-        if self._os.get_distro() == "fedora":
-            if self._os.get_version() == "unknown":
-                return _OsVariant.DEFAULT
-            return int(self._os.get_version() >= 10) or _OsVariant.DEFAULT
-
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "block")
-        devs = self._os.get_all_devices(fltr)
-        for dev in range(devs.get_length()):
-            d = devs.get_nth(dev)
-            if d.get_name() == "virtio-block":
-                return True
-
-        return _OsVariant.DEFAULT
-
-    def _is_virtionet(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-        if self._os.get_distro() == "fedora":
-            if self._os.get_version() == "unknown":
-                return _OsVariant.DEFAULT
-            return int(self._os.get_version() >= 9) or _OsVariant.DEFAULT
-
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "net")
-        devs = self._os.get_all_devices(fltr)
-        for dev in range(devs.get_length()):
-            d = devs.get_nth(dev)
-            if d.get_name() == "virtio-net":
-                return True
-        return _OsVariant.DEFAULT
-
-    def _is_virtioconsole(self):
-        # We used to enable this for Fedora 18+, because systemd would
-        # autostart a getty on /dev/hvc0 which made 'virsh console' work
-        # out of the box for a login prompt. However now in Fedora
-        # virtio-console is compiled as a module, and systemd doesn't
-        # detect it in time to start a getty. So the benefit of using
-        # it as the default is erased, and we reverted to this.
-        # https://bugzilla.redhat.com/show_bug.cgi?id=1039742
-        return _OsVariant.DEFAULT
-
-    def _is_virtiommio(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-
-        if _OsVariant.is_os_related_to(self._os, ["fedora19"]):
-            return True
-        return _OsVariant.DEFAULT
-
-    def _is_qemu_ga(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-
-        if self.name.split(".")[0] in ["rhel7", "rhel6", "centos7", "centos6"]:
-            return True
-
-        if self._os.get_distro() == "fedora":
-            if self._os.get_version() == "unknown":
-                return _OsVariant.DEFAULT
-            return int(self._os.get_version()) >= 18 or _OsVariant.DEFAULT
-
-        return _OsVariant.DEFAULT
-
-    def _is_hyperv_features(self):
-        if not self._os:
-            return _OsVariant.DEFAULT
-
-        if _OsVariant.is_windows(self._os):
-            return True
-        return _OsVariant.DEFAULT
-
-    def _get_typename(self):
-        if not self._os:
-            return "generic"
-
-        if self._os.get_family() in ['linux']:
-            return "linux"
-
-        if self._os.get_family() in ['win9x', 'winnt', 'win16']:
-            return "windows"
-
-        if self._os.get_family() in ['solaris']:
-            return "solaris"
-
-        if self._os.get_family() in ['openbsd', 'freebsd', 'netbsd']:
-            return "unix"
-
-        return "other"
+            return "Generic"
+        return self._os.get_name()
 
     def _get_sortby(self):
         if not self._os:
@@ -383,7 +248,8 @@ class _OsVariant(_OsVariantType):
         name = self._os.get_short_id()
 
         if d:
-            return datetime.strptime(d, "%Y-%m-%d") > datetime.now()
+            return (datetime.datetime.strptime(d, "%Y-%m-%d") >
+                    datetime.datetime.now())
 
         # As of libosinfo 2.11, many clearly EOL distros don't have an
         # EOL date. So assume None == EOL, add some manual work arounds.
@@ -415,52 +281,160 @@ class _OsVariant(_OsVariantType):
             return "generic"
         return self._os.get_short_id()
 
-    def get_label(self):
+    def _get_typename(self):
         if not self._os:
-            return "Generic"
-        return self._os.get_name()
+            return "generic"
 
-    def __init__(self, o):
-        self._os = o
-        name = self._get_name()
-        if name != name.lower():
-            raise RuntimeError("OS dictionary wants lowercase name, not "
-                               "'%s'" % self.name)
-        self.typename = self._get_typename()
+        if self._os.get_family() in ['linux']:
+            return "linux"
 
-        # 'types' should rarely be altered, this check will make
-        # doubly sure that a new type isn't accidentally added
-        _approved_types = ["linux", "windows", "unix",
-                           "solaris", "other", "generic"]
-        if self.typename not in _approved_types:
-            raise RuntimeError("type '%s' for variant '%s' not in list "
-                               "of approved distro types %s" %
-                               (self.typename, self.name, _approved_types))
+        if self._os.get_family() in ['win9x', 'winnt', 'win16']:
+            return "windows"
+
+        if self._os.get_family() in ['solaris']:
+            return "solaris"
+
+        if self._os.get_family() in ['openbsd', 'freebsd', 'netbsd']:
+            return "unix"
+
+        return "other"
 
 
-        label = self.get_label()
-        sortby = self._get_sortby()
-        urldistro = self._get_urldistro()
+    ########################
+    # Internal helper APIs #
+    ########################
 
-        _OsVariantType.__init__(self, name, label, urldistro, sortby)
+    def _is_related_to(self, related_os_list):
+        if not self._os:
+            return False
+        return _is_os_related_to(self._os, related_os_list)
 
-        self.supported = self._get_supported()
-        self.three_stage_install = self._is_three_stage_install()
-        self.acpi = self._is_acpi()
-        self.apic = self._is_apic()
-        self.clock = self._get_clock()
-        self.xen_disable_acpi = self._get_xen_disable_acpi()
-        self.virtiommio = self._is_virtiommio()
-        self.qemu_ga = self._is_qemu_ga()
-        self.hyperv_features = self._is_hyperv_features()
-        self.virtioconsole = lambda: self._is_virtioconsole()
-        self.netmodel = lambda: self._get_netmodel()
-        self.inputtype = lambda: self._get_inputtype()
-        self.inputbus = lambda: self.get_inputbus()
-        self.virtiodisk = lambda: self._is_virtiodisk()
-        self.virtionet = lambda: self._is_virtionet()
 
-    def get_videomodel(self, guest):
+    ###############
+    # Public APIs #
+    ###############
+
+    def is_windows(self):
+        return (self._os and
+                self._os.get_family() in ['win9x', 'winnt', 'win16'])
+
+    def need_old_xen_disable_acpi(self):
+        return self._is_related_to(["winxp", "win2k"])
+
+    def get_clock(self):
+        if self._os:
+            if self.is_windows() or self._os.get_family() in ['solaris']:
+                return "localtime"
+        return "utc"
+
+    def supports_virtioconsole(self):
+        # We used to enable this for Fedora 18+, because systemd would
+        # autostart a getty on /dev/hvc0 which made 'virsh console' work
+        # out of the box for a login prompt. However now in Fedora
+        # virtio-console is compiled as a module, and systemd doesn't
+        # detect it in time to start a getty. So the benefit of using
+        # it as the default is erased, and we reverted to this.
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1039742
+        return False
+
+    def supports_virtiommio(self):
+        return self._is_related_to(["fedora19"])
+
+    def supports_acpi(self, default):
+        if (self._os and
+            self._os.get_family() in ['msdos']):
+            return False
+        return default
+
+    def supports_apic(self, default):
+        return self.supports_acpi(default)
+
+    def default_netmodel(self):
+        """
+        Default non-virtio net-model, since we check for that separately
+        """
+        if not self._os:
+            return None
+
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "net")
+        devs = self._os.get_all_devices(fltr)
+        for idx in range(devs.get_length()):
+            devname = devs.get_nth(idx).get_name()
+            if devname != "virtio-net":
+                return devname
+        return None
+
+    def default_inputtype(self):
+        if self._os:
+            fltr = libosinfo.Filter()
+            fltr.add_constraint("class", "input")
+            devs = self._os.get_all_devices(fltr)
+            if devs.get_length():
+                return devs.get_nth(0).get_name()
+        return "mouse"
+
+    def default_inputbus(self):
+        if self._os:
+            fltr = libosinfo.Filter()
+            fltr.add_constraint("class", "input")
+            devs = self._os.get_all_devices(fltr)
+            if devs.get_length():
+                return devs.get_nth(0).get_bus_type()
+        return "ps2"
+
+    def supports_virtiodisk(self):
+        if not self._os:
+            return False
+
+        if self._os.get_distro() == "fedora":
+            if self._os.get_version() == "unknown":
+                return False
+            return int(self._os.get_version()) >= 10
+
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "block")
+        devs = self._os.get_all_devices(fltr)
+        for dev in range(devs.get_length()):
+            d = devs.get_nth(dev)
+            if d.get_name() == "virtio-block":
+                return True
+
+        return False
+
+    def supports_virtionet(self):
+        if not self._os:
+            return False
+
+        if self._os.get_distro() == "fedora":
+            if self._os.get_version() == "unknown":
+                return False
+            return int(self._os.get_version()) >= 9
+
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "net")
+        devs = self._os.get_all_devices(fltr)
+        for dev in range(devs.get_length()):
+            d = devs.get_nth(dev)
+            if d.get_name() == "virtio-net":
+                return True
+        return False
+
+    def supports_qemu_ga(self):
+        if not self._os:
+            return False
+
+        if self.name.split(".")[0] in ["rhel7", "rhel6", "centos7", "centos6"]:
+            return True
+
+        if self._os.get_distro() == "fedora":
+            if self._os.get_version() == "unknown":
+                return False
+            return int(self._os.get_version()) >= 18
+
+        return False
+
+    def default_videomodel(self, guest):
         if guest.os.is_ppc64() and guest.os.machine == "pseries":
             return "vga"
 
@@ -475,7 +449,7 @@ class _OsVariant(_OsVariantType):
         if guest.has_spice() and guest.os.is_x86():
             return "qxl"
 
-        if self._os and _OsVariant.is_windows(self._os):
+        if self.is_windows():
             return "vga"
 
         return None
