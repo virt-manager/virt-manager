@@ -262,19 +262,6 @@ class _OSDB(object):
 # OsVariant classes #
 #####################
 
-def _is_os_related_to(o, related_os_list):
-    if o.get_short_id() in related_os_list:
-        return True
-    related = o.get_related(libosinfo.ProductRelationship.DERIVES_FROM)
-    clones = o.get_related(libosinfo.ProductRelationship.CLONES)
-    for r in related.get_elements() + clones.get_elements():
-        if (r.get_short_id() in related_os_list or
-            _is_os_related_to(r, related_os_list)):
-            return True
-
-    return False
-
-
 class _OsVariant(object):
     def __init__(self, o):
         self._os = o
@@ -350,10 +337,35 @@ class _OsVariant(object):
     # Internal helper APIs #
     ########################
 
-    def _is_related_to(self, related_os_list):
-        if not self._os:
+    def _is_related_to(self, related_os_list, os=None, check_upgrades=True):
+        os = os or self._os
+        if not os:
             return False
-        return _is_os_related_to(self._os, related_os_list)
+
+        if os.get_short_id() in related_os_list:
+            return True
+
+        check_list = []
+        def _extend(newl):
+            for obj in newl:
+                if obj not in check_list:
+                    check_list.append(obj)
+
+        _extend(os.get_related(
+            libosinfo.ProductRelationship.DERIVES_FROM).get_elements())
+        _extend(os.get_related(
+            libosinfo.ProductRelationship.CLONES).get_elements())
+        if check_upgrades:
+            _extend(os.get_related(
+                libosinfo.ProductRelationship.UPGRADES).get_elements())
+
+        for checkobj in check_list:
+            if (checkobj.get_short_id() in related_os_list or
+                self._is_related_to(related_os_list, os=checkobj,
+                                    check_upgrades=check_upgrades)):
+                return True
+
+        return False
 
 
     ###############
@@ -385,7 +397,7 @@ class _OsVariant(object):
         return self.get_typename() == "windows"
 
     def need_old_xen_disable_acpi(self):
-        return self._is_related_to(["winxp", "win2k"])
+        return self._is_related_to(["winxp", "win2k"], check_upgrades=False)
 
     def get_clock(self):
         if self.is_windows() or self._family in ['solaris']:
@@ -448,55 +460,31 @@ class _OsVariant(object):
         return "ps2"
 
     def supports_virtiodisk(self):
-        if not self._os:
-            return False
-
-        if self._os.get_distro() == "fedora":
-            if self._os.get_version() == "unknown":
-                return False
-            return int(self._os.get_version()) >= 10
-
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "block")
-        devs = self._os.get_all_devices(fltr)
-        for dev in range(devs.get_length()):
-            d = devs.get_nth(dev)
-            if d.get_name() == "virtio-block":
-                return True
+        if self._os:
+            fltr = libosinfo.Filter()
+            fltr.add_constraint("class", "block")
+            devs = self._os.get_all_devices(fltr)
+            for dev in range(devs.get_length()):
+                d = devs.get_nth(dev)
+                if d.get_name() == "virtio-block":
+                    return True
 
         return False
 
     def supports_virtionet(self):
-        if not self._os:
-            return False
+        if self._os:
+            fltr = libosinfo.Filter()
+            fltr.add_constraint("class", "net")
+            devs = self._os.get_all_devices(fltr)
+            for dev in range(devs.get_length()):
+                d = devs.get_nth(dev)
+                if d.get_name() == "virtio-net":
+                    return True
 
-        if self._os.get_distro() == "fedora":
-            if self._os.get_version() == "unknown":
-                return False
-            return int(self._os.get_version()) >= 9
-
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "net")
-        devs = self._os.get_all_devices(fltr)
-        for dev in range(devs.get_length()):
-            d = devs.get_nth(dev)
-            if d.get_name() == "virtio-net":
-                return True
         return False
 
     def supports_qemu_ga(self):
-        if not self._os:
-            return False
-
-        if self.name.split(".")[0] in ["rhel7", "rhel6", "centos7", "centos6"]:
-            return True
-
-        if self._os.get_distro() == "fedora":
-            if self._os.get_version() == "unknown":
-                return False
-            return int(self._os.get_version()) >= 18
-
-        return False
+        return self._is_related_to(["fedora18", "rhel6.0"])
 
     def default_videomodel(self, guest):
         if guest.os.is_ppc64() and guest.os.machine == "pseries":
