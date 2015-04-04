@@ -73,16 +73,16 @@ def _sort(tosort, sortpref=None, limit_point_releases=False):
     retlist = []
     sortpref = sortpref or []
 
-    # Make sure we are sorting by 'sortby' if specified, and group distros
-    # by their 'distro' tag first and foremost
     for key, osinfo in tosort.items():
-        sortby = osinfo.sortby or key
-        # Hack to allow "sortby" duplicates.  Remove when this never happens
-        # with libosinfo
+        # Libosinfo has some duplicate version numbers here, so append .1
+        # if there's a collision
+        sortby = osinfo.sortby
         while sortby_mappings.get(sortby):
             sortby = sortby + ".1"
         sortby_mappings[sortby] = key
 
+        # Group distros by their urldistro value first, so debian is clumped
+        # together, and fedora, etc.
         distro = osinfo.urldistro or "zzzzzzz"
         if distro not in distro_mappings:
             distro_mappings[distro] = []
@@ -96,6 +96,7 @@ def _sort(tosort, sortpref=None, limit_point_releases=False):
         distro_list.sort()
         distro_list.reverse()
 
+    # Move the sortpref values to the front of the list
     sorted_distro_list = distro_mappings.keys()
     sorted_distro_list.sort()
     sortpref.reverse()
@@ -105,12 +106,14 @@ def _sort(tosort, sortpref=None, limit_point_releases=False):
         sorted_distro_list.remove(prefer)
         sorted_distro_list.insert(0, prefer)
 
+    # Build the final list of sorted os objects
     for distro in sorted_distro_list:
         distro_list = distro_mappings[distro]
         for key in distro_list:
             orig_key = sortby_mappings[key]
             retlist.append(tosort[orig_key])
 
+    # Filter out older point releases
     if limit_point_releases:
         retlist = _remove_older_point_releases(retlist)
 
@@ -235,14 +238,21 @@ class _OSDB(object):
         return approved_types
 
     def list_os(self, typename=None, only_supported=False, sortpref=None):
+        """
+        List all OSes in the DB
+
+        :param typename: Only list OSes of this type
+        :param only_supported: Only list OSses where self.supported == True
+        :param sortpref: Sort these OSes at the front of the list
+        """
         sortmap = {}
 
-        for key, osinfo in self._all_variants.items():
-            if typename and typename != osinfo.get_typename():
+        for name, osobj in self._all_variants.items():
+            if typename and typename != osobj.get_typename():
                 continue
-            if only_supported and not osinfo.supported:
+            if only_supported and not osobj.supported:
                 continue
-            sortmap[key] = osinfo
+            sortmap[name] = osobj
 
         return _sort(sortmap, sortpref=sortpref,
             limit_point_releases=only_supported)
@@ -510,6 +520,9 @@ class _OsVariant(object):
 
     def get_recommended_resources(self, guest):
         ret = {}
+        if not self._os:
+            return ret
+
         def read_resource(resources, minimum, arch):
             # If we are reading the "minimum" block, allocate more
             # resources.
@@ -534,8 +547,8 @@ class _OsVariant(object):
         read_resource(self._os.get_recommended_resources(),
             False, guest.os.arch)
 
-        # machvirt doesn't allow smp in non-kvm mode
-        if guest.type != "kvm" and guest.os.is_arm_machvirt():
+        # QEMU TCG doesn't gain anything by having extra VCPUs
+        if guest.type == "qemu":
             ret["n-cpus"] = 1
 
         return ret
