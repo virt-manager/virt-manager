@@ -22,7 +22,7 @@ all needed input, aside from the source guest to clone.
 
 Please note, virt-clone does not change anything _inside_ the guest OS, it only duplicates disks and does host side changes. So things like changing passwords, changing static IP address, etc are outside the scope of this tool. For these types of changes, please see B<virt-sysprep>.
 
-=head1 OPTIONS
+=head1 GENERAL OPTIONS
 
 Most options are not required. Minimum requirements are --original or
 --original-xml (to specify the guest to clone), --name, and appropriate
@@ -30,38 +30,24 @@ storage options via -file.
 
 =over 4
 
-=item -h, --help
-
-Show the help message and exit
-
-=item --version
-
-Show program's version number and exit
-
-=item  --connect=URI
+=item B<--connect> URI
 
 Connect to a non-default hypervisor. See L<virt-install(1)> for details
 
-=back
+=item B<-o> ORIGINAL_GUEST
 
-=head2 General Options
-
-General configuration parameters that apply to all guest clones.
-
-=over 2
-
-=item -o ORIGINAL_GUEST, --original=ORIGINAL_GUEST
+=item B<--original> ORIGINAL_GUEST
 
 Name of the original guest to be cloned. This guest must be shut off or paused
 since it is not possible to safely clone active guests at this time.
 
-=item --original-xml=ORIGINAL_XML
+=item B<--original-xml> ORIGINAL_XML
 
 Libvirt guest xml file to use as the original guest. The guest does not need to
 be defined on the libvirt connection. This takes the place of the
 C<--original> parameter.
 
-=item --auto-clone
+=item B<--auto-clone>
 
 Generate a new guest name, and paths for new storage.
 
@@ -76,88 +62,92 @@ An example or possible generated output:
 If generated names collide with existing VMs or storage, a number is appended,
 such as foobar-clone-1.img, or MyVM-clone-3.
 
-=item -n NAME, --name=NAME
+=item B<-n> NAME
+
+=item B<--name> NAME
 
 Name of the new guest virtual machine instance. This must be unique amongst
 all guests known to the hypervisor connection, including those not
 currently active.
 
-=item -u UUID, --uuid=UUID
+=item B<-u> UUID
+
+=item B<--uuid> UUID
 
 UUID for the guest; if none is given a random UUID will be generated. If you
 specify UUID, you should use a 32-digit hexadecimal number. UUID are intended
 to be unique across the entire data center, and indeed world. Bear this in
 mind if manually specifying a UUID
 
-=back
+=item B<-f> DISKFILE
 
-=head2 Storage Configuration
-
-=over 2
-
-=item -f DISKFILE, --file=DISKFILE
+=item B<--file> DISKFILE
 
 Path to the file, disk partition, or logical volume to use as the backing store
 for the new guest's virtual disk. If the original guest has multiple disks,
 this parameter must be repeated multiple times, once per disk in the original
 virtual machine.
 
-=item --force-copy=TARGET
+=item B<--force-copy> TARGET
 
 Force cloning the passed disk target ('hdc', 'sda', etc.). By default,
 C<virt-clone> will skip certain disks, such as those marked 'readonly' or
 'shareable'.
 
-=item --nonsparse
+=item B<--nonsparse>
 
 Fully allocate the new storage if the path being cloned is a sparse file.
 See L<virt-install(1)> for more details on sparse vs. nonsparse.
 
-=item --preserve-data
+=item B<--preserve-data>
 
 No storage is cloned: disk images specific by --file are preserved as is,
 and referenced in the new clone XML. This is useful if you want to clone
 a VM XML template, but not the storage contents.
 
-=item --reflink
+=item B<--reflink>
 
 When --reflink is specified, perform a lightweight copy. This is much faster
 if source images and destination images are all on the same btrfs filesystem.
 If COW copy is not possible, then virt-clone fails.
 
-=back
+=item B<-m> MAC
 
-=head2 Networking Configuration
-
-=over 2
-
-=item -m MAC, --mac=MAC
+=item B<--mac> MAC
 
 Fixed MAC address for the guest; If this parameter is omitted, or the value
 C<RANDOM> is specified a suitable address will be randomly generated. Addresses
 are applied sequentially to the networks as they are listed in the original
 guest XML.
 
-=back
-
-=head2 Miscellaneous Options
-
-=over 2
-
-=item --print-xml
+=item B<--print-xml>
 
 Print the generated clone XML and exit without cloning.
 
-=item --replace
+=item B<--replace>
 
 Shutdown and remove any existing guest with the passed C<--name> before
 cloning the original guest.
 
-=item -q, --quiet
+=item B<-h>
+
+=item B<--help>
+
+Show the help message and exit
+
+=item B<--version>
+
+Show program's version number and exit
+
+=item B<-q>
+
+=item B<--quiet>
 
 Suppress non-error output.
 
-=item -d, --debug
+=item B<-d>
+
+=item B<--debug>
 
 Print debugging information to the terminal when running the install process.
 The debugging information is also stored in

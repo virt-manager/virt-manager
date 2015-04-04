@@ -23,72 +23,93 @@ By default, the virt-convert will convert all encountered disk images
 to 'raw' format, sending the output to a new directory location. So the
 original disk images are _not_ altered in place.
 
+
+
 =head1 OPTIONS
 
 =over 4
 
-=item -h, --help
-
-Show the help message and exit
-
-=item --version
-
-Show program's version number and exit
-
-=item  --connect=URI
+=item B<--connect> URI
 
 Connect to a non-default hypervisor. See L<virt-install(1)> for details
 
 =back
 
-=head2 Conversion Options
 
-=over 2
 
-=item  -i/--input-format FORMAT
+
+=head1 CONVERSION OPTIONS
+
+=over 4
+
+=item B<-i> INPUT-FORMAT
+
+=item B<--input-format> INPUT-FORMAT
 
 Input format. This should be auto-detected, but can be forced if necessary. Currently C<vmx> and C<ovf> are supported.
 
-=item  -D/--disk-format DISK-FORMAT
+=item B<-D> OUTPUT-FORMAT
+
+=item B<--disk-format> OUTPUT-FORMAT
 
 Output disk format. The default is 'raw', so any encountered disk images will be converted to 'raw' format using L<qemu-img(1)>. Pass C<none> if no conversion should be performed: in this case the images will just be copied to the specified --destination.
 
-=item --destination DIRECTORY
+=item B<--destination> DIRECTORY
 
 The directory to send converted/copied disk images. If not specified, the hypervisor default is used, typically /var/lib/libvirt/images.
 
 =back
 
-=head2 Miscellaneous Options
 
-=over 2
 
-=item  --noautoconsole
+
+=head1 MISCELLANEOUS OPTIONS
+
+=over 4
+
+=item B<--noautoconsole>
 
 Don't automatically try to connect to the guest console. The default behaviour
 is to launch L<virt-viewer(1)> to display the graphical console, or to run the
 C<virsh> C<console> command to display the text console. Use of this parameter
 will disable this behaviour.
 
-=item --print-xml
+=item B<--print-xml>
 
 Print the generated libvirt XML, but do not perform any disk conversions or
 install/start the guest. This option implies --dry-run.
 
-=item --dry-run
+=item B<--dry-run>
 
 Proceed through the conversion process, but don't convert disks or actually
 write any converted files.
 
-=item -q, --quiet
+=item B<-h>
+
+=item B<--help>
+
+Show the help message and exit
+
+=item B<--version>
+
+Show program's version number and exit
+
+=item B<-q>
+
+=item B<--quiet>
 
 Avoid verbose output.
 
-=item -d, --debug
+=item B<-d>
+
+=item B<--debug>
 
 Print debugging information
 
 =back
+
+
+
 
 =head1 EXAMPLES
 

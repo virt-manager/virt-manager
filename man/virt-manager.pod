@@ -22,33 +22,37 @@ The following options are accepted when running C<virt-manager>:
 
 =over 4
 
-=item -h, --help
+=item B<-h>
+
+=item B<--help>
 
 Display command line help summary
 
-=item --version
+=item B<--version>
 
 Show virt-manager's version number and exit
 
-=item -c URI, --connect=URI
+=item B<-c> URI
+
+=item B<--connect>=URI
 
 Specify the hypervisor connection C<URI>
 
-=item --debug
+=item B<--debug>
 
 List debugging output to the console (normally this is only logged in
 ~/.cache/virt-manager/virt-manager.log). This function implies --no-fork.
 
-=item --no-fork
+=item B<--no-fork>
 
 Don't fork C<virt-manager> off into the background: run it blocking the
 current terminal. Useful for seeing possible errors dumped to stdout/stderr.
 
-=item --no-conn-autostart
+=item B<--no-conn-autostart>
 
 Don't autostart any libvirt connections when launching C<virt-manager>.
 
-=item --show-DIALOG-WINDOW
+=item B<--show-DIALOG-WINDOW>
 
 Display the corresponding C<DIALOG-WINDOW> when launching C<virt-manager>. This
 function implies --no-conn-autostart and the manager window will not be shown
@@ -58,31 +62,31 @@ The following C<DIALOG-WINDOW> options are currently available:
 
 =over 4
 
-=item --show-domain-creator
+=item B<--show-domain-creator>
 
 Display the wizard for creating new virtual machines
 
-=item --show-domain-editor=NAME|ID|UUID
+=item B<--show-domain-editor> NAME|ID|UUID
 
 Display the dialog for editing properties of the virtual machine with
 unique ID matching either the domain name, ID, or UUID
 
-=item --show-domain-performance=NAME|ID|UUID
+=item B<--show-domain-performance> NAME|ID|UUID
 
 Display the dialog for monitoring performance of the virtual machine with
 unique ID matching either the domain name, ID, or UUID
 
-=item --show-domain-console=NAME|ID|UUID
+=item B<--show-domain-console> NAME|ID|UUID
 
 Display the virtual console of the virtual machine with
 unique ID matching either the domain name, ID, or UUID
 
-=item --show-host-summary
+=item B<--show-host-summary>
 
 Display the main window summarizing performance for all virtual machines
 on the host.
 
-=item --spice-disable-auto-usbredir
+=item B<--spice-disable-auto-usbredir>
 
 Auto USB redirection is supported by default. This option switches off it.
 

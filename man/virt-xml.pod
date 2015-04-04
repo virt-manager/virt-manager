@@ -29,19 +29,13 @@ B<virt-xml> only allows one action and XML pair per invocation. If you need to m
 
 =over 4
 
-=item -h, --help
+=item B<-c> URI
 
-Show the help message and exit
-
-=item --version
-
-Show program's version number and exit
-
-=item  -c URI, --connect=URI
+=item B<--connect>=URI
 
 Connect to a non-default hypervisor. See L<virt-install(1)> for details
 
-=item domain
+=item B<domain>
 
 domain is the name, UUID, or ID of the existing VM. This can be omitted if
 using --build-xml, or if XML is passed on stdin.
@@ -52,11 +46,13 @@ If XML is passed on stdin, the default output is --print-xml.
 
 =back
 
-=head2 XML actions
 
-=over 2
 
-=item --edit [EDIT-OPTIONS]
+=head1 XML ACTIONS
+
+=over 4
+
+=item B<--edit> [EDIT-OPTIONS]
 
 Edit the specified XML block. EDIT-OPTIONS tell B<virt-xml> which block to edit. The type of XML that we are editing is decided by XML option that is passed to B<virt-xml>. So if --disk is passed, EDIT-OPTIONS select which <disk> block to edit.
 
@@ -68,21 +64,21 @@ EDIT-OPTIONS examples:
 
 =over 4
 
-=item --edit
+=item B<--edit>
 
 --edit without any options implies 'edit the first block'. So '--edit --disk DISK-OPTIONS' means 'edit the first <disk>'.
 
 For the single XML block options mentioned above, plain '--edit' without any options is what you always want to use.
 
-=item --edit #
+=item B<--edit> #
 
 Select the specified XML block number. So '--edit 2 --disk DISK-OPTS' means 'edit the second <disk>'. This option only really applies for device XML.
 
-=item --edit all
+=item B<--edit> all
 
 Modify every XML block of the XML option type. So '--edit all --disk DISK-OPTS' means 'edit ever <disk> block'. This option only really applies for device XML.
 
-=item --edit DEVICE-OPTIONS
+=item B<--edit> DEVICE-OPTIONS
 
 Modify every XML block that matches the passed device options. The device options are in the same format as would be passed to the XML option.
 
@@ -90,27 +86,27 @@ So '--edit path=/tmp/foo --disk DISK-OPTS' means 'edit every <disk> with path /t
 
 =back
 
-=item --add-device
+=item B<--add-device>
 
 Append the specified XML options to the XML <devices> list. Example: '--add-device --disk DISK-OPTIONS' will create a new <disk> block and add it to the XML.
 
 This option will error if specified with a non-device XML option (see --edit section for a partial list).
 
-=item --remove-device
+=item B<--remove-device>
 
 Remove the specified device from the XML. The device to remove is chosen by the XML option, which takes arguments in the same format as --edit. Examples
 
 =over 4
 
-=item --remove-device --disk 2
+=item B<--remove-device> --disk 2
 
 Remove the second disk device
 
-=item --remove-device --network all
+=item B<--remove-device> --network all
 
 Remove all network devices
 
-=item --remove-device --sound pcspk
+=item B<--remove-device> --sound pcspk
 
 Remove all sound devices with model='pcspk'
 
@@ -118,7 +114,7 @@ Remove all sound devices with model='pcspk'
 
 This option will error if specified with a non-device XML option (see --edit section for a partial list).
 
-=item --build-xml
+=item B<--build-xml>
 
 Just build the specified XML, and print it to stdout. No input domain or input XML is required. Example: '--build-xml --disk DISK-OPTIONS' will just print the new <disk> device.
 
@@ -129,31 +125,31 @@ This option will error if specified with an XML option that does not map cleanly
 
 
 
-=head2 Output options
+=head1 OUTPUT OPTIONS
 
 These options decide what action to take after altering the XML. In the common case these do not need to be specified, as 'XML actions' will imply a default output action, described in detail above. These are only needed if you want to modify the default output.
 
-=over 2
+=over 4
 
-=item --update
+=item B<--update>
 
 If the specified domain is running, attempt to alter the running VM configuration. If combined with --edit, this is an update operation. If combined with --add-device, this is a device hotplug. If combined with --remove-device, this is a device hotunplug.
 
 Keep in mind, most XML properties and devices do not support live update operations, so don't expect it to succeed in all cases.
 
-=item --define
+=item B<--define>
 
 Define the requested XML change. This is typically the default if no output option is specified, but if a --print option is specified, --define is required to force the change.
 
-=item --print-diff
+=item B<--print-diff>
 
 Print the generated XML change in unified diff format. If only this output option is specified, all other output options are disabled and no persistent change is made.
 
-=item --print-xml
+=item B<--print-xml>
 
 Print the generated XML in its entirety. If only this output option is specified, all other output options are disabled and no persistent change is made.
 
-=item --confirm
+=item B<--confirm>
 
 Before defining or updating the domain, show the generated XML diff and interactively request confirmation.
 
@@ -162,67 +158,67 @@ Before defining or updating the domain, show the generated XML diff and interact
 
 
 
-=head2 XML options
+=head1 XML OPTIONS
 
-=over 2
+=over 4
 
-=item --disk
+=item B<--disk>
 
-=item --network
+=item B<--network>
 
-=item --graphics
+=item B<--graphics>
 
-=item --metadata
+=item B<--metadata>
 
-=item --memory
+=item B<--memory>
 
-=item --vcpus
+=item B<--vcpus>
 
-=item --cpu
+=item B<--cpu>
 
-=item --security
+=item B<--security>
 
-=item --numatune
+=item B<--numatune>
 
-=item --features
+=item B<--features>
 
-=item --clock
+=item B<--clock>
 
-=item --pm
+=item B<--pm>
 
-=item --boot
+=item B<--boot>
 
-=item --filesystem
+=item B<--filesystem>
 
-=item --controller
+=item B<--controller>
 
-=item --serial
+=item B<--serial>
 
-=item --parallel
+=item B<--parallel>
 
-=item --channel
+=item B<--channel>
 
-=item --console
+=item B<--console>
 
-=item --hostdev
+=item B<--hostdev>
 
-=item --sound
+=item B<--sound>
 
-=item --watchdog
+=item B<--watchdog>
 
-=item --video
+=item B<--video>
 
-=item --smartcard
+=item B<--smartcard>
 
-=item --redirdev
+=item B<--redirdev>
 
-=item --memballoon
+=item B<--memballoon>
 
-=item --tpm
+=item B<--tpm>
 
-=item --rng
+=item B<--rng>
 
-=item --panic
+=item B<--panic>
 
 These options alter the XML for a single class of XML elements. More complete documentation is found in L<virt-install(1)>.
 
@@ -240,15 +236,29 @@ For any option, use --option=? to see a list of all available sub options, examp
 
 
 
-=head2 Miscellaneous Options
+=head1 MISCELLANEOUS OPTIONS
 
-=over 2
+=over 4
 
-=item -q, --quiet
+=item B<-h>
+
+=item B<--help>
+
+Show the help message and exit
+
+=item B<--version>
+
+Show program's version number and exit
+
+=item B<-q>
+
+=item B<--quiet>
 
 Avoid verbose output.
 
-=item -d, --debug
+=item B<-d>
+
+=item B<--debug>
 
 Print debugging information
 
