@@ -813,25 +813,29 @@ class vmmCreate(vmmGObjectUI):
                       STABLE_OS_SUPPORT or
                       None)
 
-        types = virtinst.OSDB.list_os(list_types=True)
+        types = virtinst.OSDB.list_types()
         if not filtervars:
             # Kind of a hack, just show linux + windows by default since
             # that's all 98% of people care about
             supportl = ["linux", "windows"]
         else:
             supportl = []
-            for t in types:
-                l = virtinst.OSDB.list_os(typename=t.name,
+            for typename in types:
+                l = virtinst.OSDB.list_os(typename=typename,
                     only_supported=True,
                     filtervars=filtervars)
                 if l:
-                    supportl.append(t.name)
+                    supportl.append(typename)
 
         self._add_os_row(model, None, _("Generic"), True)
 
-        for t in types:
-            supported = (t.name in supportl)
-            self._add_os_row(model, t.name, t.label, supported)
+        for typename in types:
+            supported = (typename in supportl)
+            typelabel = typename.capitalize()
+            if typename in ["unix"]:
+                typelabel = typename.upper()
+
+            self._add_os_row(model, typename, typelabel, supported)
 
         # Add sep
         self._add_os_row(model, sep=True)

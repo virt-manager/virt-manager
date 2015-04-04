@@ -162,13 +162,16 @@ class _OSDB(object):
         "ubuntuquantal" : "ubuntu12.10",
         "ubunturaring" : "ubuntu13.04",
         "ubuntusaucy" : "ubuntu13.10",
+        "virtio26": "fedora10",
         "vista" : "winvista",
         "winxp64" : "winxp",
 
+        # Old --os-type values
         "linux" : "generic",
         "windows" : "winxp",
         "solaris" : "solaris10",
-        "virtio26": "fedora10",
+        "unix": "freebsd9",
+        "other": "generic",
     }
 
 
@@ -178,15 +181,6 @@ class _OSDB(object):
 
     def _make_default_variants(self):
         ret = {}
-
-        # Back compat 'types'
-        for name, label in [
-            ("linux", "Linux"),
-            ("windows", "Windows"),
-            ("solaris", "Solaris"),
-            ("unix", "UNIX"),
-            ("other", "Other")]:
-            ret[name] = _OsVariantType(name, label, None, None)
 
         # Generic variant
         v = _OsVariant(None)
@@ -224,7 +218,7 @@ class _OSDB(object):
     def lookup_os(self, key):
         key = self._aliases.get(key) or key
         ret = self._all_variants.get(key)
-        if ret is None or ret.is_type():
+        if ret is None:
             return None
         return ret
 
@@ -235,19 +229,18 @@ class _OSDB(object):
             return ret[0].get_short_id()
         return None
 
-    def list_os(self, list_types=False, typename=None,
-                filtervars=None, only_supported=False,
-                **kwargs):
+    def list_types(self):
+        approved_types = ["linux", "windows", "unix",
+            "solaris", "other", "generic"]
+        return approved_types
+
+    def list_os(self, typename=None, filtervars=None,
+        only_supported=False, **kwargs):
         sortmap = {}
         filtervars = filtervars or []
 
         for key, osinfo in self._all_variants.items():
-            is_type = osinfo.is_type()
-            if list_types and not is_type:
-                continue
-            if not list_types and is_type:
-                continue
-            if typename and typename != osinfo.typename:
+            if typename and typename != osinfo.get_typename():
                 continue
             if filtervars:
                 filtervars = [self.lookup_os(x).name for x in filtervars]
@@ -278,53 +271,22 @@ def _is_os_related_to(o, related_os_list):
     return False
 
 
-class _OsVariantType(object):
-    def __init__(self, name, label, urldistro, sortby):
-        self.name = name
-        self.label = label
-        self.urldistro = urldistro
-        self.sortby = sortby
-
-    def is_type(self):
-        return self.__class__ == _OsVariantType
-
-
-class _OsVariant(_OsVariantType):
+class _OsVariant(object):
     def __init__(self, o):
         self._os = o
-        name = self._get_name()
-        if name != name.lower():
-            raise RuntimeError("OS dictionary wants lowercase name, not "
-                               "'%s'" % self.name)
-        self.typename = self._get_typename()
+        self._family = self._os and self._os.get_family() or None
 
-        # 'types' should rarely be altered, this check will make
-        # doubly sure that a new type isn't accidentally added
-        _approved_types = ["linux", "windows", "unix",
-                           "solaris", "other", "generic"]
-        if self.typename not in _approved_types:
-            raise RuntimeError("type '%s' for variant '%s' not in list "
-                               "of approved distro types %s" %
-                               (self.typename, self.name, _approved_types))
+        self.name = self._os and self._os.get_short_id() or "generic"
+        self.label = self._os and self._os.get_name() or "Generic"
 
-
-        label = self._get_label()
-        sortby = self._get_sortby()
-        urldistro = self._get_urldistro()
-
-        _OsVariantType.__init__(self, name, label, urldistro, sortby)
-
+        self.sortby = self._get_sortby()
+        self.urldistro = self._get_urldistro()
         self.supported = self._get_supported()
 
 
     ###############
     # Cached APIs #
     ###############
-
-    def _get_label(self):
-        if not self._os:
-            return "Generic"
-        return self._os.get_name()
 
     def _get_sortby(self):
         if not self._os:
@@ -379,29 +341,6 @@ class _OsVariant(_OsVariantType):
 
         return urldistro
 
-    def _get_name(self):
-        if not self._os:
-            return "generic"
-        return self._os.get_short_id()
-
-    def _get_typename(self):
-        if not self._os:
-            return "generic"
-
-        if self._os.get_family() in ['linux']:
-            return "linux"
-
-        if self._os.get_family() in ['win9x', 'winnt', 'win16']:
-            return "windows"
-
-        if self._os.get_family() in ['solaris']:
-            return "solaris"
-
-        if self._os.get_family() in ['openbsd', 'freebsd', 'netbsd']:
-            return "unix"
-
-        return "other"
-
 
     ########################
     # Internal helper APIs #
@@ -417,17 +356,36 @@ class _OsVariant(_OsVariantType):
     # Public APIs #
     ###############
 
+    def get_typename(self):
+        """
+        Streamline the family name for use in the virt-manager UI
+        """
+        if not self._os:
+            return "generic"
+
+        if self._family in ['linux']:
+            return "linux"
+
+        if self._family in ['win9x', 'winnt', 'win16']:
+            return "windows"
+
+        if self._family in ['solaris']:
+            return "solaris"
+
+        if self._family in ['openbsd', 'freebsd', 'netbsd']:
+            return "unix"
+
+        return "other"
+
     def is_windows(self):
-        return (self._os and
-                self._os.get_family() in ['win9x', 'winnt', 'win16'])
+        return self.get_typename() == "windows"
 
     def need_old_xen_disable_acpi(self):
         return self._is_related_to(["winxp", "win2k"])
 
     def get_clock(self):
-        if self._os:
-            if self.is_windows() or self._os.get_family() in ['solaris']:
-                return "localtime"
+        if self.is_windows() or self._family in ['solaris']:
+            return "localtime"
         return "utc"
 
     def supports_virtioconsole(self):
@@ -444,8 +402,7 @@ class _OsVariant(_OsVariantType):
         return self._is_related_to(["fedora19"])
 
     def supports_acpi(self, default):
-        if (self._os and
-            self._os.get_family() in ['msdos']):
+        if self._family in ['msdos']:
             return False
         return default
 

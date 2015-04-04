@@ -25,6 +25,7 @@ import sys
 import unittest
 import xml.etree.ElementTree as ET
 
+from virtinst import OSDB
 from virtinst import URISplit
 
 _badmodules = ["gi.repository.Gtk", "gi.repository.Gdk"]
@@ -123,14 +124,31 @@ class TestMisc(unittest.TestCase):
                 "version of gtk-3.8, which is what we target:\n" +
                 "\n".join([("%s version=%s" % tup) for tup in failures]))
 
-    def test_libosinfo_aliases_ro(self):
-        from virtinst import OSDB
+
+class TestOSDB(unittest.TestCase):
+    """
+    Test osdict/OSDB
+    """
+    def test_osdict_aliases_ro(self):
         aliases = getattr(OSDB, "_aliases")
 
-        if len(aliases) != 40:
+        if len(aliases) != 42:
             raise AssertionError(_("OSDB._aliases changed size. It "
                 "should never be extended, since it is only for back "
                 "compat with pre-libosinfo osdict.py"))
+
+    def test_osdict_types_ro(self):
+        # 'types' should rarely be altered, this check will make
+        # doubly sure that a new type isn't accidentally added
+        approved_types = OSDB.list_types()
+
+        for osobj in OSDB.list_os():
+            if osobj.get_typename() not in approved_types:
+                raise AssertionError("OS entry '%s' has OS type '%s'.\n"
+                    "The type list should NOT be extended without a lot of "
+                    "thought, please make sure you know what you are doing." %
+                    (osobj.name, osobj.get_typename()))
+
 
 
 class TestURI(unittest.TestCase):
