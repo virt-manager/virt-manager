@@ -808,7 +808,7 @@ class vmmAddHardware(vmmGObjectUI):
         disk_buses = ["ide", "sata", "scsi", "sd",
                       "usb", "virtio", "virtio-scsi", "xen"]
         floppy_buses = ["fdc"]
-        cdrom_buses = ["ide", "scsi"]
+        cdrom_buses = ["ide", "sata", "scsi"]
         lun_buses = ["virtio-scsi"]
 
         if bus in disk_buses:
