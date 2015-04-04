@@ -122,7 +122,7 @@ class Guest(XMLBuilder):
         self.skip_default_graphics = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
 
-        self._os_variant = None
+        self.__os_object = None
         self._random_uuid = None
         self._install_devices = []
 
@@ -210,8 +210,19 @@ class Guest(XMLBuilder):
     # Distro detection properties #
     ###############################
 
+    def _set_os_object(self, variant):
+        obj = osdict.lookup_os(variant)
+        if not obj:
+            obj = osdict.lookup_os("generic")
+        self.__os_object = obj
+    def _get_os_object(self):
+        if not self.__os_object:
+            self._set_os_object(None)
+        return self.__os_object
+    _os_object = property(_get_os_object)
+
     def _get_os_variant(self):
-        return self._os_variant
+        return self._os_object.name
     def _set_os_variant(self, val):
         if val:
             val = val.lower()
@@ -220,8 +231,21 @@ class Guest(XMLBuilder):
                     _("Distro '%s' does not exist in our dictionary") % val)
 
         logging.debug("Setting Guest.os_variant to '%s'", val)
-        self._os_variant = val
+        self._set_os_object(val)
     os_variant = property(_get_os_variant, _set_os_variant)
+
+    def _lookup_osdict_key(self, key, default):
+        """
+        Use self.os_variant to find key in OSTYPES
+        @returns: dict value, or None if os_type/variant wasn't set
+        """
+        import inspect
+        ret = getattr(self._os_object, key)
+        if inspect.isfunction(ret):
+            ret = ret()
+        if ret == self._os_object.DEFAULT:
+            ret = default
+        return ret
 
 
     ########################################
@@ -508,26 +532,6 @@ class Guest(XMLBuilder):
                              "connection does not support autostart.")
             else:
                 raise e
-
-
-    ###################################
-    # Guest Dictionary Helper methods #
-    ###################################
-
-    def _get_os_object(self):
-        ret = osdict.lookup_os(self.os_variant)
-        if ret is None:
-            ret = osdict.lookup_os("generic")
-        return ret
-    _os_object = property(_get_os_object)
-
-
-    def _lookup_osdict_key(self, key, default):
-        """
-        Use self.os_variant to find key in OSTYPES
-        @returns: dict value, or None if os_type/variant wasn't set
-        """
-        return osdict.lookup_osdict_key(self.os_variant, key, default)
 
 
     ###########################

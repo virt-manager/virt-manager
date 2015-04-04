@@ -20,7 +20,6 @@
 # MA 02110-1301 USA.
 
 from datetime import datetime
-from inspect import isfunction
 import re
 
 from gi.repository import Libosinfo as libosinfo
@@ -71,7 +70,6 @@ _aliases = {
     "solaris" : "solaris10",
     "virtio26": "fedora10",
 }
-_SENTINEL = -1234
 _allvariants = {}
 
 
@@ -176,6 +174,7 @@ class _OsVariantType(object):
 
 
 class _OsVariant(_OsVariantType):
+    DEFAULT = -1234
 
     @staticmethod
     def is_windows(o):
@@ -186,65 +185,65 @@ class _OsVariant(_OsVariantType):
     def _is_three_stage_install(self):
         if _OsVariant.is_windows(self._os):
             return True
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _get_clock(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
 
         if _OsVariant.is_windows(self._os) or \
            self._os.get_family() in ['solaris']:
             return "localtime"
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _is_acpi(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
         if self._os.get_family() in ['msdos']:
             return False
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _is_apic(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
 
         if self._os.get_family() in ['msdos']:
             return False
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _get_netmodel(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
 
         if self._os.get_distro() == "fedora":
-            return _SENTINEL
+            return _OsVariant.DEFAULT
 
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "net")
         devs = self._os.get_all_devices(fltr)
         if devs.get_length():
             return devs.get_nth(0).get_name()
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _get_inputtype(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "input")
         devs = self._os.get_all_devices(fltr)
         if devs.get_length():
             return devs.get_nth(0).get_name()
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def get_inputbus(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "input")
         devs = self._os.get_all_devices(fltr)
         if devs.get_length():
             return devs.get_nth(0).get_bus_type()
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     @staticmethod
     def is_os_related_to(o, related_os_list):
@@ -261,18 +260,18 @@ class _OsVariant(_OsVariantType):
 
     def _get_xen_disable_acpi(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
         if _OsVariant.is_os_related_to(self._os, ["winxp", "win2k"]):
             return True
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _is_virtiodisk(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
         if self._os.get_distro() == "fedora":
             if self._os.get_version() == "unknown":
-                return _SENTINEL
-            return int(self._os.get_version() >= 10) or _SENTINEL
+                return _OsVariant.DEFAULT
+            return int(self._os.get_version() >= 10) or _OsVariant.DEFAULT
 
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "block")
@@ -282,15 +281,15 @@ class _OsVariant(_OsVariantType):
             if d.get_name() == "virtio-block":
                 return True
 
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _is_virtionet(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
         if self._os.get_distro() == "fedora":
             if self._os.get_version() == "unknown":
-                return _SENTINEL
-            return int(self._os.get_version() >= 9) or _SENTINEL
+                return _OsVariant.DEFAULT
+            return int(self._os.get_version() >= 9) or _OsVariant.DEFAULT
 
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "net")
@@ -299,7 +298,7 @@ class _OsVariant(_OsVariantType):
             d = devs.get_nth(dev)
             if d.get_name() == "virtio-net":
                 return True
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _is_virtioconsole(self):
         # We used to enable this for Fedora 18+, because systemd would
@@ -309,37 +308,37 @@ class _OsVariant(_OsVariantType):
         # detect it in time to start a getty. So the benefit of using
         # it as the default is erased, and we reverted to this.
         # https://bugzilla.redhat.com/show_bug.cgi?id=1039742
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _is_virtiommio(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
 
         if _OsVariant.is_os_related_to(self._os, ["fedora19"]):
             return True
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _is_qemu_ga(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
 
         if self.name.split(".")[0] in ["rhel7", "rhel6", "centos7", "centos6"]:
             return True
 
         if self._os.get_distro() == "fedora":
             if self._os.get_version() == "unknown":
-                return _SENTINEL
-            return int(self._os.get_version()) >= 18 or _SENTINEL
+                return _OsVariant.DEFAULT
+            return int(self._os.get_version()) >= 18 or _OsVariant.DEFAULT
 
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _is_hyperv_features(self):
         if not self._os:
-            return _SENTINEL
+            return _OsVariant.DEFAULT
 
         if _OsVariant.is_windows(self._os):
             return True
-        return _SENTINEL
+        return _OsVariant.DEFAULT
 
     def _get_typename(self):
         if not self._os:
@@ -592,21 +591,6 @@ def list_os(list_types=False, typename=None,
 
     kwargs["limit_point_releases"] = only_supported
     return _sort(sortmap, **kwargs)
-
-
-def lookup_osdict_key(variant, key, default):
-    _load_os_data()
-    val = _SENTINEL
-    if variant is not None:
-        os = lookup_os(variant)
-        if not hasattr(os, key):
-            raise ValueError("Unknown osdict property '%s'" % key)
-        val = getattr(os, key)
-        if isfunction(val):
-            val = val()
-    if val == _SENTINEL:
-        val = default
-    return val
 
 
 def get_recommended_resources(variant, guest):
