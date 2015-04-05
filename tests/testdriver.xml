@@ -166,16 +166,19 @@
     <!-- bus scsi -->
     <disk type='block' device='cdrom'>
       <target dev='sdb' bus='scsi'/>
+      <address type='drive' controller='5'/>
     </disk>
 
-    <!-- bus virtio -->
     <disk type='file' device='disk'>
       <driver name="qemu" type="qcow2" cache="none"/>
       <source file='/tmp/foobar2'/>
-      <target dev='vda' bus='virtio'/>
+      <target dev='sda' bus='scsi'/>
       <boot order='1'/>
+      <address type='drive' controller='9'/>
       <shareable/>
     </disk>
+
+    <!-- bus virtio -->
     <disk type="volume" device="disk">
       <driver name="qemu"/>
       <source pool="rbd-ceph" volume="vol1"/>
@@ -238,6 +241,10 @@
       <source file='/tmp/foobar4'/>
       <target dev='xvdc' bus='xen'/>
     </disk>
+
+
+    <!-- controllers -->
+    <controller type='scsi' index='9' model='virtio-scsi'/>
 
 
     <!-- interfaces -->
@@ -713,6 +720,47 @@ test-many-devices, like an alternate RNG.
         <vendor id='0x03f0'/>
       </source>
     </hostdev>
+  </devices>
+</domain>
+
+<domain type='test'>
+  <name>test-spapr-xml</name>
+  <uuid>2754dd7b-ac8a-4850-aec0-1f3fcd43235b</uuid>
+  <memory unit='KiB'>524288</memory>
+  <vcpu placement='static'>1</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <devices>
+    <console type='pty'>
+      <address type="spapr-vio"/>
+    </console>
+    <serial type="pty">
+      <address type="spapr-vio"/>
+    </serial>
+    <serial type="pty">
+      <address type="spapr-vio"/>
+    </serial>
+
+    <disk type="file" device="disk">
+      <source file="/tmp/scsidisk.img"/>
+      <target dev="sda" bus="scsi"/>
+      <address type="drive" controller="1"/>
+    </disk>
+
+    <interface type='user'>
+      <mac address='22:11:11:11:11:FA'/>
+      <model>spapr-vlan</model>
+      <address type="spapr-vio"/>
+    </interface>
+
+    <controller type="scsi" index="1">
+      <address type="spapr-vio"/>
+    </controller>
+    <controller type="scsi" index="0">
+      <address type="spapr-vio"/>
+    </controller>
   </devices>
 </domain>
 

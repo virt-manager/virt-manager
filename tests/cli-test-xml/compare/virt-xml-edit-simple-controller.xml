@@ -2,10 +2,10 @@
        <target dev="xvdc" bus="xen"/>
      </disk>
 -    <controller type="scsi" index="0" model="virtio-scsi"/>
-+    <controller type="scsi" index="2" model="lsilogic"/>
-     <controller type="usb" index="0"/>
-     <controller type="fdc" index="0"/>
-     <controller type="ide" index="0"/>
++    <controller type="scsi" index="15" model="lsilogic"/>
+     <controller type="scsi" index="1"/>
+     <controller type="scsi" index="2"/>
+     <controller type="scsi" index="3"/>
 
 Domain 'test-many-devices' defined successfully.
 Changes will take effect after the next domain shutdown.

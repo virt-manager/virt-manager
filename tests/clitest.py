@@ -873,7 +873,7 @@ c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "edit-simple-
 c.add_compare("--disk path=", "edit-simple-disk-remove-path")
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "edit-simple-network")
 c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics")
-c.add_compare("--controller index=2,model=lsilogic", "edit-simple-controller")
+c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
 c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "edit-simple-redirdev")
 c.add_compare("--tpm path=/dev/tpm", "edit-simple-tpm")

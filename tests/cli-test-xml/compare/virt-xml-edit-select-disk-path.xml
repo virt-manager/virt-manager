@@ -1,12 +1,13 @@
        <driver name="qemu" type="qcow2" cache="none"/>
        <source file="/tmp/foobar2"/>
-       <target dev="vda" bus="virtio"/>
+       <target dev="sda" bus="scsi"/>
 -      <shareable/>
        <boot order="1"/>
+       <address type="drive" controller="9" bus="0" target="0" unit="0"/>
 +      <readonly/>
      </disk>
-     <disk type="volume" device="disk">
-       <driver name="qemu"/>
+     <disk type="block" device="cdrom">
+       <target dev="sdb" bus="scsi"/>
 
 Domain 'test-many-devices' defined successfully.
 Changes will take effect after the next domain shutdown.

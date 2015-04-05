@@ -160,15 +160,28 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
  DETAILS_PAGE_SNAPSHOTS) = range(3)
 
 
-def _label_for_device(dev):
+def _label_for_device(dev, vm):
     devtype = dev.virtual_device_type
 
     if devtype == "disk":
+        def _find_matching_disk_controller():
+            for controller in vm.get_controller_devices():
+                if (dev.address.controller is not None and
+                    controller.type == dev.bus and
+                    controller.index == dev.address.controller):
+                    return controller
+
         bus = dev.bus
         if dev.address.type == "spapr-vio":
             bus = "spapr-vscsi"
 
         busstr = virtinst.VirtualDisk.pretty_disk_bus(bus) or ""
+
+        if bus == "scsi":
+            matching_controller = _find_matching_disk_controller()
+            if (matching_controller and
+                matching_controller.model == "virtio-scsi"):
+                busstr = "Virtio SCSI"
 
         if dev.device == "floppy":
             devstr = "Floppy"
@@ -226,8 +239,7 @@ def _label_for_device(dev):
     if devtype == "filesystem":
         return _("Filesystem %s") % dev.target[:8]
     if devtype == "controller":
-        pretty_type = virtinst.VirtualController.pretty_type(dev.type)
-        return _("Controller %s") % pretty_type
+        return _("Controller %s") % dev.pretty_desc()
 
     devmap = {
         "rng": _("RNG"),
@@ -2685,7 +2697,7 @@ class vmmDetails(vmmGObjectUI):
         if addr == "spapr-vio":
             bus = "spapr-vscsi"
 
-        pretty_name = _label_for_device(disk)
+        pretty_name = _label_for_device(disk, self.vm)
 
         self.widget("disk-source-path").set_text(path or "-")
         self.widget("disk-target-type").set_text(pretty_name)
@@ -2818,7 +2830,7 @@ class vmmDetails(vmmGObjectUI):
         if rd.type == 'tcp':
             address = _("%s:%s") % (rd.host, rd.service)
 
-        self.widget("redir-title").set_markup(_label_for_device(rd))
+        self.widget("redir-title").set_markup(_label_for_device(rd, self.vm))
         self.widget("redir-type").set_text(rd.pretty_type(rd.type))
 
         self.widget("redir-address").set_text(address or "")
@@ -3060,7 +3072,7 @@ class vmmDetails(vmmGObjectUI):
         if not dev:
             return
 
-        type_label = virtinst.VirtualController.pretty_type(dev.type)
+        type_label = dev.pretty_desc()
         model_label = dev.model
         if not model_label:
             model_label = _("Default")
@@ -3237,7 +3249,7 @@ class vmmDetails(vmmGObjectUI):
             See if passed hw is already in list, and if so, update info.
             If not in list, add it!
             """
-            label = _label_for_device(dev)
+            label = _label_for_device(dev, self.vm)
             icon = _icon_for_device(dev)
 
             currentDevices.append(dev)
@@ -3322,7 +3334,7 @@ class vmmDetails(vmmGObjectUI):
         ret = []
         for dev in self.vm.get_bootable_devices():
             icon = _icon_for_device(dev)
-            label = _label_for_device(dev)
+            label = _label_for_device(dev, self.vm)
 
             ret.append([dev.vmmidstr, label, icon, False, True])
 

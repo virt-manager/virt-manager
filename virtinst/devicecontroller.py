@@ -92,4 +92,13 @@ class VirtualController(VirtualDevice):
 
     index = XMLProperty("./@index", is_int=True, default_cb=lambda s: 0)
 
+    def pretty_desc(self):
+        ret = self.pretty_type(self.type)
+        if self.type == "scsi":
+            if self.model == "virtio-scsi":
+                ret = "Virtio " + ret
+            elif self.address.type == "spapr-vio":
+                ret = "sPAPR " + ret
+        return ret
+
 VirtualController.register_type()
