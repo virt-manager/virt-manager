@@ -926,6 +926,8 @@ class Guest(XMLBuilder):
                 d.bus = "xen"
                 return
             if not self.os.is_hvm():
+                # This likely isn't correct, but it's kind of a catch all
+                # for virt types we don't know how to handle.
                 d.bus = "ide"
                 return
 
@@ -941,6 +943,8 @@ class Guest(XMLBuilder):
                 d.bus = "scsi"
             elif self.os.is_arm():
                 d.bus = "sd"
+            elif self.os.is_q35():
+                d.bus = "sata"
             else:
                 d.bus = "ide"
 
