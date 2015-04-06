@@ -80,6 +80,7 @@ _usr_version = _get_param("pkgversion", "")
 if _usr_version is not None and _usr_version != "":
     __version__ = _usr_version
 
+cfgpath = _cfgpath
 prefix = _get_param("prefix", "/usr")
 gettext_dir = os.path.join(prefix, "share", "locale")
 install_asset_dir = os.path.join(prefix, "share", "virt-manager")
