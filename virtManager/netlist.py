@@ -321,7 +321,7 @@ class vmmNetworkList(vmmGObjectUI):
         if self.widget("net-portgroup").is_visible():
             portgroup = uiutil.get_combo_entry(self.widget("net-portgroup"), 0)
 
-        return net_type, net_src, mode, portgroup
+        return net_type, net_src, mode, portgroup or None
 
     def get_vport(self):
         vport_type = self.widget("vport-type").get_text()
