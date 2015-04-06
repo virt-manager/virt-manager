@@ -770,7 +770,9 @@ class vmmAddHardware(vmmGObjectUI):
         model.clear()
 
         if self.vm.is_hvm():
-            model.append(["ide", "IDE"])
+            if not self.vm.get_xmlobj().os.is_q35():
+                model.append(["ide", "IDE"])
+            model.append(["sata", "SATA"])
             model.append(["fdc", "Floppy"])
 
             if not self.vm.stable_defaults():
@@ -778,7 +780,6 @@ class vmmAddHardware(vmmGObjectUI):
                 model.append(["usb", "USB"])
 
         if self.vm.get_hv_type() in ["qemu", "kvm", "test"]:
-            model.append(["sata", "SATA"])
             model.append(["sd", "SD"])
             model.append(["virtio", "VirtIO"])
             model.append(["virtio-scsi", "VirtIO SCSI"])
@@ -786,6 +787,7 @@ class vmmAddHardware(vmmGObjectUI):
         if self.conn.is_xen() or self.conn.is_test_conn():
             model.append(["xen", "Xen"])
 
+        # By default, select bus of the first disk assigned to the VM
         default_bus = None
         for i in self.vm.get_disk_devices():
             if i.is_disk():

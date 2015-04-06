@@ -50,6 +50,10 @@ class OSXML(XMLBuilder):
 
     def is_x86(self):
         return self.arch == "x86_64" or self.arch == "i686"
+    def is_q35(self):
+        return (self.is_x86() and
+                self.machine and
+                "q35" in self.machine)
 
     def is_arm32(self):
         return self.arch == "armv7l"
