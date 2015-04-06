@@ -231,6 +231,11 @@ class my_install(install):
                   (self.prefix, CLIConfig.prefix))
             sys.exit(1)
 
+        if self.prefix != "/usr":
+            print ("WARNING: GSettings may not find your schema if it's\n"
+                   "not in /usr/share. You may need to manually play with\n"
+                   "GSETTINGS_SCHEMA_DIR and glib-compile-schemas.")
+
         install.finalize_options(self)
 
 
