@@ -1,8 +1,6 @@
 #!/usr/bin/env python2
 # Copyright (C) 2013, 2014 Red Hat, Inc.
 
-
-import datetime
 import glob
 import fnmatch
 import os
@@ -236,35 +234,13 @@ class my_install(install):
 
 
 class my_sdist(sdist):
-    user_options = sdist.user_options + [
-        ("snapshot", "s", "add snapshot id to version"),
-    ]
-
     description = "Update virt-manager.spec; build sdist-tarball."
 
-    def initialize_options(self):
-        self.snapshot = None
-        sdist.initialize_options(self)
-
-    def finalize_options(self):
-        if self.snapshot is not None:
-            self.snapshot = 1
-            cliconfig.__snapshot__ = 1
-        sdist.finalize_options(self)
-
     def run(self):
-        # Note: cliconfig.__snapshot__ by default is 0, it can be set to 1 by
-        #       either sdist or rpm and then the snapshot suffix is appended.
-        ver = cliconfig.__version__
-        if cliconfig.__snapshot__ == 1:
-            ver = ver + '.' + datetime.date.today().isoformat().replace('-', '')
-        cliconfig.__version__ = ver
-
-        setattr(self.distribution.metadata, 'version', ver)
         f1 = open('virt-manager.spec.in', 'r')
         f2 = open('virt-manager.spec', 'w')
         for line in f1:
-            f2.write(line.replace('@VERSION@', ver))
+            f2.write(line.replace('@VERSION@', cliconfig.__version__))
         f1.close()
         f2.close()
 
@@ -276,17 +252,13 @@ class my_sdist(sdist):
 ###################
 
 class my_rpm(Command):
-    user_options = [("snapshot", "s", "add snapshot id to version")]
-
+    user_options = []
     description = "Build src and noarch rpms."
 
     def initialize_options(self):
-        self.snapshot = None
-
+        pass
     def finalize_options(self):
-        if self.snapshot is not None:
-            self.snapshot = 1
-            cliconfig.__snapshot__ = 1
+        pass
 
     def run(self):
         """
@@ -300,7 +272,6 @@ class my_rpm(Command):
 class configure(Command):
     user_options = [
         ("prefix=", None, "installation prefix"),
-        ("pkgversion=", None, "user specified version-id"),
         ("qemu-user=", None,
          "user libvirt uses to launch qemu processes (default=root)"),
         ("libvirt-package-names=", None,
@@ -328,7 +299,6 @@ class configure(Command):
 
     def initialize_options(self):
         self.prefix = sysprefix
-        self.pkgversion = None
         self.qemu_user = None
         self.libvirt_package_names = None
         self.kvm_package_names = None
@@ -343,8 +313,6 @@ class configure(Command):
         template = ""
         template += "[config]\n"
         template += "prefix = %s\n" % self.prefix
-        if self.pkgversion is not None:
-            template += "pkgversion = %s\n" % self.pkgversion
         if self.qemu_user is not None:
             template += "default_qemu_user = %s\n" % self.qemu_user
         if self.libvirt_package_names is not None:

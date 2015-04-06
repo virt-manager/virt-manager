@@ -127,7 +127,6 @@ machine).
 %endif
 
 python setup.py configure \
-    --pkgversion="%{version}" \
     %{?_qemu_user} \
     %{?_kvm_packages} \
     %{?_libvirt_packages} \

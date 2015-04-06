@@ -74,11 +74,6 @@ def _setup_gsettings_path(schemadir):
 ##############
 
 __version__ = "1.1.0"
-__snapshot__ = 0
-
-_usr_version = _get_param("pkgversion", "")
-if _usr_version is not None and _usr_version != "":
-    __version__ = _usr_version
 
 cfgpath = _cfgpath
 prefix = _get_param("prefix", "/usr")
