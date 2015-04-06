@@ -8,6 +8,7 @@
 %define libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
 %define preferred_distros          "fedora,rhel"
 %define kvm_packages               "qemu-system-x86"
+%define default_hvs                "qemu,xen"
 
 %if 0%{?rhel}
 %define preferred_distros          "rhel,fedora"
@@ -126,13 +127,18 @@ machine).
 %define _stable_defaults --stable-defaults
 %endif
 
+%if %{default_hvs}
+%define _default_hvs --default-hvs %{default_hvs}
+%endif
+
 python setup.py configure \
     %{?_qemu_user} \
     %{?_kvm_packages} \
     %{?_libvirt_packages} \
     %{?_askpass_package} \
     %{?_preferred_distros} \
-    %{?_stable_defaults}
+    %{?_stable_defaults} \
+    %{?_default_hvs}
 
 
 %install

@@ -153,15 +153,21 @@ class vmmConnect(vmmGObjectUI):
         self.widget("connect").grab_default()
 
         combo = self.widget("hypervisor")
-        model = Gtk.ListStore(str)
-        model.append(["QEMU/KVM"])
-        model.append(["Xen"])
-        model.append(["LXC (Linux Containers)"])
-        model.append(["QEMU/KVM user session"])
-        if self.config.with_bhyve:
-            model.append(["Bhyve"])
+        # [connection ID, label]
+        model = Gtk.ListStore(int, str)
+
+        def _add_hv_row(rowid, config_name, label):
+            if (not self.config.default_hvs or
+                config_name in self.config.default_hvs):
+                model.append([rowid, label])
+
+        _add_hv_row(HV_QEMU, "qemu", "QEMU/KVM")
+        _add_hv_row(HV_QEMU_SESSION, "qemu", "QEMU/KVM user session")
+        _add_hv_row(HV_XEN, "xen", "Xen")
+        _add_hv_row(HV_LXC, "lxc", "LXC (Linux Containers)")
+        _add_hv_row(HV_BHYVE, "bhyve", "Bhyve")
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 0)
+        uiutil.set_combo_text_column(combo, 1)
 
         combo = self.widget("transport")
         model = Gtk.ListStore(str)
@@ -197,9 +203,9 @@ class vmmConnect(vmmGObjectUI):
     def set_default_hypervisor(self):
         default = self.default_uri(always_system=True)
         if not default or default.startswith("qemu"):
-            self.widget("hypervisor").set_active(HV_QEMU)
+            uiutil.set_row_selection(self.widget("hypervisor"), HV_QEMU)
         elif default.startswith("xen"):
-            self.widget("hypervisor").set_active(HV_XEN)
+            uiutil.set_row_selection(self.widget("hypervisor"), HV_XEN)
 
     def add_service(self, interface, protocol, name, typ, domain, flags):
         ignore = flags
@@ -360,7 +366,7 @@ class vmmConnect(vmmGObjectUI):
         self.widget("username-entry").set_text(default_user)
 
     def generate_uri(self):
-        hv = self.widget("hypervisor").get_active()
+        hv = uiutil.get_list_selection(self.widget("hypervisor"), 0)
         conn = self.widget("transport").get_active()
         host = self.widget("hostname").get_child().get_text().strip()
         user = self.widget("username-entry").get_text()

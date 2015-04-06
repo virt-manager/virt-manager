@@ -86,7 +86,7 @@ class _CLIConfig(object):
         self.askpass_package = _split_list(_get_param("askpass_packages", ""))
         self.libvirt_packages = _split_list(_get_param("libvirt_packages", ""))
         self.default_graphics = _get_param("default_graphics", "spice")
-        self.with_bhyve = bool(int(_get_param("with_bhyve", "0")))
+        self.default_hvs = _split_list(_get_param("default_hvs", ""))
 
         self.prefix = None
         self.gettext_dir = None
