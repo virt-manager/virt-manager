@@ -31,7 +31,7 @@ from .cli import VirtOptionString
 from .guest import Guest
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
-from virtcli import cliconfig
+from virtcli import CLIConfig
 
 _virtinst_uri_magic = "__virtinst_test__"
 
@@ -334,7 +334,7 @@ class VirtualConnection(object):
             to ensure we don't enable VM devices that are compiled out on
             RHEL, like vmvga
         """
-        if not cliconfig.stable_defaults and not force:
+        if not CLIConfig.stable_defaults and not force:
             return False
 
         if not self.is_qemu_system():

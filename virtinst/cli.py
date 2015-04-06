@@ -30,7 +30,7 @@ import traceback
 
 import libvirt
 
-from virtcli import cliconfig
+from virtcli import CLIConfig
 
 from . import util
 from .clock import Clock
@@ -125,7 +125,7 @@ def setupParser(usage, description, introspection_epilog=False):
         formatter_class=VirtHelpFormatter,
         epilog=epilog)
     parser.add_argument('--version', action='version',
-                        version=cliconfig.__version__)
+                        version=CLIConfig.version)
 
     return parser
 

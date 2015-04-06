@@ -140,11 +140,11 @@ class vmmConfig(object):
     DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
     DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
-    def __init__(self, appname, cliconfig, test_first_run=False):
+    def __init__(self, appname, CLIConfig, test_first_run=False):
         self.appname = appname
-        self.appversion = cliconfig.__version__
+        self.appversion = CLIConfig.version
         self.conf_dir = "/org/virt-manager/%s/" % self.appname
-        self.ui_dir = os.path.join(cliconfig.asset_dir, "ui")
+        self.ui_dir = CLIConfig.ui_dir
         self.test_first_run = bool(test_first_run)
 
         self.conf = SettingsWrapper("org.virt-manager.virt-manager")
@@ -154,13 +154,13 @@ class vmmConfig(object):
         # the keyring
         self.keyring = None
 
-        self.default_qemu_user = cliconfig.default_qemu_user
-        self.preferred_distros = cliconfig.preferred_distros
-        self.hv_packages = cliconfig.hv_packages
-        self.libvirt_packages = cliconfig.libvirt_packages
-        self.askpass_package = cliconfig.askpass_package
-        self.default_graphics_from_config = cliconfig.default_graphics
-        self.with_bhyve = cliconfig.with_bhyve
+        self.default_qemu_user = CLIConfig.default_qemu_user
+        self.preferred_distros = CLIConfig.preferred_distros
+        self.hv_packages = CLIConfig.hv_packages
+        self.libvirt_packages = CLIConfig.libvirt_packages
+        self.askpass_package = CLIConfig.askpass_package
+        self.default_graphics_from_config = CLIConfig.default_graphics
+        self.with_bhyve = CLIConfig.with_bhyve
         self.cli_usbredir = None
 
         self.default_storage_format_from_config = "qcow2"

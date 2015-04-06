@@ -15,7 +15,7 @@ from distutils.command.sdist import sdist
 from distutils.sysconfig import get_config_var
 sysprefix = get_config_var("prefix")
 
-from virtcli import cliconfig
+from virtcli import CLIConfig
 
 
 # pylint: disable=attribute-defined-outside-init
@@ -149,7 +149,8 @@ class my_build(build):
             os.mkdir("build")
 
         for app in cmds:
-            sharepath = os.path.join(cliconfig.install_asset_dir, app)
+            sharepath = os.path.join(CLIConfig.prefix,
+                "share", "virt-manager", app)
 
             wrapper = "#!/bin/sh\n\n"
             wrapper += "exec \"%s\" \"$@\"" % (sharepath)
@@ -170,7 +171,7 @@ class my_build(build):
             ret = os.system('pod2man '
                             '--center "Virtual Machine Manager" '
                             '--release %s --name %s '
-                            '< %s > %s' % (cliconfig.__version__,
+                            '< %s > %s' % (CLIConfig.version,
                                            appname.upper(),
                                            path, newpath))
             if ret != 0:
@@ -221,13 +222,13 @@ class my_install(install):
     """
     def finalize_options(self):
         if self.prefix is None:
-            if cliconfig.prefix != sysprefix:
-                print "Using prefix from 'configure': %s" % cliconfig.prefix
-                self.prefix = cliconfig.prefix
-        elif self.prefix != cliconfig.prefix:
+            if CLIConfig.prefix != sysprefix:
+                print "Using prefix from 'configure': %s" % CLIConfig.prefix
+                self.prefix = CLIConfig.prefix
+        elif self.prefix != CLIConfig.prefix:
             print("Install prefix=%s doesn't match configure prefix=%s\n"
                   "Pass matching --prefix to 'setup.py configure'" %
-                  (self.prefix, cliconfig.prefix))
+                  (self.prefix, CLIConfig.prefix))
             sys.exit(1)
 
         install.finalize_options(self)
@@ -240,7 +241,7 @@ class my_sdist(sdist):
         f1 = open('virt-manager.spec.in', 'r')
         f2 = open('virt-manager.spec', 'w')
         for line in f1:
-            f2.write(line.replace('@VERSION@', cliconfig.__version__))
+            f2.write(line.replace('@VERSION@', CLIConfig.version))
         f1.close()
         f2.close()
 
@@ -266,7 +267,7 @@ class my_rpm(Command):
         """
         self.run_command('sdist')
         os.system('rpmbuild -ta --clean dist/virt-manager-%s.tar.gz' %
-                  cliconfig.__version__)
+                  CLIConfig.version)
 
 
 class configure(Command):
@@ -331,8 +332,8 @@ class configure(Command):
         if self.with_bhyve is not None:
             template += "with_bhyve = %s\n" % self.with_bhyve
 
-        file(cliconfig.cfgpath, "w").write(template)
-        print "Generated %s" % cliconfig.cfgpath
+        file(CLIConfig.cfgpath, "w").write(template)
+        print "Generated %s" % CLIConfig.cfgpath
 
 
 class TestBaseCommand(Command):
@@ -547,7 +548,7 @@ class CheckPylint(Command):
 
 setup(
     name="virt-manager",
-    version=cliconfig.__version__,
+    version=CLIConfig.version,
     author="Cole Robinson",
     author_email="virt-tools-list@redhat.com",
     url="http://virt-manager.org",

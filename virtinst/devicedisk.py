@@ -249,8 +249,8 @@ class VirtualDisk(VirtualDevice):
         if conn.is_remote() or not conn.is_qemu_system():
             return None, []
 
-        from virtcli import cliconfig
-        user = cliconfig.default_qemu_user
+        from virtcli import CLIConfig
+        user = CLIConfig.default_qemu_user
         try:
             for secmodel in conn.caps.host.secmodels:
                 if secmodel.model != "dac":

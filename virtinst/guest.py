@@ -24,7 +24,7 @@ import logging
 import urlgrabber.progress as progress
 import libvirt
 
-from virtcli import cliconfig
+from virtcli import CLIConfig
 
 from . import util
 from . import support
@@ -113,7 +113,7 @@ class Guest(XMLBuilder):
         self.replace = False
 
         # Allow virt-manager to override the default graphics type
-        self.default_graphics_type = cliconfig.default_graphics
+        self.default_graphics_type = CLIConfig.default_graphics
 
         self.skip_default_console = False
         self.skip_default_channel = False

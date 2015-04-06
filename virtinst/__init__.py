@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtcli import cliconfig as _cliconfig
+from virtcli import CLIConfig as _CLIConfig
 
 
 def _setup_i18n():
@@ -28,11 +28,11 @@ def _setup_i18n():
         # Can happen if user passed a bogus LANG
         pass
 
-    gettext.install("virt-manager", _cliconfig.gettext_dir)
-    gettext.bindtextdomain("virt-manager", _cliconfig.gettext_dir)
+    gettext.install("virt-manager", _CLIConfig.gettext_dir)
+    gettext.bindtextdomain("virt-manager", _CLIConfig.gettext_dir)
 
 _setup_i18n()
-stable_defaults = _cliconfig.stable_defaults
+stable_defaults = _CLIConfig.stable_defaults
 
 from . import util
 from virtinst import support

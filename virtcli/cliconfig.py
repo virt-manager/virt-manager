@@ -69,30 +69,44 @@ def _setup_gsettings_path(schemadir):
         raise RuntimeError("Failed to compile local gsettings schemas")
 
 
-##############
-# Public API #
-##############
-
 __version__ = "1.1.0"
 
-cfgpath = _cfgpath
-prefix = _get_param("prefix", "/usr")
-gettext_dir = os.path.join(prefix, "share", "locale")
-install_asset_dir = os.path.join(prefix, "share", "virt-manager")
-if _running_from_srcdir:
-    asset_dir = _srcdir
-    icon_dir = os.path.join(_srcdir, "data")
-    _setup_gsettings_path(icon_dir)
-else:
-    asset_dir = install_asset_dir
-    icon_dir = os.path.join(asset_dir, "icons")
 
-default_qemu_user = _get_param("default_qemu_user", "root")
-stable_defaults = bool(int(_get_param("stable_defaults", "0")))
+class _CLIConfig(object):
+    def __init__(self):
+        self.cfgpath = _cfgpath
+        self.version = __version__
 
-preferred_distros = _split_list(_get_param("preferred_distros", ""))
-hv_packages = _split_list(_get_param("hv_packages", ""))
-askpass_package = _split_list(_get_param("askpass_packages", ""))
-libvirt_packages = _split_list(_get_param("libvirt_packages", ""))
-default_graphics = _get_param("default_graphics", "spice")
-with_bhyve = bool(int(_get_param("with_bhyve", "0")))
+        self.default_qemu_user = _get_param("default_qemu_user", "root")
+        self.stable_defaults = bool(int(_get_param("stable_defaults", "0")))
+
+        self.preferred_distros = _split_list(
+            _get_param("preferred_distros", ""))
+        self.hv_packages = _split_list(_get_param("hv_packages", ""))
+        self.askpass_package = _split_list(_get_param("askpass_packages", ""))
+        self.libvirt_packages = _split_list(_get_param("libvirt_packages", ""))
+        self.default_graphics = _get_param("default_graphics", "spice")
+        self.with_bhyve = bool(int(_get_param("with_bhyve", "0")))
+
+        self.prefix = None
+        self.gettext_dir = None
+        self.ui_dir = None
+        self.icon_dir = None
+        self.set_paths_by_prefix(_get_param("prefix", "/usr"),
+            check_source_dir=True)
+
+    def set_paths_by_prefix(self, prefix, check_source_dir=False):
+        self.prefix = prefix
+        self.gettext_dir = os.path.join(prefix, "share", "locale")
+
+        if _running_from_srcdir and check_source_dir:
+            self.icon_dir = os.path.join(_srcdir, "data")
+            self.ui_dir = os.path.join(_srcdir, "ui")
+            _setup_gsettings_path(self.icon_dir)
+        else:
+            self.icon_dir = os.path.join(prefix, "share", "virt-manager",
+                "icons")
+            self.ui_dir = os.path.join(prefix, "share", "virt-manager", "ui")
+
+
+CLIConfig = _CLIConfig()

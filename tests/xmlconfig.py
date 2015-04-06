@@ -20,7 +20,7 @@ import os
 
 import virtinst
 from virtinst import VirtualDisk
-from virtcli import cliconfig
+from virtcli import CLIConfig
 
 from tests import utils
 
@@ -297,7 +297,7 @@ class TestXMLMisc(unittest.TestCase):
         self._compare(g, "install-f11-norheldefaults", do_install)
 
         try:
-            cliconfig.stable_defaults = True
+            CLIConfig.stable_defaults = True
             origemu = g.emulator
             g.emulator = "/usr/libexec/qemu-kvm"
             self.assertTrue(g.conn.stable_defaults())
@@ -307,7 +307,7 @@ class TestXMLMisc(unittest.TestCase):
             g.emulator = origemu
             setattr(g.conn, "_support_cache", {})
         finally:
-            cliconfig.stable_defaults = False
+            CLIConfig.stable_defaults = False
 
         # Verify main guest wasn't polluted
         self._compare(g, "install-f11-norheldefaults", do_install)
@@ -323,7 +323,7 @@ class TestXMLMisc(unittest.TestCase):
             g.os_variant = "ubuntu13.10"
 
             self._compare(g, "install-novmvga-rhel", True)
-            cliconfig.stable_defaults = True
+            CLIConfig.stable_defaults = True
             self._compare(g, "install-novmvga-rhel", True)
         finally:
-            cliconfig.stable_defaults = False
+            CLIConfig.stable_defaults = False
