@@ -18,6 +18,7 @@
 # MA 02110-1301 USA.
 #
 
+import glob
 import os
 import logging
 import socket
@@ -101,7 +102,7 @@ class vmmConnect(vmmGObjectUI):
         self.reset_state()
 
     @staticmethod
-    def default_uri(always_system=False):
+    def default_uri():
         if os.path.exists('/var/lib/xen'):
             if (os.path.exists('/dev/xen/evtchn') or
                 os.path.exists("/proc/xen")):
@@ -110,11 +111,9 @@ class vmmConnect(vmmGObjectUI):
         if (os.path.exists("/usr/bin/qemu") or
             os.path.exists("/usr/bin/qemu-kvm") or
             os.path.exists("/usr/bin/kvm") or
-            os.path.exists("/usr/libexec/qemu-kvm")):
-            if always_system or os.geteuid() == 0:
-                return "qemu:///system"
-            else:
-                return "qemu:///session"
+            os.path.exists("/usr/libexec/qemu-kvm") or
+            glob.glob("/usr/bin/qemu-system-*")):
+            return "qemu:///system"
 
         if (os.path.exists("/usr/lib/libvirt/libvirt_lxc") or
             os.path.exists("/usr/lib64/libvirt/libvirt_lxc")):
@@ -201,7 +200,7 @@ class vmmConnect(vmmGObjectUI):
         return self.widget("connect-remote").get_active()
 
     def set_default_hypervisor(self):
-        default = self.default_uri(always_system=True)
+        default = self.default_uri()
         if not default or default.startswith("qemu"):
             uiutil.set_row_selection(self.widget("hypervisor"), HV_QEMU)
         elif default.startswith("xen"):

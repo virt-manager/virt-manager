@@ -200,7 +200,7 @@ class vmmEngine(vmmGObject):
         if ret:
             tryuri = "qemu:///system"
         else:
-            tryuri = vmmConnect.default_uri(always_system=True)
+            tryuri = vmmConnect.default_uri()
 
         if tryuri is None:
             manager.set_startup_error(msg)
