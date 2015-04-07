@@ -164,6 +164,10 @@ class vmmLibvirtObject(vmmGObject):
             self._reparse_xml()
         return self._xmlobj
 
+    @property
+    def xmlobj(self):
+        return self.get_xmlobj()
+
     def refresh_xml(self, forcesignal=False):
         # Force an xml update. Signal 'config-changed' if domain xml has
         # changed since last refresh

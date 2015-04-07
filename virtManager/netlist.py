@@ -183,8 +183,9 @@ class vmmNetworkList(vmmGObjectUI):
             netdevs[iface.get_name()] = [
                 iface.get_name(), iface.is_bridge(), iface.get_slave_names()]
         for nodedev in self.conn.get_nodedevs("net"):
-            if nodedev.interface not in netdevs:
-                netdevs[nodedev.interface] = [nodedev.interface, False, []]
+            if nodedev.xmlobj.interface not in netdevs:
+                netdevs[nodedev.xmlobj.interface] = [nodedev.xmlobj.interface,
+                    False, []]
 
         # For every bridge used by a virtual network, and any slaves of
         # those devices, don't list them.

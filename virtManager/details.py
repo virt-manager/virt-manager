@@ -3016,8 +3016,8 @@ class vmmDetails(vmmGObjectUI):
 
         nodedev = None
         for trydev in self.vm.conn.get_nodedevs(devtype, None):
-            if trydev.compare_to_hostdev(hostdev):
-                nodedev = trydev
+            if trydev.xmlobj.compare_to_hostdev(hostdev):
+                nodedev = trydev.xmlobj
 
         pretty_name = None
         if nodedev:

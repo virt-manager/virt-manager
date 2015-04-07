@@ -98,12 +98,13 @@ class vmmMediaCombo(vmmGObjectUI):
         model.append(row)
 
     def _pretty_label(self, nodedev):
-        if not nodedev.media_available:
+        media_label = nodedev.xmlobj.media_label
+        if not nodedev.xmlobj.media_available:
             media_label = _("No media detected")
-        elif not nodedev.media_label:
+        elif not nodedev.xmlobj.media_label:
             media_label = _("Media Unknown")
 
-        return "%s (%s)" % (media_label, nodedev.block)
+        return "%s (%s)" % (media_label, nodedev.xmlobj.block)
 
     def _mediadev_set_default_selection(self):
         # Set the first active cdrom device as selected, otherwise none
@@ -133,17 +134,17 @@ class vmmMediaCombo(vmmGObjectUI):
         model.clear()
 
         for nodedev in self.conn.get_nodedevs(devtype="storage"):
-            if not (nodedev.device_type == "storage" and
-                    nodedev.drive_type in ["cdrom", "floppy"]):
+            if not (nodedev.xmlobj.device_type == "storage" and
+                    nodedev.xmlobj.drive_type in ["cdrom", "floppy"]):
                 continue
-            if nodedev.drive_type != self.media_type:
+            if nodedev.xmlobj.drive_type != self.media_type:
                 continue
 
             row = [None] * self.OPTICAL_FIELDS
-            row[self.OPTICAL_DEV_PATH] = nodedev.block
+            row[self.OPTICAL_DEV_PATH] = nodedev.xmlobj.block
             row[self.OPTICAL_LABEL] = self._pretty_label(nodedev)
-            row[self.OPTICAL_HAS_MEDIA] = nodedev.media_available
-            row[self.OPTICAL_DEV_KEY] = nodedev.name
+            row[self.OPTICAL_HAS_MEDIA] = nodedev.xmlobj.media_available
+            row[self.OPTICAL_DEV_KEY] = nodedev.xmlobj.name
             model.append(row)
 
         self._set_mediadev_default()

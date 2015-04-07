@@ -502,10 +502,10 @@ class vmmCreateInterface(vmmGObjectUI):
 
         nodedevs = {}
         for phys in self.conn.get_nodedevs("net"):
-            nodedevs[phys.interface] = [None,
-                                        False, False, phys.interface,
-                                        "ethernet", False, True, None,
-                                        phys.address]
+            nodedevs[phys.xmlobj.interface] = [None,
+                False, False, phys.xmlobj.interface,
+                "ethernet", False, True, None,
+                phys.xmlobj.address]
 
         row_dict = {}
         for iface in self.conn.list_interfaces():

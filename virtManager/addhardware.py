@@ -845,13 +845,13 @@ class vmmAddHardware(vmmGObjectUI):
 
         devs = self.conn.get_nodedevs(devtype, devcap)
         for dev in devs:
-            prettyname = dev.pretty_name()
+            prettyname = dev.xmlobj.pretty_name()
 
             for subdev in subdevs:
-                if dev.name == subdev.parent:
-                    prettyname += " (%s)" % subdev.pretty_name()
+                if dev.xmlobj.name == subdev.xmlobj.parent:
+                    prettyname += " (%s)" % subdev.xmlobj.pretty_name()
 
-            model.append([prettyname, dev.name, devtype, dev])
+            model.append([prettyname, dev.xmlobj.name, devtype, dev.xmlobj])
 
         if len(model) == 0:
             model.append([_("No Devices Available"), None, None, None])

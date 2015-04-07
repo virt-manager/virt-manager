@@ -576,7 +576,7 @@ class vmmConnection(vmmGObject):
                    str(xmlobj.product_id).startswith("0x000"))))):
                 continue
 
-            retdevs.append(xmlobj)
+            retdevs.append(dev)
 
         return retdevs
 
@@ -585,8 +585,8 @@ class vmmConnection(vmmGObject):
         devs = self.get_nodedevs(devtype)
 
         for dev in devs:
-            if (vendor == dev.vendor_id and
-                product == dev.product_id):
+            if (vendor == dev.xmlobj.vendor_id and
+                product == dev.xmlobj.product_id):
                 count += 1
 
         logging.debug("There are %d node devices with "
