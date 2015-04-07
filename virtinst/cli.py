@@ -1626,7 +1626,7 @@ class ParserDisk(VirtCLIParser):
         if not inst.target:
             skip_targets = [d.target for d in self.guest.get_devices("disk")]
             inst.generate_target(skip_targets)
-            inst.cli_set_target = True
+            inst.cli_generated_target = True
 
         return inst
 

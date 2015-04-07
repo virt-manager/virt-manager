@@ -112,7 +112,7 @@ class Installer(object):
         dev.validate()
         return dev
 
-    def alter_bootconfig(self, guest, isinstall, bootconfig):
+    def alter_bootconfig(self, guest, isinstall):
         """
         Generate the portion of the guest xml that determines boot devices
         and parameters. (typically the <os></os> block)
@@ -128,20 +128,20 @@ class Installer(object):
 
         bootorder = self._build_boot_order(isinstall, guest)
 
-        if not bootconfig.bootorder:
+        if not guest.os.bootorder:
             # Per device <boot order> is not compatible with os/boot.
             if not any(d.boot.order for d in guest.get_all_devices()):
-                bootconfig.bootorder = bootorder
+                guest.os.bootorder = bootorder
 
         if not isinstall:
             return
 
         if self._install_kernel:
-            bootconfig.kernel = self._install_kernel
+            guest.os.kernel = self._install_kernel
         if self._install_initrd:
-            bootconfig.initrd = self._install_initrd
+            guest.os.initrd = self._install_initrd
         if self.extraargs:
-            bootconfig.kernel_args = self.extraargs
+            guest.os.kernel_args = self.extraargs
 
 
     ##########################

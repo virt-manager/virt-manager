@@ -125,6 +125,7 @@ class Guest(XMLBuilder):
         self.__os_object = None
         self._random_uuid = None
         self._install_devices = []
+        self._defaults_are_set = False
 
         # The libvirt virDomain object we 'Create'
         self.domain = None
@@ -301,22 +302,12 @@ class Guest(XMLBuilder):
             self.add_device(dev)
             self._install_devices.append(dev)
 
-
-    ##############
-    # Public API #
-    ##############
-
     def _prepare_get_xml(self):
-        # We do a shallow copy of the device list here, and set the defaults.
-        # This way, default changes aren't persistent, and we don't need
-        # to worry about when to call set_defaults
-        #
-        # XXX: this is hacky, we should find a way to use xmlbuilder.copy(),
-        # but need to make sure it's not a massive performance hit
-        data = (self._devices[:], self.features, self.os)
+        # We do a shallow copy of the OS block here, so that we can
+        # set the install time properties but not permanently overwrite
+        # any config the user explicitly requested.
+        data = self.os
         try:
-            self._propstore["_devices"] = [dev.copy() for dev in self._devices]
-            self._propstore["features"] = self.features.copy()
             self._propstore["os"] = self.os.copy()
         except:
             self._finish_get_xml(data)
@@ -324,11 +315,9 @@ class Guest(XMLBuilder):
         return data
 
     def _finish_get_xml(self, data):
-        (self._propstore["_devices"],
-         self._propstore["features"],
-         self._propstore["os"]) = data
+        self._propstore["os"] = data
 
-    def get_install_xml(self, *args, **kwargs):
+    def _get_install_xml(self, *args, **kwargs):
         data = self._prepare_get_xml()
         try:
             return self._do_get_install_xml(*args, **kwargs)
@@ -355,14 +344,19 @@ class Guest(XMLBuilder):
         if osblob_install and not self.installer.has_install_phase():
             return None
 
-        self.installer.alter_bootconfig(self, osblob_install, self.os)
+        self.installer.alter_bootconfig(self, osblob_install)
         self._set_transient_device_defaults(install)
 
         action = install and "destroy" or "restart"
         self.on_reboot = action
         self.on_crash = action
 
-        self._set_defaults()
+        self._set_osxml_defaults()
+
+        # Only set defaults on any install devices
+        for dev in self._install_devices:
+            dev.set_defaults(self)
+        self._set_disk_defaults(disks=self._install_devices)
 
         self.bootloader = None
         if (not install and
@@ -372,6 +366,11 @@ class Guest(XMLBuilder):
             self.os.clear()
 
         return self.get_xml_config()
+
+
+    ##############
+    # Public API #
+    ##############
 
     def get_continue_inst(self):
         """
@@ -385,11 +384,6 @@ class Guest(XMLBuilder):
 
         return self._os_object.is_windows()
 
-
-    ##########################
-    # Actual install methods #
-    ##########################
-
     def start_install(self, meter=None,
                       dry=False, return_xml=False, noboot=False):
         """
@@ -400,6 +394,7 @@ class Guest(XMLBuilder):
             raise RuntimeError(_("Domain has already been started!"))
 
         is_initial = True
+        self.set_install_defaults()
 
         self._prepare_install(meter, dry)
         try:
@@ -461,8 +456,8 @@ class Guest(XMLBuilder):
         log_label = is_initial and "install" or "continue"
         disk_boot = not is_initial
 
-        start_xml = self.get_install_xml(install=True, disk_boot=disk_boot)
-        final_xml = self.get_install_xml(install=False)
+        start_xml = self._get_install_xml(install=True, disk_boot=disk_boot)
+        final_xml = self._get_install_xml(install=False)
 
         logging.debug("Generated %s XML: %s",
                       log_label,
@@ -553,6 +548,21 @@ class Guest(XMLBuilder):
     ###################
     # Device defaults #
     ###################
+
+    def set_install_defaults(self):
+        """
+        Allow API users to set defaults ahead of time if they want it.
+        Used by vmmDomainVirtinst so the 'Customize before install' dialog
+        shows accurate values.
+
+        If the user doesn't explicitly call this, it will be called by
+        start_install()
+        """
+        if self._defaults_are_set:
+            return
+
+        self._set_defaults()
+        self._defaults_are_set = True
 
     def stable_defaults(self, *args, **kwargs):
         return self.conn.stable_defaults(self.emulator, *args, **kwargs)
@@ -673,7 +683,6 @@ class Guest(XMLBuilder):
                 dev.path = None
 
     def _set_defaults(self):
-        self._set_osxml_defaults()
         self._set_clock_defaults()
         self._set_emulator_defaults()
         self._set_cpu_defaults()
@@ -917,7 +926,11 @@ class Guest(XMLBuilder):
 
         return False
 
-    def _set_disk_defaults(self):
+    def _set_disk_defaults(self, disks=None):
+        alldisks = self.get_devices("disk")
+        if disks is None:
+            disks = alldisks
+
         def set_disk_bus(d):
             if d.is_floppy():
                 d.bus = "fdc"
@@ -948,15 +961,19 @@ class Guest(XMLBuilder):
             else:
                 d.bus = "ide"
 
+
+        # Generate disk targets
         used_targets = []
-        for disk in self.get_devices("disk"):
+        for disk in disks:
             if not disk.bus:
                 set_disk_bus(disk)
 
-            # Generate disk targets
-            if disk.target and not getattr(disk, "cli_set_target", False):
+        for disk in alldisks:
+            if disk.target and not getattr(disk,
+                    "cli_generated_target", False):
                 used_targets.append(disk.target)
-            else:
+            elif disk in disks:
+                disk.cli_generated_target = False
                 used_targets.append(disk.generate_target(used_targets))
 
     def _set_net_defaults(self):

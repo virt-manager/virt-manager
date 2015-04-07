@@ -287,43 +287,43 @@ class TestXMLMisc(unittest.TestCase):
         """
         # Use connver=12005 so that non-rhel displays ac97
         conn = utils.open_rhelkvm(connver=12005)
+
         g = _make_guest(conn=conn)
-        do_install = False
-
-        # Call get_xml_config sets first round of defaults w/o os_variant set
-        g.get_install_xml(do_install)
-
         g.os_variant = "fedora11"
-        self._compare(g, "install-f11-norheldefaults", do_install)
+        self._compare(g, "install-f11-norheldefaults", False)
 
         try:
             CLIConfig.stable_defaults = True
+
+            g = _make_guest(conn=conn)
+            g.os_variant = "fedora11"
             origemu = g.emulator
             g.emulator = "/usr/libexec/qemu-kvm"
             self.assertTrue(g.conn.stable_defaults())
 
             setattr(g.conn, "_support_cache", {})
-            self._compare(g, "install-f11-rheldefaults", do_install)
+            self._compare(g, "install-f11-rheldefaults", False)
             g.emulator = origemu
             setattr(g.conn, "_support_cache", {})
         finally:
             CLIConfig.stable_defaults = False
 
-        # Verify main guest wasn't polluted
-        self._compare(g, "install-f11-norheldefaults", do_install)
-
     def test_no_vmvga_RHEL(self):
         # Test that vmvga is not used on RHEL
         conn = utils.open_rhelkvm()
-        g = _make_guest(conn=conn)
-
-        try:
+        def _make():
+            g = _make_guest(conn=conn)
             g.emulator = "/usr/libexec/qemu-kvm"
             g.add_default_video_device()
             g.os_variant = "ubuntu13.10"
+            return g
 
+        try:
+            g = _make()
             self._compare(g, "install-novmvga-rhel", True)
+
             CLIConfig.stable_defaults = True
+            g = _make()
             self._compare(g, "install-novmvga-rhel", True)
         finally:
             CLIConfig.stable_defaults = False
