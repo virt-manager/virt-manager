@@ -2627,7 +2627,7 @@ class vmmDetails(vmmGObjectUI):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
         uiutil.set_combo_text_column(combo, 1)
-        model.append([None, "default"])
+        model.append([None, _("Hypervisor default")])
         model.append(["filtered", "filtered"])
         model.append(["unfiltered", "unfiltered"])
 
@@ -3197,7 +3197,7 @@ class vmmDetails(vmmGObjectUI):
         for row in buses:
             busmodel.append(row)
         if not no_default:
-            busmodel.append([None, "default"])
+            busmodel.append([None, _("Hypervisor default")])
 
     def populate_hw_list(self):
         hw_list_model = self.widget("hw-list").get_model()

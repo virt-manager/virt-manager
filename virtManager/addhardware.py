@@ -272,7 +272,7 @@ class vmmAddHardware(vmmGObjectUI):
         if self.conn.is_qemu():
             model.append(["virtio", "virtio"])
         else:
-            model.append([None, "default"])
+            model.append([None, _("Hypervisor default")])
 
         # Char target name
         lst = self.widget("char-target-name")
@@ -681,7 +681,7 @@ class vmmAddHardware(vmmGObjectUI):
         for m in virtinst.VirtualDisk.cache_types:
             model.append([m, m])
 
-        _iter = model.insert(0, [None, "default"])
+        _iter = model.insert(0, [None, _("Hypervisor default")])
         combo.set_active_iter(_iter)
 
     @staticmethod
@@ -697,7 +697,7 @@ class vmmAddHardware(vmmGObjectUI):
             model.append([m, m])
 
         if not no_default:
-            model.append([None, "default"])
+            model.append([None, _("Hypervisor default")])
         combo.set_active(0)
 
     @staticmethod
@@ -709,7 +709,7 @@ class vmmAddHardware(vmmGObjectUI):
         model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         if not no_default:
-            model.append([None, "default"])
+            model.append([None, _("Hypervisor default")])
         combo.set_active(-1)
 
     @staticmethod
@@ -739,22 +739,23 @@ class vmmAddHardware(vmmGObjectUI):
                     break
 
     @staticmethod
-    def populate_controller_model_combo(combo, controller_type, widget_name, add_default=False):
+    def populate_controller_model_combo(combo, controller_type, widget_name,
+        add_default=False):
         model = combo.get_model()
         model.clear()
 
         if controller_type == virtinst.VirtualController.TYPE_USB:
-            model.append(["default", "Default"])
+            model.append(["default", _("Hypervisor default")])
             model.append(["ich9-ehci1", "USB 2"])
             model.append(["nec-xhci", "USB 3"])
             if widget_name is not None:
                 widget_name.set_sensitive(False)
         elif controller_type == virtinst.VirtualController.TYPE_SCSI:
-            model.append(["default", "Default"])
+            model.append(["default", _("Hypervisor default")])
             model.append(["virtio-scsi", "VirtIO SCSI"])
         else:
             if add_default:
-                model.append([None, "Default"])
+                model.append([None, _("Hypervisor default")])
                 uiutil.set_grid_row_visible(combo, False)
             if widget_name is not None:
                 widget_name.set_sensitive(True)
