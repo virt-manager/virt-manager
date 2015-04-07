@@ -102,9 +102,9 @@ class Guest(XMLBuilder):
     _XML_ROOT_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
         "maxmemory", "memory", "blkiotune", "memtune", "memoryBacking",
-        "vcpus", "curvcpus", "numatune", "bootloader", "os", "idmap", "features",
-        "cpu", "clock", "on_poweroff", "on_reboot", "on_crash", "resource", "pm",
-        "emulator", "_devices", "seclabel"]
+        "vcpus", "curvcpus", "numatune", "bootloader", "os", "idmap",
+        "features", "cpu", "clock", "on_poweroff", "on_reboot", "on_crash",
+        "resource", "pm", "emulator", "_devices", "seclabel"]
 
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
@@ -190,8 +190,8 @@ class Guest(XMLBuilder):
 
     on_poweroff = XMLProperty("./on_poweroff",
                               default_cb=lambda s: "destroy")
-    on_reboot = XMLProperty("./on_reboot")
-    on_crash = XMLProperty("./on_crash")
+    on_reboot = XMLProperty("./on_reboot", default_cb=lambda s: "restart")
+    on_crash = XMLProperty("./on_crash", default_cb=lambda s: "restart")
 
     os = XMLChildProperty(OSXML, is_single=True)
     features = XMLChildProperty(DomainFeatures, is_single=True)
@@ -306,7 +306,7 @@ class Guest(XMLBuilder):
         # We do a shallow copy of the OS block here, so that we can
         # set the install time properties but not permanently overwrite
         # any config the user explicitly requested.
-        data = self.os
+        data = (self.os, self.on_crash, self.on_reboot)
         try:
             self._propstore["os"] = self.os.copy()
         except:
@@ -315,7 +315,9 @@ class Guest(XMLBuilder):
         return data
 
     def _finish_get_xml(self, data):
-        self._propstore["os"] = data
+        (self._propstore["os"],
+         self.on_crash,
+         self.on_reboot) = data
 
     def _get_install_xml(self, *args, **kwargs):
         data = self._prepare_get_xml()
@@ -347,9 +349,9 @@ class Guest(XMLBuilder):
         self.installer.alter_bootconfig(self, osblob_install)
         self._set_transient_device_defaults(install)
 
-        action = install and "destroy" or "restart"
-        self.on_reboot = action
-        self.on_crash = action
+        if install:
+            self.on_reboot = "destroy"
+            self.on_crash = "destroy"
 
         self._set_osxml_defaults()
 
