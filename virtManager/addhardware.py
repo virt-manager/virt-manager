@@ -129,7 +129,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.topwin.present()
         self.conn.schedule_priority_tick(pollnet=True,
                                          pollpool=True, polliface=True,
-                                         pollnodedev=True, pollmedia=True)
+                                         pollnodedev=True)
 
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing addhw")

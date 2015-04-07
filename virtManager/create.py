@@ -30,7 +30,6 @@ import virtinst
 from virtinst import util
 
 from . import uiutil
-from .mediadev import MEDIA_CDROM
 from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
 from .storagebrowse import vmmStorageBrowser
@@ -499,7 +498,7 @@ class vmmCreate(vmmGObjectUI):
         # Update all state that has some dependency on the current connection
         self.conn.schedule_priority_tick(pollnet=True,
                                          pollpool=True, polliface=True,
-                                         pollnodedev=True, pollmedia=True)
+                                         pollnodedev=True)
 
         self.widget("install-box").show()
         self.widget("startup-error-box").hide()
@@ -557,7 +556,7 @@ class vmmCreate(vmmGObjectUI):
             self.mediacombo = None
 
         self.mediacombo = vmmMediaCombo(self.conn, self.builder, self.topwin,
-                                        MEDIA_CDROM)
+                                        vmmMediaCombo.MEDIA_CDROM)
         def mediacombo_changed(src):
             ignore = src
             self.mediaDetected = False

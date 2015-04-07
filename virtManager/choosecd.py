@@ -23,7 +23,6 @@ import logging
 from gi.repository import GObject
 
 from .baseclass import vmmGObjectUI
-from .mediadev import MEDIA_FLOPPY
 from .mediacombo import vmmMediaCombo
 from .storagebrowse import vmmStorageBrowser
 from .addstorage import vmmAddStorage
@@ -74,7 +73,7 @@ class vmmChooseCD(vmmGObjectUI):
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
-        self.conn.schedule_priority_tick(pollnodedev=True, pollmedia=True)
+        self.conn.schedule_priority_tick(pollnodedev=True)
 
     def _cleanup(self):
         self.vm = None
@@ -89,7 +88,7 @@ class vmmChooseCD(vmmGObjectUI):
             self.mediacombo = None
 
     def _init_ui(self):
-        if self.media_type == MEDIA_FLOPPY:
+        if self.media_type == vmmMediaCombo.MEDIA_FLOPPY:
             self.widget("physical-media").set_label(_("Floppy D_rive"))
             self.widget("iso-image").set_label(_("Floppy _Image"))
 
@@ -153,7 +152,7 @@ class vmmChooseCD(vmmGObjectUI):
 
         self.storage_browser.stable_defaults = self.vm.stable_defaults()
 
-        if self.media_type == MEDIA_FLOPPY:
+        if self.media_type == vmmMediaCombo.MEDIA_FLOPPY:
             self.storage_browser.set_browse_reason(
                                     self.config.CONFIG_DIR_FLOPPY_MEDIA)
         else:

@@ -37,7 +37,6 @@ from . import connectauth
 from .baseclass import vmmGObject
 from .domain import vmmDomain
 from .interface import vmmInterface
-from .mediadev import vmmMediaDevice
 from .network import vmmNetwork
 from .nodedev import vmmNodeDevice
 from .storagepool import vmmStoragePool
@@ -65,8 +64,6 @@ class vmmConnection(vmmGObject):
         "interface-stopped": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "nodedev-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "nodedev-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "mediadev-added": (GObject.SignalFlags.RUN_FIRST, None, [object]),
-        "mediadev-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
         "state-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "connect-error": (GObject.SignalFlags.RUN_FIRST, None,
@@ -106,8 +103,6 @@ class vmmConnection(vmmGObject):
 
         # Physical network interfaces: name -> virtinst.NodeDevice
         self._nodedevs = {}
-        # Physical media devices: vmmMediaDevice.key -> vmmMediaDevice
-        self._mediadevs = {}
         # Connection Storage pools: name -> vmmInterface
         self._interfaces = {}
         # Connection Storage pools: name -> vmmStoragePool
@@ -121,10 +116,6 @@ class vmmConnection(vmmGObject):
         self.hostinfo = None
 
         self._tick_lock = threading.Lock()
-
-        self.mediadev_initialized = False
-        self.mediadev_error = ""
-        self.mediadev_use_libvirt = False
 
         self._init_virtconn()
 
@@ -188,28 +179,6 @@ class vmmConnection(vmmGObject):
 
         self._backend.cb_clear_cache = clear_cache
 
-    def _init_mediadev(self):
-        if self.is_nodedev_capable():
-            try:
-                self.connect("nodedev-added", self._nodedev_mediadev_added)
-                self.connect("nodedev-removed", self._nodedev_mediadev_removed)
-                self.mediadev_use_libvirt = True
-            except Exception, e:
-                self.mediadev_error = _("Could not build media "
-                                        "list via libvirt: %s") % str(e)
-        else:
-            self.mediadev_error = _("Libvirt version does not support "
-                                    "media listing.")
-
-        self.mediadev_initialized = True
-        if self.mediadev_error:
-            logging.debug(self.mediadev_error)
-        else:
-            if self.mediadev_use_libvirt:
-                logging.debug("Using libvirt API for mediadev enumeration")
-            else:
-                logging.debug("Using HAL for mediadev enumeration")
-
 
     ########################
     # General data getters #
@@ -259,14 +228,9 @@ class vmmConnection(vmmGObject):
         if name == "vm-added":
             for connkey in self._vms.keys():
                 self.emit("vm-added", connkey)
-        elif name == "mediadev-added":
-            for dev in self._mediadevs.values():
-                self.emit("mediadev-added", dev)
-        elif name == "nodedev-added":
-            for connkey in self._nodedevs.keys():
-                self.emit("nodedev-added", connkey)
 
         return handle_id
+
 
     ##########################
     # URI + hostname helpers #
@@ -805,38 +769,6 @@ class vmmConnection(vmmGObject):
             logging.debug("Error registering network events: %s", e)
 
 
-    ####################
-    # Update listeners #
-    ####################
-
-    def _nodedev_mediadev_added(self, ignore1, name):
-        def _add_thread():
-            if name in self._mediadevs:
-                return
-
-            vobj = self.get_nodedev(name)
-            mediadev = vmmMediaDevice.mediadev_from_nodedev(vobj)
-            if not mediadev:
-                return
-
-            def _add_idle():
-                self._mediadevs[name] = mediadev
-                logging.debug("mediadev=%s added", name)
-                self.emit("mediadev-added", mediadev)
-            self.idle_add(_add_idle)
-
-        self._start_thread(_add_thread, "nodedev=%s AddMediadev" % name)
-
-    def _nodedev_mediadev_removed(self, ignore1, name):
-        if name not in self._mediadevs:
-            return
-
-        self._mediadevs[name].cleanup()
-        del(self._mediadevs[name])
-        logging.debug("mediadev=%s removed", name)
-        self.emit("mediadev-removed", name)
-
-
     ######################################
     # Connection closing/opening methods #
     ######################################
@@ -880,9 +812,6 @@ class vmmConnection(vmmGObject):
 
         cleanup(self._nodedevs)
         self._nodedevs = {}
-
-        cleanup(self._mediadevs)
-        self._mediadevs = {}
 
         cleanup(self._interfaces)
         self._interfaces = {}
@@ -996,7 +925,7 @@ class vmmConnection(vmmGObject):
                 self.schedule_priority_tick(stats_update=True,
                                             pollvm=True, pollnet=True,
                                             pollpool=True, polliface=True,
-                                            pollnodedev=True, pollmedia=True,
+                                            pollnodedev=True,
                                             force=True)
         except Exception, e:
             is_active = False
@@ -1115,7 +1044,7 @@ class vmmConnection(vmmGObject):
     def _tick(self, stats_update,
              pollvm=False, pollnet=False,
              pollpool=False, polliface=False,
-             pollnodedev=False, pollmedia=False,
+             pollnodedev=False,
              force=False):
         """
         main update function: polls for new objects, updates stats, ...
@@ -1158,10 +1087,9 @@ class vmmConnection(vmmGObject):
             (goneInterfaces,
              newInterfaces, interfaces) = self._update_interfaces(polliface)
             self._refresh_new_objects(newInterfaces.values())
-
-            # Refreshing these is handled by the mediadev callback
             (goneNodedevs,
              newNodedevs, nodedevs) = self._update_nodedevs(pollnodedev)
+            self._refresh_new_objects(newNodedevs.values())
 
             # These are refreshing in their __init__ method, because the
             # data is wanted immediately
@@ -1193,9 +1121,6 @@ class vmmConnection(vmmGObject):
                     self._nodedevs = nodedevs
             finally:
                 self._tick_lock.release()
-
-            if not self.mediadev_initialized:
-                self._init_mediadev()
 
             # Update VM states
             for connkey, obj in goneVMs.items():
@@ -1278,8 +1203,6 @@ class vmmConnection(vmmGObject):
             add_to_ticklist(interfaces.values())
         if pollnodedev:
             add_to_ticklist(nodedevs.values())
-        if pollmedia:
-            add_to_ticklist(self._mediadevs.values())
 
         for obj, args in ticklist:
             try:
