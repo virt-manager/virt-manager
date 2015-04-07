@@ -1749,7 +1749,7 @@ class vmmDetails(vmmGObjectUI):
         self.config_cpu_topology_changed()
 
     # Boot device / Autostart
-    def config_bootdev_selected(self, ignore):
+    def config_bootdev_selected(self, ignore=None):
         boot_row = self.get_boot_selection()
         boot_selection = boot_row and boot_row[BOOT_KEY]
         boot_devs = self.get_config_boot_order()
@@ -1769,6 +1769,7 @@ class vmmDetails(vmmGObjectUI):
         row = model[index]
 
         row[BOOT_ACTIVE] = not row[BOOT_ACTIVE]
+        self.config_bootdev_selected()
         self.enable_apply(EDIT_BOOTORDER)
 
     def config_boot_move(self, src, move_up):
