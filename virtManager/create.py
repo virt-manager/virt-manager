@@ -142,8 +142,6 @@ class vmmCreate(vmmGObjectUI):
 
             "on_enable_storage_toggled": self.toggle_enable_storage,
 
-            "on_config_set_macaddr_toggled": self.toggle_macaddr,
-
             "on_config_hv_changed": self.hv_changed,
             "on_config_arch_changed": self.arch_changed,
         })
@@ -609,11 +607,6 @@ class vmmCreate(vmmGObjectUI):
         self.addstorage.reset_state()
 
         # Networking
-        newmac = virtinst.VirtualNetworkInterface.generate_mac(
-                self.conn.get_backend())
-        self.widget("config-set-macaddr").set_active(bool(newmac))
-        self.widget("config-macaddr").set_text(newmac)
-
         self.widget("config-advanced-expander").set_expanded(False)
 
         if self.netlist:
@@ -1259,9 +1252,6 @@ class vmmCreate(vmmGObjectUI):
     def toggle_enable_storage(self, src):
         self.widget("config-storage-align").set_sensitive(src.get_active())
 
-    def toggle_macaddr(self, src):
-        self.widget("config-macaddr").set_sensitive(src.get_active())
-
     # Navigation methods
     def set_install_page(self):
         instnotebook = self.widget("install-method-pages")
@@ -1730,11 +1720,7 @@ class vmmCreate(vmmGObjectUI):
                 if not self.validate_storage_page():
                     return False
 
-        macaddr = None
-        if self.widget("config-macaddr").get_sensitive():
-            macaddr = self.widget("config-macaddr").get_text().strip()
         nettype = self.netlist.get_network_selection()[0]
-
         if nettype is None:
             # No network device available
             instmethod = self.get_config_install_page()
@@ -1749,6 +1735,8 @@ class vmmCreate(vmmGObjectUI):
                             _("Network device required for %s install.") %
                             methname)
 
+        macaddr = virtinst.VirtualNetworkInterface.generate_mac(
+            self.conn.get_backend())
         nic = self.netlist.validate_network(macaddr)
         if nic is False:
             return False

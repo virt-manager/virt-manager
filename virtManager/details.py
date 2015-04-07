@@ -84,6 +84,7 @@ EDIT_SMARTCARD_MODE,
 EDIT_NET_MODEL,
 EDIT_NET_VPORT,
 EDIT_NET_SOURCE,
+EDIT_NET_MAC,
 
 EDIT_GFX_PASSWD,
 EDIT_GFX_TYPE,
@@ -105,7 +106,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 46)
+) = range(1, 47)
 
 
 # Columns in hw list model
@@ -515,6 +516,8 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_sgio_entry_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SGIO),
 
             "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
+            "on_network_mac_entry_changed": lambda *x: self.enable_apply(x,
+                EDIT_NET_MAC),
 
             "on_sound_model_combo_changed": lambda *x: self.enable_apply(x,
                                              EDIT_SOUND_MODEL),
@@ -994,6 +997,11 @@ class vmmDetails(vmmGObjectUI):
         # Network model
         net_model = self.widget("network-model")
         vmmAddHardware.build_network_model_combo(self.vm, net_model)
+
+        # Network mac
+        self.widget("network-mac-label").set_visible(
+            not self.is_customize_dialog)
+        self.widget("network-mac-entry").set_visible(self.is_customize_dialog)
 
         # Sound model
         sound_dev = self.widget("sound-model")
@@ -2221,6 +2229,9 @@ class vmmDetails(vmmGObjectUI):
              kwargs["typeid"], kwargs["typeidversion"],
              kwargs["instanceid"]) = self.netlist.get_vport()
 
+        if self.edited(EDIT_NET_MAC):
+            kwargs["macaddr"] = self.widget("network-mac-entry").get_text()
+
         return vmmAddHardware.change_config_helper(self.vm.define_network,
                                           kwargs, self.vm, self.err,
                                           devobj=devobj)
@@ -2756,10 +2767,11 @@ class vmmDetails(vmmGObjectUI):
             self.vm, self.widget("network-model"))
         uiutil.set_combo_entry(self.widget("network-model"), net.model)
 
-        uiutil.set_grid_row_visible(self.widget("network-mac-address"),
-                                    bool(net.macaddr))
-        if net.macaddr:
-            self.widget("network-mac-address").set_text(net.macaddr)
+        macaddr = net.macaddr or ""
+        if self.widget("network-mac-label").is_visible():
+            self.widget("network-mac-label").set_text(macaddr)
+        else:
+            self.widget("network-mac-entry").set_text(macaddr)
 
         self.netlist.set_dev(net)
 

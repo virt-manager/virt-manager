@@ -789,7 +789,7 @@ class vmmDomain(vmmLibvirtObject):
         mode=_SENTINEL, model=_SENTINEL, addrstr=_SENTINEL,
         vtype=_SENTINEL, managerid=_SENTINEL, typeid=_SENTINEL,
         typeidversion=_SENTINEL, instanceid=_SENTINEL,
-        portgroup=_SENTINEL):
+        portgroup=_SENTINEL, macaddr=_SENTINEL):
 
         def change(editdev):
             if ntype != _SENTINEL:
@@ -812,6 +812,9 @@ class vmmDomain(vmmLibvirtObject):
                 editdev.virtualport.typeid = typeid or None
                 editdev.virtualport.typeidversion = typeidversion or None
                 editdev.virtualport.instanceid = instanceid or None
+
+            if macaddr != _SENTINEL:
+                editdev.macaddr = macaddr
         return self._redefine_device(change, devobj, use_live_device)
 
     def define_graphics(self, devobj, use_live_device,
