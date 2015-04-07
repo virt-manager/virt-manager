@@ -483,10 +483,20 @@ def add_misc_options(grp, prompt=False, replace=False,
                    "with the same name."))
 
     if printxml:
-        grp.add_argument("--print-xml", nargs="?", dest="xmlonly",
-            default=False, const=True,
-            help=_("Print the generated domain XML rather than create "
-                   "the guest."))
+        print_kwargs = {
+            "dest": "xmlonly",
+            "default": False,
+            "help": _("Print the generated domain XML rather than create "
+                "the guest."),
+        }
+
+        if printstep:
+            print_kwargs["nargs"] = "?"
+            print_kwargs["const"] = "all"
+        else:
+            print_kwargs["action"] = "store_true"
+
+        grp.add_argument("--print-xml", **print_kwargs)
         if printstep:
             # Back compat, argparse allows us to use --print-xml
             # for everything.

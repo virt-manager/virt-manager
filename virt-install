@@ -110,10 +110,6 @@ def convert_old_printxml(options):
         options.xmlonly = options.xmlstep
         del(options.xmlstep)
 
-    # The case when someone specifies a bare --print-xml
-    if options.xmlonly is True:
-        options.xmlonly = "all"
-
 
 def convert_old_sound(options):
     if not options.sound:
