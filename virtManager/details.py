@@ -2734,9 +2734,8 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-format").get_child().set_text(driver_type)
         self.widget("disk-format-warn").hide()
 
-        no_default = not self.is_customize_dialog
-
-        self.populate_disk_bus_combo(devtype, no_default)
+        vmmAddHardware.populate_disk_bus_combo(self.vm, devtype,
+            self.widget("disk-bus").get_model())
         uiutil.set_combo_entry(self.widget("disk-bus"), bus)
         self.widget("disk-serial").set_text(serial or "")
 
@@ -3178,38 +3177,6 @@ class vmmDetails(vmmGObjectUI):
     ############################
     # Hardware list population #
     ############################
-
-    def populate_disk_bus_combo(self, devtype, no_default):
-        buslist     = self.widget("disk-bus")
-        busmodel    = buslist.get_model()
-        busmodel.clear()
-
-        buses = []
-        if devtype == virtinst.VirtualDisk.DEVICE_FLOPPY:
-            buses.append(["fdc", "Floppy"])
-        elif devtype == virtinst.VirtualDisk.DEVICE_CDROM:
-            buses.append(["ide", "IDE"])
-            if not self.vm.stable_defaults():
-                buses.append(["scsi", "SCSI"])
-        else:
-            if self.vm.is_hvm():
-                buses.append(["ide", "IDE"])
-                if not self.vm.stable_defaults():
-                    buses.append(["scsi", "SCSI"])
-                    buses.append(["usb", "USB"])
-            if self.vm.get_hv_type() in ["kvm", "test"]:
-                buses.append(["sata", "SATA"])
-                buses.append(["virtio", "VirtIO"])
-            if (self.vm.get_hv_type() == "kvm" and
-                    self.vm.get_machtype() == "pseries"):
-                buses.append(["spapr-vscsi", "sPAPR-vSCSI"])
-            if self.vm.conn.is_xen() or self.vm.get_hv_type() == "test":
-                buses.append(["xen", "Xen"])
-
-        for row in buses:
-            busmodel.append(row)
-        if not no_default:
-            busmodel.append([None, _("Hypervisor default")])
 
     def populate_hw_list(self):
         hw_list_model = self.widget("hw-list").get_model()
