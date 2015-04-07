@@ -520,7 +520,6 @@ class vmmDomain(vmmLibvirtObject):
 
     def _invalidate_xml(self):
         vmmLibvirtObject._invalidate_xml(self)
-        self._name = None
         self._id = None
 
     def _lookup_device_to_define(self, origdev, guest=None):
@@ -560,11 +559,9 @@ class vmmDomain(vmmLibvirtObject):
         """
         Redefine guest with appended device XML 'devxml'
         """
-        def change(guest):
-            guest.add_device(devobj)
-        ret = self._redefine(change)
+        xmlobj = self._get_xmlobj_to_define()
+        xmlobj.add_device(devobj)
         self.redefine_cached()
-        return ret
 
     def remove_device(self, devobj):
         """
@@ -576,95 +573,97 @@ class vmmDomain(vmmLibvirtObject):
         if hasattr(devobj, "virtmanager_console_dup"):
             con = getattr(devobj, "virtmanager_console_dup")
 
-        def change(guest):
-            def rmdev(editdev):
-                if con:
-                    rmcon = _find_device(guest, con)
-                    if rmcon:
-                        guest.remove_device(rmcon)
+        xmlobj = self._get_xmlobj_to_define()
+        def rmdev(editdev):
+            if con:
+                rmcon = _find_device(xmlobj, con)
+                if rmcon:
+                    xmlobj.remove_device(rmcon)
 
-                guest.remove_device(editdev)
-            return self._redefine_device(rmdev, devobj, False)
+            xmlobj.remove_device(editdev)
 
-        ret = self._redefine(change)
+        ret = self._redefine_device(rmdev, devobj, False)
         self.redefine_cached()
         return ret
 
     def define_cpu(self, vcpus=_SENTINEL, maxvcpus=_SENTINEL,
         cpuset=_SENTINEL, model=_SENTINEL, sockets=_SENTINEL,
         cores=_SENTINEL, threads=_SENTINEL):
-        def change(guest):
-            if vcpus != _SENTINEL:
-                guest.curvcpus = int(vcpus)
-            if maxvcpus != _SENTINEL:
-                guest.vcpus = int(maxvcpus)
-            if cpuset != _SENTINEL:
-                guest.cpuset = cpuset
+        guest = self._get_xmlobj_to_define()
 
-            if sockets != _SENTINEL:
-                guest.cpu.sockets = sockets
-                guest.cpu.cores = cores
-                guest.cpu.threads = threads
+        if vcpus != _SENTINEL:
+            guest.curvcpus = int(vcpus)
+        if maxvcpus != _SENTINEL:
+            guest.vcpus = int(maxvcpus)
+        if cpuset != _SENTINEL:
+            guest.cpuset = cpuset
 
-            if model != _SENTINEL:
-                if model in guest.cpu.SPECIAL_MODES:
-                    guest.cpu.set_special_mode(model)
-                else:
-                    guest.cpu.model = model
-        return self._redefine(change)
+        if sockets != _SENTINEL:
+            guest.cpu.sockets = sockets
+            guest.cpu.cores = cores
+            guest.cpu.threads = threads
+
+        if model != _SENTINEL:
+            if model in guest.cpu.SPECIAL_MODES:
+                guest.cpu.set_special_mode(model)
+            else:
+                guest.cpu.model = model
+        self.redefine_cached()
 
     def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL):
-        def change(guest):
-            if memory != _SENTINEL:
-                guest.memory = int(memory)
-            if maxmem != _SENTINEL:
-                guest.maxmemory = int(maxmem)
-        return self._redefine(change)
+        guest = self._get_xmlobj_to_define()
+
+        if memory != _SENTINEL:
+            guest.memory = int(memory)
+        if maxmem != _SENTINEL:
+            guest.maxmemory = int(maxmem)
+        self.redefine_cached()
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
         title=_SENTINEL, idmap_list=_SENTINEL, loader=_SENTINEL):
-        def change(guest):
-            if machine != _SENTINEL:
-                guest.os.machine = machine
-            if description != _SENTINEL:
-                guest.description = description or None
-            if title != _SENTINEL:
-                guest.title = title or None
+        guest = self._get_xmlobj_to_define()
+        if machine != _SENTINEL:
+            guest.os.machine = machine
+        if description != _SENTINEL:
+            guest.description = description or None
+        if title != _SENTINEL:
+            guest.title = title or None
 
-            if loader != _SENTINEL:
-                if loader is None:
-                    # Implies seabios, aka the default, so clear everything
-                    guest.os.loader = None
-                    guest.os.loader_ro = None
-                    guest.os.loader_type = None
-                    guest.os.nvram = None
-                    guest.os.nvram_template = None
-                else:
-                    # Implies UEFI
-                    guest.os.loader = loader
-                    guest.os.loader_type = "pflash"
-                    guest.os.loader_ro = True
+        if loader != _SENTINEL:
+            if loader is None:
+                # Implies seabios, aka the default, so clear everything
+                guest.os.loader = None
+                guest.os.loader_ro = None
+                guest.os.loader_type = None
+                guest.os.nvram = None
+                guest.os.nvram_template = None
+            else:
+                # Implies UEFI
+                guest.os.loader = loader
+                guest.os.loader_type = "pflash"
+                guest.os.loader_ro = True
 
-            if idmap_list != _SENTINEL:
-                if idmap_list is not None:
-                    # pylint: disable=unpacking-non-sequence
-                    (uid_target, uid_count, gid_target, gid_count) = idmap_list
-                    guest.idmap.uid_start = 0
-                    guest.idmap.uid_target = uid_target
-                    guest.idmap.uid_count = uid_count
-                    guest.idmap.gid_start = 0
-                    guest.idmap.gid_target = gid_target
-                    guest.idmap.gid_count = gid_count
-                else:
-                    guest.idmap.clear()
+        if idmap_list != _SENTINEL:
+            if idmap_list is not None:
+                # pylint: disable=unpacking-non-sequence
+                (uid_target, uid_count, gid_target, gid_count) = idmap_list
+                guest.idmap.uid_start = 0
+                guest.idmap.uid_target = uid_target
+                guest.idmap.uid_count = uid_count
+                guest.idmap.gid_start = 0
+                guest.idmap.gid_target = gid_target
+                guest.idmap.gid_count = gid_count
+            else:
+                guest.idmap.clear()
 
-        return self._redefine(change)
+        self.redefine_cached()
 
     def define_boot(self, boot_order=_SENTINEL, boot_menu=_SENTINEL,
         kernel=_SENTINEL, initrd=_SENTINEL, dtb=_SENTINEL,
         kernel_args=_SENTINEL, init=_SENTINEL, initargs=_SENTINEL):
 
-        def _change_boot_order(guest):
+        guest = self._get_xmlobj_to_define()
+        def _change_boot_order():
             boot_dev_order = []
             devmap = dict((dev.vmmidstr, dev) for dev in
                           self.get_bootable_devices())
@@ -687,28 +686,28 @@ class vmmDomain(vmmLibvirtObject):
                 dev.boot.order = count
                 count += 1
 
-        def change(guest):
-            if boot_order != _SENTINEL:
-                if self.can_use_device_boot_order():
-                    _change_boot_order(guest)
-                else:
-                    guest.os.bootorder = boot_order
+        if boot_order != _SENTINEL:
+            if self.can_use_device_boot_order():
+                _change_boot_order()
+            else:
+                guest.os.bootorder = boot_order
 
-            if boot_menu != _SENTINEL:
-                guest.os.enable_bootmenu = bool(boot_menu)
-            if init != _SENTINEL:
-                guest.os.init = init
-                guest.os.set_initargs_string(initargs)
+        if boot_menu != _SENTINEL:
+            guest.os.enable_bootmenu = bool(boot_menu)
+        if init != _SENTINEL:
+            guest.os.init = init
+            guest.os.set_initargs_string(initargs)
 
-            if kernel != _SENTINEL:
-                guest.os.kernel = kernel or None
-            if initrd != _SENTINEL:
-                guest.os.initrd = initrd or None
-            if dtb != _SENTINEL:
-                guest.os.dtb = dtb or None
-            if kernel_args != _SENTINEL:
-                guest.os.kernel_args = kernel_args or None
-        return self._redefine(change)
+        if kernel != _SENTINEL:
+            guest.os.kernel = kernel or None
+        if initrd != _SENTINEL:
+            guest.os.initrd = initrd or None
+        if dtb != _SENTINEL:
+            guest.os.dtb = dtb or None
+        if kernel_args != _SENTINEL:
+            guest.os.kernel_args = kernel_args or None
+
+        self.redefine_cached()
 
     def define_disk(self, devobj, use_live_device,
         path=_SENTINEL, readonly=_SENTINEL, serial=_SENTINEL,
@@ -1481,7 +1480,7 @@ class vmmDomain(vmmLibvirtObject):
             libvirt_destconn, flags, newname, interface, rate)
 
         def define_cb():
-            newxml = self.get_xml(inactive=True)
+            newxml = self.get_xmlobj(inactive=True).get_xml_config()
             destconn.define_domain(newxml)
         self.idle_add(define_cb)
         # Don't schedule any conn update, migrate dialog handles it for us
@@ -1993,8 +1992,7 @@ class vmmDomainVirtinst(vmmDomain):
     """
     def __init__(self, conn, backend, key):
         vmmDomain.__init__(self, conn, backend, key)
-
-        self._orig_xml = ""
+        self._orig_xml = None
 
     def get_name(self):
         return self._backend.name
@@ -2005,38 +2003,6 @@ class vmmDomainVirtinst(vmmDomain):
     def has_managed_save(self):
         return False
 
-    def _XMLDesc(self, flags):
-        raise RuntimeError("Shouldn't be called")
-
-    def get_xml(self, *args, **kwargs):
-        ignore = args
-        ignore = kwargs
-        return self._backend.get_install_xml(install=False)
-
-    def _refresh_orig_xml(self):
-        # We need to cache origxml in order to have something to diff against
-        if not self._orig_xml:
-            self._orig_xml = self._backend.get_xml_config()
-
-    def get_xmlobj(self, inactive=False, refresh_if_nec=True):
-        self._refresh_orig_xml()
-        return self._backend
-    def _reparse_xml(self, *args, **kwargs):
-        ignore = args
-        ignore = kwargs
-
-    def _define(self, newxml):
-        ignore = newxml
-        self._orig_xml = ""
-        self.emit("config-changed")
-
-    def _redefine_xml(self, newxml):
-        return self._redefine_helper(self._orig_xml, newxml)
-
-    def refresh_xml(self, forcesignal=False):
-        # No caching, so no refresh needed
-        return
-
     def snapshots_supported(self):
         return False
 
@@ -2046,7 +2012,37 @@ class vmmDomainVirtinst(vmmDomain):
         self._backend.autostart = bool(val)
         self.emit("config-changed")
 
+    def _using_events(self):
+        return False
+
+
+    ################
+    # XML handling #
+    ################
+
     def define_name(self, newname):
-        def change(guest):
-            guest.name = str(newname)
-        return self._redefine(change)
+        # We need to overwrite this, since the implementation for libvirt
+        # needs to do some crazy stuff.
+        xmlobj = self._get_xmlobj_to_define()
+        xmlobj.name = str(newname)
+        self.redefine_cached()
+
+    def _XMLDesc(self, flags):
+        ignore = flags
+        return self._backend.get_xml_config()
+
+    def _define(self, newxml):
+        ignore = newxml
+        self.emit("config-changed")
+
+    def _invalidate_xml(self):
+        vmmDomain._invalidate_xml(self)
+        self._orig_xml = None
+
+    def _make_xmlobj_to_define(self):
+        if not self._orig_xml:
+            self._orig_xml = self._backend.get_xml_config()
+        return self._backend
+
+    def _redefine_object(self, xmlobj, origxml=None):
+        vmmDomain._redefine_object(self, xmlobj, origxml=self._orig_xml)

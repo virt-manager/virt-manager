@@ -123,13 +123,12 @@ class vmmNetwork(vmmLibvirtObject):
         self.force_update_status()
 
     def set_qos(self, **kwargs):
-        q = self.get_qos()
+        xmlobj = self._get_xmlobj_to_define()
+        q = xmlobj.bandwidth
         for key, val in kwargs.items():
             setattr(q, key, val)
 
-        xml = self.get_xml()
-
-        self._redefine_xml(xml)
+        self.redefine_cached()
         return self.is_active()
 
 

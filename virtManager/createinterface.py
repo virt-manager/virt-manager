@@ -938,7 +938,8 @@ class vmmCreateInterface(vmmGObjectUI):
                         # Use the inactive XML, which drops a bunch
                         # elements that might cause netcf to choke on
                         # for a sub-interface
-                        xml = vmmiface.get_xml(inactive=True)
+                        xml = vmmiface.get_xmlobj(
+                            inactive=True).get_xml_config()
                     else:
                         xml = row[INTERFACE_ROW_KEY].get_xml_config()
 

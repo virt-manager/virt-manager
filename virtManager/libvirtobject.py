@@ -39,11 +39,9 @@ class vmmLibvirtObject(vmmGObject):
         self._key = key
         self._parseclass = parseclass
 
-        self._xml = None
-        self._is_xml_valid = False
-
         self._xmlobj = None
         self._xmlobj_to_define = None
+        self._is_xml_valid = False
 
         # These should be set by the child classes if necessary
         self._inactive_xml_flags = 0
@@ -52,8 +50,6 @@ class vmmLibvirtObject(vmmGObject):
         # Cache object name
         self._name = None
         self.get_name()
-
-        self.connect("config-changed", self._reparse_xml)
 
     @staticmethod
     def log_redefine_xml_diff(obj, origxml, newxml):
@@ -144,104 +140,118 @@ class vmmLibvirtObject(vmmGObject):
     # Public XML API #
     ##################
 
-    def get_xml(self, *args, **kwargs):
+    def refresh_xml(self, forcesignal=False):
         """
-        See _get_raw_xml for parameter docs
+        Force an xml update. Signal 'config-changed' if domain xml has
+        changed since last refresh
+
+        :param forcesignal: Send config-changed unconditionally
         """
-        return self.get_xmlobj(*args, **kwargs).get_xml_config()
+        origxml = None
+        if self._xmlobj:
+            origxml = self._xmlobj.get_xml_config()
+
+        self._invalidate_xml()
+        active_xml = self._XMLDesc(self._active_xml_flags)
+        self._xmlobj = self._parseclass(self.conn.get_backend(),
+            parsexml=active_xml)
+        self._is_xml_valid = True
+
+        if forcesignal or origxml != active_xml:
+            self.idle_emit("config-changed")
 
     def get_xmlobj(self, inactive=False, refresh_if_nec=True):
-        xml = self._get_raw_xml(inactive, refresh_if_nec)
+        """
+        Get object xml, return it wrapped in a virtinst object.
+        If cached xml is invalid, update.
 
+        :param inactive: Return persistent XML, not the running config.
+            No effect if domain is not running. Use this flag
+            if the XML will be used for redefining a guest
+        :param refresh_if_nec: Check if XML is out of date, and if so,
+            refresh it (default behavior). Skipping a refresh is
+            useful to prevent updating xml in the tick loop when
+            it's not that important (disk/net stats)
+        """
         if inactive:
-            # If inactive XML requested, always return a fresh object even
+            # If inactive XML requested, always return a fresh object even if
             # the current object is inactive XML (like when the domain is
             # stopped). Callers that request inactive are basically expecting
             # a new copy.
-            return self._build_xmlobj(xml)
+            inactive_xml = self._XMLDesc(self._inactive_xml_flags)
+            return self._parseclass(self.conn.get_backend(),
+                parsexml=inactive_xml)
 
-        if not self._xmlobj:
-            self._reparse_xml()
+        if (self._xmlobj is None or
+            (refresh_if_nec and not self._is_xml_valid)):
+            self.refresh_xml()
+
         return self._xmlobj
 
     @property
     def xmlobj(self):
         return self.get_xmlobj()
 
-    def refresh_xml(self, forcesignal=False):
-        # Force an xml update. Signal 'config-changed' if domain xml has
-        # changed since last refresh
+    def redefine_cached(self):
+        """
+        Redefine the _xmlobj_to_define cache.
 
-        origxml = self._xml
-        self._invalidate_xml()
-        self._xml = self._XMLDesc(self._active_xml_flags)
-        self._is_xml_valid = True
+        Used by places like details.py and addhardware.py to queue a bunch
+        of XML changes via vmmDomain functions, but only call 'define'
+        once.
+        """
+        if not self._xmlobj_to_define:
+            logging.debug("No cached XML to define, skipping.")
+            return
+        self._redefine_object(self._xmlobj_to_define)
 
-        if origxml != self._xml or forcesignal:
-            self.idle_emit("config-changed")
 
-
-    ######################################
-    # Internal XML cache/update routines #
-    ######################################
+    #########################
+    # Internal XML routines #
+    #########################
 
     def _invalidate_xml(self):
-        # Mark cached xml as invalid
+        """
+        Mark cached XML as invalid. Subclasses may extend this
+        to invalidate any specific caches of their own
+        """
         self._is_xml_valid = False
         self._xmlobj_to_define = None
         self._name = None
 
-
-    ##########################
-    # Internal API functions #
-    ##########################
-
-    def _get_raw_xml(self, inactive=False, refresh_if_nec=True):
+    def _make_xmlobj_to_define(self):
         """
-        Get object xml. If cached xml is invalid, update.
+        Build an xmlobj that should be used for defining new XML.
 
-        @param inactive: Return persistent XML, not the running config.
-                    No effect if domain is not running. Use this flag
-                    if the XML will be used for redefining a guest
-        @param refresh_if_nec: Check if XML is out of date, and if so,
-                    refresh it (default behavior). Skipping a refresh is
-                    useful to prevent updating xml in the tick loop when
-                    it's not that important (disk/net stats)
+        Most subclasses shouldn't touch this, but vmmDomainVirtinst needs to.
         """
-        if inactive:
-            return self._XMLDesc(self._inactive_xml_flags)
-
-        if self._xml is None:
-            self.refresh_xml()
-        elif refresh_if_nec and not self._is_xml_valid:
-            self.refresh_xml()
-
-        return self._xml
-
-    def _xml_to_redefine(self):
-        return self.get_xml(inactive=True)
-
-    def redefine_cached(self):
-        if not self._xmlobj_to_define:
-            logging.debug("No cached XML to define, skipping.")
-            return
-
-        obj = self._get_xmlobj_to_define()
-        xml = obj.get_xml_config()
-        self._redefine_xml(xml)
-
-    def _reparse_xml(self, ignore=None):
-        self._xmlobj = self._build_xmlobj(self._get_raw_xml())
-
-    def _build_xmlobj(self, xml):
-        return self._parseclass(self.conn.get_backend(), parsexml=xml)
+        return self.get_xmlobj(inactive=True)
 
     def _get_xmlobj_to_define(self):
+        """
+        Return the XML object that should be used to queue up new XML changes.
+        This is what is flushed with redefine_cached.
+
+        Most subclasses shouldn't touch this, but vmmDomainVirtinst needs to.
+        """
         if not self._xmlobj_to_define:
-            self._xmlobj_to_define = self.get_xmlobj(inactive=True)
+            self._xmlobj_to_define = self._make_xmlobj_to_define()
         return self._xmlobj_to_define
 
-    def _redefine_helper(self, origxml, newxml):
+    def _redefine_object(self, xmlobj, origxml=None):
+        """
+        Redefine the passed object. This is called by redefine_cached and
+        shouldn't be called directly.
+
+        Most subclasses shouldn't touch this, but vmmDomainVirtinst needs to.
+
+        :param origxml: vmmDomainVirtinst uses that field to make sure
+            we detect the actual XML change and log it correctly.
+        """
+        if not origxml:
+            origxml = self._make_xmlobj_to_define().get_xml_config()
+
+        newxml = xmlobj.get_xml_config()
         self.log_redefine_xml_diff(self, origxml, newxml)
 
         if origxml != newxml:
@@ -250,11 +260,3 @@ class vmmLibvirtObject(vmmGObject):
         if not self._using_events():
             # Make sure we have latest XML
             self.refresh_xml(forcesignal=True)
-
-    def _redefine_xml(self, newxml):
-        origxml = self._xml_to_redefine()
-        return self._redefine_helper(origxml, newxml)
-
-    def _redefine(self, cb):
-        guest = self._get_xmlobj_to_define()
-        return cb(guest)
