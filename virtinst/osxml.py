@@ -69,7 +69,7 @@ class OSXML(XMLBuilder):
     def is_ppc64(self):
         return self.arch == "ppc64" or self.arch == "ppc64le"
     def is_pseries(self):
-        return self.is_ppc64 and self.machine == "pseries"
+        return self.is_ppc64() and self.machine == "pseries"
 
     _XML_ROOT_NAME = "os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader", "loader_ro", "loader_type",

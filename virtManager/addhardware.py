@@ -584,7 +584,7 @@ class vmmAddHardware(vmmGObjectUI):
                 mod_list.append("virtio")
             mod_list.append("rtl8139")
             mod_list.append("e1000")
-            if (vm.get_hv_type() == "kvm" and vm.get_machtype() == "pseries"):
+            if vm.xmlobj.os.is_pseries():
                 mod_list.append("spapr-vlan")
             if vm.get_hv_type() in ["xen", "test"]:
                 mod_list.append("netfront")
@@ -734,7 +734,7 @@ class vmmAddHardware(vmmGObjectUI):
             rows.append(["sd", "SD"])
             rows.append(["virtio", "VirtIO"])
             rows.append(["virtio-scsi", "VirtIO SCSI"])
-            if vm.get_machtype() == "pseries":
+            if vm.xmlobj.os.is_pseries():
                 rows.append(["spapr-vscsi", "sPAPR-vSCSI"])
 
         if vm.conn.is_xen() or vm.conn.is_test_conn():

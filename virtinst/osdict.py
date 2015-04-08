@@ -501,7 +501,7 @@ class _OsVariant(object):
         return self._is_related_to(["fedora18", "rhel6.0"])
 
     def default_videomodel(self, guest):
-        if guest.os.is_ppc64() and guest.os.machine == "pseries":
+        if guest.os.is_pseries():
             return "vga"
 
         # Marc Deslauriers of canonical had previously patched us
