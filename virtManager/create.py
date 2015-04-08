@@ -407,7 +407,7 @@ class vmmCreate(vmmGObjectUI):
         can_remote_url = self.conn.get_backend().support_remote_url_install()
 
         installable_arch = (self.capsinfo.arch in
-                            ["i686", "x86_64", "ppc64", "ia64"])
+            ["i686", "x86_64", "ppc64", "ppc64le", "ia64"])
 
         if self.capsinfo.arch == "aarch64":
             try:
@@ -674,7 +674,7 @@ class vmmCreate(vmmGObjectUI):
             archs.remove("i686")
         archs.sort()
 
-        prios = ["x86_64", "i686", "aarch64", "armv7l", "ppc64"]
+        prios = ["x86_64", "i686", "aarch64", "armv7l", "ppc64", "ppc64le"]
         if self.conn.caps.host.cpu.arch not in prios:
             prios = []
         else:
