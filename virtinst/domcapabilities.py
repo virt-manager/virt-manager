@@ -18,6 +18,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+import logging
 import re
 
 from .xmlbuilder import XMLBuilder, XMLChildProperty
@@ -80,12 +81,19 @@ class _Devices(_CapsBlock):
 class DomainCapabilities(XMLBuilder):
     @staticmethod
     def build_from_params(conn, emulator, arch, machine, hvtype):
-        if not conn.check_support(
+        xml = None
+        if conn.check_support(
             conn.SUPPORT_CONN_DOMAIN_CAPABILITIES):
+            try:
+                xml = conn.getDomainCapabilities(emulator, arch,
+                    machine, hvtype)
+            except:
+                logging.debug("Error fetching domcapabilities XML",
+                    exc_info=True)
+
+        if not xml:
             # If not supported, just use a stub object
             return DomainCapabilities(conn)
-
-        xml = conn.getDomainCapabilities(emulator, arch, machine, hvtype)
         return DomainCapabilities(conn, parsexml=xml)
 
     @staticmethod
