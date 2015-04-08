@@ -832,8 +832,11 @@ class vmmCloneVM(vmmGObjectUI):
         def callback(src_ignore, txt):
             self.widget("change-storage-new").set_text(txt)
 
+        if self.storage_browser and self.storage_browser.conn != self.conn:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
             self.storage_browser.set_finish_cb(callback)
 
-        self.storage_browser.show(self.topwin, self.conn)
+        self.storage_browser.show(self.topwin)

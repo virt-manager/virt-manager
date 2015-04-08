@@ -54,19 +54,27 @@ class vmmErrorDialog(vmmGObject):
         self._parent = parent
         self._simple = None
 
+        # Allows the error owner to easily override default modality
+        self._modal_default = False
+
     def _cleanup(self):
         pass
 
+    def set_modal_default(self, val):
+        self._modal_default = val
     def set_parent(self, parent):
         self._parent = parent
     def get_parent(self):
         return self._parent
 
     def show_err(self, summary, details=None, title="",
-                 modal=False, debug=True,
+                 modal=None, debug=True,
                  dialog_type=Gtk.MessageType.ERROR,
                  buttons=Gtk.ButtonsType.CLOSE,
                  text2=None):
+        if modal is None:
+            modal = self._modal_default
+
         if details is None:
             details = summary
             tb = "".join(traceback.format_exc()).strip()
@@ -92,6 +100,7 @@ class vmmErrorDialog(vmmGObject):
                                   secondary_text=text2,
                                   details=details, title=title,
                                   modal=modal)
+
 
     ###################################
     # Simple one shot message dialogs #

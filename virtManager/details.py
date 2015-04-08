@@ -1589,7 +1589,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.storage_browser.set_finish_cb(callback)
         self.storage_browser.set_browse_reason(reason)
-        self.storage_browser.show(self.topwin, self.conn)
+        self.storage_browser.show(self.topwin)
 
     def boot_kernel_toggled(self, src):
         self.widget("boot-kernel-box").set_sensitive(src.get_active())

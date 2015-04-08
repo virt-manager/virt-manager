@@ -1409,6 +1409,19 @@ ba</description>
     </target>
   </volume>
   <volume type='file'>
+    <name>dir-vol</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='dir'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume type='file'>
     <name>iso-vol</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>

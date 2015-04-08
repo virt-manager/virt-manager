@@ -337,6 +337,10 @@ class vmmCreateVolume(vmmGObjectUI):
         return self.err.val_err(info, details, modal=self.topwin.get_modal())
 
     def _browse_file(self):
+        if self.storage_browser and self.storage_browser.conn != self.conn:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
+
         if self.storage_browser is None:
             def cb(src, text):
                 ignore = src
@@ -346,8 +350,7 @@ class vmmCreateVolume(vmmGObjectUI):
             self.storage_browser = vmmStorageBrowser(self.conn)
             self.storage_browser.set_finish_cb(cb)
             self.storage_browser.topwin.set_modal(self.topwin.get_modal())
-            self.storage_browser.can_new_volume = False
             self.storage_browser.set_browse_reason(
                 self.config.CONFIG_DIR_IMAGE)
 
-        self.storage_browser.show(self.topwin, self.conn)
+        self.storage_browser.show(self.topwin)

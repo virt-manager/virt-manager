@@ -342,16 +342,18 @@ class vmmFSDetails(vmmGObjectUI):
             if path:
                 textent.set_text(path)
 
-        conn = self.conn
         reason = (isdir and
                   self.config.CONFIG_DIR_FS or
                   self.config.CONFIG_DIR_IMAGE)
+
+        if self.storage_browser and self.storage_browser.conn != self.conn:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
         if self.storage_browser is None:
-            self.storage_browser = vmmStorageBrowser(conn)
+            self.storage_browser = vmmStorageBrowser(self.conn)
 
-        self.storage_browser.stable_defaults = self.vm.stable_defaults()
-
+        self.storage_browser.set_stable_defaults(self.vm.stable_defaults())
         self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.set_browse_reason(reason)
 
-        self.storage_browser.show(self.topwin.get_ancestor(Gtk.Window), conn)
+        self.storage_browser.show(self.topwin.get_ancestor(Gtk.Window))

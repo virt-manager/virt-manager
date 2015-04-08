@@ -3,16 +3,6 @@
 <interface>
   <requires lib="gtk+" version="3.8"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-delete</property>
-  </object>
-  <object class="GtkImage" id="image22">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-new</property>
-  </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -152,8 +142,8 @@
                                   <object class="GtkLabel" id="label6">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">1</property>
                                     <property name="label" translatable="yes">Hostname:</property>
+                                    <property name="xalign">1</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">1</property>
@@ -166,8 +156,8 @@
                                   <object class="GtkLabel" id="label7">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">1</property>
                                     <property name="label" translatable="yes">Hypervisor:</property>
+                                    <property name="xalign">1</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">2</property>
@@ -180,8 +170,8 @@
                                   <object class="GtkLabel" id="label8">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">1</property>
                                     <property name="label" translatable="yes">Memory:</property>
+                                    <property name="xalign">1</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">3</property>
@@ -194,8 +184,8 @@
                                   <object class="GtkLabel" id="label9">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">1</property>
                                     <property name="label" translatable="yes">Logical CPUs:</property>
+                                    <property name="xalign">1</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">4</property>
@@ -208,8 +198,8 @@
                                   <object class="GtkLabel" id="label10">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">1</property>
                                     <property name="label" translatable="yes">Architecture:</property>
+                                    <property name="xalign">1</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">5</property>
@@ -222,10 +212,10 @@
                                   <object class="GtkLabel" id="overview-hostname">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label">example.com</property>
                                     <property name="selectable">True</property>
                                     <property name="ellipsize">end</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -239,8 +229,8 @@
                                   <object class="GtkLabel" id="overview-hypervisor">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label">Xen</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -254,8 +244,8 @@
                                   <object class="GtkLabel" id="overview-memory">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label">2000 MiB</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -269,8 +259,8 @@
                                   <object class="GtkLabel" id="overview-cpus">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label">4</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -284,8 +274,8 @@
                                   <object class="GtkLabel" id="overview-arch">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label">x86_64</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -299,8 +289,8 @@
                                   <object class="GtkLabel" id="label71">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">1</property>
                                     <property name="label" translatable="yes">Connection:</property>
+                                    <property name="xalign">1</property>
                                   </object>
                                   <packing>
                                     <property name="x_options">GTK_FILL</property>
@@ -311,10 +301,10 @@
                                   <object class="GtkLabel" id="overview-uri">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label">example.com</property>
                                     <property name="selectable">True</property>
                                     <property name="ellipsize">end</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -327,10 +317,10 @@
                                   <object class="GtkLabel" id="label72">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes">A_utoconnect:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">config-autoconnect</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">6</property>
@@ -414,8 +404,8 @@
                                   <object class="GtkLabel" id="performance-cpu">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">1</property>
                                     <property name="label">60%</property>
+                                    <property name="xalign">1</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -478,8 +468,8 @@
                                   <object class="GtkLabel" id="performance-memory">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">1</property>
                                     <property name="label">1.59 GiB of 2.2 GiB</property>
+                                    <property name="xalign">1</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -603,8 +593,8 @@
                                           <object class="GtkLabel" id="net-state">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">Running</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="expand">True</property>
@@ -638,9 +628,9 @@
                                       <object class="GtkLabel" id="net-device">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label">label</property>
                                         <property name="selectable">True</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -651,8 +641,8 @@
                                       <object class="GtkLabel" id="net-name-domain">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label">label</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -663,8 +653,8 @@
                                       <object class="GtkLabel" id="label58">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Device:</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -675,8 +665,8 @@
                                       <object class="GtkLabel" id="label63">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">State:</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -687,10 +677,10 @@
                                       <object class="GtkLabel" id="label70">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">A_utostart:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">net-autostart</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -701,9 +691,9 @@
                                       <object class="GtkLabel" id="label33">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Domain:</property>
                                         <property name="use_markup">True</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -714,8 +704,8 @@
                                       <object class="GtkLabel" id="label5">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Name:</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -754,9 +744,9 @@
                                           <object class="GtkLabel" id="net-ipv4-network">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">label</property>
                                             <property name="selectable">True</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -767,9 +757,9 @@
                                           <object class="GtkLabel" id="net-ipv4-dhcp-range">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">label</property>
                                             <property name="selectable">True</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -780,8 +770,8 @@
                                           <object class="GtkLabel" id="net-ipv4-route">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">&lt;network-addr&gt; via &lt;gateway-addr&gt;</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -809,8 +799,8 @@
                                               <object class="GtkLabel" id="net-ipv4-forwarding">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">NAT to any device</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">True</property>
@@ -828,8 +818,8 @@
                                           <object class="GtkLabel" id="label52">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Network:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -840,8 +830,8 @@
                                           <object class="GtkLabel" id="label54">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">DHCP range:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -852,8 +842,8 @@
                                           <object class="GtkLabel" id="label34">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Forwarding:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -864,8 +854,8 @@
                                           <object class="GtkLabel" id="net-ipv4-route-label">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Static Route:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -904,9 +894,9 @@
                                           <object class="GtkLabel" id="net-ipv6-network">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">label</property>
                                             <property name="selectable">True</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -917,9 +907,9 @@
                                           <object class="GtkLabel" id="net-ipv6-dhcp-range">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">label</property>
                                             <property name="selectable">True</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -930,9 +920,9 @@
                                           <object class="GtkLabel" id="net-ipv6-route">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">&lt;network-addr&gt; via &lt;gateway-addr&gt;</property>
                                             <property name="selectable">True</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -960,8 +950,8 @@
                                               <object class="GtkLabel" id="net-ipv6-forwarding">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">Routed</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">True</property>
@@ -979,8 +969,8 @@
                                           <object class="GtkLabel" id="label39">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Network:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -991,8 +981,8 @@
                                           <object class="GtkLabel" id="label40">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">DHCP range:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -1003,8 +993,8 @@
                                           <object class="GtkLabel" id="label26">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Forwarding:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -1015,8 +1005,8 @@
                                           <object class="GtkLabel" id="net-ipv6-route-label">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Static Route:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -1098,8 +1088,8 @@
                                               <object class="GtkLabel" id="label35">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">Average (KiB/sec):</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1110,8 +1100,8 @@
                                               <object class="GtkLabel" id="label36">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">Burst (KiB):</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1133,8 +1123,8 @@
                                               <object class="GtkLabel" id="label37">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">Peak (KiB/sec):</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1208,8 +1198,8 @@
                                               <object class="GtkLabel" id="label42">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">Burst (KiB/sec):</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1220,8 +1210,8 @@
                                               <object class="GtkLabel" id="label44">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">Peak (KiB/sec):</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1232,8 +1222,8 @@
                                               <object class="GtkLabel" id="label45">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">Average (KiB/sec):</property>
+                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1468,541 +1458,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox5">
+              <object class="GtkAlignment" id="storage-align">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">3</property>
                 <child>
-                  <object class="GtkHPaned" id="hpaned1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="border_width">3</property>
-                    <property name="position">200</property>
-                    <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow6">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="pool-list">
-                            <property name="width_request">134</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="headers_visible">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection2"/>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="resize">False</property>
-                        <property name="shrink">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkNotebook" id="storage-pages">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="show_border">False</property>
-                        <child>
-                          <object class="GtkAlignment" id="alignment13">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="left_padding">6</property>
-                            <child>
-                              <object class="GtkVBox" id="pool-details">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="spacing">6</property>
-                                <child>
-                                  <object class="GtkGrid" id="table5">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="row_spacing">5</property>
-                                    <property name="column_spacing">8</property>
-                                    <child>
-                                      <object class="GtkLabel" id="label73">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Pool Type:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="pool-type">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label">Pool Type</property>
-                                        <property name="selectable">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="pool-name">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label">&lt;b&gt;Poolname:&lt;/b&gt;</property>
-                                        <property name="use_markup">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="pool-sizes">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label">&lt;span size="large"&gt;1234 GiB Free&lt;/span&gt; / &lt;i&gt;6000 GiB In Use&lt;/i&gt;</property>
-                                        <property name="use_markup">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkHBox" id="hbox7">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="spacing">3</property>
-                                        <child>
-                                          <object class="GtkImage" id="pool-state-icon">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
-                                            <property name="stock">gtk-missing-image</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="pool-state">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">Active</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">4</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="pool-autostart">
-                                        <property name="label">Some label</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="xalign">0.5</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_pool_autostart_toggled" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">5</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="pool-location">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label">label</property>
-                                        <property name="selectable">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkEntry" id="pool-name-entry">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <signal name="changed" handler="on_pool_name_changed" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label11">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Name:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label60">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Location:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label75">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">State:</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">4</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label76">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">A_utostart:</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">pool-autostart</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">5</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVBox" id="vbox6">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="spacing">3</property>
-                                    <child>
-                                      <object class="GtkHBox" id="hbox12">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkLabel" id="label77">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">&lt;b&gt;Volumes&lt;/b&gt;</property>
-                                            <property name="use_markup">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="pool-refresh">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">True</property>
-                                            <property name="has_tooltip">True</property>
-                                            <property name="tooltip_text" translatable="yes">Refresh volume list</property>
-                                            <signal name="clicked" handler="on_pool_refresh_clicked" swapped="no"/>
-                                            <child>
-                                              <object class="GtkImage" id="image8">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="stock">gtk-refresh</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkScrolledWindow" id="scrolledwindow5">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="shadow_type">in</property>
-                                        <child>
-                                          <object class="GtkTreeView" id="vol-list">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <signal name="button-press-event" handler="on_vol_list_button_press_event" swapped="no"/>
-                                            <child internal-child="selection">
-                                              <object class="GtkTreeSelection" id="treeview-selection3">
-                                                <signal name="changed" handler="on_vol_list_changed" swapped="no"/>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="label123">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label">info</property>
-                          </object>
-                          <packing>
-                            <property name="tab_fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="storage-error-label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label">some error here</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child type="tab">
-                          <object class="GtkLabel" id="label24">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label">error</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                            <property name="tab_fill">False</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="resize">True</property>
-                        <property name="shrink">True</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkHBox" id="hbox9">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="border_width">3</property>
-                    <child>
-                      <object class="GtkHBox" id="hbox10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkButton" id="pool-add">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Add Pool</property>
-                            <signal name="clicked" handler="on_pool_add_clicked" swapped="no"/>
-                            <child>
-                              <object class="GtkImage" id="image4">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="stock">gtk-add</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="pool-start">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Start Pool</property>
-                            <signal name="clicked" handler="on_pool_start_clicked" swapped="no"/>
-                            <child>
-                              <object class="GtkImage" id="someicon">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="stock">gtk-media-play</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="pool-stop">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Stop Pool</property>
-                            <signal name="clicked" handler="on_pool_stop_clicked" swapped="no"/>
-                            <child>
-                              <object class="GtkImage" id="image6">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="stock">gtk-cancel</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="pool-delete">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Delete Pool</property>
-                            <signal name="clicked" handler="on_pool_delete_clicked" swapped="no"/>
-                            <child>
-                              <object class="GtkImage" id="image7">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="stock">gtk-delete</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkHBox" id="hbox11">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkButton" id="vol-add">
-                            <property name="label" translatable="yes">_New Volume</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="image">image22</property>
-                            <property name="use_underline">True</property>
-                            <signal name="clicked" handler="on_vol_add_clicked" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="vol-delete">
-                            <property name="label" translatable="yes">_Delete Volume</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="image">image1</property>
-                            <property name="use_underline">True</property>
-                            <signal name="clicked" handler="on_vol_delete_clicked" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="pool-apply">
-                            <property name="label">gtk-apply</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_stock">True</property>
-                            <signal name="clicked" handler="on_pool_apply_clicked" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -2084,9 +1544,9 @@
                                       <object class="GtkLabel" id="interface-name">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">&lt;b&gt;Name&lt;/b&gt;</property>
                                         <property name="use_markup">True</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="right_attach">2</property>
@@ -2098,9 +1558,9 @@
                                       <object class="GtkLabel" id="label17">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">MAC:</property>
                                         <property name="xalign">0</property>
                                         <property name="yalign">0</property>
-                                        <property name="label" translatable="yes">MAC:</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">1</property>
@@ -2113,10 +1573,10 @@
                                       <object class="GtkLabel" id="interface-mac">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="yalign">0</property>
                                         <property name="label">insert mac</property>
                                         <property name="selectable">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="yalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2130,8 +1590,8 @@
                                       <object class="GtkLabel" id="label18">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">State:</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">2</property>
@@ -2183,8 +1643,8 @@
                                       <object class="GtkLabel" id="label19">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Start mode:</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">3</property>
@@ -2212,8 +1672,8 @@
                                         <child>
                                           <object class="GtkLabel" id="interface-startmode-label">
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">unknown startmode</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="expand">True</property>
@@ -2234,8 +1694,8 @@
                                       <object class="GtkLabel" id="label16">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">In use by:</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">4</property>
@@ -2248,8 +1708,8 @@
                                       <object class="GtkLabel" id="interface-inuseby">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label">foo, bar</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2283,8 +1743,8 @@
                                           <object class="GtkLabel" id="label28">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Mode:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
@@ -2295,8 +1755,8 @@
                                           <object class="GtkLabel" id="interface-ipv4-mode">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">label</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -2308,8 +1768,8 @@
                                           <object class="GtkLabel" id="label31">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Address:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -2322,9 +1782,9 @@
                                           <object class="GtkLabel" id="interface-ipv4-address">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">label</property>
                                             <property name="selectable">True</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -2367,8 +1827,8 @@
                                           <object class="GtkLabel" id="label29">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Mode:</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
@@ -2379,8 +1839,8 @@
                                           <object class="GtkLabel" id="interface-ipv6-mode">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label">label</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -2392,9 +1852,9 @@
                                           <object class="GtkLabel" id="label32">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes">Address:</property>
                                             <property name="xalign">0</property>
                                             <property name="yalign">0</property>
-                                            <property name="label" translatable="yes">Address:</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -2407,10 +1867,10 @@
                                           <object class="GtkLabel" id="interface-ipv6-address">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
-                                            <property name="yalign">0</property>
                                             <property name="label">label</property>
                                             <property name="selectable">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -2446,9 +1906,9 @@
                                       <object class="GtkLabel" id="label20">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">&lt;b&gt;Slave Interfaces&lt;/b&gt;</property>
                                         <property name="use_markup">True</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>

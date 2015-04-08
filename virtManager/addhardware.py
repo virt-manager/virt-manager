@@ -2025,9 +2025,8 @@ class vmmAddHardware(vmmGObjectUI):
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(conn)
 
-        self.storage_browser.stable_defaults = self.vm.stable_defaults()
-
+        self.storage_browser.set_stable_defaults(self.vm.stable_defaults())
         self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.set_browse_reason(reason)
 
-        self.storage_browser.show(self.topwin, conn)
+        self.storage_browser.show(self.topwin)

@@ -2087,12 +2087,14 @@ class vmmCreate(vmmGObjectUI):
                     widget = self.widget(cbwidget)
                 widget.set_text(text)
 
+        if self.storage_browser and self.storage_browser.conn != self.conn:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
 
-        self.storage_browser.stable_defaults = self._stable_defaults()
-
+        self.storage_browser.set_stable_defaults(self._stable_defaults())
         self.storage_browser.set_vm_name(self.get_config_name())
         self.storage_browser.set_finish_cb(callback)
         self.storage_browser.set_browse_reason(reason)
-        self.storage_browser.show(self.topwin, self.conn)
+        self.storage_browser.show(self.topwin)
