@@ -27,11 +27,17 @@ from .baseclass import vmmGObject
 
 class vmmLibvirtObject(vmmGObject):
     __gsignals__ = {
-        "status-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "config-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "state-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "started": (GObject.SignalFlags.RUN_FIRST, None, []),
         "stopped": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
+
+    _STATUS_ACTIVE = 1
+    _STATUS_INACTIVE = 2
+
+    # The parameter name for conn.tick() object polling. So
+    # for vmmDomain == "pollvm"
+    _conn_tick_poll_param = None
 
     def __init__(self, conn, backend, key, parseclass):
         vmmGObject.__init__(self)
@@ -39,6 +45,9 @@ class vmmLibvirtObject(vmmGObject):
         self._backend = backend
         self._key = key
         self._parseclass = parseclass
+
+        self.__status = self._STATUS_ACTIVE
+        self._support_isactive = None
 
         self._xmlobj = None
         self._xmlobj_to_define = None
@@ -51,6 +60,7 @@ class vmmLibvirtObject(vmmGObject):
         # Cache object name
         self._name = None
         self.get_name()
+
 
     @staticmethod
     def log_redefine_xml_diff(obj, origxml, newxml):
@@ -105,7 +115,7 @@ class vmmLibvirtObject(vmmGObject):
         finally:
             self._invalidate_xml()
 
-        self.emit("config-changed")
+        self.emit("state-changed")
 
 
     #############################################################
@@ -116,6 +126,10 @@ class vmmLibvirtObject(vmmGObject):
         raise NotImplementedError()
     def _using_events(self):
         return False
+    def _check_supports_isactive(self):
+        return False
+    def _get_backend_status(self):
+        raise NotImplementedError()
 
     def _define(self, xml):
         ignore = xml
@@ -123,10 +137,6 @@ class vmmLibvirtObject(vmmGObject):
 
     def delete(self, force=True):
         ignore = force
-
-    def force_update_status(self, from_event=False, log=True):
-        ignore = from_event
-        ignore = log
 
     def get_name(self):
         if self._name is None:
@@ -137,16 +147,65 @@ class vmmLibvirtObject(vmmGObject):
         return self._backend.name()
 
 
+    ###################
+    # Status handling #
+    ###################
+
+    def _get_status(self):
+        return self.__status
+
+    def is_active(self):
+        # vmmDomain overwrites this since it has more fine grained statuses
+        return self._get_status() == self._STATUS_ACTIVE
+
+    def force_update_status(self, from_event=False, newstatus=None):
+        """
+        :param newstatus: Used by vmmDomain as a small optimization to
+        avoid polling info() twice
+        """
+        if self._using_events() and not from_event:
+            return
+
+        try:
+            status = newstatus
+            if newstatus is None:
+                status = self._get_backend_status()
+            if status == self.__status:
+                return
+            self.__status = status
+
+            # This will send state-change for us
+            self.refresh_xml(forcesignal=True)
+        except:
+            # If we hit an exception here, it's often that the object
+            # disappeared, so request the poll loop to be updated
+            if self._conn_tick_poll_param:
+                logging.debug("force_update_status: Triggering %s "
+                    "list refresh", self.__class__)
+                kwargs = {"force": True, self._conn_tick_poll_param: True}
+                self.conn.schedule_priority_tick(**kwargs)
+
+    def _backend_get_active(self):
+        if self._support_isactive is None:
+            self._support_isactive = self._check_supports_isactive()
+
+        if not self._support_isactive:
+            return self._STATUS_ACTIVE
+        return (bool(self._backend.isActive()) and
+                self._STATUS_ACTIVE or
+                self._STATUS_INACTIVE)
+
+
     ##################
     # Public XML API #
     ##################
 
     def refresh_xml(self, forcesignal=False):
         """
-        Force an xml update. Signal 'config-changed' if domain xml has
+        Force an xml update. Signal 'state-changed' if domain xml has
         changed since last refresh
 
-        :param forcesignal: Send config-changed unconditionally
+        :param forcesignal: Send state-changed unconditionally
         """
         origxml = None
         if self._xmlobj:
@@ -159,7 +218,7 @@ class vmmLibvirtObject(vmmGObject):
         self._is_xml_valid = True
 
         if forcesignal or origxml != active_xml:
-            self.idle_emit("config-changed")
+            self.idle_emit("state-changed")
 
     def get_xmlobj(self, inactive=False, refresh_if_nec=True):
         """

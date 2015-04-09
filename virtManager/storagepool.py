@@ -47,6 +47,9 @@ class vmmStorageVolume(vmmLibvirtObject):
                 self._backend.key(), e)
             raise
 
+    def _get_backend_status(self):
+        return self._STATUS_ACTIVE
+
 
     ###########
     # Actions #
@@ -100,13 +103,12 @@ class vmmStoragePool(vmmLibvirtObject):
         "refreshed": (GObject.SignalFlags.RUN_FIRST, None, [])
     }
 
+    _conn_tick_poll_param = "pollpool"
+
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, StoragePool)
 
-        self._active = True
-        self._support_isactive = None
         self._last_refresh_time = 0
-
         self._volumes = {}
 
         self.tick()
@@ -120,46 +122,21 @@ class vmmStoragePool(vmmLibvirtObject):
         return self._backend.XMLDesc(flags)
     def _define(self, xml):
         return self.conn.define_pool(xml)
+    def _check_supports_isactive(self):
+        return self.conn.check_support(
+            self.conn.SUPPORT_POOL_ISACTIVE, self._backend)
+    def _get_backend_status(self):
+        return self._backend_get_active()
+
+    def _kick_conn(self):
+        self.conn.schedule_priority_tick(pollpool=True)
+    def tick(self):
+        self.force_update_status()
 
 
     ###########
     # Actions #
     ###########
-
-    def is_active(self):
-        return self._active
-    def _backend_get_active(self):
-        if self._support_isactive is None:
-            self._support_isactive = self.conn.check_support(
-                self.conn.SUPPORT_POOL_ISACTIVE, self._backend)
-
-        if not self._support_isactive:
-            return True
-        return bool(self._backend.isActive())
-
-    def _set_active(self, state):
-        if state == self._active:
-            return
-
-        self._active = state
-        self._invalidate_xml()
-        self.idle_emit("status-changed")
-
-    def _kick_conn(self):
-        self.conn.schedule_priority_tick(pollpool=True)
-    def tick(self):
-        self._set_active(self._backend_get_active())
-
-    def set_autostart(self, value):
-        self._backend.setAutostart(value)
-    def get_autostart(self):
-        return self._backend.autostart()
-
-    def can_change_alloc(self):
-        typ = self.get_type()
-        return (typ in [StoragePool.TYPE_LOGICAL])
-    def supports_volume_creation(self):
-        return self.get_xmlobj().supports_volume_creation()
 
     def start(self):
         self._backend.create(0)
@@ -212,9 +189,20 @@ class vmmStoragePool(vmmLibvirtObject):
         self._volumes = allvols
 
 
-    #################
-    # XML accessors #
-    #################
+    #########################
+    # XML/config operations #
+    #########################
+
+    def set_autostart(self, value):
+        self._backend.setAutostart(value)
+    def get_autostart(self):
+        return self._backend.autostart()
+
+    def can_change_alloc(self):
+        typ = self.get_type()
+        return (typ in [StoragePool.TYPE_LOGICAL])
+    def supports_volume_creation(self):
+        return self.get_xmlobj().supports_volume_creation()
 
     def get_type(self):
         return self.get_xmlobj().type

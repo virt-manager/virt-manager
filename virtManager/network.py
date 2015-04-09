@@ -18,8 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import logging
-
 import ipaddr
 
 from virtinst import Network
@@ -41,11 +39,10 @@ def _make_addr_str(addrStr, prefix, netmaskStr):
 
 
 class vmmNetwork(vmmLibvirtObject):
+    _conn_tick_poll_param = "pollnet"
+
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Network)
-        self._active = True
-
-        self._support_isactive = None
 
         self.force_update_status(from_event=True)
 
@@ -60,46 +57,21 @@ class vmmNetwork(vmmLibvirtObject):
         return self.conn.define_network(xml)
     def _using_events(self):
         return self.conn.using_network_events
+    def _check_supports_isactive(self):
+        return self.conn.check_support(
+            self.conn.SUPPORT_NET_ISACTIVE, self._backend)
+    def _get_backend_status(self):
+        return self._backend_get_active()
+
+    def _kick_conn(self):
+        self.conn.schedule_priority_tick(pollnet=True)
+    def tick(self):
+        self.force_update_status()
 
 
     ###########
     # Actions #
     ###########
-
-    def _backend_get_active(self):
-        if self._support_isactive is None:
-            self._support_isactive = self.conn.check_support(
-                self.conn.SUPPORT_NET_ISACTIVE, self._backend)
-
-        if not self._support_isactive:
-            return True
-        return bool(self._backend.isActive())
-
-    def _set_active(self, state):
-        if state == self._active:
-            return
-
-        self._active = state
-        self._invalidate_xml()
-        self.idle_emit("status-changed")
-
-    def force_update_status(self, from_event=False, log=True):
-        ignore = log
-        if self._using_events() and not from_event:
-            return
-
-        try:
-            self._set_active(self._backend_get_active())
-        except:
-            logging.debug("force_update_status: Triggering network "
-                "list refresh")
-            self.conn.schedule_priority_tick(pollnet=True, force=True)
-
-    def is_active(self):
-        return self._active
-
-    def _kick_conn(self):
-        self.conn.schedule_priority_tick(pollnet=True)
 
     def start(self):
         self._backend.create()
@@ -115,13 +87,15 @@ class vmmNetwork(vmmLibvirtObject):
         self._backend = None
         self._kick_conn()
 
+
+    ###############################
+    # XML/config handling parsing #
+    ###############################
+
     def get_autostart(self):
         return self._backend.autostart()
     def set_autostart(self, value):
         self._backend.setAutostart(value)
-
-    def tick(self):
-        self.force_update_status()
 
     def set_qos(self, **kwargs):
         xmlobj = self._get_xmlobj_to_define()
@@ -131,11 +105,6 @@ class vmmNetwork(vmmLibvirtObject):
 
         self.redefine_cached()
         return self.is_active()
-
-
-    ###############
-    # XML parsing #
-    ###############
 
     def get_uuid(self):
         return self.get_xmlobj().uuid

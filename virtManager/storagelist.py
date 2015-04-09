@@ -384,7 +384,7 @@ class vmmStorageList(vmmGObjectUI):
                 pool.disconnect_by_func(self._pool_changed)
             except:
                 pass
-            pool.connect("status-changed", self._pool_changed)
+            pool.connect("state-changed", self._pool_changed)
             pool.connect("refreshed", self._pool_changed)
 
             name = pool.get_name()

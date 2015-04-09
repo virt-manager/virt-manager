@@ -703,7 +703,7 @@ class vmmHost(vmmGObjectUI):
                 net.disconnect_by_func(self.refresh_network)
             except:
                 pass
-            net.connect("status-changed", self.refresh_network)
+            net.connect("state-changed", self.refresh_network)
             model.append([net.get_connkey(), net.get_name(), "network-idle",
                           Gtk.IconSize.LARGE_TOOLBAR,
                           bool(net.is_active())])
@@ -955,7 +955,7 @@ class vmmHost(vmmGObjectUI):
                 iface.disconnect_by_func(self.refresh_interface)
             except:
                 pass
-            iface.connect("status-changed", self.refresh_interface)
+            iface.connect("state-changed", self.refresh_interface)
             model.append([iface.get_connkey(), iface.get_name(),
                           "network-idle", Gtk.IconSize.LARGE_TOOLBAR,
                           bool(iface.is_active())])

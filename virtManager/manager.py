@@ -588,8 +588,7 @@ class vmmManager(vmmGObjectUI):
         if self.vm_row_key(vm) in self.rows:
             return
 
-        vm.connect("config-changed", self.vm_config_changed)
-        vm.connect("status-changed", self.vm_status_changed)
+        vm.connect("state-changed", self.vm_changed)
         vm.connect("resources-sampled", self.vm_row_updated)
         vm.connect("inspection-changed", self.vm_inspection_changed)
 
@@ -778,12 +777,15 @@ class vmmManager(vmmGObjectUI):
             return
         self.widget("vm-list").get_model().row_changed(row.path, row.iter)
 
-    def vm_config_changed(self, vm):
+    def vm_changed(self, vm):
         row = self.rows.get(self.vm_row_key(vm), None)
         if row is None:
             return
 
         try:
+            if vm == self.current_vm():
+                self.update_current_selection()
+
             name = vm.get_name_or_title()
             status = vm.run_status()
 
@@ -802,25 +804,6 @@ class vmmManager(vmmGObjectUI):
             raise
 
         self.vm_row_updated(vm)
-
-    def vm_status_changed(self, vm):
-        parent = self.rows[vm.conn.get_uri()].iter
-        vmlist = self.widget("vm-list")
-        model = vmlist.get_model()
-
-        missing = True
-        for row in range(model.iter_n_children(parent)):
-            _iter = model.iter_nth_child(parent, row)
-            if model[_iter][ROW_HANDLE] == vm:
-                missing = False
-                break
-
-        if missing:
-            self._append_vm(model, vm, vm.conn)
-
-        # Update run/shutdown/pause button states
-        self.update_current_selection()
-        self.vm_config_changed(vm)
 
     def vm_inspection_changed(self, vm):
         row = self.rows.get(self.vm_row_key(vm), None)

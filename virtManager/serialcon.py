@@ -320,7 +320,7 @@ class vmmSerialConsole(vmmGObject):
         self.error_label = None
         self.init_ui()
 
-        self.vm.connect("status-changed", self.vm_status_changed)
+        self.vm.connect("state-changed", self.vm_status_changed)
 
     def init_terminal(self):
         self.terminal = Vte.Terminal()

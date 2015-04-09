@@ -177,6 +177,8 @@ class vmmDomainSnapshot(vmmLibvirtObject):
 
     def _XMLDesc(self, flags):
         return self._backend.getXMLDesc(flags=flags)
+    def _get_backend_status(self):
+        return self._STATUS_ACTIVE
 
     def delete(self, force=True):
         ignore = force
@@ -213,6 +215,8 @@ class vmmDomain(vmmLibvirtObject):
         "inspection-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "pre-startup": (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
+
+    _conn_tick_poll_param = "pollvm"
 
     @staticmethod
     def pretty_run_status(status, has_saved=False):
@@ -302,10 +306,7 @@ class vmmDomain(vmmLibvirtObject):
         self._snapshot_list = None
         self._autostart = None
         self._domain_caps = None
-
-        self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
-        self._lastStatusReason = getattr(libvirt, "VIR_DOMAIN_SHUTOFF_SHUTDOWN",
-                                         1)
+        self._status_reason = None
 
         self.managedsave_supported = False
         self.remote_console_supported = False
@@ -362,7 +363,7 @@ class vmmDomain(vmmLibvirtObject):
         self.toggle_sample_mem_stats()
         self.toggle_sample_cpu_stats()
 
-        self.force_update_status(from_event=True, log=False)
+        self.force_update_status(from_event=True)
 
         # Prime caches
         self.refresh_xml()
@@ -426,10 +427,14 @@ class vmmDomain(vmmLibvirtObject):
         return self._id
 
     def status(self):
-        return self.lastStatus
+        return self._normalize_status(self._get_status())
 
     def status_reason(self):
-        return self._lastStatusReason
+        if self._status_reason is None:
+            self._status_reason = 1
+            if self.domain_state_supported:
+                self._status_reason = self._backend.state()[1]
+        return self._status_reason
 
     def get_cloning(self):
         return self.cloning
@@ -520,6 +525,9 @@ class vmmDomain(vmmLibvirtObject):
     def _invalidate_xml(self):
         vmmLibvirtObject._invalidate_xml(self)
         self._id = None
+        self._has_managed_save = None
+        self._status_reason = None
+        self._has_managed_save = None
 
     def _lookup_device_to_define(self, origdev, guest=None):
         if guest is None:
@@ -1034,6 +1042,8 @@ class vmmDomain(vmmLibvirtObject):
         self.conn.define_domain(newxml)
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
+    def _get_backend_status(self):
+        return self._backend.info()[0]
 
     def get_autostart(self):
         if self._autostart is None:
@@ -1345,7 +1355,7 @@ class vmmDomain(vmmLibvirtObject):
         self.shutdown()
 
         def add_reboot():
-            self.reboot_listener = self.connect_opt_out("status-changed",
+            self.reboot_listener = self.connect_opt_out("state-changed",
                 reboot_listener, self)
         self.idle_add(add_reboot)
 
@@ -1716,48 +1726,6 @@ class vmmDomain(vmmLibvirtObject):
             status = libvirt.VIR_DOMAIN_NOSTATE
         return vm_status_icons[status]
 
-    def force_update_status(self, from_event=False, log=True):
-        """
-        Fetch current domain state and clear status cache
-        """
-        if not from_event and self._using_events():
-            return
-
-        try:
-            info = self._backend.info()
-            if log:
-                logging.debug("domain=%s status changed to %d=%s",
-                    self.get_name(), info[0], self.pretty_run_status(info[0]))
-
-            self._update_status(info[0])
-        except libvirt.libvirtError, e:
-            # Transient domain might have disappeared, tell the connection
-            # to update the domain list
-            logging.debug("Error setting domain status: %s\nDomain might "
-                "have disappeared, triggering connection tick", e)
-            self.conn.schedule_priority_tick(pollvm=True, force=True)
-
-    def _update_status(self, status):
-        """
-        Internal helper to change cached status to 'status' and signal
-        clients if we actually changed state
-        """
-        status = self._normalize_status(status)
-
-        if status == self.lastStatus:
-            return
-
-        self.lastStatus = status
-        if self.domain_state_supported:
-            self._lastStatusReason = self._backend.state()[1]
-        self._has_managed_save = None
-
-        # Send 'config-changed' before a status-update, so users
-        # are operating with fresh XML
-        self.refresh_xml()
-
-        self.idle_emit("status-changed")
-
     def inspection_data_updated(self):
         self.idle_emit("inspection-changed")
 
@@ -1934,8 +1902,8 @@ class vmmDomain(vmmLibvirtObject):
         if stats_update:
             self._tick_stats(info)
 
-        if not self._using_events():
-            self._update_status(info[0])
+        # This is a no-op if using events
+        self.force_update_status(newstatus=info[0])
 
         if stats_update:
             self.idle_emit("resources-sampled")
@@ -2015,7 +1983,7 @@ class vmmDomainVirtinst(vmmDomain):
         return self._backend.autostart
     def set_autostart(self, val):
         self._backend.autostart = bool(val)
-        self.emit("config-changed")
+        self.emit("state-changed")
 
     def _using_events(self):
         return False
@@ -2038,7 +2006,7 @@ class vmmDomainVirtinst(vmmDomain):
 
     def _define(self, newxml):
         ignore = newxml
-        self.emit("config-changed")
+        self.emit("state-changed")
 
     def _invalidate_xml(self):
         vmmDomain._invalidate_xml(self)

@@ -51,7 +51,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.vm = vm
         self._pointer_is_grabbed = False
         self._change_title()
-        self.vm.connect("config-changed", self._change_title)
+        self.vm.connect("state-changed", self._change_title)
         self._force_resize = False
 
         # State for disabling modifiers when keyboard is grabbed

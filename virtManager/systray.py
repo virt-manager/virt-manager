@@ -280,7 +280,7 @@ class vmmSystray(vmmGObject):
         vm = conn.get_vm(connkey)
         if not vm:
             return
-        vm.connect("status-changed", self.vm_state_changed)
+        vm.connect("state-changed", self.vm_state_changed)
 
         vm_mappings = self.conn_vm_menuitems[uri]
         if connkey in vm_mappings:

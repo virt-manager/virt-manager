@@ -678,6 +678,8 @@ class vmmConnection(vmmGObject):
         obj = self._vms.get(domain.name(), None)
         if not obj:
             return
+
+        # Uses forcesignal=True
         self.idle_add(obj.refresh_xml, True)
 
     def _domain_lifecycle_event(self, conn, domain, event, reason, userdata):
@@ -692,6 +694,7 @@ class vmmConnection(vmmGObject):
             self.idle_add(obj.force_update_status, True)
 
             if event == libvirt.VIR_DOMAIN_EVENT_DEFINED:
+                # Uses forcesignal=True
                 self.idle_add(obj.refresh_xml, True)
         else:
             self.schedule_priority_tick(pollvm=True, force=True)
@@ -706,6 +709,7 @@ class vmmConnection(vmmGObject):
             self.idle_add(obj.force_update_status, True)
 
             if event == getattr(libvirt, "VIR_NETWORK_EVENT_DEFINED", 0):
+                # Uses forcesignal=True
                 self.idle_add(obj.refresh_xml, True)
         else:
             self.schedule_priority_tick(pollnet=True, force=True)
