@@ -411,8 +411,8 @@ class vmmSerialConsole(vmmGObject):
 
         return False
 
-    def vm_status_changed(self, src_ignore, oldstatus_ignore, status):
-        if status in [libvirt.VIR_DOMAIN_RUNNING]:
+    def vm_status_changed(self, vm):
+        if vm.status() in [libvirt.VIR_DOMAIN_RUNNING]:
             self.open_console()
         else:
             self.console.close()

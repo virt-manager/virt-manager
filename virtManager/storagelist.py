@@ -118,16 +118,6 @@ class vmmStorageList(vmmGObjectUI):
 
 
     def _cleanup(self):
-        try:
-            self.conn.disconnect_by_func(self._conn_pool_count_changed)
-            self.conn.disconnect_by_func(self._conn_pool_count_changed)
-            self.conn.disconnect_by_func(self._conn_pool_changed)
-            self.conn.disconnect_by_func(self._conn_pool_changed)
-            self.conn.disconnect_by_func(self._conn_pool_changed)
-            self.conn.disconnect_by_func(self._conn_state_changed)
-        except:
-            pass
-
         self.conn = None
 
         if self._addpool:
@@ -238,9 +228,6 @@ class vmmStorageList(vmmGObjectUI):
         self._populate_pools()
         self.conn.connect("pool-added", self._conn_pool_count_changed)
         self.conn.connect("pool-removed", self._conn_pool_count_changed)
-        self.conn.connect("pool-started", self._conn_pool_changed)
-        self.conn.connect("pool-stopped", self._conn_pool_changed)
-        self.conn.connect("pool-refreshed", self._conn_pool_changed)
         self.conn.connect("state-changed", self._conn_state_changed)
 
         self._conn_state_changed()
@@ -392,6 +379,14 @@ class vmmStorageList(vmmGObjectUI):
         model.clear()
 
         for pool in self.conn.list_pools():
+            try:
+                pool.disconnect_by_func(self._pool_changed)
+                pool.disconnect_by_func(self._pool_changed)
+            except:
+                pass
+            pool.connect("status-changed", self._pool_changed)
+            pool.connect("refreshed", self._pool_changed)
+
             name = pool.get_name()
             typ = StoragePool.get_pool_type_desc(pool.get_type())
             label = "%s\n<span size='small'>%s</span>" % (name, typ)
@@ -576,9 +571,8 @@ class vmmStorageList(vmmGObjectUI):
             self._set_storage_error_page(
                 _("Libvirt connection does not support storage management."))
 
-    def _conn_pool_changed(self, src, connkey):
-        ignore = src
-        self._update_pool_row(connkey)
+    def _pool_changed(self, pool):
+        self._update_pool_row(pool.get_connkey())
 
     def _conn_pool_count_changed(self, src, connkey):
         ignore = src

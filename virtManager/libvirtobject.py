@@ -27,6 +27,7 @@ from .baseclass import vmmGObject
 
 class vmmLibvirtObject(vmmGObject):
     __gsignals__ = {
+        "status-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "config-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "started": (GObject.SignalFlags.RUN_FIRST, None, []),
         "stopped": (GObject.SignalFlags.RUN_FIRST, None, []),

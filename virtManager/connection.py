@@ -52,17 +52,10 @@ class vmmConnection(vmmGObject):
         "vm-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "net-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "net-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "net-started": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "net-stopped": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "pool-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "pool-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "pool-started": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "pool-stopped": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "pool-refreshed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "interface-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "interface-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "interface-started": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "interface-stopped": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "nodedev-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "nodedev-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -973,9 +966,6 @@ class vmmConnection(vmmGObject):
         return pollhelpers.fetch_vms(self._backend, self._vms.copy(),
                     (lambda obj, key: vmmDomain(self, obj, key)))
 
-    def _obj_signal_proxy(self, obj, signal):
-        self.emit(signal, obj.get_connkey())
-
     def schedule_priority_tick(self, **kwargs):
         # args/kwargs are what is passed to def tick()
         if "stats_update" not in kwargs:
@@ -1140,8 +1130,6 @@ class vmmConnection(vmmGObject):
                 obj.cleanup()
             for connkey, obj in newNets.items():
                 logging.debug("network=%s added", obj.get_name())
-                obj.connect("started", self._obj_signal_proxy, "net-started")
-                obj.connect("stopped", self._obj_signal_proxy, "net-stopped")
                 self.emit("net-added", connkey)
 
             # Update storage pool states
@@ -1151,10 +1139,6 @@ class vmmConnection(vmmGObject):
                 obj.cleanup()
             for connkey, obj in newPools.items():
                 logging.debug("pool=%s added", obj.get_name())
-                obj.connect("started", self._obj_signal_proxy, "pool-started")
-                obj.connect("stopped", self._obj_signal_proxy, "pool-stopped")
-                obj.connect("refreshed", self._obj_signal_proxy,
-                    "pool-refreshed")
                 self.emit("pool-added", connkey)
 
             # Update interface states
@@ -1164,10 +1148,6 @@ class vmmConnection(vmmGObject):
                 obj.cleanup()
             for name, obj in newInterfaces.items():
                 logging.debug("interface=%s added", obj.get_name())
-                obj.connect("started", self._obj_signal_proxy,
-                    "interface-started")
-                obj.connect("stopped", self._obj_signal_proxy,
-                    "interface-stopped")
                 self.emit("interface-added", name)
 
             # Update nodedev list

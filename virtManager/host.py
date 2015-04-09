@@ -131,13 +131,9 @@ class vmmHost(vmmGObjectUI):
 
         self.conn.connect("net-added", self.repopulate_networks)
         self.conn.connect("net-removed", self.repopulate_networks)
-        self.conn.connect("net-started", self.refresh_network)
-        self.conn.connect("net-stopped", self.refresh_network)
 
         self.conn.connect("interface-added", self.repopulate_interfaces)
         self.conn.connect("interface-removed", self.repopulate_interfaces)
-        self.conn.connect("interface-started", self.refresh_interface)
-        self.conn.connect("interface-stopped", self.refresh_interface)
 
         self.conn.connect("state-changed", self.conn_state_changed)
         self.conn.connect("resources-sampled", self.refresh_resources)
@@ -498,11 +494,11 @@ class vmmHost(vmmGObjectUI):
         except KeyError:
             return None
 
-    def refresh_network(self, src_ignore, connkey):
+    def refresh_network(self, net):
+        connkey = net.get_connkey()
         uilist = self.widget("net-list")
         sel = uilist.get_selection()
         model, treeiter = sel.get_selected()
-        net = self.conn.get_net(connkey)
         net.tick()
 
         for row in uilist.get_model():
@@ -703,6 +699,11 @@ class vmmHost(vmmGObjectUI):
         net_list.get_selection().unselect_all()
         model.clear()
         for net in self.conn.list_nets():
+            try:
+                net.disconnect_by_func(self.refresh_network)
+            except:
+                pass
+            net.connect("status-changed", self.refresh_network)
             model.append([net.get_connkey(), net.get_name(), "network-idle",
                           Gtk.IconSize.LARGE_TOOLBAR,
                           bool(net.is_active())])
@@ -775,7 +776,7 @@ class vmmHost(vmmGObjectUI):
         if cp is None:
             return
 
-        self.refresh_interface(None, cp.get_name())
+        self.refresh_interface(cp)
 
     def current_interface(self):
         connkey = uiutil.get_list_selection(self.widget("interface-list"), 0)
@@ -915,13 +916,10 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-child-box").set_visible(show_child)
         self.populate_interface_children()
 
-    def refresh_interface(self, src, connkey):
-        ignore = src
-
+    def refresh_interface(self, iface):
         iface_list = self.widget("interface-list")
         sel = iface_list.get_selection()
         model, treeiter = sel.get_selected()
-        iface = self.conn.get_interface(connkey)
         name = iface.get_name()
         iface.tick()
 
@@ -953,6 +951,11 @@ class vmmHost(vmmGObjectUI):
         iface_list.get_selection().unselect_all()
         model.clear()
         for iface in self.conn.list_interfaces():
+            try:
+                iface.disconnect_by_func(self.refresh_interface)
+            except:
+                pass
+            iface.connect("status-changed", self.refresh_interface)
             model.append([iface.get_connkey(), iface.get_name(),
                           "network-idle", Gtk.IconSize.LARGE_TOOLBAR,
                           bool(iface.is_active())])

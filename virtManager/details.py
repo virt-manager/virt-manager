@@ -1300,7 +1300,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("details-vm-menu").get_submenu().change_run_text(text)
         self.widget("control-run").set_label(strip_text)
 
-    def refresh_vm_state(self, ignore1=None, ignore2=None, ignore3=None):
+    def refresh_vm_state(self, ignore=None):
         vm = self.vm
         status = self.vm.status()
 

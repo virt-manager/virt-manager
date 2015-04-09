@@ -209,7 +209,6 @@ class vmmDomain(vmmLibvirtObject):
     backed by a virtinst.Guest object for new VM 'customize before install'
     """
     __gsignals__ = {
-        "status-changed": (GObject.SignalFlags.RUN_FIRST, None, [int, int]),
         "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
         "inspection-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "pre-startup": (GObject.SignalFlags.RUN_FIRST, None, [object]),
@@ -1321,7 +1320,7 @@ class vmmDomain(vmmLibvirtObject):
         Attempt a manual reboot by invoking 'shutdown', then listen
         for a state change and restart the VM
         """
-        def reboot_listener(vm, ignore1, ignore2, self):
+        def reboot_listener(vm, self):
             if vm.is_crashed():
                 # Abandon reboot plans
                 self.reboot_listener = None
@@ -1347,7 +1346,7 @@ class vmmDomain(vmmLibvirtObject):
 
         def add_reboot():
             self.reboot_listener = self.connect_opt_out("status-changed",
-                                                    reboot_listener, self)
+                reboot_listener, self)
         self.idle_add(add_reboot)
 
     def shutdown(self):
@@ -1748,7 +1747,6 @@ class vmmDomain(vmmLibvirtObject):
         if status == self.lastStatus:
             return
 
-        oldstatus = self.lastStatus
         self.lastStatus = status
         if self.domain_state_supported:
             self._lastStatusReason = self._backend.state()[1]
@@ -1758,7 +1756,7 @@ class vmmDomain(vmmLibvirtObject):
         # are operating with fresh XML
         self.refresh_xml()
 
-        self.idle_emit("status-changed", oldstatus, status)
+        self.idle_emit("status-changed")
 
     def inspection_data_updated(self):
         self.idle_emit("inspection-changed")

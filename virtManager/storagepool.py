@@ -140,9 +140,10 @@ class vmmStoragePool(vmmLibvirtObject):
     def _set_active(self, state):
         if state == self._active:
             return
-        self.idle_emit(state and "started" or "stopped")
+
         self._active = state
-        self.refresh_xml()
+        self._invalidate_xml()
+        self.idle_emit("status-changed")
 
     def _kick_conn(self):
         self.conn.schedule_priority_tick(pollpool=True)

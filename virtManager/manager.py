@@ -803,9 +803,7 @@ class vmmManager(vmmGObjectUI):
 
         self.vm_row_updated(vm)
 
-    def vm_status_changed(self, vm, oldstatus, newstatus):
-        ignore = newstatus
-        ignore = oldstatus
+    def vm_status_changed(self, vm):
         parent = self.rows[vm.conn.get_uri()].iter
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()

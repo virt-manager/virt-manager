@@ -42,13 +42,13 @@ class vmmInterface(vmmLibvirtObject):
     def _define(self, xml):
         return self.conn.define_interface(xml)
 
-    def set_active(self, state):
+    def _set_active(self, state):
         if state == self._active:
             return
 
-        self.idle_emit(state and "started" or "stopped")
         self._active = state
-        self.refresh_xml()
+        self._invalidate_xml()
+        self.idle_emit("status-changed")
 
     def _backend_get_active(self):
         ret = True
@@ -61,7 +61,7 @@ class vmmInterface(vmmLibvirtObject):
         return bool(self._backend.isActive())
 
     def tick(self):
-        self.set_active(self._backend_get_active())
+        self._set_active(self._backend_get_active())
 
     def is_active(self):
         return self._active

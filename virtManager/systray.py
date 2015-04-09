@@ -325,7 +325,7 @@ class vmmSystray(vmmGObject):
             placeholder.set_sensitive(False)
             vm_menu.add(placeholder)
 
-    def vm_state_changed(self, vm, ignore=None, ignore2=None):
+    def vm_state_changed(self, vm):
         menu_item = self._get_vm_menu_item(vm)
         if not menu_item:
             return

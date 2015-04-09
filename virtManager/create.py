@@ -1906,7 +1906,7 @@ class vmmCreate(vmmGObjectUI):
                     "VM creation.", poolname, exc_info=True)
 
 
-    def check_install_status(self, vm, ignore1, ignore2, virtinst_guest=None):
+    def check_install_status(self, vm, virtinst_guest):
         if vm.is_crashed():
             logging.debug("VM crashed, cancelling install plans.")
             return True
