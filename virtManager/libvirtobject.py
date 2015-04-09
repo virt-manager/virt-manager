@@ -203,7 +203,14 @@ class vmmLibvirtObject(vmmGObject):
         if not self._xmlobj_to_define:
             logging.debug("No cached XML to define, skipping.")
             return
-        self._redefine_object(self._xmlobj_to_define)
+
+        try:
+            self._redefine_object(self._xmlobj_to_define)
+        except:
+            # If something fails here, we need to drop the cached object,
+            # since some edits like addhardware.py may not be idempotent
+            self._invalidate_xml()
+            raise
 
 
     #########################
