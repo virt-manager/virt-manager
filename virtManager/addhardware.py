@@ -780,17 +780,19 @@ class vmmAddHardware(vmmGObjectUI):
                     break
 
     @staticmethod
-    def populate_controller_model_combo(combo, controller_type, widget_name,
+    def populate_controller_model_combo(combo, controller_type, remove_widget,
         add_default=False):
         model = combo.get_model()
         model.clear()
+
+        if remove_widget:
+            remove_widget.set_sensitive(
+                controller_type != virtinst.VirtualController.TYPE_USB)
 
         if controller_type == virtinst.VirtualController.TYPE_USB:
             model.append(["default", _("Hypervisor default")])
             model.append(["ich9-ehci1", "USB 2"])
             model.append(["nec-xhci", "USB 3"])
-            if widget_name is not None:
-                widget_name.set_sensitive(False)
         elif controller_type == virtinst.VirtualController.TYPE_SCSI:
             model.append(["default", _("Hypervisor default")])
             model.append(["virtio-scsi", "VirtIO SCSI"])
@@ -798,8 +800,6 @@ class vmmAddHardware(vmmGObjectUI):
             if add_default:
                 model.append([None, _("Hypervisor default")])
                 uiutil.set_grid_row_visible(combo, False)
-            if widget_name is not None:
-                widget_name.set_sensitive(True)
 
 
     #########################

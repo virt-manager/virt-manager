@@ -160,6 +160,8 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
  DETAILS_PAGE_CONSOLE,
  DETAILS_PAGE_SNAPSHOTS) = range(3)
 
+_remove_tooltip = _("Remove this device from the virtual machine")
+
 
 def _label_for_device(dev, vm):
     devtype = dev.virtual_device_type
@@ -973,6 +975,9 @@ class vmmDetails(vmmGObjectUI):
         model.append([None, None, None, True])
         for name in cpu_names:
             model.append([name, name, name, False])
+
+        # Remove button tooltip
+        self.widget("config-remove").set_tooltip_text(_remove_tooltip)
 
         # Disk cache combo
         disk_cache = self.widget("disk-cache")
@@ -2804,12 +2809,15 @@ class vmmDetails(vmmGObjectUI):
         self.widget("input-dev-mode").set_text(mode or "")
         uiutil.set_grid_row_visible(self.widget("input-dev-mode"), bool(mode))
 
-        # Can't remove primary Xen or PS/2 mice
+        tooltip = _remove_tooltip
+        sensitive = True
         if ((inp.type == "mouse" and inp.bus in ("xen", "ps2")) or
             (inp.type == "keyboard" and inp.bus in ("xen", "ps2"))):
-            self.widget("config-remove").set_sensitive(False)
-        else:
-            self.widget("config-remove").set_sensitive(True)
+            sensitive = False
+            tooltip = _("Hypervisor does not support removing this device")
+
+        self.widget("config-remove").set_sensitive(sensitive)
+        self.widget("config-remove").set_tooltip_text(tooltip)
 
     def refresh_graphics_page(self):
         gfx = self.get_hw_selection(HW_LIST_COL_DEVICE)
