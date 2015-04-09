@@ -801,6 +801,16 @@ class vmmAddHardware(vmmGObjectUI):
                 model.append([None, _("Hypervisor default")])
                 uiutil.set_grid_row_visible(combo, False)
 
+    @staticmethod
+    def label_for_input_device(typ, bus):
+        if typ == "tablet" and bus == "usb":
+            return _("EvTouch USB Graphics Tablet")
+
+        if bus in ["usb", "ps2"]:
+            return _("Generic") + (" %s %s" %
+                (bus.upper(), str(typ).capitalize()))
+        return "%s %s" % (str(bus).capitalize(), str(typ).capitalize())
+
 
     #########################
     # UI population methods #
@@ -825,9 +835,12 @@ class vmmAddHardware(vmmGObjectUI):
 
     def populate_input_model(self, model):
         model.clear()
-        model.append([_("EvTouch USB Graphics Tablet"), "tablet", "usb"])
-        model.append([_("Generic USB Mouse"), "mouse", "usb"])
-        model.append([_("Generic USB Keyboard"), "keyboard", "usb"])
+        def _add_row(typ, bus):
+            model.append([self.label_for_input_device(typ, bus), typ, bus])
+
+        _add_row("tablet", "usb")
+        _add_row("mouse", "usb")
+        _add_row("keyboard", "usb")
 
     def populate_host_device_model(self, devtype, devcap, subtype, subcap):
         devlist = self.widget("host-device")

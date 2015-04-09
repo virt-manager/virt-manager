@@ -265,6 +265,8 @@ def _icon_for_device(dev):
         return "drive-harddisk"
 
     if devtype == "input":
+        if dev.type == "keyboard":
+            return "input-keyboard"
         if dev.type == "tablet":
             return "input-tablet"
         return "input-mouse"
@@ -2785,19 +2787,7 @@ class vmmDetails(vmmGObjectUI):
         if not inp:
             return
 
-        ident = "%s:%s" % (inp.type, inp.bus)
-        if ident == "tablet:usb":
-            dev = _("EvTouch USB Graphics Tablet")
-        elif ident == "mouse:usb":
-            dev = _("Generic USB Mouse")
-        elif ident == "mouse:xen":
-            dev = _("Xen Mouse")
-        elif ident == "mouse:ps2":
-            dev = _("PS/2 Mouse")
-        elif ident == "keyboard:ps2":
-            dev = _("PS/2 Keyboard")
-        else:
-            dev = inp.bus + " " + inp.type
+        dev = vmmAddHardware.label_for_input_device(inp.type, inp.bus)
 
         mode = None
         if inp.type == "tablet":
