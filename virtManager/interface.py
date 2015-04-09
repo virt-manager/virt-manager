@@ -45,8 +45,6 @@ class vmmInterface(vmmLibvirtObject):
     def _get_backend_status(self):
         return self._backend_get_active()
 
-    def _kick_conn(self):
-        self.conn.schedule_priority_tick(polliface=True)
     def tick(self):
         self.force_update_status()
 
@@ -55,20 +53,17 @@ class vmmInterface(vmmLibvirtObject):
     # Object operations #
     #####################
 
+    @vmmLibvirtObject.lifecycle_action
     def start(self):
         self._backend.create(0)
-        self.idle_add(self.refresh_xml)
-        self._kick_conn()
 
+    @vmmLibvirtObject.lifecycle_action
     def stop(self):
         self._backend.destroy(0)
-        self.idle_add(self.refresh_xml)
-        self._kick_conn()
 
+    @vmmLibvirtObject.lifecycle_action
     def delete(self, force=True):
-        ignore = force
         self._backend.undefine()
-        self._kick_conn()
 
 
     ################

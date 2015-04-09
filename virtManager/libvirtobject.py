@@ -77,6 +77,26 @@ class vmmLibvirtObject(vmmGObject):
                                             tofile="New XML"))
         logging.debug("Redefining %s with XML diff:\n%s", objname, diff)
 
+    @staticmethod
+    def lifecycle_action(fn):
+        """
+        Decorator for object lifecycle actions like start, stop, delete.
+        Will make sure any necessary state is updated accordingly.
+        """
+        def newfn(self, *args, **kwargs):
+            ret = fn(self, *args, **kwargs)
+
+            # If events are supported, this is a no-op, but the event loop
+            # will trigger force_status_update, which will refresh_xml as well.
+            #
+            # If events aren't supported, the priority tick will call
+            # self.tick(), which will call force_status_update
+            tick_kwargs = {self._conn_tick_poll_param: True}
+            self.conn.schedule_priority_tick(**tick_kwargs)
+
+            return ret
+        return newfn
+
     def _cleanup(self):
         pass
 
@@ -176,13 +196,13 @@ class vmmLibvirtObject(vmmGObject):
 
             # This will send state-change for us
             self.refresh_xml(forcesignal=True)
-        except:
+        except Exception, e:
             # If we hit an exception here, it's often that the object
             # disappeared, so request the poll loop to be updated
+            logging.debug("Error polling status for %s: %s", self, e)
             if self._conn_tick_poll_param:
-                logging.debug("force_update_status: Triggering %s "
-                    "list refresh", self.__class__)
                 kwargs = {"force": True, self._conn_tick_poll_param: True}
+                logging.debug("Scheduling priority tick with: %s", kwargs)
                 self.conn.schedule_priority_tick(**kwargs)
 
     def _backend_get_active(self):

@@ -63,8 +63,6 @@ class vmmNetwork(vmmLibvirtObject):
     def _get_backend_status(self):
         return self._backend_get_active()
 
-    def _kick_conn(self):
-        self.conn.schedule_priority_tick(pollnet=True)
     def tick(self):
         self.force_update_status()
 
@@ -73,19 +71,19 @@ class vmmNetwork(vmmLibvirtObject):
     # Actions #
     ###########
 
+    @vmmLibvirtObject.lifecycle_action
     def start(self):
         self._backend.create()
-        self._kick_conn()
 
+    @vmmLibvirtObject.lifecycle_action
     def stop(self):
         self._backend.destroy()
-        self._kick_conn()
 
+    @vmmLibvirtObject.lifecycle_action
     def delete(self, force=True):
         ignore = force
         self._backend.undefine()
         self._backend = None
-        self._kick_conn()
 
 
     ###############################

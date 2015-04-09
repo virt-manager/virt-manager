@@ -1075,9 +1075,9 @@ class vmmDomain(vmmLibvirtObject):
             self._snapshot_list = newlist
         return self._snapshot_list[:]
 
+    @vmmLibvirtObject.lifecycle_action
     def revert_to_snapshot(self, snap):
         self._backend.revertToSnapshot(snap.get_backend())
-        self.idle_add(self.force_update_status)
 
     def create_snapshot(self, xml, redefine=False):
         flags = 0
@@ -1359,28 +1359,29 @@ class vmmDomain(vmmLibvirtObject):
                 reboot_listener, self)
         self.idle_add(add_reboot)
 
+    @vmmLibvirtObject.lifecycle_action
     def shutdown(self):
         self._install_abort = True
         self._unregister_reboot_listener()
         self._backend.shutdown()
-        self.idle_add(self.force_update_status)
 
+    @vmmLibvirtObject.lifecycle_action
     def reboot(self):
         self._install_abort = True
         self._backend.reboot(0)
-        self.idle_add(self.force_update_status)
 
+    @vmmLibvirtObject.lifecycle_action
     def destroy(self):
         self._install_abort = True
         self._unregister_reboot_listener()
         self._backend.destroy()
-        self.idle_add(self.force_update_status)
 
+    @vmmLibvirtObject.lifecycle_action
     def reset(self):
         self._install_abort = True
         self._backend.reset(0)
-        self.idle_add(self.force_update_status)
 
+    @vmmLibvirtObject.lifecycle_action
     def startup(self):
         if self.get_cloning():
             raise RuntimeError(_("Cannot start guest while cloning "
@@ -1393,12 +1394,12 @@ class vmmDomain(vmmLibvirtObject):
             raise RuntimeError(error)
 
         self._backend.create()
-        self.idle_add(self.force_update_status)
 
+    @vmmLibvirtObject.lifecycle_action
     def suspend(self):
         self._backend.suspend()
-        self.idle_add(self.force_update_status)
 
+    @vmmLibvirtObject.lifecycle_action
     def delete(self, force=True):
         flags = 0
         if force:
@@ -1415,13 +1416,24 @@ class vmmDomain(vmmLibvirtObject):
                               "falling back to old style")
             self._backend.undefine()
 
+    @vmmLibvirtObject.lifecycle_action
     def resume(self):
         if self.get_cloning():
             raise RuntimeError(_("Cannot resume guest while cloning "
                                  "operation in progress"))
-
         self._backend.resume()
-        self.idle_add(self.force_update_status)
+
+    @vmmLibvirtObject.lifecycle_action
+    def save(self, filename=None, meter=None):
+        self._install_abort = True
+
+        if meter:
+            start_job_progress_thread(self, meter, _("Saving domain to disk"))
+
+        if not self.managedsave_supported:
+            self._backend.save(filename)
+        else:
+            self._backend.managedSave(0)
 
     def has_managed_save(self):
         if not self.managedsave_supported:
@@ -1442,19 +1454,6 @@ class vmmDomain(vmmLibvirtObject):
             return
         self._backend.managedSaveRemove(0)
         self._has_managed_save = None
-
-    def save(self, filename=None, meter=None):
-        self._install_abort = True
-
-        if meter:
-            start_job_progress_thread(self, meter, _("Saving domain to disk"))
-
-        if not self.managedsave_supported:
-            self._backend.save(filename)
-        else:
-            self._backend.managedSave(0)
-
-        self.idle_add(self.force_update_status)
 
 
     def support_downtime(self):

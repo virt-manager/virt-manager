@@ -128,8 +128,6 @@ class vmmStoragePool(vmmLibvirtObject):
     def _get_backend_status(self):
         return self._backend_get_active()
 
-    def _kick_conn(self):
-        self.conn.schedule_priority_tick(pollpool=True)
     def tick(self):
         self.force_update_status()
 
@@ -138,21 +136,19 @@ class vmmStoragePool(vmmLibvirtObject):
     # Actions #
     ###########
 
+    @vmmLibvirtObject.lifecycle_action
     def start(self):
         self._backend.create(0)
-        self._kick_conn()
-        self.idle_add(self.refresh_xml)
 
+    @vmmLibvirtObject.lifecycle_action
     def stop(self):
         self._backend.destroy()
-        self._kick_conn()
-        self.idle_add(self.refresh_xml)
 
+    @vmmLibvirtObject.lifecycle_action
     def delete(self, force=True):
         ignore = force
         self._backend.undefine()
         self._backend = None
-        self._kick_conn()
 
     def refresh(self):
         if not self.is_active():
