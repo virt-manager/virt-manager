@@ -129,7 +129,7 @@ class vmmStoragePool(vmmLibvirtObject):
         return self._backend_get_active()
 
     def tick(self):
-        self.force_update_status()
+        self._refresh_status()
 
 
     ###########

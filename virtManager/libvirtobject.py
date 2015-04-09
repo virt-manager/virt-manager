@@ -46,6 +46,7 @@ class vmmLibvirtObject(vmmGObject):
         self._key = key
         self._parseclass = parseclass
 
+        self._initial_status_update = False
         self.__status = self._STATUS_ACTIVE
         self._support_isactive = None
 
@@ -178,12 +179,28 @@ class vmmLibvirtObject(vmmGObject):
         # vmmDomain overwrites this since it has more fine grained statuses
         return self._get_status() == self._STATUS_ACTIVE
 
-    def force_update_status(self, from_event=False, newstatus=None):
+    def refresh_status_from_event_loop(self):
         """
+        Updates VM status, because we received a status event from libvirt's
+        event implementations. That's the only time this should be used.
+        """
+        return self._refresh_status(skip_if_have_events=False)
+
+    def _refresh_status(self, skip_if_have_events=True, newstatus=None):
+        """
+        Grab the object status/active state from libvirt, and if the
+        status has changed, update the XML cache. Typically called from
+        object tick functions for manually updating the object state.
+
+        :param skip_if_have_events: If this object is served by libvirt
+            events, we want this to be a no-op for most usages, like
+            from tick(), so don't do anything.
         :param newstatus: Used by vmmDomain as a small optimization to
-        avoid polling info() twice
+            avoid polling info() twice
         """
-        if self._using_events() and not from_event:
+        if (self._using_events() and
+            skip_if_have_events and
+            self._initial_status_update):
             return
 
         try:
@@ -204,6 +221,8 @@ class vmmLibvirtObject(vmmGObject):
                 kwargs = {"force": True, self._conn_tick_poll_param: True}
                 logging.debug("Scheduling priority tick with: %s", kwargs)
                 self.conn.schedule_priority_tick(**kwargs)
+        finally:
+            self._initial_status_update = True
 
     def _backend_get_active(self):
         if self._support_isactive is None:

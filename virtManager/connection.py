@@ -691,7 +691,7 @@ class vmmConnection(vmmGObject):
         if obj:
             # If the domain disappeared, this will catch it and trigger
             # a domain list refresh
-            self.idle_add(obj.force_update_status, True)
+            self.idle_add(obj.refresh_status_from_event_loop)
 
             if event == libvirt.VIR_DOMAIN_EVENT_DEFINED:
                 # Uses forcesignal=True
@@ -706,7 +706,7 @@ class vmmConnection(vmmGObject):
         obj = self._nets.get(network.name(), None)
 
         if obj:
-            self.idle_add(obj.force_update_status, True)
+            self.idle_add(obj.refresh_status_from_event_loop)
 
             if event == getattr(libvirt, "VIR_NETWORK_EVENT_DEFINED", 0):
                 # Uses forcesignal=True

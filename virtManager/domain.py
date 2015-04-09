@@ -363,8 +363,6 @@ class vmmDomain(vmmLibvirtObject):
         self.toggle_sample_mem_stats()
         self.toggle_sample_cpu_stats()
 
-        self.force_update_status(from_event=True)
-
         # Prime caches
         self.refresh_xml()
         self.has_managed_save()
@@ -1901,8 +1899,7 @@ class vmmDomain(vmmLibvirtObject):
         if stats_update:
             self._tick_stats(info)
 
-        # This is a no-op if using events
-        self.force_update_status(newstatus=info[0])
+        self._refresh_status(newstatus=info and info[0] or None)
 
         if stats_update:
             self.idle_emit("resources-sampled")

@@ -44,8 +44,6 @@ class vmmNetwork(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Network)
 
-        self.force_update_status(from_event=True)
-
 
     ##########################
     # Required class methods #
@@ -64,7 +62,7 @@ class vmmNetwork(vmmLibvirtObject):
         return self._backend_get_active()
 
     def tick(self):
-        self.force_update_status()
+        self._refresh_status()
 
 
     ###########
