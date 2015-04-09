@@ -26,8 +26,9 @@ class VirtualInputDevice(VirtualDevice):
 
     TYPE_MOUSE = "mouse"
     TYPE_TABLET = "tablet"
+    TYPE_KEYBOARD = "keyboard"
     TYPE_DEFAULT = "default"
-    TYPES = [TYPE_MOUSE, TYPE_TABLET, TYPE_DEFAULT]
+    TYPES = [TYPE_MOUSE, TYPE_TABLET, TYPE_KEYBOARD, TYPE_DEFAULT]
 
     BUS_PS2 = "ps2"
     BUS_USB = "usb"

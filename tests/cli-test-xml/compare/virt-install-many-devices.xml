@@ -174,7 +174,8 @@
       </virtualport>
       <boot order="1"/>
     </interface>
-    <input type="tablet" bus="usb"/>
+    <input type="keyboard" bus="usb"/>
+    <input type="tablet" bus="xen"/>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
     <graphics type="vnc" port="5950" keymap="ja" listen="1.2.3.4" passwd="foo"/>

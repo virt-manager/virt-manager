@@ -42,6 +42,7 @@ from .devicedisk import VirtualDisk
 from .devicefilesystem import VirtualFilesystem
 from .devicegraphics import VirtualGraphics
 from .devicehostdev import VirtualHostDevice
+from .deviceinput import VirtualInputDevice
 from .deviceinterface import VirtualNetworkInterface
 from .devicememballoon import VirtualMemballoon
 from .devicepanic import VirtualPanicDevice
@@ -574,6 +575,10 @@ def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--controller", action="append",
                     help=_("Configure a guest controller device. Ex:\n"
                            "--controller type=usb,model=ich9-ehci1"))
+    devg.add_argument("--input", action="append",
+        help=_("Configure a guest input device. Ex:\n"
+               "--input tablet\n"
+               "--input keyboard,bus=usb"))
     devg.add_argument("--serial", action="append",
                     help=_("Configure a guest serial device"))
     devg.add_argument("--parallel", action="append",
@@ -1782,6 +1787,19 @@ class ParserController(VirtCLIParser):
         return VirtCLIParser._parse(self, opts, inst)
 
 
+###################
+# --input parsing #
+###################
+
+class ParserInput(VirtCLIParser):
+    def _init_params(self):
+        self.devclass = VirtualInputDevice
+        self.remove_first = "type"
+
+        self.set_param("type", "type")
+        self.set_param("bus", "bus")
+
+
 #######################
 # --smartcard parsing #
 #######################
@@ -2182,6 +2200,7 @@ def build_parser_map(options, skip=None, only=None):
     register_parser("network", ParserNetwork)
     register_parser("graphics", ParserGraphics)
     register_parser("controller", ParserController)
+    register_parser("input", ParserInput)
     register_parser("smartcard", ParserSmartcard)
     register_parser("redirdev", ParserRedir)
     register_parser("tpm", ParserTPM)
