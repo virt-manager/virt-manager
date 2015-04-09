@@ -342,23 +342,28 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-add").set_sensitive(conn_active and
             self.conn.is_interface_capable())
 
-        if not conn_active:
-            self.set_net_error_page(_("Connection not active."))
-            self.set_interface_error_page(_("Connection not active."))
-
-            self.repopulate_networks()
-            self.repopulate_interfaces()
-            return
-
         if not self.conn.is_network_capable():
             self.set_net_error_page(
                 _("Libvirt connection does not support virtual network "
                   "management."))
-
         if not self.conn.is_interface_capable():
             self.set_interface_error_page(
                 _("Libvirt connection does not support interface management."))
 
+        if conn_active:
+            return
+
+        self.set_net_error_page(_("Connection not active."))
+        self.set_interface_error_page(_("Connection not active."))
+
+        self.repopulate_networks()
+        self.repopulate_interfaces()
+
+        self.storagelist.close()
+        if self.addinterface:
+            self.addinterface.close()
+        if self.addnet:
+            self.addnet.close()
 
     def toggle_autoconnect(self, src):
         self.conn.set_autoconnect(src.get_active())
