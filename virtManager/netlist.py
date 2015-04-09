@@ -360,7 +360,6 @@ class vmmNetworkList(vmmGObjectUI):
             # Try to start the network
             try:
                 netobj.start()
-                netobj.tick()
                 logging.info("Started network '%s'", devname)
             except Exception, e:
                 return self.err.show_err(_("Could not start virtual network "

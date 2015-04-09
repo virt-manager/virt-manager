@@ -32,8 +32,6 @@ class vmmInterface(vmmLibvirtObject):
         (self._inactive_xml_flags,
          self._active_xml_flags) = self.conn.get_interface_flags(self._backend)
 
-        self.tick()
-
     # Routines from vmmLibvirtObject
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)

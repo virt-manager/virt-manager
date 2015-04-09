@@ -1880,7 +1880,6 @@ class vmmCreate(vmmGObjectUI):
             raise RuntimeError(
                 _("VM '%s' didn't show up after expected time.") % guest.name)
         vm = foundvm
-        vm.tick()
 
         if vm.is_shutoff():
             # Domain is already shutdown, but no error was raised.

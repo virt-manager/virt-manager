@@ -499,7 +499,6 @@ class vmmHost(vmmGObjectUI):
         uilist = self.widget("net-list")
         sel = uilist.get_selection()
         model, treeiter = sel.get_selected()
-        net.tick()
 
         for row in uilist.get_model():
             if row[0] == connkey:
@@ -921,7 +920,6 @@ class vmmHost(vmmGObjectUI):
         sel = iface_list.get_selection()
         model, treeiter = sel.get_selected()
         name = iface.get_name()
-        iface.tick()
 
         for row in iface_list.get_model():
             if row[0] == name:

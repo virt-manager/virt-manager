@@ -111,8 +111,6 @@ class vmmStoragePool(vmmLibvirtObject):
         self._last_refresh_time = 0
         self._volumes = {}
 
-        self.tick()
-
 
     ##########################
     # Required class methods #

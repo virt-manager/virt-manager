@@ -62,6 +62,7 @@ class vmmLibvirtObject(vmmGObject):
         self._name = None
         self.get_name()
 
+        self._refresh_status()
 
     @staticmethod
     def log_redefine_xml_diff(obj, origxml, newxml):

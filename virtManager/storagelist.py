@@ -323,7 +323,6 @@ class vmmStorageList(vmmGObjectUI):
 
     def _populate_pool_state(self, connkey):
         pool = self.conn.get_pool(connkey)
-        pool.tick()
         auto = pool.get_autostart()
         active = pool.is_active()
 
