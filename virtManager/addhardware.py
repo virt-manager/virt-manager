@@ -827,6 +827,7 @@ class vmmAddHardware(vmmGObjectUI):
         model.clear()
         model.append([_("EvTouch USB Graphics Tablet"), "tablet", "usb"])
         model.append([_("Generic USB Mouse"), "mouse", "usb"])
+        model.append([_("Generic USB Keyboard"), "keyboard", "usb"])
 
     def populate_host_device_model(self, devtype, devcap, subtype, subcap):
         devlist = self.widget("host-device")
