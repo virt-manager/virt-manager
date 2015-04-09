@@ -186,8 +186,8 @@ class vmmStoragePool(vmmLibvirtObject):
         self.idle_emit("refreshed")
         self._last_refresh_time = time.time()
 
-    def get_last_refresh_time(self):
-        return self._last_refresh_time
+    def secs_since_last_refresh(self):
+        return time.time() - self._last_refresh_time
 
 
     ###################

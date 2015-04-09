@@ -33,7 +33,7 @@ from virtinst import StorageVolume
 
 class vmmCreateVolume(vmmGObjectUI):
     __gsignals__ = {
-        "vol-created": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "vol-created": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
     }
 
     def __init__(self, conn, parent_pool):
@@ -259,6 +259,9 @@ class vmmCreateVolume(vmmGObjectUI):
         ignore = src
         self._browse_file()
 
+    def _signal_vol_created(self, pool, volname):
+        self.emit("vol-created", pool.get_connkey(), volname)
+
     def _finish_cb(self, error, details):
         self.topwin.set_sensitive(True)
         self.topwin.get_window().set_cursor(
@@ -269,8 +272,9 @@ class vmmCreateVolume(vmmGObjectUI):
             self.show_err(error,
                           details=details)
         else:
-            # vol-created will refresh the parent pool
-            self.emit("vol-created")
+            self.parent_pool.connect("refreshed", self._signal_vol_created,
+                self.vol.name)
+            self.idle_add(self.parent_pool.refresh)
             self.close()
 
     def finish(self, src_ignore):

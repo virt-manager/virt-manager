@@ -20,7 +20,6 @@
 import logging
 import os
 import statvfs
-import time
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -79,7 +78,7 @@ class vmmAddStorage(vmmGObjectUI):
         avail = 0
         if pool and pool.is_active():
             # Rate limit this, since it can be spammed at dialog startup time
-            if ((time.time() - pool.get_last_refresh_time()) > 10):
+            if pool.secs_since_last_refresh() > 10:
                 pool.refresh()
             avail = int(pool.get_available())
 

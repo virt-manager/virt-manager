@@ -58,6 +58,7 @@ class vmmConnection(vmmGObject):
         "pool-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "pool-started": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "pool-stopped": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "pool-refreshed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "interface-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "interface-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "interface-started": (GObject.SignalFlags.RUN_FIRST, None, [str]),
@@ -1152,6 +1153,8 @@ class vmmConnection(vmmGObject):
                 logging.debug("pool=%s added", obj.get_name())
                 obj.connect("started", self._obj_signal_proxy, "pool-started")
                 obj.connect("stopped", self._obj_signal_proxy, "pool-stopped")
+                obj.connect("refreshed", self._obj_signal_proxy,
+                    "pool-refreshed")
                 self.emit("pool-added", connkey)
 
             # Update interface states

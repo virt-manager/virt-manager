@@ -18,8 +18,9 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 import logging
 
@@ -34,6 +35,10 @@ PAGE_FORMAT = 1
 
 
 class vmmCreatePool(vmmGObjectUI):
+    __gsignals__ = {
+        "pool-created": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+    }
+
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "createpool.ui", "vmm-create-pool")
         self.conn = conn
@@ -399,6 +404,11 @@ class vmmCreatePool(vmmGObjectUI):
     def back(self, ignore=None):
         self.widget("pool-pages").prev_page()
 
+    def _signal_pool_added(self, src, connkey, created_name):
+        ignore = src
+        if connkey == created_name:
+            self.emit("pool-created", connkey)
+
     def _finish_cb(self, error, details):
         self.topwin.set_sensitive(True)
         self.topwin.get_window().set_cursor(
@@ -409,6 +419,8 @@ class vmmCreatePool(vmmGObjectUI):
             self.err.show_err(error,
                               details=details)
         else:
+            self.conn.connect_once("pool-added", self._signal_pool_added,
+                self._pool.name)
             self.conn.schedule_priority_tick(pollpool=True)
             self.close()
 
