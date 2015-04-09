@@ -1005,7 +1005,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     # Network getters
     def get_config_net_model(self):
-        return uiutil.get_list_selection(self.widget("net-model"), 0)
+        return uiutil.get_combo_entry(self.widget("net-model"))
 
     def get_config_macaddr(self):
         macaddr = None

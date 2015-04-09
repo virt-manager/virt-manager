@@ -486,17 +486,6 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="net-model">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <object class="GtkAlignment" id="network-source-label-align">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -524,6 +513,23 @@
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="net-model">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="has_entry">True</property>
+                                    <child internal-child="entry">
+                                      <object class="GtkEntry" id="combobox-entry3">
+                                        <property name="can_focus">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">2</property>
                                   </packing>
                                 </child>
                               </object>
