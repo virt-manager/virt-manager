@@ -619,11 +619,11 @@ class StorageVolume(_StorageObject):
                                  parsexml=self._input_vol.XMLDesc(0))
 
         self.format = parsevol.format
+        self.capacity = parsevol.capacity
+        self.allocation = parsevol.allocation
         if only_format:
             return
         self.pool = self._input_vol.storagePoolLookupByVolume()
-        self.capacity = parsevol.capacity
-        self.allocation = parsevol.allocation
 
 
     ##########################
