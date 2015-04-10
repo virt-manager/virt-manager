@@ -118,7 +118,7 @@ class vmmStoragePool(vmmLibvirtObject):
         vmmLibvirtObject.__init__(self, conn, backend, key, StoragePool)
 
         self._last_refresh_time = 0
-        self._volumes = []
+        self._volumes = None
 
 
     ##########################
@@ -150,6 +150,10 @@ class vmmStoragePool(vmmLibvirtObject):
         for vol in self.get_volumes():
             vol.init_libvirt_state()
 
+    def _invalidate_xml(self):
+        vmmLibvirtObject._invalidate_xml(self)
+        self._volumes = None
+
 
     ###########
     # Actions #
@@ -180,7 +184,7 @@ class vmmStoragePool(vmmLibvirtObject):
         self._backend.refresh(0)
         if skip_xml_refresh:
             self.ensure_latest_xml()
-        self._update_volumes()
+        self._update_volumes(force=True)
         self.idle_emit("refreshed")
         self._last_refresh_time = time.time()
 
@@ -193,6 +197,7 @@ class vmmStoragePool(vmmLibvirtObject):
     ###################
 
     def get_volumes(self):
+        self._update_volumes(force=False)
         return self._volumes[:]
 
     def get_volume(self, key):
@@ -201,11 +206,14 @@ class vmmStoragePool(vmmLibvirtObject):
                 return vol
         return None
 
-    def _update_volumes(self):
+    def _update_volumes(self, force):
         if not self.is_active():
             self._volumes = []
             return
+        if not force and self._volumes is not None:
+            return
 
+        self._volumes = []
         keymap = dict((o.get_connkey(), o) for o in self._volumes)
         (ignore, ignore, allvols) = pollhelpers.fetch_volumes(
             self.conn.get_backend(), self.get_backend(), keymap,
