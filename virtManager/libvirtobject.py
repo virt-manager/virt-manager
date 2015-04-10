@@ -113,7 +113,7 @@ class vmmLibvirtObject(vmmGObject):
     def define_name(self, newname):
         oldname = self.get_xmlobj().name
         self._invalidate_xml()
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         if xmlobj.name == newname:
             return
 
@@ -320,26 +320,6 @@ class vmmLibvirtObject(vmmGObject):
     def xmlobj(self):
         return self.get_xmlobj()
 
-    def redefine_cached(self):
-        """
-        Redefine the _xmlobj_to_define cache.
-
-        Used by places like details.py and addhardware.py to queue a bunch
-        of XML changes via vmmDomain functions, but only call 'define'
-        once.
-        """
-        if not self._xmlobj_to_define:
-            logging.debug("No cached XML to define, skipping.")
-            return
-
-        try:
-            self._redefine_object(self._xmlobj_to_define)
-        except:
-            # If something fails here, we need to drop the cached object,
-            # since some edits like addhardware.py may not be idempotent
-            self._invalidate_xml()
-            raise
-
 
     #########################
     # Internal XML routines #
@@ -351,7 +331,6 @@ class vmmLibvirtObject(vmmGObject):
         to invalidate any specific caches of their own
         """
         self._is_xml_valid = False
-        self._xmlobj_to_define = None
         self._name = None
 
     def _make_xmlobj_to_define(self):
@@ -362,21 +341,10 @@ class vmmLibvirtObject(vmmGObject):
         """
         return self.get_xmlobj(inactive=True)
 
-    def _get_xmlobj_to_define(self):
+    def _redefine_xmlobj(self, xmlobj, origxml=None):
         """
-        Return the XML object that should be used to queue up new XML changes.
-        This is what is flushed with redefine_cached.
-
-        Most subclasses shouldn't touch this, but vmmDomainVirtinst needs to.
-        """
-        if not self._xmlobj_to_define:
-            self._xmlobj_to_define = self._make_xmlobj_to_define()
-        return self._xmlobj_to_define
-
-    def _redefine_object(self, xmlobj, origxml=None):
-        """
-        Redefine the passed object. This is called by redefine_cached and
-        shouldn't be called directly.
+        Redefine the passed xmlobj, which should be generated with
+        self._make_xmlobj_to_define()
 
         Most subclasses shouldn't touch this, but vmmDomainVirtinst needs to.
 

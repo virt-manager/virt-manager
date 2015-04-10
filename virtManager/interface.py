@@ -104,9 +104,9 @@ class vmmInterface(vmmLibvirtObject):
         return self.get_xmlobj().start_mode or "none"
 
     def set_startmode(self, newmode):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         xmlobj.start_mode = newmode
-        self.redefine_cached()
+        self._redefine_xmlobj(xmlobj)
 
     def get_slaves(self):
         return [[obj.name, obj.type or "Unknown"] for obj in

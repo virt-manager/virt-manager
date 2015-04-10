@@ -564,9 +564,9 @@ class vmmDomain(vmmLibvirtObject):
         """
         Redefine guest with appended device XML 'devxml'
         """
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         xmlobj.add_device(devobj)
-        self.redefine_cached()
+        self._redefine_xmlobj(xmlobj)
 
     def remove_device(self, devobj):
         """
@@ -578,7 +578,7 @@ class vmmDomain(vmmLibvirtObject):
         if hasattr(devobj, "virtmanager_console_dup"):
             con = getattr(devobj, "virtmanager_console_dup")
 
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, False)
         if not editdev:
             return
@@ -589,12 +589,12 @@ class vmmDomain(vmmLibvirtObject):
                 xmlobj.remove_device(rmcon)
         xmlobj.remove_device(editdev)
 
-        self.redefine_cached()
+        self._redefine_xmlobj(xmlobj)
 
     def define_cpu(self, vcpus=_SENTINEL, maxvcpus=_SENTINEL,
         cpuset=_SENTINEL, model=_SENTINEL, sockets=_SENTINEL,
         cores=_SENTINEL, threads=_SENTINEL):
-        guest = self._get_xmlobj_to_define()
+        guest = self._make_xmlobj_to_define()
 
         if vcpus != _SENTINEL:
             guest.curvcpus = int(vcpus)
@@ -613,20 +613,20 @@ class vmmDomain(vmmLibvirtObject):
                 guest.cpu.set_special_mode(model)
             else:
                 guest.cpu.model = model
-        self.redefine_cached()
+        self._redefine_xmlobj(guest)
 
     def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL):
-        guest = self._get_xmlobj_to_define()
+        guest = self._make_xmlobj_to_define()
 
         if memory != _SENTINEL:
             guest.memory = int(memory)
         if maxmem != _SENTINEL:
             guest.maxmemory = int(maxmem)
-        self.redefine_cached()
+        self._redefine_xmlobj(guest)
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
         title=_SENTINEL, idmap_list=_SENTINEL, loader=_SENTINEL):
-        guest = self._get_xmlobj_to_define()
+        guest = self._make_xmlobj_to_define()
         if machine != _SENTINEL:
             guest.os.machine = machine
         if description != _SENTINEL:
@@ -661,13 +661,13 @@ class vmmDomain(vmmLibvirtObject):
             else:
                 guest.idmap.clear()
 
-        self.redefine_cached()
+        self._redefine_xmlobj(guest)
 
     def define_boot(self, boot_order=_SENTINEL, boot_menu=_SENTINEL,
         kernel=_SENTINEL, initrd=_SENTINEL, dtb=_SENTINEL,
         kernel_args=_SENTINEL, init=_SENTINEL, initargs=_SENTINEL):
 
-        guest = self._get_xmlobj_to_define()
+        guest = self._make_xmlobj_to_define()
         def _change_boot_order():
             boot_dev_order = []
             devmap = dict((dev.vmmidstr, dev) for dev in
@@ -712,7 +712,7 @@ class vmmDomain(vmmLibvirtObject):
         if kernel_args != _SENTINEL:
             guest.os.kernel_args = kernel_args or None
 
-        self.redefine_cached()
+        self._redefine_xmlobj(guest)
 
 
     ######################
@@ -726,7 +726,7 @@ class vmmDomain(vmmLibvirtObject):
         iotune_rbs=_SENTINEL, iotune_ris=_SENTINEL, iotune_tbs=_SENTINEL,
         iotune_tis=_SENTINEL, iotune_wbs=_SENTINEL, iotune_wis=_SENTINEL,
         sgio=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
@@ -802,7 +802,7 @@ class vmmDomain(vmmLibvirtObject):
                 hotplug_kwargs["storage_path"] = True
             self.hotplug(**hotplug_kwargs)
         else:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
 
     def define_network(self, devobj, do_hotplug,
         ntype=_SENTINEL, source=_SENTINEL,
@@ -810,7 +810,7 @@ class vmmDomain(vmmLibvirtObject):
         vtype=_SENTINEL, managerid=_SENTINEL, typeid=_SENTINEL,
         typeidversion=_SENTINEL, instanceid=_SENTINEL,
         portgroup=_SENTINEL, macaddr=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
@@ -842,12 +842,12 @@ class vmmDomain(vmmLibvirtObject):
         if do_hotplug:
             self.hotplug(device=editdev)
         else:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
 
     def define_graphics(self, devobj, do_hotplug,
         listen=_SENTINEL, port=_SENTINEL, tlsport=_SENTINEL,
         passwd=_SENTINEL, keymap=_SENTINEL, gtype=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
@@ -868,10 +868,10 @@ class vmmDomain(vmmLibvirtObject):
         if do_hotplug:
             self.hotplug(device=editdev)
         else:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
 
     def define_sound(self, devobj, do_hotplug, model=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
@@ -884,10 +884,10 @@ class vmmDomain(vmmLibvirtObject):
         if do_hotplug:
             self.hotplug(device=editdev)
         else:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
 
     def define_video(self, devobj, do_hotplug, model=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
@@ -907,11 +907,11 @@ class vmmDomain(vmmLibvirtObject):
         if do_hotplug:
             self.hotplug(device=editdev)
         else:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
 
     def define_watchdog(self, devobj, do_hotplug,
         model=_SENTINEL, action=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
@@ -927,10 +927,10 @@ class vmmDomain(vmmLibvirtObject):
         if do_hotplug:
             self.hotplug(device=editdev)
         else:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
 
     def define_smartcard(self, devobj, do_hotplug, model=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
@@ -942,17 +942,17 @@ class vmmDomain(vmmLibvirtObject):
         if do_hotplug:
             self.hotplug(device=editdev)
         else:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
 
     def define_controller(self, devobj, do_hotplug, model=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
 
         def _change_model():
             if editdev.type == "usb":
-                guest = self._get_xmlobj_to_define()
+                guest = self._make_xmlobj_to_define()
                 ctrls = guest.get_devices("controller")
                 ctrls = [x for x in ctrls if (x.type ==
                          VirtualController.TYPE_USB)]
@@ -983,10 +983,10 @@ class vmmDomain(vmmLibvirtObject):
         if do_hotplug:
             self.hotplug(device=editdev)
         else:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
 
     def define_filesystem(self, devobj, do_hotplug, newdev=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
@@ -1004,13 +1004,13 @@ class vmmDomain(vmmLibvirtObject):
             editdev.target = newdev.target
 
         if do_hotplug:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
         else:
             self.hotplug(device=editdev)
 
 
     def define_hostdev(self, devobj, do_hotplug, rom_bar=_SENTINEL):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return
@@ -1021,7 +1021,7 @@ class vmmDomain(vmmLibvirtObject):
         if do_hotplug:
             self.hotplug(device=editdev)
         else:
-            self.redefine_cached()
+            self._redefine_xmlobj(xmlobj)
 
 
     ####################
@@ -2083,9 +2083,9 @@ class vmmDomainVirtinst(vmmDomain):
     def define_name(self, newname):
         # We need to overwrite this, since the implementation for libvirt
         # needs to do some crazy stuff.
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         xmlobj.name = str(newname)
-        self.redefine_cached()
+        self._redefine_xmlobj(xmlobj)
 
     def _XMLDesc(self, flags):
         ignore = flags
@@ -2104,5 +2104,5 @@ class vmmDomainVirtinst(vmmDomain):
             self._orig_xml = self._backend.get_xml_config()
         return self._backend
 
-    def _redefine_object(self, xmlobj, origxml=None):
-        vmmDomain._redefine_object(self, xmlobj, origxml=self._orig_xml)
+    def _redefine_xmlobj(self, xmlobj, origxml=None):
+        vmmDomain._redefine_xmlobj(self, xmlobj, origxml=self._orig_xml)

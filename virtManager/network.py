@@ -101,12 +101,12 @@ class vmmNetwork(vmmLibvirtObject):
         self._backend.setAutostart(value)
 
     def set_qos(self, **kwargs):
-        xmlobj = self._get_xmlobj_to_define()
+        xmlobj = self._make_xmlobj_to_define()
         q = xmlobj.bandwidth
         for key, val in kwargs.items():
             setattr(q, key, val)
 
-        self.redefine_cached()
+        self._redefine_xmlobj(xmlobj)
         return self.is_active()
 
     def get_uuid(self):
