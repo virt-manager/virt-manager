@@ -588,8 +588,8 @@ size (in GiB) to use if creating new storage
 
 =item B<sparse>
 
-whether to skip fully allocating newly created storage. Value is 'true' or
-'false'. Default is 'true' (do not fully allocate) unless it isn't
+whether to skip fully allocating newly created storage. Value is 'yes' or
+'no'. Default is 'yes' (do not fully allocate) unless it isn't
 supported by the underlying storage type.
 
 The initial time taken to fully-allocate the guest virtual disk (sparse=false)
