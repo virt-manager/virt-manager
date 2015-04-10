@@ -35,10 +35,6 @@ class vmmLibvirtObject(vmmGObject):
     _STATUS_ACTIVE = 1
     _STATUS_INACTIVE = 2
 
-    # The parameter name for conn.tick() object polling. So
-    # for vmmDomain == "pollvm"
-    _conn_tick_poll_param = None
-
     def __init__(self, conn, backend, key, parseclass):
         vmmGObject.__init__(self)
         self._conn = conn
@@ -93,7 +89,8 @@ class vmmLibvirtObject(vmmGObject):
             #
             # If events aren't supported, the priority tick will call
             # self.tick(), which will call force_status_update
-            tick_kwargs = {self._conn_tick_poll_param: True}
+            poll_param = self._conn_tick_poll_param()  # pylint: disable=protected-access
+            tick_kwargs = {poll_param: True}
             self.conn.schedule_priority_tick(**tick_kwargs)
 
             return ret
@@ -146,6 +143,13 @@ class vmmLibvirtObject(vmmGObject):
 
     def _XMLDesc(self, flags):
         raise NotImplementedError()
+    def class_name(self):
+        raise NotImplementedError()
+    def _conn_tick_poll_param(self):
+        # The parameter name for conn.tick() object polling. So
+        # for vmmDomain == "pollvm"
+        raise NotImplementedError()
+
     def _using_events(self):
         return False
     def _check_supports_isactive(self):
@@ -168,6 +172,9 @@ class vmmLibvirtObject(vmmGObject):
     def _backend_get_name(self):
         return self._backend.name()
 
+    def tick(self, stats_update=True):
+        raise NotImplementedError()
+
 
     ###################
     # Status handling #
@@ -179,6 +186,11 @@ class vmmLibvirtObject(vmmGObject):
     def is_active(self):
         # vmmDomain overwrites this since it has more fine grained statuses
         return self._get_status() == self._STATUS_ACTIVE
+
+    def run_status(self):
+        if self.is_active():
+            return "Active"
+        return "Inactive"
 
     def refresh_status_from_event_loop(self):
         """
@@ -218,8 +230,9 @@ class vmmLibvirtObject(vmmGObject):
             # If we hit an exception here, it's often that the object
             # disappeared, so request the poll loop to be updated
             logging.debug("Error polling status for %s: %s", self, e)
-            if self._conn_tick_poll_param:
-                kwargs = {"force": True, self._conn_tick_poll_param: True}
+            poll_param = self._conn_tick_poll_param()
+            if poll_param:
+                kwargs = {"force": True, poll_param: True}
                 logging.debug("Scheduling priority tick with: %s", kwargs)
                 self.conn.schedule_priority_tick(**kwargs)
         finally:

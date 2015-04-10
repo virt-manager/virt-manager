@@ -39,8 +39,6 @@ def _make_addr_str(addrStr, prefix, netmaskStr):
 
 
 class vmmNetwork(vmmLibvirtObject):
-    _conn_tick_poll_param = "pollnet"
-
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Network)
 
@@ -48,6 +46,11 @@ class vmmNetwork(vmmLibvirtObject):
     ##########################
     # Required class methods #
     ##########################
+
+    def _conn_tick_poll_param(self):
+        return "pollnet"
+    def class_name(self):
+        return "network"
 
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
@@ -61,7 +64,8 @@ class vmmNetwork(vmmLibvirtObject):
     def _get_backend_status(self):
         return self._backend_get_active()
 
-    def tick(self):
+    def tick(self, stats_update=True):
+        ignore = stats_update
         self._refresh_status()
 
 

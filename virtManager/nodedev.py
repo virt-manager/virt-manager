@@ -28,11 +28,14 @@ def _parse_convert(conn, parsexml=None):
 
 
 class vmmNodeDevice(vmmLibvirtObject):
-    _conn_tick_poll_param = "pollnodedev"
-
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, _parse_convert)
         self._name = key
+
+    def _conn_tick_poll_param(self):
+        return "pollnodedev"
+    def class_name(self):
+        return "nodedev"
 
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
@@ -41,5 +44,5 @@ class vmmNodeDevice(vmmLibvirtObject):
     def is_active(self):
         return True
 
-    def tick(self):
-        pass
+    def tick(self, stats_update=True):
+        ignore = stats_update

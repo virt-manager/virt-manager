@@ -172,13 +172,31 @@ class vmmDomainSnapshot(vmmLibvirtObject):
 
         self.refresh_xml()
 
+
+    ##########################
+    # Required class methods #
+    ##########################
+
     def _backend_get_name(self):
         return self._backend.getName()
+
+    def _conn_tick_poll_param(self):
+        return None
+    def class_name(self):
+        return "snapshot"
 
     def _XMLDesc(self, flags):
         return self._backend.getXMLDesc(flags=flags)
     def _get_backend_status(self):
         return self._STATUS_ACTIVE
+
+    def tick(self, stats_update=True):
+        ignore = stats_update
+
+
+    ###########
+    # Actions #
+    ###########
 
     def delete(self, force=True):
         ignore = force
@@ -215,8 +233,6 @@ class vmmDomain(vmmLibvirtObject):
         "inspection-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "pre-startup": (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
-
-    _conn_tick_poll_param = "pollvm"
 
     @staticmethod
     def pretty_run_status(status, has_saved=False):
@@ -1035,6 +1051,11 @@ class vmmDomain(vmmLibvirtObject):
     ########################
     # Libvirt API wrappers #
     ########################
+
+    def _conn_tick_poll_param(self):
+        return "pollvm"
+    def class_name(self):
+        return "domain"
 
     def _define(self, newxml):
         self.conn.define_domain(newxml)
@@ -1983,6 +2004,9 @@ class vmmDomainVirtinst(vmmDomain):
 
     def _using_events(self):
         return False
+
+    def tick(self, stats_update=True):
+        ignore = stats_update
 
 
     ################

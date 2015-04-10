@@ -24,15 +24,23 @@ from .libvirtobject import vmmLibvirtObject
 
 
 class vmmInterface(vmmLibvirtObject):
-    _conn_tick_poll_param = "polliface"
-
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Interface)
 
         (self._inactive_xml_flags,
          self._active_xml_flags) = self.conn.get_interface_flags(self._backend)
 
+
+    ##########################
+    # Required class methods #
+    ##########################
+
     # Routines from vmmLibvirtObject
+    def _conn_tick_poll_param(self):
+        return "polliface"
+    def class_name(self):
+        return "interface"
+
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
     def _define(self, xml):
@@ -43,7 +51,8 @@ class vmmInterface(vmmLibvirtObject):
     def _get_backend_status(self):
         return self._backend_get_active()
 
-    def tick(self):
+    def tick(self, stats_update=True):
+        ignore = stats_update
         self._refresh_status()
 
 

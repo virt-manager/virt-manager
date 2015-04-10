@@ -39,6 +39,11 @@ class vmmStorageVolume(vmmLibvirtObject):
     # Required class methods #
     ##########################
 
+    def _conn_tick_poll_param(self):
+        return None
+    def class_name(self):
+        return "volume"
+
     def _XMLDesc(self, flags):
         try:
             return self._backend.XMLDesc(flags)
@@ -49,6 +54,9 @@ class vmmStorageVolume(vmmLibvirtObject):
 
     def _get_backend_status(self):
         return self._STATUS_ACTIVE
+
+    def tick(self, stats_update=True):
+        ignore = stats_update
 
 
     ###########
@@ -103,8 +111,6 @@ class vmmStoragePool(vmmLibvirtObject):
         "refreshed": (GObject.SignalFlags.RUN_FIRST, None, [])
     }
 
-    _conn_tick_poll_param = "pollpool"
-
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, StoragePool)
 
@@ -116,6 +122,11 @@ class vmmStoragePool(vmmLibvirtObject):
     # Required class methods #
     ##########################
 
+    def _conn_tick_poll_param(self):
+        return "pollpool"
+    def class_name(self):
+        return "pool"
+
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
     def _define(self, xml):
@@ -126,7 +137,8 @@ class vmmStoragePool(vmmLibvirtObject):
     def _get_backend_status(self):
         return self._backend_get_active()
 
-    def tick(self):
+    def tick(self, stats_update=True):
+        ignore = stats_update
         self._refresh_status()
 
 

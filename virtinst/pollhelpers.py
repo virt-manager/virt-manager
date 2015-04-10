@@ -86,13 +86,12 @@ def _old_poll_helper(origmap, typename,
         connkey = name
 
         if connkey not in origmap:
-            if connkey not in origmap:
-                try:
-                    obj = lookup_func(name)
-                except Exception, e:
-                    logging.debug("Could not fetch %s '%s': %s",
-                                  typename, connkey, e)
-                    return
+            try:
+                obj = lookup_func(name)
+            except Exception, e:
+                logging.debug("Could not fetch %s '%s': %s",
+                              typename, connkey, e)
+                return
 
             # Object is brand new this period
             current[connkey] = build_func(obj, connkey)

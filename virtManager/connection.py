@@ -80,9 +80,6 @@ class vmmConnection(vmmGObject):
         self._backend = virtinst.VirtualConnection(self._uri)
         self._closing = False
 
-        self._caps = None
-        self._caps_xml = None
-
         self._network_capable = None
         self._storage_capable = None
         self._interface_capable = None
@@ -611,16 +608,13 @@ class vmmConnection(vmmGObject):
         return self._backend.interfaceDefineXML(xml, 0)
 
     def rename_object(self, obj, origxml, newxml, oldname, newname):
-        if str(obj.__class__).endswith("vmmDomain'>"):
-            objlabel = "domain"
+        if obj.class_name() == "domain":
             define_cb = self.define_domain
             objlist = self._vms
-        elif str(obj.__class__).endswith("vmmStoragePool'>"):
-            objlabel = "storagepool"
+        elif obj.class_name() == "pool":
             define_cb = self.define_pool
             objlist = self._pools
-        elif str(obj.__class__).endswith("vmmNetwork'>"):
-            objlabel = "network"
+        elif obj.class_name() == "network":
             define_cb = self.define_network
             objlist = self._nets
         else:
@@ -638,18 +632,18 @@ class vmmConnection(vmmGObject):
             success = True
         except Exception, renameerr:
             try:
-                logging.debug("Error defining new name %s XML", objlabel,
-                    exc_info=True)
+                logging.debug("Error defining new name %s XML",
+                    obj.class_name(), exc_info=True)
                 newobj = define_cb(origxml)
             except Exception, fixerr:
-                logging.debug("Failed to redefine original %s!", objlabel,
-                    exc_info=True)
+                logging.debug("Failed to redefine original %s!",
+                    obj.class_name(), exc_info=True)
                 raise RuntimeError(
                     _("%s rename failed. Attempting to recover also "
                       "failed.\n\n"
                       "Original error: %s\n\n"
                       "Recover error: %s" %
-                      (objlabel, str(renameerr), str(fixerr))))
+                      (obj.class_name(), str(renameerr), str(fixerr))))
             raise
         finally:
             if newobj:
@@ -970,6 +964,44 @@ class vmmConnection(vmmGObject):
         return pollhelpers.fetch_vms(self._backend, self._vms.copy(),
                     (lambda obj, key: vmmDomain(self, obj, key)))
 
+    def _send_object_signals(self, new_objects, gone_objects,
+            finish_connecting):
+        for obj in gone_objects:
+            class_name = obj.class_name()
+            logging.debug("%s=%s removed", class_name, obj.get_name())
+            if class_name == "domain":
+                self.emit("vm-removed", obj.get_connkey())
+            elif class_name == "network":
+                self.emit("net-removed", obj.get_connkey())
+            elif class_name == "pool":
+                self.emit("pool-removed", obj.get_connkey())
+            elif class_name == "interface":
+                self.emit("interface-removed", obj.get_connkey())
+            elif class_name == "nodedev":
+                self.emit("nodedev-removed", obj.get_connkey())
+            obj.cleanup()
+
+        for obj in new_objects:
+            class_name = obj.class_name()
+            if class_name != "nodedev":
+                # Skip nodedev logging since it's noisy and not interesting
+                logging.debug("%s=%s status=%s added", class_name,
+                    obj.get_name(), obj.run_status())
+            if class_name == "domain":
+                self.emit("vm-added", obj.get_connkey())
+            elif class_name == "network":
+                self.emit("net-added", obj.get_connkey())
+            elif class_name == "pool":
+                self.emit("pool-added", obj.get_connkey())
+            elif class_name == "interface":
+                self.emit("interface-added", obj.get_connkey())
+            elif class_name == "nodedev":
+                self.emit("nodedev-added", obj.get_connkey())
+
+        if finish_connecting:
+            self._change_state(self._STATE_ACTIVE)
+
+
     def schedule_priority_tick(self, **kwargs):
         # args/kwargs are what is passed to def tick()
         if "stats_update" not in kwargs:
@@ -1089,11 +1121,18 @@ class vmmConnection(vmmGObject):
             # These are refreshing in their __init__ method, because the
             # data is wanted immediately
             (goneVMs, newVMs, vms) = self._update_vms(pollvm)
+
+            gone_objects = (goneVMs.values() + goneNets.values() +
+                gonePools.values() + goneInterfaces.values() +
+                goneNodedevs.values())
+            new_objects = (newVMs.values() + newNets.values() +
+                newPools.values() + newInterfaces.values() +
+                newNodedevs.values())
         except:
             self._tick_lock.release()
             raise
 
-        def tick_send_signals():
+        def tick_update_lists():
             """
             Responsible for signaling the UI for any updates. All possible UI
             updates need to go here to enable threading that doesn't block the
@@ -1114,86 +1153,32 @@ class vmmConnection(vmmGObject):
                     self._pools = pools
                 if pollnodedev:
                     self._nodedevs = nodedevs
+
+                self.idle_add(self._send_object_signals,
+                    new_objects, gone_objects, finish_connecting)
             finally:
                 self._tick_lock.release()
 
-            # Update VM states
-            for connkey, obj in goneVMs.items():
-                logging.debug("domain=%s removed", obj.get_name())
-                self.emit("vm-removed", connkey)
-                obj.cleanup()
-            for connkey, obj in newVMs.items():
-                logging.debug("domain=%s status=%s added",
-                    obj.get_name(), obj.run_status())
-                self.emit("vm-added", connkey)
-
-            # Update virtual network states
-            for connkey, obj in goneNets.items():
-                logging.debug("network=%s removed", obj.get_name())
-                self.emit("net-removed", connkey)
-                obj.cleanup()
-            for connkey, obj in newNets.items():
-                logging.debug("network=%s added", obj.get_name())
-                self.emit("net-added", connkey)
-
-            # Update storage pool states
-            for connkey, obj in gonePools.items():
-                logging.debug("pool=%s removed", obj.get_name())
-                self.emit("pool-removed", connkey)
-                obj.cleanup()
-            for connkey, obj in newPools.items():
-                logging.debug("pool=%s added", obj.get_name())
-                self.emit("pool-added", connkey)
-
-            # Update interface states
-            for name, obj in goneInterfaces.items():
-                logging.debug("interface=%s removed", obj.get_name())
-                self.emit("interface-removed", name)
-                obj.cleanup()
-            for name, obj in newInterfaces.items():
-                logging.debug("interface=%s added", obj.get_name())
-                self.emit("interface-added", name)
-
-            # Update nodedev list
-            for name in goneNodedevs:
-                self.emit("nodedev-removed", name)
-                goneNodedevs[name].cleanup()
-            for name in newNodedevs:
-                self.emit("nodedev-added", name)
-
-            if finish_connecting:
-                self._change_state(self._STATE_ACTIVE)
 
         # Anything that could possibly fail before this call needs to go
         # in the try/except that handles the tick lock
-        self.idle_add(tick_send_signals)
+        self.idle_add(tick_update_lists)
 
         ticklist = []
-        def add_to_ticklist(l, args=()):
-            ticklist.extend([(o, args) for o in l])
-
-        updateVMs = newVMs
-        if stats_update:
-            updateVMs = vms
-
-        if stats_update:
-            for key in vms:
-                if key in updateVMs:
-                    add_to_ticklist([vms[key]], (True,))
-                else:
-                    add_to_ticklist([vms[key]], (stats_update,))
+        if pollvm or stats_update:
+            ticklist.extend(vms.values())
         if pollnet:
-            add_to_ticklist(nets.values())
+            ticklist.extend(nets.values())
         if pollpool:
-            add_to_ticklist(pools.values())
+            ticklist.extend(pools.values())
         if polliface:
-            add_to_ticklist(interfaces.values())
+            ticklist.extend(interfaces.values())
         if pollnodedev:
-            add_to_ticklist(nodedevs.values())
+            ticklist.extend(nodedevs.values())
 
-        for obj, args in ticklist:
+        for obj in ticklist:
             try:
-                obj.tick(*args)
+                obj.tick(stats_update=stats_update)
             except Exception, e:
                 logging.exception("Tick for %s failed", obj)
                 if (isinstance(e, libvirt.libvirtError) and
@@ -1206,7 +1191,7 @@ class vmmConnection(vmmGObject):
                                   "Ignoring.")
 
         if stats_update:
-            self._recalculate_stats(updateVMs.values())
+            self._recalculate_stats(vms.values())
             self.idle_emit("resources-sampled")
 
         return 1
