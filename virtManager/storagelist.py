@@ -292,7 +292,7 @@ class vmmStorageList(vmmGObjectUI):
             break
 
         curpool = self._current_pool()
-        if curpool.get_connkey() != connkey:
+        if not curpool or curpool.get_connkey() != connkey:
             return
 
         # Currently selected pool changed state: force a 'pool_selected' to

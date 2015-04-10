@@ -338,11 +338,11 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-add").set_sensitive(conn_active and
             self.conn.is_interface_capable())
 
-        if not self.conn.is_network_capable():
+        if conn_active and not self.conn.is_network_capable():
             self.set_net_error_page(
                 _("Libvirt connection does not support virtual network "
                   "management."))
-        if not self.conn.is_interface_capable():
+        if conn_active and not self.conn.is_interface_capable():
             self.set_interface_error_page(
                 _("Libvirt connection does not support interface management."))
 
