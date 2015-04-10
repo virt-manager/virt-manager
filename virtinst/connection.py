@@ -193,10 +193,10 @@ class VirtualConnection(object):
         if key in self._fetch_cache:
             return self._fetch_cache[key]
 
-        ignore, ignore, ret = pollhelpers.fetch_vms(self, {},
-                                                    lambda obj, ignore: obj)
+        ignore, ignore, ret = pollhelpers.fetch_vms(
+            self, {}, lambda obj, ignore: obj)
         ret = [Guest(weakref.ref(self), parsexml=obj.XMLDesc(0))
-               for obj in ret.values()]
+               for obj in ret]
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
         return ret
@@ -214,10 +214,10 @@ class VirtualConnection(object):
         if key in self._fetch_cache:
             return self._fetch_cache[key]
 
-        ignore, ignore, ret = pollhelpers.fetch_pools(self, {},
-                                                    lambda obj, ignore: obj)
+        ignore, ignore, ret = pollhelpers.fetch_pools(
+            self, {}, lambda obj, ignore: obj)
         ret = [StoragePool(weakref.ref(self), parsexml=obj.XMLDesc(0))
-               for obj in ret.values()]
+               for obj in ret]
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
         return ret
@@ -244,7 +244,7 @@ class VirtualConnection(object):
             ignore, ignore, vols = pollhelpers.fetch_volumes(
                 self, pool, {}, lambda obj, ignore: obj)
 
-            for vol in vols.values():
+            for vol in vols:
                 try:
                     xml = vol.XMLDesc(0)
                     ret.append(StorageVolume(weakref.ref(self), parsexml=xml))
@@ -271,7 +271,7 @@ class VirtualConnection(object):
         ignore, ignore, ret = pollhelpers.fetch_nodedevs(
             self, {}, lambda obj, ignore: obj)
         ret = [NodeDevice.parse(weakref.ref(self), obj.XMLDesc(0))
-               for obj in ret.values()]
+               for obj in ret]
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
         return ret

@@ -49,7 +49,7 @@ def _new_poll_helper(origmap, typename, listfunc, buildfunc):
             current[connkey] = origmap[connkey]
             del(origmap[connkey])
 
-    return (origmap, new, current)
+    return (origmap.values(), new.values(), current.values())
 
 
 def _old_poll_helper(origmap, typename,
@@ -107,7 +107,7 @@ def _old_poll_helper(origmap, typename,
         except:
             logging.exception("Couldn't fetch %s '%s'", typename, name)
 
-    return (origmap, new, current)
+    return (origmap.values(), new.values(), current.values())
 
 
 def fetch_nets(backend, origmap, build_func):

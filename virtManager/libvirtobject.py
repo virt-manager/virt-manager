@@ -150,6 +150,8 @@ class vmmLibvirtObject(vmmGObject):
         # for vmmDomain == "pollvm"
         raise NotImplementedError()
 
+    def reports_stats(self):
+        return False
     def _using_events(self):
         return False
     def _check_supports_isactive(self):

@@ -115,7 +115,7 @@ class vmmStoragePool(vmmLibvirtObject):
         vmmLibvirtObject.__init__(self, conn, backend, key, StoragePool)
 
         self._last_refresh_time = 0
-        self._volumes = {}
+        self._volumes = []
 
 
     ##########################
@@ -179,18 +179,22 @@ class vmmStoragePool(vmmLibvirtObject):
     ###################
 
     def get_volumes(self):
-        return self._volumes
+        return self._volumes[:]
 
     def get_volume(self, key):
-        return self._volumes[key]
+        for vol in self.get_volumes():
+            if vol.get_connkey() == key:
+                return vol
+        return None
 
     def _update_volumes(self):
         if not self.is_active():
-            self._volumes = {}
+            self._volumes = []
             return
 
+        keymap = dict((o.get_connkey(), o) for o in self._volumes)
         (ignore, ignore, allvols) = pollhelpers.fetch_volumes(
-            self.conn.get_backend(), self.get_backend(), self._volumes.copy(),
+            self.conn.get_backend(), self.get_backend(), keymap,
             lambda obj, key: vmmStorageVolume(self.conn, obj, key))
         self._volumes = allvols
 

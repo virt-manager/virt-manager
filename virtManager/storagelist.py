@@ -405,13 +405,13 @@ class vmmStorageList(vmmGObjectUI):
     def _populate_vols(self):
         list_widget = self.widget("vol-list")
         pool = self._current_pool()
-        vols = pool and pool.get_volumes() or {}
+        vols = pool and pool.get_volumes() or []
         model = list_widget.get_model()
         list_widget.get_selection().unselect_all()
         model.clear()
 
-        for key in vols.keys():
-            vol = vols[key]
+        for vol in vols:
+            key = vol.get_connkey()
 
             try:
                 path = vol.get_target_path()

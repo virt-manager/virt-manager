@@ -432,6 +432,8 @@ class vmmDomain(vmmLibvirtObject):
     # Misc API getter methods #
     ###########################
 
+    def reports_stats(self):
+        return True
     def _using_events(self):
         return self.conn.using_domain_events
 
