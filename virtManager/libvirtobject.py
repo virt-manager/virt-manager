@@ -41,8 +41,8 @@ class vmmLibvirtObject(vmmGObject):
         self._key = key
         self._parseclass = parseclass
 
-        self._initialized = False
-        self.__status = self._STATUS_ACTIVE
+        self.__initialized = False
+        self.__status = None
         self._support_isactive = None
 
         self._xmlobj = None
@@ -182,13 +182,13 @@ class vmmLibvirtObject(vmmGObject):
         Function called by vmmConnection to populate initial state when
         a new object appears.
         """
-        if self._initialized:
+        if self.__initialized:
             return
 
         try:
             self._init_libvirt_state()
         finally:
-            self._initialized = True
+            self.__initialized = True
             self.idle_emit("initialized")
 
 
@@ -229,23 +229,18 @@ class vmmLibvirtObject(vmmGObject):
         """
         if (self._using_events() and
             skip_if_have_events and
-            self._initialized):
+            self.__status is not None):
             return
 
         try:
-            status = newstatus
             if newstatus is None:
-                status = self._get_backend_status()
+                newstatus = self._get_backend_status()
+            status = newstatus
             if status == self.__status:
                 return
             self.__status = status
 
-            # If using events, we don't want to fetch XML here,
-            # since it should already be up to date.
-            if (not self._using_events() or
-                not self._initialized):
-                self._force_refresh_xml(nosignal=True)
-
+            self.ensure_latest_xml(nosignal=True)
             self.idle_emit("state-changed")
         except Exception, e:
             # If we hit an exception here, it's often that the object
@@ -283,7 +278,7 @@ class vmmLibvirtObject(vmmGObject):
         # will be refreshed.
         self.idle_emit("state-changed")
 
-    def ensure_latest_xml(self):
+    def ensure_latest_xml(self, nosignal=False):
         """
         Refresh XML if it isn't up to date, basically if we aren't using
         events.
@@ -292,7 +287,7 @@ class vmmLibvirtObject(vmmGObject):
             self._xmlobj and
             self._is_xml_valid):
             return
-        self._force_refresh_xml()
+        self._force_refresh_xml(nosignal=nosignal)
 
     def _force_refresh_xml(self, nosignal=False):
         """
@@ -394,7 +389,7 @@ class vmmLibvirtObject(vmmGObject):
             return
 
         # Make sure we have latest XML.
-        self._force_refresh_xml(nosignal=True)
+        self.ensure_latest_xml(nosignal=True)
 
         # We force a signal even if XML didn't change, so the details
         # window is correctly refreshed.
