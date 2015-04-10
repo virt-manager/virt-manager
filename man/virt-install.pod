@@ -951,7 +951,9 @@ This deprecates the --accelerate option, which is now the default behavior. To i
 Attach a controller device to the guest. TYPE is one of:
 B<ide>, B<fdc>, B<scsi>, B<sata>, B<virtio-serial>, or B<usb>.
 
-Controller also supports the special values B<usb2> and B<usb3>.
+Controller also supports the special values B<usb2> and B<usb3> to
+specify which version of the USB controller should be used (version 2
+or 3).
 
 =over 4
 
