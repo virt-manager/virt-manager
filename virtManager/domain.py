@@ -536,11 +536,11 @@ class vmmDomain(vmmLibvirtObject):
         self._status_reason = None
         self._has_managed_save = None
 
-    def _lookup_device_to_define(self, origdev, guest=None):
-        if guest is None:
-            guest = self._get_xmlobj_to_define()
+    def _lookup_device_to_define(self, xmlobj, origdev, for_hotplug):
+        if for_hotplug:
+            return origdev
 
-        dev = _find_device(guest, origdev)
+        dev = _find_device(xmlobj, origdev)
         if dev:
             return dev
 
@@ -553,15 +553,6 @@ class vmmDomain(vmmLibvirtObject):
 
         raise RuntimeError(_("Could not find specified device in the "
                              "inactive VM configuration: %s") % repr(origdev))
-
-    def _redefine_device(self, cb, origdev, use_live_device):
-        if not use_live_device:
-            dev = self._lookup_device_to_define(origdev)
-        else:
-            dev = origdev
-        if dev:
-            cb(dev)
-        return dev
 
 
     ##############################
@@ -588,17 +579,17 @@ class vmmDomain(vmmLibvirtObject):
             con = getattr(devobj, "virtmanager_console_dup")
 
         xmlobj = self._get_xmlobj_to_define()
-        def rmdev(editdev):
-            if con:
-                rmcon = _find_device(xmlobj, con)
-                if rmcon:
-                    xmlobj.remove_device(rmcon)
+        editdev = self._lookup_device_to_define(xmlobj, devobj, False)
+        if not editdev:
+            return
 
-            xmlobj.remove_device(editdev)
+        if con:
+            rmcon = _find_device(xmlobj, con)
+            if rmcon:
+                xmlobj.remove_device(rmcon)
+        xmlobj.remove_device(editdev)
 
-        ret = self._redefine_device(rmdev, devobj, False)
         self.redefine_cached()
-        return ret
 
     def define_cpu(self, vcpus=_SENTINEL, maxvcpus=_SENTINEL,
         cpuset=_SENTINEL, model=_SENTINEL, sockets=_SENTINEL,
@@ -694,7 +685,7 @@ class vmmDomain(vmmLibvirtObject):
 
             count = 1
             for origdev in boot_dev_order:
-                dev = self._lookup_device_to_define(origdev, guest=guest)
+                dev = self._lookup_device_to_define(guest, origdev, False)
                 if not dev:
                     continue
                 dev.boot.order = count
@@ -723,14 +714,24 @@ class vmmDomain(vmmLibvirtObject):
 
         self.redefine_cached()
 
-    def define_disk(self, devobj, use_live_device,
+
+    ######################
+    # Device XML editing #
+    ######################
+
+    def define_disk(self, devobj, do_hotplug,
         path=_SENTINEL, readonly=_SENTINEL, serial=_SENTINEL,
         shareable=_SENTINEL, removable=_SENTINEL, cache=_SENTINEL,
         io=_SENTINEL, driver_type=_SENTINEL, bus=_SENTINEL, addrstr=_SENTINEL,
         iotune_rbs=_SENTINEL, iotune_ris=_SENTINEL, iotune_tbs=_SENTINEL,
         iotune_tis=_SENTINEL, iotune_wbs=_SENTINEL, iotune_wis=_SENTINEL,
         sgio=_SENTINEL):
-        def _change_bus(editdev):
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        def _change_bus():
             oldprefix = editdev.get_target_prefix()[0]
             oldbus = editdev.bus
             editdev.bus = bus
@@ -756,112 +757,142 @@ class vmmDomain(vmmLibvirtObject):
             editdev.target = None
             editdev.generate_target(used)
 
-        def change(editdev):
+        if path != _SENTINEL:
+            editdev.path = path
+            if not do_hotplug:
+                editdev.sync_path_props()
+
+        if readonly != _SENTINEL:
+            editdev.read_only = readonly
+        if shareable != _SENTINEL:
+            editdev.shareable = shareable
+        if removable != _SENTINEL:
+            editdev.removable = removable
+
+        if cache != _SENTINEL:
+            editdev.driver_cache = cache or None
+        if io != _SENTINEL:
+            editdev.driver_io = io or None
+        if driver_type != _SENTINEL:
+            editdev.driver_type = driver_type or None
+        if serial != _SENTINEL:
+            editdev.serial = serial or None
+
+        if iotune_rbs != _SENTINEL:
+            editdev.iotune_rbs = iotune_rbs
+        if iotune_ris != _SENTINEL:
+            editdev.iotune_ris = iotune_ris
+        if iotune_tbs != _SENTINEL:
+            editdev.iotune_tbs = iotune_tbs
+        if iotune_tis != _SENTINEL:
+            editdev.iotune_tis = iotune_tis
+        if iotune_wbs != _SENTINEL:
+            editdev.iotune_wbs = iotune_wbs
+        if iotune_wis != _SENTINEL:
+            editdev.iotune_wis = iotune_wis
+        if sgio != _SENTINEL:
+            editdev.sgio = sgio or None
+
+        if bus != _SENTINEL:
+            _change_bus()
+
+        if do_hotplug:
+            hotplug_kwargs = {"device": editdev}
             if path != _SENTINEL:
-                editdev.path = path
-                if not use_live_device:
-                    editdev.sync_path_props()
+                hotplug_kwargs["storage_path"] = True
+            self.hotplug(**hotplug_kwargs)
+        else:
+            self.redefine_cached()
 
-            if readonly != _SENTINEL:
-                editdev.read_only = readonly
-            if shareable != _SENTINEL:
-                editdev.shareable = shareable
-            if removable != _SENTINEL:
-                editdev.removable = removable
-
-            if cache != _SENTINEL:
-                editdev.driver_cache = cache or None
-            if io != _SENTINEL:
-                editdev.driver_io = io or None
-            if driver_type != _SENTINEL:
-                editdev.driver_type = driver_type or None
-            if serial != _SENTINEL:
-                editdev.serial = serial or None
-
-            if iotune_rbs != _SENTINEL:
-                editdev.iotune_rbs = iotune_rbs
-            if iotune_ris != _SENTINEL:
-                editdev.iotune_ris = iotune_ris
-            if iotune_tbs != _SENTINEL:
-                editdev.iotune_tbs = iotune_tbs
-            if iotune_tis != _SENTINEL:
-                editdev.iotune_tis = iotune_tis
-            if iotune_wbs != _SENTINEL:
-                editdev.iotune_wbs = iotune_wbs
-            if iotune_wis != _SENTINEL:
-                editdev.iotune_wis = iotune_wis
-            if sgio != _SENTINEL:
-                editdev.sgio = sgio or None
-
-            if bus != _SENTINEL:
-                _change_bus(editdev)
-
-        return self._redefine_device(change, devobj, use_live_device)
-
-    def define_network(self, devobj, use_live_device,
+    def define_network(self, devobj, do_hotplug,
         ntype=_SENTINEL, source=_SENTINEL,
         mode=_SENTINEL, model=_SENTINEL, addrstr=_SENTINEL,
         vtype=_SENTINEL, managerid=_SENTINEL, typeid=_SENTINEL,
         typeidversion=_SENTINEL, instanceid=_SENTINEL,
         portgroup=_SENTINEL, macaddr=_SENTINEL):
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
 
-        def change(editdev):
-            if ntype != _SENTINEL:
-                editdev.source = None
+        if ntype != _SENTINEL:
+            editdev.source = None
 
-                editdev.type = ntype
-                editdev.source = source
-                editdev.source_mode = mode or None
-                editdev.portgroup = portgroup or None
+            editdev.type = ntype
+            editdev.source = source
+            editdev.source_mode = mode or None
+            editdev.portgroup = portgroup or None
 
-            if model != _SENTINEL:
-                if editdev.model != model:
-                    editdev.address.clear()
-                    editdev.address.set_addrstr(addrstr)
-                editdev.model = model
+        if model != _SENTINEL:
+            if editdev.model != model:
+                editdev.address.clear()
+                editdev.address.set_addrstr(addrstr)
+            editdev.model = model
 
-            if vtype != _SENTINEL:
-                editdev.virtualport.type = vtype or None
-                editdev.virtualport.managerid = managerid or None
-                editdev.virtualport.typeid = typeid or None
-                editdev.virtualport.typeidversion = typeidversion or None
-                editdev.virtualport.instanceid = instanceid or None
+        if vtype != _SENTINEL:
+            editdev.virtualport.type = vtype or None
+            editdev.virtualport.managerid = managerid or None
+            editdev.virtualport.typeid = typeid or None
+            editdev.virtualport.typeidversion = typeidversion or None
+            editdev.virtualport.instanceid = instanceid or None
 
-            if macaddr != _SENTINEL:
-                editdev.macaddr = macaddr
-        return self._redefine_device(change, devobj, use_live_device)
+        if macaddr != _SENTINEL:
+            editdev.macaddr = macaddr
 
-    def define_graphics(self, devobj, use_live_device,
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self.redefine_cached()
+
+    def define_graphics(self, devobj, do_hotplug,
         listen=_SENTINEL, port=_SENTINEL, tlsport=_SENTINEL,
         passwd=_SENTINEL, keymap=_SENTINEL, gtype=_SENTINEL):
-        def change(editdev):
-            if listen != _SENTINEL:
-                editdev.listen = listen
-            if port != _SENTINEL:
-                editdev.port = port
-            if tlsport != _SENTINEL:
-                editdev.tlsPort = tlsport
-            if passwd != _SENTINEL:
-                editdev.passwd = passwd
-            if keymap != _SENTINEL:
-                editdev.keymap = keymap
-            if gtype != _SENTINEL:
-                editdev.type = gtype
-        return self._redefine_device(change, devobj, use_live_device)
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
 
-    def define_sound(self, devobj, use_live_device, model=_SENTINEL):
-        def change(editdev):
-            if model != _SENTINEL:
-                if editdev.model != model:
-                    editdev.address.clear()
-                editdev.model = model
-        return self._redefine_device(change, devobj, use_live_device)
+        if listen != _SENTINEL:
+            editdev.listen = listen
+        if port != _SENTINEL:
+            editdev.port = port
+        if tlsport != _SENTINEL:
+            editdev.tlsPort = tlsport
+        if passwd != _SENTINEL:
+            editdev.passwd = passwd
+        if keymap != _SENTINEL:
+            editdev.keymap = keymap
+        if gtype != _SENTINEL:
+            editdev.type = gtype
 
-    def define_video(self, devobj, use_live_device, model=_SENTINEL):
-        def change(editdev):
-            if model == _SENTINEL or model == editdev.model:
-                return
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self.redefine_cached()
 
+    def define_sound(self, devobj, do_hotplug, model=_SENTINEL):
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        if model != _SENTINEL:
+            if editdev.model != model:
+                editdev.address.clear()
+            editdev.model = model
+
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self.redefine_cached()
+
+    def define_video(self, devobj, do_hotplug, model=_SENTINEL):
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        if model != _SENTINEL and model != editdev.model:
             editdev.model = model
             editdev.address.clear()
 
@@ -873,29 +904,53 @@ class vmmDomain(vmmLibvirtObject):
             editdev.ram = None
             editdev.vgamem = None
 
-        return self._redefine_device(change, devobj, use_live_device)
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self.redefine_cached()
 
-    def define_watchdog(self, devobj, use_live_device,
+    def define_watchdog(self, devobj, do_hotplug,
         model=_SENTINEL, action=_SENTINEL):
-        def change(editdev):
-            if model != _SENTINEL:
-                if editdev.model != model:
-                    editdev.address.clear()
-                editdev.model = model
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
 
-            if action != _SENTINEL:
-                editdev.action = action
-        return self._redefine_device(change, devobj, use_live_device)
+        if model != _SENTINEL:
+            if editdev.model != model:
+                editdev.address.clear()
+            editdev.model = model
 
-    def define_smartcard(self, devobj, use_live_device, model=_SENTINEL):
-        def change(editdev):
-            if model != _SENTINEL:
-                editdev.mode = model
-                editdev.type = editdev.TYPE_DEFAULT
-        return self._redefine_device(change, devobj, use_live_device)
+        if action != _SENTINEL:
+            editdev.action = action
 
-    def define_controller(self, devobj, use_live_device, model=_SENTINEL):
-        def _change_model(editdev):
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self.redefine_cached()
+
+    def define_smartcard(self, devobj, do_hotplug, model=_SENTINEL):
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        if model != _SENTINEL:
+            editdev.mode = model
+            editdev.type = editdev.TYPE_DEFAULT
+
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self.redefine_cached()
+
+    def define_controller(self, devobj, do_hotplug, model=_SENTINEL):
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        def _change_model():
             if editdev.type == "usb":
                 guest = self._get_xmlobj_to_define()
                 ctrls = guest.get_devices("controller")
@@ -922,17 +977,21 @@ class vmmDomain(vmmLibvirtObject):
                     editdev.model = model
                 self.hotplug(device=editdev)
 
-        def change(editdev):
-            if model != _SENTINEL:
-                _change_model(editdev)
+        if model != _SENTINEL:
+            _change_model()
 
-        return self._redefine_device(change, devobj, use_live_device)
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self.redefine_cached()
 
-    def define_filesystem(self, devobj, use_live_device, newdev=_SENTINEL):
-        def change(editdev):
-            if newdev == _SENTINEL:
-                return
+    def define_filesystem(self, devobj, do_hotplug, newdev=_SENTINEL):
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
 
+        if newdev != _SENTINEL:
             # pylint: disable=maybe-no-member
             editdev.type = newdev.type
             editdev.mode = newdev.mode
@@ -944,14 +1003,25 @@ class vmmDomain(vmmLibvirtObject):
             editdev.source = newdev.source
             editdev.target = newdev.target
 
-        return self._redefine_device(change, devobj, use_live_device)
+        if do_hotplug:
+            self.redefine_cached()
+        else:
+            self.hotplug(device=editdev)
 
 
-    def define_hostdev(self, devobj, use_live_device, rom_bar=_SENTINEL):
-        def change(editdev):
-            if rom_bar != _SENTINEL:
-                editdev.rom_bar = rom_bar
-        return self._redefine_device(change, devobj, use_live_device)
+    def define_hostdev(self, devobj, do_hotplug, rom_bar=_SENTINEL):
+        xmlobj = self._get_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        if rom_bar != _SENTINEL:
+            editdev.rom_bar = rom_bar
+
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self.redefine_cached()
 
 
     ####################
@@ -966,6 +1036,7 @@ class vmmDomain(vmmLibvirtObject):
             return
 
         devxml = devobj.get_xml_config()
+        logging.debug("attach_device with xml=\n%s", devxml)
         self._backend.attachDevice(devxml)
 
     def detach_device(self, devobj):
@@ -975,15 +1046,16 @@ class vmmDomain(vmmLibvirtObject):
         if not self.is_active():
             return
 
-        xml = devobj.get_xml_config()
-        self._backend.detachDevice(xml)
+        devxml = devobj.get_xml_config()
+        logging.debug("detach_device with xml=\n%s", devxml)
+        self._backend.detachDevice(devxml)
 
     def _update_device(self, devobj, flags=None):
         if flags is None:
             flags = getattr(libvirt, "VIR_DOMAIN_DEVICE_MODIFY_LIVE", 1)
 
         xml = devobj.get_xml_config()
-        logging.debug("Calling update_device with xml=\n%s", xml)
+        logging.debug("update_device with xml=\n%s", xml)
         self._backend.updateDeviceFlags(xml, flags)
 
     def hotplug(self, vcpus=_SENTINEL, memory=_SENTINEL, maxmem=_SENTINEL,

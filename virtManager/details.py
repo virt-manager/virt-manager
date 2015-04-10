@@ -2126,12 +2126,9 @@ class vmmDetails(vmmGObjectUI):
     # <device> defining
     def change_storage_media(self, devobj, newpath):
         kwargs = {"path": newpath}
-        hotplug_args = {"storage_path": True}
-
         return vmmAddHardware.change_config_helper(self.vm.define_disk,
                                           kwargs, self.vm, self.err,
-                                          devobj=devobj,
-                                          hotplug_args=hotplug_args)
+                                          devobj=devobj)
 
     def config_disk_apply(self, devobj):
         kwargs = {}

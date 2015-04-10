@@ -1391,17 +1391,17 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def change_config_helper(define_func, define_args, vm, err,
-                              devobj=None,
-                              hotplug_args=None):
+            devobj=None, hotplug_args=None):
         hotplug_args = hotplug_args or {}
 
         # Persistent config change
         try:
             if devobj:
-                define_func(devobj, False, **define_args)
+                # Device XML editing
+                define_func(devobj=devobj, do_hotplug=False, **define_args)
             else:
+                # Guest XML editing
                 define_func(**define_args)
-            vm.redefine_cached()
         except Exception, e:
             err.show_err((_("Error changing VM configuration: %s") %
                               str(e)))
@@ -1409,38 +1409,45 @@ class vmmAddHardware(vmmGObjectUI):
             vm.refresh_xml()
             return False
 
+        if not vm.is_active():
+            return True
+
         # Hotplug change
         hotplug_err = None
-        if vm.is_active():
-            try:
-                if devobj:
-                    hotplug_args["device"] = define_func(
-                        devobj, True, **define_args)
-                if hotplug_args:
-                    vm.hotplug(**hotplug_args)
-            except Exception, e:
-                logging.debug("Hotplug failed: %s", str(e))
-                hotplug_err = ((str(e), "".join(traceback.format_exc())))
+        did_hotplug = False
+        try:
+            if devobj:
+                define_func(devobj=devobj, do_hotplug=True, **define_args)
+                did_hotplug = True
+            elif hotplug_args:
+                did_hotplug = True
+                vm.hotplug(**hotplug_args)
+        except Exception, e:
+            did_hotplug = True
+            logging.debug("Hotplug failed: %s", str(e))
+            hotplug_err = ((str(e), "".join(traceback.format_exc())))
 
-        if (hotplug_err or (vm.is_active() and not hotplug_args)):
-            if len(define_args) > 1:
-                msg = _("Some changes may require a guest shutdown "
-                        "to take effect.")
-            else:
-                msg = _("These changes will take effect after "
-                        "the next guest shutdown.")
+        if did_hotplug and not hotplug_err:
+            return True
 
-            dtype = (hotplug_err and
-                     Gtk.MessageType.WARNING or Gtk.MessageType.INFO)
-            hotplug_msg = ""
-            if hotplug_err:
-                hotplug_msg += (hotplug_err[0] + "\n\n" +
-                                hotplug_err[1] + "\n")
+        if len(define_args) > 1:
+            msg = _("Some changes may require a guest shutdown "
+                    "to take effect.")
+        else:
+            msg = _("These changes will take effect after "
+                    "the next guest shutdown.")
 
-            err.show_err(msg,
-                              details=hotplug_msg,
-                              buttons=Gtk.ButtonsType.OK,
-                              dialog_type=dtype)
+        dtype = (hotplug_err and
+                 Gtk.MessageType.WARNING or Gtk.MessageType.INFO)
+        hotplug_msg = ""
+        if hotplug_err:
+            hotplug_msg += (hotplug_err[0] + "\n\n" +
+                            hotplug_err[1] + "\n")
+
+        err.show_err(msg,
+                details=hotplug_msg,
+                buttons=Gtk.ButtonsType.OK,
+                dialog_type=dtype)
 
         return True
 
@@ -1473,7 +1480,8 @@ class vmmAddHardware(vmmGObjectUI):
             kwargs["model"] = self._selected_model
 
             self.change_config_helper(self.vm.define_controller,
-                    kwargs, self.vm, self.err, self._remove_usb_controller)
+                    kwargs, self.vm, self.err,
+                    devobj=self._remove_usb_controller)
 
             self._remove_usb_controller = None
             self._selected_model = None
