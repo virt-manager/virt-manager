@@ -244,7 +244,6 @@ class vmmHost(vmmGObjectUI):
         self.memory_usage_graph.show()
         self.widget("performance-memory-align").add(self.memory_usage_graph)
 
-
     def show(self):
         logging.debug("Showing host details: %s", self.conn)
         vis = self.is_visible()
@@ -347,6 +346,8 @@ class vmmHost(vmmGObjectUI):
                 _("Libvirt connection does not support interface management."))
 
         if conn_active:
+            uiutil.set_list_selection(self.widget("net-list"), 0)
+            uiutil.set_list_selection(self.widget("interface-list"), 0)
             return
 
         self.set_net_error_page(_("Connection not active."))

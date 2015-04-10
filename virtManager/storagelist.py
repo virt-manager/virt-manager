@@ -561,14 +561,16 @@ class vmmStorageList(vmmGObjectUI):
         self.widget("pool-add").set_sensitive(conn_active and
             self.conn.is_storage_capable())
 
-        if not conn_active:
-            self._set_storage_error_page(_("Connection not active."))
-            self._populate_pools()
-            return
-
-        if not self.conn.is_storage_capable():
+        if conn_active and not self.conn.is_storage_capable():
             self._set_storage_error_page(
                 _("Libvirt connection does not support storage management."))
+
+        if conn_active:
+            uiutil.set_list_selection(self.widget("pool-list"), 0)
+            return
+
+        self._set_storage_error_page(_("Connection not active."))
+        self._populate_pools()
 
     def _pool_changed(self, pool):
         self._update_pool_row(pool.get_connkey())
