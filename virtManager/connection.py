@@ -886,21 +886,15 @@ class vmmConnection(vmmGObject):
     def _cleanup(self):
         self.close()
 
-    def open(self, sync=False):
+    def open(self):
         if not self.is_disconnected():
             return
 
         self._change_state(self._STATE_CONNECTING)
 
-        if sync:
-            logging.debug("Opening connection synchronously: %s",
-                          self.get_uri())
-            self._open_thread()
-        else:
-            logging.debug("Scheduling background open thread for " +
-                         self.get_uri())
-            self._start_thread(self._open_thread,
-                "Connect %s" % self.get_uri())
+        logging.debug("Scheduling background open thread for " +
+                     self.get_uri())
+        self._start_thread(self._open_thread, "Connect %s" % self.get_uri())
 
     def _do_creds_password(self, creds):
         try:
