@@ -118,6 +118,12 @@ class vmmStorageList(vmmGObjectUI):
 
 
     def _cleanup(self):
+        try:
+            self.conn.disconnect_by_func(self._conn_pool_count_changed)
+            self.conn.disconnect_by_func(self._conn_pool_count_changed)
+            self.conn.disconnect_by_func(self._conn_state_changed)
+        except:
+            pass
         self.conn = None
 
         if self._addpool:
