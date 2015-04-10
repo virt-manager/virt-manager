@@ -562,8 +562,9 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.vm.log_redefine_xml_diff(snap, origxml, newxml)
         if newxml == origxml:
             return True
+
         self.vm.create_snapshot(newxml, redefine=True)
-        snap.refresh_xml()
+        snap.ensure_latest_xml()
         return True
 
 

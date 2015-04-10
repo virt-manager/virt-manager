@@ -1405,8 +1405,6 @@ class vmmAddHardware(vmmGObjectUI):
         except Exception, e:
             err.show_err((_("Error changing VM configuration: %s") %
                               str(e)))
-            # If we fail, make sure we flush the cache
-            vm.refresh_xml()
             return False
 
         if not vm.is_active():

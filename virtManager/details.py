@@ -2374,8 +2374,8 @@ class vmmDetails(vmmGObjectUI):
         # If the dialog is visible, we want to make sure the XML is always
         # up to date
         try:
-            if self.is_visible() and not self.conn.using_domain_events:
-                self.vm.refresh_xml()
+            if self.is_visible():
+                self.vm.ensure_latest_xml()
         except libvirt.libvirtError, e:
             if util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
                 self.close()

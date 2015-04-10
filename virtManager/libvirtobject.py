@@ -112,7 +112,8 @@ class vmmLibvirtObject(vmmGObject):
 
     def define_name(self, newname):
         oldname = self.get_xmlobj().name
-        self._invalidate_xml()
+
+        self.ensure_latest_xml()
         xmlobj = self._make_xmlobj_to_define()
         if xmlobj.name == newname:
             return
@@ -130,9 +131,7 @@ class vmmLibvirtObject(vmmGObject):
             self._key = oldname
             raise
         finally:
-            self._invalidate_xml()
-
-        self.emit("state-changed")
+            self._force_refresh_xml()
 
 
     #############################################################
@@ -241,8 +240,13 @@ class vmmLibvirtObject(vmmGObject):
                 return
             self.__status = status
 
-            # This will send state-change for us
-            self.refresh_xml(forcesignal=True)
+            # If using events, we don't want to fetch XML here,
+            # since it should already be up to date.
+            if (not self._using_events() or
+                not self._initialized):
+                self._force_refresh_xml(nosignal=True)
+
+            self.idle_emit("state-changed")
         except Exception, e:
             # If we hit an exception here, it's often that the object
             # disappeared, so request the poll loop to be updated
@@ -268,12 +272,35 @@ class vmmLibvirtObject(vmmGObject):
     # Public XML API #
     ##################
 
-    def refresh_xml(self, forcesignal=False):
+    def refresh_xml_from_event_loop(self):
+        """
+        Updates VM XML, because we received an XML event from libvirt's
+        event implementations. That's the only time this should be used.
+        """
+        self._force_refresh_xml(nosignal=True)
+
+        # Even if XML didn't change, send this signal, so details.py
+        # will be refreshed.
+        self.idle_emit("state-changed")
+
+    def ensure_latest_xml(self):
+        """
+        Refresh XML if it isn't up to date, basically if we aren't using
+        events.
+        """
+        if (self._using_events() and
+            self._xmlobj and
+            self._is_xml_valid):
+            return
+        self._force_refresh_xml()
+
+    def _force_refresh_xml(self, nosignal=False):
         """
         Force an xml update. Signal 'state-changed' if domain xml has
         changed since last refresh
 
-        :param forcesignal: Send state-changed unconditionally
+        :param nosignal: If true, don't send state-changed. Used by
+            callers that are going to send it anyways.
         """
         origxml = None
         if self._xmlobj:
@@ -285,7 +312,7 @@ class vmmLibvirtObject(vmmGObject):
             parsexml=active_xml)
         self._is_xml_valid = True
 
-        if forcesignal or origxml != active_xml:
+        if not nosignal and origxml != active_xml:
             self.idle_emit("state-changed")
 
     def get_xmlobj(self, inactive=False, refresh_if_nec=True):
@@ -312,7 +339,7 @@ class vmmLibvirtObject(vmmGObject):
 
         if (self._xmlobj is None or
             (refresh_if_nec and not self._is_xml_valid)):
-            self.refresh_xml()
+            self.ensure_latest_xml()
 
         return self._xmlobj
 
@@ -330,8 +357,11 @@ class vmmLibvirtObject(vmmGObject):
         Mark cached XML as invalid. Subclasses may extend this
         to invalidate any specific caches of their own
         """
-        self._is_xml_valid = False
         self._name = None
+
+        # While for events we do want to clear cached XML values like
+        # _name, the XML is never invalid.
+        self._is_xml_valid = self._using_events()
 
     def _make_xmlobj_to_define(self):
         """
@@ -360,6 +390,12 @@ class vmmLibvirtObject(vmmGObject):
         if origxml != newxml:
             self._define(newxml)
 
-        if not self._using_events():
-            # Make sure we have latest XML
-            self.refresh_xml(forcesignal=True)
+        if self._using_events():
+            return
+
+        # Make sure we have latest XML.
+        self._force_refresh_xml(nosignal=True)
+
+        # We force a signal even if XML didn't change, so the details
+        # window is correctly refreshed.
+        self.idle_emit("state-changed")

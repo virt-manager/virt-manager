@@ -59,7 +59,7 @@ class vmmStorageVolume(vmmLibvirtObject):
         # Deliberately empty
         ignore = stats_update
     def _init_libvirt_state(self):
-        self.refresh_xml()
+        self.ensure_latest_xml()
 
 
     ###########
@@ -179,7 +179,7 @@ class vmmStoragePool(vmmLibvirtObject):
 
         self._backend.refresh(0)
         if skip_xml_refresh:
-            self.refresh_xml()
+            self.ensure_latest_xml()
         self._update_volumes()
         self.idle_emit("refreshed")
         self._last_refresh_time = time.time()

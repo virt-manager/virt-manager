@@ -191,7 +191,7 @@ class vmmDomainSnapshot(vmmLibvirtObject):
     def tick(self, stats_update=True):
         ignore = stats_update
     def _init_libvirt_state(self):
-        self.refresh_xml()
+        self.ensure_latest_xml()
 
 
     ###########
@@ -1977,6 +1977,9 @@ class vmmDomain(vmmLibvirtObject):
 
 
     def tick(self, stats_update=True):
+        # For domains it's pretty important that we are always using
+        # the latest XML, but other objects probably don't want to do
+        # this since it could be a performance hit.
         if not self._using_events():
             self._invalidate_xml()
 
