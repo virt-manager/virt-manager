@@ -71,13 +71,13 @@ class vmmGraphicsDetails(vmmGObjectUI):
         graphics_list = self.widget("graphics-type")
         graphics_model = Gtk.ListStore(str, str)
         graphics_list.set_model(graphics_model)
-        uiutil.set_combo_text_column(graphics_list, 1)
+        uiutil.init_combo_text_column(graphics_list, 1)
         graphics_model.clear()
         graphics_model.append(["spice", _("Spice server")])
         graphics_model.append(["vnc", _("VNC server")])
 
         self.widget("graphics-address").set_model(Gtk.ListStore(str, str))
-        uiutil.set_combo_text_column(self.widget("graphics-address"), 1)
+        uiutil.init_combo_text_column(self.widget("graphics-address"), 1)
 
         model = self.widget("graphics-address").get_model()
         model.clear()
@@ -89,7 +89,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         combo = self.widget("graphics-keymap")
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
 
         model.append(["auto", "Auto"])
         model.append([virtinst.VirtualGraphics.KEYMAP_LOCAL,

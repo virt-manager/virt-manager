@@ -29,7 +29,7 @@ except (ValueError, AttributeError):
     can_set_row_none = False
 
 
-def set_combo_text_column(combo, col):
+def init_combo_text_column(combo, col):
     """
     Set the text column of the passed combo to 'col'. Does the
     right thing whether it's a plain combo or a comboboxentry. Saves
@@ -84,7 +84,7 @@ def get_list_selection(widget, rowindex, check_visible=False):
     return row[rowindex]
 
 
-def set_list_selection(widget, rownum):
+def select_list_row_by_number(widget, rownum):
     """
     Helper to set list selection from the passed row number
     """
@@ -96,7 +96,7 @@ def set_list_selection(widget, rownum):
     selection.select_path(path)
 
 
-def set_row_selection(listwidget, prevkey):
+def select_list_row_by_value(listwidget, prevkey, column=0):
     """
     Set a list or tree selection given the passed key. The key is
     expected to be element 0 in the list rows.
@@ -105,7 +105,7 @@ def set_row_selection(listwidget, prevkey):
     _iter = None
     if prevkey is not None:
         for row in model:
-            if row[0] == prevkey:
+            if row[column] == prevkey:
                 _iter = row.iter
                 break
     if not _iter:

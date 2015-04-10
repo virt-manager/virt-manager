@@ -123,13 +123,13 @@ class vmmCreateNetwork(vmmGObjectUI):
         fw_list = self.widget("net-forward")
         fw_model = Gtk.ListStore(str, str)
         fw_list.set_model(fw_model)
-        uiutil.set_combo_text_column(fw_list, 0)
+        uiutil.init_combo_text_column(fw_list, 0)
 
         # [ label, mode ]
         mode_list = self.widget("net-forward-mode")
         mode_model = Gtk.ListStore(str, str)
         mode_list.set_model(mode_model)
-        uiutil.set_combo_text_column(mode_list, 0)
+        uiutil.init_combo_text_column(mode_list, 0)
 
         mode_model.append([_("NAT"), "nat"])
         mode_model.append([_("Routed"), "route"])

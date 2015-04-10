@@ -166,7 +166,7 @@ class vmmConnect(vmmGObjectUI):
         _add_hv_row(HV_LXC, "lxc", "LXC (Linux Containers)")
         _add_hv_row(HV_BHYVE, "bhyve", "Bhyve")
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
 
         combo = self.widget("transport")
         model = Gtk.ListStore(str)
@@ -174,7 +174,7 @@ class vmmConnect(vmmGObjectUI):
         model.append(["TCP (SASL, Kerberos)"])
         model.append(["SSL/TLS with certificates"])
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 0)
+        uiutil.init_combo_text_column(combo, 0)
 
         # Hostname combo box entry
         hostListModel = Gtk.ListStore(str, str, str)
@@ -202,9 +202,9 @@ class vmmConnect(vmmGObjectUI):
     def set_default_hypervisor(self):
         default = self.default_uri()
         if not default or default.startswith("qemu"):
-            uiutil.set_row_selection(self.widget("hypervisor"), HV_QEMU)
+            uiutil.select_list_row_by_value(self.widget("hypervisor"), HV_QEMU)
         elif default.startswith("xen"):
-            uiutil.set_row_selection(self.widget("hypervisor"), HV_XEN)
+            uiutil.select_list_row_by_value(self.widget("hypervisor"), HV_XEN)
 
     def add_service(self, interface, protocol, name, typ, domain, flags):
         ignore = flags

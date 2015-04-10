@@ -88,7 +88,7 @@ class vmmNetworkList(vmmGObjectUI):
         # [xml value, label]
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
 
         model.append(["bridge", "Bridge"])
         model.append(["vepa", "VEPA"])
@@ -100,7 +100,7 @@ class vmmNetworkList(vmmGObjectUI):
         # [xml value, label]
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
 
         self.conn.connect("net-added", self._repopulate_network_list)
         self.conn.connect("net-removed", self._repopulate_network_list)

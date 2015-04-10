@@ -178,7 +178,7 @@ class vmmCreateInterface(vmmGObjectUI):
     def build_interface_startmode_combo(combo):
         model = Gtk.ListStore(str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 0)
+        uiutil.init_combo_text_column(combo, 0)
 
         model.append(["none"])
         model.append(["onboot"])
@@ -195,7 +195,7 @@ class vmmCreateInterface(vmmGObjectUI):
         type_list = self.widget("interface-type")
         type_model = Gtk.ListStore(str, str)
         type_list.set_model(type_model)
-        uiutil.set_combo_text_column(type_list, 1)
+        uiutil.init_combo_text_column(type_list, 1)
         type_model.append([Interface.INTERFACE_TYPE_BRIDGE,
                            _("Bridge")])
         type_model.append([Interface.INTERFACE_TYPE_BOND,
@@ -255,7 +255,7 @@ class vmmCreateInterface(vmmGObjectUI):
         mode_list = self.widget("bond-mode")
         mode_model = Gtk.ListStore(str, str)
         mode_list.set_model(mode_model)
-        uiutil.set_combo_text_column(mode_list, 0)
+        uiutil.init_combo_text_column(mode_list, 0)
         mode_model.append([_("System default"), None])
         for m in Interface.INTERFACE_BOND_MODES:
             mode_model.append([m, m])
@@ -263,7 +263,7 @@ class vmmCreateInterface(vmmGObjectUI):
         mon_list = self.widget("bond-monitor-mode")
         mon_model = Gtk.ListStore(str, str)
         mon_list.set_model(mon_model)
-        uiutil.set_combo_text_column(mon_list, 0)
+        uiutil.init_combo_text_column(mon_list, 0)
         mon_model.append([_("System default"), None])
         for m in Interface.INTERFACE_BOND_MONITOR_MODES:
             mon_model.append([m, m])
@@ -271,14 +271,14 @@ class vmmCreateInterface(vmmGObjectUI):
         validate_list = self.widget("arp-validate")
         validate_model = Gtk.ListStore(str)
         validate_list.set_model(validate_model)
-        uiutil.set_combo_text_column(validate_list, 0)
+        uiutil.init_combo_text_column(validate_list, 0)
         for m in Interface.INTERFACE_BOND_MONITOR_MODE_ARP_VALIDATE_MODES:
             validate_model.append([m])
 
         carrier_list = self.widget("mii-carrier")
         carrier_model = Gtk.ListStore(str)
         carrier_list.set_model(carrier_model)
-        uiutil.set_combo_text_column(carrier_list, 0)
+        uiutil.init_combo_text_column(carrier_list, 0)
         for m in Interface.INTERFACE_BOND_MONITOR_MODE_MII_CARRIER_TYPES:
             carrier_model.append([m])
 
@@ -286,13 +286,13 @@ class vmmCreateInterface(vmmGObjectUI):
         copy_iface = self.widget("ip-copy-interface-combo")
         copy_model = Gtk.ListStore(str, object, bool)
         copy_iface.set_model(copy_model)
-        uiutil.set_combo_text_column(copy_iface, 0)
+        uiutil.init_combo_text_column(copy_iface, 0)
         copy_iface.add_attribute(txt, "sensitive", 2)
 
         ip_mode = self.widget("ipv4-mode")
         ip_model = Gtk.ListStore(str)
         ip_mode.set_model(ip_model)
-        uiutil.set_combo_text_column(ip_mode, 0)
+        uiutil.init_combo_text_column(ip_mode, 0)
         ip_model.insert(IP_DHCP, ["DHCP"])
         ip_model.insert(IP_STATIC, ["Static"])
         ip_model.insert(IP_NONE, ["No configuration"])
@@ -300,7 +300,7 @@ class vmmCreateInterface(vmmGObjectUI):
         ip_mode = self.widget("ipv6-mode")
         ip_model = Gtk.ListStore(str)
         ip_mode.set_model(ip_model)
-        uiutil.set_combo_text_column(ip_mode, 0)
+        uiutil.init_combo_text_column(ip_mode, 0)
         ip_model.insert(IP_DHCP, ["DHCP"])
         ip_model.insert(IP_STATIC, ["Static"])
         ip_model.insert(IP_NONE, ["No configuration"])

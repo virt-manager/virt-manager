@@ -346,8 +346,8 @@ class vmmHost(vmmGObjectUI):
                 _("Libvirt connection does not support interface management."))
 
         if conn_active:
-            uiutil.set_list_selection(self.widget("net-list"), 0)
-            uiutil.set_list_selection(self.widget("interface-list"), 0)
+            uiutil.select_list_row_by_number(self.widget("net-list"), 0)
+            uiutil.select_list_row_by_number(self.widget("interface-list"), 0)
             return
 
         self.set_net_error_page(_("Connection not active."))
@@ -708,7 +708,7 @@ class vmmHost(vmmGObjectUI):
                           Gtk.IconSize.LARGE_TOOLBAR,
                           bool(net.is_active())])
 
-        uiutil.set_row_selection(net_list,
+        uiutil.select_list_row_by_value(net_list,
             curnet and curnet.get_connkey() or None)
 
 
@@ -959,7 +959,7 @@ class vmmHost(vmmGObjectUI):
                           "network-idle", Gtk.IconSize.LARGE_TOOLBAR,
                           bool(iface.is_active())])
 
-        uiutil.set_row_selection(iface_list,
+        uiutil.select_list_row_by_value(iface_list,
             curiface and curiface.get_connkey() or None)
 
     def populate_interface_children(self):

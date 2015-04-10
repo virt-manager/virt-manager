@@ -236,7 +236,7 @@ class vmmAddHardware(vmmGObjectUI):
         input_list = self.widget("input-type")
         input_model = Gtk.ListStore(str, str, str)
         input_list.set_model(input_model)
-        uiutil.set_combo_text_column(input_list, 0)
+        uiutil.init_combo_text_column(input_list, 0)
 
         # Sound model list
         sound_list = self.widget("sound-model")
@@ -264,7 +264,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Mode name, desc
         char_mode_model = Gtk.ListStore(str, str)
         char_mode.set_model(char_mode_model)
-        uiutil.set_combo_text_column(char_mode, 1)
+        uiutil.init_combo_text_column(char_mode, 1)
         char_mode_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         for t in VirtualSerialDevice.MODES:
             desc = VirtualSerialDevice.pretty_mode(t)
@@ -274,7 +274,7 @@ class vmmAddHardware(vmmGObjectUI):
         lst = self.widget("char-target-type")
         model = Gtk.ListStore(str, str)
         lst.set_model(model)
-        uiutil.set_combo_text_column(lst, 1)
+        uiutil.init_combo_text_column(lst, 1)
         if self.conn.is_qemu():
             model.append(["virtio", "virtio"])
         else:
@@ -284,7 +284,7 @@ class vmmAddHardware(vmmGObjectUI):
         lst = self.widget("char-target-name")
         model = Gtk.ListStore(str)
         lst.set_model(model)
-        uiutil.set_combo_text_column(lst, 0)
+        uiutil.init_combo_text_column(lst, 0)
         for n in VirtualChannelDevice.CHANNEL_NAMES:
             model.append([n])
 
@@ -292,7 +292,7 @@ class vmmAddHardware(vmmGObjectUI):
         lst = self.widget("char-device-type")
         model = Gtk.ListStore(str, str)
         lst.set_model(model)
-        uiutil.set_combo_text_column(lst, 1)
+        uiutil.init_combo_text_column(lst, 1)
 
         # Watchdog widgets
         combo = self.widget("watchdog-model")
@@ -328,11 +328,11 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.widget("controller-type")
         target_model = Gtk.ListStore(str, str)
         combo.set_model(target_model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         combo = self.widget("controller-model")
         target_model = Gtk.ListStore(str, str)
         combo.set_model(target_model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
 
         # Available HW options
         is_local = not self.conn.is_remote()
@@ -515,7 +515,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_video_combo(vm, combo, no_default=None):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         combo.get_model().set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         vmmAddHardware.populate_video_combo(vm, combo, no_default)
@@ -524,7 +524,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_sound_combo(vm, combo, no_default=False):
         model = Gtk.ListStore(str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 0)
+        uiutil.init_combo_text_column(combo, 0)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         stable_defaults = vm.stable_defaults()
@@ -546,7 +546,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 0)
+        uiutil.init_combo_text_column(combo, 0)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         for m in virtinst.VirtualWatchdog.MODELS:
@@ -561,7 +561,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         for m in virtinst.VirtualWatchdog.ACTIONS:
@@ -597,7 +597,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_network_model_combo(vm, combo):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         vmmAddHardware.populate_network_model_combo(vm, combo)
@@ -617,7 +617,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_smartcard_mode_combo(vm, combo):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         vmmAddHardware.populate_smartcard_mode_combo(vm, combo)
@@ -645,7 +645,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_redir_type_combo(vm, combo):
         model = Gtk.ListStore(str, str, bool)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
 
         vmmAddHardware.populate_redir_type_combo(vm, combo)
         combo.set_active(0)
@@ -664,7 +664,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_tpm_type_combo(vm, combo):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         vmmAddHardware.populate_tpm_type_combo(vm, combo)
@@ -683,7 +683,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
 
         combo.set_active(-1)
         for m in virtinst.VirtualDisk.cache_types:
@@ -697,7 +697,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         combo.set_active(-1)
@@ -713,7 +713,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         combo.set_active(-1)
 
@@ -757,7 +757,7 @@ class vmmAddHardware(vmmGObjectUI):
     def populate_disk_format_combo(vm, combo, create):
         model = Gtk.ListStore(str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 0)
+        uiutil.init_combo_text_column(combo, 0)
 
         formats = ["raw", "qcow2", "qed"]
         no_create_formats = []
@@ -829,7 +829,7 @@ class vmmAddHardware(vmmGObjectUI):
                 break
 
         if default_bus:
-            uiutil.set_row_selection(widget, default_bus)
+            uiutil.select_list_row_by_value(widget, default_bus)
         elif len(model) > 0:
             widget.set_active(0)
 
@@ -863,7 +863,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         if len(model) == 0:
             model.append([_("No Devices Available"), None, None, None])
-        uiutil.set_list_selection(devlist, 0)
+        uiutil.select_list_row_by_number(devlist, 0)
 
     def populate_disk_format_combo_wrapper(self, create):
         format_list = self.widget("config-storage-format")
@@ -930,7 +930,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_combo_with_values(self, combo, values, default=None):
         dev_model = Gtk.ListStore(str, str)
         combo.set_model(dev_model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         types = combo.get_model()
@@ -1129,7 +1129,7 @@ class vmmAddHardware(vmmGObjectUI):
     ################
 
     def set_hw_selection(self, page):
-        uiutil.set_list_selection(self.widget("hw-list"), page)
+        uiutil.select_list_row_by_number(self.widget("hw-list"), page)
 
     def get_hw_selection(self):
         return uiutil.get_list_selection(self.widget("hw-list"), None)
@@ -1312,7 +1312,7 @@ class vmmAddHardware(vmmGObjectUI):
         elif (text == VirtualChannelDevice.CHANNEL_NAME_QEMUGA or
               text == VirtualChannelDevice.CHANNEL_NAME_LIBGUESTFS):
             settype = "unix"
-        uiutil.set_row_selection(self.widget("char-device-type"), settype)
+        uiutil.select_list_row_by_value(self.widget("char-device-type"), settype)
 
     def change_char_device_type(self, src):
         devtype = uiutil.get_list_selection(src, 0)

@@ -243,7 +243,7 @@ class vmmCreate(vmmGObjectUI):
         conn_list = self.widget("create-conn")
         conn_model = Gtk.ListStore(str, str)
         conn_list.set_model(conn_model)
-        uiutil.set_combo_text_column(conn_list, 1)
+        uiutil.init_combo_text_column(conn_list, 1)
 
         # ISO media list
         iso_list = self.widget("install-local-box")
@@ -275,13 +275,13 @@ class vmmCreate(vmmGObjectUI):
         os_type_list = self.widget("install-os-type")
         os_type_model = Gtk.ListStore(str, str, bool, bool)
         os_type_list.set_model(os_type_model)
-        uiutil.set_combo_text_column(os_type_list, 1)
+        uiutil.init_combo_text_column(os_type_list, 1)
         os_type_list.set_row_separator_func(sep_func, os_type_list)
 
         os_variant_list = self.widget("install-os-version")
         os_variant_model = Gtk.ListStore(str, str, bool, bool)
         os_variant_list.set_model(os_variant_model)
-        uiutil.set_combo_text_column(os_variant_list, 1)
+        uiutil.init_combo_text_column(os_variant_list, 1)
         os_variant_list.set_row_separator_func(sep_func, os_variant_list)
 
         entry = self.widget("install-os-version-entry")
@@ -296,19 +296,19 @@ class vmmCreate(vmmGObjectUI):
         archList = self.widget("config-arch")
         archModel = Gtk.ListStore(str, str)
         archList.set_model(archModel)
-        uiutil.set_combo_text_column(archList, 1)
+        uiutil.init_combo_text_column(archList, 1)
         archList.set_row_separator_func(
             lambda m, i, ignore: m[i][0] is None, None)
 
         hyperList = self.widget("config-hv")
         hyperModel = Gtk.ListStore(str, str)
         hyperList.set_model(hyperModel)
-        uiutil.set_combo_text_column(hyperList, 0)
+        uiutil.init_combo_text_column(hyperList, 0)
 
         lst = self.widget("config-machine")
         model = Gtk.ListStore(str)
         lst.set_model(model)
-        uiutil.set_combo_text_column(lst, 0)
+        uiutil.init_combo_text_column(lst, 0)
         lst.set_row_separator_func(lambda m, i, ignore: m[i][0] is None, None)
 
     def reset_state(self, urihint=None):

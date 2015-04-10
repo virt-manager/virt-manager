@@ -123,7 +123,7 @@ class vmmCreateVolume(vmmGObjectUI):
         format_list = self.widget("vol-format")
         format_model = Gtk.ListStore(str, str)
         format_list.set_model(format_model)
-        uiutil.set_combo_text_column(format_list, 1)
+        uiutil.init_combo_text_column(format_list, 1)
 
 
     def _make_stub_vol(self):

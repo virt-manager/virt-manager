@@ -780,7 +780,7 @@ class vmmDetails(vmmGObjectUI):
         machtype_combo = self.widget("machine-type")
         machtype_model = Gtk.ListStore(str)
         machtype_combo.set_model(machtype_model)
-        uiutil.set_combo_text_column(machtype_combo, 0)
+        uiutil.init_combo_text_column(machtype_combo, 0)
         machtype_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         machines = []
@@ -1037,7 +1037,7 @@ class vmmDetails(vmmGObjectUI):
         combo = self.widget("controller-model")
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         combo.set_active(-1)
 
 
@@ -1099,7 +1099,7 @@ class vmmDetails(vmmGObjectUI):
     def set_hw_selection(self, page, disable_apply=True):
         if disable_apply:
             self.disable_apply()
-        uiutil.set_list_selection(self.widget("hw-list"), page)
+        uiutil.select_list_row_by_number(self.widget("hw-list"), page)
 
     def get_hw_row(self):
         return uiutil.get_list_selection(self.widget("hw-list"), None)
@@ -2644,7 +2644,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
+        uiutil.init_combo_text_column(combo, 1)
         model.append([None, _("Hypervisor default")])
         model.append(["filtered", "filtered"])
         model.append(["unfiltered", "unfiltered"])
