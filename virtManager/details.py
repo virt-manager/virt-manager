@@ -3024,7 +3024,7 @@ class vmmDetails(vmmGObjectUI):
             devtype = 'usb_device'
 
         nodedev = None
-        for trydev in self.vm.conn.get_nodedevs(devtype, None):
+        for trydev in self.vm.conn.filter_nodedevs(devtype, None):
             if trydev.xmlobj.compare_to_hostdev(hostdev):
                 nodedev = trydev.xmlobj
 

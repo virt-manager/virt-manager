@@ -501,7 +501,7 @@ class vmmCreateInterface(vmmGObjectUI):
         self.widget("interface-list-text").set_text(msg)
 
         nodedevs = {}
-        for phys in self.conn.get_nodedevs("net"):
+        for phys in self.conn.filter_nodedevs("net"):
             nodedevs[phys.xmlobj.interface] = [None,
                 False, False, phys.xmlobj.interface,
                 "ethernet", False, True, None,

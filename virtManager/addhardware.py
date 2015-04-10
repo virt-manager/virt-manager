@@ -849,9 +849,9 @@ class vmmAddHardware(vmmGObjectUI):
         subdevs = []
 
         if subtype:
-            subdevs = self.conn.get_nodedevs(subtype, subcap)
+            subdevs = self.conn.filter_nodedevs(subtype, subcap)
 
-        devs = self.conn.get_nodedevs(devtype, devcap)
+        devs = self.conn.filter_nodedevs(devtype, devcap)
         for dev in devs:
             prettyname = dev.xmlobj.pretty_name()
 
@@ -1764,7 +1764,7 @@ class vmmAddHardware(vmmGObjectUI):
         if devtype == "usb_device":
             vendor = nodedev.vendor_id
             product = nodedev.product_id
-            count = self.conn.get_nodedevs_number(devtype, vendor, product)
+            count = self.conn.get_nodedev_count(devtype, vendor, product)
             if not count:
                 raise RuntimeError(_("Could not find USB device "
                                      "(vendorId: %s, productId: %s) "

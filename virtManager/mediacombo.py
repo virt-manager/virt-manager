@@ -133,7 +133,7 @@ class vmmMediaCombo(vmmGObjectUI):
         model = widget.get_model()
         model.clear()
 
-        for nodedev in self.conn.get_nodedevs(devtype="storage"):
+        for nodedev in self.conn.filter_nodedevs(devtype="storage"):
             if not (nodedev.xmlobj.device_type == "storage" and
                     nodedev.xmlobj.drive_type in ["cdrom", "floppy"]):
                 continue

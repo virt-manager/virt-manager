@@ -546,9 +546,17 @@ class vmmConnection(vmmGObject):
 
     def get_nodedev(self, connkey):
         return self._nodedevs[connkey]
-    def get_nodedevs(self, devtype=None, devcap=None):
+    def get_nodedevs(self):
+        return self._nodedevs.values()
+
+
+    ############################
+    # nodedev helper functions #
+    ############################
+
+    def filter_nodedevs(self, devtype=None, devcap=None):
         retdevs = []
-        for dev in self._nodedevs.values():
+        for dev in self.get_nodedevs():
             xmlobj = dev.get_xmlobj()
             if devtype and xmlobj.device_type != devtype:
                 continue
@@ -571,9 +579,9 @@ class vmmConnection(vmmGObject):
 
         return retdevs
 
-    def get_nodedevs_number(self, devtype, vendor, product):
+    def get_nodedev_count(self, devtype, vendor, product):
         count = 0
-        devs = self.get_nodedevs(devtype)
+        devs = self.filter_nodedevs(devtype)
 
         for dev in devs:
             if (vendor == dev.xmlobj.vendor_id and

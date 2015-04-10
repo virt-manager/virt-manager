@@ -202,7 +202,7 @@ class vmmCreatePool(vmmGObjectUI):
             use_list.set_active(0)
 
     def list_scsi_adapters(self):
-        scsi_hosts = self.conn.get_nodedevs("scsi_host")
+        scsi_hosts = self.conn.filter_nodedevs("scsi_host")
         host_list = [dev.xmlobj.host for dev in scsi_hosts]
 
         clean_list = []
@@ -218,7 +218,7 @@ class vmmCreatePool(vmmGObjectUI):
         return clean_list
 
     def list_disk_devs(self):
-        devs = self.conn.get_nodedevs("storage")
+        devs = self.conn.filter_nodedevs("storage")
         devlist = []
         for dev in devs:
             if dev.xmlobj.drive_type != "disk" or not dev.xmlobj.block:

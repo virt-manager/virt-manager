@@ -420,7 +420,7 @@ class vmmDomain(vmmLibvirtObject):
             device = hostdev.device
 
             if vendor and product:
-                count = self.conn.get_nodedevs_number("usb_device",
+                count = self.conn.get_nodedev_count("usb_device",
                                                       vendor,
                                                       product)
                 if count > 1 and not (bus and device):
