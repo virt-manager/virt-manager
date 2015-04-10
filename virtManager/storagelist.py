@@ -307,10 +307,8 @@ class vmmStorageList(vmmGObjectUI):
 
     def _reset_pool_state(self):
         self.widget("pool-details").set_sensitive(False)
-        self.widget("pool-name").set_text("")
         self.widget("pool-name-entry").set_text("")
-        self.widget("pool-sizes").set_markup("""<span size="large"> </span>""")
-        self.widget("pool-type").set_text("")
+        self.widget("pool-sizes").set_markup("")
         self.widget("pool-location").set_text("")
         self.widget("pool-state-icon").set_from_icon_name(
             ICON_SHUTOFF, Gtk.IconSize.BUTTON)
@@ -335,14 +333,11 @@ class vmmStorageList(vmmGObjectUI):
 
         # Set pool details state
         self.widget("pool-details").set_sensitive(True)
-        self.widget("pool-name").set_markup("<b>%s:</b>" % pool.get_name())
         self.widget("pool-name-entry").set_text(pool.get_name())
         self.widget("pool-name-entry").set_editable(not active)
         self.widget("pool-sizes").set_markup(
-                """<span size="large">%s Free</span> / <i>%s In Use</i>""" %
+                """%s Free / <i>%s In Use</i>""" %
                 (pool.get_pretty_available(), pool.get_pretty_allocation()))
-        self.widget("pool-type").set_text(
-                StoragePool.get_pool_type_desc(pool.get_type()))
         self.widget("pool-location").set_text(
                 pool.get_target_path())
         self.widget("pool-state-icon").set_from_icon_name(

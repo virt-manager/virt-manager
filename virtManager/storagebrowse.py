@@ -108,8 +108,6 @@ class vmmStorageBrowser(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.storagelist.widget("pool-name-entry"), False)
         uiutil.set_grid_row_visible(
-            self.storagelist.widget("pool-type"), False)
-        uiutil.set_grid_row_visible(
             self.storagelist.widget("pool-state-box"), False)
         self.storagelist.widget("browse-local").set_visible(True)
         self.storagelist.widget("browse-cancel").set_visible(True)
