@@ -68,6 +68,9 @@ class vmmNetwork(vmmLibvirtObject):
         ignore = stats_update
         self._refresh_status()
 
+    def _init_libvirt_state(self):
+        self.tick()
+
 
     ###########
     # Actions #

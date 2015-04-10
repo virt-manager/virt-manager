@@ -56,7 +56,10 @@ class vmmStorageVolume(vmmLibvirtObject):
         return self._STATUS_ACTIVE
 
     def tick(self, stats_update=True):
+        # Deliberately empty
         ignore = stats_update
+    def _init_libvirt_state(self):
+        self.refresh_xml()
 
 
     ###########
@@ -141,6 +144,12 @@ class vmmStoragePool(vmmLibvirtObject):
         ignore = stats_update
         self._refresh_status()
 
+    def _init_libvirt_state(self):
+        self.tick()
+        self.refresh(skip_xml_refresh=True)
+        for vol in self.get_volumes():
+            vol.init_libvirt_state()
+
 
     ###########
     # Actions #
@@ -160,12 +169,17 @@ class vmmStoragePool(vmmLibvirtObject):
         self._backend.undefine()
         self._backend = None
 
-    def refresh(self):
+    def refresh(self, skip_xml_refresh=False):
+        """
+        :param skip_xml_refresh: Only used by init_libvirt_state to avoid
+            double XML updating
+        """
         if not self.is_active():
             return
 
         self._backend.refresh(0)
-        self.refresh_xml()
+        if skip_xml_refresh:
+            self.refresh_xml()
         self._update_volumes()
         self.idle_emit("refreshed")
         self._last_refresh_time = time.time()

@@ -28,8 +28,7 @@ from .baseclass import vmmGObject
 class vmmLibvirtObject(vmmGObject):
     __gsignals__ = {
         "state-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "started": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "stopped": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "initialized": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
     _STATUS_ACTIVE = 1
@@ -42,7 +41,7 @@ class vmmLibvirtObject(vmmGObject):
         self._key = key
         self._parseclass = parseclass
 
-        self._initial_status_update = False
+        self._initialized = False
         self.__status = self._STATUS_ACTIVE
         self._support_isactive = None
 
@@ -54,11 +53,10 @@ class vmmLibvirtObject(vmmGObject):
         self._inactive_xml_flags = 0
         self._active_xml_flags = 0
 
-        # Cache object name
+        # Cache object name. We may need to do this even
+        # before init_libvirt_state since it might be needed ahead of time.
         self._name = None
         self.get_name()
-
-        self._refresh_status()
 
     @staticmethod
     def log_redefine_xml_diff(obj, origxml, newxml):
@@ -177,6 +175,23 @@ class vmmLibvirtObject(vmmGObject):
     def tick(self, stats_update=True):
         raise NotImplementedError()
 
+    def _init_libvirt_state(self):
+        raise NotImplementedError()
+
+    def init_libvirt_state(self):
+        """
+        Function called by vmmConnection to populate initial state when
+        a new object appears.
+        """
+        if self._initialized:
+            return
+
+        try:
+            self._init_libvirt_state()
+        finally:
+            self._initialized = True
+            self.idle_emit("initialized")
+
 
     ###################
     # Status handling #
@@ -215,7 +230,7 @@ class vmmLibvirtObject(vmmGObject):
         """
         if (self._using_events() and
             skip_if_have_events and
-            self._initial_status_update):
+            self._initialized):
             return
 
         try:
@@ -237,8 +252,6 @@ class vmmLibvirtObject(vmmGObject):
                 kwargs = {"force": True, poll_param: True}
                 logging.debug("Scheduling priority tick with: %s", kwargs)
                 self.conn.schedule_priority_tick(**kwargs)
-        finally:
-            self._initial_status_update = True
 
     def _backend_get_active(self):
         if self._support_isactive is None:

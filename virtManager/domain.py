@@ -170,8 +170,6 @@ class vmmDomainSnapshot(vmmLibvirtObject):
         vmmLibvirtObject.__init__(self, conn, backend, backend.getName(),
                                   DomainSnapshot)
 
-        self.refresh_xml()
-
 
     ##########################
     # Required class methods #
@@ -192,6 +190,8 @@ class vmmDomainSnapshot(vmmLibvirtObject):
 
     def tick(self, stats_update=True):
         ignore = stats_update
+    def _init_libvirt_state(self):
+        self.refresh_xml()
 
 
     ###########
@@ -344,20 +344,12 @@ class vmmDomain(vmmLibvirtObject):
 
         self.inspection = vmmInspectionData()
 
-        if isinstance(self._backend, Guest):
-            return
-
-        self._libvirt_init()
-
     def _cleanup(self):
         for snap in self._snapshot_list or []:
             snap.cleanup()
         self._snapshot_list = None
 
-    def _libvirt_init(self):
-        """
-        Initialization to do if backed by a libvirt virDomain
-        """
+    def _init_libvirt_state(self):
         self.managedsave_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_MANAGED_SAVE, self._backend)
         self.remote_console_supported = self.conn.check_support(
@@ -374,15 +366,15 @@ class vmmDomain(vmmLibvirtObject):
         (self._inactive_xml_flags,
          self._active_xml_flags) = self.conn.get_dom_flags(self._backend)
 
+        # Prime caches
+        self.tick()
+        self.has_managed_save()
+        self.snapshots_supported()
+
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
         self.toggle_sample_mem_stats()
         self.toggle_sample_cpu_stats()
-
-        # Prime caches
-        self.refresh_xml()
-        self.has_managed_save()
-        self.snapshots_supported()
 
         # Hook up listeners that need to be cleaned up
         self.add_gsettings_handle(
@@ -541,7 +533,6 @@ class vmmDomain(vmmLibvirtObject):
     def _invalidate_xml(self):
         vmmLibvirtObject._invalidate_xml(self)
         self._id = None
-        self._has_managed_save = None
         self._status_reason = None
         self._has_managed_save = None
 
@@ -1092,7 +1083,9 @@ class vmmDomain(vmmLibvirtObject):
         if self._snapshot_list is None:
             newlist = []
             for rawsnap in self._backend.listAllSnapshots():
-                newlist.append(vmmDomainSnapshot(self.conn, rawsnap))
+                obj = vmmDomainSnapshot(self.conn, rawsnap)
+                obj.init_libvirt_state()
+                newlist.append(obj)
             self._snapshot_list = newlist
         return self._snapshot_list[:]
 

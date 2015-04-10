@@ -27,9 +27,6 @@ class vmmInterface(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Interface)
 
-        (self._inactive_xml_flags,
-         self._active_xml_flags) = self.conn.get_interface_flags(self._backend)
-
 
     ##########################
     # Required class methods #
@@ -54,6 +51,12 @@ class vmmInterface(vmmLibvirtObject):
     def tick(self, stats_update=True):
         ignore = stats_update
         self._refresh_status()
+
+    def _init_libvirt_state(self):
+        (self._inactive_xml_flags,
+         self._active_xml_flags) = self.conn.get_interface_flags(self._backend)
+
+        self.tick()
 
 
     #####################
