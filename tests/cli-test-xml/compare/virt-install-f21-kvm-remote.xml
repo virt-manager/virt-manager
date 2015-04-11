@@ -1,8 +1,8 @@
 <domain type="kvm">
-  <name>fedora</name>
+  <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
-  <memory>524288</memory>
-  <currentMemory>524288</currentMemory>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
     <type arch="x86_64">hvm</type>
@@ -27,13 +27,9 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu" type="raw"/>
-      <source file="/var/lib/libvirt/images/fedora.raw"/>
-      <target dev="sda" bus="scsi"/>
-    </disk>
-    <disk type="block" device="cdrom">
-      <target dev="hda" bus="ide"/>
-      <readonly/>
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>
     <controller type="usb" index="0" model="ich9-uhci1">
@@ -48,12 +44,15 @@
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
     </interface>
-    <input type="mouse" bus="ps2"/>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
-      <image compression="off"/>
-    </graphics>
+    <input type="tablet" bus="usb"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
     <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
@@ -65,6 +64,3 @@
     <redirdev bus="usb" type="spicevmc"/>
   </devices>
 </domain>
-
-
-Running /usr/bin/qemu-img convert -O raw fedora.vmdk /var/lib/libvirt/images/fedora.raw

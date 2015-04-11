@@ -1022,10 +1022,7 @@ class Guest(XMLBuilder):
                 sound.model = default
 
     def _set_graphics_defaults(self):
-        for gfx in self.get_devices("graphics"):
-            if gfx.type != "default":
-                continue
-
+        def _set_type(gfx):
             gtype = self.default_graphics_type
             logging.debug("Using default_graphics=%s", gtype)
             if (gtype == "spice" and not
@@ -1034,7 +1031,21 @@ class Guest(XMLBuilder):
                 logging.debug("spice requested but HV doesn't support it. "
                               "Using vnc.")
                 gtype = "vnc"
+
             gfx.type = gtype
+
+        for dev in self.get_devices("graphics"):
+            if dev.type == "default":
+                _set_type(dev)
+
+            if (dev.type == "spice" and
+                not self.conn.is_remote() and
+                self.conn.check_support(
+                    self.conn.SUPPORT_CONN_SPICE_COMPRESSION)):
+                logging.debug("Local connection, disabling spice image "
+                    "compression.")
+                if dev.image_compression is None:
+                    dev.image_compression = "off"
 
     def _add_spice_channels(self):
         if self.skip_default_channel:

@@ -47,7 +47,9 @@
       <model type="virtio"/>
     </interface>
     <input type="tablet" bus="usb"/>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
     <video>
       <model type="qxl"/>
     </video>
@@ -100,7 +102,9 @@
       <model type="virtio"/>
     </interface>
     <input type="tablet" bus="usb"/>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
     <video>
       <model type="qxl"/>
     </video>

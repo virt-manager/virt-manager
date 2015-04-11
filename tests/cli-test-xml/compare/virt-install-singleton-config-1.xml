@@ -45,7 +45,9 @@
       <master startport="4"/>
     </controller>
     <input type="tablet" bus="usb"/>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
     <video>
       <model type="vga"/>
     </video>
