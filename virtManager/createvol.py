@@ -130,14 +130,18 @@ class vmmCreateVolume(vmmGObjectUI):
         self.vol = StorageVolume(self.conn.get_backend())
         self.vol.pool = self.parent_pool.get_backend()
 
-    def _can_alloc(self):
-        if self.parent_pool.get_type() == "logical":
-            # Sparse LVM volumes don't auto grow, so alloc=0 is useless
-            return False
+    def _can_only_sparse(self):
         if self.get_config_format() == "qcow2":
-            return False
+            return True
         if (self.widget("backing-store").is_visible() and
             self.widget("backing-store").get_text()):
+            return True
+        return False
+    def _can_alloc(self):
+        if self._can_only_sparse():
+            return False
+        if self.parent_pool.get_type() == "logical":
+            # Sparse LVM volumes don't auto grow, so alloc=0 is useless
             return False
         return True
     def _show_alloc(self, *args, **kwargs):
@@ -189,8 +193,7 @@ class vmmCreateVolume(vmmGObjectUI):
         self.widget("vol-allocation").set_range(0,
             int(self.parent_pool.get_available() / 1024 / 1024 / 1024))
         self.widget("vol-allocation").set_value(alloc)
-        self.widget("vol-capacity").set_range(0.1,
-            int(self.parent_pool.get_available() / 1024 / 1024 / 1024))
+        self.widget("vol-capacity").set_range(0.1, 1000000)
         self.widget("vol-capacity").set_value(default_cap)
 
         self.widget("vol-parent-name").set_markup(
@@ -319,6 +322,8 @@ class vmmCreateVolume(vmmGObjectUI):
         backing = self.widget("backing-store").get_text()
         if not self.widget("vol-allocation").get_visible():
             alloc = cap
+            if self._can_only_sparse():
+                alloc = 0
 
         try:
             self._make_stub_vol()
