@@ -328,6 +328,14 @@ class vmmEngine(vmmGObject):
                                         stats_update=True, pollvm=True)
         return 1
 
+    def _handle_tick_error(self, msg, details):
+        if self.windows <= 0:
+            # This means the systray icon is running. Don't raise an error
+            # here to avoid spamming dialogs out of nowhere.
+            logging.debug(msg + "\n\n" + details)
+            return
+        self.err.show_err(msg, details=details)
+
     def _handle_tick_queue(self):
         while True:
             ignore1, ignore2, conn, kwargs = self._tick_queue.get()
@@ -337,8 +345,7 @@ class vmmEngine(vmmGObject):
                 tb = "".join(traceback.format_exc())
                 error_msg = (_("Error polling connection '%s': %s")
                     % (conn.get_uri(), e))
-                self.idle_add(lambda: self.err.show_err(error_msg,
-                    details=tb))
+                self.idle_add(self._handle_tick_error, error_msg, tb)
 
             self._tick_queue.task_done()
         return 1
