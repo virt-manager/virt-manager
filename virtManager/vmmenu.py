@@ -93,6 +93,14 @@ class VMShutdownMenu(_VMMenu):
             if name in statemap:
                 child.set_sensitive(statemap[name])
 
+            if name == "reset":
+                child.set_tooltip_text(None)
+                if vm and not vm.conn.check_support(
+                    vm.conn.SUPPORT_CONN_DOMAIN_RESET):
+                    child.set_tooltip_text(_("Hypervisor does not support "
+                        "domain reset."))
+                    child.set_sensitive(False)
+
 
 class VMActionMenu(_VMMenu):
     def _init_state(self):
