@@ -721,10 +721,11 @@ class vmmConnection(vmmGObject):
         if not obj:
             return
 
-        self.idle_add(obj.refresh_xml_from_event_loop)
+        self.idle_add(obj.refresh_from_event_loop)
 
     def _domain_lifecycle_event(self, conn, domain, event, reason, userdata):
         ignore = conn
+        ignore = event
         ignore = reason
         ignore = userdata
         obj = self.get_vm(domain.name())
@@ -732,24 +733,19 @@ class vmmConnection(vmmGObject):
         if obj:
             # If the domain disappeared, this will catch it and trigger
             # a domain list refresh
-            self.idle_add(obj.refresh_status_from_event_loop)
-
-            if event == libvirt.VIR_DOMAIN_EVENT_DEFINED:
-                self.idle_add(obj.refresh_xml_from_event_loop)
+            self.idle_add(obj.refresh_from_event_loop)
         else:
             self.schedule_priority_tick(pollvm=True, force=True)
 
     def _network_lifecycle_event(self, conn, network, event, reason, userdata):
         ignore = conn
+        ignore = event
         ignore = reason
         ignore = userdata
         obj = self.get_net(network.name())
 
         if obj:
-            self.idle_add(obj.refresh_status_from_event_loop)
-
-            if event == getattr(libvirt, "VIR_NETWORK_EVENT_DEFINED", 0):
-                self.idle_add(obj.refresh_xml_from_event_loop)
+            self.idle_add(obj.refresh_from_event_loop)
         else:
             self.schedule_priority_tick(pollnet=True, force=True)
 

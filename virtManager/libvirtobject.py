@@ -208,27 +208,16 @@ class vmmLibvirtObject(vmmGObject):
             return "Active"
         return "Inactive"
 
-    def refresh_status_from_event_loop(self):
-        """
-        Updates VM status, because we received a status event from libvirt's
-        event implementations. That's the only time this should be used.
-        """
-        return self._refresh_status(skip_if_have_events=False)
-
-    def _refresh_status(self, skip_if_have_events=True, newstatus=None):
+    def _refresh_status(self, newstatus=None):
         """
         Grab the object status/active state from libvirt, and if the
         status has changed, update the XML cache. Typically called from
         object tick functions for manually updating the object state.
 
-        :param skip_if_have_events: If this object is served by libvirt
-            events, we want this to be a no-op for most usages, like
-            from tick(), so don't do anything.
         :param newstatus: Used by vmmDomain as a small optimization to
             avoid polling info() twice
         """
         if (self._using_events() and
-            skip_if_have_events and
             self.__status is not None):
             return
 
@@ -267,15 +256,18 @@ class vmmLibvirtObject(vmmGObject):
     # Public XML API #
     ##################
 
-    def refresh_xml_from_event_loop(self):
+    def refresh_from_event_loop(self):
         """
-        Updates VM XML, because we received an XML event from libvirt's
-        event implementations. That's the only time this should be used.
+        Updates the VM status and XML, because we received an event from
+        libvirt's event implementations. That's the only time this should
+        be used.
+
+        We refresh status and XML because they are tied together in subtle
+        ways, like runtime XML changing when a VM is started.
         """
         self._force_refresh_xml(nosignal=True)
-
-        # Even if XML didn't change, send this signal, so details.py
-        # will be refreshed.
+        self.__status = None
+        self._refresh_status()
         self.idle_emit("state-changed")
 
     def ensure_latest_xml(self, nosignal=False):
