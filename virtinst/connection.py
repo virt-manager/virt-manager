@@ -363,14 +363,12 @@ class VirtualConnection(object):
 
     def get_uri_hostname(self):
         return self._urisplits.hostname or "localhost"
-
-    def get_uri_host_port(self):
-        return self.get_uri_hostname(), self._urisplits.port
-
+    def get_uri_port(self):
+        return self._urisplits.port
+    def get_uri_username(self):
+        return self._urisplits.username
     def get_uri_transport(self):
-        if self._urisplits.transport:
-            return [self._urisplits.transport, self._urisplits.username]
-        return [None, None]
+        return self._urisplits.transport
 
     def get_uri_driver(self):
         return self._urisplits.scheme

@@ -320,10 +320,13 @@ class vmmConnection(vmmGObject):
         except:
             return self.get_uri_hostname()
 
+    get_uri_username = property(lambda s:
+        getattr(s, "_backend").get_uri_username)
     get_uri_hostname = property(lambda s:
-                                getattr(s, "_backend").get_uri_hostname)
-    get_transport = property(lambda s:
-                             getattr(s, "_backend").get_uri_transport)
+        getattr(s, "_backend").get_uri_hostname)
+    get_uri_transport = property(lambda s:
+        getattr(s, "_backend").get_uri_transport)
+    get_uri_port = property(lambda s: getattr(s, "_backend").get_uri_port)
     get_driver = property(lambda s: getattr(s, "_backend").get_uri_driver)
     is_container = property(lambda s: getattr(s, "_backend").is_container)
     is_lxc = property(lambda s: getattr(s, "_backend").is_lxc)
@@ -887,7 +890,7 @@ class vmmConnection(vmmGObject):
 
     def _do_creds_password(self, creds):
         try:
-            return connectauth.creds_dialog(creds)
+            return connectauth.creds_dialog(self, creds)
         except:
             logging.debug("Launching creds dialog failed", exc_info=True)
             return -1

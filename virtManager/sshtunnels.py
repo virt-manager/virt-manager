@@ -38,10 +38,11 @@ class ConnectionInfo(object):
         self.gaddr      = gdev.listen or "127.0.0.1"
         self.gtlsport   = gdev.tlsPort or None
 
-        self.transport, self.connuser = conn.get_transport()
+        self.transport = conn.get_uri_transport()
+        self.connuser = conn.get_uri_username()
 
-        (self._connhost,
-         self._connport) = conn.get_backend().get_uri_host_port()
+        self._connhost = conn.get_uri_hostname()
+        self._connport = conn.get_uri_port()
         if self._connhost == "localhost":
             self._connhost = "127.0.0.1"
 

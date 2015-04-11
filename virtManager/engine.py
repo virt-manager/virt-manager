@@ -563,12 +563,12 @@ class vmmEngine(vmmGObject):
 
         if conn.is_remote():
             logging.debug("connect_error: conn transport=%s",
-                conn.get_transport())
+                conn.get_uri_transport())
             if re.search(r"nc: .* -- 'U'", tb):
                 hint += _("The remote host requires a version of netcat/nc\n"
                           "which supports the -U option.")
                 show_errmsg = False
-            elif (conn.get_transport()[0] == "ssh" and
+            elif (conn.get_uri_transport() == "ssh" and
                   re.search(r"ssh-askpass", tb)):
 
                 if self.config.askpass_package:
