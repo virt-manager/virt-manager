@@ -300,30 +300,23 @@ class vmmConnection(vmmGObject):
         if self.check_support(self._backend.SUPPORT_CONN_GETHOSTNAME):
             return self._backend.getHostname()
 
-        uri_hostname = self.get_uri_hostname()
+        uri_hostname = self.get_uri_hostname() or "localhost"
         if self.is_remote() and uri_hostname.lower() != "localhost":
             return uri_hostname
 
         # This can throw an exception, so beware when calling!
         return socket.gethostbyaddr(socket.gethostname())[0]
 
-    def get_short_hostname(self):
-        hostname = self.get_hostname()
-        offset = hostname.find(".")
-        if offset > 0 and not hostname[0].isdigit():
-            return hostname[0:offset]
-        return hostname
-
     def get_hostname(self):
         try:
             return self.get_qualified_hostname()
         except:
-            return self.get_uri_hostname()
+            return self.get_uri_hostname() or "localhost"
 
-    get_uri_username = property(lambda s:
-        getattr(s, "_backend").get_uri_username)
     get_uri_hostname = property(lambda s:
         getattr(s, "_backend").get_uri_hostname)
+    get_uri_username = property(lambda s:
+        getattr(s, "_backend").get_uri_username)
     get_uri_transport = property(lambda s:
         getattr(s, "_backend").get_uri_transport)
     get_uri_port = property(lambda s: getattr(s, "_backend").get_uri_port)
@@ -370,28 +363,13 @@ class vmmConnection(vmmGObject):
     # Connection pretty print routines #
     ####################################
 
-    def get_pretty_desc(self, shorthost=True, show_transport=False,
-        show_user=False, show_kvm=False):
+    def get_pretty_desc(self):
         """
-        @show_kvm: Show hv as QEMU/KVM. Only works if connection is
-            active though
+        Return a pretty label for use in the manager view, and various
+        connection lists.
         """
-        uriinfo = virtinst.URISplit(self.get_uri())
-
-        rest = ""
-        if uriinfo.hostname:
-            hostname = uriinfo.hostname
-            if show_user and uriinfo.username:
-                hostname = uriinfo.username + "@" + hostname
-            if uriinfo.port:
-                hostname += ":" + uriinfo.port
-
-            if shorthost and not uriinfo.host_is_ipv4_string:
-                rest = hostname.split(".")[0]
-            else:
-                rest = hostname
-        else:
-            rest = "localhost"
+        if self._backend.fake_name():
+            return self._backend.fake_name()
 
         pretty_map = {
             "esx"       : "ESX",
@@ -400,7 +378,7 @@ class vmmConnection(vmmGObject):
             "lxc"       : "LXC",
             "openvz"    : "OpenVZ",
             "phyp"      : "phyp",
-            "qemu"      : "QEMU",
+            "qemu"      : "QEMU/KVM",
             "test"      : "test",
             "uml"       : "UML",
             "vbox"      : "VBox",
@@ -409,26 +387,23 @@ class vmmConnection(vmmGObject):
             "xenapi"    : "XenAPI",
         }
 
-        hv = uriinfo.scheme
-        if hv in pretty_map:
-            hv = pretty_map[hv]
+        hv = pretty_map.get(self.get_driver(), self.get_driver())
+        hostname = self.get_uri_hostname()
+        path = self.get_backend().get_uri_path()
+        is_session = self.get_backend().is_session_uri()
 
-        if hv == "QEMU" and show_kvm and self.caps.is_kvm_available():
-            hv += "/KVM"
+        ret = hv
 
-        if show_transport and uriinfo.transport:
-            hv += "+" + uriinfo.transport
+        if is_session:
+            ret += " Usermode"
+        elif path != "/system":
+            # Used by test URIs to report what XML file they are using
+            ret += " %s" % os.path.basename(path)
 
-        if uriinfo.path and uriinfo.path != "/system" and uriinfo.path != "/":
-            if uriinfo.path == "/session":
-                hv += " Usermode"
-            else:
-                hv += " %s" % os.path.basename(uriinfo.path)
+        if hostname:
+            ret += " %s" % hostname
 
-        if self._backend.fake_name():
-            hv = self._backend.fake_name()
-
-        return "%s (%s)" % (rest, hv)
+        return ret
 
 
     #######################

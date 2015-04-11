@@ -25,6 +25,7 @@ import time
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Pango
 
 import virtinst
 from virtinst import util
@@ -243,7 +244,8 @@ class vmmCreate(vmmGObjectUI):
         conn_list = self.widget("create-conn")
         conn_model = Gtk.ListStore(str, str)
         conn_list.set_model(conn_model)
-        uiutil.init_combo_text_column(conn_list, 1)
+        text = uiutil.init_combo_text_column(conn_list, 1)
+        text.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
 
         # ISO media list
         iso_list = self.widget("install-local-box")
@@ -755,8 +757,7 @@ class vmmCreate(vmmGObjectUI):
                 # Favor local connections over remote connections
                 default = len(model)
 
-            model.append([connobj.get_uri(),
-                connobj.get_pretty_desc(show_kvm=True)])
+            model.append([connobj.get_uri(), connobj.get_pretty_desc()])
 
         no_conns = (len(model) == 0)
 

@@ -60,7 +60,7 @@ class vmmHost(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "host.ui", "vmm-host")
         self.conn = conn
 
-        self.title = conn.get_short_hostname() + " " + self.topwin.get_title()
+        self.title = conn.get_pretty_desc() + " " + self.topwin.get_title()
         self.topwin.set_title(self.title)
 
         self.ICON_RUNNING = "state_running"

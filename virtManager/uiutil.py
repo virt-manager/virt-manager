@@ -34,6 +34,8 @@ def init_combo_text_column(combo, col):
     Set the text column of the passed combo to 'col'. Does the
     right thing whether it's a plain combo or a comboboxentry. Saves
     some typing.
+
+    :returns: If we added a cell renderer, returns it. Otherwise return None
     """
     if combo.get_has_entry():
         combo.set_entry_text_column(col)
@@ -41,6 +43,8 @@ def init_combo_text_column(combo, col):
         text = Gtk.CellRendererText()
         combo.pack_start(text, True)
         combo.add_attribute(text, 'text', col)
+        return text
+    return None
 
 
 def spin_get_helper(widget):

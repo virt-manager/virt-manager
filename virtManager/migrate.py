@@ -25,6 +25,7 @@ import threading
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import Pango
 
 import libvirt
 from virtinst import util
@@ -93,9 +94,9 @@ class vmmMigrateDialog(vmmGObjectUI):
         dest_model = Gtk.ListStore(str, object, bool, str)
         dest_combo = self.widget("migrate-dest")
         dest_combo.set_model(dest_model)
-        text = Gtk.CellRendererText()
-        dest_combo.pack_start(text, True)
-        dest_combo.add_attribute(text, 'text', 0)
+        text = uiutil.init_combo_text_column(dest_combo, 0)
+        text.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
+        text.set_property("width-chars", 30)
         dest_combo.add_attribute(text, 'sensitive', 2)
         dest_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
@@ -279,7 +280,8 @@ class vmmMigrateDialog(vmmGObjectUI):
             # For secure migration, we need to make sure we aren't migrating
             # to the local connection, because libvirt will pull try to use
             # 'qemu:///system' as the migrate URI which will deadlock
-            if destconn.get_uri_hostname() == "localhost":
+            desthost = destconn.get_uri_hostname() or "localhost"
+            if desthost == "localhost":
                 uri = self.build_localhost_uri(destconn, srcuri)
             else:
                 uri = destconn.get_uri()

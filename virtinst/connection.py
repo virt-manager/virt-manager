@@ -362,19 +362,21 @@ class VirtualConnection(object):
             self._urisplits.hostname)
 
     def get_uri_hostname(self):
-        return self._urisplits.hostname or "localhost"
+        return self._urisplits.hostname
     def get_uri_port(self):
         return self._urisplits.port
     def get_uri_username(self):
         return self._urisplits.username
     def get_uri_transport(self):
         return self._urisplits.transport
+    def get_uri_path(self):
+        return self._urisplits.path
 
     def get_uri_driver(self):
         return self._urisplits.scheme
 
     def is_session_uri(self):
-        return self._urisplits.path == "/session"
+        return self.get_uri_path() == "/session"
     def is_qemu(self):
         return self._urisplits.scheme.startswith("qemu")
     def is_qemu_system(self):

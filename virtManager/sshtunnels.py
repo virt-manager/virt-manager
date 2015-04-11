@@ -41,7 +41,7 @@ class ConnectionInfo(object):
         self.transport = conn.get_uri_transport()
         self.connuser = conn.get_uri_username()
 
-        self._connhost = conn.get_uri_hostname()
+        self._connhost = conn.get_uri_hostname() or "localhost"
         self._connport = conn.get_uri_port()
         if self._connhost == "localhost":
             self._connhost = "127.0.0.1"
