@@ -1751,6 +1751,14 @@ class ParserGraphics(VirtCLIParser):
         self.set_param("connected", "connected")
         self.set_param("defaultMode", "defaultMode")
 
+        self.set_param("image_compression", "image_compression")
+        self.set_param("streaming_mode", "streaming_mode")
+        self.set_param("clipboard_copypaste", "clipboard_copypaste",
+            is_onoff=True)
+        self.set_param("mouse_mode", "mouse_mode")
+        self.set_param("filetransfer_enable", "filetransfer_enable",
+            is_onoff=True)
+
     def _parse(self, opts, inst):
         if opts.fullopts == "none":
             self.guest.skip_default_graphics = True

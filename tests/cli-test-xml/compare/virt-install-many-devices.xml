@@ -180,6 +180,13 @@
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
     <graphics type="vnc" port="5950" keymap="ja" listen="1.2.3.4" passwd="foo"/>
     <graphics type="spice" port="5950" tlsPort="5950" keymap="ja" listen="1.2.3.4"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="foo"/>
+      <streaming mode="bar"/>
+      <clipboard copypaste="yes"/>
+      <mouse mode="client"/>
+      <filetransfer enable="yes"/>
+    </graphics>
     <serial type="tcp">
       <source mode="bind" host="127.0.0.1" service="2222"/>
       <protocol type="telnet"/>

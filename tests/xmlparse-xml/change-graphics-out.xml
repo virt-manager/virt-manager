@@ -39,6 +39,11 @@
       <channel name="cursor" mode="any"/>
       <channel name="playback" mode="insecure"/>
       <channel name="display" mode="secure"/>
+      <image compression="auto_glz"/>
+      <streaming mode="filter"/>
+      <clipboard copypaste="yes"/>
+      <mouse mode="client"/>
+      <filetransfer enable="no"/>
     </graphics>
   </devices>
   <seclabel type="static" model="selinux">

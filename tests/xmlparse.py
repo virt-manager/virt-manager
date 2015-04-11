@@ -629,6 +629,11 @@ class XMLParseTest(unittest.TestCase):
         check("channel_playback_mode", "any", "insecure")
         check("passwdValidTo", "2010-04-09T15:51:00", "2011-01-07T19:08:00")
         check("defaultMode", None, "secure")
+        check("image_compression", None, "auto_glz")
+        check("streaming_mode", None, "filter")
+        check("clipboard_copypaste", None, True)
+        check("mouse_mode", None, "client")
+        check("filetransfer_enable", None, False)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

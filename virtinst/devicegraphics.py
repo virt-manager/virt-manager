@@ -218,5 +218,11 @@ class VirtualGraphics(VirtualDevice):
     def remove_listen(self, obj):
         self._remove_child(obj)
 
+    # Spice bits
+    image_compression = XMLProperty("./image/@compression")
+    streaming_mode = XMLProperty("./streaming/@mode")
+    clipboard_copypaste = XMLProperty("./clipboard/@copypaste", is_yesno=True)
+    mouse_mode = XMLProperty("./mouse/@mode")
+    filetransfer_enable = XMLProperty("./filetransfer/@enable", is_yesno=True)
 
 VirtualGraphics.register_type()
