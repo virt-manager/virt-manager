@@ -57,6 +57,14 @@ class VirtualHostDevice(VirtualDevice):
 
             self.set_from_nodedev(founddev, use_full_usb=use_full_usb)
 
+        elif nodedev.device_type == nodedev.CAPABILITY_TYPE_SCSIDEV:
+            self.type = "scsi"
+            self.scsi_adapter = "scsi_host%s" % nodedev.host
+            self.scsi_bus = nodedev.bus
+            self.scsi_target = nodedev.target
+            self.scsi_unit = nodedev.lun
+            self.managed = False
+
         else:
             raise ValueError("Unknown node device type %s" % nodedev)
 
@@ -117,6 +125,12 @@ class VirtualHostDevice(VirtualDevice):
 
     driver_name = XMLProperty("./driver/@name")
     rom_bar = XMLProperty("./rom/@bar", is_onoff=True)
+
+    # type=scsi handling
+    scsi_adapter = XMLProperty("./source/adapter/@name")
+    scsi_bus = XMLProperty("./source/address/@bus", is_int=True)
+    scsi_target = XMLProperty("./source/address/@target", is_int=True)
+    scsi_unit = XMLProperty("./source/address/@unit", is_int=True)
 
 
 VirtualHostDevice.register_type()

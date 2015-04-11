@@ -24,6 +24,14 @@
        <boot order="6"/>
 +      <driver name="vfio"/>
      </hostdev>
+     <hostdev mode="subsystem" type="scsi" managed="no">
+       <source>
+@@
+         <address bus="0" target="0" unit="0"/>
+       </source>
+       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
++      <driver name="vfio"/>
+     </hostdev>
      <redirdev bus="usb" type="tcp">
        <source mode="connect" host="localhost" service="4000"/>
 

@@ -574,6 +574,7 @@ c.add_compare(""" \
 --hostdev 0:15:0.3 \
 --host-device 0x0781:0x5151,driver_name=vfio \
 --host-device 04b3:4485 \
+--host-device pci_8086_2829_scsi_host_scsi_device_lun0 \
 \
 
 --filesystem /source,/target,mode=squash \

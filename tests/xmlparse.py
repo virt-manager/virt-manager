@@ -665,6 +665,7 @@ class XMLParseTest(unittest.TestCase):
         dev1 = guest.get_devices("hostdev")[0]
         dev2 = guest.get_devices("hostdev")[1]
         dev3 = guest.get_devices("hostdev")[2]
+        dev4 = guest.get_devices("hostdev")[3]
 
         check = self._make_checker(dev1)
         check("type", "usb", "foo", "usb")
@@ -693,6 +694,12 @@ class XMLParseTest(unittest.TestCase):
         check("driver_name", None, "vfio")
         check("rom_bar", None, True)
 
+        check = self._make_checker(dev4)
+        check("type", "scsi")
+        check("scsi_adapter", "scsi_host0", "foo")
+        check("scsi_bus", 0, 1)
+        check("scsi_target", 0, 2)
+        check("scsi_unit", 0, 3)
         self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterWatchdogs(self):

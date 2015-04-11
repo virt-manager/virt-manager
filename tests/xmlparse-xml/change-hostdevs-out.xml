@@ -40,5 +40,11 @@
       <driver name="vfio"/>
       <rom bar="on"/>
     </hostdev>
+    <hostdev mode="subsystem" type="scsi" managed="no">
+      <source>
+        <adapter name="foo"/>
+        <address bus="1" target="2" unit="3"/>
+      </source>
+    </hostdev>
   </devices>
 </domain>

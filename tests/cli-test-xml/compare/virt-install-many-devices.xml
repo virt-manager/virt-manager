@@ -258,6 +258,12 @@
         <product id="0x4485"/>
       </source>
     </hostdev>
+    <hostdev mode="subsystem" type="scsi" managed="no">
+      <source>
+        <adapter name="scsi_host0"/>
+        <address bus="0" target="0" unit="0"/>
+      </source>
+    </hostdev>
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="passthrough" type="host"/>
     <redirdev bus="usb" type="spicevmc"/>
