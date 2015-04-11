@@ -1463,16 +1463,13 @@ class vmmDomain(vmmLibvirtObject):
         self._backend.resume()
 
     @vmmLibvirtObject.lifecycle_action
-    def save(self, filename=None, meter=None):
+    def save(self, meter=None):
         self._install_abort = True
 
         if meter:
             start_job_progress_thread(self, meter, _("Saving domain to disk"))
 
-        if not self.managedsave_supported:
-            self._backend.save(filename)
-        else:
-            self._backend.managedSave(0)
+        self._backend.managedSave(0)
 
     def has_managed_save(self):
         if not self.managedsave_supported:

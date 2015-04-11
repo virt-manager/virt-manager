@@ -111,8 +111,6 @@ class vmmConfig(object):
     CONFIG_DIR_IMAGE = "image"
     CONFIG_DIR_ISO_MEDIA = "isomedia"
     CONFIG_DIR_FLOPPY_MEDIA = "floppymedia"
-    CONFIG_DIR_SAVE = "save"
-    CONFIG_DIR_RESTORE = "restore"
     CONFIG_DIR_SCREENSHOT = "screenshot"
     CONFIG_DIR_FS = "fs"
 
@@ -152,10 +150,8 @@ class vmmConfig(object):
     CONSOLE_SCALE_ALWAYS = 2
 
     DEFAULT_XEN_IMAGE_DIR = "/var/lib/xen/images"
-    DEFAULT_XEN_SAVE_DIR = "/var/lib/xen/dump"
 
     DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
-    DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
     def __init__(self, appname, CLIConfig, test_first_run=False):
         self.appname = appname
@@ -661,9 +657,6 @@ class vmmConfig(object):
                 _type == self.CONFIG_DIR_ISO_MEDIA or
                 _type == self.CONFIG_DIR_FLOPPY_MEDIA):
                 path = self.get_default_image_dir(conn)
-            if (_type == self.CONFIG_DIR_SAVE or
-                _type == self.CONFIG_DIR_RESTORE):
-                path = self.get_default_save_dir(conn)
 
         logging.debug("directory for type=%s returning=%s", _type, path)
         return path
@@ -687,14 +680,6 @@ class vmmConfig(object):
         # Just return the default dir since the intention is that it
         # is a managed pool and the user will be able to install to it.
         return self.DEFAULT_VIRT_IMAGE_DIR
-
-    def get_default_save_dir(self, conn):
-        if conn.is_xen():
-            return self.DEFAULT_XEN_SAVE_DIR
-        elif os.access(self.DEFAULT_VIRT_SAVE_DIR, os.W_OK):
-            return self.DEFAULT_VIRT_SAVE_DIR
-        else:
-            return os.getcwd()
 
 
     # Keyring / VNC password dealings

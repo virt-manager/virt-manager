@@ -676,7 +676,6 @@ class vmmEngine(vmmGObject):
 
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
-        obj.connect("action-restore-domain", self._do_restore_domain)
         obj.connect("host-opened", self.increment_window_counter)
         obj.connect("host-closed", self.decrement_window_counter)
 
@@ -930,34 +929,18 @@ class vmmEngine(vmmGObject):
     def _do_save_domain(self, src, uri, connkey):
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(connkey)
-        managed = bool(vm.managedsave_supported)
-
-        if not managed and conn.is_remote():
-            src.err.val_err(_("Saving virtual machines over remote "
-                              "connections is not supported with this "
-                              "libvirt version or hypervisor."))
-            return
 
         if not src.err.chkbox_helper(self.config.get_confirm_poweroff,
             self.config.set_confirm_poweroff,
             text1=_("Are you sure you want to save '%s'?" % vm.get_name())):
             return
 
-        path = None
-        if not managed:
-            path = src.err.browse_local(
-                conn, _("Save Virtual Machine"),
-                dialog_type=Gtk.FileChooserAction.SAVE,
-                browse_reason=self.config.CONFIG_DIR_SAVE)
-            if not path:
-                return
-
         _cancel_cb = None
         if vm.getjobinfo_supported:
             _cancel_cb = (self._save_cancel, vm)
 
         def cb(asyncjob):
-            vm.save(path, meter=asyncjob.get_meter())
+            vm.save(meter=asyncjob.get_meter())
         def finish_cb(error, details):
             if error is not None:
                 error = _("Error saving domain: %s") % error
@@ -984,23 +967,6 @@ class vmmEngine(vmmGObject):
 
         asyncjob.job_canceled = True
         return
-
-    def _do_restore_domain(self, src, uri):
-        conn = self._lookup_conn(uri)
-        if conn.is_remote():
-            src.err.val_err(_("Restoring virtual machines over remote "
-                              "connections is not yet supported"))
-            return
-
-        path = src.err.browse_local(
-            conn, _("Restore Virtual Machine"),
-            browse_reason=self.config.CONFIG_DIR_RESTORE)
-
-        if not path:
-            return
-
-        vmmAsyncJob.simple_async_noshow(conn.restore, [path], src,
-                                        _("Error restoring domain"))
 
     def _do_destroy_domain(self, src, uri, connkey):
         conn = self._lookup_conn(uri)

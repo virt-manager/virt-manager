@@ -652,13 +652,6 @@ class vmmConnection(vmmGObject):
     # Libvirt object creation methods #
     ###################################
 
-    def restore(self, frm):
-        self._backend.restore(frm)
-        try:
-            os.remove(frm)
-        except:
-            logging.debug("Couldn't remove save file '%s' for restore", frm)
-
     def define_domain(self, xml):
         return self._backend.defineXML(xml)
     def define_network(self, xml):
