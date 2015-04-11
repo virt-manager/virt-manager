@@ -142,9 +142,13 @@ python setup.py configure \
 
 
 %install
-python setup.py install -O1 --root=$RPM_BUILD_ROOT
-
+python setup.py install -O1 --root=%{buildroot}
 %find_lang %{name}
+
+# The conversion script was only added to virt-manager after several
+# Fedora cycles of using gsettings. Installing it now could convert old data
+# and wipe out recent settings.
+rm %{buildroot}%{_datadir}/GConf/gsettings/org.virt-manager.virt-manager.convert
 
 
 %post
@@ -182,7 +186,6 @@ fi
 %{_datadir}/appdata/%{name}.appdata.xml
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/glib-2.0/schemas/org.virt-manager.virt-manager.gschema.xml
-%{_datadir}/GConf/gsettings/org.virt-manager.virt-manager.convert
 
 
 %files common -f %{name}.lang
