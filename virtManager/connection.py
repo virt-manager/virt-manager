@@ -267,9 +267,6 @@ class vmmConnection(vmmGObject):
         return self._backend.invalidate_caps()
     caps = property(lambda self: getattr(self, "_backend").caps)
 
-    def get_host_info(self):
-        return self.hostinfo
-
     def pretty_host_memory_size(self):
         if not self._backend.is_open():
             return ""
@@ -280,21 +277,10 @@ class vmmConnection(vmmGObject):
             return 0
         return self.hostinfo[1] * 1024
 
-    def host_architecture(self):
-        if not self._backend.is_open():
-            return ""
-        return self.hostinfo[0]
-
     def host_active_processor_count(self):
         if not self._backend.is_open():
             return 0
         return self.hostinfo[2]
-
-    def host_maximum_processor_count(self):
-        if not self._backend.is_open():
-            return 0
-        return (self.hostinfo[4] * self.hostinfo[5] *
-                self.hostinfo[6] * self.hostinfo[7])
 
     def connect(self, name, callback, *args):
         handle_id = vmmGObject.connect(self, name, callback, *args)

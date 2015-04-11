@@ -223,17 +223,11 @@ class vmmHost(vmmGObjectUI):
         uri = self.conn.get_uri()
         host = self.conn.get_hostname()
         drv = self.conn.get_driver()
-        memory = self.conn.pretty_host_memory_size()
-        proc = self.conn.host_active_processor_count()
-        arch = self.conn.host_architecture()
         auto = self.conn.get_autoconnect()
 
         self.widget("overview-uri").set_text(uri)
         self.widget("overview-hostname").set_text(host)
         self.widget("overview-hypervisor").set_text(drv)
-        self.widget("overview-memory").set_text(memory)
-        self.widget("overview-cpus").set_text(str(proc))
-        self.widget("overview-arch").set_text(arch)
         self.widget("config-autoconnect").set_active(auto)
 
         self.cpu_usage_graph = Sparkline()
