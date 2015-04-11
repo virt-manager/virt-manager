@@ -137,8 +137,8 @@ class VMActionMenu(_VMMenu):
 
         for child in self.get_children():
             name = getattr(child, "vmm_widget_name", None)
-            if hasattr(child, "update_widget_states"):
-                child.update_widget_states(vm)
+            if child.get_submenu():
+                child.get_submenu().update_widget_states(vm)
             if name in statemap:
                 child.set_sensitive(statemap[name])
             if name in vismap:
