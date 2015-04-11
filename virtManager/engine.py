@@ -28,8 +28,6 @@ import Queue
 import threading
 import traceback
 
-from virtinst import util
-
 from . import packageutils
 from .about import vmmAbout
 from .baseclass import vmmGObject
@@ -1109,33 +1107,8 @@ class vmmEngine(vmmGObject):
             return
 
         logging.debug("Rebooting vm '%s'", vm.get_name())
-
-        def reboot_cb():
-            no_support = False
-            reboot_err = None
-            try:
-                vm.reboot()
-            except Exception, reboot_err:
-                no_support = util.is_error_nosupport(reboot_err)
-                if not no_support:
-                    raise RuntimeError(_("Error rebooting domain: %s" %
-                                       str(reboot_err)))
-
-            if not no_support:
-                return
-
-            # Reboot isn't supported. Let's try to emulate it
-            logging.debug("Hypervisor doesn't support reboot, let's fake it")
-            try:
-                vm.manual_reboot()
-            except:
-                logging.exception("Could not fake a reboot")
-
-                # Raise the original error message
-                raise RuntimeError(_("Error rebooting domain: %s" %
-                                   str(reboot_err)))
-
-        vmmAsyncJob.simple_async_noshow(reboot_cb, [], src, "")
+        vmmAsyncJob.simple_async_noshow(vm.reboot, [], src,
+            _("Error rebooting domain"))
 
     def _do_reset_domain(self, src, uri, connkey):
         conn = self._lookup_conn(uri)

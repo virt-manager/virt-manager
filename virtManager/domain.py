@@ -314,7 +314,6 @@ class vmmDomain(vmmLibvirtObject):
         }
 
         self._install_abort = False
-        self.reboot_listener = None
         self._is_management_domain = None
         self._id = None
         self._uuid = None
@@ -1401,54 +1400,9 @@ class vmmDomain(vmmLibvirtObject):
     # let's be extra careful and have anything which might touch UI
     # or GObject.props invoked in an idle callback
 
-    def _unregister_reboot_listener(self):
-        if self.reboot_listener is None:
-            return
-
-        try:
-            self.idle_add(self.disconnect, self.reboot_listener)
-            self.reboot_listener = None
-        except:
-            pass
-
-    def manual_reboot(self):
-        """
-        Attempt a manual reboot by invoking 'shutdown', then listen
-        for a state change and restart the VM
-        """
-        def reboot_listener(vm, self):
-            if vm.is_crashed():
-                # Abandon reboot plans
-                self.reboot_listener = None
-                return True
-
-            if not vm.is_shutoff():
-                # Not shutoff, continue waiting
-                return
-
-            try:
-                logging.debug("Fake reboot detected shutdown. Restarting VM")
-                vm.startup()
-            except:
-                logging.exception("Fake reboot startup failed")
-
-            self.reboot_listener = None
-            return True
-
-        self._unregister_reboot_listener()
-
-        # Request a shutdown
-        self.shutdown()
-
-        def add_reboot():
-            self.reboot_listener = self.connect_opt_out("state-changed",
-                reboot_listener, self)
-        self.idle_add(add_reboot)
-
     @vmmLibvirtObject.lifecycle_action
     def shutdown(self):
         self._install_abort = True
-        self._unregister_reboot_listener()
         self._backend.shutdown()
 
     @vmmLibvirtObject.lifecycle_action
@@ -1459,7 +1413,6 @@ class vmmDomain(vmmLibvirtObject):
     @vmmLibvirtObject.lifecycle_action
     def destroy(self):
         self._install_abort = True
-        self._unregister_reboot_listener()
         self._backend.destroy()
 
     @vmmLibvirtObject.lifecycle_action
