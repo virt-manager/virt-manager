@@ -96,6 +96,8 @@ test_files = {
     'AUTOMANAGEIMG'     : "/some/new/pool/dir/new",
     'EXISTIMG1'         : "/dev/default-pool/testvol1.img",
     'EXISTIMG2'         : "/dev/default-pool/testvol2.img",
+    'EXISTIMG3'         : exist_images[0],
+    'EXISTIMG4'         : exist_images[1],
     'EXISTUPPER'        : "/dev/default-pool/UPPER",
     'POOL'              : "default-pool",
     'VOL'               : "testvol1.img",
@@ -638,6 +640,7 @@ c.add_valid("--disk path=%(MANAGEDNEW1)s,format=raw,size=.0000001")  # Managed f
 c.add_valid("--disk path=%(MANAGEDNEW1)s,format=qcow2,size=.0000001")  # Managed file using format qcow2
 c.add_valid("--disk %(EXISTIMG1)s")  # Not specifying path=
 c.add_valid("--disk %(NEWIMG1)s,format=raw,size=.0000001")  # Not specifying path= but creating storage
+c.add_valid("--disk %(COLLIDE)s --check path_in_use=off")  # Colliding storage with --check
 c.add_valid("--disk %(COLLIDE)s --force")  # Colliding storage with --force
 c.add_valid("--disk %(SHARE)s,perms=sh")  # Colliding shareable storage
 c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom --disk path=%(EXISTIMG1)s,device=cdrom")  # Two IDE cds
@@ -645,7 +648,7 @@ c.add_valid("--disk %(EXISTIMG1)s,driver_name=qemu,driver_type=qcow2")  # Driver
 c.add_valid("--disk /dev/zero")  # Referencing a local unmanaged /dev node
 c.add_valid("--disk pool=default,size=.00001")  # Building 'default' pool
 c.add_valid("--disk %(AUTOMANAGEIMG)s,size=.1")  # autocreate the pool
-c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000 --force")  # Don't warn about fully allocated file exceeding disk space
+c.add_valid("--disk %(NEWIMG1)s,sparse=true,size=100000000 --check disk_size=off")  # Don't warn about fully allocated file exceeding disk space
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse")  # Nonexisting file, size too big
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000")  # Huge file, sparse, but no prompting
 c.add_invalid("--file %(NEWIMG1)s")  # Nonexisting file, no size
@@ -828,7 +831,7 @@ c.add_invalid("--mac 22:22:33:12:34:AB")  # Colliding macaddr
 c = vinst.add_category("storage-back-compat", "--pxe --noautoconsole")
 c.add_valid("--file %(EXISTIMG1)s --nonsparse --file-size 4")  # Existing file, other opts
 c.add_valid("--file %(EXISTIMG1)s")  # Existing file, no opts
-c.add_valid("--file %(EXISTIMG1)s --file virt-clone --file virt-clone")  # Multiple existing files
+c.add_valid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Multiple existing files
 c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent file
 
 
@@ -936,20 +939,22 @@ c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-nam
 vclon = App("virt-clone")
 c = vclon.add_category("remote", "--connect %(REMOTEURI)s")
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
-c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage,
-c.add_invalid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ storage,
+c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage
+c.add_invalid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ local storage, which is invalid for remote connection
 
 
 c = vclon.add_category("misc", "")
 c.add_compare("--connect %(KVMURI)s -o test-for-clone --auto-clone --clone-running", "clone-auto1", compare_check=support.SUPPORT_CONN_LOADER_ROM)
 c.add_compare("-o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", compare_check=support.SUPPORT_CONN_LOADER_ROM)
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
-c.add_valid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ storage,
-c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage,
+c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage
+c.add_valid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ local storage
 c.add_valid("-o test-for-clone --auto-clone --clone-running")  # Auto flag, actual VM, skip state check
-c.add_valid("-o test-clone-simple -n newvm --preserve-data --file /dev/default-pool/default-vol --clone-running --force")  # Preserve data shouldn't complain about existing volume
+c.add_valid("-o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s --clone-running")  # Preserve data shouldn't complain about existing volume
+c.add_valid("-n clonetest --original-xml %(CLONE_DISK_XML)s --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
 c.add_invalid("--auto-clone")  # Just the auto flag
 c.add_invalid("-o test-for-clone --auto-clone")
+c.add_invalid("-o test-clone-simple -n newvm --file %(EXISTIMG1)s --clone-running")  # Should complain about overwriting existing file
 
 
 c = vclon.add_category("general", "-n clonetest")

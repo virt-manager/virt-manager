@@ -24,7 +24,6 @@ import sys
 import time
 
 import libvirt
-import urlgrabber.progress as progress
 
 import virtinst
 from virtinst import cli
@@ -418,7 +417,7 @@ def validate_required_options(options, guest):
     msg = ""
 
     if not options.name:
-        msg += "\n" + cli.name_missing
+        msg += "\n" + _("--name is required")
 
     if not options.memory:
         msg += "\n" + _("--memory amount in MiB is required")
@@ -739,9 +738,7 @@ def start_install(guest, continue_inst, options):
                 wait_on_install = True
                 wait_time = -1
 
-    meter = (options.quiet and
-             progress.BaseMeter() or
-             progress.TextMeter(fo=sys.stdout))
+    meter = cli.get_meter()
     logging.debug("Guest.has_install_phase: %s",
                   guest.installer.has_install_phase())
 
@@ -1048,7 +1045,8 @@ def main(conn=None):
 
     check_cdrom_option_error(options)
 
-    cli.set_force(options.force)
+    cli.convert_old_force(options)
+    cli.parse_check(options.check)
     cli.set_prompt(options.prompt)
 
     parsermap = cli.build_parser_map(options)

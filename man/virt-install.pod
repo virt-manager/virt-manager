@@ -1476,6 +1476,10 @@ change host device configuration, or actually teach libvirt about the guest.
 virt-install may still fetch install media, since this is required to
 properly detect the OS to install.
 
+=item B<--check>
+
+Enable or disable some validation checks. Some examples are warning about using a disk that's already assigned to another VM (--check path_in_use=on|off), or warning about potentially running out of space during disk allocation (--check disk_size=on|off). Most checks are performed by default.
+
 =item B<-q>
 
 =item B<--quiet>

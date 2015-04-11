@@ -24,8 +24,6 @@ import argparse
 import logging
 import sys
 
-import urlgrabber.progress as progress
-
 import virtinst.cli as cli
 from virtinst import Cloner
 from virtinst.cli import fail, print_stdout, print_stderr
@@ -163,8 +161,9 @@ def main(conn=None):
     options.quiet = options.quiet or options.xmlonly
     cli.setupLogging("virt-clone", options.debug, options.quiet)
 
+    cli.convert_old_force(options)
+    cli.parse_check(options.check)
     cli.set_prompt(options.prompt)
-    cli.set_force(options.force)
 
     if conn is None:
         conn = cli.getConnection(options.connect)
@@ -200,9 +199,7 @@ def main(conn=None):
     if options.xmlonly:
         print_stdout(design.clone_xml, do_force=True)
     else:
-        # start cloning
-        meter = progress.TextMeter(fo=sys.stdout)
-        design.start_duplicate(meter)
+        design.start_duplicate(cli.get_meter())
 
     print_stdout("")
     print_stdout(_("Clone '%s' created successfully.") % design.clone_name)

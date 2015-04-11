@@ -29,6 +29,7 @@ import sys
 import traceback
 
 import libvirt
+from urlgrabber import progress
 
 from virtcli import CLIConfig
 
@@ -58,8 +59,38 @@ from .osxml import OSXML
 from .storage import StoragePool, StorageVolume
 
 
-force = False
-quiet = False
+##########################
+# Global option handling #
+##########################
+
+class _GlobalState(object):
+    def __init__(self):
+        self.quiet = False
+
+        self.all_checks = None
+        self._validation_checks = {}
+
+    def set_validation_check(self, checkname, val):
+        self._validation_checks[checkname] = val
+
+    def get_validation_check(self, checkname):
+        if self.all_checks is not None:
+            return self.all_checks
+
+        # Default to True for all checks
+        return self._validation_checks.get(checkname, True)
+
+
+_globalstate = None
+
+
+def get_global_state():
+    return _globalstate
+
+
+def _reset_global_state():
+    global _globalstate
+    _globalstate = _GlobalState()
 
 
 ####################
@@ -136,8 +167,8 @@ def earlyLogging():
 
 
 def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
-    global quiet
-    quiet = do_quiet
+    _reset_global_state()
+    get_global_state().quiet = do_quiet
 
     vi_dir = None
     logfile = None
@@ -192,7 +223,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     elif not cli_app:
         streamHandler = None
     else:
-        if quiet:
+        if get_global_state().quiet:
             level = logging.ERROR
         else:
             level = logging.WARN
@@ -270,7 +301,7 @@ def fail(msg, do_exit=True):
 
 
 def print_stdout(msg, do_force=False):
-    if do_force or not quiet:
+    if do_force or not get_global_state().quiet:
         print msg
 
 
@@ -303,27 +334,22 @@ def install_fail(guest):
     sys.exit(1)
 
 
-def set_force(val=True):
-    global force
-    force = val
-
-
 def set_prompt(prompt):
     # Set whether we allow prompts, or fail if a prompt pops up
     if prompt:
         logging.warning("--prompt mode is no longer supported.")
 
 
-name_missing    = _("--name is required")
-
-
 def validate_disk(dev, warn_overwrite=False):
-    def _optional_fail(msg):
-        if force:
-            logging.debug("--force skipping error condition '%s'", msg)
-            logging.warn(msg)
-        else:
-            fail(msg + _(" (Use --force to override)"))
+    def _optional_fail(msg, checkname):
+        do_check = get_global_state().get_validation_check(checkname)
+        if do_check:
+            fail(msg + (_(" (Use --check %s=off or "
+                "--check all=off to override)") % checkname))
+
+        logging.debug("Skipping --check %s error condition '%s'",
+            checkname, msg)
+        logging.warn(msg)
 
     def check_path_exists(dev):
         """
@@ -331,10 +357,11 @@ def validate_disk(dev, warn_overwrite=False):
         """
         if not warn_overwrite:
             return
-        if VirtualDisk.path_definitely_exists(dev.conn, dev.path):
-            _optional_fail(
-                _("This will overwrite the existing path '%s'" % dev.path))
-
+        if not VirtualDisk.path_definitely_exists(dev.conn, dev.path):
+            return
+        _optional_fail(
+            _("This will overwrite the existing path '%s'" % dev.path),
+            "path_exists")
 
     def check_inuse_conflict(dev):
         """
@@ -345,7 +372,8 @@ def validate_disk(dev, warn_overwrite=False):
             return
 
         _optional_fail(_("Disk %s is already in use by other guests %s." %
-            (dev.path, names)))
+            (dev.path, names)),
+            "path_in_use")
 
     def check_size_conflict(dev):
         """
@@ -354,7 +382,7 @@ def validate_disk(dev, warn_overwrite=False):
         isfatal, errmsg = dev.is_size_conflict()
         # The isfatal case should have already caused us to fail
         if not isfatal and errmsg:
-            _optional_fail(errmsg)
+            _optional_fail(errmsg, "disk_size")
 
     def check_path_search(dev):
         user, broken_paths = dev.check_path_search(dev.conn, dev.path)
@@ -446,6 +474,12 @@ def get_console_cb(guest):
     return _gfx_console
 
 
+def get_meter():
+    if get_global_state().quiet or "VIRTINST_TEST_SUITE" in os.environ:
+        return progress.BaseMeter()
+    return progress.TextMeter(fo=sys.stdout)
+
+
 ###########################
 # Common CLI option/group #
 ###########################
@@ -509,6 +543,11 @@ def add_misc_options(grp, prompt=False, replace=False,
                        help=_("Run through install process, but do not "
                               "create devices or define the guest."))
 
+    if prompt:
+        grp.add_argument("--check",
+            help=_("Enable or disable validation checks. Example:\n"
+                   "--check path_in_use=off\n"
+                   "--check all=off"))
     grp.add_argument("-q", "--quiet", action="store_true",
                    help=_("Suppress non-error output"))
     grp.add_argument("-d", "--debug", action="store_true",
@@ -1098,6 +1137,41 @@ class VirtCLIParser(object):
 
     def _init_params(self):
         raise NotImplementedError()
+
+
+###################
+# --check parsing #
+###################
+
+def convert_old_force(options):
+    if options.force:
+        if not options.check:
+            options.check = "all=off"
+        del(options.force)
+
+
+class ParseCLICheck(VirtCLIParser):
+    # This sets properties on the _GlobalState objects
+
+    def _init_params(self):
+        def _set_check(opts, inst, cliname, val):
+            ignore = opts
+            inst.set_validation_check(cliname, val)
+
+        self.set_param(None, "path_in_use",
+            is_onoff=True, setter_cb=_set_check)
+        self.set_param(None, "disk_size",
+            is_onoff=True, setter_cb=_set_check)
+        self.set_param(None, "path_exists",
+            is_onoff=True, setter_cb=_set_check)
+
+        self.set_param("all_checks", "all", is_onoff=True)
+
+
+def parse_check(checkstr):
+    # Overwrite this for each parse,
+    parser = ParseCLICheck("check")
+    parser.parse(None, checkstr, get_global_state())
 
 
 ######################
