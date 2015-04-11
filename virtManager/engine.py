@@ -75,6 +75,7 @@ class vmmEngine(vmmGObject):
 
         self.conns = {}
         self.err = vmmErrorDialog()
+        self.err.set_find_parent_cb(self._find_error_parent_cb)
 
         self.timer = None
         self.last_timeout = 0
@@ -456,6 +457,29 @@ class vmmEngine(vmmGObject):
         self.connect("conn-removed", self.inspection.conn_removed)
         return
 
+    def _find_error_parent_cb(self):
+        """
+        Search over the toplevel windows for any that are visible or have
+        focus, and use that
+        """
+        windowlist = [self.windowManager]
+        for conndict in self.conns.values():
+            windowlist.extend(conndict["windowDetails"].values())
+        windowlist.extend(
+            [conndict["windowHost"] for conndict in self.conns.values()])
+
+        use_win = None
+        for window in windowlist:
+            if not window:
+                continue
+            if window.topwin.has_focus():
+                use_win = window
+                break
+            if not use_win and window.is_visible():
+                use_win = window
+
+        if use_win:
+            return use_win.topwin
 
     def make_conn(self, uri, probe=False):
         conn = self._check_conn(uri)
@@ -619,10 +643,6 @@ class vmmEngine(vmmGObject):
         if probe_connection:
             msg += "\n\n"
             msg += _("Would you still like to remember this connection?")
-
-        if (self.windowManager and
-            self.windowManager.is_visible()):
-            self.err.set_parent(self.windowManager.topwin)
 
         title = _("Virtual Machine Manager Connection Failure")
         if probe_connection:
