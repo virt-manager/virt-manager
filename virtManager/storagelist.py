@@ -374,33 +374,35 @@ class vmmStorageList(vmmGObjectUI):
         pool_list = self.widget("pool-list")
         curpool = self._current_pool()
 
-        # Prevent events while the model is modified
         model = pool_list.get_model()
+        # Prevent events while the model is modified
         pool_list.set_model(None)
-        pool_list.get_selection().unselect_all()
-        model.clear()
+        try:
+            pool_list.get_selection().unselect_all()
+            model.clear()
 
-        for pool in self.conn.list_pools():
-            try:
-                pool.disconnect_by_func(self._pool_changed)
-                pool.disconnect_by_func(self._pool_changed)
-            except:
-                pass
-            pool.connect("state-changed", self._pool_changed)
-            pool.connect("refreshed", self._pool_changed)
+            for pool in self.conn.list_pools():
+                try:
+                    pool.disconnect_by_func(self._pool_changed)
+                    pool.disconnect_by_func(self._pool_changed)
+                except:
+                    pass
+                pool.connect("state-changed", self._pool_changed)
+                pool.connect("refreshed", self._pool_changed)
 
-            name = pool.get_name()
-            typ = StoragePool.get_pool_type_desc(pool.get_type())
-            label = "%s\n<span size='small'>%s</span>" % (name, typ)
+                name = pool.get_name()
+                typ = StoragePool.get_pool_type_desc(pool.get_type())
+                label = "%s\n<span size='small'>%s</span>" % (name, typ)
 
-            row = [None] * POOL_NUM_COLUMNS
-            row[POOL_COLUMN_CONNKEY] = pool.get_connkey()
-            row[POOL_COLUMN_LABEL] = label
-            row[POOL_COLUMN_ISACTIVE] = pool.is_active()
-            row[POOL_COLUMN_PERCENT] = _get_pool_size_percent(pool)
+                row = [None] * POOL_NUM_COLUMNS
+                row[POOL_COLUMN_CONNKEY] = pool.get_connkey()
+                row[POOL_COLUMN_LABEL] = label
+                row[POOL_COLUMN_ISACTIVE] = pool.is_active()
+                row[POOL_COLUMN_PERCENT] = _get_pool_size_percent(pool)
 
-            model.append(row)
-        pool_list.set_model(model)
+                model.append(row)
+        finally:
+            pool_list.set_model(model)
 
         uiutil.select_list_row_by_value(pool_list,
             curpool and curpool.get_connkey() or None)

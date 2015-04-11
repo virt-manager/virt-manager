@@ -126,14 +126,14 @@ class vmmHost(vmmGObjectUI):
             "on_net_qos_outbound_enable_toggled": self.change_qos_out_enable,
         })
 
-        self.repopulate_networks()
-        self.repopulate_interfaces()
+        self.populate_networks()
+        self.populate_interfaces()
 
-        self.conn.connect("net-added", self.repopulate_networks)
-        self.conn.connect("net-removed", self.repopulate_networks)
+        self.conn.connect("net-added", self.populate_networks)
+        self.conn.connect("net-removed", self.populate_networks)
 
-        self.conn.connect("interface-added", self.repopulate_interfaces)
-        self.conn.connect("interface-removed", self.repopulate_interfaces)
+        self.conn.connect("interface-added", self.populate_interfaces)
+        self.conn.connect("interface-removed", self.populate_interfaces)
 
         self.conn.connect("state-changed", self.conn_state_changed)
         self.conn.connect("resources-sampled", self.refresh_resources)
@@ -297,12 +297,12 @@ class vmmHost(vmmGObjectUI):
         ignore = child
         self.confirm_changes()
         if pagenum == 1:
-            self.repopulate_networks()
+            self.populate_networks()
             self.conn.schedule_priority_tick(pollnet=True)
         elif pagenum == 2:
             self.storagelist.refresh_page()
         elif pagenum == 3:
-            self.repopulate_interfaces()
+            self.populate_interfaces()
             self.conn.schedule_priority_tick(polliface=True)
 
     def refresh_resources(self, ignore=None):
@@ -347,8 +347,8 @@ class vmmHost(vmmGObjectUI):
         self.set_net_error_page(_("Connection not active."))
         self.set_interface_error_page(_("Connection not active."))
 
-        self.repopulate_networks()
-        self.repopulate_interfaces()
+        self.populate_networks()
+        self.populate_interfaces()
 
         self.storagelist.close()
         if self.addinterface:
@@ -417,7 +417,7 @@ class vmmHost(vmmGObjectUI):
                 net.set_autostart(auto)
             if EDIT_NET_NAME in self.active_edits:
                 net.define_name(self.widget("net-name").get_text())
-                self.idle_add(self.repopulate_networks)
+                self.idle_add(self.populate_networks)
             if EDIT_NET_QOS in self.active_edits:
                 in_qos = self.widget("net-qos-inbound-enable").get_active()
                 out_qos = self.widget("net-qos-outbound-enable").get_active()
@@ -681,26 +681,30 @@ class vmmHost(vmmGObjectUI):
                                     _("Isolated network"))
         self.disable_net_apply()
 
-    def repopulate_networks(self, src=None, connkey=None):
+    def populate_networks(self, src=None, connkey=None):
         ignore = src
         ignore = connkey
-        self.populate_networks(self.widget("net-list").get_model())
-
-    def populate_networks(self, model):
-        curnet = self.current_network()
 
         net_list = self.widget("net-list")
-        net_list.get_selection().unselect_all()
-        model.clear()
-        for net in self.conn.list_nets():
-            try:
-                net.disconnect_by_func(self.refresh_network)
-            except:
-                pass
-            net.connect("state-changed", self.refresh_network)
-            model.append([net.get_connkey(), net.get_name(), "network-idle",
-                          Gtk.IconSize.LARGE_TOOLBAR,
-                          bool(net.is_active())])
+        curnet = self.current_network()
+
+        model = net_list.get_model()
+        # Prevent events while the model is modified
+        net_list.set_model(None)
+        try:
+            net_list.get_selection().unselect_all()
+            model.clear()
+            for net in self.conn.list_nets():
+                try:
+                    net.disconnect_by_func(self.refresh_network)
+                except:
+                    pass
+                net.connect("state-changed", self.refresh_network)
+                model.append([net.get_connkey(), net.get_name(), "network-idle",
+                              Gtk.IconSize.LARGE_TOOLBAR,
+                              bool(net.is_active())])
+        finally:
+            net_list.set_model(model)
 
         uiutil.select_list_row_by_value(net_list,
             curnet and curnet.get_connkey() or None)
@@ -931,27 +935,29 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-start").set_sensitive(False)
         self.widget("interface-apply").set_sensitive(False)
 
-    def repopulate_interfaces(self, src=None, connkey=None):
+    def populate_interfaces(self, src=None, connkey=None):
         ignore = src
         ignore = connkey
-        interface_list = self.widget("interface-list")
-        self.populate_interfaces(interface_list.get_model())
-
-    def populate_interfaces(self, model):
+        iface_list = self.widget("interface-list")
         curiface = self.current_interface()
 
-        iface_list = self.widget("interface-list")
-        iface_list.get_selection().unselect_all()
-        model.clear()
-        for iface in self.conn.list_interfaces():
-            try:
-                iface.disconnect_by_func(self.refresh_interface)
-            except:
-                pass
-            iface.connect("state-changed", self.refresh_interface)
-            model.append([iface.get_connkey(), iface.get_name(),
-                          "network-idle", Gtk.IconSize.LARGE_TOOLBAR,
+        model = iface_list.get_model()
+        # Prevent events while the model is modified
+        iface_list.set_model(None)
+        try:
+            model.clear()
+            iface_list.get_selection().unselect_all()
+            for iface in self.conn.list_interfaces():
+                try:
+                    iface.disconnect_by_func(self.refresh_interface)
+                except:
+                    pass
+                iface.connect("state-changed", self.refresh_interface)
+                model.append([iface.get_connkey(), iface.get_name(),
+                              "network-idle", Gtk.IconSize.LARGE_TOOLBAR,
                           bool(iface.is_active())])
+        finally:
+            iface_list.set_model(model)
 
         uiutil.select_list_row_by_value(iface_list,
             curiface and curiface.get_connkey() or None)
