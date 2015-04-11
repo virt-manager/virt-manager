@@ -24,6 +24,10 @@
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
+  <pm>
+    <suspend-to-disk enabled="yes"/>
+    <suspend-to-mem enabled="no"/>
+  </pm>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">

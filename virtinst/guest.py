@@ -689,6 +689,7 @@ class Guest(XMLBuilder):
         self._set_emulator_defaults()
         self._set_cpu_defaults()
         self._set_feature_defaults()
+        self._set_pm_defaults()
 
         for dev in self.get_all_devices():
             dev.set_defaults(self)
@@ -848,6 +849,21 @@ class Guest(XMLBuilder):
                 self.features.hyperv_spinlocks = True
             if self.features.hyperv_spinlocks_retries is None:
                 self.features.hyperv_spinlocks_retries = 8191
+
+    def _set_pm_defaults(self):
+        # When the suspend feature is exposed to VMs, an ACPI shutdown
+        # event triggers a suspend in the guest, which causes a lot of
+        # user confusion (especially compounded with the face that suspend
+        # is often buggy so VMs can get hung, etc).
+        #
+        # We've been disabling this in virt-manager for a while, but lets
+        # do it here too for consistency.
+        if (self.os.is_x86() and
+            self.conn.check_support(self.conn.SUPPORT_CONN_PM_DISABLE)):
+            if self.pm.suspend_to_mem is None:
+                self.pm.suspend_to_mem = False
+            if self.pm.suspend_to_disk is None:
+                self.pm.suspend_to_disk = False
 
     def _add_implied_controllers(self):
         has_spapr_scsi = False

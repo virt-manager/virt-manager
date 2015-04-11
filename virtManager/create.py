@@ -1409,12 +1409,6 @@ class vmmCreate(vmmGObjectUI):
                 for_cpu=True)
 
             guest.add_default_devices()
-
-            if (guest.os.is_x86() and
-                self.conn.check_support(self.conn.SUPPORT_CONN_PM_DISABLE)):
-                guest.pm.suspend_to_mem = False
-                guest.pm.suspend_to_disk = False
-
         except Exception, e:
             self.err.show_err(_("Error setting up default devices:") + str(e))
             return None
