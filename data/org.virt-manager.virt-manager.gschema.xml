@@ -27,6 +27,17 @@
     </key>
   </schema>
 
+
+  <!-- Relocatable per conn schema -->
+  <schema id="org.virt-manager.virt-manager.connection">
+    <key name="pretty-name" type="s">
+      <default>''</default>
+      <summary>Custom connection description</summary>
+      <description>Custom connection description, used in the manager window. If empty, the app generates a default on demand.</description>
+    </key>
+  </schema>
+
+
   <schema id="org.virt-manager.virt-manager"
           path="/org/virt-manager/virt-manager/">
 

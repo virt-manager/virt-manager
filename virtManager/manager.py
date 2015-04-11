@@ -804,10 +804,9 @@ class vmmManager(vmmGObjectUI):
 
             it = model.iter_next(it)
 
-    def conn_state_changed(self, conn, newname=None):
+    def conn_state_changed(self, conn):
         row = self.rows[conn.get_uri()]
-        if newname:
-            row[ROW_SORT_KEY] = newname
+        row[ROW_SORT_KEY] = conn.get_pretty_desc()
         row[ROW_MARKUP] = self._build_conn_markup(conn, row[ROW_SORT_KEY])
         row[ROW_IS_CONN_CONNECTED] = not conn.is_disconnected()
         row[ROW_COLOR] = self._build_conn_color(conn)

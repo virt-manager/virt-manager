@@ -50,15 +50,32 @@ class SettingsWrapper(object):
         return settingskey, value
 
     def make_vm_settings(self, key):
+        """
+        Initialize per-VM relocatable schema if necessary
+        """
         settingskey = self._parse_key(key)[0]
-
         if settingskey in self._settingsmap:
             return True
 
         schema = self._root + ".vm"
         path = "/" + self._root.replace(".", "/") + key.rsplit("/", 1)[0] + "/"
-        self._settingsmap[settingskey] = Gio.Settings.new_with_path(schema,
-                                                                    path)
+        self._settingsmap[settingskey] = Gio.Settings.new_with_path(
+                schema, path)
+        return True
+
+    def make_conn_settings(self, key):
+        """
+        Initialize per-conn relocatable schema if necessary
+        """
+        settingskey = self._parse_key(key)[0]
+        if settingskey in self._settingsmap:
+            return True
+
+        schema = self._root + ".connection"
+        path = "/" + self._root.replace(".", "/") + key.rsplit("/", 1)[0] + "/"
+        print schema, path
+        self._settingsmap[settingskey] = Gio.Settings.new_with_path(
+                schema, path)
         return True
 
     def _find_settings(self, key):
@@ -212,6 +229,11 @@ class vmmConfig(object):
     def get_objects(self):
         return self._objects[:]
 
+
+    #####################################
+    # Wrappers for setting per-VM value #
+    #####################################
+
     def _make_pervm_key(self, uuid, key):
         return "/vms/%s%s" % (uuid.replace("-", ""), key)
 
@@ -229,6 +251,30 @@ class vmmConfig(object):
     def get_pervm(self, uuid, key):
         key = self._make_pervm_key(uuid, key)
         self.conf.make_vm_settings(key)
+        return self.conf.get(key)
+
+
+    ########################################
+    # Wrappers for setting per-conn values #
+    ########################################
+
+    def _make_perconn_key(self, uri, key):
+        return "/conns/%s%s" % (uri.replace("/", ""), key)
+
+    def listen_perconn(self, uri, key, *args, **kwargs):
+        key = self._make_perconn_key(uri, key)
+        self.conf.make_conn_settings(key)
+        return self.conf.notify_add(key, *args, **kwargs)
+
+    def set_perconn(self, uri, key, *args, **kwargs):
+        key = self._make_perconn_key(uri, key)
+        self.conf.make_conn_settings(key)
+        ret = self.conf.set(key, *args, **kwargs)
+        return ret
+
+    def get_perconn(self, uri, key):
+        key = self._make_perconn_key(uri, key)
+        self.conf.make_conn_settings(key)
         return self.conf.get(key)
 
 

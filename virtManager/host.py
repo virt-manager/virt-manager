@@ -60,9 +60,7 @@ class vmmHost(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "host.ui", "vmm-host")
         self.conn = conn
 
-        self.title = conn.get_pretty_desc() + " " + self.topwin.get_title()
-        self.topwin.set_title(self.title)
-
+        self._orig_title = self.topwin.get_title()
         self.ICON_RUNNING = "state_running"
         self.ICON_SHUTOFF = "state_shutoff"
 
@@ -107,6 +105,7 @@ class vmmHost(vmmGObjectUI):
             "on_interface_apply_clicked" : (lambda *x: self.interface_apply()),
             "on_interface_list_changed": self.interface_selected,
 
+            "on_overview_name_changed": self._overview_name_changed,
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
 
             "on_qos_inbound_average_changed":  (lambda *x:
@@ -325,6 +324,12 @@ class vmmHost(vmmGObjectUI):
 
     def conn_state_changed(self, ignore1=None):
         conn_active = self.conn.is_active()
+
+        self.topwin.set_title(
+            self.conn.get_pretty_desc() + " " + self._orig_title)
+        if not self.widget("overview-name").has_focus():
+            self.widget("overview-name").set_text(self.conn.get_pretty_desc())
+
         self.widget("menu_file_restore_saved").set_sensitive(conn_active)
         self.widget("net-add").set_sensitive(conn_active and
             self.conn.is_network_capable())
@@ -356,13 +361,17 @@ class vmmHost(vmmGObjectUI):
         if self.addnet:
             self.addnet.close()
 
+    def _overview_name_changed(self, src):
+        src = self.widget("overview-name")
+        self.conn.set_config_pretty_name(src.get_text())
+
     def toggle_autoconnect(self, src):
         self.conn.set_autoconnect(src.get_active())
 
 
-    # -------------------------
-    # Virtual Network functions
-    # -------------------------
+    #############################
+    # Virtual Network functions #
+    #############################
 
     def delete_network(self, src_ignore):
         net = self.current_network()

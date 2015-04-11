@@ -191,6 +191,10 @@ class vmmConnection(vmmGObject):
         self.record = []
         self.hostinfo = None
 
+        self.add_gsettings_handle(
+            self._on_config_pretty_name_changed(
+                self._config_pretty_name_changed_cb))
+
         self._init_virtconn()
 
 
@@ -368,6 +372,8 @@ class vmmConnection(vmmGObject):
         Return a pretty label for use in the manager view, and various
         connection lists.
         """
+        if self._get_config_pretty_name():
+            return self._get_config_pretty_name()
         if self._backend.fake_name():
             return self._backend.fake_name()
 
@@ -810,11 +816,6 @@ class vmmConnection(vmmGObject):
     ######################################
     # Connection closing/opening methods #
     ######################################
-
-    def get_autoconnect(self):
-        return self.config.get_conn_autoconnect(self.get_uri())
-    def set_autoconnect(self, val):
-        self.config.set_conn_autoconnect(self.get_uri(), val)
 
     def _schedule_close(self):
         self._closing = True
@@ -1351,3 +1352,23 @@ class vmmConnection(vmmGObject):
         return self.disk_read_rate() + self.disk_write_rate()
     def disk_io_max_rate(self):
         return self._get_record_helper("diskMaxRate")
+
+
+    ###########################
+    # Per-conn config helpers #
+    ###########################
+
+    def get_autoconnect(self):
+        return self.config.get_conn_autoconnect(self.get_uri())
+    def set_autoconnect(self, val):
+        self.config.set_conn_autoconnect(self.get_uri(), val)
+
+    def set_config_pretty_name(self, value):
+        self.config.set_perconn(self.get_uri(), "/pretty-name", value)
+    def _get_config_pretty_name(self):
+        return self.config.get_perconn(self.get_uri(), "/pretty-name")
+    def _on_config_pretty_name_changed(self, *args, **kwargs):
+        return self.config.listen_perconn(self.get_uri(), "/pretty-name",
+            *args, **kwargs)
+    def _config_pretty_name_changed_cb(self):
+        self.emit("state-changed")
