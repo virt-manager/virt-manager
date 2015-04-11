@@ -38,10 +38,11 @@ EDIT_POOL_NAME,
 EDIT_POOL_AUTOSTART,
 ) = range(2)
 
-VOL_NUM_COLUMNS = 6
+VOL_NUM_COLUMNS = 7
 (VOL_COLUMN_KEY,
  VOL_COLUMN_NAME,
  VOL_COLUMN_CAPACITY,
+ VOL_COLUMN_SIZESTR,
  VOL_COLUMN_FORMAT,
  VOL_COLUMN_INUSEBY,
  VOL_COLUMN_SENSITIVE) = range(VOL_NUM_COLUMNS)
@@ -150,6 +151,10 @@ class vmmStorageList(vmmGObjectUI):
     # Initialization methods #
     ##########################
 
+    def _cap_sort_func(self, model, iter1, iter2, ignore):
+        return cmp(int(model[iter1][VOL_COLUMN_CAPACITY]),
+                   int(model[iter2][VOL_COLUMN_CAPACITY]))
+
     def _init_ui(self):
         self.widget("storage-pages").set_show_tabs(False)
 
@@ -169,8 +174,8 @@ class vmmStorageList(vmmGObjectUI):
         self._volmenu.add(volCopyPath)
 
         # Volume list
-        # [key, name, capacity, format, in use by string, sensitive]
-        volListModel = Gtk.ListStore(str, str, str, str, str, bool)
+        # [key, name, sizestr, capacity, format, in use by string, sensitive]
+        volListModel = Gtk.ListStore(str, str, str, str, str, str, bool)
         self.widget("vol-list").set_model(volListModel)
 
         volCol = Gtk.TreeViewColumn("Volumes")
@@ -184,10 +189,11 @@ class vmmStorageList(vmmGObjectUI):
         volSizeCol = Gtk.TreeViewColumn("Size")
         vol_txt2 = Gtk.CellRendererText()
         volSizeCol.pack_start(vol_txt2, False)
-        volSizeCol.add_attribute(vol_txt2, 'text', VOL_COLUMN_CAPACITY)
+        volSizeCol.add_attribute(vol_txt2, 'text', VOL_COLUMN_SIZESTR)
         volSizeCol.add_attribute(vol_txt2, 'sensitive', VOL_COLUMN_SENSITIVE)
         volSizeCol.set_sort_column_id(VOL_COLUMN_CAPACITY)
         self.widget("vol-list").append_column(volSizeCol)
+        volListModel.set_sort_func(VOL_COLUMN_CAPACITY, self._cap_sort_func)
 
         volFormatCol = Gtk.TreeViewColumn("Format")
         vol_txt3 = Gtk.CellRendererText()
@@ -421,7 +427,8 @@ class vmmStorageList(vmmGObjectUI):
             try:
                 path = vol.get_target_path()
                 name = vol.get_pretty_name(pool.get_type())
-                cap = vol.get_pretty_capacity()
+                cap = str(vol.get_capacity())
+                sizestr = vol.get_pretty_capacity()
                 fmt = vol.get_format() or ""
             except:
                 logging.debug("Error getting volume info for '%s', "
@@ -447,6 +454,7 @@ class vmmStorageList(vmmGObjectUI):
             row = [None] * VOL_NUM_COLUMNS
             row[VOL_COLUMN_KEY] = key
             row[VOL_COLUMN_NAME] = name
+            row[VOL_COLUMN_SIZESTR] = sizestr
             row[VOL_COLUMN_CAPACITY] = cap
             row[VOL_COLUMN_FORMAT] = fmt
             row[VOL_COLUMN_INUSEBY] = namestr
