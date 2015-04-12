@@ -537,7 +537,13 @@ class SpiceViewer(Viewer):
         self._tunnels.unlock()
 
     def _channel_open_fd_request(self, channel, tls_ignore):
-        logging.debug("Opening tunnel for channel: %s", channel)
+        if not self._tunnels:
+            # Can happen if we close the details window and clear self._tunnels
+            # while initially connecting to spice and channel FD requests
+            # are still rolling in
+            return
+
+        logging.debug("Requesting tunnel for channel: %s", channel)
         channel.connect_after("channel-event", self._fd_channel_event_cb)
 
         fd = self._tunnels.open_new()

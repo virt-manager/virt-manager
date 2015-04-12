@@ -171,53 +171,9 @@ class _Tunnel(object):
 
         return errout
 
-    def open(self, ginfo, sshfd):
+    def open(self, argv, sshfd):
         if self._closed:
             return
-
-        host, port, ignore = ginfo.get_conn_host()
-
-        # Build SSH cmd
-        argv = ["ssh", "ssh"]
-        if port:
-            argv += ["-p", str(port)]
-
-        if ginfo.connuser:
-            argv += ['-l', ginfo.connuser]
-
-        argv += [host]
-
-        # Build 'nc' command run on the remote host
-        #
-        # This ugly thing is a shell script to detect availability of
-        # the -q option for 'nc': debian and suse based distros need this
-        # flag to ensure the remote nc will exit on EOF, so it will go away
-        # when we close the VNC tunnel. If it doesn't go away, subsequent
-        # VNC connection attempts will hang.
-        #
-        # Fedora's 'nc' doesn't have this option, and apparently defaults
-        # to the desired behavior.
-        #
-        if ginfo.gsocket:
-            nc_params = "-U %s" % ginfo.gsocket
-        else:
-            nc_params = "%s %s" % (ginfo.gaddr, ginfo.gport)
-
-        nc_cmd = (
-            """nc -q 2>&1 | grep "requires an argument" >/dev/null;"""
-            """if [ $? -eq 0 ] ; then"""
-            """   CMD="nc -q 0 %(nc_params)s";"""
-            """else"""
-            """   CMD="nc %(nc_params)s";"""
-            """fi;"""
-            """eval "$CMD";""" %
-            {'nc_params': nc_params})
-
-        argv.append("sh -c")
-        argv.append("'%s'" % nc_cmd)
-
-        argv_str = reduce(lambda x, y: x + " " + y, argv[1:])
-        logging.debug("Creating SSH tunnel: %s", argv_str)
 
         errfds = socket.socketpair()
         pid = os.fork()
@@ -241,10 +197,60 @@ class _Tunnel(object):
         self._pid = pid
 
 
+def _make_ssh_command(ginfo):
+    if not ginfo.need_tunnel():
+        return None
+
+    host, port, ignore = ginfo.get_conn_host()
+
+    # Build SSH cmd
+    argv = ["ssh", "ssh"]
+    if port:
+        argv += ["-p", str(port)]
+
+    if ginfo.connuser:
+        argv += ['-l', ginfo.connuser]
+
+    argv += [host]
+
+    # Build 'nc' command run on the remote host
+    #
+    # This ugly thing is a shell script to detect availability of
+    # the -q option for 'nc': debian and suse based distros need this
+    # flag to ensure the remote nc will exit on EOF, so it will go away
+    # when we close the VNC tunnel. If it doesn't go away, subsequent
+    # VNC connection attempts will hang.
+    #
+    # Fedora's 'nc' doesn't have this option, and apparently defaults
+    # to the desired behavior.
+    #
+    if ginfo.gsocket:
+        nc_params = "-U %s" % ginfo.gsocket
+    else:
+        nc_params = "%s %s" % (ginfo.gaddr, ginfo.gport)
+
+    nc_cmd = (
+        """nc -q 2>&1 | grep "requires an argument" >/dev/null;"""
+        """if [ $? -eq 0 ] ; then"""
+        """   CMD="nc -q 0 %(nc_params)s";"""
+        """else"""
+        """   CMD="nc %(nc_params)s";"""
+        """fi;"""
+        """eval "$CMD";""" %
+        {'nc_params': nc_params})
+
+    argv.append("sh -c")
+    argv.append("'%s'" % nc_cmd)
+
+    argv_str = reduce(lambda x, y: x + " " + y, argv[1:])
+    logging.debug("Pre-generated ssh command for ginfo: %s", argv_str)
+    return argv
+
+
 class SSHTunnels(object):
     def __init__(self, ginfo):
         self._tunnels = []
-        self._ginfo = ginfo
+        self._sshcommand = _make_ssh_command(ginfo)
         self._locked = False
 
     def open_new(self):
@@ -258,7 +264,7 @@ class SSHTunnels(object):
         # level socket object for the SSH side, since it simplifies things
         # in that area.
         viewerfd, sshfd = socket.socketpair()
-        _tunnel_scheduler.schedule(self._lock, t.open, self._ginfo, sshfd)
+        _tunnel_scheduler.schedule(self._lock, t.open, self._sshcommand, sshfd)
 
         retfd = os.dup(viewerfd.fileno())
         logging.debug("Generated tunnel fd=%s for viewer", retfd)
