@@ -556,22 +556,22 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("console-auth-username").set_visible(withUsername)
         self.widget("label-auth-username").set_visible(withUsername)
 
-        if withUsername:
-            self.widget("console-auth-username").grab_focus()
-        else:
-            self.widget("console-auth-password").grab_focus()
-
         self.widget("console-auth-username").set_text(username)
         self.widget("console-auth-password").set_text(pw)
 
         self.widget("console-auth-remember").set_sensitive(
                 bool(self.config.has_keyring()))
         if self.config.has_keyring():
-            self.widget("console-auth-remember").set_active(bool(pw and
-                                                                 username))
+            self.widget("console-auth-remember").set_active(
+                bool(pw and username))
 
         self.widget("console-pages").set_current_page(
             self.CONSOLE_PAGE_AUTHENTICATE)
+
+        if withUsername:
+            self.widget("console-auth-username").grab_focus()
+        else:
+            self.widget("console-auth-password").grab_focus()
 
     def _activate_viewer_page(self):
         self.widget("console-pages").set_current_page(self.CONSOLE_PAGE_VIEWER)
