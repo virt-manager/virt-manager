@@ -73,7 +73,6 @@ class SettingsWrapper(object):
 
         schema = self._root + ".connection"
         path = "/" + self._root.replace(".", "/") + key.rsplit("/", 1)[0] + "/"
-        print schema, path
         self._settingsmap[settingskey] = Gio.Settings.new_with_path(
                 schema, path)
         return True
