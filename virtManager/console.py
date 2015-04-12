@@ -783,7 +783,7 @@ class vmmConsolePages(vmmGObjectUI):
     def _viewer_disconnected(self, ignore):
         errout = ""
         if self._viewer:
-            errout = self._viewer.console_reset_tunnels()
+            errout = self._viewer.console_get_err_output()
 
         self.widget("console-pages").set_current_page(
             self.CONSOLE_PAGE_UNAVAILABLE)

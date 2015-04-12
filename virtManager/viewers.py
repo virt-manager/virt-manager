@@ -81,7 +81,7 @@ class Viewer(vmmGObject):
         self._display = None
 
         if self._tunnels:
-            self._reset_tunnels()
+            self._tunnels.close_all()
         self._tunnels = None
 
 
@@ -115,12 +115,6 @@ class Viewer(vmmGObject):
     #########################
     # Generic internal APIs #
     #########################
-
-    def _reset_tunnels(self):
-        errout = self._tunnels.get_err_output()
-        self._tunnels.close_all()
-        self._tunnels = None
-        return errout
 
     def _grab_focus(self):
         if self._display:
@@ -229,8 +223,8 @@ class Viewer(vmmGObject):
     def console_send_keys(self, keys):
         return self._send_keys(keys)
 
-    def console_reset_tunnels(self):
-        return self._reset_tunnels()
+    def console_get_err_output(self):
+        return self._tunnels.get_err_output()
 
     def console_get_grab_keys(self):
         return self._get_grab_keys()
@@ -348,11 +342,10 @@ class VNCViewer(Viewer):
 
     def close(self):
         self._display.close()
-        if not self._sockfd:
-            return
-
-        self._sockfd.close()
-        self._sockfd = None
+        if self._sockfd:
+            self._sockfd.close()
+            self._sockfd = None
+        self._tunnels.close_all()
 
     def _is_open(self):
         return self._display.is_open()
@@ -600,6 +593,7 @@ class SpiceViewer(Viewer):
 
         self._close_main_channel()
         self._usbdev_manager = None
+        self._tunnels.close_all()
 
     def _is_open(self):
         return self._spice_session is not None
