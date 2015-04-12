@@ -499,15 +499,11 @@ class vmmConsolePages(vmmGObjectUI):
         if self._viewer is None:
             return
 
-        viewer = self._viewer
-        display = getattr(viewer, "_display")
+        self._viewer.console_remove_display_from_widget(
+            self.widget("console-gfx-viewport"))
+        self._viewer.cleanup()
         self._viewer = None
 
-        viewport = self.widget("console-gfx-viewport")
-        if display and display in viewport.get_children():
-            viewport.remove(display)
-
-        viewer.cleanup()
         self._viewer_is_connected = False
         self._refresh_can_fullscreen()
         self._leave_fullscreen()

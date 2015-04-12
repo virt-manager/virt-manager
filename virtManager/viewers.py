@@ -249,6 +249,10 @@ class Viewer(vmmGObject):
     def console_has_agent(self):
         return self._has_agent()
 
+    def console_remove_display_from_widget(self, widget):
+        if self._display and self._display in widget.get_children():
+            widget.remove(self._display)
+
 
 ####################
 # VNC viewer class #
