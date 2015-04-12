@@ -664,9 +664,8 @@ class SpiceViewer(Viewer):
         ignore = val
     def _set_password(self, cred):
         self._spice_session.set_property("password", cred)
-        if self._tunnels:
-            fd = self._tunnels.open_new()
-            self._spice_session.open_fd(fd)
+        if self._ginfo.need_tunnel():
+            self._spice_session.open_fd(self._tunnels.open_new())
         else:
             self._spice_session.connect()
 
