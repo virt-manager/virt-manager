@@ -514,7 +514,7 @@ class vmmConsolePages(vmmGObjectUI):
         if display and display in viewport.get_children():
             viewport.remove(display)
 
-        viewer.close()
+        viewer.cleanup()
         self._viewer_is_connected = False
         self._refresh_can_fullscreen()
         self._leave_fullscreen()
