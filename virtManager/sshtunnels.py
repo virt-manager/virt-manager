@@ -274,6 +274,7 @@ class SSHTunnels(object):
         for l in self._tunnels:
             l.close()
         self._tunnels = []
+        self.unlock()
 
     def get_err_output(self):
         errout = ""

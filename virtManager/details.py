@@ -1336,7 +1336,7 @@ class vmmDetails(vmmGObjectUI):
         for c in send_key.get_submenu().get_children():
             c.set_sensitive(not (run or paused))
 
-        self.console.details_update_widget_states(vm, status)
+        self.console.details_update_widget_states()
         if not run:
             self.activate_default_console_page()
 

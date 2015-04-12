@@ -487,9 +487,6 @@ class vmmConsolePages(vmmGObjectUI):
     ##########################
 
     def _show_vm_status_unavailable(self):
-        self.widget("console-pages").set_current_page(
-            self.CONSOLE_PAGE_UNAVAILABLE)
-
         if self.vm.is_crashed():
             self._activate_unavailable_page(_("Guest has crashed"))
         else:
@@ -511,9 +508,9 @@ class vmmConsolePages(vmmGObjectUI):
         for serial in self._serial_tabs:
             serial.close()
 
-    def _update_widget_states(self, vm, status_ignore):
-        runable = vm.is_runable()
-        paused = vm.is_paused()
+    def _update_vm_widget_states(self):
+        runable = self.vm.is_runable()
+        paused = self.vm.is_paused()
         pages = self.widget("console-pages")
         page = pages.get_current_page()
 
@@ -714,9 +711,22 @@ class vmmConsolePages(vmmGObjectUI):
         else:
             self._enable_modifiers()
 
-    def _viewer_auth_error(self, viewer, errmsg):
-        viewer.close()
+    def _viewer_auth_rejected(self, ignore, errmsg):
+        self._close_viewer()
         self._activate_unavailable_page(errmsg)
+
+    def _viewer_auth_error(self, ignore, errmsg, viewer_will_disconnect):
+        errmsg = _("Viewer authentication error: %s") % errmsg
+        self.err.val_err(errmsg)
+
+        if viewer_will_disconnect:
+            # GtkVNC will disconnect after an auth error, so lets do it for
+            # them and re-init the viewer (which will be triggered by
+            # update_vm_widget_states if needed)
+            self._close_viewer()
+            self._activate_unavailable_page(errmsg)
+
+        self._update_vm_widget_states()
 
     def _viewer_need_auth(self, ignore, withPassword, withUsername):
         self._activate_auth_page(withPassword, withUsername)
@@ -744,15 +754,14 @@ class vmmConsolePages(vmmGObjectUI):
         if self.vm.is_runable():
             # Exit was probably for legitimate reasons
             self._show_vm_status_unavailable()
-            return
+        else:
+            error = _("Error: viewer connection to hypervisor host got "
+                "refused or disconnected!")
+            if errout:
+                logging.debug("Error output from closed console: %s", errout)
+                error += "\n\nError: %s" % errout
+            self._activate_unavailable_page(error)
 
-        error = _("Error: viewer connection to hypervisor host got refused "
-                  "or disconnected!")
-        if errout:
-            logging.debug("Error output from closed console: %s", errout)
-            error += "\n\nError: %s" % errout
-
-        self._activate_unavailable_page(error)
         self._refresh_resizeguest_from_settings()
 
     def _viewer_connected(self, ignore):
@@ -775,6 +784,7 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer.connect("connected", self._viewer_connected)
         self._viewer.connect("disconnected", self._viewer_disconnected)
         self._viewer.connect("auth-error", self._viewer_auth_error)
+        self._viewer.connect("auth-rejected", self._viewer_auth_rejected)
         self._viewer.connect("need-auth", self._viewer_need_auth)
         self._viewer.connect("agent-connected", self._viewer_agent_connected)
         self._viewer.connect("usb-redirect-error",
@@ -947,8 +957,8 @@ class vmmConsolePages(vmmGObjectUI):
     def details_activate_default_console_page(self):
         return self._activate_default_console_page()
 
-    def details_update_widget_states(self, *args, **kwargs):
-        return self._update_widget_states(*args, **kwargs)
+    def details_update_widget_states(self):
+        return self._update_vm_widget_states()
 
     def details_build_keycombo_menu(self, *args, **kwargs):
         return self._build_keycombo_menu(*args, **kwargs)
@@ -972,7 +982,4 @@ class vmmConsolePages(vmmGObjectUI):
         self._change_fullscreen(do_fullscreen)
 
     def details_auth_login(self, ignore):
-        self.widget("console-pages").set_current_page(
-            self.CONSOLE_PAGE_UNAVAILABLE)
         self._set_credentials()
-        self._activate_viewer_page()

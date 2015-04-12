@@ -53,7 +53,8 @@ class Viewer(vmmGObject):
         "pointer-ungrab": (GObject.SignalFlags.RUN_FIRST, None, []),
         "connected": (GObject.SignalFlags.RUN_FIRST, None, []),
         "disconnected": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "auth-error": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "auth-error": (GObject.SignalFlags.RUN_FIRST, None, [str, bool]),
+        "auth-rejected": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "need-auth": (GObject.SignalFlags.RUN_FIRST, None, [bool, bool]),
         "agent-connected": (GObject.SignalFlags.RUN_FIRST, None, []),
         "usb-redirect-error": (GObject.SignalFlags.RUN_FIRST, None, [str]),
@@ -80,9 +81,7 @@ class Viewer(vmmGObject):
             self._display.destroy()
         self._display = None
 
-        if self._tunnels:
-            self._tunnels.close_all()
-        self._tunnels = None
+        self._tunnels.close_all()
 
 
     ########################
@@ -288,6 +287,7 @@ class VNCViewer(Viewer):
             self._make_signal_proxy("pointer-ungrab"))
 
         self._display.connect("vnc-auth-credential", self._auth_credential)
+        self._display.connect("vnc-auth-failure", self._auth_failure_cb)
         self._display.connect("vnc-initialized", self._connected_cb)
         self._display.connect("vnc-disconnected", self._disconnected_cb)
         self._display.connect("vnc-desktop-resize", self._desktop_resize)
@@ -307,6 +307,10 @@ class VNCViewer(Viewer):
         # Queue a resize
         self.emit("size-allocate", None)
 
+    def _auth_failure_cb(self, ignore, msg):
+        logging.debug("VNC auth failure. msg=%s", msg)
+        self.emit("auth-error", msg, True)
+
     def _auth_credential(self, src_ignore, credList):
         values = []
         for idx in range(int(credList.n_values)):
@@ -322,7 +326,8 @@ class VNCViewer(Viewer):
                 "server.\n The credential type %s is not supported") %
                 str(cred))
 
-            self.emit("auth-error", errmsg)
+            # XXX test this
+            self.emit("auth-rejected", errmsg)
             return
 
         withUsername = False
@@ -349,7 +354,6 @@ class VNCViewer(Viewer):
         if self._sockfd:
             self._sockfd.close()
             self._sockfd = None
-        self._tunnels.close_all()
 
     def _is_open(self):
         return self._display.is_open()
@@ -519,10 +523,14 @@ class SpiceViewer(Viewer):
         if event == SpiceClientGLib.ChannelEvent.CLOSED:
             self.emit("disconnected")
         elif event == SpiceClientGLib.ChannelEvent.ERROR_AUTH:
-            logging.debug("Spice channel received ERROR_AUTH, assuming "
-                "it needs credentials.")
-            self.emit("need-auth", True, False)
-            self._close_main_channel()
+            if not self._spice_session.get_property("password"):
+                logging.debug("Spice channel received ERROR_AUTH, but no "
+                    "password set, assuming it wants credentials.")
+                self.emit("need-auth", True, False)
+            else:
+                logging.debug("Spice channel received ERROR_AUTH, but a "
+                    "password is already set. Assuming authentication failed.")
+                self.emit("auth-error", channel.get_error().message, False)
         elif event in [SpiceClientGLib.ChannelEvent.ERROR_CONNECT,
                        SpiceClientGLib.ChannelEvent.ERROR_IO,
                        SpiceClientGLib.ChannelEvent.ERROR_LINK,
@@ -603,7 +611,6 @@ class SpiceViewer(Viewer):
 
         self._close_main_channel()
         self._usbdev_manager = None
-        self._tunnels.close_all()
 
     def _is_open(self):
         return self._spice_session is not None
