@@ -135,41 +135,21 @@ _tunnel_scheduler = _TunnelScheduler()
 
 class _Tunnel(object):
     def __init__(self):
-        self._outfd = None
-        self._errfd = None
         self._pid = None
-        self._outfds = None
-        self._errfds = None
         self._closed = False
-
-    def open(self, ginfo):
-        self._outfds = socket.socketpair()
-        self._errfds = socket.socketpair()
-
-        return self._outfds[0].fileno(), self._launch_tunnel, ginfo
+        self._errfd = None
 
     def close(self):
         if self._closed:
             return
         self._closed = True
 
-        logging.debug("Close tunnel PID=%s OUTFD=%s ERRFD=%s",
-                      self._pid,
-                      self._outfd and self._outfd.fileno() or self._outfds,
-                      self._errfd and self._errfd.fileno() or self._errfds)
+        logging.debug("Close tunnel PID=%s ERRFD=%s",
+                      self._pid, self._errfd and self._errfd.fileno() or None)
 
-        if self._outfds:
-            self._outfds[1].close()
-        self._outfd = None
-        self._outfds = None
-
-        if self._errfd:
-            self._errfd.close()
-        elif self._errfds:
-            self._errfds[0].close()
-            self._errfds[1].close()
+        # Since this is a socket object, the file descriptor is closed
+        # when it's garbage collected.
         self._errfd = None
-        self._errfds = None
 
         if self._pid:
             os.kill(self._pid, signal.SIGKILL)
@@ -191,9 +171,9 @@ class _Tunnel(object):
 
         return errout
 
-    def _launch_tunnel(self, ginfo):
+    def open(self, ginfo, sshfd):
         if self._closed:
-            return -1
+            return
 
         host, port, ignore = ginfo.get_conn_host()
 
@@ -239,31 +219,25 @@ class _Tunnel(object):
         argv_str = reduce(lambda x, y: x + " " + y, argv[1:])
         logging.debug("Creating SSH tunnel: %s", argv_str)
 
+        errfds = socket.socketpair()
         pid = os.fork()
         if pid == 0:
-            self._outfds[0].close()
-            self._errfds[0].close()
+            errfds[0].close()
 
-            os.close(0)
-            os.close(1)
-            os.close(2)
-            os.dup(self._outfds[1].fileno())
-            os.dup(self._outfds[1].fileno())
-            os.dup(self._errfds[1].fileno())
+            os.dup2(sshfd.fileno(), 0)
+            os.dup2(sshfd.fileno(), 1)
+            os.dup2(errfds[1].fileno(), 2)
             os.execlp(*argv)
             os._exit(1)  # pylint: disable=protected-access
-        else:
-            self._outfds[1].close()
-            self._errfds[1].close()
 
-        logging.debug("Opened tunnel PID=%d OUTFD=%d ERRFD=%d",
-                      pid, self._outfds[0].fileno(), self._errfds[0].fileno())
-        self._errfds[0].setblocking(0)
+        sshfd.close()
+        errfds[1].close()
 
-        self._outfd = self._outfds[0]
-        self._errfd = self._errfds[0]
-        self._outfds = None
-        self._errfds = None
+        self._errfd = errfds[0]
+        self._errfd.setblocking(0)
+        logging.debug("Opened tunnel PID=%d ERRFD=%d",
+                      pid, self._errfd.fileno())
+
         self._pid = pid
 
 
@@ -275,11 +249,20 @@ class SSHTunnels(object):
 
     def open_new(self):
         t = _Tunnel()
-        fd, cb, args = t.open(self._ginfo)
         self._tunnels.append(t)
-        _tunnel_scheduler.schedule(self._lock, cb, args)
 
-        return fd
+        # socket FDs are closed when the object is garbage collected. This
+        # can close an FD behind spice/vnc's back which causes crashes.
+        #
+        # Dup a bare FD for the viewer side of things, but keep the high
+        # level socket object for the SSH side, since it simplifies things
+        # in that area.
+        viewerfd, sshfd = socket.socketpair()
+        _tunnel_scheduler.schedule(self._lock, t.open, self._ginfo, sshfd)
+
+        retfd = os.dup(viewerfd.fileno())
+        logging.debug("Generated tunnel fd=%s for viewer", retfd)
+        return retfd
 
     def close_all(self):
         for l in self._tunnels:
