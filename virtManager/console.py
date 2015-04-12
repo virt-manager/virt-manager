@@ -22,8 +22,6 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-import libvirt
-
 import logging
 
 from .autodrawer import AutoDrawer
@@ -61,10 +59,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         # Initialize display widget
         self._viewer = None
-        self._viewerRetriesScheduled = 0
-        self._viewerRetryDelay = 125
         self._viewer_is_connected = False
-        self._viewer_is_connecting = False
 
         # Fullscreen toolbar
         self._send_key_button = None
@@ -491,16 +486,14 @@ class vmmConsolePages(vmmGObjectUI):
     # State tracking methods #
     ##########################
 
-    def _view_vm_status(self):
-        if not self.vm:
-            # window has been closed and no pages to update are available.
-            return
-        status = self.vm.status()
-        if status == libvirt.VIR_DOMAIN_SHUTOFF:
-            self._activate_unavailable_page(_("Guest not running"))
+    def _show_vm_status_unavailable(self):
+        self.widget("console-pages").set_current_page(
+            self.CONSOLE_PAGE_UNAVAILABLE)
+
+        if self.vm.is_crashed():
+            self._activate_unavailable_page(_("Guest has crashed"))
         else:
-            if status == libvirt.VIR_DOMAIN_CRASHED:
-                self._activate_unavailable_page(_("Guest has crashed"))
+            self._activate_unavailable_page(_("Guest not running"))
 
     def _close_viewer(self):
         if self._viewer is None:
@@ -525,26 +518,19 @@ class vmmConsolePages(vmmGObjectUI):
     def _update_widget_states(self, vm, status_ignore):
         runable = vm.is_runable()
         paused = vm.is_paused()
-        pages   = self.widget("console-pages")
-        page    = pages.get_current_page()
+        pages = self.widget("console-pages")
+        page = pages.get_current_page()
 
         self._send_key_button.set_sensitive(not (runable or paused))
 
         if runable:
-            if page != self.CONSOLE_PAGE_UNAVAILABLE:
-                pages.set_current_page(self.CONSOLE_PAGE_UNAVAILABLE)
-
-            self._view_vm_status()
+            self._show_vm_status_unavailable()
 
         elif page in [self.CONSOLE_PAGE_UNAVAILABLE, self.CONSOLE_PAGE_VIEWER]:
             if self._viewer and self._viewer.console_is_open():
                 self._activate_viewer_page()
             else:
-                self._viewerRetriesScheduled = 0
-                self._viewerRetryDelay = 125
-                self._try_login()
-
-        return
+                self._init_viewer()
 
 
     ###################
@@ -619,42 +605,9 @@ class vmmConsolePages(vmmGObjectUI):
     # Viewer login attempts #
     #########################
 
-    def _schedule_retry(self):
-        if self._viewerRetriesScheduled >= 10:
-            logging.error("Too many connection failures, not retrying again")
-            return
-
-        self.timeout_add(self._viewerRetryDelay, self._try_login)
-
-        if self._viewerRetryDelay < 2000:
-            self._viewerRetryDelay = self._viewerRetryDelay * 2
-
-    def _skip_connect_attempt(self):
-        return (self._viewer or
-                not self.is_visible())
-
-    def _guest_not_avail(self):
-        return (self.vm.is_shutoff() or self.vm.is_crashed())
-
-    def _try_login(self, src_ignore=None):
-        if self._viewer_is_connecting:
-            return
-
-        try:
-            self._viewer_is_connecting = True
-            self._do_try_login()
-        finally:
-            self._viewer_is_connecting = False
-
-    def _do_try_login(self):
-        if self._skip_connect_attempt():
+    def _init_viewer(self):
+        if self._viewer or not self.is_visible():
             # Don't try and login for these cases
-            return
-
-        if self._guest_not_avail():
-            # Guest isn't running, schedule another try
-            self._activate_unavailable_page(_("Guest not running"))
-            self._schedule_retry()
             return
 
         ginfo = None
@@ -695,8 +648,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         if not ginfo.console_active():
             self._activate_unavailable_page(
-                            _("Graphical console is not yet active for guest"))
-            self._schedule_retry()
+                _("Graphical console is not yet active for guest"))
             return
 
         self._activate_unavailable_page(
@@ -793,9 +745,9 @@ class vmmConsolePages(vmmGObjectUI):
         # Make sure modifiers are set correctly
         self._viewer_focus_changed()
 
-        if self._guest_not_avail():
+        if self.vm.is_runable():
             # Exit was probably for legitimate reasons
-            self._view_vm_status()
+            self._show_vm_status_unavailable()
             return
 
         error = _("Error: viewer connection to hypervisor host got refused "
@@ -813,10 +765,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         logging.debug("Viewer connected")
         self._activate_viewer_page()
-
-        # Had a successful connect, so reset counters now
-        self._viewerRetriesScheduled = 0
-        self._viewerRetryDelay = 125
 
         # Make sure modifiers are set correctly
         self._viewer_focus_changed()

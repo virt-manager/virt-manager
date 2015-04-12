@@ -1739,8 +1739,7 @@ class vmmDomain(vmmLibvirtObject):
         return (self.is_stoppable() or
                 self.status() in [libvirt.VIR_DOMAIN_CRASHED])
     def is_runable(self):
-        return self.status() in [libvirt.VIR_DOMAIN_SHUTOFF,
-                                 libvirt.VIR_DOMAIN_CRASHED]
+        return self.is_shutoff() or self.is_crashed()
     def is_pauseable(self):
         return self.status() in [libvirt.VIR_DOMAIN_RUNNING]
     def is_unpauseable(self):
