@@ -135,7 +135,7 @@ class vmmEngine(vmmGObject):
             conn = self.make_conn(self.uri_at_startup)
             self.register_conn(conn, skip_config=True)
             if conn and self.uri_cb:
-                conn.connect_opt_out("resources-sampled", self.uri_cb)
+                conn.connect_opt_out("state-changed", self.uri_cb)
 
             self.connect_to_uri(self.uri_at_startup)
 

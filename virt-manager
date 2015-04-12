@@ -264,9 +264,15 @@ def main():
 
     if show:
         def cb(conn):
-            ignore = conn
-            launch_specific_window(engine, show, options.uri, options.uuid)
-            return True
+            if conn.is_disconnected():
+                # Connection error
+                return True
+
+            if conn.is_active():
+                launch_specific_window(engine, show, options.uri, options.uuid)
+                return True
+
+            return False
         engine.uri_cb = cb
         engine.show_manager_window = False
         engine.skip_autostart = True
