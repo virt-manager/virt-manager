@@ -59,10 +59,11 @@ class Viewer(vmmGObject):
         "usb-redirect-error": (GObject.SignalFlags.RUN_FIRST, None, [str]),
     }
 
-    def __init__(self):
+    def __init__(self, ginfo):
         vmmGObject.__init__(self)
         self._display = None
-        self._tunnels = None
+        self._ginfo = ginfo
+        self._tunnels = SSHTunnels(self._ginfo)
 
         self.add_gsettings_handle(
             self.config.on_keys_combination_changed(self._refresh_grab_keys))
@@ -79,7 +80,8 @@ class Viewer(vmmGObject):
             self._display.destroy()
         self._display = None
 
-        self._reset_tunnels()
+        if self._tunnels:
+            self._reset_tunnels()
         self._tunnels = None
 
 
@@ -115,9 +117,6 @@ class Viewer(vmmGObject):
     #########################
 
     def _reset_tunnels(self):
-        if not self._tunnels:
-            return
-
         errout = self._tunnels.get_err_output()
         self._tunnels.close_all()
         self._tunnels = None
@@ -138,12 +137,11 @@ class Viewer(vmmGObject):
     def _get_pixbuf(self):
         return self._display.get_pixbuf()
 
-    def _open_ginfo(self, ginfo):
-        if ginfo.need_tunnel():
-            self._tunnels = SSHTunnels(ginfo)
+    def _open(self):
+        if self._ginfo.need_tunnel():
             self._open_fd(self._tunnels.open_new())
         else:
-            self._open_host(ginfo)
+            self._open_host()
 
     def _get_grab_keys(self):
         return self._display.get_grab_keys().as_string()
@@ -173,7 +171,7 @@ class Viewer(vmmGObject):
     def _refresh_keyboard_grab_default(self):
         raise NotImplementedError()
 
-    def _open_host(self, ginfo):
+    def _open_host(self):
         raise NotImplementedError()
     def _open_fd(self, fd):
         raise NotImplementedError()
@@ -220,8 +218,8 @@ class Viewer(vmmGObject):
     def console_get_pixbuf(self):
         return self._get_pixbuf()
 
-    def console_open_ginfo(self, ginfo):
-        return self._open_ginfo(ginfo)
+    def console_open(self):
+        return self._open()
 
     def console_set_password(self, val):
         return self._set_password(val)
@@ -270,7 +268,6 @@ class VNCViewer(Viewer):
         self._display = None
         self._sockfd = None
         self._desktop_resolution = None
-        self._tunnel_unlocked = False
 
 
     ###################
@@ -299,17 +296,12 @@ class VNCViewer(Viewer):
 
         self._display.show()
 
-    def _unlock_tunnel(self):
-        if self._tunnels and not self._tunnel_unlocked:
-            self._tunnels.unlock()
-            self._tunnel_unlocked = True
-
     def _connected_cb(self, ignore):
-        self._unlock_tunnel()
+        self._tunnels.unlock()
         self.emit("connected")
 
     def _disconnected_cb(self, ignore):
-        self._unlock_tunnel()
+        self._tunnels.unlock()
         self.emit("disconnected")
 
     def _desktop_resize(self, src_ignore, w, h):
@@ -428,31 +420,31 @@ class VNCViewer(Viewer):
     # Connection routines #
     #######################
 
-    def _open_ginfo(self, *args, **kwargs):
+    def _open(self, *args, **kwargs):
         self._init_widget()
-        return Viewer._open_ginfo(self, *args, **kwargs)
+        return Viewer._open(self, *args, **kwargs)
 
-    def _open_host(self, ginfo):
-        host, port, ignore = ginfo.get_conn_host()
+    def _open_host(self):
+        host, port, ignore = self._ginfo.get_conn_host()
 
-        if not ginfo.gsocket:
+        if not self._ginfo.gsocket:
             logging.debug("VNC connection to %s:%s", host, port)
             self._display.open_host(host, port)
             return
 
-        logging.debug("VNC connecting to socket=%s", ginfo.gsocket)
+        logging.debug("VNC connecting to socket=%s", self._ginfo.gsocket)
         try:
             sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            sock.connect(ginfo.gsocket)
+            sock.connect(self._ginfo.gsocket)
             self._sockfd = sock
         except Exception, e:
             raise RuntimeError(_("Error opening socket path '%s': %s") %
-                               (ginfo.gsocket, e))
+                               (self._ginfo.gsocket, e))
 
         fd = self._sockfd.fileno()
         if fd < 0:
             raise RuntimeError((_("Error opening socket path '%s'") %
-                                ginfo.gsocket) + " fd=%s" % fd)
+                                self._ginfo.gsocket) + " fd=%s" % fd)
         self._open_fd(fd)
 
     def _open_fd(self, fd):
@@ -548,9 +540,6 @@ class SpiceViewer(Viewer):
         self._tunnels.unlock()
 
     def _channel_open_fd_request(self, channel, tls_ignore):
-        if not self._tunnels:
-            raise SystemError("Got fd request with no configured tunnel!")
-
         logging.debug("Opening tunnel for channel: %s", channel)
         channel.connect_after("channel-event", self._fd_channel_event_cb)
 
@@ -563,8 +552,7 @@ class SpiceViewer(Viewer):
 
         if (type(channel) == SpiceClientGLib.MainChannel and
             not self._main_channel):
-            if self._tunnels:
-                self._tunnels.unlock()
+            self._tunnels.unlock()
             self._main_channel = channel
             hid = self._main_channel.connect_after("channel-event",
                 self._main_channel_event_cb)
@@ -658,8 +646,8 @@ class SpiceViewer(Viewer):
             return False
         return self._main_channel.get_property("agent-connected")
 
-    def _open_host(self, ginfo):
-        host, port, tlsport = ginfo.get_conn_host()
+    def _open_host(self):
+        host, port, tlsport = self._ginfo.get_conn_host()
         self._create_spice_session()
 
         self._spice_session.set_property("host", str(host))

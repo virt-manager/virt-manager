@@ -709,12 +709,12 @@ class vmmConsolePages(vmmGObjectUI):
             elif ginfo.gtype == "spice":
                 viewer_class = SpiceViewer
 
-            self._viewer = viewer_class()
+            self._viewer = viewer_class(ginfo)
             self._connect_viewer_signals()
 
             self._refresh_enable_accel()
 
-            self._viewer.console_open_ginfo(ginfo)
+            self._viewer.console_open()
         except Exception, e:
             logging.exception("Error connection to graphical console")
             self._activate_unavailable_page(

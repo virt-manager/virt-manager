@@ -104,23 +104,25 @@ class _TunnelScheduler(object):
     independent of connection, vm, etc.
     """
     def __init__(self):
-        self._thread = threading.Thread(name="Tunnel thread",
-                                        target=self._handle_queue,
-                                        args=())
-        self._thread.daemon = True
+        self._thread = None
         self._queue = Queue.Queue()
         self._lock = threading.Lock()
 
     def _handle_queue(self):
         while True:
-            cb, args, = self._queue.get()
-            self.lock()
+            lock_cb, cb, args, = self._queue.get()
+            lock_cb()
             vmmGObject.idle_add(cb, *args)
 
-    def schedule(self, cb, *args):
+    def schedule(self, lock_cb, cb, *args):
+        if not self._thread:
+            self._thread = threading.Thread(name="Tunnel thread",
+                                            target=self._handle_queue,
+                                            args=())
+            self._thread.daemon = True
         if not self._thread.is_alive():
             self._thread.start()
-        self._queue.put((cb, args))
+        self._queue.put((lock_cb, cb, args))
 
     def lock(self):
         self._lock.acquire()
@@ -128,14 +130,17 @@ class _TunnelScheduler(object):
         self._lock.release()
 
 
+_tunnel_scheduler = _TunnelScheduler()
+
+
 class _Tunnel(object):
     def __init__(self):
-        self.outfd = None
-        self.errfd = None
-        self.pid = None
+        self._outfd = None
+        self._errfd = None
+        self._pid = None
         self._outfds = None
         self._errfds = None
-        self.closed = False
+        self._closed = False
 
     def open(self, ginfo):
         self._outfds = socket.socketpair()
@@ -144,38 +149,38 @@ class _Tunnel(object):
         return self._outfds[0].fileno(), self._launch_tunnel, ginfo
 
     def close(self):
-        if self.closed:
+        if self._closed:
             return
-        self.closed = True
+        self._closed = True
 
         logging.debug("Close tunnel PID=%s OUTFD=%s ERRFD=%s",
-                      self.pid,
-                      self.outfd and self.outfd.fileno() or self._outfds,
-                      self.errfd and self.errfd.fileno() or self._errfds)
+                      self._pid,
+                      self._outfd and self._outfd.fileno() or self._outfds,
+                      self._errfd and self._errfd.fileno() or self._errfds)
 
         if self._outfds:
             self._outfds[1].close()
-        self.outfd = None
+        self._outfd = None
         self._outfds = None
 
-        if self.errfd:
-            self.errfd.close()
+        if self._errfd:
+            self._errfd.close()
         elif self._errfds:
             self._errfds[0].close()
             self._errfds[1].close()
-        self.errfd = None
+        self._errfd = None
         self._errfds = None
 
-        if self.pid:
-            os.kill(self.pid, signal.SIGKILL)
-            os.waitpid(self.pid, 0)
-        self.pid = None
+        if self._pid:
+            os.kill(self._pid, signal.SIGKILL)
+            os.waitpid(self._pid, 0)
+        self._pid = None
 
     def get_err_output(self):
         errout = ""
         while True:
             try:
-                new = self.errfd.recv(1024)
+                new = self._errfd.recv(1024)
             except:
                 break
 
@@ -187,7 +192,7 @@ class _Tunnel(object):
         return errout
 
     def _launch_tunnel(self, ginfo):
-        if self.closed:
+        if self._closed:
             return -1
 
         host, port, ignore = ginfo.get_conn_host()
@@ -255,31 +260,31 @@ class _Tunnel(object):
                       pid, self._outfds[0].fileno(), self._errfds[0].fileno())
         self._errfds[0].setblocking(0)
 
-        self.outfd = self._outfds[0]
-        self.errfd = self._errfds[0]
+        self._outfd = self._outfds[0]
+        self._errfd = self._errfds[0]
         self._outfds = None
         self._errfds = None
-        self.pid = pid
+        self._pid = pid
 
 
 class SSHTunnels(object):
-    _tunnel_sched = _TunnelScheduler()
-
     def __init__(self, ginfo):
-        self.ginfo = ginfo
         self._tunnels = []
+        self._ginfo = ginfo
+        self._locked = False
 
     def open_new(self):
         t = _Tunnel()
-        fd, cb, args = t.open(self.ginfo)
+        fd, cb, args = t.open(self._ginfo)
         self._tunnels.append(t)
-        self._tunnel_sched.schedule(cb, args)
+        _tunnel_scheduler.schedule(self._lock, cb, args)
 
         return fd
 
     def close_all(self):
         for l in self._tunnels:
             l.close()
+        self._tunnels = []
 
     def get_err_output(self):
         errout = ""
@@ -287,7 +292,11 @@ class SSHTunnels(object):
             errout += l.get_err_output()
         return errout
 
-    def lock(self, *args, **kwargs):
-        return self._tunnel_sched.lock(*args, **kwargs)
+    def _lock(self):
+        _tunnel_scheduler.lock()
+        self._locked = True
+
     def unlock(self, *args, **kwargs):
-        return self._tunnel_sched.unlock(*args, **kwargs)
+        if self._locked:
+            _tunnel_scheduler.unlock(*args, **kwargs)
+            self._locked = False
