@@ -252,7 +252,7 @@ class vmmDomain(vmmLibvirtObject):
         elif status == libvirt.VIR_DOMAIN_PMSUSPENDED:
             return _("Suspended")
 
-        logging.debug("Unknown status %d, returning 'Unknown'", status)
+        logging.debug("Unknown status %s, returning 'Unknown'", status)
         return _("Unknown")
 
     @staticmethod
@@ -1756,7 +1756,7 @@ class vmmDomain(vmmLibvirtObject):
     def run_status_icon_name(self):
         status = self.status()
         if status not in vm_status_icons:
-            logging.debug("Unknown status %d, using NOSTATE", status)
+            logging.debug("Unknown status %s, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
         return vm_status_icons[status]
 
@@ -2003,6 +2003,9 @@ class vmmDomainVirtinst(vmmDomain):
         # dialog actually shows disk buses, cache values, default devices, etc.
         backend.set_install_defaults()
 
+        self.title_supported = True
+        self._refresh_status()
+
     def get_name(self):
         return self._backend.name
     def get_uuid(self):
@@ -2023,6 +2026,10 @@ class vmmDomainVirtinst(vmmDomain):
 
     def _using_events(self):
         return False
+    def _get_backend_status(self):
+        return libvirt.VIR_DOMAIN_SHUTOFF
+    def _init_libvirt_state(self):
+        pass
 
     def tick(self, stats_update=True):
         ignore = stats_update
