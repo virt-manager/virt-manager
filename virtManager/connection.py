@@ -252,8 +252,9 @@ class vmmConnection(vmmGObject):
             if not pools:
                 return
 
-            # We need to do this synchronously
-            self.tick(False, pollpool=True)
+            # This isn't synchronous, so any virtinst callers need to
+            # take that into account.
+            self.schedule_priority_tick(pollpool=True)
 
         self._backend.cb_clear_cache = clear_cache
 
@@ -1103,7 +1104,7 @@ class vmmConnection(vmmGObject):
 
         return gone_objects, preexisting_objects
 
-    def _tick(self, stats_update,
+    def _tick(self, stats_update=False,
              pollvm=False, pollnet=False,
              pollpool=False, polliface=False,
              pollnodedev=False,
@@ -1236,12 +1237,9 @@ class vmmConnection(vmmGObject):
 
 
     def schedule_priority_tick(self, **kwargs):
-        # args/kwargs are what is passed to def tick()
-        if "stats_update" not in kwargs:
-            kwargs["stats_update"] = False
         self.idle_emit("priority-tick", kwargs)
 
-    def tick(self, *args, **kwargs):
+    def tick_from_engine(self, *args, **kwargs):
         e = None
         try:
             self._tick(*args, **kwargs)

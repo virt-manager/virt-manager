@@ -340,7 +340,7 @@ class vmmEngine(vmmGObject):
         while True:
             ignore1, ignore2, conn, kwargs = self._tick_queue.get()
             try:
-                conn.tick(**kwargs)
+                conn.tick_from_engine(**kwargs)
             except Exception, e:
                 tb = "".join(traceback.format_exc())
                 error_msg = (_("Error polling connection '%s': %s")
