@@ -215,7 +215,7 @@ class vmmConsolePages(vmmGObjectUI):
     #################
 
     def _change_title(self, ignore1=None):
-        title = self.vm.get_name() + " " + _("Virtual Machine")
+        title = self.vm.get_name_or_title() + " " + _("Virtual Machine")
 
         if self._pointer_is_grabbed and self._viewer:
             keystr = self._viewer.console_get_grab_keys()
