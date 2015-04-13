@@ -70,7 +70,7 @@ def _lookup_vol_by_basename(pool, path):
     """
     name = os.path.basename(path)
     if name in pool.listVolumes():
-        return pool.lookupByName(name)
+        return pool.storageVolLookupByName(name)
 
 
 def check_if_path_managed(conn, path):
