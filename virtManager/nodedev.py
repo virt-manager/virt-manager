@@ -49,4 +49,4 @@ class vmmNodeDevice(vmmLibvirtObject):
         # Deliberately empty
         ignore = stats_update
     def _init_libvirt_state(self):
-        self.tick()
+        self.ensure_latest_xml()
