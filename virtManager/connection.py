@@ -716,9 +716,10 @@ class vmmConnection(vmmGObject):
     def _domain_xml_misc_event(self, conn, domain, *args):
         # Just trigger a domain XML refresh for hotplug type events
         ignore = conn
-        ignore = args
 
-        obj = self.get_vm(domain.name())
+        name = domain.name()
+        logging.debug("domain xmlmisc event: domain=%s args=%s ", name, args)
+        obj = self.get_vm(name)
         if not obj:
             return
 
@@ -726,24 +727,26 @@ class vmmConnection(vmmGObject):
 
     def _domain_lifecycle_event(self, conn, domain, event, reason, userdata):
         ignore = conn
-        ignore = event
-        ignore = reason
         ignore = userdata
-        obj = self.get_vm(domain.name())
+
+        name = domain.name()
+        logging.debug("domain lifecycle event: domain=%s event=%s "
+            "reason=%s", name, event, reason)
+        obj = self.get_vm(name)
 
         if obj:
-            # If the domain disappeared, this will catch it and trigger
-            # a domain list refresh
             self.idle_add(obj.refresh_from_event_loop)
         else:
             self.schedule_priority_tick(pollvm=True, force=True)
 
     def _network_lifecycle_event(self, conn, network, event, reason, userdata):
         ignore = conn
-        ignore = event
-        ignore = reason
         ignore = userdata
-        obj = self.get_net(network.name())
+
+        name = network.name()
+        logging.debug("network lifecycle event: network=%s event=%s "
+            "reason=%s", name, event, reason)
+        obj = self.get_net(name)
 
         if obj:
             self.idle_add(obj.refresh_from_event_loop)

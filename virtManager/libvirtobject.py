@@ -131,7 +131,7 @@ class vmmLibvirtObject(vmmGObject):
             self._key = oldname
             raise
         finally:
-            self._force_refresh_xml()
+            self.__force_refresh_xml()
 
 
     #############################################################
@@ -221,25 +221,15 @@ class vmmLibvirtObject(vmmGObject):
             self.__status is not None):
             return
 
-        try:
-            if newstatus is None:
-                newstatus = self._get_backend_status()
-            status = newstatus
-            if status == self.__status:
-                return
-            self.__status = status
+        if newstatus is None:
+            newstatus = self._get_backend_status()
+        status = newstatus
+        if status == self.__status:
+            return
+        self.__status = status
 
-            self.ensure_latest_xml(nosignal=True)
-            self.idle_emit("state-changed")
-        except Exception, e:
-            # If we hit an exception here, it's often that the object
-            # disappeared, so request the poll loop to be updated
-            logging.debug("Error polling status for %s: %s", self, e)
-            poll_param = self._conn_tick_poll_param()
-            if poll_param:
-                kwargs = {"force": True, poll_param: True}
-                logging.debug("Scheduling priority tick with: %s", kwargs)
-                self.conn.schedule_priority_tick(**kwargs)
+        self.ensure_latest_xml(nosignal=True)
+        self.idle_emit("state-changed")
 
     def _backend_get_active(self):
         if self._support_isactive is None:
@@ -265,10 +255,20 @@ class vmmLibvirtObject(vmmGObject):
         We refresh status and XML because they are tied together in subtle
         ways, like runtime XML changing when a VM is started.
         """
-        self._force_refresh_xml(nosignal=True)
-        self.__status = None
-        self._refresh_status()
-        self.idle_emit("state-changed")
+        try:
+            self.__force_refresh_xml(nosignal=True)
+            # status = None forces a signal to be emitted
+            self.__status = None
+            self._refresh_status()
+        except Exception, e:
+            # If we hit an exception here, it's often that the object
+            # disappeared, so request the poll loop to be updated
+            logging.debug("Error refreshing %s from events: %s", self, e)
+            poll_param = self._conn_tick_poll_param()
+            if poll_param:
+                kwargs = {"force": True, poll_param: True}
+                logging.debug("Scheduling priority tick with: %s", kwargs)
+                self.conn.schedule_priority_tick(**kwargs)
 
     def ensure_latest_xml(self, nosignal=False):
         """
@@ -279,9 +279,9 @@ class vmmLibvirtObject(vmmGObject):
             self._xmlobj and
             self._is_xml_valid):
             return
-        self._force_refresh_xml(nosignal=nosignal)
+        self.__force_refresh_xml(nosignal=nosignal)
 
-    def _force_refresh_xml(self, nosignal=False):
+    def __force_refresh_xml(self, nosignal=False):
         """
         Force an xml update. Signal 'state-changed' if domain xml has
         changed since last refresh
