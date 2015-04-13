@@ -666,14 +666,8 @@ class FedoraDistro(RedHatDistro):
         """
         Search osdict list, find newest fedora version listed
         """
-        ret = None
-        for osinfo in OSDB.list_os(typename="linux"):
-            if osinfo.name.startswith("fedora") and "unknown" not in osinfo.name:
-                # First fedora* occurrence should be the newest
-                ret = osinfo.name
-                break
-
-        return ret, int(ret[6:])
+        latest = OSDB.latest_fedora_version()
+        return latest, int(latest[6:])
 
     def isValidStore(self):
         if not self._hasTreeinfo():

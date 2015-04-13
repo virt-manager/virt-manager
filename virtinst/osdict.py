@@ -20,6 +20,7 @@
 # MA 02110-1301 USA.
 
 import datetime
+import logging
 import re
 
 from gi.repository import Libosinfo as libosinfo
@@ -228,9 +229,17 @@ class _OSDB(object):
     def lookup_os_by_media(self, location):
         media = libosinfo.Media.create_from_location(location, None)
         ret = self._os_loader.get_db().guess_os_from_media(media)
-        if ret and len(ret) > 0 and ret[0]:
-            return ret[0].get_short_id()
-        return None
+        if not (ret and len(ret) > 0 and ret[0]):
+            return None
+
+        osname = ret[0].get_short_id()
+        if osname == "fedora-unknown":
+            osname = self.latest_fedora_version()
+            logging.debug("Detected location=%s as os=fedora-unknown. "
+                "Converting that to the latest fedora OS version=%s",
+                location, osname)
+
+        return osname
 
     def list_types(self):
         approved_types = ["linux", "windows", "unix",
@@ -256,6 +265,13 @@ class _OSDB(object):
 
         return _sort(sortmap, sortpref=sortpref,
             limit_point_releases=only_supported)
+
+    def latest_fedora_version(self):
+        for osinfo in self.list_os():
+            if (osinfo.name.startswith("fedora") and
+                "unknown" not in osinfo.name):
+                # First fedora* occurrence should be the newest
+                return osinfo.name
 
 
 #####################
