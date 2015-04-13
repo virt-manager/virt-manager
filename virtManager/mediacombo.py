@@ -17,6 +17,8 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 from gi.repository import Gtk
 
 from . import uiutil
@@ -159,7 +161,10 @@ class vmmMediaCombo(vmmGObjectUI):
     ##############
 
     def reset_state(self):
-        self._populate_media()
+        try:
+            self._populate_media()
+        except:
+            logging.debug("Error populating mediadev combo", exc_info=True)
 
     def get_path(self):
         return uiutil.get_list_selection(self.combo, self.OPTICAL_DEV_PATH)
