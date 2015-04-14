@@ -792,9 +792,10 @@ class vmmCloneVM(vmmGObjectUI):
             error = (_("Error creating virtual machine clone '%s': %s") %
                       (self.clone_design.clone_name, error))
             self.err.show_err(error, details=details)
-        else:
-            self.close()
-            self.conn.schedule_priority_tick(pollvm=True)
+            return
+
+        self.close()
+        self.conn.schedule_priority_tick(pollvm=True)
 
     def finish(self, src_ignore):
         try:
@@ -823,8 +824,30 @@ class vmmCloneVM(vmmGObjectUI):
             self.orig_vm.set_cloning(True)
             meter = asyncjob.get_meter()
 
+            refresh_pools = []
+            for disk in self.clone_design.clone_disks:
+                if not disk.wants_storage_creation():
+                    continue
+
+                pool = disk.get_parent_pool()
+                if not pool:
+                    continue
+
+                poolname = pool.name()
+                if poolname not in refresh_pools:
+                    refresh_pools.append(poolname)
+
             self.clone_design.setup()
             self.clone_design.start_duplicate(meter)
+
+            for poolname in refresh_pools:
+                try:
+                    pool = self.conn.get_pool(poolname)
+                    self.idle_add(pool.refresh)
+                except:
+                    logging.debug("Error looking up pool=%s for refresh after "
+                        "VM clone.", poolname, exc_info=True)
+
         finally:
             self.orig_vm.set_cloning(False)
 
