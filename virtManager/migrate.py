@@ -53,7 +53,6 @@ class vmmMigrateDialog(vmmGObjectUI):
             "on_migrate_finish_clicked" : self.finish,
 
             "on_migrate_dest_changed" : self.destconn_changed,
-            "on_migrate_set_rate_toggled" : self.toggle_set_rate,
             "on_migrate_set_interface_toggled" : self.toggle_set_interface,
             "on_migrate_set_port_toggled" : self.toggle_set_port,
             "on_migrate_set_maxdowntime_toggled" : self.toggle_set_maxdowntime,
@@ -119,12 +118,10 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-label-src").set_text(srchost)
 
         self.widget("migrate-set-interface").set_active(False)
-        self.widget("migrate-set-rate").set_active(False)
         self.widget("migrate-set-port").set_active(False)
         self.widget("migrate-set-maxdowntime").set_active(False)
         self.widget("migrate-max-downtime").set_value(30)
 
-        self.widget("migrate-rate").set_value(0)
         self.widget("migrate-secure").set_active(False)
         self.widget("migrate-unsafe").set_active(False)
 
@@ -180,10 +177,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-finish").set_sensitive(bool(row))
         self.widget("migrate-finish").set_tooltip_text(tooltip)
 
-    def toggle_set_rate(self, src):
-        enable = src.get_active()
-        self.widget("migrate-rate").set_sensitive(enable)
-
     def toggle_set_interface(self, src):
         enable = src.get_active()
         port_enable = self.widget("migrate-set-port").get_active()
@@ -218,13 +211,6 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def get_config_max_downtime_enabled(self):
         return self.widget("migrate-max-downtime").get_sensitive()
-
-    def get_config_rate_enabled(self):
-        return self.widget("migrate-rate").get_sensitive()
-    def get_config_rate(self):
-        if not self.get_config_rate_enabled():
-            return 0
-        return int(self.widget("migrate-rate").get_value())
 
     def get_config_interface_enabled(self):
         return self.widget("migrate-interface").get_sensitive()
@@ -404,7 +390,6 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def validate(self):
         interface = self.get_config_interface()
-        rate = self.get_config_rate()
         port = self.get_config_port()
         max_downtime = self.get_config_max_downtime()
 
@@ -413,9 +398,6 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         if self.get_config_interface_enabled() and interface is None:
             return self.err.val_err(_("An interface must be specified."))
-
-        if self.get_config_rate_enabled() and rate == 0:
-            return self.err.val_err(_("Transfer rate must be greater than 0."))
 
         if self.get_config_port_enabled() and port == 0:
             return self.err.val_err(_("Port must be greater than 0."))
@@ -450,9 +432,6 @@ class vmmMigrateDialog(vmmGObjectUI):
             secure = self.get_config_secure()
             unsafe = self.get_config_unsafe()
             uri = self.build_migrate_uri(destconn, srcuri)
-            rate = self.get_config_rate()
-            if rate:
-                rate = int(rate)
         except Exception, e:
             details = "".join(traceback.format_exc())
             self.err.show_err((_("Uncaught error validating input: %s") %
@@ -470,7 +449,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         progWin = vmmAsyncJob(
             self._async_migrate,
-            [self.vm, destconn, uri, rate, live, secure, unsafe, max_downtime],
+            [self.vm, destconn, uri, live, secure, unsafe, max_downtime],
             self._finish_cb, [destconn],
             _("Migrating VM '%s'" % self.vm.get_name()),
             (_("Migrating VM '%s' from %s to %s. This may take a while.") %
@@ -509,7 +488,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         return
 
     def _async_migrate(self, asyncjob,
-                       origvm, origdconn, migrate_uri, rate, live,
+                       origvm, origdconn, migrate_uri, live,
                        secure, unsafe, max_downtime):
         meter = asyncjob.get_meter()
 
@@ -530,6 +509,6 @@ class vmmMigrateDialog(vmmGObjectUI):
             timer = self.timeout_add(100, self._async_set_max_downtime,
                                      vm, max_downtime, current_thread)
 
-        vm.migrate(dstconn, migrate_uri, rate, live, secure, unsafe, meter=meter)
+        vm.migrate(dstconn, migrate_uri, live, secure, unsafe, meter=meter)
         if timer:
             self.idle_add(GLib.source_remove, timer)

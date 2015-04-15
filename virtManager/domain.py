@@ -1499,7 +1499,7 @@ class vmmDomain(vmmLibvirtObject):
     def migrate_set_max_downtime(self, max_downtime, flag=0):
         self._backend.migrateSetMaxDowntime(max_downtime, flag)
 
-    def migrate(self, destconn, interface=None, rate=0,
+    def migrate(self, destconn, interface=None,
                 live=False, secure=False, unsafe=False, meter=None):
         self._install_abort = True
 
@@ -1517,14 +1517,14 @@ class vmmDomain(vmmLibvirtObject):
             flags |= libvirt.VIR_MIGRATE_UNSAFE
 
         libvirt_destconn = destconn.get_backend().get_conn_for_api_arg()
-        logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s",
-                      destconn, flags, newname, interface, rate)
+        logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s",
+                      destconn, flags, newname, interface)
 
         if meter:
             start_job_progress_thread(self, meter, _("Migrating domain"))
 
         self._backend.migrate(
-            libvirt_destconn, flags, newname, interface, rate)
+            libvirt_destconn, flags, newname, interface, 0)
 
         def define_cb():
             newxml = self.get_xmlobj(inactive=True).get_xml_config()
