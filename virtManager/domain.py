@@ -1492,13 +1492,6 @@ class vmmDomain(vmmLibvirtObject):
         self._has_managed_save = None
 
 
-    def support_downtime(self):
-        return self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_MIGRATE_DOWNTIME, self._backend)
-
-    def migrate_set_max_downtime(self, max_downtime, flag=0):
-        self._backend.migrateSetMaxDowntime(max_downtime, flag)
-
     def migrate(self, destconn, interface=None,
                 live=False, secure=False, unsafe=False, meter=None):
         self._install_abort = True
