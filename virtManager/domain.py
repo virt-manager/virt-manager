@@ -1498,6 +1498,7 @@ class vmmDomain(vmmLibvirtObject):
 
         flags = 0
         flags |= libvirt.VIR_MIGRATE_LIVE
+        flags |= libvirt.VIR_MIGRATE_PERSIST_DEST
 
         if secure:
             flags |= libvirt.VIR_MIGRATE_PEER2PEER
@@ -1515,10 +1516,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self._backend.migrate(libvirt_destconn, flags, None, interface, 0)
 
-        def define_cb():
-            newxml = self.get_xmlobj(inactive=True).get_xml_config()
-            destconn.define_domain(newxml)
-        self.idle_add(define_cb)
         # Don't schedule any conn update, migrate dialog handles it for us
 
 
