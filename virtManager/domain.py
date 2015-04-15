@@ -1499,6 +1499,7 @@ class vmmDomain(vmmLibvirtObject):
         flags = 0
         flags |= libvirt.VIR_MIGRATE_LIVE
         flags |= libvirt.VIR_MIGRATE_PERSIST_DEST
+        flags |= libvirt.VIR_MIGRATE_UNDEFINE_SOURCE
 
         if secure:
             flags |= libvirt.VIR_MIGRATE_PEER2PEER
