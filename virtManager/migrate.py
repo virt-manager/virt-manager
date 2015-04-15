@@ -395,7 +395,6 @@ class vmmMigrateDialog(vmmGObjectUI):
             if not self.validate():
                 return
 
-            live = True
             destconn = self.get_config_destconn()
             srcuri = self.vm.conn.get_uri()
             srchost = self.vm.conn.get_hostname()
@@ -420,7 +419,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         progWin = vmmAsyncJob(
             self._async_migrate,
-            [self.vm, destconn, uri, live, secure, unsafe],
+            [self.vm, destconn, uri, secure, unsafe],
             self._finish_cb, [destconn],
             _("Migrating VM '%s'" % self.vm.get_name()),
             (_("Migrating VM '%s' from %s to %s. This may take a while.") %
@@ -444,8 +443,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         return
 
     def _async_migrate(self, asyncjob,
-                       origvm, origdconn, migrate_uri, live,
-                       secure, unsafe):
+            origvm, origdconn, migrate_uri, secure, unsafe):
         meter = asyncjob.get_meter()
 
         srcconn = origvm.conn
@@ -457,4 +455,4 @@ class vmmMigrateDialog(vmmGObjectUI):
         logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
                       srcconn.get_uri(), dstconn.get_uri())
 
-        vm.migrate(dstconn, migrate_uri, live, secure, unsafe, meter=meter)
+        vm.migrate(dstconn, migrate_uri, secure, unsafe, meter=meter)
