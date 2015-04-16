@@ -22,7 +22,6 @@ from gi.repository import GObject
 
 import logging
 import os
-import socket
 import threading
 import time
 import traceback
@@ -301,22 +300,8 @@ class vmmConnection(vmmGObject):
     # URI + hostname helpers #
     ##########################
 
-    def get_qualified_hostname(self):
-        if self.check_support(self._backend.SUPPORT_CONN_GETHOSTNAME):
-            return self._backend.getHostname()
-
-        uri_hostname = self.get_uri_hostname() or "localhost"
-        if self.is_remote() and uri_hostname.lower() != "localhost":
-            return uri_hostname
-
-        # This can throw an exception, so beware when calling!
-        return socket.gethostbyaddr(socket.gethostname())[0]
-
-    def get_hostname(self):
-        try:
-            return self.get_qualified_hostname()
-        except:
-            return self.get_uri_hostname() or "localhost"
+    def libvirt_gethostname(self):
+        return self._backend.getHostname()
 
     get_uri_hostname = property(lambda s:
         getattr(s, "_backend").get_uri_hostname)

@@ -873,10 +873,9 @@ class vmmEngine(vmmGObject):
             vm = conn.get_vm(connkey)
 
             if not self.windowMigrate:
-                self.windowMigrate = vmmMigrateDialog(vm, self)
+                self.windowMigrate = vmmMigrateDialog(self)
 
-            self.windowMigrate.set_state(vm)
-            self.windowMigrate.show(src.topwin)
+            self.windowMigrate.show(src.topwin, vm)
         except Exception, e:
             src.err.show_err(_("Error launching migrate dialog: %s") % str(e))
 

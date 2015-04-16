@@ -1509,8 +1509,8 @@ class vmmDomain(vmmLibvirtObject):
             flags |= libvirt.VIR_MIGRATE_UNSAFE
 
         libvirt_destconn = destconn.get_backend().get_conn_for_api_arg()
-        logging.debug("Migrating: conn=%s flags=%s uri=%s",
-                      destconn, flags, interface)
+        logging.debug("Migrating: conn=%s flags=%s uri=%s secure=%s unsafe=%s",
+                      destconn, flags, interface, secure, unsafe)
 
         if meter:
             start_job_progress_thread(self, meter, _("Migrating domain"))

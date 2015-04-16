@@ -18,18 +18,14 @@
 # MA 02110-1301 USA.
 #
 
-import traceback
 import logging
-import threading
+import traceback
 
 from gi.repository import Gdk
-from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
-import libvirt
 from virtinst import util
-from virtinst import URISplit
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
@@ -37,89 +33,131 @@ from .asyncjob import vmmAsyncJob
 from .domain import vmmDomain
 
 
-class vmmMigrateDialog(vmmGObjectUI):
-    def __init__(self, vm, engine):
-        vmmGObjectUI.__init__(self, "migrate.ui", "vmm-migrate")
-        self.vm = vm
-        self.conn = vm.conn
-        self.engine = engine
+NUM_COLS = 3
+(COL_LABEL,
+ COL_URI,
+ COL_CAN_MIGRATE) = range(NUM_COLS)
 
-        self.destconn_rows = []
+
+class vmmMigrateDialog(vmmGObjectUI):
+    def __init__(self, engine):
+        vmmGObjectUI.__init__(self, "migrate.ui", "vmm-migrate")
+        self.vm = None
+        self.conn = None
+        self._conns = {}
 
         self.builder.connect_signals({
-            "on_vmm_migrate_delete_event" : self.close,
+            "on_vmm_migrate_delete_event" : self._delete_event,
+            "on_migrate_cancel_clicked" : self._cancel_clicked,
+            "on_migrate_finish_clicked" : self._finish_clicked,
 
-            "on_migrate_cancel_clicked" : self.close,
-            "on_migrate_finish_clicked" : self.finish,
-
-            "on_migrate_dest_changed" : self.destconn_changed,
-            "on_migrate_set_interface_toggled" : self.toggle_set_interface,
-            "on_migrate_set_port_toggled" : self.toggle_set_port,
+            "on_migrate_dest_changed" : self._destconn_changed,
+            "on_migrate_set_address_toggled" : self._set_address_toggled,
+            "on_migrate_set_port_toggled" : self._set_port_toggled,
+            "on_migrate_mode_changed" : self._mode_changed,
         })
         self.bind_escape_key_close()
 
-        self.init_state()
+        self._init_state(engine)
 
-    def show(self, parent):
+
+    def _cleanup(self):
+        self.vm = None
+        self.conn = None
+        self._conns = None
+
+
+    ##############
+    # Public API #
+    ##############
+
+    def show(self, parent, vm):
         logging.debug("Showing migrate wizard")
-        self.reset_state()
-        self.topwin.resize(1, 1)
+        self.vm = vm
+        self.conn = vm.conn
+        self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing migrate wizard")
         self.topwin.hide()
-        # If we only do this at show time, operation takes too long and
-        # user actually sees the expander close.
-        self.widget("migrate-advanced-expander").set_expanded(False)
         return 1
 
-    def _cleanup(self):
-        self.vm = None
-        self.conn = None
-        self.engine = None
-        self.destconn_rows = None
 
-        # Not sure why we need to do this manually, but it matters
-        self.widget("migrate-dest").get_model().clear()
+    ################
+    # Init helpers #
+    ################
 
-    def init_state(self):
+    def _init_state(self, engine):
         blue = Gdk.color_parse("#0072A8")
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
-        # [hostname, conn, can_migrate, tooltip]
-        dest_model = Gtk.ListStore(str, object, bool, str)
-        dest_combo = self.widget("migrate-dest")
-        dest_combo.set_model(dest_model)
-        text = uiutil.init_combo_text_column(dest_combo, 0)
+        # Connection combo
+        cols = [None] * NUM_COLS
+        cols[COL_LABEL] = str
+        cols[COL_URI] = str
+        cols[COL_CAN_MIGRATE] = bool
+        model = Gtk.ListStore(*cols)
+        combo = self.widget("migrate-dest")
+        combo.set_model(model)
+        text = uiutil.init_combo_text_column(combo, COL_LABEL)
         text.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
         text.set_property("width-chars", 30)
-        dest_combo.add_attribute(text, 'sensitive', 2)
-        dest_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+        combo.add_attribute(text, 'sensitive', COL_CAN_MIGRATE)
+        model.set_sort_column_id(COL_LABEL, Gtk.SortType.ASCENDING)
+
+        def _sorter(model, iter1, iter2, ignore):
+            row1 = model[iter1]
+            row2 = model[iter2]
+            if row1[COL_URI] is None:
+                return -1
+            if row2[COL_URI] is None:
+                return 1
+            return cmp(row1[COL_LABEL], row2[COL_LABEL])
+        model.set_sort_func(COL_LABEL, _sorter)
+
+        # Mode combo
+        combo = self.widget("migrate-mode")
+        # label, is_tunnel
+        model = Gtk.ListStore(str, bool)
+        model.append([_("Direct"), False])
+        model.append([_("Tunnelled"), True])
+        combo.set_model(model)
+        uiutil.init_combo_text_column(combo, 0)
 
         # Hook up signals to get connection listing
-        self.engine.connect("conn-added", self.dest_add_conn)
-        self.engine.connect("conn-removed", self.dest_remove_conn)
-        self.destconn_changed(dest_combo)
+        engine.connect("conn-added", self._conn_added_cb)
+        engine.connect("conn-removed", self._conn_removed_cb)
+        self.widget("migrate-dest").emit("changed")
 
-    def reset_state(self):
+        self.widget("migrate-mode").set_tooltip_text(
+            self.widget("migrate-mode-label").get_tooltip_text())
+        self.widget("migrate-unsafe").set_tooltip_text(
+            self.widget("migrate-unsafe-label").get_tooltip_text())
+
+    def _reset_state(self):
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
                      (_("Migrate"), util.xml_escape(self.vm.get_name())))
         self.widget("header-label").set_markup(title_str)
 
+        self.widget("migrate-advanced-expander").set_expanded(False)
+
         self.widget("migrate-cancel").grab_focus()
 
-        name = self.vm.get_name()
-        srchost = self.conn.get_hostname()
+        self.widget("config-box").set_visible(True)
 
-        self.widget("migrate-label-name").set_text(name)
-        self.widget("migrate-label-src").set_text(srchost)
+        hostname = self.conn.libvirt_gethostname()
+        srctext = "%s (%s)" % (hostname, self.conn.get_pretty_desc())
+        self.widget("migrate-label-name").set_text(self.vm.get_name_or_title())
+        self.widget("migrate-label-src").set_text(srctext)
+        self.widget("migrate-label-src").set_tooltip_text(self.conn.get_uri())
 
-        self.widget("migrate-set-interface").set_active(False)
-        self.widget("migrate-set-port").set_active(False)
+        self.widget("migrate-set-address").set_active(True)
+        self.widget("migrate-set-address").emit("toggled")
+        self.widget("migrate-set-port").set_active(True)
 
-        self.widget("migrate-secure").set_active(False)
+        self.widget("migrate-mode").set_active(0)
         self.widget("migrate-unsafe").set_active(False)
 
         if self.conn.is_xen():
@@ -129,218 +167,120 @@ class vmmMigrateDialog(vmmGObjectUI):
             # QEMU migrate port range is 49152+64
             self.widget("migrate-port").set_value(49152)
 
-        secure_box = self.widget("migrate-secure-box")
-        support_secure = hasattr(libvirt, "VIR_MIGRATE_TUNNELLED")
-        secure_tooltip = ""
-        if not support_secure:
-            secure_tooltip = _("Libvirt version does not support tunnelled "
-                               "migration.")
+        self._populate_destconn()
 
-        secure_box.set_sensitive(support_secure)
-        secure_box.set_tooltip_text(secure_tooltip)
 
-        unsafe_box = self.widget("migrate-unsafe-box")
-        support_unsafe = hasattr(libvirt, "VIR_MIGRATE_UNSAFE")
-        unsafe_tooltip = ""
-        if not support_unsafe:
-            unsafe_tooltip = _("Libvirt version does not support unsafe "
-                               "migration.")
+    #############
+    # Listeners #
+    #############
 
-        unsafe_box.set_sensitive(support_unsafe)
-        unsafe_box.set_tooltip_text(unsafe_tooltip)
+    def _delete_event(self, ignore1, ignore2):
+        self.close()
+        return 1
 
-        self.rebuild_dest_rows()
+    def _cancel_clicked(self, src):
+        ignore = src
+        self.close()
 
-    def set_state(self, vm):
-        self.vm = vm
-        self.conn = vm.conn
-        self.reset_state()
+    def _finish_clicked(self, src):
+        ignore = src
+        self._finish()
 
-    def destconn_changed(self, src):
+    def _destconn_changed(self, src):
         row = uiutil.get_list_selection(src, None)
+        if not row:
+            return
+
+        can_migrate = row and row[COL_CAN_MIGRATE] or False
+        uri = row[COL_URI]
+
         tooltip = ""
-        if row:
+        if not can_migrate:
             tooltip = _("A valid destination connection must be selected.")
 
-        self.widget("migrate-finish").set_sensitive(bool(row))
+        self.widget("config-box").set_visible(can_migrate)
+        self.widget("migrate-finish").set_sensitive(can_migrate)
         self.widget("migrate-finish").set_tooltip_text(tooltip)
 
-    def toggle_set_interface(self, src):
+        address = ""
+        address_warning = ""
+        tunnel_warning = ""
+        tunnel_uri = ""
+        is_tunnel = self._is_tunnel_selected()
+
+        if can_migrate and uri in self._conns:
+            destconn = self._conns[uri]
+
+            tunnel_uri = destconn.get_uri()
+            if not destconn.is_remote():
+                tunnel_warning = _("A remotely accessible libvirt URI "
+                    "is required for tunneled migration, but the "
+                    "selected connection is a local URI. Libvirt will "
+                    "reject this unless you add a transport.")
+                tunnel_warning = ("<span size='small'>%s</span>" %
+                    tunnel_warning)
+
+            address = destconn.libvirt_gethostname()
+
+            if self._is_localhost(address):
+                address_warning = _("The destination's hostname is "
+                    "'localhost', which will be rejected by libvirt. "
+                    "You must configure the destination to have a valid "
+                    "publicly accessible hostname.")
+                address_warning = ("<span size='small'>%s</span>" %
+                    address_warning)
+
+        self.widget("migrate-address").set_text(address)
+        uiutil.set_grid_row_visible(
+            self.widget("migrate-address-warning-box"), bool(address_warning))
+        self.widget("migrate-address-warning-label").set_markup(address_warning)
+
+        self.widget("migrate-tunnel-uri").set_text(tunnel_uri)
+        uiutil.set_grid_row_visible(
+            self.widget("migrate-tunnel-warning-box"), bool(tunnel_warning))
+        self.widget("migrate-tunnel-warning-label").set_markup(tunnel_warning)
+
+
+    def _set_address_toggled(self, src):
         enable = src.get_active()
+        self.widget("migrate-address").set_visible(enable)
+        self.widget("migrate-address-label").set_visible(not enable)
+
         port_enable = self.widget("migrate-set-port").get_active()
-        self.widget("migrate-interface").set_sensitive(enable)
-        self.widget("migrate-set-port").set_sensitive(enable)
-        self.widget("migrate-port").set_sensitive(enable and port_enable)
+        self.widget("migrate-set-port").set_active(enable and port_enable)
+        self.widget("migrate-set-port").emit("toggled")
 
-    def toggle_set_port(self, src):
+    def _set_port_toggled(self, src):
         enable = src.get_active()
-        self.widget("migrate-port").set_sensitive(enable)
+        self.widget("migrate-port").set_visible(enable)
+        self.widget("migrate-port-label").set_visible(not enable)
 
-    def get_config_destconn(self):
-        row = uiutil.get_list_selection(self.widget("migrate-dest"), None)
-        if not row or not row[2]:
-            return None
-        return row[1]
+    def _is_tunnel_selected(self):
+        return uiutil.get_list_selection(self.widget("migrate-mode"), 1)
 
-    def get_config_secure(self):
-        return self.widget("migrate-secure").get_active()
+    def _mode_changed(self, src):
+        ignore = src
+        is_tunnel = self._is_tunnel_selected()
+        self.widget("migrate-direct-box").set_visible(not is_tunnel)
+        self.widget("migrate-tunnel-box").set_visible(is_tunnel)
 
-    def get_config_unsafe(self):
-        return self.widget("migrate-unsafe").get_active()
+    def _conn_added_cb(self, engine, conn):
+        ignore = engine
+        self._conns[conn.get_uri()] = conn
 
-    def get_config_interface_enabled(self):
-        return self.widget("migrate-interface").get_sensitive()
-    def get_config_interface(self):
-        if not self.get_config_interface_enabled():
-            return None
-        return self.widget("migrate-interface").get_text()
+    def _conn_removed_cb(self, engine, uri):
+        ignore = engine
+        del(self._conns[uri])
 
-    def get_config_port_enabled(self):
-        return self.widget("migrate-port").get_sensitive()
-    def get_config_port(self):
-        if not self.get_config_port_enabled():
-            return 0
-        return int(self.widget("migrate-port").get_value())
 
-    def build_localhost_uri(self, destconn, srcuri):
-        desthost = destconn.get_qualified_hostname()
-        if desthost == "localhost":
-            # We couldn't find a host name for the destination machine
-            # that is accessible from the source machine.
-            # /etc/hosts is likely borked and the only hostname it will
-            # give us is localhost. Remember, the dest machine can actually
-            # be our local machine so we may not already know its hostname
-            raise RuntimeError(_("Could not determine remotely accessible "
-                                 "hostname for destination connection."))
+    ###########################
+    # destconn combo handling #
+    ###########################
 
-        # Since the connection started as local, we have no clue about
-        # how to access it remotely. Assume users have a uniform access
-        # setup and use the same credentials as the remote source URI
-        return self.edit_uri(srcuri, desthost, None)
+    def _is_localhost(self, addr):
+        return not addr or addr.startswith("localhost")
 
-    def edit_uri(self, uri, hostname, port):
-        uriinfo = URISplit(uri)
-
-        uriinfo.hostname = hostname or uriinfo.hostname
-        uriinfo.port = port or uriinfo.port
-        return uriinfo.rebuild_uri()
-
-    def build_migrate_uri(self, destconn, srcuri):
-        conn = self.conn
-
-        interface = self.get_config_interface()
-        port = self.get_config_port()
-        secure = self.get_config_secure()
-
-        if not interface and not secure:
-            return None
-
-        if secure:
-            # P2P migration uri is a libvirt connection uri, e.g.
-            # qemu+ssh://root@foobar/system
-
-            # For secure migration, we need to make sure we aren't migrating
-            # to the local connection, because libvirt will pull try to use
-            # 'qemu:///system' as the migrate URI which will deadlock
-            desthost = destconn.get_uri_hostname() or "localhost"
-            if desthost == "localhost":
-                uri = self.build_localhost_uri(destconn, srcuri)
-            else:
-                uri = destconn.get_uri()
-
-            uri = self.edit_uri(uri, interface, port)
-
-        else:
-            # Regular migration URI is HV specific
-            uri = ""
-            if conn.is_xen():
-                uri = "xenmigr://%s" % interface
-
-            else:
-                uri = "tcp:%s" % interface
-
-            if port:
-                uri += ":%s" % port
-
-        return uri or None
-
-    def rebuild_dest_rows(self):
-        newrows = []
-
-        for row in self.destconn_rows:
-            newrows.append(self.build_dest_row(row[1]))
-
-        self.destconn_rows = newrows
-        self.populate_dest_combo()
-
-    def populate_dest_combo(self):
-        combo = self.widget("migrate-dest")
-        model = combo.get_model()
-        idx = combo.get_active()
-        idxconn = None
-        if idx != -1:
-            idxconn = model[idx][1]
-
-        rows = [[_("No connections available."), None, False, None]]
-        if self.destconn_rows:
-            rows = self.destconn_rows
-
-        model.clear()
-        for r in rows:
-            # Don't list the current connection
-            if r[1] == self.conn:
-                continue
-            model.append(r)
-
-        # Find old index
-        idx = -1
-        for i in range(len(model)):
-            row = model[i]
-            conn = row[1]
-
-            if idxconn:
-                if conn == idxconn and row[2]:
-                    idx = i
-                    break
-            else:
-                if row[2]:
-                    idx = i
-                    break
-
-        combo.set_active(idx)
-
-    def dest_add_conn(self, engine_ignore, conn):
-        combo = self.widget("migrate-dest")
-        model = combo.get_model()
-
-        newrow = self.build_dest_row(conn)
-
-        # Make sure connection isn't already present
-        for row in model:
-            if row[1] and row[1].get_uri() == newrow[1].get_uri():
-                return
-
-        conn.connect("state-changed", self.destconn_state_changed)
-        self.destconn_rows.append(newrow)
-        self.populate_dest_combo()
-
-    def dest_remove_conn(self, engine_ignore, uri):
-        # Make sure connection isn't already present
-        for row in self.destconn_rows:
-            if row[1] and row[1].get_uri() == uri:
-                self.destconn_rows.remove(row)
-
-        self.populate_dest_combo()
-
-    def destconn_state_changed(self, conn):
-        for row in self.destconn_rows:
-            if row[1] == conn:
-                self.destconn_rows.remove(row)
-                self.destconn_rows.append(self.build_dest_row(conn))
-
-        self.populate_dest_combo()
-
-    def build_dest_row(self, destconn):
+    def _build_dest_row(self, destconn):
         driver = self.conn.get_driver()
         origuri = self.conn.get_uri()
 
@@ -350,31 +290,64 @@ class vmmMigrateDialog(vmmGObjectUI):
         desturi = destconn.get_uri()
 
         if destconn.get_driver() != driver:
-            reason = _("Connection hypervisors do not match.")
+            reason = _("Hypervisors do not match")
         elif destconn.is_disconnected():
-            reason = _("Connection is disconnected.")
+            reason = _("Disconnected")
         elif destconn.get_uri() == origuri:
-            # Same connection
-            pass
+            reason = _("Same connection")
         elif destconn.is_active():
-            # Assumably we can migrate to this connection
             can_migrate = True
-            reason = desturi
 
-        return [desc, destconn, can_migrate, reason]
+        if reason:
+            desc = "%s (%s)" % (desc, reason)
+        return [desc, desturi, can_migrate]
+
+    def _populate_destconn(self):
+        combo = self.widget("migrate-dest")
+        model = combo.get_model()
+        model.clear()
+
+        rows = []
+        for conn in self._conns.values():
+            rows.append(self._build_dest_row(conn))
+
+        if not any([row[COL_CAN_MIGRATE] for row in rows]):
+            rows.insert(0,
+                [_("No usable connections available."), None, False])
+
+        for row in rows:
+            model.append(row)
+
+        combo.set_active(0)
+        for idx, row in enumerate(model):
+            if row[COL_CAN_MIGRATE]:
+                combo.set_active(idx)
+                break
 
 
-    def validate(self):
-        interface = self.get_config_interface()
-        port = self.get_config_port()
+    ####################
+    # migrate handling #
+    ####################
 
-        if self.get_config_interface_enabled() and interface is None:
-            return self.err.val_err(_("An interface must be specified."))
+    def _build_regular_migrate_uri(self):
+        address = None
+        if self.widget("migrate-address").get_visible():
+            address = self.widget("migrate-address").get_text()
 
-        if self.get_config_port_enabled() and port == 0:
-            return self.err.val_err(_("Port must be greater than 0."))
+        port = None
+        if self.widget("migrate-port").get_visible():
+            port = int(self.widget("migrate-port").get_value())
 
-        return True
+        if not address:
+            return
+
+        if self.conn.is_xen():
+            uri = "xenmigr://%s" % address
+        else:
+            uri = "tcp:%s" % address
+        if port:
+            uri += ":%s" % port
+        return uri
 
     def _finish_cb(self, error, details, destconn):
         self.topwin.set_sensitive(True)
@@ -383,25 +356,25 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         if error:
             error = _("Unable to migrate guest: %s") % error
-            self.err.show_err(error,
-                              details=details)
+            self.err.show_err(error, details=details)
         else:
             self.conn.schedule_priority_tick(pollvm=True)
             destconn.schedule_priority_tick(pollvm=True)
             self.close()
 
-    def finish(self, src_ignore):
+    def _finish(self):
         try:
-            if not self.validate():
-                return
+            row = uiutil.get_list_selection(self.widget("migrate-dest"), None)
+            destlabel = row[COL_LABEL]
+            destconn = self._conns.get(row[COL_URI])
 
-            destconn = self.get_config_destconn()
-            srcuri = self.vm.conn.get_uri()
-            srchost = self.vm.conn.get_hostname()
-            dsthost = destconn.get_qualified_hostname()
-            secure = self.get_config_secure()
-            unsafe = self.get_config_unsafe()
-            uri = self.build_migrate_uri(destconn, srcuri)
+            tunnel = self._is_tunnel_selected()
+            unsafe = self.widget("migrate-unsafe").get_active()
+
+            if tunnel:
+                uri = self.widget("migrate-tunnel-uri").get_text()
+            else:
+                uri = self._build_regular_migrate_uri()
         except Exception, e:
             details = "".join(traceback.format_exc())
             self.err.show_err((_("Uncaught error validating input: %s") %
@@ -415,19 +388,22 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         cancel_cb = None
         if self.vm.getjobinfo_supported:
-            cancel_cb = (self.cancel_migration, self.vm)
+            cancel_cb = (self._cancel_migration, self.vm)
+
+        if uri:
+            destlabel += " " + uri
 
         progWin = vmmAsyncJob(
             self._async_migrate,
-            [self.vm, destconn, uri, secure, unsafe],
+            [self.vm, destconn, uri, tunnel, unsafe],
             self._finish_cb, [destconn],
             _("Migrating VM '%s'" % self.vm.get_name()),
-            (_("Migrating VM '%s' from %s to %s. This may take a while.") %
-             (self.vm.get_name(), srchost, dsthost)),
+            (_("Migrating VM '%s' to %s. This may take a while.") %
+             (self.vm.get_name(), destlabel)),
             self.topwin, cancel_cb=cancel_cb)
         progWin.run()
 
-    def cancel_migration(self, asyncjob, vm):
+    def _cancel_migration(self, asyncjob, vm):
         logging.debug("Cancelling migrate job")
         if not vm:
             return
@@ -443,7 +419,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         return
 
     def _async_migrate(self, asyncjob,
-            origvm, origdconn, migrate_uri, secure, unsafe):
+            origvm, origdconn, migrate_uri, tunnel, unsafe):
         meter = asyncjob.get_meter()
 
         srcconn = origvm.conn
@@ -455,4 +431,4 @@ class vmmMigrateDialog(vmmGObjectUI):
         logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
                       srcconn.get_uri(), dstconn.get_uri())
 
-        vm.migrate(dstconn, migrate_uri, secure, unsafe, meter=meter)
+        vm.migrate(dstconn, migrate_uri, tunnel, unsafe, meter=meter)
