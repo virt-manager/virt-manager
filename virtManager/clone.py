@@ -235,7 +235,7 @@ class vmmCloneVM(vmmGObjectUI):
 
         uiutil.set_grid_row_visible(
             self.widget("clone-dest-host"), self.conn.is_remote())
-        self.widget("clone-dest-host").set_text(self.conn.get_hostname())
+        self.widget("clone-dest-host").set_text(self.conn.get_pretty_desc())
 
         # We need to determine which disks fail (and why).
         self.storage_list, self.target_list = self.check_all_storage()
