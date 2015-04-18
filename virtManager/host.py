@@ -220,13 +220,9 @@ class vmmHost(vmmGObjectUI):
 
     def init_conn_state(self):
         uri = self.conn.get_uri()
-        host = self.conn.get_hostname()
-        drv = self.conn.get_driver()
         auto = self.conn.get_autoconnect()
 
         self.widget("overview-uri").set_text(uri)
-        self.widget("overview-hostname").set_text(host)
-        self.widget("overview-hypervisor").set_text(drv)
         self.widget("config-autoconnect").set_active(auto)
 
         self.cpu_usage_graph = Sparkline()
