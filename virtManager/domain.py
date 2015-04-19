@@ -366,7 +366,9 @@ class vmmDomain(vmmLibvirtObject):
          self._active_xml_flags) = self.conn.get_dom_flags(self._backend)
 
         # Prime caches
-        self.tick()
+        info = self._backend.info()
+        self._tick_stats(info)
+        self._refresh_status(newstatus=info[0])
         self.has_managed_save()
         self.snapshots_supported()
 
@@ -1527,6 +1529,8 @@ class vmmDomain(vmmLibvirtObject):
     def _sample_cpu_stats(self, info, now):
         if not self._enable_cpu_stats:
             return 0, 0, 0, 0
+        if not info:
+            info = self._backend.info()
 
         prevCpuTime = 0
         prevTimestamp = 0
@@ -1913,21 +1917,24 @@ class vmmDomain(vmmLibvirtObject):
 
 
     def tick(self, stats_update=True):
-        # For domains it's pretty important that we are always using
-        # the latest XML, but other objects probably don't want to do
-        # this since it could be a performance hit.
-        if not self._using_events():
-            self._invalidate_xml()
+        if (not self._using_events() and
+            not stats_update):
+            return
 
         info = []
-        if not self._using_events() or self._enable_cpu_stats:
+        dosignal = False
+        if not self._using_events():
+            # For domains it's pretty important that we are always using
+            # the latest XML, but other objects probably don't want to do
+            # this since it could be a performance hit.
+            self._invalidate_xml()
             info = self._backend.info()
+            dosignal = self._refresh_status(newstatus=info[0], cansignal=False)
 
         if stats_update:
             self._tick_stats(info)
-
-        self._refresh_status(newstatus=info and info[0] or None)
-
+        if dosignal:
+            self.idle_emit("state-changed")
         if stats_update:
             self.idle_emit("resources-sampled")
 

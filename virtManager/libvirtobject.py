@@ -208,7 +208,7 @@ class vmmLibvirtObject(vmmGObject):
             return "Active"
         return "Inactive"
 
-    def _refresh_status(self, newstatus=None):
+    def _refresh_status(self, newstatus=None, cansignal=True):
         """
         Grab the object status/active state from libvirt, and if the
         status has changed, update the XML cache. Typically called from
@@ -216,20 +216,25 @@ class vmmLibvirtObject(vmmGObject):
 
         :param newstatus: Used by vmmDomain as a small optimization to
             avoid polling info() twice
+        :param cansignal: If True, this function will signal state-changed
+            if required.
+        :returns: True if status changed, false otherwise
         """
         if (self._using_events() and
             self.__status is not None):
-            return
+            return False
 
         if newstatus is None:
             newstatus = self._get_backend_status()
         status = newstatus
         if status == self.__status:
-            return
+            return False
         self.__status = status
 
         self.ensure_latest_xml(nosignal=True)
-        self.idle_emit("state-changed")
+        if cansignal:
+            self.idle_emit("state-changed")
+        return True
 
     def _backend_get_active(self):
         if self._support_isactive is None:
