@@ -89,14 +89,18 @@ class vmmConnect(vmmGObjectUI):
 
         self.set_initial_state()
 
-        self.dbus = None
-        self.avahiserver = None
         try:
             self.dbus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
             self.avahiserver = Gio.DBusProxy.new_sync(self.dbus, 0, None,
                                     "org.freedesktop.Avahi", "/",
                                     "org.freedesktop.Avahi.Server", None)
+
+            # Call any API, so we detect if avahi is even available or not
+            self.avahiserver.GetAPIVersion()
+            logging.debug("Connected to avahi")
         except Exception, e:
+            self.dbus = None
+            self.avahiserver = None
             logging.debug("Couldn't contact avahi: %s", str(e))
 
         self.reset_state()
