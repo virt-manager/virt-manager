@@ -6,8 +6,8 @@
        <address type="drive" controller="9" bus="0" target="0" unit="0"/>
 +      <readonly/>
      </disk>
-     <disk type="block" device="cdrom">
-       <target dev="sdb" bus="scsi"/>
+     <controller type="scsi" index="0"/>
+     <controller type="scsi" index="1"/>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

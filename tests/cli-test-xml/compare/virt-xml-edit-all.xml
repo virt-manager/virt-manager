@@ -3,13 +3,6 @@
        </source>
 +      <driver name="vfio"/>
      </hostdev>
-     <hostdev mode="subsystem" type="usb" managed="yes">
-       <source>
-         <address bus="3" device="2"/>
-       </source>
-       <boot order="9"/>
-+      <driver name="vfio"/>
-     </hostdev>
      <hostdev mode="subsystem" type="pci" managed="yes">
        <source>
          <address domain="0x0000" bus="0x00" slot="0x19" function="0x0"/>
@@ -17,23 +10,8 @@
        <rom bar="off"/>
 +      <driver name="vfio"/>
      </hostdev>
-     <hostdev mode="subsystem" type="pci" managed="yes">
-       <source>
-         <address domain="0x0003" bus="0x00" slot="0x19" function="0x0"/>
-       </source>
-       <boot order="6"/>
-+      <driver name="vfio"/>
-     </hostdev>
-     <hostdev mode="subsystem" type="scsi" managed="no">
-       <source>
-@@
-         <address bus="0" target="0" unit="0"/>
-       </source>
-       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
-+      <driver name="vfio"/>
-     </hostdev>
      <redirdev bus="usb" type="tcp">
        <source mode="connect" host="localhost" service="4000"/>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

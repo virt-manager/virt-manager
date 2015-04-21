@@ -1,5 +1,5 @@
        </source>
-       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+       <rom bar="off"/>
      </hostdev>
 -    <redirdev bus="usb" type="tcp">
 -      <source mode="connect" host="localhost" service="4000"/>
@@ -7,7 +7,7 @@
 +      <source mode="connect" host="example.com" service="12345"/>
        <protocol type="raw"/>
      </redirdev>
-     <redirdev bus="usb" type="spicevmc">
+     <watchdog model="ib700" action="poweroff"/>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

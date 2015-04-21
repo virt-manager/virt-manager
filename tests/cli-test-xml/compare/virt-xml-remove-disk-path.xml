@@ -7,22 +7,9 @@
 -      <boot order="5"/>
 -      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
 -    </disk>
-     <disk type="dir" device="floppy">
-       <source dir="/tmp"/>
-       <target dev="fdb" bus="fdc"/>
-@@
-       <target dev="hdb" bus="ide"/>
-       <readonly/>
-       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
--    </disk>
--    <disk type="block" device="disk">
--      <driver type="raw" cache="none"/>
--      <source dev="/dev/null"/>
--      <target dev="hdc" bus="ide"/>
--      <address type="drive" controller="0" bus="1" target="0" unit="0"/>
-     </disk>
      <disk type="file" device="disk">
-       <driver name="qemu" type="qcow2" cache="none"/>
+       <source file="/tmp/foobar"/>
+       <target dev="hda" bus="ide"/>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

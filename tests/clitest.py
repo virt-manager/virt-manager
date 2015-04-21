@@ -849,10 +849,10 @@ c.add_invalid("test --edit --hostdev driver_name=vfio")  # Guest has no hostdev 
 c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
 c.add_invalid("test --edit")  # specified no edit option
 c.add_invalid("test --edit 2 --cpu host-passthrough")  # specifing --edit number where it doesn't make sense
-c.add_invalid("test-many-devices --edit 5 --tpm /dev/tpm")  # device edit out of range
-c.add_invalid("test-many-devices --add-device --host-device 0x0781:0x5151 --update")  # test driver doesn't support attachdevice...
-c.add_invalid("test-many-devices --remove-device --host-device 1 --update")  # test driver doesn't support detachdevice...
-c.add_invalid("test-many-devices --edit --graphics password=foo --update")  # test driver doesn't support updatdevice...
+c.add_invalid("test-for-virtxml --edit 5 --tpm /dev/tpm")  # device edit out of range
+c.add_invalid("test-for-virtxml --add-device --host-device 0x0781:0x5151 --update")  # test driver doesn't support attachdevice...
+c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update")  # test driver doesn't support detachdevice...
+c.add_invalid("test-for-virtxml --edit --graphics password=foo --update")  # test driver doesn't support updatdevice...
 c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(xmldir + "/virtxml-stdin-edit.xml"))  # stdin test
@@ -863,7 +863,7 @@ c.add_compare("--build-xml --idmap uid_start=0,uid_target=1000,uid_count=10,gid_
 c.add_compare("test --edit --boot network,cdrom", "edit-bootorder")
 
 
-c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
+c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
 c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
 new
 very,very=new desc\\\'",title="This is my,funky=new title" """, "edit-simple-metadata")
@@ -899,7 +899,7 @@ c.add_compare("--video cirrus", "edit-simple-video", compare_check=support.SUPPO
 c.add_compare("--sound pcspk", "edit-simple-soundhw")
 c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "edit-simple-host-device")
 
-c = vixml.add_category("edit selection", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
+c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
 c.add_compare("--edit 3 --sound pcspk", "edit-pos-num", compare_check=support.SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT)
 c.add_compare("--edit -1 --video qxl", "edit-neg-num", compare_check=support.SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT)
@@ -909,13 +909,13 @@ c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
 
-c = vixml.add_category("edit clear", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
+c = vixml.add_category("edit clear", "test-for-virtxml --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
 c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
 c.add_invalid("--edit --disk /foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes")  # clearxml isn't supported for devices
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
 
-c = vixml.add_category("add/rm devices", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
+c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
 c.add_invalid("--add-device --security foo")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
 c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "add-host-device")
@@ -924,7 +924,7 @@ c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-di
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "add-disk-notarget")  # filling in acceptable target
 c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-storage")
 c.add_compare("--remove-device --sound ich6", "remove-sound-model", compare_check=support.SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT)
-c.add_compare("--remove-device --disk 6", "remove-disk-index")
+c.add_compare("--remove-device --disk 3", "remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all", compare_check=support.SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT)
 c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name")
@@ -967,7 +967,7 @@ c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(
 c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --file %(MANAGEDNEW1)s")  # XML w/ managed storage, specify managed path
 c.add_valid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools# Libvirt test driver doesn't support cloning across pools# XML w/ non-existent storage, with --preserve
-c.add_valid("-o test -n test-many-devices --replace")  # Overwriting existing VM
+c.add_valid("-o test -n test-for-clone --replace")  # Overwriting existing VM
 c.add_invalid("-o test foobar")  # Positional arguments error
 c.add_invalid("-o idontexist")  # Non-existent vm name
 c.add_invalid("-o idontexist --auto-clone")  # Non-existent vm name with auto flag,

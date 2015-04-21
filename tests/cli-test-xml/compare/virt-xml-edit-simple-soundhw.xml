@@ -1,11 +1,11 @@
-       <channel name="inputs" mode="secure"/>
-       <channel name="record" mode="insecure"/>
-     </graphics>
+     <input type="mouse" bus="ps2"/>
+     <input type="keyboard" bus="ps2"/>
+     <graphics type="vnc" port="-1" autoport="yes"/>
 -    <sound model="sb16"/>
 +    <sound model="pcspk"/>
      <sound model="es1370"/>
      <sound model="ich6"/>
      <video>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

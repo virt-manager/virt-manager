@@ -1,15 +1,15 @@
+     <video>
+       <model type="cirrus" vram="16384" heads="3"/>
      </video>
-     <hostdev mode="subsystem" type="usb" managed="yes">
-       <source>
+-    <hostdev mode="subsystem" type="usb" managed="yes">
+-      <source>
 -        <vendor id="0x04b3"/>
 -        <product id="0x4485"/>
 -      </source>
 -    </hostdev>
--    <hostdev mode="subsystem" type="usb" managed="yes">
--      <source>
-         <address bus="3" device="2"/>
-       </source>
-       <boot order="9"/>
+     <hostdev mode="subsystem" type="pci" managed="yes">
+       <source>
+         <address domain="0x0000" bus="0x00" slot="0x19" function="0x0"/>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

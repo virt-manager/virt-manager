@@ -4,8 +4,8 @@
 -      <target dev="nic02"/>
 +      <target dev="nic55"/>
      </interface>
-     <interface type="direct">
-       <mac address="f0:11:22:33:44:5f"/>
+     <smartcard mode="host">
+       <address type="ccid" controller="0" slot="0"/>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

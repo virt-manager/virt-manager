@@ -1,11 +1,11 @@
-       <target port="2"/>
+       <target port="0"/>
      </parallel>
      <console type="pty">
 -      <target type="virtio" port="0"/>
 +      <target type="serial" port="0"/>
      </console>
-     <console type="pty">
-       <target type="uml" port="1"/>
+     <channel type="pipe">
+       <source path="/tmp/guestfwd"/>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

@@ -56,7 +56,7 @@
 
 
 <domain type='test'>
-  <name>test-many-devices</name>
+  <name>test-for-virtxml</name>
   <currentMemory>204800</currentMemory>
   <memory>409600</memory>
   <blkiotune>
@@ -78,8 +78,202 @@
     <uid start='0' target='1000' count='10'/>
     <gid start='0' target='1000' count='10'/>
   </idmap>
-  <description>Foo bar baz &amp;
-    yeah boii &lt; &gt; yeahfoo
+  <description>Test VM for virtxml cli tests
+  </description>
+  <features>
+    <acpi/>
+    <apic eoi='off'/>
+    <hyperv>
+      <relaxed state='on'/>
+      <vapic state='on'/>
+      <spinlocks state='on' retries='12287'/>
+    </hyperv>
+  </features>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu cpuset="1,2,5-9,11,13-14">9</vcpu>
+  <numatune>
+    <memory mode='interleave' placement='auto'/>
+  </numatune>
+  <cpu match="exact">
+    <model>core2duo</model>
+    <vendor>Intel</vendor>
+    <feature policy="require" name="pbe"/>
+    <feature policy="require" name="tm2"/>
+    <feature policy="require" name="est"/>
+    <feature policy="require" name="ss"/>
+    <feature policy="require" name="ht"/>
+    <feature policy="require" name="ds"/>
+    <feature policy="require" name="lahf_lm"/>
+    <feature policy="require" name="tm"/>
+    <feature policy="require" name="cx16"/>
+    <feature policy="require" name="vmx"/>
+    <feature policy="require" name="ds_cpl"/>
+    <feature policy="require" name="xtpr"/>
+    <feature policy="require" name="acpi"/>
+  </cpu>
+
+  <pm>
+    <suspend-to-mem enabled='no'/>
+  </pm>
+
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+
+    <disk type='block' device='floppy'>
+      <source dev='/dev/null'/>
+      <target dev='fda' bus='fdc'/>
+      <boot order='5'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <source file='/tmp/foobar'/>
+      <target dev='hda' bus='ide'/>
+      <iotune>
+        <read_bytes_sec>5242880</read_bytes_sec>
+        <total_iops_sec>50</total_iops_sec>
+      </iotune>
+    </disk>
+    <disk type='file' device='disk'>
+      <driver name="qemu" type="qcow2" cache="none"/>
+      <source file='/tmp/foobar2'/>
+      <target dev='sda' bus='scsi'/>
+      <boot order='1'/>
+      <address type='drive' controller='9'/>
+      <shareable/>
+    </disk>
+
+    <controller type='scsi' index='9' model='virtio-scsi'/>
+
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:33:54:32:10'/>
+      <model type='e1000'/>
+    </interface>
+    <interface type='bridge'>
+      <source bridge='br0'/>
+      <mac address='22:00:00:44:AA:BF'/>
+      <model type='e1000'/>
+    </interface>
+    <interface type='ethernet'>
+      <mac address='00:11:7f:33:44:55'/>
+      <script path='/etc/qemu-ifup'/>
+      <target dev='nic02'/>
+    </interface>
+
+    <input type='mouse' bus='ps2'/>
+
+    <graphics type='vnc' display=':3.4' xauth='/testdir/.Xauthority' fullscreen='yes'/>
+
+    <sound model='sb16'/>
+    <sound model='es1370'/>
+    <sound model='ich6'/>
+
+    <video>
+      <model type='vmvga'/>
+    </video>
+    <video>
+      <model type='cirrus' vram='10240' heads='3'/>
+    </video>
+
+    <hostdev mode='subsystem' type='usb' managed='yes'>
+      <source>
+        <vendor id='0x04b3'/>
+        <product id='0x4485'/>
+      </source>
+    </hostdev>
+    <hostdev mode='subsystem' type='pci' managed='yes'>
+      <source>
+        <address bus='0x00' slot='0x19' function="0x0"/>
+      </source>
+      <rom bar='off'/>
+    </hostdev>
+
+    <serial type='null'/>
+
+    <parallel type='file'>
+      <source path='/tmp/foo.log'/>
+    </parallel>
+
+    <console type='pty'>
+      <target type='virtio'/>
+    </console>
+
+    <channel type='pipe'>
+      <source path='/tmp/guestfwd'/>
+      <target type='guestfwd' address='10.0.2.1' port='4600'/>
+    </channel>
+
+    <watchdog model='ib700' action='poweroff'/>
+
+    <smartcard mode='host'>
+      <address type='ccid' controller='0' slot='0'/>
+    </smartcard>
+
+    <redirdev bus='usb' type='tcp'>
+      <source mode='connect' host='localhost' service='4000'/>
+      <protocol type='raw'/>
+    </redirdev>
+
+    <filesystem>
+      <driver type='handle'/>
+      <source dir='/foo/bar'/>
+      <target dir='/bar/baz'/>
+    </filesystem>
+
+    <tpm model='tpm-tis'>
+      <backend type='passthrough'>
+        <device path='/dev/tzz'/>
+      </backend>
+    </tpm>
+
+    <rng model='virtio'>
+      <rate period='2000' bytes='1234'/>
+      <backend model='egd' type='tcp'>
+        <source mode='connect' host='1.2.3.4' service='1234'/>
+      </backend>
+    </rng>
+
+    <panic>
+      <address type='isa' iobase='0x505'/>
+    </panic>
+
+    <memballoon model='virtio'/>
+  </devices>
+</domain>
+
+
+<domain type='test'>
+  <name>test-many-devices</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <blkiotune>
+    <weight>100</weight>
+    <device>
+      <path>/dev/sdd</path>
+      <weight>200</weight>
+    </device>
+  </blkiotune>
+  <memoryBacking>
+    <hugepages/>
+  </memoryBacking>
+  <uuid>12345678-12F4-1234-1234-A23456A89012</uuid>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+  </os>
+  <idmap>
+    <uid start='0' target='1000' count='10'/>
+    <gid start='0' target='1000' count='10'/>
+  </idmap>
+  <description>Test VM for virt-manager details UI testing
+
+Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
   </description>
   <features>
     <acpi/>
@@ -245,6 +439,8 @@
 
     <!-- controllers -->
     <controller type='scsi' index='9' model='virtio-scsi'/>
+    <controller type='scsi' model='virtio-scsi'/>
+    <controller type='usb'/>
 
 
     <!-- interfaces -->
@@ -308,9 +504,6 @@
       <channel name="record" mode="insecure"/>
     </graphics>
 
-    <!-- controller devices -->
-    <controller type='scsi' model='virtio-scsi'/>
-    <controller type='usb'/>
 
     <!-- sound devices -->
     <sound model='sb16'/>
@@ -489,6 +682,8 @@
     <memballoon model='virtio'/>
   </devices>
 </domain>
+
+
 
 <domain type='test'>
   <name>test-alternate-devs</name>

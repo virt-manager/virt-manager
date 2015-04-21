@@ -1,11 +1,11 @@
-       <boot order="3"/>
-       <address type="pci" domain="0x0000" bus="0x00" slot="0x07" function="0x0"/>
+       <script path="/etc/qemu-ifup"/>
+       <target dev="nic02"/>
      </interface>
 -    <smartcard mode="host">
 +    <smartcard mode="host" type="spicevmc">
        <address type="ccid" controller="0" slot="0"/>
      </smartcard>
-     <smartcard mode="host-certificates">
+     <serial type="null">
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

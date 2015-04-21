@@ -1,11 +1,11 @@
-       <protocol type="raw"/>
-       <address type="ccid" controller="0" slot="3"/>
+     <smartcard mode="host">
+       <address type="ccid" controller="0" slot="0"/>
      </smartcard>
 -    <serial type="null">
 +    <serial type="pty">
        <target port="0"/>
      </serial>
-     <serial type="tcp">
+     <parallel type="file">
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.
