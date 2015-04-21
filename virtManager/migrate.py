@@ -135,6 +135,8 @@ class vmmMigrateDialog(vmmGObjectUI):
             self.widget("migrate-mode-label").get_tooltip_text())
         self.widget("migrate-unsafe").set_tooltip_text(
             self.widget("migrate-unsafe-label").get_tooltip_text())
+        self.widget("migrate-temporary").set_tooltip_text(
+            self.widget("migrate-temporary-label").get_tooltip_text())
 
     def _reset_state(self):
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
@@ -159,6 +161,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         self.widget("migrate-mode").set_active(0)
         self.widget("migrate-unsafe").set_active(False)
+        self.widget("migrate-temporary").set_active(False)
 
         if self.conn.is_xen():
             # Default xen port is 8002
@@ -206,7 +209,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         address_warning = ""
         tunnel_warning = ""
         tunnel_uri = ""
-        is_tunnel = self._is_tunnel_selected()
 
         if can_migrate and uri in self._conns:
             destconn = self._conns[uri]
@@ -370,6 +372,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
             tunnel = self._is_tunnel_selected()
             unsafe = self.widget("migrate-unsafe").get_active()
+            temporary = self.widget("migrate-temporary").get_active()
 
             if tunnel:
                 uri = self.widget("migrate-tunnel-uri").get_text()
@@ -395,7 +398,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         progWin = vmmAsyncJob(
             self._async_migrate,
-            [self.vm, destconn, uri, tunnel, unsafe],
+            [self.vm, destconn, uri, tunnel, unsafe, temporary],
             self._finish_cb, [destconn],
             _("Migrating VM '%s'" % self.vm.get_name()),
             (_("Migrating VM '%s' to %s. This may take a while.") %
@@ -419,7 +422,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         return
 
     def _async_migrate(self, asyncjob,
-            origvm, origdconn, migrate_uri, tunnel, unsafe):
+            origvm, origdconn, migrate_uri, tunnel, unsafe, temporary):
         meter = asyncjob.get_meter()
 
         srcconn = origvm.conn
@@ -431,4 +434,5 @@ class vmmMigrateDialog(vmmGObjectUI):
         logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
                       srcconn.get_uri(), dstconn.get_uri())
 
-        vm.migrate(dstconn, migrate_uri, tunnel, unsafe, meter=meter)
+        vm.migrate(dstconn, migrate_uri, tunnel, unsafe, temporary,
+            meter=meter)

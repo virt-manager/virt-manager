@@ -1495,13 +1495,15 @@ class vmmDomain(vmmLibvirtObject):
 
 
     def migrate(self, destconn, interface=None,
-        secure=False, unsafe=False, meter=None):
+        secure=False, unsafe=False, temporary=False, meter=None):
         self._install_abort = True
 
         flags = 0
         flags |= libvirt.VIR_MIGRATE_LIVE
-        flags |= libvirt.VIR_MIGRATE_PERSIST_DEST
-        flags |= libvirt.VIR_MIGRATE_UNDEFINE_SOURCE
+
+        if not temporary:
+            flags |= libvirt.VIR_MIGRATE_PERSIST_DEST
+            flags |= libvirt.VIR_MIGRATE_UNDEFINE_SOURCE
 
         if secure:
             flags |= libvirt.VIR_MIGRATE_PEER2PEER
@@ -1511,8 +1513,9 @@ class vmmDomain(vmmLibvirtObject):
             flags |= libvirt.VIR_MIGRATE_UNSAFE
 
         libvirt_destconn = destconn.get_backend().get_conn_for_api_arg()
-        logging.debug("Migrating: conn=%s flags=%s uri=%s secure=%s unsafe=%s",
-                      destconn, flags, interface, secure, unsafe)
+        logging.debug("Migrating: conn=%s flags=%s uri=%s secure=%s "
+            "unsafe=%s temporary=%s",
+            destconn, flags, interface, secure, unsafe, temporary)
 
         if meter:
             start_job_progress_thread(self, meter, _("Migrating domain"))
