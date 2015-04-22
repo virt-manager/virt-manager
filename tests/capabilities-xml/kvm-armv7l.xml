@@ -1,0 +1,103 @@
+<capabilities>
+  <!-- From Fedora 21 on cubietruck, libvirt 1.2.9.2 -->
+
+  <host>
+    <uuid>06bf8e5a-b512-4782-abbc-1ab7b6f008f4</uuid>
+    <cpu>
+      <arch>armv7l</arch>
+      <model>host</model>
+      <topology sockets='1' cores='2' threads='1'/>
+      <pages unit='KiB' size='4'/>
+      <pages unit='KiB' size='2048'/>
+    </cpu>
+    <power_management>
+      <suspend_disk/>
+      <suspend_hybrid/>
+    </power_management>
+    <migration_features>
+      <live/>
+      <uri_transports>
+        <uri_transport>tcp</uri_transport>
+        <uri_transport>rdma</uri_transport>
+      </uri_transports>
+    </migration_features>
+    <topology>
+      <cells num='1'>
+        <cell id='0'>
+          <memory unit='KiB'>2064964</memory>
+          <cpus num='2'>
+            <cpu id='0' socket_id='0' core_id='0' siblings='0'/>
+            <cpu id='1' socket_id='0' core_id='1' siblings='1'/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+    <secmodel>
+      <model>selinux</model>
+      <doi>0</doi>
+      <baselabel type='kvm'>system_u:system_r:svirt_t:s0</baselabel>
+      <baselabel type='qemu'>system_u:system_r:svirt_tcg_t:s0</baselabel>
+    </secmodel>
+    <secmodel>
+      <model>dac</model>
+      <doi>0</doi>
+      <baselabel type='kvm'>+107:+107</baselabel>
+      <baselabel type='qemu'>+107:+107</baselabel>
+    </secmodel>
+  </host>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='armv7l'>
+      <wordsize>32</wordsize>
+      <emulator>/usr/bin/qemu-system-arm</emulator>
+      <machine maxCpus='1'>integratorcp</machine>
+      <machine maxCpus='2'>nuri</machine>
+      <machine maxCpus='1'>verdex</machine>
+      <machine maxCpus='2'>smdkc210</machine>
+      <machine maxCpus='1'>collie</machine>
+      <machine maxCpus='4'>virt</machine>
+      <machine maxCpus='1'>spitz</machine>
+      <machine maxCpus='4'>realview-pbx-a9</machine>
+      <machine maxCpus='1'>realview-eb</machine>
+      <machine maxCpus='1'>versatilepb</machine>
+      <machine maxCpus='1'>realview-pb-a8</machine>
+      <machine maxCpus='1'>musicpal</machine>
+      <machine maxCpus='1'>z2</machine>
+      <machine maxCpus='1'>akita</machine>
+      <machine maxCpus='1'>kzm</machine>
+      <machine maxCpus='4'>realview-eb-mpcore</machine>
+      <machine maxCpus='1'>sx1</machine>
+      <machine maxCpus='1'>sx1-v1</machine>
+      <machine maxCpus='1'>cubieboard</machine>
+      <machine maxCpus='4'>highbank</machine>
+      <machine maxCpus='1'>terrier</machine>
+      <machine maxCpus='1'>n810</machine>
+      <machine maxCpus='1'>mainstone</machine>
+      <machine maxCpus='4'>midway</machine>
+      <machine maxCpus='1'>cheetah</machine>
+      <machine maxCpus='1'>tosa</machine>
+      <machine maxCpus='1'>borzoi</machine>
+      <machine maxCpus='1'>versatileab</machine>
+      <machine maxCpus='1'>lm3s6965evb</machine>
+      <machine maxCpus='1'>n800</machine>
+      <machine maxCpus='1'>connex</machine>
+      <machine maxCpus='1'>xilinx-zynq-a9</machine>
+      <machine maxCpus='4'>vexpress-a9</machine>
+      <machine maxCpus='4'>vexpress-a15</machine>
+      <machine maxCpus='1'>canon-a1100</machine>
+      <machine maxCpus='1'>lm3s811evb</machine>
+      <domain type='qemu'>
+      </domain>
+      <domain type='kvm'>
+        <emulator>/usr/bin/qemu-system-arm</emulator>
+      </domain>
+    </arch>
+    <features>
+      <cpuselection/>
+      <deviceboot/>
+      <disksnapshot default='on' toggle='no'/>
+    </features>
+  </guest>
+
+</capabilities>

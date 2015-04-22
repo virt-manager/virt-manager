@@ -23,7 +23,7 @@
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
-    <emulator>/bin/qemu-system-aarch64</emulator>
+    <emulator>/usr/bin/qemu-system-aarch64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>

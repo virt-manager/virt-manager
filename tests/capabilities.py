@@ -33,133 +33,8 @@ class TestCapabilities(unittest.TestCase):
         path = os.path.join("tests/capabilities-xml", filename)
         return Capabilities(conn, file(path).read())
 
-    def _compareGuest(self, (arch, os_type, domains, features), guest):
-        self.assertEqual(arch,            guest.arch)
-        self.assertEqual(os_type,         guest.os_type)
-        self.assertEqual(len(domains), len(guest.domains))
-        for n in range(len(domains)):
-            self.assertEqual(domains[n][0], guest.domains[n].hypervisor_type)
-            self.assertEqual(domains[n][1], guest.domains[n].emulator)
-            self.assertEqual(domains[n][2], guest.domains[n].machines)
-
-        for n in features:
-            self.assertEqual(features[n], getattr(guest.features, n))
-
-    def _testCapabilities(self, path, (host_arch, host_features), guests,
-                          secmodel=None):
-        caps = self._buildCaps(path)
-
-        if host_arch:
-            self.assertEqual(host_arch, caps.host.cpu.arch)
-            for n in host_features:
-                self.assertEqual(host_features[n], caps.host.cpu.has_feature(n))
-
-        if secmodel:
-            self.assertEqual(secmodel[0], caps.host.secmodels[0].model)
-            if secmodel[1]:
-                for idx, (t, v) in enumerate(secmodel[1].items()):
-                    self.assertEqual(t,
-                        caps.host.secmodels[0].baselabels[idx].type)
-                    self.assertEqual(v,
-                        caps.host.secmodels[0].baselabels[idx].content)
-
-        for idx in range(len(guests)):
-            self._compareGuest(guests[idx], caps.guests[idx])
-
-    def testCapabilities1(self):
-        host = ('x86_64', {'vmx': True})
-
-        guests = [
-            ('x86_64', 'xen',
-              [['xen', None, []]], {}),
-            ('i686',   'xen',
-                [['xen', None, []]], {'pae': True, 'nonpae': False}),
-            ('i686',   'hvm',
-              [['xen', "/usr/lib64/xen/bin/qemu-dm", ['pc', 'isapc']]],
-              {'pae': True, 'nonpae': True}),
-            ('x86_64', 'hvm',
-              [['xen', "/usr/lib64/xen/bin/qemu-dm", ['pc', 'isapc']]], {})
-       ]
-
-        self._testCapabilities("capabilities-xen.xml", host, guests)
-
-    def testCapabilities2(self):
-        host = ('x86_64', {})
-        secmodel = ('selinux', None)
-
-        guests = [
-            ('x86_64', 'hvm',
-              [['qemu', '/usr/bin/qemu-system-x86_64', ['pc', 'isapc']]], {}),
-            ('i686',   'hvm',
-              [['qemu', '/usr/bin/qemu', ['pc', 'isapc']]], {}),
-            ('mips',   'hvm',
-              [['qemu', '/usr/bin/qemu-system-mips', ['mips']]], {}),
-            ('mipsel', 'hvm',
-              [['qemu', '/usr/bin/qemu-system-mipsel', ['mips']]], {}),
-            ('sparc',  'hvm',
-              [['qemu', '/usr/bin/qemu-system-sparc', ['sun4m']]], {}),
-            ('ppc',    'hvm',
-              [['qemu', '/usr/bin/qemu-system-ppc',
-               ['g3bw', 'mac99', 'prep']]], {}),
-       ]
-
-        self._testCapabilities("capabilities-qemu.xml", host, guests, secmodel)
-
-    def testCapabilities3(self):
-        host = ('i686', {})
-
-        guests = [
-            ('i686',   'hvm',
-              [['qemu', '/usr/bin/qemu', ['pc', 'isapc']],
-               ['kvm', '/usr/bin/qemu-kvm', ['pc', 'isapc']]], {}),
-            ('x86_64', 'hvm',
-              [['qemu', '/usr/bin/qemu-system-x86_64', ['pc', 'isapc']]], {}),
-            ('mips',   'hvm',
-              [['qemu', '/usr/bin/qemu-system-mips', ['mips']]], {}),
-            ('mipsel', 'hvm',
-              [['qemu', '/usr/bin/qemu-system-mipsel', ['mips']]], {}),
-            ('sparc',  'hvm',
-              [['qemu', '/usr/bin/qemu-system-sparc', ['sun4m']]], {}),
-            ('ppc',    'hvm',
-              [['qemu', '/usr/bin/qemu-system-ppc',
-               ['g3bw', 'mac99', 'prep']]], {}),
-       ]
-
-        secmodel = ('dac', {"kvm" : "+0:+0", "qemu" : "+0:+0"})
-
-        self._testCapabilities("capabilities-kvm.xml", host, guests, secmodel)
-
-    def testCapabilities4(self):
-        host = ('i686', {'pae': True, 'nonpae': True})
-
-        guests = [
-            ('i686', 'linux',
-              [['test', None, []]],
-              {'pae': True, 'nonpae': True}),
-       ]
-
-        self._testCapabilities("capabilities-test.xml", host, guests)
-
-    def testCapsLXC(self):
-        guests = [
-            ("x86_64", "exe", [["lxc", "/usr/libexec/libvirt_lxc", []]], {}),
-            ("i686", "exe", [["lxc", "/usr/libexec/libvirt_lxc", []]], {}),
-       ]
-
-        self._testCapabilities("capabilities-lxc.xml",
-                               (None, None), guests)
-
-    def testCapsTopology(self):
-        filename = "capabilities-test.xml"
-        caps = self._buildCaps(filename)
-
-        self.assertTrue(bool(caps.host.topology))
-        self.assertTrue(len(caps.host.topology.cells) == 2)
-        self.assertTrue(len(caps.host.topology.cells[0].cpus) == 8)
-        self.assertTrue(len(caps.host.topology.cells[0].cpus) == 8)
-
     def testCapsCPUFeaturesOldSyntax(self):
-        filename = "rhel5.4-xen-caps-virt-enabled.xml"
+        filename = "test-old-vmx.xml"
         host_feature_list = ["vmx"]
 
         caps = self._buildCaps(filename)
@@ -167,7 +42,7 @@ class TestCapabilities(unittest.TestCase):
             self.assertEquals(caps.host.cpu.has_feature(f), True)
 
     def testCapsCPUFeaturesOldSyntaxSVM(self):
-        filename = "rhel5.4-xen-caps.xml"
+        filename = "test-old-svm.xml"
         host_feature_list = ["svm"]
 
         caps = self._buildCaps(filename)
@@ -175,7 +50,7 @@ class TestCapabilities(unittest.TestCase):
             self.assertEquals(caps.host.cpu.has_feature(f), True)
 
     def testCapsCPUFeaturesNewSyntax(self):
-        filename = "libvirt-0.7.6-qemu-caps.xml"
+        filename = "test-qemu-with-kvm.xml"
         host_feature_list = ['lahf_lm', 'xtpr', 'cx16', 'tm2', 'est', 'vmx',
             'ds_cpl', 'pbe', 'tm', 'ht', 'ss', 'acpi', 'ds']
 
@@ -190,28 +65,25 @@ class TestCapabilities(unittest.TestCase):
         self.assertEquals(caps.host.cpu.sockets, 7)
 
     def testCapsUtilFuncs(self):
-        new_caps = self._buildCaps("libvirt-0.7.6-qemu-caps.xml")
-        new_caps_no_kvm = self._buildCaps(
-                                    "libvirt-0.7.6-qemu-no-kvmcaps.xml")
-        empty_caps = self._buildCaps("empty-caps.xml")
-        rhel_xen_enable_hvm_caps = self._buildCaps(
-                                    "rhel5.4-xen-caps-virt-enabled.xml")
-        rhel_xen_caps = self._buildCaps("rhel5.4-xen-caps.xml")
-        rhel_kvm_caps = self._buildCaps("rhel5.4-kvm-caps.xml")
+        caps_with_kvm = self._buildCaps("test-qemu-with-kvm.xml")
+        caps_no_kvm = self._buildCaps("test-qemu-no-kvm.xml")
+        caps_empty = self._buildCaps("test-old-vmx.xml")
 
         def test_utils(caps, has_guests, is_kvm):
             self.assertEquals(caps.has_install_options(), has_guests)
             self.assertEquals(caps.is_kvm_available(), is_kvm)
 
-        test_utils(new_caps, True, True)
-        test_utils(empty_caps, False, False)
-        test_utils(rhel_xen_enable_hvm_caps, True, False)
-        test_utils(rhel_xen_caps, True, False)
-        test_utils(rhel_kvm_caps, True, True)
-        test_utils(new_caps_no_kvm, True, False)
+        test_utils(caps_empty, False, False)
+        test_utils(caps_with_kvm, True, True)
+        test_utils(caps_no_kvm, True, False)
+
+
+    ################################################
+    # Test cpu_map.xml/getCPUModel output handling #
+    ################################################
 
     def _testCPUMap(self, api):
-        caps = self._buildCaps("libvirt-0.7.6-qemu-caps.xml")
+        caps = self._buildCaps("test-qemu-with-kvm.xml")
 
         setattr(_CPUMapFileValues, "_cpu_filename",
             "tests/capabilities-xml/cpu_map.xml")
@@ -247,8 +119,13 @@ class TestCapabilities(unittest.TestCase):
     def testCPUMapAPI(self):
         self._testCPUMap(api=False)
 
+
+    ##############################
+    # domcapabilities.py testing #
+    ##############################
+
     def testDomainCapabilities(self):
-        xml = file("tests/capabilities-xml/domain-capabilities.xml").read()
+        xml = file("tests/capabilities-xml/test-domcaps.xml").read()
         caps = DomainCapabilities(utils.open_testdriver(), xml)
 
         self.assertEqual(caps.os.loader.supported, True)

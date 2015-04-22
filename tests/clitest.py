@@ -69,20 +69,23 @@ new_files   = new_images
 clean_files = (new_images + exist_images)
 
 test_files = {
-    'TESTURI'           : utils.testuri,
-    'DEFAULTURI'        : utils.defaulturi,
-    'REMOTEURI'         : utils.uriremote,
-    'KVMURI'            : utils.urikvm,
-    'REMOTEKVMURI'      : utils.urikvm + ",remote",
-    'KVMURI_NODOMCAPS'  : utils.urikvm_nodomcaps,
-    'XENURI'            : utils.urixencaps,
-    'XENIA64URI'        : utils.urixenia64,
-    'LXCURI'            : utils.urilxc,
+    'URI-TEST': utils.uri_test,
+    'URI-TEST-DEFAULT': utils.uri_test_default,
+    'URI-TEST-REMOTE': utils.uri_test_remote,
+    'URI-KVM': utils.uri_kvm,
+    'URI-KVM-REMOTE': utils.uri_kvm + ",remote",
+    'URI-KVM-NODOMCAPS': utils.uri_kvm_nodomcaps,
+    'URI-XEN': utils.uri_xen,
+    'URI-LXC': utils.uri_lxc,
+
     'CLONE_DISK_XML'    : "%s/clone-disk.xml" % xmldir,
     'CLONE_STORAGE_XML' : "%s/clone-disk-managed.xml" % xmldir,
     'CLONE_NOEXIST_XML' : "%s/clone-disk-noexist.xml" % xmldir,
     'IMAGE_XML'         : "%s/image.xml" % xmldir,
     'IMAGE_NOGFX_XML'   : "%s/image-nogfx.xml" % xmldir,
+    'OVF_IMG1'           : "%s/tests/virtconv-files/ovf_input/test1.ovf" % os.getcwd(),
+    'VMX_IMG1'          : "%s/tests/virtconv-files/vmx_input/test1.vmx" % os.getcwd(),
+
     'NEWIMG1'           : "/dev/default-pool/new1.img",
     'NEWIMG2'           : "/dev/default-pool/new2.img",
     'NEWCLONEIMG1'      : new_images[0],
@@ -102,9 +105,6 @@ test_files = {
     'MANAGEDDISKNEW1'   : "/dev/disk-pool/newvol1.img",
     'COLLIDE'           : "/dev/default-pool/collidevol1.img",
     'SHARE'             : "/dev/default-pool/sharevol.img",
-
-    'OVF_IMG1'           : "%s/tests/virtconv-files/ovf_input/test1.ovf" % os.getcwd(),
-    'VMX_IMG1'          : "%s/tests/virtconv-files/vmx_input/test1.vmx" % os.getcwd(),
 }
 
 
@@ -289,7 +289,7 @@ class App(object):
             args = "--debug"
 
         if "--connect " not in cli:
-            args += " --connect %(TESTURI)s"
+            args += " --connect %(URI-TEST)s"
 
         if self.appname in ["virt-install"]:
             if "--name " not in cli:
@@ -367,7 +367,7 @@ vinst = App("virt-install")
 # virt-install verbose XML comparison tests #
 #############################################
 
-c = vinst.add_category("xml-comparsion", "--connect %(KVMURI)s --noautoconsole --os-variant fedora20")
+c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole --os-variant fedora20")
 
 # Singleton element test #1, for simpler strings
 c.add_compare(""" \
@@ -528,7 +528,7 @@ c.add_valid("--cpu somemodel")  # Simple --cpu
 c.add_valid("--security label=foobar.label,relabel=yes")  # --security implicit static
 c.add_valid("--security label=foobar.label,a1,z2,b3,type=static,relabel=no")  # static with commas 1
 c.add_valid("--security label=foobar.label,a1,z2,b3")  # --security static with commas 2
-c.add_compare("--connect %(DEFAULTURI)s --cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
+c.add_compare("--connect %(URI-TEST-DEFAULT)s --cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 c.add_invalid("--vcpus 32 --cpuset=969-1000")  # Bogus cpuset
 c.add_invalid("--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
 c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
@@ -597,8 +597,8 @@ c.add_invalid("--serial unix")  # Unix with no path
 c.add_invalid("--serial null,path=/tmp/foo")  # Path where it doesn't belong
 c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
 c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
-c.add_invalid("--connect %(KVMURI)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
-c.add_valid("--connect %(KVMURI_NODOMCAPS)s --arch aarch64 --nodisks")  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
+c.add_invalid("--connect %(URI-KVM)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
+c.add_valid("--connect %(URI-KVM-NODOMCAPS)s --arch aarch64 --nodisks")  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 
 
 
@@ -654,7 +654,7 @@ c.add_invalid("--nodisks --pxe --name test")  # Colliding name
 # Remote URI specific tests #
 #############################
 
-c = vinst.add_category("remote", "--connect %(REMOTEURI)s --nographics --noautoconsole")
+c = vinst.add_category("remote", "--connect %(URI-TEST-REMOTE)s --nographics --noautoconsole")
 c.add_valid("--nodisks --pxe")  # Simple pxe nodisks
 c.add_valid("--pxe --disk /foo/bar/baz,size=.01")  # Creating any random path on the remote host
 c.add_valid("--pxe --disk /dev/zde")  # /dev file that we just pass through to the remote VM
@@ -668,7 +668,7 @@ c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage wi
 # QEMU/KVM specific tests #
 ###########################
 
-c = vinst.add_category("kvm", "--connect %(KVMURI)s --noautoconsole")
+c = vinst.add_category("kvm", "--connect %(URI-KVM)s --noautoconsole")
 c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none", "kvm-f14-url")  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s", "test-url-detection")  # --test-media-detection
 c.add_compare("--os-variant fedora20 --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url")  # Quiet URL install should make no noise
@@ -694,14 +694,14 @@ c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm")  # Invalid
 c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch/virt combo
 c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi")  # no HYPER-V
 c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
-c.add_compare("--connect %(REMOTEKVMURI)s --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote")
+c.add_compare("--connect %(URI-KVM-REMOTE)s --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote")
 
 
 ######################
 # LXC specific tests #
 ######################
 
-c = vinst.add_category("lxc", "--connect %(LXCURI)s --noautoconsole --name foolxc --memory 64")
+c = vinst.add_category("lxc", "--connect %(URI-LXC)s --noautoconsole --name foolxc --memory 64")
 c.add_compare("", "default")
 c.add_compare("--filesystem /source,/", "fs-default")
 c.add_compare("--init /usr/bin/httpd", "manual-init")
@@ -712,7 +712,7 @@ c.add_compare("--init /usr/bin/httpd", "manual-init")
 # Xen specific tests #
 ######################
 
-c = vinst.add_category("xen", "--connect %(XENURI)s --noautoconsole")
+c = vinst.add_category("xen", "--connect %(URI-XEN)s --noautoconsole")
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-pv")  # Xen PV
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
@@ -849,14 +849,14 @@ c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-nam
 ####################
 
 vclon = App("virt-clone")
-c = vclon.add_category("remote", "--connect %(REMOTEURI)s")
+c = vclon.add_category("remote", "--connect %(URI-TEST-REMOTE)s")
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage
 c.add_invalid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ local storage, which is invalid for remote connection
 
 
 c = vclon.add_category("misc", "")
-c.add_compare("--connect %(KVMURI)s -o test-for-clone --auto-clone --clone-running", "clone-auto1", compare_check=support.SUPPORT_CONN_LOADER_ROM)
+c.add_compare("--connect %(URI-KVM)s -o test-for-clone --auto-clone --clone-running", "clone-auto1", compare_check=support.SUPPORT_CONN_LOADER_ROM)
 c.add_compare("-o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", compare_check=support.SUPPORT_CONN_LOADER_ROM)
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage
@@ -898,7 +898,7 @@ c.add_invalid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s")  # XM
 ######################
 
 vconv = App("virt-convert")
-c = vconv.add_category("misc", "--connect %(KVMURI)s --dry")
+c = vconv.add_category("misc", "--connect %(URI-KVM)s --dry")
 c.add_invalid("%(VMX_IMG1)s --input-format foo")  # invalid input format
 c.add_invalid("%(EXISTIMG1)s")  # invalid input file
 

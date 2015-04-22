@@ -24,7 +24,7 @@ import virtinst
 from tests import utils
 
 conn = utils.open_testdriver()
-kvmconn = utils.open_testkvmdriver()
+kvmconn = utils.open_kvm()
 
 
 def sanitize_file_xml(xml):

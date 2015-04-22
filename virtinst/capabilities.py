@@ -120,8 +120,6 @@ class _CapsCPU(DomainCPU):
     # capabilities used to just expose these properties as bools
     _svm_bool = XMLProperty("./features/svm", is_bool=True)
     _vmx_bool = XMLProperty("./features/vmx", is_bool=True)
-    _pae_bool = XMLProperty("./features/pae", is_bool=True)
-    _nonpae_bool = XMLProperty("./features/nonpae", is_bool=True)
 
 
     ##############
@@ -133,11 +131,6 @@ class _CapsCPU(DomainCPU):
             return True
         if name == "vmx" and self._vmx_bool:
             return True
-        if name == "pae" and self._pae_bool:
-            return True
-        if name == "nonpae" and self._nonpae_bool:
-            return True
-
         return name in [f.name for f in self.features]
 
 
@@ -213,7 +206,6 @@ class _CapsGuestFeatures(XMLBuilder):
     _XML_ROOT_NAME = "features"
 
     pae = XMLProperty("./pae", is_bool=True)
-    nonpae = XMLProperty("./nonpae", is_bool=True)
 
 
 class _CapsGuest(XMLBuilder):

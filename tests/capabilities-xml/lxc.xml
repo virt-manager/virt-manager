@@ -1,0 +1,63 @@
+<capabilities>
+  <!-- Came from Fedora 22 libvirt-daemon-1.2.13-3.fc22.x86_64 -->
+
+  <host>
+    <uuid>39303242-3334-3636-3341-3745ffffffff</uuid>
+    <cpu>
+      <arch>x86_64</arch>
+    </cpu>
+    <power_management>
+      <suspend_mem/>
+      <suspend_disk/>
+      <suspend_hybrid/>
+    </power_management>
+    <topology>
+      <cells num='1'>
+        <cell id='0'>
+          <memory unit='KiB'>16414548</memory>
+          <pages unit='KiB' size='4'>4103637</pages>
+          <pages unit='KiB' size='2048'>0</pages>
+          <distances>
+            <sibling id='0' value='10'/>
+          </distances>
+          <cpus num='8'>
+            <cpu id='0' socket_id='0' core_id='0' siblings='0-1'/>
+            <cpu id='1' socket_id='0' core_id='1' siblings='0-1'/>
+            <cpu id='2' socket_id='0' core_id='6' siblings='2,5'/>
+            <cpu id='3' socket_id='0' core_id='2' siblings='3-4'/>
+            <cpu id='4' socket_id='0' core_id='3' siblings='3-4'/>
+            <cpu id='5' socket_id='0' core_id='7' siblings='2,5'/>
+            <cpu id='6' socket_id='0' core_id='4' siblings='6-7'/>
+            <cpu id='7' socket_id='0' core_id='5' siblings='6-7'/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+    <secmodel>
+      <model>selinux</model>
+      <doi>0</doi>
+      <baselabel type='lxc'>system_u:system_r:svirt_lxc_net_t:s0</baselabel>
+    </secmodel>
+  </host>
+
+  <guest>
+    <os_type>exe</os_type>
+    <arch name='x86_64'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/libexec/libvirt_lxc</emulator>
+      <domain type='lxc'/>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>exe</os_type>
+    <arch name='i686'>
+      <wordsize>32</wordsize>
+      <emulator>/usr/libexec/libvirt_lxc</emulator>
+      <domain type='lxc'/>
+    </arch>
+  </guest>
+
+</capabilities>
+
+

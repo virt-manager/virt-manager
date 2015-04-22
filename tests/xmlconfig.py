@@ -275,10 +275,9 @@ class TestXMLMisc(unittest.TestCase):
             xml, ignore = g.start_install(return_xml=True, dry=True)
             return "ac97" in xml
 
-        self.assertTrue(has_ac97(utils.open_plainkvm(connver=11000)))
-        self.assertFalse(has_ac97(utils.open_plainkvm(libver=5000)))
-        self.assertFalse(has_ac97(
-            utils.open_plainkvm(libver=7000, connver=7000)))
+        self.assertTrue(has_ac97(utils.open_kvm(connver=11000)))
+        self.assertFalse(has_ac97(utils.open_kvm(libver=5000)))
+        self.assertFalse(has_ac97(utils.open_kvm(libver=7000, connver=7000)))
 
     def testOSDeviceDefaultChange(self):
         """
@@ -286,7 +285,7 @@ class TestXMLMisc(unittest.TestCase):
         distro/variant mid process
         """
         # Use connver=12005 so that non-rhel displays ac97
-        conn = utils.open_rhelkvm(connver=12005)
+        conn = utils.open_kvm_rhel(connver=12005)
 
         g = _make_guest(conn=conn)
         g.os_variant = "fedora11"
@@ -310,7 +309,7 @@ class TestXMLMisc(unittest.TestCase):
 
     def test_no_vmvga_RHEL(self):
         # Test that vmvga is not used on RHEL
-        conn = utils.open_rhelkvm()
+        conn = utils.open_kvm_rhel()
         def _make():
             g = _make_guest(conn=conn)
             g.emulator = "/usr/libexec/qemu-kvm"

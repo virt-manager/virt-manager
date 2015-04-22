@@ -32,18 +32,18 @@ REGENERATE_OUTPUT = False
 
 _capsprefix  = ",caps=%s/tests/capabilities-xml/" % os.getcwd()
 _domcapsprefix  = ",domcaps=%s/tests/capabilities-xml/" % os.getcwd()
-defaulturi = "__virtinst_test__test:///default,predictable"
-testuri = "__virtinst_test__test:///%s/tests/testdriver.xml,predictable" % os.getcwd()
-uriremote = testuri + ",remote"
-uriqemu = "%s,qemu" % testuri
-urixen = "%s,xen" % testuri
-urixencaps = testuri + _capsprefix + "rhel5.4-xen-caps-virt-enabled.xml,xen"
-urixenia64 = testuri + _capsprefix + "xen-ia64-hvm.xml,xen"
-urirhelkvm = (uriqemu + _capsprefix + "caps-libvirt-1.1.1-29.el7.xml")
-urikvm_nodomcaps = (uriqemu + _capsprefix + "libvirt-1.1.2-qemu-caps.xml")
-urikvm = (urikvm_nodomcaps +
-    _domcapsprefix + "domcapabilities-1.2.12-aavmf.xml")
-urilxc = testuri + _capsprefix + "capabilities-lxc.xml,lxc"
+
+uri_test_default = "__virtinst_test__test:///default,predictable"
+uri_test = "__virtinst_test__test:///%s/tests/testdriver.xml,predictable" % os.getcwd()
+uri_test_remote = uri_test + ",remote"
+
+_uri_qemu = "%s,qemu" % uri_test
+uri_kvm_rhel = (_uri_qemu + _capsprefix + "kvm-x86_64-rhel7.xml")
+uri_kvm_nodomcaps = (_uri_qemu + _capsprefix + "kvm-x86_64.xml")
+uri_kvm = (uri_kvm_nodomcaps + _domcapsprefix + "kvm-x86_64-domcaps.xml")
+
+uri_xen = uri_test + _capsprefix + "xen-rhel5.4.xml,xen"
+uri_lxc = uri_test + _capsprefix + "lxc.xml,lxc"
 
 
 def get_debug():
@@ -113,27 +113,23 @@ def openconn(uri):
 
 
 def open_testdefault():
-    return openconn("test:///default")
+    return openconn(uri_test_default)
 
 
 def open_testdriver():
-    return openconn(testuri)
+    return openconn(uri_test)
 
 
-def open_testkvmdriver():
-    return openconn(urikvm)
+def open_kvm(connver=None, libver=None):
+    return openconn(_make_uri(uri_kvm, connver, libver))
 
 
-def open_plainkvm(connver=None, libver=None):
-    return openconn(_make_uri(uriqemu, connver, libver))
-
-
-def open_rhelkvm(connver=None):
-    return openconn(_make_uri(urirhelkvm, connver))
+def open_kvm_rhel(connver=None):
+    return openconn(_make_uri(uri_kvm_rhel, connver))
 
 
 def open_test_remote():
-    return openconn(uriremote)
+    return openconn(uri_test_remote)
 
 
 def _libvirt_callback(ignore, err):

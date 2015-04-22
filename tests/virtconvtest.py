@@ -27,7 +27,7 @@ from tests import utils
 
 base_dir = os.getcwd() + "/tests/virtconv-files/"
 out_dir = base_dir + "libvirt_output"
-conn = utils.open_testkvmdriver()
+conn = utils.open_kvm()
 
 
 class TestVirtConv(unittest.TestCase):

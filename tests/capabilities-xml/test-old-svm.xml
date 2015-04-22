@@ -1,0 +1,26 @@
+<capabilities>
+  <host>
+    <cpu>
+      <arch>x86_64</arch>
+      <features>
+        <svm/>
+      </features>
+    </cpu>
+    <migration_features>
+      <live/>
+      <uri_transports>
+        <uri_transport>xenmigr</uri_transport>
+      </uri_transports>
+    </migration_features>
+    <topology>
+      <cells num='1'>
+        <cell id='0'>
+          <cpus num='2'>
+            <cpu id='0'/>
+            <cpu id='1'/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+  </host>
+</capabilities>
