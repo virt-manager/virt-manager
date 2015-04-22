@@ -445,7 +445,7 @@ class TestCommand(TestBaseCommand):
         Finds all the tests modules in tests/, and runs them.
         '''
         testfiles = []
-        for t in glob.glob(os.path.join(self._dir, 'tests', '*.py')):
+        for t in sorted(glob.glob(os.path.join(self._dir, 'tests', '*.py'))):
             if (t.endswith("__init__.py") or
                 t.endswith("test_urls.py") or
                 t.endswith("test_inject.py")):
@@ -460,6 +460,19 @@ class TestCommand(TestBaseCommand):
                 continue
 
             testfiles.append('.'.join(['tests', os.path.splitext(base)[0]]))
+
+        # Put clitest at the end, since it takes the longest
+        for f in testfiles[:]:
+            if "clitest" in f:
+                testfiles.remove(f)
+                testfiles.append(f)
+
+        # Always want to put checkprops at the end to get accurate results
+        for f in testfiles[:]:
+            if "checkprops" in f:
+                testfiles.remove(f)
+                if not self.testfile and not self.skipcli:
+                    testfiles.append(f)
 
         if not testfiles:
             raise RuntimeError("--testfile didn't catch anything")

@@ -89,11 +89,6 @@ class XMLParseTest(unittest.TestCase):
                                parsexml=file(infile).read())
         return guest, outfile
 
-    def test000ClearProps(self):
-        # pylint: disable=protected-access
-        # Access to protected member, needed to unittest stuff
-        virtinst.xmlbuilder._seenprops = []
-
     def testAlterGuest(self):
         """
         Test changing Guest() parameters after parsing
@@ -1288,28 +1283,6 @@ class XMLParseTest(unittest.TestCase):
         guest.cpu.clear()
         utils.diff_compare(guest.get_xml_config(), outfile)
 
-    def testzzzzCheckProps(self):
-        # pylint: disable=protected-access
-        # Access to protected member, needed to unittest stuff
-
-        # If a certain environment variable is set, XMLBuilder tracks
-        # every property registered and every one of those that is
-        # actually altered. The test suite sets that env variable.
-        #
-        # test000ClearProps resets the 'set' list, and this test
-        # ensures that every property we know about has been touched
-        # by one of the above tests.
-        fail = [p for p in virtinst.xmlbuilder._allprops
-                if p not in virtinst.xmlbuilder._seenprops]
-        try:
-            self.assertEquals([], fail)
-        except AssertionError:
-            msg = "".join(traceback.format_exc()) + "\n\n"
-            msg += ("This means that there are XML properties that are\n"
-                    "untested in tests/xmlparse.py. This could be caused\n"
-                    "by a previous test suite failure, or if you added\n"
-                    "a new property and didn't add corresponding tests!")
-            self.fail(msg)
 
 if __name__ == "__main__":
     unittest.main()
