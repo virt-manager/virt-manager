@@ -1,0 +1,47 @@
+<domain type="kvm">
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="ppc64le" machine="pseries">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
+      <target dev="sda" bus="scsi"/>
+    </disk>
+    <interface type="bridge">
+      <source bridge="eth0"/>
+      <mac address="00:11:22:33:44:55"/>
+    </interface>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <video>
+      <model type="vga"/>
+    </video>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+  </devices>
+</domain>

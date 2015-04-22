@@ -92,6 +92,9 @@
       <machine maxCpus='1'>canon-a1100</machine>
       <machine maxCpus='1'>lm3s811evb</machine>
       <domain type='qemu'/>
+      <domain type='kvm'>
+        <emulator>/usr/bin/qemu-system-aarch64</emulator>
+      </domain>
     </arch>
     <features>
       <cpuselection/>

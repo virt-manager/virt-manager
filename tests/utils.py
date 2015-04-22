@@ -38,9 +38,14 @@ uri_test = "__virtinst_test__test:///%s/tests/testdriver.xml,predictable" % os.g
 uri_test_remote = uri_test + ",remote"
 
 _uri_qemu = "%s,qemu" % uri_test
-uri_kvm_rhel = (_uri_qemu + _capsprefix + "kvm-x86_64-rhel7.xml")
+_uri_kvm_domcaps = (_uri_qemu + _domcapsprefix + "kvm-x86_64-domcaps.xml")
 uri_kvm_nodomcaps = (_uri_qemu + _capsprefix + "kvm-x86_64.xml")
-uri_kvm = (uri_kvm_nodomcaps + _domcapsprefix + "kvm-x86_64-domcaps.xml")
+uri_kvm_rhel = (_uri_kvm_domcaps + _capsprefix + "kvm-x86_64-rhel7.xml")
+uri_kvm = (_uri_kvm_domcaps + _capsprefix + "kvm-x86_64.xml")
+
+uri_kvm_armv7l = (_uri_kvm_domcaps + _capsprefix + "kvm-armv7l.xml")
+uri_kvm_aarch64 = (_uri_kvm_domcaps + _capsprefix + "kvm-aarch64.xml")
+uri_kvm_ppc64le = (_uri_kvm_domcaps + _capsprefix + "kvm-ppc64le.xml")
 
 uri_xen = uri_test + _capsprefix + "xen-rhel5.4.xml,xen"
 uri_lxc = uri_test + _capsprefix + "lxc.xml,lxc"
