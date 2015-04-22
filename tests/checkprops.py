@@ -6,6 +6,8 @@ import virtinst
 
 
 class CheckPropsTest(unittest.TestCase):
+    maxDiff = None
+
     def testCheckProps(self):
         # pylint: disable=protected-access
         # Access to protected member, needed to unittest stuff

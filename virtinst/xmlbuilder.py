@@ -330,8 +330,6 @@ class XMLChildProperty(property):
 
 
 class XMLProperty(property):
-    _track = True
-
     def __init__(self, xpath=None, name=None, doc=None,
                  set_converter=None, validate_cb=None, make_xpath_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
@@ -401,7 +399,8 @@ class XMLProperty(property):
         if self._default_name and not self._default_cb:
             raise RuntimeError("default_name requires default_cb.")
 
-        if _trackprops and self._track:
+        self._is_tracked = False
+        if _trackprops:
             _allprops.append(self)
 
         property.__init__(self, fget=self.getter, fset=self.setter)
@@ -527,8 +526,6 @@ class XMLProperty(property):
         propstore = xmlbuilder._propstore
         proporder = xmlbuilder._proporder
 
-        if _trackprops and self not in _seenprops:
-            _seenprops.append(self)
         propname = self._findpropname(xmlbuilder)
         propstore[propname] = val
 
@@ -567,6 +564,10 @@ class XMLProperty(property):
         since it's known to the empty, and we may want to return
         a 'default' value
         """
+        if _trackprops and not self._is_tracked:
+            _seenprops.append(self)
+            self._is_tracked = True
+
         if (self._prop_is_unset(xmlbuilder) and
             not xmlbuilder._xmlstate.is_build):
             val = self._get_xml(xmlbuilder)
@@ -595,6 +596,10 @@ class XMLProperty(property):
         in propstore. Setting the actual XML is only done at
         get_xml_config time.
         """
+        if _trackprops and not self._is_tracked:
+            _seenprops.append(self)
+            self._is_tracked = True
+
         if validate and self._validate_cb:
             self._validate_cb(xmlbuilder, val)
         self._nonxml_fset(xmlbuilder,

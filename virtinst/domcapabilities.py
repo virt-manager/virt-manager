@@ -21,14 +21,7 @@
 import logging
 import re
 
-from .xmlbuilder import XMLBuilder, XMLChildProperty
-from .xmlbuilder import XMLProperty as _XMLProperty
-
-
-class XMLProperty(_XMLProperty):
-    # We don't care about full parsing coverage, so tell the test suite
-    # not to warn
-    _track = False
+from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _Value(XMLBuilder):

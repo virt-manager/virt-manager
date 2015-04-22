@@ -22,13 +22,7 @@
 import re
 
 from .cpu import CPU as DomainCPU
-from .xmlbuilder import XMLBuilder, XMLChildProperty
-from .xmlbuilder import XMLProperty as _XMLProperty
-
-
-# Disable test suite property tracking
-class XMLProperty(_XMLProperty):
-    _track = False
+from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 ##########################
@@ -158,7 +152,6 @@ class _CapsTopologyCPU(XMLBuilder):
 
 class _TopologyCell(XMLBuilder):
     _XML_ROOT_NAME = "cell"
-    id = XMLProperty("./@id")
     cpus = XMLChildProperty(_CapsTopologyCPU, relative_xpath="./cpus")
 
 
@@ -221,8 +214,6 @@ class _CapsGuestFeatures(XMLBuilder):
 
     pae = XMLProperty("./pae", is_bool=True)
     nonpae = XMLProperty("./nonpae", is_bool=True)
-    acpi = XMLProperty("./acpi", is_bool=True)
-    apic = XMLProperty("./apci", is_bool=True)
 
 
 class _CapsGuest(XMLBuilder):

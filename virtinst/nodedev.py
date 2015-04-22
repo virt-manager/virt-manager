@@ -19,12 +19,7 @@
 
 import logging
 
-from .xmlbuilder import XMLBuilder
-from .xmlbuilder import XMLProperty as _XMLProperty
-
-
-class XMLProperty(_XMLProperty):
-    _track = False
+from .xmlbuilder import XMLBuilder, XMLProperty
 
 
 def _compare_int(nodedev_val, hostdev_val):
