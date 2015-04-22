@@ -71,8 +71,6 @@ exist_files = exist_images + fake_iso
 new_files   = new_images
 clean_files = (new_images + exist_images + fake_iso)
 
-promptlist = []
-
 test_files = {
     'TESTURI'           : utils.testuri,
     'DEFAULTURI'        : utils.defaulturi,
@@ -263,90 +261,6 @@ class Command(object):
 
         if err:
             tests.fail(err)
-
-
-class PromptCheck(object):
-    """
-    Individual question/response pair for automated --prompt tests
-    """
-    def __init__(self, prompt, response=None, num_lines=1):
-        self.prompt = prompt
-        self.response = response
-        if self.response:
-            self.response = self.response % test_files
-        self.num_lines = num_lines
-
-        self._output = None
-
-    def check(self, proc):
-        timeout = 3
-        def _set_output():
-            self._output = ""
-            for ignore in range(self.num_lines):
-                self._output += proc.stdout.readline()
-
-        import threading
-        thread = threading.Thread(target=_set_output)
-        thread.start()
-        thread.join(timeout)
-
-        if thread.isAlive():
-            proc.terminate()
-            return False, self._output + "\nProcess hung on readline()"
-
-        if not self._output.count(self.prompt):
-            self._output += ("\nContent didn't contain prompt '%s'" %
-                             (self.prompt))
-            return False, self._output
-
-        if self.response:
-            proc.stdin.write(self.response + "\n")
-
-        return True, self._output
-
-
-class PromptTest(Command):
-    """
-    Fully automated --prompt test
-    """
-    def __init__(self, cmdstr):
-        Command.__init__(self, cmdstr)
-
-        self.prompt_list = []
-
-    def add(self, *args, **kwargs):
-        self.prompt_list.append(PromptCheck(*args, **kwargs))
-
-    def _launch_command(self, conn):
-        ignore = conn
-
-        proc = subprocess.Popen(self.argv,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT)
-
-        out = "Running %s\n" % self.cmdstr
-
-        for p in self.prompt_list:
-            ret, content = p.check(proc)
-            out += content
-            if not ret:
-                # Since we didn't match output, process might be hung
-                proc.kill()
-                break
-
-        exited = False
-        for ignore in range(30):
-            if proc.poll() is not None:
-                exited = True
-                break
-            time.sleep(.1)
-
-        if not exited:
-            proc.kill()
-            out += "\nProcess was killed by test harness"
-
-        return proc.wait(), out
 
 
 class _CategoryProxy(object):
@@ -861,6 +775,7 @@ c.add_compare("--build-xml --tpm /dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device_path=/dev/sdf,device_weight=200", "build-blkiotune")
 c.add_compare("--build-xml --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10", "build-idmap")
 c.add_compare("test --edit --boot network,cdrom", "edit-bootorder")
+c.add_compare("--confirm test --edit --cpu host-passthrough", "prompt-response")
 
 
 c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
@@ -995,15 +910,6 @@ c.add_compare("%(OVF_IMG1)s --disk-format none --destination /tmp --print-xml", 
 
 
 
-##########################
-# Automated prompt tests #
-##########################
-
-_p = PromptTest("virt-xml --connect %(TESTURI)s --confirm test "
-    "--edit --cpu host-passthrough")
-_p.add("Define 'test' with the changed XML", "yes", num_lines=10)
-promptlist.append(_p)
-
 
 #########################
 # Test runner functions #
@@ -1049,7 +955,7 @@ def maketest(cmd):
         _cmdobj.run(self)
     return lambda s: cmdtemplate(s, cmd)
 
-_cmdlist = promptlist[:]
+_cmdlist = []
 _cmdlist += vinst.cmds
 _cmdlist += vclon.cmds
 _cmdlist += vconv.cmds
@@ -1058,8 +964,6 @@ _cmdlist += vixml.cmds
 for _cmd in _cmdlist:
     newidx += 1
     _name = "testCLI"
-    if _cmd in promptlist:
-        _name += "prompt"
     _name += "%s%.4d" % (os.path.basename(_cmd.app.replace("-", "")), newidx)
     setattr(CLITests, _name, maketest(_cmd))
 

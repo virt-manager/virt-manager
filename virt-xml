@@ -38,12 +38,14 @@ from virtinst.cli import fail, print_stdout, print_stderr
 def prompt_yes_or_no(msg):
     while 1:
         printmsg = msg + " (y/n): "
-        if "VIRTINST_TEST_SUITE" in os.environ:
-            printmsg += "\n"
         sys.stdout.write(printmsg)
         sys.stdout.flush()
 
-        inp = sys.stdin.readline().lower().strip()
+        if "VIRTINST_TEST_SUITE" in os.environ:
+            inp = "yes"
+        else:
+            inp = sys.stdin.readline().lower().strip()
+
         if inp in ["y", "yes"]:
             return True
         elif inp in ["n", "no"]:
