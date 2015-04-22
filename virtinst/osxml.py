@@ -64,7 +64,7 @@ class OSXML(XMLBuilder):
     def is_arm_vexpress(self):
         return self.is_arm() and str(self.machine).startswith("vexpress-")
     def is_arm_machvirt(self):
-        return self.is_arm() and self.machine == "virt"
+        return self.is_arm() and str(self.machine).startswith("virt")
 
     def is_ppc64(self):
         return self.arch == "ppc64" or self.arch == "ppc64le"
