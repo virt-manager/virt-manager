@@ -64,12 +64,9 @@ exist_images = [
     image_prefix + "exist2.img",
 ]
 
-# Fake iso for --location iso mounting
-fake_iso = ["/tmp/fake.iso"]
-
-exist_files = exist_images + fake_iso
+exist_files = exist_images
 new_files   = new_images
-clean_files = (new_images + exist_images + fake_iso)
+clean_files = (new_images + exist_images)
 
 test_files = {
     'TESTURI'           : utils.testuri,
@@ -688,7 +685,7 @@ c.add_compare("--arch aarch64 --cdrom %(EXISTIMG2)s --boot loader=CODE.fd,nvram_
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-pseries-f20")
 c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-machdefault-f20")
 c.add_compare("--arch aarch64 --nodisks", "aarch64-default-uefi")  # ensure aarch64 defaults to UEFI
-c.add_compare("--disk none --location /tmp/fake.iso --nonetworks", "location-iso")  # Using --location iso mounting
+c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso")  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7")  # RHEL7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7")  # Centos 7 defaults
