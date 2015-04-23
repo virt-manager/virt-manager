@@ -795,9 +795,7 @@ class Guest(XMLBuilder):
             return
 
         if self.os.is_arm_machvirt() and self.type == "kvm":
-            # Should be host-passthrough, but the libvirt support is
-            # incomplete for arm cpu
-            self.cpu.model = "host"
+            self.cpu.mode = self.cpu.SPECIAL_MODE_HOST_PASSTHROUGH
 
         elif self.os.is_arm64() and self.os.is_arm_machvirt():
             # -M virt defaults to a 32bit CPU, even if using aarch64
