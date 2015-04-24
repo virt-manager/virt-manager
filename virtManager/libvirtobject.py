@@ -187,9 +187,12 @@ class vmmLibvirtObject(vmmGObject):
 
         try:
             self._init_libvirt_state()
-        finally:
-            self.__initialized = True
-            self.idle_emit("initialized")
+        except:
+            logging.debug("Error initializing libvirt state for %s", self,
+                exc_info=True)
+
+        self.__initialized = True
+        self.idle_emit("initialized")
 
 
     ###################
