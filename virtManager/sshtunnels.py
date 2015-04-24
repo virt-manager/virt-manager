@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 Red Hat, Inc.
+# Copyright (C) 2014, 2015 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import Queue
 import socket
 import signal
 import threading
+import ipaddr
 
 from .baseclass import vmmGObject
 
@@ -47,10 +48,10 @@ class ConnectionInfo(object):
             self._connhost = "127.0.0.1"
 
     def _is_listen_localhost(self, host=None):
-        return (host or self.gaddr) in ["127.0.0.1", "::1"]
+        return ipaddr.IPNetwork(host or self.gaddr).is_loopback
 
     def _is_listen_any(self):
-        return self.gaddr in ["0.0.0.0", "::"]
+        return ipaddr.IPNetwork(self.gaddr).is_unspecified
 
     def need_tunnel(self):
         if not self._is_listen_localhost():
