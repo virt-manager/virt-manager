@@ -205,8 +205,9 @@ class LibvirtConsoleConnection(ConsoleConnection):
         name = dev and dev.alias.name or None
         logging.debug("Opening console stream for dev=%s alias=%s",
                       dev, name)
-        if not name:
-            raise RuntimeError(_("Cannot open a device with no alias name"))
+        # libxl doesn't set aliases, their open_console just defaults to
+        # opening the first console device, so don't force prescence of
+        # an alias
 
         stream = self.conn.get_backend().newStream(libvirt.VIR_STREAM_NONBLOCK)
         self.vm.open_console(name, stream)
