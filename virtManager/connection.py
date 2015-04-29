@@ -775,6 +775,9 @@ class vmmConnection(vmmGObject):
         _add_domain_xml_event(
             getattr(libvirt, "VIR_DOMAIN_EVENT_ID_DEVICE_REMOVED", 15),
             "device removed")
+        _add_domain_xml_event(
+            getattr(libvirt, "VIR_DOMAIN_EVENT_ID_DEVICE_ADDED", 19),
+            "device added")
 
         try:
             if _disable_libvirt_events:
