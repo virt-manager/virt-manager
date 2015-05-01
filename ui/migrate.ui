@@ -393,7 +393,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="tooltip_text" translatable="yes">Tunnel migration through the libvirtd connection channel, rather than having the hypervisor open a separate network connection to the destination. The source libvirt instance connects directly to the destination libvirt instance.
 
-Can simplify setup by since no additional firewall ports need to be open, and w ill encrypt migration traffic if your libvirt connection is encrypted. But it can be difficult to make this work with SSH transport.</property>
+This can simplify setup since no additional firewall ports need to be open, and will encrypt migration traffic if your libvirt connection is encrypted. But it can be difficult to make this work with SSH transport.</property>
                                         <property name="label" translatable="yes">M_ode:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">migrate-mode</property>
