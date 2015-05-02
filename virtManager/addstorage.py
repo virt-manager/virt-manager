@@ -56,10 +56,7 @@ class vmmAddStorage(vmmGObjectUI):
     ##########################
 
     def _get_default_dir(self):
-        pool = self.conn.get_default_pool()
-        if pool:
-            return pool.get_target_path()
-        return self.config.get_default_image_dir(self.conn)
+        return virtinst.StoragePool.get_default_dir(self.conn.get_backend())
 
     def _get_ideal_path_info(self, name):
         path = self._get_default_dir()

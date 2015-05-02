@@ -148,10 +148,6 @@ class vmmConfig(object):
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
 
-    DEFAULT_XEN_IMAGE_DIR = "/var/lib/xen/images"
-
-    DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
-
     def __init__(self, appname, CLIConfig, test_first_run=False):
         self.appname = appname
         self.appversion = CLIConfig.version
@@ -645,6 +641,7 @@ class vmmConfig(object):
         return None
 
     def get_default_directory(self, conn, _type):
+        ignore = conn
         key = self._get_default_dir_key(_type)
         path = None
 
@@ -655,7 +652,7 @@ class vmmConfig(object):
             if (_type == self.CONFIG_DIR_IMAGE or
                 _type == self.CONFIG_DIR_ISO_MEDIA or
                 _type == self.CONFIG_DIR_FLOPPY_MEDIA):
-                path = self.get_default_image_dir(conn)
+                path = os.getcwd()
 
         logging.debug("directory for type=%s returning=%s", _type, path)
         return path
@@ -667,19 +664,6 @@ class vmmConfig(object):
 
         logging.debug("saving directory for type=%s to %s", key, folder)
         self.conf.set("/paths/%s-default" % key, folder)
-
-    def get_default_image_dir(self, conn):
-        if conn.is_xen():
-            return self.DEFAULT_XEN_IMAGE_DIR
-
-        if (conn.is_qemu_session() or
-            not os.access(self.DEFAULT_VIRT_IMAGE_DIR, os.W_OK)):
-            return os.getcwd()
-
-        # Just return the default dir since the intention is that it
-        # is a managed pool and the user will be able to install to it.
-        return self.DEFAULT_VIRT_IMAGE_DIR
-
 
     # Keyring / VNC password dealings
     def get_secret_name(self, vm):
