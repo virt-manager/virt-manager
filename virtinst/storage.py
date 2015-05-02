@@ -82,7 +82,7 @@ class _StorageObject(XMLBuilder):
 def _get_default_pool_path(conn):
     path = "/var/lib/libvirt/images"
     if conn.is_session_uri():
-        path = os.path.expanduser("~/.config/libvirt/images")
+        path = os.path.expanduser("~/.local/libvirt/images")
     return path
 
 
@@ -204,6 +204,8 @@ class StoragePool(_StorageObject):
         pool = None
         name = "default"
         path = _get_default_pool_path(conn)
+        if conn.is_session_uri() and not os.path.exists(path):
+            os.makedirs(path)
 
         try:
             pool = conn.storagePoolLookupByName(name)
