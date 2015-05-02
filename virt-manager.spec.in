@@ -6,8 +6,8 @@
 %define askpass_package            "openssh-askpass"
 %define qemu_user                  "qemu"
 %define libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
+%define kvm_packages               ""
 %define preferred_distros          "fedora,rhel"
-%define kvm_packages               "qemu-system-x86"
 %define default_hvs                "qemu,xen"
 
 %if 0%{?rhel}
