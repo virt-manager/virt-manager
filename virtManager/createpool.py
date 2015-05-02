@@ -381,8 +381,9 @@ class vmmCreatePool(vmmGObjectUI):
             self.widget("pool-source-path").get_child().set_text(source)
 
     def browse_target_path(self, ignore1=None):
+        startfolder = StoragePool.get_default_dir(self.conn.get_backend())
         target = self._browse_file(_("Choose target directory"),
-                                   startfolder="/var/lib/libvirt",
+                                   startfolder=startfolder,
                                    foldermode=True)
         if target:
             self.widget("pool-target-path").get_child().set_text(target)

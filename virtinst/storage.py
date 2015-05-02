@@ -29,11 +29,10 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 from . import util
 
 
-DEFAULT_DEV_TARGET = "/dev"
-DEFAULT_LVM_TARGET_BASE = "/dev/"
-DEFAULT_DIR_TARGET_BASE = "/var/lib/libvirt/images/"
-DEFAULT_SCSI_TARGET = "/dev/disk/by-path"
-DEFAULT_MPATH_TARGET = "/dev/mapper"
+_DEFAULT_DEV_TARGET = "/dev"
+_DEFAULT_LVM_TARGET_BASE = "/dev/"
+_DEFAULT_SCSI_TARGET = "/dev/disk/by-path"
+_DEFAULT_MPATH_TARGET = "/dev/mapper"
 
 
 class _StoragePermissions(XMLBuilder):
@@ -311,18 +310,18 @@ class StoragePool(_StorageObject):
         if (self.type == self.TYPE_DIR or
             self.type == self.TYPE_NETFS or
             self.type == self.TYPE_FS):
-            return (DEFAULT_DIR_TARGET_BASE + self.name)
+            return os.path.join(self.get_default_dir(self.conn), self.name)
         if self.type == self.TYPE_LOGICAL:
             name = self.name
             if self.source_name:
                 name = self.source_name
-            return DEFAULT_LVM_TARGET_BASE + name
+            return _DEFAULT_LVM_TARGET_BASE + name
         if self.type == self.TYPE_DISK:
-            return DEFAULT_DEV_TARGET
+            return _DEFAULT_DEV_TARGET
         if self.type == self.TYPE_ISCSI or self.type == self.TYPE_SCSI:
-            return DEFAULT_SCSI_TARGET
+            return _DEFAULT_SCSI_TARGET
         if self.type == self.TYPE_MPATH:
-            return DEFAULT_MPATH_TARGET
+            return _DEFAULT_MPATH_TARGET
         raise RuntimeError("No default target_path for type=%s" % self.type)
 
     def _get_default_uuid(self):
@@ -350,10 +349,10 @@ class StoragePool(_StorageObject):
             srcname = "gv0"
         elif ("target_path" in self._propstore and
             self.target_path and
-            self.target_path.startswith(DEFAULT_LVM_TARGET_BASE)):
+            self.target_path.startswith(_DEFAULT_LVM_TARGET_BASE)):
             # If there is a target path, parse it for an expected VG
             # location, and pull the name from there
-            vg = self.target_path[len(DEFAULT_LVM_TARGET_BASE):]
+            vg = self.target_path[len(_DEFAULT_LVM_TARGET_BASE):]
             srcname = vg.split("/", 1)[0]
 
         return srcname
