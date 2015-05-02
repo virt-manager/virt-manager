@@ -39,7 +39,7 @@ def check_packagekit(parent, errbox, packages):
         logging.debug("No PackageKit packages to search for.")
         return
 
-    logging.debug("Asking PackageKit what's installed locally.")
+    logging.debug("PackageKit check/install for packages=%s", packages)
     try:
         bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
         Gio.DBusProxy.new_sync(bus, 0, None,
@@ -53,10 +53,14 @@ def check_packagekit(parent, errbox, packages):
     try:
         for package in packages[:]:
             if packagekit_isinstalled(package):
+                logging.debug("package=%s already installed, skipping it",
+                    package)
                 packages.remove(package)
 
         if packages:
             packagekit_install(parent, packages)
+        else:
+            logging.debug("Nothing to install")
     except Exception, e:
         # PackageKit frontend should report an error for us, so just log
         # the actual error
@@ -100,6 +104,7 @@ def packagekit_install(parent, package_list):
     logging.debug("Installing packages: %s", package_list)
     pk_control.InstallPackageNames("(uass)", xid, package_list, "",
                                    timeout=timeout)
+    logging.debug("Install completed")
 
 
 ###################
