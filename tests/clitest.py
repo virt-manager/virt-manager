@@ -850,7 +850,7 @@ c.add_compare("--remove-device --sound ich6", "remove-sound-model", compare_chec
 c.add_compare("--remove-device --disk 3", "remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all", compare_check=support.SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT)
-c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name")
+c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name", compare_check=support.SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT)
 
 
 
