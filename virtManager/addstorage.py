@@ -167,6 +167,7 @@ class vmmAddStorage(vmmGObjectUI):
             if path not in broken_paths:
                 continue
             details += "%s : %s\n" % (path, error)
+        details += "\nIt is very likely the VM fill fail to start up."
 
         logging.debug("Permission errors:\n%s", details)
 
