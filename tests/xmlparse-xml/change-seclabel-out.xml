@@ -1,0 +1,19 @@
+<domain type="kvm">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <os>
+    <type arch="i686" machine="foobar">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+  </devices>
+  <seclabel type="none" model="apparmor" relabel="no">
+    <label>barlabel</label>
+    <imagelabel>fooimage</imagelabel>
+    <baselabel>baselabel</baselabel>
+  </seclabel>
+  <seclabel type="dynamic" model="dac" relabel="yes"/>
+</domain>

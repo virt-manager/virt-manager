@@ -201,14 +201,16 @@ def action_edit(guest, options, parsermap, parserobj):
 
 
 def action_add_device(guest, options, parsermap, parserobj):
-    if not parserobj.objclass:
+    if (not parserobj.objclass or
+        guest.child_class_is_singleton(parserobj.objclass)):
         fail(_("Cannot use --add-device with --%s") % parserobj.cli_arg_name)
     return cli.parse_option_strings(parsermap, options, guest, None)
 
 
 def action_remove_device(guest, options, parsermap, parserobj):
     ignore = parsermap
-    if not parserobj.objclass:
+    if (not parserobj.objclass or
+        guest.child_class_is_singleton(parserobj.objclass)):
         fail(_("Cannot use --remove-device with --%s") %
              parserobj.cli_arg_name)
 

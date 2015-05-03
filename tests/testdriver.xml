@@ -248,6 +248,8 @@
 
     <memballoon model='virtio'/>
   </devices>
+
+  <seclabel model='selinux' type='dynamic'/>
 </domain>
 
 
@@ -685,6 +687,9 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <!-- memballoon device -->
     <memballoon model='virtio'/>
   </devices>
+
+  <seclabel model='selinux' type='dynamic'/>
+  <seclabel model='dac' type='none'/>
 </domain>
 
 

@@ -89,4 +89,5 @@ class Seclabel(XMLBuilder):
 
     label = XMLProperty("./label")
     imagelabel = XMLProperty("./imagelabel")
+    baselabel = XMLProperty("./baselabel")
     relabel = XMLProperty("./@relabel", is_yesno=True)

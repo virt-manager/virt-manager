@@ -685,7 +685,7 @@ def add_device_options(devg, sound_back_compat=False):
 
 
 def add_guest_xml_options(geng):
-    geng.add_argument("--security",
+    geng.add_argument("--security", action="append",
         help=_("Set domain security driver configuration."))
     geng.add_argument("--numatune",
         help=_("Tune NUMA policy for the domain process."))
@@ -1482,8 +1482,10 @@ class ParserSecurity(VirtCLIParser):
         self.objclass = Seclabel
 
         self.set_param("type", "type")
-        self.set_param("label", "label", can_comma=True)
+        self.set_param("model", "model")
         self.set_param("relabel", "relabel", is_onoff=True)
+        self.set_param("label", "label", can_comma=True)
+        self.set_param("baselabel", "label", can_comma=True)
 
 
 ######################

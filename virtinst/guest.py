@@ -197,10 +197,10 @@ class Guest(XMLBuilder):
     on_reboot = XMLProperty("./on_reboot", default_cb=lambda s: "restart")
     on_crash = XMLProperty("./on_crash", default_cb=lambda s: "restart")
 
+    seclabel = XMLChildProperty(Seclabel)
     os = XMLChildProperty(OSXML, is_single=True)
     features = XMLChildProperty(DomainFeatures, is_single=True)
     clock = XMLChildProperty(Clock, is_single=True)
-    seclabel = XMLChildProperty(Seclabel, is_single=True)
     cpu = XMLChildProperty(CPU, is_single=True)
     numatune = XMLChildProperty(DomainNumatune, is_single=True)
     pm = XMLChildProperty(PM, is_single=True)

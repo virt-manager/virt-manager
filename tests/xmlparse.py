@@ -132,13 +132,6 @@ class XMLParseTest(unittest.TestCase):
         check("suspend_to_mem", False, True)
         check("suspend_to_disk", None, False)
 
-        check = self._make_checker(guest.seclabel)
-        check("type", "static", "static")
-        check("model", "selinux", "apparmor")
-        check("label", "foolabel", "barlabel")
-        check("imagelabel", "imagelabel", "fooimage")
-        check("relabel", None, True)
-
         check = self._make_checker(guest.os)
         check("os_type", "hvm", "xen")
         check("arch", "i686", None)
@@ -228,6 +221,21 @@ class XMLParseTest(unittest.TestCase):
         self._alter_compare(guest.get_xml_config(), outfile,
             support_check=conn.SUPPORT_CONN_VMPORT)
 
+    def testSeclabel(self):
+        guest, outfile = self._get_test_content("change-seclabel")
+
+        check = self._make_checker(guest.seclabel[0])
+        check("type", "static", "none")
+        check("model", "selinux", "apparmor")
+        check("label", "foolabel", "barlabel")
+        check("imagelabel", "imagelabel", "fooimage")
+        check("baselabel", None, "baselabel")
+        check("relabel", None, False)
+
+        guest.remove_child(guest.seclabel[1])
+
+        self._alter_compare(guest.get_xml_config(), outfile)
+
     def testAlterMinimalGuest(self):
         guest, outfile = self._get_test_content("change-minimal-guest")
 
@@ -241,12 +249,13 @@ class XMLParseTest(unittest.TestCase):
         check("offset", None, "utc")
         self.assertTrue(guest.clock.get_xml_config().startswith("<clock"))
 
-        check = self._make_checker(guest.seclabel)
-        check("model", None, "testSecurity")
-        check("type", None, "static")
-        check("label", None, "frob")
+        seclabel = virtinst.Seclabel(guest.conn)
+        guest.add_child(seclabel)
+        seclabel.model = "testSecurity"
+        seclabel.type = "static"
+        seclabel.label = "frob"
         self.assertTrue(
-            guest.seclabel.get_xml_config().startswith("<seclabel"))
+            guest.seclabel[0].get_xml_config().startswith("<seclabel"))
 
         check = self._make_checker(guest.cpu)
         check("model", None, "foobar")

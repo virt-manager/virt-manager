@@ -10,9 +10,9 @@
    <on_reboot>restart</on_reboot>
    <on_crash>restart</on_crash>
 @@
-       <address type="isa" iobase="0x505"/>
      </panic>
    </devices>
+   <seclabel type="dynamic" model="selinux" relabel="yes"/>
 +  <clock offset="utc"/>
  </domain>
 

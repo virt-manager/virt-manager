@@ -380,6 +380,7 @@ c.add_compare(""" \
 --description \"foobar & baz\" \
 --boot uefi \
 --security type=dynamic \
+--security type=none,model=dac \
 --numatune 1,2,3,5-7,^6 \
 --memorybacking hugepages=on \
 --features apic=off \
@@ -849,7 +850,8 @@ c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
 
 c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
-c.add_invalid("--add-device --security foo")  # --add-device without a device
+c.add_valid("--add-device --security model=dac")  # --add-device works for seclabel
+c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
 c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "add-host-device")
 c.add_compare("--add-device --sound pcspk", "add-sound")

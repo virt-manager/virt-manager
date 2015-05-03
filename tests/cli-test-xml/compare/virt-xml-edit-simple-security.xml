@@ -1,7 +1,8 @@
        <address type="isa" iobase="0x505"/>
      </panic>
    </devices>
-+  <seclabel relabel="yes">
+-  <seclabel type="dynamic" model="selinux" relabel="yes"/>
++  <seclabel type="dynamic" model="selinux" relabel="yes">
 +    <label>foo,bar,baz,UNKNOWN=val</label>
 +  </seclabel>
  </domain>

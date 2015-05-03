@@ -22,9 +22,9 @@
      <timer name="rtc" tickpolicy="catchup"/>
      <timer name="pit" tickpolicy="delay"/>
 @@
-       <address type="isa" iobase="0x505"/>
      </panic>
    </devices>
+   <seclabel type="dynamic" model="selinux" relabel="yes"/>
 +  <cpu mode="host-passthrough"/>
  </domain>
 

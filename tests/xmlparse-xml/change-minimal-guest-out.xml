@@ -19,12 +19,12 @@
     <acpi/>
   </features>
   <clock offset="utc"/>
-  <seclabel type="static" model="testSecurity">
-    <label>frob</label>
-  </seclabel>
   <cpu mode="custom" match="exact">
     <model fallback="allow">foobar</model>
     <topology sockets="1" cores="4" threads="1"/>
     <feature policy="forbid" name="x2apic"/>
   </cpu>
+  <seclabel type="static" model="testSecurity">
+    <label>frob</label>
+  </seclabel>
 </domain>
