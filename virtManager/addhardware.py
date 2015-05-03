@@ -1683,20 +1683,16 @@ class vmmAddHardware(vmmGObjectUI):
                 disk.driver_cache = cache
 
             # Generate target
-            disks = []
-            if not self.is_customize_dialog:
-                disks = (self.vm.get_disk_devices() +
-                         self.vm.get_disk_devices(inactive=True))
-                for d in disks:
-                    if d.target not in used:
-                        used.append(d.target)
+            disks = (self.vm.get_disk_devices() +
+                     self.vm.get_disk_devices(inactive=True))
+            for d in disks:
+                if d.target not in used:
+                    used.append(d.target)
 
             prefer_ctrl = self._set_disk_controller(
                 disk, controller_model, disks)
 
-            if not self.is_customize_dialog:
-                disk.generate_target(used, prefer_ctrl)
-
+            disk.generate_target(used, prefer_ctrl)
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 
