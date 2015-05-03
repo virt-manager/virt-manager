@@ -1792,11 +1792,11 @@ class vmmCreate(vmmGObjectUI):
             logging.debug("User finished customize dialog, starting install")
             self.start_install(guest)
 
-        def details_closed(ignore):
-            logging.debug("User closed customize window, back to wizard")
+        def config_canceled(ignore):
+            logging.debug("User closed customize window, closing wizard")
             cleanup_config_window()
             self._undo_finish_cursor()
-            self.widget("summary-customize").set_active(False)
+            self.close()
 
         cleanup_config_window()
         self.config_window = vmmDetails(virtinst_guest, self.topwin)
@@ -1806,7 +1806,7 @@ class vmmCreate(vmmGObjectUI):
                                        start_install_wrapper,
                                        guest))
         self.config_window_signals.append(
-            self.config_window.connect("details-closed", details_closed))
+            self.config_window.connect("details-closed", config_canceled))
         self.config_window.show()
 
     def _install_finished_cb(self, error, details):

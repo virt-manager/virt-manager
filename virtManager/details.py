@@ -429,7 +429,7 @@ class vmmDetails(vmmGObjectUI):
         self.builder.connect_signals({
             "on_close_details_clicked": self.close,
             "on_details_menu_close_activate": self.close,
-            "on_vmm_details_delete_event": self.close,
+            "on_vmm_details_delete_event": self._window_delete_event,
             "on_vmm_details_configure_event": self.window_resized,
             "on_details_menu_quit_activate": self.exit_app,
             "on_hw_list_changed": self.hw_changed,
@@ -444,7 +444,7 @@ class vmmDetails(vmmGObjectUI):
             "on_control_fullscreen_toggled": self.control_fullscreen,
 
             "on_details_customize_finish_clicked": self.customize_finish,
-            "on_details_cancel_customize_clicked": self.close,
+            "on_details_cancel_customize_clicked": self._customize_cancel_clicked,
 
             "on_details_menu_virtual_manager_activate": self.control_vm_menu,
             "on_details_menu_run_activate": self.control_vm_run,
@@ -631,6 +631,25 @@ class vmmDetails(vmmGObjectUI):
             return
 
         return self._close(customize_finish=True)
+
+    def _customize_cancel(self):
+        logging.debug("Asking to cancel customization")
+
+        result = self.err.yes_no(
+            _("This will abort the installation. Are you sure?"))
+        if not result:
+            logging.debug("Customize cancel aborted")
+            return
+
+        logging.debug("Canceling customization")
+        return self._close()
+
+    def _customize_cancel_clicked(self, src):
+        ignore = src
+        return self._customize_cancel()
+
+    def _window_delete_event(self, ignore1=None, ignore2=None):
+        return self._close()
 
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing VM details: %s", self.vm)
