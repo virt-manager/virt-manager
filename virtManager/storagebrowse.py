@@ -62,8 +62,9 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.conn.schedule_priority_tick(pollpool=True)
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing storage browser")
-        self.topwin.hide()
+        if self.topwin.is_visible():
+            logging.debug("Closing storage browser")
+            self.topwin.hide()
         self.storagelist.close()
         return 1
 
