@@ -2757,8 +2757,11 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-format").get_child().set_text(driver_type)
         self.widget("disk-format-warn").hide()
 
+        # skip virtio-scsi since we don't handle it correctly yet, need
+        # to duplicate the addhw logic
         vmmAddHardware.populate_disk_bus_combo(self.vm, devtype,
-            self.widget("disk-bus").get_model())
+            self.widget("disk-bus").get_model(),
+            do_virtio_scsi=False)
         uiutil.set_combo_entry(self.widget("disk-bus"), bus)
         self.widget("disk-serial").set_text(serial or "")
 
