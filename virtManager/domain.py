@@ -2002,6 +2002,7 @@ class vmmDomainVirtinst(vmmDomain):
 
         self.title_supported = True
         self._refresh_status()
+        logging.debug("%s initialized with XML=\n%s", self, self._XMLDesc(0))
 
     def get_name(self):
         return self._backend.name
