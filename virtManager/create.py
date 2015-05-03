@@ -1708,8 +1708,8 @@ class vmmCreate(vmmGObjectUI):
             except Exception, e:
                 return self.err.val_err(_("Invalid guest name"), str(e))
             if self.is_default_storage():
-                logging.debug("User changed VM name and using default storage,"
-                    "re-validating with new default storage path.")
+                logging.debug("User changed VM name and using default "
+                    "storage, re-validating with new default storage path.")
                 # User changed the name and we are using default storage
                 # which depends on the VM name. Revalidate things
                 if not self.validate_storage_page():
