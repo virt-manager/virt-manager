@@ -187,8 +187,8 @@ class vmmConnection(vmmGObject):
 
         self._objects = _ObjectList()
 
-        self.record = []
-        self.hostinfo = None
+        self._stats = []
+        self._hostinfo = None
 
         self.add_gsettings_handle(
             self._on_config_pretty_name_changed(
@@ -274,12 +274,12 @@ class vmmConnection(vmmGObject):
     def host_memory_size(self):
         if not self._backend.is_open():
             return 0
-        return self.hostinfo[1] * 1024
+        return self._hostinfo[1] * 1024
 
     def host_active_processor_count(self):
         if not self._backend.is_open():
             return 0
-        return self.hostinfo[2]
+        return self._hostinfo[2]
 
     def connect(self, name, callback, *args):
         handle_id = vmmGObject.connect(self, name, callback, *args)
@@ -816,7 +816,7 @@ class vmmConnection(vmmGObject):
             self._network_cb_ids = []
 
         self._backend.close()
-        self.record = []
+        self._stats = []
 
         if self._init_object_event:
             self._init_object_event.clear()
@@ -1118,7 +1118,7 @@ class vmmConnection(vmmGObject):
         if self.using_network_events and not force:
             pollnet = False
 
-        self.hostinfo = self._backend.getInfo()
+        self._hostinfo = self._backend.getInfo()
 
         gone_objects, preexisting_objects = self._poll(
             initial_poll, pollvm, pollnet, pollpool, polliface, pollnodedev)
@@ -1164,9 +1164,9 @@ class vmmConnection(vmmGObject):
 
         now = time.time()
         expected = self.config.get_stats_history_length()
-        current = len(self.record)
+        current = len(self._stats)
         if current > expected:
-            del self.record[expected:current]
+            del self._stats[expected:current]
 
         mem = 0
         cpuTime = 0
@@ -1194,8 +1194,8 @@ class vmmConnection(vmmGObject):
         pcentHostCpu = 0
         pcentMem = mem * 100.0 / self.host_memory_size()
 
-        if len(self.record) > 0:
-            prevTimestamp = self.record[0]["timestamp"]
+        if len(self._stats) > 0:
+            prevTimestamp = self._stats[0]["timestamp"]
             host_cpus = self.host_active_processor_count()
 
             pcentHostCpu = ((cpuTime) * 100.0 /
@@ -1219,7 +1219,7 @@ class vmmConnection(vmmGObject):
             "netMaxRate" : netMaxRate,
         }
 
-        self.record.insert(0, newStats)
+        self._stats.insert(0, newStats)
 
 
     def schedule_priority_tick(self, **kwargs):
@@ -1266,9 +1266,9 @@ class vmmConnection(vmmGObject):
     ########################
 
     def _get_record_helper(self, record_name):
-        if len(self.record) == 0:
+        if len(self._stats) == 0:
             return 0
-        return self.record[0][record_name]
+        return self._stats[0][record_name]
 
     def _vector_helper(self, record_name, limit, ceil=100.0):
         vector = []
@@ -1277,8 +1277,8 @@ class vmmConnection(vmmGObject):
             statslen = min(statslen, limit)
 
         for i in range(statslen):
-            if i < len(self.record):
-                vector.append(self.record[i][record_name] / ceil)
+            if i < len(self._stats):
+                vector.append(self._stats[i][record_name] / ceil)
             else:
                 vector.append(0)
 

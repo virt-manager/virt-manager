@@ -305,8 +305,8 @@ class vmmDomain(vmmLibvirtObject):
 
         self.cloning = False
 
-        self.record = []
-        self.maxRecord = {
+        self._stats = []
+        self._stats_rates = {
             "diskRdRate" : 10.0,
             "diskWrRate" : 10.0,
             "netTxRate"  : 10.0,
@@ -1542,9 +1542,9 @@ class vmmDomain(vmmLibvirtObject):
         pcentHostCpu = 0
         pcentGuestCpu = 0
 
-        if len(self.record) > 0:
-            prevTimestamp = self.record[0]["timestamp"]
-            prevCpuTime = self.record[0]["cpuTimeAbs"]
+        if len(self._stats) > 0:
+            prevTimestamp = self._stats[0]["timestamp"]
+            prevCpuTime = self._stats[0]["cpuTimeAbs"]
 
         if not (info[0] in [libvirt.VIR_DOMAIN_SHUTOFF,
                             libvirt.VIR_DOMAIN_CRASHED]):
@@ -1566,25 +1566,25 @@ class vmmDomain(vmmLibvirtObject):
         return cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu
 
     def _get_cur_rate(self, what):
-        if len(self.record) > 1:
-            ret = (float(self.record[0][what] -
-                         self.record[1][what]) /
-                   float(self.record[0]["timestamp"] -
-                         self.record[1]["timestamp"]))
+        if len(self._stats) > 1:
+            ret = (float(self._stats[0][what] -
+                         self._stats[1][what]) /
+                   float(self._stats[0]["timestamp"] -
+                         self._stats[1]["timestamp"]))
         else:
             ret = 0.0
         return max(ret, 0, 0)  # avoid negative values at poweroff
 
     def _set_max_rate(self, record, what):
-        if record[what] > self.maxRecord[what]:
-            self.maxRecord[what] = record[what]
+        if record[what] > self._stats_rates[what]:
+            self._stats_rates[what] = record[what]
     def _get_max_rate(self, name1, name2):
-        return float(max(self.maxRecord[name1], self.maxRecord[name2]))
+        return float(max(self._stats_rates[name1], self._stats_rates[name2]))
 
     def _get_record_helper(self, record_name):
-        if len(self.record) == 0:
+        if len(self._stats) == 0:
             return 0
-        return self.record[0][record_name]
+        return self._stats[0][record_name]
 
     def _vector_helper(self, record_name, limit, ceil=100.0):
         vector = []
@@ -1593,8 +1593,8 @@ class vmmDomain(vmmLibvirtObject):
             statslen = min(statslen, limit)
 
         for i in range(statslen):
-            if i < len(self.record):
-                vector.append(self.record[i][record_name] / ceil)
+            if i < len(self._stats):
+                vector.append(self._stats[i][record_name] / ceil)
             else:
                 vector.append(0)
 
@@ -1743,18 +1743,18 @@ class vmmDomain(vmmLibvirtObject):
     def _on_config_sample_network_traffic_changed(self, ignore=None):
         self._enable_net_poll = self.config.get_stats_enable_net_poll()
 
-        if self._enable_net_poll and len(self.record) > 1:
+        if self._enable_net_poll and len(self._stats) > 1:
             rxBytes, txBytes = self._sample_network_traffic()
-            self.record[0]["netRxKiB"] = rxBytes / 1024
-            self.record[0]["netTxKiB"] = txBytes / 1024
+            self._stats[0]["netRxKiB"] = rxBytes / 1024
+            self._stats[0]["netTxKiB"] = txBytes / 1024
 
     def _on_config_sample_disk_io_changed(self, ignore=None):
         self._enable_disk_poll = self.config.get_stats_enable_disk_poll()
 
-        if self._enable_disk_poll and len(self.record) > 1:
+        if self._enable_disk_poll and len(self._stats) > 1:
             rdBytes, wrBytes = self._sample_disk_io()
-            self.record[0]["diskRdKiB"] = rdBytes / 1024
-            self.record[0]["diskWrKiB"] = wrBytes / 1024
+            self._stats[0]["diskRdKiB"] = rdBytes / 1024
+            self._stats[0]["diskWrKiB"] = wrBytes / 1024
 
     def _on_config_sample_mem_stats_changed(self, ignore=None):
         self._enable_mem_stats = self.config.get_stats_enable_memory_poll()
@@ -1909,9 +1909,9 @@ class vmmDomain(vmmLibvirtObject):
 
     def _tick_stats(self, info):
         expected = self.config.get_stats_history_length()
-        current = len(self.record)
+        current = len(self._stats)
         if current > expected:
-            del self.record[expected:current]
+            del self._stats[expected:current]
 
         # Xen reports complete crap for Dom0 max memory
         # (ie MAX_LONG) so lets clamp it to the actual
@@ -1945,7 +1945,7 @@ class vmmDomain(vmmLibvirtObject):
             newStats[r + "Rate"] = self._get_cur_rate(r + "KiB")
             self._set_max_rate(newStats, r + "Rate")
 
-        self.record.insert(0, newStats)
+        self._stats.insert(0, newStats)
 
 
 ########################
