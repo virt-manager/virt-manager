@@ -372,24 +372,24 @@ class vmmDomain(vmmLibvirtObject):
         self.has_managed_save()
         self.snapshots_supported()
 
-        self.toggle_sample_network_traffic()
-        self.toggle_sample_disk_io()
-        self.toggle_sample_mem_stats()
-        self.toggle_sample_cpu_stats()
+        self._on_config_sample_network_traffic_changed()
+        self._on_config_sample_disk_io_changed()
+        self._on_config_sample_mem_stats_changed()
+        self._on_config_sample_cpu_stats_changed()
 
         # Hook up listeners that need to be cleaned up
         self.add_gsettings_handle(
             self.config.on_stats_enable_cpu_poll_changed(
-                self.toggle_sample_cpu_stats))
+                self._on_config_sample_cpu_stats_changed))
         self.add_gsettings_handle(
             self.config.on_stats_enable_net_poll_changed(
-                self.toggle_sample_network_traffic))
+                self._on_config_sample_network_traffic_changed))
         self.add_gsettings_handle(
             self.config.on_stats_enable_disk_poll_changed(
-                self.toggle_sample_disk_io))
+                self._on_config_sample_disk_io_changed))
         self.add_gsettings_handle(
             self.config.on_stats_enable_memory_poll_changed(
-                self.toggle_sample_mem_stats))
+                self._on_config_sample_mem_stats_changed))
 
         self.connect("pre-startup", self._prestartup_nodedev_check)
 
@@ -1586,60 +1586,26 @@ class vmmDomain(vmmLibvirtObject):
             return 0
         return self.record[0][record_name]
 
-    def _vector_helper(self, record_name):
+    def _vector_helper(self, record_name, limit, ceil=100.0):
         vector = []
-        stats = self.record
-        for i in range(self.config.get_stats_history_length() + 1):
-            if i < len(stats):
-                vector.append(stats[i][record_name] / 100.0)
+        statslen = self.config.get_stats_history_length() + 1
+        if limit is not None:
+            statslen = min(statslen, limit)
+
+        for i in range(statslen):
+            if i < len(self.record):
+                vector.append(self.record[i][record_name] / ceil)
             else:
                 vector.append(0)
+
         return vector
 
-    def _in_out_vector_helper(self, name1, name2, ceil):
-        vector = []
-        stats = self.record
+    def _in_out_vector_helper(self, name1, name2, limit, ceil):
         if ceil is None:
             ceil = self._get_max_rate(name1, name2)
-        maxlen = self.config.get_stats_history_length()
 
-        for n in [name1, name2]:
-            for i in range(maxlen + 1):
-                if i < len(stats):
-                    vector.append(float(stats[i][n]) / ceil)
-                else:
-                    vector.append(0.0)
-        return vector
-
-    def in_out_vector_limit(self, data, limit):
-        l = len(data) / 2
-        end = min(l, limit)
-        if l > limit:
-            data = data[0:end] + data[l:l + end]
-
-        return [(x + y) / 2 for x, y in zip(data[0:end], data[end:end * 2])]
-
-    def toggle_sample_network_traffic(self, ignore=None):
-        self._enable_net_poll = self.config.get_stats_enable_net_poll()
-
-        if self._enable_net_poll and len(self.record) > 1:
-            rxBytes, txBytes = self._sample_network_traffic()
-            self.record[0]["netRxKiB"] = rxBytes / 1024
-            self.record[0]["netTxKiB"] = txBytes / 1024
-
-    def toggle_sample_disk_io(self, ignore=None):
-        self._enable_disk_poll = self.config.get_stats_enable_disk_poll()
-
-        if self._enable_disk_poll and len(self.record) > 1:
-            rdBytes, wrBytes = self._sample_disk_io()
-            self.record[0]["diskRdKiB"] = rdBytes / 1024
-            self.record[0]["diskWrKiB"] = wrBytes / 1024
-
-    def toggle_sample_mem_stats(self, ignore=None):
-        self._enable_mem_stats = self.config.get_stats_enable_memory_poll()
-
-    def toggle_sample_cpu_stats(self, ignore=None):
-        self._enable_cpu_stats = self.config.get_stats_enable_cpu_poll()
+        return (self._vector_helper(name1, limit, ceil=ceil),
+                self._vector_helper(name2, limit, ceil=ceil))
 
 
     ###################
@@ -1663,11 +1629,6 @@ class vmmDomain(vmmLibvirtObject):
     def disk_write_rate(self):
         return self._get_record_helper("diskWrRate")
 
-    def get_memory_pretty(self):
-        return util.pretty_mem(self.get_memory())
-    def maximum_memory_pretty(self):
-        return util.pretty_mem(self.maximum_memory())
-
     def network_traffic_rate(self):
         return self.network_tx_rate() + self.network_rx_rate()
     def network_traffic_max_rate(self):
@@ -1677,37 +1638,18 @@ class vmmDomain(vmmLibvirtObject):
     def disk_io_max_rate(self):
         return self._get_max_rate("diskRdRate", "diskWrRate")
 
-    def host_cpu_time_vector(self):
-        return self._vector_helper("cpuHostPercent")
-    def guest_cpu_time_vector(self):
-        return self._vector_helper("cpuGuestPercent")
-    def stats_memory_vector(self):
-        return self._vector_helper("currMemPercent")
-    def network_traffic_vector(self, ceil=None):
-        return self._in_out_vector_helper("netRxRate", "netTxRate", ceil)
-    def disk_io_vector(self, ceil=None):
-        return self._in_out_vector_helper("diskRdRate", "diskWrRate", ceil)
-
-    def host_cpu_time_vector_limit(self, limit):
-        cpudata = self.host_cpu_time_vector()
-        if len(cpudata) > limit:
-            cpudata = cpudata[0:limit]
-        return cpudata
-    def guest_cpu_time_vector_limit(self, limit):
-        cpudata = self.guest_cpu_time_vector()
-        if len(cpudata) > limit:
-            cpudata = cpudata[0:limit]
-        return cpudata
-    def memory_usage_vector_limit(self, limit):
-        data = self.stats_memory_vector()
-        if len(data) > limit:
-            data = data[0:limit]
-        return data
-    def network_traffic_vector_limit(self, limit, ceil=None):
-        return self.in_out_vector_limit(self.network_traffic_vector(ceil),
-                                        limit)
-    def disk_io_vector_limit(self, limit, ceil=None):
-        return self.in_out_vector_limit(self.disk_io_vector(ceil), limit)
+    def host_cpu_time_vector(self, limit=None):
+        return self._vector_helper("cpuHostPercent", limit)
+    def guest_cpu_time_vector(self, limit=None):
+        return self._vector_helper("cpuGuestPercent", limit)
+    def stats_memory_vector(self, limit=None):
+        return self._vector_helper("currMemPercent", limit)
+    def network_traffic_vectors(self, limit=None, ceil=None):
+        return self._in_out_vector_helper(
+            "netRxRate", "netTxRate", limit, ceil)
+    def disk_io_vectors(self, limit=None, ceil=None):
+        return self._in_out_vector_helper(
+            "diskRdRate", "diskWrRate", limit, ceil)
 
 
     ###################
@@ -1797,6 +1739,28 @@ class vmmDomain(vmmLibvirtObject):
     def set_console_password(self, username, keyid):
         return self.config.set_pervm(self.get_uuid(), "/console-password",
                                      (username, keyid))
+
+    def _on_config_sample_network_traffic_changed(self, ignore=None):
+        self._enable_net_poll = self.config.get_stats_enable_net_poll()
+
+        if self._enable_net_poll and len(self.record) > 1:
+            rxBytes, txBytes = self._sample_network_traffic()
+            self.record[0]["netRxKiB"] = rxBytes / 1024
+            self.record[0]["netTxKiB"] = txBytes / 1024
+
+    def _on_config_sample_disk_io_changed(self, ignore=None):
+        self._enable_disk_poll = self.config.get_stats_enable_disk_poll()
+
+        if self._enable_disk_poll and len(self.record) > 1:
+            rdBytes, wrBytes = self._sample_disk_io()
+            self.record[0]["diskRdKiB"] = rdBytes / 1024
+            self.record[0]["diskWrKiB"] = wrBytes / 1024
+
+    def _on_config_sample_mem_stats_changed(self, ignore=None):
+        self._enable_mem_stats = self.config.get_stats_enable_memory_poll()
+
+    def _on_config_sample_cpu_stats_changed(self, ignore=None):
+        self._enable_cpu_stats = self.config.get_stats_enable_cpu_poll()
 
     def get_cache_dir(self):
         ret = os.path.join(self.conn.get_cache_dir(), self.get_uuid())

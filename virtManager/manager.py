@@ -1051,7 +1051,7 @@ class vmmManager(vmmGObjectUI):
         if obj is None or not hasattr(obj, "conn"):
             return
 
-        data = obj.guest_cpu_time_vector_limit(GRAPH_LEN)
+        data = obj.guest_cpu_time_vector(GRAPH_LEN)
         cell.set_property('data_array', data)
 
     def host_cpu_usage_img(self, column_ignore, cell, model, _iter, data):
@@ -1059,7 +1059,7 @@ class vmmManager(vmmGObjectUI):
         if obj is None or not hasattr(obj, "conn"):
             return
 
-        data = obj.host_cpu_time_vector_limit(GRAPH_LEN)
+        data = obj.host_cpu_time_vector(GRAPH_LEN)
         cell.set_property('data_array', data)
 
     def memory_usage_img(self, column_ignore, cell, model, _iter, data):
@@ -1067,7 +1067,7 @@ class vmmManager(vmmGObjectUI):
         if obj is None or not hasattr(obj, "conn"):
             return
 
-        data = obj.memory_usage_vector_limit(GRAPH_LEN)
+        data = obj.stats_memory_vector(GRAPH_LEN)
         cell.set_property('data_array', data)
 
     def disk_io_img(self, column_ignore, cell, model, _iter, data):
@@ -1075,7 +1075,8 @@ class vmmManager(vmmGObjectUI):
         if obj is None or not hasattr(obj, "conn"):
             return
 
-        data = obj.disk_io_vector_limit(GRAPH_LEN, self.max_disk_rate)
+        d1, d2 = obj.disk_io_vectors(GRAPH_LEN, self.max_disk_rate)
+        data = [(x + y) / 2 for x, y in zip(d1, d2)]
         cell.set_property('data_array', data)
 
     def network_traffic_img(self, column_ignore, cell, model, _iter, data):
@@ -1083,5 +1084,6 @@ class vmmManager(vmmGObjectUI):
         if obj is None or not hasattr(obj, "conn"):
             return
 
-        data = obj.network_traffic_vector_limit(GRAPH_LEN, self.max_net_rate)
+        d1, d2 = obj.network_traffic_vectors(GRAPH_LEN, self.max_net_rate)
+        data = [(x + y) / 2 for x, y in zip(d1, d2)]
         cell.set_property('data_array', data)

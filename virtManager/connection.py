@@ -271,11 +271,6 @@ class vmmConnection(vmmGObject):
         return self._backend.invalidate_caps()
     caps = property(lambda self: getattr(self, "_backend").caps)
 
-    def pretty_host_memory_size(self):
-        if not self._backend.is_open():
-            return ""
-        return util.pretty_mem(self.host_memory_size())
-
     def host_memory_size(self):
         if not self._backend.is_open():
             return 0
@@ -1270,64 +1265,45 @@ class vmmConnection(vmmGObject):
     # Stats getter methods #
     ########################
 
-    def _vector_helper(self, record_name):
-        vector = []
-        stats = self.record
-        for i in range(self.config.get_stats_history_length() + 1):
-            if i < len(stats):
-                vector.append(stats[i][record_name] / 100.0)
-            else:
-                vector.append(0)
-        return vector
-
-    def stats_memory_vector(self):
-        return self._vector_helper("memoryPercent")
-
-    def host_cpu_time_vector(self):
-        return self._vector_helper("cpuHostPercent")
-    guest_cpu_time_vector = host_cpu_time_vector
-
-    def host_cpu_time_vector_limit(self, limit):
-        cpudata = self.host_cpu_time_vector()
-        if len(cpudata) > limit:
-            cpudata = cpudata[0:limit]
-        return cpudata
-    guest_cpu_time_vector_limit = host_cpu_time_vector_limit
-
-    def disk_io_vector_limit(self, ignore):
-        return [0.0]
-    def network_traffic_vector_limit(self, ignore):
-        return [0.0]
-
     def _get_record_helper(self, record_name):
         if len(self.record) == 0:
             return 0
         return self.record[0][record_name]
 
+    def _vector_helper(self, record_name, limit, ceil=100.0):
+        vector = []
+        statslen = self.config.get_stats_history_length() + 1
+        if limit is not None:
+            statslen = min(statslen, limit)
+
+        for i in range(statslen):
+            if i < len(self.record):
+                vector.append(self.record[i][record_name] / ceil)
+            else:
+                vector.append(0)
+
+        return vector
+
+    def stats_memory_vector(self, limit=None):
+        return self._vector_helper("memoryPercent", limit)
+    def host_cpu_time_vector(self, limit=None):
+        return self._vector_helper("cpuHostPercent", limit)
+
     def stats_memory(self):
         return self._get_record_helper("memory")
-    def pretty_stats_memory(self):
-        return util.pretty_mem(self.stats_memory())
-
     def host_cpu_time_percentage(self):
         return self._get_record_helper("cpuHostPercent")
-    guest_cpu_time_percentage = host_cpu_time_percentage
-
-    def network_rx_rate(self):
-        return self._get_record_helper("netRxRate")
-    def network_tx_rate(self):
-        return self._get_record_helper("netTxRate")
+    def guest_cpu_time_percentage(self):
+        return self.host_cpu_time_percentage()
     def network_traffic_rate(self):
-        return self.network_tx_rate() + self.network_rx_rate()
+        return (self._get_record_helper("netRxRate") +
+                self._get_record_helper("netTxRate"))
+    def disk_io_rate(self):
+        return (self._get_record_helper("diskRdRate") +
+                self._get_record_helper("diskWrRate"))
+
     def network_traffic_max_rate(self):
         return self._get_record_helper("netMaxRate")
-
-    def disk_read_rate(self):
-        return self._get_record_helper("diskRdRate")
-    def disk_write_rate(self):
-        return self._get_record_helper("diskWrRate")
-    def disk_io_rate(self):
-        return self.disk_read_rate() + self.disk_write_rate()
     def disk_io_max_rate(self):
         return self._get_record_helper("diskMaxRate")
 

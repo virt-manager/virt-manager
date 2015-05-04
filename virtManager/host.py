@@ -24,6 +24,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from virtinst import Interface
+from virtinst import util
 
 from . import uiutil
 from .asyncjob import vmmAsyncJob
@@ -301,11 +302,11 @@ class vmmHost(vmmGObjectUI):
             self.conn.schedule_priority_tick(polliface=True)
 
     def refresh_resources(self, ignore=None):
-        vm_memory = self.conn.pretty_stats_memory()
-        host_memory = self.conn.pretty_host_memory_size()
+        vm_memory = util.pretty_mem(self.conn.stats_memory())
+        host_memory = util.pretty_mem(self.conn.host_memory_size())
+
         cpu_vector = self.conn.host_cpu_time_vector()
         memory_vector = self.conn.stats_memory_vector()
-
         cpu_vector.reverse()
         memory_vector.reverse()
 

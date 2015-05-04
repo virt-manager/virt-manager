@@ -2578,10 +2578,12 @@ class vmmDetails(vmmGObjectUI):
                                           self.vm.guest_cpu_time_vector())
         self.memory_usage_graph.set_property("data_array",
                                              self.vm.stats_memory_vector())
-        self.disk_io_graph.set_property("data_array",
-                                        self.vm.disk_io_vector())
-        self.network_traffic_graph.set_property("data_array",
-                                        self.vm.network_traffic_vector())
+
+        d1, d2 = self.vm.disk_io_vectors()
+        self.disk_io_graph.set_property("data_array", d1 + d2)
+
+        n1, n2 = self.vm.network_traffic_vectors()
+        self.network_traffic_graph.set_property("data_array", n1 + n2)
 
     def refresh_config_cpu(self):
         # This bit needs to come first, since CPU values can be affected
