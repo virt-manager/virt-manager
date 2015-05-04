@@ -3357,10 +3357,3 @@ class vmmDetails(vmmGObjectUI):
 
         for row in boot_rows:
             boot_model.append(row)
-
-    def show_pair(self, basename, show):
-        combo = self.widget(basename)
-        label = self.widget(basename + "-title")
-
-        combo.set_visible(show)
-        label.set_visible(show)
