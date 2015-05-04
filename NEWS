@@ -1,6 +1,23 @@
  Virtual Machine Manager News
  ============================
 
+Release 1.2.0 (May 04, 2015)
+----------------------------
+- OVMF/AAVMF Support (Laszlo Ersek, Giuseppe Scrivano, Cole Robinson)
+- Improved support for AArch64 qemu/kvm
+- virt-install: Support --disk type=network parameters
+- virt-install: Make --disk  just work
+- virt-install: Add --disk sgio= option (Giuseppe Scrivano)
+- addhardware: default to an existing bus when adding a new disk
+  (Giuseppe Scrivano)
+- virt-install: Add --input device option
+- virt-manager: Unify storagebrowser and storage details functionality
+- virt-manager: allow setting a custom connection row name
+- virt-install: Support --hostdev scsi passthrough
+- virt-install: Fill in a bunch of --graphics spice options
+- Disable spice image compression for new local VMs
+- virt-manager: big reworking of the migration dialog
+
 Release 1.1.0 (September 07, 2014)
 ----------------------------------
 - Switch to libosinfo as OS metadata database (Giuseppe Scrivano)

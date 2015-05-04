@@ -7,12 +7,13 @@
 # Sandeep Shedmake <sandeep.shedmake@gmail.com>, 2008-2009
 # sandeeps <sshedmak@redhat.com>, 2008-2010,2012-2013
 # sandeeps <sshedmak@redhat.com>, 2014
+# sandeeps <sshedmak@redhat.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-11 13:13-0500\n"
-"PO-Revision-Date: 2015-01-02 20:44+0000\n"
+"POT-Creation-Date: 2015-05-04 15:00-0400\n"
+"PO-Revision-Date: 2015-05-01 13:10+0000\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Marathi (http://www.transifex.com/projects/p/virt-manager/"
 "language/mr/)\n"
@@ -30,11 +31,11 @@ msgstr "वर्च्युअल मशीन व्यवस्थापक 
 msgid "virt-manager requires libvirt 0.6.0 or later."
 msgstr "virt-manager ला libvirt 0.6.0 किंवा पुढील आवश्यक आहे."
 
-#: ../virt-install:160
+#: ../virt-install:165
 msgid "Cannot specify storage and use --nodisks"
 msgstr "स्टोरेज निर्देशीत करणे व --nodisks वापर अशक्य"
 
-#: ../virt-install:164
+#: ../virt-install:169
 msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
@@ -42,52 +43,56 @@ msgstr ""
 "--file, --nonsparse, किंवा --disk पर्यायसह --file-size एकत्र करणे अशक्य. --disk "
 "PATH[,size=SIZE][,sparse=yes|no] वापर करा"
 
-#: ../virt-install:217
+#: ../virt-install:222
 msgid "Cannot use --mac with --nonetworks"
 msgstr "--nonetworks सह --mac याचा वापर अशक्य"
 
-#: ../virt-install:219
+#: ../virt-install:224
 msgid "Cannot use --bridge with --nonetworks"
 msgstr "--nonetworks सह --bridge याचा वापर अशक्य"
 
-#: ../virt-install:221
+#: ../virt-install:226
 msgid "Cannot use --nonetworks with --network"
 msgstr ""
 
-#: ../virt-install:229
+#: ../virt-install:234
 msgid "Cannot mix both --bridge and --network arguments"
 msgstr "दोन्ही --bridge व --network घटकांना एकत्र करणे अशक्य"
 
-#: ../virt-install:282
+#: ../virt-install:287
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr "--graphics व जुण्या शैळीचे ग्राफिकल पर्याय एकत्र करणे अशक्य"
 
-#: ../virt-install:286
+#: ../virt-install:291
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr "VNC, SDL, --graphics किंवा --nographics पैकी एक निर्देशीत करणे अशक्य"
 
-#: ../virt-install:334
+#: ../virt-install:339
 msgid "Can't do more than one of --hvm, --paravirt, or --container"
 msgstr "--hvm, --paravirt, किंवा --container पैकी एकच कार्यान्वित करू शकते"
 
-#: ../virt-install:348 ../virt-install:349
+#: ../virt-install:353 ../virt-install:354
 msgid "default"
 msgstr "पूर्वनिर्धारित"
 
-#: ../virt-install:397
+#: ../virt-install:400
 #, c-format
 msgid "Error validating install location: %s"
 msgstr "इंस्टॉल स्थळ वैध करतेवेळी त्रुटी: %s"
 
-#: ../virt-install:421
+#: ../virt-install:420
+msgid "--name is required"
+msgstr "--name आवश्यक आहे"
+
+#: ../virt-install:423
 msgid "--memory amount in MiB is required"
 msgstr "MiB मध्ये --memory प्रमाण आवश्यक आहे"
 
-#: ../virt-install:426
+#: ../virt-install:428
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
-#: ../virt-install:434
+#: ../virt-install:436
 msgid ""
 "An install method must be specified\n"
 "(%(methods)s)"
@@ -95,40 +100,40 @@ msgstr ""
 "इंस्टॉल पद्धत निर्देशीत पाहिजे\n"
 "(%(methods)s)"
 
-#: ../virt-install:441
+#: ../virt-install:443
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr "सीडीरॉम मिडीयासह --location च्या वापरसाठी, उदाहरणांकरिता मॅन पृष्ठ पहा"
 
-#: ../virt-install:449
+#: ../virt-install:451
 msgid "Only one install method can be used (%(methods)s)"
 msgstr "फक्त एक इंस्टॉल पद्धतीचा वापर शक्य आहे (%(methods)s)"
 
-#: ../virt-install:455
+#: ../virt-install:457
 #, c-format
 msgid "Install methods (%s) cannot be specified for container guests"
 msgstr "कंटेनर अतिथीकरीता इंस्टॉल पद्धती (%s) निर्देशीत करणे अशक्य"
 
-#: ../virt-install:460
+#: ../virt-install:462
 msgid "Network PXE boot is not supported for paravirtualized guests"
 msgstr "पॅरावर्च्युअलाइज्ड अतिथींकरीता नेटवर्क PXE बूट समर्थीत नाही"
 
-#: ../virt-install:463
+#: ../virt-install:465
 msgid "Paravirtualized guests cannot install off cdrom media."
 msgstr "सिडिरॉम मिडियाविना पॅरावर्च्युअलाइज्ड अतिथी इंस्टॉल अशक्य."
 
-#: ../virt-install:468
+#: ../virt-install:470
 msgid "Libvirt version does not support remote --location installs"
 msgstr "Libvirt आवृत्ती --location इंस्टॉल्सकरीता समर्थन पुरवत नाही"
 
-#: ../virt-install:474
+#: ../virt-install:476
 msgid "--extra-args only work if specified with --location."
 msgstr "--location सह निर्देशीत केल्यानंतरच --extra-args कार्य करते."
 
-#: ../virt-install:477
+#: ../virt-install:479
 msgid "--initrd-inject only works if specified with --location."
 msgstr "--location सह निर्देशीत केल्यानंतरच --initrd-inject कार्य करते."
 
-#: ../virt-install:492
+#: ../virt-install:494
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -137,7 +142,7 @@ msgstr ""
 "बऱ्यापैकी मजकूर इंस्टॉल आउटपुट दिसणार नाही. तुम्हाला बहुदा --location याचा वापर करावे "
 "लागेल."
 
-#: ../virt-install:505
+#: ../virt-install:507
 msgid ""
 "No --console device added, you likely will not see text install output from "
 "the guest."
@@ -145,7 +150,7 @@ msgstr ""
 "--console साधन समाविष्ट केले नाही, तुम्हाला अतिथी पासून बऱ्यापैकी मजकूर इंस्टॉल आउपुट "
 "दिसणार नाही."
 
-#: ../virt-install:521
+#: ../virt-install:523
 #, c-format
 msgid ""
 "No 'console' seen in --extra-args, a '%s' kernel argument is likely required "
@@ -154,7 +159,7 @@ msgstr ""
 "--extra-args मध्ये 'console' आढळले नाही, अतिथी पासून बऱ्यापैकी मजकूर इंस्टॉल आउपुट "
 "पहाण्याकरिता '%s' कर्नल बाब आवश्यक आहे."
 
-#: ../virt-install:534
+#: ../virt-install:536
 #, c-format
 msgid ""
 "'%s' found in --extra-args, but the device attached to the guest likely "
@@ -163,7 +168,7 @@ msgstr ""
 "--extra-args मध्ये '%s' आढळले, परंतु अतिथीसह जुळलेल्या साधनाला बऱ्यापैकी '%s' आवश्यक "
 "आहे. तुम्हाला अतिथी पासून मजकूर इंस्टॉल आउपुट दिसणार नाही."
 
-#: ../virt-install:538
+#: ../virt-install:540
 #, c-format
 msgid ""
 "To make '--extra-args %s' work, you can force a plain serial device with '--"
@@ -172,25 +177,25 @@ msgstr ""
 "'--extra-args %s' कार्यरत करण्यासाठी, तुम्ही '--console pty' सह सिरिअल साधनाला "
 "जबरपने लागू करू शकता"
 
-#: ../virt-install:544
+#: ../virt-install:546
 msgid "The guest's network configuration does not support PXE"
 msgstr "अतिथीची नेटवर्क संरचना PXE करीता समर्थन पुरवत नाही"
 
-#: ../virt-install:548
+#: ../virt-install:550
 msgid ""
 "No operating system detected, VM performance may suffer. Specify an OS with "
 "--os-variant for optimal results."
 msgstr ""
 
-#: ../virt-install:568
+#: ../virt-install:570
 msgid "A disk device must be specified with --import."
 msgstr "--import सह डिस्क साधन निर्देशीत करणे आवश्यक."
 
-#: ../virt-install:713
+#: ../virt-install:736
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
-#: ../virt-install:725
+#: ../virt-install:746
 msgid ""
 "\n"
 "Starting install..."
@@ -198,28 +203,30 @@ msgstr ""
 "\n"
 "इंस्टॉल सुरू करत आहे..."
 
-#: ../virt-install:744
+#: ../virt-install:763
+msgid "Domain creation completed."
+msgstr ""
+
+#: ../virt-install:767
 #, c-format
 msgid ""
-"Domain creation completed. You can restart your domain by running:\n"
+"You can restart your domain by running:\n"
 "  %s"
 msgstr ""
-"डोमेन निर्माण पूर्ण झाले. खालील चालवून डोमेन पुनःसुरू करणे शक्य:\n"
-"  %s"
 
-#: ../virt-install:748
-msgid "Guest installation complete... restarting guest."
-msgstr "अतिथी इंस्टॉलेशन पूर्ण... अतिथी पुनःसुरू करत आहे."
+#: ../virt-install:770
+msgid "Restarting guest."
+msgstr ""
 
-#: ../virt-install:754
+#: ../virt-install:776
 msgid "Domain install interrupted."
 msgstr "डोमेन इंस्टॉलमध्ये व्यत्यय."
 
-#: ../virt-install:776
+#: ../virt-install:798
 msgid "Domain has crashed."
 msgstr "डोमेन खंडीत झाले."
 
-#: ../virt-install:813
+#: ../virt-install:835
 msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
@@ -228,174 +235,164 @@ msgstr ""
 "जोडणी करू \n"
 "शकता."
 
-#: ../virt-install:818
+#: ../virt-install:840
 #, c-format
 msgid " %d minutes"
 msgstr ""
 
-#: ../virt-install:820
+#: ../virt-install:842
 msgid ""
 "Domain installation still in progress. Waiting%(time_string)s for "
 "installation to complete."
 msgstr ""
 
-#: ../virt-install:827
+#: ../virt-install:849
 msgid "Domain has shutdown. Continuing."
 msgstr "डोमेन पूर्णपणे बंद झाले. सुरू ठेवत आहे."
 
-#: ../virt-install:834
+#: ../virt-install:856
 #, c-format
 msgid "Could not lookup domain after install: %s"
 msgstr "इंस्टॉलनंतर डोमेन शोधणे अशक्य: %s"
 
-#: ../virt-install:841
+#: ../virt-install:863
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "इंस्टॉलेशन निर्देशीत वेळ मर्यादापेक्षा जास्त वेळ घेत आहे. ॲप्लिकेशनपासून बाहेर पडत आहे."
 
-#: ../virt-install:866
+#: ../virt-install:888
 msgid "Dry run completed successfully"
 msgstr "ड्राय रन यशस्वीरित्या पूर्ण झाले"
 
-#: ../virt-install:872
-msgid ""
-"--print-xml can only be used with guests that do not have an installation "
-"phase (--import, --boot, etc.). To see all generated XML, please use --print-"
-"step all."
-msgstr ""
-"--print-xml चा वापर फक्त अतिथींसह शक्य आहे ज्याकडे इंस्टॉलेशन फेज नाही (--import, --"
-"boot, इत्यादि). सर्व निर्मीत XML पहाण्याकरीता, कृपया सर्व --print-step याचा वापर "
-"करा."
-
-#: ../virt-install:882
+#: ../virt-install:895
 msgid "Requested installation does not have XML step 2"
 msgstr "विनंतीकृत इंस्टॉलेशनकडे XML स्टेप 2 नाही"
 
-#: ../virt-install:886
+#: ../virt-install:899
 msgid "Requested installation does not have XML step 3"
 msgstr "विनंतीकृत इंस्टॉलेशनकडे XML स्टेप 3 नाही"
 
-#: ../virt-install:905
+#: ../virt-install:918
 msgid "Create a new virtual machine from specified install media."
 msgstr "निर्देशीत इंस्टॉल मिडीयापासून नविन वर्च्युअल मशीन निर्माण करा."
 
-#: ../virt-install:909 ../virt-clone:111
+#: ../virt-install:922 ../virt-clone:109
 msgid "General Options"
 msgstr "साधारण पर्याय"
 
-#: ../virt-install:911
+#: ../virt-install:924
 msgid "Name of the guest instance"
 msgstr "अतिथी घटनाचे नाव"
 
-#: ../virt-install:918
+#: ../virt-install:931
 msgid "Installation Method Options"
 msgstr "इंस्टॉलेशन पद्धत पर्याय"
 
-#: ../virt-install:920
+#: ../virt-install:933
 msgid "CD-ROM installation media"
 msgstr "CD-ROM इंस्टॉलेशन मिडिया"
 
-#: ../virt-install:922
+#: ../virt-install:935
 msgid ""
 "Installation source (eg, nfs:host:/path, http://host/path, ftp://host/path)"
 msgstr "इंस्टॉलेशन स्रोत (उदा, nfs:host:/path, http://host/path, ftp://host/path)"
 
-#: ../virt-install:925
+#: ../virt-install:938
 msgid "Boot from the network using the PXE protocol"
 msgstr "PXE प्रोटोकॉलचा वापर करून नेटवर्कपासून बूट करा"
 
-#: ../virt-install:927
+#: ../virt-install:940
 msgid "Build guest around an existing disk image"
 msgstr "अस्तित्वातील डिस्क प्रतिमाच्या भोवती अतिथीची बांधणी करा"
 
-#: ../virt-install:929
+#: ../virt-install:942
 msgid "Treat the CD-ROM media as a Live CD"
 msgstr "CD-ROM मिडियाला Live CD म्हणून गृहीत धरा"
 
-#: ../virt-install:931
+#: ../virt-install:944
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr "--location पासून बूट झालेल्या इंस्टॉल कर्नलकरीता पुरवण्याजोगी अगाऊ बाबी"
 
-#: ../virt-install:934
+#: ../virt-install:947
 msgid "Add given file to root of initrd from --location"
 msgstr "--location पासून initrd च्या रूटमध्ये समाविष्ट करण्याजोगी फाइल"
 
-#: ../virt-install:941
+#: ../virt-install:954
 msgid ""
 "The OS variant being installed guests, e.g. 'fedora18', 'rhel6', 'winxp', "
 "etc."
 msgstr ""
 "OS वेरिएंट म्हणजे इंस्टॉल केलेले अतिथी, उ.दा. 'fedora18', 'rhel6', 'winxp', इत्यादि."
 
-#: ../virt-install:948
+#: ../virt-install:961
 msgid "Device Options"
 msgstr "साधन पर्याय"
 
-#: ../virt-install:978
+#: ../virt-install:991
 msgid "Guest Configuration Options"
 msgstr ""
 
-#: ../virt-install:982
+#: ../virt-install:995
 msgid "Virtualization Platform Options"
 msgstr "वर्च्युअलाइजेशन प्लॅटफॉर्म पर्याय"
 
-#: ../virt-install:984
+#: ../virt-install:997
 msgid "This guest should be a fully virtualized guest"
 msgstr "अतिथी पूर्णतया वर्च्युअलाइज्ड अतिथी पाहिजे"
 
-#: ../virt-install:986
+#: ../virt-install:999
 msgid "This guest should be a paravirtualized guest"
 msgstr "अतिथी पॅरावर्च्युअलाइज्ड अतिथी पाहिजे"
 
-#: ../virt-install:988
+#: ../virt-install:1001
 msgid "This guest should be a container guest"
 msgstr "अतिथी कंटेनर अतिथी पाहिजे"
 
-#: ../virt-install:991
+#: ../virt-install:1004
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "वापरण्याजोगी हाइपरवाइजर नाव (kvm, qemu, xen, ...)"
 
-#: ../virt-install:995
+#: ../virt-install:1008
 msgid "The CPU architecture to simulate"
 msgstr "सिम्युलेट करण्जोगी CPU आर्किटेक्चर"
 
-#: ../virt-install:997
+#: ../virt-install:1010
 msgid "The machine type to emulate"
 msgstr "इम्युलेटजोगी मशीन प्रकार"
 
-#: ../virt-install:1004 ../virt-clone:147 ../virt-xml:361
+#: ../virt-install:1017 ../virt-clone:145 ../virt-xml:358
 msgid "Miscellaneous Options"
 msgstr "मिश्र पर्याय"
 
-#: ../virt-install:1007
+#: ../virt-install:1020
 msgid "Have domain autostart on host boot up."
 msgstr "यजमान बूट अपवेळी डोमेनला स्वयंसुरू करा."
 
-#: ../virt-install:1009
+#: ../virt-install:1022
 msgid "Minutes to wait for install to complete."
 msgstr "इंस्टॉल पूर्ण होईपर्यंत थांबण्याजोगी मिनीटे."
 
-#: ../virt-install:1048
+#: ../virt-install:1064
 msgid "--print-step must be 1, 2, 3, or all"
 msgstr "--print-step 1, 2, 3, किंवा सर्व पाहिजे"
 
-#: ../virt-install:1070 ../virt-clone:218
+#: ../virt-install:1086 ../virt-clone:215
 msgid "Installation aborted at user request"
 msgstr "वापरकर्ता विनंतीवेळी इंस्टॉलेशन रद्द केले"
 
-#: ../virt-clone:42
+#: ../virt-clone:40
 msgid ""
 "A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
 "specify one."
 msgstr ""
 
-#: ../virt-clone:61
+#: ../virt-clone:59
 msgid ""
 "An original machine name is required, use '--original ORIGINAL_GUEST' and "
 "try again."
 msgstr ""
 
-#: ../virt-clone:101
+#: ../virt-clone:99
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -414,37 +411,37 @@ msgstr ""
 "बाबी जसे कि पासवर्ड्ज बदलवणे, स्टॅटिक IP पत्ते बदलवमे, इत्यादि या साधनाच्या व्याप्ति बाहेर "
 "आहे. या प्रकारच्या बदलावांकरिता, कृपया virt-sysprep(1) पहा."
 
-#: ../virt-clone:113
+#: ../virt-clone:111
 msgid "Name of the original guest; The status must be shut off or paused."
 msgstr "मूळ अतिथीचे नाव; स्थिती पूर्णपणे बंद किंवा थांबवलेली पाहिजे."
 
-#: ../virt-clone:116
+#: ../virt-clone:114
 msgid "XML file to use as the original guest."
 msgstr "मूळ अतिथी म्हणून वापरण्याजोगी XML फाइल."
 
-#: ../virt-clone:118
+#: ../virt-clone:116
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr "मूळ अतिथी संरचनापासून क्लोन नाव व स्टोरेज मार्ग स्वतः निर्माण करा."
 
-#: ../virt-clone:121
+#: ../virt-clone:119
 msgid "Name for the new guest"
 msgstr "नवीन अतिथीकरीता नाव"
 
-#: ../virt-clone:124
+#: ../virt-clone:122
 msgid "use btrfs COW lightweight copy"
 msgstr ""
 
-#: ../virt-clone:126
+#: ../virt-clone:124
 msgid "Storage Configuration"
 msgstr "स्टोरेज संरचना"
 
-#: ../virt-clone:128
+#: ../virt-clone:126
 msgid "New file to use as the disk image for the new guest"
 msgstr "नवीन अतिथीकरीता डिस्क प्रतिमा म्हणून वापरण्याजोगी नवीन फाइल"
 
-#: ../virt-clone:131
+#: ../virt-clone:129
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
@@ -452,11 +449,11 @@ msgstr ""
 "साधनांचे सक्तीने प्रत बनवा (उदा, 'hdc' केवळ वाचनीय cdrom साधन असल्यास, --force-"
 "copy=hdc)"
 
-#: ../virt-clone:135
+#: ../virt-clone:133
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr "क्लोन डिस्क प्रतिमाकरीता स्पार्स फाइलचा वापर करू नका"
 
-#: ../virt-clone:139
+#: ../virt-clone:137
 msgid ""
 "Do not clone storage, new disk images specified via --file are preserved "
 "unchanged"
@@ -464,17 +461,17 @@ msgstr ""
 "स्टोरेज क्लोन करू नका, --file तर्फे निर्देशीत नवीन डिस्क प्रतिमा विनाबदल म्हणून साठवले "
 "जातात"
 
-#: ../virt-clone:142
+#: ../virt-clone:140
 msgid "Networking Configuration"
 msgstr "नेटवर्किंग संरचना"
 
-#: ../virt-clone:144
+#: ../virt-clone:142
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr "क्लोन अतिथीकरीता नवीन ठरलेले MAC पत्ता. पूर्वनिर्धारित विनाक्रम निर्मीत MAC आहे"
 
-#: ../virt-clone:208
+#: ../virt-clone:205
 #, c-format
 msgid "Clone '%s' created successfully."
 msgstr "क्लोन '%s' यशस्वीरित्या निर्माण केले."
@@ -521,116 +518,116 @@ msgstr ""
 "डिस्क प्रतिमा रूपांतरीत किंवा प्रत निर्माणकरिता निर्देशीत असणारी लक्ष्य डिरेक्ट्री. "
 "पूर्वनिर्धारित libvirt डिरेक्ट्रीकरिता पूर्वनिर्धारित असते."
 
-#: ../virt-convert:122
+#: ../virt-convert:123
 #, c-format
 msgid "Creating guest '%s'."
 msgstr "अतिथी '%s' चे निर्माण."
 
-#: ../virt-convert:138 ../virt-xml:474
+#: ../virt-convert:139 ../virt-xml:471
 msgid "Aborted at user request"
 msgstr "वापरकर्ता विनंतीनुसार रद्द केले"
 
-#: ../virt-xml:53
+#: ../virt-xml:54
 msgid "Please enter 'yes' or 'no'."
 msgstr "कृपया 'होय' किंवा 'नाही' द्या."
 
-#: ../virt-xml:97
+#: ../virt-xml:98
 #, c-format
 msgid "Could not find domain '%s': %s"
 msgstr "डोमेन '%s': %s शोधणे अशक्य"
 
-#: ../virt-xml:126
+#: ../virt-xml:127
 #, c-format
 msgid "Invalid --edit option '%s'"
 msgstr "अवैध --edit पर्या '%s'"
 
-#: ../virt-xml:129
+#: ../virt-xml:130
 #, c-format
 msgid "No --%s devices found in the XML"
 msgstr "XML मध्ये --%s साधने आढळले नाही"
 
-#: ../virt-xml:132
+#: ../virt-xml:133
 #, c-format
 msgid "--edit %s requested but there's only %s --%s devices in the XML"
 msgstr "--edit %s करिता विनंती केली परंतु XML मध्ये फत्त %s --%s साधने आढळली"
 
-#: ../virt-xml:144
+#: ../virt-xml:145
 #, c-format
 msgid "No matching devices found for --%s %s"
 msgstr "--%s %s करिता जुळण्याजोगी साधने आढळले नाही"
 
-#: ../virt-xml:160
+#: ../virt-xml:161
 #, c-format
 msgid "One of %s must be specified."
 msgstr "%s पैकी एक निर्देशीत पाहिजे."
 
-#: ../virt-xml:163
+#: ../virt-xml:164
 #, c-format
 msgid "Conflicting options %s"
 msgstr "मतभेदीय पर्याय %s"
 
-#: ../virt-xml:174
+#: ../virt-xml:175
 msgid "No change specified."
 msgstr "बदल निर्देशीत केले नाही."
 
-#: ../virt-xml:176
+#: ../virt-xml:177
 #, c-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "फक्त एक बदल कार्य निर्देशीत करणे शक्य आहे (मतभेदीय पर्याय %s)"
 
-#: ../virt-xml:189
+#: ../virt-xml:190
 #, c-format
 msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
 msgstr "--%s सह '--edit %s' वापरणे निरर्थक आहे, सरळ रिक्त '--edit' चा वापर करा"
 
-#: ../virt-xml:199
+#: ../virt-xml:200
 #, c-format
 msgid "Cannot use --add-device with --%s"
 msgstr "--%s सह --add-device चा वापर शक्य नाही"
 
-#: ../virt-xml:206
+#: ../virt-xml:207
 #, c-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "--%s सह --remove-device चा वापर शक्य नाही"
 
-#: ../virt-xml:228
+#: ../virt-xml:229
 #, c-format
 msgid "--build-xml not supported for --%s"
 msgstr "--%s करिता --build-xml समर्थीत नाही"
 
-#: ../virt-xml:255
+#: ../virt-xml:252
 #, c-format
 msgid "Define '%s' with the changed XML?"
 msgstr "बदललेल्या XML सह '%s' ठरवायचे?"
 
-#: ../virt-xml:263
+#: ../virt-xml:260
 #, c-format
 msgid "Domain '%s' defined successfully."
 msgstr "डोमेन '%s' यशस्वीरित्या ठरवले."
 
-#: ../virt-xml:294
+#: ../virt-xml:291
 #, c-format
 msgid "Error attempting device %s: %s"
 msgstr "साधन %s: %s सक्रीय करतेवेळी त्रुटी"
 
-#: ../virt-xml:296
+#: ../virt-xml:293
 #, c-format
 msgid "Device %s successful."
 msgstr "साधन %s यशस्वी."
 
-#: ../virt-xml:308
+#: ../virt-xml:305
 msgid "Edit libvirt XML using command line options."
 msgstr "आदेश ओळ पर्यायांचा वापर करून libvirt XML संपादित करा."
 
-#: ../virt-xml:314
+#: ../virt-xml:311
 msgid "Domain name, id, or uuid"
 msgstr "डोमेन नाव, id, किंवा uuid"
 
-#: ../virt-xml:316
+#: ../virt-xml:313
 msgid "XML actions"
 msgstr "XML कृती"
 
-#: ../virt-xml:318
+#: ../virt-xml:315
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -644,7 +641,7 @@ msgstr ""
 "--edit all --disk ... (सर्व डिस्क साधन संपादित करा)\n"
 "--edit target=hda --disk ... (डिस्क 'hda' संपादित करा)\n"
 
-#: ../virt-xml:324
+#: ../virt-xml:321
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -656,7 +653,7 @@ msgstr ""
 "--remove-device --disk all (सर्व डिस्क्स काढून टाका)\n"
 "--remove-device --disk /some/path"
 
-#: ../virt-xml:329
+#: ../virt-xml:326
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -664,15 +661,15 @@ msgstr ""
 "निर्देशीत साधन समाविष्ट करा. उदाहरणार्थ:\n"
 "--add-device --disk ..."
 
-#: ../virt-xml:332
+#: ../virt-xml:329
 msgid "Just output the built device XML, no domain required."
 msgstr "बिल्ट साधन XML आउटपुट करा, डोमेन आवश्यक नाही."
 
-#: ../virt-xml:334
+#: ../virt-xml:331
 msgid "Output options"
 msgstr "आउटपुट पर्याय"
 
-#: ../virt-xml:336
+#: ../virt-xml:333
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -684,106 +681,111 @@ msgstr ""
 "--remove-device सह, हे हॉटप्लग कार्य आहे.\n"
 "--edit सह, हे साधन अद्यावत कार्य आहे."
 
-#: ../virt-xml:341
+#: ../virt-xml:338
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr "डोमेन जबरनपणे ठरवा. --print पर्याय निर्देशीत असल्यावरच आवश्यक असते."
 
-#: ../virt-xml:344
+#: ../virt-xml:341
 msgid "Only print the requested change, in diff format"
 msgstr "फक्त विनंतीकृत बदलाचीच छपाई करा, diff रूपणमध्ये"
 
-#: ../virt-xml:346
+#: ../virt-xml:343
 msgid "Only print the requested change, in full XML format"
 msgstr "फक्त विनंतीकृत बदलाचीच छपाई करा, संपूर्ण XML रूपणमध्ये"
 
-#: ../virt-xml:348
+#: ../virt-xml:345
 msgid "Require confirmation before saving any results."
 msgstr "कोणतेही परिणाम साठवण्यापूर्वी खात्री करणे आवश्यक."
 
-#: ../virt-xml:350
+#: ../virt-xml:347
 msgid "XML options"
 msgstr "XML पर्याय"
 
-#: ../virt-xml:388
+#: ../virt-xml:385
 msgid "Can't use --confirm with stdin input."
 msgstr "stdin इंपुटसह --confirm चा वापर अशक्य."
 
-#: ../virt-xml:390
+#: ../virt-xml:387
 msgid "Can't use --update with stdin input."
 msgstr "stdin इंपुटसह --update चा वापर अशक्य."
 
-#: ../virt-xml:393
+#: ../virt-xml:390
 msgid "A domain must be specified"
 msgstr "डोमेन निर्देशीत पाहिजे"
 
-#: ../virt-xml:424
+#: ../virt-xml:421
 #, c-format
 msgid "Don't know how to --update for --%s"
 msgstr "--%s करिता --update कसे करायचे, ते माहिती नाही"
 
-#: ../virt-xml:462
+#: ../virt-xml:459
 msgid "Changes will take effect after the next domain shutdown."
 msgstr "पुढील डोमेन पूर्णपणे बंद झाल्यावरच बदल लागू होतील."
 
-#: ../virtManager/addhardware.py:338 ../virtManager/addstorage.py:209
-#: ../virtManager/create.py:448
-msgid "Connection does not support storage management."
-msgstr "साठा व्यवस्थापन करीता जुळवणी समर्थीत नाही."
-
-#: ../virtManager/addhardware.py:353 ../virtManager/addhardware.py:358
-#: ../virtManager/addhardware.py:361 ../virtManager/addhardware.py:365
-#: ../virtManager/addhardware.py:371 ../virtManager/addhardware.py:385
-msgid "Not supported for this guest type."
-msgstr "या अतिथी प्रकार करीता समर्थीत नाही."
-
-#: ../virtManager/addhardware.py:375 ../virtManager/addhardware.py:379
-msgid "Connection does not support host device enumeration"
-msgstr "जुळवणी यजमान साधण एन्यूमरेशनसाठी समर्थन पुरवत नाही"
-
-#: ../virtManager/addhardware.py:382
-msgid "Libvirt version does not support video devices."
-msgstr "Libvirt आवृत्ती ग्राफिकल उपकरणांकरीता समर्थन पुरवत नाही."
-
-#: ../virtManager/addhardware.py:390 ../virtManager/addhardware.py:401
-msgid "Not supported for this hypervisor/libvirt combination."
-msgstr "ह्या हायपरवाइजर/libvirt जोडणीकरीता समर्थीत नाही."
-
-#. [xml value, label]
-#: ../virtManager/addhardware.py:573 ../virtManager/gfxdetails.py:84
-#: ../virtManager/preferences.py:165 ../virtinst/devicewatchdog.py:58
-msgid "Hypervisor default"
-msgstr "पूर्वनिर्धारीत हायपरवायजर"
-
-#: ../virtManager/addhardware.py:808
+#: ../virtManager/addhardware.py:219
 msgid "Disk device"
 msgstr "डिस्क साधन"
 
-#: ../virtManager/addhardware.py:811
-msgid "Floppy device"
-msgstr "फ्लॉपी साधन"
-
-#: ../virtManager/addhardware.py:814
+#: ../virtManager/addhardware.py:221
 msgid "CDROM device"
 msgstr "सीडीरॉम साधन"
 
-#: ../virtManager/addhardware.py:817
-msgid "LUN device"
-msgstr "लून साधन"
+#: ../virtManager/addhardware.py:223
+msgid "Floppy device"
+msgstr "फ्लॉपी साधन"
 
-#: ../virtManager/addhardware.py:824 ../virtManager/details.py:2735
+#: ../virtManager/addhardware.py:226
+msgid "LUN Passthrough"
+msgstr ""
+
+#. [xml value, label]
+#: ../virtManager/addhardware.py:282 ../virtManager/addhardware.py:581
+#: ../virtManager/addhardware.py:693 ../virtManager/addhardware.py:709
+#: ../virtManager/addhardware.py:795 ../virtManager/addhardware.py:799
+#: ../virtManager/addhardware.py:803 ../virtManager/details.py:2664
+#: ../virtManager/gfxdetails.py:84 ../virtManager/preferences.py:165
+#: ../virtinst/devicewatchdog.py:58
+msgid "Hypervisor default"
+msgstr "पूर्वनिर्धारीत हायपरवायजर"
+
+#: ../virtManager/addhardware.py:345 ../virtManager/addstorage.py:206
+#: ../virtManager/create.py:453
+msgid "Connection does not support storage management."
+msgstr "साठा व्यवस्थापन करीता जुळवणी समर्थीत नाही."
+
+#: ../virtManager/addhardware.py:360 ../virtManager/addhardware.py:365
+#: ../virtManager/addhardware.py:368 ../virtManager/addhardware.py:372
+#: ../virtManager/addhardware.py:378 ../virtManager/addhardware.py:392
+msgid "Not supported for this guest type."
+msgstr "या अतिथी प्रकार करीता समर्थीत नाही."
+
+#: ../virtManager/addhardware.py:382 ../virtManager/addhardware.py:386
+msgid "Connection does not support host device enumeration"
+msgstr "जुळवणी यजमान साधण एन्यूमरेशनसाठी समर्थन पुरवत नाही"
+
+#: ../virtManager/addhardware.py:389
+msgid "Libvirt version does not support video devices."
+msgstr "Libvirt आवृत्ती ग्राफिकल उपकरणांकरीता समर्थन पुरवत नाही."
+
+#: ../virtManager/addhardware.py:397 ../virtManager/addhardware.py:408
+msgid "Not supported for this hypervisor/libvirt combination."
+msgstr "ह्या हायपरवाइजर/libvirt जोडणीकरीता समर्थीत नाही."
+
+#: ../virtManager/addhardware.py:809
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB ग्राफिकल टॅबलेट"
 
-#: ../virtManager/addhardware.py:825 ../virtManager/details.py:2737
-msgid "Generic USB Mouse"
-msgstr "जेनेरीक USB माऊस"
+#: ../virtManager/addhardware.py:812 ../virtManager/create.py:921
+#: ../virtManager/create.py:924
+msgid "Generic"
+msgstr "मूळ"
 
-#: ../virtManager/addhardware.py:847
+#: ../virtManager/addhardware.py:867
 msgid "No Devices Available"
 msgstr "साधण उपलब्ध नाही"
 
-#: ../virtManager/addhardware.py:874
+#: ../virtManager/addhardware.py:894
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -794,84 +796,84 @@ msgstr ""
 "एकापेक्षा जास्त USB कंट्रोलर समावेश करणे समर्थीत नाही.\n"
 "VM तपशीलवार पडद्यामध्ये तुम्ही USB कंट्रोलर प्रकार बदलवू शकता."
 
-#: ../virtManager/addhardware.py:1213
+#: ../virtManager/addhardware.py:1235
 msgid "Error"
 msgstr "त्रुटी"
 
-#: ../virtManager/addhardware.py:1215 ../ui/create.ui.h:57
+#: ../virtManager/addhardware.py:1237 ../ui/create.ui.h:57
 msgid "Storage"
 msgstr "साठा"
 
-#: ../virtManager/addhardware.py:1217 ../ui/addhardware.ui.h:10
+#: ../virtManager/addhardware.py:1239 ../ui/addhardware.ui.h:10
 msgid "Controller"
 msgstr "कंट्रोलर"
 
-#: ../virtManager/addhardware.py:1219 ../virtinst/network.py:194
+#: ../virtManager/addhardware.py:1241 ../virtinst/network.py:194
 msgid "Network"
 msgstr "नेटवर्क"
 
-#: ../virtManager/addhardware.py:1221 ../virtManager/details.py:200
+#: ../virtManager/addhardware.py:1243 ../virtManager/details.py:217
 msgid "Input"
 msgstr "इन्पुट"
 
-#: ../virtManager/addhardware.py:1223
+#: ../virtManager/addhardware.py:1245
 msgid "Graphics"
 msgstr "ग्राफिक्स्"
 
-#: ../virtManager/addhardware.py:1225
+#: ../virtManager/addhardware.py:1247
 msgid "Sound"
 msgstr "आवाज"
 
-#: ../virtManager/addhardware.py:1227
+#: ../virtManager/addhardware.py:1249
 msgid "Video Device"
 msgstr "व्हिडिओ साधन"
 
-#: ../virtManager/addhardware.py:1229
+#: ../virtManager/addhardware.py:1251
 msgid "Watchdog Device"
 msgstr "वॉचडॉग साधन"
 
-#: ../virtManager/addhardware.py:1231
+#: ../virtManager/addhardware.py:1253
 msgid "Filesystem Passthrough"
 msgstr "फाइलसिस्टम पासथ्रु"
 
-#: ../virtManager/addhardware.py:1233 ../virtManager/details.py:235
+#: ../virtManager/addhardware.py:1255 ../virtManager/details.py:251
 msgid "Smartcard"
 msgstr "स्मार्टकार्ड"
 
-#: ../virtManager/addhardware.py:1235
+#: ../virtManager/addhardware.py:1257
 msgid "USB Redirection"
 msgstr "USB रिडाइरेक्शन"
 
-#: ../virtManager/addhardware.py:1237 ../virtManager/details.py:233
+#: ../virtManager/addhardware.py:1259 ../virtManager/details.py:249
 msgid "TPM"
 msgstr "TPM"
 
-#: ../virtManager/addhardware.py:1239
+#: ../virtManager/addhardware.py:1261
 msgid "Random Number Generator"
 msgstr "विनाक्रम संख्या जनक"
 
-#: ../virtManager/addhardware.py:1241 ../virtManager/details.py:234
+#: ../virtManager/addhardware.py:1263 ../virtManager/details.py:250
 msgid "Panic Notifier"
 msgstr "पॅनिक सूचक"
 
-#: ../virtManager/addhardware.py:1386
+#: ../virtManager/addhardware.py:1408
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "VM संरचना बदलतेवेळी त्रुटी: %s"
 
-#: ../virtManager/addhardware.py:1407
+#: ../virtManager/addhardware.py:1434
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr "ठराविक बदल लागू करण्यासाठी अतिथी शटडाऊन आवश्यक ठरू शकते."
 
-#: ../virtManager/addhardware.py:1410
+#: ../virtManager/addhardware.py:1437
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "पुढील अतिथी शटडाऊन नंतरच ह्या बदलांचा परिणाम आढळेल."
 
-#: ../virtManager/addhardware.py:1464
+#: ../virtManager/addhardware.py:1507
 msgid "Are you sure you want to add this device?"
 msgstr "तुम्हाला नक्की हे साधण जोडायचे?"
 
-#: ../virtManager/addhardware.py:1467
+#: ../virtManager/addhardware.py:1510
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -879,184 +881,184 @@ msgstr ""
 "ह्या साधनाला सुरू असलेल्या मशीनसह जोडणी करणे अशक्य. पुढील अतिथी शटडाऊन केल्यानंतर साधन "
 "उपलब्ध करायचे?"
 
-#: ../virtManager/addhardware.py:1483
+#: ../virtManager/addhardware.py:1526
 #, python-format
 msgid "Error adding device: %s"
 msgstr "साधण समावेश करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/addhardware.py:1495
+#: ../virtManager/addhardware.py:1538
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "साधण समावेष करण्यास अशक्य: %s"
 
-#: ../virtManager/addhardware.py:1515
+#: ../virtManager/addhardware.py:1558
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr "हार्डवेअर इन्पुट तापसतेवेळी न आढळलेली त्रुटी: %s"
 
-#: ../virtManager/addhardware.py:1525
+#: ../virtManager/addhardware.py:1568
 msgid "Creating device"
 msgstr "साधन निर्माण करणे"
 
-#: ../virtManager/addhardware.py:1526
+#: ../virtManager/addhardware.py:1569
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "साधनावर आधारित, पूर्णत्वकरिता काही मिनीटे लागतील."
 
-#: ../virtManager/addhardware.py:1659 ../virtManager/addstorage.py:348
+#: ../virtManager/addhardware.py:1698 ../virtManager/addstorage.py:345
 msgid "Storage parameter error."
 msgstr "साठा बाब त्रुटी."
 
-#: ../virtManager/addhardware.py:1674
+#: ../virtManager/addhardware.py:1713
 msgid "Network selection error."
 msgstr "नेटवर्क नीवड त्रुटी."
 
-#: ../virtManager/addhardware.py:1675
+#: ../virtManager/addhardware.py:1714
 msgid "A network source must be selected."
 msgstr "नेटवर्क स्रोत नीवडायला हवे."
 
-#: ../virtManager/addhardware.py:1678
+#: ../virtManager/addhardware.py:1717
 msgid "Invalid MAC address"
 msgstr "अवैध MAC पत्ता"
 
-#: ../virtManager/addhardware.py:1679
+#: ../virtManager/addhardware.py:1718
 msgid "A MAC address must be entered."
 msgstr "MAC पत्ता एंटर केले पाहिजे."
 
-#: ../virtManager/addhardware.py:1709
+#: ../virtManager/addhardware.py:1748
 msgid "Graphics device parameter error"
 msgstr "ग्राफिकल साधण बाब त्रुटी"
 
-#: ../virtManager/addhardware.py:1717
+#: ../virtManager/addhardware.py:1756
 msgid "Sound device parameter error"
 msgstr "आवाज साधण बाब त्रुटी"
 
-#: ../virtManager/addhardware.py:1724
+#: ../virtManager/addhardware.py:1763
 msgid "Physical Device Required"
 msgstr "फिजिकल साधन आवश्यक"
 
-#: ../virtManager/addhardware.py:1725
+#: ../virtManager/addhardware.py:1764
 msgid "A device must be selected."
 msgstr "साधण निवडले पाहिजे."
 
-#: ../virtManager/addhardware.py:1734
+#: ../virtManager/addhardware.py:1773
 #, python-format
 msgid "Could not find USB device (vendorId: %s, productId: %s) "
 msgstr "USB साधन शोधणे अशक्य (vendorId: %s, productId: %s) "
 
-#: ../virtManager/addhardware.py:1750
+#: ../virtManager/addhardware.py:1789
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1752
+#: ../virtManager/addhardware.py:1791
 msgid "Do you really want to use the device?"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1758
+#: ../virtManager/addhardware.py:1797
 msgid "Host device parameter error"
 msgstr "आयोजक साधण बाब त्रुटी"
 
-#: ../virtManager/addhardware.py:1819
+#: ../virtManager/addhardware.py:1858
 #, python-format
 msgid "%s device parameter error"
 msgstr "%s साधण घटक त्रुटी"
 
-#: ../virtManager/addhardware.py:1830
+#: ../virtManager/addhardware.py:1869
 msgid "Video device parameter error"
 msgstr "व्हिडीओ साधण घटकातील त्रुटी"
 
-#: ../virtManager/addhardware.py:1842
+#: ../virtManager/addhardware.py:1881
 msgid "Watchdog parameter error"
 msgstr "वॉचडॉग घटकातील त्रुटी"
 
-#: ../virtManager/addhardware.py:1857
+#: ../virtManager/addhardware.py:1896
 msgid "Smartcard device parameter error"
 msgstr "स्मार्टकार्ड साधन घटक त्रुटी"
 
-#: ../virtManager/addhardware.py:1872
+#: ../virtManager/addhardware.py:1911
 msgid "USB redirected device parameter error"
 msgstr "USB रिडाइरेक्टेड साधन घटक त्रुटी"
 
-#: ../virtManager/addhardware.py:1892
+#: ../virtManager/addhardware.py:1931
 msgid "TPM device parameter error"
 msgstr "TPM साधन घटक त्रुटी"
 
-#: ../virtManager/addhardware.py:1910
+#: ../virtManager/addhardware.py:1949
 msgid "Panic device parameter error"
 msgstr "पॅनिक साधन बाब त्रुटी"
 
-#: ../virtManager/addhardware.py:1942 ../virtManager/addhardware.py:1951
-#: ../virtManager/addhardware.py:1955 ../virtManager/addhardware.py:1959
-#: ../virtManager/addhardware.py:1962 ../virtManager/addhardware.py:1965
+#: ../virtManager/addhardware.py:1981 ../virtManager/addhardware.py:1990
+#: ../virtManager/addhardware.py:1994 ../virtManager/addhardware.py:1998
+#: ../virtManager/addhardware.py:2001 ../virtManager/addhardware.py:2004
 msgid "RNG selection error."
 msgstr "RNG निवड त्रुटी."
 
-#: ../virtManager/addhardware.py:1943
+#: ../virtManager/addhardware.py:1982
 msgid "A device must be specified."
 msgstr "साधन निर्देशीत पाहिजे."
 
-#: ../virtManager/addhardware.py:1952
+#: ../virtManager/addhardware.py:1991
 msgid "Please specify both bind and connect host"
 msgstr "कृपया दोन्ही बाइंड आणि जोडणी यजमान निर्देशीत करा"
 
-#: ../virtManager/addhardware.py:1956
+#: ../virtManager/addhardware.py:1995
 msgid "Please specify both bind and connect service"
 msgstr "कृपया दोन्ही बाइंड आणि जोडणी सर्व्हिस निर्देशीत करा"
 
-#: ../virtManager/addhardware.py:1960
+#: ../virtManager/addhardware.py:1999
 msgid "The EGD host must be specified."
 msgstr "EGD यजमान निर्देशीत पाहिजे."
 
-#: ../virtManager/addhardware.py:1963
+#: ../virtManager/addhardware.py:2002
 msgid "The EGD service must be specified."
 msgstr "EGD यजमान निर्देशीत पाहिजे."
 
-#: ../virtManager/addhardware.py:1966
+#: ../virtManager/addhardware.py:2005
 msgid "Invalid RNG type."
 msgstr "अवैध RNG प्रकार."
 
-#: ../virtManager/addhardware.py:1985
+#: ../virtManager/addhardware.py:2024
 msgid "RNG device parameter error"
 msgstr "RNG साधन घटक त्रुटी"
 
-#: ../virtManager/addstorage.py:113
+#: ../virtManager/addstorage.py:109
 msgid "Default pool is not active."
 msgstr "पूर्वनिर्धारित पूल सुरू नाही."
 
-#: ../virtManager/addstorage.py:114
+#: ../virtManager/addstorage.py:110
 #, python-format
 msgid "Storage pool '%s' is not active. Would you like to start the pool now?"
 msgstr "स्टोरेज पूल '%s' सुरू नाही. तुम्हाला आत्ता पूल सुरू करायला आवडेल?"
 
-#: ../virtManager/addstorage.py:125
+#: ../virtManager/addstorage.py:121
 #, python-format
 msgid "Could not start storage_pool '%s': %s"
 msgstr "storage_pool '%s': %s सुरू करणे अशक्य"
 
-#: ../virtManager/addstorage.py:150
+#: ../virtManager/addstorage.py:146
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr "इम्यूलेटरकडे मार्ग '%s' करीता शोध परवानगी नसावे."
 
-#: ../virtManager/addstorage.py:152
+#: ../virtManager/addstorage.py:148
 msgid "Do you want to correct this now?"
 msgstr "तुम्हाला आत्ता हे योग्य करायचे?"
 
-#: ../virtManager/addstorage.py:153 ../virtManager/addstorage.py:178
+#: ../virtManager/addstorage.py:149 ../virtManager/addstorage.py:175
 msgid "Don't ask about these directories again."
 msgstr "या डिरेक्ट्रीज् बाबत पुनः विचारू नका."
 
-#: ../virtManager/addstorage.py:167
+#: ../virtManager/addstorage.py:163
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr "खालील डिरेक्ट्रीज् करीता परवानगी बदलवतेवेळी त्रुटी आढळली:"
 
-#: ../virtManager/addstorage.py:197 ../virtManager/create.py:400
+#: ../virtManager/addstorage.py:194 ../virtManager/create.py:391
 #, python-format
 msgid "Disk format '%s' does not support full allocation."
 msgstr "डिस्क रूपण '%s' संपूर्ण वाटपकरिता समर्थन पुरवत नाही."
 
-#: ../virtManager/addstorage.py:278
+#: ../virtManager/addstorage.py:275
 #, python-format
 msgid ""
 "The following storage already exists, but is not\n"
@@ -1073,21 +1075,21 @@ msgstr ""
 "\n"
 "ह्या स्टोरेजचा पुनःवापर करायला आवडेल?"
 
-#: ../virtManager/addstorage.py:324
+#: ../virtManager/addstorage.py:321
 msgid "A storage path must be specified."
 msgstr "साठा मार्ग निश्चित केले पाहिजे."
 
 #. Fatal errors are reported when setting 'size'
-#: ../virtManager/addstorage.py:356
+#: ../virtManager/addstorage.py:353
 msgid "Not Enough Free Space"
 msgstr "अतिरिक्त मोकळी जागा नाही"
 
-#: ../virtManager/addstorage.py:364 ../virtManager/choosecd.py:126
+#: ../virtManager/addstorage.py:361 ../virtManager/choosecd.py:125
 #, python-format
 msgid "Disk \"%s\" is already in use by other guests %s"
 msgstr "डिस्क \"%s\" आधीपासूनच इतर अतिथी %s तर्फे वापरले जात आहे"
 
-#: ../virtManager/addstorage.py:366 ../virtManager/choosecd.py:128
+#: ../virtManager/addstorage.py:363 ../virtManager/choosecd.py:127
 msgid "Do you really want to use the disk?"
 msgstr "तुम्हाला नक्की डिस्क वापरायचे?"
 
@@ -1108,23 +1110,23 @@ msgstr "विश्लेषण करत आहे..."
 msgid "Completed"
 msgstr "पूर्ण झाले"
 
-#: ../virtManager/choosecd.py:93
+#: ../virtManager/choosecd.py:92
 msgid "Floppy D_rive"
 msgstr "फ्लॉपी ड्राइव्ह (_r)"
 
-#: ../virtManager/choosecd.py:94
+#: ../virtManager/choosecd.py:93
 msgid "Floppy _Image"
 msgstr "फ्लॉपी प्रतिमा (_I)"
 
-#: ../virtManager/choosecd.py:102 ../virtManager/create.py:575
+#: ../virtManager/choosecd.py:101 ../virtManager/create.py:576
 msgid "Physical CDROM passthrough not supported with this hypervisor"
 msgstr "फिजिकल सीडीरॉम पासथ्रू या हाइपरवाइजरवर समर्थीत नाही"
 
-#: ../virtManager/choosecd.py:115 ../virtManager/choosecd.py:121
+#: ../virtManager/choosecd.py:114 ../virtManager/choosecd.py:120
 msgid "Invalid Media Path"
 msgstr "अवैध मिडीया मार्ग"
 
-#: ../virtManager/choosecd.py:116
+#: ../virtManager/choosecd.py:115
 msgid "A media path must be specified."
 msgstr "मिडीया मार्ग निश्चित केले पाहिजे."
 
@@ -1249,83 +1251,75 @@ msgstr ""
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "वर्च्युअल मशीन क्लोन '%s' निर्माण करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/clone.py:804 ../virtManager/createpool.py:396
-#: ../virtManager/createvol.py:281 ../virtManager/migrate.py:456
+#: ../virtManager/clone.py:805 ../virtManager/createpool.py:402
+#: ../virtManager/createvol.py:288 ../virtManager/migrate.py:383
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "इन्पुट तापसतेवेळी न आढळलेली त्रुटी: %s"
 
-#: ../virtManager/clone.py:811
+#: ../virtManager/clone.py:812
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "वर्च्युअल मशीन क्लोन '%s' निर्माण करत आहे"
 
-#: ../virtManager/clone.py:815 ../virtManager/delete.py:157
+#: ../virtManager/clone.py:816 ../virtManager/delete.py:157
 msgid " and selected storage (this may take a while)"
 msgstr " व नीवडलेले स्टोरेज (यांस काहिक वेळ लागू शकतो)"
 
-#: ../virtManager/config.py:107
+#: ../virtManager/config.py:121
 msgid "Locate or create storage volume"
 msgstr "स्टोरेज वॉल्यूम शोधा किंवा निर्माण करा"
 
-#: ../virtManager/config.py:108
+#: ../virtManager/config.py:122
 msgid "Locate existing storage"
 msgstr "अस्तित्वातील साठा शोधत आहे"
 
-#: ../virtManager/config.py:115
+#: ../virtManager/config.py:129
 msgid "Locate ISO media volume"
 msgstr "ISO मिडीया वॉल्यूम शोधा"
 
-#: ../virtManager/config.py:116
+#: ../virtManager/config.py:130
 msgid "Locate ISO media"
 msgstr "ISO मिडीया शोधा"
 
-#: ../virtManager/config.py:121
+#: ../virtManager/config.py:135
 msgid "Locate floppy media volume"
 msgstr "फ्लॉपी मिडिया वॉल्युम शोधा"
 
-#: ../virtManager/config.py:122
+#: ../virtManager/config.py:136
 msgid "Locate floppy media"
 msgstr "फ्लॉपी मिडिया शोधा"
 
-#: ../virtManager/config.py:127 ../virtManager/config.py:128
+#: ../virtManager/config.py:141 ../virtManager/config.py:142
 msgid "Locate directory volume"
 msgstr "डिरेक्ट्री वॉल्युम शोधा"
 
-#: ../virtManager/connect.py:409
+#: ../virtManager/connect.py:418
 msgid "A hostname is required for remote connections."
 msgstr "रिमोट जोडणीकरीता यजमाननाव आवश्यक आहे."
 
-#: ../virtManager/connection.py:197
-#, python-format
-msgid "Could not build media list via libvirt: %s"
-msgstr "libvirt च्या सहाय्याने ऑप्टिकल संवाद बिल्ड करणे अशक्य: %s"
-
-#: ../virtManager/connection.py:200
-msgid "Libvirt version does not support media listing."
-msgstr "Libvirt आवृत्ती ऑप्टिकल मिडीया सूचीकरीता समर्थन पुरवत नाही."
-
-#: ../virtManager/connection.py:568
+#: ../virtManager/connection.py:553 ../virtManager/migrate.py:297
 msgid "Disconnected"
 msgstr "जोडणी तुटली"
 
-#: ../virtManager/connection.py:570
+#: ../virtManager/connection.py:555
 msgid "Connecting"
 msgstr "जुळवणी स्थापीत करत आहे"
 
-#: ../virtManager/connection.py:572 ../virtManager/host.py:736
-#: ../virtManager/host.py:1020 ../virtManager/host.py:1250 ../ui/host.ui.h:43
+#: ../virtManager/connection.py:557 ../virtManager/host.py:642
+#: ../virtManager/host.py:858 ../virtManager/storagelist.py:353
+#: ../ui/storagelist.ui.h:11
 msgid "Active"
 msgstr "कार्यान्वित"
 
-#: ../virtManager/connection.py:574 ../virtManager/create.py:1967
-#: ../virtManager/details.py:2393 ../virtManager/details.py:2632
-#: ../virtManager/domain.py:237 ../virtManager/gfxdetails.py:196
-#: ../virtManager/gfxdetails.py:198 ../virtManager/host.py:1244
+#: ../virtManager/connection.py:559 ../virtManager/create.py:1976
+#: ../virtManager/details.py:2445 ../virtManager/details.py:2697
+#: ../virtManager/domain.py:256 ../virtManager/gfxdetails.py:196
+#: ../virtManager/gfxdetails.py:198 ../virtManager/host.py:852
 msgid "Unknown"
 msgstr "अपरिचित"
 
-#: ../virtManager/connection.py:699
+#: ../virtManager/connection.py:680
 #, python-format
 msgid ""
 "%s rename failed. Attempting to recover also failed.\n"
@@ -1340,154 +1334,134 @@ msgstr ""
 "\n"
 "पुन्हप्राप्य त्रुटी: %s"
 
-#: ../virtManager/console.py:240
-msgid "Unable to provide requested credentials to the VNC server"
-msgstr "VNC सर्व्हरकरीता विनंतीकृत श्रेय पुरवण्यास अशक्य"
-
-#: ../virtManager/console.py:242
-#, python-format
-msgid "The credential type %s is not supported"
-msgstr "श्रेय प्रकार '%s' समर्थीत नाही"
-
-#: ../virtManager/console.py:244
-msgid "Unable to authenticate"
-msgstr "ओळख पटवण्यास अशक्य"
-
-#: ../virtManager/console.py:250
-msgid "Unsupported console authentication type"
-msgstr "असमर्थीत कंसोल अधिप्रमाणन प्रकार"
-
-#: ../virtManager/console.py:298
-#, python-format
-msgid "Error opening socket path '%s': %s"
-msgstr "सॉकेट मार्ग '%s' उघडतेवेळी त्रुटी: %s"
-
-#: ../virtManager/console.py:303
-#, python-format
-msgid "Error opening socket path '%s'"
-msgstr "सॉकेट मार्ग '%s' उघडतेवेळी त्रुटी"
-
-#: ../virtManager/console.py:561
-msgid "USB redirection error"
-msgstr "USB पुन्ह निर्देशन त्रुटी"
-
-#: ../virtManager/console.py:717
+#: ../virtManager/console.py:165
 msgid "Leave fullscreen"
 msgstr "पडदाभर सोडा"
 
-#: ../virtManager/console.py:738
+#: ../virtManager/console.py:186
 msgid "Send key combination"
 msgstr "कि जोडणी पाठवा"
 
-#: ../virtManager/console.py:765 ../ui/details.ui.h:1
+#: ../virtManager/console.py:218 ../ui/details.ui.h:1
 msgid "Virtual Machine"
 msgstr "वर्च्युअल मशीन"
 
-#: ../virtManager/console.py:769
+#: ../virtManager/console.py:222
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "पॉईंटर सोडण्याकरीता %s दाबा."
 
-#: ../virtManager/console.py:852
+#: ../virtManager/console.py:349
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr "ग्राफिक्स प्रकार '%s' स्व पुन्हआकारकरिता समर्थन पुरवत नाही."
 
-#: ../virtManager/console.py:855
+#: ../virtManager/console.py:352
 msgid "Guest agent is not available."
 msgstr "अतिथी अजेंट अनुपलब्ध."
 
-#. Guest isn't running, schedule another try
-#: ../virtManager/console.py:995 ../virtManager/console.py:1199
-msgid "Guest not running"
-msgstr "अतिथी कार्यरत नाही"
-
-#: ../virtManager/console.py:998
+#: ../virtManager/console.py:491
 msgid "Guest has crashed"
 msgstr "अतिथी नष्ट झाले"
 
-#: ../virtManager/console.py:1137
-msgid ""
-"Error: viewer connection to hypervisor host got refused or disconnected!"
-msgstr "त्रुटी: हायपरवाइजर यजमानकरीता जोडणी नकारली किंवा खंडित झाली!"
+#: ../virtManager/console.py:493
+msgid "Guest not running"
+msgstr "अतिथी कार्यरत नाही"
 
-#: ../virtManager/console.py:1218
+#: ../virtManager/console.py:621
 msgid "Graphical console not configured for guest"
 msgstr "अतिथीकरीता ग्राफिकल कंसोल संरचीत केले नाही"
 
-#: ../virtManager/console.py:1225
+#: ../virtManager/console.py:628
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "ग्राफिकल कंसोल प्रकार '%s' दाखवणे अशक्य"
 
-#: ../virtManager/console.py:1233
+#: ../virtManager/console.py:636
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s'\n"
-"but is only configured to listen on locally.\n"
+"but is only configured to listen locally.\n"
 "Connect using 'ssh' transport or change the\n"
 "guest's listen address."
 msgstr ""
-"अतिथी ट्रांस्पोर्ट '%s' सह दूरस्त यजमानवर आहे\n"
-"परंतु फक्त स्थानीय करिता ऐकण्यास संरचीत आहे.\n"
-"'ssh' ट्रांसपोर्टचा वापर करून जोडणी करा किंवा\n"
-"अतिथीचे listen पत्ता बदलवा."
 
-#: ../virtManager/console.py:1241
+#: ../virtManager/console.py:644
 msgid "Graphical console is not yet active for guest"
 msgstr "अतिथी करीता कंसोल अजूनही सक्रिय केले नाही"
 
-#: ../virtManager/console.py:1246
+#: ../virtManager/console.py:648
 msgid "Connecting to graphical console for guest"
 msgstr "अतिथीकरीता ग्राफिकल कंसोलशी जुळवणी करत आहे"
 
-#: ../virtManager/console.py:1263
+#: ../virtManager/console.py:666
 msgid "Error connecting to graphical console"
 msgstr "ग्राफिकल कंसोलशी जोडणी करतेवेळी त्रुटी"
 
-#: ../virtManager/console.py:1406
+#: ../virtManager/console.py:719
+#, python-format
+msgid "Viewer authentication error: %s"
+msgstr ""
+
+#: ../virtManager/console.py:738
+msgid "USB redirection error"
+msgstr "USB पुन्ह निर्देशन त्रुटी"
+
+#: ../virtManager/console.py:758
+msgid ""
+"Error: viewer connection to hypervisor host got refused or disconnected!"
+msgstr "त्रुटी: हायपरवाइजर यजमानकरीता जोडणी नकारली किंवा खंडित झाली!"
+
+#: ../virtManager/console.py:863
 msgid "No text console available"
 msgstr "मजकूर कंसोल अनुपलब्ध"
 
-#: ../virtManager/console.py:1430
+#: ../virtManager/console.py:887
 msgid "No graphical console available"
 msgstr "ग्राफिकल कंसोल अनुपलब्ध"
 
-#: ../virtManager/console.py:1437
+#: ../virtManager/console.py:894
 msgid "Graphical Console"
 msgstr ""
 
-#: ../virtManager/console.py:1445
+#: ../virtManager/console.py:902
 msgid "virt-manager does not support more that one graphical console"
 msgstr ""
 
-#: ../virtManager/create.py:351
+#: ../virtManager/create.py:342
 msgid "No active connection to install on."
 msgstr "प्रतिष्ठापन करीता सक्रीय जुळवणी आढळली नाही."
 
-#: ../virtManager/create.py:445
+#: ../virtManager/create.py:424
+#, python-format
+msgid ""
+"Failed to setup UEFI for AArch64: %s\n"
+"Install options are limited."
+msgstr ""
+
+#: ../virtManager/create.py:450
 msgid "Libvirt version does not support remote URL installs."
 msgstr "Libvirt आवृत्ती दुरस्त URL प्रतिष्ठापनकरीता समर्थन पुरवत नाही."
 
-#: ../virtManager/create.py:452
+#: ../virtManager/create.py:457
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "अपूरे वर्च्युअल अतिथी करीता %s installs उपलब्ध नाही."
 
-#: ../virtManager/create.py:457
+#: ../virtManager/create.py:462
 #, python-format
 msgid "Architecture '%s' is not installable"
 msgstr "आर्किटेक्चर '%s' इंस्टॉलजोगी नाही"
 
-#: ../virtManager/create.py:473
+#: ../virtManager/create.py:478
 msgid "No install methods available for this connection."
 msgstr "ह्या जोडणीकरीता प्रतिष्ठापन पद्धती अनुपलब्ध."
 
-#: ../virtManager/create.py:504
+#: ../virtManager/create.py:508
 msgid "No hypervisor options were found for this connection."
 msgstr "ह्या जोडणीकरीता हायपरवाइजर पर्याय आढळले नाही."
 
-#: ../virtManager/create.py:509
+#: ../virtManager/create.py:513
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
@@ -1495,23 +1469,13 @@ msgstr ""
 "याचा अर्थ QEMU किंवा KVM तुमच्या मशीनवर प्रतिष्ठापीत नाही, किंवा KVM कर्नल मॉड्युल्स् "
 "लोड झाले नाही."
 
-#: ../virtManager/create.py:529
+#: ../virtManager/create.py:537
 msgid ""
-"Host supports full virtualization, but no related install options are "
-"available. This may mean support is disabled in your system BIOS."
-msgstr ""
-"यजमान संपूर्ण वर्च्युअलाइजेशनकरीता समर्थन पुरवतो, परंतु संबंधित प्रतिष्ठापन पर्याय अनुपलब्ध "
-"आहे. याचा अर्थ प्रणाली BIOS वर समर्थन बंद आहे."
-
-#: ../virtManager/create.py:536
-msgid ""
-"Host does not appear to support hardware virtualization. Install options may "
+"Host is not advertising support for full virtualization. Install options may "
 "be limited."
 msgstr ""
-"यजमान हार्डवेअर वर्च्युअलाइजेशनकरीता समर्थन पुरवत नाही. प्रतिष्ठापन पर्याय मर्यादित असू "
-"शकतात."
 
-#: ../virtManager/create.py:542
+#: ../virtManager/create.py:543
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
@@ -1519,163 +1483,162 @@ msgstr ""
 "KVM उपलब्ध नाही. याचा अर्थ KVM संकुल प्रतिष्ठापीत नाही, किंवा KVM कर्नल घटके लोड केले "
 "जात नाही. तुमच्या वर्च्युअल मशीन्स् अयोग्यरित्या कार्य करतील."
 
-#: ../virtManager/create.py:587
+#: ../virtManager/create.py:588
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "आयोजक वर %(maxmem)s उपलब्ध नाही"
 
-#: ../virtManager/create.py:599
+#: ../virtManager/create.py:600
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "%(numcpus)d पर्यंत उपलब्ध"
 
-#: ../virtManager/create.py:824 ../virtManager/create.py:841
-#: ../virtManager/create.py:940 ../virtManager/create.py:943
-msgid "Generic"
-msgstr "मूळ"
-
-#. Add action option
-#: ../virtManager/create.py:833 ../virtManager/create.py:863
+#: ../virtManager/create.py:819 ../virtManager/create.py:840
 msgid "Show all OS options"
 msgstr "सर्व OS पर्याय दाखवा"
 
-#: ../virtManager/create.py:903
+#: ../virtManager/create.py:884
 msgid "Local CDROM/ISO"
 msgstr "स्थानीय CDROM/ISO"
 
-#: ../virtManager/create.py:905
+#: ../virtManager/create.py:886
 msgid "URL Install Tree"
 msgstr "URL प्रतिष्ठापन ट्री"
 
-#: ../virtManager/create.py:907
+#: ../virtManager/create.py:888
 msgid "PXE Install"
 msgstr "PXE प्रतिष्ठापन"
 
-#: ../virtManager/create.py:909
+#: ../virtManager/create.py:890
 msgid "Import existing OS image"
 msgstr "सध्याचे OS प्रतिमा आयात करा"
 
-#: ../virtManager/create.py:911
+#: ../virtManager/create.py:892
 msgid "Application container"
 msgstr "ॲप्लिकेशन कंटेनर"
 
-#: ../virtManager/create.py:913
+#: ../virtManager/create.py:894
 msgid "Operating system container"
 msgstr "ऑपरेटिंग सिस्टम कंटेनर"
 
-#: ../virtManager/create.py:931
+#: ../virtManager/create.py:912
 msgid "Host filesystem"
 msgstr "यजमान फाइलप्रणाली"
 
-#: ../virtManager/create.py:933 ../virtManager/details.py:2394
+#: ../virtManager/create.py:914 ../virtManager/details.py:2446
+#: ../virtinst/domcapabilities.py:132
 msgid "None"
 msgstr "काहिच नाही"
 
-#: ../virtManager/create.py:938
+#: ../virtManager/create.py:919
 msgid "Linux"
 msgstr "लिनक्स्"
 
-#: ../virtManager/create.py:1131
+#: ../virtManager/create.py:1112
 msgid "Network selection does not support PXE"
 msgstr "नेटवर्क पसंती PXE करीता समर्थन पुरवत नाही"
 
-#: ../virtManager/create.py:1370 ../virtManager/createinterface.py:878
-#: ../virtManager/createnet.py:470 ../virtManager/createpool.py:440
+#: ../virtManager/create.py:1346 ../virtManager/createinterface.py:878
+#: ../virtManager/createnet.py:459 ../virtManager/createpool.py:453
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "%(current_page)d पद्धत, %(max_page)d पैकी"
 
-#: ../virtManager/create.py:1384
+#: ../virtManager/create.py:1360
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr "सारांश पृष्ठ: %s पॉप्युलेट करतेवेळी त्रुटी"
 
-#: ../virtManager/create.py:1408
+#: ../virtManager/create.py:1383
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "UUID निश्चित करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/create.py:1416
+#: ../virtManager/create.py:1391
 msgid "Error setting OS information."
 msgstr "OS माहिती संयोजीत करतेवेळी त्रुटी."
 
-#: ../virtManager/create.py:1436
+#: ../virtManager/create.py:1413
 msgid "Error setting up default devices:"
 msgstr "पूर्वनिर्धारित साधने ठरवताना त्रुटी:"
 
-#: ../virtManager/create.py:1454 ../virtManager/createinterface.py:906
+#: ../virtManager/create.py:1431 ../virtManager/createinterface.py:906
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "प्रतिष्ठापन बाब वैध करतेवेळी न आढळलेली त्रुटी: %s"
 
-#: ../virtManager/create.py:1504
+#: ../virtManager/create.py:1481
 msgid "Please specify a valid OS variant."
 msgstr "कृपया वैध ओएस वेरिएंट निर्देशीत करा."
 
-#: ../virtManager/create.py:1512
+#: ../virtManager/create.py:1489
 msgid "An install media selection is required."
 msgstr "प्रतिष्ठापन मिडीया निवड आवश्यक आहे."
 
-#: ../virtManager/create.py:1522
+#: ../virtManager/create.py:1499
 msgid "An install tree is required."
 msgstr "install tree आवश्यक आहे."
 
-#: ../virtManager/create.py:1536
+#: ../virtManager/create.py:1513
 msgid "A storage path to import is required."
 msgstr "आयात करण्यासाठी स्टोरेज मार्ग आवश्यक आहे."
 
-#: ../virtManager/create.py:1543
+#: ../virtManager/create.py:1520
 msgid "An application path is required."
 msgstr "ॲप्लिकेशन मार्ग आवश्यक आहे."
 
-#: ../virtManager/create.py:1550
+#: ../virtManager/create.py:1527
 msgid "An OS directory path is required."
 msgstr "OS डिरेक्ट्री मार्ग आवश्यक आहे."
 
-#: ../virtManager/create.py:1562
+#: ../virtManager/create.py:1539
 msgid "Error setting installer parameters."
 msgstr "प्रतिष्ठापक बाब संयोजनवेळी त्रुटी आढळली."
 
-#: ../virtManager/create.py:1590
+#: ../virtManager/create.py:1567
 msgid "Error setting install media location."
 msgstr "प्रतिष्ठापन मिडीया ठिकाण निश्चित करतेवेळी त्रुटी."
 
-#: ../virtManager/create.py:1614
+#: ../virtManager/create.py:1591
 #, python-format
 msgid "A kernel is required for %s guests."
 msgstr "%s अतिथींकरिता कर्नल आवश्यक आहे."
 
-#: ../virtManager/create.py:1622
+#: ../virtManager/create.py:1599
 msgid "Error setting default name."
 msgstr "पूर्वनिर्धारित नाव सेट करतेवेळी त्रुटी."
 
-#: ../virtManager/create.py:1673
+#: ../virtManager/create.py:1655
 msgid "Error setting CPUs."
 msgstr "CPUs निश्चित करतेवेळी त्रुटी आढळली."
 
-#: ../virtManager/create.py:1680
+#: ../virtManager/create.py:1662
 msgid "Error setting guest memory."
 msgstr "अतिथी स्मृती निश्चित करतेवेळी त्रुटी आढळली."
 
-#: ../virtManager/create.py:1749
+#: ../virtManager/create.py:1709
+msgid "Invalid guest name"
+msgstr ""
+
+#: ../virtManager/create.py:1730
 #, python-format
 msgid "Network device required for %s install."
 msgstr "%s प्रतिष्ठापन करीता नेटवर्क साधण आवश्यक आहे."
 
-#: ../virtManager/create.py:1790
+#: ../virtManager/create.py:1773
 msgid "Error starting installation: "
 msgstr "प्रतिष्ठापन सुरू करताना त्रुटी आढळली: "
 
-#: ../virtManager/create.py:1833
+#: ../virtManager/create.py:1816
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "पूर्णतया प्रतिष्ठापन करू शकले नाही: '%s'"
 
-#: ../virtManager/create.py:1848
+#: ../virtManager/create.py:1831
 msgid "Creating Virtual Machine"
 msgstr "वर्च्युअल मशीन निर्माण करत आहे"
 
-#: ../virtManager/create.py:1849
+#: ../virtManager/create.py:1832
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1683,17 +1646,17 @@ msgstr ""
 "वर्च्युअल मशीन आता बनवले जात आहे. डिस्क साठाचे वाटप व प्रतिष्ठापन प्रतिमा प्राप्य करीता "
 "काहिक मिनीटं लागू शकतिल."
 
-#: ../virtManager/create.py:1881
+#: ../virtManager/create.py:1876
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "अपेक्षित वेळेनंतर VM '%s' आढळले नाही."
 
-#: ../virtManager/create.py:1931
+#: ../virtManager/create.py:1934
 #, python-format
 msgid "Error continue install: %s"
 msgstr "प्रतिष्ठापन सुरू असतेवेळी त्रुटी: %s"
 
-#: ../virtManager/create.py:1989
+#: ../virtManager/create.py:1998
 msgid "Detecting"
 msgstr "शोधत आहे"
 
@@ -1713,9 +1676,8 @@ msgstr "इथरनेट"
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../virtManager/createinterface.py:221 ../virtManager/details.py:867
-#: ../virtManager/manager.py:353 ../virtManager/storagebrowse.py:121
-#: ../ui/create.ui.h:18
+#: ../virtManager/createinterface.py:221 ../virtManager/details.py:909
+#: ../virtManager/manager.py:352 ../ui/create.ui.h:18
 msgid "Name"
 msgstr "नाव"
 
@@ -1763,7 +1725,7 @@ msgstr "संवाद नाव आवश्यक आहे."
 msgid "An interface must be selected"
 msgstr "संवाद नीवडणे आवश्यक आहे"
 
-#: ../virtManager/createinterface.py:968
+#: ../virtManager/createinterface.py:969
 #, python-format
 msgid ""
 "The following interface(s) are already configured:\n"
@@ -1780,77 +1742,77 @@ msgstr ""
 "यांचा वापर केल्यास अस्तित्वातील संरचना खोडून पुनः लिहले जातील. तुम्हाला नक्की नीवडलेले "
 "संवाद वापरायचे?"
 
-#: ../virtManager/createinterface.py:1009
+#: ../virtManager/createinterface.py:1010
 msgid "Error setting interface parameters."
 msgstr "संवाद घटके सेट करतेवेळी त्रुटी."
 
-#: ../virtManager/createinterface.py:1073
+#: ../virtManager/createinterface.py:1074
 #, python-format
 msgid "Error validating IP configuration: %s"
 msgstr "IP संरचनाची तपासणी करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/createinterface.py:1110
+#: ../virtManager/createinterface.py:1111
 #, python-format
 msgid "Error creating interface: '%s'"
 msgstr "संवाद निर्माण करतेवेळी त्रुटी: '%s'"
 
-#: ../virtManager/createinterface.py:1132
+#: ../virtManager/createinterface.py:1133
 msgid "Creating virtual interface"
 msgstr "वर्च्युअल संवाद निर्माण करत आहे"
 
-#: ../virtManager/createinterface.py:1133
+#: ../virtManager/createinterface.py:1134
 msgid "The virtual interface is now being created."
 msgstr "वर्च्युअल संवाद आत्ता निर्माण केले जात आहे."
 
-#: ../virtManager/createnet.py:135 ../virtinst/network.py:155
+#: ../virtManager/createnet.py:134 ../virtinst/network.py:155
 msgid "NAT"
 msgstr "NAT"
 
-#: ../virtManager/createnet.py:136 ../ui/host.ui.h:28
+#: ../virtManager/createnet.py:135 ../ui/host.ui.h:24
 msgid "Routed"
 msgstr "राउटेड"
 
-#: ../virtManager/createnet.py:173
+#: ../virtManager/createnet.py:172
 msgid "Any physical device"
 msgstr "कुठलेही फिजीकल साधण"
 
-#: ../virtManager/createnet.py:183
+#: ../virtManager/createnet.py:182
 #, python-format
 msgid "Physical device %s"
 msgstr "फिजीकल साधण %s"
 
-#: ../virtManager/createnet.py:261
+#: ../virtManager/createnet.py:260
 msgid "Invalid network name"
 msgstr "अवैध नेटवर्क नावे"
 
-#: ../virtManager/createnet.py:270 ../virtManager/createnet.py:274
-#: ../virtManager/createnet.py:278 ../virtManager/createnet.py:282
-#: ../virtManager/createnet.py:353 ../virtManager/createnet.py:357
-#: ../virtManager/createnet.py:361
+#: ../virtManager/createnet.py:269 ../virtManager/createnet.py:273
+#: ../virtManager/createnet.py:277 ../virtManager/createnet.py:281
+#: ../virtManager/createnet.py:352 ../virtManager/createnet.py:356
+#: ../virtManager/createnet.py:360
 msgid "Invalid Network Address"
 msgstr "अवैध नेटवर्क पत्ता"
 
-#: ../virtManager/createnet.py:271 ../virtManager/createnet.py:354
+#: ../virtManager/createnet.py:270 ../virtManager/createnet.py:353
 msgid "The network address could not be understood"
 msgstr "नेटवर्क पत्ता समजले नाही"
 
-#: ../virtManager/createnet.py:275
+#: ../virtManager/createnet.py:274
 msgid "The network must be an IPv4 address"
 msgstr "नेटवर्क IPv4 पत्ता असायला हवे"
 
-#: ../virtManager/createnet.py:279
+#: ../virtManager/createnet.py:278
 msgid "The network must address at least 8 addresses."
 msgstr "नेटवर्कने किमान 8 पत्ता हाताळायला हवे."
 
-#: ../virtManager/createnet.py:283
+#: ../virtManager/createnet.py:282
 msgid "The network prefix must be >= 15"
 msgstr "नेटवर्क प्रिफिक्स >= 15 पाहिजे"
 
-#: ../virtManager/createnet.py:286 ../virtManager/createnet.py:365
+#: ../virtManager/createnet.py:285 ../virtManager/createnet.py:364
 msgid "Check Network Address"
 msgstr "नेटवर्क पत्ता तपासा"
 
-#: ../virtManager/createnet.py:287 ../virtManager/createnet.py:366
+#: ../virtManager/createnet.py:286 ../virtManager/createnet.py:365
 msgid ""
 "The network should normally use a private IPv4 address. Use this non-private "
 "address anyway?"
@@ -1858,157 +1820,141 @@ msgstr ""
 "नेटवर्कने साधारणतया व्यक्तिगत IPv4 पत्ता वापरायला हवे. तरिही कसेही करून हा विना "
 "व्यक्तिगत पत्ता वापरायचा का?"
 
-#: ../virtManager/createnet.py:297 ../virtManager/createnet.py:300
-#: ../virtManager/createnet.py:303 ../virtManager/createnet.py:307
+#: ../virtManager/createnet.py:296 ../virtManager/createnet.py:299
+#: ../virtManager/createnet.py:302 ../virtManager/createnet.py:306
 msgid "Invalid DHCP Address"
 msgstr "अवैध DHCP पत्ता"
 
-#: ../virtManager/createnet.py:298
+#: ../virtManager/createnet.py:297
 msgid "The DHCP start address could not be understood"
 msgstr "DHCP प्रारंभ पत्ता समझले नाही"
 
-#: ../virtManager/createnet.py:301
+#: ../virtManager/createnet.py:300
 msgid "The DHCP end address could not be understood"
 msgstr "DHCP समाप्ती पत्ता समझले नाही"
 
-#: ../virtManager/createnet.py:304
+#: ../virtManager/createnet.py:303
 #, python-format
 msgid "The DHCP start address is not with the network %s"
 msgstr "DHCP प्रारंभ पत्ता नेटवर्क %s सह निगडीत नाही"
 
-#: ../virtManager/createnet.py:308
+#: ../virtManager/createnet.py:307
 #, python-format
 msgid "The DHCP end address is not with the network %s"
 msgstr "DHCP समाप्ती पत्ता नेटवर्क %s सह निगडीत नाही"
 
-#: ../virtManager/createnet.py:340 ../virtManager/createnet.py:343
-#: ../virtManager/createnet.py:419 ../virtManager/createnet.py:422
+#: ../virtManager/createnet.py:339 ../virtManager/createnet.py:342
+#: ../virtManager/createnet.py:418 ../virtManager/createnet.py:421
 msgid "Invalid static route"
 msgstr "अवैध स्टॅटिक राउट"
 
-#: ../virtManager/createnet.py:341 ../virtManager/createnet.py:420
+#: ../virtManager/createnet.py:340 ../virtManager/createnet.py:419
 msgid "The network address is incorrect."
 msgstr "नेटवर्क पत्ता अयोग्य आहे."
 
-#: ../virtManager/createnet.py:344 ../virtManager/createnet.py:423
+#: ../virtManager/createnet.py:343 ../virtManager/createnet.py:422
 msgid "The gateway address is incorrect."
 msgstr "गेटवे पत्ता अयोग्य आहे."
 
-#: ../virtManager/createnet.py:358
+#: ../virtManager/createnet.py:357
 msgid "The network must be an IPv6 address"
 msgstr "नेटवर्क IPv6 पत्ता पाहिजे"
 
-#: ../virtManager/createnet.py:362
+#: ../virtManager/createnet.py:361
 msgid "For libvirt, the IPv6 network prefix must be /64"
 msgstr "libvirtकरिता, IPv6 नेटवर्क प्रिफिक्स /64 पाहिजे"
 
-#: ../virtManager/createnet.py:376 ../virtManager/createnet.py:379
-#: ../virtManager/createnet.py:382 ../virtManager/createnet.py:386
+#: ../virtManager/createnet.py:375 ../virtManager/createnet.py:378
+#: ../virtManager/createnet.py:381 ../virtManager/createnet.py:385
 msgid "Invalid DHCPv6 Address"
 msgstr "अवैध DHCPv6 पत्ता"
 
-#: ../virtManager/createnet.py:377
+#: ../virtManager/createnet.py:376
 msgid "The DHCPv6 start address could not be understood"
 msgstr "DHCPv6 सुरवातीचा पत्ता समझणे अशक्य"
 
-#: ../virtManager/createnet.py:380
+#: ../virtManager/createnet.py:379
 msgid "The DHCPv6 end address could not be understood"
 msgstr "DHCPv6 समाप्ति पत्ता समझणे अशक्य"
 
-#: ../virtManager/createnet.py:383
+#: ../virtManager/createnet.py:382
 #, python-format
 msgid "The DHCPv6 start address is not with the network %s"
 msgstr "DHCPv6 सुरवात पत्ता नेटवर्क %sसह नाही"
 
-#: ../virtManager/createnet.py:387
+#: ../virtManager/createnet.py:386
 #, python-format
 msgid "The DHCPv6 end address is not with the network %s"
 msgstr "DHCPv6 समाप्तिचा पत्ता नेटवर्क %sसह नाही"
 
-#: ../virtManager/createnet.py:431 ../virtManager/createnet.py:434
-msgid "Invalid Domain Name"
-msgstr "अवैध डोमेन नाव"
-
-#: ../virtManager/createnet.py:432
-msgid "Domain name must be less than 17 characters"
-msgstr "डोमेन नाव किमान 17 अक्षरांपेक्षा कमी पाहिजे"
-
-#: ../virtManager/createnet.py:435
-msgid "Domain name may contain alphanumeric and '_' characters only"
-msgstr "डोमेन नावात अल्फान्युमेरिक व '_' अक्षरेच पाहिजे"
-
-#: ../virtManager/createnet.py:577 ../virtManager/createnet.py:631
+#: ../virtManager/createnet.py:566 ../virtManager/createnet.py:620
 msgid "Private"
 msgstr "खाजगी"
 
-#: ../virtManager/createnet.py:577 ../virtManager/createnet.py:637
+#: ../virtManager/createnet.py:566 ../virtManager/createnet.py:626
 msgid "Other/Public"
 msgstr "इतर किंवा पब्लिक"
 
-#: ../virtManager/createnet.py:633
+#: ../virtManager/createnet.py:622
 msgid "Reserved"
 msgstr "आरक्षीत"
 
-#: ../virtManager/createnet.py:635
+#: ../virtManager/createnet.py:624
 msgid "Unspecified"
 msgstr "विनानिर्देशीत"
 
-#: ../virtManager/createnet.py:748
+#: ../virtManager/createnet.py:737
 #, python-format
 msgid "Error creating virtual network: %s"
 msgstr "वर्च्युअल नेटवर्क बनवितेवेळी त्रुटी आढळली: %s"
 
-#: ../virtManager/createnet.py:765
+#: ../virtManager/createnet.py:754
 #, python-format
 msgid "Error generating network xml: %s"
 msgstr "नेटवर्क xml: %s निर्माण करतेवेळी त्रुटी"
 
-#: ../virtManager/createnet.py:774
+#: ../virtManager/createnet.py:763
 msgid "Creating virtual network..."
 msgstr "वर्च्युअल नेटवर्क निर्माण करणे..."
 
-#: ../virtManager/createnet.py:775
+#: ../virtManager/createnet.py:764
 msgid "Creating the virtual network may take a while..."
 msgstr "वर्च्युअल नेटवर्कच्या निर्माणला काही वेळ लागेल..."
 
-#: ../virtManager/createpool.py:284
+#: ../virtManager/createpool.py:289
 msgid "_Source IQN:"
 msgstr "स्रोत IQN (_S):"
 
-#: ../virtManager/createpool.py:286
+#: ../virtManager/createpool.py:291
 msgid "_Source Path:"
 msgstr "स्रोत मार्ग (_S):"
 
-#: ../virtManager/createpool.py:373
+#: ../virtManager/createpool.py:378
 msgid "Choose source path"
 msgstr "स्रोत मार्ग नीवडा"
 
-#: ../virtManager/createpool.py:379
+#: ../virtManager/createpool.py:385
 msgid "Choose target directory"
 msgstr "लक्ष्य संचयीका नीवडा"
 
-#: ../virtManager/createpool.py:408
+#: ../virtManager/createpool.py:419
 #, python-format
 msgid "Error creating pool: %s"
 msgstr "संग्रह बनवितेवेळी त्रुटी: %s"
 
-#: ../virtManager/createpool.py:423
+#: ../virtManager/createpool.py:436
 msgid "Creating storage pool..."
 msgstr "संचयन संग्रह बनवित आहे..."
 
-#: ../virtManager/createpool.py:424
+#: ../virtManager/createpool.py:437
 msgid "Creating the storage pool may take a while..."
 msgstr "संचयन संग्रह बनवितेवेळी जरा वेळ लागू शकतो..."
 
-#: ../virtManager/createpool.py:483 ../virtinst/snapshot.py:77
-msgid "A name must be specified."
-msgstr "नाव निर्देशीत पाहिजे."
-
-#: ../virtManager/createpool.py:492 ../virtManager/createpool.py:522
+#: ../virtManager/createpool.py:501 ../virtManager/createpool.py:531
 msgid "Pool Parameter Error"
 msgstr "संग्रह बाब अंतर्गत त्रुटी"
 
-#: ../virtManager/createpool.py:528
+#: ../virtManager/createpool.py:537
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
@@ -2016,20 +1962,20 @@ msgstr ""
 "या प्रकारचे संग्रहची बांधणी केल्यास स्रोत साधणचे स्वरूपन केले जाते. तुम्हाला नक्की या संग्रहाची "
 "बांधणी करायची?"
 
-#: ../virtManager/createvol.py:268
+#: ../virtManager/createvol.py:274
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "vol बनवितेवेळी त्रुटी: %s"
 
-#: ../virtManager/createvol.py:290
+#: ../virtManager/createvol.py:297
 msgid "Creating storage volume..."
 msgstr "संचयन खंड बनवित आहे..."
 
-#: ../virtManager/createvol.py:291
+#: ../virtManager/createvol.py:298
 msgid "Creating the storage volume may take a while..."
 msgstr "संचयन खंड बनवितेवेळी जरा वेळ लागू शकतो..."
 
-#: ../virtManager/createvol.py:330
+#: ../virtManager/createvol.py:339
 msgid "Volume Parameter Error"
 msgstr "आवाज बाब त्रुटी"
 
@@ -2116,383 +2062,393 @@ msgstr ""
 "स्टोरेज खालील वर्च्युअल मशीनस् द्वारे वापरणीत आहे:\n"
 "- %s "
 
-#: ../virtManager/details.py:195
+#: ../virtManager/details.py:163
+msgid "Remove this device from the virtual machine"
+msgstr ""
+
+#: ../virtManager/details.py:212
 msgid "Tablet"
 msgstr "टॅबलेट"
 
-#: ../virtManager/details.py:197
+#: ../virtManager/details.py:214
 msgid "Mouse"
 msgstr "माऊस"
 
-#: ../virtManager/details.py:199
+#: ../virtManager/details.py:216
 msgid "Keyboard"
 msgstr "कळफलक"
 
-#: ../virtManager/details.py:216
+#: ../virtManager/details.py:233
 #, python-format
 msgid "Display %s"
 msgstr "%s दाखवा"
 
-#: ../virtManager/details.py:218
+#: ../virtManager/details.py:235
 #, python-format
 msgid "%s Redirector %s"
 msgstr "%s रिडाइरेक्टर %s"
 
-#: ../virtManager/details.py:222
+#: ../virtManager/details.py:239
 #, python-format
 msgid "Sound: %s"
 msgstr "आवाज: %s"
 
-#: ../virtManager/details.py:224
+#: ../virtManager/details.py:241
 #, python-format
 msgid "Video %s"
 msgstr "व्हिडिओ %s"
 
-#: ../virtManager/details.py:226
+#: ../virtManager/details.py:243
 #, python-format
 msgid "Filesystem %s"
 msgstr "फाइलसिस्टम %s"
 
-#: ../virtManager/details.py:229
+#: ../virtManager/details.py:245
 #, python-format
 msgid "Controller %s"
 msgstr "कंट्रोलर %s"
 
-#: ../virtManager/details.py:232
+#: ../virtManager/details.py:248
 msgid "RNG"
 msgstr "RNG"
 
-#: ../virtManager/details.py:236 ../virtManager/domain.py:260
+#: ../virtManager/details.py:252 ../virtManager/domain.py:279
 msgid "Watchdog"
 msgstr "वॉचडॉग"
 
-#: ../virtManager/details.py:670
+#: ../virtManager/details.py:639
+#, fuzzy
+msgid "This will abort the installation. Are you sure?"
+msgstr ""
+"यामुळे जुळवणी काढून टाकली जाईल:\n"
+"\n"
+"%s\n"
+"\n"
+"तुम्ही नक्की असे करायचे?"
+
+#: ../virtManager/details.py:706
 msgid "_Add Hardware"
 msgstr "हार्डवेअर समाविष्ट करा (_A)"
 
-#: ../virtManager/details.py:678
+#: ../virtManager/details.py:714
 msgid "_Remove Hardware"
 msgstr "हार्डवेअर काढून टाका (_R)"
 
-#: ../virtManager/details.py:810
+#: ../virtManager/details.py:849
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr ""
 
-#: ../virtManager/details.py:813
+#: ../virtManager/details.py:852
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 
-#: ../virtManager/details.py:868
+#: ../virtManager/details.py:857
+msgid "UEFI not found"
+msgstr ""
+
+#: ../virtManager/details.py:910
 msgid "Version"
 msgstr "आवृत्ती"
 
-#: ../virtManager/details.py:898
+#: ../virtManager/details.py:940
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr "Libvirt यास NUMA क्षमता आढळले नाही."
 
-#: ../virtManager/details.py:949
+#: ../virtManager/details.py:990
 msgid "Application Default"
 msgstr "ॲप्लिकेशन पूर्वनिर्धारित"
 
-#: ../virtManager/details.py:950
+#: ../virtManager/details.py:991
 msgid "Hypervisor Default"
 msgstr "हाइपरवाइजर पूर्वनिर्धारित"
 
-#: ../virtManager/details.py:952
+#: ../virtManager/details.py:993
 msgid "Clear CPU configuration"
 msgstr "CPU संरचना नष्ट करा"
 
-#: ../virtManager/details.py:1104 ../virtManager/host.py:1380
-#: ../virtManager/snapshots.py:377
+#: ../virtManager/details.py:1153 ../virtManager/host.py:991
+#: ../virtManager/snapshots.py:377 ../virtManager/storagelist.py:471
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "हे विनालागू केलेले बदल आहेत. त्यास आत्ता लागू करायला आवडेल?"
 
-#: ../virtManager/details.py:1106 ../virtManager/host.py:1382
-#: ../virtManager/snapshots.py:379
+#: ../virtManager/details.py:1155 ../virtManager/host.py:993
+#: ../virtManager/snapshots.py:379 ../virtManager/storagelist.py:473
 msgid "Don't warn me again."
 msgstr "मला पुनः सावध करू नका."
 
-#: ../virtManager/details.py:1192
+#: ../virtManager/details.py:1241
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "हार्डवेअर पान पुनः ताजी करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/details.py:1264 ../virtManager/manager.py:897
+#: ../virtManager/details.py:1313 ../virtManager/manager.py:841
 msgid "_Restore"
 msgstr "पुनःसाठवा (_R)"
 
-#: ../virtManager/details.py:1266 ../virtManager/manager.py:899
-#: ../virtManager/vmmenu.py:99 ../ui/manager.ui.h:21
+#: ../virtManager/details.py:1315 ../virtManager/manager.py:843
+#: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "चालवा(_R)"
 
-#: ../virtManager/details.py:1330
+#: ../virtManager/details.py:1378
 msgid "Manage VM snapshots"
 msgstr "VM स्नॅपशॉट्स व्यवस्थापीत करा"
 
-#: ../virtManager/details.py:1387
+#: ../virtManager/details.py:1435
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "हार्वडेअर संवाद सुरू करताना त्रुटी: %s"
 
-#: ../virtManager/details.py:1467
+#: ../virtManager/details.py:1514
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "स्क्रीनशॉट: %s प्राप्त करतेवेळी त्रुटी"
 
-#: ../virtManager/details.py:1475
+#: ../virtManager/details.py:1522
 msgid "Error initializing spice USB device widget"
 msgstr "स्पाइस USB साधन विजेट सुरू करताना त्रुटी"
 
-#: ../virtManager/details.py:1479
+#: ../virtManager/details.py:1526
 msgid "Select USB devices for redirection"
 msgstr "पुन्ह निर्देशनकरिता USB साधने निवडा"
 
-#: ../virtManager/details.py:1505
+#: ../virtManager/details.py:1552
 msgid "Save Virtual Machine Screenshot"
 msgstr "वर्च्युअल मशीन स्क्रीनशॉट सुरक्षित करा"
 
-#: ../virtManager/details.py:1648
+#: ../virtManager/details.py:1695
 msgid "Error generating CPU configuration"
 msgstr "CPU संरचना निर्माण करतेवेळी त्रुटी"
 
-#: ../virtManager/details.py:1854
+#: ../virtManager/details.py:1902
 #, python-format
 msgid "Error disconnecting media: %s"
 msgstr "मिडिया खंडीत करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/details.py:1873
+#: ../virtManager/details.py:1921
 #, python-format
 msgid "Error launching media dialog: %s"
 msgstr "मिडिया संवाद सुरू करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/details.py:1929
+#: ../virtManager/details.py:1977
 #, python-format
 msgid "Error apply changes: %s"
 msgstr "बदल लागू करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/details.py:2065
+#: ../virtManager/details.py:2113
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "स्वयंप्रारंभ मुल्य बदलवितेवेळी त्रुटी आढळली: %s"
 
-#: ../virtManager/details.py:2083
+#: ../virtManager/details.py:2131
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "कर्नल मार्ग निर्देशीत न करून initrd सेट करणे अशक्य"
 
-#: ../virtManager/details.py:2086
+#: ../virtManager/details.py:2134
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "कर्नल मार्ग निर्देशीत न करता कर्नल घटके सेट करणे अशक्य"
 
-#: ../virtManager/details.py:2092
+#: ../virtManager/details.py:2140
 msgid "An init path must be specified"
 msgstr "init मार्ग निर्देशीत करणे आवश्यक"
 
-#: ../virtManager/details.py:2301
+#: ../virtManager/details.py:2353
 msgid "Are you sure you want to remove this device?"
 msgstr "तुम्हाला नक्की हे साधण काढून टाकायचे?"
 
-#: ../virtManager/details.py:2308
+#: ../virtManager/details.py:2360
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "साधण काढून टाकतेवेळी त्रुटी: %s"
 
-#: ../virtManager/details.py:2325
+#: ../virtManager/details.py:2377
 msgid "Device could not be removed from the running machine"
 msgstr "सुरू असलेल्या मशीन पासून साधन काढून टाकणे अशक्य"
 
-#: ../virtManager/details.py:2327
+#: ../virtManager/details.py:2379
 msgid "This change will take effect after the next guest shutdown."
 msgstr "पुढील अतिथी शटडाऊन नंतर ह्या बदलाचा परिणाम होईल."
 
-#: ../virtManager/details.py:2445
+#: ../virtManager/details.py:2501
 msgid "Error while inspecting the guest configuration"
 msgstr "अतिथी संरचनाची चौकशी करतेवेळी त्रुटी"
 
-#: ../virtManager/details.py:2453 ../virtManager/details.py:2457
+#: ../virtManager/details.py:2509 ../virtManager/details.py:2513
 msgid "unknown"
 msgstr "अपरिचीत"
 
-#: ../virtManager/details.py:2494 ../virtManager/details.py:2495
-#: ../virtManager/details.py:2496 ../virtManager/details.py:2497
-#: ../virtManager/host.py:651 ../virtManager/host.py:682
+#: ../virtManager/details.py:2550 ../virtManager/details.py:2551
+#: ../virtManager/details.py:2552 ../virtManager/details.py:2553
+#: ../virtManager/host.py:557 ../virtManager/host.py:588
 msgid "Disabled"
 msgstr "अकार्यान्वीत"
 
-#: ../virtManager/details.py:2739
-msgid "Xen Mouse"
-msgstr "Xen माऊस"
-
-#: ../virtManager/details.py:2741
-msgid "PS/2 Mouse"
-msgstr "PS/2 माऊस"
-
-#: ../virtManager/details.py:2743
-msgid "PS/2 Keyboard"
-msgstr "PS/2 कळफलक"
-
-#: ../virtManager/details.py:2749
+#: ../virtManager/details.py:2812
 msgid "Absolute Movement"
 msgstr "पूर्णतया स्थानांतरन"
 
-#: ../virtManager/details.py:2751
+#: ../virtManager/details.py:2814
 msgid "Relative Movement"
 msgstr "परस्पर स्थानांतरन"
 
-#: ../virtManager/details.py:2793
+#: ../virtManager/details.py:2825
+msgid "Hypervisor does not support removing this device"
+msgstr ""
+
+#: ../virtManager/details.py:2859
 #, python-format
 msgid "%s:%s"
 msgstr "%s:%s"
 
-#: ../virtManager/details.py:2937
+#: ../virtManager/details.py:3003
 msgid "Serial Device"
 msgstr "सिरिअल साधन"
 
-#: ../virtManager/details.py:2939
+#: ../virtManager/details.py:3005
 msgid "Parallel Device"
 msgstr "पॅरलल साधन"
 
-#: ../virtManager/details.py:2941
+#: ../virtManager/details.py:3007
 msgid "Console Device"
 msgstr "कंसोल साधन"
 
-#: ../virtManager/details.py:2943
+#: ../virtManager/details.py:3009
 msgid "Channel Device"
 msgstr "चॅनल साधन"
 
-#: ../virtManager/details.py:2945
+#: ../virtManager/details.py:3011
 #, python-format
 msgid "%s Device"
 msgstr "%s साधन"
 
-#: ../virtManager/details.py:2953
+#: ../virtManager/details.py:3019
 msgid "Primary Console"
 msgstr "प्राथमीक कंसोल"
 
-#: ../virtManager/details.py:3040 ../ui/fsdetails.ui.h:1
+#: ../virtManager/details.py:3106 ../ui/fsdetails.ui.h:1
 msgid "Default"
 msgstr "पूर्वनिर्धारित"
 
-#: ../virtManager/details.py:3173
+#: ../virtManager/details.py:3207
 msgid "Overview"
 msgstr "पूर्वलोकन"
 
-#: ../virtManager/details.py:3176
+#: ../virtManager/details.py:3210
 msgid "OS information"
 msgstr "ओएस माहिती"
 
-#: ../virtManager/details.py:3304
+#: ../virtManager/details.py:3338
 msgid "No bootable devices"
 msgstr "बूटजोगी साधन आढळले नाही"
 
-#: ../virtManager/domain.py:221
+#: ../virtManager/domain.py:240
 msgid "Running"
 msgstr "चालू आहे"
 
-#: ../virtManager/domain.py:223
+#: ../virtManager/domain.py:242
 msgid "Paused"
 msgstr "थांबलेले"
 
-#: ../virtManager/domain.py:225
+#: ../virtManager/domain.py:244
 msgid "Shutting Down"
 msgstr "पूर्णपणे बंद करा"
 
-#: ../virtManager/domain.py:228 ../virtManager/domain.py:274
+#: ../virtManager/domain.py:247 ../virtManager/domain.py:293
 msgid "Saved"
 msgstr "साठवले"
 
-#: ../virtManager/domain.py:230
+#: ../virtManager/domain.py:249
 msgid "Shutoff"
 msgstr "शटऑफ"
 
-#: ../virtManager/domain.py:232 ../virtManager/domain.py:252
-#: ../virtManager/domain.py:264 ../virtManager/domain.py:272
+#: ../virtManager/domain.py:251 ../virtManager/domain.py:271
+#: ../virtManager/domain.py:283 ../virtManager/domain.py:291
 msgid "Crashed"
 msgstr "क्रॅश्ड"
 
-#: ../virtManager/domain.py:234
+#: ../virtManager/domain.py:253
 msgid "Suspended"
 msgstr "सस्पेंड केले"
 
-#: ../virtManager/domain.py:244
+#: ../virtManager/domain.py:263
 msgid "Booted"
 msgstr "बूट केले"
 
-#: ../virtManager/domain.py:245 ../virtManager/domain.py:273
+#: ../virtManager/domain.py:264 ../virtManager/domain.py:292
 msgid "Migrated"
 msgstr "माइग्रेट केले"
 
-#: ../virtManager/domain.py:246
+#: ../virtManager/domain.py:265
 msgid "Restored"
 msgstr "पूर्ववत् केले"
 
-#: ../virtManager/domain.py:247 ../virtManager/domain.py:261
-#: ../virtManager/domain.py:276
+#: ../virtManager/domain.py:266 ../virtManager/domain.py:280
+#: ../virtManager/domain.py:295
 msgid "From snapshot"
 msgstr "स्नॅपशॉट पासून"
 
-#: ../virtManager/domain.py:248
+#: ../virtManager/domain.py:267
 msgid "Unpaused"
 msgstr "सुरू"
 
-#: ../virtManager/domain.py:249
+#: ../virtManager/domain.py:268
 msgid "Migration canceled"
 msgstr "माइग्रेशन रद्द केले"
 
-#: ../virtManager/domain.py:250
+#: ../virtManager/domain.py:269
 msgid "Save canceled"
 msgstr "साठवणे रद्द केले"
 
-#: ../virtManager/domain.py:251
+#: ../virtManager/domain.py:270
 msgid "Event wakeup"
 msgstr "इवेंट वेकअप"
 
-#: ../virtManager/domain.py:255 ../virtManager/domain.py:267
+#: ../virtManager/domain.py:274 ../virtManager/domain.py:286
 msgid "User"
 msgstr "वापरकर्ता"
 
-#: ../virtManager/domain.py:256
+#: ../virtManager/domain.py:275
 msgid "Migrating"
 msgstr "माइग्रेट करणे"
 
-#: ../virtManager/domain.py:257
+#: ../virtManager/domain.py:276
 msgid "Saving"
 msgstr "साठवत आहे"
 
-#: ../virtManager/domain.py:258
+#: ../virtManager/domain.py:277
 msgid "Dumping"
 msgstr "डम्प करणे"
 
-#: ../virtManager/domain.py:259
+#: ../virtManager/domain.py:278
 msgid "I/O error"
 msgstr "I/O त्रुटी"
 
-#: ../virtManager/domain.py:262
+#: ../virtManager/domain.py:281
 msgid "Shutting down"
 msgstr "पूर्णपणे बंद करत आहे"
 
-#: ../virtManager/domain.py:263 ../virtManager/snapshots.py:543
+#: ../virtManager/domain.py:282 ../virtManager/snapshots.py:543
 msgid "Creating snapshot"
 msgstr "नवीन स्नॅपशॉट निर्माण करत आहे"
 
-#: ../virtManager/domain.py:270
+#: ../virtManager/domain.py:289
 msgid "Shutdown"
 msgstr "पूर्णपणे बंद करा"
 
-#: ../virtManager/domain.py:271
+#: ../virtManager/domain.py:290
 msgid "Destroyed"
 msgstr "नष्ट केले"
 
-#: ../virtManager/domain.py:275
+#: ../virtManager/domain.py:294
 msgid "Failed"
 msgstr "अपयशी"
 
-#: ../virtManager/domain.py:279
+#: ../virtManager/domain.py:298
 msgid "Panicked"
 msgstr "भेदरला"
 
-#: ../virtManager/domain.py:391
+#: ../virtManager/domain.py:398
 #, python-format
 msgid ""
 "There is more than one '%s' device attached to your host, and we can't "
@@ -2505,11 +2461,11 @@ msgstr ""
 "ह्याच्या निवारणकरिता, 'हार्डवेअर समाविष्ट करा' सहाय्यकाचा वापर करून USB साधन काढून "
 "टाका व अतिथीसह पुन्हा संलग्न करा."
 
-#: ../virtManager/domain.py:489
+#: ../virtManager/domain.py:502
 msgid "Libvirt connection does not support snapshots."
 msgstr "लिबवर्ट जोडणी स्नॅपशॉट्सकरिता समर्थन पुरवत नाही."
 
-#: ../virtManager/domain.py:504
+#: ../virtManager/domain.py:517
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -2517,36 +2473,36 @@ msgstr ""
 "सर्व लेखनजोगी qcow2 रूपणकरिता डिस्क प्रतिमांचे वाटप केले असल्यावरच स्नॅपशॉट्स समर्थीत "
 "असतात."
 
-#: ../virtManager/domain.py:507
+#: ../virtManager/domain.py:520
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr ""
 "स्नॅपशॉट्सना अतिथीकरिता वाटप केलेली किमान एक लेखनजोगी qcow2 डिस्क प्रतिमा आवश्यक आहे."
 
-#: ../virtManager/domain.py:549
+#: ../virtManager/domain.py:555
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "निष्क्रिय VM संरचनामध्ये निर्देशीत साधन आढळले नाही: %s"
 
-#: ../virtManager/domain.py:1380
+#: ../virtManager/domain.py:1428
 msgid "Cannot start guest while cloning operation in progress"
 msgstr "क्लोन कार्यपद्धती सुरू असताना अतिथीला सुरू करणे अशक्य"
 
-#: ../virtManager/domain.py:1414
+#: ../virtManager/domain.py:1463
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr "क्लोनिंग कार्य सुरू असताना अतिथीला पुनः सुरू करणे अशक्य"
 
-#: ../virtManager/domain.py:1444
+#: ../virtManager/domain.py:1472
 msgid "Saving domain to disk"
 msgstr "डोमैनला डिस्कवर साठवत आहे"
 
-#: ../virtManager/domain.py:1483
+#: ../virtManager/domain.py:1521
 msgid "Migrating domain"
 msgstr "डोमैन स्थानांतरीत करत आहे"
 
 #. Manager fail message
-#: ../virtManager/engine.py:182
+#: ../virtManager/engine.py:181
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -2564,7 +2520,7 @@ msgstr ""
 "हायपरवाइजर जुळवणी \n"
 "फाइल ->जुळवणी समावेष करा, यानुरूप स्वहस्ते समावेश करणे शक्य आहे"
 
-#: ../virtManager/engine.py:209
+#: ../virtManager/engine.py:208
 msgid ""
 "The 'libvirtd' service will need to be started.\n"
 "\n"
@@ -2576,21 +2532,21 @@ msgstr ""
 "त्यानंतर, पुढील ॲप्लिकेशन स्टार्टअपवेळी virt-manager\n"
 "libvirt सह जोडणी करेल."
 
-#: ../virtManager/engine.py:220
+#: ../virtManager/engine.py:219
 msgid "Libvirt service must be started"
 msgstr "Libvirt सर्व्हिस सुरू करणे आवश्यक आहे"
 
-#: ../virtManager/engine.py:339
+#: ../virtManager/engine.py:346
 #, python-format
 msgid "Error polling connection '%s': %s"
 msgstr "जोडणी '%s': %s करीता पोल करतेवेळी त्रुटी"
 
-#: ../virtManager/engine.py:557
+#: ../virtManager/engine.py:586
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "अपरिचीत जुळवणी URI %s"
 
-#: ../virtManager/engine.py:570
+#: ../virtManager/engine.py:599
 msgid ""
 "The remote host requires a version of netcat/nc\n"
 "which supports the -U option."
@@ -2598,7 +2554,7 @@ msgstr ""
 "रिमोट यजमानला netcat/nc ची आवृत्ती आवश्यक आहे\n"
 "जे -U पर्यायकरीता समर्थन पुरवते."
 
-#: ../virtManager/engine.py:585
+#: ../virtManager/engine.py:614
 msgid ""
 "You need to install openssh-askpass or similar\n"
 "to connect to this host."
@@ -2606,7 +2562,7 @@ msgstr ""
 "ह्या यजमानसह जोडणी करण्यासाठी openssh-askpass किंवा\n"
 "समान प्रतिष्ठापीत करणे आवश्यक आहे."
 
-#: ../virtManager/engine.py:589
+#: ../virtManager/engine.py:618
 msgid ""
 "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
@@ -2614,7 +2570,7 @@ msgstr ""
 "दुरस्त यजमानवर 'libvirtd' डिमन सुरू आहे\n"
 "याची खात्री करा."
 
-#: ../virtManager/engine.py:593
+#: ../virtManager/engine.py:622
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -2624,7 +2580,7 @@ msgstr ""
 " - Xen यजमान कर्नल बूट झाले\n"
 " - Xen सर्व्हिस सुरू झाली"
 
-#: ../virtManager/engine.py:599
+#: ../virtManager/engine.py:628
 msgid ""
 "Could not detect a local session: if you are \n"
 "running virt-manager over ssh -X or VNC, you \n"
@@ -2636,138 +2592,118 @@ msgstr ""
 "libvirt सह सर्वसाधारण वापरकर्ता म्हणू जोडणी अशक्य \n"
 "होईल. रूट म्हणून चालवण्याचा प्रयत्न करा."
 
-#: ../virtManager/engine.py:605
+#: ../virtManager/engine.py:634
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "'libvirtd' डिमन सुरू आहे याची खात्री करा."
 
-#: ../virtManager/engine.py:609
+#: ../virtManager/engine.py:638
 msgid "Unable to connect to libvirt."
 msgstr "libvirt सह जोडणी अशक्य."
 
-#: ../virtManager/engine.py:622
+#: ../virtManager/engine.py:652
 msgid "Would you still like to remember this connection?"
 msgstr "तुम्हाला तरिही ही जोडणी लक्षात ठेवायची?"
 
-#: ../virtManager/engine.py:624
+#: ../virtManager/engine.py:654
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "वर्च्युअल मशीन व्यवस्थापक जोडणी अपयश"
 
-#: ../virtManager/engine.py:650
+#: ../virtManager/engine.py:681
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "'विषयी' संवाद सुरू करताना त्रुटी: %s"
 
-#: ../virtManager/engine.py:664
+#: ../virtManager/engine.py:695
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "पसंती सुरू करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/engine.py:686
+#: ../virtManager/engine.py:716
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "यजमान संवाद सुरू करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/engine.py:712
+#: ../virtManager/engine.py:742
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "जोडणी संवाद सुरू करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/engine.py:763
+#: ../virtManager/engine.py:793
 #, python-format
 msgid "Error launching details: %s"
 msgstr "तपशील सुरू करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/engine.py:823 ../virtManager/engine.py:838
+#: ../virtManager/engine.py:853 ../virtManager/engine.py:868
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "मॅनेजर सुरू करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/engine.py:851
+#: ../virtManager/engine.py:880
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "माइग्रेट संवाद सुरू करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/engine.py:867
+#: ../virtManager/engine.py:896
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "क्लोन घटक सेटकरतेवेळी त्रुटी: %s"
 
-#: ../virtManager/engine.py:932
-msgid ""
-"Saving virtual machines over remote connections is not supported with this "
-"libvirt version or hypervisor."
-msgstr ""
-"वर्च्युअल मशीन्स्ला रिमोट जोडणीकरीता साठवणे ह्या आवृत्ती किंवा हायपरवाइजरसह समर्थीत "
-"नाही."
-
-#: ../virtManager/engine.py:939
+#: ../virtManager/engine.py:961
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "तुम्हाला नक्की '%s' साठवायचे?"
 
-#: ../virtManager/engine.py:945
-msgid "Save Virtual Machine"
-msgstr "वर्च्युअल मशीन सुरक्षित करा"
-
-#: ../virtManager/engine.py:959
+#: ../virtManager/engine.py:972
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "क्षेत्र संचयन करतेवेळी त्रुटी आढळली: %s"
 
-#: ../virtManager/engine.py:964
+#: ../virtManager/engine.py:977
 msgid "Saving Virtual Machine"
 msgstr "वर्च्युअल मशीन सुरक्षित करत आहे"
 
-#: ../virtManager/engine.py:965
+#: ../virtManager/engine.py:978
 msgid "Saving virtual machine memory to disk "
 msgstr "वर्च्युअल मशीन मेमरीला डिस्कवर साठवत आहे"
 
-#: ../virtManager/engine.py:978
+#: ../virtManager/engine.py:991
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "साठवणे जॉब रद्द करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/engine.py:987
-msgid "Restoring virtual machines over remote connections is not yet supported"
-msgstr "दूर्रस्थ जुळवणी वरील वर्च्युअल मशीनचे पुन्हस्थापन अजूनही समर्थीत नाही"
-
-#: ../virtManager/engine.py:992
-msgid "Restore Virtual Machine"
-msgstr "वर्च्युअल मशीन पुनःरक्षित करा"
-
-#: ../virtManager/engine.py:999 ../virtManager/engine.py:1050
-msgid "Error restoring domain"
-msgstr "क्षेत्र पूर्वस्थितीत आणतेवेळी त्रुटी"
-
-#: ../virtManager/engine.py:1008
+#: ../virtManager/engine.py:1004
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "तुम्हाला नक्की '%s' जबरन बंद टाकायचे?"
 
-#: ../virtManager/engine.py:1010
+#: ../virtManager/engine.py:1006
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "यामुळे VM लगेचच OS ला बंद न केल्यावरही बंद होईल व माहिती सुद्धा लुप्त होऊ शकते."
 
-#: ../virtManager/engine.py:1016 ../virtManager/engine.py:1093
+#: ../virtManager/engine.py:1012 ../virtManager/engine.py:1089
 msgid "Error shutting down domain"
 msgstr "डोमैन शटडाऊन करतेवेळी त्रुटी"
 
-#: ../virtManager/engine.py:1024
+#: ../virtManager/engine.py:1020
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "तुम्हाला नक्की '%s' बंद करायचे?"
 
-#: ../virtManager/engine.py:1030
+#: ../virtManager/engine.py:1026
 msgid "Error pausing domain"
 msgstr "डोमैन थांबवतेवेळी त्रुटी"
 
-#: ../virtManager/engine.py:1038
+#: ../virtManager/engine.py:1034
 msgid "Error unpausing domain"
 msgstr "डोमैन थांबवणे अशक्य करतेवेळी त्रुटी"
 
-#: ../virtManager/engine.py:1053
+#: ../virtManager/engine.py:1046
+msgid "Error restoring domain"
+msgstr "क्षेत्र पूर्वस्थितीत आणतेवेळी त्रुटी"
+
+#: ../virtManager/engine.py:1049
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -2777,70 +2713,68 @@ msgstr ""
 "व योग्य सुरवात करायला\n"
 "आवडेल?"
 
-#: ../virtManager/engine.py:1067
+#: ../virtManager/engine.py:1063
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "डोमैन स्तर: %s काढून टाकतेवेळी त्रुटी"
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1071
+#: ../virtManager/engine.py:1067
 msgid "Restoring Virtual Machine"
 msgstr "वर्च्युअल मशीन पुनःरक्षित आहे"
 
-#: ../virtManager/engine.py:1072
+#: ../virtManager/engine.py:1068
 msgid "Restoring virtual machine memory from disk"
 msgstr "डिस्क पासून वर्च्युअल मशीन मेमरी पुनःसाठवत आहे"
 
 #. Regular startup
-#: ../virtManager/engine.py:1078
+#: ../virtManager/engine.py:1074
 msgid "Error starting domain"
 msgstr "डोमैन सुरू करतेवेळी त्रुटी"
 
-#: ../virtManager/engine.py:1087
+#: ../virtManager/engine.py:1083
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "तुम्हाला नक्की '%s' बंद करायचे?"
 
-#: ../virtManager/engine.py:1101
+#: ../virtManager/engine.py:1097
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "तुम्हाला नक्की '%s' पुनः सुरू करायचे?"
 
-#. Raise the original error message
-#: ../virtManager/engine.py:1115 ../virtManager/engine.py:1129
-#, python-format
-msgid "Error rebooting domain: %s"
-msgstr "क्षेत्र पुनः सुरू करतेवेळी त्रुटी आढळली: %s"
+#: ../virtManager/engine.py:1103
+msgid "Error rebooting domain"
+msgstr ""
 
-#: ../virtManager/engine.py:1141
+#: ../virtManager/engine.py:1112
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "तुम्हाला नक्की '%s'ला सक्तीने मूळस्थितीत आणायचे?"
 
-#: ../virtManager/engine.py:1143
+#: ../virtManager/engine.py:1114
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "यामुळे OSला पूर्णपणे बंद न करता VM पटकन मूळस्थिती येते व कदाचित डाटा गमवाल."
 
-#: ../virtManager/engine.py:1149
+#: ../virtManager/engine.py:1120
 msgid "Error resetting domain"
 msgstr "डोमेन पुनःसेट करतेवेळी त्रुटी"
 
-#: ../virtManager/engine.py:1160
+#: ../virtManager/engine.py:1131
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "नष्ट करा संवाद: %s सुरू करतेवेळी त्रुटी"
 
-#: ../virtManager/error.py:116
+#: ../virtManager/error.py:134
 msgid "Input Error"
 msgstr "इन्पुट त्रुटी"
 
-#: ../virtManager/error.py:184
+#: ../virtManager/error.py:202
 msgid "Don't ask me again"
 msgstr "मला पुन्हा विचारू नका"
 
-#: ../virtManager/error.py:326 ../ui/details.ui.h:25
+#: ../virtManager/error.py:344 ../ui/details.ui.h:25
 msgid "Details"
 msgstr "तपशील"
 
@@ -2901,254 +2835,179 @@ msgstr "%(graphicstype)s सर्व्हर"
 msgid "Local SDL Window"
 msgstr "स्थानीय SDL पटल"
 
-#: ../virtManager/host.py:206
-msgid "Copy Volume Path"
-msgstr "खंड मार्ग प्रतिकृत करा"
-
-#: ../virtManager/host.py:417
+#: ../virtManager/host.py:315
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s, %(maxmem)s पैकी"
 
-#: ../virtManager/host.py:434 ../virtManager/host.py:435
-#: ../virtManager/host.py:436
-msgid "Connection not active."
-msgstr "जोडणी सक्रिय नाही."
-
-#: ../virtManager/host.py:445
+#: ../virtManager/host.py:337
 msgid "Libvirt connection does not support virtual network management."
 msgstr "Libvirt जोडणी वर्च्युअल नेटवर्क व्यवस्थापन करीता समर्थन पुरवत नाही."
 
-#: ../virtManager/host.py:450
-msgid "Libvirt connection does not support storage management."
-msgstr "Libvirt जोडणी स्टोरेज व्यवस्थापन करीता समर्थन पुरवत नाही."
-
-#: ../virtManager/host.py:454
+#: ../virtManager/host.py:341
 msgid "Libvirt connection does not support interface management."
 msgstr "Libvirt जोडणी संवाद व्यवस्थापनकरीता समर्थन पुरवत नाही."
 
-#: ../virtManager/host.py:470
+#: ../virtManager/host.py:348 ../virtManager/host.py:349
+#: ../virtManager/storagelist.py:585
+msgid "Connection not active."
+msgstr "जोडणी सक्रिय नाही."
+
+#: ../virtManager/host.py:377
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "तुम्हाला नक्की नेटवर्क %s नेहमी करीता काढूण टाकायचे?"
 
-#: ../virtManager/host.py:477
+#: ../virtManager/host.py:384
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "नेटवर्क '%s' नष्ट करतेवेळी त्रुटी"
 
-#: ../virtManager/host.py:486
+#: ../virtManager/host.py:393
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "नेटवर्क '%s' सुरू करतेवेळी त्रुटी"
 
-#: ../virtManager/host.py:495
+#: ../virtManager/host.py:402
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "नेटवर्क '%s' थांबवतेवेळी त्रुटी"
 
-#: ../virtManager/host.py:504
+#: ../virtManager/host.py:411
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "नेटवर्क सहाय्यक दाखल करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/host.py:539
+#: ../virtManager/host.py:446
 msgid "Network could not be updated"
 msgstr "नेटवर्क सुधारित करणे अशक्य"
 
-#: ../virtManager/host.py:540
+#: ../virtManager/host.py:447
 msgid "This change will take effect when the network is restarted"
 msgstr "नेटवर्क पुन्हा सुरू केल्यानंतर हे बदल लागू होतील"
 
-#: ../virtManager/host.py:547
+#: ../virtManager/host.py:454
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "नेटवर्क सेटिंग्ज: %s बदलवतेवेळी त्रुटी"
 
-#: ../virtManager/host.py:579 ../virtManager/host.py:748
-#: ../virtManager/host.py:972 ../virtManager/host.py:1022
+#: ../virtManager/host.py:486 ../virtManager/host.py:654
+#: ../virtManager/storagelist.py:355 ../virtManager/storagelist.py:547
 msgid "On Boot"
 msgstr "बूट वेळी"
 
-#: ../virtManager/host.py:580 ../virtManager/host.py:748
-#: ../virtManager/host.py:767 ../virtManager/host.py:973
-#: ../virtManager/host.py:1022 ../virtManager/host.py:1062
-#: ../virtManager/preferences.py:108
+#: ../virtManager/host.py:487 ../virtManager/host.py:654
+#: ../virtManager/host.py:673 ../virtManager/preferences.py:108
+#: ../virtManager/storagelist.py:323 ../virtManager/storagelist.py:355
+#: ../virtManager/storagelist.py:547
 msgid "Never"
 msgstr "कधिच नाही"
 
-#: ../virtManager/host.py:613
+#: ../virtManager/host.py:519
 msgid "No virtual network selected."
 msgstr "वर्च्युअल नेटवर्क नीवडले नाही."
 
-#: ../virtManager/host.py:626 ../virtManager/host.py:632
+#: ../virtManager/host.py:532 ../virtManager/host.py:538
 #, python-format
 msgid "Error selecting network: %s"
 msgstr "नेटवर्क नीवडतेवेळी त्रुटी: %s"
 
-#: ../virtManager/host.py:675 ../virtinst/network.py:160
+#: ../virtManager/host.py:581 ../virtinst/network.py:160
 msgid "Routed network"
 msgstr "राउटेड नेटवर्क"
 
-#: ../virtManager/host.py:677
+#: ../virtManager/host.py:583
 msgid "Isolated network, internal routing only"
 msgstr "वेगळे नेटवर्क, फक्त आंतरिक राउटिंग"
 
-#: ../virtManager/host.py:679
+#: ../virtManager/host.py:585
 msgid "Isolated network, routing disabled"
 msgstr "वेगळे नेटवर्क, राउटिंग बंद केले"
 
-#: ../virtManager/host.py:736 ../virtManager/host.py:761
-#: ../virtManager/host.py:1020 ../virtManager/host.py:1060
-#: ../virtManager/host.py:1250 ../virtManager/netlist.py:147
+#: ../virtManager/host.py:642 ../virtManager/host.py:667
+#: ../virtManager/host.py:858 ../virtManager/netlist.py:147
+#: ../virtManager/storagelist.py:321 ../virtManager/storagelist.py:353
 msgid "Inactive"
 msgstr "निष्क्रीय"
 
-#: ../virtManager/host.py:775 ../virtManager/host.py:780
+#: ../virtManager/host.py:681 ../virtManager/host.py:686
 msgid "Isolated network"
 msgstr "विलग जाळ"
 
-#: ../virtManager/host.py:815
-#, python-format
-msgid "Error stopping pool '%s'"
-msgstr "पूल '%s' थांबवतेवेळी त्रुटी"
-
-#: ../virtManager/host.py:824
-#, python-format
-msgid "Error starting pool '%s'"
-msgstr "पूल '%s' सुरू करतेवेळी त्रुटी"
-
-#: ../virtManager/host.py:831
-#, python-format
-msgid "Are you sure you want to permanently delete the pool %s?"
-msgstr "तुम्हाला नक्की %s संग्रह नेहमी करीता काढूण टाकायचे?"
-
-#: ../virtManager/host.py:838
-#, python-format
-msgid "Error deleting pool '%s'"
-msgstr "पूल '%s' नष्ट करतेवेळी त्रुटी"
-
-#: ../virtManager/host.py:863 ../virtManager/storagebrowse.py:298
-#, python-format
-msgid "Error refreshing pool '%s'"
-msgstr "पूल '%s' पुनःताजे करतेवेळी त्रुटी"
-
-#: ../virtManager/host.py:870 ../virtManager/storagebrowse.py:262
-#, python-format
-msgid "Are you sure you want to permanently delete the volume %s?"
-msgstr "तुम्हाला नक्की खंड %s नेहमी करीता काढूण टाकायचे?"
-
-#: ../virtManager/host.py:884 ../virtManager/storagebrowse.py:276
-#, python-format
-msgid "Error refreshing volume '%s'"
-msgstr "वॉल्युम '%s' पुनःताजे करतेवेळी त्रुटी"
-
-#: ../virtManager/host.py:893
-#, python-format
-msgid "Error launching pool wizard: %s"
-msgstr "संग्रह सहाय्यक दाखल करतेवेळी त्रुटी: %s"
-
-#: ../virtManager/host.py:910 ../virtManager/storagebrowse.py:355
-#, python-format
-msgid "Error launching volume wizard: %s"
-msgstr "आवाज सहाय्यक दाखल करतेवेळी त्रुटी: %s"
-
-#: ../virtManager/host.py:951
-#, python-format
-msgid "Error changing pool settings: %s"
-msgstr "पूल सेटिंग्ज: %s बदलवतेवेळी त्रुटी"
-
-#: ../virtManager/host.py:984
-msgid "No storage pool selected."
-msgstr "स्टोरेज पूल नीवडले नाही."
-
-#: ../virtManager/host.py:994
-#, python-format
-msgid "Error selecting pool: %s"
-msgstr "पूल नीवडतेवेळी त्रुटी आढळली: %s"
-
-#: ../virtManager/host.py:1032
-msgid "Create new volume"
-msgstr "नवीन वॉल्युम निर्माण करा"
-
-#: ../virtManager/host.py:1038 ../virtManager/storagebrowse.py:311
-msgid "Pool does not support volume creation"
-msgstr "पूल वॉल्युम निर्माणकरिता समर्थन पुरवत नाही"
-
-#: ../virtManager/host.py:1121
+#: ../virtManager/host.py:729
 #, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
 msgstr "तुम्हाला नक्की संवाद '%s' बंद करायचे?"
 
-#: ../virtManager/host.py:1127
+#: ../virtManager/host.py:735
 #, python-format
 msgid "Error stopping interface '%s'"
 msgstr "संवाद '%s' थांबवतेवेळी त्रुटी"
 
-#: ../virtManager/host.py:1136
+#: ../virtManager/host.py:744
 #, python-format
 msgid "Are you sure you want to start the interface '%s'?"
 msgstr "तुम्हाला नक्की संवाद '%s' पुनः सुरू करायचे?"
 
-#: ../virtManager/host.py:1142
+#: ../virtManager/host.py:750
 #, python-format
 msgid "Error starting interface '%s'"
 msgstr "संवाद '%s' सुरू करतेवेळी त्रुटी"
 
-#: ../virtManager/host.py:1149
+#: ../virtManager/host.py:757
 #, python-format
 msgid "Are you sure you want to permanently delete the interface %s?"
 msgstr "तुम्हाला नक्की संवाद %s नेहमी करीता नष्ट करायचे?"
 
-#: ../virtManager/host.py:1157
+#: ../virtManager/host.py:765
 #, python-format
 msgid "Error deleting interface '%s'"
 msgstr "संवाद '%s' नष्ट करतेवेळी त्रुटी"
 
-#: ../virtManager/host.py:1166
+#: ../virtManager/host.py:774
 #, python-format
 msgid "Error launching interface wizard: %s"
 msgstr "संवाद सहाय्यक सुरू करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/host.py:1196
+#: ../virtManager/host.py:804
 #, python-format
 msgid "Error setting interface startmode: %s"
 msgstr "संवाद स्टार्टमोड सेट करतेवेळी त्रुटी: %s"
 
-#: ../virtManager/host.py:1213
+#: ../virtManager/host.py:821
 msgid "No interface selected."
 msgstr "संवाद नीवडले नाही."
 
-#: ../virtManager/host.py:1223
+#: ../virtManager/host.py:831
 #, python-format
 msgid "Error selecting interface: %s"
 msgstr "संवाद नीवडतेवेळी त्रुटी: %s"
 
-#: ../virtManager/manager.py:326
+#: ../virtManager/manager.py:325
 msgid "D_etails"
 msgstr "तपशील (_e)"
 
-#: ../virtManager/manager.py:403
+#: ../virtManager/manager.py:402
 msgid "CPU usage"
 msgstr "CPU वापर"
 
-#: ../virtManager/manager.py:404
+#: ../virtManager/manager.py:403
 msgid "Host CPU usage"
 msgstr "यजमान CPU वापर"
 
-#: ../virtManager/manager.py:405
+#: ../virtManager/manager.py:404
 msgid "Memory usage"
 msgstr "मेमरि वापर"
 
-#: ../virtManager/manager.py:406
+#: ../virtManager/manager.py:405
 msgid "Disk I/O"
 msgstr "डिस्क I/O"
 
-#: ../virtManager/manager.py:407
+#: ../virtManager/manager.py:406
 msgid "Network I/O"
 msgstr "नेटवर्क I/O"
 
-#: ../virtManager/manager.py:512
+#: ../virtManager/manager.py:511
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -3163,108 +3022,96 @@ msgstr ""
 "\n"
 "तुम्ही नक्की असे करायचे?"
 
-#: ../virtManager/manager.py:616
+#: ../virtManager/manager.py:614
 msgid "Double click to connect"
 msgstr "जुळवणीकरीता दोनवेळा क्लिक करा"
 
-#: ../virtManager/manager.py:623
+#: ../virtManager/manager.py:621
 msgid "Not Connected"
 msgstr "जोडणी अशक्य"
 
-#: ../virtManager/manager.py:625
+#: ../virtManager/manager.py:623
 msgid "Connecting..."
 msgstr "जोडणी करत आहे..."
 
-#: ../virtManager/manager.py:1041
+#: ../virtManager/manager.py:987
 msgid "Disabled in preferences dialog."
 msgstr "आवड निवड संवाद मध्ये अकार्यान्वीत केले."
 
-#: ../virtManager/mediacombo.py:96
+#: ../virtManager/mediacombo.py:85
+msgid "Libvirt version does not support media listing."
+msgstr "Libvirt आवृत्ती ऑप्टिकल मिडीया सूचीकरीता समर्थन पुरवत नाही."
+
+#: ../virtManager/mediacombo.py:97
 msgid "No device present"
 msgstr "साधण आढळले नाही"
 
-#: ../virtManager/mediadev.py:107
+#: ../virtManager/mediacombo.py:105
 msgid "No media detected"
 msgstr "मिडीया आढळले नाही"
 
-#: ../virtManager/mediadev.py:109
+#: ../virtManager/mediacombo.py:107
 msgid "Media Unknown"
 msgstr "अपरिचित मिडीया"
 
-#: ../virtManager/migrate.py:109
+#: ../virtManager/migrate.py:124
+msgid "Direct"
+msgstr ""
+
+#: ../virtManager/migrate.py:125
+msgid "Tunnelled"
+msgstr ""
+
+#: ../virtManager/migrate.py:143
 msgid "Migrate"
 msgstr "स्थानांतरीत करा"
 
-#: ../virtManager/migrate.py:134
-msgid "Libvirt version does not support setting downtime."
-msgstr "Libvirt आवृत्ती डाउनटाइम निश्चित करण्यास समर्थन पुरवत नाही."
-
-#: ../virtManager/migrate.py:150
-msgid "Libvirt version does not support tunnelled migration."
-msgstr "Libvirt आवृत्ती टनल्ड् स्थानांतरनकरीता समर्थन पुरवत नाही."
-
-#: ../virtManager/migrate.py:160
-msgid "Libvirt version does not support unsafe migration."
-msgstr "लिबवर्ट आवृत्ती असुरक्षित माइग्रेशनकरिता समर्थन पुरवत नाही."
-
-#: ../virtManager/migrate.py:177
+#: ../virtManager/migrate.py:202
 msgid "A valid destination connection must be selected."
 msgstr "वैध लक्ष्य जोडणी नीवडले पाहिजे."
 
-#. We couldn't find a host name for the destination machine
-#. that is accessible from the source machine.
-#. /etc/hosts is likely borked and the only hostname it will
-#. give us is localhost. Remember, the dest machine can actually
-#. be our local machine so we may not already know its hostname
-#: ../virtManager/migrate.py:250
+#: ../virtManager/migrate.py:218
 msgid ""
-"Could not determine remotely accessible hostname for destination connection."
-msgstr "लक्ष्य जोडणीसाठी दूरस्थ प्रवेशजोगी यजमाननाव ओळखणे अशक्य."
+"A remotely accessible libvirt URI is required for tunneled migration, but "
+"the selected connection is a local URI. Libvirt will reject this unless you "
+"add a transport."
+msgstr ""
 
-#: ../virtManager/migrate.py:320
-msgid "No connections available."
-msgstr "जुळवणी उपलब्ध नाही."
+#: ../virtManager/migrate.py:228
+msgid ""
+"The destination's hostname is 'localhost', which will be rejected by "
+"libvirt. You must configure the destination to have a valid publicly "
+"accessible hostname."
+msgstr ""
 
-#: ../virtManager/migrate.py:389
-msgid "Connection hypervisors do not match."
-msgstr "जुळवणीजोगी हायपरवाइजर जुळत नाही."
+#: ../virtManager/migrate.py:295
+msgid "Hypervisors do not match"
+msgstr ""
 
-#: ../virtManager/migrate.py:391
-msgid "Connection is disconnected."
-msgstr "जुळवणी तोडले गेली आहे."
+#: ../virtManager/migrate.py:299
+msgid "Same connection"
+msgstr ""
 
-#: ../virtManager/migrate.py:410
-msgid "max downtime must be greater than 0."
-msgstr "max डाउनटाइम 0 पेक्षा जास्त पाहिजे."
+#: ../virtManager/migrate.py:318
+msgid "No usable connections available."
+msgstr ""
 
-#: ../virtManager/migrate.py:413
-msgid "An interface must be specified."
-msgstr "संवाद निर्देशीत करायला हवे."
-
-#: ../virtManager/migrate.py:416
-msgid "Transfer rate must be greater than 0."
-msgstr "स्थानांतरन दर 0 पेक्षा जास्त असायला हवे."
-
-#: ../virtManager/migrate.py:419
-msgid "Port must be greater than 0."
-msgstr "पोर्ट 0 पेक्षा जास्त असायला हवे."
-
-#: ../virtManager/migrate.py:429
+#: ../virtManager/migrate.py:360
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "अतिथी स्थानांतरीत करणे अशक्य: %s"
 
-#: ../virtManager/migrate.py:473
+#: ../virtManager/migrate.py:403
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "VM '%s' स्थानांतरीत करत आहे"
 
-#: ../virtManager/migrate.py:474
+#: ../virtManager/migrate.py:404
 #, python-format
-msgid "Migrating VM '%s' from %s to %s. This may take a while."
-msgstr "VM '%s'ला %sपासून %sकरीता स्थानांतरीत करत आहे. यास काही वेळ लागेल."
+msgid "Migrating VM '%s' to %s. This may take a while."
+msgstr ""
 
-#: ../virtManager/migrate.py:503
+#: ../virtManager/migrate.py:418
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "माइग्रेट जॉब रद्द करतेवेळी त्रुटी: %s"
@@ -3281,41 +3128,41 @@ msgstr "वर्च्युअल नेटवर्क"
 msgid "No virtual networks available"
 msgstr "वर्च्युअल नेटवर्क उपलब्ध नाही"
 
-#: ../virtManager/netlist.py:207 ../virtManager/netlist.py:211
+#: ../virtManager/netlist.py:208 ../virtManager/netlist.py:212
 #, python-format
 msgid "Host device %s"
 msgstr "यजमान साधन %s"
 
-#: ../virtManager/netlist.py:214
-msgid "(Empty bridge)"
-msgstr "(रिकामे ब्रिज)"
-
 #: ../virtManager/netlist.py:215
-#, python-format
-msgid "Bridge %s %s"
-msgstr "ब्रिज %s %s"
+msgid "Empty bridge"
+msgstr ""
 
-#: ../virtManager/netlist.py:220
+#: ../virtManager/netlist.py:216
+#, python-format
+msgid "Bridge %s: %s"
+msgstr ""
+
+#: ../virtManager/netlist.py:221
 msgid "macvtap"
 msgstr "macvtap"
 
-#: ../virtManager/netlist.py:226
+#: ../virtManager/netlist.py:227
 msgid "Not bridged"
 msgstr "जुळले नाही"
 
-#: ../virtManager/netlist.py:279
+#: ../virtManager/netlist.py:280
 msgid "No networking"
 msgstr "नेटवर्किंग आढळली नाही"
 
-#: ../virtManager/netlist.py:288
+#: ../virtManager/netlist.py:289
 msgid "Specify shared device name"
 msgstr "शेअर्ड् साधणाचे नाव निर्देशीत करा"
 
-#: ../virtManager/netlist.py:352
+#: ../virtManager/netlist.py:353
 msgid "Virtual Network is not active."
 msgstr "वर्च्युअल जाळ सक्रीय नाही."
 
-#: ../virtManager/netlist.py:353
+#: ../virtManager/netlist.py:354
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
@@ -3392,29 +3239,25 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "कृपया पसंतीची ग्रॅब कि जोडणी दाबा"
 
-#: ../virtManager/serialcon.py:209
-msgid "Cannot open a device with no alias name"
-msgstr "विना अलायस नावसह साधन उघडणे अशक्य"
-
-#: ../virtManager/serialcon.py:281
+#: ../virtManager/serialcon.py:282
 msgid "Serial console not yet supported over remote connection"
 msgstr "सिरिअल कंसोल रिमोट जोडणीवर समर्थीत नाही"
 
-#: ../virtManager/serialcon.py:284
+#: ../virtManager/serialcon.py:285
 msgid "Serial console not available for inactive guest"
 msgstr "निष्क्रीय अतिथीकरीता सिरिअल कंसोल उपलब्ध नाही"
 
-#: ../virtManager/serialcon.py:286
+#: ../virtManager/serialcon.py:287
 #, python-format
 msgid "Console for device type '%s' not yet supported"
 msgstr "साधन प्रकार '%s' करीता कंसोल समर्थीत नाही"
 
-#: ../virtManager/serialcon.py:291
+#: ../virtManager/serialcon.py:292
 #, python-format
 msgid "Can not access console path '%s'"
 msgstr "कंसोल मार्ग '%s' करीता प्रवेश अशक्य"
 
-#: ../virtManager/serialcon.py:406
+#: ../virtManager/serialcon.py:407
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "मजकूर कंसोलशी जोडणी करतेवेळी त्रुटी: %s"
@@ -3466,7 +3309,7 @@ msgstr "स्नॅपशॉट: %s वैध करतेवेळी त्�
 msgid "Creating virtual machine snapshot"
 msgstr "वर्च्युअल मशीन स्नॅपशॉट निर्माण करत आहे"
 
-#: ../virtManager/snapshots.py:616
+#: ../virtManager/snapshots.py:617
 #, python-format
 msgid ""
 "Are you sure you want to run snapshot '%s'? All %s changes since the last "
@@ -3475,74 +3318,137 @@ msgstr ""
 "तुम्हाला नक्की स्नॅपशॉट '%s' चालवायचे? मागील स्नॅपशॉट निर्माण केल्यापासूनचे सर्व %s बदल "
 "वगळले जातील."
 
-#: ../virtManager/snapshots.py:620
+#: ../virtManager/snapshots.py:621
 msgid "disk"
 msgstr "डिस्क"
 
-#: ../virtManager/snapshots.py:622
+#: ../virtManager/snapshots.py:623
 msgid "disk and configuration"
 msgstr "डिस्क आणि संरचना"
 
-#: ../virtManager/snapshots.py:631
+#: ../virtManager/snapshots.py:632
 msgid "Running snapshot"
 msgstr "स्नॅपशॉट चालवत आहे"
 
-#: ../virtManager/snapshots.py:632
+#: ../virtManager/snapshots.py:633
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "स्नॅपशॉट '%s' चालवत आहे"
 
-#: ../virtManager/snapshots.py:633
+#: ../virtManager/snapshots.py:634
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "स्नॅपशॉट '%s' चालवतेवेळी त्रुटी"
 
-#: ../virtManager/snapshots.py:642
+#: ../virtManager/snapshots.py:643
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "तुम्हाला नक्की नेहमीकरिता नीवडलेले स्नॅपशॉट्स नष्ट करायचे?"
 
-#: ../virtManager/snapshots.py:650
+#: ../virtManager/snapshots.py:651
 msgid "Deleting snapshot"
 msgstr "स्नॅपशॉट नष्ट करणे"
 
-#: ../virtManager/snapshots.py:651
+#: ../virtManager/snapshots.py:652
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "स्नॅपशॉट '%s' नष्ट करतेवेळी त्रुटी"
 
-#: ../virtManager/snapshots.py:652
+#: ../virtManager/snapshots.py:653
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "स्नॅपशॉट '%s' नष्ट करतेवेळी त्रुटी"
 
-#: ../virtManager/snapshots.py:660
+#: ../virtManager/snapshots.py:661
 msgid "No snapshot selected."
 msgstr "स्नॅपशॉट नीवडले नाही."
 
-#: ../virtManager/snapshots.py:663
+#: ../virtManager/snapshots.py:664
 msgid "Multiple snapshots selected."
 msgstr "एकापेक्षा जास्त स्नॅपशॉट्स पसंत केले."
 
-#: ../virtManager/snapshots.py:673
+#: ../virtManager/snapshots.py:674
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "स्नॅपशॉट: %s नीवडतेवेळी त्रुटी"
 
-#: ../virtManager/storagebrowse.py:129
-msgid "Size"
-msgstr "आकार"
-
-#: ../virtManager/storagebrowse.py:137
-msgid "Format"
-msgstr "रूपण"
-
-#: ../virtManager/storagebrowse.py:145
-msgid "Used By"
-msgstr "वापरलेले"
-
-#: ../virtManager/storagebrowse.py:189
+#: ../virtManager/storagebrowse.py:104
 msgid "Cannot use local storage on remote connection."
 msgstr "दूरस्थ जुळवणीवर स्थानीय स्टोरेज वापरणे अशक्य."
+
+#: ../virtManager/storagelist.py:168
+msgid "Copy Volume Path"
+msgstr "खंड मार्ग प्रतिकृत करा"
+
+#: ../virtManager/storagelist.py:366
+msgid "Create new volume"
+msgstr "नवीन वॉल्युम निर्माण करा"
+
+#: ../virtManager/storagelist.py:372
+msgid "Pool does not support volume creation"
+msgstr "पूल वॉल्युम निर्माणकरिता समर्थन पुरवत नाही"
+
+#: ../virtManager/storagelist.py:511
+msgid "No storage pool selected."
+msgstr "स्टोरेज पूल नीवडले नाही."
+
+#: ../virtManager/storagelist.py:521
+#, python-format
+msgid "Error selecting pool: %s"
+msgstr "पूल नीवडतेवेळी त्रुटी आढळली: %s"
+
+#: ../virtManager/storagelist.py:579
+msgid "Libvirt connection does not support storage management."
+msgstr "Libvirt जोडणी स्टोरेज व्यवस्थापन करीता समर्थन पुरवत नाही."
+
+#: ../virtManager/storagelist.py:608
+#, python-format
+msgid "Error stopping pool '%s'"
+msgstr "पूल '%s' थांबवतेवेळी त्रुटी"
+
+#: ../virtManager/storagelist.py:618
+#, python-format
+msgid "Error starting pool '%s'"
+msgstr "पूल '%s' सुरू करतेवेळी त्रुटी"
+
+#: ../virtManager/storagelist.py:630
+#, python-format
+msgid "Error launching pool wizard: %s"
+msgstr "संग्रह सहाय्यक दाखल करतेवेळी त्रुटी: %s"
+
+#: ../virtManager/storagelist.py:638
+#, python-format
+msgid "Are you sure you want to permanently delete the pool %s?"
+msgstr "तुम्हाला नक्की %s संग्रह नेहमी करीता काढूण टाकायचे?"
+
+#: ../virtManager/storagelist.py:645
+#, python-format
+msgid "Error deleting pool '%s'"
+msgstr "पूल '%s' नष्ट करतेवेळी त्रुटी"
+
+#: ../virtManager/storagelist.py:661
+#, python-format
+msgid "Error refreshing pool '%s'"
+msgstr "पूल '%s' पुनःताजे करतेवेळी त्रुटी"
+
+#: ../virtManager/storagelist.py:677
+#, python-format
+msgid "Error changing pool settings: %s"
+msgstr "पूल सेटिंग्ज: %s बदलवतेवेळी त्रुटी"
+
+#: ../virtManager/storagelist.py:716
+#, python-format
+msgid "Error launching volume wizard: %s"
+msgstr "आवाज सहाय्यक दाखल करतेवेळी त्रुटी: %s"
+
+#: ../virtManager/storagelist.py:724
+#, python-format
+msgid "Are you sure you want to permanently delete the volume %s?"
+msgstr "तुम्हाला नक्की खंड %s नेहमी करीता काढूण टाकायचे?"
+
+#: ../virtManager/storagelist.py:737
+#, python-format
+msgid "Error refreshing volume '%s'"
+msgstr "वॉल्युम '%s' पुनःताजे करतेवेळी त्रुटी"
 
 #: ../virtManager/systray.py:118
 msgid "_Show Virtual Machine Manager"
@@ -3556,11 +3462,28 @@ msgstr "वर्च्युअल मशीन व्यवस्थापक"
 msgid "No virtual machines"
 msgstr "वर्च्युअल मशीनस् आढळले नाही"
 
+#: ../virtManager/viewers.py:325
+#, python-format
+msgid ""
+"Unable to provide requested credentials to the VNC server.\n"
+" The credential type %s is not supported"
+msgstr ""
+
+#: ../virtManager/viewers.py:442
+#, python-format
+msgid "Error opening socket path '%s': %s"
+msgstr "सॉकेट मार्ग '%s' उघडतेवेळी त्रुटी: %s"
+
+#: ../virtManager/viewers.py:447
+#, python-format
+msgid "Error opening socket path '%s'"
+msgstr "सॉकेट मार्ग '%s' उघडतेवेळी त्रुटी"
+
 #: ../virtManager/vmmenu.py:73
 msgid "_Reboot"
 msgstr "रिबूट (_R)"
 
-#: ../virtManager/vmmenu.py:74 ../virtManager/vmmenu.py:102
+#: ../virtManager/vmmenu.py:74 ../virtManager/vmmenu.py:110
 msgid "_Shut Down"
 msgstr "पूर्णपणे बंद करा (_S)"
 
@@ -3576,23 +3499,27 @@ msgstr "जबरनरित्या बंद करा (_F)"
 msgid "Sa_ve"
 msgstr "साठवा (_v)"
 
-#: ../virtManager/vmmenu.py:100 ../ui/manager.ui.h:23
+#: ../virtManager/vmmenu.py:100
+msgid "Hypervisor does not support domain reset."
+msgstr ""
+
+#: ../virtManager/vmmenu.py:108 ../ui/manager.ui.h:23
 msgid "_Pause"
 msgstr "थांबा(_P)"
 
-#: ../virtManager/vmmenu.py:101
+#: ../virtManager/vmmenu.py:109
 msgid "R_esume"
 msgstr "पुनः सुरू करा (_e)"
 
-#: ../virtManager/vmmenu.py:106
+#: ../virtManager/vmmenu.py:114
 msgid "Clone..."
 msgstr "क्लोन..."
 
-#: ../virtManager/vmmenu.py:107
+#: ../virtManager/vmmenu.py:115
 msgid "Migrate..."
 msgstr "माइग्रेट व्हा..."
 
-#: ../virtManager/vmmenu.py:108
+#: ../virtManager/vmmenu.py:116
 msgid "_Delete"
 msgstr "नष्ट करा (_D)"
 
@@ -3675,31 +3602,26 @@ msgstr "बहुस्टोरेज VMDK डिस्क्रिप्टर
 msgid "No displayName defined in '%s'"
 msgstr "'%s' मध्ये डिस्पले नाव निर्देशीत केले नाही"
 
-#: ../virtinst/capabilities.py:75
-#, python-format
-msgid "Unknown CPU model '%s'"
-msgstr "अपरिचीत CPU मॉडेल '%s'"
-
-#: ../virtinst/capabilities.py:692
+#: ../virtinst/capabilities.py:462
 #, python-format
 msgid "for arch '%s'"
 msgstr "आर्क '%s' करीता"
 
-#: ../virtinst/capabilities.py:696
+#: ../virtinst/capabilities.py:466
 #, python-format
 msgid "virtualization type '%s'"
 msgstr "वर्च्युअलाइजेशन प्रकार '%s'"
 
-#: ../virtinst/capabilities.py:698
+#: ../virtinst/capabilities.py:468
 msgid "any virtualization options"
 msgstr "कोणतेही वर्च्युअलाइजेशन पर्याय"
 
-#: ../virtinst/capabilities.py:700
+#: ../virtinst/capabilities.py:470
 #, python-format
 msgid "Host does not support %(virttype)s %(arch)s"
 msgstr "यजमान %(virttype)s %(arch)s करीता समर्थन पुरवत नाही"
 
-#: ../virtinst/capabilities.py:708
+#: ../virtinst/capabilities.py:478
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s%(machine)s for virtualization "
@@ -3708,20 +3630,20 @@ msgstr ""
 "यजमान डोमेन प्रकार %(domain)s%(machine)s वर्च्युअलाइजेशन प्रकार '%(virttype)s' आर्क "
 "'%(arch)s' करीता समर्थन पुरवत नाही"
 
-#: ../virtinst/cli.py:117
+#: ../virtinst/cli.py:150
 msgid "See man page for examples and full option syntax."
 msgstr "उदाहरण व संपूर्ण पर्यायी मांडणीकरिता man पृष्ठ पहा."
 
-#: ../virtinst/cli.py:119
+#: ../virtinst/cli.py:152
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 "उपलब्ध उपपर्याय पहाण्याकरिता '--option=?' किंवा '--option help' यांचा वापर करा"
 
-#: ../virtinst/cli.py:285
+#: ../virtinst/cli.py:318
 msgid "Exiting at user request."
 msgstr "वापरकर्ता विनंतीला बाहेर पडत आहे."
 
-#: ../virtinst/cli.py:297
+#: ../virtinst/cli.py:330
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -3734,25 +3656,22 @@ msgstr ""
 "  %s\n"
 "नाहीतर, कृपया इंस्टॉलेशन पुनःसुरू करा."
 
-#: ../virtinst/cli.py:315
-msgid "--name is required"
-msgstr "--name आवश्यक आहे"
+#: ../virtinst/cli.py:347
+#, python-format
+msgid " (Use --check %s=off or --check all=off to override)"
+msgstr ""
 
-#: ../virtinst/cli.py:324
-msgid " (Use --force to override)"
-msgstr " (ओवराराइडकरिता --force चा वापर करा)"
-
-#: ../virtinst/cli.py:334
+#: ../virtinst/cli.py:363
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "यामुळे अस्तित्वातील मार्ग '%s' खोडून पुनःलिहले जाईल"
 
-#: ../virtinst/cli.py:345
+#: ../virtinst/cli.py:374
 #, python-format
 msgid "Disk %s is already in use by other guests %s."
 msgstr "डिस्क \"%s\" आधीपासूनच इतर अतिथी %s तर्फे वापरले जात आहे."
 
-#: ../virtinst/cli.py:361
+#: ../virtinst/cli.py:391
 #, python-format
 msgid ""
 "%s may not be accessible by the hypervisor. You will need to grant the '%s' "
@@ -3761,7 +3680,7 @@ msgstr ""
 "%s कदाचित हायपरवाइजमार्फत प्रवेशजोगी नसेल. तुम्हाला '%s' वापरकर्ता शोध परवानगी ग्रांट "
 "करावे लागेल, खालील डिरेक्ट्रीजकरिता: %s"
 
-#: ../virtinst/cli.py:432
+#: ../virtinst/cli.py:464
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -3769,50 +3688,51 @@ msgstr ""
 "ग्राफिकल कंसोलसह जोडणी अशक्य: virt-viewer इंस्टॉल केले नाही. कृपया 'virt-viewer' संकुल "
 "इंस्टॉल करा."
 
-#: ../virtinst/cli.py:438
+#: ../virtinst/cli.py:470
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: ../virtinst/cli.py:452 ../virtinst/cli.py:455
+#: ../virtinst/cli.py:490 ../virtinst/cli.py:493
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "libvirt URI सह हायपरवाइजरशी जोडणी करा"
 
-#: ../virtinst/cli.py:471
+#: ../virtinst/cli.py:509
 msgid "Don't automatically try to connect to the guest console"
 msgstr "अतिथी कंसोलशी स्वयंरित्या जोडणी करू नका"
 
-#: ../virtinst/cli.py:475
+#: ../virtinst/cli.py:513
 msgid "Don't boot guest after completing install."
 msgstr "इंस्टॉल पूर्ण झाल्यानंतर अतिथी बूट करू नका."
 
-#: ../virtinst/cli.py:479
+#: ../virtinst/cli.py:517
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr "नाव टकराव तपासू नका, समान नाव असणाऱ्या अतिथीला खोडून पुन्हा लिहा."
 
-#: ../virtinst/cli.py:484
+#: ../virtinst/cli.py:524
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "निर्मीत डोमेन XML ची छपाई करा, अतिथी निर्माण ऐवजी."
 
-#: ../virtinst/cli.py:488
-msgid ""
-"Print XML of a specific install step (1, 2, 3, all) rather than define the "
-"guest."
-msgstr "अतिथी ठरवण्याऐवजी ठराविक इंस्टॉल स्टेप (१, २, ३, सर्व) यांचे XMLची छपाई करा."
-
-#: ../virtinst/cli.py:493
+#: ../virtinst/cli.py:543
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr "इंस्टॉल प्रक्रिया चालवा, परंतु साधन निर्माण करू नका किंवा अतिथी निश्चित करू नका."
 
-#: ../virtinst/cli.py:497
+#: ../virtinst/cli.py:548
+msgid ""
+"Enable or disable validation checks. Example:\n"
+"--check path_in_use=off\n"
+"--check all=off"
+msgstr ""
+
+#: ../virtinst/cli.py:552
 msgid "Suppress non-error output"
 msgstr "विना-त्रुटी आउटुपट दाबतो"
 
-#: ../virtinst/cli.py:499
+#: ../virtinst/cli.py:554
 msgid "Print debugging information"
 msgstr "डिबगिंग माहितीची छपाई करा"
 
-#: ../virtinst/cli.py:504
+#: ../virtinst/cli.py:559
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -3822,7 +3742,7 @@ msgstr ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 
-#: ../virtinst/cli.py:511
+#: ../virtinst/cli.py:566
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
@@ -3832,7 +3752,7 @@ msgstr ""
 "--memory 1024 (in MiB)\n"
 "--memory 512,maxmemory=1024"
 
-#: ../virtinst/cli.py:521
+#: ../virtinst/cli.py:576
 msgid ""
 "Number of vcpus to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -3844,7 +3764,7 @@ msgstr ""
 "--vcpus 5,maxcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2,"
 
-#: ../virtinst/cli.py:530
+#: ../virtinst/cli.py:585
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -3852,7 +3772,7 @@ msgstr ""
 "CPU प्रतिकृती आणि गुणविशेष. उदा:\n"
 "--cpu coreduo,+x2apic\n"
 
-#: ../virtinst/cli.py:541
+#: ../virtinst/cli.py:596
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics vnc\n"
@@ -3866,7 +3786,7 @@ msgstr ""
 "--graphics none\n"
 "--graphics vnc,password=foobar,port=5910,keymap=ja"
 
-#: ../virtinst/cli.py:550
+#: ../virtinst/cli.py:605
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -3876,7 +3796,7 @@ msgid ""
 "--network help"
 msgstr ""
 
-#: ../virtinst/cli.py:560
+#: ../virtinst/cli.py:615
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=ich9-ehci1"
@@ -3884,27 +3804,34 @@ msgstr ""
 "अतिथी कंट्रोलर साधन संरचीत करा. उदा:\n"
 "--controller type=usb,model=ich9-ehci1"
 
-#: ../virtinst/cli.py:563
+#: ../virtinst/cli.py:618
+msgid ""
+"Configure a guest input device. Ex:\n"
+"--input tablet\n"
+"--input keyboard,bus=usb"
+msgstr ""
+
+#: ../virtinst/cli.py:622
 msgid "Configure a guest serial device"
 msgstr "अतिथी सिरिअल साधन संरचीत करा"
 
-#: ../virtinst/cli.py:565
+#: ../virtinst/cli.py:624
 msgid "Configure a guest parallel device"
 msgstr "अतिथी पॅरलल साधन संरचीत करा"
 
-#: ../virtinst/cli.py:567
+#: ../virtinst/cli.py:626
 msgid "Configure a guest communication channel"
 msgstr "अतिथी संपर्क वाहिनी संरचीत करा"
 
-#: ../virtinst/cli.py:569
+#: ../virtinst/cli.py:628
 msgid "Configure a text console connection between the guest and host"
 msgstr "अतिथी व यजमान अंतर्गत मजकूर कंसोल जोडणी संरचीत करा"
 
-#: ../virtinst/cli.py:572
+#: ../virtinst/cli.py:631
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
-#: ../virtinst/cli.py:575
+#: ../virtinst/cli.py:634
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -3914,19 +3841,19 @@ msgstr ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 
-#: ../virtinst/cli.py:586
+#: ../virtinst/cli.py:645
 msgid "Configure guest sound device emulation"
 msgstr "अतिथी ध्वनी साधन एम्युलेशन संरचीत करा"
 
-#: ../virtinst/cli.py:596
+#: ../virtinst/cli.py:655
 msgid "Configure a guest watchdog device"
 msgstr "अतिथी वॉचडॉग साधन संरचीत करा"
 
-#: ../virtinst/cli.py:598
+#: ../virtinst/cli.py:657
 msgid "Configure guest video hardware."
 msgstr "अतिथी व्हिडिओ हार्डवेअर संरचीत करा."
 
-#: ../virtinst/cli.py:600
+#: ../virtinst/cli.py:659
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -3934,7 +3861,7 @@ msgstr ""
 "अतिथी स्मार्टकार्ड साधन संरचीत करा. उदा:\n"
 "--smartcard mode=passthrough"
 
-#: ../virtinst/cli.py:603
+#: ../virtinst/cli.py:662
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -3942,7 +3869,7 @@ msgstr ""
 "अतिथी पुनःनिर्देशन साधन संरचीत करा. उदा:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: ../virtinst/cli.py:606
+#: ../virtinst/cli.py:665
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -3950,7 +3877,7 @@ msgstr ""
 "अतिथी memballoon साधन संरचीत करा. उदा:\n"
 "--memballoon model=virtio"
 
-#: ../virtinst/cli.py:609
+#: ../virtinst/cli.py:668
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -3958,7 +3885,7 @@ msgstr ""
 "अतिथी TPM साधन संरचीत करा. उदा:\n"
 "--tpm /dev/tpm"
 
-#: ../virtinst/cli.py:612
+#: ../virtinst/cli.py:671
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
@@ -3966,7 +3893,7 @@ msgstr ""
 "अतिथी RNG साधन संरचीत करा. उदा:\n"
 "--rng /dev/random"
 
-#: ../virtinst/cli.py:615
+#: ../virtinst/cli.py:674
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -3974,23 +3901,23 @@ msgstr ""
 "अतिथी पॅनिक साधन संरचीत करा. उदा:\n"
 "--panic default"
 
-#: ../virtinst/cli.py:621
+#: ../virtinst/cli.py:680
 msgid "Set domain security driver configuration."
 msgstr "डोमेन सुरक्षा ड्राइव्हर संरचना सेट करा."
 
-#: ../virtinst/cli.py:623
+#: ../virtinst/cli.py:682
 msgid "Tune NUMA policy for the domain process."
 msgstr "डोमेन प्रोसेसकरीता NUMA धोरण ट्युन करा."
 
-#: ../virtinst/cli.py:625
+#: ../virtinst/cli.py:684
 msgid "Tune memory policy for the domain process."
 msgstr "डोमेन प्रोसेसकरिता मेमरि धोरण ट्युन करा."
 
-#: ../virtinst/cli.py:627
+#: ../virtinst/cli.py:686
 msgid "Tune blkio policy for the domain process."
 msgstr "डोमेन प्रोसेसकरिता blkio धोरण ट्युन करा."
 
-#: ../virtinst/cli.py:629
+#: ../virtinst/cli.py:688
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -3998,7 +3925,7 @@ msgstr ""
 "डोमेन प्रोसेसकरिता मेमरि बॅकिंग धोणर सेट करा. उदा:\n"
 "--memorybacking hugepages=on"
 
-#: ../virtinst/cli.py:632
+#: ../virtinst/cli.py:691
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -4008,7 +3935,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,eoi=on"
 
-#: ../virtinst/cli.py:636
+#: ../virtinst/cli.py:695
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -4016,19 +3943,19 @@ msgstr ""
 "डोमेन <clock> XML सेट करा. उदा:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: ../virtinst/cli.py:639
+#: ../virtinst/cli.py:698
 msgid "Configure VM power management features"
 msgstr "VM पावर व्यवस्थापन गुणविशेष संरचीत करा"
 
-#: ../virtinst/cli.py:641
+#: ../virtinst/cli.py:700
 msgid "Configure VM lifecycle management policy"
 msgstr "VM चक्र व्वयस्थापन धोरण संरचीत करा"
 
-#: ../virtinst/cli.py:643
+#: ../virtinst/cli.py:702
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "VM स्रोत विभाजन संरचीत करा (cgroups)"
 
-#: ../virtinst/cli.py:648
+#: ../virtinst/cli.py:707
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -4038,7 +3965,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (कंटेनर्सकरिता)"
 
-#: ../virtinst/cli.py:652
+#: ../virtinst/cli.py:711
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
@@ -4046,7 +3973,7 @@ msgstr ""
 "LXC कंटेनरकरिता वापरकर्ता नेमस्पेस सुरू करा. उदा:\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
 
-#: ../virtinst/cli.py:661
+#: ../virtinst/cli.py:720
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -4055,52 +3982,52 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: ../virtinst/cli.py:691
+#: ../virtinst/cli.py:750
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s 'होय' किंवा 'नाही' पाहिजे"
 
-#: ../virtinst/cli.py:760
+#: ../virtinst/cli.py:822
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: ../virtinst/cli.py:823
+#: ../virtinst/cli.py:889
 #, python-format
 msgid "Unknown options %s"
 msgstr "अपरिचीत पर्याय %s"
 
-#: ../virtinst/cli.py:1009 ../virtinst/cli.py:1042
+#: ../virtinst/cli.py:1075 ../virtinst/cli.py:1108
 #, python-format
 msgid "Error: --%(cli_arg_name)s %(options)s: %(err)s"
 msgstr "त्रुटी: --%(cli_arg_name)s %(options)s: %(err)s"
 
-#: ../virtinst/cli.py:1531
+#: ../virtinst/cli.py:1644
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size': %s करीता अयोग्य मूल्य"
 
-#: ../virtinst/cli.py:1544
+#: ../virtinst/cli.py:1657
 #, python-format
 msgid "Unknown '%s' value '%s'"
 msgstr "अपरिचीत '%s' मूल्य '%s'"
 
-#: ../virtinst/cli.py:1561
+#: ../virtinst/cli.py:1674
 msgid "Cannot specify more than 1 storage path"
 msgstr "१ पेक्षा जास्त स्टोरेज मार्ग निर्देशीत करणे अशक्य"
 
-#: ../virtinst/cli.py:1568
+#: ../virtinst/cli.py:1681
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "स्टोरेज खंडला vol=poolname/volname असे निर्देशीत करा"
 
-#: ../virtinst/cli.py:1697
+#: ../virtinst/cli.py:1810
 #, python-format
 msgid "Didn't match keymap '%s' in keytable!"
 msgstr "किमॅप '%s' जुळले नाही, keytable! मध्ये"
 
-#: ../virtinst/cli.py:1971
+#: ../virtinst/cli.py:2105
 #, python-format
 msgid "%(devtype)s type '%(chartype)s' does not support '%(optname)s' option."
 msgstr ""
@@ -4147,7 +4074,7 @@ msgstr "क्लोनजोगी साधनांसह डोमेन थ
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr "अस्तित्वातील स्टोरेज वॉल्युमकरीता क्लोन करणे सध्या समर्थीत नाही: '%s'"
 
-#: ../virtinst/cloner.py:371
+#: ../virtinst/cloner.py:373
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -4156,26 +4083,26 @@ msgstr ""
 "नवीन निर्देशीत मार्गऐवजी एकापेक्षाजास्त डिस्क्स क्लोन करा. (%(passed)d निर्देशीत, "
 "%(need)d आवश्यक"
 
-#: ../virtinst/cloner.py:383
+#: ../virtinst/cloner.py:385
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr "मतभेद टाळण्याकरीता, ग्राफिक्स साधन पोर्टला autoport करीता ठरवत आहे."
 
-#: ../virtinst/cloner.py:546
+#: ../virtinst/cloner.py:548
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "मूळ डिस्क माहिती ओळखणे अशक्य: %s"
 
-#: ../virtinst/cloner.py:587
+#: ../virtinst/cloner.py:589
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "डोमेन '%s' आढळले नाही."
 
-#: ../virtinst/cpu.py:94
+#: ../virtinst/cpu.py:98
 msgid "No host CPU reported in capabilities"
 msgstr "क्षमतामध्ये यजमान CPU कळवले नाही"
 
-#: ../virtinst/device.py:72 ../virtinst/deviceredirdev.py:46
+#: ../virtinst/device.py:72 ../virtinst/deviceredirdev.py:45
 #, python-format
 msgid "Could not determine or unsupported format of '%s'"
 msgstr "'%s'चे रूपण शोधणे अशक्य किंवा असमर्थीत"
@@ -4299,17 +4226,17 @@ msgstr "अतिथीमधील virtio पोर्टचे Sysfs नाव
 
 #. Trying to change perms on vfat at least doesn't work
 #. but also doesn't seem to error. Try and detect that
-#: ../virtinst/devicedisk.py:304
+#: ../virtinst/devicedisk.py:307
 #, python-format
 msgid "Permissions on '%s' did not stick"
 msgstr "'%s' वरील परवानगी लागू झाली नाही"
 
-#: ../virtinst/devicedisk.py:414
+#: ../virtinst/devicedisk.py:417
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr ""
 
-#: ../virtinst/devicedisk.py:419
+#: ../virtinst/devicedisk.py:422
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
@@ -4318,34 +4245,34 @@ msgstr ""
 "मार्ग '%s' करिता स्टोरेज कसे निर्माण करायचे, ते माहिती नाही. libvirt APIs चा वापर "
 "करा आणि पॅरेंट डिरेक्ट्रीला पहिले पूल करण्यासाठी व्यवस्थापीत करा."
 
-#: ../virtinst/devicedisk.py:441
+#: ../virtinst/devicedisk.py:444
 msgid "Format attribute not supported for this volume type"
 msgstr "ह्या वॉल्युम प्रकारकरीता रूपण गुणधर्म समर्थीत नाही"
 
-#: ../virtinst/devicedisk.py:849
+#: ../virtinst/devicedisk.py:853
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "साधन प्रकार '%s' ला मार्ग आवश्यक"
 
-#: ../virtinst/devicedisk.py:856
+#: ../virtinst/devicedisk.py:860
 #, python-format
 msgid "The path '%s' must be a file or a device, not a directory"
 msgstr "मार्ग '%s' फाइल किंवा साधन पाहिजे, डिरेक्ट्रि नसावी"
 
-#: ../virtinst/devicedisk.py:865
+#: ../virtinst/devicedisk.py:869
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "विना-अस्तित्वातील मार्ग '%s' करिता स्टोरेज निर्माण बाबी निर्देशीत करा."
 
 #. This basically means that we either chose full
 #. controller or didn't add any
-#: ../virtinst/devicedisk.py:1035
+#: ../virtinst/devicedisk.py:1039
 #, python-format
 msgid "Controller number %d for disk of type %s has no empty slot to use"
 msgstr ""
 "कंट्रोलर क्रमांक %d, डिस्क प्रकार %s करिता, याकडे वापरकरिता रिक्त स्लॉट उपलब्ध नाही"
 
-#: ../virtinst/devicedisk.py:1038
+#: ../virtinst/devicedisk.py:1042
 #, python-format
 msgid "Only %s disks of type '%s' are supported"
 msgstr "फक्त %s डिस्क्स, '%s' प्रकारचे समर्थीत आहेत"
@@ -4373,19 +4300,19 @@ msgstr "वर्च्युअल नेटवर्किंग"
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr "MAC पत्ता '%s' आधिपासूनच इतर वर्च्युअल मशीनतर्फे वापरात आहे."
 
-#: ../virtinst/devicepanic.py:36
+#: ../virtinst/devicepanic.py:35
 msgid "ISA"
 msgstr "ISA"
 
-#: ../virtinst/devicerng.py:44
+#: ../virtinst/devicerng.py:43
 msgid "Random"
 msgstr "विनाक्रम"
 
-#: ../virtinst/devicerng.py:46
+#: ../virtinst/devicerng.py:45
 msgid "Entropy Gathering Daemon"
 msgstr "एंट्रोपि गोळा करणारे डिमन"
 
-#: ../virtinst/devicetpm.py:44
+#: ../virtinst/devicetpm.py:43
 msgid "Passthrough device"
 msgstr "पासथ्रु साधन"
 
@@ -4506,43 +4433,71 @@ msgstr "क्षमता फक्त <= 1 कप्पा दाखवता�
 msgid "Could not find any usable NUMA cell/cpu combinations."
 msgstr "वापरण्याजोगी NUMA कप्पा किंवा cpu जोडणी आढळले नाही."
 
-#: ../virtinst/guest.py:73
+#: ../virtinst/domcapabilities.py:131
+msgid "BIOS"
+msgstr ""
+
+#: ../virtinst/domcapabilities.py:137
+#, python-format
+msgid "UEFI %(arch)s: %(path)s"
+msgstr ""
+
+#: ../virtinst/domcapabilities.py:140
+#, python-format
+msgid "Custom: %(path)s"
+msgstr ""
+
+#: ../virtinst/guest.py:74
 #, python-format
 msgid "Domain named %s already exists!"
 msgstr "%s नावाचे डोमेन आधिपासूनच अस्तित्वात आहे!"
 
-#: ../virtinst/guest.py:84
+#: ../virtinst/guest.py:85
 #, python-format
 msgid "Could not remove old vm '%s': %s"
 msgstr "जुण्या vm '%s': %s ला काढून टाकणे अशक्य"
 
-#: ../virtinst/guest.py:90
+#: ../virtinst/guest.py:91
 msgid "Guest"
 msgstr "अतिथी"
 
-#: ../virtinst/guest.py:98
+#: ../virtinst/guest.py:99
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "अतिथी नाव '%s' आधिपासूनच वापरणीत आहे."
 
-#: ../virtinst/guest.py:219
+#: ../virtinst/guest.py:232
 #, python-format
 msgid "Distro '%s' does not exist in our dictionary"
 msgstr "डिस्ट्रो '%s' आमच्या शब्दकोषमध्ये अस्तित्वात नाही"
 
-#: ../virtinst/guest.py:388
+#: ../virtinst/guest.py:396
 msgid "Domain has already been started!"
 msgstr "डोमेन आधिपासूनच सुरू केले!"
 
-#: ../virtinst/guest.py:438
+#: ../virtinst/guest.py:447
 msgid "Creating domain..."
 msgstr "डोमेन निर्माण करत आहे..."
 
-#: ../virtinst/guest.py:440
+#: ../virtinst/guest.py:449
 msgid "Starting domain..."
 msgstr "डोमेन सुरू करत आहे..."
 
-#: ../virtinst/guest.py:870
+#: ../virtinst/guest.py:533
+msgid "Libvirt version does not support UEFI."
+msgstr ""
+
+#: ../virtinst/guest.py:537
+#, python-format
+msgid "Don't know how to setup UEFI for arch '%s'"
+msgstr ""
+
+#: ../virtinst/guest.py:542
+#, python-format
+msgid "Did not find any UEFI binary path for arch '%s'"
+msgstr ""
+
+#: ../virtinst/guest.py:922
 #, python-format
 msgid "Duplicate address for devices %s and %s"
 msgstr "साधन %s आणि %s करिता ड्युप्लिकेट पत्ता"
@@ -4687,186 +4642,189 @@ msgstr "वेगळे नेटवर्क, फक्त आंतरिक �
 msgid "Name '%s' already in use by another network."
 msgstr "नाव '%s' आधिपासूनच दुसऱ्या नेटवर्कतर्फे वापरणीत आहे."
 
-#: ../virtinst/nodedev.py:73
+#: ../virtinst/nodedev.py:68
 msgid "Connection does not support host device enumeration."
 msgstr "जोडणी यजमान साधन एन्युमरेशनकरीता समर्थन पुरवत नाही."
 
-#: ../virtinst/nodedev.py:86
+#: ../virtinst/nodedev.py:81
 #, python-format
 msgid "Did not find node device matching '%s': %s"
 msgstr ""
 
-#: ../virtinst/nodedev.py:135
+#: ../virtinst/nodedev.py:134
 msgid "System"
 msgstr "प्रणाली"
 
-#: ../virtinst/nodedev.py:152
+#: ../virtinst/nodedev.py:151
 #, python-format
 msgid "Interface %s"
 msgstr "इंटरफेस %s"
 
-#: ../virtinst/nodedev.py:372
+#: ../virtinst/nodedev.py:371
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s एकापेक्षाजास्त नोड साधनांशी परस्पर आहे"
 
-#: ../virtinst/nodedev.py:375
+#: ../virtinst/nodedev.py:374
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' करीता जुळणारे नोड साधन आढळले नाही"
 
-#: ../virtinst/storage.py:66
+#: ../virtinst/snapshot.py:77
+msgid "A name must be specified."
+msgstr "नाव निर्देशीत पाहिजे."
+
+#: ../virtinst/storage.py:65
 msgid "Storage object"
 msgstr "स्टोरेज ऑब्जेक्ट"
 
-#: ../virtinst/storage.py:76
+#: ../virtinst/storage.py:75
 msgid "Name for the storage object."
 msgstr "स्टोरेज ऑब्जेक्टकरीता नाव."
 
-#: ../virtinst/storage.py:116
+#: ../virtinst/storage.py:115
 msgid "Filesystem Directory"
 msgstr "फाइलप्रणाली डिरेक्ट्री"
 
-#: ../virtinst/storage.py:117
+#: ../virtinst/storage.py:116
 msgid "Pre-Formatted Block Device"
 msgstr "पूर्व-रूपण ब्लॉक साधन"
 
-#: ../virtinst/storage.py:118
+#: ../virtinst/storage.py:117
 msgid "Network Exported Directory"
 msgstr "नेटवर्क एक्सपोर्टेड डिरेक्ट्री"
 
-#: ../virtinst/storage.py:119
+#: ../virtinst/storage.py:118
 msgid "LVM Volume Group"
 msgstr "LVM वॉल्युम ग्रुप"
 
-#: ../virtinst/storage.py:120
+#: ../virtinst/storage.py:119
 msgid "Physical Disk Device"
 msgstr "फिजिकल डिस्क साधन"
 
-#: ../virtinst/storage.py:121
+#: ../virtinst/storage.py:120
 msgid "iSCSI Target"
 msgstr "iSCSI लक्ष्य"
 
-#: ../virtinst/storage.py:122
+#: ../virtinst/storage.py:121
 msgid "SCSI Host Adapter"
 msgstr "SCSI यजमान अडॅप्टर"
 
-#: ../virtinst/storage.py:123
+#: ../virtinst/storage.py:122
 msgid "Multipath Device Enumerator"
 msgstr "मल्टिपाथ साधन एम्युलेटर"
 
-#: ../virtinst/storage.py:124
+#: ../virtinst/storage.py:123
 msgid "Gluster Filesystem"
 msgstr "ग्लस्टर फाइलप्रणाली"
 
-#: ../virtinst/storage.py:125
+#: ../virtinst/storage.py:124
 msgid "RADOS Block Device/Ceph"
 msgstr ""
 
-#: ../virtinst/storage.py:126
+#: ../virtinst/storage.py:125
 msgid "Sheepdog Filesystem"
 msgstr ""
 
-#: ../virtinst/storage.py:225
+#: ../virtinst/storage.py:229
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "पूर्वनिर्धारीत संचयन संग्रह '%s' बनवू शकले नाही: %s"
 
-#: ../virtinst/storage.py:297
+#: ../virtinst/storage.py:304
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "नाव '%s' आधिपासूनच इतर पूलतर्फे वापरणीत आहे."
 
-#: ../virtinst/storage.py:371
+#: ../virtinst/storage.py:378
 msgid "Storage device type the pool will represent."
 msgstr "पूलतर्फे प्रस्तुत केलेले स्टोरेज साधन प्रकार."
 
-#: ../virtinst/storage.py:383
+#: ../virtinst/storage.py:390
 msgid "iSCSI initiator qualified name"
 msgstr "iSCSI इनिशिएटर कॉलिफाइड नाव"
 
-#: ../virtinst/storage.py:388
+#: ../virtinst/storage.py:395
 msgid "Name of the Volume Group"
 msgstr "वॉल्युम ग्रुपचे नाव"
 
-#: ../virtinst/storage.py:453
+#: ../virtinst/storage.py:460
 msgid "Hostname is required"
 msgstr "यजमाननाव आवश्यक"
 
-#: ../virtinst/storage.py:457
+#: ../virtinst/storage.py:464
 msgid "Source path is required"
 msgstr "स्रोत मार्ग आवश्यक"
 
-#: ../virtinst/storage.py:470
+#: ../virtinst/storage.py:477
 msgid "Must explicitly specify source path if building pool"
 msgstr "संग्रह बांधणीवेळी सोअर्स मार्ग विशेषरित्या निर्देशीत करा"
 
-#: ../virtinst/storage.py:474
+#: ../virtinst/storage.py:481
 msgid "Must explicitly specify disk format if formatting disk device."
 msgstr "डिस्क साधनाचे रूपण करताना डिस्क रूपण ठराविकपणे निर्देशीत करा."
 
-#: ../virtinst/storage.py:487
+#: ../virtinst/storage.py:494
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "स्टोरेज संग्रह ठरवले नाही: %s"
 
-#: ../virtinst/storage.py:494
+#: ../virtinst/storage.py:501
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "स्टोरेज संग्रह: %s बांधणी अशक्य"
 
-#: ../virtinst/storage.py:500
+#: ../virtinst/storage.py:507
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "स्टोरेज संग्रह सुरू करणे अशक्य: %s"
 
-#: ../virtinst/storage.py:506
+#: ../virtinst/storage.py:513
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "संग्रह स्वयंसुरवात फ्लॅग सेट करणे अशक्य: %s"
 
-#: ../virtinst/storage.py:575
+#: ../virtinst/storage.py:582
 #, python-format
 msgid "pool '%s' must be active."
 msgstr "संग्रह '%s' सक्रीय पाहिजे."
 
-#: ../virtinst/storage.py:589
+#: ../virtinst/storage.py:596
 msgid "input_vol must be a virStorageVol"
 msgstr "input_vol virStorageVol पाहिजे"
 
-#: ../virtinst/storage.py:593
+#: ../virtinst/storage.py:600
 msgid ""
 "Creating storage from an existing volume is not supported by this libvirt "
 "version."
 msgstr "अस्तित्वातील वॉल्युमपासून स्टोरेज निर्माण या libvirt आवृत्तीतर्फे समर्थीत नाही."
 
-#: ../virtinst/storage.py:598
+#: ../virtinst/storage.py:605
 msgid "virStorageVolume pointer to clone/use as input."
 msgstr "क्लोन किंवा वापरण्याजोगी इंपुट म्हणून virStorageVolume पॉइंटर."
 
-#: ../virtinst/storage.py:605
-#, fuzzy
+#: ../virtinst/storage.py:613
 msgid ""
 "Creating storage by btrfs COW copy is not supported by this libvirt version."
-msgstr "अस्तित्वातील वॉल्युमपासून स्टोरेज निर्माण या libvirt आवृत्तीतर्फे समर्थीत नाही."
+msgstr ""
 
-#: ../virtinst/storage.py:634
+#: ../virtinst/storage.py:644
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "नाव '%s' आधिपासूनच इतर वॉल्युमतर्फे वापरणीत आहे."
 
-#: ../virtinst/storage.py:734
+#: ../virtinst/storage.py:744
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr "स्पार्स लॉजिकल वॉल्युम्स समर्थीत नाही, वाटपला क्षमताकरीता ठरवत आहे"
 
-#: ../virtinst/storage.py:771
+#: ../virtinst/storage.py:782
 #, python-format
 msgid "Allocating '%s'"
 msgstr "'%s'चे वाटप करत आहे"
 
-#: ../virtinst/storage.py:841
+#: ../virtinst/storage.py:852
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
@@ -4875,7 +4833,7 @@ msgstr ""
 "वॉल्युम निर्माण करण्यासाठी स्टोरेज संग्रहमध्ये अतिरिक्त मोकळी जागा नाही. (%d M विनंतीकृत "
 "वाटप > %d M उपलब्ध)"
 
-#: ../virtinst/storage.py:847
+#: ../virtinst/storage.py:858
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -4940,11 +4898,11 @@ msgstr "वर्ट प्रकार '%s' करीता कर्नल म
 msgid "Could not find a boot iso path for this tree."
 msgstr "या ट्रीकरीता बूट iso मार्ग शोधणे अशक्य."
 
-#: ../virtinst/util.py:124
+#: ../virtinst/util.py:123
 msgid "UUID must be a string."
 msgstr "UUID स्ट्रिंग पाहिजे."
 
-#: ../virtinst/util.py:132
+#: ../virtinst/util.py:131
 msgid ""
 "UUID must be a 32-digit hexadecimal number. It may take the form xxxxxxxx-"
 "xxxx-xxxx-xxxx-xxxxxxxxxxxx or may omit hyphens altogether."
@@ -4952,31 +4910,36 @@ msgstr ""
 "UUID ३२-डिजिट हेक्जाडेसिमल संख्या पाहिजे. त्याचे रूप  xxxxxxxx-xxxx-xxxx-xxxx-"
 "xxxxxxxxxxxx असू शकते किंवा हायफेन वगळले तरी चालेल."
 
-#: ../virtinst/util.py:150
+#: ../virtinst/util.py:147
+#, python-format
+msgid "A name must be specified for the %s"
+msgstr ""
+
+#: ../virtinst/util.py:152
 #, python-format
 msgid "%s name '%s' can not contain '%s' character."
 msgstr "%s नाव '%s' मध्ये '%s' अक्षर समाविष्टीत असू शकत नाही."
 
-#: ../virtinst/util.py:159
+#: ../virtinst/util.py:161
 msgid "MAC address must be a string."
 msgstr "MAC पत्ता स्ट्रिंग पाहिजे."
 
-#: ../virtinst/util.py:163
+#: ../virtinst/util.py:165
 #, python-format
 msgid "MAC address must be of the format AA:BB:CC:DD:EE:FF, was '%s'"
 msgstr "MAC पत्ताचे रूपण AA:BB:CC:DD:EE:FF पाहिजे, '%s' होते"
 
-#: ../virtinst/util.py:216
+#: ../virtinst/util.py:218
 msgid "Name generation range exceeded."
 msgstr "नाव निर्माण व्याप्ति वाढली."
 
 #. 11 = typical num of fields in the file
-#: ../virtinst/util.py:299
+#: ../virtinst/util.py:268
 #, python-format
 msgid "Invalid line length while parsing %s."
 msgstr "%s वाचतेवेळी अवैध रेषची लांबी."
 
-#: ../virtinst/util.py:301
+#: ../virtinst/util.py:270
 #, python-format
 msgid "Defaulting bridge to xenbr%d"
 msgstr "ब्रिजला xenbr%d करीता पूर्वनिर्धारित करत आहे"
@@ -5016,7 +4979,7 @@ msgstr "बस प्रकार (_B):"
 msgid "Stor_age format:"
 msgstr ""
 
-#: ../ui/addhardware.ui.h:6 ../ui/details.ui.h:122
+#: ../ui/addhardware.ui.h:6 ../ui/details.ui.h:123
 msgid "Cac_he mode:"
 msgstr "कॅशे मोड (_h):"
 
@@ -5045,7 +5008,7 @@ msgstr "MAC पत्ता गुणविशेष"
 msgid "_MAC address:"
 msgstr "MAC पत्ता (_M):"
 
-#: ../ui/addhardware.ui.h:14 ../ui/details.ui.h:133
+#: ../ui/addhardware.ui.h:14 ../ui/details.ui.h:134
 msgid "Device mode_l:"
 msgstr "साधन प्रतिकृती (_l):"
 
@@ -5053,7 +5016,7 @@ msgstr "साधन प्रतिकृती (_l):"
 msgid "Host _Device:"
 msgstr "यजमान साधन (_D):"
 
-#: ../ui/addhardware.ui.h:16 ../ui/gfxdetails.ui.h:4 ../ui/migrate.ui.h:11
+#: ../ui/addhardware.ui.h:16 ../ui/gfxdetails.ui.h:4 ../ui/migrate.ui.h:6
 msgid "_Port:"
 msgstr "पोर्ट (_P):"
 
@@ -5092,7 +5055,7 @@ msgstr "प्रकार (_y):"
 
 #: ../ui/addhardware.ui.h:25 ../ui/createinterface.ui.h:23
 #: ../ui/createpool.ui.h:3 ../ui/createvol.ui.h:4 ../ui/details.ui.h:40
-#: ../ui/snapshots.ui.h:3
+#: ../ui/host.ui.h:7 ../ui/snapshots.ui.h:3
 msgid "_Name:"
 msgstr "नाव (_N):"
 
@@ -5104,7 +5067,7 @@ msgstr "स्व सॉकेट (_A):"
 msgid "_Channel:"
 msgstr "वाहिनी (_C):"
 
-#: ../ui/addhardware.ui.h:28 ../ui/details.ui.h:151
+#: ../ui/addhardware.ui.h:28 ../ui/details.ui.h:152
 msgid "Ac_tion:"
 msgstr "कृती (_t):"
 
@@ -5140,7 +5103,7 @@ msgstr ""
 msgid "_Device:"
 msgstr ""
 
-#: ../ui/addhardware.ui.h:37 ../ui/details.ui.h:169
+#: ../ui/addhardware.ui.h:37 ../ui/details.ui.h:170
 msgid "rng"
 msgstr "rng"
 
@@ -5152,11 +5115,11 @@ msgstr "पत्ता प्रकार (_T):"
 msgid "_IO Base:"
 msgstr "IO बेस (_I):"
 
-#: ../ui/addhardware.ui.h:40 ../ui/details.ui.h:175
+#: ../ui/addhardware.ui.h:40 ../ui/details.ui.h:176
 msgid "panic"
 msgstr "पॅनिक"
 
-#: ../ui/addhardware.ui.h:41 ../ui/create.ui.h:69
+#: ../ui/addhardware.ui.h:41 ../ui/create.ui.h:68
 #: ../ui/createinterface.ui.h:32 ../ui/createnet.ui.h:35
 #: ../ui/createpool.ui.h:14 ../ui/createvol.ui.h:15 ../ui/snapshots.ui.h:7
 msgid "_Finish"
@@ -5380,7 +5343,7 @@ msgstr "स्वयंजोडणी (_A):"
 msgid "H_ostname:"
 msgstr "यजमाननाव (_o):"
 
-#: ../ui/connect.ui.h:10 ../ui/details.ui.h:179
+#: ../ui/connect.ui.h:10 ../ui/details.ui.h:180
 msgid "_Username:"
 msgstr "वापकर्त्याचेनाव (_U):"
 
@@ -5649,14 +5612,10 @@ msgid ""
 msgstr "<small>सर्वोत्तम कामगिरिकरीता ऑपरेटिंग सिस्टम निर्देशीत करत आहे</small>"
 
 #: ../ui/create.ui.h:66
-msgid "Set a fixed _MAC address"
-msgstr "ठराविक MAC पत्ता ठरवा (_M)"
+msgid "N_etwork selection"
+msgstr ""
 
-#: ../ui/create.ui.h:67 ../ui/migrate.ui.h:14
-msgid "Advanced options"
-msgstr "प्रगत पर्याय"
-
-#: ../ui/create.ui.h:68
+#: ../ui/create.ui.h:67
 msgid "Finish"
 msgstr "समाप्त"
 
@@ -5796,7 +5755,7 @@ msgstr "स्वयं संरचीत करा (_n):"
 msgid "Static configuration:"
 msgstr "स्टॅटिक संरचना:"
 
-#: ../ui/createinterface.ui.h:38 ../ui/migrate.ui.h:10
+#: ../ui/createinterface.ui.h:38 ../ui/migrate.ui.h:5
 msgid "_Address:"
 msgstr "पत्ता (_A):"
 
@@ -5880,7 +5839,7 @@ msgstr "?"
 msgid "Gateway:"
 msgstr "गेटवे:"
 
-#: ../ui/createnet.ui.h:14 ../ui/details.ui.h:136
+#: ../ui/createnet.ui.h:14 ../ui/details.ui.h:137
 msgid "Type:"
 msgstr "प्रकार:"
 
@@ -6051,7 +6010,7 @@ msgstr "कमाल क्षमता (_p):"
 msgid "_Allocation:"
 msgstr "वाटप (_A):"
 
-#: ../ui/createvol.ui.h:12 ../ui/details.ui.h:159
+#: ../ui/createvol.ui.h:12 ../ui/details.ui.h:160
 msgid "Path:"
 msgstr "मार्ग:"
 
@@ -6210,8 +6169,9 @@ msgid "_Begin Installation"
 msgstr "प्रतिष्ठापन सुरू करा (_B)"
 
 #: ../ui/details.ui.h:36
-msgid "_Cancel"
-msgstr "रद्द करा (_C)"
+#, fuzzy
+msgid "_Cancel Installation"
+msgstr "प्रतिष्ठापन सुरू करा (_B)"
 
 #: ../ui/details.ui.h:37
 msgid "A_dd Hardware"
@@ -6233,19 +6193,19 @@ msgstr ""
 msgid "Shut down"
 msgstr "पूर्णपणे बंद करा"
 
-#: ../ui/details.ui.h:43 ../ui/snapshots.ui.h:4
-msgid "_Description:"
-msgstr "वर्णन (_D):"
+#: ../ui/details.ui.h:43
+msgid "D_escription:"
+msgstr ""
 
 #: ../ui/details.ui.h:44
 msgid "<b>Basic Details</b>"
 msgstr "<b>पूर्वनिर्धारीत तपशील</b>"
 
-#: ../ui/details.ui.h:45 ../ui/host.ui.h:7
+#: ../ui/details.ui.h:45
 msgid "Hypervisor:"
 msgstr "हायपरवायजर:"
 
-#: ../ui/details.ui.h:46 ../ui/host.ui.h:10
+#: ../ui/details.ui.h:46
 msgid "Architecture:"
 msgstr "आर्किटेक्चर:"
 
@@ -6299,7 +6259,7 @@ msgstr "सुरू करा"
 msgid "Count"
 msgstr "प्रमाण"
 
-#: ../ui/details.ui.h:61
+#: ../ui/details.ui.h:61 ../ui/migrate.ui.h:7
 msgid "0"
 msgstr "0"
 
@@ -6307,7 +6267,7 @@ msgstr "0"
 msgid "<b>User Namespace</b>"
 msgstr "<b>वापरकर्ता नेमस्पेस</b>"
 
-#: ../ui/details.ui.h:63 ../ui/host.ui.h:6
+#: ../ui/details.ui.h:63
 msgid "Hostname:"
 msgstr "यजमान:"
 
@@ -6327,11 +6287,11 @@ msgstr "<b>ॲप्लिकेशन्स्</b>"
 msgid "Error message bar"
 msgstr "त्रुटी संदेश पट्टी"
 
-#: ../ui/details.ui.h:68 ../ui/host.ui.h:14
+#: ../ui/details.ui.h:68 ../ui/host.ui.h:10
 msgid "<b>CPU usage</b>"
 msgstr "<b>CPU वापर</b>"
 
-#: ../ui/details.ui.h:69 ../ui/host.ui.h:15
+#: ../ui/details.ui.h:69 ../ui/host.ui.h:11
 msgid "<b>Memory usage</b>"
 msgstr "<b>मेमरि वापर</b>"
 
@@ -6520,18 +6480,14 @@ msgid "Removab_le:"
 msgstr "काढून टाकण्याजोगी (_l):"
 
 #: ../ui/details.ui.h:118
-msgid "Storage forma_t:"
-msgstr "स्टोरेज रूपण (_t):"
-
-#: ../ui/details.ui.h:119
 msgid "Disk b_us:"
 msgstr "डिस्क बस (_u):"
 
-#: ../ui/details.ui.h:120
+#: ../ui/details.ui.h:119
 msgid "Seria_l number:"
 msgstr ""
 
-#: ../ui/details.ui.h:121
+#: ../ui/details.ui.h:120
 msgid ""
 "<small>Changing this will not change the disk image format, it only tells "
 "libvirt about the existing image format. </small>"
@@ -6539,207 +6495,215 @@ msgstr ""
 "<small>या बदलवून डिस्क प्रतिमा रूपन बदलणार नाही, ते फक्त libvirt ला अस्तित्वातील "
 "प्रतिमा रूपणविषयी माहिती देते. </small>"
 
-#: ../ui/details.ui.h:123
+#: ../ui/details.ui.h:121
+msgid "Storage forma_t:"
+msgstr "स्टोरेज रूपण (_t):"
+
+#: ../ui/details.ui.h:122
+msgid "_SGIO:"
+msgstr ""
+
+#: ../ui/details.ui.h:124
 msgid "_IO mode:"
 msgstr "IO मोड (_I):"
 
-#: ../ui/details.ui.h:124
+#: ../ui/details.ui.h:125
 msgid "_Performance options"
 msgstr "कामगिरि पर्याय (_P)"
 
-#: ../ui/details.ui.h:125
+#: ../ui/details.ui.h:126
 msgid "Re_ad:"
 msgstr ""
 
-#: ../ui/details.ui.h:126
+#: ../ui/details.ui.h:127
 msgid "KiBytes/Sec"
 msgstr "KiBytes दर सेकंद"
 
-#: ../ui/details.ui.h:127
+#: ../ui/details.ui.h:128
 msgid "IOPS/Sec"
 msgstr "IOPS/Sec"
 
-#: ../ui/details.ui.h:128
+#: ../ui/details.ui.h:129
 msgid "Total_:"
 msgstr ""
 
-#: ../ui/details.ui.h:129
+#: ../ui/details.ui.h:130
 msgid "_Write:"
 msgstr ""
 
-#: ../ui/details.ui.h:130
+#: ../ui/details.ui.h:131
 msgid "IO Tu_ning"
 msgstr ""
 
-#: ../ui/details.ui.h:131
+#: ../ui/details.ui.h:132
 msgid "Advanced _options"
 msgstr "प्रगत पर्याय (_o)"
 
-#: ../ui/details.ui.h:132
+#: ../ui/details.ui.h:133
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>वर्च्युअल डिस्क</b>"
 
-#: ../ui/details.ui.h:134
+#: ../ui/details.ui.h:135
 msgid "MAC address:"
 msgstr "MAC पत्ता:"
 
-#: ../ui/details.ui.h:135
+#: ../ui/details.ui.h:136
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>वर्च्युअल नेटवर्क संवाद</b>"
 
-#: ../ui/details.ui.h:137 ../ui/host.ui.h:58
+#: ../ui/details.ui.h:138 ../ui/host.ui.h:43
 msgid "Mode:"
 msgstr "रीत:"
 
-#: ../ui/details.ui.h:138
-msgid "<b>Virtual Pointer</b>"
-msgstr "<b>वर्च्युअल पॉईन्टर</b>"
-
 #: ../ui/details.ui.h:139
+msgid "<b>Virtual Input Device</b>"
+msgstr ""
+
+#: ../ui/details.ui.h:140
 msgid "Device m_odel:"
 msgstr "साधणचे मॉडेल (_o):"
 
-#: ../ui/details.ui.h:140
+#: ../ui/details.ui.h:141
 msgid "<b>Sound Device</b>"
 msgstr "<b>आवाज साधण</b>"
 
-#: ../ui/details.ui.h:141
+#: ../ui/details.ui.h:142
 msgid "Source host:"
 msgstr "सोअर्स् यजमान:"
 
-#: ../ui/details.ui.h:142
+#: ../ui/details.ui.h:143
 msgid "Bind host:"
 msgstr "यजमानला बाईंड करा:"
 
-#: ../ui/details.ui.h:143
+#: ../ui/details.ui.h:144
 msgid "Target type:"
 msgstr "लक्ष्य प्रकार:"
 
-#: ../ui/details.ui.h:144
+#: ../ui/details.ui.h:145
 msgid "Target name:"
 msgstr "लक्ष्य नाव:"
 
-#: ../ui/details.ui.h:145
+#: ../ui/details.ui.h:146
 msgid "<b>insert type</b>"
 msgstr "<b>अंतर्भुत प्रकार</b>"
 
-#: ../ui/details.ui.h:146 ../ui/host.ui.h:17
+#: ../ui/details.ui.h:147 ../ui/host.ui.h:13
 msgid "Device:"
 msgstr "यंत्र:"
 
-#: ../ui/details.ui.h:147
+#: ../ui/details.ui.h:148
 msgid "ROM _BAR:"
 msgstr "ROM पट्टी (_B):"
 
-#: ../ui/details.ui.h:148
+#: ../ui/details.ui.h:149
 msgid "RAM:"
 msgstr "RAM:"
 
-#: ../ui/details.ui.h:149
+#: ../ui/details.ui.h:150
 msgid "Heads:"
 msgstr "हेडस्:"
 
-#: ../ui/details.ui.h:150
+#: ../ui/details.ui.h:151
 msgid "<b>Video</b>"
 msgstr "<b>व्हिडिओ</b>"
 
-#: ../ui/details.ui.h:152
+#: ../ui/details.ui.h:153
 msgid "<b>Controller</b>"
 msgstr "<b>कंट्रोलर</b>"
 
-#: ../ui/details.ui.h:153
+#: ../ui/details.ui.h:154
 msgid "<b>Filesystem</b>"
 msgstr "<b>फाइलसिस्टम</b>"
 
-#: ../ui/details.ui.h:154 ../ui/fsdetails.ui.h:5
+#: ../ui/details.ui.h:155 ../ui/fsdetails.ui.h:5 ../ui/migrate.ui.h:12
 msgid "M_ode:"
 msgstr "मोड (_o):"
 
-#: ../ui/details.ui.h:155
+#: ../ui/details.ui.h:156
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>स्मार्टकार्ड साधन</b>"
 
-#: ../ui/details.ui.h:156 ../ui/host.ui.h:59
+#: ../ui/details.ui.h:157 ../ui/host.ui.h:44
 msgid "Address:"
 msgstr "पत्ता:"
 
-#: ../ui/details.ui.h:157
+#: ../ui/details.ui.h:158
 msgid "foo:12"
 msgstr "foo:12"
 
-#: ../ui/details.ui.h:158
+#: ../ui/details.ui.h:159
 msgid "<b>Redirected device</b>"
 msgstr "<b>रिडायरेक्टेड साधन</b>"
 
-#: ../ui/details.ui.h:160
+#: ../ui/details.ui.h:161
 msgid "<b>TPM Device</b>"
 msgstr "<b>TPM साधन</b>"
 
-#: ../ui/details.ui.h:161
+#: ../ui/details.ui.h:162
 msgid "Backend type:"
 msgstr "बॅकएंड प्रकार:"
 
-#: ../ui/details.ui.h:162
+#: ../ui/details.ui.h:163
 msgid "Host:"
 msgstr "यजमान:"
 
-#: ../ui/details.ui.h:163
+#: ../ui/details.ui.h:164
 msgid "Service:"
 msgstr "सर्व्हिस:"
 
-#: ../ui/details.ui.h:164
+#: ../ui/details.ui.h:165
 msgid "Bind Host:"
 msgstr "यजमान बाइंड करा:"
 
-#: ../ui/details.ui.h:165
+#: ../ui/details.ui.h:166
 msgid "Bind Service:"
 msgstr "बाइंड सर्व्हिस:"
 
-#: ../ui/details.ui.h:166
+#: ../ui/details.ui.h:167
 msgid "Rate (period):"
 msgstr "दर (कालावधी):"
 
-#: ../ui/details.ui.h:167
+#: ../ui/details.ui.h:168
 msgid "Rate (bytes):"
 msgstr "दर (बाइट्स):"
 
-#: ../ui/details.ui.h:168
+#: ../ui/details.ui.h:169
 msgid "<b>Random Number Generator</b>"
 msgstr "<b>विनाक्रम संख्या जनक</b>"
 
-#: ../ui/details.ui.h:170
+#: ../ui/details.ui.h:171
 msgid "Address Type:"
 msgstr ""
 
-#: ../ui/details.ui.h:171
+#: ../ui/details.ui.h:172
 msgid "IO Base:"
 msgstr ""
 
-#: ../ui/details.ui.h:172
+#: ../ui/details.ui.h:173
 msgid "panic-address-type"
 msgstr "panic-address-type"
 
-#: ../ui/details.ui.h:173
+#: ../ui/details.ui.h:174
 msgid "panic-iobase"
 msgstr "panic-iobase"
 
-#: ../ui/details.ui.h:174
+#: ../ui/details.ui.h:175
 msgid "<b>Panic Notifier</b>"
 msgstr "<b>पॅनिक सूचक</b>"
 
-#: ../ui/details.ui.h:176
+#: ../ui/details.ui.h:177
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>कंसोल सध्या उपलब्ध नाही</b>"
 
-#: ../ui/details.ui.h:177
+#: ../ui/details.ui.h:178
 msgid "_Password:"
 msgstr "पासवर्ड (_P):"
 
-#: ../ui/details.ui.h:178
+#: ../ui/details.ui.h:179
 msgid "_Save this password in your keyring"
 msgstr "किरींगमध्ये हा पासवर्ड साठवा (_S)"
 
-#: ../ui/details.ui.h:180
+#: ../ui/details.ui.h:181
 msgid "_Login"
 msgstr "प्रवेश करा (_L)"
 
@@ -6803,7 +6767,7 @@ msgstr "डिस्पले:"
 msgid "XAuth:"
 msgstr "XAuth:"
 
-#: ../ui/gfxdetails.ui.h:13 ../ui/snapshots.ui.h:12
+#: ../ui/gfxdetails.ui.h:13 ../ui/snapshots.ui.h:12 ../ui/storagelist.ui.h:17
 msgid "label"
 msgstr "लेबल"
 
@@ -6819,215 +6783,163 @@ msgstr "सेव्हड् मशीनची पूर्वस्थित�
 msgid "Restore a saved machine from a filesystem image"
 msgstr "फाइलप्रणाली प्रतिमेपासून सुरक्षित मशीन पुनःरक्षित करा"
 
+#: ../ui/host.ui.h:6
+msgid "Libvirt URI:"
+msgstr ""
+
 #: ../ui/host.ui.h:8
-msgid "Memory:"
-msgstr "स्मृती:"
-
-#: ../ui/host.ui.h:9
-msgid "Logical CPUs:"
-msgstr "तार्किक CPUs:"
-
-#: ../ui/host.ui.h:11
-msgid "Connection:"
-msgstr "जोडणी:"
-
-#: ../ui/host.ui.h:12
 msgid "A_utoconnect:"
 msgstr "स्वयंजुळवणी (_u):"
 
-#: ../ui/host.ui.h:13
+#: ../ui/host.ui.h:9
 msgid "<b>Basic details</b>"
 msgstr "<b>पायाभूत तपशील</b>"
 
-#: ../ui/host.ui.h:16
+#: ../ui/host.ui.h:12
 msgid "_Overview"
 msgstr "पूर्वावलोकन (_O)"
 
-#: ../ui/host.ui.h:18
+#: ../ui/host.ui.h:14 ../ui/storagelist.ui.h:14
 msgid "State:"
 msgstr "स्तर:"
 
-#: ../ui/host.ui.h:19
+#: ../ui/host.ui.h:15 ../ui/storagelist.ui.h:15
 msgid "A_utostart:"
 msgstr "स्वयंसुरू (_u):"
 
-#: ../ui/host.ui.h:20
+#: ../ui/host.ui.h:16
 msgid "Domain:"
 msgstr "डोमेन:"
 
-#: ../ui/host.ui.h:21
+#: ../ui/host.ui.h:17 ../ui/storagelist.ui.h:12
 msgid "Name:"
 msgstr "नाव:"
 
-#: ../ui/host.ui.h:22
+#: ../ui/host.ui.h:18
 msgid "NAT to any device"
 msgstr "कोणतेही साधनाला NAT करा"
 
-#: ../ui/host.ui.h:23
+#: ../ui/host.ui.h:19
 msgid "Network:"
 msgstr "नेटवर्क:"
 
-#: ../ui/host.ui.h:24
+#: ../ui/host.ui.h:20
 msgid "DHCP range:"
 msgstr "DHCP व्याप्ति:"
 
-#: ../ui/host.ui.h:25
+#: ../ui/host.ui.h:21
 msgid "Forwarding:"
 msgstr "फॉरवर्डिंग:"
 
-#: ../ui/host.ui.h:26
+#: ../ui/host.ui.h:22
 msgid "Static Route:"
 msgstr "स्टॅटिक राउट:"
 
-#: ../ui/host.ui.h:27
-#, fuzzy
+#: ../ui/host.ui.h:23
 msgid "<b>_IPv4 configuration</b>"
-msgstr "<b>IPv4 संयोजना</b>"
+msgstr ""
 
-#: ../ui/host.ui.h:29
+#: ../ui/host.ui.h:25
 msgid "<b>IPv6 configuration</b>"
 msgstr "<b>IPv6 संरचना</b>"
 
-#: ../ui/host.ui.h:30
-#, fuzzy
+#: ../ui/host.ui.h:26
 msgid "Enable i_nbound QoS"
-msgstr "इंबाउंड QoS सुरू करा"
+msgstr ""
 
-#: ../ui/host.ui.h:31
+#: ../ui/host.ui.h:27
 msgid "Average (KiB/sec):"
 msgstr "सरासर (KiB दर सेकंद):"
 
-#: ../ui/host.ui.h:32
+#: ../ui/host.ui.h:28
 msgid "Burst (KiB):"
 msgstr "बर्स्ट (KiB):"
 
-#: ../ui/host.ui.h:33
+#: ../ui/host.ui.h:29
 msgid "Peak (KiB/sec):"
 msgstr "पिक (KiB दर सेकंद):"
 
-#: ../ui/host.ui.h:34
-#, fuzzy
+#: ../ui/host.ui.h:30
 msgid "Enable ou_tbound QoS"
-msgstr "आउटबाउंड QoS सुरू करा"
+msgstr ""
 
-#: ../ui/host.ui.h:35
+#: ../ui/host.ui.h:31
 msgid "Burst (KiB/sec):"
 msgstr "बर्स्ट (KiB दर सेकंद):"
 
-#: ../ui/host.ui.h:36
-#, fuzzy
+#: ../ui/host.ui.h:32
 msgid "<b>_QoS configuration</b>"
-msgstr "<b>QoS संरचना</b>"
+msgstr ""
 
-#: ../ui/host.ui.h:37
+#: ../ui/host.ui.h:33
 msgid "Add Network"
 msgstr "नेटवर्क समावेश करा"
 
-#: ../ui/host.ui.h:38
+#: ../ui/host.ui.h:34
 msgid "Start Network"
 msgstr "नेटवर्क सुरू करा"
 
-#: ../ui/host.ui.h:39
+#: ../ui/host.ui.h:35
 msgid "Stop Network"
 msgstr "नेटवर्क बंद करा"
 
-#: ../ui/host.ui.h:40
+#: ../ui/host.ui.h:36
 msgid "Delete Network"
 msgstr "नेटवर्क काढून टाका"
 
-#: ../ui/host.ui.h:41
+#: ../ui/host.ui.h:37
 msgid "_Virtual Networks"
 msgstr "वर्च्युअल नेटवर्क्स (_V)"
 
-#: ../ui/host.ui.h:42
-msgid "Pool Type:"
-msgstr "पूल प्रकार:"
-
-#: ../ui/host.ui.h:44
-msgid "Location:"
-msgstr "स्थान:"
-
-#: ../ui/host.ui.h:45 ../ui/storagebrowse.ui.h:2
-msgid "<b>Volumes</b>"
-msgstr "<b>खंड</b>"
-
-#: ../ui/host.ui.h:46
-msgid "Refresh volume list"
-msgstr "वॉल्युम सूची पुनःताजे करा"
-
-#: ../ui/host.ui.h:47
-msgid "Add Pool"
-msgstr "पूल समावेश करा"
-
-#: ../ui/host.ui.h:48
-msgid "Start Pool"
-msgstr "पूल सुरू करा"
-
-#: ../ui/host.ui.h:49
-msgid "Stop Pool"
-msgstr "पूल बंद करा"
-
-#: ../ui/host.ui.h:50
-msgid "Delete Pool"
-msgstr "संग्रह काढून टाका"
-
-#: ../ui/host.ui.h:51 ../ui/storagebrowse.ui.h:4
-msgid "_New Volume"
-msgstr "नवीन खंड (_N)"
-
-#: ../ui/host.ui.h:52
-msgid "_Delete Volume"
-msgstr "खंड काढून टाका (_D)"
-
-#: ../ui/host.ui.h:53
+#: ../ui/host.ui.h:38
 msgid "_Storage"
 msgstr "स्टोरेज (_S)"
 
-#: ../ui/host.ui.h:54
+#: ../ui/host.ui.h:39
 msgid "<b>Name</b>"
 msgstr "<b>नाव</b>"
 
-#: ../ui/host.ui.h:55
+#: ../ui/host.ui.h:40
 msgid "MAC:"
 msgstr "MAC:"
 
-#: ../ui/host.ui.h:56
+#: ../ui/host.ui.h:41
 msgid "Start mode:"
 msgstr "सुर मोड:"
 
-#: ../ui/host.ui.h:57
+#: ../ui/host.ui.h:42
 msgid "In use by:"
 msgstr "यांच्या द्वारे वापरणीत:"
 
-#: ../ui/host.ui.h:60
+#: ../ui/host.ui.h:45
 msgid "<b>IPv4 Configuration</b>"
 msgstr "<b>IPv4 संरचना</b>"
 
-#: ../ui/host.ui.h:61
+#: ../ui/host.ui.h:46
 msgid "<b>IPv6 Configuration</b>"
 msgstr "<b>IPv6 संरचना</b>"
 
-#: ../ui/host.ui.h:62
+#: ../ui/host.ui.h:47
 msgid "<b>Slave Interfaces</b>"
 msgstr "<b>स्लेव्ह संवाद</b>"
 
-#: ../ui/host.ui.h:63
+#: ../ui/host.ui.h:48
 msgid "Add Interface"
 msgstr "संवाद समावेश करा"
 
-#: ../ui/host.ui.h:64
+#: ../ui/host.ui.h:49
 msgid "Start Interface"
 msgstr "संवाद सुरू करा"
 
-#: ../ui/host.ui.h:65
+#: ../ui/host.ui.h:50
 msgid "Stop Interface"
 msgstr "संवाद बंद करा"
 
-#: ../ui/host.ui.h:66
+#: ../ui/host.ui.h:51
 msgid "Delete Interface"
 msgstr "संवाद नष्ट करा"
 
-#: ../ui/host.ui.h:67
+#: ../ui/host.ui.h:52
 msgid "N_etwork Interfaces"
 msgstr "नेटवर्क संवाद (_e)"
 
@@ -7104,46 +7016,75 @@ msgid "Migrate the virtual machine"
 msgstr "वर्च्युअल मशीन स्थानांतरीत करा"
 
 #: ../ui/migrate.ui.h:2
-msgid "<span color='#484848'>Name:</span>"
-msgstr "<span color='#484848'>नाव:</span>"
+msgid "<span color='#484848'>Migrating VM:</span>"
+msgstr ""
 
 #: ../ui/migrate.ui.h:3
 msgid "<span color='#484848'>Original host:</span>"
 msgstr "<span color='#484848'>मूळ यजमान:</span>"
 
 #: ../ui/migrate.ui.h:4
-msgid "<span color='#484848'>New host:</span>"
-msgstr "<span color='#484848'>नवीन यजमान:</span>"
-
-#: ../ui/migrate.ui.h:5
-msgid "_Tunnel migration through libvirt's daemon:"
-msgstr "libvirt च्या डिमनसह टनलचे स्थानांतरन (_T):"
-
-#: ../ui/migrate.ui.h:6
-msgid "_Allow unsafe migration:"
-msgstr "असुरक्षित माइग्रेशन स्वीकारा (_A):"
-
-#: ../ui/migrate.ui.h:7
-msgid "Max downtime:"
-msgstr "मॅक्स् डाउनटाइम:"
+msgid "<span color='#484848'>New _host:</span>"
+msgstr ""
 
 #: ../ui/migrate.ui.h:8
-msgid "ms"
-msgstr "ms"
+msgid "Let libvirt decide"
+msgstr ""
 
 #: ../ui/migrate.ui.h:9
-msgid "MiB/s"
-msgstr "MiB/s"
-
-#: ../ui/migrate.ui.h:12
-msgid "_Bandwidth:"
-msgstr "बँडविड्थ (_B):"
+msgid ""
+"Tunnel migration through the libvirtd connection channel, rather than having "
+"the hypervisor open a separate network connection to the destination. The "
+"source libvirt instance connects directly to the destination libvirt "
+"instance.\n"
+"\n"
+"This can simplify setup since no additional firewall ports need to be open, "
+"and will encrypt migration traffic if your libvirt connection is encrypted. "
+"But it can be difficult to make this work with SSH transport."
+msgstr ""
 
 #: ../ui/migrate.ui.h:13
+msgid "_URI:"
+msgstr ""
+
+#: ../ui/migrate.ui.h:14
 msgid "<b>Connectivity</b>"
 msgstr "<b>जोडणी</b>"
 
 #: ../ui/migrate.ui.h:15
+msgid ""
+"By default libvirt will refuse to migrate a VM for certain configurations "
+"that could lead to malfunctioning guests, like if a disk's cache mode is not "
+"'none'.\n"
+"\n"
+"Enabling this option tells libvirt to skip those checks."
+msgstr ""
+
+#: ../ui/migrate.ui.h:18
+msgid "A_llow unsafe:"
+msgstr ""
+
+#: ../ui/migrate.ui.h:19
+msgid ""
+"By default, the migrated VM config is removed from the source host, and "
+"saved persistently on the destination host. The destination host is "
+"considered the new home of the VM.\n"
+"\n"
+"If 'temporary' is selected, the migration is considered only a temporary "
+"move: the source host maintains a copy of the VM config, and the running "
+"copy moved to the destination is only transient, and will disappear when it "
+"is shutdown."
+msgstr ""
+
+#: ../ui/migrate.ui.h:22
+msgid "_Temporary move:"
+msgstr ""
+
+#: ../ui/migrate.ui.h:23
+msgid "Advanced options"
+msgstr "प्रगत पर्याय"
+
+#: ../ui/migrate.ui.h:24
 msgid "_Migrate"
 msgstr "स्थानांतरीत करा (_M)"
 
@@ -7380,6 +7321,10 @@ msgstr "स्नॅपशॉट निर्माण करा"
 msgid "<span size='large' color='white'>Create snapshot</span>"
 msgstr "<span size='large' color='white'>स्नॅपशॉट निर्माण करा</span>"
 
+#: ../ui/snapshots.ui.h:4
+msgid "_Description:"
+msgstr "वर्णन (_D):"
+
 #: ../ui/snapshots.ui.h:6
 msgid "Screenshot:"
 msgstr "स्क्रीनशॉट:"
@@ -7428,13 +7373,65 @@ msgstr "सुधारित स्नॅपशॉट मेटाडाटा 
 msgid "Choose Storage Volume"
 msgstr "स्टोरेज खंड नीवडा"
 
-#: ../ui/storagebrowse.ui.h:3
+#: ../ui/storagelist.ui.h:1
+msgid "Add Pool"
+msgstr "पूल समावेश करा"
+
+#: ../ui/storagelist.ui.h:2
+msgid "Start Pool"
+msgstr "पूल सुरू करा"
+
+#: ../ui/storagelist.ui.h:3
+msgid "Stop Pool"
+msgstr "पूल बंद करा"
+
+#: ../ui/storagelist.ui.h:4
+msgid "Delete Pool"
+msgstr "संग्रह काढून टाका"
+
+#: ../ui/storagelist.ui.h:5
+msgid "Browse local filesystem"
+msgstr ""
+
+#: ../ui/storagelist.ui.h:6
 msgid "_Browse Local"
 msgstr "स्थानीय ब्राऊज करा (_B)"
 
-#: ../ui/storagebrowse.ui.h:5
-msgid "Choose _Volume"
-msgstr "खंड नीवडा (_V)"
+#: ../ui/storagelist.ui.h:7
+msgid "Cancel and close dialog"
+msgstr ""
 
-#~ msgid "%s %s %s at %d-%d"
-#~ msgstr "%s %s %s, %d-%d येथे"
+#: ../ui/storagelist.ui.h:8
+msgid "Choose Volume"
+msgstr ""
+
+#: ../ui/storagelist.ui.h:9
+msgid "Choose the selected volume"
+msgstr ""
+
+#: ../ui/storagelist.ui.h:10
+msgid "Apply pool changes"
+msgstr ""
+
+#: ../ui/storagelist.ui.h:13
+msgid "Location:"
+msgstr "स्थान:"
+
+#: ../ui/storagelist.ui.h:16
+msgid "Size:"
+msgstr ""
+
+#: ../ui/storagelist.ui.h:18
+msgid "<b>Volumes</b>"
+msgstr "<b>खंड</b>"
+
+#: ../ui/storagelist.ui.h:19
+msgid "Refresh volume list"
+msgstr "वॉल्युम सूची पुनःताजे करा"
+
+#: ../ui/storagelist.ui.h:20
+msgid "Delete volume"
+msgstr ""
+
+#~ msgid "_Cancel"
+#~ msgstr "रद्द करा (_C)"
