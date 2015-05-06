@@ -51,26 +51,6 @@ class VirtualFilesystem(VirtualDevice):
     DRIVER_DEFAULT = "default"
     DRIVERS = [DRIVER_PATH, DRIVER_HANDLE, DRIVER_LOOP, DRIVER_NBD, DRIVER_DEFAULT]
 
-    @staticmethod
-    def type_to_source_prop(fs_type):
-        """
-        Convert a value of VirtualFilesystem.type to it's associated XML
-        source @prop name
-        """
-        if (fs_type == VirtualFilesystem.TYPE_MOUNT or
-            fs_type == VirtualFilesystem.TYPE_DEFAULT or
-            fs_type is None):
-            return "dir"
-        elif fs_type == VirtualFilesystem.TYPE_TEMPLATE:
-            return "name"
-        elif fs_type == VirtualFilesystem.TYPE_FILE:
-            return "file"
-        elif fs_type == VirtualFilesystem.TYPE_BLOCK:
-            return "dev"
-        elif fs_type == VirtualFilesystem.TYPE_RAM:
-            return "usage"
-        return "dir"
-
 
     type = XMLProperty("./@type",
                        default_cb=lambda s: None,
@@ -90,11 +70,6 @@ class VirtualFilesystem(VirtualDevice):
 
     units = XMLProperty("./source/@units")
 
-    def _make_source_xpath(self):
-        return "./source/@" + self.type_to_source_prop(self.type)
-    source = XMLProperty(name="filesystem source",
-                         make_xpath_cb=_make_source_xpath)
-
     def _validate_set_target(self, val):
         # In case of qemu for default fs type (mount) target is not
         # actually a directory, it is merely a arbitrary string tag
@@ -110,6 +85,29 @@ class VirtualFilesystem(VirtualDevice):
         return val
     target = XMLProperty("./target/@dir",
                          set_converter=_validate_set_target)
+
+    _source_dir = XMLProperty("./source/@dir")
+    _source_name = XMLProperty("./source/@name")
+    _source_file = XMLProperty("./source/@file")
+    _source_dev = XMLProperty("./source/@dev")
+    _source_usage = XMLProperty("./source/@usage")
+    def _type_to_source_prop(self):
+        if self.type == VirtualFilesystem.TYPE_TEMPLATE:
+            return "_source_name"
+        elif self.type == VirtualFilesystem.TYPE_FILE:
+            return "_source_file"
+        elif self.type == VirtualFilesystem.TYPE_BLOCK:
+            return "_source_dev"
+        elif self.type == VirtualFilesystem.TYPE_RAM:
+            return "_source_usage"
+        else:
+            return "_source_dir"
+
+    def _get_source(self):
+        return getattr(self, self._type_to_source_prop())
+    def _set_source(self, val):
+        return setattr(self, self._type_to_source_prop(), val)
+    source = property(_get_source, _set_source)
 
 
 VirtualFilesystem.register_type()

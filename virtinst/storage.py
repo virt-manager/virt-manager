@@ -329,13 +329,20 @@ class StoragePool(_StorageObject):
             self._random_uuid = util.generate_uuid(self.conn)
         return self._random_uuid
 
-    def _make_source_xpath(self):
+    def _type_to_source_prop(self):
         if (self.type == self.TYPE_NETFS or
             self.type == self.TYPE_GLUSTER):
-            return "./source/dir/@path"
-        if self.type == self.TYPE_SCSI:
-            return "./source/adapter/@name"
-        return "./source/device/@path"
+            return "_source_dir"
+        elif self.type == self.TYPE_SCSI:
+            return "_source_adapter"
+        else:
+            return "_source_device"
+
+    def _get_source(self):
+        return getattr(self, self._type_to_source_prop())
+    def _set_source(self, val):
+        return setattr(self, self._type_to_source_prop(), val)
+    source_path = property(_get_source, _set_source)
 
     def _default_source_name(self):
         if not self.supports_property("source_name"):
@@ -371,8 +378,14 @@ class StoragePool(_StorageObject):
     _XML_PROP_ORDER = ["name", "type", "uuid",
                        "capacity", "allocation", "available",
                        "format", "hosts",
-                       "source_path", "source_name", "target_path",
+                       "_source_dir", "_source_adapter", "_source_device",
+                       "source_name", "target_path",
                        "permissions"]
+
+
+    _source_dir = XMLProperty("./source/dir/@path")
+    _source_adapter = XMLProperty("./source/adapter/@name")
+    _source_device = XMLProperty("./source/device/@path")
 
     type = XMLProperty("./@type",
         doc=_("Storage device type the pool will represent."))
@@ -388,8 +401,6 @@ class StoragePool(_StorageObject):
                          default_cb=_default_format_cb)
     iqn = XMLProperty("./source/initiator/iqn/@name",
                       doc=_("iSCSI initiator qualified name"))
-    source_path = XMLProperty(name="source path",
-                              make_xpath_cb=_make_source_xpath)
     source_name = XMLProperty("./source/name",
                               default_cb=_default_source_name,
                               doc=_("Name of the Volume Group"))
