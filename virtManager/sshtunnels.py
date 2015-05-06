@@ -48,10 +48,16 @@ class ConnectionInfo(object):
             self._connhost = "127.0.0.1"
 
     def _is_listen_localhost(self, host=None):
-        return ipaddr.IPNetwork(host or self.gaddr).is_loopback
+        try:
+            return ipaddr.IPNetwork(host or self.gaddr).is_loopback
+        except:
+            return False
 
     def _is_listen_any(self):
-        return ipaddr.IPNetwork(self.gaddr).is_unspecified
+        try:
+            return ipaddr.IPNetwork(self.gaddr).is_unspecified
+        except:
+            return False
 
     def need_tunnel(self):
         if not self._is_listen_localhost():
