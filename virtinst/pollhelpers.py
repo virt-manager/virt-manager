@@ -268,7 +268,7 @@ def _old_fetch_vms(backend, origmap, build_func):
             except:
                 logging.exception("Couldn't fetch domain '%s'", name)
 
-    return (origmap, new, current)
+    return (origmap.values(), new.values(), current.values())
 
 
 def fetch_vms(backend, origmap, build_func):
