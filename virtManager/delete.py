@@ -236,7 +236,11 @@ def populate_storage_list(storage_list, vm, conn):
         if disk.source_pool:
             try:
                 pool = conn.get_pool(disk.source_pool)
+                if pool is None:
+                    return disk.path
                 vol = pool.get_volume(disk.path)
+                if vol is None:
+                    return disk.path
                 return vol.get_target_path()
             except KeyError:
                 return disk.path

@@ -2700,12 +2700,14 @@ class vmmDetails(vmmGObjectUI):
         if not path:
             size = "-"
         else:
+            vol = None
             if source_pool:
                 try:
                     pool = self.conn.get_pool(source_pool)
-                    vol = pool.get_volume(path)
+                    if pool is not None:
+                        vol = pool.get_volume(path)
                 except KeyError:
-                    vol = None
+                    pass
             else:
                 vol = self.conn.get_vol_by_path(path)
 
