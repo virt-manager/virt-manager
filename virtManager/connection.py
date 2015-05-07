@@ -956,13 +956,17 @@ class vmmConnection(vmmGObject):
 
         for obj in gone_objects:
             class_name = obj.class_name()
+            try:
+                name = obj.get_name()
+            except:
+                name = str(obj)
 
             if not self._objects.remove(obj):
                 logging.debug("Requested removal of %s=%s, but it's "
-                    "not in our object list.", class_name, obj.get_name())
+                    "not in our object list.", class_name, name)
                 continue
 
-            logging.debug("%s=%s removed", class_name, obj.get_name())
+            logging.debug("%s=%s removed", class_name, name)
             if class_name == "domain":
                 self.emit("vm-removed", obj.get_connkey())
             elif class_name == "network":
