@@ -490,10 +490,7 @@ class vmmHost(vmmGObjectUI):
 
     def current_network(self):
         connkey = uiutil.get_list_selection(self.widget("net-list"), 0)
-        try:
-            return connkey and self.conn.get_net(connkey)
-        except KeyError:
-            return None
+        return connkey and self.conn.get_net(connkey)
 
     def refresh_network(self, net):
         connkey = net.get_connkey()
@@ -525,14 +522,6 @@ class vmmHost(vmmGObjectUI):
 
         try:
             net = self.conn.get_net(connkey)
-        except KeyError:
-            self.disable_net_apply()
-            return
-        except Exception, e:
-            logging.exception(e)
-            self.set_net_error_page(_("Error selecting network: %s") % e)
-
-        try:
             self.populate_net_state(net)
         except Exception, e:
             logging.exception(e)
@@ -784,10 +773,7 @@ class vmmHost(vmmGObjectUI):
 
     def current_interface(self):
         connkey = uiutil.get_list_selection(self.widget("interface-list"), 0)
-        try:
-            return connkey and self.conn.get_interface(connkey)
-        except KeyError:
-            return None
+        return connkey and self.conn.get_interface(connkey)
 
     def interface_apply(self):
         interface = self.current_interface()

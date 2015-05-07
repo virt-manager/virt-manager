@@ -234,16 +234,13 @@ def populate_storage_list(storage_list, vm, conn):
 
     def get_path(disk):
         if disk.source_pool:
-            try:
-                pool = conn.get_pool(disk.source_pool)
-                if pool is None:
-                    return disk.path
-                vol = pool.get_volume(disk.path)
-                if vol is None:
-                    return disk.path
-                return vol.get_target_path()
-            except KeyError:
+            pool = conn.get_pool(disk.source_pool)
+            if pool is None:
                 return disk.path
+            vol = pool.get_volume(disk.path)
+            if vol is None:
+                return disk.path
+            return vol.get_target_path()
         return disk.path
 
     diskdata = [(d.target, get_path(d), d.read_only, d.shareable) for

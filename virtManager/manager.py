@@ -584,7 +584,7 @@ class vmmManager(vmmGObjectUI):
 
     def vm_added(self, conn, connkey):
         vm = conn.get_vm(connkey)
-        if self.vm_row_key(vm) in self.rows:
+        if not vm or self.vm_row_key(vm) in self.rows:
             return
 
         vm.connect("state-changed", self.vm_changed)
