@@ -313,7 +313,7 @@ Change all host devices to use driver_name=vfio for VM 'fedora20' on the remote 
 
 Hotplug host USB device 001.003 to running domain 'fedora19':
 
-  # virt-xml f19 --add-device --hostdev 001.003 --update
+  # virt-xml fedora19 --add-device --hostdev 001.003 --update
 
 Add a spicevmc channel to the domain 'winxp', that will be available after the next VM shutdown.
 
