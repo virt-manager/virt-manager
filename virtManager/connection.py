@@ -1322,7 +1322,8 @@ class vmmConnection(vmmGObject):
         self.config.set_conn_autoconnect(self.get_uri(), val)
 
     def set_config_pretty_name(self, value):
-        self.config.set_perconn(self.get_uri(), "/pretty-name", value)
+        if value != self._get_config_pretty_name():
+            self.config.set_perconn(self.get_uri(), "/pretty-name", value)
     def _get_config_pretty_name(self):
         return self.config.get_perconn(self.get_uri(), "/pretty-name")
     def _on_config_pretty_name_changed(self, *args, **kwargs):
