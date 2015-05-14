@@ -101,7 +101,7 @@ class vmmInterface(vmmLibvirtObject):
             return "Interface"
 
     def get_startmode(self):
-        return self.get_xmlobj().start_mode or "none"
+        return self.get_xmlobj(inactive=True).start_mode or "none"
 
     def set_startmode(self, newmode):
         xmlobj = self._make_xmlobj_to_define()
