@@ -954,22 +954,21 @@ class vmmDomain(vmmLibvirtObject):
 
         def _change_model():
             if editdev.type == "usb":
-                guest = self._make_xmlobj_to_define()
-                ctrls = guest.get_devices("controller")
+                ctrls = xmlobj.get_devices("controller")
                 ctrls = [x for x in ctrls if (x.type ==
                          VirtualController.TYPE_USB)]
                 for dev in ctrls:
-                    guest.remove_device(dev)
+                    xmlobj.remove_device(dev)
 
                 if model == "ich9-ehci1":
                     for dev in VirtualController.get_usb2_controllers(
-                            guest.conn):
-                        guest.add_device(dev)
+                            xmlobj.conn):
+                        xmlobj.add_device(dev)
                 else:
-                    dev = VirtualController(guest.conn)
+                    dev = VirtualController(xmlobj.conn)
                     dev.type = "usb"
                     dev.model = model
-                    guest.add_device(dev)
+                    xmlobj.add_device(dev)
 
             else:
                 editdev.model = model
