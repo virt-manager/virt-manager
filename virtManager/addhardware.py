@@ -1231,8 +1231,9 @@ class vmmAddHardware(vmmGObjectUI):
         elif (text == VirtualChannelDevice.CHANNEL_NAME_QEMUGA or
               text == VirtualChannelDevice.CHANNEL_NAME_LIBGUESTFS):
             settype = "unix"
-        uiutil.select_list_row_by_value(self.widget("char-device-type"),
-            settype)
+        if settype:
+            uiutil.select_list_row_by_value(
+                self.widget("char-device-type"), settype)
 
     def _change_char_device_type(self, src):
         devtype = uiutil.get_list_selection(src)

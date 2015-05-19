@@ -110,11 +110,10 @@ def select_list_row_by_value(widget, value, column=0):
     """
     model = widget.get_model()
     _iter = None
-    if value is not None:
-        for row in model:
-            if row[column] == value:
-                _iter = row.iter
-                break
+    for row in model:
+        if row[column] == value:
+            _iter = row.iter
+            break
     if not _iter:
         _iter = model.get_iter_first()
 
