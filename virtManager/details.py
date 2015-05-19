@@ -1112,7 +1112,7 @@ class vmmDetails(vmmGObjectUI):
     def set_hw_selection(self, page, disable_apply=True):
         if disable_apply:
             self.disable_apply()
-        uiutil.select_list_row_by_number(self.widget("hw-list"), page)
+        uiutil.set_list_selection_by_number(self.widget("hw-list"), page)
 
     def get_hw_row(self):
         return uiutil.get_list_selected_row(self.widget("hw-list"))

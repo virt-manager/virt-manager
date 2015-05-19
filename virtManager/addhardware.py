@@ -879,7 +879,7 @@ class vmmAddHardware(vmmGObjectUI):
                 break
 
         if default_bus:
-            uiutil.select_list_row_by_value(widget, default_bus)
+            uiutil.set_list_selection(widget, default_bus)
         elif len(model) > 0:
             widget.set_active(0)
 
@@ -913,7 +913,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         if len(model) == 0:
             model.append([_("No Devices Available"), None, None, None])
-        uiutil.select_list_row_by_number(devlist, 0)
+        uiutil.set_list_selection_by_number(devlist, 0)
 
     def _populate_disk_format_combo_wrapper(self, create):
         format_list = self.widget("config-storage-format")
@@ -983,7 +983,7 @@ class vmmAddHardware(vmmGObjectUI):
         for xmlval, label in values:
             model.append([xmlval, label])
         if default:
-            uiutil.select_list_row_by_value(combo, default)
+            uiutil.set_list_selection(combo, default)
 
     def _build_rng_type_combo(self, combo):
         types = []
@@ -1043,7 +1043,7 @@ class vmmAddHardware(vmmGObjectUI):
         return VirtualSerialDevice
 
     def _set_hw_selection(self, page):
-        uiutil.select_list_row_by_number(self.widget("hw-list"), page)
+        uiutil.set_list_selection_by_number(self.widget("hw-list"), page)
 
     def _get_hw_selection(self):
         return uiutil.get_list_selected_row(self.widget("hw-list"))
@@ -1232,7 +1232,7 @@ class vmmAddHardware(vmmGObjectUI):
               text == VirtualChannelDevice.CHANNEL_NAME_LIBGUESTFS):
             settype = "unix"
         if settype:
-            uiutil.select_list_row_by_value(
+            uiutil.set_list_selection(
                 self.widget("char-device-type"), settype)
 
     def _change_char_device_type(self, src):

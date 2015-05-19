@@ -342,8 +342,8 @@ class vmmHost(vmmGObjectUI):
                 _("Libvirt connection does not support interface management."))
 
         if conn_active:
-            uiutil.select_list_row_by_number(self.widget("net-list"), 0)
-            uiutil.select_list_row_by_number(self.widget("interface-list"), 0)
+            uiutil.set_list_selection_by_number(self.widget("net-list"), 0)
+            uiutil.set_list_selection_by_number(self.widget("interface-list"), 0)
             return
 
         self.set_net_error_page(_("Connection not active."))
@@ -701,7 +701,7 @@ class vmmHost(vmmGObjectUI):
         finally:
             net_list.set_model(model)
 
-        uiutil.select_list_row_by_value(net_list,
+        uiutil.set_list_selection(net_list,
             curnet and curnet.get_connkey() or None)
 
 
@@ -951,7 +951,7 @@ class vmmHost(vmmGObjectUI):
         finally:
             iface_list.set_model(model)
 
-        uiutil.select_list_row_by_value(iface_list,
+        uiutil.set_list_selection(iface_list,
             curiface and curiface.get_connkey() or None)
 
     def populate_interface_children(self):

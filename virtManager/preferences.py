@@ -188,11 +188,11 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_console_scaling(self):
         combo = self.widget("prefs-console-scaling")
         val = self.config.get_console_scaling()
-        uiutil.select_list_row_by_value(combo, val)
+        uiutil.set_list_selection(combo, val)
     def refresh_console_resizeguest(self):
         combo = self.widget("prefs-console-resizeguest")
         val = self.config.get_console_resizeguest()
-        uiutil.select_list_row_by_value(combo, val)
+        uiutil.set_list_selection(combo, val)
 
     def refresh_new_vm_sound(self):
         self.widget("prefs-new-vm-sound").set_active(
@@ -200,19 +200,19 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_graphics_type(self):
         combo = self.widget("prefs-graphics-type")
         gtype = self.config.get_graphics_type(raw=True)
-        uiutil.select_list_row_by_value(combo, gtype)
+        uiutil.set_list_selection(combo, gtype)
     def refresh_add_spice_usbredir(self):
         combo = self.widget("prefs-add-spice-usbredir")
         val = self.config.get_add_spice_usbredir(raw=True)
-        uiutil.select_list_row_by_value(combo, val)
+        uiutil.set_list_selection(combo, val)
     def refresh_storage_format(self):
         combo = self.widget("prefs-storage-format")
         val = self.config.get_default_storage_format(raw=True)
-        uiutil.select_list_row_by_value(combo, val)
+        uiutil.set_list_selection(combo, val)
     def refresh_cpu_default(self):
         combo = self.widget("prefs-cpu-default")
         val = self.config.get_default_cpu_setting(raw=True)
-        uiutil.select_list_row_by_value(combo, val)
+        uiutil.set_list_selection(combo, val)
 
     def refresh_cpu_poll(self):
         self.widget("prefs-stats-enable-cpu").set_active(

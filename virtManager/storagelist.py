@@ -404,7 +404,7 @@ class vmmStorageList(vmmGObjectUI):
         finally:
             pool_list.set_model(model)
 
-        uiutil.select_list_row_by_value(pool_list,
+        uiutil.set_list_selection(pool_list,
             curpool and curpool.get_connkey() or None)
 
     def _populate_vols(self):
@@ -520,7 +520,7 @@ class vmmStorageList(vmmGObjectUI):
         # signal arrives only after pool-added. So all we do here is
         # select the pool we just created.
         ignore = src
-        uiutil.select_list_row_by_value(self.widget("pool-list"), connkey)
+        uiutil.set_list_selection(self.widget("pool-list"), connkey)
 
     def _vol_created(self, src, pool_connkey, volname):
         # The vol list will have already been updated, since this
@@ -532,7 +532,7 @@ class vmmStorageList(vmmGObjectUI):
             return
 
         # Select the new volume
-        uiutil.select_list_row_by_value(self.widget("vol-list"), volname)
+        uiutil.set_list_selection(self.widget("vol-list"), volname)
 
     def _pool_autostart_changed(self, src):
         ignore = src
@@ -573,7 +573,7 @@ class vmmStorageList(vmmGObjectUI):
                 _("Libvirt connection does not support storage management."))
 
         if conn_active:
-            uiutil.select_list_row_by_number(self.widget("pool-list"), 0)
+            uiutil.set_list_selection_by_number(self.widget("pool-list"), 0)
             return
 
         self._set_storage_error_page(_("Connection not active."))

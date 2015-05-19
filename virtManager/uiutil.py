@@ -91,7 +91,7 @@ def get_list_selection(widget, column=0, check_visible=False):
 # UI setter helpers #
 #####################
 
-def select_list_row_by_number(widget, rownum):
+def set_list_selection_by_number(widget, rownum):
     """
     Helper to set list selection from the passed row number
     """
@@ -103,7 +103,7 @@ def select_list_row_by_number(widget, rownum):
     selection.select_path(path)
 
 
-def select_list_row_by_value(widget, value, column=0):
+def set_list_selection(widget, value, column=0):
     """
     Set a list or tree selection given the passed key, expected to
     be stored at the specified column.
