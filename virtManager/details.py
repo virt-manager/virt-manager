@@ -1885,26 +1885,23 @@ class vmmDetails(vmmGObjectUI):
 
 
     # CDROM Eject/Connect
-    def toggle_storage_media(self, src_ignore):
-        disk = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not disk:
-            return
+    def _change_storage_media(self, devobj, newpath):
+        kwargs = {"path": newpath}
+        return vmmAddHardware.change_config_helper(self.vm.define_disk,
+            kwargs, self.vm, self.err, devobj=devobj)
 
-        curpath = disk.path
-        devtype = disk.device
-
+    def _eject_media(self, disk):
         try:
-            if curpath:
-                # Disconnect cdrom
-                self.change_storage_media(disk, None)
-                return
+            self._change_storage_media(disk, None)
         except Exception, e:
             self.err.show_err((_("Error disconnecting media: %s") % e))
-            return
 
+    def _insert_media(self, disk):
         try:
-            def change_cdrom_wrapper(src_ignore, disk, newpath):
-                return self.change_storage_media(disk, newpath)
+            devtype = disk.device
+
+            def change_cdrom_wrapper(src_ignore, devobj, newpath):
+                return self._change_storage_media(devobj, newpath)
 
             # Launch 'Choose CD' dialog
             if self.media_choosers[devtype] is None:
@@ -1920,6 +1917,16 @@ class vmmDetails(vmmGObjectUI):
         except Exception, e:
             self.err.show_err((_("Error launching media dialog: %s") % e))
             return
+
+    def toggle_storage_media(self, src_ignore):
+        disk = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not disk:
+            return
+
+        if disk.path:
+            return self._eject_media(disk)
+        return self._insert_media(disk)
+
 
     ##################################################
     # Details/Hardware config changes (apply button) #
@@ -2142,12 +2149,10 @@ class vmmDetails(vmmGObjectUI):
         return vmmAddHardware.change_config_helper(self.vm.define_boot,
                                           kwargs, self.vm, self.err)
 
-    # <device> defining
-    def change_storage_media(self, devobj, newpath):
-        kwargs = {"path": newpath}
-        return vmmAddHardware.change_config_helper(self.vm.define_disk,
-                                          kwargs, self.vm, self.err,
-                                          devobj=devobj)
+
+    #####################
+    # <device> defining #
+    #####################
 
     def config_disk_apply(self, devobj):
         kwargs = {}
