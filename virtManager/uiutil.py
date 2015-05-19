@@ -107,6 +107,9 @@ def set_list_selection(widget, value, column=0):
     """
     Set a list or tree selection given the passed key, expected to
     be stored at the specified column.
+
+    If the passed value is not found, and the widget is a combo box with
+    a text entry, set the text entry to the passed value.
     """
     model = widget.get_model()
     _iter = None
@@ -114,8 +117,12 @@ def set_list_selection(widget, value, column=0):
         if row[column] == value:
             _iter = row.iter
             break
+
     if not _iter:
-        _iter = model.get_iter_first()
+        if hasattr(widget, "get_has_entry") and widget.get_has_entry():
+            widget.get_child().set_text(value or "")
+        else:
+            _iter = model.get_iter_first()
 
     if hasattr(widget, "get_selection"):
         selection = widget.get_selection()
@@ -126,24 +133,6 @@ def set_list_selection(widget, value, column=0):
     if _iter:
         cb(_iter)
     selection.emit("changed")
-
-
-def set_combo_entry(combo, value, column=0):
-    """
-    Search the passed combobox for value, comparing against
-    value of 'column'. If found, select it. If not found, and
-    the combobox has a text entry, stick the value in their and
-    select it.
-    """
-    idx = -1
-    model_list = [x[column] for x in combo.get_model()]
-    model_in_list = (value in model_list)
-    if model_in_list:
-        idx = model_list.index(value)
-
-    combo.set_active(idx)
-    if idx == -1 and combo.get_has_entry():
-        combo.get_child().set_text(value or "")
 
 
 ##################

@@ -177,9 +177,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
             use_passwd = gfx.passwd is not None
 
             set_port("graphics-port", gfx.port)
-            uiutil.set_combo_entry(
+            uiutil.set_list_selection(
                 self.widget("graphics-address"), gfx.listen)
-            uiutil.set_combo_entry(
+            uiutil.set_list_selection(
                 self.widget("graphics-keymap"), gfx.keymap or None)
 
             self.widget("graphics-password").set_text(gfx.passwd or "")
@@ -197,7 +197,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
             self.widget("graphics-xauth").set_text(
                 gfx.xauth or _("Unknown"))
 
-        uiutil.set_combo_entry(self.widget("graphics-type"), gtype)
+        uiutil.set_list_selection(self.widget("graphics-type"), gtype)
         return title
 
 

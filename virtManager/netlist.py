@@ -432,7 +432,7 @@ class vmmNetworkList(vmmGObjectUI):
         source_mode = net.source_mode
         is_direct = (net.type == "direct")
 
-        uiutil.set_combo_entry(self.widget("net-source-mode"), source_mode)
+        uiutil.set_list_selection(self.widget("net-source-mode"), source_mode)
 
         # Virtualport config
         self.widget("vport-expander").set_visible(is_direct)
@@ -466,7 +466,7 @@ class vmmNetworkList(vmmGObjectUI):
         combo.emit("changed")
 
         if net.portgroup:
-            uiutil.set_combo_entry(self.widget("net-portgroup"), net.portgroup)
+            uiutil.set_list_selection(self.widget("net-portgroup"), net.portgroup)
 
 
     #############
@@ -507,7 +507,7 @@ class vmmNetworkList(vmmGObjectUI):
             if p.default:
                 default = p.name
 
-        uiutil.set_combo_entry(combo, default)
+        uiutil.set_list_selection(combo, default)
 
     def _on_net_source_changed(self, src):
         ignore = src

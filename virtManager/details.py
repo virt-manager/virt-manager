@@ -2451,7 +2451,7 @@ class vmmDetails(vmmGObjectUI):
         firmware = domcaps.label_for_firmware_path(
             self.vm.get_xmlobj().os.loader)
         if self.widget("overview-firmware").is_visible():
-            uiutil.set_combo_entry(
+            uiutil.set_list_selection(
                 self.widget("overview-firmware"), firmware)
         elif self.widget("overview-firmware-label").is_visible():
             self.widget("overview-firmware-label").set_text(firmware)
@@ -2459,7 +2459,7 @@ class vmmDetails(vmmGObjectUI):
         # Machine settings
         machtype = self.vm.get_machtype()
         if self.widget("machine-type").is_visible():
-            uiutil.set_combo_entry(
+            uiutil.set_list_selection(
                 self.widget("machine-type"), machtype)
         elif self.widget("machine-type-label").is_visible():
             self.widget("machine-type-label").set_text(machtype)
@@ -2467,7 +2467,7 @@ class vmmDetails(vmmGObjectUI):
         # Chipset
         chipset = _chipset_label_from_machine(machtype)
         if self.widget("overview-chipset").is_visible():
-            uiutil.set_combo_entry(
+            uiutil.set_list_selection(
                 self.widget("overview-chipset"), chipset)
         elif self.widget("overview-chipset-label").is_visible():
             self.widget("overview-chipset-label").set_text(chipset)
@@ -2626,7 +2626,7 @@ class vmmDetails(vmmGObjectUI):
         if model:
             self.widget("cpu-model").get_child().set_text(model)
         else:
-            uiutil.set_combo_entry(
+            uiutil.set_list_selection(
                 self.widget("cpu-model"),
                 virtinst.CPU.SPECIAL_MODE_HV_DEFAULT, column=2)
 
@@ -2747,11 +2747,11 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(self.widget("disk-sgio"), is_lun)
         if is_lun:
             self.build_disk_sgio(self.vm, self.widget("disk-sgio"))
-            uiutil.set_combo_entry(self.widget("disk-sgio"), disk.sgio)
+            uiutil.set_list_selection(self.widget("disk-sgio"), disk.sgio)
 
         self.widget("disk-size").set_text(size)
-        uiutil.set_combo_entry(self.widget("disk-cache"), cache)
-        uiutil.set_combo_entry(self.widget("disk-io"), io)
+        uiutil.set_list_selection(self.widget("disk-cache"), cache)
+        uiutil.set_list_selection(self.widget("disk-io"), io)
 
         self.widget("disk-format").set_sensitive(show_format)
         self.widget("disk-format").get_child().set_text(driver_type)
@@ -2762,7 +2762,7 @@ class vmmDetails(vmmGObjectUI):
         vmmAddHardware.populate_disk_bus_combo(self.vm, devtype,
             self.widget("disk-bus").get_model(),
             do_virtio_scsi=False)
-        uiutil.set_combo_entry(self.widget("disk-bus"), bus)
+        uiutil.set_list_selection(self.widget("disk-bus"), bus)
         self.widget("disk-serial").set_text(serial or "")
 
         self.widget("disk-iotune-rbs").set_value(iotune_rbs)
@@ -2790,7 +2790,7 @@ class vmmDetails(vmmGObjectUI):
 
         vmmAddHardware.populate_network_model_combo(
             self.vm, self.widget("network-model"))
-        uiutil.set_combo_entry(self.widget("network-model"), net.model)
+        uiutil.set_list_selection(self.widget("network-model"), net.model)
 
         macaddr = net.macaddr or ""
         if self.widget("network-mac-label").is_visible():
@@ -2840,14 +2840,14 @@ class vmmDetails(vmmGObjectUI):
         if not sound:
             return
 
-        uiutil.set_combo_entry(self.widget("sound-model"), sound.model)
+        uiutil.set_list_selection(self.widget("sound-model"), sound.model)
 
     def refresh_smartcard_page(self):
         sc = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not sc:
             return
 
-        uiutil.set_combo_entry(self.widget("smartcard-mode"), sc.mode)
+        uiutil.set_list_selection(self.widget("smartcard-mode"), sc.mode)
 
     def refresh_redir_page(self):
         rd = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3080,7 +3080,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("video-ram").set_text(ramlabel)
         self.widget("video-heads").set_text(heads and str(heads) or "-")
 
-        uiutil.set_combo_entry(self.widget("video-model"), model)
+        uiutil.set_list_selection(self.widget("video-model"), model)
 
     def refresh_watchdog_page(self):
         watch = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3090,8 +3090,8 @@ class vmmDetails(vmmGObjectUI):
         model = watch.model
         action = watch.action
 
-        uiutil.set_combo_entry(self.widget("watchdog-model"), model)
-        uiutil.set_combo_entry(self.widget("watchdog-action"), action)
+        uiutil.set_list_selection(self.widget("watchdog-model"), model)
+        uiutil.set_list_selection(self.widget("watchdog-action"), action)
 
     def refresh_controller_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3108,7 +3108,7 @@ class vmmDetails(vmmGObjectUI):
         vmmAddHardware.populate_controller_model_combo(combo, dev.type)
         uiutil.set_grid_row_visible(combo,
             dev.model or len(combo.get_model()) > 1)
-        uiutil.set_combo_entry(self.widget("controller-model"),
+        uiutil.set_list_selection(self.widget("controller-model"),
             dev.model or None)
 
     def refresh_filesystem_page(self):
