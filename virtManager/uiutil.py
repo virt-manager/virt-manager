@@ -86,12 +86,19 @@ def get_list_selected_row(widget, check_visible=False):
 
 def get_list_selection(widget, column=0, check_visible=False):
     """
-    Helper to simplify getting the selected row and value in a list/tree/combo
+    Helper to simplify getting the selected row and value in a list/tree/combo.
+    If nothing is selected, and the widget is a combo box with a text entry,
+    return the value of that.
     """
     row = get_list_selected_row(widget, check_visible=check_visible)
-    if row is None:
-        return None
-    return row[column]
+    if row is not None:
+        return row[column]
+
+    if hasattr(widget, "get_has_entry"):
+        if widget.get_has_entry():
+            return widget.get_child().get_text().strip()
+
+    return None
 
 
 def select_list_row_by_number(widget, rownum):
@@ -148,19 +155,6 @@ def set_combo_entry(combo, value, column=0):
     combo.set_active(idx)
     if idx == -1 and combo.get_has_entry():
         combo.get_child().set_text(value or "")
-
-
-def get_combo_entry(combo, column=0):
-    """
-    Helper to get the value specified in a combo box, with or
-    without and entry
-    """
-    row = get_list_selected_row(combo)
-    if row:
-        return row[column]
-    if not combo.get_has_entry():
-        return None
-    return combo.get_child().get_text().strip()
 
 
 def child_get_property(parent, child, propname):

@@ -2012,7 +2012,7 @@ class vmmDetails(vmmGObjectUI):
                 kwargs["machine"] = uiutil.get_list_selection(
                     self.widget("overview-chipset"), column=1)
             else:
-                kwargs["machine"] = uiutil.get_combo_entry(
+                kwargs["machine"] = uiutil.get_list_selection(
                     self.widget("machine-type"))
 
         if self.edited(EDIT_DESC):
@@ -2162,20 +2162,21 @@ class vmmDetails(vmmGObjectUI):
                 self.widget("disk-removable").get_active())
 
         if self.edited(EDIT_DISK_CACHE):
-            kwargs["cache"] = uiutil.get_combo_entry(self.widget("disk-cache"))
+            kwargs["cache"] = uiutil.get_list_selection(
+                self.widget("disk-cache"))
 
         if self.edited(EDIT_DISK_IO):
-            kwargs["io"] = uiutil.get_combo_entry(self.widget("disk-io"))
+            kwargs["io"] = uiutil.get_list_selection(self.widget("disk-io"))
 
         if self.edited(EDIT_DISK_FORMAT):
-            kwargs["driver_type"] = uiutil.get_combo_entry(
+            kwargs["driver_type"] = uiutil.get_list_selection(
                 self.widget("disk-format"))
 
         if self.edited(EDIT_DISK_SERIAL):
             kwargs["serial"] = self.get_text("disk-serial")
 
         if self.edited(EDIT_DISK_SGIO):
-            sgio = uiutil.get_combo_entry(self.widget("disk-sgio"))
+            sgio = uiutil.get_list_selection(self.widget("disk-sgio"))
             kwargs["sgio"] = sgio
 
         if self.edited(EDIT_DISK_IOTUNE):
@@ -2193,7 +2194,7 @@ class vmmDetails(vmmGObjectUI):
                 self.widget("disk-iotune-wis").get_value())
 
         if self.edited(EDIT_DISK_BUS):
-            bus = uiutil.get_combo_entry(self.widget("disk-bus"))
+            bus = uiutil.get_list_selection(self.widget("disk-bus"))
             addr = None
             if bus == "spapr-vscsi":
                 bus = "scsi"
@@ -2210,7 +2211,7 @@ class vmmDetails(vmmGObjectUI):
         kwargs = {}
 
         if self.edited(EDIT_SOUND_MODEL):
-            model = uiutil.get_combo_entry(self.widget("sound-model"))
+            model = uiutil.get_list_selection(self.widget("sound-model"))
             if model:
                 kwargs["model"] = model
 
@@ -2222,7 +2223,7 @@ class vmmDetails(vmmGObjectUI):
         kwargs = {}
 
         if self.edited(EDIT_SMARTCARD_MODE):
-            model = uiutil.get_combo_entry(self.widget("smartcard-mode"))
+            model = uiutil.get_list_selection(self.widget("smartcard-mode"))
             if model:
                 kwargs["model"] = model
 
@@ -2234,7 +2235,7 @@ class vmmDetails(vmmGObjectUI):
         kwargs = {}
 
         if self.edited(EDIT_NET_MODEL):
-            model = uiutil.get_combo_entry(self.widget("network-model"))
+            model = uiutil.get_list_selection(self.widget("network-model"))
             addrstr = None
             if model == "spapr-vlan":
                 addrstr = "spapr-vio"
@@ -2285,7 +2286,7 @@ class vmmDetails(vmmGObjectUI):
         kwargs = {}
 
         if self.edited(EDIT_VIDEO_MODEL):
-            model = uiutil.get_combo_entry(self.widget("video-model"))
+            model = uiutil.get_list_selection(self.widget("video-model"))
             if model:
                 kwargs["model"] = model
 
@@ -2297,7 +2298,7 @@ class vmmDetails(vmmGObjectUI):
         kwargs = {}
 
         if self.edited(EDIT_CONTROLLER_MODEL):
-            model = uiutil.get_combo_entry(self.widget("controller-model"))
+            model = uiutil.get_list_selection(self.widget("controller-model"))
             kwargs["model"] = model
 
         return vmmAddHardware.change_config_helper(self.vm.define_controller,
@@ -2308,11 +2309,11 @@ class vmmDetails(vmmGObjectUI):
         kwargs = {}
 
         if self.edited(EDIT_WATCHDOG_MODEL):
-            kwargs["model"] = uiutil.get_combo_entry(
+            kwargs["model"] = uiutil.get_list_selection(
                 self.widget("watchdog-model"))
 
         if self.edited(EDIT_WATCHDOG_ACTION):
-            kwargs["action"] = uiutil.get_combo_entry(
+            kwargs["action"] = uiutil.get_list_selection(
                 self.widget("watchdog-action"))
 
         return vmmAddHardware.change_config_helper(self.vm.define_watchdog,

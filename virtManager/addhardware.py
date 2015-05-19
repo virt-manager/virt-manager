@@ -1523,7 +1523,7 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("config-storage-devtype"))
         cache = uiutil.get_list_selection(
             self.widget("config-storage-cache"))
-        fmt = uiutil.get_combo_entry(self.widget("config-storage-format"))
+        fmt = uiutil.get_list_selection(self.widget("config-storage-format"))
 
         controller_model = None
         if bus == "virtio-scsi":
@@ -1565,7 +1565,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_network(self):
         nettype = self._netlist.get_network_selection()[0]
-        model = uiutil.get_combo_entry(self.widget("net-model"))
+        model = uiutil.get_list_selection(self.widget("net-model"))
         mac = None
         if self.widget("mac-address").get_active():
             mac = self.widget("create-mac-address").get_text()
@@ -1818,7 +1818,7 @@ class vmmAddHardware(vmmGObjectUI):
         conn = self.conn.get_backend()
         controller_type = uiutil.get_list_selection(
             self.widget("controller-type"))
-        model = uiutil.get_combo_entry(self.widget("controller-model"))
+        model = uiutil.get_list_selection(self.widget("controller-model"))
 
         self._dev = VirtualController(conn)
         self._selected_model = model

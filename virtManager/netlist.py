@@ -316,11 +316,11 @@ class vmmNetworkList(vmmGObjectUI):
 
         mode = None
         if self.widget("net-source-mode").is_visible():
-            mode = uiutil.get_combo_entry(self.widget("net-source-mode"))
+            mode = uiutil.get_list_selection(self.widget("net-source-mode"))
 
         portgroup = None
         if self.widget("net-portgroup").is_visible():
-            portgroup = uiutil.get_combo_entry(self.widget("net-portgroup"))
+            portgroup = uiutil.get_list_selection(self.widget("net-portgroup"))
 
         return net_type, net_src, mode, portgroup or None
 

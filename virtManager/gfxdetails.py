@@ -135,7 +135,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
         port, tlsport = self._get_config_graphics_ports()
         addr = uiutil.get_list_selection(self.widget("graphics-address"))
-        keymap = uiutil.get_combo_entry(self.widget("graphics-keymap"))
+        keymap = uiutil.get_list_selection(self.widget("graphics-keymap"))
         if keymap == "auto":
             keymap = None
 
