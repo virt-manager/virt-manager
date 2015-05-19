@@ -968,15 +968,11 @@ class vmmDomain(vmmLibvirtObject):
                 else:
                     dev = VirtualController(guest.conn)
                     dev.type = "usb"
-                    if model != "default":
-                        dev.model = model
+                    dev.model = model
                     guest.add_device(dev)
 
-            elif editdev.type == "scsi":
-                if model == "default":
-                    editdev.model = None
-                else:
-                    editdev.model = model
+            else:
+                editdev.model = model
                 self.hotplug(device=editdev)
 
         if model != _SENTINEL:

@@ -317,6 +317,8 @@
                           <object class="GtkGrid" id="grid5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">start</property>
+                            <property name="vexpand">False</property>
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">6</property>
                             <child>
@@ -359,16 +361,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="controller-model">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkImage" id="controller-tooltip">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -377,6 +369,22 @@
                               <packing>
                                 <property name="left_attach">2</property>
                                 <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="controller-model">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="has_entry">True</property>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry" id="combobox-entry4">
+                                    <property name="can_focus">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                             <child>
@@ -391,7 +399,7 @@
                           <object class="GtkLabel" id="label24">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Controller</property>
+                            <property name="label" translatable="yes">ctrl</property>
                           </object>
                           <packing>
                             <property name="position">2</property>

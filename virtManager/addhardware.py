@@ -782,26 +782,19 @@ class vmmAddHardware(vmmGObjectUI):
                     break
 
     @staticmethod
-    def populate_controller_model_combo(combo, controller_type, remove_widget,
-        add_default=False):
+    def populate_controller_model_combo(combo, controller_type):
         model = combo.get_model()
         model.clear()
 
-        if remove_widget:
-            remove_widget.set_sensitive(
-                controller_type != virtinst.VirtualController.TYPE_USB)
-
+        model.append([None, _("Hypervisor default")])
         if controller_type == virtinst.VirtualController.TYPE_USB:
-            model.append(["default", _("Hypervisor default")])
             model.append(["ich9-ehci1", "USB 2"])
             model.append(["nec-xhci", "USB 3"])
         elif controller_type == virtinst.VirtualController.TYPE_SCSI:
-            model.append(["default", _("Hypervisor default")])
             model.append(["virtio-scsi", "VirtIO SCSI"])
-        else:
-            if add_default:
-                model.append([None, _("Hypervisor default")])
-                uiutil.set_grid_row_visible(combo, False)
+
+        combo.set_active(0)
+
 
     @staticmethod
     def label_for_input_device(typ, bus):
@@ -899,8 +892,8 @@ class vmmAddHardware(vmmGObjectUI):
             model_tooltip.set_tooltip_text(tooltip)
 
         controller_type = self.get_config_controller_type()
-        modellist = self.widget("controller-model")
-        modellist.set_sensitive(True)
+        combo = self.widget("controller-model")
+        combo.set_sensitive(True)
         model_tooltip = self.widget("controller-tooltip")
         show_tooltip(model_tooltip, False)
 
@@ -910,7 +903,8 @@ class vmmAddHardware(vmmGObjectUI):
                     (x.type == VirtualController.TYPE_USB)]
             if (len(usb_controllers) == 0):
                 self.widget("create-finish").set_sensitive(True)
-            elif (len(usb_controllers) == 1 and usb_controllers[0].model == "none"):
+            elif (len(usb_controllers) == 1 and
+                  usb_controllers[0].model == "none"):
                 self._remove_usb_controller = usb_controllers[0]
                 self.widget("create-finish").set_sensitive(True)
             else:
@@ -918,11 +912,9 @@ class vmmAddHardware(vmmGObjectUI):
                 self.widget("create-finish").set_sensitive(False)
         else:
             self.widget("create-finish").set_sensitive(True)
-        uiutil.set_grid_row_visible(modellist, True)
-        self.populate_controller_model_combo(modellist, controller_type, None, True)
 
-        if len(modellist.get_model()) > 0:
-            modellist.set_active(0)
+        self.populate_controller_model_combo(combo, controller_type)
+        uiutil.set_grid_row_visible(combo, len(combo.get_model()) > 1)
 
 
     ########################
@@ -1124,7 +1116,7 @@ class vmmAddHardware(vmmGObjectUI):
         return uiutil.get_list_selection(self.widget("controller-type"), 0)
 
     def get_config_controller_model(self):
-        return uiutil.get_list_selection(self.widget("controller-model"), 0)
+        return uiutil.get_combo_entry(self.widget("controller-model"), 0)
 
     ################
     # UI listeners #

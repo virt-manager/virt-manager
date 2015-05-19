@@ -2299,8 +2299,7 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_CONTROLLER_MODEL):
             model = uiutil.get_combo_entry(self.widget("controller-model"))
-            if model:
-                kwargs["model"] = model
+            kwargs["model"] = model
 
         return vmmAddHardware.change_config_helper(self.vm.define_controller,
                                           kwargs, self.vm, self.err,
@@ -3101,20 +3100,18 @@ class vmmDetails(vmmGObjectUI):
         if not dev:
             return
 
+        self.widget("config-remove").set_sensitive(
+            dev.type != virtinst.VirtualController.TYPE_USB)
+
         type_label = dev.pretty_desc()
-        model_label = dev.model
-        if not model_label:
-            model_label = _("Default")
-
         self.widget("controller-type").set_text(type_label)
+
         combo = self.widget("controller-model")
-        uiutil.set_grid_row_visible(combo, True)
-
-        vmmAddHardware.populate_controller_model_combo(combo, dev.type,
-                self.widget("config-remove"), False)
-
+        vmmAddHardware.populate_controller_model_combo(combo, dev.type)
+        uiutil.set_grid_row_visible(combo,
+            dev.model or len(combo.get_model()) > 1)
         uiutil.set_combo_entry(self.widget("controller-model"),
-                             dev.model or "Default")
+            dev.model or None)
 
     def refresh_filesystem_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
