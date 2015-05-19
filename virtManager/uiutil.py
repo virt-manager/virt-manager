@@ -29,23 +29,9 @@ except (ValueError, AttributeError):
     can_set_row_none = False
 
 
-def init_combo_text_column(combo, col):
-    """
-    Set the text column of the passed combo to 'col'. Does the
-    right thing whether it's a plain combo or a comboboxentry. Saves
-    some typing.
-
-    :returns: If we added a cell renderer, returns it. Otherwise return None
-    """
-    if combo.get_has_entry():
-        combo.set_entry_text_column(col)
-    else:
-        text = Gtk.CellRendererText()
-        combo.pack_start(text, True)
-        combo.add_attribute(text, 'text', col)
-        return text
-    return None
-
+#####################
+# UI getter helpers #
+#####################
 
 def spin_get_helper(widget):
     """
@@ -101,6 +87,10 @@ def get_list_selection(widget, column=0, check_visible=False):
     return None
 
 
+#####################
+# UI setter helpers #
+#####################
+
 def select_list_row_by_number(widget, rownum):
     """
     Helper to set list selection from the passed row number
@@ -113,26 +103,26 @@ def select_list_row_by_number(widget, rownum):
     selection.select_path(path)
 
 
-def select_list_row_by_value(listwidget, prevkey, column=0):
+def select_list_row_by_value(widget, value, column=0):
     """
-    Set a list or tree selection given the passed key. The key is
-    expected to be element 0 in the list rows.
+    Set a list or tree selection given the passed key, expected to
+    be stored at the specified column.
     """
-    model = listwidget.get_model()
+    model = widget.get_model()
     _iter = None
-    if prevkey is not None:
+    if value is not None:
         for row in model:
-            if row[column] == prevkey:
+            if row[column] == value:
                 _iter = row.iter
                 break
     if not _iter:
         _iter = model.get_iter_first()
 
-    if hasattr(listwidget, "get_selection"):
-        selection = listwidget.get_selection()
+    if hasattr(widget, "get_selection"):
+        selection = widget.get_selection()
         cb = selection.select_iter
     else:
-        selection = listwidget
+        selection = widget
         cb = selection.set_active_iter
     if _iter:
         cb(_iter)
@@ -156,6 +146,10 @@ def set_combo_entry(combo, value, column=0):
     if idx == -1 and combo.get_has_entry():
         combo.get_child().set_text(value or "")
 
+
+##################
+# Misc functions #
+##################
 
 def child_get_property(parent, child, propname):
     """
@@ -184,3 +178,21 @@ def set_grid_row_visible(child, visible):
     for child in parent.get_children():
         if child_get_property(parent, child, "top-attach") == row:
             child.set_visible(visible)
+
+
+def init_combo_text_column(combo, col):
+    """
+    Set the text column of the passed combo to 'col'. Does the
+    right thing whether it's a plain combo or a comboboxentry. Saves
+    some typing.
+
+    :returns: If we added a cell renderer, returns it. Otherwise return None
+    """
+    if combo.get_has_entry():
+        combo.set_entry_text_column(col)
+    else:
+        text = Gtk.CellRendererText()
+        combo.pack_start(text, True)
+        combo.add_attribute(text, 'text', col)
+        return text
+    return None
