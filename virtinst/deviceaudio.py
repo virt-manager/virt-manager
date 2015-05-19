@@ -25,7 +25,7 @@ class VirtualAudio(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_AUDIO
 
     MODEL_DEFAULT = "default"
-    MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", "ich9", MODEL_DEFAULT]
+    MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", "ich9"]
 
     model = XMLProperty("./@model",
                         default_cb=lambda s: "es1370",

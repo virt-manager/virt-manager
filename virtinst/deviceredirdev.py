@@ -30,7 +30,7 @@ class VirtualRedirDevice(VirtualDevice):
     BUSES = ["usb"]
 
     TYPE_DEFAULT = "default"
-    TYPES = ["tcp", "spicevmc", TYPE_DEFAULT]
+    TYPES = ["tcp", "spicevmc"]
 
     @staticmethod
     def pretty_type(typ):

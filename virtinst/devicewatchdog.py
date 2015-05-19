@@ -28,7 +28,7 @@ class VirtualWatchdog(VirtualDevice):
     MODEL_I6300 = "i6300esb"
     MODEL_IB700 = "ib700"
     MODEL_DEFAULT = "default"
-    MODELS = [MODEL_I6300, MODEL_IB700, MODEL_DEFAULT]
+    MODELS = [MODEL_I6300, MODEL_IB700]
 
     ACTION_SHUTDOWN = "shutdown"
     ACTION_RESET    = "reset"
@@ -39,8 +39,7 @@ class VirtualWatchdog(VirtualDevice):
     ACTION_DEFAULT  = "default"
     ACTIONS = [ACTION_RESET, ACTION_SHUTDOWN,
                ACTION_POWEROFF, ACTION_PAUSE,
-               ACTION_NONE, ACTION_DUMP,
-               ACTION_DEFAULT]
+               ACTION_NONE, ACTION_DUMP]
 
     @staticmethod
     def get_action_desc(action):
@@ -54,8 +53,6 @@ class VirtualWatchdog(VirtualDevice):
             return _("Pause the guest")
         if action == VirtualWatchdog.ACTION_NONE:
             return _("No action")
-        if action == VirtualWatchdog.ACTION_DEFAULT:
-            return _("Hypervisor default")
         return action
 
     _XML_PROP_ORDER = ["model", "action"]

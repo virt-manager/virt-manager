@@ -490,7 +490,7 @@ class vmmAddHardware(vmmGObjectUI):
     #####################
 
     @staticmethod
-    def populate_video_combo(vm, combo, no_default=None):
+    def populate_video_combo(vm, combo):
         model = combo.get_model()
         has_spice = bool([g for g in vm.get_graphics_devices()
                           if g.type == g.TYPE_SPICE])
@@ -505,24 +505,22 @@ class vmmAddHardware(vmmGObjectUI):
                     # Only list QXL video option when VM has SPICE video
                     continue
 
-            if m == tmpdev.MODEL_DEFAULT and no_default:
-                continue
             model.append([m, tmpdev.pretty_model(m)])
 
         if len(model) > 0:
             combo.set_active(0)
 
     @staticmethod
-    def build_video_combo(vm, combo, no_default=None):
+    def build_video_combo(vm, combo):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
         combo.get_model().set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
-        vmmAddHardware.populate_video_combo(vm, combo, no_default)
+        vmmAddHardware.populate_video_combo(vm, combo)
 
     @staticmethod
-    def build_sound_combo(vm, combo, no_default=False):
+    def build_sound_combo(vm, combo):
         model = Gtk.ListStore(str)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 0)
@@ -532,9 +530,6 @@ class vmmAddHardware(vmmGObjectUI):
         stable_soundmodels = ["ich6", "ich9", "ac97"]
 
         for m in virtinst.VirtualAudio.MODELS:
-            if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
-                continue
-
             if (stable_defaults and m not in stable_soundmodels):
                 continue
 
@@ -543,31 +538,25 @@ class vmmAddHardware(vmmGObjectUI):
             combo.set_active(0)
 
     @staticmethod
-    def build_watchdogmodel_combo(vm, combo, no_default=False):
+    def build_watchdogmodel_combo(vm, combo):
         ignore = vm
         model = Gtk.ListStore(str)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 0)
-        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         for m in virtinst.VirtualWatchdog.MODELS:
-            if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
-                continue
             model.append([m])
         if len(model) > 0:
             combo.set_active(0)
 
     @staticmethod
-    def build_watchdogaction_combo(vm, combo, no_default=False):
+    def build_watchdogaction_combo(vm, combo):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
-        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         for m in virtinst.VirtualWatchdog.ACTIONS:
-            if m == virtinst.VirtualWatchdog.ACTION_DEFAULT and no_default:
-                continue
             model.append([m, virtinst.VirtualWatchdog.get_action_desc(m)])
         if len(model) > 0:
             combo.set_active(0)

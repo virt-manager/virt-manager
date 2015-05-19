@@ -27,7 +27,7 @@ class VirtualVideoDevice(VirtualDevice):
 
     # Default models list
     MODEL_DEFAULT = "default"
-    MODELS = ["cirrus", "vga", "vmvga", "xen", "qxl", MODEL_DEFAULT]
+    MODELS = ["cirrus", "vga", "vmvga", "xen", "qxl"]
 
     @staticmethod
     def pretty_model(model):

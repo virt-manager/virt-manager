@@ -967,8 +967,6 @@ class vmmDetails(vmmGObjectUI):
         txtCol.add_attribute(text, 'text', BOOT_LABEL)
         txtCol.add_attribute(text, 'sensitive', BOOT_ACTIVE)
 
-        no_default = not self.is_customize_dialog
-
         try:
             cpu_names = caps.get_cpu_values(self.vm.get_arch())
         except:
@@ -1030,23 +1028,19 @@ class vmmDetails(vmmGObjectUI):
 
         # Sound model
         sound_dev = self.widget("sound-model")
-        vmmAddHardware.build_sound_combo(self.vm, sound_dev,
-            no_default=no_default)
+        vmmAddHardware.build_sound_combo(self.vm, sound_dev)
 
         # Video model combo
         video_dev = self.widget("video-model")
-        vmmAddHardware.build_video_combo(self.vm, video_dev,
-            no_default=no_default)
+        vmmAddHardware.build_video_combo(self.vm, video_dev)
 
         # Watchdog model combo
         combo = self.widget("watchdog-model")
-        vmmAddHardware.build_watchdogmodel_combo(self.vm, combo,
-                                            no_default=no_default)
+        vmmAddHardware.build_watchdogmodel_combo(self.vm, combo)
 
         # Watchdog action combo
         combo = self.widget("watchdog-action")
-        vmmAddHardware.build_watchdogaction_combo(self.vm, combo,
-                                             no_default=no_default)
+        vmmAddHardware.build_watchdogaction_combo(self.vm, combo)
 
         # Smartcard mode
         sc_mode = self.widget("smartcard-mode")
@@ -3071,10 +3065,8 @@ class vmmDetails(vmmGObjectUI):
         if not vid:
             return
 
-        no_default = not self.is_customize_dialog
         vmmAddHardware.populate_video_combo(self.vm,
-            self.widget("video-model"),
-            no_default=no_default)
+            self.widget("video-model"))
 
         model = vid.model
         ram = vid.vram

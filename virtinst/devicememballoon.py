@@ -25,10 +25,12 @@ from .xmlbuilder import XMLProperty
 class VirtualMemballoon(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_MEMBALLOON
 
-    MODEL_DEFAULT = "virtio"
-    MODELS = ["xen", "none", MODEL_DEFAULT]
+    MODEL_DEFAULT = "default"
+    MODELS = ["virtio", "xen", "none"]
 
-    model = XMLProperty("./@model", default_cb=lambda s: s.MODEL_DEFAULT)
+    model = XMLProperty("./@model",
+                        default_name=MODEL_DEFAULT,
+                        default_cb=lambda s: "virtio")
 
 
 VirtualMemballoon.register_type()
