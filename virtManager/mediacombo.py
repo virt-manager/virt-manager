@@ -167,7 +167,9 @@ class vmmMediaCombo(vmmGObjectUI):
             logging.debug("Error populating mediadev combo", exc_info=True)
 
     def get_path(self):
-        return uiutil.get_list_selection(self.combo, self.OPTICAL_DEV_PATH)
+        return uiutil.get_list_selection(
+            self.combo, column=self.OPTICAL_DEV_PATH)
 
     def has_media(self):
-        return uiutil.get_list_selection(self.combo, self.OPTICAL_HAS_MEDIA)
+        return uiutil.get_list_selection(
+            self.combo, column=self.OPTICAL_HAS_MEDIA)

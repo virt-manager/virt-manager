@@ -947,7 +947,7 @@ class vmmAddHardware(vmmGObjectUI):
             model_tooltip.set_tooltip_text(tooltip)
 
         controller_type = uiutil.get_list_selection(
-            self.widget("controller-type"), 0)
+            self.widget("controller-type"))
         combo = self.widget("controller-model")
         combo.set_sensitive(True)
         model_tooltip = self.widget("controller-tooltip")
@@ -1046,7 +1046,7 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.select_list_row_by_number(self.widget("hw-list"), page)
 
     def _get_hw_selection(self):
-        return uiutil.get_list_selection(self.widget("hw-list"), None)
+        return uiutil.get_list_selected_row(self.widget("hw-list"))
 
 
     ################
@@ -1177,7 +1177,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _change_storage_devtype(self, ignore):
         devtype = uiutil.get_list_selection(
-            self.widget("config-storage-devtype"), 0)
+            self.widget("config-storage-devtype"))
         self._refresh_disk_bus(devtype)
 
         allow_create = devtype not in ["cdrom", "floppy"]
@@ -1193,7 +1193,7 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("create-mac-address").set_sensitive(False)
 
     def _change_tpm_device_type(self, src):
-        devtype = uiutil.get_list_selection(src, 0)
+        devtype = uiutil.get_list_selection(src)
         if devtype is None:
             return
 
@@ -1235,7 +1235,7 @@ class vmmAddHardware(vmmGObjectUI):
             settype)
 
     def _change_char_device_type(self, src):
-        devtype = uiutil.get_list_selection(src, 0)
+        devtype = uiutil.get_list_selection(src)
         if devtype is None:
             return
 
@@ -1275,22 +1275,22 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("char-mode").set_active(0)
 
     def _change_usbredir_type(self, src):
-        showhost = uiutil.get_list_selection(src, 2)
+        showhost = uiutil.get_list_selection(src, column=2)
         if showhost is None:
             return
         uiutil.set_grid_row_visible(self.widget("usbredir-host-box"),
                                        showhost)
 
     def _change_rng(self, ignore1):
-        rtype = uiutil.get_list_selection(self.widget("rng-type"), 0)
+        rtype = uiutil.get_list_selection(self.widget("rng-type"))
         is_egd = rtype == virtinst.VirtualRNGDevice.TYPE_EGD
         uiutil.set_grid_row_visible(self.widget("rng-device"), not is_egd)
         uiutil.set_grid_row_visible(self.widget("rng-backend-type"), is_egd)
 
         backend_type = uiutil.get_list_selection(
-            self.widget("rng-backend-type"), 0)
+            self.widget("rng-backend-type"))
         backend_mode = uiutil.get_list_selection(
-            self.widget("rng-backend-mode"), 0)
+            self.widget("rng-backend-mode"))
         udp = backend_type == virtinst.VirtualRNGDevice.BACKEND_TYPE_UDP
         bind = backend_mode == virtinst.VirtualRNGDevice.BACKEND_MODE_BIND
 
@@ -1518,11 +1518,11 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_storage(self):
         bus = uiutil.get_list_selection(
-            self.widget("config-storage-bustype"), 0)
+            self.widget("config-storage-bustype"))
         device = uiutil.get_list_selection(
-            self.widget("config-storage-devtype"), 0)
+            self.widget("config-storage-devtype"))
         cache = uiutil.get_list_selection(
-            self.widget("config-storage-cache"), 0)
+            self.widget("config-storage-cache"))
         fmt = uiutil.get_combo_entry(self.widget("config-storage-format"))
 
         controller_model = None
@@ -1585,7 +1585,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev = ret
 
     def _validate_page_input(self):
-        row = uiutil.get_list_selection(self.widget("input-type"), None)
+        row = uiutil.get_list_selected_row(self.widget("input-type"))
         dev = virtinst.VirtualInputDevice(self.conn.get_backend())
         dev.type = row[1]
         dev.bus = row[2]
@@ -1609,7 +1609,7 @@ class vmmAddHardware(vmmGObjectUI):
             self.err.val_err(_("Graphics device parameter error"), e)
 
     def _validate_page_sound(self):
-        smodel = uiutil.get_list_selection(self.widget("sound-model"), 0)
+        smodel = uiutil.get_list_selection(self.widget("sound-model"))
 
         try:
             self._dev = virtinst.VirtualAudio(self.conn.get_backend())
@@ -1618,7 +1618,7 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Sound device parameter error"), e)
 
     def _validate_page_hostdev(self):
-        row = uiutil.get_list_selection(self.widget("host-device"), None)
+        row = uiutil.get_list_selected_row(self.widget("host-device"))
         is_dup = False
 
         if row is None:
@@ -1663,7 +1663,7 @@ class vmmAddHardware(vmmGObjectUI):
         modebox = self.widget("char-mode")
         devbox = self.widget("char-device-type")
         typebox = self.widget("char-target-type")
-        devtype = uiutil.get_list_selection(devbox, 0)
+        devtype = uiutil.get_list_selection(devbox)
         conn = self.conn.get_backend()
 
         devclass = char_class(conn)
@@ -1671,13 +1671,13 @@ class vmmAddHardware(vmmGObjectUI):
 
         source_path = self.widget("char-path").get_text()
         source_channel = self.widget("char-channel").get_text()
-        source_mode = uiutil.get_list_selection(modebox, 0)
+        source_mode = uiutil.get_list_selection(modebox)
         source_host = self.widget("char-host").get_text()
         bind_host = self.widget("char-bind-host").get_text()
         source_port = self.widget("char-port").get_value()
         bind_port = self.widget("char-bind-port").get_value()
         target_name = self.widget("char-target-name").get_child().get_text()
-        target_type = uiutil.get_list_selection(typebox, 0)
+        target_type = uiutil.get_list_selection(typebox)
 
         if self.widget("char-use-telnet").get_active():
             protocol = VirtualSerialDevice.PROTOCOL_TELNET
@@ -1722,7 +1722,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_video(self):
         conn = self.conn.get_backend()
-        model = uiutil.get_list_selection(self.widget("video-model"), 0)
+        model = uiutil.get_list_selection(self.widget("video-model"))
 
         try:
             self._dev = VirtualVideoDevice(conn)
@@ -1732,8 +1732,8 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_watchdog(self):
         conn = self.conn.get_backend()
-        model = uiutil.get_list_selection(self.widget("watchdog-model"), 0)
-        action = uiutil.get_list_selection(self.widget("watchdog-action"), 0)
+        model = uiutil.get_list_selection(self.widget("watchdog-model"))
+        action = uiutil.get_list_selection(self.widget("watchdog-action"))
 
         try:
             self._dev = VirtualWatchdog(conn)
@@ -1749,7 +1749,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_smartcard(self):
         conn = self.conn.get_backend()
-        mode = uiutil.get_list_selection(self.widget("smartcard-mode"), 0)
+        mode = uiutil.get_list_selection(self.widget("smartcard-mode"))
 
         try:
             self._dev = VirtualSmartCardDevice(conn)
@@ -1759,7 +1759,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_usbredir(self):
         conn = self.conn.get_backend()
-        stype = uiutil.get_list_selection(self.widget("usbredir-list"), 0)
+        stype = uiutil.get_list_selection(self.widget("usbredir-list"))
         host = None
         service = None
         if self.widget("usbredir-host").is_visible():
@@ -1779,7 +1779,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_tpm(self):
         conn = self.conn.get_backend()
-        typ = uiutil.get_list_selection(self.widget("tpm-type"), 0)
+        typ = uiutil.get_list_selection(self.widget("tpm-type"))
 
         device_path = self.widget("tpm-device-path").get_text()
 
@@ -1817,8 +1817,8 @@ class vmmAddHardware(vmmGObjectUI):
     def _validate_page_controller(self):
         conn = self.conn.get_backend()
         controller_type = uiutil.get_list_selection(
-            self.widget("controller-type"), 0)
-        model = uiutil.get_combo_entry(self.widget("controller-model"), 0)
+            self.widget("controller-type"))
+        model = uiutil.get_combo_entry(self.widget("controller-model"))
 
         self._dev = VirtualController(conn)
         self._selected_model = model
@@ -1838,11 +1838,11 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.model = model
 
     def _validate_page_rng(self):
-        rtype = uiutil.get_list_selection(self.widget("rng-type"), 0)
+        rtype = uiutil.get_list_selection(self.widget("rng-type"))
         backend_type = uiutil.get_list_selection(
-            self.widget("rng-backend-type"), 0)
+            self.widget("rng-backend-type"))
         backend_mode = uiutil.get_list_selection(
-            self.widget("rng-backend-mode"), 0)
+            self.widget("rng-backend-mode"))
 
         connect_host = self.widget("rng-connect-host").get_text()
         connect_service = uiutil.spin_get_helper(

@@ -262,7 +262,7 @@ class vmmStorageList(vmmGObjectUI):
     ####################
 
     def _current_pool(self):
-        connkey = uiutil.get_list_selection(self.widget("pool-list"), 0)
+        connkey = uiutil.get_list_selection(self.widget("pool-list"))
         return connkey and self.conn.get_pool(connkey)
 
     def _current_vol(self):
@@ -270,7 +270,7 @@ class vmmStorageList(vmmGObjectUI):
         if not pool:
             return None
 
-        connkey = uiutil.get_list_selection(self.widget("vol-list"), 0)
+        connkey = uiutil.get_list_selection(self.widget("vol-list"))
         return connkey and pool.get_volume(connkey)
 
     def _enable_pool_apply(self, *arglist):

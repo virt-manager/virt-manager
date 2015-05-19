@@ -310,7 +310,7 @@ class vmmCreatePool(vmmGObjectUI):
 
 
     def get_config_type(self):
-        return uiutil.get_list_selection(self.widget("pool-type"), 0)
+        return uiutil.get_list_selection(self.widget("pool-type"))
 
     def get_config_name(self):
         return self.widget("pool-name").get_text()
@@ -320,7 +320,7 @@ class vmmCreatePool(vmmGObjectUI):
         if not src.get_sensitive():
             return None
 
-        ret = uiutil.get_list_selection(src, 1)
+        ret = uiutil.get_list_selection(src, column=1)
         if ret is not None:
             return ret
         return src.get_child().get_text()
@@ -330,7 +330,7 @@ class vmmCreatePool(vmmGObjectUI):
         if not src.get_sensitive():
             return None
 
-        ret = uiutil.get_list_selection(src, 1)
+        ret = uiutil.get_list_selection(src, column=1)
         if ret is not None:
             return ret
         return src.get_child().get_text().strip()
@@ -348,7 +348,7 @@ class vmmCreatePool(vmmGObjectUI):
         return None
 
     def get_config_format(self):
-        return uiutil.get_list_selection(self.widget("pool-format"), 0)
+        return uiutil.get_list_selection(self.widget("pool-format"))
 
     def get_config_iqn(self):
         iqn = self.widget("pool-iqn")
@@ -479,9 +479,9 @@ class vmmCreatePool(vmmGObjectUI):
         source_list = self.widget("pool-source-path")
         target_list = self.widget("pool-target-path")
 
-        pool = uiutil.get_list_selection(source_list, 2)
+        pool = uiutil.get_list_selection(source_list, column=2)
         if pool is None:
-            pool = uiutil.get_list_selection(target_list, 2)
+            pool = uiutil.get_list_selection(target_list, column=2)
 
         return pool
 

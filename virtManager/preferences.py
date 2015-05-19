@@ -338,24 +338,24 @@ class vmmPreferences(vmmGObjectUI):
     def change_console_scaling(self, box):
         self.config.set_console_scaling(box.get_active())
     def change_console_resizeguest(self, box):
-        val = uiutil.get_list_selection(box, 0)
+        val = uiutil.get_list_selection(box)
         self.config.set_console_resizeguest(val)
 
     def change_new_vm_sound(self, src):
         self.config.set_new_vm_sound(src.get_active())
     def change_graphics_type(self, src):
-        val = uiutil.get_list_selection(src, 0)
+        val = uiutil.get_list_selection(src)
         self.config.set_graphics_type(val)
         uiutil.set_grid_row_visible(
             self.widget("prefs-add-spice-usbredir"),
             self.config.get_graphics_type() == "spice")
     def change_add_spice_usbredir(self, src):
-        self.config.set_add_spice_usbredir(uiutil.get_list_selection(src, 0))
+        self.config.set_add_spice_usbredir(uiutil.get_list_selection(src))
     def change_storage_format(self, src):
-        typ = uiutil.get_list_selection(src, 0) or "default"
+        typ = uiutil.get_list_selection(src) or "default"
         self.config.set_storage_format(typ.lower())
     def change_cpu_default(self, src):
-        typ = uiutil.get_list_selection(src, 0) or "default"
+        typ = uiutil.get_list_selection(src) or "default"
         self.config.set_default_cpu_setting(typ.lower())
 
     def change_cpu_poll(self, src):

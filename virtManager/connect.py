@@ -369,7 +369,7 @@ class vmmConnect(vmmGObjectUI):
         self.widget("username-entry").set_text(default_user)
 
     def generate_uri(self):
-        hv = uiutil.get_list_selection(self.widget("hypervisor"), 0)
+        hv = uiutil.get_list_selection(self.widget("hypervisor"))
         conn = self.widget("transport").get_active()
         host = self.widget("hostname").get_child().get_text().strip()
         user = self.widget("username-entry").get_text()

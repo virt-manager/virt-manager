@@ -203,7 +203,7 @@ class vmmCreateVolume(vmmGObjectUI):
 
 
     def get_config_format(self):
-        return uiutil.get_list_selection(self.widget("vol-format"), 0)
+        return uiutil.get_list_selection(self.widget("vol-format"))
 
     def populate_vol_format(self):
         stable_whitelist = ["raw", "qcow2", "qed"]

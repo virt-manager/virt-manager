@@ -226,8 +226,9 @@ class vmmCreateNetwork(vmmGObjectUI):
         if self.widget("net-forward-none").get_active():
             return [None, None]
 
-        name = uiutil.get_list_selection(self.widget("net-forward"), 1)
-        mode = uiutil.get_list_selection(self.widget("net-forward-mode"), 1)
+        name = uiutil.get_list_selection(self.widget("net-forward"), column=1)
+        mode = uiutil.get_list_selection(
+            self.widget("net-forward-mode"), column=1)
         return [name, mode]
 
     def get_config_routev4_network(self):

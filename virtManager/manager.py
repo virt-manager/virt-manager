@@ -418,7 +418,7 @@ class vmmManager(vmmGObjectUI):
     ##################
 
     def current_row(self):
-        return uiutil.get_list_selection(self.widget("vm-list"), None)
+        return uiutil.get_list_selected_row(self.widget("vm-list"))
 
     def current_vm(self):
         row = self.current_row()

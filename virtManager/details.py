@@ -1107,7 +1107,7 @@ class vmmDetails(vmmGObjectUI):
             self.widget("toolbar-box").hide()
 
     def get_boot_selection(self):
-        return uiutil.get_list_selection(self.widget("config-boot-list"), None)
+        return uiutil.get_list_selected_row(self.widget("config-boot-list"))
 
     def set_hw_selection(self, page, disable_apply=True):
         if disable_apply:
@@ -1115,7 +1115,7 @@ class vmmDetails(vmmGObjectUI):
         uiutil.select_list_row_by_number(self.widget("hw-list"), page)
 
     def get_hw_row(self):
-        return uiutil.get_list_selection(self.widget("hw-list"), None)
+        return uiutil.get_list_selected_row(self.widget("hw-list"))
 
     def get_hw_selection(self, field):
         row = self.get_hw_row()
@@ -2005,12 +2005,12 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_FIRMWARE):
             kwargs["loader"] = uiutil.get_list_selection(
-                self.widget("overview-firmware"), 1)
+                self.widget("overview-firmware"), column=1)
 
         if self.edited(EDIT_MACHTYPE):
             if self.widget("overview-chipset").is_visible():
                 kwargs["machine"] = uiutil.get_list_selection(
-                    self.widget("overview-chipset"), 1)
+                    self.widget("overview-chipset"), column=1)
             else:
                 kwargs["machine"] = uiutil.get_combo_entry(
                     self.widget("machine-type"))
@@ -2627,7 +2627,7 @@ class vmmDetails(vmmGObjectUI):
         else:
             uiutil.set_combo_entry(
                 self.widget("cpu-model"),
-                virtinst.CPU.SPECIAL_MODE_HV_DEFAULT, 2)
+                virtinst.CPU.SPECIAL_MODE_HV_DEFAULT, column=2)
 
         # Warn about hyper-threading setting
         cpu_model = self.get_config_cpu_model()

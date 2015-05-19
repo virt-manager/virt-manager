@@ -298,7 +298,7 @@ class vmmNetworkList(vmmGObjectUI):
     ###############
 
     def get_network_row(self):
-        return uiutil.get_list_selection(self.widget("net-source"), None)
+        return uiutil.get_list_selected_row(self.widget("net-source"))
 
     def get_network_selection(self):
         bridge_entry = self.widget("net-bridge-name")
@@ -316,11 +316,11 @@ class vmmNetworkList(vmmGObjectUI):
 
         mode = None
         if self.widget("net-source-mode").is_visible():
-            mode = uiutil.get_combo_entry(self.widget("net-source-mode"), 0)
+            mode = uiutil.get_combo_entry(self.widget("net-source-mode"))
 
         portgroup = None
         if self.widget("net-portgroup").is_visible():
-            portgroup = uiutil.get_combo_entry(self.widget("net-portgroup"), 0)
+            portgroup = uiutil.get_combo_entry(self.widget("net-portgroup"))
 
         return net_type, net_src, mode, portgroup or None
 
@@ -488,7 +488,7 @@ class vmmNetworkList(vmmGObjectUI):
         ignore = kwargs
 
         netlist = self.widget("net-source")
-        label = uiutil.get_list_selection(netlist, 2)
+        label = uiutil.get_list_selection(netlist, column=2)
         self._populate_network_list()
 
         for row in netlist.get_model():

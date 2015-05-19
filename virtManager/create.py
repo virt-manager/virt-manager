@@ -940,7 +940,7 @@ class vmmCreate(vmmGObjectUI):
         return self.widget("create-vm-name").get_text()
 
     def get_config_machine(self):
-        return uiutil.get_list_selection(self.widget("config-machine"), 0,
+        return uiutil.get_list_selection(self.widget("config-machine"),
             check_visible=True)
 
     def is_install_page(self):
@@ -965,10 +965,8 @@ class vmmCreate(vmmGObjectUI):
                 return INSTALL_PAGE_CONTAINER_OS
 
     def get_config_os_info(self):
-        drow = uiutil.get_list_selection(
-            self.widget("install-os-type"), None)
-        vrow = uiutil.get_list_selection(
-            self.widget("install-os-version"), None)
+        drow = uiutil.get_list_selected_row(self.widget("install-os-type"))
+        vrow = uiutil.get_list_selected_row(self.widget("install-os-version"))
         distro = None
         dlabel = None
         variant = None
@@ -1060,7 +1058,7 @@ class vmmCreate(vmmGObjectUI):
 
     # Listeners
     def conn_changed(self, src):
-        uri = uiutil.get_list_selection(src, 0)
+        uri = uiutil.get_list_selection(src)
         conn = None
         if uri:
             conn = self.engine.conns[uri]["conn"]
@@ -1112,7 +1110,7 @@ class vmmCreate(vmmGObjectUI):
             "<small>%s</small>" % _("Network selection does not support PXE"))
 
     def hv_changed(self, src):
-        hv = uiutil.get_list_selection(src, 1)
+        hv = uiutil.get_list_selection(src, column=1)
         if not hv:
             return
 
@@ -1120,7 +1118,7 @@ class vmmCreate(vmmGObjectUI):
         self.populate_arch()
 
     def arch_changed(self, src):
-        arch = uiutil.get_list_selection(src, 0)
+        arch = uiutil.get_list_selection(src)
         if not arch:
             return
 
@@ -1166,8 +1164,7 @@ class vmmCreate(vmmGObjectUI):
             self.detect_media_os()
 
     def _selected_os_row(self):
-        return uiutil.get_list_selection(
-            self.widget("install-os-type"), None)
+        return uiutil.get_list_selected_row(self.widget("install-os-type"))
 
     def change_os_type(self, box):
         ignore = box
@@ -1181,7 +1178,7 @@ class vmmCreate(vmmGObjectUI):
                 return
 
     def change_os_version(self, box):
-        show_all = uiutil.get_list_selection(box, 3)
+        show_all = uiutil.get_list_selection(box, column=3)
         if not show_all:
             return
 

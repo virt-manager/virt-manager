@@ -60,11 +60,9 @@ def spin_get_helper(widget):
         return adj.get_value()
 
 
-def get_list_selection(widget, rowindex, check_visible=False):
+def get_list_selected_row(widget, check_visible=False):
     """
-    Helper to simplify getting the selected row and value in a list/tree/combo
-
-    If rowindex is None, return the whole row.
+    Helper to simplify getting the selected row in a list/tree/combo
     """
     if check_visible and not widget.get_visible():
         return None
@@ -83,9 +81,17 @@ def get_list_selection(widget, rowindex, check_visible=False):
 
         row = widget.get_model()[idx]
 
-    if rowindex is None:
-        return row
-    return row[rowindex]
+    return row
+
+
+def get_list_selection(widget, column=0, check_visible=False):
+    """
+    Helper to simplify getting the selected row and value in a list/tree/combo
+    """
+    row = get_list_selected_row(widget, check_visible=check_visible)
+    if row is None:
+        return None
+    return row[column]
 
 
 def select_list_row_by_number(widget, rownum):
@@ -126,15 +132,15 @@ def select_list_row_by_value(listwidget, prevkey, column=0):
     selection.emit("changed")
 
 
-def set_combo_entry(combo, value, rowidx=0):
+def set_combo_entry(combo, value, column=0):
     """
     Search the passed combobox for value, comparing against
-    rowidx. If found, select it. If not found, and
+    value of 'column'. If found, select it. If not found, and
     the combobox has a text entry, stick the value in their and
     select it.
     """
     idx = -1
-    model_list = [x[rowidx] for x in combo.get_model()]
+    model_list = [x[column] for x in combo.get_model()]
     model_in_list = (value in model_list)
     if model_in_list:
         idx = model_list.index(value)
@@ -144,14 +150,14 @@ def set_combo_entry(combo, value, rowidx=0):
         combo.get_child().set_text(value or "")
 
 
-def get_combo_entry(combo, rowidx=0):
+def get_combo_entry(combo, column=0):
     """
     Helper to get the value specified in a combo box, with or
     without and entry
     """
-    row = get_list_selection(combo, None)
+    row = get_list_selected_row(combo)
     if row:
-        return row[rowidx]
+        return row[column]
     if not combo.get_has_entry():
         return None
     return combo.get_child().get_text().strip()

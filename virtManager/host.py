@@ -489,7 +489,7 @@ class vmmHost(vmmGObjectUI):
         self.enable_net_apply(EDIT_NET_AUTOSTART)
 
     def current_network(self):
-        connkey = uiutil.get_list_selection(self.widget("net-list"), 0)
+        connkey = uiutil.get_list_selection(self.widget("net-list"))
         return connkey and self.conn.get_net(connkey)
 
     def refresh_network(self, net):
@@ -772,7 +772,7 @@ class vmmHost(vmmGObjectUI):
         self.refresh_interface(cp)
 
     def current_interface(self):
-        connkey = uiutil.get_list_selection(self.widget("interface-list"), 0)
+        connkey = uiutil.get_list_selection(self.widget("interface-list"))
         return connkey and self.conn.get_interface(connkey)
 
     def interface_apply(self):
@@ -781,7 +781,7 @@ class vmmHost(vmmGObjectUI):
             return
 
         newmode = uiutil.get_list_selection(
-            self.widget("interface-startmode"), 0)
+            self.widget("interface-startmode"))
 
         logging.debug("Applying changes for interface '%s'",
                       interface.get_name())

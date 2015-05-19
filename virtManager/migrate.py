@@ -190,7 +190,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         self._finish()
 
     def _destconn_changed(self, src):
-        row = uiutil.get_list_selection(src, None)
+        row = uiutil.get_list_selected_row(src)
         if not row:
             return
 
@@ -258,7 +258,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-port-label").set_visible(not enable)
 
     def _is_tunnel_selected(self):
-        return uiutil.get_list_selection(self.widget("migrate-mode"), 1)
+        return uiutil.get_list_selection(self.widget("migrate-mode"), column=1)
 
     def _mode_changed(self, src):
         ignore = src
@@ -366,7 +366,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def _finish(self):
         try:
-            row = uiutil.get_list_selection(self.widget("migrate-dest"), None)
+            row = uiutil.get_list_selected_row(self.widget("migrate-dest"))
             destlabel = row[COL_LABEL]
             destconn = self._conns.get(row[COL_URI])
 
