@@ -793,9 +793,7 @@ class vmmCreate(vmmGObjectUI):
 
         model.append([name, label, sep, action])
 
-    def populate_os_type_model(self):
-        widget = self.widget("install-os-type")
-        model = widget.get_model()
+    def _fill_os_type_model(self, model):
         model.clear()
 
         # Kind of a hack, just show linux + windows by default since
@@ -818,13 +816,21 @@ class vmmCreate(vmmGObjectUI):
         self._add_os_row(model, sep=True)
         self._add_os_row(model, label=_("Show all OS options"), action=True)
 
+    def populate_os_type_model(self):
+        widget = self.widget("install-os-type")
+        model = widget.get_model()
+
+        # Don't trigger 'change' events while repopulating
+        widget.set_model(None)
+        try:
+            self._fill_os_type_model(model)
+        finally:
+            widget.set_model(model)
+
         # Select 'generic' by default
         widget.set_active(0)
 
-
-    def populate_os_variant_model(self, _type):
-        widget = self.widget("install-os-version")
-        model = widget.get_model()
+    def _fill_os_variant_model(self, model, _type):
         model.clear()
 
         preferred = self.config.preferred_distros
@@ -838,6 +844,17 @@ class vmmCreate(vmmGObjectUI):
 
         self._add_os_row(model, sep=True)
         self._add_os_row(model, label=_("Show all OS options"), action=True)
+
+    def populate_os_variant_model(self, _type):
+        widget = self.widget("install-os-version")
+        model = widget.get_model()
+
+        # Don't trigger 'change' events while repopulating
+        widget.set_model(None)
+        try:
+            self._fill_os_variant_model(model, _type)
+        finally:
+            widget.set_model(model)
 
         widget.set_active(0)
 
