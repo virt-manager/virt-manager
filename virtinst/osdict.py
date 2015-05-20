@@ -514,7 +514,7 @@ class _OsVariant(object):
         return False
 
     def supports_qemu_ga(self):
-        return self._is_related_to(["fedora18", "rhel6.0"])
+        return self._is_related_to(["fedora18", "rhel6.0", "sles11sp4"])
 
     def default_videomodel(self, guest):
         if guest.os.is_pseries():
