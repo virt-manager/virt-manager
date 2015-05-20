@@ -814,6 +814,18 @@ class Guest(XMLBuilder):
             return False
         return True
 
+    def check_defaults(self):
+        # This is used only by virt-manager to reset any defaults that may have
+        # changed through manual intervention via the customize wizard.
+        if not self._hv_supported():
+            self.features.hyperv_relaxed = None
+            self.features.hyperv_vapic = None
+            self.features.hyperv_spinlocks = None
+            self.features.hyperv_spinlocks_retries = None
+            for i in self.clock.timers:
+                if i.name == "hypervclock":
+                    self.clock.remove_timer(i)
+
     def _set_feature_defaults(self):
         if self.os.is_container():
             self.features.acpi = None

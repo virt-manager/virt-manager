@@ -1804,6 +1804,7 @@ class vmmCreate(vmmGObjectUI):
             if not self.is_visible():
                 return
             logging.debug("User finished customize dialog, starting install")
+            guest.check_defaults()
             self.start_install(guest)
 
         def config_canceled(ignore):
