@@ -20,6 +20,7 @@
 
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Pango
 
 import os
 import stat
@@ -91,6 +92,7 @@ class vmmDeleteDialog(vmmGObjectUI):
                      (_("Delete"), util.xml_escape(self.vm.get_name())))
         self.widget("header-label").set_markup(title_str)
 
+        self.topwin.resize(1, 1)
         self.widget("delete-cancel").grab_focus()
 
         # Show warning message if VM is running
@@ -295,9 +297,11 @@ def prepare_storage_list(storage_list):
     storage_list.set_tooltip_column(STORAGE_ROW_TOOLTIP)
 
     confirmCol = Gtk.TreeViewColumn()
-    pathCol = Gtk.TreeViewColumn(_("Storage Path"))
     targetCol = Gtk.TreeViewColumn(_("Target"))
     infoCol = Gtk.TreeViewColumn()
+    pathCol = Gtk.TreeViewColumn(_("Storage Path"))
+    pathCol.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
+    pathCol.set_expand(True)
 
     storage_list.append_column(confirmCol)
     storage_list.append_column(pathCol)
@@ -316,6 +320,8 @@ def prepare_storage_list(storage_list):
     pathCol.pack_start(path_txt, True)
     pathCol.add_attribute(path_txt, 'text', STORAGE_ROW_PATH)
     pathCol.set_sort_column_id(STORAGE_ROW_PATH)
+    path_txt.set_property("width-chars", 50)
+    path_txt.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
 
     target_txt = Gtk.CellRendererText()
     targetCol.pack_start(target_txt, False)
