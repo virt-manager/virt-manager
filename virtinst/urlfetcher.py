@@ -919,27 +919,56 @@ class SLDistro(RHELDistro):
 
 class SuseDistro(Distro):
     name = "SUSE"
-    urldistro = "suse"
-    os_variant = "linux"
 
     _boot_iso_paths   = ["boot/boot.iso"]
 
     def __init__(self, *args, **kwargs):
+        self.version_from_content = None
         Distro.__init__(self, *args, **kwargs)
         if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
 
+        oldkern = "linux"
+        oldinit = "initrd"
+        if self.arch == "x86_64":
+            oldkern += "64"
+            oldinit += "64"
+
         # Tested with Opensuse >= 10.2, 11, and sles 10
         self._hvm_kernel_paths = [("boot/%s/loader/linux" % self.arch,
                                     "boot/%s/loader/initrd" % self.arch)]
+        # Tested with Opensuse 10.0
+        self._hvm_kernel_paths.append(("boot/loader/%s" % oldkern,
+                                       "boot/loader/%s" % oldinit))
 
         # Matches Opensuse > 10.2 and sles 10
         self._xen_kernel_paths = [("boot/%s/vmlinuz-xen" % self.arch,
                                     "boot/%s/initrd-xen" % self.arch)]
 
+    def _variantFromVersion(self):
+        distro_version = self.version_from_content[1].strip()
+        version = distro_version.split('.', 1)[0].strip()
+        self.os_variant = self.urldistro
+        if int(version) >= 10:
+            if self.os_variant.startswith(("sles", "sled")):
+                sp_version = None
+                if len(distro_version.split('.', 1)) == 2:
+                    sp_version = 'sp' + distro_version.split('.', 1)[1].strip()
+                self.os_variant += version
+                if sp_version:
+                    self.os_variant += sp_version
+            else:
+                self.os_variant += distro_version
+        else:
+            self.os_variant += "9"
+
     def isValidStore(self):
-        if not self.fetcher.hasFile("directory.yast"):
+        # self.version_from_content is the VERSION line from the contents file
+        if self.version_from_content is None or \
+            self.version_from_content[1] is None:
             return False
+
+        self._variantFromVersion()
 
         self.os_variant = self._detect_osdict_from_url()
         return True
