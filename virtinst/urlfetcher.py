@@ -873,6 +873,20 @@ class SuseDistro(Distro):
         return self.os_variant
 
 
+class SLESDistro(SuseDistro):
+    urldistro = "sles"
+
+
+class SLEDDistro(SuseDistro):
+    urldistro = "sled"
+
+
+# Suse  image store is harder - we fetch the kernel RPM and a helper
+# RPM and then munge bits together to generate a initrd
+class OpensuseDistro(SuseDistro):
+    urldistro = "opensuse"
+
+
 class DebianDistro(Distro):
     # ex. http://ftp.egr.msu.edu/debian/dists/sarge/main/installer-i386/
     # daily builds: http://d-i.debian.org/daily-images/amd64/
