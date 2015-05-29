@@ -147,6 +147,9 @@ _add(OLD_OPENSUSE_URL % ("11.4"), "opensuse11.4", hasbootiso=False)
 # Only keep i686 for the latest opensuse
 _add(OPENSUSE_URL % ("12.3"), "opensuse12.3",
      i686=OPENSUSE_URL % ("12.3"), hasbootiso=False, testshortcircuit=True)
+# Latest 13.x releases
+_add(OPENSUSE_URL % ("13.1"), "opensuse13.1", hasbootiso=False)
+_add(OPENSUSE_URL % ("13.2"), "opensuse13.2", hasbootiso=False)
 
 
 _set_distro(DebianDistro)
