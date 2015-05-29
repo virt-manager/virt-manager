@@ -317,6 +317,91 @@ def _distroFromTreeinfo(fetcher, arch, vmtype=None):
     return ob
 
 
+def _distroFromSUSEContent(fetcher, arch, vmtype=None):
+    # Parse content file for the 'LABEL' field containing the distribution name
+    # None if no content, GenericDistro if unknown label type.
+    if not fetcher.hasFile("content"):
+        return None
+
+    distribution = None
+    distro_version = None
+    distro_summary = None
+    distro_distro = None
+    distro_arch = None
+    filename = fetcher.acquireFile("content")
+    cbuf = None
+    try:
+        cbuf = open(filename).read()
+    finally:
+        os.unlink(filename)
+
+    lines = cbuf.splitlines()[1:]
+    for line in lines:
+        if line.startswith("LABEL "):
+            distribution = line.split(' ', 1)
+        elif line.startswith("DISTRO "):
+            distro_distro = line.rsplit(',', 1)
+        elif line.startswith("VERSION "):
+            distro_version = line.split(' ', 1)
+        elif line.startswith("SUMMARY "):
+            distro_summary = line.split(' ', 1)
+        elif line.startswith("BASEARCHS "):
+            distro_arch = line.split(' ', 1)
+        elif line.startswith("DEFAULTBASE "):
+            distro_arch = line.split(' ', 1)
+        elif line.startswith("REPOID "):
+            distro_arch = line.rsplit('/', 1)
+        if distribution and distro_version and distro_arch:
+            break
+
+    if not distribution:
+        if distro_summary:
+            distribution = distro_summary
+        elif distro_distro:
+            distribution = distro_distro
+    if distro_arch:
+        arch = distro_arch[1].strip()
+        # Fix for 13.2 official oss repo
+        if arch.find("i586-x86_64") != -1:
+            arch = "x86_64"
+    else:
+        if cbuf.find("x86_64") != -1:
+            arch = "x86_64"
+        elif cbuf.find("i586") != -1:
+            arch = "i586"
+
+    dclass = GenericDistro
+    if distribution:
+        if re.match(".*SUSE Linux Enterprise Server*", distribution[1]) or \
+            re.match(".*SUSE SLES*", distribution[1]):
+            dclass = SLESDistro
+            if distro_version is None:
+                distro_version = ['VERSION', distribution[1].strip().rsplit(' ')[4]]
+        elif re.match(".*SUSE Linux Enterprise Desktop*", distribution[1]):
+            dclass = SLEDDistro
+            if distro_version is None:
+                distro_version = ['VERSION', distribution[1].strip().rsplit(' ')[4]]
+        elif re.match(".*openSUSE.*", distribution[1]):
+            dclass = OpensuseDistro
+            if distro_version is None:
+                distro_version = ['VERSION', distribution[0].strip().rsplit(':')[4]]
+                # For tumbleweed we only have an 8 character date string so default to 13.2
+                if distro_version[1] and len(distro_version[1]) == 8:
+                    distro_version = ['VERSION', '13.2']
+
+    if distro_version is None:
+        return None
+
+    ob = dclass(fetcher, arch, vmtype)
+    if dclass != GenericDistro:
+        ob.version_from_content = distro_version
+
+    # Explictly call this, so we populate os_type/variant info
+    ob.isValidStore()
+
+    return ob
+
+
 def getDistroStore(guest, fetcher):
     stores = []
     logging.debug("Finding distro store for location=%s", fetcher.location)
@@ -329,6 +414,10 @@ def getDistroStore(guest, fetcher):
         urldistro = OSDB.lookup_os(guest.os_variant).urldistro
 
     dist = _distroFromTreeinfo(fetcher, arch, _type)
+    if dist:
+        return dist
+
+    dist = _distroFromSUSEContent(fetcher, arch, _type)
     if dist:
         return dist
 
