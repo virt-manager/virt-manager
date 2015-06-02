@@ -173,7 +173,7 @@ class VirtualNetworkInterface(VirtualDevice):
 
     def _get_source(self):
         """
-        Convenince function, try to return the relevant <source> value
+        Convenience function, try to return the relevant <source> value
         per the network type.
         """
         if self.type == self.TYPE_VIRTUAL:
@@ -187,7 +187,7 @@ class VirtualNetworkInterface(VirtualDevice):
         return self._network or self._bridge or self._source_dev
     def _set_source(self, newsource):
         """
-        Conveninece function, try to set the relevant <source> value
+        Convenience function, try to set the relevant <source> value
         per the network type
         """
         self._bridge = None
