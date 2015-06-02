@@ -484,7 +484,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             newsnap.get_xml_config()
             return newsnap
         except Exception, e:
-            return self.err.val_err(_("Error validating snapshot: %s" % e))
+            return self.err.val_err(_("Error validating snapshot: %s") % e)
 
     def _get_screenshot_data_for_save(self):
         snwidget = self.widget("snapshot-new-screenshot")

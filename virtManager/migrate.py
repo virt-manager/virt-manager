@@ -400,7 +400,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             self._async_migrate,
             [self.vm, destconn, uri, tunnel, unsafe, temporary],
             self._finish_cb, [destconn],
-            _("Migrating VM '%s'" % self.vm.get_name()),
+            _("Migrating VM '%s'") % self.vm.get_name(),
             (_("Migrating VM '%s' to %s. This may take a while.") %
              (self.vm.get_name(), destlabel)),
             self.topwin, cancel_cb=cancel_cb)

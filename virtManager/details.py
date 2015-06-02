@@ -236,7 +236,7 @@ def _label_for_device(dev, vm):
     if devtype == "hostdev":
         return dev.pretty_name()
     if devtype == "sound":
-        return _("Sound: %s" % dev.model)
+        return _("Sound: %s") % dev.model
     if devtype == "video":
         return _("Video %s") % dev.pretty_model(dev.model)
     if devtype == "filesystem":
@@ -2356,7 +2356,7 @@ class vmmDetails(vmmGObjectUI):
         try:
             self.vm.remove_device(devobj)
         except Exception, e:
-            self.err.show_err(_("Error Removing Device: %s" % str(e)))
+            self.err.show_err(_("Error Removing Device: %s") % str(e))
             return
 
         # Try to hot remove

@@ -1381,7 +1381,7 @@ class vmmAddHardware(vmmGObjectUI):
                 self.vm.add_device(controller)
             self.vm.add_device(self._dev)
         except Exception, e:
-            self.err.show_err(_("Error adding device: %s" % str(e)))
+            self.err.show_err(_("Error adding device: %s") % str(e))
             return True
 
         return False

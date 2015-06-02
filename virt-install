@@ -397,7 +397,7 @@ def set_install_media(guest, location, cdpath, distro_variant):
         elif distro_variant != "none":
             guest.os_variant = distro_variant
     except ValueError, e:
-        fail(_("Error validating install location: %s" % str(e)))
+        fail(_("Error validating install location: %s") % str(e))
 
 
 def do_test_media_detection(conn, url):

@@ -249,7 +249,7 @@ def setup_device(dev):
 def define_changes(conn, inactive_xmlobj, devs, action, confirm):
     if confirm:
         if not prompt_yes_or_no(
-            _("Define '%s' with the changed XML?" % inactive_xmlobj.name)):
+            _("Define '%s' with the changed XML?") % inactive_xmlobj.name):
             return
 
     if action == "hotplug":
@@ -257,7 +257,7 @@ def define_changes(conn, inactive_xmlobj, devs, action, confirm):
             setup_device(dev)
 
     conn.defineXML(inactive_xmlobj.get_xml_config())
-    print_stdout(_("Domain '%s' defined successfully." % inactive_xmlobj.name))
+    print_stdout(_("Domain '%s' defined successfully.") % inactive_xmlobj.name)
 
 
 def update_changes(domain, devs, action, confirm):

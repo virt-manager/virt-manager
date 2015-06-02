@@ -199,7 +199,7 @@ def _import_file(doc, ctx, conn, input_file):
             ref = _path_has_prefix("/file/")
 
         else:
-            raise ValueError(_("Unknown storage path type %s." % path))
+            raise ValueError(_("Unknown storage path type %s.") % path)
 
         xpath = (envbase + "/ovf:References/ovf:File[@ovf:id='%s']" % ref)
 

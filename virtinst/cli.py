@@ -360,7 +360,7 @@ def validate_disk(dev, warn_overwrite=False):
         if not VirtualDisk.path_definitely_exists(dev.conn, dev.path):
             return
         _optional_fail(
-            _("This will overwrite the existing path '%s'" % dev.path),
+            _("This will overwrite the existing path '%s'") % dev.path,
             "path_exists")
 
     def check_inuse_conflict(dev):
@@ -1641,7 +1641,7 @@ class ParserDisk(VirtCLIParser):
             try:
                 return float(val)
             except Exception, e:
-                fail(_("Improper value for 'size': %s" % str(e)))
+                fail(_("Improper value for 'size': %s") % str(e))
 
         def convert_perms(val):
             if val is None:
@@ -1654,7 +1654,7 @@ class ParserDisk(VirtCLIParser):
                 # It's default. Nothing to do.
                 pass
             else:
-                fail(_("Unknown '%s' value '%s'" % ("perms", val)))
+                fail(_("Unknown '%s' value '%s'") % ("perms", val))
 
         has_path = "path" in opts.opts
         backing_store = opts.get_opt_param("backing_store")

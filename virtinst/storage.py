@@ -502,26 +502,26 @@ class StoragePool(_StorageObject):
         try:
             pool = self.conn.storagePoolDefineXML(xml, 0)
         except Exception, e:
-            raise RuntimeError(_("Could not define storage pool: %s" % str(e)))
+            raise RuntimeError(_("Could not define storage pool: %s") % str(e))
 
         errmsg = None
         if build:
             try:
                 pool.build(libvirt.VIR_STORAGE_POOL_BUILD_NEW)
             except Exception, e:
-                errmsg = _("Could not build storage pool: %s" % str(e))
+                errmsg = _("Could not build storage pool: %s") % str(e)
 
         if create and not errmsg:
             try:
                 pool.create(0)
             except Exception, e:
-                errmsg = _("Could not start storage pool: %s" % str(e))
+                errmsg = _("Could not start storage pool: %s") % str(e)
 
         if autostart and not errmsg:
             try:
                 pool.setAutostart(True)
             except Exception, e:
-                errmsg = _("Could not set pool autostart flag: %s" % str(e))
+                errmsg = _("Could not set pool autostart flag: %s") % str(e)
 
         if errmsg:
             # Try and clean up the leftover pool
@@ -590,7 +590,7 @@ class StorageVolume(_StorageObject):
         return self._pool
     def _set_pool(self, newpool):
         if newpool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
-            raise ValueError(_("pool '%s' must be active." % newpool.name()))
+            raise ValueError(_("pool '%s' must be active.") % newpool.name())
         self._pool = newpool
         self._pool_xml = StoragePool(self.conn,
             parsexml=self._pool.XMLDesc(0))
