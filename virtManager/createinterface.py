@@ -211,7 +211,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
         # Parent/slave Interface list
         slave_list = self.widget("interface-list")
-        # [ vmmInterface, selected, selectabel, name, type, is defined,
+        # [ vmmInterface, selected, selectable, name, type, is defined,
         #   is active, in use by str, mac]
         slave_model = Gtk.ListStore(object, bool, bool, str, str, bool, bool,
                                     str, str)
