@@ -481,6 +481,7 @@ class Distro(object):
     _hvm_kernel_paths = []
     _xen_kernel_paths = []
     uses_treeinfo = False
+    version_from_content = None
 
     def __init__(self, fetcher, arch, vmtype):
         self.fetcher = fetcher
@@ -923,7 +924,6 @@ class SuseDistro(Distro):
     _boot_iso_paths   = ["boot/boot.iso"]
 
     def __init__(self, *args, **kwargs):
-        self.version_from_content = None
         Distro.__init__(self, *args, **kwargs)
         if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
