@@ -111,8 +111,9 @@ _add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14",
 # 2 Latest releases
 _add(OLD_FEDORA_URL % ("20", "x86_64"), "fedora20")
 _add(FEDORA_URL % ("21", "x86_64"), "fedora21")
+_add(FEDORA_URL % ("22", "x86_64"), "fedora22")
 # Any Dev release
-_add(DEVFEDORA_URL % ("22", "x86_64"), "fedora21", name="fedora22")
+# _add(DEVFEDORA_URL % ("22", "x86_64"), "fedora21", name="fedora22")
 
 
 _set_distro(CentOSDistro)
@@ -122,10 +123,10 @@ _add(OLD_CENTOS_URL % ("4.9", "x86_64"), name="centos-4.9")
 # One old centos 5
 _add(OLD_CENTOS_URL % ("5.0", "x86_64"), name="centos-5.0")
 # Latest centos 5 w/ i686
-_add(CENTOS_URL % ("5", "x86_64"), "rhel5.8", name="centos-5-latest",
+_add(CENTOS_URL % ("5", "x86_64"), "rhel5.11", name="centos-5-latest",
      i686=CENTOS_URL % ("5", "i386"))
 # Latest centos 6 w/ i686
-_add(CENTOS_URL % ("6", "x86_64"), "centos6.5", name="centos-6-latest",
+_add(CENTOS_URL % ("6", "x86_64"), "rhel6.6", name="centos-6-latest",
      i686=CENTOS_URL % ("6", "i386"))
 # Latest centos 7, but no i686 as of 2014-09-06
 _add(CENTOS_URL % ("7", "x86_64"), "centos7.0", name="centos-7-latest")
@@ -159,8 +160,8 @@ _add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debian5", hasxen=False,
 _add(DEBIAN_URL % ("squeeze", "amd64"), "debian6")
 _add(DEBIAN_URL % ("wheezy", "amd64"), "debian7")
 # And daily builds, since we specially handle that URL
-_add(DAILY_DEBIAN_URL % ("amd64"), "debian7", name="debiandaily")
-_add(DAILY_DEBIAN_URL % ("arm64"), "debian7",
+_add(DAILY_DEBIAN_URL % ("amd64"), "debian8", name="debiandaily")
+_add(DAILY_DEBIAN_URL % ("arm64"), "debian8",
     name="debiandailyarm64", hasxen=False)
 
 
