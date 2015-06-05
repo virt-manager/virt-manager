@@ -86,7 +86,7 @@ class TestClone(unittest.TestCase):
 
         if disks is None:
             disks = ["/dev/disk-pool/disk-vol1", "/tmp/clone2.img",
-                     "/tmp/clone3.img", "/tmp/clone4.img",
+                     "/clone3", "/tmp/clone4.img",
                      "/tmp/clone5.img", None]
 
         cloneobj.clone_paths = disks
@@ -156,7 +156,7 @@ class TestClone(unittest.TestCase):
         base = "force"
         self._clone_helper(base,
                            disks=["/dev/default-pool/1234.img",
-                                  None, "/tmp/clone2.img"],
+                                  None, "/clone2.img"],
                            force_list=["hda", "fdb", "sdb"])
 
     def testCloneStorageSkip(self):
