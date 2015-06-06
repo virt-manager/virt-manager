@@ -347,7 +347,8 @@ class Guest(XMLBuilder):
             return None
 
         self.installer.alter_bootconfig(self, osblob_install)
-        self._set_transient_device_defaults(install)
+        if not install:
+            self._remove_cdrom_install_media()
 
         if install:
             self.on_reboot = "destroy"
@@ -662,26 +663,14 @@ class Guest(XMLBuilder):
         self.add_default_usb_controller()
         self.add_default_channels()
 
-    def _set_transient_device_defaults(self, install):
-        def do_remove_media(d):
-            # Keep cdrom around, but with no media attached,
+    def _remove_cdrom_install_media(self):
+        for dev in self.get_devices("disk"):
+            # Keep the install cdrom device around, but with no media attached.
             # But only if we are a distro that doesn't have a multi
             # stage install (aka not Windows)
-            return (d.is_cdrom() and
-                    getattr(d, "installer_media", False) and
-                    not install and
-                    not self.get_continue_inst())
-
-        def do_skip_disk(d):
-            # Skip transient labeled non-media disks
-            return (d.is_disk() and
-                    getattr(d, "installer_media", False) and
-                    not install)
-
-        for dev in self.get_devices("disk"):
-            if do_skip_disk(dev):
-                self.remove_device(dev)
-            elif do_remove_media(dev):
+            if (dev.is_cdrom() and
+                getattr(dev, "installer_media", False) and
+                not self.get_continue_inst()):
                 dev.path = None
 
     def _set_defaults(self):
