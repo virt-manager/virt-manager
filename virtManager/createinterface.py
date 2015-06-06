@@ -137,7 +137,8 @@ class vmmCreateInterface(vmmGObjectUI):
         self.ip_config.show_all()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing new interface wizard")
+        if self.topwin.is_visible():
+            logging.debug("Closing new interface wizard")
         self.ip_config.hide()
         self.bridge_config.hide()
         self.bond_config.hide()
