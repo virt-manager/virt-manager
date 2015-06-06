@@ -288,7 +288,6 @@ class vmmCreateInterface(vmmGObjectUI):
         copy_model = Gtk.ListStore(str, object, bool)
         copy_iface.set_model(copy_model)
         uiutil.init_combo_text_column(copy_iface, 0)
-        copy_iface.add_attribute(txt, "sensitive", 2)
 
         ip_mode = self.widget("ipv4-mode")
         ip_model = Gtk.ListStore(str)
@@ -318,7 +317,6 @@ class vmmCreateInterface(vmmGObjectUI):
         txt_col.add_attribute(txt, "text", 0)
 
     def reset_state(self):
-
         self.widget("pages").set_current_page(PAGE_TYPE)
         self.page_changed(None, None, PAGE_TYPE)
 
