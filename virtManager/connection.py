@@ -591,7 +591,13 @@ class vmmConnection(vmmGObject):
     def filter_nodedevs(self, devtype=None, devcap=None):
         retdevs = []
         for dev in self.list_nodedevs():
-            xmlobj = dev.get_xmlobj()
+            try:
+                xmlobj = dev.get_xmlobj()
+            except libvirt.libvirtError, e:
+                if e.get_error_code() == libvirt.VIR_ERR_NO_NODE_DEVICE:
+                    continue
+                raise
+
             if devtype and xmlobj.device_type != devtype:
                 continue
 
