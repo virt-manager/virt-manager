@@ -172,4 +172,4 @@ class vmmMediaCombo(vmmGObjectUI):
 
     def has_media(self):
         return uiutil.get_list_selection(
-            self.combo, column=self.OPTICAL_HAS_MEDIA)
+            self.combo, column=self.OPTICAL_HAS_MEDIA) or False
