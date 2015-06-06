@@ -311,6 +311,7 @@ class DistroInstaller(Installer):
         self.livecd = False
         self._cached_fetcher = None
         self._cached_store = None
+        self._cdrom_path = None
 
 
     ########################
@@ -350,16 +351,13 @@ class DistroInstaller(Installer):
         return self._cached_store
 
     def _prepare_local(self):
-        transient = True
-        if self.cdrom:
-            transient = not self.livecd
-        return self._make_cdrom_dev(self.location, transient=transient)
+        return self.location
 
     def _prepare_cdrom_url(self, guest, fetcher):
         store = self._get_store(guest, fetcher)
         media = store.acquireBootDisk(guest)
         self._tmpfiles.append(media)
-        return self._make_cdrom_dev(media, transient=True)
+        return media
 
     def _prepare_kernel_url(self, guest, fetcher):
         store = self._get_store(guest, fetcher)
@@ -418,12 +416,16 @@ class DistroInstaller(Installer):
             return _sanitize_url(val)
 
         try:
-            d = self._make_cdrom_dev(val)
-            val = d.path
-        except:
+            dev = VirtualDisk(self.conn)
+            dev.device = dev.DEVICE_CDROM
+            dev.path = val
+            dev.validate()
+
+            val = dev.path
+        except Exception, e:
             logging.debug("Error validating install location", exc_info=True)
-            raise ValueError(_("Checking installer location failed: "
-                               "Could not find media '%s'." % str(val)))
+            raise ValueError(_("Validating install media '%s' failed: %s") %
+                (str(val), e))
 
         return val
 
@@ -433,9 +435,9 @@ class DistroInstaller(Installer):
         if mediatype == MEDIA_CDROM_IMPLIED:
             return
 
-        dev = None
+        cdrom_path = None
         if mediatype == MEDIA_CDROM_PATH or mediatype == MEDIA_LOCATION_CDROM:
-            dev = self._prepare_local()
+            cdrom_path = self.location
 
         if mediatype != MEDIA_CDROM_PATH:
             fetcher = self._get_fetcher(guest, meter)
@@ -448,14 +450,13 @@ class DistroInstaller(Installer):
                     raise ValueError(_("Invalid install location: ") + str(e))
 
                 if mediatype == MEDIA_CDROM_URL:
-                    dev = self._prepare_cdrom_url(guest, fetcher)
+                    cdrom_path = self._prepare_cdrom_url(guest, fetcher)
                 else:
                     self._prepare_kernel_url(guest, fetcher)
             finally:
                 fetcher.cleanupLocation()
 
-        if dev:
-            self.install_devices.append(dev)
+        self._cdrom_path = cdrom_path
 
 
 
@@ -465,6 +466,14 @@ class DistroInstaller(Installer):
 
     def has_install_phase(self):
         return not self.livecd
+
+    def needs_cdrom(self):
+        mediatype = self._get_media_type()
+        return mediatype in [MEDIA_CDROM_PATH, MEDIA_LOCATION_CDROM,
+                             MEDIA_CDROM_URL]
+
+    def cdrom_path(self):
+        return self._cdrom_path
 
     def scratchdir_required(self):
         mediatype = self._get_media_type()

@@ -66,9 +66,6 @@ class Installer(object):
         self._install_kernel = None
         self._install_initrd = None
 
-        # Devices created/added during the prepare() stage
-        self.install_devices = []
-
         self._tmpfiles = []
         self._tmpvols = []
 
@@ -101,16 +98,6 @@ class Installer(object):
                     bootorder.append(bootdev)
                 break
         return bootorder
-
-    def _make_cdrom_dev(self, path, transient=False):
-        dev = VirtualDisk(self.conn)
-        dev.path = path
-        dev.device = dev.DEVICE_CDROM
-        dev.read_only = True
-        setattr(dev, "installer_media", transient)
-
-        dev.validate()
-        return dev
 
     def alter_bootconfig(self, guest, isinstall):
         """
@@ -179,6 +166,19 @@ class Installer(object):
         """
         return self._has_install_phase
 
+    def needs_cdrom(self):
+        """
+        If this installer uses cdrom media, so it needs a cdrom device
+        attached to the VM
+        """
+        return False
+
+    def cdrom_path(self):
+        """
+        Return the cdrom path needed for needs_cdrom() installs
+        """
+        return None
+
     def cleanup(self):
         """
         Remove any temporary files retrieved during installation
@@ -193,7 +193,6 @@ class Installer(object):
 
         self._tmpvols = []
         self._tmpfiles = []
-        self.install_devices = []
 
     def prepare(self, guest, meter):
         self.cleanup()

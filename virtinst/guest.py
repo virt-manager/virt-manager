@@ -35,6 +35,7 @@ from .device import VirtualDevice
 from .deviceaudio import VirtualAudio
 from .devicechar import VirtualChannelDevice, VirtualConsoleDevice
 from .devicecontroller import VirtualController
+from .devicedisk import VirtualDisk
 from .devicegraphics import VirtualGraphics
 from .deviceinput import VirtualInputDevice
 from .deviceredirdev import VirtualRedirDevice
@@ -124,7 +125,7 @@ class Guest(XMLBuilder):
 
         self.__os_object = None
         self._random_uuid = None
-        self._install_devices = []
+        self._install_cdrom_device = None
         self._defaults_are_set = False
 
         # The libvirt virDomain object we 'Create'
@@ -289,18 +290,15 @@ class Guest(XMLBuilder):
     ############################
 
     def _prepare_install(self, meter, dry=False):
-        for dev in self._install_devices:
-            self.remove_device(dev)
-        self._install_devices = []
         ignore = dry
 
         # Fetch install media, prepare installer devices
         self.installer.prepare(self, meter)
 
         # Initialize install device list
-        for dev in self.installer.install_devices:
-            self.add_device(dev)
-            self._install_devices.append(dev)
+        if self._install_cdrom_device:
+            self._install_cdrom_device.path = self.installer.cdrom_path()
+            self._install_cdrom_device.validate()
 
     def _prepare_get_xml(self):
         # We do a shallow copy of the OS block here, so that we can
@@ -355,11 +353,6 @@ class Guest(XMLBuilder):
             self.on_crash = "destroy"
 
         self._set_osxml_defaults()
-
-        # Only set defaults on any install devices
-        for dev in self._install_devices:
-            dev.set_defaults(self)
-        self._set_disk_defaults(disks=self._install_devices)
 
         self.bootloader = None
         if (not install and
@@ -663,6 +656,18 @@ class Guest(XMLBuilder):
         self.add_default_usb_controller()
         self.add_default_channels()
 
+    def _add_install_cdrom(self):
+        if self._install_cdrom_device:
+            return
+        if not self.installer.needs_cdrom():
+            return
+
+        dev = VirtualDisk(self.conn)
+        dev.device = dev.DEVICE_CDROM
+        setattr(dev, "installer_media", not self.installer.livecd)
+        self._install_cdrom_device = dev
+        self.add_device(dev)
+
     def _remove_cdrom_install_media(self):
         for dev in self.get_devices("disk"):
             # Keep the install cdrom device around, but with no media attached.
@@ -674,6 +679,8 @@ class Guest(XMLBuilder):
                 dev.path = None
 
     def _set_defaults(self):
+        self._add_install_cdrom()
+
         # some options check for has_spice() which is resolved after this:
         self._set_graphics_defaults()
 
@@ -950,10 +957,8 @@ class Guest(XMLBuilder):
 
         return False
 
-    def _set_disk_defaults(self, disks=None):
-        alldisks = self.get_devices("disk")
-        if disks is None:
-            disks = alldisks
+    def _set_disk_defaults(self):
+        disks = self.get_devices("disk")
 
         def set_disk_bus(d):
             if d.is_floppy():
@@ -985,18 +990,17 @@ class Guest(XMLBuilder):
             else:
                 d.bus = "ide"
 
-
         # Generate disk targets
         used_targets = []
         for disk in disks:
             if not disk.bus:
                 set_disk_bus(disk)
 
-        for disk in alldisks:
-            if disk.target and not getattr(disk,
-                    "cli_generated_target", False):
+        for disk in disks:
+            if (disk.target and
+                not getattr(disk, "cli_generated_target", False)):
                 used_targets.append(disk.target)
-            elif disk in disks:
+            else:
                 disk.cli_generated_target = False
                 used_targets.append(disk.generate_target(used_targets))
 
