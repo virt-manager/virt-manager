@@ -69,7 +69,7 @@ def _setup_gsettings_path(schemadir):
         raise RuntimeError("Failed to compile local gsettings schemas")
 
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 
 class _CLIConfig(object):
