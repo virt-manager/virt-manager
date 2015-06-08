@@ -1,11 +1,11 @@
        <target port="0"/>
      </parallel>
-     <console type="pty">
--      <target type="virtio" port="0"/>
-+      <target type="serial" port="0"/>
+     <console type="null">
+-      <target type="serial" port="0"/>
++      <target type="serial" port="0" name="foo.bar.baz"/>
      </console>
-     <channel type="pipe">
-       <source path="/tmp/guestfwd"/>
+     <console type="pty">
+       <target type="virtio" port="1"/>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.
