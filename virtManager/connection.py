@@ -594,9 +594,11 @@ class vmmConnection(vmmGObject):
             try:
                 xmlobj = dev.get_xmlobj()
             except libvirt.libvirtError, e:
-                if e.get_error_code() == libvirt.VIR_ERR_NO_NODE_DEVICE:
-                    continue
-                raise
+                # Libvirt nodedev XML fetching can be busted
+                # https://bugzilla.redhat.com/show_bug.cgi?id=1225771
+                if e.get_error_code() != libvirt.VIR_ERR_NO_NODE_DEVICE:
+                    logging.debug("Error fetching nodedev XML", exc_info=True)
+                continue
 
             if devtype and xmlobj.device_type != devtype:
                 continue
