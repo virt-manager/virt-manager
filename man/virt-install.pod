@@ -592,7 +592,7 @@ whether to skip fully allocating newly created storage. Value is 'yes' or
 'no'. Default is 'yes' (do not fully allocate) unless it isn't
 supported by the underlying storage type.
 
-The initial time taken to fully-allocate the guest virtual disk (sparse=false)
+The initial time taken to fully-allocate the guest virtual disk (sparse=no)
 will be usually balanced by faster install times inside the guest. Thus
 use of this option is recommended to ensure consistently high performance
 and to avoid I/O errors in the guest should the host filesystem fill up.
