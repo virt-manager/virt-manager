@@ -70,17 +70,21 @@ def get_list_selected_row(widget, check_visible=False):
     return row
 
 
-def get_list_selection(widget, column=0, check_visible=False):
+def get_list_selection(widget, column=0,
+                       check_visible=False, check_entry=True):
     """
     Helper to simplify getting the selected row and value in a list/tree/combo.
     If nothing is selected, and the widget is a combo box with a text entry,
     return the value of that.
+
+    :param check_entry: If True, attempt to check the widget's text entry
+        using the logic described above.
     """
     row = get_list_selected_row(widget, check_visible=check_visible)
     if row is not None:
         return row[column]
 
-    if hasattr(widget, "get_has_entry"):
+    if check_entry and hasattr(widget, "get_has_entry"):
         if widget.get_has_entry():
             return widget.get_child().get_text().strip()
 

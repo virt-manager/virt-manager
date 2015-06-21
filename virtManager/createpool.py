@@ -479,9 +479,11 @@ class vmmCreatePool(vmmGObjectUI):
         source_list = self.widget("pool-source-path")
         target_list = self.widget("pool-target-path")
 
-        pool = uiutil.get_list_selection(source_list, column=2)
+        pool = uiutil.get_list_selection(source_list, column=2,
+                                         check_entry=False)
         if pool is None:
-            pool = uiutil.get_list_selection(target_list, column=2)
+            pool = uiutil.get_list_selection(target_list, column=2,
+                                             check_entry=False)
 
         return pool
 
