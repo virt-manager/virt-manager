@@ -295,6 +295,33 @@ def update_changes(domain, devs, action, confirm):
             print_stdout("")
 
 
+def prepare_changes(xmlobj, options, parsermap, parserobj):
+    origxml = xmlobj.get_xml_config()
+
+    if options.edit != -1:
+        devs = action_edit(xmlobj, options, parsermap, parserobj)
+        action = "update"
+
+    elif options.add_device:
+        devs = action_add_device(xmlobj, options, parsermap, parserobj)
+        action = "hotplug"
+
+    elif options.remove_device:
+        devs = action_remove_device(xmlobj, options, parsermap, parserobj)
+        action = "hotunplug"
+
+    newxml = xmlobj.get_xml_config()
+    diff = get_diff(origxml, newxml)
+
+    if options.print_diff:
+        if diff:
+            print_stdout(diff)
+    elif options.print_xml:
+        print_stdout(newxml)
+
+    return devs, action
+
+
 #######################
 # CLI option handling #
 #######################
@@ -410,10 +437,6 @@ def main(conn=None):
     elif not options.build_xml:
         inactive_xmlobj = _make_guest(conn, options.stdinxml)
 
-    origxml = None
-    if inactive_xmlobj:
-        origxml = inactive_xmlobj.get_xml_config()
-
     check_action_collision(options)
     parserobj = check_xmlopt_collision(options, parsermap)
 
@@ -421,42 +444,25 @@ def main(conn=None):
         fail(_("Don't know how to --update for --%s") %
              (parserobj.cli_arg_name))
 
-    if options.edit != -1:
-        devs = action_edit(inactive_xmlobj, options, parsermap, parserobj)
-        action = "update"
-
-    elif options.add_device:
-        devs = action_add_device(inactive_xmlobj, options,
-                                 parsermap, parserobj)
-        action = "hotplug"
-
-    elif options.remove_device:
-        devs = action_remove_device(inactive_xmlobj, options,
-                                    parsermap, parserobj)
-        action = "hotunplug"
-
-    elif options.build_xml:
+    if options.build_xml:
         devs = action_build_xml(conn, options, parsermap, parserobj)
         for dev in util.listify(devs):
             print_stdout(dev.get_xml_config())
         return 0
 
-    newxml = inactive_xmlobj.get_xml_config()
-    diff = get_diff(origxml, newxml)
-
-    if options.print_diff:
-        if diff:
-            print_stdout(diff)
-    elif options.print_xml:
-        print_stdout(newxml)
-
     if options.update and active_xmlobj:
+        devs, action = prepare_changes(active_xmlobj, options,
+                                       parsermap, parserobj)
         update_changes(domain, devs, action, options.confirm)
     if options.define:
+        devs, action = prepare_changes(inactive_xmlobj, options,
+                                       parsermap, parserobj)
         define_changes(conn, inactive_xmlobj, devs, action, options.confirm)
         if not options.update and active_xmlobj:
             print_stdout(
                 _("Changes will take effect after the next domain shutdown."))
+    if not options.update and not options.define:
+        prepare_changes(inactive_xmlobj, options, parsermap, parserobj)
 
     return 0
 
