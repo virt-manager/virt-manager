@@ -447,14 +447,6 @@ class _OsVariant(object):
     def supports_virtiommio(self):
         return self._is_related_to(["fedora19"])
 
-    def supports_acpi(self, default):
-        if self._family in ['msdos']:
-            return False
-        return default
-
-    def supports_apic(self, default):
-        return self.supports_acpi(default)
-
     def default_netmodel(self):
         """
         Default non-virtio net-model, since we check for that separately

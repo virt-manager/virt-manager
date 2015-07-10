@@ -206,6 +206,8 @@ class _CapsGuestFeatures(XMLBuilder):
     _XML_ROOT_NAME = "features"
 
     pae = XMLProperty("./pae", is_bool=True)
+    acpi = XMLProperty("./acpi/@default", is_onoff=True)
+    apic = XMLProperty("./apic/@default", is_onoff=True)
 
 
 class _CapsGuest(XMLBuilder):
@@ -292,6 +294,18 @@ class _CapsGuest(XMLBuilder):
         Return True if capabilities report support for PAE
         """
         return bool(self.features.pae)
+
+    def supports_acpi(self):
+        """
+        Return Tree if capabilities report support for ACPI
+        """
+        return bool(self.features.acpi)
+
+    def supports_apic(self):
+        """
+        Return Tree if capabilities report support for APIC
+        """
+        return bool(self.features.apic)
 
 
 ############################

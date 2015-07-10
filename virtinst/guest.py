@@ -843,9 +843,12 @@ class Guest(XMLBuilder):
             default = False
 
         if self.features.acpi == "default":
-            self.features.acpi = self._os_object.supports_acpi(default)
+            if default:
+                self.features.acpi = self.capsinfo.guest.supports_acpi()
+            else:
+                self.features.acpi = False
         if self.features.apic == "default":
-            self.features.apic = self._os_object.supports_apic(default)
+            self.features.apic = self.capsinfo.guest.supports_apic()
         if self.features.pae == "default":
             self.features.pae = self.capsinfo.guest.supports_pae()
 
