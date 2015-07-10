@@ -95,12 +95,12 @@ class _NetworkBandwidth(XMLBuilder):
     outbound_burst = XMLProperty("./outbound/@burst")
 
     def is_inbound(self):
-        return bool(self.inbound_average or self.inbound_peak
-                    or self.inbound_burst or self.inbound_floor)
+        return bool(self.inbound_average or self.inbound_peak or
+                    self.inbound_burst or self.inbound_floor)
 
     def is_outbound(self):
-        return bool(self.outbound_average or self.outbound_peak
-                    or self.outbound_burst)
+        return bool(self.outbound_average or self.outbound_peak or
+                    self.outbound_burst)
 
     def pretty_desc(self, inbound=True, outbound=True):
         items_in = [(self.inbound_average, _("Average"), "KiB/s"),

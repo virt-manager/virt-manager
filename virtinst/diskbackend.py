@@ -56,8 +56,8 @@ def _lookup_vol_by_path(conn, path):
         vol.info()
         return vol, None
     except libvirt.libvirtError, e:
-        if (hasattr(libvirt, "VIR_ERR_NO_STORAGE_VOL")
-            and e.get_error_code() != libvirt.VIR_ERR_NO_STORAGE_VOL):
+        if (hasattr(libvirt, "VIR_ERR_NO_STORAGE_VOL") and
+            e.get_error_code() != libvirt.VIR_ERR_NO_STORAGE_VOL):
             raise
         return None, e
 

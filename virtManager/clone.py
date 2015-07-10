@@ -455,8 +455,8 @@ class vmmCloneVM(vmmGObjectUI):
                 newpath = self.generate_clone_path_name(origpath, newname)
                 row[STORAGE_INFO_NEW_PATH] = newpath
             except Exception, e:
-                logging.debug("Generating new path from clone name failed: "
-                              + str(e))
+                logging.debug("Generating new path from clone name failed: " +
+                              str(e))
 
     def build_storage_entry(self, disk, storage_box):
         origpath = disk[STORAGE_INFO_ORIG_PATH]

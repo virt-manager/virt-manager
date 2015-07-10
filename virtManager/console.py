@@ -428,14 +428,14 @@ class vmmConsolePages(vmmGObjectUI):
         fs = self.widget("control-fullscreen").get_active()
         scale_type = self.vm.get_console_scaling()
 
-        if (scale_type == self.config.CONSOLE_SCALE_NEVER
-            and curscale is True):
+        if (scale_type == self.config.CONSOLE_SCALE_NEVER and
+            curscale is True):
             self._viewer.console_set_scaling(False)
-        elif (scale_type == self.config.CONSOLE_SCALE_ALWAYS
-              and curscale is False):
+        elif (scale_type == self.config.CONSOLE_SCALE_ALWAYS and
+              curscale is False):
             self._viewer.console_set_scaling(True)
-        elif (scale_type == self.config.CONSOLE_SCALE_FULLSCREEN
-              and curscale != fs):
+        elif (scale_type == self.config.CONSOLE_SCALE_FULLSCREEN and
+              curscale != fs):
             self._viewer.console_set_scaling(fs)
 
         # Refresh viewer size

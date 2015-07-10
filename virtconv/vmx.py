@@ -290,8 +290,8 @@ class vmx_parser(parser_class):
                 continue
 
             # vmx files often have dross left in path for CD entries
-            if (disk.path is None
-                or disk.path.lower() == "auto detect" or
+            if (disk.path is None or
+                disk.path.lower() == "auto detect" or
                 not os.path.exists(disk.path)):
                 disk.path = None
 
