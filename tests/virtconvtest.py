@@ -68,7 +68,7 @@ class TestVirtConv(unittest.TestCase):
 
         if (os.path.splitext(in_path)[1] in [".zip"] and
             not find_executable("unar")):
-            return
+            self.skipTest("Install 'unar' to run all tests.")
 
         try:
             os.chdir(os.path.dirname(in_path))
