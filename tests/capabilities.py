@@ -70,8 +70,9 @@ class TestCapabilities(unittest.TestCase):
         caps_empty = self._buildCaps("test-old-vmx.xml")
 
         def test_utils(caps, has_guests, is_kvm):
-            self.assertEquals(caps.has_install_options(), has_guests)
-            self.assertEquals(caps.is_kvm_available(), is_kvm)
+            if caps.guests:
+                self.assertEquals(caps.guests[0].has_install_options(), has_guests)
+                self.assertEquals(caps.guests[0].is_kvm_available(), is_kvm)
 
         test_utils(caps_empty, False, False)
         test_utils(caps_with_kvm, True, True)

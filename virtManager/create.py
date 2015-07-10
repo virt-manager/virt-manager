@@ -504,7 +504,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("startup-error-box").hide()
         self.widget("create-forward").set_sensitive(True)
 
-        if not self.conn.caps.has_install_options():
+        if not self.capsinfo.guest.has_install_options():
             error = _("No hypervisor options were found for this "
                       "connection.")
 
@@ -539,7 +539,7 @@ class vmmCreate(vmmGObjectUI):
                 self.startup_warning(error)
 
         elif self.conn.is_qemu():
-            if not self.conn.caps.is_kvm_available():
+            if not self.capsinfo.guest.is_kvm_available():
                 error = _("KVM is not available. This may mean the KVM "
                  "package is not installed, or the KVM kernel modules "
                  "are not loaded. Your virtual machines may perform poorly.")
@@ -876,11 +876,10 @@ class vmmCreate(vmmGObjectUI):
                     break
 
         capsinfo = self.conn.caps.guest_lookup(os_type=gtype, arch=arch)
-        newg, newdom = capsinfo.get_caps_objects()
 
         if self.capsinfo:
-            oldg, olddom = self.capsinfo.get_caps_objects()
-            if oldg == newg and olddom and newdom:
+            if (self.capsinfo.guest == capsinfo.guest and
+                self.capsinfo.domain == capsinfo.domain):
                 return
 
         self.capsinfo = capsinfo

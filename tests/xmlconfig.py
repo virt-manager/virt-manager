@@ -32,7 +32,7 @@ def _make_guest(installer=None, conn=None):
     if conn is None:
         conn = _default_conn
 
-    g = virtinst.Guest(conn)
+    g = conn.caps.lookup_virtinst_guest()
     g.type = "kvm"
     g.name = "TestGuest"
     g.memory = int(200 * 1024)

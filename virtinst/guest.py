@@ -131,6 +131,9 @@ class Guest(XMLBuilder):
         # The libvirt virDomain object we 'Create'
         self.domain = None
 
+        # This is set via Capabilities.build_virtinst_guest
+        self.capsinfo = None
+
         self.installer = DistroInstaller(self.conn)
 
 
@@ -844,7 +847,7 @@ class Guest(XMLBuilder):
         if self.features.apic == "default":
             self.features.apic = self._os_object.supports_apic(default)
         if self.features.pae == "default":
-            self.features.pae = self.conn.caps.supports_pae()
+            self.features.pae = self.capsinfo.guest.supports_pae()
 
         if (self.features.vmport == "default" and
             self.has_spice() and
