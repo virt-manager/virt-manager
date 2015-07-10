@@ -257,7 +257,8 @@ class vmmDomain(vmmLibvirtObject):
 
     @staticmethod
     def pretty_status_reason(status, reason):
-        key = lambda x, y: getattr(libvirt, "VIR_DOMAIN_" + x, y)
+        def key(x, y):
+            return getattr(libvirt, "VIR_DOMAIN_" + x, y)
         reasons = {
             libvirt.VIR_DOMAIN_RUNNING : {
                 key("RUNNING_BOOTED", 1) : _("Booted"),

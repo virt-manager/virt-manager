@@ -153,7 +153,8 @@ def fetch_volumes(backend, pool, origmap, build_func):
                                 pool.listAllVolumes, build_func)
     else:
         active_list = pool.listVolumes
-        inactive_list = lambda: []
+        def inactive_list():
+            return []
         lookup_func = pool.storageVolLookupByName
         return _old_poll_helper(origmap, name,
                                 active_list, inactive_list,
@@ -184,8 +185,10 @@ def fetch_nodedevs(backend, origmap, build_func):
         return _new_poll_helper(origmap, name,
                                 backend.listAllDevices, build_func)
     else:
-        active_list = lambda: backend.listDevices(None, 0)
-        inactive_list = lambda: []
+        def active_list():
+            return backend.listDevices(None, 0)
+        def inactive_list():
+            return []
         lookup_func = backend.nodeDeviceLookupByName
         return _old_poll_helper(origmap, name,
                                 active_list, inactive_list,
