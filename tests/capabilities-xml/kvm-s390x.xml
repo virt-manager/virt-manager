@@ -1,0 +1,73 @@
+<capabilities>
+
+  <host>
+    <uuid>b88e553c-5920-4aa8-bb09-cc0ab8e6e0c2</uuid>
+    <cpu>
+      <arch>s390x</arch>
+      <model>host</model>
+      <topology sockets="2" cores="2" threads="1"/>
+      <pages unit="KiB" size="4"/>
+      <pages unit="KiB" size="1024"/>
+    </cpu>
+    <power_management>
+      <suspend_disk/>
+      <suspend_hybrid/>
+    </power_management>
+    <migration_features>
+      <live/>
+      <uri_transports>
+        <uri_transport>tcp</uri_transport>
+        <uri_transport>rdma</uri_transport>
+      </uri_transports>
+    </migration_features>
+    <topology>
+      <cells num="1">
+        <cell id="0">
+          <memory unit="KiB">2878860</memory>
+          <cpus num="4">
+            <cpu id="0" socket_id="0" core_id="0" siblings="0"/>
+            <cpu id="1" socket_id="0" core_id="1" siblings="1"/>
+            <cpu id="2" socket_id="1" core_id="0" siblings="2"/>
+            <cpu id="3" socket_id="1" core_id="1" siblings="3"/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+    <secmodel>
+      <model>selinux</model>
+      <doi>0</doi>
+      <baselabel type="kvm">system_u:system_r:svirt_t:s0</baselabel>
+      <baselabel type="qemu">system_u:system_r:svirt_tcg_t:s0</baselabel>
+    </secmodel>
+    <secmodel>
+      <model>dac</model>
+      <doi>0</doi>
+      <baselabel type="kvm">+107:+107</baselabel>
+      <baselabel type="qemu">+107:+107</baselabel>
+    </secmodel>
+  </host>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="s390x">
+      <wordsize>64</wordsize>
+      <emulator>/usr/bin/qemu-system-s390x</emulator>
+      <machine canonical="s390-virtio" maxCpus="255">s390</machine>
+      <machine canonical="s390-ccw-virtio" maxCpus="255">s390-ccw</machine>
+      <domain type="qemu">
+        <emulator>/usr/bin/qemu-system-s390x</emulator>
+      </domain>
+      <domain type="kvm">
+        <emulator>/usr/bin/qemu-system-s390x</emulator>
+        <machine canonical="s390-virtio" maxCpus="255">s390</machine>
+        <machine canonical="s390-ccw-virtio" maxCpus="255">s390-ccw</machine>
+      </domain>
+    </arch>
+    <features>
+      <cpuselection/>
+      <deviceboot/>
+      <disksnapshot default="on" toggle="no"/>
+    </features>
+  </guest>
+
+</capabilities>

@@ -987,6 +987,8 @@ class Guest(XMLBuilder):
                 d.bus = "sd"
             elif self.os.is_q35():
                 d.bus = "sata"
+            elif self.os.is_s390x():
+                d.bus = "virtio"
             else:
                 d.bus = "ide"
 

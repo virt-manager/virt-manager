@@ -323,6 +323,10 @@ class _CapsInfo(object):
             if "vexpress-a15" in self.machines:
                 return "vexpress-a15"
 
+        if self.arch in ["s390x"]:
+            if "s390-ccw-virtio" in self.machines:
+                return "s390-ccw-virtio"
+
         return None
 
 

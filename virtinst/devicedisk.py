@@ -897,6 +897,9 @@ class VirtualDisk(VirtualDevice):
         if self.is_cdrom():
             self.read_only = True
 
+        if self.is_cdrom() and guest.os.is_s390x():
+            self.bus = "scsi"
+
         if (guest.os.is_xenpv() and
             self.type == VirtualDisk.TYPE_FILE and
             self.driver_name is None and

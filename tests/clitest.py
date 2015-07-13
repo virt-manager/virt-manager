@@ -76,6 +76,7 @@ test_files = {
     'URI-KVM-ARMV7L' : utils.uri_kvm_armv7l,
     'URI-KVM-AARCH64' : utils.uri_kvm_aarch64,
     'URI-KVM-PPC64LE' : utils.uri_kvm_ppc64le,
+    'URI-KVM-S390X' : utils.uri_kvm_s390x,
     'URI-XEN': utils.uri_xen,
     'URI-LXC': utils.uri_lxc,
 
@@ -693,6 +694,9 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-pseries-f20")
 c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-machdefault-f20")
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20", "ppc64le-kvm-import")
+
+# s390x tests
+c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom")
 
 c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso")  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults

@@ -46,6 +46,7 @@ uri_kvm = (_uri_kvm_domcaps + _capsprefix + "kvm-x86_64.xml")
 uri_kvm_armv7l = (_uri_kvm_domcaps + _capsprefix + "kvm-armv7l.xml")
 uri_kvm_aarch64 = (_uri_kvm_domcaps + _capsprefix + "kvm-aarch64.xml")
 uri_kvm_ppc64le = (_uri_kvm_domcaps + _capsprefix + "kvm-ppc64le.xml")
+uri_kvm_s390x = (_uri_kvm_domcaps + _capsprefix + "kvm-s390x.xml")
 
 uri_xen = uri_test + _capsprefix + "xen-rhel5.4.xml,xen"
 uri_lxc = uri_test + _capsprefix + "lxc.xml,lxc"
