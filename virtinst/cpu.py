@@ -104,8 +104,8 @@ class CPU(XMLBuilder):
 
         for feature in self.features:
             self.remove_feature(feature)
-        for name in cpu.features.names():
-            self.add_feature(name)
+        for feature in cpu.features:
+            self.add_feature(feature.name)
 
     def vcpus_from_topology(self):
         """
