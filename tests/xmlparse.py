@@ -1282,8 +1282,9 @@ class XMLParseTest(unittest.TestCase):
         basename = "clear-cpu-unknown-vals"
         infile = "tests/xmlparse-xml/%s-in.xml" % basename
         outfile = "tests/xmlparse-xml/%s-out.xml" % basename
-        guest = virtinst.Guest(conn, parsexml=file(infile).read())
+        guest = virtinst.Guest(kvmconn, parsexml=file(infile).read())
 
+        guest.cpu.copy_host_cpu()
         guest.cpu.clear()
         utils.diff_compare(guest.get_xml_config(), outfile)
 
