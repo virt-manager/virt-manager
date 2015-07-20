@@ -504,6 +504,9 @@ class vmmCreate(vmmGObjectUI):
         self.widget("startup-error-box").hide()
         self.widget("create-forward").set_sensitive(True)
 
+        self.conn.invalidate_caps()
+        self.change_caps()
+
         if not self.capsinfo.guest.has_install_options():
             error = _("No hypervisor options were found for this "
                       "connection.")
@@ -517,8 +520,6 @@ class vmmCreate(vmmGObjectUI):
 
         # A bit out of order, but populate arch + hv lists so we can
         # determine a default
-        self.conn.invalidate_caps()
-        self.change_caps()
         self.populate_hv()
         self.populate_arch()
 
