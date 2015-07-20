@@ -764,9 +764,11 @@ class Guest(XMLBuilder):
         hpet.name = "hpet"
         hpet.present = False
 
-        if (self._os_object.is_windows() and
-            self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK) and
-            self._hv_supported()):
+        hv_clock = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK)
+        hv_clock_rhel = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK_RHEL)
+
+        if (self._os_object.is_windows() and self._hv_supported() and
+            (hv_clock or (self.stable_defaults() and hv_clock_rhel))):
             hyperv = self.clock.add_timer()
             hyperv.name = "hypervclock"
             hyperv.present = True

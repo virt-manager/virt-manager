@@ -298,6 +298,8 @@ SUPPORT_CONN_HYPERV_VAPIC = _make(
     version="1.1.0", hv_version={"qemu": "1.1.0", "test": 0})
 SUPPORT_CONN_HYPERV_CLOCK = _make(
     version="1.2.2", hv_version={"qemu": "2.0.0", "test": 0})
+SUPPORT_CONN_HYPERV_CLOCK_RHEL = _make(
+    version="1.2.2", hv_version={"qemu": "1.5.3", "test": 0})
 SUPPORT_CONN_LOADER_ROM = _make(version="1.2.9")
 SUPPORT_CONN_DOMAIN_CAPABILITIES = _make(
     function="virConnect.getDomainCapabilities",
