@@ -69,7 +69,7 @@ class OSXML(XMLBuilder):
     def is_ppc64(self):
         return self.arch == "ppc64" or self.arch == "ppc64le"
     def is_pseries(self):
-        return self.is_ppc64() and self.machine == "pseries"
+        return self.is_ppc64() and str(self.machine).startswith("pseries")
 
     def is_s390x(self):
         return self.arch == "s390x"
