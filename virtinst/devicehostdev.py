@@ -25,7 +25,7 @@ from .xmlbuilder import XMLProperty
 class VirtualHostDevice(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_HOSTDEV
 
-    def set_from_nodedev(self, nodedev, use_full_usb=None):
+    def set_from_nodedev(self, nodedev):
         """
         @use_full_usb: If set, and nodedev is USB, specify both
             vendor and product. Used if user requests bus/add on virt-install
@@ -44,7 +44,20 @@ class VirtualHostDevice(VirtualDevice):
             self.vendor = nodedev.vendor_id
             self.product = nodedev.product_id
 
-            if use_full_usb:
+            count = 0
+
+            for dev in self.conn.fetch_all_nodedevs():
+                if (dev.device_type == NodeDevice.CAPABILITY_TYPE_USBDEV and
+                    dev.vendor_id == self.vendor and
+                    dev.product_id == self.product):
+                    count += 1
+
+            if not count:
+                raise RuntimeError(_("Could not find USB device "
+                                     "(vendorId: %s, productId: %s)")
+                                   % (vendor, product))
+
+            if count > 1:
                 self.bus = nodedev.bus
                 self.device = nodedev.device
 
@@ -55,7 +68,7 @@ class VirtualHostDevice(VirtualDevice):
                     founddev = checkdev
                     break
 
-            self.set_from_nodedev(founddev, use_full_usb=use_full_usb)
+            self.set_from_nodedev(founddev)
 
         elif nodedev.device_type == nodedev.CAPABILITY_TYPE_SCSIDEV:
             self.type = "scsi"

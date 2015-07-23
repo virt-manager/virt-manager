@@ -246,7 +246,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Host device list
         # model = [ Description, nodedev name ]
         host_dev = self.widget("host-device")
-        host_dev_model = Gtk.ListStore(str, str, str, object)
+        host_dev_model = Gtk.ListStore(str, str, object)
         host_dev.set_model(host_dev_model)
 
         host_col = Gtk.TreeViewColumn()
@@ -1620,24 +1620,12 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_hostdev(self):
         row = uiutil.get_list_selected_row(self.widget("host-device"))
-        is_dup = False
 
         if row is None:
             return self.err.val_err(_("Physical Device Required"),
                                     _("A device must be selected."))
 
-        devtype = row[2]
-        nodedev = row[3]
-        if devtype == "usb_device":
-            vendor = nodedev.vendor_id
-            product = nodedev.product_id
-            count = self.conn.get_nodedev_count(devtype, vendor, product)
-            if not count:
-                raise RuntimeError(_("Could not find USB device "
-                                     "(vendorId: %s, productId: %s) "
-                                     % (vendor, product)))
-            if count > 1:
-                is_dup = True
+        nodedev = row[2]
 
         try:
             dev = virtinst.VirtualHostDevice(self.conn.get_backend())
@@ -1654,7 +1642,7 @@ class vmmAddHardware(vmmGObjectUI):
                         _("Do you really want to use the device?"))
                 if not res:
                     return False
-            dev.set_from_nodedev(nodedev, use_full_usb=is_dup)
+            dev.set_from_nodedev(nodedev)
             self._dev = dev
         except Exception, e:
             return self.err.val_err(_("Host device parameter error"), e)
