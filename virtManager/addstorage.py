@@ -252,34 +252,6 @@ class vmmAddStorage(vmmGObjectUI):
     def is_default_storage(self):
         return self.widget("config-storage-create").get_active()
 
-    def _check_ideal_path(self, path, vmname, collidelist):
-        # See if the ideal disk path (/default/pool/vmname.img)
-        # exists, and if unused, prompt the use for using it
-        conn = self.conn.get_backend()
-        ideal = self._get_ideal_path(vmname)
-        if ideal in collidelist:
-            return path
-
-        do_exist = False
-        ret = True
-        try:
-            do_exist = virtinst.VirtualDisk.path_definitely_exists(conn, ideal)
-            ret = virtinst.VirtualDisk.path_in_use_by(conn, ideal)
-        except:
-            logging.exception("Error checking default path usage")
-
-        if not do_exist or ret:
-            return path
-
-        do_use = self.err.yes_no(
-            _("The following storage already exists, but is not\n"
-              "in use by any virtual machine:\n\n%s\n\n"
-              "Would you like to reuse this storage?") % ideal)
-
-        if do_use:
-            return ideal
-        return path
-
     def validate_storage(self, vmname,
                          path=None, size=None, sparse=None,
                          device="disk", fmt=None, collidelist=None):
@@ -313,9 +285,6 @@ class vmmAddStorage(vmmGObjectUI):
                     path = self.get_default_path(vmname, collidelist)
                 else:
                     path = self.widget("config-storage-entry").get_text().strip()
-
-            if is_default:
-                path = self._check_ideal_path(path, vmname, collidelist)
 
             if not path and device in ["disk", "lun"]:
                 return self.err.val_err(_("A storage path must be specified."))
