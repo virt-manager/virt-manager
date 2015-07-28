@@ -3043,7 +3043,10 @@ class vmmDetails(vmmGObjectUI):
             self.widget("video-model"))
 
         model = vid.model
-        ram = vid.vram
+        if model == "qxl" and vid.vgamem:
+            ram = vid.vgamem
+        else:
+            ram = vid.vram
         heads = vid.heads
         try:
             ramlabel = ram and "%d MiB" % (int(ram) / 1024) or "-"
