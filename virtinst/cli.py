@@ -101,7 +101,7 @@ class VirtStreamHandler(logging.StreamHandler):
     def emit(self, record):
         """
         Based on the StreamHandler code from python 2.6: ripping out all
-        the unicode handling and just uncoditionally logging seems to fix
+        the unicode handling and just unconditionally logging seems to fix
         logging backtraces with unicode locales (for me at least).
 
         No doubt this is atrocious, but it WORKSFORME!
