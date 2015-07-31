@@ -2457,7 +2457,7 @@ class vmmDetails(vmmGObjectUI):
             self.widget("overview-firmware-label").set_text(firmware)
 
         # Machine settings
-        machtype = self.vm.get_machtype()
+        machtype = self.vm.get_machtype() or _("Unknown")
         if self.widget("machine-type").is_visible():
             uiutil.set_list_selection(
                 self.widget("machine-type"), machtype)
