@@ -708,7 +708,7 @@ class vmmAddHardware(vmmGObjectUI):
         combo.set_active(-1)
 
     @staticmethod
-    def populate_disk_bus_combo(vm, devtype, model, do_virtio_scsi=True):
+    def populate_disk_bus_combo(vm, devtype, model):
         rows = []
         if vm.is_hvm():
             if not vm.get_xmlobj().os.is_q35():
@@ -723,8 +723,7 @@ class vmmAddHardware(vmmGObjectUI):
         if vm.get_hv_type() in ["qemu", "kvm", "test"]:
             rows.append(["sd", "SD"])
             rows.append(["virtio", "VirtIO"])
-            if do_virtio_scsi:
-                rows.append(["virtio-scsi", "VirtIO SCSI"])
+            rows.append(["virtio-scsi", "VirtIO SCSI"])
             if vm.xmlobj.os.is_pseries():
                 rows.append(["spapr-vscsi", "sPAPR-vSCSI"])
 
