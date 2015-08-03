@@ -723,9 +723,8 @@ class vmmAddHardware(vmmGObjectUI):
         if vm.get_hv_type() in ["qemu", "kvm", "test"]:
             rows.append(["sd", "SD"])
             rows.append(["virtio", "VirtIO"])
-            rows.append(["virtio-scsi", "VirtIO SCSI"])
-            if vm.xmlobj.os.is_pseries():
-                rows.append(["spapr-vscsi", "sPAPR-vSCSI"])
+            if not rows.count(["scsi", "SCSI"]):
+                rows.append(["scsi", "SCSI"])
 
         if vm.conn.is_xen() or vm.conn.is_test_conn():
             rows.append(["xen", "Xen"])
@@ -733,11 +732,10 @@ class vmmAddHardware(vmmGObjectUI):
         model.clear()
 
         bus_map = {
-            "disk": ["ide", "sata", "scsi", "sd", "spapr-vscsi",
-                     "usb", "virtio", "virtio-scsi", "xen"],
+            "disk": ["ide", "sata", "scsi", "sd", "usb", "virtio", "xen"],
             "floppy": ["fdc"],
             "cdrom": ["ide", "sata", "scsi"],
-            "lun": ["virtio-scsi"],
+            "lun": ["scsi"],
         }
         for row in rows:
             if row[0] in bus_map[devtype]:
@@ -1526,8 +1524,9 @@ class vmmAddHardware(vmmGObjectUI):
         fmt = uiutil.get_list_selection(self.widget("config-storage-format"))
 
         controller_model = None
-        if bus == "virtio-scsi":
-            bus = "scsi"
+        if (bus == "scsi" and
+            self.vm.get_hv_type() in ["qemu", "kvm", "test"] and
+            not self.vm.xmlobj.os.is_pseries()):
             controller_model = "virtio-scsi"
 
         collidelist = [d.path for d in self.vm.get_disk_devices()]

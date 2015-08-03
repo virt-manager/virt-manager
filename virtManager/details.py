@@ -163,28 +163,11 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
 _remove_tooltip = _("Remove this device from the virtual machine")
 
 
-def _label_for_device(dev, vm):
+def _label_for_device(dev):
     devtype = dev.virtual_device_type
 
     if devtype == "disk":
-        def _find_matching_disk_controller():
-            for controller in vm.get_controller_devices():
-                if (dev.address.controller is not None and
-                    controller.type == dev.bus and
-                    controller.index == dev.address.controller):
-                    return controller
-
-        bus = dev.bus
-        if dev.address.type == "spapr-vio":
-            bus = "spapr-vscsi"
-
-        busstr = virtinst.VirtualDisk.pretty_disk_bus(bus) or ""
-
-        if bus == "scsi":
-            matching_controller = _find_matching_disk_controller()
-            if (matching_controller and
-                matching_controller.model == "virtio-scsi"):
-                busstr = "Virtio SCSI"
+        busstr = virtinst.VirtualDisk.pretty_disk_bus(dev.bus) or ""
 
         if dev.device == "floppy":
             devstr = "Floppy"
@@ -2196,9 +2179,6 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_DISK_BUS):
             bus = uiutil.get_list_selection(self.widget("disk-bus"))
             addr = None
-            if bus == "spapr-vscsi":
-                bus = "scsi"
-                addr = "spapr-vio"
 
             kwargs["bus"] = bus
             kwargs["addrstr"] = addr
@@ -2678,7 +2658,6 @@ class vmmDetails(vmmGObjectUI):
         share = disk.shareable
         bus = disk.bus
         removable = disk.removable
-        addr = disk.address.type
         cache = disk.driver_cache
         io = disk.driver_io
         driver_type = disk.driver_type or ""
@@ -2728,10 +2707,7 @@ class vmmDetails(vmmGObjectUI):
         else:
             can_set_removable = True
 
-        if addr == "spapr-vio":
-            bus = "spapr-vscsi"
-
-        pretty_name = _label_for_device(disk, self.vm)
+        pretty_name = _label_for_device(disk)
 
         self.widget("disk-source-path").set_text(path or "-")
         self.widget("disk-target-type").set_text(pretty_name)
@@ -2855,7 +2831,7 @@ class vmmDetails(vmmGObjectUI):
         if rd.type == 'tcp':
             address = _("%s:%s") % (rd.host, rd.service)
 
-        self.widget("redir-title").set_markup(_label_for_device(rd, self.vm))
+        self.widget("redir-title").set_markup(_label_for_device(rd))
         self.widget("redir-type").set_text(rd.pretty_type(rd.type))
 
         self.widget("redir-address").set_text(address or "")
@@ -3238,7 +3214,7 @@ class vmmDetails(vmmGObjectUI):
             See if passed hw is already in list, and if so, update info.
             If not in list, add it!
             """
-            label = _label_for_device(dev, self.vm)
+            label = _label_for_device(dev)
             icon = _icon_for_device(dev)
 
             currentDevices.append(dev)
@@ -3323,7 +3299,7 @@ class vmmDetails(vmmGObjectUI):
         ret = []
         for dev in self.vm.get_bootable_devices():
             icon = _icon_for_device(dev)
-            label = _label_for_device(dev, self.vm)
+            label = _label_for_device(dev)
 
             ret.append([dev.vmmidstr, label, icon, False, True])
 

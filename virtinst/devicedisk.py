@@ -169,8 +169,6 @@ class VirtualDisk(VirtualDevice):
             return bus.capitalize()
         if bus == "virtio":
             return "VirtIO"
-        if bus == "spapr-vscsi":
-            return "vSCSI"
         return bus
 
     @staticmethod
