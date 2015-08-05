@@ -55,7 +55,7 @@ class VirtualHostDevice(VirtualDevice):
             if not count:
                 raise RuntimeError(_("Could not find USB device "
                                      "(vendorId: %s, productId: %s)")
-                                   % (vendor, product))
+                                   % (self.vendor, self.product))
 
             if count > 1:
                 self.bus = nodedev.bus
