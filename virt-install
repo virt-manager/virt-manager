@@ -226,6 +226,9 @@ def convert_old_networks(options):
             fail(_("Cannot use --nonetworks with --network"))
         options.network = ["none"]
 
+    if options.pxe and options.network and "none" in options.network:
+        fail(_("Can't use --pxe without any network"))
+
     macs = virtinst.util.listify(options.mac)
     networks = virtinst.util.listify(options.network)
     bridges = virtinst.util.listify(options.bridge)

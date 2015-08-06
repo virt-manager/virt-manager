@@ -746,8 +746,8 @@ c.add_valid("--mac 22:22:33:44:55:AF")  # Just a macaddr
 c.add_valid("--bridge mybr0 --mac 22:22:33:44:55:AF")  # Old bridge w/ mac
 c.add_valid("--network bridge:mybr0,model=e1000")  # --network bridge:
 c.add_valid("--network network:default --mac RANDOM")  # VirtualNetwork with a random macaddr
-c.add_valid("--nonetworks")  # no networks
 c.add_valid("--vnc --keymap=local")  # --keymap local
+c.add_invalid("--nonetworks")  # no networks
 c.add_invalid("--graphics vnc --vnclisten 1.2.3.4")  # mixing old and new
 c.add_invalid("--network=FOO")  # Nonexistent network
 c.add_invalid("--mac 1234")  # Invalid mac
