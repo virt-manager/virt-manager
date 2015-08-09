@@ -327,6 +327,7 @@ class vmmConnect(vmmGObjectUI):
         self.populate_uri()
 
     def hypervisor_changed(self, src):
+        ignore = src
         hv = uiutil.get_list_selection(self.widget("hypervisor"))
         is_session = (hv == HV_QEMU_SESSION)
         uiutil.set_grid_row_visible(
