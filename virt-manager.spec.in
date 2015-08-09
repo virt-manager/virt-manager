@@ -8,7 +8,7 @@
 %define libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
 %define kvm_packages               ""
 %define preferred_distros          "fedora,rhel"
-%define default_hvs                "qemu,xen"
+%define default_hvs                "qemu,xen,lxc"
 
 %if 0%{?rhel}
 %define preferred_distros          "rhel,fedora"
