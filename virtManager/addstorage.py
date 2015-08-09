@@ -98,7 +98,7 @@ class vmmAddStorage(vmmGObjectUI):
         def pretty_storage(size):
             return "%.1f GiB" % float(size)
 
-        hd_label = ("%s available in the default location" %
+        hd_label = (_("%s available in the default location") %
                     pretty_storage(max_storage))
         hd_label = ("<span color='#484848'>%s</span>" % hd_label)
         widget.set_markup(hd_label)
