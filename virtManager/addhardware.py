@@ -244,11 +244,10 @@ class vmmAddHardware(vmmGObjectUI):
         self.build_sound_combo(self.vm, sound_list)
 
         # Host device list
-        # model = [ Description, nodedev name ]
         host_dev = self.widget("host-device")
-        host_dev_model = Gtk.ListStore(str, str, object)
+        # [ prettyname, xmlobj ]
+        host_dev_model = Gtk.ListStore(str, object)
         host_dev.set_model(host_dev_model)
-
         host_col = Gtk.TreeViewColumn()
         text = Gtk.CellRendererText()
         host_col.pack_start(text, True)
@@ -906,10 +905,10 @@ class vmmAddHardware(vmmGObjectUI):
                 if dev.xmlobj.name == subdev.xmlobj.parent:
                     prettyname += " (%s)" % subdev.xmlobj.pretty_name()
 
-            model.append([prettyname, dev.xmlobj.name, dev.xmlobj])
+            model.append([prettyname, dev.xmlobj])
 
         if len(model) == 0:
-            model.append([_("No Devices Available"), None, None])
+            model.append([_("No Devices Available"), None])
         uiutil.set_list_selection_by_number(devlist, 0)
 
     def _populate_disk_format_combo_wrapper(self, create):
@@ -1617,13 +1616,10 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Sound device parameter error"), e)
 
     def _validate_page_hostdev(self):
-        row = uiutil.get_list_selected_row(self.widget("host-device"))
-
-        if row is None:
+        nodedev = uiutil.get_list_selection(self.widget("host-device"), 1)
+        if nodedev is None:
             return self.err.val_err(_("Physical Device Required"),
                                     _("A device must be selected."))
-
-        nodedev = row[2]
 
         try:
             dev = virtinst.VirtualHostDevice(self.conn.get_backend())
