@@ -279,6 +279,20 @@
         <address bus="0" target="0" unit="0"/>
       </source>
     </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x03f0"/>
+        <product id="0x7e04"/>
+        <address bus="1" device="20"/>
+      </source>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x03f0"/>
+        <product id="0x7e04"/>
+        <address bus="1" device="21"/>
+      </source>
+    </hostdev>
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="passthrough" type="host"/>
     <redirdev bus="usb" type="spicevmc"/>
