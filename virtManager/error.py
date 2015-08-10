@@ -89,6 +89,8 @@ class vmmErrorDialog(vmmGObject):
             tb = "".join(traceback.format_exc()).strip()
             if tb != "None":
                 details += "\n\n" + tb
+        else:
+            details = str(details)
 
         if debug:
             debugmsg = "error dialog message:\nsummary=%s" % summary
