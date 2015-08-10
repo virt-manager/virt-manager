@@ -174,7 +174,7 @@ class _OSDB(object):
         "linux" : "generic",
         "windows" : "winxp",
         "solaris" : "solaris10",
-        "unix": "freebsd9",
+        "unix": "freebsd9.0",
         "other": "generic",
     }
 
@@ -221,10 +221,7 @@ class _OSDB(object):
 
     def lookup_os(self, key):
         key = self._aliases.get(key) or key
-        ret = self._all_variants.get(key)
-        if ret is None:
-            return None
-        return ret
+        return self._all_variants.get(key)
 
     def lookup_os_by_media(self, location):
         media = libosinfo.Media.create_from_location(location, None)
