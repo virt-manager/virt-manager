@@ -906,10 +906,10 @@ class vmmAddHardware(vmmGObjectUI):
                 if dev.xmlobj.name == subdev.xmlobj.parent:
                     prettyname += " (%s)" % subdev.xmlobj.pretty_name()
 
-            model.append([prettyname, dev.xmlobj.name, devtype, dev.xmlobj])
+            model.append([prettyname, dev.xmlobj.name, dev.xmlobj])
 
         if len(model) == 0:
-            model.append([_("No Devices Available"), None, None, None])
+            model.append([_("No Devices Available"), None, None])
         uiutil.set_list_selection_by_number(devlist, 0)
 
     def _populate_disk_format_combo_wrapper(self, create):
