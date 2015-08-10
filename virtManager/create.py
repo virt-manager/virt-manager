@@ -1403,7 +1403,7 @@ class vmmCreate(vmmGObjectUI):
             if variant:
                 guest.os_variant = variant
         except ValueError, e:
-            self.err.show_err(_("Error setting OS information."), str(e))
+            self.err.val_err(_("Error setting OS information."), str(e))
             return None
 
         if guest.os.is_arm64():
