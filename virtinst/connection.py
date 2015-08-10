@@ -360,6 +360,9 @@ class VirtualConnection(object):
     def is_remote(self):
         return (hasattr(self, "_virtinst__fake_conn_remote") or
             self._urisplits.hostname)
+    def is_session_uri(self):
+        return (hasattr(self, "_virtinst__fake_conn_session") or
+                self.get_uri_path() == "/session")
 
     def get_uri_hostname(self):
         return self._urisplits.hostname
@@ -375,8 +378,6 @@ class VirtualConnection(object):
     def get_uri_driver(self):
         return self._urisplits.scheme
 
-    def is_session_uri(self):
-        return self.get_uri_path() == "/session"
     def is_qemu(self):
         return self._urisplits.scheme.startswith("qemu")
     def is_qemu_system(self):
@@ -456,6 +457,10 @@ class VirtualConnection(object):
         if "remote" in opts:
             opts.pop("remote")
             setattr(self, "_virtinst__fake_conn_remote", True)
+
+        if "session" in opts:
+            opts.pop("session")
+            setattr(self, "_virtinst__fake_conn_session", True)
 
         if "prettyname" in opts:
             self._fake_pretty_name = opts.pop("prettyname")

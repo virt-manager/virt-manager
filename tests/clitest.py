@@ -71,6 +71,7 @@ test_files = {
     'URI-TEST-DEFAULT': utils.uri_test_default,
     'URI-TEST-REMOTE': utils.uri_test_remote,
     'URI-KVM': utils.uri_kvm,
+    'URI-KVM-SESSION': utils.uri_kvm_session,
     'URI-KVM-REMOTE': utils.uri_kvm + ",remote",
     'URI-KVM-NODOMCAPS': utils.uri_kvm_nodomcaps,
     'URI-KVM-ARMV7L' : utils.uri_kvm_armv7l,
@@ -698,6 +699,10 @@ c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-
 # s390x tests
 c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom")
 
+# qemu:///session tests
+c.add_compare("--connect %(URI-KVM-SESSION)s --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults")
+
+# misc KVM config tests
 c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso")  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7")  # RHEL7 defaults
@@ -705,7 +710,6 @@ c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7"
 c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi")  # no HYPER-V with UEFI
 c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
 c.add_compare("--connect %(URI-KVM-REMOTE)s --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote")
-
 c.add_valid("--connect %(URI-KVM-NODOMCAPS)s --arch aarch64 --nodisks --pxe")  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
 c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm")  # Invalid domain type for arch
