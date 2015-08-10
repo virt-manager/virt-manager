@@ -81,7 +81,7 @@ class _StorageObject(XMLBuilder):
 def _get_default_pool_path(conn):
     path = "/var/lib/libvirt/images"
     if conn.is_session_uri():
-        path = os.path.expanduser("~/.local/libvirt/images")
+        path = os.path.expanduser("~/.local/share/libvirt/images")
     return path
 
 
