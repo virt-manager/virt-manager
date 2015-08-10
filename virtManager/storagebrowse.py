@@ -135,6 +135,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def _volume_chosen(self, src, volume):
         ignore = src
+        logging.debug("Chosen volume XML:\n%s", volume.xmlobj.get_xml_config())
         self._finish(volume.get_target_path())
 
     def _vol_sensitive_cb(self, fmt):
@@ -166,6 +167,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             dialog_type=dialog_type, browse_reason=self._browse_reason,
             dialog_name=dialog_name, choose_button=choose_button)
         if filename:
+            logging.debug("Browse local chose path=%s", filename)
             self._finish(filename)
 
     def _finish(self, path):

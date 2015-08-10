@@ -64,7 +64,14 @@ class vmmCreateVolume(vmmGObjectUI):
 
 
     def show(self, parent):
-        logging.debug("Showing new volume wizard")
+        try:
+            parent_xml = self.parent_pool.xmlobj.get_xml_config()
+        except:
+            logging.debug("Error getting parent_pool xml", exc_info=True)
+            parent_xml = None
+
+        logging.debug("Showing new volume wizard for parent_pool=\n%s",
+            parent_xml)
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
