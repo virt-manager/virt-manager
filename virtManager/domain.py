@@ -800,10 +800,7 @@ class vmmDomain(vmmLibvirtObject):
             _change_bus()
 
         if do_hotplug:
-            hotplug_kwargs = {"device": editdev}
-            if path != _SENTINEL:
-                hotplug_kwargs["storage_path"] = True
-            self.hotplug(**hotplug_kwargs)
+            self.hotplug(device=editdev)
         else:
             self._redefine_xmlobj(xmlobj)
 
@@ -1057,8 +1054,7 @@ class vmmDomain(vmmLibvirtObject):
         self._backend.updateDeviceFlags(xml, flags)
 
     def hotplug(self, vcpus=_SENTINEL, memory=_SENTINEL, maxmem=_SENTINEL,
-        description=_SENTINEL, title=_SENTINEL, storage_path=_SENTINEL,
-        device=_SENTINEL):
+        description=_SENTINEL, title=_SENTINEL, device=_SENTINEL):
         if not self.is_active():
             return
 
@@ -1101,13 +1097,7 @@ class vmmDomain(vmmLibvirtObject):
         if title != _SENTINEL:
             _hotplug_metadata(title, libvirt.VIR_DOMAIN_METADATA_TITLE)
 
-        if storage_path != _SENTINEL:
-            # qemu originally only supported attach_device for updating
-            # a device's path. Stick with that. We may need to differentiate
-            # for other drivers that don't maintain back compat though
-            self.attach_device(device)
-
-        elif device != _SENTINEL:
+        if device != _SENTINEL:
             self._update_device(device)
 
 
