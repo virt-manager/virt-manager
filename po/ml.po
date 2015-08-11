@@ -1,24 +1,28 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
+# Ani Peter <apeter@redhat.com>, 2006-2007,2009,2012-2014
+# Ani Peter <apeter@redhat.com>, 2013
 # Ani Peter <peter.ani@gmail.com>, 2006-2007,2009,2012-2014
 # Ani Peter <peter.ani@gmail.com>, 2013
+# Cole Robinson <crobinso@redhat.com>, 2015. #zanata
 msgid ""
 msgstr ""
-"Project-Id-Version: virt-manager\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-06 18:15-0400\n"
-"PO-Revision-Date: 2015-05-01 13:10+0000\n"
+"POT-Creation-Date: 2015-09-01 14:01-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Malayalam (http://www.transifex.com/projects/p/virt-manager/"
 "language/ml/)\n"
 "Language: ml\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Zanata 3.7.1\n"
 
 #: ../virt-manager:56
 msgid "Error starting Virtual Machine Manager"
@@ -26,7 +30,8 @@ msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ മാനേ�
 
 #: ../virt-manager:221
 msgid "virt-manager requires libvirt 0.6.0 or later."
-msgstr "virt-manager-നു് libvirt 0.6.0 അല്ലെങ്കില്‍ പിന്നീടുള്ളതു് ആവശ്യമുണ്ടു്."
+msgstr ""
+"virt-manager-നു് libvirt 0.6.0 അല്ലെങ്കില്‍ പിന്നീടുള്ളതു് ആവശ്യമുണ്ടു്."
 
 #: ../virt-install:165
 msgid "Cannot specify storage and use --nodisks"
@@ -37,8 +42,9 @@ msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
-"--file, --nonsparse, അല്ലെങ്കില്‍ --file-size എന്നിവ --disk ഐച്ഛികങ്ങള്‍ക്കൊപ്പം "
-"ചേര്‍ക്കുവാന്‍ സാധ്യമല്ല. --disk PATH[,size=SIZE][,sparse=yes|no] ഉപയോഗിയ്ക്കുക"
+"--file, --nonsparse, അല്ലെങ്കില്‍ --file-size എന്നിവ --disk "
+"ഐച്ഛികങ്ങള്‍ക്കൊപ്പം ചേര്‍ക്കുവാന്‍ സാധ്യമല്ല. --disk PATH[,size="
+"SIZE][,sparse=yes|no] ഉപയോഗിയ്ക്കുക"
 
 #: ../virt-install:222
 msgid "Cannot use --mac with --nonetworks"
@@ -52,262 +58,287 @@ msgstr "--bridge, --nonetworks-നൊപ്പം ഉപയോഗിയ്ക്
 msgid "Cannot use --nonetworks with --network"
 msgstr "--network-നൊപ്പം --nonetworks ഉപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../virt-install:234
+#: ../virt-install:230
+#, fuzzy
+msgid "Can't use --pxe without any network"
+msgstr "--mac, --nonetworks-നൊപ്പം ഉപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല"
+
+#: ../virt-install:237
 msgid "Cannot mix both --bridge and --network arguments"
-msgstr "--bridge,  --network ആര്‍ഗ്യുമെന്റുകള്‍ കൂട്ടിച്ചേര്‍ക്കുവാന്‍ പാടില്ല"
+msgstr ""
+"--bridge,  --network ആര്‍ഗ്യുമെന്റുകള്‍ കൂട്ടിച്ചേര്‍ക്കുവാന്‍ പാടില്ല"
 
-#: ../virt-install:287
+#: ../virt-install:290
 msgid "Cannot mix --graphics and old style graphical options"
-msgstr "--graphics-ഉം പഴയ ശൈലിയിലുള്ള ഗ്രാഫിക്കല്‍ ഐച്ഛികങ്ങളും കൂട്ടിച്ചേര്‍ക്കുവാന്‍ സാധ്യമല്ല"
+msgstr ""
+"--graphics-ഉം പഴയ ശൈലിയിലുള്ള ഗ്രാഫിക്കല്‍ ഐച്ഛികങ്ങളും "
+"കൂട്ടിച്ചേര്‍ക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../virt-install:291
+#: ../virt-install:294
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
-"VNC, SDL, --graphics അല്ലെങ്കില്‍ --nographics എന്നിവയിലൊന്നില്‍ കൂടുതല്‍ നല്‍കുവാന്‍ സാധ്യമല്ല"
+"VNC, SDL, --graphics അല്ലെങ്കില്‍ --nographics എന്നിവയിലൊന്നില്‍ കൂടുതല്‍ "
+"നല്‍കുവാന്‍ സാധ്യമല്ല"
 
-#: ../virt-install:339
+#: ../virt-install:342
 msgid "Can't do more than one of --hvm, --paravirt, or --container"
-msgstr "--hvm, --paravirt, അല്ലെങ്കില്‍ --container എന്നതില്‍ കൂടുതല്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല"
+msgstr ""
+"--hvm, --paravirt, അല്ലെങ്കില്‍ --container എന്നതില്‍ കൂടുതല്‍ ചെയ്യുവാന്‍ "
+"സാധ്യമല്ല"
 
-#: ../virt-install:353 ../virt-install:354
+#: ../virt-install:356 ../virt-install:357
 msgid "default"
 msgstr "സ്വതവേ"
 
-#: ../virt-install:400
+#: ../virt-install:403
 #, c-format
 msgid "Error validating install location: %s"
 msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യേണ്ട സ്ഥാനം ഉറപ്പാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virt-install:420
+#: ../virt-install:423
 msgid "--name is required"
 msgstr "--name ആവശ്യമുണ്ടു്"
 
-#: ../virt-install:423
+#: ../virt-install:426
 msgid "--memory amount in MiB is required"
 msgstr ""
 
-#: ../virt-install:428
+#: ../virt-install:431
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
-#: ../virt-install:436
-msgid ""
-"An install method must be specified\n"
+#: ../virt-install:439
+msgid "An install method must be specified\n"
 "(%(methods)s)"
-msgstr ""
-"ഇന്‍സ്റ്റോള്‍ ചെയ്യുവാനുള്ളൊരു രീതി പറഞ്ഞിരിയ്ക്കണം\n"
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യുവാനുള്ളൊരു രീതി പറഞ്ഞിരിയ്ക്കണം\n"
 "(%(methods)s)"
 
-#: ../virt-install:443
+#: ../virt-install:446
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
 
-#: ../virt-install:451
+#: ../virt-install:454
 msgid "Only one install method can be used (%(methods)s)"
-msgstr "ഒറ്റ ഇന്‍സ്റ്റോള്‍ രീതി മാത്രമേ ഉപയോഗിയ്ക്കുവാന്‍ പാടുള്ളൂ (%(methods)s)"
+msgstr ""
+"ഒറ്റ ഇന്‍സ്റ്റോള്‍ രീതി മാത്രമേ ഉപയോഗിയ്ക്കുവാന്‍ പാടുള്ളൂ (%(methods)s)"
 
-#: ../virt-install:457
+#: ../virt-install:460
 #, c-format
 msgid "Install methods (%s) cannot be specified for container guests"
-msgstr "കണ്ടെയിനര്‍ ഗസ്റ്റുകള്‍ക്കുള്ള (%s) ഇന്‍സ്റ്റോള്‍ രീതികള്‍ നല്‍കുവാന്‍ സാധ്യമല്ല"
-
-#: ../virt-install:462
-msgid "Network PXE boot is not supported for paravirtualized guests"
-msgstr "പാരാവിര്‍ച്ച്വലൈസ്ഡ് ഗസ്റ്റുകള്‍ക്കു് നെറ്റ്‌വര്‍ക്ക് പിഎക്സ്ഇ ബൂട്ട് പിന്തുണയ്ക്കുന്നില്ല"
+msgstr ""
+"കണ്ടെയിനര്‍ ഗസ്റ്റുകള്‍ക്കുള്ള (%s) ഇന്‍സ്റ്റോള്‍ രീതികള്‍ നല്‍കുവാന്‍ "
+"സാധ്യമല്ല"
 
 #: ../virt-install:465
+msgid "Network PXE boot is not supported for paravirtualized guests"
+msgstr ""
+"പാരാവിര്‍ച്ച്വലൈസ്ഡ് ഗസ്റ്റുകള്‍ക്കു് നെറ്റ്‌വര്‍ക്ക് പിഎക്സ്ഇ ബൂട്ട് "
+"പിന്തുണയ്ക്കുന്നില്ല"
+
+#: ../virt-install:468
 msgid "Paravirtualized guests cannot install off cdrom media."
-msgstr "പാരാവിര്‍ച്ച്വലൈസ്ഡ് ഗസ്റ്റുകള്‍ക്കു് സിഡിറോ മീഡിയാ ഇന്‍സ്റ്റോള്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല."
+msgstr ""
+"പാരാവിര്‍ച്ച്വലൈസ്ഡ് ഗസ്റ്റുകള്‍ക്കു് സിഡിറോ മീഡിയാ ഇന്‍സ്റ്റോള്‍ "
+"ചെയ്യുവാന്‍ സാധ്യമല്ല."
 
-#: ../virt-install:470
+#: ../virt-install:473
 msgid "Libvirt version does not support remote --location installs"
-msgstr "Libvirt പതിപ്പു് വിദൂര --location ഇന്‍സ്റ്റോളുകള്‍ പിന്തുണയ്ക്കുന്നില്ല"
-
-#: ../virt-install:476
-msgid "--extra-args only work if specified with --location."
-msgstr "--location-നൊപ്പം നിഷ്കര്‍ഷിച്ചാല്‍ മാത്രം --extra-args പ്രവര്‍ത്തിയ്ക്കുന്നു."
+msgstr ""
+"Libvirt പതിപ്പു് വിദൂര --location ഇന്‍സ്റ്റോളുകള്‍ പിന്തുണയ്ക്കുന്നില്ല"
 
 #: ../virt-install:479
-msgid "--initrd-inject only works if specified with --location."
-msgstr "--location-നൊപ്പം നിഷ്കര്‍ഷിച്ചാല്‍ മാത്രം --initrd-injectപ്രവര്‍ത്തിയ്ക്കുന്നു."
+msgid "--extra-args only work if specified with --location."
+msgstr ""
+"--location-നൊപ്പം നിഷ്കര്‍ഷിച്ചാല്‍ മാത്രം --extra-args "
+"പ്രവര്‍ത്തിയ്ക്കുന്നു."
 
-#: ../virt-install:494
+#: ../virt-install:482
+msgid "--initrd-inject only works if specified with --location."
+msgstr ""
+"--location-നൊപ്പം നിഷ്കര്‍ഷിച്ചാല്‍ മാത്രം --initrd-"
+"injectപ്രവര്‍ത്തിയ്ക്കുന്നു."
+
+#: ../virt-install:497
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
 msgstr ""
 
-#: ../virt-install:507
+#: ../virt-install:510
 msgid ""
 "No --console device added, you likely will not see text install output from "
 "the guest."
 msgstr ""
 
-#: ../virt-install:523
+#: ../virt-install:526
 #, c-format
 msgid ""
 "No 'console' seen in --extra-args, a '%s' kernel argument is likely required "
 "to see text install output from the guest."
 msgstr ""
 
-#: ../virt-install:536
+#: ../virt-install:539
 #, c-format
 msgid ""
 "'%s' found in --extra-args, but the device attached to the guest likely "
 "requires '%s'. You may not see text install output from the guest."
 msgstr ""
 
-#: ../virt-install:540
+#: ../virt-install:543
 #, c-format
 msgid ""
 "To make '--extra-args %s' work, you can force a plain serial device with '--"
 "console pty'"
 msgstr ""
 
-#: ../virt-install:546
+#: ../virt-install:549
 msgid "The guest's network configuration does not support PXE"
 msgstr "ഗസ്റ്റിന്റെ നെറ്റ്‌വര്‍ക്ക് ക്രമീകരണം പിഎക്സ്ഇ പിന്തുണയ്ക്കുന്നില്ല"
 
-#: ../virt-install:550
+#: ../virt-install:553
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with -"
+"-os-variant for optimal results."
 msgstr ""
 
-#: ../virt-install:570
+#: ../virt-install:573
 msgid "A disk device must be specified with --import."
 msgstr "ഒരു ഡിവൈസ് --import-നൊപ്പം നല്‍കണം."
 
-#: ../virt-install:736
+#: ../virt-install:739
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
-#: ../virt-install:746
-msgid ""
-"\n"
+#: ../virt-install:749
+msgid "\n"
 "Starting install..."
-msgstr ""
-"\n"
+msgstr "\n"
 "ഇന്‍സ്റ്റോള്‍ ചെയ്യുവാന്‍ ആരംഭിയ്ക്കുന്നു..."
 
-#: ../virt-install:763
+#: ../virt-install:766
 msgid "Domain creation completed."
 msgstr ""
 
-#: ../virt-install:767
+#: ../virt-install:770
 #, c-format
-msgid ""
-"You can restart your domain by running:\n"
+msgid "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
-#: ../virt-install:770
+#: ../virt-install:773
 msgid "Restarting guest."
 msgstr ""
 
-#: ../virt-install:776
+#: ../virt-install:779
 msgid "Domain install interrupted."
 msgstr "ഡൊമെയിന്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതില്‍ തടസ്സം."
 
-#: ../virt-install:798
+#: ../virt-install:801
 msgid "Domain has crashed."
 msgstr "ഡൊമെയിന്‍ തകര്‍ന്നിരിയ്ക്കുന്നു."
 
-#: ../virt-install:835
+#: ../virt-install:838
 msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
 msgstr ""
-"ഡൊമെയിന്‍ ഇന്‍സ്റ്റലേഷന്‍ പുരോഗമിയ്ക്കുന്നു. നിങ്ങള്‍ക്കു് ഇന്‍സ്റ്റലേഷന്‍ പ്രക്രിയ\n"
+"ഡൊമെയിന്‍ ഇന്‍സ്റ്റലേഷന്‍ പുരോഗമിയ്ക്കുന്നു. നിങ്ങള്‍ക്കു് ഇന്‍സ്റ്റലേഷന്‍ "
+"പ്രക്രിയ\n"
 "പൂര്‍ത്തിയാക്കുന്നതിനായി വീണ്ടും കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യാം."
 
-#: ../virt-install:840
+#: ../virt-install:843
 #, c-format
 msgid " %d minutes"
 msgstr " %d നിമിഷങ്ങള്‍"
 
-#: ../virt-install:842
+#: ../virt-install:845
 msgid ""
 "Domain installation still in progress. Waiting%(time_string)s for "
 "installation to complete."
 msgstr ""
 
-#: ../virt-install:849
+#: ../virt-install:852
 msgid "Domain has shutdown. Continuing."
 msgstr "ഡൊമെയിന്‍ അടച്ചുപൂട്ടിയിരിയ്ക്കുന്നു. തുടരുന്നു."
 
-#: ../virt-install:856
+#: ../virt-install:859
 #, c-format
 msgid "Could not lookup domain after install: %s"
 msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തതിനു് ശേഷം ഡൊമെയിന്‍ തെരയുവാന്‍ സാധ്യമല്ല: %s"
 
-#: ../virt-install:863
+#: ../virt-install:866
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
-"ഇന്‍സ്റ്റലേഷന്‍ നല്‍കിയ സമയപരിധിയേക്കാള്‍ സമയമെടുക്കുന്നു. പ്രയോഗത്തില്‍ നിന്നും പുറത്തു് കടക്കുന്നു."
+"ഇന്‍സ്റ്റലേഷന്‍ നല്‍കിയ സമയപരിധിയേക്കാള്‍ സമയമെടുക്കുന്നു. പ്രയോഗത്തില്‍ "
+"നിന്നും പുറത്തു് കടക്കുന്നു."
 
-#: ../virt-install:888
+#: ../virt-install:891
 msgid "Dry run completed successfully"
 msgstr "ഡ്രൈ റണ്‍ വിജയകരമായി പൂര്‍ത്തിയായി"
 
-#: ../virt-install:895
+#: ../virt-install:898
 msgid "Requested installation does not have XML step 2"
 msgstr "ആവശ്യപ്പെട്ട ഇന്‍സ്റ്റലേഷനു് എക്സ്എംഎല്‍ നടപടി 2 ലഭ്യമല്ല"
 
-#: ../virt-install:899
+#: ../virt-install:902
 msgid "Requested installation does not have XML step 3"
 msgstr "ആവശ്യപ്പെട്ട ഇന്‍സ്റ്റലേഷനു് എക്സ്എംഎല്‍ നടപടി 3 ലഭ്യമല്ല"
 
-#: ../virt-install:918
+#: ../virt-install:921
 msgid "Create a new virtual machine from specified install media."
-msgstr "നല്‍കിയ ഇന്‍സ്റ്റോള്‍ മീഡിയയില്‍ നിന്നും പുതിയൊരു വിര്‍ച്ച്വല്‍ മഷീന്‍ തയ്യാറാക്കുക."
+msgstr ""
+"നല്‍കിയ ഇന്‍സ്റ്റോള്‍ മീഡിയയില്‍ നിന്നും പുതിയൊരു വിര്‍ച്ച്വല്‍ മഷീന്‍ "
+"തയ്യാറാക്കുക."
 
-#: ../virt-install:922 ../virt-clone:109
+#: ../virt-install:925 ../virt-clone:109
 msgid "General Options"
 msgstr "സാധാരണ ഐച്ഛികങ്ങള്‍"
 
-#: ../virt-install:924
+#: ../virt-install:927
 msgid "Name of the guest instance"
 msgstr "ഗസ്റ്റ് ഇന്‍സ്റ്റന്‍സിന്റെ പേരു്"
 
-#: ../virt-install:931
+#: ../virt-install:934
 msgid "Installation Method Options"
 msgstr "ഇന്‍സ്റ്റലേഷന്‍ രീതികള്‍"
 
-#: ../virt-install:933
+#: ../virt-install:936
 msgid "CD-ROM installation media"
 msgstr "സിഡി-റോം ഇന്‍സ്റ്റലേഷന്‍ മീഡിയാ"
 
-#: ../virt-install:935
+#: ../virt-install:938
 msgid ""
 "Installation source (eg, nfs:host:/path, http://host/path, ftp://host/path)"
 msgstr ""
-"ഇന്‍സ്റ്റലേഷന്‍ ശ്രോതസ്സ് (ഉദാ, nfs:host:/path, http://host/path, ftp://host/path)"
+"ഇന്‍സ്റ്റലേഷന്‍ ശ്രോതസ്സ് (ഉദാ, nfs:host:/path, http://host/path, ftp://host/"
+"path)"
 
-#: ../virt-install:938
+#: ../virt-install:941
 msgid "Boot from the network using the PXE protocol"
-msgstr "പിഎക്സ്ഇ സമ്പ്രദായം ഉപയോഗിച്ചു് നെറ്റ്‌വര്‍ക്കില്‍ നിന്നും ബൂട്ട് ചെയ്യുക"
+msgstr ""
+"പിഎക്സ്ഇ സമ്പ്രദായം ഉപയോഗിച്ചു് നെറ്റ്‌വര്‍ക്കില്‍ നിന്നും ബൂട്ട് ചെയ്യുക"
 
-#: ../virt-install:940
+#: ../virt-install:943
 msgid "Build guest around an existing disk image"
 msgstr "നിലവിലുള്ളൊരു ഡിസ്ക് ഇമേജിന് ഗസ്റ്റ് തയ്യാറാക്കുക"
 
-#: ../virt-install:942
+#: ../virt-install:945
 msgid "Treat the CD-ROM media as a Live CD"
 msgstr "സിഡിറോം മീഡിയാ ഒരു ലൈവ് സിഡിയായി കരുതുക"
 
-#: ../virt-install:944
+#: ../virt-install:947
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
-"--location-ല്‍ നിന്നും ബൂട്ട് ചെയ്ത കേര്‍ണല്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി നല്‍കുവാനുള്ള കൂടുതല്‍ "
-"ആര്‍ഗ്യുമെന്റുകള്‍ "
+"--location-ല്‍ നിന്നും ബൂട്ട് ചെയ്ത കേര്‍ണല്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി "
+"നല്‍കുവാനുള്ള കൂടുതല്‍ ആര്‍ഗ്യുമെന്റുകള്‍ "
 
-#: ../virt-install:947
+#: ../virt-install:950
 msgid "Add given file to root of initrd from --location"
-msgstr "--location-ല്‍ നിന്നും initrd-യുടെ റൂട്ടിലേക്കു് നല്‍കിയ ഫയല്‍ ചേര്‍ക്കുക"
+msgstr ""
+"--location-ല്‍ നിന്നും initrd-യുടെ റൂട്ടിലേക്കു് നല്‍കിയ ഫയല്‍ ചേര്‍ക്കുക"
 
-#: ../virt-install:954
+#: ../virt-install:957
 msgid ""
 "The OS variant being installed guests, e.g. 'fedora18', 'rhel6', 'winxp', "
 "etc."
@@ -315,61 +346,62 @@ msgstr ""
 "The OS variant being installed guests, e.g. 'fedora18', 'rhel6', 'winxp', "
 "etc."
 
-#: ../virt-install:961
+#: ../virt-install:964
 msgid "Device Options"
 msgstr "ഡിവൈസ് ഐച്ഛികങ്ങള്‍"
 
-#: ../virt-install:991
+#: ../virt-install:994
 msgid "Guest Configuration Options"
 msgstr ""
 
-#: ../virt-install:995
+#: ../virt-install:998
 msgid "Virtualization Platform Options"
 msgstr "വിര്‍ച്ച്വലൈസേഷന്‍ പ്ലാറ്റ്ഫോം ഐച്ഛികങ്ങള്‍"
 
-#: ../virt-install:997
+#: ../virt-install:1000
 msgid "This guest should be a fully virtualized guest"
 msgstr "ഗസ്റ്റ് പൂര്‍ണ്ണ വിര്‍ച്ച്വലൈസ്ഡ് ഗസ്റ്റായിരിയ്ക്കണം"
 
-#: ../virt-install:999
+#: ../virt-install:1002
 msgid "This guest should be a paravirtualized guest"
 msgstr "ഗസ്റ്റ് പാരാവിര്‍ച്ച്വലൈസ്ഡ് ഗസ്റ്റായിരിയ്ക്കണം"
 
-#: ../virt-install:1001
+#: ../virt-install:1004
 msgid "This guest should be a container guest"
 msgstr "ഈ ഗസ്റ്റ് ഒരു കണ്ടെയിനര്‍ ഗസ്റ്റായിരിയ്ക്കണം"
 
-#: ../virt-install:1004
+#: ../virt-install:1007
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "ഉപയോഗിയ്ക്കുവാനുള്ള ഹൈപ്പര്‍വൈസറിന്റെ പേരു് (kvm, qemu, xen, ...)"
 
-#: ../virt-install:1008
+#: ../virt-install:1011
 msgid "The CPU architecture to simulate"
 msgstr "മാതൃകയ്ക്കുള്ള സിപിയു ആര്‍ക്കിറ്റക്ചര്‍"
 
-#: ../virt-install:1010
+#: ../virt-install:1013
 msgid "The machine type to emulate"
 msgstr "എമുലേറ്റ് ചെയ്യുവാനുള്ള മഷീന്‍ രീതി"
 
-#: ../virt-install:1017 ../virt-clone:145 ../virt-xml:358
+#: ../virt-install:1020 ../virt-clone:145 ../virt-xml:385
 msgid "Miscellaneous Options"
 msgstr "പലവക ഐച്ഛികങ്ങള്‍"
 
-#: ../virt-install:1020
+#: ../virt-install:1023
 msgid "Have domain autostart on host boot up."
 msgstr "ഹോസ്റ്റ് ബൂട്ട് ചെയ്യുമ്പോള്‍ ഡൊമെയിന്‍ സ്വയം ആരംഭിയ്ക്കുന്നു."
 
-#: ../virt-install:1022
+#: ../virt-install:1025
 msgid "Minutes to wait for install to complete."
 msgstr ""
 
-#: ../virt-install:1064
+#: ../virt-install:1067
 msgid "--print-step must be 1, 2, 3, or all"
 msgstr "--print-step 1, 2, 3, അല്ലെങ്കില്‍ എല്ലാമായിരിയ്ക്കണം"
 
-#: ../virt-install:1086 ../virt-clone:215
+#: ../virt-install:1089 ../virt-clone:215
 msgid "Installation aborted at user request"
-msgstr "ഉപയോക്താവിന്റെ ആവശ്യമനുസരിച്ചു് ഇന്‍സ്റ്റലേഷന്‍ നിര്‍ത്തിയിരിയ്ക്കുന്നു"
+msgstr ""
+"ഉപയോക്താവിന്റെ ആവശ്യമനുസരിച്ചു് ഇന്‍സ്റ്റലേഷന്‍ നിര്‍ത്തിയിരിയ്ക്കുന്നു"
 
 #: ../virt-clone:40
 msgid ""
@@ -398,7 +430,8 @@ msgstr ""
 #: ../virt-clone:111
 msgid "Name of the original guest; The status must be shut off or paused."
 msgstr ""
-"യഥാര്‍ത്ഥ ഗസ്റ്റിന്റെ പേരു്; അവസ്ഥ ഒന്നില്ലെങ്കില്‍ അടച്ചുപൂട്ടണം അല്ലെങ്കില്‍ ഇടയ്ക്കു് നിര്‍ത്തണം."
+"യഥാര്‍ത്ഥ ഗസ്റ്റിന്റെ പേരു്; അവസ്ഥ ഒന്നില്ലെങ്കില്‍ അടച്ചുപൂട്ടണം "
+"അല്ലെങ്കില്‍ ഇടയ്ക്കു് നിര്‍ത്തണം."
 
 #: ../virt-clone:114
 msgid "XML file to use as the original guest."
@@ -409,7 +442,8 @@ msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr ""
-"യഥാര്‍ത്ഥ ഗസ്റ്റ് ക്രമീകരണത്തില്‍ നിന്നും ക്ലോണ്‍ നാമവും സംഭരണ പാഥുകളും സ്വയമായി തയ്യാറാക്കുക."
+"യഥാര്‍ത്ഥ ഗസ്റ്റ് ക്രമീകരണത്തില്‍ നിന്നും ക്ലോണ്‍ നാമവും സംഭരണ പാഥുകളും "
+"സ്വയമായി തയ്യാറാക്കുക."
 
 #: ../virt-clone:119
 msgid "Name for the new guest"
@@ -429,23 +463,24 @@ msgstr "പുതിയ ഗസ്റ്റിനു് ഡിസ്ക് ഇമ
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
-"copy=hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
+"hdc)"
 msgstr ""
-"ഡിവൈസുകള്‍ പകര്‍ത്തുവാന്‍ നിര്‍ബന്ധിയ്ക്കുക (ഉദാ, 'hdc' ഒരു റീഡ്ഒണ്‍ലി സിഡിറോം ഡിവൈസാണെങ്കില്‍, --"
-"force-copy=hdc)"
+"ഡിവൈസുകള്‍ പകര്‍ത്തുവാന്‍ നിര്‍ബന്ധിയ്ക്കുക (ഉദാ, 'hdc' ഒരു റീഡ്ഒണ്‍ലി "
+"സിഡിറോം ഡിവൈസാണെങ്കില്‍, --force-copy=hdc)"
 
 #: ../virt-clone:133
 msgid "Do not use a sparse file for the clone's disk image"
-msgstr "ക്ലോണിന്റെ ഡിസ്ക് ഇമേജിനു് ഒരു സ്പാഴ്സ് ഫയല്‍ ഉപയോഗിയ്ക്കുവാന്‍ പാടില്ല"
+msgstr ""
+"ക്ലോണിന്റെ ഡിസ്ക് ഇമേജിനു് ഒരു സ്പാഴ്സ് ഫയല്‍ ഉപയോഗിയ്ക്കുവാന്‍ പാടില്ല"
 
 #: ../virt-clone:137
 msgid ""
 "Do not clone storage, new disk images specified via --file are preserved "
 "unchanged"
 msgstr ""
-"സംഭരണം ക്ലോണ്‍ ചെയ്യരുതു്,  --file മുഖേന നല്‍കിയിരിയ്ക്കുന്ന പുതിയ ഡിസ്ക് ഇമേജുകള്‍ മാറ്റമില്ലാതെ "
-"കരുതിയിരിയ്ക്കുന്നു"
+"സംഭരണം ക്ലോണ്‍ ചെയ്യരുതു്,  --file മുഖേന നല്‍കിയിരിയ്ക്കുന്ന പുതിയ ഡിസ്ക് "
+"ഇമേജുകള്‍ മാറ്റമില്ലാതെ കരുതിയിരിയ്ക്കുന്നു"
 
 #: ../virt-clone:140
 msgid "Networking Configuration"
@@ -455,7 +490,9 @@ msgstr "നെറ്റ്‌വര്‍ക്കിങ് ക്രമീക�
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
-msgstr "ക്ലോണ്‍ ഗസ്റ്റിനുള്ള പുതിയ മാക് വിലാസം. സ്വതവേയുള്ളതു് പെട്ടെന്നു് തയ്യാറാക്കിയ മാക്"
+msgstr ""
+"ക്ലോണ്‍ ഗസ്റ്റിനുള്ള പുതിയ മാക് വിലാസം. സ്വതവേയുള്ളതു് പെട്ടെന്നു് "
+"തയ്യാറാക്കിയ മാക്"
 
 #: ../virt-clone:205
 #, c-format
@@ -498,7 +535,7 @@ msgstr ""
 msgid "Creating guest '%s'."
 msgstr "'%s' ഗസ്റ്റ് തയ്യാറാക്കുന്നു."
 
-#: ../virt-convert:139 ../virt-xml:471
+#: ../virt-convert:139 ../virt-xml:477
 msgid "Aborted at user request"
 msgstr "ഉപയോക്താവിന്റെ ആവശ്യമനുസരിച്ചു് നിര്‍ത്തിയിരിയ്ക്കുന്നു"
 
@@ -590,19 +627,19 @@ msgstr "ഡിവൈസ് %s ശ്രമിയ്ക്കുന്നതി�
 msgid "Device %s successful."
 msgstr "ഡിവൈസ്  %s വിജയകരം."
 
-#: ../virt-xml:305
+#: ../virt-xml:332
 msgid "Edit libvirt XML using command line options."
 msgstr ""
 
-#: ../virt-xml:311
+#: ../virt-xml:338
 msgid "Domain name, id, or uuid"
 msgstr "ഡൊമെയിന്‍ നാമം, id, അല്ലെങ്കില്‍ uuid"
 
-#: ../virt-xml:313
+#: ../virt-xml:340
 msgid "XML actions"
 msgstr "എക്സ്എംഎല്‍ പ്രവര്‍ത്തികള്‍"
 
-#: ../virt-xml:315
+#: ../virt-xml:342
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -611,7 +648,7 @@ msgid ""
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 msgstr ""
 
-#: ../virt-xml:321
+#: ../virt-xml:348
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -619,21 +656,20 @@ msgid ""
 "--remove-device --disk /some/path"
 msgstr ""
 
-#: ../virt-xml:326
-msgid ""
-"Add specified device. Example:\n"
+#: ../virt-xml:353
+msgid "Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
 
-#: ../virt-xml:329
+#: ../virt-xml:356
 msgid "Just output the built device XML, no domain required."
 msgstr ""
 
-#: ../virt-xml:331
+#: ../virt-xml:358
 msgid "Output options"
 msgstr ""
 
-#: ../virt-xml:333
+#: ../virt-xml:360
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -641,45 +677,46 @@ msgid ""
 "With --edit, this is an update device operation."
 msgstr ""
 
-#: ../virt-xml:338
+#: ../virt-xml:365
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 
-#: ../virt-xml:341
+#: ../virt-xml:368
 msgid "Only print the requested change, in diff format"
 msgstr ""
 
-#: ../virt-xml:343
+#: ../virt-xml:370
 msgid "Only print the requested change, in full XML format"
 msgstr ""
 
-#: ../virt-xml:345
+#: ../virt-xml:372
 msgid "Require confirmation before saving any results."
-msgstr "ഏതെങ്കിലും ഫലങ്ങള്‍ സൂക്ഷിയ്ക്കുന്നതിനു് മുമ്പു് ഉറപ്പാക്കേണ്ടതുണ്ടു്."
+msgstr ""
+"ഏതെങ്കിലും ഫലങ്ങള്‍ സൂക്ഷിയ്ക്കുന്നതിനു് മുമ്പു് ഉറപ്പാക്കേണ്ടതുണ്ടു്."
 
-#: ../virt-xml:347
+#: ../virt-xml:374
 msgid "XML options"
 msgstr "എക്സ്എംഎല്‍ ഐച്ഛികങ്ങള്‍"
 
-#: ../virt-xml:385
+#: ../virt-xml:412
 msgid "Can't use --confirm with stdin input."
 msgstr "stdin ഇന്‍പുട്ടില്‍ --confirm ഉപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../virt-xml:387
+#: ../virt-xml:414
 msgid "Can't use --update with stdin input."
 msgstr "stdin ഇന്‍പുട്ടില്‍ --update ഉപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../virt-xml:390
+#: ../virt-xml:417
 msgid "A domain must be specified"
 msgstr "ഒരു ഡൊമെയിന്‍ നല്‍കിയിരിയ്ക്കണം"
 
-#: ../virt-xml:421
+#: ../virt-xml:444
 #, c-format
 msgid "Don't know how to --update for --%s"
 msgstr "--%s-നു് --update എങ്ങനെയെന്നറിയില്ല"
 
-#: ../virt-xml:459
+#: ../virt-xml:463
 msgid "Changes will take effect after the next domain shutdown."
 msgstr "അടുത്ത തവണ ഡൊമെയിന്‍ അടച്ചുപൂട്ടുമ്പോള്‍ മാറ്റങ്ങള്‍ ലഭ്യമാകുന്നു."
 
@@ -700,63 +737,65 @@ msgid "LUN Passthrough"
 msgstr ""
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:282 ../virtManager/addhardware.py:570
-#: ../virtManager/addhardware.py:682 ../virtManager/addhardware.py:698
-#: ../virtManager/addhardware.py:778 ../virtManager/details.py:2665
+#: ../virtManager/addhardware.py:281 ../virtManager/addhardware.py:569
+#: ../virtManager/addhardware.py:681 ../virtManager/addhardware.py:697
+#: ../virtManager/addhardware.py:774 ../virtManager/details.py:2645
 #: ../virtManager/gfxdetails.py:84 ../virtManager/preferences.py:165
 msgid "Hypervisor default"
 msgstr "ഹൈപ്പര്‍വൈസര്‍ ഡിഫോള്‍ട്ട്"
 
-#: ../virtManager/addhardware.py:345 ../virtManager/addstorage.py:206
+#: ../virtManager/addhardware.py:344 ../virtManager/addstorage.py:206
 #: ../virtManager/create.py:453
 msgid "Connection does not support storage management."
 msgstr "കണക്ഷന്‍ സ്റ്റോറേജ് മാനേജ്മെന്റ് പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../virtManager/addhardware.py:360 ../virtManager/addhardware.py:365
-#: ../virtManager/addhardware.py:368 ../virtManager/addhardware.py:372
-#: ../virtManager/addhardware.py:378 ../virtManager/addhardware.py:392
+#: ../virtManager/addhardware.py:359 ../virtManager/addhardware.py:364
+#: ../virtManager/addhardware.py:367 ../virtManager/addhardware.py:371
+#: ../virtManager/addhardware.py:377 ../virtManager/addhardware.py:391
 msgid "Not supported for this guest type."
 msgstr "ഈ തരത്തിലുള്ള ഗസ്റ്റിനു് പിന്തുണ നല്‍കുന്നില്ല."
 
-#: ../virtManager/addhardware.py:382 ../virtManager/addhardware.py:386
+#: ../virtManager/addhardware.py:381 ../virtManager/addhardware.py:385
 msgid "Connection does not support host device enumeration"
 msgstr "കണക്ഷന്‍ ഹോസ്റ്റ് ഡിവൈസ് എന്യുമറേഷന്‍ പിന്തുണയ്ക്കുന്നില്ല"
 
-#: ../virtManager/addhardware.py:389
+#: ../virtManager/addhardware.py:388
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt പതിപ്പ് വീഡിയോ ഡിവൈസുകളെ പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../virtManager/addhardware.py:397 ../virtManager/addhardware.py:408
+#: ../virtManager/addhardware.py:396 ../virtManager/addhardware.py:407
 msgid "Not supported for this hypervisor/libvirt combination."
 msgstr "ഈ ഹൈപ്പര്‍വൈസര്‍/libvrt കൂട്ടത്തിനെ പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../virtManager/addhardware.py:791
+#: ../virtManager/addhardware.py:787
 msgid "EvTouch USB Graphics Tablet"
 msgstr "ഇവി ടച്ച് യുഎസ്ബി ഗ്രാഫിക്സ് ടാബ്ലറ്റ്"
 
-#: ../virtManager/addhardware.py:794 ../virtManager/create.py:938
-#: ../virtManager/create.py:941
+#: ../virtManager/addhardware.py:790 ../virtManager/create.py:939
+#: ../virtManager/create.py:942
 msgid "Generic"
 msgstr "സാധാരണ"
 
-#: ../virtManager/addhardware.py:818
+#: ../virtManager/addhardware.py:814
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "VM ക്രമീകരണം മാറ്റുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/addhardware.py:844
+#: ../virtManager/addhardware.py:840
 msgid "Some changes may require a guest shutdown to take effect."
-msgstr "ഗസ്റ്റ് അടച്ചുപൂട്ടലിനു് ശേഷം ലഭ്യമാക്കുന്നതിനായി ഗസ്റ്റിനു് ചില മാറ്റങ്ങള്‍ ആവശ്യമുണ്ടു്."
+msgstr ""
+"ഗസ്റ്റ് അടച്ചുപൂട്ടലിനു് ശേഷം ലഭ്യമാക്കുന്നതിനായി ഗസ്റ്റിനു് ചില മാറ്റങ്ങള്‍ "
+"ആവശ്യമുണ്ടു്."
 
-#: ../virtManager/addhardware.py:847
+#: ../virtManager/addhardware.py:843
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "അടുത്ത തവണ ഗസ്റ്റ് അടച്ചുപൂട്ടുമ്പോള്‍ ഈ മാറ്റങ്ങള്‍ ലഭ്യമാകുന്നു."
 
-#: ../virtManager/addhardware.py:915
+#: ../virtManager/addhardware.py:911
 msgid "No Devices Available"
 msgstr "ഡിവൈസുകള്‍ ലഭ്യമല്ല"
 
-#: ../virtManager/addhardware.py:942
+#: ../virtManager/addhardware.py:938
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -764,221 +803,221 @@ msgid ""
 "You can change the USB controller type in the VM details screen."
 msgstr ""
 
-#: ../virtManager/addhardware.py:1123
+#: ../virtManager/addhardware.py:1119
 msgid "Error"
 msgstr "പിശക്"
 
-#: ../virtManager/addhardware.py:1125 ../ui/create.ui.h:57
+#: ../virtManager/addhardware.py:1121 ../ui/create.ui.h:57
 msgid "Storage"
 msgstr "സംഭരണം"
 
-#: ../virtManager/addhardware.py:1127
+#: ../virtManager/addhardware.py:1123
 msgid "Controller"
 msgstr "കണ്ട്രോളര്‍"
 
-#: ../virtManager/addhardware.py:1129 ../virtinst/network.py:194
+#: ../virtManager/addhardware.py:1125 ../virtinst/network.py:194
 msgid "Network"
 msgstr "നെറ്റ്‍വര്‍ക്ക്"
 
-#: ../virtManager/addhardware.py:1131 ../virtManager/details.py:217
+#: ../virtManager/addhardware.py:1127 ../virtManager/details.py:200
 msgid "Input"
 msgstr "ഇന്‍പുട്ട്"
 
-#: ../virtManager/addhardware.py:1133
+#: ../virtManager/addhardware.py:1129
 msgid "Graphics"
 msgstr "ഗ്രാഫിക്സ്"
 
-#: ../virtManager/addhardware.py:1135
+#: ../virtManager/addhardware.py:1131
 msgid "Sound"
 msgstr "ശബ്ദം"
 
-#: ../virtManager/addhardware.py:1137
+#: ../virtManager/addhardware.py:1133
 msgid "Video Device"
 msgstr "വീഡിയോ ഡിവൈസ്"
 
-#: ../virtManager/addhardware.py:1139
+#: ../virtManager/addhardware.py:1135
 msgid "Watchdog Device"
 msgstr "വാച്ച്ഡോഗ് ഡിവൈസ്"
 
-#: ../virtManager/addhardware.py:1141
+#: ../virtManager/addhardware.py:1137
 msgid "Filesystem Passthrough"
 msgstr "ഫയല്‍സിസ്റ്റം പാസ്ത്രൂ"
 
-#: ../virtManager/addhardware.py:1143 ../virtManager/details.py:251
+#: ../virtManager/addhardware.py:1139 ../virtManager/details.py:234
 msgid "Smartcard"
 msgstr "സ്മാര്‍ട്ട്കാര്‍ഡ്"
 
-#: ../virtManager/addhardware.py:1145
+#: ../virtManager/addhardware.py:1141
 msgid "USB Redirection"
 msgstr "യുഎസ്ബി റീഡയറക്ഷന്‍"
 
-#: ../virtManager/addhardware.py:1147 ../virtManager/details.py:249
+#: ../virtManager/addhardware.py:1143 ../virtManager/details.py:232
 msgid "TPM"
 msgstr "ടിപിഎം"
 
-#: ../virtManager/addhardware.py:1149
+#: ../virtManager/addhardware.py:1145
 msgid "Random Number Generator"
 msgstr "റാന്‍ഡം നംബര്‍ ജനറേറ്റര്‍"
 
-#: ../virtManager/addhardware.py:1151 ../virtManager/details.py:250
+#: ../virtManager/addhardware.py:1147 ../virtManager/details.py:233
 msgid "Panic Notifier"
 msgstr "പാനിക്ക് നോട്ടിഫയര്‍"
 
-#: ../virtManager/addhardware.py:1159
+#: ../virtManager/addhardware.py:1155
 #, fuzzy
 msgid "PCI Device"
 msgstr "%s ഡിവൈസ്"
 
-#: ../virtManager/addhardware.py:1160
+#: ../virtManager/addhardware.py:1156
 #, fuzzy
 msgid "USB Device"
 msgstr "%s ഡിവൈസ്"
 
-#: ../virtManager/addhardware.py:1365
+#: ../virtManager/addhardware.py:1361
 msgid "Are you sure you want to add this device?"
 msgstr "നിങ്ങള്‍ ഈ ഡിവൈസ് ചേര്‍ക്കണമെന്നുറപ്പാണോ?"
 
-#: ../virtManager/addhardware.py:1368
+#: ../virtManager/addhardware.py:1364
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
 msgstr "പ്രവര്‍ത്തനത്തിലുള്ള സിസ്റ്റത്തിലേക്കു് ഊഈ "
 
-#: ../virtManager/addhardware.py:1384
+#: ../virtManager/addhardware.py:1380
 #, python-format
 msgid "Error adding device: %s"
 msgstr "ഡിവൈസ് ചേര്‍ക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/addhardware.py:1396
+#: ../virtManager/addhardware.py:1392
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "ഡിവൈസ് ചേര്‍ക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: ../virtManager/addhardware.py:1415
+#: ../virtManager/addhardware.py:1411
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr "Uncaught error validating hardware input: %s"
 
-#: ../virtManager/addhardware.py:1425
+#: ../virtManager/addhardware.py:1421
 msgid "Creating device"
 msgstr "ഡിവൈസ് തയ്യാറാക്കുന്നു"
 
-#: ../virtManager/addhardware.py:1426
+#: ../virtManager/addhardware.py:1422
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "ഡിവൈസ് അനുസരിച്ചു്, ഇതു് പൂര്‍ത്തിയാകുവാന്‍ കുറച്ചു് സമയമെടുക്കുന്നു."
 
-#: ../virtManager/addhardware.py:1558 ../virtManager/addstorage.py:345
+#: ../virtManager/addhardware.py:1555 ../virtManager/addstorage.py:314
 msgid "Storage parameter error."
 msgstr "സ്റ്റോറേജ് പരാമീറ്റര്‍ പിശക്."
 
-#: ../virtManager/addhardware.py:1575
+#: ../virtManager/addhardware.py:1572
 msgid "Network selection error."
 msgstr "നെറ്റ്‌വര്‍ക്ക് തെരഞ്ഞെടുക്കലില്‍ പിശക്."
 
-#: ../virtManager/addhardware.py:1576
+#: ../virtManager/addhardware.py:1573
 msgid "A network source must be selected."
 msgstr "ഒരു നെറ്റ്‌വര്‍ക്ക് ഉറവിടം തെരഞ്ഞെടുക്കണം."
 
-#: ../virtManager/addhardware.py:1579
+#: ../virtManager/addhardware.py:1576
 msgid "Invalid MAC address"
 msgstr "അസാധുവായ MAC വിലാസം"
 
-#: ../virtManager/addhardware.py:1580
+#: ../virtManager/addhardware.py:1577
 msgid "A MAC address must be entered."
 msgstr "ഒരു MAC വിലാസം നല്‍കണം."
 
-#: ../virtManager/addhardware.py:1610
+#: ../virtManager/addhardware.py:1607
 msgid "Graphics device parameter error"
 msgstr "ഗ്രാഫിക്സ് ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1619
+#: ../virtManager/addhardware.py:1616
 msgid "Sound device parameter error"
 msgstr "ശബ്ദ ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1626
+#: ../virtManager/addhardware.py:1621
 msgid "Physical Device Required"
 msgstr "ഫിസിക്കല്‍ ഡിവൈസ് ആവശ്യമുണ്ടു്"
 
-#: ../virtManager/addhardware.py:1627
+#: ../virtManager/addhardware.py:1622
 msgid "A device must be selected."
 msgstr "ഒരു ഡിവൈസ് തെരഞ്ഞെടുക്കണം."
 
-#: ../virtManager/addhardware.py:1636
-#, python-format
-msgid "Could not find USB device (vendorId: %s, productId: %s) "
-msgstr "യുഎസ്ബി ഡിവൈസ് കണ്ടുപിടിയ്ക്കുവാനായില്ല (vendorId: %s, productId: %s) "
-
-#: ../virtManager/addhardware.py:1652
+#: ../virtManager/addhardware.py:1634
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "മറ്റൂള്ള %s ഗസ്റ്റുകള്‍ നിലവില്‍ ഡിവൈസ് ഉപയോഗിയ്ക്കുന്നു."
 
-#: ../virtManager/addhardware.py:1654
+#: ../virtManager/addhardware.py:1636
 msgid "Do you really want to use the device?"
 msgstr "ഡിവൈസ് യഥാര്‍ത്ഥത്തില്‍ ഉപയോഗിയ്ക്കണമോ?"
 
-#: ../virtManager/addhardware.py:1660
+#: ../virtManager/addhardware.py:1642
 msgid "Host device parameter error"
 msgstr "ഹോസ്റ്റ് ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1721
+#: ../virtManager/addhardware.py:1703
 #, python-format
 msgid "%s device parameter error"
 msgstr "%s ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1732
+#: ../virtManager/addhardware.py:1714
 msgid "Video device parameter error"
 msgstr "വീഡിയോ ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1744
+#: ../virtManager/addhardware.py:1726
 msgid "Watchdog parameter error"
 msgstr "വാച്ച്ഡോഗ് പരാമീറ്റര്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1759
+#: ../virtManager/addhardware.py:1741
 msgid "Smartcard device parameter error"
 msgstr "സ്മാര്‍ട്ട്കാര്‍ഡ് ഡിവൈസ് പരാമീറ്റര്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1778
+#: ../virtManager/addhardware.py:1760
 msgid "USB redirected device parameter error"
 msgstr "യുഎസ്ബി തിരിച്ചുവിട്ട പരാമീറ്റര്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1798
+#: ../virtManager/addhardware.py:1780
 msgid "TPM device parameter error"
 msgstr "ടിപിഎം ഡിവൈസ് പരാമീറ്റര്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1816
+#: ../virtManager/addhardware.py:1798
 msgid "Panic device parameter error"
 msgstr "പാനിക്ക് ഡിവൈസ് പരീമീറ്റര്‍ പിശക്"
 
-#: ../virtManager/addhardware.py:1859 ../virtManager/addhardware.py:1871
-#: ../virtManager/addhardware.py:1874 ../virtManager/addhardware.py:1886
-#: ../virtManager/addhardware.py:1889
+#: ../virtManager/addhardware.py:1841 ../virtManager/addhardware.py:1853
+#: ../virtManager/addhardware.py:1856 ../virtManager/addhardware.py:1868
+#: ../virtManager/addhardware.py:1871
 msgid "RNG selection error."
 msgstr "RNG തെരഞ്ഞെടുക്കുന്നതില്‍ പിശക്."
 
-#: ../virtManager/addhardware.py:1860
+#: ../virtManager/addhardware.py:1842
 msgid "A device must be specified."
 msgstr "ഒരു ഡിവൈസ് നല്‍കിയിരിയ്ക്കണം."
 
-#: ../virtManager/addhardware.py:1872
+#: ../virtManager/addhardware.py:1854
 msgid "Please specify both bind and connect host"
 msgstr "ബൈന്‍ഡ്, കണക്ട് ഹോസ്റ്റ് രണ്ടും നല്‍കിയിരിയ്ക്കണം"
 
-#: ../virtManager/addhardware.py:1875
+#: ../virtManager/addhardware.py:1857
 msgid "Please specify both bind and connect service"
 msgstr "ബൈന്‍ഡ്, കണക്ട് സര്‍വീസ് രണ്ടും നല്‍കിയിരിയ്ക്കണം"
 
-#: ../virtManager/addhardware.py:1887
+#: ../virtManager/addhardware.py:1869
 msgid "The EGD host must be specified."
 msgstr "ഇജിഡി ഹോസ്റ്റ് നല്‍കിയിരിയ്ക്കണം."
 
-#: ../virtManager/addhardware.py:1890
+#: ../virtManager/addhardware.py:1872
 msgid "The EGD service must be specified."
 msgstr "ഇജിഡി സര്‍വീസ് നല്‍കിയിരിയ്ക്കണം."
 
-#: ../virtManager/addhardware.py:1909
+#: ../virtManager/addhardware.py:1891
 msgid "RNG device parameter error"
 msgstr "RNG ഡിവൈസ് പരാമീറ്റര്‍ പിശക്"
+
+#: ../virtManager/addstorage.py:101
+#, fuzzy, python-format
+msgid "%s available in the default location"
+msgstr "തെറ്റായ ഇന്‍സ്റ്റോള്‍ സ്ഥാനം"
 
 #: ../virtManager/addstorage.py:109
 msgid "Default pool is not active."
@@ -987,7 +1026,8 @@ msgstr "സ്വതവേയുള്ള പൂള്‍ സജീവമല്�
 #: ../virtManager/addstorage.py:110
 #, python-format
 msgid "Storage pool '%s' is not active. Would you like to start the pool now?"
-msgstr "സ്റ്റോറേജ് പൂള്‍ '%s' സജീവമല്ല. നിങ്ങള്‍ക്കു് പൂള്‍ ഉടന്‍ ആരംഭിയ്ക്കണമോ?"
+msgstr ""
+"സ്റ്റോറേജ് പൂള്‍ '%s' സജീവമല്ല. നിങ്ങള്‍ക്കു് പൂള്‍ ഉടന്‍ ആരംഭിയ്ക്കണമോ?"
 
 #: ../virtManager/addstorage.py:121
 #, python-format
@@ -1010,45 +1050,30 @@ msgstr "ഈ ഡയറക്ടറികളെപ്പറ്റി ഇനി ച
 #: ../virtManager/addstorage.py:163
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
-msgstr "ഈ ഡയറക്ടറികള്‍ക്കു് അനുവാദങ്ങള്‍ മാറ്റുന്നതില്‍ പിശകുകള്‍ നേരിട്ടിരിക്കുന്നു:"
+msgstr ""
+"ഈ ഡയറക്ടറികള്‍ക്കു് അനുവാദങ്ങള്‍ മാറ്റുന്നതില്‍ പിശകുകള്‍ നേരിട്ടിരിക്കുന്നു:"
+""
 
 #: ../virtManager/addstorage.py:194 ../virtManager/create.py:391
 #, python-format
 msgid "Disk format '%s' does not support full allocation."
 msgstr ""
 
-#: ../virtManager/addstorage.py:275
-#, python-format
-msgid ""
-"The following storage already exists, but is not\n"
-"in use by any virtual machine:\n"
-"\n"
-"%s\n"
-"\n"
-"Would you like to reuse this storage?"
-msgstr ""
-"ഈ സംഭരണം നിലവിലുണ്ടു്, പക്ഷേ ഒരു\n"
-"വിര്‍ച്ച്വല്‍ മഷീനും ഇതുപയോഗിയ്ക്കുന്നില്ല:\n"
-"\n"
-"%s\n"
-"\n"
-"നിങ്ങള്‍ക്കു് ഈ സം‌ഭരണം വീണ്ടും ഉപയോഗിയ്ക്കണമോ?"
-
-#: ../virtManager/addstorage.py:321
+#: ../virtManager/addstorage.py:290
 msgid "A storage path must be specified."
 msgstr "ഒരു സ്റ്റോറേജ് പാഥ് നല്‍കേണ്ടതുണ്ടു്."
 
 #. Fatal errors are reported when setting 'size'
-#: ../virtManager/addstorage.py:353
+#: ../virtManager/addstorage.py:322
 msgid "Not Enough Free Space"
 msgstr "മതിയായ ഉപയോഗത്തിലില്ലാത്ത സ്ഥലം ലഭ്യമല്ല"
 
-#: ../virtManager/addstorage.py:361 ../virtManager/choosecd.py:125
+#: ../virtManager/addstorage.py:330 ../virtManager/choosecd.py:125
 #, python-format
 msgid "Disk \"%s\" is already in use by other guests %s"
 msgstr "ഡിസ്ക് \"%s\" നിലവില്‍ മറ്റു് %s ഗസ്റ്റുകള്‍ ഉപയോഗിയ്ക്കുന്നു"
 
-#: ../virtManager/addstorage.py:363 ../virtManager/choosecd.py:127
+#: ../virtManager/addstorage.py:332 ../virtManager/choosecd.py:127
 msgid "Do you really want to use the disk?"
 msgstr "നിങ്ങള്‍ക്കു് ഡിസ്ക് ഉപയോഗിക്കണമോ?"
 
@@ -1077,7 +1102,7 @@ msgstr "ഫ്ലോപ്പി ഡ്രൈ_വ്"
 msgid "Floppy _Image"
 msgstr "ഫ്ലോപ്പി _ഇമേജ്"
 
-#: ../virtManager/choosecd.py:101 ../virtManager/create.py:576
+#: ../virtManager/choosecd.py:101 ../virtManager/create.py:577
 msgid "Physical CDROM passthrough not supported with this hypervisor"
 msgstr ""
 
@@ -1102,8 +1127,7 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "കൈകാര്യം ചെയ്യാത്ത റിമോട്ട് സ്റ്റോറേജ് ക്ലോണ്‍ ചെയ്യുവാന്‍ സാധ്യമല്ല."
 
 #: ../virtManager/clone.py:84
-msgid ""
-"Block devices to clone must be libvirt\n"
+msgid "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 "ക്ലോണ്‍ ചെയ്യുവാനുള്ള ബ്ലോക്ക് ഡിവൈസുകള്‍ libvrt\n"
@@ -1164,7 +1188,8 @@ msgstr "സംഭരണം പങ്കിടുവാനോ ക്ലോണ്�
 
 #: ../virtManager/clone.py:588
 msgid "One or more disks cannot be cloned or shared."
-msgstr "ഒന്നോ അതിലധികമോ ഡിസ്കുകള്‍ ക്ലോണ്‍ അല്ലെങ്കില്‍ പങ്കിടുവാന്‍ സാധ്യമല്ല."
+msgstr ""
+"ഒന്നോ അതിലധികമോ ഡിസ്കുകള്‍ ക്ലോണ്‍ അല്ലെങ്കില്‍ പങ്കിടുവാന്‍ സാധ്യമല്ല."
 
 #: ../virtManager/clone.py:680
 #, python-format
@@ -1180,8 +1205,8 @@ msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
 msgstr ""
-"നിലവിലുള്ള ഇമേജ് ഉപയോഗിച്ചാല്‍ ക്ലോണ്‍ പ്രക്രിയ സമയത്തു് പാഥ് മാറ്റിയെഴുതുന്നു. നിങ്ങള്‍ക്ക് ഈ പാഥ് "
-"ഉപയോഗിക്കണമെന്നുറപ്പാണോ?"
+"നിലവിലുള്ള ഇമേജ് ഉപയോഗിച്ചാല്‍ ക്ലോണ്‍ പ്രക്രിയ സമയത്തു് പാഥ് "
+"മാറ്റിയെഴുതുന്നു. നിങ്ങള്‍ക്ക് ഈ പാഥ് ഉപയോഗിക്കണമെന്നുറപ്പാണോ?"
 
 #: ../virtManager/clone.py:720
 #, python-format
@@ -1203,7 +1228,8 @@ msgstr ""
 "താഴെ പറയുന്ന ഡിസ്ക് ഡിവൈസുകള്‍ ക്ലോണ്‍ ചെയ്യുന്നതല്ല:\n"
 "\n"
 "%s\n"
-"പുതിയ ഗസ്റ്റ് പ്രവര്‍ത്തിപ്പിക്കുന്നതു് ഈ ഡിസ്ക് ഇമേജുകളിലുള്ള ഡേറ്റാ മാറ്റിയെഴുതുന്നു."
+"പുതിയ ഗസ്റ്റ് പ്രവര്‍ത്തിപ്പിക്കുന്നതു് ഈ ഡിസ്ക് ഇമേജുകളിലുള്ള ഡേറ്റാ "
+"മാറ്റിയെഴുതുന്നു."
 
 #: ../virtManager/clone.py:792
 #, python-format
@@ -1211,7 +1237,7 @@ msgid "Error creating virtual machine clone '%s': %s"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ക്ലോണ്‍ '%s' ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../virtManager/clone.py:805 ../virtManager/createpool.py:402
-#: ../virtManager/createvol.py:288 ../virtManager/migrate.py:383
+#: ../virtManager/createvol.py:295 ../virtManager/migrate.py:383
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "Uncaught error validating input: %s"
@@ -1253,7 +1279,7 @@ msgstr "ഫ്ലോപ്പി മീഡിയാ സ്ഥാപിയ്ക�
 msgid "Locate directory volume"
 msgstr "ഡയറക്ടറി വോള്യം സ്ഥാപിയ്ക്കുക"
 
-#: ../virtManager/connect.py:418
+#: ../virtManager/connect.py:420
 msgid "A hostname is required for remote connections."
 msgstr "റിമോട്ട് കണക്ഷനുകള്‍ക്കായി ഒരു ഹോസ്റ്റ്നാമം ആവശ്യമുണ്ടു്."
 
@@ -1271,14 +1297,16 @@ msgstr "കണക്ട് ചെയ്യുന്നു"
 msgid "Active"
 msgstr "സജീവം"
 
-#: ../virtManager/connection.py:554 ../virtManager/create.py:1991
-#: ../virtManager/details.py:2444 ../virtManager/details.py:2698
-#: ../virtManager/domain.py:256 ../virtManager/gfxdetails.py:196
-#: ../virtManager/gfxdetails.py:198 ../virtManager/host.py:839
+#. Machine settings
+#: ../virtManager/connection.py:554 ../virtManager/create.py:1992
+#: ../virtManager/details.py:2424 ../virtManager/details.py:2440
+#: ../virtManager/details.py:2677 ../virtManager/domain.py:256
+#: ../virtManager/gfxdetails.py:196 ../virtManager/gfxdetails.py:198
+#: ../virtManager/host.py:839
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
-#: ../virtManager/connection.py:681
+#: ../virtManager/connection.py:683
 #, python-format
 msgid ""
 "%s rename failed. Attempting to recover also failed.\n"
@@ -1296,42 +1324,43 @@ msgstr "പൂര്‍ണ്ണ വലിപ്പത്തിലുള്ള �
 msgid "Send key combination"
 msgstr "കീ കൂട്ടം അയയ്ക്കുക"
 
-#: ../virtManager/console.py:218 ../ui/details.ui.h:1
-msgid "Virtual Machine"
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ "
+#: ../virtManager/console.py:218
+#, python-format
+msgid "%(vm-name)s on %(connection-name)s"
+msgstr ""
 
-#: ../virtManager/console.py:222
+#: ../virtManager/console.py:225
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "പോയിന്റര്‍ വിടുവിയ്ക്കുന്നതിനായി %s അമര്‍ത്തുക."
 
-#: ../virtManager/console.py:349
+#: ../virtManager/console.py:352
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr ""
 
-#: ../virtManager/console.py:352
+#: ../virtManager/console.py:355
 msgid "Guest agent is not available."
 msgstr "ഗസ്റ്റ് ഏജന്റ് ലഭ്യമല്ല."
 
-#: ../virtManager/console.py:491
+#: ../virtManager/console.py:494
 msgid "Guest has crashed"
 msgstr "ഗസ്റ്റിനു് തകരാറു സംഭവിച്ചിരിക്കുന്നു"
 
-#: ../virtManager/console.py:493
+#: ../virtManager/console.py:496
 msgid "Guest not running"
 msgstr "ഗസ്റ്റ് പ്രവര്‍ത്തിക്കുന്നില്ല"
 
-#: ../virtManager/console.py:621
+#: ../virtManager/console.py:624
 msgid "Graphical console not configured for guest"
 msgstr "ഗസ്റ്റിനുള്ള ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ ക്രമികരിച്ചിട്ടില്ല"
 
-#: ../virtManager/console.py:628
+#: ../virtManager/console.py:631
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "'%s' എന്ന ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ രീതി ലഭ്യമാക്കുന്നതില്‍ സാധ്യമല്ല"
 
-#: ../virtManager/console.py:636
+#: ../virtManager/console.py:639
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s'\n"
@@ -1340,45 +1369,47 @@ msgid ""
 "guest's listen address."
 msgstr ""
 
-#: ../virtManager/console.py:644
+#: ../virtManager/console.py:647
 msgid "Graphical console is not yet active for guest"
 msgstr "ഗസ്റ്റിനുള്ള ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ ഇതുവരെ സജീവമല്ല"
 
-#: ../virtManager/console.py:648
+#: ../virtManager/console.py:651
 msgid "Connecting to graphical console for guest"
 msgstr "ഗസ്റ്റിനുള്ള ഗ്രാഫിക്കല്‍ കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുന്നു"
 
-#: ../virtManager/console.py:666
+#: ../virtManager/console.py:669
 msgid "Error connecting to graphical console"
 msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുന്നു"
 
-#: ../virtManager/console.py:719
+#: ../virtManager/console.py:722
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr ""
 
-#: ../virtManager/console.py:738
+#: ../virtManager/console.py:741
 msgid "USB redirection error"
 msgstr "യുഎസ്ബി റീഡയറക്ഷന്‍ പിശക്"
 
-#: ../virtManager/console.py:758
+#: ../virtManager/console.py:761
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
-msgstr "പിശക്: ഹൈപ്പര്‍വൈസര്‍ ഹോസ്റ്റിലേക്കുള്ള കണക്ഷന്‍ നഷ്ടമായി അല്ലെങ്കില്‍ നിഷേധിയ്ക്കപ്പെട്ടു!"
+msgstr ""
+"പിശക്: ഹൈപ്പര്‍വൈസര്‍ ഹോസ്റ്റിലേക്കുള്ള കണക്ഷന്‍ നഷ്ടമായി അല്ലെങ്കില്‍ "
+"നിഷേധിയ്ക്കപ്പെട്ടു!"
 
-#: ../virtManager/console.py:863
+#: ../virtManager/console.py:866
 msgid "No text console available"
 msgstr "ടെക്സ്റ്റ് കണ്‍സോള്‍ ലഭ്യമല്ല"
 
-#: ../virtManager/console.py:887
+#: ../virtManager/console.py:890
 msgid "No graphical console available"
 msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ ലഭ്യമല്ല"
 
-#: ../virtManager/console.py:894
+#: ../virtManager/console.py:897
 msgid "Graphical Console"
 msgstr ""
 
-#: ../virtManager/console.py:902
+#: ../virtManager/console.py:905
 msgid "virt-manager does not support more that one graphical console"
 msgstr ""
 
@@ -1388,14 +1419,14 @@ msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നത�
 
 #: ../virtManager/create.py:424
 #, python-format
-msgid ""
-"Failed to setup UEFI for AArch64: %s\n"
+msgid "Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 
 #: ../virtManager/create.py:450
 msgid "Libvirt version does not support remote URL installs."
-msgstr "Libvirt പതിപ്പു് റിമോട്ട് യുആര്‍എല്‍ ഇന്‍സ്റ്റോള്‍ പിന്തുണയ്ക്കുന്നില്ല."
+msgstr ""
+"Libvirt പതിപ്പു് റിമോട്ട് യുആര്‍എല്‍ ഇന്‍സ്റ്റോള്‍ പിന്തുണയ്ക്കുന്നില്ല."
 
 #: ../virtManager/create.py:457
 #, python-format
@@ -1411,207 +1442,209 @@ msgstr ""
 msgid "No install methods available for this connection."
 msgstr "ഈ കണക്ഷനു് ഇന്‍സ്റ്റോള്‍ രീതികള്‍ ലഭ്യമല്ല."
 
-#: ../virtManager/create.py:508
+#: ../virtManager/create.py:511
 msgid "No hypervisor options were found for this connection."
 msgstr "ഈ കണക്ഷനുള്ള ഹൈപ്പര്‍വൈസര്‍ ഐച്ഛികങ്ങള്‍ ലഭ്യമായില്ല."
 
-#: ../virtManager/create.py:513
+#: ../virtManager/create.py:516
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
 msgstr ""
-"ഇതിനര്‍ത്ഥം, നിങ്ങളുടെ സിസ്റ്റത്തില്‍ QEMU അല്ലെങ്കില്‍ കെവിഎം ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ലെന്നാണു്. "
-"അല്ലെങ്കില്‍ കെവിഎം കേര്‍ണല്‍ ഘടകങ്ങള്‍ ലഭ്യമാക്കിയിട്ടില്ല."
+"ഇതിനര്‍ത്ഥം, നിങ്ങളുടെ സിസ്റ്റത്തില്‍ QEMU അല്ലെങ്കില്‍ കെവിഎം ഇന്‍സ്റ്റോള്‍ "
+"ചെയ്തിട്ടില്ലെന്നാണു്. അല്ലെങ്കില്‍ കെവിഎം കേര്‍ണല്‍ ഘടകങ്ങള്‍ "
+"ലഭ്യമാക്കിയിട്ടില്ല."
 
-#: ../virtManager/create.py:537
+#: ../virtManager/create.py:538
 msgid ""
 "Host is not advertising support for full virtualization. Install options may "
 "be limited."
 msgstr ""
 
-#: ../virtManager/create.py:543
+#: ../virtManager/create.py:544
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
 msgstr ""
-"കെവിഎം ലഭ്യമല്ല. ഇതിനര്‍ത്ഥം, ഒന്നുങ്കില്‍, കെവിഎം പാക്കേജ് ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല, അല്ലെങ്കില്‍ "
-"കെവിഎം കേര്‍ണല്‍ ഘടകങ്ങള്‍ ലഭ്യമാക്കിയിട്ടില്ല. നിങ്ങളുടെ വിര്‍ച്ച്വല്‍ സിസ്റ്റങ്ങളുടെ പ്രവര്‍ത്തനം "
-"മോശമാകാം."
+"കെവിഎം ലഭ്യമല്ല. ഇതിനര്‍ത്ഥം, ഒന്നുങ്കില്‍, കെവിഎം പാക്കേജ് ഇന്‍സ്റ്റോള്‍ "
+"ചെയ്തിട്ടില്ല, അല്ലെങ്കില്‍ കെവിഎം കേര്‍ണല്‍ ഘടകങ്ങള്‍ ലഭ്യമാക്കിയിട്ടില്ല. "
+"നിങ്ങളുടെ വിര്‍ച്ച്വല്‍ സിസ്റ്റങ്ങളുടെ പ്രവര്‍ത്തനം മോശമാകാം."
 
-#: ../virtManager/create.py:588
+#: ../virtManager/create.py:589
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "ഹോസ്റ്റില്‍ %(maxmem)s വരെ ലഭ്യമാണു്"
 
-#: ../virtManager/create.py:600
+#: ../virtManager/create.py:601
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "%(numcpus)d വരെ ലഭ്യമാണു്"
 
-#: ../virtManager/create.py:817 ../virtManager/create.py:846
+#: ../virtManager/create.py:819 ../virtManager/create.py:848
 msgid "Show all OS options"
 msgstr "എല്ലാ ഒഎസ് ഐച്ഛികങ്ങള്‍ കാണിയ്ക്കുക"
 
-#: ../virtManager/create.py:901
+#: ../virtManager/create.py:902
 msgid "Local CDROM/ISO"
 msgstr "ലോക്കല്‍ CDROM/ISO"
 
-#: ../virtManager/create.py:903
+#: ../virtManager/create.py:904
 msgid "URL Install Tree"
 msgstr "URL ഇന്‍സ്റ്റോള്‍ ട്രീ"
 
-#: ../virtManager/create.py:905
+#: ../virtManager/create.py:906
 msgid "PXE Install"
 msgstr "PXE ഇന്‍സ്റ്റോള്‍"
 
-#: ../virtManager/create.py:907
+#: ../virtManager/create.py:908
 msgid "Import existing OS image"
 msgstr "നിലവിലുള്ള ഒഎസ് ഇമേജ് ഇംപോര്‍ട്ട് ചെയ്യുക"
 
-#: ../virtManager/create.py:909
+#: ../virtManager/create.py:910
 msgid "Application container"
 msgstr "ആപ്ലിക്കേഷന്‍ കണ്ടെയിനര്‍"
 
-#: ../virtManager/create.py:911
+#: ../virtManager/create.py:912
 msgid "Operating system container"
 msgstr "ഓപ്പറേറ്റിങ് സിസ്റ്റം കണ്ടെയിനര്‍"
 
-#: ../virtManager/create.py:929
+#: ../virtManager/create.py:930
 msgid "Host filesystem"
 msgstr "ഹോസ്റ്റ് ഫയല്‍സിസ്റ്റം"
 
-#: ../virtManager/create.py:931 ../virtManager/details.py:2445
+#: ../virtManager/create.py:932 ../virtManager/details.py:2425
 #: ../virtinst/domcapabilities.py:132
 msgid "None"
 msgstr "ഒന്നുമില്ല"
 
-#: ../virtManager/create.py:936
+#: ../virtManager/create.py:937
 msgid "Linux"
 msgstr "ലിനക്സ്"
 
-#: ../virtManager/create.py:1127
+#: ../virtManager/create.py:1128
 msgid "Network selection does not support PXE"
 msgstr "നെറ്റ്‌വര്‍ക്ക് തെരഞ്ഞെടുക്കല്‍ പിഎക്സ്ഇ പിന്തുണയ്ക്കുന്നില്ല"
 
-#: ../virtManager/create.py:1360 ../virtManager/createinterface.py:878
+#: ../virtManager/create.py:1361 ../virtManager/createinterface.py:878
 #: ../virtManager/createnet.py:460 ../virtManager/createpool.py:453
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "Step %(current_page)d of %(max_page)d"
 
-#: ../virtManager/create.py:1374
+#: ../virtManager/create.py:1375
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr ""
 
-#: ../virtManager/create.py:1397
+#: ../virtManager/create.py:1398
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "UUID ക്രമീകരിക്കുന്നില്‍ പിശക്: %s"
 
-#: ../virtManager/create.py:1405
+#: ../virtManager/create.py:1406
 msgid "Error setting OS information."
 msgstr "ഒഎസ് വിവരം ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../virtManager/create.py:1427
+#: ../virtManager/create.py:1428
 msgid "Error setting up default devices:"
 msgstr "സ്വതവേയുള്ള ഡിവൈസുകള്‍ സജ്ജമാക്കുന്നതില്‍ പിശക്:"
 
-#: ../virtManager/create.py:1445 ../virtManager/createinterface.py:906
+#: ../virtManager/create.py:1446 ../virtManager/createinterface.py:906
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "ഇന്‍സ്റ്റോള്‍ പരാമീറ്ററുകള്‍ പരിശോധിക്കുമ്പോള്‍ ലഭ്യമാകാത്ത പിശക്: %s"
 
-#: ../virtManager/create.py:1495
+#: ../virtManager/create.py:1496
 msgid "Please specify a valid OS variant."
 msgstr "ദയവായി ശരിയായൊരു ഒഎസ് വേരിയന്റ് നല്‍കുക."
 
-#: ../virtManager/create.py:1503
+#: ../virtManager/create.py:1504
 msgid "An install media selection is required."
 msgstr "ഒരു ഇന്‍സ്റ്റോള്‍ മീഡിയ തെരഞ്ഞെടുക്കേണ്ടതുണ്ടു്."
 
-#: ../virtManager/create.py:1513
+#: ../virtManager/create.py:1514
 msgid "An install tree is required."
 msgstr "ഒരു ഇന്‍സ്റ്റോള്‍ ട്രീ ആവശ്യമുണ്ടു്."
 
-#: ../virtManager/create.py:1527
+#: ../virtManager/create.py:1528
 msgid "A storage path to import is required."
 msgstr "ഇംപോര്‍ട്ട് ചെയ്യുന്നതിനായി ഒരു സ്റ്റോറേജ് പാഥ് നല്‍കേണ്ടതുണ്ടു്."
 
-#: ../virtManager/create.py:1534
+#: ../virtManager/create.py:1535
 msgid "An application path is required."
 msgstr "ഒരു പ്രയോഗത്തിനുള്ള പാഥ് ആവശ്യമുണ്ടു്"
 
-#: ../virtManager/create.py:1541
+#: ../virtManager/create.py:1542
 msgid "An OS directory path is required."
 msgstr "ഒരു ഒഎസ് ഡയറക്ടറി പാഥ് ആവശ്യമുണ്ടു്."
 
-#: ../virtManager/create.py:1553
+#: ../virtManager/create.py:1554
 msgid "Error setting installer parameters."
 msgstr "ഇന്‍സ്റ്റോളര്‍ പരാമീറ്ററുകള്‍ ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../virtManager/create.py:1581
+#: ../virtManager/create.py:1582
 msgid "Error setting install media location."
 msgstr "ഇന്‍സ്റ്റോള്‍ മീഡിയ സ്ഥാനം ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../virtManager/create.py:1605
+#: ../virtManager/create.py:1606
 #, python-format
 msgid "A kernel is required for %s guests."
 msgstr "%s ഗസ്റ്റുകള്‍ക്കു് ഒരു കേര്‍ണല്‍ ആവശ്യമുണ്ടു്."
 
-#: ../virtManager/create.py:1613
+#: ../virtManager/create.py:1614
 msgid "Error setting default name."
 msgstr "സ്വതവേയുള്ള പേരു് സജ്ജമാക്കുന്നതില്‍ പിശക്."
 
-#: ../virtManager/create.py:1669
+#: ../virtManager/create.py:1670
 msgid "Error setting CPUs."
 msgstr "സിപിയു ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../virtManager/create.py:1676
+#: ../virtManager/create.py:1677
 msgid "Error setting guest memory."
 msgstr "ഗസ്റ്റ് മെമ്മറി ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../virtManager/create.py:1723
+#: ../virtManager/create.py:1724
 msgid "Invalid guest name"
 msgstr ""
 
-#: ../virtManager/create.py:1744
+#: ../virtManager/create.py:1745
 #, python-format
 msgid "Network device required for %s install."
 msgstr "%s ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി നെറ്റ്‌വര്‍ക്ക് ഡിവൈസ് ആവശ്യമുണ്ടു്."
 
-#: ../virtManager/create.py:1787
+#: ../virtManager/create.py:1788
 msgid "Error starting installation: "
 msgstr "ഇന്‍സ്റ്റലേഷന്‍ ആരംഭിയ്ക്കുന്നതില്‍ പിശക്:"
 
-#: ../virtManager/create.py:1831
+#: ../virtManager/create.py:1832
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "ഇന്‍സ്റ്റ്ലേഷന്‍ പൂറ്‍ത്തിയാക്കുവാന്‍ സാധ്യമായില്ല: '%s'"
 
-#: ../virtManager/create.py:1846
+#: ../virtManager/create.py:1847
 msgid "Creating Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉണ്ടാക്കുന്നു"
 
-#: ../virtManager/create.py:1847
+#: ../virtManager/create.py:1848
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
-"വിര്‍ച്ച്വല്‍ മഷീന്‍ ഇപ്പോള്‍ ഉണ്ടാക്കുന്നു. ഡിസ്ക് സ്റ്റോറേജും ഇന്‍സ്റ്റലേഷന്‍ ഇമേജും ലഭ്യമാക്കുന്നതു് "
-"പൂര്‍ണ്ണമാക്കുന്നതിനു് അല്‍പം സമയമെടുക്കുന്നു."
+"വിര്‍ച്ച്വല്‍ മഷീന്‍ ഇപ്പോള്‍ ഉണ്ടാക്കുന്നു. ഡിസ്ക് സ്റ്റോറേജും "
+"ഇന്‍സ്റ്റലേഷന്‍ ഇമേജും ലഭ്യമാക്കുന്നതു് പൂര്‍ണ്ണമാക്കുന്നതിനു് അല്‍പം "
+"സമയമെടുക്കുന്നു."
 
-#: ../virtManager/create.py:1891
+#: ../virtManager/create.py:1892
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr ""
 
-#: ../virtManager/create.py:1949
+#: ../virtManager/create.py:1950
 #, python-format
 msgid "Error continue install: %s"
 msgstr "ഇന്‍സ്റ്റോള്‍ തുടരുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/create.py:2013
+#: ../virtManager/create.py:2014
 msgid "Detecting"
 msgstr "കണ്ടുപിടിക്കുന്നു"
 
@@ -1631,7 +1664,7 @@ msgstr "ഇഥര്‍നെറ്റ്"
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../virtManager/createinterface.py:222 ../virtManager/details.py:909
+#: ../virtManager/createinterface.py:222 ../virtManager/details.py:892
 #: ../virtManager/manager.py:352 ../ui/create.ui.h:18
 msgid "Name"
 msgstr "പേര്"
@@ -1694,8 +1727,8 @@ msgstr ""
 "\n"
 "%s\n"
 "\n"
-"ഇവ ഉപയോഗിക്കുന്നതു് നിലവിലുള്ള ക്രമീകരണം തിരുത്തിയെഴുതുന്നു. തെരഞ്ഞെടുത്ത ഇന്റര്‍ഫെയിസുകള്‍ "
-"ഉപയോഗിക്കണമെന്നുറപ്പാണോ?"
+"ഇവ ഉപയോഗിക്കുന്നതു് നിലവിലുള്ള ക്രമീകരണം തിരുത്തിയെഴുതുന്നു. തെരഞ്ഞെടുത്ത "
+"ഇന്റര്‍ഫെയിസുകള്‍ ഉപയോഗിക്കണമെന്നുറപ്പാണോ?"
 
 #: ../virtManager/createinterface.py:1010
 msgid "Error setting interface parameters."
@@ -1749,7 +1782,8 @@ msgstr "തെറ്റായ നെറ്റ്‌വറ്‍ക്ക് വ�
 
 #: ../virtManager/createnet.py:271 ../virtManager/createnet.py:354
 msgid "The network address could not be understood"
-msgstr "നെറ്റ്‌വര്‍ക്കിന്റെ വിലാസം ശരിയായ രീതിയില്‍ കംപ്യൂട്ടറില്‍ ലഭ്യമായില്ല"
+msgstr ""
+"നെറ്റ്‌വര്‍ക്കിന്റെ വിലാസം ശരിയായ രീതിയില്‍ കംപ്യൂട്ടറില്‍ ലഭ്യമായില്ല"
 
 #: ../virtManager/createnet.py:275
 msgid "The network must be an IPv4 address"
@@ -1772,8 +1806,8 @@ msgid ""
 "The network should normally use a private IPv4 address. Use this non-private "
 "address anyway?"
 msgstr ""
-"നെറ്റ്‌വര്‍ക്ക് സാധാരണ IPv4 വിലാസമാണു് ഉപയോഗിക്കേണ്ടതു്. എന്നാലും ഈ സ്വകാര്യമല്ലാത്ത വിലാസം "
-"ഉപയോഗിക്കണമോ?"
+"നെറ്റ്‌വര്‍ക്ക് സാധാരണ IPv4 വിലാസമാണു് ഉപയോഗിക്കേണ്ടതു്. എന്നാലും ഈ "
+"സ്വകാര്യമല്ലാത്ത വിലാസം ഉപയോഗിക്കണമോ?"
 
 #: ../virtManager/createnet.py:297 ../virtManager/createnet.py:300
 #: ../virtManager/createnet.py:303 ../virtManager/createnet.py:307
@@ -1874,7 +1908,8 @@ msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്�
 
 #: ../virtManager/createnet.py:765
 msgid "Creating the virtual network may take a while..."
-msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് തയ്യാറാക്കുന്നതിനു് അല്‍പം സമയമെടുക്കുന്നു..."
+msgstr ""
+"വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് തയ്യാറാക്കുന്നതിനു് അല്‍പം സമയമെടുക്കുന്നു..."
 
 #: ../virtManager/createpool.py:289
 msgid "_Source IQN:"
@@ -1905,11 +1940,11 @@ msgstr "സ്റ്റോറേജ് പൂള്‍ ഉണ്ടാക്ക�
 msgid "Creating the storage pool may take a while..."
 msgstr "സ്റ്റോറേജ് പൂള്‍ ഉണ്ടാക്കുന്നതിനു് കുറച്ചു് സമയം എടുക്കുന്നു..."
 
-#: ../virtManager/createpool.py:501 ../virtManager/createpool.py:531
+#: ../virtManager/createpool.py:503 ../virtManager/createpool.py:533
 msgid "Pool Parameter Error"
 msgstr "പൂള്‍ പരാമീറ്റര്‍ പിശക്"
 
-#: ../virtManager/createpool.py:537
+#: ../virtManager/createpool.py:539
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
@@ -1917,20 +1952,20 @@ msgstr ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
 
-#: ../virtManager/createvol.py:274
+#: ../virtManager/createvol.py:281
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "വോള്യം ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/createvol.py:297
+#: ../virtManager/createvol.py:304
 msgid "Creating storage volume..."
 msgstr "പുതിയ സ്റ്റോറേജ് വോള്യം ഉണ്ടാക്കുന്നു..."
 
-#: ../virtManager/createvol.py:298
+#: ../virtManager/createvol.py:305
 msgid "Creating the storage volume may take a while..."
 msgstr "സ്റ്റോറേജ് വോള്യം ഉണ്ടാക്കുന്നതിനു് കുറച്ചു് സമയം എടുക്കുന്നു..."
 
-#: ../virtManager/createvol.py:339
+#: ../virtManager/createvol.py:346
 msgid "Volume Parameter Error"
 msgstr "വോള്യം പരാമീറ്റര്‍ പിശക്"
 
@@ -1944,12 +1979,10 @@ msgstr "നിങ്ങള്‍ക്കു് സംഭരണം വെട്�
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid ""
-"The following paths will be deleted:\n"
+msgid "The following paths will be deleted:\n"
 "\n"
 "%s"
-msgstr ""
-"ഈ പാഥുകള്‍ വെട്ടി നീക്കപ്പെടുന്നു:\n"
+msgstr "ഈ പാഥുകള്‍ വെട്ടി നീക്കപ്പെടുന്നു:\n"
 "\n"
 "%s"
 
@@ -1974,7 +2007,8 @@ msgstr "കൂടാതെ, ചില സ്റ്റോറേജ് ഡിവ�
 
 #: ../virtManager/delete.py:212
 msgid "Errors encountered while removing certain storage devices."
-msgstr "ചില സംഭരണ ഡിവൈസുകള്‍ നീക്കം ചെയ്യുമ്പോള്‍ പിശകുകള്‍ ഉണ്ടായിരിക്കുന്നു."
+msgstr ""
+"ചില സംഭരണ ഡിവൈസുകള്‍ നീക്കം ചെയ്യുമ്പോള്‍ പിശകുകള്‍ ഉണ്ടായിരിക്കുന്നു."
 
 #: ../virtManager/delete.py:300 ../ui/details.ui.h:59
 msgid "Target"
@@ -2010,8 +2044,7 @@ msgstr "സ്റ്റോറേജ് പങ്കിടുന്നവയാ�
 
 #: ../virtManager/delete.py:400
 #, python-format
-msgid ""
-"Storage is in use by the following virtual machines:\n"
+msgid "Storage is in use by the following virtual machines:\n"
 "- %s "
 msgstr ""
 "താഴെ പറഞ്ഞിരിക്കുന്ന വിര്‍ച്ച്വല്‍ മഷീനുകള്‍ സ്റ്റോറേജ് ഉപയോഗിക്കുന്നു:\n"
@@ -2021,57 +2054,57 @@ msgstr ""
 msgid "Remove this device from the virtual machine"
 msgstr ""
 
-#: ../virtManager/details.py:212
+#: ../virtManager/details.py:195
 msgid "Tablet"
 msgstr "ടാബ്ലറ്റ്"
 
-#: ../virtManager/details.py:214
+#: ../virtManager/details.py:197
 msgid "Mouse"
 msgstr "മൌസ്"
 
-#: ../virtManager/details.py:216
+#: ../virtManager/details.py:199
 msgid "Keyboard"
 msgstr "കീബോര്‍ഡ്"
 
-#: ../virtManager/details.py:233
+#: ../virtManager/details.py:216
 #, python-format
 msgid "Display %s"
 msgstr "%s കാണിക്കുക"
 
-#: ../virtManager/details.py:235
+#: ../virtManager/details.py:218
 #, python-format
 msgid "%s Redirector %s"
 msgstr ""
 
-#: ../virtManager/details.py:239
+#: ../virtManager/details.py:222
 #, python-format
 msgid "Sound: %s"
 msgstr "ശബ്ദം: %s"
 
-#: ../virtManager/details.py:241
+#: ../virtManager/details.py:224
 #, python-format
 msgid "Video %s"
 msgstr "വീഡിയോ %s"
 
-#: ../virtManager/details.py:243
+#: ../virtManager/details.py:226
 #, python-format
 msgid "Filesystem %s"
 msgstr "ഫയല്‍സിസ്റ്റം %s"
 
-#: ../virtManager/details.py:245
+#: ../virtManager/details.py:228
 #, python-format
 msgid "Controller %s"
 msgstr "കണ്ട്രോളര്‍ %s"
 
-#: ../virtManager/details.py:248
+#: ../virtManager/details.py:231
 msgid "RNG"
 msgstr "RNG"
 
-#: ../virtManager/details.py:252 ../virtManager/domain.py:279
+#: ../virtManager/details.py:235 ../virtManager/domain.py:280
 msgid "Watchdog"
 msgstr "വാച്ച്ഡോഗ്"
 
-#: ../virtManager/details.py:639
+#: ../virtManager/details.py:622
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
 msgstr ""
@@ -2080,215 +2113,219 @@ msgstr ""
 "\n"
 "നിങ്ങള്‍ക്കുറപ്പാണോ?"
 
-#: ../virtManager/details.py:706
+#: ../virtManager/details.py:689
 msgid "_Add Hardware"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ _ചേര്‍ക്കുക"
 
-#: ../virtManager/details.py:714
+#: ../virtManager/details.py:697
 msgid "_Remove Hardware"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ _നീക്കം ചെയ്യുക"
 
-#: ../virtManager/details.py:849
+#: ../virtManager/details.py:832
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt അല്ലെങ്കില്‍ ഹൈപ്പര്‍വൈസര്‍ യുഇഎഫ്ഐ പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../virtManager/details.py:852
+#: ../virtManager/details.py:835
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 
-#: ../virtManager/details.py:857
+#: ../virtManager/details.py:840
 msgid "UEFI not found"
 msgstr ""
 
-#: ../virtManager/details.py:910
+#: ../virtManager/details.py:893
 msgid "Version"
 msgstr "പതിപ്പു്"
 
-#: ../virtManager/details.py:940
+#: ../virtManager/details.py:923
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr "Libvirt NUMA വിശേഷതകള്‍ കണ്ടുപിടിയ്ക്കുവാനായില്ല"
 
-#: ../virtManager/details.py:988
+#: ../virtManager/details.py:971
 msgid "Application Default"
 msgstr "ആപ്ലിക്കേഷന്‍ ഡീഫോള്‍ട്ട്"
 
-#: ../virtManager/details.py:989
+#: ../virtManager/details.py:972
 msgid "Hypervisor Default"
 msgstr "ഹൈപ്പര്‍വൈസര്‍ ഡീഫോള്‍ട്ട്"
 
-#: ../virtManager/details.py:991
+#: ../virtManager/details.py:974
 msgid "Clear CPU configuration"
 msgstr "സിപിയു ക്രമീകരണം വെടിപ്പാക്കുക"
 
-#: ../virtManager/details.py:1147 ../virtManager/host.py:978
+#: ../virtManager/details.py:1130 ../virtManager/host.py:978
 #: ../virtManager/snapshots.py:377 ../virtManager/storagelist.py:465
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "സൂക്ഷിയ്ക്കാത്ത മാറ്റങ്ങളുണ്ടു്. നിങ്ങള്‍ക്കു് ഇവ ആവശ്യമുണ്ടോ?"
 
-#: ../virtManager/details.py:1149 ../virtManager/host.py:980
+#: ../virtManager/details.py:1132 ../virtManager/host.py:980
 #: ../virtManager/snapshots.py:379 ../virtManager/storagelist.py:467
 msgid "Don't warn me again."
 msgstr "മുന്നറിയിപ്പിന്റെ ആവശ്യമില്ല."
 
-#: ../virtManager/details.py:1235
+#: ../virtManager/details.py:1218
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ താള്‍ പുതുക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/details.py:1307 ../virtManager/manager.py:841
+#: ../virtManager/details.py:1290 ../virtManager/manager.py:841
 msgid "_Restore"
 msgstr "_വീണ്ടെടുക്കുക"
 
-#: ../virtManager/details.py:1309 ../virtManager/manager.py:843
+#: ../virtManager/details.py:1292 ../virtManager/manager.py:843
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "പ്രവര്‍ത്തിപ്പിക്കുക (_R)"
 
-#: ../virtManager/details.py:1372
+#: ../virtManager/details.py:1355
 msgid "Manage VM snapshots"
 msgstr "വിഎം സ്നാപ്പ്ഷോട്ടുകള്‍ കൈകാര്യം ചെയ്യുക"
 
-#: ../virtManager/details.py:1429
+#: ../virtManager/details.py:1412
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/details.py:1508
+#: ../virtManager/details.py:1491
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "സ്ക്രീന്‍ഷോട്ട് എടുക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/details.py:1516
+#: ../virtManager/details.py:1499
 msgid "Error initializing spice USB device widget"
 msgstr "സ്പയിസ് യുഎസ്ബി ഡിവൈസ് വിഡ്ജറ്റ് ആരംഭിയ്ക്കുന്നതില്‍ പിശക്"
 
-#: ../virtManager/details.py:1520
+#: ../virtManager/details.py:1503
 msgid "Select USB devices for redirection"
 msgstr "റീഡയറക്ഷനു വേണ്ടി യുഎസ്ബി ഡിവൈസുകള്‍ തെരഞ്ഞെടുക്കുക"
 
-#: ../virtManager/details.py:1546
+#: ../virtManager/details.py:1529
 msgid "Save Virtual Machine Screenshot"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീനിന്‍റെ സ്ക്രീന്‍ഷോട്ട് സൂക്ഷിക്കുക"
 
-#: ../virtManager/details.py:1689
+#: ../virtManager/details.py:1672
 msgid "Error generating CPU configuration"
 msgstr "സിപിയു ക്രമീകരണം ലഭ്യമാക്കുന്നതില്‍ പിശക്"
 
-#: ../virtManager/details.py:1891
+#: ../virtManager/details.py:1874
 #, python-format
 msgid "Error disconnecting media: %s"
 msgstr "മീഡിയയില്‍ നിന്നും വിഛേദിയ്ക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/details.py:1912
+#: ../virtManager/details.py:1895
 #, python-format
 msgid "Error launching media dialog: %s"
 msgstr "മീ‍ഡിയാ ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/details.py:1978
+#: ../virtManager/details.py:1961
 #, python-format
 msgid "Error apply changes: %s"
 msgstr "മാറ്റങ്ങള്‍ വരുത്തുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/details.py:2114
+#: ../virtManager/details.py:2097
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "ഓട്ടോസ്റ്റാര്‍ട്ട് മൂല്ല്യം മാറ്റുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/details.py:2132
+#: ../virtManager/details.py:2115
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "ഒരു കേര്‍ണല്‍ പാഥ് വ്യക്തമാക്കാതെ initrd സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../virtManager/details.py:2135
+#: ../virtManager/details.py:2118
 msgid "Cannot set kernel arguments without specifying a kernel path"
-msgstr "ഒരു കേര്‍ണല്‍ പാഥ് വ്യക്തമാക്കാതെ കേര്‍ണല്‍ ആര്‍ഗ്യുമെന്റുകള്‍ സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല"
+msgstr ""
+"ഒരു കേര്‍ണല്‍ പാഥ് വ്യക്തമാക്കാതെ കേര്‍ണല്‍ ആര്‍ഗ്യുമെന്റുകള്‍ "
+"സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../virtManager/details.py:2141
+#: ../virtManager/details.py:2124
 msgid "An init path must be specified"
 msgstr "ഒരു init പാഥ് നല്‍കേണ്ടതുണ്ടു്"
 
-#: ../virtManager/details.py:2352
+#: ../virtManager/details.py:2332
 msgid "Are you sure you want to remove this device?"
 msgstr "നിങ്ങള്‍ക്ക് ഈ ഡിവൈസ് നീക്കം ചെയ്യണമെന്നുറപ്പാണോ?"
 
-#: ../virtManager/details.py:2359
+#: ../virtManager/details.py:2339
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "ഡിവൈസ് നീക്കം ചെയ്യുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/details.py:2376
+#: ../virtManager/details.py:2356
 msgid "Device could not be removed from the running machine"
-msgstr "പ്രവര്‍ത്തനത്തിലുള്ള സിസ്റ്റത്തില്‍ നിന്നും ഡിവൈസ് നീക്കം ചെയ്യുവാന്‍ സാധ്യമല്ല"
+msgstr ""
+"പ്രവര്‍ത്തനത്തിലുള്ള സിസ്റ്റത്തില്‍ നിന്നും ഡിവൈസ് നീക്കം ചെയ്യുവാന്‍ "
+"സാധ്യമല്ല"
 
-#: ../virtManager/details.py:2378
+#: ../virtManager/details.py:2358
 msgid "This change will take effect after the next guest shutdown."
 msgstr "അടുത്ത തവണ ഗസ്റ്റ് അടച്ചുപൂട്ടുമ്പോള്‍ ഈ മാറ്റം ലഭ്യമാകുന്നു."
 
-#: ../virtManager/details.py:2500
+#: ../virtManager/details.py:2480
 msgid "Error while inspecting the guest configuration"
 msgstr "ഗസ്റ്റ് ക്രമീകരണം പരിശോധിയ്ക്കുമ്പോള്‍ പിശക്"
 
-#: ../virtManager/details.py:2508 ../virtManager/details.py:2512
+#: ../virtManager/details.py:2488 ../virtManager/details.py:2492
 msgid "unknown"
 msgstr "അപരിചിതം"
 
-#: ../virtManager/details.py:2549 ../virtManager/details.py:2550
-#: ../virtManager/details.py:2551 ../virtManager/details.py:2552
+#: ../virtManager/details.py:2529 ../virtManager/details.py:2530
+#: ../virtManager/details.py:2531 ../virtManager/details.py:2532
 #: ../virtManager/host.py:547 ../virtManager/host.py:578
 msgid "Disabled"
 msgstr "പ്രവര്‍ത്തന രഹിതം"
 
-#: ../virtManager/details.py:2812
+#: ../virtManager/details.py:2785
 msgid "Absolute Movement"
 msgstr "ആബ്സല്യൂട്ട് മൂവ്മെന്റ്"
 
-#: ../virtManager/details.py:2814
+#: ../virtManager/details.py:2787
 msgid "Relative Movement"
 msgstr "റിലേറ്റീവ് മൂവ്മെന്റ്"
 
-#: ../virtManager/details.py:2825
+#: ../virtManager/details.py:2798
 msgid "Hypervisor does not support removing this device"
 msgstr ""
 
-#: ../virtManager/details.py:2859
+#: ../virtManager/details.py:2832
 #, python-format
 msgid "%s:%s"
 msgstr "%s:%s"
 
-#: ../virtManager/details.py:3003
+#: ../virtManager/details.py:2976
 msgid "Serial Device"
 msgstr "സീരിയല്‍ ഡിവൈസ്"
 
-#: ../virtManager/details.py:3005
+#: ../virtManager/details.py:2978
 msgid "Parallel Device"
 msgstr "പാരലല്‍ ഡിവൈസ്"
 
-#: ../virtManager/details.py:3007
+#: ../virtManager/details.py:2980
 msgid "Console Device"
 msgstr "കണ്‍സോള്‍ ഡിവൈസ്"
 
-#: ../virtManager/details.py:3009
+#: ../virtManager/details.py:2982
 msgid "Channel Device"
 msgstr "ചാനല്‍ ഡിവൈസ്"
 
-#: ../virtManager/details.py:3011
+#: ../virtManager/details.py:2984
 #, python-format
 msgid "%s Device"
 msgstr "%s ഡിവൈസ്"
 
-#: ../virtManager/details.py:3019
+#: ../virtManager/details.py:2992
 msgid "Primary Console"
 msgstr "പ്രൈമറി കണ്‍സോള്‍"
 
-#: ../virtManager/details.py:3203
+#: ../virtManager/details.py:3179
 msgid "Overview"
 msgstr "ഓവര്‍ വ്യൂ"
 
-#: ../virtManager/details.py:3206
+#: ../virtManager/details.py:3182
 msgid "OS information"
 msgstr "ഒഎസ് വിവരം"
 
-#: ../virtManager/details.py:3334
+#: ../virtManager/details.py:3310
 msgid "No bootable devices"
 msgstr "ബൂട്ട് ചെയ്യുവാന്‍ സാധ്യമായ ഡിവൈസുകളില്ല"
 
@@ -2304,7 +2341,7 @@ msgstr "താല്‍കാലികമായി നിര്‍ത്തി�
 msgid "Shutting Down"
 msgstr "അടച്ചു പൂട്ടുന്നു"
 
-#: ../virtManager/domain.py:247 ../virtManager/domain.py:293
+#: ../virtManager/domain.py:247 ../virtManager/domain.py:294
 msgid "Saved"
 msgstr "സൂക്ഷിച്ചിരിയ്ക്കുന്നു"
 
@@ -2312,8 +2349,8 @@ msgstr "സൂക്ഷിച്ചിരിയ്ക്കുന്നു"
 msgid "Shutoff"
 msgstr "അടച്ചു പൂട്ടുക"
 
-#: ../virtManager/domain.py:251 ../virtManager/domain.py:271
-#: ../virtManager/domain.py:283 ../virtManager/domain.py:291
+#: ../virtManager/domain.py:251 ../virtManager/domain.py:272
+#: ../virtManager/domain.py:284 ../virtManager/domain.py:292
 msgid "Crashed"
 msgstr "തകര്‍ന്നിരിക്കുന്നു"
 
@@ -2321,84 +2358,84 @@ msgstr "തകര്‍ന്നിരിക്കുന്നു"
 msgid "Suspended"
 msgstr "തല്‍ക്കാലത്തേക്കു് നിര്‍ത്തിയിരിയ്ക്കുന്നു"
 
-#: ../virtManager/domain.py:263
+#: ../virtManager/domain.py:264
 msgid "Booted"
 msgstr ""
 
-#: ../virtManager/domain.py:264 ../virtManager/domain.py:292
+#: ../virtManager/domain.py:265 ../virtManager/domain.py:293
 msgid "Migrated"
 msgstr ""
 
-#: ../virtManager/domain.py:265
+#: ../virtManager/domain.py:266
 msgid "Restored"
 msgstr "വീണ്ടെടുത്തിരിയ്ക്കുന്നു"
 
-#: ../virtManager/domain.py:266 ../virtManager/domain.py:280
-#: ../virtManager/domain.py:295
+#: ../virtManager/domain.py:267 ../virtManager/domain.py:281
+#: ../virtManager/domain.py:296
 msgid "From snapshot"
 msgstr "സ്നാപ്പ്ഷോട്ടില്‍ നിന്നും"
 
-#: ../virtManager/domain.py:267
+#: ../virtManager/domain.py:268
 msgid "Unpaused"
 msgstr ""
 
-#: ../virtManager/domain.py:268
+#: ../virtManager/domain.py:269
 msgid "Migration canceled"
 msgstr ""
 
-#: ../virtManager/domain.py:269
+#: ../virtManager/domain.py:270
 msgid "Save canceled"
 msgstr ""
 
-#: ../virtManager/domain.py:270
+#: ../virtManager/domain.py:271
 msgid "Event wakeup"
 msgstr ""
 
-#: ../virtManager/domain.py:274 ../virtManager/domain.py:286
+#: ../virtManager/domain.py:275 ../virtManager/domain.py:287
 msgid "User"
 msgstr "ഉപയോക്താവു്"
 
-#: ../virtManager/domain.py:275
+#: ../virtManager/domain.py:276
 msgid "Migrating"
 msgstr "മാറ്റുന്നു"
 
-#: ../virtManager/domain.py:276
+#: ../virtManager/domain.py:277
 msgid "Saving"
 msgstr "സൂക്ഷിയ്ക്കുന്നു"
 
-#: ../virtManager/domain.py:277
+#: ../virtManager/domain.py:278
 msgid "Dumping"
 msgstr ""
 
-#: ../virtManager/domain.py:278
+#: ../virtManager/domain.py:279
 msgid "I/O error"
 msgstr "ഐ/ഒ പിശക്"
 
-#: ../virtManager/domain.py:281
+#: ../virtManager/domain.py:282
 msgid "Shutting down"
 msgstr "അടച്ചു പൂട്ടുന്നു"
 
-#: ../virtManager/domain.py:282 ../virtManager/snapshots.py:543
+#: ../virtManager/domain.py:283 ../virtManager/snapshots.py:543
 msgid "Creating snapshot"
 msgstr "സ്നാപ്പ്ഷോട്ട് തയ്യാറാക്കുന്നു"
 
-#: ../virtManager/domain.py:289
+#: ../virtManager/domain.py:290
 msgid "Shutdown"
 msgstr ""
 
-#: ../virtManager/domain.py:290
+#: ../virtManager/domain.py:291
 msgid "Destroyed"
 msgstr ""
 
-#: ../virtManager/domain.py:294
+#: ../virtManager/domain.py:295
 msgid "Failed"
 msgstr "പരാജയപ്പെട്ടു"
 
-#: ../virtManager/domain.py:298
+#: ../virtManager/domain.py:299
 msgid "Panicked"
 msgstr ""
 
-#: ../virtManager/domain.py:399
+#: ../virtManager/domain.py:400
 #, python-format
 msgid ""
 "There is more than one '%s' device attached to your host, and we can't "
@@ -2406,45 +2443,47 @@ msgid ""
 "To fix this, remove and reattach the USB device to your guest using the 'Add "
 "Hardware' wizard."
 msgstr ""
-"ഹോസ്റ്റിലേക്കു് ഒന്നില്‍ കൂടുതല്‍ തവണ ഘടിപ്പിച്ചിരിയ്ക്കുന്ന '%s' ഡിവൈസുണ്ടു്. ഇതില്‍നിങ്ങളുടെ ഗസ്റ്റിനു് "
-"ഉപയോഗിയ്ക്കുവാനുള്ളതു് ഏതെന്നു് കണ്ടുപിടിയ്ക്കുവാനായില്ല.\n"
-"ഇതു് പരിഹരിയ്ക്കുന്നതിനായി, 'ഹാര്‍ഡ്‌വെയര്‍ ചേര്‍ക്കുക' പ്രയോഗം ഉപയോഗിച്ചു്, ഗസ്റ്റിലേക്കു് യുഎസ്ബി "
-"ഡിവൈസ് നീക്കം ചെയ്തു് വീണ്ടും ഘടിപ്പിയ്ക്കുക."
+"ഹോസ്റ്റിലേക്കു് ഒന്നില്‍ കൂടുതല്‍ തവണ ഘടിപ്പിച്ചിരിയ്ക്കുന്ന '%s' "
+"ഡിവൈസുണ്ടു്. ഇതില്‍നിങ്ങളുടെ ഗസ്റ്റിനു് ഉപയോഗിയ്ക്കുവാനുള്ളതു് ഏതെന്നു് "
+"കണ്ടുപിടിയ്ക്കുവാനായില്ല.\n"
+"ഇതു് പരിഹരിയ്ക്കുന്നതിനായി, 'ഹാര്‍ഡ്‌വെയര്‍ ചേര്‍ക്കുക' പ്രയോഗം ഉപയോഗിച്ചു്, "
+"ഗസ്റ്റിലേക്കു് യുഎസ്ബി ഡിവൈസ് നീക്കം ചെയ്തു് വീണ്ടും ഘടിപ്പിയ്ക്കുക."
 
-#: ../virtManager/domain.py:503
+#: ../virtManager/domain.py:504
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt കണക്ഷന്‍ സ്നാപ്പ്ഷോട്ടുകള്‍ പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../virtManager/domain.py:518
+#: ../virtManager/domain.py:519
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
 msgstr ""
 
-#: ../virtManager/domain.py:521
+#: ../virtManager/domain.py:522
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr ""
 
-#: ../virtManager/domain.py:556
+#: ../virtManager/domain.py:557
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "സജീവമല്ലാത്ത വിഎം ക്രമീകരണത്തില്‍ വ്യക്തമാക്കിയ ഡിവൈസ് ലഭ്യമല്ല: %s"
 
-#: ../virtManager/domain.py:1424
+#: ../virtManager/domain.py:1415
 msgid "Cannot start guest while cloning operation in progress"
 msgstr "ക്ലോണിങ് നടക്കുമ്പോള്‍ ഗസ്റ്റിനെ ആരംഭിയ്ക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../virtManager/domain.py:1459
+#: ../virtManager/domain.py:1450
 msgid "Cannot resume guest while cloning operation in progress"
-msgstr "ക്ലോണിങ് പ്രക്രിയ നടക്കുമ്പോള്‍ ഗസ്റ്റ് വീണ്ടും ആരംഭിയ്ക്കുവാന്‍ സാധ്യമല്ല"
+msgstr ""
+"ക്ലോണിങ് പ്രക്രിയ നടക്കുമ്പോള്‍ ഗസ്റ്റ് വീണ്ടും ആരംഭിയ്ക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../virtManager/domain.py:1468
+#: ../virtManager/domain.py:1459
 msgid "Saving domain to disk"
 msgstr "ഡിസ്കിലേക്കു് ഡൊമെയിന്‍ സൂക്ഷിയ്ക്കുന്നു"
 
-#: ../virtManager/domain.py:1517
+#: ../virtManager/domain.py:1508
 msgid "Migrating domain"
 msgstr "ഡൊമെിന്‍ നീക്കുന്നു"
 
@@ -2510,8 +2549,7 @@ msgstr ""
 "അല്ലെങ്കില്‍ ഇതുപോലുള്ളതു് ഇന്‍സ്റ്റോള്‍ ചെയ്യേണ്ടതുണ്ടു്."
 
 #: ../virtManager/engine.py:618
-msgid ""
-"Verify that the 'libvirtd' daemon is running\n"
+msgid "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr ""
 "റിമോട്ട് ഹോസ്റ്റില്‍ 'libvirtd' ഡെമണ്‍ പ്രവര്‍ത്തിയ്ക്കുന്നു\n"
@@ -2534,8 +2572,10 @@ msgid ""
 "may not be able to connect to libvirt as a \n"
 "regular user. Try running as root."
 msgstr ""
-"ഒരു പ്രാദേശിക സെഷന്‍ കണ്ടുപിടിയ്ക്കുവാന്‍ സാധ്യമല്ല: നിങ്ങള്‍ ssh -X അല്ലെങ്കില്‍ വിഎന്‍സി \n"
-"ഉപയോഗിച്ചു് virt-manager പ്രവര്‍ത്തിപ്പിയ്ക്കുന്നെങ്കില്‍, ഒരു സാധാരണ ഉപയോക്താവായി \n"
+"ഒരു പ്രാദേശിക സെഷന്‍ കണ്ടുപിടിയ്ക്കുവാന്‍ സാധ്യമല്ല: നിങ്ങള്‍ ssh -X "
+"അല്ലെങ്കില്‍ വിഎന്‍സി \n"
+"ഉപയോഗിച്ചു് virt-manager പ്രവര്‍ത്തിപ്പിയ്ക്കുന്നെങ്കില്‍, ഒരു സാധാരണ "
+"ഉപയോക്താവായി \n"
 "libvrt-ലേക്കു് കണക്ട് ചെയ്യുവാന്‍ നിങ്ങള്‍ക്കു് സാധ്യമാകുന്നതല്ല. \n"
 "റൂട്ടായി പ്രവര്‍ത്തിപ്പിച്ചു് നോക്കുക."
 
@@ -2628,8 +2668,8 @@ msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
-"ഓപ്പറേറ്റിങ് സിസ്റ്റം അടച്ചു പൂട്ടാതെ ഇതു് ഉടന്‍ തന്നെ വിഎംമിന്റെ പവര്‍ ഓഫ് ചെയ്യുന്നു, ഇതു് ഡേറ്റാ "
-"നഷ്ടപ്പെടുത്തിയേക്കാം."
+"ഓപ്പറേറ്റിങ് സിസ്റ്റം അടച്ചു പൂട്ടാതെ ഇതു് ഉടന്‍ തന്നെ വിഎംമിന്റെ പവര്‍ ഓഫ് "
+"ചെയ്യുന്നു, ഇതു് ഡേറ്റാ നഷ്ടപ്പെടുത്തിയേക്കാം."
 
 #: ../virtManager/engine.py:1012 ../virtManager/engine.py:1089
 msgid "Error shutting down domain"
@@ -2704,7 +2744,9 @@ msgstr "'%s' നിര്‍ബന്ധിച്ചു് വീണ്ടും
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
-msgstr "ഒഎസ് അടച്ചുപൂട്ടാതെ ഇതുടന്‍ വിഎം അടച്ചുപൂട്ടുന്നു, ഡേറ്റയും നഷ്ടമാകുന്നതാണു്."
+msgstr ""
+"ഒഎസ് അടച്ചുപൂട്ടാതെ ഇതുടന്‍ വിഎം അടച്ചുപൂട്ടുന്നു, ഡേറ്റയും നഷ്ടമാകുന്നതാണു്."
+""
 
 #: ../virtManager/engine.py:1120
 msgid "Error resetting domain"
@@ -2715,15 +2757,15 @@ msgstr "ഡൊമെയിന്‍ വീണ്ടും സജ്ജമാക�
 msgid "Error launching delete dialog: %s"
 msgstr ""
 
-#: ../virtManager/error.py:134
+#: ../virtManager/error.py:136
 msgid "Input Error"
 msgstr "ഇന്‍പുട്ടില്‍ പിശക്"
 
-#: ../virtManager/error.py:202
+#: ../virtManager/error.py:204
 msgid "Don't ask me again"
 msgstr "ഇനി ചോദിയ്ക്കരുതു്"
 
-#: ../virtManager/error.py:344 ../ui/details.ui.h:25
+#: ../virtManager/error.py:346 ../ui/details.ui.h:25
 msgid "Details"
 msgstr "വിശദവിവരങ്ങള്‍"
 
@@ -2747,11 +2789,7 @@ msgstr "റാം ഫയല്‍സിസ്റ്റത്തിന്റെ �
 msgid "A filesystem target must be specified"
 msgstr "ഒരു ഫയല്‍സിസ്റ്റത്തിനുള്ള ടാര്‍ഗറ്റ് നിഷ്കര്‍ഷിയ്ക്കണം"
 
-#: ../virtManager/fsdetails.py:303
-msgid "Invalid target path. A filesystem with that target already exists"
-msgstr "തെറ്റായ ടാര്‍ഗറ്റ് പാഥ്. ഈ ടാര്‍ഗറ്റുള്ള ഫയല്‍സിസ്റ്റം നിലവിലുണ്ടു്."
-
-#: ../virtManager/fsdetails.py:329
+#: ../virtManager/fsdetails.py:325
 msgid "Filesystem parameter error"
 msgstr "ഫയല്‍സിസ്റ്റം പരാമീറ്റര്‍ പിശക്"
 
@@ -2791,7 +2829,9 @@ msgstr "%(currentmem)s of %(maxmem)s"
 
 #: ../virtManager/host.py:338
 msgid "Libvirt connection does not support virtual network management."
-msgstr "Libvrt കണക്ഷന്‍ വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് മാനേജ്മെന്റ് പിന്തുണയ്ക്കുന്നില്ല."
+msgstr ""
+"Libvrt കണക്ഷന്‍ വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് മാനേജ്മെന്റ് "
+"പിന്തുണയ്ക്കുന്നില്ല."
 
 #: ../virtManager/host.py:342
 msgid "Libvirt connection does not support interface management."
@@ -2805,7 +2845,8 @@ msgstr "കണക്ഷന്‍ സജീവമല്ല."
 #: ../virtManager/host.py:378
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
-msgstr "നിങ്ങള്‍ക്ക് %s നെറ്റ്‌വര്‍ക്ക് എന്നേക്കുമായി ഇല്ലാതാക്കണമെന്നുറപ്പാണോ?"
+msgstr ""
+"നിങ്ങള്‍ക്ക് %s നെറ്റ്‌വര്‍ക്ക് എന്നേക്കുമായി ഇല്ലാതാക്കണമെന്നുറപ്പാണോ?"
 
 #: ../virtManager/host.py:385
 #, python-format
@@ -2958,8 +2999,7 @@ msgstr "നെറ്റ്‌വര്‍ക്ക് I/O"
 
 #: ../virtManager/manager.py:511
 #, python-format
-msgid ""
-"This will remove the connection:\n"
+msgid "This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3027,9 +3067,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by "
-"libvirt. You must configure the destination to have a valid publicly "
-"accessible hostname."
+"The destination's hostname is 'localhost', which will be rejected by libvirt."
+" You must configure the destination to have a valid publicly accessible "
+"hostname."
 msgstr ""
 
 #: ../virtManager/migrate.py:295
@@ -3064,7 +3104,7 @@ msgstr ""
 msgid "Error cancelling migrate job: %s"
 msgstr "നീക്കുന്ന ജോലി റദ്ദാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/netlist.py:112 ../virtinst/deviceinterface.py:88
+#: ../virtManager/netlist.py:112 ../virtinst/deviceinterface.py:90
 msgid "Usermode networking"
 msgstr "യൂസര്‍മോഡ് നെറ്റ്‌വര്‍ക്കിങ്"
 
@@ -3114,7 +3154,9 @@ msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്�
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
-msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് '%s' സജീവമല്ല. നിങ്ങള്‍ക്കു് ഉടന്‍ നെറ്റ്‌വര്‍ക്ക് ആരംഭിക്കണമോ?"
+msgstr ""
+"വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് '%s' സജീവമല്ല. നിങ്ങള്‍ക്കു് ഉടന്‍ "
+"നെറ്റ്‌വര്‍ക്ക് ആരംഭിക്കണമോ?"
 
 #: ../virtManager/netlist.py:365
 #, python-format
@@ -3136,7 +3178,8 @@ msgstr "%s ഈ വിലാസമുപയോഗിക്കണമെന്ന�
 
 #: ../virtManager/netlist.py:410
 msgid "Libvirt version does not support physical interface listing."
-msgstr "Libvirt പതിപ്പ് ഫിസിക്കല്‍ ഇന്റര്‍ഫെയിസ് ലഭ്യമാക്കല്‍ പിന്തുണയ്ക്കുന്നില്ല."
+msgstr ""
+"Libvirt പതിപ്പ് ഫിസിക്കല്‍ ഇന്റര്‍ഫെയിസ് ലഭ്യമാക്കല്‍ പിന്തുണയ്ക്കുന്നില്ല."
 
 #: ../virtManager/preferences.py:109
 msgid "Fullscreen only"
@@ -3523,16 +3566,14 @@ msgid ""
 "OVF section '%s' is listed as required, but parser doesn't know how to "
 "handle it."
 msgstr ""
-"ഒവിഎഫ് '%s' ആവശ്യപ്പെട്ടതു് പോലെ ലഭ്യമാക്കിയിരിയ്ക്കുന്നു, പക്ഷേ എങ്ങനെ കൈകാര്യം ചെയ്യണമെന്നു് "
-"പാഴ്സറിനു് അറിയില്ല."
+"ഒവിഎഫ് '%s' ആവശ്യപ്പെട്ടതു് പോലെ ലഭ്യമാക്കിയിരിയ്ക്കുന്നു, പക്ഷേ എങ്ങനെ "
+"കൈകാര്യം ചെയ്യണമെന്നു് പാഴ്സറിനു് അറിയില്ല."
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid ""
-"Syntax error at line %d: %s\n"
+msgid "Syntax error at line %d: %s\n"
 "%s"
-msgstr ""
-"%d വരിയില്‍ സിന്റാക്സ് പിശക്: %s\n"
+msgstr "%d വരിയില്‍ സിന്റാക്സ് പിശക്: %s\n"
 "%s"
 
 #: ../virtconv/vmx.py:125
@@ -3541,40 +3582,41 @@ msgstr "വിഎംഡികെ വിവരണ ഫയലില്‍ ഒരു
 
 #: ../virtconv/vmx.py:128
 msgid "Don't know how to handle multistorage VMDK descriptors"
-msgstr "മള്‍ട്ടിസ്റ്റോറേജ് വിഎംഡികെ വിവരണങ്ങള്‍ എങ്ങനെ കൈകാര്യം ചെയ്യണമെന്നറിയില്ല"
+msgstr ""
+"മള്‍ട്ടിസ്റ്റോറേജ് വിഎംഡികെ വിവരണങ്ങള്‍ എങ്ങനെ കൈകാര്യം ചെയ്യണമെന്നറിയില്ല"
 
 #: ../virtconv/vmx.py:263
 #, python-format
 msgid "No displayName defined in '%s'"
 msgstr "'%s'-ല്‍ displayName നിഷ്കര്‍ഷിച്ചിട്ടില്ല"
 
-#: ../virtinst/capabilities.py:462
+#: ../virtinst/capabilities.py:466
 #, python-format
 msgid "for arch '%s'"
 msgstr "'%s' ആര്‍ക്കിനു്"
 
-#: ../virtinst/capabilities.py:466
+#: ../virtinst/capabilities.py:470
 #, python-format
 msgid "virtualization type '%s'"
 msgstr "വിര്‍ച്ച്വലൈസേഷന്‍ തരം '%s'"
 
-#: ../virtinst/capabilities.py:468
+#: ../virtinst/capabilities.py:472
 msgid "any virtualization options"
 msgstr "ഏതെങ്കിലും വിര്‍ച്ച്വലൈസേഷന്‍ ഐച്ഛികങ്ങള്‍"
 
-#: ../virtinst/capabilities.py:470
+#: ../virtinst/capabilities.py:474
 #, python-format
 msgid "Host does not support %(virttype)s %(arch)s"
 msgstr "ഹോസ്റ്റ് %(virttype)s %(arch)s പിന്തുണയ്ക്കുന്നില്ല"
 
-#: ../virtinst/capabilities.py:478
+#: ../virtinst/capabilities.py:482
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s%(machine)s for virtualization "
 "type '%(virttype)s' arch '%(arch)s'"
 msgstr ""
-"ഹോസ്റ്റ് ഡൊമെയിന്‍ തരെ %(domain)s%(machine)s പിന്തുണയ്ക്കുന്നില്ല. ഇതു് വിര്‍ച്ച്വലൈസേഷന്‍ "
-"തരം'%(virttype)s' arch '%(arch)s'-നുള്ളതു്"
+"ഹോസ്റ്റ് ഡൊമെയിന്‍ തരെ %(domain)s%(machine)s പിന്തുണയ്ക്കുന്നില്ല. ഇതു് "
+"വിര്‍ച്ച്വലൈസേഷന്‍ തരം'%(virttype)s' arch '%(arch)s'-നുള്ളതു്"
 
 #: ../virtinst/cli.py:150
 msgid "See man page for examples and full option syntax."
@@ -3628,8 +3670,9 @@ msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
-"ഗ്രാഫിക്കല്‍ കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല: virt-viewer ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല. "
-"ദയവായി 'virt-viewer' പാക്കേജ് ഇന്‍സ്റ്റോള്‍ ചെയ്യുക."
+"ഗ്രാഫിക്കല്‍ കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല: virt-viewer "
+"ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല. ദയവായി 'virt-viewer' പാക്കേജ് ഇന്‍സ്റ്റോള്‍ "
+"ചെയ്യുക."
 
 #: ../virtinst/cli.py:470
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
@@ -3659,8 +3702,8 @@ msgstr ""
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
-"ഇന്‍സ്റ്റോള്‍ പ്രക്രിയയിലൂടെ പോകുക, പക്ഷേ ഡിവൈസുകള്‍ തയ്യാറാക്കുകയോ ഗസ്റ്റിനെ നിഷ്കര്‍ഷിയ്ക്കുകയോ "
-"ചെയ്യരുതു്."
+"ഇന്‍സ്റ്റോള്‍ പ്രക്രിയയിലൂടെ പോകുക, പക്ഷേ ഡിവൈസുകള്‍ തയ്യാറാക്കുകയോ "
+"ഗസ്റ്റിനെ നിഷ്കര്‍ഷിയ്ക്കുകയോ ചെയ്യരുതു്."
 
 #: ../virtinst/cli.py:548
 msgid ""
@@ -3700,8 +3743,7 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:585
-msgid ""
-"CPU model and features. Ex:\n"
+msgid "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 msgstr ""
 
@@ -3758,10 +3800,12 @@ msgstr "ഒരു ഗസ്റ്റിനുള്ള ആശയവിനിമ�
 
 #: ../virtinst/cli.py:628
 msgid "Configure a text console connection between the guest and host"
-msgstr "ഗസ്റ്റിനും ഹോസ്റ്റിനുമുള്ളൊരു ടെക്സ്റ്റ് കണ്‍സോള്‍ കണക്ഷന്‍ ക്രമീകരിയ്ക്കുക"
+msgstr ""
+"ഗസ്റ്റിനും ഹോസ്റ്റിനുമുള്ളൊരു ടെക്സ്റ്റ് കണ്‍സോള്‍ കണക്ഷന്‍ ക്രമീകരിയ്ക്കുക"
 
 #: ../virtinst/cli.py:631
-msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid ""
+"Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
 #: ../virtinst/cli.py:634
@@ -3787,8 +3831,7 @@ msgid "Configure guest video hardware."
 msgstr "ഗസ്റ്റ് വീഡിയോ ഹാര്‍ഡ്‌വെയര്‍ ക്രമീകരിയ്ക്കുക."
 
 #: ../virtinst/cli.py:659
-msgid ""
-"Configure a guest smartcard device. Ex:\n"
+msgid "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 "ഒരു ഗസ്റ്റ് സ്മാര്‍ട്ട്കാര്‍ഡ് ഡിവൈസ് ക്രമീകരിയ്ക്കുക. ഉദാ:\n"
@@ -3803,28 +3846,24 @@ msgstr ""
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:665
-msgid ""
-"Configure a guest memballoon device. Ex:\n"
+msgid "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 "ഒരു ഗസ്റ്റ് memballoon ഡിവൈസ് ക്രമീകരിയ്ക്കുക. ഉദാ:\n"
 "--memballoon model=virtio"
 
 #: ../virtinst/cli.py:668
-msgid ""
-"Configure a guest TPM device. Ex:\n"
+msgid "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
 
 #: ../virtinst/cli.py:671
-msgid ""
-"Configure a guest RNG device. Ex:\n"
+msgid "Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
 msgstr ""
 
 #: ../virtinst/cli.py:674
-msgid ""
-"Configure a guest panic device. Ex:\n"
+msgid "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
@@ -3937,15 +3976,16 @@ msgstr "ഒരു സംഭരണ പാഥില്‍ കൂടുതല്‍
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "സംഭരണ വോള്യം vol=poolname/volname ആയി നല്‍കണം"
 
-#: ../virtinst/cli.py:1810
+#: ../virtinst/cli.py:1818
 #, python-format
 msgid "Didn't match keymap '%s' in keytable!"
 msgstr "keytable!-ല്‍ കീമാപ്പ് '%s' ചേരുന്നില്ല"
 
-#: ../virtinst/cli.py:2105
+#: ../virtinst/cli.py:2113
 #, python-format
 msgid "%(devtype)s type '%(chartype)s' does not support '%(optname)s' option."
-msgstr "%(devtype)s type '%(chartype)s' '%(optname)s' ഐച്ഛികം പിന്തുണയ്ക്കുന്നില്ല."
+msgstr ""
+"%(devtype)s type '%(chartype)s' '%(optname)s' ഐച്ഛികം പിന്തുണയ്ക്കുന്നില്ല."
 
 #: ../virtinst/cloner.py:90
 msgid "Original xml must be a string."
@@ -3982,12 +4022,15 @@ msgstr "യഥാര്‍ത്ഥ ഗസ്റ്റ് നാമം അല്
 #: ../virtinst/cloner.py:306
 msgid "Domain with devices to clone must be paused or shutoff."
 msgstr ""
-"ക്ലോണ്‍ ചെയ്യുവാനുള്ള ഡിവൈസുകളുള്ള ഡൊമെയിന്‍ തല്‍ക്കാലത്തേക്കു് നിര്‍ത്തണം അല്ലെങ്കില്‍ അടച്ചുപൂട്ടണം."
+"ക്ലോണ്‍ ചെയ്യുവാനുള്ള ഡിവൈസുകളുള്ള ഡൊമെയിന്‍ തല്‍ക്കാലത്തേക്കു് നിര്‍ത്തണം "
+"അല്ലെങ്കില്‍ അടച്ചുപൂട്ടണം."
 
 #: ../virtinst/cloner.py:331
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
-msgstr "നിലവിലുള്ള സംഭരണ വോള്യം ക്ലോണ്‍ ചെയ്യുന്നതു് നിലവില്‍ പിന്തുണയ്ക്കുന്നില്ല: '%s'"
+msgstr ""
+"നിലവിലുള്ള സംഭരണ വോള്യം ക്ലോണ്‍ ചെയ്യുന്നതു് നിലവില്‍ പിന്തുണയ്ക്കുന്നില്ല: "
+"'%s'"
 
 #: ../virtinst/cloner.py:373
 #, python-format
@@ -3995,14 +4038,15 @@ msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
 "%(need)d needed"
 msgstr ""
-"നിഷ്കര്‍ഷിച്ചിരിയ്ക്കുന്ന പുതിയ പാഥുകളേക്കാള്‍ കൂടുതല്‍ ഡിസ്കുകള്‍ ക്ലോണ്‍ ചെയ്യണം. (%(passed)d "
-"നിഷ്കര്‍ച്ചിരിയ്ക്കുന്നു, %(need)d ആവശ്യം"
+"നിഷ്കര്‍ഷിച്ചിരിയ്ക്കുന്ന പുതിയ പാഥുകളേക്കാള്‍ കൂടുതല്‍ ഡിസ്കുകള്‍ ക്ലോണ്‍ "
+"ചെയ്യണം. (%(passed)d നിഷ്കര്‍ച്ചിരിയ്ക്കുന്നു, %(need)d ആവശ്യം"
 
 #: ../virtinst/cloner.py:385
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
-"പൊരുത്തക്കേടു് ഒഴിവാക്കുന്നതിനായി, ഗ്രാഫിക്സ് ഡിവൈസ് പോര്‍ട്ട് ഓട്ടോപോര്‍ട്ടിലേക്കു് സജ്ജമാക്കുന്നു."
+"പൊരുത്തക്കേടു് ഒഴിവാക്കുന്നതിനായി, ഗ്രാഫിക്സ് ഡിവൈസ് പോര്‍ട്ട് "
+"ഓട്ടോപോര്‍ട്ടിലേക്കു് സജ്ജമാക്കുന്നു."
 
 #: ../virtinst/cloner.py:548
 #, python-format
@@ -4021,7 +4065,9 @@ msgstr "വിശേഷതകളില്‍ ഒരു ഹോസ്റ്റ് 
 #: ../virtinst/device.py:72 ../virtinst/deviceredirdev.py:45
 #, python-format
 msgid "Could not determine or unsupported format of '%s'"
-msgstr "കണ്ടുപിടിയ്ക്കുവാന്‍ സാധ്യമായില്ല അല്ലെങ്കില്‍ പിന്തുണയ്ക്കാത്ത '%s'-ന്റെ ശൈലി"
+msgstr ""
+"കണ്ടുപിടിയ്ക്കുവാന്‍ സാധ്യമായില്ല അല്ലെങ്കില്‍ പിന്തുണയ്ക്കാത്ത '%s'-ന്റെ "
+"ശൈലി"
 
 #: ../virtinst/device.py:157
 msgid "Virtual device type must be set in subclass."
@@ -4110,7 +4156,9 @@ msgstr "കണക്ട് അല്ലെങ്കില്‍ ശ്രദ്�
 
 #: ../virtinst/devicechar.py:287
 msgid "Port on target host to connect/listen to."
-msgstr "കണക്ട് ചെയ്യുവാന്‍ അല്ലെങ്കില്‍ ശ്രദ്ധിയ്ക്കുവാനുള്ള ലക്ഷ്യ ഹോസ്റ്റിലുള്ള പോര്‍ട്ട്."
+msgstr ""
+"കണക്ട് ചെയ്യുവാന്‍ അല്ലെങ്കില്‍ ശ്രദ്ധിയ്ക്കുവാനുള്ള ലക്ഷ്യ ഹോസ്റ്റിലുള്ള "
+"പോര്‍ട്ട്."
 
 #: ../virtinst/devicechar.py:304
 msgid "Host address to bind to."
@@ -4142,50 +4190,52 @@ msgstr "ഗസ്റ്റിലുള്ള virtio പോര്‍ട്ടി�
 
 #. Trying to change perms on vfat at least doesn't work
 #. but also doesn't seem to error. Try and detect that
-#: ../virtinst/devicedisk.py:307
+#: ../virtinst/devicedisk.py:305
 #, python-format
 msgid "Permissions on '%s' did not stick"
 msgstr "'%s'-ലുള്ള അനുമതികള്‍ നിലവിലില്ല"
 
-#: ../virtinst/devicedisk.py:417
+#: ../virtinst/devicedisk.py:415
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr ""
 
-#: ../virtinst/devicedisk.py:422
+#: ../virtinst/devicedisk.py:420
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
 msgstr ""
 
-#: ../virtinst/devicedisk.py:444
+#: ../virtinst/devicedisk.py:442
 msgid "Format attribute not supported for this volume type"
 msgstr "ഈ വോള്യം തരത്തില്‍ ശൈലി വിശേഷത പിന്തുണയ്ക്കുന്നില്ല"
 
-#: ../virtinst/devicedisk.py:853
+#: ../virtinst/devicedisk.py:851
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "ഡിവൈസ് തരം '%s'-നു് ഒരു പാഥ് ആവശ്യമുണ്ടു്"
 
-#: ../virtinst/devicedisk.py:860
+#: ../virtinst/devicedisk.py:858
 #, python-format
 msgid "The path '%s' must be a file or a device, not a directory"
-msgstr "പാഥ് '%s' ഒരു ഫയല്‍ അല്ലെങ്കില്‍ ഡിവൈസായിരിയ്ക്കണം, പക്ഷേ ഡയറക്ടറി ആവരുതു്"
+msgstr ""
+"പാഥ് '%s' ഒരു ഫയല്‍ അല്ലെങ്കില്‍ ഡിവൈസായിരിയ്ക്കണം, പക്ഷേ ഡയറക്ടറി ആവരുതു്"
 
-#: ../virtinst/devicedisk.py:869
+#: ../virtinst/devicedisk.py:867
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
-msgstr "നിലവിലില്ലാത്ത '%s'-നു് സംഭരണം തയ്യാറാക്കുന്നതിനുള്ള പരാമീറ്ററുകള്‍ നല്‍കണം."
+msgstr ""
+"നിലവിലില്ലാത്ത '%s'-നു് സംഭരണം തയ്യാറാക്കുന്നതിനുള്ള പരാമീറ്ററുകള്‍ നല്‍കണം."
 
 #. This basically means that we either chose full
 #. controller or didn't add any
-#: ../virtinst/devicedisk.py:1039
+#: ../virtinst/devicedisk.py:1040
 #, python-format
 msgid "Controller number %d for disk of type %s has no empty slot to use"
 msgstr ""
 
-#: ../virtinst/devicedisk.py:1042
+#: ../virtinst/devicedisk.py:1043
 #, python-format
 msgid "Only %s disks of type '%s' are supported"
 msgstr ""
@@ -4198,17 +4248,25 @@ msgstr "ഫയല്‍സിസ്റ്റം ലക്ഷം '%s' ഒരു �
 #: ../virtinst/devicegraphics.py:37
 #, python-format
 msgid "%s must be above 5900, or -1 for auto allocation"
-msgstr "%s, 5900-ല്‍ കൂടുതലായിരിയ്ക്കണം, അല്ലെങ്കില്‍ സ്വയമായി അനുവദിയ്ക്കുന്നതിനു് -1 "
+msgstr ""
+"%s, 5900-ല്‍ കൂടുതലായിരിയ്ക്കണം, അല്ലെങ്കില്‍ സ്വയമായി അനുവദിയ്ക്കുന്നതിനു് -"
+"1 "
 
-#: ../virtinst/deviceinterface.py:84
+#: ../virtinst/devicehostdev.py:56
+#, fuzzy, python-format
+msgid "Could not find USB device (vendorId: %s, productId: %s)"
+msgstr ""
+"യുഎസ്ബി ഡിവൈസ് കണ്ടുപിടിയ്ക്കുവാനായില്ല (vendorId: %s, productId: %s) "
+
+#: ../virtinst/deviceinterface.py:86
 msgid "Shared physical device"
 msgstr "പങ്കിടുന്ന ഫിസിക്കല്‍ ഡിവൈസ്"
 
-#: ../virtinst/deviceinterface.py:86
+#: ../virtinst/deviceinterface.py:88
 msgid "Virtual networking"
 msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്കിങ്"
 
-#: ../virtinst/deviceinterface.py:129
+#: ../virtinst/deviceinterface.py:131
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr "'%s' എന്ന മാക് വിലാസം മറ്റൊരു വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉപയോഗിയ്ക്കുന്നു."
@@ -4274,8 +4332,8 @@ msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr ""
-"ഗസ്റ്റ് പ്രവര്‍ത്തിയ്ക്കുമ്പോള്‍ സ്പാഴ്സ് ഫയല്‍ പൂര്‍ണ്ണമായും അനുവദിയ്ക്കുന്നതിനു് മതിയായ സ്ഥലം "
-"ഫയല്‍സിസ്റ്റത്തില്‍ ലഭ്യമല്ല."
+"ഗസ്റ്റ് പ്രവര്‍ത്തിയ്ക്കുമ്പോള്‍ സ്പാഴ്സ് ഫയല്‍ പൂര്‍ണ്ണമായും "
+"അനുവദിയ്ക്കുന്നതിനു് മതിയായ സ്ഥലം ഫയല്‍സിസ്റ്റത്തില്‍ ലഭ്യമല്ല."
 
 #: ../virtinst/diskbackend.py:339
 msgid "There is not enough free space to create the disk."
@@ -4324,7 +4382,9 @@ msgstr "cpuset ഒരു സ്ട്രിങ്ങായിരിയ്ക്�
 
 #: ../virtinst/domainnumatune.py:47
 msgid "cpuset can only contain numeric, ',', '^', or '-' characters"
-msgstr "cpuset-നു് അക്കങ്ങള്‍, ',', '^', അല്ലെങ്കില്‍ '-' അക്ഷരങ്ങള്‍ മാത്രമേ പാടുള്ളൂ"
+msgstr ""
+"cpuset-നു് അക്കങ്ങള്‍, ',', '^', അല്ലെങ്കില്‍ '-' അക്ഷരങ്ങള്‍ മാത്രമേ "
+"പാടുള്ളൂ"
 
 #: ../virtinst/domainnumatune.py:61
 msgid "cpuset contains invalid format."
@@ -4379,38 +4439,38 @@ msgstr "ഗസ്റ്റ്"
 msgid "Guest name '%s' is already in use."
 msgstr "'%s' എന്ന ഗസ്റ്റ് നാമം നിലവില്‍ ഉപയോഗത്തില്‍"
 
-#: ../virtinst/guest.py:233
+#: ../virtinst/guest.py:236
 #, python-format
 msgid "Distro '%s' does not exist in our dictionary"
 msgstr "നിഘണ്ടുവില്‍ '%s' വിതരണം നിലവിലില്ല"
 
-#: ../virtinst/guest.py:390
+#: ../virtinst/guest.py:393
 msgid "Domain has already been started!"
 msgstr "ഡൊമെയിന്‍ നിലവില്‍ ആരംഭിച്ചിരിയ്ക്കുന്നു!"
 
-#: ../virtinst/guest.py:441
+#: ../virtinst/guest.py:444
 msgid "Creating domain..."
 msgstr "ഡൊമെയിന്‍ തയ്യാറാക്കുന്നു..."
 
-#: ../virtinst/guest.py:443
+#: ../virtinst/guest.py:446
 msgid "Starting domain..."
 msgstr "ഡൊമെയിന്‍ ആരംഭിയ്ക്കുന്നു..."
 
-#: ../virtinst/guest.py:527
+#: ../virtinst/guest.py:530
 msgid "Libvirt version does not support UEFI."
 msgstr ""
 
-#: ../virtinst/guest.py:531
+#: ../virtinst/guest.py:534
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: ../virtinst/guest.py:536
+#: ../virtinst/guest.py:539
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
 
-#: ../virtinst/guest.py:930
+#: ../virtinst/guest.py:938
 #, python-format
 msgid "Duplicate address for devices %s and %s"
 msgstr "%s, %s ഡിവൈസുകള്‍ക്കുള്ള ആവര്‍ത്തിച്ച വിലാസം"
@@ -4455,7 +4515,8 @@ msgstr "ബ്രിഡ്ജില്‍ എസ്‌ടിപി  പ്രവ
 #: ../virtinst/interface.py:196
 msgid "Delay in seconds before forwarding begins when joining a network."
 msgstr ""
-"ഒരു നെറ്റ്‌വര്‍ക്കില്‍ പങ്കു് ചേരുമ്പോള്‍ ഫോര്‍വേഡിങ് ആരംഭിയ്ക്കുന്നതിനു് മുമ്പുള്ള താമസം സെക്കന്‍ഡുകളില്‍."
+"ഒരു നെറ്റ്‌വര്‍ക്കില്‍ പങ്കു് ചേരുമ്പോള്‍ ഫോര്‍വേഡിങ് ആരംഭിയ്ക്കുന്നതിനു് "
+"മുമ്പുള്ള താമസം സെക്കന്‍ഡുകളില്‍."
 
 #: ../virtinst/interface.py:204
 msgid "Mode of operation of the bonding device"
@@ -4485,15 +4546,15 @@ msgstr "എംഐഐ നിരീക്ഷണ ഇടവേള മില്ലി
 msgid ""
 "Time in milliseconds to wait before enabling a slave after link recovery "
 msgstr ""
-"കണ്ണി കണ്ടുപിടിച്ച ശേഷം ഒരു സ്ലേവ് പ്രവര്‍ത്തന സജ്ജമാക്കുന്നതിനു് മുമ്പു് കാത്തിരിയ്ക്കേണ്ട സമയം "
-"മില്ലിസെക്കന്‍ഡുകളില്‍"
+"കണ്ണി കണ്ടുപിടിച്ച ശേഷം ഒരു സ്ലേവ് പ്രവര്‍ത്തന സജ്ജമാക്കുന്നതിനു് മുമ്പു് "
+"കാത്തിരിയ്ക്കേണ്ട സമയം മില്ലിസെക്കന്‍ഡുകളില്‍"
 
 #: ../virtinst/interface.py:223
 msgid ""
 "Time in milliseconds to wait before disabling a slave after link failure"
 msgstr ""
-"കണ്ണി പരാജയപ്പെട്ട ശേഷം ഒരു സ്ലേവ് പ്രവര്‍ത്തന രഹിതമാക്കുന്നതിനു് മുമ്പു് കാത്തിരിയ്ക്കേണ്ട സമയം "
-"മില്ലിസെക്കന്‍ഡുകളില്‍"
+"കണ്ണി പരാജയപ്പെട്ട ശേഷം ഒരു സ്ലേവ് പ്രവര്‍ത്തന രഹിതമാക്കുന്നതിനു് മുമ്പു് "
+"കാത്തിരിയ്ക്കേണ്ട സമയം മില്ലിസെക്കന്‍ഡുകളില്‍"
 
 #: ../virtinst/interface.py:232
 msgid "VLAN device tag number"
@@ -4644,122 +4705,133 @@ msgstr ""
 msgid "Sheepdog Filesystem"
 msgstr ""
 
-#: ../virtinst/storage.py:229
+#: ../virtinst/storage.py:231
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "സ്വതവേയുള്ള സ്റ്റോറേജ് പൂള്‍ '%s' ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല: %s"
 
-#: ../virtinst/storage.py:304
+#: ../virtinst/storage.py:306
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "'%s' പേരു് മറ്റൊരു പൂള്‍ നിലവില്‍ ഉപയോഗിയ്ക്കുന്നു."
 
-#: ../virtinst/storage.py:391
+#: ../virtinst/storage.py:393
 msgid "Storage device type the pool will represent."
 msgstr "പൂള്‍ പ്രതിനിധീകരിയ്ക്കുന്ന സംഭരണം ഡിവൈസ് തരം."
 
-#: ../virtinst/storage.py:403
+#: ../virtinst/storage.py:405
 msgid "iSCSI initiator qualified name"
 msgstr "iSCSI ഇനീഷ്യേറ്റര്‍ ക്വാളിഫൈഡ് നെയിം"
 
-#: ../virtinst/storage.py:406
+#: ../virtinst/storage.py:408
 msgid "Name of the Volume Group"
 msgstr "വോള്യം ഗ്രൂപ്പിന്റെ പേരു്"
 
-#: ../virtinst/storage.py:471
+#: ../virtinst/storage.py:473
 msgid "Hostname is required"
 msgstr "ഹോസ്റ്റ്നാമം ആവശ്യമുണ്ടു്"
 
-#: ../virtinst/storage.py:475
+#: ../virtinst/storage.py:477
 msgid "Source path is required"
 msgstr "ശ്രോതസ്സിനുള്ള പാഥ ആവശ്യമുണ്ടു്"
 
-#: ../virtinst/storage.py:488
+#: ../virtinst/storage.py:490
 msgid "Must explicitly specify source path if building pool"
-msgstr "പൂള്‍ തയ്യാറാക്കുന്നെങ്കില്‍ സോഴ്സ് പാഥ് പ്രത്യേകാല്‍ നിഷ്കര്‍ഷിയ്ക്കുക"
+msgstr ""
+"പൂള്‍ തയ്യാറാക്കുന്നെങ്കില്‍ സോഴ്സ് പാഥ് പ്രത്യേകാല്‍ നിഷ്കര്‍ഷിയ്ക്കുക"
 
-#: ../virtinst/storage.py:492
+#: ../virtinst/storage.py:494
 msgid "Must explicitly specify disk format if formatting disk device."
-msgstr "ഡിസ്ക് ഡിവൈസ് ഫോര്‍മാറ്റ് ചെയ്യുന്നെങ്കില്‍ ഡിസ്ക് ശൈലി പ്രത്യേകമായി നല്‍കണം."
+msgstr ""
+"ഡിസ്ക് ഡിവൈസ് ഫോര്‍മാറ്റ് ചെയ്യുന്നെങ്കില്‍ ഡിസ്ക് ശൈലി പ്രത്യേകമായി നല്‍കണം."
+""
 
-#: ../virtinst/storage.py:505
+#: ../virtinst/storage.py:507
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "സംഭരണ പൂള്‍ നിഷ്കര്‍ഷിയ്ക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: ../virtinst/storage.py:512
+#: ../virtinst/storage.py:514
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "സംഭരണ പൂള്‍ തയ്യാറാക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: ../virtinst/storage.py:518
+#: ../virtinst/storage.py:520
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "സംഭരണ പൂള്‍ ആരംഭിയ്ക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: ../virtinst/storage.py:524
+#: ../virtinst/storage.py:526
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "പൂള്‍ ഓട്ടോസ്റ്റാര്‍ട്ട് ഫ്ലാഗ് സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: ../virtinst/storage.py:593
+#: ../virtinst/storage.py:595
 #, python-format
 msgid "pool '%s' must be active."
 msgstr "പൂള്‍ '%s' സജീവമായിരിയ്ക്കണം."
 
-#: ../virtinst/storage.py:607
+#: ../virtinst/storage.py:609
 msgid "input_vol must be a virStorageVol"
 msgstr "input_vol ഒരു virStorageVol ആയിരിയ്ക്കണം"
 
-#: ../virtinst/storage.py:611
+#: ../virtinst/storage.py:613
 msgid ""
 "Creating storage from an existing volume is not supported by this libvirt "
 "version."
 msgstr ""
-"നിലവിലുള്ളൊരു വോള്യത്തില്‍ നിന്നും സംഭരണം തയ്യാറാക്കുന്നതു് ഈ libvirt പതിപ്പു് പിന്തുണയ്ക്കുന്നില്ല."
+"നിലവിലുള്ളൊരു വോള്യത്തില്‍ നിന്നും സംഭരണം തയ്യാറാക്കുന്നതു് ഈ libvirt "
+"പതിപ്പു് പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../virtinst/storage.py:616
+#: ../virtinst/storage.py:618
 msgid "virStorageVolume pointer to clone/use as input."
-msgstr "virStorageVolume പോയിന്റര്‍ ഇന്‍പുട്ടായി ക്ലോണ്‍ ചെയ്യുക/ഉപയോഗിയ്ക്കുക."
+msgstr ""
+"virStorageVolume പോയിന്റര്‍ ഇന്‍പുട്ടായി ക്ലോണ്‍ ചെയ്യുക/ഉപയോഗിയ്ക്കുക."
 
-#: ../virtinst/storage.py:624
+#: ../virtinst/storage.py:626
+#, fuzzy
 msgid ""
 "Creating storage by btrfs COW copy is not supported by this libvirt version."
 msgstr ""
+"നിലവിലുള്ളൊരു വോള്യത്തില്‍ നിന്നും സംഭരണം തയ്യാറാക്കുന്നതു് ഈ libvirt "
+"പതിപ്പു് പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../virtinst/storage.py:655
+#: ../virtinst/storage.py:657
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "'%s' പേരു് നിലവില്‍ മറ്റൊരു വോള്യത്തിന്റെ പേരാണു്."
 
-#: ../virtinst/storage.py:755
+#: ../virtinst/storage.py:757
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
-msgstr "സ്പാഴ്സ് ലോജിക്കല്‍ വോള്യങ്ങള്‍ പിന്തുണയ്ക്കുന്നില്ല, വ്യാപ്തിയ്ക്കനുസരിച്ചുള്ളതു് അനുവദിയ്ക്കുന്നു"
+msgstr ""
+"സ്പാഴ്സ് ലോജിക്കല്‍ വോള്യങ്ങള്‍ പിന്തുണയ്ക്കുന്നില്ല, "
+"വ്യാപ്തിയ്ക്കനുസരിച്ചുള്ളതു് അനുവദിയ്ക്കുന്നു"
 
-#: ../virtinst/storage.py:793
+#: ../virtinst/storage.py:795
 #, python-format
 msgid "Allocating '%s'"
 msgstr "'%s' അനുവദിയ്ക്കുന്നു"
 
-#: ../virtinst/storage.py:863
+#: ../virtinst/storage.py:865
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
 "M requested allocation > %d M available)"
 msgstr ""
-"വോള്യം തയ്യാറാക്കുന്നതിനായി സംഭരണ പൂളില്‍ മതിയായ സ്ഥലം ലഭ്യമല്ല. (ആവശ്യപ്പെട്ട %d M വ്യാപ്തി "
-"> %d M ലഭ്യമായതു്)"
+"വോള്യം തയ്യാറാക്കുന്നതിനായി സംഭരണ പൂളില്‍ മതിയായ സ്ഥലം ലഭ്യമല്ല. "
+"(ആവശ്യപ്പെട്ട %d M വ്യാപ്തി > %d M ലഭ്യമായതു്)"
 
-#: ../virtinst/storage.py:869
+#: ../virtinst/storage.py:871
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%d M requested capacity > %d M available)"
 msgstr ""
-"വോള്യം പൂര്‍ണ്ണമായും അനുവദിയ്ക്കുമ്പോള്‍ ആവശ്യപ്പെട്ട വോള്യം വിശേഷത ലഭ്യമായ പൂള്‍ സ്ഥലത്തേക്കാള്‍ "
-"വലുതാകുന്നു. (ആവശ്യപ്പെട്ട %d M വ്യാപ്തി > %d M ലഭ്യമായതു്)"
+"വോള്യം പൂര്‍ണ്ണമായും അനുവദിയ്ക്കുമ്പോള്‍ ആവശ്യപ്പെട്ട വോള്യം വിശേഷത ലഭ്യമായ "
+"പൂള്‍ സ്ഥലത്തേക്കാള്‍ വലുതാകുന്നു. (ആവശ്യപ്പെട്ട %d M വ്യാപ്തി > %d M "
+"ലഭ്യമായതു്)"
 
 #: ../virtinst/urlfetcher.py:106
 #, python-format
@@ -4826,8 +4898,9 @@ msgid ""
 "UUID must be a 32-digit hexadecimal number. It may take the form xxxxxxxx-"
 "xxxx-xxxx-xxxx-xxxxxxxxxxxx or may omit hyphens altogether."
 msgstr ""
-"യുയുഐഡി ഒരു 32 അക്കമുള്ള ഹെക്സാഡെസിമല്‍ നംബറായിരിയ്ക്കണം. xxxxxxxx-xxxx-xxxx-xxxx-"
-"xxxxxxxxxxxx എന്ന ശൈലിയിലായിരിയ്ക്കണം അല്ലെങ്കില്‍ ഹൈഫനുകള്‍ ഒഴിവാക്കുക."
+"യുയുഐഡി ഒരു 32 അക്കമുള്ള ഹെക്സാഡെസിമല്‍ നംബറായിരിയ്ക്കണം. xxxxxxxx-xxxx-xxxx-"
+"xxxx-xxxxxxxxxxxx എന്ന ശൈലിയിലായിരിയ്ക്കണം അല്ലെങ്കില്‍ ഹൈഫനുകള്‍ ഒഴിവാക്കുക."
+""
 
 #: ../virtinst/util.py:147
 #, python-format
@@ -4846,7 +4919,8 @@ msgstr "മാക് വിലാസം ഒരു സ്ട്രിങ്ങാ
 #: ../virtinst/util.py:165
 #, python-format
 msgid "MAC address must be of the format AA:BB:CC:DD:EE:FF, was '%s'"
-msgstr "മാക് വിലാസത്തിന്റെ ശൈലി AA:BB:CC:DD:EE:FF ആയിരിയ്ക്കണം, '%s' ആയിരുന്നു"
+msgstr ""
+"മാക് വിലാസത്തിന്റെ ശൈലി AA:BB:CC:DD:EE:FF ആയിരിയ്ക്കണം, '%s' ആയിരുന്നു"
 
 #: ../virtinst/util.py:218
 msgid "Name generation range exceeded."
@@ -5040,9 +5114,9 @@ msgstr "_ഐഒ ബെയിസ്:"
 msgid "panic"
 msgstr "പാനിക്ക്"
 
-#: ../ui/addhardware.ui.h:41 ../ui/create.ui.h:68
-#: ../ui/createinterface.ui.h:32 ../ui/createnet.ui.h:35
-#: ../ui/createpool.ui.h:14 ../ui/createvol.ui.h:15 ../ui/snapshots.ui.h:7
+#: ../ui/addhardware.ui.h:41 ../ui/create.ui.h:69 ../ui/createinterface.ui.h:32
+#: ../ui/createnet.ui.h:35 ../ui/createpool.ui.h:14 ../ui/createvol.ui.h:15
+#: ../ui/snapshots.ui.h:7
 msgid "_Finish"
 msgstr "അവസാനിച്ചു (_F)"
 
@@ -5123,7 +5197,8 @@ msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ക്ലോ�
 
 #: ../ui/clone.ui.h:2
 msgid "<span size='large' color='white'>Clone virtual machine</span>"
-msgstr "<span size='large' color='white'>വിര്‍ച്ച്വല്‍ മഷീന്‍ ക്ലോണ്‍ ചെയ്യുക</span>"
+msgstr ""
+"<span size='large' color='white'>വിര്‍ച്ച്വല്‍ മഷീന്‍ ക്ലോണ്‍ ചെയ്യുക</span>"
 
 #: ../ui/clone.ui.h:3
 msgid "Create clone based on:"
@@ -5145,11 +5220,11 @@ msgstr "<span color='#484848'>നെറ്റ്‌വര്‍ക്കിങ�
 msgid "No storage to clone"
 msgstr "ക്ലോണ്‍ ചെയ്യുവാന്‍ സംഭരണം ലഭ്യമല്ല"
 
-#: ../ui/clone.ui.h:8 ../ui/create.ui.h:63
+#: ../ui/clone.ui.h:8 ../ui/create.ui.h:64
 msgid "<span color='#484848'>Storage:</span>"
 msgstr "<span color='#484848'>സംഭരണം:</span>"
 
-#: ../ui/clone.ui.h:9 ../ui/create.ui.h:59
+#: ../ui/clone.ui.h:9 ../ui/create.ui.h:60
 msgid "<span color='#484848'>_Name:</span>"
 msgstr "<span color='#484848'>_പേര്:</span>"
 
@@ -5160,8 +5235,8 @@ msgid ""
 "uses the existing disk image for both the original and the new machine.</"
 "span>"
 msgstr ""
-"<span size='small'>ക്ലോണിങ്, യഥാര്‍ത്ഥ ഡിസ്കിന്റെ പുതിയ പകര്‍പ്പുണ്ടാക്കുന്നു. "
-"യഥാര്‍ത്ഥത്തിലുള്ളതിനും\n"
+"<span size='small'>ക്ലോണിങ്, യഥാര്‍ത്ഥ ഡിസ്കിന്റെ പുതിയ "
+"പകര്‍പ്പുണ്ടാക്കുന്നു. യഥാര്‍ത്ഥത്തിലുള്ളതിനും\n"
 "പുതിയ മഷീനിനും നിലവിലുള്ള ഡിസ്ക് ഇമേജ് പങ്കിടുന്നു.</span>"
 
 #: ../ui/clone.ui.h:12
@@ -5278,11 +5353,14 @@ msgstr "പുതിയ വിഎം"
 
 #: ../ui/create.ui.h:2
 msgid "<span size='large' color='white'>Create a new virtual machine</span>"
-msgstr "<span size='large' color='white'>ഒരു പുതിയ വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉണ്ടാക്കുക</span>"
+msgstr ""
+"<span size='large' color='white'>ഒരു പുതിയ വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉണ്ടാക്കുക</"
+"span>"
 
 #: ../ui/create.ui.h:3
 msgid "Choose how you would like to install the operating system"
-msgstr "ഓപ്പറേറ്റിങ് സിസ്റ്റം എങ്ങനെ ഇന്‍സ്റ്റോള്‍ ചെയ്യണമെന്നു് തെരഞ്ഞെടുക്കുക"
+msgstr ""
+"ഓപ്പറേറ്റിങ് സിസ്റ്റം എങ്ങനെ ഇന്‍സ്റ്റോള്‍ ചെയ്യണമെന്നു് തെരഞ്ഞെടുക്കുക"
 
 #: ../ui/create.ui.h:4
 msgid "_Local install media (ISO image or CDROM)"
@@ -5333,11 +5411,9 @@ msgid "Architecture options"
 msgstr "ആര്‍ക്കിറ്റക്ചര്‍ ഐച്ഛികങ്ങള്‍"
 
 #: ../ui/create.ui.h:16
-msgid ""
-"Error message\n"
+msgid "Error message\n"
 "bar"
-msgstr ""
-"പിശക് സന്ദേശത്തിനുള്ള\n"
+msgstr "പിശക് സന്ദേശത്തിനുള്ള\n"
 "പട്ട"
 
 #: ../ui/create.ui.h:19
@@ -5445,7 +5521,9 @@ msgstr ""
 
 #: ../ui/create.ui.h:45
 msgid "A_utomatically detect operating system based on install media"
-msgstr "ഇന്‍സ്റ്റോള്‍ മീഡിയ അനുസരിച്ചുള്ള ഓപ്പറേറ്റിങ് സിസ്റ്റം _സ്വയമായി കണ്ടുപിടിക്കുക"
+msgstr ""
+"ഇന്‍സ്റ്റോള്‍ മീഡിയ അനുസരിച്ചുള്ള ഓപ്പറേറ്റിങ് സിസ്റ്റം _സ്വയമായി "
+"കണ്ടുപിടിക്കുക"
 
 #: ../ui/create.ui.h:46
 msgid "Choose an operating system type and version"
@@ -5492,37 +5570,43 @@ msgid "_Enable storage for this virtual machine"
 msgstr "ഈ വിര്‍ച്ച്വല്‍ മഷീനുള്ള സംഭരണം _സജ്ജമാക്കുക"
 
 #: ../ui/create.ui.h:58
+#, fuzzy
+msgid "Ready to begin the installation"
+msgstr "ഇന്‍സ്റ്റലേഷന്‍ ആരംഭിയ്ക്കുക"
+
+#: ../ui/create.ui.h:59
 msgid "C_ustomize configuration before install"
 msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനു് മുമ്പു് ക്രമീകരണം _യഥേഷ്ടമാക്കുക"
 
-#: ../ui/create.ui.h:60
+#: ../ui/create.ui.h:61
 msgid "<span color='#484848'>Install:</span>"
 msgstr "<span color='#484848'>ഇന്‍സ്റ്റോള്‍ ചെയ്യുക:</span>"
 
-#: ../ui/create.ui.h:61
+#: ../ui/create.ui.h:62
 msgid "<span color='#484848'>Memory:</span>"
 msgstr "<span color='#484848'>മെമ്മറി:</span>"
 
-#: ../ui/create.ui.h:62
+#: ../ui/create.ui.h:63
 msgid "<span color='#484848'>CPUs:</span>"
 msgstr "<span color='#484848'>CPUs:</span>"
 
-#: ../ui/create.ui.h:64
+#: ../ui/create.ui.h:65
 msgid "<span color='#484848'>OS:</span>"
 msgstr "<span color='#484848'>ഒഎസ്:</span>"
 
-#: ../ui/create.ui.h:65
+#: ../ui/create.ui.h:66
 msgid ""
 "<small>Specifying an operating system is required for best performance</"
 "small>"
 msgstr ""
-"<small>ഏറ്റവും ഉത്തമമായി പ്രവര്‍ത്തനത്തിനു് ഒരു ഓപ്പറേറ്റിങ് സിസ്റ്റം വ്യക്തമാക്കേണ്ടതുണ്ടു്</small>"
+"<small>ഏറ്റവും ഉത്തമമായി പ്രവര്‍ത്തനത്തിനു് ഒരു ഓപ്പറേറ്റിങ് സിസ്റ്റം "
+"വ്യക്തമാക്കേണ്ടതുണ്ടു്</small>"
 
-#: ../ui/create.ui.h:66
+#: ../ui/create.ui.h:67
 msgid "N_etwork selection"
 msgstr ""
 
-#: ../ui/create.ui.h:67
+#: ../ui/create.ui.h:68
 msgid "Finish"
 msgstr "അവസാനിച്ചു "
 
@@ -5604,7 +5688,9 @@ msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫ�
 
 #: ../ui/createinterface.ui.h:20
 msgid "<span size='large' color='white'>Configure network interface</span>"
-msgstr "<span size='large' color='white'>നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസ് ക്രമീകരിക്കുക</span>"
+msgstr ""
+"<span size='large' color='white'>നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസ് "
+"ക്രമീകരിക്കുക</span>"
 
 #: ../ui/createinterface.ui.h:21
 msgid "Select the interface type you would like to configure."
@@ -5696,7 +5782,9 @@ msgstr "ഒരു പുതിയ വിര്‍ച്ച്വല്‍ നെ
 
 #: ../ui/createnet.ui.h:2
 msgid "<span size='large' color='white'>Create virtual network</span>"
-msgstr "<span size='large' color='white'>വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് തയ്യാറാക്കുക</span>"
+msgstr ""
+"<span size='large' color='white'>വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് തയ്യാറാക്കുക</"
+"span>"
 
 #: ../ui/createnet.ui.h:3
 msgid "Choose a name for your virtual network:"
@@ -5716,11 +5804,15 @@ msgstr "നെറ്റ്‌വറ്‍ക്കിന്‍റെ പേര�
 
 #: ../ui/createnet.ui.h:7
 msgid "Choose <b>IPv4</b> address space for the virtual network:"
-msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്കിനുള്ള <b>IPv4</b> വിലാസത്തിന്റെ സ്ഥലം തെരഞ്ഞെടുക്കുക:"
+msgstr ""
+"വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്കിനുള്ള <b>IPv4</b> വിലാസത്തിന്റെ സ്ഥലം "
+"തെരഞ്ഞെടുക്കുക:"
 
 #: ../ui/createnet.ui.h:8
 msgid "Enable IPv4 network address space definition"
-msgstr "IPv4 നെറ്റ്‍വര്‍ക്ക് വിലാസ സ്പെയിസ് നിഷ്കര്‍ഷിയ്ക്കുന്നതു് പ്രവര്‍ത്തന സജ്ജമാക്കുക"
+msgstr ""
+"IPv4 നെറ്റ്‍വര്‍ക്ക് വിലാസ സ്പെയിസ് നിഷ്കര്‍ഷിയ്ക്കുന്നതു് പ്രവര്‍ത്തന "
+"സജ്ജമാക്കുക"
 
 #: ../ui/createnet.ui.h:9
 msgid "_Network:"
@@ -5774,11 +5866,15 @@ msgstr "ഗേറ്റ്‌വേ <b>മുഖേന</b>:"
 
 #: ../ui/createnet.ui.h:21
 msgid "Choose <b>IPv6</b> address space for the virtual network:"
-msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്കിനുള്ള <b>IPv6</b> വിലാസത്തിന്റെ സ്ഥലം തെരഞ്ഞെടുക്കുക:"
+msgstr ""
+"വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്കിനുള്ള <b>IPv6</b> വിലാസത്തിന്റെ സ്ഥലം "
+"തെരഞ്ഞെടുക്കുക:"
 
 #: ../ui/createnet.ui.h:22
 msgid "Enable IPv6 network address space definition"
-msgstr "IPv6 നെറ്റ്‌വര്‍ക്ക് വിലാസ സ്ഥലം നിഷ്കര്‍ഷിയ്ക്കുന്നതു് പ്രവര്‍ത്തന സജ്ജമാക്കുക"
+msgstr ""
+"IPv6 നെറ്റ്‌വര്‍ക്ക് വിലാസ സ്ഥലം നിഷ്കര്‍ഷിയ്ക്കുന്നതു് പ്രവര്‍ത്തന "
+"സജ്ജമാക്കുക"
 
 #: ../ui/createnet.ui.h:23
 msgid ""
@@ -5825,9 +5921,9 @@ msgid ""
 "internal routing between virtual machines.  By default, IPv4 internal "
 "routing is enabled."
 msgstr ""
-"ഒരു IPv6 നെറ്റ്‌വര്‍ക്ക് വിലാസം <b>നല്‍കിയിട്ടില്ലെങ്കില്‍</b>, ഇതു് വിര്‍ച്ച്വല്‍ മഷീനുകളുടെ ഇടയില്‍ "
-"IPv6 ആന്തരിക റൌട്ടിങ് പ്രവര്‍ത്തന സജ്ജമാക്കുന്നു. സ്വതവേ, IPv4 ആന്തരിക റൌട്ടിങ് പ്രവര്‍ത്തന "
-"സജ്ജമാകുന്നു."
+"ഒരു IPv6 നെറ്റ്‌വര്‍ക്ക് വിലാസം <b>നല്‍കിയിട്ടില്ലെങ്കില്‍</b>, ഇതു് "
+"വിര്‍ച്ച്വല്‍ മഷീനുകളുടെ ഇടയില്‍ IPv6 ആന്തരിക റൌട്ടിങ് പ്രവര്‍ത്തന "
+"സജ്ജമാക്കുന്നു. സ്വതവേ, IPv4 ആന്തരിക റൌട്ടിങ് പ്രവര്‍ത്തന സജ്ജമാകുന്നു."
 
 #: ../ui/createnet.ui.h:34
 msgid "DNS Domain Name:"
@@ -5934,12 +6030,16 @@ msgid ""
 "<small>This VM is currently running and will be forced off before being "
 "deleted</small>"
 msgstr ""
-"<small>ഈ വിഎം നിലവില്‍ പ്രവര്‍ത്തിയ്ക്കുന്നു, വെട്ടി നീക്കപ്പെടുന്നതിനു് മുമ്പു് നിര്‍ബന്ധമായും ഓഫ് "
-"ആക്കുന്നു</small>"
+"<small>ഈ വിഎം നിലവില്‍ പ്രവര്‍ത്തിയ്ക്കുന്നു, വെട്ടി നീക്കപ്പെടുന്നതിനു് "
+"മുമ്പു് നിര്‍ബന്ധമായും ഓഫ് ആക്കുന്നു</small>"
 
 #: ../ui/delete.ui.h:3
 msgid "Delete _associated storage files"
 msgstr "_സ്റ്റോറേജ് ഫയലുകള്‍ വെട്ടി നീക്കുക"
+
+#: ../ui/details.ui.h:1
+msgid "Virtual Machine"
+msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ "
 
 #: ../ui/details.ui.h:2 ../ui/host.ui.h:2 ../ui/manager.ui.h:2
 msgid "_File"
@@ -6227,7 +6327,9 @@ msgstr "വിര്‍ച്ച്വല്‍ സിപിയു തെരഞ�
 
 #: ../ui/details.ui.h:77
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
-msgstr "<small>കൂടുതല്‍ vCPU സമ‌ര്‍പ്പിയ്ക്കുന്നതു് പ്രവര്‍ത്തനത്തെ ബാധിയ്ക്കാം</small>"
+msgstr ""
+"<small>കൂടുതല്‍ vCPU സമ‌ര്‍പ്പിയ്ക്കുന്നതു് പ്രവര്‍ത്തനത്തെ ബാധിയ്ക്കാം</"
+"small>"
 
 #: ../ui/details.ui.h:78
 msgid "<b>CPUs</b>"
@@ -6685,7 +6787,8 @@ msgstr "സൂക്ഷിച്ച മഷീന്‍ വീണ്ടെടു�
 
 #: ../ui/host.ui.h:4
 msgid "Restore a saved machine from a filesystem image"
-msgstr "ഒരു ഫയല്‍ സിസ്റ്റം ഇമേജില്‍ നിന്നും സംരക്ഷിച്ച ഒരു മഷീന്‍ വീണ്ടെടുക്കുക"
+msgstr ""
+"ഒരു ഫയല്‍ സിസ്റ്റം ഇമേജില്‍ നിന്നും സംരക്ഷിച്ച ഒരു മഷീന്‍ വീണ്ടെടുക്കുക"
 
 #: ../ui/host.ui.h:6
 msgid "Libvirt URI:"
@@ -6740,16 +6843,18 @@ msgid "Static Route:"
 msgstr "സ്റ്റാറ്റിക്ക് റൂട്ട്: "
 
 #: ../ui/host.ui.h:23
+#, fuzzy
 msgid "<b>_IPv4 configuration</b>"
-msgstr ""
+msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
 
 #: ../ui/host.ui.h:25
 msgid "<b>IPv6 configuration</b>"
 msgstr "<b>IPv6 ക്രമീകരണം</b>"
 
 #: ../ui/host.ui.h:26
+#, fuzzy
 msgid "Enable i_nbound QoS"
-msgstr ""
+msgstr "ഇന്‍ബൌണ്ട് ക്യൂഒഎസ് പ്രവര്‍ത്തന സജ്ജമാക്കുക"
 
 #: ../ui/host.ui.h:27
 msgid "Average (KiB/sec):"
@@ -6764,16 +6869,18 @@ msgid "Peak (KiB/sec):"
 msgstr "പീക്ക് (KiB/sec):"
 
 #: ../ui/host.ui.h:30
+#, fuzzy
 msgid "Enable ou_tbound QoS"
-msgstr ""
+msgstr "ഔട്ട്ബൌണ്ട് ക്യുഒഎസ് പ്രവര്‍ത്തന സജ്ജമാക്കുക"
 
 #: ../ui/host.ui.h:31
 msgid "Burst (KiB/sec):"
 msgstr "ബേര്‍സ്റ്റ് (KiB/sec):"
 
 #: ../ui/host.ui.h:32
+#, fuzzy
 msgid "<b>_QoS configuration</b>"
-msgstr ""
+msgstr "<b>ക്യൂഒഎസ് ക്രമീകരണം</b>"
 
 #: ../ui/host.ui.h:33
 msgid "Add Network"
@@ -7108,11 +7215,9 @@ msgid "CPU _default:"
 msgstr "സിപിയു _ഡിഫോള്‍ട്ട്:"
 
 #: ../ui/preferences.ui.h:21
-msgid ""
-"Add Spice _USB\n"
+msgid "Add Spice _USB\n"
 "Redirection:"
-msgstr ""
-"സ്പയിസ്  യു_എസ്ബി\n"
+msgstr "സ്പയിസ്  യു_എസ്ബി\n"
 "റീഡയറക്ഷന്‍ ചേര്‍ക്കുക:"
 
 #: ../ui/preferences.ui.h:23
@@ -7142,10 +7247,11 @@ msgid ""
 "disabled to ensure that typing in the guest does not accidentally perform an "
 "operation in virt-manager's console window."
 msgstr ""
-"ഗസ്റ്റ് ഗ്രാഫിക്കല്‍ കണ്‍സോളില്‍ കീബോര്‍ഡ് ലഭ്യമാക്കുമ്പോള്‍, കണ്‍സോള്‍ ജാലക മെനുകള്‍ക്കുള്ള എളുപ്പവഴികള്‍ "
-"പ്രവര്‍ത്തന രഹിതമാക്കരുതു് (Alt+F -> File, etc.) ഗസ്റ്റില്‍ അറിയാതെ ടൈപ്പ് ചെയ്താല്‍, അതു് virt-"
-"manager-ന്റെ കണ്‍സോള്‍ ജാലകത്തില്‍ ആവശ്യമില്ലാത്ത പ്രക്രിയ നടപ്പിലാകാതിരിയ്ക്കണ്ടതിനു് ഇവ "
-"സാധാരണ പ്രവര്‍ത്തന രഹിതമാക്കുന്നു."
+"ഗസ്റ്റ് ഗ്രാഫിക്കല്‍ കണ്‍സോളില്‍ കീബോര്‍ഡ് ലഭ്യമാക്കുമ്പോള്‍, കണ്‍സോള്‍ ജാലക "
+"മെനുകള്‍ക്കുള്ള എളുപ്പവഴികള്‍ പ്രവര്‍ത്തന രഹിതമാക്കരുതു് (Alt+F -> File, etc."
+") ഗസ്റ്റില്‍ അറിയാതെ ടൈപ്പ് ചെയ്താല്‍, അതു് virt-manager-ന്റെ കണ്‍സോള്‍ "
+"ജാലകത്തില്‍ ആവശ്യമില്ലാത്ത പ്രക്രിയ നടപ്പിലാകാതിരിയ്ക്കണ്ടതിനു് ഇവ സാധാരണ "
+"പ്രവര്‍ത്തന രഹിതമാക്കുന്നു."
 
 #: ../ui/preferences.ui.h:29
 msgid "_Force console shortcuts:"
@@ -7328,14 +7434,3 @@ msgstr "വോള്യം പട്ടിക പുതുക്കുക"
 #: ../ui/storagelist.ui.h:20
 msgid "Delete volume"
 msgstr ""
-
-#~ msgid "Invalid RNG type."
-#~ msgstr "തെറ്റായ RNG തരം."
-
-#~ msgid "Checking installer location failed: Could not find media '%s'."
-#~ msgstr ""
-#~ "ഇന്‍സ്റ്റോളര്‍ സ്ഥാനം പരിശോധിയ്ക്കുന്നതില്‍ പരാജയം. '%s' മീഡിയാ കണ്ടുപിടിയ്ക്കുവാന്‍ "
-#~ "സാധ്യമായില്ല."
-
-#~ msgid "_Cancel"
-#~ msgstr "_റദ്ദാക്കുക"
