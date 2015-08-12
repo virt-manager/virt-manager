@@ -209,10 +209,12 @@ class StoragePool(_StorageObject):
         try:
             pool = conn.storagePoolLookupByName(name)
         except libvirt.libvirtError:
-            pass
+            # Try default pool path when "default" name fails
+            pool = StoragePool.lookup_pool_by_path(conn, path)
 
         if pool:
-            return
+            # This is a libvirt pool object so create a StoragePool from it
+            return StoragePool(conn, parsexml=pool.XMLDesc(0))
 
         try:
             logging.debug("Attempting to build default pool with target '%s'",
