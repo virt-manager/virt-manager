@@ -29,7 +29,7 @@ from .baseclass import vmmGObjectUI
 from .details import DETAILS_PAGE_CONSOLE
 from .serialcon import vmmSerialConsole
 from .sshtunnels import ConnectionInfo
-from .viewers import SpiceViewer, VNCViewer
+from .viewers import SpiceViewer, VNCViewer, have_spice_gtk
 
 
 # console-pages IDs
@@ -665,7 +665,12 @@ class vmmConsolePages(vmmGObjectUI):
             if ginfo.gtype == "vnc":
                 viewer_class = VNCViewer
             elif ginfo.gtype == "spice":
-                viewer_class = SpiceViewer
+                if have_spice_gtk:
+                    viewer_class = SpiceViewer
+                else:
+                    raise RuntimeError("Error opening Spice console, "
+                                       "SpiceClientGtk missing")
+
 
             self._viewer = viewer_class(ginfo)
             self._connect_viewer_signals()

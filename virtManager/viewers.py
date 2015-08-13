@@ -25,9 +25,13 @@ from gi.repository import Gdk
 import gi
 gi.require_version('GtkVnc', '2.0')
 from gi.repository import GtkVnc
-gi.require_version('SpiceClientGtk', '3.0')
-from gi.repository import SpiceClientGtk
-from gi.repository import SpiceClientGLib
+try:
+    gi.require_version('SpiceClientGtk', '3.0')
+    from gi.repository import SpiceClientGtk
+    from gi.repository import SpiceClientGLib
+    have_spice_gtk = True
+except (ValueError, ImportError):
+    have_spice_gtk = False
 
 import logging
 import socket
