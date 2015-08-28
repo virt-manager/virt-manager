@@ -780,6 +780,91 @@ Controlling firewall and network filtering in libvirt. Value can be any nwfilter
 defined by the C<virsh> 'nwfilter' subcommands. Available filters can be listed
 by running 'virsh nwfilter-list', e.g.: 'clean-traffic', 'no-mac-spoofing', ...
 
+=item B<virtualport_type>
+
+The type of virtual port profile, one the following values
+
+=over 4
+
+=item C<802.Qbg>
+
+The following additional parameters are accepted
+
+=over 4
+
+=item B<virtualport_managerid>
+
+
+The VSI Manager ID identifies the database containing the VSI type
+and instance definitions. This is an integer value and the value
+0 is reserved.
+
+=item B<virtualport_typeid>
+
+The VSI Type ID identifies a VSI type characterizing the network
+access. VSI types are typically managed by network administrator.
+This is an integer value.
+
+=item B<virtualport_typeidversion>
+
+The VSI Type Version allows multiple versions of a VSI Type. This
+is an integer value.
+
+=item B<virtualport_instanceid>
+
+The VSI Instance ID Identifier is generated when a VSI instance
+(i.e. a virtual interface of a virtual machine) is created. This
+is a globally unique identifier.
+
+=back
+
+=item C<802.Qbh>
+
+The following additional parameters are accepted
+
+=over 4
+
+=item B<virtualport_profileid>
+
+The profile ID contains the name of the port profile that is to
+be applied to this interface. This name is resolved by the port
+profile database into the network parameters from the port profile,
+and those network parameters will be applied to this interface.
+
+=back
+
+=item C<openvswitch>
+
+The following additional parameters are accepted
+
+=over 4
+
+=item B<virtualport_profileid>
+
+The OpenVSwitch port profile for the interface
+
+=item B<virtualport_interfaceid>
+
+A UUID to uniquely identify the interface. If omitted one will
+be generated automatically
+
+=back
+
+=item C<midonet>
+
+The following additional parameters are accepted
+
+=over 4
+
+=item B<virtualport_interfaceid>
+
+A UUID identifying the port in the network to which the interface
+will be bound
+
+=back
+
+=back
+
 =back
 
 Use --network=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsNICS>
