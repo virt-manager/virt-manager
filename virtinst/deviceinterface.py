@@ -60,6 +60,8 @@ class VirtualPort(XMLBuilder):
     typeid = XMLProperty("./parameters/@typeid", is_int=True)
     typeidversion = XMLProperty("./parameters/@typeidversion", is_int=True)
     instanceid = XMLProperty("./parameters/@instanceid")
+    profileid = XMLProperty("./parameters/@profileid")
+    interfaceid = XMLProperty("./parameters/@interfaceid")
 
 
 class VirtualNetworkInterface(VirtualDevice):

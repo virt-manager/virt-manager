@@ -168,6 +168,14 @@
       <model type="virtio"/>
       <driver name="qemu" queues="3"/>
     </interface>
+    <interface type="bridge">
+      <source bridge="ovsbr"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <virtualport type="openvswitch">
+        <parameters profileid="demo" interfaceid="09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b"/>
+      </virtualport>
+    </interface>
     <interface type="direct">
       <source dev="eth5" mode="vepa"/>
       <mac address="00:11:22:33:44:55"/>

@@ -1761,11 +1761,19 @@ class ParserNetwork(VirtCLIParser):
         self.set_param("driver_queues", "driver_queues")
 
         self.set_param("virtualport.type", "virtualport_type")
+
+        # For 802.1Qbg
         self.set_param("virtualport.managerid", "virtualport_managerid")
         self.set_param("virtualport.typeid", "virtualport_typeid")
         self.set_param("virtualport.typeidversion",
             "virtualport_typeidversion")
         self.set_param("virtualport.instanceid", "virtualport_instanceid")
+
+        # For openvswitch & 802.1Qbh
+        self.set_param("virtualport.profileid", "virtualport_profileid")
+
+        # For openvswitch & midonet
+        self.set_param("virtualport.interfaceid", "virtualport_interfaceid")
 
     def _parse(self, optsobj, inst):
         if optsobj.fullopts == "none":
