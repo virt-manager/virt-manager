@@ -299,10 +299,6 @@ class vmmFSDetails(vmmGObjectUI):
         if not target:
             return self.err.val_err(_("A filesystem target must be specified"))
 
-        if self.conn.is_qemu() and self.filesystem_target_present(target):
-            return self.err.val_err(_('Invalid target path. A filesystem with'
-                                      ' that target already exists'))
-
         try:
             self._dev = VirtualFilesystem(conn)
             if fstype == VirtualFilesystem.TYPE_RAM:
@@ -327,15 +323,6 @@ class vmmFSDetails(vmmGObjectUI):
                 self._dev.wrpolicy = wrpolicy
         except Exception, e:
             return self.err.val_err(_("Filesystem parameter error"), e)
-
-    def filesystem_target_present(self, target):
-        fsdevs = self.vm.get_filesystem_devices()
-
-        for fs in fsdevs:
-            if (fs.target == target):
-                return True
-
-        return False
 
     def _browse_file(self, textent, isdir=False):
         def set_storage_cb(src, path):
