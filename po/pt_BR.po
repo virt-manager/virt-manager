@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # diegobz1 <diegobz@gmail.com>, 2006
 # gscrivano <Gscrivano@gmail.com>, 2014
@@ -17,15 +17,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-01 14:01-0400\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2015-09-02 09:43-0400\n"
 "PO-Revision-Date: 2015-08-04 01:23-0400\n"
 "Last-Translator: Bruno R. Zanuzzo <xmrbrz@fedoraproject.org>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/virt-"
 "manager/language/pt_BR/)\n"
 "Language: pt-BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Zanata 3.7.1\n"
 
@@ -103,9 +103,11 @@ msgstr ""
 "--armazenamento em disco deve ser especificado (substituir com --disk none)"
 
 #: ../virt-install:439
-msgid "An install method must be specified\n"
+msgid ""
+"An install method must be specified\n"
 "(%(methods)s)"
-msgstr "Um método de instalação deve ser especificado\n"
+msgstr ""
+"Um método de instalação deve ser especificado\n"
 "(%(methods)s)"
 
 #: ../virt-install:446
@@ -189,8 +191,8 @@ msgstr ""
 
 #: ../virt-install:553
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with -"
-"-os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with "
+"--os-variant for optimal results."
 msgstr ""
 
 #: ../virt-install:573
@@ -202,7 +204,8 @@ msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
 #: ../virt-install:749
-msgid "\n"
+msgid ""
+"\n"
 "Starting install..."
 msgstr ""
 
@@ -212,7 +215,8 @@ msgstr ""
 
 #: ../virt-install:770
 #, c-format
-msgid "You can restart your domain by running:\n"
+msgid ""
+"You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
@@ -440,8 +444,8 @@ msgstr "Novo arquivo a ser usado como imagem do disco para o novo convidado. "
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
-"hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
+"copy=hdc)"
 msgstr ""
 "Forçar a cópia de dispositivos (i.e. se 'hdc' for um dispositivo de cdrom "
 "somente de leitura, --force-copy=hdc)"
@@ -631,7 +635,8 @@ msgid ""
 msgstr ""
 
 #: ../virt-xml:353
-msgid "Add specified device. Example:\n"
+msgid ""
+"Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
 
@@ -1104,7 +1109,8 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "Não é possível clonar armazenamento remoto não gerenciado."
 
 #: ../virtManager/clone.py:84
-msgid "Block devices to clone must be libvirt\n"
+msgid ""
+"Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 "Dispositivos de blocos a serem clonados\n"
@@ -1396,7 +1402,8 @@ msgstr "Nenhuma conexão ativa para instalar"
 
 #: ../virtManager/create.py:424
 #, python-format
-msgid "Failed to setup UEFI for AArch64: %s\n"
+msgid ""
+"Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 
@@ -1952,7 +1959,8 @@ msgstr ""
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid "The following paths will be deleted:\n"
+msgid ""
+"The following paths will be deleted:\n"
 "\n"
 "%s"
 msgstr ""
@@ -2016,9 +2024,11 @@ msgstr "O armazenamento está marcado como compartilhavel."
 
 #: ../virtManager/delete.py:400
 #, python-format
-msgid "Storage is in use by the following virtual machines:\n"
+msgid ""
+"Storage is in use by the following virtual machines:\n"
 "- %s "
-msgstr "O armazenamento está em uso pelas seguintes máquinas virtuais:\n"
+msgstr ""
+"O armazenamento está em uso pelas seguintes máquinas virtuais:\n"
 "- %s "
 
 #: ../virtManager/details.py:163
@@ -2078,7 +2088,8 @@ msgstr "Watchdog"
 #: ../virtManager/details.py:622
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
-msgstr "Isso irá remover a conexão:\n"
+msgstr ""
+"Isso irá remover a conexão:\n"
 "\n"
 "%s\n"
 "\n"
@@ -2514,7 +2525,8 @@ msgstr ""
 "para conectar-se a esse host."
 
 #: ../virtManager/engine.py:618
-msgid "Verify that the 'libvirtd' daemon is running\n"
+msgid ""
+"Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr "Verifique que o daemon 'libvirtd'"
 
@@ -2955,12 +2967,14 @@ msgstr "Entrada e saída de rede"
 
 #: ../virtManager/manager.py:511
 #, python-format
-msgid "This will remove the connection:\n"
+msgid ""
+"This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
 "Are you sure?"
-msgstr "Isso irá remover a conexão:\n"
+msgstr ""
+"Isso irá remover a conexão:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3023,9 +3037,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by libvirt."
-" You must configure the destination to have a valid publicly accessible "
-"hostname."
+"The destination's hostname is 'localhost', which will be rejected by "
+"libvirt. You must configure the destination to have a valid publicly "
+"accessible hostname."
 msgstr ""
 
 #: ../virtManager/migrate.py:295
@@ -3523,7 +3537,8 @@ msgstr ""
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid "Syntax error at line %d: %s\n"
+msgid ""
+"Syntax error at line %d: %s\n"
 "%s"
 msgstr ""
 
@@ -3684,7 +3699,8 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:585
-msgid "CPU model and features. Ex:\n"
+msgid ""
+"CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 msgstr ""
 
@@ -3737,8 +3753,7 @@ msgid "Configure a text console connection between the guest and host"
 msgstr ""
 
 #: ../virtinst/cli.py:631
-msgid ""
-"Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
 #: ../virtinst/cli.py:634
@@ -3761,7 +3776,8 @@ msgid "Configure guest video hardware."
 msgstr ""
 
 #: ../virtinst/cli.py:659
-msgid "Configure a guest smartcard device. Ex:\n"
+msgid ""
+"Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 
@@ -3772,22 +3788,26 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:665
-msgid "Configure a guest memballoon device. Ex:\n"
+msgid ""
+"Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 
 #: ../virtinst/cli.py:668
-msgid "Configure a guest TPM device. Ex:\n"
+msgid ""
+"Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
 
 #: ../virtinst/cli.py:671
-msgid "Configure a guest RNG device. Ex:\n"
+msgid ""
+"Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
 msgstr ""
 
 #: ../virtinst/cli.py:674
-msgid "Configure a guest panic device. Ex:\n"
+msgid ""
+"Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
@@ -4709,8 +4729,8 @@ msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
 "M requested allocation > %d M available)"
 msgstr ""
-"Não há espaço livre suficiente no pool de armazenamento para criar um volume."
-" (%d M requer alocação > %d M disponível)"
+"Não há espaço livre suficiente no pool de armazenamento para criar um "
+"volume. (%d M requer alocação > %d M disponível)"
 
 #: ../virtinst/storage.py:871
 #, python-format
@@ -5295,7 +5315,8 @@ msgid "Architecture options"
 msgstr ""
 
 #: ../ui/create.ui.h:16
-msgid "Error message\n"
+msgid ""
+"Error message\n"
 "bar"
 msgstr ""
 
@@ -7070,7 +7091,8 @@ msgid "CPU _default:"
 msgstr ""
 
 #: ../ui/preferences.ui.h:21
-msgid "Add Spice _USB\n"
+msgid ""
+"Add Spice _USB\n"
 "Redirection:"
 msgstr ""
 

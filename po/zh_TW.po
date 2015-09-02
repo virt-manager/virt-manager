@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Cheng-Chia Tseng <pswo10680@gmail.com>, 2012
 # Chester Cheng <ccheng@redhat.com>, 2012-2013
@@ -13,15 +13,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-01 14:01-0400\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2015-09-02 09:43-0400\n"
 "PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/virt-"
 "manager/language/zh_TW/)\n"
 "Language: zh-TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Zanata 3.7.1\n"
 
@@ -42,8 +42,8 @@ msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
-"無法混合使用 --file、--nonsparse 或是 --file-size 和 --disk 選項。請使用 --disk PATH[,size="
-"SIZE][,sparse=yes|no]"
+"無法混合使用 --file、--nonsparse 或是 --file-size 和 --disk 選項。請使用 --"
+"disk PATH[,size=SIZE][,sparse=yes|no]"
 
 #: ../virt-install:222
 msgid "Cannot use --mac with --nonetworks"
@@ -100,9 +100,11 @@ msgid "--disk storage must be specified (override with --disk none)"
 msgstr "--disk 必須指定儲存裝置 (--disk none 可凌駕)"
 
 #: ../virt-install:439
-msgid "An install method must be specified\n"
+msgid ""
+"An install method must be specified\n"
 "(%(methods)s)"
-msgstr "您必須指定一項安裝方式\n"
+msgstr ""
+"您必須指定一項安裝方式\n"
 "(%(methods)s)"
 
 #: ../virt-install:446
@@ -177,8 +179,8 @@ msgstr "客端的網路配置不支援 PXE"
 
 #: ../virt-install:553
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with -"
-"-os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with "
+"--os-variant for optimal results."
 msgstr ""
 
 #: ../virt-install:573
@@ -190,9 +192,11 @@ msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
 #: ../virt-install:749
-msgid "\n"
+msgid ""
+"\n"
 "Starting install..."
-msgstr "\n"
+msgstr ""
+"\n"
 "正在開始進行安裝..."
 
 #: ../virt-install:766
@@ -201,7 +205,8 @@ msgstr ""
 
 #: ../virt-install:770
 #, c-format
-msgid "You can restart your domain by running:\n"
+msgid ""
+"You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
@@ -221,7 +226,8 @@ msgstr "區域當機。"
 msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
-msgstr "區域安裝正在進行中。您可連至 \n"
+msgstr ""
+"區域安裝正在進行中。您可連至 \n"
 "主控台，以完成安裝程序。"
 
 #: ../virt-install:843
@@ -424,9 +430,10 @@ msgstr "使用來作為新客端之磁碟映像檔的新檔案"
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
-"hdc)"
-msgstr "強制複製裝置（比方說，若「hdc」是個唯讀的 cdrom 裝置，則 --force-copy=hdc）"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
+"copy=hdc)"
+msgstr ""
+"強制複製裝置（比方說，若「hdc」是個唯讀的 cdrom 裝置，則 --force-copy=hdc）"
 
 #: ../virt-clone:133
 msgid "Do not use a sparse file for the clone's disk image"
@@ -611,7 +618,8 @@ msgid ""
 msgstr ""
 
 #: ../virt-xml:353
-msgid "Add specified device. Example:\n"
+msgid ""
+"Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
 
@@ -1075,9 +1083,11 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "無法製作未管理遠端貯藏的分身。"
 
 #: ../virtManager/clone.py:84
-msgid "Block devices to clone must be libvirt\n"
+msgid ""
+"Block devices to clone must be libvirt\n"
 "managed storage volumes."
-msgstr "要分身的區塊裝置必須為\n"
+msgstr ""
+"要分身的區塊裝置必須為\n"
 "受 libvirt 管理的貯藏儲區。"
 
 #: ../virtManager/clone.py:87 ../virtManager/delete.py:362
@@ -1168,7 +1178,8 @@ msgid ""
 "\n"
 "%s\n"
 "Running the new guest could overwrite data in these disk images."
-msgstr "下列磁碟裝置不會製作分身：\n"
+msgstr ""
+"下列磁碟裝置不會製作分身：\n"
 "\n"
 "%s\n"
 "執行新的客端會覆寫這些磁碟映像中的資料。"
@@ -1359,7 +1370,8 @@ msgstr "無使用中的連線可以安裝。"
 
 #: ../virtManager/create.py:424
 #, python-format
-msgid "Failed to setup UEFI for AArch64: %s\n"
+msgid ""
+"Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 
@@ -1401,7 +1413,9 @@ msgstr ""
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
-msgstr "KVM 無法使用。這可能代表 KVM 套件尚未安裝，或是尚未載入 KVM 核心模組。您的虛擬機的執行效能可能相當低落。"
+msgstr ""
+"KVM 無法使用。這可能代表 KVM 套件尚未安裝，或是尚未載入 KVM 核心模組。您的虛"
+"擬機的執行效能可能相當低落。"
 
 #: ../virtManager/create.py:589
 #, python-format
@@ -1652,7 +1666,8 @@ msgid ""
 "\n"
 "Using these may overwrite their existing configuration. Are you sure you "
 "want to use the selected interface(s)?"
-msgstr "已經配置以下介面：\n"
+msgstr ""
+"已經配置以下介面：\n"
 "\n"
 "%s\n"
 "\n"
@@ -1901,7 +1916,8 @@ msgstr ""
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid "The following paths will be deleted:\n"
+msgid ""
+"The following paths will be deleted:\n"
 "\n"
 "%s"
 msgstr ""
@@ -1963,9 +1979,11 @@ msgstr "貯藏被標記為可分享。"
 
 #: ../virtManager/delete.py:400
 #, python-format
-msgid "Storage is in use by the following virtual machines:\n"
+msgid ""
+"Storage is in use by the following virtual machines:\n"
 "- %s "
-msgstr "儲存媒體正被下列虛擬機使用中：\n"
+msgstr ""
+"儲存媒體正被下列虛擬機使用中：\n"
 "- %s"
 
 #: ../virtManager/details.py:163
@@ -2025,7 +2043,8 @@ msgstr "Watchdog"
 #: ../virtManager/details.py:622
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
-msgstr "這會移除該連線：\n"
+msgstr ""
+"這會移除該連線：\n"
 "\n"
 "%s\n"
 "\n"
@@ -2440,20 +2459,24 @@ msgstr "未知的連線 URI %s"
 msgid ""
 "The remote host requires a version of netcat/nc\n"
 "which supports the -U option."
-msgstr "遠端主機需要支援 -U 選項的\n"
+msgstr ""
+"遠端主機需要支援 -U 選項的\n"
 "netcat/nc 版本。"
 
 #: ../virtManager/engine.py:614
 msgid ""
 "You need to install openssh-askpass or similar\n"
 "to connect to this host."
-msgstr "您需要安裝 openssh-askpass 或類似軟體\n"
+msgstr ""
+"您需要安裝 openssh-askpass 或類似軟體\n"
 "以連接至這台主機。"
 
 #: ../virtManager/engine.py:618
-msgid "Verify that the 'libvirtd' daemon is running\n"
+msgid ""
+"Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
-msgstr "驗證「libvirtd」幕後程式\n"
+msgstr ""
+"驗證「libvirtd」幕後程式\n"
 "已於遠端主機上執行。"
 
 #: ../virtManager/engine.py:622
@@ -2461,7 +2484,8 @@ msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
 " - The Xen service has been started"
-msgstr "驗證：\n"
+msgstr ""
+"驗證：\n"
 " - 已啟動 Xen 主機 kernel\n"
 " - Xen 服務已經開始執行"
 
@@ -2592,7 +2616,8 @@ msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
 "start up?"
-msgstr "領域無法復原。您想要移除儲存\n"
+msgstr ""
+"領域無法復原。您想要移除儲存\n"
 "的狀態並執行正常啟動嗎？"
 
 #: ../virtManager/engine.py:1063
@@ -2887,12 +2912,14 @@ msgstr "網路 I/O"
 
 #: ../virtManager/manager.py:511
 #, python-format
-msgid "This will remove the connection:\n"
+msgid ""
+"This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
 "Are you sure?"
-msgstr "這會移除該連線：\n"
+msgstr ""
+"這會移除該連線：\n"
 "\n"
 "%s\n"
 "\n"
@@ -2955,9 +2982,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by libvirt."
-" You must configure the destination to have a valid publicly accessible "
-"hostname."
+"The destination's hostname is 'localhost', which will be rejected by "
+"libvirt. You must configure the destination to have a valid publicly "
+"accessible hostname."
 msgstr ""
 
 #: ../virtManager/migrate.py:295
@@ -3106,7 +3133,8 @@ msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
 "while you have desired keys pressed."
-msgstr "您可以立刻按下組合建來定義抓取用的按鍵。\n"
+msgstr ""
+"您可以立刻按下組合建來定義抓取用的按鍵。\n"
 "若要確認您的選取按鍵，當您按下偏愛的\n"
 "按鍵後，請按下「確定」按鈕。"
 
@@ -3453,9 +3481,11 @@ msgstr "OVF 部分「%s」被列為必要部分，不過叵析器不知如何處
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid "Syntax error at line %d: %s\n"
+msgid ""
+"Syntax error at line %d: %s\n"
 "%s"
-msgstr "%d 行上發生了語法錯誤：%s\n"
+msgstr ""
+"%d 行上發生了語法錯誤：%s\n"
 "%s"
 
 #: ../virtconv/vmx.py:125
@@ -3496,7 +3526,8 @@ msgid ""
 "Host does not support domain type %(domain)s%(machine)s for virtualization "
 "type '%(virttype)s' arch '%(arch)s'"
 msgstr ""
-"主機不支援區域類型 %(domain)s%(machine)s (虛擬化類型為 '%(virttype)s' arch '%(arch)s')"
+"主機不支援區域類型 %(domain)s%(machine)s (虛擬化類型為 '%(virttype)s' arch "
+"'%(arch)s')"
 
 #: ../virtinst/cli.py:150
 msgid "See man page for examples and full option syntax."
@@ -3517,7 +3548,8 @@ msgid ""
 "If it was, you can restart your domain by running:\n"
 "  %s\n"
 "otherwise, please restart your installation."
-msgstr "區域安裝程序似乎未成功完成。\n"
+msgstr ""
+"區域安裝程序似乎未成功完成。\n"
 "若有成功完成，您可藉由執行以下指令來重啟您的區域：\n"
 "  %s\n"
 "否則，請重新進行安裝程序。"
@@ -3548,7 +3580,8 @@ msgstr ""
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
-msgstr "無法連至圖形化主控台：尚未安裝 virt-viewer。請安裝 'virt-viewer' 套件。"
+msgstr ""
+"無法連至圖形化主控台：尚未安裝 virt-viewer。請安裝 'virt-viewer' 套件。"
 
 #: ../virtinst/cli.py:470
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
@@ -3617,7 +3650,8 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:585
-msgid "CPU model and features. Ex:\n"
+msgid ""
+"CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 msgstr ""
 
@@ -3649,7 +3683,8 @@ msgstr ""
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=ich9-ehci1"
-msgstr "配置客端控制器裝置：\n"
+msgstr ""
+"配置客端控制器裝置：\n"
 "--controller type=usb,model=ich9-ehci1"
 
 #: ../virtinst/cli.py:618
@@ -3676,8 +3711,7 @@ msgid "Configure a text console connection between the guest and host"
 msgstr "配置客座端與主機之間的文字主控台連線"
 
 #: ../virtinst/cli.py:631
-msgid ""
-"Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
 #: ../virtinst/cli.py:634
@@ -3703,36 +3737,44 @@ msgid "Configure guest video hardware."
 msgstr "配置客端的繪圖卡硬體。"
 
 #: ../virtinst/cli.py:659
-msgid "Configure a guest smartcard device. Ex:\n"
+msgid ""
+"Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
-msgstr "配置客端的智慧卡裝置。例如：\n"
+msgstr ""
+"配置客端的智慧卡裝置。例如：\n"
 "--smartcard mode=passthrough"
 
 #: ../virtinst/cli.py:662
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
-msgstr "配置客端的重定向裝置。例如：\n"
+msgstr ""
+"配置客端的重定向裝置。例如：\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:665
-msgid "Configure a guest memballoon device. Ex:\n"
+msgid ""
+"Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
-msgstr "配置客端的 memballoon 裝置。例如：\n"
+msgstr ""
+"配置客端的 memballoon 裝置。例如：\n"
 "--memballoon model=virtio"
 
 #: ../virtinst/cli.py:668
-msgid "Configure a guest TPM device. Ex:\n"
+msgid ""
+"Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
 
 #: ../virtinst/cli.py:671
-msgid "Configure a guest RNG device. Ex:\n"
+msgid ""
+"Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
 msgstr ""
 
 #: ../virtinst/cli.py:674
-msgid "Configure a guest panic device. Ex:\n"
+msgid ""
+"Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
@@ -3901,7 +3943,8 @@ msgstr "目前並不支援複製至既有儲存卷冊上：'%s'"
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
 "%(need)d needed"
-msgstr "需複製的磁碟比指定的新路徑還要多。（指定了 %(passed)d 個，需要 %(need)d 個）"
+msgstr ""
+"需複製的磁碟比指定的新路徑還要多。（指定了 %(passed)d 個，需要 %(need)d 個）"
 
 #: ../virtinst/cloner.py:385
 msgid ""
@@ -4769,7 +4812,8 @@ msgstr "由 libvirt 提供動力"
 #. TRANSLATORS: Replace this string with your names, one name per line.
 #: ../ui/about.ui.h:4
 msgid "translator-credits"
-msgstr "莊佳儒 <tchuang@redhat.com>\n"
+msgstr ""
+"莊佳儒 <tchuang@redhat.com>\n"
 "Cheng-chia Tseng <pswo10680@gmail.com>, 2013"
 
 #: ../ui/addhardware.ui.h:1
@@ -5055,7 +5099,8 @@ msgid ""
 "disk. Sharing\n"
 "uses the existing disk image for both the original and the new machine.</"
 "span>"
-msgstr "<span size='small'>分身會建立新的、獨立的原版磁碟之複製本。共享\n"
+msgstr ""
+"<span size='small'>分身會建立新的、獨立的原版磁碟之複製本。共享\n"
 "現有的磁碟映像檔給原機器與新機器使用。</span>"
 
 #: ../ui/clone.ui.h:12
@@ -5227,7 +5272,8 @@ msgid "Architecture options"
 msgstr ""
 
 #: ../ui/create.ui.h:16
-msgid "Error message\n"
+msgid ""
+"Error message\n"
 "bar"
 msgstr ""
 
@@ -5330,7 +5376,8 @@ msgid ""
 "<small>The OS directory tree must already exist. Creating an OS directory "
 "tree\n"
 "is not yet supported.</small>"
-msgstr "<small>作業統目錄上必須已經存在。尚未支援作業系統目錄樹\n"
+msgstr ""
+"<small>作業統目錄上必須已經存在。尚未支援作業系統目錄樹\n"
 "的建立動作。</small>"
 
 #: ../ui/create.ui.h:45
@@ -7003,7 +7050,8 @@ msgid "CPU _default:"
 msgstr ""
 
 #: ../ui/preferences.ui.h:21
-msgid "Add Spice _USB\n"
+msgid ""
+"Add Spice _USB\n"
 "Redirection:"
 msgstr ""
 
@@ -7034,8 +7082,9 @@ msgid ""
 "disabled to ensure that typing in the guest does not accidentally perform an "
 "operation in virt-manager's console window."
 msgstr ""
-"當客端圖形化主控台取得鍵盤聚焦時，不要停用主控台視窗選單的快捷鍵 (Alt+F -> "
-"檔案，等等)。一般來說這些快捷鍵都會被停用，以確保客端中的輸入不會在 virt-manager 的主控台視窗中意外執行動作。"
+"當客端圖形化主控台取得鍵盤聚焦時，不要停用主控台視窗選單的快捷鍵 (Alt+F -> 檔"
+"案，等等)。一般來說這些快捷鍵都會被停用，以確保客端中的輸入不會在 virt-"
+"manager 的主控台視窗中意外執行動作。"
 
 #: ../ui/preferences.ui.h:29
 msgid "_Force console shortcuts:"
@@ -7049,7 +7098,9 @@ msgstr "變更..."
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
-msgstr "當變更客端視窗大小時也改變客端解析度。僅對使用 spice 與桌面代理適當配置過組態的客端有作用。"
+msgstr ""
+"當變更客端視窗大小時也改變客端解析度。僅對使用 spice 與桌面代理適當配置過組態"
+"的客端有作用。"
 
 #: ../ui/preferences.ui.h:32
 msgid "_Resize guest with window:"
