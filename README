@@ -10,25 +10,7 @@ Qemu/KVM and Xen virtual machines, as well as LXC containers. The UI is
 primarily tested with KVM, but is intended to be reasonably portable to any
 virtualization backend libvirt supports.
 
-
-  Pre-requisite software
-  ======================
-
-virt-manager was ported to GTK3 at the beginning of 2013. Older GTK3
-or pygobject3 versions likely will not work for running virt-manager.
-
-Earliest tested versions of major components:
-
-  python >= 2.6
-  gtk3 >= 3.6
-  libvirt-python >= 0.4.0
-  pygobject3 >= 3.4
-  libosinfo >= 0.2.10
-
-A more detailed dependency list can be found in virt-manager.spec.in. On
-Debian based distributions you need to install the gobject-introspection
-bindings for some depedencies like libvirt-glib and libosinfo. Look for
-package names that start with 'gir'.
+For dependency info and installation instructions, see the INSTALL file
 
 
   Contact
