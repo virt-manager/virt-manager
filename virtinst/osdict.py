@@ -23,6 +23,8 @@ import datetime
 import logging
 import re
 
+import gi
+gi.require_version('Libosinfo', '1.0')
 from gi.repository import Libosinfo as libosinfo
 
 

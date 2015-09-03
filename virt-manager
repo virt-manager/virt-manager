@@ -28,6 +28,7 @@ import traceback
 
 import gi
 from gi.repository import GObject
+gi.require_version('LibvirtGLib', '1.0')
 from gi.repository import LibvirtGLib
 
 from virtinst import util as util
