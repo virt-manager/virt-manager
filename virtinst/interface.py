@@ -70,9 +70,9 @@ class InterfaceProtocol(XMLBuilder):
         ip = _IPAddress(self.conn)
         ip.address = addr
         ip.prefix = prefix
-        self._add_child(ip)
+        self.add_child(ip)
     def remove_ip(self, ip):
-        self._remove_child(ip)
+        self.remove_child(ip)
         ip.clear()
     ips = XMLChildProperty(_IPAddress)
 
@@ -136,16 +136,16 @@ class Interface(XMLBuilder):
     ##################
 
     def add_interface(self, obj):
-        self._add_child(obj)
+        self.add_child(obj)
     def remove_interface(self, obj):
-        self._remove_child(obj)
+        self.remove_child(obj)
     # 'interfaces' property is added outside this class, since it needs
     # to reference the completed Interface class
 
     def add_protocol(self, obj):
-        self._add_child(obj)
+        self.add_child(obj)
     def remove_protocol(self, obj):
-        self._remove_child(obj)
+        self.remove_child(obj)
     protocols = XMLChildProperty(InterfaceProtocol)
 
 

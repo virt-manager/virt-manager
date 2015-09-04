@@ -39,7 +39,7 @@ class Clock(XMLBuilder):
 
     def add_timer(self):
         obj = _ClockTimer(self.conn)
-        self._add_child(obj)
+        self.add_child(obj)
         return obj
     def remove_timer(self, obj):
-        self._remove_child(obj)
+        self.remove_child(obj)

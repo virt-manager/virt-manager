@@ -216,7 +216,7 @@ class VirtualGraphics(VirtualDevice):
 
     listens = XMLChildProperty(_GraphicsListen)
     def remove_listen(self, obj):
-        self._remove_child(obj)
+        self.remove_child(obj)
 
     # Spice bits
     image_compression = XMLProperty("./image/@compression")

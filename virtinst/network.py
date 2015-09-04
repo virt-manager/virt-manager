@@ -58,7 +58,7 @@ class _NetworkIP(XMLBuilder):
 
     def add_range(self):
         r = _NetworkDHCPRange(self.conn)
-        self._add_child(r)
+        self.add_child(r)
         return r
 
 
@@ -238,11 +238,11 @@ class Network(XMLBuilder):
 
     def add_ip(self):
         ip = _NetworkIP(self.conn)
-        self._add_child(ip)
+        self.add_child(ip)
         return ip
     def add_route(self):
         route = _NetworkRoute(self.conn)
-        self._add_child(route)
+        self.add_child(route)
         return route
 
 

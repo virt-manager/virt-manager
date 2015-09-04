@@ -250,7 +250,7 @@ class Guest(XMLBuilder):
 
         @param dev: VirtualDevice instance to attach to guest
         """
-        self._add_child(dev)
+        self.add_child(dev)
 
     def remove_device(self, dev):
         """
@@ -258,7 +258,7 @@ class Guest(XMLBuilder):
 
         @param dev: VirtualDevice instance
         """
-        self._remove_child(dev)
+        self.remove_child(dev)
 
     def get_devices(self, devtype):
         """
@@ -273,6 +273,7 @@ class Guest(XMLBuilder):
             if devtype == "all" or i.virtual_device_type == devtype:
                 newlist.append(i)
         return newlist
+
     _devices = XMLChildProperty(
         [VirtualDevice.virtual_device_classes[_n]
          for _n in VirtualDevice.virtual_device_types],

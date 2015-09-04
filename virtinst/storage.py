@@ -411,14 +411,14 @@ class StoragePool(_StorageObject):
                               default_cb=_get_default_target_path)
 
     def add_host_obj(self, obj):
-        self._add_child(obj)
+        self.add_child(obj)
     def add_host(self, name, port=None):
         obj = _Host(self.conn)
         obj.name = name
         obj.port = port
-        self._add_child(obj)
+        self.add_child(obj)
     def remove_host(self, obj):
-        self._remove_child(obj)
+        self.remove_child(obj)
     hosts = XMLChildProperty(_Host, relative_xpath="./source")
 
 

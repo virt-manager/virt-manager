@@ -292,7 +292,7 @@ class XMLChildProperty(property):
             self._get(xmlbuilder).clear()
         else:
             for obj in self._get(xmlbuilder)[:]:
-                xmlbuilder._remove_child(obj)
+                xmlbuilder.remove_child(obj)
 
     def append(self, xmlbuilder, newobj):
         # Keep the list ordered by the order of passed in child classes
@@ -950,10 +950,11 @@ class XMLBuilder(object):
             for p in util.listify(getattr(self, propname, [])):
                 p._xmlstate._parse(None, self._xmlstate.xml_node)
 
-    def _add_child(self, obj):
+    def add_child(self, obj):
         """
         Insert the passed XMLBuilder object into our XML document. The
         object needs to have an associated mapping via XMLChildProperty
+        or an error is thrown.
         """
         xmlprop = self._find_child_prop(obj.__class__)
         xml = obj.get_xml_config()
@@ -967,10 +968,10 @@ class XMLBuilder(object):
             _build_xpath_node(self._xmlstate.xml_ctx, use_xpath, newnode)
         obj._parse_with_children(None, self._xmlstate.xml_node)
 
-    def _remove_child(self, obj):
+    def remove_child(self, obj):
         """
         Remove the passed XMLBuilder object from our XML document, but
-        ensure it's data isn't altered.
+        ensure its data isn't altered.
         """
         xmlprop = self._find_child_prop(obj.__class__)
         xmlprop.remove(self, obj)
