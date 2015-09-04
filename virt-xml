@@ -112,8 +112,8 @@ def get_domain_and_guest(conn, domstr):
 # Change logic #
 ################
 
-def _find_devices_to_edit(guest, action_name, editval, parserobj):
-    devlist = guest.get_devices(parserobj.devclass.virtual_device_type)
+def _find_objects_to_edit(guest, action_name, editval, parserobj):
+    objlist = guest.list_children_for_class(parserobj.objclass)
     idx = None
 
     if editval is None:
@@ -123,26 +123,31 @@ def _find_devices_to_edit(guest, action_name, editval, parserobj):
         idx = int(editval)
 
     if idx is not None:
+        # Edit device by index
         if idx == 0:
             fail(_("Invalid --edit option '%s'") % editval)
 
-        if not devlist:
-            fail(_("No --%s devices found in the XML") %
+        if not objlist:
+            fail(_("No --%s objects found in the XML") %
                 parserobj.cli_arg_name)
-        if len(devlist) < abs(idx):
+        if len(objlist) < abs(idx):
             fail(_("--edit %s requested but there's only %s "
-                   "--%s devices in the XML") %
-                (idx, len(devlist), parserobj.cli_arg_name))
+                   "--%s object in the XML") %
+                (idx, len(objlist), parserobj.cli_arg_name))
 
         if idx > 0:
             idx -= 1
-        inst = devlist[idx]
+        inst = objlist[idx]
+
     elif editval == "all":
-        inst = devlist[:]
+        # Edit 'all' devices
+        inst = objlist[:]
+
     else:
-        inst = parserobj.lookup_device_from_option_string(guest, editval)
+        # Lookup device by the passed prop string
+        inst = parserobj.lookup_child_from_option_string(guest, editval)
         if not inst:
-            fail(_("No matching devices found for --%s %s") %
+            fail(_("No matching objects found for --%s %s") %
                  (action_name, editval))
 
     return inst
@@ -182,8 +187,8 @@ def check_xmlopt_collision(options, parsermap):
 
 
 def action_edit(guest, options, parsermap, parserobj):
-    if parserobj.devclass:
-        inst = _find_devices_to_edit(guest, "edit", options.edit, parserobj)
+    if parserobj.objclass:
+        inst = _find_objects_to_edit(guest, "edit", options.edit, parserobj)
     else:
         inst = guest
         if options.edit and options.edit != '1' and options.edit != 'all':
@@ -196,18 +201,18 @@ def action_edit(guest, options, parsermap, parserobj):
 
 
 def action_add_device(guest, options, parsermap, parserobj):
-    if not parserobj.devclass:
+    if not parserobj.objclass:
         fail(_("Cannot use --add-device with --%s") % parserobj.cli_arg_name)
     return cli.parse_option_strings(parsermap, options, guest, None)
 
 
 def action_remove_device(guest, options, parsermap, parserobj):
     ignore = parsermap
-    if not parserobj.devclass:
+    if not parserobj.objclass:
         fail(_("Cannot use --remove-device with --%s") %
              parserobj.cli_arg_name)
 
-    devs = _find_devices_to_edit(guest, "remove-device",
+    devs = _find_objects_to_edit(guest, "remove-device",
         getattr(options, parserobj.option_variable_name)[-1], parserobj)
 
     devs = util.listify(devs)
@@ -221,8 +226,8 @@ def action_build_xml(conn, options, parsermap, parserobj):
     ret_inst = None
     inst = None
 
-    if parserobj.devclass:
-        inst = parserobj.devclass(conn)
+    if parserobj.objclass:
+        inst = parserobj.objclass(conn)
     elif parserobj.clear_attr:
         ret_inst = getattr(guest, parserobj.clear_attr)
     else:
@@ -440,7 +445,7 @@ def main(conn=None):
     check_action_collision(options)
     parserobj = check_xmlopt_collision(options, parsermap)
 
-    if options.update and not parserobj.devclass:
+    if options.update and not parserobj.objclass:
         fail(_("Don't know how to --update for --%s") %
              (parserobj.cli_arg_name))
 

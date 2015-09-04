@@ -984,6 +984,16 @@ class XMLBuilder(object):
         _remove_xpath_node(self._xmlstate.xml_ctx, xpath, dofree=False)
         self._set_child_xpaths()
 
+    def list_children_for_class(self, klass):
+        """
+        Return a list of all XML child objects with the passed class
+        """
+        ret = []
+        for prop in self._all_child_props().values():
+            ret += [obj for obj in util.listify(prop._get(self))
+                    if obj.__class__ == klass]
+        return ret
+
 
     #################################
     # Private XML building routines #

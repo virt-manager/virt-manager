@@ -974,7 +974,7 @@ class VirtCLIParser(object):
     from overriding _parse), so that we can show all options when the
     user requests command line introspection like --disk=?
     """
-    devclass = None
+    objclass = None
 
     def __init__(self, cli_arg_name):
         """
@@ -1053,8 +1053,8 @@ class VirtCLIParser(object):
         ret = []
         for optstr in optlist:
             optinst = inst
-            if self.devclass and not inst:
-                optinst = self.devclass(guest.conn)  # pylint: disable=not-callable
+            if self.objclass and not inst:
+                optinst = self.objclass(guest.conn)  # pylint: disable=not-callable
 
             try:
                 devs = self._parse_single_optstr(guest, optstr, optinst)
@@ -1082,15 +1082,15 @@ class VirtCLIParser(object):
             return ret[0]
         return ret
 
-    def lookup_device_from_option_string(self, guest, optstr):
+    def lookup_child_from_option_string(self, guest, optstr):
         """
-        Given a passed option string, search the guests' device list
-        for all devices which match the passed options.
+        Given a passed option string, search the guests' child list
+        for all objects which match the passed options.
         """
-        devlist = guest.get_devices(self.devclass.virtual_device_type)[:]
         ret = []
+        objlist = guest.list_children_for_class(self.objclass)
 
-        for inst in devlist:
+        for inst in objlist:
             try:
                 opts = VirtOptionString(optstr, self._params,
                                         self.remove_first)
@@ -1582,7 +1582,7 @@ def _generate_new_volume_name(guest, poolobj, fmt):
 
 class ParserDisk(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualDisk
+        self.objclass = VirtualDisk
         self.remove_first = "path"
 
         def noset_cb(opts, inst, cliname, val):
@@ -1728,7 +1728,7 @@ class ParserDisk(VirtCLIParser):
 
 class ParserNetwork(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualNetworkInterface
+        self.objclass = VirtualNetworkInterface
         self.remove_first = "type"
 
         def set_mac_cb(opts, inst, cliname, val):
@@ -1797,7 +1797,7 @@ class ParserNetwork(VirtCLIParser):
 
 class ParserGraphics(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualGraphics
+        self.objclass = VirtualGraphics
         self.remove_first = "type"
 
         def set_keymap_cb(opts, inst, cliname, val):
@@ -1856,7 +1856,7 @@ class ParserGraphics(VirtCLIParser):
 
 class ParserController(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualController
+        self.objclass = VirtualController
         self.remove_first = "type"
 
         self.set_param("type", "type")
@@ -1885,7 +1885,7 @@ class ParserController(VirtCLIParser):
 
 class ParserInput(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualInputDevice
+        self.objclass = VirtualInputDevice
         self.remove_first = "type"
 
         self.set_param("type", "type")
@@ -1898,7 +1898,7 @@ class ParserInput(VirtCLIParser):
 
 class ParserSmartcard(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualSmartCardDevice
+        self.objclass = VirtualSmartCardDevice
         self.remove_first = "mode"
         self.check_none = True
 
@@ -1912,7 +1912,7 @@ class ParserSmartcard(VirtCLIParser):
 
 class ParserRedir(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualRedirDevice
+        self.objclass = VirtualRedirDevice
         self.remove_first = "bus"
 
         self.set_param("bus", "bus")
@@ -1938,7 +1938,7 @@ class ParserRedir(VirtCLIParser):
 
 class ParserTPM(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualTPMDevice
+        self.objclass = VirtualTPMDevice
         self.remove_first = "type"
         self.check_none = True
 
@@ -1958,7 +1958,7 @@ class ParserTPM(VirtCLIParser):
 
 class ParserRNG(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualRNGDevice
+        self.objclass = VirtualRNGDevice
         self.remove_first = "type"
         self.check_none = True
 
@@ -2028,7 +2028,7 @@ class ParserRNG(VirtCLIParser):
 
 class ParserWatchdog(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualWatchdog
+        self.objclass = VirtualWatchdog
         self.remove_first = "model"
 
         self.set_param("model", "model")
@@ -2041,7 +2041,7 @@ class ParserWatchdog(VirtCLIParser):
 
 class ParserMemballoon(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualMemballoon
+        self.objclass = VirtualMemballoon
         self.remove_first = "model"
 
         self.set_param("model", "model")
@@ -2053,7 +2053,7 @@ class ParserMemballoon(VirtCLIParser):
 
 class ParserPanic(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualPanicDevice
+        self.objclass = VirtualPanicDevice
         self.remove_first = "iobase"
 
         def set_iobase_cb(opts, inst, cliname, val):
@@ -2152,19 +2152,19 @@ class _ParserChar(VirtCLIParser):
 
 
 class ParserSerial(_ParserChar):
-    devclass = VirtualSerialDevice
+    objclass = VirtualSerialDevice
 
 
 class ParserParallel(_ParserChar):
-    devclass = VirtualParallelDevice
+    objclass = VirtualParallelDevice
 
 
 class ParserChannel(_ParserChar):
-    devclass = VirtualChannelDevice
+    objclass = VirtualChannelDevice
 
 
 class ParserConsole(_ParserChar):
-    devclass = VirtualConsoleDevice
+    objclass = VirtualConsoleDevice
 
 
 ########################
@@ -2173,7 +2173,7 @@ class ParserConsole(_ParserChar):
 
 class ParserFilesystem(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualFilesystem
+        self.objclass = VirtualFilesystem
         self.remove_first = ["source", "target"]
 
         self.set_param("type", "type")
@@ -2188,7 +2188,7 @@ class ParserFilesystem(VirtCLIParser):
 
 class ParserVideo(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualVideoDevice
+        self.objclass = VirtualVideoDevice
         self.remove_first = "model"
 
         self.set_param("model", "model", ignore_default=True)
@@ -2200,7 +2200,7 @@ class ParserVideo(VirtCLIParser):
 
 class ParserSound(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualAudio
+        self.objclass = VirtualAudio
         self.remove_first = "model"
 
         self.set_param("model", "model", ignore_default=True)
@@ -2218,7 +2218,7 @@ class ParserSound(VirtCLIParser):
 
 class ParserHostdev(VirtCLIParser):
     def _init_params(self):
-        self.devclass = VirtualHostDevice
+        self.objclass = VirtualHostDevice
         self.remove_first = "name"
 
         # If using the name_lookup_cb, this saves us repeatedly trying to
