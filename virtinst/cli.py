@@ -35,6 +35,7 @@ from virtcli import CLIConfig
 
 from . import util
 from .clock import Clock
+from .cpu import CPU
 from .deviceaudio import VirtualAudio
 from .devicechar import (VirtualChannelDevice, VirtualConsoleDevice,
                          VirtualSerialDevice, VirtualParallelDevice)
@@ -53,9 +54,17 @@ from .devicesmartcard import VirtualSmartCardDevice
 from .devicetpm import VirtualTPMDevice
 from .devicevideo import VirtualVideoDevice
 from .devicewatchdog import VirtualWatchdog
+from .domainblkiotune import DomainBlkiotune
+from .domainfeatures import DomainFeatures
+from .domainmemorybacking import DomainMemorybacking
+from .domainmemorytune import DomainMemorytune
 from .domainnumatune import DomainNumatune
+from .domainresource import DomainResource
+from .idmap import IdMap
 from .nodedev import NodeDevice
 from .osxml import OSXML
+from .pm import PM
+from .seclabel import Seclabel
 from .storage import StoragePool, StorageVolume
 
 
@@ -1014,12 +1023,16 @@ class VirtCLIParser(object):
     def __init_global_params(self):
         def set_clearxml_cb(opts, inst, cliname, val):
             ignore = opts = cliname
-            if not self.clear_attr:
+            if not self.objclass and not self.clear_attr:
                 raise RuntimeError("Don't know how to clearxml --%s" %
                                    self.cli_arg_name)
             if val is not True:
                 return
-            getattr(inst, self.clear_attr).clear()
+
+            if self.clear_attr:
+                getattr(inst, self.clear_attr).clear()
+            else:
+                inst.clear()
 
         self.set_param(None, "clearxml",
                        setter_cb=set_clearxml_cb, is_onoff=True)
@@ -1052,23 +1065,26 @@ class VirtCLIParser(object):
 
         ret = []
         for optstr in optlist:
+            new_object = False
             optinst = inst
             if self.objclass and not inst:
-                optinst = self.objclass(guest.conn)  # pylint: disable=not-callable
+                if guest.child_class_is_singleton(self.objclass):
+                    optinst = guest.list_children_for_class(
+                        self.objclass)[0]
+                else:
+                    new_object = True
+                    optinst = self.objclass(guest.conn)  # pylint: disable=not-callable
 
             try:
-                devs = self._parse_single_optstr(guest, optstr, optinst)
-                for dev in util.listify(devs):
-                    if not hasattr(dev, "virtual_device_type"):
-                        continue
-
+                objs = self._parse_single_optstr(guest, optstr, optinst)
+                for obj in util.listify(objs):
+                    if not new_object:
+                        break
                     if validate:
-                        dev.validate()
-                    if editting:
-                        continue
-                    guest.add_device(dev)
+                        obj.validate()
+                    guest.add_child(obj)
 
-                ret += util.listify(devs)
+                ret += util.listify(objs)
             except Exception, e:
                 logging.debug("Exception parsing inst=%s optstr=%s",
                               inst, optstr, exc_info=True)
@@ -1086,6 +1102,8 @@ class VirtCLIParser(object):
         """
         Given a passed option string, search the guests' child list
         for all objects which match the passed options.
+
+        Used only by virt-xml --edit lookups
         """
         ret = []
         objlist = guest.list_children_for_class(self.objclass)
@@ -1203,10 +1221,10 @@ class ParserEvents(VirtCLIParser):
 
 class ParserResource(VirtCLIParser):
     def _init_params(self):
+        self.objclass = DomainResource
         self.remove_first = "partition"
-        self.clear_attr = "resource"
 
-        self.set_param("resource.partition", "partition")
+        self.set_param("partition", "partition")
 
 
 ######################
@@ -1215,11 +1233,11 @@ class ParserResource(VirtCLIParser):
 
 class ParserNumatune(VirtCLIParser):
     def _init_params(self):
-        self.clear_attr = "numatune"
+        self.objclass = DomainNumatune
         self.remove_first = "nodeset"
 
-        self.set_param("numatune.memory_nodeset", "nodeset", can_comma=True)
-        self.set_param("numatune.memory_mode", "mode")
+        self.set_param("memory_nodeset", "nodeset", can_comma=True)
+        self.set_param("memory_mode", "mode")
 
 
 ####################
@@ -1244,13 +1262,13 @@ class ParserMemory(VirtCLIParser):
 
 class ParserMemorytune(VirtCLIParser):
     def _init_params(self):
+        self.objclass = DomainMemorytune
         self.remove_first = "soft_limit"
-        self.clear_attr = "memtune"
 
-        self.set_param("memtune.hard_limit", "hard_limit")
-        self.set_param("memtune.soft_limit", "soft_limit")
-        self.set_param("memtune.swap_hard_limit", "swap_hard_limit")
-        self.set_param("memtune.min_guarantee", "min_guarantee")
+        self.set_param("hard_limit", "hard_limit")
+        self.set_param("soft_limit", "soft_limit")
+        self.set_param("swap_hard_limit", "swap_hard_limit")
+        self.set_param("min_guarantee", "min_guarantee")
 
 
 ###################
@@ -1307,21 +1325,21 @@ class ParserVCPU(VirtCLIParser):
 
 class ParserCPU(VirtCLIParser):
     def _init_params(self):
-        self.clear_attr = "cpu"
+        self.objclass = CPU
         self.remove_first = "model"
 
         def set_model_cb(opts, inst, cliname, val):
             ignore = opts
             ignore = cliname
             if val == "host":
-                val = inst.cpu.SPECIAL_MODE_HOST_MODEL
+                val = inst.SPECIAL_MODE_HOST_MODEL
             if val == "none":
-                val = inst.cpu.SPECIAL_MODE_CLEAR
+                val = inst.SPECIAL_MODE_CLEAR
 
-            if val in inst.cpu.SPECIAL_MODES:
-                inst.cpu.set_special_mode(val)
+            if val in inst.SPECIAL_MODES:
+                inst.set_special_mode(val)
             else:
-                inst.cpu.model = val
+                inst.model = val
 
         def set_feature_cb(opts, inst, cliname, val):
             ignore = opts
@@ -1329,7 +1347,7 @@ class ParserCPU(VirtCLIParser):
             for feature_name in util.listify(val):
                 featureobj = None
 
-                for f in inst.cpu.features:
+                for f in inst.features:
                     if f.name == feature_name:
                         featureobj = f
                         break
@@ -1337,12 +1355,12 @@ class ParserCPU(VirtCLIParser):
                 if featureobj:
                     featureobj.policy = policy
                 else:
-                    inst.cpu.add_feature(feature_name, policy)
+                    inst.add_feature(feature_name, policy)
 
         self.set_param(None, "model", setter_cb=set_model_cb)
-        self.set_param("cpu.mode", "mode")
-        self.set_param("cpu.match", "match")
-        self.set_param("cpu.vendor", "vendor")
+        self.set_param("mode", "mode")
+        self.set_param("match", "match")
+        self.set_param("vendor", "vendor")
 
         self.set_param(None, "force", is_list=True, setter_cb=set_feature_cb)
         self.set_param(None, "require", is_list=True, setter_cb=set_feature_cb)
@@ -1444,15 +1462,15 @@ class ParserBoot(VirtCLIParser):
 
 class ParserIdmap(VirtCLIParser):
     def _init_params(self):
-        self.clear_attr = "idmap"
+        self.objclass = IdMap
 
-        self.set_param("idmap.uid_start", "uid_start")
-        self.set_param("idmap.uid_target", "uid_target")
-        self.set_param("idmap.uid_count", "uid_count")
+        self.set_param("uid_start", "uid_start")
+        self.set_param("uid_target", "uid_target")
+        self.set_param("uid_count", "uid_count")
 
-        self.set_param("idmap.gid_start", "gid_start")
-        self.set_param("idmap.gid_target", "gid_target")
-        self.set_param("idmap.gid_count", "gid_count")
+        self.set_param("gid_start", "gid_start")
+        self.set_param("gid_target", "gid_target")
+        self.set_param("gid_count", "gid_count")
 
 
 ######################
@@ -1461,12 +1479,11 @@ class ParserIdmap(VirtCLIParser):
 
 class ParserSecurity(VirtCLIParser):
     def _init_params(self):
-        self.clear_attr = "seclabel"
+        self.objclass = Seclabel
 
-        self.set_param("seclabel.type", "type")
-        self.set_param("seclabel.label", "label", can_comma=True)
-        self.set_param("seclabel.relabel", "relabel",
-                       is_onoff=True)
+        self.set_param("type", "type")
+        self.set_param("label", "label", can_comma=True)
+        self.set_param("relabel", "relabel", is_onoff=True)
 
 
 ######################
@@ -1475,29 +1492,29 @@ class ParserSecurity(VirtCLIParser):
 
 class ParserFeatures(VirtCLIParser):
     def _init_params(self):
-        self.clear_attr = "features"
+        self.objclass = DomainFeatures
 
-        self.set_param("features.acpi", "acpi", is_onoff=True)
-        self.set_param("features.apic", "apic", is_onoff=True)
-        self.set_param("features.pae", "pae", is_onoff=True)
-        self.set_param("features.privnet", "privnet",
+        self.set_param("acpi", "acpi", is_onoff=True)
+        self.set_param("apic", "apic", is_onoff=True)
+        self.set_param("pae", "pae", is_onoff=True)
+        self.set_param("privnet", "privnet",
             is_onoff=True)
-        self.set_param("features.hap", "hap",
+        self.set_param("hap", "hap",
             is_onoff=True)
-        self.set_param("features.viridian", "viridian",
+        self.set_param("viridian", "viridian",
             is_onoff=True)
-        self.set_param("features.eoi", "eoi", is_onoff=True)
+        self.set_param("eoi", "eoi", is_onoff=True)
 
-        self.set_param("features.hyperv_vapic", "hyperv_vapic",
+        self.set_param("hyperv_vapic", "hyperv_vapic",
             is_onoff=True)
-        self.set_param("features.hyperv_relaxed", "hyperv_relaxed",
+        self.set_param("hyperv_relaxed", "hyperv_relaxed",
             is_onoff=True)
-        self.set_param("features.hyperv_spinlocks", "hyperv_spinlocks",
+        self.set_param("hyperv_spinlocks", "hyperv_spinlocks",
             is_onoff=True)
-        self.set_param("features.hyperv_spinlocks_retries",
+        self.set_param("hyperv_spinlocks_retries",
             "hyperv_spinlocks_retries")
 
-        self.set_param("features.vmport", "vmport", is_onoff=True)
+        self.set_param("vmport", "vmport", is_onoff=True)
 
 
 ###################
@@ -1506,22 +1523,22 @@ class ParserFeatures(VirtCLIParser):
 
 class ParserClock(VirtCLIParser):
     def _init_params(self):
-        self.clear_attr = "clock"
+        self.objclass = Clock
 
-        self.set_param("clock.offset", "offset")
+        self.set_param("offset", "offset")
 
         def set_timer(opts, inst, cliname, val):
             ignore = opts
             tname, attrname = cliname.split("_")
 
             timerobj = None
-            for t in inst.clock.timers:
+            for t in inst.timers:
                 if t.name == tname:
                     timerobj = t
                     break
 
             if not timerobj:
-                timerobj = inst.clock.add_timer()
+                timerobj = inst.add_timer()
                 timerobj.name = tname
 
             setattr(timerobj, attrname, val)
@@ -1539,10 +1556,10 @@ class ParserClock(VirtCLIParser):
 
 class ParserPM(VirtCLIParser):
     def _init_params(self):
-        self.clear_attr = "pm"
+        self.objclass = PM
 
-        self.set_param("pm.suspend_to_mem", "suspend_to_mem", is_onoff=True)
-        self.set_param("pm.suspend_to_disk", "suspend_to_disk", is_onoff=True)
+        self.set_param("suspend_to_mem", "suspend_to_mem", is_onoff=True)
+        self.set_param("suspend_to_disk", "suspend_to_disk", is_onoff=True)
 
 
 ##########################
@@ -2071,12 +2088,12 @@ class ParserPanic(VirtCLIParser):
 
 class ParserBlkiotune(VirtCLIParser):
     def _init_params(self):
-        self.clear_attr = "blkiotune"
+        self.objclass = DomainBlkiotune
         self.remove_first = "weight"
 
-        self.set_param("blkiotune.weight", "weight")
-        self.set_param("blkiotune.device_path", "device_path")
-        self.set_param("blkiotune.device_weight", "device_weight")
+        self.set_param("weight", "weight")
+        self.set_param("device_path", "device_path")
+        self.set_param("device_weight", "device_weight")
 
 
 ########################
@@ -2085,17 +2102,14 @@ class ParserBlkiotune(VirtCLIParser):
 
 class ParserMemorybacking(VirtCLIParser):
     def _init_params(self):
-        self.clear_attr = "memoryBacking"
+        self.objclass = DomainMemorybacking
 
-        self.set_param("memoryBacking.hugepages",
-                "hugepages", is_onoff=True)
-        self.set_param("memoryBacking.page_size", "size")
-        self.set_param("memoryBacking.page_unit", "unit")
-        self.set_param("memoryBacking.page_nodeset",
-                "nodeset", can_comma=True)
-        self.set_param("memoryBacking.nosharepages",
-                "nosharepages", is_onoff=True)
-        self.set_param("memoryBacking.locked", "locked", is_onoff=True)
+        self.set_param("hugepages", "hugepages", is_onoff=True)
+        self.set_param("page_size", "size")
+        self.set_param("page_unit", "unit")
+        self.set_param("page_nodeset", "nodeset", can_comma=True)
+        self.set_param("nosharepages", "nosharepages", is_onoff=True)
+        self.set_param("locked", "locked", is_onoff=True)
 
 
 ######################################################

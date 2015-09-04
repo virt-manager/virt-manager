@@ -201,16 +201,18 @@ def _remove_xpath_node(ctx, xpath, dofree=True):
     """
     Remove an XML node tree if it has no content
     """
-    curxpath = xpath
+    nextxpath = xpath
     root_node = ctx.contextNode()
 
-    while curxpath:
+    while nextxpath:
+        curxpath = nextxpath
         is_orig = (curxpath == xpath)
         node = _get_xpath_node(ctx, curxpath)
+
         if curxpath.count("/"):
-            curxpath, ignore = curxpath.rsplit("/", 1)
+            nextxpath, ignore = curxpath.rsplit("/", 1)
         else:
-            curxpath = None
+            nextxpath = None
 
         if not node:
             continue
@@ -853,8 +855,20 @@ class XMLBuilder(object):
         for prop in props:
             prop.clear(self)
 
-        _remove_xpath_node(self._xmlstate.xml_ctx,
-                           self.get_root_xpath())
+        is_child = bool(re.match("^.*\[\d+\]$", self.get_root_xpath()))
+        if is_child:
+            # User requested to clear an object that is the child of
+            # another object (xpath ends in [1] etc). We can't fully remove
+            # the node in that case, since then the xmlbuilder object is
+            # no longer valid, and all the other child xpaths will be
+            # pointing to the wrong node. So just stub out the content
+            node = _get_xpath_node(self._xmlstate.xml_ctx,
+                                   self.get_root_xpath())
+            indent = 2 * self.get_root_xpath().count("/")
+            node.setContent("\n" + (indent * " "))
+        else:
+            _remove_xpath_node(self._xmlstate.xml_ctx,
+                               self.get_root_xpath())
 
     def validate(self):
         """
@@ -930,10 +944,10 @@ class XMLBuilder(object):
             for p in util.listify(getattr(self, propname, [])):
                 p._set_parent_xpath(self.get_root_xpath())
 
-    def _find_child_prop(self, child_class):
+    def _find_child_prop(self, child_class, return_single=False):
         xmlprops = self._all_child_props()
         for xmlprop in xmlprops.values():
-            if xmlprop.is_single:
+            if xmlprop.is_single and not return_single:
                 continue
             if child_class in xmlprop.child_classes:
                 return xmlprop
@@ -993,6 +1007,13 @@ class XMLBuilder(object):
             ret += [obj for obj in util.listify(prop._get(self))
                     if obj.__class__ == klass]
         return ret
+
+    def child_class_is_singleton(self, klass):
+        """
+        Return True if the passed class is registered as a singleton
+        child property
+        """
+        return self._find_child_prop(klass, return_single=True).is_single
 
 
     #################################

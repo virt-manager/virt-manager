@@ -1,0 +1,15 @@
+   </pm>
+   <devices>
+     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+-    <disk type="block" device="floppy">
+-      <source dev="/dev/null"/>
++    <disk device="floppy">
+       <target dev="fda" bus="fdc"/>
+-      <boot order="5"/>
+-      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+     </disk>
+     <disk type="file" device="disk">
+       <source file="/tmp/foobar"/>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the next domain shutdown.

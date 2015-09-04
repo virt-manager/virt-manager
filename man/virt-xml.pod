@@ -58,7 +58,7 @@ Edit the specified XML block. EDIT-OPTIONS tell B<virt-xml> which block to edit.
 
 Certain XML options only ever map to a single XML block, like --cpu, --security, --boot, --clock, and a few others. In those cases, B<virt-xml> will not complain if a corresponding XML block does not already exist, it will create it for you.
 
-Some XML option support a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being edited before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
+Most XML options support a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being edited before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
 
 EDIT-OPTIONS examples:
 

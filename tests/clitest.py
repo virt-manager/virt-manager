@@ -844,7 +844,7 @@ c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-selec
 
 c = vixml.add_category("edit clear", "test-for-virtxml --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
 c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
-c.add_invalid("--edit --disk /foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes")  # clearxml isn't supported for devices
+c.add_compare("--edit --disk path=/foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes", "edit-clear-disk")
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
 
