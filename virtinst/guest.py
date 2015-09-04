@@ -855,6 +855,7 @@ class Guest(XMLBuilder):
             self.features.pae = self.capsinfo.guest.supports_pae()
 
         if (self.features.vmport == "default" and
+            self.os.is_x86() and
             self.has_spice() and
             self.conn.check_support(self.conn.SUPPORT_CONN_VMPORT)):
             self.features.vmport = False
