@@ -65,7 +65,8 @@ class vmmConsolePages(vmmGObjectUI):
         self._send_key_button = None
         self._fs_toolbar = None
         self._fs_drawer = None
-        self._keycombo_menu = self._build_keycombo_menu(self._do_send_key)
+        self._keycombo_toolbar = self._build_keycombo_menu()
+        self._keycombo_menu = self._build_keycombo_menu()
         self._init_fs_toolbar()
 
         # Make viewer widget background always be black
@@ -111,8 +112,8 @@ class vmmConsolePages(vmmGObjectUI):
             self._viewer.cleanup()
         self._viewer = None
 
-        self._keycombo_menu.destroy()
-        self._keycombo_menu = None
+        self._keycombo_toolbar.destroy()
+        self._keycombo_toolbar = None
         self._fs_drawer.destroy()
         self._fs_drawer = None
         self._fs_toolbar.destroy()
@@ -127,13 +128,13 @@ class vmmConsolePages(vmmGObjectUI):
     # Initialization helpers #
     ##########################
 
-    def _build_keycombo_menu(self, cb):
+    def _build_keycombo_menu(self):
         # Shared with vmmDetails
         menu = Gtk.Menu()
 
         def make_item(name, combo):
             item = Gtk.MenuItem.new_with_mnemonic(name)
-            item.connect("activate", cb, combo)
+            item.connect("activate", self._do_send_key, combo)
 
             menu.add(item)
 
@@ -176,7 +177,7 @@ class vmmConsolePages(vmmGObjectUI):
 
                 return x, y + height, True
 
-            self._keycombo_menu.popup(None, None, menu_location,
+            self._keycombo_toolbar.popup(None, None, menu_location,
                                      self._fs_toolbar, 0,
                                      Gtk.get_current_event_time())
 
@@ -208,6 +209,9 @@ class vmmConsolePages(vmmGObjectUI):
         smenu = Gtk.Menu()
         smenu.connect("show", self._populate_serial_menu)
         self.widget("details-menu-view-serial-list").set_submenu(smenu)
+
+        # Keycombo menu (ctrl+alt+del etc.)
+        self.widget("details-menu-send-key").set_submenu(self._keycombo_menu)
 
 
     #################
@@ -512,21 +516,19 @@ class vmmConsolePages(vmmGObjectUI):
             serial.close()
 
     def _update_vm_widget_states(self):
-        runable = self.vm.is_runable()
-        paused = self.vm.is_paused()
-        pages = self.widget("console-pages")
-        page = pages.get_current_page()
+        page = self.widget("console-pages").get_current_page()
 
-        self._send_key_button.set_sensitive(not (runable or paused))
-
-        if runable:
+        if self.vm.is_runable():
             self._show_vm_status_unavailable()
 
-        elif page in [self.CONSOLE_PAGE_UNAVAILABLE, self.CONSOLE_PAGE_VIEWER]:
+        elif page == self.CONSOLE_PAGE_UNAVAILABLE:
             if self._viewer and self._viewer.console_is_open():
                 self._activate_viewer_page()
             else:
                 self._init_viewer()
+        else:
+            # Update other state
+            self._page_changed()
 
 
     ###################
@@ -541,14 +543,10 @@ class vmmConsolePages(vmmGObjectUI):
         self._close_viewer()
         self.widget("console-pages").set_current_page(
             self.CONSOLE_PAGE_UNAVAILABLE)
-        self.widget("details-menu-vm-screenshot").set_sensitive(False)
-        self.widget("details-menu-usb-redirection").set_sensitive(False)
         self.widget("console-unavailable").set_label("<b>" + msg + "</b>")
 
     def _activate_auth_page(self, withPassword, withUsername):
         (pw, username) = self.config.get_console_password(self.vm)
-        self.widget("details-menu-vm-screenshot").set_sensitive(False)
-        self.widget("details-menu-usb-redirection").set_sensitive(False)
 
         self.widget("console-auth-password").set_visible(withPassword)
         self.widget("label-auth-password").set_visible(withPassword)
@@ -575,22 +573,30 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _activate_viewer_page(self):
         self.widget("console-pages").set_current_page(self.CONSOLE_PAGE_VIEWER)
-        self.widget("details-menu-vm-screenshot").set_sensitive(True)
         if self._viewer:
             self._viewer.console_grab_focus()
-
-        if (self._viewer.console_has_usb_redirection() and
-            self.vm.has_spicevmc_type_redirdev()):
-            self.widget("details-menu-usb-redirection").set_sensitive(True)
-            return
 
     def _page_changed(self, ignore1=None, ignore2=None, newpage=None):
         pagenum = self.widget("console-pages").get_current_page()
 
         if newpage is not None:
+            # Hide the contents of all other pages, so they don't screw
+            # up window sizing
             for i in range(self.widget("console-pages").get_n_pages()):
                 w = self.widget("console-pages").get_nth_page(i)
                 w.set_visible(i == newpage)
+
+        paused = self.vm.is_paused()
+        is_viewer = (pagenum == self.CONSOLE_PAGE_VIEWER)
+
+        self._send_key_button.set_sensitive(is_viewer)
+        self.widget("details-menu-vm-screenshot").set_sensitive(is_viewer)
+        self.widget("details-menu-usb-redirection").set_sensitive(
+            is_viewer and self._viewer.console_has_usb_redirection() and
+            self.vm.has_spicevmc_type_redirdev())
+
+        for c in self._keycombo_menu.get_children():
+            c.set_sensitive(is_viewer and not paused)
 
         if pagenum < self.CONSOLE_PAGE_OFFSET:
             self._last_gfx_page = pagenum
@@ -963,15 +969,10 @@ class vmmConsolePages(vmmGObjectUI):
     def details_update_widget_states(self):
         return self._update_vm_widget_states()
 
-    def details_build_keycombo_menu(self, *args, **kwargs):
-        return self._build_keycombo_menu(*args, **kwargs)
-
     def details_refresh_can_fullscreen(self):
         return self._refresh_can_fullscreen()
     def details_resizeguest_ui_changed_cb(self, *args, **kwargs):
         return self._resizeguest_ui_changed_cb(*args, **kwargs)
-    def details_send_key(self, *args, **kwargs):
-        return self._do_send_key(*args, **kwargs)
 
     def details_page_changed(self, *args, **kwargs):
         return self._page_changed(*args, **kwargs)

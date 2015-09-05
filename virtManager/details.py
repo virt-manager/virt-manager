@@ -712,11 +712,6 @@ class vmmDetails(vmmGObjectUI):
         self.widget("details-menu-view-toolbar").set_active(
                                     self.config.get_details_show_toolbar())
 
-        # Keycombo menu (ctrl+alt+del etc.)
-        self.keycombo_menu = self.console.details_build_keycombo_menu(
-            self.console.details_send_key)
-        self.widget("details-menu-send-key").set_submenu(self.keycombo_menu)
-
 
     def init_graphs(self):
         def _make_graph():
@@ -1313,11 +1308,6 @@ class vmmDetails(vmmGObjectUI):
         self.set_pause_state(paused)
 
         self.widget("overview-name").set_editable(not active)
-
-        # Disable send key menu entries for offline VM
-        send_key = self.widget("details-menu-send-key")
-        for c in send_key.get_submenu().get_children():
-            c.set_sensitive(not (run or paused))
 
         self.console.details_update_widget_states()
         if not run:
