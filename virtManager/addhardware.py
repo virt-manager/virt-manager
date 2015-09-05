@@ -1676,6 +1676,11 @@ class vmmAddHardware(vmmGObjectUI):
             source_path = None
             source_mode = "bind"
 
+        if (devclass.type == "tcp" and source_mode == "bind"):
+            devclass.bind_host = source_host
+            devclass.bind_port = source_port
+            source_host = source_port = source_mode = None
+
         value_mappings = {
             "source_path" : source_path,
             "source_channel" : source_channel,

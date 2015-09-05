@@ -159,8 +159,9 @@ class _VirtualCharDevice(VirtualDevice):
         return hasattr(self, propname)
 
     def set_defaults(self, guest):
-        if not self.source_host and self.supports_property("source_host"):
-            self.source_host = "127.0.0.1"
+        ignore = guest
+        if not self.source_mode and self.supports_property("source_mode"):
+            self.source_mode = self.MODE_BIND
 
 
     def _set_host_helper(self, hostparam, portparam, val):
@@ -169,6 +170,8 @@ class _VirtualCharDevice(VirtualDevice):
             return host or None, port or None
 
         host, port = parse_host(val)
+        if not host:
+            host = "127.0.0.1"
         if host:
             setattr(self, hostparam, host)
         if port:
@@ -184,9 +187,8 @@ class _VirtualCharDevice(VirtualDevice):
 
     _XML_PROP_ORDER = ["type", "_has_mode_bind", "_has_mode_connect",
                        "bind_host", "bind_port",
-                       "source_mode", "_source_path", "source_channel",
-                       "_source_connect_host", "_source_bind_host",
-                       "_source_connect_port", "_source_bind_port",
+                       "source_mode", "source_host", "source_port",
+                       "_source_path", "source_channel",
                        "target_type", "target_name"]
 
     type = XMLProperty(
@@ -210,102 +212,45 @@ class _VirtualCharDevice(VirtualDevice):
                                  doc=_("Source channel name."))
 
 
-    ########################
-    # source mode handling #
-    ########################
+    ###################
+    # source handling #
+    ###################
 
-    def _get_mode_for_xml_prop(self):
-        mode = self.source_mode
-        if not mode:
-            # If we are parsing XML, source_mode may be empty
-            mode = self._get_default_source_mode()
-        if not mode:
-            mode = self.MODE_CONNECT
-        return mode
-
-    def _get_default_source_mode(self):
-        if self.type == self.TYPE_UDP:
-            return self.MODE_CONNECT
-        if not self.supports_property("source_mode"):
-            return None
-        return self.MODE_BIND
-    def _make_sourcemode_xpath(self):
-        if self.type == self.TYPE_UDP:
-            return "./source[@mode='connect']/@mode"
-        return "./source/@mode"
-    source_mode = XMLProperty(name="char sourcemode",
-                              doc=_("Target connect/listen mode."),
-                              make_xpath_cb=_make_sourcemode_xpath,
-                              default_cb=_get_default_source_mode)
-
-
-    ########################
-    # source host handling #
-    ########################
-
-    _source_connect_host = XMLProperty("./source[@mode='connect']/@host")
-    _source_bind_host = XMLProperty("./source[@mode='bind']/@host")
-
-    def _set_source_host(self, val):
-        if (val and
-            self.type == self.TYPE_UDP and
-            not self._has_mode_connect):
-            self._has_mode_connect = self.MODE_CONNECT
-
-        if self._get_mode_for_xml_prop() == self.MODE_CONNECT:
-            self._source_connect_host = val
-        else:
-            self._source_bind_host = val
-    def _get_source_host(self):
-        if self._get_mode_for_xml_prop() == self.MODE_CONNECT:
-            return self._source_connect_host
-        else:
-            return self._source_bind_host
-    source_host = property(_get_source_host, _set_source_host,
-                           doc=_("Address to connect/listen to."))
-
-
-    ########################
-    # source port handling #
-    ########################
-
-    _source_connect_port = XMLProperty("./source[@mode='connect']/@service",
-        is_int=True)
-    _source_bind_port = XMLProperty("./source[@mode='bind']/@service",
-        is_int=True)
-    def _set_source_port(self, val):
-        if self._get_mode_for_xml_prop() == self.MODE_CONNECT:
-            self._source_connect_port = val
-        else:
-            self._source_bind_port = val
-    def _get_source_port(self):
-        if self._get_mode_for_xml_prop() == self.MODE_CONNECT:
-            return self._source_connect_port
-        else:
-            return self._source_bind_port
-    source_port = property(_get_source_port, _set_source_port,
-        doc=_("Port on target host to connect/listen to."))
-
-
-    #######################
-    # Remaining XML props #
-    #######################
+    source_mode = XMLProperty("./source/@mode")
 
     _has_mode_connect = XMLProperty("./source[@mode='connect']/@mode")
     _has_mode_bind = XMLProperty("./source[@mode='bind']/@mode")
 
+    def _set_source_validate(self, val):
+        if val is None:
+            return None
+        self._has_mode_connect = self.MODE_CONNECT
+        return val
+    source_host = XMLProperty("./source[@mode='connect']/@host",
+                            doc=_("Host address to connect to."),
+                            set_converter=_set_source_validate)
+    source_port = XMLProperty("./source[@mode='connect']/@service",
+                              doc=_("Host port to connect to."),
+                              set_converter=_set_source_validate,
+                              is_int=True)
+
     def _set_bind_validate(self, val):
         if val is None:
             return None
-        if not self._has_mode_bind:
-            self._has_mode_bind = self.MODE_BIND
+        self._has_mode_bind = self.MODE_BIND
         return val
     bind_host = XMLProperty("./source[@mode='bind']/@host",
                             doc=_("Host address to bind to."),
                             set_converter=_set_bind_validate)
     bind_port = XMLProperty("./source[@mode='bind']/@service",
                             doc=_("Host port to bind to."),
-                            set_converter=_set_bind_validate, is_int=True)
+                            set_converter=_set_bind_validate,
+                            is_int=True)
+
+
+    #######################
+    # Remaining XML props #
+    #######################
 
     def _get_default_protocol(self):
         if not self.supports_property("protocol"):

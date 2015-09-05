@@ -454,7 +454,6 @@ class XMLParseTest(unittest.TestCase):
         check("type", "udp")
         check("bind_port", 1111, 1357)
         check("bind_host", "my.bind.host", "my.foo.host")
-        check("source_mode", "connect")
         check("source_port", 2222, 7777)
         check("source_host", "my.source.host", "source.foo.host")
 

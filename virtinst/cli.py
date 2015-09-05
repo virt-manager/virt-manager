@@ -2133,17 +2133,19 @@ class _ParserChar(VirtCLIParser):
                      "optname" : cliname})
         self.support_cb = support_check
 
-
         self.set_param("type", "char_type")
         self.set_param("source_path", "path")
-        self.set_param("source_mode", "mode")
         self.set_param("protocol",   "protocol")
         self.set_param("target_type", "target_type")
         self.set_param("target_name", "name")
 
         def set_host_cb(opts, inst, cliname, val):
-            ignore = opts = cliname
-            inst.set_friendly_source(val)
+            ignore = cliname
+            if ("bind_host" not in opts.opts and
+                opts.opts.get("mode", None) == "bind"):
+                inst.set_friendly_bind(val)
+            else:
+                inst.set_friendly_source(val)
         self.set_param(None, "host", setter_cb=set_host_cb)
 
         def set_bind_cb(opts, inst, cliname, val):
@@ -2155,6 +2157,8 @@ class _ParserChar(VirtCLIParser):
             ignore = opts = cliname
             inst.set_friendly_target(val)
         self.set_param(None, "target_address", setter_cb=set_target_cb)
+
+        self.set_param("source_mode", "mode")
 
     def _parse(self, opts, inst):
         if opts.fullopts == "none" and inst.virtual_device_type == "console":
