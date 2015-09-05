@@ -432,8 +432,8 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     </disk>
 
     <!-- bus usb -->
-    <disk type='block' device='disk'>
-      <source dev='/dev/default-pool/overlay.img'/>
+    <disk type='volume' device='disk'>
+      <source pool='default-pool' volume='overlay.img'/>
       <target dev='sdd' bus='usb'/>
     </disk>
 

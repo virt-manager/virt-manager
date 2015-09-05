@@ -234,18 +234,7 @@ def populate_storage_list(storage_list, vm, conn):
     model = storage_list.get_model()
     model.clear()
 
-    def get_path(disk):
-        if disk.source_pool:
-            pool = conn.get_pool(disk.source_pool)
-            if pool is None:
-                return disk.path
-            vol = pool.get_volume(disk.path)
-            if vol is None:
-                return disk.path
-            return vol.get_target_path()
-        return disk.path
-
-    diskdata = [(d.target, get_path(d), d.read_only, d.shareable) for
+    diskdata = [(d.target, d.path, d.read_only, d.shareable) for
                 d in vm.get_disk_devices()]
 
     diskdata.append(("kernel", vm.get_xmlobj().os.kernel, True, False))

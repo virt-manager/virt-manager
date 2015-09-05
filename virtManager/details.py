@@ -2639,7 +2639,6 @@ class vmmDetails(vmmGObjectUI):
             return
 
         path = disk.path
-        source_pool = disk.source_pool
         devtype = disk.device
         ro = disk.read_only
         share = disk.shareable
@@ -2661,27 +2660,12 @@ class vmmDetails(vmmGObjectUI):
                        virtinst.VirtualDisk.path_definitely_exists(
                             disk.conn, disk.path))
 
-        size = _("Unknown")
-        if not path:
-            size = "-"
-        else:
-            vol = None
-            if source_pool:
-                pool = self.conn.get_pool(source_pool)
-                if pool is not None:
-                    vol = pool.get_volume(path)
-            else:
-                vol = self.conn.get_vol_by_path(path)
-
+        size = "-"
+        if path:
+            size = _("Unknown")
+            vol = self.conn.get_vol_by_path(path)
             if vol:
                 size = vol.get_pretty_capacity()
-            elif not self.conn.is_remote():
-                ignore, val = virtinst.VirtualDisk.stat_local_path(path)
-                if val != 0:
-                    if val > (1024 * 1024 * 1024):
-                        size = "%2.2f GiB" % (val / (1024.0 * 1024.0 * 1024.0))
-                    else:
-                        size = "%2.2f MiB" % (val / (1024.0 * 1024.0))
 
         is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
         is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)

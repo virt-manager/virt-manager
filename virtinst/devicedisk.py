@@ -386,21 +386,6 @@ class VirtualDisk(VirtualDevice):
         return ret
 
     @staticmethod
-    def stat_local_path(path):
-        """
-        Return tuple (storage type, storage size) for the passed path on
-        the local machine. This is a best effort attempt.
-
-        @return: tuple of
-                 (True if regular file, False otherwise, default is True,
-                 max size of storage, default is 0)
-        """
-        try:
-            return util.stat_disk(path)
-        except:
-            return (True, 0)
-
-    @staticmethod
     def build_vol_install(conn, volname, poolobj, size, sparse,
                           fmt=None, backing_store=None):
         """
