@@ -191,12 +191,11 @@ class _VirtualCharDevice(VirtualDevice):
                        "_source_path", "source_channel",
                        "target_type", "target_name"]
 
-    type = XMLProperty(
-                doc=_("Method used to expose character device in the host."),
-                xpath="./@type")
+    type = XMLProperty("./@type",
+        doc=_("Method used to expose character device in the host."))
 
     _tty = XMLProperty("./@tty")
-    _source_path = XMLProperty(xpath="./source/@path",
+    _source_path = XMLProperty("./source/@path",
         doc=_("Host input path to attach to the guest."))
 
     def _get_source_path(self):
@@ -208,7 +207,7 @@ class _VirtualCharDevice(VirtualDevice):
         self._source_path = val
     source_path = property(_get_source_path, _set_source_path)
 
-    source_channel = XMLProperty(xpath="./source/@channel",
+    source_channel = XMLProperty("./source/@channel",
                                  doc=_("Source channel name."))
 
 

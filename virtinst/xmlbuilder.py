@@ -332,8 +332,8 @@ class XMLChildProperty(property):
 
 
 class XMLProperty(property):
-    def __init__(self, xpath=None, name=None, doc=None,
-                 set_converter=None, validate_cb=None, make_xpath_cb=None,
+    def __init__(self, xpath, doc=None,
+                 set_converter=None, validate_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
                  default_cb=None, default_name=None, do_abspath=False):
         """
@@ -359,9 +359,6 @@ class XMLProperty(property):
             operation we convert the XML value with int(val) / 1024.
         @param validate_cb: Called once when value is set, should
             raise a RuntimeError if the value is not proper.
-        @param make_xpath_cb: Not all props map cleanly to a
-            static xpath. This allows passing functions which generate
-            an xpath.
         @param is_bool: Whether this is a boolean property in the XML
         @param is_int: Whether this is an integer property in the XML
         @param is_yesno: Whether this is a yes/no property in the XML
@@ -374,11 +371,9 @@ class XMLProperty(property):
             value, instead use the value of default_cb()
         @param do_abspath: If True, run os.path.abspath on the passed value
         """
-
         self._xpath = xpath
-        self._name = name or xpath
-        if not self._name:
-            raise RuntimeError("XMLProperty: name or xpath must be passed.")
+        if not self._xpath:
+            raise RuntimeError("XMLProperty: xpath must be passed.")
         self._propname = None
 
         self._is_bool = is_bool
@@ -387,7 +382,6 @@ class XMLProperty(property):
         self._is_onoff = is_onoff
         self._do_abspath = do_abspath
 
-        self._make_xpath_cb = make_xpath_cb
         self._validate_cb = validate_cb
         self._convert_value_for_setter_cb = set_converter
         self._default_cb = default_cb
@@ -410,7 +404,7 @@ class XMLProperty(property):
 
 
     def __repr__(self):
-        return "<XMLProperty %s %s>" % (str(self._name), id(self))
+        return "<XMLProperty %s %s>" % (str(self._xpath), id(self))
 
 
     ####################
@@ -432,12 +426,7 @@ class XMLProperty(property):
         return self._propname
 
     def _make_xpath(self, xmlbuilder):
-        ret = self._xpath
-        if self._make_xpath_cb:
-            ret = self._make_xpath_cb(xmlbuilder)
-        if ret is None:
-            raise RuntimeError("%s: didn't generate any xpath." % self)
-        return xmlbuilder.fix_relative_xpath(ret)
+        return xmlbuilder.fix_relative_xpath(self._xpath)
 
 
     def _build_node_list(self, xmlbuilder, xpath):

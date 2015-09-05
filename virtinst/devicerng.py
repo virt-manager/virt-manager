@@ -98,25 +98,24 @@ class VirtualRNGDevice(VirtualDevice):
             self._has_mode_bind = VirtualRNGDevice.BACKEND_MODE_BIND
         return val
 
-    type = XMLProperty(xpath="./backend/@model")
-    model = XMLProperty(xpath="./@model",
-                        default_cb=lambda s: "virtio")
+    type = XMLProperty("./backend/@model")
+    model = XMLProperty("./@model", default_cb=lambda s: "virtio")
 
-    backend_type = XMLProperty(xpath="./backend/@type")
+    backend_type = XMLProperty("./backend/@type")
 
-    bind_host = XMLProperty(xpath="./backend/source[@mode='bind']/@host",
+    bind_host = XMLProperty("./backend/source[@mode='bind']/@host",
                             set_converter=_set_bind_validate)
-    bind_service = XMLProperty(xpath="./backend/source[@mode='bind']/@service",
+    bind_service = XMLProperty("./backend/source[@mode='bind']/@service",
                                set_converter=_set_bind_validate)
 
-    connect_host = XMLProperty(xpath="./backend/source[@mode='connect']/@host",
-                               set_converter=_set_connect_validate)
-    connect_service = XMLProperty(set_converter=_set_connect_validate,
-                           xpath="./backend/source[@mode='connect']/@service")
+    connect_host = XMLProperty("./backend/source[@mode='connect']/@host",
+        set_converter=_set_connect_validate)
+    connect_service = XMLProperty("./backend/source[@mode='connect']/@service",
+        set_converter=_set_connect_validate)
 
-    rate_bytes = XMLProperty(xpath="./rate/@bytes")
-    rate_period = XMLProperty(xpath="./rate/@period")
+    rate_bytes = XMLProperty("./rate/@bytes")
+    rate_period = XMLProperty("./rate/@period")
 
-    device = XMLProperty(xpath="./backend")
+    device = XMLProperty("./backend")
 
 VirtualRNGDevice.register_type()
