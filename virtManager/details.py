@@ -706,10 +706,6 @@ class vmmDetails(vmmGObjectUI):
         for i in self._addhwmenuitems.values():
             self.addhwmenu.add(i)
 
-        # Don't allowing changing network/disks for Dom0
-        dom0 = self.vm.is_management_domain()
-        self.widget("add-hardware-button").set_sensitive(not dom0)
-
         self.widget("hw-panel").set_show_tabs(False)
         self.widget("details-pages").set_show_tabs(False)
         self.widget("console-pages").set_show_tabs(False)
@@ -797,8 +793,7 @@ class vmmDetails(vmmGObjectUI):
         except:
             logging.exception("Error determining machine list")
 
-        show_machine = (arch not in ["i686", "x86_64"] and
-                        not self.vm.is_management_domain())
+        show_machine = (arch not in ["i686", "x86_64"])
         uiutil.set_grid_row_visible(self.widget("machine-type-title"),
             show_machine)
 
@@ -851,8 +846,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-firmware-label").set_visible(
             not self.is_customize_dialog)
         show_firmware = ((self.conn.is_qemu() or self.conn.is_test_conn()) and
-            domcaps.arch_can_uefi() and
-            not self.vm.is_management_domain())
+            domcaps.arch_can_uefi())
         uiutil.set_grid_row_visible(
             self.widget("overview-firmware-title"), show_firmware)
 
@@ -879,8 +873,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-chipset-label").set_visible(
             not self.is_customize_dialog)
         show_chipset = ((self.conn.is_qemu() or self.conn.is_test_conn()) and
-                        arch in ["i686", "x86_64"] and
-                        not self.vm.is_management_domain())
+                        arch in ["i686", "x86_64"])
         uiutil.set_grid_row_visible(
             self.widget("overview-chipset-title"), show_chipset)
 
@@ -1307,7 +1300,6 @@ class vmmDetails(vmmGObjectUI):
         run = vm.is_runable()
         stop = vm.is_stoppable()
         paused = vm.is_paused()
-        ro = vm.is_read_only()
 
         if vm.managedsave_supported:
             self.change_run_text(vm.has_managed_save())
@@ -1321,11 +1313,6 @@ class vmmDetails(vmmGObjectUI):
         self.set_pause_state(paused)
 
         self.widget("overview-name").set_editable(not active)
-
-        self.widget("config-vcpus").set_sensitive(not ro)
-        self.widget("config-vcpupin").set_sensitive(not ro)
-        self.widget("config-memory").set_sensitive(not ro)
-        self.widget("config-maxmem").set_sensitive(not ro)
 
         # Disable send key menu entries for offline VM
         send_key = self.widget("details-menu-send-key")

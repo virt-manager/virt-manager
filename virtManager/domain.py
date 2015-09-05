@@ -315,7 +315,6 @@ class vmmDomain(vmmLibvirtObject):
         }
 
         self._install_abort = False
-        self._is_management_domain = None
         self._id = None
         self._uuid = None
         self._has_managed_save = None
@@ -459,17 +458,6 @@ class vmmDomain(vmmLibvirtObject):
 
     def stable_defaults(self):
         return self.get_xmlobj().stable_defaults()
-
-    def is_read_only(self):
-        if self.is_management_domain():
-            return True
-        return False
-
-    def is_management_domain(self):
-        if self._is_management_domain is None:
-            self._is_management_domain = (self.conn.is_xen() and
-                                          self.get_id() == 0)
-        return self._is_management_domain
 
     def has_spicevmc_type_redirdev(self):
         devs = self.get_redirdev_devices()
@@ -1886,13 +1874,6 @@ class vmmDomain(vmmLibvirtObject):
         current = len(self._stats)
         if current > expected:
             del self._stats[expected:current]
-
-        # Xen reports complete crap for Dom0 max memory
-        # (ie MAX_LONG) so lets clamp it to the actual
-        # physical RAM in machine which is the effective
-        # real world limit
-        if self.is_management_domain() and info:
-            info[1] = self.conn.host_memory_size()
 
         now = time.time()
         (cpuTime, cpuTimeAbs,
