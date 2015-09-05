@@ -334,7 +334,10 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
 
     <!-- bus fdc -->
     <disk type='block' device='floppy'>
-      <source dev='/dev/null'/>
+      <source dev='/dev/null'>
+        <seclabel model='selinux' relabel='no'/>
+        <seclabel model='dac' relabel='no'/>
+      </source>
       <target dev='fda' bus='fdc'/>
       <boot order='5'/>
     </disk>
@@ -688,8 +691,10 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <memballoon model='virtio'/>
   </devices>
 
-  <seclabel model='selinux' type='dynamic'/>
-  <seclabel model='dac' type='none'/>
+  <seclabel model='selinux' type='dynamic' relabel='yes'/>
+  <seclabel model='dac' type='static' relabel='yes'>
+    <label type='qemu'>107:107</label>
+  </seclabel>
 </domain>
 
 

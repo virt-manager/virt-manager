@@ -24,7 +24,10 @@
       <serial>WD-WMAP9A966149</serial>
     </disk>
     <disk type="block" device="disk">
-      <source dev="/dev/null"/>
+      <source dev="/dev/null">
+        <seclabel model='selinux' relabel='no'/>
+        <seclabel model='dac' type='dynamic'/>
+      </source>
       <target dev="hdb" bus="ide"/>
     </disk>
     <disk type="block" device="cdrom">

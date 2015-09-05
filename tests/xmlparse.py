@@ -345,6 +345,11 @@ class XMLParseTest(unittest.TestCase):
         check("bus", "ide", "usb")
         check("removable", None, False, True)
 
+        disk = guest.get_devices("disk")[1]
+        check = self._make_checker(disk.seclabel[1])
+        check("model", "dac")
+        check("type", "dynamic", "none")
+
         disk = _get_disk("hdc")
         check = self._make_checker(disk)
         check("type", "block", "dir", "file", "block")

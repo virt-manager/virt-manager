@@ -31,8 +31,9 @@ import urlgrabber.progress as progress
 from . import diskbackend
 from . import util
 from .device import VirtualDevice
+from .seclabel import Seclabel
 from .uri import URISplit
-from .xmlbuilder import XMLProperty
+from .xmlbuilder import XMLChildProperty, XMLProperty
 
 
 def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
@@ -765,6 +766,8 @@ class VirtualDisk(VirtualDevice):
     iotune_tis = XMLProperty("./iotune/total_iops_sec", is_int=True)
     iotune_wbs = XMLProperty("./iotune/write_bytes_sec", is_int=True)
     iotune_wis = XMLProperty("./iotune/write_iops_sec", is_int=True)
+
+    seclabel = XMLChildProperty(Seclabel, relative_xpath="./source")
 
 
     #################################

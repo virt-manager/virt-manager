@@ -25,7 +25,10 @@
       <driver name="test" type="raw"/>
     </disk>
     <disk type="block" device="disk">
-      <source dev="/dev/null"/>
+      <source dev="/dev/null">
+        <seclabel model="selinux" relabel="no"/>
+        <seclabel model="dac" type="none"/>
+      </source>
       <target dev="hdb" bus="ide"/>
     </disk>
     <disk type="block" device="floppy">
