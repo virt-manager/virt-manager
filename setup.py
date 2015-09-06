@@ -349,6 +349,8 @@ class TestBaseCommand(Command):
         ('regenerate-output', None, 'Regenerate test output'),
         ("only=", None,
          "Run only testcases whose name contains the passed string"),
+        ("testfile=", None, "Specific test file to run (e.g "
+                            "validation, storage, ...)"),
     ]
 
     def initialize_options(self):
@@ -358,10 +360,30 @@ class TestBaseCommand(Command):
         self.only = None
         self._testfiles = []
         self._dir = os.getcwd()
+        self.testfile = None
 
     def finalize_options(self):
         if self.debug and "DEBUG_TESTS" not in os.environ:
             os.environ["DEBUG_TESTS"] = "1"
+
+    def _find_tests_in_dir(self, dirname, excludes):
+        testfiles = []
+        for t in sorted(glob.glob(os.path.join(self._dir, dirname, '*.py'))):
+            base = os.path.basename(t)
+            if base in excludes + ["__init__.py"]:
+                continue
+
+            if self.testfile:
+                check = os.path.basename(self.testfile)
+                if base != check and base != (check + ".py"):
+                    continue
+
+            testfiles.append('.'.join(
+                dirname.split("/") + [os.path.splitext(base)[0]]))
+
+        if not testfiles:
+            raise RuntimeError("--testfile didn't catch anything")
+        return testfiles
 
     def run(self):
         try:
@@ -429,14 +451,11 @@ class TestBaseCommand(Command):
 class TestCommand(TestBaseCommand):
     description = "Runs a quick unit test suite"
     user_options = TestBaseCommand.user_options + [
-        ("testfile=", None, "Specific test file to run (e.g "
-                            "validation, storage, ...)"),
         ("skipcli", None, "Skip CLI tests"),
     ]
 
     def initialize_options(self):
         TestBaseCommand.initialize_options(self)
-        self.testfile = None
         self.skipcli = None
 
     def finalize_options(self):
@@ -446,22 +465,10 @@ class TestCommand(TestBaseCommand):
         '''
         Finds all the tests modules in tests/, and runs them.
         '''
-        testfiles = []
-        for t in sorted(glob.glob(os.path.join(self._dir, 'tests', '*.py'))):
-            if (t.endswith("__init__.py") or
-                t.endswith("test_urls.py") or
-                t.endswith("test_inject.py")):
-                continue
-
-            base = os.path.basename(t)
-            if self.testfile:
-                check = os.path.basename(self.testfile)
-                if base != check and base != (check + ".py"):
-                    continue
-            if self.skipcli and base.count("clitest"):
-                continue
-
-            testfiles.append('.'.join(['tests', os.path.splitext(base)[0]]))
+        excludes = ["test_urls.py", "test_inject.py"]
+        if self.skipcli:
+            excludes += ["clitest.py"]
+        testfiles = self._find_tests_in_dir("tests", excludes)
 
         # Put clitest at the end, since it takes the longest
         for f in testfiles[:]:
@@ -476,10 +483,15 @@ class TestCommand(TestBaseCommand):
                 if not self.testfile and not self.skipcli:
                     testfiles.append(f)
 
-        if not testfiles:
-            raise RuntimeError("--testfile didn't catch anything")
-
         self._testfiles = testfiles
+        TestBaseCommand.run(self)
+
+
+class TestUI(TestBaseCommand):
+    description = "Run UI dogtails tests"
+
+    def run(self):
+        self._testfiles = self._find_tests_in_dir("tests/uitests", [])
         TestBaseCommand.run(self)
 
 
@@ -626,6 +638,7 @@ setup(
         'pylint': CheckPylint,
         'rpm': my_rpm,
         'test': TestCommand,
+        'test_ui': TestUI,
         'test_urls' : TestURLFetch,
         'test_initrd_inject' : TestInitrdInject,
     }
