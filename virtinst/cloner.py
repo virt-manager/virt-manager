@@ -23,7 +23,6 @@ import logging
 import re
 import os
 
-import urlgrabber.progress as progress
 import libvirt
 
 from . import util
@@ -432,9 +431,7 @@ class Cloner(object):
         the new clone xml.
         """
         logging.debug("Starting duplicate.")
-
-        if not meter:
-            meter = progress.BaseMeter()
+        meter = util.ensure_meter(meter)
 
         dom = None
         try:

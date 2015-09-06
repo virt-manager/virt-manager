@@ -26,8 +26,6 @@ import subprocess
 import logging
 import re
 
-import urlgrabber.progress as progress
-
 from . import diskbackend
 from . import util
 from .device import VirtualDevice
@@ -865,15 +863,11 @@ class VirtualDisk(VirtualDevice):
 
         If storage doesn't exist (a non-existent file 'path', or 'vol_install'
         was specified), we create it.
-
-        @param meter: Progress meter to report file creation on
-        @type meter: instanceof urlgrabber.BaseMeter
         """
-        if not meter:
-            meter = progress.BaseMeter()
         if not self._storage_backend.will_create_storage():
             return
 
+        meter = util.ensure_meter(meter)
         vol_object = self._storage_backend.create(meter)
         self.storage_was_created = True
         if not vol_object:

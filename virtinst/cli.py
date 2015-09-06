@@ -29,7 +29,6 @@ import sys
 import traceback
 
 import libvirt
-from urlgrabber import progress
 
 from virtcli import CLIConfig
 
@@ -484,9 +483,8 @@ def get_console_cb(guest):
 
 
 def get_meter():
-    if get_global_state().quiet or "VIRTINST_TEST_SUITE" in os.environ:
-        return progress.BaseMeter()
-    return progress.TextMeter(fo=sys.stdout)
+    quiet = (get_global_state().quiet or "VIRTINST_TEST_SUITE" in os.environ)
+    return util.make_meter(quiet=quiet)
 
 
 ###########################

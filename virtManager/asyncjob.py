@@ -27,7 +27,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 import libvirt
-import urlgrabber
+import urlgrabber.progress
 
 from .baseclass import vmmGObjectUI
 

@@ -6,13 +6,12 @@ import os
 import sys
 import unittest
 
-import urlgrabber
-
 from tests import INITRD_TEST_DISTROS
 from tests import utils
 
 from virtinst import Guest
 from virtinst import urlfetcher
+from virtinst import util
 from virtinst.distroinstaller import _perform_initrd_injections
 
 cleanup = []
@@ -22,7 +21,7 @@ testconn = utils.open_testdefault()
 guest = Guest(testconn)
 guest.os.os_type = "hvm"
 guest.os.arch = "x86_64"
-meter = urlgrabber.progress.TextMeter(fo=sys.stdout)
+meter = util.make_meter(quiet=False)
 
 DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
 OLD_FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"

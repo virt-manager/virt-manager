@@ -23,7 +23,6 @@ import time
 import logging
 
 import libvirt
-import urlgrabber
 
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 from . import util
@@ -498,8 +497,7 @@ class StoragePool(_StorageObject):
         logging.debug("Creating storage pool '%s' with xml:\n%s",
                       self.name, xml)
 
-        if not meter:
-            meter = urlgrabber.progress.BaseMeter()
+        meter = util.ensure_meter(meter)
 
         try:
             pool = self.conn.storagePoolDefineXML(xml, 0)
@@ -771,8 +769,7 @@ class StorageVolume(_StorageObject):
                              args=(meter,))
         t.setDaemon(True)
 
-        if not meter:
-            meter = urlgrabber.progress.BaseMeter()
+        meter = util.ensure_meter(meter)
 
         cloneflags = 0
         createflags = 0

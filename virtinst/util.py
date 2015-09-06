@@ -23,6 +23,7 @@ import os
 import random
 import re
 import stat
+import sys
 
 import libvirt
 
@@ -462,3 +463,16 @@ def register_libvirt_error_handler():
         ignore = userdata
         ignore = err
     libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
+
+
+def ensure_meter(meter):
+    if meter:
+        return meter
+    return make_meter(quiet=True)
+
+
+def make_meter(quiet):
+    from urlgrabber import progress
+    if quiet:
+        return progress.BaseMeter()
+    return progress.TextMeter(fo=sys.stdout)

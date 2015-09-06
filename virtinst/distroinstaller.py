@@ -23,8 +23,6 @@ import shutil
 import subprocess
 import tempfile
 
-import urlgrabber
-
 from . import urlfetcher
 from . import util
 from .devicedisk import VirtualDisk
@@ -100,8 +98,7 @@ def _upload_file(conn, meter, destpool, src):
                 break
             data = data[ret:]
 
-    if meter is None:
-        meter = urlgrabber.progress.BaseMeter()
+    meter = util.ensure_meter(meter)
 
     # Build placeholder volume
     size = os.path.getsize(src)
@@ -332,8 +329,7 @@ class DistroInstaller(Installer):
         return MEDIA_LOCATION_CDROM
 
     def _get_fetcher(self, guest, meter):
-        if not meter:
-            meter = urlgrabber.progress.BaseMeter()
+        meter = util.ensure_meter(meter)
 
         if not self._cached_fetcher:
             scratchdir = util.make_scratchdir(guest.conn, guest.type)

@@ -22,7 +22,6 @@
 import logging
 import os
 
-import urlgrabber.progress as progress
 import libvirt
 
 from virtcli import CLIConfig
@@ -379,8 +378,7 @@ class Guest(XMLBuilder):
         else:
             meter_label = _("Starting domain...")
 
-        if meter is None:
-            meter = progress.BaseMeter()
+        meter = util.ensure_meter(meter)
         meter.start(size=None, text=meter_label)
 
         return meter

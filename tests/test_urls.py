@@ -19,15 +19,13 @@ import unittest
 import time
 import logging
 import platform
-import sys
-
-import urlgrabber.progress
 
 from tests import URLTEST_LOCAL_MEDIA
 from tests import utils
 
 from virtinst import Guest
 from virtinst import urlfetcher
+from virtinst import util
 from virtinst.urlfetcher import FedoraDistro
 from virtinst.urlfetcher import SuseDistro
 from virtinst.urlfetcher import DebianDistro
@@ -189,9 +187,7 @@ hvmguest.os.os_type = "hvm"
 xenguest = Guest(testconn)
 xenguest.os.os_type = "xen"
 
-meter = urlgrabber.progress.BaseMeter()
-if utils.get_debug():
-    meter = urlgrabber.progress.TextMeter(fo=sys.stdout)
+meter = util.make_meter(quiet=not utils.get_debug())
 
 
 def _storeForDistro(fetcher, guest):
