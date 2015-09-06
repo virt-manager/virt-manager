@@ -171,7 +171,7 @@ class vmmEngine(vmmGObject):
 
     def add_default_conn(self, manager):
         # Only add default if no connections are currently known
-        if self.config.get_conn_uris():
+        if self.config.get_conn_uris() or self.uri_at_startup:
             return
 
         self.timeout_add(1000, self._add_default_conn, manager)
