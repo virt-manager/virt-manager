@@ -228,15 +228,15 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
         streamHandler.setLevel(logging.DEBUG)
         streamHandler.setFormatter(logging.Formatter(fileFormat,
                                                      dateFormat))
-    elif not cli_app:
-        streamHandler = None
-    else:
+    elif cli_app or not logfile:
         if get_global_state().quiet:
             level = logging.ERROR
         else:
             level = logging.WARN
         streamHandler.setLevel(level)
         streamHandler.setFormatter(logging.Formatter(streamErrorFormat))
+    else:
+        streamHandler = None
 
     if streamHandler:
         rootLogger.addHandler(streamHandler)
