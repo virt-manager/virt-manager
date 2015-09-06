@@ -851,14 +851,7 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
     while True:
         if domain_is_shutdown(guest.domain):
             print_stdout(_("Domain has shutdown. Continuing."))
-            try:
-                # Lookup a new domain object incase current
-                # one returned bogus data (see comment in
-                # domain_is_shutdown)
-                dom = guest.conn.lookupByName(guest.name)
-            except Exception, e:
-                raise RuntimeError(_("Could not lookup domain after "
-                                     "install: %s" % str(e)))
+            dom = guest.domain
             break
 
         time_elapsed = (time.time() - start_time)
