@@ -20,6 +20,7 @@
 # MA 02110-1301 USA.
 
 import logging
+import os
 
 import urlgrabber.progress as progress
 import libvirt
@@ -368,77 +369,9 @@ class Guest(XMLBuilder):
         return self.get_xml_config()
 
 
-    ##############
-    # Public API #
-    ##############
-
-    def get_continue_inst(self):
-        """
-        Return True if this guest requires a call to 'continue_install',
-        which means the OS requires a 2 stage install (windows)
-        """
-        # If we are doing an 'import' or 'liveCD' install, there is
-        # no true install process, so continue install has no meaning
-        if not self.installer.has_install_phase():
-            return False
-
-        return self._os_object.is_windows()
-
-    def start_install(self, meter=None,
-                      dry=False, return_xml=False, noboot=False):
-        """
-        Begin the guest install (stage1).
-        @param return_xml: Don't create the guest, just return generated XML
-        """
-        if self.domain is not None:
-            raise RuntimeError(_("Domain has already been started!"))
-
-        is_initial = True
-        self.set_install_defaults()
-
-        self._prepare_install(meter, dry)
-        try:
-            # Create devices if required (disk images, etc.)
-            if not dry:
-                for dev in self.get_all_devices():
-                    dev.setup(meter)
-
-            start_xml, final_xml = self._build_xml(is_initial)
-            if return_xml:
-                return (start_xml, final_xml)
-            if dry:
-                return
-
-            # Remove existing VM if requested
-            self.check_vm_collision(self.conn, self.name,
-                                    do_remove=self.replace)
-
-            self.domain = self._create_guest(meter,
-                                             start_xml, final_xml, is_initial,
-                                             noboot)
-            # Set domain autostart flag if requested
-            self._flag_autostart()
-
-            return self.domain
-        finally:
-            self.installer.cleanup()
-
-    def continue_install(self, meter=None,
-                         dry=False, return_xml=False):
-        """
-        Continue with stage 2 of a guest install. Only required for
-        guests which have the 'continue' flag set (accessed via
-        get_continue_inst)
-        """
-        is_initial = False
-        start_xml, final_xml = self._build_xml(is_initial)
-        if return_xml:
-            return (start_xml, final_xml)
-        if dry:
-            return
-
-        return self._create_guest(meter,
-                                  start_xml, final_xml, is_initial, False)
+    ###########################
+    # Private install helpers #
+    ###########################
 
     def _build_meter(self, meter, is_initial):
         if is_initial:
@@ -514,6 +447,109 @@ class Guest(XMLBuilder):
                              "connection does not support autostart.")
             else:
                 raise e
+
+
+
+    ##############
+    # Public API #
+    ##############
+
+    def get_continue_inst(self):
+        """
+        Return True if this guest requires a call to 'continue_install',
+        which means the OS requires a 2 stage install (windows)
+        """
+        # If we are doing an 'import' or 'liveCD' install, there is
+        # no true install process, so continue install has no meaning
+        if not self.installer.has_install_phase():
+            return False
+
+        return self._os_object.is_windows()
+
+    def start_install(self, meter=None,
+                      dry=False, return_xml=False, noboot=False):
+        """
+        Begin the guest install (stage1).
+        @param return_xml: Don't create the guest, just return generated XML
+        """
+        if self.domain is not None:
+            raise RuntimeError(_("Domain has already been started!"))
+
+        is_initial = True
+        self.set_install_defaults()
+
+        self._prepare_install(meter, dry)
+        try:
+            # Create devices if required (disk images, etc.)
+            if not dry:
+                for dev in self.get_all_devices():
+                    dev.setup(meter)
+
+            start_xml, final_xml = self._build_xml(is_initial)
+            if return_xml:
+                return (start_xml, final_xml)
+            if dry:
+                return
+
+            # Remove existing VM if requested
+            self.check_vm_collision(self.conn, self.name,
+                                    do_remove=self.replace)
+
+            self.domain = self._create_guest(meter,
+                                             start_xml, final_xml, is_initial,
+                                             noboot)
+            # Set domain autostart flag if requested
+            self._flag_autostart()
+
+            return self.domain
+        finally:
+            self.installer.cleanup()
+
+    def continue_install(self, meter=None,
+                         dry=False, return_xml=False):
+        """
+        Continue with stage 2 of a guest install. Only required for
+        guests which have the 'continue' flag set (accessed via
+        get_continue_inst)
+        """
+        is_initial = False
+        start_xml, final_xml = self._build_xml(is_initial)
+        if return_xml:
+            return (start_xml, final_xml)
+        if dry:
+            return
+
+        return self._create_guest(meter,
+                                  start_xml, final_xml, is_initial, False)
+
+    def cleanup_created_disks(self, meter):
+        """
+        Remove any disks we created as part of the install. Only ever
+        called by clients.
+        """
+        clean_disks = [d for d in self.get_devices("disk") if
+                       d.storage_was_created]
+        if not clean_disks:
+            return
+
+        for disk in clean_disks:
+            logging.debug("Removing created disk path=%s vol_object=%s",
+                disk.path, disk.get_vol_object())
+            name = os.path.basename(disk.path)
+
+            try:
+                meter.start(size=None, text=_("Removing disk '%s'") % name)
+
+                if disk.get_vol_object():
+                    disk.get_vol_object().delete()
+                else:
+                    os.unlink(disk.path)
+
+                meter.end(0)
+            except Exception, e:
+                logging.debug("Failed to remove disk '%s'",
+                    name, exc_info=True)
+                logging.error("Failed to remove disk '%s': %s", name, e)
 
 
     ###########################

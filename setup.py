@@ -372,7 +372,9 @@ class TestBaseCommand(Command):
             cov = None
 
         if use_cov:
-            omit = ["/usr/*", "/*/tests/*"]
+            # The latter is required to not give errors on f23, probably
+            # a temporary bug.
+            omit = ["/usr/*", "/*/tests/*", "/builddir/*"]
             cov = coverage.coverage(omit=omit)
             cov.erase()
             cov.start()

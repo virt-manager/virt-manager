@@ -490,6 +490,7 @@ class VirtualDisk(VirtualDevice):
         VirtualDevice.__init__(self, *args, **kwargs)
 
         self._storage_backend = None
+        self.storage_was_created = False
 
 
     #############################
@@ -874,6 +875,7 @@ class VirtualDisk(VirtualDevice):
             return
 
         vol_object = self._storage_backend.create(meter)
+        self.storage_was_created = True
         if not vol_object:
             return
 

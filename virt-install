@@ -748,6 +748,7 @@ def start_install(guest, continue_inst, options):
     # we've got everything -- try to start the install
     print_stdout(_("\nStarting install..."))
 
+    dom = None
     try:
         start_time = time.time()
 
@@ -778,10 +779,10 @@ def start_install(guest, continue_inst, options):
         logging.debug("", exc_info=True)
         print_stderr(_("Domain install interrupted."))
         raise
-    except RuntimeError, e:
-        fail(e)
     except Exception, e:
         fail(e, do_exit=False)
+        if dom is None and guest.domain is None:
+            guest.cleanup_created_disks(meter)
         cli.install_fail(guest)
 
 
