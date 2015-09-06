@@ -309,7 +309,7 @@ def is_blktap_capable(conn):
 
 
 def randomUUID(conn):
-    if hasattr(conn, "_virtinst__fake_conn_predictable"):
+    if conn.fake_conn_predictable():
         # Testing hack
         return "00000000-1111-2222-3333-444444444444"
 

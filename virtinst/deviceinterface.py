@@ -97,7 +97,7 @@ class VirtualNetworkInterface(VirtualDevice):
         Generate a random MAC that doesn't conflict with any VMs on
         the connection.
         """
-        if hasattr(conn, "_virtinst__fake_conn_predictable"):
+        if conn.fake_conn_predictable():
             # Testing hack
             return "00:11:22:33:44:55"
 

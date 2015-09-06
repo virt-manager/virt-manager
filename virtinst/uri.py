@@ -17,10 +17,29 @@
 # MA 02110-1301 USA.
 #
 
+import logging
 import re
 
+from .cli import VirtOptionString
 
-class URISplit(object):
+
+def _sanitize_xml(xml):
+    import difflib
+
+    orig = xml
+    xml = re.sub("arch=\".*\"", "arch=\"i686\"", xml)
+    xml = re.sub("domain type=\".*\"", "domain type=\"test\"", xml)
+    xml = re.sub("machine type=\".*\"", "", xml)
+    xml = re.sub(">exe<", ">hvm<", xml)
+
+    diff = "\n".join(difflib.unified_diff(orig.split("\n"),
+                                          xml.split("\n")))
+    if diff:
+        logging.debug("virtinst test sanitizing diff\n:%s", diff)
+    return xml
+
+
+class URI(object):
     """
     Parse an arbitrary URI into its individual parts
     """
@@ -78,28 +97,133 @@ class URISplit(object):
         return scheme, username, netloc, uri, query, fragment
 
 
+class MagicURI(object):
+    """
+    Handle magic virtinst URIs we use for the test suite and UI testing.
+    This allows a special URI to override various features like capabilities
+    XML, reported connection and libvirt versions, that enable testing
+    different code paths.
+
+    A magic URI has 3 parts:
+
+        1) Magic prefix __virtinst_test__
+        2) Actual openable URI, usually a test:/// URI
+        3) Comma separated options
+
+    The available options are:
+
+        * 'predictable': Generate predictable UUIDs, MAC addresses, and
+            temporary file names.
+        * 'remote': Have the code consider this as a remote URI
+        * 'session': Have the code consider this as a session URI
+        * 'connver=%d': Override the connection (hv) version
+        * 'libver=%d': Override the libvirt version
+        * 'caps=%s': Points to a file with capabilities XML, that will
+                     be returned in conn.getCapabilities. Ex.
+                     files in test/capabilities-xml/
+        * 'domcaps=%s': Points to a file with domain capabilities XML, that
+                        will be returned in conn.getDomainCapabilities
+        * qemu or xen or lxc: Fake the specified hypervisor
+
+    See tests/utils.py for example URLs
+    """
+    VIRTINST_URI_MAGIC_PREFIX = "__virtinst_test__"
+
+    @staticmethod
+    def uri_is_magic(uri):
+        return uri.startswith(MagicURI.VIRTINST_URI_MAGIC_PREFIX)
+
+    def __init__(self, uri):
+        if not self.uri_is_magic(uri):
+            raise RuntimeError("uri=%s is not virtinst magic URI" % uri)
+
+        uri = uri.replace(self.VIRTINST_URI_MAGIC_PREFIX, "")
+        ret = uri.split(",", 1)
+        self.open_uri = ret[0]
+        opts = VirtOptionString(len(ret) > 1 and ret[1] or "", [], None).opts
+
+        def pop_bool(field):
+            ret = field in opts
+            opts.pop(field, None)
+            return ret
+
+        self.predictable = pop_bool("predictable")
+        self.remote = pop_bool("remote")
+        self.session = pop_bool("session")
+        self.capsfile = opts.pop("caps", None)
+        self.domcapsfile = opts.pop("domcaps", None)
+
+        self.hv = None
+        if pop_bool("qemu"):
+            self.hv = "qemu"
+        if pop_bool("lxc"):
+            self.hv = "lxc"
+        if pop_bool("xen"):
+            self.hv = "xen"
+
+        self.conn_version = opts.pop("connver", None)
+        if self.conn_version:
+            self.conn_version = int(self.conn_version)
+        elif self.hv:
+            self.conn_version = 10000000000
+
+        self.libvirt_version = opts.pop("libver", None)
+        if self.libvirt_version:
+            self.libvirt_version = int(self.libvirt_version)
+
+        if opts:
+            raise RuntimeError("Unhandled virtinst test uri options %s" % opts)
+
+
     ##############
     # Public API #
     ##############
 
-    def rebuild_uri(self):
-        ret = self.scheme
-        if self.transport:
-            ret += "+" + self.transport
-        ret += "://"
-        if self.username:
-            ret += self.username + "@"
-        if self.hostname:
-            host = self.hostname
-            if self.is_ipv6:
-                host = "[%s]" % self.hostname
-            ret += host
-            if self.port:
-                ret += ":" + self.port
-        if self.path:
-            ret += self.path
-        if self.query:
-            ret += "?" + self.query
-        if self.fragment:
-            ret += "#" + self.fragment
-        return ret
+    def make_fake_uri(self):
+        """
+        If self.hv is set, we need to make a fake URI so that Connection
+        URI handling bits have something to work with.
+        """
+        if self.hv:
+            return self.hv + "+abc:///system"
+        return self.open_uri
+
+    def overwrite_conn_functions(self, conn):
+        """
+        After the connection is open, we need to stub out various functions
+        depending on what magic bits the user specified in the URI
+        """
+        # Fake capabilities
+        if self.capsfile:
+            capsxml = file(self.capsfile).read()
+            conn.getCapabilities = lambda: capsxml
+
+        # Fake domcapabilities. This is insufficient since output should
+        # vary per type/arch/emulator combo, but it can be expanded later
+        # if needed
+        if self.domcapsfile:
+            domcapsxml = file(self.domcapsfile).read()
+            def fake_domcaps(emulator, arch, machine, virttype, flags=0):
+                ignore = emulator
+                ignore = flags
+                ignore = machine
+                ignore = virttype
+
+                ret = domcapsxml
+                if arch:
+                    ret = re.sub("arch>.+</arch", "arch>%s</arch" % arch, ret)
+                return ret
+
+            conn.getDomainCapabilities = fake_domcaps
+
+        if self.hv:
+            origcreate = conn.createLinux
+            origdefine = conn.defineXML
+            def newcreate(xml, flags):
+                xml = _sanitize_xml(xml)
+                return origcreate(xml, flags)
+            def newdefine(xml):
+                xml = _sanitize_xml(xml)
+                return origdefine(xml)
+            conn.createLinux = newcreate
+            conn.defineXML = newdefine

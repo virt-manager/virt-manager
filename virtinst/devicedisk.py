@@ -32,7 +32,6 @@ from . import diskbackend
 from . import util
 from .device import VirtualDevice
 from .seclabel import Seclabel
-from .uri import URISplit
 from .xmlbuilder import XMLChildProperty, XMLProperty
 
 
@@ -595,20 +594,22 @@ class VirtualDisk(VirtualDevice):
     source_host_socket = XMLProperty("./source/host/@socket")
 
     def _set_source_network_from_url(self, uri):
-        uriinfo = URISplit(uri)
-        if uriinfo.scheme:
-            self.source_protocol = uriinfo.scheme
-        if uriinfo.transport:
-            self.source_host_transport = uriinfo.transport
-        if uriinfo.hostname:
-            self.source_host_name = uriinfo.hostname
-        if uriinfo.port:
-            self.source_host_port = uriinfo.port
-        if uriinfo.path:
+        from .uri import URI
+        uriobj = URI(uri)
+
+        if uriobj.scheme:
+            self.source_protocol = uriobj.scheme
+        if uriobj.transport:
+            self.source_host_transport = uriobj.transport
+        if uriobj.hostname:
+            self.source_host_name = uriobj.hostname
+        if uriobj.port:
+            self.source_host_port = uriobj.port
+        if uriobj.path:
             if self.source_host_transport:
-                self.source_host_socket = uriinfo.path
+                self.source_host_socket = uriobj.path
             else:
-                self.source_name = uriinfo.path
+                self.source_name = uriobj.path
                 if self.source_name.startswith("/"):
                     self.source_name = self.source_name[1:]
 

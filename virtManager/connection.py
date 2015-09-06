@@ -355,8 +355,6 @@ class vmmConnection(vmmGObject):
         """
         if self._get_config_pretty_name():
             return self._get_config_pretty_name()
-        if self._backend.fake_name():
-            return self._backend.fake_name()
 
         pretty_map = {
             "esx"       : "ESX",

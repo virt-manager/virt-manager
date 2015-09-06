@@ -17,18 +17,18 @@
 
 import unittest
 
-from virtinst import URISplit
+from virtinst import URI
 
 
 class TestURI(unittest.TestCase):
     """
-    Test virtinst URISplit module
+    Test virtinst URI module
     """
     def _compare(self, uri, scheme='',
                  transport='', port='', username='', path='',
                  hostname='', query='', fragment='',
                  is_ipv6=False, host_is_ipv4_string=False):
-        uriinfo = URISplit(uri)
+        uriinfo = URI(uri)
         self.assertEquals(scheme, uriinfo.scheme)
         self.assertEquals(transport, uriinfo.transport)
         self.assertEquals(port, uriinfo.port)
@@ -39,7 +39,6 @@ class TestURI(unittest.TestCase):
         self.assertEquals(fragment, uriinfo.fragment)
         self.assertEquals(is_ipv6, uriinfo.is_ipv6)
         self.assertEquals(host_is_ipv4_string, uriinfo.host_is_ipv4_string)
-        self.assertEquals(uri, uriinfo.rebuild_uri())
 
     def testURIs(self):
         self._compare("lxc://", scheme="lxc")

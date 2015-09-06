@@ -36,7 +36,7 @@ stable_defaults = _CLIConfig.stable_defaults
 
 from . import util
 from virtinst import support
-from virtinst.uri import URISplit
+from virtinst.uri import URI
 from virtinst.osdict import OSDB
 
 from virtinst.osxml import OSXML

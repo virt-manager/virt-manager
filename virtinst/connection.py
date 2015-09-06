@@ -17,7 +17,6 @@
 # MA 02110-1301 USA.
 
 import logging
-import re
 import weakref
 
 import libvirt
@@ -25,31 +24,12 @@ import libvirt
 from . import pollhelpers
 from . import support
 from . import util
-from . import URISplit
 from . import Capabilities
-from .cli import VirtOptionString
 from .guest import Guest
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
+from .uri import URI, MagicURI
 from virtcli import CLIConfig
-
-_virtinst_uri_magic = "__virtinst_test__"
-
-
-def _sanitize_xml(xml):
-    import difflib
-
-    orig = xml
-    xml = re.sub("arch=\".*\"", "arch=\"i686\"", xml)
-    xml = re.sub("domain type=\".*\"", "domain type=\"test\"", xml)
-    xml = re.sub("machine type=\".*\"", "", xml)
-    xml = re.sub(">exe<", ">hvm<", xml)
-
-    diff = "\n".join(difflib.unified_diff(orig.split("\n"),
-                                          xml.split("\n")))
-    if diff:
-        logging.debug("virtinst test sanitizing diff\n:%s", diff)
-    return xml
 
 
 class VirtualConnection(object):
@@ -60,30 +40,34 @@ class VirtualConnection(object):
     - simplified API wrappers that handle new and old ways of doing things
     """
     def __init__(self, uri):
-        self._initial_uri = uri or ""
+        _initial_uri = uri or ""
 
-        self._fake_pretty_name = None
-        self._fake_libvirt_version = None
-        self._fake_conn_version = None
+        if MagicURI.uri_is_magic(_initial_uri):
+            self._magic_uri = MagicURI(_initial_uri)
+            self._open_uri = self._magic_uri.open_uri
+            self._uri = self._magic_uri.make_fake_uri()
+
+            self._fake_conn_predictable = self._magic_uri.predictable
+            self._fake_conn_remote = self._magic_uri.remote
+            self._fake_conn_session = self._magic_uri.session
+            self._fake_conn_version = self._magic_uri.conn_version
+            self._fake_libvirt_version = self._magic_uri.libvirt_version
+        else:
+            self._magic_uri = None
+            self._open_uri = _initial_uri
+            self._uri = _initial_uri
+
+            self._fake_conn_predictable = False
+            self._fake_conn_remote = False
+            self._fake_conn_session = False
+            self._fake_libvirt_version = None
+            self._fake_conn_version = None
+
         self._daemon_version = None
         self._conn_version = None
 
-        if self._initial_uri.startswith(_virtinst_uri_magic):
-            # virtinst unit test URI handling
-            uri = self._initial_uri.replace(_virtinst_uri_magic, "")
-            ret = uri.split(",", 1)
-            self._open_uri = ret[0]
-            self._test_opts = VirtOptionString(
-                len(ret) > 1 and ret[1] or "", [], None).opts
-            self._early_virtinst_test_uri()
-            self._uri = self._virtinst_uri_make_fake()
-        else:
-            self._open_uri = self._initial_uri
-            self._uri = self._initial_uri
-            self._test_opts = {}
-
         self._libvirtconn = None
-        self._urisplits = URISplit(self._uri)
+        self._uriobj = URI(self._uri)
         self._caps = None
 
         self._support_cache = {}
@@ -142,6 +126,9 @@ class VirtualConnection(object):
         self._uri = None
         self._fetch_cache = {}
 
+    def fake_conn_predictable(self):
+        return self._fake_conn_predictable
+
     def invalidate_caps(self):
         self._caps = None
 
@@ -160,11 +147,13 @@ class VirtualConnection(object):
                     (authcb_data, valid_auth_options)],
                     open_flags)
 
-        self._fixup_virtinst_test_uri(conn)
+        if self._magic_uri:
+            self._magic_uri.overwrite_conn_functions(conn)
+
         self._libvirtconn = conn
         if not self._open_uri:
             self._uri = self._libvirtconn.getURI()
-            self._urisplits = URISplit(self._uri)
+            self._uriobj = URI(self._uri)
 
     def set_keep_alive(self, interval, count):
         if hasattr(self._libvirtconn, "setKeepAlive"):
@@ -354,48 +343,43 @@ class VirtualConnection(object):
     # Public URI bits #
     ###################
 
-    def fake_name(self):
-        return self._fake_pretty_name
-
     def is_remote(self):
-        return (hasattr(self, "_virtinst__fake_conn_remote") or
-            self._urisplits.hostname)
+        return (self._fake_conn_remote or self._uriobj.hostname)
     def is_session_uri(self):
-        return (hasattr(self, "_virtinst__fake_conn_session") or
-                self.get_uri_path() == "/session")
+        return (self._fake_conn_session or self.get_uri_path() == "/session")
 
     def get_uri_hostname(self):
-        return self._urisplits.hostname
+        return self._uriobj.hostname
     def get_uri_port(self):
-        return self._urisplits.port
+        return self._uriobj.port
     def get_uri_username(self):
-        return self._urisplits.username
+        return self._uriobj.username
     def get_uri_transport(self):
-        return self._urisplits.transport
+        return self._uriobj.transport
     def get_uri_path(self):
-        return self._urisplits.path
+        return self._uriobj.path
 
     def get_uri_driver(self):
-        return self._urisplits.scheme
+        return self._uriobj.scheme
 
     def is_qemu(self):
-        return self._urisplits.scheme.startswith("qemu")
+        return self._uriobj.scheme.startswith("qemu")
     def is_qemu_system(self):
-        return (self.is_qemu() and self._urisplits.path == "/system")
+        return (self.is_qemu() and self._uriobj.path == "/system")
     def is_qemu_session(self):
         return (self.is_qemu() and self.is_session_uri())
 
     def is_really_test(self):
-        return URISplit(self._open_uri).scheme.startswith("test")
+        return URI(self._open_uri).scheme.startswith("test")
     def is_test(self):
-        return self._urisplits.scheme.startswith("test")
+        return self._uriobj.scheme.startswith("test")
     def is_xen(self):
-        return (self._urisplits.scheme.startswith("xen") or
-                self._urisplits.scheme.startswith("libxl"))
+        return (self._uriobj.scheme.startswith("xen") or
+                self._uriobj.scheme.startswith("libxl"))
     def is_lxc(self):
-        return self._urisplits.scheme.startswith("lxc")
+        return self._uriobj.scheme.startswith("lxc")
     def is_openvz(self):
-        return self._urisplits.scheme.startswith("openvz")
+        return self._uriobj.scheme.startswith("openvz")
     def is_container(self):
         return self.is_lxc() or self.is_openvz()
 
@@ -417,7 +401,7 @@ class VirtualConnection(object):
         return self._support_cache[key]
 
     def support_remote_url_install(self):
-        if hasattr(self, "_virtinst__fake_conn"):
+        if self._magic_uri:
             return False
         return (self.check_support(self.SUPPORT_CONN_STREAM) and
                 self.check_support(self.SUPPORT_STREAM_UPLOAD))
@@ -433,97 +417,3 @@ class VirtualConnection(object):
                 raise RuntimeError("Unknown cred type '%s', expected only "
                                    "%s" % (cred[0], passwordcreds))
         return passwordcb(creds)
-
-    def _virtinst_uri_make_fake(self):
-        if "qemu" in self._test_opts:
-            return "qemu+abc:///system"
-        elif "xen" in self._test_opts:
-            return "xen+abc:///"
-        elif "lxc" in self._test_opts:
-            return "lxc+abc:///"
-        return self._open_uri
-
-    def _early_virtinst_test_uri(self):
-        # Need tmpfile names to be deterministic
-        if not self._test_opts:
-            return
-        opts = self._test_opts
-
-        if "predictable" in opts:
-            opts.pop("predictable")
-            setattr(self, "_virtinst__fake_conn_predictable", True)
-
-        # Fake remote status
-        if "remote" in opts:
-            opts.pop("remote")
-            setattr(self, "_virtinst__fake_conn_remote", True)
-
-        if "session" in opts:
-            opts.pop("session")
-            setattr(self, "_virtinst__fake_conn_session", True)
-
-        if "prettyname" in opts:
-            self._fake_pretty_name = opts.pop("prettyname")
-
-
-    def _fixup_virtinst_test_uri(self, conn):
-        """
-        This hack allows us to fake various drivers via passing a magic
-        URI string to virt-*. Helps with testing
-        """
-        if not self._test_opts:
-            return
-        opts = self._test_opts.copy()
-
-        # Fake capabilities
-        if "caps" in opts:
-            capsxml = file(opts.pop("caps")).read()
-            conn.getCapabilities = lambda: capsxml
-
-        # Fake domcapabilities. This is insufficient since output should
-        # vary per type/arch/emulator combo, but it can be expanded later
-        # if needed
-        if "domcaps" in opts:
-            domcapsxml = file(opts.pop("domcaps")).read()
-            def fake_domcaps(emulator, arch, machine, virttype, flags=0):
-                ignore = emulator
-                ignore = flags
-                ignore = machine
-                ignore = virttype
-
-                ret = domcapsxml
-                if arch:
-                    ret = re.sub("arch>.+</arch", "arch>%s</arch" % arch, ret)
-                return ret
-
-            conn.getDomainCapabilities = fake_domcaps
-
-        if ("qemu" in opts) or ("xen" in opts) or ("lxc" in opts):
-            opts.pop("qemu", None)
-            opts.pop("xen", None)
-            opts.pop("lxc", None)
-
-            self._fake_conn_version = 10000000000
-
-            origcreate = conn.createLinux
-            origdefine = conn.defineXML
-            def newcreate(xml, flags):
-                xml = _sanitize_xml(xml)
-                return origcreate(xml, flags)
-            def newdefine(xml):
-                xml = _sanitize_xml(xml)
-                return origdefine(xml)
-            conn.createLinux = newcreate
-            conn.defineXML = newdefine
-
-        # These need to come after the HV setter, since that sets a default
-        # conn version
-        if "connver" in opts:
-            self._fake_conn_version = int(opts.pop("connver"))
-        if "libver" in opts:
-            self._fake_libvirt_version = int(opts.pop("libver"))
-
-        if opts:
-            raise RuntimeError("Unhandled virtinst test uri options %s" % opts)
-
-        setattr(self, "_virtinst__fake_conn", True)
