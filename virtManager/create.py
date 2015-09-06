@@ -108,9 +108,9 @@ class vmmCreate(vmmGObjectUI):
         self.addstorage.connect("browse-clicked", self._browse_file_cb)
 
         self.builder.connect_signals({
-            "on_vmm_newcreate_delete_event" : self.close,
+            "on_vmm_newcreate_delete_event" : self._close_requested,
 
-            "on_create_cancel_clicked": self.close,
+            "on_create_cancel_clicked": self._close_requested,
             "on_create_back_clicked" : self.back,
             "on_create_forward_clicked" : self.forward,
             "on_create_finish_clicked" : self.finish,
@@ -162,7 +162,7 @@ class vmmCreate(vmmGObjectUI):
 
         self.topwin.present()
 
-    def close(self, ignore1=None, ignore2=None):
+    def _close(self, ignore1=None, ignore2=None):
         if self.is_visible():
             logging.debug("Closing new vm wizard")
         self.topwin.hide()
@@ -171,8 +171,6 @@ class vmmCreate(vmmGObjectUI):
             self.config_window.close()
         if self.storage_browser:
             self.storage_browser.close()
-
-        return 1
 
     def _cleanup(self):
         self.remove_conn()
@@ -1055,15 +1053,6 @@ class vmmCreate(vmmGObjectUI):
     def get_config_container_fs_path(self):
         return self.widget("install-oscontainer-fs").get_text()
 
-    def get_default_path(self, name):
-        # Don't generate a new path if the install failed
-        if self.failed_guest:
-            disks = self.failed_guest.get_devices("disk")
-            if disks:
-                return disks[0].path
-
-        return self.addstorage.get_default_path(name)
-
     def is_default_storage(self):
         return (self.addstorage.is_default_storage() and
                 not self.skip_disk_page())
@@ -1074,7 +1063,37 @@ class vmmCreate(vmmGObjectUI):
         return self.widget("install-detect-os").get_active()
 
 
-    # Listeners
+    ################
+    # UI Listeners #
+    ################
+
+    def _close_requested(self, *ignore1, **ignore2):
+        if (self.failed_guest and
+            self.failed_guest.get_created_disks()):
+
+            def _cleanup_disks(asyncjob):
+                meter = asyncjob.get_meter()
+                self.failed_guest.cleanup_created_disks(meter)
+
+            def _cleanup_disks_finished(error, details):
+                if error:
+                    logging.debug("Error cleaning up disk images:"
+                        "\nerror=%s\ndetails=%s", error, details)
+                self.idle_add(self._close)
+
+            progWin = vmmAsyncJob(
+                _cleanup_disks, [],
+                _cleanup_disks_finished, [],
+                _("Removing disk images"),
+                _("Removing disk images we created for this virtual machine."),
+                self.topwin)
+            progWin.run()
+
+        else:
+            self._close()
+
+        return 1
+
     def conn_changed(self, src):
         uri = uiutil.get_list_selection(src)
         conn = None
@@ -1679,24 +1698,31 @@ class vmmCreate(vmmGObjectUI):
         return True
 
     def validate_storage_page(self):
+        failed_disk = None
         if self.disk and self.disk in self.guest.get_devices("disk"):
             self.guest.remove_device(self.disk)
+            if self.failed_guest:
+                failed_disk = self.disk
         self.disk = None
 
         path = None
-        size = None
-        sparse = None
+        path_already_created = False
 
         if self.get_config_install_page() == INSTALL_PAGE_IMPORT:
             path = self.get_config_import_path()
-            size = None
-            sparse = False
-        elif self.is_default_storage():
-            path = self.get_default_path(self.guest.name)
-            logging.debug("Default storage path is: %s", path)
 
-        ret = self.addstorage.validate_storage(
-            self.guest.name, path=path, size=size, sparse=sparse)
+        elif self.is_default_storage():
+            # Don't generate a new path if the install failed
+            if failed_disk and failed_disk.device == "disk":
+                path = failed_disk.path
+                path_already_created = failed_disk.storage_was_created
+                logging.debug("Reusing failed disk path=%s "
+                    "already_created=%s", path, path_already_created)
+            else:
+                path = self.addstorage.get_default_path(self.guest.name)
+                logging.debug("Default storage path is: %s", path)
+
+        ret = self.addstorage.validate_storage(self.guest.name, path=path)
         no_storage = (ret is True)
 
         if self.get_config_install_page() == INSTALL_PAGE_ISO:
@@ -1710,6 +1736,7 @@ class vmmCreate(vmmGObjectUI):
             return False
 
         self.disk = ret
+        self.disk.storage_was_created = path_already_created
         self.guest.add_device(self.disk)
 
         return True
@@ -1812,7 +1839,7 @@ class vmmCreate(vmmGObjectUI):
             logging.debug("User closed customize window, closing wizard")
             cleanup_config_window()
             self._undo_finish_cursor()
-            self.close()
+            self._close_requested()
 
         cleanup_config_window()
         self.config_window = vmmDetails(virtinst_guest, self.topwin)
@@ -1835,7 +1862,7 @@ class vmmCreate(vmmGObjectUI):
             self.failed_guest = self.guest
             return
 
-        self.close()
+        self._close()
 
         # Launch details dialog for new VM
         self.emit("action-show-domain", self.conn.get_uri(), self.guest.name)

@@ -520,13 +520,15 @@ class Guest(XMLBuilder):
         return self._create_guest(meter,
                                   start_xml, final_xml, is_initial, False)
 
+    def get_created_disks(self):
+        return [d for d in self.get_devices("disk") if d.storage_was_created]
+
     def cleanup_created_disks(self, meter):
         """
         Remove any disks we created as part of the install. Only ever
         called by clients.
         """
-        clean_disks = [d for d in self.get_devices("disk") if
-                       d.storage_was_created]
+        clean_disks = self.get_created_disks()
         if not clean_disks:
             return
 
