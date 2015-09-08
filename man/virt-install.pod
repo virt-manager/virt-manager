@@ -246,6 +246,10 @@ Enable APIC PV EOI
 
 Enable hypver VAPIC, but disable spinlocks
 
+=item B<--features kvm_hidden=on>
+
+Allow the KVM hypervisor signature to be hidden from the guest
+
 =back
 
 Use --features=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsFeatures>

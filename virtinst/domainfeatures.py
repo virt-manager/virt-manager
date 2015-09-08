@@ -48,3 +48,4 @@ class DomainFeatures(XMLBuilder):
 
     vmport = XMLProperty("./vmport/@state", is_onoff=True,
                          default_name="default", default_cb=lambda s: False)
+    kvm_hidden = XMLProperty("./kvm/hidden/@state", is_onoff=True)

@@ -1515,6 +1515,7 @@ class ParserFeatures(VirtCLIParser):
             "hyperv_spinlocks_retries")
 
         self.set_param("vmport", "vmport", is_onoff=True)
+        self.set_param("kvm_hidden", "kvm_hidden", is_onoff=True)
 
 
 ###################
