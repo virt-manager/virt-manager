@@ -819,13 +819,7 @@ class vmmCreate(vmmGObjectUI):
     def populate_os_type_model(self):
         widget = self.widget("install-os-type")
         model = widget.get_model()
-
-        # Don't trigger 'change' events while repopulating
-        widget.set_model(None)
-        try:
-            self._fill_os_type_model(model)
-        finally:
-            widget.set_model(model)
+        self._fill_os_type_model(model)
 
         # Select 'generic' by default
         widget.set_active(0)
@@ -848,13 +842,7 @@ class vmmCreate(vmmGObjectUI):
     def populate_os_variant_model(self, _type):
         widget = self.widget("install-os-version")
         model = widget.get_model()
-
-        # Don't trigger 'change' events while repopulating
-        widget.set_model(None)
-        try:
-            self._fill_os_variant_model(model, _type)
-        finally:
-            widget.set_model(model)
+        self._fill_os_variant_model(model, _type)
 
         widget.set_active(0)
 
@@ -1215,7 +1203,7 @@ class vmmCreate(vmmGObjectUI):
                 return
 
     def change_os_version(self, box):
-        show_all = uiutil.get_list_selection(box, column=3)
+        show_all = uiutil.get_list_selection(box, column=3, check_entry=False)
         if not show_all:
             return
 
