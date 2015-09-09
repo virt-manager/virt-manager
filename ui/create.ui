@@ -811,7 +811,9 @@ bar</property>
                                               <object class="GtkLabel" id="label24">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes">URL:</property>
+                                                <property name="label" translatable="yes">U_RL:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">install-url-entry</property>
                                                 <property name="xalign">1</property>
                                               </object>
                                             </child>
@@ -846,7 +848,9 @@ bar</property>
                                                           <object class="GtkLabel" id="label25">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
-                                                            <property name="label" translatable="yes">Kickstart URL:</property>
+                                                            <property name="label" translatable="yes">_Kickstart URL:</property>
+                                                            <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">install-ks-entry</property>
                                                             <property name="xalign">0</property>
                                                           </object>
                                                           <packing>
@@ -858,7 +862,9 @@ bar</property>
                                                           <object class="GtkLabel" id="label26">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
-                                                            <property name="label" translatable="yes">Kernel options:</property>
+                                                            <property name="label" translatable="yes">Kerne_l options:</property>
+                                                            <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">install-urlopts-entry</property>
                                                             <property name="xalign">1</property>
                                                           </object>
                                                           <packing>
@@ -888,7 +894,7 @@ bar</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="has_entry">True</property>
                                                             <child internal-child="entry">
-                                                            <object class="GtkEntry" id="combobox-entry2">
+                                                            <object class="GtkEntry" id="install-ks-entry">
                                                             <property name="can_focus">True</property>
                                                             </object>
                                                             </child>
@@ -907,7 +913,8 @@ bar</property>
                                                   <object class="GtkLabel" id="label14">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="label" translatable="yes">URL Options</property>
+                                                    <property name="label" translatable="yes">URL _Options</property>
+                                                    <property name="use_underline">True</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -926,7 +933,7 @@ bar</property>
                                             <property name="has_entry">True</property>
                                             <signal name="changed" handler="on_install_url_box_changed" swapped="no"/>
                                             <child internal-child="entry">
-                                              <object class="GtkEntry" id="combobox-entry1">
+                                              <object class="GtkEntry" id="install-url-entry">
                                                 <property name="can_focus">True</property>
                                               </object>
                                             </child>
@@ -1009,7 +1016,9 @@ User shouldn't see this.</property>
                                       <object class="GtkLabel" id="label41">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Provide the existing storage path:</property>
+                                        <property name="label" translatable="yes">Provide the existing stora_ge path:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">install-import-entry</property>
                                         <property name="xalign">0</property>
                                       </object>
                                       <packing>
