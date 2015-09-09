@@ -51,18 +51,13 @@ def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
     return fmt
 
 
-def _name_uid(user):
-    """
-    Return UID for string username
-    """
-    pwdinfo = pwd.getpwnam(user)
-    return pwdinfo[2]
-
-
 def _is_dir_searchable(uid, username, path):
     """
     Check if passed directory is searchable by uid
     """
+    if "VIRTINST_TEST_SUITE" in os.environ:
+        return True
+
     try:
         statinfo = os.stat(path)
     except OSError:
@@ -218,7 +213,8 @@ class VirtualDisk(VirtualDevice):
             return []
 
         try:
-            uid = _name_uid(username)
+            # Get UID for string name
+            uid = pwd.getpwnam(username)[2]
         except Exception, e:
             logging.debug("Error looking up username: %s", str(e))
             return []
