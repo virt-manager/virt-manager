@@ -11,22 +11,57 @@ class DogtailApp(object):
     Wrapper class to simplify dogtail app handling
     """
     def __init__(self, uri):
-        self.proc = subprocess.Popen(["python",
+        self._proc = None
+        self._root = None
+        self.uri = uri
+
+
+    @property
+    def root(self):
+        if self._root is None:
+            self.open()
+        return self._root
+
+    def open(self, extra_opts=None):
+        self._proc = subprocess.Popen(["python",
             os.path.join(os.getcwd(), "virt-manager"),
-            "--test-first-run", "--no-fork", "--connect", uri])
+            "--test-first-run", "--no-fork", "--connect", self.uri] +
+            (extra_opts or []))
         time.sleep(1)
 
-        self.root = dogtail.tree.root.application("virt-manager")
+        self._root = dogtail.tree.root.application("virt-manager")
 
+    def kill(self):
+        """
+        Force kill the process
+        """
+        if self._proc:
+            self._proc.kill()
+
+    def quit(self):
+        """
+        Quit the app via Ctrl+q
+        """
+        self.root.keyCombo("<ctrl>q")
+        time.sleep(.5)
 
     @staticmethod
-    def find_pattern(root, name, roleName=None):
+    def node_string(node):
+        msg = "name='%s' roleName='%s'" % (node.name, node.roleName)
+        if node.labeller:
+            msg += " labeller.text='%s'" % node.labeller.text
+        return msg
+
+    @staticmethod
+    def find_pattern(root, name, roleName=None, labeller_text=None,
+            return_all=False):
         """
         Search root for any widget that contains the passed name/role regex
         strings.
         """
-        name_pattern = re.compile(name)
+        name_pattern = re.compile(name or ".*")
         role_pattern = re.compile(roleName or ".*")
+        labeller_pattern = re.compile(labeller_text or ".*")
 
         def _walk(node):
             try:
@@ -34,6 +69,11 @@ class DogtailApp(object):
                     return
                 if not role_pattern.match(node.roleName):
                     return
+                if labeller_text:
+                    if not node.labeller:
+                        return
+                    if not labeller_pattern.match(node.labeller.text):
+                        return
                 return node
             except Exception, e:
                 print "got walk exception: %s" % e
@@ -41,23 +81,35 @@ class DogtailApp(object):
         ret = root.findChildren(_walk, isLambda=True)
         if not ret:
             raise RuntimeError("Didn't find widget with name='%s' "
-                "roleName='%s'" % (name, roleName))
+                "roleName='%s' labeller_text='%s'" %
+                (name, roleName, labeller_text))
+        if return_all:
+            return ret
         if len(ret) > 1:
             raise RuntimeError("Found more than 1 widget with name='%s' "
-                "rolename='%s':\n%s" % (name, roleName,
-                [str(w) for w in ret]))
+                "rolename='%s' labeller_text='%s':\n%s" %
+                (name, roleName, labeller_text,
+                 "\n".join([DogtailApp.node_string(w) for w in ret])))
         return ret[0]
 
     @staticmethod
-    def find_fuzzy(root, name, roleName=None):
+    def find_fuzzy(root, name, roleName=None, labeller_text=None,
+            return_all=False):
         """
         Search root for any widget that contains the passed name/role strings.
         """
-        name_pattern = ".*%s.*" % name
+        name_pattern = None
         role_pattern = None
+        labeller_pattern = None
+        if name:
+            name_pattern = ".*%s.*" % name
         if roleName:
             role_pattern = ".*%s.*" % roleName
-        return DogtailApp.find_pattern(root, name_pattern, role_pattern)
+        if labeller_text:
+            labeller_pattern = ".*%s.*" % labeller_text
+
+        return DogtailApp.find_pattern(root, name_pattern, role_pattern,
+            labeller_pattern, return_all=return_all)
 
     @staticmethod
     def print_nodes(root):
@@ -67,7 +119,7 @@ class DogtailApp(object):
         """
         def _walk(node):
             try:
-                print "__str__=%s roleName=%s" % (str(node), node.roleName)
+                print DogtailApp.node_string(node)
             except Exception, e:
                 print "got exception: %s" % e
 

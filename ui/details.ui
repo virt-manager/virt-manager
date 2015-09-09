@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.19.0 -->
 <interface>
   <requires lib="gtk+" version="3.8"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -635,6 +635,11 @@
                         <property name="image">image80</property>
                         <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_add_hardware_button_clicked" swapped="no"/>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="add-hardware-button-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">add-hardware</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6138,6 +6143,11 @@ if you know what you are doing.&lt;/small&gt;</property>
                             <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
                             <signal name="clicked" handler="on_config_remove_clicked" swapped="no"/>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="config-remove-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">config-remove</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -6153,6 +6163,11 @@ if you know what you are doing.&lt;/small&gt;</property>
                             <property name="receives_default">True</property>
                             <property name="use_stock">True</property>
                             <signal name="clicked" handler="on_config_cancel_clicked" swapped="no"/>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="config-cancel-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">config-cancel</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -6170,6 +6185,11 @@ if you know what you are doing.&lt;/small&gt;</property>
                             <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
                             <signal name="clicked" handler="on_config_apply_clicked" swapped="no"/>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="config-apply-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">config-apply</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>

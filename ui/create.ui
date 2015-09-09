@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.19.0 -->
 <interface>
   <requires lib="gtk+" version="3.8"/>
   <object class="GtkAdjustment" id="adjustment2">
@@ -735,6 +735,11 @@ bar</property>
                                                     <property name="receives_default">True</property>
                                                     <property name="use_underline">True</property>
                                                     <signal name="clicked" handler="on_install_local_browse_clicked" swapped="no"/>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="install-local-browse-atkobject">
+                                                        <property name="AtkObject::accessible-name" translatable="yes">install-local-browse</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -1057,6 +1062,11 @@ User shouldn't see this.</property>
                                                 <property name="receives_default">True</property>
                                                 <property name="use_underline">True</property>
                                                 <signal name="clicked" handler="on_install_import_browse_clicked" swapped="no"/>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="install-import-browse-atkobject">
+                                                    <property name="AtkObject::accessible-name" translatable="yes">install-import-browse</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -1193,6 +1203,11 @@ User shouldn't see this.</property>
                                                 <property name="receives_default">True</property>
                                                 <property name="use_underline">True</property>
                                                 <signal name="clicked" handler="on_config_kernel_browse_clicked" swapped="no"/>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="config-kernel-browse-atkobject">
+                                                    <property name="AtkObject::accessible-name" translatable="yes">config-kernel-browse</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">2</property>
@@ -1207,6 +1222,11 @@ User shouldn't see this.</property>
                                                 <property name="receives_default">True</property>
                                                 <property name="use_underline">True</property>
                                                 <signal name="clicked" handler="on_config_initrd_browse_clicked" swapped="no"/>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="config-initrd-browse-atkobject">
+                                                    <property name="AtkObject::accessible-name" translatable="yes">config-initrd-browse</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">2</property>
@@ -1221,6 +1241,11 @@ User shouldn't see this.</property>
                                                 <property name="receives_default">True</property>
                                                 <property name="use_underline">True</property>
                                                 <signal name="clicked" handler="on_config_dtb_browse_clicked" swapped="no"/>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="config-dtb-browse-atkobject">
+                                                    <property name="AtkObject::accessible-name" translatable="yes">config-dtb-browse</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">2</property>
@@ -1373,6 +1398,11 @@ User shouldn't see this.</property>
                                             <property name="receives_default">True</property>
                                             <property name="use_underline">True</property>
                                             <signal name="clicked" handler="on_install_app_browse_clicked" swapped="no"/>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="install-app-browse-atkobject">
+                                                <property name="AtkObject::accessible-name" translatable="yes">install-app-browse</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -1460,6 +1490,11 @@ User shouldn't see this.</property>
                                                 <property name="receives_default">True</property>
                                                 <property name="use_underline">True</property>
                                                 <signal name="clicked" handler="on_install_oscontainer_browse_clicked" swapped="no"/>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="install-oscontainer-browse-atkobject">
+                                                    <property name="AtkObject::accessible-name" translatable="yes">install-oscontainer-browse</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -1612,6 +1647,11 @@ is not yet supported.&lt;/small&gt;</property>
                                         <property name="can_focus">False</property>
                                         <property name="label">-</property>
                                         <property name="xalign">0</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="install-os-version-label-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes">install-os-version-label</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">2</property>
@@ -1627,6 +1667,11 @@ is not yet supported.&lt;/small&gt;</property>
                                         <property name="can_focus">False</property>
                                         <property name="label">-</property>
                                         <property name="xalign">0</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="install-os-type-label-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes">install-os-type-label</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">2</property>
@@ -1640,6 +1685,11 @@ is not yet supported.&lt;/small&gt;</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <signal name="changed" handler="on_install_os_type_changed" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="install-os-type-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes">install-os-type</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -1687,6 +1737,16 @@ is not yet supported.&lt;/small&gt;</property>
                                         <child internal-child="entry">
                                           <object class="GtkEntry" id="install-os-version-entry">
                                             <property name="can_focus">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="install-os-version-entry-atkobject">
+                                                <property name="AtkObject::accessible-name" translatable="yes">install-os-version-entry</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="install-os-version-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes">install-os-version</property>
                                           </object>
                                         </child>
                                       </object>
