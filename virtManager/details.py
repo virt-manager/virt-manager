@@ -3144,7 +3144,7 @@ class vmmDetails(vmmGObjectUI):
                     HW_LIST_TYPE_INSPECTION, "computer")
             add_hw_list_option("Performance", HW_LIST_TYPE_STATS,
                                "utilities-system-monitor")
-        add_hw_list_option("Processor", HW_LIST_TYPE_CPU, "device_cpu")
+        add_hw_list_option("CPUs", HW_LIST_TYPE_CPU, "device_cpu")
         add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, "device_mem")
         add_hw_list_option("Boot Options", HW_LIST_TYPE_BOOT, "system-run")
 
