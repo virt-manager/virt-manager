@@ -26,7 +26,8 @@ class DogtailApp(object):
         self._proc = subprocess.Popen(["python",
             os.path.join(os.getcwd(), "virt-manager"),
             "--test-first-run", "--no-fork", "--connect", self.uri] +
-            (extra_opts or []))
+            (extra_opts or []),
+            stdout=file(os.devnull), stderr=file(os.devnull))
         time.sleep(1)
 
         self._root = dogtail.tree.root.application("virt-manager")
