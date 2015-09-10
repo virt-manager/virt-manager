@@ -91,9 +91,9 @@ class NewVM(unittest.TestCase):
             "install-os-version-entry", "text")
         self.assertEquals(version.text, "Generic")
 
-        self.app.find_fuzzy(newvm, "install-os-type", "combo").click()
-        self.app.find_fuzzy(newvm, "Show all", "menu item",
-            return_all=True)[1].click()
+        ostype = self.app.find_fuzzy(newvm, "install-os-type", "combo")
+        ostype.click()
+        self.app.find_fuzzy(ostype, "Show all", "menu item").click()
         self.app.find_fuzzy(newvm, "install-os-type", "combo").click()
         self.app.find_fuzzy(newvm, "Windows", "menu item").click()
         self.app.find_fuzzy(newvm, "install-os-version-entry",

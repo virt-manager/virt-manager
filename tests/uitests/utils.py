@@ -6,6 +6,49 @@ import subprocess
 import dogtail.tree
 
 
+class _FuzzyPredicate(dogtail.predicate.Predicate):
+    """
+    Object dogtail/pyatspi want for node searching.
+    """
+    def __init__(self, name=None, roleName=None, labeller_text=None):
+        self._name_pattern = re.compile(name or ".*")
+        self._role_pattern = re.compile(roleName or ".*")
+        self._labeller_text = bool(labeller_text)
+        self._labeller_pattern = re.compile(labeller_text or ".*")
+
+    def makeScriptMethodCall(self, node):
+        return
+    def makeScriptVariableName(self, node):
+        return
+
+    def describeSearchResult(self):
+        return str(self)
+    def foo(node):
+        msg = "name='%s' roleName='%s'" % (node.name, node.roleName)
+        if node.labeller:
+            msg += " labeller.text='%s'" % node.labeller.text
+        return msg
+
+    def satisfiedByNode(self, node):
+        """
+        The actual search routine
+        """
+        try:
+            if not self._name_pattern.match(node.name):
+                return
+            if not self._role_pattern.match(node.roleName):
+                return
+            if self._labeller_text:
+                if not node.labeller:
+                    return
+                if not self._labeller_pattern.match(node.labeller.text):
+                    return
+            return True
+        except Exception, e:
+            print "got predicate exception: %s" % e
+
+
+
 class DogtailApp(object):
     """
     Wrapper class to simplify dogtail app handling
@@ -47,55 +90,23 @@ class DogtailApp(object):
         time.sleep(.5)
 
     @staticmethod
-    def node_string(node):
-        msg = "name='%s' roleName='%s'" % (node.name, node.roleName)
-        if node.labeller:
-            msg += " labeller.text='%s'" % node.labeller.text
-        return msg
-
-    @staticmethod
-    def find_pattern(root, name, roleName=None, labeller_text=None,
-            return_all=False):
+    def find_pattern(root, name, roleName=None, labeller_text=None):
         """
         Search root for any widget that contains the passed name/role regex
         strings.
         """
-        name_pattern = re.compile(name or ".*")
-        role_pattern = re.compile(roleName or ".*")
-        labeller_pattern = re.compile(labeller_text or ".*")
+        pred = _FuzzyPredicate(name, roleName, labeller_text)
 
-        def _walk(node):
-            try:
-                if not name_pattern.match(node.name):
-                    return
-                if not role_pattern.match(node.roleName):
-                    return
-                if labeller_text:
-                    if not node.labeller:
-                        return
-                    if not labeller_pattern.match(node.labeller.text):
-                        return
-                return node
-            except Exception, e:
-                print "got walk exception: %s" % e
-
-        ret = root.findChildren(_walk, isLambda=True)
-        if not ret:
-            raise RuntimeError("Didn't find widget with name='%s' "
+        try:
+            return root.findChild(pred)
+        except dogtail.tree.SearchError:
+            raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
                 "roleName='%s' labeller_text='%s'" %
                 (name, roleName, labeller_text))
-        if return_all:
-            return ret
-        if len(ret) > 1:
-            raise RuntimeError("Found more than 1 widget with name='%s' "
-                "rolename='%s' labeller_text='%s':\n%s" %
-                (name, roleName, labeller_text,
-                 "\n".join([DogtailApp.node_string(w) for w in ret])))
-        return ret[0]
+
 
     @staticmethod
-    def find_fuzzy(root, name, roleName=None, labeller_text=None,
-            return_all=False):
+    def find_fuzzy(root, name, roleName=None, labeller_text=None):
         """
         Search root for any widget that contains the passed name/role strings.
         """
@@ -110,7 +121,14 @@ class DogtailApp(object):
             labeller_pattern = ".*%s.*" % labeller_text
 
         return DogtailApp.find_pattern(root, name_pattern, role_pattern,
-            labeller_pattern, return_all=return_all)
+            labeller_pattern)
+
+    @staticmethod
+    def node_string(node):
+        msg = "name='%s' roleName='%s'" % (node.name, node.roleName)
+        if node.labeller:
+            msg += " labeller.text='%s'" % node.labeller.text
+        return msg
 
     @staticmethod
     def print_nodes(root):
