@@ -369,6 +369,8 @@ def _distroFromSUSEContent(fetcher, arch, vmtype=None):
             arch = "x86_64"
         elif cbuf.find("i586") != -1:
             arch = "i586"
+        elif cbuf.find("s390x") != -1:
+            arch = "s390x"
 
     dclass = GenericDistro
     if distribution:
@@ -934,16 +936,22 @@ class SuseDistro(Distro):
             oldkern += "64"
             oldinit += "64"
 
-        # Tested with Opensuse >= 10.2, 11, and sles 10
-        self._hvm_kernel_paths = [("boot/%s/loader/linux" % self.arch,
-                                    "boot/%s/loader/initrd" % self.arch)]
-        # Tested with Opensuse 10.0
-        self._hvm_kernel_paths.append(("boot/loader/%s" % oldkern,
-                                       "boot/loader/%s" % oldinit))
+        if self.arch == "s390x":
+            self._hvm_kernel_paths = [("boot/%s/linux" % self.arch,
+                                       "boot/%s/initrd" % self.arch)]
+            # No Xen on s390x
+            self._xen_kernel_paths = []
+        else:
+            # Tested with Opensuse >= 10.2, 11, and sles 10
+            self._hvm_kernel_paths = [("boot/%s/loader/linux" % self.arch,
+                                        "boot/%s/loader/initrd" % self.arch)]
+            # Tested with Opensuse 10.0
+            self._hvm_kernel_paths.append(("boot/loader/%s" % oldkern,
+                                           "boot/loader/%s" % oldinit))
 
-        # Matches Opensuse > 10.2 and sles 10
-        self._xen_kernel_paths = [("boot/%s/vmlinuz-xen" % self.arch,
-                                    "boot/%s/initrd-xen" % self.arch)]
+            # Matches Opensuse > 10.2 and sles 10
+            self._xen_kernel_paths = [("boot/%s/vmlinuz-xen" % self.arch,
+                                        "boot/%s/initrd-xen" % self.arch)]
 
     def _variantFromVersion(self):
         distro_version = self.version_from_content[1].strip()
@@ -971,6 +979,13 @@ class SuseDistro(Distro):
         self._variantFromVersion()
 
         self.os_variant = self._detect_osdict_from_url()
+
+        # Reset kernel name for sle11 source on s390x
+        if self.arch == "s390x":
+            if self.os_variant == "sles11" or self.os_variant == "sled11":
+                self._hvm_kernel_paths = [("boot/%s/vmrdr.ikr" % self.arch,
+                                           "boot/%s/initrd" % self.arch)]
+
         return True
 
     def _get_method_arg(self):
