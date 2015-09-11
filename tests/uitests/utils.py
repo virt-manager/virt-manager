@@ -16,18 +16,13 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
         self._labeller_text = bool(labeller_text)
         self._labeller_pattern = re.compile(labeller_text or ".*")
 
-    def makeScriptMethodCall(self, node):
+    def makeScriptMethodCall(self, isRecursive):
+        ignore = isRecursive
         return
-    def makeScriptVariableName(self, node):
+    def makeScriptVariableName(self):
         return
-
-    def describeSearchResult(self):
-        return str(self)
-    def foo(node):
-        msg = "name='%s' roleName='%s'" % (node.name, node.roleName)
-        if node.labeller:
-            msg += " labeller.text='%s'" % node.labeller.text
-        return msg
+    def describeSearchResult(self, node):
+        return DogtailApp.node_string(node)
 
     def satisfiedByNode(self, node):
         """
