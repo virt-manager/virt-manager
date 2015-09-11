@@ -107,11 +107,10 @@ _set_distro(FedoraDistro)
 _add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14",
      i686=ARCHIVE_FEDORA_URL % ("14", "i386"))
 # 2 Latest releases
-_add(OLD_FEDORA_URL % ("20", "x86_64"), "fedora20")
 _add(FEDORA_URL % ("21", "x86_64"), "fedora21")
 _add(FEDORA_URL % ("22", "x86_64"), "fedora22")
 # Any Dev release
-# _add(DEVFEDORA_URL % ("22", "x86_64"), "fedora21", name="fedora22")
+_add(DEVFEDORA_URL % ("23", "x86_64"), "fedora22", name="fedora23")
 
 
 _set_distro(CentOSDistro)
@@ -134,7 +133,7 @@ _set_distro(SLDistro)
 # scientific 5
 _add(OLD_SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.5", name="sl-5latest")
 # Latest scientific 6
-_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6.1", name="sl-6latest")
+_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6.6", name="sl-6latest")
 
 
 _set_distro(SuseDistro)
