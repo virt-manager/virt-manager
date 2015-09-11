@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Yuri Chornoivan <yurchor@ukr.net>, 2011-2015
 # Yuri Chornoivan <yurchor@ukr.net>, 2014
@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 09:45-0400\n"
-"PO-Revision-Date: 2015-08-12 07:24-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-09-06 04:53-0400\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/virt-manager/"
 "language/uk/)\n"
 "Language: uk\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Zanata 3.7.1\n"
 
 #: ../virt-manager:56
@@ -35,7 +35,8 @@ msgstr ""
 
 #: ../virt-install:165
 msgid "Cannot specify storage and use --nodisks"
-msgstr "Не можна одночасно вказувати сховище даних і використовувати --nodisks"
+msgstr ""
+"Не можна одночасно вказувати сховище даних і використовувати --nodisks"
 
 #: ../virt-install:169
 msgid ""
@@ -43,8 +44,8 @@ msgid ""
 "disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
 "Не можна використовувати одразу --file, --nonsparse або --file-size разом з "
-"параметрами --disk. Скористайтеся визначенням --disk АДРЕСА[,size=РОЗМІР][,"
-"sparse=yes|no]"
+"параметрами --disk. Скористайтеся визначенням --disk АДРЕСА[,size="
+"РОЗМІР][,sparse=yes|no]"
 
 #: ../virt-install:222
 msgid "Cannot use --mac with --nonetworks"
@@ -107,11 +108,9 @@ msgstr ""
 "disk none)"
 
 #: ../virt-install:439
-msgid ""
-"An install method must be specified\n"
+msgid "An install method must be specified\n"
 "(%(methods)s)"
-msgstr ""
-"Слід вказати спосіб встановлення\n"
+msgstr "Слід вказати спосіб встановлення\n"
 "(%(methods)s)"
 
 #: ../virt-install:446
@@ -208,8 +207,8 @@ msgstr "Налаштуваннями мережі гостьової систе�
 
 #: ../virt-install:553
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with -"
+"-os-variant for optimal results."
 msgstr ""
 "Не виявлено жодної операційної системи, швидкодію ВМ може бути значно "
 "знижено. Щоб отримати оптимальні результати, вкажіть операційну систему за "
@@ -225,11 +224,9 @@ msgstr ""
 "Немає консолі для запуску гостьової системи. Використовуємо типове --wait -1"
 
 #: ../virt-install:749
-msgid ""
-"\n"
+msgid "\n"
 "Starting install..."
-msgstr ""
-"\n"
+msgstr "\n"
 "Починаємо встановлення…"
 
 #: ../virt-install:766
@@ -238,11 +235,9 @@ msgstr "Створення домену завершено."
 
 #: ../virt-install:770
 #, c-format
-msgid ""
-"You can restart your domain by running:\n"
+msgid "You can restart your domain by running:\n"
 "  %s"
-msgstr ""
-"Ви можете перезавантажити ваш домен такою командою:\n"
+msgstr "Ви можете перезавантажити ваш домен такою командою:\n"
 "  %s"
 
 #: ../virt-install:773
@@ -307,7 +302,8 @@ msgstr "У вказаному встановленні немає кроку 3 X
 
 #: ../virt-install:921
 msgid "Create a new virtual machine from specified install media."
-msgstr "Створити віртуальну машину на основі вказаного носія для встановлення."
+msgstr ""
+"Створити віртуальну машину на основі вказаного носія для встановлення."
 
 #: ../virt-install:925 ../virt-clone:109
 msgid "General Options"
@@ -410,7 +406,8 @@ msgstr "Автоматично запускати домен після запу
 
 #: ../virt-install:1025
 msgid "Minutes to wait for install to complete."
-msgstr "Час у хвилинах, протягом якого слід чекати на завершення встановлення."
+msgstr ""
+"Час у хвилинах, протягом якого слід чекати на завершення встановлення."
 
 #: ../virt-install:1067
 msgid "--print-step must be 1, 2, 3, or all"
@@ -460,6 +457,7 @@ msgstr ""
 msgid "Name of the original guest; The status must be shut off or paused."
 msgstr ""
 "Назва початкової гостьової системи. Стан має бути вимкненим або призупиненим."
+""
 
 #: ../virt-clone:114
 msgid "XML file to use as the original guest."
@@ -492,8 +490,8 @@ msgstr ""
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
-"copy=hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
+"hdc)"
 msgstr ""
 "Примусово копіювати пристрої (наприклад, якщо «hdc» є придатним лише для "
 "читання пристроєм cdrom, --force-copy=hdc)"
@@ -710,11 +708,9 @@ msgstr ""
 "--remove-device --disk /якийсь/шлях"
 
 #: ../virt-xml:353
-msgid ""
-"Add specified device. Example:\n"
+msgid "Add specified device. Example:\n"
 "--add-device --disk ..."
-msgstr ""
-"Додати вказаний пристрій. Приклад:\n"
+msgstr "Додати вказаний пристрій. Приклад:\n"
 "--add-device --disk ..."
 
 #: ../virt-xml:356
@@ -1175,7 +1171,8 @@ msgstr "Образ _дискети"
 
 #: ../virtManager/choosecd.py:101 ../virtManager/create.py:577
 msgid "Physical CDROM passthrough not supported with this hypervisor"
-msgstr "У цьому гіпервізорі не передбачено передавання даних на фізичний CDROM"
+msgstr ""
+"У цьому гіпервізорі не передбачено передавання даних на фізичний CDROM"
 
 #: ../virtManager/choosecd.py:114 ../virtManager/choosecd.py:120
 msgid "Invalid Media Path"
@@ -1198,8 +1195,7 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "Неможливо клонувати некероване віддалене сховище."
 
 #: ../virtManager/clone.py:84
-msgid ""
-"Block devices to clone must be libvirt\n"
+msgid "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 "Блокові пристрої для клонування мають бути\n"
@@ -1404,7 +1400,7 @@ msgstr "Надіслати комбінацію ключів"
 #: ../virtManager/console.py:218
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
-msgstr ""
+msgstr "%(vm-name)s на %(connection-name)s"
 
 #: ../virtManager/console.py:225
 #, python-format
@@ -1502,8 +1498,7 @@ msgstr "Немає активних з’єднань для встановле�
 
 #: ../virtManager/create.py:424
 #, python-format
-msgid ""
-"Failed to setup UEFI for AArch64: %s\n"
+msgid "Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 "Не вдалося налаштувати UEFI для AArch64: %s\n"
@@ -1640,7 +1635,8 @@ msgstr "Помилка під час встановлення типових п�
 #: ../virtManager/create.py:1446 ../virtManager/createinterface.py:906
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
-msgstr "Під час перевірки параметрів встановлення сталася невідома помилка: %s"
+msgstr ""
+"Під час перевірки параметрів встановлення сталася невідома помилка: %s"
 
 #: ../virtManager/create.py:1496
 msgid "Please specify a valid OS variant."
@@ -1672,7 +1668,8 @@ msgstr "Помилка під час спроби визначення пара�
 
 #: ../virtManager/create.py:1582
 msgid "Error setting install media location."
-msgstr "Помилка під час спроби визначення розташування носія для встановлення."
+msgstr ""
+"Помилка під час спроби визначення розташування носія для встановлення."
 
 #: ../virtManager/create.py:1606
 #, python-format
@@ -2064,12 +2061,10 @@ msgstr "Ви справді хочете вилучити сховище дан�
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid ""
-"The following paths will be deleted:\n"
+msgid "The following paths will be deleted:\n"
 "\n"
 "%s"
-msgstr ""
-"Буде вилучено такі шляхи:\n"
+msgstr "Буде вилучено такі шляхи:\n"
 "\n"
 "%s"
 
@@ -2091,8 +2086,8 @@ msgstr "Помилка під час вилучення віртуальної �
 #: ../virtManager/delete.py:208
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
-"Крім того, під час спроби вилучення певних пристроїв сховища сталися "
-"помилки: \n"
+"Крім того, під час спроби вилучення певних пристроїв сховища сталися помилки:"
+" \n"
 
 #: ../virtManager/delete.py:212
 msgid "Errors encountered while removing certain storage devices."
@@ -2132,11 +2127,9 @@ msgstr "Сховище позначено як спільне."
 
 #: ../virtManager/delete.py:400
 #, python-format
-msgid ""
-"Storage is in use by the following virtual machines:\n"
+msgid "Storage is in use by the following virtual machines:\n"
 "- %s "
-msgstr ""
-"Сховище використовується такими віртуальними машинами:\n"
+msgstr "Сховище використовується такими віртуальними машинами:\n"
 "- %s "
 
 #: ../virtManager/details.py:163
@@ -2558,7 +2551,8 @@ msgstr "Не вдалося знайти вказаний пристрій у н
 
 #: ../virtManager/domain.py:1415
 msgid "Cannot start guest while cloning operation in progress"
-msgstr "Не можна запускати гостьову систему під час виконання дії з клонування"
+msgstr ""
+"Не можна запускати гостьову систему під час виконання дії з клонування"
 
 #: ../virtManager/domain.py:1450
 msgid "Cannot resume guest while cloning operation in progress"
@@ -2635,11 +2629,9 @@ msgstr ""
 "програму для встановлення з’єднання з цим вузлом."
 
 #: ../virtManager/engine.py:618
-msgid ""
-"Verify that the 'libvirtd' daemon is running\n"
+msgid "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
-msgstr ""
-"Перевірте, чи запущено фонову службу «libvirtd» на\n"
+msgstr "Перевірте, чи запущено фонову службу «libvirtd» на\n"
 "віддаленому вузлі."
 
 #: ../virtManager/engine.py:622
@@ -3084,8 +3076,7 @@ msgstr "Мережний ввід/вивід"
 
 #: ../virtManager/manager.py:511
 #, python-format
-msgid ""
-"This will remove the connection:\n"
+msgid "This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3157,9 +3148,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by "
-"libvirt. You must configure the destination to have a valid publicly "
-"accessible hostname."
+"The destination's hostname is 'localhost', which will be rejected by libvirt."
+" You must configure the destination to have a valid publicly accessible "
+"hostname."
 msgstr ""
 "Назвою вузла призначення є «localhost». У використанні такої адреси буде "
 "відмовлено libvirt. Вам слід вказати як призначення назву загальнодоступного "
@@ -3345,7 +3336,8 @@ msgstr "Не вдалося отримати доступ до шляху кон
 #: ../virtManager/serialcon.py:407
 #, python-format
 msgid "Error connecting to text console: %s"
-msgstr "Помилка під час спроби встановлення з’єднання з текстовою консоллю: %s"
+msgstr ""
+"Помилка під час спроби встановлення з’єднання з текстовою консоллю: %s"
 
 #: ../virtManager/snapshots.py:159
 msgid "_Start snapshot"
@@ -3676,11 +3668,9 @@ msgstr ""
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid ""
-"Syntax error at line %d: %s\n"
+msgid "Syntax error at line %d: %s\n"
 "%s"
-msgstr ""
-"Синтаксична помилку у рядку %d: %s\n"
+msgstr "Синтаксична помилку у рядку %d: %s\n"
 "%s"
 
 #: ../virtconv/vmx.py:125
@@ -3689,7 +3679,8 @@ msgstr "Не виявлено рядка сховища даних у файлі
 
 #: ../virtconv/vmx.py:128
 msgid "Don't know how to handle multistorage VMDK descriptors"
-msgstr "Спосіб обробки дескрипторів VMDK з багатьма сховищами даних невідомий."
+msgstr ""
+"Спосіб обробки дескрипторів VMDK з багатьма сховищами даних невідомий."
 
 #: ../virtconv/vmx.py:263
 #, python-format
@@ -3733,8 +3724,8 @@ msgstr ""
 #: ../virtinst/cli.py:152
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
-"Щоб ознайомитися зі списком додаткових параметрів, скористайтеся командами "
-"«--параметр=?» або «--параметр help»"
+"Щоб ознайомитися зі списком додаткових параметрів, скористайтеся командами «-"
+"-параметр=?» або «--параметр help»"
 
 #: ../virtinst/cli.py:318
 msgid "Exiting at user request."
@@ -3756,7 +3747,8 @@ msgstr ""
 #: ../virtinst/cli.py:347
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
-msgstr " (Скористайтеся --check %s=off або --check all=off, щоб перевизначити)"
+msgstr ""
+" (Скористайтеся --check %s=off або --check all=off, щоб перевизначити)"
 
 #: ../virtinst/cli.py:363
 #, python-format
@@ -3874,11 +3866,9 @@ msgstr ""
 "--vcpus sockets=2,cores=4,threads=2,"
 
 #: ../virtinst/cli.py:585
-msgid ""
-"CPU model and features. Ex:\n"
+msgid "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
-msgstr ""
-"Модель процесора та можливості. Приклад:\n"
+msgstr "Модель процесора та можливості. Приклад:\n"
 "--cpu coreduo,+x2apic\n"
 
 #: ../virtinst/cli.py:596
@@ -3948,7 +3938,8 @@ msgstr ""
 "основною системами"
 
 #: ../virtinst/cli.py:631
-msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid ""
+"Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Налаштувати фізичні пристрої USB, PCI тощо основної системи, які буде надано "
 "у спільне користування гостьовій системі."
@@ -3976,8 +3967,7 @@ msgid "Configure guest video hardware."
 msgstr "Налаштувати графічну підсистему гостьової системи."
 
 #: ../virtinst/cli.py:659
-msgid ""
-"Configure a guest smartcard device. Ex:\n"
+msgid "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 "Налаштувати пристрій читання карток гостьової системи. Приклад:\n"
@@ -3992,36 +3982,30 @@ msgstr ""
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:665
-msgid ""
-"Configure a guest memballoon device. Ex:\n"
+msgid "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 "Налаштувати пристрій резервної пам’яті. Приклад:\n"
 "--memballoon model=virtio"
 
 #: ../virtinst/cli.py:668
-msgid ""
-"Configure a guest TPM device. Ex:\n"
+msgid "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
-msgstr ""
-"Налаштувати пристрій TPM гостьової системи. Приклад:\n"
+msgstr "Налаштувати пристрій TPM гостьової системи. Приклад:\n"
 "--tpm /dev/tpm"
 
 #: ../virtinst/cli.py:671
-msgid ""
-"Configure a guest RNG device. Ex:\n"
+msgid "Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
 msgstr ""
-"Налаштувати пристрій породжувача випадкових чисел гостьової системи. "
-"Приклад:\n"
+"Налаштувати пристрій породжувача випадкових чисел гостьової системи. Приклад:"
+"\n"
 "--rng /dev/random"
 
 #: ../virtinst/cli.py:674
-msgid ""
-"Configure a guest panic device. Ex:\n"
+msgid "Configure a guest panic device. Ex:\n"
 "--panic default"
-msgstr ""
-"Налаштувати гостьовий пристрій для паніки. Приклад:\n"
+msgstr "Налаштувати гостьовий пристрій для паніки. Приклад:\n"
 "--panic default"
 
 #: ../virtinst/cli.py:680
@@ -4199,7 +4183,8 @@ msgstr "Слід вказати початкову назву гостьової
 
 #: ../virtinst/cloner.py:306
 msgid "Domain with devices to clone must be paused or shutoff."
-msgstr "Для клонування домену з пристроями його слід призупинити або вимкнути."
+msgstr ""
+"Для клонування домену з пристроями його слід призупинити або вимкнути."
 
 #: ../virtinst/cloner.py:331
 #, python-format
@@ -4802,7 +4787,8 @@ msgstr "Маршрут до %s"
 
 #: ../virtinst/network.py:167
 msgid "Isolated network, internal and host routing only"
-msgstr "Ізольована мережа, лише внутрішнє використання та маршрутизація вузлів"
+msgstr ""
+"Ізольована мережа, лише внутрішнє використання та маршрутизація вузлів"
 
 #: ../virtinst/network.py:200
 #, python-format
@@ -4934,6 +4920,7 @@ msgstr ""
 msgid "Must explicitly specify disk format if formatting disk device."
 msgstr ""
 "У разі форматування дискового пристрою слід явним чином вказати формат диска."
+""
 
 #: ../virtinst/storage.py:507
 #, python-format
@@ -5618,11 +5605,9 @@ msgid "Architecture options"
 msgstr "Параметри архітектури"
 
 #: ../ui/create.ui.h:16
-msgid ""
-"Error message\n"
+msgid "Error message\n"
 "bar"
-msgstr ""
-"Панель повідомлення\n"
+msgstr "Панель повідомлення\n"
 "про помилку"
 
 #: ../ui/create.ui.h:19
@@ -5809,7 +5794,8 @@ msgid ""
 "<small>Specifying an operating system is required for best performance</"
 "small>"
 msgstr ""
-"<small>Кращої швидкодії можна досягти визначенням операційної системи</small>"
+"<small>Кращої швидкодії можна досягти визначенням операційної системи</"
+"small>"
 
 #: ../ui/create.ui.h:67
 msgid "N_etwork selection"
@@ -7267,8 +7253,8 @@ msgid ""
 msgstr ""
 "Тунельоване перенесення за допомогою каналу з’єднання libvirtd замість "
 "відкриття гіпервізором окремого з’єднання мережі з призначенням. Екземпляр "
-"джерела libvirt з’єднується безпосередньо із екземпляром призначення "
-"libvirt.\n"
+"джерела libvirt з’єднується безпосередньо із екземпляром призначення libvirt."
+"\n"
 "\n"
 "Може спростити налаштування, оскільки не потрібно відкривати додаткові порти "
 "у брандмауері, і зашифрувати дані, що передаються під час перенесення, якщо "
@@ -7457,11 +7443,9 @@ msgid "CPU _default:"
 msgstr "Ти_повий процесор:"
 
 #: ../ui/preferences.ui.h:21
-msgid ""
-"Add Spice _USB\n"
+msgid "Add Spice _USB\n"
 "Redirection:"
-msgstr ""
-"Додати п_ереспрямування\n"
+msgstr "Додати п_ереспрямування\n"
 "USB Spice:"
 
 #: ../ui/preferences.ui.h:23

@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Adolfo Jayme Barrientos, 2015
 # Adolfo Jayme Barrientos, 2014
@@ -21,14 +21,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 09:45-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2015-08-20 08:42-0400\n"
 "Last-Translator: Abdel G. Martínez L. <abdel.g.martinez.l@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/virt-manager/"
 "language/es/)\n"
 "Language: es\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Zanata 3.7.1\n"
 
@@ -109,11 +109,9 @@ msgid "--disk storage must be specified (override with --disk none)"
 msgstr "--disk storage debe especificarse (se revierte con --disk none)"
 
 #: ../virt-install:439
-msgid ""
-"An install method must be specified\n"
+msgid "An install method must be specified\n"
 "(%(methods)s)"
-msgstr ""
-"Debe indicarse un método de instalación\n"
+msgstr "Debe indicarse un método de instalación\n"
 "(%(methods)s)"
 
 #: ../virt-install:446
@@ -137,6 +135,7 @@ msgstr ""
 msgid "Network PXE boot is not supported for paravirtualized guests"
 msgstr ""
 "Inicialización PXE en red no está soportado para huéspedes paravirtualizados "
+""
 
 #: ../virt-install:468
 msgid "Paravirtualized guests cannot install off cdrom media."
@@ -209,8 +208,8 @@ msgstr "La configuración de red del huésped no tiene soporte para PXE"
 
 #: ../virt-install:553
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with -"
+"-os-variant for optimal results."
 msgstr ""
 "No se detectó ningún sistema operativo, el rendimiento de la máquina virtual "
 "(VM) puede resentirse. Especifique un sistema operativo con -os-variant para "
@@ -227,11 +226,9 @@ msgstr ""
 "predeterminado --wait -1"
 
 #: ../virt-install:749
-msgid ""
-"\n"
+msgid "\n"
 "Starting install..."
-msgstr ""
-"\n"
+msgstr "\n"
 "Empezando la instalación..."
 
 #: ../virt-install:766
@@ -240,11 +237,9 @@ msgstr "Creación de dominio completada."
 
 #: ../virt-install:770
 #, c-format
-msgid ""
-"You can restart your domain by running:\n"
+msgid "You can restart your domain by running:\n"
 "  %s"
-msgstr ""
-"Puede reiniciar su dominio ejecutando:\n"
+msgstr "Puede reiniciar su dominio ejecutando:\n"
 "%s"
 
 #: ../virt-install:773
@@ -491,8 +486,8 @@ msgstr ""
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
-"copy=hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
+"hdc)"
 msgstr ""
 "Copiando dispositivos de manera forzada (por ejemplo, si \"hdc\" es un "
 "dispositivo cdrom sólo de lectura, --force-copy=hdc)"
@@ -678,7 +673,8 @@ msgstr "Edita el XML de libvirt usando las opciones de línea de comandos."
 #: ../virt-xml:338
 msgid "Domain name, id, or uuid"
 msgstr ""
-"Nombre de dominio, id (identificador), o uuid (identificador universal único)"
+"Nombre de dominio, id (identificador), o uuid (identificador universal "
+"único)"
 
 #: ../virt-xml:340
 msgid "XML actions"
@@ -711,11 +707,9 @@ msgstr ""
 "--remove-device --disk /some/path"
 
 #: ../virt-xml:353
-msgid ""
-"Add specified device. Example:\n"
+msgid "Add specified device. Example:\n"
 "--add-device --disk ..."
-msgstr ""
-"Añadir el dispositivo especificado. Ejemplo:\n"
+msgstr "Añadir el dispositivo especificado. Ejemplo:\n"
 "--add-device --disk ..."
 
 #: ../virt-xml:356
@@ -851,6 +845,7 @@ msgstr "Error al modificar la configuración de MV: %s"
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr ""
 "Algunos cambios requieren un apagado del equipo huésped para que se efectúen."
+""
 
 #: ../virtManager/addhardware.py:843
 msgid "These changes will take effect after the next guest shutdown."
@@ -871,6 +866,7 @@ msgstr ""
 "%s ya tiene acoplado un controlador USB.\n"
 "No está soportada la adición de más de un controlador USB.\n"
 "Puede cambiar el tipo de controlador USB en la pantalla de detalles de la VM."
+""
 
 #: ../virtManager/addhardware.py:1119
 msgid "Error"
@@ -1200,8 +1196,7 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "No es posible clonar almacenamiento remoto no administrado."
 
 #: ../virtManager/clone.py:84
-msgid ""
-"Block devices to clone must be libvirt\n"
+msgid "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 "Los dispositivos de bloque a clonar deberían ser\n"
@@ -1500,8 +1495,7 @@ msgstr "No existe ninguna conexión activa en donde hacer la instalación."
 
 #: ../virtManager/create.py:424
 #, python-format
-msgid ""
-"Failed to setup UEFI for AArch64: %s\n"
+msgid "Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 "Fallo al configurar UEFI para AArch64: %s\n"
@@ -2063,12 +2057,10 @@ msgstr "¿Está seguro de que desea borrar el almacenamiento?"
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid ""
-"The following paths will be deleted:\n"
+msgid "The following paths will be deleted:\n"
 "\n"
 "%s"
-msgstr ""
-"Las siguientes rutas serán borradas:\n"
+msgstr "Las siguientes rutas serán borradas:\n"
 "\n"
 "%s"
 
@@ -2090,8 +2082,8 @@ msgstr "Error al eliminar la máquina virtual '%s': %s"
 #: ../virtManager/delete.py:208
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
-"Además, hubo errores al eliminar determinados dispositivos de "
-"almacenamiento: \n"
+"Además, hubo errores al eliminar determinados dispositivos de almacenamiento:"
+" \n"
 
 #: ../virtManager/delete.py:212
 msgid "Errors encountered while removing certain storage devices."
@@ -2133,8 +2125,7 @@ msgstr "El almacenamiento está identificado como posible de ser compartido."
 
 #: ../virtManager/delete.py:400
 #, python-format
-msgid ""
-"Storage is in use by the following virtual machines:\n"
+msgid "Storage is in use by the following virtual machines:\n"
 "- %s "
 msgstr ""
 "El almacenamiento está siendo utilizado por las siguientes máquinas "
@@ -2345,7 +2336,8 @@ msgstr "No se pudo desconectar el dispositivo de la máquina en ejecución"
 
 #: ../virtManager/details.py:2358
 msgid "This change will take effect after the next guest shutdown."
-msgstr "Este cambio tendrá efecto tras el siguiente apagado del equipo huésped"
+msgstr ""
+"Este cambio tendrá efecto tras el siguiente apagado del equipo huésped"
 
 #: ../virtManager/details.py:2480
 msgid "Error while inspecting the guest configuration"
@@ -2641,8 +2633,7 @@ msgstr ""
 "Necesitas instalar openssh-askpass o similar para conectar a este host."
 
 #: ../virtManager/engine.py:618
-msgid ""
-"Verify that the 'libvirtd' daemon is running\n"
+msgid "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr "Comprueba que el demonio 'libvirtd' esté corriendo en el host remoto."
 
@@ -3086,14 +3077,12 @@ msgstr "Red E/S"
 
 #: ../virtManager/manager.py:511
 #, python-format
-msgid ""
-"This will remove the connection:\n"
+msgid "This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
 "Are you sure?"
-msgstr ""
-"Esto eliminará la conexión:\n"
+msgstr "Esto eliminará la conexión:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3159,9 +3148,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by "
-"libvirt. You must configure the destination to have a valid publicly "
-"accessible hostname."
+"The destination's hostname is 'localhost', which will be rejected by libvirt."
+" You must configure the destination to have a valid publicly accessible "
+"hostname."
 msgstr ""
 "El nombre de servidor del destino es 'localhost', que será rechazado por "
 "libvirt. Tiene que configurar el destino para que tenga un nombre de "
@@ -3652,7 +3641,8 @@ msgstr "El nombre de la nueva ruta '%s' ya existe"
 #: ../virtconv/ovf.py:193
 #, python-format
 msgid "Unknown disk reference id '%s' for path %s."
-msgstr "Identificador de referencia de disco '%s' para la ruta %s desconocido."
+msgstr ""
+"Identificador de referencia de disco '%s' para la ruta %s desconocido."
 
 #: ../virtconv/ovf.py:202
 #, python-format
@@ -3675,11 +3665,9 @@ msgstr ""
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid ""
-"Syntax error at line %d: %s\n"
+msgid "Syntax error at line %d: %s\n"
 "%s"
-msgstr ""
-"Error de sintaxis en la línea %d: %s\n"
+msgstr "Error de sintaxis en la línea %d: %s\n"
 "%s"
 
 #: ../virtconv/vmx.py:125
@@ -3871,8 +3859,7 @@ msgstr ""
 "--vcpus sockets=2,cores=4,threads=2,"
 
 #: ../virtinst/cli.py:585
-msgid ""
-"CPU model and features. Ex:\n"
+msgid "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 msgstr ""
 "El modelo de CPU y sus características. Ejemplo:\n"
@@ -3944,7 +3931,8 @@ msgstr ""
 "Configura una conexión de consola de texto entre el huésped y el anfitrión"
 
 #: ../virtinst/cli.py:631
-msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid ""
+"Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Configure los dispositivos físicos del anfitrión (host) USB/PCI/etc para ser "
 "compartidos con el invitado (guest)"
@@ -3972,8 +3960,7 @@ msgid "Configure guest video hardware."
 msgstr "Configura hardware de video en el huésped."
 
 #: ../virtinst/cli.py:659
-msgid ""
-"Configure a guest smartcard device. Ex:\n"
+msgid "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 "Configura un dispositivo smartcard en el huésped. Ej:\n"
@@ -3988,30 +3975,25 @@ msgstr ""
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:665
-msgid ""
-"Configure a guest memballoon device. Ex:\n"
+msgid "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 "Configure un dispositivo memballoon huésped. Ex:\n"
 "--memballoon model=virtio"
 
 #: ../virtinst/cli.py:668
-msgid ""
-"Configure a guest TPM device. Ex:\n"
+msgid "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr "Configurar un dispositivo TPM de huésped"
 
 #: ../virtinst/cli.py:671
-msgid ""
-"Configure a guest RNG device. Ex:\n"
+msgid "Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
-msgstr ""
-"Configure un dispositivo RNG invitado. Ej:\n"
+msgstr "Configure un dispositivo RNG invitado. Ej:\n"
 "--rng /dev/random"
 
 #: ../virtinst/cli.py:674
-msgid ""
-"Configure a guest panic device. Ex:\n"
+msgid "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 "Configure un dispositivo de pánico para el invitado. Ejemplo:\n"
@@ -4038,8 +4020,8 @@ msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
-"Establezca la política de respaldo de memoria para el proceso de dominio. "
-"Ej:\n"
+"Establezca la política de respaldo de memoria para el proceso de dominio. Ej:"
+"\n"
 "--memorybacking hugepages=on"
 
 #: ../virtinst/cli.py:691
@@ -4194,7 +4176,8 @@ msgstr "Se requiere el nombre del huésped o xml original."
 
 #: ../virtinst/cloner.py:306
 msgid "Domain with devices to clone must be paused or shutoff."
-msgstr "El dominio con dispositivos para clonar debe estar en pausa o apagado."
+msgstr ""
+"El dominio con dispositivos para clonar debe estar en pausa o apagado."
 
 #: ../virtinst/cloner.py:331
 #, python-format
@@ -4305,7 +4288,8 @@ msgstr "Modo servidor"
 
 #: ../virtinst/devicechar.py:193
 msgid "Method used to expose character device in the host."
-msgstr "Método utilizado para exponer un dispositivo de caracteres en el host."
+msgstr ""
+"Método utilizado para exponer un dispositivo de caracteres en el host."
 
 #: ../virtinst/devicechar.py:198
 msgid "Host input path to attach to the guest."
@@ -4424,7 +4408,8 @@ msgstr "%s debe estar por encima de 5900, o -1 para auto asignación"
 #: ../virtinst/devicehostdev.py:56
 #, python-format
 msgid "Could not find USB device (vendorId: %s, productId: %s)"
-msgstr "No se puede encontrar el dispositivo USB (vendorId: %s, productId: %s)"
+msgstr ""
+"No se puede encontrar el dispositivo USB (vendorId: %s, productId: %s)"
 
 #: ../virtinst/deviceinterface.py:86
 msgid "Shared physical device"
@@ -4551,7 +4536,8 @@ msgstr "cpuset debe ser una cadena"
 
 #: ../virtinst/domainnumatune.py:47
 msgid "cpuset can only contain numeric, ',', '^', or '-' characters"
-msgstr "cpuset solamente puede contener caracteres numéricos, ',', '^', o '-' "
+msgstr ""
+"cpuset solamente puede contener caracteres numéricos, ',', '^', o '-' "
 
 #: ../virtinst/domainnumatune.py:61
 msgid "cpuset contains invalid format."
@@ -5600,11 +5586,9 @@ msgid "Architecture options"
 msgstr "Opciones de la arquitectura"
 
 #: ../ui/create.ui.h:16
-msgid ""
-"Error message\n"
+msgid "Error message\n"
 "bar"
-msgstr ""
-"Mensaje de error\n"
+msgstr "Mensaje de error\n"
 "barra"
 
 #: ../ui/create.ui.h:19
@@ -6124,7 +6108,8 @@ msgstr "<span size='large' color='white'>Crear silo de almacenamiento</span>"
 
 #: ../ui/createpool.ui.h:4
 msgid "Select the storage pool type you would like to configure."
-msgstr "Seleccione tipo de silo (pool) de almacenamiento que desea configurar."
+msgstr ""
+"Seleccione tipo de silo (pool) de almacenamiento que desea configurar."
 
 #: ../ui/createpool.ui.h:6
 msgid "B_uild Pool:"
@@ -7434,11 +7419,9 @@ msgid "CPU _default:"
 msgstr "_CPU predeterminada:"
 
 #: ../ui/preferences.ui.h:21
-msgid ""
-"Add Spice _USB\n"
+msgid "Add Spice _USB\n"
 "Redirection:"
-msgstr ""
-"Añadir redirección de\n"
+msgstr "Añadir redirección de\n"
 "_USB con protocolo Spice:"
 
 #: ../ui/preferences.ui.h:23

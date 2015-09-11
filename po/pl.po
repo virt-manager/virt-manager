@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Cole Robinson <crobinso@redhat.com>, 2011
 # Piotr Drąg <piotrdrag@gmail.com>, 2006,2011-2015
@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 09:45-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2015-09-01 03:47-0400\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/virt-manager/"
 "language/pl/)\n"
 "Language: pl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Zanata 3.7.1\n"
@@ -102,11 +102,9 @@ msgstr ""
 "zastąpić)"
 
 #: ../virt-install:439
-msgid ""
-"An install method must be specified\n"
+msgid "An install method must be specified\n"
 "(%(methods)s)"
-msgstr ""
-"Metoda instalacji musi zostać podana\n"
+msgstr "Metoda instalacji musi zostać podana\n"
 "(%(methods)s)"
 
 #: ../virt-install:446
@@ -127,7 +125,8 @@ msgstr "Metody instalacji (%s) nie mogą być podawane dla gości kontenerów"
 #: ../virt-install:465
 msgid "Network PXE boot is not supported for paravirtualized guests"
 msgstr ""
-"Uruchamianie sieciowe PXE nie jest obsługiwane dla gości parawirtualizowanych"
+"Uruchamianie sieciowe PXE nie jest obsługiwane dla gości "
+"parawirtualizowanych"
 
 #: ../virt-install:468
 msgid "Paravirtualized guests cannot install off cdrom media."
@@ -135,7 +134,8 @@ msgstr "Goście parawirtualizowani nie mogą być instalowani z nośnika CD-ROM.
 
 #: ../virt-install:473
 msgid "Libvirt version does not support remote --location installs"
-msgstr "Wersja biblioteki libvirt nie obsługuje zdalnych instalacji --location"
+msgstr ""
+"Wersja biblioteki libvirt nie obsługuje zdalnych instalacji --location"
 
 #: ../virt-install:479
 msgid "--extra-args only work if specified with --location."
@@ -196,8 +196,8 @@ msgstr "Konfiguracja sieci gościa nie obsługuje PXE"
 
 #: ../virt-install:553
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with -"
+"-os-variant for optimal results."
 msgstr ""
 "Nie wykryto systemu operacyjnego. Wydajność maszyny wirtualnej może być "
 "ograniczona. Proszę podać system operacyjny za pomocą opcji --os-variant, "
@@ -214,11 +214,9 @@ msgstr ""
 "wait -1"
 
 #: ../virt-install:749
-msgid ""
-"\n"
+msgid "\n"
 "Starting install..."
-msgstr ""
-"\n"
+msgstr "\n"
 "Rozpoczynanie instalacji…"
 
 #: ../virt-install:766
@@ -227,11 +225,9 @@ msgstr "Utworzenie domeny zostało ukończone."
 
 #: ../virt-install:770
 #, c-format
-msgid ""
-"You can restart your domain by running:\n"
+msgid "You can restart your domain by running:\n"
 "  %s"
-msgstr ""
-"Można ponownie uruchomić domenę wykonując polecenie:\n"
+msgstr "Można ponownie uruchomić domenę wykonując polecenie:\n"
 "  %s"
 
 #: ../virt-install:773
@@ -318,8 +314,8 @@ msgstr "Nośnik instalacji CD-ROM"
 msgid ""
 "Installation source (eg, nfs:host:/path, http://host/path, ftp://host/path)"
 msgstr ""
-"Źródło instalacji (np. nfs:gospodarz:/ścieżka, http://gospodarz/ścieżka, "
-"ftp://gospodarz/ścieżka)"
+"Źródło instalacji (np. nfs:gospodarz:/ścieżka, http://gospodarz/ścieżka, ftp:"
+"//gospodarz/ścieżka)"
 
 #: ../virt-install:941
 msgid "Boot from the network using the PXE protocol"
@@ -478,8 +474,8 @@ msgstr "Nowy plik do użycia jako obraz dysku dla nowego gościa"
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
-"copy=hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
+"hdc)"
 msgstr ""
 "Wymusza skopiowanie urządzeń (np. jeśli „hdc” jest urządzeniem CD-ROM tylko "
 "do odczytu należy użyć --force-copy=hdc)"
@@ -696,11 +692,9 @@ msgstr ""
 "--remove-device --disk /jakaś/ścieżka"
 
 #: ../virt-xml:353
-msgid ""
-"Add specified device. Example:\n"
+msgid "Add specified device. Example:\n"
 "--add-device --disk ..."
-msgstr ""
-"Dodaje podane urządzenie. Przykłady:\n"
+msgstr "Dodaje podane urządzenie. Przykłady:\n"
 "--add-device --disk …"
 
 #: ../virt-xml:356
@@ -1153,7 +1147,8 @@ msgstr "Obraz dysk_ietki"
 
 #: ../virtManager/choosecd.py:101 ../virtManager/create.py:577
 msgid "Physical CDROM passthrough not supported with this hypervisor"
-msgstr "Fizyczne przejście CD-ROM nie jest obsługiwane za pomocą tego nadzorcy"
+msgstr ""
+"Fizyczne przejście CD-ROM nie jest obsługiwane za pomocą tego nadzorcy"
 
 #: ../virtManager/choosecd.py:114 ../virtManager/choosecd.py:120
 msgid "Invalid Media Path"
@@ -1176,8 +1171,7 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "Nie można sklonować niezarządzanej zdalnej pamięci masowej."
 
 #: ../virtManager/clone.py:84
-msgid ""
-"Block devices to clone must be libvirt\n"
+msgid "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 "Urządzenia blokowe do klonowania powinny\n"
@@ -1364,8 +1358,7 @@ msgid ""
 "\n"
 "Recover error: %s"
 msgstr ""
-"Zmiana nazwy %s się nie powiodła. Próba przywrócenia także się nie "
-"powiodła.\n"
+"Zmiana nazwy %s się nie powiodła. Próba przywrócenia także się nie powiodła.\n"
 "\n"
 "Pierwotny błąd: %s\n"
 "\n"
@@ -1478,8 +1471,7 @@ msgstr "Brak dostępnych połączeń do zainstalowania."
 
 #: ../virtManager/create.py:424
 #, python-format
-msgid ""
-"Failed to setup UEFI for AArch64: %s\n"
+msgid "Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 "Ustawienie UEFI dla AArch64 się nie powiodło: %s\n"
@@ -2038,12 +2030,10 @@ msgstr "Na pewno usunąć pamięć masową?"
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid ""
-"The following paths will be deleted:\n"
+msgid "The following paths will be deleted:\n"
 "\n"
 "%s"
-msgstr ""
-"Następujące ścieżki zostaną usunięte:\n"
+msgstr "Następujące ścieżki zostaną usunięte:\n"
 "\n"
 "%s"
 
@@ -2070,7 +2060,8 @@ msgstr ""
 
 #: ../virtManager/delete.py:212
 msgid "Errors encountered while removing certain storage devices."
-msgstr "Wystąpiły błędy podczas usuwania niektórych urządzeń pamięci masowych."
+msgstr ""
+"Wystąpiły błędy podczas usuwania niektórych urządzeń pamięci masowych."
 
 #: ../virtManager/delete.py:300 ../ui/details.ui.h:59
 msgid "Target"
@@ -2106,11 +2097,9 @@ msgstr "Pamięć masowa jest oznaczona jako współdzielona."
 
 #: ../virtManager/delete.py:400
 #, python-format
-msgid ""
-"Storage is in use by the following virtual machines:\n"
+msgid "Storage is in use by the following virtual machines:\n"
 "- %s "
-msgstr ""
-"Pamięć masowa jest używana przez następujące maszyny wirtualne:\n"
+msgstr "Pamięć masowa jest używana przez następujące maszyny wirtualne:\n"
 "• %s "
 
 #: ../virtManager/details.py:163
@@ -2609,8 +2598,7 @@ msgstr ""
 "aby połączyć się z tym gospodarzem."
 
 #: ../virtManager/engine.py:618
-msgid ""
-"Verify that the 'libvirtd' daemon is running\n"
+msgid "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr ""
 "Proszę sprawdzić, czy usługa „libvirtd” jest uruchomiona\n"
@@ -3056,14 +3044,12 @@ msgstr "Wejście/wyjście sieci"
 
 #: ../virtManager/manager.py:511
 #, python-format
-msgid ""
-"This will remove the connection:\n"
+msgid "This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
 "Are you sure?"
-msgstr ""
-"To usunie połączenie:\n"
+msgstr "To usunie połączenie:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3130,9 +3116,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by "
-"libvirt. You must configure the destination to have a valid publicly "
-"accessible hostname."
+"The destination's hostname is 'localhost', which will be rejected by libvirt."
+" You must configure the destination to have a valid publicly accessible "
+"hostname."
 msgstr ""
 "Nazwa gospodarza docelowego to „localhost”, co zostanie odrzucone przez "
 "bibliotekę libvirt. Należy skonfigurować cel tak, aby posiadał prawidłową, "
@@ -3298,7 +3284,8 @@ msgstr "Proszę nacisnąć żądane połączenie klawiszy przechwycenia"
 
 #: ../virtManager/serialcon.py:282
 msgid "Serial console not yet supported over remote connection"
-msgstr "Konsola szeregowa nie jest jeszcze obsługiwana przez zdalne połączenie"
+msgstr ""
+"Konsola szeregowa nie jest jeszcze obsługiwana przez zdalne połączenie"
 
 #: ../virtManager/serialcon.py:285
 msgid "Serial console not available for inactive guest"
@@ -3644,11 +3631,9 @@ msgstr ""
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid ""
-"Syntax error at line %d: %s\n"
+msgid "Syntax error at line %d: %s\n"
 "%s"
-msgstr ""
-"Błąd składni w wierszu %d: %s\n"
+msgstr "Błąd składni w wierszu %d: %s\n"
 "%s"
 
 #: ../virtconv/vmx.py:125
@@ -3835,11 +3820,9 @@ msgstr ""
 "--vcpus sockets=2,cores=4,threads=2,"
 
 #: ../virtinst/cli.py:585
-msgid ""
-"CPU model and features. Ex:\n"
+msgid "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
-msgstr ""
-"Model i funkcje procesora. Przykład:\n"
+msgstr "Model i funkcje procesora. Przykład:\n"
 "--cpu coreduo,+x2apic\n"
 
 #: ../virtinst/cli.py:596
@@ -3907,7 +3890,8 @@ msgid "Configure a text console connection between the guest and host"
 msgstr "Konfiguruje połączenie konsoli tekstowej między gościem a gospodarzem"
 
 #: ../virtinst/cli.py:631
-msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid ""
+"Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Konfiguruje fizyczne urządzenia USB/PCI/itp. gospodarza współdzielone z "
 "gościem"
@@ -3935,8 +3919,7 @@ msgid "Configure guest video hardware."
 msgstr "Konfiguruje sprzęt wideo gościa."
 
 #: ../virtinst/cli.py:659
-msgid ""
-"Configure a guest smartcard device. Ex:\n"
+msgid "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 "Konfiguruje urządzenie smartcard gościa. Np.:\n"
@@ -3951,35 +3934,28 @@ msgstr ""
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:665
-msgid ""
-"Configure a guest memballoon device. Ex:\n"
+msgid "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 "Konfiguruje urządzenie memballoon gościa. Na przykład:\n"
 " --memballoon model=virtio"
 
 #: ../virtinst/cli.py:668
-msgid ""
-"Configure a guest TPM device. Ex:\n"
+msgid "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
-msgstr ""
-"Konfiguruje urządzenie TPM gościa. Przykład:\n"
+msgstr "Konfiguruje urządzenie TPM gościa. Przykład:\n"
 "--tpm /dev/tpm"
 
 #: ../virtinst/cli.py:671
-msgid ""
-"Configure a guest RNG device. Ex:\n"
+msgid "Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
-msgstr ""
-"Konfiguruje urządzenie RNG gościa. Przykład:\n"
+msgstr "Konfiguruje urządzenie RNG gościa. Przykład:\n"
 "--rng /dev/random"
 
 #: ../virtinst/cli.py:674
-msgid ""
-"Configure a guest panic device. Ex:\n"
+msgid "Configure a guest panic device. Ex:\n"
 "--panic default"
-msgstr ""
-"Konfiguruje urządzenie awarii gościa. Przykład:\n"
+msgstr "Konfiguruje urządzenie awarii gościa. Przykład:\n"
 "--panic default"
 
 #: ../virtinst/cli.py:680
@@ -4111,7 +4087,8 @@ msgstr "Nie można określić więcej niż jedną ścieżkę pamięci masowej"
 #: ../virtinst/cli.py:1681
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
-"Wolumin pamięci masowej musi zostać podany jako vol=nazwa_puli/nazwa_woluminu"
+"Wolumin pamięci masowej musi zostać podany jako vol=nazwa_puli/"
+"nazwa_woluminu"
 
 #: ../virtinst/cli.py:1818
 #, python-format
@@ -4534,7 +4511,8 @@ msgstr "Możliwości wyświetlają tylko <= 1 komórkę. Brak możliwości NUMA"
 
 #: ../virtinst/domainnumatune.py:134
 msgid "Could not find any usable NUMA cell/cpu combinations."
-msgstr "Nie można odnaleźć żadnych używalnych połączeń komórki/procesora NUMA."
+msgstr ""
+"Nie można odnaleźć żadnych używalnych połączeń komórki/procesora NUMA."
 
 #: ../virtinst/domcapabilities.py:131
 msgid "BIOS"
@@ -5335,7 +5313,8 @@ msgstr "Sklonowanie maszyny wirtualnej"
 
 #: ../ui/clone.ui.h:2
 msgid "<span size='large' color='white'>Clone virtual machine</span>"
-msgstr "<span size='large' color='white'>Sklonowanie maszyny wirtualnej</span>"
+msgstr ""
+"<span size='large' color='white'>Sklonowanie maszyny wirtualnej</span>"
 
 #: ../ui/clone.ui.h:3
 msgid "Create clone based on:"
@@ -5554,11 +5533,9 @@ msgid "Architecture options"
 msgstr "Opcje architektury"
 
 #: ../ui/create.ui.h:16
-msgid ""
-"Error message\n"
+msgid "Error message\n"
 "bar"
-msgstr ""
-"Komunikat błędu\n"
+msgstr "Komunikat błędu\n"
 "pasek"
 
 #: ../ui/create.ui.h:19
@@ -7389,11 +7366,9 @@ msgid "CPU _default:"
 msgstr "Domyślny p_rocesor:"
 
 #: ../ui/preferences.ui.h:21
-msgid ""
-"Add Spice _USB\n"
+msgid "Add Spice _USB\n"
 "Redirection:"
-msgstr ""
-"Dodaj przekierowanie\n"
+msgstr "Dodaj przekierowanie\n"
 "_USB Spice:"
 
 #: ../ui/preferences.ui.h:23

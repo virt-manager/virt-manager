@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Cole Robinson <crobinso@redhat.com>, 2011
 # gscrivano <Gscrivano@gmail.com>, 2013-2014
@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 09:45-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/virt-manager/"
 "language/it/)\n"
 "Language: it\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Zanata 3.7.1\n"
 
@@ -100,11 +100,9 @@ msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
 #: ../virt-install:439
-msgid ""
-"An install method must be specified\n"
+msgid "An install method must be specified\n"
 "(%(methods)s)"
-msgstr ""
-"Bisogna specificare un metodo di installazione\n"
+msgstr "Bisogna specificare un metodo di installazione\n"
 "(%(methods)s)"
 
 #: ../virt-install:446
@@ -182,8 +180,8 @@ msgstr "La configurazione di rete del guest non supporta PXE"
 
 #: ../virt-install:553
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with -"
+"-os-variant for optimal results."
 msgstr ""
 
 #: ../virt-install:573
@@ -195,11 +193,9 @@ msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
 #: ../virt-install:749
-msgid ""
-"\n"
+msgid "\n"
 "Starting install..."
-msgstr ""
-"\n"
+msgstr "\n"
 "Avvio dell'installazione in corso..."
 
 #: ../virt-install:766
@@ -208,8 +204,7 @@ msgstr ""
 
 #: ../virt-install:770
 #, c-format
-msgid ""
-"You can restart your domain by running:\n"
+msgid "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
@@ -297,8 +292,8 @@ msgstr "CD-ROM di installazione"
 msgid ""
 "Installation source (eg, nfs:host:/path, http://host/path, ftp://host/path)"
 msgstr ""
-"Sorgente d'installazione (es, nfs:host:/percorso, http://host/percorso, "
-"ftp://host/percorso)"
+"Sorgente d'installazione (es, nfs:host:/percorso, http://host/percorso, ftp:/"
+"/host/percorso)"
 
 #: ../virt-install:941
 msgid "Boot from the network using the PXE protocol"
@@ -444,8 +439,8 @@ msgstr "Nuovo file da usare come immagine disco per il nuovo guest"
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
-"copy=hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
+"hdc)"
 msgstr ""
 "Forza la copia dei dispositivi (es, se 'hdc' è un dispositivo cdrom di sola "
 "lettura, --force-copy=hdc)"
@@ -637,8 +632,7 @@ msgid ""
 msgstr ""
 
 #: ../virt-xml:353
-msgid ""
-"Add specified device. Example:\n"
+msgid "Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
 
@@ -1108,8 +1102,7 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "Impossibile clonare lo storage remoto unmanaged."
 
 #: ../virtManager/clone.py:84
-msgid ""
-"Block devices to clone must be libvirt\n"
+msgid "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 "I dispositivi a blocchi da clonare devono\n"
@@ -1406,8 +1399,7 @@ msgstr "Nessuna connessione attiva su cui installare."
 
 #: ../virtManager/create.py:424
 #, python-format
-msgid ""
-"Failed to setup UEFI for AArch64: %s\n"
+msgid "Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 
@@ -1431,8 +1423,7 @@ msgstr "Nessuna opzione di installazione per questa connessione."
 
 #: ../virtManager/create.py:511
 msgid "No hypervisor options were found for this connection."
-msgstr ""
-"Nessuna opzione dell'hypervisor trovata per\n"
+msgstr "Nessuna opzione dell'hypervisor trovata per\n"
 "questa connessione."
 
 #: ../virtManager/create.py:516
@@ -1925,7 +1916,8 @@ msgstr "Creazione pool di storage in corso..."
 
 #: ../virtManager/createpool.py:437
 msgid "Creating the storage pool may take a while..."
-msgstr "La creazione del pool di storage potrebbe richiedere qualche minuto..."
+msgstr ""
+"La creazione del pool di storage potrebbe richiedere qualche minuto..."
 
 #: ../virtManager/createpool.py:503 ../virtManager/createpool.py:533
 msgid "Pool Parameter Error"
@@ -1967,12 +1959,10 @@ msgstr "Cancellare lo storage?"
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid ""
-"The following paths will be deleted:\n"
+msgid "The following paths will be deleted:\n"
 "\n"
 "%s"
-msgstr ""
-"I percorsi seguenti saranno eliminati:\n"
+msgstr "I percorsi seguenti saranno eliminati:\n"
 "\n"
 "%s"
 
@@ -1994,8 +1984,8 @@ msgstr "Errore durante l'eliminazione della macchina virtuale '%s': %s"
 #: ../virtManager/delete.py:208
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
-"Inoltre si sono verificati errori rimuovendo alcuni dispositivi di "
-"storage: \n"
+"Inoltre si sono verificati errori rimuovendo alcuni dispositivi di storage: "
+"\n"
 
 #: ../virtManager/delete.py:212
 msgid "Errors encountered while removing certain storage devices."
@@ -2037,8 +2027,7 @@ msgstr "Lo storage è contrassegnato come condivisibile."
 
 #: ../virtManager/delete.py:400
 #, python-format
-msgid ""
-"Storage is in use by the following virtual machines:\n"
+msgid "Storage is in use by the following virtual machines:\n"
 "- %s "
 msgstr ""
 "Lo storage è attualmente in uso dalle seguenti macchine virtuali:\n"
@@ -2101,8 +2090,7 @@ msgstr "Watchdog"
 #: ../virtManager/details.py:622
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
-msgstr ""
-"Questa operazione eliminerà la connessione:\n"
+msgstr "Questa operazione eliminerà la connessione:\n"
 "\n"
 "%s\n"
 "\n"
@@ -2550,8 +2538,7 @@ msgstr ""
 "per connettersi a questo host."
 
 #: ../virtManager/engine.py:618
-msgid ""
-"Verify that the 'libvirtd' daemon is running\n"
+msgid "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr ""
 "Controllare che il demone 'libvirtd' sia in esecuzione\n"
@@ -2995,14 +2982,12 @@ msgstr "I/O rete"
 
 #: ../virtManager/manager.py:511
 #, python-format
-msgid ""
-"This will remove the connection:\n"
+msgid "This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
 "Are you sure?"
-msgstr ""
-"Questa operazione eliminerà la connessione:\n"
+msgstr "Questa operazione eliminerà la connessione:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3065,9 +3050,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by "
-"libvirt. You must configure the destination to have a valid publicly "
-"accessible hostname."
+"The destination's hostname is 'localhost', which will be rejected by libvirt."
+" You must configure the destination to have a valid publicly accessible "
+"hostname."
 msgstr ""
 
 #: ../virtManager/migrate.py:295
@@ -3230,6 +3215,7 @@ msgstr "Digitare la combizione di tasti desiderata per grab"
 msgid "Serial console not yet supported over remote connection"
 msgstr ""
 "La console seriale non è ancora supportata attraverso un collegamento remoto."
+""
 
 #: ../virtManager/serialcon.py:285
 msgid "Serial console not available for inactive guest"
@@ -3568,11 +3554,9 @@ msgstr ""
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid ""
-"Syntax error at line %d: %s\n"
+msgid "Syntax error at line %d: %s\n"
 "%s"
-msgstr ""
-"Errore di sintassi alla linea %d: %s\n"
+msgstr "Errore di sintassi alla linea %d: %s\n"
 "%s"
 
 #: ../virtconv/vmx.py:125
@@ -3744,8 +3728,7 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:585
-msgid ""
-"CPU model and features. Ex:\n"
+msgid "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 msgstr ""
 
@@ -3805,7 +3788,8 @@ msgid "Configure a text console connection between the guest and host"
 msgstr "Configura una connessione a console di testo fra il guest e l'host"
 
 #: ../virtinst/cli.py:631
-msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid ""
+"Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
 #: ../virtinst/cli.py:634
@@ -3831,8 +3815,7 @@ msgid "Configure guest video hardware."
 msgstr "Configura un hardware video guest"
 
 #: ../virtinst/cli.py:659
-msgid ""
-"Configure a guest smartcard device. Ex:\n"
+msgid "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 "Configura un dispositivo smartcard guest. Es:\n"
@@ -3847,30 +3830,25 @@ msgstr ""
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:665
-msgid ""
-"Configure a guest memballoon device. Ex:\n"
+msgid "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 "Configurare un dispositivo memballoon guest. Es:\n"
 "--memballoon model=virtio"
 
 #: ../virtinst/cli.py:668
-msgid ""
-"Configure a guest TPM device. Ex:\n"
+msgid "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
-msgstr ""
-"Configurare un dispositivo TPM guest. Es:\n"
+msgstr "Configurare un dispositivo TPM guest. Es:\n"
 "--tpm /dev/tpm"
 
 #: ../virtinst/cli.py:671
-msgid ""
-"Configure a guest RNG device. Ex:\n"
+msgid "Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
 msgstr ""
 
 #: ../virtinst/cli.py:674
-msgid ""
-"Configure a guest panic device. Ex:\n"
+msgid "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
@@ -3986,7 +3964,8 @@ msgstr "Impossibile specificare più di un percorso di storage"
 
 #: ../virtinst/cli.py:1681
 msgid "Storage volume must be specified as vol=poolname/volname"
-msgstr "Il volume di storage deve essere specificato come vol=poolname/volname"
+msgstr ""
+"Il volume di storage deve essere specificato come vol=poolname/volname"
 
 #: ../virtinst/cli.py:1818
 #, python-format
@@ -4518,6 +4497,7 @@ msgstr "Se STP è abilitato sul bridge"
 msgid "Delay in seconds before forwarding begins when joining a network."
 msgstr ""
 "Ritardo in secondi prima che avvenga il forward quando si accede ad una rete."
+""
 
 #: ../virtinst/interface.py:204
 msgid "Mode of operation of the bonding device"
@@ -4745,6 +4725,7 @@ msgstr ""
 msgid "Must explicitly specify disk format if formatting disk device."
 msgstr ""
 "E' necessario specificare il formato del disco se si formatta il dispositivo."
+""
 
 #: ../virtinst/storage.py:507
 #, python-format
@@ -5414,11 +5395,9 @@ msgid "Architecture options"
 msgstr "Opzioni architettura"
 
 #: ../ui/create.ui.h:16
-msgid ""
-"Error message\n"
+msgid "Error message\n"
 "bar"
-msgstr ""
-"Barra messaggio\n"
+msgstr "Barra messaggio\n"
 "d'errore"
 
 #: ../ui/create.ui.h:19
@@ -7213,8 +7192,7 @@ msgid "CPU _default:"
 msgstr ""
 
 #: ../ui/preferences.ui.h:21
-msgid ""
-"Add Spice _USB\n"
+msgid "Add Spice _USB\n"
 "Redirection:"
 msgstr ""
 

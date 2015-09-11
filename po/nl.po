@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # isama <bart.formosus@gmail.com>, 2014
 # Cole Robinson <crobinso@redhat.com>, 2011
@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 09:45-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/virt-manager/"
 "language/nl/)\n"
 "Language: nl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Zanata 3.7.1\n"
 
@@ -99,11 +99,9 @@ msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
 #: ../virt-install:439
-msgid ""
-"An install method must be specified\n"
+msgid "An install method must be specified\n"
 "(%(methods)s)"
-msgstr ""
-"Een installatie methode moet opgegeven worden\n"
+msgstr "Een installatie methode moet opgegeven worden\n"
 "(%(methods)s)"
 
 #: ../virt-install:446
@@ -183,8 +181,8 @@ msgstr "De netwerk configuratie van de gast ondersteunt PXE niet"
 
 #: ../virt-install:553
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with -"
+"-os-variant for optimal results."
 msgstr ""
 
 #: ../virt-install:573
@@ -196,11 +194,9 @@ msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
 #: ../virt-install:749
-msgid ""
-"\n"
+msgid "\n"
 "Starting install..."
-msgstr ""
-"\n"
+msgstr "\n"
 "Installatie wordt gestart..."
 
 #: ../virt-install:766
@@ -209,8 +205,7 @@ msgstr ""
 
 #: ../virt-install:770
 #, c-format
-msgid ""
-"You can restart your domain by running:\n"
+msgid "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
@@ -314,8 +309,8 @@ msgstr "Behandel de CD-ROM als een live CD"
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
-"Extra argumenten om door te geven aan de installatie kernel opgestart vanaf "
-"--location"
+"Extra argumenten om door te geven aan de installatie kernel opgestart vanaf -"
+"-location"
 
 #: ../virt-install:950
 msgid "Add given file to root of initrd from --location"
@@ -411,6 +406,7 @@ msgstr ""
 msgid "Name of the original guest; The status must be shut off or paused."
 msgstr ""
 "Naam van de originele gast; the status moet uitgeschakeld of gepauzeerd zijn."
+""
 
 #: ../virt-clone:114
 msgid "XML file to use as the original guest."
@@ -442,8 +438,8 @@ msgstr "Nieuw bestand te gebruiken als de schijf image voor de nieuwe gast"
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
-"copy=hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
+"hdc)"
 msgstr ""
 "Forceer het kopiëren van apparaten (b.v., als 'hdc' een alleen-lezen cdrom "
 "apparaat is, --force-copy=hdc)"
@@ -635,8 +631,7 @@ msgid ""
 msgstr ""
 
 #: ../virt-xml:353
-msgid ""
-"Add specified device. Example:\n"
+msgid "Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
 
@@ -1105,8 +1100,7 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "Kan onbeheerde opslag op afstand niet klonen."
 
 #: ../virtManager/clone.py:84
-msgid ""
-"Block devices to clone must be libvirt\n"
+msgid "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 "Te klonen blok apparaten moeten libvirt\n"
@@ -1207,6 +1201,7 @@ msgstr ""
 "\n"
 "%s\n"
 "Het draaien van de nieuwe guest kan data in deze schijf images overschrijven."
+""
 
 #: ../virtManager/clone.py:792
 #, python-format
@@ -1395,8 +1390,7 @@ msgstr "Geen actieve verbinding om op te installeren."
 
 #: ../virtManager/create.py:424
 #, python-format
-msgid ""
-"Failed to setup UEFI for AArch64: %s\n"
+msgid "Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 
@@ -1420,8 +1414,7 @@ msgstr "Geen installatie methode beschikbaar voor deze verbinding."
 
 #: ../virtManager/create.py:511
 msgid "No hypervisor options were found for this connection."
-msgstr ""
-"Voor deze verbinding zijn geen hypervisor\n"
+msgstr "Voor deze verbinding zijn geen hypervisor\n"
 "opties gevonden."
 
 #: ../virtManager/create.py:516
@@ -1954,8 +1947,7 @@ msgstr ""
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid ""
-"The following paths will be deleted:\n"
+msgid "The following paths will be deleted:\n"
 "\n"
 "%s"
 msgstr ""
@@ -1978,8 +1970,8 @@ msgstr "Fout bij verwijderen van virtuele machine '%s': %s"
 #: ../virtManager/delete.py:208
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
-"Daarnaast zijn er fouten bij het verwijderen van bepaalde opslag "
-"apparaten: \n"
+"Daarnaast zijn er fouten bij het verwijderen van bepaalde opslag apparaten: "
+"\n"
 
 #: ../virtManager/delete.py:212
 msgid "Errors encountered while removing certain storage devices."
@@ -2019,11 +2011,9 @@ msgstr "Opslag is gemarkeerd als deelbaar."
 
 #: ../virtManager/delete.py:400
 #, python-format
-msgid ""
-"Storage is in use by the following virtual machines:\n"
+msgid "Storage is in use by the following virtual machines:\n"
 "- %s "
-msgstr ""
-"Opslag is in gebruik door de volgende virtuele machines:\n"
+msgstr "Opslag is in gebruik door de volgende virtuele machines:\n"
 "- %s "
 
 #: ../virtManager/details.py:163
@@ -2083,8 +2073,7 @@ msgstr "Bewaker"
 #: ../virtManager/details.py:622
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
-msgstr ""
-"Dit zal de verbinding verwijderen:\n"
+msgstr "Dit zal de verbinding verwijderen:\n"
 "\n"
 "%s\n"
 "\n"
@@ -2509,8 +2498,7 @@ msgid ""
 msgstr ""
 
 #: ../virtManager/engine.py:618
-msgid ""
-"Verify that the 'libvirtd' daemon is running\n"
+msgid "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr ""
 
@@ -2941,14 +2929,12 @@ msgstr "Netwerk I/O"
 
 #: ../virtManager/manager.py:511
 #, python-format
-msgid ""
-"This will remove the connection:\n"
+msgid "This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
 "Are you sure?"
-msgstr ""
-"Dit zal de verbinding verwijderen:\n"
+msgstr "Dit zal de verbinding verwijderen:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3011,9 +2997,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by "
-"libvirt. You must configure the destination to have a valid publicly "
-"accessible hostname."
+"The destination's hostname is 'localhost', which will be rejected by libvirt."
+" You must configure the destination to have a valid publicly accessible "
+"hostname."
 msgstr ""
 
 #: ../virtManager/migrate.py:295
@@ -3512,11 +3498,9 @@ msgstr ""
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid ""
-"Syntax error at line %d: %s\n"
+msgid "Syntax error at line %d: %s\n"
 "%s"
-msgstr ""
-"Syntax fout op regel %d: %s\n"
+msgstr "Syntax fout op regel %d: %s\n"
 "%s"
 
 #: ../virtconv/vmx.py:125
@@ -3686,8 +3670,7 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:585
-msgid ""
-"CPU model and features. Ex:\n"
+msgid "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 msgstr ""
 
@@ -3747,7 +3730,8 @@ msgid "Configure a text console connection between the guest and host"
 msgstr "Configureer een tekst console verbinding tussen de gast en de host"
 
 #: ../virtinst/cli.py:631
-msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid ""
+"Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
 #: ../virtinst/cli.py:634
@@ -3773,8 +3757,7 @@ msgid "Configure guest video hardware."
 msgstr "Configureer gast video hardware."
 
 #: ../virtinst/cli.py:659
-msgid ""
-"Configure a guest smartcard device. Ex:\n"
+msgid "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 "Configureer een gast smartcard apparaat. B.v.:\n"
@@ -3789,26 +3772,22 @@ msgstr ""
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:665
-msgid ""
-"Configure a guest memballoon device. Ex:\n"
+msgid "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 
 #: ../virtinst/cli.py:668
-msgid ""
-"Configure a guest TPM device. Ex:\n"
+msgid "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
 
 #: ../virtinst/cli.py:671
-msgid ""
-"Configure a guest RNG device. Ex:\n"
+msgid "Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
 msgstr ""
 
 #: ../virtinst/cli.py:674
-msgid ""
-"Configure a guest panic device. Ex:\n"
+msgid "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
@@ -5332,8 +5311,7 @@ msgid "Architecture options"
 msgstr ""
 
 #: ../ui/create.ui.h:16
-msgid ""
-"Error message\n"
+msgid "Error message\n"
 "bar"
 msgstr ""
 
@@ -7113,8 +7091,7 @@ msgid "CPU _default:"
 msgstr ""
 
 #: ../ui/preferences.ui.h:21
-msgid ""
-"Add Spice _USB\n"
+msgid "Add Spice _USB\n"
 "Redirection:"
 msgstr ""
 

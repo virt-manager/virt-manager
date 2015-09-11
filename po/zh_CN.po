@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # 1dot75cm <sensor.wen@gmail.com>, 2014
 # Aron Xu <happyaron.xu@gmail.com>, 2010
@@ -21,14 +21,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-02 09:45-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2015-05-04 09:11-0400\n"
 "Last-Translator: 1dot75cm <sensor.wen@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/virt-"
 "manager/language/zh_CN/)\n"
 "Language: zh-CN\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Zanata 3.7.1\n"
 
@@ -49,8 +49,8 @@ msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
-"不能混用 --file, --nonsparse 或 --file-size 与 --disk 选项。使用 --disk "
-"PATH[,size=SIZE][,sparse=yes|no]"
+"不能混用 --file, --nonsparse 或 --file-size 与 --disk 选项。使用 --disk PATH[,size="
+"SIZE][,sparse=yes|no]"
 
 #: ../virt-install:222
 msgid "Cannot use --mac with --nonetworks"
@@ -107,11 +107,9 @@ msgid "--disk storage must be specified (override with --disk none)"
 msgstr "--disk 存储必须被指定 (--disk none 选项会覆盖此参数)"
 
 #: ../virt-install:439
-msgid ""
-"An install method must be specified\n"
+msgid "An install method must be specified\n"
 "(%(methods)s)"
-msgstr ""
-"必须指定安装方法。\n"
+msgstr "必须指定安装方法。\n"
 "(%(methods)s)"
 
 #: ../virt-install:446
@@ -151,43 +149,34 @@ msgstr "--initrd-inject 只能与 --location 选项一起使用。"
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
-msgstr ""
-"CDROM 介质默认情况下不输出信息到文本控制台，所以您可能看不到安装的输出。您可"
-"能需要使用 --location 选项。"
+msgstr "CDROM 介质默认情况下不输出信息到文本控制台，所以您可能看不到安装的输出。您可能需要使用 --location 选项。"
 
 #: ../virt-install:510
 msgid ""
 "No --console device added, you likely will not see text install output from "
 "the guest."
-msgstr ""
-"未添加 --console 设备，您可能看不到客户机安装过程中输出的任何文本信息。"
+msgstr "未添加 --console 设备，您可能看不到客户机安装过程中输出的任何文本信息。"
 
 #: ../virt-install:526
 #, c-format
 msgid ""
 "No 'console' seen in --extra-args, a '%s' kernel argument is likely required "
 "to see text install output from the guest."
-msgstr ""
-"--extra-args 选项中不包含可用的 'console'，可能需要添加 '%s' 内核参数来查看客"
-"户机安装过程中输出的文本信息。"
+msgstr "--extra-args 选项中不包含可用的 'console'，可能需要添加 '%s' 内核参数来查看客户机安装过程中输出的文本信息。"
 
 #: ../virt-install:539
 #, c-format
 msgid ""
 "'%s' found in --extra-args, but the device attached to the guest likely "
 "requires '%s'. You may not see text install output from the guest."
-msgstr ""
-"--extra-args 中发现 '%s' 参数，但添加设备到客户机可能需要 '%s' 参数。您可能看"
-"不到客户机安装过程中输出的文本信息。"
+msgstr "--extra-args 中发现 '%s' 参数，但添加设备到客户机可能需要 '%s' 参数。您可能看不到客户机安装过程中输出的文本信息。"
 
 #: ../virt-install:543
 #, c-format
 msgid ""
 "To make '--extra-args %s' work, you can force a plain serial device with '--"
 "console pty'"
-msgstr ""
-"为了使 '--extra-args %s' 工作，你可以使用 '--console pty' 强制指定一个普通的"
-"串口设备"
+msgstr "为了使 '--extra-args %s' 工作，你可以使用 '--console pty' 强制指定一个普通的串口设备"
 
 #: ../virt-install:549
 msgid "The guest's network configuration does not support PXE"
@@ -195,11 +184,9 @@ msgstr "客户机的网络配置不支持 PXE"
 
 #: ../virt-install:553
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
-msgstr ""
-"未检测到操作系统，虚拟机性能可能会受到影响。使用 --os-variant 选项指定操作系"
-"统以获得最佳性能。"
+"No operating system detected, VM performance may suffer. Specify an OS with -"
+"-os-variant for optimal results."
+msgstr "未检测到操作系统，虚拟机性能可能会受到影响。使用 --os-variant 选项指定操作系统以获得最佳性能。"
 
 #: ../virt-install:573
 msgid "A disk device must be specified with --import."
@@ -210,11 +197,9 @@ msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr "没有控制台用于启动客户机，默认为 --wait -1"
 
 #: ../virt-install:749
-msgid ""
-"\n"
+msgid "\n"
 "Starting install..."
-msgstr ""
-"\n"
+msgstr "\n"
 "开始安装......"
 
 #: ../virt-install:766
@@ -223,11 +208,9 @@ msgstr "域创建完成。"
 
 #: ../virt-install:770
 #, c-format
-msgid ""
-"You can restart your domain by running:\n"
+msgid "You can restart your domain by running:\n"
 "  %s"
-msgstr ""
-"您可以运行以下命令重启您的域：\n"
+msgstr "您可以运行以下命令重启您的域：\n"
 "%s"
 
 #: ../virt-install:773
@@ -246,8 +229,7 @@ msgstr "域已经崩溃！"
 msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
-msgstr ""
-"域安装仍在进行。您可以重新连接\n"
+msgstr "域安装仍在进行。您可以重新连接\n"
 "到控制台以便完成安装进程。"
 
 #: ../virt-install:843
@@ -419,9 +401,8 @@ msgid ""
 msgstr ""
 "复制一个虚拟机，需修改如 MAC 地址，名称等所有主机端唯一的配置。\n"
 "\n"
-"虚拟机的内容并没有改变：virt-clone 不修改任何客户机系统内部的配置，它只复制磁"
-"盘和主机端的修改。所以像修改密码，修改静态 IP 地址等操作都在本工具复制范围"
-"内。如何修改此类型的配置，请参考 virt-sysprep(1)。"
+"虚拟机的内容并没有改变：virt-clone 不修改任何客户机系统内部的配置，它只复制磁盘和主机端的修改。所以像修改密码，修改静态 IP "
+"地址等操作都在本工具复制范围内。如何修改此类型的配置，请参考 virt-sysprep(1)。"
 
 #: ../virt-clone:111
 msgid "Name of the original guest; The status must be shut off or paused."
@@ -455,8 +436,8 @@ msgstr "为新客户机使用新的磁盘镜像文件"
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
-"copy=hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
+"hdc)"
 msgstr "强制复制设备(例如：如果 'hdc' 是随机光驱设备，则使用 --force-copy=hdc)"
 
 #: ../virt-clone:133
@@ -505,9 +486,7 @@ msgstr ""
 msgid ""
 "Conversion input. Can be a ovf/vmx file, a directory containing a config and "
 "disk images, or a zip/ova/7z/etc archive."
-msgstr ""
-"转换输入。可以为 ovf/vmx 文件，包含配置和磁盘镜像的目录，或一个 zip/ova/7z/"
-"etc 归档。"
+msgstr "转换输入。可以为 ovf/vmx 文件，包含配置和磁盘镜像的目录，或一个 zip/ova/7z/etc 归档。"
 
 #: ../virt-convert:69
 msgid "Force the input format. 'vmx' or 'ovf'"
@@ -659,11 +638,9 @@ msgstr ""
 "--remove-device --disk /some/path"
 
 #: ../virt-xml:353
-msgid ""
-"Add specified device. Example:\n"
+msgid "Add specified device. Example:\n"
 "--add-device --disk ..."
-msgstr ""
-"添加指定设备。例如：\n"
+msgstr "添加指定设备。例如：\n"
 "--add-device --disk ..."
 
 #: ../virt-xml:356
@@ -807,8 +784,7 @@ msgid ""
 "%s already has a USB controller attached.\n"
 "Adding more than one USB controller is not supported.\n"
 "You can change the USB controller type in the VM details screen."
-msgstr ""
-"%s 已有一个已连接的 USB 控制器。\n"
+msgstr "%s 已有一个已连接的 USB 控制器。\n"
 "不支持添加更多 USB 控制器。\n"
 "您可以在 VM 详情页面修改 USB 控制器类型。"
 
@@ -1133,11 +1109,9 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "无法克隆自由远程存储。"
 
 #: ../virtManager/clone.py:84
-msgid ""
-"Block devices to clone must be libvirt\n"
+msgid "Block devices to clone must be libvirt\n"
 "managed storage volumes."
-msgstr ""
-"要克隆的块设备必须\n"
+msgstr "要克隆的块设备必须\n"
 "是由 libvirt 管理的存储卷。"
 
 #: ../virtManager/clone.py:87 ../virtManager/delete.py:362
@@ -1228,8 +1202,7 @@ msgid ""
 "\n"
 "%s\n"
 "Running the new guest could overwrite data in these disk images."
-msgstr ""
-"不会克隆下列磁盘设备：\n"
+msgstr "不会克隆下列磁盘设备：\n"
 "\n"
 "%s\n"
 "运行新虚拟机系统将会覆盖这些磁盘映像中的数据。"
@@ -1317,8 +1290,7 @@ msgid ""
 "Original error: %s\n"
 "\n"
 "Recover error: %s"
-msgstr ""
-"%s 重命名失败。尝试恢复也已失败。\n"
+msgstr "%s 重命名失败。尝试恢复也已失败。\n"
 "\n"
 "最初错误： %s\n"
 "\n"
@@ -1375,8 +1347,7 @@ msgid ""
 "but is only configured to listen locally.\n"
 "Connect using 'ssh' transport or change the\n"
 "guest's listen address."
-msgstr ""
-"客户机在一个远程主机通过 '%s' 传输\n"
+msgstr "客户机在一个远程主机通过 '%s' 传输\n"
 "但其只被配置为监听本地地址。\n"
 "使用 'ssh' 转发或修改客户机监听地址。"
 
@@ -1428,11 +1399,9 @@ msgstr "没有活跃连接可用于安装。"
 
 #: ../virtManager/create.py:424
 #, python-format
-msgid ""
-"Failed to setup UEFI for AArch64: %s\n"
+msgid "Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
-msgstr ""
-"为 AArch64 安装 UEFI 失败： %s\n"
+msgstr "为 AArch64 安装 UEFI 失败： %s\n"
 "安装选项受到限制。"
 
 #: ../virtManager/create.py:450
@@ -1473,9 +1442,7 @@ msgstr "主机未通告其支持完全虚拟化。安装选项可能受限。"
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
-msgstr ""
-"KVM 不可用。这可能是因为没有安装 KVM 软件包，或者没有载入 KVM 内核模块。您的"
-"虚拟机可能性能很差。"
+msgstr "KVM 不可用。这可能是因为没有安装 KVM 软件包，或者没有载入 KVM 内核模块。您的虚拟机可能性能很差。"
 
 #: ../virtManager/create.py:589
 #, python-format
@@ -1726,8 +1693,7 @@ msgid ""
 "\n"
 "Using these may overwrite their existing configuration. Are you sure you "
 "want to use the selected interface(s)?"
-msgstr ""
-"已配置以下接口：\n"
+msgstr "已配置以下接口：\n"
 "\n"
 "%s\n"
 "\n"
@@ -1976,12 +1942,10 @@ msgstr "您确定要删除此存储？"
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid ""
-"The following paths will be deleted:\n"
+msgid "The following paths will be deleted:\n"
 "\n"
 "%s"
-msgstr ""
-"以下路径将会被删除：\n"
+msgstr "以下路径将会被删除：\n"
 "\n"
 "%s"
 
@@ -2042,11 +2006,9 @@ msgstr "将存储标记为可共享。"
 
 #: ../virtManager/delete.py:400
 #, python-format
-msgid ""
-"Storage is in use by the following virtual machines:\n"
+msgid "Storage is in use by the following virtual machines:\n"
 "- %s "
-msgstr ""
-"以下虚拟机在使用存储：\n"
+msgstr "以下虚拟机在使用存储：\n"
 "- %s "
 
 #: ../virtManager/details.py:163
@@ -2106,8 +2068,7 @@ msgstr "Watchdog"
 #: ../virtManager/details.py:622
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
-msgstr ""
-"这将删除该连接：\n"
+msgstr "这将删除该连接：\n"
 "\n"
 "%s\n"
 "\n"
@@ -2504,8 +2465,7 @@ msgid ""
 "\n"
 "After that, virt-manager will connect to libvirt on\n"
 "the next application start up."
-msgstr ""
-"需要启动 'libvirtd' 服务。\n"
+msgstr "需要启动 'libvirtd' 服务。\n"
 "\n"
 "在此之后，virt-manager 将连接至 libvirt\n"
 "并启动下一个应用程序。"
@@ -2528,24 +2488,20 @@ msgstr "未知连接 URI %s"
 msgid ""
 "The remote host requires a version of netcat/nc\n"
 "which supports the -U option."
-msgstr ""
-"远程主机需要可支持 -U 选项的\n"
+msgstr "远程主机需要可支持 -U 选项的\n"
 "netcat/nc 版本。"
 
 #: ../virtManager/engine.py:614
 msgid ""
 "You need to install openssh-askpass or similar\n"
 "to connect to this host."
-msgstr ""
-"您需要安装 openssh-askpass 或类似程序\n"
+msgstr "您需要安装 openssh-askpass 或类似程序\n"
 "方可连接到这台主机。"
 
 #: ../virtManager/engine.py:618
-msgid ""
-"Verify that the 'libvirtd' daemon is running\n"
+msgid "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
-msgstr ""
-"确认在远程主机中正在\n"
+msgstr "确认在远程主机中正在\n"
 "运行 'libvirtd' 守护进程。"
 
 #: ../virtManager/engine.py:622
@@ -2553,8 +2509,7 @@ msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
 " - The Xen service has been started"
-msgstr ""
-"确认以下内容：\n"
+msgstr "确认以下内容：\n"
 "已载入 -A Xen 主机内核\n"
 "已启动 Xen 服务"
 
@@ -2686,8 +2641,7 @@ msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
 "start up?"
-msgstr ""
-"无法恢复该域。您要删除\n"
+msgstr "无法恢复该域。您要删除\n"
 "保存的状态并执行\n"
 "常规启动吗？"
 
@@ -2983,14 +2937,12 @@ msgstr "网络 I/O"
 
 #: ../virtManager/manager.py:511
 #, python-format
-msgid ""
-"This will remove the connection:\n"
+msgid "This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
 "Are you sure?"
-msgstr ""
-"这将删除该连接：\n"
+msgstr "这将删除该连接：\n"
 "\n"
 "%s\n"
 "\n"
@@ -3049,18 +3001,14 @@ msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
-msgstr ""
-"通过隧道迁移需要一个可远程访问的 libvirt URI，但已选的连接是一个本地 URI。"
-"Libvirt 将会拒绝迁移，除非添加一个转发。"
+msgstr "通过隧道迁移需要一个可远程访问的 libvirt URI，但已选的连接是一个本地 URI。Libvirt 将会拒绝迁移，除非添加一个转发。"
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by "
-"libvirt. You must configure the destination to have a valid publicly "
-"accessible hostname."
-msgstr ""
-"目标的主机名为 'localhost'，libvirt 将会拒绝。你必须配置目标为一个有效且能公"
-"开访问的主机名。"
+"The destination's hostname is 'localhost', which will be rejected by libvirt."
+" You must configure the destination to have a valid publicly accessible "
+"hostname."
+msgstr "目标的主机名为 'localhost'，libvirt 将会拒绝。你必须配置目标为一个有效且能公开访问的主机名。"
 
 #: ../virtManager/migrate.py:295
 msgid "Hypervisors do not match"
@@ -3208,8 +3156,7 @@ msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
 "while you have desired keys pressed."
-msgstr ""
-"您现在可以按它们来定义 grab 键。\n"
+msgstr "您现在可以按它们来定义 grab 键。\n"
 "在按下您选择的按键的同时，\n"
 "点击确定按钮确定您的选择。"
 
@@ -3443,8 +3390,7 @@ msgstr "无虚拟机"
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 " The credential type %s is not supported"
-msgstr ""
-"无法向 VNC 服务器提供其要求的凭证。\n"
+msgstr "无法向 VNC 服务器提供其要求的凭证。\n"
 "不支持的凭证类型 %s"
 
 #: ../virtManager/viewers.py:442
@@ -3517,9 +3463,7 @@ msgid ""
 "%s appears to be an archive, but 'unar' is not installed. Please either "
 "install 'unar', or extract the archive yourself and point virt-convert at "
 "the extracted directory."
-msgstr ""
-"%s 可能是一个压缩文件，但未安装 'unar'。请安装 'unar'，或自己解压归档文件并"
-"向 virt-convert 提供解压目录。"
+msgstr "%s 可能是一个压缩文件，但未安装 'unar'。请安装 'unar'，或自己解压归档文件并向 virt-convert 提供解压目录。"
 
 #: ../virtconv/formats.py:141
 #, python-format
@@ -3560,11 +3504,9 @@ msgstr "根据需要列出 OVF 部分 '%s'，但解析程序不知道如何处�
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid ""
-"Syntax error at line %d: %s\n"
+msgid "Syntax error at line %d: %s\n"
 "%s"
-msgstr ""
-"%d 行语法错误： %s\n"
+msgstr "%d 行语法错误： %s\n"
 "%s"
 
 #: ../virtconv/vmx.py:125
@@ -3604,8 +3546,7 @@ msgstr "主机不支持 %(virttype)s %(arch)s"
 msgid ""
 "Host does not support domain type %(domain)s%(machine)s for virtualization "
 "type '%(virttype)s' arch '%(arch)s'"
-msgstr ""
-"虚拟主机'%(virttype)s', '%(arch)s'架构不支持 %(domain)s%(machine)s 域类型。"
+msgstr "虚拟主机'%(virttype)s', '%(arch)s'架构不支持 %(domain)s%(machine)s 域类型。"
 
 #: ../virtinst/cli.py:150
 msgid "See man page for examples and full option syntax."
@@ -3626,8 +3567,7 @@ msgid ""
 "If it was, you can restart your domain by running:\n"
 "  %s\n"
 "otherwise, please restart your installation."
-msgstr ""
-"域安装失败，您可以运行下列命令重启您的域：\n"
+msgstr "域安装失败，您可以运行下列命令重启您的域：\n"
 "'virsh start %s'\n"
 "否则请重新开始安装。"
 
@@ -3651,15 +3591,13 @@ msgstr "磁盘 \"%s\" 已被其他客户机 %s 使用。"
 msgid ""
 "%s may not be accessible by the hypervisor. You will need to grant the '%s' "
 "user search permissions for the following directories: %s"
-msgstr ""
-"%s 可能不能被管理程序访问。您将需要授予 '%s' 用户搜索以下目录的权限： %s"
+msgstr "%s 可能不能被管理程序访问。您将需要授予 '%s' 用户搜索以下目录的权限： %s"
 
 #: ../virtinst/cli.py:464
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
-msgstr ""
-"无法连接到图形控制台：没有安装 virt-viewer。请安装 'virt-viewer' 软件包。"
+msgstr "无法连接到图形控制台：没有安装 virt-viewer。请安装 'virt-viewer' 软件包。"
 
 #: ../virtinst/cli.py:470
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
@@ -3695,8 +3633,7 @@ msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
 "--check all=off"
-msgstr ""
-"启用或禁用验证检查。例如：\n"
+msgstr "启用或禁用验证检查。例如：\n"
 "--check path_in_use=off\n"
 "--check all=off"
 
@@ -3723,8 +3660,7 @@ msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
 "--memory 512,maxmemory=1024"
-msgstr ""
-"配置客户机内存分配。例如：\n"
+msgstr "配置客户机内存分配。例如：\n"
 "--memory 1024 (单位 MiB)\n"
 "--memory 512,maxmemory=1024"
 
@@ -3741,11 +3677,9 @@ msgstr ""
 "--vcpus sockets=2,cores=4,threads=2"
 
 #: ../virtinst/cli.py:585
-msgid ""
-"CPU model and features. Ex:\n"
+msgid "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
-msgstr ""
-"CPU 模型和特性。例如：\n"
+msgstr "CPU 模型和特性。例如：\n"
 "--cpu coreduo,+x2apic\n"
 
 #: ../virtinst/cli.py:596
@@ -3782,8 +3716,7 @@ msgstr ""
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=ich9-ehci1"
-msgstr ""
-"配置客户机控制器设备。例如：\n"
+msgstr "配置客户机控制器设备。例如：\n"
 "--controller type=usb,model=ich9-ehci1"
 
 #: ../virtinst/cli.py:618
@@ -3791,8 +3724,7 @@ msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
-msgstr ""
-"配置客户机输入设备。例如：\n"
+msgstr "配置客户机输入设备。例如：\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
@@ -3813,7 +3745,8 @@ msgid "Configure a text console connection between the guest and host"
 msgstr "配置文本控制台连接主机与客户机"
 
 #: ../virtinst/cli.py:631
-msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid ""
+"Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr "配置物理 USB/PCI 等主机设备与客户机共享"
 
 #: ../virtinst/cli.py:634
@@ -3839,51 +3772,40 @@ msgid "Configure guest video hardware."
 msgstr "配置客户机视频硬件。"
 
 #: ../virtinst/cli.py:659
-msgid ""
-"Configure a guest smartcard device. Ex:\n"
+msgid "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
-msgstr ""
-"配置客户机智能卡设备。例如：\n"
+msgstr "配置客户机智能卡设备。例如：\n"
 "--smartcard mode=passthrough"
 
 #: ../virtinst/cli.py:662
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
-msgstr ""
-"配置客户机重定向设备。例如：\n"
+msgstr "配置客户机重定向设备。例如：\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:665
-msgid ""
-"Configure a guest memballoon device. Ex:\n"
+msgid "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
-msgstr ""
-"配置客户机 memballoon 设备。例如：\n"
+msgstr "配置客户机 memballoon 设备。例如：\n"
 "--memballoon model=virtio"
 
 #: ../virtinst/cli.py:668
-msgid ""
-"Configure a guest TPM device. Ex:\n"
+msgid "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
-msgstr ""
-"配置客户机 TPM 设备。例如：\n"
+msgstr "配置客户机 TPM 设备。例如：\n"
 "--tpm /dev/tpm"
 
 #: ../virtinst/cli.py:671
-msgid ""
-"Configure a guest RNG device. Ex:\n"
+msgid "Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
-msgstr ""
-"配置客户机随机数生成器设备。例如：\n"
+msgstr "配置客户机随机数生成器设备。例如：\n"
 "--rng /dev/random"
 
 #: ../virtinst/cli.py:674
-msgid ""
-"Configure a guest panic device. Ex:\n"
+msgid "Configure a guest panic device. Ex:\n"
 "--panic default"
-msgstr ""
-"配置客户机 panic 设备。例如：\n"
+msgstr "配置客户机 panic 设备。例如：\n"
 "--panic default"
 
 #: ../virtinst/cli.py:680
@@ -3906,8 +3828,7 @@ msgstr "为域进程调整 blkio 策略。"
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
-msgstr ""
-"为域进程设置内存后备策略。例如：\n"
+msgstr "为域进程设置内存后备策略。例如：\n"
 "--memorybacking hugepages=on"
 
 #: ../virtinst/cli.py:691
@@ -3915,8 +3836,7 @@ msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,eoi=on"
-msgstr ""
-"设置域 <features> XML。例如：\n"
+msgstr "设置域 <features> XML。例如：\n"
 "--features acpi=off\n"
 "--features apic=on,eoi=on"
 
@@ -3924,8 +3844,7 @@ msgstr ""
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
-msgstr ""
-"设置域 <clock> XML。例如：\n"
+msgstr "设置域 <clock> XML。例如：\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
 #: ../virtinst/cli.py:698
@@ -3945,8 +3864,7 @@ msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
-msgstr ""
-"配置客户机引导设置。例如：\n"
+msgstr "配置客户机引导设置。例如：\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (针对容器)"
 
@@ -3954,8 +3872,7 @@ msgstr ""
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
-msgstr ""
-"为 LXC 容器启用用户名称空间。例如：\n"
+msgstr "为 LXC 容器启用用户名称空间。例如：\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
 
 #: ../virtinst/cli.py:720
@@ -4068,8 +3985,7 @@ msgstr "目前不支持克隆到现有存储卷：'%s'"
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
 "%(need)d needed"
-msgstr ""
-"需要克隆的磁盘数多于已指定的路径。（已指定%(passed)d个，需要%(need)d个）"
+msgstr "需要克隆的磁盘数多于已指定的路径。（已指定%(passed)d个，需要%(need)d个）"
 
 #: ../virtinst/cloner.py:385
 msgid ""
@@ -4229,9 +4145,7 @@ msgstr "必须为非现有卷 '%s' 指定大小"
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
-msgstr ""
-"不知道如何为路径 '%s' 创建存储。首先使用 libvirt API 将父目录作为存储池来管"
-"理。"
+msgstr "不知道如何为路径 '%s' 创建存储。首先使用 libvirt API 将父目录作为存储池来管理。"
 
 #: ../virtinst/devicedisk.py:442
 msgid "Format attribute not supported for this volume type"
@@ -4826,9 +4740,7 @@ msgstr "存储池中没有足够空间来创建卷。(%d M 需要的空间 > %d 
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%d M requested capacity > %d M available)"
-msgstr ""
-"当卷已经被全部分配后，需要的卷容量将超过可用池空间。(%d M 需要的容量 > %d M "
-"可用容量)"
+msgstr "当卷已经被全部分配后，需要的卷容量将超过可用池空间。(%d M 需要的容量 > %d M 可用容量)"
 
 #: ../virtinst/urlfetcher.py:106
 #, python-format
@@ -4865,8 +4777,7 @@ msgid ""
 "\n"
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
-msgstr ""
-"在 '%s'%s 不能找到可用安装源\n"
+msgstr "在 '%s'%s 不能找到可用安装源\n"
 "\n"
 "该位置必须为安装树的根目录。\n"
 "请查看 virt-install man手册中各种发行版的示例。"
@@ -4899,8 +4810,7 @@ msgid ""
 "UUID must be a 32-digit hexadecimal number. It may take the form xxxxxxxx-"
 "xxxx-xxxx-xxxx-xxxxxxxxxxxx or may omit hyphens altogether."
 msgstr ""
-"UUID 必须是一个 32 位十六进制数。它可能使用 xxxxxxxx-xxxx-xxxx-xxxx-"
-"xxxxxxxxxxxx 形式或完全忽略连字符。"
+"UUID 必须是一个 32 位十六进制数。它可能使用 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx 形式或完全忽略连字符。"
 
 #: ../virtinst/util.py:147
 #, python-format
@@ -5245,8 +5155,7 @@ msgid ""
 "disk. Sharing\n"
 "uses the existing disk image for both the original and the new machine.</"
 "span>"
-msgstr ""
-"<span size='small'>克隆生成了原始磁盘的新的独立副本。\n"
+msgstr "<span size='small'>克隆生成了原始磁盘的新的独立副本。\n"
 "在原始机器和新机器中共享使用现有磁盘镜像。</span>"
 
 #: ../ui/clone.ui.h:12
@@ -5256,8 +5165,7 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>克隆 <u>不</u> 修改客户机操作系统内容。如果您需要做一些配"
-"置\n"
+"<span size='small'>克隆 <u>不</u> 修改客户机操作系统内容。如果您需要做一些配置\n"
 "比如修改密码或设置静态 IP 地址，请查看 virt-sysprep(1) 工具。</span>"
 
 #: ../ui/clone.ui.h:14
@@ -5424,11 +5332,9 @@ msgid "Architecture options"
 msgstr "架构选项"
 
 #: ../ui/create.ui.h:16
-msgid ""
-"Error message\n"
+msgid "Error message\n"
 "bar"
-msgstr ""
-"错误消息\n"
+msgstr "错误消息\n"
 "栏"
 
 #: ../ui/create.ui.h:19
@@ -5530,8 +5436,7 @@ msgid ""
 "<small>The OS directory tree must already exist. Creating an OS directory "
 "tree\n"
 "is not yet supported.</small>"
-msgstr ""
-"<small>必须已存在操作系统目录树。\n"
+msgstr "<small>必须已存在操作系统目录树。\n"
 "还不支持生成操作系统目录树。</small>"
 
 #: ../ui/create.ui.h:45
@@ -5825,9 +5730,7 @@ msgstr "网络(_N)："
 msgid ""
 "<b>Hint:</b> The network should be chosen from one of the IPv4 private "
 "address ranges. eg 10.0.0.0/8 or 192.168.0.0/16"
-msgstr ""
-"<b>提示：</b> 应该从 IPv4 私有地址范围内选择网络。例如：10.0.0.0/8 或"
-"192.168.0.0/24"
+msgstr "<b>提示：</b> 应该从 IPv4 私有地址范围内选择网络。例如：10.0.0.0/8 或192.168.0.0/24"
 
 #: ../ui/createnet.ui.h:11
 msgid "192.168.100.1"
@@ -5883,8 +5786,8 @@ msgid ""
 "address ranges. eg FC00::/7.  The prefix must be <b>64</b>. A typical IPv6 "
 "network address will look something like:  fd00:dead:beef:55::/64"
 msgstr ""
-"<b>注意：</b> 应该从 IPv6 私有地址范围内选择网络。例如： FC00::/7。前缀必须为"
-"<b>64</b>。典型的 IPv6 网络地址类似于： fd00:dead:beef:55::/64"
+"<b>注意：</b> 应该从 IPv6 私有地址范围内选择网络。例如： FC00::/7。前缀必须为<b>64</b>。典型的 IPv6 "
+"网络地址类似于： fd00:dead:beef:55::/64"
 
 #: ../ui/createnet.ui.h:24
 msgid "fd00:100::1"
@@ -5923,9 +5826,7 @@ msgid ""
 "If an IPv6 network address is <b>not</b> specified, this will enable IPv6 "
 "internal routing between virtual machines.  By default, IPv4 internal "
 "routing is enabled."
-msgstr ""
-"如果 <b>未</b> 指定 IPv6 网络地址，将会在虚拟机之间启用 IPv6 内部路由。默认启"
-"用 IPv4 内部路由。"
+msgstr "如果 <b>未</b> 指定 IPv6 网络地址，将会在虚拟机之间启用 IPv6 内部路由。默认启用 IPv4 内部路由。"
 
 #: ../ui/createnet.ui.h:34
 msgid "DNS Domain Name:"
@@ -6496,8 +6397,7 @@ msgstr "序列号："
 msgid ""
 "<small>Changing this will not change the disk image format, it only tells "
 "libvirt about the existing image format. </small>"
-msgstr ""
-"<small>这将不会修改磁盘镜像格式，只会向 libvirt 报告已有镜像的格式。</small>"
+msgstr "<small>这将不会修改磁盘镜像格式，只会向 libvirt 报告已有镜像的格式。</small>"
 
 #: ../ui/details.ui.h:121
 msgid "Storage forma_t:"
@@ -7055,11 +6955,10 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
-"隧道迁移直接通过 libvirtd 连接通道，而不是由 hypervisor 打开一个单独的网络连"
-"接到目标。源 libvirt 实例直接连接到目标 libvirt 实例。\n"
+"隧道迁移直接通过 libvirtd 连接通道，而不是由 hypervisor 打开一个单独的网络连接到目标。源 libvirt 实例直接连接到目标 "
+"libvirt 实例。\n"
 "\n"
-"可以简化配置，由于不需要开放额外的防火墙端口，如果启用 libvirt 连接加密还可以"
-"加密迁移流量。但它很难由 SSH 传输来完成此工作。"
+"可以简化配置，由于不需要开放额外的防火墙端口，如果启用 libvirt 连接加密还可以加密迁移流量。但它很难由 SSH 传输来完成此工作。"
 
 #: ../ui/migrate.ui.h:13
 msgid "_URI:"
@@ -7077,8 +6976,7 @@ msgid ""
 "\n"
 "Enabling this option tells libvirt to skip those checks."
 msgstr ""
-"默认情况下，由于某些配置可能导致客户机发生故障，libvirt 将拒绝迁移 VM，如磁盘"
-"缓存模式不为 'none'。\n"
+"默认情况下，由于某些配置可能导致客户机发生故障，libvirt 将拒绝迁移 VM，如磁盘缓存模式不为 'none'。\n"
 "\n"
 "启用该选项使 libvirt 跳过这些检查。"
 
@@ -7097,11 +6995,9 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
-"默认情况下，已迁移虚拟机的配置已从源主机中删除，并保存在目标主机上。目标主机"
-"被认为是虚拟机的新家。\n"
+"默认情况下，已迁移虚拟机的配置已从源主机中删除，并保存在目标主机上。目标主机被认为是虚拟机的新家。\n"
 "\n"
-"如果选择 '临时'，迁移会是一个暂时的动作：源主机保持虚拟机配置的副本，并且在目"
-"标临时运行副本，当关闭时会消失。"
+"如果选择 '临时'，迁移会是一个暂时的动作：源主机保持虚拟机配置的副本，并且在目标临时运行副本，当关闭时会消失。"
 
 #: ../ui/migrate.ui.h:22
 msgid "_Temporary move:"
@@ -7127,8 +7023,7 @@ msgstr "源模式："
 msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
-msgstr ""
-"<small>在多数配置中，macvtap 不能为主机到客户机的网络通信工作。</small>"
+msgstr "<small>在多数配置中，macvtap 不能为主机到客户机的网络通信工作。</small>"
 
 #: ../ui/netlist.ui.h:4
 msgid "_Portgroup:"
@@ -7235,11 +7130,9 @@ msgid "CPU _default:"
 msgstr "CPU 默认值："
 
 #: ../ui/preferences.ui.h:21
-msgid ""
-"Add Spice _USB\n"
+msgid "Add Spice _USB\n"
 "Redirection:"
-msgstr ""
-"添加 Spice USB\n"
+msgstr "添加 Spice USB\n"
 " 重定向："
 
 #: ../ui/preferences.ui.h:23
@@ -7269,9 +7162,8 @@ msgid ""
 "disabled to ensure that typing in the guest does not accidentally perform an "
 "operation in virt-manager's console window."
 msgstr ""
-"当虚拟机的图形安装界面着重使用键盘时，请不要禁用控制台窗口菜单的快捷键 (Alt"
-"+F -> File 等等)。通常禁用这些快捷键是为了保证不会在虚拟机中打字时意外地在 "
-"virt-manager 的控制台窗口中执行操作。"
+"当虚拟机的图形安装界面着重使用键盘时，请不要禁用控制台窗口菜单的快捷键 (Alt+F -> File "
+"等等)。通常禁用这些快捷键是为了保证不会在虚拟机中打字时意外地在 virt-manager 的控制台窗口中执行操作。"
 
 #: ../ui/preferences.ui.h:29
 msgid "_Force console shortcuts:"
@@ -7285,8 +7177,7 @@ msgstr "更改..."
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
-msgstr ""
-"当改变客户机窗口大小时，修改其分辨率。客户机需要配置使用 spice 和桌面代理。"
+msgstr "当改变客户机窗口大小时，修改其分辨率。客户机需要配置使用 spice 和桌面代理。"
 
 #: ../ui/preferences.ui.h:32
 msgid "_Resize guest with window:"
