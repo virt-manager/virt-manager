@@ -47,25 +47,41 @@ DETECT_FAILED = -2
 
 DEFAULT_MEM = 1024
 
-PAGE_NAME = 0
-PAGE_INSTALL = 1
-PAGE_MEM = 2
-PAGE_STORAGE = 3
-PAGE_FINISH = 4
+(PAGE_NAME,
+ PAGE_INSTALL,
+ PAGE_MEM,
+ PAGE_STORAGE,
+ PAGE_FINISH) = range(5)
 
-INSTALL_PAGE_ISO = 0
-INSTALL_PAGE_URL = 1
-INSTALL_PAGE_PXE = 2
-INSTALL_PAGE_IMPORT = 3
-INSTALL_PAGE_CONTAINER_APP = 4
-INSTALL_PAGE_CONTAINER_OS = 5
+(INSTALL_PAGE_ISO,
+ INSTALL_PAGE_URL,
+ INSTALL_PAGE_PXE,
+ INSTALL_PAGE_IMPORT,
+ INSTALL_PAGE_CONTAINER_APP,
+ INSTALL_PAGE_CONTAINER_OS) = range(6)
 
 
-def pretty_arch(_a):
+#####################
+# Pretty UI helpers #
+#####################
+
+def _pretty_arch(_a):
     if _a == "armv7l":
         return "arm"
     return _a
 
+
+def _pretty_storage(size):
+    return "%.1f GiB" % float(size)
+
+
+def _pretty_memory(mem):
+    return "%d MiB" % (mem / 1024.0)
+
+
+##############
+# Main class #
+##############
 
 class vmmCreate(vmmGObjectUI):
     __gsignals__ = {
@@ -83,72 +99,76 @@ class vmmCreate(vmmGObjectUI):
         self.disk = None
         self.nic = None
 
-        self.storage_browser = None
-
         # Distro detection state variables
-        self.detectedDistro = None
-        self.mediaDetected = False
-        self.show_all_os = False
+        self._detected_distro = None
+        self._media_was_detected = False
+        self._show_all_os = False
 
         # 'Guest' class from the previous failed install
         self.failed_guest = None
 
         # Whether there was an error at dialog startup
-        self.have_startup_error = False
+        self._have_startup_error = False
 
-        # 'Configure before install' window
-        self.config_window = None
-        self.config_window_signals = []
+        self._customize_window = None
+        self._customize_window_signals = []
 
+        self.storage_browser = None
         self.netlist = None
         self.mediacombo = None
 
         self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
         self.widget("config-storage-align").add(self.addstorage.top_box)
-        self.addstorage.connect("browse-clicked", self._browse_file_cb)
+        def _browse_file_cb(ignore, widget):
+            self._browse_file(widget)
+        self.addstorage.connect("browse-clicked", _browse_file_cb)
 
         self.builder.connect_signals({
             "on_vmm_newcreate_delete_event" : self._close_requested,
 
             "on_create_cancel_clicked": self._close_requested,
-            "on_create_back_clicked" : self.back,
-            "on_create_forward_clicked" : self.forward,
-            "on_create_finish_clicked" : self.finish,
-            "on_create_pages_switch_page": self.page_changed,
+            "on_create_back_clicked" : self._back_clicked,
+            "on_create_forward_clicked" : self._forward_clicked,
+            "on_create_finish_clicked" : self._finish_clicked,
+            "on_create_pages_switch_page": self._page_changed,
 
-            "on_create_vm_name_activate": self.forward,
-            "on_create_conn_changed": self.conn_changed,
-            "on_method_changed": self.method_changed,
-            "on_config_machine_changed": self.machine_changed,
+            "on_create_vm_name_activate": self._forward_clicked,
+            "on_create_conn_changed": self._conn_changed,
+            "on_method_changed": self._method_changed,
+            "on_config_machine_changed": self._machine_changed,
+            "on_config_hv_changed": self._hv_changed,
+            "on_config_arch_changed": self._arch_changed,
 
-            "on_install_url_box_changed": self.url_box_changed,
-            "on_install_local_cdrom_toggled": self.toggle_local_cdrom,
-            "on_install_local_cdrom_combo_changed": self.detect_media_os,
-            "on_install_local_box_changed": self.local_box_changed,
-            "on_install_local_browse_clicked": self.browse_iso,
-            "on_install_import_browse_clicked": self.browse_import,
-            "on_install_app_browse_clicked": self.browse_app,
-            "on_install_oscontainer_browse_clicked": self.browse_oscontainer,
+            "on_install_url_box_changed": self._url_box_changed,
+            "on_install_local_cdrom_toggled": self._toggle_local_cdrom,
+            "on_install_local_cdrom_combo_changed": self._do_detect_media_os,
+            "on_install_local_box_changed": self._local_box_changed,
+            "on_install_local_browse_clicked": self._browse_iso,
+            "on_install_import_browse_clicked": self._browse_import,
+            "on_install_app_browse_clicked": self._browse_app,
+            "on_install_oscontainer_browse_clicked": self._browse_oscontainer,
 
-            "on_install_detect_os_toggled": self.toggle_detect_os,
-            "on_install_os_type_changed": self.change_os_type,
-            "on_install_os_version_changed": self.change_os_version,
-            "on_install_local_iso_toggled": self.toggle_local_iso,
-            "on_install_detect_os_box_show": self.detect_visibility_changed,
-            "on_install_detect_os_box_hide": self.detect_visibility_changed,
+            "on_install_detect_os_toggled": self._toggle_detect_os,
+            "on_install_os_type_changed": self._change_os_type,
+            "on_install_os_version_changed": self._change_os_version,
+            "on_install_local_iso_toggled": self._toggle_local_iso,
+            "on_install_detect_os_box_show": self._os_detect_visibility_changed,
+            "on_install_detect_os_box_hide": self._os_detect_visibility_changed,
 
-            "on_config_kernel_browse_clicked": self.browse_kernel,
-            "on_config_initrd_browse_clicked": self.browse_initrd,
-            "on_config_dtb_browse_clicked": self.browse_dtb,
+            "on_config_kernel_browse_clicked": self._browse_kernel,
+            "on_config_initrd_browse_clicked": self._browse_initrd,
+            "on_config_dtb_browse_clicked": self._browse_dtb,
 
-            "on_enable_storage_toggled": self.toggle_enable_storage,
-
-            "on_config_hv_changed": self.hv_changed,
-            "on_config_arch_changed": self.arch_changed,
+            "on_enable_storage_toggled": self._toggle_enable_storage,
         })
         self.bind_escape_key_close()
 
-        self.set_initial_state()
+        self._init_state()
+
+
+    ###########################
+    # Standard window methods #
+    ###########################
 
     def is_visible(self):
         return self.topwin.get_visible()
@@ -157,7 +177,7 @@ class vmmCreate(vmmGObjectUI):
         logging.debug("Showing new vm wizard")
 
         if not self.is_visible():
-            self.reset_state(uri)
+            self._reset_state(uri)
             self.topwin.set_transient_for(parent)
 
         self.topwin.present()
@@ -167,13 +187,13 @@ class vmmCreate(vmmGObjectUI):
             logging.debug("Closing new vm wizard")
         self.topwin.hide()
 
-        if self.config_window:
-            self.config_window.close()
+        if self._customize_window:
+            self._customize_window.close()
         if self.storage_browser:
             self.storage_browser.close()
 
     def _cleanup(self):
-        self.remove_conn()
+        self._remove_conn()
 
         self.conn = None
         self.capsinfo = None
@@ -199,23 +219,26 @@ class vmmCreate(vmmGObjectUI):
             self.addstorage.cleanup()
             self.addstorage = None
 
-    def remove_conn(self):
+
+    ##########################
+    # Initial state handling #
+    ##########################
+
+    def _remove_conn(self):
         self.conn = None
         self.capsinfo = None
 
-    def set_conn(self, newconn, force_validate=False):
+    def _set_conn(self, newconn, force_validate=False):
         if self.conn == newconn and not force_validate:
             return
 
-        self.remove_conn()
+        self._remove_conn()
         self.conn = newconn
         if self.conn:
-            self.set_conn_state()
+            self._set_conn_state()
 
-
-    # State init methods
-    def startup_error(self, error, hideinstall=True):
-        self.have_startup_error = True
+    def _show_startup_error(self, error, hideinstall=True):
+        self._have_startup_error = True
         self.widget("startup-error-box").show()
         self.widget("create-forward").set_sensitive(False)
         if hideinstall:
@@ -225,11 +248,12 @@ class vmmCreate(vmmGObjectUI):
         self.widget("startup-error").set_text("Error: %s" % error)
         return False
 
-    def startup_warning(self, error):
+    def _show_startup_warning(self, error):
         self.widget("startup-error-box").show()
         self.widget("startup-error").set_text("Warning: %s" % error)
 
-    def set_initial_state(self):
+
+    def _init_state(self):
         self.widget("create-pages").set_show_tabs(False)
         self.widget("install-method-pages").set_show_tabs(False)
 
@@ -251,7 +275,7 @@ class vmmCreate(vmmGObjectUI):
         iso_list.set_model(iso_model)
         iso_list.set_entry_text_column(0)
         self.widget("install-local-box").get_child().connect("activate",
-                                                    self.detect_media_os)
+                                                    self._do_detect_media_os)
 
         # Lists for the install urls
         media_url_list = self.widget("install-url-box")
@@ -259,7 +283,7 @@ class vmmCreate(vmmGObjectUI):
         media_url_list.set_model(media_url_model)
         media_url_list.set_entry_text_column(0)
         self.widget("install-url-box").get_child().connect("activate",
-                                                    self.detect_media_os)
+                                                    self._do_detect_media_os)
 
         ks_url_list = self.widget("install-ks-box")
         ks_url_model = Gtk.ListStore(str)
@@ -311,44 +335,56 @@ class vmmCreate(vmmGObjectUI):
         uiutil.init_combo_text_column(lst, 0)
         lst.set_row_separator_func(lambda m, i, ignore: m[i][0] is None, None)
 
-    def reset_state(self, urihint=None):
+
+    def _reset_state(self, urihint=None):
+        """
+        Reset all UI state to default values. Conn specific state is
+        populated in _set_conn_state
+        """
         self.failed_guest = None
-        self.have_startup_error = False
+        self._have_startup_error = False
         self.guest = None
         self.disk = None
         self.nic = None
-        self.show_all_os = False
+        self._show_all_os = False
 
         self.widget("create-pages").set_current_page(PAGE_NAME)
-        self.page_changed(None, None, PAGE_NAME)
+        self._page_changed(None, None, PAGE_NAME)
 
         # Name page state
         self.widget("create-vm-name").set_text("")
         self.widget("method-local").set_active(True)
         self.widget("create-conn").set_active(-1)
-        activeconn = self.populate_conn_list(urihint)
+        activeconn = self._populate_conn_list(urihint)
         self.widget("arch-expander").set_expanded(False)
 
         try:
-            self.set_conn(activeconn, force_validate=True)
+            self._set_conn(activeconn, force_validate=True)
         except Exception, e:
             logging.exception("Error setting create wizard conn state.")
-            return self.startup_error(str(e))
+            return self._show_startup_error(str(e))
 
         if not activeconn:
-            return self.startup_error(
+            return self._show_startup_error(
                                 _("No active connection to install on."))
 
         # Everything from this point forward should be connection independent
 
         # Distro/Variant
-        self.toggle_detect_os(self.widget("install-detect-os"))
-        self.populate_os_type_model()
+        self._toggle_detect_os(self.widget("install-detect-os"))
+        self._populate_os_type_model()
         self.widget("install-os-type").set_active(0)
+
+        def _populate_media_model(media_model, urls):
+            media_model.clear()
+            if urls is None:
+                return
+            for url in urls:
+                media_model.append([url])
 
         self.widget("install-local-box").get_child().set_text("")
         iso_model = self.widget("install-local-box").get_model()
-        self.populate_media_model(iso_model, self.config.get_iso_paths())
+        _populate_media_model(iso_model, self.config.get_iso_paths())
 
         # Install URL
         self.widget("install-urlopts-entry").set_text("")
@@ -357,9 +393,9 @@ class vmmCreate(vmmGObjectUI):
         self.widget("install-url-options").set_expanded(False)
         urlmodel = self.widget("install-url-box").get_model()
         ksmodel  = self.widget("install-ks-box").get_model()
-        self.populate_media_model(urlmodel, self.config.get_media_urls())
-        self.populate_media_model(ksmodel, self.config.get_kickstart_urls())
-        self.set_distro_labels("-", "-", force=True)
+        _populate_media_model(urlmodel, self.config.get_media_urls())
+        _populate_media_model(ksmodel, self.config.get_kickstart_urls())
+        self._set_distro_labels("-", "-", force=True)
 
         # Install import
         self.widget("install-import-entry").set_text("")
@@ -395,8 +431,12 @@ class vmmCreate(vmmGObjectUI):
         # Make sure window is a sane size
         self.topwin.resize(1, 1)
 
-    def set_caps_state(self):
-        # State that is dependent on when capsinfo changes
+
+    def _set_caps_state(self):
+        """
+        Set state that is dependent on when capsinfo changes
+        """
+        self._populate_machine()
 
         # Helper state
         is_local = not self.conn.is_remote()
@@ -421,7 +461,7 @@ class vmmCreate(vmmGObjectUI):
                     exc_info=True)
                 msg = _("Failed to setup UEFI for AArch64: %s\n"
                         "Install options are limited.") % e
-                self.startup_warning(msg)
+                self._show_startup_warning(msg)
 
         # Install Options
         method_tree = self.widget("method-tree")
@@ -472,7 +512,7 @@ class vmmCreate(vmmGObjectUI):
 
         if not (is_container or
                 [w for w in virt_methods if w.get_sensitive()]):
-            return self.startup_error(
+            return self._show_startup_error(
                     _("No install methods available for this connection."),
                     hideinstall=False)
 
@@ -492,8 +532,10 @@ class vmmCreate(vmmGObjectUI):
         self.widget("config-kernel-box").set_visible(not installable_arch)
         uiutil.set_grid_row_visible(self.widget("config-dtb"), show_dtb)
 
-    def set_conn_state(self):
-        # Update all state that has some dependency on the current connection
+    def _set_conn_state(self):
+        """
+        Update all state that has some dependency on the current connection
+        """
         self.conn.schedule_priority_tick(pollnet=True,
                                          pollpool=True, polliface=True,
                                          pollnodedev=True)
@@ -503,7 +545,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("create-forward").set_sensitive(True)
 
         self.conn.invalidate_caps()
-        self.change_caps()
+        self._change_caps()
 
         if not self.capsinfo.guest.has_install_options():
             error = _("No hypervisor options were found for this "
@@ -514,12 +556,12 @@ class vmmCreate(vmmGObjectUI):
                 error += _("This usually means that QEMU or KVM is not "
                            "installed on your machine, or the KVM kernel "
                            "modules are not loaded.")
-            return self.startup_error(error)
+            return self._show_startup_error(error)
 
         # A bit out of order, but populate arch + hv lists so we can
         # determine a default
-        self.populate_hv()
-        self.populate_arch()
+        self._populate_hv()
+        self._populate_arch()
 
         show_arch = (self.widget("config-hv").get_visible() or
                      self.widget("config-arch").get_visible() or
@@ -535,14 +577,14 @@ class vmmCreate(vmmGObjectUI):
             if not has_hvm_guests:
                 error = _("Host is not advertising support for full "
                           "virtualization. Install options may be limited.")
-                self.startup_warning(error)
+                self._show_startup_warning(error)
 
         elif self.conn.is_qemu():
             if not self.capsinfo.guest.is_kvm_available():
                 error = _("KVM is not available. This may mean the KVM "
                  "package is not installed, or the KVM kernel modules "
                  "are not loaded. Your virtual machines may perform poorly.")
-                self.startup_warning(error)
+                self._show_startup_warning(error)
 
         # Install local
         iso_option = self.widget("install-local-iso")
@@ -558,8 +600,8 @@ class vmmCreate(vmmGObjectUI):
                                         vmmMediaCombo.MEDIA_CDROM)
         def mediacombo_changed(src):
             ignore = src
-            self.mediaDetected = False
-            self.detect_media_os()
+            self._media_was_detected = False
+            self._do_detect_media_os()
         self.mediacombo.combo.connect("changed", mediacombo_changed)
         self.mediacombo.reset_state()
         self.widget("install-local-cdrom-align").add(
@@ -579,13 +621,13 @@ class vmmCreate(vmmGObjectUI):
         if not is_local or not enable_phys:
             iso_option.set_active(True)
 
-        self.toggle_local_cdrom(cdrom_option)
-        self.toggle_local_iso(iso_option)
+        self._toggle_local_cdrom(cdrom_option)
+        self._toggle_local_iso(iso_option)
 
         # Memory
         memory = int(self.conn.host_memory_size())
         mem_label = (_("Up to %(maxmem)s available on the host") %
-                     {'maxmem': self.pretty_memory(memory)})
+                     {'maxmem': _pretty_memory(memory)})
         mem_label = ("<span size='small' color='#484848'>%s</span>" %
                      mem_label)
         self.widget("config-mem").set_range(50, memory / 1024)
@@ -617,10 +659,43 @@ class vmmCreate(vmmGObjectUI):
 
         self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
         self.widget("config-netdev-ui-align").add(self.netlist.top_box)
-        self.netlist.connect("changed", self.netdev_changed)
+        self.netlist.connect("changed", self._netdev_changed)
         self.netlist.reset_state()
 
-    def populate_hv(self):
+
+    def _change_caps(self, gtype=None, arch=None):
+        """
+        Change the cached capsinfo for the passed values, and trigger
+        all needed UI refreshing
+        """
+        if gtype is None:
+            # If none specified, prefer HVM so install options aren't limited
+            # with a default PV choice.
+            for g in self.conn.caps.guests:
+                if g.os_type == "hvm":
+                    gtype = "hvm"
+                    break
+
+        capsinfo = self.conn.caps.guest_lookup(os_type=gtype, arch=arch)
+
+        if self.capsinfo:
+            if (self.capsinfo.guest == capsinfo.guest and
+                self.capsinfo.domain == capsinfo.domain):
+                return
+
+        self.capsinfo = capsinfo
+        logging.debug("Guest type set to os_type=%s, arch=%s, dom_type=%s",
+                      self.capsinfo.os_type,
+                      self.capsinfo.arch,
+                      self.capsinfo.hypervisor_type)
+        self._set_caps_state()
+
+
+    ##################################################
+    # Helpers for populating hv/arch/machine/conn UI #
+    ##################################################
+
+    def _populate_hv(self):
         hv_list = self.widget("config-hv")
         model = hv_list.get_model()
         model.clear()
@@ -658,7 +733,7 @@ class vmmCreate(vmmGObjectUI):
         if show:
             hv_list.set_active(default)
 
-    def populate_arch(self):
+    def _populate_arch(self):
         arch_list = self.widget("config-arch")
         model = arch_list.get_model()
         model.clear()
@@ -695,13 +770,13 @@ class vmmCreate(vmmGObjectUI):
             default = archs.index(self.capsinfo.arch)
 
         for arch in archs:
-            model.append([arch, pretty_arch(arch)])
+            model.append([arch, _pretty_arch(arch)])
 
         show = not (len(archs) < 2)
         uiutil.set_grid_row_visible(arch_list, show)
         arch_list.set_active(default)
 
-    def populate_machine(self):
+    def _populate_machine(self):
         lst = self.widget("config-machine")
         model = lst.get_model()
         model.clear()
@@ -740,7 +815,7 @@ class vmmCreate(vmmGObjectUI):
         else:
             lst.emit("changed")
 
-    def populate_conn_list(self, urihint=None):
+    def _populate_conn_list(self, urihint=None):
         conn_list = self.widget("create-conn")
         model = conn_list.get_model()
         model.clear()
@@ -782,11 +857,16 @@ class vmmCreate(vmmGObjectUI):
 
         return activeconn
 
+
+    #############################################
+    # Helpers for populating OS type/variant UI #
+    #############################################
+
     def _add_os_row(self, model, name="", label="", supported=False,
                       sep=False, action=False):
-        visible = self.show_all_os or supported
+        visible = self._show_all_os or supported
         if sep or action:
-            visible = not self.show_all_os
+            visible = not self._show_all_os
 
         if not visible:
             return
@@ -816,7 +896,7 @@ class vmmCreate(vmmGObjectUI):
         self._add_os_row(model, sep=True)
         self._add_os_row(model, label=_("Show all OS options"), action=True)
 
-    def populate_os_type_model(self):
+    def _populate_os_type_model(self):
         widget = self.widget("install-os-type")
         model = widget.get_model()
         self._fill_os_type_model(model)
@@ -839,50 +919,24 @@ class vmmCreate(vmmGObjectUI):
         self._add_os_row(model, sep=True)
         self._add_os_row(model, label=_("Show all OS options"), action=True)
 
-    def populate_os_variant_model(self, _type):
+    def _populate_os_variant_model(self, _type):
         widget = self.widget("install-os-version")
         model = widget.get_model()
         self._fill_os_variant_model(model, _type)
 
         widget.set_active(0)
 
-    def populate_media_model(self, model, urls):
-        model.clear()
-        if urls is not None:
-            for url in urls:
-                model.append([url])
 
+    ###############################
+    # Misc UI populating routines #
+    ###############################
 
-    def change_caps(self, gtype=None, arch=None):
-        if gtype is None:
-            # If none specified, prefer HVM so install options aren't limited
-            # with a default PV choice.
-            for g in self.conn.caps.guests:
-                if g.os_type == "hvm":
-                    gtype = "hvm"
-                    break
-
-        capsinfo = self.conn.caps.guest_lookup(os_type=gtype, arch=arch)
-
-        if self.capsinfo:
-            if (self.capsinfo.guest == capsinfo.guest and
-                self.capsinfo.domain == capsinfo.domain):
-                return
-
-        self.capsinfo = capsinfo
-        logging.debug("Guest type set to os_type=%s, arch=%s, dom_type=%s",
-                      self.capsinfo.os_type,
-                      self.capsinfo.arch,
-                      self.capsinfo.hypervisor_type)
-        self.populate_machine()
-        self.set_caps_state()
-
-    def populate_summary(self):
-        distro, version, ignore1, dlabel, vlabel = self.get_config_os_info()
-        mem = self.pretty_memory(int(self.guest.memory))
+    def _populate_summary(self):
+        distro, version, ignore1, dlabel, vlabel = self._get_config_os_info()
+        mem = _pretty_memory(int(self.guest.memory))
         cpu = str(int(self.guest.vcpus))
 
-        instmethod = self.get_config_install_page()
+        instmethod = self._get_config_install_page()
         install = ""
         if instmethod == INSTALL_PAGE_ISO:
             install = _("Local CDROM/ISO")
@@ -901,13 +955,13 @@ class vmmCreate(vmmGObjectUI):
         disks = self.guest.get_devices("disk")
         if disks:
             disk = disks[0]
-            storage = "%s" % self.pretty_storage(disk.get_size())
+            storage = "%s" % _pretty_storage(disk.get_size())
 
             # default storage is dependent on the VM name which the user
             # can change on the last page,  so this label can get out of date.
             # We could dynamically update it if user changes things, but
             # not sure if anyone cares.
-            if not self.is_default_storage():
+            if not self._is_default_storage():
                 storage += " " + (storagetmpl % disk.path)
         elif len(self.guest.get_devices("filesystem")):
             fs = self.guest.get_devices("filesystem")[0]
@@ -937,22 +991,26 @@ class vmmCreate(vmmGObjectUI):
         self.widget("summary-cpu").set_text(cpu)
         self.widget("summary-storage").set_markup(storage)
 
-        self.netdev_changed(None)
+        self._netdev_changed(None)
 
-    # get_* methods
-    def get_config_name(self):
+
+    ################################
+    # UI state getters and helpers #
+    ################################
+
+    def _get_config_name(self):
         return self.widget("create-vm-name").get_text()
 
-    def get_config_machine(self):
+    def _get_config_machine(self):
         return uiutil.get_list_selection(self.widget("config-machine"),
             check_visible=True)
 
-    def is_install_page(self):
+    def _is_install_page(self):
         notebook = self.widget("create-pages")
         curpage = notebook.get_current_page()
         return curpage == PAGE_INSTALL
 
-    def get_config_install_page(self):
+    def _get_config_install_page(self):
         if self.widget("virt-install-box").get_visible():
             if self.widget("method-local").get_active():
                 return INSTALL_PAGE_ISO
@@ -968,7 +1026,15 @@ class vmmCreate(vmmGObjectUI):
             if self.widget("method-container-os").get_active():
                 return INSTALL_PAGE_CONTAINER_OS
 
-    def get_config_os_info(self):
+    def _is_container_install(self):
+        return self._get_config_install_page() in [INSTALL_PAGE_CONTAINER_APP,
+                                                   INSTALL_PAGE_CONTAINER_OS]
+    def _should_skip_disk_page(self):
+        return self._get_config_install_page() in [INSTALL_PAGE_IMPORT,
+                                                   INSTALL_PAGE_CONTAINER_APP,
+                                                   INSTALL_PAGE_CONTAINER_OS]
+
+    def _get_config_os_info(self):
         drow = uiutil.get_list_selected_row(self.widget("install-os-type"))
         vrow = uiutil.get_list_selected_row(self.widget("install-os-version"))
         distro = None
@@ -998,7 +1064,7 @@ class vmmCreate(vmmGObjectUI):
                 True,
                 str(dlabel), str(vlabel))
 
-    def get_config_local_media(self, store_media=False):
+    def _get_config_local_media(self, store_media=False):
         if self.widget("install-local-cdrom").get_active():
             return self.mediacombo.get_path()
         else:
@@ -1007,12 +1073,12 @@ class vmmCreate(vmmGObjectUI):
                 self.config.add_iso_path(ret)
             return ret
 
-    def get_config_detectable_media(self):
-        instpage = self.get_config_install_page()
+    def _get_config_detectable_media(self):
+        instpage = self._get_config_install_page()
         media = ""
 
         if instpage == INSTALL_PAGE_ISO:
-            media = self.get_config_local_media()
+            media = self._get_config_local_media()
         elif instpage == INSTALL_PAGE_URL:
             media = self.widget("install-url-box").get_child().get_text()
         elif instpage == INSTALL_PAGE_IMPORT:
@@ -1020,7 +1086,7 @@ class vmmCreate(vmmGObjectUI):
 
         return media
 
-    def get_config_url_info(self, store_media=False):
+    def _get_config_url_info(self, store_media=False):
         media = self.widget("install-url-box").get_child().get_text().strip()
         extra = self.widget("install-urlopts-entry").get_text().strip()
         ks = self.widget("install-ks-box").get_child().get_text().strip()
@@ -1032,22 +1098,14 @@ class vmmCreate(vmmGObjectUI):
 
         return (media.strip(), extra.strip(), ks.strip())
 
-    def get_config_import_path(self):
+    def _get_config_import_path(self):
         return self.widget("install-import-entry").get_text()
 
-    def get_config_container_app_path(self):
-        return self.widget("install-app-entry").get_text()
-
-    def get_config_container_fs_path(self):
-        return self.widget("install-oscontainer-fs").get_text()
-
-    def is_default_storage(self):
+    def _is_default_storage(self):
         return (self.addstorage.is_default_storage() and
-                not self.skip_disk_page())
+                not self._should_skip_disk_page())
 
-    def get_config_customize(self):
-        return self.widget("summary-customize").get_active()
-    def is_detect_active(self):
+    def _is_os_detect_active(self):
         return self.widget("install-detect-os").get_active()
 
 
@@ -1056,6 +1114,10 @@ class vmmCreate(vmmGObjectUI):
     ################
 
     def _close_requested(self, *ignore1, **ignore2):
+        """
+        When user tries to close the dialog, check for any disks that
+        we should auto cleanup
+        """
         if (self.failed_guest and
             self.failed_guest.get_created_disks()):
 
@@ -1082,7 +1144,9 @@ class vmmCreate(vmmGObjectUI):
 
         return 1
 
-    def conn_changed(self, src):
+
+    # Intro page listeners
+    def _conn_changed(self, src):
         uri = uiutil.get_list_selection(src)
         conn = None
         if uri:
@@ -1093,23 +1157,172 @@ class vmmCreate(vmmGObjectUI):
         if not self.is_visible():
             return
 
-        self.set_conn(conn)
+        self._set_conn(conn)
 
-    def method_changed(self, src):
+    def _method_changed(self, src):
         ignore = src
-        self.set_page_num_text(0)
+        # Reset the page number, since the total page numbers depend
+        # on the chosen install method
+        self._set_page_num_text(0)
 
-    def machine_changed(self, ignore):
-        machine = self.get_config_machine()
+    def _machine_changed(self, ignore):
+        machine = self._get_config_machine()
         show_dtb_virtio = (self.capsinfo.arch == "armv7l" and
                            machine in ["vexpress-a9", "vexpress-15"])
         uiutil.set_grid_row_visible(
             self.widget("config-dtb-warn-virtio"), show_dtb_virtio)
 
-    def netdev_changed(self, ignore):
+    def _hv_changed(self, src):
+        hv = uiutil.get_list_selection(src, column=1)
+        if not hv:
+            return
+
+        self._change_caps(hv)
+        self._populate_arch()
+
+    def _arch_changed(self, src):
+        arch = uiutil.get_list_selection(src)
+        if not arch:
+            return
+
+        self._change_caps(self.capsinfo.os_type, arch)
+
+
+    # Install page listeners
+    def _media_box_changed(self, widget):
+        self._media_was_detected = False
+
+        # If the widget has focus, don't fire detect_media_os, it means
+        # the user is probably typing
+        if self.widget(widget).get_child().has_focus():
+            return
+
+        self._do_detect_media_os()
+
+    def _url_box_changed(self, ignore):
+        self._media_box_changed("install-url-box")
+
+    def _local_box_changed(self, ignore):
+        self._media_box_changed("install-local-box")
+
+    def _should_detect_media(self):
+        return (self._is_os_detect_active() and not self._media_was_detected)
+
+    def _do_detect_media_os(self, ignore1=None, forward=False):
+        if not self._should_detect_media():
+            return
+        if not self._is_install_page():
+            return
+        self._start_detection(forward=forward)
+
+    def _toggle_detect_os(self, src):
+        dodetect = src.get_active()
+
+        self.widget("install-os-type-label").set_visible(dodetect)
+        self.widget("install-os-version-label").set_visible(dodetect)
+        self.widget("install-os-type").set_visible(not dodetect)
+        self.widget("install-os-version").set_visible(not dodetect)
+
+        if dodetect:
+            self.widget("install-os-version-entry").set_text("")
+            self._media_was_detected = False
+            self._do_detect_media_os()
+
+    def _selected_os_row(self):
+        return uiutil.get_list_selected_row(self.widget("install-os-type"))
+
+    def _change_os_type(self, box):
+        ignore = box
+        row = self._selected_os_row()
+        if row:
+            _type = row[0]
+            self._populate_os_variant_model(_type)
+            if row[3]:
+                self._show_all_os = True
+                self._populate_os_type_model()
+                return
+
+    def _change_os_version(self, box):
+        show_all = uiutil.get_list_selection(box, column=3, check_entry=False)
+        if not show_all:
+            return
+
+        # 'show all OS' was clicked
+        # Get previous type to reselect it later
+        type_row = self._selected_os_row()
+        if not type_row:
+            return
+        old_type = type_row[0]
+
+        self._show_all_os = True
+        self._populate_os_type_model()
+
+        # Reselect previous type row
+        os_type_list = self.widget("install-os-type")
+        os_type_model = os_type_list.get_model()
+        for idx in range(len(os_type_model)):
+            if os_type_model[idx][0] == old_type:
+                os_type_list.set_active(idx)
+                break
+
+    def _toggle_local_cdrom(self, src):
+        is_active = src.get_active()
+        if is_active and self.mediacombo.get_path():
+            # Local CDROM was selected with media preset, detect distro
+            self._media_was_detected = False
+            self._do_detect_media_os()
+
+        self.widget("install-local-cdrom-align").set_sensitive(is_active)
+
+    def _toggle_local_iso(self, src):
+        uselocal = src.get_active()
+        self.widget("install-local-box").set_sensitive(uselocal)
+        self.widget("install-local-browse").set_sensitive(uselocal)
+        self._media_was_detected = False
+        self._do_detect_media_os()
+
+    def _os_detect_visibility_changed(self, src, ignore=None):
+        is_visible = src.get_visible()
+        detect_chkbox = self.widget("install-detect-os")
+        nodetect_label = self.widget("install-nodetect-label")
+
+        detect_chkbox.set_active(is_visible)
+        detect_chkbox.toggled()
+
+        if is_visible:
+            nodetect_label.hide()
+        else:
+            nodetect_label.show()
+
+    def _browse_oscontainer(self, ignore):
+        self._browse_file("install-oscontainer-fs", is_dir=True)
+    def _browse_app(self, ignore):
+        self._browse_file("install-app-entry")
+    def _browse_import(self, ignore):
+        self._browse_file("install-import-entry")
+    def _browse_iso(self, ignore):
+        def set_path(ignore, path):
+            self.widget("install-local-box").get_child().set_text(path)
+        self._browse_file(None, cb=set_path, is_media=True)
+        self.widget("install-local-box").activate()
+    def _browse_kernel(self, ignore):
+        self._browse_file("config-kernel")
+    def _browse_initrd(self, ignore):
+        self._browse_file("config-initrd")
+    def _browse_dtb(self, ignore):
+        self._browse_file("config-dtb")
+
+
+    # Storage page listeners
+    def _toggle_enable_storage(self, src):
+        self.widget("config-storage-align").set_sensitive(src.get_active())
+
+
+    # Summary page listeners
+    def _netdev_changed(self, ignore):
         row = self.netlist.get_network_row()
         show_pxe_warn = True
-        pxe_install = (self.get_config_install_page() == INSTALL_PAGE_PXE)
+        pxe_install = (self._get_config_install_page() == INSTALL_PAGE_PXE)
         expand = False
 
         if row:
@@ -1134,153 +1347,76 @@ class vmmCreate(vmmGObjectUI):
         self.widget("config-netdev-warn-label").set_markup(
             "<small>%s</small>" % _("Network selection does not support PXE"))
 
-    def hv_changed(self, src):
-        hv = uiutil.get_list_selection(src, column=1)
-        if not hv:
-            return
 
-        self.change_caps(hv)
-        self.populate_arch()
+    ########################
+    # Misc helper routines #
+    ########################
 
-    def arch_changed(self, src):
-        arch = uiutil.get_list_selection(src)
-        if not arch:
-            return
+    def _stable_defaults(self):
+        emu = None
+        if self.guest:
+            emu = self.guest.emulator
+        elif self.capsinfo:
+            emu = self.capsinfo.emulator
 
-        self.change_caps(self.capsinfo.os_type, arch)
+        ret = self.conn.stable_defaults(emu)
+        return ret
 
-    def media_box_changed(self, widget):
-        self.mediaDetected = False
-
-        # If the widget has focus, don't fire detect_media_os, it means
-        # the user is probably typing
-        if self.widget(widget).get_child().has_focus():
-            return
-
-        self.detect_media_os()
-
-    def url_box_changed(self, ignore):
-        self.media_box_changed("install-url-box")
-
-    def local_box_changed(self, ignore):
-        self.media_box_changed("install-local-box")
-
-    def should_detect_media(self):
-        return (self.is_detect_active() and not self.mediaDetected)
-
-    def detect_media_os(self, ignore1=None, forward=False):
-        if not self.should_detect_media():
-            return
-        if not self.is_install_page():
-            return
-        self.start_detection(forward=forward)
-
-    def toggle_detect_os(self, src):
-        dodetect = src.get_active()
-
-        self.widget("install-os-type-label").set_visible(dodetect)
-        self.widget("install-os-version-label").set_visible(dodetect)
-        self.widget("install-os-type").set_visible(not dodetect)
-        self.widget("install-os-version").set_visible(not dodetect)
-
-        if dodetect:
-            self.widget("install-os-version-entry").set_text("")
-            self.mediaDetected = False
-            self.detect_media_os()
-
-    def _selected_os_row(self):
-        return uiutil.get_list_selected_row(self.widget("install-os-type"))
-
-    def change_os_type(self, box):
-        ignore = box
-        row = self._selected_os_row()
-        if row:
-            _type = row[0]
-            self.populate_os_variant_model(_type)
-            if row[3]:
-                self.show_all_os = True
-                self.populate_os_type_model()
-                return
-
-    def change_os_version(self, box):
-        show_all = uiutil.get_list_selection(box, column=3, check_entry=False)
-        if not show_all:
-            return
-
-        # 'show all OS' was clicked
-        # Get previous type to reselect it later
-        type_row = self._selected_os_row()
-        if not type_row:
-            return
-        old_type = type_row[0]
-
-        self.show_all_os = True
-        self.populate_os_type_model()
-
-        # Reselect previous type row
-        os_type_list = self.widget("install-os-type")
-        os_type_model = os_type_list.get_model()
-        for idx in range(len(os_type_model)):
-            if os_type_model[idx][0] == old_type:
-                os_type_list.set_active(idx)
-                break
-
-    def toggle_local_cdrom(self, src):
-        is_active = src.get_active()
-        if is_active and self.mediacombo.get_path():
-            # Local CDROM was selected with media preset, detect distro
-            self.mediaDetected = False
-            self.detect_media_os()
-
-        self.widget("install-local-cdrom-align").set_sensitive(is_active)
-
-    def toggle_local_iso(self, src):
-        uselocal = src.get_active()
-        self.widget("install-local-box").set_sensitive(uselocal)
-        self.widget("install-local-browse").set_sensitive(uselocal)
-        self.mediaDetected = False
-        self.detect_media_os()
-
-    def detect_visibility_changed(self, src, ignore=None):
-        is_visible = src.get_visible()
-        detect_chkbox = self.widget("install-detect-os")
-        nodetect_label = self.widget("install-nodetect-label")
-
-        detect_chkbox.set_active(is_visible)
-        detect_chkbox.toggled()
-
-        if is_visible:
-            nodetect_label.hide()
+    def _browse_file(self, cbwidget, cb=None, is_media=False, is_dir=False):
+        if is_media:
+            reason = self.config.CONFIG_DIR_ISO_MEDIA
+        elif is_dir:
+            reason = self.config.CONFIG_DIR_FS
         else:
-            nodetect_label.show()
+            reason = self.config.CONFIG_DIR_IMAGE
 
-    def browse_oscontainer(self, ignore):
-        self._browse_file("install-oscontainer-fs", is_dir=True)
-    def browse_app(self, ignore):
-        self._browse_file("install-app-entry")
-    def browse_import(self, ignore):
-        self._browse_file("install-import-entry")
-    def browse_iso(self, ignore):
-        def set_path(ignore, path):
-            self.widget("install-local-box").get_child().set_text(path)
-        self._browse_file(None, cb=set_path, is_media=True)
-        self.widget("install-local-box").activate()
-    def browse_kernel(self, ignore):
-        self._browse_file("config-kernel")
-    def browse_initrd(self, ignore):
-        self._browse_file("config-initrd")
-    def browse_dtb(self, ignore):
-        self._browse_file("config-dtb")
+        if cb:
+            callback = cb
+        else:
+            def callback(ignore, text):
+                widget = cbwidget
+                if type(cbwidget) is str:
+                    widget = self.widget(cbwidget)
+                widget.set_text(text)
 
-    def toggle_enable_storage(self, src):
-        self.widget("config-storage-align").set_sensitive(src.get_active())
+        if self.storage_browser and self.storage_browser.conn != self.conn:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
+        if self.storage_browser is None:
+            self.storage_browser = vmmStorageBrowser(self.conn)
 
-    # Navigation methods
-    def set_install_page(self):
+        self.storage_browser.set_stable_defaults(self._stable_defaults())
+        self.storage_browser.set_vm_name(self._get_config_name())
+        self.storage_browser.set_finish_cb(callback)
+        self.storage_browser.set_browse_reason(reason)
+        self.storage_browser.show(self.topwin)
+
+
+    ######################
+    # Navigation methods #
+    ######################
+
+    def _set_page_num_text(self, cur):
+        """
+        Set the 'page 1 of 4' style text in the wizard header
+        """
+        cur += 1
+        final = PAGE_FINISH + 1
+        if self._should_skip_disk_page():
+            final -= 1
+            cur = min(cur, final)
+
+        page_lbl = ("<span color='#59B0E2'>%s</span>" %
+                    _("Step %(current_page)d of %(max_page)d") %
+                    {'current_page': cur, 'max_page': final})
+
+        self.widget("header-pagenum").set_markup(page_lbl)
+
+    def _set_install_page(self):
         instnotebook = self.widget("install-method-pages")
         detectbox = self.widget("install-detect-os-box")
         osbox = self.widget("install-os-distro-box")
-        instpage = self.get_config_install_page()
+        instpage = self._get_config_install_page()
 
         # Setting OS value for a container guest doesn't really matter
         # at the moment
@@ -1291,7 +1427,7 @@ class vmmCreate(vmmGObjectUI):
         enabledetect = (instpage == INSTALL_PAGE_ISO and
                         self.conn and
                         not self.conn.is_remote() or
-                        self.get_config_install_page() == INSTALL_PAGE_URL)
+                        self._get_config_install_page() == INSTALL_PAGE_URL)
 
         detectbox.set_visible(enabledetect)
 
@@ -1305,20 +1441,12 @@ class vmmCreate(vmmGObjectUI):
 
         instnotebook.set_current_page(instpage)
 
-    def container_install(self):
-        return self.get_config_install_page() in [INSTALL_PAGE_CONTAINER_APP,
-                                                  INSTALL_PAGE_CONTAINER_OS]
-    def skip_disk_page(self):
-        return self.get_config_install_page() in [INSTALL_PAGE_IMPORT,
-                                                  INSTALL_PAGE_CONTAINER_APP,
-                                                  INSTALL_PAGE_CONTAINER_OS]
-
-    def back(self, src_ignore):
+    def _back_clicked(self, src_ignore):
         notebook = self.widget("create-pages")
         curpage = notebook.get_current_page()
         next_page = curpage - 1
 
-        if curpage == PAGE_FINISH and self.skip_disk_page():
+        if curpage == PAGE_FINISH and self._should_skip_disk_page():
             # Skip over storage page
             next_page -= 1
 
@@ -1327,57 +1455,45 @@ class vmmCreate(vmmGObjectUI):
     def _get_next_pagenum(self, curpage):
         next_page = curpage + 1
 
-        if next_page == PAGE_STORAGE and self.skip_disk_page():
+        if next_page == PAGE_STORAGE and self._should_skip_disk_page():
             # Skip storage page for import installs
             next_page += 1
 
         return next_page
 
-    def forward(self, src_ignore=None):
+    def _forward_clicked(self, src_ignore=None):
         notebook = self.widget("create-pages")
         curpage = notebook.get_current_page()
 
-        if self.have_startup_error:
+        if self._have_startup_error:
             return
 
-        if (curpage == PAGE_INSTALL and self.should_detect_media() and
-            self.get_config_detectable_media()):
+        if (curpage == PAGE_INSTALL and self._should_detect_media() and
+            self._get_config_detectable_media()):
             # Make sure we have detected the OS before validating the page
-            self.detect_media_os(forward=True)
+            self._do_detect_media_os(forward=True)
             return
 
-        if self.validate(curpage) is not True:
+        if self._validate(curpage) is not True:
             return
 
         if curpage == PAGE_NAME:
-            self.set_install_page()
+            self._set_install_page()
 
         next_page = self._get_next_pagenum(curpage)
 
         self.widget("create-forward").grab_focus()
         notebook.set_current_page(next_page)
 
-    def set_page_num_text(self, cur):
-        cur += 1
-        final = PAGE_FINISH + 1
-        if self.skip_disk_page():
-            final -= 1
-            cur = min(cur, final)
 
-        page_lbl = ("<span color='#59B0E2'>%s</span>" %
-                    _("Step %(current_page)d of %(max_page)d") %
-                    {'current_page': cur, 'max_page': final})
-
-        self.widget("header-pagenum").set_markup(page_lbl)
-
-    def page_changed(self, ignore1, ignore2, pagenum):
+    def _page_changed(self, ignore1, ignore2, pagenum):
         if pagenum == PAGE_INSTALL:
-            self.detect_media_os()
+            self._do_detect_media_os()
             self.widget("install-os-distro-box").set_visible(
-                not self.container_install())
+                not self._is_container_install())
         elif pagenum == PAGE_FINISH:
             try:
-                self.populate_summary()
+                self._populate_summary()
             except Exception, e:
                 self.err.show_err(_("Error populating summary page: %s") %
                     str(e))
@@ -1385,7 +1501,7 @@ class vmmCreate(vmmGObjectUI):
 
             self.widget("create-finish").grab_focus()
 
-        self.set_page_num_text(pagenum)
+        self._set_page_num_text(pagenum)
         self.widget("create-back").set_sensitive(pagenum != PAGE_NAME)
         self.widget("create-forward").set_visible(pagenum != PAGE_FINISH)
         self.widget("create-finish").set_visible(pagenum == PAGE_FINISH)
@@ -1394,9 +1510,14 @@ class vmmCreate(vmmGObjectUI):
             page = self.widget("create-pages").get_nth_page(nr)
             page.set_visible(nr == pagenum)
 
-    def build_guest(self, variant):
+
+    ############################
+    # Page validation routines #
+    ############################
+
+    def _build_guest(self, variant):
         guest = self.conn.caps.build_virtinst_guest(self.capsinfo)
-        guest.os.machine = self.get_config_machine()
+        guest.os.machine = self._get_config_machine()
 
         # Generate UUID (makes customize dialog happy)
         try:
@@ -1437,29 +1558,29 @@ class vmmCreate(vmmGObjectUI):
 
         return guest
 
-    def validate(self, pagenum):
+    def _validate(self, pagenum):
         try:
             if pagenum == PAGE_NAME:
-                return self.validate_intro_page()
+                return self._validate_intro_page()
             elif pagenum == PAGE_INSTALL:
-                return self.validate_install_page()
+                return self._validate_install_page()
             elif pagenum == PAGE_MEM:
-                return self.validate_mem_page()
+                return self._validate_mem_page()
             elif pagenum == PAGE_STORAGE:
-                return self.validate_storage_page()
+                return self._validate_storage_page()
             elif pagenum == PAGE_FINISH:
-                return self.validate_final_page()
+                return self._validate_final_page()
         except Exception, e:
             self.err.show_err(_("Uncaught error validating install "
                                 "parameters: %s") % str(e))
             return
 
-    def validate_intro_page(self):
+    def _validate_intro_page(self):
         # We just set this here because it's needed soon after for distro
         # detection. But the 'real' self.guest is created in validate_install,
-        # and it just uses build_guest, so don't ever add any other guest
+        # and it just uses _build_guest, so don't ever add any other guest
         # altering here.
-        self.guest = self.build_guest(None)
+        self.guest = self._build_guest(None)
         if not self.guest:
             return False
         return True
@@ -1478,7 +1599,7 @@ class vmmCreate(vmmGObjectUI):
             basename = variant
 
         if self.guest.os.arch != self.conn.caps.host.cpu.arch:
-            basename += "-%s" % pretty_arch(self.guest.os.arch)
+            basename += "-%s" % _pretty_arch(self.guest.os.arch)
             force_num = False
 
         return util.generate_name(basename,
@@ -1487,8 +1608,9 @@ class vmmCreate(vmmGObjectUI):
             sep=not force_num and "-" or "",
             collidelist=[vm.get_name() for vm in self.conn.list_vms()])
 
-    def validate_install_page(self):
-        instmethod = self.get_config_install_page()
+
+    def _validate_install_page(self):
+        instmethod = self._get_config_install_page()
         installer = None
         location = None
         extra = None
@@ -1497,14 +1619,14 @@ class vmmCreate(vmmGObjectUI):
         is_import = False
         init = None
         fs = None
-        distro, variant, valid, ignore1, ignore2 = self.get_config_os_info()
+        distro, variant, valid, ignore1, ignore2 = self._get_config_os_info()
 
         if not valid:
             return self.err.val_err(_("Please specify a valid OS variant."))
 
         if instmethod == INSTALL_PAGE_ISO:
             instclass = virtinst.DistroInstaller
-            media = self.get_config_local_media()
+            media = self._get_config_local_media()
 
             if not media:
                 return self.err.val_err(
@@ -1515,7 +1637,7 @@ class vmmCreate(vmmGObjectUI):
 
         elif instmethod == INSTALL_PAGE_URL:
             instclass = virtinst.DistroInstaller
-            media, extra, ks = self.get_config_url_info()
+            media, extra, ks = self._get_config_url_info()
 
             if not media:
                 return self.err.val_err(_("An install tree is required."))
@@ -1529,7 +1651,7 @@ class vmmCreate(vmmGObjectUI):
             instclass = virtinst.ImportInstaller
             is_import = True
 
-            import_path = self.get_config_import_path()
+            import_path = self._get_config_import_path()
             if not import_path:
                 return self.err.val_err(
                                 _("A storage path to import is required."))
@@ -1537,14 +1659,14 @@ class vmmCreate(vmmGObjectUI):
         elif instmethod == INSTALL_PAGE_CONTAINER_APP:
             instclass = virtinst.ContainerInstaller
 
-            init = self.get_config_container_app_path()
+            init = self.widget("install-app-entry").get_text()
             if not init:
                 return self.err.val_err(_("An application path is required."))
 
         elif instmethod == INSTALL_PAGE_CONTAINER_OS:
             instclass = virtinst.ContainerInstaller
 
-            fs = self.get_config_container_fs_path()
+            fs = self.widget("install-oscontainer-fs").get_text()
             if not fs:
                 return self.err.val_err(_("An OS directory path is required."))
 
@@ -1552,7 +1674,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             # Overwrite the guest
             installer = instclass(self.conn.get_backend())
-            self.guest = self.build_guest(variant or distro)
+            self.guest = self._build_guest(variant or distro)
             if not self.guest:
                 return False
             self.guest.installer = installer
@@ -1623,7 +1745,7 @@ class vmmCreate(vmmGObjectUI):
         # Kind of wonky, run storage validation now, which will assign
         # the import path. Import installer skips the storage page.
         if is_import:
-            if not self.validate_storage_page():
+            if not self._validate_storage_page():
                 return False
 
         if self.guest.installer.scratchdir_required():
@@ -1662,11 +1784,11 @@ class vmmCreate(vmmGObjectUI):
 
         # Validation passed, store the install path (if there is one) in
         # gsettings
-        self.get_config_local_media(store_media=True)
-        self.get_config_url_info(store_media=True)
+        self._get_config_local_media(store_media=True)
+        self._get_config_url_info(store_media=True)
         return True
 
-    def validate_mem_page(self):
+    def _validate_mem_page(self):
         cpus = self.widget("config-cpus").get_value()
         mem  = self.widget("config-mem").get_value()
 
@@ -1685,7 +1807,8 @@ class vmmCreate(vmmGObjectUI):
 
         return True
 
-    def validate_storage_page(self):
+
+    def _validate_storage_page(self):
         failed_disk = None
         if self.disk and self.disk in self.guest.get_devices("disk"):
             self.guest.remove_device(self.disk)
@@ -1696,10 +1819,10 @@ class vmmCreate(vmmGObjectUI):
         path = None
         path_already_created = False
 
-        if self.get_config_install_page() == INSTALL_PAGE_IMPORT:
-            path = self.get_config_import_path()
+        if self._get_config_install_page() == INSTALL_PAGE_IMPORT:
+            path = self._get_config_import_path()
 
-        elif self.is_default_storage():
+        elif self._is_default_storage():
             # Don't generate a new path if the install failed
             if failed_disk and failed_disk.device == "disk":
                 path = failed_disk.path
@@ -1713,7 +1836,7 @@ class vmmCreate(vmmGObjectUI):
         ret = self.addstorage.validate_storage(self.guest.name, path=path)
         no_storage = (ret is True)
 
-        if self.get_config_install_page() == INSTALL_PAGE_ISO:
+        if self._get_config_install_page() == INSTALL_PAGE_ISO:
             # CD/ISO install and no disks implies LiveCD
             self.guest.installer.livecd = no_storage
 
@@ -1729,26 +1852,27 @@ class vmmCreate(vmmGObjectUI):
 
         return True
 
-    def validate_final_page(self):
+
+    def _validate_final_page(self):
         # HV + Arch selection
-        name = self.get_config_name()
+        name = self._get_config_name()
         if name != self.guest.name:
             try:
                 self.guest.name = name
             except Exception, e:
                 return self.err.val_err(_("Invalid guest name"), str(e))
-            if self.is_default_storage():
+            if self._is_default_storage():
                 logging.debug("User changed VM name and using default "
                     "storage, re-validating with new default storage path.")
                 # User changed the name and we are using default storage
                 # which depends on the VM name. Revalidate things
-                if not self.validate_storage_page():
+                if not self._validate_storage_page():
                     return False
 
         nettype = self.netlist.get_network_selection()[0]
         if nettype is None:
             # No network device available
-            instmethod = self.get_config_install_page()
+            instmethod = self._get_config_install_page()
             methname = None
             if instmethod == INSTALL_PAGE_PXE:
                 methname  = "PXE"
@@ -1774,15 +1898,134 @@ class vmmCreate(vmmGObjectUI):
 
         return True
 
+
+    #############################
+    # Distro detection handling #
+    #############################
+
+    # Distro detection methods
+    def _set_distro_labels(self, distro, ver, force=False):
+        # Helper to set auto detect result labels
+        if not force and not self._is_os_detect_active():
+            return
+
+        self.widget("install-os-type-label").set_text(distro)
+        self.widget("install-os-version-label").set_text(ver)
+
+    def _set_os_val(self, os_widget, value):
+        # Helper method to set the OS Type/Variant selections to the passed
+        # values, or -1 if not present.
+        model = os_widget.get_model()
+        def find_row_value():
+            for idx in range(len(model)):
+                row = model[idx]
+                if value and row[0] == value:
+                    os_widget.set_active(idx)
+                    return row[1]
+            os_widget.set_active(0)
+
+        ret = None
+        if value:
+            ret = find_row_value()
+
+            if not ret and not self._show_all_os:
+                # We didn't find the OS in the variant UI, but we are only
+                # showing the reduced OS list. Trigger the _show_all_os option,
+                # and try again.
+                os_widget.set_active(len(model) - 1)
+                ret = find_row_value()
+        return ret or _("Unknown")
+
+    def _set_distro_selection(self, variant):
+        # Wrapper to change OS Type/Variant values, and update the distro
+        # detection labels
+        if not self._is_os_detect_active():
+            return
+
+        distro_type = None
+        distro_var = None
+        if variant:
+            osclass = virtinst.OSDB.lookup_os(variant)
+            distro_type = osclass.get_typename()
+            distro_var = osclass.name
+
+        dl = self._set_os_val(self.widget("install-os-type"), distro_type)
+        vl = self._set_os_val(self.widget("install-os-version"), distro_var)
+        self._set_distro_labels(dl, vl)
+
+    def _do_check_detection(self, idx, forward):
+        results = None
+        try:
+            base = _("Detecting")
+
+            if (self._detected_distro == DETECT_INPROGRESS and
+                (idx < (DETECT_TIMEOUT * 2))):
+                detect_str = base + ("." * ((idx % 3) + 1))
+                self._set_distro_labels(detect_str, detect_str)
+
+                self.timeout_add(500, self._do_check_detection,
+                                      idx + 1, forward)
+                return
+
+            results = self._detected_distro
+        except:
+            logging.exception("Error in distro detect timeout")
+
+        if results in [DETECT_INPROGRESS, DETECT_FAILED]:
+            results = None
+
+        self.widget("create-forward").set_sensitive(True)
+        self._media_was_detected = True
+        logging.debug("Finished OS detection.")
+        self._set_distro_selection(results)
+        if forward:
+            self.idle_add(self._forward_clicked, ())
+
+    def _start_detection(self, forward):
+        if self._detected_distro == DETECT_INPROGRESS:
+            return
+
+        media = self._get_config_detectable_media()
+        if not media:
+            return
+
+        self._detected_distro = DETECT_INPROGRESS
+
+        logging.debug("Starting OS detection thread for media=%s", media)
+        self.widget("create-forward").set_sensitive(False)
+
+        detectThread = threading.Thread(target=self._detect_thread_cb,
+                                        name="Actual media detection",
+                                        args=(media,))
+        detectThread.setDaemon(True)
+        detectThread.start()
+
+        self._do_check_detection(0, forward)
+
+    def _detect_thread_cb(self, media):
+        try:
+            installer = virtinst.DistroInstaller(self.conn.get_backend())
+            installer.location = media
+
+            self._detected_distro = installer.detect_distro(self.guest)
+        except:
+            logging.exception("Error detecting distro.")
+            self._detected_distro = DETECT_FAILED
+
+
+    ##########################
+    # Guest install routines #
+    ##########################
+
     def _undo_finish_cursor(self):
         self.topwin.set_sensitive(True)
         self.topwin.get_window().set_cursor(
             Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
-    def finish(self, src_ignore):
+    def _finish_clicked(self, src_ignore):
         # Validate the final page
         page = self.widget("create-pages").get_current_page()
-        if self.validate(page) is not True:
+        if self._validate(page) is not True:
             return False
 
         logging.debug("Starting create finish() sequence")
@@ -1794,51 +2037,51 @@ class vmmCreate(vmmGObjectUI):
         self.topwin.get_window().set_cursor(
             Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
-        if self.get_config_customize():
+        if self.widget("summary-customize").get_active():
             logging.debug("User requested 'customize', launching dialog")
             try:
-                self.customize(guest)
+                self._show_customize_dialog(guest)
             except Exception, e:
                 self._undo_finish_cursor()
                 self.err.show_err(_("Error starting installation: ") + str(e))
                 return
         else:
-            self.start_install(guest)
+            self._start_install(guest)
 
-    def customize(self, guest):
+    def _show_customize_dialog(self, guest):
         virtinst_guest = vmmDomainVirtinst(self.conn, guest, self.guest.uuid)
 
-        def cleanup_config_window():
-            if self.config_window:
-                for s in self.config_window_signals:
-                    self.config_window.disconnect(s)
-                self.config_window.cleanup()
-                self.config_window = None
+        def cleanup_customize_window():
+            if self._customize_window:
+                for s in self._customize_window_signals:
+                    self._customize_window.disconnect(s)
+                self._customize_window.cleanup()
+                self._customize_window = None
 
         def start_install_wrapper(ignore, guest):
-            cleanup_config_window()
+            cleanup_customize_window()
             if not self.is_visible():
                 return
             logging.debug("User finished customize dialog, starting install")
             guest.check_defaults()
-            self.start_install(guest)
+            self._start_install(guest)
 
         def config_canceled(ignore):
             logging.debug("User closed customize window, closing wizard")
-            cleanup_config_window()
+            cleanup_customize_window()
             self._undo_finish_cursor()
             self._close_requested()
 
-        cleanup_config_window()
-        self.config_window = vmmDetails(virtinst_guest, self.topwin)
-        self.config_window_signals = []
-        self.config_window_signals.append(
-            self.config_window.connect("customize-finished",
+        cleanup_customize_window()
+        self._customize_window = vmmDetails(virtinst_guest, self.topwin)
+        self._customize_window_signals = []
+        self._customize_window_signals.append(
+            self._customize_window.connect("customize-finished",
                                        start_install_wrapper,
                                        guest))
-        self.config_window_signals.append(
-            self.config_window.connect("details-closed", config_canceled))
-        self.config_window.show()
+        self._customize_window_signals.append(
+            self._customize_window.connect("details-closed", config_canceled))
+        self._customize_window.show()
 
     def _install_finished_cb(self, error, details):
         self._undo_finish_cursor()
@@ -1856,8 +2099,11 @@ class vmmCreate(vmmGObjectUI):
         self.emit("action-show-domain", self.conn.get_uri(), self.guest.name)
 
 
-    def start_install(self, guest):
-        progWin = vmmAsyncJob(self.do_install, [guest],
+    def _start_install(self, guest):
+        """
+        Launch the async job to start the install
+        """
+        progWin = vmmAsyncJob(self._do_async_install, [guest],
                               self._install_finished_cb, [],
                               _("Creating Virtual Machine"),
                               _("The virtual machine is now being "
@@ -1868,7 +2114,10 @@ class vmmCreate(vmmGObjectUI):
                               self.topwin)
         progWin.run()
 
-    def do_install(self, asyncjob, guest):
+    def _do_async_install(self, asyncjob, guest):
+        """
+        Kick off the actual install
+        """
         meter = asyncjob.get_meter()
 
         # Build a list of pools we should refresh, if we are creating storage
@@ -1917,7 +2166,7 @@ class vmmCreate(vmmGObjectUI):
             # guest after the install has finished
             def cb():
                 vm.connect_opt_out("state-changed",
-                                   self.check_install_status, guest)
+                                   self._check_install_status, guest)
                 return False
             self.idle_add(cb)
 
@@ -1931,7 +2180,11 @@ class vmmCreate(vmmGObjectUI):
                     "VM creation.", poolname, exc_info=True)
 
 
-    def check_install_status(self, vm, virtinst_guest):
+    def _check_install_status(self, vm, virtinst_guest):
+        """
+        Watch the domain that we are installing, waiting for the state
+        to change, so we can restart it as needed
+        """
         if vm.is_crashed():
             logging.debug("VM crashed, cancelling install plans.")
             return True
@@ -1951,7 +2204,7 @@ class vmmCreate(vmmGObjectUI):
                     virtinst_guest.continue_install()
 
                     vm.connect_opt_out("state-changed",
-                                       self.check_install_status, None)
+                                       self._check_install_status, None)
                     return True
 
             if vm.get_install_abort():
@@ -1965,161 +2218,3 @@ class vmmCreate(vmmGObjectUI):
             self.err.show_err(_("Error continue install: %s") % str(e))
 
         return True
-
-    def pretty_storage(self, size):
-        return "%.1f GiB" % float(size)
-
-    def pretty_memory(self, mem):
-        return "%d MiB" % (mem / 1024.0)
-
-
-    # Distro detection methods
-    def set_distro_labels(self, distro, ver, force=False):
-        # Helper to set auto detect result labels
-        if not force and not self.is_detect_active():
-            return
-
-        self.widget("install-os-type-label").set_text(distro)
-        self.widget("install-os-version-label").set_text(ver)
-
-    def set_os_val(self, os_widget, value):
-        # Helper method to set the OS Type/Variant selections to the passed
-        # values, or -1 if not present.
-        model = os_widget.get_model()
-        def find_row_value():
-            for idx in range(len(model)):
-                row = model[idx]
-                if value and row[0] == value:
-                    os_widget.set_active(idx)
-                    return row[1]
-            os_widget.set_active(0)
-
-        ret = None
-        if value:
-            ret = find_row_value()
-
-            if not ret and not self.show_all_os:
-                # We didn't find the OS in the variant UI, but we are only
-                # showing the reduced OS list. Trigger the show_all_os option,
-                # and try again.
-                os_widget.set_active(len(model) - 1)
-                ret = find_row_value()
-        return ret or _("Unknown")
-
-    def set_distro_selection(self, variant):
-        # Wrapper to change OS Type/Variant values, and update the distro
-        # detection labels
-        if not self.is_detect_active():
-            return
-
-        distro_type = None
-        distro_var = None
-        if variant:
-            osclass = virtinst.OSDB.lookup_os(variant)
-            distro_type = osclass.get_typename()
-            distro_var = osclass.name
-
-        dl = self.set_os_val(self.widget("install-os-type"), distro_type)
-        vl = self.set_os_val(self.widget("install-os-version"), distro_var)
-        self.set_distro_labels(dl, vl)
-
-    def check_detection(self, idx, forward):
-        results = None
-        try:
-            base = _("Detecting")
-
-            if (self.detectedDistro == DETECT_INPROGRESS and
-                (idx < (DETECT_TIMEOUT * 2))):
-                detect_str = base + ("." * ((idx % 3) + 1))
-                self.set_distro_labels(detect_str, detect_str)
-
-                self.timeout_add(500, self.check_detection,
-                                      idx + 1, forward)
-                return
-
-            results = self.detectedDistro
-        except:
-            logging.exception("Error in distro detect timeout")
-
-        if results in [DETECT_INPROGRESS, DETECT_FAILED]:
-            results = None
-
-        self.widget("create-forward").set_sensitive(True)
-        self.mediaDetected = True
-        logging.debug("Finished OS detection.")
-        self.set_distro_selection(results)
-        if forward:
-            self.idle_add(self.forward, ())
-
-    def start_detection(self, forward):
-        if self.detectedDistro == DETECT_INPROGRESS:
-            return
-
-        media = self.get_config_detectable_media()
-        if not media:
-            return
-
-        self.detectedDistro = DETECT_INPROGRESS
-
-        logging.debug("Starting OS detection thread for media=%s", media)
-        self.widget("create-forward").set_sensitive(False)
-
-        detectThread = threading.Thread(target=self.actually_detect,
-                                        name="Actual media detection",
-                                        args=(media,))
-        detectThread.setDaemon(True)
-        detectThread.start()
-
-        self.check_detection(0, forward)
-
-    def actually_detect(self, media):
-        try:
-            installer = virtinst.DistroInstaller(self.conn.get_backend())
-            installer.location = media
-
-            self.detectedDistro = installer.detect_distro(self.guest)
-        except:
-            logging.exception("Error detecting distro.")
-            self.detectedDistro = DETECT_FAILED
-
-    def _browse_file_cb(self, ignore, widget):
-        self._browse_file(widget)
-
-    def _stable_defaults(self):
-        emu = None
-        if self.guest:
-            emu = self.guest.emulator
-        elif self.capsinfo:
-            emu = self.capsinfo.emulator
-
-        ret = self.conn.stable_defaults(emu)
-        return ret
-
-    def _browse_file(self, cbwidget, cb=None, is_media=False, is_dir=False):
-        if is_media:
-            reason = self.config.CONFIG_DIR_ISO_MEDIA
-        elif is_dir:
-            reason = self.config.CONFIG_DIR_FS
-        else:
-            reason = self.config.CONFIG_DIR_IMAGE
-
-        if cb:
-            callback = cb
-        else:
-            def callback(ignore, text):
-                widget = cbwidget
-                if type(cbwidget) is str:
-                    widget = self.widget(cbwidget)
-                widget.set_text(text)
-
-        if self.storage_browser and self.storage_browser.conn != self.conn:
-            self.storage_browser.cleanup()
-            self.storage_browser = None
-        if self.storage_browser is None:
-            self.storage_browser = vmmStorageBrowser(self.conn)
-
-        self.storage_browser.set_stable_defaults(self._stable_defaults())
-        self.storage_browser.set_vm_name(self.get_config_name())
-        self.storage_browser.set_finish_cb(callback)
-        self.storage_browser.set_browse_reason(reason)
-        self.storage_browser.show(self.topwin)
