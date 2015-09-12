@@ -521,14 +521,15 @@ class vmmConsolePages(vmmGObjectUI):
         if self.vm.is_runable():
             self._show_vm_status_unavailable()
 
-        elif page == self.CONSOLE_PAGE_UNAVAILABLE:
+        elif (page == self.CONSOLE_PAGE_UNAVAILABLE or
+              page == self.CONSOLE_PAGE_VIEWER):
             if self._viewer and self._viewer.console_is_open():
                 self._activate_viewer_page()
             else:
                 self._init_viewer()
-        else:
-            # Update other state
-            self._page_changed()
+
+        # Update other state
+        self._page_changed()
 
 
     ###################
@@ -592,8 +593,9 @@ class vmmConsolePages(vmmGObjectUI):
         self._send_key_button.set_sensitive(is_viewer)
         self.widget("details-menu-vm-screenshot").set_sensitive(is_viewer)
         self.widget("details-menu-usb-redirection").set_sensitive(
-            is_viewer and self._viewer.console_has_usb_redirection() and
-            self.vm.has_spicevmc_type_redirdev())
+            bool(is_viewer and self._viewer and
+            self._viewer.console_has_usb_redirection() and
+            self.vm.has_spicevmc_type_redirdev()))
 
         for c in self._keycombo_menu.get_children():
             c.set_sensitive(is_viewer and not paused)
