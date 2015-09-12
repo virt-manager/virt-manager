@@ -21,7 +21,9 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
         return
     def makeScriptVariableName(self):
         return
-    def describeSearchResult(self, node):
+    def describeSearchResult(self, node=None):
+        if not node:
+            return ""
         return DogtailApp.node_string(node)
 
     def satisfiedByNode(self, node):
