@@ -138,9 +138,8 @@ class NewVM(unittest.TestCase):
         self.app.find_fuzzy(newvm, "Network Install", "radio").click()
         self.app.find_fuzzy(newvm, "Forward", "button").click()
 
-        self.app.find_pattern(newvm, None, "text", "URL").text = ("https"
-         "://dl.fedoraproject.org/pub/fedora/linux/releases/22/"
-         "Workstation/x86_64/os/")
+        self.app.find_pattern(newvm, None, "text", "URL").text = (
+            "http://vault.centos.org/5.5/os/x86_64/")
 
         version = self.app.find_pattern(newvm, "install-os-version-label")
         time.sleep(1)
@@ -148,7 +147,7 @@ class NewVM(unittest.TestCase):
             if "Detecting" not in version.text:
                 break
             time.sleep(.5)
-        self.assertEquals(version.text, "Fedora 22")
+        self.assertEquals(version.text, "Red Hat Enterprise Linux 5.5")
 
         self.app.find_fuzzy(newvm, "Forward", "button").click()
         self.app.find_fuzzy(newvm, "Forward", "button").click()
@@ -164,7 +163,7 @@ class NewVM(unittest.TestCase):
             time.sleep(.5)
         time.sleep(.5)
 
-        self.app.find_fuzzy(self.app.root, "fedora22 on", "frame")
+        self.app.find_fuzzy(self.app.root, "rhel5.5 on", "frame")
         self.assertFalse(newvm.showing)
         self.app.quit()
 
