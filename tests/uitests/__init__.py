@@ -18,7 +18,7 @@ dogtail.config.config.actionDelay = .1
 # Turn off needlessly noisy debugging
 DOGTAIL_DEBUG = False
 dogtail.config.config.logDebugToStdOut = DOGTAIL_DEBUG
-dogtail.config.config.logDebugToFile = DOGTAIL_DEBUG
+dogtail.config.config.logDebugToFile = False
 
 # Dogtail screws with the default excepthook, disabling output if we turned
 # off logging, so fix it
