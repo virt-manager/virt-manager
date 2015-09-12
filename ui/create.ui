@@ -638,7 +638,7 @@ bar</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="spacing">4</property>
                                                 <child>
-                                                  <object class="GtkRadioButton" id="install-local-cdrom">
+                                                  <object class="GtkRadioButton" id="install-cdrom-radio">
                                                     <property name="label" translatable="yes">Use CD_ROM or DVD</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
@@ -647,7 +647,7 @@ bar</property>
                                                     <property name="xalign">0.5</property>
                                                     <property name="active">True</property>
                                                     <property name="draw_indicator">True</property>
-                                                    <signal name="toggled" handler="on_install_local_cdrom_toggled" swapped="no"/>
+                                                    <signal name="toggled" handler="on_install_cdrom_radio_toggled" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -656,7 +656,7 @@ bar</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkAlignment" id="install-local-cdrom-align">
+                                                  <object class="GtkAlignment" id="install-cdrom-align">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="left_padding">20</property>
@@ -678,7 +678,7 @@ bar</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkRadioButton" id="install-local-iso">
+                                              <object class="GtkRadioButton" id="install-iso-radio">
                                                 <property name="label" translatable="yes">Use _ISO image:</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
@@ -687,8 +687,7 @@ bar</property>
                                                 <property name="xalign">0.5</property>
                                                 <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
-                                                <property name="group">install-local-cdrom</property>
-                                                <signal name="toggled" handler="on_install_local_iso_toggled" swapped="no"/>
+                                                <property name="group">install-cdrom-radio</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -707,14 +706,15 @@ bar</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="left_padding">20</property>
                                                     <child>
-                                                      <object class="GtkComboBox" id="install-local-box">
+                                                      <object class="GtkComboBox" id="install-iso-combo">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="has_entry">True</property>
-                                                        <signal name="changed" handler="on_install_local_box_changed" swapped="no"/>
                                                         <child internal-child="entry">
-                                                          <object class="GtkEntry" id="combobox-entry">
+                                                          <object class="GtkEntry" id="install-iso-entry">
                                                             <property name="can_focus">True</property>
+                                                            <signal name="activate" handler="on_install_iso_entry_activate" swapped="no"/>
+                                                            <signal name="changed" handler="on_install_iso_entry_changed" swapped="no"/>
                                                           </object>
                                                         </child>
                                                       </object>
@@ -727,17 +727,17 @@ bar</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="install-local-browse">
+                                                  <object class="GtkButton" id="install-iso-browse">
                                                     <property name="label" translatable="yes">Bro_wse...</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
                                                     <property name="use_underline">True</property>
-                                                    <signal name="clicked" handler="on_install_local_browse_clicked" swapped="no"/>
+                                                    <signal name="clicked" handler="on_install_iso_browse_clicked" swapped="no"/>
                                                     <child internal-child="accessible">
-                                                      <object class="AtkObject" id="install-local-browse-atkobject">
-                                                        <property name="AtkObject::accessible-name" translatable="yes">install-local-browse</property>
+                                                      <object class="AtkObject" id="install-iso-browse-atkobject">
+                                                        <property name="AtkObject::accessible-name" translatable="yes">install-iso-browse</property>
                                                       </object>
                                                     </child>
                                                   </object>
@@ -894,7 +894,7 @@ bar</property>
                                                           </packing>
                                                         </child>
                                                         <child>
-                                                          <object class="GtkComboBox" id="install-ks-box">
+                                                          <object class="GtkComboBox" id="install-ks-combo">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="has_entry">True</property>
@@ -932,14 +932,15 @@ bar</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBox" id="install-url-box">
+                                          <object class="GtkComboBox" id="install-url-combo">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="has_entry">True</property>
-                                            <signal name="changed" handler="on_install_url_box_changed" swapped="no"/>
                                             <child internal-child="entry">
                                               <object class="GtkEntry" id="install-url-entry">
                                                 <property name="can_focus">True</property>
+                                                <signal name="activate" handler="on_install_url_entry_activate" swapped="no"/>
+                                                <signal name="changed" handler="on_install_url_entry_changed" swapped="no"/>
                                               </object>
                                             </child>
                                           </object>

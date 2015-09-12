@@ -73,7 +73,7 @@ class NewVM(unittest.TestCase):
 
         # Select a fake iso
         self.app.find_fuzzy(newvm, "Use ISO", "radio").click()
-        self.app.find_fuzzy(newvm, "install-local-browse", "button").click()
+        self.app.find_fuzzy(newvm, "install-iso-browse", "button").click()
         browser = self.app.find_fuzzy(self.app.root, "Choose Storage", "frame")
         self.app.find_fuzzy(browser, "default-pool", "table cell").click()
         self.app.find_fuzzy(browser, "iso-vol", "table cell").click()
