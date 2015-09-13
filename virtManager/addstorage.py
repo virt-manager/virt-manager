@@ -182,17 +182,7 @@ class vmmAddStorage(vmmGObjectUI):
         self.widget("config-storage-create").set_active(True)
         self.widget("config-storage-size").set_value(8)
         self.widget("config-storage-entry").set_text("")
-        self.widget("config-storage-nosparse").set_active(True)
         self.widget("config-storage-create-box").set_sensitive(True)
-
-        fmt = self.conn.get_default_storage_format()
-        can_alloc = fmt in ["raw"]
-        self.widget("config-storage-nosparse").set_active(can_alloc)
-        self.widget("config-storage-nosparse").set_sensitive(can_alloc)
-        self.widget("config-storage-nosparse").set_tooltip_text(
-            not can_alloc and
-            (_("Disk format '%s' does not support full allocation.") % fmt) or
-            "")
 
         storage_tooltip = None
 
@@ -252,9 +242,8 @@ class vmmAddStorage(vmmGObjectUI):
     def is_default_storage(self):
         return self.widget("config-storage-create").get_active()
 
-    def validate_storage(self, vmname,
-                         path=None, size=None, sparse=None,
-                         device="disk", fmt=None, collidelist=None):
+    def validate_storage(self, vmname, path=None,
+                         device="disk", collidelist=None, fmt=None):
         collidelist = collidelist or []
         use_storage = self.widget("config-storage-box").is_sensitive()
         is_default = self.is_default_storage()
@@ -275,11 +264,8 @@ class vmmAddStorage(vmmGObjectUI):
             readonly = True
 
         try:
-            if size is None and sparse is None:
-                size = uiutil.spin_get_helper(
-                    self.widget("config-storage-size"))
-                sparse = (
-                    not self.widget("config-storage-nosparse").get_active())
+            size = uiutil.spin_get_helper(
+                self.widget("config-storage-size"))
             if path is None:
                 if is_default:
                     path = self.get_default_path(vmname, collidelist)
@@ -298,7 +284,7 @@ class vmmAddStorage(vmmGObjectUI):
                 pool = disk.get_parent_pool()
                 vol_install = virtinst.VirtualDisk.build_vol_install(
                     disk.conn, os.path.basename(disk.path), pool,
-                    size, sparse, fmt=fmt or None)
+                    size, sparse=False, fmt=fmt or None)
                 disk.set_vol_install(vol_install)
 
             if not fmt:
