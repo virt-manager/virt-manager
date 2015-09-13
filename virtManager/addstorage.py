@@ -244,58 +244,43 @@ class vmmAddStorage(vmmGObjectUI):
 
     def validate_storage(self, vmname, path=None,
                          device="disk", collidelist=None, fmt=None):
-        collidelist = collidelist or []
-        use_storage = self.widget("storage-box").is_sensitive()
-        is_default = self.is_default_storage()
-        conn = self.conn.get_backend()
-
-        # Validate storage
-        if not use_storage:
-            return True
-
-        # Make sure default pool is running
-        if is_default:
+        if self.is_default_storage():
+            # Make sure default pool is running
             ret = self._check_default_pool_active()
             if not ret:
                 return False
 
-        readonly = False
-        if device == virtinst.VirtualDisk.DEVICE_CDROM:
-            readonly = True
-
-        size = uiutil.spin_get_helper(
-            self.widget("storage-size"))
         if path is None:
-            if is_default:
-                path = self.get_default_path(vmname, collidelist)
+            if self.is_default_storage():
+                path = self.get_default_path(vmname, collidelist or [])
             else:
                 path = self.widget("storage-entry").get_text().strip()
 
         if not path and device in ["disk", "lun"]:
             return self.err.val_err(_("A storage path must be specified."))
 
-        disk = virtinst.VirtualDisk(conn)
+        disk = virtinst.VirtualDisk(self.conn.get_backend())
         disk.path = path or None
-        disk.read_only = readonly
         disk.device = device
 
         if disk.wants_storage_creation():
             pool = disk.get_parent_pool()
+            size = uiutil.spin_get_helper(self.widget("storage-size"))
+            sparse = False
+
             vol_install = virtinst.VirtualDisk.build_vol_install(
                 disk.conn, os.path.basename(disk.path), pool,
-                size, sparse=False, fmt=fmt or None)
+                size, sparse, fmt=fmt)
             disk.set_vol_install(vol_install)
 
-        if not fmt:
-            fmt = self.conn.get_default_storage_format()
-            if (self.is_default_storage() and
-                disk.get_vol_install() and
-                fmt in disk.get_vol_install().list_formats()):
-                logging.debug("Setting disk format from prefs: %s", fmt)
-                disk.get_vol_install().format = fmt
+            if not fmt:
+                fmt = self.conn.get_default_storage_format()
+                if (self.is_default_storage() and
+                    fmt in disk.get_vol_install().list_formats()):
+                    logging.debug("Setting disk format from prefs: %s", fmt)
+                    disk.get_vol_install().format = fmt
 
         disk.validate()
-
         return disk
 
     def validate_disk_object(self, disk):

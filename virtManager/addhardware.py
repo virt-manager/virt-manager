@@ -1531,12 +1531,12 @@ class vmmAddHardware(vmmGObjectUI):
         collidelist = [d.path for d in self.vm.get_disk_devices()]
         try:
             disk = self.addstorage.validate_storage(self.vm.get_name(),
-                collidelist=collidelist, device=device, fmt=fmt)
+                collidelist=collidelist, device=device, fmt=fmt or None)
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 
-        if disk in [True, False]:
-            return disk
+        if disk is False:
+            return False
 
         try:
             used = []

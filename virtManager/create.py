@@ -1872,20 +1872,24 @@ class vmmCreate(vmmGObjectUI):
                 path = self._addstorage.get_default_path(self._guest.name)
                 logging.debug("Default storage path is: %s", path)
 
+        ret = None
+        storage_enabled = self.widget("enable-storage").get_active()
         try:
-            ret = self._addstorage.validate_storage(self._guest.name,
-                path=path)
+            if storage_enabled:
+                ret = self._addstorage.validate_storage(self._guest.name,
+                    path=path)
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 
-        no_storage = (ret is True)
+        if ret is False:
+            return False
 
         if self._get_config_install_page() == INSTALL_PAGE_ISO:
             # CD/ISO install and no disks implies LiveCD
-            self._guest.installer.livecd = no_storage
+            self._guest.installer.livecd = not storage_enabled
 
-        if ret in [True, False]:
-            return ret
+        if not storage_enabled:
+            return True
 
         if self._addstorage.validate_disk_object(ret) is False:
             return False
