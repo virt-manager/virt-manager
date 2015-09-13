@@ -978,10 +978,6 @@ class vmmDetails(vmmGObjectUI):
         disk_io = self.widget("disk-io")
         vmmAddHardware.build_disk_io_combo(self.vm, disk_io)
 
-        # Disk format combo
-        format_list = self.widget("disk-format")
-        vmmAddHardware.populate_disk_format_combo(self.vm, format_list, False)
-
         # Disk bus combo
         disk_bus = self.widget("disk-bus")
         vmmAddHardware.build_disk_bus_combo(self.vm, disk_bus)
@@ -2075,8 +2071,7 @@ class vmmDetails(vmmGObjectUI):
             kwargs["io"] = uiutil.get_list_selection(self.widget("disk-io"))
 
         if self.edited(EDIT_DISK_FORMAT):
-            kwargs["driver_type"] = uiutil.get_list_selection(
-                self.widget("disk-format"))
+            kwargs["driver_type"] = self.widget("disk-format").get_text()
 
         if self.edited(EDIT_DISK_SERIAL):
             kwargs["serial"] = self.get_text("disk-serial")
@@ -2571,10 +2566,6 @@ class vmmDetails(vmmGObjectUI):
         driver_type = disk.driver_type or ""
         serial = disk.serial
 
-        show_format = (not self.is_customize_dialog or
-                       virtinst.VirtualDisk.path_definitely_exists(
-                            disk.conn, disk.path))
-
         size = "-"
         if path:
             size = _("Unknown")
@@ -2615,8 +2606,7 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("disk-cache"), cache)
         uiutil.set_list_selection(self.widget("disk-io"), io)
 
-        self.widget("disk-format").set_sensitive(show_format)
-        self.widget("disk-format").get_child().set_text(driver_type)
+        self.widget("disk-format").set_text(driver_type)
         self.widget("disk-format-warn").hide()
 
         vmmAddHardware.populate_disk_bus_combo(self.vm, devtype,

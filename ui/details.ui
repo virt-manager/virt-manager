@@ -2523,7 +2523,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="invisible_char">●</property>
                                                     <signal name="changed" handler="on_cpu_vcpupin_changed" swapped="no"/>
                                                     <child internal-child="accessible">
-                                                      <object class="AtkObject" id="-vcpupin-atkobject">
+                                                      <object class="AtkObject" id="cpu-vcpupin-atkobject">
                                                         <property name="AtkObject::accessible-name" translatable="yes">Virtual CPU Affinity Select</property>
                                                       </object>
                                                     </child>
@@ -3780,16 +3780,10 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="orientation">vertical</property>
                                                         <property name="spacing">6</property>
                                                         <child>
-                                                          <object class="GtkComboBox" id="disk-format">
+                                                          <object class="GtkEntry" id="disk-format">
                                                             <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="has_entry">True</property>
-                                                            <signal name="changed" handler="on_disk_format_changed" swapped="no"/>
-                                                            <child internal-child="entry">
-                                                            <object class="GtkEntry" id="storage-format-combobox-entry">
                                                             <property name="can_focus">True</property>
-                                                            </object>
-                                                            </child>
+                                                            <signal name="changed" handler="on_disk_format_changed" swapped="no"/>
                                                           </object>
                                                           <packing>
                                                             <property name="expand">False</property>
@@ -3849,7 +3843,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="ypad">4</property>
                                                         <property name="label" translatable="yes">Storage forma_t:</property>
                                                         <property name="use_underline">True</property>
-                                                        <property name="mnemonic_widget">storage-format-combobox-entry</property>
+                                                        <property name="mnemonic_widget">disk-format</property>
                                                         <property name="xalign">1</property>
                                                         <property name="yalign">0</property>
                                                       </object>

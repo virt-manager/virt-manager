@@ -242,8 +242,8 @@ class vmmAddStorage(vmmGObjectUI):
     def is_default_storage(self):
         return self.widget("storage-create").get_active()
 
-    def validate_storage(self, vmname, path=None,
-                         device="disk", collidelist=None, fmt=None):
+    def validate_storage(self, vmname,
+            path=None, device="disk", collidelist=None):
         if self.is_default_storage():
             # Make sure default pool is running
             ret = self._check_default_pool_active()
@@ -270,15 +270,17 @@ class vmmAddStorage(vmmGObjectUI):
 
             vol_install = virtinst.VirtualDisk.build_vol_install(
                 disk.conn, os.path.basename(disk.path), pool,
-                size, sparse, fmt=fmt)
+                size, sparse)
             disk.set_vol_install(vol_install)
 
-            if not fmt:
-                fmt = self.conn.get_default_storage_format()
-                if (self.is_default_storage() and
-                    fmt in disk.get_vol_install().list_formats()):
-                    logging.debug("Setting disk format from prefs: %s", fmt)
-                    disk.get_vol_install().format = fmt
+            fmt = self.conn.get_default_storage_format()
+            if fmt in disk.get_vol_install().list_formats():
+                logging.debug("Using default prefs format=%s for path=%s",
+                    fmt, disk.path)
+                disk.get_vol_install().format = fmt
+            else:
+                logging.debug("path=%s can not use default prefs format=%s, "
+                    "not setting it", disk.path, fmt)
 
         disk.validate()
         return disk

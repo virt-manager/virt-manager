@@ -91,7 +91,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
         self.widget("storage-align").add(self.addstorage.top_box)
         self.addstorage.connect("browse-clicked", self._browse_storage_cb)
-        self.addstorage.connect("storage-toggled", self._toggle_storage_select)
 
         self.builder.connect_signals({
             "on_create_cancel_clicked" : self.close,
@@ -229,9 +228,6 @@ class vmmAddHardware(vmmGObjectUI):
         # Disk cache mode
         cache_list = self.widget("storage-cache")
         self.build_disk_cache_combo(self.vm, cache_list)
-
-        # Disk format mode
-        self._populate_disk_format_combo_wrapper(True)
 
         # Input device type
         input_list = self.widget("input-type")
@@ -408,7 +404,6 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _reset_state(self):
         # Storage init
-        self._populate_disk_format_combo_wrapper(True)
         self.widget("storage-devtype").set_active(0)
         self.widget("storage-devtype").emit("changed")
         self.addstorage.reset_state()
@@ -741,32 +736,6 @@ class vmmAddHardware(vmmGObjectUI):
                 model.append(row)
 
     @staticmethod
-    def populate_disk_format_combo(vm, combo, create):
-        model = Gtk.ListStore(str)
-        combo.set_model(model)
-        uiutil.init_combo_text_column(combo, 0)
-
-        formats = ["raw", "qcow2", "qed"]
-        no_create_formats = []
-        if not vm.stable_defaults():
-            formats.append("vmdk")
-            no_create_formats.append("vdi")
-
-        for m in formats:
-            model.append([m])
-        if not create:
-            for m in no_create_formats:
-                model.append([m])
-
-        if create:
-            fmt = vm.conn.get_default_storage_format()
-            combo.set_active(0)
-            for row in model:
-                if row[0] == fmt:
-                    combo.set_active_iter(row.iter)
-                    break
-
-    @staticmethod
     def populate_controller_model_combo(combo, controller_type):
         model = combo.get_model()
         model.clear()
@@ -910,12 +879,6 @@ class vmmAddHardware(vmmGObjectUI):
         if len(model) == 0:
             model.append([_("No Devices Available"), None])
         uiutil.set_list_selection_by_number(devlist, 0)
-
-    def _populate_disk_format_combo_wrapper(self, create):
-        format_list = self.widget("storage-format")
-        self.populate_disk_format_combo(self.vm, format_list, create)
-        if not create:
-            format_list.get_child().set_text("")
 
     def _populate_controller_type(self):
         widget = self.widget("controller-type")
@@ -1166,10 +1129,6 @@ class vmmAddHardware(vmmGObjectUI):
     #########################
     # Device page listeners #
     #########################
-
-    def _toggle_storage_select(self, ignore, src):
-        act = src.get_active()
-        self._populate_disk_format_combo_wrapper(not act)
 
     def _change_storage_devtype(self, ignore):
         devtype = uiutil.get_list_selection(
@@ -1520,7 +1479,6 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-devtype"))
         cache = uiutil.get_list_selection(
             self.widget("storage-cache"))
-        fmt = uiutil.get_list_selection(self.widget("storage-format"))
 
         controller_model = None
         if (bus == "scsi" and
@@ -1531,7 +1489,7 @@ class vmmAddHardware(vmmGObjectUI):
         collidelist = [d.path for d in self.vm.get_disk_devices()]
         try:
             disk = self.addstorage.validate_storage(self.vm.get_name(),
-                collidelist=collidelist, device=device, fmt=fmt or None)
+                collidelist=collidelist, device=device)
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 
