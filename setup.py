@@ -568,15 +568,16 @@ class CheckPylint(Command):
 
         output_format = sys.stdout.isatty() and "colorized" or "text"
 
-        cmd = "pylint "
-        cmd += "--output-format=%s " % output_format
-        cmd += " ".join(files)
-        os.system(cmd + " --rcfile tests/pylint.cfg")
-
         print "running pep8"
         cmd = "pep8 "
         cmd += " ".join(files)
         os.system(cmd + " --config tests/pep8.cfg")
+
+        print "running pylint"
+        cmd = "pylint "
+        cmd += "--output-format=%s " % output_format
+        cmd += " ".join(files)
+        os.system(cmd + " --rcfile tests/pylint.cfg")
 
 
 setup(
