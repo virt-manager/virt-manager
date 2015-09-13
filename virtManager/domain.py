@@ -714,8 +714,6 @@ class vmmDomain(vmmLibvirtObject):
         path=_SENTINEL, readonly=_SENTINEL, serial=_SENTINEL,
         shareable=_SENTINEL, removable=_SENTINEL, cache=_SENTINEL,
         io=_SENTINEL, driver_type=_SENTINEL, bus=_SENTINEL, addrstr=_SENTINEL,
-        iotune_rbs=_SENTINEL, iotune_ris=_SENTINEL, iotune_tbs=_SENTINEL,
-        iotune_tis=_SENTINEL, iotune_wbs=_SENTINEL, iotune_wis=_SENTINEL,
         sgio=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
@@ -769,18 +767,6 @@ class vmmDomain(vmmLibvirtObject):
         if serial != _SENTINEL:
             editdev.serial = serial or None
 
-        if iotune_rbs != _SENTINEL:
-            editdev.iotune_rbs = iotune_rbs
-        if iotune_ris != _SENTINEL:
-            editdev.iotune_ris = iotune_ris
-        if iotune_tbs != _SENTINEL:
-            editdev.iotune_tbs = iotune_tbs
-        if iotune_tis != _SENTINEL:
-            editdev.iotune_tis = iotune_tis
-        if iotune_wbs != _SENTINEL:
-            editdev.iotune_wbs = iotune_wbs
-        if iotune_wis != _SENTINEL:
-            editdev.iotune_wis = iotune_wis
         if sgio != _SENTINEL:
             editdev.sgio = sgio or None
 

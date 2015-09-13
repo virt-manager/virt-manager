@@ -74,7 +74,6 @@ EDIT_DISK_IO,
 EDIT_DISK_BUS,
 EDIT_DISK_SERIAL,
 EDIT_DISK_FORMAT,
-EDIT_DISK_IOTUNE,
 EDIT_DISK_SGIO,
 
 EDIT_SOUND_MODEL,
@@ -106,7 +105,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 47)
+) = range(1, 46)
 
 
 # Columns in hw list model
@@ -500,7 +499,6 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
             "on_disk_format_changed": self.disk_format_changed,
             "on_disk_serial_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SERIAL),
-            "on_disk_iotune_changed": self.iotune_changed,
             "on_disk_sgio_entry_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SGIO),
 
             "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
@@ -987,10 +985,6 @@ class vmmDetails(vmmGObjectUI):
         # Disk bus combo
         disk_bus = self.widget("disk-bus")
         vmmAddHardware.build_disk_bus_combo(self.vm, disk_bus)
-
-        # Disk iotune expander
-        if not (self.conn.is_qemu() or self.conn.is_test_conn()):
-            self.widget("iotune-expander").set_visible(False)
 
         # Network model
         net_model = self.widget("network-model")
@@ -1792,53 +1786,6 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-format-warn").show()
         self.enable_apply(EDIT_DISK_FORMAT)
 
-    # IO Tuning
-    def iotune_changed(self, ignore):
-        iotune_rbs = int(self.get_text("disk-iotune-rbs") or 0)
-        iotune_ris = int(self.get_text("disk-iotune-ris") or 0)
-        iotune_tbs = int(self.get_text("disk-iotune-tbs") or 0)
-        iotune_tis = int(self.get_text("disk-iotune-tis") or 0)
-        iotune_wbs = int(self.get_text("disk-iotune-wbs") or 0)
-        iotune_wis = int(self.get_text("disk-iotune-wis") or 0)
-
-        # libvirt doesn't support having read/write settings along side total
-        # settings, so disable the widgets accordingly.
-
-        have_rw_bytes = (iotune_rbs > 0 or
-                         iotune_wbs > 0)
-        have_t_bytes = (not have_rw_bytes and iotune_tbs > 0)
-
-        self.widget("disk-iotune-rbs").set_sensitive(have_rw_bytes or not
-                                                     have_t_bytes)
-        self.widget("disk-iotune-wbs").set_sensitive(have_rw_bytes or not
-                                                     have_t_bytes)
-        self.widget("disk-iotune-tbs").set_sensitive(have_t_bytes or not
-                                                     have_rw_bytes)
-
-        if have_rw_bytes:
-            self.widget("disk-iotune-tbs").set_value(0)
-        elif have_t_bytes:
-            self.widget("disk-iotune-rbs").set_value(0)
-            self.widget("disk-iotune-wbs").set_value(0)
-
-        have_rw_iops = (iotune_ris > 0 or iotune_wis > 0)
-        have_t_iops = (not have_rw_iops and iotune_tis > 0)
-
-        self.widget("disk-iotune-ris").set_sensitive(have_rw_iops or not
-                                                     have_t_iops)
-        self.widget("disk-iotune-wis").set_sensitive(have_rw_iops or not
-                                                     have_t_iops)
-        self.widget("disk-iotune-tis").set_sensitive(have_t_iops or not
-                                                     have_rw_iops)
-
-        if have_rw_iops:
-            self.widget("disk-iotune-tis").set_value(0)
-        elif have_t_iops:
-            self.widget("disk-iotune-ris").set_value(0)
-            self.widget("disk-iotune-wis").set_value(0)
-
-        self.enable_apply(EDIT_DISK_IOTUNE)
-
 
     # CDROM Eject/Connect
     def _change_storage_media(self, devobj, newpath):
@@ -2140,20 +2087,6 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_DISK_SGIO):
             sgio = uiutil.get_list_selection(self.widget("disk-sgio"))
             kwargs["sgio"] = sgio
-
-        if self.edited(EDIT_DISK_IOTUNE):
-            kwargs["iotune_rbs"] = int(
-                self.widget("disk-iotune-rbs").get_value() * 1024)
-            kwargs["iotune_ris"] = int(
-                self.widget("disk-iotune-ris").get_value())
-            kwargs["iotune_tbs"] = int(
-                self.widget("disk-iotune-tbs").get_value() * 1024)
-            kwargs["iotune_tis"] = int(
-                self.widget("disk-iotune-tis").get_value())
-            kwargs["iotune_wbs"] = int(
-                self.widget("disk-iotune-wbs").get_value() * 1024)
-            kwargs["iotune_wis"] = int(
-                self.widget("disk-iotune-wis").get_value())
 
         if self.edited(EDIT_DISK_BUS):
             bus = uiutil.get_list_selection(self.widget("disk-bus"))
@@ -2641,13 +2574,6 @@ class vmmDetails(vmmGObjectUI):
         driver_type = disk.driver_type or ""
         serial = disk.serial
 
-        iotune_rbs = (disk.iotune_rbs or 0) / 1024
-        iotune_ris = (disk.iotune_ris or 0)
-        iotune_tbs = (disk.iotune_tbs or 0) / 1024
-        iotune_tis = (disk.iotune_tis or 0)
-        iotune_wbs = (disk.iotune_wbs or 0) / 1024
-        iotune_wis = (disk.iotune_wis or 0)
-
         show_format = (not self.is_customize_dialog or
                        virtinst.VirtualDisk.path_definitely_exists(
                             disk.conn, disk.path))
@@ -2700,13 +2626,6 @@ class vmmDetails(vmmGObjectUI):
             self.widget("disk-bus").get_model())
         uiutil.set_list_selection(self.widget("disk-bus"), bus)
         self.widget("disk-serial").set_text(serial or "")
-
-        self.widget("disk-iotune-rbs").set_value(iotune_rbs)
-        self.widget("disk-iotune-ris").set_value(iotune_ris)
-        self.widget("disk-iotune-tbs").set_value(iotune_tbs)
-        self.widget("disk-iotune-tis").set_value(iotune_tis)
-        self.widget("disk-iotune-wbs").set_value(iotune_wbs)
-        self.widget("disk-iotune-wis").set_value(iotune_wis)
 
         button = self.widget("config-cdrom-connect")
         if is_cdrom or is_floppy:
