@@ -122,6 +122,7 @@ class vmmManager(vmmGObjectUI):
         w, h = self.config.get_manager_window_size()
         self.topwin.set_default_size(w or 550, h or 550)
         self.prev_position = None
+        self._window_size = None
 
         self.vmmenu = vmmenu.VMActionMenu(self, self.current_vm)
         self.connmenu = Gtk.Menu()
@@ -237,6 +238,10 @@ class vmmManager(vmmGObjectUI):
         self.connmenu.destroy()
         self.connmenu = None
         self.connmenu_items = None
+
+        if self._window_size:
+            self.config.set_manager_window_size(*self._window_size)
+
 
     def is_visible(self):
         return bool(self.topwin.get_visible())
@@ -459,11 +464,9 @@ class vmmManager(vmmGObjectUI):
     ####################
 
     def window_resized(self, ignore, event):
-        # Sometimes dimensions change when window isn't visible
         if not self.is_visible():
             return
-
-        self.config.set_manager_window_size(event.width, event.height)
+        self._window_size = (event.width, event.height)
 
     def exit_app(self, src_ignore=None, src2_ignore=None):
         self.emit("action-exit-app")

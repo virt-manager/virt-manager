@@ -395,6 +395,7 @@ class vmmDetails(vmmGObjectUI):
         if h <= 0:
             h = 600
         self.topwin.set_default_size(w, h)
+        self._window_size = None
 
         self.oldhwkey = None
         self.addhwmenu = None
@@ -585,6 +586,9 @@ class vmmDetails(vmmGObjectUI):
         self.console = None
         self.snapshots.cleanup()
         self.snapshots = None
+
+        if self._window_size:
+            self.vm.set_details_window_size(*self._window_size)
 
         self.vm = None
         self.conn = None
@@ -1030,11 +1034,9 @@ class vmmDetails(vmmGObjectUI):
     ##########################
 
     def window_resized(self, ignore, event):
-        # Sometimes dimensions change when window isn't visible
         if not self.is_visible():
             return
-
-        self.vm.set_details_window_size(event.width, event.height)
+        self._window_size = (event.width, event.height)
 
     def popup_addhw_menu(self, widget, event):
         ignore = widget
