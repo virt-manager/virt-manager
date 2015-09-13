@@ -29,7 +29,7 @@
               <object class="GtkLabel" id="label123">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">C_reate a disk image on the computer's hard drive</property>
+                <property name="label" translatable="yes">C_reate a disk image for the virtual machine</property>
                 <property name="use_markup">True</property>
                 <property name="use_underline">True</property>
               </object>
@@ -154,7 +154,7 @@
               <object class="GtkLabel" id="label124">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Select _managed or other existing storage</property>
+                <property name="label" translatable="yes">_Select or create custom storage</property>
                 <property name="use_markup">True</property>
                 <property name="use_underline">True</property>
               </object>
@@ -174,12 +174,20 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkButton" id="storage-browse">
-                <property name="label" translatable="yes">Bro_wse...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_storage_browse_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">_Manage...</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">storage-browse</property>
+                  </object>
+                </child>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="storage-browse-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">storage-browse</property>
@@ -196,6 +204,7 @@
               <object class="GtkEntry" id="storage-entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="width_chars">25</property>
               </object>
               <packing>
                 <property name="expand">True</property>
