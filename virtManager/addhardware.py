@@ -1529,8 +1529,12 @@ class vmmAddHardware(vmmGObjectUI):
             controller_model = "virtio-scsi"
 
         collidelist = [d.path for d in self.vm.get_disk_devices()]
-        disk = self.addstorage.validate_storage(self.vm.get_name(),
-            collidelist=collidelist, device=device, fmt=fmt)
+        try:
+            disk = self.addstorage.validate_storage(self.vm.get_name(),
+                collidelist=collidelist, device=device, fmt=fmt)
+        except Exception, e:
+            return self.err.val_err(_("Storage parameter error."), e)
+
         if disk in [True, False]:
             return disk
 

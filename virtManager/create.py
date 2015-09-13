@@ -1872,7 +1872,12 @@ class vmmCreate(vmmGObjectUI):
                 path = self._addstorage.get_default_path(self._guest.name)
                 logging.debug("Default storage path is: %s", path)
 
-        ret = self._addstorage.validate_storage(self._guest.name, path=path)
+        try:
+            ret = self._addstorage.validate_storage(self._guest.name,
+                path=path)
+        except Exception, e:
+            return self.err.val_err(_("Storage parameter error."), e)
+
         no_storage = (ret is True)
 
         if self._get_config_install_page() == INSTALL_PAGE_ISO:
