@@ -187,7 +187,7 @@ class vmmCreateVolume(vmmGObjectUI):
                     break
 
         default_alloc = 0
-        default_cap = 8
+        default_cap = 20
 
         self.widget("backing-store").set_text("")
         alloc = default_alloc

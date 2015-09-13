@@ -180,7 +180,7 @@ class vmmAddStorage(vmmGObjectUI):
     def reset_state(self):
         self._update_host_space()
         self.widget("storage-create").set_active(True)
-        self.widget("storage-size").set_value(8)
+        self.widget("storage-size").set_value(20)
         self.widget("storage-entry").set_text("")
         self.widget("storage-create-box").set_sensitive(True)
 

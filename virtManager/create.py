@@ -1816,10 +1816,9 @@ class vmmCreate(vmmGObjectUI):
             n_cpus = res["n-cpus"]
         self.widget("cpus").set_value(n_cpus)
 
-        storage_size = 20
         if res and res.get("storage"):
             storage_size = int(res["storage"]) / (1024 ** 3)
-        self._addstorage.widget("storage-size").set_value(storage_size)
+            self._addstorage.widget("storage-size").set_value(storage_size)
 
         # Validation passed, store the install path (if there is one) in
         # gsettings
