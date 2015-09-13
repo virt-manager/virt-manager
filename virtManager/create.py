@@ -111,9 +111,6 @@ class vmmCreate(vmmGObjectUI):
         # 'Guest' class from the previous failed install
         self.failed_guest = None
 
-        # Whether there was an error at dialog startup
-        self._have_startup_error = False
-
         self._customize_window = None
         self._customize_window_signals = []
 
@@ -136,7 +133,6 @@ class vmmCreate(vmmGObjectUI):
             "on_create_finish_clicked" : self._finish_clicked,
             "on_create_pages_switch_page": self._page_changed,
 
-            "on_create_vm_name_activate": self._forward_clicked,
             "on_create_conn_changed": self._conn_changed,
             "on_method_changed": self._method_changed,
             "on_config_machine_changed": self._machine_changed,
@@ -242,7 +238,6 @@ class vmmCreate(vmmGObjectUI):
             self._set_conn_state()
 
     def _show_startup_error(self, error, hideinstall=True):
-        self._have_startup_error = True
         self.widget("startup-error-box").show()
         self.widget("create-forward").set_sensitive(False)
         if hideinstall:
@@ -350,7 +345,6 @@ class vmmCreate(vmmGObjectUI):
         populated in _set_conn_state
         """
         self.failed_guest = None
-        self._have_startup_error = False
         self.guest = None
         self.disk = None
         self.nic = None
@@ -1517,9 +1511,6 @@ class vmmCreate(vmmGObjectUI):
     def _forward_clicked(self, src_ignore=None):
         notebook = self.widget("create-pages")
         curpage = notebook.get_current_page()
-
-        if self._have_startup_error:
-            return
 
         if curpage == PAGE_INSTALL:
             # Make sure we have detected the OS before validating the page
