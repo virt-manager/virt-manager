@@ -97,32 +97,30 @@ class vmmCreate(vmmGObjectUI):
         self.engine = engine
 
         self.conn = None
-        self.capsinfo = None
+        self._capsinfo = None
 
-        self.guest = None
-        self.disk = None
-        self.nic = None
+        self._guest = None
+        self._disk = None
+        self._nic = None
+        self._failed_guest = None
 
         # Distro detection state variables
         self._detect_os_in_progress = False
         self._os_already_detected_for_media = False
         self._show_all_os_was_selected = False
 
-        # 'Guest' class from the previous failed install
-        self.failed_guest = None
-
         self._customize_window = None
         self._customize_window_signals = []
 
-        self.storage_browser = None
-        self.netlist = None
-        self.mediacombo = None
+        self._storage_browser = None
+        self._netlist = None
+        self._mediacombo = None
 
-        self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
-        self.widget("config-storage-align").add(self.addstorage.top_box)
+        self._addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
+        self.widget("config-storage-align").add(self._addstorage.top_box)
         def _browse_file_cb(ignore, widget):
             self._browse_file(widget)
-        self.addstorage.connect("browse-clicked", _browse_file_cb)
+        self._addstorage.connect("browse-clicked", _browse_file_cb)
 
         self.builder.connect_signals({
             "on_vmm_newcreate_delete_event" : self._close_requested,
@@ -189,35 +187,35 @@ class vmmCreate(vmmGObjectUI):
 
         if self._customize_window:
             self._customize_window.close()
-        if self.storage_browser:
-            self.storage_browser.close()
+        if self._storage_browser:
+            self._storage_browser.close()
 
     def _cleanup(self):
         self._remove_conn()
 
         self.conn = None
-        self.capsinfo = None
+        self._capsinfo = None
 
-        self.guest = None
-        self.disk = None
-        self.nic = None
+        self._guest = None
+        self._disk = None
+        self._nic = None
 
-        if self.storage_browser:
-            self.storage_browser.cleanup()
-            self.storage_browser = None
-        if self.netlist:
-            self.netlist.cleanup()
-            self.netlist = None
+        if self._storage_browser:
+            self._storage_browser.cleanup()
+            self._storage_browser = None
+        if self._netlist:
+            self._netlist.cleanup()
+            self._netlist = None
 
-        if self.netlist:
-            self.netlist.cleanup()
-            self.netlist = None
-        if self.mediacombo:
-            self.mediacombo.cleanup()
-            self.mediacombo = None
-        if self.addstorage:
-            self.addstorage.cleanup()
-            self.addstorage = None
+        if self._netlist:
+            self._netlist.cleanup()
+            self._netlist = None
+        if self._mediacombo:
+            self._mediacombo.cleanup()
+            self._mediacombo = None
+        if self._addstorage:
+            self._addstorage.cleanup()
+            self._addstorage = None
 
 
     ##########################
@@ -226,7 +224,7 @@ class vmmCreate(vmmGObjectUI):
 
     def _remove_conn(self):
         self.conn = None
-        self.capsinfo = None
+        self._capsinfo = None
 
     def _set_conn(self, newconn, force_validate=False):
         if self.conn == newconn and not force_validate:
@@ -344,10 +342,10 @@ class vmmCreate(vmmGObjectUI):
         Reset all UI state to default values. Conn specific state is
         populated in _set_conn_state
         """
-        self.failed_guest = None
-        self.guest = None
-        self.disk = None
-        self.nic = None
+        self._failed_guest = None
+        self._guest = None
+        self._disk = None
+        self._nic = None
         self._show_all_os_was_selected = False
 
         self.widget("create-pages").set_current_page(PAGE_NAME)
@@ -413,16 +411,16 @@ class vmmCreate(vmmGObjectUI):
 
         # Storage
         self.widget("enable-storage").set_active(True)
-        self.addstorage.reset_state()
-        self.addstorage.widget("config-storage-create").set_active(True)
-        self.addstorage.widget("config-storage-entry").set_text("")
-        self.addstorage.widget("config-storage-nosparse").set_active(True)
+        self._addstorage.reset_state()
+        self._addstorage.widget("config-storage-create").set_active(True)
+        self._addstorage.widget("config-storage-entry").set_text("")
+        self._addstorage.widget("config-storage-nosparse").set_active(True)
 
         fmt = self.conn.get_default_storage_format()
         can_alloc = fmt in ["raw"]
-        self.addstorage.widget("config-storage-nosparse").set_active(can_alloc)
-        self.addstorage.widget("config-storage-nosparse").set_sensitive(can_alloc)
-        self.addstorage.widget("config-storage-nosparse").set_tooltip_text(
+        self._addstorage.widget("config-storage-nosparse").set_active(can_alloc)
+        self._addstorage.widget("config-storage-nosparse").set_sensitive(can_alloc)
+        self._addstorage.widget("config-storage-nosparse").set_tooltip_text(
             not can_alloc and
             (_("Disk format '%s' does not support full allocation.") % fmt) or
             "")
@@ -444,16 +442,16 @@ class vmmCreate(vmmGObjectUI):
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
         can_storage = (is_local or is_storage_capable)
-        is_pv = (self.capsinfo.os_type == "xen")
+        is_pv = (self._capsinfo.os_type == "xen")
         is_container = self.conn.is_container()
         can_remote_url = self.conn.get_backend().support_remote_url_install()
 
-        installable_arch = (self.capsinfo.arch in
+        installable_arch = (self._capsinfo.arch in
             ["i686", "x86_64", "ppc64", "ppc64le", "ia64", "s390x"])
 
-        if self.capsinfo.arch == "aarch64":
+        if self._capsinfo.arch == "aarch64":
             try:
-                guest = self.conn.caps.build_virtinst_guest(self.capsinfo)
+                guest = self.conn.caps.build_virtinst_guest(self._capsinfo)
                 guest.set_uefi_default()
                 installable_arch = True
                 logging.debug("UEFI found for aarch64, setting it as default.")
@@ -500,7 +498,7 @@ class vmmCreate(vmmGObjectUI):
 
         if not installable_arch:
             msg = (_("Architecture '%s' is not installable") %
-                   self.capsinfo.arch)
+                   self._capsinfo.arch)
             tree_tt = msg
             local_tt = msg
             pxe_tt = msg
@@ -528,9 +526,9 @@ class vmmCreate(vmmGObjectUI):
         self.widget("virt-install-box").set_visible(not is_container)
         self.widget("container-install-box").set_visible(is_container)
 
-        show_dtb = ("arm" in self.capsinfo.arch or
-                    "microblaze" in self.capsinfo.arch or
-                    "ppc" in self.capsinfo.arch)
+        show_dtb = ("arm" in self._capsinfo.arch or
+                    "microblaze" in self._capsinfo.arch or
+                    "ppc" in self._capsinfo.arch)
         self.widget("config-kernel-box").set_visible(not installable_arch)
         uiutil.set_grid_row_visible(self.widget("config-dtb"), show_dtb)
 
@@ -549,7 +547,7 @@ class vmmCreate(vmmGObjectUI):
         self.conn.invalidate_caps()
         self._change_caps()
 
-        if not self.capsinfo.guest.has_install_options():
+        if not self._capsinfo.guest.has_install_options():
             error = _("No hypervisor options were found for this "
                       "connection.")
 
@@ -582,7 +580,7 @@ class vmmCreate(vmmGObjectUI):
                 self._show_startup_warning(error)
 
         elif self.conn.is_qemu():
-            if not self.capsinfo.guest.is_kvm_available():
+            if not self._capsinfo.guest.is_kvm_available():
                 error = _("KVM is not available. This may mean the KVM "
                  "package is not installed, or the KVM kernel modules "
                  "are not loaded. Your virtual machines may perform poorly.")
@@ -592,23 +590,23 @@ class vmmCreate(vmmGObjectUI):
         iso_option = self.widget("install-iso-radio")
         cdrom_option = self.widget("install-cdrom-radio")
 
-        if self.mediacombo:
+        if self._mediacombo:
             self.widget("install-cdrom-align").remove(
-                self.mediacombo.top_box)
-            self.mediacombo.cleanup()
-            self.mediacombo = None
+                self._mediacombo.top_box)
+            self._mediacombo.cleanup()
+            self._mediacombo = None
 
-        self.mediacombo = vmmMediaCombo(self.conn, self.builder, self.topwin,
+        self._mediacombo = vmmMediaCombo(self.conn, self.builder, self.topwin,
                                         vmmMediaCombo.MEDIA_CDROM)
 
-        self.mediacombo.combo.connect("changed", self._cdrom_changed)
-        self.mediacombo.reset_state()
+        self._mediacombo.combo.connect("changed", self._cdrom_changed)
+        self._mediacombo.reset_state()
         self.widget("install-cdrom-align").add(
-            self.mediacombo.top_box)
+            self._mediacombo.top_box)
 
         # Don't select physical CDROM if no valid media is present
-        cdrom_option.set_active(self.mediacombo.has_media())
-        iso_option.set_active(not self.mediacombo.has_media())
+        cdrom_option.set_active(self._mediacombo.has_media())
+        iso_option.set_active(not self._mediacombo.has_media())
 
         enable_phys = not self._stable_defaults()
         cdrom_option.set_sensitive(enable_phys)
@@ -644,21 +642,21 @@ class vmmCreate(vmmGObjectUI):
         self.widget("phys-cpu-label").set_markup(cpu_label)
 
         # Storage
-        self.addstorage.conn = self.conn
-        self.addstorage.reset_state()
+        self._addstorage.conn = self.conn
+        self._addstorage.reset_state()
 
         # Networking
         self.widget("config-advanced-expander").set_expanded(False)
 
-        if self.netlist:
-            self.widget("config-netdev-ui-align").remove(self.netlist.top_box)
-            self.netlist.cleanup()
-            self.netlist = None
+        if self._netlist:
+            self.widget("config-netdev-ui-align").remove(self._netlist.top_box)
+            self._netlist.cleanup()
+            self._netlist = None
 
-        self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
-        self.widget("config-netdev-ui-align").add(self.netlist.top_box)
-        self.netlist.connect("changed", self._netdev_changed)
-        self.netlist.reset_state()
+        self._netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
+        self.widget("config-netdev-ui-align").add(self._netlist.top_box)
+        self._netlist.connect("changed", self._netdev_changed)
+        self._netlist.reset_state()
 
 
     def _change_caps(self, gtype=None, arch=None):
@@ -676,16 +674,16 @@ class vmmCreate(vmmGObjectUI):
 
         capsinfo = self.conn.caps.guest_lookup(os_type=gtype, arch=arch)
 
-        if self.capsinfo:
-            if (self.capsinfo.guest == capsinfo.guest and
-                self.capsinfo.domain == capsinfo.domain):
+        if self._capsinfo:
+            if (self._capsinfo.guest == capsinfo.guest and
+                self._capsinfo.domain == capsinfo.domain):
                 return
 
-        self.capsinfo = capsinfo
+        self._capsinfo = capsinfo
         logging.debug("Guest type set to os_type=%s, arch=%s, dom_type=%s",
-                      self.capsinfo.os_type,
-                      self.capsinfo.arch,
-                      self.capsinfo.hypervisor_type)
+                      self._capsinfo.os_type,
+                      self._capsinfo.arch,
+                      self._capsinfo.hypervisor_type)
         self._set_caps_state()
 
 
@@ -720,8 +718,8 @@ class vmmCreate(vmmGObjectUI):
                 continue
 
             # Determine if this is the default given by guest_lookup
-            if (gtype == self.capsinfo.os_type and
-                self.capsinfo.hypervisor_type == domtype):
+            if (gtype == self._capsinfo.os_type and
+                self._capsinfo.hypervisor_type == domtype):
                 default = len(model)
 
             model.append([label, gtype])
@@ -739,7 +737,7 @@ class vmmCreate(vmmGObjectUI):
         default = 0
         archs = []
         for guest in self.conn.caps.guests:
-            if guest.os_type == self.capsinfo.os_type:
+            if guest.os_type == self._capsinfo.os_type:
                 archs.append(guest.arch)
 
         # Combine x86/i686 to avoid confusion
@@ -764,8 +762,8 @@ class vmmCreate(vmmGObjectUI):
             archs = prios + archs
 
         default = 0
-        if self.capsinfo.arch in archs:
-            default = archs.index(self.capsinfo.arch)
+        if self._capsinfo.arch in archs:
+            default = archs.index(self._capsinfo.arch)
 
         for arch in archs:
             model.append([arch, _pretty_arch(arch)])
@@ -779,14 +777,14 @@ class vmmCreate(vmmGObjectUI):
         model = lst.get_model()
         model.clear()
 
-        machines = self.capsinfo.machines[:]
-        if self.capsinfo.arch in ["i686", "x86_64"]:
+        machines = self._capsinfo.machines[:]
+        if self._capsinfo.arch in ["i686", "x86_64"]:
             machines = []
         machines.sort()
 
         defmachine = None
         prios = []
-        recommended_machine = self.capsinfo.get_recommended_machine()
+        recommended_machine = self._capsinfo.get_recommended_machine()
         if recommended_machine:
             defmachine = recommended_machine
             prios = [defmachine]
@@ -988,8 +986,8 @@ class vmmCreate(vmmGObjectUI):
 
     def _populate_summary(self):
         distro, version, ignore1, dlabel, vlabel = self._get_config_os_info()
-        mem = _pretty_memory(int(self.guest.memory))
-        cpu = str(int(self.guest.vcpus))
+        mem = _pretty_memory(int(self._guest.memory))
+        cpu = str(int(self._guest.vcpus))
 
         instmethod = self._get_config_install_page()
         install = ""
@@ -1007,7 +1005,7 @@ class vmmCreate(vmmGObjectUI):
             install = _("Operating system container")
 
         storagetmpl = "<span size='small' color='#484848'>%s</span>"
-        disks = self.guest.get_devices("disk")
+        disks = self._guest.get_devices("disk")
         if disks:
             disk = disks[0]
             storage = "%s" % _pretty_storage(disk.get_size())
@@ -1018,17 +1016,17 @@ class vmmCreate(vmmGObjectUI):
             # not sure if anyone cares.
             if not self._is_default_storage():
                 storage += " " + (storagetmpl % disk.path)
-        elif len(self.guest.get_devices("filesystem")):
-            fs = self.guest.get_devices("filesystem")[0]
+        elif len(self._guest.get_devices("filesystem")):
+            fs = self._guest.get_devices("filesystem")[0]
             storage = storagetmpl % fs.source
-        elif self.guest.os.is_container():
+        elif self._guest.os.is_container():
             storage = _("Host filesystem")
         else:
             storage = _("None")
 
         osstr = ""
         have_os = True
-        if self.guest.os.is_container():
+        if self._guest.os.is_container():
             osstr = _("Linux")
         elif not distro:
             osstr = _("Generic")
@@ -1118,7 +1116,7 @@ class vmmCreate(vmmGObjectUI):
 
     def _get_config_local_media(self, store_media=False):
         if self.widget("install-cdrom-radio").get_active():
-            return self.mediacombo.get_path()
+            return self._mediacombo.get_path()
         else:
             ret = self.widget("install-iso-entry").get_text()
             if ret and store_media:
@@ -1154,7 +1152,7 @@ class vmmCreate(vmmGObjectUI):
         return self.widget("install-import-entry").get_text()
 
     def _is_default_storage(self):
-        return (self.addstorage.is_default_storage() and
+        return (self._addstorage.is_default_storage() and
                 not self._should_skip_disk_page())
 
     def _is_os_detect_active(self):
@@ -1170,12 +1168,12 @@ class vmmCreate(vmmGObjectUI):
         When user tries to close the dialog, check for any disks that
         we should auto cleanup
         """
-        if (self.failed_guest and
-            self.failed_guest.get_created_disks()):
+        if (self._failed_guest and
+            self._failed_guest.get_created_disks()):
 
             def _cleanup_disks(asyncjob):
                 meter = asyncjob.get_meter()
-                self.failed_guest.cleanup_created_disks(meter)
+                self._failed_guest.cleanup_created_disks(meter)
 
             def _cleanup_disks_finished(error, details):
                 if error:
@@ -1219,7 +1217,7 @@ class vmmCreate(vmmGObjectUI):
 
     def _machine_changed(self, ignore):
         machine = self._get_config_machine()
-        show_dtb_virtio = (self.capsinfo.arch == "armv7l" and
+        show_dtb_virtio = (self._capsinfo.arch == "armv7l" and
                            machine in ["vexpress-a9", "vexpress-15"])
         uiutil.set_grid_row_visible(
             self.widget("config-dtb-warn-virtio"), show_dtb_virtio)
@@ -1237,7 +1235,7 @@ class vmmCreate(vmmGObjectUI):
         if not arch:
             return
 
-        self._change_caps(self.capsinfo.os_type, arch)
+        self._change_caps(self._capsinfo.os_type, arch)
 
 
     # Install page listeners
@@ -1325,7 +1323,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("install-iso-browse").set_sensitive(not usecdrom)
 
         if usecdrom:
-            self._cdrom_changed(self.mediacombo.combo)
+            self._cdrom_changed(self._mediacombo.combo)
         else:
             self._iso_changed(self.widget("install-iso-entry"))
 
@@ -1367,7 +1365,7 @@ class vmmCreate(vmmGObjectUI):
 
     # Summary page listeners
     def _netdev_changed(self, ignore):
-        row = self.netlist.get_network_row()
+        row = self._netlist.get_network_row()
         show_pxe_warn = True
         pxe_install = (self._get_config_install_page() == INSTALL_PAGE_PXE)
         expand = False
@@ -1401,10 +1399,10 @@ class vmmCreate(vmmGObjectUI):
 
     def _stable_defaults(self):
         emu = None
-        if self.guest:
-            emu = self.guest.emulator
-        elif self.capsinfo:
-            emu = self.capsinfo.emulator
+        if self._guest:
+            emu = self._guest.emulator
+        elif self._capsinfo:
+            emu = self._capsinfo.emulator
 
         ret = self.conn.stable_defaults(emu)
         return ret
@@ -1426,17 +1424,17 @@ class vmmCreate(vmmGObjectUI):
                     widget = self.widget(cbwidget)
                 widget.set_text(text)
 
-        if self.storage_browser and self.storage_browser.conn != self.conn:
-            self.storage_browser.cleanup()
-            self.storage_browser = None
-        if self.storage_browser is None:
-            self.storage_browser = vmmStorageBrowser(self.conn)
+        if self._storage_browser and self._storage_browser.conn != self.conn:
+            self._storage_browser.cleanup()
+            self._storage_browser = None
+        if self._storage_browser is None:
+            self._storage_browser = vmmStorageBrowser(self.conn)
 
-        self.storage_browser.set_stable_defaults(self._stable_defaults())
-        self.storage_browser.set_vm_name(self._get_config_name())
-        self.storage_browser.set_finish_cb(callback)
-        self.storage_browser.set_browse_reason(reason)
-        self.storage_browser.show(self.topwin)
+        self._storage_browser.set_stable_defaults(self._stable_defaults())
+        self._storage_browser.set_vm_name(self._get_config_name())
+        self._storage_browser.set_finish_cb(callback)
+        self._storage_browser.set_browse_reason(reason)
+        self._storage_browser.show(self.topwin)
 
 
     ######################
@@ -1567,7 +1565,7 @@ class vmmCreate(vmmGObjectUI):
     ############################
 
     def _build_guest(self, variant):
-        guest = self.conn.caps.build_virtinst_guest(self.capsinfo)
+        guest = self.conn.caps.build_virtinst_guest(self._capsinfo)
         guest.os.machine = self._get_config_machine()
 
         # Generate UUID (makes customize dialog happy)
@@ -1628,17 +1626,17 @@ class vmmCreate(vmmGObjectUI):
 
     def _validate_intro_page(self):
         # We just set this here because it's needed soon after for distro
-        # detection. But the 'real' self.guest is created in validate_install,
+        # detection. But the 'real' self._guest is created in validate_install,
         # and it just uses _build_guest, so don't ever add any other guest
         # altering here.
-        self.guest = self._build_guest(None)
-        if not self.guest:
+        self._guest = self._build_guest(None)
+        if not self._guest:
             return False
         return True
 
     def _generate_default_name(self, distro, variant):
         force_num = False
-        if self.guest.os.is_container():
+        if self._guest.os.is_container():
             basename = "container"
             force_num = True
         elif not distro:
@@ -1649,8 +1647,8 @@ class vmmCreate(vmmGObjectUI):
         else:
             basename = variant
 
-        if self.guest.os.arch != self.conn.caps.host.cpu.arch:
-            basename += "-%s" % _pretty_arch(self.guest.os.arch)
+        if self._guest.os.arch != self.conn.caps.host.cpu.arch:
+            basename += "-%s" % _pretty_arch(self._guest.os.arch)
             force_num = False
 
         return util.generate_name(basename,
@@ -1725,10 +1723,10 @@ class vmmCreate(vmmGObjectUI):
         try:
             # Overwrite the guest
             installer = instclass(self.conn.get_backend())
-            self.guest = self._build_guest(variant or distro)
-            if not self.guest:
+            self._guest = self._build_guest(variant or distro)
+            if not self._guest:
                 return False
-            self.guest.installer = installer
+            self._guest.installer = installer
         except Exception, e:
             return self.err.val_err(
                         _("Error setting installer parameters."), e)
@@ -1736,9 +1734,9 @@ class vmmCreate(vmmGObjectUI):
         # Validate media location
         try:
             if location is not None:
-                self.guest.installer.location = location
+                self._guest.installer.location = location
             if cdrom:
-                self.guest.installer.cdrom = True
+                self._guest.installer.cdrom = True
 
             extraargs = ""
             if extra:
@@ -1747,16 +1745,16 @@ class vmmCreate(vmmGObjectUI):
                 extraargs += " ks=%s" % ks
 
             if extraargs:
-                self.guest.installer.extraargs = extraargs
+                self._guest.installer.extraargs = extraargs
 
             if init:
-                self.guest.os.init = init
+                self._guest.os.init = init
 
             if fs:
-                fsdev = virtinst.VirtualFilesystem(self.guest.conn)
+                fsdev = virtinst.VirtualFilesystem(self._guest.conn)
                 fsdev.target = "/"
                 fsdev.source = fs
-                self.guest.add_device(fsdev)
+                self._guest.add_device(fsdev)
         except Exception, e:
             return self.err.val_err(
                                 _("Error setting install media location."), e)
@@ -1775,21 +1773,21 @@ class vmmCreate(vmmGObjectUI):
                 initrd = None
                 kargs = None
 
-            self.guest.os.kernel = kernel
-            self.guest.os.initrd = initrd
-            self.guest.os.dtb = dtb
-            self.guest.os.kernel_args = kargs
+            self._guest.os.kernel = kernel
+            self._guest.os.initrd = initrd
+            self._guest.os.dtb = dtb
+            self._guest.os.kernel_args = kargs
 
-            require_kernel = ("arm" in self.capsinfo.arch)
+            require_kernel = ("arm" in self._capsinfo.arch)
             if require_kernel and not kernel:
                 return self.err.val_err(
                     _("A kernel is required for %s guests.") %
-                    self.capsinfo.arch)
+                    self._capsinfo.arch)
 
         try:
             name = self._generate_default_name(distro, variant)
             self.widget("create-vm-name").set_text(name)
-            self.guest.name = name
+            self._guest.name = name
         except Exception, e:
             return self.err.val_err(_("Error setting default name."), e)
 
@@ -1799,21 +1797,21 @@ class vmmCreate(vmmGObjectUI):
             if not self._validate_storage_page():
                 return False
 
-        if self.guest.installer.scratchdir_required():
-            path = util.make_scratchdir(self.guest.conn, self.guest.type)
+        if self._guest.installer.scratchdir_required():
+            path = util.make_scratchdir(self._guest.conn, self._guest.type)
         elif instmethod == INSTALL_PAGE_ISO:
-            path = self.guest.installer.location
+            path = self._guest.installer.location
         else:
             path = None
 
         if path:
-            self.addstorage.check_path_search(
+            self._addstorage.check_path_search(
                 self, self.conn, path)
 
         res = None
         osobj = virtinst.OSDB.lookup_os(variant)
         if osobj:
-            res = osobj.get_recommended_resources(self.guest)
+            res = osobj.get_recommended_resources(self._guest)
             logging.debug("Recommended resources for variant=%s: %s",
                 variant, res)
 
@@ -1831,7 +1829,7 @@ class vmmCreate(vmmGObjectUI):
         storage_size = 20
         if res and res.get("storage"):
             storage_size = int(res["storage"]) / (1024 ** 3)
-        self.addstorage.widget("config-storage-size").set_value(storage_size)
+        self._addstorage.widget("config-storage-size").set_value(storage_size)
 
         # Validation passed, store the install path (if there is one) in
         # gsettings
@@ -1845,14 +1843,14 @@ class vmmCreate(vmmGObjectUI):
 
         # VCPUS
         try:
-            self.guest.vcpus = int(cpus)
+            self._guest.vcpus = int(cpus)
         except Exception, e:
             return self.err.val_err(_("Error setting CPUs."), e)
 
         # Memory
         try:
-            self.guest.memory = int(mem) * 1024
-            self.guest.maxmemory = int(mem) * 1024
+            self._guest.memory = int(mem) * 1024
+            self._guest.maxmemory = int(mem) * 1024
         except Exception, e:
             return self.err.val_err(_("Error setting guest memory."), e)
 
@@ -1861,11 +1859,11 @@ class vmmCreate(vmmGObjectUI):
 
     def _validate_storage_page(self):
         failed_disk = None
-        if self.disk and self.disk in self.guest.get_devices("disk"):
-            self.guest.remove_device(self.disk)
-            if self.failed_guest:
-                failed_disk = self.disk
-        self.disk = None
+        if self._disk and self._disk in self._guest.get_devices("disk"):
+            self._guest.remove_device(self._disk)
+            if self._failed_guest:
+                failed_disk = self._disk
+        self._disk = None
 
         path = None
         path_already_created = False
@@ -1881,25 +1879,25 @@ class vmmCreate(vmmGObjectUI):
                 logging.debug("Reusing failed disk path=%s "
                     "already_created=%s", path, path_already_created)
             else:
-                path = self.addstorage.get_default_path(self.guest.name)
+                path = self._addstorage.get_default_path(self._guest.name)
                 logging.debug("Default storage path is: %s", path)
 
-        ret = self.addstorage.validate_storage(self.guest.name, path=path)
+        ret = self._addstorage.validate_storage(self._guest.name, path=path)
         no_storage = (ret is True)
 
         if self._get_config_install_page() == INSTALL_PAGE_ISO:
             # CD/ISO install and no disks implies LiveCD
-            self.guest.installer.livecd = no_storage
+            self._guest.installer.livecd = no_storage
 
         if ret in [True, False]:
             return ret
 
-        if self.addstorage.validate_disk_object(ret) is False:
+        if self._addstorage.validate_disk_object(ret) is False:
             return False
 
-        self.disk = ret
-        self.disk.storage_was_created = path_already_created
-        self.guest.add_device(self.disk)
+        self._disk = ret
+        self._disk.storage_was_created = path_already_created
+        self._guest.add_device(self._disk)
 
         return True
 
@@ -1907,9 +1905,9 @@ class vmmCreate(vmmGObjectUI):
     def _validate_final_page(self):
         # HV + Arch selection
         name = self._get_config_name()
-        if name != self.guest.name:
+        if name != self._guest.name:
             try:
-                self.guest.name = name
+                self._guest.name = name
             except Exception, e:
                 return self.err.val_err(_("Invalid guest name"), str(e))
             if self._is_default_storage():
@@ -1920,7 +1918,7 @@ class vmmCreate(vmmGObjectUI):
                 if not self._validate_storage_page():
                     return False
 
-        nettype = self.netlist.get_network_selection()[0]
+        nettype = self._netlist.get_network_selection()[0]
         if nettype is None:
             # No network device available
             instmethod = self._get_config_install_page()
@@ -1937,15 +1935,15 @@ class vmmCreate(vmmGObjectUI):
 
         macaddr = virtinst.VirtualNetworkInterface.generate_mac(
             self.conn.get_backend())
-        nic = self.netlist.validate_network(macaddr)
+        nic = self._netlist.validate_network(macaddr)
         if nic is False:
             return False
 
-        if self.nic and self.nic in self.guest.get_devices("interface"):
-            self.guest.remove_device(self.nic)
+        if self._nic in self._guest.get_devices("interface"):
+            self._guest.remove_device(self._nic)
         if nic:
-            self.nic = nic
-            self.guest.add_device(self.nic)
+            self._nic = nic
+            self._guest.add_device(self._nic)
 
         return True
 
@@ -2027,7 +2025,7 @@ class vmmCreate(vmmGObjectUI):
             installer = virtinst.DistroInstaller(self.conn.get_backend())
             installer.location = media
 
-            distro = installer.detect_distro(self.guest)
+            distro = installer.detect_distro(self._guest)
             thread_results.set_distro(distro)
         except:
             logging.exception("Error detecting distro.")
@@ -2089,10 +2087,10 @@ class vmmCreate(vmmGObjectUI):
             return False
 
         logging.debug("Starting create finish() sequence")
-        guest = self.guest
+        guest = self._guest
 
         # Start the install
-        self.failed_guest = None
+        self._failed_guest = None
         self.topwin.set_sensitive(False)
         self.topwin.get_window().set_cursor(
             Gdk.Cursor.new(Gdk.CursorType.WATCH))
@@ -2109,7 +2107,7 @@ class vmmCreate(vmmGObjectUI):
             self._start_install(guest)
 
     def _show_customize_dialog(self, guest):
-        virtinst_guest = vmmDomainVirtinst(self.conn, guest, self.guest.uuid)
+        virtinst_guest = vmmDomainVirtinst(self.conn, guest, self._guest.uuid)
 
         def cleanup_customize_window():
             if self._customize_window:
@@ -2150,13 +2148,13 @@ class vmmCreate(vmmGObjectUI):
             error = (_("Unable to complete install: '%s'") % error)
             self.err.show_err(error,
                               details=details)
-            self.failed_guest = self.guest
+            self._failed_guest = self._guest
             return
 
         self._close()
 
         # Launch details dialog for new VM
-        self.emit("action-show-domain", self.conn.get_uri(), self.guest.name)
+        self.emit("action-show-domain", self.conn.get_uri(), self._guest.name)
 
 
     def _start_install(self, guest):
