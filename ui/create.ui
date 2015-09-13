@@ -429,10 +429,10 @@
                                     <property name="row_spacing">6</property>
                                     <property name="column_spacing">6</property>
                                     <child>
-                                      <object class="GtkComboBox" id="config-arch">
+                                      <object class="GtkComboBox" id="arch">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <signal name="changed" handler="on_config_arch_changed" swapped="no"/>
+                                        <signal name="changed" handler="on_arch_changed" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -440,10 +440,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="config-hv">
+                                      <object class="GtkComboBox" id="hv">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <signal name="changed" handler="on_config_hv_changed" swapped="no"/>
+                                        <signal name="changed" handler="on_hv_changed" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -456,7 +456,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">_Virt Type:</property>
                                         <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">config-hv</property>
+                                        <property name="mnemonic_widget">hv</property>
                                         <property name="xalign">1</property>
                                       </object>
                                       <packing>
@@ -470,7 +470,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">_Architecture:</property>
                                         <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">config-arch</property>
+                                        <property name="mnemonic_widget">arch</property>
                                         <property name="xalign">1</property>
                                       </object>
                                       <packing>
@@ -484,7 +484,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">_Machine Type:</property>
                                         <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">config-machine</property>
+                                        <property name="mnemonic_widget">machine</property>
                                         <property name="xalign">1</property>
                                       </object>
                                       <packing>
@@ -493,10 +493,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="config-machine">
+                                      <object class="GtkComboBox" id="machine">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <signal name="changed" handler="on_config_machine_changed" swapped="no"/>
+                                        <signal name="changed" handler="on_machine_changed" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -1092,7 +1092,7 @@ User shouldn't see this.</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="config-kernel-box">
+                                  <object class="GtkBox" id="kernel-box">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="orientation">vertical</property>
@@ -1127,7 +1127,7 @@ User shouldn't see this.</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label" translatable="yes">_Kernel path:</property>
                                                 <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">config-kernel</property>
+                                                <property name="mnemonic_widget">kernel</property>
                                                 <property name="xalign">0</property>
                                               </object>
                                               <packing>
@@ -1141,7 +1141,7 @@ User shouldn't see this.</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label" translatable="yes">_Initrd path:</property>
                                                 <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">config-initrd</property>
+                                                <property name="mnemonic_widget">initrd</property>
                                                 <property name="xalign">0</property>
                                               </object>
                                               <packing>
@@ -1155,7 +1155,7 @@ User shouldn't see this.</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label" translatable="yes">_DTB path:</property>
                                                 <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">config-dtb</property>
+                                                <property name="mnemonic_widget">dtb</property>
                                                 <property name="xalign">0</property>
                                               </object>
                                               <packing>
@@ -1164,7 +1164,7 @@ User shouldn't see this.</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkEntry" id="config-kernel">
+                                              <object class="GtkEntry" id="kernel">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="hexpand">True</property>
@@ -1175,7 +1175,7 @@ User shouldn't see this.</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkEntry" id="config-initrd">
+                                              <object class="GtkEntry" id="initrd">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="hexpand">True</property>
@@ -1186,7 +1186,7 @@ User shouldn't see this.</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkEntry" id="config-dtb">
+                                              <object class="GtkEntry" id="dtb">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="hexpand">True</property>
@@ -1197,16 +1197,16 @@ User shouldn't see this.</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkButton" id="config-kernel-browse">
+                                              <object class="GtkButton" id="kernel-browse">
                                                 <property name="label" translatable="yes">Br_owse...</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">True</property>
                                                 <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="on_config_kernel_browse_clicked" swapped="no"/>
+                                                <signal name="clicked" handler="on_kernel_browse_clicked" swapped="no"/>
                                                 <child internal-child="accessible">
-                                                  <object class="AtkObject" id="config-kernel-browse-atkobject">
-                                                    <property name="AtkObject::accessible-name" translatable="yes">config-kernel-browse</property>
+                                                  <object class="AtkObject" id="kernel-browse-atkobject">
+                                                    <property name="AtkObject::accessible-name" translatable="yes">kernel-browse</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -1216,16 +1216,16 @@ User shouldn't see this.</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkButton" id="config-initrd-browse">
+                                              <object class="GtkButton" id="initrd-browse">
                                                 <property name="label" translatable="yes">Bro_wse...</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">True</property>
                                                 <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="on_config_initrd_browse_clicked" swapped="no"/>
+                                                <signal name="clicked" handler="on_initrd_browse_clicked" swapped="no"/>
                                                 <child internal-child="accessible">
-                                                  <object class="AtkObject" id="config-initrd-browse-atkobject">
-                                                    <property name="AtkObject::accessible-name" translatable="yes">config-initrd-browse</property>
+                                                  <object class="AtkObject" id="initrd-browse-atkobject">
+                                                    <property name="AtkObject::accessible-name" translatable="yes">initrd-browse</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -1235,16 +1235,16 @@ User shouldn't see this.</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkButton" id="config-dtb-browse">
+                                              <object class="GtkButton" id="dtb-browse">
                                                 <property name="label" translatable="yes">Brow_se...</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">True</property>
                                                 <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="on_config_dtb_browse_clicked" swapped="no"/>
+                                                <signal name="clicked" handler="on_dtb_browse_clicked" swapped="no"/>
                                                 <child internal-child="accessible">
-                                                  <object class="AtkObject" id="config-dtb-browse-atkobject">
-                                                    <property name="AtkObject::accessible-name" translatable="yes">config-dtb-browse</property>
+                                                  <object class="AtkObject" id="dtb-browse-atkobject">
+                                                    <property name="AtkObject::accessible-name" translatable="yes">dtb-browse</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -1254,7 +1254,7 @@ User shouldn't see this.</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkBox" id="config-dtb-warn-virtio">
+                                              <object class="GtkBox" id="dtb-warn-virtio">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="spacing">6</property>
@@ -1296,7 +1296,7 @@ User shouldn't see this.</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label" translatable="yes">Kerne_l args:</property>
                                                 <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">config-kernel-args</property>
+                                                <property name="mnemonic_widget">kernel-args</property>
                                                 <property name="xalign">0</property>
                                               </object>
                                               <packing>
@@ -1305,7 +1305,7 @@ User shouldn't see this.</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkEntry" id="config-kernel-args">
+                                              <object class="GtkEntry" id="kernel-args">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                               </object>
@@ -1839,7 +1839,7 @@ is not yet supported.&lt;/small&gt;</property>
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes">C_PUs:</property>
                                             <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">config-cpus</property>
+                                            <property name="mnemonic_widget">cpus</property>
                                             <property name="xalign">1</property>
                                           </object>
                                           <packing>
@@ -1855,7 +1855,7 @@ is not yet supported.&lt;/small&gt;</property>
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes">_Memory (RAM):</property>
                                             <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">config-mem</property>
+                                            <property name="mnemonic_widget">mem</property>
                                             <property name="xalign">1</property>
                                           </object>
                                           <packing>
@@ -1864,7 +1864,7 @@ is not yet supported.&lt;/small&gt;</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkSpinButton" id="config-mem">
+                                          <object class="GtkSpinButton" id="mem">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="xalign">1</property>
@@ -1879,7 +1879,7 @@ is not yet supported.&lt;/small&gt;</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkSpinButton" id="config-cpus">
+                                          <object class="GtkSpinButton" id="cpus">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="xalign">1</property>
@@ -2027,7 +2027,7 @@ is not yet supported.&lt;/small&gt;</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="config-storage-area">
+                      <object class="GtkVBox" id="storage-area">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">6</property>
@@ -2050,7 +2050,7 @@ is not yet supported.&lt;/small&gt;</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="config-storage-align">
+                          <object class="GtkAlignment" id="storage-align">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="left_padding">15</property>
@@ -2370,7 +2370,7 @@ is not yet supported.&lt;/small&gt;</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkExpander" id="config-advanced-expander">
+                          <object class="GtkExpander" id="advanced-expander">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="spacing">6</property>
@@ -2390,7 +2390,7 @@ is not yet supported.&lt;/small&gt;</property>
                                         <property name="can_focus">False</property>
                                         <property name="row_spacing">6</property>
                                         <child>
-                                          <object class="GtkAlignment" id="config-netdev-ui-align">
+                                          <object class="GtkAlignment" id="netdev-ui-align">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <child>
@@ -2403,7 +2403,7 @@ is not yet supported.&lt;/small&gt;</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkBox" id="config-netdev-warn-box">
+                                          <object class="GtkBox" id="netdev-warn-box">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">6</property>
@@ -2420,7 +2420,7 @@ is not yet supported.&lt;/small&gt;</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel" id="config-netdev-warn-label">
+                                              <object class="GtkLabel" id="netdev-warn-label">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label">&lt;small&gt;pxe warning&lt;/small&gt;</property>
@@ -2455,7 +2455,7 @@ is not yet supported.&lt;/small&gt;</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">N_etwork selection</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">config-advanced-expander</property>
+                                <property name="mnemonic_widget">advanced-expander</property>
                               </object>
                             </child>
                           </object>

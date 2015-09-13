@@ -41,11 +41,11 @@ class vmmAddStorage(vmmGObjectUI):
         self.conn = conn
 
         self.builder.connect_signals({
-            "on_config_storage_browse_clicked": self._browse_storage,
-            "on_config_storage_select_toggled": self._toggle_storage_select,
+            "on_storage_browse_clicked": self._browse_storage,
+            "on_storage_select_toggled": self._toggle_storage_select,
         })
 
-        self.top_box = self.widget("config-storage-box")
+        self.top_box = self.widget("storage-box")
 
     def _cleanup(self):
         self.conn = None
@@ -179,17 +179,17 @@ class vmmAddStorage(vmmGObjectUI):
 
     def reset_state(self):
         self._update_host_space()
-        self.widget("config-storage-create").set_active(True)
-        self.widget("config-storage-size").set_value(8)
-        self.widget("config-storage-entry").set_text("")
-        self.widget("config-storage-create-box").set_sensitive(True)
+        self.widget("storage-create").set_active(True)
+        self.widget("storage-size").set_value(8)
+        self.widget("storage-entry").set_text("")
+        self.widget("storage-create-box").set_sensitive(True)
 
         storage_tooltip = None
 
         can_storage = (not self.conn.is_remote() or
                        self.conn.is_storage_capable())
-        use_storage = self.widget("config-storage-select")
-        storage_area = self.widget("config-storage-box")
+        use_storage = self.widget("storage-select")
+        storage_area = self.widget("storage-box")
 
         storage_area.set_sensitive(can_storage)
         if not can_storage:
@@ -240,12 +240,12 @@ class vmmAddStorage(vmmGObjectUI):
         return path
 
     def is_default_storage(self):
-        return self.widget("config-storage-create").get_active()
+        return self.widget("storage-create").get_active()
 
     def validate_storage(self, vmname, path=None,
                          device="disk", collidelist=None, fmt=None):
         collidelist = collidelist or []
-        use_storage = self.widget("config-storage-box").is_sensitive()
+        use_storage = self.widget("storage-box").is_sensitive()
         is_default = self.is_default_storage()
         conn = self.conn.get_backend()
 
@@ -264,12 +264,12 @@ class vmmAddStorage(vmmGObjectUI):
             readonly = True
 
         size = uiutil.spin_get_helper(
-            self.widget("config-storage-size"))
+            self.widget("storage-size"))
         if path is None:
             if is_default:
                 path = self.get_default_path(vmname, collidelist)
             else:
-                path = self.widget("config-storage-entry").get_text().strip()
+                path = self.widget("storage-entry").get_text().strip()
 
         if not path and device in ["disk", "lun"]:
             return self.err.val_err(_("A storage path must be specified."))
@@ -324,9 +324,9 @@ class vmmAddStorage(vmmGObjectUI):
     #############
 
     def _browse_storage(self, ignore):
-        self.emit("browse-clicked", self.widget("config-storage-entry"))
+        self.emit("browse-clicked", self.widget("storage-entry"))
 
     def _toggle_storage_select(self, src):
         act = src.get_active()
-        self.widget("config-storage-browse-box").set_sensitive(act)
+        self.widget("storage-browse-box").set_sensitive(act)
         self.emit("storage-toggled", src)

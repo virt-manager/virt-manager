@@ -89,7 +89,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("network-vport-align").add(self._netlist.top_vport)
 
         self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
-        self.widget("config-storage-align").add(self.addstorage.top_box)
+        self.widget("storage-align").add(self.addstorage.top_box)
         self.addstorage.connect("browse-clicked", self._browse_storage_cb)
         self.addstorage.connect("storage-toggled", self._toggle_storage_select)
 
@@ -99,7 +99,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_create_finish_clicked" : self._finish,
             "on_hw_list_changed": self._hw_selected,
 
-            "on_config_storage_devtype_changed": self._change_storage_devtype,
+            "on_storage_devtype_changed": self._change_storage_devtype,
 
             "on_mac_address_clicked" : self._change_macaddr_use,
 
@@ -200,10 +200,10 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Disk bus type
         self.build_disk_bus_combo(self.vm,
-            self.widget("config-storage-bustype"))
+            self.widget("storage-bustype"))
 
         # Disk device type
-        target_list = self.widget("config-storage-devtype")
+        target_list = self.widget("storage-devtype")
         # [device, icon, label]
         target_model = Gtk.ListStore(str, str, str)
         target_list.set_model(target_model)
@@ -227,7 +227,7 @@ class vmmAddHardware(vmmGObjectUI):
         target_list.set_active(0)
 
         # Disk cache mode
-        cache_list = self.widget("config-storage-cache")
+        cache_list = self.widget("storage-cache")
         self.build_disk_cache_combo(self.vm, cache_list)
 
         # Disk format mode
@@ -409,8 +409,8 @@ class vmmAddHardware(vmmGObjectUI):
     def _reset_state(self):
         # Storage init
         self._populate_disk_format_combo_wrapper(True)
-        self.widget("config-storage-devtype").set_active(0)
-        self.widget("config-storage-devtype").emit("changed")
+        self.widget("storage-devtype").set_active(0)
+        self.widget("storage-devtype").emit("changed")
         self.addstorage.reset_state()
 
         # Network init
@@ -863,7 +863,7 @@ class vmmAddHardware(vmmGObjectUI):
     #########################
 
     def _refresh_disk_bus(self, devtype):
-        widget = self.widget("config-storage-bustype")
+        widget = self.widget("storage-bustype")
         model = widget.get_model()
         self.populate_disk_bus_combo(self.vm, devtype, model)
 
@@ -912,7 +912,7 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.set_list_selection_by_number(devlist, 0)
 
     def _populate_disk_format_combo_wrapper(self, create):
-        format_list = self.widget("config-storage-format")
+        format_list = self.widget("storage-format")
         self.populate_disk_format_combo(self.vm, format_list, create)
         if not create:
             format_list.get_child().set_text("")
@@ -1173,14 +1173,14 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _change_storage_devtype(self, ignore):
         devtype = uiutil.get_list_selection(
-            self.widget("config-storage-devtype"))
+            self.widget("storage-devtype"))
         self._refresh_disk_bus(devtype)
 
         allow_create = devtype not in ["cdrom", "floppy"]
-        self.addstorage.widget("config-storage-create-box").set_sensitive(
+        self.addstorage.widget("storage-create-box").set_sensitive(
             allow_create)
         if not allow_create:
-            self.addstorage.widget("config-storage-select").set_active(True)
+            self.addstorage.widget("storage-select").set_active(True)
 
     def _change_macaddr_use(self, ignore=None):
         if self.widget("mac-address").get_active():
@@ -1515,12 +1515,12 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_storage(self):
         bus = uiutil.get_list_selection(
-            self.widget("config-storage-bustype"))
+            self.widget("storage-bustype"))
         device = uiutil.get_list_selection(
-            self.widget("config-storage-devtype"))
+            self.widget("storage-devtype"))
         cache = uiutil.get_list_selection(
-            self.widget("config-storage-cache"))
-        fmt = uiutil.get_list_selection(self.widget("config-storage-format"))
+            self.widget("storage-cache"))
+        fmt = uiutil.get_list_selection(self.widget("storage-format"))
 
         controller_model = None
         if (bus == "scsi" and

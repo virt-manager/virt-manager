@@ -117,7 +117,7 @@ class vmmCreate(vmmGObjectUI):
         self._mediacombo = None
 
         self._addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
-        self.widget("config-storage-align").add(self._addstorage.top_box)
+        self.widget("storage-align").add(self._addstorage.top_box)
         def _browse_file_cb(ignore, widget):
             self._browse_file(widget)
         self._addstorage.connect("browse-clicked", _browse_file_cb)
@@ -133,9 +133,9 @@ class vmmCreate(vmmGObjectUI):
 
             "on_create_conn_changed": self._conn_changed,
             "on_method_changed": self._method_changed,
-            "on_config_machine_changed": self._machine_changed,
-            "on_config_hv_changed": self._hv_changed,
-            "on_config_arch_changed": self._arch_changed,
+            "on_machine_changed": self._machine_changed,
+            "on_hv_changed": self._hv_changed,
+            "on_arch_changed": self._arch_changed,
 
             "on_install_cdrom_radio_toggled": self._local_media_toggled,
             "on_install_iso_entry_changed": self._iso_changed,
@@ -153,9 +153,9 @@ class vmmCreate(vmmGObjectUI):
             "on_install_detect_os_box_show": self._os_detect_visibility_changed,
             "on_install_detect_os_box_hide": self._os_detect_visibility_changed,
 
-            "on_config_kernel_browse_clicked": self._browse_kernel,
-            "on_config_initrd_browse_clicked": self._browse_initrd,
-            "on_config_dtb_browse_clicked": self._browse_dtb,
+            "on_kernel_browse_clicked": self._browse_kernel,
+            "on_initrd_browse_clicked": self._browse_initrd,
+            "on_dtb_browse_clicked": self._browse_dtb,
 
             "on_enable_storage_toggled": self._toggle_enable_storage,
         })
@@ -318,19 +318,19 @@ class vmmCreate(vmmGObjectUI):
 
         # Archtecture
         # [value, label]
-        archList = self.widget("config-arch")
+        archList = self.widget("arch")
         archModel = Gtk.ListStore(str, str)
         archList.set_model(archModel)
         uiutil.init_combo_text_column(archList, 1)
         archList.set_row_separator_func(
             lambda m, i, ignore: m[i][0] is None, None)
 
-        hyperList = self.widget("config-hv")
+        hyperList = self.widget("hv")
         hyperModel = Gtk.ListStore(str, str)
         hyperList.set_model(hyperModel)
         uiutil.init_combo_text_column(hyperList, 0)
 
-        lst = self.widget("config-machine")
+        lst = self.widget("machine")
         model = Gtk.ListStore(str)
         lst.set_model(model)
         uiutil.init_combo_text_column(lst, 0)
@@ -399,9 +399,9 @@ class vmmCreate(vmmGObjectUI):
 
         # Install import
         self.widget("install-import-entry").set_text("")
-        self.widget("config-kernel").set_text("")
-        self.widget("config-initrd").set_text("")
-        self.widget("config-dtb").set_text("")
+        self.widget("kernel").set_text("")
+        self.widget("initrd").set_text("")
+        self.widget("dtb").set_text("")
 
         # Install container app
         self.widget("install-app-entry").set_text("/bin/sh")
@@ -412,8 +412,8 @@ class vmmCreate(vmmGObjectUI):
         # Storage
         self.widget("enable-storage").set_active(True)
         self._addstorage.reset_state()
-        self._addstorage.widget("config-storage-create").set_active(True)
-        self._addstorage.widget("config-storage-entry").set_text("")
+        self._addstorage.widget("storage-create").set_active(True)
+        self._addstorage.widget("storage-entry").set_text("")
 
         # Final page
         self.widget("summary-customize").set_active(False)
@@ -519,8 +519,8 @@ class vmmCreate(vmmGObjectUI):
         show_dtb = ("arm" in self._capsinfo.arch or
                     "microblaze" in self._capsinfo.arch or
                     "ppc" in self._capsinfo.arch)
-        self.widget("config-kernel-box").set_visible(not installable_arch)
-        uiutil.set_grid_row_visible(self.widget("config-dtb"), show_dtb)
+        self.widget("kernel-box").set_visible(not installable_arch)
+        uiutil.set_grid_row_visible(self.widget("dtb"), show_dtb)
 
     def _set_conn_state(self):
         """
@@ -553,9 +553,9 @@ class vmmCreate(vmmGObjectUI):
         self._populate_hv()
         self._populate_arch()
 
-        show_arch = (self.widget("config-hv").get_visible() or
-                     self.widget("config-arch").get_visible() or
-                     self.widget("config-machine").get_visible())
+        show_arch = (self.widget("hv").get_visible() or
+                     self.widget("arch").get_visible() or
+                     self.widget("machine").get_visible())
         uiutil.set_grid_row_visible(self.widget("arch-expander"), show_arch)
 
         if self.conn.is_xen():
@@ -616,7 +616,7 @@ class vmmCreate(vmmGObjectUI):
                      {'maxmem': _pretty_memory(memory)})
         mem_label = ("<span size='small' color='#484848'>%s</span>" %
                      mem_label)
-        self.widget("config-mem").set_range(50, memory / 1024)
+        self.widget("mem").set_range(50, memory / 1024)
         self.widget("phys-mem-label").set_markup(mem_label)
 
         # CPU
@@ -628,7 +628,7 @@ class vmmCreate(vmmGObjectUI):
                      {'numcpus': int(phys_cpus)})
         cpu_label = ("<span size='small' color='#484848'>%s</span>" %
                      cpu_label)
-        self.widget("config-cpus").set_range(1, cmax)
+        self.widget("cpus").set_range(1, cmax)
         self.widget("phys-cpu-label").set_markup(cpu_label)
 
         # Storage
@@ -636,15 +636,15 @@ class vmmCreate(vmmGObjectUI):
         self._addstorage.reset_state()
 
         # Networking
-        self.widget("config-advanced-expander").set_expanded(False)
+        self.widget("advanced-expander").set_expanded(False)
 
         if self._netlist:
-            self.widget("config-netdev-ui-align").remove(self._netlist.top_box)
+            self.widget("netdev-ui-align").remove(self._netlist.top_box)
             self._netlist.cleanup()
             self._netlist = None
 
         self._netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
-        self.widget("config-netdev-ui-align").add(self._netlist.top_box)
+        self.widget("netdev-ui-align").add(self._netlist.top_box)
         self._netlist.connect("changed", self._netdev_changed)
         self._netlist.reset_state()
 
@@ -682,7 +682,7 @@ class vmmCreate(vmmGObjectUI):
     ##################################################
 
     def _populate_hv(self):
-        hv_list = self.widget("config-hv")
+        hv_list = self.widget("hv")
         model = hv_list.get_model()
         model.clear()
 
@@ -720,7 +720,7 @@ class vmmCreate(vmmGObjectUI):
             hv_list.set_active(default)
 
     def _populate_arch(self):
-        arch_list = self.widget("config-arch")
+        arch_list = self.widget("arch")
         model = arch_list.get_model()
         model.clear()
 
@@ -763,7 +763,7 @@ class vmmCreate(vmmGObjectUI):
         arch_list.set_active(default)
 
     def _populate_machine(self):
-        lst = self.widget("config-machine")
+        lst = self.widget("machine")
         model = lst.get_model()
         model.clear()
 
@@ -1045,7 +1045,7 @@ class vmmCreate(vmmGObjectUI):
         return self.widget("create-vm-name").get_text()
 
     def _get_config_machine(self):
-        return uiutil.get_list_selection(self.widget("config-machine"),
+        return uiutil.get_list_selection(self.widget("machine"),
             check_visible=True)
 
     def _get_config_install_page(self):
@@ -1210,7 +1210,7 @@ class vmmCreate(vmmGObjectUI):
         show_dtb_virtio = (self._capsinfo.arch == "armv7l" and
                            machine in ["vexpress-a9", "vexpress-15"])
         uiutil.set_grid_row_visible(
-            self.widget("config-dtb-warn-virtio"), show_dtb_virtio)
+            self.widget("dtb-warn-virtio"), show_dtb_virtio)
 
     def _hv_changed(self, src):
         hv = uiutil.get_list_selection(src, column=1)
@@ -1341,16 +1341,16 @@ class vmmCreate(vmmGObjectUI):
             self.widget("install-iso-entry").set_text(path)
         self._browse_file(None, cb=set_path, is_media=True)
     def _browse_kernel(self, ignore):
-        self._browse_file("config-kernel")
+        self._browse_file("kernel")
     def _browse_initrd(self, ignore):
-        self._browse_file("config-initrd")
+        self._browse_file("initrd")
     def _browse_dtb(self, ignore):
-        self._browse_file("config-dtb")
+        self._browse_file("dtb")
 
 
     # Storage page listeners
     def _toggle_enable_storage(self, src):
-        self.widget("config-storage-align").set_sensitive(src.get_active())
+        self.widget("storage-align").set_sensitive(src.get_active())
 
 
     # Summary page listeners
@@ -1377,9 +1377,9 @@ class vmmCreate(vmmGObjectUI):
         show_warn = (show_pxe_warn and pxe_install)
 
         if expand or show_warn:
-            self.widget("config-advanced-expander").set_expanded(True)
-        self.widget("config-netdev-warn-box").set_visible(show_warn)
-        self.widget("config-netdev-warn-label").set_markup(
+            self.widget("advanced-expander").set_expanded(True)
+        self.widget("netdev-warn-box").set_visible(show_warn)
+        self.widget("netdev-warn-label").set_markup(
             "<small>%s</small>" % _("Network selection does not support PXE"))
 
 
@@ -1751,14 +1751,14 @@ class vmmCreate(vmmGObjectUI):
 
         # Setting kernel
         if instmethod == INSTALL_PAGE_IMPORT:
-            kernel = self.widget("config-kernel").get_text() or None
-            kargs = self.widget("config-kernel-args").get_text() or None
-            initrd = self.widget("config-initrd").get_text() or None
-            dtb = self.widget("config-dtb").get_text() or None
+            kernel = self.widget("kernel").get_text() or None
+            kargs = self.widget("kernel-args").get_text() or None
+            initrd = self.widget("initrd").get_text() or None
+            dtb = self.widget("dtb").get_text() or None
 
-            if not self.widget("config-dtb").get_visible():
+            if not self.widget("dtb").get_visible():
                 dtb = None
-            if not self.widget("config-kernel").get_visible():
+            if not self.widget("kernel").get_visible():
                 kernel = None
                 initrd = None
                 kargs = None
@@ -1809,17 +1809,17 @@ class vmmCreate(vmmGObjectUI):
         ram_size = DEFAULT_MEM
         if res and res.get("ram") > 0:
             ram_size = res["ram"] / (1024 ** 2)
-        self.widget("config-mem").set_value(ram_size)
+        self.widget("mem").set_value(ram_size)
 
         n_cpus = 1
         if res and res.get("n-cpus") > 0:
             n_cpus = res["n-cpus"]
-        self.widget("config-cpus").set_value(n_cpus)
+        self.widget("cpus").set_value(n_cpus)
 
         storage_size = 20
         if res and res.get("storage"):
             storage_size = int(res["storage"]) / (1024 ** 3)
-        self._addstorage.widget("config-storage-size").set_value(storage_size)
+        self._addstorage.widget("storage-size").set_value(storage_size)
 
         # Validation passed, store the install path (if there is one) in
         # gsettings
@@ -1828,8 +1828,8 @@ class vmmCreate(vmmGObjectUI):
         return True
 
     def _validate_mem_page(self):
-        cpus = self.widget("config-cpus").get_value()
-        mem  = self.widget("config-mem").get_value()
+        cpus = self.widget("cpus").get_value()
+        mem  = self.widget("mem").get_value()
 
         # VCPUS
         try:

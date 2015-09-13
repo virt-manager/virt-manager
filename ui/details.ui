@@ -1210,7 +1210,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkExpander" id="config-idmap-expander">
+                              <object class="GtkExpander" id="idmap-expander">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <child>
@@ -1220,21 +1220,21 @@ if you know what you are doing.&lt;/small&gt;</property>
                                     <property name="top_padding">3</property>
                                     <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkGrid" id="config-idmap-grid">
+                                      <object class="GtkGrid" id="idmap-grid">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="orientation">vertical</property>
                                         <property name="row_spacing">6</property>
                                         <property name="column_spacing">6</property>
                                         <child>
-                                          <object class="GtkCheckButton" id="config-idmap-checkbutton">
+                                          <object class="GtkCheckButton" id="idmap-checkbutton">
                                             <property name="label" translatable="yes">Enable User Namespace</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="on_config_idmap_check_toggled" swapped="no"/>
+                                            <signal name="toggled" handler="on_idmap_check_toggled" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -2007,7 +2007,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label" translatable="yes">Ma_ximum allocation:</property>
                                                 <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">config-maxvcpus</property>
+                                                <property name="mnemonic_widget">cpu-maxvcpus</property>
                                                 <property name="xalign">1</property>
                                               </object>
                                               <packing>
@@ -2023,7 +2023,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label" translatable="yes">Current a_llocation:</property>
                                                 <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">config-vcpus</property>
+                                                <property name="mnemonic_widget">cpu-vcpus</property>
                                                 <property name="xalign">1</property>
                                               </object>
                                               <packing>
@@ -2034,12 +2034,12 @@ if you know what you are doing.&lt;/small&gt;</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkSpinButton" id="config-maxvcpus">
+                                              <object class="GtkSpinButton" id="cpu-maxvcpus">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="invisible_char">●</property>
                                                 <property name="adjustment">adjustment6</property>
-                                                <signal name="changed" handler="on_config_maxvcpus_changed" swapped="no"/>
+                                                <signal name="changed" handler="on_cpu_maxvcpus_changed" swapped="no"/>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
@@ -2051,7 +2051,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkSpinButton" id="config-vcpus">
+                                              <object class="GtkSpinButton" id="cpu-vcpus">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="invisible_char">●</property>
@@ -2059,9 +2059,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="climb_rate">1</property>
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
-                                                <signal name="changed" handler="on_config_vcpus_changed" swapped="no"/>
+                                                <signal name="changed" handler="on_cpu_vcpus_changed" swapped="no"/>
                                                 <child internal-child="accessible">
-                                                  <object class="AtkObject" id="config-vcpus-atkobject">
+                                                  <object class="AtkObject" id="cpu-vcpus-atkobject">
                                                     <property name="AtkObject::accessible-name" translatable="yes">Virtual CPU Select</property>
                                                   </object>
                                                 </child>
@@ -2083,7 +2083,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkHBox" id="config-vcpus-warn-box">
+                                          <object class="GtkHBox" id="cpu-vcpus-warn-box">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">6</property>
@@ -2385,7 +2385,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkHBox" id="config-topology-warn-box">
+                                                  <object class="GtkHBox" id="cpu-topology-warn-box">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="spacing">6</property>
@@ -2487,7 +2487,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label" translatable="yes">Default p_inning:</property>
                                                 <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">config-vcpupin</property>
+                                                <property name="mnemonic_widget">cpu-vcpupin</property>
                                                 <property name="xalign">1</property>
                                               </object>
                                               <packing>
@@ -2517,13 +2517,13 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="spacing">6</property>
                                                 <child>
-                                                  <object class="GtkEntry" id="config-vcpupin">
+                                                  <object class="GtkEntry" id="cpu-vcpupin">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="invisible_char">●</property>
-                                                    <signal name="changed" handler="on_config_vcpupin_changed" swapped="no"/>
+                                                    <signal name="changed" handler="on_cpu_vcpupin_changed" swapped="no"/>
                                                     <child internal-child="accessible">
-                                                      <object class="AtkObject" id="config-vcpupin-atkobject">
+                                                      <object class="AtkObject" id="-vcpupin-atkobject">
                                                         <property name="AtkObject::accessible-name" translatable="yes">Virtual CPU Affinity Select</property>
                                                       </object>
                                                     </child>
@@ -2561,13 +2561,13 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="spacing">3</property>
                                                 <child>
-                                                  <object class="GtkButton" id="config-vcpupin-generate">
+                                                  <object class="GtkButton" id="cpu-vcpupin-generate">
                                                     <property name="label" translatable="yes">Generate from host _NUMA configuration</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
                                                     <property name="use_underline">True</property>
-                                                    <signal name="clicked" handler="on_config_vcpupin_generate_clicked" swapped="no"/>
+                                                    <signal name="clicked" handler="on_cpu_vcpupin_generate_clicked" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -2580,7 +2580,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <child>
-                                                      <object class="GtkImage" id="config-vcpupin-generate-err">
+                                                      <object class="GtkImage" id="cpu-vcpupin-generate-err">
                                                         <property name="can_focus">False</property>
                                                         <property name="xalign">0</property>
                                                         <property name="stock">gtk-dialog-warning</property>
@@ -2689,7 +2689,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes">Current a_llocation:</property>
                                             <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">config-memory</property>
+                                            <property name="mnemonic_widget">mem-memory</property>
                                             <property name="xalign">1</property>
                                           </object>
                                           <packing>
@@ -2705,7 +2705,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes">Ma_ximum allocation:</property>
                                             <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">config-maxmem</property>
+                                            <property name="mnemonic_widget">mem-maxmem</property>
                                             <property name="xalign">1</property>
                                           </object>
                                           <packing>
@@ -2748,7 +2748,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">3</property>
                                             <child>
-                                              <object class="GtkSpinButton" id="config-memory">
+                                              <object class="GtkSpinButton" id="mem-memory">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="invisible_char">●</property>
@@ -2756,9 +2756,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="climb_rate">2</property>
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
-                                                <signal name="changed" handler="on_config_memory_changed" swapped="no"/>
+                                                <signal name="changed" handler="on_mem_memory_changed" swapped="no"/>
                                                 <child internal-child="accessible">
-                                                  <object class="AtkObject" id="config-memory-atkobject">
+                                                  <object class="AtkObject" id="mem-memory-atkobject">
                                                     <property name="AtkObject::accessible-name" translatable="yes">Memory Select</property>
                                                   </object>
                                                 </child>
@@ -2797,7 +2797,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">3</property>
                                             <child>
-                                              <object class="GtkSpinButton" id="config-maxmem">
+                                              <object class="GtkSpinButton" id="mem-maxmem">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="invisible_char">●</property>
@@ -2805,9 +2805,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="climb_rate">2</property>
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
-                                                <signal name="changed" handler="on_config_maxmem_changed" swapped="no"/>
+                                                <signal name="changed" handler="on_mem_maxmem_changed" swapped="no"/>
                                                 <child internal-child="accessible">
-                                                  <object class="AtkObject" id="config-maxmem-atkobject">
+                                                  <object class="AtkObject" id="mem-maxmem-atkobject">
                                                     <property name="AtkObject::accessible-name" translatable="yes">Max Memory Select</property>
                                                   </object>
                                                 </child>
@@ -2894,7 +2894,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                     <property name="top_padding">3</property>
                                     <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkCheckButton" id="config-autostart">
+                                      <object class="GtkCheckButton" id="boot-autostart">
                                         <property name="label" translatable="yes">Start virt_ual machine on host boot up</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
@@ -2902,7 +2902,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0.5</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_config_autostart_changed" swapped="no"/>
+                                        <signal name="toggled" handler="on_boot_autostart_changed" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
@@ -3356,13 +3356,13 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="hscrollbar_policy">never</property>
                                                 <property name="shadow_type">in</property>
                                                 <child>
-                                                  <object class="GtkTreeView" id="config-boot-list">
+                                                  <object class="GtkTreeView" id="boot-list">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="headers_visible">False</property>
                                                     <child internal-child="selection">
                                                       <object class="GtkTreeSelection" id="treeview-selection4">
-                                                        <signal name="changed" handler="on_config_boot_list_changed" swapped="no"/>
+                                                        <signal name="changed" handler="on_boot_list_changed" swapped="no"/>
                                                       </object>
                                                     </child>
                                                   </object>
@@ -3380,13 +3380,13 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="orientation">vertical</property>
                                                 <property name="spacing">6</property>
                                                 <child>
-                                                  <object class="GtkButton" id="config-boot-moveup">
+                                                  <object class="GtkButton" id="boot-moveup">
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
                                                     <property name="valign">start</property>
-                                                    <signal name="clicked" handler="on_config_boot_moveup_clicked" swapped="no"/>
+                                                    <signal name="clicked" handler="on_boot_moveup_clicked" swapped="no"/>
                                                     <child>
                                                       <object class="GtkImage" id="image7">
                                                         <property name="visible">True</property>
@@ -3402,14 +3402,14 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="config-boot-movedown">
+                                                  <object class="GtkButton" id="boot-movedown">
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
                                                     <property name="valign">start</property>
                                                     <property name="vexpand">False</property>
-                                                    <signal name="clicked" handler="on_config_boot_movedown_clicked" swapped="no"/>
+                                                    <signal name="clicked" handler="on_boot_movedown_clicked" swapped="no"/>
                                                     <child>
                                                       <object class="GtkImage" id="image8">
                                                         <property name="visible">True</property>
@@ -3627,7 +3627,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="config-cdrom-connect">
+                                                  <object class="GtkButton" id="disk-cdrom-connect">
                                                     <property name="label">gtk-connect</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
@@ -3636,7 +3636,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="has_tooltip">True</property>
                                                     <property name="tooltip_text" translatable="yes">Connect or disconnect media</property>
                                                     <property name="use_stock">True</property>
-                                                    <signal name="clicked" handler="on_config_cdrom_connect_clicked" swapped="no"/>
+                                                    <signal name="clicked" handler="on_disk_cdrom_connect_clicked" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>

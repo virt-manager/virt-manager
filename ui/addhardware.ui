@@ -131,7 +131,7 @@
                             <property name="valign">start</property>
                             <property name="spacing">18</property>
                             <child>
-                              <object class="GtkAlignment" id="config-storage-align">
+                              <object class="GtkAlignment" id="storage-align">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -157,7 +157,7 @@
                                     <property name="halign">start</property>
                                     <property name="label" translatable="yes">_Device type:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">config-storage-devtype</property>
+                                    <property name="mnemonic_widget">storage-devtype</property>
                                     <property name="xalign">0</property>
                                   </object>
                                   <packing>
@@ -166,13 +166,13 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="config-storage-devtype">
+                                  <object class="GtkComboBox" id="storage-devtype">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <signal name="changed" handler="on_config_storage_devtype_changed" swapped="no"/>
+                                    <signal name="changed" handler="on_storage_devtype_changed" swapped="no"/>
                                     <child internal-child="accessible">
-                                      <object class="AtkObject" id="config-storage-devtype-atkobject">
+                                      <object class="AtkObject" id="storage-devtype-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes">Device Type Field</property>
                                       </object>
                                     </child>
@@ -188,7 +188,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">_Bus type:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">config-storage-bustype</property>
+                                    <property name="mnemonic_widget">storage-bustype</property>
                                     <property name="xalign">0</property>
                                   </object>
                                   <packing>
@@ -197,7 +197,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="config-storage-bustype">
+                                  <object class="GtkComboBox" id="storage-bustype">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
@@ -244,7 +244,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">Cac_he mode:</property>
                                         <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">config-storage-cache</property>
+                                        <property name="mnemonic_widget">storage-cache</property>
                                         <property name="xalign">0</property>
                                       </object>
                                       <packing>
@@ -253,7 +253,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="config-storage-format">
+                                      <object class="GtkComboBox" id="storage-format">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="has_entry">True</property>
@@ -269,7 +269,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="config-storage-cache">
+                                      <object class="GtkComboBox" id="storage-cache">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                       </object>

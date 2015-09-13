@@ -7,18 +7,18 @@
     <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkVBox" id="config-storage-box">
+  <object class="GtkVBox" id="storage-box">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkBox" id="config-storage-create-box">
+      <object class="GtkBox" id="storage-create-box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
-          <object class="GtkRadioButton" id="config-storage-create">
+          <object class="GtkRadioButton" id="storage-create">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -57,7 +57,7 @@
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="config-storage-size">
+                      <object class="GtkSpinButton" id="storage-size">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="text" translatable="yes">0.0</property>
@@ -78,7 +78,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_GiB</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">config-storage-size</property>
+                        <property name="mnemonic_widget">storage-size</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -141,15 +141,15 @@
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkRadioButton" id="config-storage-select">
+          <object class="GtkRadioButton" id="storage-select">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="xalign">0</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
-            <property name="group">config-storage-create</property>
-            <signal name="toggled" handler="on_config_storage_select_toggled" swapped="no"/>
+            <property name="group">storage-create</property>
+            <signal name="toggled" handler="on_storage_select_toggled" swapped="no"/>
             <child>
               <object class="GtkLabel" id="label124">
                 <property name="visible">True</property>
@@ -167,22 +167,22 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="config-storage-browse-box">
+          <object class="GtkHBox" id="storage-browse-box">
             <property name="visible">True</property>
             <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkButton" id="config-storage-browse">
+              <object class="GtkButton" id="storage-browse">
                 <property name="label" translatable="yes">Bro_wse...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_config_storage_browse_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_storage_browse_clicked" swapped="no"/>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="config-storage-browse-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">config-storage-browse</property>
+                  <object class="AtkObject" id="storage-browse-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">storage-browse</property>
                   </object>
                 </child>
               </object>
@@ -193,7 +193,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="config-storage-entry">
+              <object class="GtkEntry" id="storage-entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </object>
