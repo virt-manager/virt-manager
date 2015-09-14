@@ -176,6 +176,8 @@ class vmmCreate(vmmGObjectUI):
             "on_dtb_browse_clicked": self._browse_dtb,
 
             "on_enable_storage_toggled": self._toggle_enable_storage,
+
+            "on_create_vm_name_changed": self._name_changed,
         })
         self.bind_escape_key_close()
 
@@ -988,7 +990,7 @@ class vmmCreate(vmmGObjectUI):
     # Misc UI populating routines #
     ###############################
 
-    def _populate_summary_storage(self):
+    def _populate_summary_storage(self, path=None):
         storagetmpl = "<span size='small' color='#484848'>%s</span>"
         storagesize = ""
         storagepath = ""
@@ -997,7 +999,9 @@ class vmmCreate(vmmGObjectUI):
         if disk:
             if disk.wants_storage_creation():
                 storagesize = "%s" % _pretty_storage(disk.get_size())
-            storagepath += " " + (storagetmpl % disk.path)
+            if not path:
+                path = disk.path
+            storagepath = (storagetmpl % path)
         elif len(self._guest.get_devices("filesystem")):
             fs = self._guest.get_devices("filesystem")[0]
             storagepath = storagetmpl % fs.source
@@ -1370,6 +1374,21 @@ class vmmCreate(vmmGObjectUI):
 
 
     # Summary page listeners
+    def _name_changed(self, src):
+        newname = src.get_text()
+        if not src.is_visible():
+            return
+        if not newname:
+            return
+
+        try:
+            path, ignore = self._get_storage_path(newname, do_log=False)
+            self._populate_summary_storage(path=path)
+        except:
+            logging.debug("Error generating storage path on name change "
+                "for name=%s", newname, exc_info=True)
+
+
     def _netdev_changed(self, ignore):
         row = self._netlist.get_network_row()
         show_pxe_warn = True
@@ -1861,8 +1880,7 @@ class vmmCreate(vmmGObjectUI):
 
         return True
 
-
-    def _validate_storage_page(self):
+    def _get_storage_path(self, vmname, do_log):
         failed_disk = None
         if self._failed_guest:
             failed_disk = _get_vmm_device(self._failed_guest, "disk")
@@ -1878,11 +1896,19 @@ class vmmCreate(vmmGObjectUI):
                 # Don't generate a new path if the install failed
                 path = failed_disk.path
                 path_already_created = failed_disk.storage_was_created
-                logging.debug("Reusing failed disk path=%s "
-                    "already_created=%s", path, path_already_created)
+                if do_log:
+                    logging.debug("Reusing failed disk path=%s "
+                        "already_created=%s", path, path_already_created)
             else:
-                path = self._addstorage.get_default_path(self._guest.name)
-                logging.debug("Default storage path is: %s", path)
+                path = self._addstorage.get_default_path(vmname)
+                if do_log:
+                    logging.debug("Default storage path is: %s", path)
+
+        return path, path_already_created
+
+    def _validate_storage_page(self):
+        path, path_already_created = self._get_storage_path(
+            self._guest.name, do_log=True)
 
         disk = None
         storage_enabled = self.widget("enable-storage").get_active()
