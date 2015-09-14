@@ -143,10 +143,7 @@ class NewVM(unittest.TestCase):
 
         version = uiutils.find_pattern(newvm, "install-os-version-label")
         time.sleep(1)
-        while True:
-            if "Detecting" not in version.text:
-                break
-            time.sleep(.5)
+        uiutils.check_in_loop(lambda: "Detecting" not in version.text)
         self.assertEquals(version.text, "Red Hat Enterprise Linux 5.5")
 
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
@@ -157,10 +154,7 @@ class NewVM(unittest.TestCase):
 
         progress = uiutils.find_fuzzy(self.app.root,
             "Creating Virtual Machine", "frame")
-        while True:
-            if not progress.showing:
-                break
-            time.sleep(.5)
+        uiutils.check_in_loop(lambda: not progress.showing)
         time.sleep(.5)
 
         uiutils.find_fuzzy(self.app.root, "rhel5.5 on", "frame")

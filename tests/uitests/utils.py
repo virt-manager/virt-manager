@@ -139,3 +139,19 @@ def print_nodes(root):
             print "got exception: %s" % e
 
     root.findChildren(_walk, isLambda=True)
+
+
+def check_in_loop(func, timeout=-1):
+    """
+    Run the passed func in a loop every .5 seconds until timeout is hit or
+    the func returns True.
+    If timeout=-1, check indefinitely.
+    """
+    total_time = 0.0
+    while True:
+        time.sleep(.5)
+        total_time += .5
+        if func() is True:
+            return
+        if timeout > 0 and total_time >= timeout:
+            raise RuntimeError("Loop condition wasn't met")
