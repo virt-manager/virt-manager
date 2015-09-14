@@ -57,7 +57,7 @@ UBUNTU_URL = "http://us.archive.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
 
 OLD_DEBIAN_URL = "http://archive.debian.org/debian/dists/%s/main/installer-%s/"
 DAILY_DEBIAN_URL = "http://d-i.debian.org/daily-images/%s/"
-DEBIAN_URL = "http://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
+DEBIAN_URL = "ftp://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
 
 MANDRIVA_URL = "ftp://mirror.cc.columbia.edu/pub/linux/mandriva/official/%s/%s"
 
