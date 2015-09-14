@@ -218,6 +218,10 @@ class vmmConnection(vmmGObject):
                 label = "test (xen)"
             elif gtype == "hvm":
                 label = "test (hvm)"
+        elif domtype == "qemu":
+            label = "QEMU TCG"
+        elif domtype == "kvm":
+            label = "KVM"
 
         return label
 

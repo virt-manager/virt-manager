@@ -151,9 +151,10 @@ class vmmCreate(vmmGObjectUI):
 
             "on_create_conn_changed": self._conn_changed,
             "on_method_changed": self._method_changed,
-            "on_machine_changed": self._machine_changed,
-            "on_hv_changed": self._hv_changed,
+            "on_xen_type_changed": self._xen_type_changed,
             "on_arch_changed": self._arch_changed,
+            "on_virt_type_changed": self._virt_type_changed,
+            "on_machine_changed": self._machine_changed,
 
             "on_install_cdrom_radio_toggled": self._local_media_toggled,
             "on_install_iso_entry_changed": self._iso_changed,
@@ -335,24 +336,35 @@ class vmmCreate(vmmGObjectUI):
         completion.set_model(os_variant_model)
 
         # Archtecture
-        # [value, label]
         archList = self.widget("arch")
+        # [label, guest.os.arch value]
         archModel = Gtk.ListStore(str, str)
         archList.set_model(archModel)
-        uiutil.init_combo_text_column(archList, 1)
+        uiutil.init_combo_text_column(archList, 0)
         archList.set_row_separator_func(
             lambda m, i, ignore: m[i][0] is None, None)
 
-        hyperList = self.widget("hv")
+        # guest.os.type value for xen (hvm vs. xen)
+        hyperList = self.widget("xen-type")
+        # [label, guest.os_type value]
         hyperModel = Gtk.ListStore(str, str)
         hyperList.set_model(hyperModel)
         uiutil.init_combo_text_column(hyperList, 0)
 
+        # guest.os.machine value
         lst = self.widget("machine")
+        # [machine ID]
         model = Gtk.ListStore(str)
         lst.set_model(model)
         uiutil.init_combo_text_column(lst, 0)
         lst.set_row_separator_func(lambda m, i, ignore: m[i][0] is None, None)
+
+        # guest.type value for xen (qemu vs kvm)
+        lst = self.widget("virt-type")
+        # [label, guest.type value]
+        model = Gtk.ListStore(str, str)
+        lst.set_model(model)
+        uiutil.init_combo_text_column(lst, 0)
 
 
     def _reset_state(self, urihint=None):
@@ -564,12 +576,14 @@ class vmmCreate(vmmGObjectUI):
                            "modules are not loaded.")
             return self._show_startup_error(error)
 
-        # A bit out of order, but populate arch + hv lists so we can
-        # determine a default
-        self._populate_hv()
+        # A bit out of order, but populate the xen/virt/arch/machine lists
+        # so we can work with a default.
+        self._populate_xen_type()
         self._populate_arch()
+        self._populate_virt_type()
 
-        show_arch = (self.widget("hv").get_visible() or
+        show_arch = (self.widget("xen-type").get_visible() or
+                     self.widget("virt-type").get_visible() or
                      self.widget("arch").get_visible() or
                      self.widget("machine").get_visible())
         uiutil.set_grid_row_visible(self.widget("arch-expander"), show_arch)
@@ -665,7 +679,7 @@ class vmmCreate(vmmGObjectUI):
         self._netlist.reset_state()
 
 
-    def _change_caps(self, gtype=None, arch=None):
+    def _change_caps(self, gtype=None, arch=None, domtype=None):
         """
         Change the cached capsinfo for the passed values, and trigger
         all needed UI refreshing
@@ -678,7 +692,9 @@ class vmmCreate(vmmGObjectUI):
                     gtype = "hvm"
                     break
 
-        capsinfo = self.conn.caps.guest_lookup(os_type=gtype, arch=arch)
+        capsinfo = self.conn.caps.guest_lookup(os_type=gtype,
+                                               arch=arch,
+                                               typ=domtype)
 
         if self._capsinfo:
             if (self._capsinfo.guest == capsinfo.guest and
@@ -697,20 +713,20 @@ class vmmCreate(vmmGObjectUI):
     # Helpers for populating hv/arch/machine/conn UI #
     ##################################################
 
-    def _populate_hv(self):
-        hv_list = self.widget("hv")
-        model = hv_list.get_model()
+    def _populate_xen_type(self):
+        model = self.widget("xen-type").get_model()
         model.clear()
 
         default = 0
-        guests = self.conn.caps.guests[:]
-        if not (self.conn.is_xen() or self.conn.is_test_conn()):
-            guests = []
+        guests = []
+        if self.conn.is_xen() or self.conn.is_test_conn():
+            guests = self.conn.caps.guests[:]
 
-        for guest in self.conn.caps.guests:
-            gtype = guest.os_type
+        for guest in guests:
             if not guest.domains:
                 continue
+
+            gtype = guest.os_type
             dom = guest.domains[0]
             domtype = dom.hypervisor_type
             label = self.conn.pretty_hv(gtype, domtype)
@@ -725,19 +741,19 @@ class vmmCreate(vmmGObjectUI):
 
             # Determine if this is the default given by guest_lookup
             if (gtype == self._capsinfo.os_type and
-                self._capsinfo.hypervisor_type == domtype):
+                domtype == self._capsinfo.hypervisor_type):
                 default = len(model)
 
             model.append([label, gtype])
 
-        show = bool(guests)
-        uiutil.set_grid_row_visible(hv_list, show)
+        show = bool(len(model))
+        print "showing xen default=%s" % default
+        uiutil.set_grid_row_visible(self.widget("xen-type"), show)
         if show:
-            hv_list.set_active(default)
+            self.widget("xen-type").set_active(default)
 
     def _populate_arch(self):
-        arch_list = self.widget("arch")
-        model = arch_list.get_model()
+        model = self.widget("arch").get_model()
         model.clear()
 
         default = 0
@@ -772,15 +788,46 @@ class vmmCreate(vmmGObjectUI):
             default = archs.index(self._capsinfo.arch)
 
         for arch in archs:
-            model.append([arch, _pretty_arch(arch)])
+            model.append([_pretty_arch(arch), arch])
 
         show = not (len(archs) < 2)
-        uiutil.set_grid_row_visible(arch_list, show)
-        arch_list.set_active(default)
+        uiutil.set_grid_row_visible(self.widget("arch"), show)
+        self.widget("arch").set_active(default)
+
+    def _populate_virt_type(self):
+        model = self.widget("virt-type").get_model()
+        model.clear()
+
+        # Allow choosing between qemu and kvm for archs that traditionally
+        # have a decent amount of TCG usage, like armv7l
+        domains = [d.hypervisor_type for d in self._capsinfo.guest.domains[:]]
+        if not self.conn.is_qemu():
+            domains = []
+        elif self._capsinfo.arch in ["i686", "x86_64", "aarch64",
+                                     "ppc64", "ppc64le"]:
+            domains = []
+
+        default = 0
+        if self._capsinfo.hypervisor_type in domains:
+            default = domains.index(self._capsinfo.hypervisor_type)
+
+        prios = ["kvm"]
+        for domain in prios:
+            if domain not in domains:
+                continue
+            domains.remove(domain)
+            domains.insert(0, domain)
+
+        for domain in domains:
+            label = self.conn.pretty_hv(self._capsinfo.os_type, domain)
+            model.append([label, domain])
+
+        show = bool(len(model) > 1)
+        uiutil.set_grid_row_visible(self.widget("virt-type"), show)
+        self.widget("virt-type").set_active(default)
 
     def _populate_machine(self):
-        lst = self.widget("machine")
-        model = lst.get_model()
+        model = self.widget("machine").get_model()
         model.clear()
 
         machines = self._capsinfo.machines[:]
@@ -811,11 +858,11 @@ class vmmCreate(vmmGObjectUI):
             model.append([m])
 
         show = (len(machines) > 1)
-        uiutil.set_grid_row_visible(lst, show)
+        uiutil.set_grid_row_visible(self.widget("machine"), show)
         if show:
-            lst.set_active(default)
+            self.widget("machine").set_active(default)
         else:
-            lst.emit("changed")
+            self.widget("machine").emit("changed")
 
     def _populate_conn_list(self, urihint=None):
         conn_list = self.widget("create-conn")
@@ -1232,20 +1279,29 @@ class vmmCreate(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.widget("dtb-warn-virtio"), show_dtb_virtio)
 
-    def _hv_changed(self, src):
-        hv = uiutil.get_list_selection(src, column=1)
-        if not hv:
+    def _xen_type_changed(self, ignore):
+        os_type = uiutil.get_list_selection(self.widget("xen-type"), column=1)
+        print "xen_type_changed", os_type
+        if not os_type:
             return
 
-        self._change_caps(hv)
+        self._change_caps(os_type)
         self._populate_arch()
 
-    def _arch_changed(self, src):
-        arch = uiutil.get_list_selection(src)
+    def _arch_changed(self, ignore):
+        arch = uiutil.get_list_selection(self.widget("arch"), column=1)
         if not arch:
             return
 
         self._change_caps(self._capsinfo.os_type, arch)
+        self._populate_virt_type()
+
+    def _virt_type_changed(self, ignore):
+        domtype = uiutil.get_list_selection(self.widget("virt-type"), column=1)
+        if not domtype:
+            return
+
+        self._change_caps(self._capsinfo.os_type, self._capsinfo.arch, domtype)
 
 
     # Install page listeners

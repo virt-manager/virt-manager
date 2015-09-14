@@ -436,14 +436,14 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="top_attach">1</property>
+                                        <property name="top_attach">2</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="hv">
+                                      <object class="GtkComboBox" id="xen-type">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <signal name="changed" handler="on_hv_changed" swapped="no"/>
+                                        <signal name="changed" handler="on_xen_type_changed" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -454,9 +454,9 @@
                                       <object class="GtkLabel" id="label28">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">_Virt Type:</property>
+                                        <property name="label" translatable="yes">_Xen Type:</property>
                                         <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">hv</property>
+                                        <property name="mnemonic_widget">xen-type</property>
                                         <property name="xalign">1</property>
                                       </object>
                                       <packing>
@@ -475,7 +475,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
-                                        <property name="top_attach">1</property>
+                                        <property name="top_attach">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -489,7 +489,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
-                                        <property name="top_attach">2</property>
+                                        <property name="top_attach">3</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -500,7 +500,32 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="top_attach">2</property>
+                                        <property name="top_attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label31">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">_Virt Type:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">virt-type</property>
+                                        <property name="xalign">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="virt-type">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <signal name="changed" handler="on_virt_type_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">1</property>
                                       </packing>
                                     </child>
                                   </object>
