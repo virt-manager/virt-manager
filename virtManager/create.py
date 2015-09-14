@@ -995,24 +995,20 @@ class vmmCreate(vmmGObjectUI):
             install = _("Operating system container")
 
         storagetmpl = "<span size='small' color='#484848'>%s</span>"
+        storagesize = ""
+        storagepath = ""
         disks = self._guest.get_devices("disk")
         if disks:
             disk = disks[0]
-            storage = "%s" % _pretty_storage(disk.get_size())
-
-            # default storage is dependent on the VM name which the user
-            # can change on the last page,  so this label can get out of date.
-            # We could dynamically update it if user changes things, but
-            # not sure if anyone cares.
-            if not self._is_default_storage():
-                storage += " " + (storagetmpl % disk.path)
+            storagesize = "%s" % _pretty_storage(disk.get_size())
+            storagepath += " " + (storagetmpl % disk.path)
         elif len(self._guest.get_devices("filesystem")):
             fs = self._guest.get_devices("filesystem")[0]
-            storage = storagetmpl % fs.source
+            storagepath = storagetmpl % fs.source
         elif self._guest.os.is_container():
-            storage = _("Host filesystem")
+            storagepath = _("Host filesystem")
         else:
-            storage = _("None")
+            storagepath = _("None")
 
         osstr = ""
         have_os = True
@@ -1032,7 +1028,9 @@ class vmmCreate(vmmGObjectUI):
         self.widget("summary-install").set_text(install)
         self.widget("summary-mem").set_text(mem)
         self.widget("summary-cpu").set_text(cpu)
-        self.widget("summary-storage").set_markup(storage)
+        self.widget("summary-storage").set_markup(storagesize)
+        self.widget("summary-storage").set_visible(bool(storagesize))
+        self.widget("summary-storage-path").set_markup(storagepath)
 
         self._netdev_changed(None)
 

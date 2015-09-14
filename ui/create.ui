@@ -2153,22 +2153,6 @@ is not yet supported.&lt;/small&gt;</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="summary-storage">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label">label</property>
-                                        <property name="wrap">True</property>
-                                        <property name="ellipsize">end</property>
-                                        <property name="width_chars">31</property>
-                                        <property name="max_width_chars">31</property>
-                                        <property name="xalign">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">5</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkCheckButton" id="summary-customize">
                                         <property name="label" translatable="yes">C_ustomize configuration before install</property>
                                         <property name="visible">True</property>
@@ -2307,6 +2291,51 @@ is not yet supported.&lt;/small&gt;</property>
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">6</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="box3">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">start</property>
+                                        <property name="hexpand">False</property>
+                                        <property name="vexpand">False</property>
+                                        <property name="spacing">3</property>
+                                        <child>
+                                          <object class="GtkLabel" id="summary-storage">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label">label</property>
+                                            <property name="wrap">True</property>
+                                            <property name="xalign">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="summary-storage-path">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label">label</property>
+                                            <property name="ellipsize">start</property>
+                                            <property name="width_chars">27</property>
+                                            <property name="max_width_chars">27</property>
+                                            <property name="xalign">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">5</property>
                                       </packing>
                                     </child>
                                   </object>
