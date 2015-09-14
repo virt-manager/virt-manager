@@ -101,9 +101,8 @@ class NewVM(unittest.TestCase):
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
 
         # Verify that CPU values are non-default
-        time.sleep(1)
-        cpus = uiutils.find_fuzzy(newvm, None, "spin button", "CPUs:").text
-        self.assertTrue(int(cpus) > 1)
+        cpus = uiutils.find_fuzzy(newvm, None, "spin button", "CPUs:")
+        uiutils.check_in_loop(lambda: int(cpus.text) > 1, timeout=5)
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
 
