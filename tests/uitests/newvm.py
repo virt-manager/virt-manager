@@ -24,6 +24,17 @@ class NewVM(unittest.TestCase):
         uiutils.find_pattern(self.app.root, "New", "push button").click()
         return uiutils.find_pattern(self.app.root, "New VM", "frame")
 
+    def _do_simple_import(self, newvm):
+        # Create default PXE VM
+        uiutils.find_fuzzy(newvm, "Import", "radio").click()
+        uiutils.find_fuzzy(newvm, None,
+            "text", "existing storage").text = "/tmp/foo.img"
+        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        time.sleep(1)
+
 
     ##############
     # Test cases #
@@ -160,46 +171,47 @@ class NewVM(unittest.TestCase):
         self.assertFalse(newvm.showing)
         self.app.quit()
 
-
-    def testNewVMImport(self):
+    def testNewPPC64(self):
         """
-        New VM with a plain x86 import
-        """
-        newvm = self._open_create_wizard()
-
-        uiutils.find_fuzzy(newvm, "Import", "radio").click()
-        uiutils.find_fuzzy(newvm, None,
-            "text", "existing storage").text = "/tmp/foo.img"
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
-
-        time.sleep(1)
-        uiutils.find_fuzzy(self.app.root, "generic on", "frame")
-        self.assertFalse(newvm.showing)
-        self.app.quit()
-
-
-    def testNewVMArmKernel(self):
-        """
-        New arm VM that requires kernel/initrd/dtb
+        New PPC64 VM to test architecture selection
         """
         self.app.uri = tests.utils.uri_kvm
         newvm = self._open_create_wizard()
 
-        # Validate some initial defaults
         uiutils.find_fuzzy(newvm, "Architecture options", "toggle").click()
         uiutils.find_fuzzy(newvm, None, "combo", "Architecture").click()
-        uiutils.find_fuzzy(newvm, "arm", "menu item").click()
+        uiutils.find_fuzzy(newvm, "ppc64", "menu item").click()
+        uiutils.find_fuzzy(newvm, "pseries", "menu item")
+
+        self._do_simple_import(newvm)
+
+        time.sleep(1)
+        uiutils.find_fuzzy(self.app.root, "generic-ppc64 on", "frame")
+        self.assertFalse(newvm.showing)
+        self.app.quit()
+
+
+    def testNewArmKernel(self):
+        """
+        New arm VM that requires kernel/initrd/dtb
+        """
+        self.app.uri = tests.utils.uri_kvm_armv7l
+        newvm = self._open_create_wizard()
+
+        uiutils.find_fuzzy(newvm, "Architecture options", "toggle").click()
+        uiutils.find_fuzzy(newvm, None, "combo", "Virt Type").click()
+        KVM = uiutils.find_fuzzy(newvm, "KVM", "menu item")
+        TCG = uiutils.find_fuzzy(newvm, "TCG", "menu item")
+        self.assertTrue(KVM.focused)
+        self.assertTrue(TCG.showing)
+        uiutils.find_fuzzy(newvm, None, "combo", "Virt Type").click()
+
+        # Validate some initial defaults
         self.assertFalse(
             uiutils.find_fuzzy(newvm, "PXE", "radio").sensitive)
-        self.assertFalse(
-            uiutils.find_fuzzy(newvm, "vexpress-a15", "menu item").showing)
-        self.assertFalse(
-            uiutils.find_pattern(newvm, "virt", "menu item").showing)
+        uiutils.find_fuzzy(newvm, "vexpress-a15", "menu item")
+        uiutils.find_pattern(newvm, "virt", "menu item")
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        time.sleep(.5)
 
         # Set the import media details
         uiutils.find_fuzzy(newvm, None,
@@ -222,7 +234,7 @@ class NewVM(unittest.TestCase):
         uiutils.find_fuzzy(newvm, "Finish", "button").click()
 
         time.sleep(1)
-        uiutils.find_fuzzy(self.app.root, "generic-arm on", "frame")
+        uiutils.find_fuzzy(self.app.root, "generic on", "frame")
         self.assertFalse(newvm.showing)
         self.app.quit()
 
@@ -280,17 +292,9 @@ class NewVM(unittest.TestCase):
         newvm = self._open_create_wizard()
 
         uiutils.find_fuzzy(newvm, "Architecture options", "toggle").click()
-        uiutils.find_fuzzy(newvm, None, "combo", "Virt Type").click()
+        uiutils.find_fuzzy(newvm, None, "combo", "Xen Type").click()
         uiutils.find_fuzzy(newvm, "paravirt", "menu item").click()
 
-        # Create default PXE VM
-        uiutils.find_fuzzy(newvm, "Import", "radio").click()
-        uiutils.find_fuzzy(newvm, None,
-            "text", "existing storage").text = "/tmp/foo.img"
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
-        time.sleep(1)
+        self._do_simple_import(newvm)
 
         self.app.quit()
