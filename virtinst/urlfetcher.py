@@ -167,6 +167,7 @@ class _FTPImageFetcher(_URIImageFetcher):
         except:
             logging.debug("Error quitting ftp connection", exc_info=True)
 
+        self.ftp = None
 
     def hasFile(self, filename):
         path = self._make_path(filename)
