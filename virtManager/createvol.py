@@ -170,7 +170,7 @@ class vmmCreateVolume(vmmGObjectUI):
     def reset_state(self):
         self._make_stub_vol()
 
-        self.widget("vol-name").set_text("")
+        self.widget("vol-name").set_text(self.default_vol_name() or "")
         self.widget("vol-name").grab_focus()
         self.vol_name_changed(self.widget("vol-name"))
 
