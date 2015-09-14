@@ -83,6 +83,26 @@ def _pretty_memory(mem):
     return "%d MiB" % (mem / 1024.0)
 
 
+###########################################################
+# Helpers for tracking devices we create from this wizard #
+###########################################################
+
+def _mark_vmm_device(dev):
+    setattr(dev, "vmm_create_wizard_device", True)
+
+
+def _get_vmm_device(guest, devkey):
+    for dev in guest.get_devices(devkey):
+        if hasattr(dev, "vmm_create_wizard_device"):
+            return dev
+
+
+def _remove_vmm_device(guest, devkey):
+    dev = _get_vmm_device(guest, devkey)
+    if dev:
+        guest.remove_device(dev)
+
+
 ##############
 # Main class #
 ##############
@@ -100,8 +120,6 @@ class vmmCreate(vmmGObjectUI):
         self._capsinfo = None
 
         self._guest = None
-        self._disk = None
-        self._nic = None
         self._failed_guest = None
 
         # Distro detection state variables
@@ -197,8 +215,6 @@ class vmmCreate(vmmGObjectUI):
         self._capsinfo = None
 
         self._guest = None
-        self._disk = None
-        self._nic = None
 
         if self._storage_browser:
             self._storage_browser.cleanup()
@@ -344,8 +360,6 @@ class vmmCreate(vmmGObjectUI):
         """
         self._failed_guest = None
         self._guest = None
-        self._disk = None
-        self._nic = None
         self._show_all_os_was_selected = False
 
         self.widget("create-pages").set_current_page(PAGE_NAME)
@@ -974,6 +988,28 @@ class vmmCreate(vmmGObjectUI):
     # Misc UI populating routines #
     ###############################
 
+    def _populate_summary_storage(self):
+        storagetmpl = "<span size='small' color='#484848'>%s</span>"
+        storagesize = ""
+        storagepath = ""
+
+        disk = _get_vmm_device(self._guest, "disk")
+        if disk:
+            if disk.wants_storage_creation():
+                storagesize = "%s" % _pretty_storage(disk.get_size())
+            storagepath += " " + (storagetmpl % disk.path)
+        elif len(self._guest.get_devices("filesystem")):
+            fs = self._guest.get_devices("filesystem")[0]
+            storagepath = storagetmpl % fs.source
+        elif self._guest.os.is_container():
+            storagepath = _("Host filesystem")
+        else:
+            storagepath = _("None")
+
+        self.widget("summary-storage").set_markup(storagesize)
+        self.widget("summary-storage").set_visible(bool(storagesize))
+        self.widget("summary-storage-path").set_markup(storagepath)
+
     def _populate_summary(self):
         distro, version, ignore1, dlabel, vlabel = self._get_config_os_info()
         mem = _pretty_memory(int(self._guest.memory))
@@ -994,22 +1030,6 @@ class vmmCreate(vmmGObjectUI):
         elif instmethod == INSTALL_PAGE_CONTAINER_OS:
             install = _("Operating system container")
 
-        storagetmpl = "<span size='small' color='#484848'>%s</span>"
-        storagesize = ""
-        storagepath = ""
-        disks = self._guest.get_devices("disk")
-        if disks:
-            disk = disks[0]
-            storagesize = "%s" % _pretty_storage(disk.get_size())
-            storagepath += " " + (storagetmpl % disk.path)
-        elif len(self._guest.get_devices("filesystem")):
-            fs = self._guest.get_devices("filesystem")[0]
-            storagepath = storagetmpl % fs.source
-        elif self._guest.os.is_container():
-            storagepath = _("Host filesystem")
-        else:
-            storagepath = _("None")
-
         osstr = ""
         have_os = True
         if self._guest.os.is_container():
@@ -1028,9 +1048,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("summary-install").set_text(install)
         self.widget("summary-mem").set_text(mem)
         self.widget("summary-cpu").set_text(cpu)
-        self.widget("summary-storage").set_markup(storagesize)
-        self.widget("summary-storage").set_visible(bool(storagesize))
-        self.widget("summary-storage-path").set_markup(storagepath)
+        self._populate_summary_storage()
 
         self._netdev_changed(None)
 
@@ -1846,11 +1864,8 @@ class vmmCreate(vmmGObjectUI):
 
     def _validate_storage_page(self):
         failed_disk = None
-        if self._disk and self._disk in self._guest.get_devices("disk"):
-            self._guest.remove_device(self._disk)
-            if self._failed_guest:
-                failed_disk = self._disk
-        self._disk = None
+        if self._failed_guest:
+            failed_disk = _get_vmm_device(self._failed_guest, "disk")
 
         path = None
         path_already_created = False
@@ -1859,8 +1874,8 @@ class vmmCreate(vmmGObjectUI):
             path = self._get_config_import_path()
 
         elif self._is_default_storage():
-            # Don't generate a new path if the install failed
-            if failed_disk and failed_disk.device == "disk":
+            if failed_disk:
+                # Don't generate a new path if the install failed
                 path = failed_disk.path
                 path_already_created = failed_disk.storage_was_created
                 logging.debug("Reusing failed disk path=%s "
@@ -1869,31 +1884,33 @@ class vmmCreate(vmmGObjectUI):
                 path = self._addstorage.get_default_path(self._guest.name)
                 logging.debug("Default storage path is: %s", path)
 
-        ret = None
+        disk = None
         storage_enabled = self.widget("enable-storage").get_active()
         try:
             if storage_enabled:
-                ret = self._addstorage.validate_storage(self._guest.name,
+                disk = self._addstorage.validate_storage(self._guest.name,
                     path=path)
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 
-        if ret is False:
+        if disk is False:
             return False
 
         if self._get_config_install_page() == INSTALL_PAGE_ISO:
             # CD/ISO install and no disks implies LiveCD
             self._guest.installer.livecd = not storage_enabled
 
+        if disk and self._addstorage.validate_disk_object(disk) is False:
+            return False
+
+        _remove_vmm_device(self._guest, "disk")
+
         if not storage_enabled:
             return True
 
-        if self._addstorage.validate_disk_object(ret) is False:
-            return False
-
-        self._disk = ret
-        self._disk.storage_was_created = path_already_created
-        self._guest.add_device(self._disk)
+        disk.storage_was_created = path_already_created
+        _mark_vmm_device(disk)
+        self._guest.add_device(disk)
 
         return True
 
@@ -1935,11 +1952,10 @@ class vmmCreate(vmmGObjectUI):
         if nic is False:
             return False
 
-        if self._nic in self._guest.get_devices("interface"):
-            self._guest.remove_device(self._nic)
+        _remove_vmm_device(self._guest, "interface")
         if nic:
-            self._nic = nic
-            self._guest.add_device(self._nic)
+            _mark_vmm_device(nic)
+            self._guest.add_device(nic)
 
         return True
 
