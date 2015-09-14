@@ -87,6 +87,10 @@ class DogtailApp(object):
         time.sleep(.5)
 
 
+#########################
+# Widget search helpers #
+#########################
+
 def find_pattern(root, name, roleName=None, labeller_text=None):
     """
     Search root for any widget that contains the passed name/role regex
@@ -120,6 +124,26 @@ def find_fuzzy(root, name, roleName=None, labeller_text=None):
         labeller_pattern)
 
 
+def check_in_loop(func, timeout=-1):
+    """
+    Run the passed func in a loop every .5 seconds until timeout is hit or
+    the func returns True.
+    If timeout=-1, check indefinitely.
+    """
+    total_time = 0.0
+    while True:
+        time.sleep(.5)
+        total_time += .5
+        if func() is True:
+            return
+        if timeout > 0 and total_time >= timeout:
+            raise RuntimeError("Loop condition wasn't met")
+
+
+#####################
+# Debugging helpers #
+#####################
+
 def node_string(node):
     msg = "name='%s' roleName='%s'" % (node.name, node.roleName)
     if node.labeller:
@@ -141,17 +165,15 @@ def print_nodes(root):
     root.findChildren(_walk, isLambda=True)
 
 
-def check_in_loop(func, timeout=-1):
+def focused_nodes(root):
     """
-    Run the passed func in a loop every .5 seconds until timeout is hit or
-    the func returns True.
-    If timeout=-1, check indefinitely.
+    Return a list of all focused nodes. Useful for debugging
     """
-    total_time = 0.0
-    while True:
-        time.sleep(.5)
-        total_time += .5
-        if func() is True:
-            return
-        if timeout > 0 and total_time >= timeout:
-            raise RuntimeError("Loop condition wasn't met")
+    def _walk(node):
+        try:
+            if node.focused:
+                return node
+        except Exception, e:
+            print "got exception: %s" % e
+
+    return root.findChildren(_walk, isLambda=True)

@@ -617,6 +617,16 @@
                                 <signal name="changed" handler="on_hw_list_changed" swapped="no"/>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="hw-list-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">hw-list</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="scrolledwindow5-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">hw-list-scroll</property>
                           </object>
                         </child>
                       </object>
