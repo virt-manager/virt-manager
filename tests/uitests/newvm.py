@@ -272,3 +272,26 @@ class NewVM(unittest.TestCase):
         uiutils.find_fuzzy(self.app.root, "container1 on", "frame")
         self.assertFalse(newvm.showing)
         self.app.quit()
+
+    def testNewXenPV(self):
+        """
+        Test the create wizard with a fake xen PV install
+        """
+        self.app.uri = tests.utils.uri_xen
+        newvm = self._open_create_wizard()
+
+        uiutils.find_fuzzy(newvm, "Architecture options", "toggle").click()
+        uiutils.find_fuzzy(newvm, None, "combo", "Virt Type").click()
+        uiutils.find_fuzzy(newvm, "paravirt", "menu item").click()
+
+        # Create default PXE VM
+        uiutils.find_fuzzy(newvm, "Import", "radio").click()
+        uiutils.find_fuzzy(newvm, None,
+            "text", "existing storage").text = "/tmp/foo.img"
+        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        time.sleep(1)
+
+        self.app.quit()
