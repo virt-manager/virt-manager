@@ -24,7 +24,7 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
     def describeSearchResult(self, node=None):
         if not node:
             return ""
-        return DogtailApp.node_string(node)
+        return node_string(node)
 
     def satisfiedByNode(self, node):
         """
@@ -86,57 +86,56 @@ class DogtailApp(object):
         self.root.keyCombo("<ctrl>q")
         time.sleep(.5)
 
-    @staticmethod
-    def find_pattern(root, name, roleName=None, labeller_text=None):
-        """
-        Search root for any widget that contains the passed name/role regex
-        strings.
-        """
-        pred = _FuzzyPredicate(name, roleName, labeller_text)
 
+def find_pattern(root, name, roleName=None, labeller_text=None):
+    """
+    Search root for any widget that contains the passed name/role regex
+    strings.
+    """
+    pred = _FuzzyPredicate(name, roleName, labeller_text)
+
+    try:
+        return root.findChild(pred)
+    except dogtail.tree.SearchError:
+        raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
+            "roleName='%s' labeller_text='%s'" %
+            (name, roleName, labeller_text))
+
+
+def find_fuzzy(root, name, roleName=None, labeller_text=None):
+    """
+    Search root for any widget that contains the passed name/role strings.
+    """
+    name_pattern = None
+    role_pattern = None
+    labeller_pattern = None
+    if name:
+        name_pattern = ".*%s.*" % name
+    if roleName:
+        role_pattern = ".*%s.*" % roleName
+    if labeller_text:
+        labeller_pattern = ".*%s.*" % labeller_text
+
+    return find_pattern(root, name_pattern, role_pattern,
+        labeller_pattern)
+
+
+def node_string(node):
+    msg = "name='%s' roleName='%s'" % (node.name, node.roleName)
+    if node.labeller:
+        msg += " labeller.text='%s'" % node.labeller.text
+    return msg
+
+
+def print_nodes(root):
+    """
+    Helper to print the entire node tree for the passed root. Useful
+    if to figure out the roleName for the object you are looking for
+    """
+    def _walk(node):
         try:
-            return root.findChild(pred)
-        except dogtail.tree.SearchError:
-            raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
-                "roleName='%s' labeller_text='%s'" %
-                (name, roleName, labeller_text))
+            print node_string(node)
+        except Exception, e:
+            print "got exception: %s" % e
 
-
-    @staticmethod
-    def find_fuzzy(root, name, roleName=None, labeller_text=None):
-        """
-        Search root for any widget that contains the passed name/role strings.
-        """
-        name_pattern = None
-        role_pattern = None
-        labeller_pattern = None
-        if name:
-            name_pattern = ".*%s.*" % name
-        if roleName:
-            role_pattern = ".*%s.*" % roleName
-        if labeller_text:
-            labeller_pattern = ".*%s.*" % labeller_text
-
-        return DogtailApp.find_pattern(root, name_pattern, role_pattern,
-            labeller_pattern)
-
-    @staticmethod
-    def node_string(node):
-        msg = "name='%s' roleName='%s'" % (node.name, node.roleName)
-        if node.labeller:
-            msg += " labeller.text='%s'" % node.labeller.text
-        return msg
-
-    @staticmethod
-    def print_nodes(root):
-        """
-        Helper to print the entire node tree for the passed root. Useful
-        if to figure out the roleName for the object you are looking for
-        """
-        def _walk(node):
-            try:
-                print DogtailApp.node_string(node)
-            except Exception, e:
-                print "got exception: %s" % e
-
-        root.findChildren(_walk, isLambda=True)
+    root.findChildren(_walk, isLambda=True)
