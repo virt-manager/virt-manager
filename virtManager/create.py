@@ -747,7 +747,6 @@ class vmmCreate(vmmGObjectUI):
             model.append([label, gtype])
 
         show = bool(len(model))
-        print "showing xen default=%s" % default
         uiutil.set_grid_row_visible(self.widget("xen-type"), show)
         if show:
             self.widget("xen-type").set_active(default)
@@ -1281,7 +1280,6 @@ class vmmCreate(vmmGObjectUI):
 
     def _xen_type_changed(self, ignore):
         os_type = uiutil.get_list_selection(self.widget("xen-type"), column=1)
-        print "xen_type_changed", os_type
         if not os_type:
             return
 
