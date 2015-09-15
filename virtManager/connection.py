@@ -372,7 +372,7 @@ class vmmConnection(vmmGObject):
             "uml"       : "UML",
             "vbox"      : "VBox",
             "vmware"    : "VMWare",
-            "xen"       : "xen",
+            "xen"       : "Xen",
             "xenapi"    : "XenAPI",
         }
 
@@ -385,7 +385,7 @@ class vmmConnection(vmmGObject):
 
         if is_session:
             ret += " User session"
-        elif path != "/system":
+        elif (path and path != "/system" and os.path.basename(path)):
             # Used by test URIs to report what XML file they are using
             ret += " %s" % os.path.basename(path)
 
