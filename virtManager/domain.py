@@ -392,6 +392,13 @@ class vmmDomain(vmmLibvirtObject):
             self.config.on_stats_enable_memory_poll_changed(
                 self._on_config_sample_mem_stats_changed))
 
+        if (self.get_name() == "Domain-0" and
+            self.get_uuid() == "00000000-0000-0000-0000-000000000000"):
+            # We don't want virt-manager to track Domain-0 since it
+            # doesn't work with our UI. Raising an error will ensures it
+            # is blacklisted.
+            raise RuntimeError("Can't track Domain-0 as a vmmDomain")
+
         self.connect("pre-startup", self._prestartup_nodedev_check)
 
     def _prestartup_nodedev_check(self, src, ret):
