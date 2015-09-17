@@ -21,7 +21,8 @@ import logging
 
 
 # Debugging helper to force old style polling
-_force_old_poll = False
+# Can be enabled with virt-manager --test-old-poll
+FORCE_OLD_POLL = False
 
 
 def _new_poll_helper(origmap, typename, listfunc, buildfunc):
@@ -114,7 +115,7 @@ def fetch_nets(backend, origmap, build_func):
     name = "network"
 
     if backend.check_support(
-        backend.SUPPORT_CONN_LISTALLNETWORKS) and not _force_old_poll:
+        backend.SUPPORT_CONN_LISTALLNETWORKS) and not FORCE_OLD_POLL:
         return _new_poll_helper(origmap, name,
                                 backend.listAllNetworks, build_func)
     else:
@@ -131,7 +132,7 @@ def fetch_pools(backend, origmap, build_func):
     name = "pool"
 
     if backend.check_support(
-        backend.SUPPORT_CONN_LISTALLSTORAGEPOOLS) and not _force_old_poll:
+        backend.SUPPORT_CONN_LISTALLSTORAGEPOOLS) and not FORCE_OLD_POLL:
         return _new_poll_helper(origmap, name,
                                 backend.listAllStoragePools, build_func)
     else:
@@ -148,7 +149,7 @@ def fetch_volumes(backend, pool, origmap, build_func):
     name = "volume"
 
     if backend.check_support(
-        backend.SUPPORT_POOL_LISTALLVOLUMES, pool) and not _force_old_poll:
+        backend.SUPPORT_POOL_LISTALLVOLUMES, pool) and not FORCE_OLD_POLL:
         return _new_poll_helper(origmap, name,
                                 pool.listAllVolumes, build_func)
     else:
@@ -165,7 +166,7 @@ def fetch_interfaces(backend, origmap, build_func):
     name = "interface"
 
     if backend.check_support(
-        backend.SUPPORT_CONN_LISTALLINTERFACES) and not _force_old_poll:
+        backend.SUPPORT_CONN_LISTALLINTERFACES) and not FORCE_OLD_POLL:
         return _new_poll_helper(origmap, name,
                                 backend.listAllInterfaces, build_func)
     else:
@@ -181,7 +182,7 @@ def fetch_interfaces(backend, origmap, build_func):
 def fetch_nodedevs(backend, origmap, build_func):
     name = "nodedev"
     if backend.check_support(
-        backend.SUPPORT_CONN_LISTALLDEVICES) and not _force_old_poll:
+        backend.SUPPORT_CONN_LISTALLDEVICES) and not FORCE_OLD_POLL:
         return _new_poll_helper(origmap, name,
                                 backend.listAllDevices, build_func)
     else:

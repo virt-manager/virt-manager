@@ -101,6 +101,12 @@ def parse_commandline():
     # PackageKit integration
     parser.add_argument("--test-first-run", dest="testfirstrun",
         help=argparse.SUPPRESS, action="store_true")
+    # Force use of old style libvirt polling APIs
+    parser.add_argument("--test-old-poll", dest="testoldpoll",
+        help=argparse.SUPPRESS, action="store_true")
+    # Force disable use of libvirt object events
+    parser.add_argument("--test-no-events", dest="testnoevents",
+        help=argparse.SUPPRESS, action="store_true")
 
     parser.add_argument("-c", "--connect", dest="uri",
         help="Connect to hypervisor at URI", metavar="URI")
@@ -233,6 +239,12 @@ def main():
     from virtManager.engine import vmmEngine
 
     Gtk.Window.set_default_icon_name("virt-manager")
+
+    import virtManager.connection
+    virtManager.connection.FORCE_DISABLE_EVENTS = bool(options.testnoevents)
+
+    import virtinst.pollhelpers
+    virtinst.pollhelpers.FORCE_OLD_POLL = bool(options.testoldpoll)
 
     show = None
     if options.show_domain_creator:

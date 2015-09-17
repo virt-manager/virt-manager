@@ -42,7 +42,8 @@ from .storagepool import vmmStoragePool
 
 
 # debugging helper to turn off events
-_disable_libvirt_events = False
+# Can be enabled with virt-manager --test-no-events
+FORCE_DISABLE_EVENTS = False
 
 
 class _ObjectList(vmmGObject):
@@ -748,8 +749,8 @@ class vmmConnection(vmmGObject):
             return
 
         try:
-            if _disable_libvirt_events:
-                raise RuntimeError("_disable_libvirt_events = True")
+            if FORCE_DISABLE_EVENTS:
+                raise RuntimeError("FORCE_DISABLE_EVENTS = True")
 
             self._domain_cb_ids.append(
                 self.get_backend().domainEventRegisterAny(
@@ -785,8 +786,8 @@ class vmmConnection(vmmGObject):
             "device added")
 
         try:
-            if _disable_libvirt_events:
-                raise RuntimeError("_disable_libvirt_events = True")
+            if FORCE_DISABLE_EVENTS:
+                raise RuntimeError("FORCE_DISABLE_EVENTS = True")
 
             eventid = getattr(libvirt, "VIR_NETWORK_EVENT_ID_LIFECYCLE", 0)
             self._network_cb_ids.append(
