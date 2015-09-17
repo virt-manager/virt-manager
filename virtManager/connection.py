@@ -54,6 +54,7 @@ class _ObjectList(vmmGObject):
         vmmGObject.__init__(self)
 
         self._objects = []
+        self._blacklist = []
         self._lock = threading.Lock()
 
     def _cleanup(self):
@@ -69,6 +70,29 @@ class _ObjectList(vmmGObject):
         finally:
             self._lock.release()
 
+    def _blacklist_key(self, obj):
+        return str(obj.__class__) + obj.get_connkey()
+
+    def add_blacklist(self, obj):
+        """
+        Add an object to the blacklist. Basically a list of objects we
+        choose not to poll, because they threw an error at init time
+
+        :param obj: vmmLibvirtObject to blacklist
+        :returns: True if object added, False if object was already in list
+        """
+        if self.in_blacklist(obj):
+            return False
+        self._blacklist.append(self._blacklist_key(obj))
+        return True
+
+    def in_blacklist(self, obj):
+        """
+        :param obj: vmmLibvirtObject to check
+        :returns: True if object is in the blacklist
+        """
+        return self._blacklist_key(obj) in self._blacklist
+
     def remove(self, obj):
         """
         Remove an object from the list.
@@ -82,6 +106,10 @@ class _ObjectList(vmmGObject):
             # Identity check is sufficient here, since we should never be
             # asked to remove an object that wasn't at one point in the list.
             if obj not in self._objects:
+                if self.in_blacklist(obj):
+                    self._blacklist.remove(self._blacklist_key(obj))
+                    return True
+
                 return False
 
             self._objects.remove(obj)
@@ -990,12 +1018,18 @@ class vmmConnection(vmmGObject):
                 self.emit("nodedev-removed", obj.get_connkey())
             obj.cleanup()
 
-    def _new_object_cb(self, obj):
+    def _new_object_cb(self, obj, initialize_failed):
         if not self._backend.is_open():
             return
 
         try:
             class_name = obj.class_name()
+
+            if initialize_failed:
+                logging.debug("Blacklisting %s=%s", class_name, obj.get_name())
+                if self._objects.add_blacklist(obj) is False:
+                    logging.debug("Object already blacklisted?")
+                return
 
             if not self._objects.add(obj):
                 logging.debug("New %s=%s requested, but it's already tracked.",
@@ -1074,6 +1108,7 @@ class vmmConnection(vmmGObject):
 
             gone_objects.extend(gone)
             preexisting_objects.extend([o for o in master if o not in new])
+            new = [n for n in new if not self._objects.in_blacklist(n)]
             return new
 
         new_vms = _process_objects(self._update_vms(pollvm))

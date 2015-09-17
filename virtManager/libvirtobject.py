@@ -28,7 +28,7 @@ from .baseclass import vmmGObject
 class vmmLibvirtObject(vmmGObject):
     __gsignals__ = {
         "state-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "initialized": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "initialized": (GObject.SignalFlags.RUN_FIRST, None, [bool]),
     }
 
     _STATUS_ACTIVE = 1
@@ -185,14 +185,16 @@ class vmmLibvirtObject(vmmGObject):
         if self.__initialized:
             return
 
+        initialize_failed = False
         try:
             self._init_libvirt_state()
         except:
             logging.debug("Error initializing libvirt state for %s", self,
                 exc_info=True)
+            initialize_failed = True
 
         self.__initialized = True
-        self.idle_emit("initialized")
+        self.idle_emit("initialized", initialize_failed)
 
 
     ###################
