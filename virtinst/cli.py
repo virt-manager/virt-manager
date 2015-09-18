@@ -250,6 +250,8 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
         sys.__excepthook__(typ, val, tb)
     sys.excepthook = exception_log
 
+    logging.getLogger("requests").setLevel(logging.ERROR)
+
     # Log the app command string
     logging.debug("Launched with command line: %s", " ".join(sys.argv))
 

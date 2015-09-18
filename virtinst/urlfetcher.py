@@ -24,14 +24,13 @@ import ftplib
 import logging
 import os
 import re
+import requests
 import stat
 import StringIO
 import subprocess
 import tempfile
 import urllib2
 import urlparse
-
-import urlgrabber.grabber as grabber
 
 from .osdict import OSDB
 
@@ -45,6 +44,8 @@ class _URLFetcher(object):
     This is a generic base class for fetching/extracting files from
     a media source, such as CD ISO, NFS server, or HTTP/FTP server
     """
+    _block_size = 16384
+
     def __init__(self, location, scratchdir, meter):
         self.location = location
         self.scratchdir = scratchdir
@@ -53,6 +54,7 @@ class _URLFetcher(object):
         self._srcdir = None
 
         logging.debug("Using scratchdir=%s", scratchdir)
+
 
     ####################
     # Internal helpers #
@@ -71,32 +73,48 @@ class _URLFetcher(object):
             ret += "/"
         return ret + filename
 
-    def _writeURLToFileobj(self, urlobj, fileobj):
+    def _grabURL(self, filename, fileobj):
         """
-        Write the urlobj contents into the passed python style file object
-        """
-        block_size = 16384
-        while 1:
-            buff = urlobj.read(block_size)
-            if not buff:
-                break
-            fileobj.write(buff)
-
-    def _grabURL(self, filename):
-        """
-        Return the urlobj from grabber.urlopen
+        Download the filename from self.location, and write contents to
+        fileobj
         """
         url = self._make_full_url(filename)
-        base = os.path.basename(filename)
-        logging.debug("Fetching URI: %s", url)
 
         try:
-            return grabber.urlopen(url,
-                                progress_obj=self.meter,
-                                text=_("Retrieving file %s...") % base)
+            urlobj, size = self._grabber(url)
         except Exception, e:
             raise ValueError(_("Couldn't acquire file %s: %s") %
                                (url, str(e)))
+
+        logging.debug("Fetching URI: %s", url)
+        self.meter.start(
+            text=_("Retrieving file %s...") % os.path.basename(filename),
+            size=size)
+
+        total = self._write(urlobj, fileobj)
+        self.meter.end(total)
+
+    def _write(self, urlobj, fileobj):
+        """
+        Write the contents of urlobj to python file like object fileobj
+        """
+        total = 0
+        while 1:
+            buff = urlobj.read(self._block_size)
+            if not buff:
+                break
+            fileobj.write(buff)
+            total += len(buff)
+            self.meter.update(total)
+        return total
+
+    def _grabber(self, url):
+        """
+        Returns the urlobj, size for the passed URL. urlobj is whatever
+        data needs to be passed to self._write
+        """
+        raise NotImplementedError("must be implemented in subclass")
+
 
     ##############
     # Public API #
@@ -125,42 +143,63 @@ class _URLFetcher(object):
         Grab the passed filename from self.location and save it to
         a temporary file, returning the temp filename
         """
-        urlobj = self._grabURL(filename)
         prefix = "virtinst-" + os.path.basename(filename) + "."
 
         if "VIRTINST_TEST_SUITE" in os.environ:
-            filename = os.path.join("/tmp", prefix)
-            fileobj = file(filename, "w+b")
+            fn = os.path.join("/tmp", prefix)
+            fileobj = file(fn, "w")
         else:
             fileobj = tempfile.NamedTemporaryFile(
                 dir=self.scratchdir, prefix=prefix, delete=False)
-            filename = fileobj.name
+            fn = fileobj.name
 
-        self._writeURLToFileobj(urlobj, fileobj)
-        logging.debug("Saved file to " + filename)
-        return filename
+        self._grabURL(filename, fileobj)
+        logging.debug("Saved file to " + fn)
+        return fn
 
     def acquireFileContent(self, filename):
         """
         Grab the passed filename from self.location and return it as a string
         """
         fileobj = StringIO.StringIO()
-        urlobj = self._grabURL(filename)
-        self._writeURLToFileobj(urlobj, fileobj)
+        self._grabURL(filename, fileobj)
         return fileobj.getvalue()
 
 
 class _HTTPURLFetcher(_URLFetcher):
     def hasFile(self, filename):
+        """
+        We just do a HEAD request to see if the file exists
+        """
         url = self._make_full_url(filename)
         try:
-            request = urllib2.Request(url)
-            request.get_method = lambda: "HEAD"
-            urllib2.urlopen(request)
+            response = requests.head(url)
+            response.raise_for_status()
         except Exception, e:
             logging.debug("HTTP hasFile: didn't find %s: %s", url, str(e))
             return False
         return True
+
+    def _grabber(self, url):
+        """
+        Use requests for this
+        """
+        response = requests.get(url, stream=True)
+        response.raise_for_status()
+        size = response.headers.get('content-length')
+        return response, size.isdigit() and int(size) or None
+
+    def _write(self, urlobj, fileobj):
+        """
+        The requests object doesn't have a file-like read() option, so
+        we need to implemente it ourselves
+        """
+        total = 0
+        for data in urlobj.iter_content(chunk_size=self._block_size):
+            fileobj.write(data)
+            total += len(data)
+            self.meter.update(total)
+        return total
 
 
 class _FTPURLFetcher(_URLFetcher):
@@ -171,12 +210,22 @@ class _FTPURLFetcher(_URLFetcher):
             return
 
         try:
-            urlret = urlparse.urlparse(self._make_full_url(""))
-            self._ftp = ftplib.FTP(urlret[1])
+            server = urlparse.urlparse(self.location)[1]
+            self._ftp = ftplib.FTP(server)
             self._ftp.login()
         except Exception, e:
             raise ValueError(_("Opening URL %s failed: %s.") %
                               (self.location, str(e)))
+
+    def _grabber(self, url):
+        """
+        Use urllib2 and ftplib to grab the file
+        """
+        request = urllib2.Request(url)
+        urlobj = urllib2.urlopen(request)
+        size = self._ftp.size(urlparse.urlparse(url)[2])
+        return urlobj, size
+
 
     def cleanupLocation(self):
         if not self._ftp:
@@ -191,15 +240,15 @@ class _FTPURLFetcher(_URLFetcher):
 
     def hasFile(self, filename):
         url = self._make_full_url(filename)
-        urlret = urlparse.urlparse(url)
+        path = urlparse.urlparse(url)[2]
 
         try:
             try:
                 # If it's a file
-                self._ftp.size(urlret[2])
+                self._ftp.size(path)
             except ftplib.all_errors:
                 # If it's a dir
-                self._ftp.cwd(urlret[2])
+                self._ftp.cwd(path)
         except ftplib.all_errors, e:
             logging.debug("FTP hasFile: couldn't access %s: %s",
                           url, str(e))
@@ -218,6 +267,11 @@ class _LocalURLFetcher(_URLFetcher):
         if not ret:
             logging.debug("local hasFile: Couldn't find %s", url)
         return ret
+
+    def _grabber(self, url):
+        urlobj = file(url, "r")
+        size = os.path.getsize(url)
+        return urlobj, size
 
 
 class _MountedURLFetcher(_LocalURLFetcher):
