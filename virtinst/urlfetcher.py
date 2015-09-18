@@ -39,7 +39,7 @@ from .osdict import OSDB
 # Backends for the various URL types we support (http, ftp, nfs, local) #
 #########################################################################
 
-class _ImageFetcher(object):
+class _URLFetcher(object):
     """
     This is a generic base class for fetching/extracting files from
     a media source, such as CD ISO, NFS server, or HTTP/FTP server
@@ -48,24 +48,33 @@ class _ImageFetcher(object):
         self.location = location
         self.scratchdir = scratchdir
         self.meter = meter
-        self.srcdir = None
+
+        self._srcdir = None
 
         logging.debug("Using scratchdir=%s", scratchdir)
 
-    def _make_path(self, filename):
-        path = self.srcdir or self.location
+    ####################
+    # Internal helpers #
+    ####################
 
-        if filename:
-            if not path.endswith("/"):
-                path += "/"
-            path += filename
+    def _make_full_url(self, filename):
+        """
+        Generate a full fetchable URL from the passed filename, which
+        is relative to the self.location
+        """
+        ret = self._srcdir or self.location
+        if not filename:
+            return ret
 
-        return path
+        if not ret.endswith("/"):
+            ret += "/"
+        return ret + filename
 
-    def saveTemp(self, fileobj, prefix):
-        if not os.path.exists(self.scratchdir):
-            os.makedirs(self.scratchdir, 0750)
-
+    def _saveTemp(self, fileobj, prefix):
+        """
+        Save the fileobj contents to a temporary file, and return
+        the filename
+        """
         prefix = "virtinst-" + prefix
         if "VIRTINST_TEST_SUITE" in os.environ:
             fn = os.path.join("/tmp", prefix)
@@ -85,18 +94,38 @@ class _ImageFetcher(object):
             os.close(fd)
         return fn
 
+
+    ##############
+    # Public API #
+    ##############
+
     def prepareLocation(self):
+        """
+        Perform any necessary setup
+        """
         pass
 
     def cleanupLocation(self):
+        """
+        Perform any necessary cleanup
+        """
         pass
 
+    def hasFile(self, filename):
+        """
+        Return True if self.location has the passed filename
+        """
+        raise NotImplementedError("Must be implemented in subclass")
+
     def acquireFile(self, filename):
-        # URLGrabber works for all network and local cases
+        """
+        Grab the passed filename from self.location and save it to
+        a temporary file, returning the temp filename
+        """
 
         f = None
         try:
-            path = self._make_path(filename)
+            path = self._make_full_url(filename)
             base = os.path.basename(filename)
             logging.debug("Fetching URI: %s", path)
 
@@ -108,7 +137,7 @@ class _ImageFetcher(object):
                 raise ValueError(_("Couldn't acquire file %s: %s") %
                                    (path, str(e)))
 
-            tmpname = self.saveTemp(f, prefix=base + ".")
+            tmpname = self._saveTemp(f, prefix=base + ".")
             logging.debug("Saved file to " + tmpname)
             return tmpname
         finally:
@@ -116,89 +145,78 @@ class _ImageFetcher(object):
                 f.close()
 
 
-    def hasFile(self, src):
-        raise NotImplementedError("Must be implemented in subclass")
 
-
-class _URIImageFetcher(_ImageFetcher):
-    """
-    Base class for downloading from FTP / HTTP
-    """
+class _HTTPURLFetcher(_URLFetcher):
     def hasFile(self, filename):
-        raise NotImplementedError
-
-
-class _HTTPImageFetcher(_URIImageFetcher):
-    def hasFile(self, filename):
+        url = self._make_full_url(filename)
         try:
-            path = self._make_path(filename)
-            request = urllib2.Request(path)
+            request = urllib2.Request(url)
             request.get_method = lambda: "HEAD"
             urllib2.urlopen(request)
         except Exception, e:
-            logging.debug("HTTP hasFile: didn't find %s: %s", path, str(e))
+            logging.debug("HTTP hasFile: didn't find %s: %s", url, str(e))
             return False
         return True
 
 
-class _FTPImageFetcher(_URIImageFetcher):
-    ftp = None
+class _FTPURLFetcher(_URLFetcher):
+    _ftp = None
 
     def prepareLocation(self):
-        if self.ftp:
+        if self._ftp:
             return
 
         try:
-            url = urlparse.urlparse(self._make_path(""))
-            if not url[1]:
-                raise ValueError(_("Invalid install location"))
-            self.ftp = ftplib.FTP(url[1])
-            self.ftp.login()
+            urlret = urlparse.urlparse(self._make_full_url(""))
+            self._ftp = ftplib.FTP(urlret[1])
+            self._ftp.login()
         except Exception, e:
             raise ValueError(_("Opening URL %s failed: %s.") %
                               (self.location, str(e)))
 
     def cleanupLocation(self):
-        if not self.ftp:
+        if not self._ftp:
             return
 
         try:
-            self.ftp.quit()
+            self._ftp.quit()
         except:
             logging.debug("Error quitting ftp connection", exc_info=True)
 
-        self.ftp = None
+        self._ftp = None
 
     def hasFile(self, filename):
-        path = self._make_path(filename)
-        url = urlparse.urlparse(path)
+        url = self._make_full_url(filename)
+        urlret = urlparse.urlparse(url)
 
         try:
             try:
                 # If it's a file
-                self.ftp.size(url[2])
+                self._ftp.size(urlret[2])
             except ftplib.all_errors:
                 # If it's a dir
-                self.ftp.cwd(url[2])
+                self._ftp.cwd(urlret[2])
         except ftplib.all_errors, e:
             logging.debug("FTP hasFile: couldn't access %s: %s",
-                          path, str(e))
+                          url, str(e))
             return False
 
         return True
 
 
-class _LocalImageFetcher(_ImageFetcher):
+class _LocalURLFetcher(_URLFetcher):
+    """
+    For grabbing files from a local directory
+    """
     def hasFile(self, filename):
-        src = self._make_path(filename)
-        if os.path.exists(src):
-            return True
-        else:
-            logging.debug("local hasFile: Couldn't find %s", src)
-            return False
+        url = self._make_full_url(filename)
+        ret = os.path.exists(url)
+        if not ret:
+            logging.debug("local hasFile: Couldn't find %s", url)
+        return ret
 
 
-class _MountedImageFetcher(_LocalImageFetcher):
+class _MountedURLFetcher(_LocalURLFetcher):
     """
     Fetcher capable of extracting files from a NFS server
     or loopback mounted file, or local CDROM device
@@ -211,21 +229,21 @@ class _MountedImageFetcher(_LocalImageFetcher):
             return
 
         if self._in_test_suite:
-            self.srcdir = os.environ["VIRTINST_TEST_URL_DIR"]
+            self._srcdir = os.environ["VIRTINST_TEST_URL_DIR"]
         else:
-            self.srcdir = tempfile.mkdtemp(prefix="virtinstmnt.",
+            self._srcdir = tempfile.mkdtemp(prefix="virtinstmnt.",
                                            dir=self.scratchdir)
         mountcmd = "/bin/mount"
 
-        logging.debug("Preparing mount at " + self.srcdir)
+        logging.debug("Preparing mount at " + self._srcdir)
         if self.location.startswith("nfs:"):
-            cmd = [mountcmd, "-o", "ro", self.location[4:], self.srcdir]
+            cmd = [mountcmd, "-o", "ro", self.location[4:], self._srcdir]
         else:
             if stat.S_ISBLK(os.stat(self.location)[stat.ST_MODE]):
                 mountopt = "ro"
             else:
                 mountopt = "ro,loop"
-            cmd = [mountcmd, "-o", mountopt, self.location, self.srcdir]
+            cmd = [mountcmd, "-o", mountopt, self.location, self._srcdir]
 
         logging.debug("mount cmd: %s", cmd)
         if not self._in_test_suite:
@@ -241,36 +259,32 @@ class _MountedImageFetcher(_LocalImageFetcher):
         if not self._mounted:
             return
 
-        logging.debug("Cleaning up mount at " + self.srcdir)
+        logging.debug("Cleaning up mount at " + self._srcdir)
         try:
             if not self._in_test_suite:
-                cmd = ["/bin/umount", self.srcdir]
+                cmd = ["/bin/umount", self._srcdir]
                 subprocess.call(cmd)
                 try:
-                    os.rmdir(self.srcdir)
+                    os.rmdir(self._srcdir)
                 except:
                     pass
         finally:
             self._mounted = False
 
 
-class _DirectImageFetcher(_LocalImageFetcher):
-    def prepareLocation(self):
-        self.srcdir = self.location
-
-
 def fetcherForURI(uri, *args, **kwargs):
     if uri.startswith("http://") or uri.startswith("https://"):
-        fclass = _HTTPImageFetcher
+        fclass = _HTTPURLFetcher
     elif uri.startswith("ftp://"):
-        fclass = _FTPImageFetcher
+        fclass = _FTPURLFetcher
     elif uri.startswith("nfs:"):
-        fclass = _MountedImageFetcher
+        fclass = _MountedURLFetcher
+    elif os.path.isdir(uri):
+        # Pointing to a local tree
+        fclass = _LocalURLFetcher
     else:
-        if os.path.isdir(uri):
-            fclass = _DirectImageFetcher
-        else:
-            fclass = _MountedImageFetcher
+        # Pointing to a path, like an .iso to mount
+        fclass = _MountedURLFetcher
     return fclass(uri, *args, **kwargs)
 
 
