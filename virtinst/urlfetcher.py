@@ -70,29 +70,27 @@ class _URLFetcher(object):
             ret += "/"
         return ret + filename
 
-    def _saveTemp(self, fileobj, prefix):
+    def _saveTemp(self, urlobj, prefix):
         """
         Save the fileobj contents to a temporary file, and return
         the filename
         """
         prefix = "virtinst-" + prefix
         if "VIRTINST_TEST_SUITE" in os.environ:
-            fn = os.path.join("/tmp", prefix)
-            fd = os.open(fn, os.O_RDWR | os.O_CREAT, 0640)
+            filename = os.path.join("/tmp", prefix)
+            fileobj = file(filename, "w+b")
         else:
-            (fd, fn) = tempfile.mkstemp(prefix=prefix,
-                                        dir=self.scratchdir)
+            fileobj = tempfile.NamedTemporaryFile(
+                dir=self.scratchdir, prefix=prefix, delete=False)
+            filename = fileobj.name
 
         block_size = 16384
-        try:
-            while 1:
-                buff = fileobj.read(block_size)
-                if not buff:
-                    break
-                os.write(fd, buff)
-        finally:
-            os.close(fd)
-        return fn
+        while 1:
+            buff = urlobj.read(block_size)
+            if not buff:
+                break
+            fileobj.write(buff)
+        return filename
 
 
     ##############
@@ -122,28 +120,21 @@ class _URLFetcher(object):
         Grab the passed filename from self.location and save it to
         a temporary file, returning the temp filename
         """
+        url = self._make_full_url(filename)
+        base = os.path.basename(filename)
+        logging.debug("Fetching URI: %s", url)
 
-        f = None
         try:
-            path = self._make_full_url(filename)
-            base = os.path.basename(filename)
-            logging.debug("Fetching URI: %s", path)
+            urlobj = grabber.urlopen(url,
+                                progress_obj=self.meter,
+                                text=_("Retrieving file %s...") % base)
+        except Exception, e:
+            raise ValueError(_("Couldn't acquire file %s: %s") %
+                               (url, str(e)))
 
-            try:
-                f = grabber.urlopen(path,
-                                    progress_obj=self.meter,
-                                    text=_("Retrieving file %s...") % base)
-            except Exception, e:
-                raise ValueError(_("Couldn't acquire file %s: %s") %
-                                   (path, str(e)))
-
-            tmpname = self._saveTemp(f, prefix=base + ".")
-            logging.debug("Saved file to " + tmpname)
-            return tmpname
-        finally:
-            if f:
-                f.close()
-
+        tmpname = self._saveTemp(urlobj, prefix=base + ".")
+        logging.debug("Saved file to " + tmpname)
+        return tmpname
 
 
 class _HTTPURLFetcher(_URLFetcher):
