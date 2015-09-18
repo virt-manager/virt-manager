@@ -59,7 +59,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         # Initialize display widget
         self._viewer = None
-        self._viewer_is_connected = False
 
         # Fullscreen toolbar
         self._send_key_button = None
@@ -83,8 +82,12 @@ class vmmConsolePages(vmmGObjectUI):
         # Signals are added by vmmDetails. Don't use connect_signals here
         # or it changes will be overwritten
 
-        self._refresh_can_fullscreen()
+        self.widget("console-gfx-scroll").connect("size-allocate",
+            self._scroll_size_allocate)
+
+        self._refresh_widget_states()
         self._refresh_scaling_from_settings()
+
         self.add_gsettings_handle(
             self.vm.on_console_scaling_changed(
                 self._refresh_scaling_from_settings))
@@ -92,13 +95,8 @@ class vmmConsolePages(vmmGObjectUI):
         self.add_gsettings_handle(
             self.vm.on_console_resizeguest_changed(
                 self._refresh_resizeguest_from_settings))
-
-        scroll = self.widget("console-gfx-scroll")
-        scroll.connect("size-allocate", self._scroll_size_allocate)
         self.add_gsettings_handle(
             self.config.on_console_accels_changed(self._refresh_enable_accel))
-
-        self._page_changed()
 
 
     def is_visible(self):
@@ -237,7 +235,7 @@ class vmmConsolePages(vmmGObjectUI):
     def _someone_has_focus(self):
         if (self._viewer and
             self._viewer.console_has_focus() and
-            self._viewer_is_connected):
+            self._viewer.console_is_open()):
             return True
 
         for serial in self._serial_consoles:
@@ -461,7 +459,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         allow_fullscreen = (dpage == DETAILS_PAGE_CONSOLE and
                             cpage == _CONSOLE_PAGE_VIEWER and
-                            self._viewer_is_connected)
+                            self._viewer and self._viewer.console_is_open())
 
         self.widget("control-fullscreen").set_sensitive(allow_fullscreen)
         self.widget("details-menu-view-fullscreen").set_sensitive(
@@ -510,8 +508,6 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer.cleanup()
         self._viewer = None
 
-        self._viewer_is_connected = False
-        self._refresh_can_fullscreen()
         self._leave_fullscreen()
 
         for serial in self._serial_consoles:
@@ -531,7 +527,7 @@ class vmmConsolePages(vmmGObjectUI):
                 self._init_viewer()
 
         # Update other state
-        self._page_changed()
+        self._refresh_widget_states()
 
 
     ###################
@@ -579,28 +575,34 @@ class vmmConsolePages(vmmGObjectUI):
         if self._viewer:
             self._viewer.console_grab_focus()
 
-    def _page_changed(self, ignore1=None, ignore2=None, newpage=None):
+    def _page_changed(self, src, origpage, newpage):
+        ignore = src
+        ignore = origpage
+
+        # Hide the contents of all other pages, so they don't screw
+        # up window sizing
+        for i in range(self.widget("console-pages").get_n_pages()):
+            self.widget("console-pages").get_nth_page(i).set_visible(
+                i == newpage)
+
+        self.idle_add(self._refresh_widget_states)
+
+    def _refresh_widget_states(self):
         pagenum = self.widget("console-pages").get_current_page()
-
-        if newpage is not None:
-            # Hide the contents of all other pages, so they don't screw
-            # up window sizing
-            for i in range(self.widget("console-pages").get_n_pages()):
-                w = self.widget("console-pages").get_nth_page(i)
-                w.set_visible(i == newpage)
-
         paused = self.vm.is_paused()
-        is_viewer = (pagenum == _CONSOLE_PAGE_VIEWER)
+        is_viewer = (pagenum == _CONSOLE_PAGE_VIEWER and
+            self._viewer and self._viewer.console_is_open())
 
-        self._send_key_button.set_sensitive(is_viewer)
         self.widget("details-menu-vm-screenshot").set_sensitive(is_viewer)
         self.widget("details-menu-usb-redirection").set_sensitive(
             bool(is_viewer and self._viewer and
             self._viewer.console_has_usb_redirection() and
             self.vm.has_spicevmc_type_redirdev()))
 
+        can_sendkey = (is_viewer and not paused)
+        self._send_key_button.set_sensitive(can_sendkey)
         for c in self._keycombo_menu.get_children():
-            c.set_sensitive(is_viewer and not paused)
+            c.set_sensitive(can_sendkey)
 
         self._refresh_can_fullscreen()
 
@@ -776,9 +778,6 @@ class vmmConsolePages(vmmGObjectUI):
         self._refresh_resizeguest_from_settings()
 
     def _viewer_connected(self, ignore):
-        self._viewer_is_connected = True
-        self._refresh_can_fullscreen()
-
         logging.debug("Viewer connected")
         self._activate_viewer_page()
 
