@@ -6088,8 +6088,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0.5</property>
-                        <property name="yalign">0</property>
+                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -6210,6 +6209,26 @@ if you know what you are doing.&lt;/small&gt;</property>
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkNotebook" id="serial-pages">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel" id="label82">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Serial</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                    <property name="tab_fill">False</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkScrolledWindow" id="console-gfx-scroll">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -6226,7 +6245,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                     </child>
                   </object>
                   <packing>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child type="tab">
@@ -6236,7 +6255,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                     <property name="label">Graphics</property>
                   </object>
                   <packing>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                     <property name="tab_fill">False</property>
                   </packing>
                 </child>

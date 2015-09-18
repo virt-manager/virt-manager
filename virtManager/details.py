@@ -710,7 +710,6 @@ class vmmDetails(vmmGObjectUI):
 
         self.widget("hw-panel").set_show_tabs(False)
         self.widget("details-pages").set_show_tabs(False)
-        self.widget("console-pages").set_show_tabs(False)
         self.widget("details-menu-view-toolbar").set_active(
                                     self.config.get_details_show_toolbar())
 
