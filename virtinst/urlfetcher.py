@@ -25,6 +25,7 @@ import logging
 import os
 import re
 import stat
+import StringIO
 import subprocess
 import tempfile
 import urllib2
@@ -70,28 +71,32 @@ class _URLFetcher(object):
             ret += "/"
         return ret + filename
 
-    def _saveTemp(self, urlobj, prefix):
+    def _writeURLToFileobj(self, urlobj, fileobj):
         """
-        Save the fileobj contents to a temporary file, and return
-        the filename
+        Write the urlobj contents into the passed python style file object
         """
-        prefix = "virtinst-" + prefix
-        if "VIRTINST_TEST_SUITE" in os.environ:
-            filename = os.path.join("/tmp", prefix)
-            fileobj = file(filename, "w+b")
-        else:
-            fileobj = tempfile.NamedTemporaryFile(
-                dir=self.scratchdir, prefix=prefix, delete=False)
-            filename = fileobj.name
-
         block_size = 16384
         while 1:
             buff = urlobj.read(block_size)
             if not buff:
                 break
             fileobj.write(buff)
-        return filename
 
+    def _grabURL(self, filename):
+        """
+        Return the urlobj from grabber.urlopen
+        """
+        url = self._make_full_url(filename)
+        base = os.path.basename(filename)
+        logging.debug("Fetching URI: %s", url)
+
+        try:
+            return grabber.urlopen(url,
+                                progress_obj=self.meter,
+                                text=_("Retrieving file %s...") % base)
+        except Exception, e:
+            raise ValueError(_("Couldn't acquire file %s: %s") %
+                               (url, str(e)))
 
     ##############
     # Public API #
@@ -120,21 +125,29 @@ class _URLFetcher(object):
         Grab the passed filename from self.location and save it to
         a temporary file, returning the temp filename
         """
-        url = self._make_full_url(filename)
-        base = os.path.basename(filename)
-        logging.debug("Fetching URI: %s", url)
+        urlobj = self._grabURL(filename)
+        prefix = "virtinst-" + os.path.basename(filename) + "."
 
-        try:
-            urlobj = grabber.urlopen(url,
-                                progress_obj=self.meter,
-                                text=_("Retrieving file %s...") % base)
-        except Exception, e:
-            raise ValueError(_("Couldn't acquire file %s: %s") %
-                               (url, str(e)))
+        if "VIRTINST_TEST_SUITE" in os.environ:
+            filename = os.path.join("/tmp", prefix)
+            fileobj = file(filename, "w+b")
+        else:
+            fileobj = tempfile.NamedTemporaryFile(
+                dir=self.scratchdir, prefix=prefix, delete=False)
+            filename = fileobj.name
 
-        tmpname = self._saveTemp(urlobj, prefix=base + ".")
-        logging.debug("Saved file to " + tmpname)
-        return tmpname
+        self._writeURLToFileobj(urlobj, fileobj)
+        logging.debug("Saved file to " + filename)
+        return filename
+
+    def acquireFileContent(self, filename):
+        """
+        Grab the passed filename from self.location and return it as a string
+        """
+        fileobj = StringIO.StringIO()
+        urlobj = self._grabURL(filename)
+        self._writeURLToFileobj(urlobj, fileobj)
+        return fileobj.getvalue()
 
 
 class _HTTPURLFetcher(_URLFetcher):
@@ -283,15 +296,16 @@ def fetcherForURI(uri, *args, **kwargs):
 # Helpers for detecting distro from given URL #
 ###############################################
 
-def _distroFromTreeinfo(fetcher, arch, vmtype=None):
+def _grabTreeinfo(fetcher):
     """
-    Parse treeinfo 'family' field, and return the associated Distro class
-    None if no treeinfo, GenericDistro if unknown family type.
+    See if the URL has treeinfo, and if so return it as a ConfigParser
+    object.
     """
-    if not fetcher.hasFile(".treeinfo"):
+    try:
+        tmptreeinfo = fetcher.acquireFile(".treeinfo")
+    except ValueError:
         return None
 
-    tmptreeinfo = fetcher.acquireFile(".treeinfo")
     try:
         treeinfo = ConfigParser.SafeConfigParser()
         treeinfo.read(tmptreeinfo)
@@ -299,34 +313,20 @@ def _distroFromTreeinfo(fetcher, arch, vmtype=None):
         os.unlink(tmptreeinfo)
 
     try:
-        fam = treeinfo.get("general", "family")
+        treeinfo.get("general", "family")
     except ConfigParser.NoSectionError:
+        logging.debug("Did not find 'family' section in treeinfo")
         return None
 
-    if re.match(".*Fedora.*", fam):
-        dclass = FedoraDistro
-    elif re.match(".*CentOS.*", fam):
-        dclass = CentOSDistro
-    elif re.match(".*Red Hat Enterprise Linux.*", fam):
-        dclass = RHELDistro
-    elif re.match(".*Scientific Linux.*", fam):
-        dclass = SLDistro
-    else:
-        dclass = GenericDistro
-
-    ob = dclass(fetcher, arch, vmtype)
-    ob.treeinfo = treeinfo
-
-    # Explicitly call this, so we populate variant info
-    ob.isValidStore()
-
-    return ob
+    return treeinfo
 
 
 def _distroFromSUSEContent(fetcher, arch, vmtype=None):
     # Parse content file for the 'LABEL' field containing the distribution name
     # None if no content, GenericDistro if unknown label type.
-    if not fetcher.hasFile("content"):
+    try:
+        cbuf = fetcher.acquireFileContent("content")
+    except ValueError:
         return None
 
     distribution = None
@@ -334,12 +334,6 @@ def _distroFromSUSEContent(fetcher, arch, vmtype=None):
     distro_summary = None
     distro_distro = None
     distro_arch = None
-    filename = fetcher.acquireFile("content")
-    cbuf = None
-    try:
-        cbuf = open(filename).read()
-    finally:
-        os.unlink(filename)
 
     lines = cbuf.splitlines()[1:]
     for line in lines:
@@ -421,13 +415,11 @@ def getDistroStore(guest, fetcher):
     if guest.os_variant:
         urldistro = OSDB.lookup_os(guest.os_variant).urldistro
 
-    dist = _distroFromTreeinfo(fetcher, arch, _type)
-    if dist:
-        return dist
-
-    dist = _distroFromSUSEContent(fetcher, arch, _type)
-    if dist:
-        return dist
+    treeinfo = _grabTreeinfo(fetcher)
+    if not treeinfo:
+        dist = _distroFromSUSEContent(fetcher, arch, _type)
+        if dist:
+            return dist
 
     stores = _allstores[:]
 
@@ -441,14 +433,12 @@ def getDistroStore(guest, fetcher):
                 stores.insert(0, store)
                 break
 
-    # Always stick GenericDistro at the end, since it's a catchall
-    stores.remove(GenericDistro)
-    stores.append(GenericDistro)
+    if treeinfo:
+        stores.sort(key=lambda x: not x.uses_treeinfo)
 
     for sclass in stores:
         store = sclass(fetcher, arch, _type)
-        # We already tried the treeinfo short circuit, so skip it here
-        store.uses_treeinfo = False
+        store.treeinfo = treeinfo
         if store.isValidStore():
             logging.debug("Detected distro name=%s osvariant=%s",
                           store.name, store.os_variant)
@@ -481,6 +471,7 @@ class Distro(object):
     """
     name = None
     urldistro = None
+    uses_treeinfo = False
 
     # osdict variant value
     os_variant = None
@@ -488,7 +479,6 @@ class Distro(object):
     _boot_iso_paths = []
     _hvm_kernel_paths = []
     _xen_kernel_paths = []
-    uses_treeinfo = False
     version_from_content = None
 
     def __init__(self, fetcher, arch, vmtype):
@@ -497,6 +487,8 @@ class Distro(object):
         self.arch = arch
 
         self.uri = fetcher.location
+
+        # This is set externally
         self.treeinfo = None
 
     def isValidStore(self):
@@ -506,7 +498,7 @@ class Distro(object):
     def acquireKernel(self, guest):
         kernelpath = None
         initrdpath = None
-        if self._hasTreeinfo():
+        if self.treeinfo:
             try:
                 kernelpath = self._getTreeinfoMedia("kernel")
                 initrdpath = self._getTreeinfoMedia("initrd")
@@ -535,14 +527,14 @@ class Distro(object):
     def acquireBootDisk(self, guest):
         ignore = guest
 
-        if self._hasTreeinfo():
+        if self.treeinfo:
             return self.fetcher.acquireFile(self._getTreeinfoMedia("boot.iso"))
-        else:
-            for path in self._boot_iso_paths:
-                if self.fetcher.hasFile(path):
-                    return self.fetcher.acquireFile(path)
-            raise RuntimeError(_("Could not find boot.iso in %s tree." %
-                               self.name))
+
+        for path in self._boot_iso_paths:
+            if self.fetcher.hasFile(path):
+                return self.fetcher.acquireFile(path)
+        raise RuntimeError(_("Could not find boot.iso in %s tree." %
+                           self.name))
 
     def _check_osvariant_valid(self, os_variant):
         return OSDB.lookup_os(os_variant) is not None
@@ -565,25 +557,6 @@ class Distro(object):
     def _get_method_arg(self):
         return "method"
 
-    def _hasTreeinfo(self):
-        # all Red Hat based distros should have .treeinfo, perhaps others
-        # will in time
-        if not (self.treeinfo is None):
-            return True
-
-        if not self.uses_treeinfo or not self.fetcher.hasFile(".treeinfo"):
-            return False
-
-        logging.debug("Detected .treeinfo file")
-
-        tmptreeinfo = self.fetcher.acquireFile(".treeinfo")
-        try:
-            self.treeinfo = ConfigParser.SafeConfigParser()
-            self.treeinfo.read(tmptreeinfo)
-        finally:
-            os.unlink(tmptreeinfo)
-        return True
-
     def _getTreeinfoMedia(self, mediaName):
         if self.type == "xen":
             t = "xen"
@@ -594,26 +567,14 @@ class Distro(object):
 
     def _fetchAndMatchRegex(self, filename, regex):
         # Fetch 'filename' and return True/False if it matches the regex
-        local_file = None
         try:
-            try:
-                local_file = self.fetcher.acquireFile(filename)
-            except:
-                return False
+            content = self.fetcher.acquireFileContent(filename)
+        except ValueError:
+            return False
 
-            f = open(local_file, "r")
-            try:
-                while 1:
-                    buf = f.readline()
-                    if not buf:
-                        break
-                    if re.match(regex, buf):
-                        return True
-            finally:
-                f.close()
-        finally:
-            if local_file is not None:
-                os.unlink(local_file)
+        for line in content.splitlines():
+            if re.match(regex, line):
+                return True
 
         return False
 
@@ -642,7 +603,6 @@ class GenericDistro(Distro):
     Generic distro store. Check well known paths for kernel locations
     as a last resort if we can't recognize any actual distro
     """
-
     name = "Generic"
     os_variant = "linux"
     uses_treeinfo = True
@@ -664,12 +624,13 @@ class GenericDistro(Distro):
     _valid_iso_path = None
 
     def isValidStore(self):
-        if self._hasTreeinfo():
+        if self.treeinfo:
             # Use treeinfo to pull down media paths
             if self.type == "xen":
                 typ = "xen"
             else:
                 typ = self.treeinfo.get("general", "arch")
+
             kernelSection = "images-%s" % typ
             isoSection = "images-%s" % self.treeinfo.get("general", "arch")
 
@@ -734,10 +695,10 @@ class RedHatDistro(Distro):
     Base image store for any Red Hat related distros which have
     a common layout
     """
+    uses_treeinfo = True
     os_variant = "linux"
     _version_number = None
 
-    uses_treeinfo = True
     _boot_iso_paths   = ["images/boot.iso"]
     _hvm_kernel_paths = [("images/pxeboot/vmlinuz",
                            "images/pxeboot/initrd.img")]
@@ -768,7 +729,7 @@ class FedoraDistro(RedHatDistro):
         return latest, int(latest[6:])
 
     def isValidStore(self):
-        if not self._hasTreeinfo():
+        if not self.treeinfo:
             return self.fetcher.hasFile("Fedora")
 
         if not re.match(".*Fedora.*", self.treeinfo.get("general", "family")):
@@ -802,7 +763,7 @@ class RHELDistro(RedHatDistro):
     urldistro = "rhel"
 
     def isValidStore(self):
-        if self._hasTreeinfo():
+        if self.treeinfo:
             m = re.match(".*Red Hat Enterprise Linux.*",
                          self.treeinfo.get("general", "family"))
             ret = (m is not None)
@@ -890,7 +851,7 @@ class CentOSDistro(RHELDistro):
     urldistro = "centos"
 
     def isValidStore(self):
-        if not self._hasTreeinfo():
+        if not self.treeinfo:
             return self.fetcher.hasFile("CentOS")
 
         m = re.match(".*CentOS.*", self.treeinfo.get("general", "family"))
@@ -914,7 +875,7 @@ class SLDistro(RHELDistro):
         ("images/SL/pxeboot/vmlinuz", "images/SL/pxeboot/initrd.img")]
 
     def isValidStore(self):
-        if self._hasTreeinfo():
+        if self.treeinfo:
             m = re.match(".*Scientific Linux.*",
                          self.treeinfo.get("general", "family"))
             ret = (m is not None)
@@ -1204,6 +1165,10 @@ def _build_distro_list():
             raise RuntimeError("programming error: duplicate urldistro=%s" %
                                obj.urldistro)
         seen_urldistro.append(obj.urldistro)
+
+    # Always stick GenericDistro at the end, since it's a catchall
+    allstores.remove(GenericDistro)
+    allstores.append(GenericDistro)
 
     return allstores
 
