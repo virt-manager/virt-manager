@@ -27,14 +27,15 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 import libvirt
-import urlgrabber.progress
+
+import virtinst.progress
 
 from .baseclass import vmmGObjectUI
 
 
-class vmmMeter(urlgrabber.progress.BaseMeter):
+class vmmMeter(virtinst.progress.BaseMeter):
     def __init__(self, cb_pulse, cb_fraction, cb_done):
-        urlgrabber.progress.BaseMeter.__init__(self)
+        virtinst.progress.BaseMeter.__init__(self)
         self.started = False
 
         self._vmm_pulse = cb_pulse
@@ -60,7 +61,7 @@ class vmmMeter(urlgrabber.progress.BaseMeter):
             text = self.text
         else:
             text = self.basename
-        fread = urlgrabber.progress.format_number(amount_read)
+        fread = virtinst.progress.format_number(amount_read)
         if self.size is None:
             out = "    %5sB" % (fread)
             self._vmm_pulse(out, text)
@@ -74,7 +75,7 @@ class vmmMeter(urlgrabber.progress.BaseMeter):
             text = self.text
         else:
             text = self.basename
-        fread = urlgrabber.progress.format_number(amount_read)
+        fread = virtinst.progress.format_number(amount_read)
         if self.size is None:
             out = "    %5sB" % (fread)
             self._vmm_pulse(out, text)

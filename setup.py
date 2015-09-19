@@ -567,17 +567,23 @@ class CheckPylint(Command):
                  "tests"]
 
         output_format = sys.stdout.isatty() and "colorized" or "text"
+        exclude = ["virtinst/progress.py"]
 
         print "running pep8"
         cmd = "pep8 "
+        cmd += "--config tests/pep8.cfg "
+        cmd += "--exclude %s " % ",".join(exclude)
         cmd += " ".join(files)
-        os.system(cmd + " --config tests/pep8.cfg")
+        os.system(cmd)
 
         print "running pylint"
         cmd = "pylint "
+        cmd += "--rcfile tests/pylint.cfg "
         cmd += "--output-format=%s " % output_format
+        cmd += "--ignore %s " % ",".join(
+            [os.path.basename(p) for p in exclude])
         cmd += " ".join(files)
-        os.system(cmd + " --rcfile tests/pylint.cfg")
+        os.system(cmd)
 
 
 setup(

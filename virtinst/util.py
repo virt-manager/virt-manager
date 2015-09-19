@@ -472,7 +472,7 @@ def ensure_meter(meter):
 
 
 def make_meter(quiet):
-    from urlgrabber import progress
+    from virtinst import progress
     if quiet:
         return progress.BaseMeter()
     return progress.TextMeter(fo=sys.stdout)
