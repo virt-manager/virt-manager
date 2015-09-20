@@ -980,9 +980,9 @@ class vmmDomain(vmmLibvirtObject):
             editdev.target = newdev.target
 
         if do_hotplug:
-            self._redefine_xmlobj(xmlobj)
-        else:
             self.hotplug(device=editdev)
+        else:
+            self._redefine_xmlobj(xmlobj)
 
 
     def define_hostdev(self, devobj, do_hotplug, rom_bar=_SENTINEL):
