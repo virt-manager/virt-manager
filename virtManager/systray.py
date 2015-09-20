@@ -53,7 +53,7 @@ class vmmSystray(vmmGObject):
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
-    def __init__(self, engine):
+    def __init__(self):
         vmmGObject.__init__(self)
 
         self.topwin = None
@@ -65,9 +65,6 @@ class vmmSystray(vmmGObject):
         self.systray_menu = None
         self.systray_icon = None
         self.systray_indicator = False
-
-        engine.connect("conn-added", self.conn_added)
-        engine.connect("conn-removed", self.conn_removed)
 
         # Are we using Application Indicators?
         if AppIndicator3 is not None:
@@ -97,8 +94,14 @@ class vmmSystray(vmmGObject):
             self.systray_menu = None
 
         self.systray_icon = None
+        self.conn_menuitems = None
+        self.conn_vm_menuitems = None
+        self.vm_action_dict = None
 
-    # Initialization routines
+
+    ###########################
+    # Initialization routines #
+    ###########################
 
     def init_systray_menu(self):
         """

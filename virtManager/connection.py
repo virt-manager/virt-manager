@@ -869,6 +869,13 @@ class vmmConnection(vmmGObject):
     def _cleanup(self):
         self.close()
 
+        self._objects = None
+        self._backend.cb_fetch_all_guests = None
+        self._backend.cb_fetch_all_pools = None
+        self._backend.cb_fetch_all_nodedevs = None
+        self._backend.cb_fetch_all_vols = None
+        self._backend.cb_clear_cache = None
+
     def open(self):
         if not self.is_disconnected():
             return

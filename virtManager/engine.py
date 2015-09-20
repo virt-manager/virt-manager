@@ -45,8 +45,13 @@ from .error import vmmErrorDialog
 from .systray import vmmSystray
 from .delete import vmmDeleteDialog
 
-# Enable this to get a report of leaked objects on app shutdown
-# gtk3/pygobject has issues here as of Fedora 18
+# Enabling this will tell us, at app exit time, which vmmGObjects were not
+# garbage collected. This is caused by circular references to other objects,
+# like a signal that wasn't disconnected. It's not a big deal, but if we
+# have objects that can be created and destroyed a lot over the course of
+# the app lifecycle, every non-garbage collected class is a memory leak.
+# So it's nice to poke at this every now and then and try to track down
+# what we need to add to class _cleanup handling.
 debug_ref_leaks = False
 
 DETAILS_PERF = 1
@@ -147,7 +152,7 @@ class vmmEngine(vmmGObject):
         if self.systray:
             return
 
-        self.systray = vmmSystray(self)
+        self.systray = vmmSystray()
         self.systray.connect("action-toggle-manager", self._do_toggle_manager)
         self.systray.connect("action-suspend-domain", self._do_suspend_domain)
         self.systray.connect("action-resume-domain", self._do_resume_domain)
@@ -162,6 +167,10 @@ class vmmEngine(vmmGObject):
         self.systray.connect("action-delete-domain", self._do_delete_domain)
         self.systray.connect("action-clone-domain", self._do_show_clone)
         self.systray.connect("action-exit-app", self.exit_app)
+
+        self.connect("conn-added", self.systray.conn_added)
+        self.connect("conn-removed", self.systray.conn_removed)
+
 
     def system_tray_changed(self, *ignore):
         systray_enabled = self.config.get_view_system_tray()
@@ -347,6 +356,8 @@ class vmmEngine(vmmGObject):
                     % (conn.get_uri(), e))
                 self.idle_add(self._handle_tick_error, error_msg, tb)
 
+            # Need to clear reference to make leak check happy
+            conn = None
             self._tick_queue.task_done()
         return 1
 
