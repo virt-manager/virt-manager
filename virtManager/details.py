@@ -169,10 +169,12 @@ def _label_for_device(dev):
         busstr = virtinst.VirtualDisk.pretty_disk_bus(dev.bus) or ""
 
         if dev.device == "floppy":
-            devstr = "Floppy"
+            devstr = _("Floppy")
             busstr = ""
         elif dev.device == "cdrom":
-            devstr = "CDROM"
+            devstr = _("CDROM")
+        elif dev.device == "disk":
+            devstr = _("Disk")
         else:
             devstr = dev.device.capitalize()
 
@@ -199,13 +201,19 @@ def _label_for_device(dev):
         return _("Input")
 
     if devtype in ["serial", "parallel", "console"]:
+        if devtype == "serial":
+            label = _("Serial")
+        elif devtype == "parallel":
+            label = _("Parallel")
+        elif devtype == "console":
+            label = _("Console")
         label = devtype.capitalize()
         if dev.target_port is not None:
             label += " %s" % (int(dev.target_port) + 1)
         return label
 
     if devtype == "channel":
-        label = devtype.capitalize()
+        label = _("Channel")
         name = dev.pretty_channel_name(dev.target_name)
         if name:
             label += " %s" % name
@@ -3049,11 +3057,11 @@ class vmmDetails(vmmGObjectUI):
             if self.config.support_inspection:
                 add_hw_list_option(_("OS information"),
                     HW_LIST_TYPE_INSPECTION, "computer")
-            add_hw_list_option("Performance", HW_LIST_TYPE_STATS,
+            add_hw_list_option(_("Performance"), HW_LIST_TYPE_STATS,
                                "utilities-system-monitor")
-        add_hw_list_option("CPUs", HW_LIST_TYPE_CPU, "device_cpu")
-        add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, "device_mem")
-        add_hw_list_option("Boot Options", HW_LIST_TYPE_BOOT, "system-run")
+        add_hw_list_option(_("CPUs"), HW_LIST_TYPE_CPU, "device_cpu")
+        add_hw_list_option(_("Memory"), HW_LIST_TYPE_MEMORY, "device_mem")
+        add_hw_list_option(_("Boot Options"), HW_LIST_TYPE_BOOT, "system-run")
 
         self.repopulate_hw_list()
 
