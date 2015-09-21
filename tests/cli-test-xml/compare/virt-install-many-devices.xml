@@ -149,13 +149,17 @@
       <master startport="4"/>
       <address type="pci" domain="0" bus="0" slot="4" function="2"/>
     </controller>
-    <filesystem accessmode="squash">
+    <filesystem type="mount" accessmode="mapped">
       <source dir="/source"/>
       <target dir="/target"/>
     </filesystem>
     <filesystem type="template" accessmode="passthrough">
       <source name="template_name"/>
       <target dir="/"/>
+    </filesystem>
+    <filesystem type="file" accessmode="squash">
+      <source file="/tmp/somefile.img"/>
+      <target dir="/mount/point"/>
     </filesystem>
     <interface type="user">
       <source portgroup="foo"/>

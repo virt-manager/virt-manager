@@ -76,7 +76,7 @@ class VirtualFilesystem(VirtualDevice):
         # In case of qemu for default fs type (mount) target is not
         # actually a directory, it is merely a arbitrary string tag
         # that is exported to the guest as a hint for where to mount
-        if (self.conn.is_qemu() and
+        if ((self.conn.is_qemu() or self.conn.is_test()) and
             (self.type is None or
              self.type == self.TYPE_DEFAULT or
              self.type == self.TYPE_MOUNT)):
@@ -110,6 +110,21 @@ class VirtualFilesystem(VirtualDevice):
     def _set_source(self, val):
         return setattr(self, self._type_to_source_prop(), val)
     source = property(_get_source, _set_source)
+
+    def set_defaults(self, guest):
+        ignore = guest
+
+        if self.conn.is_qemu() or self.conn.is_test():
+            # type=mount is the libvirt qemu default. But hardcode it
+            # here since we need it for the accessmode check
+            if self.type is None or self.type == self.TYPE_DEFAULT:
+                self.type = self.TYPE_MOUNT
+
+            # libvirt qemu defaults to accessmode=passthrough, but that
+            # really only works well for qemu running as root, which is
+            # not the common case. so use mode=mapped
+            if self.accessmode is None or self.accessmode == self.MODE_DEFAULT:
+                self.accessmode = self.MODE_MAPPED
 
 
 VirtualFilesystem.register_type()

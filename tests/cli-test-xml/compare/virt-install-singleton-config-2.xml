@@ -81,7 +81,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <controller type="usb" index="0" model="nec-xhci"/>
     <controller type="virtio-scsi" index="0"/>
-    <filesystem>
+    <filesystem type="mount" accessmode="mapped">
       <source dir="/foo/source"/>
       <target dir="/bar/target"/>
     </filesystem>
@@ -201,7 +201,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <controller type="usb" index="0" model="nec-xhci"/>
     <controller type="virtio-scsi" index="0"/>
-    <filesystem>
+    <filesystem type="mount" accessmode="mapped">
       <source dir="/foo/source"/>
       <target dir="/bar/target"/>
     </filesystem>
