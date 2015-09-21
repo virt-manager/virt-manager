@@ -232,7 +232,7 @@ class vmmFSDetails(vmmGObjectUI):
         fsdriver = self.get_config_fs_driver()
         ismount = bool(
                 fstype == VirtualFilesystem.TYPE_MOUNT or
-                self.conn.is_qemu())
+                self.conn.is_qemu() or self.conn.is_test_conn())
 
         show_mode = bool(ismount and
             (fsdriver == VirtualFilesystem.DRIVER_PATH or
