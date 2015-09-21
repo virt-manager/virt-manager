@@ -363,7 +363,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         if not ip.is_private:
             res = self.err.yes_no(_("Check Network Address"),
-                    _("The network should normally use a private IPv4 "
+                    _("The network should normally use a private IPv6 "
                       "address. Use this non-private address anyway?"))
             if not res:
                 return False
