@@ -648,22 +648,22 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <!-- filesystems -->
     <filesystem>
       <driver type='handle'/>
-      <source dir='/foo/bar'/>
-      <target dir='/bar/baz'/>
+      <source dir='/foo/bar1'/>
+      <target dir='/target/1'/>
     </filesystem>
     <filesystem type='template'>
       <source name='template_fedora'/>
-      <target dir='/bar/baz'/>
+      <target dir='/target/2'/>
     </filesystem>
     <filesystem type='mount' accessmode='squash'>
       <driver type='path' wrpolicy='immediate'/>
-      <source dir='/foo/bar'/>
-      <target dir='/bar/baz'/>
+      <source dir='/foo/bar3'/>
+      <target dir='target3'/>
     </filesystem>
     <filesystem type='mount' accessmode='mapped'>
       <driver type='path'/>
-      <source dir='/foo/bar'/>
-      <target dir='/bar/baz'/>
+      <source dir='/foo/bar4'/>
+      <target dir='/target4'/>
     </filesystem>
 
 
