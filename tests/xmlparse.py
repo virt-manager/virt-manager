@@ -743,7 +743,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev1)
         check("type", None, "mount")
-        check("mode", None, "passthrough")
+        check("accessmode", None, "passthrough")
         check("driver", "handle", None)
         check("wrpolicy", None, None)
         check("source", "/foo/bar", "/new/path")
@@ -751,20 +751,20 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev2)
         check("type", "template")
-        check("mode", None, "mapped")
+        check("accessmode", None, "mapped")
         check("source", "template_fedora", "template_new")
         check("target", "/bar/baz")
 
         check = self._make_checker(dev3)
         check("type", "mount", None)
-        check("mode", "squash", None)
+        check("accessmode", "squash", None)
         check("driver", "path", "handle")
         check("wrpolicy", "immediate", None)
         check("readonly", False, True)
 
         check = self._make_checker(dev4)
         check("type", "mount", None)
-        check("mode", "mapped", None)
+        check("accessmode", "mapped", None)
         check("driver", "path", "handle")
         check("wrpolicy", None, "immediate")
         check("readonly", False, True)
@@ -781,7 +781,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev7)
         check("type", "file")
-        check("mode", "passthrough", None)
+        check("accessmode", "passthrough", None)
         check("driver", "nbd", "loop")
         check("format", "qcow", "raw")
         check("source", "/foo/bar.img", "/foo/bar.raw")

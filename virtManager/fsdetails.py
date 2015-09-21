@@ -182,7 +182,7 @@ class vmmFSDetails(vmmGObjectUI):
         self._dev = dev
 
         self.set_config_value("fs-type", dev.type or "default")
-        self.set_config_value("fs-mode", dev.mode or "default")
+        self.set_config_value("fs-mode", dev.accessmode or "default")
         self.set_config_value("fs-driver", dev.driver or "default")
         self.set_config_value("fs-wrpolicy", dev.wrpolicy or "default")
         self.set_config_value("fs-format", dev.format or "default")
@@ -308,7 +308,7 @@ class vmmFSDetails(vmmGObjectUI):
                 self._dev.source = source
             self._dev.target = target
             if mode:
-                self._dev.mode = mode
+                self._dev.accessmode = mode
             if fstype:
                 self._dev.type = fstype
             if readonly:

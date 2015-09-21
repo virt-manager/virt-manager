@@ -2198,7 +2198,7 @@ class ParserFilesystem(VirtCLIParser):
         self.remove_first = ["source", "target"]
 
         self.set_param("type", "type")
-        self.set_param("mode", "mode")
+        self.set_param("accessmode", "accessmode", aliases=["mode"])
         self.set_param("source", "source")
         self.set_param("target", "target")
 

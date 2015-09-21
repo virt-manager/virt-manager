@@ -32,7 +32,8 @@ class VirtualFilesystem(VirtualDevice):
     TYPE_BLOCK = "block"
     TYPE_RAM = "ram"
     TYPE_DEFAULT = "default"
-    TYPES = [TYPE_MOUNT, TYPE_TEMPLATE, TYPE_FILE, TYPE_BLOCK, TYPE_RAM, TYPE_DEFAULT]
+    TYPES = [TYPE_MOUNT, TYPE_TEMPLATE, TYPE_FILE, TYPE_BLOCK, TYPE_RAM,
+        TYPE_DEFAULT]
 
     MODE_PASSTHROUGH = "passthrough"
     MODE_MAPPED = "mapped"
@@ -49,13 +50,14 @@ class VirtualFilesystem(VirtualDevice):
     DRIVER_LOOP = "loop"
     DRIVER_NBD = "nbd"
     DRIVER_DEFAULT = "default"
-    DRIVERS = [DRIVER_PATH, DRIVER_HANDLE, DRIVER_LOOP, DRIVER_NBD, DRIVER_DEFAULT]
+    DRIVERS = [DRIVER_PATH, DRIVER_HANDLE, DRIVER_LOOP, DRIVER_NBD,
+        DRIVER_DEFAULT]
 
 
     type = XMLProperty("./@type",
                        default_cb=lambda s: None,
                        default_name=TYPE_DEFAULT)
-    mode = XMLProperty("./@accessmode",
+    accessmode = XMLProperty("./@accessmode",
                        default_cb=lambda s: None,
                        default_name=MODE_DEFAULT)
     wrpolicy = XMLProperty("./driver/@wrpolicy",

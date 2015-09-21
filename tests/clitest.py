@@ -498,8 +498,8 @@ c.add_compare(""" \
 --hostdev usb_5_20 --hostdev usb_5_21 \
 \
 
---filesystem /source,/target,mode=squash \
---filesystem template_name,/,type=template \
+--filesystem /source,/target,accessmode=squash \
+--filesystem template_name,/,type=template,mode=passthrough \
 \
 --soundhw default \
 --sound ac97 \
