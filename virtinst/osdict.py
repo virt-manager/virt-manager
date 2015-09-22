@@ -433,16 +433,6 @@ class _OsVariant(object):
             return "localtime"
         return "utc"
 
-    def supports_virtioconsole(self):
-        # We used to enable this for Fedora 18+, because systemd would
-        # autostart a getty on /dev/hvc0 which made 'virsh console' work
-        # out of the box for a login prompt. However now in Fedora
-        # virtio-console is compiled as a module, and systemd doesn't
-        # detect it in time to start a getty. So the benefit of using
-        # it as the default is erased, and we reverted to this.
-        # https://bugzilla.redhat.com/show_bug.cgi?id=1039742
-        return False
-
     def supports_virtiommio(self):
         return self._is_related_to(["fedora19"])
 
