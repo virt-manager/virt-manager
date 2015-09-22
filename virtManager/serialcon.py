@@ -277,10 +277,9 @@ class vmmSerialConsole(vmmGObject):
 
         err = ""
 
-        if is_remote:
-            if not support_tunnel:
-                err = _("Serial console not yet supported over remote "
-                        "connection")
+        if is_remote and not support_tunnel:
+            err = _("Remote serial console not supported for this "
+                    "connection")
         elif not vm.is_active():
             err = _("Serial console not available for inactive guest")
         elif ctype not in usable_types:
