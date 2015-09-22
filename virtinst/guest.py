@@ -622,8 +622,6 @@ class Guest(XMLBuilder):
     def add_default_console_device(self):
         if self.skip_default_console:
             return
-        if self.os.is_xenpv():
-            return
         if self.get_devices("console") or self.get_devices("serial"):
             return
 
