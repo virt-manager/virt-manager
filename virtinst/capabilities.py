@@ -468,6 +468,11 @@ class Capabilities(XMLBuilder):
 
         @returns: A _CapsInfo object containing the found guest and domain
         """
+        # F22 libxl xen still puts type=linux in the XML, so we need
+        # to handle it for caps lookup
+        if os_type == "linux":
+            os_type = "xen"
+
         guest = self._guestForOSType(os_type, arch)
         if not guest:
             archstr = _("for arch '%s'") % arch
