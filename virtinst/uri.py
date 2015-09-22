@@ -31,6 +31,7 @@ def _sanitize_xml(xml):
     xml = re.sub("domain type=\".*\"", "domain type=\"test\"", xml)
     xml = re.sub("machine type=\".*\"", "", xml)
     xml = re.sub(">exe<", ">hvm<", xml)
+    xml = re.sub(">linux<", ">xen<", xml)
 
     diff = "\n".join(difflib.unified_diff(orig.split("\n"),
                                           xml.split("\n")))
