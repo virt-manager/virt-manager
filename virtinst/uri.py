@@ -23,7 +23,7 @@ import re
 from .cli import VirtOptionString
 
 
-def _sanitize_xml(xml):
+def sanitize_xml_for_test_define(xml):
     import difflib
 
     orig = xml
@@ -221,10 +221,10 @@ class MagicURI(object):
             origcreate = conn.createLinux
             origdefine = conn.defineXML
             def newcreate(xml, flags):
-                xml = _sanitize_xml(xml)
+                xml = sanitize_xml_for_test_define(xml)
                 return origcreate(xml, flags)
             def newdefine(xml):
-                xml = _sanitize_xml(xml)
+                xml = sanitize_xml_for_test_define(xml)
                 return origdefine(xml)
             conn.createLinux = newcreate
             conn.defineXML = newdefine

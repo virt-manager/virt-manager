@@ -23,6 +23,7 @@ import libvirt
 
 import virtinst
 import virtinst.cli
+import virtinst.uri
 
 # DON'T EDIT THIS. Use 'setup.py test --regenerate-output'
 REGENERATE_OUTPUT = False
@@ -144,24 +145,8 @@ def _libvirt_callback(ignore, err):
 libvirt.registerErrorHandler(f=_libvirt_callback, ctx=None)
 
 
-def sanitize_xml_for_define(xml):
-    # Libvirt throws errors since we are defining domain
-    # type='xen', when test driver can only handle type='test'
-    # Sanitize the XML so we can define
-    if not xml:
-        return xml
-
-    xml = xml.replace(">linux<", ">xen<")
-    for t in ["xen", "qemu", "kvm"]:
-        xml = xml.replace("<domain type=\"%s\">" % t,
-                          "<domain type=\"test\">")
-        xml = xml.replace("<domain type='%s'>" % t,
-                          "<domain type='test'>")
-    return xml
-
-
 def test_create(testconn, xml, define_func="defineXML"):
-    xml = sanitize_xml_for_define(xml)
+    xml = virtinst.uri.sanitize_xml_for_test_define(xml)
 
     try:
         func = getattr(testconn, define_func)
