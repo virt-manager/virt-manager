@@ -513,35 +513,20 @@ def _show_nographics_warnings(options, guest):
 
     serial_arg = "console=ttyS0"
     serial_arm_arg = "console=ttyAMA0"
-    virtio_arg = "console=hvc0"
-    console_type = None
-    if guest.conn.is_test() or guest.conn.is_qemu():
-        console_type = serial_arg
-        if guest.os.arch.startswith("arm") or guest.os.arch == "aarch64":
-            console_type = serial_arm_arg
-        if guest.get_devices("console")[0].target_type == "virtio":
-            console_type = virtio_arg
+    hvc_arg = "console=hvc0"
 
-    if not options.extra_args or "console=" not in options.extra_args:
-        logging.warn(_("No 'console' seen in --extra-args, a '%s' kernel "
-            "argument is likely required to see text install output from "
-            "the guest."), console_type or "console=")
+    console_type = serial_arg
+    if guest.os.is_arm():
+        console_type = serial_arm_arg
+    if guest.get_devices("console")[0].target_type in ["virtio", "xen"]:
+        console_type = hvc_arg
+
+    if console_type in (options.extra_args or ""):
         return
 
-    if console_type in options.extra_args:
-        return
-    if (serial_arg not in options.extra_args and
-        virtio_arg not in options.extra_args):
-        return
-
-    has = (serial_arg in options.extra_args) and serial_arg or virtio_arg
-    need = (serial_arg in options.extra_args) and virtio_arg or serial_arg
-    logging.warn(_("'%s' found in --extra-args, but the device attached "
-        "to the guest likely requires '%s'. You may not see text install "
-        "output from the guest."), has, need)
-    if has == serial_arg:
-        logging.warn(_("To make '--extra-args %s' work, you can force a "
-            "plain serial device with '--console pty'"), serial_arg)
+    logging.warn(_("Did not find '%(console_string)s' in --extra-args, "
+        "which is likely required to see text install output from the "
+        "guest."), {"console_string": console_type})
 
 
 def show_warnings(options, guest):
