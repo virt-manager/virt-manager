@@ -28,9 +28,6 @@ import sys
 import libvirt
 
 
-_host_blktap_capable = None
-
-
 def listify(l):
     if l is None:
         return []
@@ -286,27 +283,6 @@ def default_network(conn):
 
     # FIXME: Check that this exists
     return ["network", "default"]
-
-
-def is_blktap_capable(conn):
-    # Ideally we would get this from libvirt capabilities XML
-    if conn.is_remote():
-        return False
-
-    global _host_blktap_capable
-    if _host_blktap_capable is not None:
-        return _host_blktap_capable
-
-    if "VIRTINST_TEST_SUITE" not in os.environ:
-        lines = file("/proc/modules").readlines()
-        for line in lines:
-            if line.startswith("blktap ") or line.startswith("xenblktap "):
-                _host_blktap_capable = True
-                break
-
-    if not _host_blktap_capable:
-        _host_blktap_capable = False
-    return _host_blktap_capable
 
 
 def randomUUID(conn):

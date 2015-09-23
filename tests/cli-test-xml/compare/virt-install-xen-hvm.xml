@@ -20,11 +20,13 @@
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/lib64/xen/bin/qemu-dm</emulator>
-    <disk type="file" device="disk">
-      <source file="/dev/default-pool/testvol1.img"/>
+    <disk type="block" device="disk">
+      <driver name="phy"/>
+      <source dev="/iscsi-pool/diskvol1"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">
+      <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
       <target dev="hdb" bus="ide"/>
       <readonly/>

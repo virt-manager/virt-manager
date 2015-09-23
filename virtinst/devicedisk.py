@@ -41,12 +41,12 @@ def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
 
     if phystype == VirtualDisk.TYPE_BLOCK:
         if not fmt:
-            return VirtualDisk.DRIVER_QEMU_RAW
+            return VirtualDisk.DRIVER_TYPE_RAW
         if fmt and not manual_format:
-            return VirtualDisk.DRIVER_QEMU_RAW
+            return VirtualDisk.DRIVER_TYPE_RAW
 
     if fmt in raw_list:
-        return VirtualDisk.DRIVER_QEMU_RAW
+        return VirtualDisk.DRIVER_TYPE_RAW
 
     return fmt
 
@@ -94,22 +94,9 @@ def _is_dir_searchable(uid, username, path):
 class VirtualDisk(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_DISK
 
-    DRIVER_FILE = "file"
-    DRIVER_PHY = "phy"
-    DRIVER_TAP = "tap"
-    DRIVER_QEMU = "qemu"
-    driver_names = [DRIVER_FILE, DRIVER_PHY, DRIVER_TAP, DRIVER_QEMU]
-
-    DRIVER_QEMU_RAW = "raw"
-    # No list here, since there are many other valid values
-
-    DRIVER_TAP_RAW = "aio"
-    DRIVER_TAP_QCOW = "qcow"
-    DRIVER_TAP_VMDK = "vmdk"
-    DRIVER_TAP_VDISK = "vdisk"
-    DRIVER_TAP_QED = "qed"
-    driver_types = [DRIVER_TAP_RAW, DRIVER_TAP_QCOW,
-        DRIVER_TAP_VMDK, DRIVER_TAP_VDISK, DRIVER_TAP_QED]
+    DRIVER_NAME_PHY = "phy"
+    DRIVER_NAME_QEMU = "qemu"
+    DRIVER_TYPE_RAW = "raw"
 
     CACHE_MODE_NONE = "none"
     CACHE_MODE_WRITETHROUGH = "writethrough"
@@ -548,8 +535,15 @@ class VirtualDisk(VirtualDevice):
     def _get_default_driver_name(self):
         if not self.path:
             return None
-        if self.conn.is_qemu():
-            return self.DRIVER_QEMU
+
+        # Recommended xen defaults from here:
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1171550#c9
+        # If type block, use name=phy. Otherwise do the same as qemu
+        if self.conn.is_xen() and self.type == self.TYPE_BLOCK:
+            return self.DRIVER_NAME_PHY
+        if self.conn.check_support(
+                self.conn.SUPPORT_CONN_DISK_DRIVER_NAME_QEMU):
+            return self.DRIVER_NAME_QEMU
         return None
 
     def _get_default_driver_type(self):
@@ -562,7 +556,7 @@ class VirtualDisk(VirtualDevice):
 
         http://lists.gnu.org/archive/html/qemu-devel/2008-04/msg00675.html
         """
-        if self.driver_name != self.DRIVER_QEMU:
+        if self.driver_name != self.DRIVER_NAME_QEMU:
             return None
 
         drvtype = self._storage_backend.get_driver_type()
@@ -878,12 +872,6 @@ class VirtualDisk(VirtualDevice):
 
         if self.is_cdrom() and guest.os.is_s390x():
             self.bus = "scsi"
-
-        if (guest.os.is_xenpv() and
-            self.type == VirtualDisk.TYPE_FILE and
-            self.driver_name is None and
-            util.is_blktap_capable(self.conn)):
-            self.driver_name = VirtualDisk.DRIVER_TAP
 
         if not self.conn.is_qemu():
             return

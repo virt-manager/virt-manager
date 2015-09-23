@@ -310,8 +310,18 @@ SUPPORT_CONN_SPICE_COMPRESSION = _make(version="0.9.1")
 SUPPORT_CONN_VMPORT = _make(
     version="1.2.16", hv_version={"qemu": "2.2.0", "test": 0})
 
+# This is for disk <driver name=qemu>. xen supports this, but it's
+# limited to arbitrary new enough xen, since I know libxl can handle it
+# but I don't think the old xend driver does.
+SUPPORT_CONN_DISK_DRIVER_NAME_QEMU = _make(
+    hv_version={"qemu": 0, "xen": "4.2.0"},
+    hv_libvirt_version={"qemu": 0, "xen": "1.1.0"})
 
-# Domain checks
+
+#################
+# Domain checks #
+#################
+
 SUPPORT_DOMAIN_GETVCPUS = _make(function="virDomain.vcpus", run_args=())
 SUPPORT_DOMAIN_XML_INACTIVE = _make(function="virDomain.XMLDesc", run_args=(),
     flag="VIR_DOMAIN_XML_INACTIVE")
@@ -338,7 +348,10 @@ SUPPORT_DOMAIN_MEMORY_STATS = _make(
 SUPPORT_DOMAIN_STATE = _make(function="virDomain.state", run_args=())
 
 
-# Pool checks
+###############
+# Pool checks #
+###############
+
 SUPPORT_POOL_CREATEVOLFROM = _make(
     function="virStoragePool.createXMLFrom", version="0.8.0")
 SUPPORT_POOL_ISACTIVE = _make(function="virStoragePool.isActive", run_args=())
@@ -352,7 +365,10 @@ SUPPORT_POOL_REFLINK = _make(
     version="1.2.13")
 
 
-# Interface checks
+####################
+# Interface checks #
+####################
+
 SUPPORT_INTERFACE_XML_INACTIVE = _make(function="virInterface.XMLDesc",
     flag="VIR_INTERFACE_XML_INACTIVE",
     run_args=())
@@ -360,12 +376,19 @@ SUPPORT_INTERFACE_ISACTIVE = _make(
     function="virInterface.isActive", run_args=())
 
 
-# Stream checks
+#################
+# Stream checks #
+#################
+
 # Latest I tested with, and since we will use it by default
 # for URL installs, want to be sure it works
 SUPPORT_STREAM_UPLOAD = _make(version="0.9.4")
 
-# Network checks
+
+##################
+# Network checks #
+##################
+
 SUPPORT_NET_ISACTIVE = _make(function="virNetwork.isActive", run_args=())
 
 

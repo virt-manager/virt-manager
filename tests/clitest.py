@@ -95,6 +95,7 @@ test_files = {
     'NEWCLONEIMG2'      : new_images[1],
     'NEWCLONEIMG3'      : new_images[2],
     'AUTOMANAGEIMG'     : "/some/new/pool/dir/new",
+    'BLOCKVOL'          : '/iscsi-pool/diskvol1',
     'EXISTIMG1'         : "/dev/default-pool/testvol1.img",
     'EXISTIMG2'         : "/dev/default-pool/testvol2.img",
     'EXISTIMG3'         : exist_images[0],
@@ -446,7 +447,7 @@ c.add_compare(""" \
 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap \
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,total_bytes_sec=10,total_iops_sec=20,write_bytes_sec=5,write_iops_sec=6 \
 --disk size=1 \
---disk /iscsi-pool/diskvol1 \
+--disk %(BLOCKVOL)s \
 --disk /dev/default-pool/iso-vol \
 --disk /dev/default-pool/iso-vol,format=qcow2 \
 --disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1 \
@@ -740,7 +741,7 @@ c = vinst.add_category("xen", "--connect %(URI-XEN)s --noautoconsole")
 c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none")  # Xen PV install headless
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-pv")  # Xen PV
-c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
+c.add_compare("--disk %(BLOCKVOL)s --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
 
 
 
