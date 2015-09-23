@@ -207,7 +207,6 @@ def _label_for_device(dev):
             label = _("Parallel")
         elif devtype == "console":
             label = _("Console")
-        label = devtype.capitalize()
         if dev.target_port is not None:
             label += " %s" % (int(dev.target_port) + 1)
         return label
@@ -2428,14 +2427,17 @@ class vmmDetails(vmmGObjectUI):
                 apps_model.append([name, version, summary])
 
     def refresh_stats_page(self):
+        def _multi_color(text1, text2):
+            return ('<span color="#82003B"></span> '
+                    '<span color="#295C45"></span>' % (text1, text2))
         def _dsk_rx_tx_text(rx, tx, unit):
-            return ('<span color="#82003B">%(rx)d %(unit)s read</span> '
-                    '<span color="#295C45">%(tx)d %(unit)s write</span>' %
-                    {"rx": rx, "tx": tx, "unit": unit})
+            opts = {"received": rx, "transfered": tx, "units": unit}
+            return _multi_color(_("%(received)d %(units)s read") % opts,
+                                _("%(transfered)d %(units)s write") % opts)
         def _net_rx_tx_text(rx, tx, unit):
-            return ('<span color="#82003B">%(rx)d %(unit)s in</span> '
-                    '<span color="#295C45">%(tx)d %(unit)s out</span>' %
-                    {"rx": rx, "tx": tx, "unit": unit})
+            opts = {"received": rx, "transfered": tx, "units": unit}
+            return _multi_color(_("%(received)d %(units)s in") % opts,
+                                _("%(transfered)d %(units)s out") % opts)
 
         cpu_txt = _("Disabled")
         mem_txt = _("Disabled")
@@ -2448,8 +2450,10 @@ class vmmDetails(vmmGObjectUI):
         if self.config.get_stats_enable_memory_poll():
             cur_vm_memory = self.vm.stats_memory()
             vm_memory = self.vm.maximum_memory()
-            mem_txt = "%s of %s" % (util.pretty_mem(cur_vm_memory),
-                                    util.pretty_mem(vm_memory))
+            mem_txt = _("%(current-memory) of %(total-memory)") % {
+                "current-memory": util.pretty_mem(cur_vm_memory),
+                "total-memory": util.pretty_mem(vm_memory)
+            }
 
         if self.config.get_stats_enable_disk_poll():
             dsk_txt = _dsk_rx_tx_text(self.vm.disk_read_rate(),

@@ -41,7 +41,7 @@ class VirtualController(VirtualDevice):
     def pretty_type(ctype):
         pretty_mappings = {
             VirtualController.TYPE_IDE           : "IDE",
-            VirtualController.TYPE_FDC           : "Floppy",
+            VirtualController.TYPE_FDC           : _("Floppy"),
             VirtualController.TYPE_SCSI          : "SCSI",
             VirtualController.TYPE_SATA          : "SATA",
             VirtualController.TYPE_VIRTIOSERIAL  : "VirtIO Serial",
