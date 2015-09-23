@@ -2428,8 +2428,8 @@ class vmmDetails(vmmGObjectUI):
 
     def refresh_stats_page(self):
         def _multi_color(text1, text2):
-            return ('<span color="#82003B"></span> '
-                    '<span color="#295C45"></span>' % (text1, text2))
+            return ('<span color="#82003B">%s</span> '
+                    '<span color="#295C45">%s</span>' % (text1, text2))
         def _dsk_rx_tx_text(rx, tx, unit):
             opts = {"received": rx, "transfered": tx, "units": unit}
             return _multi_color(_("%(received)d %(units)s read") % opts,
@@ -2450,7 +2450,7 @@ class vmmDetails(vmmGObjectUI):
         if self.config.get_stats_enable_memory_poll():
             cur_vm_memory = self.vm.stats_memory()
             vm_memory = self.vm.maximum_memory()
-            mem_txt = _("%(current-memory) of %(total-memory)") % {
+            mem_txt = _("%(current-memory)s of %(total-memory)s") % {
                 "current-memory": util.pretty_mem(cur_vm_memory),
                 "total-memory": util.pretty_mem(vm_memory)
             }
