@@ -5,6 +5,7 @@ import glob
 import fnmatch
 import os
 import sys
+import time
 import unittest
 
 from distutils.core import Command, setup
@@ -223,8 +224,13 @@ class my_install(install):
     def finalize_options(self):
         if self.prefix is None:
             if CLIConfig.prefix != sysprefix:
-                print "Using prefix from 'configure': %s" % CLIConfig.prefix
+                print "Using configured prefix=%s instead of sysprefix=%s" % (
+                    CLIConfig.prefix, sysprefix)
                 self.prefix = CLIConfig.prefix
+            else:
+                print "Using sysprefix=%s" % sysprefix
+                self.prefix = sysprefix
+
         elif self.prefix != CLIConfig.prefix:
             print("Install prefix=%s doesn't match configure prefix=%s\n"
                   "Pass matching --prefix to 'setup.py configure'" %
@@ -234,7 +240,8 @@ class my_install(install):
         if self.prefix != "/usr":
             print ("WARNING: GSettings may not find your schema if it's\n"
                    "not in /usr/share. You may need to manually play with\n"
-                   "GSETTINGS_SCHEMA_DIR and glib-compile-schemas.")
+                   "GSETTINGS_SCHEMA_DIR and glib-compile-schemas.\n\n")
+            time.sleep(2)
 
         install.finalize_options(self)
 
