@@ -266,7 +266,13 @@ class vmmCreate(vmmGObjectUI):
 
     def _show_startup_warning(self, error):
         self.widget("startup-error-box").show()
-        self.widget("startup-error").set_text("%s: %s" % (_("Warning"), error))
+        self.widget("startup-error").set_markup(
+            "<span size='small'>%s: %s</span>" % (_("Warning"), error))
+
+    def _show_arch_warning(self, error):
+        self.widget("arch-warning-box").show()
+        self.widget("arch-warning").set_markup(
+            "<span size='small'>%s: %s</span>" % (_("Warning"), error))
 
 
     def _init_state(self):
@@ -455,6 +461,7 @@ class vmmCreate(vmmGObjectUI):
         Set state that is dependent on when capsinfo changes
         """
         self._populate_machine()
+        self.widget("arch-warning-box").hide()
 
         # Helper state
         is_local = not self.conn.is_remote()
@@ -479,7 +486,7 @@ class vmmCreate(vmmGObjectUI):
                     exc_info=True)
                 msg = _("Failed to setup UEFI for AArch64: %s\n"
                         "Install options are limited.") % e
-                self._show_startup_warning(msg)
+                self._show_arch_warning(msg)
 
         # Install Options
         method_tree = self.widget("method-tree")
