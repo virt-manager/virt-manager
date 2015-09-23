@@ -1097,7 +1097,7 @@ class DebianDistro(Distro):
             logging.debug("Regex didn't match, not a %s distro", self.name)
             return False
 
-        self.os_variant = self._detect_osdict_from_url()
+        self.os_variant = self._detect_debian_osdict_from_url()
         return True
 
 
@@ -1105,21 +1105,28 @@ class DebianDistro(Distro):
     # osdict autodetection helpers #
     ################################
 
-    def _detect_osdict_from_url(self):
+    def _detect_debian_osdict_from_url(self):
         root = self.name.lower()
         oses = [n for n in OSDB.list_os() if n.name.startswith(root)]
 
         if self._url_prefix == "daily":
+            logging.debug("Appears to be debian 'daily' URL, using latest "
+                "debian OS")
             return oses[0].name
 
+        # We grab the distro code name from the libosinfo label, and
+        # see if we can find that in the URL
         for osobj in oses:
-            # name looks like 'Debian Sarge'
+            # name looks like 'Debian Sarge' or 'Ubuntu Vivid Varvet'
             if " " not in osobj.label:
                 continue
 
             codename = osobj.label.lower().split()[1]
             if ("/%s/" % codename) in self.uri:
+                logging.debug("Found codename=%s in the URL string", codename)
                 return osobj.name
+
+        logging.debug("Didn't find any known codename in the URL string")
         return self.os_variant
 
 
@@ -1146,7 +1153,7 @@ class UbuntuDistro(DebianDistro):
             logging.debug("Regex didn't match, not a %s distro", self.name)
             return False
 
-        self.os_variant = self._detect_osdict_from_url()
+        self.os_variant = self._detect_debian_osdict_from_url()
         return True
 
 
