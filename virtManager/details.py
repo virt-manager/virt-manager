@@ -2480,29 +2480,11 @@ class vmmDetails(vmmGObjectUI):
         self.network_traffic_graph.set_property("data_array", n1 + n2)
 
     def refresh_config_cpu(self):
-        # This bit needs to come first, since CPU values can be affected
-        # by whether topology is enabled
+        # Set topology first, because it impacts maxvcpus values
         cpu = self.vm.get_cpu_config()
         show_top = bool(cpu.sockets or cpu.cores or cpu.threads)
         self.widget("cpu-topology-enable").set_active(show_top)
 
-        conn = self.vm.conn
-        host_active_count = conn.host_active_processor_count()
-        maxvcpus = self.vm.vcpu_max_count()
-        curvcpus = self.vm.vcpu_count()
-
-        curadj = self.widget("cpu-vcpus")
-        maxadj = self.widget("cpu-maxvcpus")
-        curadj.set_value(int(curvcpus))
-        maxadj.set_value(int(maxvcpus))
-
-        self.widget("state-host-cpus").set_text(str(host_active_count))
-
-        # Warn about overcommit
-        warn = bool(self.config_get_vcpus() > host_active_count)
-        self.widget("cpu-vcpus-warn-box").set_visible(warn)
-
-        # CPU model config
         sockets = cpu.sockets or 1
         cores = cpu.cores or 1
         threads = cpu.threads or 1
@@ -2513,6 +2495,22 @@ class vmmDetails(vmmGObjectUI):
         if show_top:
             self.widget("cpu-topology-expander").set_expanded(True)
 
+        host_active_count = self.vm.conn.host_active_processor_count()
+        maxvcpus = self.vm.vcpu_max_count()
+        curvcpus = self.vm.vcpu_count()
+
+        self.widget("cpu-vcpus").set_value(int(curvcpus))
+        self.widget("cpu-maxvcpus").set_value(int(maxvcpus))
+        self.widget("state-host-cpus").set_text(str(host_active_count))
+
+        # Trigger this again to make sure maxvcpus is correct
+        self.config_cpu_topology_changed()
+
+        # Warn about overcommit
+        warn = bool(self.config_get_vcpus() > host_active_count)
+        self.widget("cpu-vcpus-warn-box").set_visible(warn)
+
+        # CPU model config
         model = cpu.model or None
         if not model:
             if cpu.mode == "host-model" or cpu.mode == "host-passthrough":
