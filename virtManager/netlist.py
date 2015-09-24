@@ -240,12 +240,19 @@ class vmmNetworkList(vmmGObjectUI):
         model = net_list.get_model()
         model.clear()
 
-        # For qemu:///session
+        def _add_manual_bridge_row():
+            manual_row = self._build_source_row(
+                None, None, _("Specify shared device name"),
+                True, False, manual_bridge=True)
+            model.append(manual_row)
+
         if self.conn.is_qemu_session():
             nettype = virtinst.VirtualNetworkInterface.TYPE_USER
             r = self._build_source_row(
                 nettype, None, self._pretty_network_desc(nettype), True, True)
             model.append(r)
+
+            _add_manual_bridge_row()
             net_list.set_active(0)
             return
 
@@ -284,12 +291,7 @@ class vmmNetworkList(vmmGObjectUI):
             default = [idx for idx in range(len(model)) if
                        model[idx][2] == label][0]
 
-        # After all is said and done, add a manual bridge option
-        manual_row = self._build_source_row(
-            None, None, _("Specify shared device name"),
-            True, False, manual_bridge=True)
-        model.append(manual_row)
-
+        _add_manual_bridge_row()
         net_list.set_active(default)
 
 
