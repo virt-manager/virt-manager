@@ -38,6 +38,7 @@ class DomainFeatures(XMLBuilder):
     viridian = XMLProperty("./viridian", is_bool=True)
     privnet = XMLProperty("./privnet", is_bool=True)
 
+    pmu = XMLProperty("./pmu/@state", is_onoff=True)
     eoi = XMLProperty("./apic/@eoi", is_onoff=True)
 
     hyperv_vapic = XMLProperty("./hyperv/vapic/@state", is_onoff=True)

@@ -1506,6 +1506,7 @@ class ParserFeatures(VirtCLIParser):
         self.set_param("viridian", "viridian",
             is_onoff=True)
         self.set_param("eoi", "eoi", is_onoff=True)
+        self.set_param("pmu", "pmu", is_onoff=True)
 
         self.set_param("hyperv_vapic", "hyperv_vapic",
             is_onoff=True)
