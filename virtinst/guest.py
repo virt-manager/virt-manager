@@ -1060,11 +1060,22 @@ class Guest(XMLBuilder):
                     net.model = net_model
 
     def _set_input_defaults(self):
+        def _usb_disabled():
+            controllers = [c for c in self.get_devices("controller") if
+                c.type == "usb"]
+            if not controllers:
+                return False
+            return all([c.model == "none" for c in controllers])
+
         input_type = self._os_object.default_inputtype()
         input_bus = self._os_object.default_inputbus()
         if self.os.is_xenpv():
             input_type = VirtualInputDevice.TYPE_MOUSE
             input_bus = VirtualInputDevice.BUS_XEN
+        elif _usb_disabled() and input_bus == "usb":
+            input_bus = "ps2"
+            if input_type == "tablet":
+                input_type = "mouse"
 
         for inp in self.get_devices("input"):
             if (inp.type == inp.TYPE_DEFAULT and
