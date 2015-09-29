@@ -805,12 +805,12 @@ class vmmCreate(vmmGObjectUI):
         model.clear()
 
         # Allow choosing between qemu and kvm for archs that traditionally
-        # have a decent amount of TCG usage, like armv7l
+        # have a decent amount of TCG usage, like armv7l. Also include
+        # aarch64 which can be used for arm32 VMs as well
         domains = [d.hypervisor_type for d in self._capsinfo.guest.domains[:]]
         if not self.conn.is_qemu():
             domains = []
-        elif self._capsinfo.arch in ["i686", "x86_64", "aarch64",
-                                     "ppc64", "ppc64le"]:
+        elif self._capsinfo.arch in ["i686", "x86_64", "ppc64", "ppc64le"]:
             domains = []
 
         default = 0
