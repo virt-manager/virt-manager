@@ -250,6 +250,10 @@ Enable hypver VAPIC, but disable spinlocks
 
 Allow the KVM hypervisor signature to be hidden from the guest
 
+=item B<--features pvspinlock=on>
+
+Notify the guest that the host supports paravirtual spinlocks for example by exposing the pvticketlocks mechanism.
+
 =back
 
 Use --features=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsFeatures>
