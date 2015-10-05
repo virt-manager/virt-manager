@@ -818,7 +818,10 @@ class RHELDistro(RedHatDistro):
 
     def isValidStore(self):
         if self.treeinfo:
-            m = re.match(".*Red Hat Enterprise Linux.*",
+            # Matches:
+            #   Red Hat Enterprise Linux
+            #   RHEL Atomic Host
+            m = re.match(".*(Red Hat Enterprise Linux|RHEL).*",
                          self.treeinfo.get("general", "family"))
             ret = (m is not None)
 
