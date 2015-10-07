@@ -196,6 +196,7 @@ class Guest(XMLBuilder):
                               default_cb=lambda s: "destroy")
     on_reboot = XMLProperty("./on_reboot", default_cb=lambda s: "restart")
     on_crash = XMLProperty("./on_crash", default_cb=lambda s: "restart")
+    on_lockfailure = XMLProperty("./on_lockfailure")
 
     seclabel = XMLChildProperty(Seclabel)
     os = XMLChildProperty(OSXML, is_single=True)

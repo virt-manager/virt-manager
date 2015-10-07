@@ -116,6 +116,7 @@ class XMLParseTest(unittest.TestCase):
         check("on_poweroff", "destroy", "restart")
         check("on_reboot", "restart", "destroy")
         check("on_crash", "restart", "destroy")
+        check("on_lockfailure", "poweroff", "restart")
 
         check = self._make_checker(guest.clock)
         check("offset", "utc", "localtime")

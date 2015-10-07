@@ -423,7 +423,7 @@ c.add_compare("""--pxe \
 --clock offset=utc,hpet_present=no,rtc_tickpolicy=merge \
 --pm suspend_to_mem=yes,suspend_to_disk=no \
 --resource partition=/virtualmachines/production \
---events on_poweroff=destroy,on_reboot=restart,on_crash=preserve \
+--events on_poweroff=destroy,on_reboot=restart,on_crash=preserve,on_lockfailure=ignore \
 \
 --controller usb3 \
 --controller virtio-scsi \

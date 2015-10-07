@@ -1213,6 +1213,7 @@ class ParserEvents(VirtCLIParser):
         self.set_param("on_poweroff", "on_poweroff")
         self.set_param("on_reboot", "on_reboot")
         self.set_param("on_crash", "on_crash")
+        self.set_param("on_lockfailure", "on_lockfailure")
 
 
 ######################
