@@ -1445,31 +1445,31 @@ class vmmCreate(vmmGObjectUI):
 
     def _netdev_changed(self, ignore):
         row = self._netlist.get_network_row()
-        show_pxe_warn = True
         pxe_install = (self._get_config_install_page() == INSTALL_PAGE_PXE)
-        expand = False
 
-        if row:
-            ntype = row[0]
-            connkey = row[6]
+        ntype = row[0]
+        connkey = row[6]
+        expand = (ntype != "network" and ntype != "bridge")
+        no_network = ntype is None
 
-            expand = (ntype != "network" and ntype != "bridge")
-            if (ntype is None or
-                ntype == virtinst.VirtualNetworkInterface.TYPE_USER):
-                show_pxe_warn = True
-            elif ntype != virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
-                show_pxe_warn = False
-            else:
-                obj = self.conn.get_net(connkey)
-                show_pxe_warn = not obj.can_pxe()
+        if (no_network or ntype == virtinst.VirtualNetworkInterface.TYPE_USER):
+            can_pxe = False
+        elif ntype != virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
+            can_pxe = True
+        else:
+            can_pxe = self.conn.get_net(connkey).can_pxe()
 
-        show_warn = (show_pxe_warn and pxe_install)
-
-        if expand or show_warn:
+        if expand:
             self.widget("advanced-expander").set_expanded(True)
-        self.widget("netdev-warn-box").set_visible(show_warn)
-        self.widget("netdev-warn-label").set_markup(
-            "<small>%s</small>" % _("Network selection does not support PXE"))
+
+        def _show_netdev_warn(msg):
+            self.widget("advanced-expander").set_expanded(True)
+            self.widget("netdev-warn-box").set_visible(True)
+            self.widget("netdev-warn-label").set_markup(
+                "<small>%s</small>" % msg)
+
+        if not can_pxe and pxe_install:
+            _show_netdev_warn(_("Network selection does not support PXE"))
 
 
     ########################
