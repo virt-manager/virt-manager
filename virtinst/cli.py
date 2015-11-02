@@ -1299,7 +1299,7 @@ class ParserVCPU(VirtCLIParser):
                         inst.conn, inst.memory)
                     logging.debug("Auto cpuset is: %s", val)
                 except Exception, e:
-                    logging.error("Not setting cpuset: %s", str(e))
+                    logging.warning("Not setting cpuset: %s", str(e))
                     val = None
 
             if val:
