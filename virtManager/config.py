@@ -31,12 +31,18 @@ RUNNING_CONFIG = None
 
 
 class SettingsWrapper(object):
-    def __init__(self, settings_id):
+    """
+    Wrapper class to simplify interacting with gsettings APIs
+    """
+    def __init__(self, settings_id, schemadir):
         self._root = settings_id
+
+        os.environ["GSETTINGS_SCHEMA_DIR"] = schemadir
         self._settings = Gio.Settings.new(self._root)
 
         self._settingsmap = {"": self._settings}
         self._handler_map = {}
+
         for child in self._settings.list_children():
             childschema = self._root + "." + child
             self._settingsmap[child] = Gio.Settings.new(childschema)
@@ -155,7 +161,8 @@ class vmmConfig(object):
         self.ui_dir = CLIConfig.ui_dir
         self.test_first_run = bool(test_first_run)
 
-        self.conf = SettingsWrapper("org.virt-manager.virt-manager")
+        self.conf = SettingsWrapper("org.virt-manager.virt-manager",
+                CLIConfig.gsettings_dir)
 
         # We don't create it straight away, since we don't want
         # to block the app pending user authorization to access

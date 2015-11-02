@@ -141,7 +141,9 @@ python setup.py configure \
 
 
 %install
-python setup.py install -O1 --root=%{buildroot}
+python setup.py \
+    --no-update-icon-cache --no-compile-schemas \
+    install -O1 --root=%{buildroot}
 %find_lang %{name}
 
 # The conversion script was only added to virt-manager after several

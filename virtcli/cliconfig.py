@@ -63,7 +63,6 @@ def _setup_gsettings_path(schemadir):
         raise RuntimeError("You must install glib-compile-schemas to run "
             "virt-manager from git.")
 
-    os.environ["GSETTINGS_SCHEMA_DIR"] = schemadir
     ret = subprocess.call([exe, "--strict", schemadir])
     if ret != 0:
         raise RuntimeError("Failed to compile local gsettings schemas")
@@ -92,6 +91,7 @@ class _CLIConfig(object):
         self.gettext_dir = None
         self.ui_dir = None
         self.icon_dir = None
+        self.gsettings_dir = None
         self.set_paths_by_prefix(_get_param("prefix", "/usr"),
             check_source_dir=True)
 
@@ -100,13 +100,16 @@ class _CLIConfig(object):
         self.gettext_dir = os.path.join(prefix, "share", "locale")
 
         if _running_from_srcdir and check_source_dir:
-            self.icon_dir = os.path.join(_srcdir, "data")
             self.ui_dir = os.path.join(_srcdir, "ui")
-            _setup_gsettings_path(self.icon_dir)
+            self.icon_dir = os.path.join(_srcdir, "data")
+            self.gsettings_dir = self.icon_dir
+            _setup_gsettings_path(self.gsettings_dir)
         else:
+            self.ui_dir = os.path.join(prefix, "share", "virt-manager", "ui")
             self.icon_dir = os.path.join(prefix, "share", "virt-manager",
                 "icons")
-            self.ui_dir = os.path.join(prefix, "share", "virt-manager", "ui")
+            self.gsettings_dir = os.path.join(prefix, "share",
+                "glib-2.0", "schemas")
 
 
 CLIConfig = _CLIConfig()

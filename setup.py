@@ -5,14 +5,16 @@ import glob
 import fnmatch
 import os
 import sys
-import time
 import unittest
 
 import distutils
 import distutils.command.build
 import distutils.command.install
+import distutils.command.install_data
 import distutils.command.install_egg_info
 import distutils.command.sdist
+import distutils.dist
+import distutils.log
 import distutils.sysconfig
 sysprefix = distutils.sysconfig.get_config_var("prefix")
 
@@ -237,13 +239,23 @@ class my_install(distutils.command.install.install):
                   (self.prefix, CLIConfig.prefix))
             sys.exit(1)
 
-        if self.prefix != "/usr":
-            print ("WARNING: GSettings may not find your schema if it's\n"
-                   "not in /usr/share. You may need to manually play with\n"
-                   "GSETTINGS_SCHEMA_DIR and glib-compile-schemas.\n\n")
-            time.sleep(2)
-
         distutils.command.install.install.finalize_options(self)
+
+
+class my_install_data(distutils.command.install_data.install_data):
+    def run(self):
+        distutils.command.install_data.install_data.run(self)
+
+        if not self.distribution.no_update_icon_cache:
+            distutils.log.info("running gtk-update-icon-cache")
+            icon_path = os.path.join(self.install_dir, "share/icons/hicolor")
+            self.spawn(["gtk-update-icon-cache", "-q", "-t", icon_path])
+
+        if not self.distribution.no_compile_schemas:
+            distutils.log.info("compiling gsettings schemas")
+            gschema_install = os.path.join(self.install_dir,
+                "share/glib-2.0/schemas")
+            self.spawn(["glib-compile-schemas", gschema_install])
 
 
 class my_sdist(distutils.command.sdist.sdist):
@@ -593,6 +605,18 @@ class CheckPylint(distutils.core.Command):
         os.system(cmd)
 
 
+class VMMDistribution(distutils.dist.Distribution):
+    global_options = distutils.dist.Distribution.global_options + [
+        ("no-update-icon-cache", None, "Don't run gtk-update-icon-cache"),
+        ("no-compile-schemas", None, "Don't compile gsettings schemas"),
+    ]
+
+    def __init__(self, *args, **kwargs):
+        self.no_update_icon_cache = False
+        self.no_compile_schemas = False
+        distutils.dist.Distribution.__init__(self, *args, **kwargs)
+
+
 distutils.core.setup(
     name="virt-manager",
     version=CLIConfig.version,
@@ -645,6 +669,7 @@ distutils.core.setup(
 
         'sdist': my_sdist,
         'install': my_install,
+        'install_data': my_install_data,
         'install_egg_info': my_egg_info,
 
         'configure': configure,
@@ -655,5 +680,7 @@ distutils.core.setup(
         'test_ui': TestUI,
         'test_urls' : TestURLFetch,
         'test_initrd_inject' : TestInitrdInject,
-    }
+    },
+
+    distclass=VMMDistribution,
 )
