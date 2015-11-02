@@ -972,6 +972,9 @@ class SuseDistro(Distro):
             # Tested with Opensuse 10.0
             self._hvm_kernel_paths.append(("boot/loader/%s" % oldkern,
                                            "boot/loader/%s" % oldinit))
+            # Tested with SLES 12 for ppc64le
+            self._hvm_kernel_paths.append(("boot/%s/linux" % self.arch,
+                                           "boot/%s/initrd" % self.arch))
 
             # Matches Opensuse > 10.2 and sles 10
             self._xen_kernel_paths = [("boot/%s/vmlinuz-xen" % self.arch,
