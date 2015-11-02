@@ -235,9 +235,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         return rows, default_label
 
-    def _populate_network_list(self):
-        net_list = self.widget("net-source")
-        model = net_list.get_model()
+    def _populate_network_model(self, model):
         model.clear()
 
         def _add_manual_bridge_row():
@@ -253,7 +251,6 @@ class vmmNetworkList(vmmGObjectUI):
             model.append(r)
 
             _add_manual_bridge_row()
-            net_list.set_active(0)
             return
 
         (vnets, vnet_bridges, default_net) = self._find_virtual_networks()
@@ -292,7 +289,7 @@ class vmmNetworkList(vmmGObjectUI):
                        model[idx][2] == label][0]
 
         _add_manual_bridge_row()
-        net_list.set_active(default)
+        return default
 
 
     ###############
@@ -404,7 +401,7 @@ class vmmNetworkList(vmmGObjectUI):
         return net
 
     def reset_state(self):
-        self._populate_network_list()
+        self._repopulate_network_list()
 
         net_err = None
         if (not self.conn.is_nodedev_capable() or
@@ -490,13 +487,24 @@ class vmmNetworkList(vmmGObjectUI):
         ignore = kwargs
 
         netlist = self.widget("net-source")
-        label = uiutil.get_list_selection(netlist, column=2)
-        self._populate_network_list()
+        current_label = uiutil.get_list_selection(netlist, column=2)
+
+        model = netlist.get_model()
+        try:
+            netlist.set_model(None)
+            default_idx = self._populate_network_model(model)
+        finally:
+            netlist.set_model(model)
 
         for row in netlist.get_model():
-            if label and row[2] == label:
+            if current_label and row[2] == current_label:
                 netlist.set_active_iter(row.iter)
                 return
+
+        if default_idx is None:
+            default_idx = 0
+        netlist.set_active(default_idx)
+
 
     def _populate_portgroups(self, portgroups):
         combo = self.widget("net-portgroup")
