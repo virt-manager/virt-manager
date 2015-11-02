@@ -1468,7 +1468,9 @@ class vmmCreate(vmmGObjectUI):
             self.widget("netdev-warn-label").set_markup(
                 "<small>%s</small>" % msg)
 
-        if not can_pxe and pxe_install:
+        if no_network:
+            _show_netdev_warn(_("No network selected"))
+        elif not can_pxe and pxe_install:
             _show_netdev_warn(_("Network selection does not support PXE"))
 
 
