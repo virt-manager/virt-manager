@@ -50,7 +50,7 @@ class vmmGObject(GObject.GObject):
 
     def __init__(self):
         GObject.GObject.__init__(self)
-        self.config = config.running_config
+        self.config = config.RUNNING_CONFIG
 
         self._gobject_handles = []
         self._gobject_timeouts = []

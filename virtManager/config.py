@@ -27,7 +27,7 @@ from gi.repository import Gtk
 from virtinst import CPU
 from .keyring import vmmKeyring, vmmSecret
 
-running_config = None
+RUNNING_CONFIG = None
 
 
 class SettingsWrapper(object):
@@ -182,8 +182,8 @@ class vmmConfig(object):
 
         self._spice_error = None
 
-        global running_config
-        running_config = self
+        global RUNNING_CONFIG
+        RUNNING_CONFIG = self
 
 
     def check_inspection(self):
