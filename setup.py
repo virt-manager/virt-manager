@@ -8,13 +8,13 @@ import sys
 import time
 import unittest
 
-from distutils.core import Command, setup
-from distutils.command.build import build
-from distutils.command.install import install
-from distutils.command.install_egg_info import install_egg_info
-from distutils.command.sdist import sdist
-from distutils.sysconfig import get_config_var
-sysprefix = get_config_var("prefix")
+import distutils
+import distutils.command.build
+import distutils.command.install
+import distutils.command.install_egg_info
+import distutils.command.sdist
+import distutils.sysconfig
+sysprefix = distutils.sysconfig.get_config_var("prefix")
 
 from virtcli import CLIConfig
 
@@ -45,7 +45,7 @@ def _generate_potfiles_in():
     return potfiles
 
 
-class my_build_i18n(build):
+class my_build_i18n(distutils.command.build.build):
     """
     Add our desktop files to the list, saves us having to track setup.cfg
     """
@@ -136,7 +136,7 @@ class my_build_i18n(build):
                 self.distribution.data_files.append((target, files_merged))
 
 
-class my_build(build):
+class my_build(distutils.command.build.build):
     """
     Create simple shell wrappers for /usr/bin/ tools to point to /usr/share
     Compile .pod file
@@ -206,10 +206,10 @@ class my_build(build):
         self._build_icons()
 
         self.run_command("build_i18n")
-        build.run(self)
+        distutils.command.build.build.run(self)
 
 
-class my_egg_info(install_egg_info):
+class my_egg_info(distutils.command.install_egg_info.install_egg_info):
     """
     Disable egg_info installation, seems pointless for a non-library
     """
@@ -217,7 +217,7 @@ class my_egg_info(install_egg_info):
         pass
 
 
-class my_install(install):
+class my_install(distutils.command.install.install):
     """
     Error if we weren't 'configure'd with the correct install prefix
     """
@@ -243,10 +243,10 @@ class my_install(install):
                    "GSETTINGS_SCHEMA_DIR and glib-compile-schemas.\n\n")
             time.sleep(2)
 
-        install.finalize_options(self)
+        distutils.command.install.install.finalize_options(self)
 
 
-class my_sdist(sdist):
+class my_sdist(distutils.command.sdist.sdist):
     description = "Update virt-manager.spec; build sdist-tarball."
 
     def run(self):
@@ -257,14 +257,14 @@ class my_sdist(sdist):
         f1.close()
         f2.close()
 
-        sdist.run(self)
+        distutils.command.sdist.sdist.run(self)
 
 
 ###################
 # Custom commands #
 ###################
 
-class my_rpm(Command):
+class my_rpm(distutils.core.Command):
     user_options = []
     description = "Build src and noarch rpms."
 
@@ -282,7 +282,7 @@ class my_rpm(Command):
                   CLIConfig.version)
 
 
-class configure(Command):
+class configure(distutils.core.Command):
     user_options = [
         ("prefix=", None, "installation prefix"),
         ("qemu-user=", None,
@@ -349,7 +349,7 @@ class configure(Command):
         print "Generated %s" % CLIConfig.cfgpath
 
 
-class TestBaseCommand(Command):
+class TestBaseCommand(distutils.core.Command):
     user_options = [
         ('debug', 'd', 'Show debug output'),
         ('coverage', 'c', 'Show coverage report'),
@@ -558,7 +558,7 @@ class TestInitrdInject(TestBaseCommand):
         TestBaseCommand.run(self)
 
 
-class CheckPylint(Command):
+class CheckPylint(distutils.core.Command):
     user_options = []
     description = "Check code using pylint and pep8"
 
@@ -593,7 +593,7 @@ class CheckPylint(Command):
         os.system(cmd)
 
 
-setup(
+distutils.core.setup(
     name="virt-manager",
     version=CLIConfig.version,
     author="Cole Robinson",
