@@ -212,8 +212,6 @@ class vmmCreate(vmmGObjectUI):
             self._storage_browser.close()
 
     def _cleanup(self):
-        self._remove_conn()
-
         self.conn = None
         self._capsinfo = None
 
@@ -240,19 +238,6 @@ class vmmCreate(vmmGObjectUI):
     ##########################
     # Initial state handling #
     ##########################
-
-    def _remove_conn(self):
-        self.conn = None
-        self._capsinfo = None
-
-    def _set_conn(self, newconn, force_validate=False):
-        if self.conn == newconn and not force_validate:
-            return
-
-        self._remove_conn()
-        self.conn = newconn
-        if self.conn:
-            self._set_conn_state()
 
     def _show_startup_error(self, error, hideinstall=True):
         self.widget("startup-error-box").show()
@@ -376,7 +361,7 @@ class vmmCreate(vmmGObjectUI):
     def _reset_state(self, urihint=None):
         """
         Reset all UI state to default values. Conn specific state is
-        populated in _set_conn_state
+        populated in _populate_conn_state
         """
         self._failed_guest = None
         self._guest = None
@@ -392,15 +377,9 @@ class vmmCreate(vmmGObjectUI):
         activeconn = self._populate_conn_list(urihint)
         self.widget("arch-expander").set_expanded(False)
 
-        try:
-            self._set_conn(activeconn, force_validate=True)
-        except Exception, e:
-            logging.exception("Error setting create wizard conn state.")
-            return self._show_startup_error(str(e))
+        if self._set_conn(activeconn) is False:
+            return False
 
-        if not activeconn:
-            return self._show_startup_error(
-                                _("No active connection to install on."))
 
         # Everything from this point forward should be connection independent
 
@@ -451,9 +430,6 @@ class vmmCreate(vmmGObjectUI):
 
         # Final page
         self.widget("summary-customize").set_active(False)
-
-        # Make sure window is a sane size
-        self.topwin.resize(1, 1)
 
 
     def _set_caps_state(self):
@@ -557,7 +533,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("kernel-box").set_visible(not installable_arch)
         uiutil.set_grid_row_visible(self.widget("dtb"), show_dtb)
 
-    def _set_conn_state(self):
+    def _populate_conn_state(self):
         """
         Update all state that has some dependency on the current connection
         """
@@ -566,9 +542,9 @@ class vmmCreate(vmmGObjectUI):
                                          pollnodedev=True)
 
         self.widget("install-box").show()
-        self.widget("startup-error-box").hide()
         self.widget("create-forward").set_sensitive(True)
 
+        self._capsinfo = None
         self.conn.invalidate_caps()
         self._change_caps()
 
@@ -684,6 +660,22 @@ class vmmCreate(vmmGObjectUI):
         self.widget("netdev-ui-align").add(self._netlist.top_box)
         self._netlist.connect("changed", self._netdev_changed)
         self._netlist.reset_state()
+
+    def _set_conn(self, newconn):
+        self.widget("startup-error-box").hide()
+        self.widget("arch-warning-box").hide()
+
+        self.conn = newconn
+        if not self.conn:
+            return self._show_startup_error(
+                                _("No active connection to install on."))
+
+        try:
+            self._populate_conn_state()
+        except Exception, e:
+            logging.exception("Error setting create wizard conn state.")
+            return self._show_startup_error(str(e))
+
 
 
     def _change_caps(self, gtype=None, arch=None, domtype=None):
@@ -1261,16 +1253,17 @@ class vmmCreate(vmmGObjectUI):
     # Intro page listeners
     def _conn_changed(self, src):
         uri = uiutil.get_list_selection(src)
-        conn = None
+        newconn = None
         if uri:
-            conn = self.engine.conns[uri]["conn"]
+            newconn = self.engine.conns[uri]["conn"]
 
         # If we aren't visible, let reset_state handle this for us, which
         # has a better chance of reporting error
         if not self.is_visible():
             return
 
-        self._set_conn(conn)
+        if self.conn is not newconn:
+            self._set_conn(newconn)
 
     def _method_changed(self, src):
         ignore = src
