@@ -30,6 +30,7 @@ from .guest import Guest
 from .deviceinterface import VirtualNetworkInterface
 from .devicedisk import VirtualDisk
 from .storage import StorageVolume
+from .devicechar import VirtualChannelDevice
 
 
 class Cloner(object):
@@ -412,6 +413,12 @@ class Cloner(object):
             xmldisk.driver_name = orig_disk.driver_name
             xmldisk.driver_type = orig_disk.driver_type
             xmldisk.path = clone_disk.path
+
+        # For guest agent channel, remove a path to generate a new one with
+        # new guest name
+        for channel in self._guest.get_devices("channel"):
+            if channel.type == VirtualChannelDevice.TYPE_UNIX:
+                channel._source_path = None
 
         # Save altered clone xml
         self._clone_xml = self._guest.get_xml_config()
