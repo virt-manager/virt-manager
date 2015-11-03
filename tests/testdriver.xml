@@ -820,6 +820,10 @@ test-many-devices, like an alternate RNG.
     <parallel type='file'>
       <source path='/tmp/foo.log'/>
     </parallel>
+    <channel type='unix'>
+      <source mode='bind' path='/var/lib/libvirt/qemu/channel/target/test-for-clone/org.qemu.guest_agent.0'/>
+      <target type='virtio' name='org.qemu.guest_agent.0'/>
+    </channel>
   </devices>
 </domain>
 
