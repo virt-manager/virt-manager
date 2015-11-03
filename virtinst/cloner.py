@@ -418,7 +418,7 @@ class Cloner(object):
         # new guest name
         for channel in self._guest.get_devices("channel"):
             if channel.type == VirtualChannelDevice.TYPE_UNIX:
-                channel._source_path = None
+                channel.source_path = None
 
         # Save altered clone xml
         self._clone_xml = self._guest.get_xml_config()
