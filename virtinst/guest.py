@@ -881,7 +881,12 @@ class Guest(XMLBuilder):
         if self.features.apic == "default":
             self.features.apic = self.capsinfo.guest.supports_apic()
         if self.features.pae == "default":
-            self.features.pae = self.capsinfo.guest.supports_pae()
+            if (self.os.is_hvm() and
+                self.type == "xen" and
+                self.os.arch == "x86_64"):
+                self.features.pae = True
+            else:
+                self.features.pae = self.capsinfo.guest.supports_pae()
 
         if (self.features.vmport == "default" and
             self.os.is_x86() and
