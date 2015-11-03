@@ -286,6 +286,14 @@ class vmmEngine(vmmGObject):
         self.conns[hvuri]["windowDetails"][connkey].cleanup()
         del(self.conns[hvuri]["windowDetails"][connkey])
 
+    def _do_vm_renamed(self, conn, oldconnkey, newconnkey):
+        hvuri = conn.get_uri()
+        if oldconnkey not in self.conns[hvuri]["windowDetails"]:
+            return
+
+        self.conns[hvuri]["windowDetails"][newconnkey] = (
+            self.conns[hvuri]["windowDetails"].pop(oldconnkey))
+
     def _do_conn_changed(self, conn):
         if conn.is_active() or conn.is_connecting():
             return
@@ -514,6 +522,7 @@ class vmmEngine(vmmGObject):
         }
 
         conn.connect("vm-removed", self._do_vm_removed)
+        conn.connect("vm-renamed", self._do_vm_renamed)
         conn.connect("state-changed", self._do_conn_changed)
         conn.connect("connect-error", self._connect_error)
         conn.connect("priority-tick", self._schedule_priority_tick)

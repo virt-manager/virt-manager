@@ -111,6 +111,7 @@ class vmmLibvirtObject(vmmGObject):
         self._backend = newbackend
 
     def define_name(self, newname):
+        oldconnkey = self.get_connkey()
         oldname = self.get_xmlobj().name
 
         self.ensure_latest_xml()
@@ -126,7 +127,7 @@ class vmmLibvirtObject(vmmGObject):
 
         try:
             self._key = newname
-            self.conn.rename_object(self, origxml, newxml, oldname, newname)
+            self.conn.rename_object(self, origxml, newxml, oldconnkey)
         except:
             self._key = oldname
             raise

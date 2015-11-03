@@ -169,6 +169,7 @@ class vmmConnection(vmmGObject):
     __gsignals__ = {
         "vm-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "vm-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "vm-renamed": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "net-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "net-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "pool-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
@@ -681,10 +682,7 @@ class vmmConnection(vmmGObject):
     def define_interface(self, xml):
         return self._backend.interfaceDefineXML(xml, 0)
 
-    def rename_object(self, obj, origxml, newxml, oldname, newname):
-        ignore = oldname
-        ignore = newname
-
+    def rename_object(self, obj, origxml, newxml, oldconnkey):
         if obj.class_name() == "domain":
             define_cb = self.define_domain
         elif obj.class_name() == "pool":
@@ -721,6 +719,9 @@ class vmmConnection(vmmGObject):
             if newobj:
                 # Reinsert handle into new obj
                 obj.change_name_backend(newobj)
+
+        if newobj and obj.class_name() == "domain":
+            self.emit("vm-renamed", oldconnkey, obj.get_connkey())
 
 
     #########################
