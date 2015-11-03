@@ -357,13 +357,12 @@ class _OsVariant(object):
             return True
 
         eol_date = self._os.get_eol_date_string()
-        name = self._os.get_short_id()
 
         if eol_date:
             return (datetime.datetime.strptime(eol_date, "%Y-%m-%d") >
                     datetime.datetime.now())
 
-        if name == "fedora-unknown":
+        if self.name == "fedora-unknown":
             return False
 
         # As of libosinfo 2.11, many clearly EOL distros don't have an
