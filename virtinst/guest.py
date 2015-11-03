@@ -836,7 +836,11 @@ class Guest(XMLBuilder):
         elif self.os.is_x86() and self.type == "kvm":
             if self.os.arch != self.conn.caps.host.cpu.arch:
                 return
+
             self.cpu.set_special_mode(self.x86_cpu_default)
+            if self._os_object.broken_x2apic():
+                self.cpu.add_feature("x2apic", policy="disable")
+
 
     def _hv_supported(self):
         if (self.os.loader_type == "pflash" and
