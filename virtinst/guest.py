@@ -657,6 +657,8 @@ class Guest(XMLBuilder):
             return
         if self.get_devices("channel"):
             return
+        if self.os.is_s390x():
+            return
 
         # Skip qemu-ga on ARM where virtio slots are currently limited
         if (self.conn.is_qemu() and
