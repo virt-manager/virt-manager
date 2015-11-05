@@ -326,7 +326,7 @@ class VirtualConnection(object):
         if not CLIConfig.stable_defaults and not force:
             return False
 
-        if not self.is_qemu_system():
+        if not self.is_qemu():
             return False
 
         if emulator:
