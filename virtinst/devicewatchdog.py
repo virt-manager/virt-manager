@@ -27,8 +27,9 @@ class VirtualWatchdog(VirtualDevice):
 
     MODEL_I6300 = "i6300esb"
     MODEL_IB700 = "ib700"
+    MODEL_DIAG288 = "diag288"
     MODEL_DEFAULT = "default"
-    MODELS = [MODEL_I6300, MODEL_IB700]
+    MODELS = [MODEL_I6300, MODEL_IB700, MODEL_DIAG288]
 
     ACTION_SHUTDOWN = "shutdown"
     ACTION_RESET    = "reset"
