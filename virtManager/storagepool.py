@@ -146,7 +146,7 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def _init_libvirt_state(self):
         self.tick()
-        self.refresh(skip_xml_refresh=True)
+        self.refresh(_do_refresh_xml=False)
         for vol in self.get_volumes():
             vol.init_libvirt_state()
 
@@ -173,16 +173,16 @@ class vmmStoragePool(vmmLibvirtObject):
         self._backend.undefine()
         self._backend = None
 
-    def refresh(self, skip_xml_refresh=False):
+    def refresh(self, _do_refresh_xml=True):
         """
-        :param skip_xml_refresh: Only used by init_libvirt_state to avoid
-            double XML updating
+        :param _do_refresh_xml: We want this by default. It's only skipped
+            to avoid double updating XML via init_libvirt_state
         """
         if not self.is_active():
             return
 
         self._backend.refresh(0)
-        if skip_xml_refresh:
+        if _do_refresh_xml:
             self.ensure_latest_xml()
         self._update_volumes(force=True)
         self.idle_emit("refreshed")
