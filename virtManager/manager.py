@@ -113,8 +113,6 @@ class vmmManager(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "manager.ui", "vmm-manager")
 
-        self.ignore_pause = False
-
         # Mapping of rowkey -> tree model rows to
         # allow O(1) access instead of O(n)
         self.rows = {}
@@ -521,15 +519,12 @@ class vmmManager(vmmGObjectUI):
     def set_pause_state(self, state):
         src = self.widget("vm-pause")
         try:
-            self.ignore_pause = True
+            src.handler_block_by_func(self.pause_vm_button)
             src.set_active(state)
         finally:
-            self.ignore_pause = False
+            src.handler_unblock_by_func(self.pause_vm_button)
 
     def pause_vm_button(self, src):
-        if self.ignore_pause:
-            return
-
         do_pause = src.get_active()
 
         # Set button state back to original value: just let the status

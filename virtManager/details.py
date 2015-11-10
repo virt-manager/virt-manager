@@ -356,7 +356,6 @@ class vmmDetails(vmmGObjectUI):
         self.media_choosers = {"cdrom": None, "floppy": None}
         self.storage_browser = None
 
-        self.ignorePause = False
         self.ignoreDetails = False
 
         from .console import vmmConsolePages
@@ -1393,22 +1392,22 @@ class vmmDetails(vmmGObjectUI):
             return
         self.remove_device(devobj)
 
-    def set_pause_state(self, paused):
-        # Set pause widget states
+    def set_pause_state(self, state):
+        src = self.widget("control-pause")
         try:
-            self.ignorePause = True
-            self.widget("control-pause").set_property("active", paused)
+            src.handler_block_by_func(self.control_vm_pause)
+            src.set_active(state)
         finally:
-            self.ignorePause = False
+            src.handler_unblock_by_func(self.control_vm_pause)
 
     def control_vm_pause(self, src):
-        if self.ignorePause:
-            return
+        do_pause = src.get_active()
 
-        # Let state handler listener change things if nec.
-        self.set_pause_state(not src.get_active())
+        # Set button state back to original value: just let the status
+        # update function fix things for us
+        self.set_pause_state(not do_pause)
 
-        if not self.vm.is_paused():
+        if do_pause:
             self.emit("action-suspend-domain",
                       self.vm.conn.get_uri(),
                       self.vm.get_connkey())
