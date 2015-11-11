@@ -502,7 +502,7 @@ def _show_nographics_warnings(options, guest):
     # Trying --location --nographics with console connect. Warn if
     # they likely won't see any output.
 
-    if not guest.get_devices("console"):
+    if len(guest.get_devices("console")) = 0:
         logging.warn(_("No --console device added, you likely will not "
             "see text install output from the guest."))
         return
