@@ -488,10 +488,6 @@ def _show_nographics_warnings(options, guest):
         return
     if not options.autoconsole:
         return
-    if guest.os.is_arm_machvirt():
-        # Later arm kernels figure out console= automatically, so don't
-        # warn about it.
-        return
 
     if guest.installer.cdrom:
         logging.warn(_("CDROM media does not print to the text console "
@@ -520,7 +516,9 @@ def _show_nographics_warnings(options, guest):
         console_type = serial_arm_arg
     if guest.get_devices("console")[0].target_type in ["virtio", "xen"]:
         console_type = hvc_arg
-    if guest.os.is_ppc64():
+    if guest.os.is_ppc64() or guest.os.is_arm_machvirt():
+        # Later arm/ppc kernels figure out console= automatically, so don't
+        # warn about it.
         return
 
     if console_type in (options.extra_args or ""):
