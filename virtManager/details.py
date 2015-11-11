@@ -214,6 +214,8 @@ def _label_for_device(dev):
     if devtype == "channel":
         label = _("Channel")
         name = dev.pretty_channel_name(dev.target_name)
+        if not name:
+            name = dev.pretty_type(dev.type)
         if name:
             label += " %s" % name
         return label
