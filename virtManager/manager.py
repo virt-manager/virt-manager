@@ -870,6 +870,12 @@ class vmmManager(vmmGObjectUI):
         self.set_pause_state(is_paused)
         self.widget("vm-pause").set_sensitive(show_pause)
 
+        if is_paused:
+            pauseTooltip = _("Resume the virtual machine")
+        else:
+            pauseTooltip = _("Pause the virtual machine")
+        self.widget("vm-pause").set_tooltip_text(pauseTooltip)
+
         self.widget("menu_edit_details").set_sensitive(show_details)
         self.widget("menu_host_details").set_sensitive(host_details)
 

@@ -1301,6 +1301,12 @@ class vmmDetails(vmmGObjectUI):
         self.widget("control-shutdown").get_menu().update_widget_states(vm)
         self.widget("control-pause").set_sensitive(stop)
 
+        if paused:
+            pauseTooltip = _("Resume the virtual machine")
+        else:
+            pauseTooltip = _("Pause the virtual machine")
+        self.widget("control-pause").set_tooltip_text(pauseTooltip)
+
         self.widget("details-vm-menu").get_submenu().update_widget_states(vm)
         self.set_pause_state(paused)
 
