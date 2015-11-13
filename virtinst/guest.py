@@ -628,6 +628,8 @@ class Guest(XMLBuilder):
 
         dev = VirtualConsoleDevice(self.conn)
         dev.type = dev.TYPE_PTY
+        if self.os.is_s390x():
+            dev.target_type = "sclp"
         self.add_device(dev)
 
     def add_default_video_device(self):
