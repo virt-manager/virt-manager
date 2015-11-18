@@ -78,6 +78,12 @@ class TestCapabilities(unittest.TestCase):
         test_utils(caps_with_kvm, True, True)
         test_utils(caps_no_kvm, True, False)
 
+    def testCapsNuma(self):
+        cells = self._buildCaps("lxc.xml").host.topology.cells
+        self.assertEquals(len(cells), 1)
+        self.assertEquals(len(cells[0].cpus), 8)
+        self.assertEquals(cells[0].cpus[3].id, '3')
+
 
     ################################################
     # Test cpu_map.xml/getCPUModel output handling #
