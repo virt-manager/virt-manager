@@ -54,7 +54,6 @@ EDIT_IDMAP,
 
 EDIT_VCPUS,
 EDIT_MAXVCPUS,
-EDIT_CPUSET,
 EDIT_CPU,
 EDIT_TOPOLOGY,
 
@@ -105,7 +104,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 46)
+) = range(1, 45)
 
 
 # Columns in hw list model
@@ -470,8 +469,6 @@ class vmmDetails(vmmGObjectUI):
 
             "on_cpu_vcpus_changed": self.config_vcpus_changed,
             "on_cpu_maxvcpus_changed": self.config_maxvcpus_changed,
-            "on_cpu_vcpupin_changed": lambda *x: self.enable_apply(x, EDIT_CPUSET),
-            "on_cpu_vcpupin_generate_clicked": self.config_vcpupin_generate,
             "on_cpu_model_changed": lambda *x: self.config_cpu_model_changed(x),
             "on_cpu_copy_host_clicked": self.on_cpu_copy_host_clicked,
             "on_cpu_cores_changed": self.config_cpu_topology_changed,
@@ -908,16 +905,6 @@ class vmmDetails(vmmGObjectUI):
         summary_col.pack_start(summary_text, True)
         summary_col.add_attribute(summary_text, 'text', 2)
         summary_col.set_sort_column_id(2)
-
-
-        # VCPU Pinning list
-        generate_cpuset = self.widget("cpu-vcpupin-generate")
-        generate_warn = self.widget("cpu-vcpupin-generate-err")
-        if not self.conn.caps.host.topology:
-            generate_cpuset.set_sensitive(False)
-            generate_warn.show()
-            generate_warn.set_tooltip_text(
-                _("Libvirt did not detect NUMA capabilities."))
 
 
         # Boot device list
@@ -1632,26 +1619,12 @@ class vmmDetails(vmmGObjectUI):
         ignore, upper = maxadj.get_range()
         maxadj.set_range(mem, upper)
 
-    def generate_cpuset(self):
-        mem = int(self.vm.get_memory()) / 1024
-        return virtinst.DomainNumatune.generate_cpuset(self.conn.get_backend(),
-                                                       mem)
 
     # VCPUS
     def config_get_vcpus(self):
         return uiutil.spin_get_helper(self.widget("cpu-vcpus"))
     def config_get_maxvcpus(self):
         return uiutil.spin_get_helper(self.widget("cpu-maxvcpus"))
-
-    def config_vcpupin_generate(self, ignore):
-        try:
-            pinstr = self.generate_cpuset()
-        except Exception, e:
-            return self.err.val_err(
-                _("Error generating CPU configuration"), e)
-
-        self.widget("cpu-vcpupin").set_text("")
-        self.widget("cpu-vcpupin").set_text(pinstr)
 
     def config_vcpus_changed(self, src):
         self.enable_apply(EDIT_VCPUS)
@@ -1972,9 +1945,6 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_MAXVCPUS):
             kwargs["maxvcpus"] = self.config_get_maxvcpus()
-
-        if self.edited(EDIT_CPUSET):
-            kwargs["cpuset"] = self.get_text("cpu-vcpupin")
 
         if self.edited(EDIT_CPU):
             kwargs["model"] = self.get_config_cpu_model()

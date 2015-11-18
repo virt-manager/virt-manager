@@ -590,7 +590,7 @@ class vmmDomain(vmmLibvirtObject):
         self._redefine_xmlobj(xmlobj)
 
     def define_cpu(self, vcpus=_SENTINEL, maxvcpus=_SENTINEL,
-        cpuset=_SENTINEL, model=_SENTINEL, sockets=_SENTINEL,
+        model=_SENTINEL, sockets=_SENTINEL,
         cores=_SENTINEL, threads=_SENTINEL):
         guest = self._make_xmlobj_to_define()
 
@@ -598,8 +598,6 @@ class vmmDomain(vmmLibvirtObject):
             guest.curvcpus = int(vcpus)
         if maxvcpus != _SENTINEL:
             guest.vcpus = int(maxvcpus)
-        if cpuset != _SENTINEL:
-            guest.cpuset = cpuset
 
         if sockets != _SENTINEL:
             guest.cpu.sockets = sockets
@@ -1202,8 +1200,6 @@ class vmmDomain(vmmLibvirtObject):
     def vcpu_max_count(self):
         return int(self.get_xmlobj().vcpus)
 
-    def vcpu_pinning(self):
-        return self.get_xmlobj().cpuset or ""
     def get_cpu_config(self):
         return self.get_xmlobj().cpu
 
