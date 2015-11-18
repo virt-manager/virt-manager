@@ -165,6 +165,7 @@
       <source portgroup="foo"/>
       <mac address="12:34:56:78:11:22"/>
       <model type="virtio"/>
+      <link state="down"/>
     </interface>
     <interface type="bridge">
       <source bridge="foobar"/>
@@ -179,6 +180,7 @@
       <virtualport type="openvswitch">
         <parameters profileid="demo" interfaceid="09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b"/>
       </virtualport>
+      <link state="up"/>
     </interface>
     <interface type="direct">
       <source dev="eth5" mode="vepa"/>

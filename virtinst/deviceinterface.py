@@ -232,6 +232,7 @@ class VirtualNetworkInterface(VirtualDevice):
     model = XMLProperty("./model/@type")
     target_dev = XMLProperty("./target/@dev")
     filterref = XMLProperty("./filterref/@filter")
+    link_state = XMLProperty("./link/@state")
 
     driver_name = XMLProperty("./driver/@name")
     driver_queues = XMLProperty("./driver/@queues", is_int=True)

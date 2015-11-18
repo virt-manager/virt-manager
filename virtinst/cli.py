@@ -738,22 +738,23 @@ def add_disk_option(stog, editexample=False):
 # (for options like --disk, --network, etc. #
 #############################################
 
+def _raw_on_off_convert(s):
+    tvalues = ["y", "yes", "1", "true", "t", "on"]
+    fvalues = ["n", "no", "0", "false", "f", "off"]
+
+    s = (s or "").lower()
+    if s in tvalues:
+        return True
+    elif s in fvalues:
+        return False
+    return None
+
+
 def _on_off_convert(key, val):
     if val is None:
         return None
 
-    def _yes_no_convert(s):
-        tvalues = ["y", "yes", "1", "true", "t", "on"]
-        fvalues = ["n", "no", "0", "false", "f", "off"]
-
-        s = (s or "").lower()
-        if s in tvalues:
-            return True
-        elif s in fvalues:
-            return False
-        return None
-
-    val = _yes_no_convert(val)
+    val = _raw_on_off_convert(val)
     if val is not None:
         return val
     raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
@@ -1770,6 +1771,21 @@ class ParserNetwork(VirtCLIParser):
             else:
                 inst.type = val
 
+        def set_link_state(opts, inst, cliname, val):
+            ignore = opts
+            ignore = cliname
+
+            if val in ["up", "down"]:
+                inst.link_state = val
+                return
+
+            ret = _raw_on_off_convert(val)
+            if ret is True:
+                val = "up"
+            elif ret is False:
+                val = "down"
+            inst.link_state = val
+
         self.set_param("type", "type", setter_cb=set_type_cb)
         self.set_param("source", "source")
         self.set_param("source_mode", "source_mode")
@@ -1779,6 +1795,7 @@ class ParserNetwork(VirtCLIParser):
         self.set_param("macaddr", "mac", setter_cb=set_mac_cb)
         self.set_param("filterref", "filterref")
         self.set_param("boot.order", "boot_order")
+        self.set_param("link_state", "link_state", setter_cb=set_link_state)
 
         self.set_param("driver_name", "driver_name")
         self.set_param("driver_queues", "driver_queues")
