@@ -1287,17 +1287,23 @@ class ParserVCPU(VirtCLIParser):
             setattr(inst, attrname, val)
 
         def set_cpuset_cb(opts, inst, cliname, val):
-            if val == "auto":
-                try:
-                    val = DomainNumatune.generate_cpuset(
-                        inst.conn, inst.memory)
-                    logging.debug("Auto cpuset is: %s", val)
-                except Exception, e:
-                    logging.warning("Not setting cpuset: %s", str(e))
-                    val = None
-
-            if val:
+            if not val:
+                return
+            if val != "auto":
                 inst.cpuset = val
+                return
+
+            # Previously we did our own one-time cpuset placement
+            # based on current NUMA memory availability, but that's
+            # pretty dumb unless the conditions on the host never change.
+            # So instead use newer vcpu placement=, but only if it's
+            # supported.
+            if not inst.conn.check_support(
+                    inst.conn.SUPPORT_CONN_VCPU_PLACEMENT):
+                logging.warning("vcpu placement=auto not supported, skipping.")
+                return
+
+            inst.vcpu_placement = "auto"
 
         self.set_param("cpu.sockets", "sockets")
         self.set_param("cpu.cores", "cores")

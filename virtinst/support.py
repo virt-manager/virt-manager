@@ -309,6 +309,8 @@ SUPPORT_CONN_DOMAIN_RESET = _make(version="0.9.7", hv_version={"qemu": 0})
 SUPPORT_CONN_SPICE_COMPRESSION = _make(version="0.9.1")
 SUPPORT_CONN_VMPORT = _make(
     version="1.2.16", hv_version={"qemu": "2.2.0", "test": 0})
+SUPPORT_CONN_VCPU_PLACEMENT = _make(
+    version="0.9.11", hv_version={"qemu": 0, "test": 0})
 
 # This is for disk <driver name=qemu>. xen supports this, but it's
 # limited to arbitrary new enough xen, since I know libxl can handle it
