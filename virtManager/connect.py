@@ -390,6 +390,9 @@ class vmmConnect(vmmGObjectUI):
         addrstr = ""
         if user:
             addrstr += user + "@"
+
+        if host.count(":") > 1:
+            host = "[%s]" % host
         addrstr += host
 
         hoststr = ""
