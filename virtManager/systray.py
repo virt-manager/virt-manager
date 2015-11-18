@@ -135,7 +135,7 @@ class vmmSystray(vmmGObject):
         if self.systray_indicator:
             # pylint: disable=maybe-no-member
             self.systray_icon = AppIndicator3.Indicator.new("virt-manager",
-                                "virt-manager-icon",
+                                "virt-manager",
                                 AppIndicator3.IndicatorCategory.OTHER)
             self.systray_icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
             self.systray_icon.set_menu(self.systray_menu)
