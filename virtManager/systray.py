@@ -69,6 +69,7 @@ class vmmSystray(vmmGObject):
         # Are we using Application Indicators?
         if AppIndicator3 is not None:
             self.systray_indicator = True
+            logging.debug("Using AppIndicator3 for systray")
 
         self.init_systray_menu()
 
