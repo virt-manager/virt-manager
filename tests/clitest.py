@@ -441,7 +441,7 @@ c.add_compare("""--pxe \
 # Device testing #1
 
 c.add_compare(""" \
---vcpus 4,cores=1 \
+--vcpus 4,cores=1,placement=static \
 --cpu none \
 \
 --disk %(EXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,boot_order=2 \

@@ -1281,17 +1281,10 @@ class ParserVCPU(VirtCLIParser):
     def _init_params(self):
         self.remove_first = "vcpus"
 
-        self.set_param("cpu.sockets", "sockets")
-        self.set_param("cpu.cores", "cores")
-        self.set_param("cpu.threads", "threads")
-
         def set_vcpus_cb(opts, inst, cliname, val):
             ignore = cliname
             attrname = ("maxvcpus" in opts.opts) and "curvcpus" or "vcpus"
             setattr(inst, attrname, val)
-
-        self.set_param(None, "vcpus", setter_cb=set_vcpus_cb)
-        self.set_param("vcpus", "maxvcpus")
 
         def set_cpuset_cb(opts, inst, cliname, val):
             if val == "auto":
@@ -1306,8 +1299,16 @@ class ParserVCPU(VirtCLIParser):
             if val:
                 inst.cpuset = val
 
+        self.set_param("cpu.sockets", "sockets")
+        self.set_param("cpu.cores", "cores")
+        self.set_param("cpu.threads", "threads")
+
+        self.set_param(None, "vcpus", setter_cb=set_vcpus_cb)
+        self.set_param("vcpus", "maxvcpus")
+
         self.set_param(None, "cpuset", can_comma=True,
                        setter_cb=set_cpuset_cb)
+        self.set_param("vcpu_placement", "placement")
 
 
     def _parse(self, opts, inst):

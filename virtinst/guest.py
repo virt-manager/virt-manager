@@ -103,7 +103,8 @@ class Guest(XMLBuilder):
     _XML_ROOT_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
         "maxmemory", "memory", "blkiotune", "memtune", "memoryBacking",
-        "vcpus", "curvcpus", "numatune", "bootloader", "os", "idmap",
+        "vcpus", "curvcpus", "vcpu_placement", "cpuset",
+        "numatune", "bootloader", "os", "idmap",
         "features", "cpu", "clock", "on_poweroff", "on_reboot", "on_crash",
         "resource", "pm", "emulator", "_devices", "seclabel"]
 
@@ -171,6 +172,7 @@ class Guest(XMLBuilder):
                         set_converter=_set_vcpus,
                         default_cb=lambda s: 1)
     curvcpus = XMLProperty("./vcpu/@current", is_int=True)
+    vcpu_placement = XMLProperty("./vcpu/@placement")
 
     def _validate_cpuset(self, val):
         DomainNumatune.validate_cpuset(self.conn, val)
