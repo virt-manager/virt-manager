@@ -968,7 +968,7 @@ class vmmDomain(vmmLibvirtObject):
         if newdev != _SENTINEL:
             # pylint: disable=maybe-no-member
             editdev.type = newdev.type
-            editdev.mode = newdev.mode
+            editdev.accessmode = newdev.accessmode
             editdev.wrpolicy = newdev.wrpolicy
             editdev.driver = newdev.driver
             editdev.format = newdev.format
