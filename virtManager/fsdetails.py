@@ -103,13 +103,13 @@ class vmmFSDetails(vmmGObjectUI):
         if self.conn.is_openvz():
             simple_store_set("fs-type-combo",
                 [VirtualFilesystem.TYPE_MOUNT,
-                 VirtualFilesystem.TYPE_TEMPLATE])
+                 VirtualFilesystem.TYPE_TEMPLATE], sort=False)
         elif self.conn.is_lxc():
             simple_store_set("fs-type-combo",
                 [VirtualFilesystem.TYPE_MOUNT,
                  VirtualFilesystem.TYPE_FILE,
                  VirtualFilesystem.TYPE_BLOCK,
-                 VirtualFilesystem.TYPE_RAM])
+                 VirtualFilesystem.TYPE_RAM], sort=False)
         else:
             simple_store_set("fs-type-combo", [VirtualFilesystem.TYPE_MOUNT])
             self.widget("fs-type-label").set_text(VirtualFilesystem.TYPE_MOUNT)
