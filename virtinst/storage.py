@@ -809,25 +809,20 @@ class StorageVolume(_StorageObject):
                                "'%s': '%s'" % (self.name, str(e)))
 
     def _progress_thread(self, meter):
-        lookup_attempts = 10
         vol = None
         if not meter:
             return
 
-        while lookup_attempts > 0:
+        while True:
             try:
                 if not vol:
                     vol = self.pool.storageVolLookupByName(self.name)
                 vol.info()
                 break
             except:
-                lookup_attempts -= 1
                 time.sleep(.2)
                 if self._install_finished:
                     break
-                else:
-                    continue
-            break
 
         if vol is None:
             logging.debug("Couldn't lookup storage volume in prog thread.")
