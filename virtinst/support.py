@@ -311,6 +311,9 @@ SUPPORT_CONN_VMPORT = _make(
     version="1.2.16", hv_version={"qemu": "2.2.0", "test": 0})
 SUPPORT_CONN_VCPU_PLACEMENT = _make(
     version="0.9.11", hv_version={"qemu": 0, "test": 0})
+SUPPORT_CONN_MEM_STATS_PERIOD = _make(
+    function="virDomain.setMemoryStatsPeriod",
+    version="1.1.1", hv_version={"qemu": 0})
 
 # This is for disk <driver name=qemu>. xen supports this, but it's
 # limited to arbitrary new enough xen, since I know libxl can handle it

@@ -331,6 +331,7 @@ class vmmDomain(vmmLibvirtObject):
 
         self._enable_mem_stats = False
         self._enable_cpu_stats = False
+        self._mem_stats_period_is_set = False
 
         self._enable_net_poll = False
         self._stats_net_supported = True
@@ -1812,25 +1813,49 @@ class vmmDomain(vmmLibvirtObject):
 
         return rd, wr
 
+    def _set_mem_stats_period(self):
+        # QEMU requires we explicitly enable memory stats polling per VM
+        # if we wan't fine grained memory stats
+        if not self.conn.check_support(
+                self.conn.SUPPORT_CONN_MEM_STATS_PERIOD):
+            return
+
+        # Only works for virtio balloon
+        if not any([b for b in self.get_xmlobj().get_devices("memballoon") if
+                    b.model == "virtio"]):
+            return
+
+        try:
+            secs = 5
+            self._backend.setMemoryStatsPeriod(secs,
+                libvirt.VIR_DOMAIN_AFFECT_LIVE)
+        except Exception, e:
+            logging.debug("Error setting memstats period: %s", e)
+
     def _sample_mem_stats(self):
         if (not self.mem_stats_supported or
             not self._enable_mem_stats or
             not self.is_active()):
+            self._mem_stats_period_is_set = False
             return 0, 0
+
+        if self._mem_stats_period_is_set is False:
+            self._set_mem_stats_period()
+            self._mem_stats_period_is_set = True
 
         curmem = 0
         totalmem = 1
         try:
             stats = self._backend.memoryStats()
-            # did we get both required stat items back?
-            if set(['actual', 'rss']).issubset(
-                    set(stats.keys())):
-                curmem = stats['rss']
-                totalmem = stats['actual']
+            totalmem = stats.get("actual", 1)
+            curmem = stats.get("rss", 0)
+
+            if "unused" in stats:
+                curmem = max(0, totalmem - stats.get("unused", totalmem))
         except libvirt.libvirtError, err:
             logging.error("Error reading mem stats: %s", err)
 
-        pcentCurrMem = curmem * 100.0 / totalmem
+        pcentCurrMem = (curmem / float(totalmem)) * 100
         pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
 
         return pcentCurrMem, curmem
