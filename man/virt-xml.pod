@@ -274,13 +274,13 @@ See a list of all suboptions that --disk and --network take
 
   # virt-xml --disk=? --network=?
 
-Change the <description> of domain 'example':
+Change the <description> of domain 'EXAMPLE':
 
-  # virt-xml example --edit --metadata description="my new description"
+  # virt-xml EXAMPLE --edit --metadata description="my new description"
 
-# Enable the boot device menu for domain 'example':
+# Enable the boot device menu for domain 'EXAMPLE':
 
-  # virt-xml example --edit --boot menu=on
+  # virt-xml EXAMPLE --edit --boot menu=on
 
 Clear the previous <cpu> definition of domain 'winxp', change it to 'host-model', but interactively confirm the diff before saving:
 
@@ -304,7 +304,8 @@ Change all disk devices of type 'disk' to use cache=none, using XML from stdin, 
 
 Change disk 'hda' IO to native and use startup policy as 'optional'.
 
-  # virt-xml fedora20 --edit target=hda --disk io=native,startup_policy=optional
+  # virt-xml fedora20 --edit target=hda \
+             --disk io=native,startup_policy=optional
 
 Change all host devices to use driver_name=vfio for VM 'fedora20' on the remote connection
 
@@ -313,7 +314,7 @@ Change all host devices to use driver_name=vfio for VM 'fedora20' on the remote 
 
 Hotplug host USB device 001.003 to running domain 'fedora19':
 
-  # virt-xml fedora19 --add-device --hostdev 001.003 --update
+  # virt-xml fedora19 --update --add-device --hostdev 001.003
 
 Add a spicevmc channel to the domain 'winxp', that will be available after the next VM shutdown.
 
@@ -324,9 +325,9 @@ Create a 10G qcow2 disk image and attach it to 'fedora18' for the next VM startu
   # virt-xml fedora18 --add-device \
     --disk /var/lib/libvirt/images/newimage.qcow2,format=qcow2,size=10
 
-Remove the disk vdb from the running domain 'rhel7':
+Hotunplug the disk vdb from the running domain 'rhel7':
 
-  # virt-xml rhel7 --remove-device --disk target=vdb
+  # virt-xml rhel7 --update --remove-device --disk target=vdb
 
 Remove all graphics devices from the VM 'rhel7' after the next shutdown:
 
