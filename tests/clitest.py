@@ -477,8 +477,8 @@ c.add_compare(""" \
 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 \
 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 \
 \
---input keyboard,bus=usb \
---input type=tablet \
+--input type=keyboard,bus=usb \
+--input tablet \
 \
 --serial tcp,host=:2222,mode=bind,protocol=telnet \
 --parallel udp,host=0.0.0.0:1234,bind_host=127.0.0.1:1234 \

@@ -39,8 +39,15 @@ class VirtualInputDevice(VirtualDevice):
     type = XMLProperty("./@type",
                        default_cb=lambda s: s.TYPE_MOUSE,
                        default_name=TYPE_DEFAULT)
+
+    def _default_bus(self):
+        if self.type == self.TYPE_TABLET:
+            return self.BUS_USB
+        if self.conn.is_xen():
+            return self.BUS_XEN
+        return self.BUS_PS2
     bus = XMLProperty("./@bus",
-                      default_cb=lambda s: s.BUS_XEN,
+                      default_cb=_default_bus,
                       default_name=BUS_DEFAULT)
 
 
