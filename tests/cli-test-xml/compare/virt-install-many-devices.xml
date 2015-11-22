@@ -43,7 +43,7 @@
       <target dev="vdb" bus="virtio"/>
       <readonly/>
     </disk>
-    <disk type="block" device="cdrom">
+    <disk type="file" device="cdrom">
       <target dev="sda" bus="sata"/>
       <iotune>
         <read_bytes_sec>1</read_bytes_sec>

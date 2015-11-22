@@ -35,7 +35,7 @@
       <source file="/var/lib/libvirt/images/fedora.qcow2"/>
       <target dev="sda" bus="scsi"/>
     </disk>
-    <disk type="block" device="cdrom">
+    <disk type="file" device="cdrom">
       <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>

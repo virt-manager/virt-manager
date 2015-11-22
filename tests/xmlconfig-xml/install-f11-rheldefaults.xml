@@ -37,7 +37,7 @@
       <source dev="/dev/disk-pool/diskvol1"/>
       <target dev="vdb" bus="virtio"/>
     </disk>
-    <disk type="block" device="cdrom">
+    <disk type="file" device="cdrom">
       <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
