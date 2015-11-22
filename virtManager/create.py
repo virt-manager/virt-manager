@@ -1450,6 +1450,7 @@ class vmmCreate(vmmGObjectUI):
         if expand:
             self.widget("advanced-expander").set_expanded(True)
 
+        self.widget("netdev-warn-box").set_visible(False)
         def _show_netdev_warn(msg):
             self.widget("advanced-expander").set_expanded(True)
             self.widget("netdev-warn-box").set_visible(True)
