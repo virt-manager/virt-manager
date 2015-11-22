@@ -128,7 +128,6 @@ class vmmCreate(vmmGObjectUI):
         self._show_all_os_was_selected = False
 
         self._customize_window = None
-        self._customize_window_signals = []
 
         self._storage_browser = None
         self._netlist = None
@@ -206,8 +205,7 @@ class vmmCreate(vmmGObjectUI):
             logging.debug("Closing new vm wizard")
         self.topwin.hide()
 
-        if self._customize_window:
-            self._customize_window.close()
+        self._cleanup_customize_window()
         if self._storage_browser:
             self._storage_browser.close()
 
@@ -366,6 +364,7 @@ class vmmCreate(vmmGObjectUI):
         self._failed_guest = None
         self._guest = None
         self._show_all_os_was_selected = False
+        self._undo_finish_cursor(self.topwin)
 
         self.widget("create-pages").set_current_page(PAGE_NAME)
         self._page_changed(None, None, PAGE_NAME)
@@ -2169,10 +2168,17 @@ class vmmCreate(vmmGObjectUI):
     # Guest install routines #
     ##########################
 
-    def _undo_finish_cursor(self):
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+    def _set_finish_cursor(self, topwin):
+        topwin.set_sensitive(False)
+        topwin.get_window().set_cursor(
+                Gdk.Cursor.new(Gdk.CursorType.WATCH))
+
+    def _undo_finish_cursor(self, topwin):
+        topwin.set_sensitive(True)
+        if not topwin.get_window():
+            return
+        topwin.get_window().set_cursor(
+                Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
     def _finish_clicked(self, src_ignore):
         # Validate the final page
@@ -2185,63 +2191,56 @@ class vmmCreate(vmmGObjectUI):
 
         # Start the install
         self._failed_guest = None
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self._set_finish_cursor(self.topwin)
 
-        if self.widget("summary-customize").get_active():
-            logging.debug("User requested 'customize', launching dialog")
-            try:
-                self._show_customize_dialog(guest)
-            except Exception, e:
-                self._undo_finish_cursor()
-                self.err.show_err(_("Error starting installation: ") + str(e))
-                return
-        else:
+        if not self.widget("summary-customize").get_active():
             self._start_install(guest)
+            return
+
+        logging.debug("User requested 'customize', launching dialog")
+        try:
+            self._show_customize_dialog(guest)
+        except Exception, e:
+            self._undo_finish_cursor(self.topwin)
+            self.err.show_err(_("Error starting installation: ") + str(e))
+            return
+
+    def _cleanup_customize_window(self):
+        if not self._customize_window:
+            return
+
+        # We can re-enter this: cleanup() -> close() -> "details-closed"
+        window = self._customize_window
+        self._customize_window = None
+        window.cleanup()
 
     def _show_customize_dialog(self, guest):
         virtinst_guest = vmmDomainVirtinst(self.conn, guest, self._guest.uuid)
 
-        def cleanup_customize_window():
-            if self._customize_window:
-                for s in self._customize_window_signals:
-                    self._customize_window.disconnect(s)
-                self._customize_window.cleanup()
-                self._customize_window = None
-
         def start_install_wrapper(ignore, guest):
-            cleanup_customize_window()
             if not self.is_visible():
                 return
             logging.debug("User finished customize dialog, starting install")
-            guest.check_defaults()
+            guest.update_defaults()
             self._start_install(guest)
 
         def config_canceled(ignore):
             logging.debug("User closed customize window, closing wizard")
-            cleanup_customize_window()
-            self._undo_finish_cursor()
             self._close_requested()
 
-        cleanup_customize_window()
+        self._cleanup_customize_window()
         self._customize_window = vmmDetails(virtinst_guest, self.topwin)
-        self._customize_window_signals = []
-        self._customize_window_signals.append(
-            self._customize_window.connect("customize-finished",
-                                       start_install_wrapper,
-                                       guest))
-        self._customize_window_signals.append(
-            self._customize_window.connect("details-closed", config_canceled))
+        self._customize_window.connect(
+                "customize-finished", start_install_wrapper, guest)
+        self._customize_window.connect("details-closed", config_canceled)
         self._customize_window.show()
 
-    def _install_finished_cb(self, error, details):
-        self._undo_finish_cursor()
+    def _install_finished_cb(self, error, details, parentobj):
+        self._undo_finish_cursor(parentobj.topwin)
 
         if error:
             error = (_("Unable to complete install: '%s'") % error)
-            self.err.show_err(error,
-                              details=details)
+            parentobj.err.show_err(error, details=details)
             self._failed_guest = self._guest
             return
 
@@ -2255,15 +2254,16 @@ class vmmCreate(vmmGObjectUI):
         """
         Launch the async job to start the install
         """
+        parentobj = self._customize_window or self
         progWin = vmmAsyncJob(self._do_async_install, [guest],
-                              self._install_finished_cb, [],
+                              self._install_finished_cb, [parentobj],
                               _("Creating Virtual Machine"),
                               _("The virtual machine is now being "
                                 "created. Allocation of disk storage "
                                 "and retrieval of the installation "
                                 "images may take a few minutes to "
                                 "complete."),
-                              self.topwin)
+                              parentobj.topwin)
         progWin.run()
 
     def _do_async_install(self, asyncjob, guest):

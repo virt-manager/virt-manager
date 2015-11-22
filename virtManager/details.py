@@ -619,8 +619,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = src
         if self.has_unapplied_changes(self.get_hw_row()):
             return
-
-        return self._close(customize_finish=True)
+        self.emit("customize-finished")
 
     def _customize_cancel(self):
         logging.debug("Asking to cancel customization")
@@ -639,13 +638,14 @@ class vmmDetails(vmmGObjectUI):
         return self._customize_cancel()
 
     def _window_delete_event(self, ignore1=None, ignore2=None):
-        return self._close()
+        return self.close()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing VM details: %s", self.vm)
+        if self.is_visible():
+            logging.debug("Closing VM details: %s", self.vm)
         return self._close()
 
-    def _close(self, customize_finish=False):
+    def _close(self):
         fs = self.widget("details-menu-view-fullscreen")
         if fs.get_active():
             fs.set_active(False)
@@ -660,10 +660,7 @@ class vmmDetails(vmmGObjectUI):
             except:
                 logging.error("Failure when disconnecting from desktop server")
 
-        if customize_finish:
-            self.emit("customize-finished")
-        else:
-            self.emit("details-closed")
+        self.emit("details-closed")
         return 1
 
     def is_visible(self):

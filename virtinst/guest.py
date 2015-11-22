@@ -856,9 +856,11 @@ class Guest(XMLBuilder):
             return False
         return True
 
-    def check_defaults(self):
+    def update_defaults(self):
         # This is used only by virt-manager to reset any defaults that may have
         # changed through manual intervention via the customize wizard.
+
+        # UEFI doesn't work with hyperv bits
         if not self._hv_supported():
             self.features.hyperv_relaxed = None
             self.features.hyperv_vapic = None
