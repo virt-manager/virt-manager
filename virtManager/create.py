@@ -286,11 +286,6 @@ class vmmCreate(vmmGObjectUI):
         media_url_list.set_model(media_url_model)
         media_url_list.set_entry_text_column(0)
 
-        ks_url_list = self.widget("install-ks-combo")
-        ks_url_model = Gtk.ListStore(str)
-        ks_url_list.set_model(ks_url_model)
-        ks_url_list.set_entry_text_column(0)
-
         def sep_func(model, it, combo):
             ignore = combo
             return model[it][OS_COL_IS_SEP]
@@ -400,13 +395,10 @@ class vmmCreate(vmmGObjectUI):
 
         # Install URL
         self.widget("install-urlopts-entry").set_text("")
-        self.widget("install-ks-entry").set_text("")
         self.widget("install-url-entry").set_text("")
         self.widget("install-url-options").set_expanded(False)
         urlmodel = self.widget("install-url-combo").get_model()
-        ksmodel  = self.widget("install-ks-combo").get_model()
         _populate_media_model(urlmodel, self.config.get_media_urls())
-        _populate_media_model(ksmodel, self.config.get_kickstart_urls())
         self._set_distro_labels("-", "-")
 
         # Install import
@@ -1193,14 +1185,11 @@ class vmmCreate(vmmGObjectUI):
     def _get_config_url_info(self, store_media=False):
         media = self.widget("install-url-entry").get_text().strip()
         extra = self.widget("install-urlopts-entry").get_text().strip()
-        ks = self.widget("install-ks-entry").get_text().strip()
 
         if media and store_media:
             self.config.add_media_url(media)
-        if ks and store_media:
-            self.config.add_kickstart_url(ks)
 
-        return (media.strip(), extra.strip(), ks.strip())
+        return (media.strip(), extra.strip())
 
     def _get_config_import_path(self):
         return self.widget("install-import-entry").get_text()
@@ -1743,7 +1732,6 @@ class vmmCreate(vmmGObjectUI):
         installer = None
         location = None
         extra = None
-        ks = None
         cdrom = False
         is_import = False
         init = None
@@ -1766,7 +1754,7 @@ class vmmCreate(vmmGObjectUI):
 
         elif instmethod == INSTALL_PAGE_URL:
             instclass = virtinst.DistroInstaller
-            media, extra, ks = self._get_config_url_info()
+            media, extra = self._get_config_url_info()
 
             if not media:
                 return self.err.val_err(_("An install tree is required."))
@@ -1821,8 +1809,6 @@ class vmmCreate(vmmGObjectUI):
             extraargs = ""
             if extra:
                 extraargs += extra
-            if ks:
-                extraargs += " ks=%s" % ks
 
             if extraargs:
                 self._guest.installer.extraargs = extraargs
