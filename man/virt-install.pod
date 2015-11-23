@@ -575,6 +575,10 @@ Disk device type. Value can be 'cdrom', 'disk', 'lun' or 'floppy'. Default is
 'disk'. If a 'cdrom' is specified, and no install method is chosen, the
 cdrom is used as the install media.
 
+=item B<boot_order>
+
+Guest installation with multiple disks will need this parameter to boot correctly after being installed. A boot_order parameter will take values 1,2,3,... Devices with lower value has higher priority.
+
 =item B<bus>
 
 Disk bus type. Value can be 'ide', 'sata', 'scsi', 'usb', 'virtio' or 'xen'.
