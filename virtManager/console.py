@@ -457,9 +457,9 @@ class vmmConsolePages(vmmGObjectUI):
         cpage = self.widget("console-pages").get_current_page()
         dpage = self.widget("details-pages").get_current_page()
 
-        allow_fullscreen = (dpage == DETAILS_PAGE_CONSOLE and
-                            cpage == _CONSOLE_PAGE_VIEWER and
-                            self._viewer and self._viewer.console_is_open())
+        allow_fullscreen = bool(dpage == DETAILS_PAGE_CONSOLE and
+            cpage == _CONSOLE_PAGE_VIEWER and
+            self._viewer and self._viewer.console_is_open())
 
         self.widget("control-fullscreen").set_sensitive(allow_fullscreen)
         self.widget("details-menu-view-fullscreen").set_sensitive(
