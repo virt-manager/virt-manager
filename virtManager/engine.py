@@ -63,6 +63,12 @@ DETAILS_CONSOLE = 3
 
 
 class vmmEngine(vmmGObject):
+    CLI_SHOW_DOMAIN_CREATOR = "creator"
+    CLI_SHOW_DOMAIN_EDITOR = "editor"
+    CLI_SHOW_DOMAIN_PERFORMANCE = "performance"
+    CLI_SHOW_DOMAIN_CONSOLE = "console"
+    CLI_SHOW_HOST_SUMMARY = "summary"
+
     __gsignals__ = {
         "conn-added": (GObject.SignalFlags.RUN_FIRST, None, [object]),
         "conn-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
@@ -87,10 +93,10 @@ class vmmEngine(vmmGObject):
 
         self.systray = None
         self.delete_dialog = None
-        self.application = Gtk.Application(
-                                 application_id="com.redhat.virt-manager",
-                                 flags=0)
-        self.application.connect("activate", self._activate)
+        self._application = Gtk.Application(
+            application_id="org.virt-manager.gtkapplication",
+            flags=0)
+        self._application.connect("activate", self._activate)
         self._appwindow = Gtk.Window()
 
         self._tick_counter = 0
@@ -109,11 +115,9 @@ class vmmEngine(vmmGObject):
         # keep running in system tray if enabled
         self.windows = 0
 
-        # Public bits set by virt-manager cli
-        self.skip_autostart = False
-        self.uri_at_startup = None
-        self.uri_cb = None
-        self.show_manager_window = True
+        self._cli_uri = None
+        self._show_manager_at_startup = True
+        self._skip_autostart = False
 
         self.init_systray()
 
@@ -130,23 +134,18 @@ class vmmEngine(vmmGObject):
 
 
     def _activate(self, ignore):
-        if self.show_manager_window:
-            self.show_manager()
+        if self._show_manager_at_startup:
+            self._show_manager()
         else:
             self.get_manager()
-        self.application.add_window(self._appwindow)
+        self._application.add_window(self._appwindow)
 
-        if self.uri_at_startup:
-            conn = self.make_conn(self.uri_at_startup)
-            self.register_conn(conn, skip_config=True)
-            if conn and self.uri_cb:
-                conn.connect_opt_out("state-changed", self.uri_cb)
-
-            self.connect_to_uri(self.uri_at_startup)
-
-        if not self.skip_autostart:
+        if not self._skip_autostart and not self._cli_uri:
             self.autostart_conns()
 
+    def start(self, skip_autostart):
+        self._skip_autostart = skip_autostart
+        self._application.run(None)
 
     def init_systray(self):
         if self.systray:
@@ -176,11 +175,11 @@ class vmmEngine(vmmGObject):
         systray_enabled = self.config.get_view_system_tray()
         if self.windows == 0 and not systray_enabled:
             # Show the manager so that the user can control the application
-            self.show_manager()
+            self._show_manager()
 
     def add_default_conn(self, manager):
         # Only add default if no connections are currently known
-        if self.config.get_conn_uris() or self.uri_at_startup:
+        if self.config.get_conn_uris() or self._cli_uri:
             return
 
         self.timeout_add(1000, self._add_default_conn, manager)
@@ -468,7 +467,7 @@ class vmmEngine(vmmGObject):
             for ignore in range(Gtk.main_level()):
                 Gtk.main_quit()
 
-        self.application.remove_window(self._appwindow)
+        self._application.remove_window(self._appwindow)
 
     def _create_inspection_thread(self):
         logging.debug("libguestfs inspection support: %s",
@@ -851,7 +850,7 @@ class vmmEngine(vmmGObject):
         self.connect("conn-added", obj.add_conn)
         self.connect("conn-removed", obj.remove_conn)
 
-        obj.set_initial_selection(self.uri_at_startup)
+        obj.set_initial_selection(self._cli_uri)
 
         self.windowManager = obj
         return self.windowManager
@@ -919,17 +918,6 @@ class vmmEngine(vmmGObject):
     # Window launchers from virt-manager cli #
     ##########################################
 
-    def show_manager(self):
-        self._do_show_manager(None)
-
-    def show_host_summary(self, uri):
-        self._do_show_host(self.get_manager(), uri)
-
-    def show_domain_creator(self, uri):
-        self.show_manager()
-        self._do_show_create(self.get_manager(), uri)
-
-
     def _find_vm_by_cli_str(self, uri, clistr):
         """
         Lookup a VM by a string passed in on the CLI. Can be either
@@ -958,14 +946,73 @@ class vmmEngine(vmmGObject):
 
         self._show_vm_helper(src, uri, vm, page, True)
 
-    def show_domain_console(self, uri, clistr):
+    def _show_manager(self):
+        self._do_show_manager(None)
+
+    def _show_host_summary(self, uri):
+        self._do_show_host(self.get_manager(), uri)
+
+    def _show_domain_creator(self, uri):
+        self._show_manager()
+        self._do_show_create(self.get_manager(), uri)
+
+    def _show_domain_console(self, uri, clistr):
         self.idle_add(self._cli_show_vm_helper, uri, clistr, DETAILS_CONSOLE)
 
-    def show_domain_editor(self, uri, clistr):
+    def _show_domain_editor(self, uri, clistr):
         self.idle_add(self._cli_show_vm_helper, uri, clistr, DETAILS_CONFIG)
 
-    def show_domain_performance(self, uri, clistr):
+    def _show_domain_performance(self, uri, clistr):
         self.idle_add(self._cli_show_vm_helper, uri, clistr, DETAILS_PERF)
+
+    def _launch_cli_window(self, uri, show_window, clistr):
+        logging.debug("Launching requested window '%s'", show_window)
+        if show_window == self.CLI_SHOW_DOMAIN_CREATOR:
+            self._show_domain_creator(uri)
+        elif show_window == self.CLI_SHOW_DOMAIN_EDITOR:
+            self._show_domain_editor(uri, clistr)
+        elif show_window == self.CLI_SHOW_DOMAIN_PERFORMANCE:
+            self._show_domain_performance(uri, clistr)
+        elif show_window == self.CLI_SHOW_DOMAIN_CONSOLE:
+            self._show_domain_console(uri, clistr)
+        elif show_window == self.CLI_SHOW_HOST_SUMMARY:
+            self._show_host_summary(uri)
+        else:
+            logging.debug("Unknown cli window command '%s'", show_window)
+
+    def _cli_conn_connected_cb(self, conn, uri, show_window, domain):
+        ignore = conn
+
+        if conn.is_disconnected():
+            # Connection error
+            return True
+
+        if conn.is_active():
+            self._launch_cli_window(uri, show_window, domain)
+            return True
+
+        return False
+
+    def run_cli_command(self, uri, show_window, domain):
+        if not uri:
+            return
+
+        self._cli_uri = uri
+        conn = self.make_conn(uri)
+        self.register_conn(conn, skip_config=True)
+        if show_window:
+            if conn.is_active():
+                self.idle_add(self._launch_cli_window,
+                    uri, show_window, domain)
+            else:
+                conn.connect_opt_out("state-changed",
+                    self._cli_conn_connected_cb, uri, show_window, domain)
+                self._show_manager_at_startup = False
+
+        if conn.is_disconnected():
+            def connect():
+                self.connect_to_uri(uri)
+            self.idle_add(connect)
 
 
     #######################################

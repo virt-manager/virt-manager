@@ -91,7 +91,7 @@ def parse_commandline():
                                      epilog=epilog)
     parser.add_argument('--version', action='version',
                         version=CLIConfig.version)
-    parser.set_defaults(uuid=None)
+    parser.set_defaults(domain=None)
 
     # Trace every libvirt API call to debug output
     parser.add_argument("--trace-libvirt", dest="tracelibvirt",
@@ -116,7 +116,7 @@ def parse_commandline():
     parser.add_argument("--no-fork", action="store_true", dest="nofork",
         help="Don't fork into background on startup")
     parser.add_argument("--no-conn-autostart", action="store_true",
-        dest="no_conn_auto", help="Do not autostart connections")
+        dest="skip_autostart", help="Do not autostart connections")
     parser.add_argument("--spice-disable-auto-usbredir", action="store_true",
         dest="usbredir", help="Disable Auto USB redirection support")
 
@@ -132,23 +132,6 @@ def parse_commandline():
         help="Show connection details window")
 
     return parser.parse_known_args()
-
-
-def launch_specific_window(engine, show, uri, clistr):
-    if not show:
-        return
-
-    logging.debug("Launching requested window '%s'", show)
-    if show == 'creator':
-        engine.show_domain_creator(uri)
-    elif show == 'editor':
-        engine.show_domain_editor(uri, clistr)
-    elif show == 'performance':
-        engine.show_domain_performance(uri, clistr)
-    elif show == 'console':
-        engine.show_domain_console(uri, clistr)
-    elif show == 'summary':
-        engine.show_host_summary(uri)
 
 
 def main():
@@ -246,52 +229,34 @@ def main():
     import virtinst.pollhelpers
     virtinst.pollhelpers.FORCE_OLD_POLL = bool(options.testoldpoll)
 
-    show = None
+    show_window = None
+    domain = None
     if options.show_domain_creator:
-        show = "creator"
-    elif options.show_domain_editor:
-        show = "editor"
-    elif options.show_domain_performance:
-        show = "performance"
-    elif options.show_domain_console:
-        show = "console"
+        show_window = vmmEngine.CLI_SHOW_DOMAIN_CREATOR
     elif options.show_host_summary:
-        show = "summary"
+        show_window = vmmEngine.CLI_SHOW_HOST_SUMMARY
+    elif options.show_domain_editor:
+        show_window = vmmEngine.CLI_SHOW_DOMAIN_EDITOR
+        domain = options.show_domain_editor
+    elif options.show_domain_performance:
+        show_window = vmmEngine.CLI_SHOW_DOMAIN_PERFORMANCE
+        domain = options.show_domain_performance
+    elif options.show_domain_console:
+        show_window = vmmEngine.CLI_SHOW_DOMAIN_CONSOLE
+        domain = options.show_domain_console
 
-    if show and options.uri is None:
+    if show_window and options.uri is None:
         raise RuntimeError("can't use --show-* options without --connect")
-    if show:
-        options.uuid = (options.uuid or options.show_domain_creator or
-                        options.show_domain_editor or
-                        options.show_domain_performance or
-                        options.show_domain_console or
-                        options.show_host_summary)
 
     # Hook libvirt events into glib main loop
     LibvirtGLib.init(None)
     LibvirtGLib.event_register()
 
-    engine = vmmEngine()
-    engine.skip_autostart = options.no_conn_auto
-    engine.uri_at_startup = options.uri
+    from virtManager.dbusapi import StartupAPI
+    api = StartupAPI()
 
-    if show:
-        def cb(conn):
-            if conn.is_disconnected():
-                # Connection error
-                return True
-
-            if conn.is_active():
-                launch_specific_window(engine, show, options.uri, options.uuid)
-                return True
-
-            return False
-        engine.uri_cb = cb
-        engine.show_manager_window = False
-        engine.skip_autostart = True
-
-    # Finally start the app for real
-    engine.application.run(None)
+    api.run_cli_command(options.uri, show_window, domain)
+    api.start(options.skip_autostart)
 
 
 if __name__ == "__main__":
