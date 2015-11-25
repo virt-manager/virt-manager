@@ -664,9 +664,6 @@ class Guest(XMLBuilder):
         if self.os.is_s390x():
             # Not wanted for s390 apparently
             return
-        if self.os.is_arm():
-            # arm virtio-mmio slots are limited, so skip this
-            return
 
         if (self.conn.is_qemu() and
             self._os_object.supports_qemu_ga() and
