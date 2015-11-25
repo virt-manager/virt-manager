@@ -1,6 +1,25 @@
  Virtual Machine Manager News
  ============================
 
+Release 1.3.0 (November 24, 2015)
+---------------------------------
+- Git hosting moved to http://github.com/virt-manager/virt-manager
+- Switch translation infrastructure from transifex to fedora.zanata.org
+- Add dogtail UI tests and infrastructure
+- Improved support for s390x kvm (Kevin Zhao)
+- virt-install and virt-manager now remove created disk images if VM
+  install startup fails
+- Replace urlgrabber usage with requests and urllib2
+- virt-install: add --network virtualport support for openvswitch
+  (Daniel P. Berrange)
+- virt-install: support multiple --security labels
+- virt-install: support --features kvm_hidden=on|off (Pavel Hrdina)
+- virt-install: add --features pmu=on|off
+- virt-install: add --features pvspinlock=on|off (Abhijeet Kasurde)
+- virt-install: add --events on_lockfailure=on|off (Abhijeet Kasurde)
+- virt-install: add --network link_state=up|down
+- virt-install: add --vcpu placement=static|auto
+
 Release 1.2.1 (June 06, 2015)
 -----------------------------
 - Bugfix release
