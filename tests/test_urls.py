@@ -110,7 +110,7 @@ _add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14",
 _add(FEDORA_URL % ("21", "x86_64"), "fedora21")
 _add(FEDORA_URL % ("22", "x86_64"), "fedora22")
 # Any Dev release
-_add(DEVFEDORA_URL % ("23", "x86_64"), "fedora22", name="fedora23")
+_add(FEDORA_URL % ("23", "x86_64"), "fedora22", name="fedora23")
 
 
 _set_distro(CentOSDistro)
@@ -232,9 +232,10 @@ def _testURL(fetcher, distname, arch, distroobj):
         # Make sure the stores are reporting correct distro name/variant
         if (s and distroobj.detectdistro and
             distroobj.detectdistro != s.os_variant):
-            raise AssertionError("Store distro/variant did not match "
-                "expected values: store=%s, found=%s expect=%s" %
-                (s, s.os_variant, distroobj.detectdistro))
+            raise AssertionError(
+                "Store distro/variant did not match expected values:\n"
+                "url=%s\nstore=%s\nfound=%s\nexpect=%s" %
+                (fetcher.location, s, s.os_variant, distroobj.detectdistro))
 
     # Do this only after the distro detection, since we actually need
     # to fetch files for that part
