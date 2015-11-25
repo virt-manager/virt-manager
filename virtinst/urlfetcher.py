@@ -1120,14 +1120,16 @@ class DebianDistro(Distro):
                 "debian OS")
             return oses[0].name
 
-        # We grab the distro code name from the libosinfo label, and
-        # see if we can find that in the URL
         for osobj in oses:
-            # name looks like 'Debian Sarge' or 'Ubuntu Vivid Varvet'
-            if " " not in osobj.label:
-                continue
+            if osobj.codename:
+                # Ubuntu codenames look like 'Warty Warthog'
+                codename = osobj.codename.split()[0].lower()
+            else:
+                if " " not in osobj.label:
+                    continue
+                # Debian labels look like 'Debian Sarge'
+                codename = osobj.label.split()[1].lower()
 
-            codename = osobj.label.lower().split()[1]
             if ("/%s/" % codename) in self.uri:
                 logging.debug("Found codename=%s in the URL string", codename)
                 return osobj.name

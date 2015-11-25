@@ -284,6 +284,7 @@ class _OsVariant(object):
 
         self.name = self._os and self._os.get_short_id() or "generic"
         self.label = self._os and self._os.get_name() or "Generic"
+        self.codename = self._os and self._os.get_codename() or ""
 
         self.sortby = self._get_sortby()
         self.urldistro = self._get_urldistro()
