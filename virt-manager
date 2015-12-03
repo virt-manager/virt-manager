@@ -252,11 +252,9 @@ def main():
     LibvirtGLib.init(None)
     LibvirtGLib.event_register()
 
-    from virtManager.dbusapi import StartupAPI
-    api = StartupAPI()
+    engine = vmmEngine()
 
-    api.run_cli_command(options.uri, show_window, domain)
-    api.start(options.skip_autostart)
+    engine.start(options.uri, show_window, domain, options.skip_autostart)
 
 
 if __name__ == "__main__":

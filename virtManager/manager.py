@@ -107,7 +107,6 @@ class vmmManager(vmmGObjectUI):
         "manager-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "manager-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
         "remove-conn": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "add-default-conn": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
     def __init__(self):
@@ -190,8 +189,6 @@ class vmmManager(vmmGObjectUI):
         self.enable_polling(COL_NETWORK)
         self.enable_polling(COL_MEM)
 
-        # Queue up the default connection detector
-        self.idle_emit("add-default-conn")
 
     ##################
     # Common methods #
