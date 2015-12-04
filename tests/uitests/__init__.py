@@ -5,6 +5,10 @@ import warnings
 # Dogtail is noisy with GTK and GI deprecation warnings
 warnings.simplefilter("ignore")
 
+# Ignores pylint error since dogtail doesn't specify this
+import gi
+gi.require_version('Atspi', '2.0')
+
 import dogtail.config
 
 from tests.uitests import utils

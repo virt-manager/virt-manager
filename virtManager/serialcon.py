@@ -25,9 +25,11 @@ import pty
 import fcntl
 import logging
 
+import gi
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
+gi.require_version("Vte", "2.91")
 from gi.repository import Vte
 
 import libvirt

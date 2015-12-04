@@ -81,28 +81,17 @@ def packagekit_isinstalled(package):
 
 
 def packagekit_install(parent, package_list):
+    ignore = parent
     bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
     pk_control = Gio.DBusProxy.new_sync(bus, 0, None,
                             "org.freedesktop.PackageKit",
                             "/org/freedesktop/PackageKit",
                             "org.freedesktop.PackageKit.Modify", None)
 
-    xid = 0
-    try:
-        # Need to import GdkX11 just to get access to get_xid function
-        # This will likely fail on wayland in the future, so ignore errors
-        from gi.repository import GdkX11  # pylint: disable=no-name-in-module
-        ignore = GdkX11
-
-        if parent and parent.topwin.get_window():
-            xid = parent.topwin.get_window().get_xid()
-    except:
-        pass
-
     # Set 2 hour timeout
     timeout = 1000 * 60 * 60 * 2
     logging.debug("Installing packages: %s", package_list)
-    pk_control.InstallPackageNames("(uass)", xid, package_list, "",
+    pk_control.InstallPackageNames("(uass)", 0, package_list, "",
                                    timeout=timeout)
     logging.debug("Install completed")
 
