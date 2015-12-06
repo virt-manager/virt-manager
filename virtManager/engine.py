@@ -489,14 +489,6 @@ class vmmEngine(vmmGObject):
                 logging.debug("Leaked %s", name)
 
         logging.debug("Exiting app normally.")
-
-        # We need this if there are any asyncdialog fobjs running
-        if Gtk.main_level():
-            logging.debug("%s other gtk main loops running, killing them.",
-                          Gtk.main_level())
-            for ignore in range(Gtk.main_level()):
-                Gtk.main_quit()
-
         self._application.quit()
 
     def _create_inspection_thread(self):
