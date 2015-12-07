@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-24 22:04-0500\n"
+"POT-Creation-Date: 2015-12-06 19:35-0500\n"
 "PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Malayalam (http://www.transifex.com/projects/p/virt-manager/"
@@ -1620,7 +1620,7 @@ msgid "VLAN"
 msgstr "VLAN"
 
 #: ../virtManager/createinterface.py:222 ../virtManager/details.py:883
-#: ../virtManager/manager.py:355 ../ui/create.ui.h:17
+#: ../virtManager/manager.py:352 ../ui/create.ui.h:17
 msgid "Name"
 msgstr "പേര്"
 
@@ -2154,21 +2154,21 @@ msgstr "മുന്നറിയിപ്പിന്റെ ആവശ്യമ�
 msgid "Error refreshing hardware page: %s"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ താള്‍ പുതുക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/details.py:1261 ../virtManager/manager.py:839
+#: ../virtManager/details.py:1261 ../virtManager/manager.py:836
 msgid "_Restore"
 msgstr "_വീണ്ടെടുക്കുക"
 
-#: ../virtManager/details.py:1263 ../virtManager/manager.py:841
+#: ../virtManager/details.py:1263 ../virtManager/manager.py:838
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "പ്രവര്‍ത്തിപ്പിക്കുക (_R)"
 
-#: ../virtManager/details.py:1291 ../virtManager/manager.py:874
+#: ../virtManager/details.py:1291 ../virtManager/manager.py:871
 #, fuzzy
 msgid "Resume the virtual machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ തല്‍ക്കാലത്തേക്ക് നിര്‍ത്തുക"
 
-#: ../virtManager/details.py:1293 ../virtManager/manager.py:876
+#: ../virtManager/details.py:1293 ../virtManager/manager.py:873
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
 msgid "Pause the virtual machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ തല്‍ക്കാലത്തേക്ക് നിര്‍ത്തുക"
@@ -2514,7 +2514,7 @@ msgid "Migrating domain"
 msgstr "ഡൊമെിന്‍ നീക്കുന്നു"
 
 #. Manager fail message
-#: ../virtManager/engine.py:189
+#: ../virtManager/engine.py:218
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -2532,7 +2532,7 @@ msgstr ""
 "ഒരു ഹൈപ്പര്‍വൈസര്‍ കണക്ഷന്‍ നിങ്ങള്‍ക്ക് ചേര്‍ക്കാം: \n"
 "ഫയല്‍->കണക്ഷന്‍ ചേര്‍ക്കുക"
 
-#: ../virtManager/engine.py:216
+#: ../virtManager/engine.py:245
 msgid ""
 "The 'libvirtd' service will need to be started.\n"
 "\n"
@@ -2544,21 +2544,21 @@ msgstr ""
 "അതിനു് ശേഷം, അടുത്ത തവണ പ്രയോഗം ആരംഭിയ്ക്കുമ്പോള്‍\n"
 "virt-manager libvirt-ലേക്കു് കണക്ട് ചെയ്യുന്നു."
 
-#: ../virtManager/engine.py:227
+#: ../virtManager/engine.py:256
 msgid "Libvirt service must be started"
 msgstr "Libvrt സര്‍വീസ് ആരംഭിക്കണം"
 
-#: ../virtManager/engine.py:362
+#: ../virtManager/engine.py:388
 #, python-format
 msgid "Error polling connection '%s': %s"
 msgstr "'%s' കണക്ഷന്‍ പോള്‍ ചെയ്യുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:605
+#: ../virtManager/engine.py:627
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "അപരിചിതമായ കണക്ഷന്‍ URI %s"
 
-#: ../virtManager/engine.py:618
+#: ../virtManager/engine.py:640
 msgid ""
 "The remote host requires a version of netcat/nc\n"
 "which supports the -U option."
@@ -2566,7 +2566,7 @@ msgstr ""
 "-U ഐച്ഛികം പിന്തുണയ്ക്കുന്ന netcat/nc പതിപ്പു്\n"
 "റിമോട്ട് ഹോസ്റ്റിനു് ആവശ്യമുണ്ടു്."
 
-#: ../virtManager/engine.py:633
+#: ../virtManager/engine.py:655
 msgid ""
 "You need to install openssh-askpass or similar\n"
 "to connect to this host."
@@ -2574,7 +2574,7 @@ msgstr ""
 "ഈ ഹോസ്റ്റിലേക്കു് കണക്ട് ചെയ്യുന്നതിനായി openssh-askpass \n"
 "അല്ലെങ്കില്‍ ഇതുപോലുള്ളതു് ഇന്‍സ്റ്റോള്‍ ചെയ്യേണ്ടതുണ്ടു്."
 
-#: ../virtManager/engine.py:637
+#: ../virtManager/engine.py:659
 msgid ""
 "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
@@ -2582,7 +2582,7 @@ msgstr ""
 "റിമോട്ട് ഹോസ്റ്റില്‍ 'libvirtd' ഡെമണ്‍ പ്രവര്‍ത്തിയ്ക്കുന്നു\n"
 "എന്നുറപ്പാക്കുക."
 
-#: ../virtManager/engine.py:641
+#: ../virtManager/engine.py:663
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -2592,7 +2592,7 @@ msgstr ""
 " - ഒരു Xen ഹോസ്റ്റ് കേര്‍ണല്‍ ബൂട്ട് ചെയ്തിരുന്നു\n"
 " - Xen സര്‍വീസ് ആരംഭിച്ചിരിയ്ക്കുന്നു"
 
-#: ../virtManager/engine.py:647
+#: ../virtManager/engine.py:669
 msgid ""
 "Could not detect a local session: if you are \n"
 "running virt-manager over ssh -X or VNC, you \n"
@@ -2604,91 +2604,91 @@ msgstr ""
 "libvrt-ലേക്കു് കണക്ട് ചെയ്യുവാന്‍ നിങ്ങള്‍ക്കു് സാധ്യമാകുന്നതല്ല. \n"
 "റൂട്ടായി പ്രവര്‍ത്തിപ്പിച്ചു് നോക്കുക."
 
-#: ../virtManager/engine.py:653
+#: ../virtManager/engine.py:675
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "'libvirtd' ഡെമണ്‍ പ്രവര്‍ത്തിയ്ക്കുന്നുണ്ടെന്നു് ഉറപ്പാക്കുക."
 
-#: ../virtManager/engine.py:657
+#: ../virtManager/engine.py:679
 msgid "Unable to connect to libvirt."
 msgstr "libvirt-ലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല."
 
-#: ../virtManager/engine.py:671
+#: ../virtManager/engine.py:693
 msgid "Would you still like to remember this connection?"
 msgstr "നിങ്ങള്‍ക്കു് ഈ കണക്ഷന്‍ ഇപ്പോഴും ഓര്‍ത്തു് വയ്ക്കണമോ?"
 
-#: ../virtManager/engine.py:673
+#: ../virtManager/engine.py:695
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ മാനേജര്‍ കണക്ഷന്‍ പരാജയം"
 
-#: ../virtManager/engine.py:700
+#: ../virtManager/engine.py:722
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "'സംബന്ധിച്ചു്' ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:714
+#: ../virtManager/engine.py:736
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "മുന്‍ഗണനകള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:735
+#: ../virtManager/engine.py:757
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "ഹോസ്റ്റ് ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:761
+#: ../virtManager/engine.py:783
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "കണക്ട് ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:812
+#: ../virtManager/engine.py:834
 #, python-format
 msgid "Error launching details: %s"
 msgstr "വിശദവിവരങ്ങള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:872 ../virtManager/engine.py:887
+#: ../virtManager/engine.py:888 ../virtManager/engine.py:903
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "പാലകനെ ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:899
+#: ../virtManager/engine.py:915
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "നീക്കം ചെയ്യല്‍ ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:915
+#: ../virtManager/engine.py:931
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "ക്ലോണ്‍ പരാമീറ്ററുകള്‍ ക്രമീകരിക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:1028
+#: ../virtManager/engine.py:1075
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "'%s' സൂക്ഷിയ്ക്കണമെന്നു് ഉറപ്പാണോ?"
 
-#: ../virtManager/engine.py:1039
+#: ../virtManager/engine.py:1086
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "ഡൊമെയിന്‍ സൂക്ഷിക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:1044
+#: ../virtManager/engine.py:1091
 msgid "Saving Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ സൂക്ഷിക്കുന്നു"
 
-#: ../virtManager/engine.py:1045
+#: ../virtManager/engine.py:1092
 msgid "Saving virtual machine memory to disk "
 msgstr "ഡിസ്കിലേക്കു് വിര്‍ച്ച്വല്‍ സിസ്റ്റം മെമ്മറി സൂക്ഷിയ്ക്കുന്നു"
 
-#: ../virtManager/engine.py:1058
+#: ../virtManager/engine.py:1105
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "സൂക്ഷിച്ച ജോലി റദ്ദാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/engine.py:1071
+#: ../virtManager/engine.py:1118
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "നിങ്ങള്‍ക്ക് '%s' നിര്‍ബന്ധമായും ഓഫ് ചെയ്യണമെന്നുറപ്പാണോ?"
 
-#: ../virtManager/engine.py:1073
+#: ../virtManager/engine.py:1120
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -2696,28 +2696,28 @@ msgstr ""
 "ഓപ്പറേറ്റിങ് സിസ്റ്റം അടച്ചു പൂട്ടാതെ ഇതു് ഉടന്‍ തന്നെ വിഎംമിന്റെ പവര്‍ ഓഫ് ചെയ്യുന്നു, ഇതു് ഡേറ്റാ "
 "നഷ്ടപ്പെടുത്തിയേക്കാം."
 
-#: ../virtManager/engine.py:1079 ../virtManager/engine.py:1156
+#: ../virtManager/engine.py:1126 ../virtManager/engine.py:1203
 msgid "Error shutting down domain"
 msgstr "ഡൊമെയിന്‍ അടച്ചുപൂട്ടുന്നതില്‍ പിശക്"
 
-#: ../virtManager/engine.py:1087
+#: ../virtManager/engine.py:1134
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "നിങ്ങള്‍ '%s' നല്‍ക്കാലത്തേക്കു് നിര്‍ത്തണമോ?"
 
-#: ../virtManager/engine.py:1093
+#: ../virtManager/engine.py:1140
 msgid "Error pausing domain"
 msgstr "ഡൊമെയിന്‍ ഇടയ്ക്കു് നിര്‍ത്തുന്നതില്‍ പിശക്"
 
-#: ../virtManager/engine.py:1101
+#: ../virtManager/engine.py:1148
 msgid "Error unpausing domain"
 msgstr "ഡൊമെയിന്‍ അണ്‍പോസ് ചെയ്യുന്നതില്‍ പിശക്"
 
-#: ../virtManager/engine.py:1113
+#: ../virtManager/engine.py:1160
 msgid "Error restoring domain"
 msgstr "ഡൊമെയിന്‍ വീണ്ടെടുക്കുന്നതില്‍ പിശക്"
 
-#: ../virtManager/engine.py:1116
+#: ../virtManager/engine.py:1163
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -2727,55 +2727,55 @@ msgstr ""
 "നീക്കം ചെയ്തു് നിങ്ങള്‍ക്കു് സാധാരണയായി വീണ്ടും \n"
 "ആരംഭിയ്ക്കണമോ?"
 
-#: ../virtManager/engine.py:1130
+#: ../virtManager/engine.py:1177
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "ഡൊണെയിന്‍ അവസ്ഥ നീക്കം ചെയ്യുന്നതില്‍ പിശക്: %s"
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1134
+#: ../virtManager/engine.py:1181
 msgid "Restoring Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വീണ്ടെടുക്കുന്നു"
 
-#: ../virtManager/engine.py:1135
+#: ../virtManager/engine.py:1182
 msgid "Restoring virtual machine memory from disk"
 msgstr "ഡിസ്കില്‍ നിന്നും വിര്‍ച്ച്വല്‍ മഷീന്‍ മെമ്മറി വീണ്ടെടുക്കുന്നു"
 
 #. Regular startup
-#: ../virtManager/engine.py:1141
+#: ../virtManager/engine.py:1188
 msgid "Error starting domain"
 msgstr "ഡൊമെയിന്‍ ആരംഭിയ്ക്കുന്നതില്‍ പിശക്"
 
-#: ../virtManager/engine.py:1150
+#: ../virtManager/engine.py:1197
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "നിങ്ങള്‍ക്ക് ഈ '%s' ഓഫ് ചെയ്യണമെന്നുറപ്പാണോ?"
 
-#: ../virtManager/engine.py:1164
+#: ../virtManager/engine.py:1211
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "നിങ്ങള്‍ക്ക് '%s' റീബൂട്ട് ചെയ്യണമെന്നുറപ്പാണോ?"
 
-#: ../virtManager/engine.py:1170
+#: ../virtManager/engine.py:1217
 msgid "Error rebooting domain"
 msgstr ""
 
-#: ../virtManager/engine.py:1179
+#: ../virtManager/engine.py:1226
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "'%s' നിര്‍ബന്ധിച്ചു് വീണ്ടും സജ്ജമാക്കണമെന്നുറപ്പാണോ?"
 
-#: ../virtManager/engine.py:1181
+#: ../virtManager/engine.py:1228
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "ഒഎസ് അടച്ചുപൂട്ടാതെ ഇതുടന്‍ വിഎം അടച്ചുപൂട്ടുന്നു, ഡേറ്റയും നഷ്ടമാകുന്നതാണു്."
 
-#: ../virtManager/engine.py:1187
+#: ../virtManager/engine.py:1234
 msgid "Error resetting domain"
 msgstr "ഡൊമെയിന്‍ വീണ്ടും സജ്ജമാക്കുന്നതില്‍ പിശക്"
 
-#: ../virtManager/engine.py:1198
+#: ../virtManager/engine.py:1245
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr ""
@@ -2993,31 +2993,31 @@ msgstr "ഇന്റര്‍ഫെയിസ് തെരഞ്ഞെടുത�
 msgid "Error selecting interface: %s"
 msgstr "ഇന്റര്‍ഫെയിസ് തെരഞ്ഞെടുക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../virtManager/manager.py:328
+#: ../virtManager/manager.py:325
 msgid "D_etails"
 msgstr "_വിവരങ്ങള്‍"
 
-#: ../virtManager/manager.py:405
+#: ../virtManager/manager.py:402
 msgid "CPU usage"
 msgstr "CPU ഉപയോഗം"
 
-#: ../virtManager/manager.py:406
+#: ../virtManager/manager.py:403
 msgid "Host CPU usage"
 msgstr "ഹോസ്റ്റ് സിപിയു ഉപയോഗം"
 
-#: ../virtManager/manager.py:407
+#: ../virtManager/manager.py:404
 msgid "Memory usage"
 msgstr "മെമ്മറി ഉപയോഗം"
 
-#: ../virtManager/manager.py:408
+#: ../virtManager/manager.py:405
 msgid "Disk I/O"
 msgstr "ഡിസ്ക് I/O"
 
-#: ../virtManager/manager.py:409
+#: ../virtManager/manager.py:406
 msgid "Network I/O"
 msgstr "നെറ്റ്‌വര്‍ക്ക് I/O"
 
-#: ../virtManager/manager.py:512
+#: ../virtManager/manager.py:509
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -3031,19 +3031,19 @@ msgstr ""
 "\n"
 "നിങ്ങള്‍ക്കുറപ്പാണോ?"
 
-#: ../virtManager/manager.py:612
+#: ../virtManager/manager.py:609
 msgid "Double click to connect"
 msgstr "കണക്ട് ചെയ്യുന്നതിനായി ഡബിള്‍ ക്ലിക്ക് ചെയ്യുക"
 
-#: ../virtManager/manager.py:619
+#: ../virtManager/manager.py:616
 msgid "Not Connected"
 msgstr "കണക്ട് ചെയ്തിട്ടില്ല"
 
-#: ../virtManager/manager.py:621
+#: ../virtManager/manager.py:618
 msgid "Connecting..."
 msgstr "കണക്ട് ചെയ്യുന്നു..."
 
-#: ../virtManager/manager.py:991
+#: ../virtManager/manager.py:988
 msgid "Disabled in preferences dialog."
 msgstr "മുന്‍ഗണനകള്‍ക്കുള്ള ഡയലോഗില്‍ പ്രവര്‍ത്തന രഹിതമാക്കിയിരിക്കുന്നു."
 
@@ -3248,25 +3248,25 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "ആവശ്യമുള്ള ഗ്രാബ് കീകൂട്ടം തെരഞ്ഞെടുക്കുക"
 
-#: ../virtManager/serialcon.py:281
+#: ../virtManager/serialcon.py:283
 msgid "Remote serial console not supported for this connection"
 msgstr ""
 
-#: ../virtManager/serialcon.py:284
+#: ../virtManager/serialcon.py:286
 msgid "Serial console not available for inactive guest"
 msgstr "സീരിയല്‍ കണ്‍സോള്‍ നിര്‍ജീവമായ ഗസ്റ്റിനു് ലഭ്യമല്ല"
 
-#: ../virtManager/serialcon.py:286
+#: ../virtManager/serialcon.py:288
 #, python-format
 msgid "Console for device type '%s' not yet supported"
 msgstr "'%s' തരത്തിലുള്ള ഡിവൈസിനുള്ള കണ്‍സോള്‍ പിന്തുണയ്ക്കുന്നില്ല"
 
-#: ../virtManager/serialcon.py:291
+#: ../virtManager/serialcon.py:293
 #, python-format
 msgid "Can not access console path '%s'"
 msgstr "കണ്‍സോള്‍ പാഥ് '%s'-ലേക്കു് പ്രവേശിയ്ക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../virtManager/serialcon.py:406
+#: ../virtManager/serialcon.py:408
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "ടെക്സ്റ്റ് കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുന്നതില്‍ പിശക്: %s"

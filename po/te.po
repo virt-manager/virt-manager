@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-24 22:04-0500\n"
+"POT-Creation-Date: 2015-12-06 19:35-0500\n"
 "PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Telugu (http://www.transifex.com/projects/p/virt-manager/"
@@ -1651,7 +1651,7 @@ msgid "VLAN"
 msgstr "VLAN"
 
 #: ../virtManager/createinterface.py:222 ../virtManager/details.py:883
-#: ../virtManager/manager.py:355 ../ui/create.ui.h:17
+#: ../virtManager/manager.py:352 ../ui/create.ui.h:17
 msgid "Name"
 msgstr "పేరు"
 
@@ -2186,21 +2186,21 @@ msgstr "నన్ను మరలా వారించవద్దు."
 msgid "Error refreshing hardware page: %s"
 msgstr "హార్డువేర్ పేజీను తాజాపరచుటలో దోషము: %s"
 
-#: ../virtManager/details.py:1261 ../virtManager/manager.py:839
+#: ../virtManager/details.py:1261 ../virtManager/manager.py:836
 msgid "_Restore"
 msgstr "తిరిగివుంచు (_R)"
 
-#: ../virtManager/details.py:1263 ../virtManager/manager.py:841
+#: ../virtManager/details.py:1263 ../virtManager/manager.py:838
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "ఉపయోగించు (_R)"
 
-#: ../virtManager/details.py:1291 ../virtManager/manager.py:874
+#: ../virtManager/details.py:1291 ../virtManager/manager.py:871
 #, fuzzy
 msgid "Resume the virtual machine"
 msgstr "వర్చ్యువల్ మిషన్‌ను నిలిపివుంచుము"
 
-#: ../virtManager/details.py:1293 ../virtManager/manager.py:876
+#: ../virtManager/details.py:1293 ../virtManager/manager.py:873
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
 msgid "Pause the virtual machine"
 msgstr "వర్చ్యువల్ మిషన్‌ను నిలిపివుంచుము"
@@ -2546,7 +2546,7 @@ msgid "Migrating domain"
 msgstr "డొమైన్‌ను వలసపంపుచున్నది"
 
 #. Manager fail message
-#: ../virtManager/engine.py:189
+#: ../virtManager/engine.py:218
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -2563,7 +2563,7 @@ msgstr ""
 "హెపర్విజర్ అనుసంధానము మానవీయంగా యిలా జతచేయవచ్చు \n"
 "ఫైలు->అనుసంధానమును జతచేయుము"
 
-#: ../virtManager/engine.py:216
+#: ../virtManager/engine.py:245
 msgid ""
 "The 'libvirtd' service will need to be started.\n"
 "\n"
@@ -2573,21 +2573,21 @@ msgstr ""
 "తరువాతిసారి అనువర్తనం ప్రారంభమైనప్పుడు virt-manager\n"
 "libvirt కు అనుసంధానమగును."
 
-#: ../virtManager/engine.py:227
+#: ../virtManager/engine.py:256
 msgid "Libvirt service must be started"
 msgstr "Libvirt సేవ తప్పక ప్రారంభంకావలెను"
 
-#: ../virtManager/engine.py:362
+#: ../virtManager/engine.py:388
 #, python-format
 msgid "Error polling connection '%s': %s"
 msgstr "అనుసంధానం '%s' పోలింగ్‌లో దోషం: %s"
 
-#: ../virtManager/engine.py:605
+#: ../virtManager/engine.py:627
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "తెలియని అనుసంధానము URI %s"
 
-#: ../virtManager/engine.py:618
+#: ../virtManager/engine.py:640
 msgid ""
 "The remote host requires a version of netcat/nc\n"
 "which supports the -U option."
@@ -2595,7 +2595,7 @@ msgstr ""
 "రిమోట్ అతిథేయికు netcat/nc యొక్క వర్షన్ అవసరం\n"
 "అది -U ఐచ్చికంకు తోడ్పాటునిచ్చును."
 
-#: ../virtManager/engine.py:633
+#: ../virtManager/engine.py:655
 msgid ""
 "You need to install openssh-askpass or similar\n"
 "to connect to this host."
@@ -2603,7 +2603,7 @@ msgstr ""
 "మీరు openssh-askpass లేదా సమానమైన దాన్ని సంస్థాపించాలి\n"
 "ఈ అతిథేయికు అనుసంధానమగుటకు."
 
-#: ../virtManager/engine.py:637
+#: ../virtManager/engine.py:659
 msgid ""
 "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
@@ -2611,7 +2611,7 @@ msgstr ""
 "'libvirtd' డెమోన్ నడుస్తోందని నిర్థారించండి\n"
 "రిమోట్ అతిథేయిపై."
 
-#: ../virtManager/engine.py:641
+#: ../virtManager/engine.py:663
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -2621,7 +2621,7 @@ msgstr ""
 " - ఒక Xen అతిథేయి కెర్నల్ బూటైందని\n"
 " -Xen సేవ ప్రారంభమైందని"
 
-#: ../virtManager/engine.py:647
+#: ../virtManager/engine.py:669
 msgid ""
 "Could not detect a local session: if you are \n"
 "running virt-manager over ssh -X or VNC, you \n"
@@ -2633,118 +2633,118 @@ msgstr ""
 "libvirt నకు సాధారణ వాడుకరి వలె అనుసంధానం \n"
 "కాలేరు. root వలె నడుపుటకు ప్రయత్నించు."
 
-#: ../virtManager/engine.py:653
+#: ../virtManager/engine.py:675
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "'libvirtd' డెమోన్ నడుస్తోందని నిర్థారించుము."
 
-#: ../virtManager/engine.py:657
+#: ../virtManager/engine.py:679
 msgid "Unable to connect to libvirt."
 msgstr "libvirt కు అనుసంధానం కాలేకపోయింది."
 
-#: ../virtManager/engine.py:671
+#: ../virtManager/engine.py:693
 msgid "Would you still like to remember this connection?"
 msgstr "ఈ అనుసంధానమును చేతనముచేయుము (_n)?"
 
-#: ../virtManager/engine.py:673
+#: ../virtManager/engine.py:695
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "వర్చ్యువల్ కంప్యూటరు నిర్వాహక అనుసంధానం విఫలమైంది"
 
-#: ../virtManager/engine.py:700
+#: ../virtManager/engine.py:722
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "'గురించి' డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:714
+#: ../virtManager/engine.py:736
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "ప్రాధాన్యతలను ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:735
+#: ../virtManager/engine.py:757
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "అతిథేయి డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:761
+#: ../virtManager/engine.py:783
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "అనుసంధానం డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:812
+#: ../virtManager/engine.py:834
 #, python-format
 msgid "Error launching details: %s"
 msgstr "వివరాలను ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:872 ../virtManager/engine.py:887
+#: ../virtManager/engine.py:888 ../virtManager/engine.py:903
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "నిర్వాహికను ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:899
+#: ../virtManager/engine.py:915
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "మైగ్రేట్ డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:915
+#: ../virtManager/engine.py:931
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "క్లోన్ పారామితులను అమర్చుటలో దోషము: %s"
 
-#: ../virtManager/engine.py:1028
+#: ../virtManager/engine.py:1075
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s' ను దాయాలని అనుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1039
+#: ../virtManager/engine.py:1086
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "డొమైన్ భద్రపరచుటలో దోషము: %s"
 
-#: ../virtManager/engine.py:1044
+#: ../virtManager/engine.py:1091
 msgid "Saving Virtual Machine"
 msgstr "వర్చ్యువల్ కంప్యూటరును భద్రపరుస్తోంది"
 
-#: ../virtManager/engine.py:1045
+#: ../virtManager/engine.py:1092
 msgid "Saving virtual machine memory to disk "
 msgstr "వర్చ్యువల్ మిషన్ మెమొరీను డిస్కునకు దాచుచున్నది "
 
-#: ../virtManager/engine.py:1058
+#: ../virtManager/engine.py:1105
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "పనిని దాచుటను రద్దుచేయుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:1071
+#: ../virtManager/engine.py:1118
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s'ను బలవంతంగా పవర్ఆఫ్ చేయాలని అనుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1073
+#: ../virtManager/engine.py:1120
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "ఇది OSను మూసివేయకుండా తక్షణమే VM పవర్ఆఫ్ చేస్తుంది మరియు మీ డాటా పోవుటకు కారణంకావచ్చును."
 
-#: ../virtManager/engine.py:1079 ../virtManager/engine.py:1156
+#: ../virtManager/engine.py:1126 ../virtManager/engine.py:1203
 msgid "Error shutting down domain"
 msgstr "డొమైన్ మూసివేతలో దోషం"
 
-#: ../virtManager/engine.py:1087
+#: ../virtManager/engine.py:1134
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s'ను నిలిపివుంచుదామని కోరుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1093
+#: ../virtManager/engine.py:1140
 msgid "Error pausing domain"
 msgstr "డొమైన్ నిలిపివుంచుటలో దోషం"
 
-#: ../virtManager/engine.py:1101
+#: ../virtManager/engine.py:1148
 msgid "Error unpausing domain"
 msgstr "డొమైన్‌ను తిరిగికొనసాగించుటలో దోషం"
 
-#: ../virtManager/engine.py:1113
+#: ../virtManager/engine.py:1160
 msgid "Error restoring domain"
 msgstr "డొమైన్ తిరిగివుంచుటలో దోషము"
 
-#: ../virtManager/engine.py:1116
+#: ../virtManager/engine.py:1163
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -2754,56 +2754,56 @@ msgstr ""
 "రోజువారి ప్రారంభమును జరుపుటకు\n"
 "మీరు యిష్టపడతారా?"
 
-#: ../virtManager/engine.py:1130
+#: ../virtManager/engine.py:1177
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "డొమైన్ స్థితిని తొలగించుటలో దోషం: %s"
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1134
+#: ../virtManager/engine.py:1181
 msgid "Restoring Virtual Machine"
 msgstr "వర్చ్యువల్ కంప్యూటరును తిరిగి స్టోరు చేస్తోంది"
 
-#: ../virtManager/engine.py:1135
+#: ../virtManager/engine.py:1182
 msgid "Restoring virtual machine memory from disk"
 msgstr "డిస్కునుండి వర్చ్యువల్ మిషన్ మెమొరీను తిరిగినిల్వవుంచుతోంది"
 
 #. Regular startup
-#: ../virtManager/engine.py:1141
+#: ../virtManager/engine.py:1188
 msgid "Error starting domain"
 msgstr "డొమైన్ ప్రారంభించుటలో దోషం"
 
-#: ../virtManager/engine.py:1150
+#: ../virtManager/engine.py:1197
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s'ను పవర్ఆఫ్ చేయాలని కోరుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1164
+#: ../virtManager/engine.py:1211
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s'ను పునఃప్రారంభించాలని కోరుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1170
+#: ../virtManager/engine.py:1217
 msgid "Error rebooting domain"
 msgstr ""
 
-#: ../virtManager/engine.py:1179
+#: ../virtManager/engine.py:1226
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s' ను బలవంతంగా తిరిగి అమర్చుదామని అనుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1181
+#: ../virtManager/engine.py:1228
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
 "ఇది VM ను OS మూసివేయకుండానే తక్షణమే తిరిగివుంచును మరియు దత్తాంశం కోల్పోవుటకు కారణం కావచ్చు."
 
-#: ../virtManager/engine.py:1187
+#: ../virtManager/engine.py:1234
 msgid "Error resetting domain"
 msgstr "డొమైన్ తిరిగిఅమర్చుటలో దోషం"
 
-#: ../virtManager/engine.py:1198
+#: ../virtManager/engine.py:1245
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "అనుసంధానమగుటలో దోషము:%s"
@@ -3021,31 +3021,31 @@ msgstr "ఏ యింటర్ఫేస్ యెంపికకాలేదు.
 msgid "Error selecting interface: %s"
 msgstr "ఇంటర్ఫేస్ యెంపికచేయుటలో దోషము: %s"
 
-#: ../virtManager/manager.py:328
+#: ../virtManager/manager.py:325
 msgid "D_etails"
 msgstr "వివరాలు (_e)"
 
-#: ../virtManager/manager.py:405
+#: ../virtManager/manager.py:402
 msgid "CPU usage"
 msgstr "CPU వాడుక"
 
-#: ../virtManager/manager.py:406
+#: ../virtManager/manager.py:403
 msgid "Host CPU usage"
 msgstr "అతిథేయి CPU వాడుక"
 
-#: ../virtManager/manager.py:407
+#: ../virtManager/manager.py:404
 msgid "Memory usage"
 msgstr "మెమొరీ cgroup వాడుక సమాచారం పొందలేదు"
 
-#: ../virtManager/manager.py:408
+#: ../virtManager/manager.py:405
 msgid "Disk I/O"
 msgstr "డిస్కు I/O"
 
-#: ../virtManager/manager.py:409
+#: ../virtManager/manager.py:406
 msgid "Network I/O"
 msgstr "నెట్వర్కు I/O"
 
-#: ../virtManager/manager.py:512
+#: ../virtManager/manager.py:509
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -3060,19 +3060,19 @@ msgstr ""
 "\n"
 "మీరు ఖచ్చితంగా వున్నారా?"
 
-#: ../virtManager/manager.py:612
+#: ../virtManager/manager.py:609
 msgid "Double click to connect"
 msgstr "అనుసంధానించుటకు రెండుసార్లు నొక్కుము"
 
-#: ../virtManager/manager.py:619
+#: ../virtManager/manager.py:616
 msgid "Not Connected"
 msgstr "అనుసంధానం కాలేదు"
 
-#: ../virtManager/manager.py:621
+#: ../virtManager/manager.py:618
 msgid "Connecting..."
 msgstr "అనుసంధానమౌతోంది..."
 
-#: ../virtManager/manager.py:991
+#: ../virtManager/manager.py:988
 msgid "Disabled in preferences dialog."
 msgstr "అభీష్టాల డైలాగునందు అచేతనపరచబడింది."
 
@@ -3278,25 +3278,25 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "దయచేసి కావలసిన గ్రాబ్ కీ జోడీను నొక్కండి"
 
-#: ../virtManager/serialcon.py:281
+#: ../virtManager/serialcon.py:283
 msgid "Remote serial console not supported for this connection"
 msgstr ""
 
-#: ../virtManager/serialcon.py:284
+#: ../virtManager/serialcon.py:286
 msgid "Serial console not available for inactive guest"
 msgstr "క్రియాహీన గెస్టునకు సీరియల్ కన్సోల్ యింకా అందుబాటులో లేదు"
 
-#: ../virtManager/serialcon.py:286
+#: ../virtManager/serialcon.py:288
 #, python-format
 msgid "Console for device type '%s' not yet supported"
 msgstr "పరికర రకం '%s' కొరకు కన్సోల్ యింకా తోడ్పాటునీయుటలేదు"
 
-#: ../virtManager/serialcon.py:291
+#: ../virtManager/serialcon.py:293
 #, python-format
 msgid "Can not access console path '%s'"
 msgstr "కన్సోల్ పాత్ '%s' ను యాక్సెస్ చేయలేదు"
 
-#: ../virtManager/serialcon.py:406
+#: ../virtManager/serialcon.py:408
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "పాఠ కన్సోల్‌కు అనుసంధానమగుటలో దోషం: %s"

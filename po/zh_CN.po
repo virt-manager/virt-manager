@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-24 22:04-0500\n"
+"POT-Creation-Date: 2015-12-06 19:35-0500\n"
 "PO-Revision-Date: 2015-05-04 09:11-0400\n"
 "Last-Translator: 1dot75cm <sensor.wen@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/virt-"
@@ -1656,7 +1656,7 @@ msgid "VLAN"
 msgstr "VLAN"
 
 #: ../virtManager/createinterface.py:222 ../virtManager/details.py:883
-#: ../virtManager/manager.py:355 ../ui/create.ui.h:17
+#: ../virtManager/manager.py:352 ../ui/create.ui.h:17
 msgid "Name"
 msgstr "名称"
 
@@ -2186,21 +2186,21 @@ msgstr "不要再警告。"
 msgid "Error refreshing hardware page: %s"
 msgstr "刷新硬件页面时出错：%s"
 
-#: ../virtManager/details.py:1261 ../virtManager/manager.py:839
+#: ../virtManager/details.py:1261 ../virtManager/manager.py:836
 msgid "_Restore"
 msgstr "恢复(_R)"
 
-#: ../virtManager/details.py:1263 ../virtManager/manager.py:841
+#: ../virtManager/details.py:1263 ../virtManager/manager.py:838
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "运行(_R)"
 
-#: ../virtManager/details.py:1291 ../virtManager/manager.py:874
+#: ../virtManager/details.py:1291 ../virtManager/manager.py:871
 #, fuzzy
 msgid "Resume the virtual machine"
 msgstr "暂停虚拟机"
 
-#: ../virtManager/details.py:1293 ../virtManager/manager.py:876
+#: ../virtManager/details.py:1293 ../virtManager/manager.py:873
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
 msgid "Pause the virtual machine"
 msgstr "暂停虚拟机"
@@ -2544,7 +2544,7 @@ msgid "Migrating domain"
 msgstr "正在迁移域"
 
 #. Manager fail message
-#: ../virtManager/engine.py:189
+#: ../virtManager/engine.py:218
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -2562,7 +2562,7 @@ msgstr ""
 "您可以使用 文件 --> 添加连接\n"
 "手动添加 hypervisor 连接。"
 
-#: ../virtManager/engine.py:216
+#: ../virtManager/engine.py:245
 msgid ""
 "The 'libvirtd' service will need to be started.\n"
 "\n"
@@ -2574,21 +2574,21 @@ msgstr ""
 "在此之后，virt-manager 将连接至 libvirt\n"
 "并启动下一个应用程序。"
 
-#: ../virtManager/engine.py:227
+#: ../virtManager/engine.py:256
 msgid "Libvirt service must be started"
 msgstr "必须启动 libvirt 服务"
 
-#: ../virtManager/engine.py:362
+#: ../virtManager/engine.py:388
 #, python-format
 msgid "Error polling connection '%s': %s"
 msgstr "轮询连接 '%s' 出错：%s"
 
-#: ../virtManager/engine.py:605
+#: ../virtManager/engine.py:627
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "未知连接 URI %s"
 
-#: ../virtManager/engine.py:618
+#: ../virtManager/engine.py:640
 msgid ""
 "The remote host requires a version of netcat/nc\n"
 "which supports the -U option."
@@ -2596,7 +2596,7 @@ msgstr ""
 "远程主机需要可支持 -U 选项的\n"
 "netcat/nc 版本。"
 
-#: ../virtManager/engine.py:633
+#: ../virtManager/engine.py:655
 msgid ""
 "You need to install openssh-askpass or similar\n"
 "to connect to this host."
@@ -2604,7 +2604,7 @@ msgstr ""
 "您需要安装 openssh-askpass 或类似程序\n"
 "方可连接到这台主机。"
 
-#: ../virtManager/engine.py:637
+#: ../virtManager/engine.py:659
 msgid ""
 "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
@@ -2612,7 +2612,7 @@ msgstr ""
 "确认在远程主机中正在\n"
 "运行 'libvirtd' 守护进程。"
 
-#: ../virtManager/engine.py:641
+#: ../virtManager/engine.py:663
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -2622,7 +2622,7 @@ msgstr ""
 "已载入 -A Xen 主机内核\n"
 "已启动 Xen 服务"
 
-#: ../virtManager/engine.py:647
+#: ../virtManager/engine.py:669
 msgid ""
 "Could not detect a local session: if you are \n"
 "running virt-manager over ssh -X or VNC, you \n"
@@ -2634,118 +2634,118 @@ msgstr ""
 "您可能无法作为普通用户\n"
 "连接到 libvirt。请尝试作为 root 用户连接。"
 
-#: ../virtManager/engine.py:653
+#: ../virtManager/engine.py:675
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "确定 ‘libvirtd’ 守护进程正在运行。"
 
-#: ../virtManager/engine.py:657
+#: ../virtManager/engine.py:679
 msgid "Unable to connect to libvirt."
 msgstr "无法连接到 libvirt。"
 
-#: ../virtManager/engine.py:671
+#: ../virtManager/engine.py:693
 msgid "Would you still like to remember this connection?"
 msgstr "您仍然希望记住此连接？"
 
-#: ../virtManager/engine.py:673
+#: ../virtManager/engine.py:695
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "虚拟机管理器连接失败"
 
-#: ../virtManager/engine.py:700
+#: ../virtManager/engine.py:722
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "启动 ‘About’ 会话出错：%s"
 
-#: ../virtManager/engine.py:714
+#: ../virtManager/engine.py:736
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "启动属性出错：%s"
 
-#: ../virtManager/engine.py:735
+#: ../virtManager/engine.py:757
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "启动主机对话出错：%s"
 
-#: ../virtManager/engine.py:761
+#: ../virtManager/engine.py:783
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "启动连接对话出错：%s"
 
-#: ../virtManager/engine.py:812
+#: ../virtManager/engine.py:834
 #, python-format
 msgid "Error launching details: %s"
 msgstr "启动详情出错：%s"
 
-#: ../virtManager/engine.py:872 ../virtManager/engine.py:887
+#: ../virtManager/engine.py:888 ../virtManager/engine.py:903
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "启动管理器出错：%s"
 
-#: ../virtManager/engine.py:899
+#: ../virtManager/engine.py:915
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "启动迁移对话出错：%s"
 
-#: ../virtManager/engine.py:915
+#: ../virtManager/engine.py:931
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "设定克隆参数出错：%s"
 
-#: ../virtManager/engine.py:1028
+#: ../virtManager/engine.py:1075
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "您确定要保存 '%s' 吗？"
 
-#: ../virtManager/engine.py:1039
+#: ../virtManager/engine.py:1086
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "保存域出错：%s"
 
-#: ../virtManager/engine.py:1044
+#: ../virtManager/engine.py:1091
 msgid "Saving Virtual Machine"
 msgstr "正在保存虚拟机"
 
-#: ../virtManager/engine.py:1045
+#: ../virtManager/engine.py:1092
 msgid "Saving virtual machine memory to disk "
 msgstr "将虚拟机内存保存到磁盘中"
 
-#: ../virtManager/engine.py:1058
+#: ../virtManager/engine.py:1105
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "取消保存任务出错：%s"
 
-#: ../virtManager/engine.py:1071
+#: ../virtManager/engine.py:1118
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "您确定要强制关闭 '%s' 吗？"
 
-#: ../virtManager/engine.py:1073
+#: ../virtManager/engine.py:1120
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "这将立即关闭 VM 而不关闭操作系统，并可能造成数据丢失。"
 
-#: ../virtManager/engine.py:1079 ../virtManager/engine.py:1156
+#: ../virtManager/engine.py:1126 ../virtManager/engine.py:1203
 msgid "Error shutting down domain"
 msgstr "关闭域出错"
 
-#: ../virtManager/engine.py:1087
+#: ../virtManager/engine.py:1134
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "您确定要暂停 '%s' 吗？"
 
-#: ../virtManager/engine.py:1093
+#: ../virtManager/engine.py:1140
 msgid "Error pausing domain"
 msgstr "暂停域出错"
 
-#: ../virtManager/engine.py:1101
+#: ../virtManager/engine.py:1148
 msgid "Error unpausing domain"
 msgstr "取消暂停域时出错"
 
-#: ../virtManager/engine.py:1113
+#: ../virtManager/engine.py:1160
 msgid "Error restoring domain"
 msgstr "恢复域出错"
 
-#: ../virtManager/engine.py:1116
+#: ../virtManager/engine.py:1163
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -2755,55 +2755,55 @@ msgstr ""
 "保存的状态并执行\n"
 "常规启动吗？"
 
-#: ../virtManager/engine.py:1130
+#: ../virtManager/engine.py:1177
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "删除域状态时出错：%s"
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1134
+#: ../virtManager/engine.py:1181
 msgid "Restoring Virtual Machine"
 msgstr "正在恢复虚拟机"
 
-#: ../virtManager/engine.py:1135
+#: ../virtManager/engine.py:1182
 msgid "Restoring virtual machine memory from disk"
 msgstr "从磁盘中恢复虚拟机内存时出错"
 
 #. Regular startup
-#: ../virtManager/engine.py:1141
+#: ../virtManager/engine.py:1188
 msgid "Error starting domain"
 msgstr "启动域时出错"
 
-#: ../virtManager/engine.py:1150
+#: ../virtManager/engine.py:1197
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "您确定要关闭 '%s' 吗？"
 
-#: ../virtManager/engine.py:1164
+#: ../virtManager/engine.py:1211
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "您确定要重启 '%s' 吗？"
 
-#: ../virtManager/engine.py:1170
+#: ../virtManager/engine.py:1217
 msgid "Error rebooting domain"
 msgstr "重启域错误"
 
-#: ../virtManager/engine.py:1179
+#: ../virtManager/engine.py:1226
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "您确定要强制重置 '%s' 吗？"
 
-#: ../virtManager/engine.py:1181
+#: ../virtManager/engine.py:1228
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "这将立即重置 VM 而无需关闭操作系统，并可能造成数据丢失。"
 
-#: ../virtManager/engine.py:1187
+#: ../virtManager/engine.py:1234
 msgid "Error resetting domain"
 msgstr "重置域出错"
 
-#: ../virtManager/engine.py:1198
+#: ../virtManager/engine.py:1245
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "启动删除对话框出错： %s"
@@ -3021,31 +3021,31 @@ msgstr "未选择接口。"
 msgid "Error selecting interface: %s"
 msgstr "选择接口时出错：%s"
 
-#: ../virtManager/manager.py:328
+#: ../virtManager/manager.py:325
 msgid "D_etails"
 msgstr "详情(_e)"
 
-#: ../virtManager/manager.py:405
+#: ../virtManager/manager.py:402
 msgid "CPU usage"
 msgstr "CPU 使用率"
 
-#: ../virtManager/manager.py:406
+#: ../virtManager/manager.py:403
 msgid "Host CPU usage"
 msgstr "主机 CPU 使用率"
 
-#: ../virtManager/manager.py:407
+#: ../virtManager/manager.py:404
 msgid "Memory usage"
 msgstr "内存使用率"
 
-#: ../virtManager/manager.py:408
+#: ../virtManager/manager.py:405
 msgid "Disk I/O"
 msgstr "磁盘 I/O"
 
-#: ../virtManager/manager.py:409
+#: ../virtManager/manager.py:406
 msgid "Network I/O"
 msgstr "网络 I/O"
 
-#: ../virtManager/manager.py:512
+#: ../virtManager/manager.py:509
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -3060,19 +3060,19 @@ msgstr ""
 "\n"
 "您确定要这样做吗？"
 
-#: ../virtManager/manager.py:612
+#: ../virtManager/manager.py:609
 msgid "Double click to connect"
 msgstr "双击进行连接"
 
-#: ../virtManager/manager.py:619
+#: ../virtManager/manager.py:616
 msgid "Not Connected"
 msgstr "尚未连接"
 
-#: ../virtManager/manager.py:621
+#: ../virtManager/manager.py:618
 msgid "Connecting..."
 msgstr "连接中......"
 
-#: ../virtManager/manager.py:991
+#: ../virtManager/manager.py:988
 msgid "Disabled in preferences dialog."
 msgstr "在属性对话中禁用。"
 
@@ -3281,25 +3281,25 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "请按所需 grab 组合键"
 
-#: ../virtManager/serialcon.py:281
+#: ../virtManager/serialcon.py:283
 msgid "Remote serial console not supported for this connection"
 msgstr ""
 
-#: ../virtManager/serialcon.py:284
+#: ../virtManager/serialcon.py:286
 msgid "Serial console not available for inactive guest"
 msgstr "不活跃的虚拟机不能使用串口控制台"
 
-#: ../virtManager/serialcon.py:286
+#: ../virtManager/serialcon.py:288
 #, python-format
 msgid "Console for device type '%s' not yet supported"
 msgstr "还不支持设备类型 '%s' 控制台"
 
-#: ../virtManager/serialcon.py:291
+#: ../virtManager/serialcon.py:293
 #, python-format
 msgid "Can not access console path '%s'"
 msgstr "无法访问控制台路径 '%s'"
 
-#: ../virtManager/serialcon.py:406
+#: ../virtManager/serialcon.py:408
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "连接到文本控制台时出错：%s"

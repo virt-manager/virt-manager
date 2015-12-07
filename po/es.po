@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-24 22:04-0500\n"
+"POT-Creation-Date: 2015-12-06 19:35-0500\n"
 "PO-Revision-Date: 2015-11-16 03:04-0500\n"
 "Last-Translator: Gerardo Rosales <grosale86@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/virt-manager/"
@@ -1738,7 +1738,7 @@ msgid "VLAN"
 msgstr "VLAN"
 
 #: ../virtManager/createinterface.py:222 ../virtManager/details.py:883
-#: ../virtManager/manager.py:355 ../ui/create.ui.h:17
+#: ../virtManager/manager.py:352 ../ui/create.ui.h:17
 msgid "Name"
 msgstr "Nombre"
 
@@ -2276,21 +2276,21 @@ msgstr "No avisarme de nuevo"
 msgid "Error refreshing hardware page: %s"
 msgstr "Error al actualizar la página del hardware: %s"
 
-#: ../virtManager/details.py:1261 ../virtManager/manager.py:839
+#: ../virtManager/details.py:1261 ../virtManager/manager.py:836
 msgid "_Restore"
 msgstr "_Reanudar"
 
-#: ../virtManager/details.py:1263 ../virtManager/manager.py:841
+#: ../virtManager/details.py:1263 ../virtManager/manager.py:838
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "_Ejecutar"
 
-#: ../virtManager/details.py:1291 ../virtManager/manager.py:874
+#: ../virtManager/details.py:1291 ../virtManager/manager.py:871
 #, fuzzy
 msgid "Resume the virtual machine"
 msgstr "Pausar la máquina virtual"
 
-#: ../virtManager/details.py:1293 ../virtManager/manager.py:876
+#: ../virtManager/details.py:1293 ../virtManager/manager.py:873
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
 msgid "Pause the virtual machine"
 msgstr "Pausar la máquina virtual"
@@ -2648,7 +2648,7 @@ msgid "Migrating domain"
 msgstr "Migrando dominio"
 
 #. Manager fail message
-#: ../virtManager/engine.py:189
+#: ../virtManager/engine.py:218
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -2666,7 +2666,7 @@ msgstr ""
 "Una conexión de hipervisor puede agregarse manualmente\n"
 "a través de Archivo -> Agregar conexión"
 
-#: ../virtManager/engine.py:216
+#: ../virtManager/engine.py:245
 msgid ""
 "The 'libvirtd' service will need to be started.\n"
 "\n"
@@ -2678,41 +2678,41 @@ msgstr ""
 "Después de que virt-manager se conecte con libvirt \n"
 "la siguiente aplicación iniciará."
 
-#: ../virtManager/engine.py:227
+#: ../virtManager/engine.py:256
 msgid "Libvirt service must be started"
 msgstr "Debe iniciar el servicio libvirt"
 
-#: ../virtManager/engine.py:362
+#: ../virtManager/engine.py:388
 #, python-format
 msgid "Error polling connection '%s': %s"
 msgstr "Error al sondear  conexión '%s': %s"
 
-#: ../virtManager/engine.py:605
+#: ../virtManager/engine.py:627
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "Conexión URI %s desconocida"
 
-#: ../virtManager/engine.py:618
+#: ../virtManager/engine.py:640
 msgid ""
 "The remote host requires a version of netcat/nc\n"
 "which supports the -U option."
 msgstr ""
 "El host remoto requiere una versión de netcat/nc que soporte la opción -U."
 
-#: ../virtManager/engine.py:633
+#: ../virtManager/engine.py:655
 msgid ""
 "You need to install openssh-askpass or similar\n"
 "to connect to this host."
 msgstr ""
 "Necesitas instalar openssh-askpass o similar para conectar a este host."
 
-#: ../virtManager/engine.py:637
+#: ../virtManager/engine.py:659
 msgid ""
 "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr "Comprueba que el demonio 'libvirtd' esté corriendo en el host remoto."
 
-#: ../virtManager/engine.py:641
+#: ../virtManager/engine.py:663
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -2722,7 +2722,7 @@ msgstr ""
 "-Se arrancó un kernel host Xen\n"
 "-El servicio Xen se inició"
 
-#: ../virtManager/engine.py:647
+#: ../virtManager/engine.py:669
 msgid ""
 "Could not detect a local session: if you are \n"
 "running virt-manager over ssh -X or VNC, you \n"
@@ -2733,91 +2733,91 @@ msgstr ""
 "ssh -X o VNC, puede que no pueda conectarse a libvirt como usuario normal. "
 "Intente ejecutar como root."
 
-#: ../virtManager/engine.py:653
+#: ../virtManager/engine.py:675
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "Comprueba que el demonio 'libvirtd' está corriendo."
 
-#: ../virtManager/engine.py:657
+#: ../virtManager/engine.py:679
 msgid "Unable to connect to libvirt."
 msgstr "No se pudo conectar a libvirt."
 
-#: ../virtManager/engine.py:671
+#: ../virtManager/engine.py:693
 msgid "Would you still like to remember this connection?"
 msgstr "¿Aún desea recordar esta conexión?"
 
-#: ../virtManager/engine.py:673
+#: ../virtManager/engine.py:695
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Falla en la conexión del Gestor de máquina virtual"
 
-#: ../virtManager/engine.py:700
+#: ../virtManager/engine.py:722
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "Error al lanzar diálogo 'Acerca de': %s"
 
-#: ../virtManager/engine.py:714
+#: ../virtManager/engine.py:736
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "Error al lanzar preferencias: %s"
 
-#: ../virtManager/engine.py:735
+#: ../virtManager/engine.py:757
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "Error al lanzar diálogo de equipo anfitrión: %s"
 
-#: ../virtManager/engine.py:761
+#: ../virtManager/engine.py:783
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "Error al lanzar diálogo de conexión: %s "
 
-#: ../virtManager/engine.py:812
+#: ../virtManager/engine.py:834
 #, python-format
 msgid "Error launching details: %s"
 msgstr "Error al lanzar detalles: %s"
 
-#: ../virtManager/engine.py:872 ../virtManager/engine.py:887
+#: ../virtManager/engine.py:888 ../virtManager/engine.py:903
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "Error al lanzar gestor: %s"
 
-#: ../virtManager/engine.py:899
+#: ../virtManager/engine.py:915
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Error al lanzar diálogo de migración: %s"
 
-#: ../virtManager/engine.py:915
+#: ../virtManager/engine.py:931
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "Error al configurar parámetros de clon: %s"
 
-#: ../virtManager/engine.py:1028
+#: ../virtManager/engine.py:1075
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "¿Está seguro de querer guardar '%s'?"
 
-#: ../virtManager/engine.py:1039
+#: ../virtManager/engine.py:1086
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "Error al guardar dominio: %s"
 
-#: ../virtManager/engine.py:1044
+#: ../virtManager/engine.py:1091
 msgid "Saving Virtual Machine"
 msgstr "Guardando Máquina Virtual"
 
-#: ../virtManager/engine.py:1045
+#: ../virtManager/engine.py:1092
 msgid "Saving virtual machine memory to disk "
 msgstr "Guardando memoria de máquina virtual a disco"
 
-#: ../virtManager/engine.py:1058
+#: ../virtManager/engine.py:1105
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "Error al cancelar guardado de trabajo: %s"
 
-#: ../virtManager/engine.py:1071
+#: ../virtManager/engine.py:1118
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "¿Está seguro de querer forzar el apagado de '%s'?"
 
-#: ../virtManager/engine.py:1073
+#: ../virtManager/engine.py:1120
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -2825,28 +2825,28 @@ msgstr ""
 "Esto apagará inmediatamente la MV, sin desconectar el SO, y puede provocar "
 "la pérdida de datos."
 
-#: ../virtManager/engine.py:1079 ../virtManager/engine.py:1156
+#: ../virtManager/engine.py:1126 ../virtManager/engine.py:1203
 msgid "Error shutting down domain"
 msgstr "Error al apagar dominio"
 
-#: ../virtManager/engine.py:1087
+#: ../virtManager/engine.py:1134
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "¿Está seguro de querer pausar '%s'?"
 
-#: ../virtManager/engine.py:1093
+#: ../virtManager/engine.py:1140
 msgid "Error pausing domain"
 msgstr "Error al pausar dominio"
 
-#: ../virtManager/engine.py:1101
+#: ../virtManager/engine.py:1148
 msgid "Error unpausing domain"
 msgstr "Error al reanudar dominio"
 
-#: ../virtManager/engine.py:1113
+#: ../virtManager/engine.py:1160
 msgid "Error restoring domain"
 msgstr "Error al restaurar dominio"
 
-#: ../virtManager/engine.py:1116
+#: ../virtManager/engine.py:1163
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -2856,45 +2856,45 @@ msgstr ""
 "retirar el estado guardado y realizar un inicio\n"
 "regular?"
 
-#: ../virtManager/engine.py:1130
+#: ../virtManager/engine.py:1177
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "Error al  retirar estado de dominio: %s"
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1134
+#: ../virtManager/engine.py:1181
 msgid "Restoring Virtual Machine"
 msgstr "Restaurando Máquina Virtual"
 
-#: ../virtManager/engine.py:1135
+#: ../virtManager/engine.py:1182
 msgid "Restoring virtual machine memory from disk"
 msgstr "Restaurando memoria de máquina virtual a disco"
 
 #. Regular startup
-#: ../virtManager/engine.py:1141
+#: ../virtManager/engine.py:1188
 msgid "Error starting domain"
 msgstr "Error al iniciar dominio"
 
-#: ../virtManager/engine.py:1150
+#: ../virtManager/engine.py:1197
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "¿Está seguro de querer apagar '%s'?"
 
-#: ../virtManager/engine.py:1164
+#: ../virtManager/engine.py:1211
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "¿Está seguro de querer reiniciar '%s'?"
 
-#: ../virtManager/engine.py:1170
+#: ../virtManager/engine.py:1217
 msgid "Error rebooting domain"
 msgstr "Error al reiniciar el dominio"
 
-#: ../virtManager/engine.py:1179
+#: ../virtManager/engine.py:1226
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "¿Está seguro de querer forzar un reajuste ‘%s’?"
 
-#: ../virtManager/engine.py:1181
+#: ../virtManager/engine.py:1228
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
@@ -2902,11 +2902,11 @@ msgstr ""
 "Esto reajustará inmediatamente la VM sin tirar el SO y puede causar la "
 "perdida de datos."
 
-#: ../virtManager/engine.py:1187
+#: ../virtManager/engine.py:1234
 msgid "Error resetting domain"
 msgstr "Error al reajustar el dominio"
 
-#: ../virtManager/engine.py:1198
+#: ../virtManager/engine.py:1245
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "Error al abrir el cuadro de diálogo de borrado: %s"
@@ -3126,31 +3126,31 @@ msgstr "No se ha seleccionado una interfaz."
 msgid "Error selecting interface: %s"
 msgstr "Error al seleccionar la interfaz: %s"
 
-#: ../virtManager/manager.py:328
+#: ../virtManager/manager.py:325
 msgid "D_etails"
 msgstr "Detalles"
 
-#: ../virtManager/manager.py:405
+#: ../virtManager/manager.py:402
 msgid "CPU usage"
 msgstr "Uso de CPU"
 
-#: ../virtManager/manager.py:406
+#: ../virtManager/manager.py:403
 msgid "Host CPU usage"
 msgstr "Uso de CPU de equipo anfitrión"
 
-#: ../virtManager/manager.py:407
+#: ../virtManager/manager.py:404
 msgid "Memory usage"
 msgstr "Uso de memoria"
 
-#: ../virtManager/manager.py:408
+#: ../virtManager/manager.py:405
 msgid "Disk I/O"
 msgstr "Disco E/S"
 
-#: ../virtManager/manager.py:409
+#: ../virtManager/manager.py:406
 msgid "Network I/O"
 msgstr "Red E/S"
 
-#: ../virtManager/manager.py:512
+#: ../virtManager/manager.py:509
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -3165,19 +3165,19 @@ msgstr ""
 "\n"
 " ¿Está seguro?"
 
-#: ../virtManager/manager.py:612
+#: ../virtManager/manager.py:609
 msgid "Double click to connect"
 msgstr "Haga doble clic para conectar"
 
-#: ../virtManager/manager.py:619
+#: ../virtManager/manager.py:616
 msgid "Not Connected"
 msgstr "No conectado"
 
-#: ../virtManager/manager.py:621
+#: ../virtManager/manager.py:618
 msgid "Connecting..."
 msgstr "Conectando..."
 
-#: ../virtManager/manager.py:991
+#: ../virtManager/manager.py:988
 msgid "Disabled in preferences dialog."
 msgstr "Inhabilitado en diálogo de preferencias."
 
@@ -3389,25 +3389,25 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "Por favor presione la combinación deseada de teclas grab"
 
-#: ../virtManager/serialcon.py:281
+#: ../virtManager/serialcon.py:283
 msgid "Remote serial console not supported for this connection"
 msgstr "Consola serial remota no está soportada para esta conexión"
 
-#: ../virtManager/serialcon.py:284
+#: ../virtManager/serialcon.py:286
 msgid "Serial console not available for inactive guest"
 msgstr "Consola serial no disponible para huésped inactivo."
 
-#: ../virtManager/serialcon.py:286
+#: ../virtManager/serialcon.py:288
 #, python-format
 msgid "Console for device type '%s' not yet supported"
 msgstr "Consola para tipo de dispositivo '%s' aún no soportada"
 
-#: ../virtManager/serialcon.py:291
+#: ../virtManager/serialcon.py:293
 #, python-format
 msgid "Can not access console path '%s'"
 msgstr "No se puede acceder a la ruta de consola '%s'"
 
-#: ../virtManager/serialcon.py:406
+#: ../virtManager/serialcon.py:408
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "Error al conectar a la consola de texto: %s"

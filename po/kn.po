@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-24 22:04-0500\n"
+"POT-Creation-Date: 2015-12-06 19:35-0500\n"
 "PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Kannada (http://www.transifex.com/projects/p/virt-manager/"
@@ -1685,7 +1685,7 @@ msgid "VLAN"
 msgstr "VLAN"
 
 #: ../virtManager/createinterface.py:222 ../virtManager/details.py:883
-#: ../virtManager/manager.py:355 ../ui/create.ui.h:17
+#: ../virtManager/manager.py:352 ../ui/create.ui.h:17
 msgid "Name"
 msgstr "ಹೆಸರು"
 
@@ -2221,21 +2221,21 @@ msgstr "ನನ್ನನ್ನು ಇನ್ನೊಮ್ಮೆ ಎಚ್ಚರಿ�
 msgid "Error refreshing hardware page: %s"
 msgstr "ಯಂತ್ರಾಂಶ ಪುಟವನ್ನು ಪುನಶ್ಚೇತನಗೊಳಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: %s"
 
-#: ../virtManager/details.py:1261 ../virtManager/manager.py:839
+#: ../virtManager/details.py:1261 ../virtManager/manager.py:836
 msgid "_Restore"
 msgstr "ಮರಳಿ ಸ್ಥಾಪಿಸು (_R)"
 
-#: ../virtManager/details.py:1263 ../virtManager/manager.py:841
+#: ../virtManager/details.py:1263 ../virtManager/manager.py:838
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "ಚಲಾಯಿಸು (_R)"
 
-#: ../virtManager/details.py:1291 ../virtManager/manager.py:874
+#: ../virtManager/details.py:1291 ../virtManager/manager.py:871
 #, fuzzy
 msgid "Resume the virtual machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ವಿರಮಿಸಿ"
 
-#: ../virtManager/details.py:1293 ../virtManager/manager.py:876
+#: ../virtManager/details.py:1293 ../virtManager/manager.py:873
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
 msgid "Pause the virtual machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ವಿರಮಿಸಿ"
@@ -2586,7 +2586,7 @@ msgid "Migrating domain"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ವರ್ಗಾಯಿಸಲಾಗುತ್ತಿದೆ"
 
 #. Manager fail message
-#: ../virtManager/engine.py:189
+#: ../virtManager/engine.py:218
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -2604,7 +2604,7 @@ msgstr ""
 "ಕಡತ->ಸಂಪರ್ಕವನ್ನು ಸೇರಿಸು ಅನ್ನು ಬಳಸಿಕೊಂಡು ಒಂದು ಹೈಪರ್ವೈಸರ್ \n"
 "ಸಂಪರ್ಕವನ್ನು ಕೈಯಾರೆ ಸೇರಿಸಬಹುದಾಗಿದೆ"
 
-#: ../virtManager/engine.py:216
+#: ../virtManager/engine.py:245
 msgid ""
 "The 'libvirtd' service will need to be started.\n"
 "\n"
@@ -2616,21 +2616,21 @@ msgstr ""
 "ಅನ್ವಯವು ಮುಂದಿನ ಬಾರಿಗೆ ಆರಂಭಗೊಳ್ಳುವಾಗ libvirtನೊಂದಿಗೆ \n"
 "virt-manager ಸಂಪರ್ಕಸಾಧಿಸುತ್ತದೆ."
 
-#: ../virtManager/engine.py:227
+#: ../virtManager/engine.py:256
 msgid "Libvirt service must be started"
 msgstr "Libvirt ಸೇವೆಯನ್ನು ಆರಂಭಿಸುವುದು ಅಗತ್ಯ"
 
-#: ../virtManager/engine.py:362
+#: ../virtManager/engine.py:388
 #, python-format
 msgid "Error polling connection '%s': %s"
 msgstr "ಸಂಪರ್ಕವನ್ನು ಪೋಲ್ ಮಾಡುವಲ್ಲಿ ದೋಷ: '%s': %s"
 
-#: ../virtManager/engine.py:605
+#: ../virtManager/engine.py:627
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "ಗೊತ್ತಿರದ ಸಂಪರ್ URI %s"
 
-#: ../virtManager/engine.py:618
+#: ../virtManager/engine.py:640
 msgid ""
 "The remote host requires a version of netcat/nc\n"
 "which supports the -U option."
@@ -2638,7 +2638,7 @@ msgstr ""
 "ದೂರಸ್ಥ ಆತಿಥೇಯಕ್ಕಾಗಿ -U ಆಯ್ಕೆಯನ್ನು ಬೆಂಬಲಿಸುವ\n"
 "netcat/nc ನ ಅಗತ್ಯವಿರುತ್ತದೆ."
 
-#: ../virtManager/engine.py:633
+#: ../virtManager/engine.py:655
 msgid ""
 "You need to install openssh-askpass or similar\n"
 "to connect to this host."
@@ -2646,7 +2646,7 @@ msgstr ""
 "ಈ ಆತಿಥೇಯಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕಸಾಧಿಸಲು ನೀವು openssh-askpass\n"
 "ಅಥವ ಅದರ ರೀತಿಯದ್ದನ್ನು ಹೊಂದಿರಬೇಕಿರುತ್ತದೆ."
 
-#: ../virtManager/engine.py:637
+#: ../virtManager/engine.py:659
 msgid ""
 "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
@@ -2654,7 +2654,7 @@ msgstr ""
 "'libvirtd' ದೂರಸ್ಥ ಆತಿಥೇಯಗಣಕದಲ್ಲಿ ಡೀಮನ್\n"
 "ಚಾಲನೆಯಲ್ಲಿದೆಯೆ ಎಂದು ಪರಿಶೀಲಿಸಿ."
 
-#: ../virtManager/engine.py:641
+#: ../virtManager/engine.py:663
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -2664,7 +2664,7 @@ msgstr ""
 " - ಒಂದು Xen ಆತಿಥೇಯವನ್ನು ಬೂಟ್ ಮಾಡಲಾಗಿದೆಯೆ\n"
 " - Xen ಸೇವೆಯನ್ನು ಆರಂಭಿಸಲಾಗಿದೆ"
 
-#: ../virtManager/engine.py:647
+#: ../virtManager/engine.py:669
 msgid ""
 "Could not detect a local session: if you are \n"
 "running virt-manager over ssh -X or VNC, you \n"
@@ -2676,91 +2676,91 @@ msgstr ""
 "ನೀವು ಸಾಮಾನ್ಯ ಬಳಕೆದಾರರಂತೆ libvirt ನೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸಲು\n"
 "ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ. ನಿರ್ವಾಹಕರಾಗಿ ಚಲಾಯಿಸಿ ನೋಡಿ."
 
-#: ../virtManager/engine.py:653
+#: ../virtManager/engine.py:675
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "'libvirtd' ಡೀಮನ್ ಚಾಲನೆಯಲ್ಲಿದೆಯೆ ಎಂದು ಪರಿಶೀಲಿಸಿ."
 
-#: ../virtManager/engine.py:657
+#: ../virtManager/engine.py:679
 msgid "Unable to connect to libvirt."
 msgstr "libvirt ನೊಂದಿಗೆ ಸಾಧಿಸುವಲ್ಲಿ ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
-#: ../virtManager/engine.py:671
+#: ../virtManager/engine.py:693
 msgid "Would you still like to remember this connection?"
 msgstr "ನೀವು ಇನ್ನೂ ಸಹ ಈ ಸಂಪರ್ಕವನ್ನು ನೆನಪಿಟ್ಟುಕೊಳ್ಳಲು ಬಯಸುವಿರಾ?"
 
-#: ../virtManager/engine.py:673
+#: ../virtManager/engine.py:695
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕ ವ್ಯವಸ್ಥಾಪಕನೊಂದಿಗಿನ ಸಂಪರ್ಕ ವಿಫಲ"
 
-#: ../virtManager/engine.py:700
+#: ../virtManager/engine.py:722
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "'ಕುರಿತು' ಸಂವಾದ ಚೌಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: %s"
 
-#: ../virtManager/engine.py:714
+#: ../virtManager/engine.py:736
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "ಆದ್ಯತೆಗಳನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../virtManager/engine.py:735
+#: ../virtManager/engine.py:757
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "ಆತಿಥೇಯ ಸಂವಾದ ಚೌಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: %s"
 
-#: ../virtManager/engine.py:761
+#: ../virtManager/engine.py:783
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "ಸಂಪರ್ಕದ ಸಂವಾದ ಚೌಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: %s"
 
-#: ../virtManager/engine.py:812
+#: ../virtManager/engine.py:834
 #, python-format
 msgid "Error launching details: %s"
 msgstr "ವಿವರಗಳನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: %s"
 
-#: ../virtManager/engine.py:872 ../virtManager/engine.py:887
+#: ../virtManager/engine.py:888 ../virtManager/engine.py:903
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "ವ್ಯವಸ್ಥಾಪಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: %s"
 
-#: ../virtManager/engine.py:899
+#: ../virtManager/engine.py:915
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "ವರ್ಗಾವಣೆ ಸಂವಾದ ಚೌಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: %s"
 
-#: ../virtManager/engine.py:915
+#: ../virtManager/engine.py:931
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "ತದ್ರೂಪು ನಿಯತಾಂಕಗಳನ್ನು ಸಜ್ಜುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../virtManager/engine.py:1028
+#: ../virtManager/engine.py:1075
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "ನೀವು '%s' ಅನ್ನು ಖಂಡಿತವಾಗಿಯೂ ಉಳಿಸಿಡಲು ಬಯಸುತ್ತೀರೆ?"
 
-#: ../virtManager/engine.py:1039
+#: ../virtManager/engine.py:1086
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ಉಳಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../virtManager/engine.py:1044
+#: ../virtManager/engine.py:1091
 msgid "Saving Virtual Machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ಉಳಿಸಲಾಗುತ್ತಿದೆ"
 
-#: ../virtManager/engine.py:1045
+#: ../virtManager/engine.py:1092
 msgid "Saving virtual machine memory to disk "
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕದ ಮೆಮೊರಿಯನ್ನು ಉಳಿಸಲಾಗುತ್ತಿದೆ"
 
-#: ../virtManager/engine.py:1058
+#: ../virtManager/engine.py:1105
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "ಉಳಿಸುವ ದೋಷವನ್ನು ರದ್ದುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../virtManager/engine.py:1071
+#: ../virtManager/engine.py:1118
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "ನೀವು '%s' ಅನ್ನು ಒತ್ತಾಯ ಪೂರ್ವಕವಾಗಿ ಮುಚ್ಚಲು ಖಚಿತವೆ?"
 
-#: ../virtManager/engine.py:1073
+#: ../virtManager/engine.py:1120
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -2768,28 +2768,28 @@ msgstr ""
 "ಇದು OS ಅನ್ನು ಮುಚ್ಚದೆ VM ಅನ್ನು ತಕ್ಷಣ ಸ್ಥಗಿತಗೊಳಿಸುತ್ತದೆ ಹಾಗು ಇದು ದತ್ತಾಂಶ ನಾಶಕ್ಕೂ "
 "ಕಾರಣವಾಗಬಹುದು."
 
-#: ../virtManager/engine.py:1079 ../virtManager/engine.py:1156
+#: ../virtManager/engine.py:1126 ../virtManager/engine.py:1203
 msgid "Error shutting down domain"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ಸ್ಥಗಿತಗೊಳಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: ../virtManager/engine.py:1087
+#: ../virtManager/engine.py:1134
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "ನೀವು '%s' ಅನ್ನು ವಿರಮಿಸಲು ಖಚಿತವೆ?"
 
-#: ../virtManager/engine.py:1093
+#: ../virtManager/engine.py:1140
 msgid "Error pausing domain"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ತಾತ್ಕಾಲಿಕ ಸ್ಥಗಿತಗೊಳಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: ../virtManager/engine.py:1101
+#: ../virtManager/engine.py:1148
 msgid "Error unpausing domain"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: ../virtManager/engine.py:1113
+#: ../virtManager/engine.py:1160
 msgid "Error restoring domain"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ಮರಳಿ ಸ್ಥಾಪಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: ../virtManager/engine.py:1116
+#: ../virtManager/engine.py:1163
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -2798,45 +2798,45 @@ msgstr ""
 "ಡೊಮೇನ್ ಅನ್ನು ಮರಳಿ ಸ್ಥಾಪಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ. ಉಳಿಸಲಾದ ಸ್ಥಿತಿಯನ್ನು\n"
 "ತೆಗೆದುಹಾಕಿ ನಂತರ ಸಾಮಾನ್ಯ ರೀತಿಯಲ್ಲಿ ಆರಂಭಿಸಲು ನೀವು ಬಯಸುವಿರಾ?"
 
-#: ../virtManager/engine.py:1130
+#: ../virtManager/engine.py:1177
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "ಡೊಮೇನ್ ಸ್ಥಿತಿಯನ್ನು ತೆಗೆದು ಹಾಕುವಲ್ಲಿ ದೋಷ: %s"
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1134
+#: ../virtManager/engine.py:1181
 msgid "Restoring Virtual Machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ಪುನಃಸ್ಥಾಪಿಸಲಾಗುತ್ತದೆ"
 
-#: ../virtManager/engine.py:1135
+#: ../virtManager/engine.py:1182
 msgid "Restoring virtual machine memory from disk"
 msgstr "ಡಿಸ್ಕಿನಿಂದ ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ಮರಳಿಸ್ಥಾಪಿಸಲಾಗುತ್ತದೆ"
 
 #. Regular startup
-#: ../virtManager/engine.py:1141
+#: ../virtManager/engine.py:1188
 msgid "Error starting domain"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: ../virtManager/engine.py:1150
+#: ../virtManager/engine.py:1197
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "ನೀವು '%s' ಅನ್ನು ಆಫ್‌ ಮಾಡಲು ಖಚಿತವೆ?"
 
-#: ../virtManager/engine.py:1164
+#: ../virtManager/engine.py:1211
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "ನೀವು '%s' ಅನ್ನು ಮರಳಿ ಬೂಟ್ ಮಾಡಲು ಖಚಿತವೆ?"
 
-#: ../virtManager/engine.py:1170
+#: ../virtManager/engine.py:1217
 msgid "Error rebooting domain"
 msgstr ""
 
-#: ../virtManager/engine.py:1179
+#: ../virtManager/engine.py:1226
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "ನೀವು '%s' ಅನ್ನು ಒತ್ತಾಯ ಪೂರ್ವಕವಾಗಿ ಮರುಹೊಂದಿಸಲು ಖಚಿತವೆ?"
 
-#: ../virtManager/engine.py:1181
+#: ../virtManager/engine.py:1228
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
@@ -2844,11 +2844,11 @@ msgstr ""
 "ಇದು OS ಅನ್ನು ಮುಚ್ಚದೆ VM ಅನ್ನು ತಕ್ಷಣ ಮರುಹೊಂದಿಸಲಾಗುತ್ತದೆ ಹಾಗು ಇದು ದತ್ತಾಂಶ ನಾಶಕ್ಕೂ "
 "ಕಾರಣವಾಗಬಹುದು."
 
-#: ../virtManager/engine.py:1187
+#: ../virtManager/engine.py:1234
 msgid "Error resetting domain"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ಮರುಹೊಂದಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: ../virtManager/engine.py:1198
+#: ../virtManager/engine.py:1245
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "ಆತಿಥೇಯ ಅಳಿಸುವ ಚೌಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ: %s"
@@ -3066,31 +3066,31 @@ msgstr "ಒಂದು ಸಂಪರ್ಕಸಾಧನವನ್ನು ಆರಿಸ�
 msgid "Error selecting interface: %s"
 msgstr "ಸಂಪರ್ಕಸಾಧನವನ್ನು ಆರಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../virtManager/manager.py:328
+#: ../virtManager/manager.py:325
 msgid "D_etails"
 msgstr "ವಿವರಗಳು (_e)"
 
-#: ../virtManager/manager.py:405
+#: ../virtManager/manager.py:402
 msgid "CPU usage"
 msgstr "CPUನ ಬಳಕೆ"
 
-#: ../virtManager/manager.py:406
+#: ../virtManager/manager.py:403
 msgid "Host CPU usage"
 msgstr "ಆತಿಥೇಯ CPUನ ಬಳಕೆ"
 
-#: ../virtManager/manager.py:407
+#: ../virtManager/manager.py:404
 msgid "Memory usage"
 msgstr "ಮೆಮೊರಿ ಬಳಕೆ"
 
-#: ../virtManager/manager.py:408
+#: ../virtManager/manager.py:405
 msgid "Disk I/O"
 msgstr "ಡಿಸ್ಕ್‌ I/O"
 
-#: ../virtManager/manager.py:409
+#: ../virtManager/manager.py:406
 msgid "Network I/O"
 msgstr "ಜಾಲಬಂಧ I/O"
 
-#: ../virtManager/manager.py:512
+#: ../virtManager/manager.py:509
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -3105,19 +3105,19 @@ msgstr ""
 "\n"
 "ನೀವು ಹಾಗೆ ಮಾಡಲು ಖಚಿತವೆ?"
 
-#: ../virtManager/manager.py:612
+#: ../virtManager/manager.py:609
 msgid "Double click to connect"
 msgstr "ಸಂಪರ್ಕ ಹೊಂದಲು ಎರಡು ಬಾರಿ ಕ್ಲಿಕ್ಕಿಸಿ"
 
-#: ../virtManager/manager.py:619
+#: ../virtManager/manager.py:616
 msgid "Not Connected"
 msgstr "ಸಂಪರ್ಕಿತಗೊಂಡಿಲ್ಲ"
 
-#: ../virtManager/manager.py:621
+#: ../virtManager/manager.py:618
 msgid "Connecting..."
 msgstr "ಸಂಪರ್ಕ ಕಲ್ಪಿಸಲಾಗುತ್ತಿದೆ..."
 
-#: ../virtManager/manager.py:991
+#: ../virtManager/manager.py:988
 msgid "Disabled in preferences dialog."
 msgstr "ಆದ್ಯತೆಗಳ ಸಂವಾದದಲ್ಲಿ ಅಶಕ್ತಗೊಳಿಸಲಾಗುತ್ತಿದೆ."
 
@@ -3322,25 +3322,25 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "ನಿಮ್ಮ ಇಚ್ಛೆಯ ಸೆಳೆಯುವ ಕೀಲಿ ಸಂಯೋಜನೆಯನ್ನು ಒತ್ತಿ"
 
-#: ../virtManager/serialcon.py:281
+#: ../virtManager/serialcon.py:283
 msgid "Remote serial console not supported for this connection"
 msgstr ""
 
-#: ../virtManager/serialcon.py:284
+#: ../virtManager/serialcon.py:286
 msgid "Serial console not available for inactive guest"
 msgstr "ನಿಷ್ಕ್ರಿಯ ಅತಿಥಿಗಳಿಗೆ ಅನುಕ್ರಮಿತ ಕನ್ಸೋಲ್ ಲಭ್ಯವಿರುವುದಿಲ್ಲ"
 
-#: ../virtManager/serialcon.py:286
+#: ../virtManager/serialcon.py:288
 #, python-format
 msgid "Console for device type '%s' not yet supported"
 msgstr "'%s' ಬಗೆಯ ಸಾಧನಗಳಿಗಾಗಿನ ಕನ್ಸೋಲಿಗೆ ಇನ್ನೂ ಸಹ ಬೆಂಬಲವಿಲ್ಲ"
 
-#: ../virtManager/serialcon.py:291
+#: ../virtManager/serialcon.py:293
 #, python-format
 msgid "Can not access console path '%s'"
 msgstr "ಕನ್ಸೋಲ್ ಮಾರ್ಗ '%s' ಅನ್ನು ನಿಲುಕಿಸಿಕೊಳ್ಳಲು ಸಾಧ್ಯವಿಲ್ಲ"
 
-#: ../virtManager/serialcon.py:406
+#: ../virtManager/serialcon.py:408
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "ಪಠ್ಯ ಕನ್ಸೋಲ್‌ನೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸುವಲ್ಲಿ ದೋಷ: %s"
