@@ -735,4 +735,4 @@ class vmmStorageList(vmmGObjectUI):
 
         logging.debug("Deleting volume '%s'", vol.get_name())
         vmmAsyncJob.simple_async_noshow(cb, [], self,
-                        _("Error refreshing volume '%s'") % vol.get_name())
+                        _("Error deleting volume '%s'") % vol.get_name())
