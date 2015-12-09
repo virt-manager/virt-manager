@@ -29,7 +29,7 @@ import gi
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
-gi.require_version("Vte", "2.91")
+gi.require_version("Vte", "2.90")
 from gi.repository import Vte
 
 import libvirt
