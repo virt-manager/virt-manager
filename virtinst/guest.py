@@ -1119,8 +1119,9 @@ class Guest(XMLBuilder):
             gtype = self.default_graphics_type
             logging.debug("Using default_graphics=%s", gtype)
             if (gtype == "spice" and not
-                self.conn.check_support(
-                    self.conn.SUPPORT_CONN_GRAPHICS_SPICE)):
+                (self.conn.caps.host.cpu.arch in ["i686", "x86_64"] and
+                 self.conn.check_support(
+                     self.conn.SUPPORT_CONN_GRAPHICS_SPICE))):
                 logging.debug("spice requested but HV doesn't support it. "
                               "Using vnc.")
                 gtype = "vnc"
