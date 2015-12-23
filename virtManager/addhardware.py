@@ -376,10 +376,16 @@ class vmmAddHardware(vmmGObjectUI):
                       self.conn.is_nodedev_capable(),
                       _("Connection does not support host device enumeration"),
                       "usb")
+
+        nodedev_enabled = self.conn.is_nodedev_capable()
+        nodedev_errstr = _("Connection does not support "
+            "host device enumeration")
+        if self.vm.is_container():
+            nodedev_enabled = False
+            nodedev_errstr = _("Not supported for containers")
         add_hw_option("PCI Host Device", "system-run", PAGE_HOSTDEV,
-                      self.conn.is_nodedev_capable(),
-                      _("Connection does not support host device enumeration"),
-                      "pci")
+                      nodedev_enabled, nodedev_errstr, "pci")
+
         add_hw_option("Video", "video-display", PAGE_VIDEO, True,
                       _("Libvirt version does not support video devices."))
         add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
