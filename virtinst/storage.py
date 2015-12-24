@@ -820,7 +820,9 @@ class StorageVolume(_StorageObject):
                 vol.info()
                 break
             except:
-                time.sleep(.2)
+                if time:
+                    # This 'if' check saves some noise from the test suite
+                    time.sleep(.2)
                 if self._install_finished:
                     break
 
