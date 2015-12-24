@@ -36,9 +36,14 @@ Requires: pygobject3
 Requires: gtk3
 Requires: libvirt-glib >= 0.0.9
 Requires: libxml2-python
-Requires: vte3
 Requires: dconf
 Requires: dbus-x11
+
+# The vte291 package is actually the latest vte with API version 2.91, while
+# the vte3 package is effectively a compat package with API version 2.90.
+# virt-manager works fine with either, so pull the latest bits so there's
+# no ambiguity.
+Requires: vte291
 
 # For console widget
 Requires: gtk-vnc2
