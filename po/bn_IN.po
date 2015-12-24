@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-06 19:35-0500\n"
+"POT-Creation-Date: 2015-12-24 13:18-0500\n"
 "PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Bengali (India) (http://www.transifex.com/projects/p/virt-"
@@ -729,9 +729,9 @@ msgid "LUN Passthrough"
 msgstr ""
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:564
-#: ../virtManager/addhardware.py:676 ../virtManager/addhardware.py:692
-#: ../virtManager/addhardware.py:743 ../virtManager/details.py:2532
+#: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:570
+#: ../virtManager/addhardware.py:682 ../virtManager/addhardware.py:698
+#: ../virtManager/addhardware.py:749 ../virtManager/details.py:2532
 #: ../virtManager/gfxdetails.py:84 ../virtManager/preferences.py:165
 msgid "Hypervisor default"
 msgstr "হাইপার-ভাইসরের ডিফল্ট মান"
@@ -743,7 +743,7 @@ msgstr "সংযোগ দ্বারা সংগ্রহস্থল পর
 
 #: ../virtManager/addhardware.py:355 ../virtManager/addhardware.py:360
 #: ../virtManager/addhardware.py:363 ../virtManager/addhardware.py:367
-#: ../virtManager/addhardware.py:373 ../virtManager/addhardware.py:387
+#: ../virtManager/addhardware.py:373 ../virtManager/addhardware.py:393
 msgid "Not supported for this guest type."
 msgstr "এই ধরনের গেস্টের জন্য সমর্থিত নয়।"
 
@@ -751,41 +751,46 @@ msgstr "এই ধরনের গেস্টের জন্য সমর্�
 msgid "Connection does not support host device enumeration"
 msgstr "এই সংযোগ দ্বারা হোস্ট ডিভাইসের সংখ্যা স্থাপন সমর্থিত নয়"
 
-#: ../virtManager/addhardware.py:384
+#: ../virtManager/addhardware.py:385
+#, fuzzy
+msgid "Not supported for containers"
+msgstr "এই ধরনের গেস্টের জন্য সমর্থিত নয়।"
+
+#: ../virtManager/addhardware.py:390
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt-র সংস্করণ দ্বারা ভিডিও ডিভাইস সমর্থিত নয়।"
 
-#: ../virtManager/addhardware.py:392 ../virtManager/addhardware.py:403
+#: ../virtManager/addhardware.py:398 ../virtManager/addhardware.py:409
 msgid "Not supported for this hypervisor/libvirt combination."
 msgstr "এই হাইপারভাইসর/libvirt জুটির জন্য সমর্থিত নয়।"
 
-#: ../virtManager/addhardware.py:756
+#: ../virtManager/addhardware.py:762
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB গ্রাফিক্স ট্যাবলেট"
 
-#: ../virtManager/addhardware.py:759 ../virtManager/create.py:1078
+#: ../virtManager/addhardware.py:765 ../virtManager/create.py:1078
 #: ../virtManager/create.py:1081
 msgid "Generic"
 msgstr "সাধারণ"
 
-#: ../virtManager/addhardware.py:783
+#: ../virtManager/addhardware.py:789
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "VM-র কনফিগারেশন পরিবর্তন করতে ত্রুটি: %s"
 
-#: ../virtManager/addhardware.py:809
+#: ../virtManager/addhardware.py:815
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr "কিছু পরিবর্তন প্রয়োগ করার জন্য গেস্ট সিস্টেম পুনরারম্ভ করা প্রয়োজন।"
 
-#: ../virtManager/addhardware.py:812
+#: ../virtManager/addhardware.py:818
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "গেস্ট সিস্টেম পুনরায় বুট করার হলে এই পরিবর্তনগুলি প্রয়োগ করা হবে।"
 
-#: ../virtManager/addhardware.py:880
+#: ../virtManager/addhardware.py:886
 msgid "No Devices Available"
 msgstr "কোনো ডিভাইস উপলব্ধ নেই"
 
-#: ../virtManager/addhardware.py:901
+#: ../virtManager/addhardware.py:907
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -796,81 +801,81 @@ msgstr ""
 "একটির বেশি USB নিয়ন্ত্রক যোগ করা সম্ভব নয়।\n"
 "অাপনি VM সবিশেষ স্ক্রীনে USB কন্ট্রোলার ধরন পরিবর্তন করতে পারবেন।"
 
-#: ../virtManager/addhardware.py:1082 ../virtManager/create.py:247
+#: ../virtManager/addhardware.py:1088 ../virtManager/create.py:247
 msgid "Error"
 msgstr "ত্রুটি"
 
-#: ../virtManager/addhardware.py:1084 ../ui/create.ui.h:55
+#: ../virtManager/addhardware.py:1090 ../ui/create.ui.h:55
 msgid "Storage"
 msgstr "সংগ্রহস্থল"
 
-#: ../virtManager/addhardware.py:1086
+#: ../virtManager/addhardware.py:1092
 msgid "Controller"
 msgstr "নিয়ন্ত্রক"
 
-#: ../virtManager/addhardware.py:1088 ../virtinst/network.py:194
+#: ../virtManager/addhardware.py:1094 ../virtinst/network.py:194
 msgid "Network"
 msgstr "নেটওয়ার্ক"
 
-#: ../virtManager/addhardware.py:1090 ../virtManager/details.py:200
+#: ../virtManager/addhardware.py:1096 ../virtManager/details.py:200
 msgid "Input"
 msgstr "ইনপুট"
 
-#: ../virtManager/addhardware.py:1092
+#: ../virtManager/addhardware.py:1098
 msgid "Graphics"
 msgstr "গ্রাফিক্স"
 
-#: ../virtManager/addhardware.py:1094
+#: ../virtManager/addhardware.py:1100
 msgid "Sound"
 msgstr "শব্দ"
 
-#: ../virtManager/addhardware.py:1096
+#: ../virtManager/addhardware.py:1102
 msgid "Video Device"
 msgstr "ভিডিও ডিভাইস:"
 
-#: ../virtManager/addhardware.py:1098
+#: ../virtManager/addhardware.py:1104
 msgid "Watchdog Device"
 msgstr "ওয়াচ-ডগ ডিভাইস"
 
-#: ../virtManager/addhardware.py:1100
+#: ../virtManager/addhardware.py:1106
 msgid "Filesystem Passthrough"
 msgstr "ফাইল-সিস্টেম পাসথ্রু"
 
-#: ../virtManager/addhardware.py:1102 ../virtManager/details.py:241
+#: ../virtManager/addhardware.py:1108 ../virtManager/details.py:241
 msgid "Smartcard"
 msgstr "স্মার্ট-কার্ড"
 
-#: ../virtManager/addhardware.py:1104
+#: ../virtManager/addhardware.py:1110
 msgid "USB Redirection"
 msgstr "USB পুনঃনির্দেশ"
 
-#: ../virtManager/addhardware.py:1106 ../virtManager/details.py:239
+#: ../virtManager/addhardware.py:1112 ../virtManager/details.py:239
 msgid "TPM"
 msgstr "TPM"
 
-#: ../virtManager/addhardware.py:1108
+#: ../virtManager/addhardware.py:1114
 msgid "Random Number Generator"
 msgstr "অনির্দিষ্ট নম্বর প্রস্তুতি"
 
-#: ../virtManager/addhardware.py:1110 ../virtManager/details.py:240
+#: ../virtManager/addhardware.py:1116 ../virtManager/details.py:240
 msgid "Panic Notifier"
 msgstr "প্যানিক বিজ্ঞপ্তিকারী"
 
-#: ../virtManager/addhardware.py:1118
+#: ../virtManager/addhardware.py:1124
 #, fuzzy
 msgid "PCI Device"
 msgstr "%s ডিভাইস"
 
-#: ../virtManager/addhardware.py:1119
+#: ../virtManager/addhardware.py:1125
 #, fuzzy
 msgid "USB Device"
 msgstr "%s ডিভাইস"
 
-#: ../virtManager/addhardware.py:1320
+#: ../virtManager/addhardware.py:1326
 msgid "Are you sure you want to add this device?"
 msgstr "আপনি কি নিশ্চিতরূপে এই ডিভাইসটি যোগ করতে ইচ্ছুক?"
 
-#: ../virtManager/addhardware.py:1323
+#: ../virtManager/addhardware.py:1329
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -878,136 +883,136 @@ msgstr ""
 "চলমান মেশিনের সাথে ডিভাইস যোগ করা যায়নি। গেস্টমেশিন পরবর্তীবার বন্ধ করার পরে এই "
 "ডিভাইসটি উপলব্ধ করতে ইচ্ছুক কি?"
 
-#: ../virtManager/addhardware.py:1339
+#: ../virtManager/addhardware.py:1345
 #, python-format
 msgid "Error adding device: %s"
 msgstr "ডিভাইস যোগ করতে ত্রুটি: %s"
 
-#: ../virtManager/addhardware.py:1351
+#: ../virtManager/addhardware.py:1357
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "ডিভাইস যোগ করতে ব্যর্থ: %s"
 
-#: ../virtManager/addhardware.py:1370
+#: ../virtManager/addhardware.py:1376
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr ""
 "হার্ডওয়্যার থেকে প্রাপ্ত ইনপুট যাচাই করতে উৎপন্ন ত্রুটির ব্যবস্থাপনা করা যায়নি: %s"
 
-#: ../virtManager/addhardware.py:1380
+#: ../virtManager/addhardware.py:1386
 msgid "Creating device"
 msgstr "ডিভাইস তৈরি করা হচ্ছে"
 
-#: ../virtManager/addhardware.py:1381
+#: ../virtManager/addhardware.py:1387
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "ডিভাইস অনুসারে, এটি সম্পূর্ণ হতে অল্প কিছুটা সময় লাগতে পারে।"
 
-#: ../virtManager/addhardware.py:1494 ../virtManager/addhardware.py:1517
+#: ../virtManager/addhardware.py:1500 ../virtManager/addhardware.py:1523
 #: ../virtManager/create.py:1962
 msgid "Storage parameter error."
 msgstr "সংগ্রহস্থলের পরামিতি সংক্রান্ত ত্রুটি।"
 
-#: ../virtManager/addhardware.py:1534
+#: ../virtManager/addhardware.py:1540
 msgid "Network selection error."
 msgstr "নেটওয়ার্ক নির্বাচন সংক্রান্ত ত্রুটি।"
 
-#: ../virtManager/addhardware.py:1535
+#: ../virtManager/addhardware.py:1541
 msgid "A network source must be selected."
 msgstr "একটি নেটওয়ার্কের উৎস নির্বাচন করা আবশ্যক।"
 
-#: ../virtManager/addhardware.py:1538
+#: ../virtManager/addhardware.py:1544
 msgid "Invalid MAC address"
 msgstr "MAC ঠিকানা বৈধ নয়"
 
-#: ../virtManager/addhardware.py:1539
+#: ../virtManager/addhardware.py:1545
 msgid "A MAC address must be entered."
 msgstr "একটি MAC ঠিকানা উল্লেখ করা আবশ্যক।"
 
-#: ../virtManager/addhardware.py:1569
+#: ../virtManager/addhardware.py:1575
 msgid "Graphics device parameter error"
 msgstr "গ্রাফিক্স ডিভাইসের পরামিতি সংক্রান্ত ত্রুটি"
 
-#: ../virtManager/addhardware.py:1578
+#: ../virtManager/addhardware.py:1584
 msgid "Sound device parameter error"
 msgstr "শব্দের ডিভাইসের পরামিতি সংক্রান্ত ত্রুটি"
 
-#: ../virtManager/addhardware.py:1583
+#: ../virtManager/addhardware.py:1589
 msgid "Physical Device Required"
 msgstr "প্রকৃত ডিভাইস আবশ্যক"
 
-#: ../virtManager/addhardware.py:1584
+#: ../virtManager/addhardware.py:1590
 msgid "A device must be selected."
 msgstr "একটি ডিভাইস নির্বাচন করা আবশ্যক।"
 
-#: ../virtManager/addhardware.py:1596
+#: ../virtManager/addhardware.py:1602
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "ডিভাইসটি অপর একটি গেস্ট %s দ্বারা ইতিমধ্যেই ব্যবহৃত হচ্ছে"
 
-#: ../virtManager/addhardware.py:1598
+#: ../virtManager/addhardware.py:1604
 msgid "Do you really want to use the device?"
 msgstr "অাপনি কি সত্যিই ডিভাইসটি ব্যবহার করতে চান?"
 
-#: ../virtManager/addhardware.py:1604
+#: ../virtManager/addhardware.py:1610
 msgid "Host device parameter error"
 msgstr "হোস্ট ডিভাইসের পরামিতি সংক্রান্ত ত্রুটি"
 
-#: ../virtManager/addhardware.py:1670
+#: ../virtManager/addhardware.py:1676
 #, python-format
 msgid "%s device parameter error"
 msgstr "%s ডিভাইসের পরামিতি সংক্রান্ত ত্রুটি"
 
-#: ../virtManager/addhardware.py:1681
+#: ../virtManager/addhardware.py:1687
 msgid "Video device parameter error"
 msgstr "ভিডিও ডিভাইসের পরামিতি সংক্রান্ত ত্রুটি"
 
-#: ../virtManager/addhardware.py:1693
+#: ../virtManager/addhardware.py:1699
 msgid "Watchdog parameter error"
 msgstr "ওয়াচডগ পরামিতি সংক্রান্ত ত্রুটি।"
 
-#: ../virtManager/addhardware.py:1708
+#: ../virtManager/addhardware.py:1714
 msgid "Smartcard device parameter error"
 msgstr "স্মার্টকার্ড ডিভাইস প্যারামিটার ত্রুটি"
 
-#: ../virtManager/addhardware.py:1727
+#: ../virtManager/addhardware.py:1733
 msgid "USB redirected device parameter error"
 msgstr "USB পুনঃনির্দেশিত ডিভাইস প্যারামিটার ত্রুটি"
 
-#: ../virtManager/addhardware.py:1747
+#: ../virtManager/addhardware.py:1753
 msgid "TPM device parameter error"
 msgstr "TPM ডিভাইস প্যারামিটার ত্রুটি"
 
-#: ../virtManager/addhardware.py:1765
+#: ../virtManager/addhardware.py:1771
 msgid "Panic device parameter error"
 msgstr "প্যানিক ডিভাইস প্যারামিটার ত্রুটি"
 
-#: ../virtManager/addhardware.py:1808 ../virtManager/addhardware.py:1820
-#: ../virtManager/addhardware.py:1823 ../virtManager/addhardware.py:1835
-#: ../virtManager/addhardware.py:1838
+#: ../virtManager/addhardware.py:1814 ../virtManager/addhardware.py:1826
+#: ../virtManager/addhardware.py:1829 ../virtManager/addhardware.py:1841
+#: ../virtManager/addhardware.py:1844
 msgid "RNG selection error."
 msgstr "RNG নির্বাচন ত্রুটি।"
 
-#: ../virtManager/addhardware.py:1809
+#: ../virtManager/addhardware.py:1815
 msgid "A device must be specified."
 msgstr "অবশ্যই একটি ডিভাইস নির্দিষ্ট করতে হবে।"
 
-#: ../virtManager/addhardware.py:1821
+#: ../virtManager/addhardware.py:1827
 msgid "Please specify both bind and connect host"
 msgstr "অনুগ্রহ করে বাইন্ড এবং সংযোগ হোস্ট উভয়ই নির্দিষ্ট করুন"
 
-#: ../virtManager/addhardware.py:1824
+#: ../virtManager/addhardware.py:1830
 msgid "Please specify both bind and connect service"
 msgstr "অনুগ্রহ করে বাইন্ড এবং সংযোগ পরিষেবা উভয়ই নির্দিষ্ট করুন"
 
-#: ../virtManager/addhardware.py:1836
+#: ../virtManager/addhardware.py:1842
 msgid "The EGD host must be specified."
 msgstr "EGD হোস্ট অবশ্যই উল্লেখ করতে হবে।"
 
-#: ../virtManager/addhardware.py:1839
+#: ../virtManager/addhardware.py:1845
 msgid "The EGD service must be specified."
 msgstr "EGD পরিষেবা অবশ্যই উল্লেখ করতে হবে।"
 
-#: ../virtManager/addhardware.py:1858
+#: ../virtManager/addhardware.py:1864
 msgid "RNG device parameter error"
 msgstr "RNG ডিভাইস প্যারামিটার ত্রুটি"
 
@@ -3311,25 +3316,25 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "অনুগ্রহ করে পছন্দসই grab-কি সংকলন টিপুন"
 
-#: ../virtManager/serialcon.py:283
+#: ../virtManager/serialcon.py:281
 msgid "Remote serial console not supported for this connection"
 msgstr ""
 
-#: ../virtManager/serialcon.py:286
+#: ../virtManager/serialcon.py:284
 msgid "Serial console not available for inactive guest"
 msgstr "নিষ্ক্রিয় গেস্ট সিস্টেমের জন্য সিরিয়াল কনসোল উপলব্ধ নয়"
 
-#: ../virtManager/serialcon.py:288
+#: ../virtManager/serialcon.py:286
 #, python-format
 msgid "Console for device type '%s' not yet supported"
 msgstr "'%s' প্রকৃতির ডিভাইসের জন্য কনসোল বর্তমানে সমর্থিত নয়"
 
-#: ../virtManager/serialcon.py:293
+#: ../virtManager/serialcon.py:291
 #, python-format
 msgid "Can not access console path '%s'"
 msgstr "কনসোল পাথ '%s' প্রয়োগ করতে ব্যর্থ"
 
-#: ../virtManager/serialcon.py:408
+#: ../virtManager/serialcon.py:406
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "টেক্সট কনসোলের সাথে সংযোগ স্থাপন করতে ত্রুটি: %s"
@@ -3518,9 +3523,9 @@ msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "আপনি কি নিশ্চিতরূপে %s ভলিউমটি স্থায়ীভাবে মুছে ফেলতে ইচ্ছুক?"
 
 #: ../virtManager/storagelist.py:738
-#, python-format
-msgid "Error refreshing volume '%s'"
-msgstr "'%s' ভলিউম নতুন করে প্রস্তুত করতে ত্রুটি"
+#, fuzzy, python-format
+msgid "Error deleting volume '%s'"
+msgstr "'%s' পুল মুছে ফেলতে সমস্যা"
 
 #: ../virtManager/systray.py:122
 msgid "_Show Virtual Machine Manager"
@@ -4912,7 +4917,7 @@ msgstr "লজিক্যাল ভলিউম স্পার্স করা
 msgid "Allocating '%s'"
 msgstr "'%s' নির্দিষ্ট করা হচ্ছে"
 
-#: ../virtinst/storage.py:857
+#: ../virtinst/storage.py:859
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
@@ -4921,7 +4926,7 @@ msgstr ""
 "ভলিউম তৈরি করার জন্য সংগ্রহস্থল পুলে পর্যাপ্ত খালি জায়গা নেই। (%d M অনুরোধ জানানো "
 "নির্দিষ্টকরণ > %d M উপলব্ধ)"
 
-#: ../virtinst/storage.py:863
+#: ../virtinst/storage.py:865
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -7428,6 +7433,9 @@ msgstr ""
 
 #~ msgid "Error generating CPU configuration"
 #~ msgstr "CPU কনফিগারেশন নির্মাণ করতে ত্রুটি"
+
+#~ msgid "Error refreshing volume '%s'"
+#~ msgstr "'%s' ভলিউম নতুন করে প্রস্তুত করতে ত্রুটি"
 
 #~ msgid "No topology section in capabilities xml."
 #~ msgstr "সক্ষমতা xml এ কোনো টোপোলজি বিভাগ নেই।"

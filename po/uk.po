@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-06 19:35-0500\n"
+"POT-Creation-Date: 2015-12-24 13:18-0500\n"
 "PO-Revision-Date: 2015-09-24 01:29-0400\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/virt-manager/"
@@ -776,9 +776,9 @@ msgid "LUN Passthrough"
 msgstr "Передавання LUN"
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:564
-#: ../virtManager/addhardware.py:676 ../virtManager/addhardware.py:692
-#: ../virtManager/addhardware.py:743 ../virtManager/details.py:2532
+#: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:570
+#: ../virtManager/addhardware.py:682 ../virtManager/addhardware.py:698
+#: ../virtManager/addhardware.py:749 ../virtManager/details.py:2532
 #: ../virtManager/gfxdetails.py:84 ../virtManager/preferences.py:165
 msgid "Hypervisor default"
 msgstr "Типова для гіпервізора"
@@ -790,7 +790,7 @@ msgstr "Керування сховищами даних не підтримує
 
 #: ../virtManager/addhardware.py:355 ../virtManager/addhardware.py:360
 #: ../virtManager/addhardware.py:363 ../virtManager/addhardware.py:367
-#: ../virtManager/addhardware.py:373 ../virtManager/addhardware.py:387
+#: ../virtManager/addhardware.py:373 ../virtManager/addhardware.py:393
 msgid "Not supported for this guest type."
 msgstr "Не підтримується для цього типу гостьової системи."
 
@@ -798,44 +798,49 @@ msgstr "Не підтримується для цього типу гостьо�
 msgid "Connection does not support host device enumeration"
 msgstr "З’єднанням не підтримується нумерація пристроїв основної системи"
 
-#: ../virtManager/addhardware.py:384
+#: ../virtManager/addhardware.py:385
+#, fuzzy
+msgid "Not supported for containers"
+msgstr "Не підтримується для цього типу гостьової системи."
+
+#: ../virtManager/addhardware.py:390
 msgid "Libvirt version does not support video devices."
 msgstr "У цій версії libvirt не передбачено роботи з відеопристроями."
 
-#: ../virtManager/addhardware.py:392 ../virtManager/addhardware.py:403
+#: ../virtManager/addhardware.py:398 ../virtManager/addhardware.py:409
 msgid "Not supported for this hypervisor/libvirt combination."
 msgstr "Не передбачено для цієї комбінації гіпервізора/libvirt."
 
-#: ../virtManager/addhardware.py:756
+#: ../virtManager/addhardware.py:762
 msgid "EvTouch USB Graphics Tablet"
 msgstr "Графічний USB-планшет EvTouch"
 
-#: ../virtManager/addhardware.py:759 ../virtManager/create.py:1078
+#: ../virtManager/addhardware.py:765 ../virtManager/create.py:1078
 #: ../virtManager/create.py:1081
 msgid "Generic"
 msgstr "Типовий"
 
-#: ../virtManager/addhardware.py:783
+#: ../virtManager/addhardware.py:789
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Помилка під час спроби зміни налаштувань ВМ: %s"
 
-#: ../virtManager/addhardware.py:809
+#: ../virtManager/addhardware.py:815
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr ""
 "Для набуття чинності деякими зі змін може знадобитися вимикання гостьової "
 "системи."
 
-#: ../virtManager/addhardware.py:812
+#: ../virtManager/addhardware.py:818
 msgid "These changes will take effect after the next guest shutdown."
 msgstr ""
 "Ці зміни набудуть чинності після наступного вимикання гостьової системи."
 
-#: ../virtManager/addhardware.py:880
+#: ../virtManager/addhardware.py:886
 msgid "No Devices Available"
 msgstr "Не виявлено жодного пристрою"
 
-#: ../virtManager/addhardware.py:901
+#: ../virtManager/addhardware.py:907
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -846,79 +851,79 @@ msgstr ""
 "Додавання декількох контролерів USB не передбачено.\n"
 "Змінити тип контролера USB можна у вікні параметрів віртуальної машини."
 
-#: ../virtManager/addhardware.py:1082 ../virtManager/create.py:247
+#: ../virtManager/addhardware.py:1088 ../virtManager/create.py:247
 msgid "Error"
 msgstr "Помилка"
 
-#: ../virtManager/addhardware.py:1084 ../ui/create.ui.h:55
+#: ../virtManager/addhardware.py:1090 ../ui/create.ui.h:55
 msgid "Storage"
 msgstr "Сховище даних"
 
-#: ../virtManager/addhardware.py:1086
+#: ../virtManager/addhardware.py:1092
 msgid "Controller"
 msgstr "Контролер"
 
-#: ../virtManager/addhardware.py:1088 ../virtinst/network.py:194
+#: ../virtManager/addhardware.py:1094 ../virtinst/network.py:194
 msgid "Network"
 msgstr "Мережа"
 
-#: ../virtManager/addhardware.py:1090 ../virtManager/details.py:200
+#: ../virtManager/addhardware.py:1096 ../virtManager/details.py:200
 msgid "Input"
 msgstr "Введення даних"
 
-#: ../virtManager/addhardware.py:1092
+#: ../virtManager/addhardware.py:1098
 msgid "Graphics"
 msgstr "Графіка"
 
-#: ../virtManager/addhardware.py:1094
+#: ../virtManager/addhardware.py:1100
 msgid "Sound"
 msgstr "Звук"
 
-#: ../virtManager/addhardware.py:1096
+#: ../virtManager/addhardware.py:1102
 msgid "Video Device"
 msgstr "Відеопристрій"
 
-#: ../virtManager/addhardware.py:1098
+#: ../virtManager/addhardware.py:1104
 msgid "Watchdog Device"
 msgstr "Сторожовий пристрій"
 
-#: ../virtManager/addhardware.py:1100
+#: ../virtManager/addhardware.py:1106
 msgid "Filesystem Passthrough"
 msgstr "Передавання файлової системи"
 
-#: ../virtManager/addhardware.py:1102 ../virtManager/details.py:241
+#: ../virtManager/addhardware.py:1108 ../virtManager/details.py:241
 msgid "Smartcard"
 msgstr "Картка пам’яті"
 
-#: ../virtManager/addhardware.py:1104
+#: ../virtManager/addhardware.py:1110
 msgid "USB Redirection"
 msgstr "Переспрямування USB"
 
-#: ../virtManager/addhardware.py:1106 ../virtManager/details.py:239
+#: ../virtManager/addhardware.py:1112 ../virtManager/details.py:239
 msgid "TPM"
 msgstr "TPM"
 
-#: ../virtManager/addhardware.py:1108
+#: ../virtManager/addhardware.py:1114
 msgid "Random Number Generator"
 msgstr "Генератор випадкових чисел"
 
-#: ../virtManager/addhardware.py:1110 ../virtManager/details.py:240
+#: ../virtManager/addhardware.py:1116 ../virtManager/details.py:240
 msgid "Panic Notifier"
 msgstr "Сповіщувач про паніку"
 
-#: ../virtManager/addhardware.py:1118
+#: ../virtManager/addhardware.py:1124
 msgid "PCI Device"
 msgstr "Пристрій PCI"
 
-#: ../virtManager/addhardware.py:1119
+#: ../virtManager/addhardware.py:1125
 msgid "USB Device"
 msgstr "Пристрій USB"
 
-#: ../virtManager/addhardware.py:1320
+#: ../virtManager/addhardware.py:1326
 msgid "Are you sure you want to add this device?"
 msgstr "Ви справді бажаєте додати цей пристрій?"
 
-#: ../virtManager/addhardware.py:1323
+#: ../virtManager/addhardware.py:1329
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -926,137 +931,137 @@ msgstr ""
 "Не вдалося приєднати цей пристрій до запущеної машини. Бажаєте зробити цей "
 "пристрій доступним після наступного вимикання гостьової системи?"
 
-#: ../virtManager/addhardware.py:1339
+#: ../virtManager/addhardware.py:1345
 #, python-format
 msgid "Error adding device: %s"
 msgstr "Помилка під час спроби додавання пристрою: %s"
 
-#: ../virtManager/addhardware.py:1351
+#: ../virtManager/addhardware.py:1357
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Не вдалося додати пристрій: %s"
 
-#: ../virtManager/addhardware.py:1370
+#: ../virtManager/addhardware.py:1376
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr ""
 "Під час перевірки апаратного джерела даних сталася невідома помилка: %s"
 
-#: ../virtManager/addhardware.py:1380
+#: ../virtManager/addhardware.py:1386
 msgid "Creating device"
 msgstr "Створення запису пристрою"
 
-#: ../virtManager/addhardware.py:1381
+#: ../virtManager/addhardware.py:1387
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr ""
 "Залежно від пристрою, створення запису може тривати до декількох хвилин."
 
-#: ../virtManager/addhardware.py:1494 ../virtManager/addhardware.py:1517
+#: ../virtManager/addhardware.py:1500 ../virtManager/addhardware.py:1523
 #: ../virtManager/create.py:1962
 msgid "Storage parameter error."
 msgstr "Помилка у параметрах сховища."
 
-#: ../virtManager/addhardware.py:1534
+#: ../virtManager/addhardware.py:1540
 msgid "Network selection error."
 msgstr "Помилка у виборі мережі."
 
-#: ../virtManager/addhardware.py:1535
+#: ../virtManager/addhardware.py:1541
 msgid "A network source must be selected."
 msgstr "Слід вибрати джерело мережевих даних."
 
-#: ../virtManager/addhardware.py:1538
+#: ../virtManager/addhardware.py:1544
 msgid "Invalid MAC address"
 msgstr "Некоректна MAC-адреса"
 
-#: ../virtManager/addhardware.py:1539
+#: ../virtManager/addhardware.py:1545
 msgid "A MAC address must be entered."
 msgstr "Слід вказати MAC-адресу."
 
-#: ../virtManager/addhardware.py:1569
+#: ../virtManager/addhardware.py:1575
 msgid "Graphics device parameter error"
 msgstr "Помилка у параметрах графічного пристрою"
 
-#: ../virtManager/addhardware.py:1578
+#: ../virtManager/addhardware.py:1584
 msgid "Sound device parameter error"
 msgstr "Помилка у параметрах звукового пристрою"
 
-#: ../virtManager/addhardware.py:1583
+#: ../virtManager/addhardware.py:1589
 msgid "Physical Device Required"
 msgstr "Слід вказати фізичний пристрій"
 
-#: ../virtManager/addhardware.py:1584
+#: ../virtManager/addhardware.py:1590
 msgid "A device must be selected."
 msgstr "Слід вибрати пристрій."
 
-#: ../virtManager/addhardware.py:1596
+#: ../virtManager/addhardware.py:1602
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "Пристрій вже використовується іншими гостьовими системами %s"
 
-#: ../virtManager/addhardware.py:1598
+#: ../virtManager/addhardware.py:1604
 msgid "Do you really want to use the device?"
 msgstr "Ви справді хочете скористатися цим пристроєм?"
 
-#: ../virtManager/addhardware.py:1604
+#: ../virtManager/addhardware.py:1610
 msgid "Host device parameter error"
 msgstr "Помилка у параметрах пристрою основної системи"
 
-#: ../virtManager/addhardware.py:1670
+#: ../virtManager/addhardware.py:1676
 #, python-format
 msgid "%s device parameter error"
 msgstr "Помилка у параметрах пристрою %s"
 
-#: ../virtManager/addhardware.py:1681
+#: ../virtManager/addhardware.py:1687
 msgid "Video device parameter error"
 msgstr "Помилка у параметрах відеопристрою"
 
-#: ../virtManager/addhardware.py:1693
+#: ../virtManager/addhardware.py:1699
 msgid "Watchdog parameter error"
 msgstr "Помилка у параметрах сторожового пристрою"
 
-#: ../virtManager/addhardware.py:1708
+#: ../virtManager/addhardware.py:1714
 msgid "Smartcard device parameter error"
 msgstr "Помилка у параметрах пристрою картки пам’яті"
 
-#: ../virtManager/addhardware.py:1727
+#: ../virtManager/addhardware.py:1733
 msgid "USB redirected device parameter error"
 msgstr "Помилка у параметрах переспрямованого пристрою USB"
 
-#: ../virtManager/addhardware.py:1747
+#: ../virtManager/addhardware.py:1753
 msgid "TPM device parameter error"
 msgstr "Помилка параметра пристрою TPM"
 
-#: ../virtManager/addhardware.py:1765
+#: ../virtManager/addhardware.py:1771
 msgid "Panic device parameter error"
 msgstr "Помилка у параметрах пристрою паніки"
 
-#: ../virtManager/addhardware.py:1808 ../virtManager/addhardware.py:1820
-#: ../virtManager/addhardware.py:1823 ../virtManager/addhardware.py:1835
-#: ../virtManager/addhardware.py:1838
+#: ../virtManager/addhardware.py:1814 ../virtManager/addhardware.py:1826
+#: ../virtManager/addhardware.py:1829 ../virtManager/addhardware.py:1841
+#: ../virtManager/addhardware.py:1844
 msgid "RNG selection error."
 msgstr "Помилка під час вибору ГВЧ."
 
-#: ../virtManager/addhardware.py:1809
+#: ../virtManager/addhardware.py:1815
 msgid "A device must be specified."
 msgstr "Слід вказати пристрій."
 
-#: ../virtManager/addhardware.py:1821
+#: ../virtManager/addhardware.py:1827
 msgid "Please specify both bind and connect host"
 msgstr "Будь ласка, вкажіть і вузол прив’язки і вузол з’єднання"
 
-#: ../virtManager/addhardware.py:1824
+#: ../virtManager/addhardware.py:1830
 msgid "Please specify both bind and connect service"
 msgstr "Будь ласка, вкажіть і службу прив’язки і службу з’єднання"
 
-#: ../virtManager/addhardware.py:1836
+#: ../virtManager/addhardware.py:1842
 msgid "The EGD host must be specified."
 msgstr "Слід вказати вузол EGD."
 
-#: ../virtManager/addhardware.py:1839
+#: ../virtManager/addhardware.py:1845
 msgid "The EGD service must be specified."
 msgstr "Слід вказати службу EGD."
 
-#: ../virtManager/addhardware.py:1858
+#: ../virtManager/addhardware.py:1864
 msgid "RNG device parameter error"
 msgstr "Помилка у параметрі пристрою ГВЧ"
 
@@ -3388,27 +3393,27 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "Будь ласка, натисніть бажану комбінацію клавіш захоплення"
 
-#: ../virtManager/serialcon.py:283
+#: ../virtManager/serialcon.py:281
 msgid "Remote serial console not supported for this connection"
 msgstr ""
 "Для цього з’єднання не передбачено підтримки віддаленої послідовної консолі"
 
-#: ../virtManager/serialcon.py:286
+#: ../virtManager/serialcon.py:284
 msgid "Serial console not available for inactive guest"
 msgstr ""
 "Не можна використовувати послідовні консолі для неактивних гостьових систем"
 
-#: ../virtManager/serialcon.py:288
+#: ../virtManager/serialcon.py:286
 #, python-format
 msgid "Console for device type '%s' not yet supported"
 msgstr "Підтримку консолей для пристроїв типів «%s» ще не реалізовано"
 
-#: ../virtManager/serialcon.py:293
+#: ../virtManager/serialcon.py:291
 #, python-format
 msgid "Can not access console path '%s'"
 msgstr "Не вдалося отримати доступ до шляху консолі «%s»"
 
-#: ../virtManager/serialcon.py:408
+#: ../virtManager/serialcon.py:406
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "Помилка під час спроби встановлення з’єднання з текстовою консоллю: %s"
@@ -3600,9 +3605,9 @@ msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Ви справді бажаєте остаточно вилучити том %s?"
 
 #: ../virtManager/storagelist.py:738
-#, python-format
-msgid "Error refreshing volume '%s'"
-msgstr "Помилка під час спроби оновлення тому «%s»"
+#, fuzzy, python-format
+msgid "Error deleting volume '%s'"
+msgstr "Помилка під час спроби вилучення резерву «%s»"
 
 #: ../virtManager/systray.py:122
 msgid "_Show Virtual Machine Manager"
@@ -5053,7 +5058,7 @@ msgstr ""
 msgid "Allocating '%s'"
 msgstr "Розміщення «%s»"
 
-#: ../virtinst/storage.py:857
+#: ../virtinst/storage.py:859
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
@@ -5062,7 +5067,7 @@ msgstr ""
 "На резервному сховищі даних недостатньо місця для створення тому. (Для "
 "розміщення потрібно %d МБ > доступно %d МБ)"
 
-#: ../virtinst/storage.py:863
+#: ../virtinst/storage.py:865
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -7613,6 +7618,9 @@ msgstr "Вилучити том"
 
 #~ msgid "Error generating CPU configuration"
 #~ msgstr "Помилка під час спроби створення налаштувань процесора"
+
+#~ msgid "Error refreshing volume '%s'"
+#~ msgstr "Помилка під час спроби оновлення тому «%s»"
 
 #~ msgid "No topology section in capabilities xml."
 #~ msgstr "У XML capabilities немає розділу topology."
