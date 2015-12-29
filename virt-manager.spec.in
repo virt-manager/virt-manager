@@ -1,18 +1,18 @@
 # -*- rpm-spec -*-
 
 
-%define with_guestfs               0
-%define stable_defaults            0
-%define askpass_package            "openssh-askpass"
-%define qemu_user                  "qemu"
-%define libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
-%define kvm_packages               ""
-%define preferred_distros          "fedora,rhel"
-%define default_hvs                "qemu,xen,lxc"
+%global with_guestfs               0
+%global stable_defaults            0
+%global askpass_package            "openssh-askpass"
+%global qemu_user                  "qemu"
+%global libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
+%global kvm_packages               ""
+%global preferred_distros          "fedora,rhel"
+%global default_hvs                "qemu,xen,lxc"
 
 %if 0%{?rhel}
-%define preferred_distros          "rhel,fedora"
-%define stable_defaults            1
+%global preferred_distros          "rhel,fedora"
+%global stable_defaults            1
 %endif
 
 
@@ -21,7 +21,7 @@
 Name: virt-manager
 Version: @VERSION@
 Release: 1%{?dist}
-%define verrel %{version}-%{release}
+%global verrel %{version}-%{release}
 
 Summary: Desktop tool for managing virtual machines via libvirt
 Group: Applications/Emulators
@@ -108,31 +108,31 @@ machine).
 
 %build
 %if %{qemu_user}
-%define _qemu_user --qemu-user=%{qemu_user}
+%global _qemu_user --qemu-user=%{qemu_user}
 %endif
 
 %if %{kvm_packages}
-%define _kvm_packages --kvm-package-names=%{kvm_packages}
+%global _kvm_packages --kvm-package-names=%{kvm_packages}
 %endif
 
 %if %{preferred_distros}
-%define _preferred_distros --preferred-distros=%{preferred_distros}
+%global _preferred_distros --preferred-distros=%{preferred_distros}
 %endif
 
 %if %{libvirt_packages}
-%define _libvirt_packages --libvirt-package-names=%{libvirt_packages}
+%global _libvirt_packages --libvirt-package-names=%{libvirt_packages}
 %endif
 
 %if %{askpass_package}
-%define _askpass_package --askpass-package-names=%{askpass_package}
+%global _askpass_package --askpass-package-names=%{askpass_package}
 %endif
 
 %if %{stable_defaults}
-%define _stable_defaults --stable-defaults
+%global _stable_defaults --stable-defaults
 %endif
 
 %if %{default_hvs}
-%define _default_hvs --default-hvs %{default_hvs}
+%global _default_hvs --default-hvs %{default_hvs}
 %endif
 
 python setup.py configure \
