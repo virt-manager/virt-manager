@@ -1298,6 +1298,7 @@ class vmmConnection(vmmGObject):
         from_remote = getattr(libvirt, "VIR_FROM_REMOTE", None)
         from_rpc = getattr(libvirt, "VIR_FROM_RPC", None)
         sys_error = getattr(libvirt, "VIR_ERR_SYSTEM_ERROR", None)
+        internal_error = getattr(libvirt, "VIR_ERR_INTERNAL_ERROR", None)
 
         dom = -1
         code = -1
@@ -1309,7 +1310,7 @@ class vmmConnection(vmmGObject):
             self.get_uri(), exc_info=True)
 
         if (dom in [from_remote, from_rpc] and
-            code in [sys_error]):
+            code in [sys_error, internal_error]):
             e = None
             logging.debug("Not showing user error since libvirtd "
                 "appears to have stopped.")
