@@ -118,6 +118,8 @@ def _find_input(input_file, parser, print_cb):
     try:
         ext = os.path.splitext(input_file)[1]
         tempdir = None
+        binname = None
+        pkg = None
         if ext and ext[1:] in ["zip", "gz", "ova",
                 "tar", "bz2", "bzip2", "7z", "xz"]:
             basedir = "/var/tmp"
@@ -129,19 +131,40 @@ def _find_input(input_file, parser, print_cb):
 
             base = os.path.basename(input_file)
 
-            # check if 'unar' command existed.
-            if not find_executable("unar"):
+            if (ext[1:] == "zip"):
+                binname = "unzip"
+                pkg = "unzip"
+                cmd = ["unzip", "-o", "-d", tempdir, input_file]
+            elif (ext[1:] == "7z"):
+                binname = "7z"
+                pkg = "p7zip"
+                cmd = ["7z", "-o" + tempdir, "e", input_file]
+            elif (ext[1:] == "ova" or ext[1:] == "tar"):
+                binname = "tar"
+                pkg = "tar"
+                cmd = ["tar", "xf", input_file, "-C", tempdir]
+            elif (ext[1:] == "gz"):
+                binname = "gzip"
+                pkg = "gzip"
+                cmd = ["tar", "zxf", input_file, "-C", tempdir]
+            elif (ext[1:] == "bz2" or ext[1:] == "bzip2"):
+                binname = "bzip2"
+                pkg = "bzip2"
+                cmd = ["tar", "jxf", input_file, "-C", tempdir]
+            elif (ext[1:] == "xz"):
+                binname = "xz"
+                pkg = "xz"
+                cmd = ["tar", "Jxf", input_file, "-C", tempdir]
+            if not find_executable(binname):
                 raise RuntimeError(_("%s appears to be an archive, "
-                    "but 'unar' is not installed. "
-                    "Please either install 'unar', or extract the archive "
+                    "but '%s' is not installed. "
+                    "Please either install '%s', or extract the archive "
                     "yourself and point virt-convert at "
-                    "the extracted directory.") % base)
+                    "the extracted directory.") % (base, pkg, pkg))
 
-            cmd = ["unar", "-o", tempdir, base]
             print_cb(_("%s appears to be an archive, running: %s") %
                 (base, " ".join(cmd)))
 
-            cmd[-1] = input_file
             _run_cmd(cmd)
             force_clean.append(tempdir)
             input_file = tempdir
