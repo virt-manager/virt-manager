@@ -197,6 +197,7 @@ class vmmAsyncJob(vmmGObjectUI):
         })
 
         # UI state
+        self.topwin.set_deletable(bool(self.cancel_cb))
         self.topwin.set_title(title)
         self.widget("pbar-text").set_text(text)
         self.widget("cancel-async-job").set_visible(bool(self.cancel_cb))
