@@ -197,7 +197,6 @@ class vmmAsyncJob(vmmGObjectUI):
         })
 
         # UI state
-        self.topwin.set_deletable(bool(self.cancel_cb))
         self.topwin.set_title(title)
         self.widget("pbar-text").set_text(text)
         self.widget("cancel-async-job").set_visible(bool(self.cancel_cb))
@@ -230,21 +229,7 @@ class vmmAsyncJob(vmmGObjectUI):
     ################
 
     def _on_window_delete(self, ignore1=None, ignore2=None):
-        if not self.cancel_cb or not self._bg_thread.is_alive():
-            logging.debug("User closed progress window, but thread "
-                          "still running and process isn't cancellable, "
-                          "ignoring.")
-            return 1
-
-        res = self.err.warn_chkbox(
-                text1=_("Cancel the job?"),
-                buttons=Gtk.ButtonsType.YES_NO)
-        if not res:
-            logging.debug("User closed progress window, but chose not "
-                          "cancel operation, ignoring.")
-            return 1
-
-        self._on_cancel()
+        return 1
 
     def _on_cancel(self, ignore1=None, ignore2=None):
         if not self.cancel_cb or not self._bg_thread.is_alive():
