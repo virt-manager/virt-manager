@@ -320,6 +320,13 @@ class _OsVariant(object):
             _extend(os.get_related(
                 libosinfo.ProductRelationship.UPGRADES).get_elements())
 
+        # check this explicitly to avoid infinitely recursing if something is
+        # related to itself for some reason, like a buggy libosinfo
+        if os in check_list:
+            # If we were checking we are related to ourself then we would have
+            # returned True above already when looking at related_os_list
+            return False
+
         for checkobj in check_list:
             if (checkobj.get_short_id() in related_os_list or
                 self._is_related_to(related_os_list, os=checkobj,
