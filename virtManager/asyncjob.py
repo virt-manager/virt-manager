@@ -18,13 +18,11 @@
 # MA 02110-1301 USA.
 #
 
-import logging
 import threading
 import traceback
 
 from gi.repository import Gdk
 from gi.repository import GLib
-from gi.repository import Gtk
 
 import libvirt
 
