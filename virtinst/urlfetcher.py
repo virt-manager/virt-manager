@@ -186,8 +186,11 @@ class _HTTPURLFetcher(_URLFetcher):
         """
         response = requests.get(url, stream=True)
         response.raise_for_status()
-        size = response.headers.get('content-length')
-        return response, size.isdigit() and int(size) or None
+        try:
+            size = int(response.headers.get('content-length'))
+        except:
+            size = None
+        return response, size
 
     def _write(self, urlobj, fileobj):
         """
