@@ -309,7 +309,7 @@ class VirtConverter(object):
             if disk_format:
                 newpath += ("." + disk_format)
             newpath = os.path.join(destdir, newpath)
-            if os.path.exists(newpath):
+            if os.path.exists(newpath) and not _is_test():
                 raise RuntimeError(_("New path name '%s' already exists") %
                     newpath)
 
