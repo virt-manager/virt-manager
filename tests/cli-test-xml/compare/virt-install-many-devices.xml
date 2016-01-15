@@ -76,12 +76,12 @@
       <target dev="vdf" bus="virtio"/>
     </disk>
     <disk type="volume" device="disk">
-      <driver name="qemu"/>
+      <driver name="qemu" type="raw"/>
       <source volume="some-rbd-vol" pool="rbd-ceph"/>
       <target dev="vdg" bus="virtio"/>
     </disk>
     <disk type="network" device="disk">
-      <driver name="qemu"/>
+      <driver name="qemu" type="raw"/>
       <source protocol="rbd" name="rbd/foobar">
         <host name="ceph-mon-1.example.com" port="6789"/>
       </source>

@@ -520,7 +520,7 @@ c.add_compare(""" \
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp \
 \
 --panic iobase=507 \
-""", "many-devices", compare_check=support.SUPPORT_CONN_VMPORT)
+""", "many-devices", compare_check=support.SUPPORT_CONN_RBD_FORMAT)
 
 
 
