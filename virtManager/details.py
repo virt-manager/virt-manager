@@ -1486,6 +1486,9 @@ class vmmDetails(vmmGObjectUI):
         # and future proof it a bit
         if type(ret) is tuple and len(ret) >= 2:
             ret = ret[1]
+        # F24 rawhide, ret[1] is a named tuple with a 'buffer' element...
+        if hasattr(ret, "buffer"):
+            ret = ret.buffer
 
         import datetime
         now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_")
