@@ -1807,6 +1807,9 @@ class ParserNetwork(VirtCLIParser):
         self.set_param("driver_name", "driver_name")
         self.set_param("driver_queues", "driver_queues")
 
+        self.set_param("rom_file", "rom_file")
+        self.set_param("rom_bar", "rom_bar", is_onoff=True)
+
         self.set_param("virtualport.type", "virtualport_type")
 
         # For 802.1Qbg
