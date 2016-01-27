@@ -195,14 +195,23 @@ class Command(object):
         except Exception, e:
             return (-1, "".join(traceback.format_exc()) + str(e))
 
-    def _skip_msg(self, conn):
-        if self.skip_check is None:
+    def _check_support(self, tests, conn, check, skipmsg):
+        if check is None:
             return
         if conn is None:
-            raise RuntimeError("skip_check is not None, but conn is None")
-        if conn.check_support(self.skip_check):
-            return
-        return "skipped"
+            raise RuntimeError("skip check is not None, but conn is None")
+
+        if type(check) is str:
+            # pylint: disable=protected-access
+            if support._check_version(conn, check):
+                return
+            # pylint: enable=protected-access
+        else:
+            if conn.check_support(check):
+                return
+
+        tests.skipTest(skipmsg)
+        return True
 
     def run(self, tests):
         err = None
@@ -218,9 +227,7 @@ class Command(object):
                 raise RuntimeError("couldn't parse URI from command %s" %
                                    self.argv)
 
-            skipmsg = self._skip_msg(conn)
-            if skipmsg is not None:
-                tests.skipTest(skipmsg)
+            if self._check_support(tests, conn, self.skip_check, "skipped"):
                 return
 
             code, output = self._get_output(conn)
@@ -234,10 +241,8 @@ class Command(object):
                      ("Output was:\n%s" % output))
 
             if self.compare_file:
-                if (self.compare_check and not
-                    conn.check_support(self.compare_check)):
-                    tests.skipTest(
-                        "Skipping compare check due to lack of support")
+                if self._check_support(tests, conn, self.compare_check,
+                        "Skipping compare check due to lack of support"):
                     return
 
                 # Generate test files that don't exist yet
@@ -887,8 +892,8 @@ c.add_invalid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ 
 
 
 c = vclon.add_category("misc", "")
-c.add_compare("--connect %(URI-KVM)s -o test-for-clone --auto-clone --clone-running", "clone-auto1", compare_check=support.SUPPORT_CONN_LOADER_ROM)
-c.add_compare("-o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", compare_check=support.SUPPORT_CONN_LOADER_ROM)
+c.add_compare("--connect %(URI-KVM)s -o test-for-clone --auto-clone --clone-running", "clone-auto1", compare_check="1.2.15")
+c.add_compare("-o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", compare_check="1.2.15")
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage
 c.add_valid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ local storage

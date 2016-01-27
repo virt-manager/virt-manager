@@ -404,7 +404,7 @@ def check_support(virtconn, feature, data=None):
     Attempt to determine if a specific libvirt feature is support given
     the passed connection.
 
-    @param conn: Libvirt connection to check feature on
+    @param virtconn: Libvirt connection to check feature on
     @param feature: Feature type to check support for
     @type  feature: One of the SUPPORT_* flags
     @param data: Option libvirt object to use in feature checking
@@ -418,3 +418,12 @@ def check_support(virtconn, feature, data=None):
 
     sobj = _support_objs[feature - 1]
     return sobj.check_support(virtconn, data)
+
+
+def _check_version(virtconn, version):
+    """
+    Check libvirt version. Useful for the test suite so we don't need
+    to keep adding new support checks.
+    """
+    sobj = _SupportCheck(version=version)
+    return sobj.check_support(virtconn, None)
