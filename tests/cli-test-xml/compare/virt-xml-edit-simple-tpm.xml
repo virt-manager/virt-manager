@@ -1,11 +1,11 @@
-     </channel>
+     <input type="mouse" bus="ps2"/>
      <tpm model="tpm-tis">
        <backend type="passthrough">
 -        <device path="/dev/tzz"/>
 +        <device path="/dev/tpm"/>
        </backend>
      </tpm>
-     <input type="mouse" bus="ps2"/>
+     <graphics type="vnc" port="-1" autoport="yes"/>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.
