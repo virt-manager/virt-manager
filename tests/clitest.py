@@ -829,11 +829,11 @@ c.add_compare("--pm suspend_to_mem=yes,suspend_to_disk=no", "edit-simple-pm")
 c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "edit-simple-disk")
 c.add_compare("--disk path=", "edit-simple-disk-remove-path")
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "edit-simple-network")
-c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics")
+c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics", compare_check="1.3.2") # compare_check=<input> reordering
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
 c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "edit-simple-redirdev")
-c.add_compare("--tpm path=/dev/tpm", "edit-simple-tpm")
+c.add_compare("--tpm path=/dev/tpm", "edit-simple-tpm", compare_check="1.3.2") # compare_check=<input> reordering
 c.add_compare("--rng rate_bytes=3333,rate_period=4444", "edit-simple-rng")
 c.add_compare("--watchdog action=reset", "edit-simple-watchdog")
 c.add_compare("--memballoon model=none", "edit-simple-memballoon")
@@ -843,7 +843,7 @@ c.add_compare("--channel null", "edit-simple-channel")
 c.add_compare("--console name=foo.bar.baz", "edit-simple-console")
 c.add_compare("--filesystem /1/2/3,/4/5/6,mode=mapped", "edit-simple-filesystem")
 c.add_compare("--video cirrus", "edit-simple-video", compare_check=support.SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT)
-c.add_compare("--sound pcspk", "edit-simple-soundhw")
+c.add_compare("--sound pcspk", "edit-simple-soundhw", compare_check="1.3.2") # compare_check=<input> reordering
 c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "edit-simple-host-device")
 
 c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
