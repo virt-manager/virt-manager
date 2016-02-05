@@ -98,7 +98,7 @@ class vmmInterface(vmmLibvirtObject):
         elif itype:
             return str(itype).capitalize()
         else:
-            return "Interface"
+            return _("Interface")
 
     def get_startmode(self):
         return self.get_xmlobj(inactive=True).start_mode or "none"
@@ -109,7 +109,7 @@ class vmmInterface(vmmLibvirtObject):
         self._redefine_xmlobj(xmlobj)
 
     def get_slaves(self):
-        return [[obj.name, obj.type or "Unknown"] for obj in
+        return [[obj.name, obj.type or _("Unknown")] for obj in
                 self.get_xmlobj().interfaces]
 
     def get_slave_names(self):

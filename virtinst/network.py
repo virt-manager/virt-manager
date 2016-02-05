@@ -160,9 +160,10 @@ class Network(XMLBuilder):
                     desc = _("Routed network")
             else:
                 if dev:
-                    desc = "%s to %s" % (mode, dev)
+                    desc = (_("%(mode)s to %(device)s") %
+                            {"mode" : mode, "device" : dev})
                 else:
-                    desc = "%s network" % mode.capitalize()
+                    desc = _("%s network") % mode.capitalize()
         else:
             desc = _("Isolated network, internal and host routing only")
 

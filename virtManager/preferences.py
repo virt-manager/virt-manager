@@ -141,7 +141,7 @@ class vmmPreferences(vmmGObjectUI):
         model = Gtk.ListStore(str, str)
         for row in [["system", _("System default (%s)") %
                      self.config.default_add_spice_usbredir],
-                    ["yes", "Yes"], ["no", "No"]]:
+                    ["yes", _("Yes")], ["no", _("No")]]:
             model.append(row)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)

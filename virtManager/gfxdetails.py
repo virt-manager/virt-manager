@@ -91,9 +91,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
 
-        model.append(["auto", "Auto"])
+        model.append(["auto", _("Auto")])
         model.append([virtinst.VirtualGraphics.KEYMAP_LOCAL,
-                      "Copy local keymap"])
+                      _("Copy local keymap")])
         for k in virtinst.VirtualGraphics.valid_keymaps():
             model.append([k, k])
 

@@ -544,7 +544,7 @@ class Cloner(object):
                 newd.target = disk.target
                 if validate:
                     if newd.wants_storage_creation():
-                        raise ValueError("Disk path '%s' does not exist." %
+                        raise ValueError(_("Disk path '%s' does not exist.") %
                                          newd.path)
             except Exception, e:
                 logging.debug("Exception creating clone disk objects",
@@ -560,7 +560,7 @@ class Cloner(object):
     # Cloning policy based on 'clone_policy', 'force_target' and 'skip_target'
     def _do_we_clone_device(self, disk):
         if not disk.target:
-            raise ValueError("XML has no 'dev' attribute in disk target")
+            raise ValueError(_("XML has no 'dev' attribute in disk target"))
 
         if disk.target in self.skip_target:
             return False

@@ -871,9 +871,9 @@ class vmmConsolePages(vmmGObjectUI):
 
         for dev in devs:
             if dev.virtual_device_type == "console":
-                label = "Text Console %d" % (dev.vmmindex + 1)
+                label = _("Text Console %d") % (dev.vmmindex + 1)
             else:
-                label = "Serial %d" % (dev.vmmindex + 1)
+                label = _("Serial %d") % (dev.vmmindex + 1)
 
             tooltip = vmmSerialConsole.can_connect(self.vm, dev)
             sensitive = not bool(tooltip)

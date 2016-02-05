@@ -52,8 +52,8 @@ class VirtualRNGDevice(VirtualDevice):
 
     @staticmethod
     def get_pretty_mode(mode):
-        return {"bind" : "Bind",
-                "connect": "Connect"}.get(mode) or mode
+        return {"bind" : _("Bind"),
+                "connect": _("Connect")}.get(mode) or mode
 
     def supports_property(self, propname):
         """

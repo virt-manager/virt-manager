@@ -62,7 +62,7 @@ class Seclabel(XMLBuilder):
         if imagelabel:
             imglab_len = min(3, len(imagelabel.split(':')))
         if lab_len and imglab_len and lab_len != imglab_len:
-            raise ValueError("Label and Imagelabel are incompatible")
+            raise ValueError(_("Label and Imagelabel are incompatible"))
 
         lab_len = lab_len or imglab_len
         if lab_len == 3:
@@ -70,7 +70,7 @@ class Seclabel(XMLBuilder):
         elif lab_len == 2:
             return self.MODEL_DAC
         else:
-            raise ValueError("Unknown model type for label '%s'" % self.label)
+            raise ValueError(_("Unknown model type for label '%s'") % self.label)
     def _get_default_model(self):
         if self.type is None or self.type == self.TYPE_DEFAULT:
             return None

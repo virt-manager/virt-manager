@@ -81,7 +81,7 @@ def _creds_dialog_main(conn, creds):
     """
     from gi.repository import Gtk
 
-    dialog = Gtk.Dialog("Authentication required", None, 0,
+    dialog = Gtk.Dialog(_("Authentication required"), None, 0,
                         (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                          Gtk.STOCK_OK, Gtk.ResponseType.OK))
     label = []

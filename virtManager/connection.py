@@ -414,7 +414,7 @@ class vmmConnection(vmmGObject):
         ret = hv
 
         if is_session:
-            ret += " User session"
+            ret += " " + _("User session")
         elif (path and path != "/system" and os.path.basename(path)):
             # Used by test URIs to report what XML file they are using
             ret += " %s" % os.path.basename(path)

@@ -489,8 +489,8 @@ class VirtualDisk(VirtualDevice):
     def _set_path(self, newpath):
         if (self._storage_backend and
             self._storage_backend.will_create_storage()):
-            raise ValueError("Can't change disk path if storage creation info "
-                             "has been set.")
+            raise ValueError(_("Can't change disk path if storage creation info "
+                               "has been set."))
 
         # User explicitly changed 'path', so try to lookup its storage
         # object since we may need it

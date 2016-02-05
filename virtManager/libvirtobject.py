@@ -211,8 +211,8 @@ class vmmLibvirtObject(vmmGObject):
 
     def run_status(self):
         if self.is_active():
-            return "Active"
-        return "Inactive"
+            return _("Active")
+        return _("Inactive")
 
     def _refresh_status(self, newstatus=None, cansignal=True):
         """

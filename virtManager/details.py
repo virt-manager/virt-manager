@@ -751,7 +751,7 @@ class vmmDetails(vmmGObjectUI):
         hw_list_model = Gtk.ListStore(str, str, int, int, object)
         self.widget("hw-list").set_model(hw_list_model)
 
-        hwCol = Gtk.TreeViewColumn("Hardware")
+        hwCol = Gtk.TreeViewColumn(_("Hardware"))
         hwCol.set_spacing(6)
         hwCol.set_min_width(165)
         hw_txt = Gtk.CellRendererText()
@@ -1496,7 +1496,7 @@ class vmmDetails(vmmGObjectUI):
 
         path = self.err.browse_local(
             self.vm.conn, _("Save Virtual Machine Screenshot"),
-            _type=("png", "PNG files"),
+            _type=("png", _("PNG files")),
             dialog_type=Gtk.FileChooserAction.SAVE,
             browse_reason=self.config.CONFIG_DIR_SCREENSHOT,
             default_name=default)
@@ -2884,7 +2884,7 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.widget("hostdev-rombar"), hostdev.type == "pci")
 
-        devlabel = "<b>Physical %s Device</b>" % hostdev.type.upper()
+        devlabel = "<b>" + _("Physical %s Device") % hostdev.type.upper() + "</b>"
         self.widget("hostdev-title").set_markup(devlabel)
         self.widget("hostdev-source").set_text(pretty_name)
         self.widget("hostdev-rombar").set_active(rom_bar)
@@ -3148,10 +3148,10 @@ class vmmDetails(vmmGObjectUI):
     def _make_boot_rows(self):
         if not self.vm.can_use_device_boot_order():
             return [
-                ["hd", "Hard Disk", "drive-harddisk", False, True],
-                ["cdrom", "CDROM", "media-optical", False, True],
-                ["network", "Network (PXE)", "network-idle", False, True],
-                ["fd", "Floppy", "media-floppy", False, True],
+                ["hd", _("Hard Disk"), "drive-harddisk", False, True],
+                ["cdrom", _("CDROM"), "media-optical", False, True],
+                ["network", _("Network (PXE)"), "network-idle", False, True],
+                ["fd", _("Floppy"), "media-floppy", False, True],
             ]
 
         ret = []

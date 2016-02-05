@@ -79,7 +79,7 @@ class VirtualHostDevice(VirtualDevice):
             self.managed = False
 
         else:
-            raise ValueError("Unknown node device type %s" % nodedev)
+            raise ValueError(_("Unknown node device type %s") % nodedev)
 
     def pretty_name(self):
         def dehex(val):

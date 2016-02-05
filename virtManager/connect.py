@@ -165,9 +165,9 @@ class vmmConnect(vmmGObjectUI):
                 model.append([rowid, label])
 
         _add_hv_row(HV_QEMU, "qemu", "QEMU/KVM")
-        _add_hv_row(HV_QEMU_SESSION, "qemu", "QEMU/KVM user session")
+        _add_hv_row(HV_QEMU_SESSION, "qemu", "QEMU/KVM " + _("user session"))
         _add_hv_row(HV_XEN, "xen", "Xen")
-        _add_hv_row(HV_LXC, "lxc", "LXC (Linux Containers)")
+        _add_hv_row(HV_LXC, "lxc", "LXC (" + _("Linux Containers") + ")")
         _add_hv_row(HV_BHYVE, "bhyve", "Bhyve")
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
@@ -176,7 +176,7 @@ class vmmConnect(vmmGObjectUI):
         model = Gtk.ListStore(str)
         model.append(["SSH"])
         model.append(["TCP (SASL, Kerberos)"])
-        model.append(["SSL/TLS with certificates"])
+        model.append(["SSL/TLS " + _("with certificates")])
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 0)
 

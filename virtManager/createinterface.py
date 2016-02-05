@@ -294,16 +294,16 @@ class vmmCreateInterface(vmmGObjectUI):
         ip_mode.set_model(ip_model)
         uiutil.init_combo_text_column(ip_mode, 0)
         ip_model.insert(IP_DHCP, ["DHCP"])
-        ip_model.insert(IP_STATIC, ["Static"])
-        ip_model.insert(IP_NONE, ["No configuration"])
+        ip_model.insert(IP_STATIC, [_("Static")])
+        ip_model.insert(IP_NONE, [_("No configuration")])
 
         ip_mode = self.widget("ipv6-mode")
         ip_model = Gtk.ListStore(str)
         ip_mode.set_model(ip_model)
         uiutil.init_combo_text_column(ip_mode, 0)
         ip_model.insert(IP_DHCP, ["DHCP"])
-        ip_model.insert(IP_STATIC, ["Static"])
-        ip_model.insert(IP_NONE, ["No configuration"])
+        ip_model.insert(IP_STATIC, [_("Static")])
+        ip_model.insert(IP_NONE, [_("No configuration")])
 
         v6_addr = self.widget("ipv6-address-list")
         addr_model = Gtk.ListStore(str)
@@ -432,9 +432,9 @@ class vmmCreateInterface(vmmGObjectUI):
             # We only want configured (aka interface API) interfaces with
             # actually present <protocol> info
             if not is_defined or not iface_obj:
-                label += " (Not configured)"
+                label += " (" + _("Not configured") + ")"
             elif not iface_obj.get_protocol_xml():
-                label += " (No IP configuration)"
+                label += " (" + _("No IP configuration") + ")"
             else:
                 sensitive = True
 
@@ -449,7 +449,7 @@ class vmmCreateInterface(vmmGObjectUI):
             copy_model.append(row)
 
         if len(copy_model) == 0:
-            copy_model.append(["No child interfaces selected.", None, False])
+            copy_model.append([_("No child interfaces selected."), None, False])
 
         if not enable_copy:
             copy_model.clear()
@@ -721,7 +721,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
         if is_manual:
             if ipv4:
-                label += "IPv4: %s" % (ipv4.dhcp and "DHCP" or "Static")
+                label += "IPv4: %s" % (ipv4.dhcp and "DHCP" or _("Static"))
 
             if ipv6:
                 if label:
@@ -730,22 +730,22 @@ class vmmCreateInterface(vmmGObjectUI):
 
                 mode_label = ""
                 if ipv6.autoconf and ipv6.dhcp:
-                    mode_label += "Autoconf "
+                    mode_label += _("Autoconf") + " "
 
                 if ipv6.dhcp:
                     mode_label += "DHCP"
 
                 if not mode_label:
-                    mode_label = "Static"
+                    mode_label = _("Static")
 
                 label += mode_label
 
         else:
             if name:
-                label = "Copy configuration from '%s'" % name
+                label = _("Copy configuration from '%s'") % name
 
         if not label:
-            label = "No configuration"
+            label = _("No configuration")
 
         self.widget("ip-config-label").set_text(label)
 

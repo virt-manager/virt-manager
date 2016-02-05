@@ -178,7 +178,7 @@ class vmmStorageList(vmmGObjectUI):
         volListModel = Gtk.ListStore(str, str, str, str, str, str, bool)
         self.widget("vol-list").set_model(volListModel)
 
-        volCol = Gtk.TreeViewColumn("Volumes")
+        volCol = Gtk.TreeViewColumn(_("Volumes"))
         vol_txt1 = Gtk.CellRendererText()
         volCol.pack_start(vol_txt1, True)
         volCol.add_attribute(vol_txt1, 'text', VOL_COLUMN_NAME)
@@ -186,7 +186,7 @@ class vmmStorageList(vmmGObjectUI):
         volCol.set_sort_column_id(VOL_COLUMN_NAME)
         self.widget("vol-list").append_column(volCol)
 
-        volSizeCol = Gtk.TreeViewColumn("Size")
+        volSizeCol = Gtk.TreeViewColumn(_("Size"))
         vol_txt2 = Gtk.CellRendererText()
         volSizeCol.pack_start(vol_txt2, False)
         volSizeCol.add_attribute(vol_txt2, 'text', VOL_COLUMN_SIZESTR)
@@ -195,7 +195,7 @@ class vmmStorageList(vmmGObjectUI):
         self.widget("vol-list").append_column(volSizeCol)
         volListModel.set_sort_func(VOL_COLUMN_CAPACITY, self._cap_sort_func)
 
-        volFormatCol = Gtk.TreeViewColumn("Format")
+        volFormatCol = Gtk.TreeViewColumn(_("Format"))
         vol_txt3 = Gtk.CellRendererText()
         volFormatCol.pack_start(vol_txt3, False)
         volFormatCol.add_attribute(vol_txt3, 'text', VOL_COLUMN_FORMAT)
@@ -203,7 +203,7 @@ class vmmStorageList(vmmGObjectUI):
         volFormatCol.set_sort_column_id(VOL_COLUMN_FORMAT)
         self.widget("vol-list").append_column(volFormatCol)
 
-        volUseCol = Gtk.TreeViewColumn("Used By")
+        volUseCol = Gtk.TreeViewColumn(_("Used By"))
         vol_txt4 = Gtk.CellRendererText()
         volUseCol.pack_start(vol_txt4, False)
         volUseCol.add_attribute(vol_txt4, 'text', VOL_COLUMN_INUSEBY)
@@ -220,7 +220,7 @@ class vmmStorageList(vmmGObjectUI):
         poolListModel = Gtk.ListStore(str, str, bool, str)
         pool_list.set_model(poolListModel)
 
-        poolCol = Gtk.TreeViewColumn("Storage Pools")
+        poolCol = Gtk.TreeViewColumn(_("Storage Pools"))
         pool_txt = Gtk.CellRendererText()
         pool_per = Gtk.CellRendererText()
         poolCol.pack_start(pool_per, False)

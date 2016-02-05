@@ -134,7 +134,7 @@ class vmmErrorDialog(vmmGObject):
                               modal=modal)
 
     def val_err(self, text1, text2=None, title=_("Input Error"), modal=True):
-        logtext = "Validation Error: %s" % text1
+        logtext = _("Validation Error: %s") % text1
         if text2:
             logtext += " %s" % text2
 
