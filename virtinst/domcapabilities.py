@@ -101,7 +101,7 @@ class DomainCapabilities(XMLBuilder):
         "x86_64": [
             ".*OVMF_CODE\.fd",  # RHEL
             ".*ovmf-x64/OVMF.*\.fd",  # gerd's firmware repo
-            ".*ovmf-x86_64-.*", # SUSE
+            ".*ovmf-x86_64-.*",  # SUSE
         ],
         "aarch64": [
             ".*AAVMF_CODE\.fd",  # RHEL
