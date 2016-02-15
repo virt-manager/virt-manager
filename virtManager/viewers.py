@@ -429,7 +429,7 @@ class VNCViewer(Viewer):
         host, port, ignore = self._ginfo.get_conn_host()
 
         if not self._ginfo.gsocket:
-            logging.debug("VNC connection to %s:%s", host, port)
+            logging.debug("VNC connecting to host=%s port=%s", host, port)
             self._display.open_host(host, port)
             return
 
@@ -661,6 +661,8 @@ class SpiceViewer(Viewer):
         host, port, tlsport = self._ginfo.get_conn_host()
         self._create_spice_session()
 
+        logging.debug("Spice connecting to host=%s port=%s tlsport=%s",
+            host, port, tlsport)
         self._spice_session.set_property("host", str(host))
         if port:
             self._spice_session.set_property("port", str(port))
