@@ -1414,6 +1414,8 @@ class vmmDetails(vmmGObjectUI):
         self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
 
     def control_vm_run(self, src_ignore):
+        if self.has_unapplied_changes(self.get_hw_row()):
+            return
         self.emit("action-run-domain",
                   self.vm.conn.get_uri(), self.vm.get_connkey())
 
