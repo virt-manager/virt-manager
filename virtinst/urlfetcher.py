@@ -214,7 +214,12 @@ class _FTPURLFetcher(_URLFetcher):
 
         try:
             server = urlparse.urlparse(self.location)[1]
-            self._ftp = ftplib.FTP(server)
+            if re.match('(.+):(\d*)', server):
+                self._ftp = ftplib.FTP()
+                self._ftp.connect(server.split(':')[0],
+                                  int(server.split(':')[1]))
+            else:
+                self._ftp = ftplib.FTP(server)
             self._ftp.login()
         except Exception, e:
             raise ValueError(_("Opening URL %s failed: %s.") %
