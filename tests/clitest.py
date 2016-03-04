@@ -529,6 +529,13 @@ c.add_compare(""" \
 """, "many-devices", compare_check=support.SUPPORT_CONN_RBD_FORMAT)
 
 
+c.add_compare(""" \
+--memory 1024 \
+--disk none \
+--graphics spice,gl=yes \
+""", "spice-gl", compare_check=support.SUPPORT_CONN_VMPORT)
+
+
 
 ####################################################
 # CPU/RAM/numa and other singleton VM config tests #

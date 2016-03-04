@@ -1183,6 +1183,11 @@ class Guest(XMLBuilder):
             if gfx.type == gfx.TYPE_SPICE:
                 return True
 
+    def has_gl(self):
+        for gfx in self.get_devices("graphics"):
+            if gfx.gl:
+                return True
+
     def _set_video_defaults(self):
         if self.has_spice():
             self._add_spice_channels()
@@ -1196,3 +1201,5 @@ class Guest(XMLBuilder):
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model
+                if video.model == 'virtio' and self.has_gl():
+                    video.accel3d = True
