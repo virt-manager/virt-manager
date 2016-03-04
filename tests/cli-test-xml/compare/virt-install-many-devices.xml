@@ -210,6 +210,10 @@
       <mouse mode="client"/>
       <filetransfer enable="yes"/>
     </graphics>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <gl enable="yes"/>
+      <image compression="off"/>
+    </graphics>
     <serial type="tcp">
       <source mode="bind" host="127.0.0.1" service="2222"/>
       <protocol type="telnet"/>

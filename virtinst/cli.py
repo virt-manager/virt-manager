@@ -1892,6 +1892,7 @@ class ParserGraphics(VirtCLIParser):
         self.set_param("mouse_mode", "mouse_mode")
         self.set_param("filetransfer_enable", "filetransfer_enable",
             is_onoff=True)
+        self.set_param("gl", "gl", is_onoff=True)
 
     def _parse(self, opts, inst):
         if opts.fullopts == "none":

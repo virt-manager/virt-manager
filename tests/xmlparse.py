@@ -649,6 +649,7 @@ class XMLParseTest(unittest.TestCase):
         check("clipboard_copypaste", None, True)
         check("mouse_mode", None, "client")
         check("filetransfer_enable", None, False)
+        check("gl", None, True)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

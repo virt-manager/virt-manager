@@ -108,7 +108,7 @@ class VirtualGraphics(VirtualDevice):
         self._local_keymap = -1
 
 
-    _XML_PROP_ORDER = ["type", "port", "tlsPort", "autoport",
+    _XML_PROP_ORDER = ["type", "gl", "port", "tlsPort", "autoport",
                        "keymap", "listen",
                        "passwd", "display", "xauth"]
 
@@ -224,5 +224,6 @@ class VirtualGraphics(VirtualDevice):
     clipboard_copypaste = XMLProperty("./clipboard/@copypaste", is_yesno=True)
     mouse_mode = XMLProperty("./mouse/@mode")
     filetransfer_enable = XMLProperty("./filetransfer/@enable", is_yesno=True)
+    gl = XMLProperty("./gl/@enable", is_yesno=True)
 
 VirtualGraphics.register_type()

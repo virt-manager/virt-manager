@@ -982,6 +982,11 @@ Request a VNC password, required at connection time. Beware, this info may
 end up in virt-install log files, so don't use an important password. This
 is used by 'vnc' and 'spice'
 
+=item B<gl>
+
+Whether to use OpenGl accelerated rendering. Value is 'yes' or 'no'. This is
+used by 'spice'.
+
 =back
 
 Use --graphics=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsGraphics>
