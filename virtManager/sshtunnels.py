@@ -32,7 +32,9 @@ class ConnectionInfo(object):
     """
     Holds all the bits needed to make a connection to a graphical console
     """
-    def __init__(self, conn, gdev):
+    def __init__(self, vm, gdev):
+        conn = vm.conn
+        self.vm = vm
         self.gtype      = gdev.type
         self.gport      = gdev.port and str(gdev.port) or None
         self.gsocket    = gdev.socket
@@ -46,6 +48,9 @@ class ConnectionInfo(object):
         self._connport = conn.get_uri_port()
         if self._connhost == "localhost":
             self._connhost = "127.0.0.1"
+
+    def get_conn_fd(self):
+        return self.vm.open_graphics_fd()
 
     def _is_listen_localhost(self, host=None):
         try:

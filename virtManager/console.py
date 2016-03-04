@@ -621,7 +621,7 @@ class vmmConsolePages(vmmGObjectUI):
             gdevs = self.vm.get_graphics_devices()
             gdev = gdevs and gdevs[0] or None
             if gdev:
-                ginfo = ConnectionInfo(self.vm.conn, gdev)
+                ginfo = ConnectionInfo(self.vm, gdev)
         except Exception, e:
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after

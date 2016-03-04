@@ -133,6 +133,10 @@ class Viewer(vmmGObject):
     def _open(self):
         if self._ginfo.need_tunnel():
             self._open_fd(self._tunnels.open_new())
+            return
+        connfd = self._ginfo.get_conn_fd()
+        if connfd != -1:
+            self._open_fd(connfd)
         else:
             self._open_host()
 
@@ -545,6 +549,11 @@ class SpiceViewer(Viewer):
         self._tunnels.unlock()
 
     def _channel_open_fd_request(self, channel, tls_ignore):
+        if not self._ginfo.need_tunnel():
+            connfd = self._ginfo.get_conn_fd()
+            channel.open_fd(connfd)
+            return
+
         if not self._tunnels:
             # Can happen if we close the details window and clear self._tunnels
             # while initially connecting to spice and channel FD requests
