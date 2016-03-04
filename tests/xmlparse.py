@@ -674,6 +674,7 @@ class XMLParseTest(unittest.TestCase):
         check("model", "cirrus", "cirrus", "qxl")
         check("ram", None, 100)
         check("vgamem", None, 8192)
+        check("accel3d", None, True)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

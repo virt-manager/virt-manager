@@ -27,7 +27,7 @@ class VirtualVideoDevice(VirtualDevice):
 
     # Default models list
     MODEL_DEFAULT = "default"
-    MODELS = ["cirrus", "vga", "vmvga", "xen", "qxl"]
+    MODELS = ["cirrus", "vga", "vmvga", "xen", "qxl", "virtio"]
 
     @staticmethod
     def pretty_model(model):
@@ -43,6 +43,7 @@ class VirtualVideoDevice(VirtualDevice):
     ram = XMLProperty("./model/@ram", is_int=True)
     heads = XMLProperty("./model/@heads", is_int=True)
     vgamem = XMLProperty("./model/@vgamem", is_int=True)
+    accel3d = XMLProperty("./model/acceleration/@accel3d", is_yesno=True)
 
 
 VirtualVideoDevice.register_type()
