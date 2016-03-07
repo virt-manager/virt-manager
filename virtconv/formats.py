@@ -263,6 +263,8 @@ class VirtConverter(object):
         """
         binnames = ["qemu-img", "kvm-img"]
 
+        decompress_cmd = None
+
         if _is_test():
             executable = "/usr/bin/qemu-img"
         else:
@@ -275,12 +277,23 @@ class VirtConverter(object):
             raise RuntimeError(_("None of %s tools found.") % binnames)
 
         base = os.path.basename(absin)
+        ext = os.path.splitext(base)[1]
+        if (ext and ext[1:] == "gz"):
+            if not find_executable("gzip"):
+                raise RuntimeError("'gzip' is needed to decompress the file, "
+                    "but not found.")
+            decompress_cmd = ["gzip", "-d", absin]
+            base = os.path.splitext(base)[0]
+            absin = absin[0:-3]
+            self.print_cb("Running %s" % " ".join(decompress_cmd))
         cmd = [executable, "convert", "-O", disk_format, base, absout]
         self.print_cb("Running %s" % " ".join(cmd))
         if dry:
             return
 
         cmd[4] = absin
+        if decompress_cmd is not None:
+            _run_cmd(decompress_cmd)
         _run_cmd(cmd)
 
     def convert_disks(self, disk_format, destdir=None, dry=False):
