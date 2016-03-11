@@ -90,3 +90,5 @@ class TestVirtConv(unittest.TestCase):
             base_dir + "ovf_input/test1.ovf", "ovf", disk_format="qcow2")
         self._compare_single_file(
             base_dir + "vmx_input/test1.vmx", "vmx", disk_format="raw")
+        self._compare_single_file(
+            base_dir + "ovf_input/test_gzip.ovf", "ovf", disk_format="raw")
