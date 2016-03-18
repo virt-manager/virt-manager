@@ -521,8 +521,9 @@ def _show_nographics_warnings(options, guest):
         # warn about it.
         return
 
-    if console_type in (options.extra_args or ""):
-        return
+    for args in options.extra_args:
+        if console_type in (options.extra_args or ""):
+            return
 
     logging.warn(_("Did not find '%(console_string)s' in --extra-args, "
         "which is likely required to see text install output from the "
@@ -589,7 +590,7 @@ def build_guest_instance(conn, options, parsermap):
     convert_old_os_options(options)
 
     # non-xml install options
-    guest.installer.extraargs = options.extra_args
+    guest.installer.extraargs = options.extra_args or []
     guest.installer.initrd_injections = options.initrd_inject
     guest.autostart = options.autostart
 
@@ -922,7 +923,7 @@ def parse_args():
                     help=_("Build guest around an existing disk image"))
     insg.add_argument("--livecd", action="store_true",
                     help=_("Treat the CD-ROM media as a Live CD"))
-    insg.add_argument("-x", "--extra-args",
+    insg.add_argument("-x", "--extra-args", action="append",
                     help=_("Additional arguments to pass to the install kernel "
                            "booted from --location"))
     insg.add_argument("--initrd-inject", action="append",

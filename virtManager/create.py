@@ -1807,12 +1807,8 @@ class vmmCreate(vmmGObjectUI):
             if cdrom:
                 self._guest.installer.cdrom = True
 
-            extraargs = ""
             if extra:
-                extraargs += extra
-
-            if extraargs:
-                self._guest.installer.extraargs = extraargs
+                self._guest.installer.extraargs = [extra]
 
             if init:
                 self._guest.os.init = init

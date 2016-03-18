@@ -374,7 +374,8 @@ class DistroInstaller(Installer):
 
         self._install_kernel = kernel
         self._install_initrd = initrd
-        self.extraargs = args
+        if args:
+            self.extraargs.append(args)
 
 
     ###########################

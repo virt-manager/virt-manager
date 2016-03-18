@@ -59,7 +59,7 @@ class Installer(object):
 
         self.cdrom = False
         self.livecd = False
-        self.extraargs = None
+        self.extraargs = []
 
         self.initrd_injections = []
 
@@ -128,7 +128,7 @@ class Installer(object):
         if self._install_initrd:
             guest.os.initrd = self._install_initrd
         if self.extraargs:
-            guest.os.kernel_args = self.extraargs
+            guest.os.kernel_args = " ".join(self.extraargs)
 
 
     ##########################

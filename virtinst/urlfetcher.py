@@ -644,9 +644,6 @@ class Distro(object):
         if not self.fetcher.location.startswith("/"):
             args += "%s=%s" % (self._get_method_arg(), self.fetcher.location)
 
-        if guest.installer.extraargs:
-            args += " " + guest.installer.extraargs
-
         try:
             initrd = self.fetcher.acquireFile(initrdpath)
             return kernel, initrd, args
