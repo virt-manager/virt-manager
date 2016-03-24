@@ -132,11 +132,17 @@ class _URLFetcher(object):
         """
         pass
 
+    def _hasFile(self, url):
+        raise NotImplementedError("Must be implemented in subclass")
+
     def hasFile(self, filename):
         """
         Return True if self.location has the passed filename
         """
-        raise NotImplementedError("Must be implemented in subclass")
+        url = self._make_full_url(filename)
+        ret = self._hasFile(url)
+        logging.debug("hasFile(%s) returning %s", url, ret)
+        return ret
 
     def acquireFile(self, filename):
         """
@@ -167,16 +173,15 @@ class _URLFetcher(object):
 
 
 class _HTTPURLFetcher(_URLFetcher):
-    def hasFile(self, filename):
+    def _hasFile(self, url):
         """
         We just do a HEAD request to see if the file exists
         """
-        url = self._make_full_url(filename)
         try:
             response = requests.head(url)
             response.raise_for_status()
         except Exception, e:
-            logging.debug("HTTP hasFile: didn't find %s: %s", url, str(e))
+            logging.debug("HTTP hasFile request failed: %s", str(e))
             return False
         return True
 
@@ -241,8 +246,7 @@ class _FTPURLFetcher(_URLFetcher):
 
         self._ftp = None
 
-    def hasFile(self, filename):
-        url = self._make_full_url(filename)
+    def _hasFile(self, url):
         path = urlparse.urlparse(url)[2]
 
         try:
@@ -264,12 +268,8 @@ class _LocalURLFetcher(_URLFetcher):
     """
     For grabbing files from a local directory
     """
-    def hasFile(self, filename):
-        url = self._make_full_url(filename)
-        ret = os.path.exists(url)
-        if not ret:
-            logging.debug("local hasFile: Couldn't find %s", url)
-        return ret
+    def _hasFile(self, url):
+        return os.path.exists(url)
 
     def _grabber(self, url):
         urlobj = file(url, "r")
