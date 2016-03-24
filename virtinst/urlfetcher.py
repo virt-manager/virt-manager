@@ -375,6 +375,7 @@ def _grabTreeinfo(fetcher):
         logging.debug("Did not find 'family' section in treeinfo")
         return None
 
+    logging.debug("treeinfo family=%s", treeinfo.get("general", "family"))
     return treeinfo
 
 
@@ -933,7 +934,7 @@ class SLDistro(RHELDistro):
 
     def isValidStore(self):
         if self.treeinfo:
-            m = re.match(".*Scientific Linux.*",
+            m = re.match(".*Scientific.*",
                          self.treeinfo.get("general", "family"))
             ret = (m is not None)
 
