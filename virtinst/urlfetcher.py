@@ -218,8 +218,9 @@ class _FTPURLFetcher(_URLFetcher):
             return
 
         try:
-            server = urlparse.urlparse(self.location)[1]
-            self._ftp = ftplib.FTP(server)
+            parsed = urlparse.urlparse(self.location)
+            self._ftp = ftplib.FTP()
+            self._ftp.connect(parsed.hostname, parsed.port)
             self._ftp.login()
         except Exception, e:
             raise ValueError(_("Opening URL %s failed: %s.") %

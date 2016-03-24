@@ -53,11 +53,11 @@ OLD_OPENSUSE_URL = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/%
 OPENSUSE_URL = "http://download.opensuse.org/distribution/%s/repo/oss/"
 
 OLD_UBUNTU_URL = "http://old-releases.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
-UBUNTU_URL = "http://us.archive.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
+UBUNTU_URL = "http://us.archive.ubuntu.com:80/ubuntu/dists/%s/main/installer-%s"
 
 OLD_DEBIAN_URL = "http://archive.debian.org/debian/dists/%s/main/installer-%s/"
 DAILY_DEBIAN_URL = "http://d-i.debian.org/daily-images/%s/"
-DEBIAN_URL = "ftp://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
+DEBIAN_URL = "ftp://ftp.us.debian.org:21/debian/dists/%s/main/installer-%s/"
 
 MAGEIA_URL = "http://distro.ibiblio.org/mageia/distrib/%s/%s"
 
