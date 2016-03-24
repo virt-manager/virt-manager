@@ -178,7 +178,7 @@ class _HTTPURLFetcher(_URLFetcher):
         We just do a HEAD request to see if the file exists
         """
         try:
-            response = requests.head(url)
+            response = requests.head(url, allow_redirects=True)
             response.raise_for_status()
         except Exception, e:
             logging.debug("HTTP hasFile request failed: %s", str(e))
