@@ -639,6 +639,7 @@ class Distro(object):
     def _kernelFetchHelper(self, guest, kernelpath, initrdpath):
         # Simple helper for fetching kernel + initrd and performing
         # cleanup if necessary
+        ignore = guest
         kernel = self.fetcher.acquireFile(kernelpath)
         args = ''
 

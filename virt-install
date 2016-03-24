@@ -522,7 +522,7 @@ def _show_nographics_warnings(options, guest):
         return
 
     for args in options.extra_args:
-        if console_type in (options.extra_args or ""):
+        if console_type in (args or ""):
             return
 
     logging.warn(_("Did not find '%(console_string)s' in --extra-args, "
