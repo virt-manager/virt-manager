@@ -1173,9 +1173,21 @@ class MandrivaDistro(Distro):
     os_variant = "linux"
 
     _boot_iso_paths = ["install/images/boot.iso"]
-    # Kernels for HVM: valid for releases 2007.1, 2008.*, 2009.0
-    _hvm_kernel_paths = [("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
     _xen_kernel_paths = []
+
+    def __init__(self, *args, **kwargs):
+        Distro.__init__(self, *args, **kwargs)
+        self._hvm_kernel_paths = []
+
+        # At least Mageia 5 uses arch in the names
+        self._hvm_kernel_paths += [
+            ("isolinux/%s/vmlinuz" % self.arch,
+             "isolinux/%s/all.rdz" % self.arch)]
+
+        # Kernels for HVM: valid for releases 2007.1, 2008.*, 2009.0
+        self._hvm_kernel_paths += [
+            ("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
+
 
     def isValidStore(self):
         # Don't support any paravirt installs
