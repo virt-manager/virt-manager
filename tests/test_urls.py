@@ -211,7 +211,10 @@ def _testURL(fetcher, distname, arch, distroobj):
     Test that our URL detection logic works for grabbing kernel, xen
     kernel, and boot.iso
     """
-    print "\nTesting %s-%s" % (distname, arch)
+    import sys
+    sys.stdout.write("\nTesting %-25s " % ("%s-%s:" % (distname, arch)))
+    sys.stdout.flush()
+
     hvmguest.os.arch = arch
     xenguest.os.arch = arch
     if distroobj.testshortcircuit:
@@ -226,16 +229,26 @@ def _testURL(fetcher, distname, arch, distroobj):
     for s in [hvmstore, xenstore]:
         if (s and distroobj.distroclass and
             not isinstance(s, distroobj.distroclass)):
-            raise AssertionError("(%s): expected store %s, was %s" %
-                                 (distname, distroobj.distroclass, s))
+            raise AssertionError("Unexpected URLDistro class:\n"
+                "found  = %s\n"
+                "expect = %s\n"
+                "name   = %s\n"
+                "url    = %s" %
+                (s.__class__, distroobj.distroclass, distname,
+                 fetcher.location))
 
         # Make sure the stores are reporting correct distro name/variant
         if (s and distroobj.detectdistro and
             distroobj.detectdistro != s.os_variant):
             raise AssertionError(
-                "Store distro/variant did not match expected values:\n"
-                "url=%s\nstore=%s\nfound=%s\nexpect=%s" %
-                (fetcher.location, s, s.os_variant, distroobj.detectdistro))
+                "Detected OS did not match expected values:\n"
+                "found  = %s\n"
+                "expect = %s\n"
+                "name   = %s\n"
+                "url    = %s\n"
+                "store  = %s" %
+                (s.os_variant, distroobj.detectdistro,
+                 distname, fetcher.location, distroobj.distroclass))
 
     # Do this only after the distro detection, since we actually need
     # to fetch files for that part
