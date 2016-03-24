@@ -59,7 +59,7 @@ OLD_DEBIAN_URL = "http://archive.debian.org/debian/dists/%s/main/installer-%s/"
 DAILY_DEBIAN_URL = "http://d-i.debian.org/daily-images/%s/"
 DEBIAN_URL = "ftp://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
 
-MANDRIVA_URL = "ftp://mirror.cc.columbia.edu/pub/linux/mandriva/official/%s/%s"
+MAGEIA_URL = "http://distro.ibiblio.org/mageia/distrib/%s/%s"
 
 
 urls = {}
@@ -154,7 +154,6 @@ _set_distro(DebianDistro)
 # Debian releases rarely enough that we can just do every release since lenny
 _add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debian5", hasxen=False,
      testshortcircuit=True)
-_add(DEBIAN_URL % ("squeeze", "amd64"), "debian6")
 _add(DEBIAN_URL % ("wheezy", "amd64"), "debian7")
 # And daily builds, since we specially handle that URL
 _add(DAILY_DEBIAN_URL % ("amd64"), "debian8", name="debiandaily")
@@ -170,14 +169,11 @@ _add(OLD_UBUNTU_URL % ("hardy", "amd64"), "ubuntu8.04",
 # Latest LTS
 _add(UBUNTU_URL % ("precise", "amd64"), "ubuntu12.04")
 # Latest release
-_add(OLD_UBUNTU_URL % ("raring", "amd64"), "ubuntu13.04")
+_add(UBUNTU_URL % ("wily", "amd64"), "ubuntu15.10")
 
 
 _set_distro(MandrivaDistro)
-# One old mandriva
-_add(MANDRIVA_URL % ("2010.2", "x86_64"),
-     i686=MANDRIVA_URL % ("2010.2", "i586"),
-     hasxen=False, name="mandriva-2010.2")
+_add(MAGEIA_URL % ("5", "x86_64"), "linux", name="mageia5", hasxen=False)
 
 
 testconn = utils.open_testdefault()
