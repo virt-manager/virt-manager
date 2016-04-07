@@ -778,13 +778,6 @@ class FedoraDistro(RedHatDistro):
     name = "Fedora"
     urldistro = "fedora"
 
-    def _latestFedoraVariant(self):
-        """
-        Search osdict list, find newest fedora version listed
-        """
-        latest = OSDB.latest_fedora_version()
-        return latest, int(latest[6:])
-
     def isValidStore(self):
         if not self.treeinfo:
             return self.fetcher.hasFile("Fedora")
@@ -792,22 +785,41 @@ class FedoraDistro(RedHatDistro):
         if not re.match(".*Fedora.*", self.treeinfo.get("general", "family")):
             return False
 
-        lateststr, latestnum = self._latestFedoraVariant()
         ver = self.treeinfo.get("general", "version")
         if not ver:
+            logging.debug("No version found in .treeinfo")
             return False
+        logging.debug("Found treeinfo version=%s", ver)
+
+        latest_variant = OSDB.latest_fedora_version()
+        if re.match("fedora[0-9]+", latest_variant):
+            latest_vernum = int(latest_variant[6:])
+        else:
+            logging.debug("Failed to parse version number from latest "
+                "fedora variant=%s. Using safe default 22", latest_variant)
+            latest_vernum = 22
 
         # rawhide trees changed to use version=Rawhide in Apr 2016
         if ver in ["development", "rawhide", "Rawhide"]:
-            self._version_number = latestnum
-            self.os_variant = lateststr
+            self._version_number = latest_vernum
+            self.os_variant = latest_variant
             return True
 
+        # Dev versions can be like '23_Alpha'
         if "_" in ver:
             ver = ver.split("_")[0]
-        vernum = int(str(ver).split("-")[0])
-        if vernum > latestnum:
-            self.os_variant = lateststr
+
+        # Typical versions are like 'fedora-23'
+        vernum = str(ver).split("-")[0]
+        if vernum.isdigit():
+            vernum = int(vernum)
+        else:
+            logging.debug("Failed to parse version number from treeinfo "
+                "version=%s, using vernum=latest=%s", ver, latest_vernum)
+            vernum = latest_vernum
+
+        if vernum > latest_vernum:
+            self.os_variant = latest_variant
         else:
             self.os_variant = "fedora" + str(vernum)
 
