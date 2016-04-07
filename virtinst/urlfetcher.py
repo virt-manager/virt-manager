@@ -797,10 +797,11 @@ class FedoraDistro(RedHatDistro):
         if not ver:
             return False
 
-        if ver == "development" or ver == "rawhide":
+        # rawhide trees changed to use version=Rawhide in Apr 2016
+        if ver in ["development", "rawhide", "Rawhide"]:
             self._version_number = latestnum
             self.os_variant = lateststr
-            return
+            return True
 
         if "_" in ver:
             ver = ver.split("_")[0]
