@@ -39,8 +39,7 @@ from virtinst.urlfetcher import MandrivaDistro
 # Access to protected member, needed to unittest stuff
 
 ARCHIVE_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"
-OLD_FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
-DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
+DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/Server/%s/os/"
 FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Server/%s/os/"
 
 OLD_CENTOS_URL = "http://vault.centos.org/%s/os/%s"
@@ -107,10 +106,11 @@ _set_distro(FedoraDistro)
 _add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14",
      i686=ARCHIVE_FEDORA_URL % ("14", "i386"))
 # 2 Latest releases
-_add(FEDORA_URL % ("21", "x86_64"), "fedora21")
 _add(FEDORA_URL % ("22", "x86_64"), "fedora22")
-# Any Dev release
 _add(FEDORA_URL % ("23", "x86_64"), "fedora22", name="fedora23")
+# Any Dev release
+_add(DEVFEDORA_URL % ("24", "x86_64"), "fedora22", name="fedora24")
+_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora22", name="fedora-rawhide")
 
 
 _set_distro(CentOSDistro)
