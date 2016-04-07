@@ -661,7 +661,6 @@ class GenericDistro(Distro):
     as a last resort if we can't recognize any actual distro
     """
     name = "Generic"
-    os_variant = "linux"
     uses_treeinfo = True
 
     _xen_paths = [("images/xen/vmlinuz",
@@ -753,7 +752,6 @@ class RedHatDistro(Distro):
     a common layout
     """
     uses_treeinfo = True
-    os_variant = "linux"
     _version_number = None
 
     _boot_iso_paths   = ["images/boot.iso"]
@@ -1068,7 +1066,6 @@ class DebianDistro(Distro):
     # daily builds: http://d-i.debian.org/daily-images/amd64/
     name = "Debian"
     urldistro = "debian"
-    os_variant = "linux"
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
@@ -1185,7 +1182,6 @@ class MandrivaDistro(Distro):
     # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
     name = "Mandriva/Mageia"
     urldistro = "mandriva"
-    os_variant = "linux"
 
     _boot_iso_paths = ["install/images/boot.iso"]
     _xen_kernel_paths = []
@@ -1228,7 +1224,6 @@ class ALTLinuxDistro(Distro):
     # mounted ISO
     name = "ALT Linux"
     urldistro = "altlinux"
-    os_variant = "linux"
 
     _boot_iso_paths = [("altinst", "live")]
     _hvm_kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]

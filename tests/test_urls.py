@@ -67,7 +67,7 @@ _distro = None
 
 
 class _DistroURL(object):
-    def __init__(self, x86_64, detectdistro="linux", i686=None,
+    def __init__(self, x86_64, detectdistro=None, i686=None,
                  hasxen=True, hasbootiso=True, name=None,
                  testshortcircuit=False):
         self.x86_64 = x86_64
@@ -174,7 +174,7 @@ _add(UBUNTU_URL % ("wily", "amd64"), "ubuntu15.10")
 
 
 _set_distro(MandrivaDistro)
-_add(MAGEIA_URL % ("5", "x86_64"), "linux", name="mageia5", hasxen=False)
+_add(MAGEIA_URL % ("5", "x86_64"), name="mageia5", hasxen=False)
 
 
 testconn = utils.open_testdefault()
