@@ -19,6 +19,7 @@ import unittest
 import time
 import logging
 import platform
+import traceback
 
 from tests import URLTEST_LOCAL_MEDIA
 from tests import utils
@@ -217,10 +218,16 @@ def _testURL(fetcher, distname, arch, distroobj):
         hvmguest.os_variant = distroobj.detectdistro
         xenguest.os_variant = distroobj.detectdistro
 
-    hvmstore = _storeForDistro(fetcher, hvmguest)
-    xenstore = None
-    if distroobj.hasxen:
-        xenstore = _storeForDistro(fetcher, xenguest)
+    try:
+        hvmstore = _storeForDistro(fetcher, hvmguest)
+        xenstore = None
+        if distroobj.hasxen:
+            xenstore = _storeForDistro(fetcher, xenguest)
+    except:
+        raise AssertionError("\nFailed to detect URLDistro class:\n"
+            "name   = %s\n"
+            "url    = %s\n\n%s" %
+            (distname, fetcher.location, "".join(traceback.format_exc())))
 
     for s in [hvmstore, xenstore]:
         if (s and distroobj.distroclass and
