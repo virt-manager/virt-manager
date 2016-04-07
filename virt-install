@@ -535,7 +535,8 @@ def show_warnings(options, guest):
         logging.warn(_("The guest's network configuration does not support "
                        "PXE"))
 
-    if not guest.os_variant and options.distro_variant != "none":
+    if (guest.os_variant == "generic" and
+        options.distro_variant not in ["none", "generic"]):
         logging.warn(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
 
