@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Cole Robinson <crobinso@redhat.com>, 2011
 # Ville Skyttä <ville.skytta@iki.fi>, 2011
@@ -10,17 +10,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-24 13:18-0500\n"
+"POT-Creation-Date: 2016-02-27 11:39-0500\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/projects/p/virt-manager/"
 "language/fi/)\n"
 "Language: fi\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Zanata 3.7.3\n"
+"X-Generator: Zanata 3.8.2\n"
 
 #: ../virt-manager:57
 msgid "Error starting Virtual Machine Manager"
@@ -95,8 +95,7 @@ msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
 #: ../virt-install:439
-msgid ""
-"An install method must be specified\n"
+msgid "An install method must be specified\n"
 "(%(methods)s)"
 msgstr ""
 
@@ -157,8 +156,8 @@ msgstr ""
 
 #: ../virt-install:538
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with -"
+"-os-variant for optimal results."
 msgstr ""
 
 #: ../virt-install:558
@@ -170,8 +169,7 @@ msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
 #: ../virt-install:734
-msgid ""
-"\n"
+msgid "\n"
 "Starting install..."
 msgstr ""
 
@@ -181,8 +179,7 @@ msgstr ""
 
 #: ../virt-install:756
 #, c-format
-msgid ""
-"You can restart your domain by running:\n"
+msgid "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
@@ -399,8 +396,8 @@ msgstr ""
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
-"copy=hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
+"hdc)"
 msgstr ""
 
 #: ../virt-clone:133
@@ -586,8 +583,7 @@ msgid ""
 msgstr ""
 
 #: ../virt-xml:360
-msgid ""
-"Add specified device. Example:\n"
+msgid "Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
 
@@ -649,6 +645,10 @@ msgstr ""
 msgid "Changes will take effect after the next domain shutdown."
 msgstr ""
 
+#: ../virtManager/addhardware.py:180 ../virtManager/details.py:754
+msgid "Hardware"
+msgstr ""
+
 #: ../virtManager/addhardware.py:218
 msgid "Disk device"
 msgstr ""
@@ -668,7 +668,7 @@ msgstr ""
 #. [xml value, label]
 #: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:570
 #: ../virtManager/addhardware.py:682 ../virtManager/addhardware.py:698
-#: ../virtManager/addhardware.py:749 ../virtManager/details.py:2532
+#: ../virtManager/addhardware.py:749 ../virtManager/details.py:2537
 #: ../virtManager/gfxdetails.py:84 ../virtManager/preferences.py:165
 msgid "Hypervisor default"
 msgstr ""
@@ -678,27 +678,134 @@ msgstr ""
 msgid "Connection does not support storage management."
 msgstr ""
 
+#: ../virtManager/addhardware.py:350 ../virtManager/addhardware.py:1090
+#: ../ui/create.ui.h:55
+msgid "Storage"
+msgstr ""
+
+#: ../virtManager/addhardware.py:352 ../virtManager/addhardware.py:1092
+msgid "Controller"
+msgstr ""
+
+#: ../virtManager/addhardware.py:353 ../virtManager/addhardware.py:1094
+#: ../virtinst/network.py:195
+msgid "Network"
+msgstr "Verkko"
+
+#: ../virtManager/addhardware.py:354 ../virtManager/addhardware.py:1096
+#: ../virtManager/details.py:200
+msgid "Input"
+msgstr "Syöte"
+
 #: ../virtManager/addhardware.py:355 ../virtManager/addhardware.py:360
 #: ../virtManager/addhardware.py:363 ../virtManager/addhardware.py:367
 #: ../virtManager/addhardware.py:373 ../virtManager/addhardware.py:393
 msgid "Not supported for this guest type."
 msgstr "Ei tuettu tälle vierasjärjestelmätyypille."
 
+#: ../virtManager/addhardware.py:356 ../virtManager/addhardware.py:1098
+msgid "Graphics"
+msgstr ""
+
+#: ../virtManager/addhardware.py:358 ../virtManager/addhardware.py:1100
+msgid "Sound"
+msgstr ""
+
+#: ../virtManager/addhardware.py:361 ../virtManager/details.py:204
+#: ../ui/details.ui.h:169
+msgid "Serial"
+msgstr ""
+
+#: ../virtManager/addhardware.py:365 ../virtManager/details.py:206
+msgid "Parallel"
+msgstr ""
+
+#: ../virtManager/addhardware.py:369 ../virtManager/details.py:208
+#: ../ui/details.ui.h:23
+msgid "Console"
+msgstr ""
+
+#: ../virtManager/addhardware.py:371 ../virtManager/details.py:214
+msgid "Channel"
+msgstr ""
+
+#: ../virtManager/addhardware.py:375
+msgid "USB Host Device"
+msgstr ""
+
 #: ../virtManager/addhardware.py:377 ../virtManager/addhardware.py:381
 msgid "Connection does not support host device enumeration"
 msgstr ""
 
 #: ../virtManager/addhardware.py:385
-#, fuzzy
 msgid "Not supported for containers"
-msgstr "Ei tuettu tälle vierasjärjestelmätyypille."
+msgstr ""
+
+#: ../virtManager/addhardware.py:386
+msgid "PCI Host Device"
+msgstr ""
+
+#: ../virtManager/addhardware.py:389
+msgid "Video"
+msgstr ""
 
 #: ../virtManager/addhardware.py:390
 msgid "Libvirt version does not support video devices."
 msgstr ""
 
+#: ../virtManager/addhardware.py:391 ../virtManager/details.py:242
+#: ../virtManager/domain.py:280
+msgid "Watchdog"
+msgstr ""
+
+#: ../virtManager/addhardware.py:394
+msgid "Filesystem"
+msgstr ""
+
 #: ../virtManager/addhardware.py:398 ../virtManager/addhardware.py:409
 msgid "Not supported for this hypervisor/libvirt combination."
+msgstr ""
+
+#: ../virtManager/addhardware.py:400 ../virtManager/addhardware.py:1108
+#: ../virtManager/details.py:241
+msgid "Smartcard"
+msgstr ""
+
+#: ../virtManager/addhardware.py:402 ../virtManager/addhardware.py:1110
+msgid "USB Redirection"
+msgstr ""
+
+#: ../virtManager/addhardware.py:404 ../virtManager/addhardware.py:1112
+#: ../virtManager/details.py:239
+msgid "TPM"
+msgstr ""
+
+#: ../virtManager/addhardware.py:406 ../virtManager/details.py:238
+msgid "RNG"
+msgstr ""
+
+#: ../virtManager/addhardware.py:407 ../virtManager/addhardware.py:1116
+#: ../virtManager/details.py:240
+msgid "Panic Notifier"
+msgstr ""
+
+#. [xml value, label]
+#: ../virtManager/addhardware.py:603 ../virtManager/netlist.py:96
+msgid "Passthrough"
+msgstr ""
+
+#: ../virtManager/addhardware.py:604
+msgid "Host"
+msgstr ""
+
+#. [xml value, label, conn details]
+#: ../virtManager/addhardware.py:631
+msgid "Spice channel"
+msgstr ""
+
+#: ../virtManager/addhardware.py:717 ../virtManager/details.py:171
+#: ../virtManager/details.py:3156 ../virtinst/devicecontroller.py:44
+msgid "Floppy"
 msgstr ""
 
 #: ../virtManager/addhardware.py:762
@@ -739,30 +846,6 @@ msgstr ""
 msgid "Error"
 msgstr "Virhe"
 
-#: ../virtManager/addhardware.py:1090 ../ui/create.ui.h:55
-msgid "Storage"
-msgstr ""
-
-#: ../virtManager/addhardware.py:1092
-msgid "Controller"
-msgstr ""
-
-#: ../virtManager/addhardware.py:1094 ../virtinst/network.py:194
-msgid "Network"
-msgstr "Verkko"
-
-#: ../virtManager/addhardware.py:1096 ../virtManager/details.py:200
-msgid "Input"
-msgstr "Syöte"
-
-#: ../virtManager/addhardware.py:1098
-msgid "Graphics"
-msgstr ""
-
-#: ../virtManager/addhardware.py:1100
-msgid "Sound"
-msgstr ""
-
 #: ../virtManager/addhardware.py:1102
 msgid "Video Device"
 msgstr ""
@@ -775,24 +858,13 @@ msgstr ""
 msgid "Filesystem Passthrough"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1108 ../virtManager/details.py:241
-msgid "Smartcard"
-msgstr ""
-
-#: ../virtManager/addhardware.py:1110
-msgid "USB Redirection"
-msgstr ""
-
-#: ../virtManager/addhardware.py:1112 ../virtManager/details.py:239
-msgid "TPM"
-msgstr ""
-
 #: ../virtManager/addhardware.py:1114
 msgid "Random Number Generator"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1116 ../virtManager/details.py:240
-msgid "Panic Notifier"
+#: ../virtManager/addhardware.py:1120 ../virtManager/details.py:2841
+#, python-format
+msgid "%s Device"
 msgstr ""
 
 #: ../virtManager/addhardware.py:1124
@@ -1003,19 +1075,15 @@ msgid "Do you really want to use the disk?"
 msgstr ""
 
 #: ../virtManager/asyncjob.py:239
-msgid "Cancel the job?"
-msgstr ""
-
-#: ../virtManager/asyncjob.py:255
 msgid "Cancelling job..."
 msgstr ""
 
-#: ../virtManager/asyncjob.py:339 ../virtManager/asyncjob.py:346
+#: ../virtManager/asyncjob.py:323 ../virtManager/asyncjob.py:330
 #: ../ui/asyncjob.ui.h:3
 msgid "Processing..."
 msgstr "Käsitellään..."
 
-#: ../virtManager/asyncjob.py:360
+#: ../virtManager/asyncjob.py:344
 msgid "Completed"
 msgstr "Valmis"
 
@@ -1052,8 +1120,7 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr ""
 
 #: ../virtManager/clone.py:84
-msgid ""
-"Block devices to clone must be libvirt\n"
+msgid "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 
@@ -1195,8 +1262,28 @@ msgstr ""
 msgid "Locate directory volume"
 msgstr ""
 
+#: ../virtManager/connect.py:168
+msgid "user session"
+msgstr ""
+
+#: ../virtManager/connect.py:170
+msgid "Linux Containers"
+msgstr ""
+
+#: ../virtManager/connect.py:179
+msgid "with certificates"
+msgstr ""
+
 #: ../virtManager/connect.py:423
 msgid "A hostname is required for remote connections."
+msgstr ""
+
+#: ../virtManager/connectauth.py:84
+msgid "Authentication required"
+msgstr ""
+
+#: ../virtManager/connection.py:417
+msgid "User session"
 msgstr ""
 
 #: ../virtManager/connection.py:580 ../virtManager/migrate.py:297
@@ -1208,17 +1295,17 @@ msgid "Connecting"
 msgstr "Yhdistää"
 
 #: ../virtManager/connection.py:584 ../virtManager/host.py:632
-#: ../virtManager/host.py:845 ../virtManager/storagelist.py:347
-#: ../ui/storagelist.ui.h:11
+#: ../virtManager/host.py:845 ../virtManager/libvirtobject.py:214
+#: ../virtManager/storagelist.py:347 ../ui/storagelist.ui.h:11
 msgid "Active"
 msgstr "Aktiivinen"
 
 #. Machine settings
 #: ../virtManager/connection.py:586 ../virtManager/create.py:999
-#: ../virtManager/details.py:2308 ../virtManager/details.py:2324
-#: ../virtManager/details.py:2554 ../virtManager/domain.py:256
+#: ../virtManager/details.py:2313 ../virtManager/details.py:2329
+#: ../virtManager/details.py:2559 ../virtManager/domain.py:256
 #: ../virtManager/gfxdetails.py:196 ../virtManager/gfxdetails.py:198
-#: ../virtManager/host.py:839
+#: ../virtManager/host.py:839 ../virtManager/interface.py:112
 msgid "Unknown"
 msgstr "Tuntematon"
 
@@ -1315,6 +1402,16 @@ msgstr ""
 msgid "No text console available"
 msgstr ""
 
+#: ../virtManager/console.py:874
+#, python-format
+msgid "Text Console %d"
+msgstr ""
+
+#: ../virtManager/console.py:876
+#, python-format
+msgid "Serial %d"
+msgstr ""
+
 #: ../virtManager/console.py:888
 msgid "No graphical console available"
 msgstr ""
@@ -1333,8 +1430,7 @@ msgstr ""
 
 #: ../virtManager/create.py:454
 #, python-format
-msgid ""
-"Failed to setup UEFI for AArch64: %s\n"
+msgid "Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 
@@ -1400,8 +1496,8 @@ msgstr ""
 msgid "Host filesystem"
 msgstr ""
 
-#: ../virtManager/create.py:1047 ../virtManager/details.py:2309
-#: ../virtinst/domcapabilities.py:132
+#: ../virtManager/create.py:1047 ../virtManager/details.py:2314
+#: ../virtinst/domcapabilities.py:133
 msgid "None"
 msgstr ""
 
@@ -1569,7 +1665,8 @@ msgstr ""
 msgid "Error continue install: %s"
 msgstr ""
 
-#: ../virtManager/createinterface.py:201 ../virtManager/netlist.py:116
+#: ../virtManager/createinterface.py:201 ../virtManager/netlist.py:93
+#: ../virtManager/netlist.py:116
 msgid "Bridge"
 msgstr "Silta"
 
@@ -1586,7 +1683,8 @@ msgid "VLAN"
 msgstr ""
 
 #: ../virtManager/createinterface.py:222 ../virtManager/details.py:883
-#: ../virtManager/manager.py:352 ../ui/create.ui.h:17
+#: ../virtManager/host.py:207 ../virtManager/manager.py:352
+#: ../ui/create.ui.h:17
 msgid "Name"
 msgstr "Nimi"
 
@@ -1600,6 +1698,29 @@ msgstr ""
 
 #: ../virtManager/createinterface.py:260 ../virtManager/createinterface.py:268
 msgid "System default"
+msgstr ""
+
+#: ../virtManager/createinterface.py:297 ../virtManager/createinterface.py:305
+#: ../virtManager/createinterface.py:724 ../virtManager/createinterface.py:739
+#: ../virtManager/host.py:877 ../virtManager/host.py:890
+msgid "Static"
+msgstr ""
+
+#: ../virtManager/createinterface.py:298 ../virtManager/createinterface.py:306
+#: ../virtManager/createinterface.py:748
+msgid "No configuration"
+msgstr ""
+
+#: ../virtManager/createinterface.py:435
+msgid "Not configured"
+msgstr ""
+
+#: ../virtManager/createinterface.py:437
+msgid "No IP configuration"
+msgstr ""
+
+#: ../virtManager/createinterface.py:452
+msgid "No child interfaces selected."
 msgstr ""
 
 #: ../virtManager/createinterface.py:491
@@ -1620,6 +1741,15 @@ msgstr ""
 
 #: ../virtManager/createinterface.py:567
 msgid "No interface selected"
+msgstr ""
+
+#: ../virtManager/createinterface.py:733 ../virtManager/host.py:885
+msgid "Autoconf"
+msgstr ""
+
+#: ../virtManager/createinterface.py:745
+#, python-format
+msgid "Copy configuration from '%s'"
 msgstr ""
 
 #: ../virtManager/createinterface.py:764
@@ -1797,6 +1927,7 @@ msgid "The DHCPv6 end address is not with the network %s"
 msgstr ""
 
 #: ../virtManager/createnet.py:567 ../virtManager/createnet.py:621
+#: ../virtManager/netlist.py:95
 msgid "Private"
 msgstr "Yksityinen"
 
@@ -1896,8 +2027,7 @@ msgstr ""
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid ""
-"The following paths will be deleted:\n"
+msgid "The following paths will be deleted:\n"
 "\n"
 "%s"
 msgstr ""
@@ -1959,22 +2089,16 @@ msgstr ""
 
 #: ../virtManager/delete.py:389
 #, python-format
-msgid ""
-"Storage is in use by the following virtual machines:\n"
+msgid "Storage is in use by the following virtual machines:\n"
 "- %s "
-msgstr ""
-"Massamuisti on seuraavien virtuaalikoneiden käytössä:\n"
+msgstr "Massamuisti on seuraavien virtuaalikoneiden käytössä:\n"
 "- %s"
 
 #: ../virtManager/details.py:161
 msgid "Remove this device from the virtual machine"
 msgstr ""
 
-#: ../virtManager/details.py:171 ../virtinst/devicecontroller.py:44
-msgid "Floppy"
-msgstr ""
-
-#: ../virtManager/details.py:174
+#: ../virtManager/details.py:174 ../virtManager/details.py:3154
 msgid "CDROM"
 msgstr ""
 
@@ -1992,22 +2116,6 @@ msgstr "Hiiri"
 
 #: ../virtManager/details.py:199
 msgid "Keyboard"
-msgstr ""
-
-#: ../virtManager/details.py:204 ../ui/details.ui.h:169
-msgid "Serial"
-msgstr ""
-
-#: ../virtManager/details.py:206
-msgid "Parallel"
-msgstr ""
-
-#: ../virtManager/details.py:208 ../ui/details.ui.h:23
-msgid "Console"
-msgstr ""
-
-#: ../virtManager/details.py:214
-msgid "Channel"
 msgstr ""
 
 #: ../virtManager/details.py:223
@@ -2038,14 +2146,6 @@ msgstr ""
 #: ../virtManager/details.py:235
 #, python-format
 msgid "Controller %s"
-msgstr ""
-
-#: ../virtManager/details.py:238
-msgid "RNG"
-msgstr ""
-
-#: ../virtManager/details.py:242 ../virtManager/domain.py:280
-msgid "Watchdog"
 msgstr ""
 
 #: ../virtManager/details.py:628
@@ -2114,9 +2214,8 @@ msgid "_Run"
 msgstr "_Suorita"
 
 #: ../virtManager/details.py:1291 ../virtManager/manager.py:871
-#, fuzzy
 msgid "Resume the virtual machine"
-msgstr "Ei virtuaalikoneita"
+msgstr ""
 
 #: ../virtManager/details.py:1293 ../virtManager/manager.py:873
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
@@ -2132,178 +2231,190 @@ msgstr ""
 msgid "Error launching hardware dialog: %s"
 msgstr ""
 
-#: ../virtManager/details.py:1457
+#: ../virtManager/details.py:1459
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr ""
 
-#: ../virtManager/details.py:1465
+#: ../virtManager/details.py:1467
 msgid "Error initializing spice USB device widget"
 msgstr ""
 
-#: ../virtManager/details.py:1469
+#: ../virtManager/details.py:1471
 msgid "Select USB devices for redirection"
 msgstr ""
 
-#: ../virtManager/details.py:1495
+#: ../virtManager/details.py:1500
 msgid "Save Virtual Machine Screenshot"
 msgstr "Tallenna virtuaalikoneen kuvakaappaus"
 
-#: ../virtManager/details.py:1776
+#: ../virtManager/details.py:1501
+msgid "PNG files"
+msgstr ""
+
+#: ../virtManager/details.py:1781
 #, python-format
 msgid "Error disconnecting media: %s"
 msgstr ""
 
-#: ../virtManager/details.py:1797
+#: ../virtManager/details.py:1802
 #, python-format
 msgid "Error launching media dialog: %s"
 msgstr ""
 
-#: ../virtManager/details.py:1863
+#: ../virtManager/details.py:1868
 #, python-format
 msgid "Error apply changes: %s"
 msgstr ""
 
-#: ../virtManager/details.py:1996
+#: ../virtManager/details.py:2001
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr ""
 
-#: ../virtManager/details.py:2014
+#: ../virtManager/details.py:2019
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr ""
 
-#: ../virtManager/details.py:2017
+#: ../virtManager/details.py:2022
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 
-#: ../virtManager/details.py:2023
+#: ../virtManager/details.py:2028
 msgid "An init path must be specified"
 msgstr ""
 
-#: ../virtManager/details.py:2216
+#: ../virtManager/details.py:2221
 msgid "Are you sure you want to remove this device?"
 msgstr ""
 
-#: ../virtManager/details.py:2223
+#: ../virtManager/details.py:2228
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Virhe poistettaessa laitetta: %s"
 
-#: ../virtManager/details.py:2240
+#: ../virtManager/details.py:2245
 msgid "Device could not be removed from the running machine"
 msgstr ""
 
-#: ../virtManager/details.py:2242
+#: ../virtManager/details.py:2247
 msgid "This change will take effect after the next guest shutdown."
 msgstr ""
 
-#: ../virtManager/details.py:2364
+#: ../virtManager/details.py:2369
 msgid "Error while inspecting the guest configuration"
 msgstr ""
 
-#: ../virtManager/details.py:2372 ../virtManager/details.py:2376
+#: ../virtManager/details.py:2377 ../virtManager/details.py:2381
 msgid "unknown"
-msgstr ""
-
-#: ../virtManager/details.py:2409
-#, python-format
-msgid "%(received)d %(units)s read"
-msgstr ""
-
-#: ../virtManager/details.py:2410
-#, python-format
-msgid "%(transfered)d %(units)s write"
-msgstr ""
-
-#: ../virtManager/details.py:2413
-#, python-format
-msgid "%(received)d %(units)s in"
 msgstr ""
 
 #: ../virtManager/details.py:2414
 #, python-format
+msgid "%(received)d %(units)s read"
+msgstr ""
+
+#: ../virtManager/details.py:2415
+#, python-format
+msgid "%(transfered)d %(units)s write"
+msgstr ""
+
+#: ../virtManager/details.py:2418
+#, python-format
+msgid "%(received)d %(units)s in"
+msgstr ""
+
+#: ../virtManager/details.py:2419
+#, python-format
 msgid "%(transfered)d %(units)s out"
 msgstr ""
 
-#: ../virtManager/details.py:2416 ../virtManager/details.py:2417
-#: ../virtManager/details.py:2418 ../virtManager/details.py:2419
+#: ../virtManager/details.py:2421 ../virtManager/details.py:2422
+#: ../virtManager/details.py:2423 ../virtManager/details.py:2424
 #: ../virtManager/host.py:547 ../virtManager/host.py:578
 msgid "Disabled"
 msgstr ""
 
-#: ../virtManager/details.py:2427
+#: ../virtManager/details.py:2432
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr ""
 
-#: ../virtManager/details.py:2637
+#: ../virtManager/details.py:2642
 msgid "Absolute Movement"
 msgstr "Absoluuttinen liikkuminen"
 
-#: ../virtManager/details.py:2639
+#: ../virtManager/details.py:2644
 msgid "Relative Movement"
 msgstr "Suhteellinen liikkuminen"
 
-#: ../virtManager/details.py:2650
+#: ../virtManager/details.py:2655
 msgid "Hypervisor does not support removing this device"
 msgstr ""
 
-#: ../virtManager/details.py:2684
+#: ../virtManager/details.py:2689
 #, python-format
 msgid "%s:%s"
 msgstr ""
 
-#: ../virtManager/details.py:2828
+#: ../virtManager/details.py:2833
 msgid "Serial Device"
 msgstr "Sarjalaite"
 
-#: ../virtManager/details.py:2830
+#: ../virtManager/details.py:2835
 msgid "Parallel Device"
 msgstr "Rinnakkaislaite"
 
-#: ../virtManager/details.py:2832
+#: ../virtManager/details.py:2837
 msgid "Console Device"
 msgstr ""
 
-#: ../virtManager/details.py:2834
+#: ../virtManager/details.py:2839
 msgid "Channel Device"
 msgstr ""
 
-#: ../virtManager/details.py:2836
-#, python-format
-msgid "%s Device"
-msgstr ""
-
-#: ../virtManager/details.py:2844
+#: ../virtManager/details.py:2849
 msgid "Primary Console"
 msgstr "Ensisijainen konsoli"
 
-#: ../virtManager/details.py:3031
-msgid "Overview"
-msgstr "Yleistiedot"
-
-#: ../virtManager/details.py:3034
-msgid "OS information"
+#: ../virtManager/details.py:2889
+#, python-format
+msgid "Physical %s Device"
 msgstr ""
 
 #: ../virtManager/details.py:3036
+msgid "Overview"
+msgstr "Yleistiedot"
+
+#: ../virtManager/details.py:3039
+msgid "OS information"
+msgstr ""
+
+#: ../virtManager/details.py:3041
 msgid "Performance"
 msgstr ""
 
-#: ../virtManager/details.py:3038
+#: ../virtManager/details.py:3043
 msgid "CPUs"
 msgstr ""
 
-#: ../virtManager/details.py:3039 ../ui/create.ui.h:53
+#: ../virtManager/details.py:3044 ../ui/create.ui.h:53
 msgid "Memory"
 msgstr ""
 
-#: ../virtManager/details.py:3040
+#: ../virtManager/details.py:3045
 msgid "Boot Options"
 msgstr ""
 
-#: ../virtManager/details.py:3162
+#: ../virtManager/details.py:3153
+msgid "Hard Disk"
+msgstr ""
+
+#: ../virtManager/details.py:3155
+msgid "Network (PXE)"
+msgstr ""
+
+#: ../virtManager/details.py:3167
 msgid "No bootable devices"
 msgstr ""
 
@@ -2506,8 +2617,7 @@ msgid ""
 msgstr ""
 
 #: ../virtManager/engine.py:659
-msgid ""
-"Verify that the 'libvirtd' daemon is running\n"
+msgid "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr ""
 
@@ -2701,6 +2811,11 @@ msgstr ""
 msgid "Input Error"
 msgstr ""
 
+#: ../virtManager/error.py:137
+#, python-format
+msgid "Validation Error: %s"
+msgstr ""
+
 #: ../virtManager/error.py:204
 msgid "Don't ask me again"
 msgstr ""
@@ -2749,6 +2864,14 @@ msgstr ""
 msgid "All interfaces"
 msgstr ""
 
+#: ../virtManager/gfxdetails.py:94
+msgid "Auto"
+msgstr ""
+
+#: ../virtManager/gfxdetails.py:96
+msgid "Copy local keymap"
+msgstr ""
+
 #: ../virtManager/gfxdetails.py:160
 msgid "Port"
 msgstr ""
@@ -2760,6 +2883,18 @@ msgstr ""
 
 #: ../virtManager/gfxdetails.py:193
 msgid "Local SDL Window"
+msgstr ""
+
+#: ../virtManager/host.py:157
+msgid "Networks"
+msgstr ""
+
+#: ../virtManager/host.py:185
+msgid "Interfaces"
+msgstr ""
+
+#: ../virtManager/host.py:214
+msgid "Interface Type"
 msgstr ""
 
 #: ../virtManager/host.py:316
@@ -2852,8 +2987,9 @@ msgid "Isolated network, routing disabled"
 msgstr ""
 
 #: ../virtManager/host.py:632 ../virtManager/host.py:657
-#: ../virtManager/host.py:845 ../virtManager/netlist.py:147
-#: ../virtManager/storagelist.py:315 ../virtManager/storagelist.py:347
+#: ../virtManager/host.py:845 ../virtManager/libvirtobject.py:215
+#: ../virtManager/netlist.py:147 ../virtManager/storagelist.py:315
+#: ../virtManager/storagelist.py:347
 msgid "Inactive"
 msgstr "Passiivinen"
 
@@ -2910,6 +3046,10 @@ msgstr ""
 msgid "Error selecting interface: %s"
 msgstr ""
 
+#: ../virtManager/interface.py:101
+msgid "Interface"
+msgstr ""
+
 #: ../virtManager/manager.py:325
 msgid "D_etails"
 msgstr ""
@@ -2936,8 +3076,7 @@ msgstr ""
 
 #: ../virtManager/manager.py:509
 #, python-format
-msgid ""
-"This will remove the connection:\n"
+msgid "This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3001,9 +3140,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by "
-"libvirt. You must configure the destination to have a valid publicly "
-"accessible hostname."
+"The destination's hostname is 'localhost', which will be rejected by libvirt."
+" You must configure the destination to have a valid publicly accessible "
+"hostname."
 msgstr ""
 
 #: ../virtManager/migrate.py:295
@@ -3134,6 +3273,14 @@ msgstr ""
 #: ../virtManager/preferences.py:163
 #, python-format
 msgid "System default (%s)"
+msgstr ""
+
+#: ../virtManager/preferences.py:144
+msgid "Yes"
+msgstr ""
+
+#: ../virtManager/preferences.py:144
+msgid "No"
 msgstr ""
 
 #: ../virtManager/preferences.py:166
@@ -3297,6 +3444,26 @@ msgstr ""
 msgid "Copy Volume Path"
 msgstr ""
 
+#: ../virtManager/storagelist.py:181
+msgid "Volumes"
+msgstr ""
+
+#: ../virtManager/storagelist.py:189
+msgid "Size"
+msgstr "Koko"
+
+#: ../virtManager/storagelist.py:198
+msgid "Format"
+msgstr ""
+
+#: ../virtManager/storagelist.py:206
+msgid "Used By"
+msgstr ""
+
+#: ../virtManager/storagelist.py:223
+msgid "Storage Pools"
+msgstr ""
+
 #: ../virtManager/storagelist.py:360
 msgid "Create new volume"
 msgstr ""
@@ -3364,9 +3531,9 @@ msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr ""
 
 #: ../virtManager/storagelist.py:738
-#, fuzzy, python-format
+#, python-format
 msgid "Error deleting volume '%s'"
-msgstr "Virhe poistettaessa virtuaalikonetta '%s': %s"
+msgstr ""
 
 #: ../virtManager/systray.py:122
 msgid "_Show Virtual Machine Manager"
@@ -3451,25 +3618,25 @@ msgstr ""
 msgid "Don't know how to parse file %s"
 msgstr ""
 
-#: ../virtconv/formats.py:134
+#: ../virtconv/formats.py:159
 #, python-format
 msgid ""
-"%s appears to be an archive, but 'unar' is not installed. Please either "
-"install 'unar', or extract the archive yourself and point virt-convert at "
-"the extracted directory."
+"%s appears to be an archive, but '%s' is not installed. Please either "
+"install '%s', or extract the archive yourself and point virt-convert at the "
+"extracted directory."
 msgstr ""
 
-#: ../virtconv/formats.py:141
+#: ../virtconv/formats.py:165
 #, python-format
 msgid "%s appears to be an archive, running: %s"
 msgstr ""
 
-#: ../virtconv/formats.py:252
+#: ../virtconv/formats.py:275
 #, python-format
 msgid "None of %s tools found."
 msgstr ""
 
-#: ../virtconv/formats.py:290
+#: ../virtconv/formats.py:313
 #, python-format
 msgid "New path name '%s' already exists"
 msgstr ""
@@ -3498,8 +3665,7 @@ msgstr ""
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid ""
-"Syntax error at line %d: %s\n"
+msgid "Syntax error at line %d: %s\n"
 "%s"
 msgstr ""
 
@@ -3658,8 +3824,7 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:594
-msgid ""
-"CPU model and features. Ex:\n"
+msgid "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 msgstr ""
 
@@ -3712,7 +3877,8 @@ msgid "Configure a text console connection between the guest and host"
 msgstr ""
 
 #: ../virtinst/cli.py:640
-msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid ""
+"Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
 #: ../virtinst/cli.py:643
@@ -3735,8 +3901,7 @@ msgid "Configure guest video hardware."
 msgstr ""
 
 #: ../virtinst/cli.py:668
-msgid ""
-"Configure a guest smartcard device. Ex:\n"
+msgid "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 
@@ -3747,26 +3912,22 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:674
-msgid ""
-"Configure a guest memballoon device. Ex:\n"
+msgid "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 
 #: ../virtinst/cli.py:677
-msgid ""
-"Configure a guest TPM device. Ex:\n"
+msgid "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
 
 #: ../virtinst/cli.py:680
-msgid ""
-"Configure a guest RNG device. Ex:\n"
+msgid "Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
 msgstr ""
 
 #: ../virtinst/cli.py:683
-msgid ""
-"Configure a guest panic device. Ex:\n"
+msgid "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
@@ -3879,12 +4040,12 @@ msgstr ""
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 
-#: ../virtinst/cli.py:1865
+#: ../virtinst/cli.py:1868
 #, python-format
 msgid "Didn't match keymap '%s' in keytable!"
 msgstr ""
 
-#: ../virtinst/cli.py:2157
+#: ../virtinst/cli.py:2160
 #, python-format
 msgid "%(devtype)s type '%(chartype)s' does not support '%(optname)s' option."
 msgstr ""
@@ -3942,9 +4103,18 @@ msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 
+#: ../virtinst/cloner.py:547
+#, python-format
+msgid "Disk path '%s' does not exist."
+msgstr ""
+
 #: ../virtinst/cloner.py:552
 #, python-format
 msgid "Could not determine original disk information: %s"
+msgstr ""
+
+#: ../virtinst/cloner.py:563
+msgid "XML has no 'dev' attribute in disk target"
 msgstr ""
 
 #: ../virtinst/cloner.py:593
@@ -4097,6 +4267,10 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr ""
 
+#: ../virtinst/devicedisk.py:492
+msgid "Can't change disk path if storage creation info has been set."
+msgstr ""
+
 #: ../virtinst/devicedisk.py:829
 #, python-format
 msgid "Device type '%s' requires a path"
@@ -4139,6 +4313,11 @@ msgstr ""
 msgid "Could not find USB device (vendorId: %s, productId: %s)"
 msgstr ""
 
+#: ../virtinst/devicehostdev.py:82
+#, python-format
+msgid "Unknown node device type %s"
+msgstr ""
+
 #: ../virtinst/deviceinterface.py:86
 msgid "Shared physical device"
 msgstr ""
@@ -4162,6 +4341,14 @@ msgstr ""
 
 #: ../virtinst/devicerng.py:45
 msgid "Entropy Gathering Daemon"
+msgstr ""
+
+#: ../virtinst/devicerng.py:55
+msgid "Bind"
+msgstr ""
+
+#: ../virtinst/devicerng.py:56
+msgid "Connect"
 msgstr ""
 
 #: ../virtinst/devicetpm.py:43
@@ -4271,16 +4458,16 @@ msgstr ""
 msgid "cpuset's pCPU numbers must be less than pCPUs."
 msgstr ""
 
-#: ../virtinst/domcapabilities.py:131
+#: ../virtinst/domcapabilities.py:132
 msgid "BIOS"
 msgstr ""
 
-#: ../virtinst/domcapabilities.py:137
+#: ../virtinst/domcapabilities.py:138
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
-#: ../virtinst/domcapabilities.py:140
+#: ../virtinst/domcapabilities.py:141
 #, python-format
 msgid "Custom: %(path)s"
 msgstr ""
@@ -4476,11 +4663,21 @@ msgstr ""
 msgid "Route to %s"
 msgstr ""
 
-#: ../virtinst/network.py:167
+#: ../virtinst/network.py:163
+#, python-format
+msgid "%(mode)s to %(device)s"
+msgstr ""
+
+#: ../virtinst/network.py:166
+#, python-format
+msgid "%s network"
+msgstr ""
+
+#: ../virtinst/network.py:168
 msgid "Isolated network, internal and host routing only"
 msgstr ""
 
-#: ../virtinst/network.py:200
+#: ../virtinst/network.py:201
 #, python-format
 msgid "Name '%s' already in use by another network."
 msgstr ""
@@ -4511,6 +4708,15 @@ msgstr ""
 #: ../virtinst/nodedev.py:374
 #, python-format
 msgid "Did not find a matching node device for '%s'"
+msgstr ""
+
+#: ../virtinst/seclabel.py:65
+msgid "Label and Imagelabel are incompatible"
+msgstr ""
+
+#: ../virtinst/seclabel.py:73
+#, python-format
+msgid "Unknown model type for label '%s'"
 msgstr ""
 
 #: ../virtinst/snapshot.py:77
@@ -4691,21 +4897,21 @@ msgstr ""
 msgid "Retrieving file %s..."
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:217
+#: ../virtinst/urlfetcher.py:220
 #, python-format
 msgid "Opening URL %s failed: %s."
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:311
+#: ../virtinst/urlfetcher.py:314
 #, python-format
 msgid "Mounting location '%s' failed"
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:508
+#: ../virtinst/urlfetcher.py:511
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:511
+#: ../virtinst/urlfetcher.py:514
 #, python-format
 msgid ""
 "Could not find an installable distribution at '%s'%s\n"
@@ -4714,22 +4920,22 @@ msgid ""
 "See virt-install man page for various distro examples."
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:575
+#: ../virtinst/urlfetcher.py:578
 #, python-format
 msgid "Couldn't find %(type)s kernel for %(distro)s tree."
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:590
+#: ../virtinst/urlfetcher.py:593
 #, python-format
 msgid "Could not find boot.iso in %s tree."
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:733
+#: ../virtinst/urlfetcher.py:736
 #, python-format
 msgid "Could not find a kernel path for virt type '%s'"
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:742
+#: ../virtinst/urlfetcher.py:745
 msgid "Could not find a boot iso path for this tree."
 msgstr ""
 
@@ -4788,8 +4994,7 @@ msgstr "Toimii libvirtillä"
 #. TRANSLATORS: Replace this string with your names, one name per line.
 #: ../ui/about.ui.h:4
 msgid "translator-credits"
-msgstr ""
-"Ville-Pekka Vainio, 2007, 2008.\n"
+msgstr "Ville-Pekka Vainio, 2007, 2008.\n"
 "Ville Skyttä, 2011."
 
 #: ../ui/addhardware.ui.h:1
@@ -6911,8 +7116,7 @@ msgid "CPU _default:"
 msgstr ""
 
 #: ../ui/preferences.ui.h:21
-msgid ""
-"Add Spice _USB\n"
+msgid "Add Spice _USB\n"
 "Redirection:"
 msgstr ""
 
