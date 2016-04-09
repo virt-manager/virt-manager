@@ -289,8 +289,6 @@ SUPPORT_CONN_USBREDIR = _make(
     version="0.9.5", hv_version={"qemu": "1.3.0", "test": 0})
 SUPPORT_CONN_DEVICE_BOOTORDER = _make(
     version="0.8.8", hv_version={"qemu": 0, "test": 0})
-SUPPORT_CONN_INPUT_KEYBOARD = _make(
-    version="1.2.2", hv_version={"qemu": 0, "test": 0})
 SUPPORT_CONN_POOL_GLUSTERFS = _make(version="1.2.0")
 SUPPORT_CONN_CPU_MODEL_NAMES = _make(function="virConnect.getCPUModelNames",
                                      run_args=("x86_64", 0))
@@ -304,7 +302,6 @@ SUPPORT_CONN_LOADER_ROM = _make(version="1.2.9")
 SUPPORT_CONN_DOMAIN_CAPABILITIES = _make(
     function="virConnect.getDomainCapabilities",
     run_args=(None, None, None, None))
-SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT = _make(version="1.2.11")
 SUPPORT_CONN_DOMAIN_RESET = _make(version="0.9.7", hv_version={"qemu": 0})
 SUPPORT_CONN_SPICE_COMPRESSION = _make(version="0.9.1")
 SUPPORT_CONN_VMPORT = _make(
@@ -314,7 +311,6 @@ SUPPORT_CONN_VCPU_PLACEMENT = _make(
 SUPPORT_CONN_MEM_STATS_PERIOD = _make(
     function="virDomain.setMemoryStatsPeriod",
     version="1.1.1", hv_version={"qemu": 0})
-SUPPORT_CONN_RBD_FORMAT = _make(version="1.3.1")
 
 
 # This is for disk <driver name=qemu>. xen supports this, but it's

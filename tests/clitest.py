@@ -526,7 +526,7 @@ c.add_compare(""" \
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp \
 \
 --panic iobase=507 \
-""", "many-devices", compare_check=support.SUPPORT_CONN_RBD_FORMAT)
+""", "many-devices", compare_check="1.3.1")  # compare_check=rbd format output
 
 
 c.add_compare(""" \
@@ -818,7 +818,7 @@ c.add_compare("test --edit --boot network,cdrom", "edit-bootorder")
 c.add_compare("--confirm test --edit --cpu host-passthrough", "prompt-response")
 
 
-c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
+c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
 c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
 new
 very,very=new desc\\\'",title="This is my,funky=new title" """, "edit-simple-metadata")
@@ -854,23 +854,23 @@ c.add_compare("--video cirrus", "edit-simple-video", compare_check="1.3.3")  # c
 c.add_compare("--sound pcspk", "edit-simple-soundhw", compare_check="1.3.2")  # compare_check=<input> reordering
 c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "edit-simple-host-device")
 
-c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
+c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
 c.add_compare("--edit 3 --sound pcspk", "edit-pos-num", compare_check="1.3.3")  # compare_check=video primary= attribute
-c.add_compare("--edit -1 --video qxl", "edit-neg-num", compare_check=support.SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT)
+c.add_compare("--edit -1 --video qxl", "edit-neg-num", compare_check="1.2.11")  # compare_check=video ram output change
 c.add_compare("--edit all --host-device driver_name=vfio", "edit-all")
 c.add_compare("--edit ich6 --sound pcspk", "edit-select-sound-model", compare_check="1.3.3")  # compare_check=video primary= attribute
 c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
 
-c = vixml.add_category("edit clear", "test-for-virtxml --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
+c = vixml.add_category("edit clear", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
 c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
 c.add_compare("--edit --disk path=/foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes", "edit-clear-disk")
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
 
-c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
+c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
 c.add_valid("--add-device --security model=dac")  # --add-device works for seclabel
 c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
@@ -883,7 +883,7 @@ c.add_compare("--remove-device --sound ich6", "remove-sound-model", compare_chec
 c.add_compare("--remove-device --disk 3", "remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all", compare_check="1.3.3")  # compare_check=video primary= attribute
-c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name", compare_check=support.SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT)
+c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name", compare_check="1.2.11")  # compare_check=video ram output change
 
 
 
