@@ -20,10 +20,10 @@
 
 import logging
 
-import ipaddr
-
 from gi.repository import Gtk
 from gi.repository import Gdk
+
+import ipaddr
 
 from virtinst import Network
 

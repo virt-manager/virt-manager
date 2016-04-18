@@ -36,10 +36,7 @@ def _is_url(conn, url):
     Check if passed string is a (pseudo) valid http, ftp, or nfs url.
     """
     if not conn.is_remote() and os.path.exists(url):
-        if os.path.isdir(url):
-            return True
-        else:
-            return False
+        return os.path.isdir(url)
 
     return (url.startswith("http://") or url.startswith("https://") or
             url.startswith("ftp://") or url.startswith("nfs:"))

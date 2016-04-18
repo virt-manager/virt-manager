@@ -25,14 +25,14 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
+import libvirt
+
 from virtinst import util
 
 from . import vmmenu
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .graphwidgets import CellRendererSparkline
-
-import libvirt
 
 # Number of data points for performance graphs
 GRAPH_LEN = 40
@@ -962,6 +962,7 @@ class vmmManager(vmmGObjectUI):
         return cmp(obj1.network_traffic_rate(), obj2.network_traffic_rate())
 
     def enable_polling(self, column):
+        # pylint: disable=redefined-variable-type
         if column == COL_GUEST_CPU:
             widgn = ["menu_view_stats_guest_cpu", "menu_view_stats_host_cpu"]
             do_enable = self.config.get_stats_enable_cpu_poll()

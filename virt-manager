@@ -39,7 +39,7 @@ from virtcli import CLIConfig
 # up the slew of gtk deprecation warnings that clog up our very useful
 # stdout --debug output. Of course we could drop use of deprecated APIs,
 # but it's a serious quantity of churn
-import warnings
+import warnings  # pylint: disable=wrong-import-order
 warnings.simplefilter("ignore")
 
 try:

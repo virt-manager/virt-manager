@@ -979,8 +979,7 @@ class vmmCreate(vmmGObjectUI):
         """
         model = os_widget.get_model()
         def find_row():
-            for idx in range(len(model)):
-                row = model[idx]
+            for idx, row in enumerate(model):
                 if os_id and row[OS_COL_ID] == os_id:
                     os_widget.set_active(idx)
                     return row[OS_COL_LABEL]
@@ -1363,8 +1362,8 @@ class vmmCreate(vmmGObjectUI):
         # Reselect previous type row
         os_type_list = self.widget("install-os-type")
         os_type_model = os_type_list.get_model()
-        for idx in range(len(os_type_model)):
-            if os_type_model[idx][OS_COL_ID] == old_type:
+        for idx, row in enumerate(os_type_model):
+            if row[OS_COL_ID] == old_type:
                 os_type_list.set_active(idx)
                 break
 

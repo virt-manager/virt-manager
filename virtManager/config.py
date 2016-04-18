@@ -494,7 +494,7 @@ class vmmConfig(object):
         ret = self.conf.get("/new-vm/add-spice-usbredir")
         if ret not in ["system", "yes", "no"]:
             ret = "system"
-        if not raw and not self.get_graphics_type() == "spice":
+        if not raw and self.get_graphics_type() != "spice":
             return "no"
         if ret == "system" and not raw:
             return self.default_add_spice_usbredir

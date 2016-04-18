@@ -24,12 +24,12 @@ import sys
 import threading
 import traceback
 
-from . import config
-
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
+
+from . import config
 
 
 class vmmGObject(GObject.GObject):

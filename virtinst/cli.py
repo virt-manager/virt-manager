@@ -917,7 +917,7 @@ class VirtOptionString(object):
         argsplitter.whitespace_split = True
 
         remove_first = util.listify(remove_first)[:]
-        commaopt = None
+        commaopt = []
         for opt in list(argsplitter):
             if not opt:
                 continue
@@ -934,7 +934,7 @@ class VirtOptionString(object):
             if commaopt:
                 if cliname in virtargmap:
                     optlist.append(tuple(commaopt))
-                    commaopt = None
+                    commaopt = []
                 else:
                     commaopt[1] += "," + cliname
                     if val:

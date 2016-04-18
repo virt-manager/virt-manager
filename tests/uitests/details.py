@@ -1,11 +1,11 @@
 import time
 import unittest
 
-import tests
-from tests.uitests import utils as uiutils
-
 import dogtail.rawinput
 import pyatspi
+
+import tests
+from tests.uitests import utils as uiutils
 
 
 class Details(unittest.TestCase):
@@ -69,6 +69,7 @@ class Details(unittest.TestCase):
                 time.sleep(.1)
                 continue
 
+            # pylint: disable=not-an-iterable
             old_focused = focused
             focused = uiutils.focused_nodes(win)
             if old_focused is None:

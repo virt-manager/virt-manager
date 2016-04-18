@@ -100,8 +100,7 @@ def compare_device(origdev, newdev, idx):
 
 def _find_device(guest, origdev):
     devlist = guest.get_devices(origdev.virtual_device_type)
-    for idx in range(len(devlist)):
-        dev = devlist[idx]
+    for idx, dev in enumerate(devlist):
         if compare_device(origdev, dev, idx):
             return dev
 
@@ -1276,9 +1275,9 @@ class vmmDomain(vmmLibvirtObject):
                                 inactive=inactive)
         devs = guest.get_devices(device_type)
 
-        for idx in range(len(devs)):
-            devs[idx].vmmindex = idx
-            devs[idx].vmmidstr = devs[idx].virtual_device_type + ("%.3d" % idx)
+        for idx, dev in enumerate(devs):
+            dev.vmmindex = idx
+            dev.vmmidstr = dev.virtual_device_type + ("%.3d" % idx)
 
         return devs
 

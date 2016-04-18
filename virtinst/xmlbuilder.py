@@ -159,8 +159,7 @@ def _build_xpath_node(ctx, xpath, addnode=None):
         return newnode
 
     nodelist = xpath.split("/")
-    for idx in range(len(nodelist)):
-        nodename = nodelist[idx]
+    for nodename in nodelist:
         if not nodename:
             continue
 
@@ -304,7 +303,7 @@ class XMLChildProperty(property):
             return
 
         idx = 0
-        for idx in range(len(objlist)):
+        for idx, obj in enumerate(objlist):
             obj = objlist[idx]
             if (obj.__class__ not in self.child_classes or
                 (self.child_classes.index(newobj.__class__) <
@@ -437,6 +436,7 @@ class XMLProperty(property):
         return util.listify(nodes)
 
     def _convert_get_value(self, val):
+        # pylint: disable=redefined-variable-type
         if self._default_name and val == self._default_name:
             ret = val
         elif self._is_bool:
@@ -559,6 +559,7 @@ class XMLProperty(property):
             _seenprops.append(self)
             self._is_tracked = True
 
+        # pylint: disable=redefined-variable-type
         if (self._prop_is_unset(xmlbuilder) and
             not xmlbuilder._xmlstate.is_build):
             val = self._get_xml(xmlbuilder)

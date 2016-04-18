@@ -198,6 +198,7 @@ class VirtConverter(object):
         self._err_clean = []
         self._force_clean = []
 
+        # pylint: disable=redefined-variable-type
         if print_cb == -1 or print_cb is None:
             def cb(msg):
                 if print_cb == -1:

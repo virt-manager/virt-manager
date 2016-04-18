@@ -25,9 +25,17 @@ import pty
 import fcntl
 import logging
 
+import gi
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
+
+# We can use either 2.91 or 2.90. This is just to silence runtime warnings
+# pylint: disable=wrong-import-position
+try:
+    gi.require_version("Vte", "2.91")
+except ValueError:
+    gi.require_version("Vte", "2.90")
 from gi.repository import Vte
 
 import libvirt

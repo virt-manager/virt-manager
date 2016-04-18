@@ -200,7 +200,7 @@ def _storeForDistro(fetcher, guest):
                 time.sleep(.5)
                 continue
             raise
-    raise
+    raise  # pylint: disable=misplaced-bare-raise
 
 
 def _testURL(fetcher, distname, arch, distroobj):

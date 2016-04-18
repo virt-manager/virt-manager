@@ -18,6 +18,8 @@
 from virtcli import CLIConfig as _CLIConfig
 
 
+# pylint: disable=wrong-import-position
+
 def _setup_i18n():
     import gettext
     import locale

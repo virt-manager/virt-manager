@@ -16,9 +16,10 @@ import distutils.command.sdist
 import distutils.dist
 import distutils.log
 import distutils.sysconfig
-sysprefix = distutils.sysconfig.get_config_var("prefix")
 
 from virtcli import CLIConfig
+
+sysprefix = distutils.sysconfig.get_config_var("prefix")
 
 
 # pylint: disable=attribute-defined-outside-init

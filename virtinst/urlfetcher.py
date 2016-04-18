@@ -24,13 +24,14 @@ import ftplib
 import logging
 import os
 import re
-import requests
 import stat
 import StringIO
 import subprocess
 import tempfile
 import urllib2
 import urlparse
+
+import requests
 
 from .osdict import OSDB
 
@@ -151,6 +152,7 @@ class _URLFetcher(object):
         """
         prefix = "virtinst-" + os.path.basename(filename) + "."
 
+        # pylint: disable=redefined-variable-type
         if "VIRTINST_TEST_SUITE" in os.environ:
             fn = os.path.join("/tmp", prefix)
             fileobj = file(fn, "w")
@@ -538,7 +540,7 @@ class Distro(object):
     _boot_iso_paths = []
     _hvm_kernel_paths = []
     _xen_kernel_paths = []
-    version_from_content = None
+    version_from_content = []
 
     def __init__(self, fetcher, arch, vmtype):
         self.fetcher = fetcher
@@ -1013,8 +1015,8 @@ class SuseDistro(Distro):
 
     def isValidStore(self):
         # self.version_from_content is the VERSION line from the contents file
-        if self.version_from_content is None or \
-            self.version_from_content[1] is None:
+        if (not self.version_from_content or
+            self.version_from_content[1] is None):
             return False
 
         self._variantFromVersion()

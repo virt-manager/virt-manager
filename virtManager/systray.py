@@ -28,7 +28,9 @@ from .baseclass import vmmGObject
 from .error import vmmErrorDialog
 
 try:
-    from gi.repository import AppIndicator3  # pylint: disable=no-name-in-module
+    # pylint: disable=no-name-in-module
+    # pylint: disable=wrong-import-order
+    from gi.repository import AppIndicator3
 except:
     AppIndicator3 = None
 

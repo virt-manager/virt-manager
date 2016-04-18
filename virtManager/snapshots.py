@@ -107,6 +107,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self._snapshot_new = None
 
     def _init_ui(self):
+        # pylint: disable=redefined-variable-type
         blue = Gdk.color_parse("#0072A8")
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 

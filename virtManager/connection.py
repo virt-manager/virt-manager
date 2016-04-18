@@ -904,7 +904,8 @@ class vmmConnection(vmmGObject):
             return True, None
         except Exception, exc:
             tb = "".join(traceback.format_exc())
-            if type(exc) is libvirt.libvirtError:
+            if isinstance(exc, libvirt.libvirtError):
+                # pylint: disable=no-member
                 libvirt_error_code = exc.get_error_code()
                 libvirt_error_message = exc.get_error_message()
 
@@ -1303,6 +1304,7 @@ class vmmConnection(vmmGObject):
         dom = -1
         code = -1
         if isinstance(e, libvirt.libvirtError):
+            # pylint: disable=no-member
             dom = e.get_error_domain()
             code = e.get_error_code()
 

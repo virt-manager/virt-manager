@@ -140,10 +140,10 @@ def _do_convert_old_disks(options):
     sizelist = padlist(sizes, len(disklist))
 
     opts = []
-    for idx in range(len(disklist)):
+    for idx, path in enumerate(disklist):
         optstr = ""
-        if disklist[idx]:
-            optstr += "path=%s" % disklist[idx]
+        if path:
+            optstr += "path=%s" % path
         if sizelist[idx]:
             if optstr:
                 optstr += ","
@@ -249,7 +249,7 @@ def convert_old_networks(options):
     networks = padlist(networks, max(len(macs), 1))
     macs = padlist(macs, len(networks))
 
-    for idx in range(len(networks)):
+    for idx, ignore in enumerate(networks):
         if networks[idx] is None:
             networks[idx] = "default"
         if macs[idx]:

@@ -473,18 +473,18 @@ class vmmNetworkList(vmmGObjectUI):
     #############
 
     def _emit_changed(self, *args, **kwargs):
-        ignore = args
-        ignore = kwargs
+        ignore1 = args
+        ignore2 = kwargs
         self.emit("changed")
 
     def _emit_vport_changed(self, *args, **kwargs):
-        ignore = args
-        ignore = kwargs
+        ignore1 = args
+        ignore2 = kwargs
         self.emit("changed-vport")
 
     def _repopulate_network_list(self, *args, **kwargs):
-        ignore = args
-        ignore = kwargs
+        ignore1 = args
+        ignore2 = kwargs
 
         netlist = self.widget("net-source")
         current_label = uiutil.get_list_selection(netlist, column=2)

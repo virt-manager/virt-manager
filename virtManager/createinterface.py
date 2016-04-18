@@ -124,14 +124,17 @@ class vmmCreateInterface(vmmGObjectUI):
         self.topwin.present()
 
     def show_bond_config(self, src):
+        ignore = src
         logging.debug("Showing new interface bond config")
         self.bond_config.show_all()
 
     def show_bridge_config(self, src):
+        ignore = src
         logging.debug("Showing new interface bridge config")
         self.bridge_config.show_all()
 
     def show_ip_config(self, src):
+        ignore = src
         logging.debug("Showing new interface ip config")
         self.ip_manually_changed = True
         self.ip_config.show_all()
@@ -846,6 +849,7 @@ class vmmCreateInterface(vmmGObjectUI):
         row[0] = new_text
 
     def ipv6_address_selected(self, src=None):
+        ignore = src
         treepath = self.get_config_ipv6_address_selection()
         has_selection = (treepath is not None)
 
@@ -857,6 +861,7 @@ class vmmCreateInterface(vmmGObjectUI):
     #######################
 
     def back(self, src):
+        ignore = src
         notebook = self.widget("pages")
         curpage = notebook.get_current_page()
         notebook.set_current_page(curpage - 1)
@@ -977,6 +982,7 @@ class vmmCreateInterface(vmmGObjectUI):
             # Validate IP info (get_config validates for us)
             (is_manual, copy_name, ipv4,
              ipv6, proto_xml) = self.get_config_ip_info()
+            ignore = copy_name
 
             if is_manual:
                 if ipv4:
@@ -990,13 +996,13 @@ class vmmCreateInterface(vmmGObjectUI):
                         parsexml=proto.get_xml_config()))
 
             if itype == Interface.INTERFACE_TYPE_BRIDGE:
-                ret = self.validate_bridge(iobj, ifaces)
+                ret = self.validate_bridge(iobj)
             elif itype == Interface.INTERFACE_TYPE_BOND:
-                ret = self.validate_bond(iobj, ifaces)
+                ret = self.validate_bond(iobj)
             elif itype == Interface.INTERFACE_TYPE_VLAN:
-                ret = self.validate_vlan(iobj, ifaces)
+                ret = self.validate_vlan(iobj)
             elif itype == Interface.INTERFACE_TYPE_ETHERNET:
-                ret = self.validate_ethernet(iobj, ifaces)
+                ret = self.validate_ethernet(iobj)
 
             if not ret:
                 return ret
@@ -1011,7 +1017,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
         return True
 
-    def validate_bridge(self, iobj, ifaces):
+    def validate_bridge(self, iobj):
         delay = self.widget("bridge-delay").get_value()
         stp = self.widget("bridge-stp").get_active()
 
@@ -1021,7 +1027,7 @@ class vmmCreateInterface(vmmGObjectUI):
         return True
 
 
-    def validate_bond(self, iobj, ifaces):
+    def validate_bond(self, iobj):
         mode = uiutil.get_list_selection(self.widget("bond-mode"), column=1)
         mon = uiutil.get_list_selection(
             self.widget("bond-monitor-mode"), column=1)
@@ -1057,14 +1063,15 @@ class vmmCreateInterface(vmmGObjectUI):
         return True
 
 
-    def validate_vlan(self, iobj, ifaces):
+    def validate_vlan(self, iobj):
         idx = uiutil.spin_get_helper(self.widget("vlan-tag"))
 
         iobj.tag = int(idx)
         return True
 
 
-    def validate_ethernet(self, iobj, ifaces):
+    def validate_ethernet(self, iobj):
+        ignore = iobj
         return True
 
 
@@ -1117,6 +1124,8 @@ class vmmCreateInterface(vmmGObjectUI):
             self.close()
 
     def finish(self, src):
+        ignore = src
+
         # Validate the final page
         page = self.widget("pages").get_current_page()
         if self.validate(page) is not True:

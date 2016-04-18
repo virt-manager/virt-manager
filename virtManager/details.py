@@ -1122,8 +1122,8 @@ class vmmDetails(vmmGObjectUI):
         if self.has_unapplied_changes(oldhwrow):
             # Unapplied changes, and syncing them failed
             pageidx = 0
-            for idx in range(len(model)):
-                if model[idx][HW_LIST_COL_DEVICE] == self.oldhwkey:
+            for idx, row in enumerate(model):
+                if row[HW_LIST_COL_DEVICE] == self.oldhwkey:
                     pageidx = idx
                     break
             self.set_hw_selection(pageidx, disable_apply=False)
@@ -1359,9 +1359,9 @@ class vmmDetails(vmmGObjectUI):
         self.widget("details-pages").set_current_page(DETAILS_PAGE_DETAILS)
         index = 0
         model = self.widget("hw-list").get_model()
-        for i in range(len(model)):
-            if model[i][HW_LIST_COL_TYPE] == HW_LIST_TYPE_STATS:
-                index = i
+        for idx, row in enumerate(model):
+            if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_STATS:
+                index = idx
                 break
         self.set_hw_selection(index)
 
@@ -1750,6 +1750,7 @@ class vmmDetails(vmmGObjectUI):
         model = boot_list.get_model()
         prev_row = None
         for row in model:
+            # pylint: disable=unsubscriptable-object
             if prev_row and prev_row[BOOT_KEY] == row_key:
                 model.swap(prev_row.iter, row.iter)
                 break
@@ -2229,7 +2230,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         # Try to hot remove
-        detach_err = False
+        detach_err = ()
         try:
             if self.vm.is_active():
                 self.vm.detach_device(devobj)

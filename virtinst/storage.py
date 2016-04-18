@@ -471,7 +471,7 @@ class StoragePool(_StorageObject):
         if self.supports_property("host") and not self.hosts:
             raise RuntimeError(_("Hostname is required"))
         if (self.supports_property("source_path") and
-            not self.type == self.TYPE_LOGICAL and
+            self.type != self.TYPE_LOGICAL and
             not self.source_path):
             raise RuntimeError(_("Source path is required"))
 
@@ -820,7 +820,7 @@ class StorageVolume(_StorageObject):
                 vol.info()
                 break
             except:
-                if time:
+                if time:  # pylint: disable=using-constant-test
                     # This 'if' check saves some noise from the test suite
                     time.sleep(.2)
                 if self._install_finished:
