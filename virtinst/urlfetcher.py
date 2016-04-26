@@ -1169,6 +1169,11 @@ class UbuntuDistro(DebianDistro):
             self._set_media_paths()
             filename = "%s/netboot/version.info" % self._url_prefix
             regex = "%s*" % self.name
+        elif self.fetcher.hasFile(".disk/info") and self.arch == "s390x":
+            self._hvm_kernel_paths += [("boot/kernel.ubuntu", "boot/initrd.ubuntu")]
+            self._xen_kernel_paths += [("boot/kernel.ubuntu", "boot/initrd.ubuntu")]
+            filename = ".disk/info"
+            regex = "%s*" % self.name
         else:
             return False
 
