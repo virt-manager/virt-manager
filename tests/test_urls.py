@@ -108,10 +108,10 @@ _add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14",
      i686=ARCHIVE_FEDORA_URL % ("14", "i386"))
 # 2 Latest releases
 _add(FEDORA_URL % ("22", "x86_64"), "fedora22")
-_add(FEDORA_URL % ("23", "x86_64"), "fedora22", name="fedora23")
+_add(FEDORA_URL % ("23", "x86_64"), "fedora23", name="fedora23")
 # Any Dev release
-_add(DEVFEDORA_URL % ("24", "x86_64"), "fedora22", name="fedora24")
-_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora22", name="fedora-rawhide")
+_add(DEVFEDORA_URL % ("24", "x86_64"), "fedora23", name="fedora24")
+_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora23", name="fedora-rawhide")
 
 
 _set_distro(CentOSDistro)
@@ -124,7 +124,7 @@ _add(OLD_CENTOS_URL % ("5.0", "x86_64"), name="centos-5.0")
 _add(CENTOS_URL % ("5", "x86_64"), "rhel5.11", name="centos-5-latest",
      i686=CENTOS_URL % ("5", "i386"))
 # Latest centos 6 w/ i686
-_add(CENTOS_URL % ("6", "x86_64"), "rhel6.6", name="centos-6-latest",
+_add(CENTOS_URL % ("6", "x86_64"), "centos6.7", name="centos-6-latest",
      i686=CENTOS_URL % ("6", "i386"))
 # Latest centos 7, but no i686 as of 2014-09-06
 _add(CENTOS_URL % ("7", "x86_64"), "centos7.0", name="centos-7-latest")
@@ -132,9 +132,9 @@ _add(CENTOS_URL % ("7", "x86_64"), "centos7.0", name="centos-7-latest")
 
 _set_distro(SLDistro)
 # scientific 5
-_add(OLD_SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.5", name="sl-5latest")
+_add(OLD_SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.5", name="sl-5.5")
 # Latest scientific 6
-_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6.6", name="sl-6latest")
+_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6.7", name="sl-6latest")
 
 
 _set_distro(SuseDistro)
