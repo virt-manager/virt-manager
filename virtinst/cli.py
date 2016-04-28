@@ -1880,10 +1880,19 @@ class ParserGraphics(VirtCLIParser):
                 return
             inst.type = val
 
+        def set_listen_cb(opts, inst, cliname, val):
+            if val == "none":
+                inst.port = None
+                inst.tlsPort = None
+                inst.listen = None
+                inst.autoport = False
+            else:
+                inst.listen = val
+
         self.set_param(None, "type", setter_cb=set_type_cb)
         self.set_param("port", "port")
         self.set_param("tlsPort", "tlsport")
-        self.set_param("listen", "listen")
+        self.set_param("listen", "listen", setter_cb=set_listen_cb)
         self.set_param(None, "keymap", setter_cb=set_keymap_cb)
         self.set_param("passwd", "password")
         self.set_param("passwdValidTo", "passwordvalidto")

@@ -964,8 +964,13 @@ Specify the spice tlsport.
 Address to listen on for VNC/Spice connections. Default is typically 127.0.0.1
 (localhost only), but some hypervisors allow changing this globally (for
 example, the qemu driver default can be changed in /etc/libvirt/qemu.conf).
-Use 0.0.0.0 to allow access from other machines. This is use by 'vnc' and
-'spice'
+Use 0.0.0.0 to allow access from other machines.
+
+Use 'none' to specify that the display server should not listen on any
+port. The display server can be accessed only locally through
+libvirt unix socket (virt-viewer with --attach for instance).
+
+This is used by 'vnc' and 'spice'
 
 =item B<keymap>
 

@@ -477,6 +477,7 @@ c.add_compare(""" \
 --graphics spice,port=5950,tlsport=5950,listen=1.2.3.4,keymap=ja \
 --graphics spice,image_compression=foo,streaming_mode=bar,clipboard_copypaste=yes,mouse_mode=client,filetransfer_enable=on \
 --graphics spice,gl=yes \
+--graphics spice,gl=yes,listen=none \
 \
 --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 \
 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 \
