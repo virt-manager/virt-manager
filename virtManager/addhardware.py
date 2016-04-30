@@ -272,7 +272,7 @@ class vmmAddHardware(vmmGObjectUI):
         lst.set_model(model)
         uiutil.init_combo_text_column(lst, 1)
         if self.conn.is_qemu():
-            model.append(["virtio", "virtio"])
+            model.append(["virtio", "VirtIO"])
         else:
             model.append([None, _("Hypervisor default")])
 
