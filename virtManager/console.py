@@ -652,11 +652,6 @@ class vmmConsolePages(vmmGObjectUI):
                   "guest's listen address." % ginfo.transport))
             return
 
-        if not ginfo.console_active():
-            self._activate_unavailable_page(
-                _("Graphical console is not yet active for guest"))
-            return
-
         self._activate_unavailable_page(
             _("Connecting to graphical console for guest"))
 

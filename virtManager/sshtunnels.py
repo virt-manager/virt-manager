@@ -98,12 +98,6 @@ class ConnectionInfo(object):
                 (self.gtype, self.transport, self._connhost, self.connuser,
                  self._connport, self.gaddr, self.gport, self.gtlsport,
                  self.gsocket))
-    def console_active(self):
-        if self.gsocket:
-            return True
-        if (self.gport in [None, -1] and self.gtlsport in [None, -1]):
-            return False
-        return True
 
 
 class _TunnelScheduler(object):
