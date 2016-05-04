@@ -423,6 +423,11 @@ def _gfx_console(guest):
             "--connect", guest.conn.uri,
             "--wait", guest.name]
 
+    # Currently virt-viewer needs attaching to the local display while
+    # spice gl is enabled.
+    if guest.has_gl():
+        args.append("--attach")
+
     logging.debug("Launching virt-viewer for graphics type '%s'",
         guest.get_devices("graphics")[0].type)
     return _run_console(args)
