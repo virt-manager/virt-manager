@@ -1116,12 +1116,7 @@ class vmmDomain(vmmLibvirtObject):
         return self._backend.openConsole(devname, stream, flags)
 
     def open_graphics_fd(self):
-        try:
-            fd = self._backend.openGraphicsFD(0)
-        except libvirt.libvirtError:
-            logging.debug("openGraphicsFD failed", exc_info=True)
-            fd = -1
-        return fd
+        return self._backend.openGraphicsFD(0)
 
     def refresh_snapshots(self):
         self._snapshot_list = None

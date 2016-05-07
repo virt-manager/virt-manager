@@ -349,6 +349,8 @@ SUPPORT_DOMAIN_GET_METADATA = _make(function="virDomain.metadata",
 SUPPORT_DOMAIN_MEMORY_STATS = _make(
     function="virDomain.memoryStats", run_args=())
 SUPPORT_DOMAIN_STATE = _make(function="virDomain.state", run_args=())
+SUPPORT_DOMAIN_OPEN_GRAPHICS = _make(function="virDomain.openGraphicsFD",
+    version="1.2.8", hv_version={"qemu": 0})
 
 
 ###############

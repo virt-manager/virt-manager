@@ -139,11 +139,20 @@ class Viewer(vmmGObject):
     def _get_fd_for_open(self):
         if self._ginfo.need_tunnel():
             return self._tunnels.open_new()
+
+        if self._vm.conn.is_remote():
+            # OpenGraphics only works for local libvirtd connections
+            return None
+
+        if not self._vm.conn.check_support(
+                self._vm.conn.SUPPORT_DOMAIN_OPEN_GRAPHICS):
+            return None
+
         return self._vm.open_graphics_fd()
 
     def _open(self):
         fd = self._get_fd_for_open()
-        if fd != -1:
+        if fd is not None:
             self._open_fd(fd)
         else:
             self._open_host()
