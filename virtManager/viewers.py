@@ -64,9 +64,10 @@ class Viewer(vmmGObject):
         "usb-redirect-error": (GObject.SignalFlags.RUN_FIRST, None, [str]),
     }
 
-    def __init__(self, ginfo):
+    def __init__(self, vm, ginfo):
         vmmGObject.__init__(self)
         self._display = None
+        self._vm = vm
         self._ginfo = ginfo
         self._tunnels = SSHTunnels(self._ginfo)
 
@@ -84,6 +85,7 @@ class Viewer(vmmGObject):
         if self._display:
             self._display.destroy()
         self._display = None
+        self._vm = None
 
         self._tunnels.close_all()
 
@@ -137,7 +139,7 @@ class Viewer(vmmGObject):
     def _get_fd_for_open(self):
         if self._ginfo.need_tunnel():
             return self._tunnels.open_new()
-        return self._ginfo.get_conn_fd()
+        return self._vm.open_graphics_fd()
 
     def _open(self):
         fd = self._get_fd_for_open()
