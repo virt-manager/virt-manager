@@ -35,11 +35,11 @@ class ConnectionInfo(object):
     def __init__(self, vm, gdev):
         conn = vm.conn
         self.vm = vm
-        self.gtype      = gdev.type
-        self.gport      = gdev.port and str(gdev.port) or None
-        self.gsocket    = gdev.socket
-        self.gaddr      = gdev.listen or "127.0.0.1"
-        self.gtlsport   = gdev.tlsPort or None
+        self.gtype = gdev.type
+        self.gport = gdev.port and str(gdev.port) or None
+        self.gsocket = gdev.socket
+        self.gaddr = gdev.listen or "127.0.0.1"
+        self.gtlsport = gdev.tlsPort or None
 
         self.transport = conn.get_uri_transport()
         self.connuser = conn.get_uri_username()
