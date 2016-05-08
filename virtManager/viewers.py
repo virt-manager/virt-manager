@@ -572,7 +572,7 @@ class SpiceViewer(Viewer):
             # are still rolling in
             return
 
-        logging.debug("Requesting tunnel for channel: %s", channel)
+        logging.debug("Requesting fd for channel: %s", channel)
         channel.connect_after("channel-event", self._fd_channel_event_cb)
 
         fd = self._get_fd_for_open()
