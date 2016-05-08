@@ -34,8 +34,10 @@ from gi.repository import Gtk
 # pylint: disable=wrong-import-position
 try:
     gi.require_version("Vte", "2.91")
+    logging.debug("Using VTE API 2.91")
 except ValueError:
     gi.require_version("Vte", "2.90")
+    logging.debug("Using VTE API 2.90")
 from gi.repository import Vte
 
 import libvirt
