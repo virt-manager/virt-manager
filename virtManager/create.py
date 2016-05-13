@@ -2326,6 +2326,11 @@ class vmmCreate(vmmGObjectUI):
         if not vm.is_shutoff():
             return
 
+        if vm.get_install_abort():
+            logging.debug("User manually shutdown VM, not restarting "
+                          "guest after install.")
+            return True
+
         try:
             if virtinst_guest:
                 continue_inst = virtinst_guest.get_continue_inst()
@@ -2340,11 +2345,6 @@ class vmmCreate(vmmGObjectUI):
                     vm.connect_opt_out("state-changed",
                                        self._check_install_status, None)
                     return True
-
-            if vm.get_install_abort():
-                logging.debug("User manually shutdown VM, not restarting "
-                              "guest after install.")
-                return True
 
             logging.debug("Install should be completed, starting VM.")
             vm.startup()
