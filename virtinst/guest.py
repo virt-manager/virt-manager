@@ -358,8 +358,8 @@ class Guest(XMLBuilder):
         if install:
             self.on_reboot = "destroy"
             self.on_crash = "destroy"
-	# on_crash=restart can cause reboot loops on s390x, so use preserve
-	elif self.os.is_s390x():
+        # on_crash=restart can cause reboot loops on s390x, so use preserve
+        elif self.os.is_s390x():
             self.on_crash = "preserve"
 
         self._set_osxml_defaults()
