@@ -751,13 +751,15 @@ class vmmConsolePages(vmmGObjectUI):
         self.err.show_err(_("USB redirection error"),
             text2=str(errstr), modal=True)
 
-    def _viewer_disconnected_set_page(self, ssherr):
+    def _viewer_disconnected_set_page(self, errdetails, ssherr):
         if self.vm.is_runable():
             # Exit was probably for legitimate reasons
             self._show_vm_status_unavailable()
             return
 
         msg = _("Viewer was disconnected.")
+        if errdetails:
+            msg += "\n" + errdetails
         if ssherr:
             logging.debug("SSH tunnel error output: %s", ssherr)
             msg += "\n\n"
@@ -765,7 +767,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         self._activate_unavailable_page(msg)
 
-    def _viewer_disconnected(self, ignore, ssherr):
+    def _viewer_disconnected(self, ignore, errdetails, ssherr):
         self.widget("console-pages").set_current_page(
             _CONSOLE_PAGE_UNAVAILABLE)
         self._close_viewer()
@@ -774,7 +776,7 @@ class vmmConsolePages(vmmGObjectUI):
         # Make sure modifiers are set correctly
         self._viewer_focus_changed()
 
-        self._viewer_disconnected_set_page(ssherr)
+        self._viewer_disconnected_set_page(errdetails, ssherr)
         self._refresh_resizeguest_from_settings()
 
     def _viewer_connected(self, ignore):

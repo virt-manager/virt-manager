@@ -56,7 +56,7 @@ class Viewer(vmmGObject):
         "pointer-grab": (GObject.SignalFlags.RUN_FIRST, None, []),
         "pointer-ungrab": (GObject.SignalFlags.RUN_FIRST, None, []),
         "connected": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "disconnected": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "disconnected": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "auth-error": (GObject.SignalFlags.RUN_FIRST, None, [str, bool]),
         "auth-rejected": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "need-auth": (GObject.SignalFlags.RUN_FIRST, None, [bool, bool]),
@@ -165,9 +165,9 @@ class Viewer(vmmGObject):
     def _get_grab_keys(self):
         return self._display.get_grab_keys().as_string()
 
-    def _emit_disconnected(self):
+    def _emit_disconnected(self, errdetails=None):
         ssherr = self._tunnels.get_err_output()
-        self.emit("disconnected", ssherr)
+        self.emit("disconnected", errdetails, ssherr)
 
 
     #######################################################
@@ -565,7 +565,12 @@ class SpiceViewer(Viewer):
             if channel.get_error():
                 error = channel.get_error().message
             logging.debug("Spice channel event=%s message=%s", event, error)
-            self._emit_disconnected()
+
+            msg = _("Encountered SPICE %(error-name)s") % {
+                "error-name": event.value_nick}
+            if error:
+                msg += ": %s" % error
+            self._emit_disconnected(msg)
 
     def _fd_channel_event_cb(self, channel, event):
         # When we see any event from the channel, release the
