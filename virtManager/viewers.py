@@ -345,9 +345,8 @@ class VNCViewer(Viewer):
 
             errmsg = (_("Unable to provide requested credentials to the VNC "
                 "server.\n The credential type %s is not supported") %
-                str(cred))
+                str(cred.value_name))
 
-            # XXX test this
             self.emit("auth-rejected", errmsg)
             return
 
