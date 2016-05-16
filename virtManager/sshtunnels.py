@@ -283,10 +283,12 @@ class SSHTunnels(object):
         self.unlock()
 
     def get_err_output(self):
-        errout = ""
+        errstrings = []
         for l in self._tunnels:
-            errout += l.get_err_output()
-        return errout
+            e = l.get_err_output().strip()
+            if e and e not in errstrings:
+                errstrings.append(e)
+        return "\n".join(errstrings)
 
     def _lock(self):
         _tunnel_scheduler.lock()
