@@ -495,9 +495,9 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _show_vm_status_unavailable(self):
         if self.vm.is_crashed():
-            self._activate_unavailable_page(_("Guest has crashed"))
+            self._activate_unavailable_page(_("Guest has crashed."))
         else:
-            self._activate_unavailable_page(_("Guest not running"))
+            self._activate_unavailable_page(_("Guest is not running."))
 
     def _close_viewer(self):
         if self._viewer is None:
