@@ -69,23 +69,28 @@ class ConnectionInfo(object):
         Return True if the guest is listening on localhost, but the libvirt
         URI doesn't give us any way to tunnel the connection
         """
-        host = self.get_conn_host()[0]
         if self.need_tunnel():
             return False
+        host, ignore, ignore = self.get_conn_host()
         return self.transport and self._is_listen_localhost(host)
 
     def get_conn_host(self):
-        host = self._connhost
-        port = self._connport
-        tlsport = None
-
-        if not self.need_tunnel():
-            port = self.gport
-            tlsport = self.gtlsport
-            if not self._is_listen_any():
-                host = self.gaddr
+        """
+        Return host/port/tlsport needed for direct spice/vnc connection
+        """
+        host = self.gaddr
+        port = self.gport
+        tlsport = self.gtlsport
+        if self._is_listen_any():
+            host = self._connhost
 
         return host, port, tlsport
+
+    def get_tunnel_host(self):
+        """
+        Physical host name/port needed for ssh tunnel connection
+        """
+        return self._connhost, self._connport
 
     def logstring(self):
         return ("proto=%s trans=%s connhost=%s connuser=%s "
@@ -202,7 +207,7 @@ def _make_ssh_command(ginfo):
     if not ginfo.need_tunnel():
         return None
 
-    host, port, ignore = ginfo.get_conn_host()
+    host, port = ginfo.get_tunnel_host()
 
     # Build SSH cmd
     argv = ["ssh", "ssh"]
