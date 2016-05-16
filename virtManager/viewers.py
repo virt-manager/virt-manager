@@ -556,11 +556,15 @@ class SpiceViewer(Viewer):
                 logging.debug("Spice channel received ERROR_AUTH, but a "
                     "password is already set. Assuming authentication failed.")
                 self.emit("auth-error", channel.get_error().message, False)
-        elif event in [SpiceClientGLib.ChannelEvent.ERROR_CONNECT,
-                       SpiceClientGLib.ChannelEvent.ERROR_IO,
-                       SpiceClientGLib.ChannelEvent.ERROR_LINK,
-                       SpiceClientGLib.ChannelEvent.ERROR_TLS]:
-            logging.debug("Spice channel event error: %s", event)
+        elif "ERROR" in str(event):
+            # SpiceClientGLib.ChannelEvent.ERROR_CONNECT
+            # SpiceClientGLib.ChannelEvent.ERROR_IO
+            # SpiceClientGLib.ChannelEvent.ERROR_LINK
+            # SpiceClientGLib.ChannelEvent.ERROR_TLS
+            error = None
+            if channel.get_error():
+                error = channel.get_error().message
+            logging.debug("Spice channel event=%s message=%s", event, error)
             self.emit("disconnected")
 
     def _fd_channel_event_cb(self, channel, event):
