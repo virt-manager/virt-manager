@@ -144,6 +144,11 @@ class Viewer(vmmGObject):
             # OpenGraphics only works for local libvirtd connections
             return None
 
+        if self._ginfo.gtlsport and not self._ginfo.gport:
+            # This makes spice loop requesting an fd. Disable until spice is
+            # fixed: https://bugzilla.redhat.com/show_bug.cgi?id=1334071
+            return None
+
         if not self._vm.conn.check_support(
                 self._vm.conn.SUPPORT_DOMAIN_OPEN_GRAPHICS):
             return None
