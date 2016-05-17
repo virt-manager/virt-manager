@@ -61,6 +61,46 @@ def _show_startup_error(msg, details):
                  debug=False)
 
 
+def _import_gtk(leftovers):
+    # The never ending fork+gsettings problems now require us to
+    # import Gtk _after_ the fork. This creates a funny race, since we
+    # need to parse the command line arguments to know if we need to
+    # fork, but need to import Gtk before cli processing so it can
+    # handle --g-fatal-args. We strip out our flags first and pass the
+    # left overs to gtk
+    origargv = sys.argv
+    try:
+        sys.argv = origargv[:1] + leftovers[:]
+        gi.require_version('Gtk', '3.0')
+        from gi.repository import Gtk
+        leftovers = sys.argv[1:]
+
+        if Gtk.check_version(3, 14, 0):
+            print "gtk3 3.14.0 or later is required."
+            sys.exit(1)
+
+        # This will error if Gtk wasn't correctly initialized
+        Gtk.Window()
+
+        globals()["Gtk"] = Gtk
+        import virtManager.config
+    except Exception, e:
+        # Don't just let the exception raise here. abrt reports bugs
+        # when users mess up su/sudo and DISPLAY isn't set. Printing
+        # it avoids the issue
+        display = os.environ.get("DISPLAY", "")
+        msg = str(e)
+        if display:
+            msg += ": Could not open display: %s" % display
+        logging.debug("".join(traceback.format_exc()))
+        print msg
+        sys.exit(1)
+    finally:
+        sys.argv = origargv
+
+    return leftovers
+
+
 def drop_tty():
     # We fork and setsid so that we drop the controlling
     # tty. This prevents libvirt's SSH tunnels from prompting
@@ -157,41 +197,8 @@ def main():
         # Ignore SIGHUP, otherwise a serial console closing drops the whole app
         signal.signal(signal.SIGHUP, signal.SIG_IGN)
 
-    # The never ending fork+gsettings problems now require us to
-    # import Gtk _after_ the fork. This creates a funny race, since we
-    # need to parse the command line arguments to know if we need to
-    # fork, but need to import Gtk before cli processing so it can
-    # handle --g-fatal-args. We strip out our flags first and pass the
-    # left overs to gtk
-    origargv = sys.argv
-    try:
-        sys.argv = origargv[:1] + leftovers[:]
-        gi.require_version('Gtk', '3.0')
-        from gi.repository import Gtk
-        leftovers = sys.argv[1:]
-
-        if Gtk.check_version(3, 14, 0):
-            print "gtk3 3.14.0 or later is required."
-            return
-
-        # This will error if Gtk wasn't correctly initialized
-        Gtk.Window()
-
-        globals()["Gtk"] = Gtk
-        import virtManager.config
-    except Exception, e:
-        # Don't just let the exception raise here. abrt reports bugs
-        # when users mess up su/sudo and DISPLAY isn't set. Printing
-        # it avoids the issue
-        display = os.environ.get("DISPLAY", "")
-        msg = str(e)
-        if display:
-            msg += ": Could not open display: %s" % display
-        logging.debug("".join(traceback.format_exc()))
-        print msg
-        return
-    finally:
-        sys.argv = origargv
+    leftovers = _import_gtk(leftovers)
+    Gtk = globals()["Gtk"]
 
     # Do this after the Gtk import so the user has a chance of seeing any error
     if do_drop_stdio:
