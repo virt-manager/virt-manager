@@ -754,8 +754,6 @@ class vmmManager(vmmGObjectUI):
             row[ROW_MARKUP] = self._build_vm_markup(name, status)
 
             desc = vm.get_description()
-            if not uiutil.can_set_row_none:
-                desc = desc or ""
             row[ROW_HINT] = util.xml_escape(desc)
         except libvirt.libvirtError, e:
             if util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
@@ -770,8 +768,6 @@ class vmmManager(vmmGObjectUI):
             return
 
         new_icon = _get_inspection_icon_pixbuf(vm, 16, 16)
-        if not uiutil.can_set_row_none:
-            new_icon = new_icon or ""
         row[ROW_INSPECTION_OS_ICON] = new_icon
 
         self.vm_row_updated(vm)
