@@ -41,11 +41,7 @@ class vmmGObject(GObject.GObject):
         Make sure idle functions are run thread safe
         """
         def cb():
-            try:
-                return func(*args, **kwargs)
-            except:
-                print traceback.format_exc()
-            return False
+            return func(*args, **kwargs)
         return GLib.idle_add(cb)
 
     def __init__(self):
@@ -169,11 +165,7 @@ class vmmGObject(GObject.GObject):
         Make sure timeout functions are run thread safe
         """
         def cb():
-            try:
-                return func(*args)
-            except:
-                print traceback.format_exc()
-            return False
+            return func(*args)
         ret = GLib.timeout_add(timeout, cb)
         self.add_gobject_timeout(ret)
         return ret
