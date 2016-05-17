@@ -243,11 +243,17 @@ class vmmConsolePages(vmmGObjectUI):
 
         def keycombo_menu_clicked(src):
             ignore = src
-            def menu_location(menu, toolbar):
-                ignore = menu
+            def menu_location(*args):
+                # Signature changed at some point.
+                #  f23+    : args = menu, x, y, toolbar
+                #  rhel7.3 : args = menu, toolbar
+                if len(args) == 4:
+                    toolbar = args[3]
+                else:
+                    toolbar = args[1]
+
                 ignore, x, y = toolbar.get_window().get_origin()
                 height = toolbar.get_window().get_height()
-
                 return x, y + height, True
 
             self._keycombo_toolbar.popup(None, None, menu_location,
