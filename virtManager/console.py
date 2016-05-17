@@ -24,8 +24,7 @@ from gi.repository import Gdk
 
 import logging
 
-from .autodrawer import AutoDrawer
-from .baseclass import vmmGObjectUI
+from .baseclass import vmmGObject, vmmGObjectUI
 from .details import DETAILS_PAGE_CONSOLE
 from .serialcon import vmmSerialConsole
 from .sshtunnels import ConnectionInfo
@@ -37,6 +36,84 @@ from .viewers import SpiceViewer, VNCViewer, have_spice_gtk
  _CONSOLE_PAGE_AUTHENTICATE,
  _CONSOLE_PAGE_SERIAL,
  _CONSOLE_PAGE_VIEWER) = range(4)
+
+
+class _TimedRevealer(vmmGObject):
+    """
+    Revealer for the fullscreen toolbar, with a bit of extra logic to
+    hide/show based on mouse over
+    """
+    def __init__(self, toolbar):
+        vmmGObject.__init__(self)
+
+        self._in_fullscreen = False
+        self._timeout_id = None
+
+        self._revealer = Gtk.Revealer()
+        self._revealer.add(toolbar)
+
+        # Adding the revealer to the eventbox seems to ensure the
+        # eventbox always has 1 invisible pixel showing at the top of the
+        # screen, which we can use to grab the pointer event to show
+        # the hidden toolbar.
+
+        self._ebox = Gtk.EventBox()
+        self._ebox.add(self._revealer)
+        self._ebox.set_halign(Gtk.Align.CENTER)
+        self._ebox.set_valign(Gtk.Align.START)
+        self._ebox.show_all()
+
+        self._ebox.connect("enter-notify-event", self._enter_notify)
+        self._ebox.connect("leave-notify-event", self._enter_notify)
+
+    def _cleanup(self):
+        self._ebox.destroy()
+        self._ebox = None
+        self._revealer.destroy()
+        self._revealer = None
+        self._timeout_id = None
+
+    def _enter_notify(self, ignore1, ignore2):
+        x, y = self._ebox.get_pointer()
+        alloc = self._ebox.get_allocation()
+        entered = bool(x >= 0 and y >= 0 and
+                       x < alloc.width and y < alloc.height)
+
+        if not self._in_fullscreen:
+            return
+
+        # Pointer exited the toolbar, and toolbar is revealed. Schedule
+        # a timeout to close it, if one isn't already scheduled
+        if not entered and self._revealer.get_reveal_child():
+            self._schedule_unreveal_timeout(1000)
+            return
+
+        self._unregister_timeout()
+        if entered and not self._revealer.get_reveal_child():
+            self._revealer.set_reveal_child(True)
+
+    def _schedule_unreveal_timeout(self, timeout):
+        if self._timeout_id:
+            return
+
+        def cb():
+            self._revealer.set_reveal_child(False)
+            self._timeout_id = None
+        self._timeout_id = self.timeout_add(timeout, cb)
+
+    def _unregister_timeout(self):
+        if self._timeout_id:
+            self.remove_gobject_timeout(self._timeout_id)
+            self._timeout_id = None
+
+    def force_reveal(self, val):
+        self._unregister_timeout()
+        self._in_fullscreen = val
+        self._revealer.set_reveal_child(val)
+        self._schedule_unreveal_timeout(2000)
+
+    def get_overlay_widget(self):
+        return self._ebox
 
 
 class vmmConsolePages(vmmGObjectUI):
@@ -62,11 +139,11 @@ class vmmConsolePages(vmmGObjectUI):
 
         # Fullscreen toolbar
         self._send_key_button = None
-        self._fs_toolbar = None
-        self._fs_drawer = None
+        self._overlay_toolbar = None
+        self._timed_revealer = None
         self._keycombo_toolbar = self._build_keycombo_menu()
         self._keycombo_menu = self._build_keycombo_menu()
-        self._init_fs_toolbar()
+        self._init_overlay_toolbar()
 
         # Make viewer widget background always be black
         black = Gdk.Color(0, 0, 0)
@@ -114,10 +191,11 @@ class vmmConsolePages(vmmGObjectUI):
 
         self._keycombo_toolbar.destroy()
         self._keycombo_toolbar = None
-        self._fs_drawer.destroy()
-        self._fs_drawer = None
-        self._fs_toolbar.destroy()
-        self._fs_toolbar = None
+        self._overlay_toolbar.destroy()
+        self._overlay_toolbar = None
+
+        self._timed_revealer.cleanup()
+        self._timed_revealer = None
 
         for serial in self._serial_consoles:
             serial.cleanup()
@@ -151,21 +229,16 @@ class vmmConsolePages(vmmGObjectUI):
         menu.show_all()
         return menu
 
-    def _init_fs_toolbar(self):
-        scroll = self.widget("console-gfx-scroll")
-        pages = self.widget("console-pages")
-        pages.remove(scroll)
-
-        self._fs_toolbar = Gtk.Toolbar()
-        self._fs_toolbar.set_show_arrow(False)
-        self._fs_toolbar.set_no_show_all(True)
-        self._fs_toolbar.set_style(Gtk.ToolbarStyle.BOTH_HORIZ)
+    def _init_overlay_toolbar(self):
+        self._overlay_toolbar = Gtk.Toolbar()
+        self._overlay_toolbar.set_show_arrow(False)
+        self._overlay_toolbar.set_style(Gtk.ToolbarStyle.BOTH_HORIZ)
 
         # Exit fullscreen button
         button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_LEAVE_FULLSCREEN)
         button.set_tooltip_text(_("Leave fullscreen"))
         button.show()
-        self._fs_toolbar.add(button)
+        self._overlay_toolbar.add(button)
         button.connect("clicked", self._leave_fullscreen)
 
         def keycombo_menu_clicked(src):
@@ -178,7 +251,7 @@ class vmmConsolePages(vmmGObjectUI):
                 return x, y + height, True
 
             self._keycombo_toolbar.popup(None, None, menu_location,
-                                     self._fs_toolbar, 0,
+                                     self._overlay_toolbar, 0,
                                      Gtk.get_current_event_time())
 
         self._send_key_button = Gtk.ToolButton()
@@ -187,22 +260,11 @@ class vmmConsolePages(vmmGObjectUI):
         self._send_key_button.set_tooltip_text(_("Send key combination"))
         self._send_key_button.show_all()
         self._send_key_button.connect("clicked", keycombo_menu_clicked)
-        self._fs_toolbar.add(self._send_key_button)
+        self._overlay_toolbar.add(self._send_key_button)
 
-        self._fs_drawer = AutoDrawer()
-        self._fs_drawer.set_active(False)
-        self._fs_drawer.set_over(self._fs_toolbar)
-        self._fs_drawer.set_under(scroll)
-        self._fs_drawer.set_offset(-1)
-        self._fs_drawer.set_fill(False)
-        self._fs_drawer.set_overlap_pixels(1)
-        self._fs_drawer.set_nooverlap_pixels(0)
-        self._fs_drawer.period = 20
-        self._fs_drawer.step = .1
-
-        self._fs_drawer.show_all()
-
-        pages.add(self._fs_drawer)
+        self._timed_revealer = _TimedRevealer(self._overlay_toolbar)
+        self.widget("console-overlay").add_overlay(
+                self._timed_revealer.get_overlay_widget())
 
     def _init_menus(self):
         # Serial list menu
@@ -473,13 +535,11 @@ class vmmConsolePages(vmmGObjectUI):
 
         if do_fullscreen:
             self.topwin.fullscreen()
-            self._fs_toolbar.show()
-            self._fs_drawer.set_active(True)
+            self._timed_revealer.force_reveal(True)
             self.widget("toolbar-box").hide()
             self.widget("details-menubar").hide()
         else:
-            self._fs_toolbar.hide()
-            self._fs_drawer.set_active(False)
+            self._timed_revealer.force_reveal(False)
             self.topwin.unfullscreen()
 
             if self.widget("details-menu-view-toolbar").get_active():
