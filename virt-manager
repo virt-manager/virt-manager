@@ -80,7 +80,7 @@ def _import_gtk(leftovers):
             sys.exit(1)
 
         # This will error if Gtk wasn't correctly initialized
-        Gtk.Window()
+        Gtk.init()
 
         globals()["Gtk"] = Gtk
         import virtManager.config
