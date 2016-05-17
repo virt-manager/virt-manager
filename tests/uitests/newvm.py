@@ -109,6 +109,7 @@ class NewVM(unittest.TestCase):
         uiutils.find_fuzzy(newvm, "Windows", "menu item").click()
         uiutils.find_fuzzy(newvm, "install-os-version-entry",
             "text").typeText("Microsoft Windows 8")
+        uiutils.find_fuzzy(newvm, "install-os-version-entry", "text").click()
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
 
         # Verify that CPU values are non-default
