@@ -27,7 +27,6 @@ import sys
 import traceback
 
 import gi
-from gi.repository import GObject
 gi.require_version('LibvirtGLib', '1.0')
 from gi.repository import LibvirtGLib
 
@@ -43,10 +42,10 @@ import warnings  # pylint: disable=wrong-import-order
 warnings.simplefilter("ignore")
 
 try:
-    # Avoid a deprecation warning about threads_init
-    gi.check_version("3.9.1")
+    gi.check_version("3.14.0")
 except (ValueError, AttributeError):
-    GObject.threads_init()
+    print "pygobject3 3.14.0 or later is required."
+    sys.exit(1)
 
 
 def _show_startup_error(msg, details):
@@ -171,6 +170,10 @@ def main():
         from gi.repository import Gtk
         leftovers = sys.argv[1:]
 
+        if Gtk.check_version(3, 14, 0):
+            print "gtk3 3.14.0 or later is required."
+            return
+
         # This will error if Gtk wasn't correctly initialized
         Gtk.Window()
 
@@ -186,7 +189,7 @@ def main():
             msg += ": Could not open display: %s" % display
         logging.debug("".join(traceback.format_exc()))
         print msg
-        return 1
+        return
     finally:
         sys.argv = origargv
 
@@ -197,6 +200,10 @@ def main():
     if leftovers:
         raise RuntimeError("Unhandled command line options '%s'" % leftovers)
 
+    logging.debug("PyGObject version: %d.%d.%d",
+                  gi.version_info[0],
+                  gi.version_info[1],
+                  gi.version_info[2])
     logging.debug("GTK version: %d.%d.%d",
                   Gtk.get_major_version(),
                   Gtk.get_minor_version(),

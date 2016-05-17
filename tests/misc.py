@@ -110,13 +110,13 @@ class TestMisc(unittest.TestCase):
 
             if required_version is None:
                 raise AssertionError("ui file=%s doesn't have a <requires> "
-                    "tag for gtk+, it should say 3.8")
+                    "tag for gtk+, it should say 3.10")
 
             if (int(required_version.split(".")[0]) != 3 or
-                int(required_version.split(".")[1]) != 8):
+                int(required_version.split(".")[1]) != 14):
                 failures.append((filename, required_version))
 
         if failures:
             raise AssertionError("The following files should require gtk "
-                "version of gtk-3.8, which is what we target:\n" +
+                "version of gtk-3.10, which is what we target:\n" +
                 "\n".join([("%s version=%s" % tup) for tup in failures]))

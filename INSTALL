@@ -24,18 +24,15 @@ setup.py generally has all the build and install commands, for more info see:
   Pre-requisite software
   ======================
 
-virt-manager was ported to GTK3 at the beginning of 2013. Older GTK3
-or pygobject3 versions likely will not work for running virt-manager.
+A detailed dependency list can be found in virt-manager.spec.in
 
-Earliest tested versions of major components:
+Minimum version requirements of major components:
 
   python >= 2.7
-  gtk3 >= 3.6
-  libvirt-python >= 0.4.0
-  pygobject3 >= 3.4
+  gtk3 >= 3.14
+  libvirt-python >= 0.6.0
+  pygobject3 >= 3.14
   libosinfo >= 0.2.10
-
-A more detailed dependency list can be found in virt-manager.spec.in.
 
 On Debian or Ubuntu based distributions, you need to install the
 gobject-introspection bindings for some depedencies like libvirt-glib
