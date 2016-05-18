@@ -712,9 +712,9 @@ class vmmConsolePages(vmmGObjectUI):
 
         if ginfo.is_bad_localhost():
             self._activate_unavailable_page(
-                _("Guest is on a remote host with transport '%s'\n"
-                  "but is only configured to listen locally.\n"
-                  "Connect using 'ssh' transport or change the\n"
+                _("Guest is on a remote host with transport '%s' "
+                  "but is only configured to listen locally. "
+                  "Connect using 'ssh' transport or change the"
                   "guest's listen address." % ginfo.transport))
             return
 
