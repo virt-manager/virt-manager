@@ -62,7 +62,7 @@ class ConnectionInfo(object):
     def need_tunnel(self):
         if not self._is_listen_localhost():
             return False
-        return self.transport in ["ssh", "ext"]
+        return self.transport == "ssh"
 
     def is_bad_localhost(self):
         """
