@@ -59,20 +59,30 @@ class ConnectionInfo(object):
         except:
             return False
 
+    def _is_listen_none(self):
+        return not (self.gsocket or self.gport or self.gtlsport)
+
     def need_tunnel(self):
         if not self._is_listen_localhost():
             return False
         return self.transport == "ssh"
 
-    def is_bad_localhost(self):
-        """
-        Return True if the guest is listening on localhost, but the libvirt
-        URI doesn't give us any way to tunnel the connection
-        """
-        if self.need_tunnel():
-            return False
-        host, ignore, ignore = self.get_conn_host()
-        return self.transport and self._is_listen_localhost(host)
+    def bad_config(self):
+        if self.transport and self._is_listen_none():
+            return _("Guest is on a remote host, but is only configured "
+                "to allow local file descriptor connections.")
+
+        if self.need_tunnel() and (self.gtlsport and not self.gport):
+            return _("Guest is configured for TLS only which does not "
+                "work over SSH.")
+
+        if (not self.need_tunnel() and
+            self.transport and
+            self._is_listen_localhost(self.get_conn_host()[0])):
+            return _("Guest is on a remote host with transport '%s' "
+                "but is only configured to listen locally. "
+                "To connect remotely you will need to change the guest's "
+                "listen address." % self.transport)
 
     def get_conn_host(self):
         """

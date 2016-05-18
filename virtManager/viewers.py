@@ -156,6 +156,9 @@ class Viewer(vmmGObject):
         return self._vm.open_graphics_fd()
 
     def _open(self):
+        if self._ginfo.bad_config():
+            raise RuntimeError(self._ginfo.bad_config())
+
         fd = self._get_fd_for_open()
         if fd is not None:
             self._open_fd(fd)
