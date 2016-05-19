@@ -699,13 +699,13 @@ class vmmManager(vmmGObjectUI):
         if conn.get_uri() in self.rows:
             return
 
+        vmlist = self.widget("vm-list")
+        self._append_conn(vmlist.get_model(), conn)
+
         conn.connect("vm-added", self.vm_added)
         conn.connect("vm-removed", self.vm_removed)
         conn.connect("resources-sampled", self.conn_row_updated)
         conn.connect("state-changed", self.conn_state_changed)
-
-        vmlist = self.widget("vm-list")
-        self._append_conn(vmlist.get_model(), conn)
 
     def remove_conn(self, engine_ignore, uri):
         # Called from engine.py signal conn-removed
