@@ -579,17 +579,26 @@ class vmmManager(vmmGObjectUI):
 
     def vm_added(self, conn, connkey):
         vm = conn.get_vm(connkey)
-        if not vm or self.vm_row_key(vm) in self.rows:
+        if not vm:
             return
+
+        row_key = self.vm_row_key(vm)
+        if row_key in self.rows:
+            return
+
+        row = self._build_row(None, vm)
+        parent = self.rows[conn.get_uri()].iter
+        model = self.widget("vm-list").get_model()
+        _iter = model.append(parent, row)
+        path = model.get_path(_iter)
+        self.rows[row_key] = model[path]
 
         vm.connect("state-changed", self.vm_changed)
         vm.connect("resources-sampled", self.vm_row_updated)
         vm.connect("inspection-changed", self.vm_inspection_changed)
 
-        vmlist = self.widget("vm-list")
-        model = vmlist.get_model()
-
-        self._append_vm(model, vm, conn)
+        # Expand a connection when adding a vm to it
+        self.widget("vm-list").expand_row(model.get_path(parent), False)
 
     def vm_removed(self, conn, connkey):
         vmlist = self.widget("vm-list")
@@ -667,29 +676,6 @@ class vmmManager(vmmGObjectUI):
 
         return row
 
-    def _append_vm(self, model, vm, conn):
-        row_key = self.vm_row_key(vm)
-        if row_key in self.rows:
-            return
-
-        row = self._build_row(None, vm)
-        parent = self.rows[conn.get_uri()].iter
-
-        _iter = model.append(parent, row)
-        path = model.get_path(_iter)
-        self.rows[row_key] = model[path]
-
-        # Expand a connection when adding a vm to it
-        self.widget("vm-list").expand_row(model.get_path(parent), False)
-
-    def _append_conn(self, model, conn):
-        row = self._build_row(conn, None)
-
-        _iter = model.append(None, row)
-        path = model.get_path(_iter)
-        self.rows[conn.get_uri()] = model[path]
-        return _iter
-
     def add_conn(self, engine_ignore, conn):
         # Called from engine.py signal conn-added
 
@@ -699,8 +685,11 @@ class vmmManager(vmmGObjectUI):
         if conn.get_uri() in self.rows:
             return
 
-        vmlist = self.widget("vm-list")
-        self._append_conn(vmlist.get_model(), conn)
+        model = self.widget("vm-list").get_model()
+        row = self._build_row(conn, None)
+        _iter = model.append(None, row)
+        path = model.get_path(_iter)
+        self.rows[conn.get_uri()] = model[path]
 
         conn.connect("vm-added", self.vm_added)
         conn.connect("vm-removed", self.vm_removed)
