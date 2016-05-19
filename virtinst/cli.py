@@ -2249,6 +2249,11 @@ class ParserVideo(VirtCLIParser):
         self.remove_first = "model"
 
         self.set_param("model", "model", ignore_default=True)
+        self.set_param("accel3d", "accel3d", is_onoff=True)
+        self.set_param("heads", "heads")
+        self.set_param("ram", "ram")
+        self.set_param("vram", "vram")
+        self.set_param("vgamem", "vgamem")
 
 
 ###################

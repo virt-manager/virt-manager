@@ -514,7 +514,7 @@ c.add_compare(""" \
 --sound ac97 \
 \
 --video cirrus \
---video model=qxl \
+--video model=qxl,vgamem=1,ram=2,vram=3,heads=4,accel3d=yes \
 \
 --smartcard passthrough,type=spicevmc \
 --smartcard type=host \

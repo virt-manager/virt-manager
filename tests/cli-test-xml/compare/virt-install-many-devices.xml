@@ -243,7 +243,9 @@
       <model type="cirrus"/>
     </video>
     <video>
-      <model type="qxl"/>
+      <model type="qxl" vram="3" heads="4" vgamem="1" ram="2">
+        <acceleration accel3d="yes"/>
+      </model>
     </video>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
