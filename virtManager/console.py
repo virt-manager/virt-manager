@@ -127,7 +127,6 @@ class vmmConsolePages(vmmGObjectUI):
         self._pointer_is_grabbed = False
         self._change_title()
         self.vm.connect("state-changed", self._change_title)
-        self._force_resize = False
 
         # State for disabling modifiers when keyboard is grabbed
         self._accel_groups = Gtk.accel_groups_from_object(self.topwin)
@@ -357,8 +356,9 @@ class vmmConsolePages(vmmGObjectUI):
     ###########################
 
     def _scroll_size_allocate(self, src_ignore, req):
-        if (not self._viewer or
-            not self._viewer.console_get_desktop_resolution()):
+        if not self._viewer:
+            return
+        if not self._viewer.console_get_desktop_resolution():
             return
 
         scroll = self.widget("console-gfx-scroll")
@@ -371,27 +371,24 @@ class vmmConsolePages(vmmGObjectUI):
 
         # pylint: disable=unpacking-non-sequence
         desktop_w, desktop_h = self._viewer.console_get_desktop_resolution()
-        if desktop_h == 0:
-            return
         desktop_ratio = float(desktop_w) / float(desktop_h)
 
-        if is_scale or self._force_resize:
+        if is_scale:
             # Make sure we never show scrollbars when scaling
             scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
         else:
             scroll.set_policy(Gtk.PolicyType.AUTOMATIC,
                               Gtk.PolicyType.AUTOMATIC)
 
-        if not self._force_resize and is_resizeguest:
+        if is_resizeguest:
             # With resize guest, we don't want to maintain aspect ratio,
             # since the guest can resize to arbitrary resolutions.
             self._viewer.console_set_size_request(req.width, req.height)
             return
 
-        if not is_scale or self._force_resize:
+        if not is_scale:
             # Scaling disabled is easy, just force the VNC widget size. Since
             # we are inside a scrollwindow, it shouldn't cause issues.
-            self._force_resize = False
             self._viewer.console_set_size_request(desktop_w, desktop_h)
             return
 
@@ -458,10 +455,14 @@ class vmmConsolePages(vmmGObjectUI):
         if not self._viewer.console_get_desktop_resolution():
             return
 
+        topwin_alloc = self.topwin.get_allocation()
+        viewer_alloc = self.widget("console-gfx-scroll").get_allocation()
+        desktop_w, desktop_h = self._viewer.console_get_desktop_resolution()
+
         self.topwin.unmaximize()
-        self.topwin.resize(1, 1)
-        self._force_resize = True
-        self.widget("console-gfx-scroll").queue_resize()
+        self.topwin.resize(
+            desktop_w + (topwin_alloc.width - viewer_alloc.width),
+            desktop_h + (topwin_alloc.height - viewer_alloc.height))
 
 
     ################

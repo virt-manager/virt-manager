@@ -258,7 +258,14 @@ class Viewer(vmmGObject):
         return self._get_grab_keys()
 
     def console_get_desktop_resolution(self):
-        return self._get_desktop_resolution()
+        ret = self._get_desktop_resolution()
+        if not ret:
+            return ret
+
+        # Don't pass on bogus resolutions
+        if (ret[0] == 0) or (ret[1] == 0):
+            return None
+        return ret
 
     def console_get_scaling(self):
         return self._get_scaling()
