@@ -893,6 +893,8 @@ class vmmEngine(vmmGObject):
 
         obj = vmmCreate(self)
         obj.connect("action-show-domain", self._do_show_vm)
+        obj.connect("create-opened", self.increment_window_counter)
+        obj.connect("create-closed", self.decrement_window_counter)
         self.windowCreate = obj
         return self.windowCreate
 
@@ -968,7 +970,6 @@ class vmmEngine(vmmGObject):
         self._do_show_host(self.get_manager(), uri)
 
     def _show_domain_creator(self, uri):
-        self._show_manager()
         self._do_show_create(self.get_manager(), uri)
 
     def _show_domain_console(self, uri, clistr):

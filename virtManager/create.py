@@ -110,6 +110,8 @@ def _remove_vmm_device(guest, devkey):
 class vmmCreate(vmmGObjectUI):
     __gsignals__ = {
         "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "create-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "create-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
     def __init__(self, engine):
@@ -197,12 +199,15 @@ class vmmCreate(vmmGObjectUI):
         if not self.is_visible():
             self._reset_state(uri)
             self.topwin.set_transient_for(parent)
+            self.emit("create-opened")
 
         self.topwin.present()
 
     def _close(self, ignore1=None, ignore2=None):
         if self.is_visible():
             logging.debug("Closing new vm wizard")
+            self.emit("create-closed")
+
         self.topwin.hide()
 
         self._cleanup_customize_window()
