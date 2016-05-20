@@ -455,9 +455,6 @@ class vmmAddHardware(vmmGObjectUI):
         # FS params
         self._fsdetails.reset_state()
 
-        # Video params
-        self.populate_video_combo(self.vm, self.widget("video-model"))
-
         # TPM params
         self.widget("tpm-device-path").set_text("/dev/tpm0")
 
@@ -490,34 +487,18 @@ class vmmAddHardware(vmmGObjectUI):
     #####################
 
     @staticmethod
-    def populate_video_combo(vm, combo):
-        model = combo.get_model()
-        has_spice = bool([g for g in vm.get_graphics_devices()
-                          if g.type == g.TYPE_SPICE])
-        has_qxl = bool([v for v in vm.get_video_devices()
-                        if v.model == "qxl"])
-
-        model.clear()
-        tmpdev = virtinst.VirtualVideoDevice(vm.conn.get_backend())
-        for m in tmpdev.MODELS:
-            if vm.stable_defaults():
-                if m == "qxl" and not has_spice and not has_qxl:
-                    # Only list QXL video option when VM has SPICE video
-                    continue
-
-            model.append([m, tmpdev.pretty_model(m)])
-
-        if len(model) > 0:
-            combo.set_active(0)
-
-    @staticmethod
     def build_video_combo(vm, combo):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
         combo.get_model().set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
-        vmmAddHardware.populate_video_combo(vm, combo)
+        tmpdev = virtinst.VirtualVideoDevice(vm.conn.get_backend())
+        for m in tmpdev.MODELS:
+            model.append([m, tmpdev.pretty_model(m)])
+
+        if len(model) > 0:
+            combo.set_active(0)
 
     @staticmethod
     def build_sound_combo(vm, combo):

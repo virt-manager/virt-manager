@@ -2897,9 +2897,6 @@ class vmmDetails(vmmGObjectUI):
         if not vid:
             return
 
-        vmmAddHardware.populate_video_combo(self.vm,
-            self.widget("video-model"))
-
         model = vid.model
         if model == "qxl" and vid.vgamem:
             ram = vid.vgamem
