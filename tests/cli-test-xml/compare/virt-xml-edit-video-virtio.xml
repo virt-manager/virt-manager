@@ -1,0 +1,13 @@
+     <sound model="es1370"/>
+     <sound model="ich6"/>
+     <video>
+-      <model type="vmvga" vram="16384" heads="1" primary="yes"/>
++      <model type="virtio">
++        <acceleration accel3d="yes"/>
++      </model>
+     </video>
+     <video>
+       <model type="cirrus" vram="16384" heads="3"/>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the next domain shutdown.

@@ -870,6 +870,8 @@ c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for me
 c.add_compare("--edit --disk path=/foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes", "edit-clear-disk")
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
+c.add_compare("--edit --video clearxml=yes,model=virtio,accel3d=yes", "edit-video-virtio")
+c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl")
 
 c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
 c.add_valid("--add-device --security model=dac")  # --add-device works for seclabel
