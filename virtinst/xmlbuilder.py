@@ -613,9 +613,9 @@ class XMLProperty(property):
             _remove_xpath_node(ctx, xpath)
             return
 
-        node = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
+        node = _get_xpath_node(ctx, xpath)
         if not node:
-            node = _build_xpath_node(root_node, xpath)
+            node = _build_xpath_node(ctx, xpath)
 
         if setval is True:
             # Boolean property, creating the node is enough
