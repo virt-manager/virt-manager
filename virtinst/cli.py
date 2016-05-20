@@ -1912,7 +1912,17 @@ class ParserGraphics(VirtCLIParser):
         if opts.fullopts == "none":
             self.guest.skip_default_graphics = True
             return
-        return VirtCLIParser._parse(self, opts, inst)
+
+        ret = VirtCLIParser._parse(self, opts, inst)
+
+        if inst.conn.is_qemu() and inst.gl:
+            if inst.type != "spice":
+                logging.warn("graphics type=%s does not support GL", inst.type)
+            elif not inst.conn.check_support(
+                    inst.conn.SUPPORT_CONN_SPICE_GL):
+                logging.warn("qemu/libvirt version may not support spice GL")
+
+        return ret
 
 
 ########################
@@ -2263,6 +2273,20 @@ class ParserVideo(VirtCLIParser):
         self.set_param("ram", "ram")
         self.set_param("vram", "vram")
         self.set_param("vgamem", "vgamem")
+
+    def _parse(self, opts, inst):
+        ret = VirtCLIParser._parse(self, opts, inst)
+
+        if inst.conn.is_qemu() and inst.accel3d:
+            if inst.model != "virtio":
+                logging.warn("video model=%s does not support accel3d",
+                    inst.model)
+            elif not inst.conn.check_support(
+                    inst.conn.SUPPORT_CONN_VIDEO_VIRTIO_ACCEL3D):
+                logging.warn("qemu/libvirt version may not support "
+                             "virtio accel3d")
+
+        return ret
 
 
 ###################

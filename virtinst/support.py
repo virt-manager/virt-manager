@@ -311,6 +311,10 @@ SUPPORT_CONN_VCPU_PLACEMENT = _make(
 SUPPORT_CONN_MEM_STATS_PERIOD = _make(
     function="virDomain.setMemoryStatsPeriod",
     version="1.1.1", hv_version={"qemu": 0})
+SUPPORT_CONN_SPICE_GL = _make(version="1.3.3",
+    hv_version={"qemu": "2.5.92", "test": 0})
+SUPPORT_CONN_VIDEO_VIRTIO_ACCEL3D = _make(version="1.3.0",
+    hv_version={"qemu": "2.5.0", "test": 0})
 
 
 # This is for disk <driver name=qemu>. xen supports this, but it's
