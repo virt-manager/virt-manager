@@ -17,16 +17,10 @@
 -    <feature policy="require" name="ds_cpl"/>
 -    <feature policy="require" name="xtpr"/>
 -    <feature policy="require" name="acpi"/>
--  </cpu>
++  <cpu mode="host-passthrough">
+   </cpu>
    <clock offset="utc">
      <timer name="rtc" tickpolicy="catchup"/>
-     <timer name="pit" tickpolicy="delay"/>
-@@
-     </panic>
-   </devices>
-   <seclabel type="dynamic" model="selinux" relabel="yes"/>
-+  <cpu mode="host-passthrough"/>
- </domain>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

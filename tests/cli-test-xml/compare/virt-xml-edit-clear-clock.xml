@@ -1,20 +1,12 @@
-     <feature policy="require" name="xtpr"/>
      <feature policy="require" name="acpi"/>
    </cpu>
--  <clock offset="utc">
+   <clock offset="utc">
 -    <timer name="rtc" tickpolicy="catchup"/>
 -    <timer name="pit" tickpolicy="delay"/>
 -    <timer name="hpet" present="no"/>
--  </clock>
+   </clock>
    <on_poweroff>destroy</on_poweroff>
    <on_reboot>restart</on_reboot>
-   <on_crash>restart</on_crash>
-@@
-     </panic>
-   </devices>
-   <seclabel type="dynamic" model="selinux" relabel="yes"/>
-+  <clock offset="utc"/>
- </domain>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

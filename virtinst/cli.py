@@ -1028,17 +1028,27 @@ class VirtCLIParser(object):
 
     def __init_global_params(self):
         def set_clearxml_cb(opts, inst, cliname, val):
-            ignore = opts = cliname
+            ignore = opts
+            ignore = cliname
             if not self.objclass and not self.clear_attr:
                 raise RuntimeError("Don't know how to clearxml --%s" %
                                    self.cli_arg_name)
             if val is not True:
                 return
 
+            clear_inst = inst
             if self.clear_attr:
-                getattr(inst, self.clear_attr).clear()
-            else:
-                inst.clear()
+                clear_inst = getattr(inst, self.clear_attr)
+
+            # If there's any opts remaining, leave the root stub element
+            # in place, so virt-xml updates are done in place.
+            #
+            # So --edit --cpu clearxml=yes  should remove the entire <cpu>
+            # block. But --edit --cpu clearxml=yes,model=foo should leave
+            # a <cpu> stub in place, so that it gets model=foo in place,
+            # otherwise the newly created cpu block gets appened to the
+            # end of the domain XML, which gives an ugly diff
+            clear_inst.clear(leave_stub=bool(opts.opts))
 
         self.set_param(None, "clearxml",
                        setter_cb=set_clearxml_cb, is_onoff=True)
