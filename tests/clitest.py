@@ -838,11 +838,11 @@ c.add_compare("--pm suspend_to_mem=yes,suspend_to_disk=no", "edit-simple-pm")
 c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "edit-simple-disk")
 c.add_compare("--disk path=", "edit-simple-disk-remove-path")
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "edit-simple-network")
-c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics", compare_check="1.3.2")  # compare_check=<input> reordering
+c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics", compare_check="1.3.5")  # compare_check=new graphics listen output
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
 c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "edit-simple-redirdev")
-c.add_compare("--tpm path=/dev/tpm", "edit-simple-tpm", compare_check="1.3.2")  # compare_check=<input> reordering
+c.add_compare("--tpm path=/dev/tpm", "edit-simple-tpm", compare_check="1.3.5")  # compare_check=new graphics listen output
 c.add_compare("--rng rate_bytes=3333,rate_period=4444", "edit-simple-rng")
 c.add_compare("--watchdog action=reset", "edit-simple-watchdog")
 c.add_compare("--memballoon model=none", "edit-simple-memballoon")
@@ -852,15 +852,15 @@ c.add_compare("--channel null", "edit-simple-channel")
 c.add_compare("--console name=foo.bar.baz", "edit-simple-console")
 c.add_compare("--filesystem /1/2/3,/4/5/6,mode=mapped", "edit-simple-filesystem")
 c.add_compare("--video cirrus", "edit-simple-video", compare_check="1.3.3")  # compare_check=video primary= attribute
-c.add_compare("--sound pcspk", "edit-simple-soundhw", compare_check="1.3.2")  # compare_check=<input> reordering
+c.add_compare("--sound pcspk", "edit-simple-soundhw", compare_check="1.3.5")  # compare_check=new graphics listen output
 c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "edit-simple-host-device")
 
 c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
-c.add_compare("--edit 3 --sound pcspk", "edit-pos-num", compare_check="1.3.3")  # compare_check=video primary= attribute
+c.add_compare("--edit 3 --sound pcspk", "edit-pos-num", compare_check="1.3.5")  # compare_check=new graphics listen output
 c.add_compare("--edit -1 --video qxl", "edit-neg-num", compare_check="1.2.11")  # compare_check=video ram output change
 c.add_compare("--edit all --host-device driver_name=vfio", "edit-all")
-c.add_compare("--edit ich6 --sound pcspk", "edit-select-sound-model", compare_check="1.3.3")  # compare_check=video primary= attribute
+c.add_compare("--edit ich6 --sound pcspk", "edit-select-sound-model", compare_check="1.3.5")  # compare_check=new graphics listen output
 c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
@@ -871,7 +871,7 @@ c.add_compare("--edit --disk path=/foo/bar,target=fda,bus=fdc,device=floppy,clea
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
 c.add_compare("--edit --video clearxml=yes,model=virtio,accel3d=yes", "edit-video-virtio")
-c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl")
+c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl", compare_check="1.3.5")  # compare_check=new graphics listen output
 
 c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
 c.add_valid("--add-device --security model=dac")  # --add-device works for seclabel
@@ -882,7 +882,7 @@ c.add_compare("--add-device --sound pcspk", "add-sound")
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "add-disk-notarget")  # filling in acceptable target
 c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-storage")
-c.add_compare("--remove-device --sound ich6", "remove-sound-model", compare_check="1.3.3")  # compare_check=video primary= attribute
+c.add_compare("--remove-device --sound ich6", "remove-sound-model", compare_check="1.3.5")  # compare_check=new graphics listen output
 c.add_compare("--remove-device --disk 3", "remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all", compare_check="1.3.3")  # compare_check=video primary= attribute
