@@ -327,7 +327,6 @@ class vmmHost(vmmGObjectUI):
         if not self.widget("overview-name").has_focus():
             self.widget("overview-name").set_text(self.conn.get_pretty_desc())
 
-        self.widget("menu_file_restore_saved").set_sensitive(conn_active)
         self.widget("net-add").set_sensitive(conn_active and
             self.conn.is_network_capable())
         self.widget("interface-add").set_sensitive(conn_active and
