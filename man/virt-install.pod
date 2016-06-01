@@ -1576,6 +1576,15 @@ Show program's version number and exit
 Set the autostart flag for a domain. This causes the domain to be started
 on host boot up.
 
+=item B<--transient>
+
+Use --import or --boot and --transient if you want a transient libvirt
+VM.  These VMs exist only until the domain is shut down or the host
+server is restarted.  Libvirt forgets the XML configuration of the VM
+after either of these events.  Note that the VM's disks will not be
+deleted.  See:
+L<http://wiki.libvirt.org/page/VM_lifecycle#Transient_guest_domains_vs_Persistent_guest_domains>
+
 =item B<--print-xml> [STEP]
 
 Print the generated XML of the guest, instead of defining it. By default this WILL do storage creation (can be disabled with --dry-run). This option implies --quiet.

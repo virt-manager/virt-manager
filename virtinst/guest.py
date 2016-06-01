@@ -382,7 +382,7 @@ class Guest(XMLBuilder):
 
         return install_xml, final_xml
 
-    def _create_guest(self, meter, install_xml, final_xml, doboot):
+    def _create_guest(self, meter, install_xml, final_xml, doboot, transient):
         """
         Actually do the XML logging, guest defining/creating
 
@@ -392,10 +392,11 @@ class Guest(XMLBuilder):
         meter = util.ensure_meter(meter)
         meter.start(size=None, text=meter_label)
 
-        if doboot or self.installer.has_install_phase():
+        if doboot or transient or self.installer.has_install_phase():
             self.domain = self.conn.createXML(install_xml or final_xml, 0)
 
-        self.domain = self.conn.defineXML(final_xml)
+        if not transient:
+            self.domain = self.conn.defineXML(final_xml)
         meter.end(0)
 
         try:
@@ -428,7 +429,8 @@ class Guest(XMLBuilder):
     ##############
 
     def start_install(self, meter=None,
-                      dry=False, return_xml=False, doboot=True):
+                      dry=False, return_xml=False,
+                      doboot=True, transient=False):
         """
         Begin the guest install (stage1).
         @param return_xml: Don't create the guest, just return generated XML
@@ -455,7 +457,9 @@ class Guest(XMLBuilder):
             self.check_vm_collision(self.conn, self.name,
                                     do_remove=self.replace)
 
-            self._create_guest(meter, install_xml, final_xml, doboot)
+            self._create_guest(meter, install_xml, final_xml,
+                               doboot, transient)
+
             # Set domain autostart flag if requested
             self._flag_autostart()
         finally:

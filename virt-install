@@ -449,6 +449,9 @@ _cdrom_location_man_page = _("See the man page for examples of "
 
 
 def check_option_collisions(options, guest):
+    if options.noreboot and options.transient:
+        fail(_("--noreboot and --transient can not be specified together"))
+
     # Install collisions
     if sum([bool(l) for l in [options.pxe, options.location,
                       options.cdrom, options.import_install]]) > 1:
@@ -688,13 +691,14 @@ def start_install(guest, options):
         start_time = time.time()
 
         # Do first install phase
-        guest.start_install(meter=meter, doboot=not options.noreboot)
+        guest.start_install(meter=meter, doboot=not options.noreboot,
+                            transient=options.transient)
         cli.connect_console(guest, conscb, wait_on_console)
-        check_domain(guest, conscb,
+        check_domain(guest, conscb, options.transient,
                      wait_on_install, wait_time, start_time)
 
         print_stdout(_("Domain creation completed."))
-        if not guest.domain.isActive():
+        if not options.transient and not guest.domain.isActive():
             if options.noreboot or not guest.installer.has_install_phase():
                 print_stdout(
                     _("You can restart your domain by running:\n  %s") %
@@ -715,21 +719,27 @@ def start_install(guest, options):
         cli.install_fail(guest)
 
 
-def check_domain(guest, conscb, wait_for_install, wait_time, start_time):
+def check_domain(guest, conscb, transient,
+                 wait_for_install, wait_time, start_time):
     """
     Make sure domain ends up in expected state, and wait if for install
     to complete if requested
     """
-    # Wait a bit so info is accurate
     def check_domain_inactive():
-        dominfo = guest.domain.info()
-        state = dominfo[0]
-        logging.debug("Domain state after install: %s", state)
+        try:
+            dominfo = guest.domain.info()
+            state = dominfo[0]
+            logging.debug("Domain state after install: %s", state)
 
-        if state == libvirt.VIR_DOMAIN_CRASHED:
-            fail(_("Domain has crashed."))
+            if state == libvirt.VIR_DOMAIN_CRASHED:
+                fail(_("Domain has crashed."))
 
-        return not guest.domain.isActive()
+            return not guest.domain.isActive()
+        except libvirt.libvirtError, e:
+            if transient and e.get_error_code() == libvirt.VIR_ERR_NO_DOMAIN:
+                logging.debug("transient VM shutdown and disappeared.")
+                return True
+            raise
 
     if check_domain_inactive():
         return
@@ -927,6 +937,9 @@ def parse_args():
     misc.add_argument("--autostart", action="store_true", dest="autostart",
                     default=False,
                     help=_("Have domain autostart on host boot up."))
+    misc.add_argument("--transient", action="store_true", dest="transient",
+                      default=False,
+                      help=_("Create a transient domain."))
     misc.add_argument("--wait", type=int, dest="wait",
                     help=_("Minutes to wait for install to complete."))
 
