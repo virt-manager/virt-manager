@@ -448,9 +448,6 @@ def _distroFromSUSEContent(fetcher, arch, vmtype=None):
             dclass = OpensuseDistro
             if distro_version is None:
                 distro_version = ['VERSION', distribution[0].strip().rsplit(':')[4]]
-                # For tumbleweed we only have an 8 character date string so default to 13.2
-                if distro_version[1] and len(distro_version[1]) == 8:
-                    distro_version = ['VERSION', '13.2']
 
     if distro_version is None:
         return None
@@ -1009,7 +1006,11 @@ class SuseDistro(Distro):
                 if sp_version:
                     self.os_variant += sp_version
             else:
-                self.os_variant += distro_version
+                # Tumbleweed 8 digit date
+                if len(version) == 8:
+                    self.os_variant += "tumbleweed"
+                else:
+                    self.os_variant += distro_version
         else:
             self.os_variant += "9"
 
