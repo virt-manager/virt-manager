@@ -404,6 +404,10 @@ def _distroFromSUSEContent(fetcher, arch, vmtype=None):
             distro_distro = line.rsplit(',', 1)
         elif line.startswith("VERSION "):
             distro_version = line.split(' ', 1)
+            if len(distro_version) > 1:
+                d_version = distro_version[1].split('-', 1)
+                if len(d_version) > 1:
+                    distro_version[1] = d_version[0]
         elif line.startswith("SUMMARY "):
             distro_summary = line.split(' ', 1)
         elif line.startswith("BASEARCHS "):
@@ -433,17 +437,23 @@ def _distroFromSUSEContent(fetcher, arch, vmtype=None):
         elif cbuf.find("s390x") != -1:
             arch = "s390x"
 
+    def _parse_sle_distribution(d):
+        sle_version = d[1].strip().rsplit(' ')[4]
+        if len(d[1].strip().rsplit(' ')) > 5:
+            sle_version = sle_version + '.' + d[1].strip().rsplit(' ')[5][2]
+        return ['VERSION', sle_version]
+
     dclass = GenericDistro
     if distribution:
         if re.match(".*SUSE Linux Enterprise Server*", distribution[1]) or \
             re.match(".*SUSE SLES*", distribution[1]):
             dclass = SLESDistro
             if distro_version is None:
-                distro_version = ['VERSION', distribution[1].strip().rsplit(' ')[4]]
+                distro_version = _parse_sle_distribution(distribution)
         elif re.match(".*SUSE Linux Enterprise Desktop*", distribution[1]):
             dclass = SLEDDistro
             if distro_version is None:
-                distro_version = ['VERSION', distribution[1].strip().rsplit(' ')[4]]
+                distro_version = _parse_sle_distribution(distribution)
         elif re.match(".*openSUSE.*", distribution[1]):
             dclass = OpensuseDistro
             if distro_version is None:
