@@ -179,7 +179,7 @@ class vmmConfig(object):
         self.cli_usbredir = None
 
         self.default_storage_format_from_config = "qcow2"
-        self.cpu_default_from_config = "host-cpu-model"
+        self.cpu_default_from_config = CPU.SPECIAL_MODE_HOST_MODEL_ONLY
         self.default_console_resizeguest = 0
         self.default_add_spice_usbredir = "yes"
 

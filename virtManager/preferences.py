@@ -163,7 +163,7 @@ class vmmPreferences(vmmGObjectUI):
         for row in [["default", _("System default (%s)") %
                     self.config.cpu_default_from_config],
                     ["hv-default", _("Hypervisor default")],
-                    ["host-cpu-model", _("Nearest host CPU model")],
+                    ["host-model-only", _("Nearest host CPU model")],
                     ["host-model", _("Copy host CPU definition")]]:
             model.append(row)
         combo.set_model(model)
