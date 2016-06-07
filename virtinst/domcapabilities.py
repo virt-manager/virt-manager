@@ -102,10 +102,12 @@ class DomainCapabilities(XMLBuilder):
             ".*OVMF_CODE\.fd",  # RHEL
             ".*ovmf-x64/OVMF.*\.fd",  # gerd's firmware repo
             ".*ovmf-x86_64-.*",  # SUSE
+            ".*ovmf.*", ".*OVMF.*", # generic attempt at a catchall
         ],
         "aarch64": [
             ".*AAVMF_CODE\.fd",  # RHEL
             ".*aarch64/QEMU_EFI.*",  # gerd's firmware repo
+            ".*aarch64.*", # generic attempt at a catchall
         ],
     }
 
