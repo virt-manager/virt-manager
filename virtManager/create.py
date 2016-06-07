@@ -1778,6 +1778,12 @@ class vmmCreate(vmmGObjectUI):
                 return self.err.val_err(
                                 _("A storage path to import is required."))
 
+            if not virtinst.VirtualDisk.path_definitely_exists(
+                                                self.conn.get_backend(),
+                                                import_path):
+                return self.err.val_err(_("The import path must point to "
+                                          "an existing storage."))
+
         elif instmethod == INSTALL_PAGE_CONTAINER_APP:
             instclass = virtinst.ContainerInstaller
 
