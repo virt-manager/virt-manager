@@ -19,6 +19,9 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+import socket
+
 from gi.repository import GObject
 from gi.repository import Gdk
 
@@ -32,9 +35,6 @@ try:
     have_spice_gtk = True
 except (ValueError, ImportError):
     have_spice_gtk = False
-
-import logging
-import socket
 
 from .baseclass import vmmGObject
 from .sshtunnels import SSHTunnels

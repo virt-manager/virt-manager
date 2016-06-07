@@ -18,10 +18,10 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-import logging
 
 from virtinst import Interface, InterfaceProtocol
 

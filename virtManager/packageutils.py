@@ -18,10 +18,10 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import Gio
-
 import logging
 import time
+
+from gi.repository import Gio
 
 
 #############################

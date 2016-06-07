@@ -18,14 +18,14 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import Pango
-
 import os
 import stat
 import traceback
 import logging
+
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Pango
 
 import virtinst
 from virtinst import util

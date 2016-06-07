@@ -18,14 +18,14 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import GObject
-
 import logging
 import os
 import time
 import threading
 
 import libvirt
+
+from gi.repository import GObject
 
 from virtinst import DomainCapabilities
 from virtinst import DomainSnapshot

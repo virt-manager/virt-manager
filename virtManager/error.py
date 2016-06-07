@@ -17,10 +17,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from gi.repository import Gtk
-
 import logging
 import traceback
+
+from gi.repository import Gtk
 
 from .baseclass import vmmGObject
 

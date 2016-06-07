@@ -18,12 +18,12 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import GLib
-from gi.repository import Gio
-
 import logging
 import os
 import time
+
+from gi.repository import GLib
+from gi.repository import Gio
 
 import libvirt
 

@@ -19,10 +19,10 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-import logging
 
 from .baseclass import vmmGObject, vmmGObjectUI
 from .details import DETAILS_PAGE_CONSOLE

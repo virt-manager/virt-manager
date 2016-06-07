@@ -18,8 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import GObject
-
 import logging
 import os
 import threading
@@ -27,6 +25,9 @@ import time
 import traceback
 
 import libvirt
+
+from gi.repository import GObject
+
 import virtinst
 from virtinst import pollhelpers
 from virtinst import support

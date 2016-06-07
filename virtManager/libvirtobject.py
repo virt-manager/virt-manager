@@ -18,9 +18,9 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import GObject
-
 import logging
+
+from gi.repository import GObject
 
 from .baseclass import vmmGObject
 

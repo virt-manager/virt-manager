@@ -18,11 +18,11 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
-
-import logging
 
 from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob

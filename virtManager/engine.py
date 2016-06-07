@@ -18,16 +18,16 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import Gio
-from gi.repository import GLib
-from gi.repository import GObject
-from gi.repository import Gtk
-
 import logging
 import re
 import Queue
 import threading
 import traceback
+
+from gi.repository import Gio
+from gi.repository import GLib
+from gi.repository import GObject
+from gi.repository import Gtk
 
 from . import packageutils
 from .about import vmmAbout
