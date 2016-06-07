@@ -161,7 +161,7 @@ class VirtualDisk(VirtualDevice):
         cases.
 
         (In fact if cached storage volume data is out of date, the volume
-         may have disappeared behind out back, but that shouldn't have bad
+         may have disappeared behind our back, but that shouldn't have bad
          effects in practice.)
         """
         if path is None:
