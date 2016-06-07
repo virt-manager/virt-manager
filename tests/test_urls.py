@@ -51,6 +51,7 @@ SCIENTIFIC_URL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/os"
 OPENSUSE10 = "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/10.0"
 OLD_OPENSUSE_URL = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/%s/repo/oss"
 OPENSUSE_URL = "http://download.opensuse.org/distribution/%s/repo/oss/"
+OPENSUSE_TUMBLEWEED = "http://download.opensuse.org/tumbleweed/repo/oss/"
 
 OLD_UBUNTU_URL = "http://old-releases.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
 UBUNTU_URL = "http://us.archive.ubuntu.com:80/ubuntu/dists/%s/main/installer-%s"
@@ -149,6 +150,8 @@ _add(OPENSUSE_URL % ("12.3"), "opensuse12.3",
 # Latest 13.x releases
 _add(OPENSUSE_URL % ("13.1"), "opensuse13.1", hasbootiso=False)
 _add(OPENSUSE_URL % ("13.2"), "opensuse13.2", hasbootiso=False)
+# tumbleweed (rolling distro)
+_add(OPENSUSE_TUMBLEWEED, "opensusetumbleweed", hasbootiso=False)
 
 
 _set_distro(DebianDistro)
