@@ -1039,7 +1039,10 @@ class Guest(XMLBuilder):
                     self._os_object.supports_virtiodisk()))):
                 d.bus = "virtio"
             elif self.os.is_pseries():
-                d.bus = "virtio"
+                if d.is_cdrom():
+                    d.bus = "scsi"
+                else:
+                    d.bus = 'virtio'
             elif self.os.is_arm():
                 d.bus = "sd"
             elif self.os.is_q35():
