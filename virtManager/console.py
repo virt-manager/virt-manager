@@ -627,7 +627,7 @@ class vmmConsolePages(vmmGObjectUI):
                 bool(self.config.has_keyring()))
         if self.config.has_keyring():
             self.widget("console-auth-remember").set_active(
-                bool(pw and username))
+                    bool(withPassword and pw) or (withUsername and username))
 
         self.widget("console-pages").set_current_page(
             _CONSOLE_PAGE_AUTHENTICATE)
