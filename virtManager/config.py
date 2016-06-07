@@ -708,3 +708,16 @@ class vmmConfig(object):
             return
 
         vm.set_console_password(username, keyid)
+
+    def del_console_password(self, vm):
+        if not self.has_keyring():
+            return
+
+        username, keyid = vm.get_console_password()
+
+        if keyid == -1:
+            return
+
+        self.keyring.del_secret(keyid)
+
+        vm.del_console_password()

@@ -88,6 +88,16 @@ class vmmKeyring(object):
 
         return ret
 
+    def del_secret(self, _id):
+        try:
+            path = self._collection.get_object_path() + "/" + str(_id)
+            iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
+                                           "org.freedesktop.secrets", path,
+                                           "org.freedesktop.Secret.Item", None)
+            iface.Delete("(s)", "/")
+        except:
+            logging.exception("Failed to delete keyring secret")
+
     def get_secret(self, _id):
         ret = None
         try:

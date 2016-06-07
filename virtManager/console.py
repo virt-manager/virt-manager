@@ -749,6 +749,8 @@ class vmmConsolePages(vmmGObjectUI):
         if self.widget("console-auth-remember").get_active():
             self.config.set_console_password(self.vm, passwd.get_text(),
                                              username.get_text())
+        else:
+            self.config.del_console_password(self.vm)
 
 
     ##########################

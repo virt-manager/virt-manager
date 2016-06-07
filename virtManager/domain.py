@@ -1706,6 +1706,10 @@ class vmmDomain(vmmLibvirtObject):
     def set_console_password(self, username, keyid):
         return self.config.set_pervm(self.get_uuid(), "/console-password",
                                      (username, keyid))
+    def del_console_password(self):
+        return self.config.set_pervm(self.get_uuid(), "/console-password",
+                                     ("", -1))
+
 
     def _on_config_sample_network_traffic_changed(self, ignore=None):
         self._enable_net_poll = self.config.get_stats_enable_net_poll()
