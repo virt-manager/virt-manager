@@ -1545,6 +1545,8 @@ class ParserFeatures(VirtCLIParser):
         self.set_param("kvm_hidden", "kvm_hidden", is_onoff=True)
         self.set_param("pvspinlock", "pvspinlock", is_onoff=True)
 
+        self.set_param("gic_version", "gic_version")
+
 
 ###################
 # --clock parsing #

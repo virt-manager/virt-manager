@@ -254,6 +254,11 @@ Allow the KVM hypervisor signature to be hidden from the guest
 
 Notify the guest that the host supports paravirtual spinlocks for example by exposing the pvticketlocks mechanism.
 
+=item B<--features gic_version=2>
+
+This is relevant only for ARM architectures. Possible values are "host" or
+version number.
+
 =back
 
 Use --features=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsFeatures>
