@@ -25,7 +25,7 @@ class DomainFeatures(XMLBuilder):
     Class for generating <features> XML
     """
     _XML_ROOT_NAME = "features"
-    _XML_PROP_ORDER = ["acpi", "apic", "pae"]
+    _XML_PROP_ORDER = ["acpi", "apic", "pae", "gic_version"]
 
     acpi = XMLProperty("./acpi", is_bool=True,
                        default_name="default", default_cb=lambda s: False)
@@ -33,6 +33,7 @@ class DomainFeatures(XMLBuilder):
                        default_name="default", default_cb=lambda s: False)
     pae = XMLProperty("./pae", is_bool=True,
                        default_name="default", default_cb=lambda s: False)
+    gic_version = XMLProperty("./gic/@version")
 
     hap = XMLProperty("./hap", is_bool=True)
     viridian = XMLProperty("./viridian", is_bool=True)

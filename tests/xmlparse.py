@@ -165,6 +165,7 @@ class XMLParseTest(unittest.TestCase):
         check("vmport", False, True)
         check("kvm_hidden", None, True)
         check("pvspinlock", None, True)
+        check("gic_version", None, False)
 
         check = self._make_checker(guest.cpu)
         check("match", "exact", "strict")
