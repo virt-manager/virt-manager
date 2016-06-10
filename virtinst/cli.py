@@ -2392,7 +2392,6 @@ def build_parser_map(options, skip=None, only=None):
     register_parser("features", ParserFeatures)
     register_parser("clock", ParserClock)
     register_parser("pm", ParserPM)
-    register_parser("features", ParserFeatures)
     register_parser("disk", ParserDisk)
     register_parser("network", ParserNetwork)
     register_parser("graphics", ParserGraphics)
