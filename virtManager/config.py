@@ -713,7 +713,7 @@ class vmmConfig(object):
         if not self.has_keyring():
             return
 
-        username, keyid = vm.get_console_password()
+        ignore, keyid = vm.get_console_password()
 
         if keyid == -1:
             return
