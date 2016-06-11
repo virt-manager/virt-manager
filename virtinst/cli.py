@@ -1288,6 +1288,36 @@ class ParserMemorytune(VirtCLIParser):
         self.set_param("min_guarantee", "min_guarantee")
 
 
+#######################
+# --blkiotune parsing #
+#######################
+
+class ParserBlkiotune(VirtCLIParser):
+    def _init_params(self):
+        self.objclass = DomainBlkiotune
+        self.remove_first = "weight"
+
+        self.set_param("weight", "weight")
+        self.set_param("device_path", "device_path")
+        self.set_param("device_weight", "device_weight")
+
+
+###########################
+# --memorybacking parsing #
+###########################
+
+class ParserMemorybacking(VirtCLIParser):
+    def _init_params(self):
+        self.objclass = DomainMemorybacking
+
+        self.set_param("hugepages", "hugepages", is_onoff=True)
+        self.set_param("page_size", "size")
+        self.set_param("page_unit", "unit")
+        self.set_param("page_nodeset", "nodeset", can_comma=True)
+        self.set_param("nosharepages", "nosharepages", is_onoff=True)
+        self.set_param("locked", "locked", is_onoff=True)
+
+
 ###################
 # --vcpus parsing #
 ###################
@@ -2150,36 +2180,6 @@ class ParserPanic(VirtCLIParser):
                 return
             inst.iobase = val
         self.set_param(None, "iobase", setter_cb=set_iobase_cb)
-
-
-#######################
-# --blkiotune parsing #
-#######################
-
-class ParserBlkiotune(VirtCLIParser):
-    def _init_params(self):
-        self.objclass = DomainBlkiotune
-        self.remove_first = "weight"
-
-        self.set_param("weight", "weight")
-        self.set_param("device_path", "device_path")
-        self.set_param("device_weight", "device_weight")
-
-
-########################
-# --memorybacking parsing #
-########################
-
-class ParserMemorybacking(VirtCLIParser):
-    def _init_params(self):
-        self.objclass = DomainMemorybacking
-
-        self.set_param("hugepages", "hugepages", is_onoff=True)
-        self.set_param("page_size", "size")
-        self.set_param("page_unit", "unit")
-        self.set_param("page_nodeset", "nodeset", can_comma=True)
-        self.set_param("nosharepages", "nosharepages", is_onoff=True)
-        self.set_param("locked", "locked", is_onoff=True)
 
 
 ######################################################
