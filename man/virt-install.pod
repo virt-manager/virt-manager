@@ -1060,6 +1060,10 @@ This deprecates the --accelerate option, which is now the default behavior. To i
 
 =head1 DEVICE OPTIONS
 
+All devices have a set of B<address.*> options for configuring the
+particulars of the device's address on its parent controller or bus.
+See C<http://libvirt.org/formatdomain.html#elementsAddress> for details.
+
 =over 4
 
 =item B<--controller> OPTIONS
@@ -1083,7 +1087,8 @@ see C<http://libvirt.org/formatdomain.html#elementsControllers>.
 
 =item B<address>
 
-Controller address, current PCI of form 'bus:domain:slot.function'.
+Shorthand for setting a manual PCI address from an lscpi style string.
+The preferred method for setting this is using the address.* parameters.
 
 =item B<index>
 

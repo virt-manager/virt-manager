@@ -74,15 +74,28 @@ class VirtualDeviceAddress(XMLBuilder):
 
 
     type = XMLProperty("./@type")
+    # type=pci
     domain = XMLProperty("./@domain", is_int=True)
     bus = XMLProperty("./@bus", is_int=True)
     slot = XMLProperty("./@slot", is_int=True)
     function = XMLProperty("./@function", is_int=True)
+    multifunction = XMLProperty("./@multifunction", is_onoff=True)
+    # type=drive
     controller = XMLProperty("./@controller", is_int=True)
     unit = XMLProperty("./@unit", is_int=True)
     port = XMLProperty("./@port", is_int=True)
     target = XMLProperty("./@target", is_int=True)
-    multifunction = XMLProperty("./@multifunction", is_onoff=True)
+    # type=spapr-vio
+    reg = XMLProperty("./@reg")
+    # type=ccw
+    cssid = XMLProperty("./@cssid")
+    ssid = XMLProperty("./@ssid")
+    devno = XMLProperty("./@devno")
+    # type=isa
+    iobase = XMLProperty("./@iobase")
+    irq = XMLProperty("./@irq")
+    # type=dimm
+    base = XMLProperty("./@base")
 
 
 class VirtualDevice(XMLBuilder):

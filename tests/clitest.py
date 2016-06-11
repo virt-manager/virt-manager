@@ -464,12 +464,13 @@ c.add_compare(""" \
 --disk qemu+nbd:///var/foo/bar/socket,bus=usb,removable=on \
 --disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo \
 --disk vol=gluster-pool/test-gluster.raw,startup_policy=optional \
---disk %(DIR)s,device=floppy \
+--disk %(DIR)s,device=floppy,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01 \
 \
 --network user,mac=12:34:56:78:11:22,portgroup=foo,link_state=down,rom_bar=on,rom_file=/tmp/foo \
 --network bridge=foobar,model=virtio,driver_name=qemu,driver_queues=3 \
 --network bridge=ovsbr,virtualport_type=openvswitch,virtualport_profileid=demo,virtualport_interfaceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,link_state=yes \
 --network type=direct,source=eth5,source_mode=vepa,target=mytap12,virtualport_type=802.1Qbg,virtualport_managerid=12,virtualport_typeid=1193046,virtualport_typeidversion=1,virtualport_instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1 \
+--network user,model=virtio,address.type=spapr-vio,address.reg=0x500 \
 \
 --graphics sdl \
 --graphics spice,keymap=none \
@@ -500,7 +501,7 @@ c.add_compare(""" \
 --host-device 001.003 \
 --hostdev 15:0.1 \
 --host-device 2:15:0.2 \
---hostdev 0:15:0.3 \
+--hostdev 0:15:0.3,address.type=isa,address.iobase=0x500,address.irq=5 \
 --host-device 0x0781:0x5151,driver_name=vfio \
 --host-device 04b3:4485 \
 --host-device pci_8086_2829_scsi_host_scsi_device_lun0 \

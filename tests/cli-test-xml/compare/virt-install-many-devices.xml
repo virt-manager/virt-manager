@@ -133,6 +133,7 @@
       <driver name="qemu"/>
       <source dir="/var"/>
       <target dev="fda" bus="fdc"/>
+      <address type="ccw" cssid="0xfe" ssid="0" devno="01"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
@@ -192,6 +193,11 @@
         <parameters managerid="12" typeid="1193046" typeidversion="1" instanceid="09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b"/>
       </virtualport>
       <boot order="1"/>
+    </interface>
+    <interface type="user">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <address type="spapr-vio" reg="0x500"/>
     </interface>
     <input type="keyboard" bus="usb"/>
     <input type="tablet" bus="usb"/>
@@ -284,6 +290,7 @@
       <source>
         <address domain="0" bus="21" slot="0" function="3"/>
       </source>
+      <address type="isa" iobase="0x500" irq="5"/>
     </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>

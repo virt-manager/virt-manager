@@ -1053,6 +1053,30 @@ class VirtCLIParser(object):
         self.set_param(None, "clearxml",
                        setter_cb=set_clearxml_cb, is_onoff=True)
 
+    def _add_device_address_params(self):
+        """
+        Add VirtualDeviceAddress parameters if we are parsing for a device
+        """
+        self.set_param("address.type", "address.type")
+        self.set_param("address.domain", "address.domain")
+        self.set_param("address.bus", "address.bus")
+        self.set_param("address.slot", "address.slot")
+        self.set_param("address.multifunction", "address.multifunction",
+                       is_onoff=True)
+        self.set_param("address.function", "address.function")
+        self.set_param("address.controller", "address.controller")
+        self.set_param("address.unit", "address.unit")
+        self.set_param("address.port", "address.port")
+        self.set_param("address.target", "address.target")
+        self.set_param("address.reg", "address.reg")
+        self.set_param("address.cssid", "address.cssid")
+        self.set_param("address.ssid", "address.ssid")
+        self.set_param("address.devno", "address.devno")
+        self.set_param("address.iobase", "address.iobase")
+        self.set_param("address.irq", "address.irq")
+        self.set_param("address.base", "address.base")
+
+
     def check_introspection(self, option):
         for optstr in util.listify(option):
             if optstr == "?" or optstr == "help":
@@ -1662,6 +1686,7 @@ class ParserDisk(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualDisk
         self.remove_first = "path"
+        self._add_device_address_params()
 
         def noset_cb(opts, inst, cliname, val):
             ignore = opts, inst, cliname, val
@@ -1707,7 +1732,6 @@ class ParserDisk(VirtCLIParser):
         self.set_param("iotune_wis", "write_iops_sec")
         self.set_param("iotune_tis", "total_iops_sec")
         self.set_param("sgio", "sgio")
-
 
     def _parse(self, opts, inst):
         if opts.fullopts == "none":
@@ -1808,6 +1832,7 @@ class ParserNetwork(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualNetworkInterface
         self.remove_first = "type"
+        self._add_device_address_params()
 
         def set_mac_cb(opts, inst, cliname, val):
             ignore = opts
@@ -1896,6 +1921,7 @@ class ParserGraphics(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualGraphics
         self.remove_first = "type"
+        self._add_device_address_params()
 
         def set_keymap_cb(opts, inst, cliname, val):
             ignore = opts
@@ -1975,6 +2001,7 @@ class ParserController(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualController
         self.remove_first = "type"
+        self._add_device_address_params()
 
         self.set_param("type", "type")
         self.set_param("model", "model")
@@ -2004,6 +2031,7 @@ class ParserInput(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualInputDevice
         self.remove_first = "type"
+        self._add_device_address_params()
 
         self.set_param("type", "type")
         self.set_param("bus", "bus")
@@ -2018,6 +2046,7 @@ class ParserSmartcard(VirtCLIParser):
         self.objclass = VirtualSmartCardDevice
         self.remove_first = "mode"
         self.check_none = True
+        self._add_device_address_params()
 
         self.set_param("mode", "mode")
         self.set_param("type", "type")
@@ -2031,6 +2060,7 @@ class ParserRedir(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualRedirDevice
         self.remove_first = "bus"
+        self._add_device_address_params()
 
         self.set_param("bus", "bus")
         self.set_param("type", "type")
@@ -2058,6 +2088,7 @@ class ParserTPM(VirtCLIParser):
         self.objclass = VirtualTPMDevice
         self.remove_first = "type"
         self.check_none = True
+        self._add_device_address_params()
 
         self.set_param("type", "type")
         self.set_param("model", "model")
@@ -2078,6 +2109,7 @@ class ParserRNG(VirtCLIParser):
         self.objclass = VirtualRNGDevice
         self.remove_first = "type"
         self.check_none = True
+        self._add_device_address_params()
 
         def set_hosts_cb(opts, inst, cliname, val):
             namemap = {}
@@ -2147,6 +2179,7 @@ class ParserWatchdog(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualWatchdog
         self.remove_first = "model"
+        self._add_device_address_params()
 
         self.set_param("model", "model")
         self.set_param("action", "action")
@@ -2160,6 +2193,7 @@ class ParserMemballoon(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualMemballoon
         self.remove_first = "model"
+        self._add_device_address_params()
 
         self.set_param("model", "model")
 
@@ -2172,6 +2206,7 @@ class ParserPanic(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualPanicDevice
         self.remove_first = "iobase"
+        self._add_device_address_params()
 
         def set_iobase_cb(opts, inst, cliname, val):
             ignore = opts
@@ -2189,6 +2224,7 @@ class ParserPanic(VirtCLIParser):
 class _ParserChar(VirtCLIParser):
     def _init_params(self):
         self.remove_first = "char_type"
+        self._add_device_address_params()
 
         def support_check(inst, attrname, cliname):
             if type(attrname) is not str:
@@ -2263,6 +2299,7 @@ class ParserFilesystem(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualFilesystem
         self.remove_first = ["source", "target"]
+        self._add_device_address_params()
 
         self.set_param("type", "type")
         self.set_param("accessmode", "accessmode", aliases=["mode"])
@@ -2278,6 +2315,7 @@ class ParserVideo(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualVideoDevice
         self.remove_first = "model"
+        self._add_device_address_params()
 
         self.set_param("model", "model", ignore_default=True)
         self.set_param("accel3d", "accel3d", is_onoff=True)
@@ -2309,6 +2347,7 @@ class ParserSound(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualAudio
         self.remove_first = "model"
+        self._add_device_address_params()
 
         self.set_param("model", "model", ignore_default=True)
 
@@ -2327,6 +2366,7 @@ class ParserHostdev(VirtCLIParser):
     def _init_params(self):
         self.objclass = VirtualHostDevice
         self.remove_first = "name"
+        self._add_device_address_params()
 
         # If using the name_lookup_cb, this saves us repeatedly trying to
         # lookup the nodedev
