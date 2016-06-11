@@ -1950,10 +1950,7 @@ class ParserGraphics(VirtCLIParser):
 
         def set_listen_cb(opts, inst, cliname, val):
             if val == "none":
-                inst.port = None
-                inst.tlsPort = None
-                inst.listen = None
-                inst.autoport = False
+                inst.set_listen_none()
             else:
                 inst.listen = val
 

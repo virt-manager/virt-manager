@@ -530,7 +530,7 @@ c.add_compare(""" \
 --panic iobase=507 \
 """, "many-devices", compare_check="1.3.1")  # compare_check=rbd format output
 
-
+# Test the implied defaults for gl=yes setting virgl=on
 c.add_compare(""" \
 --memory 1024 \
 --disk none \
@@ -841,6 +841,8 @@ c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "edit-simple-
 c.add_compare("--disk path=", "edit-simple-disk-remove-path")
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "edit-simple-network")
 c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics", compare_check="1.3.5")  # compare_check=new graphics listen output
+c.add_compare("--graphics listen=None", "edit-graphics-listen-none", compare_check="1.3.6")  # compare_check=graphics listen=none support
+c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
 c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "edit-simple-redirdev")
@@ -873,7 +875,7 @@ c.add_compare("--edit --disk path=/foo/bar,target=fda,bus=fdc,device=floppy,clea
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
 c.add_compare("--edit --video clearxml=yes,model=virtio,accel3d=yes", "edit-video-virtio")
-c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl", compare_check="1.3.5")  # compare_check=new graphics listen output
+c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl", compare_check="1.3.6")  # compare_check=graphics listen=none support
 
 c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
 c.add_valid("--add-device --security model=dac")  # --add-device works for seclabel

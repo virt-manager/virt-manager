@@ -199,7 +199,7 @@ class VirtualGraphics(VirtualDevice):
                        (l.type == "address" and l.address == self.listen)]
         if find_listen:
             if val is None:
-                self.remove_listen(find_listen[0])
+                self.remove_child(find_listen[0])
             else:
                 find_listen[0].address = val
         return val
@@ -215,8 +215,26 @@ class VirtualGraphics(VirtualDevice):
     defaultMode = XMLProperty("./@defaultMode")
 
     listens = XMLChildProperty(_GraphicsListen)
-    def remove_listen(self, obj):
-        self.remove_child(obj)
+    def remove_all_listens(self):
+        for listen in self.listens:
+            self.remove_child(listen)
+
+    def add_listen(self):
+        obj = _GraphicsListen(self.conn)
+        self.add_child(obj)
+        return obj
+
+    def set_listen_none(self):
+        self.remove_all_listens()
+        self.port = None
+        self.tlsPort = None
+        self.autoport = False
+        self.socket = None
+
+        if self.conn.check_support(
+            self.conn.SUPPORT_CONN_GRAPHICS_LISTEN_NONE):
+            obj = self.add_listen()
+            obj.type = "none"
 
     # Spice bits
     image_compression = XMLProperty("./image/@compression")
