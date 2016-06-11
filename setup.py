@@ -385,6 +385,11 @@ class TestBaseCommand(distutils.core.Command):
     def finalize_options(self):
         if self.debug and "DEBUG_TESTS" not in os.environ:
             os.environ["DEBUG_TESTS"] = "1"
+        if self.only:
+            # Can do --only many-devices to match on the cli testcase
+            # for "virt-install-many-devices", despite the actual test
+            # function name not containing any '-'
+            self.only = self.only.replace("-", "_")
 
     def _find_tests_in_dir(self, dirname, excludes):
         testfiles = []

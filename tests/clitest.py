@@ -1006,10 +1006,15 @@ _cmdlist += vclon.cmds
 _cmdlist += vconv.cmds
 _cmdlist += vixml.cmds
 
+# Generate numbered names like testCLI%d
 for _cmd in _cmdlist:
     newidx += 1
-    _name = "testCLI"
-    _name += "%s%.4d" % (os.path.basename(_cmd.app.replace("-", "")), newidx)
+    _name = "testCLI%.4d" % newidx
+    if _cmd.compare_file:
+        _base = os.path.splitext(os.path.basename(_cmd.compare_file))[0]
+        _name += _base.replace("-", "_")
+    else:
+        _name += _cmd.app.replace("-", "_")
     setattr(CLITests, _name, maketest(_cmd))
 
 atexit.register(cleanup)
