@@ -43,11 +43,6 @@
       <target dev='hdd' bus='scsi'/>
       <readonly/>
     </disk>
-    <disk type="block" device="disk">
-      <driver name="qemu" type="qcow2"/>
-      <source dev="/dev/null"/>
-      <target dev="hdd" bus="ide"/>
-    </disk>
     <disk type="block" device="cdrom">
       <target dev="sda" bus="scsi"/>
       <readonly/>
