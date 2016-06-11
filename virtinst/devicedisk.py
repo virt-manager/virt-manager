@@ -30,7 +30,7 @@ from . import diskbackend
 from . import util
 from .device import VirtualDevice
 from .seclabel import Seclabel
-from .xmlbuilder import XMLChildProperty, XMLProperty
+from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
@@ -89,6 +89,17 @@ def _is_dir_searchable(uid, username, path):
         return False
 
     return bool(re.search("user:%s:..x" % username, out))
+
+
+class _DiskSeclabel(XMLBuilder):
+    """
+    This is for disk source <seclabel>. It's similar to a domain
+    <seclabel> but has fewer options
+    """
+    _XML_ROOT_NAME = "seclabel"
+    model = XMLProperty("./@model")
+    relabel = XMLProperty("./@relabel", is_yesno=True)
+    label = XMLProperty("./label")
 
 
 class VirtualDisk(VirtualDevice):
@@ -742,7 +753,7 @@ class VirtualDisk(VirtualDevice):
     iotune_wbs = XMLProperty("./iotune/write_bytes_sec", is_int=True)
     iotune_wis = XMLProperty("./iotune/write_iops_sec", is_int=True)
 
-    seclabel = XMLChildProperty(Seclabel, relative_xpath="./source")
+    seclabel = XMLChildProperty(_DiskSeclabel, relative_xpath="./source")
 
 
     #################################

@@ -26,7 +26,7 @@
     <disk type="block" device="disk">
       <source dev="/dev/null">
         <seclabel model='selinux' relabel='no'/>
-        <seclabel model='dac' type='dynamic'/>
+        <seclabel model='dac'/>
       </source>
       <target dev="hdb" bus="ide"/>
     </disk>

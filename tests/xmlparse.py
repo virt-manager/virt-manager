@@ -352,7 +352,8 @@ class XMLParseTest(unittest.TestCase):
         disk = guest.get_devices("disk")[1]
         check = self._make_checker(disk.seclabel[1])
         check("model", "dac")
-        check("type", "dynamic", "none")
+        check("relabel", None, True)
+        check("label", None, "foo-my-label")
 
         disk = _get_disk("hdc")
         check = self._make_checker(disk)
