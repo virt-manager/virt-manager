@@ -975,6 +975,9 @@ Use 'none' to specify that the display server should not listen on any
 port. The display server can be accessed only locally through
 libvirt unix socket (virt-viewer with --attach for instance).
 
+Use 'socket' to have the VM listen on a libvirt generated unix socket
+path on the host filesystem.
+
 This is used by 'vnc' and 'spice'
 
 =item B<keymap>

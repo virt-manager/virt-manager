@@ -477,7 +477,7 @@ c.add_compare(""" \
 --graphics vnc,port=5950,listen=1.2.3.4,keymap=ja,password=foo \
 --graphics spice,port=5950,tlsport=5950,listen=1.2.3.4,keymap=ja \
 --graphics spice,image_compression=foo,streaming_mode=bar,clipboard_copypaste=yes,mouse_mode=client,filetransfer_enable=on \
---graphics spice,gl=yes \
+--graphics spice,gl=yes,listen=socket \
 --graphics spice,gl=yes,listen=none \
 \
 --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 \
@@ -528,7 +528,7 @@ c.add_compare(""" \
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp \
 \
 --panic iobase=507 \
-""", "many-devices", compare_check="1.3.1")  # compare_check=rbd format output
+""", "many-devices", compare_check="1.3.6")  # compare_check=graphics listen=socket support
 
 # Test the implied defaults for gl=yes setting virgl=on
 c.add_compare(""" \
@@ -841,7 +841,7 @@ c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "edit-simple-
 c.add_compare("--disk path=", "edit-simple-disk-remove-path")
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "edit-simple-network")
 c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics", compare_check="1.3.5")  # compare_check=new graphics listen output
-c.add_compare("--graphics listen=None", "edit-graphics-listen-none", compare_check="1.3.6")  # compare_check=graphics listen=none support
+c.add_compare("--graphics listen=none", "edit-graphics-listen-none", compare_check="1.3.6")  # compare_check=graphics listen=none support
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")

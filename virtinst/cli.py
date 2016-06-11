@@ -1951,6 +1951,10 @@ class ParserGraphics(VirtCLIParser):
         def set_listen_cb(opts, inst, cliname, val):
             if val == "none":
                 inst.set_listen_none()
+            elif val == "socket":
+                inst.remove_all_listens()
+                obj = inst.add_listen()
+                obj.type = "socket"
             else:
                 inst.listen = val
 

@@ -1,0 +1,13 @@
+         <device path="/dev/tzz"/>
+       </backend>
+     </tpm>
+-    <graphics type="vnc" port="-1" autoport="yes">
+-      <listen type="address"/>
++    <graphics type="vnc" autoport="no">
++      <listen type="none"/>
+     </graphics>
+     <sound model="sb16"/>
+     <sound model="es1370"/>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the next domain shutdown.
