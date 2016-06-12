@@ -822,8 +822,7 @@ class _VirtCLIArgument(object):
         self.lookup_cb = lookup_cb
         self.is_novalue = is_novalue
 
-
-    def parse(self, opts, inst, support_cb=None, lookup=False):
+    def _parse_common(self, opts, inst, support_cb, is_lookup):
         val = None
         for cliname in self.aliases + [self.cliname]:
             # We iterate over all values unconditionally, so they are
@@ -832,7 +831,7 @@ class _VirtCLIArgument(object):
             if foundval is not None:
                 val = foundval
         if val is None:
-            return
+            return 0
         if val == "":
             val = None
 
@@ -840,15 +839,14 @@ class _VirtCLIArgument(object):
             support_cb(inst, self.attrname, self.cliname)
         if self.is_onoff:
             val = _on_off_convert(self.cliname, val)
-        if val == "default" and self.ignore_default and not lookup:
-            return
+        if val == "default" and self.ignore_default and not is_lookup:
+            return 0
+        return val
 
-        if lookup and not self.attrname and not self.lookup_cb:
-            raise RuntimeError(
-                _("Don't know how to match device type '%(device_type)s' "
-                  "property '%(property_name)s'") %
-                {"device_type": getattr(inst, "virtual_device_type", ""),
-                 "property_name": self.cliname})
+    def parse_param(self, opts, inst, support_cb):
+        val = self._parse_common(opts, inst, support_cb, False)
+        if val is 0:
+            return
 
         try:
             if self.attrname:
@@ -858,17 +856,33 @@ class _VirtCLIArgument(object):
                                "member=%s" % (inst, self.attrname))
 
         cbdata = _SetterCBData(opts, self.cliname)
-        if lookup:
-            if self.lookup_cb:
-                return self.lookup_cb(inst, val, cbdata)
-            else:
-                return eval(  # pylint: disable=eval-used
-                    "inst." + self.attrname) == val
-        elif self.setter_cb:
+        if self.setter_cb:
             self.setter_cb(inst, val, cbdata)
         else:
             exec(  # pylint: disable=exec-used
                 "inst." + self.attrname + " = val")
+
+    def lookup_param(self, opts, inst):
+        """
+        Lookup device, like via virt-xml --edit X matching
+        """
+        val = self._parse_common(opts, inst, None, True)
+        if val is 0:
+            return
+
+        if not self.attrname and not self.lookup_cb:
+            raise RuntimeError(
+                _("Don't know how to match device type '%(device_type)s' "
+                  "property '%(property_name)s'") %
+                {"device_type": getattr(inst, "virtual_device_type", ""),
+                 "property_name": self.cliname})
+
+        cbdata = _SetterCBData(opts, self.cliname)
+        if self.lookup_cb:
+            return self.lookup_cb(inst, val, cbdata)
+        else:
+            return eval(  # pylint: disable=eval-used
+                "inst." + self.attrname) == val
 
 
 class VirtOptionString(object):
@@ -1166,8 +1180,7 @@ class VirtCLIParser(object):
                                         self.remove_first)
                 valid = True
                 for param in self._params:
-                    if param.parse(opts, inst,
-                                   support_cb=None, lookup=True) is False:
+                    if param.lookup_param(opts, inst) is False:
                         valid = False
                         break
                 if valid:
@@ -1201,7 +1214,7 @@ class VirtCLIParser(object):
 
     def _parse(self, opts, inst):
         for param in self._params:
-            param.parse(opts, inst, self.support_cb)
+            param.parse_param(opts, inst, self.support_cb)
         opts.check_leftover_opts()
         return inst
 
