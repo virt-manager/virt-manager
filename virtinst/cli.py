@@ -893,13 +893,17 @@ class VirtOptionString(object):
                 virtargmap[alias] = arg
 
         # @opts: A dictionary of the mapping {cliname: val}
-        self.opts = self._parse_optstr(virtargmap, remove_first)
+        self.optsdict = self._parse_optstr(virtargmap, remove_first)
 
     def get_opt_param(self, key, is_novalue=False):
-        if key not in self.opts:
+        """
+        Basically self.optsdict.pop(key, None) with a little extra
+        error reporting wrapped in
+        """
+        if key not in self.optsdict:
             return None
 
-        ret = self.opts.pop(key)
+        ret = self.optsdict.pop(key)
         if ret is None:
             if not is_novalue:
                 raise RuntimeError("Option '%s' had no value set." % key)
@@ -908,9 +912,9 @@ class VirtOptionString(object):
         return ret
 
     def check_leftover_opts(self):
-        if not self.opts:
+        if not self.optsdict:
             return
-        raise fail(_("Unknown options %s") % self.opts.keys())
+        raise fail(_("Unknown options %s") % self.optsdict.keys())
 
 
     ###########################
@@ -968,20 +972,20 @@ class VirtOptionString(object):
 
     def _parse_optstr(self, virtargmap, remove_first):
         orderedopts = self._parse_optstr_tuples(virtargmap, remove_first)
-        optdict = collections.OrderedDict()
+        optsdict = collections.OrderedDict()
 
         for cliname, val in orderedopts:
-            if (cliname not in optdict and
+            if (cliname not in optsdict and
                 cliname in virtargmap and
                 virtargmap[cliname].is_list):
-                optdict[cliname] = []
+                optsdict[cliname] = []
 
-            if type(optdict.get(cliname)) is list:
-                optdict[cliname].append(val)
+            if type(optsdict.get(cliname)) is list:
+                optsdict[cliname].append(val)
             else:
-                optdict[cliname] = val
+                optsdict[cliname] = val
 
-        return optdict
+        return optsdict
 
 
 class VirtCLIParser(object):
@@ -1056,7 +1060,7 @@ class VirtCLIParser(object):
             # a <cpu> stub in place, so that it gets model=foo in place,
             # otherwise the newly created cpu block gets appened to the
             # end of the domain XML, which gives an ugly diff
-            clear_inst.clear(leave_stub=bool(cbdata.opts.opts))
+            clear_inst.clear(leave_stub=bool(cbdata.opts.optsdict))
 
         self.set_param(None, "clearxml",
                        setter_cb=set_clearxml_cb, is_onoff=True)
@@ -1357,7 +1361,7 @@ class ParserVCPU(VirtCLIParser):
         self.remove_first = "vcpus"
 
         def set_vcpus_cb(inst, val, cbdata):
-            attrname = (("maxvcpus" in cbdata.opts.opts) and
+            attrname = (("maxvcpus" in cbdata.opts.optsdict) and
                         "curvcpus" or "vcpus")
             setattr(inst, attrname, val)
 
@@ -1393,8 +1397,8 @@ class ParserVCPU(VirtCLIParser):
 
 
     def _parse(self, opts, inst):
-        set_from_top = ("maxvcpus" not in opts.opts and
-                        "vcpus" not in opts.opts)
+        set_from_top = ("maxvcpus" not in opts.optsdict and
+                        "vcpus" not in opts.optsdict)
 
         ret = VirtCLIParser._parse(self, opts, inst)
 
@@ -1450,11 +1454,9 @@ class ParserCPU(VirtCLIParser):
         self.set_param(None, "disable", is_list=True, setter_cb=set_feature_cb)
         self.set_param(None, "forbid", is_list=True, setter_cb=set_feature_cb)
 
-    def _parse(self, optsobj, inst):
-        opts = optsobj.opts
-
+    def _parse(self, opts, inst):
         # Convert +feature, -feature into expected format
-        for key, value in opts.items():
+        for key, value in opts.optsdict.items():
             policy = None
             if value or len(key) == 1:
                 continue
@@ -1465,12 +1467,12 @@ class ParserCPU(VirtCLIParser):
                 policy = "disable"
 
             if policy:
-                del(opts[key])
-                if opts.get(policy) is None:
-                    opts[policy] = []
-                opts[policy].append(key[1:])
+                del(opts.optsdict[key])
+                if opts.optsdict.get(policy) is None:
+                    opts.optsdict[policy] = []
+                opts.optsdict[policy].append(key[1:])
 
-        return VirtCLIParser._parse(self, optsobj, inst)
+        return VirtCLIParser._parse(self, opts, inst)
 
 
 ##################
@@ -1522,11 +1524,11 @@ class ParserBoot(VirtCLIParser):
     def _parse(self, opts, inst):
         # Build boot order
         boot_order = []
-        for cliname in opts.opts.keys():
+        for cliname in opts.optsdict.keys():
             if cliname not in inst.os.BOOT_DEVICES:
                 continue
 
-            del(opts.opts[cliname])
+            del(opts.optsdict[cliname])
             if cliname not in boot_order:
                 boot_order.append(cliname)
 
@@ -1750,16 +1752,16 @@ class ParserDisk(VirtCLIParser):
             if val is None:
                 return
             if val == "ro":
-                opts.opts["readonly"] = "on"
+                opts.optsdict["readonly"] = "on"
             elif val == "sh":
-                opts.opts["shareable"] = "on"
+                opts.optsdict["shareable"] = "on"
             elif val == "rw":
                 # It's default. Nothing to do.
                 pass
             else:
                 fail(_("Unknown '%s' value '%s'") % ("perms", val))
 
-        has_path = "path" in opts.opts
+        has_path = "path" in opts.optsdict
         backing_store = opts.get_opt_param("backing_store")
         poolname = opts.get_opt_param("pool")
         volname = opts.get_opt_param("vol")
@@ -1767,9 +1769,9 @@ class ParserDisk(VirtCLIParser):
         fmt = opts.get_opt_param("format")
         sparse = _on_off_convert("sparse", opts.get_opt_param("sparse"))
         convert_perms(opts.get_opt_param("perms"))
-        has_type_volume = ("source_pool" in opts.opts or
-                           "source_volume" in opts.opts)
-        has_type_network = ("source_protocol" in opts.opts)
+        has_type_volume = ("source_pool" in opts.optsdict or
+                           "source_volume" in opts.optsdict)
+        has_type_network = ("source_protocol" in opts.optsdict)
 
         optcount = sum([bool(p) for p in [has_path, poolname, volname,
                                           has_type_volume, has_type_network]])
@@ -1894,20 +1896,19 @@ class ParserNetwork(VirtCLIParser):
         # For openvswitch & midonet
         self.set_param("virtualport.interfaceid", "virtualport_interfaceid")
 
-    def _parse(self, optsobj, inst):
-        if optsobj.fullopts == "none":
+    def _parse(self, opts, inst):
+        if opts.fullopts == "none":
             return
 
-        opts = optsobj.opts
-        if "type" not in opts:
-            if "network" in opts:
-                opts["type"] = VirtualNetworkInterface.TYPE_VIRTUAL
-                opts["source"] = opts.pop("network")
-            elif "bridge" in opts:
-                opts["type"] = VirtualNetworkInterface.TYPE_BRIDGE
-                opts["source"] = opts.pop("bridge")
+        if "type" not in opts.optsdict:
+            if "network" in opts.optsdict:
+                opts.optsdict["type"] = VirtualNetworkInterface.TYPE_VIRTUAL
+                opts.optsdict["source"] = opts.optsdict.pop("network")
+            elif "bridge" in opts.optsdict:
+                opts.optsdict["type"] = VirtualNetworkInterface.TYPE_BRIDGE
+                opts.optsdict["source"] = opts.optsdict.pop("bridge")
 
-        return VirtCLIParser._parse(self, optsobj, inst)
+        return VirtCLIParser._parse(self, opts, inst)
 
 
 ######################
@@ -2092,8 +2093,8 @@ class ParserTPM(VirtCLIParser):
         self.set_param("device_path", "path")
 
     def _parse(self, opts, inst):
-        if (opts.opts.get("type", "").startswith("/")):
-            opts.opts["path"] = opts.opts.pop("type")
+        if (opts.optsdict.get("type", "").startswith("/")):
+            opts.optsdict["path"] = opts.optsdict.pop("type")
         return VirtCLIParser._parse(self, opts, inst)
 
 
@@ -2151,21 +2152,19 @@ class ParserRNG(VirtCLIParser):
         self.set_param("rate_bytes", "rate_bytes")
         self.set_param("rate_period", "rate_period")
 
-    def _parse(self, optsobj, inst):
-        opts = optsobj.opts
-
+    def _parse(self, opts, inst):
         # pylint: disable=attribute-defined-outside-init
         # Defined outside init, but its easier this way
         self._cli_backend_mode = "connect"
         self._cli_backend_type = "udp"
         # pylint: enable=attribute-defined-outside-init
 
-        if opts.get("type", "").startswith("/"):
+        if opts.optsdict.get("type", "").startswith("/"):
             # Allow --rng /dev/random
-            opts["device"] = opts.pop("type")
-            opts["type"] = "random"
+            opts.optsdict["device"] = opts.optsdict.pop("type")
+            opts.optsdict["type"] = "random"
 
-        return VirtCLIParser._parse(self, optsobj, inst)
+        return VirtCLIParser._parse(self, opts, inst)
 
 
 ######################
@@ -2240,8 +2239,8 @@ class _ParserChar(VirtCLIParser):
         self.set_param("target_name", "name")
 
         def set_host_cb(inst, val, cbdata):
-            if ("bind_host" not in cbdata.opts.opts and
-                cbdata.opts.opts.get("mode", None) == "bind"):
+            if ("bind_host" not in cbdata.opts.optsdict and
+                cbdata.opts.optsdict.get("mode", None) == "bind"):
                 inst.set_friendly_bind(val)
             else:
                 inst.set_friendly_source(val)
