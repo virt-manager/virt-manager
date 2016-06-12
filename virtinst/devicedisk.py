@@ -29,7 +29,6 @@ import re
 from . import diskbackend
 from . import util
 from .device import VirtualDevice
-from .seclabel import Seclabel
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
