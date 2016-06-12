@@ -106,7 +106,7 @@ class Guest(XMLBuilder):
         "vcpus", "curvcpus", "vcpu_placement", "cpuset",
         "numatune", "bootloader", "os", "idmap",
         "features", "cpu", "clock", "on_poweroff", "on_reboot", "on_crash",
-        "resource", "pm", "emulator", "_devices", "seclabel"]
+        "resource", "pm", "emulator", "_devices", "seclabels"]
 
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
@@ -200,7 +200,7 @@ class Guest(XMLBuilder):
     on_crash = XMLProperty("./on_crash", default_cb=lambda s: "restart")
     on_lockfailure = XMLProperty("./on_lockfailure")
 
-    seclabel = XMLChildProperty(Seclabel)
+    seclabels = XMLChildProperty(Seclabel)
     os = XMLChildProperty(OSXML, is_single=True)
     features = XMLChildProperty(DomainFeatures, is_single=True)
     clock = XMLChildProperty(Clock, is_single=True)

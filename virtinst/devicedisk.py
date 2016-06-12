@@ -752,7 +752,7 @@ class VirtualDisk(VirtualDevice):
     iotune_wbs = XMLProperty("./iotune/write_bytes_sec", is_int=True)
     iotune_wis = XMLProperty("./iotune/write_iops_sec", is_int=True)
 
-    seclabel = XMLChildProperty(_DiskSeclabel, relative_xpath="./source")
+    seclabels = XMLChildProperty(_DiskSeclabel, relative_xpath="./source")
 
 
     #################################

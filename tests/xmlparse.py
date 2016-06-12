@@ -228,7 +228,7 @@ class XMLParseTest(unittest.TestCase):
     def testSeclabel(self):
         guest, outfile = self._get_test_content("change-seclabel")
 
-        check = self._make_checker(guest.seclabel[0])
+        check = self._make_checker(guest.seclabels[0])
         check("type", "static", "none")
         check("model", "selinux", "apparmor")
         check("label", "foolabel", "barlabel")
@@ -236,7 +236,7 @@ class XMLParseTest(unittest.TestCase):
         check("baselabel", None, "baselabel")
         check("relabel", None, False)
 
-        guest.remove_child(guest.seclabel[1])
+        guest.remove_child(guest.seclabels[1])
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
@@ -259,7 +259,7 @@ class XMLParseTest(unittest.TestCase):
         seclabel.type = "static"
         seclabel.label = "frob"
         self.assertTrue(
-            guest.seclabel[0].get_xml_config().startswith("<seclabel"))
+            guest.seclabels[0].get_xml_config().startswith("<seclabel"))
 
         check = self._make_checker(guest.cpu)
         check("model", None, "foobar")
@@ -350,7 +350,7 @@ class XMLParseTest(unittest.TestCase):
         check("removable", None, False, True)
 
         disk = guest.get_devices("disk")[1]
-        check = self._make_checker(disk.seclabel[1])
+        check = self._make_checker(disk.seclabels[1])
         check("model", "dac")
         check("relabel", None, True)
         check("label", None, "foo-my-label")
