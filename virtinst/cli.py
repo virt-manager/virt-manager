@@ -20,6 +20,7 @@
 # MA 02110-1301 USA.
 
 import argparse
+import collections
 import logging
 import logging.handlers
 import os
@@ -892,10 +893,7 @@ class VirtOptionString(object):
                 virtargmap[alias] = arg
 
         # @opts: A dictionary of the mapping {cliname: val}
-        # @orderedopts: A list of tuples (cliname: val), in the order
-        #   they appeared on the CLI.
-        self.opts, self.orderedopts = self._parse_optstr(
-            virtargmap, remove_first)
+        self.opts = self._parse_optstr(virtargmap, remove_first)
 
     def get_opt_param(self, key, is_novalue=False):
         if key not in self.opts:
@@ -970,7 +968,7 @@ class VirtOptionString(object):
 
     def _parse_optstr(self, virtargmap, remove_first):
         orderedopts = self._parse_optstr_tuples(virtargmap, remove_first)
-        optdict = {}
+        optdict = collections.OrderedDict()
 
         for cliname, val in orderedopts:
             if (cliname not in optdict and
@@ -983,7 +981,7 @@ class VirtOptionString(object):
             else:
                 optdict[cliname] = val
 
-        return optdict, orderedopts
+        return optdict
 
 
 class VirtCLIParser(object):
@@ -1524,7 +1522,7 @@ class ParserBoot(VirtCLIParser):
     def _parse(self, opts, inst):
         # Build boot order
         boot_order = []
-        for cliname, ignore in opts.orderedopts:
+        for cliname in opts.opts.keys():
             if cliname not in inst.os.BOOT_DEVICES:
                 continue
 
