@@ -844,6 +844,11 @@ class _VirtCLIArgument(object):
         return val
 
     def parse_param(self, opts, inst, support_cb):
+        """
+        Process the cli param. So if we are VirtCLIArgument for
+        the --disk device, calling this function actually handles
+        the device value processing.
+        """
         val = self._parse_common(opts, inst, support_cb, False)
         if val is 0:
             return
@@ -884,8 +889,46 @@ class _VirtCLIArgument(object):
             return eval(  # pylint: disable=eval-used
                 "inst." + self.attrname) == val
 
+    def match_name(self, cliname):
+        """
+        Return True if the passed argument name matches this
+        VirtCLIArgument. So for an option like --foo bar=X, this
+        checks if we are the parser for 'bar'
+        """
+        for argname in [self.cliname] + self.aliases:
+            if argname == cliname:
+                return True
+        return False
 
-class VirtOptionString(object):
+
+def parse_optstr_tuples(optstr):
+    """
+    Parse the command string into an ordered list of tuples. So
+    a string like --disk path=foo,size=5,path=bar will end up like
+
+    [("path", "foo"), ("size", "5"), ("path", "bar")]
+    """
+    argsplitter = shlex.shlex(optstr or "", posix=True)
+    argsplitter.commenters = ""
+    argsplitter.whitespace = ","
+    argsplitter.whitespace_split = True
+    ret = []
+
+    for opt in list(argsplitter):
+        if not opt:
+            continue
+
+        if opt.count("="):
+            cliname, val = opt.split("=", 1)
+        else:
+            cliname = opt
+            val = None
+
+        ret.append((cliname, val))
+    return ret
+
+
+class _VirtOptionString(object):
     def __init__(self, optstr, virtargs, remove_first):
         """
         Helper class for parsing opt strings of the form
@@ -893,21 +936,15 @@ class VirtOptionString(object):
 
         @optstr: The full option string
         @virtargs: A list of VirtCLIArguments
-        @remove_first: List or parameters to peel off the front of
+        @remove_first: List of parameters to peel off the front of
             option string, and store in the returned dict.
             remove_first=["char_type"] for --serial pty,foo=bar
             maps to {"char_type", "pty", "foo" : "bar"}
         """
         self.fullopts = optstr
 
-        virtargmap = {}
-        for arg in virtargs:
-            virtargmap[arg.cliname] = arg
-            for alias in arg.aliases:
-                virtargmap[alias] = arg
-
-        # @opts: A dictionary of the mapping {cliname: val}
-        self.optsdict = self._parse_optstr(virtargmap, remove_first)
+        # @optsdict: A dictionary of the mapping {cliname: val}
+        self.optsdict = self._parse_optstr(virtargs, remove_first)
 
     def get_opt_param(self, key, is_novalue=False):
         """
@@ -935,69 +972,55 @@ class VirtOptionString(object):
     # Actual parsing routines #
     ###########################
 
-    def _parse_optstr_tuples(self, virtargmap, remove_first):
-        """
-        Parse the command string into an ordered list of tuples (see
-        docs for orderedopts
-        """
-        optstr = str(self.fullopts or "")
-        optlist = []
-
-        argsplitter = shlex.shlex(optstr, posix=True)
-        argsplitter.commenters = ""
-        argsplitter.whitespace = ","
-        argsplitter.whitespace_split = True
-
-        remove_first = util.listify(remove_first)[:]
-        commaopt = []
-        for opt in list(argsplitter):
-            if not opt:
-                continue
-
-            cliname = opt
-            val = None
-            if opt.count("="):
-                cliname, val = opt.split("=", 1)
-                remove_first = []
-            elif remove_first:
-                val = cliname
-                cliname = remove_first.pop(0)
-
-            if commaopt:
-                if cliname in virtargmap:
-                    optlist.append(tuple(commaopt))
-                    commaopt = []
-                else:
-                    commaopt[1] += "," + cliname
-                    if val:
-                        commaopt[1] += "=" + val
-                    continue
-
-            if (cliname in virtargmap and virtargmap[cliname].can_comma):
-                commaopt = [cliname, val]
-                continue
-
-            optlist.append((cliname, val))
-
-        if commaopt:
-            optlist.append(tuple(commaopt))
-
-        return optlist
-
-    def _parse_optstr(self, virtargmap, remove_first):
-        orderedopts = self._parse_optstr_tuples(virtargmap, remove_first)
+    def _parse_optstr(self, virtargs, remove_first):
         optsdict = collections.OrderedDict()
+        opttuples = parse_optstr_tuples(self.fullopts or "")
 
-        for cliname, val in orderedopts:
+        def _add_opt(virtarg, cliname, val):
             if (cliname not in optsdict and
-                cliname in virtargmap and
-                virtargmap[cliname].is_list):
+                virtarg and
+                virtarg.is_list):
                 optsdict[cliname] = []
 
             if type(optsdict.get(cliname)) is list:
                 optsdict[cliname].append(val)
             else:
                 optsdict[cliname] = val
+
+        def _lookup_virtarg(cliname):
+            for virtarg in virtargs:
+                if virtarg.match_name(cliname):
+                    return virtarg
+
+        # Splice in remove_first names upfront
+        remove_first = util.listify(remove_first)[:]
+        for idx, (cliname, val) in enumerate(opttuples):
+            if val is not None or not remove_first:
+                break
+            opttuples[idx] = (remove_first.pop(0), cliname)
+
+        commaopt = []
+        virtarg = None
+        for cliname, val in opttuples:
+            virtarg = _lookup_virtarg(cliname)
+            if commaopt:
+                if not virtarg:
+                    commaopt[1] += "," + cliname
+                    if val:
+                        commaopt[1] += "=" + val
+                    continue
+
+                _add_opt(virtarg, commaopt[0], commaopt[1])
+                commaopt = []
+
+            if (virtarg and virtarg.can_comma):
+                commaopt = [cliname, val]
+                continue
+
+            _add_opt(virtarg, cliname, val)
+
+        if commaopt:
+            _add_opt(virtarg, commaopt[0], commaopt[1])
 
         return optsdict
 
@@ -1025,7 +1048,7 @@ class VirtCLIParser(object):
         @cli_arg_name: The command line argument this maps to, so
             "hostdev" for --hostdev
         @guest: Will be set parse(), the toplevel Guest object
-        @remove_first: Passed to VirtOptionString
+        @remove_first: Passed to _VirtOptionString
         @check_none: If the parsed option string is just 'none', return None
         @support_cb: An extra support check function for further validation.
             Called before the virtinst object is altered. Take arguments
@@ -1176,8 +1199,8 @@ class VirtCLIParser(object):
 
         for inst in objlist:
             try:
-                opts = VirtOptionString(optstr, self._params,
-                                        self.remove_first)
+                opts = _VirtOptionString(optstr, self._params,
+                                         self.remove_first)
                 valid = True
                 for param in self._params:
                     if param.lookup_param(opts, inst) is False:
@@ -1206,7 +1229,7 @@ class VirtCLIParser(object):
         try:
             self.guest = guest
             self._inparse = True
-            opts = VirtOptionString(optstr, self._params, self.remove_first)
+            opts = _VirtOptionString(optstr, self._params, self.remove_first)
             return self._parse(opts, inst)
         finally:
             self.guest = None

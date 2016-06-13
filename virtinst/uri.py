@@ -20,7 +20,7 @@
 import logging
 import re
 
-from .cli import VirtOptionString
+from .cli import parse_optstr_tuples
 
 
 def sanitize_xml_for_test_define(xml):
@@ -141,8 +141,7 @@ class MagicURI(object):
         uri = uri.replace(self.VIRTINST_URI_MAGIC_PREFIX, "")
         ret = uri.split(",", 1)
         self.open_uri = ret[0]
-        opts = VirtOptionString(
-                len(ret) > 1 and ret[1] or "", [], None).optsdict
+        opts = dict(parse_optstr_tuples(len(ret) > 1 and ret[1] or ""))
 
         def pop_bool(field):
             ret = field in opts
