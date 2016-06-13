@@ -822,7 +822,11 @@ class _VirtCLIArgument(object):
         self.lookup_cb = lookup_cb
         self.is_novalue = is_novalue
 
-    def _parse_common(self, opts, inst, support_cb, is_lookup):
+    def _lookup_val(self, opts, inst, support_cb, is_lookup):
+        """
+        Find the value in 'opts' thats associated with this Argument,
+        and perform some other misc checking
+        """
         val = None
         for cliname in self.aliases + [self.cliname]:
             # We iterate over all values unconditionally, so they are
@@ -845,11 +849,13 @@ class _VirtCLIArgument(object):
 
     def parse_param(self, opts, inst, support_cb):
         """
-        Process the cli param. So if we are VirtCLIArgument for
-        the --disk device, calling this function actually handles
-        the device value processing.
+        Process the cli param against the pass inst.
+
+        So if we are VirtCLIArgument for --disk device=, and the user
+        specified --disk device=foo, we grab 'device=foo' from the
+        parsed 'opts', and set inst.device = foo
         """
-        val = self._parse_common(opts, inst, support_cb, False)
+        val = self._lookup_val(opts, inst, support_cb, False)
         if val is 0:
             return
 
@@ -869,9 +875,13 @@ class _VirtCLIArgument(object):
 
     def lookup_param(self, opts, inst):
         """
-        Lookup device, like via virt-xml --edit X matching
+        See if the passed value matches our Argument, like via virt-xml
+
+        So if this Argument is for --disk device=, and the user
+        specified virt-xml --edit device=floppy --disk ..., we grab
+        device=floppy from 'opts', then return 'inst.device == floppy'
         """
-        val = self._parse_common(opts, inst, None, True)
+        val = self._lookup_val(opts, inst, None, True)
         if val is 0:
             return
 
