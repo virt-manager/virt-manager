@@ -1045,12 +1045,15 @@ class VirtCLIParser(object):
         this is the property name we grab from inst to actually clear
         (so 'security' to get guest.security). If it's True, then
         clear inst (in the case of devices)
+    @cli_arg_name: The command line argument this maps to, so
+        "hostdev" for --hostdev
     """
     objclass = None
     remove_first = None
     check_none = False
     support_cb = None
     clear_attr = None
+    cli_arg_name = None
     _class_args = None
 
     @classmethod
@@ -1063,17 +1066,7 @@ class VirtCLIParser(object):
         cls._class_args.append(_VirtCLIArgument(*args, **kwargs))
 
 
-    def __init__(self, cli_arg_name):
-        """
-        @cli_arg_name: The command line argument this maps to, so
-        "hostdev" for --hostdev
-        """
-        self.cli_arg_name = cli_arg_name
-
-        # This is the name of the variable that argparse will set in
-        # the result of parse_args()
-        self.option_variable_name = cli_arg_name.replace("-", "_")
-
+    def __init__(self):
         self.guest = None
 
         self._params = [_VirtCLIArgument(None, "clearxml",
@@ -1224,6 +1217,8 @@ def convert_old_force(options):
 
 
 class ParseCLICheck(VirtCLIParser):
+    cli_arg_name = "check"
+
     @staticmethod
     def set_cb(inst, val, cbdata):
         # This sets properties on the _GlobalState objects
@@ -1240,8 +1235,8 @@ ParseCLICheck.add_arg("all_checks", "all", is_onoff=True)
 
 
 def parse_check(checkstr):
-    # Overwrite this for each parse,
-    parser = ParseCLICheck("check")
+    # Overwrite this for each parse
+    parser = ParseCLICheck()
     parser.parse(None, checkstr, get_global_state())
 
 
@@ -2409,25 +2404,19 @@ ParserHostdev.add_arg("rom_bar", "rom_bar", is_onoff=True)
 # Register parser classes #
 ###########################
 
-def build_parser_map(options, skip=None, only=None):
+def build_parser_map(options):
     """
     Build a dictionary with mapping of cli-name->parserinstance, so
     --vcpus -> ParserVCPU object.
     """
     parsermap = {}
     def register_parser(cli_arg_name, parserclass):
-        if cli_arg_name in util.listify(skip):
-            return
-        if only and cli_arg_name not in util.listify(only):
-            return
-
-        parserobj = parserclass(cli_arg_name)
-        if not hasattr(options, parserobj.option_variable_name):
-            raise RuntimeError("programming error: unknown option=%s "
-                               "cliname=%s class=%s" %
-                               (parserobj.option_variable_name,
-                                parserobj.cli_arg_name, parserclass))
-        parsermap[parserobj.option_variable_name] = parserobj
+        if not hasattr(options, cli_arg_name):
+            raise RuntimeError("programming error: cliname=%s class=%s" %
+                               (parserobj.cli_arg_name, parserclass))
+        parserclass.cli_arg_name = cli_arg_name
+        parserobj = parserclass()
+        parsermap[parserobj.cli_arg_name] = parserobj
 
     register_parser("metadata", ParserMetadata)
     register_parser("events", ParserEvents)
@@ -2482,14 +2471,17 @@ def parse_option_strings(parsermap, options, guest, instlist, update=False):
         instlist = [None]
 
     ret = []
-    for option_variable_name in dir(options):
-        if option_variable_name not in parsermap:
+    for cli_arg_name in dir(options):
+        if cli_arg_name not in parsermap:
+            continue
+
+        optstr = getattr(options, cli_arg_name)
+        if optstr is None:
             continue
 
         for inst in util.listify(instlist):
-            parseret = parsermap[option_variable_name].parse(
-                guest, getattr(options, option_variable_name), inst,
-                validate=not update)
+            parseret = parsermap[cli_arg_name].parse(
+                guest, optstr, inst, validate=not update)
             ret += util.listify(parseret)
 
     return ret
@@ -2500,13 +2492,13 @@ def check_option_introspection(options, parsermap):
     Check if the user requested option introspection with ex: '--disk=?'
     """
     ret = False
-    for option_variable_name in dir(options):
-        if option_variable_name not in parsermap:
+    for cli_arg_name in dir(options):
+        if cli_arg_name not in parsermap:
             continue
 
-        for optstr in util.listify(getattr(options, option_variable_name)):
+        for optstr in util.listify(getattr(options, cli_arg_name)):
             if optstr == "?" or optstr == "help":
-                parsermap[option_variable_name].print_introspection()
+                parsermap[cli_arg_name].print_introspection()
                 ret = True
 
     return ret

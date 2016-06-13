@@ -172,8 +172,8 @@ def check_action_collision(options):
 
 def check_xmlopt_collision(options, parsermap):
     collisions = []
-    for option_variable_name, parserobj in parsermap.items():
-        if getattr(options, option_variable_name):
+    for cli_arg_name, parserobj in parsermap.items():
+        if getattr(options, cli_arg_name):
             collisions.append(parserobj)
 
     if len(collisions) == 0:
@@ -215,7 +215,7 @@ def action_remove_device(guest, options, parsermap, parserobj):
              parserobj.cli_arg_name)
 
     devs = _find_objects_to_edit(guest, "remove-device",
-        getattr(options, parserobj.option_variable_name)[-1], parserobj)
+        getattr(options, parserobj.cli_arg_name)[-1], parserobj)
 
     devs = util.listify(devs)
     for dev in util.listify(devs):
