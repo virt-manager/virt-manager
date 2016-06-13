@@ -1106,15 +1106,14 @@ class VirtCLIParser(object):
         # end of the domain XML, which gives an ugly diff
         clear_inst.clear(leave_stub=bool(cbdata.opts.optsdict))
 
-    def check_introspection(self, option):
-        for optstr in util.listify(option):
-            if optstr == "?" or optstr == "help":
-                print "--%s options:" % self.cli_arg_name
-                for arg in sorted(self._params, key=lambda p: p.cliname):
-                    print "  %s" % arg.cliname
-                print
-                return True
-        return False
+    def print_introspection(self):
+        """
+        Print out all _param names, triggered via ex. --disk help
+        """
+        print "--%s options:" % self.cli_arg_name
+        for arg in sorted(self._params, key=lambda p: p.cliname):
+            print "  %s" % arg.cliname
+        print
 
     def parse(self, guest, optlist, inst, validate=True):
         optlist = util.listify(optlist)
@@ -2504,8 +2503,10 @@ def check_option_introspection(options, parsermap):
     for option_variable_name in dir(options):
         if option_variable_name not in parsermap:
             continue
-        if parsermap[option_variable_name].check_introspection(
-            getattr(options, option_variable_name)):
-            ret = True
+
+        for optstr in util.listify(getattr(options, option_variable_name)):
+            if optstr == "?" or optstr == "help":
+                parsermap[option_variable_name].print_introspection()
+                ret = True
 
     return ret
