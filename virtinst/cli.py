@@ -1072,35 +1072,35 @@ class VirtCLIParser(object):
         self._params = []
         self._inparse = False
 
-        self.__init_global_params()
+        self.set_param(None, "clearxml",
+                       setter_cb=self._clearxml_cb, is_onoff=True)
         self._init_params()
 
 
-    def __init_global_params(self):
-        def set_clearxml_cb(inst, val, cbdata):
-            ignore = cbdata
-            if not self.objclass and not self.clear_attr:
-                raise RuntimeError("Don't know how to clearxml --%s" %
-                                   self.cli_arg_name)
-            if val is not True:
-                return
+    def _clearxml_cb(self, inst, val, cbdata):
+        """
+        Callback that handles virt-xml clearxml=yes|no magic
+        """
+        ignore = cbdata
+        if not self.objclass and not self.clear_attr:
+            raise RuntimeError("Don't know how to clearxml --%s" %
+                               self.cli_arg_name)
+        if val is not True:
+            return
 
-            clear_inst = inst
-            if self.clear_attr:
-                clear_inst = getattr(inst, self.clear_attr)
+        clear_inst = inst
+        if self.clear_attr:
+            clear_inst = getattr(inst, self.clear_attr)
 
-            # If there's any opts remaining, leave the root stub element
-            # in place, so virt-xml updates are done in place.
-            #
-            # So --edit --cpu clearxml=yes  should remove the entire <cpu>
-            # block. But --edit --cpu clearxml=yes,model=foo should leave
-            # a <cpu> stub in place, so that it gets model=foo in place,
-            # otherwise the newly created cpu block gets appened to the
-            # end of the domain XML, which gives an ugly diff
-            clear_inst.clear(leave_stub=bool(cbdata.opts.optsdict))
-
-        self.set_param(None, "clearxml",
-                       setter_cb=set_clearxml_cb, is_onoff=True)
+        # If there's any opts remaining, leave the root stub element
+        # in place, so virt-xml updates are done in place.
+        #
+        # So --edit --cpu clearxml=yes  should remove the entire <cpu>
+        # block. But --edit --cpu clearxml=yes,model=foo should leave
+        # a <cpu> stub in place, so that it gets model=foo in place,
+        # otherwise the newly created cpu block gets appened to the
+        # end of the domain XML, which gives an ugly diff
+        clear_inst.clear(leave_stub=bool(cbdata.opts.optsdict))
 
     def check_introspection(self, option):
         for optstr in util.listify(option):
