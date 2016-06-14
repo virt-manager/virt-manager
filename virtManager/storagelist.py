@@ -654,11 +654,8 @@ class vmmStorageList(vmmGObjectUI):
         if pool is None:
             return
 
-        def cb():
-            pool.refresh()
-
         logging.debug("Refresh pool '%s'", pool.get_name())
-        vmmAsyncJob.simple_async_noshow(cb, [], self,
+        vmmAsyncJob.simple_async_noshow(pool.refresh, [], self,
                             _("Error refreshing pool '%s'") % pool.get_name())
 
     def _pool_apply(self):
