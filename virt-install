@@ -572,7 +572,7 @@ def build_installer(options, conn, virt_type):
     return installer
 
 
-def build_guest_instance(conn, options, parsermap):
+def build_guest_instance(conn, options):
     guest = get_guest(conn, options)
 
     logging.debug("Received virt method '%s'", guest.type)
@@ -603,10 +603,7 @@ def build_guest_instance(conn, options, parsermap):
         guest.description = options.description
 
     validate_required_options(options, guest)
-
-    # We don't want to auto-parse --disk, but we wanted it for earlier
-    # parameter introspection
-    cli.parse_option_strings(parsermap, options, guest, None)
+    cli.parse_option_strings(options, guest, None)
 
     # Extra disk validation
     for disk in guest.get_devices("disk"):
@@ -1033,8 +1030,7 @@ def main(conn=None):
     cli.parse_check(options.check)
     cli.set_prompt(options.prompt)
 
-    parsermap = cli.build_parser_map(options)
-    if cli.check_option_introspection(options, parsermap):
+    if cli.check_option_introspection(options):
         return 0
 
     if conn is None:
@@ -1047,7 +1043,7 @@ def main(conn=None):
     if options.xmlonly not in [False, "1", "2", "3", "all"]:
         fail(_("--print-step must be 1, 2, 3, or all"))
 
-    guest = build_guest_instance(conn, options, parsermap)
+    guest = build_guest_instance(conn, options)
     continue_inst = guest.get_continue_inst()
 
     if options.xmlonly or options.dry:

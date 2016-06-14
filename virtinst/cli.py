@@ -771,8 +771,8 @@ class _SetterCBData(object):
     Structure holding all the data we want to pass to the cli
     cb callbacks. Makes it simpler to add new fields in the future.
     """
-    def __init__(self, opts, cliname):
-        self.opts = opts
+    def __init__(self, optdict, cliname):
+        self.optdict = optdict
         self.cliname = cliname
 
 
@@ -822,16 +822,31 @@ class _VirtCLIArgument(object):
         self.lookup_cb = lookup_cb
         self.is_novalue = is_novalue
 
-    def _lookup_val(self, opts, inst, support_cb, is_lookup):
+    def _pop_opt(self, optdict, key):
         """
-        Find the value in 'opts' thats associated with this Argument,
+        Basically optdict.pop(key, None) with is_novalue wrapped in
+        """
+        if key not in optdict:
+            return None
+
+        ret = optdict.pop(key)
+        if ret is None:
+            if not self.is_novalue:
+                raise RuntimeError("Option '%s' had no value set." % key)
+            ret = ""
+
+        return ret
+
+    def _lookup_val(self, optdict, inst, support_cb, is_lookup):
+        """
+        Find the value in 'optdict' thats associated with this Argument,
         and perform some other misc checking
         """
         val = None
         for cliname in self.aliases + [self.cliname]:
             # We iterate over all values unconditionally, so they are
-            # removed from opts
-            foundval = opts.get_opt_param(cliname, self.is_novalue)
+            # removed from optdict
+            foundval = self._pop_opt(optdict, cliname)
             if foundval is not None:
                 val = foundval
         if val is None:
@@ -847,15 +862,15 @@ class _VirtCLIArgument(object):
             return 0
         return val
 
-    def parse_param(self, opts, inst, support_cb):
+    def parse_param(self, optdict, inst, support_cb):
         """
         Process the cli param against the pass inst.
 
         So if we are VirtCLIArgument for --disk device=, and the user
         specified --disk device=foo, we grab 'device=foo' from the
-        parsed 'opts', and set inst.device = foo
+        parsed 'optdict', and set inst.device = foo
         """
-        val = self._lookup_val(opts, inst, support_cb, False)
+        val = self._lookup_val(optdict, inst, support_cb, False)
         if val is 0:
             return
 
@@ -866,22 +881,22 @@ class _VirtCLIArgument(object):
             raise RuntimeError("programming error: obj=%s does not have "
                                "member=%s" % (inst, self.attrname))
 
-        cbdata = _SetterCBData(opts, self.cliname)
+        cbdata = _SetterCBData(optdict, self.cliname)
         if self.cb:
             self.cb(inst, val, cbdata)
         else:
             exec(  # pylint: disable=exec-used
                 "inst." + self.attrname + " = val")
 
-    def lookup_param(self, opts, inst):
+    def lookup_param(self, optdict, inst):
         """
         See if the passed value matches our Argument, like via virt-xml
 
         So if this Argument is for --disk device=, and the user
         specified virt-xml --edit device=floppy --disk ..., we grab
-        device=floppy from 'opts', then return 'inst.device == floppy'
+        device=floppy from 'optdict', then return 'inst.device == floppy'
         """
-        val = self._lookup_val(opts, inst, None, True)
+        val = self._lookup_val(optdict, inst, None, True)
         if val is 0:
             return
 
@@ -892,7 +907,7 @@ class _VirtCLIArgument(object):
                 {"device_type": getattr(inst, "virtual_device_type", ""),
                  "property_name": self.cliname})
 
-        cbdata = _SetterCBData(opts, self.cliname)
+        cbdata = _SetterCBData(optdict, self.cliname)
         if self.lookup_cb:
             return self.lookup_cb(inst, val, cbdata)
         else:
@@ -938,101 +953,64 @@ def parse_optstr_tuples(optstr):
     return ret
 
 
-class _VirtOptionString(object):
-    def __init__(self, optstr, virtargs, remove_first):
-        """
-        Helper class for parsing opt strings of the form
-        opt1=val1,opt2=val2,...
+def _parse_optstr_to_dict(optstr, virtargs, remove_first):
+    """
+    Parse the passed argument string into an OrderedDict WRT
+    the passed list of VirtCLIArguments and their special handling.
 
-        @optstr: The full option string
-        @virtargs: A list of VirtCLIArguments
-        @remove_first: List of parameters to peel off the front of
-            option string, and store in the returned dict.
-            remove_first=["char_type"] for --serial pty,foo=bar
-            maps to {"char_type", "pty", "foo" : "bar"}
-        """
-        self.fullopts = optstr
+    So for --disk path=foo,size=5, optstr is 'path=foo,size=5', and
+    we return {"path": "foo", "size": "5"}
+    """
+    optsdict = collections.OrderedDict()
+    opttuples = parse_optstr_tuples(optstr)
 
-        # @optsdict: A dictionary of the mapping {cliname: val}
-        self.optsdict = self._parse_optstr(virtargs, remove_first)
+    def _add_opt(virtarg, cliname, val):
+        if (cliname not in optsdict and
+            virtarg and
+            virtarg.is_list):
+            optsdict[cliname] = []
 
-    def get_opt_param(self, key, is_novalue=False):
-        """
-        Basically self.optsdict.pop(key, None) with a little extra
-        error reporting wrapped in
-        """
-        if key not in self.optsdict:
-            return None
+        if type(optsdict.get(cliname)) is list:
+            optsdict[cliname].append(val)
+        else:
+            optsdict[cliname] = val
 
-        ret = self.optsdict.pop(key)
-        if ret is None:
-            if not is_novalue:
-                raise RuntimeError("Option '%s' had no value set." % key)
-            ret = ""
+    def _lookup_virtarg(cliname):
+        for virtarg in virtargs:
+            if virtarg.match_name(cliname):
+                return virtarg
 
-        return ret
+    # Splice in remove_first names upfront
+    remove_first = util.listify(remove_first)[:]
+    for idx, (cliname, val) in enumerate(opttuples):
+        if val is not None or not remove_first:
+            break
+        opttuples[idx] = (remove_first.pop(0), cliname)
 
-    def check_leftover_opts(self):
-        if not self.optsdict:
-            return
-        raise fail(_("Unknown options %s") % self.optsdict.keys())
-
-
-    ###########################
-    # Actual parsing routines #
-    ###########################
-
-    def _parse_optstr(self, virtargs, remove_first):
-        optsdict = collections.OrderedDict()
-        opttuples = parse_optstr_tuples(self.fullopts or "")
-
-        def _add_opt(virtarg, cliname, val):
-            if (cliname not in optsdict and
-                virtarg and
-                virtarg.is_list):
-                optsdict[cliname] = []
-
-            if type(optsdict.get(cliname)) is list:
-                optsdict[cliname].append(val)
-            else:
-                optsdict[cliname] = val
-
-        def _lookup_virtarg(cliname):
-            for virtarg in virtargs:
-                if virtarg.match_name(cliname):
-                    return virtarg
-
-        # Splice in remove_first names upfront
-        remove_first = util.listify(remove_first)[:]
-        for idx, (cliname, val) in enumerate(opttuples):
-            if val is not None or not remove_first:
-                break
-            opttuples[idx] = (remove_first.pop(0), cliname)
-
-        commaopt = []
-        virtarg = None
-        for cliname, val in opttuples:
-            virtarg = _lookup_virtarg(cliname)
-            if commaopt:
-                if not virtarg:
-                    commaopt[1] += "," + cliname
-                    if val:
-                        commaopt[1] += "=" + val
-                    continue
-
-                _add_opt(virtarg, commaopt[0], commaopt[1])
-                commaopt = []
-
-            if (virtarg and virtarg.can_comma):
-                commaopt = [cliname, val]
+    commaopt = []
+    virtarg = None
+    for cliname, val in opttuples:
+        virtarg = _lookup_virtarg(cliname)
+        if commaopt:
+            if not virtarg:
+                commaopt[1] += "," + cliname
+                if val:
+                    commaopt[1] += "=" + val
                 continue
 
-            _add_opt(virtarg, cliname, val)
-
-        if commaopt:
             _add_opt(virtarg, commaopt[0], commaopt[1])
+            commaopt = []
 
-        return optsdict
+        if (virtarg and virtarg.can_comma):
+            commaopt = [cliname, val]
+            continue
+
+        _add_opt(virtarg, cliname, val)
+
+    if commaopt:
+        _add_opt(virtarg, commaopt[0], commaopt[1])
+
+    return optsdict
 
 
 class VirtCLIParser(object):
@@ -1046,7 +1024,10 @@ class VirtCLIParser(object):
     crazy stuff.
 
     Class parameters:
-    @remove_first: Passed to _VirtOptionString
+    @remove_first: List of parameters to peel off the front of the
+        option string, and store in the optdict. So:
+        remove_first=["char_type"] for --serial pty,foo=bar
+        maps to {"char_type", "pty", "foo" : "bar"}
     @check_none: If the parsed option string is just 'none', return None
     @support_cb: An extra support check function for further validation.
         Called before the virtinst object is altered. Take arguments
@@ -1064,105 +1045,123 @@ class VirtCLIParser(object):
     support_cb = None
     clear_attr = None
     cli_arg_name = None
-    _class_args = None
+    _virtargs = []
 
     @classmethod
     def add_arg(cls, *args, **kwargs):
         """
         Add a VirtCLIArgument for this class.
         """
-        if not cls._class_args:
-            cls._class_args = []
-        cls._class_args.append(_VirtCLIArgument(*args, **kwargs))
+        if not cls._virtargs:
+            cls._virtargs = [_VirtCLIArgument(None, "clearxml",
+                             cb=cls._clearxml_cb,
+                             is_onoff=True)]
+        cls._virtargs.append(_VirtCLIArgument(*args, **kwargs))
 
-
-    def __init__(self):
-        self.guest = None
-
-        self._params = [_VirtCLIArgument(None, "clearxml",
-                                         cb=self._clearxml_cb,
-                                         is_onoff=True)]
-        self._params += (self._class_args or [])
-
-    def _clearxml_cb(self, inst, val, cbdata):
+    @classmethod
+    def _clearxml_cb(cls, inst, val, cbdata):
         """
         Callback that handles virt-xml clearxml=yes|no magic
         """
         ignore = cbdata
-        if not self.objclass and not self.clear_attr:
+        if not cls.objclass and not cls.clear_attr:
             raise RuntimeError("Don't know how to clearxml --%s" %
-                               self.cli_arg_name)
+                               cls.cli_arg_name)
         if val is not True:
             return
 
         clear_inst = inst
-        if self.clear_attr:
-            clear_inst = getattr(inst, self.clear_attr)
+        if cls.clear_attr:
+            clear_inst = getattr(inst, cls.clear_attr)
 
         # If there's any opts remaining, leave the root stub element
-        # in place, so virt-xml updates are done in place.
+        # in place with leave_stub=True, so virt-xml updates are done
+        # in place.
         #
-        # So --edit --cpu clearxml=yes  should remove the entire <cpu>
+        # Example: --edit --cpu clearxml=yes should remove the <cpu>
         # block. But --edit --cpu clearxml=yes,model=foo should leave
         # a <cpu> stub in place, so that it gets model=foo in place,
         # otherwise the newly created cpu block gets appened to the
         # end of the domain XML, which gives an ugly diff
-        clear_inst.clear(leave_stub=bool(cbdata.opts.optsdict))
+        clear_inst.clear(leave_stub=bool(cbdata.optdict))
 
-    def print_introspection(self):
+    @classmethod
+    def print_introspection(cls):
         """
         Print out all _param names, triggered via ex. --disk help
         """
-        print "--%s options:" % self.cli_arg_name
-        for arg in sorted(self._params, key=lambda p: p.cliname):
+        print "--%s options:" % cls.cli_arg_name
+        for arg in sorted(cls._virtargs, key=lambda p: p.cliname):
             print "  %s" % arg.cliname
         print
 
-    def parse(self, guest, optlist, inst, validate=True):
-        optlist = util.listify(optlist)
-        editting = bool(inst)
 
-        if editting and optlist:
-            # If an object is passed in, we are updating it in place, and
-            # only use the last command line occurrence, eg. from virt-xml
-            optlist = [optlist[-1]]
+    def __init__(self, guest, optstr):
+        self.guest = guest
+        self.optstr = optstr
+        self.optdict = _parse_optstr_to_dict(self.optstr,
+                                             self._virtargs,
+                                             self.remove_first)
+
+    def _parse(self, inst):
+        """
+        Subclasses can hook into this to do any pre/post processing
+        of the inst, or self.optdict
+        """
+        for param in self._virtargs:
+            param.parse_param(self.optdict, inst, self.support_cb)
+
+        # Check leftover opts
+        if self.optdict:
+            fail(_("Unknown options %s") % self.optdict.keys())
+        return inst
+
+    def parse(self, inst, validate=True):
+        """
+        Main entry point. Iterate over self._virtargs, and serialize
+        self.optdict into 'inst'.
+
+        For virt-xml, 'inst' is the virtinst object we are editing,
+        ex. a VirtualDisk from a parsed Guest object.
+        For virt-install, 'inst' is None, and we will create a new
+        inst from self.objclass, or edit a singleton object in place
+        like Guest.features/DomainFeatures
+        """
+        if not self.optstr:
+            return None
+        if self.check_none and self.optstr == "none":
+            return None
+
+        new_object = False
+        if self.objclass and not inst:
+            if self.guest.child_class_is_singleton(self.objclass):
+                inst = self.guest.list_children_for_class(self.objclass)[0]
+            else:
+                new_object = True
+                inst = self.objclass(  # pylint: disable=not-callable
+                        self.guest.conn)
 
         ret = []
-        for optstr in optlist:
-            new_object = False
-            optinst = inst
-            if self.objclass and not inst:
-                if guest.child_class_is_singleton(self.objclass):
-                    optinst = guest.list_children_for_class(
-                        self.objclass)[0]
-                else:
-                    new_object = True
-                    optinst = self.objclass(guest.conn)  # pylint: disable=not-callable
+        try:
+            objs = self._parse(inst or self.guest)
+            for obj in util.listify(objs):
+                if not new_object:
+                    break
+                if validate:
+                    obj.validate()
+                self.guest.add_child(obj)
 
-            try:
-                objs = self._parse_single_optstr(guest, optstr, optinst)
-                for obj in util.listify(objs):
-                    if not new_object:
-                        break
-                    if validate:
-                        obj.validate()
-                    guest.add_child(obj)
+            ret += util.listify(objs)
+        except Exception, e:
+            logging.debug("Exception parsing inst=%s optstr=%s",
+                          inst, self.optstr, exc_info=True)
+            fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
+                    {"cli_arg_name": self.cli_arg_name,
+                     "options": self.optstr, "err": str(e)})
 
-                ret += util.listify(objs)
-            except Exception, e:
-                logging.debug("Exception parsing inst=%s optstr=%s",
-                              inst, optstr, exc_info=True)
-                fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
-                        {"cli_arg_name": self.cli_arg_name,
-                         "options": optstr, "err": str(e)})
-
-        if not ret:
-            return None
-        if len(ret) == 1:
-            return ret[0]
         return ret
 
-    def lookup_child_from_option_string(self, guest, optstr):
+    def lookup_child_from_option_string(self):
         """
         Given a passed option string, search the guests' child list
         for all objects which match the passed options.
@@ -1170,49 +1169,34 @@ class VirtCLIParser(object):
         Used only by virt-xml --edit lookups
         """
         ret = []
-        objlist = guest.list_children_for_class(self.objclass)
+        objlist = self.guest.list_children_for_class(self.objclass)
 
         for inst in objlist:
             try:
-                opts = _VirtOptionString(optstr, self._params,
-                                         self.remove_first)
-                valid = True
-                for param in self._params:
-                    if param.lookup_param(opts, inst) is False:
-                        valid = False
+                optdict = self.optdict.copy()
+                valid = False
+                for param in self._virtargs:
+                    paramret = param.lookup_param(optdict, inst)
+                    if paramret is True:
+                        valid = True
                         break
                 if valid:
                     ret.append(inst)
             except Exception, e:
                 logging.debug("Exception parsing inst=%s optstr=%s",
-                              inst, optstr, exc_info=True)
+                              inst, self.optstr, exc_info=True)
                 fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
                         {"cli_arg_name": self.cli_arg_name,
-                         "options": optstr, "err": str(e)})
+                         "options": self.optstr, "err": str(e)})
 
         return ret
 
-    def _parse_single_optstr(self, guest, optstr, inst):
-        if not optstr:
-            return None
-        if self.check_none and optstr == "none":
-            return None
 
-        if not inst:
-            inst = guest
+VIRT_PARSERS = []
 
-        try:
-            self.guest = guest
-            opts = _VirtOptionString(optstr, self._params, self.remove_first)
-            return self._parse(opts, inst)
-        finally:
-            self.guest = None
 
-    def _parse(self, opts, inst):
-        for param in self._params:
-            param.parse_param(opts, inst, self.support_cb)
-        opts.check_leftover_opts()
-        return inst
+def _register_virt_parser(parserclass):
+    VIRT_PARSERS.append(parserclass)
 
 
 ###################
@@ -1246,8 +1230,8 @@ ParseCLICheck.add_arg("all_checks", "all", is_onoff=True)
 
 def parse_check(checkstr):
     # Overwrite this for each parse
-    parser = ParseCLICheck()
-    parser.parse(None, checkstr, get_global_state())
+    parser = ParseCLICheck(None, checkstr)
+    parser.parse(get_global_state())
 
 
 ######################
@@ -1255,8 +1239,9 @@ def parse_check(checkstr):
 ######################
 
 class ParserMetadata(VirtCLIParser):
-    pass
+    cli_arg_name = "metadata"
 
+_register_virt_parser(ParserMetadata)
 ParserMetadata.add_arg("name", "name", can_comma=True)
 ParserMetadata.add_arg("title", "title", can_comma=True)
 ParserMetadata.add_arg("uuid", "uuid")
@@ -1268,8 +1253,9 @@ ParserMetadata.add_arg("description", "description", can_comma=True)
 ####################
 
 class ParserEvents(VirtCLIParser):
-    pass
+    cli_arg_name = "events"
 
+_register_virt_parser(ParserEvents)
 ParserEvents.add_arg("on_poweroff", "on_poweroff")
 ParserEvents.add_arg("on_reboot", "on_reboot")
 ParserEvents.add_arg("on_crash", "on_crash")
@@ -1281,9 +1267,11 @@ ParserEvents.add_arg("on_lockfailure", "on_lockfailure")
 ######################
 
 class ParserResource(VirtCLIParser):
+    cli_arg_name = "resource"
     objclass = DomainResource
     remove_first = "partition"
 
+_register_virt_parser(ParserResource)
 ParserResource.add_arg("partition", "partition")
 
 
@@ -1292,9 +1280,11 @@ ParserResource.add_arg("partition", "partition")
 ######################
 
 class ParserNumatune(VirtCLIParser):
+    cli_arg_name = "numatune"
     objclass = DomainNumatune
     remove_first = "nodeset"
 
+_register_virt_parser(ParserNumatune)
 ParserNumatune.add_arg("memory_nodeset", "nodeset", can_comma=True)
 ParserNumatune.add_arg("memory_mode", "mode")
 
@@ -1304,6 +1294,7 @@ ParserNumatune.add_arg("memory_mode", "mode")
 ####################
 
 class ParserMemory(VirtCLIParser):
+    cli_arg_name = "memory"
     remove_first = "memory"
 
     @staticmethod
@@ -1311,6 +1302,7 @@ class ParserMemory(VirtCLIParser):
         setattr(inst, cbdata.cliname, int(val) * 1024)
 
 
+_register_virt_parser(ParserMemory)
 ParserMemory.add_arg("memory", "memory", cb=ParserMemory.set_memory_cb)
 ParserMemory.add_arg("maxmemory", "maxmemory", cb=ParserMemory.set_memory_cb)
 ParserMemory.add_arg("memoryBacking.hugepages", "hugepages", is_onoff=True)
@@ -1321,9 +1313,11 @@ ParserMemory.add_arg("memoryBacking.hugepages", "hugepages", is_onoff=True)
 #####################
 
 class ParserMemorytune(VirtCLIParser):
+    cli_arg_name = "memtune"
     objclass = DomainMemorytune
     remove_first = "soft_limit"
 
+_register_virt_parser(ParserMemorytune)
 ParserMemorytune.add_arg("hard_limit", "hard_limit")
 ParserMemorytune.add_arg("soft_limit", "soft_limit")
 ParserMemorytune.add_arg("swap_hard_limit", "swap_hard_limit")
@@ -1335,9 +1329,11 @@ ParserMemorytune.add_arg("min_guarantee", "min_guarantee")
 #######################
 
 class ParserBlkiotune(VirtCLIParser):
+    cli_arg_name = "blkiotune"
     objclass = DomainBlkiotune
     remove_first = "weight"
 
+_register_virt_parser(ParserBlkiotune)
 ParserBlkiotune.add_arg("weight", "weight")
 ParserBlkiotune.add_arg("device_path", "device_path")
 ParserBlkiotune.add_arg("device_weight", "device_weight")
@@ -1348,8 +1344,10 @@ ParserBlkiotune.add_arg("device_weight", "device_weight")
 ###########################
 
 class ParserMemorybacking(VirtCLIParser):
+    cli_arg_name = "memorybacking"
     objclass = DomainMemorybacking
 
+_register_virt_parser(ParserMemorybacking)
 ParserMemorybacking.add_arg("hugepages", "hugepages", is_onoff=True)
 ParserMemorybacking.add_arg("page_size", "size")
 ParserMemorybacking.add_arg("page_unit", "unit")
@@ -1358,66 +1356,12 @@ ParserMemorybacking.add_arg("nosharepages", "nosharepages", is_onoff=True)
 ParserMemorybacking.add_arg("locked", "locked", is_onoff=True)
 
 
-###################
-# --vcpus parsing #
-###################
-
-class ParserVCPU(VirtCLIParser):
-    remove_first = "vcpus"
-
-    @staticmethod
-    def set_vcpus_cb(inst, val, cbdata):
-        attrname = (("maxvcpus" in cbdata.opts.optsdict) and
-                    "curvcpus" or "vcpus")
-        setattr(inst, attrname, val)
-
-    @staticmethod
-    def set_cpuset_cb(inst, val, cbdata):
-        if not val:
-            return
-        if val != "auto":
-            inst.cpuset = val
-            return
-
-        # Previously we did our own one-time cpuset placement
-        # based on current NUMA memory availability, but that's
-        # pretty dumb unless the conditions on the host never change.
-        # So instead use newer vcpu placement=, but only if it's
-        # supported.
-        if not inst.conn.check_support(
-                inst.conn.SUPPORT_CONN_VCPU_PLACEMENT):
-            logging.warning("vcpu placement=auto not supported, skipping.")
-            return
-
-        inst.vcpu_placement = "auto"
-
-    def _parse(self, opts, inst):
-        set_from_top = ("maxvcpus" not in opts.optsdict and
-                        "vcpus" not in opts.optsdict)
-
-        ret = VirtCLIParser._parse(self, opts, inst)
-
-        if set_from_top:
-            inst.vcpus = inst.cpu.vcpus_from_topology()
-        return ret
-
-
-ParserVCPU.add_arg("cpu.sockets", "sockets")
-ParserVCPU.add_arg("cpu.cores", "cores")
-ParserVCPU.add_arg("cpu.threads", "threads")
-
-ParserVCPU.add_arg(None, "vcpus", cb=ParserVCPU.set_vcpus_cb)
-ParserVCPU.add_arg("vcpus", "maxvcpus")
-
-ParserVCPU.add_arg(None, "cpuset", can_comma=True, cb=ParserVCPU.set_cpuset_cb)
-ParserVCPU.add_arg("vcpu_placement", "placement")
-
-
 #################
 # --cpu parsing #
 #################
 
 class ParserCPU(VirtCLIParser):
+    cli_arg_name = "cpu"
     objclass = CPU
     remove_first = "model"
 
@@ -1450,9 +1394,9 @@ class ParserCPU(VirtCLIParser):
             else:
                 inst.add_feature(feature_name, policy)
 
-    def _parse(self, opts, inst):
+    def _parse(self, inst):
         # Convert +feature, -feature into expected format
-        for key, value in opts.optsdict.items():
+        for key, value in self.optdict.items():
             policy = None
             if value or len(key) == 1:
                 continue
@@ -1463,14 +1407,15 @@ class ParserCPU(VirtCLIParser):
                 policy = "disable"
 
             if policy:
-                del(opts.optsdict[key])
-                if opts.optsdict.get(policy) is None:
-                    opts.optsdict[policy] = []
-                opts.optsdict[policy].append(key[1:])
+                del(self.optdict[key])
+                if self.optdict.get(policy) is None:
+                    self.optdict[policy] = []
+                self.optdict[policy].append(key[1:])
 
-        return VirtCLIParser._parse(self, opts, inst)
+        return VirtCLIParser._parse(self, inst)
 
 
+_register_virt_parser(ParserCPU)
 ParserCPU.add_arg(None, "model", cb=ParserCPU.set_model_cb)
 ParserCPU.add_arg("mode", "mode")
 ParserCPU.add_arg("match", "match")
@@ -1483,11 +1428,69 @@ ParserCPU.add_arg(None, "disable", is_list=True, cb=ParserCPU.set_feature_cb)
 ParserCPU.add_arg(None, "forbid", is_list=True, cb=ParserCPU.set_feature_cb)
 
 
+###################
+# --vcpus parsing #
+###################
+
+class ParserVCPU(VirtCLIParser):
+    cli_arg_name = "vcpus"
+    remove_first = "vcpus"
+
+    @staticmethod
+    def set_vcpus_cb(inst, val, cbdata):
+        attrname = (("maxvcpus" in cbdata.optdict) and
+                    "curvcpus" or "vcpus")
+        setattr(inst, attrname, val)
+
+    @staticmethod
+    def set_cpuset_cb(inst, val, cbdata):
+        if not val:
+            return
+        if val != "auto":
+            inst.cpuset = val
+            return
+
+        # Previously we did our own one-time cpuset placement
+        # based on current NUMA memory availability, but that's
+        # pretty dumb unless the conditions on the host never change.
+        # So instead use newer vcpu placement=, but only if it's
+        # supported.
+        if not inst.conn.check_support(
+                inst.conn.SUPPORT_CONN_VCPU_PLACEMENT):
+            logging.warning("vcpu placement=auto not supported, skipping.")
+            return
+
+        inst.vcpu_placement = "auto"
+
+    def _parse(self, inst):
+        set_from_top = ("maxvcpus" not in self.optdict and
+                        "vcpus" not in self.optdict)
+
+        ret = VirtCLIParser._parse(self, inst)
+
+        if set_from_top:
+            inst.vcpus = inst.cpu.vcpus_from_topology()
+        return ret
+
+
+_register_virt_parser(ParserVCPU)
+ParserVCPU.add_arg("cpu.sockets", "sockets")
+ParserVCPU.add_arg("cpu.cores", "cores")
+ParserVCPU.add_arg("cpu.threads", "threads")
+
+ParserVCPU.add_arg(None, "vcpus", cb=ParserVCPU.set_vcpus_cb)
+ParserVCPU.add_arg("vcpus", "maxvcpus")
+
+ParserVCPU.add_arg(None, "cpuset", can_comma=True, cb=ParserVCPU.set_cpuset_cb)
+ParserVCPU.add_arg("vcpu_placement", "placement")
+
+
 ##################
 # --boot parsing #
 ##################
 
 class ParserBoot(VirtCLIParser):
+    cli_arg_name = "boot"
     clear_attr = "os"
 
     @staticmethod
@@ -1505,23 +1508,24 @@ class ParserBoot(VirtCLIParser):
     def noset_cb(inst, val, cbdata):
         pass
 
-    def _parse(self, opts, inst):
+    def _parse(self, inst):
         # Build boot order
         boot_order = []
-        for cliname in opts.optsdict.keys():
+        for cliname in self.optdict.keys():
             if cliname not in inst.os.BOOT_DEVICES:
                 continue
 
-            del(opts.optsdict[cliname])
+            del(self.optdict[cliname])
             if cliname not in boot_order:
                 boot_order.append(cliname)
 
         if boot_order:
             inst.os.bootorder = boot_order
 
-        VirtCLIParser._parse(self, opts, inst)
+        VirtCLIParser._parse(self, inst)
 
 
+_register_virt_parser(ParserBoot)
 # UEFI depends on these bits, so set them first
 ParserBoot.add_arg("os.arch", "arch")
 ParserBoot.add_arg("type", "domain_type")
@@ -1556,12 +1560,13 @@ for _bootdev in OSXML.BOOT_DEVICES:
 ###################
 
 class ParserIdmap(VirtCLIParser):
+    cli_arg_name = "idmap"
     objclass = IdMap
 
+_register_virt_parser(ParserIdmap)
 ParserIdmap.add_arg("uid_start", "uid_start")
 ParserIdmap.add_arg("uid_target", "uid_target")
 ParserIdmap.add_arg("uid_count", "uid_count")
-
 ParserIdmap.add_arg("gid_start", "gid_start")
 ParserIdmap.add_arg("gid_target", "gid_target")
 ParserIdmap.add_arg("gid_count", "gid_count")
@@ -1572,8 +1577,10 @@ ParserIdmap.add_arg("gid_count", "gid_count")
 ######################
 
 class ParserSecurity(VirtCLIParser):
+    cli_arg_name = "security"
     objclass = Seclabel
 
+_register_virt_parser(ParserSecurity)
 ParserSecurity.add_arg("type", "type")
 ParserSecurity.add_arg("model", "model")
 ParserSecurity.add_arg("relabel", "relabel", is_onoff=True)
@@ -1586,8 +1593,10 @@ ParserSecurity.add_arg("baselabel", "label", can_comma=True)
 ######################
 
 class ParserFeatures(VirtCLIParser):
+    cli_arg_name = "features"
     objclass = DomainFeatures
 
+_register_virt_parser(ParserFeatures)
 ParserFeatures.add_arg("acpi", "acpi", is_onoff=True)
 ParserFeatures.add_arg("apic", "apic", is_onoff=True)
 ParserFeatures.add_arg("pae", "pae", is_onoff=True)
@@ -1615,6 +1624,7 @@ ParserFeatures.add_arg("gic_version", "gic_version")
 ###################
 
 class ParserClock(VirtCLIParser):
+    cli_arg_name = "clock"
     objclass = Clock
 
     @staticmethod
@@ -1634,6 +1644,7 @@ class ParserClock(VirtCLIParser):
         setattr(timerobj, attrname, val)
 
 
+_register_virt_parser(ParserClock)
 ParserClock.add_arg("offset", "offset")
 
 for _tname in Clock.TIMER_NAMES:
@@ -1648,8 +1659,10 @@ for _tname in Clock.TIMER_NAMES:
 ################
 
 class ParserPM(VirtCLIParser):
+    cli_arg_name = "pm"
     objclass = PM
 
+_register_virt_parser(ParserPM)
 ParserPM.add_arg("suspend_to_mem", "suspend_to_mem", is_onoff=True)
 ParserPM.add_arg("suspend_to_disk", "suspend_to_disk", is_onoff=True)
 
@@ -1714,6 +1727,7 @@ def _generate_new_volume_name(guest, poolobj, fmt):
 
 
 class ParserDisk(VirtCLIParser):
+    cli_arg_name = "disk"
     objclass = VirtualDisk
     remove_first = "path"
 
@@ -1721,8 +1735,8 @@ class ParserDisk(VirtCLIParser):
     def noset_cb(inst, val, cbdata):
         ignore = inst, val, cbdata
 
-    def _parse(self, opts, inst):
-        if opts.fullopts == "none":
+    def _parse(self, inst):
+        if self.optstr == "none":
             return
 
         def parse_size(val):
@@ -1737,26 +1751,26 @@ class ParserDisk(VirtCLIParser):
             if val is None:
                 return
             if val == "ro":
-                opts.optsdict["readonly"] = "on"
+                self.optdict["readonly"] = "on"
             elif val == "sh":
-                opts.optsdict["shareable"] = "on"
+                self.optdict["shareable"] = "on"
             elif val == "rw":
                 # It's default. Nothing to do.
                 pass
             else:
                 fail(_("Unknown '%s' value '%s'") % ("perms", val))
 
-        has_path = "path" in opts.optsdict
-        backing_store = opts.get_opt_param("backing_store")
-        poolname = opts.get_opt_param("pool")
-        volname = opts.get_opt_param("vol")
-        size = parse_size(opts.get_opt_param("size"))
-        fmt = opts.get_opt_param("format")
-        sparse = _on_off_convert("sparse", opts.get_opt_param("sparse"))
-        convert_perms(opts.get_opt_param("perms"))
-        has_type_volume = ("source_pool" in opts.optsdict or
-                           "source_volume" in opts.optsdict)
-        has_type_network = ("source_protocol" in opts.optsdict)
+        has_path = "path" in self.optdict
+        backing_store = self.optdict.pop("backing_store", None)
+        poolname = self.optdict.pop("pool", None)
+        volname = self.optdict.pop("vol", None)
+        size = parse_size(self.optdict.pop("size", None))
+        fmt = self.optdict.pop("format", None)
+        sparse = _on_off_convert("sparse", self.optdict.pop("sparse", None))
+        convert_perms(self.optdict.pop("perms", None))
+        has_type_volume = ("source_pool" in self.optdict or
+                           "source_volume" in self.optdict)
+        has_type_network = ("source_protocol" in self.optdict)
 
         optcount = sum([bool(p) for p in [has_path, poolname, volname,
                                           has_type_volume, has_type_network]])
@@ -1774,7 +1788,7 @@ class ParserDisk(VirtCLIParser):
             logging.debug("Parsed --disk volume as: pool=%s vol=%s",
                           poolname, volname)
 
-        VirtCLIParser._parse(self, opts, inst)
+        VirtCLIParser._parse(self, inst)
 
         # Generate and fill in the disk source info
         newvolname = None
@@ -1812,6 +1826,7 @@ class ParserDisk(VirtCLIParser):
         return inst
 
 
+_register_virt_parser(ParserDisk)
 _add_device_address_args(ParserDisk)
 
 # These are all handled specially in _parse
@@ -1862,6 +1877,7 @@ ParserDisk.add_arg("sgio", "sgio")
 #####################
 
 class ParserNetwork(VirtCLIParser):
+    cli_arg_name = "network"
     objclass = VirtualNetworkInterface
     remove_first = "type"
 
@@ -1895,21 +1911,22 @@ class ParserNetwork(VirtCLIParser):
             val = "down"
         inst.link_state = val
 
-    def _parse(self, opts, inst):
-        if opts.fullopts == "none":
+    def _parse(self, inst):
+        if self.optstr == "none":
             return
 
-        if "type" not in opts.optsdict:
-            if "network" in opts.optsdict:
-                opts.optsdict["type"] = VirtualNetworkInterface.TYPE_VIRTUAL
-                opts.optsdict["source"] = opts.optsdict.pop("network")
-            elif "bridge" in opts.optsdict:
-                opts.optsdict["type"] = VirtualNetworkInterface.TYPE_BRIDGE
-                opts.optsdict["source"] = opts.optsdict.pop("bridge")
+        if "type" not in self.optdict:
+            if "network" in self.optdict:
+                self.optdict["type"] = VirtualNetworkInterface.TYPE_VIRTUAL
+                self.optdict["source"] = self.optdict.pop("network")
+            elif "bridge" in self.optdict:
+                self.optdict["type"] = VirtualNetworkInterface.TYPE_BRIDGE
+                self.optdict["source"] = self.optdict.pop("bridge")
 
-        return VirtCLIParser._parse(self, opts, inst)
+        return VirtCLIParser._parse(self, inst)
 
 
+_register_virt_parser(ParserNetwork)
 _add_device_address_args(ParserNetwork)
 ParserNetwork.add_arg("type", "type", cb=ParserNetwork.set_type_cb)
 ParserNetwork.add_arg("source", "source")
@@ -1947,6 +1964,7 @@ ParserNetwork.add_arg("virtualport.interfaceid", "virtualport_interfaceid")
 ######################
 
 class ParserGraphics(VirtCLIParser):
+    cli_arg_name = "graphics"
     objclass = VirtualGraphics
     remove_first = "type"
 
@@ -1987,12 +2005,12 @@ class ParserGraphics(VirtCLIParser):
         else:
             inst.listen = val
 
-    def _parse(self, opts, inst):
-        if opts.fullopts == "none":
+    def _parse(self, inst):
+        if self.optstr == "none":
             self.guest.skip_default_graphics = True
             return
 
-        ret = VirtCLIParser._parse(self, opts, inst)
+        ret = VirtCLIParser._parse(self, inst)
 
         if inst.conn.is_qemu() and inst.gl:
             if inst.type != "spice":
@@ -2003,6 +2021,7 @@ class ParserGraphics(VirtCLIParser):
 
         return ret
 
+_register_virt_parser(ParserGraphics)
 _add_device_address_args(ParserGraphics)
 ParserGraphics.add_arg(None, "type", cb=ParserGraphics.set_type_cb)
 ParserGraphics.add_arg("port", "port")
@@ -2029,6 +2048,7 @@ ParserGraphics.add_arg("gl", "gl", is_onoff=True)
 ########################
 
 class ParserController(VirtCLIParser):
+    cli_arg_name = "controller"
     objclass = VirtualController
     remove_first = "type"
 
@@ -2037,16 +2057,17 @@ class ParserController(VirtCLIParser):
         ignore = cbdata
         inst.address.set_addrstr(val)
 
-    def _parse(self, opts, inst):
-        if opts.fullopts == "usb2":
+    def _parse(self, inst):
+        if self.optstr == "usb2":
             return VirtualController.get_usb2_controllers(inst.conn)
-        elif opts.fullopts == "usb3":
+        elif self.optstr == "usb3":
             inst.type = "usb"
             inst.model = "nec-xhci"
             return inst
-        return VirtCLIParser._parse(self, opts, inst)
+        return VirtCLIParser._parse(self, inst)
 
 
+_register_virt_parser(ParserController)
 _add_device_address_args(ParserController)
 ParserController.add_arg("type", "type")
 ParserController.add_arg("model", "model")
@@ -2061,9 +2082,11 @@ ParserController.add_arg(None, "address", cb=ParserController.set_server_cb)
 ###################
 
 class ParserInput(VirtCLIParser):
+    cli_arg_name = "input"
     objclass = VirtualInputDevice
     remove_first = "type"
 
+_register_virt_parser(ParserInput)
 _add_device_address_args(ParserInput)
 ParserInput.add_arg("type", "type")
 ParserInput.add_arg("bus", "bus")
@@ -2074,10 +2097,12 @@ ParserInput.add_arg("bus", "bus")
 #######################
 
 class ParserSmartcard(VirtCLIParser):
+    cli_arg_name = "smartcard"
     objclass = VirtualSmartCardDevice
     remove_first = "mode"
     check_none = True
 
+_register_virt_parser(ParserSmartcard)
 _add_device_address_args(ParserSmartcard)
 ParserSmartcard.add_arg("mode", "mode")
 ParserSmartcard.add_arg("type", "type")
@@ -2088,6 +2113,7 @@ ParserSmartcard.add_arg("type", "type")
 ######################
 
 class ParserRedir(VirtCLIParser):
+    cli_arg_name = "redirdev"
     objclass = VirtualRedirDevice
     remove_first = "bus"
 
@@ -2096,12 +2122,13 @@ class ParserRedir(VirtCLIParser):
         ignore = cbdata
         inst.parse_friendly_server(val)
 
-    def _parse(self, opts, inst):
-        if opts.fullopts == "none":
+    def _parse(self, inst):
+        if self.optstr == "none":
             self.guest.skip_default_usbredir = True
             return
-        return VirtCLIParser._parse(self, opts, inst)
+        return VirtCLIParser._parse(self, inst)
 
+_register_virt_parser(ParserRedir)
 _add_device_address_args(ParserRedir)
 ParserRedir.add_arg("bus", "bus")
 ParserRedir.add_arg("type", "type")
@@ -2114,15 +2141,17 @@ ParserRedir.add_arg(None, "server", cb=ParserRedir.set_server_cb)
 #################
 
 class ParserTPM(VirtCLIParser):
+    cli_arg_name = "tpm"
     objclass = VirtualTPMDevice
     remove_first = "type"
     check_none = True
 
-    def _parse(self, opts, inst):
-        if (opts.optsdict.get("type", "").startswith("/")):
-            opts.optsdict["path"] = opts.optsdict.pop("type")
-        return VirtCLIParser._parse(self, opts, inst)
+    def _parse(self, inst):
+        if (self.optdict.get("type", "").startswith("/")):
+            self.optdict["path"] = self.optdict.pop("type")
+        return VirtCLIParser._parse(self, inst)
 
+_register_virt_parser(ParserTPM)
 _add_device_address_args(ParserTPM)
 ParserTPM.add_arg("type", "type")
 ParserTPM.add_arg("model", "model")
@@ -2134,6 +2163,7 @@ ParserTPM.add_arg("device_path", "path")
 #################
 
 class ParserRNG(VirtCLIParser):
+    cli_arg_name = "rng"
     objclass = VirtualRNGDevice
     remove_first = "type"
     check_none = True
@@ -2167,18 +2197,19 @@ class ParserRNG(VirtCLIParser):
         elif cbdata.cliname == "backend_type":
             inst.cli_backend_type = val
 
-    def _parse(self, opts, inst):
+    def _parse(self, inst):
         inst.cli_backend_mode = "connect"
         inst.cli_backend_type = "udp"
 
-        if opts.optsdict.get("type", "").startswith("/"):
+        if self.optdict.get("type", "").startswith("/"):
             # Allow --rng /dev/random
-            opts.optsdict["device"] = opts.optsdict.pop("type")
-            opts.optsdict["type"] = "random"
+            self.optdict["device"] = self.optdict.pop("type")
+            self.optdict["type"] = "random"
 
-        return VirtCLIParser._parse(self, opts, inst)
+        return VirtCLIParser._parse(self, inst)
 
 
+_register_virt_parser(ParserRNG)
 _add_device_address_args(ParserRNG)
 ParserRNG.add_arg("type", "type")
 
@@ -2201,9 +2232,11 @@ ParserRNG.add_arg("rate_period", "rate_period")
 ######################
 
 class ParserWatchdog(VirtCLIParser):
+    cli_arg_name = "watchdog"
     objclass = VirtualWatchdog
     remove_first = "model"
 
+_register_virt_parser(ParserWatchdog)
 _add_device_address_args(ParserWatchdog)
 ParserWatchdog.add_arg("model", "model")
 ParserWatchdog.add_arg("action", "action")
@@ -2214,9 +2247,11 @@ ParserWatchdog.add_arg("action", "action")
 ########################
 
 class ParserMemballoon(VirtCLIParser):
+    cli_arg_name = "memballoon"
     objclass = VirtualMemballoon
     remove_first = "model"
 
+_register_virt_parser(ParserMemballoon)
 _add_device_address_args(ParserMemballoon)
 ParserMemballoon.add_arg("model", "model")
 
@@ -2226,6 +2261,7 @@ ParserMemballoon.add_arg("model", "model")
 ###################
 
 class ParserPanic(VirtCLIParser):
+    cli_arg_name = "panic"
     objclass = VirtualPanicDevice
     remove_first = "iobase"
 
@@ -2236,6 +2272,7 @@ class ParserPanic(VirtCLIParser):
             return
         inst.iobase = val
 
+_register_virt_parser(ParserPanic)
 _add_device_address_args(ParserPanic)
 ParserPanic.add_arg(None, "iobase", cb=ParserPanic.set_iobase_cb)
 
@@ -2261,8 +2298,8 @@ class _ParserChar(VirtCLIParser):
 
     @staticmethod
     def set_host_cb(inst, val, cbdata):
-        if ("bind_host" not in cbdata.opts.optsdict and
-            cbdata.opts.optsdict.get("mode", None) == "bind"):
+        if ("bind_host" not in cbdata.optdict and
+            cbdata.optdict.get("mode", None) == "bind"):
             inst.set_friendly_bind(val)
         else:
             inst.set_friendly_source(val)
@@ -2277,15 +2314,15 @@ class _ParserChar(VirtCLIParser):
         ignore = cbdata
         inst.set_friendly_target(val)
 
-    def _parse(self, opts, inst):
-        if opts.fullopts == "none" and inst.virtual_device_type == "console":
+    def _parse(self, inst):
+        if self.optstr == "none" and inst.virtual_device_type == "console":
             self.guest.skip_default_console = True
             return
-        if opts.fullopts == "none" and inst.virtual_device_type == "channel":
+        if self.optstr == "none" and inst.virtual_device_type == "channel":
             self.guest.skip_default_channel = True
             return
 
-        return VirtCLIParser._parse(self, opts, inst)
+        return VirtCLIParser._parse(self, inst)
 
 
 _add_device_address_args(_ParserChar)
@@ -2302,19 +2339,27 @@ _ParserChar.add_arg("source_mode", "mode")
 
 
 class ParserSerial(_ParserChar):
+    cli_arg_name = "serial"
     objclass = VirtualSerialDevice
+_register_virt_parser(ParserSerial)
 
 
 class ParserParallel(_ParserChar):
+    cli_arg_name = "parallel"
     objclass = VirtualParallelDevice
+_register_virt_parser(ParserParallel)
 
 
 class ParserChannel(_ParserChar):
+    cli_arg_name = "channel"
     objclass = VirtualChannelDevice
+_register_virt_parser(ParserChannel)
 
 
 class ParserConsole(_ParserChar):
+    cli_arg_name = "console"
     objclass = VirtualConsoleDevice
+_register_virt_parser(ParserConsole)
 
 
 ########################
@@ -2322,9 +2367,11 @@ class ParserConsole(_ParserChar):
 ########################
 
 class ParserFilesystem(VirtCLIParser):
+    cli_arg_name = "filesystem"
     objclass = VirtualFilesystem
     remove_first = ["source", "target"]
 
+_register_virt_parser(ParserFilesystem)
 _add_device_address_args(ParserFilesystem)
 ParserFilesystem.add_arg("type", "type")
 ParserFilesystem.add_arg("accessmode", "accessmode", aliases=["mode"])
@@ -2337,11 +2384,12 @@ ParserFilesystem.add_arg("target", "target")
 ###################
 
 class ParserVideo(VirtCLIParser):
+    cli_arg_name = "video"
     objclass = VirtualVideoDevice
     remove_first = "model"
 
-    def _parse(self, opts, inst):
-        ret = VirtCLIParser._parse(self, opts, inst)
+    def _parse(self, inst):
+        ret = VirtCLIParser._parse(self, inst)
 
         if inst.conn.is_qemu() and inst.accel3d:
             if inst.model != "virtio":
@@ -2354,6 +2402,7 @@ class ParserVideo(VirtCLIParser):
 
         return ret
 
+_register_virt_parser(ParserVideo)
 _add_device_address_args(ParserVideo)
 ParserVideo.add_arg("model", "model", ignore_default=True)
 ParserVideo.add_arg("accel3d", "accel3d", is_onoff=True)
@@ -2368,15 +2417,17 @@ ParserVideo.add_arg("vgamem", "vgamem")
 ###################
 
 class ParserSound(VirtCLIParser):
+    cli_arg_name = "sound"
     objclass = VirtualAudio
     remove_first = "model"
 
-    def _parse(self, opts, inst):
-        if opts.fullopts == "none":
+    def _parse(self, inst):
+        if self.optstr == "none":
             self.guest.skip_default_sound = True
             return
-        return VirtCLIParser._parse(self, opts, inst)
+        return VirtCLIParser._parse(self, inst)
 
+_register_virt_parser(ParserSound)
 _add_device_address_args(ParserSound)
 ParserSound.add_arg("model", "model", ignore_default=True)
 
@@ -2386,6 +2437,7 @@ ParserSound.add_arg("model", "model", ignore_default=True)
 #####################
 
 class ParserHostdev(VirtCLIParser):
+    cli_arg_name = "hostdev"
     objclass = VirtualHostDevice
     remove_first = "name"
 
@@ -2401,6 +2453,7 @@ class ParserHostdev(VirtCLIParser):
         nodedev = NodeDevice.lookupNodedevFromString(inst.conn, val)
         return nodedev.compare_to_hostdev(inst)
 
+_register_virt_parser(ParserHostdev)
 _add_device_address_args(ParserHostdev)
 ParserHostdev.add_arg(None, "name",
                       cb=ParserHostdev.set_name_cb,
@@ -2411,66 +2464,12 @@ ParserHostdev.add_arg("rom_bar", "rom_bar", is_onoff=True)
 
 
 ###########################
-# Register parser classes #
+# Public virt parser APIs #
 ###########################
 
-def build_parser_map(options):
+def parse_option_strings(options, guest, instlist, update=False):
     """
-    Build a dictionary with mapping of cli-name->parserinstance, so
-    --vcpus -> ParserVCPU object.
-    """
-    parsermap = {}
-    def register_parser(cli_arg_name, parserclass):
-        if not hasattr(options, cli_arg_name):
-            raise RuntimeError("programming error: cliname=%s class=%s" %
-                               (parserobj.cli_arg_name, parserclass))
-        parserclass.cli_arg_name = cli_arg_name
-        parserobj = parserclass()
-        parsermap[parserobj.cli_arg_name] = parserobj
-
-    register_parser("metadata", ParserMetadata)
-    register_parser("events", ParserEvents)
-    register_parser("resource", ParserResource)
-    register_parser("memory", ParserMemory)
-    register_parser("memtune", ParserMemorytune)
-    register_parser("vcpus", ParserVCPU)
-    register_parser("cpu", ParserCPU)
-    register_parser("numatune", ParserNumatune)
-    register_parser("blkiotune", ParserBlkiotune)
-    register_parser("memorybacking", ParserMemorybacking)
-    register_parser("idmap", ParserIdmap)
-    register_parser("boot", ParserBoot)
-    register_parser("security", ParserSecurity)
-    register_parser("features", ParserFeatures)
-    register_parser("clock", ParserClock)
-    register_parser("pm", ParserPM)
-    register_parser("disk", ParserDisk)
-    register_parser("network", ParserNetwork)
-    register_parser("graphics", ParserGraphics)
-    register_parser("controller", ParserController)
-    register_parser("input", ParserInput)
-    register_parser("smartcard", ParserSmartcard)
-    register_parser("redirdev", ParserRedir)
-    register_parser("tpm", ParserTPM)
-    register_parser("rng", ParserRNG)
-    register_parser("watchdog", ParserWatchdog)
-    register_parser("memballoon", ParserMemballoon)
-    register_parser("serial", ParserSerial)
-    register_parser("parallel", ParserParallel)
-    register_parser("channel", ParserChannel)
-    register_parser("console", ParserConsole)
-    register_parser("filesystem", ParserFilesystem)
-    register_parser("video", ParserVideo)
-    register_parser("sound", ParserSound)
-    register_parser("hostdev", ParserHostdev)
-    register_parser("panic", ParserPanic)
-
-    return parsermap
-
-
-def parse_option_strings(parsermap, options, guest, instlist, update=False):
-    """
-    Iterate over the parsermap, and launch the associated parser
+    Iterate over VIRT_PARSERS, and launch the associated parser
     function for every value that was filled in on 'options', which
     came from argparse/the command line.
 
@@ -2481,34 +2480,38 @@ def parse_option_strings(parsermap, options, guest, instlist, update=False):
         instlist = [None]
 
     ret = []
-    for cli_arg_name in dir(options):
-        if cli_arg_name not in parsermap:
+    for parserclass in VIRT_PARSERS:
+        optlist = util.listify(getattr(options, parserclass.cli_arg_name))
+        if not optlist:
             continue
 
-        optstr = getattr(options, cli_arg_name)
-        if optstr is None:
-            continue
+        for inst in instlist:
+            if inst and optlist:
+                # If an object is passed in, we are updating it in place, and
+                # only use the last command line occurrence, eg. from virt-xml
+                optlist = [optlist[-1]]
 
-        for inst in util.listify(instlist):
-            parseret = parsermap[cli_arg_name].parse(
-                guest, optstr, inst, validate=not update)
-            ret += util.listify(parseret)
+            for optstr in optlist:
+                parserobj = parserclass(guest, optstr)
+                parseret = parserobj.parse(inst, validate=not update)
+                ret += util.listify(parseret)
 
     return ret
 
 
-def check_option_introspection(options, parsermap):
+def check_option_introspection(options):
     """
     Check if the user requested option introspection with ex: '--disk=?'
     """
     ret = False
-    for cli_arg_name in dir(options):
-        if cli_arg_name not in parsermap:
+    for parserclass in VIRT_PARSERS:
+        optlist = util.listify(getattr(options, parserclass.cli_arg_name))
+        if not optlist:
             continue
 
-        for optstr in util.listify(getattr(options, cli_arg_name)):
+        for optstr in optlist:
             if optstr == "?" or optstr == "help":
-                parsermap[cli_arg_name].print_introspection()
+                parserclass.print_introspection()
                 ret = True
 
     return ret

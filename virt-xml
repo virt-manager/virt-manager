@@ -112,8 +112,8 @@ def get_domain_and_guest(conn, domstr):
 # Change logic #
 ################
 
-def _find_objects_to_edit(guest, action_name, editval, parserobj):
-    objlist = guest.list_children_for_class(parserobj.objclass)
+def _find_objects_to_edit(guest, action_name, editval, parserclass):
+    objlist = guest.list_children_for_class(parserclass.objclass)
     idx = None
 
     if editval is None:
@@ -129,11 +129,11 @@ def _find_objects_to_edit(guest, action_name, editval, parserobj):
 
         if not objlist:
             fail(_("No --%s objects found in the XML") %
-                parserobj.cli_arg_name)
+                parserclass.cli_arg_name)
         if len(objlist) < abs(idx):
             fail(_("--edit %s requested but there's only %s "
                    "--%s object in the XML") %
-                (idx, len(objlist), parserobj.cli_arg_name))
+                (idx, len(objlist), parserclass.cli_arg_name))
 
         if idx > 0:
             idx -= 1
@@ -145,7 +145,8 @@ def _find_objects_to_edit(guest, action_name, editval, parserobj):
 
     else:
         # Lookup device by the passed prop string
-        inst = parserobj.lookup_child_from_option_string(guest, editval)
+        parserobj = parserclass(guest, editval)
+        inst = parserobj.lookup_child_from_option_string()
         if not inst:
             fail(_("No matching objects found for --%s %s") %
                  (action_name, editval))
@@ -170,11 +171,11 @@ def check_action_collision(options):
              ", ".join(["--" + c for c in collisions]))
 
 
-def check_xmlopt_collision(options, parsermap):
+def check_xmlopt_collision(options):
     collisions = []
-    for cli_arg_name, parserobj in parsermap.items():
-        if getattr(options, cli_arg_name):
-            collisions.append(parserobj)
+    for parserclass in cli.VIRT_PARSERS:
+        if getattr(options, parserclass.cli_arg_name):
+            collisions.append(parserclass)
 
     if len(collisions) == 0:
         fail(_("No change specified."))
@@ -186,36 +187,34 @@ def check_xmlopt_collision(options, parsermap):
     return collisions[0]
 
 
-def action_edit(guest, options, parsermap, parserobj):
-    if parserobj.objclass:
-        inst = _find_objects_to_edit(guest, "edit", options.edit, parserobj)
+def action_edit(guest, options, parserclass):
+    if parserclass.objclass:
+        inst = _find_objects_to_edit(guest, "edit", options.edit, parserclass)
     else:
         inst = guest
         if options.edit and options.edit != '1' and options.edit != 'all':
             fail(_("'--edit %s' doesn't make sense with --%s, "
                    "just use empty '--edit'") %
-            (options.edit, parserobj.cli_arg_name))
+            (options.edit, parserclass.cli_arg_name))
 
-    return cli.parse_option_strings(parsermap, options,
-                                    guest, inst, update=True)
-
-
-def action_add_device(guest, options, parsermap, parserobj):
-    if (not parserobj.objclass or
-        guest.child_class_is_singleton(parserobj.objclass)):
-        fail(_("Cannot use --add-device with --%s") % parserobj.cli_arg_name)
-    return cli.parse_option_strings(parsermap, options, guest, None)
+    return cli.parse_option_strings(options, guest, inst, update=True)
 
 
-def action_remove_device(guest, options, parsermap, parserobj):
-    ignore = parsermap
-    if (not parserobj.objclass or
-        guest.child_class_is_singleton(parserobj.objclass)):
+def action_add_device(guest, options, parserclass):
+    if (not parserclass.objclass or
+        guest.child_class_is_singleton(parserclass.objclass)):
+        fail(_("Cannot use --add-device with --%s") % parserclass.cli_arg_name)
+    return cli.parse_option_strings(options, guest, None)
+
+
+def action_remove_device(guest, options, parserclass):
+    if (not parserclass.objclass or
+        guest.child_class_is_singleton(parserclass.objclass)):
         fail(_("Cannot use --remove-device with --%s") %
-             parserobj.cli_arg_name)
+             parserclass.cli_arg_name)
 
     devs = _find_objects_to_edit(guest, "remove-device",
-        getattr(options, parserobj.cli_arg_name)[-1], parserobj)
+        getattr(options, parserclass.cli_arg_name)[-1], parserclass)
 
     devs = util.listify(devs)
     for dev in util.listify(devs):
@@ -223,19 +222,20 @@ def action_remove_device(guest, options, parsermap, parserobj):
     return devs
 
 
-def action_build_xml(conn, options, parsermap, parserobj):
+def action_build_xml(conn, options, parserclass):
     guest = virtinst.Guest(conn)
     ret_inst = None
     inst = None
 
-    if parserobj.objclass:
-        inst = parserobj.objclass(conn)
-    elif parserobj.clear_attr:
-        ret_inst = getattr(guest, parserobj.clear_attr)
+    if parserclass.objclass:
+        inst = parserclass.objclass(conn)
+    elif parserclass.clear_attr:
+        ret_inst = getattr(guest, parserclass.clear_attr)
     else:
-        fail(_("--build-xml not supported for --%s") % parserobj.cli_arg_name)
+        fail(_("--build-xml not supported for --%s") %
+             parserclass.cli_arg_name)
 
-    ret = cli.parse_option_strings(parsermap, options, guest, inst)
+    ret = cli.parse_option_strings(options, guest, inst)
     if ret_inst:
         return ret_inst
     return ret
@@ -302,19 +302,19 @@ def update_changes(domain, devs, action, confirm):
             print_stdout("")
 
 
-def prepare_changes(xmlobj, options, parsermap, parserobj):
+def prepare_changes(xmlobj, options, parserclass):
     origxml = xmlobj.get_xml_config()
 
     if options.edit != -1:
-        devs = action_edit(xmlobj, options, parsermap, parserobj)
+        devs = action_edit(xmlobj, options, parserclass)
         action = "update"
 
     elif options.add_device:
-        devs = action_add_device(xmlobj, options, parsermap, parserobj)
+        devs = action_add_device(xmlobj, options, parserclass)
         action = "hotplug"
 
     elif options.remove_device:
-        devs = action_remove_device(xmlobj, options, parsermap, parserobj)
+        devs = action_remove_device(xmlobj, options, parserclass)
         action = "hotunplug"
 
     newxml = xmlobj.get_xml_config()
@@ -408,8 +408,7 @@ def main(conn=None):
         options.quiet = False
     cli.setupLogging("virt-xml", options.debug, options.quiet)
 
-    parsermap = cli.build_parser_map(options)
-    if cli.check_option_introspection(options, parsermap):
+    if cli.check_option_introspection(options):
         return 0
 
     options.stdinxml = None
@@ -445,31 +444,29 @@ def main(conn=None):
         inactive_xmlobj = _make_guest(conn, options.stdinxml)
 
     check_action_collision(options)
-    parserobj = check_xmlopt_collision(options, parsermap)
+    parserclass = check_xmlopt_collision(options)
 
-    if options.update and not parserobj.objclass:
+    if options.update and not parserclass.objclass:
         fail(_("Don't know how to --update for --%s") %
-             (parserobj.cli_arg_name))
+             (parserclass.cli_arg_name))
 
     if options.build_xml:
-        devs = action_build_xml(conn, options, parsermap, parserobj)
-        for dev in util.listify(devs):
+        devs = action_build_xml(conn, options, parserclass)
+        for dev in devs:
             print_stdout(dev.get_xml_config())
         return 0
 
     if options.update and active_xmlobj:
-        devs, action = prepare_changes(active_xmlobj, options,
-                                       parsermap, parserobj)
+        devs, action = prepare_changes(active_xmlobj, options, parserclass)
         update_changes(domain, devs, action, options.confirm)
     if options.define:
-        devs, action = prepare_changes(inactive_xmlobj, options,
-                                       parsermap, parserobj)
+        devs, action = prepare_changes(inactive_xmlobj, options, parserclass)
         define_changes(conn, inactive_xmlobj, devs, action, options.confirm)
         if not options.update and active_xmlobj:
             print_stdout(
                 _("Changes will take effect after the next domain shutdown."))
     if not options.update and not options.define:
-        prepare_changes(inactive_xmlobj, options, parsermap, parserobj)
+        prepare_changes(inactive_xmlobj, options, parserclass)
 
     return 0
 
