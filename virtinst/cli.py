@@ -767,101 +767,109 @@ def _on_off_convert(key, val):
 
 
 class _VirtCLIArgument(object):
-    def __init__(self, attrname, cliname,
-                 cb=None, ignore_default=False,
-                 can_comma=False, aliases=None,
-                 is_list=False, is_onoff=False,
-                 lookup_cb=None, is_novalue=False):
+    """
+    A single subargument passed to compound command lines like --disk,
+    --network, etc.
+
+    @attrname: The virtinst API attribute name the cliargument maps to.
+        If this is a virtinst object method, it will be called.
+    @cliname: The command line option name, 'path' for path=FOO
+
+    @cb: Rather than set an attribute directly on the virtinst
+        object, (self, inst, val, virtarg) to this callback to handle it.
+    @ignore_default: If the value passed on the cli is 'default', don't
+        do anything.
+    @can_comma: If True, this option is expected to have embedded commas.
+        After the parser sees this option, it will iterate over the
+        option string until it finds another known argument name:
+        everything prior to that argument name is considered part of
+        the value of this option, '=' included. Should be used sparingly.
+    @aliases: List of cli aliases. Useful if we want to change a property
+        name on the cli but maintain back compat.
+    @is_list: This value should be stored as a list, so multiple instances
+        are appended.
+    @is_onoff: The value expected on the cli is on/off or yes/no, convert
+        it to true/false.
+    @lookup_cb: If specified, use this function for performing match
+        lookups.
+    @is_novalue: If specified, the parameter is not expected in the
+        form FOO=BAR, but just FOO.
+    @find_inst_cb: If specified, this can be used to return a different
+        'inst' to check and set attributes against. For example,
+        VirtualDisk has multiple seclabel children, this provides a hook
+        to lookup the specified child object.
+    """
+    attrname = None
+    cliname = None
+    cb = None
+    can_comma = None
+    ignore_default = False
+    aliases = None
+    is_list = False
+    is_onoff = False
+    lookup_cb = None
+    is_novalue = False
+
+    @staticmethod
+    def make_arg(attrname, cliname, **kwargs):
         """
-        A single subargument passed to compound command lines like --disk,
-        --network, etc.
-
-        @attrname: The virtinst API attribute name the cliargument maps to.
-            If this is a virtinst object method, it will be called.
-        @cliname: The command line option name, 'path' for path=FOO
-
-        @cb: Rather than set an attribute directly on the virtinst
-            object, (self, inst, val, virtarg) to this callback to handle it.
-        @ignore_default: If the value passed on the cli is 'default', don't
-            do anything.
-        @can_comma: If True, this option is expected to have embedded commas.
-            After the parser sees this option, it will iterate over the
-            option string until it finds another known argument name:
-            everything prior to that argument name is considered part of
-            the value of this option, '=' included. Should be used sparingly.
-        @aliases: List of cli aliases. Useful if we want to change a property
-            name on the cli but maintain back compat.
-        @is_list: This value should be stored as a list, so multiple instances
-            are appended.
-        @is_onoff: The value expected on the cli is on/off or yes/no, convert
-            it to true/false.
-        @lookup_cb: If specified, use this function for performing match
-            lookups.
-        @is_novalue: If specified, the parameter is not expected in the
-            form FOO=BAR, but just FOO.
+        Generates a new VirtCLIArgument class with the passed static
+        values. Initialize it later with the actual command line and value.
+        kwargs can be any of the
         """
-        self.attrname = attrname
-        self.cliname = cliname
+        class VirtAddArg(_VirtCLIArgument):
+            pass
 
-        self.cb = cb
-        self.can_comma = can_comma
-        self.ignore_default = ignore_default
-        self.aliases = util.listify(aliases)
-        self.is_list = is_list
-        self.is_onoff = is_onoff
-        self.lookup_cb = lookup_cb
-        self.is_novalue = is_novalue
+        VirtAddArg.attrname = attrname
+        VirtAddArg.cliname = cliname
+        for key, val in kwargs.items():
+            # getattr for validation
+            getattr(VirtAddArg, key)
+            setattr(VirtAddArg, key, val)
+        return VirtAddArg
 
-    def _pop_opt(self, optdict, key):
+    @classmethod
+    def match_name(cls, cliname):
         """
-        Basically optdict.pop(key, None) with is_novalue wrapped in
+        Return True if the passed argument name matches this
+        VirtCLIArgument. So for an option like --foo bar=X, this
+        checks if we are the parser for 'bar'
         """
-        if key not in optdict:
-            return None
+        for argname in [cls.cliname] + util.listify(cls.aliases):
+            if argname == cliname:
+                return True
+        return False
 
-        ret = optdict.pop(key)
-        if ret is None:
+
+    def __init__(self, key, val):
+        """
+        Instantiate a VirtCLIArgument with the actual key=val pair
+        from the command line.
+        """
+        # Sanitize the value
+        if val is None:
             if not self.is_novalue:
                 raise RuntimeError("Option '%s' had no value set." % key)
-            ret = ""
-
-        return ret
-
-    def _lookup_val(self, optdict):
-        """
-        Find the value in 'optdict' thats associated with this Argument,
-        and perform some other misc checking
-        """
-        val = None
-        for cliname in self.aliases + [self.cliname]:
-            # We iterate over all values unconditionally, so they are
-            # removed from optdict
-            foundval = self._pop_opt(optdict, cliname)
-            if foundval is not None:
-                val = foundval
-        if val is None:
-            return 0
+            val = ""
         if val == "":
             val = None
         if self.is_onoff:
-            val = _on_off_convert(self.cliname, val)
+            val = _on_off_convert(key, val)
 
-        return val
+        self.val = val
+        self.key = key
 
-    def parse_param(self, parser, optdict, inst, support_cb):
+    def parse_param(self, parser, inst, support_cb):
         """
         Process the cli param against the pass inst.
 
         So if we are VirtCLIArgument for --disk device=, and the user
-        specified --disk device=foo, we grab 'device=foo' from the
-        parsed 'optdict', and set inst.device = foo
+        specified --disk device=foo, we were instanciated with
+        key=device val=foo, so set inst.device = foo
         """
-        val = self._lookup_val(optdict)
-        if val is 0:
-            return
         if support_cb:
             support_cb(inst, self)
-        if val == "default" and self.ignore_default:
+        if self.val == "default" and self.ignore_default:
             return
 
         try:
@@ -872,46 +880,34 @@ class _VirtCLIArgument(object):
                                "member=%s" % (inst, self.attrname))
 
         if self.cb:
-            self.cb(parser, inst, val, self)
+            self.cb(parser, inst,  # pylint: disable=not-callable
+                    self.val, self)
         else:
             exec(  # pylint: disable=exec-used
-                "inst." + self.attrname + " = val")
+                "inst." + self.attrname + " = self.val")
 
-    def lookup_param(self, parser, optdict, inst):
+    def lookup_param(self, parser, inst):
         """
         See if the passed value matches our Argument, like via virt-xml
 
         So if this Argument is for --disk device=, and the user
-        specified virt-xml --edit device=floppy --disk ..., we grab
-        device=floppy from 'optdict', then return 'inst.device == floppy'
+        specified virt-xml --edit device=floppy --disk ..., we were
+        instantiated with key=device val=floppy, so return
+        'inst.device == floppy'
         """
-        val = self._lookup_val(optdict)
-        if val is 0:
-            return
-
         if not self.attrname and not self.lookup_cb:
             raise RuntimeError(
                 _("Don't know how to match device type '%(device_type)s' "
                   "property '%(property_name)s'") %
                 {"device_type": getattr(inst, "virtual_device_type", ""),
-                 "property_name": self.cliname})
+                 "property_name": self.key})
 
         if self.lookup_cb:
-            return self.lookup_cb(parser, inst, val, self)
+            return self.lookup_cb(parser,  # pylint: disable=not-callable
+                                  inst, self.val, self)
         else:
             return eval(  # pylint: disable=eval-used
-                "inst." + self.attrname) == val
-
-    def match_name(self, cliname):
-        """
-        Return True if the passed argument name matches this
-        VirtCLIArgument. So for an option like --foo bar=X, this
-        checks if we are the parser for 'bar'
-        """
-        for argname in [self.cliname] + self.aliases:
-            if argname == cliname:
-                return True
-        return False
+                "inst." + self.attrname) == self.val
 
 
 def parse_optstr_tuples(optstr):
@@ -1045,10 +1041,9 @@ class VirtCLIParser(object):
         Add a VirtCLIArgument for this class.
         """
         if not cls._virtargs:
-            cls._virtargs = [_VirtCLIArgument(None, "clearxml",
-                             cb=cls._clearxml_cb,
-                             is_onoff=True)]
-        cls._virtargs.append(_VirtCLIArgument(*args, **kwargs))
+            cls._virtargs = [_VirtCLIArgument.make_arg(
+                None, "clearxml", cb=cls._clearxml_cb, is_onoff=True)]
+        cls._virtargs.append(_VirtCLIArgument.make_arg(*args, **kwargs))
 
     @classmethod
     def print_introspection(cls):
@@ -1090,19 +1085,39 @@ class VirtCLIParser(object):
         # a <cpu> stub in place, so that it gets model=foo in place,
         # otherwise the newly created cpu block gets appened to the
         # end of the domain XML, which gives an ugly diff
-        clear_inst.clear(leave_stub=bool(self.optdict))
+        clear_inst.clear(leave_stub="," in self.optstr)
+
+    def _optdict_to_param_list(self, optdict):
+        """
+        Convert the passed optdict to a list of instantiated
+        VirtCLIArguments to actually interact with
+        """
+        ret = []
+        for param in self._virtargs:
+            for key in optdict.keys():
+                if param.match_name(key):
+                    ret.append(param(key, optdict.pop(key)))
+        return ret
+
+    def _check_leftover_opts(self, optdict):
+        """
+        Used to check if there were any unprocessed entries in the
+        optdict after we should have emptied it. Like if the user
+        passed an invalid argument such as --disk idontexist=foo
+        """
+        if optdict:
+            fail(_("Unknown options %s") % optdict.keys())
 
     def _parse(self, inst):
         """
         Subclasses can hook into this to do any pre/post processing
         of the inst, or self.optdict
         """
-        for param in self._virtargs:
-            param.parse_param(self, self.optdict, inst, self.support_cb)
+        optdict = self.optdict.copy()
+        for param in self._optdict_to_param_list(optdict):
+            param.parse_param(self, inst, self.support_cb)
 
-        # Check leftover opts
-        if self.optdict:
-            fail(_("Unknown options %s") % self.optdict.keys())
+        self._check_leftover_opts(optdict)
         return inst
 
     def parse(self, inst, validate=True):
@@ -1160,23 +1175,24 @@ class VirtCLIParser(object):
         ret = []
         objlist = self.guest.list_children_for_class(self.objclass)
 
-        for inst in objlist:
-            try:
+        try:
+            for inst in objlist:
                 optdict = self.optdict.copy()
                 valid = False
-                for param in self._virtargs:
-                    paramret = param.lookup_param(self, optdict, inst)
+                for param in self._optdict_to_param_list(optdict):
+                    paramret = param.lookup_param(self, inst)
                     if paramret is True:
                         valid = True
                         break
                 if valid:
                     ret.append(inst)
-            except Exception, e:
-                logging.debug("Exception parsing inst=%s optstr=%s",
-                              inst, self.optstr, exc_info=True)
-                fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
-                        {"cli_arg_name": self.cli_arg_name,
-                         "options": self.optstr, "err": str(e)})
+                self._check_leftover_opts(optdict)
+        except Exception, e:
+            logging.debug("Exception parsing inst=%s optstr=%s",
+                          inst, self.optstr, exc_info=True)
+            fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
+                    {"cli_arg_name": self.cli_arg_name,
+                     "options": self.optstr, "err": str(e)})
 
         return ret
 
