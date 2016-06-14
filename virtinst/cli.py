@@ -949,56 +949,60 @@ def _parse_optstr_to_dict(optstr, virtargs, remove_first):
     So for --disk path=foo,size=5, optstr is 'path=foo,size=5', and
     we return {"path": "foo", "size": "5"}
     """
-    optsdict = collections.OrderedDict()
+    optdict = collections.OrderedDict()
     opttuples = parse_optstr_tuples(optstr)
 
     def _add_opt(virtarg, cliname, val):
-        if (cliname not in optsdict and
-            virtarg and
+        if (cliname not in optdict and
             virtarg.is_list):
-            optsdict[cliname] = []
+            optdict[cliname] = []
 
-        if type(optsdict.get(cliname)) is list:
-            optsdict[cliname].append(val)
+        if type(optdict.get(cliname)) is list:
+            optdict[cliname].append(val)
         else:
-            optsdict[cliname] = val
+            optdict[cliname] = val
 
     def _lookup_virtarg(cliname):
         for virtarg in virtargs:
             if virtarg.match_name(cliname):
                 return virtarg
 
+    def _consume_comma_arg(commaopt):
+        while opttuples:
+            cliname, val = opttuples[0]
+            if _lookup_virtarg(cliname):
+                # Next tuple is for an actual virtarg
+                break
+
+            # Next tuple is a continuation of the comma argument,
+            # sum it up
+            opttuples.pop(0)
+            commaopt[1] += "," + cliname
+            if val:
+                commaopt[1] += "=" + val
+
+        return commaopt
+
     # Splice in remove_first names upfront
-    remove_first = util.listify(remove_first)[:]
     for idx, (cliname, val) in enumerate(opttuples):
         if val is not None or not remove_first:
             break
         opttuples[idx] = (remove_first.pop(0), cliname)
 
-    commaopt = []
-    virtarg = None
-    for cliname, val in opttuples:
+    while opttuples:
+        cliname, val = opttuples.pop(0)
         virtarg = _lookup_virtarg(cliname)
-        if commaopt:
-            if not virtarg:
-                commaopt[1] += "," + cliname
-                if val:
-                    commaopt[1] += "=" + val
-                continue
-
-            _add_opt(virtarg, commaopt[0], commaopt[1])
-            commaopt = []
-
-        if (virtarg and virtarg.can_comma):
-            commaopt = [cliname, val]
+        if not virtarg:
+            optdict[cliname] = val
             continue
 
-        _add_opt(virtarg, cliname, val)
+        if virtarg.can_comma:
+            commaopt = _consume_comma_arg([cliname, val])
+            _add_opt(virtarg, commaopt[0], commaopt[1])
+        else:
+            _add_opt(virtarg, cliname, val)
 
-    if commaopt:
-        _add_opt(virtarg, commaopt[0], commaopt[1])
-
-    return optsdict
+    return optdict
 
 
 class VirtCLIParser(object):
@@ -1061,8 +1065,7 @@ class VirtCLIParser(object):
         self.guest = guest
         self.optstr = optstr
         self.optdict = _parse_optstr_to_dict(self.optstr,
-                                             self._virtargs,
-                                             self.remove_first)
+                self._virtargs, util.listify(self.remove_first)[:])
 
     def _clearxml_cb(self, inst, val, virtarg):
         """
