@@ -766,16 +766,6 @@ def _on_off_convert(key, val):
     raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
 
 
-class _SetterCBData(object):
-    """
-    Structure holding all the data we want to pass to the cli
-    cb callbacks. Makes it simpler to add new fields in the future.
-    """
-    def __init__(self, optdict, cliname):
-        self.optdict = optdict
-        self.cliname = cliname
-
-
 class _VirtCLIArgument(object):
     def __init__(self, attrname, cliname,
                  cb=None, ignore_default=False,
@@ -791,7 +781,7 @@ class _VirtCLIArgument(object):
         @cliname: The command line option name, 'path' for path=FOO
 
         @cb: Rather than set an attribute directly on the virtinst
-            object, (inst, val, cbdata) to this callback to handle it.
+            object, (self, inst, val, virtarg) to this callback to handle it.
         @ignore_default: If the value passed on the cli is 'default', don't
             do anything.
         @can_comma: If True, this option is expected to have embedded commas.
@@ -837,7 +827,7 @@ class _VirtCLIArgument(object):
 
         return ret
 
-    def _lookup_val(self, optdict, inst, support_cb, is_lookup):
+    def _lookup_val(self, optdict):
         """
         Find the value in 'optdict' thats associated with this Argument,
         and perform some other misc checking
@@ -853,16 +843,12 @@ class _VirtCLIArgument(object):
             return 0
         if val == "":
             val = None
-
-        if support_cb:
-            support_cb(inst, self.attrname, self.cliname)
         if self.is_onoff:
             val = _on_off_convert(self.cliname, val)
-        if val == "default" and self.ignore_default and not is_lookup:
-            return 0
+
         return val
 
-    def parse_param(self, optdict, inst, support_cb):
+    def parse_param(self, parser, optdict, inst, support_cb):
         """
         Process the cli param against the pass inst.
 
@@ -870,8 +856,12 @@ class _VirtCLIArgument(object):
         specified --disk device=foo, we grab 'device=foo' from the
         parsed 'optdict', and set inst.device = foo
         """
-        val = self._lookup_val(optdict, inst, support_cb, False)
+        val = self._lookup_val(optdict)
         if val is 0:
+            return
+        if support_cb:
+            support_cb(inst, self)
+        if val == "default" and self.ignore_default:
             return
 
         try:
@@ -881,14 +871,13 @@ class _VirtCLIArgument(object):
             raise RuntimeError("programming error: obj=%s does not have "
                                "member=%s" % (inst, self.attrname))
 
-        cbdata = _SetterCBData(optdict, self.cliname)
         if self.cb:
-            self.cb(inst, val, cbdata)
+            self.cb(parser, inst, val, self)
         else:
             exec(  # pylint: disable=exec-used
                 "inst." + self.attrname + " = val")
 
-    def lookup_param(self, optdict, inst):
+    def lookup_param(self, parser, optdict, inst):
         """
         See if the passed value matches our Argument, like via virt-xml
 
@@ -896,7 +885,7 @@ class _VirtCLIArgument(object):
         specified virt-xml --edit device=floppy --disk ..., we grab
         device=floppy from 'optdict', then return 'inst.device == floppy'
         """
-        val = self._lookup_val(optdict, inst, None, True)
+        val = self._lookup_val(optdict)
         if val is 0:
             return
 
@@ -907,9 +896,8 @@ class _VirtCLIArgument(object):
                 {"device_type": getattr(inst, "virtual_device_type", ""),
                  "property_name": self.cliname})
 
-        cbdata = _SetterCBData(optdict, self.cliname)
         if self.lookup_cb:
-            return self.lookup_cb(inst, val, cbdata)
+            return self.lookup_cb(parser, inst, val, self)
         else:
             return eval(  # pylint: disable=eval-used
                 "inst." + self.attrname) == val
@@ -1059,33 +1047,6 @@ class VirtCLIParser(object):
         cls._virtargs.append(_VirtCLIArgument(*args, **kwargs))
 
     @classmethod
-    def _clearxml_cb(cls, inst, val, cbdata):
-        """
-        Callback that handles virt-xml clearxml=yes|no magic
-        """
-        ignore = cbdata
-        if not cls.objclass and not cls.clear_attr:
-            raise RuntimeError("Don't know how to clearxml --%s" %
-                               cls.cli_arg_name)
-        if val is not True:
-            return
-
-        clear_inst = inst
-        if cls.clear_attr:
-            clear_inst = getattr(inst, cls.clear_attr)
-
-        # If there's any opts remaining, leave the root stub element
-        # in place with leave_stub=True, so virt-xml updates are done
-        # in place.
-        #
-        # Example: --edit --cpu clearxml=yes should remove the <cpu>
-        # block. But --edit --cpu clearxml=yes,model=foo should leave
-        # a <cpu> stub in place, so that it gets model=foo in place,
-        # otherwise the newly created cpu block gets appened to the
-        # end of the domain XML, which gives an ugly diff
-        clear_inst.clear(leave_stub=bool(cbdata.optdict))
-
-    @classmethod
     def print_introspection(cls):
         """
         Print out all _param names, triggered via ex. --disk help
@@ -1103,13 +1064,38 @@ class VirtCLIParser(object):
                                              self._virtargs,
                                              self.remove_first)
 
+    def _clearxml_cb(self, inst, val, virtarg):
+        """
+        Callback that handles virt-xml clearxml=yes|no magic
+        """
+        if not self.objclass and not self.clear_attr:
+            raise RuntimeError("Don't know how to clearxml --%s" %
+                               self.cli_arg_name)
+        if val is not True:
+            return
+
+        clear_inst = inst
+        if self.clear_attr:
+            clear_inst = getattr(inst, self.clear_attr)
+
+        # If there's any opts remaining, leave the root stub element
+        # in place with leave_stub=True, so virt-xml updates are done
+        # in place.
+        #
+        # Example: --edit --cpu clearxml=yes should remove the <cpu>
+        # block. But --edit --cpu clearxml=yes,model=foo should leave
+        # a <cpu> stub in place, so that it gets model=foo in place,
+        # otherwise the newly created cpu block gets appened to the
+        # end of the domain XML, which gives an ugly diff
+        clear_inst.clear(leave_stub=bool(self.optdict))
+
     def _parse(self, inst):
         """
         Subclasses can hook into this to do any pre/post processing
         of the inst, or self.optdict
         """
         for param in self._virtargs:
-            param.parse_param(self.optdict, inst, self.support_cb)
+            param.parse_param(self, self.optdict, inst, self.support_cb)
 
         # Check leftover opts
         if self.optdict:
@@ -1176,7 +1162,7 @@ class VirtCLIParser(object):
                 optdict = self.optdict.copy()
                 valid = False
                 for param in self._virtargs:
-                    paramret = param.lookup_param(optdict, inst)
+                    paramret = param.lookup_param(self, optdict, inst)
                     if paramret is True:
                         valid = True
                         break
@@ -1213,10 +1199,9 @@ def convert_old_force(options):
 class ParseCLICheck(VirtCLIParser):
     cli_arg_name = "check"
 
-    @staticmethod
-    def set_cb(inst, val, cbdata):
+    def set_cb(self, inst, val, virtarg):
         # This sets properties on the _GlobalState objects
-        inst.set_validation_check(cbdata.cliname, val)
+        inst.set_validation_check(virtarg.cliname, val)
 
 
 ParseCLICheck.add_arg(None, "path_in_use", is_onoff=True,
@@ -1297,9 +1282,8 @@ class ParserMemory(VirtCLIParser):
     cli_arg_name = "memory"
     remove_first = "memory"
 
-    @staticmethod
-    def set_memory_cb(inst, val, cbdata):
-        setattr(inst, cbdata.cliname, int(val) * 1024)
+    def set_memory_cb(self, inst, val, virtarg):
+        setattr(inst, virtarg.cliname, int(val) * 1024)
 
 
 _register_virt_parser(ParserMemory)
@@ -1365,9 +1349,7 @@ class ParserCPU(VirtCLIParser):
     objclass = CPU
     remove_first = "model"
 
-    @staticmethod
-    def set_model_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_model_cb(self, inst, val, virtarg):
         if val == "host":
             val = inst.SPECIAL_MODE_HOST_MODEL
         if val == "none":
@@ -1378,9 +1360,8 @@ class ParserCPU(VirtCLIParser):
         else:
             inst.model = val
 
-    @staticmethod
-    def set_feature_cb(inst, val, cbdata):
-        policy = cbdata.cliname
+    def set_feature_cb(self, inst, val, virtarg):
+        policy = virtarg.cliname
         for feature_name in util.listify(val):
             featureobj = None
 
@@ -1436,14 +1417,12 @@ class ParserVCPU(VirtCLIParser):
     cli_arg_name = "vcpus"
     remove_first = "vcpus"
 
-    @staticmethod
-    def set_vcpus_cb(inst, val, cbdata):
-        attrname = (("maxvcpus" in cbdata.optdict) and
+    def set_vcpus_cb(self, inst, val, virtarg):
+        attrname = (("maxvcpus" in self.optdict) and
                     "curvcpus" or "vcpus")
         setattr(inst, attrname, val)
 
-    @staticmethod
-    def set_cpuset_cb(inst, val, cbdata):
+    def set_cpuset_cb(self, inst, val, virtarg):
         if not val:
             return
         if val != "auto":
@@ -1493,19 +1472,15 @@ class ParserBoot(VirtCLIParser):
     cli_arg_name = "boot"
     clear_attr = "os"
 
-    @staticmethod
-    def set_uefi(inst, val, cbdata):
+    def set_uefi(self, inst, val, virtarg):
+        ignore = virtarg
         ignore = val
-        ignore = cbdata
         inst.set_uefi_default()
 
-    @staticmethod
-    def set_initargs_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_initargs_cb(self, inst, val, virtarg):
         inst.os.set_initargs_string(val)
 
-    @staticmethod
-    def noset_cb(inst, val, cbdata):
+    def noset_cb(self, inst, val, virtarg):
         pass
 
     def _parse(self, inst):
@@ -1627,9 +1602,8 @@ class ParserClock(VirtCLIParser):
     cli_arg_name = "clock"
     objclass = Clock
 
-    @staticmethod
-    def set_timer(inst, val, cbdata):
-        tname, attrname = cbdata.cliname.split("_")
+    def set_timer(self, inst, val, virtarg):
+        tname, attrname = virtarg.cliname.split("_")
 
         timerobj = None
         for t in inst.timers:
@@ -1731,9 +1705,8 @@ class ParserDisk(VirtCLIParser):
     objclass = VirtualDisk
     remove_first = "path"
 
-    @staticmethod
-    def noset_cb(inst, val, cbdata):
-        ignore = inst, val, cbdata
+    def noset_cb(self, inst, val, virtarg):
+        ignore = self, inst, val, virtarg
 
     def _parse(self, inst):
         if self.optstr == "none":
@@ -1881,25 +1854,20 @@ class ParserNetwork(VirtCLIParser):
     objclass = VirtualNetworkInterface
     remove_first = "type"
 
-    @staticmethod
-    def set_mac_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_mac_cb(self, inst, val, virtarg):
         if val == "RANDOM":
             return None
         inst.macaddr = val
         return val
 
-    @staticmethod
-    def set_type_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_type_cb(self, inst, val, virtarg):
         if val == "default":
             inst.set_default_source()
         else:
             inst.type = val
 
-    @staticmethod
-    def set_link_state(inst, val, cbdata):
-        ignore = cbdata
+    def set_link_state(self, inst, val, virtarg):
+        ignore = virtarg
         if val in ["up", "down"]:
             inst.link_state = val
             return
@@ -1968,9 +1936,7 @@ class ParserGraphics(VirtCLIParser):
     objclass = VirtualGraphics
     remove_first = "type"
 
-    @staticmethod
-    def set_keymap_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_keymap_cb(self, inst, val, virtarg):
         from . import hostkeymap
 
         if not val:
@@ -1987,15 +1953,12 @@ class ParserGraphics(VirtCLIParser):
             val = use_keymap
         inst.keymap = val
 
-    @staticmethod
-    def set_type_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_type_cb(self, inst, val, virtarg):
         if val == "default":
             return
         inst.type = val
 
-    @staticmethod
-    def set_listen_cb(inst, val, cbdata):
+    def set_listen_cb(self, inst, val, virtarg):
         if val == "none":
             inst.set_listen_none()
         elif val == "socket":
@@ -2052,9 +2015,7 @@ class ParserController(VirtCLIParser):
     objclass = VirtualController
     remove_first = "type"
 
-    @staticmethod
-    def set_server_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_server_cb(self, inst, val, virtarg):
         inst.address.set_addrstr(val)
 
     def _parse(self, inst):
@@ -2117,9 +2078,7 @@ class ParserRedir(VirtCLIParser):
     objclass = VirtualRedirDevice
     remove_first = "bus"
 
-    @staticmethod
-    def set_server_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_server_cb(self, inst, val, virtarg):
         inst.parse_friendly_server(val)
 
     def _parse(self, inst):
@@ -2168,8 +2127,7 @@ class ParserRNG(VirtCLIParser):
     remove_first = "type"
     check_none = True
 
-    @staticmethod
-    def set_hosts_cb(inst, val, cbdata):
+    def set_hosts_cb(self, inst, val, virtarg):
         namemap = {}
         inst.backend_type = inst.cli_backend_type
 
@@ -2185,16 +2143,13 @@ class ParserRNG(VirtCLIParser):
                 namemap["backend_connect_host"] = "connect_host"
                 namemap["backend_connect_service"] = "connect_service"
 
-        if cbdata.cliname in namemap:
-            setattr(inst, namemap[cbdata.cliname], val)
+        if virtarg.cliname in namemap:
+            setattr(inst, namemap[virtarg.cliname], val)
 
-    @staticmethod
-    def set_backend_cb(inst, val, cbdata):
-        ignore = cbdata
-        ignore = inst
-        if cbdata.cliname == "backend_mode":
+    def set_backend_cb(self, inst, val, virtarg):
+        if virtarg.cliname == "backend_mode":
             inst.cli_backend_mode = val
-        elif cbdata.cliname == "backend_type":
+        elif virtarg.cliname == "backend_type":
             inst.cli_backend_type = val
 
     def _parse(self, inst):
@@ -2265,9 +2220,7 @@ class ParserPanic(VirtCLIParser):
     objclass = VirtualPanicDevice
     remove_first = "iobase"
 
-    @staticmethod
-    def set_iobase_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_iobase_cb(self, inst, val, virtarg):
         if val == "default":
             return
         inst.iobase = val
@@ -2284,34 +2237,28 @@ ParserPanic.add_arg(None, "iobase", cb=ParserPanic.set_iobase_cb)
 class _ParserChar(VirtCLIParser):
     remove_first = "char_type"
 
-    @staticmethod
-    def support_check(inst, attrname, cliname):
-        if type(attrname) is not str:
+    def support_check(self, inst, virtarg):
+        if type(virtarg.attrname) is not str:
             return
-        if not inst.supports_property(attrname):
+        if not inst.supports_property(virtarg.attrname):
             raise ValueError(_("%(devtype)s type '%(chartype)s' does not "
                 "support '%(optname)s' option.") %
                 {"devtype" : inst.virtual_device_type,
                  "chartype": inst.type,
-                 "optname" : cliname})
+                 "optname" : virtarg.cliname})
     support_cb = support_check
 
-    @staticmethod
-    def set_host_cb(inst, val, cbdata):
-        if ("bind_host" not in cbdata.optdict and
-            cbdata.optdict.get("mode", None) == "bind"):
+    def set_host_cb(self, inst, val, virtarg):
+        if ("bind_host" not in self.optdict and
+            self.optdict.get("mode", None) == "bind"):
             inst.set_friendly_bind(val)
         else:
             inst.set_friendly_source(val)
 
-    @staticmethod
-    def set_bind_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_bind_cb(self, inst, val, virtarg):
         inst.set_friendly_bind(val)
 
-    @staticmethod
-    def set_target_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_target_cb(self, inst, val, virtarg):
         inst.set_friendly_target(val)
 
     def _parse(self, inst):
@@ -2441,15 +2388,11 @@ class ParserHostdev(VirtCLIParser):
     objclass = VirtualHostDevice
     remove_first = "name"
 
-    @staticmethod
-    def set_name_cb(inst, val, cbdata):
-        ignore = cbdata
+    def set_name_cb(self, inst, val, virtarg):
         val = NodeDevice.lookupNodedevFromString(inst.conn, val)
         inst.set_from_nodedev(val)
 
-    @staticmethod
-    def name_lookup_cb(inst, val, cbdata):
-        ignore = cbdata
+    def name_lookup_cb(self, inst, val, virtarg):
         nodedev = NodeDevice.lookupNodedevFromString(inst.conn, val)
         return nodedev.compare_to_hostdev(inst)
 
