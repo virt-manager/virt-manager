@@ -213,6 +213,8 @@ class vmmConnection(vmmGObject):
         self._domain_cb_ids = []
         self.using_network_events = False
         self._network_cb_ids = []
+        self.using_storage_pool_events = False
+        self._storage_pool_cb_ids = []
 
         self._xml_flags = {}
 
@@ -774,6 +776,21 @@ class vmmConnection(vmmGObject):
         else:
             self.schedule_priority_tick(pollnet=True, force=True)
 
+    def _storage_pool_lifecycle_event(self, conn, pool,
+                                      event, reason, userdata):
+        ignore = conn
+        ignore = userdata
+
+        name = pool.name()
+        logging.debug("storage pool lifecycle event: storage=%s event=%s "
+            "reason=%s", name, event, reason)
+        obj = self.get_pool(name)
+
+        if obj:
+            self.idle_add(obj.refresh_from_event_loop)
+        else:
+            self.schedule_priority_tick(pollpool=True, force=True)
+
     def _add_conn_events(self):
         if not self.check_support(support.SUPPORT_CONN_WORKING_XEN_EVENTS):
             return
@@ -829,6 +846,21 @@ class vmmConnection(vmmGObject):
             self.using_network_events = False
             logging.debug("Error registering network events: %s", e)
 
+        try:
+            if FORCE_DISABLE_EVENTS:
+                raise RuntimeError("FORCE_DISABLE_EVENTS = True")
+
+            eventid = getattr(libvirt,
+                              "VIR_STORAGE_POOL_EVENT_ID_LIFECYCLE", 0)
+            self._storage_pool_cb_ids.append(
+                self.get_backend().storagePoolEventRegisterAny(
+                None, eventid, self._storage_pool_lifecycle_event, None))
+            self.using_storage_pool_events = True
+            logging.debug("Using storage pool events")
+        except Exception, e:
+            self.using_storage_pool_events = False
+            logging.debug("Error registering storage pool events: %s", e)
+
 
     ######################################
     # Connection closing/opening methods #
@@ -849,12 +881,15 @@ class vmmConnection(vmmGObject):
                     self._backend.domainEventDeregisterAny(eid)
                 for eid in self._network_cb_ids:
                     self._backend.networkEventDeregisterAny(eid)
+                for eid in self._storage_pool_cb_ids:
+                    self._backend.storagePoolEventDeregisterAny(eid)
         except:
             logging.debug("Failed to deregister events in conn cleanup",
                 exc_info=True)
         finally:
             self._domain_cb_ids = []
             self._network_cb_ids = []
+            self._storage_pool_cb_ids = []
 
         self._backend.close()
         self._stats = []
@@ -1177,6 +1212,8 @@ class vmmConnection(vmmGObject):
             pollvm = False
         if self.using_network_events and not force:
             pollnet = False
+        if self.using_storage_pool_events and not force:
+            pollpool = False
 
         self._hostinfo = self._backend.getInfo()
 

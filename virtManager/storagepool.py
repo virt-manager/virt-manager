@@ -134,6 +134,8 @@ class vmmStoragePool(vmmLibvirtObject):
         return self._backend.XMLDesc(flags)
     def _define(self, xml):
         return self.conn.define_pool(xml)
+    def _using_events(self):
+        return self.conn.using_storage_pool_events
     def _check_supports_isactive(self):
         return self.conn.check_support(
             self.conn.SUPPORT_POOL_ISACTIVE, self._backend)
