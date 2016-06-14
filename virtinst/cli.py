@@ -1380,6 +1380,22 @@ class ParserCPU(VirtCLIParser):
     objclass = CPU
     remove_first = "model"
 
+    def cell_find_inst_cb(self, inst, val, virtarg, can_edit):
+        cpu = inst
+        num = 0
+        if re.search("\d+", virtarg.key):
+            num = int(re.search("\d+", virtarg.key).group())
+
+        if can_edit:
+            while len(cpu.cells) < (num + 1):
+                cpu.add_cell()
+        try:
+            return cpu.cells[num]
+        except IndexError:
+            if not can_edit:
+                return None
+            raise
+
     def set_model_cb(self, inst, val, virtarg):
         if val == "host":
             val = inst.SPECIAL_MODE_HOST_MODEL
@@ -1438,6 +1454,14 @@ ParserCPU.add_arg(None, "require", is_list=True, cb=ParserCPU.set_feature_cb)
 ParserCPU.add_arg(None, "optional", is_list=True, cb=ParserCPU.set_feature_cb)
 ParserCPU.add_arg(None, "disable", is_list=True, cb=ParserCPU.set_feature_cb)
 ParserCPU.add_arg(None, "forbid", is_list=True, cb=ParserCPU.set_feature_cb)
+
+# Options for CPU.cells config
+ParserCPU.add_arg("id", "cell[0-9]*.id",
+                  find_inst_cb=ParserCPU.cell_find_inst_cb)
+ParserCPU.add_arg("cpus", "cell[0-9]*.cpus", can_comma=True,
+                  find_inst_cb=ParserCPU.cell_find_inst_cb)
+ParserCPU.add_arg("memory", "cell[0-9]*.memory",
+                  find_inst_cb=ParserCPU.cell_find_inst_cb)
 
 
 ###################

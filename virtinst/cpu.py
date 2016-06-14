@@ -17,7 +17,23 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+from .domainnumatune import DomainNumatune
 from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
+
+
+class _CPUCell(XMLBuilder):
+    """
+    Class for generating <cpu><numa> child <cell> XML
+    """
+    _XML_ROOT_NAME = "cell"
+    _XML_PROP_ORDER = ["id", "cpus", "memory"]
+
+    def _validate_cpuset(self, val):
+        DomainNumatune.validate_cpuset(self.conn, val)
+
+    id = XMLProperty("./@id", is_int=True)
+    cpus = XMLProperty("./@cpus", validate_cb=_validate_cpuset)
+    memory = XMLProperty("./@memory", is_int=True)
 
 
 class CPUFeature(XMLBuilder):
@@ -87,6 +103,12 @@ class CPU(XMLBuilder):
     def remove_feature(self, feature):
         self.remove_child(feature)
     features = XMLChildProperty(CPUFeature)
+
+    cells = XMLChildProperty(_CPUCell, relative_xpath="./numa")
+    def add_cell(self):
+        obj = _CPUCell(self.conn)
+        self.add_child(obj)
+        return obj
 
     def copy_host_cpu(self):
         """

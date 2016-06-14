@@ -10,9 +10,9 @@
      <feature policy="require" name="est"/>
      <feature policy="require" name="ss"/>
 @@
-     <feature policy="require" name="ds_cpl"/>
-     <feature policy="require" name="xtpr"/>
-     <feature policy="require" name="acpi"/>
+       <cell id="2" cpus="2" memory="1048576" unit="KiB"/>
+       <cell id="3" cpus="3" memory="1048576" unit="KiB"/>
+     </numa>
 +    <feature policy="force" name="x2apic"/>
    </cpu>
    <clock offset="utc">

@@ -7,9 +7,9 @@
      <memory mode="interleave" placement="auto"/>
    </numatune>
 @@
-     <feature policy="require" name="ds_cpl"/>
-     <feature policy="require" name="xtpr"/>
-     <feature policy="require" name="acpi"/>
+       <cell id="2" cpus="2" memory="1048576" unit="KiB"/>
+       <cell id="3" cpus="3" memory="1048576" unit="KiB"/>
+     </numa>
 +    <topology sockets="4" cores="5" threads="1"/>
    </cpu>
    <clock offset="utc">

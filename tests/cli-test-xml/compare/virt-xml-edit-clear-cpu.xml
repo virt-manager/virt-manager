@@ -17,6 +17,12 @@
 -    <feature policy="require" name="ds_cpl"/>
 -    <feature policy="require" name="xtpr"/>
 -    <feature policy="require" name="acpi"/>
+-    <numa>
+-      <cell id="0" cpus="0" memory="1048576" unit="KiB"/>
+-      <cell id="1" cpus="1" memory="1048576" unit="KiB"/>
+-      <cell id="2" cpus="2" memory="1048576" unit="KiB"/>
+-      <cell id="3" cpus="3" memory="1048576" unit="KiB"/>
+-    </numa>
 +  <cpu mode="host-passthrough">
    </cpu>
    <clock offset="utc">
