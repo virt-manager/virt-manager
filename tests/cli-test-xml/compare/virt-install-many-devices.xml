@@ -67,7 +67,12 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
-      <source file="/dev/default-pool/iso-vol"/>
+      <source file="/dev/default-pool/iso-vol">
+        <seclabel model="dac">
+          <label>foo,bar,baz</label>
+        </seclabel>
+        <seclabel model="selinux" relabel="no"/>
+      </source>
       <target dev="vde" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">

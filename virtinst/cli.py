@@ -24,6 +24,7 @@ import collections
 import logging
 import logging.handlers
 import os
+import re
 import shlex
 import subprocess
 import sys
@@ -809,6 +810,7 @@ class _VirtCLIArgument(object):
     is_onoff = False
     lookup_cb = None
     is_novalue = False
+    find_inst_cb = None
 
     @staticmethod
     def make_arg(attrname, cliname, **kwargs):
@@ -836,7 +838,7 @@ class _VirtCLIArgument(object):
         checks if we are the parser for 'bar'
         """
         for argname in [cls.cliname] + util.listify(cls.aliases):
-            if argname == cliname:
+            if re.match("^%s$" % argname, cliname):
                 return True
         return False
 
@@ -872,6 +874,10 @@ class _VirtCLIArgument(object):
         if self.val == "default" and self.ignore_default:
             return
 
+        if self.find_inst_cb:
+            inst = self.find_inst_cb(parser,  # pylint: disable=not-callable
+                                     inst, self.val, self, True)
+
         try:
             if self.attrname:
                 eval("inst." + self.attrname)  # pylint: disable=eval-used
@@ -901,6 +907,12 @@ class _VirtCLIArgument(object):
                   "property '%(property_name)s'") %
                 {"device_type": getattr(inst, "virtual_device_type", ""),
                  "property_name": self.key})
+
+        if self.find_inst_cb:
+            inst = self.find_inst_cb(parser,  # pylint: disable=not-callable
+                                     inst, self.val, self, False)
+            if not inst:
+                return False
 
         if self.lookup_cb:
             return self.lookup_cb(parser,  # pylint: disable=not-callable
@@ -1178,11 +1190,11 @@ class VirtCLIParser(object):
         try:
             for inst in objlist:
                 optdict = self.optdict.copy()
-                valid = False
+                valid = True
                 for param in self._optdict_to_param_list(optdict):
                     paramret = param.lookup_param(self, inst)
-                    if paramret is True:
-                        valid = True
+                    if paramret is False:
+                        valid = False
                         break
                 if valid:
                     ret.append(inst)
@@ -1727,6 +1739,22 @@ class ParserDisk(VirtCLIParser):
     def noset_cb(self, inst, val, virtarg):
         ignore = self, inst, val, virtarg
 
+    def seclabel_find_inst_cb(self, inst, val, virtarg, can_edit):
+        disk = inst
+        num = 0
+        if re.search("\d+", virtarg.key):
+            num = int(re.search("\d+", virtarg.key).group())
+
+        if can_edit:
+            while len(disk.seclabels) < (num + 1):
+                disk.add_seclabel()
+        try:
+            return disk.seclabels[num]
+        except IndexError:
+            if not can_edit:
+                return None
+            raise
+
     def _parse(self, inst):
         if self.optstr == "none":
             return
@@ -1862,6 +1890,14 @@ ParserDisk.add_arg("iotune_ris", "read_iops_sec")
 ParserDisk.add_arg("iotune_wis", "write_iops_sec")
 ParserDisk.add_arg("iotune_tis", "total_iops_sec")
 ParserDisk.add_arg("sgio", "sgio")
+
+# VirtualDisk.seclabels properties
+ParserDisk.add_arg("model", "seclabel[0-9]*.model",
+                   find_inst_cb=ParserDisk.seclabel_find_inst_cb)
+ParserDisk.add_arg("relabel", "seclabel[0-9]*.relabel", is_onoff=True,
+                   find_inst_cb=ParserDisk.seclabel_find_inst_cb)
+ParserDisk.add_arg("label", "seclabel[0-9]*.label", can_comma=True,
+                   find_inst_cb=ParserDisk.seclabel_find_inst_cb)
 
 
 #####################

@@ -454,7 +454,7 @@ c.add_compare(""" \
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,total_bytes_sec=10,total_iops_sec=20,write_bytes_sec=5,write_iops_sec=6 \
 --disk size=1 \
 --disk %(BLOCKVOL)s \
---disk /dev/default-pool/iso-vol \
+--disk /dev/default-pool/iso-vol,seclabel.model=dac,seclabel1.model=selinux,seclabel1.relabel=no,seclabel0.label=foo,bar,baz \
 --disk /dev/default-pool/iso-vol,format=qcow2 \
 --disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1 \
 --disk pool=rbd-ceph,size=.1 \
@@ -861,6 +861,8 @@ c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "edit-simple-host-
 
 c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
+c.add_invalid("--edit seclabel2.model=dac --disk /dev/null")  # no match found
+c.add_valid("--edit seclabel.model=dac --disk /dev/null")  # match found
 c.add_compare("--edit 3 --sound pcspk", "edit-pos-num", compare_check="1.3.5")  # compare_check=new graphics listen output
 c.add_compare("--edit -1 --video qxl", "edit-neg-num", compare_check="1.2.11")  # compare_check=video ram output change
 c.add_compare("--edit all --host-device driver_name=vfio", "edit-all")

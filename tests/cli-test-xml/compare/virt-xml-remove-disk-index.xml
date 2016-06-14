@@ -4,7 +4,9 @@
 -    </disk>
 -    <disk type="file" device="disk">
 -      <driver name="qemu" type="qcow2" cache="none"/>
--      <source file="/tmp/foobar2"/>
+-      <source file="/tmp/foobar2">
+-        <seclabel model="dac" relabel="no"/>
+-      </source>
 -      <target dev="sda" bus="scsi"/>
 -      <shareable/>
 -      <boot order="1"/>

@@ -753,6 +753,10 @@ class VirtualDisk(VirtualDevice):
     iotune_wis = XMLProperty("./iotune/write_iops_sec", is_int=True)
 
     seclabels = XMLChildProperty(_DiskSeclabel, relative_xpath="./source")
+    def add_seclabel(self):
+        obj = _DiskSeclabel(self.conn)
+        self.add_child(obj)
+        return obj
 
 
     #################################
