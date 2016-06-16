@@ -12,7 +12,7 @@ from tests import utils
 from virtinst import Guest
 from virtinst import urlfetcher
 from virtinst import util
-from virtinst.distroinstaller import _perform_initrd_injections
+from virtinst.initrdinject import perform_initrd_injections
 
 cleanup = []
 _alldistros = {}
@@ -120,7 +120,7 @@ def _test_distro(distro):
 
     os.system("cp -f %s %s" % (originitrd, newinitrd))
     cleanup.append(newinitrd)
-    _perform_initrd_injections(newinitrd, [injectfile], ".")
+    perform_initrd_injections(newinitrd, [injectfile], ".")
 
     nic = distro.virtio and "virtio" or "rtl8139"
     append = "-append \"ks=file:/%s\"" % os.path.basename(injectfile)
