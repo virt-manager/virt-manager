@@ -1640,7 +1640,11 @@ class vmmCreate(vmmGObjectUI):
 
     def _build_guest(self, variant):
         guest = self.conn.caps.build_virtinst_guest(self._capsinfo)
-        guest.os.machine = self._get_config_machine()
+
+        # If no machine was selected don't clear recommended machine
+        machine = self._get_config_machine()
+        if machine:
+            guest.os.machine = machine
 
         # Generate UUID (makes customize dialog happy)
         try:
