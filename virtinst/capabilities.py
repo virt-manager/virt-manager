@@ -350,8 +350,13 @@ class _CapsInfo(object):
 
         # For any other HV just let libvirt get us the default, these
         # are the only ones we've tested.
-        if not self.conn.is_test() and not self.conn.is_qemu():
+        if (not self.conn.is_test() and
+            not self.conn.is_qemu() and
+            not self.conn.is_xen()):
             return None
+
+        if self.conn.is_xen() and len(self.machines):
+            return self.machines[0]
 
         if (self.arch in ["ppc64", "ppc64le"] and
             "pseries" in self.machines):
