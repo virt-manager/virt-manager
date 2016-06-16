@@ -843,8 +843,10 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-firmware").set_visible(self.is_customize_dialog)
         self.widget("overview-firmware-label").set_visible(
             not self.is_customize_dialog)
-        show_firmware = ((self.conn.is_qemu() or self.conn.is_test_conn()) and
-            domcaps.arch_can_uefi())
+        show_firmware = ((self.conn.is_qemu() or
+                          self.conn.is_test_conn() or
+                          self.conn.is_xen()) and
+                         domcaps.arch_can_uefi())
         uiutil.set_grid_row_visible(
             self.widget("overview-firmware-title"), show_firmware)
 
