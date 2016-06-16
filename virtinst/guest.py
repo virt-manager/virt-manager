@@ -331,35 +331,29 @@ class Guest(XMLBuilder):
         finally:
             self._finish_get_xml(data)
 
-    def _do_get_install_xml(self, install=True, disk_boot=False):
+    def _do_get_install_xml(self, install):
         """
         Return the full Guest xml configuration.
 
-        @param install: Whether we want the 'OS install' configuration or
-                        the 'post-install' configuration. (Some installs,
-                        like an import or livecd may not have an 'install'
-                        config.)
-        @type install: C{bool}
-        @param disk_boot: Whether we should boot off the harddisk, regardless
-                          of our position in the install process (this is
-                          used for 2 stage installs, where the second stage
-                          boots off the disk. You probably don't need to touch
-                          this.)
-        @type disk_boot: C{bool}
+        @install: Whether we want the 'OS install' configuration or
+            the 'post-install' configuration. The difference is mostly
+            whether the install media is attached and set as the boot
+            device. Some installs, like an import or livecd, do not have
+            an 'install' config.
         """
-        osblob_install = install and not disk_boot
-        if osblob_install and not self.installer.has_install_phase():
+        if install and not self.installer.has_install_phase():
             return None
 
-        self.installer.alter_bootconfig(self, osblob_install)
+        self.installer.alter_bootconfig(self, install)
         if not install:
             self._remove_cdrom_install_media()
 
         if install:
             self.on_reboot = "destroy"
             self.on_crash = "destroy"
-        # on_crash=restart can cause reboot loops on s390x, so use preserve
         elif self.os.is_s390x():
+            # on_crash=restart can cause reboot loops on s390x,
+            # so use preserve
             self.on_crash = "preserve"
 
         self._set_osxml_defaults()
@@ -378,60 +372,46 @@ class Guest(XMLBuilder):
     # Private install helpers #
     ###########################
 
-    def _build_meter(self, meter, is_initial):
-        if is_initial:
-            meter_label = _("Creating domain...")
-        else:
-            meter_label = _("Starting domain...")
-
+    def _build_meter(self, meter):
+        meter_label = _("Creating domain...")
         meter = util.ensure_meter(meter)
         meter.start(size=None, text=meter_label)
 
         return meter
 
-    def _build_xml(self, is_initial):
-        log_label = is_initial and "install" or "continue"
-        disk_boot = not is_initial
-
-        start_xml = self._get_install_xml(install=True, disk_boot=disk_boot)
+    def _build_xml(self):
+        start_xml = self._get_install_xml(install=True)
         final_xml = self._get_install_xml(install=False)
 
-        logging.debug("Generated %s XML: %s",
-                      log_label,
+        logging.debug("Generated install XML: %s",
                       (start_xml and ("\n" + start_xml) or "None required"))
         logging.debug("Generated boot XML: \n%s", final_xml)
 
         return start_xml, final_xml
 
-    def _create_guest(self, meter,
-                      start_xml, final_xml, is_initial, noboot):
+    def _create_guest(self, meter, start_xml, final_xml, noboot):
         """
         Actually do the XML logging, guest defining/creating
 
-        @param is_initial: If running initial guest creation, else we
-                           are continuing the install
         @param noboot: Don't boot guest if no install phase
         """
-        meter = self._build_meter(meter, is_initial)
+        meter = self._build_meter(meter)
         doboot = not noboot or self.installer.has_install_phase()
 
-        if is_initial and doboot:
+        if doboot:
             dom = self.conn.createLinux(start_xml or final_xml, 0)
         else:
             dom = self.conn.defineXML(start_xml or final_xml)
-            if doboot:
-                dom.create()
 
         self.domain = dom
         meter.end(0)
 
         self.domain = self.conn.defineXML(final_xml)
-        if is_initial:
-            try:
-                logging.debug("XML fetched from libvirt object:\n%s",
-                              dom.XMLDesc(0))
-            except Exception, e:
-                logging.debug("Error fetching XML from libvirt object: %s", e)
+        try:
+            logging.debug("XML fetched from libvirt object:\n%s",
+                          dom.XMLDesc(0))
+        except Exception, e:
+            logging.debug("Error fetching XML from libvirt object: %s", e)
 
         return self.domain
 
@@ -458,18 +438,6 @@ class Guest(XMLBuilder):
     # Public API #
     ##############
 
-    def get_continue_inst(self):
-        """
-        Return True if this guest requires a call to 'continue_install',
-        which means the OS requires a 2 stage install (windows)
-        """
-        # If we are doing an 'import' or 'liveCD' install, there is
-        # no true install process, so continue install has no meaning
-        if not self.installer.has_install_phase():
-            return False
-
-        return self._os_object.is_windows()
-
     def start_install(self, meter=None,
                       dry=False, return_xml=False, noboot=False):
         """
@@ -479,7 +447,6 @@ class Guest(XMLBuilder):
         if self.domain is not None:
             raise RuntimeError(_("Domain has already been started!"))
 
-        is_initial = True
         self.set_install_defaults()
 
         self._prepare_install(meter, dry)
@@ -489,7 +456,7 @@ class Guest(XMLBuilder):
                 for dev in self.get_all_devices():
                     dev.setup(meter)
 
-            start_xml, final_xml = self._build_xml(is_initial)
+            start_xml, final_xml = self._build_xml()
             if return_xml:
                 return (start_xml, final_xml)
             if dry:
@@ -499,8 +466,7 @@ class Guest(XMLBuilder):
             self.check_vm_collision(self.conn, self.name,
                                     do_remove=self.replace)
 
-            self.domain = self._create_guest(meter,
-                                             start_xml, final_xml, is_initial,
+            self.domain = self._create_guest(meter, start_xml, final_xml,
                                              noboot)
             # Set domain autostart flag if requested
             self._flag_autostart()
@@ -508,23 +474,6 @@ class Guest(XMLBuilder):
             return self.domain
         finally:
             self.installer.cleanup()
-
-    def continue_install(self, meter=None,
-                         dry=False, return_xml=False):
-        """
-        Continue with stage 2 of a guest install. Only required for
-        guests which have the 'continue' flag set (accessed via
-        get_continue_inst)
-        """
-        is_initial = False
-        start_xml, final_xml = self._build_xml(is_initial)
-        if return_xml:
-            return (start_xml, final_xml)
-        if dry:
-            return
-
-        return self._create_guest(meter,
-                                  start_xml, final_xml, is_initial, False)
 
     def get_created_disks(self):
         return [d for d in self.get_devices("disk") if d.storage_was_created]
@@ -711,11 +660,11 @@ class Guest(XMLBuilder):
     def _remove_cdrom_install_media(self):
         for dev in self.get_devices("disk"):
             # Keep the install cdrom device around, but with no media attached.
-            # But only if we are a distro that doesn't have a multi
-            # stage install (aka not Windows)
+            # But only if we are installing windows which has a multi stage
+            # install.
             if (dev.is_cdrom() and
                 getattr(dev, "installer_media", False) and
-                not self.get_continue_inst()):
+                not self._os_object.is_windows()):
                 dev.path = None
 
     def _set_defaults(self):

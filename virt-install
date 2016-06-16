@@ -683,23 +683,13 @@ def domain_is_active(domain):
         return False
 
 
-def start_install(guest, continue_inst, options):
-    # There are two main cases we care about:
-    #
-    # Scripts: these should specify --wait always, maintaining the
-    # semantics of virt-install exit implying the domain has finished
-    # installing.
-    #
-    # Interactive: If this is a continue_inst domain, we default to
-    # waiting.  Otherwise, we can exit before the domain has finished
-    # installing. Passing --wait will give the above semantics.
-    #
-    if options.wait is None:
-        wait_on_install = continue_inst
-        wait_time = -1
-    else:
+def start_install(guest, options):
+    if options.wait:
         wait_on_install = True
         wait_time = options.wait * 60
+    else:
+        wait_on_install = False
+        wait_time = -1
 
     # If --wait specified, we don't want the default behavior of waiting
     # for virt-viewer to exit, since then we can't exit the app when time
@@ -741,12 +731,6 @@ def start_install(guest, continue_inst, options):
         cli.connect_console(guest, conscb, wait_on_console)
         dom = check_domain(guest, dom, conscb,
                            wait_on_install, wait_time, start_time)
-
-        if continue_inst:
-            dom = guest.continue_install(meter=meter)
-            cli.connect_console(guest, conscb, wait_on_console)
-            dom = check_domain(guest, dom, conscb,
-                               wait_on_install, wait_time, start_time)
 
         print_stdout(_("Domain creation completed."))
         if not domain_is_active(dom):
@@ -854,36 +838,29 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
 # XML printing helpers #
 ########################
 
-def xml_to_print(guest, continue_inst, xmlonly, dry):
+def xml_to_print(guest, xmlonly, dry):
     start_xml, final_xml = guest.start_install(dry=dry, return_xml=True)
-    second_xml = None
     if not start_xml:
         start_xml = final_xml
         final_xml = None
-
-    if continue_inst:
-        second_xml, final_xml = guest.continue_install(dry=dry,
-                                                       return_xml=True)
 
     if dry and not xmlonly:
         print_stdout(_("Dry run completed successfully"))
         return
 
+    if xmlonly not in [False, "1", "2", "all"]:
+        fail(_("Unknown XML step request '%s', must be 1, 2, or all") %
+             xmlonly)
+
     if xmlonly == "1":
         return start_xml
     if xmlonly == "2":
-        if not (second_xml or final_xml):
+        if not final_xml:
             fail(_("Requested installation does not have XML step 2"))
-        return second_xml or final_xml
-    if xmlonly == "3":
-        if not second_xml:
-            fail(_("Requested installation does not have XML step 3"))
         return final_xml
 
     # "all" case
     xml = start_xml
-    if second_xml:
-        xml += second_xml
     if final_xml:
         xml += final_xml
     return xml
@@ -1040,19 +1017,13 @@ def main(conn=None):
         do_test_media_detection(conn, options.test_media_detection)
         return 0
 
-    if options.xmlonly not in [False, "1", "2", "3", "all"]:
-        fail(_("--print-step must be 1, 2, 3, or all"))
-
     guest = build_guest_instance(conn, options)
-    continue_inst = guest.get_continue_inst()
-
     if options.xmlonly or options.dry:
-        xml = xml_to_print(guest, continue_inst,
-                           options.xmlonly, options.dry)
+        xml = xml_to_print(guest, options.xmlonly, options.dry)
         if xml:
             print_stdout(xml, do_force=True)
     else:
-        start_install(guest, continue_inst, options)
+        start_install(guest, options)
 
     return 0
 

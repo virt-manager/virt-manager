@@ -2316,7 +2316,7 @@ class vmmCreate(vmmGObjectUI):
             # guest after the install has finished
             def cb():
                 vm.connect_opt_out("state-changed",
-                                   self._check_install_status, guest)
+                                   self._check_install_status)
                 return False
             self.idle_add(cb)
 
@@ -2330,7 +2330,7 @@ class vmmCreate(vmmGObjectUI):
                     "VM creation.", poolname, exc_info=True)
 
 
-    def _check_install_status(self, vm, virtinst_guest):
+    def _check_install_status(self, vm):
         """
         Watch the domain that we are installing, waiting for the state
         to change, so we can restart it as needed
@@ -2348,20 +2348,6 @@ class vmmCreate(vmmGObjectUI):
             return True
 
         try:
-            if virtinst_guest:
-                continue_inst = virtinst_guest.get_continue_inst()
-
-                if continue_inst:
-                    logging.debug("VM needs a 2 stage install, continuing.")
-                    # Continue the install, then reconnect this opt
-                    # out handler, removing the virtinst_guest which
-                    # will force one final restart.
-                    virtinst_guest.continue_install()
-
-                    vm.connect_opt_out("state-changed",
-                                       self._check_install_status, None)
-                    return True
-
             logging.debug("Install should be completed, starting VM.")
             vm.startup()
         except Exception, e:
