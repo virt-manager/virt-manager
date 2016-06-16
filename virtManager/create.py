@@ -2218,6 +2218,7 @@ class vmmCreate(vmmGObjectUI):
             if not self.is_visible():
                 return
             logging.debug("User finished customize dialog, starting install")
+            self._failed_guest = None
             guest.update_defaults()
             self._start_install(guest)
 
