@@ -1,4 +1,4 @@
-#!/usr/bin/env python2 -tt
+#!/usr/bin/env python2
 # Copyright (C) 2013, 2014 Red Hat, Inc.
 
 import atexit
