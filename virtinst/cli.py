@@ -1806,6 +1806,7 @@ class ParserDisk(VirtCLIParser):
 
         has_path = "path" in self.optdict
         backing_store = self.optdict.pop("backing_store", None)
+        backing_format = self.optdict.pop("backing_format", None)
         poolname = self.optdict.pop("pool", None)
         volname = self.optdict.pop("vol", None)
         size = parse_size(self.optdict.pop("size", None))
@@ -1859,7 +1860,8 @@ class ParserDisk(VirtCLIParser):
                                                        fmt)
             vol_install = VirtualDisk.build_vol_install(
                     self.guest.conn, newvolname, poolobj, size, sparse,
-                    fmt=fmt, backing_store=backing_store)
+                    fmt=fmt, backing_store=backing_store,
+                    backing_format=backing_format)
             inst.set_vol_install(vol_install)
 
         if not inst.target:
@@ -1875,6 +1877,7 @@ _add_device_address_args(ParserDisk)
 
 # These are all handled specially in _parse
 ParserDisk.add_arg(None, "backing_store", cb=ParserDisk.noset_cb)
+ParserDisk.add_arg(None, "backing_format", cb=ParserDisk.noset_cb)
 ParserDisk.add_arg(None, "pool", cb=ParserDisk.noset_cb)
 ParserDisk.add_arg(None, "vol", cb=ParserDisk.noset_cb)
 ParserDisk.add_arg(None, "size", cb=ParserDisk.noset_cb)

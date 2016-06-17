@@ -707,6 +707,7 @@ class StorageVolume(_StorageObject):
     format = XMLProperty("./target/format/@type", default_cb=_default_format)
     target_path = XMLProperty("./target/path")
     backing_store = XMLProperty("./backingStore/path")
+    backing_format = XMLProperty("./backingStore/format/@type")
 
     def _lazy_refcounts_default_cb(self):
         if self.format != "qcow2":

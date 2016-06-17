@@ -377,7 +377,7 @@ class VirtualDisk(VirtualDevice):
 
     @staticmethod
     def build_vol_install(conn, volname, poolobj, size, sparse,
-                          fmt=None, backing_store=None):
+                          fmt=None, backing_store=None, backing_format=None):
         """
         Helper for building a StorageVolume instance to pass to VirtualDisk
         for eventual storage creation.
@@ -412,6 +412,7 @@ class VirtualDisk(VirtualDevice):
         volinst.capacity = cap
         volinst.allocation = alloc
         volinst.backing_store = backing_store
+        volinst.backing_format = backing_format
 
         if fmt:
             if not volinst.supports_property("format"):

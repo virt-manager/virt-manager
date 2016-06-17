@@ -140,6 +140,11 @@
       <target dev="fda" bus="fdc"/>
       <address type="ccw" cssid="0xfe" ssid="0" devno="01"/>
     </disk>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/new2.img"/>
+      <target dev="vdm" bus="virtio"/>
+    </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
     </controller>
