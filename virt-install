@@ -722,25 +722,24 @@ def start_install(guest, options):
     # we've got everything -- try to start the install
     print_stdout(_("\nStarting install..."))
 
-    dom = None
     try:
         start_time = time.time()
 
         # Do first install phase
-        dom = guest.start_install(meter=meter, doboot=not options.noreboot)
+        guest.start_install(meter=meter, doboot=not options.noreboot)
         cli.connect_console(guest, conscb, wait_on_console)
-        dom = check_domain(guest, dom, conscb,
-                           wait_on_install, wait_time, start_time)
+        check_domain(guest, conscb,
+                     wait_on_install, wait_time, start_time)
 
         print_stdout(_("Domain creation completed."))
-        if not domain_is_active(dom):
+        if not domain_is_active(guest.domain):
             if options.noreboot or not guest.installer.has_install_phase():
                 print_stdout(
                     _("You can restart your domain by running:\n  %s") %
                     cli.virsh_start_cmd(guest))
             else:
                 print_stdout(_("Restarting guest."))
-                dom.create()
+                guest.domain.create()
                 cli.connect_console(guest, conscb, True)
 
     except KeyboardInterrupt:
@@ -749,36 +748,34 @@ def start_install(guest, options):
         raise
     except Exception, e:
         fail(e, do_exit=False)
-        if dom is None and guest.domain is None:
+        if guest.domain is None:
             guest.cleanup_created_disks(meter)
         cli.install_fail(guest)
 
 
-def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
+def check_domain(guest, conscb, wait_for_install, wait_time, start_time):
     """
     Make sure domain ends up in expected state, and wait if for install
     to complete if requested
     """
-    wait_forever = (wait_time < 0)
-
     # Wait a bit so info is accurate
     def check_domain_state():
-        dominfo = dom.info()
+        dominfo = guest.domain.info()
         state = dominfo[0]
 
         if domain_is_crashed(guest.domain):
             fail(_("Domain has crashed."))
 
         if domain_is_shutdown(guest.domain):
-            return dom, state
+            return True, state
 
-        return None, state
+        return False, state
 
     do_sleep = bool(conscb)
     try:
         ret, state = check_domain_state()
         if ret:
-            return ret
+            return
     except Exception, e:
         # Sometimes we see errors from libvirt here due to races
         logging.exception(e)
@@ -790,7 +787,7 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
 
     ret, state = check_domain_state()
     if ret:
-        return ret
+        return
 
     # Domain seems to be running
     logging.debug("Domain state after install: %s", state)
@@ -801,13 +798,14 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
         #   used --wait 0
         #   killed console and guest is still running
         if not guest.installer.has_install_phase():
-            return dom
+            return
 
         print_stdout(
             _("Domain installation still in progress. You can reconnect"
               " to \nthe console to complete the installation process."))
         sys.exit(0)
 
+    wait_forever = (wait_time < 0)
     timestr = (not wait_forever and
                _(" %d minutes") % (int(wait_time) / 60) or "")
     print_stdout(
@@ -830,8 +828,6 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
             sys.exit(1)
 
         time.sleep(2)
-
-    return dom
 
 
 ########################

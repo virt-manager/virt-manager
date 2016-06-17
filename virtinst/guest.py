@@ -404,8 +404,6 @@ class Guest(XMLBuilder):
         except Exception, e:
             logging.debug("Error fetching XML from libvirt object: %s", e)
 
-        return self.domain
-
 
     def _flag_autostart(self):
         """
@@ -457,12 +455,9 @@ class Guest(XMLBuilder):
             self.check_vm_collision(self.conn, self.name,
                                     do_remove=self.replace)
 
-            self.domain = self._create_guest(meter, install_xml, final_xml,
-                                             doboot)
+            self._create_guest(meter, install_xml, final_xml, doboot)
             # Set domain autostart flag if requested
             self._flag_autostart()
-
-            return self.domain
         finally:
             self.installer.cleanup()
 
