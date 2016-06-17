@@ -23,8 +23,6 @@ class VMMCLI(unittest.TestCase):
         self.app.open(extra_opts=["--show-domain-creator"])
         time.sleep(.5)
 
-        uiutils.find_pattern(self.app.root,
-            "Virtual Machine Manager", "frame")
         uiutils.find_pattern(self.app.root, "New VM", "frame")
         self.app.quit()
 

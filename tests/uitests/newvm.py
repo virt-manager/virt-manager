@@ -28,7 +28,7 @@ class NewVM(unittest.TestCase):
         # Create default PXE VM
         uiutils.find_fuzzy(newvm, "Import", "radio").click()
         uiutils.find_fuzzy(newvm, None,
-            "text", "existing storage").text = "/tmp/foo.img"
+            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
