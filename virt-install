@@ -727,7 +727,7 @@ def start_install(guest, options):
         start_time = time.time()
 
         # Do first install phase
-        dom = guest.start_install(meter=meter, noboot=options.noreboot)
+        dom = guest.start_install(meter=meter, doboot=not options.noreboot)
         cli.connect_console(guest, conscb, wait_on_console)
         dom = check_domain(guest, dom, conscb,
                            wait_on_install, wait_time, start_time)

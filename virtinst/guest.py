@@ -372,13 +372,6 @@ class Guest(XMLBuilder):
     # Private install helpers #
     ###########################
 
-    def _build_meter(self, meter):
-        meter_label = _("Creating domain...")
-        meter = util.ensure_meter(meter)
-        meter.start(size=None, text=meter_label)
-
-        return meter
-
     def _build_xml(self):
         install_xml = self._get_install_xml(install=True)
         final_xml = self._get_install_xml(install=False)
@@ -389,27 +382,25 @@ class Guest(XMLBuilder):
 
         return install_xml, final_xml
 
-    def _create_guest(self, meter, install_xml, final_xml, noboot):
+    def _create_guest(self, meter, install_xml, final_xml, doboot):
         """
         Actually do the XML logging, guest defining/creating
 
-        @param noboot: Don't boot guest if no install phase
+        @param doboot: Boot guest even if it has no install phase
         """
-        meter = self._build_meter(meter)
-        doboot = not noboot or self.installer.has_install_phase()
+        meter_label = _("Creating domain...")
+        meter = util.ensure_meter(meter)
+        meter.start(size=None, text=meter_label)
 
-        if doboot:
-            dom = self.conn.createXML(install_xml or final_xml, 0)
-        else:
-            dom = self.conn.defineXML(install_xml or final_xml)
-
-        self.domain = dom
-        meter.end(0)
+        if doboot or self.installer.has_install_phase():
+            self.domain = self.conn.createXML(install_xml or final_xml, 0)
 
         self.domain = self.conn.defineXML(final_xml)
+        meter.end(0)
+
         try:
             logging.debug("XML fetched from libvirt object:\n%s",
-                          dom.XMLDesc(0))
+                          self.domain.XMLDesc(0))
         except Exception, e:
             logging.debug("Error fetching XML from libvirt object: %s", e)
 
@@ -439,7 +430,7 @@ class Guest(XMLBuilder):
     ##############
 
     def start_install(self, meter=None,
-                      dry=False, return_xml=False, noboot=False):
+                      dry=False, return_xml=False, doboot=True):
         """
         Begin the guest install (stage1).
         @param return_xml: Don't create the guest, just return generated XML
@@ -467,7 +458,7 @@ class Guest(XMLBuilder):
                                     do_remove=self.replace)
 
             self.domain = self._create_guest(meter, install_xml, final_xml,
-                                             noboot)
+                                             doboot)
             # Set domain autostart flag if requested
             self._flag_autostart()
 
