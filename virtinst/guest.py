@@ -399,7 +399,7 @@ class Guest(XMLBuilder):
         doboot = not noboot or self.installer.has_install_phase()
 
         if doboot:
-            dom = self.conn.createLinux(start_xml or final_xml, 0)
+            dom = self.conn.createXML(start_xml or final_xml, 0)
         else:
             dom = self.conn.defineXML(start_xml or final_xml)
 

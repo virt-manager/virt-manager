@@ -218,7 +218,7 @@ class MagicURI(object):
             conn.getDomainCapabilities = fake_domcaps
 
         if self.hv:
-            origcreate = conn.createLinux
+            origcreate = conn.createXML
             origdefine = conn.defineXML
             def newcreate(xml, flags):
                 xml = sanitize_xml_for_test_define(xml)
@@ -226,5 +226,5 @@ class MagicURI(object):
             def newdefine(xml):
                 xml = sanitize_xml_for_test_define(xml)
                 return origdefine(xml)
-            conn.createLinux = newcreate
+            conn.createXML = newcreate
             conn.defineXML = newdefine
