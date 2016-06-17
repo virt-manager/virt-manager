@@ -234,14 +234,15 @@ def populate_storage_list(storage_list, vm, conn):
     model = storage_list.get_model()
     model.clear()
 
-    diskdata = [(d.target, d.path, d.read_only, d.shareable) for
+    diskdata = [(d.target, d.path, d.read_only, d.shareable,
+                 d.device in ["cdrom", "floppy"]) for
                 d in vm.get_disk_devices()]
 
-    diskdata.append(("kernel", vm.get_xmlobj().os.kernel, True, False))
-    diskdata.append(("initrd", vm.get_xmlobj().os.initrd, True, False))
-    diskdata.append(("dtb", vm.get_xmlobj().os.dtb, True, False))
+    diskdata.append(("kernel", vm.get_xmlobj().os.kernel, True, False, True))
+    diskdata.append(("initrd", vm.get_xmlobj().os.initrd, True, False, True))
+    diskdata.append(("dtb", vm.get_xmlobj().os.dtb, True, False, True))
 
-    for target, path, ro, shared in diskdata:
+    for target, path, ro, shared, is_media in diskdata:
         if not path:
             continue
 
@@ -262,7 +263,7 @@ def populate_storage_list(storage_list, vm, conn):
 
         if can_del:
             default, definfo = do_we_default(conn, vm.get_name(), vol,
-                                             path, ro, shared)
+                                             path, ro, shared, is_media)
 
         info = None
         if not can_del:
@@ -358,7 +359,7 @@ def can_delete(conn, vol, path):
     return (ret, msg)
 
 
-def do_we_default(conn, vm_name, vol, path, ro, shared):
+def do_we_default(conn, vm_name, vol, path, ro, shared, is_media):
     """ Returns (do we delete by default?, info string if not)"""
     info = ""
 
@@ -377,6 +378,9 @@ def do_we_default(conn, vm_name, vol, path, ro, shared):
 
     if shared:
         info = append_str(info, _("Storage is marked as shareable."))
+
+    if not info and is_media:
+        info = append_str(info, _("Storage is a media device."))
 
     try:
         names = virtinst.VirtualDisk.path_in_use_by(conn.get_backend(), path)
