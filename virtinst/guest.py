@@ -688,12 +688,13 @@ class Guest(XMLBuilder):
             return
         self.add_device(VirtualGraphics(self.conn))
 
-    def add_default_devices(self):
+    def add_default_devices(self, options):
         self.add_default_graphics()
         self.add_default_video_device()
         self.add_default_input_device()
         self.add_default_console_device()
-        self.add_default_usb_controller()
+        if not options.nousb:
+            self.add_default_usb_controller()
         self.add_default_channels()
 
     def _add_install_cdrom(self):

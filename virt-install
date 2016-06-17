@@ -612,7 +612,7 @@ def build_guest_instance(conn, options):
     set_install_media(guest, options.location, options.cdrom,
         options.distro_variant)
 
-    guest.add_default_devices()
+    guest.add_default_devices(options)
 
     # Default to UEFI for aarch64
     if (guest.os.is_arm64() and
@@ -967,6 +967,8 @@ def parse_args():
     devg.add_argument("--sdl", action="store_true", help=argparse.SUPPRESS)
     devg.add_argument("--nographics", action="store_true",
         help=argparse.SUPPRESS)
+    devg.add_argument("--nousb", action="store_true",
+                      default=False, help=argparse.SUPPRESS)
 
 
     gxmlg = parser.add_argument_group(_("Guest Configuration Options"))
@@ -993,7 +995,6 @@ def parse_args():
         default=False, help=argparse.SUPPRESS)
     virg.add_argument("--noacpi", action="store_true",
         default=False, help=argparse.SUPPRESS)
-
 
     misc = parser.add_argument_group(_("Miscellaneous Options"))
     misc.add_argument("--autostart", action="store_true", dest="autostart",
