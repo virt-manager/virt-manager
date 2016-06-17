@@ -380,16 +380,16 @@ class Guest(XMLBuilder):
         return meter
 
     def _build_xml(self):
-        start_xml = self._get_install_xml(install=True)
+        install_xml = self._get_install_xml(install=True)
         final_xml = self._get_install_xml(install=False)
 
         logging.debug("Generated install XML: %s",
-                      (start_xml and ("\n" + start_xml) or "None required"))
+            (install_xml and ("\n" + install_xml) or "None required"))
         logging.debug("Generated boot XML: \n%s", final_xml)
 
-        return start_xml, final_xml
+        return install_xml, final_xml
 
-    def _create_guest(self, meter, start_xml, final_xml, noboot):
+    def _create_guest(self, meter, install_xml, final_xml, noboot):
         """
         Actually do the XML logging, guest defining/creating
 
@@ -399,9 +399,9 @@ class Guest(XMLBuilder):
         doboot = not noboot or self.installer.has_install_phase()
 
         if doboot:
-            dom = self.conn.createXML(start_xml or final_xml, 0)
+            dom = self.conn.createXML(install_xml or final_xml, 0)
         else:
-            dom = self.conn.defineXML(start_xml or final_xml)
+            dom = self.conn.defineXML(install_xml or final_xml)
 
         self.domain = dom
         meter.end(0)
@@ -456,9 +456,9 @@ class Guest(XMLBuilder):
                 for dev in self.get_all_devices():
                     dev.setup(meter)
 
-            start_xml, final_xml = self._build_xml()
+            install_xml, final_xml = self._build_xml()
             if return_xml:
-                return (start_xml, final_xml)
+                return (install_xml, final_xml)
             if dry:
                 return
 
@@ -466,7 +466,7 @@ class Guest(XMLBuilder):
             self.check_vm_collision(self.conn, self.name,
                                     do_remove=self.replace)
 
-            self.domain = self._create_guest(meter, start_xml, final_xml,
+            self.domain = self._create_guest(meter, install_xml, final_xml,
                                              noboot)
             # Set domain autostart flag if requested
             self._flag_autostart()
