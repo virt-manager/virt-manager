@@ -559,28 +559,8 @@ class TestURLFetch(TestBaseCommand):
 class TestInitrdInject(TestBaseCommand):
     description = "Test initrd inject with real kernels, fetched from URLs"
 
-    user_options = TestBaseCommand.user_options + [
-        ("distro=", None, "Comma separated list of distros to test, from "
-                          "the tests internal URL dictionary.")
-    ]
-
-    def initialize_options(self):
-        TestBaseCommand.initialize_options(self)
-        self.distro = ""
-
-    def finalize_options(self):
-        TestBaseCommand.finalize_options(self)
-        orig = str(self.distro)
-        if not orig:
-            self.distro = []
-        else:
-            self.distro = orig.split(",")
-
     def run(self):
         self._testfiles = ["tests.test_inject"]
-        if self.distro:
-            import tests
-            tests.INITRD_TEST_DISTROS += self.distro
         TestBaseCommand.run(self)
 
 

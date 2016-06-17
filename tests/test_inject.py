@@ -6,7 +6,6 @@ import os
 import sys
 import unittest
 
-from tests import INITRD_TEST_DISTROS
 from tests import utils
 
 from virtinst import Guest
@@ -23,8 +22,7 @@ guest.os.os_type = "hvm"
 guest.os.arch = "x86_64"
 meter = util.make_meter(quiet=False)
 
-DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
-OLD_FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
+DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/Server/%s/os/"
 FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Server/%s/os/"
 
 (WARN_RHEL4,
@@ -66,9 +64,8 @@ _add("centos-6-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/6/os/x86_64/",
      warntype=WARN_RHEL5)
 _add("centos-7-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/7/os/x86_64/",
      ks2=True)
-_add("fedora-20", OLD_FEDORA_URL % ("20", "x86_64"), ks2=True)
-_add("fedora-21", FEDORA_URL % ("21", "x86_64"), ks2=True)
-_add("fedora-22", DEVFEDORA_URL % ("22", "x86_64"), ks2=True)
+_add("fedora-23", FEDORA_URL % ("23", "x86_64"), ks2=True)
+_add("fedora-24", DEVFEDORA_URL % ("24", "x86_64"), ks2=True)
 
 
 def exit_cleanup():
@@ -93,6 +90,8 @@ def _fetch_distro(distro):
         cleanup.append(initrd)
         distro.kernel = kernel
         distro.initrd = initrd
+    except Exception, e:
+        print "fetching distro=%s failed: %s" % (distro.name, e)
     finally:
         fetcher.cleanupLocation()
         if origenv:
@@ -125,7 +124,7 @@ def _test_distro(distro):
     nic = distro.virtio and "virtio" or "rtl8139"
     append = "-append \"ks=file:/%s\"" % os.path.basename(injectfile)
     cmd = ("sudo qemu-kvm -enable-kvm -name %s "
-           "-cpu host -m 1500 -sdl "
+           "-cpu host -m 1500 -display gtk "
            "-net bridge,br=virbr0 -net nic,model=%s "
            "-kernel %s -initrd %s %s" %
            (distro.name, nic, kernel, newinitrd, append))
@@ -139,6 +138,7 @@ _printfetch = False
 
 class FetchTests(unittest.TestCase):
     def setUp(self):
+        self.failfast = True
         global _printfetch
         if _printfetch:
             return
@@ -182,12 +182,12 @@ def _make_tests():
     def _make_check_cb(_d):
         return lambda s: _test_distro(_d)
 
-    distros = INITRD_TEST_DISTROS or _alldistros.keys()
     idx = 0
-    for d in distros:
-        dobj = _alldistros[d]
+    for dname, dobj in _alldistros.items():
         idx += 1
-        setattr(FetchTests, "testFetch%.3d" % idx, _make_fetch_cb(dobj))
-        setattr(InjectTests, "testInitrd%.3d" % idx, _make_check_cb(dobj))
+        setattr(FetchTests, "testFetch%.3d_%s" %
+                (idx, dname.replace("-", "_")), _make_fetch_cb(dobj))
+        setattr(InjectTests, "testInitrd%.3d_%s" %
+                (idx, dname.replace("-", "_")), _make_check_cb(dobj))
 
 _make_tests()
