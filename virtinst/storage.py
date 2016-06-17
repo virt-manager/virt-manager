@@ -230,6 +230,17 @@ class StoragePool(_StorageObject):
                 _("Couldn't create default storage pool '%s': %s") %
                 (path, str(e)))
 
+    @staticmethod
+    def manage_path(conn, path):
+        """
+        If the passed path is managed, lookup its storage objects.
+        If the passed path isn't managed, attempt to manage it if
+        we can.
+
+        :returns: (vol, parent pool) tuple
+        """
+        from . import diskbackend
+        return diskbackend.manage_path(conn, path)
 
     @staticmethod
     def get_default_dir(conn, build=False):
@@ -678,7 +689,14 @@ class StorageVolume(_StorageObject):
 
     def _get_vol_type(self):
         if self.type:
-            return self.type
+            if self.type == "file":
+                return self.TYPE_FILE
+            elif self.type == "block":
+                return self.TYPE_BLOCK
+            elif self.type == "dir":
+                return self.TYPE_DIR
+            elif self.type == "network":
+                return self.TYPE_NETWORK
         if (self._pool_xml.type == StoragePool.TYPE_DISK or
             self._pool_xml.type == StoragePool.TYPE_LOGICAL):
             return self.TYPE_BLOCK
@@ -718,6 +736,31 @@ class StorageVolume(_StorageObject):
         is_bool=True, default_cb=_lazy_refcounts_default_cb)
 
 
+    def _detect_backing_store_format(self):
+        logging.debug("Attempting to detect format for backing_store=%s",
+                self.backing_store)
+        vol, pool = StoragePool.manage_path(self.conn, self.backing_store)
+
+        if not vol:
+            logging.debug("Didn't find any volume for backing_store")
+            return None
+
+        # Only set backing format for volumes that support
+        # the 'format' parameter as we know it, like qcow2 etc.
+        volxml = StorageVolume(self.conn, vol.XMLDesc(0))
+        volxml.pool = pool
+        logging.debug("Found backing store volume XML:\n%s",
+                volxml.get_xml_config())
+
+        if volxml.supports_property("format"):
+            logging.debug("Returning format=%s", volxml.format)
+            return volxml.format
+
+        logging.debug("backing_store volume doesn't appear to have "
+            "a file format we can specify, returning None")
+        return None
+
+
     ######################
     # Public API helpers #
     ######################
@@ -728,7 +771,6 @@ class StorageVolume(_StorageObject):
         if self._pool_xml.type == StoragePool.TYPE_GLUSTER:
             return True
         return False
-
 
     def supports_property(self, propname):
         if propname == "format":
@@ -761,6 +803,9 @@ class StorageVolume(_StorageObject):
         """
         Build and install storage volume from xml
         """
+        if self.backing_store and not self.backing_format:
+            self.backing_format = self._detect_backing_store_format()
+
         xml = self.get_xml_config()
         logging.debug("Creating storage volume '%s' with xml:\n%s",
                       self.name, xml)
@@ -784,7 +829,6 @@ class StorageVolume(_StorageObject):
         if self.reflink:
             cloneflags |= getattr(libvirt,
                 "VIR_STORAGE_VOL_CREATE_REFLINK", 1)
-
 
         try:
             self._install_finished = False

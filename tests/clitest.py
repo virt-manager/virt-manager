@@ -466,6 +466,7 @@ c.add_compare(""" \
 --disk vol=gluster-pool/test-gluster.raw,startup_policy=optional \
 --disk %(DIR)s,device=floppy,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01 \
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk \
+--disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol \
 \
 --network user,mac=12:34:56:78:11:22,portgroup=foo,link_state=down,rom_bar=on,rom_file=/tmp/foo \
 --network bridge=foobar,model=virtio,driver_name=qemu,driver_queues=3 \
