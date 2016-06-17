@@ -24,6 +24,14 @@ sysprefix = distutils.sysconfig.get_config_var("prefix")
 
 # pylint: disable=attribute-defined-outside-init
 
+_desktop_files = [
+    ("share/applications", ["data/virt-manager.desktop.in"]),
+]
+_appdata_files = [
+    ("share/appdata", ["data/virt-manager.appdata.xml.in"]),
+]
+
+
 def _generate_potfiles_in():
     def find(dirname, ext):
         ret = []
@@ -42,8 +50,12 @@ def _generate_potfiles_in():
     potfiles += "\n".join(find("virtconv", "*.py")) + "\n\n"
     potfiles += "\n".join(find("virtinst", "*.py")) + "\n\n"
 
+    for ignore, filelist in _desktop_files + _appdata_files:
+        potfiles += "\n".join(filelist) + "\n"
+    potfiles += "\n"
+
     potfiles += "\n".join(["[type: gettext/glade]" + f for
-                          f in find("ui", "*.ui")])
+                          f in find("ui", "*.ui")]) + "\n\n"
 
     return potfiles
 
@@ -75,12 +87,7 @@ class my_build_i18n(distutils.command.build.build):
 
     def _run(self):
         # Borrowed from python-distutils-extra
-        desktop_files = [
-            ("share/applications", ["data/virt-manager.desktop.in"]),
-            ("share/appdata", ["data/virt-manager.appdata.xml"]),
-        ]
         po_dir = "po"
-
 
         # Update po(t) files and print a report
         # We have to change the working dir to the po dir for intltool
@@ -112,7 +119,8 @@ class my_build_i18n(distutils.command.build.build):
             self.distribution.data_files.append((targetpath, (mo_file,)))
 
         # merge .in with translation
-        for (file_set, switch) in [(desktop_files, "-d")]:
+        for (file_set, switch) in [(_desktop_files, "-d"),
+                                   (_appdata_files, "-x")]:
             for (target, files) in file_set:
                 build_target = os.path.join("build", target)
                 if not os.path.exists(build_target):
