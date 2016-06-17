@@ -642,48 +642,6 @@ def build_guest_instance(conn, options):
 # Install process helpers #
 ###########################
 
-def domain_is_crashed(domain):
-    """
-    Return True if the created domain object is in a crashed state
-    """
-    if not domain:
-        return False
-
-    dominfo = domain.info()
-    state = dominfo[0]
-
-    return state == libvirt.VIR_DOMAIN_CRASHED
-
-
-def domain_is_shutdown(domain):
-    """
-    Return True if the created domain object is shutdown
-    """
-    if not domain:
-        return False
-
-    dominfo = domain.info()
-
-    state    = dominfo[0]
-    cpu_time = dominfo[4]
-
-    if state == libvirt.VIR_DOMAIN_SHUTOFF:
-        return True
-
-    # If 'wait' was specified, the dom object we have was looked up
-    # before initially shutting down, which seems to bogus up the
-    # info data (all 0's). So, if it is bogus, assume the domain is
-    # shutdown. We will catch the error later.
-    return state == libvirt.VIR_DOMAIN_NOSTATE and cpu_time == 0
-
-
-def domain_is_active(domain):
-    try:
-        return domain and domain.isActive()
-    except:
-        return False
-
-
 def start_install(guest, options):
     if options.wait:
         wait_on_install = True
@@ -736,7 +694,7 @@ def start_install(guest, options):
                      wait_on_install, wait_time, start_time)
 
         print_stdout(_("Domain creation completed."))
-        if not domain_is_active(guest.domain):
+        if not guest.domain.isActive():
             if options.noreboot or not guest.installer.has_install_phase():
                 print_stdout(
                     _("You can restart your domain by running:\n  %s") %
@@ -763,39 +721,29 @@ def check_domain(guest, conscb, wait_for_install, wait_time, start_time):
     to complete if requested
     """
     # Wait a bit so info is accurate
-    def check_domain_state():
+    def check_domain_inactive():
         dominfo = guest.domain.info()
         state = dominfo[0]
+        logging.debug("Domain state after install: %s", state)
 
-        if domain_is_crashed(guest.domain):
+        if state == libvirt.VIR_DOMAIN_CRASHED:
             fail(_("Domain has crashed."))
 
-        if domain_is_shutdown(guest.domain):
-            return True, state
+        return not guest.domain.isActive()
 
-        return False, state
-
-    do_sleep = bool(conscb)
-    try:
-        ret, state = check_domain_state()
-        if ret:
-            return
-    except Exception, e:
-        # Sometimes we see errors from libvirt here due to races
-        logging.exception(e)
-        do_sleep = True
-
-    if do_sleep:
-        # Sleep a bit and try again to be sure the HV has caught up
-        time.sleep(2)
-
-    ret, state = check_domain_state()
-    if ret:
+    if check_domain_inactive():
         return
 
-    # Domain seems to be running
-    logging.debug("Domain state after install: %s", state)
+    if bool(conscb):
+        # We are trying to detect if the VM shutdown, or the user
+        # just closed the console and the VM is still running. In the
+        # the former case, libvirt may not have caught up yet with the
+        # VM having exited, so wait a bit and check again
+        time.sleep(2)
+        if check_domain_inactive():
+            return
 
+    # If we reach here, the VM still appears to be running.
     if not wait_for_install or wait_time == 0:
         # User either:
         #   used --noautoconsole
@@ -819,18 +767,21 @@ def check_domain(guest, conscb, wait_for_install, wait_time, start_time):
 
     # Wait loop
     while True:
+        if not guest.domain.isActive():
+            print_stdout(_("Domain has shutdown. Continuing."))
+            break
+
         time_elapsed = (time.time() - start_time)
         if not wait_forever and time_elapsed >= wait_time:
             print_stdout(
                 _("Installation has exceeded specified time limit. "
-                        "Exiting application."))
+                  "Exiting application."))
             sys.exit(1)
 
         time.sleep(1)
 
-        if domain_is_shutdown(guest.domain):
+        if not guest.domain.isActive():
             print_stdout(_("Domain has shutdown. Continuing."))
-            dom = guest.domain
             break
 
 
