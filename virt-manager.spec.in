@@ -106,6 +106,7 @@ machine).
 %prep
 %setup -q
 
+
 %build
 %if %{qemu_user}
 %global _qemu_user --qemu-user=%{qemu_user}
@@ -150,6 +151,13 @@ python setup.py \
     --no-update-icon-cache --no-compile-schemas \
     install -O1 --root=%{buildroot}
 %find_lang %{name}
+
+# Replace '#!/usr/bin/env python2' with '#!/usr/bin/python2'
+# The format is ideal for upstream, but not a distro. See:
+# https://fedoraproject.org/wiki/Features/SystemPythonExecutablesUseSystemPython
+for f in $(find %{buildroot} -type f -executable -print); do
+    sed -i "1 s|^#!/usr/bin/env python2|#!%{__python2}|" $f || :
+done
 
 # The conversion script was only added to virt-manager after several
 # Fedora cycles of using gsettings. Installing it now could convert old data
