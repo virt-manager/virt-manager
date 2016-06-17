@@ -410,8 +410,14 @@ def validate_disk(dev, warn_overwrite=False):
     check_path_search(dev)
 
 
-def _run_console(args):
+def _run_console(guest, args):
     logging.debug("Running: %s", " ".join(args))
+    if "VIRTINST_TEST_SUITE" in os.environ:
+        # Add this destroy() in here to trigger more virt-install code
+        # for the test suite
+        guest.domain.destroy()
+        return None
+
     child = os.fork()
     if child:
         return child
@@ -432,7 +438,7 @@ def _gfx_console(guest):
 
     logging.debug("Launching virt-viewer for graphics type '%s'",
         guest.get_devices("graphics")[0].type)
-    return _run_console(args)
+    return _run_console(guest, args)
 
 
 def _txt_console(guest):
@@ -441,7 +447,7 @@ def _txt_console(guest):
             "console", guest.name]
 
     logging.debug("Connecting to text console")
-    return _run_console(args)
+    return _run_console(guest, args)
 
 
 def connect_console(guest, consolecb, wait):

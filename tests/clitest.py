@@ -793,6 +793,10 @@ c.add_valid("--file %(EXISTIMG1)s")  # Existing file, no opts
 c.add_valid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Multiple existing files
 c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent file
 
+c = vinst.add_category("console-tests", "--pxe --nodisks")
+c.add_valid("--nographics")  # mock virsh console waiting
+c.add_valid("--graphics vnc --noreboot")  # mock virt-viewer waiting, with noreboot magic
+c.add_valid("--nographics --wait 1")
 
 
 
