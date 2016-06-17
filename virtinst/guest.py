@@ -914,6 +914,8 @@ class Guest(XMLBuilder):
         for d in self.get_all_devices():
             if d.address.type != d.address.ADDRESS_TYPE_PCI:
                 continue
+            if None in [d.address.domain, d.address.bus, d.address.slot]:
+                continue
 
             addr = d.address
             addrstr = "%d%d%d" % (d.address.domain,

@@ -19,10 +19,19 @@
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/bin/qemu-system-aarch64</emulator>
-    <interface type="bridge">
-      <source bridge="eth0"/>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/var/lib/libvirt/images/foobar.qcow2"/>
+      <target dev="sda" bus="scsi"/>
+    </disk>
+    <controller type="scsi" index="0" model="virtio-scsi">
+      <address type="pci"/>
+    </controller>
+    <interface type="network">
+      <source network="default"/>
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
+      <address type="pci"/>
     </interface>
     <console type="pty"/>
     <channel type="unix">
