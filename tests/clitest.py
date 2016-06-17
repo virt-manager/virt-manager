@@ -796,7 +796,7 @@ c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent 
 c = vinst.add_category("console-tests", "--pxe --nodisks")
 c.add_valid("--nographics")  # mock virsh console waiting
 c.add_valid("--graphics vnc --noreboot")  # mock virt-viewer waiting, with noreboot magic
-c.add_valid("--nographics --wait 1")
+c.add_invalid("--noautoconsole --wait 1")  # --wait 1 is converted to 1 second if we are in the test suite, so this should actually touch the wait machinery. however in this case it exits with failure
 
 
 
