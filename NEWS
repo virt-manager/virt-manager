@@ -1,6 +1,25 @@
  Virtual Machine Manager News
  ============================
 
+Release 1.4.0 (June 18, 2016)
+-----------------------------
+- virt-manager: spice GL console support (Marc-André Lureau, Cole Robinson)
+- Bump gtk and pygobject deps to 3.14
+- virt-manager: add checkbox to forget keyring password (Pavel Hrdina)
+- cli: add --graphics gl= (Marc-André Lureau)
+- cli: add --video accel3d= (Marc-André Lureau)
+- cli: add --graphics listen=none (Marc-André Lureau)
+- cli: add --transient flag (Richard W.M. Jones)
+- cli: --features gic= support, and set a default for it (Pavel Hrdina)
+- cli: Expose --video heads, ram, vram, vgamem
+- cli: add --graphics listen=socket
+- cli: add device address.type/address.bus/...
+- cli: add --disk seclabelX.model (and .label, .relabel)
+- cli: add -cpu cellX.id (and .cpus, and .memory)
+- cli: add --network rom_bar= and rom_file=
+- cli: add --disk backing_format=
+- Many bug fixes and improvements
+
 Release 1.3.2 (December 24, 2015)
 ---------------------------------
 - Fix dependency issues with vte

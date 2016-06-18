@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # isama <bart.formosus@gmail.com>, 2014
 # Cole Robinson <crobinso@redhat.com>, 2011
@@ -12,31 +12,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-27 11:39-0500\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2016-06-18 10:00-0400\n"
 "PO-Revision-Date: 2015-05-01 09:10-0400\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/virt-manager/"
 "language/nl/)\n"
 "Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Zanata 3.8.2\n"
+"X-Generator: Zanata 3.8.4\n"
 
-#: ../virt-manager:57
+#: ../virt-manager:56
 msgid "Error starting Virtual Machine Manager"
 msgstr "Fout bij het starten van Virtuele machine beheerder"
 
-#: ../virt-manager:211
+#: ../virt-manager:225
 msgid "virt-manager requires libvirt 0.6.0 or later."
 msgstr "virt-manager vereist libvirt 0.6.0 of hoger"
 
-#: ../virt-install:165
+#: ../virt-install:166
 msgid "Cannot specify storage and use --nodisks"
 msgstr "Kan opslag niet specificeren en gebruik --nodisks"
 
-#: ../virt-install:169
+#: ../virt-install:170
 msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
@@ -44,169 +44,178 @@ msgstr ""
 "Kan --file, --nonsparse of --file-size niet combineren met --disk opties. "
 "Gebruik --disk PAD[,size=GROOTTE][,sparse=yes|no]"
 
-#: ../virt-install:222
+#: ../virt-install:223
 msgid "Cannot use --mac with --nonetworks"
 msgstr "Kan --mac niet gebruiken met --nonetworks"
 
-#: ../virt-install:224
+#: ../virt-install:225
 msgid "Cannot use --bridge with --nonetworks"
 msgstr "Kan --bridge niet gebruiken met --nonetworks"
 
-#: ../virt-install:226
+#: ../virt-install:227
 msgid "Cannot use --nonetworks with --network"
 msgstr "Kan --nonetworks niet gebruiken met --network"
 
-#: ../virt-install:230
+#: ../virt-install:231
 #, fuzzy
 msgid "Can't use --pxe without any network"
 msgstr "Kan --mac niet gebruiken met --nonetworks"
 
-#: ../virt-install:237
+#: ../virt-install:238
 msgid "Cannot mix both --bridge and --network arguments"
 msgstr "Kan de --bridge en --network argumenten niet tezamen gebruiken"
 
-#: ../virt-install:290
+#: ../virt-install:291
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr "Kan --graphics en oude stijl grafische opties niet vermengen"
 
-#: ../virt-install:294
+#: ../virt-install:295
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr "Kan slechts één van VNC, SDL, --graphics of --nographics speciferen"
 
-#: ../virt-install:342
+#: ../virt-install:343
 msgid "Can't do more than one of --hvm, --paravirt, or --container"
 msgstr "Kan slechts een van --hvm, --paravirt, of --container gebruiken"
 
-#: ../virt-install:356 ../virt-install:357
+#: ../virt-install:357 ../virt-install:358
 msgid "default"
 msgstr "standaard"
 
-#: ../virt-install:403
+#: ../virt-install:404
 #, c-format
 msgid "Error validating install location: %s"
 msgstr "Fout bij het valideren van installatielocatie: %s"
 
-#: ../virt-install:423
+#: ../virt-install:424
 msgid "--name is required"
 msgstr "--name is vereist"
 
-#: ../virt-install:426
+#: ../virt-install:427
 msgid "--memory amount in MiB is required"
 msgstr "--memory hoeveelheid in MiB is vereist"
 
-#: ../virt-install:431
+#: ../virt-install:432
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
-#: ../virt-install:439
-msgid "An install method must be specified\n"
+#: ../virt-install:440
+msgid ""
+"An install method must be specified\n"
 "(%(methods)s)"
-msgstr "Een installatie methode moet opgegeven worden\n"
+msgstr ""
+"Een installatie methode moet opgegeven worden\n"
 "(%(methods)s)"
 
-#: ../virt-install:446
+#: ../virt-install:447
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
 
-#: ../virt-install:454
+#: ../virt-install:453
+msgid "--noreboot and --transient can not be specified together"
+msgstr ""
+
+#: ../virt-install:458
 msgid "Only one install method can be used (%(methods)s)"
 msgstr "Slechts één installatie methode (%(methods)s) kan gebruikt worden"
 
-#: ../virt-install:460
+#: ../virt-install:464
 #, c-format
 msgid "Install methods (%s) cannot be specified for container guests"
 msgstr ""
 "Installeer methode (%s) kan niet opgegeven worden voor container gasten"
 
-#: ../virt-install:465
+#: ../virt-install:469
 msgid "Network PXE boot is not supported for paravirtualized guests"
 msgstr ""
 "Netwerk PXE opstarten wordt niet ondersteund voor para-gevirtualiseerde "
 "gasten"
 
-#: ../virt-install:468
+#: ../virt-install:472
 msgid "Paravirtualized guests cannot install off cdrom media."
 msgstr ""
 "Para-gevirtualiseerde gasten kunnen niet geïnstalleerd worden vanaf cdrom "
 "media."
 
-#: ../virt-install:473
+#: ../virt-install:477
 msgid "Libvirt version does not support remote --location installs"
 msgstr "Libvirt versie ondersteunt geen - locatie installaties op afstand"
 
-#: ../virt-install:479
+#: ../virt-install:483
 msgid "--extra-args only work if specified with --location."
 msgstr "--extra-args werkt alleen als het opgegeven wordt met --location."
 
-#: ../virt-install:482
+#: ../virt-install:486
 msgid "--initrd-inject only works if specified with --location."
 msgstr "--initrd-inject werkt alleen indien gespecificeerd met --location."
 
-#: ../virt-install:493
+#: ../virt-install:497
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
 msgstr ""
 
-#: ../virt-install:506
+#: ../virt-install:510
 msgid ""
 "No --console device added, you likely will not see text install output from "
 "the guest."
 msgstr ""
 
-#: ../virt-install:527
+#: ../virt-install:532
 msgid ""
 "Did not find '%(console_string)s' in --extra-args, which is likely required "
 "to see text install output from the guest."
 msgstr ""
 
-#: ../virt-install:534
+#: ../virt-install:539
 msgid "The guest's network configuration does not support PXE"
 msgstr "De netwerk configuratie van de gast ondersteunt PXE niet"
 
-#: ../virt-install:538
+#: ../virt-install:544
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with -"
-"-os-variant for optimal results."
+"No operating system detected, VM performance may suffer. Specify an OS with "
+"--os-variant for optimal results."
 msgstr ""
 
-#: ../virt-install:558
+#: ../virt-install:564
 msgid "A disk device must be specified with --import."
 msgstr "Een schijf apparaat moet gespecificeerd worden met --import."
 
-#: ../virt-install:724
+#: ../virt-install:678
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
-#: ../virt-install:734
-msgid "\n"
+#: ../virt-install:688
+msgid ""
+"\n"
 "Starting install..."
-msgstr "\n"
+msgstr ""
+"\n"
 "Installatie wordt gestart..."
 
-#: ../virt-install:752
+#: ../virt-install:700
 msgid "Domain creation completed."
 msgstr ""
 
-#: ../virt-install:756
+#: ../virt-install:704
 #, c-format
-msgid "You can restart your domain by running:\n"
+msgid ""
+"You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
-#: ../virt-install:759
+#: ../virt-install:707
 msgid "Restarting guest."
 msgstr ""
 
-#: ../virt-install:765
+#: ../virt-install:713
 msgid "Domain install interrupted."
 msgstr "Domein installatie onderbroken."
 
-#: ../virt-install:787
+#: ../virt-install:735
 msgid "Domain has crashed."
 msgstr "Domein is gecrasht."
 
-#: ../virt-install:824
+#: ../virt-install:766
 msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
@@ -214,147 +223,149 @@ msgstr ""
 "Domein installatie is nog bezig. Je kunt opnieuw verbinden met\n"
 "de console om het installatie proces te voltooien."
 
-#: ../virt-install:829
+#: ../virt-install:772
 #, c-format
 msgid " %d minutes"
 msgstr "%d minuten"
 
-#: ../virt-install:831
+#: ../virt-install:774
 msgid ""
 "Domain installation still in progress. Waiting%(time_string)s for "
 "installation to complete."
 msgstr ""
 
-#: ../virt-install:838
+#: ../virt-install:781 ../virt-install:794
 msgid "Domain has shutdown. Continuing."
 msgstr "Domein is afgesloten. Ga verder."
 
-#: ../virt-install:845
+#: ../virt-install:787
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
 "Installatie heeft de gespecificeerde tijdslimiet overschreden. Toepassing "
 "wordt afgesloten."
 
-#: ../virt-install:870
+#: ../virt-install:809
 msgid "Dry run completed successfully"
 msgstr "Uitprobeer uitvoering met succes aangemaakt."
 
-#: ../virt-install:877
+#: ../virt-install:813
+#, c-format
+msgid "Unknown XML step request '%s', must be 1, 2, or all"
+msgstr ""
+
+#: ../virt-install:820
 msgid "Requested installation does not have XML step 2"
 msgstr "Gevraagde installatie heeft geen XML stap 2"
 
-#: ../virt-install:881
-msgid "Requested installation does not have XML step 3"
-msgstr "Gevraagde installatie heeft geen XML stap 3"
-
-#: ../virt-install:900
+#: ../virt-install:837
 msgid "Create a new virtual machine from specified install media."
 msgstr ""
 
-#: ../virt-install:904 ../virt-clone:109
+#: ../virt-install:841 ../virt-clone:109
 msgid "General Options"
 msgstr "Algemene opties"
 
-#: ../virt-install:906
+#: ../virt-install:843
 msgid "Name of the guest instance"
 msgstr "Naam van gast aanhaling"
 
-#: ../virt-install:913
+#: ../virt-install:850
 msgid "Installation Method Options"
 msgstr "Installatie methode opties"
 
-#: ../virt-install:915
+#: ../virt-install:852
 msgid "CD-ROM installation media"
 msgstr "CD-ROM installatie media"
 
-#: ../virt-install:917
+#: ../virt-install:854
 msgid ""
 "Installation source (eg, nfs:host:/path, http://host/path, ftp://host/path)"
 msgstr ""
 "Installatie bron (b.v., nfs:host:/pad, http://host/pad, ftp://host/pad)"
 
-#: ../virt-install:920
+#: ../virt-install:857
 msgid "Boot from the network using the PXE protocol"
 msgstr "Opstarten vanaf het netwerk met het PXE protocol"
 
-#: ../virt-install:922
+#: ../virt-install:859
 msgid "Build guest around an existing disk image"
 msgstr "Bouw gast met een bestaande schijf image"
 
-#: ../virt-install:924
+#: ../virt-install:861
 msgid "Treat the CD-ROM media as a Live CD"
 msgstr "Behandel de CD-ROM als een live CD"
 
-#: ../virt-install:926
+#: ../virt-install:863
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
-"Extra argumenten om door te geven aan de installatie kernel opgestart vanaf -"
-"-location"
+"Extra argumenten om door te geven aan de installatie kernel opgestart vanaf "
+"--location"
 
-#: ../virt-install:929
+#: ../virt-install:866
 msgid "Add given file to root of initrd from --location"
 msgstr "Voeg gegeven bestand toe aan de root van initrd van --location"
 
-#: ../virt-install:936
+#: ../virt-install:873
 msgid ""
 "The OS variant being installed guests, e.g. 'fedora18', 'rhel6', 'winxp', "
 "etc."
 msgstr ""
 
-#: ../virt-install:943
+#: ../virt-install:880
 msgid "Device Options"
 msgstr "Apparaat opties"
 
-#: ../virt-install:973
+#: ../virt-install:910
 msgid "Guest Configuration Options"
 msgstr "Gast configuratie opties"
 
-#: ../virt-install:977
+#: ../virt-install:914
 msgid "Virtualization Platform Options"
 msgstr "Virtualisatie platform opties"
 
-#: ../virt-install:979
+#: ../virt-install:916
 msgid "This guest should be a fully virtualized guest"
 msgstr "Deze gast moet een volledig gevirtualiseerde gast zijn"
 
-#: ../virt-install:981
+#: ../virt-install:918
 msgid "This guest should be a paravirtualized guest"
 msgstr "Deze gast moet een volledig para-gevirtualiseerde gast zijn"
 
-#: ../virt-install:983
+#: ../virt-install:920
 msgid "This guest should be a container guest"
 msgstr "Deze gast moet een container gast zijn"
 
-#: ../virt-install:986
+#: ../virt-install:923
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Te gebruiken hypervisor naam (kvm, qemu, xen, ...)"
 
-#: ../virt-install:990
+#: ../virt-install:927
 msgid "The CPU architecture to simulate"
 msgstr "Te simuleren CPU architectuur"
 
-#: ../virt-install:992
+#: ../virt-install:929
 msgid "The machine type to emulate"
 msgstr "Te emuleren machine type"
 
-#: ../virt-install:999 ../virt-clone:145 ../virt-xml:392
+#: ../virt-install:936 ../virt-clone:145 ../virt-xml:392
 msgid "Miscellaneous Options"
 msgstr "Diverse opties"
 
-#: ../virt-install:1002
+#: ../virt-install:939
 msgid "Have domain autostart on host boot up."
 msgstr "Laat domein automatisch starten bij opstarten."
 
-#: ../virt-install:1004
+#: ../virt-install:942
+#, fuzzy
+msgid "Create a transient domain."
+msgstr "Domein aanmaken..."
+
+#: ../virt-install:944
 msgid "Minutes to wait for install to complete."
 msgstr ""
 
-#: ../virt-install:1046
-msgid "--print-step must be 1, 2, 3, or all"
-msgstr "--print-step moet 1, 2, 3 of all zijn"
-
-#: ../virt-install:1068 ../virt-clone:215
+#: ../virt-install:1001 ../virt-clone:215
 msgid "Installation aborted at user request"
 msgstr "Installatie afgebroken op verzoek van de gebruiker"
 
@@ -386,7 +397,6 @@ msgstr ""
 msgid "Name of the original guest; The status must be shut off or paused."
 msgstr ""
 "Naam van de originele gast; the status moet uitgeschakeld of gepauzeerd zijn."
-""
 
 #: ../virt-clone:114
 msgid "XML file to use as the original guest."
@@ -418,8 +428,8 @@ msgstr "Nieuw bestand te gebruiken als de schijf image voor de nieuwe gast"
 
 #: ../virt-clone:129
 msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy="
-"hdc)"
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
+"copy=hdc)"
 msgstr ""
 "Forceer het kopiëren van apparaten (b.v., als 'hdc' een alleen-lezen cdrom "
 "apparaat is, --force-copy=hdc)"
@@ -489,7 +499,7 @@ msgstr ""
 msgid "Creating guest '%s'."
 msgstr ""
 
-#: ../virt-convert:139 ../virt-xml:484
+#: ../virt-convert:139 ../virt-xml:481
 msgid "Aborted at user request"
 msgstr "Afgebroken op verzoek van de gebruiker"
 
@@ -517,31 +527,31 @@ msgstr ""
 msgid "--edit %s requested but there's only %s --%s object in the XML"
 msgstr ""
 
-#: ../virt-xml:150
+#: ../virt-xml:151
 #, c-format
 msgid "No matching objects found for --%s %s"
 msgstr ""
 
-#: ../virt-xml:166
+#: ../virt-xml:167
 #, c-format
 msgid "One of %s must be specified."
 msgstr "Een van %s moet opgegeven worden."
 
-#: ../virt-xml:169
+#: ../virt-xml:170
 #, c-format
 msgid "Conflicting options %s"
 msgstr ""
 
-#: ../virt-xml:180
+#: ../virt-xml:181
 msgid "No change specified."
 msgstr "Geen wijziging opgegeven."
 
-#: ../virt-xml:182
+#: ../virt-xml:183
 #, c-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr ""
 
-#: ../virt-xml:195
+#: ../virt-xml:196
 #, c-format
 msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
 msgstr ""
@@ -551,12 +561,12 @@ msgstr ""
 msgid "Cannot use --add-device with --%s"
 msgstr "Kan --add-device niet gebruiken met --%s"
 
-#: ../virt-xml:214
+#: ../virt-xml:213
 #, c-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "Kan --remove-device niet gebruiken met --%s"
 
-#: ../virt-xml:236
+#: ../virt-xml:235
 #, c-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml niet ondersteund voor %s"
@@ -611,7 +621,8 @@ msgid ""
 msgstr ""
 
 #: ../virt-xml:360
-msgid "Add specified device. Example:\n"
+msgid ""
+"Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
 
@@ -652,24 +663,24 @@ msgstr ""
 msgid "XML options"
 msgstr "XML opties"
 
-#: ../virt-xml:419
+#: ../virt-xml:418
 msgid "Can't use --confirm with stdin input."
 msgstr "Kan --confirm niet gebuiken met stdin invoer"
 
-#: ../virt-xml:421
+#: ../virt-xml:420
 msgid "Can't use --update with stdin input."
 msgstr "Kan --update niet gebruiken met stdin invoer"
 
-#: ../virt-xml:424
+#: ../virt-xml:423
 msgid "A domain must be specified"
 msgstr "Een domein moet opgegeven worden"
 
-#: ../virt-xml:451
+#: ../virt-xml:450
 #, c-format
 msgid "Don't know how to --update for --%s"
 msgstr ""
 
-#: ../virt-xml:470
+#: ../virt-xml:467
 msgid "Changes will take effect after the next domain shutdown."
 msgstr ""
 
@@ -694,33 +705,33 @@ msgid "LUN Passthrough"
 msgstr ""
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:570
-#: ../virtManager/addhardware.py:682 ../virtManager/addhardware.py:698
-#: ../virtManager/addhardware.py:749 ../virtManager/details.py:2537
+#: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:551
+#: ../virtManager/addhardware.py:663 ../virtManager/addhardware.py:679
+#: ../virtManager/addhardware.py:730 ../virtManager/details.py:2540
 #: ../virtManager/gfxdetails.py:84 ../virtManager/preferences.py:165
 msgid "Hypervisor default"
 msgstr "Hypervisor standaard"
 
 #: ../virtManager/addhardware.py:340 ../virtManager/addstorage.py:196
-#: ../virtManager/create.py:483
+#: ../virtManager/create.py:488
 msgid "Connection does not support storage management."
 msgstr "Verbinding ondersteunt geen geheugenbeheer."
 
-#: ../virtManager/addhardware.py:350 ../virtManager/addhardware.py:1090
+#: ../virtManager/addhardware.py:350 ../virtManager/addhardware.py:1071
 #: ../ui/create.ui.h:55
 msgid "Storage"
 msgstr "Opslag"
 
-#: ../virtManager/addhardware.py:352 ../virtManager/addhardware.py:1092
+#: ../virtManager/addhardware.py:352 ../virtManager/addhardware.py:1073
 msgid "Controller"
 msgstr "Controller"
 
-#: ../virtManager/addhardware.py:353 ../virtManager/addhardware.py:1094
+#: ../virtManager/addhardware.py:353 ../virtManager/addhardware.py:1075
 #: ../virtinst/network.py:195
 msgid "Network"
 msgstr "Netwerk"
 
-#: ../virtManager/addhardware.py:354 ../virtManager/addhardware.py:1096
+#: ../virtManager/addhardware.py:354 ../virtManager/addhardware.py:1077
 #: ../virtManager/details.py:200
 msgid "Input"
 msgstr "Input"
@@ -731,16 +742,16 @@ msgstr "Input"
 msgid "Not supported for this guest type."
 msgstr "Wordt niet ondersteund voor dit type guest."
 
-#: ../virtManager/addhardware.py:356 ../virtManager/addhardware.py:1098
+#: ../virtManager/addhardware.py:356 ../virtManager/addhardware.py:1079
 msgid "Graphics"
 msgstr "Grafisch"
 
-#: ../virtManager/addhardware.py:358 ../virtManager/addhardware.py:1100
+#: ../virtManager/addhardware.py:358 ../virtManager/addhardware.py:1081
 msgid "Sound"
 msgstr "Geluid"
 
 #: ../virtManager/addhardware.py:361 ../virtManager/details.py:204
-#: ../ui/details.ui.h:169
+#: ../ui/details.ui.h:170
 msgid "Serial"
 msgstr ""
 
@@ -782,7 +793,7 @@ msgid "Libvirt version does not support video devices."
 msgstr "Libvirt versie ondersteunt geen video apparaten."
 
 #: ../virtManager/addhardware.py:391 ../virtManager/details.py:242
-#: ../virtManager/domain.py:280
+#: ../virtManager/domain.py:279
 msgid "Watchdog"
 msgstr "Bewaker"
 
@@ -794,16 +805,16 @@ msgstr ""
 msgid "Not supported for this hypervisor/libvirt combination."
 msgstr "Niet ondersteund voor deze hypervisor/libvirt combinatie."
 
-#: ../virtManager/addhardware.py:400 ../virtManager/addhardware.py:1108
+#: ../virtManager/addhardware.py:400 ../virtManager/addhardware.py:1089
 #: ../virtManager/details.py:241
 msgid "Smartcard"
 msgstr "Smartcard"
 
-#: ../virtManager/addhardware.py:402 ../virtManager/addhardware.py:1110
+#: ../virtManager/addhardware.py:402 ../virtManager/addhardware.py:1091
 msgid "USB Redirection"
 msgstr "USB Redirection"
 
-#: ../virtManager/addhardware.py:404 ../virtManager/addhardware.py:1112
+#: ../virtManager/addhardware.py:404 ../virtManager/addhardware.py:1093
 #: ../virtManager/details.py:239
 msgid "TPM"
 msgstr "TPM"
@@ -812,59 +823,59 @@ msgstr "TPM"
 msgid "RNG"
 msgstr ""
 
-#: ../virtManager/addhardware.py:407 ../virtManager/addhardware.py:1116
+#: ../virtManager/addhardware.py:407 ../virtManager/addhardware.py:1097
 #: ../virtManager/details.py:240
 msgid "Panic Notifier"
 msgstr ""
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:603 ../virtManager/netlist.py:96
+#: ../virtManager/addhardware.py:584 ../virtManager/netlist.py:96
 msgid "Passthrough"
 msgstr ""
 
-#: ../virtManager/addhardware.py:604
+#: ../virtManager/addhardware.py:585
 msgid "Host"
 msgstr ""
 
 #. [xml value, label, conn details]
-#: ../virtManager/addhardware.py:631
+#: ../virtManager/addhardware.py:612
 msgid "Spice channel"
 msgstr ""
 
-#: ../virtManager/addhardware.py:717 ../virtManager/details.py:171
+#: ../virtManager/addhardware.py:698 ../virtManager/details.py:171
 #: ../virtManager/details.py:3156 ../virtinst/devicecontroller.py:44
 msgid "Floppy"
 msgstr ""
 
-#: ../virtManager/addhardware.py:762
+#: ../virtManager/addhardware.py:743
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB grafisch tablet"
 
-#: ../virtManager/addhardware.py:765 ../virtManager/create.py:1078
-#: ../virtManager/create.py:1081
+#: ../virtManager/addhardware.py:746 ../virtManager/create.py:1082
+#: ../virtManager/create.py:1085
 msgid "Generic"
 msgstr "Algemeen"
 
-#: ../virtManager/addhardware.py:789
+#: ../virtManager/addhardware.py:770
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Fout bij het veranderen van VM configuratie: %s"
 
-#: ../virtManager/addhardware.py:815
+#: ../virtManager/addhardware.py:796
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr ""
 "Sommige veranderingen kunnen opnieuw opstarten van de guest vereisen om "
 "effect te hebben."
 
-#: ../virtManager/addhardware.py:818
+#: ../virtManager/addhardware.py:799
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "Deze wijzigingen hebben effect na de volgende herstart van de guest."
 
-#: ../virtManager/addhardware.py:886
+#: ../virtManager/addhardware.py:867
 msgid "No Devices Available"
 msgstr "Geen apparaten beschikbaar"
 
-#: ../virtManager/addhardware.py:907
+#: ../virtManager/addhardware.py:888
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -872,46 +883,46 @@ msgid ""
 "You can change the USB controller type in the VM details screen."
 msgstr ""
 
-#: ../virtManager/addhardware.py:1088 ../virtManager/create.py:247
+#: ../virtManager/addhardware.py:1069 ../virtManager/create.py:252
 msgid "Error"
 msgstr "Fout"
 
-#: ../virtManager/addhardware.py:1102
+#: ../virtManager/addhardware.py:1083
 msgid "Video Device"
 msgstr "Video apparaat"
 
-#: ../virtManager/addhardware.py:1104
+#: ../virtManager/addhardware.py:1085
 msgid "Watchdog Device"
 msgstr "Bewaker apparaat"
 
-#: ../virtManager/addhardware.py:1106
+#: ../virtManager/addhardware.py:1087
 msgid "Filesystem Passthrough"
 msgstr "Bestandssysteem Passthrough"
 
-#: ../virtManager/addhardware.py:1114
+#: ../virtManager/addhardware.py:1095
 msgid "Random Number Generator"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1120 ../virtManager/details.py:2841
+#: ../virtManager/addhardware.py:1101 ../virtManager/details.py:2844
 #, python-format
 msgid "%s Device"
 msgstr "%s apparaat"
 
-#: ../virtManager/addhardware.py:1124
+#: ../virtManager/addhardware.py:1105
 #, fuzzy
 msgid "PCI Device"
 msgstr "%s apparaat"
 
-#: ../virtManager/addhardware.py:1125
+#: ../virtManager/addhardware.py:1106
 #, fuzzy
 msgid "USB Device"
 msgstr "%s apparaat"
 
-#: ../virtManager/addhardware.py:1326
+#: ../virtManager/addhardware.py:1307
 msgid "Are you sure you want to add this device?"
 msgstr "Weet je zeker dat je dit apparaat wilt toevoegen?"
 
-#: ../virtManager/addhardware.py:1329
+#: ../virtManager/addhardware.py:1310
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -919,135 +930,135 @@ msgstr ""
 "Dit apparaat kon niet verbonden worden met de draaiende machine. Wilt u het "
 "apparaat beschikbaar maken na de eerstvolgende guest shutdown?"
 
-#: ../virtManager/addhardware.py:1345
+#: ../virtManager/addhardware.py:1326
 #, python-format
 msgid "Error adding device: %s"
 msgstr "Fout bij toevoegen van apparaat: %s"
 
-#: ../virtManager/addhardware.py:1357
+#: ../virtManager/addhardware.py:1338
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Kan apparaat niet toevoegen: %s"
 
-#: ../virtManager/addhardware.py:1376
+#: ../virtManager/addhardware.py:1357
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr "Niet-afgevangen fout bij het valideren van hardware input: %s"
 
-#: ../virtManager/addhardware.py:1386
+#: ../virtManager/addhardware.py:1367
 msgid "Creating device"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1387
+#: ../virtManager/addhardware.py:1368
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr ""
 
-#: ../virtManager/addhardware.py:1500 ../virtManager/addhardware.py:1523
-#: ../virtManager/create.py:1962
+#: ../virtManager/addhardware.py:1481 ../virtManager/addhardware.py:1504
+#: ../virtManager/create.py:1972
 msgid "Storage parameter error."
 msgstr "Opslag parameter fout."
 
-#: ../virtManager/addhardware.py:1540
+#: ../virtManager/addhardware.py:1521
 msgid "Network selection error."
 msgstr "Netwerkselectie fout."
 
-#: ../virtManager/addhardware.py:1541
+#: ../virtManager/addhardware.py:1522
 msgid "A network source must be selected."
 msgstr "Een netwerk bron moet geselecteerd worden."
 
-#: ../virtManager/addhardware.py:1544
+#: ../virtManager/addhardware.py:1525
 msgid "Invalid MAC address"
 msgstr "Ongeldig MAC adres"
 
-#: ../virtManager/addhardware.py:1545
+#: ../virtManager/addhardware.py:1526
 msgid "A MAC address must be entered."
 msgstr "Een MAC adres moet ingevuld worden."
 
-#: ../virtManager/addhardware.py:1575
+#: ../virtManager/addhardware.py:1556
 msgid "Graphics device parameter error"
 msgstr "Grafische apparaat parameter fout"
 
-#: ../virtManager/addhardware.py:1584
+#: ../virtManager/addhardware.py:1565
 msgid "Sound device parameter error"
 msgstr "Geluid apparaat parameter fout"
 
-#: ../virtManager/addhardware.py:1589
+#: ../virtManager/addhardware.py:1570
 msgid "Physical Device Required"
 msgstr "Fysiek apparaat vereist"
 
-#: ../virtManager/addhardware.py:1590
+#: ../virtManager/addhardware.py:1571
 msgid "A device must be selected."
 msgstr "Een apparaat moet geselecteerd worden."
 
-#: ../virtManager/addhardware.py:1602
+#: ../virtManager/addhardware.py:1583
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "Het apparaat is al in gebruik door andere gasten %s"
 
-#: ../virtManager/addhardware.py:1604
+#: ../virtManager/addhardware.py:1585
 msgid "Do you really want to use the device?"
 msgstr "Weet je zeker dat je het apparaat wil gebruiken?"
 
-#: ../virtManager/addhardware.py:1610
+#: ../virtManager/addhardware.py:1591
 msgid "Host device parameter error"
 msgstr "Host apparaat parameter fout"
 
-#: ../virtManager/addhardware.py:1676
+#: ../virtManager/addhardware.py:1657
 #, python-format
 msgid "%s device parameter error"
 msgstr "%s apparaat parameter fout"
 
-#: ../virtManager/addhardware.py:1687
+#: ../virtManager/addhardware.py:1668
 msgid "Video device parameter error"
 msgstr "Video apparaat parameter fout"
 
-#: ../virtManager/addhardware.py:1699
+#: ../virtManager/addhardware.py:1680
 msgid "Watchdog parameter error"
 msgstr "Bewaker parameter fout"
 
-#: ../virtManager/addhardware.py:1714
+#: ../virtManager/addhardware.py:1695
 msgid "Smartcard device parameter error"
 msgstr "Smartcard apparaat parameter fout"
 
-#: ../virtManager/addhardware.py:1733
+#: ../virtManager/addhardware.py:1714
 msgid "USB redirected device parameter error"
 msgstr "Geluid apparaat parameter fout"
 
-#: ../virtManager/addhardware.py:1753
+#: ../virtManager/addhardware.py:1734
 msgid "TPM device parameter error"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1771
+#: ../virtManager/addhardware.py:1752
 msgid "Panic device parameter error"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1814 ../virtManager/addhardware.py:1826
-#: ../virtManager/addhardware.py:1829 ../virtManager/addhardware.py:1841
-#: ../virtManager/addhardware.py:1844
+#: ../virtManager/addhardware.py:1795 ../virtManager/addhardware.py:1807
+#: ../virtManager/addhardware.py:1810 ../virtManager/addhardware.py:1822
+#: ../virtManager/addhardware.py:1825
 msgid "RNG selection error."
 msgstr ""
 
-#: ../virtManager/addhardware.py:1815
+#: ../virtManager/addhardware.py:1796
 msgid "A device must be specified."
 msgstr "Er moet een apparaat opgegeven worden."
 
-#: ../virtManager/addhardware.py:1827
+#: ../virtManager/addhardware.py:1808
 msgid "Please specify both bind and connect host"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1830
+#: ../virtManager/addhardware.py:1811
 msgid "Please specify both bind and connect service"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1842
+#: ../virtManager/addhardware.py:1823
 msgid "The EGD host must be specified."
 msgstr ""
 
-#: ../virtManager/addhardware.py:1845
+#: ../virtManager/addhardware.py:1826
 msgid "The EGD service must be specified."
 msgstr ""
 
-#: ../virtManager/addhardware.py:1864
+#: ../virtManager/addhardware.py:1845
 msgid "RNG device parameter error"
 msgstr ""
 
@@ -1128,7 +1139,7 @@ msgstr "Floppy D_rive"
 msgid "Floppy _Image"
 msgstr "Floppy _image"
 
-#: ../virtManager/choosecd.py:101 ../virtManager/create.py:608
+#: ../virtManager/choosecd.py:101 ../virtManager/create.py:613
 msgid "Physical CDROM passthrough not supported with this hypervisor"
 msgstr ""
 
@@ -1153,17 +1164,18 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "Kan onbeheerde opslag op afstand niet klonen."
 
 #: ../virtManager/clone.py:84
-msgid "Block devices to clone must be libvirt\n"
+msgid ""
+"Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 "Te klonen blok apparaten moeten libvirt\n"
 "beheerde opslag volumes zijn. "
 
-#: ../virtManager/clone.py:87 ../virtManager/delete.py:351
+#: ../virtManager/clone.py:87 ../virtManager/delete.py:352
 msgid "No write access to parent directory."
 msgstr "Geen toegang tot ouder map."
 
-#: ../virtManager/clone.py:89 ../virtManager/delete.py:349
+#: ../virtManager/clone.py:89 ../virtManager/delete.py:350
 msgid "Path does not exist."
 msgstr "Pad bestaat niet."
 
@@ -1254,7 +1266,6 @@ msgstr ""
 "\n"
 "%s\n"
 "Het draaien van de nieuwe guest kan data in deze schijf images overschrijven."
-""
 
 #: ../virtManager/clone.py:792
 #, python-format
@@ -1324,34 +1335,34 @@ msgstr "Een host naam wordt vereist voor verbindingen op afstand."
 msgid "Authentication required"
 msgstr ""
 
-#: ../virtManager/connection.py:417
+#: ../virtManager/connection.py:418
 msgid "User session"
 msgstr ""
 
-#: ../virtManager/connection.py:580 ../virtManager/migrate.py:297
+#: ../virtManager/connection.py:581 ../virtManager/migrate.py:297
 msgid "Disconnected"
 msgstr "Niet-verbonden"
 
-#: ../virtManager/connection.py:582
+#: ../virtManager/connection.py:583
 msgid "Connecting"
 msgstr "Bezig met verbinden"
 
-#: ../virtManager/connection.py:584 ../virtManager/host.py:632
-#: ../virtManager/host.py:845 ../virtManager/libvirtobject.py:214
+#: ../virtManager/connection.py:585 ../virtManager/host.py:631
+#: ../virtManager/host.py:844 ../virtManager/libvirtobject.py:214
 #: ../virtManager/storagelist.py:347 ../ui/storagelist.ui.h:11
 msgid "Active"
 msgstr "Actief"
 
 #. Machine settings
-#: ../virtManager/connection.py:586 ../virtManager/create.py:999
-#: ../virtManager/details.py:2313 ../virtManager/details.py:2329
-#: ../virtManager/details.py:2559 ../virtManager/domain.py:256
+#: ../virtManager/connection.py:587 ../virtManager/create.py:1003
+#: ../virtManager/details.py:2316 ../virtManager/details.py:2332
+#: ../virtManager/details.py:2562 ../virtManager/domain.py:255
 #: ../virtManager/gfxdetails.py:196 ../virtManager/gfxdetails.py:198
-#: ../virtManager/host.py:839 ../virtManager/interface.py:112
+#: ../virtManager/host.py:838 ../virtManager/interface.py:112
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ../virtManager/connection.py:712
+#: ../virtManager/connection.py:713
 #, python-format
 msgid ""
 "%s rename failed. Attempting to recover also failed.\n"
@@ -1361,146 +1372,141 @@ msgid ""
 "Recover error: %s"
 msgstr ""
 
-#: ../virtManager/console.py:166
+#: ../virtManager/console.py:238
 msgid "Leave fullscreen"
 msgstr "Volledig scherm laten"
 
-#: ../virtManager/console.py:187
+#: ../virtManager/console.py:265
 msgid "Send key combination"
 msgstr "Stuur toetscombinatie"
 
-#: ../virtManager/console.py:222
+#: ../virtManager/console.py:289
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr ""
 
-#: ../virtManager/console.py:229
+#: ../virtManager/console.py:296
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Druk op %s om aanwijzer vrij te geven."
 
-#: ../virtManager/console.py:356
+#: ../virtManager/console.py:421
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr ""
 
-#: ../virtManager/console.py:359
+#: ../virtManager/console.py:424
 msgid "Guest agent is not available."
 msgstr ""
 
-#: ../virtManager/console.py:498
-msgid "Guest has crashed"
+#: ../virtManager/console.py:565
+#, fuzzy
+msgid "Guest has crashed."
 msgstr "Guest is gecrasht"
 
-#: ../virtManager/console.py:500
-msgid "Guest not running"
+#: ../virtManager/console.py:567
+#, fuzzy
+msgid "Guest is not running."
 msgstr "Guest draait niet"
 
-#: ../virtManager/console.py:634
+#: ../virtManager/console.py:701
 msgid "Graphical console not configured for guest"
 msgstr "Grafische console is niet geconfigureerd voor guest"
 
-#: ../virtManager/console.py:641
+#: ../virtManager/console.py:708
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Kan grafische console type '%s' net tonen"
 
-#: ../virtManager/console.py:649
-#, python-format
-msgid ""
-"Guest is on a remote host with transport '%s'\n"
-"but is only configured to listen locally.\n"
-"Connect using 'ssh' transport or change the\n"
-"guest's listen address."
-msgstr ""
-
-#: ../virtManager/console.py:657
-msgid "Graphical console is not yet active for guest"
-msgstr "Grafische console is nog niet actief voor guest"
-
-#: ../virtManager/console.py:661
+#: ../virtManager/console.py:715
 msgid "Connecting to graphical console for guest"
 msgstr "Verbinden met grafische console voor guest"
 
-#: ../virtManager/console.py:679
+#: ../virtManager/console.py:738
 msgid "Error connecting to graphical console"
 msgstr "Fout bij verbinden met grafische console"
 
-#: ../virtManager/console.py:732
+#: ../virtManager/console.py:793
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr ""
 
-#: ../virtManager/console.py:751
+#: ../virtManager/console.py:812
 msgid "USB redirection error"
 msgstr ""
 
-#: ../virtManager/console.py:771
-msgid ""
-"Error: viewer connection to hypervisor host got refused or disconnected!"
-msgstr ""
-"Fout: viewer verbinding met hypervisor host werd geweigerd of verbroken!"
+#: ../virtManager/console.py:821
+#, fuzzy
+msgid "Viewer was disconnected."
+msgstr "Niet-verbonden"
 
-#: ../virtManager/console.py:861
+#: ../virtManager/console.py:827
+#, fuzzy, python-format
+msgid "SSH tunnel error output: %s"
+msgstr "Onderdruk niet-fout output"
+
+#: ../virtManager/console.py:924
 msgid "No text console available"
 msgstr "Geen tekst console beschikbaar."
 
-#: ../virtManager/console.py:874
+#: ../virtManager/console.py:937
 #, python-format
 msgid "Text Console %d"
 msgstr ""
 
-#: ../virtManager/console.py:876
+#: ../virtManager/console.py:939
 #, python-format
 msgid "Serial %d"
 msgstr ""
 
-#: ../virtManager/console.py:888
+#: ../virtManager/console.py:951
 msgid "No graphical console available"
 msgstr "Geen grafische console beschikbaar"
 
-#: ../virtManager/console.py:895
+#: ../virtManager/console.py:958
 msgid "Graphical Console"
 msgstr ""
 
-#: ../virtManager/console.py:903
+#: ../virtManager/console.py:966
 msgid "virt-manager does not support more that one graphical console"
 msgstr ""
 
-#: ../virtManager/create.py:253 ../virtManager/create.py:258
+#: ../virtManager/create.py:258 ../virtManager/create.py:263
 msgid "Warning"
 msgstr ""
 
-#: ../virtManager/create.py:454
+#: ../virtManager/create.py:459
 #, python-format
-msgid "Failed to setup UEFI for AArch64: %s\n"
+msgid ""
+"Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 
-#: ../virtManager/create.py:480
+#: ../virtManager/create.py:485
 msgid "Libvirt version does not support remote URL installs."
 msgstr "Libvirt versie ondersteunt geen URL installatie op afstand."
 
-#: ../virtManager/create.py:487
+#: ../virtManager/create.py:492
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "%s installaties niet beschikbaar voor paravirt guests."
 
-#: ../virtManager/create.py:492
+#: ../virtManager/create.py:497
 #, python-format
 msgid "Architecture '%s' is not installable"
 msgstr ""
 
-#: ../virtManager/create.py:508
+#: ../virtManager/create.py:513
 msgid "No install methods available for this connection."
 msgstr "Geen installatie methode beschikbaar voor deze verbinding."
 
-#: ../virtManager/create.py:543
+#: ../virtManager/create.py:548
 msgid "No hypervisor options were found for this connection."
-msgstr "Voor deze verbinding zijn geen hypervisor\n"
+msgstr ""
+"Voor deze verbinding zijn geen hypervisor\n"
 "opties gevonden."
 
-#: ../virtManager/create.py:548
+#: ../virtManager/create.py:553
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
@@ -1509,13 +1515,13 @@ msgstr ""
 "geïnstalleerd is op jouw machine, of dat de KVM kernel modules niet geladen "
 "zijn."
 
-#: ../virtManager/create.py:572
+#: ../virtManager/create.py:577
 msgid ""
 "Host is not advertising support for full virtualization. Install options may "
 "be limited."
 msgstr ""
 
-#: ../virtManager/create.py:578
+#: ../virtManager/create.py:583
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
@@ -1524,182 +1530,186 @@ msgstr ""
 "pakket niet geïnstalleerd is, of de KVM kernel modules\n"
 "zijn niet geladen. Jouw virtuele machines kunnen slecht presteren."
 
-#: ../virtManager/create.py:619
+#: ../virtManager/create.py:624
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "Maximaal %(maxmem)s beschikbaar op de host"
 
-#: ../virtManager/create.py:631
+#: ../virtManager/create.py:636
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "Maximaal %(numcpus)d beschikbaar"
 
-#: ../virtManager/create.py:662
+#: ../virtManager/create.py:667
 msgid "No active connection to install on."
 msgstr "Geen actieve verbinding om op te installeren."
 
-#: ../virtManager/create.py:947 ../virtManager/create.py:967
+#: ../virtManager/create.py:952 ../virtManager/create.py:972
 msgid "Show all OS options"
 msgstr "Toon alle OS opties"
 
-#: ../virtManager/create.py:1045
+#: ../virtManager/create.py:1049
 msgid "Host filesystem"
 msgstr "Bestandssysteem host"
 
-#: ../virtManager/create.py:1047 ../virtManager/details.py:2314
-#: ../virtinst/domcapabilities.py:133
+#: ../virtManager/create.py:1051 ../virtManager/details.py:2317
+#: ../virtinst/domcapabilities.py:140
 msgid "None"
 msgstr "Geen"
 
-#: ../virtManager/create.py:1061
+#: ../virtManager/create.py:1065
 msgid "Local CDROM/ISO"
 msgstr "Lokale CDROM/ISO"
 
-#: ../virtManager/create.py:1063
+#: ../virtManager/create.py:1067
 msgid "URL Install Tree"
 msgstr "URL installatie boom"
 
-#: ../virtManager/create.py:1065
+#: ../virtManager/create.py:1069
 msgid "PXE Install"
 msgstr "PXE installatie"
 
-#: ../virtManager/create.py:1067
+#: ../virtManager/create.py:1071
 msgid "Import existing OS image"
 msgstr "Bestaande OS image importeren"
 
-#: ../virtManager/create.py:1069
+#: ../virtManager/create.py:1073
 msgid "Application container"
 msgstr "Applicatie container"
 
-#: ../virtManager/create.py:1071
+#: ../virtManager/create.py:1075
 msgid "Operating system container"
 msgstr "Besturingssysteem container"
 
-#: ../virtManager/create.py:1076
+#: ../virtManager/create.py:1080
 msgid "Linux"
 msgstr "Linux"
 
-#: ../virtManager/create.py:1230
+#: ../virtManager/create.py:1234
 msgid "Removing disk images"
 msgstr ""
 
-#: ../virtManager/create.py:1231
+#: ../virtManager/create.py:1235
 msgid "Removing disk images we created for this virtual machine."
 msgstr ""
 
-#: ../virtManager/create.py:1461
+#: ../virtManager/create.py:1465
 msgid "No network selected"
 msgstr ""
 
-#: ../virtManager/create.py:1463
+#: ../virtManager/create.py:1467
 msgid "Network selection does not support PXE"
 msgstr "Netwerk selectie ondersteunt PXE niet"
 
-#: ../virtManager/create.py:1525 ../virtManager/createinterface.py:878
+#: ../virtManager/create.py:1529 ../virtManager/createinterface.py:883
 #: ../virtManager/createnet.py:460 ../virtManager/createpool.py:453
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "Stap %(current_page)d van %(max_page)d"
 
-#: ../virtManager/create.py:1615
+#: ../virtManager/create.py:1619
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr ""
 
-#: ../virtManager/create.py:1645
+#: ../virtManager/create.py:1653
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "Fout bij instellen van UUID: %s"
 
-#: ../virtManager/create.py:1653
+#: ../virtManager/create.py:1661
 msgid "Error setting OS information."
 msgstr "Fout bij het instellen van OS informatie."
 
-#: ../virtManager/create.py:1675
+#: ../virtManager/create.py:1683
 msgid "Error setting up default devices:"
 msgstr "Fout bij instellen van default apparaat:"
 
-#: ../virtManager/create.py:1693 ../virtManager/createinterface.py:906
+#: ../virtManager/create.py:1701 ../virtManager/createinterface.py:911
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "Niet-afgevangen fout bij het valideren van installatie parameters: %s"
 
-#: ../virtManager/create.py:1743
+#: ../virtManager/create.py:1751
 msgid "Please specify a valid OS variant."
 msgstr ""
 
-#: ../virtManager/create.py:1751
+#: ../virtManager/create.py:1759
 msgid "An install media selection is required."
 msgstr "Een installatie media keuze is vereist."
 
-#: ../virtManager/create.py:1761
+#: ../virtManager/create.py:1769
 msgid "An install tree is required."
 msgstr "Een installatie boom is vereist."
 
-#: ../virtManager/create.py:1775
+#: ../virtManager/create.py:1783
 msgid "A storage path to import is required."
 msgstr "Een opslag pad om te importeren is vereist."
 
-#: ../virtManager/create.py:1782
+#: ../virtManager/create.py:1788
+msgid "The import path must point to an existing storage."
+msgstr ""
+
+#: ../virtManager/create.py:1796
 msgid "An application path is required."
 msgstr "Een toepassingen pad is vereist."
 
-#: ../virtManager/create.py:1789
+#: ../virtManager/create.py:1803
 msgid "An OS directory path is required."
 msgstr "Een OS directory pad is vereist."
 
-#: ../virtManager/create.py:1801
+#: ../virtManager/create.py:1815
 msgid "Error setting installer parameters."
 msgstr "Fout bij het instellen van installatie parameters."
 
-#: ../virtManager/create.py:1827
+#: ../virtManager/create.py:1837
 msgid "Error setting install media location."
 msgstr "Fout bij het instellen van media locatie."
 
-#: ../virtManager/create.py:1851
+#: ../virtManager/create.py:1861
 #, python-format
 msgid "A kernel is required for %s guests."
 msgstr "Een kernel is vereist voor %s gasten."
 
-#: ../virtManager/create.py:1859
+#: ../virtManager/create.py:1869
 msgid "Error setting default name."
 msgstr ""
 
-#: ../virtManager/create.py:1914
+#: ../virtManager/create.py:1924
 msgid "Error setting CPUs."
 msgstr "Fout bij het instellen van CPU's."
 
-#: ../virtManager/create.py:1921
+#: ../virtManager/create.py:1931
 msgid "Error setting guest memory."
 msgstr "Fout bij het instellen van guest geheugen."
 
-#: ../virtManager/create.py:1993
+#: ../virtManager/create.py:2003
 msgid "Invalid guest name"
 msgstr ""
 
-#: ../virtManager/create.py:2014
+#: ../virtManager/create.py:2024
 #, python-format
 msgid "Network device required for %s install."
 msgstr "Netwerk apparaat vereist installatie van %s."
 
-#: ../virtManager/create.py:2125
+#: ../virtManager/create.py:2135
 msgid "Detecting"
 msgstr "Opsporen"
 
-#: ../virtManager/create.py:2192
+#: ../virtManager/create.py:2202
 msgid "Error starting installation: "
 msgstr "Fout bij opstarten van installatie:"
 
-#: ../virtManager/create.py:2229
+#: ../virtManager/create.py:2240
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Niet in staat om de installatie te voltooien: '%s'"
 
-#: ../virtManager/create.py:2247
+#: ../virtManager/create.py:2258
 msgid "Creating Virtual Machine"
 msgstr "Aanmaken van virtuele machine"
 
-#: ../virtManager/create.py:2248
+#: ../virtManager/create.py:2259
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1707,116 +1717,116 @@ msgstr ""
 "De virtuele machine wordt nu aangemaakt. Toewijzing van schijf opslag en "
 "zoeken naar de installatie images zal enige minuten duren."
 
-#: ../virtManager/create.py:2295
+#: ../virtManager/create.py:2306
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr ""
 
-#: ../virtManager/create.py:2357
+#: ../virtManager/create.py:2354
 #, python-format
 msgid "Error continue install: %s"
 msgstr "Fout bij verder gaan met installeren: %s"
 
-#: ../virtManager/createinterface.py:201 ../virtManager/netlist.py:93
+#: ../virtManager/createinterface.py:204 ../virtManager/netlist.py:93
 #: ../virtManager/netlist.py:116
 msgid "Bridge"
 msgstr "Brug"
 
-#: ../virtManager/createinterface.py:203
+#: ../virtManager/createinterface.py:206
 msgid "Bond"
 msgstr "Binding"
 
-#: ../virtManager/createinterface.py:205
+#: ../virtManager/createinterface.py:208
 msgid "Ethernet"
 msgstr "Ethernet"
 
-#: ../virtManager/createinterface.py:207
+#: ../virtManager/createinterface.py:210
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../virtManager/createinterface.py:222 ../virtManager/details.py:883
+#: ../virtManager/createinterface.py:225 ../virtManager/details.py:885
 #: ../virtManager/host.py:207 ../virtManager/manager.py:352
 #: ../ui/create.ui.h:17
 msgid "Name"
 msgstr "Naam"
 
-#: ../virtManager/createinterface.py:223
+#: ../virtManager/createinterface.py:226
 msgid "Type"
 msgstr "Type"
 
-#: ../virtManager/createinterface.py:224
+#: ../virtManager/createinterface.py:227
 msgid "In use by"
 msgstr "Gebruikt door"
 
-#: ../virtManager/createinterface.py:260 ../virtManager/createinterface.py:268
+#: ../virtManager/createinterface.py:263 ../virtManager/createinterface.py:271
 msgid "System default"
 msgstr "Systeem standaard"
 
-#: ../virtManager/createinterface.py:297 ../virtManager/createinterface.py:305
-#: ../virtManager/createinterface.py:724 ../virtManager/createinterface.py:739
-#: ../virtManager/host.py:877 ../virtManager/host.py:890
+#: ../virtManager/createinterface.py:300 ../virtManager/createinterface.py:308
+#: ../virtManager/createinterface.py:727 ../virtManager/createinterface.py:742
+#: ../virtManager/host.py:876 ../virtManager/host.py:889
 msgid "Static"
 msgstr ""
 
-#: ../virtManager/createinterface.py:298 ../virtManager/createinterface.py:306
-#: ../virtManager/createinterface.py:748
+#: ../virtManager/createinterface.py:301 ../virtManager/createinterface.py:309
+#: ../virtManager/createinterface.py:751
 msgid "No configuration"
 msgstr ""
 
-#: ../virtManager/createinterface.py:435
+#: ../virtManager/createinterface.py:438
 msgid "Not configured"
 msgstr ""
 
-#: ../virtManager/createinterface.py:437
+#: ../virtManager/createinterface.py:440
 msgid "No IP configuration"
 msgstr ""
 
-#: ../virtManager/createinterface.py:452
+#: ../virtManager/createinterface.py:455
 msgid "No child interfaces selected."
 msgstr ""
 
-#: ../virtManager/createinterface.py:491
+#: ../virtManager/createinterface.py:494
 msgid "Choose interface(s) to bridge:"
 msgstr "Kies interface(s) voor de brug:"
 
-#: ../virtManager/createinterface.py:494
+#: ../virtManager/createinterface.py:497
 msgid "Choose parent interface:"
 msgstr "Kies ouder interface:"
 
-#: ../virtManager/createinterface.py:496
+#: ../virtManager/createinterface.py:499
 msgid "Choose interfaces to bond:"
 msgstr "Kies interfaces om te binden:"
 
-#: ../virtManager/createinterface.py:498
+#: ../virtManager/createinterface.py:501
 msgid "Choose an unconfigured interface:"
 msgstr "Kies een niet-geconfigureerde interface:"
 
-#: ../virtManager/createinterface.py:567
+#: ../virtManager/createinterface.py:570
 msgid "No interface selected"
 msgstr "Geen interface geselecteerd."
 
-#: ../virtManager/createinterface.py:733 ../virtManager/host.py:885
+#: ../virtManager/createinterface.py:736 ../virtManager/host.py:884
 msgid "Autoconf"
 msgstr ""
 
-#: ../virtManager/createinterface.py:745
+#: ../virtManager/createinterface.py:748
 #, python-format
 msgid "Copy configuration from '%s'"
 msgstr ""
 
-#: ../virtManager/createinterface.py:764
+#: ../virtManager/createinterface.py:767
 msgid "Please enter an IP address"
 msgstr "Geef een IP adres op"
 
-#: ../virtManager/createinterface.py:917
+#: ../virtManager/createinterface.py:922
 msgid "An interface name is required."
 msgstr "Een interface naam is vereist."
 
-#: ../virtManager/createinterface.py:921
+#: ../virtManager/createinterface.py:926
 msgid "An interface must be selected"
 msgstr "Een interface moet geselecteerd worden."
 
-#: ../virtManager/createinterface.py:969
+#: ../virtManager/createinterface.py:974
 #, python-format
 msgid ""
 "The following interface(s) are already configured:\n"
@@ -1833,25 +1843,25 @@ msgstr ""
 "Deze te gebruiken kan hun bestaande configuratie overschrijven. Weet je "
 "zeker dat je de geselecteerde interface(s) wilt gebruiken?"
 
-#: ../virtManager/createinterface.py:1010
+#: ../virtManager/createinterface.py:1016
 msgid "Error setting interface parameters."
 msgstr "Fout bij het instellen van interface parameters."
 
-#: ../virtManager/createinterface.py:1075
+#: ../virtManager/createinterface.py:1082
 #, python-format
 msgid "Error validating IP configuration: %s"
 msgstr "Fout bij het valideren IP configuratie: %s"
 
-#: ../virtManager/createinterface.py:1112
+#: ../virtManager/createinterface.py:1119
 #, python-format
 msgid "Error creating interface: '%s'"
 msgstr "Fout bij het maken van interface: '%s'"
 
-#: ../virtManager/createinterface.py:1134
+#: ../virtManager/createinterface.py:1143
 msgid "Creating virtual interface"
 msgstr "Aanmaken van virtuele interface"
 
-#: ../virtManager/createinterface.py:1135
+#: ../virtManager/createinterface.py:1144
 msgid "The virtual interface is now being created."
 msgstr "De virtuele interface wordt nu aangemaakt."
 
@@ -1859,7 +1869,7 @@ msgstr "De virtuele interface wordt nu aangemaakt."
 msgid "NAT"
 msgstr "NAT"
 
-#: ../virtManager/createnet.py:135 ../ui/host.ui.h:24
+#: ../virtManager/createnet.py:135 ../ui/host.ui.h:22
 msgid "Routed"
 msgstr "Gerouteerd"
 
@@ -2087,7 +2097,8 @@ msgstr ""
 
 #: ../virtManager/delete.py:143
 #, python-format
-msgid "The following paths will be deleted:\n"
+msgid ""
+"The following paths will be deleted:\n"
 "\n"
 "%s"
 msgstr ""
@@ -2110,50 +2121,57 @@ msgstr "Fout bij verwijderen van virtuele machine '%s': %s"
 #: ../virtManager/delete.py:208
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
-"Daarnaast zijn er fouten bij het verwijderen van bepaalde opslag apparaten: "
-"\n"
+"Daarnaast zijn er fouten bij het verwijderen van bepaalde opslag "
+"apparaten: \n"
 
 #: ../virtManager/delete.py:212
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Fouten opgetreden bij het verwijderen van bepaalde opslag apparaten."
 
-#: ../virtManager/delete.py:289 ../ui/details.ui.h:59
+#: ../virtManager/delete.py:290 ../ui/details.ui.h:59
 msgid "Target"
 msgstr "Doel"
 
-#: ../virtManager/delete.py:291
+#: ../virtManager/delete.py:292
 msgid "Storage Path"
 msgstr "Opslag pad"
 
-#: ../virtManager/delete.py:344
+#: ../virtManager/delete.py:345
 msgid "Cannot delete iscsi share."
 msgstr "Kan iscsi deel niet verwijderen."
 
-#: ../virtManager/delete.py:347
+#: ../virtManager/delete.py:348
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Kan niet-beheerde opslag op afstand niet verwijderen."
 
-#: ../virtManager/delete.py:353
+#: ../virtManager/delete.py:354
 msgid "Cannot delete unmanaged block device."
 msgstr "Kan niet-beheerd blok apparaat niet verwijderen."
 
-#: ../virtManager/delete.py:374
+#: ../virtManager/delete.py:375
 msgid "Storage is read-only."
 msgstr "Opslag is alleen-lezen."
 
-#: ../virtManager/delete.py:376
+#: ../virtManager/delete.py:377
 msgid "No write access to path."
 msgstr "Geen schrijf toegang tot pad."
 
-#: ../virtManager/delete.py:379
+#: ../virtManager/delete.py:380
 msgid "Storage is marked as shareable."
 msgstr "Opslag is gemarkeerd als deelbaar."
 
-#: ../virtManager/delete.py:389
+#: ../virtManager/delete.py:383
+#, fuzzy
+msgid "Storage is a media device."
+msgstr "Opslag is gemarkeerd als deelbaar."
+
+#: ../virtManager/delete.py:393
 #, python-format
-msgid "Storage is in use by the following virtual machines:\n"
+msgid ""
+"Storage is in use by the following virtual machines:\n"
 "- %s "
-msgstr "Opslag is in gebruik door de volgende virtuele machines:\n"
+msgstr ""
+"Opslag is in gebruik door de volgende virtuele machines:\n"
 "- %s "
 
 #: ../virtManager/details.py:161
@@ -2213,7 +2231,8 @@ msgstr "Controller %s"
 #: ../virtManager/details.py:628
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
-msgstr "Dit zal de verbinding verwijderen:\n"
+msgstr ""
+"Dit zal de verbinding verwijderen:\n"
 "\n"
 "%s\n"
 "\n"
@@ -2240,211 +2259,211 @@ msgstr ""
 msgid "UEFI not found"
 msgstr ""
 
-#: ../virtManager/details.py:884
+#: ../virtManager/details.py:886
 msgid "Version"
 msgstr "Versie"
 
-#: ../virtManager/details.py:952
+#: ../virtManager/details.py:954
 msgid "Application Default"
 msgstr ""
 
-#: ../virtManager/details.py:953
+#: ../virtManager/details.py:955
 msgid "Hypervisor Default"
 msgstr ""
 
-#: ../virtManager/details.py:955
+#: ../virtManager/details.py:957
 msgid "Clear CPU configuration"
 msgstr ""
 
-#: ../virtManager/details.py:1101 ../virtManager/host.py:978
-#: ../virtManager/snapshots.py:377 ../virtManager/storagelist.py:472
+#: ../virtManager/details.py:1103 ../virtManager/host.py:977
+#: ../virtManager/snapshots.py:375 ../virtManager/storagelist.py:472
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "Er zijn nog niet-doorgevoerde veranderingen. Nu doorvoeren?"
 
-#: ../virtManager/details.py:1103 ../virtManager/host.py:980
-#: ../virtManager/snapshots.py:379 ../virtManager/storagelist.py:474
+#: ../virtManager/details.py:1105 ../virtManager/host.py:979
+#: ../virtManager/snapshots.py:377 ../virtManager/storagelist.py:474
 msgid "Don't warn me again."
 msgstr "Waarschuw mij niet nog een keer."
 
-#: ../virtManager/details.py:1189
+#: ../virtManager/details.py:1191
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Fout bij verversen van hardware pagina: %s"
 
-#: ../virtManager/details.py:1261 ../virtManager/manager.py:836
+#: ../virtManager/details.py:1263 ../virtManager/manager.py:821
 msgid "_Restore"
 msgstr "_Herladen"
 
-#: ../virtManager/details.py:1263 ../virtManager/manager.py:838
+#: ../virtManager/details.py:1265 ../virtManager/manager.py:823
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "_Uitvoeren"
 
-#: ../virtManager/details.py:1291 ../virtManager/manager.py:871
+#: ../virtManager/details.py:1293 ../virtManager/manager.py:856
 msgid "Resume the virtual machine"
 msgstr ""
 
-#: ../virtManager/details.py:1293 ../virtManager/manager.py:873
+#: ../virtManager/details.py:1295 ../virtManager/manager.py:858
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
 msgid "Pause the virtual machine"
 msgstr "Pauzeer de virtuele machine"
 
-#: ../virtManager/details.py:1321
+#: ../virtManager/details.py:1323
 msgid "Manage VM snapshots"
 msgstr ""
 
-#: ../virtManager/details.py:1378
+#: ../virtManager/details.py:1380
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Fout bij het opstarten van hardware dialoog: %s"
 
-#: ../virtManager/details.py:1459
+#: ../virtManager/details.py:1461
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr ""
 
-#: ../virtManager/details.py:1467
+#: ../virtManager/details.py:1469
 msgid "Error initializing spice USB device widget"
 msgstr ""
 
-#: ../virtManager/details.py:1471
+#: ../virtManager/details.py:1473
 msgid "Select USB devices for redirection"
 msgstr ""
 
-#: ../virtManager/details.py:1500
+#: ../virtManager/details.py:1502
 msgid "Save Virtual Machine Screenshot"
 msgstr "Schermafdruk van virtuele machine opslaan"
 
-#: ../virtManager/details.py:1501
+#: ../virtManager/details.py:1503
 msgid "PNG files"
 msgstr ""
 
-#: ../virtManager/details.py:1781
+#: ../virtManager/details.py:1784
 #, python-format
 msgid "Error disconnecting media: %s"
 msgstr "Fout bij het loskoppelen van media: %s"
 
-#: ../virtManager/details.py:1802
+#: ../virtManager/details.py:1805
 #, python-format
 msgid "Error launching media dialog: %s"
 msgstr "Fout bij lanceren van media dialoog: %s"
 
-#: ../virtManager/details.py:1868
+#: ../virtManager/details.py:1871
 #, python-format
 msgid "Error apply changes: %s"
 msgstr "Fout bij doorvoeren veranderingen: %s"
 
-#: ../virtManager/details.py:2001
+#: ../virtManager/details.py:2004
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Fout bij het veranderen van autostart waarde: %s"
 
-#: ../virtManager/details.py:2019
+#: ../virtManager/details.py:2022
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Kan initrd niet instellen zonder gespecificeerd kernel pad"
 
-#: ../virtManager/details.py:2022
+#: ../virtManager/details.py:2025
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "Kan geen kernel argumenten instellen zonder gespecificeerd kernel pad"
 
-#: ../virtManager/details.py:2028
+#: ../virtManager/details.py:2031
 msgid "An init path must be specified"
 msgstr "Een init pad moet opgegeven worden."
 
-#: ../virtManager/details.py:2221
+#: ../virtManager/details.py:2224
 msgid "Are you sure you want to remove this device?"
 msgstr "Weet je zeker dat je dit apparaat wilt verwijderen?"
 
-#: ../virtManager/details.py:2228
+#: ../virtManager/details.py:2231
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Fout bij verwijderen van apparaat: %s"
 
-#: ../virtManager/details.py:2245
+#: ../virtManager/details.py:2248
 msgid "Device could not be removed from the running machine"
 msgstr "Apparaat kon niet verwijderd worden uit de draaiende machine"
 
-#: ../virtManager/details.py:2247
+#: ../virtManager/details.py:2250
 msgid "This change will take effect after the next guest shutdown."
 msgstr "Deze wijzigingen hebben effect na de volgende herstart van de guest."
 
-#: ../virtManager/details.py:2369
+#: ../virtManager/details.py:2372
 msgid "Error while inspecting the guest configuration"
 msgstr ""
 
-#: ../virtManager/details.py:2377 ../virtManager/details.py:2381
+#: ../virtManager/details.py:2380 ../virtManager/details.py:2384
 msgid "unknown"
 msgstr "onbekend"
 
-#: ../virtManager/details.py:2414
+#: ../virtManager/details.py:2417
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr ""
 
-#: ../virtManager/details.py:2415
+#: ../virtManager/details.py:2418
 #, python-format
 msgid "%(transfered)d %(units)s write"
 msgstr ""
 
-#: ../virtManager/details.py:2418
+#: ../virtManager/details.py:2421
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr ""
 
-#: ../virtManager/details.py:2419
+#: ../virtManager/details.py:2422
 #, python-format
 msgid "%(transfered)d %(units)s out"
 msgstr ""
 
-#: ../virtManager/details.py:2421 ../virtManager/details.py:2422
-#: ../virtManager/details.py:2423 ../virtManager/details.py:2424
-#: ../virtManager/host.py:547 ../virtManager/host.py:578
+#: ../virtManager/details.py:2424 ../virtManager/details.py:2425
+#: ../virtManager/details.py:2426 ../virtManager/details.py:2427
+#: ../virtManager/host.py:546 ../virtManager/host.py:577
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: ../virtManager/details.py:2432
+#: ../virtManager/details.py:2435
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr ""
 
-#: ../virtManager/details.py:2642
+#: ../virtManager/details.py:2645
 msgid "Absolute Movement"
 msgstr "Absolute verplaatsing"
 
-#: ../virtManager/details.py:2644
+#: ../virtManager/details.py:2647
 msgid "Relative Movement"
 msgstr "Relatieve verplaatsing"
 
-#: ../virtManager/details.py:2655
+#: ../virtManager/details.py:2658
 msgid "Hypervisor does not support removing this device"
 msgstr ""
 
-#: ../virtManager/details.py:2689
+#: ../virtManager/details.py:2692
 #, python-format
 msgid "%s:%s"
 msgstr "%s:%s"
 
-#: ../virtManager/details.py:2833
+#: ../virtManager/details.py:2836
 msgid "Serial Device"
 msgstr "Serieel apparaat"
 
-#: ../virtManager/details.py:2835
+#: ../virtManager/details.py:2838
 msgid "Parallel Device"
 msgstr "Parallel apparaat"
 
-#: ../virtManager/details.py:2837
+#: ../virtManager/details.py:2840
 msgid "Console Device"
 msgstr "Console apparaat"
 
-#: ../virtManager/details.py:2839
+#: ../virtManager/details.py:2842
 msgid "Channel Device"
 msgstr "Kanaal apparaat"
 
-#: ../virtManager/details.py:2849
+#: ../virtManager/details.py:2852
 msgid "Primary Console"
 msgstr "Primaire console"
 
-#: ../virtManager/details.py:2889
+#: ../virtManager/details.py:2892
 #, python-format
 msgid "Physical %s Device"
 msgstr ""
@@ -2485,113 +2504,113 @@ msgstr ""
 msgid "No bootable devices"
 msgstr ""
 
-#: ../virtManager/domain.py:240
+#: ../virtManager/domain.py:239
 msgid "Running"
 msgstr "Draaiend"
 
-#: ../virtManager/domain.py:242
+#: ../virtManager/domain.py:241
 msgid "Paused"
 msgstr "Gepauzeerd"
 
-#: ../virtManager/domain.py:244
+#: ../virtManager/domain.py:243
 msgid "Shutting Down"
 msgstr "Bezig met afsluiten"
 
-#: ../virtManager/domain.py:247 ../virtManager/domain.py:294
+#: ../virtManager/domain.py:246 ../virtManager/domain.py:293
 msgid "Saved"
 msgstr "Opgeslagen"
 
-#: ../virtManager/domain.py:249
+#: ../virtManager/domain.py:248
 msgid "Shutoff"
 msgstr "Afgesloten"
 
-#: ../virtManager/domain.py:251 ../virtManager/domain.py:272
-#: ../virtManager/domain.py:284 ../virtManager/domain.py:292
+#: ../virtManager/domain.py:250 ../virtManager/domain.py:271
+#: ../virtManager/domain.py:283 ../virtManager/domain.py:291
 msgid "Crashed"
 msgstr "Gecrasht"
 
-#: ../virtManager/domain.py:253
+#: ../virtManager/domain.py:252
 msgid "Suspended"
 msgstr ""
 
-#: ../virtManager/domain.py:264
+#: ../virtManager/domain.py:263
 msgid "Booted"
 msgstr ""
 
-#: ../virtManager/domain.py:265 ../virtManager/domain.py:293
+#: ../virtManager/domain.py:264 ../virtManager/domain.py:292
 msgid "Migrated"
 msgstr ""
 
-#: ../virtManager/domain.py:266
+#: ../virtManager/domain.py:265
 msgid "Restored"
 msgstr ""
 
-#: ../virtManager/domain.py:267 ../virtManager/domain.py:281
-#: ../virtManager/domain.py:296
+#: ../virtManager/domain.py:266 ../virtManager/domain.py:280
+#: ../virtManager/domain.py:295
 msgid "From snapshot"
 msgstr ""
 
-#: ../virtManager/domain.py:268
+#: ../virtManager/domain.py:267
 msgid "Unpaused"
 msgstr ""
 
-#: ../virtManager/domain.py:269
+#: ../virtManager/domain.py:268
 msgid "Migration canceled"
 msgstr ""
 
-#: ../virtManager/domain.py:270
+#: ../virtManager/domain.py:269
 msgid "Save canceled"
 msgstr ""
 
-#: ../virtManager/domain.py:271
+#: ../virtManager/domain.py:270
 msgid "Event wakeup"
 msgstr ""
 
-#: ../virtManager/domain.py:275 ../virtManager/domain.py:287
+#: ../virtManager/domain.py:274 ../virtManager/domain.py:286
 msgid "User"
 msgstr "Gebruiker"
 
-#: ../virtManager/domain.py:276
+#: ../virtManager/domain.py:275
 msgid "Migrating"
 msgstr ""
 
-#: ../virtManager/domain.py:277
+#: ../virtManager/domain.py:276
 msgid "Saving"
 msgstr ""
 
-#: ../virtManager/domain.py:278
+#: ../virtManager/domain.py:277
 msgid "Dumping"
 msgstr ""
 
-#: ../virtManager/domain.py:279
+#: ../virtManager/domain.py:278
 msgid "I/O error"
 msgstr ""
 
-#: ../virtManager/domain.py:282
+#: ../virtManager/domain.py:281
 msgid "Shutting down"
 msgstr ""
 
-#: ../virtManager/domain.py:283 ../virtManager/snapshots.py:543
+#: ../virtManager/domain.py:282 ../virtManager/snapshots.py:541
 msgid "Creating snapshot"
 msgstr ""
 
-#: ../virtManager/domain.py:290
+#: ../virtManager/domain.py:289
 msgid "Shutdown"
 msgstr "Afsluiten"
 
-#: ../virtManager/domain.py:291
+#: ../virtManager/domain.py:290
 msgid "Destroyed"
 msgstr ""
 
-#: ../virtManager/domain.py:295
+#: ../virtManager/domain.py:294
 msgid "Failed"
 msgstr ""
 
-#: ../virtManager/domain.py:299
+#: ../virtManager/domain.py:298
 msgid "Panicked"
 msgstr ""
 
-#: ../virtManager/domain.py:407
+#: ../virtManager/domain.py:406
 #, python-format
 msgid ""
 "There is more than one '%s' device attached to your host, and we can't "
@@ -2600,41 +2619,41 @@ msgid ""
 "Hardware' wizard."
 msgstr ""
 
-#: ../virtManager/domain.py:500
+#: ../virtManager/domain.py:499
 msgid "Libvirt connection does not support snapshots."
 msgstr ""
 
-#: ../virtManager/domain.py:515
+#: ../virtManager/domain.py:514
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
 msgstr ""
 
-#: ../virtManager/domain.py:518
+#: ../virtManager/domain.py:517
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr ""
 
-#: ../virtManager/domain.py:553
+#: ../virtManager/domain.py:552
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Kon gespecificeerde apparaat niet vinden in de inactieve VM configuratie: %s"
 
-#: ../virtManager/domain.py:1393
+#: ../virtManager/domain.py:1395
 msgid "Cannot start guest while cloning operation in progress"
 msgstr "Kan guest niet starten zolang het kloon proces nog bezig is"
 
-#: ../virtManager/domain.py:1428
+#: ../virtManager/domain.py:1430
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr "Kan guest niet hervatten zolang het kloon proces nog bezig is"
 
-#: ../virtManager/domain.py:1437
+#: ../virtManager/domain.py:1439
 msgid "Saving domain to disk"
 msgstr "Domein opslaan op schijf"
 
-#: ../virtManager/domain.py:1486
+#: ../virtManager/domain.py:1488
 msgid "Migrating domain"
 msgstr "Domein migreren"
 
@@ -2692,7 +2711,8 @@ msgid ""
 msgstr ""
 
 #: ../virtManager/engine.py:659
-msgid "Verify that the 'libvirtd' daemon is running\n"
+msgid ""
+"Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr ""
 
@@ -2752,50 +2772,50 @@ msgstr "Fout bij lanceren van verbinding dialoog: %s"
 msgid "Error launching details: %s"
 msgstr "Fout bij lanceren van details: %s"
 
-#: ../virtManager/engine.py:888 ../virtManager/engine.py:903
+#: ../virtManager/engine.py:888 ../virtManager/engine.py:905
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "Fout bij lanceren van beheerder: %s"
 
-#: ../virtManager/engine.py:915
+#: ../virtManager/engine.py:917
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Fout bij lanceren van migratie dialoog: %s"
 
-#: ../virtManager/engine.py:931
+#: ../virtManager/engine.py:933
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "Fout bij het instellen van kloon parameters: %s"
 
-#: ../virtManager/engine.py:1075
+#: ../virtManager/engine.py:1076
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "Weet je zeker dat je '%s' wilt opslaan?"
 
-#: ../virtManager/engine.py:1086
+#: ../virtManager/engine.py:1087
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "Fout bij opslaan van domein: %s"
 
-#: ../virtManager/engine.py:1091
+#: ../virtManager/engine.py:1092
 msgid "Saving Virtual Machine"
 msgstr "Opslaan van virtuele machine"
 
-#: ../virtManager/engine.py:1092
+#: ../virtManager/engine.py:1093
 msgid "Saving virtual machine memory to disk "
 msgstr "Opslaan van virtuele machine naar schijf"
 
-#: ../virtManager/engine.py:1105
+#: ../virtManager/engine.py:1106
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "Fout bij afbreken opslag taak: %s"
 
-#: ../virtManager/engine.py:1118
+#: ../virtManager/engine.py:1119
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Weet je zeker dat je uitschakelen wilt forceren voor '%s'?"
 
-#: ../virtManager/engine.py:1120
+#: ../virtManager/engine.py:1121
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -2803,83 +2823,83 @@ msgstr ""
 "Dit zal de VM onmiddellijk uitschakelen zonder het OS af te sluiten en kan "
 "leiden tot data verlies."
 
-#: ../virtManager/engine.py:1126 ../virtManager/engine.py:1203
+#: ../virtManager/engine.py:1127 ../virtManager/engine.py:1204
 msgid "Error shutting down domain"
 msgstr "Fout tijdens het afsluiten van domein"
 
-#: ../virtManager/engine.py:1134
+#: ../virtManager/engine.py:1135
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Weet je zeker dat je '%s' wilt pauzeren?"
 
-#: ../virtManager/engine.py:1140
+#: ../virtManager/engine.py:1141
 msgid "Error pausing domain"
 msgstr "Fout bij het pauzeren van domein"
 
-#: ../virtManager/engine.py:1148
+#: ../virtManager/engine.py:1149
 msgid "Error unpausing domain"
 msgstr "Fout bij doorgaan met domein"
 
-#: ../virtManager/engine.py:1160
+#: ../virtManager/engine.py:1161
 msgid "Error restoring domain"
 msgstr "Fout bij het herstellen van domein"
 
-#: ../virtManager/engine.py:1163
+#: ../virtManager/engine.py:1164
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
 "start up?"
 msgstr ""
 
-#: ../virtManager/engine.py:1177
+#: ../virtManager/engine.py:1178
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr ""
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1181
+#: ../virtManager/engine.py:1182
 msgid "Restoring Virtual Machine"
 msgstr "Virtuele machine herstellen"
 
-#: ../virtManager/engine.py:1182
+#: ../virtManager/engine.py:1183
 msgid "Restoring virtual machine memory from disk"
 msgstr "Virtuele machine geheugen herstellen van schijf"
 
 #. Regular startup
-#: ../virtManager/engine.py:1188
+#: ../virtManager/engine.py:1189
 msgid "Error starting domain"
 msgstr "Fout bij starten van domein"
 
-#: ../virtManager/engine.py:1197
+#: ../virtManager/engine.py:1198
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Weet je zeker dat je '%s' wilt uitschakelen?"
 
-#: ../virtManager/engine.py:1211
+#: ../virtManager/engine.py:1212
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Weet je zeker dat je '%s' opnieuw op wilt starten?"
 
-#: ../virtManager/engine.py:1217
+#: ../virtManager/engine.py:1218
 msgid "Error rebooting domain"
 msgstr ""
 
-#: ../virtManager/engine.py:1226
+#: ../virtManager/engine.py:1227
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr ""
 
-#: ../virtManager/engine.py:1228
+#: ../virtManager/engine.py:1229
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
 
-#: ../virtManager/engine.py:1234
+#: ../virtManager/engine.py:1235
 msgid "Error resetting domain"
 msgstr ""
 
-#: ../virtManager/engine.py:1245
+#: ../virtManager/engine.py:1246
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr ""
@@ -2979,146 +2999,146 @@ msgstr ""
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s van %(maxmem)s"
 
-#: ../virtManager/host.py:338
+#: ../virtManager/host.py:337
 msgid "Libvirt connection does not support virtual network management."
 msgstr "Libvirt verbinding ondersteunt geen virtueel netwerk beheer."
 
-#: ../virtManager/host.py:342
+#: ../virtManager/host.py:341
 msgid "Libvirt connection does not support interface management."
 msgstr "Libvirt verbinding ondersteunt geen interface beheer."
 
-#: ../virtManager/host.py:349 ../virtManager/host.py:350
+#: ../virtManager/host.py:348 ../virtManager/host.py:349
 #: ../virtManager/storagelist.py:586
 msgid "Connection not active."
 msgstr "Verbinding is niet actief."
 
-#: ../virtManager/host.py:378
+#: ../virtManager/host.py:377
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Weet je zeker dat je het netwerk %s permanent wilt verwijderen?"
 
-#: ../virtManager/host.py:385
+#: ../virtManager/host.py:384
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "Fout bij het verwijderen van netwerk '%s'"
 
-#: ../virtManager/host.py:394
+#: ../virtManager/host.py:393
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "Fout bij het starten van netwerk '%s'"
 
-#: ../virtManager/host.py:403
+#: ../virtManager/host.py:402
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "Fout bij het stoppen van netwerk '%s'"
 
-#: ../virtManager/host.py:412
+#: ../virtManager/host.py:411
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Fout bij het lanceren van de netwerk assistent: %s"
 
-#: ../virtManager/host.py:447
+#: ../virtManager/host.py:446
 msgid "Network could not be updated"
 msgstr ""
 
-#: ../virtManager/host.py:448
+#: ../virtManager/host.py:447
 msgid "This change will take effect when the network is restarted"
 msgstr ""
 
-#: ../virtManager/host.py:455
+#: ../virtManager/host.py:454
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr ""
 
-#: ../virtManager/host.py:487 ../virtManager/host.py:644
+#: ../virtManager/host.py:486 ../virtManager/host.py:643
 #: ../virtManager/storagelist.py:349 ../virtManager/storagelist.py:548
 msgid "On Boot"
 msgstr "Bij het opstarten"
 
-#: ../virtManager/host.py:488 ../virtManager/host.py:644
-#: ../virtManager/host.py:663 ../virtManager/preferences.py:108
+#: ../virtManager/host.py:487 ../virtManager/host.py:643
+#: ../virtManager/host.py:662 ../virtManager/preferences.py:108
 #: ../virtManager/storagelist.py:317 ../virtManager/storagelist.py:349
 #: ../virtManager/storagelist.py:548
 msgid "Never"
 msgstr "Nooit"
 
-#: ../virtManager/host.py:517
+#: ../virtManager/host.py:516
 msgid "No virtual network selected."
 msgstr "Geen virtueel netwerk geselecteerd."
 
-#: ../virtManager/host.py:528
+#: ../virtManager/host.py:527
 #, python-format
 msgid "Error selecting network: %s"
 msgstr "Fout bij het selecteren van netwerk: %s"
 
-#: ../virtManager/host.py:571 ../virtinst/network.py:160
+#: ../virtManager/host.py:570 ../virtinst/network.py:160
 msgid "Routed network"
 msgstr "Netwerk met routering"
 
-#: ../virtManager/host.py:573
+#: ../virtManager/host.py:572
 msgid "Isolated network, internal routing only"
 msgstr ""
 
-#: ../virtManager/host.py:575
+#: ../virtManager/host.py:574
 msgid "Isolated network, routing disabled"
 msgstr ""
 
-#: ../virtManager/host.py:632 ../virtManager/host.py:657
-#: ../virtManager/host.py:845 ../virtManager/libvirtobject.py:215
+#: ../virtManager/host.py:631 ../virtManager/host.py:656
+#: ../virtManager/host.py:844 ../virtManager/libvirtobject.py:215
 #: ../virtManager/netlist.py:147 ../virtManager/storagelist.py:315
 #: ../virtManager/storagelist.py:347
 msgid "Inactive"
 msgstr "Inactief"
 
-#: ../virtManager/host.py:671 ../virtManager/host.py:676
+#: ../virtManager/host.py:670 ../virtManager/host.py:675
 msgid "Isolated network"
 msgstr "Geïsoleerd netwerk"
 
-#: ../virtManager/host.py:719
+#: ../virtManager/host.py:718
 #, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
 msgstr "Weet je zeker dat je de interface '%s' wilt stoppen?"
 
-#: ../virtManager/host.py:725
+#: ../virtManager/host.py:724
 #, python-format
 msgid "Error stopping interface '%s'"
 msgstr "Fout bij het stoppen van interface '%s'"
 
-#: ../virtManager/host.py:734
+#: ../virtManager/host.py:733
 #, python-format
 msgid "Are you sure you want to start the interface '%s'?"
 msgstr "Weet je zeker dat je de interface '%s' wilt starten?"
 
-#: ../virtManager/host.py:740
+#: ../virtManager/host.py:739
 #, python-format
 msgid "Error starting interface '%s'"
 msgstr "Fout bij het starten van interface '%s'"
 
-#: ../virtManager/host.py:747
+#: ../virtManager/host.py:746
 #, python-format
 msgid "Are you sure you want to permanently delete the interface %s?"
 msgstr "Weet je zeker dat je het interface %s permanent wilt verwijderen?"
 
-#: ../virtManager/host.py:755
+#: ../virtManager/host.py:754
 #, python-format
 msgid "Error deleting interface '%s'"
 msgstr "Fout bij het verwijderen van interface '%s'"
 
-#: ../virtManager/host.py:764
+#: ../virtManager/host.py:763
 #, python-format
 msgid "Error launching interface wizard: %s"
 msgstr "Fout bij het lanceren van interface assistent: %s"
 
-#: ../virtManager/host.py:791
+#: ../virtManager/host.py:790
 #, python-format
 msgid "Error setting interface startmode: %s"
 msgstr "Fout bij het instellen van interface start mode: %s"
 
-#: ../virtManager/host.py:808
+#: ../virtManager/host.py:807
 msgid "No interface selected."
 msgstr "Geen interface geselecteerd."
 
-#: ../virtManager/host.py:818
+#: ../virtManager/host.py:817
 #, python-format
 msgid "Error selecting interface: %s"
 msgstr "Fout bij het selecteren van interface: %s"
@@ -3153,30 +3173,32 @@ msgstr "Netwerk I/O"
 
 #: ../virtManager/manager.py:509
 #, python-format
-msgid "This will remove the connection:\n"
+msgid ""
+"This will remove the connection:\n"
 "\n"
 "%s\n"
 "\n"
 "Are you sure?"
-msgstr "Dit zal de verbinding verwijderen:\n"
+msgstr ""
+"Dit zal de verbinding verwijderen:\n"
 "\n"
 "%s\n"
 "\n"
 "Wil je dat?"
 
-#: ../virtManager/manager.py:609
+#: ../virtManager/manager.py:618
 msgid "Double click to connect"
 msgstr "Dubbel-klik om te verbinden"
 
-#: ../virtManager/manager.py:616
+#: ../virtManager/manager.py:625
 msgid "Not Connected"
 msgstr "Niet verbonden"
 
-#: ../virtManager/manager.py:618
+#: ../virtManager/manager.py:627
 msgid "Connecting..."
 msgstr "Verbinding maken..."
 
-#: ../virtManager/manager.py:988
+#: ../virtManager/manager.py:974
 msgid "Disabled in preferences dialog."
 msgstr "Uitgezet in de voorkeuren dialoog."
 
@@ -3221,9 +3243,9 @@ msgstr ""
 
 #: ../virtManager/migrate.py:228
 msgid ""
-"The destination's hostname is 'localhost', which will be rejected by libvirt."
-" You must configure the destination to have a valid publicly accessible "
-"hostname."
+"The destination's hostname is 'localhost', which will be rejected by "
+"libvirt. You must configure the destination to have a valid publicly "
+"accessible hostname."
 msgstr ""
 
 #: ../virtManager/migrate.py:295
@@ -3389,134 +3411,152 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "Druk op de gewenste grijp toets combinatie"
 
-#: ../virtManager/serialcon.py:281
+#: ../virtManager/serialcon.py:291
 msgid "Remote serial console not supported for this connection"
 msgstr ""
 
-#: ../virtManager/serialcon.py:284
+#: ../virtManager/serialcon.py:294
 msgid "Serial console not available for inactive guest"
 msgstr "Seriële console niet beschikbaar voor niet-actieve guests."
 
-#: ../virtManager/serialcon.py:286
+#: ../virtManager/serialcon.py:296
 #, python-format
 msgid "Console for device type '%s' not yet supported"
 msgstr "Console voor apparaat type '%s' nog niet ondersteund."
 
-#: ../virtManager/serialcon.py:291
+#: ../virtManager/serialcon.py:301
 #, python-format
 msgid "Can not access console path '%s'"
 msgstr "Kan geen toegang krijgen tot console pad '%s'."
 
-#: ../virtManager/serialcon.py:406
+#: ../virtManager/serialcon.py:416
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "Fout bij verbinden met tekst console: %s"
 
-#: ../virtManager/snapshots.py:159
+#: ../virtManager/snapshots.py:160
 msgid "_Start snapshot"
 msgstr ""
 
-#: ../virtManager/snapshots.py:168
+#: ../virtManager/snapshots.py:169
 msgid "_Delete snapshot"
 msgstr ""
 
-#: ../virtManager/snapshots.py:225
+#: ../virtManager/snapshots.py:226
 #, python-format
 msgid "Error refreshing snapshot list: %s"
 msgstr ""
 
-#: ../virtManager/snapshots.py:241
+#: ../virtManager/snapshots.py:239
 msgid "External"
 msgstr "Extern"
 
-#: ../virtManager/snapshots.py:248
+#: ../virtManager/snapshots.py:246
 msgid "VM State"
 msgstr "VM staat"
 
-#: ../virtManager/snapshots.py:346
+#: ../virtManager/snapshots.py:344
 msgid "External disk and memory"
 msgstr ""
 
-#: ../virtManager/snapshots.py:348
+#: ../virtManager/snapshots.py:346
 msgid "External memory only"
 msgstr ""
 
-#: ../virtManager/snapshots.py:350
+#: ../virtManager/snapshots.py:348
 msgid "External disk only"
 msgstr ""
 
-#: ../virtManager/snapshots.py:469
+#: ../virtManager/snapshots.py:467
 #, python-format
 msgid "Error creating snapshot: %s"
 msgstr ""
 
-#: ../virtManager/snapshots.py:487
+#: ../virtManager/snapshots.py:485
 #, python-format
 msgid "Error validating snapshot: %s"
 msgstr ""
 
-#: ../virtManager/snapshots.py:544
+#: ../virtManager/snapshots.py:542
 msgid "Creating virtual machine snapshot"
 msgstr ""
 
-#: ../virtManager/snapshots.py:617
+#: ../virtManager/snapshots.py:615
 #, python-format
 msgid ""
 "Are you sure you want to run snapshot '%s'? All %s changes since the last "
 "snapshot was created will be discarded."
 msgstr ""
 
-#: ../virtManager/snapshots.py:621
+#: ../virtManager/snapshots.py:619
 msgid "disk"
 msgstr ""
 
-#: ../virtManager/snapshots.py:623
+#: ../virtManager/snapshots.py:621
 msgid "disk and configuration"
 msgstr ""
 
-#: ../virtManager/snapshots.py:632
+#: ../virtManager/snapshots.py:630
 msgid "Running snapshot"
 msgstr ""
 
-#: ../virtManager/snapshots.py:633
+#: ../virtManager/snapshots.py:631
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr ""
 
-#: ../virtManager/snapshots.py:634
+#: ../virtManager/snapshots.py:632
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr ""
 
-#: ../virtManager/snapshots.py:643
+#: ../virtManager/snapshots.py:641
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr ""
 
-#: ../virtManager/snapshots.py:651
+#: ../virtManager/snapshots.py:649
 msgid "Deleting snapshot"
 msgstr ""
 
-#: ../virtManager/snapshots.py:652
+#: ../virtManager/snapshots.py:650
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr ""
 
-#: ../virtManager/snapshots.py:653
+#: ../virtManager/snapshots.py:651
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr ""
 
-#: ../virtManager/snapshots.py:661
+#: ../virtManager/snapshots.py:659
 msgid "No snapshot selected."
 msgstr ""
 
-#: ../virtManager/snapshots.py:664
+#: ../virtManager/snapshots.py:662
 msgid "Multiple snapshots selected."
 msgstr ""
 
-#: ../virtManager/snapshots.py:674
+#: ../virtManager/snapshots.py:672
 #, python-format
 msgid "Error selecting snapshot: %s"
+msgstr ""
+
+#: ../virtManager/sshtunnels.py:72
+msgid ""
+"Guest is on a remote host, but is only configured to allow local file "
+"descriptor connections."
+msgstr ""
+
+#: ../virtManager/sshtunnels.py:76
+msgid "Guest is configured for TLS only which does not work over SSH."
+msgstr ""
+
+#: ../virtManager/sshtunnels.py:82
+#, python-format
+msgid ""
+"Guest is on a remote host with transport '%s' but is only configured to "
+"listen locally. To connect remotely you will need to change the guest's "
+"listen address."
 msgstr ""
 
 #: ../virtManager/storagebrowse.py:104
@@ -3593,59 +3633,65 @@ msgstr "Weet je zeker dat je de pool %s permanent wilt verwijderen?"
 msgid "Error deleting pool '%s'"
 msgstr "Fout bij het verwijderen van pool '%s'"
 
-#: ../virtManager/storagelist.py:662
+#: ../virtManager/storagelist.py:659
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Fout bij het verversen van pool '%s'"
 
-#: ../virtManager/storagelist.py:678
+#: ../virtManager/storagelist.py:675
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr ""
 
-#: ../virtManager/storagelist.py:717
+#: ../virtManager/storagelist.py:714
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Fout bij het lanceren van de volume assistent: %s"
 
-#: ../virtManager/storagelist.py:725
+#: ../virtManager/storagelist.py:722
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Weet je zeker dat je het volume %s permanent wilt verwijderen?"
 
-#: ../virtManager/storagelist.py:738
+#: ../virtManager/storagelist.py:735
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr ""
 
-#: ../virtManager/systray.py:122
+#: ../virtManager/systray.py:124
 msgid "_Show Virtual Machine Manager"
 msgstr ""
 
-#: ../virtManager/systray.py:150 ../ui/manager.ui.h:1
+#: ../virtManager/systray.py:152 ../data/virt-manager.desktop.in.h:1
+#: ../data/virt-manager.appdata.xml.in.h:1 ../ui/manager.ui.h:1
 msgid "Virtual Machine Manager"
 msgstr "Virtuele machine beheerder"
 
-#: ../virtManager/systray.py:270 ../virtManager/systray.py:327
+#: ../virtManager/systray.py:272 ../virtManager/systray.py:329
 msgid "No virtual machines"
 msgstr "Geen virtuele machines"
 
-#: ../virtManager/viewers.py:325
+#: ../virtManager/viewers.py:361
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 " The credential type %s is not supported"
 msgstr ""
 
-#: ../virtManager/viewers.py:442
+#: ../virtManager/viewers.py:477
 #, python-format
 msgid "Error opening socket path '%s': %s"
 msgstr "Fout bij openen van socket pad '%s': %s"
 
-#: ../virtManager/viewers.py:447
+#: ../virtManager/viewers.py:482
 #, python-format
 msgid "Error opening socket path '%s'"
 msgstr "Fout bij openen van socket pad '%s'"
+
+#: ../virtManager/viewers.py:579
+#, python-format
+msgid "Encountered SPICE %(error-name)s"
+msgstr ""
 
 #: ../virtManager/vmmenu.py:73
 msgid "_Reboot"
@@ -3714,12 +3760,12 @@ msgstr ""
 msgid "%s appears to be an archive, running: %s"
 msgstr ""
 
-#: ../virtconv/formats.py:275
+#: ../virtconv/formats.py:278
 #, python-format
 msgid "None of %s tools found."
 msgstr ""
 
-#: ../virtconv/formats.py:313
+#: ../virtconv/formats.py:327
 #, python-format
 msgid "New path name '%s' already exists"
 msgstr ""
@@ -3750,9 +3796,11 @@ msgstr ""
 
 #: ../virtconv/vmx.py:87
 #, python-format
-msgid "Syntax error at line %d: %s\n"
+msgid ""
+"Syntax error at line %d: %s\n"
 "%s"
-msgstr "Syntax fout op regel %d: %s\n"
+msgstr ""
+"Syntax fout op regel %d: %s\n"
 "%s"
 
 #: ../virtconv/vmx.py:125
@@ -3770,26 +3818,26 @@ msgstr ""
 msgid "No displayName defined in '%s'"
 msgstr "Geen displayName gedefinieerd in '%s'"
 
-#: ../virtinst/capabilities.py:478
+#: ../virtinst/capabilities.py:483
 #, python-format
 msgid "for arch '%s'"
 msgstr "voor architectuur '%s'"
 
-#: ../virtinst/capabilities.py:482
+#: ../virtinst/capabilities.py:487
 #, python-format
 msgid "virtualization type '%s'"
 msgstr "virtualisatie type '%s'"
 
-#: ../virtinst/capabilities.py:484
+#: ../virtinst/capabilities.py:489
 msgid "any virtualization options"
 msgstr "alle virtualisatie opties"
 
-#: ../virtinst/capabilities.py:486
+#: ../virtinst/capabilities.py:491
 #, python-format
 msgid "Host does not support %(virttype)s %(arch)s"
 msgstr "Host ondersteunt %(virttype)s %(arch)s niet"
 
-#: ../virtinst/capabilities.py:494
+#: ../virtinst/capabilities.py:499
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s%(machine)s for virtualization "
@@ -3798,19 +3846,19 @@ msgstr ""
 "Host ondersteunt domein type %(domain)s%(machine)s niet voor virtualisatie "
 "type '%(virttype)s' architectuur '%(arch)s'"
 
-#: ../virtinst/cli.py:158
+#: ../virtinst/cli.py:160
 msgid "See man page for examples and full option syntax."
 msgstr ""
 
-#: ../virtinst/cli.py:160
+#: ../virtinst/cli.py:162
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 
-#: ../virtinst/cli.py:328
+#: ../virtinst/cli.py:330
 msgid "Exiting at user request."
 msgstr "Afsluiten op verzoek van gebruiker."
 
-#: ../virtinst/cli.py:340
+#: ../virtinst/cli.py:342
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -3823,29 +3871,29 @@ msgstr ""
 "  %s\n"
 "anders moet je jouw installatie opnieuw starten."
 
-#: ../virtinst/cli.py:357
+#: ../virtinst/cli.py:359
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr ""
 
-#: ../virtinst/cli.py:373
+#: ../virtinst/cli.py:375
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Dit zal het bestaande pad '%s' overschrijven"
 
-#: ../virtinst/cli.py:384
+#: ../virtinst/cli.py:386
 #, python-format
 msgid "Disk %s is already in use by other guests %s."
 msgstr ""
 
-#: ../virtinst/cli.py:401
+#: ../virtinst/cli.py:403
 #, python-format
 msgid ""
 "%s may not be accessible by the hypervisor. You will need to grant the '%s' "
 "user search permissions for the following directories: %s"
 msgstr ""
 
-#: ../virtinst/cli.py:474
+#: ../virtinst/cli.py:487
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -3853,67 +3901,67 @@ msgstr ""
 "Kan niet verbinden met de grafische console: virt-viewer is niet "
 "geïnstalleerd. Installeer het 'virt-viewer' pakket."
 
-#: ../virtinst/cli.py:480
+#: ../virtinst/cli.py:493
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: ../virtinst/cli.py:499 ../virtinst/cli.py:502
+#: ../virtinst/cli.py:512 ../virtinst/cli.py:515
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Verbinden met  hypervisor met libvirt URI"
 
-#: ../virtinst/cli.py:518
+#: ../virtinst/cli.py:531
 msgid "Don't automatically try to connect to the guest console"
 msgstr "Probeer niet automatisch met de gast console te verbinden"
 
-#: ../virtinst/cli.py:522
+#: ../virtinst/cli.py:535
 msgid "Don't boot guest after completing install."
 msgstr "Start de gast niet op na het voltooien van de installatie."
 
-#: ../virtinst/cli.py:526
+#: ../virtinst/cli.py:539
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 
-#: ../virtinst/cli.py:533
+#: ../virtinst/cli.py:546
 msgid "Print the generated domain XML rather than create the guest."
 msgstr ""
 
-#: ../virtinst/cli.py:552
+#: ../virtinst/cli.py:565
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "Loop door het installatie proces, maar maak geen apparaten aan en definieer "
 "geen gast."
 
-#: ../virtinst/cli.py:557
+#: ../virtinst/cli.py:570
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
 
-#: ../virtinst/cli.py:561
+#: ../virtinst/cli.py:574
 msgid "Suppress non-error output"
 msgstr "Onderdruk niet-fout output"
 
-#: ../virtinst/cli.py:563
+#: ../virtinst/cli.py:576
 msgid "Print debugging information"
 msgstr "Debug informatie afdrukken"
 
-#: ../virtinst/cli.py:568
+#: ../virtinst/cli.py:581
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
 
-#: ../virtinst/cli.py:575
+#: ../virtinst/cli.py:588
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
 "--memory 512,maxmemory=1024"
 msgstr ""
 
-#: ../virtinst/cli.py:585
+#: ../virtinst/cli.py:598
 msgid ""
 "Number of vcpus to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -3921,12 +3969,13 @@ msgid ""
 "--vcpus sockets=2,cores=4,threads=2,"
 msgstr ""
 
-#: ../virtinst/cli.py:594
-msgid "CPU model and features. Ex:\n"
+#: ../virtinst/cli.py:607
+msgid ""
+"CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 msgstr ""
 
-#: ../virtinst/cli.py:605
+#: ../virtinst/cli.py:618
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics vnc\n"
@@ -3940,7 +3989,7 @@ msgstr ""
 "--graphics none\n"
 "--graphics vnc,password=foobar,port=5910,keymap=ja"
 
-#: ../virtinst/cli.py:614
+#: ../virtinst/cli.py:627
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -3950,7 +3999,7 @@ msgid ""
 "--network help"
 msgstr ""
 
-#: ../virtinst/cli.py:624
+#: ../virtinst/cli.py:637
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=ich9-ehci1"
@@ -3958,35 +4007,34 @@ msgstr ""
 "Configureer een gast controller apparaat. B.v.:\n"
 "--controller type=usb,model=ich9-ehci1"
 
-#: ../virtinst/cli.py:627
+#: ../virtinst/cli.py:640
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
 
-#: ../virtinst/cli.py:631
+#: ../virtinst/cli.py:644
 msgid "Configure a guest serial device"
 msgstr "Configureer een gast serieel apparaat"
 
-#: ../virtinst/cli.py:633
+#: ../virtinst/cli.py:646
 msgid "Configure a guest parallel device"
 msgstr "Configureer een gast parallel apparaat"
 
-#: ../virtinst/cli.py:635
+#: ../virtinst/cli.py:648
 msgid "Configure a guest communication channel"
 msgstr "Configureer een gast communicatiekanaal"
 
-#: ../virtinst/cli.py:637
+#: ../virtinst/cli.py:650
 msgid "Configure a text console connection between the guest and host"
 msgstr "Configureer een tekst console verbinding tussen de gast en de host"
 
-#: ../virtinst/cli.py:640
-msgid ""
-"Configure physical USB/PCI/etc host devices to be shared with the guest"
+#: ../virtinst/cli.py:653
+msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
-#: ../virtinst/cli.py:643
+#: ../virtinst/cli.py:656
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -3996,26 +4044,27 @@ msgstr ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 
-#: ../virtinst/cli.py:654
+#: ../virtinst/cli.py:667
 msgid "Configure guest sound device emulation"
 msgstr "Configureer gast geluidsapparaat emulatie"
 
-#: ../virtinst/cli.py:664
+#: ../virtinst/cli.py:677
 msgid "Configure a guest watchdog device"
 msgstr "Configureer een gast waakhond apparaat"
 
-#: ../virtinst/cli.py:666
+#: ../virtinst/cli.py:679
 msgid "Configure guest video hardware."
 msgstr "Configureer gast video hardware."
 
-#: ../virtinst/cli.py:668
-msgid "Configure a guest smartcard device. Ex:\n"
+#: ../virtinst/cli.py:681
+msgid ""
+"Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 "Configureer een gast smartcard apparaat. B.v.:\n"
 "--smartcard mode=passthrough"
 
-#: ../virtinst/cli.py:671
+#: ../virtinst/cli.py:684
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -4023,87 +4072,91 @@ msgstr ""
 "Configureer een gast omleiding apparaat. B.v.:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: ../virtinst/cli.py:674
-msgid "Configure a guest memballoon device. Ex:\n"
+#: ../virtinst/cli.py:687
+msgid ""
+"Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 
-#: ../virtinst/cli.py:677
-msgid "Configure a guest TPM device. Ex:\n"
+#: ../virtinst/cli.py:690
+msgid ""
+"Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
 
-#: ../virtinst/cli.py:680
-msgid "Configure a guest RNG device. Ex:\n"
+#: ../virtinst/cli.py:693
+msgid ""
+"Configure a guest RNG device. Ex:\n"
 "--rng /dev/random"
 msgstr ""
 
-#: ../virtinst/cli.py:683
-msgid "Configure a guest panic device. Ex:\n"
+#: ../virtinst/cli.py:696
+msgid ""
+"Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
-#: ../virtinst/cli.py:689
+#: ../virtinst/cli.py:702
 msgid "Set domain security driver configuration."
 msgstr "Stel domein beveiliging driver configuratie in."
 
-#: ../virtinst/cli.py:691
+#: ../virtinst/cli.py:704
 msgid "Tune NUMA policy for the domain process."
 msgstr "Stem NUMA tactiek af voor het domein proces."
 
-#: ../virtinst/cli.py:693
+#: ../virtinst/cli.py:706
 msgid "Tune memory policy for the domain process."
 msgstr ""
 
-#: ../virtinst/cli.py:695
+#: ../virtinst/cli.py:708
 msgid "Tune blkio policy for the domain process."
 msgstr ""
 
-#: ../virtinst/cli.py:697
+#: ../virtinst/cli.py:710
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
 
-#: ../virtinst/cli.py:700
+#: ../virtinst/cli.py:713
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,eoi=on"
 msgstr ""
 
-#: ../virtinst/cli.py:704
+#: ../virtinst/cli.py:717
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
 
-#: ../virtinst/cli.py:707
+#: ../virtinst/cli.py:720
 msgid "Configure VM power management features"
 msgstr ""
 
-#: ../virtinst/cli.py:709
+#: ../virtinst/cli.py:722
 msgid "Configure VM lifecycle management policy"
 msgstr ""
 
-#: ../virtinst/cli.py:711
+#: ../virtinst/cli.py:724
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr ""
 
-#: ../virtinst/cli.py:716
+#: ../virtinst/cli.py:729
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
 
-#: ../virtinst/cli.py:720
+#: ../virtinst/cli.py:733
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
 msgstr ""
 
-#: ../virtinst/cli.py:729
+#: ../virtinst/cli.py:742
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -4112,52 +4165,52 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: ../virtinst/cli.py:760
+#: ../virtinst/cli.py:773
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr ""
 
-#: ../virtinst/cli.py:832
+#: ../virtinst/cli.py:912
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: ../virtinst/cli.py:899
+#: ../virtinst/cli.py:1127
 #, python-format
 msgid "Unknown options %s"
 msgstr "Onbekende opties %s"
 
-#: ../virtinst/cli.py:1092 ../virtinst/cli.py:1127
+#: ../virtinst/cli.py:1180 ../virtinst/cli.py:1211
 #, python-format
 msgid "Error: --%(cli_arg_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: ../virtinst/cli.py:1675
+#: ../virtinst/cli.py:1798
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Onjuiste waarde voor 'size': %s"
 
-#: ../virtinst/cli.py:1688
+#: ../virtinst/cli.py:1811
 #, python-format
 msgid "Unknown '%s' value '%s'"
 msgstr "Onbekende '%s' waarde '%s'"
 
-#: ../virtinst/cli.py:1705
+#: ../virtinst/cli.py:1829
 msgid "Cannot specify more than 1 storage path"
 msgstr "Kan niet meer dan een opslag pad specificeren"
 
-#: ../virtinst/cli.py:1712
+#: ../virtinst/cli.py:1836
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Opslag volume moet gespecificeerd worden als vol=poolnaam/volnaam"
 
-#: ../virtinst/cli.py:1868
+#: ../virtinst/cli.py:2040
 #, python-format
 msgid "Didn't match keymap '%s' in keytable!"
 msgstr "Komt niet overeen met toetsenbord indeling '%s' in keytable!"
 
-#: ../virtinst/cli.py:2160
+#: ../virtinst/cli.py:2332
 #, python-format
 msgid "%(devtype)s type '%(chartype)s' does not support '%(optname)s' option."
 msgstr "%(devtype)s type '%(chartype)s' ondersteunt '%(optname)s' optie niet."
@@ -4237,7 +4290,7 @@ msgstr ""
 msgid "Domain '%s' was not found."
 msgstr "Domein '%s' werd niet gevonden."
 
-#: ../virtinst/cpu.py:98
+#: ../virtinst/cpu.py:120
 msgid "No host CPU reported in capabilities"
 msgstr "Geen host CPU gerapporteerd in mogelijkheden"
 
@@ -4246,11 +4299,11 @@ msgstr "Geen host CPU gerapporteerd in mogelijkheden"
 msgid "Could not determine or unsupported format of '%s'"
 msgstr "Kon niet bepalen of niet-ondersteund formaat van '%s'"
 
-#: ../virtinst/device.py:157
+#: ../virtinst/device.py:170
 msgid "Virtual device type must be set in subclass."
 msgstr "Virtueel apparaat type moet ingesteld worden in sub-klasse."
 
-#: ../virtinst/device.py:160
+#: ../virtinst/device.py:173
 #, python-format
 msgid "Unknown virtual device type '%s'."
 msgstr "Onbekend virtueel apparaat type '%s'."
@@ -4361,54 +4414,54 @@ msgstr "Sysfs naam van virtio poort in de gast"
 
 #. Trying to change perms on vfat at least doesn't work
 #. but also doesn't seem to error. Try and detect that
-#: ../virtinst/devicedisk.py:286
+#: ../virtinst/devicedisk.py:296
 #, python-format
 msgid "Permissions on '%s' did not stick"
 msgstr "Rechten op '%s' waren niet blijvend"
 
-#: ../virtinst/devicedisk.py:381
+#: ../virtinst/devicedisk.py:391
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr ""
 
-#: ../virtinst/devicedisk.py:386
+#: ../virtinst/devicedisk.py:396
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
 msgstr ""
 
-#: ../virtinst/devicedisk.py:408
+#: ../virtinst/devicedisk.py:419
 msgid "Format attribute not supported for this volume type"
 msgstr "Formaat attribuut niet ondersteund voor dit volume type"
 
-#: ../virtinst/devicedisk.py:492
+#: ../virtinst/devicedisk.py:503
 msgid "Can't change disk path if storage creation info has been set."
 msgstr ""
 
-#: ../virtinst/devicedisk.py:829
+#: ../virtinst/devicedisk.py:844
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Apparaat type '%s' vereist een pad"
 
-#: ../virtinst/devicedisk.py:836
+#: ../virtinst/devicedisk.py:851
 #, python-format
 msgid "The path '%s' must be a file or a device, not a directory"
 msgstr "Het pad '%s' moet een bestand of een apparaat zijn, geen map"
 
-#: ../virtinst/devicedisk.py:845
+#: ../virtinst/devicedisk.py:860
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 
 #. This basically means that we either chose full
 #. controller or didn't add any
-#: ../virtinst/devicedisk.py:1009
+#: ../virtinst/devicedisk.py:1024
 #, python-format
 msgid "Controller number %d for disk of type %s has no empty slot to use"
 msgstr ""
 
-#: ../virtinst/devicedisk.py:1012
+#: ../virtinst/devicedisk.py:1027
 #, python-format
 msgid "Only %s disks of type '%s' are supported"
 msgstr ""
@@ -4537,25 +4590,16 @@ msgstr "Klonen van %(srcfile)s"
 msgid "Error cloning diskimage %s to %s: %s"
 msgstr "Fout bij het klonen van disk image %s naar %s: %s"
 
-#: ../virtinst/distroinstaller.py:61
+#: ../virtinst/distroinstaller.py:56
 msgid "Invalid NFS format: No path specified."
 msgstr "Ongeldig NFS formaat: Geen pad gespecificeerd."
 
-#: ../virtinst/distroinstaller.py:120
-msgid "Failed to lookup scratch media volume"
-msgstr "Opzoeken van scratch media volume mislukte"
-
-#: ../virtinst/distroinstaller.py:135
-#, python-format
-msgid "Transferring %s"
-msgstr "Overdracht van %s"
-
-#: ../virtinst/distroinstaller.py:423
+#: ../virtinst/distroinstaller.py:192
 #, fuzzy, python-format
 msgid "Validating install media '%s' failed: %s"
 msgstr "Fout bij het valideren van installatielocatie: %s"
 
-#: ../virtinst/distroinstaller.py:446
+#: ../virtinst/distroinstaller.py:215
 msgid "Invalid install location: "
 msgstr "Ongeldige installatie locatie:"
 
@@ -4575,16 +4619,16 @@ msgstr "cpuset bevat een ongeldige formaat."
 msgid "cpuset's pCPU numbers must be less than pCPUs."
 msgstr "pCPU nummers van cpuset moet kleiner zijn dan pCPUs."
 
-#: ../virtinst/domcapabilities.py:132
+#: ../virtinst/domcapabilities.py:139
 msgid "BIOS"
 msgstr ""
 
-#: ../virtinst/domcapabilities.py:138
+#: ../virtinst/domcapabilities.py:145
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
-#: ../virtinst/domcapabilities.py:141
+#: ../virtinst/domcapabilities.py:148
 #, python-format
 msgid "Custom: %(path)s"
 msgstr ""
@@ -4613,38 +4657,34 @@ msgstr "Gast naam '%s' is al in gebruik."
 msgid "Distro '%s' does not exist in our dictionary"
 msgstr ""
 
-#: ../virtinst/guest.py:380
+#: ../virtinst/guest.py:391
 msgid "Creating domain..."
 msgstr "Domein aanmaken..."
 
-#: ../virtinst/guest.py:382
-msgid "Starting domain..."
-msgstr "Domein starten..."
-
-#: ../virtinst/guest.py:477
+#: ../virtinst/guest.py:439
 msgid "Domain has already been started!"
 msgstr "Domein is al gestart!"
 
-#: ../virtinst/guest.py:544
+#: ../virtinst/guest.py:486
 #, python-format
 msgid "Removing disk '%s'"
 msgstr ""
 
-#: ../virtinst/guest.py:570
+#: ../virtinst/guest.py:512
 msgid "Libvirt version does not support UEFI."
 msgstr ""
 
-#: ../virtinst/guest.py:574
+#: ../virtinst/guest.py:516
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: ../virtinst/guest.py:579
+#: ../virtinst/guest.py:521
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
 
-#: ../virtinst/guest.py:984
+#: ../virtinst/guest.py:928
 #, python-format
 msgid "Duplicate address for devices %s and %s"
 msgstr ""
@@ -4741,15 +4781,24 @@ msgstr "Ouder interface waarop VLAN aangemaakt wordt"
 msgid "VLAN Tag and parent interface are required."
 msgstr ""
 
-#: ../virtinst/interface.py:257
+#: ../virtinst/interface.py:258
 #, python-format
 msgid "Could not define interface: %s"
 msgstr "Kon interface niet definiëren: %s"
 
-#: ../virtinst/interface.py:264
+#: ../virtinst/interface.py:265
 #, python-format
 msgid "Could not create interface: %s"
 msgstr "Kon interface niet aanmaken: %s"
+
+#: ../virtinst/kernelupload.py:88
+msgid "Failed to lookup scratch media volume"
+msgstr "Opzoeken van scratch media volume mislukte"
+
+#: ../virtinst/kernelupload.py:103
+#, python-format
+msgid "Transferring %s"
+msgstr "Overdracht van %s"
 
 #: ../virtinst/network.py:106 ../virtinst/network.py:111
 msgid "Average"
@@ -4902,72 +4951,72 @@ msgstr ""
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "Kon standaard opslag pool '%s' niet aanmaken: %s"
 
-#: ../virtinst/storage.py:305
+#: ../virtinst/storage.py:316
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "De naam '%s' is al in gebruik door een andere pool."
 
-#: ../virtinst/storage.py:392
+#: ../virtinst/storage.py:403
 msgid "Storage device type the pool will represent."
 msgstr "Opslag apparaat type gerepresenteerd door de pool."
 
-#: ../virtinst/storage.py:404
+#: ../virtinst/storage.py:415
 msgid "iSCSI initiator qualified name"
 msgstr "iSCSI initiator gekwalificeerde naam"
 
-#: ../virtinst/storage.py:407
+#: ../virtinst/storage.py:418
 msgid "Name of the Volume Group"
 msgstr "Naam van de volume groep"
 
-#: ../virtinst/storage.py:472
+#: ../virtinst/storage.py:483
 msgid "Hostname is required"
 msgstr "Host naam is vereist"
 
-#: ../virtinst/storage.py:476
+#: ../virtinst/storage.py:487
 msgid "Source path is required"
 msgstr ""
 
-#: ../virtinst/storage.py:489
+#: ../virtinst/storage.py:500
 msgid "Must explicitly specify source path if building pool"
 msgstr ""
 "Bron pad moet uitdrukkelijk opgegeven worden bij het bouwen van de pool"
 
-#: ../virtinst/storage.py:493
+#: ../virtinst/storage.py:504
 msgid "Must explicitly specify disk format if formatting disk device."
 msgstr ""
 "Schijf formaat moet expliciet opgegeven worden bij het formatteren van "
 "schijf apparaat."
 
-#: ../virtinst/storage.py:505
+#: ../virtinst/storage.py:516
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "Kon opslag pool niet definiëren: %s"
 
-#: ../virtinst/storage.py:512
+#: ../virtinst/storage.py:523
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "Kon opslag pool niet bouwen: %s"
 
-#: ../virtinst/storage.py:518
+#: ../virtinst/storage.py:529
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "Kon opslag pool niet starten: %s"
 
-#: ../virtinst/storage.py:524
+#: ../virtinst/storage.py:535
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "Kon pool autostart vlag miet instellen: %s"
 
-#: ../virtinst/storage.py:593
+#: ../virtinst/storage.py:604
 #, python-format
 msgid "pool '%s' must be active."
 msgstr "pool '%s' moet actief zijn."
 
-#: ../virtinst/storage.py:607
+#: ../virtinst/storage.py:618
 msgid "input_vol must be a virStorageVol"
 msgstr "input_vol moet een virStorageVol zijn"
 
-#: ../virtinst/storage.py:611
+#: ../virtinst/storage.py:622
 msgid ""
 "Creating storage from an existing volume is not supported by this libvirt "
 "version."
@@ -4975,11 +5024,11 @@ msgstr ""
 "Opslag aanmaken van een bestaande volume wordt niet ondersteund door deze "
 "libvirt versie."
 
-#: ../virtinst/storage.py:616
+#: ../virtinst/storage.py:627
 msgid "virStorageVolume pointer to clone/use as input."
 msgstr "virStorageVolume aanwijzer naar kloon/gebruik als input."
 
-#: ../virtinst/storage.py:624
+#: ../virtinst/storage.py:635
 #, fuzzy
 msgid ""
 "Creating storage by btrfs COW copy is not supported by this libvirt version."
@@ -4987,23 +5036,23 @@ msgstr ""
 "Opslag aanmaken van een bestaande volume wordt niet ondersteund door deze "
 "libvirt versie."
 
-#: ../virtinst/storage.py:655
+#: ../virtinst/storage.py:666
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "De naam '%s' is al in gebruik door een ander volume."
 
-#: ../virtinst/storage.py:755
+#: ../virtinst/storage.py:798
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr ""
 
-#: ../virtinst/storage.py:792
+#: ../virtinst/storage.py:837
 #, python-format
 msgid "Allocating '%s'"
 msgstr "Toewijzing van '%s'"
 
-#: ../virtinst/storage.py:859
+#: ../virtinst/storage.py:904
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
@@ -5012,7 +5061,7 @@ msgstr ""
 "Er is niet voldoende vrije ruimte op de opslag pool om het volume aan te "
 "maken. (%d M gevraagde toewijzing > %d M beschikbaar)"
 
-#: ../virtinst/storage.py:865
+#: ../virtinst/storage.py:910
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -5022,31 +5071,31 @@ msgstr ""
 "ruimte als het volume volledig wordt toegewezen. (%d M gevraagde capaciteit "
 "> %d M beschikbare)"
 
-#: ../virtinst/urlfetcher.py:86
+#: ../virtinst/urlfetcher.py:87
 #, python-format
 msgid "Couldn't acquire file %s: %s"
 msgstr "Kon bestand %s niet verkrijgen: %s"
 
-#: ../virtinst/urlfetcher.py:91
+#: ../virtinst/urlfetcher.py:92
 #, python-format
 msgid "Retrieving file %s..."
 msgstr "Ophalen van bestand %s..."
 
-#: ../virtinst/urlfetcher.py:220
+#: ../virtinst/urlfetcher.py:228
 #, python-format
 msgid "Opening URL %s failed: %s."
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:314
+#: ../virtinst/urlfetcher.py:317
 #, python-format
 msgid "Mounting location '%s' failed"
 msgstr "Locatie '%s' aankoppelen mislukte"
 
-#: ../virtinst/urlfetcher.py:511
+#: ../virtinst/urlfetcher.py:522
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:514
+#: ../virtinst/urlfetcher.py:525
 #, python-format
 msgid ""
 "Could not find an installable distribution at '%s'%s\n"
@@ -5055,22 +5104,22 @@ msgid ""
 "See virt-install man page for various distro examples."
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:578
+#: ../virtinst/urlfetcher.py:589
 #, python-format
 msgid "Couldn't find %(type)s kernel for %(distro)s tree."
 msgstr "Kon  %(type)s kernel voor %(distro)s boom niet vinden."
 
-#: ../virtinst/urlfetcher.py:593
+#: ../virtinst/urlfetcher.py:604
 #, python-format
 msgid "Could not find boot.iso in %s tree."
 msgstr "Kon boot.iso niet vinden in boom %s."
 
-#: ../virtinst/urlfetcher.py:736
+#: ../virtinst/urlfetcher.py:744
 #, python-format
 msgid "Could not find a kernel path for virt type '%s'"
 msgstr "Kon geen kernel pad vinden voor virt type '%s'"
 
-#: ../virtinst/urlfetcher.py:745
+#: ../virtinst/urlfetcher.py:753
 msgid "Could not find a boot iso path for this tree."
 msgstr "Kon geen boot iso pad voor deze boom vinden."
 
@@ -5117,6 +5166,38 @@ msgstr "Ongeldige regel lengte tijdens het ontleden van %s."
 #, python-format
 msgid "Defaulting bridge to xenbr%d"
 msgstr "Brug gaat naar de standaard xenbr%d"
+
+#: ../data/virt-manager.desktop.in.h:2
+#, fuzzy
+msgid "Manage virtual machines"
+msgstr "Geen virtuele machines"
+
+#: ../data/virt-manager.appdata.xml.in.h:2
+msgid "Graphically manage KVM, Xen, or LXC via libvirt"
+msgstr ""
+
+#: ../data/virt-manager.appdata.xml.in.h:3
+msgid ""
+"Virtual Machine Manager provides a graphical tool for administering virtual "
+"machines for KVM, Xen, and LXC. Start, stop, add or remove virtual devices, "
+"connect to a graphical or serial console, and see resource usage statistics "
+"for existing VMs on local or remote machines. Uses libvirt as the backend "
+"management API."
+msgstr ""
+
+#: ../data/virt-manager.appdata.xml.in.h:4
+msgid "Main manager window"
+msgstr ""
+
+#: ../data/virt-manager.appdata.xml.in.h:5
+#, fuzzy
+msgid "Virtual machine configuration screen"
+msgstr "Virtuele machine beheerder verbinding mislukt"
+
+#: ../data/virt-manager.appdata.xml.in.h:6
+#, fuzzy
+msgid "Graphical console connection for a virtual vachine"
+msgstr "Grafische console is nog niet actief voor guest"
 
 #: ../ui/about.ui.h:1
 msgid "Copyright (C) 2006-2014 Red Hat Inc."
@@ -5221,7 +5302,7 @@ msgstr "T_ype:"
 
 #: ../ui/addhardware.ui.h:22 ../ui/createinterface.ui.h:23
 #: ../ui/createpool.ui.h:3 ../ui/createvol.ui.h:4 ../ui/details.ui.h:40
-#: ../ui/host.ui.h:7 ../ui/snapshots.ui.h:3
+#: ../ui/host.ui.h:5 ../ui/snapshots.ui.h:3
 msgid "_Name:"
 msgstr "_Naam:"
 
@@ -5479,7 +5560,7 @@ msgstr "_Automatisch verbinden:"
 msgid "H_ostname:"
 msgstr "H_ost naam:"
 
-#: ../ui/connect.ui.h:8 ../ui/details.ui.h:167
+#: ../ui/connect.ui.h:8 ../ui/details.ui.h:168
 msgid "_Username:"
 msgstr "_Gebruikersnaam:"
 
@@ -6159,7 +6240,7 @@ msgstr "Virtuele machine"
 msgid "_File"
 msgstr "_Bestand"
 
-#: ../ui/details.ui.h:3 ../ui/host.ui.h:5
+#: ../ui/details.ui.h:3 ../ui/host.ui.h:3
 msgid "_View Manager"
 msgstr "Geef _beheerder weer"
 
@@ -6395,11 +6476,11 @@ msgstr "<b>Toepassingen</b>"
 msgid "Error message bar"
 msgstr ""
 
-#: ../ui/details.ui.h:68 ../ui/host.ui.h:10
+#: ../ui/details.ui.h:68 ../ui/host.ui.h:8
 msgid "<b>CPU usage</b>"
 msgstr ""
 
-#: ../ui/details.ui.h:69 ../ui/host.ui.h:11
+#: ../ui/details.ui.h:69 ../ui/host.ui.h:9
 msgid "<b>Memory usage</b>"
 msgstr ""
 
@@ -6605,7 +6686,7 @@ msgstr "MAC adres:"
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Virtuele netwerk interface</b>"
 
-#: ../ui/details.ui.h:125 ../ui/host.ui.h:43
+#: ../ui/details.ui.h:125 ../ui/host.ui.h:41
 msgid "Mode:"
 msgstr "Mode:"
 
@@ -6641,7 +6722,7 @@ msgstr "Doel naam:"
 msgid "<b>insert type</b>"
 msgstr "<b>type invoegen</b>"
 
-#: ../ui/details.ui.h:134 ../ui/host.ui.h:13
+#: ../ui/details.ui.h:134 ../ui/host.ui.h:11
 msgid "Device:"
 msgstr "Apparaat:"
 
@@ -6677,7 +6758,7 @@ msgstr "M_odus:"
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>Smartcard Device</b>"
 
-#: ../ui/details.ui.h:144 ../ui/host.ui.h:44
+#: ../ui/details.ui.h:144 ../ui/host.ui.h:42
 msgid "Address:"
 msgstr "Adres:"
 
@@ -6757,7 +6838,11 @@ msgstr "_Wachtwoord:"
 msgid "_Save this password in your keyring"
 msgstr "_Sla dit wachtwoord op in jouw sleutelbos"
 
-#: ../ui/details.ui.h:168
+#: ../ui/details.ui.h:167
+msgid "Check to save password, uncheck to forget password."
+msgstr ""
+
+#: ../ui/details.ui.h:169
 msgid "_Login"
 msgstr "_Inlog:"
 
@@ -6833,173 +6918,165 @@ msgstr "label"
 msgid "Connection Details"
 msgstr "Connectie Details"
 
-#: ../ui/host.ui.h:3
-msgid "Restore Saved Machine..."
-msgstr "Opgeslagen machine herstellen..."
-
 #: ../ui/host.ui.h:4
-msgid "Restore a saved machine from a filesystem image"
-msgstr "Herstel een opgeslagen machine vanuit een bestandssysteem image"
-
-#: ../ui/host.ui.h:6
 msgid "Libvirt URI:"
 msgstr ""
 
-#: ../ui/host.ui.h:8
+#: ../ui/host.ui.h:6
 msgid "A_utoconnect:"
 msgstr "Automatisch verbinden:"
 
-#: ../ui/host.ui.h:9
+#: ../ui/host.ui.h:7
 msgid "<b>Basic details</b>"
 msgstr "<b>Basis details</b>"
 
-#: ../ui/host.ui.h:12
+#: ../ui/host.ui.h:10
 msgid "_Overview"
 msgstr ""
 
-#: ../ui/host.ui.h:14 ../ui/storagelist.ui.h:14
+#: ../ui/host.ui.h:12 ../ui/storagelist.ui.h:14
 msgid "State:"
 msgstr "Toestand:"
 
-#: ../ui/host.ui.h:15 ../ui/storagelist.ui.h:15
+#: ../ui/host.ui.h:13 ../ui/storagelist.ui.h:15
 msgid "A_utostart:"
 msgstr "Automatisch starten:"
 
-#: ../ui/host.ui.h:16
+#: ../ui/host.ui.h:14
 msgid "Domain:"
 msgstr ""
 
-#: ../ui/host.ui.h:17 ../ui/storagelist.ui.h:12
+#: ../ui/host.ui.h:15 ../ui/storagelist.ui.h:12
 msgid "Name:"
 msgstr "Naam:"
 
-#: ../ui/host.ui.h:18
+#: ../ui/host.ui.h:16
 msgid "NAT to any device"
 msgstr ""
 
-#: ../ui/host.ui.h:19
+#: ../ui/host.ui.h:17
 msgid "Network:"
 msgstr "Netwerk:"
 
-#: ../ui/host.ui.h:20
+#: ../ui/host.ui.h:18
 msgid "DHCP range:"
 msgstr ""
 
-#: ../ui/host.ui.h:21
+#: ../ui/host.ui.h:19
 msgid "Forwarding:"
 msgstr ""
 
-#: ../ui/host.ui.h:22
+#: ../ui/host.ui.h:20
 msgid "Static Route:"
 msgstr ""
 
-#: ../ui/host.ui.h:23
+#: ../ui/host.ui.h:21
 #, fuzzy
 msgid "<b>_IPv4 configuration</b>"
 msgstr "<b>IPv4 configuratie</b>"
 
-#: ../ui/host.ui.h:25
+#: ../ui/host.ui.h:23
 msgid "<b>IPv6 configuration</b>"
 msgstr ""
 
-#: ../ui/host.ui.h:26
+#: ../ui/host.ui.h:24
 msgid "Enable i_nbound QoS"
 msgstr ""
 
-#: ../ui/host.ui.h:27
+#: ../ui/host.ui.h:25
 msgid "Average (KiB/sec):"
 msgstr ""
 
-#: ../ui/host.ui.h:28
+#: ../ui/host.ui.h:26
 msgid "Burst (KiB):"
 msgstr ""
 
-#: ../ui/host.ui.h:29
+#: ../ui/host.ui.h:27
 msgid "Peak (KiB/sec):"
 msgstr ""
 
-#: ../ui/host.ui.h:30
+#: ../ui/host.ui.h:28
 msgid "Enable ou_tbound QoS"
 msgstr ""
 
-#: ../ui/host.ui.h:31
+#: ../ui/host.ui.h:29
 msgid "Burst (KiB/sec):"
 msgstr ""
 
-#: ../ui/host.ui.h:32
+#: ../ui/host.ui.h:30
 #, fuzzy
 msgid "<b>_QoS configuration</b>"
 msgstr "<b>Verbind configuratie</b>"
 
-#: ../ui/host.ui.h:33
+#: ../ui/host.ui.h:31
 msgid "Add Network"
 msgstr "Netwerk toevoegen"
 
-#: ../ui/host.ui.h:34
+#: ../ui/host.ui.h:32
 msgid "Start Network"
 msgstr "Netwerk starten"
 
-#: ../ui/host.ui.h:35
+#: ../ui/host.ui.h:33
 msgid "Stop Network"
 msgstr "Netwerk stoppen"
 
-#: ../ui/host.ui.h:36
+#: ../ui/host.ui.h:34
 msgid "Delete Network"
 msgstr "Netwerk verwijderen"
 
-#: ../ui/host.ui.h:37
+#: ../ui/host.ui.h:35
 msgid "_Virtual Networks"
 msgstr ""
 
-#: ../ui/host.ui.h:38
+#: ../ui/host.ui.h:36
 msgid "_Storage"
 msgstr ""
 
-#: ../ui/host.ui.h:39
+#: ../ui/host.ui.h:37
 msgid "<b>Name</b>"
 msgstr "<b>Naam</b>"
 
-#: ../ui/host.ui.h:40
+#: ../ui/host.ui.h:38
 msgid "MAC:"
 msgstr "MAC:"
 
-#: ../ui/host.ui.h:41
+#: ../ui/host.ui.h:39
 msgid "Start mode:"
 msgstr "Start mode:"
 
-#: ../ui/host.ui.h:42
+#: ../ui/host.ui.h:40
 msgid "In use by:"
 msgstr "Gebruikt door:"
 
-#: ../ui/host.ui.h:45
+#: ../ui/host.ui.h:43
 msgid "<b>IPv4 Configuration</b>"
 msgstr "<b>IPv4 configuratie</b>"
 
-#: ../ui/host.ui.h:46
+#: ../ui/host.ui.h:44
 msgid "<b>IPv6 Configuration</b>"
 msgstr "<b>IPv6 configuratie</b>"
 
-#: ../ui/host.ui.h:47
+#: ../ui/host.ui.h:45
 msgid "<b>Slave Interfaces</b>"
 msgstr "<b>Slaaf interfaces</b>"
 
-#: ../ui/host.ui.h:48
+#: ../ui/host.ui.h:46
 msgid "Add Interface"
 msgstr "Interface toevoegen"
 
-#: ../ui/host.ui.h:49
+#: ../ui/host.ui.h:47
 msgid "Start Interface"
 msgstr "Interface starten"
 
-#: ../ui/host.ui.h:50
+#: ../ui/host.ui.h:48
 msgid "Stop Interface"
 msgstr "Interface stoppen"
 
-#: ../ui/host.ui.h:51
+#: ../ui/host.ui.h:49
 msgid "Delete Interface"
 msgstr "Interface verwijderen"
 
-#: ../ui/host.ui.h:52
+#: ../ui/host.ui.h:50
 msgid "N_etwork Interfaces"
 msgstr ""
 
@@ -7264,7 +7341,8 @@ msgid "CPU _default:"
 msgstr ""
 
 #: ../ui/preferences.ui.h:21
-msgid "Add Spice _USB\n"
+msgid ""
+"Add Spice _USB\n"
 "Redirection:"
 msgstr ""
 
@@ -7477,3 +7555,23 @@ msgstr "Ververs volume lijst"
 #: ../ui/storagelist.ui.h:20
 msgid "Delete volume"
 msgstr ""
+
+#~ msgid "Requested installation does not have XML step 3"
+#~ msgstr "Gevraagde installatie heeft geen XML stap 3"
+
+#~ msgid "--print-step must be 1, 2, 3, or all"
+#~ msgstr "--print-step moet 1, 2, 3 of all zijn"
+
+#~ msgid ""
+#~ "Error: viewer connection to hypervisor host got refused or disconnected!"
+#~ msgstr ""
+#~ "Fout: viewer verbinding met hypervisor host werd geweigerd of verbroken!"
+
+#~ msgid "Starting domain..."
+#~ msgstr "Domein starten..."
+
+#~ msgid "Restore Saved Machine..."
+#~ msgstr "Opgeslagen machine herstellen..."
+
+#~ msgid "Restore a saved machine from a filesystem image"
+#~ msgstr "Herstel een opgeslagen machine vanuit een bestandssysteem image"
