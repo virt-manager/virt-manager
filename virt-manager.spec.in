@@ -54,9 +54,10 @@ Requires: gnome-icon-theme
 %endif
 
 
-BuildRequires: python
 BuildRequires: intltool
 BuildRequires: /usr/bin/pod2man
+# For python, and python2 rpm macros
+BuildRequires: python2-devel
 
 
 %description
