@@ -447,12 +447,6 @@ class vmmConnection(vmmGObject):
             if self._storage_capable is False:
                 logging.debug("Connection doesn't seem to support storage "
                               "APIs. Skipping all storage polling.")
-            else:
-                # Try to create the default storage pool
-                try:
-                    virtinst.StoragePool.build_default_pool(self.get_backend())
-                except Exception, e:
-                    logging.debug("Building default pool failed: %s", str(e))
 
         return self._storage_capable
 
@@ -976,6 +970,14 @@ class vmmConnection(vmmGObject):
         logging.debug("conn version=%s", self._backend.conn_version())
         logging.debug("%s capabilities:\n%s",
                       self.get_uri(), self.caps.get_xml_config())
+
+        # Try to create the default storage pool
+        # We want this before events setup to save some needless polling
+        try:
+            virtinst.StoragePool.build_default_pool(self.get_backend())
+        except Exception, e:
+            logging.debug("Building default pool failed: %s", str(e))
+
         self._add_conn_events()
 
         # Prime CPU cache
