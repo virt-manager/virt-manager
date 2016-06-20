@@ -778,6 +778,13 @@ class vmmConnection(vmmGObject):
         name = pool.name()
         logging.debug("storage pool lifecycle event: storage=%s event=%s "
             "reason=%s", name, event, reason)
+
+        if (not self.is_active() and
+            event == getattr(libvirt, "VIR_STORAGE_POOL_EVENT_REFRESHED", 4)):
+            # We refresh() pools during connection startup, and this spams
+            # the logs, so skip it.
+            return
+
         obj = self.get_pool(name)
 
         if obj:
