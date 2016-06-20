@@ -148,7 +148,12 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def _init_libvirt_state(self):
         self.tick()
-        self.refresh(_do_refresh_xml=False)
+        if not self.conn.is_active():
+            # We only want to refresh a pool on initial conn startup,
+            # since the pools may be out of date. But if a storage pool
+            # shows up while the conn is connected, this means it was
+            # just 'defined' recently and doesn't need to be refreshed.
+            self.refresh(_do_refresh_xml=False)
         for vol in self.get_volumes():
             vol.init_libvirt_state()
 
