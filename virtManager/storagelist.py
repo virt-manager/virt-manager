@@ -480,13 +480,6 @@ class vmmStorageList(vmmGObjectUI):
         self._active_edits = []
         return True
 
-    def _refresh_current_pool(self):
-        cp = self._current_pool()
-        if cp is None:
-            return
-
-        cp.refresh()
-
 
     #############
     # Listeners #
