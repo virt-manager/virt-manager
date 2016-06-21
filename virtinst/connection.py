@@ -355,6 +355,10 @@ class VirtualConnection(object):
     def get_uri_username(self):
         return self._uriobj.username
     def get_uri_transport(self):
+        if self.get_uri_hostname() and not self._uriobj.transport:
+            # Libvirt defaults to transport=tls if hostname specified but
+            # no transport is specified
+            return "tls"
         return self._uriobj.transport
     def get_uri_path(self):
         return self._uriobj.path
