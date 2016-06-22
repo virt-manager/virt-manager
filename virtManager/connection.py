@@ -778,9 +778,10 @@ class vmmConnection(vmmGObject):
         name = pool.name()
         logging.debug("storage pool lifecycle event: storage=%s event=%s "
             "reason=%s", name, event, reason)
+        is_event_refreshed = (event == getattr(
+            libvirt, "VIR_STORAGE_POOL_EVENT_REFRESHED", 4))
 
-        if (not self.is_active() and
-            event == getattr(libvirt, "VIR_STORAGE_POOL_EVENT_REFRESHED", 4)):
+        if is_event_refreshed and not self.is_active():
             # We refresh() pools during connection startup, and this spams
             # the logs, so skip it.
             return
@@ -788,7 +789,10 @@ class vmmConnection(vmmGObject):
         obj = self.get_pool(name)
 
         if obj:
-            self.idle_add(obj.recache_from_event_loop)
+            if is_event_refreshed:
+                self.idle_add(obj.refresh_pool_cache_from_event_loop)
+            else:
+                self.idle_add(obj.recache_from_event_loop)
         else:
             self.schedule_priority_tick(pollpool=True, force=True)
 
