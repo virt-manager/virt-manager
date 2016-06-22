@@ -122,7 +122,7 @@ msgstr "Siehe Manpage für Beispiele wie man --location mit einer CDROM nutzt"
 
 #: ../virt-install:453
 msgid "--noreboot and --transient can not be specified together"
-msgstr ""
+msgstr "--noreboot und --transient können nicht zusammen angegeben werden"
 
 #: ../virt-install:458
 msgid "Only one install method can be used (%(methods)s)"
@@ -313,7 +313,7 @@ msgstr "Vom Netzwerk starten mittels PXE-Protokoll"
 
 #: ../virt-install:859
 msgid "Build guest around an existing disk image"
-msgstr "Gast um vorhandenes Festplattenimage herum erstellen"
+msgstr "Gast um vorhandenes Datenträger-Abbild herum erstellen"
 
 #: ../virt-install:861
 msgid "Treat the CD-ROM media as a Live CD"
@@ -462,7 +462,7 @@ msgstr "Speicherkonfiguration"
 
 #: ../virt-clone:126
 msgid "New file to use as the disk image for the new guest"
-msgstr "Neue Datei zur Verwendung als Festplattenimage für den neuen Gast"
+msgstr "Neue Datei zur Verwendung als Datenträger-Abbild für den neuen Gast"
 
 #: ../virt-clone:129
 msgid ""
@@ -515,7 +515,7 @@ msgid ""
 msgstr ""
 "Konvertieren Sie ein OVF oder VMX-Appliance zu nativer libvirt XML und "
 "führen Sie den Gast aus.\n"
-"Die VM Inhalte werden nicht geändert. Disk-Abbilder werden zum Hypervisor "
+"Die VM Inhalte werden nicht geändert. Datenträger-Abbilder werden zum Hypervisor "
 "Standard-\n"
 "Speicherort kopiert.\n"
 "\n"
@@ -529,7 +529,7 @@ msgid ""
 "disk images, or a zip/ova/7z/etc archive."
 msgstr ""
 "Konvertierungs-Eingabe. Kann eine ovf/vmx Datei, ein Verzeichnis mit einer "
-"Config und Disk-Images, oder ein zip/ova/7z/etc Archiv sein."
+"Konfiguration und Datenträger-Abbilder oder ein zip/ova/7z/usw.-Archiv sein."
 
 #: ../virt-convert:69
 msgid "Force the input format. 'vmx' or 'ovf'"
@@ -538,16 +538,16 @@ msgstr "Das Eingabe-Format erzwingen. 'vmx' oder 'ovf'"
 #: ../virt-convert:71
 msgid "Output disk format. default is 'raw'. Disable conversion with 'none'"
 msgstr ""
-"Disk-Format ausgeben. Standardwert ist 'raw'. Konversation deaktivieren mit "
-"'none'"
+"Datenträger-Format ausgeben. Standardwert ist 'raw'. Konversation deaktivieren "
+"mit 'none'"
 
 #: ../virt-convert:74
 msgid ""
 "Destination directory the disk images should be converted/copied to. "
 "Defaults to the default libvirt directory."
 msgstr ""
-"Zielverzeichnis, in das Disk-Images konvertiert/kopiert werden sollten. "
-"Standardmäßig ist dies das Standard libvirt Verzeichnis."
+"Zielverzeichnis, in das Datenträger-Abbilder konvertiert/kopiert werden sollten. "
+"Standardmäßig ist dies das libvirt-Standardverzeichnis."
 
 #: ../virt-convert:123
 #, c-format
@@ -668,10 +668,10 @@ msgid ""
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 msgstr ""
 "VM XML bearbeiten. Beispiele:\n"
-"--edit --disk ...     (edit first disk device)\n"
-"--edit 2 --disk ...   (edit second disk device)\n"
-"--edit all --disk ... (edit all disk devices)\n"
-"--edit target=hda --disk ... (edit disk 'hda')\n"
+"--edit --disk ...     (erstes Datenträger-Gerät bearbeiten)\n"
+"--edit 2 --disk ...   (zweites Datenträger-Gerät bearbeiten)\n"
+"--edit all --disk ... (alle Datenträger-Geräte bearbeiten)\n"
+"--edit target=hda --disk ... (Datenträger 'hda' bearbeiten)\n"
 
 #: ../virt-xml:355
 msgid ""
@@ -681,8 +681,8 @@ msgid ""
 "--remove-device --disk /some/path"
 msgstr ""
 "Angegebenes Gerät entfernen. Beispiele:\n"
-"--remove-device --disk 1 (remove first disk)\n"
-"--remove-device --disk all (remove all disks)\n"
+"--remove-device --disk 1 (ersten Datenträger entfernen)\n"
+"--remove-device --disk all (alle Datenträger entfernen)\n"
 "--remove-device --disk /some/path"
 
 #: ../virt-xml:360
@@ -1346,7 +1346,7 @@ msgstr ""
 "\n"
 "%s\n"
 "Das Ausführen des neuen Gasts kann zum Überschreiben von Daten in diesen "
-"Plattenabbildern führen."
+"Datenträger-Abbildern führen."
 
 #: ../virtManager/clone.py:792
 #, python-format
@@ -1480,7 +1480,7 @@ msgstr "%s drücken, um den Mauszeiger freizugeben."
 #: ../virtManager/console.py:421
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
-msgstr "Grafiktyp '%s' unterstützt nicht automatische Änderung der Größe."
+msgstr "Grafiktyp '%s' unterstützt keine automatische Größenänderung."
 
 #: ../virtManager/console.py:424
 msgid "Guest agent is not available."
@@ -1681,8 +1681,8 @@ msgstr "Disk Images werden entfernt"
 #: ../virtManager/create.py:1235
 msgid "Removing disk images we created for this virtual machine."
 msgstr ""
-"Disk Images, die für diese virtuelle Maschine erstellt wurden, werden "
-"entfernt."
+"Datenträger-Abbilder, die für diese virtuelle Maschine erstellt wurden, "
+"werden entfernt."
 
 #: ../virtManager/create.py:1465
 msgid "No network selected"
@@ -2493,22 +2493,22 @@ msgstr "unbekannt"
 #: ../virtManager/details.py:2417
 #, python-format
 msgid "%(received)d %(units)s read"
-msgstr "%(received)d %(units)s read"
+msgstr "%(received)d %(units)s lesen"
 
 #: ../virtManager/details.py:2418
 #, python-format
 msgid "%(transfered)d %(units)s write"
-msgstr "%(transfered)d %(units)s write"
+msgstr "%(transfered)d %(units)s schreiben"
 
 #: ../virtManager/details.py:2421
 #, python-format
 msgid "%(received)d %(units)s in"
-msgstr "%(received)d %(units)s in"
+msgstr "%(received)d %(units)s eingehend"
 
 #: ../virtManager/details.py:2422
 #, python-format
 msgid "%(transfered)d %(units)s out"
-msgstr "%(transfered)d %(units)s out"
+msgstr "%(transfered)d %(units)s ausgehend"
 
 #: ../virtManager/details.py:2424 ../virtManager/details.py:2425
 #: ../virtManager/details.py:2426 ../virtManager/details.py:2427
@@ -2569,7 +2569,7 @@ msgstr "Übersicht"
 
 #: ../virtManager/details.py:3039
 msgid "OS information"
-msgstr "OS Information"
+msgstr "Betriebssysteminformationen"
 
 #: ../virtManager/details.py:3041
 msgid "Performance"
@@ -2577,7 +2577,7 @@ msgstr "Leistung"
 
 #: ../virtManager/details.py:3043
 msgid "CPUs"
-msgstr "Anzahl der CPUs:"
+msgstr "CPUs"
 
 #: ../virtManager/details.py:3044 ../ui/create.ui.h:53
 msgid "Memory"
@@ -2609,7 +2609,7 @@ msgstr "Pausiert"
 
 #: ../virtManager/domain.py:243
 msgid "Shutting Down"
-msgstr "Herunterfahren"
+msgstr "Wird heruntergefahren"
 
 #: ../virtManager/domain.py:246 ../virtManager/domain.py:293
 msgid "Saved"
@@ -2683,7 +2683,7 @@ msgstr "E/A-Fehler"
 
 #: ../virtManager/domain.py:281
 msgid "Shutting down"
-msgstr "Herunterfahren"
+msgstr "Wird heruntergefahren"
 
 #: ../virtManager/domain.py:282 ../virtManager/snapshots.py:541
 msgid "Creating snapshot"
@@ -2727,16 +2727,16 @@ msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
 msgstr ""
-"Schnappschüsse werden nur unterstützt, wenn alle beschreibbaren Disk Images, "
-"die dem Gast zugewiesen sind, im qcow2 Format sind."
+"Schnappschüsse werden nur unterstützt, wenn alle beschreibbaren "
+"Datenträger-Abbilder, die dem Gast zugewiesen sind, im Format qcow2 sind."
 
 #: ../virtManager/domain.py:517
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr ""
-"Schnappschüsse erfordern, dass mindestens ein beschreibbares qcow2 Disk "
-"Image dem Gast zugewiesen ist."
+"Schnappschüsse erfordern, dass mindestens ein beschreibbares qcow2 "
+"Datenträger-Abbild dem Gast zugewiesen ist."
 
 #: ../virtManager/domain.py:552
 #, python-format
@@ -3062,7 +3062,7 @@ msgstr "Eine Dateisystemquelle muss angegeben werden"
 
 #: ../virtManager/fsdetails.py:298
 msgid "A RAM filesystem usage must be specified"
-msgstr "Ein RAM Dateisystemverbrauch muss angegeben werden"
+msgstr "Ein RAM-Dateisystemverbrauch muss angegeben werden"
 
 #: ../virtManager/fsdetails.py:300
 msgid "A filesystem target must be specified"
@@ -3281,11 +3281,11 @@ msgstr "D_etails"
 
 #: ../virtManager/manager.py:402
 msgid "CPU usage"
-msgstr "CPU-Verwendung"
+msgstr "CPU-Auslastung"
 
 #: ../virtManager/manager.py:403
 msgid "Host CPU usage"
-msgstr "Wirt-CPU-Verwendung"
+msgstr "Wirt-CPU-Auslastung"
 
 #: ../virtManager/manager.py:404
 msgid "Memory usage"
@@ -5419,7 +5419,7 @@ msgstr "Keine virtuellen Maschinen"
 
 #: ../data/virt-manager.appdata.xml.in.h:2
 msgid "Graphically manage KVM, Xen, or LXC via libvirt"
-msgstr ""
+msgstr "KVM, Xen oder LXC über libvirt grafisch verwalten"
 
 #: ../data/virt-manager.appdata.xml.in.h:3
 msgid ""
@@ -5433,7 +5433,7 @@ msgstr ""
 #: ../data/virt-manager.appdata.xml.in.h:4
 #, fuzzy
 msgid "Main manager window"
-msgstr "M_anager-ID:"
+msgstr "Hauptmanagerfenster"
 
 #: ../data/virt-manager.appdata.xml.in.h:5
 #, fuzzy
@@ -5622,7 +5622,7 @@ msgstr "_Fertig"
 
 #: ../ui/addstorage.ui.h:1
 msgid "C_reate a disk image for the virtual machine"
-msgstr "_Datenträger Image für die virtuelle Maschine erstellen"
+msgstr "_Datenträger-Abbild für die virtuelle Maschine erstellen"
 
 #: ../ui/addstorage.ui.h:2
 msgid "0.0"
@@ -5721,7 +5721,7 @@ msgid ""
 msgstr ""
 "<span size='small'>Beim Klonen wird eine neue, unabhängige Kopie der "
 "Originalplatte erstellt. Beim Freigeben\n"
-"wird das vorhandene Plattenabbild für die neue und die Originalmaschine "
+"wird das vorhandene Datenträger-Abbild für die neue und die Originalmaschine "
 "verwendet.</span>"
 
 #: ../ui/clone.ui.h:12
@@ -5859,7 +5859,7 @@ msgstr "_Netzwerkstart (PXE)"
 
 #: ../ui/create.ui.h:7
 msgid "Import _existing disk image"
-msgstr "_Vorhandenes Festplatten-Abbild importieren"
+msgstr "_Vorhandenes Datenträger-Abbild importieren"
 
 #: ../ui/create.ui.h:8
 msgid "Choose the container type"
@@ -6269,7 +6269,7 @@ msgstr "<b>Beispiel:</b> Netzwerk1"
 
 #: ../ui/createnet.ui.h:5
 msgid "Network _Name:"
-msgstr "Netzwerk_Name:"
+msgstr "Netzwerk_name:"
 
 #: ../ui/createnet.ui.h:6
 msgid "Choose <b>IPv4</b> address space for the virtual network:"
@@ -6750,7 +6750,7 @@ msgstr "Fehlermeldungs-Leiste"
 
 #: ../ui/details.ui.h:68 ../ui/host.ui.h:8
 msgid "<b>CPU usage</b>"
-msgstr "<b>CPU-Verwendung</b>"
+msgstr "<b>CPU-Auslastung</b>"
 
 #: ../ui/details.ui.h:69 ../ui/host.ui.h:9
 msgid "<b>Memory usage</b>"
@@ -6927,7 +6927,7 @@ msgid ""
 "<small>Changing this will not change the disk image format, it only tells "
 "libvirt about the existing image format. </small>"
 msgstr ""
-"<small>Diese Änderung wird nicht das Datenträger-Image Format ändern, "
+"<small>Diese Änderung wird nicht das Datenträger-Abbildformat ändern, "
 "sondern informiert libvirt lediglich über das vorhandene Format. </small>"
 
 #: ../ui/details.ui.h:114
@@ -7380,11 +7380,11 @@ msgstr "_Diagramm"
 
 #: ../ui/manager.ui.h:10
 msgid "_Guest CPU Usage"
-msgstr "_Gast-CPU-Verwendung"
+msgstr "_Gast-CPU-Auslastung"
 
 #: ../ui/manager.ui.h:11
 msgid "_Host CPU Usage"
-msgstr "_Wirt-CPU-Verwendung"
+msgstr "_Wirt-CPU-Auslastung"
 
 #: ../ui/manager.ui.h:12
 msgid "_Memory Usage"
@@ -7562,7 +7562,7 @@ msgstr "M_anager-ID:"
 
 #: ../ui/netlist.ui.h:11
 msgid "Virtual _port"
-msgstr "Virtueller_Port"
+msgstr "Virtueller _Port"
 
 #: ../ui/preferences.ui.h:1
 msgid "Preferences"
@@ -7598,7 +7598,7 @@ msgstr "_Status aktualisieren alle"
 
 #: ../ui/preferences.ui.h:10
 msgid "Poll C_PU usage"
-msgstr "_CPU-Verwendung abrufen"
+msgstr "_CPU-Auslastung abrufen"
 
 #: ../ui/preferences.ui.h:11
 msgid "<b>Stats Options</b>"
@@ -7614,7 +7614,7 @@ msgstr "_Grafiktyp:"
 
 #: ../ui/preferences.ui.h:14
 msgid "Default storage format for new disk images."
-msgstr "Vorgegebenes Speicherformat für neue Festplattenabbilder."
+msgstr "Vorgegebenes Speicherformat für neue Datenträger-Abbilder."
 
 #: ../ui/preferences.ui.h:15
 msgid "_Storage format:"
