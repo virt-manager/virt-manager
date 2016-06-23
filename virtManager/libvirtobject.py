@@ -257,7 +257,7 @@ class vmmLibvirtObject(vmmGObject):
     # Public XML API #
     ##################
 
-    def refresh_from_event_loop(self):
+    def recache_from_event_loop(self):
         """
         Updates the VM status and XML, because we received an event from
         libvirt's event implementations. That's the only time this should

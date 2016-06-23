@@ -740,7 +740,7 @@ class vmmConnection(vmmGObject):
         if not obj:
             return
 
-        self.idle_add(obj.refresh_from_event_loop)
+        self.idle_add(obj.recache_from_event_loop)
 
     def _domain_lifecycle_event(self, conn, domain, event, reason, userdata):
         ignore = conn
@@ -752,7 +752,7 @@ class vmmConnection(vmmGObject):
         obj = self.get_vm(name)
 
         if obj:
-            self.idle_add(obj.refresh_from_event_loop)
+            self.idle_add(obj.recache_from_event_loop)
         else:
             self.schedule_priority_tick(pollvm=True, force=True)
 
@@ -766,7 +766,7 @@ class vmmConnection(vmmGObject):
         obj = self.get_net(name)
 
         if obj:
-            self.idle_add(obj.refresh_from_event_loop)
+            self.idle_add(obj.recache_from_event_loop)
         else:
             self.schedule_priority_tick(pollnet=True, force=True)
 
@@ -788,7 +788,7 @@ class vmmConnection(vmmGObject):
         obj = self.get_pool(name)
 
         if obj:
-            self.idle_add(obj.refresh_from_event_loop)
+            self.idle_add(obj.recache_from_event_loop)
         else:
             self.schedule_priority_tick(pollpool=True, force=True)
 
