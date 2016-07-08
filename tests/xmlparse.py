@@ -551,7 +551,6 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev4)
         check("type", "ethernet")
-        check("source", "eth0", "eth1")
         check("target_dev", "nic02", "nic03")
         check("target_dev", "nic03", None)
 
