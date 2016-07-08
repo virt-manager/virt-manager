@@ -182,9 +182,9 @@ class VirtualNetworkInterface(VirtualDevice):
             return self._network
         if self.type == self.TYPE_BRIDGE:
             return self._bridge
-        if self.type == self.TYPE_ETHERNET or self.type == self.TYPE_DIRECT:
+        if self.type == self.TYPE_DIRECT:
             return self._source_dev
-        if self.type == self.TYPE_USER:
+        if self.type == self.TYPE_USER or self.type == self.TYPE_ETHERNET:
             return None
         return self._network or self._bridge or self._source_dev
     def _set_source(self, newsource):
@@ -200,7 +200,7 @@ class VirtualNetworkInterface(VirtualDevice):
             self._network = newsource
         elif self.type == self.TYPE_BRIDGE:
             self._bridge = newsource
-        elif self.type == self.TYPE_ETHERNET or self.type == self.TYPE_DIRECT:
+        elif self.type == self.TYPE_DIRECT:
             self._source_dev = newsource
     source = property(_get_source, _set_source)
 
