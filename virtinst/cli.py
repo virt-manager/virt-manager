@@ -2370,6 +2370,8 @@ _ParserChar.add_arg(None, "host", cb=_ParserChar.set_host_cb)
 _ParserChar.add_arg(None, "bind_host", cb=_ParserChar.set_bind_cb)
 _ParserChar.add_arg(None, "target_address", cb=_ParserChar.set_target_cb)
 _ParserChar.add_arg("source_mode", "mode")
+_ParserChar.add_arg("log_file", "log.file")
+_ParserChar.add_arg("log_append", "log.append", is_onoff=True)
 
 
 

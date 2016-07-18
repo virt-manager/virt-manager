@@ -490,7 +490,7 @@ c.add_compare(""" \
 --input type=keyboard,bus=usb \
 --input tablet \
 \
---serial tcp,host=:2222,mode=bind,protocol=telnet \
+--serial tcp,host=:2222,mode=bind,protocol=telnet,log_file=/tmp/foo.log,log_append=yes \
 --parallel udp,host=0.0.0.0:1234,bind_host=127.0.0.1:1234 \
 --parallel unix,path=/tmp/foo-socket \
 --channel pty,target_type=guestfwd,target_address=127.0.0.1:10000 \

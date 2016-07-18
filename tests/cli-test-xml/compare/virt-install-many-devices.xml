@@ -244,6 +244,7 @@
     <serial type="tcp">
       <source mode="bind" host="127.0.0.1" service="2222"/>
       <protocol type="telnet"/>
+      <log file="/tmp/foo.log" append="on"/>
     </serial>
     <parallel type="udp">
       <source mode="bind" host="127.0.0.1" service="1234"/>

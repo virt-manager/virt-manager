@@ -281,6 +281,9 @@ class _VirtualCharDevice(VirtualDevice):
                            doc=_("Sysfs name of virtio port in the guest"),
                            default_cb=_default_target_name)
 
+    log_file = XMLProperty("./log/@file")
+    log_append = XMLProperty("./log/@append", is_onoff=True)
+
 
 class VirtualConsoleDevice(_VirtualCharDevice):
     virtual_device_type = "console"
