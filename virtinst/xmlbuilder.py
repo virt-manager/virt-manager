@@ -340,15 +340,16 @@ class XMLProperty(property):
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
                  default_cb=None, default_name=None, do_abspath=False):
         """
-        Set a XMLBuilder class property that represents a value in the
-        <domain> XML. For example
+        Set a XMLBuilder class property that maps to a value in an XML
+        document, indicated by the passed xpath. For example, for a
+        <domain><name> the definition may look like:
 
-        name = XMLProperty(get_name, set_name, xpath="/domain/name")
+          name = XMLProperty("./name")
 
-        When building XML from scratch (virt-install), name is a regular
-        class property. When parsing and editting existing guest XML, we
-        use the xpath value to map the name property to the underlying XML
-        definition.
+        When building XML from scratch (virt-install), 'name' works
+        similar to a regular class property(). When parsing and editing
+        existing guest XML, we  use the xpath value to get/set the value
+        in the parsed XML document.
 
         @param doc: option doc string for the property
         @param xpath: xpath string which maps to the associated property
