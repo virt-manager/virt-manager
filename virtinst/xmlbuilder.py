@@ -98,14 +98,13 @@ def _get_xpath_node(ctx, xpath):
     return (node and node[0] or None)
 
 
-def _build_xpath_node(ctx, xpath, addnode=None):
+def _add_pretty_child(parentnode, newnode):
     """
-    Build all nodes required to set an xpath. If we have XML <foo/>, and want
-    to set xpath /foo/bar/baz@booyeah, we create node 'bar' and 'baz'
-    returning the last node created.
+    Add 'newnode' as a child of 'parentnode', but try to preserve
+    whitespace and nicely format the result.
     """
-    parentpath = ""
-    parentnode = None
+    def node_is_text(n):
+        return bool(n and n.type == "text" and not n.content.count("<"))
 
     def prevSibling(node):
         parent = node.get_parent()
@@ -120,47 +119,51 @@ def _build_xpath_node(ctx, xpath, addnode=None):
 
         return None
 
-    def make_node(parentnode, newnode):
-        # Add the needed parent node, try to preserve whitespace by
-        # looking for a starting TEXT node, and copying it
-        def node_is_text(n):
-            return bool(n and n.type == "text" and not n.content.count("<"))
-
-        sib = parentnode.get_last()
-        if not node_is_text(sib):
-            # This case is when we add a child element to a node for the
-            # first time, like:
-            #
-            # <features/>
-            # to
-            # <features>
-            #   <acpi/>
-            # </features>
-            prevsib = prevSibling(parentnode)
-            if node_is_text(prevsib):
-                sib = libxml2.newText(prevsib.content)
-            else:
-                sib = libxml2.newText("\n")
-            parentnode.addChild(sib)
-
-        # This case is adding a child element to an already properly
-        # spaced element. Example:
-        # <features>
-        #   <acpi/>
-        # </features>
+    sib = parentnode.get_last()
+    if not node_is_text(sib):
+        # This case is when we add a child element to a node for the
+        # first time, like:
+        #
+        # <features/>
         # to
         # <features>
         #   <acpi/>
-        #   <apic/>
         # </features>
-        sib = parentnode.get_last()
-        content = sib.content
-        sib = sib.addNextSibling(libxml2.newText("  "))
-        txt = libxml2.newText(content)
+        prevsib = prevSibling(parentnode)
+        if node_is_text(prevsib):
+            sib = libxml2.newText(prevsib.content)
+        else:
+            sib = libxml2.newText("\n")
+        parentnode.addChild(sib)
 
-        sib.addNextSibling(newnode)
-        newnode.addNextSibling(txt)
-        return newnode
+    # This case is adding a child element to an already properly
+    # spaced element. Example:
+    # <features>
+    #   <acpi/>
+    # </features>
+    # to
+    # <features>
+    #   <acpi/>
+    #   <apic/>
+    # </features>
+    sib = parentnode.get_last()
+    content = sib.content
+    sib = sib.addNextSibling(libxml2.newText("  "))
+    txt = libxml2.newText(content)
+
+    sib.addNextSibling(newnode)
+    newnode.addNextSibling(txt)
+    return newnode
+
+
+def _build_xpath_node(ctx, xpath, addnode=None):
+    """
+    Build all nodes required to set an xpath. If we have XML <foo/>, and want
+    to set xpath /foo/bar/baz@booyeah, we create node 'bar' and 'baz'
+    returning the last node created.
+    """
+    parentpath = ""
+    parentnode = None
 
     nodelist = xpath.split("/")
     for nodename in nodelist:
@@ -192,10 +195,10 @@ def _build_xpath_node(ctx, xpath, addnode=None):
             nodename = nodename[:nodename.index("[")]
 
         newnode = libxml2.newNode(nodename)
-        parentnode = make_node(parentnode, newnode)
+        parentnode = _add_pretty_child(parentnode, newnode)
 
     if addnode:
-        parentnode = make_node(parentnode, addnode)
+        parentnode = _add_pretty_child(parentnode, addnode)
 
     return parentnode
 
