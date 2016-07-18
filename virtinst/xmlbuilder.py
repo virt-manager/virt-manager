@@ -167,6 +167,16 @@ def _build_xpath_node(ctx, xpath):
 
     And the node pointing to @baz will be returned, for the caller to
     do with as they please.
+
+    There's also special handling to ensure that setting
+    xpath=./bar[@baz='foo']/frob will create
+
+      <bar baz='foo'>
+        <frob></frob>
+      </bar>
+
+    Even if <bar> didn't exist before. So we fill in the dependent property
+    expression values
     """
     def _handle_node(nodename, parentnode, parentpath):
         # If the passed xpath snippet (nodename) exists, return the node
@@ -208,6 +218,19 @@ def _build_xpath_node(ctx, xpath):
     parentnode = None
     for nodename in xpath.split("/"):
         parentnode, parentpath = _handle_node(nodename, parentnode, parentpath)
+
+        # Check if the xpath snippet had an '=' expression in it, example:
+        #
+        #   ./foo[@bar='baz']
+        #
+        # If so, we also want to set <foo bar='baz'/>, so that setting
+        # this XML element works as expected in this case.
+        if "[" not in nodename or "=" not in nodename:
+            continue
+
+        propname, val = nodename.split("[")[1].strip("]").split("=")
+        propobj, ignore = _handle_node(propname, parentnode, parentpath)
+        propobj.setContent(val.strip("'"))
 
     return parentnode
 
