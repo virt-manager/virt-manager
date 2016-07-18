@@ -156,7 +156,7 @@ def _add_pretty_child(parentnode, newnode):
     return newnode
 
 
-def _build_xpath_node(ctx, xpath, addnode=None):
+def _build_xpath_node(ctx, xpath):
     """
     Build all nodes required to set an xpath. If we have XML <foo/>, and want
     to set xpath /foo/bar/baz@booyeah, we create node 'bar' and 'baz'
@@ -196,9 +196,6 @@ def _build_xpath_node(ctx, xpath, addnode=None):
 
         newnode = libxml2.newNode(nodename)
         parentnode = _add_pretty_child(parentnode, newnode)
-
-    if addnode:
-        parentnode = _add_pretty_child(parentnode, addnode)
 
     return parentnode
 
@@ -989,7 +986,9 @@ class XMLBuilder(object):
             use_xpath = obj.get_root_xpath().rsplit("/", 1)[0]
             indent = 2 * obj.get_root_xpath().count("/")
             newnode = libxml2.parseDoc(util.xml_indent(xml, indent)).children
-            _build_xpath_node(self._xmlstate.xml_ctx, use_xpath, newnode)
+            parentnode = _build_xpath_node(self._xmlstate.xml_ctx, use_xpath)
+            # Tack newnode on the end
+            _add_pretty_child(parentnode, newnode)
         obj._parse_with_children(None, self._xmlstate.xml_node)
 
     def remove_child(self, obj):
