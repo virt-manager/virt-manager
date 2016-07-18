@@ -277,9 +277,35 @@
     <hugepages/>
   </memoryBacking>
   <uuid>12345678-12F4-1234-1234-A23456A89012</uuid>
+  <sysinfo type='smbios'>
+    <bios>
+      <entry name='vendor'>LENOVO</entry>
+      <entry name='version'>6FET82WW (3.12 )</entry>
+      <entry name='date'>01/12/2010</entry>
+      <entry name='release'>3.18</entry>
+    </bios>
+    <system>
+      <entry name='manufacturer'>Fedora</entry>
+      <entry name='product'>Virt-Manager</entry>
+      <entry name='version'>0.8.2-3.fc14</entry>
+      <entry name='serial'>32dfcb37-5af1-552b-357c-be8c3aa38310</entry>
+      <entry name='uuid'>12345678-12F4-1234-1234-A23456A89012</entry>
+      <entry name='sku'>1234567890</entry>
+      <entry name='family'>Red Hat</entry>
+    </system>
+    <baseBoard>
+      <entry name='manufacturer'>Hewlett-Packard</entry>
+      <entry name='product'>0B4Ch</entry>
+      <entry name='version'>D</entry>
+      <entry name='serial'>CZC1065993</entry>
+      <entry name='asset'>CZC1065993</entry>
+      <entry name='location'>Upside down</entry>
+    </baseBoard>
+  </sysinfo>
   <os>
     <type arch='i686'>hvm</type>
     <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <smbios mode='sysinfo'/>
   </os>
   <idmap>
     <uid start='0' target='1000' count='10'/>
