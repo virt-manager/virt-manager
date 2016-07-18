@@ -158,44 +158,56 @@ def _add_pretty_child(parentnode, newnode):
 
 def _build_xpath_node(ctx, xpath):
     """
-    Build all nodes required to set an xpath. If we have XML <foo/>, and want
-    to set xpath /foo/bar/baz@booyeah, we create node 'bar' and 'baz'
-    returning the last node created.
+    Build all nodes for the passed xpath. For example, if 'ctx' xml=<foo/>,
+    and xpath=./bar/@baz, after this function the 'ctx' XML will be:
+
+      <foo>
+        <bar baz=''/>
+      </foo>
+
+    And the node pointing to @baz will be returned, for the caller to
+    do with as they please.
     """
-    parentpath = ""
-    parentnode = None
+    def _handle_node(nodename, parentnode, parentpath):
+        # If the passed xpath snippet (nodename) exists, return the node
+        # If it doesn't exist, create it, and return the new node
 
-    nodelist = xpath.split("/")
-    for nodename in nodelist:
-        if not nodename:
-            continue
-
-        # If xpath is a node property, set it and move on
+        # If nodename is a node property, we can handle it up front
         if nodename.startswith("@"):
             nodename = nodename.strip("@")
-            parentnode = parentnode.setProp(nodename, "")
-            continue
+            return parentnode.setProp(nodename, ""), parentpath
 
         if not parentpath:
             parentpath = nodename
         else:
             parentpath += "/%s" % nodename
 
-        # Node found, nothing to create for now
+        # See if the xpath node already exists
         node = _get_xpath_node(ctx, parentpath)
         if node:
-            parentnode = node
-            continue
+            # xpath node already exists, so we don't need to create anything
+            return node, parentpath
 
+        # If we don't have a parentnode by this point, the root of the
+        # xpath didn't find anything. Usually a coding error
         if not parentnode:
             raise RuntimeError("Could not find XML root node")
 
-        # Remove conditional xpath elements for node creation
+        # Remove conditional xpath elements for node creation. We preserved
+        # them up until this point since it was needed for proper xpath
+        # lookup, but they aren't valid syntax when creating the node
         if nodename.count("["):
             nodename = nodename[:nodename.index("[")]
 
         newnode = libxml2.newNode(nodename)
-        parentnode = _add_pretty_child(parentnode, newnode)
+        return _add_pretty_child(parentnode, newnode), parentpath
+
+
+    # Split the xpath and lookup/create each individual piece
+    parentpath = None
+    parentnode = None
+    for nodename in xpath.split("/"):
+        parentnode, parentpath = _handle_node(nodename, parentnode, parentpath)
 
     return parentnode
 
