@@ -485,18 +485,19 @@ def get_console_cb(guest):
         logging.debug("No viewer to launch for graphics type '%s'", gtype)
         return
 
-    try:
-        subprocess.check_output(["virt-viewer", "--version"])
-    except OSError:
-        logging.warn(_("Unable to connect to graphical console: "
-                       "virt-viewer not installed. Please install "
-                       "the 'virt-viewer' package."))
-        return None
+    if not _in_testsuite():
+        try:
+            subprocess.check_output(["virt-viewer", "--version"])
+        except OSError:
+            logging.warn(_("Unable to connect to graphical console: "
+                           "virt-viewer not installed. Please install "
+                           "the 'virt-viewer' package."))
+            return None
 
-    if not os.environ.get("DISPLAY", ""):
-        logging.warn(_("Graphics requested but DISPLAY is not set. "
-                       "Not running virt-viewer."))
-        return None
+        if not os.environ.get("DISPLAY", ""):
+            logging.warn(_("Graphics requested but DISPLAY is not set. "
+                           "Not running virt-viewer."))
+            return None
 
     return _gfx_console
 
