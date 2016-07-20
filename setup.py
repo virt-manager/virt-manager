@@ -462,7 +462,7 @@ class TestBaseCommand(distutils.core.Command):
                 print "%s" % test
             print
 
-        t = unittest.TextTestRunner(verbosity=1)
+        t = unittest.TextTestRunner(verbosity=self.debug and 2 or 1)
 
         try:
             result = t.run(tests)
