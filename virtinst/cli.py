@@ -182,7 +182,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 
     vi_dir = None
     logfile = None
-    if "VIRTINST_TEST_SUITE" not in os.environ:
+    if not _in_testsuite():
         vi_dir = util.get_cache_dir()
         logfile = os.path.join(vi_dir, appname + ".log")
 
@@ -256,6 +256,10 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 
     # Log the app command string
     logging.debug("Launched with command line: %s", " ".join(sys.argv))
+
+
+def _in_testsuite():
+    return "VIRTINST_TEST_SUITE" in os.environ
 
 
 ##############################
@@ -412,7 +416,7 @@ def validate_disk(dev, warn_overwrite=False):
 
 def _run_console(guest, args):
     logging.debug("Running: %s", " ".join(args))
-    if "VIRTINST_TEST_SUITE" in os.environ:
+    if _in_testsuite():
         # Add this destroy() in here to trigger more virt-install code
         # for the test suite
         guest.domain.destroy()
@@ -498,7 +502,7 @@ def get_console_cb(guest):
 
 
 def get_meter():
-    quiet = (get_global_state().quiet or "VIRTINST_TEST_SUITE" in os.environ)
+    quiet = (get_global_state().quiet or _in_testsuite())
     return util.make_meter(quiet=quiet)
 
 
