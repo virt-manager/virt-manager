@@ -76,11 +76,11 @@ def _pretty_arch(_a):
 
 
 def _pretty_storage(size):
-    return "%.1f GiB" % float(size)
+    return _("%.1f GiB") % float(size)
 
 
 def _pretty_memory(mem):
-    return "%d MiB" % (mem / 1024.0)
+    return _("%d MiB") % (mem / 1024.0)
 
 
 ###########################################################
