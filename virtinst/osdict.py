@@ -457,23 +457,19 @@ class _OsVariant(object):
                 return devname
         return None
 
-    def default_inputtype(self):
-        if self._os:
-            fltr = libosinfo.Filter()
-            fltr.add_constraint("class", "input")
-            devs = self._os.get_all_devices(fltr)
-            if devs.get_length():
-                return devs.get_nth(0).get_name()
-        return "mouse"
+    def supports_usbtablet(self):
+        if not self._os:
+            return False
 
-    def default_inputbus(self):
-        if self._os:
-            fltr = libosinfo.Filter()
-            fltr.add_constraint("class", "input")
-            devs = self._os.get_all_devices(fltr)
-            if devs.get_length():
-                return devs.get_nth(0).get_bus_type()
-        return "ps2"
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "input")
+        fltr.add_constraint("name", "tablet")
+        devs = self._os.get_all_devices(fltr)
+        for idx in range(devs.get_length()):
+            dev = devs.get_nth(idx)
+            if devs.get_nth(idx).get_bus_type() == "usb":
+                return True
+        return False
 
     def supports_virtiodisk(self):
         if self._os:

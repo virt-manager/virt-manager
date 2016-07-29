@@ -1031,15 +1031,14 @@ class Guest(XMLBuilder):
                 return False
             return all([c.model == "none" for c in controllers])
 
-        input_type = self._os_object.default_inputtype()
-        input_bus = self._os_object.default_inputbus()
+        input_type = "mouse"
+        input_bus = "ps2"
         if self.os.is_xenpv():
             input_type = VirtualInputDevice.TYPE_MOUSE
             input_bus = VirtualInputDevice.BUS_XEN
-        elif _usb_disabled() and input_bus == "usb":
-            input_bus = "ps2"
-            if input_type == "tablet":
-                input_type = "mouse"
+        elif self._os_object.supports_usbtablet() and not _usb_disabled():
+            input_type = "tablet"
+            input_bus = "usb"
 
         for inp in self.get_devices("input"):
             if (inp.type == inp.TYPE_DEFAULT and
