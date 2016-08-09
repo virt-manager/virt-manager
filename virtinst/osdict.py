@@ -466,7 +466,6 @@ class _OsVariant(object):
         fltr.add_constraint("name", "tablet")
         devs = self._os.get_all_devices(fltr)
         for idx in range(devs.get_length()):
-            dev = devs.get_nth(idx)
             if devs.get_nth(idx).get_bus_type() == "usb":
                 return True
         return False
