@@ -677,6 +677,8 @@ class GenericDistro(Distro):
                 ]
     _hvm_paths = [("images/pxeboot/vmlinuz",
                     "images/pxeboot/initrd.img"),       # Fedora
+                  ("ppc/ppc64/vmlinuz",
+                    "ppc/ppc64/initrd.img"),            # CenOS 7 ppc64le
                 ]
     _iso_paths = ["images/boot.iso",                   # RH/Fedora
                    "boot/boot.iso",                     # Suse
