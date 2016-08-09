@@ -108,6 +108,7 @@ class StoragePool(_StorageObject):
     TYPE_GLUSTER = "gluster"
     TYPE_RBD     = "rbd"
     TYPE_SHEEPDOG = "sheepdog"
+    TYPE_ZFS     = "zfs"
 
     # Pool type descriptions for use in higher level programs
     _descs = {}
@@ -122,6 +123,7 @@ class StoragePool(_StorageObject):
     _descs[TYPE_GLUSTER] = _("Gluster Filesystem")
     _descs[TYPE_RBD]     = _("RADOS Block Device/Ceph")
     _descs[TYPE_SHEEPDOG] = _("Sheepdog Filesystem")
+    _descs[TYPE_ZFS]     = _("ZFS Pool")
 
     @staticmethod
     def get_pool_types():
@@ -442,7 +444,7 @@ class StoragePool(_StorageObject):
                             self.TYPE_DISK, self.TYPE_ISCSI, self.TYPE_SCSI,
                             self.TYPE_GLUSTER],
             "source_name": [self.TYPE_LOGICAL, self.TYPE_GLUSTER,
-                            self.TYPE_RBD, self.TYPE_SHEEPDOG],
+                            self.TYPE_RBD, self.TYPE_SHEEPDOG, self.TYPE_ZFS],
             "hosts": [self.TYPE_NETFS, self.TYPE_ISCSI, self.TYPE_GLUSTER,
                      self.TYPE_RBD, self.TYPE_SHEEPDOG],
             "format": [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_DISK],
@@ -471,7 +473,8 @@ class StoragePool(_StorageObject):
             StoragePool.TYPE_DIR, StoragePool.TYPE_FS,
             StoragePool.TYPE_NETFS, StoragePool.TYPE_LOGICAL,
             StoragePool.TYPE_DISK,
-            StoragePool.TYPE_RBD, StoragePool.TYPE_SHEEPDOG]
+            StoragePool.TYPE_RBD, StoragePool.TYPE_SHEEPDOG,
+            StoragePool.TYPE_ZFS]
 
 
     ##################
@@ -698,7 +701,8 @@ class StorageVolume(_StorageObject):
             elif self.type == "network":
                 return self.TYPE_NETWORK
         if (self._pool_xml.type == StoragePool.TYPE_DISK or
-            self._pool_xml.type == StoragePool.TYPE_LOGICAL):
+            self._pool_xml.type == StoragePool.TYPE_LOGICAL or
+            self._pool_xml.type == StoragePool.TYPE_ZFS):
             return self.TYPE_BLOCK
         if (self._pool_xml.type == StoragePool.TYPE_GLUSTER or
             self._pool_xml.type == StoragePool.TYPE_RBD or
