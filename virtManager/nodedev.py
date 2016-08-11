@@ -44,6 +44,8 @@ class vmmNodeDevice(vmmLibvirtObject):
         return self.get_connkey()
     def is_active(self):
         return True
+    def _using_events(self):
+        return self.conn.using_node_device_events
 
     def tick(self, stats_update=True):
         # Deliberately empty
