@@ -1085,18 +1085,32 @@ class DebianDistro(Distro):
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
-        # Pull the tree's arch out of the URL text
-        self._treeArch = "i386"
-        for pattern in ["^.*/installer-(\w+)/?$",
-                        "^.*/daily-images/(\w+)/?$"]:
-            arch = re.findall(pattern, self.uri)
-            if arch:
-                self._treeArch = arch[0]
-                break
-
+        self._treeArch = self._find_treearch()
         self._url_prefix = 'current/images'
         self._installer_dirname = self.name.lower() + "-installer"
         self._set_media_paths()
+
+    def _find_treearch(self):
+        for pattern in ["^.*/installer-(\w+)/?$",
+                        "^.*/daily-images/(\w+)/?$"]:
+            arch = re.findall(pattern, self.uri)
+            if not arch:
+                continue
+            logging.debug("Found pattern=%s treearch=%s in uri",
+                pattern, arch[0])
+            return arch[0]
+
+        # Check for standard 'i386' and 'amd64' which will be
+        # in the URI name for --location $ISO mounts
+        for arch in ["i386", "amd64"]:
+            if arch in self.uri:
+                logging.debug("Found treearch=%s in uri", arch)
+                return arch
+
+        # Otherwise default to amd64
+        arch = "i386"
+        logging.debug("No treearch found in uri, defaulting to arch=%s", arch)
+        return arch
 
     def _set_media_paths(self):
         self._boot_iso_paths   = ["%s/netboot/mini.iso" % self._url_prefix]
