@@ -129,6 +129,9 @@ _add(CENTOS_URL % ("6", "x86_64"), "centos6.7", name="centos-6-latest",
      i686=CENTOS_URL % ("6", "i386"))
 # Latest centos 7, but no i686 as of 2014-09-06
 _add(CENTOS_URL % ("7", "x86_64"), "centos7.0", name="centos-7-latest")
+# Centos 7 ppc64le
+_add("http://mirror.centos.org/altarch/7/os/ppc64le/",
+     "centos7.0", name="centos-7-ppc64", hasbootiso=False, hasxen=False)
 
 
 _set_distro(SLDistro)
