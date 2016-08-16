@@ -108,10 +108,10 @@ _set_distro(FedoraDistro)
 _add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14",
      i686=ARCHIVE_FEDORA_URL % ("14", "i386"))
 # 2 Latest releases
-_add(FEDORA_URL % ("22", "x86_64"), "fedora22")
 _add(FEDORA_URL % ("23", "x86_64"), "fedora23", name="fedora23")
+_add(FEDORA_URL % ("24", "x86_64"), "fedora23", name="fedora24")
 # Any Dev release
-_add(DEVFEDORA_URL % ("24", "x86_64"), "fedora23", name="fedora24")
+#_add(DEVFEDORA_URL % ("25", "x86_64"), "fedora23", name="fedora25")
 _add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora23", name="fedora-rawhide")
 
 
