@@ -1016,6 +1016,8 @@ class vmmConsolePages(vmmGObjectUI):
         return self._viewer.console_get_pixbuf()
 
     def details_close_viewer(self):
+        self.widget("console-pages").set_current_page(
+                _CONSOLE_PAGE_UNAVAILABLE)
         return self._close_viewer()
 
     def details_activate_default_console_page(self):
