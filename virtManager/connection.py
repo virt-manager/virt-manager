@@ -809,6 +809,18 @@ class vmmConnection(vmmGObject):
 
         self.schedule_priority_tick(pollnodedev=True, force=True)
 
+    def _node_device_update_event(self, conn, dev, userdata):
+        ignore = conn
+        ignore = userdata
+
+        name = dev.name()
+        logging.debug("node device update event: device=%s", name)
+
+        obj = self.get_nodedev(name)
+
+        if obj:
+            self.idle_add(obj.recache_from_event_loop)
+
     def _add_conn_events(self):
         if not self.check_support(support.SUPPORT_CONN_WORKING_XEN_EVENTS):
             return
@@ -884,9 +896,14 @@ class vmmConnection(vmmGObject):
                 raise RuntimeError("FORCE_DISABLE_EVENTS = True")
 
             eventid = getattr(libvirt, "VIR_NODE_DEVICE_EVENT_ID_LIFECYCLE", 0)
+            updateid = getattr(libvirt, "VIR_NODE_DEVICE_EVENT_ID_UPDATE", 1)
             self._node_device_cb_ids.append(
                 self.get_backend().nodeDeviceEventRegisterAny(
                 None, eventid, self._node_device_lifecycle_event, None))
+            self._node_device_cb_ids.append(
+                self.get_backend().nodeDeviceEventRegisterAny(
+                None, updateid, self._node_device_update_event, None))
+
             self.using_node_device_events = True
             logging.debug("Using node device events")
         except Exception, e:
