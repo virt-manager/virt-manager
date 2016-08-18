@@ -780,23 +780,27 @@ class vmmConnection(vmmGObject):
         name = pool.name()
         logging.debug("storage pool lifecycle event: storage=%s event=%s "
             "reason=%s", name, event, reason)
-        is_event_refreshed = (event == getattr(
-            libvirt, "VIR_STORAGE_POOL_EVENT_REFRESHED", 4))
-
-        if is_event_refreshed and not self.is_active():
-            # We refresh() pools during connection startup, and this spams
-            # the logs, so skip it.
-            return
 
         obj = self.get_pool(name)
 
         if obj:
-            if is_event_refreshed:
-                self.idle_add(obj.refresh_pool_cache_from_event_loop)
-            else:
-                self.idle_add(obj.recache_from_event_loop)
+            self.idle_add(obj.recache_from_event_loop)
         else:
             self.schedule_priority_tick(pollpool=True, force=True)
+
+    def _storage_pool_refresh_event(self, conn, pool, userdata):
+        ignore = conn
+        ignore = userdata
+
+        name = pool.name()
+        logging.debug("storage pool refresh event: pool=%s", name)
+
+        obj = self.get_pool(name)
+
+        if not obj:
+            return
+
+        self.idle_add(obj.refresh_pool_cache_from_event_loop)
 
     def _node_device_lifecycle_event(self, conn, dev,
                                      event, reason, userdata):
@@ -882,9 +886,14 @@ class vmmConnection(vmmGObject):
 
             eventid = getattr(libvirt,
                               "VIR_STORAGE_POOL_EVENT_ID_LIFECYCLE", 0)
+            refreshid = getattr(libvirt,
+                              "VIR_STORAGE_POOL_EVENT_ID_REFRESH", 1)
             self._storage_pool_cb_ids.append(
                 self.get_backend().storagePoolEventRegisterAny(
                 None, eventid, self._storage_pool_lifecycle_event, None))
+            self._storage_pool_cb_ids.append(
+                self.get_backend().storagePoolEventRegisterAny(
+                None, refreshid, self._storage_pool_refresh_event, None))
             self.using_storage_pool_events = True
             logging.debug("Using storage pool events")
         except Exception, e:
