@@ -931,7 +931,7 @@ c.add_invalid("-o test-clone-simple -n newvm --file %(EXISTIMG1)s --clone-runnin
 
 
 c = vclon.add_category("general", "-n clonetest")
-c.add_valid("-o test")  # Nodisk guest
+c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("-o test --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # Nodisk, but with spurious files passed
 c.add_valid("-o test --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --prompt")  # Working scenario w/ prompt shouldn't ask anything
 c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # XML File with 2 disks
@@ -940,7 +940,7 @@ c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(
 c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --file %(MANAGEDNEW1)s")  # XML w/ managed storage, specify managed path
 c.add_valid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools# Libvirt test driver doesn't support cloning across pools# XML w/ non-existent storage, with --preserve
-c.add_valid("-o test -n test-for-clone --replace")  # Overwriting existing VM
+c.add_valid("-o test -n test-for-clone --auto-clone --replace")  # Overwriting existing VM
 c.add_invalid("-o test foobar")  # Positional arguments error
 c.add_invalid("-o idontexist")  # Non-existent vm name
 c.add_invalid("-o idontexist --auto-clone")  # Non-existent vm name with auto flag,
