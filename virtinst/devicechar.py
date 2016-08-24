@@ -39,6 +39,7 @@ class _VirtualCharDevice(VirtualDevice):
     TYPE_UNIX     = "unix"
     TYPE_SPICEVMC = "spicevmc"
     TYPE_SPICEPORT = "spiceport"
+    TYPE_NMDM = "nmdm"
 
     # We don't list the non-UI friendly types here
     _TYPES_FOR_ALL = [TYPE_PTY, TYPE_DEV, TYPE_FILE,
@@ -146,6 +147,8 @@ class _VirtualCharDevice(VirtualDevice):
             "source_host"   : [self.TYPE_TCP, self.TYPE_UDP],
             "source_port"   : [self.TYPE_TCP, self.TYPE_UDP],
             "source_channel": [self.TYPE_SPICEPORT],
+            "source_master" : [self.TYPE_NMDM],
+            "source_slave"  : [self.TYPE_NMDM],
             "protocol"      : [self.TYPE_TCP],
             "bind_host"     : [self.TYPE_UDP],
             "bind_port"     : [self.TYPE_UDP],
@@ -209,6 +212,8 @@ class _VirtualCharDevice(VirtualDevice):
 
     source_channel = XMLProperty("./source/@channel",
                                  doc=_("Source channel name."))
+    source_master = XMLProperty("./source/@master")
+    source_slave = XMLProperty("./source/@slave")
 
 
     ###################

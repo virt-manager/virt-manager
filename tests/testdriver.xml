@@ -603,6 +603,9 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <source mode='bind' host='my.source.host' service='1234'/>
       <protocol type='telnet'/>
     </serial>
+    <serial type="nmdm">
+      <source master="/dev/nmdm0A" slave="/dev/nmdm0B"/>
+    </serial>
 
 
     <!-- parallel devices -->

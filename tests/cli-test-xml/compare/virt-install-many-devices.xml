@@ -246,6 +246,9 @@
       <protocol type="telnet"/>
       <log file="/tmp/foo.log" append="on"/>
     </serial>
+    <serial type="nmdm">
+      <source master="/dev/foo1" slave="/dev/foo2"/>
+    </serial>
     <parallel type="udp">
       <source mode="bind" host="127.0.0.1" service="1234"/>
       <source mode="connect" host="0.0.0.0" service="1234"/>
