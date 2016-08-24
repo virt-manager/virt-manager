@@ -201,6 +201,10 @@ def generate_uuid(conn):
 
 def default_route():
     route_file = "/proc/net/route"
+    if not os.path.exists(route_file):
+        logging.debug("route_file=%s does not exist", route_file)
+        return None
+
     d = file(route_file)
 
     defn = 0
