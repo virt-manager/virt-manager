@@ -775,6 +775,20 @@ class XMLBuilder(object):
     # https://bugzilla.redhat.com/show_bug.cgi?id=1184131
     _XML_SANITIZE = False
 
+
+    @staticmethod
+    def xml_indent(xmlstr, level):
+        """
+        Indent the passed str the specified number of spaces
+        """
+        xml = ""
+        if not xmlstr:
+            return xml
+        if not level:
+            return xmlstr
+        return "\n".join((" " * level + l) for l in xmlstr.splitlines())
+
+
     def __init__(self, conn, parsexml=None, parsexmlnode=None,
                  parent_xpath=None, relative_object_xpath=None):
         """
@@ -1020,7 +1034,7 @@ class XMLBuilder(object):
         if not obj._xmlstate.is_build:
             use_xpath = obj.get_root_xpath().rsplit("/", 1)[0]
             indent = 2 * obj.get_root_xpath().count("/")
-            newnode = libxml2.parseDoc(util.xml_indent(xml, indent)).children
+            newnode = libxml2.parseDoc(self.xml_indent(xml, indent)).children
             parentnode = _build_xpath_node(self._xmlstate.xml_ctx, use_xpath)
             # Tack newnode on the end
             _add_pretty_child(parentnode, newnode)
