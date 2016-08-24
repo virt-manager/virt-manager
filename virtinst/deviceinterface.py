@@ -18,6 +18,7 @@
 # MA 02110-1301 USA.
 
 import logging
+import os
 import random
 
 from . import util
@@ -50,6 +51,67 @@ def _random_mac(conn):
             random.randint(0x00, 0xff),
             random.randint(0x00, 0xff)]
     return ':'.join(["%02x" % x for x in mac])
+
+
+def _default_route():
+    route_file = "/proc/net/route"
+    if not os.path.exists(route_file):
+        logging.debug("route_file=%s does not exist", route_file)
+        return None
+
+    for line in file(route_file):
+        info = line.split()
+        if len(info) != 11:
+            logging.debug("Unexpected field count=%s when parsing %s",
+                          len(info), route_file)
+            break
+
+        try:
+            route = int(info[1], 16)
+            if route == 0:
+                return info[0]
+        except ValueError:
+            continue
+
+    return None
+
+
+def _default_bridge(conn):
+    if "VIRTINST_TEST_SUITE" in os.environ:
+        return "eth0"
+
+    if conn.is_remote():
+        return None
+
+    dev = _default_route()
+    if not dev:
+        return None
+
+    # New style peth0 == phys dev, eth0 == bridge, eth0 == default route
+    if os.path.exists("/sys/class/net/%s/bridge" % dev):
+        return dev
+
+    # Old style, peth0 == phys dev, eth0 == netloop, xenbr0 == bridge,
+    # vif0.0 == netloop enslaved, eth0 == default route
+    try:
+        defn = int(dev[-1])
+    except:
+        defn = -1
+
+    if (defn >= 0 and
+        os.path.exists("/sys/class/net/peth%d/brport" % defn) and
+        os.path.exists("/sys/class/net/xenbr%d/bridge" % defn)):
+        return "xenbr%d"
+    return None
+
+
+def _default_network(conn):
+    ret = _default_bridge(conn)
+    if ret:
+        return ["bridge", ret]
+
+    # FIXME: Check that this exists
+    return ["network", "default"]
 
 
 class VirtualPort(XMLBuilder):
@@ -148,7 +210,7 @@ class VirtualNetworkInterface(VirtualDevice):
         ret = self._default_bridge
         if ret is None:
             ret = False
-            default = util.default_bridge(self.conn)
+            default = _default_bridge(self.conn)
             if default:
                 ret = default
 
@@ -262,7 +324,7 @@ class VirtualNetworkInterface(VirtualDevice):
         if (self.conn.is_qemu_session() or self.conn.is_test()):
             self.type = self.TYPE_USER
         else:
-            self.type, self.source = util.default_network(self.conn)
+            self.type, self.source = _default_network(self.conn)
 
 
 VirtualNetworkInterface.register_type()

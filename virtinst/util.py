@@ -160,34 +160,6 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
     raise ValueError(_("Name generation range exceeded."))
 
 
-def default_bridge(conn):
-    if "VIRTINST_TEST_SUITE" in os.environ:
-        return "eth0"
-
-    if conn.is_remote():
-        return None
-
-    dev = default_route()
-    if not dev:
-        return None
-
-    # New style peth0 == phys dev, eth0 == bridge, eth0 == default route
-    if os.path.exists("/sys/class/net/%s/bridge" % dev):
-        return dev
-
-    # Old style, peth0 == phys dev, eth0 == netloop, xenbr0 == bridge,
-    # vif0.0 == netloop enslaved, eth0 == default route
-    try:
-        defn = int(dev[-1])
-    except:
-        defn = -1
-
-    if (defn >= 0 and
-        os.path.exists("/sys/class/net/peth%d/brport" % defn) and
-        os.path.exists("/sys/class/net/xenbr%d/bridge" % defn)):
-        return "xenbr%d"
-    return None
-
 
 def generate_uuid(conn):
     for ignore in range(256):
@@ -197,40 +169,6 @@ def generate_uuid(conn):
 
     logging.error("Failed to generate non-conflicting UUID")
 
-
-
-def default_route():
-    route_file = "/proc/net/route"
-    if not os.path.exists(route_file):
-        logging.debug("route_file=%s does not exist", route_file)
-        return None
-
-    d = file(route_file)
-
-    defn = 0
-    for line in d.xreadlines():
-        info = line.split()
-        if (len(info) != 11):  # 11 = typical num of fields in the file
-            logging.warn(_("Invalid line length while parsing %s."),
-                         route_file)
-            logging.warn(_("Defaulting bridge to xenbr%d"), defn)
-            break
-        try:
-            route = int(info[1], 16)
-            if route == 0:
-                return info[0]
-        except ValueError:
-            continue
-    return None
-
-
-def default_network(conn):
-    ret = default_bridge(conn)
-    if ret:
-        return ["bridge", ret]
-
-    # FIXME: Check that this exists
-    return ["network", "default"]
 
 
 def randomUUID(conn):
