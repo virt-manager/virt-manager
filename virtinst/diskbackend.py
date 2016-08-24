@@ -21,11 +21,11 @@
 import logging
 import os
 import re
+import stat
 import statvfs
 
 import libvirt
 
-from . import util
 from .storage import StoragePool, StorageVolume
 
 
@@ -71,6 +71,31 @@ def _lookup_vol_by_basename(pool, path):
     name = os.path.basename(path)
     if name in pool.listVolumes():
         return pool.storageVolLookupByName(name)
+
+
+def _stat_disk(path):
+    """
+    Returns the tuple (isreg, size)
+    """
+    if not os.path.exists(path):
+        return True, 0
+
+    mode = os.stat(path)[stat.ST_MODE]
+
+    # os.path.getsize('/dev/..') can be zero on some platforms
+    if stat.S_ISBLK(mode):
+        try:
+            fd = os.open(path, os.O_RDONLY)
+            # os.SEEK_END is not present on all systems
+            size = os.lseek(fd, 0, 2)
+            os.close(fd)
+        except:
+            size = 0
+        return False, size
+    elif stat.S_ISREG(mode):
+        return True, os.path.getsize(path)
+
+    return True, 0
 
 
 def check_if_path_managed(conn, path):
@@ -497,7 +522,7 @@ class StorageBackend(_StorageBase):
             if self._vol_object:
                 ret = self.get_vol_xml().capacity
             elif self._path:
-                ignore, ret = util.stat_disk(self._path)
+                ret = _stat_disk(self._path)[1]
             self._size = (float(ret) / 1024.0 / 1024.0 / 1024.0)
         return self._size
 
@@ -551,7 +576,7 @@ class StorageBackend(_StorageBase):
             elif self._path and not self._conn.is_remote():
                 if os.path.isdir(self._path):
                     self._dev_type = "dir"
-                elif util.stat_disk(self._path)[0]:
+                elif _stat_disk(self._path)[0]:
                     self._dev_type = "file"
                 else:
                     self._dev_type = "block"

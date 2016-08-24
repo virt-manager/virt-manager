@@ -22,7 +22,6 @@ import logging
 import os
 import random
 import re
-import stat
 import sys
 
 import libvirt
@@ -44,29 +43,6 @@ def xml_indent(xmlstr, level):
     if not level:
         return xmlstr
     return "\n".join((" " * level + l) for l in xmlstr.splitlines())
-
-
-def stat_disk(path):
-    """Returns the tuple (isreg, size)."""
-    if not os.path.exists(path):
-        return True, 0
-
-    mode = os.stat(path)[stat.ST_MODE]
-
-    # os.path.getsize('/dev/..') can be zero on some platforms
-    if stat.S_ISBLK(mode):
-        try:
-            fd = os.open(path, os.O_RDONLY)
-            # os.SEEK_END is not present on all systems
-            size = os.lseek(fd, 0, 2)
-            os.close(fd)
-        except:
-            size = 0
-        return False, size
-    elif stat.S_ISREG(mode):
-        return True, os.path.getsize(path)
-
-    return True, 0
 
 
 def vm_uuid_collision(conn, uuid):
