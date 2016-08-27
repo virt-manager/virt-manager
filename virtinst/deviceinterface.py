@@ -132,6 +132,7 @@ class VirtualNetworkInterface(VirtualDevice):
     TYPE_BRIDGE     = "bridge"
     TYPE_VIRTUAL    = "network"
     TYPE_USER       = "user"
+    TYPE_VHOSTUSER  = "vhostuser"
     TYPE_ETHERNET   = "ethernet"
     TYPE_DIRECT   = "direct"
     network_types = [TYPE_BRIDGE, TYPE_VIRTUAL, TYPE_USER, TYPE_ETHERNET,
@@ -272,9 +273,9 @@ class VirtualNetworkInterface(VirtualDevice):
     ##################
 
     _XML_PROP_ORDER = [
-        "_bridge", "_network", "_source_dev", "source_mode", "portgroup",
-        "macaddr", "target_dev", "model", "virtualport",
-        "filterref", "rom_bar", "rom_file"]
+        "_bridge", "_network", "_source_dev", "source_type", "source_path",
+        "source_mode", "portgroup", "macaddr", "target_dev", "model",
+        "virtualport", "filterref", "rom_bar", "rom_file"]
 
     _bridge = XMLProperty("./source/@bridge", default_cb=_get_default_bridge)
     _network = XMLProperty("./source/@network")
@@ -288,6 +289,8 @@ class VirtualNetworkInterface(VirtualDevice):
                           set_converter=_validate_mac,
                           default_cb=_get_default_mac)
 
+    source_type = XMLProperty("./source/@type")
+    source_path = XMLProperty("./source/@path")
     source_mode = XMLProperty("./source/@mode",
                               default_cb=_default_source_mode)
     portgroup = XMLProperty("./source/@portgroup")
