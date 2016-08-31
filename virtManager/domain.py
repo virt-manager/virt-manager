@@ -1487,7 +1487,11 @@ class vmmDomain(vmmLibvirtObject):
         if meter:
             start_job_progress_thread(self, meter, _("Migrating domain"))
 
-        self._backend.migrate(libvirt_destconn, flags, None, interface, 0)
+        params = {}
+        if interface:
+            params[libvirt.VIR_MIGRATE_PARAM_URI] = interface
+
+        self._backend.migrate3(libvirt_destconn, params, flags)
 
         # Don't schedule any conn update, migrate dialog handles it for us
 
