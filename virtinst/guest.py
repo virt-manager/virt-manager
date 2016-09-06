@@ -52,6 +52,7 @@ from .idmap import IdMap
 from .osxml import OSXML
 from .pm import PM
 from .seclabel import Seclabel
+from .sysinfo import SYSInfo
 from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
@@ -106,7 +107,7 @@ class Guest(XMLBuilder):
         "vcpus", "curvcpus", "vcpu_placement", "cpuset",
         "numatune", "bootloader", "os", "idmap",
         "features", "cpu", "clock", "on_poweroff", "on_reboot", "on_crash",
-        "resource", "pm", "emulator", "_devices", "seclabels"]
+        "resource", "pm", "emulator", "_devices", "seclabels", "sysinfo"]
 
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
@@ -212,6 +213,7 @@ class Guest(XMLBuilder):
     memoryBacking = XMLChildProperty(DomainMemorybacking, is_single=True)
     idmap = XMLChildProperty(IdMap, is_single=True)
     resource = XMLChildProperty(DomainResource, is_single=True)
+    sysinfo = XMLChildProperty(SYSInfo, is_single=True)
 
 
     ###############################
