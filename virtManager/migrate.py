@@ -344,7 +344,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             return
 
         if self.conn.is_xen():
-            uri = "xenmigr://%s" % address
+            uri = "%s" % address
         else:
             uri = "tcp:%s" % address
         if port:
