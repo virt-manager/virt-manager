@@ -135,6 +135,12 @@ Specify resource partitioning for the guest.
 
 Use --resource=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#resPartition>
 
+=item B<--sysinfo> OPT=VAL,[...]
+
+Configure sysinfo/SMBIOS values exposed to the guest OS. '--sysinfo host' can be used to expose the host's SMBIOS info to the VM, otherwise values can be manually specified.
+
+Use --sysinfo=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsSysinfo>
+
 =item B<--vcpus> OPTIONS
 
 Number of virtual cpus to configure for the guest. If 'maxvcpus' is specified,
