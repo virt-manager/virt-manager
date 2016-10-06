@@ -1655,6 +1655,10 @@ class vmmDomain(vmmLibvirtObject):
         return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
     def is_paused(self):
         return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
+    def is_clonable(self):
+        return self.status() in [libvirt.VIR_DOMAIN_SHUTOFF,
+                                 libvirt.VIR_DOMAIN_PAUSED,
+                                 libvirt.VIR_DOMAIN_PMSUSPENDED]
 
     def run_status(self):
         return self.pretty_run_status(self.status(), self.has_managed_save())

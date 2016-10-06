@@ -128,7 +128,7 @@ class VMActionMenu(_VMMenu):
             "suspend": bool(vm and vm.is_stoppable()),
             "resume": bool(vm and vm.is_paused()),
             "migrate": bool(vm and vm.is_stoppable()),
-            "clone": True,
+            "clone": bool(vm and vm.is_clonable()),
         }
         vismap = {
             "suspend": bool(vm and not vm.is_paused()),
