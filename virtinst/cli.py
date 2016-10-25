@@ -1115,7 +1115,7 @@ class VirtCLIParser(object):
         # Example: --edit --cpu clearxml=yes should remove the <cpu>
         # block. But --edit --cpu clearxml=yes,model=foo should leave
         # a <cpu> stub in place, so that it gets model=foo in place,
-        # otherwise the newly created cpu block gets appened to the
+        # otherwise the newly created cpu block gets appended to the
         # end of the domain XML, which gives an ugly diff
         clear_inst.clear(leave_stub="," in self.optstr)
 
