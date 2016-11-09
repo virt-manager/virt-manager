@@ -1089,6 +1089,10 @@ class Guest(XMLBuilder):
                 if dev.image_compression is None:
                     dev.image_compression = "off"
 
+            if (dev.type == "spice" and dev.gl and
+                not self.conn.check_support(self.conn.SUPPORT_CONN_SPICE_GL)):
+                raise ValueError(_("Host does not support spice GL"))
+
     def _add_spice_channels(self):
         if self.skip_default_channel:
             return
