@@ -949,6 +949,7 @@ class vmmDomain(vmmLibvirtObject):
 
             else:
                 editdev.model = model
+                editdev.address.clear()
                 self.hotplug(device=editdev)
 
         if model != _SENTINEL:
