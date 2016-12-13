@@ -453,7 +453,7 @@ class _OsVariant(object):
         devs = self._os.get_all_devices(fltr)
         for idx in range(devs.get_length()):
             devname = devs.get_nth(idx).get_name()
-            if devname != "virtio-net":
+            if devname in ["pcnet", "ne2k_pci", "rtl8139", "e1000"]:
                 return devname
         return None
 
