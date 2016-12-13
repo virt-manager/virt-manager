@@ -27,6 +27,10 @@ from gi.repository import Gdk
 
 import libvirt
 
+import virtinst
+from virtinst import util
+from virtinst import VirtualRNGDevice
+
 from . import vmmenu
 from . import uiutil
 from .baseclass import vmmGObjectUI
@@ -38,10 +42,6 @@ from .netlist import vmmNetworkList
 from .snapshots import vmmSnapshotPage
 from .storagebrowse import vmmStorageBrowser
 from .graphwidgets import Sparkline
-
-import virtinst
-from virtinst import util
-from virtinst import VirtualRNGDevice
 
 
 # Parameters that can be edited in the details window

@@ -24,11 +24,11 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+from virtinst import StorageVolume
+
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
-
-from virtinst import StorageVolume
 
 
 class vmmCreateVolume(vmmGObjectUI):

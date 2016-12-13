@@ -364,7 +364,7 @@ class vmmEngine(vmmGObject):
         self._add_obj_to_tick_queue(conn, True, **kwargs)
 
     def tick(self):
-        for uri in self.conns.keys():
+        for uri in self.conns:
             conn = self.conns[uri]["conn"]
             self._add_obj_to_tick_queue(conn, False,
                                         stats_update=True, pollvm=True)
@@ -609,9 +609,8 @@ class vmmEngine(vmmGObject):
         handle_id = vmmGObject.connect(self, name, callback, *args)
 
         if name == "conn-added":
-            for uri in self.conns.keys():
-                self.emit("conn-added",
-                          self.conns[uri]["conn"])
+            for conn_dict in self.conns.values():
+                self.emit("conn-added", conn_dict["conn"])
 
         return handle_id
 

@@ -24,11 +24,11 @@ from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
 
+from virtinst import StoragePool
+
 from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
 from . import uiutil
-
-from virtinst import StoragePool
 
 PAGE_NAME   = 0
 PAGE_FORMAT = 1

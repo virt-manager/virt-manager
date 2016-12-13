@@ -36,7 +36,7 @@ def _setup_i18n():
 _setup_i18n()
 stable_defaults = _CLIConfig.stable_defaults
 
-from . import util
+from virtinst import util
 from virtinst import support
 from virtinst.uri import URI
 from virtinst.osdict import OSDB

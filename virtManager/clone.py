@@ -24,14 +24,14 @@ import os
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+import virtinst
+from virtinst import Cloner
+from virtinst import VirtualNetworkInterface
+
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
 from .storagebrowse import vmmStorageBrowser
-
-import virtinst
-from virtinst import Cloner
-from virtinst import VirtualNetworkInterface
 
 STORAGE_COMBO_CLONE = 0
 STORAGE_COMBO_SHARE = 1

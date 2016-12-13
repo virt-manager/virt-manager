@@ -21,6 +21,8 @@ import weakref
 
 import libvirt
 
+from virtcli import CLIConfig
+
 from . import pollhelpers
 from . import support
 from . import util
@@ -29,7 +31,6 @@ from .guest import Guest
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
 from .uri import URI, MagicURI
-from virtcli import CLIConfig
 
 
 class VirtualConnection(object):
