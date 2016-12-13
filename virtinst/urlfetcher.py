@@ -1107,7 +1107,7 @@ class DebianDistro(Distro):
                 logging.debug("Found treearch=%s in uri", arch)
                 return arch
 
-        # Otherwise default to amd64
+        # Otherwise default to i386
         arch = "i386"
         logging.debug("No treearch found in uri, defaulting to arch=%s", arch)
         return arch
