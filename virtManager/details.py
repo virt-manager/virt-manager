@@ -1016,10 +1016,10 @@ class vmmDetails(vmmGObjectUI):
     # Window state listeners #
     ##########################
 
-    def window_resized(self, ignore, event):
+    def window_resized(self, ignore, ignore2):
         if not self.is_visible():
             return
-        self._window_size = (event.width, event.height)
+        self._window_size = self.topwin.get_size()
 
     def popup_addhw_menu(self, widget, event):
         ignore = widget

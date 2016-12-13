@@ -458,10 +458,10 @@ class vmmManager(vmmGObjectUI):
     # Action listeners #
     ####################
 
-    def window_resized(self, ignore, event):
+    def window_resized(self, ignore, ignore2):
         if not self.is_visible():
             return
-        self._window_size = (event.width, event.height)
+        self._window_size = self.topwin.get_size()
 
     def exit_app(self, src_ignore=None, src2_ignore=None):
         self.emit("action-exit-app")
