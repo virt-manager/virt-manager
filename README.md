@@ -22,5 +22,5 @@ For dependency info and installation instructions, see the
    [BugReporting](http://virt-manager.org/page/BugReporting).
  - There are further project details on the
    [virt-manager](http://virt-manager.org/) website.
- - See the [HACKING](HACKING) file for info about submitting patches or
+ - See the [HACKING.md](HACKING.md) file for info about submitting patches or
    contributing translations.
