@@ -338,6 +338,10 @@ Generate XML for a virtio console device and print it to stdout:
   # virt-xml --build-xml --console pty,target_type=virtio
 
 
+=head1 CAVEATS
+
+Virtualization hosts supported by libvirt may not permit all changes that might seem possible. Some edits made to a VM's definition may be ignored. For instance, QEMU does not allow the removal of certain devices once they've been defined.
+
 =head1 BUGS
 
 Please see http://virt-manager.org/page/BugReporting
