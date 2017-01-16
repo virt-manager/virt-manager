@@ -1929,7 +1929,7 @@ class ParserDisk(VirtCLIParser):
         volname = self.optdict.pop("vol", None)
         size = parse_size(self.optdict.pop("size", None))
         fmt = self.optdict.pop("format", None)
-        sparse = _on_off_convert("sparse", self.optdict.pop("sparse", None))
+        sparse = _on_off_convert("sparse", self.optdict.pop("sparse", "yes"))
         convert_perms(self.optdict.pop("perms", None))
         has_type_volume = ("source_pool" in self.optdict or
                            "source_volume" in self.optdict)
