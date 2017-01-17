@@ -263,6 +263,9 @@ def main():
     if show_window and options.uri is None:
         raise RuntimeError("can't use --show-* options without --connect")
 
+    if show_window:
+        options.skip_autostart = True
+
     # Hook libvirt events into glib main loop
     LibvirtGLib.init(None)
     LibvirtGLib.event_register()
