@@ -647,7 +647,7 @@ def build_guest_instance(conn, options):
 ###########################
 
 def start_install(guest, options):
-    if options.wait:
+    if options.wait is not None:
         wait_on_install = True
         wait_time = options.wait * 60
         if "VIRTINST_TEST_SUITE" in os.environ and wait_time:
