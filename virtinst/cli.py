@@ -1680,6 +1680,12 @@ class ParserFeatures(VirtCLIParser):
     cli_arg_name = "features"
     objclass = DomainFeatures
 
+    def set_smm_cb(self, inst, val, virtarg):
+        if not inst.conn.check_support(inst.conn.SUPPORT_DOMAIN_FEATURE_SMM):
+            raise RuntimeError("smm is not supported by libvirt")
+        inst.smm = val
+        return val
+
 _register_virt_parser(ParserFeatures)
 ParserFeatures.add_arg("acpi", "acpi", is_onoff=True)
 ParserFeatures.add_arg("apic", "apic", is_onoff=True)
@@ -1703,6 +1709,8 @@ ParserFeatures.add_arg("kvm_hidden", "kvm_hidden", is_onoff=True)
 ParserFeatures.add_arg("pvspinlock", "pvspinlock", is_onoff=True)
 
 ParserFeatures.add_arg("gic_version", "gic_version")
+
+ParserFeatures.add_arg("smm", "smm", is_onoff=True, cb=ParserFeatures.set_smm_cb)
 
 
 ###################

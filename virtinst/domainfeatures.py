@@ -54,3 +54,5 @@ class DomainFeatures(XMLBuilder):
                          default_name="default", default_cb=lambda s: False)
     kvm_hidden = XMLProperty("./kvm/hidden/@state", is_onoff=True)
     pvspinlock = XMLProperty("./pvspinlock/@state", is_onoff=True)
+
+    smm = XMLProperty("./smm/@state", is_onoff=True)

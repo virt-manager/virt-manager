@@ -280,6 +280,12 @@ Notify the guest that the host supports paravirtual spinlocks for example by exp
 This is relevant only for ARM architectures. Possible values are "host" or
 version number.
 
+=item B<--features smm=on>
+
+This enables System Management Mode of hypervisor. Some UEFI firmwares may
+require this feature to be present. (QEMU supports SMM only with q35 machine
+type.)
+
 =back
 
 Use --features=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsFeatures>

@@ -552,6 +552,15 @@ c.add_compare(""" \
 """, "spice-gl", compare_check=support.SUPPORT_CONN_VMPORT)
 
 
+############################
+# Features install options #
+############################
+
+c = vinst.add_category("features", "--nographics --noautoconsole --import --disk none --controller usb,model=none")
+c.add_compare("--features smm=on", "features-smm")
+c.add_invalid("--features smm=on --machine pc")
+
+
 ######################################
 # Memory hot(un)plug install options #
 ######################################

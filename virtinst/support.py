@@ -361,6 +361,7 @@ SUPPORT_DOMAIN_MEMORY_STATS = _make(
 SUPPORT_DOMAIN_STATE = _make(function="virDomain.state", run_args=())
 SUPPORT_DOMAIN_OPEN_GRAPHICS = _make(function="virDomain.openGraphicsFD",
     version="1.2.8", hv_version={"qemu": 0})
+SUPPORT_DOMAIN_FEATURE_SMM = _make(version="2.1.0")
 
 
 ###############
