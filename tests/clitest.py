@@ -561,6 +561,14 @@ c.add_compare("--features smm=on", "features-smm")
 c.add_invalid("--features smm=on --machine pc")
 
 
+########################
+# Boot install options #
+########################
+
+c = vinst.add_category("boot", "--nographics --noautoconsole --import --disk none --controller usb,model=none")
+c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-secure")
+
+
 ######################################
 # Memory hot(un)plug install options #
 ######################################

@@ -519,13 +519,14 @@ correct UEFI parameters, libvirt needs to be advertising known UEFI binaries
 via domcapabilities XML, so this will likely only work if using properly
 configured distro packages.
 
-=item B<--boot loader=/.../OVMF_CODE.fd,loader_ro=yes,loader_type=pflash,nvram_template=/.../OVMF_VARS.fd>
+=item B<--boot loader=/.../OVMF_CODE.fd,loader_ro=yes,loader_type=pflash,nvram_template=/.../OVMF_VARS.fd,loader_secure=no>
 
 Specify that the virtual machine use the custom OVMF binary as boot firmware,
 mapped as a virtual flash chip. In addition, request that libvirt instantiate
 the VM-specific UEFI varstore from the custom "/.../OVMF_VARS.fd" varstore
 template. This is the recommended UEFI setup, and should be used if
---boot uefi doesn't know about your UEFI binaries.
+--boot uefi doesn't know about your UEFI binaries. If your UEFI firmware
+supports Secure boot feature you can enable it via loader_secure.
 
 =back
 

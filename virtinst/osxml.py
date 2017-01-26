@@ -116,6 +116,7 @@ class OSXML(XMLBuilder):
     loader = XMLProperty("./loader")
     loader_ro = XMLProperty("./loader/@readonly", is_yesno=True)
     loader_type = XMLProperty("./loader/@type")
+    loader_secure = XMLProperty("./loader/@secure", is_yesno=True)
     smbios_mode = XMLProperty("./smbios/@mode")
     nvram = XMLProperty("./nvram")
     nvram_template = XMLProperty("./nvram/@template")

@@ -1587,6 +1587,13 @@ class ParserBoot(VirtCLIParser):
         inst.os.smbios_mode = val
         self.optdict["smbios_mode"] = val
 
+    def set_loader_secure_cb(self, inst, val, virtarg):
+        if not inst.conn.check_support(inst.conn.SUPPORT_DOMAIN_LOADER_SECURE):
+            raise RuntimeError("secure attribute for loader is not supported "
+                               "by libvirt.")
+        inst.os.loader_secure = val
+        return val
+
     def noset_cb(self, inst, val, virtarg):
         pass
 
@@ -1623,6 +1630,8 @@ ParserBoot.add_arg("os.dtb", "dtb")
 ParserBoot.add_arg("os.loader", "loader")
 ParserBoot.add_arg("os.loader_ro", "loader_ro", is_onoff=True)
 ParserBoot.add_arg("os.loader_type", "loader_type")
+ParserBoot.add_arg("os.loader_secure", "loader_secure", is_onoff=True,
+                   cb=ParserBoot.set_loader_secure_cb)
 ParserBoot.add_arg("os.nvram", "nvram")
 ParserBoot.add_arg("os.nvram_template", "nvram_template")
 ParserBoot.add_arg("os.kernel_args", "kernel_args",
