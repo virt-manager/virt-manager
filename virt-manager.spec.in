@@ -91,6 +91,8 @@ virt-install related tools.
 Summary: Utilities for installing virtual machines
 
 Requires: virt-manager-common = %{verrel}
+# For 'virsh console'
+Requires: libvirt-client
 
 Provides: virt-install
 Provides: virt-clone
