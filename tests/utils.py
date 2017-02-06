@@ -37,10 +37,12 @@ uri_test_remote = uri_test + ",remote"
 
 _uri_qemu = "%s,qemu" % uri_test
 _uri_kvm_domcaps = (_uri_qemu + _domcapsprefix + "kvm-x86_64-domcaps.xml")
+_uri_kvm_domcaps_q35 = (_uri_qemu + _domcapsprefix + "kvm-x86_64-domcaps-q35.xml")
 _uri_kvm_aarch64_domcaps = (_uri_qemu + _domcapsprefix + "kvm-aarch64-domcaps.xml")
 uri_kvm_nodomcaps = (_uri_qemu + _capsprefix + "kvm-x86_64.xml")
 uri_kvm_rhel = (_uri_kvm_domcaps + _capsprefix + "kvm-x86_64-rhel7.xml")
 uri_kvm = (_uri_kvm_domcaps + _capsprefix + "kvm-x86_64.xml")
+uri_kvm_q35 = (_uri_kvm_domcaps_q35 + _capsprefix + "kvm-x86_64.xml")
 uri_kvm_session = uri_kvm + ",session"
 
 uri_kvm_armv7l = (_uri_kvm_domcaps + _capsprefix + "kvm-armv7l.xml")

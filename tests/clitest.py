@@ -71,6 +71,7 @@ test_files = {
     'URI-TEST-DEFAULT': utils.uri_test_default,
     'URI-TEST-REMOTE': utils.uri_test_remote,
     'URI-KVM': utils.uri_kvm,
+    'URI-KVM-Q35': utils.uri_kvm_q35,
     'URI-KVM-SESSION': utils.uri_kvm_session,
     'URI-KVM-REMOTE': utils.uri_kvm + ",remote",
     'URI-KVM-NODOMCAPS': utils.uri_kvm_nodomcaps,
@@ -781,6 +782,9 @@ c.add_valid("--connect %(URI-KVM-NODOMCAPS)s --arch aarch64 --nodisks --pxe")  #
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
 c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm")  # Invalid domain type for arch
 c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch/virt combo
+
+c = vinst.add_category("kvm-q35", "--connect %(URI-KVM-Q35)s --noautoconsole", compare_check=support.SUPPORT_CONN_VMPORT)
+c.add_compare("--boot uefi --disk none", "boot-uefi")
 
 
 ######################

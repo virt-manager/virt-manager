@@ -561,6 +561,29 @@ class Guest(XMLBuilder):
         self.os.loader_type = "pflash"
         self.os.loader = path
 
+        self.check_uefi_smm()
+
+
+    def check_uefi_smm(self):
+        """
+        If the firmware name contains "secboot" it is probably build
+        with SMM feature required so we need to enable that feature,
+        otherwise the firmware may fail to load.  True secure boot is
+        currently supported only on x86 architecture and with q35 with
+        SMM feature enabled so change the machine to q35 as well.
+        """
+
+        if not self.os.is_x86():
+            return
+
+        if "secboot" not in self.os.loader:
+            return
+
+        if not self.conn.check_support(self.conn.SUPPORT_DOMAIN_FEATURE_SMM):
+            return
+
+        self.features.smm = True
+        self.os.machine = "q35"
 
     ###################
     # Device defaults #

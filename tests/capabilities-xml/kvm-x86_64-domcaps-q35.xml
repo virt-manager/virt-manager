@@ -1,0 +1,126 @@
+<domainCapabilities>
+  <path>/home/phrdina/work/qemu/x86_64-softmmu/qemu-system-x86_64</path>
+  <domain>kvm</domain>
+  <machine>pc-q35-2.9</machine>
+  <arch>x86_64</arch>
+  <vcpu max='288'/>
+  <os supported='yes'>
+    <loader supported='yes'>
+      <value>/usr/share/ovmf/OVMF_CODE.secboot.fd</value>
+      <enum name='type'>
+        <value>rom</value>
+        <value>pflash</value>
+      </enum>
+      <enum name='readonly'>
+        <value>yes</value>
+        <value>no</value>
+      </enum>
+    </loader>
+  </os>
+  <cpu>
+    <mode name='host-passthrough' supported='yes'/>
+    <mode name='host-model' supported='yes'>
+      <model fallback='forbid'>Skylake-Client</model>
+      <vendor>Intel</vendor>
+      <feature policy='require' name='ss'/>
+      <feature policy='require' name='vmx'/>
+      <feature policy='require' name='hypervisor'/>
+      <feature policy='require' name='tsc_adjust'/>
+      <feature policy='require' name='clflushopt'/>
+      <feature policy='require' name='xsaves'/>
+      <feature policy='require' name='pdpe1gb'/>
+      <feature policy='require' name='invtsc'/>
+    </mode>
+    <mode name='custom' supported='yes'>
+      <model usable='yes'>qemu64</model>
+      <model usable='yes'>qemu32</model>
+      <model usable='no'>phenom</model>
+      <model usable='yes'>pentium3</model>
+      <model usable='yes'>pentium2</model>
+      <model usable='yes'>pentium</model>
+      <model usable='yes'>n270</model>
+      <model usable='yes'>kvm64</model>
+      <model usable='yes'>kvm32</model>
+      <model usable='yes'>coreduo</model>
+      <model usable='yes'>core2duo</model>
+      <model usable='no'>athlon</model>
+      <model usable='yes'>Westmere</model>
+      <model usable='yes'>Skylake-Client</model>
+      <model usable='yes'>SandyBridge</model>
+      <model usable='yes'>Penryn</model>
+      <model usable='no'>Opteron_G5</model>
+      <model usable='no'>Opteron_G4</model>
+      <model usable='no'>Opteron_G3</model>
+      <model usable='yes'>Opteron_G2</model>
+      <model usable='yes'>Opteron_G1</model>
+      <model usable='yes'>Nehalem</model>
+      <model usable='yes'>IvyBridge</model>
+      <model usable='yes'>Haswell</model>
+      <model usable='yes'>Haswell-noTSX</model>
+      <model usable='yes'>Conroe</model>
+      <model usable='yes'>Broadwell</model>
+      <model usable='yes'>Broadwell-noTSX</model>
+      <model usable='yes'>486</model>
+    </mode>
+  </cpu>
+  <devices>
+    <disk supported='yes'>
+      <enum name='diskDevice'>
+        <value>disk</value>
+        <value>cdrom</value>
+        <value>floppy</value>
+        <value>lun</value>
+      </enum>
+      <enum name='bus'>
+        <value>fdc</value>
+        <value>scsi</value>
+        <value>virtio</value>
+        <value>usb</value>
+        <value>sata</value>
+      </enum>
+    </disk>
+    <graphics supported='yes'>
+      <enum name='type'>
+        <value>sdl</value>
+        <value>vnc</value>
+        <value>spice</value>
+      </enum>
+    </graphics>
+    <video supported='yes'>
+      <enum name='modelType'>
+        <value>vga</value>
+        <value>cirrus</value>
+        <value>vmvga</value>
+        <value>qxl</value>
+        <value>virtio</value>
+      </enum>
+    </video>
+    <hostdev supported='yes'>
+      <enum name='mode'>
+        <value>subsystem</value>
+      </enum>
+      <enum name='startupPolicy'>
+        <value>default</value>
+        <value>mandatory</value>
+        <value>requisite</value>
+        <value>optional</value>
+      </enum>
+      <enum name='subsysType'>
+        <value>usb</value>
+        <value>pci</value>
+        <value>scsi</value>
+      </enum>
+      <enum name='capsType'/>
+      <enum name='pciBackend'>
+        <value>default</value>
+        <value>kvm</value>
+        <value>vfio</value>
+      </enum>
+    </hostdev>
+  </devices>
+  <features>
+    <gic supported='no'/>
+  </features>
+</domainCapabilities>
+
+
