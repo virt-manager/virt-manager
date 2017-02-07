@@ -562,6 +562,8 @@ class SpiceViewer(Viewer):
     #####################
 
     def _main_channel_event_cb(self, channel, event):
+        self._tunnels.unlock()
+
         if event == SpiceClientGLib.ChannelEvent.CLOSED:
             self._emit_disconnected()
         elif event == SpiceClientGLib.ChannelEvent.ERROR_AUTH:
@@ -614,7 +616,6 @@ class SpiceViewer(Viewer):
 
         if (type(channel) == SpiceClientGLib.MainChannel and
             not self._main_channel):
-            self._tunnels.unlock()
             self._main_channel = channel
             hid = self._main_channel.connect_after("channel-event",
                 self._main_channel_event_cb)
