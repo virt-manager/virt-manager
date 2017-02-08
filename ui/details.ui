@@ -1468,22 +1468,10 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="border_width">3</property>
-                                            <property name="n_rows">2</property>
+                                            <property name="n_rows">3</property>
                                             <property name="n_columns">2</property>
                                             <property name="column_spacing">6</property>
                                             <property name="row_spacing">6</property>
-                                            <child>
-                                              <object class="GtkLabel" id="label71">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes">Hostname:</property>
-                                                <property name="xalign">1</property>
-                                              </object>
-                                              <packing>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options">GTK_FILL</property>
-                                              </packing>
-                                            </child>
                                             <child>
                                               <object class="GtkLabel" id="label72">
                                                 <property name="visible">True</property>
@@ -1492,8 +1480,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="xalign">1</property>
                                               </object>
                                               <packing>
-                                                <property name="top_attach">1</property>
-                                                <property name="bottom_attach">2</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
                                                 <property name="x_options">GTK_FILL</property>
                                                 <property name="y_options">GTK_FILL</property>
                                               </packing>
@@ -1514,6 +1502,30 @@ if you know what you are doing.&lt;/small&gt;</property>
                                               </packing>
                                             </child>
                                             <child>
+                                              <object class="GtkLabel" id="label71">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes">Hostname:</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="x_options">GTK_FILL</property>
+                                                <property name="y_options">GTK_FILL</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes">Operating system:</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <object class="GtkLabel" id="inspection-product-name">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
@@ -1524,10 +1536,24 @@ if you know what you are doing.&lt;/small&gt;</property>
                                               <packing>
                                                 <property name="left_attach">1</property>
                                                 <property name="right_attach">2</property>
-                                                <property name="top_attach">1</property>
-                                                <property name="bottom_attach">2</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
                                                 <property name="x_options">GTK_FILL</property>
                                                 <property name="y_options">GTK_FILL</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="inspection-type">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes">foo</property>
+                                                <property name="xalign">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -5906,8 +5932,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                         <property name="label" translatable="yes">_Save this password in your keyring</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Check to save password, uncheck to forget password.</property>
                         <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Check to save password, uncheck to forget password.</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>

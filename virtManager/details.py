@@ -310,6 +310,23 @@ def _warn_cpu_thread_topo(threads, cpu_model):
     return False
 
 
+def _label_for_os_type(os_type):
+    typemap = {
+        "dos": _("MS-DOS/FreeDOS"),
+        "freebsd": _("FreeBSD"),
+        "hurd": _("GNU/Hurd"),
+        "linux": _("Linux"),
+        "minix": _("MINIX"),
+        "netbsd": _("NetBSD"),
+        "openbsd": _("OpenBSD"),
+        "windows": _("Microsoft Windows"),
+    }
+    try:
+        return typemap[os_type]
+    except KeyError:
+        return _("unknown")
+
+
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
         "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
@@ -2379,6 +2396,10 @@ class vmmDetails(vmmGObjectUI):
             if not hostname:
                 hostname = _("unknown")
             self.widget("inspection-hostname").set_text(hostname)
+            os_type = self.vm.inspection.os_type
+            if not os_type:
+                os_type = "unknown"
+            self.widget("inspection-type").set_text(_label_for_os_type(os_type))
             product_name = self.vm.inspection.product_name
             if not product_name:
                 product_name = _("unknown")
