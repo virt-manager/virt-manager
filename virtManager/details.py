@@ -2419,8 +2419,10 @@ class vmmDetails(vmmGObjectUI):
                 if app["app_display_name"]:
                     name = app["app_display_name"]
                 version = ""
+                if app["app_epoch"] > 0:
+                    version += str(app["app_epoch"]) + ":"
                 if app["app_version"]:
-                    version = app["app_version"]
+                    version += app["app_version"]
                 if app["app_release"]:
                     version += "-" + app["app_release"]
                 summary = ""
