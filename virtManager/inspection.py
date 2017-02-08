@@ -225,8 +225,11 @@ class vmmInspection(vmmGObject):
         if filesystems_mounted:
             # string containing PNG data
             icon = g.inspect_get_icon(root, favicon=0, highquality=1)
-            if icon == "":
-                icon = None
+            if icon == "" or icon is None:
+                # no high quality icon, try a low quality one
+                icon = g.inspect_get_icon(root, favicon=0, highquality=0)
+                if icon == "":
+                    icon = None
 
             # Inspection applications.
             apps = g.inspect_list_applications(root)
