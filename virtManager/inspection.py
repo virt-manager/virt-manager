@@ -179,7 +179,7 @@ class vmmInspection(vmmGObject):
         root = roots[0]
 
         # Inspection results.
-        typ = g.inspect_get_type(root)  # eg. "linux"
+        os_type = g.inspect_get_type(root)  # eg. "linux"
         distro = g.inspect_get_distro(root)  # eg. "fedora"
         major_version = g.inspect_get_major_version(root)  # eg. 14
         minor_version = g.inspect_get_minor_version(root)  # eg. 0
@@ -236,7 +236,7 @@ class vmmInspection(vmmGObject):
 
         # Log what we found.
         logging.debug("%s: detected operating system: %s %s %d.%d (%s)",
-                      prettyvm, typ, distro, major_version, minor_version,
+                      prettyvm, os_type, distro, major_version, minor_version,
                       product_name)
         logging.debug("hostname: %s", hostname)
         if icon:
@@ -245,7 +245,7 @@ class vmmInspection(vmmGObject):
             logging.debug("# apps: %d", len(apps))
 
         data = vmmInspectionData()
-        data.type = str(type)
+        data.os_type = str(os_type)
         data.distro = str(distro)
         data.major_version = int(major_version)
         data.minor_version = int(minor_version)

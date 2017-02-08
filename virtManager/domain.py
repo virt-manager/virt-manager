@@ -149,7 +149,7 @@ def start_job_progress_thread(vm, meter, progtext):
 
 class vmmInspectionData(object):
     def __init__(self):
-        self.type = None
+        self.os_type = None
         self.distro = None
         self.major_version = None
         self.minor_version = None
