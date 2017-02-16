@@ -9,8 +9,8 @@ Qemu/KVM and Xen virtual machines, as well as LXC containers. The UI is
 primarily tested with KVM, but is intended to be reasonably portable to any
 virtualization backend libvirt supports.
 
-For dependency info and installation instructions, see the [INSTALL](INSTALL)
-file.
+For dependency info and installation instructions, see the
+[INSTALL.md](INSTALL.md) file.
 
 ## Contact
 
@@ -22,5 +22,5 @@ file.
    [BugReporting](http://virt-manager.org/page/BugReporting).
  - There are further project details on the
    [virt-manager](http://virt-manager.org/) website.
- - See the [HACKING](HACKING) file for info about submitting patches or
+ - See the [HACKING.md](HACKING.md) file for info about submitting patches or
    contributing translations.
