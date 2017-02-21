@@ -54,6 +54,7 @@ class NodeDevice(XMLBuilder):
     CAPABILITY_TYPE_STORAGE = "storage"
     CAPABILITY_TYPE_SCSIBUS = "scsi_host"
     CAPABILITY_TYPE_SCSIDEV = "scsi"
+    CAPABILITY_TYPE_DRM = "drm"
 
     @staticmethod
     def lookupNodedevFromString(conn, idstring):
@@ -328,6 +329,15 @@ class SCSIBus(NodeDevice):
     wwpn = XMLProperty("./capability/capability[@type='fc_host']/wwpn")
 
 
+class DRMDevice(NodeDevice):
+    drm_type = XMLProperty("./capability/type")
+
+    def drm_pretty_name(self, conn):
+        parent = NodeDevice.lookupNodedevFromString(conn, self.parent)
+
+        return "%s (%s)" % (parent.pretty_name(), self.drm_type)
+
+
 def _AddressStringToHostdev(conn, addrstr):
     from .devicehostdev import VirtualHostDevice
     hostdev = VirtualHostDevice(conn)
@@ -410,5 +420,7 @@ def _typeToDeviceClass(t):
         return SCSIBus
     elif t == NodeDevice.CAPABILITY_TYPE_SCSIDEV:
         return SCSIDevice
+    elif t == NodeDevice.CAPABILITY_TYPE_DRM:
+        return DRMDevice
     else:
         return NodeDevice

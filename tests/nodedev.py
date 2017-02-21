@@ -236,6 +236,21 @@ class TestNodeDev(unittest.TestCase):
                 "type": "disk"}
         self._testCompare(devname, vals)
 
+    def testDRMDevice(self):
+        devname = "drm_renderD129"
+        vals = {"name": "drm_renderD129",
+                "parent": "pci_0000_00_02_0",
+                "devnodes": [
+                    {"path": "/dev/dri/renderD129", "node_type": "dev"},
+                    {"path": "/dev/dri/by-path/pci-0000:00:02.0-render", "node_type": "link"},
+                    {"path": "/dev/dri/by-id/foo-render", "node_type": "link"}
+                ],
+                "device_type": NodeDevice.CAPABILITY_TYPE_DRM,
+                "drm_type": "render"}
+        dev = self._testCompare(devname, vals)
+        self.assertEqual(dev.drm_pretty_name(conn),
+                         "0000:00:02:0 Intel Corporation HD Graphics 530 (render)")
+
     def testUnknownDevice(self):
         vals = {"name": "foodevice", "parent": "computer",
                 "device_type": "frobtype"}
