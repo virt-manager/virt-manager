@@ -115,7 +115,7 @@ class XMLParseTest(unittest.TestCase):
         check("bootloader", None, "pygrub")
         check("on_poweroff", "destroy", "restart")
         check("on_reboot", "restart", "destroy")
-        check("on_crash", "restart", "destroy")
+        check("on_crash", "destroy", "restart")
         check("on_lockfailure", "poweroff", "restart")
 
         check = self._make_checker(guest.clock)

@@ -10,9 +10,6 @@
     <initrd>/initrd.img</initrd>
   </os>
   <clock offset="utc"/>
-  <on_poweroff>destroy</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>preserve</on_crash>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">

@@ -195,10 +195,9 @@ class Guest(XMLBuilder):
     title = XMLProperty("./title")
     emulator = XMLProperty("./devices/emulator")
 
-    on_poweroff = XMLProperty("./on_poweroff",
-                              default_cb=lambda s: "destroy")
-    on_reboot = XMLProperty("./on_reboot", default_cb=lambda s: "restart")
-    on_crash = XMLProperty("./on_crash", default_cb=lambda s: "restart")
+    on_poweroff = XMLProperty("./on_poweroff")
+    on_reboot = XMLProperty("./on_reboot")
+    on_crash = XMLProperty("./on_crash")
     on_lockfailure = XMLProperty("./on_lockfailure")
 
     seclabels = XMLChildProperty(Seclabel)
@@ -313,7 +312,7 @@ class Guest(XMLBuilder):
         # We do a shallow copy of the OS block here, so that we can
         # set the install time properties but not permanently overwrite
         # any config the user explicitly requested.
-        data = (self.os, self.on_crash, self.on_reboot)
+        data = (self.os, self.on_reboot)
         try:
             self._propstore["os"] = self.os.copy()
         except:
@@ -323,7 +322,6 @@ class Guest(XMLBuilder):
 
     def _finish_get_xml(self, data):
         (self._propstore["os"],
-         self.on_crash,
          self.on_reboot) = data
 
     def _get_install_xml(self, *args, **kwargs):
@@ -352,11 +350,6 @@ class Guest(XMLBuilder):
 
         if install:
             self.on_reboot = "destroy"
-            self.on_crash = "destroy"
-        elif self.os.is_s390x():
-            # on_crash=restart can cause reboot loops on s390x,
-            # so use preserve
-            self.on_crash = "preserve"
 
         self._set_osxml_defaults()
 

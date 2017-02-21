@@ -8,9 +8,6 @@
     <type arch="x86_64">exe</type>
     <init>/usr/bin/httpd</init>
   </os>
-  <on_poweroff>destroy</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/libexec/libvirt_lxc</emulator>
     <interface type="bridge">
