@@ -1168,3 +1168,6 @@ class XMLBuilder(object):
             elif key in childprops:
                 for obj in util.listify(getattr(self, key)):
                     obj._add_parse_bits(node)
+
+    def __repr__(self):
+        return "<XMLBuilder %s %s>" % (self._XML_ROOT_NAME, id(self))
