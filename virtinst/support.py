@@ -311,7 +311,9 @@ SUPPORT_CONN_VCPU_PLACEMENT = _make(
 SUPPORT_CONN_MEM_STATS_PERIOD = _make(
     function="virDomain.setMemoryStatsPeriod",
     version="1.1.1", hv_version={"qemu": 0})
-SUPPORT_CONN_SPICE_GL = _make(version="1.3.3",
+# spice GL is actually enabled with libvirt 1.3.3, but 3.1.0 is the
+# first version that sorts out the qemu:///system + cgroup issues
+SUPPORT_CONN_SPICE_GL = _make(version="3.1.0",
     hv_version={"qemu": "2.6.0", "test": 0})
 SUPPORT_CONN_VIDEO_VIRTIO_ACCEL3D = _make(version="1.3.0",
     hv_version={"qemu": "2.5.0", "test": 0})
