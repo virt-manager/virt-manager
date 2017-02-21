@@ -228,7 +228,7 @@ class VirtualGraphics(VirtualDevice):
         self.remove_all_listens()
         self.port = None
         self.tlsPort = None
-        self.autoport = False
+        self.autoport = None
         self.socket = None
 
         if self.conn.check_support(
