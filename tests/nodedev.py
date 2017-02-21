@@ -68,18 +68,26 @@ class TestNodeDev(unittest.TestCase):
         return NodeDevice.parse(conn, xml)
 
     def _testCompare(self, devname, vals, devxml=None):
+        def _compare(dev, vals, root=""):
+            for attr in vals.keys():
+                expect = vals[attr]
+                actual = getattr(dev, attr)
+                if isinstance(expect, list):
+                    for adev, exp in zip(actual, expect):
+                        _compare(adev, exp, attr + ".")
+                else:
+                    if expect != actual:
+                        raise AssertionError("devname=%s attribute=%s%s did not match:\n"
+                            "expect=%s\nactual=%s" % (devname, root, attr, expect, actual))
+                    self.assertEqual(vals[attr], getattr(dev, attr))
+
         if devxml:
             dev = NodeDevice.parse(conn, devxml)
         else:
             dev = self._nodeDevFromName(devname)
 
-        for attr in vals.keys():
-            expect = vals[attr]
-            actual = getattr(dev, attr)
-            if expect != actual:
-                raise AssertionError("devname=%s attribute=%s did not match:\n"
-                    "expect=%s\nactual=%s" % (devname, attr, expect, actual))
-            self.assertEqual(vals[attr], getattr(dev, attr))
+        _compare(dev, vals)
+        return dev
 
     def _testNode2DeviceCompare(self, nodename, devfile, nodedev=None):
         devfile = os.path.join("tests/nodedev-xml/devxml", devfile)
