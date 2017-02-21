@@ -387,12 +387,27 @@ class Guest(XMLBuilder):
         meter = util.ensure_meter(meter)
         meter.start(size=None, text=meter_label)
 
-        if doboot or transient or self.installer.has_install_phase():
+        if transient:
             self.domain = self.conn.createXML(install_xml or final_xml, 0)
+        else:
+            # Not all hypervisors (vz) support createXML, so avoid it here
+            self.domain = self.conn.defineXML(install_xml or final_xml)
 
-        if not transient:
-            self.domain = self.conn.defineXML(final_xml)
-        meter.end(0)
+            # Handle undefining the VM if the initial startup fails
+            if doboot or self.installer.has_install_phase():
+                try:
+                    self.domain.create()
+                except:
+                    import sys
+                    exc_info = sys.exc_info()
+                    try:
+                        self.domain.undefine()
+                    except:
+                        pass
+                    raise exc_info[0], exc_info[1], exc_info[2]
+
+            if install_xml and install_xml != final_xml:
+                self.domain = self.conn.defineXML(final_xml)
 
         try:
             logging.debug("XML fetched from libvirt object:\n%s",
