@@ -90,6 +90,7 @@ EDIT_GFX_KEYMAP,
 EDIT_GFX_ADDRESS,
 EDIT_GFX_TLSPORT,
 EDIT_GFX_PORT,
+EDIT_GFX_OPENGL,
 
 EDIT_VIDEO_MODEL,
 
@@ -104,7 +105,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 45)
+) = range(1, 46)
 
 
 # Columns in hw list model
@@ -394,6 +395,8 @@ class vmmDetails(vmmGObjectUI):
             lambda *x: self.enable_apply(x, EDIT_GFX_TYPE))
         self.gfxdetails.connect("changed-port",
             lambda *x: self.enable_apply(x, EDIT_GFX_PORT))
+        self.gfxdetails.connect("changed-opengl",
+            lambda *x: self.enable_apply(x, EDIT_GFX_OPENGL))
         self.gfxdetails.connect("changed-tlsport",
             lambda *x: self.enable_apply(x, EDIT_GFX_TLSPORT))
         self.gfxdetails.connect("changed-address",
@@ -2158,7 +2161,7 @@ class vmmDetails(vmmGObjectUI):
 
     def config_graphics_apply(self, devobj):
         (gtype, port,
-         tlsport, addr, passwd, keymap) = self.gfxdetails.get_values()
+         tlsport, addr, passwd, keymap, gl) = self.gfxdetails.get_values()
 
         kwargs = {}
 
@@ -2170,6 +2173,8 @@ class vmmDetails(vmmGObjectUI):
             kwargs["keymap"] = keymap
         if self.edited(EDIT_GFX_PORT):
             kwargs["port"] = port
+        if self.edited(EDIT_GFX_OPENGL):
+            kwargs["gl"] = gl
         if self.edited(EDIT_GFX_TLSPORT):
             kwargs["tlsport"] = tlsport
         if self.edited(EDIT_GFX_TYPE):

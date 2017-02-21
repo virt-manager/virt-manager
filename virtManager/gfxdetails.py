@@ -35,6 +35,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         "changed-type": (GObject.SignalFlags.RUN_FIRST, None, []),
         "changed-address": (GObject.SignalFlags.RUN_FIRST, None, []),
         "changed-keymap": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "changed-opengl": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
     def __init__(self, vm, builder, topwin):
@@ -54,6 +55,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
             "on_graphics_tlsport_changed": lambda ignore: self.emit("changed-tlsport"),
             "on_graphics_port_changed": lambda ignore: self.emit("changed-port"),
             "on_graphics_keymap_changed": lambda ignore: self.emit("changed-keymap"),
+            "on_graphics_opengl_toggled": lambda ignore: self.emit("changed-opengl"),
         })
 
         self._init_ui()
@@ -143,7 +145,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
         if not self.widget("graphics-password-chk").get_active():
             passwd = None
 
-        return gtype, port, tlsport, addr, passwd, keymap
+        gl = self.widget("graphics-opengl").get_active()
+
+        return gtype, port, tlsport, addr, passwd, keymap, gl
 
     def set_dev(self, gfx):
         self.reset_state()
@@ -188,6 +192,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
         if is_spice:
             set_port("graphics-tlsport", gfx.tlsPort)
+            self.widget("graphics-opengl").set_active(gfx.gl or False)
 
         if is_sdl:
             title = _("Local SDL Window")
@@ -208,13 +213,15 @@ class vmmGraphicsDetails(vmmGObjectUI):
     def _show_rows_from_type(self):
         hide_all = ["graphics-xauth", "graphics-display", "graphics-address",
             "graphics-password-box", "graphics-keymap", "graphics-port-box",
-            "graphics-tlsport-box"]
+            "graphics-tlsport-box", "graphics-opengl"]
 
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
         sdl_rows = ["graphics-xauth", "graphics-display"]
         vnc_rows = ["graphics-password-box", "graphics-address",
             "graphics-port-box", "graphics-keymap"]
         spice_rows = vnc_rows[:] + ["graphics-tlsport-box"]
+        if self.conn.check_support(self.conn.SUPPORT_CONN_SPICE_GL):
+            spice_rows.extend(["graphics-opengl"])
 
         rows = []
         if gtype == "sdl":
