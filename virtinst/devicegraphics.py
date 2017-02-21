@@ -226,6 +226,7 @@ class VirtualGraphics(VirtualDevice):
 
     def set_listen_none(self):
         self.remove_all_listens()
+        self.listen = None
         self.port = None
         self.tlsPort = None
         self.autoport = None
