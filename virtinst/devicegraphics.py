@@ -224,6 +224,11 @@ class VirtualGraphics(VirtualDevice):
         self.add_child(obj)
         return obj
 
+    def get_first_listen_type(self):
+        if len(self.listens) > 0:
+            return self.listens[0].type
+        return None
+
     def set_listen_none(self):
         self.remove_all_listens()
         self.listen = None

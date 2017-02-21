@@ -1554,16 +1554,22 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_graphics(self):
         try:
-            (gtype, port,
-             tlsport, addr, passwd, keymap, gl) = self._gfxdetails.get_values()
+            (gtype, port, tlsport, listen,
+             addr, passwd, keymap, gl) = self._gfxdetails.get_values()
 
             self._dev = virtinst.VirtualGraphics(self.conn.get_backend())
             self._dev.type = gtype
-            self._dev.port = port
             self._dev.passwd = passwd
-            self._dev.listen = addr
-            self._dev.tlsPort = tlsport
             self._dev.gl = gl
+
+            if not listen or listen == "none":
+                self._dev.set_listen_none()
+            elif listen == "address":
+                self._dev.listen = addr
+                self._dev.port = port
+                self._dev.tlsPort = tlsport
+            else:
+                raise ValueError(_("invalid listen type"))
             if keymap:
                 self._dev.keymap = keymap
         except ValueError, e:

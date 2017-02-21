@@ -87,6 +87,7 @@ EDIT_NET_MAC,
 EDIT_GFX_PASSWD,
 EDIT_GFX_TYPE,
 EDIT_GFX_KEYMAP,
+EDIT_GFX_LISTEN,
 EDIT_GFX_ADDRESS,
 EDIT_GFX_TLSPORT,
 EDIT_GFX_PORT,
@@ -105,7 +106,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 46)
+) = range(1, 47)
 
 
 # Columns in hw list model
@@ -399,6 +400,8 @@ class vmmDetails(vmmGObjectUI):
             lambda *x: self.enable_apply(x, EDIT_GFX_OPENGL))
         self.gfxdetails.connect("changed-tlsport",
             lambda *x: self.enable_apply(x, EDIT_GFX_TLSPORT))
+        self.gfxdetails.connect("changed-listen",
+            lambda *x: self.enable_apply(x, EDIT_GFX_LISTEN))
         self.gfxdetails.connect("changed-address",
             lambda *x: self.enable_apply(x, EDIT_GFX_ADDRESS))
         self.gfxdetails.connect("changed-keymap",
@@ -2160,22 +2163,24 @@ class vmmDetails(vmmGObjectUI):
                                           devobj=devobj)
 
     def config_graphics_apply(self, devobj):
-        (gtype, port,
-         tlsport, addr, passwd, keymap, gl) = self.gfxdetails.get_values()
+        (gtype, port, tlsport, listen,
+         addr, passwd, keymap, gl) = self.gfxdetails.get_values()
 
         kwargs = {}
 
         if self.edited(EDIT_GFX_PASSWD):
             kwargs["passwd"] = passwd
-        if self.edited(EDIT_GFX_ADDRESS):
-            kwargs["listen"] = addr
+        if self.edited(EDIT_GFX_LISTEN):
+            kwargs["listen"] = listen
+        if self.edited(EDIT_GFX_ADDRESS) or self.edited(EDIT_GFX_LISTEN):
+            kwargs["addr"] = addr
         if self.edited(EDIT_GFX_KEYMAP):
             kwargs["keymap"] = keymap
-        if self.edited(EDIT_GFX_PORT):
+        if self.edited(EDIT_GFX_PORT) or self.edited(EDIT_GFX_LISTEN):
             kwargs["port"] = port
         if self.edited(EDIT_GFX_OPENGL):
             kwargs["gl"] = gl
-        if self.edited(EDIT_GFX_TLSPORT):
+        if self.edited(EDIT_GFX_TLSPORT) or self.edited(EDIT_GFX_LISTEN):
             kwargs["tlsport"] = tlsport
         if self.edited(EDIT_GFX_TYPE):
             kwargs["gtype"] = gtype
