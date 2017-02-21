@@ -181,6 +181,9 @@ class TestNodeDev(unittest.TestCase):
         devname = "storage_serial_SATA_WDC_WD1600AAJS__WD_WCAP95119685"
         vals = {"name": "storage_serial_SATA_WDC_WD1600AAJS__WD_WCAP95119685",
                 "parent": "pci_8086_27c0_scsi_host_scsi_device_lun0",
+                "devnodes": [
+                    {"path": "/dev/sda", "node_type": "dev"}
+                ],
                 "device_type": NodeDevice.CAPABILITY_TYPE_STORAGE,
                 "block": "/dev/sda", "bus": "scsi", "drive_type": "disk",
                 "model": "WDC WD1600AAJS-2", "vendor": "ATA",
