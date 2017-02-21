@@ -95,6 +95,7 @@ EDIT_GFX_OPENGL,
 EDIT_GFX_RENDERNODE,
 
 EDIT_VIDEO_MODEL,
+EDIT_VIDEO_3D,
 
 EDIT_WATCHDOG_MODEL,
 EDIT_WATCHDOG_ACTION,
@@ -107,7 +108,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 48)
+) = range(1, 49)
 
 
 # Columns in hw list model
@@ -543,8 +544,8 @@ class vmmDetails(vmmGObjectUI):
             "on_sound_model_combo_changed": lambda *x: self.enable_apply(x,
                                              EDIT_SOUND_MODEL),
 
-            "on_video_model_combo_changed": lambda *x: self.enable_apply(x,
-                                             EDIT_VIDEO_MODEL),
+            "on_video_model_combo_changed": self.video_model_changed,
+            "on_video_3d_toggled": self.video_3d_toggled,
 
             "on_watchdog_model_combo_changed": lambda *x: self.enable_apply(x,
                                                 EDIT_WATCHDOG_MODEL),
@@ -1740,6 +1741,16 @@ class vmmDetails(vmmGObjectUI):
         self.widget("cpu-topology-table").set_sensitive(do_enable)
         self.config_cpu_topology_changed()
 
+    def video_model_changed(self, ignore):
+        model = uiutil.get_list_selection(self.widget("video-model"))
+        uiutil.set_grid_row_visible(
+            self.widget("video-3d"), model == "virtio")
+        self.enable_apply(EDIT_VIDEO_MODEL)
+
+    def video_3d_toggled(self, ignore):
+        self.widget("video-3d").set_inconsistent(False)
+        self.enable_apply(EDIT_VIDEO_3D)
+
     # Boot device / Autostart
     def config_bootdev_selected(self, ignore=None):
         boot_row = self.get_boot_selection()
@@ -2201,6 +2212,9 @@ class vmmDetails(vmmGObjectUI):
             model = uiutil.get_list_selection(self.widget("video-model"))
             if model:
                 kwargs["model"] = model
+
+        if self.edited(EDIT_VIDEO_3D):
+            kwargs["accel3d"] = self.widget("video-3d").get_active()
 
         return vmmAddHardware.change_config_helper(self.vm.define_video,
                                           kwargs, self.vm, self.err,
@@ -2967,6 +2981,11 @@ class vmmDetails(vmmGObjectUI):
         self.widget("video-heads").set_text(heads and str(heads) or "-")
 
         uiutil.set_list_selection(self.widget("video-model"), model)
+
+        if vid.accel3d is None:
+            self.widget("video-3d").set_inconsistent(True)
+        else:
+            self.widget("video-3d").set_active(vid.accel3d)
 
     def refresh_watchdog_page(self):
         watch = self.get_hw_selection(HW_LIST_COL_DEVICE)

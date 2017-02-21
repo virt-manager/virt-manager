@@ -876,7 +876,7 @@ class vmmDomain(vmmLibvirtObject):
         else:
             self._redefine_xmlobj(xmlobj)
 
-    def define_video(self, devobj, do_hotplug, model=_SENTINEL):
+    def define_video(self, devobj, do_hotplug, model=_SENTINEL, accel3d=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -893,6 +893,10 @@ class vmmDomain(vmmLibvirtObject):
             editdev.heads = None
             editdev.ram = None
             editdev.vgamem = None
+            editdev.accel3d = None
+
+        if accel3d != _SENTINEL:
+            editdev.accel3d = accel3d
 
         if do_hotplug:
             self.hotplug(device=editdev)
