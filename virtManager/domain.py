@@ -826,7 +826,7 @@ class vmmDomain(vmmLibvirtObject):
     def define_graphics(self, devobj, do_hotplug,
         listen=_SENTINEL, addr=_SENTINEL, port=_SENTINEL, tlsport=_SENTINEL,
         passwd=_SENTINEL, keymap=_SENTINEL, gtype=_SENTINEL,
-        gl=_SENTINEL):
+        gl=_SENTINEL, rendernode=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -846,6 +846,8 @@ class vmmDomain(vmmLibvirtObject):
             editdev.type = gtype
         if gl != _SENTINEL:
             editdev.gl = gl
+        if rendernode != _SENTINEL:
+            editdev.rendernode = rendernode
         if listen != _SENTINEL:
             listentype = editdev.get_first_listen_type()
             if listen == 'none':

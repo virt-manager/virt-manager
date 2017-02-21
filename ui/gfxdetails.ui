@@ -425,5 +425,40 @@
         <property name="top_attach">1</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkLabel" id="label5">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">GPU:</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">graphics-rendernode</property>
+        <property name="xalign">1</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">10</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="graphics-rendernode">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">False</property>
+        <property name="has_entry">True</property>
+        <signal name="changed" handler="on_graphics_rendernode_changed" swapped="no"/>
+        <child internal-child="entry">
+          <object class="GtkEntry">
+            <property name="can_focus">True</property>
+            <property name="halign">start</property>
+            <property name="editable">True</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">10</property>
+      </packing>
+    </child>
   </object>
 </interface>

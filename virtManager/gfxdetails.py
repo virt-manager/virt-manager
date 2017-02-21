@@ -37,6 +37,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         "changed-address": (GObject.SignalFlags.RUN_FIRST, None, []),
         "changed-keymap": (GObject.SignalFlags.RUN_FIRST, None, []),
         "changed-opengl": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "changed-rendernode": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
     def __init__(self, vm, builder, topwin):
@@ -57,7 +58,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
             "on_graphics_tlsport_changed": lambda ignore: self.emit("changed-tlsport"),
             "on_graphics_port_changed": lambda ignore: self.emit("changed-port"),
             "on_graphics_keymap_changed": lambda ignore: self.emit("changed-keymap"),
-            "on_graphics_opengl_toggled": lambda ignore: self.emit("changed-opengl"),
+            "on_graphics_opengl_toggled": self._change_opengl,
+            "on_graphics_rendernode_changed": lambda ignore: self.emit("changed-rendernode")
         })
 
         self._init_ui()
@@ -109,6 +111,21 @@ class vmmGraphicsDetails(vmmGObjectUI):
         for k in virtinst.VirtualGraphics.valid_keymaps():
             model.append([k, k])
 
+        # Host GPU rendernode
+        combo = self.widget("graphics-rendernode")
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uiutil.init_combo_text_column(combo, 1)
+        model.append([None, _("Auto")])
+        devs = self.conn.filter_nodedevs("drm")
+        for i in devs:
+            drm = i.xmlobj
+            if drm.drm_type != 'render':
+                continue
+            rendernode = drm.get_devnode().path
+
+            model.append([rendernode, i.xmlobj.drm_pretty_name(self.conn.get_backend())])
+
     def _get_config_graphics_ports(self):
         port = uiutil.spin_get_helper(self.widget("graphics-port"))
         tlsport = uiutil.spin_get_helper(self.widget("graphics-tlsport"))
@@ -136,6 +153,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-listen-type").set_active(0)
         self.widget("graphics-address").set_active(0)
         self.widget("graphics-keymap").set_active(0)
+        self.widget("graphics-rendernode").set_active(0)
 
         self._change_ports()
         self.widget("graphics-port-auto").set_active(True)
@@ -158,8 +176,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
             passwd = None
 
         gl = self.widget("graphics-opengl").get_active()
+        rendernode = uiutil.get_list_selection(self.widget("graphics-rendernode"))
 
-        return gtype, port, tlsport, listen, addr, passwd, keymap, gl
+        return gtype, port, tlsport, listen, addr, passwd, keymap, gl, rendernode
 
     def set_dev(self, gfx):
         self.reset_state()
@@ -210,6 +229,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
         if is_spice:
             set_port("graphics-tlsport", gfx.tlsPort)
             self.widget("graphics-opengl").set_active(gfx.gl or False)
+            uiutil.set_list_selection(
+                self.widget("graphics-rendernode"), gfx.rendernode or None)
 
         if is_sdl:
             title = _("Local SDL Window")
@@ -230,7 +251,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
     def _show_rows_from_type(self):
         hide_all = ["graphics-xauth", "graphics-display", "graphics-address",
             "graphics-password-box", "graphics-keymap", "graphics-port-box",
-            "graphics-tlsport-box", "graphics-opengl"]
+            "graphics-tlsport-box", "graphics-opengl", "graphics-rendernode"]
 
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
@@ -244,6 +265,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
             spice_rows.extend(["graphics-tlsport-box"])
         if self.conn.check_support(self.conn.SUPPORT_CONN_SPICE_GL):
             spice_rows.extend(["graphics-opengl"])
+            gl = self.widget("graphics-opengl").get_active()
+            if gl and self.conn.check_support(self.conn.SUPPORT_CONN_SPICE_RENDERNODE):
+                spice_rows.extend(["graphics-rendernode"])
 
         rows = []
         if gtype == "sdl":
@@ -263,6 +287,10 @@ class vmmGraphicsDetails(vmmGObjectUI):
     def _change_graphics_listen(self, ignore):
         self._show_rows_from_type()
         self.emit("changed-listen")
+
+    def _change_opengl(self, ignore):
+        self._show_rows_from_type()
+        self.emit("changed-opengl")
 
     def _change_port_auto(self, ignore):
         self.widget("graphics-port-auto").set_inconsistent(False)

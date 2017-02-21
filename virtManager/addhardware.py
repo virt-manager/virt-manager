@@ -1555,12 +1555,13 @@ class vmmAddHardware(vmmGObjectUI):
     def _validate_page_graphics(self):
         try:
             (gtype, port, tlsport, listen,
-             addr, passwd, keymap, gl) = self._gfxdetails.get_values()
+             addr, passwd, keymap, gl, rendernode) = self._gfxdetails.get_values()
 
             self._dev = virtinst.VirtualGraphics(self.conn.get_backend())
             self._dev.type = gtype
             self._dev.passwd = passwd
             self._dev.gl = gl
+            self._dev.rendernode = rendernode
 
             if not listen or listen == "none":
                 self._dev.set_listen_none()
