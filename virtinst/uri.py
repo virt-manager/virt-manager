@@ -124,7 +124,7 @@ class MagicURI(object):
                      files in test/capabilities-xml/
         * 'domcaps=%s': Points to a file with domain capabilities XML, that
                         will be returned in conn.getDomainCapabilities
-        * qemu or xen or lxc: Fake the specified hypervisor
+        * qemu, xen, lxc or vz: Fake the specified hypervisor
 
     See tests/utils.py for example URLs
     """
@@ -161,6 +161,8 @@ class MagicURI(object):
             self.hv = "lxc"
         if pop_bool("xen"):
             self.hv = "xen"
+        if pop_bool("vz"):
+            self.hv = "vz"
 
         self.conn_version = opts.pop("connver", None)
         if self.conn_version:

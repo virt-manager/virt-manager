@@ -1,0 +1,26 @@
+<domain type="vz">
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="x86_64">exe</type>
+    <init>/sbin/init</init>
+  </os>
+  <features>
+    <privnet/>
+  </features>
+  <devices>
+    <emulator>vz</emulator>
+    <filesystem type="template">
+      <source name="centos-7-x86_64"/>
+      <target dir="/"/>
+    </filesystem>
+    <interface type="network">
+      <source network="Bridged"/>
+      <mac address="00:11:22:33:44:55"/>
+    </interface>
+    <console type="pty"/>
+  </devices>
+</domain>

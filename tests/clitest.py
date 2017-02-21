@@ -81,6 +81,7 @@ test_files = {
     'URI-KVM-S390X-KVMIBM' : utils.uri_kvm_s390x_KVMIBM,
     'URI-XEN': utils.uri_xen,
     'URI-LXC': utils.uri_lxc,
+    'URI-VZ': utils.uri_vz,
 
     'CLONE_DISK_XML'    : "%s/clone-disk.xml" % xmldir,
     'CLONE_STORAGE_XML' : "%s/clone-disk-managed.xml" % xmldir,
@@ -770,6 +771,20 @@ c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics n
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-pv")  # Xen PV
 c.add_compare("--disk %(BLOCKVOL)s --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
+
+
+
+#####################
+# VZ specific tests #
+#####################
+
+c = vinst.add_category("vz", "--connect %(URI-VZ)s --noautoconsole")
+c.add_compare(""" \
+--container \
+--filesystem type=template,source=centos-7-x86_64,target="/" \
+--network network="Bridged" \
+""", "vz-ct-template")
+
 
 
 

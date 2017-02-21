@@ -1,0 +1,53 @@
+<capabilities>
+
+  <host>
+    <cpu>
+      <arch>x86_64</arch>
+      <model>IvyBridge</model>
+      <vendor>Intel</vendor>
+      <topology sockets="1" cores="4" threads="1"/>
+    </cpu>
+    <power_management/>
+    <topology>
+      <cells num="1">
+        <cell id="0">
+          <memory unit="KiB">16692408</memory>
+          <pages unit="KiB" size="4">4173102</pages>
+          <pages unit="KiB" size="2048">0</pages>
+          <distances>
+            <sibling id="0" value="10"/>
+          </distances>
+          <cpus num="4">
+            <cpu id="0" socket_id="0" core_id="0" siblings="0"/>
+            <cpu id="1" socket_id="0" core_id="1" siblings="1"/>
+            <cpu id="2" socket_id="0" core_id="2" siblings="2"/>
+            <cpu id="3" socket_id="0" core_id="3" siblings="3"/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+  </host>
+
+  <guest>
+    <os_type>exe</os_type>
+    <arch name="i686">
+      <wordsize>32</wordsize>
+      <emulator>vz</emulator>
+      <domain type="vz">
+        <emulator>vz</emulator>
+      </domain>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>exe</os_type>
+    <arch name="x86_64">
+      <wordsize>64</wordsize>
+      <emulator>vz</emulator>
+      <domain type="vz">
+        <emulator>vz</emulator>
+      </domain>
+    </arch>
+  </guest>
+
+</capabilities>
