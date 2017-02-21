@@ -651,6 +651,7 @@ class XMLParseTest(unittest.TestCase):
         check("mouse_mode", None, "client")
         check("filetransfer_enable", None, False)
         check("gl", None, True)
+        check("rendernode", None, "/dev/dri/foo")
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

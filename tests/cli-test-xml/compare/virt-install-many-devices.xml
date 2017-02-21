@@ -246,6 +246,11 @@
       <image compression="off"/>
       <listen type="none"/>
     </graphics>
+    <graphics type="spice">
+      <gl enable="yes" rendernode="/dev/dri/foo"/>
+      <image compression="off"/>
+      <listen type="none"/>
+    </graphics>
     <serial type="tcp">
       <source mode="bind" host="127.0.0.1" service="2222"/>
       <protocol type="telnet"/>

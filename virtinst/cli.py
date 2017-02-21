@@ -2183,6 +2183,12 @@ class ParserGraphics(VirtCLIParser):
             elif not inst.conn.check_support(
                     inst.conn.SUPPORT_CONN_SPICE_GL):
                 logging.warn("qemu/libvirt version may not support spice GL")
+        if inst.conn.is_qemu() and inst.rendernode:
+            if inst.type != "spice":
+                logging.warn("graphics type=%s does not support rendernode", inst.type)
+            elif not inst.conn.check_support(
+                    inst.conn.SUPPORT_CONN_SPICE_RENDERNODE):
+                logging.warn("qemu/libvirt version may not support rendernode")
 
         return ret
 
@@ -2206,6 +2212,7 @@ ParserGraphics.add_arg("mouse_mode", "mouse_mode")
 ParserGraphics.add_arg("filetransfer_enable", "filetransfer_enable",
             is_onoff=True)
 ParserGraphics.add_arg("gl", "gl", is_onoff=True)
+ParserGraphics.add_arg("rendernode", "rendernode")
 
 
 ########################

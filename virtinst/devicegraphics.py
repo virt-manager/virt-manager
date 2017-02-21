@@ -244,5 +244,6 @@ class VirtualGraphics(VirtualDevice):
     mouse_mode = XMLProperty("./mouse/@mode")
     filetransfer_enable = XMLProperty("./filetransfer/@enable", is_yesno=True)
     gl = XMLProperty("./gl/@enable", is_yesno=True)
+    rendernode = XMLProperty("./gl/@rendernode")
 
 VirtualGraphics.register_type()
