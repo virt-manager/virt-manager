@@ -315,6 +315,10 @@ class TestXMLMisc(unittest.TestCase):
             g.emulator = "/usr/libexec/qemu-kvm"
             g.add_default_video_device()
             g.os_variant = "ubuntu13.10"
+
+            # Some input handling to work with different libsoinfo dbs
+            g.add_default_input_device()
+            g.get_devices("input")[0].type = "tablet"
             return g
 
         try:
