@@ -32,39 +32,52 @@ reload(cliconfig)
 
 from tests import utils
 
-
-# Setup logging
-rootLogger = logging.getLogger()
-for handler in rootLogger.handlers:
-    rootLogger.removeHandler(handler)
-
-logging.basicConfig(level=logging.DEBUG,
-                    format="%(levelname)-8s %(message)s")
-
-if utils.get_debug():
-    rootLogger.setLevel(logging.DEBUG)
-else:
-    rootLogger.setLevel(logging.ERROR)
-
-_cleanup_imports = []
-
-
-def _import(name, path):
-    _cleanup_imports.append(path + "c")
-    return imp.load_source(name, path)
-
-
-def _cleanup_imports_cb():
-    for f in _cleanup_imports:
-        if os.path.exists(f):
-            os.unlink(f)
-
-atexit.register(_cleanup_imports_cb)
-virtinstall = _import("virtinstall", "virt-install")
-virtclone = _import("virtclone", "virt-clone")
-virtconvert = _import("virtconvert", "virt-convert")
-virtxml = _import("virtxml", "virt-xml")
-
 # Variable used to store a local iso or dir path to check for a distro
 # Specified via 'python setup.py test_urls --path"
 URLTEST_LOCAL_MEDIA = []
+
+virtinstall = None
+virtclone = None
+virtconvert = None
+virtxml = None
+
+
+def _setup_logging():
+    rootLogger = logging.getLogger()
+    for handler in rootLogger.handlers:
+        rootLogger.removeHandler(handler)
+
+    logging.basicConfig(level=logging.DEBUG,
+                        format="%(levelname)-8s %(message)s")
+
+    if utils.get_debug():
+        rootLogger.setLevel(logging.DEBUG)
+    else:
+        rootLogger.setLevel(logging.ERROR)
+
+
+def _setup_cli_imports():
+    _cleanup_imports = []
+
+    def _cleanup_imports_cb():
+        for f in _cleanup_imports:
+            if os.path.exists(f):
+                os.unlink(f)
+
+    def _import(name, path):
+        _cleanup_imports.append(path + "c")
+        return imp.load_source(name, path)
+
+    global virtinstall
+    global virtclone
+    global virtconvert
+    global virtxml
+    atexit.register(_cleanup_imports_cb)
+    virtinstall = _import("virtinstall", "virt-install")
+    virtclone = _import("virtclone", "virt-clone")
+    virtconvert = _import("virtconvert", "virt-convert")
+    virtxml = _import("virtxml", "virt-xml")
+
+
+_setup_logging()
+_setup_cli_imports()
