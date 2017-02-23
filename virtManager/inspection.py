@@ -71,6 +71,10 @@ class vmmInspection(vmmGObject):
         obj = ("vm_added", conn.get_uri(), connkey)
         self._q.put(obj)
 
+    def vm_refresh(self, vm):
+        obj = ("vm_refresh", vm.conn.get_uri(), vm.get_name(), vm.get_uuid())
+        self._q.put(obj)
+
     def start(self):
         # Wait a few seconds before we do anything.  This prevents
         # inspection from being a burden for initial virt-manager
@@ -105,7 +109,7 @@ class vmmInspection(vmmGObject):
         elif obj[0] == "conn_removed":
             uri = obj[1]
             del self._conns[uri]
-        elif obj[0] == "vm_added":
+        elif obj[0] == "vm_added" or obj[0] == "vm_refresh":
             uri = obj[1]
             if not (uri in self._conns):
                 # This connection disappeared in the meanwhile.
@@ -118,6 +122,13 @@ class vmmInspection(vmmGObject):
             if not vm:
                 # The VM was removed in the meanwhile.
                 return
+            if obj[0] == "vm_refresh":
+                vmuuid = obj[3]
+                # When refreshing the inspection data of a VM,
+                # all we need is to remove it from the "seen" cache,
+                # as the data itself will be replaced once the new
+                # results are available.
+                del self._vmseen[vmuuid]
             self._process_vm(conn, vm)
 
     # Try processing a single VM, keeping into account whether it was
