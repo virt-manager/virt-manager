@@ -580,6 +580,7 @@ class vmmDetails(vmmGObjectUI):
         # Deliberately keep all this after signal connection
         self.vm.connect("state-changed", self.refresh_vm_state)
         self.vm.connect("resources-sampled", self.refresh_resources)
+        self.vm.connect("inspection-changed", lambda *x: self.refresh_inspection_page())
 
         self.populate_hw_list()
 
