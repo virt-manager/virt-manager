@@ -17,7 +17,7 @@
 # MA 02110-1301 USA.
 #
 
-from Queue import Queue, Empty
+from Queue import Queue
 from threading import Thread
 import logging
 import re
@@ -80,22 +80,12 @@ class vmmInspection(vmmGObject):
         self.timeout_add(self._wait, cb)
 
     def _run(self):
+        # Process everything on the queue.  If the queue is empty when
+        # called, block.
         while True:
-            self._process_queue()
-
-    # Process everything on the queue.  If the queue is empty when
-    # called, block.
-    def _process_queue(self):
-        first_obj = self._q.get()
-        self._process_queue_item(first_obj)
-        self._q.task_done()
-        try:
-            while True:
-                obj = self._q.get(False)
-                self._process_queue_item(obj)
-                self._q.task_done()
-        except Empty:
-            pass
+            obj = self._q.get()
+            self._process_queue_item(obj)
+            self._q.task_done()
 
     def _process_queue_item(self, obj):
         if obj[0] == "conn_added":
