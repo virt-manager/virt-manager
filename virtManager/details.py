@@ -345,6 +345,7 @@ class vmmDetails(vmmGObjectUI):
         "details-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "details-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
         "customize-finished": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "inspection-refresh": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
     }
 
     def __init__(self, vm, parent=None):
@@ -483,6 +484,8 @@ class vmmDetails(vmmGObjectUI):
             "on_idmap_gid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_idmap_gid_count_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_idmap_check_toggled": self.config_idmap_enable,
+
+            "on_details_inspection_refresh_clicked": self.inspection_refresh,
 
             "on_cpu_vcpus_changed": self.config_vcpus_changed,
             "on_cpu_maxvcpus_changed": self.config_maxvcpus_changed,
@@ -1565,6 +1568,10 @@ class vmmDetails(vmmGObjectUI):
         if key == "appdefault":
             return self.config.get_default_cpu_setting(for_cpu=True)
         return key
+
+    def inspection_refresh(self, src_ignore):
+        self.emit("inspection-refresh",
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
 
     ##############################
