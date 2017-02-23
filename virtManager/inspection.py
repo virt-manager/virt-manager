@@ -149,7 +149,7 @@ class vmmInspection(vmmGObject):
             # Whether success or failure, we've "seen" this VM now.
             self._vmseen[vmuuid] = True
             try:
-                data = self._process(conn, vm)
+                data = self._inspect_vm(conn, vm)
                 if data:
                     self._set_vm_inspection_data(vm, data)
                 else:
@@ -160,7 +160,7 @@ class vmmInspection(vmmGObject):
         except:
             logging.exception("%s: exception while processing", prettyvm)
 
-    def _process(self, conn, vm):
+    def _inspect_vm(self, conn, vm):
         if re.search(r"^guestfs-", vm.get_name()):
             logging.debug("ignore libvirt/guestfs temporary VM %s",
                           vm.get_name())
