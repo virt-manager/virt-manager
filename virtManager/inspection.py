@@ -100,8 +100,8 @@ class vmmInspection(vmmGObject):
     def _process_queue_item(self, obj):
         if obj[0] == "conn_added":
             conn = obj[1]
-            if conn and not (conn.is_remote()):
-                uri = conn.get_uri()
+            uri = conn.get_uri()
+            if conn and not (conn.is_remote()) and not (uri in self._conns):
                 self._conns[uri] = conn
                 conn.connect("vm-added", self.vm_added)
                 # No need to push the VMs of the newly added
