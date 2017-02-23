@@ -64,9 +64,7 @@ class vmmInspection(vmmGObject):
 
     # Called by the main thread whenever a VM is added to vmlist.
     def vm_added(self, conn, connkey):
-        ignore = conn
-        ignore = connkey
-        obj = ("vm_added")
+        obj = ("vm_added", conn.get_uri(), connkey)
         self._q.put(obj)
 
     def start(self):
@@ -84,7 +82,6 @@ class vmmInspection(vmmGObject):
     def _run(self):
         while True:
             self._process_queue()
-            self._process_vms()
 
     # Process everything on the queue.  If the queue is empty when
     # called, block.
@@ -107,21 +104,27 @@ class vmmInspection(vmmGObject):
                 uri = conn.get_uri()
                 self._conns[uri] = conn
                 conn.connect("vm-added", self.vm_added)
+                # No need to push the VMs of the newly added
+                # connection manually into the queue, as the above
+                # connect() will emit vm-added signals for all of
+                # its VMs.
         elif obj[0] == "conn_removed":
             uri = obj[1]
             del self._conns[uri]
         elif obj[0] == "vm_added":
-            # Nothing - just a signal for the inspection thread to wake up.
-            pass
-
-    # Any VMs we've not seen yet?  If so, process them.
-    def _process_vms(self):
-        for conn in self._conns.itervalues():
-            for vm in conn.list_vms():
-                if not conn.is_active():
-                    break
-
-                self._process_vm(conn, vm)
+            uri = obj[1]
+            if not (uri in self._conns):
+                # This connection disappeared in the meanwhile.
+                return
+            conn = self._conns[uri]
+            if not conn.is_active():
+                return
+            connkey = obj[2]
+            vm = conn.get_vm(connkey)
+            if not vm:
+                # The VM was removed in the meanwhile.
+                return
+            self._process_vm(conn, vm)
 
     # Try processing a single VM, keeping into account whether it was
     # visited already, and whether there are cached data for it.
