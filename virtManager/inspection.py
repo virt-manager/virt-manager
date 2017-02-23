@@ -121,40 +121,44 @@ class vmmInspection(vmmGObject):
                 if not conn.is_active():
                     break
 
-                def set_inspection_error(vm):
-                    data = vmmInspectionData()
-                    data.error = True
+                self._process_vm(conn, vm)
+
+    # Try processing a single VM, keeping into account whether it was
+    # visited already, and whether there are cached data for it.
+    def _process_vm(self, conn, vm):
+        def set_inspection_error(vm):
+            data = vmmInspectionData()
+            data.error = True
+            self._set_vm_inspection_data(vm, data)
+
+        vmuuid = vm.get_uuid()
+        prettyvm = vmuuid
+        try:
+            prettyvm = conn.get_uri() + ":" + vm.get_name()
+
+            if vmuuid in self._vmseen:
+                data = self._cached_data.get(vmuuid)
+                if not data:
+                    return
+
+                if vm.inspection != data:
+                    logging.debug("Found cached data for %s", prettyvm)
                     self._set_vm_inspection_data(vm, data)
+                return
 
-                vmuuid = vm.get_uuid()
-                prettyvm = vmuuid
-                try:
-                    prettyvm = conn.get_uri() + ":" + vm.get_name()
-
-                    if vmuuid in self._vmseen:
-                        data = self._cached_data.get(vmuuid)
-                        if not data:
-                            continue
-
-                        if vm.inspection != data:
-                            logging.debug("Found cached data for %s", prettyvm)
-                            self._set_vm_inspection_data(vm, data)
-                        continue
-
-                    # Whether success or failure, we've "seen" this VM now.
-                    self._vmseen[vmuuid] = True
-                    try:
-                        data = self._process(conn, vm)
-                        if data:
-                            self._set_vm_inspection_data(vm, data)
-                        else:
-                            set_inspection_error(vm)
-                    except:
-                        set_inspection_error(vm)
-                        raise
-                except:
-                    logging.exception("%s: exception while processing",
-                                      prettyvm)
+            # Whether success or failure, we've "seen" this VM now.
+            self._vmseen[vmuuid] = True
+            try:
+                data = self._process(conn, vm)
+                if data:
+                    self._set_vm_inspection_data(vm, data)
+                else:
+                    set_inspection_error(vm)
+            except:
+                set_inspection_error(vm)
+                raise
+        except:
+            logging.exception("%s: exception while processing", prettyvm)
 
     def _process(self, conn, vm):
         if re.search(r"^guestfs-", vm.get_name()):
