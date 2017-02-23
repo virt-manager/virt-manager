@@ -20,7 +20,6 @@
 from Queue import Queue
 from threading import Thread
 import logging
-import re
 
 from guestfs import GuestFS  # pylint: disable=import-error
 
@@ -64,6 +63,11 @@ class vmmInspection(vmmGObject):
 
     # Called by the main thread whenever a VM is added to vmlist.
     def vm_added(self, conn, connkey):
+        if connkey.startswith("guestfs-"):
+            logging.debug("ignore libvirt/guestfs temporary VM %s",
+                          connkey)
+            return
+
         obj = ("vm_added", conn.get_uri(), connkey)
         self._q.put(obj)
 
@@ -154,11 +158,6 @@ class vmmInspection(vmmGObject):
             logging.exception("%s: exception while processing", prettyvm)
 
     def _inspect_vm(self, conn, vm):
-        if re.search(r"^guestfs-", vm.get_name()):
-            logging.debug("ignore libvirt/guestfs temporary VM %s",
-                          vm.get_name())
-            return None
-
         g = GuestFS(close_on_exit=False)
         prettyvm = conn.get_uri() + ":" + vm.get_name()
 
