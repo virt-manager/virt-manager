@@ -2436,6 +2436,13 @@ class vmmDetails(vmmGObjectUI):
                 summary = ""
                 if app["app_summary"]:
                     summary = app["app_summary"]
+                elif app["app_description"]:
+                    summary = app["app_description"]
+                    pos = summary.find("\n")
+                    if pos > -1:
+                        summary = _("%(summary)s ...") % {
+                            "summary" : summary[0:pos]
+                        }
 
                 apps_model.append([name, version, summary])
 
