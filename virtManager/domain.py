@@ -1132,7 +1132,8 @@ class vmmDomain(vmmLibvirtObject):
         return self._backend.openConsole(devname, stream, flags)
 
     def open_graphics_fd(self):
-        return self._backend.openGraphicsFD(0)
+        return self._backend.openGraphicsFD(0,
+                libvirt.VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH)
 
     def refresh_snapshots(self):
         self._snapshot_list = None
