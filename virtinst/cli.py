@@ -2571,6 +2571,7 @@ ParserVideo.add_arg("accel3d", "accel3d", is_onoff=True)
 ParserVideo.add_arg("heads", "heads")
 ParserVideo.add_arg("ram", "ram")
 ParserVideo.add_arg("vram", "vram")
+ParserVideo.add_arg("vram64", "vram64")
 ParserVideo.add_arg("vgamem", "vgamem")
 
 

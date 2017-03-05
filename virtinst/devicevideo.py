@@ -40,6 +40,7 @@ class VirtualVideoDevice(VirtualDevice):
                         default_cb=lambda s: "cirrus",
                         default_name=MODEL_DEFAULT)
     vram = XMLProperty("./model/@vram", is_int=True)
+    vram64 = XMLProperty("./model/@vram64", is_int=True)
     ram = XMLProperty("./model/@ram", is_int=True)
     heads = XMLProperty("./model/@heads", is_int=True)
     vgamem = XMLProperty("./model/@vgamem", is_int=True)
