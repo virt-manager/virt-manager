@@ -54,6 +54,7 @@ from .pm import PM
 from .seclabel import Seclabel
 from .sysinfo import SYSInfo
 from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
+from .xmlnsqemu import XMLNSQemu
 
 
 class Guest(XMLBuilder):
@@ -188,6 +189,7 @@ class Guest(XMLBuilder):
                        validate_cb=lambda s, v: util.validate_uuid(v),
                        default_cb=_get_default_uuid)
 
+
     id = XMLProperty("./@id", is_int=True)
     type = XMLProperty("./@type", default_cb=lambda s: "xen")
     bootloader = XMLProperty("./bootloader")
@@ -213,6 +215,8 @@ class Guest(XMLBuilder):
     idmap = XMLChildProperty(IdMap, is_single=True)
     resource = XMLChildProperty(DomainResource, is_single=True)
     sysinfo = XMLChildProperty(SYSInfo, is_single=True)
+
+    xmlns_qemu = XMLChildProperty(XMLNSQemu, is_single=True)
 
 
     ###############################

@@ -42,6 +42,10 @@ _seenprops = []
 # top relavtive node in certain cases
 _top_node = None
 
+_namespaces = {
+    "qemu": "http://libvirt.org/schemas/domain/qemu/1.0",
+}
+
 
 class _DocCleanupWrapper(object):
     def __init__(self, doc):
@@ -64,6 +68,7 @@ def _make_xml_context(node):
     doc = node.doc
     ctx = _CtxCleanupWrapper(doc.xpathNewContext())
     ctx.setContextNode(node)
+    ctx.xpathRegisterNs("qemu", _namespaces["qemu"])
     return ctx
 
 
@@ -96,6 +101,13 @@ def _sanitize_libxml_xml(xml):
 def _get_xpath_node(ctx, xpath):
     node = ctx.xpathEval(xpath)
     return (node and node[0] or None)
+
+
+def _add_namespace(node, nsname):
+    for ns in util.listify(node.nsDefs()):
+        if ns.name == nsname:
+            return ns
+    return node.newNs(_namespaces[nsname], nsname)
 
 
 def _add_pretty_child(parentnode, newnode):
@@ -206,10 +218,17 @@ def _build_xpath_node(ctx, xpath):
         # Remove conditional xpath elements for node creation. We preserved
         # them up until this point since it was needed for proper xpath
         # lookup, but they aren't valid syntax when creating the node
-        if nodename.count("["):
+        if "[" in nodename:
             nodename = nodename[:nodename.index("[")]
 
+        nsname = None
+        if ":" in nodename:
+            nsname, nodename = nodename.split(":")
+
         newnode = libxml2.newNode(nodename)
+        if nsname:
+            ns = _add_namespace(ctx.contextNode(), nsname)
+            newnode.setNs(ns)
         return _add_pretty_child(parentnode, newnode), parentpath
 
 
@@ -719,7 +738,12 @@ class _XMLState(object):
 
 
     def make_xml_stub(self):
-        return "<%s/>" % self._root_name
+        ret = "<%s" % self._root_name
+        if ":" in self._root_name:
+            ns = self._root_name.split(":")[0]
+            ret += " xmlns:%s='%s'" % (ns, _namespaces[ns])
+        ret += "/>"
+        return ret
 
     def set_relative_object_xpath(self, xpath):
         self._relative_object_xpath = xpath or ""
@@ -835,7 +859,7 @@ class XMLBuilder(object):
             for child_class in xmlprop.child_classes:
                 prop_path = xmlprop.get_prop_xpath(self, child_class)
 
-                nodecount = int(self._xmlstate.xml_node.xpathEval(
+                nodecount = int(self._xmlstate.xml_ctx.xpathEval(
                     "count(%s)" % self.fix_relative_xpath(prop_path)))
                 for idx in range(nodecount):
                     idxstr = "[%d]" % (idx + 1)
