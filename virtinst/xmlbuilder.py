@@ -665,14 +665,10 @@ class XMLProperty(property):
 
 
 class _XMLState(object):
-    def __init__(self, root_name, parsexml, parsexmlnode,
-                 parent_xpath, relative_object_xpath):
-        self.root_name = root_name
-        self.stub_path = "/%s" % self.root_name
-
-        self.xml_ctx = None
-        self.xml_node = None
-        self.xml_root_doc = None
+    def __init__(self, root_name, parsexml, parentxmlstate,
+                 relative_object_xpath):
+        self._root_name = root_name
+        self._stub_path = "/%s" % self._root_name
 
         # xpath of this object relative to its parent. So for a standalone
         # <disk> this is empty, but if the disk is the forth one in a <domain>
@@ -682,43 +678,48 @@ class _XMLState(object):
         # xpath of the parent. For a disk in a standalone <domain>, this
         # is empty, but if the <domain> is part of a <domainsnapshot>,
         # it will be "./domain"
-        self._parent_xpath = parent_xpath or ""
+        self._parent_xpath = (
+            parentxmlstate and parentxmlstate.get_root_xpath()) or ""
 
+        self.xml_ctx = None
+        self.xml_node = None
+        self._xml_root_doc_ref = None
         self.is_build = False
-        if not parsexml and not parsexmlnode:
+        if not parsexml and not parentxmlstate:
             self.is_build = True
-        self._parse(parsexml, parsexmlnode)
+        self._parse(parsexml, parentxmlstate)
 
-    def _parse(self, xml, node):
-        if node:
-            self.xml_root_doc = None
-            self.xml_node = node
-            self.is_build = (getattr(node, "virtinst_is_build", False) or
-                             self.is_build)
-        else:
-            if not xml:
-                xml = self.make_xml_stub()
+    def _parse(self, parsexml, parentxmlstate):
+        if parentxmlstate:
+            self._xml_root_doc_ref = None
+            self.xml_node = parentxmlstate.xml_node
+            self.is_build = self.xml_node.virtinst_is_build or self.is_build
+            self.xml_ctx = parentxmlstate.xml_ctx
+            return
 
-            try:
-                doc = libxml2.parseDoc(xml)
-            except:
-                logging.debug("Error parsing xml=\n%s", xml)
-                raise
+        if not parsexml:
+            parsexml = self.make_xml_stub()
 
-            self.xml_root_doc = _DocCleanupWrapper(doc)
-            self.xml_node = doc.children
-            self.xml_node.virtinst_is_build = self.is_build
-            self.xml_node.virtinst_node_top_xpath = self.stub_path
+        try:
+            doc = libxml2.parseDoc(parsexml)
+        except:
+            logging.debug("Error parsing xml=\n%s", parsexml)
+            raise
 
-            # This just stores a reference to our root doc wrapper in
-            # the root node, so when the node goes away it triggers
-            # auto free'ing of the doc
-            self.xml_node.virtinst_root_doc = self.xml_root_doc
-
+        self.xml_node = doc.children
+        self.xml_node.virtinst_is_build = self.is_build
+        self.xml_node.virtinst_node_top_xpath = self._stub_path
         self.xml_ctx = _make_xml_context(self.xml_node)
 
+        # This just stores a reference to our root doc wrapper in
+        # the root node, so when the doc is autofree'd when the node
+        # and this xmlstate object are freed
+        self._xml_root_doc_ref = _DocCleanupWrapper(doc)
+        self.xml_node.virtinst_root_doc = self._xml_root_doc_ref
+
+
     def make_xml_stub(self):
-        return "<%s/>" % self.root_name
+        return "<%s/>" % self._root_name
 
     def set_relative_object_xpath(self, xpath):
         self._relative_object_xpath = xpath or ""
@@ -735,7 +736,7 @@ class _XMLState(object):
 
     def fix_relative_xpath(self, xpath):
         fullpath = self.get_root_xpath()
-        if not fullpath or fullpath == self.stub_path:
+        if not fullpath or fullpath == self._stub_path:
             return xpath
         if xpath.startswith("."):
             return "%s%s" % (fullpath, xpath.strip("."))
@@ -789,8 +790,8 @@ class XMLBuilder(object):
         return "\n".join((" " * level + l) for l in xmlstr.splitlines())
 
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None,
-                 parent_xpath=None, relative_object_xpath=None):
+    def __init__(self, conn, parsexml=None,
+                 parentxmlstate=None, relative_object_xpath=None):
         """
         Initialize state
 
@@ -810,8 +811,8 @@ class XMLBuilder(object):
         self._propstore = {}
         self._proporder = []
         self._xmlstate = _XMLState(self._XML_ROOT_NAME,
-                                   parsexml, parsexmlnode,
-                                   parent_xpath, relative_object_xpath)
+                                   parsexml, parentxmlstate,
+                                   relative_object_xpath)
 
         self._initial_child_parse()
 
@@ -823,8 +824,7 @@ class XMLBuilder(object):
                 child_class = xmlprop.child_classes[0]
                 prop_path = xmlprop.get_prop_xpath(self, child_class)
                 obj = child_class(self.conn,
-                    parsexmlnode=self._xmlstate.xml_node,
-                    parent_xpath=self.get_root_xpath(),
+                    parentxmlstate=self._xmlstate,
                     relative_object_xpath=prop_path)
                 xmlprop.set(self, obj)
                 continue
@@ -840,8 +840,7 @@ class XMLBuilder(object):
                 for idx in range(nodecount):
                     idxstr = "[%d]" % (idx + 1)
                     obj = child_class(self.conn,
-                        parsexmlnode=self._xmlstate.xml_node,
-                        parent_xpath=self.get_root_xpath(),
+                        parentxmlstate=self._xmlstate,
                         relative_object_xpath=(prop_path + idxstr))
                     xmlprop.append(self, obj)
 
@@ -1018,7 +1017,7 @@ class XMLBuilder(object):
         self._xmlstate._parse(*args, **kwargs)
         for propname in self._all_child_props():
             for p in util.listify(getattr(self, propname, [])):
-                p._xmlstate._parse(None, self._xmlstate.xml_node)
+                p._xmlstate._parse(None, self._xmlstate)
 
     def add_child(self, obj):
         """
@@ -1038,7 +1037,7 @@ class XMLBuilder(object):
             parentnode = _build_xpath_node(self._xmlstate.xml_ctx, use_xpath)
             # Tack newnode on the end
             _add_pretty_child(parentnode, newnode)
-        obj._parse_with_children(None, self._xmlstate.xml_node)
+        obj._parse_with_children(None, self._xmlstate)
 
     def remove_child(self, obj):
         """
