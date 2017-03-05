@@ -87,6 +87,7 @@ class CPU(XMLBuilder):
             self.clear()
         elif val == self.SPECIAL_MODE_HOST_MODEL_ONLY:
             if self.conn.caps.host.cpu.model:
+                self.clear()
                 self.model = self.conn.caps.host.cpu.model
         else:
             raise RuntimeError("programming error: unknown "
