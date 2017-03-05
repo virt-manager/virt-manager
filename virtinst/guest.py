@@ -1126,6 +1126,8 @@ class Guest(XMLBuilder):
             return
         if self.get_devices("redirdev"):
             return
+        if not self.os.is_x86():
+            return
         if not self.conn.check_support(self.conn.SUPPORT_CONN_USBREDIR):
             return
 
