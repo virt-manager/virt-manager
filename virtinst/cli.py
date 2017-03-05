@@ -2097,6 +2097,8 @@ class ParserNetwork(VirtCLIParser):
 _register_virt_parser(ParserNetwork)
 _add_device_address_args(ParserNetwork)
 ParserNetwork.add_arg("type", "type", cb=ParserNetwork.set_type_cb)
+ParserNetwork.add_arg("trustGuestRxFilters", "trustGuestRxFilters",
+                      is_onoff=True)
 ParserNetwork.add_arg("source", "source")
 ParserNetwork.add_arg("source_mode", "source_mode")
 ParserNetwork.add_arg("source_type", "source_type")

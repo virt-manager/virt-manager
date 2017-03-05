@@ -196,7 +196,7 @@
       </virtualport>
       <link state="up"/>
     </interface>
-    <interface type="direct">
+    <interface type="direct" trustGuestRxFilters="yes">
       <source dev="eth5" mode="vepa"/>
       <mac address="00:11:22:33:44:55"/>
       <target dev="mytap12"/>

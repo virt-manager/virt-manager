@@ -284,6 +284,7 @@ class VirtualNetworkInterface(VirtualDevice):
     virtualport = XMLChildProperty(VirtualPort, is_single=True)
     type = XMLProperty("./@type",
                        default_cb=lambda s: s.TYPE_BRIDGE)
+    trustGuestRxFilters = XMLProperty("./@trustGuestRxFilters", is_yesno=True)
 
     macaddr = XMLProperty("./mac/@address",
                           set_converter=_validate_mac,
