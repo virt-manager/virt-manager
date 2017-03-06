@@ -590,7 +590,11 @@ class vmmCloneVM(vmmGObjectUI):
                 skip_targets.append(target)
 
         self.clone_design.skip_target = skip_targets
-        self.clone_design.clone_paths = new_disks
+        try:
+            self.clone_design.clone_paths = new_disks
+        except Exception, e:
+            # Just log the error and go on. The UI will fail later if needed
+            logging.debug("Error setting clone_paths: %s", str(e))
 
         # If any storage cannot be cloned or shared, don't allow cloning
         clone = True
