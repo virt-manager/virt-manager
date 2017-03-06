@@ -1753,6 +1753,10 @@ class ParserSYSInfo(VirtCLIParser):
     def _parse(self, inst):
         if self.optstr == "host" or self.optstr == "emulate":
             self.optdict['type'] = self.optstr
+        elif self.optstr:
+            # If any string specified, default to type=smbios otherwise
+            # libvirt errors. User args can still override this though
+            self.optdict['type'] = 'smbios'
 
         return VirtCLIParser._parse(self, inst)
 
