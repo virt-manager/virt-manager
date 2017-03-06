@@ -68,6 +68,7 @@ from .pm import PM
 from .seclabel import Seclabel
 from .storage import StoragePool, StorageVolume
 from .sysinfo import SYSInfo
+from .xmlnsqemu import XMLNSQemu
 
 
 ##########################
@@ -735,6 +736,10 @@ def add_guest_xml_options(geng):
                "--sysinfo bios_vendor=Vendor_Inc.,bios_version=1.2.3-abc,...\n"
                "--sysinfo system_manufacturer=System_Corp.,system_product=Computer,...\n"
                "--sysinfo baseBoard_manufacturer=Baseboard_Corp.,baseBoard_product=Motherboard,...\n"))
+    geng.add_argument("--qemu-commandline", action="append",
+        help=_("Pass arguments directly to the qemu emulator. Ex:\n"
+               "--qemu-commandline='-display gtk,gl=on'\n"
+               "--qemu-commandline env=DISPLAY=:0.1"))
 
 
 def add_boot_options(insg):
@@ -1788,6 +1793,40 @@ ParserSYSInfo.add_arg("baseBoard_version", "baseBoard_version")
 ParserSYSInfo.add_arg("baseBoard_serial", "baseBoard_serial")
 ParserSYSInfo.add_arg("baseBoard_asset", "baseBoard_asset")
 ParserSYSInfo.add_arg("baseBoard_location", "baseBoard_location")
+
+
+##############################
+# --qemu-commandline parsing #
+##############################
+
+class ParserQemuCLI(VirtCLIParser):
+    cli_arg_name = "qemu_commandline"
+    objclass = XMLNSQemu
+
+    def args_cb(self, inst, val, virtarg):
+        for opt in shlex.split(val):
+            inst.add_arg(opt)
+
+    def env_cb(self, inst, val, virtarg):
+        name, envval = val.split("=", 1)
+        inst.add_env(name, envval)
+
+    def _parse(self, inst):
+        self.optdict.clear()
+        if self.optstr.startswith("env="):
+            self.optdict["env"] = self.optstr.split("=", 1)[1]
+        elif self.optstr.startswith("args="):
+            self.optdict["args"] = self.optstr.split("=", 1)[1]
+        elif self.optstr.startswith("clearxml="):
+            self.optdict["clearxml"] = self.optstr.split("=", 1)[1]
+        else:
+            self.optdict["args"] = self.optstr
+        return VirtCLIParser._parse(self, inst)
+
+
+_register_virt_parser(ParserQemuCLI)
+ParserQemuCLI.add_arg(None, "args", cb=ParserQemuCLI.args_cb, can_comma=True)
+ParserQemuCLI.add_arg(None, "env", cb=ParserQemuCLI.env_cb, can_comma=True)
 
 
 ##########################

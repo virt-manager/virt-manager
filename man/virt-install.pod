@@ -139,6 +139,18 @@ Configure sysinfo/SMBIOS values exposed to the guest OS. '--sysinfo host' can be
 
 Use --sysinfo=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsSysinfo>
 
+=item B<--qemu-commandline> ARGS
+
+Pass options directly to the qemu emulator. Only works for the libvirt qemu driver. The option can take a string of arguments, for example:
+
+  --qemu-commandline="-display gtk,gl=on"
+
+Environment variables are specified with 'env', for example:
+
+  --qemu-commandline=env=DISPLAY=:0.1
+
+Complete details about the libvirt feature: L<https://libvirt.org/drvqemu.html#qemucommand>
+
 =item B<--vcpus> OPTIONS
 
 Number of virtual cpus to configure for the guest. If 'maxvcpus' is specified,

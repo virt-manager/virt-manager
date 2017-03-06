@@ -537,6 +537,11 @@ c.add_compare(""" \
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp \
 \
 --panic iobase=507 \
+\
+--qemu-commandline env=DISPLAY=:0.1 \
+--qemu-commandline="-display gtk,gl=on" \
+--qemu-commandline="-device vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c" \
+--qemu-commandline="-set device.video0.driver=virtio-vga" \
 """, "many-devices", compare_check="2.0.0")  # compare_check=graphics listen=socket support
 
 # Test the implied defaults for gl=yes setting virgl=on
@@ -847,6 +852,7 @@ c.add_compare("--build-xml --blkiotune weight=100,device_path=/dev/sdf,device_we
 c.add_compare("--build-xml --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10", "build-idmap")
 c.add_compare("test --edit --boot network,cdrom", "edit-bootorder")
 c.add_compare("--confirm test --edit --cpu host-passthrough", "prompt-response")
+c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(xmldir + "/virtxml-qemu-commandline-clear.xml"))
 
 
 c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
@@ -854,6 +860,7 @@ c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-12
 new
 very,very=new desc\\\'",title="This is my,funky=new title" """, "edit-simple-metadata")
 c.add_compare("--events on_poweroff=destroy,on_reboot=restart,on_crash=preserve", "edit-simple-events")
+c.add_compare("--qemu-commandline='-foo bar,baz=\"wib wob\"'", "edit-simple-qemu-commandline")
 c.add_compare("--memory 500,maxmemory=1000,hugepages=off", "edit-simple-memory")
 c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "edit-simple-vcpus")
 c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "edit-simple-cpu")

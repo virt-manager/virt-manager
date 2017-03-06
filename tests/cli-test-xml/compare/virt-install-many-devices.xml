@@ -1,4 +1,4 @@
-<domain type="kvm">
+<domain xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0" type="kvm">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
@@ -372,4 +372,13 @@
       <address iobase="507" type="isa"/>
     </panic>
   </devices>
+  <qemu:commandline>
+    <qemu:env name="DISPLAY" value=":0.1"/>
+    <qemu:arg value="-display"/>
+    <qemu:arg value="gtk,gl=on"/>
+    <qemu:arg value="-device"/>
+    <qemu:arg value="vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c"/>
+    <qemu:arg value="-set"/>
+    <qemu:arg value="device.video0.driver=virtio-vga"/>
+  </qemu:commandline>
 </domain>
