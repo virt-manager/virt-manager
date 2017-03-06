@@ -190,7 +190,7 @@ def path_is_url(path):
     return bool(re.match("[a-zA-Z]+(\+[a-zA-Z]+)?://.*", path))
 
 
-def _get_dev_type(path, vol_xml, vol_object, remote):
+def _get_dev_type(path, vol_xml, vol_object, pool_xml, remote):
     """
     Try to get device type for volume.
     """
@@ -210,6 +210,13 @@ def _get_dev_type(path, vol_xml, vol_object, remote):
         if t == StorageVolume.TYPE_FILE:
             return "file"
         elif t == StorageVolume.TYPE_BLOCK:
+            return "block"
+        elif t == StorageVolume.TYPE_NETWORK:
+            return "network"
+
+    if pool_xml:
+        t = pool_xml.get_disk_type()
+        if t == StorageVolume.TYPE_BLOCK:
             return "block"
         elif t == StorageVolume.TYPE_NETWORK:
             return "network"
@@ -321,6 +328,7 @@ class _StorageCreator(_StorageBase):
     def get_dev_type(self):
         if not self._dev_type:
             self._dev_type = _get_dev_type(self._path, self._vol_install, None,
+                                           self.get_parent_pool_xml(),
                                            self._conn.is_remote())
         return self._dev_type
 
@@ -588,6 +596,7 @@ class StorageBackend(_StorageBase):
             if self._vol_object:
                 vol_xml = self.get_vol_xml()
             self._dev_type = _get_dev_type(self._path, vol_xml, self._vol_object,
+                                           self.get_parent_pool_xml(),
                                            self._conn.is_remote())
         return self._dev_type
 

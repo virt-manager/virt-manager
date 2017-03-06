@@ -477,6 +477,19 @@ class StoragePool(_StorageObject):
             StoragePool.TYPE_RBD, StoragePool.TYPE_SHEEPDOG,
             StoragePool.TYPE_ZFS]
 
+    def get_disk_type(self):
+        if (self.type == StoragePool.TYPE_DISK or
+            self.type == StoragePool.TYPE_LOGICAL or
+            self.type == StoragePool.TYPE_SCSI or
+            self.type == StoragePool.TYPE_MPATH or
+            self.type == StoragePool.TYPE_ZFS):
+            return StorageVolume.TYPE_BLOCK
+        if (self.type == StoragePool.TYPE_GLUSTER or
+            self.type == StoragePool.TYPE_RBD or
+            self.type == StoragePool.TYPE_ISCSI or
+            self.type == StoragePool.TYPE_SHEEPDOG):
+            return StorageVolume.TYPE_NETWORK
+        return StorageVolume.TYPE_FILE
 
     ##################
     # Build routines #
@@ -701,15 +714,7 @@ class StorageVolume(_StorageObject):
                 return self.TYPE_DIR
             elif self.type == "network":
                 return self.TYPE_NETWORK
-        if (self._pool_xml.type == StoragePool.TYPE_DISK or
-            self._pool_xml.type == StoragePool.TYPE_LOGICAL or
-            self._pool_xml.type == StoragePool.TYPE_ZFS):
-            return self.TYPE_BLOCK
-        if (self._pool_xml.type == StoragePool.TYPE_GLUSTER or
-            self._pool_xml.type == StoragePool.TYPE_RBD or
-            self._pool_xml.type == StoragePool.TYPE_SHEEPDOG):
-            return self.TYPE_NETWORK
-        return self.TYPE_FILE
+        return self._pool_xml.get_disk_type()
     file_type = property(_get_vol_type)
 
 
