@@ -11,6 +11,9 @@
   <numatune>
     <memory nodeset="1,2,3,5-7,^6"/>
   </numatune>
+  <resource>
+    <partition>/virtualmachines/production</partition>
+  </resource>
   <os>
     <type arch="x86_64">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE.fd</loader>
@@ -27,9 +30,6 @@
     <timer name="hpet" present="no"/>
   </clock>
   <on_crash>restart</on_crash>
-  <resource>
-    <partition>/virtualmachines/production</partition>
-  </resource>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>

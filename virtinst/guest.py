@@ -105,9 +105,9 @@ class Guest(XMLBuilder):
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
         "maxmemory", "memory", "blkiotune", "memtune", "memoryBacking",
         "vcpus", "curvcpus", "vcpu_placement", "cpuset",
-        "numatune", "bootloader", "os", "idmap",
+        "numatune", "resource", "sysinfo", "bootloader", "os", "idmap",
         "features", "cpu", "clock", "on_poweroff", "on_reboot", "on_crash",
-        "resource", "pm", "emulator", "_devices", "seclabels", "sysinfo"]
+        "pm", "emulator", "_devices", "seclabels"]
 
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)

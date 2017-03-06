@@ -29,6 +29,34 @@
   <numatune>
     <memory mode="strict" nodeset="1-3,4"/>
   </numatune>
+  <resource>
+    <partition>/virtualmachines/production</partition>
+  </resource>
+  <sysinfo type="smbios">
+    <bios>
+      <entry name="vendor">Acme LLC</entry>
+      <entry name="version">1.2.3</entry>
+      <entry name="date">01/01/1970</entry>
+      <entry name="release">10.22</entry>
+    </bios>
+    <system>
+      <entry name="manufacturer">Acme Inc.</entry>
+      <entry name="product">Computer</entry>
+      <entry name="version">3.2.1</entry>
+      <entry name="serial">123456789</entry>
+      <entry name="uuid">00000000-1111-2222-3333-444444444444</entry>
+      <entry name="sku">abc-123</entry>
+      <entry name="family">Server</entry>
+    </system>
+    <baseBoard>
+      <entry name="manufacturer">Acme Corp.</entry>
+      <entry name="product">Motherboard</entry>
+      <entry name="version">A01</entry>
+      <entry name="serial">1234-5678</entry>
+      <entry name="asset">Tag</entry>
+      <entry name="location">Chassis</entry>
+    </baseBoard>
+  </sysinfo>
   <os>
     <type arch="x86_64">hvm</type>
     <loader>/foo/bar</loader>
@@ -76,9 +104,6 @@
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>destroy</on_reboot>
   <on_crash>preserve</on_crash>
-  <resource>
-    <partition>/virtualmachines/production</partition>
-  </resource>
   <pm>
     <suspend-to-mem enabled="yes"/>
     <suspend-to-disk enabled="no"/>
@@ -123,31 +148,6 @@
   <seclabel type="static" model="selinux" relabel="yes">
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
   </seclabel>
-  <sysinfo type="smbios">
-    <bios>
-      <entry name="vendor">Acme LLC</entry>
-      <entry name="version">1.2.3</entry>
-      <entry name="date">01/01/1970</entry>
-      <entry name="release">10.22</entry>
-    </bios>
-    <system>
-      <entry name="manufacturer">Acme Inc.</entry>
-      <entry name="product">Computer</entry>
-      <entry name="version">3.2.1</entry>
-      <entry name="serial">123456789</entry>
-      <entry name="uuid">00000000-1111-2222-3333-444444444444</entry>
-      <entry name="sku">abc-123</entry>
-      <entry name="family">Server</entry>
-    </system>
-    <baseBoard>
-      <entry name="manufacturer">Acme Corp.</entry>
-      <entry name="product">Motherboard</entry>
-      <entry name="version">A01</entry>
-      <entry name="serial">1234-5678</entry>
-      <entry name="asset">Tag</entry>
-      <entry name="location">Chassis</entry>
-    </baseBoard>
-  </sysinfo>
   <on_lockfailure>ignore</on_lockfailure>
 </domain>
 <domain type="kvm">
@@ -181,6 +181,34 @@
   <numatune>
     <memory mode="strict" nodeset="1-3,4"/>
   </numatune>
+  <resource>
+    <partition>/virtualmachines/production</partition>
+  </resource>
+  <sysinfo type="smbios">
+    <bios>
+      <entry name="vendor">Acme LLC</entry>
+      <entry name="version">1.2.3</entry>
+      <entry name="date">01/01/1970</entry>
+      <entry name="release">10.22</entry>
+    </bios>
+    <system>
+      <entry name="manufacturer">Acme Inc.</entry>
+      <entry name="product">Computer</entry>
+      <entry name="version">3.2.1</entry>
+      <entry name="serial">123456789</entry>
+      <entry name="uuid">00000000-1111-2222-3333-444444444444</entry>
+      <entry name="sku">abc-123</entry>
+      <entry name="family">Server</entry>
+    </system>
+    <baseBoard>
+      <entry name="manufacturer">Acme Corp.</entry>
+      <entry name="product">Motherboard</entry>
+      <entry name="version">A01</entry>
+      <entry name="serial">1234-5678</entry>
+      <entry name="asset">Tag</entry>
+      <entry name="location">Chassis</entry>
+    </baseBoard>
+  </sysinfo>
   <os>
     <type arch="x86_64">hvm</type>
     <loader>/foo/bar</loader>
@@ -228,9 +256,6 @@
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>preserve</on_crash>
-  <resource>
-    <partition>/virtualmachines/production</partition>
-  </resource>
   <pm>
     <suspend-to-mem enabled="yes"/>
     <suspend-to-disk enabled="no"/>
@@ -275,30 +300,5 @@
   <seclabel type="static" model="selinux" relabel="yes">
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
   </seclabel>
-  <sysinfo type="smbios">
-    <bios>
-      <entry name="vendor">Acme LLC</entry>
-      <entry name="version">1.2.3</entry>
-      <entry name="date">01/01/1970</entry>
-      <entry name="release">10.22</entry>
-    </bios>
-    <system>
-      <entry name="manufacturer">Acme Inc.</entry>
-      <entry name="product">Computer</entry>
-      <entry name="version">3.2.1</entry>
-      <entry name="serial">123456789</entry>
-      <entry name="uuid">00000000-1111-2222-3333-444444444444</entry>
-      <entry name="sku">abc-123</entry>
-      <entry name="family">Server</entry>
-    </system>
-    <baseBoard>
-      <entry name="manufacturer">Acme Corp.</entry>
-      <entry name="product">Motherboard</entry>
-      <entry name="version">A01</entry>
-      <entry name="serial">1234-5678</entry>
-      <entry name="asset">Tag</entry>
-      <entry name="location">Chassis</entry>
-    </baseBoard>
-  </sysinfo>
   <on_lockfailure>ignore</on_lockfailure>
 </domain>
