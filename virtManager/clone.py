@@ -116,13 +116,14 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
     elif not vol and path and not os.access(path, os.W_OK):
         info = append_str(info, _("No write access"))
 
-    pool_type = vol.get_parent_pool().get_type()
-    if pool_type == virtinst.StoragePool.TYPE_SCSI:
-        info = append_str(info, _("SCSI device"))
-    elif pool_type == virtinst.StoragePool.TYPE_DISK:
-        info = append_str(info, _("Disk device"))
-    elif pool_type == virtinst.StoragePool.TYPE_ISCSI:
-        info = append_str(info, _("iSCSI share"))
+    if vol:
+        pool_type = vol.get_parent_pool().get_type()
+        if pool_type == virtinst.StoragePool.TYPE_SCSI:
+            info = append_str(info, _("SCSI device"))
+        elif pool_type == virtinst.StoragePool.TYPE_DISK:
+            info = append_str(info, _("Disk device"))
+        elif pool_type == virtinst.StoragePool.TYPE_ISCSI:
+            info = append_str(info, _("iSCSI share"))
 
     if shared:
         info = append_str(info, _("Shareable"))
