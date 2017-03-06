@@ -190,6 +190,45 @@ def path_is_url(path):
     return bool(re.match("[a-zA-Z]+(\+[a-zA-Z]+)?://.*", path))
 
 
+def _get_dev_type(path, vol_xml, vol_object, remote):
+    """
+    Try to get device type for volume.
+    """
+    if vol_xml:
+        if vol_xml.type:
+            return vol_xml.type
+
+        # If vol_xml.type is None the vol_xml.file_type can return only
+        # these types: block, network or file
+        if vol_xml.file_type == libvirt.VIR_STORAGE_VOL_BLOCK:
+            return "block"
+        elif vol_xml.file_type == libvirt.VIR_STORAGE_VOL_NETWORK:
+            return "network"
+
+    if vol_object:
+        t = vol_object.info()[0]
+        if t == StorageVolume.TYPE_FILE:
+            return "file"
+        elif t == StorageVolume.TYPE_BLOCK:
+            return "block"
+        elif t == StorageVolume.TYPE_NETWORK:
+            return "network"
+
+    if path:
+        if path_is_url(path):
+            return "network"
+
+        if not remote:
+            if os.path.isdir(path):
+                return "dir"
+            elif _stat_disk(path)[0]:
+                return "file"
+            else:
+                return "block"
+
+    return "file"
+
+
 ##############################################
 # Classes for tracking storage media details #
 ##############################################
@@ -281,16 +320,8 @@ class _StorageCreator(_StorageBase):
 
     def get_dev_type(self):
         if not self._dev_type:
-            if self._vol_install:
-                if self._vol_install.file_type == libvirt.VIR_STORAGE_VOL_FILE:
-                    self._dev_type = "file"
-                elif (self._vol_install.file_type ==
-                      libvirt.VIR_STORAGE_VOL_NETWORK):
-                    self._dev_type = "network"
-                else:
-                    self._dev_type = "block"
-            else:
-                self._dev_type = "file"
+            self._dev_type = _get_dev_type(self._path, self._vol_install, None,
+                                           self._conn.is_remote())
         return self._dev_type
 
     def get_driver_type(self):
@@ -307,9 +338,6 @@ class _StorageCreator(_StorageBase):
         if self._vol_install:
             self._vol_install.validate()
         else:
-            if disk.type == "block":
-                raise ValueError(_("Local block device path '%s' must "
-                                   "exist.") % self.get_path())
             if self._size is None:
                 raise ValueError(_("size is required for non-existent disk "
                                    "'%s'" % self.get_path()))
@@ -556,33 +584,11 @@ class StorageBackend(_StorageBase):
         Return disk 'type' value per storage settings
         """
         if self._dev_type is None:
+            vol_xml = None
             if self._vol_object:
-                if self.get_vol_xml().type:
-                    self._dev_type = self.get_vol_xml().type
-                else:
-                    t = self._vol_object.info()[0]
-                    if t == StorageVolume.TYPE_FILE:
-                        self._dev_type = "file"
-                    elif t == StorageVolume.TYPE_BLOCK:
-                        self._dev_type = "block"
-                    elif t == StorageVolume.TYPE_NETWORK:
-                        self._dev_type = "network"
-                    else:
-                        self._dev_type = "file"
-
-            elif self._path and path_is_url(self._path):
-                self._dev_type = "network"
-
-            elif self._path and not self._conn.is_remote():
-                if os.path.isdir(self._path):
-                    self._dev_type = "dir"
-                elif _stat_disk(self._path)[0]:
-                    self._dev_type = "file"
-                else:
-                    self._dev_type = "block"
-
-            if not self._dev_type:
-                self._dev_type = "file"
+                vol_xml = self.get_vol_xml()
+            self._dev_type = _get_dev_type(self._path, vol_xml, self._vol_object,
+                                           self._conn.is_remote())
         return self._dev_type
 
     def get_driver_type(self):
