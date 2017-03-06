@@ -713,9 +713,9 @@ class vmmCloneVM(vmmGObjectUI):
 
         try:
             self.clone_design.clone_paths = new_path
-            self.populate_storage_lists()
             row[STORAGE_INFO_NEW_PATH] = new_path
             row[STORAGE_INFO_MANUAL_PATH] = True
+            self.populate_storage_lists()
         except Exception, e:
             self.err.show_err(_("Error changing storage path: %s") % str(e))
             return
