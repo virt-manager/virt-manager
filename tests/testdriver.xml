@@ -2164,6 +2164,33 @@ ba</description>
   </source>
 </pool>
 
+<pool type="dir">
+  <name>nvram</name>
+  <source>
+  </source>
+  <target>
+    <path>/nvram</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>0</owner>
+      <group>0</group>
+    </permissions>
+  </target>
+
+  <volume type='file'>
+    <name>clone-orig_VARS.fd</name>
+    <capacity>1000</capacity>
+    <allocation>1000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>0</owner>
+        <group>0</group>
+      </permissions>
+    </target>
+  </volume>
+
+</pool>
 
 <pool type='mpath'>
   <name>mpath</name>

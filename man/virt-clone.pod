@@ -88,6 +88,12 @@ for the new guest's virtual disk. If the original guest has multiple disks,
 this parameter must be repeated multiple times, once per disk in the original
 virtual machine.
 
+=item B<--nvram> NVRAMFILE
+
+Optional path to the new nvram VARS file, if no path is specified and the
+guest has nvram the new nvram path will be auto-generated. If the guest
+doesn't have nvram this option will be ignored.
+
 =item B<--force-copy> TARGET
 
 Force cloning the passed disk target ('hdc', 'sda', etc.). By default,

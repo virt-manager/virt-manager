@@ -57,6 +57,8 @@ class Cloner(object):
         self._clone_uuid = None
         self._clone_sparse = True
         self._clone_xml = None
+        self.clone_nvram = None
+        self._nvram_disk = None
 
         self._force_target = []
         self._skip_target = []
@@ -361,6 +363,33 @@ class Cloner(object):
         clone_disk.validate()
 
 
+    def _prepare_nvram(self):
+        if self.clone_nvram is None:
+            nvram_dir = os.path.dirname(self._guest.os.nvram)
+            self.clone_nvram = os.path.join(nvram_dir,
+                                            "%s_VARS.fd" % self._clone_name)
+
+        nvram = VirtualDisk(self.conn)
+        nvram.path = self.clone_nvram
+        if (not self.preserve_dest_disks and
+            nvram.wants_storage_creation()):
+
+            old_nvram = VirtualDisk(self.conn)
+            old_nvram.path = self._guest.os.nvram
+
+            nvram_install = VirtualDisk.build_vol_install(
+                    self.conn, os.path.basename(nvram.path),
+                    nvram.get_parent_pool(), nvram.get_size(), False)
+            nvram_install.input_vol = old_nvram.get_vol_object()
+            nvram_install.sync_input_vol(only_format=True)
+            nvram_install.reflink = self.reflink
+            nvram.set_vol_install(nvram_install)
+
+        nvram.validate()
+        self._nvram_disk = nvram
+        self._guest.os.nvram = nvram.path
+
+
     def setup_clone(self):
         """
         Validate and set up all parameters needed for the new (clone) VM
@@ -420,6 +449,9 @@ class Cloner(object):
             if channel.type == VirtualChannelDevice.TYPE_UNIX:
                 channel.source_path = None
 
+        if self._guest.os.nvram:
+            self._prepare_nvram()
+
         # Save altered clone xml
         self._clone_xml = self._guest.get_xml_config()
         logging.debug("Clone guest xml is\n%s", self._clone_xml)
@@ -452,6 +484,8 @@ class Cloner(object):
             if self.preserve:
                 for dst_dev in self.clone_disks:
                     dst_dev.setup(meter=meter)
+                if self._nvram_disk:
+                    self._nvram_disk.setup(meter=meter)
         except Exception, e:
             logging.debug("Duplicate failed: %s", str(e))
             if dom:

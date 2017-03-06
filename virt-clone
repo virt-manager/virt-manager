@@ -136,6 +136,8 @@ def parse_args():
                     dest="preserve", default=True,
                     help=_("Do not clone storage, new disk images specified "
                            "via --file are preserved unchanged"))
+    stog.add_argument("--nvram", dest="new_nvram",
+                      help=_("New file to use as storage for nvram VARS"))
 
     netg = parser.add_argument_group(_("Networking Configuration"))
     netg.add_argument("-m", "--mac", dest="new_mac", action="append",
@@ -191,6 +193,8 @@ def main(conn=None):
         design.force_target = i
     design.clone_sparse = options.sparse
     design.preserve = options.preserve
+
+    design.clone_nvram = options.new_nvram
 
     # This determines the devices that need to be cloned, so that
     # get_clone_diskfile knows how many new disk paths it needs

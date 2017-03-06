@@ -175,3 +175,7 @@ class TestClone(unittest.TestCase):
             return
 
         raise AssertionError("Expected exception, but none raised.")
+
+    def testCloneNvramAuto(self):
+        base = "nvram-auto"
+        self._clone_helper(base)
