@@ -2243,6 +2243,49 @@ ba</description>
 </pool>
 
 
+<pool type='mpath'>
+  <name>mpath</name>
+  <target>
+    <path>/dev/mapper</path>
+  </target>
+</pool>
+
+
+<pool type='scsi'>
+  <name>scsi</name>
+  <source>
+    <adapter type='scsi_host' name='host0'/>
+  </source>
+  <target>
+    <path>/dev/disk/by-path</path>
+  </target>
+
+  <volume type='block'>
+    <name>unit:0:0:0</name>
+    <key>35002538043584d30</key>
+    <capacity unit='bytes'>256060514304</capacity>
+    <allocation unit='bytes'>256060514304</allocation>
+    <physical unit='bytes'>256060514304</physical>
+    <target>
+      <path>/dev/disk/by-path/pci-0000:00:17.0-ata-1</path>
+      <format type='dos'/>
+    </target>
+  </volume>
+
+  <volume type='block'>
+    <name>unit:0:0:1</name>
+    <key>35002538043584d31</key>
+    <capacity unit='bytes'>256060514304</capacity>
+    <allocation unit='bytes'>256060514304</allocation>
+    <physical unit='bytes'>256060514304</physical>
+    <target>
+      <path>/dev/disk/by-path/pci-0000:00:17.0-ata-30</path>
+      <format type='gpt'/>
+    </target>
+  </volume>
+</pool>
+
+
 
 
 
