@@ -20,8 +20,10 @@
 """
 Classes for building and installing with libvirt <sysinfo> XML
 """
+import datetime
 
 from .xmlbuilder import XMLBuilder, XMLProperty
+from . import util
 
 
 class SYSInfo(XMLBuilder):
@@ -39,16 +41,42 @@ class SYSInfo(XMLBuilder):
 
     type = XMLProperty("./@type")
 
+    def _validate_date(self, val):
+        # If supplied, date must be in either mm/dd/yy or mm/dd/yyyy format
+        try:
+            datetime.datetime.strptime(val, '%m/%d/%Y')
+        except ValueError:
+            try:
+                datetime.datetime.strptime(val, '%m/%d/%y')
+            except ValueError:
+                raise RuntimeError(_("SMBios date string '%s' is invalid.")
+                            % val)
+        return val
+
+    bios_date = XMLProperty("./bios/entry[@name='date']",
+                            validate_cb=_validate_date)
     bios_vendor = XMLProperty("./bios/entry[@name='vendor']")
     bios_version = XMLProperty("./bios/entry[@name='version']")
-    bios_date = XMLProperty("./bios/entry[@name='date']")
     bios_release = XMLProperty("./bios/entry[@name='release']")
+
+
+    def _validate_uuid(self, val):
+        try:
+            util.validate_uuid(val)
+        except ValueError:
+            raise ValueError(_("Invalid uuid for SMBios: %s") % val)
+
+        if util.vm_uuid_collision(self.conn, val):
+            raise ValueError(_("UUID '%s' is in use by another guest.") %
+                        val)
+        return val
+    system_uuid = XMLProperty("./system/entry[@name='uuid']",
+                              validate_cb=_validate_uuid)
 
     system_manufacturer = XMLProperty("./system/entry[@name='manufacturer']")
     system_product = XMLProperty("./system/entry[@name='product']")
     system_version = XMLProperty("./system/entry[@name='version']")
     system_serial = XMLProperty("./system/entry[@name='serial']")
-    system_uuid = XMLProperty("./system/entry[@name='uuid']")
     system_sku = XMLProperty("./system/entry[@name='sku']")
     system_family = XMLProperty("./system/entry[@name='family']")
 
