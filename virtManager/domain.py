@@ -32,6 +32,7 @@ from virtinst import DomainSnapshot
 from virtinst import Guest
 from virtinst import util
 from virtinst import VirtualController
+from virtinst import VirtualDisk
 
 from .libvirtobject import vmmLibvirtObject
 
@@ -479,6 +480,10 @@ class vmmDomain(vmmLibvirtObject):
             return "-"
         return str(i)
 
+    def has_nvram(self):
+        return bool(self.get_xmlobj().os.loader_ro is True and
+                    self.get_xmlobj().os.loader_type == "pflash")
+
     ##################
     # Support checks #
     ##################
@@ -552,10 +557,64 @@ class vmmDomain(vmmLibvirtObject):
         raise RuntimeError(_("Could not find specified device in the "
                              "inactive VM configuration: %s") % repr(origdev))
 
+    def _copy_nvram_file(self, new_name):
+        """
+        We need to do this copy magic because there is no Libvirt storage API
+        to rename storage volume.
+        """
+        old_nvram = VirtualDisk(self.conn.get_backend())
+        old_nvram.path = self.get_xmlobj().os.nvram
+
+        nvram_dir = os.path.dirname(old_nvram.path)
+        new_nvram_path = os.path.join(nvram_dir, "%s_VARS.fd" % new_name)
+
+        new_nvram = VirtualDisk(self.conn.get_backend())
+        new_nvram.path = new_nvram_path
+
+        nvram_install = VirtualDisk.build_vol_install(
+                self.conn.get_backend(), os.path.basename(new_nvram.path),
+                new_nvram.get_parent_pool(), new_nvram.get_size(), False)
+        nvram_install.input_vol = old_nvram.get_vol_object()
+        nvram_install.sync_input_vol(only_format=True)
+
+        new_nvram.set_vol_install(nvram_install)
+        new_nvram.validate()
+        new_nvram.setup()
+
+        return new_nvram, old_nvram
+
 
     ##############################
     # Persistent XML change APIs #
     ##############################
+
+    def rename_domain(self, new_name):
+        new_nvram = None
+        old_nvram = None
+        if self.has_nvram():
+            try:
+                new_nvram, old_nvram = self._copy_nvram_file(new_name)
+            except Exception as error:
+                raise RuntimeError("Cannot rename nvram VARS: '%s'" % error)
+
+        try:
+            self.define_name(new_name)
+        except Exception as error:
+            if new_nvram:
+                try:
+                    new_nvram.get_vol_object().delete(0)
+                except Exception as warn:
+                    logging.debug("rename failed and new nvram was not "
+                                  "removed: '%s'", warn)
+            raise error
+
+        if new_nvram:
+            try:
+                old_nvram.get_vol_object().delete(0)
+            except Exception as warn:
+                logging.debug("old nvram file was not removed: '%s'", warn)
+
+            self.define_overview(nvram=new_nvram.path)
 
     # Device Add/Remove
     def add_device(self, devobj):
@@ -621,7 +680,8 @@ class vmmDomain(vmmLibvirtObject):
         self._redefine_xmlobj(guest)
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
-        title=_SENTINEL, idmap_list=_SENTINEL, loader=_SENTINEL):
+        title=_SENTINEL, idmap_list=_SENTINEL, loader=_SENTINEL,
+        nvram=_SENTINEL):
         guest = self._make_xmlobj_to_define()
         if machine != _SENTINEL:
             guest.os.machine = machine
@@ -643,6 +703,9 @@ class vmmDomain(vmmLibvirtObject):
                 guest.os.loader = loader
                 guest.os.loader_type = "pflash"
                 guest.os.loader_ro = True
+
+        if nvram != _SENTINEL:
+            guest.os.nvram = nvram
 
         if idmap_list != _SENTINEL:
             if idmap_list is not None:
@@ -1426,14 +1489,21 @@ class vmmDomain(vmmLibvirtObject):
 
     @vmmLibvirtObject.lifecycle_action
     def delete(self, force=True):
+        """
+        @force: True if we are deleting domain, False if we are renaming domain
+
+        If the domain is renamed we need to keep the nvram file.
+        """
         flags = 0
         if force:
             flags |= getattr(libvirt,
                              "VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA", 0)
             flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_MANAGED_SAVE", 0)
-            if (self.get_xmlobj().os.loader_ro is True and
-                self.get_xmlobj().os.loader_type == "pflash"):
+            if self.has_nvram():
                 flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_NVRAM", 0)
+        else:
+            if self.has_nvram():
+                flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_KEEP_NVRAM", 0)
         try:
             self._backend.undefineFlags(flags)
         except libvirt.libvirtError:

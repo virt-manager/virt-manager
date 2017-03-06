@@ -1975,7 +1975,7 @@ class vmmDetails(vmmGObjectUI):
         # This needs to be last
         if self.edited(EDIT_NAME):
             # Renaming is pretty convoluted, so do it here synchronously
-            self.vm.define_name(self.widget("overview-name").get_text())
+            self.vm.rename_domain(self.widget("overview-name").get_text())
 
             if not kwargs and not hotplug_args:
                 # Saves some useless redefine attempts
