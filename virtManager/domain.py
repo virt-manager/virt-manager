@@ -286,7 +286,7 @@ class vmmDomain(vmmLibvirtObject):
                 key("SHUTDOWN_USER", 1) : _("User"),
             },
             libvirt.VIR_DOMAIN_SHUTOFF : {
-                key("SHUTOFF_SHUTDOWN", 1) : _("Shutdown"),
+                key("SHUTOFF_SHUTDOWN", 1) : _("Shut Down"),
                 key("SHUTOFF_DESTROYED", 2) : _("Destroyed"),
                 key("SHUTOFF_CRASHED", 3) : _("Crashed"),
                 key("SHUTOFF_MIGRATED", 4) : _("Migrated"),
