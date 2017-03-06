@@ -764,7 +764,8 @@ test-many-devices, like an alternate RNG.
   </devices>
 </domain>
 
-<domain type='test'>
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <test:runstate>5</test:runstate>
   <name>test-clone-simple</name>
   <currentMemory>204800</currentMemory>
   <memory>409600</memory>
@@ -799,7 +800,8 @@ test-many-devices, like an alternate RNG.
 </domain>
 
 
-<domain type='test'>
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <test:runstate>5</test:runstate>
   <name>test-clone</name>
   <currentMemory>204800</currentMemory>
   <memory>409600</memory>
@@ -866,7 +868,8 @@ test-many-devices, like an alternate RNG.
 </domain>
 
 
-<domain type='test'>
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <test:runstate>5</test:runstate>
   <name>test-clone-halffull</name>
   <currentMemory>204800</currentMemory>
   <memory>409600</memory>
@@ -901,7 +904,8 @@ test-many-devices, like an alternate RNG.
 </domain>
 
 
-<domain type='test'>
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <test:runstate>5</test:runstate>
   <name>test-clone-full</name>
   <currentMemory>204800</currentMemory>
   <memory>409600</memory>

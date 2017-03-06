@@ -43,7 +43,7 @@ class VMMCLI(unittest.TestCase):
 
         win = uiutils.find_fuzzy(self.app.root, "test-clone-simple on", "frame")
         self.assertFalse(
-            uiutils.find_fuzzy(win, "Graphical console not", "label").showing)
+            uiutils.find_fuzzy(win, "Guest is not running", "label").showing)
         self.assertTrue(
             uiutils.find_fuzzy(win, "add-hardware", "button").showing)
         self.app.quit()
@@ -55,7 +55,7 @@ class VMMCLI(unittest.TestCase):
 
         win = uiutils.find_fuzzy(self.app.root, "test-clone-simple on", "frame")
         self.assertFalse(
-            uiutils.find_fuzzy(win, "Graphical console not", "label").showing)
+            uiutils.find_fuzzy(win, "Guest is not running", "label").showing)
         self.assertTrue(
             uiutils.find_fuzzy(win, "CPU usage", "label").showing)
         self.app.quit()
@@ -66,7 +66,7 @@ class VMMCLI(unittest.TestCase):
 
         win = uiutils.find_fuzzy(self.app.root, "test-clone-simple on", "frame")
         self.assertTrue(
-            uiutils.find_fuzzy(win, "Graphical console not", "label").showing)
+            uiutils.find_fuzzy(win, "Guest is not running", "label").showing)
         self.assertFalse(
             uiutils.find_fuzzy(win, "add-hardware", "button").showing)
         self.app.quit()

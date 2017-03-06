@@ -943,10 +943,10 @@ c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage
 c.add_valid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ local storage
 c.add_valid("-o test-clone --auto-clone --clone-running")  # Auto flag, actual VM, skip state check
-c.add_valid("-o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s --clone-running")  # Preserve data shouldn't complain about existing volume
+c.add_valid("-o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s")  # Preserve data shouldn't complain about existing volume
 c.add_valid("-n clonetest --original-xml %(CLONE_DISK_XML)s --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
 c.add_invalid("--auto-clone")  # Just the auto flag
-c.add_invalid("-o test-clone --auto-clone")
+c.add_invalid("-o test-many-devices --auto-clone")  # VM is running, but --clone-running isn't passed
 c.add_invalid("-o test-clone-simple -n newvm --file %(EXISTIMG1)s --clone-running")  # Should complain about overwriting existing file
 
 
