@@ -407,6 +407,13 @@ class vmmCloneVM(vmmGObjectUI):
                 storage_add(cloneinfo)
                 continue
 
+            storage_row[STORAGE_INFO_CAN_CLONE] = True
+
+            # If we cannot create default clone_path don't even try to do that
+            if not default:
+                storage_add()
+                continue
+
             try:
                 # Generate disk path, make sure that works
                 clone_path = self.generate_clone_path_name(path)
@@ -421,7 +428,6 @@ class vmmCloneVM(vmmGObjectUI):
                                   clone_path)
                 storage_add(str(e))
 
-            storage_row[STORAGE_INFO_CAN_CLONE] = True
             storage_row[STORAGE_INFO_NEW_PATH] = clone_path
             storage_row[STORAGE_INFO_SIZE] = self.pretty_storage(size)
             storage_add()
