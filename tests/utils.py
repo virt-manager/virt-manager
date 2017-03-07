@@ -17,9 +17,6 @@
 
 import difflib
 import os
-import logging
-
-import libvirt
 
 import virtinst
 import virtinst.cli
@@ -141,11 +138,6 @@ def open_kvm_rhel(connver=None):
 
 def open_test_remote():
     return openconn(uri_test_remote)
-
-
-def _libvirt_callback(ignore, err):
-    logging.warn("libvirt errmsg: %s", err[2])
-libvirt.registerErrorHandler(f=_libvirt_callback, ctx=None)
 
 
 def test_create(testconn, xml, define_func="defineXML"):

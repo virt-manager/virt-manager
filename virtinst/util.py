@@ -324,7 +324,12 @@ def register_libvirt_error_handler():
     def libvirt_callback(userdata, err):
         ignore = userdata
         ignore = err
+    def libxml2_callback(userdata, err):
+        ignore = userdata
+        logging.debug("libxml2 callback error: %s", err)
     libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
+    import libxml2
+    libxml2.registerErrorHandler(f=libxml2_callback, ctx=None)
 
 
 def ensure_meter(meter):
