@@ -257,7 +257,7 @@ def define_changes(conn, inactive_xmlobj, devs, action, confirm):
     if confirm:
         if not prompt_yes_or_no(
             _("Define '%s' with the changed XML?") % inactive_xmlobj.name):
-            return
+            return False
 
     if action == "hotplug":
         for dev in devs:
@@ -265,6 +265,7 @@ def define_changes(conn, inactive_xmlobj, devs, action, confirm):
 
     conn.defineXML(inactive_xmlobj.get_xml_config())
     print_stdout(_("Domain '%s' defined successfully.") % inactive_xmlobj.name)
+    return True
 
 
 def update_changes(domain, devs, action, confirm):
@@ -461,8 +462,9 @@ def main(conn=None):
         update_changes(domain, devs, action, options.confirm)
     if options.define:
         devs, action = prepare_changes(inactive_xmlobj, options, parserclass)
-        define_changes(conn, inactive_xmlobj, devs, action, options.confirm)
-        if not options.update and active_xmlobj:
+        applied = define_changes(conn, inactive_xmlobj,
+                                 devs, action, options.confirm)
+        if not options.update and active_xmlobj and applied:
             print_stdout(
                 _("Changes will take effect after the next domain shutdown."))
     if not options.update and not options.define:
