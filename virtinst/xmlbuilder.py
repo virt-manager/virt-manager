@@ -1193,4 +1193,5 @@ class XMLBuilder(object):
                     obj._add_parse_bits(node)
 
     def __repr__(self):
-        return "<XMLBuilder %s %s>" % (self._XML_ROOT_NAME, id(self))
+        return "<%s %s %s>" % (self.__class__.__name__.split(".")[-1],
+                               self._XML_ROOT_NAME, id(self))
