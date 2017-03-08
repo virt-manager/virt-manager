@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAdjustment" id="adjustment4">
@@ -74,10 +74,10 @@
       <object class="GtkLabel" id="label429">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes">_Type:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">graphics-type</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -88,10 +88,10 @@
       <object class="GtkLabel" id="label430">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes">Addr_ess:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">graphics-address</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -102,10 +102,10 @@
       <object class="GtkLabel" id="label432">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes">Pa_ssword:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">graphics-password-chk</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -116,10 +116,10 @@
       <object class="GtkLabel" id="label431">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes">_Port:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">graphics-port</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -136,10 +136,10 @@
           <object class="GtkLabel" id="label29">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">1</property>
             <property name="label" translatable="yes">T_LS port:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">graphics-tlsport</property>
+            <property name="xalign">1</property>
           </object>
         </child>
       </object>
@@ -200,10 +200,10 @@
       <object class="GtkLabel" id="label12">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes">Ke_ymap:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">graphics-keymap</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -283,8 +283,8 @@
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes">Display:</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -295,8 +295,8 @@
       <object class="GtkLabel" id="label2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes">XAuth:</property>
+        <property name="xalign">1</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -307,8 +307,8 @@
       <object class="GtkLabel" id="graphics-display">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes">label</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -319,8 +319,8 @@
       <object class="GtkLabel" id="graphics-xauth">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes">label</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -367,29 +367,13 @@
       <object class="GtkLabel" id="label3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">1</property>
         <property name="label" translatable="yes">Open_GL:</property>
         <property name="use_underline">True</property>
-        <property name="mnemonic_widget">graphics-opengl</property>
+        <property name="xalign">1</property>
+        <property name="yalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">9</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkCheckButton" id="graphics-opengl">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="draw_indicator">True</property>
-        <signal name="toggled" handler="on_graphics_opengl_toggled" swapped="no"/>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
         <property name="top_attach">9</property>
       </packing>
     </child>
@@ -426,38 +410,95 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="label5">
+      <object class="GtkGrid" id="graphics-opengl-box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">GPU:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">graphics-rendernode</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">10</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkComboBox" id="graphics-rendernode">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="hexpand">False</property>
-        <property name="has_entry">True</property>
-        <signal name="changed" handler="on_graphics_rendernode_changed" swapped="no"/>
-        <child internal-child="entry">
-          <object class="GtkEntry">
-            <property name="can_focus">True</property>
-            <property name="halign">start</property>
-            <property name="editable">True</property>
+        <property name="orientation">vertical</property>
+        <property name="row_spacing">3</property>
+        <child>
+          <object class="GtkBox" id="box77">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkCheckButton" id="graphics-opengl">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="on_graphics_opengl_toggled" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="graphics-opengl-warn">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="stock">gtk-dialog-warning</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="graphics-rendernode-box">
+            <property name="can_focus">False</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkComboBox" id="graphics-rendernode">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="hexpand">False</property>
+                <property name="has_entry">True</property>
+                <signal name="changed" handler="on_graphics_rendernode_changed" swapped="no"/>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="can_focus">True</property>
+                    <property name="halign">start</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="graphics-rendernode-warn">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="stock">gtk-dialog-warning</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
         </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">10</property>
+        <property name="top_attach">9</property>
       </packing>
     </child>
   </object>

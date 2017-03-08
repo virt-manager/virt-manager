@@ -228,9 +228,66 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
         if is_spice:
             set_port("graphics-tlsport", gfx.tlsPort)
-            self.widget("graphics-opengl").set_active(gfx.gl or False)
+
+            opengl_warning = ""
+            rendernode_warning = ""
+            opengl_supported = self.conn.check_support(
+                    self.conn.SUPPORT_CONN_SPICE_GL)
+            rendernode_supported = self.conn.check_support(
+                    self.conn.SUPPORT_CONN_SPICE_RENDERNODE)
+
+            # * If spicegl isn't supported, show a warning icon and
+            #     and desensitive everything
+            # * If qemu:///system and rendernode isn't supported,
+            #     show a warning icon and desensitize everything, since
+            #     rendernode support is needed for it to work out of the box.
+            # * Otherwise, enable all UI, but show warning icons anyways
+            #     for potential config issues
+
+            glval = False
+            renderval = None
+            glsensitive = False
+            if not opengl_supported:
+                opengl_warning = (
+                    _("Hypervisor/libvirt does not support spice GL"))
+            elif not rendernode_supported:
+                rendernode_warning = (
+                    _("Hypervisor/libvirt does not support manual rendernode"))
+                if self.conn.is_qemu_system():
+                    opengl_warning = rendernode_warning
+
+            if not opengl_warning:
+                glval = bool(gfx.gl)
+                glsensitive = True
+            if not rendernode_warning:
+                renderval = gfx.rendernode or None
+
+            if opengl_warning:
+                pass
+            elif not [v for v in self.vm.xmlobj.get_devices("video") if
+                    (v.model == "virtio" and v.accel3d)]:
+                opengl_warning = _("Spice GL requires "
+                    "virtio graphics configured with accel3d.")
+            elif gfx.get_first_listen_type() not in ["none", "socket"]:
+                opengl_warning = _("Graphics listen type does not support "
+                    "spice GL.")
+
+            self.widget("graphics-opengl").set_active(glval)
             uiutil.set_list_selection(
-                self.widget("graphics-rendernode"), gfx.rendernode or None)
+                    self.widget("graphics-rendernode"), renderval)
+
+            self.widget("graphics-opengl").set_sensitive(glsensitive)
+            self.widget("graphics-opengl-warn").set_tooltip_text(
+                    opengl_warning or None)
+            self.widget("graphics-opengl-warn").set_visible(
+                    bool(opengl_warning))
+
+            self.widget("graphics-rendernode").set_sensitive(
+                    rendernode_supported)
+            self.widget("graphics-rendernode-warn").set_tooltip_text(
+                    rendernode_warning or None)
+            self.widget("graphics-rendernode-warn").set_visible(
+                    bool(rendernode_warning))
 
         if is_sdl:
             title = _("Local SDL Window")
@@ -251,7 +308,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
     def _show_rows_from_type(self):
         hide_all = ["graphics-xauth", "graphics-display", "graphics-address",
             "graphics-password-box", "graphics-keymap", "graphics-port-box",
-            "graphics-tlsport-box", "graphics-opengl", "graphics-rendernode"]
+            "graphics-tlsport-box", "graphics-opengl-box"]
 
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
@@ -263,11 +320,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         spice_rows = vnc_rows[:]
         if listen == 'address':
             spice_rows.extend(["graphics-tlsport-box"])
-        if self.conn.check_support(self.conn.SUPPORT_CONN_SPICE_GL):
-            spice_rows.extend(["graphics-opengl"])
-            gl = self.widget("graphics-opengl").get_active()
-            if gl and self.conn.check_support(self.conn.SUPPORT_CONN_SPICE_RENDERNODE):
-                spice_rows.extend(["graphics-rendernode"])
+        spice_rows.extend(["graphics-opengl-box"])
 
         rows = []
         if gtype == "sdl":
@@ -289,7 +342,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.emit("changed-listen")
 
     def _change_opengl(self, ignore):
-        self._show_rows_from_type()
+        uiutil.set_grid_row_visible(
+                self.widget("graphics-rendernode-box"),
+                self.widget("graphics-opengl").get_active())
         self.emit("changed-opengl")
 
     def _change_port_auto(self, ignore):
