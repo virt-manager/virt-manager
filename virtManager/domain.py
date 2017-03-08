@@ -592,10 +592,7 @@ class vmmDomain(vmmLibvirtObject):
         new_nvram = None
         old_nvram = None
         if self.has_nvram():
-            try:
-                new_nvram, old_nvram = self._copy_nvram_file(new_name)
-            except Exception as error:
-                raise RuntimeError("Cannot rename nvram VARS: '%s'" % error)
+            new_nvram, old_nvram = self._copy_nvram_file(new_name)
 
         try:
             self.define_name(new_name)
