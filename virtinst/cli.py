@@ -1052,7 +1052,12 @@ class VirtCLIParser(object):
         option string, and store in the optdict. So:
         remove_first=["char_type"] for --serial pty,foo=bar
         maps to {"char_type", "pty", "foo" : "bar"}
-    @check_none: If the parsed option string is just 'none', return None
+    @stub_none: If the parsed option string is just 'none', make it a no-op.
+        This helps us be backwards compatible: for example, --rng none is
+        a no-op, but one day we decide to add an rng device by default to
+        certain VMs, and --rng none is extended to handle that. --rng none
+        can be added to users command lines and it will give the expected
+        results regardless of the virt-install version.
     @support_cb: An extra support check function for further validation.
         Called before the virtinst object is altered. Take arguments
         (inst, attrname, cliname)
@@ -1065,7 +1070,7 @@ class VirtCLIParser(object):
     """
     objclass = None
     remove_first = None
-    check_none = False
+    stub_none = True
     support_cb = None
     clear_attr = None
     cli_arg_name = None
@@ -1169,7 +1174,7 @@ class VirtCLIParser(object):
         """
         if not self.optstr:
             return None
-        if self.check_none and self.optstr == "none":
+        if self.stub_none and self.optstr == "none":
             return None
 
         new_object = False
@@ -1403,6 +1408,7 @@ class ParserCPU(VirtCLIParser):
     cli_arg_name = "cpu"
     objclass = CPU
     remove_first = "model"
+    stub_none = False
 
     def cell_find_inst_cb(self, inst, val, virtarg, can_edit):
         cpu = inst
@@ -1892,6 +1898,7 @@ class ParserDisk(VirtCLIParser):
     cli_arg_name = "disk"
     objclass = VirtualDisk
     remove_first = "path"
+    stub_none = False
 
     def noset_cb(self, inst, val, virtarg):
         ignore = self, inst, val, virtarg
@@ -2068,6 +2075,7 @@ class ParserNetwork(VirtCLIParser):
     cli_arg_name = "network"
     objclass = VirtualNetworkInterface
     remove_first = "type"
+    stub_none = False
 
     def set_mac_cb(self, inst, val, virtarg):
         if val == "RANDOM":
@@ -2154,6 +2162,7 @@ class ParserGraphics(VirtCLIParser):
     cli_arg_name = "graphics"
     objclass = VirtualGraphics
     remove_first = "type"
+    stub_none = False
 
     def set_keymap_cb(self, inst, val, virtarg):
         from . import hostkeymap
@@ -2287,7 +2296,6 @@ class ParserSmartcard(VirtCLIParser):
     cli_arg_name = "smartcard"
     objclass = VirtualSmartCardDevice
     remove_first = "mode"
-    check_none = True
 
 _register_virt_parser(ParserSmartcard)
 _add_device_address_args(ParserSmartcard)
@@ -2303,6 +2311,7 @@ class ParserRedir(VirtCLIParser):
     cli_arg_name = "redirdev"
     objclass = VirtualRedirDevice
     remove_first = "bus"
+    stub_none = False
 
     def set_server_cb(self, inst, val, virtarg):
         inst.parse_friendly_server(val)
@@ -2329,7 +2338,6 @@ class ParserTPM(VirtCLIParser):
     cli_arg_name = "tpm"
     objclass = VirtualTPMDevice
     remove_first = "type"
-    check_none = True
 
     def _parse(self, inst):
         if (self.optdict.get("type", "").startswith("/")):
@@ -2351,7 +2359,6 @@ class ParserRNG(VirtCLIParser):
     cli_arg_name = "rng"
     objclass = VirtualRNGDevice
     remove_first = "type"
-    check_none = True
 
     def set_hosts_cb(self, inst, val, virtarg):
         namemap = {}
@@ -2431,6 +2438,7 @@ class ParserMemballoon(VirtCLIParser):
     cli_arg_name = "memballoon"
     objclass = VirtualMemballoon
     remove_first = "model"
+    stub_none = False
 
 _register_virt_parser(ParserMemballoon)
 _add_device_address_args(ParserMemballoon)
@@ -2462,6 +2470,7 @@ ParserPanic.add_arg(None, "iobase", cb=ParserPanic.set_iobase_cb)
 
 class _ParserChar(VirtCLIParser):
     remove_first = "char_type"
+    stub_none = False
 
     def support_check(self, inst, virtarg):
         if type(virtarg.attrname) is not str:
@@ -2598,6 +2607,7 @@ class ParserSound(VirtCLIParser):
     cli_arg_name = "sound"
     objclass = VirtualAudio
     remove_first = "model"
+    stub_none = False
 
     def _parse(self, inst):
         if self.optstr == "none":
