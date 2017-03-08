@@ -39,6 +39,7 @@ from .devicedisk import VirtualDisk
 from .devicegraphics import VirtualGraphics
 from .deviceinput import VirtualInputDevice
 from .deviceredirdev import VirtualRedirDevice
+from .devicerng import VirtualRNGDevice
 from .devicevideo import VirtualVideoDevice
 from .distroinstaller import DistroInstaller
 from .domainblkiotune import DomainBlkiotune
@@ -124,6 +125,7 @@ class Guest(XMLBuilder):
         self.skip_default_sound = False
         self.skip_default_usbredir = False
         self.skip_default_graphics = False
+        self.skip_default_rng = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
 
         self.__os_object = None
@@ -641,6 +643,25 @@ class Guest(XMLBuilder):
             return
         self.add_device(VirtualGraphics(self.conn))
 
+    def add_default_rng(self):
+        if self.skip_default_rng:
+            return
+        if self.get_devices("rng"):
+            return
+        if not self.os.is_x86():
+            # Not strictly x86 specific, but some other archs like
+            # arm have limited virtio options in some situations, so
+            # it needs more work there.
+            return
+
+        if (self.conn.is_qemu() and
+            self._os_object.supports_virtiorng() and
+            self.conn.check_support(self.conn.SUPPORT_CONN_RNG_URANDOM)):
+            dev = VirtualRNGDevice(self.conn)
+            dev.type = "random"
+            dev.device = "/dev/urandom"
+            self.add_device(dev)
+
     def add_default_devices(self):
         self.add_default_graphics()
         self.add_default_video_device()
@@ -648,6 +669,7 @@ class Guest(XMLBuilder):
         self.add_default_console_device()
         self.add_default_usb_controller()
         self.add_default_channels()
+        self.add_default_rng()
 
     def _add_install_cdrom(self):
         if self._install_cdrom_device:

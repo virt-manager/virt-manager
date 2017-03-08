@@ -320,6 +320,7 @@ SUPPORT_CONN_SPICE_RENDERNODE = _make(version="3.1.0",
 SUPPORT_CONN_VIDEO_VIRTIO_ACCEL3D = _make(version="1.3.0",
     hv_version={"qemu": "2.5.0", "test": 0})
 SUPPORT_CONN_GRAPHICS_LISTEN_NONE = _make(version="2.0.0")
+SUPPORT_CONN_RNG_URANDOM = _make(version="1.3.4")
 
 
 # This is for disk <driver name=qemu>. xen supports this, but it's

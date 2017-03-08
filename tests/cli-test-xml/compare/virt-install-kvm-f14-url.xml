@@ -55,6 +55,9 @@
     <video>
       <model type="qxl"/>
     </video>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
   </devices>
 </domain>
 <domain type="kvm">
@@ -111,5 +114,8 @@
     <video>
       <model type="qxl"/>
     </video>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
   </devices>
 </domain>

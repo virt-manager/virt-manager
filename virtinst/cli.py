@@ -2359,6 +2359,7 @@ class ParserRNG(VirtCLIParser):
     cli_arg_name = "rng"
     objclass = VirtualRNGDevice
     remove_first = "type"
+    stub_none = False
 
     def set_hosts_cb(self, inst, val, virtarg):
         namemap = {}
@@ -2386,6 +2387,10 @@ class ParserRNG(VirtCLIParser):
             inst.cli_backend_type = val
 
     def _parse(self, inst):
+        if self.optstr == "none":
+            self.guest.skip_default_rng = True
+            return
+
         inst.cli_backend_mode = "connect"
         inst.cli_backend_type = "udp"
 

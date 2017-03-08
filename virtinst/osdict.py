@@ -494,6 +494,18 @@ class _OsVariant(object):
 
         return False
 
+    def supports_virtiorng(self):
+        if self._os:
+            fltr = libosinfo.Filter()
+            fltr.add_constraint("class", "rng")
+            devs = self._os.get_all_devices(fltr)
+            for dev in range(devs.get_length()):
+                d = devs.get_nth(dev)
+                if d.get_name() == "virtio-rng":
+                    return True
+
+        return False
+
     def supports_qemu_ga(self):
         return self._is_related_to(["debian8", "fedora18", "rhel6.0", "sles11sp4"])
 
