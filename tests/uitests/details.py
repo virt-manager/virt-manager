@@ -83,3 +83,43 @@ class Details(unittest.TestCase):
 
         self.app.quit()
         return
+
+    def _testRename(self, origname, newname):
+        win = self._open_details_window(origname)
+
+        # Ensure the Overview page is the first selected
+        uiutils.find_pattern(win, "Hypervisor Details", "label")
+        uiutils.find_pattern(win, "Overview", "table cell").click()
+
+        uiutils.find_pattern(win, None, "text", "Name:").text = newname
+        uiutils.find_pattern(win, "config-apply", "push button").click()
+
+        # Confirm lists were updated
+        uiutils.find_pattern(self.app.root, "%s on" % newname, "frame")
+        uiutils.find_fuzzy(self.app.root, newname, "table cell")
+
+        # Ensure old VM entry is gone
+        try:
+            uiutils.find_fuzzy(self.app.root, origname, "table cell",
+                               retry=False)
+            raise AssertionError("Still found manager row for %s" % origname)
+        except dogtail.tree.SearchError:
+            # We want this
+            pass
+
+    def testDetailsRenameSimple(self):
+        """
+        Rename a simple VM
+        """
+        self._testRename("test-clone-simple", "test-new-name")
+
+    def testDetailsRenameNVRAM(self):
+        """
+        Rename a VM that will trigger the nvram behavior
+        """
+        origname = "test-many-devices"
+        # Shutdown the VM
+        uiutils.find_fuzzy(self.app.root, origname, "table cell").click()
+        uiutils.find_pattern(self.app.root, "Shut Down", "push button").click()
+
+        self._testRename(origname, "test-new-name")

@@ -304,7 +304,8 @@
   </sysinfo>
   <os>
     <type arch='i686'>hvm</type>
-    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <loader readonly='yes' type='pflash'>/usr/share/edk2/ovmf/OVMF_CODE.fd</loader>
+    <nvram>/nvram/test-many-devices_VARS.fd</nvram>
     <smbios mode='sysinfo'/>
   </os>
   <idmap>
@@ -2179,6 +2180,18 @@ ba</description>
 
   <volume type='file'>
     <name>clone-orig_VARS.fd</name>
+    <capacity>1000</capacity>
+    <allocation>1000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>0</owner>
+        <group>0</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume type='file'>
+    <name>test-many-devices_VARS.fd</name>
     <capacity>1000</capacity>
     <allocation>1000</allocation>
     <target>

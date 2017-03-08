@@ -91,7 +91,7 @@ class DogtailApp(object):
 # Widget search helpers #
 #########################
 
-def find_pattern(root, name, roleName=None, labeller_text=None):
+def find_pattern(root, name, roleName=None, labeller_text=None, retry=True):
     """
     Search root for any widget that contains the passed name/role regex
     strings.
@@ -99,14 +99,14 @@ def find_pattern(root, name, roleName=None, labeller_text=None):
     pred = _FuzzyPredicate(name, roleName, labeller_text)
 
     try:
-        return root.findChild(pred)
+        return root.findChild(pred, retry=retry)
     except dogtail.tree.SearchError:
         raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
             "roleName='%s' labeller_text='%s'" %
             (name, roleName, labeller_text))
 
 
-def find_fuzzy(root, name, roleName=None, labeller_text=None):
+def find_fuzzy(root, name, roleName=None, labeller_text=None, retry=True):
     """
     Search root for any widget that contains the passed name/role strings.
     """
@@ -121,7 +121,7 @@ def find_fuzzy(root, name, roleName=None, labeller_text=None):
         labeller_pattern = ".*%s.*" % labeller_text
 
     return find_pattern(root, name_pattern, role_pattern,
-        labeller_pattern)
+        labeller_pattern, retry=retry)
 
 
 def check_in_loop(func, timeout=-1):
