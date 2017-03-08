@@ -567,13 +567,11 @@ class vmmDomain(vmmLibvirtObject):
 
         nvram_dir = os.path.dirname(old_nvram.path)
         new_nvram_path = os.path.join(nvram_dir, "%s_VARS.fd" % new_name)
-
         new_nvram = VirtualDisk(self.conn.get_backend())
-        new_nvram.path = new_nvram_path
 
         nvram_install = VirtualDisk.build_vol_install(
-                self.conn.get_backend(), os.path.basename(new_nvram.path),
-                new_nvram.get_parent_pool(), new_nvram.get_size(), False)
+                self.conn.get_backend(), os.path.basename(new_nvram_path),
+                old_nvram.get_parent_pool(), old_nvram.get_size(), False)
         nvram_install.input_vol = old_nvram.get_vol_object()
         nvram_install.sync_input_vol(only_format=True)
 
