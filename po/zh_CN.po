@@ -18,13 +18,14 @@
 # Martin Liu <martin@aws-faq.com>, 2015. #zanata
 # Leah Liu <lliu@redhat.com>, 2016. #zanata
 # mosquito <sensor.wen@gmail.com>, 2016. #zanata
+# Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-05 15:58-0500\n"
-"PO-Revision-Date: 2016-03-03 06:16-0500\n"
-"Last-Translator: Leah Liu <lliu@redhat.com>\n"
+"POT-Creation-Date: 2017-03-08 18:46-0500\n"
+"PO-Revision-Date: 2017-02-05 04:06-0500\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/virt-"
 "manager/language/zh_CN/)\n"
 "Language: zh-CN\n"
@@ -356,7 +357,7 @@ msgstr "模拟 CPU 架构"
 msgid "The machine type to emulate"
 msgstr "机器类型为仿真类型"
 
-#: ../virt-install:937 ../virt-clone:145 ../virt-xml:392
+#: ../virt-install:937 ../virt-clone:147 ../virt-xml:393
 msgid "Miscellaneous Options"
 msgstr "其它选项"
 
@@ -372,7 +373,7 @@ msgstr ""
 msgid "Minutes to wait for install to complete."
 msgstr "请等待数分钟以便完成安装。"
 
-#: ../virt-install:1002 ../virt-clone:221
+#: ../virt-install:1002 ../virt-clone:225
 msgid "Installation aborted at user request"
 msgstr "根据用户要求取消安装"
 
@@ -452,22 +453,27 @@ msgid ""
 msgstr "不克隆存储，通过 --file 参数指定的新磁盘镜像将保留不变"
 
 #: ../virt-clone:140
+#, fuzzy
+msgid "New file to use as storage for nvram VARS"
+msgstr "为新客户机使用新的磁盘镜像文件"
+
+#: ../virt-clone:142
 msgid "Networking Configuration"
 msgstr "联网配置"
 
-#: ../virt-clone:142
+#: ../virt-clone:144
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr "为克隆客户机生成新的固定 MAC 地址。默认为随机生成 MAC。"
 
-#: ../virt-clone:174
+#: ../virt-clone:176
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
 
-#: ../virt-clone:211
+#: ../virt-clone:215
 #, c-format
 msgid "Clone '%s' created successfully."
 msgstr "成功克隆 '%s'。"
@@ -516,7 +522,7 @@ msgstr "目标目录中的磁盘镜像应转换/复制到 libvirt 的默认目�
 msgid "Creating guest '%s'."
 msgstr "正在创建客户机 '%s'。"
 
-#: ../virt-convert:139 ../virt-xml:481
+#: ../virt-convert:139 ../virt-xml:483
 msgid "Aborted at user request"
 msgstr "根据用户要求丢弃"
 
@@ -598,29 +604,29 @@ msgstr "确认 '%s' 已变更的 XML？"
 msgid "Domain '%s' defined successfully."
 msgstr "域 '%s' 成功定义。"
 
-#: ../virt-xml:298
+#: ../virt-xml:299
 #, c-format
 msgid "Error attempting device %s: %s"
 msgstr "尝试连接设备 %s 错误： %s"
 
-#: ../virt-xml:300
+#: ../virt-xml:301
 #, c-format
 msgid "Device %s successful."
 msgstr "设备 %s 成功。"
 
-#: ../virt-xml:339
+#: ../virt-xml:340
 msgid "Edit libvirt XML using command line options."
 msgstr "使用命令行选项编辑 libvirt XML。"
 
-#: ../virt-xml:345
+#: ../virt-xml:346
 msgid "Domain name, id, or uuid"
 msgstr "域名，ID，或UUID"
 
-#: ../virt-xml:347
+#: ../virt-xml:348
 msgid "XML actions"
 msgstr "XML 动作"
 
-#: ../virt-xml:349
+#: ../virt-xml:350
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -634,7 +640,7 @@ msgstr ""
 "--edit all --disk ... (编辑所有磁盘设备)\n"
 "--edit target=hda --disk ... (编辑磁盘 'hda')\n"
 
-#: ../virt-xml:355
+#: ../virt-xml:356
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -646,7 +652,7 @@ msgstr ""
 "--remove-device --disk all (删除所有磁盘)\n"
 "--remove-device --disk /some/path"
 
-#: ../virt-xml:360
+#: ../virt-xml:361
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -654,15 +660,15 @@ msgstr ""
 "添加指定设备。例如：\n"
 "--add-device --disk ..."
 
-#: ../virt-xml:363
+#: ../virt-xml:364
 msgid "Just output the built device XML, no domain required."
 msgstr "只输出内置设备的 XML，不需要域名称。"
 
-#: ../virt-xml:365
+#: ../virt-xml:366
 msgid "Output options"
 msgstr "输出选项"
 
-#: ../virt-xml:367
+#: ../virt-xml:368
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -674,53 +680,53 @@ msgstr ""
 "对于 --remove-device 选项，将执行热拔出操作。\n"
 "对于 --edit 选项，将执行更新设备操作。"
 
-#: ../virt-xml:372
+#: ../virt-xml:373
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr "强制定义域。需要指定 --print 选项。"
 
-#: ../virt-xml:375
+#: ../virt-xml:376
 msgid "Only print the requested change, in diff format"
 msgstr "只打印需要的更改，使用 diff 格式"
 
-#: ../virt-xml:377
+#: ../virt-xml:378
 msgid "Only print the requested change, in full XML format"
 msgstr "只打印需要的更改，使用完整的 XML 格式"
 
-#: ../virt-xml:379
+#: ../virt-xml:380
 msgid "Require confirmation before saving any results."
 msgstr "保存任何结果前需要确认。"
 
-#: ../virt-xml:381
+#: ../virt-xml:382
 msgid "XML options"
 msgstr "XML 选项"
 
-#: ../virt-xml:418
+#: ../virt-xml:419
 msgid "Can't use --confirm with stdin input."
 msgstr "不能在标准输入使用 --confirm 选项。"
 
-#: ../virt-xml:420
+#: ../virt-xml:421
 msgid "Can't use --update with stdin input."
 msgstr "不能在标准输入使用 --update 选项。"
 
-#: ../virt-xml:423
+#: ../virt-xml:424
 msgid "A domain must be specified"
 msgstr "必须指定域"
 
-#: ../virt-xml:450
+#: ../virt-xml:451
 #, c-format
 msgid "Don't know how to --update for --%s"
 msgstr "不知如何为 --%s 应用 --update 选项"
 
-#: ../virt-xml:467
+#: ../virt-xml:469
 msgid "Changes will take effect after the next domain shutdown."
 msgstr "这些更改将在下次关闭域后生效。"
 
-#: ../virtManager/addhardware.py:180 ../virtManager/details.py:754
+#: ../virtManager/addhardware.py:180 ../virtManager/details.py:795
 msgid "Hardware"
 msgstr "硬件"
 
-#: ../virtManager/addhardware.py:218
+#: ../virtManager/addhardware.py:218 ../virtManager/clone.py:124
 msgid "Disk device"
 msgstr "磁盘设备"
 
@@ -739,8 +745,8 @@ msgstr "LUN 直连"
 #. [xml value, label]
 #: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:551
 #: ../virtManager/addhardware.py:663 ../virtManager/addhardware.py:679
-#: ../virtManager/addhardware.py:743 ../virtManager/details.py:2540
-#: ../virtManager/gfxdetails.py:84 ../virtManager/preferences.py:165
+#: ../virtManager/addhardware.py:743 ../virtManager/details.py:2617
+#: ../virtManager/gfxdetails.py:98 ../virtManager/preferences.py:165
 msgid "Hypervisor default"
 msgstr "管理程序默认"
 
@@ -764,7 +770,7 @@ msgid "Network"
 msgstr "网络"
 
 #: ../virtManager/addhardware.py:354 ../virtManager/addhardware.py:1090
-#: ../virtManager/details.py:200
+#: ../virtManager/details.py:204
 msgid "Input"
 msgstr "输入"
 
@@ -782,21 +788,21 @@ msgstr "图形"
 msgid "Sound"
 msgstr "声音"
 
-#: ../virtManager/addhardware.py:361 ../virtManager/details.py:204
-#: ../ui/details.ui.h:170
+#: ../virtManager/addhardware.py:361 ../virtManager/details.py:208
+#: ../ui/details.ui.h:175
 msgid "Serial"
 msgstr "串口"
 
-#: ../virtManager/addhardware.py:365 ../virtManager/details.py:206
+#: ../virtManager/addhardware.py:365 ../virtManager/details.py:210
 msgid "Parallel"
 msgstr "并口"
 
-#: ../virtManager/addhardware.py:369 ../virtManager/details.py:208
+#: ../virtManager/addhardware.py:369 ../virtManager/details.py:212
 #: ../ui/details.ui.h:23
 msgid "Console"
 msgstr "控制台"
 
-#: ../virtManager/addhardware.py:371 ../virtManager/details.py:214
+#: ../virtManager/addhardware.py:371 ../virtManager/details.py:218
 msgid "Channel"
 msgstr "信道"
 
@@ -824,8 +830,8 @@ msgstr "视频"
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt 版本不支持视频设备。"
 
-#: ../virtManager/addhardware.py:391 ../virtManager/details.py:242
-#: ../virtManager/domain.py:279
+#: ../virtManager/addhardware.py:391 ../virtManager/details.py:256
+#: ../virtManager/domain.py:280
 msgid "Watchdog"
 msgstr "Watchdog"
 
@@ -838,7 +844,7 @@ msgid "Not supported for this hypervisor/libvirt combination."
 msgstr "不支持这个 hypervisor/libvirt 组合。"
 
 #: ../virtManager/addhardware.py:400 ../virtManager/addhardware.py:1102
-#: ../virtManager/details.py:241
+#: ../virtManager/details.py:255
 msgid "Smartcard"
 msgstr "智能卡"
 
@@ -847,16 +853,16 @@ msgid "USB Redirection"
 msgstr "USB 重新定向"
 
 #: ../virtManager/addhardware.py:404 ../virtManager/addhardware.py:1106
-#: ../virtManager/details.py:239
+#: ../virtManager/details.py:248
 msgid "TPM"
 msgstr "TPM"
 
-#: ../virtManager/addhardware.py:406 ../virtManager/details.py:238
+#: ../virtManager/addhardware.py:406 ../virtManager/details.py:241
 msgid "RNG"
 msgstr "随机数生成器"
 
 #: ../virtManager/addhardware.py:407 ../virtManager/addhardware.py:1110
-#: ../virtManager/details.py:240
+#: ../virtManager/details.py:254
 msgid "Panic Notifier"
 msgstr "Panic 通知器"
 
@@ -931,7 +937,7 @@ msgstr "文件系统转移"
 msgid "Random Number Generator"
 msgstr "随机数生成器"
 
-#: ../virtManager/addhardware.py:1114 ../virtManager/details.py:2844
+#: ../virtManager/addhardware.py:1114 ../virtManager/details.py:2923
 #, python-format
 msgid "%s Device"
 msgstr "%s 设备"
@@ -998,91 +1004,96 @@ msgstr "无效的 MAC 地址"
 msgid "A MAC address must be entered."
 msgstr "必须输入 MAC 地址。"
 
-#: ../virtManager/addhardware.py:1569
+#: ../virtManager/addhardware.py:1573
+#, fuzzy
+msgid "invalid listen type"
+msgstr "无效的静态路由"
+
+#: ../virtManager/addhardware.py:1577
 msgid "Graphics device parameter error"
 msgstr "图形设备参数错误"
 
-#: ../virtManager/addhardware.py:1578
+#: ../virtManager/addhardware.py:1586
 msgid "Sound device parameter error"
 msgstr "声音设备参数错误"
 
-#: ../virtManager/addhardware.py:1583
+#: ../virtManager/addhardware.py:1591
 msgid "Physical Device Required"
 msgstr "需要物理设备"
 
-#: ../virtManager/addhardware.py:1584
+#: ../virtManager/addhardware.py:1592
 msgid "A device must be selected."
 msgstr "必须选择一个设备。"
 
-#: ../virtManager/addhardware.py:1596
+#: ../virtManager/addhardware.py:1604
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "此设备已被其他客户机 %s 使用"
 
-#: ../virtManager/addhardware.py:1598
+#: ../virtManager/addhardware.py:1606
 msgid "Do you really want to use the device?"
 msgstr "您确实要使用这个设备吗？"
 
-#: ../virtManager/addhardware.py:1604
+#: ../virtManager/addhardware.py:1612
 msgid "Host device parameter error"
 msgstr "主机设备参数错误"
 
-#: ../virtManager/addhardware.py:1670
+#: ../virtManager/addhardware.py:1678
 #, python-format
 msgid "%s device parameter error"
 msgstr "%s 设备参数错误"
 
-#: ../virtManager/addhardware.py:1681
+#: ../virtManager/addhardware.py:1689
 msgid "Video device parameter error"
 msgstr "视频设备参数错误"
 
-#: ../virtManager/addhardware.py:1693
+#: ../virtManager/addhardware.py:1701
 msgid "Watchdog parameter error"
 msgstr "监控参数错误"
 
-#: ../virtManager/addhardware.py:1708
+#: ../virtManager/addhardware.py:1716
 msgid "Smartcard device parameter error"
 msgstr "智能卡设备参数错误"
 
-#: ../virtManager/addhardware.py:1727
+#: ../virtManager/addhardware.py:1735
 msgid "USB redirected device parameter error"
 msgstr "USB 重新定向设备参数错误"
 
-#: ../virtManager/addhardware.py:1747
+#: ../virtManager/addhardware.py:1755
 msgid "TPM device parameter error"
 msgstr "TPM 设备参数错误"
 
-#: ../virtManager/addhardware.py:1765
+#: ../virtManager/addhardware.py:1773
 msgid "Panic device parameter error"
 msgstr "Panic 设备参数错误"
 
-#: ../virtManager/addhardware.py:1808 ../virtManager/addhardware.py:1820
-#: ../virtManager/addhardware.py:1823 ../virtManager/addhardware.py:1835
-#: ../virtManager/addhardware.py:1838
+#: ../virtManager/addhardware.py:1816 ../virtManager/addhardware.py:1828
+#: ../virtManager/addhardware.py:1831 ../virtManager/addhardware.py:1843
+#: ../virtManager/addhardware.py:1846
 msgid "RNG selection error."
 msgstr "随机数生成器选择错误。"
 
-#: ../virtManager/addhardware.py:1809
+#: ../virtManager/addhardware.py:1817
 msgid "A device must be specified."
 msgstr "必须指定设备。"
 
-#: ../virtManager/addhardware.py:1821
+#: ../virtManager/addhardware.py:1829
 msgid "Please specify both bind and connect host"
 msgstr "请同时指定绑定和连接的主机"
 
-#: ../virtManager/addhardware.py:1824
+#: ../virtManager/addhardware.py:1832
 msgid "Please specify both bind and connect service"
 msgstr "请同时指定绑定和连接的服务"
 
-#: ../virtManager/addhardware.py:1836
+#: ../virtManager/addhardware.py:1844
 msgid "The EGD host must be specified."
 msgstr "EGD 主机必须被指定。"
 
-#: ../virtManager/addhardware.py:1839
+#: ../virtManager/addhardware.py:1847
 msgid "The EGD service must be specified."
 msgstr "EGD 服务必须被指定。"
 
-#: ../virtManager/addhardware.py:1858
+#: ../virtManager/addhardware.py:1866
 msgid "RNG device parameter error"
 msgstr "随机数生成器设备参数错误"
 
@@ -1194,11 +1205,11 @@ msgstr ""
 "要克隆的块设备必须\n"
 "是由 libvirt 管理的存储卷。"
 
-#: ../virtManager/clone.py:87 ../virtManager/delete.py:352
+#: ../virtManager/clone.py:87 ../virtManager/delete.py:354
 msgid "No write access to parent directory."
 msgstr "没有到父目录的写入访问。"
 
-#: ../virtManager/clone.py:89 ../virtManager/delete.py:350
+#: ../virtManager/clone.py:89 ../virtManager/delete.py:352
 msgid "Path does not exist."
 msgstr "路径不存在。"
 
@@ -1214,68 +1225,78 @@ msgstr "只读"
 msgid "No write access"
 msgstr "没有写入权限"
 
-#: ../virtManager/clone.py:120
+#: ../virtManager/clone.py:122
+#, fuzzy
+msgid "SCSI device"
+msgstr "PCI 设备"
+
+#: ../virtManager/clone.py:126
+#, fuzzy
+msgid "iSCSI share"
+msgstr "iSCSI 目标"
+
+#: ../virtManager/clone.py:129
 msgid "Shareable"
 msgstr "可共享"
 
-#: ../virtManager/clone.py:276 ../virtManager/clone.py:526
+#: ../virtManager/clone.py:285 ../virtManager/clone.py:541
 msgid "Details..."
 msgstr "详情..."
 
-#: ../virtManager/clone.py:304
+#: ../virtManager/clone.py:313
 msgid "Usermode"
 msgstr "用户模式"
 
-#: ../virtManager/clone.py:320
+#: ../virtManager/clone.py:329
 msgid "Virtual Network"
 msgstr "虚拟网络"
 
-#: ../virtManager/clone.py:393
+#: ../virtManager/clone.py:402
 msgid "Nothing to clone."
 msgstr "没有可克隆的对象"
 
-#: ../virtManager/clone.py:518
+#: ../virtManager/clone.py:533
 msgid "Clone this disk"
 msgstr "克隆这个磁盘"
 
-#: ../virtManager/clone.py:522
+#: ../virtManager/clone.py:537
 #, python-format
 msgid "Share disk with %s"
 msgstr "与 %s 共享这个磁盘"
 
-#: ../virtManager/clone.py:534
+#: ../virtManager/clone.py:549
 msgid "Storage cannot be shared or cloned."
 msgstr "无法共享或者克隆存储"
 
-#: ../virtManager/clone.py:588
+#: ../virtManager/clone.py:607
 msgid "One or more disks cannot be cloned or shared."
 msgstr "无法克隆或者共享一个或者多个磁盘。"
 
-#: ../virtManager/clone.py:680
+#: ../virtManager/clone.py:699
 #, python-format
 msgid "Error changing MAC address: %s"
 msgstr "更改 MAC 地址出错：%s"
 
-#: ../virtManager/clone.py:706
+#: ../virtManager/clone.py:725
 msgid "Cloning will overwrite the existing file"
 msgstr "克隆将覆盖现有文件"
 
-#: ../virtManager/clone.py:708
+#: ../virtManager/clone.py:727
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
 msgstr "使用现有映像将覆盖克隆过程中的路径。您确定要使用这个路径吗？"
 
-#: ../virtManager/clone.py:720
+#: ../virtManager/clone.py:739
 #, python-format
 msgid "Error changing storage path: %s"
 msgstr "更改存储路径出错：%s"
 
-#: ../virtManager/clone.py:772
+#: ../virtManager/clone.py:791
 msgid "Skipping disks may cause data to be overwritten."
 msgstr "跳过磁盘可导致数据被覆盖。"
 
-#: ../virtManager/clone.py:773
+#: ../virtManager/clone.py:792
 #, python-format
 msgid ""
 "The following disk devices will not be cloned:\n"
@@ -1288,23 +1309,23 @@ msgstr ""
 "%s\n"
 "运行新虚拟机系统将会覆盖这些磁盘映像中的数据。"
 
-#: ../virtManager/clone.py:792
+#: ../virtManager/clone.py:811
 #, python-format
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "创建虚拟机克隆时出错“%s”：%s"
 
-#: ../virtManager/clone.py:805 ../virtManager/createpool.py:402
+#: ../virtManager/clone.py:824 ../virtManager/createpool.py:402
 #: ../virtManager/createvol.py:295 ../virtManager/migrate.py:383
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "确认输入时未捕获的错误：%s"
 
-#: ../virtManager/clone.py:812
+#: ../virtManager/clone.py:831
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "创建虚拟机克隆“%s”"
 
-#: ../virtManager/clone.py:816 ../virtManager/delete.py:159
+#: ../virtManager/clone.py:835 ../virtManager/delete.py:159
 msgid " and selected storage (this may take a while)"
 msgstr "以及选择的存储(可能需要一些时间)"
 
@@ -1376,9 +1397,9 @@ msgstr "活跃"
 
 #. Machine settings
 #: ../virtManager/connection.py:585 ../virtManager/create.py:1003
-#: ../virtManager/details.py:2316 ../virtManager/details.py:2332
-#: ../virtManager/details.py:2562 ../virtManager/domain.py:255
-#: ../virtManager/gfxdetails.py:196 ../virtManager/gfxdetails.py:198
+#: ../virtManager/details.py:2380 ../virtManager/details.py:2396
+#: ../virtManager/details.py:2639 ../virtManager/domain.py:256
+#: ../virtManager/gfxdetails.py:296 ../virtManager/gfxdetails.py:298
 #: ../virtManager/host.py:838 ../virtManager/interface.py:112
 msgid "Unknown"
 msgstr "未知"
@@ -1585,8 +1606,8 @@ msgstr "显示所有 OS 选项"
 msgid "Host filesystem"
 msgstr "主机文件系统"
 
-#: ../virtManager/create.py:1051 ../virtManager/details.py:2317
-#: ../virtinst/domcapabilities.py:140
+#: ../virtManager/create.py:1051 ../virtManager/details.py:2381
+#: ../virtManager/gfxdetails.py:91 ../virtinst/domcapabilities.py:140
 msgid "None"
 msgstr "无"
 
@@ -1614,7 +1635,7 @@ msgstr "应用程序容器"
 msgid "Operating system container"
 msgstr "操作系统容器"
 
-#: ../virtManager/create.py:1080
+#: ../virtManager/create.py:1080 ../virtManager/details.py:332
 msgid "Linux"
 msgstr "Linux"
 
@@ -1775,7 +1796,7 @@ msgstr "以太网"
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../virtManager/createinterface.py:225 ../virtManager/details.py:885
+#: ../virtManager/createinterface.py:225 ../virtManager/details.py:926
 #: ../virtManager/host.py:207 ../virtManager/manager.py:352
 #: ../ui/create.ui.h:17
 msgid "Name"
@@ -2167,31 +2188,36 @@ msgstr "存储路径"
 msgid "Cannot delete iscsi share."
 msgstr "无法删除 iscsi 共享。"
 
-#: ../virtManager/delete.py:348
+#: ../virtManager/delete.py:347
+#, fuzzy
+msgid "Cannot delete SCSI device."
+msgstr "无法删除自由块设备。"
+
+#: ../virtManager/delete.py:350
 msgid "Cannot delete unmanaged remote storage."
 msgstr "无法删除自由远程存储。"
 
-#: ../virtManager/delete.py:354
+#: ../virtManager/delete.py:356
 msgid "Cannot delete unmanaged block device."
 msgstr "无法删除自由块设备。"
 
-#: ../virtManager/delete.py:375
+#: ../virtManager/delete.py:377
 msgid "Storage is read-only."
 msgstr "存储为只读。"
 
-#: ../virtManager/delete.py:377
+#: ../virtManager/delete.py:379
 msgid "No write access to path."
 msgstr "没有到路径的写入访问。"
 
-#: ../virtManager/delete.py:380
+#: ../virtManager/delete.py:382
 msgid "Storage is marked as shareable."
 msgstr "将存储标记为可共享。"
 
-#: ../virtManager/delete.py:383
+#: ../virtManager/delete.py:385
 msgid "Storage is a media device."
 msgstr ""
 
-#: ../virtManager/delete.py:393
+#: ../virtManager/delete.py:395
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
@@ -2200,442 +2226,476 @@ msgstr ""
 "以下虚拟机在使用存储：\n"
 "- %s "
 
-#: ../virtManager/details.py:161
+#: ../virtManager/details.py:165
 msgid "Remove this device from the virtual machine"
 msgstr "从虚拟机删除此设备"
 
-#: ../virtManager/details.py:171 ../virtManager/details.py:3156
+#: ../virtManager/details.py:175 ../virtManager/details.py:3240
 #: ../virtinst/devicecontroller.py:44
 msgid "Floppy"
 msgstr "软盘"
 
-#: ../virtManager/details.py:174 ../virtManager/details.py:3154
+#: ../virtManager/details.py:178 ../virtManager/details.py:3238
 msgid "CDROM"
 msgstr "CDROM"
 
-#: ../virtManager/details.py:176
+#: ../virtManager/details.py:180
 msgid "Disk"
 msgstr "磁盘"
 
-#: ../virtManager/details.py:195
+#: ../virtManager/details.py:199
 msgid "Tablet"
 msgstr "数位板"
 
-#: ../virtManager/details.py:197
+#: ../virtManager/details.py:201
 msgid "Mouse"
 msgstr "鼠标"
 
-#: ../virtManager/details.py:199
+#: ../virtManager/details.py:203
 msgid "Keyboard"
 msgstr "键盘"
 
-#: ../virtManager/details.py:223
+#: ../virtManager/details.py:227
 #, python-format
 msgid "Display %s"
 msgstr "显示协议 %s"
 
-#: ../virtManager/details.py:225
+#: ../virtManager/details.py:229
 #, python-format
 msgid "%s Redirector %s"
 msgstr "%s 转发器 %s"
 
-#: ../virtManager/details.py:229
+#: ../virtManager/details.py:233
 #, python-format
 msgid "Sound: %s"
 msgstr "声音：%s"
 
-#: ../virtManager/details.py:231
+#: ../virtManager/details.py:235
 #, python-format
 msgid "Video %s"
 msgstr "显卡 %s"
 
-#: ../virtManager/details.py:233
+#: ../virtManager/details.py:237
 #, python-format
 msgid "Filesystem %s"
 msgstr "文件系统 %s"
 
-#: ../virtManager/details.py:235
+#: ../virtManager/details.py:239
 #, python-format
 msgid "Controller %s"
 msgstr "控制程序 %s"
 
-#: ../virtManager/details.py:628
+#: ../virtManager/details.py:329
+msgid "MS-DOS/FreeDOS"
+msgstr ""
+
+#: ../virtManager/details.py:330
+msgid "FreeBSD"
+msgstr ""
+
+#: ../virtManager/details.py:331
+msgid "GNU/Hurd"
+msgstr ""
+
+#: ../virtManager/details.py:333
+msgid "MINIX"
+msgstr ""
+
+#: ../virtManager/details.py:334
+msgid "NetBSD"
+msgstr ""
+
+#: ../virtManager/details.py:335
+msgid "OpenBSD"
+msgstr ""
+
+#: ../virtManager/details.py:336
+msgid "Microsoft Windows"
+msgstr ""
+
+#: ../virtManager/details.py:341 ../virtManager/details.py:2444
+#: ../virtManager/details.py:2452
+msgid "unknown"
+msgstr "未知"
+
+#: ../virtManager/details.py:669
 msgid "This will abort the installation. Are you sure?"
 msgstr "这将中止安装。您确定吗？"
 
-#: ../virtManager/details.py:693
+#: ../virtManager/details.py:734
 msgid "_Add Hardware"
 msgstr "添加硬件(_A)"
 
-#: ../virtManager/details.py:701
+#: ../virtManager/details.py:742
 msgid "_Remove Hardware"
 msgstr "删除硬件(_R)"
 
-#: ../virtManager/details.py:825
+#: ../virtManager/details.py:866
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt 或虚拟机管理器不支持 UEFI。"
 
-#: ../virtManager/details.py:828
+#: ../virtManager/details.py:869
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr "libvirt 未检测到安装在主机上的任何 UEFI/OVMF 固件镜像。"
 
-#: ../virtManager/details.py:833
+#: ../virtManager/details.py:874
 msgid "UEFI not found"
 msgstr "UEFI 未找到"
 
-#: ../virtManager/details.py:886
+#: ../virtManager/details.py:927
 msgid "Version"
 msgstr "版本"
 
-#: ../virtManager/details.py:954
+#: ../virtManager/details.py:995
 msgid "Application Default"
 msgstr "应用程序默认值"
 
-#: ../virtManager/details.py:955
+#: ../virtManager/details.py:996
 msgid "Hypervisor Default"
 msgstr "管理程序默认值"
 
-#: ../virtManager/details.py:957
+#: ../virtManager/details.py:998
 msgid "Clear CPU configuration"
 msgstr "清除 CPU 配置"
 
-#: ../virtManager/details.py:1103 ../virtManager/host.py:977
+#: ../virtManager/details.py:1144 ../virtManager/host.py:977
 #: ../virtManager/snapshots.py:376 ../virtManager/storagelist.py:472
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "有尚未应用的更改。您要现在应用它们吗？"
 
-#: ../virtManager/details.py:1105 ../virtManager/host.py:979
+#: ../virtManager/details.py:1146 ../virtManager/host.py:979
 #: ../virtManager/snapshots.py:378 ../virtManager/storagelist.py:474
 msgid "Don't warn me again."
 msgstr "不要再警告。"
 
-#: ../virtManager/details.py:1191
+#: ../virtManager/details.py:1232
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "刷新硬件页面时出错：%s"
 
-#: ../virtManager/details.py:1263 ../virtManager/manager.py:821
+#: ../virtManager/details.py:1304 ../virtManager/manager.py:821
 msgid "_Restore"
 msgstr "恢复(_R)"
 
-#: ../virtManager/details.py:1265 ../virtManager/manager.py:823
+#: ../virtManager/details.py:1306 ../virtManager/manager.py:823
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "运行(_R)"
 
-#: ../virtManager/details.py:1293 ../virtManager/manager.py:856
+#: ../virtManager/details.py:1334 ../virtManager/manager.py:856
 msgid "Resume the virtual machine"
 msgstr "恢复虚拟机"
 
-#: ../virtManager/details.py:1295 ../virtManager/manager.py:858
+#: ../virtManager/details.py:1336 ../virtManager/manager.py:858
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
 msgid "Pause the virtual machine"
 msgstr "暂停虚拟机"
 
-#: ../virtManager/details.py:1323
+#: ../virtManager/details.py:1364
 msgid "Manage VM snapshots"
 msgstr "管理虚拟机快照"
 
-#: ../virtManager/details.py:1380
+#: ../virtManager/details.py:1421
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "启动硬件对话时出错：%s"
 
-#: ../virtManager/details.py:1461
+#: ../virtManager/details.py:1502
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "截图错误： %s"
 
-#: ../virtManager/details.py:1469
+#: ../virtManager/details.py:1510
 msgid "Error initializing spice USB device widget"
 msgstr "初始化 spice USB 设备部件错误"
 
-#: ../virtManager/details.py:1473
+#: ../virtManager/details.py:1514
 msgid "Select USB devices for redirection"
 msgstr "选择需要重定向的 USB 设备"
 
-#: ../virtManager/details.py:1502
+#: ../virtManager/details.py:1543
 msgid "Save Virtual Machine Screenshot"
 msgstr "保存虚拟机截屏"
 
-#: ../virtManager/details.py:1503
+#: ../virtManager/details.py:1544
 msgid "PNG files"
 msgstr "PNG 文件"
 
-#: ../virtManager/details.py:1784
+#: ../virtManager/details.py:1839
 #, python-format
 msgid "Error disconnecting media: %s"
 msgstr "断开到介质的连接时出错：%s"
 
-#: ../virtManager/details.py:1805
+#: ../virtManager/details.py:1860
 #, python-format
 msgid "Error launching media dialog: %s"
 msgstr "启动介质对话时出错：%s"
 
-#: ../virtManager/details.py:1871
+#: ../virtManager/details.py:1926
 #, python-format
 msgid "Error apply changes: %s"
 msgstr "应用更新时出错：%s"
 
-#: ../virtManager/details.py:2004
+#: ../virtManager/details.py:2059
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "更改自动启动值出错：%s"
 
-#: ../virtManager/details.py:2022
+#: ../virtManager/details.py:2077
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "不指定内核路径就无法设定 initrd"
 
-#: ../virtManager/details.py:2025
+#: ../virtManager/details.py:2080
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "不指定内核路径就不能设定内核参数"
 
-#: ../virtManager/details.py:2031
+#: ../virtManager/details.py:2086
 msgid "An init path must be specified"
 msgstr "必须指定 init 路径"
 
-#: ../virtManager/details.py:2224
+#: ../virtManager/details.py:2288
 msgid "Are you sure you want to remove this device?"
 msgstr "您确定要删除这个设备吗？"
 
-#: ../virtManager/details.py:2231
+#: ../virtManager/details.py:2295
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "删除设备出错：%s"
 
-#: ../virtManager/details.py:2248
+#: ../virtManager/details.py:2312
 msgid "Device could not be removed from the running machine"
 msgstr "不能从运行的机器中删除设备"
 
-#: ../virtManager/details.py:2250
+#: ../virtManager/details.py:2314
 msgid "This change will take effect after the next guest shutdown."
 msgstr "这个更改将在下次虚拟机关机后生效。"
 
-#: ../virtManager/details.py:2372
+#: ../virtManager/details.py:2436
 msgid "Error while inspecting the guest configuration"
 msgstr "错误请检查客户机配置"
 
-#: ../virtManager/details.py:2380 ../virtManager/details.py:2384
-msgid "unknown"
-msgstr "未知"
+#: ../virtManager/details.py:2482
+#, python-format
+msgid "%(summary)s ..."
+msgstr ""
 
-#: ../virtManager/details.py:2417
+#: ../virtManager/details.py:2494
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s 读取"
 
-#: ../virtManager/details.py:2418
+#: ../virtManager/details.py:2495
 #, python-format
 msgid "%(transfered)d %(units)s write"
 msgstr "%(transfered)d %(units)s 写入"
 
-#: ../virtManager/details.py:2421
+#: ../virtManager/details.py:2498
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s 入站"
 
-#: ../virtManager/details.py:2422
+#: ../virtManager/details.py:2499
 #, python-format
 msgid "%(transfered)d %(units)s out"
 msgstr "%(transfered)d %(units)s 出站"
 
-#: ../virtManager/details.py:2424 ../virtManager/details.py:2425
-#: ../virtManager/details.py:2426 ../virtManager/details.py:2427
+#: ../virtManager/details.py:2501 ../virtManager/details.py:2502
+#: ../virtManager/details.py:2503 ../virtManager/details.py:2504
 #: ../virtManager/host.py:546 ../virtManager/host.py:577
 msgid "Disabled"
 msgstr "禁用"
 
-#: ../virtManager/details.py:2435
+#: ../virtManager/details.py:2512
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s / %(total-memory)s"
 
-#: ../virtManager/details.py:2645
+#: ../virtManager/details.py:2722
 msgid "Absolute Movement"
 msgstr "绝对移动"
 
-#: ../virtManager/details.py:2647
+#: ../virtManager/details.py:2724
 msgid "Relative Movement"
 msgstr "相对移动"
 
-#: ../virtManager/details.py:2658
+#: ../virtManager/details.py:2735
 msgid "Hypervisor does not support removing this device"
 msgstr "虚拟机管理程序不支持删除此设备"
 
-#: ../virtManager/details.py:2692
+#: ../virtManager/details.py:2769
 #, python-format
 msgid "%s:%s"
 msgstr "%s:%s"
 
-#: ../virtManager/details.py:2836
+#: ../virtManager/details.py:2915
 msgid "Serial Device"
 msgstr "串口设备"
 
-#: ../virtManager/details.py:2838
+#: ../virtManager/details.py:2917
 msgid "Parallel Device"
 msgstr "并口设备"
 
-#: ../virtManager/details.py:2840
+#: ../virtManager/details.py:2919
 msgid "Console Device"
 msgstr "控制台设备"
 
-#: ../virtManager/details.py:2842
+#: ../virtManager/details.py:2921
 msgid "Channel Device"
 msgstr "通道设备"
 
-#: ../virtManager/details.py:2852
+#: ../virtManager/details.py:2931
 msgid "Primary Console"
 msgstr "主控制台"
 
-#: ../virtManager/details.py:2892
+#: ../virtManager/details.py:2971
 #, python-format
 msgid "Physical %s Device"
 msgstr "物理 %s 设备"
 
-#: ../virtManager/details.py:3036
+#: ../virtManager/details.py:3120
 msgid "Overview"
 msgstr "概况"
 
-#: ../virtManager/details.py:3039
+#: ../virtManager/details.py:3123
 msgid "OS information"
 msgstr "系统信息"
 
-#: ../virtManager/details.py:3041
+#: ../virtManager/details.py:3125
 msgid "Performance"
 msgstr "性能"
 
-#: ../virtManager/details.py:3043
+#: ../virtManager/details.py:3127
 msgid "CPUs"
 msgstr "CPUs"
 
-#: ../virtManager/details.py:3044 ../ui/create.ui.h:53
+#: ../virtManager/details.py:3128 ../ui/create.ui.h:53
 msgid "Memory"
 msgstr "内存"
 
-#: ../virtManager/details.py:3045
+#: ../virtManager/details.py:3129
 msgid "Boot Options"
 msgstr "引导选项"
 
-#: ../virtManager/details.py:3153
+#: ../virtManager/details.py:3237
 msgid "Hard Disk"
 msgstr "硬盘"
 
-#: ../virtManager/details.py:3155
+#: ../virtManager/details.py:3239
 msgid "Network (PXE)"
 msgstr "网络（PXE）"
 
-#: ../virtManager/details.py:3167
+#: ../virtManager/details.py:3251
 msgid "No bootable devices"
 msgstr "没有可引导设备"
 
-#: ../virtManager/domain.py:239
+#: ../virtManager/domain.py:240
 msgid "Running"
 msgstr "运行中"
 
-#: ../virtManager/domain.py:241
+#: ../virtManager/domain.py:242
 msgid "Paused"
 msgstr "已暂停"
 
-#: ../virtManager/domain.py:243
+#: ../virtManager/domain.py:244
 msgid "Shutting Down"
 msgstr "正在关机"
 
-#: ../virtManager/domain.py:246 ../virtManager/domain.py:293
+#: ../virtManager/domain.py:247 ../virtManager/domain.py:294
 msgid "Saved"
 msgstr "已保存"
 
-#: ../virtManager/domain.py:248
+#: ../virtManager/domain.py:249
 msgid "Shutoff"
 msgstr "已关闭"
 
-#: ../virtManager/domain.py:250 ../virtManager/domain.py:271
-#: ../virtManager/domain.py:283 ../virtManager/domain.py:291
+#: ../virtManager/domain.py:251 ../virtManager/domain.py:272
+#: ../virtManager/domain.py:284 ../virtManager/domain.py:292
 msgid "Crashed"
 msgstr "已崩溃"
 
-#: ../virtManager/domain.py:252
+#: ../virtManager/domain.py:253
 msgid "Suspended"
 msgstr "已暂停"
 
-#: ../virtManager/domain.py:263
+#: ../virtManager/domain.py:264
 msgid "Booted"
 msgstr "已引导"
 
-#: ../virtManager/domain.py:264 ../virtManager/domain.py:292
+#: ../virtManager/domain.py:265 ../virtManager/domain.py:293
 msgid "Migrated"
 msgstr "已迁移"
 
-#: ../virtManager/domain.py:265
+#: ../virtManager/domain.py:266
 msgid "Restored"
 msgstr "已恢复"
 
-#: ../virtManager/domain.py:266 ../virtManager/domain.py:280
-#: ../virtManager/domain.py:295
+#: ../virtManager/domain.py:267 ../virtManager/domain.py:281
+#: ../virtManager/domain.py:296
 msgid "From snapshot"
 msgstr "基于快照"
 
-#: ../virtManager/domain.py:267
+#: ../virtManager/domain.py:268
 msgid "Unpaused"
 msgstr "取消暂停"
 
-#: ../virtManager/domain.py:268
+#: ../virtManager/domain.py:269
 msgid "Migration canceled"
 msgstr "取消迁移"
 
-#: ../virtManager/domain.py:269
+#: ../virtManager/domain.py:270
 msgid "Save canceled"
 msgstr "取消保存"
 
-#: ../virtManager/domain.py:270
+#: ../virtManager/domain.py:271
 msgid "Event wakeup"
 msgstr "事件唤醒"
 
-#: ../virtManager/domain.py:274 ../virtManager/domain.py:286
+#: ../virtManager/domain.py:275 ../virtManager/domain.py:287
 msgid "User"
 msgstr "用户"
 
-#: ../virtManager/domain.py:275
+#: ../virtManager/domain.py:276
 msgid "Migrating"
 msgstr "迁移中"
 
-#: ../virtManager/domain.py:276
+#: ../virtManager/domain.py:277
 msgid "Saving"
 msgstr "保存中"
 
-#: ../virtManager/domain.py:277
+#: ../virtManager/domain.py:278
 msgid "Dumping"
 msgstr "转储中"
 
-#: ../virtManager/domain.py:278
+#: ../virtManager/domain.py:279
 msgid "I/O error"
 msgstr "I/O 错误"
 
-#: ../virtManager/domain.py:281
+#: ../virtManager/domain.py:282
 msgid "Shutting down"
 msgstr "正在关闭"
 
-#: ../virtManager/domain.py:282 ../virtManager/snapshots.py:542
+#: ../virtManager/domain.py:283 ../virtManager/snapshots.py:542
 msgid "Creating snapshot"
 msgstr "正在创建快照"
 
-#: ../virtManager/domain.py:289
-msgid "Shutdown"
+#: ../virtManager/domain.py:290
+msgid "Shut Down"
 msgstr "关机"
 
-#: ../virtManager/domain.py:290
+#: ../virtManager/domain.py:291
 msgid "Destroyed"
 msgstr "已销毁"
 
-#: ../virtManager/domain.py:294
+#: ../virtManager/domain.py:295
 msgid "Failed"
 msgstr "失败"
 
-#: ../virtManager/domain.py:298
+#: ../virtManager/domain.py:299
 msgid "Panicked"
 msgstr "Panicked"
 
-#: ../virtManager/domain.py:406
+#: ../virtManager/domain.py:407
 #, python-format
 msgid ""
 "There is more than one '%s' device attached to your host, and we can't "
@@ -2646,40 +2706,40 @@ msgstr ""
 "有多个 '%s' 设备连接到你的主机，我们不能确定将哪个用于你的客户机。\n"
 "为了修复此问题，使用 '添加新硬件' 向导删除并重新连接 USB 设备到你的客户机。"
 
-#: ../virtManager/domain.py:499
+#: ../virtManager/domain.py:504
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt 连接不支持快照"
 
-#: ../virtManager/domain.py:514
+#: ../virtManager/domain.py:519
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
 msgstr "如果所有已分配至客户机的可写磁盘镜像为 qcow2 格式，则仅支持快照。"
 
-#: ../virtManager/domain.py:517
+#: ../virtManager/domain.py:522
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr "快照需要客户机已分配至少一个可写的 qcow2 磁盘镜像。"
 
-#: ../virtManager/domain.py:552
+#: ../virtManager/domain.py:557
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "无法在不活跃 VM 配置中找到指定设备：%s"
 
-#: ../virtManager/domain.py:1396
+#: ../virtManager/domain.py:1470
 msgid "Cannot start guest while cloning operation in progress"
 msgstr "无法在克隆操作的过程中启动虚拟机"
 
-#: ../virtManager/domain.py:1431
+#: ../virtManager/domain.py:1512
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr "无法在克隆操作的过程中恢复虚拟机"
 
-#: ../virtManager/domain.py:1440
+#: ../virtManager/domain.py:1521
 msgid "Saving domain to disk"
 msgstr "正在将域保存到磁盘"
 
-#: ../virtManager/domain.py:1489
+#: ../virtManager/domain.py:1570
 msgid "Migrating domain"
 msgstr "正在迁移域"
 
@@ -2810,82 +2870,82 @@ msgstr "启动主机对话出错：%s"
 msgid "Error launching connect dialog: %s"
 msgstr "启动连接对话出错：%s"
 
-#: ../virtManager/engine.py:833
+#: ../virtManager/engine.py:834
 #, python-format
 msgid "Error launching details: %s"
 msgstr "启动详情出错：%s"
 
-#: ../virtManager/engine.py:887 ../virtManager/engine.py:904
+#: ../virtManager/engine.py:888 ../virtManager/engine.py:905
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "启动管理器出错：%s"
 
-#: ../virtManager/engine.py:916
+#: ../virtManager/engine.py:917
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "启动迁移对话出错：%s"
 
-#: ../virtManager/engine.py:932
+#: ../virtManager/engine.py:933
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "设定克隆参数出错：%s"
 
-#: ../virtManager/engine.py:1075
+#: ../virtManager/engine.py:1084
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "您确定要保存 '%s' 吗？"
 
-#: ../virtManager/engine.py:1086
+#: ../virtManager/engine.py:1095
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "保存域出错：%s"
 
-#: ../virtManager/engine.py:1091
+#: ../virtManager/engine.py:1100
 msgid "Saving Virtual Machine"
 msgstr "正在保存虚拟机"
 
-#: ../virtManager/engine.py:1092
+#: ../virtManager/engine.py:1101
 msgid "Saving virtual machine memory to disk "
 msgstr "将虚拟机内存保存到磁盘中"
 
-#: ../virtManager/engine.py:1105
+#: ../virtManager/engine.py:1114
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "取消保存任务出错：%s"
 
-#: ../virtManager/engine.py:1118
+#: ../virtManager/engine.py:1127
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "您确定要强制关闭 '%s' 吗？"
 
-#: ../virtManager/engine.py:1120
+#: ../virtManager/engine.py:1129
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "这将立即关闭 VM 而不关闭操作系统，并可能造成数据丢失。"
 
-#: ../virtManager/engine.py:1126 ../virtManager/engine.py:1203
+#: ../virtManager/engine.py:1135 ../virtManager/engine.py:1212
 msgid "Error shutting down domain"
 msgstr "关闭域出错"
 
-#: ../virtManager/engine.py:1134
+#: ../virtManager/engine.py:1143
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "您确定要暂停 '%s' 吗？"
 
-#: ../virtManager/engine.py:1140
+#: ../virtManager/engine.py:1149
 msgid "Error pausing domain"
 msgstr "暂停域出错"
 
-#: ../virtManager/engine.py:1148
+#: ../virtManager/engine.py:1157
 msgid "Error unpausing domain"
 msgstr "取消暂停域时出错"
 
-#: ../virtManager/engine.py:1160
+#: ../virtManager/engine.py:1169
 msgid "Error restoring domain"
 msgstr "恢复域出错"
 
-#: ../virtManager/engine.py:1163
+#: ../virtManager/engine.py:1172
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -2895,55 +2955,55 @@ msgstr ""
 "保存的状态并执行\n"
 "常规启动吗？"
 
-#: ../virtManager/engine.py:1177
+#: ../virtManager/engine.py:1186
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "删除域状态时出错：%s"
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1181
+#: ../virtManager/engine.py:1190
 msgid "Restoring Virtual Machine"
 msgstr "正在恢复虚拟机"
 
-#: ../virtManager/engine.py:1182
+#: ../virtManager/engine.py:1191
 msgid "Restoring virtual machine memory from disk"
 msgstr "从磁盘中恢复虚拟机内存时出错"
 
 #. Regular startup
-#: ../virtManager/engine.py:1188
+#: ../virtManager/engine.py:1197
 msgid "Error starting domain"
 msgstr "启动域时出错"
 
-#: ../virtManager/engine.py:1197
+#: ../virtManager/engine.py:1206
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "您确定要关闭 '%s' 吗？"
 
-#: ../virtManager/engine.py:1211
+#: ../virtManager/engine.py:1220
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "您确定要重启 '%s' 吗？"
 
-#: ../virtManager/engine.py:1217
+#: ../virtManager/engine.py:1226
 msgid "Error rebooting domain"
 msgstr "重启域错误"
 
-#: ../virtManager/engine.py:1226
+#: ../virtManager/engine.py:1235
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "您确定要强制重置 '%s' 吗？"
 
-#: ../virtManager/engine.py:1228
+#: ../virtManager/engine.py:1237
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "这将立即重置 VM 而无需关闭操作系统，并可能造成数据丢失。"
 
-#: ../virtManager/engine.py:1234
+#: ../virtManager/engine.py:1243
 msgid "Error resetting domain"
 msgstr "重置域出错"
 
-#: ../virtManager/engine.py:1245
+#: ../virtManager/engine.py:1254
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "启动删除对话框出错： %s"
@@ -2989,40 +3049,64 @@ msgstr "必须指定文件系统目标"
 msgid "Filesystem parameter error"
 msgstr "文件系统参数错误"
 
-#: ../virtManager/gfxdetails.py:76
+#: ../virtManager/gfxdetails.py:82
 msgid "Spice server"
 msgstr "Spice 服务器"
 
-#: ../virtManager/gfxdetails.py:77
+#: ../virtManager/gfxdetails.py:83
 msgid "VNC server"
 msgstr "VNC 服务器"
 
-#: ../virtManager/gfxdetails.py:85
+#: ../virtManager/gfxdetails.py:90
+#, fuzzy
+msgid "Address"
+msgstr "地址："
+
+#: ../virtManager/gfxdetails.py:99
 msgid "Localhost only"
 msgstr "仅本地主机"
 
-#: ../virtManager/gfxdetails.py:86
+#: ../virtManager/gfxdetails.py:100
 msgid "All interfaces"
 msgstr "所有接口"
 
-#: ../virtManager/gfxdetails.py:94
+#: ../virtManager/gfxdetails.py:108 ../virtManager/gfxdetails.py:119
 msgid "Auto"
 msgstr "自动"
 
-#: ../virtManager/gfxdetails.py:96
+#: ../virtManager/gfxdetails.py:110
 msgid "Copy local keymap"
 msgstr "复制本地 keymap"
 
-#: ../virtManager/gfxdetails.py:160
+#: ../virtManager/gfxdetails.py:195
 msgid "Port"
 msgstr "端口"
 
-#: ../virtManager/gfxdetails.py:173
+#: ../virtManager/gfxdetails.py:208
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s 服务器"
 
-#: ../virtManager/gfxdetails.py:193
+#: ../virtManager/gfxdetails.py:252
+#, fuzzy
+msgid "Hypervisor/libvirt does not support spice GL"
+msgstr "虚拟机管理程序不支持重置域。"
+
+#: ../virtManager/gfxdetails.py:255
+#, fuzzy
+msgid "Hypervisor/libvirt does not support manual rendernode"
+msgstr "虚拟机管理程序不支持重置域。"
+
+#: ../virtManager/gfxdetails.py:269
+msgid "Spice GL requires virtio graphics configured with accel3d."
+msgstr ""
+
+#: ../virtManager/gfxdetails.py:272
+#, fuzzy
+msgid "Graphics listen type does not support spice GL."
+msgstr "'%s' 显卡类型不支持自动调整大小。"
+
+#: ../virtManager/gfxdetails.py:293
 msgid "Local SDL Window"
 msgstr "本地 SDL 窗口"
 
@@ -3743,7 +3827,7 @@ msgstr "打开插槽路径 '%s' 出错：%s"
 msgid "Error opening socket path '%s'"
 msgstr "打开插槽路径 '%s' 出错"
 
-#: ../virtManager/viewers.py:586
+#: ../virtManager/viewers.py:588
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr ""
@@ -3753,6 +3837,7 @@ msgid "_Reboot"
 msgstr "重启(_R)"
 
 #: ../virtManager/vmmenu.py:74 ../virtManager/vmmenu.py:110
+#: ../ui/details.ui.h:31 ../ui/manager.ui.h:25
 msgid "_Shut Down"
 msgstr "关机(_S)"
 
@@ -4243,7 +4328,14 @@ msgid ""
 "baseBoard_product=Motherboard,...\n"
 msgstr ""
 
-#: ../virtinst/cli.py:743
+#: ../virtinst/cli.py:740
+msgid ""
+"Pass arguments directly to the qemu emulator. Ex:\n"
+"--qemu-commandline='-display gtk,gl=on'\n"
+"--qemu-commandline env=DISPLAY=:0.1"
+msgstr ""
+
+#: ../virtinst/cli.py:747
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -4253,7 +4345,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (针对容器)"
 
-#: ../virtinst/cli.py:747
+#: ../virtinst/cli.py:751
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
@@ -4261,7 +4353,7 @@ msgstr ""
 "为 LXC 容器启用用户名称空间。例如：\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
 
-#: ../virtinst/cli.py:756
+#: ../virtinst/cli.py:760
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -4275,113 +4367,103 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: ../virtinst/cli.py:787
+#: ../virtinst/cli.py:791
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s 必须为 'yes' 或 'no'"
 
-#: ../virtinst/cli.py:926
+#: ../virtinst/cli.py:930
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr "无法匹配设备类型 '%(device_type)s' 属性 '%(property_name)s'"
 
-#: ../virtinst/cli.py:1141
+#: ../virtinst/cli.py:1150
 #, python-format
 msgid "Unknown options %s"
 msgstr "未知选项 %s"
 
-#: ../virtinst/cli.py:1194 ../virtinst/cli.py:1225
+#: ../virtinst/cli.py:1203 ../virtinst/cli.py:1234
 #, python-format
 msgid "Error: --%(cli_arg_name)s %(options)s: %(err)s"
 msgstr "错误： --%(cli_arg_name)s %(options)s: %(err)s"
 
-#: ../virtinst/cli.py:1744
+#: ../virtinst/cli.py:1754
 #, python-format
 msgid "Unknown sysinfo flag '%s'"
 msgstr ""
 
-#: ../virtinst/cli.py:1754
-#, python-format
-msgid "SMBios date string '%s' is invalid."
-msgstr ""
-
-#: ../virtinst/cli.py:1767
-#, python-format
-msgid "Invalid uuid for SMBios: %s"
-msgstr ""
-
-#: ../virtinst/cli.py:1770 ../virtinst/cloner.py:120
-#, python-format
-msgid "UUID '%s' is in use by another guest."
-msgstr "UUID '%s' 已经被其它客户机使用。"
-
-#: ../virtinst/cli.py:1910
+#: ../virtinst/cli.py:1932
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' 数值不正确：%s"
 
-#: ../virtinst/cli.py:1923
+#: ../virtinst/cli.py:1945
 #, python-format
 msgid "Unknown '%s' value '%s'"
 msgstr "未知 '%s' 值 '%s'"
 
-#: ../virtinst/cli.py:1941
+#: ../virtinst/cli.py:1963
 msgid "Cannot specify more than 1 storage path"
 msgstr "只可以指定 1 个存储路径"
 
-#: ../virtinst/cli.py:1948
+#: ../virtinst/cli.py:1970
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "必须将存储卷指定为 vol=poolname/volname"
 
-#: ../virtinst/cli.py:2154
+#: ../virtinst/cli.py:2180
 #, python-format
 msgid "Didn't match keymap '%s' in keytable!"
 msgstr "与键盘表中的 keymap '%s' 不匹配！"
 
-#: ../virtinst/cli.py:2446
+#: ../virtinst/cli.py:2484
 #, python-format
 msgid "%(devtype)s type '%(chartype)s' does not support '%(optname)s' option."
 msgstr "%(devtype)s 类型 '%(chartype)s' 不支持 '%(optname)s' 选项。"
 
-#: ../virtinst/cloner.py:90
+#: ../virtinst/cloner.py:92
 msgid "Original xml must be a string."
 msgstr "原始 xml 必须是一个字符串。"
 
-#: ../virtinst/cloner.py:107
+#: ../virtinst/cloner.py:109
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr "新客户端的无效名称：%s"
 
-#: ../virtinst/cloner.py:117
+#: ../virtinst/cloner.py:119
 #, python-format
 msgid "Invalid uuid for new guest: %s"
 msgstr "新客户端的无效 uuid：%s"
 
-#: ../virtinst/cloner.py:150
+#: ../virtinst/cloner.py:122 ../virtinst/sysinfo.py:70
+#, python-format
+msgid "UUID '%s' is in use by another guest."
+msgstr "UUID '%s' 已经被其它客户机使用。"
+
+#: ../virtinst/cloner.py:152
 #, python-format
 msgid "Could not use path '%s' for cloning: %s"
 msgstr "无法使用路径 '%s' 克隆：%s"
 
-#: ../virtinst/cloner.py:239
+#: ../virtinst/cloner.py:241
 msgid "Cloning policy must be a list of rules."
 msgstr "克隆的策略必须是一组规则列表。"
 
-#: ../virtinst/cloner.py:279
+#: ../virtinst/cloner.py:281
 msgid "Original guest name or xml is required."
 msgstr "需要原始客户机名称或 xml。"
 
-#: ../virtinst/cloner.py:306
+#: ../virtinst/cloner.py:308
 msgid "Domain with devices to clone must be paused or shutoff."
 msgstr "必须暂停或者关闭有要克隆设备的域。"
 
-#: ../virtinst/cloner.py:331
+#: ../virtinst/cloner.py:333
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr "目前不支持克隆到现有存储卷：'%s'"
 
-#: ../virtinst/cloner.py:373
+#: ../virtinst/cloner.py:402
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -4389,31 +4471,31 @@ msgid ""
 msgstr ""
 "需要克隆的磁盘数多于已指定的路径。（已指定 %(passed)d 个，需要 %(need)d 个）"
 
-#: ../virtinst/cloner.py:385
+#: ../virtinst/cloner.py:414
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr "设置图形设备端口为自动端口，以避免相互冲突。"
 
-#: ../virtinst/cloner.py:547
+#: ../virtinst/cloner.py:581
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "磁盘路径 '%s' 不存在。"
 
-#: ../virtinst/cloner.py:552
+#: ../virtinst/cloner.py:586
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "无法确定原始磁盘信息：%s"
 
-#: ../virtinst/cloner.py:563
+#: ../virtinst/cloner.py:597
 msgid "XML has no 'dev' attribute in disk target"
 msgstr "XML 在磁盘目标中没有 'dev' 属性"
 
-#: ../virtinst/cloner.py:593
+#: ../virtinst/cloner.py:627
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "没有找到域 '%s'。"
 
-#: ../virtinst/cpu.py:120
+#: ../virtinst/cpu.py:121
 msgid "No host CPU reported in capabilities"
 msgstr "无主机性能报告"
 
@@ -4673,42 +4755,37 @@ msgstr "无动作"
 msgid "Cannot use storage %(path)s: %(err)s"
 msgstr "不能使用存储 %(path)s：%(err)s"
 
-#: ../virtinst/diskbackend.py:304
+#: ../virtinst/diskbackend.py:343
 #, python-format
 msgid "Cannot create storage for %s device."
 msgstr "无法为 %s 设备创建存储。"
 
-#: ../virtinst/diskbackend.py:311
-#, python-format
-msgid "Local block device path '%s' must exist."
-msgstr "必须存在本地块设备路径 '%s'。"
-
-#: ../virtinst/diskbackend.py:314
+#: ../virtinst/diskbackend.py:350
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr "non-existent 磁盘 '%s' 需要大小"
 
-#: ../virtinst/diskbackend.py:359
+#: ../virtinst/diskbackend.py:395
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr "客户端运行时，文件系统将没有足够空间来分配全部稀疏文件。"
 
-#: ../virtinst/diskbackend.py:364
+#: ../virtinst/diskbackend.py:400
 msgid "There is not enough free space to create the disk."
 msgstr "没有足够的可用空间创建这个磁盘。"
 
-#: ../virtinst/diskbackend.py:368
+#: ../virtinst/diskbackend.py:404
 #, python-format
 msgid " %d M requested > %d M available"
 msgstr " 要求的 %d M > 可用的 %d M"
 
-#: ../virtinst/diskbackend.py:373
+#: ../virtinst/diskbackend.py:409
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "正在克隆 %(srcfile)s"
 
-#: ../virtinst/diskbackend.py:442
+#: ../virtinst/diskbackend.py:478
 #, python-format
 msgid "Error cloning diskimage %s to %s: %s"
 msgstr "将磁盘映像 %s 克隆至 %s 出错：%s"
@@ -4756,63 +4833,63 @@ msgstr "UEFI %(arch)s: %(path)s"
 msgid "Custom: %(path)s"
 msgstr "自定义： %(path)s"
 
-#: ../virtinst/guest.py:76
+#: ../virtinst/guest.py:78
 #, python-format
 msgid "Domain named %s already exists!"
 msgstr "域名 %s 已存在！"
 
-#: ../virtinst/guest.py:87
+#: ../virtinst/guest.py:89
 #, python-format
 msgid "Could not remove old vm '%s': %s"
 msgstr "无法删除旧的 vm '%s'：%s"
 
-#: ../virtinst/guest.py:93
+#: ../virtinst/guest.py:95
 msgid "Guest"
 msgstr "客户机"
 
-#: ../virtinst/guest.py:101
+#: ../virtinst/guest.py:103
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "客户机名称 '%s' 已经在使用。"
 
-#: ../virtinst/guest.py:241
+#: ../virtinst/guest.py:246
 #, python-format
 msgid "Distro '%s' does not exist in our dictionary"
 msgstr "发行版 '%s' 不在我们的字典中"
 
-#: ../virtinst/guest.py:393
+#: ../virtinst/guest.py:392
 msgid "Creating domain..."
 msgstr "创建域......"
 
-#: ../virtinst/guest.py:441
+#: ../virtinst/guest.py:455
 msgid "Domain has already been started!"
 msgstr "域已经启动！"
 
-#: ../virtinst/guest.py:488
+#: ../virtinst/guest.py:502
 #, python-format
 msgid "Removing disk '%s'"
 msgstr "正在删除磁盘 '%s'"
 
-#: ../virtinst/guest.py:514
+#: ../virtinst/guest.py:528
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt 版本不支持 UEFI。"
 
-#: ../virtinst/guest.py:518
+#: ../virtinst/guest.py:532
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "不知如何为架构 '%s' 安装 UEFI"
 
-#: ../virtinst/guest.py:523
+#: ../virtinst/guest.py:537
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "不能为架构 '%s' 找到任何 UEFI 二进制路径"
 
-#: ../virtinst/guest.py:930
+#: ../virtinst/guest.py:964
 #, python-format
 msgid "Duplicate address for devices %s and %s"
 msgstr "设备 %s 和 %s 的地址重复"
 
-#: ../virtinst/guest.py:1094
+#: ../virtinst/guest.py:1128
 msgid "Host does not support spice GL"
 msgstr ""
 
@@ -4975,30 +5052,30 @@ msgstr "隔离网络，仅使用内部和主机路由"
 msgid "Name '%s' already in use by another network."
 msgstr "名称 '%s' 已被其他网络使用。"
 
-#: ../virtinst/nodedev.py:68
+#: ../virtinst/nodedev.py:77
 msgid "Connection does not support host device enumeration."
 msgstr "连接不支持主机设备计数。"
 
-#: ../virtinst/nodedev.py:81
+#: ../virtinst/nodedev.py:90
 #, python-format
 msgid "Did not find node device matching '%s': %s"
 msgstr "未找到匹配的节点设备 '%s': %s"
 
-#: ../virtinst/nodedev.py:134
+#: ../virtinst/nodedev.py:153
 msgid "System"
 msgstr "系统"
 
-#: ../virtinst/nodedev.py:151
+#: ../virtinst/nodedev.py:170
 #, python-format
 msgid "Interface %s"
 msgstr "接口 %s"
 
-#: ../virtinst/nodedev.py:371
+#: ../virtinst/nodedev.py:399
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s 会对应多个节点设备"
 
-#: ../virtinst/nodedev.py:374
+#: ../virtinst/nodedev.py:402
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "不能为 '%s' 找到匹配的节点设备"
@@ -5094,90 +5171,90 @@ msgstr "iSCSI IQN 名称"
 msgid "Name of the Volume Group"
 msgstr "LVM 卷组名称"
 
-#: ../virtinst/storage.py:487
+#: ../virtinst/storage.py:500
 msgid "Hostname is required"
 msgstr "需要主机名"
 
-#: ../virtinst/storage.py:491
+#: ../virtinst/storage.py:504
 msgid "Source path is required"
 msgstr "需要源路径"
 
-#: ../virtinst/storage.py:504
+#: ../virtinst/storage.py:517
 msgid "Must explicitly specify source path if building pool"
 msgstr "如果想要创建池，则必须明确指定源路径"
 
-#: ../virtinst/storage.py:508
+#: ../virtinst/storage.py:521
 msgid "Must explicitly specify disk format if formatting disk device."
 msgstr "如果格式化磁盘设备，则必须单独指定磁盘格式。"
 
-#: ../virtinst/storage.py:520
+#: ../virtinst/storage.py:533
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "无法定义存储池：%s"
 
-#: ../virtinst/storage.py:527
+#: ../virtinst/storage.py:540
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "无法构建存储池：%s"
 
-#: ../virtinst/storage.py:533
+#: ../virtinst/storage.py:546
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "无法启动存储池：%s"
 
-#: ../virtinst/storage.py:539
+#: ../virtinst/storage.py:552
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "不能设置池自动启动标志：%s"
 
-#: ../virtinst/storage.py:608
+#: ../virtinst/storage.py:621
 #, python-format
 msgid "pool '%s' must be active."
 msgstr "池 '%s' 必须活跃。"
 
-#: ../virtinst/storage.py:622
+#: ../virtinst/storage.py:635
 msgid "input_vol must be a virStorageVol"
 msgstr "input_vol 必须是一个虚拟存储卷"
 
-#: ../virtinst/storage.py:626
+#: ../virtinst/storage.py:639
 msgid ""
 "Creating storage from an existing volume is not supported by this libvirt "
 "version."
 msgstr "该 libvirt 版本不支持在现有卷中创建存储。"
 
-#: ../virtinst/storage.py:631
+#: ../virtinst/storage.py:644
 msgid "virStorageVolume pointer to clone/use as input."
 msgstr "作为输入克隆/使用的虚拟存储卷指针。"
 
-#: ../virtinst/storage.py:639
+#: ../virtinst/storage.py:652
 msgid ""
 "Creating storage by btrfs COW copy is not supported by this libvirt version."
 msgstr "该 libvirt 版本不支持通过 btrfs COW 复制来创建存储。"
 
-#: ../virtinst/storage.py:670
+#: ../virtinst/storage.py:683
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "名称 '%s' 已经被另一个卷使用。"
 
-#: ../virtinst/storage.py:803
+#: ../virtinst/storage.py:808
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr "不支持稀疏逻辑卷，将分配设置的容量"
 
-#: ../virtinst/storage.py:842
+#: ../virtinst/storage.py:847
 #, python-format
 msgid "Allocating '%s'"
 msgstr "正在分配 '%s'"
 
-#: ../virtinst/storage.py:909
+#: ../virtinst/storage.py:914
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
 "M requested allocation > %d M available)"
 msgstr "存储池中没有足够空间来创建卷。(%d M 需要的空间 > %d M 可用空间)"
 
-#: ../virtinst/storage.py:915
+#: ../virtinst/storage.py:920
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -5185,6 +5262,16 @@ msgid ""
 msgstr ""
 "当卷已经被全部分配后，需要的卷容量将超过可用池空间。(%d M 需要的容量 > %d M "
 "可用容量)"
+
+#: ../virtinst/sysinfo.py:52
+#, python-format
+msgid "SMBios date string '%s' is invalid."
+msgstr ""
+
+#: ../virtinst/sysinfo.py:67
+#, python-format
+msgid "Invalid uuid for SMBios: %s"
+msgstr ""
 
 #: ../virtinst/urlfetcher.py:87
 #, python-format
@@ -5307,7 +5394,7 @@ msgid "Graphical console connection for a virtual machine"
 msgstr ""
 
 #: ../ui/about.ui.h:1
-msgid "Copyright (C) 2006-2016 Red Hat Inc."
+msgid "Copyright (C) 2006-2017 Red Hat Inc."
 msgstr ""
 
 #: ../ui/about.ui.h:2
@@ -5341,7 +5428,7 @@ msgstr "设备类型(_D)："
 msgid "_Bus type:"
 msgstr "总线类型："
 
-#: ../ui/addhardware.ui.h:4 ../ui/details.ui.h:116
+#: ../ui/addhardware.ui.h:4 ../ui/details.ui.h:119
 msgid "Cac_he mode:"
 msgstr "缓存模式(_h)："
 
@@ -5370,7 +5457,7 @@ msgstr "aa:bb:cc:dd:ee:ff"
 msgid "_MAC address:"
 msgstr "_MAC 地址："
 
-#: ../ui/addhardware.ui.h:11 ../ui/details.ui.h:121
+#: ../ui/addhardware.ui.h:11 ../ui/details.ui.h:124
 msgid "Device mode_l:"
 msgstr "设备型号："
 
@@ -5429,7 +5516,7 @@ msgstr "自动套接字："
 msgid "_Channel:"
 msgstr "通道："
 
-#: ../ui/addhardware.ui.h:25 ../ui/details.ui.h:139
+#: ../ui/addhardware.ui.h:25 ../ui/details.ui.h:143
 msgid "Ac_tion:"
 msgstr "动作(_t)："
 
@@ -5465,7 +5552,7 @@ msgstr "端口："
 msgid "_Device:"
 msgstr "设备："
 
-#: ../ui/addhardware.ui.h:34 ../ui/details.ui.h:157
+#: ../ui/addhardware.ui.h:34 ../ui/details.ui.h:162
 msgid "rng"
 msgstr "rng"
 
@@ -5477,7 +5564,7 @@ msgstr "地址类型："
 msgid "_IO Base:"
 msgstr "IO 基准："
 
-#: ../ui/addhardware.ui.h:37 ../ui/details.ui.h:163
+#: ../ui/addhardware.ui.h:37 ../ui/details.ui.h:168
 msgid "panic"
 msgstr "panic"
 
@@ -5676,7 +5763,7 @@ msgstr "自动连接(_A)"
 msgid "H_ostname:"
 msgstr "主机名(_O)："
 
-#: ../ui/connect.ui.h:8 ../ui/details.ui.h:168
+#: ../ui/connect.ui.h:8 ../ui/details.ui.h:173
 msgid "_Username:"
 msgstr "用户名(_U)："
 
@@ -5819,7 +5906,7 @@ msgstr "直接内核引导："
 msgid "_Kernel path:"
 msgstr "内核路径："
 
-#: ../ui/create.ui.h:33 ../ui/details.ui.h:97
+#: ../ui/create.ui.h:33 ../ui/details.ui.h:100
 msgid "_Initrd path:"
 msgstr "initrd 路径："
 
@@ -5894,7 +5981,7 @@ msgstr "C_PU："
 msgid "_Memory (RAM):"
 msgstr "内存(_M)，RAM："
 
-#: ../ui/create.ui.h:51 ../ui/details.ui.h:88 ../ui/fsdetails.ui.h:9
+#: ../ui/create.ui.h:51 ../ui/details.ui.h:91 ../ui/fsdetails.ui.h:9
 msgid "MiB"
 msgstr "MiB"
 
@@ -6160,7 +6247,7 @@ msgstr "？"
 msgid "Gateway:"
 msgstr "网关："
 
-#: ../ui/createnet.ui.h:13 ../ui/details.ui.h:124
+#: ../ui/createnet.ui.h:13 ../ui/details.ui.h:127
 msgid "Type:"
 msgstr "类型："
 
@@ -6324,7 +6411,7 @@ msgstr "最大容量(_P)："
 msgid "_Allocation:"
 msgstr "分配(_A)："
 
-#: ../ui/createvol.ui.h:12 ../ui/details.ui.h:147
+#: ../ui/createvol.ui.h:12 ../ui/details.ui.h:151
 msgid "Path:"
 msgstr "路径："
 
@@ -6455,12 +6542,9 @@ msgid "Pause"
 msgstr "暂停"
 
 #: ../ui/details.ui.h:30 ../ui/manager.ui.h:24
-msgid "Shutdown the virtual machine"
+#, fuzzy
+msgid "Shut down the virtual machine"
 msgstr "关闭虚拟机"
-
-#: ../ui/details.ui.h:31
-msgid "Shut Down"
-msgstr "关机"
 
 #: ../ui/details.ui.h:32
 msgid "Snapshots"
@@ -6577,393 +6661,414 @@ msgid "<b>User Namespace</b>"
 msgstr "<b>用户命名空间</b>"
 
 #: ../ui/details.ui.h:63
-msgid "Hostname:"
-msgstr "主机名："
-
-#: ../ui/details.ui.h:64
 msgid "Product name:"
 msgstr "产品名称："
 
+#: ../ui/details.ui.h:64
+msgid "Hostname:"
+msgstr "主机名："
+
 #: ../ui/details.ui.h:65
+msgid "Operating system:"
+msgstr ""
+
+#: ../ui/details.ui.h:66
+msgid "foo"
+msgstr ""
+
+#: ../ui/details.ui.h:67
 msgid "<b>Operating System</b>"
 msgstr "<b>操作系统</b>"
 
-#: ../ui/details.ui.h:66
+#: ../ui/details.ui.h:68
 msgid "<b>Applications</b>"
 msgstr "<b>应用程序</b>"
 
-#: ../ui/details.ui.h:67
+#: ../ui/details.ui.h:69
 msgid "Error message bar"
 msgstr "错误消息栏"
 
-#: ../ui/details.ui.h:68 ../ui/host.ui.h:8
+#: ../ui/details.ui.h:70
+msgid "Refresh"
+msgstr ""
+
+#: ../ui/details.ui.h:71 ../ui/host.ui.h:8
 msgid "<b>CPU usage</b>"
 msgstr "<b>CPU 使用率</b>"
 
-#: ../ui/details.ui.h:69 ../ui/host.ui.h:9
+#: ../ui/details.ui.h:72 ../ui/host.ui.h:9
 msgid "<b>Memory usage</b>"
 msgstr "<b>内存使用率</b>"
 
-#: ../ui/details.ui.h:70
+#: ../ui/details.ui.h:73
 msgid "0 KiBytes/s 0 KiBytes/s"
 msgstr "0 KiBytes/s 0 KiBytes/s"
 
-#: ../ui/details.ui.h:71
+#: ../ui/details.ui.h:74
 msgid "<b>Disk I/O</b>"
 msgstr "<b>磁盘 I/O</b>"
 
-#: ../ui/details.ui.h:72
+#: ../ui/details.ui.h:75
 msgid "<b>Network I/O</b>"
 msgstr "<b>网络 I/O</b>"
 
-#: ../ui/details.ui.h:73
+#: ../ui/details.ui.h:76
 msgid "Logical host CPUs:"
 msgstr "本地主机 CPU："
 
-#: ../ui/details.ui.h:74
+#: ../ui/details.ui.h:77
 msgid "Ma_ximum allocation:"
 msgstr "最大分配(_X)："
 
-#: ../ui/details.ui.h:75
+#: ../ui/details.ui.h:78
 msgid "Current a_llocation:"
 msgstr "当前分配(_l)："
 
-#: ../ui/details.ui.h:76
+#: ../ui/details.ui.h:79
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr "<small>过度使用 vCPUs 会影响性能</small>"
 
-#: ../ui/details.ui.h:77
+#: ../ui/details.ui.h:80
 msgid "<b>CPUs</b>"
 msgstr "<b>CPU</b>"
 
-#: ../ui/details.ui.h:78
+#: ../ui/details.ui.h:81
 msgid "M_odel:"
 msgstr "型号(_O)："
 
-#: ../ui/details.ui.h:79
+#: ../ui/details.ui.h:82
 msgid "Copy host CP_U configuration"
 msgstr "复制主机 CP_U 配置"
 
-#: ../ui/details.ui.h:80
+#: ../ui/details.ui.h:83
 msgid "<b>Configu_ration</b>"
 msgstr "<b>配置(_R)</b>"
 
-#: ../ui/details.ui.h:81
+#: ../ui/details.ui.h:84
 msgid "Manuall_y set CPU topology"
 msgstr "手动设置 CPU 拓扑(_Y)"
 
-#: ../ui/details.ui.h:82
+#: ../ui/details.ui.h:85
 msgid "Thread_s:"
 msgstr "线程(_S)："
 
-#: ../ui/details.ui.h:83
+#: ../ui/details.ui.h:86
 msgid "Cor_es:"
 msgstr "核心(_E)："
 
-#: ../ui/details.ui.h:84
+#: ../ui/details.ui.h:87
 msgid "Socke_ts:"
 msgstr "套接字(_T)："
 
-#: ../ui/details.ui.h:85
+#: ../ui/details.ui.h:88
 msgid "<small>Selected CPU model does not support Hyper-Threading</small>"
 msgstr "<small>已选择的 CPU 模型不支持超线程</small>"
 
-#: ../ui/details.ui.h:86
+#: ../ui/details.ui.h:89
 msgid "<b>To_pology</b>"
 msgstr "<b>拓扑(_P)</b>"
 
-#: ../ui/details.ui.h:87
+#: ../ui/details.ui.h:90
 msgid "Total host memory:"
 msgstr "总主机内存："
 
-#: ../ui/details.ui.h:89
+#: ../ui/details.ui.h:92
 msgid "<b>Memory</b>"
 msgstr "<b>内存</b>"
 
-#: ../ui/details.ui.h:90
+#: ../ui/details.ui.h:93
 msgid "Start virt_ual machine on host boot up"
 msgstr "主机引导时启动虚拟机(_U)"
 
-#: ../ui/details.ui.h:91
+#: ../ui/details.ui.h:94
 msgid "<b>Autostart</b>"
 msgstr "<b>自动启动</b>"
 
-#: ../ui/details.ui.h:92
+#: ../ui/details.ui.h:95
 msgid "Init _path:"
 msgstr "Init 路径(_P)："
 
-#: ../ui/details.ui.h:93
+#: ../ui/details.ui.h:96
 msgid "Init ar_gs:"
 msgstr "Init 参数(_G)："
 
-#: ../ui/details.ui.h:94
+#: ../ui/details.ui.h:97
 msgid "<b>Container init</b>"
 msgstr "<b>容器 init</b>"
 
-#: ../ui/details.ui.h:95
+#: ../ui/details.ui.h:98
 msgid "Ena_ble direct kernel boot"
 msgstr "启用直接内核引导(_B)"
 
-#: ../ui/details.ui.h:96
+#: ../ui/details.ui.h:99
 msgid "Ke_rnel path:"
 msgstr "内核路径(_R)："
 
-#: ../ui/details.ui.h:98
+#: ../ui/details.ui.h:101
 msgid "Browse"
 msgstr "浏览"
 
-#: ../ui/details.ui.h:99
+#: ../ui/details.ui.h:102
 msgid "Kernel ar_gs:"
 msgstr "内核参数(_G)："
 
-#: ../ui/details.ui.h:100
+#: ../ui/details.ui.h:103
 msgid "D_TB Path:"
 msgstr "D_TB 路径："
 
-#: ../ui/details.ui.h:101
+#: ../ui/details.ui.h:104
 msgid "<b>Dir_ect kernel boot</b>"
 msgstr "<b>直接内核引导(_E)</b>"
 
-#: ../ui/details.ui.h:102
+#: ../ui/details.ui.h:105
 msgid "Enable boot me_nu"
 msgstr "启用引导菜单(_n)"
 
-#: ../ui/details.ui.h:103
+#: ../ui/details.ui.h:106
 msgid "<b>Boot device order</b>"
 msgstr "<b>引导设备顺序</b>"
 
-#: ../ui/details.ui.h:104
+#: ../ui/details.ui.h:107
 msgid "R_eadonly:"
 msgstr "只读(_E)："
 
-#: ../ui/details.ui.h:105
+#: ../ui/details.ui.h:108
 msgid "Sharea_ble:"
 msgstr "可共享(_B)："
 
-#: ../ui/details.ui.h:106
+#: ../ui/details.ui.h:109
 msgid "Storage size:"
 msgstr "存储大小："
 
-#: ../ui/details.ui.h:107
+#: ../ui/details.ui.h:110
 msgid "Source path:"
 msgstr "源路径："
 
-#: ../ui/details.ui.h:108
+#: ../ui/details.ui.h:111
 msgid "Connect or disconnect media"
 msgstr "连接到介质或者断开与介质连接"
 
-#: ../ui/details.ui.h:109
+#: ../ui/details.ui.h:112
 msgid "Device type:"
 msgstr "设备类型："
 
-#: ../ui/details.ui.h:110
+#: ../ui/details.ui.h:113
 msgid "Removab_le:"
 msgstr "可移动(_L)："
 
-#: ../ui/details.ui.h:111
+#: ../ui/details.ui.h:114
 msgid "Disk b_us:"
 msgstr "磁盘总线(_u)："
 
-#: ../ui/details.ui.h:112
+#: ../ui/details.ui.h:115
 msgid "Seria_l number:"
 msgstr "序列号(_L)："
 
-#: ../ui/details.ui.h:113
+#: ../ui/details.ui.h:116
 msgid ""
 "<small>Changing this will not change the disk image format, it only tells "
 "libvirt about the existing image format. </small>"
 msgstr ""
 "<small>这将不会修改磁盘镜像格式，只会向 libvirt 报告已有镜像的格式。</small>"
 
-#: ../ui/details.ui.h:114
+#: ../ui/details.ui.h:117
 msgid "Storage forma_t:"
 msgstr "存储格式(_t)："
 
-#: ../ui/details.ui.h:115
+#: ../ui/details.ui.h:118
 msgid "_SGIO:"
 msgstr "_SGIO："
 
-#: ../ui/details.ui.h:117
+#: ../ui/details.ui.h:120
 msgid "_IO mode:"
 msgstr "_IO 模式："
 
-#: ../ui/details.ui.h:118
+#: ../ui/details.ui.h:121
 msgid "_Performance options"
 msgstr "性能选项(_P)"
 
-#: ../ui/details.ui.h:119
+#: ../ui/details.ui.h:122
 msgid "Advanced _options"
 msgstr "高级选项(_o)"
 
-#: ../ui/details.ui.h:120
+#: ../ui/details.ui.h:123
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>虚拟磁盘</b>"
 
-#: ../ui/details.ui.h:122
+#: ../ui/details.ui.h:125
 msgid "MAC address:"
 msgstr "MAC 地址："
 
-#: ../ui/details.ui.h:123
+#: ../ui/details.ui.h:126
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>虚拟网络接口</b>"
 
-#: ../ui/details.ui.h:125 ../ui/host.ui.h:41
+#: ../ui/details.ui.h:128 ../ui/host.ui.h:41
 msgid "Mode:"
 msgstr "模式："
 
-#: ../ui/details.ui.h:126
+#: ../ui/details.ui.h:129
 msgid "<b>Virtual Input Device</b>"
 msgstr "<b>虚拟输入设备</b>"
 
-#: ../ui/details.ui.h:127
+#: ../ui/details.ui.h:130
 msgid "Device m_odel:"
 msgstr "设备型号(_o)："
 
-#: ../ui/details.ui.h:128
+#: ../ui/details.ui.h:131
 msgid "<b>Sound Device</b>"
 msgstr "<b>声音设备</b>"
 
-#: ../ui/details.ui.h:129
+#: ../ui/details.ui.h:132
 msgid "Source host:"
 msgstr "源主机："
 
-#: ../ui/details.ui.h:130
+#: ../ui/details.ui.h:133
 msgid "Bind host:"
 msgstr "绑定主机："
 
-#: ../ui/details.ui.h:131
+#: ../ui/details.ui.h:134
 msgid "Target type:"
 msgstr "目标类型："
 
-#: ../ui/details.ui.h:132
+#: ../ui/details.ui.h:135
 msgid "Target name:"
 msgstr "目标名称："
 
-#: ../ui/details.ui.h:133
+#: ../ui/details.ui.h:136
 msgid "<b>insert type</b>"
 msgstr "<b>插入类型</b>"
 
-#: ../ui/details.ui.h:134 ../ui/host.ui.h:11
+#: ../ui/details.ui.h:137 ../ui/host.ui.h:11
 msgid "Device:"
 msgstr "设备："
 
-#: ../ui/details.ui.h:135
+#: ../ui/details.ui.h:138
 msgid "ROM _BAR:"
 msgstr "ROM 栏(_B)："
 
-#: ../ui/details.ui.h:136
+#: ../ui/details.ui.h:139
 msgid "RAM:"
 msgstr "RAM："
 
-#: ../ui/details.ui.h:137
+#: ../ui/details.ui.h:140
 msgid "Heads:"
 msgstr "标头："
 
-#: ../ui/details.ui.h:138
+#: ../ui/details.ui.h:141
+msgid "3D acceleration:"
+msgstr ""
+
+#: ../ui/details.ui.h:142
 msgid "<b>Video</b>"
 msgstr "<b>视频</b>"
 
-#: ../ui/details.ui.h:140
+#: ../ui/details.ui.h:144
 msgid "<b>Controller</b>"
 msgstr "<b>控制器</b>"
 
-#: ../ui/details.ui.h:141
+#: ../ui/details.ui.h:145
 msgid "<b>Filesystem</b>"
 msgstr "<b>文件系统</b>"
 
-#: ../ui/details.ui.h:142 ../ui/fsdetails.ui.h:5 ../ui/migrate.ui.h:12
+#: ../ui/details.ui.h:146 ../ui/fsdetails.ui.h:5 ../ui/migrate.ui.h:12
 msgid "M_ode:"
 msgstr "模式(_o)："
 
-#: ../ui/details.ui.h:143
+#: ../ui/details.ui.h:147
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>智能卡设备</b>"
 
-#: ../ui/details.ui.h:144 ../ui/host.ui.h:42
+#: ../ui/details.ui.h:148 ../ui/host.ui.h:42
 msgid "Address:"
 msgstr "地址："
 
-#: ../ui/details.ui.h:145
+#: ../ui/details.ui.h:149
 msgid "foo:12"
 msgstr "foo:12"
 
-#: ../ui/details.ui.h:146
+#: ../ui/details.ui.h:150
 msgid "<b>Redirected device</b>"
 msgstr "<b>重定向设备</b>"
 
-#: ../ui/details.ui.h:148
+#: ../ui/details.ui.h:152
 msgid "<b>TPM Device</b>"
 msgstr "<b>TPM 设备</b>"
 
-#: ../ui/details.ui.h:149
+#: ../ui/details.ui.h:153
+#, fuzzy
+msgid "Host Device:"
+msgstr "主机设备(_D)："
+
+#: ../ui/details.ui.h:154
 msgid "Backend type:"
 msgstr "后端类型："
 
-#: ../ui/details.ui.h:150
+#: ../ui/details.ui.h:155
 msgid "Host:"
 msgstr "主机："
 
-#: ../ui/details.ui.h:151
+#: ../ui/details.ui.h:156
 msgid "Service:"
 msgstr "服务："
 
-#: ../ui/details.ui.h:152
+#: ../ui/details.ui.h:157
 msgid "Bind Host:"
 msgstr "绑定主机："
 
-#: ../ui/details.ui.h:153
+#: ../ui/details.ui.h:158
 msgid "Bind Service:"
 msgstr "绑定服务："
 
-#: ../ui/details.ui.h:154
+#: ../ui/details.ui.h:159
 msgid "Rate (period):"
 msgstr "速率 (周期)："
 
-#: ../ui/details.ui.h:155
+#: ../ui/details.ui.h:160
 msgid "Rate (bytes):"
 msgstr "速率 (字节)："
 
-#: ../ui/details.ui.h:156
+#: ../ui/details.ui.h:161
 msgid "<b>Random Number Generator</b>"
 msgstr "<b>随机数生成器</b>"
 
-#: ../ui/details.ui.h:158
+#: ../ui/details.ui.h:163
 msgid "Address Type:"
 msgstr "地址类型："
 
-#: ../ui/details.ui.h:159
+#: ../ui/details.ui.h:164
 msgid "IO Base:"
 msgstr "IO 基准："
 
-#: ../ui/details.ui.h:160
+#: ../ui/details.ui.h:165
 msgid "panic-address-type"
 msgstr "panic 地址类型"
 
-#: ../ui/details.ui.h:161
+#: ../ui/details.ui.h:166
 msgid "panic-iobase"
 msgstr "panic 基准io"
 
-#: ../ui/details.ui.h:162
+#: ../ui/details.ui.h:167
 msgid "<b>Panic Notifier</b>"
 msgstr "<b>Panic 通知器</b>"
 
-#: ../ui/details.ui.h:164
+#: ../ui/details.ui.h:169
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>终端当前不可用</b>"
 
-#: ../ui/details.ui.h:165
+#: ../ui/details.ui.h:170
 msgid "_Password:"
 msgstr "密码(_P)："
 
-#: ../ui/details.ui.h:166
+#: ../ui/details.ui.h:171
 msgid "_Save this password in your keyring"
 msgstr "将密码保存到钥匙环(_S)"
 
-#: ../ui/details.ui.h:167
+#: ../ui/details.ui.h:172
 msgid "Check to save password, uncheck to forget password."
 msgstr ""
 
-#: ../ui/details.ui.h:169
+#: ../ui/details.ui.h:174
 msgid "_Login"
 msgstr "登录(_L)"
 
@@ -7034,6 +7139,16 @@ msgstr "X 验证："
 #: ../ui/gfxdetails.ui.h:13 ../ui/snapshots.ui.h:12 ../ui/storagelist.ui.h:17
 msgid "label"
 msgstr "标签"
+
+#: ../ui/gfxdetails.ui.h:14
+#, fuzzy
+msgid "Open_GL:"
+msgstr "打开(_O)"
+
+#: ../ui/gfxdetails.ui.h:15
+#, fuzzy
+msgid "L_isten type:"
+msgstr "总线类型："
 
 #: ../ui/host.ui.h:1
 msgid "Connection Details"
@@ -7262,10 +7377,6 @@ msgstr "显示虚拟机控制台及详情"
 #: ../ui/manager.ui.h:19
 msgid "_Open"
 msgstr "打开(_O)"
-
-#: ../ui/manager.ui.h:25
-msgid "_Shutdown"
-msgstr "关闭(_S)"
 
 #: ../ui/migrate.ui.h:1
 msgid "Migrate the virtual machine"
@@ -7703,3 +7814,12 @@ msgstr "刷新卷列表"
 #: ../ui/storagelist.ui.h:20
 msgid "Delete volume"
 msgstr "删除卷"
+
+#~ msgid "Shutdown"
+#~ msgstr "关机"
+
+#~ msgid "Local block device path '%s' must exist."
+#~ msgstr "必须存在本地块设备路径 '%s'。"
+
+#~ msgid "_Shutdown"
+#~ msgstr "关闭(_S)"

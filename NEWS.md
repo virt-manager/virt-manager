@@ -1,5 +1,16 @@
 # Virtual Machine Manager News
 
+## Release 1.4.1 (March 08, 2017)
+
+- storage/nodedev event API support (Jovanka Gulicoska)
+- UI options for enabling spice GL (Marc-André Lureau)
+- Add default virtio-rng /dev/urandom for supported guest OS
+- Cloning and rename support for UEFI VMs (Pavel Hrdina)
+- libguestfs inspection UI improvements (Pino Toscano)
+- virt-install: Add `--qemu-commandline`
+- virt-install: Add `--network vhostuser` (Chen Hanxiao)
+- virt-install: Add `--sysinfo` (Charles Arnold)
+
 ## Release 1.4.0 (June 18, 2016)
 
 - virt-manager: spice GL console support (Marc-André Lureau, Cole Robinson)
