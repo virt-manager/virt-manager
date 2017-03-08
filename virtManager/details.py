@@ -237,10 +237,20 @@ def _label_for_device(dev):
         return _("Filesystem %s") % dev.target[:8]
     if devtype == "controller":
         return _("Controller %s") % dev.pretty_desc()
+    if devtype == "rng":
+        label = _("RNG")
+        if dev.device:
+            print "dev device='%s'" % dev.device
+            print dev.get_xml_config()
+            label += (" %s" % dev.device)
+        return label
+    if devtype == "tpm":
+        label = _("TPM")
+        if dev.device_path:
+            label += (" %s" % dev.device_path)
+        return label
 
     devmap = {
-        "rng": _("RNG"),
-        "tpm": _("TPM"),
         "panic": _("Panic Notifier"),
         "smartcard": _("Smartcard"),
         "watchdog": _("Watchdog"),
@@ -2850,6 +2860,8 @@ class vmmDetails(vmmGObjectUI):
                 if r:
                     val = r(val)
             self.widget(k).set_text(val)
+            if "rate" in k:
+                uiutil.set_grid_row_visible(self.widget(k), val != "-")
 
         if is_egd and not udp:
             mode = VirtualRNGDevice.get_pretty_mode(dev.backend_mode()[0])

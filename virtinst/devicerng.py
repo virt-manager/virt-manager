@@ -116,6 +116,6 @@ class VirtualRNGDevice(VirtualDevice):
     rate_bytes = XMLProperty("./rate/@bytes")
     rate_period = XMLProperty("./rate/@period")
 
-    device = XMLProperty("./backend")
+    device = XMLProperty("./backend[@model='random']")
 
 VirtualRNGDevice.register_type()
