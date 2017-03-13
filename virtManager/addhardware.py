@@ -551,7 +551,7 @@ class vmmAddHardware(vmmGObjectUI):
         model.append([None, _("Hypervisor default")])
         if vm.is_hvm():
             mod_list = []
-            if vm.get_hv_type() in ["kvm", "qemu", "test"]:
+            if vm.get_hv_type() in ["kvm", "qemu", "vz", "test"]:
                 mod_list.append("virtio")
             mod_list.append("rtl8139")
             mod_list.append("e1000")

@@ -8,11 +8,7 @@
     <type arch="x86_64">exe</type>
     <init>/sbin/init</init>
   </os>
-  <features>
-    <privnet/>
-  </features>
   <devices>
-    <emulator>vz</emulator>
     <filesystem type="template">
       <source name="centos-7-x86_64"/>
       <target dir="/"/>
@@ -21,6 +17,7 @@
       <source network="Bridged"/>
       <mac address="00:11:22:33:44:55"/>
     </interface>
+    <graphics type="vnc" port="-1" keymap="en-us"/>
     <console type="pty"/>
   </devices>
 </domain>

@@ -637,7 +637,7 @@ class Guest(XMLBuilder):
             return
         if self.get_devices("graphics"):
             return
-        if self.os.is_container():
+        if self.os.is_container() and not self.conn.is_vz():
             return
         if self.os.arch not in ["x86_64", "i686", "ppc64", "ppc64le", "ia64"]:
             return
@@ -786,7 +786,7 @@ class Guest(XMLBuilder):
             hyperv.present = True
 
     def _set_emulator_defaults(self):
-        if self.os.is_xenpv():
+        if self.os.is_xenpv() or self.type == "vz":
             self.emulator = None
             return
 
@@ -850,7 +850,7 @@ class Guest(XMLBuilder):
             self.features.acpi = None
             self.features.apic = None
             self.features.pae = None
-            if self._is_full_os_container():
+            if self._is_full_os_container() and self.type != "vz":
                 self.features.privnet = True
             return
 

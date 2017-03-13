@@ -387,6 +387,9 @@ class VirtualConnection(object):
         return self._uriobj.scheme.startswith("openvz")
     def is_container(self):
         return self.is_lxc() or self.is_openvz()
+    def is_vz(self):
+        return (self._uriobj.scheme.startswith("vz") or
+                self._uriobj.scheme.startswith("parallels"))
 
 
     #########################
