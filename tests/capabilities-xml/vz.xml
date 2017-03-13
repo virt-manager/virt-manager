@@ -29,6 +29,28 @@
   </host>
 
   <guest>
+    <os_type>hvm</os_type>
+    <arch name="i686">
+      <wordsize>32</wordsize>
+      <emulator>vz</emulator>
+      <domain type="vz">
+        <emulator>vz</emulator>
+      </domain>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="x86_64">
+      <wordsize>64</wordsize>
+      <emulator>vz</emulator>
+      <domain type="vz">
+        <emulator>vz</emulator>
+      </domain>
+    </arch>
+  </guest>
+
+  <guest>
     <os_type>exe</os_type>
     <arch name="i686">
       <wordsize>32</wordsize>
