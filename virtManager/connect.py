@@ -34,7 +34,8 @@ from .baseclass import vmmGObjectUI
 HV_XEN,
 HV_LXC,
 HV_QEMU_SESSION,
-HV_BHYVE) = range(5)
+HV_BHYVE,
+HV_VZ) = range(6)
 
 (CONN_SSH,
 CONN_TCP,
@@ -169,6 +170,7 @@ class vmmConnect(vmmGObjectUI):
         _add_hv_row(HV_XEN, "xen", "Xen")
         _add_hv_row(HV_LXC, "lxc", "LXC (" + _("Linux Containers") + ")")
         _add_hv_row(HV_BHYVE, "bhyve", "Bhyve")
+        _add_hv_row(HV_VZ, "vz", "Virtuozzo")
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
 
@@ -384,6 +386,8 @@ class vmmConnect(vmmGObjectUI):
             hvstr = "qemu"
         elif hv == HV_BHYVE:
             hvstr = "bhyve"
+        elif hv == HV_VZ:
+            hvstr = "vz"
         else:
             hvstr = "lxc"
 
@@ -408,7 +412,7 @@ class vmmConnect(vmmGObjectUI):
             hoststr += addrstr + "/"
 
         uri = hvstr + hoststr
-        if hv in (HV_QEMU, HV_BHYVE):
+        if hv in (HV_QEMU, HV_BHYVE, HV_VZ):
             uri += "system"
         elif hv == HV_QEMU_SESSION:
             uri += "session"

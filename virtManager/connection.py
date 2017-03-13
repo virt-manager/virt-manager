@@ -348,6 +348,7 @@ class vmmConnection(vmmGObject):
     is_container = property(lambda s: getattr(s, "_backend").is_container)
     is_lxc = property(lambda s: getattr(s, "_backend").is_lxc)
     is_openvz = property(lambda s: getattr(s, "_backend").is_openvz)
+    is_vz = property(lambda s: getattr(s, "_backend").is_vz)
     is_xen = property(lambda s: getattr(s, "_backend").is_xen)
     is_remote = property(lambda s: getattr(s, "_backend").is_remote)
     is_qemu = property(lambda s: getattr(s, "_backend").is_qemu)

@@ -56,7 +56,8 @@ DEFAULT_MEM = 1024
  INSTALL_PAGE_PXE,
  INSTALL_PAGE_IMPORT,
  INSTALL_PAGE_CONTAINER_APP,
- INSTALL_PAGE_CONTAINER_OS) = range(6)
+ INSTALL_PAGE_CONTAINER_OS,
+ INSTALL_PAGE_VZ_TEMPLATE) = range(7)
 
 # Column numbers for os type/version list models
 (OS_COL_ID,
@@ -156,6 +157,7 @@ class vmmCreate(vmmGObjectUI):
             "on_arch_changed": self._arch_changed,
             "on_virt_type_changed": self._virt_type_changed,
             "on_machine_changed": self._machine_changed,
+            "on_vz_virt_type_changed": self._vz_virt_type_changed,
 
             "on_install_cdrom_radio_toggled": self._local_media_toggled,
             "on_install_iso_entry_changed": self._iso_changed,
@@ -375,6 +377,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("create-conn").set_active(-1)
         activeconn = self._populate_conn_list(urihint)
         self.widget("arch-expander").set_expanded(False)
+        self.widget("vz-virt-type-hvm").set_active(True)
 
         if self._set_conn(activeconn) is False:
             return False
@@ -418,6 +421,9 @@ class vmmCreate(vmmGObjectUI):
         # Install container OS
         self.widget("install-oscontainer-fs").set_text("")
 
+        # Install VZ container from template
+        self.widget("install-container-template").set_text("centos-7-x86_64")
+
         # Storage
         self.widget("enable-storage").set_active(True)
         self._addstorage.reset_state()
@@ -441,6 +447,7 @@ class vmmCreate(vmmGObjectUI):
         can_storage = (is_local or is_storage_capable)
         is_pv = (self._capsinfo.os_type == "xen")
         is_container = self.conn.is_container()
+        is_vz = self.conn.is_vz()
         can_remote_url = self.conn.get_backend().support_remote_url_install()
 
         installable_arch = (self._capsinfo.arch in
@@ -522,6 +529,7 @@ class vmmCreate(vmmGObjectUI):
         method_container_app.set_active(True)
         self.widget("virt-install-box").set_visible(not is_container)
         self.widget("container-install-box").set_visible(is_container)
+        self.widget("vz-install-box").set_visible(is_vz)
 
         show_dtb = ("arm" in self._capsinfo.arch or
                     "microblaze" in self._capsinfo.arch or
@@ -584,6 +592,21 @@ class vmmCreate(vmmGObjectUI):
                  "package is not installed, or the KVM kernel modules "
                  "are not loaded. Your virtual machines may perform poorly.")
                 self._show_startup_warning(error)
+
+        elif self.conn.is_vz():
+            has_hvm_guests = False
+            has_exe_guests = False
+            for g in self.conn.caps.guests:
+                if g.os_type == "hvm":
+                    has_hvm_guests = True
+                if g.os_type == "exe":
+                    has_exe_guests = True
+
+            self.widget("vz-virt-type-hvm").set_sensitive(has_hvm_guests)
+            self.widget("virt-install-box").set_sensitive(has_hvm_guests)
+            self.widget("vz-virt-type-exe").set_sensitive(has_exe_guests)
+            if not has_hvm_guests and has_exe_guests:
+                self.widget("vz-virt-type-exe").set_active(True)
 
         # Install local
         iso_option = self.widget("install-iso-radio")
@@ -1073,6 +1096,8 @@ class vmmCreate(vmmGObjectUI):
             install = _("Application container")
         elif instmethod == INSTALL_PAGE_CONTAINER_OS:
             install = _("Operating system container")
+        elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
+            install = _("Virtuozzo container")
 
         osstr = ""
         have_os = True
@@ -1109,6 +1134,9 @@ class vmmCreate(vmmGObjectUI):
             check_visible=True)
 
     def _get_config_install_page(self):
+        if self.widget("vz-install-box").get_visible():
+            if self.widget("vz-virt-type-exe").get_active():
+                return INSTALL_PAGE_VZ_TEMPLATE
         if self.widget("virt-install-box").get_visible():
             if self.widget("method-local").get_active():
                 return INSTALL_PAGE_ISO
@@ -1126,11 +1154,13 @@ class vmmCreate(vmmGObjectUI):
 
     def _is_container_install(self):
         return self._get_config_install_page() in [INSTALL_PAGE_CONTAINER_APP,
-                                                   INSTALL_PAGE_CONTAINER_OS]
+                                                   INSTALL_PAGE_CONTAINER_OS,
+                                                   INSTALL_PAGE_VZ_TEMPLATE]
     def _should_skip_disk_page(self):
         return self._get_config_install_page() in [INSTALL_PAGE_IMPORT,
                                                    INSTALL_PAGE_CONTAINER_APP,
-                                                   INSTALL_PAGE_CONTAINER_OS]
+                                                   INSTALL_PAGE_CONTAINER_OS,
+                                                   INSTALL_PAGE_VZ_TEMPLATE]
 
     def _get_config_os_info(self):
         drow = uiutil.get_list_selected_row(self.widget("install-os-type"))
@@ -1293,6 +1323,13 @@ class vmmCreate(vmmGObjectUI):
 
         self._change_caps(self._capsinfo.os_type, self._capsinfo.arch, domtype)
 
+    def _vz_virt_type_changed(self, ignore):
+        is_hvm = self.widget("vz-virt-type-hvm").get_active()
+        self.widget("virt-install-box").set_sensitive(is_hvm)
+        if is_hvm:
+            self._change_caps("hvm")
+        else:
+            self._change_caps("exe")
 
     # Install page listeners
     def _detectable_media_widget_changed(self, widget, checkfocus=True):
@@ -1745,6 +1782,7 @@ class vmmCreate(vmmGObjectUI):
         is_import = False
         init = None
         fs = None
+        template = None
         distro, variant, valid, ignore1, ignore2 = self._get_config_os_info()
 
         if not valid:
@@ -1802,6 +1840,12 @@ class vmmCreate(vmmGObjectUI):
             if not fs:
                 return self.err.val_err(_("An OS directory path is required."))
 
+        elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
+            instclass = virtinst.ContainerInstaller
+            template = self.widget("install-container-template").get_text()
+            if not template:
+                return self.err.val_err(_("A template name is required."))
+
         # Build the installer and Guest instance
         try:
             # Overwrite the guest
@@ -1832,6 +1876,14 @@ class vmmCreate(vmmGObjectUI):
                 fsdev.target = "/"
                 fsdev.source = fs
                 self._guest.add_device(fsdev)
+
+            if template:
+                fsdev = virtinst.VirtualFilesystem(self._guest.conn)
+                fsdev.target = "/"
+                fsdev.type = "template"
+                fsdev.source = template
+                self._guest.add_device(fsdev)
+
         except Exception, e:
             return self.err.val_err(
                                 _("Error setting install media location."), e)
