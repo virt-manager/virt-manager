@@ -285,6 +285,27 @@ class NewVM(unittest.TestCase):
         self.assertFalse(newvm.showing)
         self.app.quit()
 
+    def testNewVMContainerVZ(self):
+        """
+        Virtuozzo container install
+        """
+        self.app.uri = tests.utils.uri_vz
+
+        newvm = self._open_create_wizard()
+        uiutils.find_fuzzy(newvm, "Container", "radio").click()
+        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+
+        # Set directory path
+        uiutils.find_fuzzy(newvm, None,
+            "text", "container template").text = "centos-6-x86_64"
+        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+
+        uiutils.find_fuzzy(self.app.root, "container1 on", "frame")
+        self.assertFalse(newvm.showing)
+        self.app.quit()
+
     def testNewXenPV(self):
         """
         Test the create wizard with a fake xen PV install
