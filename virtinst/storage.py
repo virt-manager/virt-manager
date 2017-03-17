@@ -683,22 +683,6 @@ class StorageVolume(_StorageObject):
             raise ValueError(_("Name '%s' already in use by another volume." %
                                 name))
 
-    def _validate_allocation(self, val):
-        ret = self.is_size_conflict(allocation=val)
-        if ret[0]:
-            raise ValueError(ret[1])
-        elif ret[1]:
-            logging.warn(ret[1])
-        return val
-
-    def _validate_capacity(self, val):
-        ret = self.is_size_conflict(capacity=val)
-        if ret[0]:
-            raise ValueError(ret[1])
-        elif ret[1]:
-            logging.warn(ret[1])
-        return val
-
     def _default_format(self):
         if self.file_type == self.TYPE_FILE:
             return "raw"
@@ -728,10 +712,8 @@ class StorageVolume(_StorageObject):
 
     type = XMLProperty("./@type")
     key = XMLProperty("./key")
-    capacity = XMLProperty("./capacity", is_int=True,
-                           validate_cb=_validate_capacity)
-    allocation = XMLProperty("./allocation", is_int=True,
-                             validate_cb=_validate_allocation)
+    capacity = XMLProperty("./capacity", is_int=True)
+    allocation = XMLProperty("./allocation", is_int=True)
     format = XMLProperty("./target/format/@type", default_cb=_default_format)
     target_path = XMLProperty("./target/path")
     backing_store = XMLProperty("./backingStore/path")
@@ -808,6 +790,12 @@ class StorageVolume(_StorageObject):
                 logging.warn(_("Sparse logical volumes are not supported, "
                                "setting allocation equal to capacity"))
                 self.allocation = self.capacity
+
+        isfatal, errmsg = self.is_size_conflict()
+        if isfatal:
+            raise ValueError(errmsg)
+        if errmsg:
+            logging.warn(errmsg)
 
     def install(self, meter=None):
         """
@@ -891,7 +879,7 @@ class StorageVolume(_StorageObject):
             time.sleep(1)
 
 
-    def is_size_conflict(self, capacity=None, allocation=None):
+    def is_size_conflict(self):
         """
         Report if requested size exceeds its pool's available amount
 
@@ -900,27 +888,22 @@ class StorageVolume(_StorageObject):
             2. String message if some collision was encountered.
         @rtype: 2 element C{tuple}: (C{bool}, C{str})
         """
-        if capacity is None:
-            capacity = self.capacity
-        if allocation is None:
-            allocation = self.allocation
-
         if not self.pool:
             return (False, "")
 
         # pool info is [pool state, capacity, allocation, available]
         avail = self.pool.info()[3]
-        if allocation > avail:
+        if self.allocation > avail:
             return (True, _("There is not enough free space on the storage "
                             "pool to create the volume. "
                             "(%d M requested allocation > %d M available)") %
-                            ((allocation / (1024 * 1024)),
+                            ((self.allocation / (1024 * 1024)),
                              (avail / (1024 * 1024))))
-        elif capacity > avail:
+        elif self.capacity > avail:
             return (False, _("The requested volume capacity will exceed the "
                              "available pool space when the volume is fully "
                              "allocated. "
                              "(%d M requested capacity > %d M available)") %
-                             ((capacity / (1024 * 1024)),
+                             ((self.capacity / (1024 * 1024)),
                               (avail / (1024 * 1024))))
         return (False, "")

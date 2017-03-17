@@ -345,10 +345,11 @@ class _StorageCreator(_StorageBase):
 
         if self._vol_install:
             self._vol_install.validate()
-        else:
-            if self._size is None:
-                raise ValueError(_("size is required for non-existent disk "
-                                   "'%s'" % self.get_path()))
+            return
+
+        if self._size is None:
+            raise ValueError(_("size is required for non-existent disk "
+                               "'%s'" % self.get_path()))
 
         err, msg = self.is_size_conflict()
         if err:
