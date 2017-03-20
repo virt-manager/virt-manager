@@ -94,6 +94,16 @@ class TestMisc(unittest.TestCase):
 
 
     def test_ui_minimum_version(self):
+        """
+        Ensure all glade XML files don't _require_ UI bits later than
+        our minimum supported version
+        """
+        # RHEL 7.3 has gtk 3.14, so that's our current minimum target
+        minimum_version_major = 3
+        minimum_version_minor = 14
+        minimum_version_str = "%s.%s" % (minimum_version_major,
+                                         minimum_version_minor)
+
         failures = []
         for filename in glob.glob("ui/*.ui"):
             required_version = None
@@ -110,13 +120,16 @@ class TestMisc(unittest.TestCase):
 
             if required_version is None:
                 raise AssertionError("ui file=%s doesn't have a <requires> "
-                    "tag for gtk+, it should say 3.10")
+                    "tag for gtk+")
 
-            if (int(required_version.split(".")[0]) != 3 or
-                int(required_version.split(".")[1]) != 14):
+            if (int(required_version.split(".")[0]) != minimum_version_major or
+                int(required_version.split(".")[1]) != minimum_version_minor):
                 failures.append((filename, required_version))
 
-        if failures:
-            raise AssertionError("The following files should require gtk "
-                "version of gtk-3.10, which is what we target:\n" +
-                "\n".join([("%s version=%s" % tup) for tup in failures]))
+        if not failures:
+            return
+
+        err = ("The following files should require version of gtk-%s:\n" %
+            minimum_version_str)
+        err += "\n".join([("%s version=%s" % tup) for tup in failures])
+        raise AssertionError(err)
