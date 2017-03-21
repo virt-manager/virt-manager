@@ -314,7 +314,7 @@ class vmmStorageList(vmmGObjectUI):
             ICON_SHUTOFF, Gtk.IconSize.BUTTON)
         self.widget("pool-state").set_text(_("Inactive"))
         self.widget("vol-list").get_model().clear()
-        self.widget("pool-autostart").set_label(_("Never"))
+        self.widget("pool-autostart").set_label(_("On Boot"))
         self.widget("pool-autostart").set_active(False)
 
         self.widget("pool-delete").set_sensitive(False)
@@ -345,8 +345,7 @@ class vmmStorageList(vmmGObjectUI):
                 Gtk.IconSize.BUTTON)
         self.widget("pool-state").set_text(
                 (active and _("Active")) or _("Inactive"))
-        self.widget("pool-autostart").set_label(
-                (auto and _("On Boot")) or _("Never"))
+        self.widget("pool-autostart").set_label(_("On Boot"))
         self.widget("pool-autostart").set_active(auto)
 
         self.widget("vol-list").set_sensitive(active)
@@ -537,8 +536,6 @@ class vmmStorageList(vmmGObjectUI):
     def _pool_autostart_changed(self, src):
         ignore = src
         auto = self.widget("pool-autostart").get_active()
-        self.widget("pool-autostart").set_label(
-            auto and _("On Boot") or _("Never"))
         self._enable_pool_apply(EDIT_POOL_AUTOSTART)
 
     def _vol_selected(self, src):
