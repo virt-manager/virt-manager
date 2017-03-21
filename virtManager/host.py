@@ -482,9 +482,6 @@ class vmmHost(vmmGObjectUI):
 
     def net_autostart_changed(self, src_ignore):
         auto = self.widget("net-autostart").get_active()
-        self.widget("net-autostart").set_label(auto and
-                                               _("On Boot") or
-                                               _("Never"))
         self.enable_net_apply(EDIT_NET_AUTOSTART)
 
     def current_network(self):
@@ -640,9 +637,8 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-delete").set_sensitive(not active)
 
         autostart = net.get_autostart()
-        autolabel = autostart and _("On Boot") or _("Never")
         self.widget("net-autostart").set_active(autostart)
-        self.widget("net-autostart").set_label(autolabel)
+        self.widget("net-autostart").set_label(_("On Boot"))
 
         self._populate_net_ipv4_state(net)
         self._populate_net_ipv6_state(net)
@@ -659,7 +655,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-start").set_sensitive(False)
         self.widget("net-stop").set_sensitive(False)
         self.widget("net-delete").set_sensitive(False)
-        self.widget("net-autostart").set_label(_("Never"))
+        self.widget("net-autostart").set_label(_("On Boot"))
         self.widget("net-autostart").set_active(False)
         self.widget("net-ipv4-network").set_text("")
         self.widget("net-ipv4-dhcp-range").set_text("")
