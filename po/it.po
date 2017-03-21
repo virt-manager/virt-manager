@@ -9,13 +9,14 @@
 # Massimiliano Tropeano <mhacknetxp@hotmail.com>, 2013
 # Terry Chuang <tchuang@redhat.com>, 2016. #zanata
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
+# Gianluca Sforna <giallu@gmail.com>, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-01 05:01-0500\n"
-"PO-Revision-Date: 2017-02-05 04:09-0500\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"PO-Revision-Date: 2017-03-21 10:06-0400\n"
+"Last-Translator: Gianluca Sforna <giallu@gmail.com>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/virt-manager/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,16 +42,16 @@ msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use "
 "--disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
-"Impossibile mischiare --file, --nonsparse oppure --file-size con --disk "
-"options. Usare --disk PATH[,size=SIZE][,sparse=yes|no]"
+"Impossibile utilizzare le opzioni --file, --nonsparse o --file-size con "
+"--disk. Usare --disk PATH[,size=SIZE][,sparse=yes|no]"
 
 #: ../virt-install:223
 msgid "Cannot use --mac with --nonetworks"
-msgstr "Non è possibile utilizzare --mac con --nonetworks"
+msgstr "Impossibile utilizzare --mac con --nonetworks"
 
 #: ../virt-install:225
 msgid "Cannot use --bridge with --nonetworks"
-msgstr "Non è possibile utilizzare --bridge con --nonetworks"
+msgstr "Impossibile utilizzare --bridge con --nonetworks"
 
 #: ../virt-install:227
 msgid "Cannot use --nonetworks with --network"
@@ -62,12 +63,12 @@ msgstr "Impossibile utilizzare --pxe senza una rete"
 
 #: ../virt-install:238
 msgid "Cannot mix both --bridge and --network arguments"
-msgstr ""
-"Impossibile mischiare contemporaneamente gli argomenti --bridge e --network"
+msgstr "Impossibile utilizzare insieme gli argomenti --bridge e --network"
 
 #: ../virt-install:291
 msgid "Cannot mix --graphics and old style graphical options"
-msgstr "Impossibile unire --graphics e opzioni di grafica vecchio stile"
+msgstr ""
+"Impossibile utilizzare --graphics e le opzioni di grafica vecchio stile"
 
 #: ../virt-install:295
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
@@ -88,11 +89,11 @@ msgstr "Errore durante la convalida del percorso di installazione: %s"
 
 #: ../virt-install:424
 msgid "--name is required"
-msgstr "--name è richiesto"
+msgstr "--name è obbligatorio"
 
 #: ../virt-install:427
 msgid "--memory amount in MiB is required"
-msgstr "È richiesta la --memory amount in MiB"
+msgstr "--memory richiede un valore in MiB"
 
 #: ../virt-install:432
 msgid "--disk storage must be specified (override with --disk none)"
@@ -110,12 +111,11 @@ msgstr ""
 #: ../virt-install:447
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
-"Vedere la pagina man per esempi di utilizzo di --location con supporto CD-"
-"ROM"
+"Vedere la pagina man per esempi di utilizzo di --location con supporto CDROM"
 
 #: ../virt-install:453
 msgid "--noreboot and --transient can not be specified together"
-msgstr ""
+msgstr "--noreboot e --transient non possono essere usate insieme"
 
 #: ../virt-install:458
 msgid "Only one install method can be used (%(methods)s)"
@@ -134,12 +134,12 @@ msgstr "Avvio PXE non supportato per guest paravirtualizzati"
 
 #: ../virt-install:472
 msgid "Paravirtualized guests cannot install off cdrom media."
-msgstr "I guest para-virtualizzati non possono essere installati da un cdrom."
+msgstr "I guest paravirtualizzati non possono essere installati da un cdrom."
 
 #: ../virt-install:477
 msgid "Libvirt version does not support remote --location installs"
 msgstr ""
-"La versione di libvirt non supporta le installazione di --location remote"
+"La versione di libvirt non supporta la installazione da --location remote"
 
 #: ../virt-install:483
 msgid "--extra-args only work if specified with --location."
@@ -154,7 +154,7 @@ msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
 msgstr ""
-"Il supporto CD-ROM non stampa sulla console di testo per impostazione "
+"Il supporto CDROM non stampa sulla console di testo per impostazione "
 "predefinita, quindi probabilmente non viene visualizzato l’output di "
 "installazione testuale. Potrebbe essere necessario utilizzare --location."
 
@@ -163,7 +163,7 @@ msgid ""
 "No --console device added, you likely will not see text install output from "
 "the guest."
 msgstr ""
-"Nessun dispositivo --console aggiunto. Probabilmente non viene visualizzato "
+"Nessun dispositivo --console aggiunto, probabilmente non viene visualizzato "
 "l’output di installazione testuale dal guest."
 
 #: ../virt-install:532
@@ -183,9 +183,9 @@ msgid ""
 "No operating system detected, VM performance may suffer. Specify an OS with "
 "--os-variant for optimal results."
 msgstr ""
-"Sistema operativo non rilevato, le prestazioni della macchina virtuale "
-"potrebbero subire conseguenze. Per risultati ottimali, specificare un "
-"sistema operativo con --os-variant."
+"Sistema operativo non rilevato, le prestazioni della VM ne potrebbero "
+"risentire. Per risultati ottimali, specificare un sistema operativo con "
+"--os-variant."
 
 #: ../virt-install:564
 msgid "A disk device must be specified with --import."
@@ -203,7 +203,7 @@ msgid ""
 "Starting install..."
 msgstr ""
 "\n"
-"Avvio dell'installazione in corso..."
+"Avvio dell'installazione..."
 
 #: ../virt-install:701
 msgid "Domain creation completed."
@@ -235,7 +235,7 @@ msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
 msgstr ""
-"Installazione dominio ancora in corso.  E' possibile\n"
+"Installazione dominio ancora in corso.  È possibile\n"
 "riconnettersi alla console per completare il processo di\n"
 "installazione."
 
@@ -264,12 +264,12 @@ msgstr ""
 
 #: ../virt-install:810
 msgid "Dry run completed successfully"
-msgstr "Esecuzione secca completata con successo"
+msgstr "Esecuzione di prova completata con successo"
 
 #: ../virt-install:814
 #, c-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
-msgstr ""
+msgstr "Step XML sconosciuto '%s', deve essere 1, 2 oppure all"
 
 #: ../virt-install:821
 msgid "Requested installation does not have XML step 2"
@@ -343,7 +343,7 @@ msgstr "Opzioni di configurazione del guest"
 
 #: ../virt-install:915
 msgid "Virtualization Platform Options"
-msgstr "Opzioni di piattaforma di virtualizzazione"
+msgstr "Opzioni della piattaforma di virtualizzazione"
 
 #: ../virt-install:917
 msgid "This guest should be a fully virtualized guest"
@@ -363,7 +363,7 @@ msgstr "Nome dell'hypervisor da usare (kvm, qemu, xen, ...)"
 
 #: ../virt-install:928
 msgid "The CPU architecture to simulate"
-msgstr "Architettura della CPU da emulare"
+msgstr "Architettura di CPU da emulare"
 
 #: ../virt-install:930
 msgid "The machine type to emulate"
@@ -379,7 +379,7 @@ msgstr "Possiede un domain autostart all'avvio dell'host."
 
 #: ../virt-install:943
 msgid "Create a transient domain."
-msgstr ""
+msgstr "Crea un dominio transiente."
 
 #: ../virt-install:945
 msgid "Minutes to wait for install to complete."
@@ -413,11 +413,11 @@ msgid ""
 msgstr ""
 "Duplicare una macchina virtuale, modificando tutta la configurazione lato host unica come indirizzo MAC, nome, ecc. \n"
 "\n"
-"Contenuti macchina virtuale NON modificati: virt-clone non modifica elementi all’interno del sistema operativo guest, ma duplica solo i dischi e apporta modifiche lato host. Per questo motivo, processi come la modifica delle password, la modifica dell’indirizzo IP statico, ecc. esulano dall’ambito di questo strumento. Per questa tipologia di modifiche, vedere virt-sysprep(1)."
+"I contenuti della macchina virtuale NON saranno modificati: virt-clone non modifica nulla all'_interno_ del SO guest, ma duplica solo i dischi e apporta modifiche lato host. Per questo motivo, la modifica delle password, la modifica dell’indirizzo IP statico, ecc. esulano dall’ambito di questo strumento. Per questa tipologia di modifiche, vedere virt-sysprep(1)."
 
 #: ../virt-clone:111
 msgid "Name of the original guest; The status must be shut off or paused."
-msgstr "Nome per il guest originale; Lo stato deve essere spento o in pausa."
+msgstr "Nome del guest originale; lo stato deve essere spento o in pausa."
 
 #: ../virt-clone:114
 msgid "XML file to use as the original guest."
@@ -437,7 +437,7 @@ msgstr "Nome per il nuovo guest"
 
 #: ../virt-clone:122
 msgid "use btrfs COW lightweight copy"
-msgstr "Uso della copia btrfs COW lightweight"
+msgstr "utilizza della copia lightweight btrfs COW"
 
 #: ../virt-clone:124
 msgid "Storage Configuration"
@@ -484,11 +484,13 @@ msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
+"È richiesto --auto-clone oppure --file, utilizzare --auto-clone o --file e "
+"riprovare."
 
 #: ../virt-clone:211
 #, c-format
 msgid "Clone '%s' created successfully."
-msgstr "Clona '%s' creato successivamente."
+msgstr "Clone '%s' creato successivamente."
 
 #: ../virt-convert:51
 msgid ""
@@ -1346,7 +1348,7 @@ msgstr "Creazione della macchina virtuale clonata '%s'"
 
 #: ../virtManager/clone.py:816 ../virtManager/delete.py:159
 msgid " and selected storage (this may take a while)"
-msgstr " e dello storage selezionato (potrebbe impiegare alcuni minuti)"
+msgstr " e dello storage selezionato (potrebbe impiegare del tempo)"
 
 #: ../virtManager/config.py:127
 msgid "Locate or create storage volume"
@@ -1412,7 +1414,7 @@ msgstr "Connessione"
 #: ../virtManager/host.py:844 ../virtManager/libvirtobject.py:214
 #: ../virtManager/storagelist.py:347 ../ui/storagelist.ui.h:11
 msgid "Active"
-msgstr "Attiva"
+msgstr "Attivo"
 
 #. Machine settings
 #: ../virtManager/connection.py:585 ../virtManager/create.py:1003
@@ -1467,11 +1469,11 @@ msgstr "Agente guest non disponibile."
 
 #: ../virtManager/console.py:565
 msgid "Guest has crashed."
-msgstr ""
+msgstr "Il guest è andato in crash."
 
 #: ../virtManager/console.py:567
 msgid "Guest is not running."
-msgstr ""
+msgstr "Il guest non è attivo."
 
 #: ../virtManager/console.py:702
 msgid "Graphical console not configured for guest"
@@ -1501,16 +1503,16 @@ msgstr "Errore redirezione USB"
 
 #: ../virtManager/console.py:820
 msgid "Viewer was disconnected."
-msgstr ""
+msgstr "Il visualizzatore è stato disconesso"
 
 #: ../virtManager/console.py:826
 #, python-format
 msgid "SSH tunnel error output: %s"
-msgstr ""
+msgstr "Output dell'errore sul tunnel SSH: %s"
 
 #: ../virtManager/console.py:831 ../virtManager/console.py:1016
 msgid "Viewer disconnected."
-msgstr ""
+msgstr "Visualizzatore disconesso."
 
 #: ../virtManager/console.py:921
 msgid "No text console available"
@@ -1541,12 +1543,12 @@ msgstr "virt-manager non supporta più di una console grafica"
 #: ../virtManager/create.py:79
 #, python-format
 msgid "%.1f GiB"
-msgstr ""
+msgstr "%.1f GiB"
 
 #: ../virtManager/create.py:83
 #, python-format
 msgid "%d MiB"
-msgstr ""
+msgstr "%d MiB"
 
 #: ../virtManager/create.py:258 ../virtManager/create.py:263
 msgid "Warning"
@@ -1730,7 +1732,7 @@ msgstr "Occorre specificare un percorso di storage per l'importazionie."
 
 #: ../virtManager/create.py:1788
 msgid "The import path must point to an existing storage."
-msgstr ""
+msgstr "Il percorso di import deve puntare ad uno storage esistente"
 
 #: ../virtManager/create.py:1796
 msgid "An application path is required."
@@ -2253,7 +2255,7 @@ msgstr "Lo storage è contrassegnato come condivisibile."
 
 #: ../virtManager/delete.py:383
 msgid "Storage is a media device."
-msgstr ""
+msgstr "Lo storage è un dispositivo rimovibile."
 
 #: ../virtManager/delete.py:393
 #, python-format
@@ -2325,31 +2327,31 @@ msgstr "Controller %s"
 
 #: ../virtManager/details.py:315
 msgid "MS-DOS/FreeDOS"
-msgstr ""
+msgstr "MS-DOS/FreeDOS"
 
 #: ../virtManager/details.py:316
 msgid "FreeBSD"
-msgstr ""
+msgstr "FreeBSD"
 
 #: ../virtManager/details.py:317
 msgid "GNU/Hurd"
-msgstr ""
+msgstr "GNU/Hurd"
 
 #: ../virtManager/details.py:319
 msgid "MINIX"
-msgstr ""
+msgstr "MINIX"
 
 #: ../virtManager/details.py:320
 msgid "NetBSD"
-msgstr ""
+msgstr "NetBSD"
 
 #: ../virtManager/details.py:321
 msgid "OpenBSD"
-msgstr ""
+msgstr "OpenBSD"
 
 #: ../virtManager/details.py:322
 msgid "Microsoft Windows"
-msgstr ""
+msgstr "Microsoft Windows"
 
 #: ../virtManager/details.py:327 ../virtManager/details.py:2397
 #: ../virtManager/details.py:2405
@@ -3710,10 +3712,12 @@ msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr ""
+"Il guest è su un host remoto, ma è configurato per consentire solo "
+"conessioni locali ai descrittori di file."
 
 #: ../virtManager/sshtunnels.py:76
 msgid "Guest is configured for TLS only which does not work over SSH."
-msgstr ""
+msgstr "Il guest è configurato solo per TLS che non funziona su SSH."
 
 #: ../virtManager/sshtunnels.py:82
 #, python-format
@@ -3722,6 +3726,9 @@ msgid ""
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
 msgstr ""
+"Il guest è su un host remoto con modalità di trasporto ‘%s’, ma è "
+"configurato solo per ascoltare in locale. Per connettersi da remoto è "
+"necessario modificare l’indirizzo di ascolto del guest."
 
 #: ../virtManager/storagebrowse.py:104
 msgid "Cannot use local storage on remote connection."
@@ -3754,7 +3761,7 @@ msgstr "Pool di storage"
 #: ../virtManager/storagelist.py:339
 #, python-format
 msgid "%s Free / <i>%s In Use</i>"
-msgstr ""
+msgstr "%s Libero / <i>%s In Uso</i>"
 
 #: ../virtManager/storagelist.py:360
 msgid "Create new volume"
@@ -3862,7 +3869,7 @@ msgstr "Errore nell'apertura del percorso del socket '%s'"
 #: ../virtManager/viewers.py:586
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
-msgstr ""
+msgstr "Incontrato SPICE %(error-name)s"
 
 #: ../virtManager/vmmenu.py:73
 msgid "_Reboot"
@@ -4378,6 +4385,12 @@ msgid ""
 "--sysinfo system_manufacturer=System_Corp.,system_product=Computer,...\n"
 "--sysinfo baseBoard_manufacturer=Baseboard_Corp.,baseBoard_product=Motherboard,...\n"
 msgstr ""
+"Configura Informazione di Sistema SMBIOS. Es:\n"
+"--sysinfo emulate\n"
+"--sysinfo host\n"
+"--sysinfo bios_vendor=Vendor_Inc.,bios_version=1.2.3-abc,...\n"
+"--sysinfo system_manufacturer=System_Corp.,system_product=Computer,...\n"
+"--sysinfo baseBoard_manufacturer=Baseboard_Corp.,baseBoard_product=Motherboard,...\n"
 
 #: ../virtinst/cli.py:743
 msgid ""
@@ -4438,17 +4451,17 @@ msgstr "Errore: --%(cli_arg_name)s %(options)s: %(err)s"
 #: ../virtinst/cli.py:1744
 #, python-format
 msgid "Unknown sysinfo flag '%s'"
-msgstr ""
+msgstr "Flag di sysinfo '%s' sconosciuto"
 
 #: ../virtinst/cli.py:1754
 #, python-format
 msgid "SMBios date string '%s' is invalid."
-msgstr ""
+msgstr "Stringa data '%s' di SMBios non valida."
 
 #: ../virtinst/cli.py:1767
 #, python-format
 msgid "Invalid uuid for SMBios: %s"
-msgstr ""
+msgstr "Uuid invalido per SMBios: %s"
 
 #: ../virtinst/cli.py:1770 ../virtinst/cloner.py:120
 #, python-format
@@ -4968,7 +4981,7 @@ msgstr "Indirizzo duplicato per i dispositivi %s e %s"
 
 #: ../virtinst/guest.py:1094
 msgid "Host does not support spice GL"
-msgstr ""
+msgstr "L'host non supporta spice GL"
 
 #: ../virtinst/interface.py:58
 msgid "Whether to enable DHCP"
@@ -5230,7 +5243,7 @@ msgstr "File system Sheepdog"
 
 #: ../virtinst/storage.py:126
 msgid "ZFS Pool"
-msgstr ""
+msgstr "ZFS Pool"
 
 #: ../virtinst/storage.py:233
 #, python-format
@@ -5454,11 +5467,11 @@ msgstr "Superato il range per la generazione dei nomi."
 
 #: ../data/virt-manager.desktop.in.h:2
 msgid "Manage virtual machines"
-msgstr ""
+msgstr "Gestisce macchine virtuali"
 
 #: ../data/virt-manager.appdata.xml.in.h:2
 msgid "Graphically manage KVM, Xen, or LXC via libvirt"
-msgstr ""
+msgstr "Gestire graficamente  KVM, Xen, o LXC via libvirt"
 
 #: ../data/virt-manager.appdata.xml.in.h:3
 msgid ""
@@ -5468,22 +5481,27 @@ msgid ""
 "for existing VMs on local or remote machines. Uses libvirt as the backend "
 "management API."
 msgstr ""
+"Virtual Machine Manager fornisce uno strumento grafico per amministrare "
+"macchine virtuali KVM, Xen e LXC. Avviare, stoppare e rimuovere dispositivi "
+"virtuali, connettersi con una console grafica o testuale, visualizzare "
+"statistiche sull'utilizzo delle risorse di  VM esistenti su macchine locali "
+"o remote. Utilizza libvrit come API backend per l'amministrazione."
 
 #: ../data/virt-manager.appdata.xml.in.h:4
 msgid "Main manager window"
-msgstr ""
+msgstr "Finestra principale di amministrazione "
 
 #: ../data/virt-manager.appdata.xml.in.h:5
 msgid "Virtual machine configuration screen"
-msgstr ""
+msgstr "Schermata di configurazione della macchina virtuale"
 
 #: ../data/virt-manager.appdata.xml.in.h:6
 msgid "Graphical console connection for a virtual machine"
-msgstr ""
+msgstr "Connessione alla console grafica di una macchina virtuale"
 
 #: ../ui/about.ui.h:1
 msgid "Copyright (C) 2006-2016 Red Hat Inc."
-msgstr ""
+msgstr "Copyright (C) 2006-2016 Red Hat Inc."
 
 #: ../ui/about.ui.h:2
 msgid "Powered by libvirt"
@@ -6377,6 +6395,9 @@ msgid ""
 "address ranges. eg FC00::/7.  The prefix must be <b>64</b>. A typical IPv6 "
 "network address will look something like:  fd00:e81d:a6d7:55::/64"
 msgstr ""
+"<b>Nota:</b> La rete va selezionata da uno dei range privati di indirizzi "
+"iPv6. Ad es FC00::/7.  Il prefisso deve essere <b>64</b>. Un tipico indirzzo"
+" di rete IPv6 sarà qualcosa tipo:  fd00:e81d:a6d7:55::/64"
 
 #: ../ui/createnet.ui.h:23
 msgid "fd00:100::1"
@@ -6768,11 +6789,11 @@ msgstr "Nome host:"
 
 #: ../ui/details.ui.h:65
 msgid "Operating system:"
-msgstr ""
+msgstr "Systema operativo:"
 
 #: ../ui/details.ui.h:66
 msgid "foo"
-msgstr ""
+msgstr "foo"
 
 #: ../ui/details.ui.h:67
 msgid "<b>Operating System</b>"
@@ -7118,7 +7139,7 @@ msgstr "Velocità (bytes):"
 
 #: ../ui/details.ui.h:158
 msgid "<b>Random Number Generator</b>"
-msgstr "Generatore di Numeri Casuali"
+msgstr "<b>Generatore di Numeri Casuali</b>"
 
 #: ../ui/details.ui.h:160
 msgid "Address Type:"
@@ -7154,7 +7175,7 @@ msgstr "_Salvare questa password nel keyring"
 
 #: ../ui/details.ui.h:169
 msgid "Check to save password, uncheck to forget password."
-msgstr ""
+msgstr "Selezionare per salvare la password, deselezionare per dimenticarla."
 
 #: ../ui/details.ui.h:171
 msgid "_Login"
@@ -7807,9 +7828,8 @@ msgid "Run selected snapshot"
 msgstr "Eseguire lo snapshot selezionato"
 
 #: ../ui/snapshots.ui.h:17
-#, fuzzy
 msgid "Refresh snapshot list"
-msgstr "Errore nell'aggiornamento della lista snapshot: %s"
+msgstr "Aggiorna la lista delle snapshot"
 
 #: ../ui/snapshots.ui.h:18
 msgid "Delete selected snapshot"
