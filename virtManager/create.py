@@ -448,6 +448,7 @@ class vmmCreate(vmmGObjectUI):
         is_pv = (self._capsinfo.os_type == "xen")
         is_container = self.conn.is_container()
         is_vz = self.conn.is_vz()
+        is_vz_container = (is_vz and self._capsinfo.os_type == "exe")
         can_remote_url = self.conn.get_backend().support_remote_url_install()
 
         installable_arch = (self._capsinfo.arch in
@@ -527,9 +528,10 @@ class vmmCreate(vmmGObjectUI):
 
         # Container install options
         method_container_app.set_active(True)
-        self.widget("virt-install-box").set_visible(not is_container)
         self.widget("container-install-box").set_visible(is_container)
         self.widget("vz-install-box").set_visible(is_vz)
+        self.widget("virt-install-box").set_visible(
+            not is_container and not is_vz_container)
 
         show_dtb = ("arm" in self._capsinfo.arch or
                     "microblaze" in self._capsinfo.arch or
@@ -603,10 +605,10 @@ class vmmCreate(vmmGObjectUI):
                     has_exe_guests = True
 
             self.widget("vz-virt-type-hvm").set_sensitive(has_hvm_guests)
-            self.widget("virt-install-box").set_sensitive(has_hvm_guests)
             self.widget("vz-virt-type-exe").set_sensitive(has_exe_guests)
-            if not has_hvm_guests and has_exe_guests:
-                self.widget("vz-virt-type-exe").set_active(True)
+            self.widget("vz-virt-type-hvm").set_active(has_hvm_guests)
+            self.widget("vz-virt-type-exe").set_active(
+                not has_hvm_guests and has_exe_guests)
 
         # Install local
         iso_option = self.widget("install-iso-radio")
@@ -1325,7 +1327,6 @@ class vmmCreate(vmmGObjectUI):
 
     def _vz_virt_type_changed(self, ignore):
         is_hvm = self.widget("vz-virt-type-hvm").get_active()
-        self.widget("virt-install-box").set_sensitive(is_hvm)
         if is_hvm:
             self._change_caps("hvm")
         else:

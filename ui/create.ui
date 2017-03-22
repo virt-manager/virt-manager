@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAdjustment" id="adjustment2">
@@ -450,6 +450,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkComboBox" id="create-conn">
+                                    <property name="width_request">200</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <signal name="changed" handler="on_create_conn_changed" swapped="no"/>
@@ -1733,9 +1734,10 @@ is not yet supported.&lt;/small&gt;</property>
                                           <object class="GtkEntry" id="install-container-template">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
+                                            <property name="width_chars">40</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">True</property>
+                                            <property name="expand">False</property>
                                             <property name="fill">True</property>
                                             <property name="position">0</property>
                                           </packing>
