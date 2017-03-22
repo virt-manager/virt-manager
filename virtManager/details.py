@@ -240,8 +240,6 @@ def _label_for_device(dev):
     if devtype == "rng":
         label = _("RNG")
         if dev.device:
-            print "dev device='%s'" % dev.device
-            print dev.get_xml_config()
             label += (" %s" % dev.device)
         return label
     if devtype == "tpm":
