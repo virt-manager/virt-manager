@@ -1190,8 +1190,17 @@ class vmmDomain(vmmLibvirtObject):
         return self._backend.openConsole(devname, stream, flags)
 
     def open_graphics_fd(self):
-        return self._backend.openGraphicsFD(0,
-                libvirt.VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH)
+        flags = 0
+
+        # Ugly workaround for VNC bug where the display cannot be opened
+        # if the listen type is "none".  When this gets fixed in QEMU
+        # we should skip auth only for broken QEMUs.
+        graphics = self.get_graphics_devices()[0]
+        if (graphics.type == "vnc" and
+            graphics.get_first_listen_type() == "none"):
+            flags = libvirt.VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH
+
+        return self._backend.openGraphicsFD(0, flags)
 
     def refresh_snapshots(self):
         self._snapshot_list = None
