@@ -1241,6 +1241,7 @@ class XMLParseTest(unittest.TestCase):
         check("domain_name", "net7", "newdom")
         check("ipv6", None, True)
         check("macaddr", None, "52:54:00:69:eb:FF")
+        check("virtualport_type", None, "openvswitch")
 
         check = self._make_checker(net.forward)
         check("mode", "nat", "route")

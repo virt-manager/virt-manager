@@ -212,7 +212,7 @@ class Network(XMLBuilder):
     ##################
 
     _XML_ROOT_NAME = "network"
-    _XML_PROP_ORDER = ["ipv6", "name", "uuid", "forward",
+    _XML_PROP_ORDER = ["ipv6", "name", "uuid", "forward", "virtualport_type",
                        "bridge", "stp", "delay", "domain_name",
                        "macaddr", "ips", "routes", "bandwidth"]
 
@@ -221,6 +221,8 @@ class Network(XMLBuilder):
     uuid = XMLProperty("./uuid",
                        validate_cb=lambda s, v: util.validate_uuid(v),
                        default_cb=_get_default_uuid)
+
+    virtualport_type = XMLProperty("./virtualport/@type")
 
     # Not entirely correct, there can be multiple routes
     forward = XMLChildProperty(_NetworkForward, is_single=True)

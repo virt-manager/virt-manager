@@ -146,6 +146,9 @@ class vmmNetworkList(vmmGObjectUI):
             if not net.is_active():
                 label += " (%s)" % _("Inactive")
 
+            if net.get_xmlobj().virtualport_type == "openvswitch":
+                label += " (OpenVSwitch)"
+
             if net.get_name() == "default":
                 default_label = label
 
@@ -526,8 +529,9 @@ class vmmNetworkList(vmmGObjectUI):
         if not row:
             return
 
+        is_openvswitch = row[2].endswith("(OpenVSwitch)")
         is_direct = (row[0] == virtinst.VirtualNetworkInterface.TYPE_DIRECT)
-        self.widget("vport-expander").set_visible(is_direct)
+        self.widget("vport-expander").set_visible(is_direct or is_openvswitch)
         uiutil.set_grid_row_visible(self.widget("net-source-mode"), is_direct)
         uiutil.set_grid_row_visible(
             self.widget("net-macvtap-warn-box"), is_direct)
