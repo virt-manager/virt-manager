@@ -1594,6 +1594,13 @@ ba</description>
   <route family='ipv6' address='fd00:db8:ac10:fd00::' prefix='64' gateway='fd00:db8:ac10:fd01::1' />
 </network>
 
+<network>
+  <name>ovsbr1</name>
+  <forward mode='bridge'/>
+  <bridge name='ovsbr1'/>
+  <virtualport type='openvswitch'/>
+</network>
+
 
 
 
