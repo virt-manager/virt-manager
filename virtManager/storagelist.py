@@ -535,7 +535,6 @@ class vmmStorageList(vmmGObjectUI):
 
     def _pool_autostart_changed(self, src):
         ignore = src
-        auto = self.widget("pool-autostart").get_active()
         self._enable_pool_apply(EDIT_POOL_AUTOSTART)
 
     def _vol_selected(self, src):

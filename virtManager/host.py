@@ -481,7 +481,6 @@ class vmmHost(vmmGObjectUI):
             self.active_edits.append(edittype)
 
     def net_autostart_changed(self, src_ignore):
-        auto = self.widget("net-autostart").get_active()
         self.enable_net_apply(EDIT_NET_AUTOSTART)
 
     def current_network(self):
