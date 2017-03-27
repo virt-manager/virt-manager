@@ -2464,6 +2464,32 @@ ba</description>
 
 
 <device>
+  <name>pci_8086_10fb</name>
+  <parent>pci_0000_80_01_0</parent>
+  <driver>
+    <name>ixgbe</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>129</bus>
+    <slot>0</slot>
+    <function>1</function>
+    <product id='0x10fb'>82599ES 10-Gigabit SFI/SFP+ Network Connection</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+    <capability type='virt_functions' maxCount='63'>
+      <address domain='0x0000' bus='0x81' slot='0x10' function='0x1'/>
+      <address domain='0x0000' bus='0x81' slot='0x10' function='0x3'/>
+      <address domain='0x0000' bus='0x81' slot='0x10' function='0x5'/>
+      <address domain='0x0000' bus='0x81' slot='0x10' function='0x7'/>
+    </capability>
+    <iommuGroup number='47'>
+      <address domain='0x0000' bus='0x81' slot='0x00' function='0x1'/>
+    </iommuGroup>
+  </capability>
+</device>
+
+
+<device>
   <name>pci_8086_2448</name>
   <parent>computer</parent>
   <capability type='pci'>
