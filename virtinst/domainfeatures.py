@@ -42,6 +42,7 @@ class DomainFeatures(XMLBuilder):
     pmu = XMLProperty("./pmu/@state", is_onoff=True)
     eoi = XMLProperty("./apic/@eoi", is_onoff=True)
 
+    hyperv_reset = XMLProperty("./hyperv/reset/@state", is_onoff=True)
     hyperv_vapic = XMLProperty("./hyperv/vapic/@state", is_onoff=True)
     hyperv_relaxed = XMLProperty("./hyperv/relaxed/@state", is_onoff=True)
     hyperv_spinlocks = XMLProperty("./hyperv/spinlocks/@state", is_onoff=True)

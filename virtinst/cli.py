@@ -1675,6 +1675,7 @@ ParserFeatures.add_arg("viridian", "viridian", is_onoff=True)
 ParserFeatures.add_arg("eoi", "eoi", is_onoff=True)
 ParserFeatures.add_arg("pmu", "pmu", is_onoff=True)
 
+ParserFeatures.add_arg("hyperv_reset", "hyperv_reset", is_onoff=True)
 ParserFeatures.add_arg("hyperv_vapic", "hyperv_vapic", is_onoff=True)
 ParserFeatures.add_arg("hyperv_relaxed", "hyperv_relaxed", is_onoff=True)
 ParserFeatures.add_arg("hyperv_spinlocks", "hyperv_spinlocks", is_onoff=True)
