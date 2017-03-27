@@ -183,6 +183,8 @@ class PCIDevice(NodeDevice):
     vendor_name = XMLProperty("./capability/vendor")
     vendor_id = XMLProperty("./capability/vendor/@id")
 
+    capability_type = XMLProperty("./capability/capability/@type")
+
     iommu_group = XMLProperty("./capability/iommuGroup/@number", is_int=True)
 
     def pretty_name(self):
