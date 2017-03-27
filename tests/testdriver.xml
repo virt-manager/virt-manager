@@ -1601,6 +1601,12 @@ ba</description>
   <virtualport type='openvswitch'/>
 </network>
 
+<network>
+  <name>passthrough</name>
+    <forward mode='hostdev' managed='yes'>
+      <pf dev='eth3'/>
+    </forward>
+</network>
 
 
 
