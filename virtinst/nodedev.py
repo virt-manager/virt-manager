@@ -87,8 +87,7 @@ class NodeDevice(XMLBuilder):
         except Exception, e:
             logging.debug("Error looking up nodedev from idstring=%s",
                 idstring, exc_info=True)
-            raise RuntimeError(_("Did not find node device matching '%s': %s" %
-                (idstring, e)))
+            raise
 
 
     @staticmethod
