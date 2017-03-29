@@ -60,10 +60,9 @@ class vmmLibvirtObject(vmmGObject):
 
     @staticmethod
     def log_redefine_xml_diff(obj, origxml, newxml):
-        objname = "<%s name=%s>" % (obj.__class__.__name__, obj.get_name())
         if origxml == newxml:
             logging.debug("Redefine requested for %s, but XML didn't change!",
-                          objname)
+                          obj)
             return
 
         import difflib
@@ -71,7 +70,7 @@ class vmmLibvirtObject(vmmGObject):
                                             newxml.splitlines(1),
                                             fromfile="Original XML",
                                             tofile="New XML"))
-        logging.debug("Redefining %s with XML diff:\n%s", objname, diff)
+        logging.debug("Redefining %s with XML diff:\n%s", obj, diff)
 
     @staticmethod
     def lifecycle_action(fn):
@@ -93,6 +92,14 @@ class vmmLibvirtObject(vmmGObject):
 
             return ret
         return newfn
+
+    def __repr__(self):
+        try:
+            name = self.get_name()
+        except:
+            name = ""
+        return "<%s name=%s id=%s>" % (
+                self.__class__.__name__, name, hex(id(self)))
 
     def _cleanup(self):
         pass
@@ -120,7 +127,7 @@ class vmmLibvirtObject(vmmGObject):
             return
 
         logging.debug("Changing %s name from %s to %s",
-                      self.__class__, oldname, newname)
+                      self, oldname, newname)
         origxml = xmlobj.get_xml_config()
         xmlobj.name = newname
         newxml = xmlobj.get_xml_config()
