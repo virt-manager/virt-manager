@@ -658,7 +658,7 @@ class vmmConsolePages(vmmGObjectUI):
     def _refresh_widget_states(self):
         pagenum = self.widget("console-pages").get_current_page()
         paused = self.vm.is_paused()
-        is_viewer = (pagenum == _CONSOLE_PAGE_VIEWER and
+        is_viewer = bool(pagenum == _CONSOLE_PAGE_VIEWER and
             self._viewer and self._viewer.console_is_open())
 
         self.widget("details-menu-vm-screenshot").set_sensitive(is_viewer)
