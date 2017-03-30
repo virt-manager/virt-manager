@@ -84,7 +84,7 @@ class NodeDevice(XMLBuilder):
 
         try:
             return _AddressStringToNodedev(conn, idstring)
-        except Exception, e:
+        except Exception:
             logging.debug("Error looking up nodedev from idstring=%s",
                 idstring, exc_info=True)
             raise
