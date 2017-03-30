@@ -48,6 +48,7 @@ class DomainFeatures(XMLBuilder):
     hyperv_spinlocks = XMLProperty("./hyperv/spinlocks/@state", is_onoff=True)
     hyperv_spinlocks_retries = XMLProperty("./hyperv/spinlocks/@retries",
                                            is_int=True)
+    hyperv_synic = XMLProperty("./hyperv/synic/@state", is_onoff=True)
 
     vmport = XMLProperty("./vmport/@state", is_onoff=True,
                          default_name="default", default_cb=lambda s: False)

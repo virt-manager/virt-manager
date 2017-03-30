@@ -1681,6 +1681,7 @@ ParserFeatures.add_arg("hyperv_relaxed", "hyperv_relaxed", is_onoff=True)
 ParserFeatures.add_arg("hyperv_spinlocks", "hyperv_spinlocks", is_onoff=True)
 ParserFeatures.add_arg("hyperv_spinlocks_retries",
                        "hyperv_spinlocks_retries")
+ParserFeatures.add_arg("hyperv_synic", "hyperv_synic", is_onoff=True)
 
 ParserFeatures.add_arg("vmport", "vmport", is_onoff=True)
 ParserFeatures.add_arg("kvm_hidden", "kvm_hidden", is_onoff=True)
