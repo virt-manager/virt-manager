@@ -72,11 +72,23 @@ class _NetworkRoute(XMLBuilder):
     netmask = XMLProperty("./@netmask")
 
 
+class _NetworkForwardPf(XMLBuilder):
+    _XML_ROOT_NAME = "pf"
+    dev = XMLProperty("./@dev")
+
+
 class _NetworkForward(XMLBuilder):
     _XML_ROOT_NAME = "forward"
 
     mode = XMLProperty("./@mode")
     dev = XMLProperty("./@dev")
+    managed = XMLProperty("./@managed")
+    pf = XMLChildProperty(_NetworkForwardPf)
+
+    def add_pf(self):
+        r = _NetworkForwardPf(self.conn)
+        self.add_child(r)
+        return r
 
     def pretty_desc(self):
         return Network.pretty_forward_desc(self.mode, self.dev)

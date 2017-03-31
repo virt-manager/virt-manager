@@ -1293,6 +1293,27 @@ class XMLParseTest(unittest.TestCase):
         utils.diff_compare(net.get_xml_config(), outfile)
         utils.test_create(conn, net.get_xml_config(), "networkDefineXML")
 
+    def testNetVfPool(self):
+        basename = "network-vf-pool"
+        infile = "tests/xmlparse-xml/%s-in.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        net = virtinst.Network(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(net)
+        check("name", "passthrough", "new-foo")
+
+        check = self._make_checker(net.forward)
+        check("mode", "hostdev")
+        check("managed", "yes")
+
+        r = net.forward.add_pf()
+        r.dev = "eth3"
+        check = self._make_checker(r)
+        check("dev", "eth3")
+
+        utils.diff_compare(net.get_xml_config(), outfile)
+        utils.test_create(conn, net.get_xml_config(), "networkDefineXML")
+
 
     ##############
     # Misc tests #
