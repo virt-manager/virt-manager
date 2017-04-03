@@ -22,6 +22,7 @@ import logging
 
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Pango
 
 import ipaddr
 
@@ -123,7 +124,8 @@ class vmmCreateNetwork(vmmGObjectUI):
         pf_list = self.widget("pf-list")
         pf_model = Gtk.ListStore(str, str)
         pf_list.set_model(pf_model)
-        uiutil.init_combo_text_column(pf_list, 0)
+        text = uiutil.init_combo_text_column(pf_list, 0)
+        text.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
 
         # [ label, dev name ]
         fw_list = self.widget("net-forward")
@@ -173,9 +175,8 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         self.widget("net-enable-ipv6-networking").set_active(False)
 
-        pf_model = self.widget("pf-list").get_model()
-        pf_model.clear()
 
+        # Populate physical forward devices
         fw_model = self.widget("net-forward").get_model()
         fw_model.clear()
         fw_model.append([_("Any physical device"), None])
@@ -189,6 +190,14 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         for name in devnames:
             fw_model.append([_("Physical device %s") % name, name])
+        self.widget("net-forward").set_active(0)
+
+        self.widget("net-forward-mode").set_active(0)
+
+
+        # Populate hostdev forward devices
+        pf_model = self.widget("pf-list").get_model()
+        pf_model.clear()
 
         devprettynames = []
         ifnames = []
@@ -204,17 +213,14 @@ class vmmCreateNetwork(vmmGObjectUI):
                 devprettynames.append(devprettyname)
                 ifnames.append(ifname)
                 break
-        if not devprettynames:
+        for devprettyname, ifname in zip(devprettynames, ifnames):
+            pf_model.append([_("%s") % devprettyname, ifname])
+        if len(pf_model) is 0:
             pf_model.append([_("No available device"), None])
-        else:
-            for devprettyname, ifname in zip(devprettynames, ifnames):
-                pf_model.append([_("%s") % devprettyname, ifname])
-
         self.widget("pf-list").set_active(0)
 
-        self.widget("net-forward").set_active(0)
-        self.widget("net-forward-mode").set_active(0)
         self.widget("net-forward-none").set_active(True)
+
 
 
     ##################
@@ -517,27 +523,20 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("create-finish").grab_focus()
 
     def change_forward_type(self, ignore):
-        index = self.widget("pf-list").get_active()
-        model = self.widget("pf-list").get_model()
-        item = model[index]
-        if item[1] is None:
-            sriov_capable = False
-        else:
-            sriov_capable = True
+        sriov_capable = bool(len(self.widget("pf-list").get_model()))
         self.widget("net-forward-mode-hostdev").set_sensitive(sriov_capable)
-        vf_pool = self.widget("net-forward-mode-hostdev").get_active()
-        if not vf_pool:
-            skip_fwd = self.widget("net-forward-none").get_active()
 
-            self.widget("net-forward-mode").set_sensitive(not skip_fwd)
-            self.widget("net-forward").set_sensitive(not skip_fwd)
-        else:
-            self.widget("net-forward-mode").set_sensitive(False)
-            self.widget("net-forward").set_sensitive(False)
+        is_hostdev = self.widget("net-forward-mode-hostdev").get_active()
+        fwd_sensitive = False
+        if not is_hostdev:
+            fwd_sensitive = not self.widget("net-forward-none").get_active()
 
-        self.widget("net-forward-hostdev-table").set_sensitive(vf_pool)
-        self.widget("net-enable-ipv6-networking-box").set_sensitive(not vf_pool)
-        self.widget("dns-domain-name-box").set_sensitive(not vf_pool)
+        self.widget("net-forward-mode").set_sensitive(fwd_sensitive)
+        self.widget("net-forward").set_sensitive(fwd_sensitive)
+        self.widget("net-forward-hostdev-table").set_sensitive(is_hostdev)
+        self.widget("net-enable-ipv6-networking-box").set_sensitive(
+            not is_hostdev)
+        self.widget("dns-domain-name-box").set_sensitive(not is_hostdev)
 
     def change_ipv4_enable(self, ignore):
         enabled = self.get_config_ipv4_enable()
