@@ -1102,9 +1102,11 @@ class DebianDistro(Distro):
 
         # Check for standard 'i386' and 'amd64' which will be
         # in the URI name for --location $ISO mounts
-        for arch in ["i386", "amd64"]:
+        for arch in ["i386", "amd64", "x86_64"]:
             if arch in self.uri:
                 logging.debug("Found treearch=%s in uri", arch)
+                if arch is "x86_64":
+                    arch = "amd64"
                 return arch
 
         # Otherwise default to i386
