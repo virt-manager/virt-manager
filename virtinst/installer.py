@@ -113,13 +113,13 @@ class Installer(object):
         if isinstall and not self.has_install_phase():
             return
 
-        bootorder = self._build_boot_order(isinstall, guest)
-
-        if not guest.os.bootorder:
+        bootorder = guest.os.bootorder
+        if isinstall or not bootorder:
             # Per device <boot order> is not compatible with os/boot.
             if not any(d.boot.order for d in guest.get_all_devices()):
-                guest.os.bootorder = bootorder
+                bootorder = self._build_boot_order(isinstall, guest)
 
+        guest.os.bootorder = bootorder
         if not isinstall:
             return
 
