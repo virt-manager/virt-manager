@@ -10,7 +10,8 @@
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_create_pool_delete_event" swapped="no"/>
     <child>
-      <object class="GtkVBox" id="vbox1">
+      <object class="GtkBox" id="vbox1">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -19,7 +20,8 @@
             <property name="can_focus">False</property>
             <property name="resize_mode">queue</property>
             <child>
-              <object class="GtkHBox" id="hbox77">
+              <object class="GtkBox" id="hbox77">
+                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
@@ -38,11 +40,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="hbox2">
+                  <object class="GtkBox" id="hbox2">
+                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkVBox" id="vbox3">
+                      <object class="GtkBox" id="vbox3">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -97,7 +101,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox2">
+          <object class="GtkBox" id="vbox2">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">12</property>
@@ -216,7 +221,8 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHBox" id="pool-iqn-box">
+                          <object class="GtkBox" id="pool-iqn-box">
+                            <property name="orientation">horizontal</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>

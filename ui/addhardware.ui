@@ -29,13 +29,15 @@
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_create_delete_event" swapped="no"/>
     <child>
-      <object class="GtkVBox" id="vbox23">
+      <object class="GtkBox" id="vbox23">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkHBox" id="mainhbox">
+          <object class="GtkBox" id="mainhbox">
+            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">12</property>
@@ -67,7 +69,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="create-vbox">
+              <object class="GtkBox" id="create-vbox">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">12</property>
@@ -125,7 +128,8 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkVBox" id="vbox10">
+                          <object class="GtkBox" id="vbox10">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">start</property>
@@ -389,7 +393,8 @@
                                 <property name="row_spacing">9</property>
                                 <property name="column_spacing">6</property>
                                 <child>
-                                  <object class="GtkHBox" id="hbox2">
+                                  <object class="GtkBox" id="hbox2">
+                                    <property name="orientation">horizontal</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="spacing">6</property>
@@ -771,7 +776,8 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox4">
+                              <object class="GtkBox" id="hbox4">
+                                <property name="orientation">horizontal</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
@@ -820,7 +826,8 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox10">
+                              <object class="GtkBox" id="hbox10">
+                                <property name="orientation">horizontal</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
@@ -1297,7 +1304,8 @@
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">12</property>
                             <child>
-                              <object class="GtkHBox" id="usbredir-host-box">
+                              <object class="GtkBox" id="usbredir-host-box">
+                                <property name="orientation">horizontal</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
@@ -1572,7 +1580,8 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="rng-connect-host-box">
+                              <object class="GtkBox" id="rng-connect-host-box">
+                                <property name="orientation">horizontal</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
@@ -1637,7 +1646,8 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="rng-bind-host-box">
+                              <object class="GtkBox" id="rng-bind-host-box">
+                                <property name="orientation">horizontal</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
