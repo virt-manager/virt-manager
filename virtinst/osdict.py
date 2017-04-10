@@ -67,6 +67,9 @@ def _remove_older_point_releases(distro_list):
     _find_latest("rhel7")
     _find_latest("freebsd9")
     _find_latest("freebsd10")
+    _find_latest("freebsd11")
+    _find_latest("centos6")
+    _find_latest("centos7")
     return ret
 
 
@@ -370,8 +373,8 @@ class _OsVariant(object):
         # EOL date. So assume None == EOL, add some manual work arounds.
         # We should fix this in a new libosinfo version, and then drop
         # this hack
-        if self._is_related_to(["fedora20", "rhel7.0", "debian6",
-            "ubuntu13.04", "win8", "win2k12"],
+        if self._is_related_to(["fedora24", "rhel7.0", "debian6",
+            "ubuntu13.04", "win8", "win2k12", "mageia5", "centos7.0"],
             check_clones=False, check_derives=False):
             return True
         return False
