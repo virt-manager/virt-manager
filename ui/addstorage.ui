@@ -7,7 +7,8 @@
     <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkVBox" id="storage-box">
+  <object class="GtkBox" id="storage-box">
+    <property name="orientation">vertical</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="spacing">6</property>
@@ -47,12 +48,14 @@
             <property name="can_focus">False</property>
             <property name="left_padding">22</property>
             <child>
-              <object class="GtkVBox" id="vbox1">
+              <object class="GtkBox" id="vbox1">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">4</property>
                 <child>
-                  <object class="GtkHBox" id="hbox1">
+                  <object class="GtkBox" id="hbox1">
+                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
@@ -124,7 +127,8 @@
       </packing>
     </child>
     <child>
-      <object class="GtkHBox" id="hbox9">
+      <object class="GtkBox" id="hbox9">
+        <property name="orientation">horizontal</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -167,7 +171,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="storage-browse-box">
+          <object class="GtkBox" id="storage-browse-box">
+            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="sensitive">False</property>
             <property name="can_focus">False</property>
