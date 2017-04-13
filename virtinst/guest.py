@@ -408,6 +408,7 @@ class Guest(XMLBuilder):
                     exc_info = sys.exc_info()
                     try:
                         self.domain.undefine()
+                        self.domain = None
                     except:
                         pass
                     raise exc_info[0], exc_info[1], exc_info[2]
