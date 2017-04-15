@@ -516,21 +516,6 @@ class _OsVariant(object):
         if guest.os.is_pseries():
             return "vga"
 
-        # Marc Deslauriers of canonical had previously patched us
-        # to use vmvga for ubuntu, see fb76c4e5. And Fedora users report
-        # issues with ubuntu + qxl for as late as 14.04, so carry the vmvga
-        # default forward until someone says otherwise. In 2014-09 I contacted
-        # Marc offlist and he said this was fine for now.
-        #
-        # But in my testing ubuntu-15.04 works _better_ with qxl (installer
-        # resolution is huge with vmvga but reasonable with qxl), and given
-        # that the qemu vmvga code is not supposed to be of high quality,
-        # let's use qxl for newer ubuntu
-        if (self._os and
-            self._os.get_distro() == "ubuntu" and
-            not self._is_related_to("ubuntu15.04")):
-            return "vmvga"
-
         if guest.has_spice() and guest.os.is_x86():
             if guest.has_gl():
                 return "virtio"
