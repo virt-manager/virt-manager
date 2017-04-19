@@ -1184,9 +1184,6 @@ class Guest(XMLBuilder):
             self._add_spice_usbredir()
 
         video_model = self._os_object.default_videomodel(self)
-        if video_model == 'vmvga' and self.stable_defaults(force=True):
-            video_model = 'vga'
-
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model

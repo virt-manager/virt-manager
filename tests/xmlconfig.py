@@ -307,30 +307,6 @@ class TestXMLMisc(unittest.TestCase):
         finally:
             CLIConfig.stable_defaults = False
 
-    def test_no_vmvga_RHEL(self):
-        # Test that vmvga is not used on RHEL
-        conn = utils.open_kvm_rhel()
-        def _make():
-            g = _make_guest(conn=conn)
-            g.emulator = "/usr/libexec/qemu-kvm"
-            g.add_default_video_device()
-            g.os_variant = "ubuntu13.10"
-
-            # Some input handling to work with different libsoinfo dbs
-            g.add_default_input_device()
-            g.get_devices("input")[0].type = "tablet"
-            return g
-
-        try:
-            g = _make()
-            self._compare(g, "install-novmvga-rhel", True)
-
-            CLIConfig.stable_defaults = True
-            g = _make()
-            self._compare(g, "install-novmvga-rhel", True)
-        finally:
-            CLIConfig.stable_defaults = False
-
     def test_hyperv_clock(self):
         def _make(connver):
             conn = utils.open_kvm(libver=1002002, connver=connver)
