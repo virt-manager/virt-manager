@@ -978,6 +978,7 @@ class vmmCreate(vmmGObjectUI):
             "bsd": _("BSD"),
             "generic": _("Generic"),
             "linux": _("Linux"),
+            "macos": _("macOS"),
             "other": _("Others"),
             "solaris": _("Solaris"),
             "windows": _("Windows"),
