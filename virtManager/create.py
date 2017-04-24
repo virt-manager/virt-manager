@@ -975,11 +975,11 @@ class vmmCreate(vmmGObjectUI):
         # Pretty names for OSes.  If a new OS is not found here,
         # its capitalized name is used.
         oses = {
+            "bsd": _("BSD"),
             "generic": _("Generic"),
             "linux": _("Linux"),
             "other": _("Others"),
             "solaris": _("Solaris"),
-            "unix": _("UNIX"),
             "windows": _("Windows"),
         }
 

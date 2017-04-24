@@ -244,7 +244,7 @@ class _OSDB(object):
         return osname
 
     def list_types(self):
-        approved_types = ["linux", "windows", "unix",
+        approved_types = ["linux", "windows", "bsd",
             "solaris", "other", "generic"]
         return approved_types
 
@@ -421,7 +421,7 @@ class _OsVariant(object):
             return "solaris"
 
         if self._family in ['openbsd', 'freebsd', 'netbsd']:
-            return "unix"
+            return "bsd"
 
         return "other"
 
