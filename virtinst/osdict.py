@@ -288,6 +288,7 @@ class _OsVariant(object):
         self.name = self._os and self._os.get_short_id() or "generic"
         self.label = self._os and self._os.get_name() or "Generic"
         self.codename = self._os and self._os.get_codename() or ""
+        self.distro = self._os and self._os.get_distro() or ""
 
         self.sortby = self._get_sortby()
         self.urldistro = self._get_urldistro()
@@ -353,8 +354,7 @@ class _OsVariant(object):
         except:
             pass
 
-        distro = self._os.get_distro()
-        return "%s-%s" % (distro, version)
+        return "%s-%s" % (self.distro, version)
 
     def _get_supported(self):
         if not self._os:
@@ -382,7 +382,7 @@ class _OsVariant(object):
     def _get_urldistro(self):
         if not self._os:
             return None
-        urldistro = self._os.get_distro()
+        urldistro = self.distro
         remap = {
             "opensuse" : "suse",
             "sles" : "suse",
