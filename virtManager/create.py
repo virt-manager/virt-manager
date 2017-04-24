@@ -304,6 +304,13 @@ class vmmCreate(vmmGObjectUI):
             cols.insert(OS_COL_LABEL, str)
             cols.insert(OS_COL_IS_SEP, bool)
             cols.insert(OS_COL_IS_SHOW_ALL, bool)
+            return Gtk.TreeStore(*cols)
+
+        def make_completion_model():
+            # [os value, os label]
+            cols = []
+            cols.insert(OS_COL_ID, str)
+            cols.insert(OS_COL_LABEL, str)
             return Gtk.ListStore(*cols)
 
         # Lists for distro type + variant
@@ -324,7 +331,7 @@ class vmmCreate(vmmGObjectUI):
         entry.set_completion(completion)
         completion.set_text_column(1)
         completion.set_inline_completion(True)
-        completion.set_model(os_variant_model)
+        completion.set_model(make_completion_model())
 
         # Archtecture
         archList = self.widget("arch")
@@ -930,18 +937,12 @@ class vmmCreate(vmmGObjectUI):
     # Helpers for populating OS type/variant UI #
     #############################################
 
-    def _add_os_row(self, model, name="", label="", supported=False,
-                      sep=False, action=False):
+    def _add_os_row(self, model, name="", label="",
+                      sep=False, action=False, parent=None):
         """
         Helper for building an os type/version row and adding it to
         the list model if necessary
         """
-        visible = self._show_all_os_was_selected or supported
-        if sep or action:
-            visible = not self._show_all_os_was_selected
-
-        if not visible:
-            return
 
         row = []
         row.insert(OS_COL_ID, name)
@@ -949,6 +950,12 @@ class vmmCreate(vmmGObjectUI):
         row.insert(OS_COL_IS_SEP, sep)
         row.insert(OS_COL_IS_SHOW_ALL, action)
 
+        return model.append(parent, row)
+
+    def _add_completion_row(self, model, name, label):
+        row = []
+        row.insert(OS_COL_ID, name)
+        row.insert(OS_COL_LABEL, label)
         model.append(row)
 
     def _populate_os_type_model(self):
@@ -958,23 +965,40 @@ class vmmCreate(vmmGObjectUI):
 
         # Kind of a hack, just show linux + windows by default since
         # that's all 98% of people care about
-        supportl = ["generic", "linux", "windows"]
+        supported = {"generic", "linux", "windows"}
 
         # Move 'generic' to the front of the list
         types = virtinst.OSDB.list_types()
         types.remove("generic")
         types.insert(0, "generic")
 
+        # Pretty names for OSes.  If a new OS is not found here,
+        # its capitalized name is used.
+        oses = {
+            "generic": _("Generic"),
+            "linux": _("Linux"),
+            "other": _("Others"),
+            "solaris": _("Solaris"),
+            "unix": _("UNIX"),
+            "windows": _("Windows"),
+        }
+
+        # When only the "supported" types are requested,
+        # filter them.
+        if not self._show_all_os_was_selected:
+            types = [t for t in types if t in supported]
+
         for typename in types:
-            supported = (typename in supportl)
-            typelabel = typename.capitalize()
-            if typename in ["unix"]:
-                typelabel = typename.upper()
+            try:
+                typelabel = oses[typename]
+            except KeyError:
+                typelabel = typename.capitalize()
 
-            self._add_os_row(model, typename, typelabel, supported)
+            self._add_os_row(model, typename, typelabel)
 
-        self._add_os_row(model, sep=True)
-        self._add_os_row(model, label=_("Show all OS options"), action=True)
+        if not self._show_all_os_was_selected:
+            self._add_os_row(model, sep=True)
+            self._add_os_row(model, label=_("Show all OS options"), action=True)
 
         # Select 'generic' by default
         widget.set_active(0)
@@ -984,17 +1008,71 @@ class vmmCreate(vmmGObjectUI):
         model = widget.get_model()
         model.clear()
 
+        completion_model = self.widget("install-os-version-entry").get_completion().get_model()
+        completion_model.clear()
+
         preferred = self.config.preferred_distros
-        variants = virtinst.OSDB.list_os(typename=_type, sortpref=preferred)
-        supportl = virtinst.OSDB.list_os(typename=_type, sortpref=preferred,
-            only_supported=True)
 
-        for v in variants:
-            supported = v in supportl or v.name == "generic"
-            self._add_os_row(model, v.name, v.label, supported)
+        # All the subgroups for top-level types.  Distributions not
+        # belonging to these groups will be shown either in a "Others"
+        # group, or top-level if there are no other groups.
+        groups = {
+            "altlinux": _("ALT Linux"),
+            "centos": _("CentOS"),
+            "debian": _("Debian"),
+            "fedora": _("Fedora"),
+            "freebsd": _("FreeBSD"),
+            "mageia": _("Mageia"),
+            "netbsd": _("NetBSD"),
+            "openbsd": _("OpenBSD"),
+            "opensuse": _("openSUSE"),
+            "rhel": _("Red Hat Enterprise Linux"),
+            "sled": _("SUSE Linux Enterprise Desktop"),
+            "sles": _("SUSE Linux Enterprise Server"),
+            "ubuntu": _("Ubuntu"),
+        }
 
-        self._add_os_row(model, sep=True)
-        self._add_os_row(model, label=_("Show all OS options"), action=True)
+        if self._show_all_os_was_selected:
+            # List all the OSes, and determine which OSes have groups,
+            # and which do not.
+            variants = virtinst.OSDB.list_os(typename=_type,
+                sortpref=preferred)
+            all_distros = set([os.distro for os in variants])
+            distros = [os for os in all_distros if os in groups]
+            distros.sort()
+            other_distros = [os for os in all_distros if os not in groups]
+            parents = dict()
+            if len(distros) > 0:
+                # We have groups for the OSes, so create them.
+                for d in distros:
+                    parents[d] = self._add_os_row(model, "", groups[d])
+                # Create the "Others" group at the end, for the OSes
+                # without a group.
+                if len(other_distros):
+                    others_parent = self._add_os_row(model, "", _('Others'))
+                    for d in other_distros:
+                        parents[d] = others_parent
+            else:
+                # No groups, so assume the top-level will be the parent
+                # all the OSes.
+                for d in other_distros:
+                    parents[d] = None
+            for v in variants:
+                self._add_os_row(model, v.name, v.label,
+                    parent=parents[v.distro])
+                self._add_completion_row(completion_model, v.name, v.label)
+        else:
+            # We are showing only the supported systems, so query them,
+            # and add them directly to their type.
+            variants = virtinst.OSDB.list_os(typename=_type,
+                sortpref=preferred, only_supported=True)
+            for v in variants:
+                self._add_os_row(model, v.name, v.label)
+                self._add_completion_row(completion_model, v.name, v.label)
+
+            # Add the menu entries to show all the OSes
+            self._add_os_row(model, sep=True)
+            self._add_os_row(model, label=_("Show all OS options"), action=True)
 
         widget.set_active(0)
 
@@ -1009,11 +1087,19 @@ class vmmCreate(vmmGObjectUI):
         """
         model = os_widget.get_model()
         def find_row():
-            for idx, row in enumerate(model):
-                if os_id and row[OS_COL_ID] == os_id:
-                    os_widget.set_active(idx)
-                    return row[OS_COL_LABEL]
-            os_widget.set_active(0)
+            def cmp_func(model, path, it, user_data):
+                ignore = path
+                if model.get_value(it, OS_COL_ID) == os_id:
+                    os_widget.set_active_iter(it)
+                    user_data[0] = model.get_value(it, OS_COL_LABEL)
+                    return True
+                return False
+            data = [None]
+            model.foreach(cmp_func, data)
+            label = data[0]
+            if not label:
+                os_widget.set_active(0)
+            return label
 
         label = None
         if os_id:
@@ -1166,33 +1252,26 @@ class vmmCreate(vmmGObjectUI):
 
     def _get_config_os_info(self):
         drow = uiutil.get_list_selected_row(self.widget("install-os-type"))
-        vrow = uiutil.get_list_selected_row(self.widget("install-os-version"))
         distro = None
         dlabel = None
         variant = None
-        variant_found = False
-        vlabel = self.widget("install-os-version-entry").get_text()
+        entry = self.widget("install-os-version-entry")
+        vlabel = entry.get_text()
 
-        for row in self.widget("install-os-version").get_model():
-            if (not row[OS_COL_IS_SEP] and
-                not row[OS_COL_IS_SHOW_ALL] and
-                row[OS_COL_LABEL] == vlabel):
+        for row in entry.get_completion().get_model():
+            if row[OS_COL_LABEL] == vlabel:
                 variant = row[OS_COL_ID]
-                variant_found = True
                 break
 
-        if vlabel and not variant_found:
+        if not variant:
             return (None, None, False, None, None)
 
         if drow:
             distro = drow[OS_COL_ID]
             dlabel = drow[OS_COL_LABEL]
-        if vrow:
-            variant = vrow[OS_COL_ID]
-            vlabel = vrow[OS_COL_LABEL]
 
         return (distro and str(distro),
-                variant and str(variant),
+                str(variant),
                 True,
                 str(dlabel), str(vlabel))
 
