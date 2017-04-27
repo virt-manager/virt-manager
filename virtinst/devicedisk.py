@@ -481,6 +481,7 @@ class VirtualDisk(VirtualDevice):
     def __init__(self, *args, **kwargs):
         VirtualDevice.__init__(self, *args, **kwargs)
 
+        self._source_volume_err = None
         self._storage_backend = None
         self.storage_was_created = False
 
@@ -768,6 +769,7 @@ class VirtualDisk(VirtualDevice):
         path = None
         vol_object = None
         parent_pool = None
+        self._source_volume_err = None
         typ = self._get_default_type()
 
         if self.type == VirtualDisk.TYPE_NETWORK:
@@ -783,7 +785,8 @@ class VirtualDisk(VirtualDevice):
                 parent_pool = conn.storagePoolLookupByName(self.source_pool)
                 vol_object = parent_pool.storageVolLookupByName(
                     self.source_volume)
-            except:
+            except Exception, e:
+                self._source_volume_err = str(e)
                 logging.debug("Error fetching source pool=%s vol=%s",
                     self.source_pool, self.source_volume, exc_info=True)
 
@@ -840,6 +843,9 @@ class VirtualDisk(VirtualDevice):
 
     def validate(self):
         if self.path is None:
+            if self._source_volume_err:
+                raise RuntimeError(self._source_volume_err)
+
             if not self.can_be_empty():
                 raise ValueError(_("Device type '%s' requires a path") %
                                  self.device)
