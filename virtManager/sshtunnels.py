@@ -38,6 +38,7 @@ class ConnectionInfo(object):
         self.gsocket = gdev.socket
         self.gaddr = gdev.listen or "127.0.0.1"
         self.gtlsport = gdev.tlsPort or None
+        self.glistentype = gdev.get_first_listen_type()
 
         self.transport = conn.get_uri_transport()
         self.connuser = conn.get_uri_username()
@@ -60,6 +61,8 @@ class ConnectionInfo(object):
             return False
 
     def _is_listen_none(self):
+        if self.glistentype == "none":
+            return True
         return not (self.gsocket or self.gport or self.gtlsport)
 
     def need_tunnel(self):
