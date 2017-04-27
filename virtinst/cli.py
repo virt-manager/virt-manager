@@ -359,7 +359,7 @@ def set_prompt(prompt):
 
 
 def validate_disk(dev, warn_overwrite=False):
-    def _optional_fail(msg, checkname):
+    def _optional_fail(msg, checkname, warn_on_skip=True):
         do_check = get_global_state().get_validation_check(checkname)
         if do_check:
             fail(msg + (_(" (Use --check %s=off or "
@@ -367,7 +367,8 @@ def validate_disk(dev, warn_overwrite=False):
 
         logging.debug("Skipping --check %s error condition '%s'",
             checkname, msg)
-        logging.warn(msg)
+        if warn_on_skip:
+            logging.warn(msg)
 
     def check_path_exists(dev):
         """
@@ -400,7 +401,7 @@ def validate_disk(dev, warn_overwrite=False):
         isfatal, errmsg = dev.is_size_conflict()
         # The isfatal case should have already caused us to fail
         if not isfatal and errmsg:
-            _optional_fail(errmsg, "disk_size")
+            _optional_fail(errmsg, "disk_size", warn_on_skip=False)
 
     def check_path_search(dev):
         user, broken_paths = dev.check_path_search(dev.conn, dev.path)
