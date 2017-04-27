@@ -383,6 +383,31 @@ class Guest(XMLBuilder):
 
         return install_xml, final_xml
 
+    def _manual_transient_create(self, install_xml, final_xml, needs_boot):
+        """
+        For hypervisors (like vz) that don't implement createXML,
+        we need to define+start, and undefine on start failure
+        """
+        domain = self.conn.defineXML(install_xml or final_xml)
+        if not needs_boot:
+            return domain
+
+        # Handle undefining the VM if the initial startup fails
+        try:
+            domain.create()
+        except:
+            import sys
+            exc_info = sys.exc_info()
+            try:
+                domain.undefine()
+            except:
+                pass
+            raise exc_info[0], exc_info[1], exc_info[2]
+
+        if install_xml and install_xml != final_xml:
+            domain = self.conn.defineXML(final_xml)
+        return domain
+
     def _create_guest(self, meter, install_xml, final_xml, doboot, transient):
         """
         Actually do the XML logging, guest defining/creating
@@ -392,27 +417,19 @@ class Guest(XMLBuilder):
         meter_label = _("Creating domain...")
         meter = util.ensure_meter(meter)
         meter.start(size=None, text=meter_label)
+        needs_boot = doboot or self.installer.has_install_phase()
 
-        if transient:
-            domain = self.conn.createXML(install_xml or final_xml, 0)
+        if self.type == "vz":
+            if transient:
+                raise RuntimeError(_("Domain type 'vz' doesn't support "
+                    "transient installs."))
+            domain = self._manual_transient_create(
+                    install_xml, final_xml, needs_boot)
+
         else:
-            # Not all hypervisors (vz) support createXML, so avoid it here
-            domain = self.conn.defineXML(install_xml or final_xml)
-
-            # Handle undefining the VM if the initial startup fails
-            if doboot or self.installer.has_install_phase():
-                try:
-                    domain.create()
-                except:
-                    import sys
-                    exc_info = sys.exc_info()
-                    try:
-                        domain.undefine()
-                    except:
-                        pass
-                    raise exc_info[0], exc_info[1], exc_info[2]
-
-            if install_xml and install_xml != final_xml:
+            if transient or needs_boot:
+                domain = self.conn.createXML(install_xml or final_xml, 0)
+            if not transient:
                 domain = self.conn.defineXML(final_xml)
 
         self.domain = domain

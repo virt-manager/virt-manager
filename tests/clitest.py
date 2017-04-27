@@ -784,6 +784,8 @@ c.add_compare("--disk %(BLOCKVOL)s --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-h
 #####################
 
 c = vinst.add_category("vz", "--connect %(URI-VZ)s --noautoconsole")
+c.add_valid("--container")  # validate the special define+start logic
+c.add_invalid("--container --transient")  # doesn't support --transient
 c.add_compare(""" \
 --container \
 --filesystem type=template,source=centos-7-x86_64,target="/" \
