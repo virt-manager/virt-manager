@@ -352,9 +352,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         return uri
 
     def _finish_cb(self, error, details, destconn):
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+        self.reset_finish_cursor()
 
         if error:
             error = _("Unable to migrate guest: %s") % error
@@ -385,9 +383,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                                details=details)
             return
 
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self.set_finish_cursor()
 
         cancel_cb = None
         if self.vm.getjobinfo_supported:

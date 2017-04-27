@@ -366,7 +366,7 @@ class vmmCreate(vmmGObjectUI):
         self._failed_guest = None
         self._guest = None
         self._show_all_os_was_selected = False
-        self._undo_finish_cursor(self.topwin)
+        self.reset_finish_cursor()
 
         self.widget("create-pages").set_current_page(PAGE_NAME)
         self._page_changed(None, None, PAGE_NAME)
@@ -2218,18 +2218,6 @@ class vmmCreate(vmmGObjectUI):
     # Guest install routines #
     ##########################
 
-    def _set_finish_cursor(self, topwin):
-        topwin.set_sensitive(False)
-        topwin.get_window().set_cursor(
-                Gdk.Cursor.new(Gdk.CursorType.WATCH))
-
-    def _undo_finish_cursor(self, topwin):
-        topwin.set_sensitive(True)
-        if not topwin.get_window():
-            return
-        topwin.get_window().set_cursor(
-                Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
     def _finish_clicked(self, src_ignore):
         # Validate the final page
         page = self.widget("create-pages").get_current_page()
@@ -2241,7 +2229,7 @@ class vmmCreate(vmmGObjectUI):
 
         # Start the install
         self._failed_guest = None
-        self._set_finish_cursor(self.topwin)
+        self.set_finish_cursor()
 
         if not self.widget("summary-customize").get_active():
             self._start_install(guest)
@@ -2251,7 +2239,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             self._show_customize_dialog(guest)
         except Exception, e:
-            self._undo_finish_cursor(self.topwin)
+            self.reset_finish_cursor()
             self.err.show_err(_("Error starting installation: ") + str(e))
             return
 
@@ -2287,7 +2275,7 @@ class vmmCreate(vmmGObjectUI):
         self._customize_window.show()
 
     def _install_finished_cb(self, error, details, parentobj):
-        self._undo_finish_cursor(parentobj.topwin)
+        self.reset_finish_cursor(parentobj.topwin)
 
         if error:
             error = (_("Unable to complete install: '%s'") % error)

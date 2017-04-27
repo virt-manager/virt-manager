@@ -1354,9 +1354,7 @@ class vmmAddHardware(vmmGObjectUI):
         if error is not None:
             self.err.show_err(error, details=details)
 
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+        self.reset_finish_cursor()
 
         self._dev = None
         if not failure:
@@ -1371,10 +1369,7 @@ class vmmAddHardware(vmmGObjectUI):
                                 "input: %s") % str(e))
             return
 
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.WATCH))
-
+        self.set_finish_cursor()
         progWin = vmmAsyncJob(self._setup_device, [],
                               self._finish_cb, [],
                               _("Creating device"),

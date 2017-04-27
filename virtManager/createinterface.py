@@ -1111,9 +1111,7 @@ class vmmCreateInterface(vmmGObjectUI):
     #####################
 
     def _finish_cb(self, error, details):
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+        self.reset_finish_cursor()
 
         if error:
             error = _("Error creating interface: '%s'") % error
@@ -1134,10 +1132,7 @@ class vmmCreateInterface(vmmGObjectUI):
         activate = self.widget("interface-activate").get_active()
 
         # Start the install
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.WATCH))
-
+        self.set_finish_cursor()
         progWin = vmmAsyncJob(self.do_install, [activate],
                               self._finish_cb, [],
                               _("Creating virtual interface"),

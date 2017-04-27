@@ -460,9 +460,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-new-ok").set_sensitive(bool(src.get_text()))
 
     def _new_finish_cb(self, error, details, newname):
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-                Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+        self.reset_finish_cursor()
 
         if error is not None:
             error = _("Error creating snapshot: %s") % error
@@ -530,12 +528,9 @@ class vmmSnapshotPage(vmmGObjectUI):
         xml = snap.get_xml_config()
         name = snap.name
         mime, sndata = self._get_screenshot_data_for_save()
-
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(
-                Gdk.Cursor.new(Gdk.CursorType.WATCH))
-
         self._snapshot_new_close()
+
+        self.set_finish_cursor()
         progWin = vmmAsyncJob(
                     self._do_create_snapshot, [xml, name, mime, sndata],
                     self._new_finish_cb, [name],

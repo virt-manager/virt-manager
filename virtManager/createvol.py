@@ -273,9 +273,7 @@ class vmmCreateVolume(vmmGObjectUI):
         self.emit("vol-created", pool.get_connkey(), volname)
 
     def _finish_cb(self, error, details):
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+        self.reset_finish_cursor()
 
         if error:
             error = _("Error creating vol: %s") % error
@@ -295,10 +293,7 @@ class vmmCreateVolume(vmmGObjectUI):
             self.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.WATCH))
-
+        self.set_finish_cursor()
         progWin = vmmAsyncJob(self._async_vol_create, [],
                               self._finish_cb, [],
                               _("Creating storage volume..."),

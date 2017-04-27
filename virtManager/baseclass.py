@@ -238,3 +238,18 @@ class vmmGObjectUI(vmmGObject):
 
     def bind_escape_key_close(self):
         self.bind_escape_key_close_helper(self.topwin, self.close)
+
+    def set_finish_cursor(self):
+        self.topwin.set_sensitive(False)
+        cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
+        self.topwin.get_window().set_cursor(cursor)
+
+    def reset_finish_cursor(self, topwin=None):
+        if not topwin:
+            topwin = self.topwin
+
+        topwin.set_sensitive(True)
+        if not topwin.get_window():
+            return
+        cursor = Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW)
+        topwin.get_window().set_cursor(cursor)

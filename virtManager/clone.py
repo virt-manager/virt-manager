@@ -803,9 +803,7 @@ class vmmCloneVM(vmmGObjectUI):
         return True
 
     def _finish_cb(self, error, details):
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+        self.reset_finish_cursor()
 
         if error is not None:
             error = (_("Error creating virtual machine clone '%s': %s") %
@@ -824,9 +822,7 @@ class vmmCloneVM(vmmGObjectUI):
             self.err.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self.set_finish_cursor()
 
         title = (_("Creating virtual machine clone '%s'") %
                  self.clone_design.clone_name)

@@ -791,9 +791,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         return net
 
     def _finish_cb(self, error, details):
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+        self.reset_finish_cursor()
 
         if error:
             error = _("Error creating virtual network: %s") % str(error)
@@ -816,10 +814,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.err.show_err(_("Error generating network xml: %s") % str(e))
             return
 
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(
-            Gdk.Cursor.new(Gdk.CursorType.WATCH))
-
+        self.set_finish_cursor()
         progWin = vmmAsyncJob(self._async_net_create, [net],
                               self._finish_cb, [],
                               _("Creating virtual network..."),
