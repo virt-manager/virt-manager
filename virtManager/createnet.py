@@ -69,6 +69,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
             "on_net_name_activate": self.forward,
             "on_net_forward_toggled" : self.change_forward_type,
+            "on_net_forward_mode_toggled" : self.change_forward_mode_type,
 
             "on_net-ipv4-enable_toggled" :  self.change_ipv4_enable,
             "on_net-ipv4-network_changed":  self.change_ipv4_network,
@@ -141,6 +142,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         mode_model.append([_("NAT"), "nat"])
         mode_model.append([_("Routed"), "route"])
+        mode_model.append([_("Open"), "open"])
 
     def reset_state(self):
         notebook = self.widget("create-pages")
@@ -525,6 +527,8 @@ class vmmCreateNetwork(vmmGObjectUI):
     def change_forward_type(self, ignore):
         sriov_capable = bool(len(self.widget("pf-list").get_model()))
         self.widget("net-forward-mode-hostdev").set_sensitive(sriov_capable)
+        mode = uiutil.get_list_selection(self.widget("net-forward-mode"),
+                                        column=1)
 
         is_hostdev = self.widget("net-forward-mode-hostdev").get_active()
         fwd_sensitive = False
@@ -532,11 +536,17 @@ class vmmCreateNetwork(vmmGObjectUI):
             fwd_sensitive = not self.widget("net-forward-none").get_active()
 
         self.widget("net-forward-mode").set_sensitive(fwd_sensitive)
-        self.widget("net-forward").set_sensitive(fwd_sensitive)
+        self.widget("net-forward").set_sensitive(fwd_sensitive and
+                                                mode != "open")
         self.widget("net-forward-hostdev-table").set_sensitive(is_hostdev)
         self.widget("net-enable-ipv6-networking-box").set_sensitive(
             not is_hostdev)
         self.widget("dns-domain-name-box").set_sensitive(not is_hostdev)
+
+    def change_forward_mode_type(self, ignore):
+        mode = uiutil.get_list_selection(self.widget("net-forward-mode"),
+                                        column=1)
+        self.widget("net-forward").set_sensitive(mode != "open")
 
     def change_ipv4_enable(self, ignore):
         enabled = self.get_config_ipv4_enable()
@@ -736,7 +746,10 @@ class vmmCreateNetwork(vmmGObjectUI):
         dev, mode = self.get_config_forwarding()
         if mode:
             net.forward.mode = mode
-            net.forward.dev = dev or None
+            if mode == "open":
+                net.forward.dev = None
+            else:
+                net.forward.dev = dev or None
 
         if net.forward.mode == "hostdev":
             net.forward.managed = "yes"

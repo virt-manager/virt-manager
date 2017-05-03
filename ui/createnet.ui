@@ -1242,6 +1242,7 @@
                                           <object class="GtkComboBox" id="net-forward-mode">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <signal name="changed" handler="on_net_forward_mode_toggled" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
