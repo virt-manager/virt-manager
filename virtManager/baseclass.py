@@ -241,15 +241,17 @@ class vmmGObjectUI(vmmGObject):
 
     def set_finish_cursor(self):
         self.topwin.set_sensitive(False)
-        cursor = Gdk.Cursor.new(Gdk.CursorType.WATCH)
-        self.topwin.get_window().set_cursor(cursor)
+        gdk_window = self.topwin.get_window()
+        cursor = Gdk.Cursor.new_from_name(gdk_window.get_display(), "progress")
+        gdk_window.set_cursor(cursor)
 
     def reset_finish_cursor(self, topwin=None):
         if not topwin:
             topwin = self.topwin
 
         topwin.set_sensitive(True)
-        if not topwin.get_window():
+        gdk_window = topwin.get_window()
+        if not gdk_window:
             return
-        cursor = Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW)
-        topwin.get_window().set_cursor(cursor)
+        cursor = Gdk.Cursor.new_from_name(gdk_window.get_display(), "default")
+        gdk_window.set_cursor(cursor)

@@ -286,8 +286,9 @@ class vmmAsyncJob(vmmGObjectUI):
             self.topwin.present()
 
         if not self.cancel_cb and self.show_progress:
-            self.topwin.get_window().set_cursor(
-                            Gdk.Cursor.new(Gdk.CursorType.WATCH))
+            gdk_window = self.topwin.get_window()
+            gdk_window.set_cursor(
+                Gdk.Cursor.new_from_name(gdk_window.get_display(), "progress"))
         self._bg_thread.start()
 
 
