@@ -1444,6 +1444,19 @@ ba</description>
 
 
 <network>
+  <name>open</name>
+  <uuid>f59fb0e3-3903-4867-a97f-3faa2edc0a50</uuid>
+  <forward mode="open"/>
+  <domain name="open"/>
+  <ip address="192.168.100.1" netmask="255.255.255.0">
+    <dhcp>
+      <range start="192.168.100.128" end="192.168.100.254"/>
+    </dhcp>
+  </ip>
+</network>
+
+
+<network>
   <name>netboot</name>
   <uuid>81ff0d90-c91e-6742-64da-4a736edb9a9b</uuid>
   <bridge name="virbr1" stp='off' delay='1'/>
