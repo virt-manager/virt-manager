@@ -1293,6 +1293,32 @@ class XMLParseTest(unittest.TestCase):
         utils.diff_compare(net.get_xml_config(), outfile)
         utils.test_create(conn, net.get_xml_config(), "networkDefineXML")
 
+    def testNetOpen(self):
+        basename = "network-open"
+        infile = "tests/xmlparse-xml/%s-in.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        net = virtinst.Network(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(net)
+        check("name", "open", "new-foo")
+        check("domain_name", "open", "newdom")
+
+        check = self._make_checker(net.forward)
+        check("mode", "open")
+        check("dev", None)
+
+        self.assertEqual(len(net.ips), 1)
+        check = self._make_checker(net.ips[0])
+        check("address", "192.168.100.1", "192.168.101.1")
+        check("netmask", "255.255.255.0", "255.255.254.0")
+
+        check = self._make_checker(net.ips[0].ranges[0])
+        check("start", "192.168.100.128", "192.168.101.128")
+        check("end", "192.168.100.254", "192.168.101.254")
+
+        utils.diff_compare(net.get_xml_config(), outfile)
+        utils.test_create(conn, net.get_xml_config(), "networkDefineXML")
+
     def testNetVfPool(self):
         basename = "network-vf-pool"
         infile = "tests/xmlparse-xml/%s-in.xml" % basename
