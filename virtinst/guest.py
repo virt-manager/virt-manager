@@ -105,9 +105,9 @@ class Guest(XMLBuilder):
 
     _XML_ROOT_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
-        "maxmemory", "memory", "blkiotune", "memtune", "memoryBacking",
-        "vcpus", "curvcpus", "vcpu_placement", "cpuset",
-        "numatune", "resource", "sysinfo", "bootloader", "os", "idmap",
+        "hotplugmemorymax", "hotplugmemoryslots", "maxmemory", "memory", "blkiotune",
+        "memtune", "memoryBacking", "vcpus", "curvcpus", "vcpu_placement",
+        "cpuset", "numatune", "resource", "sysinfo", "bootloader", "os", "idmap",
         "features", "cpu", "clock", "on_poweroff", "on_reboot", "on_crash",
         "pm", "emulator", "_devices", "seclabels"]
 
@@ -163,6 +163,8 @@ class Guest(XMLBuilder):
                          default_cb=lambda s: 1,
                          set_converter=_set_memory)
     maxmemory = XMLProperty("./memory", is_int=True)
+    hotplugmemorymax = XMLProperty("./maxMemory", is_int=True)
+    hotplugmemoryslots = XMLProperty("./maxMemory/@slots", is_int=True)
 
     def _set_vcpus(self, val):
         if val is None:

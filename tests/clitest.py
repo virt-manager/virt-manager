@@ -552,6 +552,13 @@ c.add_compare(""" \
 """, "spice-gl", compare_check=support.SUPPORT_CONN_VMPORT)
 
 
+######################################
+# Memory hot(un)plug install options #
+######################################
+
+c = vinst.add_category("memory-hotplug", "--nographics --noautoconsole --import --disk none")
+c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576", "memory-hotplug")
+
 
 ####################################################
 # CPU/RAM/numa and other singleton VM config tests #

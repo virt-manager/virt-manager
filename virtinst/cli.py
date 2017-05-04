@@ -595,7 +595,9 @@ def add_memory_option(grp, backcompat=False):
     grp.add_argument("--memory",
         help=_("Configure guest memory allocation. Ex:\n"
                "--memory 1024 (in MiB)\n"
-               "--memory 512,maxmemory=1024"))
+               "--memory 512,maxmemory=1024\n"
+               "--memory 512,maxmemory=1024,hotplugmemorymax=2048,"
+               "hotplugmemoryslots=2"))
     if backcompat:
         grp.add_argument("-r", "--ram", type=int, dest="oldmemory",
             help=argparse.SUPPRESS)
@@ -1351,6 +1353,9 @@ _register_virt_parser(ParserMemory)
 ParserMemory.add_arg("memory", "memory", cb=ParserMemory.set_memory_cb)
 ParserMemory.add_arg("maxmemory", "maxmemory", cb=ParserMemory.set_memory_cb)
 ParserMemory.add_arg("memoryBacking.hugepages", "hugepages", is_onoff=True)
+ParserMemory.add_arg("hotplugmemorymax", "hotplugmemorymax",
+                     cb=ParserMemory.set_memory_cb)
+ParserMemory.add_arg("hotplugmemoryslots", "hotplugmemoryslots")
 
 
 #####################
