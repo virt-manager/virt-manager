@@ -17,7 +17,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .domainnumatune import DomainNumatune
 from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
@@ -28,11 +27,8 @@ class _CPUCell(XMLBuilder):
     _XML_ROOT_NAME = "cell"
     _XML_PROP_ORDER = ["id", "cpus", "memory"]
 
-    def _validate_cpuset(self, val):
-        DomainNumatune.validate_cpuset(self.conn, val)
-
     id = XMLProperty("./@id", is_int=True)
-    cpus = XMLProperty("./@cpus", validate_cb=_validate_cpuset)
+    cpus = XMLProperty("./@cpus")
     memory = XMLProperty("./@memory", is_int=True)
 
 
