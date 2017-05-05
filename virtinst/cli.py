@@ -195,7 +195,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
                 raise RuntimeError("No write access to directory %s" % vi_dir)
 
             try:
-                os.makedirs(vi_dir, 0751)
+                os.makedirs(vi_dir, 0o751)
             except IOError as e:
                 raise RuntimeError("Could not create directory %s: %s" %
                                    (vi_dir, e))

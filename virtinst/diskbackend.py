@@ -435,7 +435,8 @@ class CloneStorageCreator(_StorageCreator):
             sparse = True
             fd = None
             try:
-                fd = os.open(self._output_path, os.O_WRONLY | os.O_CREAT, 0640)
+                fd = os.open(self._output_path, os.O_WRONLY | os.O_CREAT,
+                             0o640)
                 os.ftruncate(fd, size_bytes)
             finally:
                 if fd:
@@ -455,7 +456,7 @@ class CloneStorageCreator(_StorageCreator):
             try:
                 src_fd = os.open(self._input_path, os.O_RDONLY)
                 dst_fd = os.open(self._output_path,
-                                 os.O_WRONLY | os.O_CREAT, 0640)
+                                 os.O_WRONLY | os.O_CREAT, 0o640)
 
                 i = 0
                 while 1:

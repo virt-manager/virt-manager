@@ -90,7 +90,7 @@ def perform_initrd_injections(initrd, injections, scratchdir):
         return
 
     tempdir = tempfile.mkdtemp(dir=scratchdir)
-    os.chmod(tempdir, 0775)
+    os.chmod(tempdir, 0o775)
 
     for filename in injections:
         logging.debug("Copying %s to the initrd.", filename)

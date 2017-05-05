@@ -254,7 +254,7 @@ def make_scratchdir(conn, hvtype):
         not os.access(scratch, os.W_OK)):
         scratch = os.path.join(get_cache_dir(), "boot")
         if not os.path.exists(scratch):
-            os.makedirs(scratch, 0751)
+            os.makedirs(scratch, 0o751)
 
     return scratch
 
