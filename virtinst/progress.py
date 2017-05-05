@@ -482,7 +482,7 @@ def format_number(number, SI=0, space=' '):
         depth  = depth + 1
         number = number / step
 
-    if type(number) == type(1) or type(number) == type(1L):
+    if type(number) == type(1) or type(number) == type(long(1)):
         # it's an int or a long, which means it didn't get divided,
         # which means it's already short enough
         format = '%i%s%s'

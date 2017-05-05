@@ -419,7 +419,8 @@ class VirtualConnection(object):
     # Private helpers #
     ###################
 
-    def _auth_cb(self, creds, (passwordcb, passwordcreds)):
+    def _auth_cb(self, creds, data):
+        passwordcb, passwordcreds = data
         for cred in creds:
             if cred[0] not in passwordcreds:
                 raise RuntimeError("Unknown cred type '%s', expected only "

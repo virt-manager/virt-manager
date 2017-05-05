@@ -390,7 +390,7 @@ class CloneStorageCreator(_StorageCreator):
         msg = None
         vfs = os.statvfs(os.path.dirname(self._path))
         avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
-        need = long(self._size * 1024L * 1024L * 1024L)
+        need = long(self._size) * long(1024) * long(1024) * long(1024)
         if need > avail:
             if self._sparse:
                 msg = _("The filesystem will not have enough free space"
@@ -410,7 +410,8 @@ class CloneStorageCreator(_StorageCreator):
         text = (_("Cloning %(srcfile)s") %
                 {'srcfile' : os.path.basename(self._input_path)})
 
-        size_bytes = long(self.get_size() * 1024L * 1024L * 1024L)
+        size_bytes = (long(self.get_size()) *
+                      long(1024) * long(1024) * long(1024))
         progresscb.start(filename=self._output_path, size=long(size_bytes),
                          text=text)
 
