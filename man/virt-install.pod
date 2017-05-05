@@ -184,7 +184,7 @@ Tune NUMA policy for the domain process. Example invocations
     --numatune 1-3,5,mode=preferred
 
 Specifies the numa nodes to allocate memory from. This has the same syntax
-as C<--cpuset> option. mode can be one of 'interleave', 'preferred', or
+as C<--vcpus cpuset=> option. mode can be one of 'interleave', 'preferred', or
 'strict' (the default). See 'man 8 numactl' for information about each
 mode.
 
