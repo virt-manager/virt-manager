@@ -69,7 +69,7 @@ class DogtailApp(object):
             os.path.join(os.getcwd(), "virt-manager"),
             "--test-first-run", "--no-fork", "--connect", self.uri] +
             (extra_opts or []),
-            stdout=file(os.devnull), stderr=file(os.devnull))
+            stdout=open(os.devnull), stderr=open(os.devnull))
         time.sleep(1)
 
         self._root = dogtail.tree.root.application("virt-manager")

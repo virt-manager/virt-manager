@@ -303,7 +303,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         mime = _mime_to_ext(os.path.splitext(filename)[1][1:], reverse=True)
         if not mime:
             return
-        return self._make_screenshot_pixbuf(mime, file(filename, "rb").read())
+        return self._make_screenshot_pixbuf(mime, open(filename, "rb").read())
 
     def _set_snapshot_state(self, snap=None):
         self.widget("snapshot-notebook").set_current_page(0)
@@ -516,7 +516,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
             filename = basesn + "." + _mime_to_ext(mime)
             logging.debug("Writing screenshot to %s", filename)
-            file(filename, "wb").write(sndata)
+            open(filename, "wb").write(sndata)
         except:
             logging.exception("Error saving screenshot")
 

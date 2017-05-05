@@ -150,7 +150,7 @@ class Command(object):
             sys.stderr = out
             sys.argv = self.argv
             if self.input_file:
-                sys.stdin = file(self.input_file)
+                sys.stdin = open(self.input_file)
 
             exc = ""
             try:
@@ -249,7 +249,7 @@ class Command(object):
                 # Generate test files that don't exist yet
                 filename = self.compare_file
                 if utils.REGENERATE_OUTPUT or not os.path.exists(filename):
-                    file(filename, "w").write(output)
+                    open(filename, "w").write(output)
 
                 if "--print-diff" in self.argv and output.count("\n") > 3:
                     # 1) Strip header

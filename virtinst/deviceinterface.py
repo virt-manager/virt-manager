@@ -59,7 +59,7 @@ def _default_route():
         logging.debug("route_file=%s does not exist", route_file)
         return None
 
-    for line in file(route_file):
+    for line in open(route_file):
         info = line.split()
         if len(info) != 11:
             logging.debug("Unexpected field count=%s when parsing %s",

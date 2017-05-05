@@ -79,7 +79,7 @@ class my_build_i18n(distutils.command.build.build):
 
         try:
             print("Writing %s" % potpath)
-            file(potpath, "w").write(potfiles)
+            open(potpath, "w").write(potfiles)
             self._run()
         finally:
             print("Removing %s" % potpath)
@@ -169,7 +169,7 @@ class my_build(distutils.command.build.build):
 
             newpath = os.path.abspath(os.path.join("build", app))
             print("Generating %s" % newpath)
-            file(newpath, "w").write(wrapper)
+            open(newpath, "w").write(wrapper)
 
 
     def _make_man_pages(self):
@@ -366,7 +366,7 @@ class configure(distutils.core.Command):
         if self.default_hvs is not None:
             template += "default_hvs = %s\n" % self.default_hvs
 
-        file(CLIConfig.cfgpath, "w").write(template)
+        open(CLIConfig.cfgpath, "w").write(template)
         print("Generated %s" % CLIConfig.cfgpath)
 
 

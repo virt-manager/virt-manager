@@ -58,7 +58,7 @@ class _CPUMapFileValues(XMLBuilder):
 
     def __init__(self, conn):
         if os.path.exists(self._cpu_filename):
-            xml = file(self._cpu_filename).read()
+            xml = open(self._cpu_filename).read()
         else:
             xml = None
             logging.debug("CPU map file not found: %s", self._cpu_filename)

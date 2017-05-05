@@ -38,7 +38,7 @@ def _rhel4_initrd_inject(initrd, injections):
     logging.debug("Is RHEL4 initrd")
 
     # Uncompress the initrd
-    newinitrd = file(initrd + ".new", "wb")
+    newinitrd = open(initrd + ".new", "wb")
     gzip_proc = subprocess.Popen(["gzip", "-d", "-f", "-c", initrd],
                                  stdout=newinitrd,
                                  stderr=subprocess.PIPE)
@@ -67,8 +67,8 @@ def _rhel4_initrd_inject(initrd, injections):
 
     # Recompress the initrd
     gzip_proc = subprocess.Popen(["gzip"],
-                                 stdin=file(newinitrd.name, "rb"),
-                                 stdout=file(initrd, "wb"),
+                                 stdin=open(newinitrd.name, "rb"),
+                                 stdout=open(initrd, "wb"),
                                  stderr=subprocess.PIPE)
     gzip_proc.wait()
     gziperr = gzip_proc.stderr.read()

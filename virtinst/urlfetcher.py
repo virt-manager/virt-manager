@@ -155,7 +155,7 @@ class _URLFetcher(object):
         # pylint: disable=redefined-variable-type
         if "VIRTINST_TEST_SUITE" in os.environ:
             fn = os.path.join("/tmp", prefix)
-            fileobj = file(fn, "w")
+            fileobj = open(fn, "w")
         else:
             fileobj = tempfile.NamedTemporaryFile(
                 dir=self.scratchdir, prefix=prefix, delete=False)
@@ -275,7 +275,7 @@ class _LocalURLFetcher(_URLFetcher):
         return os.path.exists(url)
 
     def _grabber(self, url):
-        urlobj = file(url, "r")
+        urlobj = open(url, "r")
         size = os.path.getsize(url)
         return urlobj, size
 

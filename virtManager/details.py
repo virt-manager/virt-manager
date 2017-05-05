@@ -1550,7 +1550,7 @@ class vmmDetails(vmmGObjectUI):
         filename = path
         if not filename.endswith(".png"):
             filename += ".png"
-        file(filename, "wb").write(ret)
+        open(filename, "wb").write(ret)
 
 
     ############################

@@ -31,7 +31,7 @@ conn = utils.open_testdriver()
 class TestCapabilities(unittest.TestCase):
     def _buildCaps(self, filename):
         path = os.path.join("tests/capabilities-xml", filename)
-        return Capabilities(conn, file(path).read())
+        return Capabilities(conn, open(path).read())
 
     def testCapsCPUFeaturesOldSyntax(self):
         filename = "test-old-vmx.xml"
@@ -132,7 +132,7 @@ class TestCapabilities(unittest.TestCase):
     ##############################
 
     def testDomainCapabilities(self):
-        xml = file("tests/capabilities-xml/test-domcaps.xml").read()
+        xml = open("tests/capabilities-xml/test-domcaps.xml").read()
         caps = DomainCapabilities(utils.open_testdriver(), xml)
 
         self.assertEqual(caps.os.loader.supported, True)
