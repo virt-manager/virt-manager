@@ -419,7 +419,7 @@ class VNCViewer(Viewer):
 
             seq = GtkVnc.GrabSequence.new(keys)
             self._display.set_grab_keys(seq)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error when getting the grab keys combination: %s",
                           str(e))
 
@@ -473,7 +473,7 @@ class VNCViewer(Viewer):
             sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             sock.connect(self._ginfo.gsocket)
             self._sockfd = sock
-        except Exception, e:
+        except Exception as e:
             raise RuntimeError(_("Error opening socket path '%s': %s") %
                                (self._ginfo.gsocket, e))
 
@@ -685,7 +685,7 @@ class SpiceViewer(Viewer):
 
             seq = SpiceClientGtk.GrabSequence.new(keys)
             self._display.set_grab_keys(seq)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error when getting the grab keys combination: %s",
                           str(e))
 

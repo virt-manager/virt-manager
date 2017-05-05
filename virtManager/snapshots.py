@@ -222,7 +222,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         try:
             snapshots = self.vm.list_snapshots()
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
             self._set_error_page(_("Error refreshing snapshot list: %s") %
                                 str(e))
@@ -480,7 +480,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             newsnap.validate()
             newsnap.get_xml_config()
             return newsnap
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(_("Error validating snapshot: %s") % e)
 
     def _get_screenshot_data_for_save(self):
@@ -663,6 +663,6 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         try:
             self._set_snapshot_state(snap[0])
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
             self._set_error_page(_("Error selecting snapshot: %s") % str(e))

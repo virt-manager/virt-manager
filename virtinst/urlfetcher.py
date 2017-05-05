@@ -83,7 +83,7 @@ class _URLFetcher(object):
 
         try:
             urlobj, size = self._grabber(url)
-        except Exception, e:
+        except Exception as e:
             raise ValueError(_("Couldn't acquire file %s: %s") %
                                (url, str(e)))
 
@@ -182,7 +182,7 @@ class _HTTPURLFetcher(_URLFetcher):
         try:
             response = requests.head(url, allow_redirects=True)
             response.raise_for_status()
-        except Exception, e:
+        except Exception as e:
             logging.debug("HTTP hasFile request failed: %s", str(e))
             return False
         return True
@@ -224,7 +224,7 @@ class _FTPURLFetcher(_URLFetcher):
             self._ftp = ftplib.FTP()
             self._ftp.connect(parsed.hostname, parsed.port)
             self._ftp.login()
-        except Exception, e:
+        except Exception as e:
             raise ValueError(_("Opening URL %s failed: %s.") %
                               (self.location, str(e)))
 
@@ -259,7 +259,7 @@ class _FTPURLFetcher(_URLFetcher):
             except ftplib.all_errors:
                 # If it's a dir
                 self._ftp.cwd(path)
-        except ftplib.all_errors, e:
+        except ftplib.all_errors as e:
             logging.debug("FTP hasFile: couldn't access %s: %s",
                           url, str(e))
             return False
@@ -707,14 +707,14 @@ class GenericDistro(Distro):
                         self._getTreeinfoMedia("kernel"),
                         self._getTreeinfoMedia("initrd"))
                 except (ConfigParser.NoSectionError,
-                        ConfigParser.NoOptionError), e:
+                        ConfigParser.NoOptionError) as e:
                     logging.debug(e)
 
             if self.treeinfo.has_section(isoSection):
                 try:
                     self._valid_iso_path = self.treeinfo.get(isoSection,
                                                              "boot.iso")
-                except ConfigParser.NoOptionError, e:
+                except ConfigParser.NoOptionError as e:
                     logging.debug(e)
 
         if self.type == "xen":

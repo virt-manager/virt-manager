@@ -41,7 +41,7 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
                 if not self._labeller_pattern.match(node.labeller.text):
                     return
             return True
-        except Exception, e:
+        except Exception as e:
             print "got predicate exception: %s" % e
 
 
@@ -159,7 +159,7 @@ def print_nodes(root):
     def _walk(node):
         try:
             print node_string(node)
-        except Exception, e:
+        except Exception as e:
             print "got exception: %s" % e
 
     root.findChildren(_walk, isLambda=True)
@@ -173,7 +173,7 @@ def focused_nodes(root):
         try:
             if node.focused:
                 return node
-        except Exception, e:
+        except Exception as e:
             print "got exception: %s" % e
 
     return root.findChildren(_walk, isLambda=True)

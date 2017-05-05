@@ -187,7 +187,7 @@ class DistroInstaller(Installer):
             dev.validate()
 
             val = dev.path
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error validating install location", exc_info=True)
             raise ValueError(_("Validating install media '%s' failed: %s") %
                 (str(val), e))
@@ -209,7 +209,7 @@ class DistroInstaller(Installer):
             try:
                 try:
                     fetcher.prepareLocation()
-                except ValueError, e:
+                except ValueError as e:
                     logging.debug("Error preparing install location",
                         exc_info=True)
                     raise ValueError(_("Invalid install location: ") + str(e))

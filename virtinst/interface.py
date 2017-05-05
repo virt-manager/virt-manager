@@ -254,21 +254,21 @@ class Interface(XMLBuilder):
 
         try:
             iface = self.conn.interfaceDefineXML(xml, 0)
-        except Exception, e:
+        except Exception as e:
             raise RuntimeError(_("Could not define interface: %s") % str(e))
 
         errmsg = None
         if create and not errmsg:
             try:
                 iface.create(0)
-            except Exception, e:
+            except Exception as e:
                 errmsg = _("Could not create interface: %s") % str(e)
 
         if errmsg:
             # Try and clean up the leftover pool
             try:
                 iface.undefine()
-            except Exception, e:
+            except Exception as e:
                 logging.debug("Error cleaning up interface after failure: " +
                               "%s" % str(e))
             raise RuntimeError(errmsg)

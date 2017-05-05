@@ -200,7 +200,7 @@ def _storeForDistro(fetcher, guest):
     for ignore in range(0, 10):
         try:
             return urlfetcher.getDistroStore(guest, fetcher)
-        except Exception, e:
+        except Exception as e:
             if str(e).count("502"):
                 logging.debug("Caught proxy error: %s", str(e))
                 time.sleep(.5)

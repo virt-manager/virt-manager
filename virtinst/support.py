@@ -56,13 +56,13 @@ def _get_flag(flag_name):
 def _try_command(func, run_args, check_all_error=False):
     try:
         func(*run_args)
-    except libvirt.libvirtError, e:
+    except libvirt.libvirtError as e:
         if util.is_error_nosupport(e):
             return False
 
         if check_all_error:
             return False
-    except Exception, e:
+    except Exception as e:
         # Other python exceptions likely mean the bindings are horked
         return False
     return True

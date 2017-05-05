@@ -162,7 +162,7 @@ class Command(object):
                     ret = virtconvert.main(conn=conn)
                 elif app.count("virt-xml"):
                     ret = virtxml.main(conn=conn)
-            except SystemExit, sys_e:
+            except SystemExit as sys_e:
                 ret = sys_e.code
             except Exception:
                 ret = -1
@@ -193,7 +193,7 @@ class Command(object):
 
             logging.debug(output + "\n")
             return code, output
-        except Exception, e:
+        except Exception as e:
             return (-1, "".join(traceback.format_exc()) + str(e))
 
     def _check_support(self, tests, conn, check, skipmsg):
@@ -264,7 +264,7 @@ class Command(object):
 
                 utils.diff_compare(output, filename)
 
-        except AssertionError, e:
+        except AssertionError as e:
             err = self.cmdstr + "\n" + str(e)
 
         if err:

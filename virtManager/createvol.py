@@ -289,7 +289,7 @@ class vmmCreateVolume(vmmGObjectUI):
         try:
             if not self.validate():
                 return
-        except Exception, e:
+        except Exception as e:
             self.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
@@ -337,7 +337,7 @@ class vmmCreateVolume(vmmGObjectUI):
             if fmt:
                 self.vol.format = fmt
             self.vol.validate()
-        except ValueError, e:
+        except ValueError as e:
             return self.val_err(_("Volume Parameter Error"), e)
         return True
 

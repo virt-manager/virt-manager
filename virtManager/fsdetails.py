@@ -321,7 +321,7 @@ class vmmFSDetails(vmmGObjectUI):
                     self._dev.format = fsformat
             if wrpolicy:
                 self._dev.wrpolicy = wrpolicy
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(_("Filesystem parameter error"), e)
 
     def _browse_file(self, textent, isdir=False):

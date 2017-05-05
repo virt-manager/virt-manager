@@ -690,7 +690,7 @@ class vmmConsolePages(vmmGObjectUI):
             gdev = gdevs and gdevs[0] or None
             if gdev:
                 ginfo = ConnectionInfo(self.vm.conn, gdev)
-        except Exception, e:
+        except Exception as e:
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
             logging.exception("Getting graphics console failed: %s", str(e))
@@ -733,7 +733,7 @@ class vmmConsolePages(vmmGObjectUI):
             self._refresh_enable_accel()
 
             self._viewer.console_open()
-        except Exception, e:
+        except Exception as e:
             logging.exception("Error connection to graphical console")
             self._activate_unavailable_page(
                     _("Error connecting to graphical console") + ":\n%s" % e)

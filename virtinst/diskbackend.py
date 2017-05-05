@@ -55,7 +55,7 @@ def _lookup_vol_by_path(conn, path):
         vol = conn.storageVolLookupByPath(path)
         vol.info()
         return vol, None
-    except libvirt.libvirtError, e:
+    except libvirt.libvirtError as e:
         if (hasattr(libvirt, "VIR_ERR_NO_STORAGE_VOL") and
             e.get_error_code() != libvirt.VIR_ERR_NO_STORAGE_VOL):
             raise
@@ -123,7 +123,7 @@ def check_if_path_managed(conn, path):
                 vol = _lookup_vol_by_basename(pool, path)
             except:
                 pass
-    except Exception, e:
+    except Exception as e:
         vol = None
         pool = None
         verr = str(e)
@@ -475,7 +475,7 @@ class CloneStorageCreator(_StorageCreator):
                     i += s
                     if i < size_bytes:
                         meter.update(i)
-            except OSError, e:
+            except OSError as e:
                 raise RuntimeError(_("Error cloning diskimage %s to %s: %s") %
                                 (self._input_path, self._output_path, str(e)))
         finally:

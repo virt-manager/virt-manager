@@ -301,7 +301,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         try:
             net = self._build_xmlstub()
             net.name = self.widget("net-name").get_text()
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(_("Invalid network name"), str(e))
 
         return True
@@ -823,7 +823,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         try:
             net = self._build_xmlobj()
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error generating network xml: %s") % str(e))
             return
 

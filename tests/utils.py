@@ -146,7 +146,7 @@ def test_create(testconn, xml, define_func="defineXML"):
     try:
         func = getattr(testconn, define_func)
         obj = func(xml)
-    except Exception, e:
+    except Exception as e:
         raise RuntimeError(str(e) + "\n" + xml)
 
     try:

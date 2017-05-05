@@ -407,7 +407,7 @@ class vmmHost(vmmGObjectUI):
             if self.addnet is None:
                 self.addnet = vmmCreateNetwork(self.conn)
             self.addnet.show(self.topwin)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error launching network wizard: %s") % str(e))
 
     def net_apply(self):
@@ -450,7 +450,7 @@ class vmmHost(vmmGObjectUI):
                         dialog_type=Gtk.MessageType.INFO)
 
 
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error changing network settings: %s") % str(e))
             return
         finally:
@@ -518,7 +518,7 @@ class vmmHost(vmmGObjectUI):
         try:
             net = self.conn.get_net(connkey)
             self.populate_net_state(net)
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
             self.set_net_error_page(_("Error selecting network: %s") % e)
         finally:
@@ -754,7 +754,7 @@ class vmmHost(vmmGObjectUI):
             if self.addinterface is None:
                 self.addinterface = vmmCreateInterface(self.conn)
             self.addinterface.show(self.topwin)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error launching interface wizard: %s") %
                               str(e))
 
@@ -781,7 +781,7 @@ class vmmHost(vmmGObjectUI):
                       interface.get_name())
         try:
             interface.set_startmode(newmode)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error setting interface startmode: %s") %
                               str(e))
             return
@@ -807,7 +807,7 @@ class vmmHost(vmmGObjectUI):
 
         try:
             self.populate_interface_state(connkey)
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
             self.set_interface_error_page(_("Error selecting interface: %s") %
                                           e)
@@ -859,7 +859,7 @@ class vmmHost(vmmGObjectUI):
         used_by = None
         try:
             used_by = vmmCreateInterface.iface_in_use_by(self.conn, name)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error looking up iface usage: %s", e)
         self.widget("interface-inuseby").set_text(used_by or "-")
 

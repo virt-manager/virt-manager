@@ -85,7 +85,7 @@ def _import_gtk(leftovers):
         globals()["Gtk"] = Gtk
         import virtManager.config
         ignore = virtManager.config
-    except Exception, e:
+    except Exception as e:
         # Don't just let the exception raise here. abrt reports bugs
         # when users mess up su/sudo and DISPLAY isn't set. Printing
         # it avoids the issue
@@ -282,7 +282,7 @@ if __name__ == "__main__":
         logging.debug("Received KeyboardInterrupt. Exiting application.")
     except SystemExit:
         raise
-    except Exception, run_e:
+    except Exception as run_e:
         if "Gtk" not in globals():
             raise
         _show_startup_error(str(run_e), "".join(traceback.format_exc()))

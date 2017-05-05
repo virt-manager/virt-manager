@@ -61,7 +61,7 @@ def check_packagekit(parent, errbox, packages):
             packagekit_install(parent, packages)
         else:
             logging.debug("Nothing to install")
-    except Exception, e:
+    except Exception as e:
         # PackageKit frontend should report an error for us, so just log
         # the actual error
         logging.debug("Error talking to PackageKit: %s", str(e), exc_info=True)

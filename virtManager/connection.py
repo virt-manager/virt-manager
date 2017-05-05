@@ -281,7 +281,7 @@ class vmmConnection(vmmGObject):
                 for vol in pool.get_volumes():
                     try:
                         ret.append(vol.get_xmlobj(refresh_if_nec=False))
-                    except Exception, e:
+                    except Exception as e:
                         logging.debug("Fetching volume XML failed: %s", e)
             return ret
         self._backend.cb_fetch_all_vols = fetch_all_vols
@@ -550,7 +550,7 @@ class vmmConnection(vmmGObject):
                 try:
                     if vol.get_target_path() == path:
                         return vol
-                except Exception, e:
+                except Exception as e:
                     # Errors can happen if the volume disappeared, bug 1092739
                     logging.debug("Error looking up volume from path=%s: %s",
                         path, e)
@@ -625,7 +625,7 @@ class vmmConnection(vmmGObject):
         for dev in self.list_nodedevs():
             try:
                 xmlobj = dev.get_xmlobj()
-            except libvirt.libvirtError, e:
+            except libvirt.libvirtError as e:
                 # Libvirt nodedev XML fetching can be busted
                 # https://bugzilla.redhat.com/show_bug.cgi?id=1225771
                 if e.get_error_code() != libvirt.VIR_ERR_NO_NODE_DEVICE:
@@ -700,12 +700,12 @@ class vmmConnection(vmmGObject):
         try:
             # Redefine new domain
             newobj = define_cb(newxml)
-        except Exception, renameerr:
+        except Exception as renameerr:
             try:
                 logging.debug("Error defining new name %s XML",
                     obj.class_name(), exc_info=True)
                 newobj = define_cb(origxml)
-            except Exception, fixerr:
+            except Exception as fixerr:
                 logging.debug("Failed to redefine original %s!",
                     obj.class_name(), exc_info=True)
                 raise RuntimeError(
@@ -840,7 +840,7 @@ class vmmConnection(vmmGObject):
                 self._domain_lifecycle_event, None))
             self.using_domain_events = True
             logging.debug("Using domain events")
-        except Exception, e:
+        except Exception as e:
             self.using_domain_events = False
             logging.debug("Error registering domain events: %s", e)
 
@@ -851,7 +851,7 @@ class vmmConnection(vmmGObject):
                 self._domain_cb_ids.append(
                     self.get_backend().domainEventRegisterAny(
                     None, eventid, self._domain_xml_misc_event, None))
-            except Exception, e:
+            except Exception as e:
                 logging.debug("Error registering domain %s event: %s",
                     typestr, e)
 
@@ -877,7 +877,7 @@ class vmmConnection(vmmGObject):
                 None, eventid, self._network_lifecycle_event, None))
             self.using_network_events = True
             logging.debug("Using network events")
-        except Exception, e:
+        except Exception as e:
             self.using_network_events = False
             logging.debug("Error registering network events: %s", e)
 
@@ -897,7 +897,7 @@ class vmmConnection(vmmGObject):
                 None, refreshid, self._storage_pool_refresh_event, None))
             self.using_storage_pool_events = True
             logging.debug("Using storage pool events")
-        except Exception, e:
+        except Exception as e:
             self.using_storage_pool_events = False
             logging.debug("Error registering storage pool events: %s", e)
 
@@ -916,7 +916,7 @@ class vmmConnection(vmmGObject):
 
             self.using_node_device_events = True
             logging.debug("Using node device events")
-        except Exception, e:
+        except Exception as e:
             self.using_network_events = False
             logging.debug("Error registering node device events: %s", e)
 
@@ -1000,7 +1000,7 @@ class vmmConnection(vmmGObject):
         try:
             self._backend.open(self._do_creds_password)
             return True, None
-        except Exception, exc:
+        except Exception as exc:
             tb = "".join(traceback.format_exc())
             if isinstance(exc, libvirt.libvirtError):
                 # pylint: disable=no-member
@@ -1043,7 +1043,7 @@ class vmmConnection(vmmGObject):
         # We want this before events setup to save some needless polling
         try:
             virtinst.StoragePool.build_default_pool(self.get_backend())
-        except Exception, e:
+        except Exception as e:
             logging.debug("Building default pool failed: %s", str(e))
 
         self._add_conn_events()
@@ -1053,7 +1053,7 @@ class vmmConnection(vmmGObject):
 
         try:
             self._backend.setKeepAlive(20, 1)
-        except Exception, e:
+        except Exception as e:
             if (type(e) is not AttributeError and
                 not util.is_error_nosupport(e)):
                 raise
@@ -1085,7 +1085,7 @@ class vmmConnection(vmmGObject):
 
             self.idle_add(self._change_state, is_active and
                 self._STATE_ACTIVE or self._STATE_DISCONNECTED)
-        except Exception, e:
+        except Exception as e:
             is_active = False
             self._schedule_close()
             connectError = (str(e), "".join(traceback.format_exc()), False)
@@ -1311,7 +1311,7 @@ class vmmConnection(vmmGObject):
                     continue
 
                 obj.tick(stats_update=stats_update)
-            except Exception, e:
+            except Exception as e:
                 logging.exception("Tick for %s failed", obj)
                 if (isinstance(e, libvirt.libvirtError) and
                     (getattr(e, "get_error_code")() ==
@@ -1400,7 +1400,7 @@ class vmmConnection(vmmGObject):
             self._tick(*args, **kwargs)
         except KeyboardInterrupt:
             raise
-        except Exception, e:
+        except Exception as e:
             pass
 
         if e is None:

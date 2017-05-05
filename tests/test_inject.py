@@ -90,7 +90,7 @@ def _fetch_distro(distro):
         cleanup.append(initrd)
         distro.kernel = kernel
         distro.initrd = initrd
-    except Exception, e:
+    except Exception as e:
         print "fetching distro=%s failed: %s" % (distro.name, e)
     finally:
         fetcher.cleanupLocation()

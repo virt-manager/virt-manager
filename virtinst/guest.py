@@ -85,7 +85,7 @@ class Guest(XMLBuilder):
 
             logging.info("Undefining guest '%s'", name)
             vm.undefine()
-        except libvirt.libvirtError, e:
+        except libvirt.libvirtError as e:
             raise RuntimeError(_("Could not remove old vm '%s': %s") %
                                (str(e)))
 
@@ -438,7 +438,7 @@ class Guest(XMLBuilder):
         try:
             logging.debug("XML fetched from libvirt object:\n%s",
                           self.domain.XMLDesc(0))
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error fetching XML from libvirt object: %s", e)
 
 
@@ -451,7 +451,7 @@ class Guest(XMLBuilder):
 
         try:
             self.domain.setAutostart(True)
-        except libvirt.libvirtError, e:
+        except libvirt.libvirtError as e:
             if util.is_error_nosupport(e):
                 logging.warn("Could not set autostart flag: libvirt "
                              "connection does not support autostart.")
@@ -527,7 +527,7 @@ class Guest(XMLBuilder):
                     os.unlink(disk.path)
 
                 meter.end(0)
-            except Exception, e:
+            except Exception as e:
                 logging.debug("Failed to remove disk '%s'",
                     name, exc_info=True)
                 logging.error("Failed to remove disk '%s': %s", name, e)

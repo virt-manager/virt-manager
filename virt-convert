@@ -133,9 +133,9 @@ def main(conn=None):
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except SystemExit, sys_e:
+    except SystemExit as sys_e:
         sys.exit(sys_e.code)
     except KeyboardInterrupt:
         print_stderr(_("Aborted at user request"))
-    except Exception, main_e:
+    except Exception as main_e:
         fail(main_e)

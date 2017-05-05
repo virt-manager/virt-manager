@@ -278,7 +278,7 @@ class vmmLibvirtObject(vmmGObject):
             # status = None forces a signal to be emitted
             self.__status = None
             self._refresh_status()
-        except Exception, e:
+        except Exception as e:
             # If we hit an exception here, it's often that the object
             # disappeared, so request the poll loop to be updated
             logging.debug("Error refreshing %s from events: %s", self, e)

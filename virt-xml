@@ -94,7 +94,7 @@ def get_domain_and_guest(conn, domstr):
             domain = conn.lookupByUUIDString(domstr)
         else:
             domain = conn.lookupByName(domstr)
-    except libvirt.libvirtError, e:
+    except libvirt.libvirtError as e:
         fail(_("Could not find domain '%s': %s") % (domstr, e))
 
     state = domain.info()[0]
@@ -295,7 +295,7 @@ def update_changes(domain, devs, action, confirm):
                 domain.detachDeviceFlags(xml, libvirt.VIR_DOMAIN_AFFECT_LIVE)
             elif action == "update":
                 domain.updateDeviceFlags(xml, libvirt.VIR_DOMAIN_AFFECT_LIVE)
-        except libvirt.libvirtError, e:
+        except libvirt.libvirtError as e:
             fail(_("Error attempting device %s: %s") % (action, e))
 
         print_stdout(_("Device %s successful.") % action)
@@ -476,10 +476,10 @@ def main(conn=None):
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except SystemExit, sys_e:
+    except SystemExit as sys_e:
         sys.exit(sys_e.code)
     except KeyboardInterrupt:
         logging.debug("", exc_info=True)
         print_stderr(_("Aborted at user request"))
-    except Exception, main_e:
+    except Exception as main_e:
         fail(main_e)

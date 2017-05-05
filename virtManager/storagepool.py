@@ -47,7 +47,7 @@ class vmmStorageVolume(vmmLibvirtObject):
     def _XMLDesc(self, flags):
         try:
             return self._backend.XMLDesc(flags)
-        except Exception, e:
+        except Exception as e:
             logging.debug("XMLDesc for vol=%s failed: %s",
                 self._backend.key(), e)
             raise

@@ -411,7 +411,7 @@ class vmmSerialConsole(vmmGObject):
                 self.console.open(self.lookup_dev(), self.terminal)
             self.box.set_current_page(0)
             return True
-        except Exception, e:
+        except Exception as e:
             logging.exception("Error opening serial console")
             self.show_error(_("Error connecting to text console: %s") % e)
             try:

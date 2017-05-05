@@ -86,7 +86,7 @@ class vmmMeter(virtinst.progress.BaseMeter):
 def cb_wrapper(callback, asyncjob, *args, **kwargs):
     try:
         callback(asyncjob, *args, **kwargs)
-    except Exception, e:
+    except Exception as e:
         # If job is cancelled, don't report error to user.
         if (isinstance(e, libvirt.libvirtError) and
             asyncjob.can_cancel() and

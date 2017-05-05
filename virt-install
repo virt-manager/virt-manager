@@ -367,7 +367,7 @@ def get_guest(conn, options):
             arch=arch,
             typ=req_hv_type,
             machine=options.machine)
-    except Exception, e:
+    except Exception as e:
         fail(e)
 
     if (not req_virt_type and
@@ -400,7 +400,7 @@ def set_install_media(guest, location, cdpath, distro_variant):
             guest.os_variant = guest.installer.detect_distro(guest)
         elif distro_variant != "none":
             guest.os_variant = distro_variant
-    except ValueError, e:
+    except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
 
 
@@ -627,7 +627,7 @@ def build_guest_instance(conn, options):
         guest.os.nvram is None):
         try:
             guest.set_uefi_default()
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error setting UEFI default for aarch64",
                 exc_info=True)
             logging.warn("Couldn't configure UEFI: %s", e)
@@ -713,7 +713,7 @@ def start_install(guest, options):
         logging.debug("", exc_info=True)
         print_stderr(_("Domain install interrupted."))
         raise
-    except Exception, e:
+    except Exception as e:
         fail(e, do_exit=False)
         if guest.domain is None:
             guest.cleanup_created_disks(meter)
@@ -736,7 +736,7 @@ def check_domain(guest, conscb, transient,
                 fail(_("Domain has crashed."))
 
             return not guest.domain.isActive()
-        except libvirt.libvirtError, e:
+        except libvirt.libvirtError as e:
             if transient and e.get_error_code() == libvirt.VIR_ERR_NO_DOMAIN:
                 logging.debug("transient VM shutdown and disappeared.")
                 return True
@@ -995,10 +995,10 @@ def main(conn=None):
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except SystemExit, sys_e:
+    except SystemExit as sys_e:
         sys.exit(sys_e.code)
     except KeyboardInterrupt:
         logging.debug("", exc_info=True)
         print_stderr(_("Installation aborted at user request"))
-    except Exception, main_e:
+    except Exception as main_e:
         fail(main_e)

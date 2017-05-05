@@ -99,7 +99,7 @@ class vmmConnect(vmmGObjectUI):
             # Call any API, so we detect if avahi is even available or not
             self.avahiserver.GetAPIVersion()
             logging.debug("Connected to avahi")
-        except Exception, e:
+        except Exception as e:
             self.dbus = None
             self.avahiserver = None
             logging.debug("Couldn't contact avahi: %s", str(e))
@@ -232,7 +232,7 @@ class vmmConnect(vmmGObjectUI):
 
             sig = resint.connect("g-signal", cb)
             self.browser_sigs.append((resint, sig))
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
 
     def remove_service(self, interface, protocol, name, typ, domain, flags):
@@ -248,7 +248,7 @@ class vmmConnect(vmmGObjectUI):
             for row in model:
                 if row[0] == name:
                     model.remove(row.iter)
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
 
     def add_conn_to_list(self, interface, protocol, name, typ, domain,
@@ -271,7 +271,7 @@ class vmmConnect(vmmGObjectUI):
 
             host = self.sanitize_hostname(str(host))
             model.append([str(address), str(host), str(name)])
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
 
     def start_browse(self):

@@ -376,7 +376,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                 uri = self.widget("migrate-tunnel-uri").get_text()
             else:
                 uri = self._build_regular_migrate_uri()
-        except Exception, e:
+        except Exception as e:
             details = "".join(traceback.format_exc())
             self.err.show_err((_("Uncaught error validating input: %s") %
                                str(e)),
@@ -409,7 +409,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         try:
             vm.abort_job()
-        except Exception, e:
+        except Exception as e:
             logging.exception("Error cancelling migrate job")
             asyncjob.show_warning(_("Error cancelling migrate job: %s") % e)
             return

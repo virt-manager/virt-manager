@@ -117,7 +117,7 @@ def _default_keymap():
                 logging.debug("Found keymap=%s in %s", kt, path)
                 break
             logging.debug("Didn't find keymap in '%s'", path)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error parsing '%s': %s", path, str(e))
 
     if kt is None:

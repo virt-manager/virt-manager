@@ -238,7 +238,7 @@ class VirtualConnection(object):
                 try:
                     xml = vol.XMLDesc(0)
                     ret.append(StorageVolume(weakref.ref(self), parsexml=xml))
-                except Exception, e:
+                except Exception as e:
                     logging.debug("Fetching volume XML failed: %s", e)
 
         if self.cache_object_fetch:

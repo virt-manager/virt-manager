@@ -116,7 +116,7 @@ class vmmChooseCD(vmmGObjectUI):
 
         try:
             self.disk.path = path
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(_("Invalid Media Path"), e)
 
         names = self.disk.is_conflict_disk()

@@ -117,7 +117,7 @@ class vmmAddStorage(vmmGObjectUI):
             try:
                 default_pool.start()
                 logging.info("Started pool '%s'", default_pool.get_name())
-            except Exception, e:
+            except Exception as e:
                 return self.err.show_err(_("Could not start storage_pool "
                                       "'%s': %s") %
                                     (default_pool.get_name(), str(e)))

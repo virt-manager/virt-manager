@@ -196,7 +196,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 
             try:
                 os.makedirs(vi_dir, 0751)
-            except IOError, e:
+            except IOError as e:
                 raise RuntimeError("Could not create directory %s: %s" %
                                    (vi_dir, e))
 
@@ -204,7 +204,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
             os.path.exists(logfile) and
             not os.access(logfile, os.W_OK)):
             raise RuntimeError("No write access to logfile %s" % logfile)
-    except Exception, e:
+    except Exception as e:
         logging.warning("Error setting up logfile: %s", e)
         logfile = None
 
@@ -473,7 +473,7 @@ def connect_console(guest, consolecb, wait):
     # If we connected the console, wait for it to finish
     try:
         os.waitpid(child, 0)
-    except OSError, e:
+    except OSError as e:
         logging.debug("waitpid: %s: %s", e.errno, e.message)
 
 
@@ -1207,7 +1207,7 @@ class VirtCLIParser(object):
                 self.guest.add_child(obj)
 
             ret += util.listify(objs)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Exception parsing inst=%s optstr=%s",
                           inst, self.optstr, exc_info=True)
             fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
@@ -1238,7 +1238,7 @@ class VirtCLIParser(object):
                 if valid:
                     ret.append(inst)
                 self._check_leftover_opts(optdict)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Exception parsing inst=%s optstr=%s",
                           inst, self.optstr, exc_info=True)
             fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
@@ -1943,7 +1943,7 @@ class ParserDisk(VirtCLIParser):
                 return None
             try:
                 return float(val)
-            except Exception, e:
+            except Exception as e:
                 fail(_("Improper value for 'size': %s") % str(e))
 
         def convert_perms(val):

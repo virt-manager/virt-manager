@@ -105,7 +105,7 @@ class Cloner(object):
             Guest.validate_name(self.conn, name,
                                 check_collision=not self.replace,
                                 validate=False)
-        except ValueError, e:
+        except ValueError as e:
             raise ValueError(_("Invalid name for new guest: %s") % e)
 
         self._clone_name = name
@@ -115,7 +115,7 @@ class Cloner(object):
     def set_clone_uuid(self, uuid):
         try:
             util.validate_uuid(uuid)
-        except ValueError, e:
+        except ValueError as e:
             raise ValueError(_("Invalid uuid for new guest: %s") % e)
 
         if util.vm_uuid_collision(self.conn, uuid):
@@ -147,7 +147,7 @@ class Cloner(object):
                     disk.set_vol_install(vol_install)
                 disk.validate()
                 disklist.append(disk)
-            except Exception, e:
+            except Exception as e:
                 logging.debug("Error setting clone path.", exc_info=True)
                 raise ValueError(_("Could not use path '%s' for cloning: %s") %
                                  (path, str(e)))
@@ -486,7 +486,7 @@ class Cloner(object):
                     dst_dev.setup(meter=meter)
                 if self._nvram_disk:
                     self._nvram_disk.setup(meter=meter)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Duplicate failed: %s", str(e))
             if dom:
                 dom.undefine()
@@ -580,7 +580,7 @@ class Cloner(object):
                     if newd.wants_storage_creation():
                         raise ValueError(_("Disk path '%s' does not exist.") %
                                          newd.path)
-            except Exception, e:
+            except Exception as e:
                 logging.debug("Exception creating clone disk objects",
                     exc_info=True)
                 raise ValueError(_("Could not determine original disk "

@@ -52,7 +52,7 @@ def get_original_guest(guest_name, origfile, design):
         try:
             design.original_xml = origxml
             return
-        except (ValueError, RuntimeError), e:
+        except (ValueError, RuntimeError) as e:
             fail(e)
 
     if not guest_name:
@@ -219,9 +219,9 @@ def main(conn=None):
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except SystemExit, sys_e:
+    except SystemExit as sys_e:
         sys.exit(sys_e.code)
     except KeyboardInterrupt:
         print_stderr(_("Installation aborted at user request"))
-    except Exception, main_e:
+    except Exception as main_e:
         fail(main_e)

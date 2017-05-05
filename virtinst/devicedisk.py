@@ -212,7 +212,7 @@ class VirtualDisk(VirtualDevice):
         try:
             # Get UID for string name
             uid = pwd.getpwnam(username)[2]
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error looking up username: %s", str(e))
             return []
 
@@ -316,7 +316,7 @@ class VirtualDisk(VirtualDevice):
 
                     logging.debug("setfacl failed, trying old fashioned way")
                     fix_perms(dirname, useacl)
-            except Exception, e:
+            except Exception as e:
                 errdict[dirname] = str(e)
 
         return errdict
@@ -785,7 +785,7 @@ class VirtualDisk(VirtualDevice):
                 parent_pool = conn.storagePoolLookupByName(self.source_pool)
                 vol_object = parent_pool.storageVolLookupByName(
                     self.source_volume)
-            except Exception, e:
+            except Exception as e:
                 self._source_volume_err = str(e)
                 logging.debug("Error fetching source pool=%s vol=%s",
                     self.source_pool, self.source_volume, exc_info=True)

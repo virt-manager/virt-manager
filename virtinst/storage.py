@@ -160,7 +160,7 @@ class StoragePool(_StorageObject):
 
         try:
             xml = conn.findStoragePoolSources(pool_type, source_xml, 0)
-        except libvirt.libvirtError, e:
+        except libvirt.libvirtError as e:
             if util.is_error_nosupport(e):
                 return []
             raise
@@ -228,7 +228,7 @@ class StoragePool(_StorageObject):
             defpool.install(build=True, create=True, autostart=True)
             conn.clear_cache(pools=True)
             return defpool
-        except Exception, e:
+        except Exception as e:
             raise RuntimeError(
                 _("Couldn't create default storage pool '%s': %s") %
                 (path, str(e)))
@@ -529,33 +529,33 @@ class StoragePool(_StorageObject):
 
         try:
             pool = self.conn.storagePoolDefineXML(xml, 0)
-        except Exception, e:
+        except Exception as e:
             raise RuntimeError(_("Could not define storage pool: %s") % str(e))
 
         errmsg = None
         if build:
             try:
                 pool.build(libvirt.VIR_STORAGE_POOL_BUILD_NEW)
-            except Exception, e:
+            except Exception as e:
                 errmsg = _("Could not build storage pool: %s") % str(e)
 
         if create and not errmsg:
             try:
                 pool.create(0)
-            except Exception, e:
+            except Exception as e:
                 errmsg = _("Could not start storage pool: %s") % str(e)
 
         if autostart and not errmsg:
             try:
                 pool.setAutostart(True)
-            except Exception, e:
+            except Exception as e:
                 errmsg = _("Could not set pool autostart flag: %s") % str(e)
 
         if errmsg:
             # Try and clean up the leftover pool
             try:
                 pool.undefine()
-            except Exception, e:
+            except Exception as e:
                 logging.debug("Error cleaning up pool after failure: " +
                               "%s" % str(e))
             raise RuntimeError(errmsg)
@@ -846,7 +846,7 @@ class StorageVolume(_StorageObject):
             logging.debug("Storage volume '%s' install complete.",
                           self.name)
             return vol
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error creating storage volume", exc_info=True)
             raise RuntimeError("Couldn't create storage volume "
                                "'%s': '%s'" % (self.name, str(e)))

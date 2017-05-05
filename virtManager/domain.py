@@ -1538,7 +1538,7 @@ class vmmDomain(vmmLibvirtObject):
         if self._has_managed_save is None:
             try:
                 self._has_managed_save = self._backend.hasManagedSaveImage(0)
-            except libvirt.libvirtError, e:
+            except libvirt.libvirtError as e:
                 if not util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
                     raise
                 return False
@@ -1853,7 +1853,7 @@ class vmmDomain(vmmLibvirtObject):
                 if io:
                     rx += io[0]
                     tx += io[4]
-            except libvirt.libvirtError, err:
+            except libvirt.libvirtError as err:
                 if util.is_error_nosupport(err):
                     logging.debug("Net stats not supported: %s", err)
                     self._stats_net_supported = False
@@ -1903,7 +1903,7 @@ class vmmDomain(vmmLibvirtObject):
                 if io:
                     rd += io[1]
                     wr += io[3]
-            except libvirt.libvirtError, err:
+            except libvirt.libvirtError as err:
                 if util.is_error_nosupport(err):
                     logging.debug("Disk stats not supported: %s", err)
                     self._stats_disk_supported = False
@@ -1935,7 +1935,7 @@ class vmmDomain(vmmLibvirtObject):
             secs = 5
             self._backend.setMemoryStatsPeriod(secs,
                 libvirt.VIR_DOMAIN_AFFECT_LIVE)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error setting memstats period: %s", e)
 
     def _sample_mem_stats(self):
@@ -1958,7 +1958,7 @@ class vmmDomain(vmmLibvirtObject):
 
             if "unused" in stats:
                 curmem = max(0, totalmem - stats.get("unused", totalmem))
-        except libvirt.libvirtError, err:
+        except libvirt.libvirtError as err:
             logging.error("Error reading mem stats: %s", err)
 
         pcentCurrMem = (curmem / float(totalmem)) * 100

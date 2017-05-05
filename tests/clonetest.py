@@ -134,7 +134,7 @@ class TestClone(unittest.TestCase):
                 # We shouldn't succeed, so test fails
                 raise AssertionError("Remote clone with storage passed "
                                      "when it shouldn't.")
-            except (ValueError, RuntimeError), e:
+            except (ValueError, RuntimeError) as e:
                 # Exception expected
                 logging.debug("Received expected exception: %s", str(e))
 

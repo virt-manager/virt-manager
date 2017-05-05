@@ -383,7 +383,7 @@ class vmmEngine(vmmGObject):
             ignore1, ignore2, conn, kwargs = self._tick_queue.get()
             try:
                 conn.tick_from_engine(**kwargs)
-            except Exception, e:
+            except Exception as e:
                 tb = "".join(traceback.format_exc())
                 error_msg = (_("Error polling connection '%s': %s")
                     % (conn.get_uri(), e))
@@ -717,7 +717,7 @@ class vmmEngine(vmmGObject):
             if self.windowAbout is None:
                 self.windowAbout = vmmAbout()
             self.windowAbout.show()
-        except Exception, e:
+        except Exception as e:
             src.err.show_err(_("Error launching 'About' dialog: %s") % str(e))
 
     def _get_preferences(self):
@@ -731,7 +731,7 @@ class vmmEngine(vmmGObject):
     def _do_show_preferences(self, src):
         try:
             self._get_preferences().show(src.topwin)
-        except Exception, e:
+        except Exception as e:
             src.err.show_err(_("Error launching preferences: %s") % str(e))
 
     def _get_host_dialog(self, uri):
@@ -752,7 +752,7 @@ class vmmEngine(vmmGObject):
     def _do_show_host(self, src, uri):
         try:
             self._get_host_dialog(uri).show()
-        except Exception, e:
+        except Exception as e:
             src.err.show_err(_("Error launching host dialog: %s") % str(e))
 
 
@@ -778,7 +778,7 @@ class vmmEngine(vmmGObject):
     def _do_show_connect(self, src, reset_state=True):
         try:
             self._get_connect_dialog().show(src.topwin, reset_state)
-        except Exception, e:
+        except Exception as e:
             src.err.show_err(_("Error launching connect dialog: %s") % str(e))
 
     def _do_edit_connect(self, src, connection):
@@ -830,7 +830,7 @@ class vmmEngine(vmmGObject):
                     details.activate_default_page()
 
             details.show()
-        except Exception, e:
+        except Exception as e:
             src.err.show_err(_("Error launching details: %s") % str(e))
 
     def _do_show_vm(self, src, uri, connkey):
@@ -882,7 +882,7 @@ class vmmEngine(vmmGObject):
         try:
             manager = self.get_manager()
             manager.show()
-        except Exception, e:
+        except Exception as e:
             if not src:
                 raise
             src.err.show_err(_("Error launching manager: %s") % str(e))
@@ -901,7 +901,7 @@ class vmmEngine(vmmGObject):
     def _do_show_create(self, src, uri):
         try:
             self._get_create_dialog().show(src.topwin, uri)
-        except Exception, e:
+        except Exception as e:
             src.err.show_err(_("Error launching manager: %s") % str(e))
 
     def _do_show_migrate(self, src, uri, connkey):
@@ -913,7 +913,7 @@ class vmmEngine(vmmGObject):
                 self.windowMigrate = vmmMigrateDialog(self)
 
             self.windowMigrate.show(src.topwin, vm)
-        except Exception, e:
+        except Exception as e:
             src.err.show_err(_("Error launching migrate dialog: %s") % str(e))
 
     def _do_show_clone(self, src, uri, connkey):
@@ -929,7 +929,7 @@ class vmmEngine(vmmGObject):
                 clone_window.set_orig_vm(orig_vm)
 
             clone_window.show(src.topwin)
-        except Exception, e:
+        except Exception as e:
             src.err.show_err(_("Error setting clone parameters: %s") % str(e))
 
     def _do_refresh_inspection(self, src_ignore, uri, connkey):
@@ -1109,7 +1109,7 @@ class vmmEngine(vmmGObject):
 
         try:
             vm.abort_job()
-        except Exception, e:
+        except Exception as e:
             logging.exception("Error cancelling save job")
             asyncjob.show_warning(_("Error cancelling save job: %s") % str(e))
             return
@@ -1182,7 +1182,7 @@ class vmmEngine(vmmGObject):
                 try:
                     vm.remove_saved_image()
                     self._do_run_domain(src, uri, connkey)
-                except Exception, e:
+                except Exception as e:
                     src.err.show_err(_("Error removing domain state: %s")
                                      % str(e))
 
@@ -1250,5 +1250,5 @@ class vmmEngine(vmmGObject):
             if not self.delete_dialog:
                 self.delete_dialog = vmmDeleteDialog()
             self.delete_dialog.show(vm, src.topwin)
-        except Exception, e:
+        except Exception as e:
             src.err.show_err(_("Error launching delete dialog: %s") % str(e))

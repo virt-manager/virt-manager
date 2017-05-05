@@ -363,7 +363,7 @@ class vmmNetworkList(vmmGObjectUI):
             try:
                 netobj.start()
                 logging.info("Started network '%s'", devname)
-            except Exception, e:
+            except Exception as e:
                 return self.err.show_err(_("Could not start virtual network "
                                       "'%s': %s") % (devname, str(e)))
 
@@ -388,7 +388,7 @@ class vmmNetworkList(vmmGObjectUI):
                 net.virtualport.typeid = vport_typeid or None
                 net.virtualport.typeidversion = vport_idver or None
                 net.virtualport.instanceid = vport_instid or None
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(_("Error with network parameters."), e)
 
         # Make sure there is no mac address collision

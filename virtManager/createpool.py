@@ -398,7 +398,7 @@ class vmmCreatePool(vmmGObjectUI):
                 self.finish()
             else:
                 notebook.next_page()
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
@@ -495,7 +495,7 @@ class vmmCreatePool(vmmGObjectUI):
             else:
                 self._pool = self._make_stub_pool()
             self._pool.name = self.get_config_name()
-        except ValueError, e:
+        except ValueError as e:
             return self.err.val_err(_("Pool Parameter Error"), e)
 
         return True
@@ -525,7 +525,7 @@ class vmmCreatePool(vmmGObjectUI):
                 self._pool.source_name = source_name
 
             self._pool.validate()
-        except ValueError, e:
+        except ValueError as e:
             return self.err.val_err(_("Pool Parameter Error"), e)
 
         buildval = self.widget("pool-build").get_active()

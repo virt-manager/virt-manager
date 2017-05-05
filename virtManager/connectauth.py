@@ -161,7 +161,7 @@ def acquire_tgt():
                                 "/org/gnome/KrbAuthDialog",
                                 "org.freedesktop.KrbAuthDialog", None)
         ret = ka.acquireTgt("(s)", "")
-    except Exception, e:
+    except Exception as e:
         logging.info("Cannot acquire tgt" + str(e))
         ret = False
     return ret

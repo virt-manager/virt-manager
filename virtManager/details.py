@@ -1226,7 +1226,7 @@ class vmmDetails(vmmGObjectUI):
                 self.refresh_panic_page()
             else:
                 pagetype = -1
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error refreshing hardware page: %s") % str(e))
             # Don't return, we want the rest of the bits to run regardless
 
@@ -1415,7 +1415,7 @@ class vmmDetails(vmmGObjectUI):
                 self.addhw = vmmAddHardware(self.vm, self.is_customize_dialog)
 
             self.addhw.show(self.topwin)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err((_("Error launching hardware dialog: %s") %
                                str(e)))
 
@@ -1496,7 +1496,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = src
         try:
             return self._take_screenshot()
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error taking screenshot: %s") % str(e))
 
     def control_vm_usb_redirection(self, src):
@@ -1833,7 +1833,7 @@ class vmmDetails(vmmGObjectUI):
     def _eject_media(self, disk):
         try:
             self._change_storage_media(disk, None)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err((_("Error disconnecting media: %s") % e))
 
     def _insert_media(self, disk):
@@ -1854,7 +1854,7 @@ class vmmDetails(vmmGObjectUI):
             dialog.disk = disk
 
             dialog.show(self.topwin)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err((_("Error launching media dialog: %s") % e))
             return
 
@@ -1920,7 +1920,7 @@ class vmmDetails(vmmGObjectUI):
                 ret = self.config_hostdev_apply(key)
             else:
                 ret = False
-        except Exception, e:
+        except Exception as e:
             return self.err.show_err(_("Error apply changes: %s") % e)
 
         if ret is not False:
@@ -2052,7 +2052,7 @@ class vmmDetails(vmmGObjectUI):
             auto = self.widget("boot-autostart")
             try:
                 self.vm.set_autostart(auto.get_active())
-            except Exception, e:
+            except Exception as e:
                 self.err.show_err(
                     (_("Error changing autostart value: %s") % str(e)))
                 return False
@@ -2289,7 +2289,7 @@ class vmmDetails(vmmGObjectUI):
         # Define the change
         try:
             self.vm.remove_device(devobj)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error Removing Device: %s") % str(e))
             return
 
@@ -2298,7 +2298,7 @@ class vmmDetails(vmmGObjectUI):
         try:
             if self.vm.is_active():
                 self.vm.detach_device(devobj)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Device could not be hotUNplugged: %s", str(e))
             detach_err = (str(e), "".join(traceback.format_exc()))
 
@@ -2328,7 +2328,7 @@ class vmmDetails(vmmGObjectUI):
         try:
             if self.is_visible():
                 self.vm.ensure_latest_xml()
-        except libvirt.libvirtError, e:
+        except libvirt.libvirtError as e:
             if util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
                 self.close()
                 return

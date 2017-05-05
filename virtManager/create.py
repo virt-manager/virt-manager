@@ -467,7 +467,7 @@ class vmmCreate(vmmGObjectUI):
                 guest.set_uefi_default()
                 installable_arch = True
                 logging.debug("UEFI found for aarch64, setting it as default.")
-            except Exception, e:
+            except Exception as e:
                 installable_arch = False
                 logging.debug("Error checking for aarch64 UEFI default",
                     exc_info=True)
@@ -700,7 +700,7 @@ class vmmCreate(vmmGObjectUI):
 
         try:
             self._populate_conn_state()
-        except Exception, e:
+        except Exception as e:
             logging.exception("Error setting create wizard conn state.")
             return self._show_startup_error(str(e))
 
@@ -1733,7 +1733,7 @@ class vmmCreate(vmmGObjectUI):
         elif pagenum == PAGE_FINISH:
             try:
                 self._populate_summary()
-            except Exception, e:
+            except Exception as e:
                 self.err.show_err(_("Error populating summary page: %s") %
                     str(e))
                 return
@@ -1767,7 +1767,7 @@ class vmmCreate(vmmGObjectUI):
         # Generate UUID (makes customize dialog happy)
         try:
             guest.uuid = util.randomUUID(guest.conn)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error setting UUID: %s") % str(e))
             return None
 
@@ -1775,7 +1775,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             if variant:
                 guest.os_variant = variant
-        except ValueError, e:
+        except ValueError as e:
             self.err.val_err(_("Error setting OS information."), str(e))
             return None
 
@@ -1797,7 +1797,7 @@ class vmmCreate(vmmGObjectUI):
                 for_cpu=True)
 
             guest.add_default_devices()
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error setting up default devices:") + str(e))
             return None
 
@@ -1815,7 +1815,7 @@ class vmmCreate(vmmGObjectUI):
                 return self._validate_storage_page()
             elif pagenum == PAGE_FINISH:
                 return self._validate_final_page()
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Uncaught error validating install "
                                 "parameters: %s") % str(e))
             return
@@ -1935,7 +1935,7 @@ class vmmCreate(vmmGObjectUI):
             if not self._guest:
                 return False
             self._guest.installer = installer
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(
                         _("Error setting installer parameters."), e)
 
@@ -1965,7 +1965,7 @@ class vmmCreate(vmmGObjectUI):
                 fsdev.source = template
                 self._guest.add_device(fsdev)
 
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(
                                 _("Error setting install media location."), e)
 
@@ -1998,7 +1998,7 @@ class vmmCreate(vmmGObjectUI):
             name = self._generate_default_name(distro, variant)
             self.widget("create-vm-name").set_text(name)
             self._guest.name = name
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(_("Error setting default name."), e)
 
         # Kind of wonky, run storage validation now, which will assign
@@ -2053,14 +2053,14 @@ class vmmCreate(vmmGObjectUI):
         # VCPUS
         try:
             self._guest.vcpus = int(cpus)
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(_("Error setting CPUs."), e)
 
         # Memory
         try:
             self._guest.memory = int(mem) * 1024
             self._guest.maxmemory = int(mem) * 1024
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(_("Error setting guest memory."), e)
 
         return True
@@ -2101,7 +2101,7 @@ class vmmCreate(vmmGObjectUI):
             if storage_enabled:
                 disk = self._addstorage.validate_storage(self._guest.name,
                     path=path)
-        except Exception, e:
+        except Exception as e:
             return self.err.val_err(_("Storage parameter error."), e)
 
         if disk is False:
@@ -2132,7 +2132,7 @@ class vmmCreate(vmmGObjectUI):
         if name != self._guest.name:
             try:
                 self._guest.name = name
-            except Exception, e:
+            except Exception as e:
                 return self.err.val_err(_("Invalid guest name"), str(e))
             if self._is_default_storage():
                 logging.debug("User changed VM name and using default "
@@ -2318,7 +2318,7 @@ class vmmCreate(vmmGObjectUI):
         logging.debug("User requested 'customize', launching dialog")
         try:
             self._show_customize_dialog(guest)
-        except Exception, e:
+        except Exception as e:
             self.reset_finish_cursor()
             self.err.show_err(_("Error starting installation: ") + str(e))
             return
@@ -2471,7 +2471,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             logging.debug("Install should be completed, starting VM.")
             vm.startup()
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error continue install: %s") % str(e))
 
         return True

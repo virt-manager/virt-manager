@@ -370,7 +370,7 @@ class ovf_parser(parser_class):
 
         try:
             return _xml_parse_wrapper(xml, parse_cb)
-        except Exception, e:
+        except Exception as e:
             logging.debug("Error parsing OVF XML: %s", str(e))
 
         return False

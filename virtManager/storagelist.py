@@ -509,7 +509,7 @@ class vmmStorageList(vmmGObjectUI):
 
         try:
             self._populate_pool_state(connkey)
-        except Exception, e:
+        except Exception as e:
             logging.exception(e)
             self._set_storage_error_page(_("Error selecting pool: %s") % e)
         self._disable_pool_apply()
@@ -616,7 +616,7 @@ class vmmStorageList(vmmGObjectUI):
                 self._addpool = vmmCreatePool(self.conn)
                 self._addpool.connect("pool-created", self._pool_created)
             self._addpool.show(self.topwin)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error launching pool wizard: %s") % str(e))
 
     def _pool_delete(self, src):
@@ -660,7 +660,7 @@ class vmmStorageList(vmmGObjectUI):
             if EDIT_POOL_NAME in self._active_edits:
                 pool.define_name(self.widget("pool-name-entry").get_text())
                 self.idle_add(self._populate_pools)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error changing pool settings: %s") % str(e))
             return
 
@@ -699,7 +699,7 @@ class vmmStorageList(vmmGObjectUI):
             self._addvol.set_modal(self.topwin.get_modal())
             self._addvol.set_name_hint(self._name_hint)
             self._addvol.show(self.topwin)
-        except Exception, e:
+        except Exception as e:
             self.err.show_err(_("Error launching volume wizard: %s") % str(e))
 
     def _vol_delete(self, src_ignore):
