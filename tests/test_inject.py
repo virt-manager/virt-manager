@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 # Copyright (C) 2013, 2014 Red Hat, Inc.
 
+from __future__ import print_function
+
 import atexit
 import os
 import sys
@@ -78,7 +80,7 @@ atexit.register(exit_cleanup)
 
 
 def _fetch_distro(distro):
-    print "Fetching distro=%s" % distro.name
+    print("Fetching distro=%s" % distro.name)
 
     fetcher = urlfetcher.fetcherForURI(distro.url, "/tmp", meter)
     origenv = os.environ.pop("VIRTINST_TEST_SUITE")
@@ -91,7 +93,7 @@ def _fetch_distro(distro):
         distro.kernel = kernel
         distro.initrd = initrd
     except Exception as e:
-        print "fetching distro=%s failed: %s" % (distro.name, e)
+        print("fetching distro=%s failed: %s" % (distro.name, e))
     finally:
         fetcher.cleanupLocation()
         if origenv:
@@ -100,17 +102,17 @@ def _fetch_distro(distro):
 
 def _test_distro(distro):
     os.system("clear")
-    print "\n"
+    print("\n")
     if distro.warntype == WARN_RHEL4:
-        print "RHEL4: Makes its way to the text installer, then chokes "
-        print "on our bogus URI http://HEY-THIS-IS-OUR-BAD-KICKSTART-URL.com/"
+        print("RHEL4: Makes its way to the text installer, then chokes ")
+        print("on our bogus URI http://HEY-THIS-IS-OUR-BAD-KICKSTART-URL.com/")
     elif distro.warntype == WARN_RHEL5:
-        print "RHEL5, RHEL6, Fedora < 17: You'll get an error about a "
-        print "bogus bootproto ITREADTHEKICKSTART. This means anaconda "
-        print "read our busted kickstart."
+        print("RHEL5, RHEL6, Fedora < 17: You'll get an error about a ")
+        print("bogus bootproto ITREADTHEKICKSTART. This means anaconda ")
+        print("read our busted kickstart.")
     else:
-        print "RHEL7, Fedora >= 17: Chokes on the bogus URI in the early "
-        print "console screen when fetching the installer squashfs image."
+        print("RHEL7, Fedora >= 17: Chokes on the bogus URI in the early ")
+        print("console screen when fetching the installer squashfs image.")
 
     originitrd = distro.initrd
     kernel = distro.kernel
@@ -128,7 +130,7 @@ def _test_distro(distro):
            "-net bridge,br=virbr0 -net nic,model=%s "
            "-kernel %s -initrd %s %s" %
            (distro.name, nic, kernel, newinitrd, append))
-    print "\n\n" + cmd
+    print("\n\n" + cmd)
     os.system(cmd)
 
 
@@ -142,7 +144,7 @@ class FetchTests(unittest.TestCase):
         global _printfetch
         if _printfetch:
             return
-        print """
+        print ("""
 
 
 
@@ -152,7 +154,7 @@ First step is we need to go and fetch a bunch of distro kernel/initrd
 from public trees. This is going to take a while. Let it run then come
 back later and we will be waiting to continue.
 
-"""
+""")
         prompt()
         _printfetch = True
 
@@ -163,7 +165,7 @@ class InjectTests(unittest.TestCase):
         if _printinitrd:
             return
 
-        print """
+        print("""
 
 
 Okay, we have all the media. We are going to perform the initrd injection
@@ -171,7 +173,7 @@ of some broken kickstarts, then manually launch a qemu instance to verify
 the kickstart is detected. How you know it's working depends on the distro.
 When each test launches, we will print the manual verification instructions.
 
-"""
+""")
         prompt()
         _printinitrd = True
 

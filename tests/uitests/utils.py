@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import re
 import time
@@ -42,7 +44,7 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
                     return
             return True
         except Exception as e:
-            print "got predicate exception: %s" % e
+            print("got predicate exception: %s" % e)
 
 
 
@@ -158,9 +160,9 @@ def print_nodes(root):
     """
     def _walk(node):
         try:
-            print node_string(node)
+            print(node_string(node))
         except Exception as e:
-            print "got exception: %s" % e
+            print("got exception: %s" % e)
 
     root.findChildren(_walk, isLambda=True)
 
@@ -174,6 +176,6 @@ def focused_nodes(root):
             if node.focused:
                 return node
         except Exception as e:
-            print "got exception: %s" % e
+            print("got exception: %s" % e)
 
     return root.findChildren(_walk, isLambda=True)

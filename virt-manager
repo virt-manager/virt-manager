@@ -19,6 +19,8 @@
 # MA 02110-1301 USA.
 #
 
+from __future__ import print_function
+
 import argparse
 import logging
 import os
@@ -44,7 +46,7 @@ warnings.simplefilter("ignore")
 try:
     gi.check_version("3.14.0")
 except (ValueError, AttributeError):
-    print "pygobject3 3.14.0 or later is required."
+    print("pygobject3 3.14.0 or later is required.")
     sys.exit(1)
 
 
@@ -76,7 +78,7 @@ def _import_gtk(leftovers):
         leftovers = sys.argv[1:]
 
         if Gtk.check_version(3, 14, 0):
-            print "gtk3 3.14.0 or later is required."
+            print("gtk3 3.14.0 or later is required.")
             sys.exit(1)
 
         # This will error if Gtk wasn't correctly initialized
@@ -94,7 +96,7 @@ def _import_gtk(leftovers):
         if display:
             msg += ": Could not open display: %s" % display
         logging.debug("".join(traceback.format_exc()))
-        print msg
+        print(msg)
         sys.exit(1)
     finally:
         sys.argv = origargv

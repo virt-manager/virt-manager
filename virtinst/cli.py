@@ -19,6 +19,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+from __future__ import print_function
+
 import argparse
 import collections
 import logging
@@ -321,12 +323,12 @@ def fail(msg, do_exit=True):
 
 def print_stdout(msg, do_force=False):
     if do_force or not get_global_state().quiet:
-        print msg
+        print(msg)
 
 
 def print_stderr(msg):
     logging.debug(msg)
-    print >> sys.stderr, msg
+    print(msg, file=sys.stderr)
 
 
 def _fail_exit():
@@ -1101,10 +1103,10 @@ class VirtCLIParser(object):
         """
         Print out all _param names, triggered via ex. --disk help
         """
-        print "--%s options:" % cls.cli_arg_name
+        print("--%s options:" % cls.cli_arg_name)
         for arg in sorted(cls._virtargs, key=lambda p: p.cliname):
-            print "  %s" % arg.cliname
-        print
+            print("  %s" % arg.cliname)
+        print()
 
 
     def __init__(self, guest, optstr):

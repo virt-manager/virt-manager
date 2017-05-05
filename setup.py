@@ -78,11 +78,11 @@ class my_build_i18n(distutils.command.build.build):
         potpath = "po/POTFILES.in"
 
         try:
-            print "Writing %s" % potpath
+            print("Writing %s" % potpath)
             file(potpath, "w").write(potfiles)
             self._run()
         finally:
-            print "Removing %s" % potpath
+            print("Removing %s" % potpath)
             os.unlink(potpath)
 
     def _run(self):
@@ -168,7 +168,7 @@ class my_build(distutils.command.build.build):
             wrapper += "exec \"%s\" \"$@\"" % (sharepath)
 
             newpath = os.path.abspath(os.path.join("build", app))
-            print "Generating %s" % newpath
+            print("Generating %s" % newpath)
             file(newpath, "w").write(wrapper)
 
 
@@ -179,7 +179,7 @@ class my_build(distutils.command.build.build):
             newpath = os.path.join(os.path.dirname(path),
                                    appname + ".1")
 
-            print "Generating %s" % newpath
+            print("Generating %s" % newpath)
             ret = os.system('pod2man '
                             '--center "Virtual Machine Manager" '
                             '--release %s --name %s '
@@ -235,11 +235,11 @@ class my_install(distutils.command.install.install):
     def finalize_options(self):
         if self.prefix is None:
             if CLIConfig.prefix != sysprefix:
-                print "Using configured prefix=%s instead of sysprefix=%s" % (
-                    CLIConfig.prefix, sysprefix)
+                print("Using configured prefix=%s instead of sysprefix=%s" % (
+                    CLIConfig.prefix, sysprefix))
                 self.prefix = CLIConfig.prefix
             else:
-                print "Using sysprefix=%s" % sysprefix
+                print("Using sysprefix=%s" % sysprefix)
                 self.prefix = sysprefix
 
         elif self.prefix != CLIConfig.prefix:
@@ -367,7 +367,7 @@ class configure(distutils.core.Command):
             template += "default_hvs = %s\n" % self.default_hvs
 
         file(CLIConfig.cfgpath, "w").write(template)
-        print "Generated %s" % CLIConfig.cfgpath
+        print("Generated %s" % CLIConfig.cfgpath)
 
 
 class TestBaseCommand(distutils.core.Command):
@@ -442,7 +442,7 @@ class TestBaseCommand(distutils.core.Command):
             try:
                 unittest.installHandler()
             except:
-                print "installHandler hack failed"
+                print("installHandler hack failed")
 
         tests = unittest.TestLoader().loadTestsFromNames(self._testfiles)
         if self.only:
@@ -454,13 +454,13 @@ class TestBaseCommand(distutils.core.Command):
                             newtests.append(testcase)
 
             if not newtests:
-                print "--only didn't find any tests"
+                print("--only didn't find any tests")
                 sys.exit(1)
             tests = unittest.TestSuite(newtests)
-            print "Running only:"
+            print("Running only:")
             for test in newtests:
-                print "%s" % test
-            print
+                print("%s" % test)
+            print()
 
         t = unittest.TextTestRunner(verbosity=self.debug and 2 or 1)
 
@@ -582,14 +582,14 @@ class CheckPylint(distutils.core.Command):
         output_format = sys.stdout.isatty() and "colorized" or "text"
         exclude = ["virtinst/progress.py"]
 
-        print "running pep8"
+        print("running pep8")
         cmd = "pep8 "
         cmd += "--config tests/pep8.cfg "
         cmd += "--exclude %s " % ",".join(exclude)
         cmd += " ".join(files)
         os.system(cmd)
 
-        print "running pylint"
+        print("running pylint")
         cmd = "pylint "
         cmd += "--rcfile tests/pylint.cfg "
         cmd += "--output-format=%s " % output_format

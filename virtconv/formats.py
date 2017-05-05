@@ -19,6 +19,8 @@
 # MA 02110-1301 USA.
 #
 
+from __future__ import print_function
+
 from distutils.spawn import find_executable
 import logging
 import os
@@ -202,7 +204,7 @@ class VirtConverter(object):
         if print_cb == -1 or print_cb is None:
             def cb(msg):
                 if print_cb == -1:
-                    print msg
+                    print(msg)
             self.print_cb = cb
         else:
             self.print_cb = print_cb

@@ -15,6 +15,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+from __future__ import print_function
+
 import glob
 import os
 import StringIO
@@ -33,7 +35,7 @@ class TestVirtConv(unittest.TestCase):
     def _convert_helper(self, infile, outfile, in_type, disk_format):
         outbuf = StringIO.StringIO()
         def print_cb(msg):
-            print >> outbuf, msg
+            print(msg, file=outbuf)
 
         converter = VirtConverter(conn, infile, print_cb=print_cb)
 
