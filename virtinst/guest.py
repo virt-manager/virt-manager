@@ -453,7 +453,7 @@ class Guest(XMLBuilder):
             self.domain.setAutostart(True)
         except libvirt.libvirtError as e:
             if util.is_error_nosupport(e):
-                logging.warn("Could not set autostart flag: libvirt "
+                logging.warning("Could not set autostart flag: libvirt "
                              "connection does not support autostart.")
             else:
                 raise e

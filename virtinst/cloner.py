@@ -411,7 +411,7 @@ class Cloner(object):
         self._clone_macs.reverse()
         for dev in self._guest.get_devices("graphics"):
             if dev.port and dev.port != -1:
-                logging.warn(_("Setting the graphics device port to autoport, "
+                logging.warning(_("Setting the graphics device port to autoport, "
                                "in order to avoid conflicting."))
                 dev.port = -1
 

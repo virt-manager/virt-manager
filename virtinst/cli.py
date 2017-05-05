@@ -371,7 +371,7 @@ def validate_disk(dev, warn_overwrite=False):
         logging.debug("Skipping --check %s error condition '%s'",
             checkname, msg)
         if warn_on_skip:
-            logging.warn(msg)
+            logging.warning(msg)
 
     def check_path_exists(dev):
         """
@@ -495,13 +495,13 @@ def get_console_cb(guest):
         try:
             subprocess.check_output(["virt-viewer", "--version"])
         except OSError:
-            logging.warn(_("Unable to connect to graphical console: "
+            logging.warning(_("Unable to connect to graphical console: "
                            "virt-viewer not installed. Please install "
                            "the 'virt-viewer' package."))
             return None
 
         if not os.environ.get("DISPLAY", ""):
-            logging.warn(_("Graphics requested but DISPLAY is not set. "
+            logging.warning(_("Graphics requested but DISPLAY is not set. "
                            "Not running virt-viewer."))
             return None
 
@@ -2222,16 +2222,16 @@ class ParserGraphics(VirtCLIParser):
 
         if inst.conn.is_qemu() and inst.gl:
             if inst.type != "spice":
-                logging.warn("graphics type=%s does not support GL", inst.type)
+                logging.warning("graphics type=%s does not support GL", inst.type)
             elif not inst.conn.check_support(
                     inst.conn.SUPPORT_CONN_SPICE_GL):
-                logging.warn("qemu/libvirt version may not support spice GL")
+                logging.warning("qemu/libvirt version may not support spice GL")
         if inst.conn.is_qemu() and inst.rendernode:
             if inst.type != "spice":
-                logging.warn("graphics type=%s does not support rendernode", inst.type)
+                logging.warning("graphics type=%s does not support rendernode", inst.type)
             elif not inst.conn.check_support(
                     inst.conn.SUPPORT_CONN_SPICE_RENDERNODE):
-                logging.warn("qemu/libvirt version may not support rendernode")
+                logging.warning("qemu/libvirt version may not support rendernode")
 
         return ret
 
@@ -2625,11 +2625,11 @@ class ParserVideo(VirtCLIParser):
 
         if inst.conn.is_qemu() and inst.accel3d:
             if inst.model != "virtio":
-                logging.warn("video model=%s does not support accel3d",
+                logging.warning("video model=%s does not support accel3d",
                     inst.model)
             elif not inst.conn.check_support(
                     inst.conn.SUPPORT_CONN_VIDEO_VIRTIO_ACCEL3D):
-                logging.warn("qemu/libvirt version may not support "
+                logging.warning("qemu/libvirt version may not support "
                              "virtio accel3d")
 
         return ret

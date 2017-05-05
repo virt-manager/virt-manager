@@ -375,7 +375,7 @@ def get_guest(conn, options):
         conn.is_qemu() and
         guest.os.arch in ["i686", "x86_64"] and
         not guest.type == "kvm"):
-        logging.warn("KVM acceleration not available, using '%s'",
+        logging.warning("KVM acceleration not available, using '%s'",
                      guest.type)
 
     return guest
@@ -494,7 +494,7 @@ def _show_nographics_warnings(options, guest):
         return
 
     if guest.installer.cdrom:
-        logging.warn(_("CDROM media does not print to the text console "
+        logging.warning(_("CDROM media does not print to the text console "
             "by default, so you likely will not see text install output. "
             "You might want to use --location.") + " " +
             _cdrom_location_man_page)
@@ -507,7 +507,7 @@ def _show_nographics_warnings(options, guest):
     # they likely won't see any output.
 
     if not guest.get_devices("console"):
-        logging.warn(_("No --console device added, you likely will not "
+        logging.warning(_("No --console device added, you likely will not "
             "see text install output from the guest."))
         return
 
@@ -529,19 +529,19 @@ def _show_nographics_warnings(options, guest):
         if console_type in (args or ""):
             return
 
-    logging.warn(_("Did not find '%(console_string)s' in --extra-args, "
+    logging.warning(_("Did not find '%(console_string)s' in --extra-args, "
         "which is likely required to see text install output from the "
         "guest."), {"console_string": console_type})
 
 
 def show_warnings(options, guest):
     if options.pxe and not supports_pxe(guest):
-        logging.warn(_("The guest's network configuration does not support "
+        logging.warning(_("The guest's network configuration does not support "
                        "PXE"))
 
     if (guest.os_variant == "generic" and
         options.distro_variant not in ["none", "generic"]):
-        logging.warn(_("No operating system detected, VM performance may "
+        logging.warning(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
 
     _show_nographics_warnings(options, guest)
@@ -630,8 +630,8 @@ def build_guest_instance(conn, options):
         except Exception as e:
             logging.debug("Error setting UEFI default for aarch64",
                 exc_info=True)
-            logging.warn("Couldn't configure UEFI: %s", e)
-            logging.warn("Your aarch64 VM may not boot successfully.")
+            logging.warning("Couldn't configure UEFI: %s", e)
+            logging.warning("Your aarch64 VM may not boot successfully.")
 
     # Various little validations about option collisions. Need to do
     # this after setting guest.installer at least

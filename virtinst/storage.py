@@ -787,7 +787,7 @@ class StorageVolume(_StorageObject):
     def validate(self):
         if self._pool_xml.type == StoragePool.TYPE_LOGICAL:
             if self.allocation != self.capacity:
-                logging.warn(_("Sparse logical volumes are not supported, "
+                logging.warning(_("Sparse logical volumes are not supported, "
                                "setting allocation equal to capacity"))
                 self.allocation = self.capacity
 
@@ -795,7 +795,7 @@ class StorageVolume(_StorageObject):
         if isfatal:
             raise ValueError(errmsg)
         if errmsg:
-            logging.warn(errmsg)
+            logging.warning(errmsg)
 
     def install(self, meter=None):
         """

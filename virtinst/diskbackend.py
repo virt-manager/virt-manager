@@ -355,7 +355,7 @@ class _StorageCreator(_StorageBase):
         if err:
             raise ValueError(msg)
         if msg:
-            logging.warn(msg)
+            logging.warning(msg)
 
     def will_create_storage(self):
         return True
