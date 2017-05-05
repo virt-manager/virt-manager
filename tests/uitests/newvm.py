@@ -92,7 +92,7 @@ class NewVM(unittest.TestCase):
         time.sleep(1)
 
         self.assertFalse(browser.showing)
-        self.assertEquals(
+        self.assertEqual(
             uiutils.find_fuzzy(newvm, "os-version-label", "label").text,
             "Unknown")
 
@@ -100,7 +100,7 @@ class NewVM(unittest.TestCase):
         uiutils.find_fuzzy(newvm, "Automatically detect", "check").click()
         version = uiutils.find_fuzzy(newvm,
             "install-os-version-entry", "text")
-        self.assertEquals(version.text, "Generic")
+        self.assertEqual(version.text, "Generic")
 
         ostype = uiutils.find_fuzzy(newvm, "install-os-type", "combo")
         ostype.click()
@@ -155,7 +155,7 @@ class NewVM(unittest.TestCase):
         version = uiutils.find_pattern(newvm, "install-os-version-label")
         time.sleep(1)
         uiutils.check_in_loop(lambda: "Detecting" not in version.text)
-        self.assertEquals(version.text, "Red Hat Enterprise Linux 5.5")
+        self.assertEqual(version.text, "Red Hat Enterprise Linux 5.5")
 
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
         uiutils.find_fuzzy(newvm, "Forward", "button").click()

@@ -32,7 +32,7 @@ class VMMCLI(unittest.TestCase):
 
         win = uiutils.find_pattern(self.app.root,
             "test testdriver.xml Connection Details", "frame")
-        self.assertEquals(
+        self.assertEqual(
             uiutils.find_fuzzy(win, None, "text", "Name:").text,
             "test testdriver.xml")
         self.app.quit()

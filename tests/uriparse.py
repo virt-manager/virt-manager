@@ -29,16 +29,16 @@ class TestURI(unittest.TestCase):
                  hostname='', query='', fragment='',
                  is_ipv6=False, host_is_ipv4_string=False):
         uriinfo = URI(uri)
-        self.assertEquals(scheme, uriinfo.scheme)
-        self.assertEquals(transport, uriinfo.transport)
-        self.assertEquals(port, uriinfo.port)
-        self.assertEquals(username, uriinfo.username)
-        self.assertEquals(path, uriinfo.path)
-        self.assertEquals(hostname, uriinfo.hostname)
-        self.assertEquals(query, uriinfo.query)
-        self.assertEquals(fragment, uriinfo.fragment)
-        self.assertEquals(is_ipv6, uriinfo.is_ipv6)
-        self.assertEquals(host_is_ipv4_string, uriinfo.host_is_ipv4_string)
+        self.assertEqual(scheme, uriinfo.scheme)
+        self.assertEqual(transport, uriinfo.transport)
+        self.assertEqual(port, uriinfo.port)
+        self.assertEqual(username, uriinfo.username)
+        self.assertEqual(path, uriinfo.path)
+        self.assertEqual(hostname, uriinfo.hostname)
+        self.assertEqual(query, uriinfo.query)
+        self.assertEqual(fragment, uriinfo.fragment)
+        self.assertEqual(is_ipv6, uriinfo.is_ipv6)
+        self.assertEqual(host_is_ipv4_string, uriinfo.host_is_ipv4_string)
 
     def testURIs(self):
         self._compare("lxc://", scheme="lxc")

@@ -72,12 +72,12 @@ class XMLParseTest(unittest.TestCase):
         set newval, and make sure it is returned properly
         """
         curval = getattr(obj, param)
-        self.assertEquals(initval, curval)
+        self.assertEqual(initval, curval)
 
         for newval in args:
             setattr(obj, param, newval)
             curval = getattr(obj, param)
-            self.assertEquals(newval, curval)
+            self.assertEqual(newval, curval)
 
     def _make_checker(self, obj):
         def check(name, initval, *args):
@@ -181,7 +181,7 @@ class XMLParseTest(unittest.TestCase):
         check("policy", "force", "disable")
         rmfeat = guest.cpu.features[3]
         guest.cpu.remove_feature(rmfeat)
-        self.assertEquals(rmfeat.get_xml_config(),
+        self.assertEqual(rmfeat.get_xml_config(),
                           """<feature name="foo" policy="bar"/>\n""")
         guest.cpu.add_feature("addfeature")
 
@@ -423,7 +423,7 @@ class XMLParseTest(unittest.TestCase):
                """<target dev="hda" bus="ide"/></disk>\n""")
         d = virtinst.VirtualDisk(conn, parsexml=xml)
         self._set_and_check(d, "target", "hda", "hdb")
-        self.assertEquals(xml.replace("hda", "hdb"), d.get_xml_config())
+        self.assertEqual(xml.replace("hda", "hdb"), d.get_xml_config())
 
     def testAlterChars(self):
         guest, outfile = self._get_test_content("change-chars")
@@ -1035,8 +1035,8 @@ class XMLParseTest(unittest.TestCase):
         outfile = "tests/xmlparse-xml/interface-%s-out.xml" % basename
         iface = virtinst.Interface(conn, parsexml=file(infile).read())
 
-        self.assertEquals(len(iface.protocols), 2)
-        self.assertEquals(len(iface.interfaces), 3)
+        self.assertEqual(len(iface.protocols), 2)
+        self.assertEqual(len(iface.interfaces), 3)
 
         check = self._make_checker(iface)
         check("type", "bridge", "foo", "bridge")
@@ -1048,7 +1048,7 @@ class XMLParseTest(unittest.TestCase):
         check("family", "ipv4", "foo", "ipv4")
         check("dhcp_peerdns", True, False)
         check("gateway", "1.2.3.4", "5.5.5.5")
-        self.assertEquals(iface.protocols[0].ips[1].address, "255.255.255.0")
+        self.assertEqual(iface.protocols[0].ips[1].address, "255.255.255.0")
 
         check = self._make_checker(iface.protocols[1])
         check("dhcp", True, False)
@@ -1064,7 +1064,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(child_iface)
         check("name", "bond-brbond")
-        self.assertEquals(len(child_iface.interfaces), 2)
+        self.assertEqual(len(child_iface.interfaces), 2)
 
         utils.diff_compare(iface.get_xml_config(), outfile)
         utils.test_create(conn, iface.get_xml_config(), "interfaceDefineXML")
@@ -1256,7 +1256,7 @@ class XMLParseTest(unittest.TestCase):
         check("outbound_peak", "5000", "3000")
         check("outbound_burst", "5120", "5120")
 
-        self.assertEquals(len(net.portgroups), 2)
+        self.assertEqual(len(net.portgroups), 2)
         check = self._make_checker(net.portgroups[0])
         check("name", "engineering", "foo")
         check("default", True, False)

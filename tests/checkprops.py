@@ -22,7 +22,7 @@ class CheckPropsTest(unittest.TestCase):
         fail = [p for p in virtinst.xmlbuilder._allprops
                 if p not in virtinst.xmlbuilder._seenprops]
         try:
-            self.assertEquals([], fail)
+            self.assertEqual([], fail)
         except AssertionError:
             msg = "".join(traceback.format_exc()) + "\n\n"
             msg += ("This means that there are XML properties that are\n"
