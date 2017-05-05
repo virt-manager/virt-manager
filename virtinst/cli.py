@@ -48,6 +48,7 @@ from .devicehostdev import VirtualHostDevice
 from .deviceinput import VirtualInputDevice
 from .deviceinterface import VirtualNetworkInterface
 from .devicememballoon import VirtualMemballoon
+from .devicememory import VirtualMemoryDevice
 from .devicepanic import VirtualPanicDevice
 from .deviceredirdev import VirtualRedirDevice
 from .devicerng import VirtualRNGDevice
@@ -705,6 +706,9 @@ def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--panic", action="append",
                     help=_("Configure a guest panic device. Ex:\n"
                            "--panic default"))
+    devg.add_argument("--memdev", action="append",
+                    help=_("Configure a guest memory device. Ex:\n"
+                           "--memdev dimm,target_size=1024"))
 
 
 def add_guest_xml_options(geng):
@@ -792,6 +796,10 @@ def _on_off_convert(key, val):
     if val is not None:
         return val
     raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
+
+
+def _set_attribute(obj, attr, val):  # pylint: disable=unused-argument
+    exec("obj." + attr + " = val ")  # pylint: disable=exec-used
 
 
 class _VirtCLIArgument(object):
@@ -916,8 +924,7 @@ class _VirtCLIArgument(object):
             self.cb(parser, inst,  # pylint: disable=not-callable
                     self.val, self)
         else:
-            exec(  # pylint: disable=exec-used
-                "inst." + self.attrname + " = self.val")
+            _set_attribute(inst, self.attrname, self.val)
 
     def lookup_param(self, parser, inst):
         """
@@ -2441,6 +2448,30 @@ _register_virt_parser(ParserWatchdog)
 _add_device_address_args(ParserWatchdog)
 ParserWatchdog.add_arg("model", "model")
 ParserWatchdog.add_arg("action", "action")
+
+
+####################
+# --memdev parsing #
+####################
+
+class ParseMemdev(VirtCLIParser):
+    cli_arg_name = "memdev"
+    objclass = VirtualMemoryDevice
+    remove_first = "model"
+
+    def set_target_size(self, inst, val, virtarg):
+        _set_attribute(inst, virtarg.attrname, int(val) * 1024)
+
+_register_virt_parser(ParseMemdev)
+ParseMemdev.add_arg("model", "model")
+ParseMemdev.add_arg("access", "access")
+ParseMemdev.add_arg("target.size", "target_size", cb=ParseMemdev.set_target_size)
+ParseMemdev.add_arg("target.node", "target_node")
+ParseMemdev.add_arg("target.label_size", "target_label_size",
+                    cb=ParseMemdev.set_target_size)
+ParseMemdev.add_arg("source.pagesize", "source_pagesize")
+ParseMemdev.add_arg("source.path", "source_path")
+ParseMemdev.add_arg("source.nodemask", "source_nodemask", can_comma=True)
 
 
 ########################

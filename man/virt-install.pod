@@ -99,6 +99,8 @@ and 'hotplugmemoryslots'.  The memory parameter is mapped to <currentMemory> ele
 the 'maxmemory' sub-option is mapped to <memory> element and 'hotplugmemorymax'
 and 'hotplugmemoryslots' are mapped to <maxMemory> element.
 
+To configure memory modules which can be hotunplugged see B<--memdev> description.
+
 Use --memory=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMemoryAllocation>
 
 =item B<--memorybacking> OPTIONS
@@ -1577,7 +1579,12 @@ Attach a panic notifier device to the guest. For the recommended settings, use:
 
 Use --panic=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsPanic>
 
+=item B<--memdev> OPTS
 
+Add a memory module to a guest which can be hotunplugged. To add a memdev you need
+to configure hotplugmemory and NUMA for a guest.
+
+Use --memdev=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMemory>.
 
 
 =back

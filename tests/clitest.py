@@ -558,6 +558,8 @@ c.add_compare(""" \
 
 c = vinst.add_category("memory-hotplug", "--nographics --noautoconsole --import --disk none")
 c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576", "memory-hotplug")
+c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2", "memory-device-dimm")
+c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128", "memory-device-nvdimm")
 
 
 ####################################################
