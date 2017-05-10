@@ -138,13 +138,14 @@ class vmmInterface(vmmLibvirtObject):
             return None, []
 
         ret = []
-        for ip in activeProto.ips:
-            ipstr = ip.address
-            if not ipstr:
-                continue
-            if ip.prefix:
-                ipstr += "/%s" % ip.prefix
-            ret.append(ipstr)
+        if activeProto:
+            for ip in activeProto.ips:
+                ipstr = ip.address
+                if not ipstr:
+                    continue
+                if ip.prefix:
+                    ipstr += "/%s" % ip.prefix
+                ret.append(ipstr)
         return inactiveProto or activeProto, ret
 
     def get_ipv4(self):
