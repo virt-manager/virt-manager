@@ -478,10 +478,7 @@ def getDistroStore(guest, fetcher):
 
     arch = guest.os.arch
     _type = guest.os.os_type
-
-    urldistro = None
-    if guest.os_variant:
-        urldistro = OSDB.lookup_os(guest.os_variant).urldistro
+    urldistro = OSDB.lookup_os(guest.os_variant).urldistro
 
     treeinfo = _grabTreeinfo(fetcher)
     if not treeinfo:
@@ -494,12 +491,21 @@ def getDistroStore(guest, fetcher):
     # If user manually specified an os_distro, bump it's URL class
     # to the top of the list
     if urldistro:
+        logging.debug("variant=%s has distro=%s, looking for matching "
+                      "distro store to prioritize",
+                      guest.os_variant, urldistro)
+        found = False
         for store in stores:
             if store.urldistro == urldistro:
-                logging.debug("Prioritizing distro store=%s", store)
-                stores.remove(store)
-                stores.insert(0, store)
+                found = True
                 break
+
+        if found:
+            logging.debug("Prioritizing distro store=%s", store)
+            stores.remove(store)
+            stores.insert(0, store)
+        else:
+            logging.debug("No matching store found, not prioritizing anything")
 
     if treeinfo:
         stores.sort(key=lambda x: not x.uses_treeinfo)
