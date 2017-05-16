@@ -394,12 +394,13 @@ def set_install_media(guest, location, cdpath, distro_variant):
         if location or cdpath:
             guest.installer.location = (location or cdpath)
 
-        guest.installer.check_location(guest)
-
         if distro_variant == "auto":
             guest.os_variant = guest.installer.detect_distro(guest)
         elif distro_variant != "none":
             guest.os_variant = distro_variant
+
+        guest.installer.check_location(guest)
+
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
 
