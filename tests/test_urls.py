@@ -108,11 +108,11 @@ _set_distro(FedoraDistro)
 _add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14",
      i686=ARCHIVE_FEDORA_URL % ("14", "i386"))
 # 2 Latest releases
-_add(FEDORA_URL % ("23", "x86_64"), "fedora23", name="fedora23")
 _add(FEDORA_URL % ("24", "x86_64"), "fedora24", name="fedora24")
+_add(FEDORA_URL % ("25", "x86_64"), "fedora25", name="fedora25")
 # Any Dev release
 # _add(DEVFEDORA_URL % ("25", "x86_64"), "fedora23", name="fedora25")
-_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora24", name="fedora-rawhide")
+_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora25", name="fedora-rawhide")
 
 
 _set_distro(CentOSDistro)
@@ -122,10 +122,10 @@ _add(OLD_CENTOS_URL % ("4.9", "x86_64"), name="centos-4.9")
 # One old centos 5
 _add(OLD_CENTOS_URL % ("5.0", "x86_64"), name="centos-5.0")
 # Latest centos 5 w/ i686
-_add(CENTOS_URL % ("5", "x86_64"), "rhel5.11", name="centos-5-latest",
-     i686=CENTOS_URL % ("5", "i386"))
+_add(OLD_CENTOS_URL % ("5.11", "x86_64"), "rhel5.11", name="centos-5.11",
+     i686=OLD_CENTOS_URL % ("5.11", "i386"))
 # Latest centos 6 w/ i686
-_add(CENTOS_URL % ("6", "x86_64"), "centos6.7", name="centos-6-latest",
+_add(CENTOS_URL % ("6", "x86_64"), "centos6.9", name="centos-6-latest",
      i686=CENTOS_URL % ("6", "i386"))
 # Latest centos 7, but no i686 as of 2014-09-06
 _add(CENTOS_URL % ("7", "x86_64"), "centos7.0", name="centos-7-latest")
@@ -135,10 +135,10 @@ _add("http://mirror.centos.org/altarch/7/os/ppc64le/",
 
 
 _set_distro(SLDistro)
-# scientific 5
-_add(OLD_SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.5", name="sl-5.5")
 # Latest scientific 6
-_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6.8", name="sl-6latest")
+_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6.9", name="sl-6latest")
+# Latest scientific 7
+_add(SCIENTIFIC_URL % ("7", "x86_64"), "rhel7.3", name="sl-7latest")
 
 
 _set_distro(SuseDistro)
@@ -148,8 +148,8 @@ _add(OLD_OPENSUSE_URL % ("10.3"), "opensuse10.3", hasbootiso=False)
 _add(OLD_OPENSUSE_URL % ("11.4"), "opensuse11.4", hasbootiso=False)
 # Latest 12 series
 # Only keep i686 for the latest opensuse
-_add(OPENSUSE_URL % ("12.3"), "opensuse12.3",
-     i686=OPENSUSE_URL % ("12.3"), hasbootiso=False, testshortcircuit=True)
+_add(OLD_OPENSUSE_URL % ("12.2"), "opensuse12.2",
+     i686=OPENSUSE_URL % ("12.2"), hasbootiso=False, testshortcircuit=True)
 # Latest 13.x releases
 _add(OPENSUSE_URL % ("13.1"), "opensuse13.1", hasbootiso=False)
 _add(OPENSUSE_URL % ("13.2"), "opensuse13.2", hasbootiso=False)
