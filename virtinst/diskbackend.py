@@ -547,6 +547,7 @@ class StorageBackend(_StorageBase):
         if self._vol_xml is None:
             self._vol_xml = StorageVolume(self._conn,
                 parsexml=self._vol_object.XMLDesc(0))
+            self._vol_xml.pool = self._parent_pool
         return self._vol_xml
 
     def get_parent_pool(self):
