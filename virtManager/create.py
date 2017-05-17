@@ -1305,7 +1305,7 @@ class vmmCreate(vmmGObjectUI):
         if media and store_media:
             self.config.add_media_url(media)
 
-        return (media.strip(), extra.strip())
+        return (media, extra)
 
     def _get_config_import_path(self):
         return self.widget("install-import-entry").get_text()
