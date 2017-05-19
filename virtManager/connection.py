@@ -286,6 +286,10 @@ class vmmConnection(vmmGObject):
             return ret
         self._backend.cb_fetch_all_vols = fetch_all_vols
 
+        def add_new_pool(obj, key):
+            self._new_object_cb(vmmStoragePool(self, obj, key), False, True)
+        self._backend.cb_add_new_pool = add_new_pool
+
         def clear_cache(pools=False):
             if not pools:
                 return
@@ -974,6 +978,7 @@ class vmmConnection(vmmGObject):
         self._backend.cb_fetch_all_nodedevs = None
         self._backend.cb_fetch_all_vols = None
         self._backend.cb_clear_cache = None
+        self._backend.cb_add_new_pool = None
 
     def open(self):
         if not self.is_disconnected():
@@ -1133,7 +1138,7 @@ class vmmConnection(vmmGObject):
                 self.emit("nodedev-removed", obj.get_connkey())
             obj.cleanup()
 
-    def _new_object_cb(self, obj, initialize_failed):
+    def _new_object_cb(self, obj, initialize_failed, skip_init=False):
         if not self._backend.is_open():
             return
 
@@ -1166,7 +1171,7 @@ class vmmConnection(vmmGObject):
             elif class_name == "nodedev":
                 self.emit("nodedev-added", obj.get_connkey())
         finally:
-            if self._init_object_event:
+            if self._init_object_event and not skip_init:
                 self._init_object_count -= 1
                 if self._init_object_count <= 0:
                     self._init_object_event.set()
