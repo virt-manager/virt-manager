@@ -37,6 +37,6 @@ Minimum version requirements of major components:
    - libosinfo >= 0.2.10
 
 On Debian or Ubuntu based distributions, you need to install the
-`gobject-introspection` bindings for some depedencies like `libvirt-glib`
+`gobject-introspection` bindings for some dependencies like `libvirt-glib`
 and `libosinfo`. Look for package names that start with `'gir'`, for example
 `gir1.2-libosinfo-1.0`.
