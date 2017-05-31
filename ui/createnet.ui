@@ -1286,22 +1286,24 @@
                                         <property name="can_focus">False</property>
                                         <property name="left_padding">25</property>
                                         <child>
-                                          <object class="GtkTable" id="net-forward-hostdev-table">
+                                          <object class="GtkGrid" id="net-forward-hostdev-table">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="column_spacing">6</property>
                                             <property name="row_spacing">4</property>
+                                            <property name="column_spacing">6</property>
                                             <child>
                                               <object class="GtkLabel" id="label393">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="vexpand">True</property>
                                                 <property name="label" translatable="yes">Device _List:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">net-forward</property>
                                               </object>
                                               <packing>
-                                                <property name="x_options">GTK_FILL</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1309,10 +1311,11 @@
                                                 <property name="width_request">200</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="vexpand">True</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="x_options">GTK_FILL</property>
+                                                <property name="top_attach">0</property>
                                               </packing>
                                             </child>
                                           </object>

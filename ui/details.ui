@@ -2010,27 +2010,24 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         <property name="can_focus">False</property>
                                         <property name="spacing">6</property>
                                         <child>
-                                          <object class="GtkTable" id="table30">
+                                          <object class="GtkGrid" id="table30">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="border_width">3</property>
-                                            <property name="n_rows">3</property>
-                                            <property name="n_columns">2</property>
-                                            <property name="column_spacing">12</property>
                                             <property name="row_spacing">6</property>
+                                            <property name="column_spacing">12</property>
                                             <child>
                                               <object class="GtkLabel" id="state-host-cpus">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">start</property>
+                                                <property name="valign">center</property>
                                                 <property name="label">8</property>
                                                 <property name="selectable">True</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
+                                                <property name="top_attach">0</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -2038,11 +2035,12 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">start</property>
+                                                <property name="valign">center</property>
                                                 <property name="label" translatable="yes">Logical host CPUs:</property>
                                               </object>
                                               <packing>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -2050,15 +2048,14 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">start</property>
+                                                <property name="valign">center</property>
                                                 <property name="label" translatable="yes">Ma_ximum allocation:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">cpu-maxvcpus</property>
                                               </object>
                                               <packing>
+                                                <property name="left_attach">0</property>
                                                 <property name="top_attach">2</property>
-                                                <property name="bottom_attach">3</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
                                               </packing>
                                             </child>
                                             <child>
@@ -2066,15 +2063,14 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">start</property>
+                                                <property name="valign">center</property>
                                                 <property name="label" translatable="yes">Current a_llocation:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">cpu-vcpus</property>
                                               </object>
                                               <packing>
+                                                <property name="left_attach">0</property>
                                                 <property name="top_attach">1</property>
-                                                <property name="bottom_attach">2</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
                                               </packing>
                                             </child>
                                             <child>
@@ -2087,17 +2083,14 @@ if you know what you are doing.&lt;/small&gt;</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">2</property>
-                                                <property name="bottom_attach">3</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options">GTK_FILL</property>
                                               </packing>
                                             </child>
                                             <child>
                                               <object class="GtkSpinButton" id="cpu-vcpus">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
+                                                <property name="valign">center</property>
                                                 <property name="invisible_char">●</property>
                                                 <property name="adjustment">adjustment7</property>
                                                 <property name="climb_rate">1</property>
@@ -2112,11 +2105,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">1</property>
-                                                <property name="bottom_attach">2</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
                                               </packing>
                                             </child>
                                           </object>
@@ -2320,13 +2309,11 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="spacing">6</property>
                                                 <child>
-                                                  <object class="GtkTable" id="cpu-topology-table">
+                                                  <object class="GtkGrid" id="cpu-topology-table">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="n_rows">3</property>
-                                                    <property name="n_columns">2</property>
-                                                    <property name="column_spacing">12</property>
                                                     <property name="row_spacing">4</property>
+                                                    <property name="column_spacing">12</property>
                                                     <child>
                                                       <object class="GtkLabel" id="label59">
                                                         <property name="visible">True</property>
@@ -2337,10 +2324,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="mnemonic_widget">cpu-threads</property>
                                                       </object>
                                                       <packing>
+                                                        <property name="left_attach">0</property>
                                                         <property name="top_attach">2</property>
-                                                        <property name="bottom_attach">3</property>
-                                                        <property name="x_options">GTK_FILL</property>
-                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -2353,10 +2338,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="mnemonic_widget">cpu-cores</property>
                                                       </object>
                                                       <packing>
+                                                        <property name="left_attach">0</property>
                                                         <property name="top_attach">1</property>
-                                                        <property name="bottom_attach">2</property>
-                                                        <property name="x_options">GTK_FILL</property>
-                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -2369,8 +2352,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="mnemonic_widget">cpu-sockets</property>
                                                       </object>
                                                       <packing>
-                                                        <property name="x_options">GTK_FILL</property>
-                                                        <property name="y_options">GTK_FILL</property>
+                                                        <property name="left_attach">0</property>
+                                                        <property name="top_attach">0</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -2385,7 +2368,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
-                                                        <property name="right_attach">2</property>
+                                                        <property name="top_attach">0</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -2394,15 +2377,14 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="halign">start</property>
                                                         <property name="hexpand">False</property>
+                                                        <property name="vexpand">True</property>
                                                         <property name="invisible_char">●</property>
                                                         <property name="adjustment">adjustment4</property>
                                                         <signal name="changed" handler="on_cpu_cores_changed" swapped="no"/>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
-                                                        <property name="right_attach">2</property>
                                                         <property name="top_attach">1</property>
-                                                        <property name="bottom_attach">2</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -2410,15 +2392,15 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="halign">start</property>
+                                                        <property name="hexpand">True</property>
+                                                        <property name="vexpand">True</property>
                                                         <property name="invisible_char">●</property>
                                                         <property name="adjustment">adjustment5</property>
                                                         <signal name="changed" handler="on_cpu_threads_changed" swapped="no"/>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">1</property>
-                                                        <property name="right_attach">2</property>
                                                         <property name="top_attach">2</property>
-                                                        <property name="bottom_attach">3</property>
                                                       </packing>
                                                     </child>
                                                   </object>
@@ -2535,28 +2517,25 @@ if you know what you are doing.&lt;/small&gt;</property>
                                     <property name="top_padding">3</property>
                                     <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkTable" id="table6">
+                                      <object class="GtkGrid" id="table6">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="border_width">3</property>
-                                        <property name="n_rows">3</property>
-                                        <property name="n_columns">2</property>
-                                        <property name="column_spacing">6</property>
                                         <property name="row_spacing">6</property>
+                                        <property name="column_spacing">6</property>
                                         <child>
                                           <object class="GtkLabel" id="label60">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
+                                            <property name="valign">center</property>
                                             <property name="label" translatable="yes">Current a_llocation:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">mem-memory</property>
                                           </object>
                                           <packing>
+                                            <property name="left_attach">0</property>
                                             <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
@@ -2564,15 +2543,14 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
+                                            <property name="valign">center</property>
                                             <property name="label" translatable="yes">Ma_ximum allocation:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">mem-maxmem</property>
                                           </object>
                                           <packing>
+                                            <property name="left_attach">0</property>
                                             <property name="top_attach">2</property>
-                                            <property name="bottom_attach">3</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
@@ -2580,11 +2558,12 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
+                                            <property name="valign">center</property>
                                             <property name="label" translatable="yes">Total host memory:</property>
                                           </object>
                                           <packing>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">0</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2592,20 +2571,21 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
+                                            <property name="valign">center</property>
                                             <property name="label">2 GiB</property>
                                             <property name="selectable">True</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
+                                            <property name="top_attach">0</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkBox" id="hbox46">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="valign">center</property>
+                                            <property name="hexpand">True</property>
                                             <property name="spacing">3</property>
                                             <child>
                                               <object class="GtkSpinButton" id="mem-memory">
@@ -2645,16 +2625,14 @@ if you know what you are doing.&lt;/small&gt;</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
                                             <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkBox" id="hbox47">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="valign">center</property>
                                             <property name="spacing">3</property>
                                             <child>
                                               <object class="GtkSpinButton" id="mem-maxmem">
@@ -2694,11 +2672,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
                                             <property name="top_attach">2</property>
-                                            <property name="bottom_attach">3</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                       </object>
@@ -2910,11 +2884,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">6</property>
                                             <child>
-                                              <object class="GtkTable" id="table13">
+                                              <object class="GtkGrid" id="table13">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="n_rows">4</property>
-                                                <property name="n_columns">2</property>
                                                 <property name="column_spacing">6</property>
                                                 <child>
                                                   <object class="GtkLabel" id="label38">
@@ -2928,8 +2900,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="mnemonic_widget">boot-kernel</property>
                                                   </object>
                                                   <packing>
-                                                    <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options">GTK_FILL</property>
+                                                    <property name="left_attach">0</property>
+                                                    <property name="top_attach">0</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -2944,16 +2916,16 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="mnemonic_widget">boot-initrd</property>
                                                   </object>
                                                   <packing>
+                                                    <property name="left_attach">0</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="bottom_attach">2</property>
-                                                    <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options">GTK_FILL</property>
                                                   </packing>
                                                 </child>
                                                 <child>
                                                   <object class="GtkBox" id="box3">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <property name="valign">center</property>
+                                                    <property name="hexpand">True</property>
                                                     <property name="spacing">6</property>
                                                     <child>
                                                       <object class="GtkEntry" id="boot-initrd">
@@ -2985,16 +2957,15 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
-                                                    <property name="right_attach">2</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="bottom_attach">2</property>
-                                                    <property name="y_options"/>
                                                   </packing>
                                                 </child>
                                                 <child>
                                                   <object class="GtkBox" id="box4">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <property name="valign">center</property>
+                                                    <property name="hexpand">True</property>
                                                     <property name="spacing">6</property>
                                                     <child>
                                                       <object class="GtkEntry" id="boot-kernel">
@@ -3026,8 +2997,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
-                                                    <property name="right_attach">2</property>
-                                                    <property name="y_options"/>
+                                                    <property name="top_attach">0</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -3042,26 +3012,22 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="mnemonic_widget">boot-kernel-args</property>
                                                   </object>
                                                   <packing>
+                                                    <property name="left_attach">0</property>
                                                     <property name="top_attach">3</property>
-                                                    <property name="bottom_attach">4</property>
-                                                    <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options">GTK_FILL</property>
                                                   </packing>
                                                 </child>
                                                 <child>
                                                   <object class="GtkEntry" id="boot-kernel-args">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="hexpand">True</property>
                                                     <property name="invisible_char">●</property>
                                                     <property name="width_chars">40</property>
                                                     <signal name="changed" handler="on_boot_kernel_args_changed" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
-                                                    <property name="right_attach">2</property>
                                                     <property name="top_attach">3</property>
-                                                    <property name="bottom_attach">4</property>
-                                                    <property name="y_options">GTK_FILL</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -3076,16 +3042,16 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="mnemonic_widget">boot-dtb</property>
                                                   </object>
                                                   <packing>
+                                                    <property name="left_attach">0</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="bottom_attach">3</property>
-                                                    <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options">GTK_FILL</property>
                                                   </packing>
                                                 </child>
                                                 <child>
                                                   <object class="GtkBox" id="boot-dtb-box">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <property name="valign">center</property>
+                                                    <property name="hexpand">True</property>
                                                     <property name="spacing">6</property>
                                                     <child>
                                                       <object class="GtkEntry" id="boot-dtb">
@@ -3117,10 +3083,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
-                                                    <property name="right_attach">2</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="bottom_attach">3</property>
-                                                    <property name="y_options"/>
                                                   </packing>
                                                 </child>
                                               </object>
@@ -4282,25 +4245,25 @@ if you know what you are doing.&lt;/small&gt;</property>
                                     <property name="top_padding">3</property>
                                     <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkTable" id="table36">
+                                      <object class="GtkGrid" id="table36">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="border_width">3</property>
-                                        <property name="n_columns">2</property>
-                                        <property name="column_spacing">8</property>
                                         <property name="row_spacing">4</property>
+                                        <property name="column_spacing">8</property>
                                         <child>
                                           <object class="GtkLabel" id="label452">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
+                                            <property name="valign">center</property>
                                             <property name="label" translatable="yes">Device m_odel:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">combobox-entry12</property>
                                           </object>
                                           <packing>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">0</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -4317,9 +4280,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options">GTK_FILL</property>
+                                            <property name="top_attach">0</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -4853,27 +4814,24 @@ if you know what you are doing.&lt;/small&gt;</property>
                                     <property name="top_padding">3</property>
                                     <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkTable" id="table8">
+                                      <object class="GtkGrid" id="table8">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="n_rows">2</property>
-                                        <property name="n_columns">2</property>
-                                        <property name="column_spacing">8</property>
                                         <property name="row_spacing">4</property>
+                                        <property name="column_spacing">8</property>
                                         <child>
                                           <object class="GtkLabel" id="label27">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
+                                            <property name="valign">center</property>
                                             <property name="label" translatable="yes">Ac_tion:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">combobox-entry14</property>
                                           </object>
                                           <packing>
+                                            <property name="left_attach">0</property>
                                             <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
                                           </packing>
                                         </child>
                                         <child>
@@ -4881,13 +4839,14 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
+                                            <property name="valign">center</property>
                                             <property name="label" translatable="yes">M_odel:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">combobox-entry15</property>
                                           </object>
                                           <packing>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"/>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">0</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -4904,11 +4863,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
                                             <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -4925,9 +4880,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options">GTK_FILL</property>
+                                            <property name="top_attach">0</property>
                                           </packing>
                                         </child>
                                       </object>
