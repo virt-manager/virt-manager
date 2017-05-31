@@ -49,9 +49,9 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">&lt;span size='large' color='white'&gt;Clone virtual machine&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -104,9 +104,9 @@
                           <object class="GtkLabel" id="clone-orig-name">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="label">orig name</property>
                             <property name="ellipsize">end</property>
-                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -117,8 +117,8 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">Create clone based on:</property>
-                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -141,10 +141,10 @@
                           <object class="GtkLabel" id="clone-dest-host">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="label">dest host</property>
                             <property name="ellipsize">end</property>
                             <property name="lines">0</property>
-                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -180,8 +180,8 @@
                                   <object class="GtkLabel" id="clone-no-net">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">No networking devices</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -239,8 +239,8 @@
                                   <object class="GtkLabel" id="clone-no-storage-pass">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">No storage to clone</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -435,7 +435,6 @@
                             <property name="label" translatable="yes">&lt;span size='small'&gt;Cloning creates a new, independent copy of the original disk. Sharing
 uses the existing disk image for both the original and the new machine.&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
-                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -459,7 +458,7 @@ uses the existing disk image for both the original and the new machine.&lt;/span
                           <object class="GtkImage" id="image5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="yalign">0</property>
                             <property name="stock">gtk-dialog-warning</property>
                           </object>
@@ -651,8 +650,8 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                               <object class="GtkLabel" id="change-mac-type">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="label">type string</property>
-                                <property name="xalign">0</property>
                               </object>
                             </child>
                           </object>
@@ -672,9 +671,9 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                               <object class="GtkLabel" id="change-mac-orig">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="label">orig-mac</property>
                                 <property name="width_chars">20</property>
-                                <property name="xalign">0</property>
                               </object>
                             </child>
                           </object>
@@ -905,8 +904,8 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                       <object class="GtkLabel" id="change-storage-size">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="label">size</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -920,8 +919,8 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                       <object class="GtkLabel" id="change-storage-target">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="label">target</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -935,11 +934,11 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                       <object class="GtkLabel" id="change-storage-orig">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="label">orig-path</property>
                         <property name="ellipsize">start</property>
                         <property name="width_chars">25</property>
                         <property name="max_width_chars">25</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1004,8 +1003,8 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Existing disk</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>

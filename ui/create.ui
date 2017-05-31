@@ -67,9 +67,9 @@
                           <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">&lt;span size='large' color='white'&gt;Create a new virtual machine&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
-                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -81,9 +81,9 @@
                           <object class="GtkLabel" id="header-pagenum">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="label">&lt;span color='#59B0E2'&gt;Step foo of bar&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
-                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -155,8 +155,8 @@
                                   <object class="GtkLabel" id="label39">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Choose virtualization type</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -181,8 +181,8 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
                                             <property name="use_underline">True</property>
-                                            <property name="xalign">0</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_vz_virt_type_changed" swapped="no"/>
@@ -199,8 +199,8 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
                                             <property name="use_underline">True</property>
-                                            <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">vz-virt-type-hvm</property>
                                             <signal name="toggled" handler="on_vz_virt_type_changed" swapped="no"/>
@@ -237,8 +237,8 @@
                                   <object class="GtkLabel" id="label12">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Choose how you would like to install the operating system</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -263,8 +263,8 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
                                             <property name="use_underline">True</property>
-                                            <property name="xalign">0</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_method_changed" swapped="no"/>
@@ -281,8 +281,8 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
                                             <property name="use_underline">True</property>
-                                            <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-local</property>
                                             <signal name="toggled" handler="on_method_changed" swapped="no"/>
@@ -299,8 +299,8 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
                                             <property name="use_underline">True</property>
-                                            <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-local</property>
                                             <signal name="toggled" handler="on_method_changed" swapped="no"/>
@@ -317,8 +317,8 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
                                             <property name="use_underline">True</property>
-                                            <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-local</property>
                                             <signal name="toggled" handler="on_method_changed" swapped="no"/>
@@ -354,8 +354,8 @@
                                   <object class="GtkLabel" id="label44">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Choose the container type</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -380,8 +380,8 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
                                             <property name="use_underline">True</property>
-                                            <property name="xalign">0</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_method_changed" swapped="no"/>
@@ -398,8 +398,8 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
                                             <property name="use_underline">True</property>
-                                            <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-container-app</property>
                                             <signal name="toggled" handler="on_method_changed" swapped="no"/>
@@ -474,11 +474,11 @@
                                   <object class="GtkLabel" id="create-conn-label">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label">conn label</property>
                                     <property name="ellipsize">end</property>
                                     <property name="width_chars">25</property>
                                     <property name="max_width_chars">25</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -535,7 +535,6 @@
 bar</property>
                                     <property name="wrap">True</property>
                                     <property name="max_width_chars">45</property>
-                                    <property name="xalign">0</property>
                                     <property name="yalign">0</property>
                                   </object>
                                   <packing>
@@ -593,7 +592,6 @@ bar</property>
 bar</property>
                                     <property name="wrap">True</property>
                                     <property name="max_width_chars">45</property>
-                                    <property name="xalign">0</property>
                                     <property name="yalign">0</property>
                                   </object>
                                   <packing>
@@ -786,8 +784,8 @@ bar</property>
                                       <object class="GtkLabel" id="label21">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Locate your install media</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -962,8 +960,8 @@ bar</property>
                                   <object class="GtkLabel" id="label23">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Provide the operating system install URL</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1163,10 +1161,10 @@ User shouldn't see this.</property>
                                       <object class="GtkLabel" id="label41">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Provide the existing stora_ge path:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">install-import-entry</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -1242,8 +1240,8 @@ User shouldn't see this.</property>
                                       <object class="GtkLabel" id="label11">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Direct kernel boot:</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -1266,10 +1264,10 @@ User shouldn't see this.</property>
                                               <object class="GtkLabel" id="label38">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">_Kernel path:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">kernel</property>
-                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1280,10 +1278,10 @@ User shouldn't see this.</property>
                                               <object class="GtkLabel" id="label48">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">_Initrd path:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">initrd</property>
-                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1294,10 +1292,10 @@ User shouldn't see this.</property>
                                               <object class="GtkLabel" id="label49">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">_DTB path:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">dtb</property>
-                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1435,10 +1433,10 @@ User shouldn't see this.</property>
                                               <object class="GtkLabel" id="label51">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">Kerne_l args:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">kernel-args</property>
-                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -1500,10 +1498,10 @@ User shouldn't see this.</property>
                                   <object class="GtkLabel" id="label43">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Provide the _application path:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">install-app-entry</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1588,10 +1586,10 @@ User shouldn't see this.</property>
                                   <object class="GtkLabel" id="label45">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Provide the existing OS root _directory:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">install-oscontainer-fs</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1675,10 +1673,10 @@ User shouldn't see this.</property>
                                               <object class="GtkLabel" id="label46">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">&lt;small&gt;The OS directory tree must already exist. Creating an OS directory tree
 is not yet supported.&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
-                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">True</property>
@@ -1728,10 +1726,10 @@ is not yet supported.&lt;/small&gt;</property>
                                   <object class="GtkLabel" id="label53">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Select _container template:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">install-container-template</property>
-                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1834,8 +1832,8 @@ is not yet supported.&lt;/small&gt;</property>
                             <child>
                               <object class="GtkLabel" id="install-nodetect-label">
                                 <property name="can_focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Choose an operating system type and version</property>
-                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1860,8 +1858,8 @@ is not yet supported.&lt;/small&gt;</property>
                                       <object class="GtkLabel" id="install-os-version-label">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label">-</property>
-                                        <property name="xalign">0</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="install-os-version-label-atkobject">
                                             <property name="AtkObject::accessible-name">install-os-version-label</property>
@@ -1880,8 +1878,8 @@ is not yet supported.&lt;/small&gt;</property>
                                       <object class="GtkLabel" id="install-os-type-label">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label">-</property>
-                                        <property name="xalign">0</property>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="install-os-type-label-atkobject">
                                             <property name="AtkObject::accessible-name">install-os-type-label</property>
@@ -1917,10 +1915,10 @@ is not yet supported.&lt;/small&gt;</property>
                                       <object class="GtkLabel" id="label17">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">_Version:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">install-os-version</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="top_attach">1</property>
@@ -2022,8 +2020,8 @@ is not yet supported.&lt;/small&gt;</property>
                               <object class="GtkLabel" id="label15">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Choose Memory and CPU settings</property>
-                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -2115,8 +2113,8 @@ is not yet supported.&lt;/small&gt;</property>
                                           <object class="GtkLabel" id="phys-cpu-label">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
                                             <property name="label">Insert Phys cpu count</property>
-                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -2167,8 +2165,8 @@ is not yet supported.&lt;/small&gt;</property>
                                           <object class="GtkLabel" id="label29">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
                                             <property name="label" translatable="yes">MiB</property>
-                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">2</property>
@@ -2185,8 +2183,8 @@ is not yet supported.&lt;/small&gt;</property>
                                               <object class="GtkLabel" id="phys-mem-label">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
                                                 <property name="label" translatable="yes">(Insert host mem)</property>
-                                                <property name="xalign">0</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">True</property>
@@ -2313,9 +2311,9 @@ is not yet supported.&lt;/small&gt;</property>
                               <object class="GtkLabel" id="summary-title">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Ready to begin the installation</property>
                                 <property name="use_markup">True</property>
-                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -2339,8 +2337,8 @@ is not yet supported.&lt;/small&gt;</property>
                                       <object class="GtkLabel" id="summary-install">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label">label</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2351,8 +2349,8 @@ is not yet supported.&lt;/small&gt;</property>
                                       <object class="GtkLabel" id="summary-mem">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label">label</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2363,8 +2361,8 @@ is not yet supported.&lt;/small&gt;</property>
                                       <object class="GtkLabel" id="summary-cpu">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label">label</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2421,8 +2419,8 @@ is not yet supported.&lt;/small&gt;</property>
                                       <object class="GtkLabel" id="summary-os">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label">label</property>
-                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -2526,9 +2524,9 @@ is not yet supported.&lt;/small&gt;</property>
                                           <object class="GtkLabel" id="summary-storage">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
                                             <property name="label">label</property>
                                             <property name="wrap">True</property>
-                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -2540,11 +2538,11 @@ is not yet supported.&lt;/small&gt;</property>
                                           <object class="GtkLabel" id="summary-storage-path">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
                                             <property name="label">label</property>
                                             <property name="ellipsize">start</property>
                                             <property name="width_chars">27</property>
                                             <property name="max_width_chars">27</property>
-                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
