@@ -93,9 +93,9 @@
                       <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">&lt;span color='#484848'&gt;Migrating VM:&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
-                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -106,9 +106,9 @@
                       <object class="GtkLabel" id="label8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">&lt;span color='#484848'&gt;Original host:&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
-                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -119,11 +119,11 @@
                       <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">&lt;span color='#484848'&gt;New _host:&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">migrate-dest</property>
-                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -206,10 +206,10 @@
                                       <object class="GtkLabel" id="label2">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">end</property>
                                         <property name="label" translatable="yes">_Address:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">migrate-set-address</property>
-                                        <property name="xalign">1</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -394,10 +394,10 @@
                                         <property name="tooltip_text" translatable="yes">Tunnel migration through the libvirtd connection channel, rather than having the hypervisor open a separate network connection to the destination. The source libvirt instance connects directly to the destination libvirt instance.
 
 This can simplify setup since no additional firewall ports need to be open, and will encrypt migration traffic if your libvirt connection is encrypted. But it can be difficult to make this work with SSH transport.</property>
+                                        <property name="halign">end</property>
                                         <property name="label" translatable="yes">M_ode:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">migrate-mode</property>
-                                        <property name="xalign">1</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
