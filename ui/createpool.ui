@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkWindow" id="vmm-create-pool">
@@ -11,9 +11,9 @@
     <signal name="delete-event" handler="on_vmm_create_pool_delete_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="vbox1">
-        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkViewport" id="header">
             <property name="visible">True</property>
@@ -21,7 +21,6 @@
             <property name="resize_mode">queue</property>
             <child>
               <object class="GtkBox" id="hbox77">
-                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
@@ -41,21 +40,20 @@
                 </child>
                 <child>
                   <object class="GtkBox" id="hbox2">
-                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkBox" id="vbox3">
-                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">&lt;span size='large' color='white'&gt;Create storage pool&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -67,9 +65,9 @@
                           <object class="GtkLabel" id="header-pagenum">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label">&lt;span color='#59B0E2'&gt;Step foo of bar&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -102,10 +100,10 @@
         </child>
         <child>
           <object class="GtkBox" id="vbox2">
-            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">12</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
               <object class="GtkNotebook" id="pool-pages">
@@ -124,10 +122,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">_Name:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">pool-name</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -159,8 +157,8 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Select the storage pool type you would like to configure.</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -173,10 +171,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">_Type:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">pool-type</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -210,10 +208,10 @@
                           <object class="GtkLabel" id="pool-build-label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes">B_uild Pool:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">pool-build</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -222,7 +220,6 @@
                         </child>
                         <child>
                           <object class="GtkBox" id="pool-iqn-box">
-                            <property name="orientation">horizontal</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
@@ -264,10 +261,10 @@
                           <object class="GtkLabel" id="pool-target-label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes">_Target Path:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">pool-target-path</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -278,10 +275,10 @@
                           <object class="GtkLabel" id="pool-format-label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes">F_ormat:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">pool-format</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -292,10 +289,10 @@
                           <object class="GtkLabel" id="pool-hostname-label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes">Host Na_me:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">pool-hostname</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -306,10 +303,10 @@
                           <object class="GtkLabel" id="pool-source-label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label">sourcep:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">pool-source-path</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -320,10 +317,10 @@
                           <object class="GtkLabel" id="pool-iqn-label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes">Initiator _IQN:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">pool-iqn-chk</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -437,10 +434,10 @@
                           <object class="GtkLabel" id="pool-source-name-label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes">Source _Name:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">pool-source-name</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>

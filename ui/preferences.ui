@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -17,9 +17,9 @@
     <signal name="delete-event" handler="on_vmm_preferences_delete_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="vbox1">
-        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkNotebook" id="prefs-pages">
@@ -109,10 +109,10 @@
                           <object class="GtkLabel" id="label13">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Poll _Disk I/O</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-stats-enable-disk</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -137,10 +137,10 @@
                           <object class="GtkLabel" id="label14">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Poll _Network I/O</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-stats-enable-net</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -165,10 +165,10 @@
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Poll _Memory stats</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-stats-enable-memory</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -193,9 +193,9 @@
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Update status every</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -225,8 +225,8 @@
                               <object class="GtkLabel" id="label8">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">seconds</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -244,10 +244,10 @@
                           <object class="GtkLabel" id="label28">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Poll C_PU usage</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-stats-enable-cpu</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -325,10 +325,10 @@
                               <object class="GtkLabel" id="label162">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Gra_phics type:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">prefs-graphics-type</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -340,10 +340,10 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="tooltip_text" translatable="yes">Default storage format for new disk images.</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Storage format:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">prefs-storage-format</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -393,10 +393,10 @@
                               <object class="GtkLabel" id="label7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Add sound device:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">prefs-new-vm-sound</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -410,10 +410,10 @@
                                 <property name="tooltip_text" translatable="yes">Default CPU setting for new VMs. This is typically a tradeoff between performance
 and migration compatibility: if using the 'copy host' option, your servers will need
 identical CPUs in order to migrate the VM.</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">CPU _default:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">prefs-cpu-default</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -435,11 +435,11 @@ identical CPUs in order to migrate the VM.</property>
                               <object class="GtkLabel" id="label27">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Add Spice _USB
 Redirection:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">prefs-add-spice-usbredir</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -516,9 +516,9 @@ Redirection:</property>
                           <object class="GtkLabel" id="label17">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Graphical console _scaling:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -527,17 +527,16 @@ Redirection:</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="hbox2">
-                            <property name="orientation">horizontal</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
                               <object class="GtkLabel" id="label24">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Gr_ab keys:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">prefs-keys-grab-changebtn</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -549,8 +548,8 @@ Redirection:</property>
                               <object class="GtkLabel" id="prefs-keys-grab-sequence">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Not supported</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -596,10 +595,10 @@ Redirection:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes">When the guest graphical console has keyboard focus, do not disable shortcuts for console window menus (Alt+F -&gt; File, etc.) Normally these are disabled to ensure that typing in the guest does not accidentally perform an operation in virt-manager's console window.</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Force console shortcuts:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-console-accels</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -626,11 +625,11 @@ Redirection:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes">Change guest resolution when the guest window size is changed. Only works with properly configured guest using spice and the desktop agent.</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Resize guest with window:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-console-resizeguest</property>
                             <property name="lines">2</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -700,10 +699,10 @@ Redirection:</property>
                           <object class="GtkLabel" id="label19">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Force Poweroff:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-confirm-forcepoweroff</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -728,10 +727,10 @@ Redirection:</property>
                           <object class="GtkLabel" id="label20">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Poweroff/_Reboot/Save:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-confirm-poweroff</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -742,10 +741,10 @@ Redirection:</property>
                           <object class="GtkLabel" id="label21">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Pause:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-confirm-pause</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -798,10 +797,10 @@ Redirection:</property>
                           <object class="GtkLabel" id="label22">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Device re_moval:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-confirm-removedev</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -812,10 +811,10 @@ Redirection:</property>
                           <object class="GtkLabel" id="label23">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Interface start/stop:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-confirm-interface</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -840,10 +839,10 @@ Redirection:</property>
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Unapplied changes:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-confirm-unapplied</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -868,10 +867,10 @@ Redirection:</property>
                           <object class="GtkLabel" id="label66">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Deleting storage:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">prefs-confirm-delstorage</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>

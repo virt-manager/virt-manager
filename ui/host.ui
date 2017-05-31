@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-open</property>
-  </object>
   <object class="GtkWindow" id="vmm-host">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Connection Details</property>
@@ -19,9 +14,9 @@
     <signal name="delete-event" handler="on_vmm_host_delete_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="vbox1">
-        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkMenuBar" id="menubar1">
             <property name="visible">True</property>
@@ -96,10 +91,10 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkBox" id="vbox2">
-                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="border_width">6</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">18</property>
                     <child>
                       <object class="GtkFrame" id="frame1">
@@ -384,10 +379,10 @@
             </child>
             <child>
               <object class="GtkBox" id="vbox7">
-                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">3</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkHPaned" id="hpaned2">
                     <property name="visible">True</property>
@@ -430,9 +425,9 @@
                             <property name="left_padding">6</property>
                             <child>
                               <object class="GtkBox" id="net-details">
-                                <property name="orientation">vertical</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
                                 <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkGrid" id="table4">
@@ -442,7 +437,6 @@
                                     <property name="column_spacing">6</property>
                                     <child>
                                       <object class="GtkBox" id="hbox3">
-                                        <property name="orientation">horizontal</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="spacing">3</property>
@@ -649,7 +643,6 @@
                                         </child>
                                         <child>
                                           <object class="GtkBox" id="hbox13">
-                                            <property name="orientation">horizontal</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">3</property>
@@ -801,7 +794,6 @@
                                         </child>
                                         <child>
                                           <object class="GtkBox" id="hbox6">
-                                            <property name="orientation">horizontal</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">3</property>
@@ -1176,13 +1168,11 @@
                 </child>
                 <child>
                   <object class="GtkBox" id="hbox15">
-                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="border_width">3</property>
                     <child>
                       <object class="GtkBox" id="hbox16">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -1282,7 +1272,6 @@
                     </child>
                     <child>
                       <object class="GtkBox" id="hbox17">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -1357,10 +1346,10 @@
             </child>
             <child>
               <object class="GtkBox" id="vbox3">
-                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">3</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkHPaned" id="hpaned3">
                     <property name="visible">True</property>
@@ -1404,9 +1393,9 @@
                             <property name="left_padding">6</property>
                             <child>
                               <object class="GtkBox" id="interface-details">
-                                <property name="orientation">vertical</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
                                 <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkTable" id="table2">
@@ -1478,7 +1467,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkBox" id="hbox4">
-                                        <property name="orientation">horizontal</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="spacing">3</property>
@@ -1532,7 +1520,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkBox" id="hbox8">
-                                        <property name="orientation">horizontal</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <child>
@@ -1777,9 +1764,9 @@
                                 </child>
                                 <child>
                                   <object class="GtkBox" id="interface-child-box">
-                                    <property name="orientation">vertical</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="orientation">vertical</property>
                                     <property name="spacing">3</property>
                                     <child>
                                       <object class="GtkLabel" id="label20">
@@ -1875,13 +1862,11 @@ here</property>
                 </child>
                 <child>
                   <object class="GtkBox" id="hbox1">
-                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="border_width">3</property>
                     <child>
                       <object class="GtkBox" id="hbox2">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -1981,7 +1966,6 @@ here</property>
                     </child>
                     <child>
                       <object class="GtkBox" id="hbox5">
-                        <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -2039,5 +2023,10 @@ here</property>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-open</property>
   </object>
 </interface>

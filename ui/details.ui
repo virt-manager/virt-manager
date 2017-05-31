@@ -132,9 +132,9 @@
     <signal name="delete-event" handler="on_vmm_details_delete_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="vbox2">
-        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkMenuBar" id="details-menubar">
             <property name="visible">True</property>
@@ -400,7 +400,6 @@
         </child>
         <child>
           <object class="GtkBox" id="toolbar-box">
-            <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -593,16 +592,15 @@
             <signal name="switch-page" handler="on_details_pages_switch_page" after="yes" swapped="no"/>
             <child>
               <object class="GtkBox" id="hbox1">
-                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkBox" id="vbox53">
-                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow5">
@@ -670,9 +668,9 @@
                 </child>
                 <child>
                   <object class="GtkBox" id="vbox1">
-                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkNotebook" id="hw-panel">
@@ -682,9 +680,9 @@
                         <property name="show_border">False</property>
                         <child>
                           <object class="GtkBox" id="vbox6">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkFrame" id="frame2">
@@ -1702,9 +1700,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox" id="vbox5">
-                                <property name="orientation">vertical</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
                                 <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkFrame" id="frame24">
@@ -1990,10 +1988,10 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox14">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">start</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkFrame" id="CPUs">
@@ -2009,7 +2007,6 @@ if you know what you are doing.&lt;/small&gt;</property>
                                     <property name="left_padding">12</property>
                                     <child>
                                       <object class="GtkBox" id="hbox5">
-                                        <property name="orientation">horizontal</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="spacing">6</property>
@@ -2132,7 +2129,6 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         </child>
                                         <child>
                                           <object class="GtkBox" id="cpu-vcpus-warn-box">
-                                            <property name="orientation">horizontal</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">6</property>
@@ -2292,9 +2288,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                     <property name="right_padding">12</property>
                                     <child>
                                       <object class="GtkBox" id="vbox15">
-                                        <property name="orientation">vertical</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
                                         <property name="spacing">4</property>
                                         <child>
                                           <object class="GtkCheckButton" id="cpu-topology-enable">
@@ -2322,7 +2318,6 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="xscale">0</property>
                                             <child>
                                               <object class="GtkBox" id="hbox26">
-                                                <property name="orientation">horizontal</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="spacing">6</property>
@@ -2437,7 +2432,6 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 </child>
                                                 <child>
                                                   <object class="GtkBox" id="cpu-topology-warn-box">
-                                                    <property name="orientation">horizontal</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="spacing">6</property>
@@ -2527,9 +2521,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox7">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkFrame" id="frame5">
                                 <property name="visible">True</property>
@@ -2612,7 +2606,6 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         </child>
                                         <child>
                                           <object class="GtkBox" id="hbox46">
-                                            <property name="orientation">horizontal</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">3</property>
@@ -2662,7 +2655,6 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         </child>
                                         <child>
                                           <object class="GtkBox" id="hbox47">
-                                            <property name="orientation">horizontal</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">3</property>
@@ -3191,9 +3183,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                     <property name="left_padding">12</property>
                                     <child>
                                       <object class="GtkBox" id="bootvbox">
-                                        <property name="orientation">vertical</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
                                         <property name="spacing">6</property>
                                         <child>
                                           <object class="GtkCheckButton" id="boot-menu">
@@ -3346,9 +3338,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox55">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkFrame" id="frame10">
@@ -3364,9 +3356,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                     <property name="left_padding">12</property>
                                     <child>
                                       <object class="GtkBox" id="vbox13">
-                                        <property name="orientation">vertical</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
                                         <property name="spacing">12</property>
                                         <child>
                                           <object class="GtkGrid" id="table32">
@@ -3923,9 +3915,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox54">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkFrame" id="frame9">
@@ -4109,9 +4101,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox56">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkFrame" id="frame11">
@@ -4220,9 +4212,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox57">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkFrame" id="vnc-frame">
                                 <property name="visible">True</property>
@@ -4273,9 +4265,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox58">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkFrame" id="frame13">
                                 <property name="visible">True</property>
@@ -4366,9 +4358,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox59">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkFrame" id="frame14">
                                 <property name="visible">True</property>
@@ -4572,9 +4564,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox8">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkFrame" id="frame6">
                                 <property name="visible">True</property>
@@ -4683,9 +4675,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox9">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkFrame" id="frame8">
                                 <property name="visible">True</property>
@@ -4844,9 +4836,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox12">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkFrame" id="frame15">
                                 <property name="visible">True</property>
@@ -5115,9 +5107,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox16">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkFrame" id="frame18">
                                 <property name="visible">True</property>
@@ -5303,9 +5295,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="vbox17">
-                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkFrame" id="frame20">
