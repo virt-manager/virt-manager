@@ -22,6 +22,7 @@ import glob
 import os
 import logging
 import socket
+import urllib
 
 from gi.repository import Gio
 from gi.repository import GObject
@@ -393,7 +394,7 @@ class vmmConnect(vmmGObjectUI):
 
         addrstr = ""
         if user:
-            addrstr += user + "@"
+            addrstr += urllib.quote(user) + "@"
 
         if host.count(":") > 1:
             host = "[%s]" % host

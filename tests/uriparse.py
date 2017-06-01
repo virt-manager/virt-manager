@@ -57,3 +57,7 @@ class TestURI(unittest.TestCase):
             scheme="qemu", transport="ssh", username="root",
             hostname="192.168.2.3", path="/system",
             query="no_verify=1", host_is_ipv4_string=True)
+        self._compare(
+            "qemu+ssh://foo%5Cbar@hostname/system",
+            scheme="qemu", path="/system", transport="ssh",
+            hostname="hostname", username="foo\\bar")
