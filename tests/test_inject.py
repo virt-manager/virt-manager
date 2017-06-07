@@ -60,14 +60,14 @@ def _add(*args, **kwargs):
 
 _add("centos-4.9", "http://vault.centos.org/4.9/os/x86_64",
      warntype=WARN_RHEL4, ks2=True, virtio=False)
-_add("centos-5-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/5/os/x86_64/",
+_add("centos-5.11", "http://vault.centos.org/5.11/os/x86_64/",
      warntype=WARN_RHEL5)
 _add("centos-6-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/6/os/x86_64/",
      warntype=WARN_RHEL5)
 _add("centos-7-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/7/os/x86_64/",
      ks2=True)
-_add("fedora-23", FEDORA_URL % ("23", "x86_64"), ks2=True)
-_add("fedora-24", DEVFEDORA_URL % ("24", "x86_64"), ks2=True)
+_add("fedora-25", FEDORA_URL % ("25", "x86_64"), ks2=True)
+_add("fedora-26", DEVFEDORA_URL % ("26", "x86_64"), ks2=True)
 
 
 def exit_cleanup():
