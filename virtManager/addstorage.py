@@ -163,10 +163,10 @@ class vmmAddStorage(vmmGObjectUI):
         errmsg = _("Errors were encountered changing permissions for the "
                    "following directories:")
         details = ""
-        for path, error in errors.items():
-            if path not in broken_paths:
+        for p, error in errors.items():
+            if p not in broken_paths:
                 continue
-            details += "%s : %s\n" % (path, error)
+            details += "%s : %s\n" % (p, error)
         details += "\nIt is very likely the VM will fail to start up."
 
         logging.debug("Permission errors:\n%s", details)

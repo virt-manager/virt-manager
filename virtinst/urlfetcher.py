@@ -494,16 +494,15 @@ def getDistroStore(guest, fetcher):
         logging.debug("variant=%s has distro=%s, looking for matching "
                       "distro store to prioritize",
                       guest.os_variant, urldistro)
-        found = False
+        found_store = None
         for store in stores:
             if store.urldistro == urldistro:
-                found = True
-                break
+                found_store = store
 
-        if found:
-            logging.debug("Prioritizing distro store=%s", store)
-            stores.remove(store)
-            stores.insert(0, store)
+        if found_store:
+            logging.debug("Prioritizing distro store=%s", found_store)
+            stores.remove(found_store)
+            stores.insert(0, found_store)
         else:
             logging.debug("No matching store found, not prioritizing anything")
 
@@ -782,8 +781,8 @@ class RedHatDistro(Distro):
 
     def _get_method_arg(self):
         if (self._version_number is not None and
-            ((self.urldistro is "rhel" and self._version_number >= 7) or
-             (self.urldistro is "fedora" and self._version_number >= 19))):
+            ((self.urldistro == "rhel" and self._version_number >= 7) or
+             (self.urldistro == "fedora" and self._version_number >= 19))):
             return "inst.repo"
         return "method"
 
@@ -1111,7 +1110,7 @@ class DebianDistro(Distro):
         for arch in ["i386", "amd64", "x86_64"]:
             if arch in self.uri:
                 logging.debug("Found treearch=%s in uri", arch)
-                if arch is "x86_64":
+                if arch == "x86_64":
                     arch = "amd64"
                 return arch
 

@@ -1164,8 +1164,8 @@ class vmmDomain(vmmLibvirtObject):
     def class_name(self):
         return "domain"
 
-    def _define(self, newxml):
-        self.conn.define_domain(newxml)
+    def _define(self, xml):
+        self.conn.define_domain(xml)
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
     def _get_backend_status(self):
@@ -2090,8 +2090,8 @@ class vmmDomainVirtinst(vmmDomain):
         ignore = flags
         return self._backend.get_xml_config()
 
-    def _define(self, newxml):
-        ignore = newxml
+    def _define(self, xml):
+        ignore = xml
         self.emit("state-changed")
 
     def _invalidate_xml(self):

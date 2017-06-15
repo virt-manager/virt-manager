@@ -126,11 +126,9 @@ class TestXMLMisc(unittest.TestCase):
 
     def testDefaultBridge(self):
         # Test our handling of the default bridge routines
-        origfunc = None
+        from virtinst import deviceinterface
+        origfunc = getattr(deviceinterface, "_default_bridge")
         try:
-            from virtinst import deviceinterface
-            origfunc = getattr(deviceinterface, "_default_bridge")
-
             def newbridge(ignore_conn):
                 return "bzz0"
             setattr(deviceinterface, "_default_bridge", newbridge)
@@ -164,9 +162,7 @@ class TestXMLMisc(unittest.TestCase):
                                "  <mac address=\"22:22:33:44:55:68\"/>\n"
                                "</interface>\n")
         finally:
-            if origfunc:
-                from virtinst import deviceinterface
-                setattr(deviceinterface, "_default_bridge", origfunc)
+            setattr(deviceinterface, "_default_bridge", origfunc)
 
     def testCpustrToTuple(self):
         # Various testing our cpustr handling

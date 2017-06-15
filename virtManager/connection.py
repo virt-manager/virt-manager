@@ -445,6 +445,7 @@ class vmmConnection(vmmGObject):
         locals()[_supportname] = getattr(virtinst.VirtualConnection,
                                          _supportname)
     def check_support(self, *args):
+        # pylint: disable=no-value-for-parameter
         return self._backend.check_support(*args)
 
     def is_storage_capable(self):

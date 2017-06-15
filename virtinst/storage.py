@@ -185,9 +185,9 @@ class StoragePool(_StorageObject):
             obj = StoragePool(conn)
             obj.type = pool_type
             obj.source_path = parseobj.source_path
-            for host in parseobj.hosts:
-                parseobj.remove_host(host)
-                obj.add_host_obj(host)
+            for h in parseobj.hosts:
+                parseobj.remove_host(h)
+                obj.add_host_obj(h)
             obj.source_name = parseobj.source_name
             obj.format = parseobj.format
 

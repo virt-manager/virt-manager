@@ -45,8 +45,8 @@ def install_specified(location, cdpath, pxe, import_install):
 def cdrom_specified(guest, disk=None):
     disks = guest.get_devices("disk")
 
-    for disk in disks:
-        if disk.device == virtinst.VirtualDisk.DEVICE_CDROM:
+    for d in disks:
+        if d.device == virtinst.VirtualDisk.DEVICE_CDROM:
             return True
 
     # Probably haven't set up disks yet

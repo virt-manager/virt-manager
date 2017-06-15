@@ -160,9 +160,9 @@ def set_grid_row_visible(child, visible):
                            "not %s" % type(parent))
 
     row = child_get_property(parent, child, "top-attach")
-    for child in parent.get_children():
-        if child_get_property(parent, child, "top-attach") == row:
-            child.set_visible(visible)
+    for c in parent.get_children():
+        if child_get_property(parent, c, "top-attach") == row:
+            c.set_visible(visible)
 
 
 def init_combo_text_column(combo, col):
