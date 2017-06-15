@@ -590,7 +590,10 @@ class CheckPylint(distutils.core.Command):
         os.system(cmd)
 
         print("running pylint")
-        cmd = "pylint "
+        if os.path.exists("/usr/bin/pylint-2"):
+            cmd = "pylint-2 "
+        else:
+            cmd = "pylint "
         cmd += "--rcfile tests/pylint.cfg "
         cmd += "--output-format=%s " % output_format
         cmd += "--ignore %s " % ",".join(
