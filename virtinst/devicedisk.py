@@ -746,6 +746,8 @@ class VirtualDisk(VirtualDevice):
     error_policy = XMLProperty("./driver/@error_policy")
     serial = XMLProperty("./serial")
     startup_policy = XMLProperty("./source/@startupPolicy")
+    logical_block_size = XMLProperty("./blockio/@logical_block_size")
+    physical_block_size = XMLProperty("./blockio/@physical_block_size")
 
     iotune_rbs = XMLProperty("./iotune/read_bytes_sec", is_int=True)
     iotune_ris = XMLProperty("./iotune/read_iops_sec", is_int=True)

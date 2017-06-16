@@ -2092,6 +2092,8 @@ ParserDisk.add_arg("iotune_ris", "read_iops_sec")
 ParserDisk.add_arg("iotune_wis", "write_iops_sec")
 ParserDisk.add_arg("iotune_tis", "total_iops_sec")
 ParserDisk.add_arg("sgio", "sgio")
+ParserDisk.add_arg("logical_block_size", "logical_block_size")
+ParserDisk.add_arg("physical_block_size", "physical_block_size")
 
 # VirtualDisk.seclabels properties
 ParserDisk.add_arg("model", "seclabel[0-9]*.model",

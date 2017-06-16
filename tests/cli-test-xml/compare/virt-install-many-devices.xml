@@ -102,6 +102,7 @@
         <host transport="unix" socket="/tmp/socket"/>
       </source>
       <target dev="sdb" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="512"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
