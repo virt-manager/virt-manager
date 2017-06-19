@@ -13,7 +13,7 @@
   </features>
   <devices>
     <emulator>/usr/libexec/libvirt_lxc</emulator>
-    <filesystem>
+    <filesystem type="mount" accessmode="mapped">
       <source dir="/source"/>
       <target dir="/"/>
     </filesystem>

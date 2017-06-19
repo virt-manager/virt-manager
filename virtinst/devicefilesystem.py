@@ -133,8 +133,8 @@ class VirtualFilesystem(VirtualDevice):
     def set_defaults(self, guest):
         ignore = guest
 
-        if self.conn.is_qemu() or self.conn.is_test():
-            # type=mount is the libvirt qemu default. But hardcode it
+        if self.conn.is_qemu() or self.conn.is_lxc() or self.conn.is_test():
+            # type=mount is the libvirt default. But hardcode it
             # here since we need it for the accessmode check
             if self.type is None or self.type == self.TYPE_DEFAULT:
                 self.type = self.TYPE_MOUNT
