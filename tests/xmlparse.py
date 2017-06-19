@@ -781,9 +781,9 @@ class XMLParseTest(unittest.TestCase):
         check("units", "MB", "KiB")
 
         check = self._make_checker(dev6)
-        check("type", "block")
         check("source", "/foo/bar", "/dev/new")
         check("readonly", False, True)
+        check("type", "block", "file")
 
         check = self._make_checker(dev7)
         check("type", "file")

@@ -47,8 +47,8 @@
       <source usage="123" units="KiB"/>
       <target dir="/bar/baz"/>
     </filesystem>
-    <filesystem type="block">
-      <source dev="/dev/new"/>
+    <filesystem type="file">
+      <source dev="/dev/new" file="/dev/new"/>
       <target dir="/bar/baz"/>
       <readonly/>
     </filesystem>
