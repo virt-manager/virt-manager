@@ -208,7 +208,7 @@ Tune blkio policy for the domain process. Example invocations
 
 Use --blkiotune=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsBlockTuning>
 
-=item B<--cpu> MODEL[,+feature][,-feature][,match=MATCH][,vendor=VENDOR]
+=item B<--cpu> MODEL[,+feature][,-feature][,match=MATCH][,vendor=VENDOR],...
 
 Configure the CPU model and CPU features exposed to the guest. The only
 required value is MODEL, which is a valid CPU model as known to libvirt.
@@ -235,6 +235,17 @@ may cause issues if migrating the guest to a host without an identical CPU.
 
 Expose the nearest host CPU model configuration to the guest.
 It is the best CPU which can be used for a guest on any of the hosts.
+
+=item B<--cpu cell0.memory=1234,cell0.cpus=0-3,cell1.memory=5678,cell1.cpus=4-7>
+
+Example of specifying two NUMA cells. This will generate XML like:
+
+  <cpu>
+    <numa>
+      <cell cpus="0-3" memory="1234"/>
+      <cell cpus="4-7" memory="5678"/>
+    </numa>
+  </cpu>
 
 =back
 
