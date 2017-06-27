@@ -3013,9 +3013,12 @@ class vmmDetails(vmmGObjectUI):
         if not dev:
             return
 
-        self.widget("config-remove").set_sensitive(
-            dev.type not in [virtinst.VirtualController.TYPE_USB,
-                             virtinst.VirtualController.TYPE_PCI])
+        can_remove = True
+        if self.vm.get_xmlobj().os.is_x86() and dev.type == "usb":
+            can_remove = False
+        if dev.type == "pci":
+            can_remove = False
+        self.widget("config-remove").set_sensitive(can_remove)
 
         type_label = dev.pretty_desc()
         self.widget("controller-type").set_text(type_label)
