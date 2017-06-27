@@ -23,7 +23,6 @@ from gi.repository import Gtk
 from gi.repository import GObject
 
 from virtinst import VirtualFilesystem, StorageVolume
-from virtinst import util
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .storagebrowse import vmmStorageBrowser
@@ -191,22 +190,12 @@ class vmmFSDetails(vmmGObjectUI):
         if dev.type != VirtualFilesystem.TYPE_RAM:
             self.widget("fs-source").set_text(dev.source)
         else:
-            self.set_config_ram_usage(dev.source, dev.units)
+            self.widget("fs-ram-source-spin").set_value(int(dev.source) / 1024)
         self.widget("fs-target").set_text(dev.target or "")
         self.widget("fs-readonly").set_active(dev.readonly)
 
         self.show_pair_combo("fs-type",
             self.conn.is_openvz() or self.conn.is_lxc())
-
-    def set_config_ram_usage(self, usage, units):
-        value = int(usage)
-
-        units = units.lower()
-        if units == "bytes" or units == "byte":
-            units = "b"
-
-        value = util.convert_units(value, units.lower(), 'mb')
-        self.widget("fs-ram-source-spin").set_value(value)
 
     def set_config_value(self, name, value):
         combo = self.widget("%s-combo" % name)
