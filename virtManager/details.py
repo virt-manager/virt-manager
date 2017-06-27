@@ -3204,6 +3204,12 @@ class vmmDetails(vmmGObjectUI):
             if dev.model in ["ich9-uhci1", "ich9-uhci2", "ich9-uhci3"]:
                 continue
 
+            # These are all parts of a default PCIe setup, which we
+            # condense down to one listing
+            if dev.model in ["pcie-root-port", "dmi-to-pci-bridge",
+                             "pci-bridge"]:
+                continue
+
             update_hwlist(HW_LIST_TYPE_CONTROLLER, dev)
 
         for dev in self.vm.get_filesystem_devices():

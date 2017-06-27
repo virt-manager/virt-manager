@@ -99,6 +99,8 @@ class VirtualController(VirtualDevice):
                 ret = "Virtio " + ret
             elif self.address.type == "spapr-vio":
                 ret = "sPAPR " + ret
+        if self.type == "pci" and self.model == "pcie-root":
+            ret = "PCIe"
         return ret
 
 VirtualController.register_type()
