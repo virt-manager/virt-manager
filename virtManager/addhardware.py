@@ -466,7 +466,11 @@ class vmmAddHardware(vmmGObjectUI):
             widget.hide()
 
         # RNG params
-        self.widget("rng-device").set_text("/dev/random")
+        default_rng = "/dev/random"
+        if self.conn.check_support(self.conn.SUPPORT_CONN_RNG_URANDOM):
+            default_rng = "/dev/urandom"
+        self.widget("rng-device").set_text(default_rng)
+
         for i in ["rng-bind-host", "rng-connect-host"]:
             self.widget(i).set_text("localhost")
 
