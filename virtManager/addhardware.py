@@ -856,6 +856,8 @@ class vmmAddHardware(vmmGObjectUI):
         _add_row("tablet", "usb")
         _add_row("mouse", "usb")
         _add_row("keyboard", "usb")
+        _add_row("keyboard", "virtio")
+        _add_row("tablet", "virtio")
 
     def _populate_host_device_model(self, devtype, devcap, subtype, subcap):
         devlist = self.widget("host-device")
