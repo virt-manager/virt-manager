@@ -3014,15 +3014,18 @@ class vmmDetails(vmmGObjectUI):
             return
 
         self.widget("config-remove").set_sensitive(
-            dev.type != virtinst.VirtualController.TYPE_USB)
+            dev.type not in [virtinst.VirtualController.TYPE_USB,
+                             virtinst.VirtualController.TYPE_PCI])
 
         type_label = dev.pretty_desc()
         self.widget("controller-type").set_text(type_label)
 
         combo = self.widget("controller-model")
         vmmAddHardware.populate_controller_model_combo(combo, dev.type)
-        uiutil.set_grid_row_visible(combo,
-            dev.model or len(combo.get_model()) > 1)
+        show_model = (dev.model or len(combo.get_model()) > 1)
+        if dev.type == "pci":
+            show_model = False
+        uiutil.set_grid_row_visible(combo, show_model)
         uiutil.set_list_selection(self.widget("controller-model"),
             dev.model or None)
 
