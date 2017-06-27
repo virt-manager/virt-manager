@@ -704,6 +704,10 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <source dir='/foo/bar4'/>
       <target dir='/target4'/>
     </filesystem>
+    <filesystem type='ram'>
+      <source usage='8192' units='KiB'/>
+      <target dir='/run'/>
+    </filesystem>
 
 
     <!-- tpm devices -->

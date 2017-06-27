@@ -161,6 +161,8 @@ class vmmFSDetails(vmmGObjectUI):
                                          check_visible=True)
 
     def get_config_fs_type(self):
+        if self.widget("fs-type-label").is_visible():
+            return self.widget("fs-type-label").get_text()
         return uiutil.get_list_selection(self.widget("fs-type-combo"),
                                          check_visible=True)
 
