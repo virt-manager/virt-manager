@@ -115,7 +115,7 @@ class vmmFSDetails(vmmGObjectUI):
             self.widget("fs-type-label").set_text(VirtualFilesystem.TYPE_MOUNT)
 
         simple_store_set("fs-mode-combo", VirtualFilesystem.MODES)
-        if self.conn.is_qemu() or self.conn.is_test_conn():
+        if self.conn.is_qemu() or self.conn.is_test():
             simple_store_set("fs-driver-combo",
                 [VirtualFilesystem.DRIVER_PATH,
                  VirtualFilesystem.DRIVER_HANDLE,
@@ -135,7 +135,7 @@ class vmmFSDetails(vmmGObjectUI):
             self.conn.is_openvz() or self.conn.is_lxc())
         self.show_check_button("fs-readonly",
                 self.conn.is_qemu() or
-                self.conn.is_test_conn() or
+                self.conn.is_test() or
                 self.conn.is_lxc())
 
     def reset_state(self):
@@ -234,7 +234,7 @@ class vmmFSDetails(vmmGObjectUI):
         fsdriver = self.get_config_fs_driver()
         ismount = bool(
                 fstype == VirtualFilesystem.TYPE_MOUNT or
-                self.conn.is_qemu() or self.conn.is_test_conn())
+                self.conn.is_qemu() or self.conn.is_test())
 
         show_mode = bool(ismount and
             (fsdriver == VirtualFilesystem.DRIVER_PATH or
@@ -260,15 +260,15 @@ class vmmFSDetails(vmmGObjectUI):
 
         show_mode_combo = False
         show_driver_combo = False
-        show_wrpolicy_combo = self.conn.is_qemu() or self.conn.is_test_conn()
+        show_wrpolicy_combo = self.conn.is_qemu() or self.conn.is_test()
         if fstype == VirtualFilesystem.TYPE_TEMPLATE:
             source_text = _("Te_mplate:")
         else:
             source_text = _("_Source path:")
-            show_mode_combo = self.conn.is_qemu() or self.conn.is_test_conn()
+            show_mode_combo = self.conn.is_qemu() or self.conn.is_test()
             show_driver_combo = (self.conn.is_qemu() or
                                  self.conn.is_lxc() or
-                                 self.conn.is_test_conn())
+                                 self.conn.is_test())
 
         self.widget("fs-source-title").set_text(source_text)
         self.widget("fs-source-title").set_use_underline(True)

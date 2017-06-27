@@ -220,7 +220,7 @@ class vmmAddHardware(vmmGObjectUI):
                       "media-cdrom", _("CDROM device")])
         target_model.append([virtinst.VirtualDisk.DEVICE_FLOPPY,
                       "media-floppy", _("Floppy device")])
-        if self.conn.is_qemu() or self.conn.is_test_conn():
+        if self.conn.is_qemu() or self.conn.is_test():
             target_model.append([virtinst.VirtualDisk.DEVICE_LUN,
                           "drive-harddisk", _("LUN Passthrough")])
         target_list.set_active(0)
@@ -716,7 +716,7 @@ class vmmAddHardware(vmmGObjectUI):
                 if "scsi" not in disk_bus_types:
                     disk_bus_types.append("scsi")
 
-            if vm.conn.is_xen() or vm.conn.is_test_conn():
+            if vm.conn.is_xen() or vm.conn.is_test():
                 disk_bus_types.append("xen")
 
         rows = []

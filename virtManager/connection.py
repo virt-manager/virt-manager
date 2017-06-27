@@ -359,7 +359,7 @@ class vmmConnection(vmmGObject):
     is_qemu_system = property(lambda s: getattr(s, "_backend").is_qemu_system)
     is_qemu_session = property(lambda s:
                                getattr(s, "_backend").is_qemu_session)
-    is_test_conn = property(lambda s: getattr(s, "_backend").is_test)
+    is_test = property(lambda s: getattr(s, "_backend").is_test)
     is_session_uri = property(lambda s: getattr(s, "_backend").is_session_uri)
 
 

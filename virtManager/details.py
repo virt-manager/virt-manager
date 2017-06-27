@@ -883,7 +883,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-firmware-label").set_visible(
             not self.is_customize_dialog)
         show_firmware = ((self.conn.is_qemu() or
-                          self.conn.is_test_conn() or
+                          self.conn.is_test() or
                           self.conn.is_xen()) and
                          domcaps.arch_can_uefi())
         uiutil.set_grid_row_visible(
@@ -911,7 +911,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-chipset").set_visible(self.is_customize_dialog)
         self.widget("overview-chipset-label").set_visible(
             not self.is_customize_dialog)
-        show_chipset = ((self.conn.is_qemu() or self.conn.is_test_conn()) and
+        show_chipset = ((self.conn.is_qemu() or self.conn.is_test()) and
                         arch in ["i686", "x86_64"])
         uiutil.set_grid_row_visible(
             self.widget("overview-chipset-title"), show_chipset)
@@ -2644,7 +2644,7 @@ class vmmDetails(vmmGObjectUI):
         is_usb = (bus == "usb")
 
         can_set_removable = (is_usb and (self.conn.is_qemu() or
-                                         self.conn.is_test_conn()))
+                                         self.conn.is_test()))
         if removable is None:
             removable = False
         else:

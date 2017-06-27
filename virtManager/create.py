@@ -746,7 +746,7 @@ class vmmCreate(vmmGObjectUI):
 
         default = 0
         guests = []
-        if self.conn.is_xen() or self.conn.is_test_conn():
+        if self.conn.is_xen() or self.conn.is_test():
             guests = self.conn.caps.guests[:]
 
         for guest in guests:
