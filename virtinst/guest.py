@@ -647,13 +647,6 @@ class Guest(XMLBuilder):
             dev.bus = "usb"
             self.add_device(dev)
 
-    def add_default_sound_device(self):
-        if not self.os.is_hvm():
-            return
-        if not self.os.is_x86():
-            return
-        self.add_device(VirtualAudio(self.conn))
-
     def add_default_console_device(self):
         if self.skip_default_console:
             return
@@ -1203,7 +1196,13 @@ class Guest(XMLBuilder):
             return
         if self.get_devices("sound"):
             return
-        self.add_default_sound_device()
+        if not self.os.is_hvm():
+            return
+        if not (self.os.is_x86() or
+                self.os.is_arm_machvirt):
+            return
+
+        self.add_device(VirtualAudio(self.conn))
 
     def _add_spice_usbredir(self):
         if self.skip_default_usbredir:
