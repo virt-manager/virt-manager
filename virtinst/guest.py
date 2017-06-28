@@ -1224,6 +1224,9 @@ class Guest(XMLBuilder):
             self._add_spice_usbredir()
 
         video_model = self._os_object.default_videomodel(self)
+        if self.os.is_arm_machvirt():
+            video_model = "virtio"
+
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model

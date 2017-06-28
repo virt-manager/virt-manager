@@ -24,6 +24,9 @@
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
+    <video>
+      <model type="virtio"/>
+    </video>
     <rng model="virtio">
       <backend model="random">/dev/urandom</backend>
     </rng>
