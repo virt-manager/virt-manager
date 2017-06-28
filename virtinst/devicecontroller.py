@@ -81,6 +81,15 @@ class VirtualController(VirtualDevice):
         ret.append(ctrl)
         return ret
 
+    @staticmethod
+    def get_usb3_controller(conn):
+        ctrl = VirtualController(conn)
+        ctrl.type = "usb"
+        ctrl.model = "nec-xhci"
+        if conn.check_support(conn.SUPPORT_CONN_USB3_PORTS):
+            ctrl.ports = 8
+        return ctrl
+
 
     _XML_PROP_ORDER = ["type", "index", "model", "master_startport"]
 

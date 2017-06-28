@@ -653,15 +653,31 @@ class Guest(XMLBuilder):
     def add_default_usb_controller(self):
         if self.os.is_container():
             return
-        if not self.os.is_x86():
-            return
         if any([d.type == "usb" for d in self.get_devices("controller")]):
             return
-        if not self.conn.check_support(
-            self.conn.SUPPORT_CONN_DEFAULT_USB2):
+
+        usb2 = False
+        usb3 = False
+        if self.os.is_x86():
+            usb2 = True
+        elif (self.os.is_arm_machvirt() and
+              self.conn.check_support(
+                  self.conn.SUPPORT_CONN_MACHVIRT_PCI_DEFAULT)):
+            usb3 = True
+
+
+        if not usb2 and not usb3:
             return
-        for dev in VirtualController.get_usb2_controllers(self.conn):
-            self.add_device(dev)
+
+        if usb2:
+            if not self.conn.check_support(
+                self.conn.SUPPORT_CONN_DEFAULT_USB2):
+                return
+            for dev in VirtualController.get_usb2_controllers(self.conn):
+                self.add_device(dev)
+
+        if usb3:
+            self.add_device(VirtualController.get_usb3_controller(self.conn))
 
     def add_default_channels(self):
         if self.skip_default_channel:
