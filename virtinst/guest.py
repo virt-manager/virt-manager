@@ -697,10 +697,9 @@ class Guest(XMLBuilder):
             return
         if self.get_devices("rng"):
             return
-        if not self.os.is_x86():
-            # Not strictly x86 specific, but some other archs like
-            # arm have limited virtio options in some situations, so
-            # it needs more work there.
+        if not (self.os.is_x86() or
+                self.os.is_arm_machvirt() or
+                self.os.is_pseries()):
             return
 
         if (self.conn.is_qemu() and
