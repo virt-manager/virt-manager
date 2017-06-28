@@ -827,7 +827,7 @@ class Guest(XMLBuilder):
         hv_clock = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK)
         hv_clock_rhel = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK_RHEL)
 
-        if (self._os_object.is_windows() and self._hv_supported() and
+        if (self._os_object.is_windows() and self._hyperv_supported() and
             (hv_clock or (self.stable_defaults() and hv_clock_rhel))):
             hyperv = self.clock.add_timer()
             hyperv.name = "hypervclock"
@@ -873,7 +873,7 @@ class Guest(XMLBuilder):
                 self.cpu.add_feature("x2apic", policy="disable")
 
 
-    def _hv_supported(self):
+    def _hyperv_supported(self):
         if (self.os.loader_type == "pflash" and
             self.os_variant in ("win2k8r2", "win7")):
             return False
@@ -884,7 +884,7 @@ class Guest(XMLBuilder):
         # changed through manual intervention via the customize wizard.
 
         # UEFI doesn't work with hyperv bits
-        if not self._hv_supported():
+        if not self._hyperv_supported():
             self.features.hyperv_relaxed = None
             self.features.hyperv_vapic = None
             self.features.hyperv_spinlocks = None
@@ -932,7 +932,7 @@ class Guest(XMLBuilder):
             self.features.vmport = False
 
         if (self._os_object.is_windows() and
-            self._hv_supported() and
+            self._hyperv_supported() and
             self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_VAPIC)):
             if self.features.hyperv_relaxed is None:
                 self.features.hyperv_relaxed = True
