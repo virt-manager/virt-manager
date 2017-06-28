@@ -1018,16 +1018,18 @@ class Guest(XMLBuilder):
             if len(devs) > 1 and 0 in devs:
                 devs[0].address.multifunction = True
 
-    def _hv_only_supports_virtio(self):
-        # Only supports virtio so we need to force it
-        return self.conn.is_qemu() and self.os.is_arm_machvirt()
-
-    def _hv_supports_virtio(self):
+    def _supports_virtio(self, os_support):
         if not self.conn.is_qemu():
             return False
 
-        if self._hv_only_supports_virtio():
+        # These _only_ support virtio so don't check the OS
+        if (self.os.is_arm_machvirt() or
+            self.os.is_s390x() or
+            self.os.is_pseries()):
             return True
+
+        if not os_support:
+            return False
 
         if self.os.is_x86():
             return True
@@ -1060,21 +1062,14 @@ class Guest(XMLBuilder):
                 # We prefer virtio-scsi for machvirt, gets us hotplug
                 d.bus = "scsi"
             elif (d.is_disk() and
-                  (self._hv_only_supports_virtio() or
-                   (self._hv_supports_virtio() and
-                    self._os_object.supports_virtiodisk()))):
+                  self._supports_virtio(self._os_object.supports_virtiodisk())):
                 d.bus = "virtio"
-            elif self.os.is_pseries():
-                if d.is_cdrom():
-                    d.bus = "scsi"
-                else:
-                    d.bus = 'virtio'
+            elif self.os.is_pseries() and d.is_cdrom():
+                d.bus = "scsi"
             elif self.os.is_arm():
                 d.bus = "sd"
             elif self.os.is_q35():
                 d.bus = "sata"
-            elif self.os.is_s390x():
-                d.bus = "virtio"
             else:
                 d.bus = "ide"
 
@@ -1096,9 +1091,7 @@ class Guest(XMLBuilder):
         net_model = None
         if not self.os.is_hvm():
             net_model = None
-        elif (self._hv_only_supports_virtio() or
-              (self._hv_supports_virtio() and
-               self._os_object.supports_virtionet())):
+        elif self._supports_virtio(self._os_object.supports_virtionet()):
             net_model = "virtio"
         else:
             net_model = self._os_object.default_netmodel()
