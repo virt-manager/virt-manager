@@ -611,6 +611,13 @@ class Guest(XMLBuilder):
     def stable_defaults(self, *args, **kwargs):
         return self.conn.stable_defaults(self.emulator, *args, **kwargs)
 
+    def _usb_disabled(self):
+        controllers = [c for c in self.get_devices("controller") if
+            c.type == "usb"]
+        if not controllers:
+            return False
+        return all([c.model == "none" for c in controllers])
+
     def add_default_input_device(self):
         if self.os.is_container():
             return
@@ -620,7 +627,12 @@ class Guest(XMLBuilder):
             return
         if not self.get_devices("graphics"):
             return
-        self.add_device(VirtualInputDevice(self.conn))
+
+        if self._os_object.supports_usbtablet() and not self._usb_disabled():
+            dev = VirtualInputDevice(self.conn)
+            dev.type = "tablet"
+            dev.bus = "usb"
+            self.add_device(dev)
 
     def add_default_sound_device(self):
         if not self.os.is_hvm():
@@ -775,7 +787,6 @@ class Guest(XMLBuilder):
         self._set_disk_defaults()
         self._add_implied_controllers()
         self._set_net_defaults()
-        self._set_input_defaults()
         self._set_video_defaults()
         self._set_sound_defaults()
 
@@ -1115,29 +1126,6 @@ class Guest(XMLBuilder):
             for net in self.get_devices("interface"):
                 if not net.model:
                     net.model = net_model
-
-    def _set_input_defaults(self):
-        def _usb_disabled():
-            controllers = [c for c in self.get_devices("controller") if
-                c.type == "usb"]
-            if not controllers:
-                return False
-            return all([c.model == "none" for c in controllers])
-
-        input_type = "mouse"
-        input_bus = "ps2"
-        if self.os.is_xenpv():
-            input_type = VirtualInputDevice.TYPE_MOUSE
-            input_bus = VirtualInputDevice.BUS_XEN
-        elif self._os_object.supports_usbtablet() and not _usb_disabled():
-            input_type = "tablet"
-            input_bus = "usb"
-
-        for inp in self.get_devices("input"):
-            if (inp.type == inp.TYPE_DEFAULT and
-                inp.bus  == inp.BUS_DEFAULT):
-                inp.type = input_type
-                inp.bus  = input_bus
 
     def _set_sound_defaults(self):
         if self.conn.check_support(

@@ -28,7 +28,7 @@ from tests import utils
 _default_conn = utils.open_testdriver()
 
 
-def _make_guest(installer=None, conn=None):
+def _make_guest(installer=None, conn=None, os_variant=None):
     if conn is None:
         conn = _default_conn
 
@@ -52,6 +52,8 @@ def _make_guest(installer=None, conn=None):
     g.os.arch = "i686"
     g.os.os_type = "hvm"
 
+    if os_variant:
+        g.os_variant = os_variant
     g.add_default_input_device()
     g.add_default_console_device()
     g.add_device(virtinst.VirtualAudio(g.conn))
@@ -263,9 +265,7 @@ class TestXMLMisc(unittest.TestCase):
     def testAC97(self):
         # Test setting ac97 version given various version combos
         def has_ac97(conn):
-            g = _make_guest(conn=conn)
-
-            g.os_variant = "fedora11"
+            g = _make_guest(conn=conn, os_variant="fedora11")
 
             # pylint: disable=unpacking-non-sequence
             xml, ignore = g.start_install(return_xml=True, dry=True)
@@ -283,15 +283,13 @@ class TestXMLMisc(unittest.TestCase):
         # Use connver=12005 so that non-rhel displays ac97
         conn = utils.open_kvm_rhel(connver=12005)
 
-        g = _make_guest(conn=conn)
-        g.os_variant = "fedora11"
+        g = _make_guest(conn=conn, os_variant="fedora11")
         self._compare(g, "install-f11-norheldefaults", False)
 
         try:
             CLIConfig.stable_defaults = True
 
-            g = _make_guest(conn=conn)
-            g.os_variant = "fedora11"
+            g = _make_guest(conn=conn, os_variant="fedora11")
             origemu = g.emulator
             g.emulator = "/usr/libexec/qemu-kvm"
             self.assertTrue(g.conn.stable_defaults())
@@ -306,8 +304,7 @@ class TestXMLMisc(unittest.TestCase):
     def test_hyperv_clock(self):
         def _make(connver):
             conn = utils.open_kvm(libver=1002002, connver=connver)
-            g = _make_guest(conn=conn)
-            g.os_variant = "win7"
+            g = _make_guest(conn=conn, os_variant="win7")
             g.emulator = "/usr/libexec/qemu-kvm"
             return g
 
