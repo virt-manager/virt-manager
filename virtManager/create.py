@@ -459,7 +459,7 @@ class vmmCreate(vmmGObjectUI):
         can_remote_url = self.conn.get_backend().support_remote_url_install()
 
         installable_arch = (self._capsinfo.arch in
-            ["i686", "x86_64", "ppc64", "ppc64le", "ia64", "s390x"])
+            ["i686", "x86_64", "ppc64", "ppc64le", "s390x"])
 
         if self._capsinfo.arch == "aarch64":
             try:
