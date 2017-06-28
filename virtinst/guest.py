@@ -618,6 +618,8 @@ class Guest(XMLBuilder):
             return
         if self.get_devices("input"):
             return
+        if not self.get_devices("graphics"):
+            return
         self.add_device(VirtualInputDevice(self.conn))
 
     def add_default_sound_device(self):
