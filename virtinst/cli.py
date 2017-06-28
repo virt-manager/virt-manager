@@ -705,7 +705,7 @@ def add_device_options(devg, sound_back_compat=False):
                            "--tpm /dev/tpm"))
     devg.add_argument("--rng", action="append",
                     help=_("Configure a guest RNG device. Ex:\n"
-                           "--rng /dev/random"))
+                           "--rng /dev/urandom"))
     devg.add_argument("--panic", action="append",
                     help=_("Configure a guest panic device. Ex:\n"
                            "--panic default"))
