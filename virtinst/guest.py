@@ -621,16 +621,29 @@ class Guest(XMLBuilder):
     def add_default_input_device(self):
         if self.os.is_container():
             return
-        if not self.os.is_x86():
-            return
         if self.get_devices("input"):
             return
         if not self.get_devices("graphics"):
             return
+        if self._usb_disabled():
+            return
 
-        if self._os_object.supports_usbtablet() and not self._usb_disabled():
+        usb_tablet = False
+        usb_keyboard = False
+        if self.os.is_x86():
+            usb_tablet = self._os_object.supports_usbtablet()
+        if self.os.is_arm_machvirt():
+            usb_tablet = True
+            usb_keyboard = True
+
+        if usb_tablet:
             dev = VirtualInputDevice(self.conn)
             dev.type = "tablet"
+            dev.bus = "usb"
+            self.add_device(dev)
+        if usb_keyboard:
+            dev = VirtualInputDevice(self.conn)
+            dev.type = "keyboard"
             dev.bus = "usb"
             self.add_device(dev)
 
