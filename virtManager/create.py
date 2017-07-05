@@ -20,6 +20,7 @@
 
 import logging
 import pkgutil
+import os
 import threading
 import time
 
@@ -1271,6 +1272,30 @@ class vmmCreate(vmmGObjectUI):
         return self._get_config_install_page() in [INSTALL_PAGE_CONTAINER_APP,
                                                    INSTALL_PAGE_CONTAINER_OS,
                                                    INSTALL_PAGE_VZ_TEMPLATE]
+
+
+    def _get_config_oscontainer_bootstrap(self):
+        return self.widget("install-oscontainer-bootstrap").get_active()
+
+
+    def _get_config_oscontainer_source_url(self):
+        return (self.widget("install-oscontainer-source-url-entry")
+                    .get_text().strip())
+
+
+    def _get_config_oscontainer_source_username(self):
+        return (self.widget("install-oscontainer-source-user")
+                    .get_text().strip())
+
+
+    def _get_config_oscontainer_source_password(self):
+        return self.widget("install-oscontainer-source-passwd").get_text()
+
+
+    def _get_config_oscontainer_isecure(self):
+        return self.widget("install-oscontainer-source-insecure").get_active()
+
+
     def _should_skip_disk_page(self):
         return self._get_config_install_page() in [INSTALL_PAGE_IMPORT,
                                                    INSTALL_PAGE_CONTAINER_APP,
@@ -1952,6 +1977,40 @@ class vmmCreate(vmmGObjectUI):
             fs = self.widget("install-oscontainer-fs").get_text()
             if not fs:
                 return self.err.val_err(_("An OS directory path is required."))
+
+            if self._get_config_oscontainer_bootstrap():
+                src_url = self._get_config_oscontainer_source_url()
+                user = self._get_config_oscontainer_source_username()
+                passwd = self._get_config_oscontainer_source_password()
+
+                # Check if the source path was provided
+                if not src_url:
+                    return self.err.val_err(_("Source URL is required"))
+
+                # Require username and password when authenticate
+                # to source registry.
+                if user and not passwd:
+                    return self.err.val_err(_("Please specify password "
+                                              "for accessing source registry"))
+
+                # Validate destination path
+                if os.path.exists(fs):
+                    if not os.path.isdir(fs):
+                        return self.err.val_err(_("Destination path "
+                                                  "is not directory: %s") % fs)
+                    if not os.access(fs, os.W_OK):
+                        return self.err.val_err(_("No write permissions for "
+                                                  "directory path: %s") % fs)
+                    if os.listdir(fs) != []:
+                        # Show Yes/No dialog if the destination is not empty
+                        res = self.err.yes_no(
+                            _("OS root directory is not empty"),
+                            _("Creating root file system in a non-empty "
+                              "directory might fail due to file conflicts.\n"
+                              "Would you like to continue?"))
+                        if not res:
+                            return False
+
 
         elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
             instclass = virtinst.ContainerInstaller
