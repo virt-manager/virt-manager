@@ -1038,10 +1038,10 @@ class vmmCreate(vmmGObjectUI):
             # and which do not.
             variants = virtinst.OSDB.list_os(typename=_type,
                 sortpref=preferred)
-            all_distros = set([os.distro for os in variants])
-            distros = [os for os in all_distros if os in groups]
+            all_distros = set([_os.distro for _os in variants])
+            distros = [_os for _os in all_distros if _os in groups]
             distros.sort()
-            other_distros = [os for os in all_distros if os not in groups]
+            other_distros = [_os for _os in all_distros if _os not in groups]
             parents = dict()
             if len(distros) > 0:
                 # We have groups for the OSes, so create them.
