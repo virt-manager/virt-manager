@@ -1652,7 +1652,7 @@ User shouldn't see this.</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkBox" id="hbox16">
+                                          <object class="GtkBox" id="install-oscontainer-notsupport">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">6</property>
@@ -1673,8 +1673,8 @@ User shouldn't see this.</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">&lt;small&gt;The OS directory tree must already exist. Creating an OS directory tree
-is not yet supported.&lt;/small&gt;</property>
+                                                <property name="label" translatable="yes">&lt;small&gt;The OS directory tree must already exist. To enable OS directory tree creation,
+please install &lt;a href="https://github.com/virt-manager/virt-bootstrap"&gt;virt-bootrap&lt;/a&gt;&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
                                               </object>
                                               <packing>
@@ -1688,6 +1688,200 @@ is not yet supported.&lt;/small&gt;</property>
                                             <property name="expand">False</property>
                                             <property name="fill">True</property>
                                             <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkBox" id="install-oscontainer-notsupport-conn">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="spacing">6</property>
+                                            <child>
+                                              <object class="GtkImage" id="image8">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="stock">gtk-dialog-warning</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">&lt;small&gt;The OS directory tree must already exist. Creating an OS directory tree for remote
+connections is not yet supported.&lt;/small&gt;</property>
+                                                <property name="use_markup">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">True</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">2</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkCheckButton" id="install-oscontainer-bootstrap">
+                                            <property name="label" translatable="yes">Create OS directory tree from container image</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_install_container_source_toggle" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">3</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkBox" id="install-oscontainer-source">
+                                            <property name="visible">True</property>
+                                            <property name="sensitive">False</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="border_width">10</property>
+                                            <property name="orientation">vertical</property>
+                                            <property name="spacing">10</property>
+                                            <child>
+                                              <object class="GtkGrid">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <child>
+                                                  <object class="GtkLabel">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="label" translatable="yes">Source URI:</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">0</property>
+                                                    <property name="top_attach">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkComboBox" id="install-oscontainer-source-url-combo">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="hexpand">True</property>
+                                                    <property name="has_entry">True</property>
+                                                    <child internal-child="entry">
+                                                      <object class="GtkEntry" id="install-oscontainer-source-url-entry">
+                                                        <property name="can_focus">True</property>
+                                                        <property name="placeholder_text" translatable="yes">docker://fedora</property>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="top_attach">0</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="install-oscontainer-source-insecure">
+                                                <property name="label" translatable="yes">Do not verify TLS certificates of registry</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="draw_indicator">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkExpander" id="install-oscontainer-auth-options">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <child>
+                                                  <object class="GtkGrid">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <child>
+                                                      <object class="GtkLabel">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="margin_right">10</property>
+                                                        <property name="label" translatable="yes">Username:</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="left_attach">0</property>
+                                                        <property name="top_attach">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkLabel">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="margin_right">10</property>
+                                                        <property name="label" translatable="yes">Password:</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="left_attach">0</property>
+                                                        <property name="top_attach">1</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkEntry" id="install-oscontainer-source-user">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="left_attach">1</property>
+                                                        <property name="top_attach">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkEntry" id="install-oscontainer-source-passwd">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="visibility">False</property>
+                                                        <property name="invisible_char">*</property>
+                                                        <property name="input_purpose">password</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="left_attach">1</property>
+                                                        <property name="top_attach">1</property>
+                                                      </packing>
+                                                    </child>
+                                                  </object>
+                                                </child>
+                                                <child type="label">
+                                                  <object class="GtkLabel">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="label" translatable="yes">Credentials for accessing the source registry</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">2</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">4</property>
                                           </packing>
                                         </child>
                                       </object>

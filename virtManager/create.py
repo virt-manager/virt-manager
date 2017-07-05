@@ -19,6 +19,7 @@
 #
 
 import logging
+import pkgutil
 import threading
 import time
 
@@ -104,6 +105,10 @@ def _remove_vmm_device(guest, devkey):
         guest.remove_device(dev)
 
 
+def is_virt_bootstrap_installed():
+    return pkgutil.find_loader('virtBootstrap') is not None
+
+
 ##############
 # Main class #
 ##############
@@ -168,6 +173,7 @@ class vmmCreate(vmmGObjectUI):
             "on_install_import_browse_clicked": self._browse_import,
             "on_install_app_browse_clicked": self._browse_app,
             "on_install_oscontainer_browse_clicked": self._browse_oscontainer,
+            "on_install_container_source_toggle": self._container_source_toggle,
 
             "on_install_detect_os_toggled": self._toggle_detect_os,
             "on_install_os_type_changed": self._change_os_type,
@@ -427,6 +433,12 @@ class vmmCreate(vmmGObjectUI):
 
         # Install container OS
         self.widget("install-oscontainer-fs").set_text("")
+        self.widget("install-oscontainer-source-url-entry").set_text("")
+        self.widget("install-oscontainer-source-user").set_text("")
+        self.widget("install-oscontainer-source-passwd").set_text("")
+        self.widget("install-oscontainer-source-insecure").set_active(False)
+        self.widget("install-oscontainer-bootstrap").set_active(False)
+        self.widget("install-oscontainer-auth-options").set_expanded(False)
 
         # Install VZ container from template
         self.widget("install-container-template").set_text("centos-7-x86_64")
@@ -650,6 +662,20 @@ class vmmCreate(vmmGObjectUI):
             iso_option.set_active(True)
 
         self._local_media_toggled(cdrom_option)
+
+        # Allow container bootstrap only for local connection and
+        # only if virt-bootstrap is installed. Otherwise, show message.
+        vb_installed = is_virt_bootstrap_installed()
+        vb_enabled = is_local and vb_installed
+
+        oscontainer_widget_conf = {
+            "install-oscontainer-notsupport-conn": not is_local,
+            "install-oscontainer-notsupport": not vb_installed,
+            "install-oscontainer-bootstrap": vb_enabled,
+            "install-oscontainer-source": vb_enabled
+            }
+        for w in oscontainer_widget_conf:
+            self.widget(w).set_visible(oscontainer_widget_conf[w])
 
         # Memory
         memory = int(self.conn.host_memory_size())
@@ -1583,6 +1609,12 @@ class vmmCreate(vmmGObjectUI):
             _show_netdev_warn(_("No network selected"))
         elif not can_pxe and pxe_install:
             _show_netdev_warn(_("Network selection does not support PXE"))
+
+
+    # Enable/Disable container source URL entry on checkbox click
+    def _container_source_toggle(self, ignore):
+        enable_src = self.widget("install-oscontainer-bootstrap").get_active()
+        self.widget("install-oscontainer-source").set_sensitive(enable_src)
 
 
     ########################
