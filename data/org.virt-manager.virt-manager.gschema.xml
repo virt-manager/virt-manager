@@ -153,6 +153,12 @@
   <schema id="org.virt-manager.virt-manager.urls"
       path="/org/virt-manager/virt-manager/urls/">
 
+    <key name="containers" type="as">
+      <default>[]</default>
+      <summary>Saved list of source URLs</summary>
+      <description>Saved list of source URLs used to bootstrap OS containers</description>
+    </key>
+
     <key name="urls" type="as">
       <default>[]</default>
       <summary>Saved list of install URLs</summary>

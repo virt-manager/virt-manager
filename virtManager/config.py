@@ -549,11 +549,15 @@ class vmmConfig(object):
                 del urls[len(urls) - 1]
             self.conf.set(gsettings_path, urls)
 
+    def add_container_url(self, url):
+        self._url_add_helper("/urls/containers", url)
     def add_media_url(self, url):
         self._url_add_helper("/urls/urls", url)
     def add_iso_path(self, path):
         self._url_add_helper("/urls/isos", path)
 
+    def get_container_urls(self):
+        return self.conf.get("/urls/containers")
     def get_media_urls(self):
         return self.conf.get("/urls/urls")
     def get_iso_paths(self):

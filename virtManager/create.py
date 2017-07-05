@@ -288,17 +288,20 @@ class vmmCreate(vmmGObjectUI):
         text = uiutil.init_combo_text_column(conn_list, 1)
         text.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
 
+        def set_model_list(widget_id):
+            lst = self.widget(widget_id)
+            model = Gtk.ListStore(str)
+            lst.set_model(model)
+            lst.set_entry_text_column(0)
+
         # ISO media list
-        iso_list = self.widget("install-iso-combo")
-        iso_model = Gtk.ListStore(str)
-        iso_list.set_model(iso_model)
-        iso_list.set_entry_text_column(0)
+        set_model_list("install-iso-combo")
 
         # Lists for the install urls
-        media_url_list = self.widget("install-url-combo")
-        media_url_model = Gtk.ListStore(str)
-        media_url_list.set_model(media_url_model)
-        media_url_list.set_entry_text_column(0)
+        set_model_list("install-url-combo")
+
+        # Lists for OS container bootstrap
+        set_model_list("install-oscontainer-source-url-combo")
 
         def sep_func(model, it, combo):
             ignore = combo
@@ -440,6 +443,9 @@ class vmmCreate(vmmGObjectUI):
         self.widget("install-oscontainer-source-insecure").set_active(False)
         self.widget("install-oscontainer-bootstrap").set_active(False)
         self.widget("install-oscontainer-auth-options").set_expanded(False)
+        src_model = (self.widget("install-oscontainer-source-url-combo")
+                         .get_model())
+        _populate_media_model(src_model, self.config.get_container_urls())
 
         # Install VZ container from template
         self.widget("install-container-template").set_text("centos-7-x86_64")
@@ -1278,9 +1284,14 @@ class vmmCreate(vmmGObjectUI):
         return self.widget("install-oscontainer-bootstrap").get_active()
 
 
-    def _get_config_oscontainer_source_url(self):
-        return (self.widget("install-oscontainer-source-url-entry")
-                    .get_text().strip())
+    def _get_config_oscontainer_source_url(self, store_media=False):
+        src_url = (self.widget("install-oscontainer-source-url-entry")
+                       .get_text().strip())
+
+        if src_url and store_media:
+            self.config.add_container_url(src_url)
+
+        return src_url
 
 
     def _get_config_oscontainer_source_username(self):
@@ -2133,6 +2144,7 @@ class vmmCreate(vmmGObjectUI):
 
         # Validation passed, store the install path (if there is one) in
         # gsettings
+        self._get_config_oscontainer_source_url(store_media=True)
         self._get_config_local_media(store_media=True)
         self._get_config_url_info(store_media=True)
         return True
