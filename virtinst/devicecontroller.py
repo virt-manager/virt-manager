@@ -82,10 +82,13 @@ class VirtualController(VirtualDevice):
         return ret
 
     @staticmethod
-    def get_usb3_controller(conn):
+    def get_usb3_controller(conn, guest):
         ctrl = VirtualController(conn)
         ctrl.type = "usb"
         ctrl.model = "nec-xhci"
+        if ((guest.os.is_arm_machvirt() or guest.os.is_pseries()) and
+            conn.check_support(conn.SUPPORT_CONN_QEMU_XHCI)):
+            ctrl.model = "qemu-xhci"
         if conn.check_support(conn.SUPPORT_CONN_USB3_PORTS):
             ctrl.ports = 8
         return ctrl

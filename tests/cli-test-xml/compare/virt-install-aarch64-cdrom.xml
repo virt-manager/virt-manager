@@ -28,7 +28,7 @@
       <target dev="sdb" bus="scsi"/>
       <readonly/>
     </disk>
-    <controller type="usb" index="0" model="nec-xhci" ports="8"/>
+    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
     <controller type="scsi" index="0" model="virtio-scsi"/>
     <interface type="bridge">
       <source bridge="eth0"/>
@@ -65,7 +65,7 @@
       <target dev="sdb" bus="scsi"/>
       <readonly/>
     </disk>
-    <controller type="usb" index="0" model="nec-xhci" ports="8"/>
+    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
     <controller type="scsi" index="0" model="virtio-scsi"/>
     <interface type="bridge">
       <source bridge="eth0"/>

@@ -13,7 +13,7 @@
   <clock offset="utc"/>
   <devices>
     <emulator>/usr/bin/qemu-system-aarch64</emulator>
-    <controller type="usb" index="0" model="nec-xhci" ports="8"/>
+    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
     <input type="tablet" bus="usb"/>
     <input type="keyboard" bus="usb"/>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">

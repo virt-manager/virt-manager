@@ -695,7 +695,8 @@ class Guest(XMLBuilder):
                 self.add_device(dev)
 
         if usb3:
-            self.add_device(VirtualController.get_usb3_controller(self.conn))
+            self.add_device(
+                VirtualController.get_usb3_controller(self.conn, self))
 
     def add_default_channels(self):
         if self.skip_default_channel:
