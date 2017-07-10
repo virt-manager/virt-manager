@@ -153,7 +153,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-listen-type").set_active(0)
         self.widget("graphics-address").set_active(0)
         self.widget("graphics-keymap").set_active(0)
-        self.widget("graphics-rendernode").set_active(0)
+        self.widget("graphics-rendernode").set_active(-1)
 
         self._change_ports()
         self.widget("graphics-port-auto").set_active(True)
