@@ -233,7 +233,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         for snap in snapshots:
             desc = snap.get_xmlobj().description
             name = snap.get_name()
-            state = util.xml_escape(snap.run_status())
+            state = snap.run_status()
             if snap.is_external():
                 has_external = True
                 sortname = "3%s" % name
@@ -244,7 +244,8 @@ class vmmSnapshotPage(vmmGObjectUI):
                 sortname = "1%s" % name
 
             label = "%s\n<span size='small'>%s: %s%s</span>" % (
-                (name, _("VM State"), state, external))
+                (util.xml_escape(name), _("VM State"),
+                 util.xml_escape(state), external))
             model.append([name, label, desc, snap.run_status_icon_name(),
                           sortname, snap.is_current()])
 
