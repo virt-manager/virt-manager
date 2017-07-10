@@ -1107,7 +1107,7 @@ class VirtCLIParser(object):
         print("--%s options:" % cls.cli_arg_name)
         for arg in sorted(cls._virtargs, key=lambda p: p.cliname):
             print("  %s" % arg.cliname)
-        print()
+        print("")
 
 
     def __init__(self, guest, optstr):

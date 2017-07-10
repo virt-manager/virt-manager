@@ -460,7 +460,7 @@ class TestBaseCommand(distutils.core.Command):
             print("Running only:")
             for test in newtests:
                 print("%s" % test)
-            print()
+            print("")
 
         t = unittest.TextTestRunner(verbosity=self.debug and 2 or 1)
 
