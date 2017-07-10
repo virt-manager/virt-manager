@@ -1032,7 +1032,7 @@ class VirtualDisk(VirtualDevice):
             raise ValueError(_("Controller number %d for disk of type %s has "
                                "no empty slot to use" % (pref_ctrl, prefix)))
         else:
-            raise ValueError(_("Only %s disks of type '%s' are supported"
-                               % (maxnode, prefix)))
+            raise ValueError(_("Only %s disks for bus '%s' are supported"
+                               % (maxnode, self.bus)))
 
 VirtualDisk.register_type()
