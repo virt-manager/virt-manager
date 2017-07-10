@@ -812,9 +812,6 @@ class Guest(XMLBuilder):
 
         if not self.os.loader and self.os.is_hvm() and self.type == "xen":
             self.os.loader = "/usr/lib/xen/boot/hvmloader"
-        if self.os.os_type == "xen" and self.type == "xen":
-            # Use older libvirt 'linux' value for back compat
-            self.os.os_type = "linux"
         if self.os.kernel or self.os.init:
             self.os.bootorder = []
 
