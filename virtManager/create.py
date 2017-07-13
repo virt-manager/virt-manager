@@ -2601,7 +2601,8 @@ class vmmCreate(vmmGObjectUI):
 
     def _create_directory_tree(self, asyncjob, meter, bootstrap_args):
         """
-        Call bootstrap method from virtBootstrap.
+        Call bootstrap method from virtBootstrap and show logger messages
++        as state/details.
         """
         import virtBootstrap
 
@@ -2609,6 +2610,13 @@ class vmmCreate(vmmGObjectUI):
         def progress_update_cb(prog):
             meter.text = _(prog['status'])
             meter.update(prog['value'])
+
+        asyncjob.details_enable()
+        # Use logging filter to show messages of the progreess on the GUI
+        class SetStateFilter(logging.Filter):
+            def filter(self, record):
+                asyncjob.details_update("%s\n" % record.getMessage())
+                return True
 
         # Use string buffer to store log messages
         log_stream = cStringIO.StringIO()
@@ -2619,6 +2627,8 @@ class vmmCreate(vmmGObjectUI):
         # Create hander to store log messages in the string buffer
         hdlr = logging.StreamHandler(log_stream)
         hdlr.setFormatter(logging.Formatter('%(message)s'))
+        # Use logging filter to show messages on GUI
+        hdlr.addFilter(SetStateFilter())
         vbLogger.addHandler(hdlr)
 
         # Key word arguments to be passed
