@@ -2511,7 +2511,7 @@ class vmmCreate(vmmGObjectUI):
 
         if bootstrap_args:
             # Start container bootstrap
-            self._create_directory_tree(asyncjob, bootstrap_args)
+            self._create_directory_tree(asyncjob, meter, bootstrap_args)
 
         # Build a list of pools we should refresh, if we are creating storage
         refresh_pools = []
@@ -2599,11 +2599,16 @@ class vmmCreate(vmmGObjectUI):
         return True
 
 
-    def _create_directory_tree(self, asyncjob, bootstrap_args):
+    def _create_directory_tree(self, asyncjob, meter, bootstrap_args):
         """
         Call bootstrap method from virtBootstrap.
         """
         import virtBootstrap
+
+        meter.start(text=_("Bootstraping container"), size=100)
+        def progress_update_cb(prog):
+            meter.text = _(prog['status'])
+            meter.update(prog['value'])
 
         # Use string buffer to store log messages
         log_stream = cStringIO.StringIO()
@@ -2611,16 +2616,19 @@ class vmmCreate(vmmGObjectUI):
         # Get virt-bootstrap logger
         vbLogger = logging.getLogger('virtBootstrap')
         vbLogger.setLevel(logging.DEBUG)
-        vbLogger.addHandler(logging.StreamHandler(log_stream))
+        # Create hander to store log messages in the string buffer
+        hdlr = logging.StreamHandler(log_stream)
+        hdlr.setFormatter(logging.Formatter('%(message)s'))
+        vbLogger.addHandler(hdlr)
 
         # Key word arguments to be passed
         kwargs = {'uri': bootstrap_args['src'],
                   'dest': bootstrap_args['dest'],
-                  'not_secure': bootstrap_args['insecure']}
+                  'not_secure': bootstrap_args['insecure'],
+                  'progress_cb': progress_update_cb}
         if bootstrap_args['user'] and bootstrap_args['passwd']:
             kwargs['username'] = bootstrap_args['user']
             kwargs['password'] = bootstrap_args['passwd']
-
         logging.debug('Start container bootstrap')
         try:
             virtBootstrap.bootstrap(**kwargs)
