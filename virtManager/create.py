@@ -21,6 +21,7 @@
 import logging
 import pkgutil
 import os
+import cStringIO
 import threading
 import time
 
@@ -2476,8 +2477,22 @@ class vmmCreate(vmmGObjectUI):
         """
         Launch the async job to start the install
         """
+        bootstrap_args = {}
+        # If creating new container and "container bootstrap" is enabled
+        if (self._guest.os.is_container() and
+            self._get_config_oscontainer_bootstrap()):
+            bootstrap_arg_keys = {
+                'src': self._get_config_oscontainer_source_url,
+                'dest': self.widget("install-oscontainer-fs").get_text,
+                'user': self._get_config_oscontainer_source_username,
+                'passwd': self._get_config_oscontainer_source_password,
+                'insecure': self._get_config_oscontainer_isecure
+            }
+            for key, getter in bootstrap_arg_keys.iteritems():
+                bootstrap_args[key] = getter()
+
         parentobj = self._customize_window or self
-        progWin = vmmAsyncJob(self._do_async_install, [guest],
+        progWin = vmmAsyncJob(self._do_async_install, [guest, bootstrap_args],
                               self._install_finished_cb, [parentobj],
                               _("Creating Virtual Machine"),
                               _("The virtual machine is now being "
@@ -2488,11 +2503,15 @@ class vmmCreate(vmmGObjectUI):
                               parentobj.topwin)
         progWin.run()
 
-    def _do_async_install(self, asyncjob, guest):
+    def _do_async_install(self, asyncjob, guest, bootstrap_args):
         """
         Kick off the actual install
         """
         meter = asyncjob.get_meter()
+
+        if bootstrap_args:
+            # Start container bootstrap
+            self._create_directory_tree(asyncjob, bootstrap_args)
 
         # Build a list of pools we should refresh, if we are creating storage
         refresh_pools = []
@@ -2578,3 +2597,37 @@ class vmmCreate(vmmGObjectUI):
             self.err.show_err(_("Error continue install: %s") % str(e))
 
         return True
+
+
+    def _create_directory_tree(self, asyncjob, bootstrap_args):
+        """
+        Call bootstrap method from virtBootstrap.
+        """
+        import virtBootstrap
+
+        # Use string buffer to store log messages
+        log_stream = cStringIO.StringIO()
+
+        # Get virt-bootstrap logger
+        vbLogger = logging.getLogger('virtBootstrap')
+        vbLogger.setLevel(logging.DEBUG)
+        vbLogger.addHandler(logging.StreamHandler(log_stream))
+
+        # Key word arguments to be passed
+        kwargs = {'uri': bootstrap_args['src'],
+                  'dest': bootstrap_args['dest'],
+                  'not_secure': bootstrap_args['insecure']}
+        if bootstrap_args['user'] and bootstrap_args['passwd']:
+            kwargs['username'] = bootstrap_args['user']
+            kwargs['password'] = bootstrap_args['passwd']
+
+        logging.debug('Start container bootstrap')
+        try:
+            virtBootstrap.bootstrap(**kwargs)
+            # Success - uncheck the 'install-oscontainer-bootstrap' checkbox
+
+            def cb():
+                self.widget("install-oscontainer-bootstrap").set_active(False)
+            self.idle_add(cb)
+        except Exception as err:
+            asyncjob.set_error(err, log_stream.getvalue())
