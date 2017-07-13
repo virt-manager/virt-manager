@@ -89,7 +89,6 @@
                 <property name="width_request">400</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
                 <property name="label">some warning</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">40</property>
@@ -164,6 +163,38 @@
             <property name="fill">False</property>
             <property name="pack_type">end</property>
             <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkExpander" id="details">
+            <property name="can_focus">True</property>
+            <property name="resize_toplevel">True</property>
+            <child>
+              <object class="GtkScrolledWindow" id="details-box">
+                <property name="width_request">380</property>
+                <property name="height_request">200</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Details</property>
+                <property name="use_underline">True</property>
+                <property name="track_visited_links">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
           </packing>
         </child>
       </object>

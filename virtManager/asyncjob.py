@@ -23,6 +23,7 @@ import traceback
 
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import Vte
 
 import libvirt
 
@@ -181,6 +182,9 @@ class vmmAsyncJob(vmmGObjectUI):
         self._timer = None
         self._error_info = None
         self._data = None
+
+        self._details_widget = None
+        self._details_update_cb = None
 
         self._is_pulsing = True
         self._meter = None
@@ -345,3 +349,14 @@ class vmmAsyncJob(vmmGObjectUI):
         self._set_stage_text(stage or _("Completed"))
         self.widget("pbar").set_text(progress)
         self.widget("pbar").set_fraction(1)
+
+    @idle_wrapper
+    def details_enable(self):
+        self._details_widget = Vte.Terminal()
+        self.widget("details-box").add(self._details_widget)
+        self._details_widget.set_visible(True)
+        self.widget("details").set_visible(True)
+
+    @idle_wrapper
+    def details_update(self, data):
+        self._details_widget.feed(data.replace("\n", "\r\n").encode())
