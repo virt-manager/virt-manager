@@ -1027,7 +1027,7 @@ This is used by 'vnc' and 'spice'
 
 =item B<keymap>
 
-Request that the virtual VNC console be configured to run with a specific
+Request that the virtual console be configured to run with a specific
 keyboard layout. If the special value 'local' is specified, virt-install
 will attempt to configure to use the same keymap as the local system. A value
 of 'none' specifically defers to the hypervisor. Default behavior is
@@ -1036,7 +1036,7 @@ by 'vnc' and 'spice'.
 
 =item B<password>
 
-Request a VNC password, required at connection time. Beware, this info may
+Request a console password, required at connection time. Beware, this info may
 end up in virt-install log files, so don't use an important password. This
 is used by 'vnc' and 'spice'
 
