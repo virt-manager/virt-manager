@@ -470,7 +470,8 @@ class VirtualDisk(VirtualDevice):
     _XML_PROP_ORDER = [
         "type", "device",
         "driver_name", "driver_type",
-        "driver_cache", "driver_discard", "driver_io", "error_policy",
+        "driver_cache", "driver_discard", "driver_detect_zeroes",
+        "driver_io", "error_policy",
         "_source_file", "_source_dev", "_source_dir",
         "source_volume", "source_pool", "source_protocol", "source_name",
         "source_host_name", "source_host_port",
@@ -741,6 +742,7 @@ class VirtualDisk(VirtualDevice):
     shareable = XMLProperty("./shareable", is_bool=True)
     driver_cache = XMLProperty("./driver/@cache")
     driver_discard = XMLProperty("./driver/@discard")
+    driver_detect_zeroes = XMLProperty("./driver/@detect_zeroes")
     driver_io = XMLProperty("./driver/@io")
 
     error_policy = XMLProperty("./driver/@error_policy")
