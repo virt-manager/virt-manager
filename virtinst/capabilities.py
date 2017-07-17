@@ -25,33 +25,6 @@ from .cpu import CPU as DomainCPU
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
-##########################
-# CPU model list objects #
-##########################
-
-class _CPUAPIValues(object):
-    """
-    Lists valid values for cpu models obtained from libvirt's getCPUModelNames
-    """
-    def __init__(self, conn):
-        self.conn = conn
-        self._cpus = None
-
-    def get_cpus(self, arch):
-        if self._cpus is not None:
-            return self._cpus
-
-        if self.conn.check_support(self.conn.SUPPORT_CONN_CPU_MODEL_NAMES):
-            names = self.conn.getCPUModelNames(arch, 0)
-
-            # Bindings were broke for a long time, so catch -1
-            if names != -1:
-                self._cpus = names
-                return self._cpus
-
-        return []
-
-
 ###################################
 # capabilities host <cpu> parsing #
 ###################################
@@ -313,7 +286,7 @@ class _CapsInfo(object):
 class Capabilities(XMLBuilder):
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
-        self._cpu_values = None
+        self._cpu_models_cache = {}
 
     _XML_ROOT_NAME = "capabilities"
 
@@ -344,11 +317,22 @@ class Capabilities(XMLBuilder):
     def get_cpu_values(self, arch):
         if not arch:
             return []
-        if self._cpu_values:
-            return self._cpu_values.get_cpus(arch)
+        if not self.conn.check_support(self.conn.SUPPORT_CONN_CPU_MODEL_NAMES):
+            return []
+        if arch in self._cpu_models_cache:
+            return self._cpu_models_cache[arch]
 
-        self._cpu_values = _CPUAPIValues(self.conn)
-        return self._cpu_values.get_cpus(arch)
+        try:
+            names = self.conn.getCPUModelNames(arch, 0)
+            if names == -1:
+                names = []
+        except Exception as e:
+            logging.debug("Error fetching CPU model names for arch=%s: %s",
+                          arch, e)
+            names = []
+
+        self._cpu_models_cache[arch] = names
+        return names
 
 
     ############################

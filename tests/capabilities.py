@@ -92,7 +92,7 @@ class TestCapabilities(unittest.TestCase):
         caps = self._buildCaps("test-qemu-with-kvm.xml")
 
         cpu_64 = caps.get_cpu_values("x86_64")
-        cpu_32 = caps.get_cpu_values("i486")
+        cpu_32 = caps.get_cpu_values("i686")
         cpu_random = caps.get_cpu_values("mips")
 
         def test_cpu_map(cpumap, cpus):

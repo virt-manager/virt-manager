@@ -972,12 +972,6 @@ class vmmDetails(vmmGObjectUI):
         txtCol.add_attribute(text, 'text', BOOT_LABEL)
         txtCol.add_attribute(text, 'sensitive', BOOT_ACTIVE)
 
-        try:
-            cpu_names = caps.get_cpu_values(self.vm.get_arch())
-        except:
-            cpu_names = []
-            logging.exception("Error populating CPU model list")
-
         # CPU model combo
         cpu_model = self.widget("cpu-model")
 
@@ -996,7 +990,7 @@ class vmmDetails(vmmGObjectUI):
         model.append([_("Clear CPU configuration"), "3",
             virtinst.CPU.SPECIAL_MODE_CLEAR, False])
         model.append([None, None, None, True])
-        for name in cpu_names:
+        for name in caps.get_cpu_values(self.vm.get_arch()):
             model.append([name, name, name, False])
 
         # Remove button tooltip
