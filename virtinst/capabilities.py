@@ -20,8 +20,6 @@
 # MA 02110-1301 USA.
 
 import logging
-import os
-import re
 
 from .cpu import CPU as DomainCPU
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
@@ -30,69 +28,6 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 ##########################
 # CPU model list objects #
 ##########################
-
-class _CPUMapModel(XMLBuilder):
-    """
-    Single <model> instance from cpu_map.xml
-    """
-    _XML_ROOT_NAME = "model"
-    name = XMLProperty("./@name")
-
-
-class _CPUMapArch(XMLBuilder):
-    """
-    Single <arch> instance of valid CPU from cpu_map.xml
-    """
-    _XML_ROOT_NAME = "arch"
-    arch = XMLProperty("./@name")
-    models = XMLChildProperty(_CPUMapModel)
-
-
-class _CPUMapFileValues(XMLBuilder):
-    """
-    Fallback method to lists cpu models, parsed directly from libvirt's local
-    cpu_map.xml
-    """
-    # This is overwritten as part of the test suite
-    _cpu_filename = "/usr/share/libvirt/cpu_map.xml"
-
-    def __init__(self, conn):
-        if os.path.exists(self._cpu_filename):
-            xml = open(self._cpu_filename).read()
-        else:
-            xml = None
-            logging.debug("CPU map file not found: %s", self._cpu_filename)
-
-        XMLBuilder.__init__(self, conn, parsexml=xml)
-
-        self._archmap = {}
-
-    _cpuvalues = XMLChildProperty(_CPUMapArch)
-
-
-    ##############
-    # Public API #
-    ##############
-
-    def get_cpus(self, arch):
-        if re.match(r'i[4-9]86', arch):
-            arch = "x86"
-        elif arch == "x86_64":
-            arch = "x86"
-
-        cpumap = self._archmap.get(arch)
-        if not cpumap:
-            for vals in self._cpuvalues:
-                if vals.arch == arch:
-                    cpumap = vals
-
-        if not cpumap:
-            # Create a stub object
-            cpumap = _CPUMapArch(self.conn)
-
-        self._archmap[arch] = cpumap
-        return [m.name for m in cpumap.models]
-
 
 class _CPUAPIValues(object):
     """
@@ -376,9 +311,6 @@ class _CapsInfo(object):
 
 
 class Capabilities(XMLBuilder):
-    # Set by the test suite to force a particular code path
-    _force_cpumap = False
-
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
         self._cpu_values = None
@@ -415,20 +347,8 @@ class Capabilities(XMLBuilder):
         if self._cpu_values:
             return self._cpu_values.get_cpus(arch)
 
-        order = [_CPUAPIValues, _CPUMapFileValues]
-        if self._force_cpumap:
-            order = [_CPUMapFileValues]
-
-        # Iterate over the available methods until a set of CPU models is found
-        for mode in order:
-            cpu_values = mode(self.conn)
-            cpus = cpu_values.get_cpus(arch)
-
-            if len(cpus) > 0:
-                self._cpu_values = cpu_values
-                return cpus
-
-        return []
+        self._cpu_values = _CPUAPIValues(self.conn)
+        return self._cpu_values.get_cpus(arch)
 
 
     ############################

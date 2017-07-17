@@ -22,7 +22,6 @@ from tests import utils
 
 from virtinst import Capabilities
 from virtinst import DomainCapabilities
-from virtinst.capabilities import _CPUMapFileValues
 
 
 conn = utils.open_testdriver()
@@ -85,16 +84,12 @@ class TestCapabilities(unittest.TestCase):
         self.assertEqual(cells[0].cpus[3].id, '3')
 
 
-    ################################################
-    # Test cpu_map.xml/getCPUModel output handling #
-    ################################################
+    ####################################
+    # Test getCPUModel output handling #
+    ####################################
 
-    def _testCPUMap(self, api):
+    def testCPUAPI(self):
         caps = self._buildCaps("test-qemu-with-kvm.xml")
-
-        setattr(_CPUMapFileValues, "_cpu_filename",
-            "tests/capabilities-xml/cpu_map.xml")
-        setattr(caps, "_force_cpumap", not api)
 
         cpu_64 = caps.get_cpu_values("x86_64")
         cpu_32 = caps.get_cpu_values("i486")
@@ -119,12 +114,6 @@ class TestCapabilities(unittest.TestCase):
 
         cpu_64 = caps.get_cpu_values("x86_64")
         self.assertTrue(len(cpu_64) > 0)
-
-    def testCPUMapFile(self):
-        self._testCPUMap(api=True)
-
-    def testCPUMapAPI(self):
-        self._testCPUMap(api=False)
 
 
     ##############################
