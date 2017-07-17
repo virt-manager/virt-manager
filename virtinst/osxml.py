@@ -118,7 +118,7 @@ class OSXML(XMLBuilder):
     loader_type = XMLProperty("./loader/@type")
     loader_secure = XMLProperty("./loader/@secure", is_yesno=True)
     smbios_mode = XMLProperty("./smbios/@mode")
-    nvram = XMLProperty("./nvram")
+    nvram = XMLProperty("./nvram", do_abspath=True)
     nvram_template = XMLProperty("./nvram/@template")
     arch = XMLProperty("./type/@arch",
                        default_cb=lambda s: s.conn.caps.host.cpu.arch)
