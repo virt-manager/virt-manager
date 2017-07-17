@@ -74,11 +74,6 @@ class VirtualConnection(object):
         self._support_cache = {}
         self._fetch_cache = {}
 
-        # Setting this means we only do fetch_all* once and just carry
-        # the result. For the virt-* CLI tools this ensures any revalidation
-        # isn't hammering the connection over and over
-        self.cache_object_fetch = False
-
         # These let virt-manager register a callback which provides its
         # own cached object lists, rather than doing fresh calls
         self.cb_fetch_all_guests = None
@@ -188,8 +183,7 @@ class VirtualConnection(object):
             self, {}, lambda obj, ignore: obj)
         ret = [Guest(weakref.ref(self), parsexml=obj.XMLDesc(0))
                for obj in ret]
-        if self.cache_object_fetch:
-            self._fetch_cache[key] = ret
+        self._fetch_cache[key] = ret
         return ret
 
     def fetch_all_guests(self):
@@ -209,8 +203,7 @@ class VirtualConnection(object):
             self, {}, lambda obj, ignore: obj)
         ret = [StoragePool(weakref.ref(self), parsexml=obj.XMLDesc(0))
                for obj in ret]
-        if self.cache_object_fetch:
-            self._fetch_cache[key] = ret
+        self._fetch_cache[key] = ret
         return ret
 
     def fetch_all_pools(self):
@@ -242,8 +235,7 @@ class VirtualConnection(object):
                 except Exception as e:
                     logging.debug("Fetching volume XML failed: %s", e)
 
-        if self.cache_object_fetch:
-            self._fetch_cache[key] = ret
+        self._fetch_cache[key] = ret
         return ret
 
     def fetch_all_vols(self):
@@ -263,8 +255,7 @@ class VirtualConnection(object):
             self, {}, lambda obj, ignore: obj)
         ret = [NodeDevice.parse(weakref.ref(self), obj.XMLDesc(0))
                for obj in ret]
-        if self.cache_object_fetch:
-            self._fetch_cache[key] = ret
+        self._fetch_cache[key] = ret
         return ret
 
     def fetch_all_nodedevs(self):
