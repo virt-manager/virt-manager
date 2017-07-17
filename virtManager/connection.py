@@ -264,6 +264,29 @@ class vmmConnection(vmmGObject):
     # Init routines #
     #################
 
+    def _wait_for_condition(self, compare_cb, timeout=3):
+        """
+        Wait for this object to emit the specified signal. Will not
+        block the mainloop.
+        """
+        from gi.repository import Gtk
+        is_main_thread = (threading.current_thread().name == "MainThread")
+        start_time = time.time()
+
+        while True:
+            cur_time = time.time()
+            if compare_cb():
+                return
+            if (cur_time - start_time) >= timeout:
+                return
+
+            if is_main_thread:
+                if Gtk.events_pending():
+                    Gtk.main_iteration_do(False)
+                    continue
+
+            time.sleep(.1)
+
     def _init_virtconn(self):
         self._backend.cb_fetch_all_guests = (
             lambda: [obj.get_xmlobj(refresh_if_nec=False)
@@ -287,7 +310,13 @@ class vmmConnection(vmmGObject):
         self._backend.cb_fetch_all_vols = fetch_all_vols
 
         def add_new_pool(obj, key):
-            self._new_object_cb(vmmStoragePool(self, obj, key), False, True)
+            ignore = obj
+            if not self.is_active():
+                return
+            self.schedule_priority_tick(pollpool=True)
+            def compare_cb():
+                return bool(self.get_pool(key))
+            self._wait_for_condition(compare_cb)
         self._backend.cb_add_new_pool = add_new_pool
 
         def clear_cache(pools=False):
