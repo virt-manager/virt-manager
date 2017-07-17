@@ -1504,7 +1504,8 @@ class vmmDetails(vmmGObjectUI):
 
         spice_usbdev_widget.show()
         spice_usbdev_dialog.show_info(_("Select USB devices for redirection"),
-                                      widget=spice_usbdev_widget)
+                                      widget=spice_usbdev_widget,
+                                      buttons=Gtk.ButtonsType.CLOSE)
 
     def _take_screenshot(self):
         image = self.console.details_viewer_get_pixbuf()

@@ -151,9 +151,9 @@ class vmmErrorDialog(vmmGObject):
                             str(title), None, modal)
         return False
 
-    def show_info(self, text1, text2=None, title="", widget=None, modal=True):
+    def show_info(self, text1, text2=None, title="", widget=None, modal=True,
+                  buttons=Gtk.ButtonsType.OK):
         dtype = Gtk.MessageType.INFO
-        buttons = Gtk.ButtonsType.OK
         self._simple_dialog(dtype, buttons, text1, text2, title, widget, modal)
         return False
 
