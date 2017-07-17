@@ -80,18 +80,47 @@ class vmmGObject(GObject.GObject):
     def _cleanup(self):
         raise NotImplementedError("_cleanup must be implemented in subclass")
 
+    def __del__(self):
+        try:
+            if self.config and self._leak_check:
+                self.config.remove_object(self.object_key)
+        except:
+            logging.exception("Error removing %s", self.object_key)
+
     # pylint: disable=arguments-differ
     # Newer pylint can detect, but warns that overridden arguments are wrong
 
     def connect(self, name, callback, *args):
+        """
+        GObject connect() wrapper to simplify callers, and track handles
+        for easy cleanup
+        """
         ret = GObject.GObject.connect(self, name, callback, *args)
         self._gobject_handles.append(ret)
         return ret
 
     def disconnect(self, handle):
+        """
+        GObject disconnect() wrapper to simplify callers
+        """
         ret = GObject.GObject.disconnect(self, handle)
         self._gobject_handles.remove(handle)
         return ret
+
+    def timeout_add(self, timeout, func, *args):
+        """
+        GLib timeout_add wrapper to simplify callers, and track handles
+        for easy cleanup
+        """
+        ret = GLib.timeout_add(timeout, func, *args)
+        self.add_gobject_timeout(ret)
+        return ret
+
+    def emit(self, signal_name, *args):
+        """
+        GObject emit() wrapper to simplify callers
+        """
+        return GObject.GObject.emit(self, signal_name, *args)
 
     def add_gsettings_handle(self, handle):
         self._gsettings_handles.append(handle)
@@ -123,7 +152,16 @@ class vmmGObject(GObject.GObject):
         t.daemon = True
         t.start()
 
+
+    ##############################
+    # Custom signal/idle helpers #
+    ##############################
+
     def connect_once(self, signal, func, *args):
+        """
+        Like standard glib connect(), but only runs the signal handler
+        once, then unregisters it
+        """
         id_list = []
 
         def wrap_func(*wrapargs):
@@ -138,6 +176,10 @@ class vmmGObject(GObject.GObject):
         return conn_id
 
     def connect_opt_out(self, signal, func, *args):
+        """
+        Like standard glib connect(), but allows the signal handler to
+        unregister itself if it returns True
+        """
         id_list = []
 
         def wrap_func(*wrapargs):
@@ -159,26 +201,6 @@ class vmmGObject(GObject.GObject):
             return False
 
         self.idle_add(emitwrap, signal, *args)
-
-    def timeout_add(self, timeout, func, *args):
-        """
-        Make sure timeout functions are run thread safe
-        """
-        def cb():
-            return func(*args)
-        ret = GLib.timeout_add(timeout, cb)
-        self.add_gobject_timeout(ret)
-        return ret
-
-    def emit(self, signal_name, *args):
-        return GObject.GObject.emit(self, signal_name, *args)
-
-    def __del__(self):
-        try:
-            if self.config and self._leak_check:
-                self.config.remove_object(self.object_key)
-        except:
-            logging.exception("Error removing %s", self.object_key)
 
 
 class vmmGObjectUI(vmmGObject):
