@@ -342,7 +342,7 @@ class Cloner(object):
             # replace vol_install with a CloneVolume instance, otherwise
             # simply set input_vol on the dest vol_install
             if (clone_vol_install.pool.name() ==
-                orig_disk.get_vol_object().storagePoolLookupByVolume().name()):
+                orig_disk.get_parent_pool().name()):
                 vol_install = StorageVolume(self.conn)
                 vol_install.input_vol = orig_disk.get_vol_object()
                 vol_install.sync_input_vol()
