@@ -239,14 +239,7 @@ class VirtualConnection(object):
             self._fetch_cache[key] = self._fetch_all_vols_raw()
         return self._fetch_cache[key][:]
 
-    def cache_new_pool(self, poolobj):
-        """
-        Insert the passed poolobj into our cache
-        """
-        if self.cb_cache_new_pool:
-            # pylint: disable=not-callable
-            return self.cb_cache_new_pool(poolobj)
-
+    def _cache_new_pool_raw(self, poolobj):
         # Make sure cache is primed
         if self._FETCH_KEY_POOLS not in self._fetch_cache:
             # Nothing cached yet, so next poll will pull in latest bits,
@@ -258,6 +251,15 @@ class VirtualConnection(object):
         poollist.append(poolxmlobj)
         vollist = self._fetch_cache[self._FETCH_KEY_VOLS]
         vollist.extend(self._fetch_vols_raw(poolxmlobj))
+
+    def cache_new_pool(self, poolobj):
+        """
+        Insert the passed poolobj into our cache
+        """
+        if self.cb_cache_new_pool:
+            # pylint: disable=not-callable
+            return self.cb_cache_new_pool(poolobj)
+        return self._cache_new_pool_raw(poolobj)
 
     def _fetch_all_nodedevs_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_nodedevs(

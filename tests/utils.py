@@ -98,6 +98,19 @@ def openconn(uri):
     for key, value in _conn_cache[uri].items():
         conn._fetch_cache[key] = value[:]
 
+    def cb_cache_new_pool(poolobj):
+        # Used by clonetest.py nvram-newpool test
+        if poolobj.name() == "nvram-newpool":
+            from virtinst import StorageVolume
+            vol = StorageVolume(conn)
+            vol.pool = poolobj
+            vol.name = "clone-orig-vars.fd"
+            vol.capacity = 1024 * 1024
+            vol.install()
+        conn._cache_new_pool_raw(poolobj)
+
+    conn.cb_cache_new_pool = cb_cache_new_pool
+
     return conn
 
 

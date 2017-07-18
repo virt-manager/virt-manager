@@ -183,3 +183,7 @@ class TestClone(unittest.TestCase):
     def testCloneNvramAuto(self):
         base = "nvram-auto"
         self._clone_helper(base)
+
+    def testCloneNvramNewpool(self):
+        base = "nvram-newpool"
+        self._clone_helper(base)
