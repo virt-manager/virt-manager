@@ -28,7 +28,6 @@ from tests import utils
 
 base_dir = os.getcwd() + "/tests/virtconv-files/"
 out_dir = base_dir + "libvirt_output"
-conn = utils.open_kvm()
 
 
 class TestVirtConv(unittest.TestCase):
@@ -37,6 +36,7 @@ class TestVirtConv(unittest.TestCase):
         def print_cb(msg):
             print(msg, file=outbuf)
 
+        conn = utils.open_kvm()
         converter = VirtConverter(conn, infile, print_cb=print_cb)
 
         if converter.parser.name != in_type:
@@ -57,7 +57,7 @@ class TestVirtConv(unittest.TestCase):
             self.skipTest("Not comparing XML because vmport isn't supported")
 
         utils.diff_compare(out_expect, outfile)
-        utils.test_create(converter.conn, out_xml)
+        utils.test_create(conn, out_xml)
 
     def _compare_single_file(self, in_path, in_type, disk_format=None):
         cwd = os.getcwd()
