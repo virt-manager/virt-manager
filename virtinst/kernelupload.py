@@ -36,8 +36,7 @@ def _build_pool(conn, meter, path):
         pool.refresh(0)
         return pool
 
-    name = util.generate_name("boot-scratch",
-                               conn.storagePoolLookupByName)
+    name = StoragePool.find_free_name(conn, "boot-scratch")
     logging.debug("Building storage pool: path=%s name=%s", path, name)
     poolbuild = StoragePool(conn)
     poolbuild.type = poolbuild.TYPE_DIR

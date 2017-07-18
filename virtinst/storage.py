@@ -295,9 +295,14 @@ class StoragePool(_StorageObject):
         Finds a name similar (or equal) to passed 'basename' that is not
         in use by another pool. Extra params are passed to generate_name
         """
-        return util.generate_name(basename,
-                                  conn.storagePoolLookupByName,
-                                  **kwargs)
+        def cb(name):
+            for pool in conn.fetch_all_pools():
+                if pool.name == name:
+                    return True
+            return False
+
+        kwargs["lib_collision"] = False
+        return util.generate_name(basename, cb, **kwargs)
 
 
     def __init__(self, *args, **kwargs):
