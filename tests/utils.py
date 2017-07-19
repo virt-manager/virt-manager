@@ -85,39 +85,18 @@ def openconn(uri):
     conn = virtinst.cli.getConnection(uri)
 
     if uri not in _conn_cache:
+        conn.fetch_all_guests()
+        conn.fetch_all_pools()
+        conn.fetch_all_vols()
+        conn.fetch_all_nodedevs()
+
         _conn_cache[uri] = {}
-        _conn_cache[uri]["vms"] = conn._fetch_all_guests_raw()
-        _conn_cache[uri]["pools"] = conn._fetch_all_pools_raw()
-        _conn_cache[uri]["vols"] = conn._fetch_all_vols_raw()
-        _conn_cache[uri]["nodedevs"] = conn._fetch_all_nodedevs_raw()
-    cache = _conn_cache[uri].copy()
+        for key, value in conn._fetch_cache.items():
+            _conn_cache[uri][key] = value[:]
 
-    def cb_fetch_all_guests():
-        return cache["vms"][:]
-
-    def cb_fetch_all_nodedevs():
-        return cache["nodedevs"][:]
-
-    def cb_fetch_all_pools():
-        if "pools" not in cache:
-            cache["pools"] = conn._fetch_all_pools_raw()
-        return cache["pools"][:]
-
-    def cb_fetch_all_vols():
-        if "vols" not in cache:
-            cache["vols"] = conn._fetch_all_vols_raw()
-        return cache["vols"][:]
-
-    def cb_clear_cache(pools=False):
-        if pools:
-            cache.pop("pools", None)
-            cache.pop("vols", None)
-
-    conn.cb_fetch_all_guests = cb_fetch_all_guests
-    conn.cb_fetch_all_pools = cb_fetch_all_pools
-    conn.cb_fetch_all_vols = cb_fetch_all_vols
-    conn.cb_fetch_all_nodedevs = cb_fetch_all_nodedevs
-    conn.cb_clear_cache = cb_clear_cache
+    # Prime the internal connection cache
+    for key, value in _conn_cache[uri].items():
+        conn._fetch_cache[key] = value[:]
 
     return conn
 
