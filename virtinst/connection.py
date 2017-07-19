@@ -174,17 +174,11 @@ class VirtualConnection(object):
         if pools:
             self._fetch_cache.pop(self._FETCH_KEY_POOLS, None)
 
-    def _fetch_all_guests_cached(self):
-        key = self._FETCH_KEY_GUESTS
-        if key in self._fetch_cache:
-            return self._fetch_cache[key]
-
+    def _fetch_all_guests_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_vms(
             self, {}, lambda obj, ignore: obj)
-        ret = [Guest(weakref.ref(self), parsexml=obj.XMLDesc(0))
-               for obj in ret]
-        self._fetch_cache[key] = ret
-        return ret
+        return [Guest(weakref.ref(self), parsexml=obj.XMLDesc(0))
+                for obj in ret]
 
     def fetch_all_guests(self):
         """
@@ -192,19 +186,17 @@ class VirtualConnection(object):
         """
         if self.cb_fetch_all_guests:
             return self.cb_fetch_all_guests()  # pylint: disable=not-callable
-        return self._fetch_all_guests_cached()
 
-    def _fetch_all_pools_cached(self):
-        key = self._FETCH_KEY_POOLS
-        if key in self._fetch_cache:
-            return self._fetch_cache[key]
+        key = self._FETCH_KEY_GUESTS
+        if key not in self._fetch_cache:
+            self._fetch_cache[key] = self._fetch_all_guests_raw()
+        return self._fetch_cache[key]
 
+    def _fetch_all_pools_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_pools(
             self, {}, lambda obj, ignore: obj)
-        ret = [StoragePool(weakref.ref(self), parsexml=obj.XMLDesc(0))
-               for obj in ret]
-        self._fetch_cache[key] = ret
-        return ret
+        return [StoragePool(weakref.ref(self), parsexml=obj.XMLDesc(0))
+                for obj in ret]
 
     def fetch_all_pools(self):
         """
@@ -212,13 +204,13 @@ class VirtualConnection(object):
         """
         if self.cb_fetch_all_pools:
             return self.cb_fetch_all_pools()  # pylint: disable=not-callable
-        return self._fetch_all_pools_cached()
 
-    def _fetch_all_vols_cached(self):
-        key = self._FETCH_KEY_VOLS
-        if key in self._fetch_cache:
-            return self._fetch_cache[key]
+        key = self._FETCH_KEY_POOLS
+        if key not in self._fetch_cache:
+            self._fetch_cache[key] = self._fetch_all_pools_raw()
+        return self._fetch_cache[key]
 
+    def _fetch_all_vols_raw(self):
         ret = []
         for xmlobj in self.fetch_all_pools():
             pool = self._libvirtconn.storagePoolLookupByName(xmlobj.name)
@@ -235,7 +227,6 @@ class VirtualConnection(object):
                 except Exception as e:
                     logging.debug("Fetching volume XML failed: %s", e)
 
-        self._fetch_cache[key] = ret
         return ret
 
     def fetch_all_vols(self):
@@ -244,19 +235,17 @@ class VirtualConnection(object):
         """
         if self.cb_fetch_all_vols:
             return self.cb_fetch_all_vols()  # pylint: disable=not-callable
-        return self._fetch_all_vols_cached()
 
-    def _fetch_all_nodedevs_cached(self):
-        key = self._FETCH_KEY_NODEDEVS
-        if key in self._fetch_cache:
-            return self._fetch_cache[key]
+        key = self._FETCH_KEY_VOLS
+        if key not in self._fetch_cache:
+            self._fetch_cache[key] = self._fetch_all_vols_raw()
+        return self._fetch_cache[key]
 
+    def _fetch_all_nodedevs_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_nodedevs(
             self, {}, lambda obj, ignore: obj)
-        ret = [NodeDevice.parse(weakref.ref(self), obj.XMLDesc(0))
-               for obj in ret]
-        self._fetch_cache[key] = ret
-        return ret
+        return [NodeDevice.parse(weakref.ref(self), obj.XMLDesc(0))
+                for obj in ret]
 
     def fetch_all_nodedevs(self):
         """
@@ -264,7 +253,11 @@ class VirtualConnection(object):
         """
         if self.cb_fetch_all_nodedevs:
             return self.cb_fetch_all_nodedevs()  # pylint: disable=not-callable
-        return self._fetch_all_nodedevs_cached()
+
+        key = self._FETCH_KEY_NODEDEVS
+        if key not in self._fetch_cache:
+            self._fetch_cache[key] = self._fetch_all_nodedevs_raw()
+        return self._fetch_cache[key]
 
 
     #########################
