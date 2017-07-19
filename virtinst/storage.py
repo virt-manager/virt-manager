@@ -565,8 +565,7 @@ class StoragePool(_StorageObject):
                               "%s" % str(e))
             raise RuntimeError(errmsg)
 
-        if self.conn.cb_cache_new_pool:
-            self.conn.cb_cache_new_pool(pool, self.name)
+        self.conn.cache_new_pool(pool)
 
         return pool
 

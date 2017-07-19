@@ -192,11 +192,14 @@ class VirtualConnection(object):
             self._fetch_cache[key] = self._fetch_all_guests_raw()
         return self._fetch_cache[key][:]
 
+    def _build_pool_raw(self, poolobj):
+        return StoragePool(weakref.ref(self),
+                           parsexml=poolobj.XMLDesc(0))
+
     def _fetch_all_pools_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_pools(
             self, {}, lambda obj, ignore: obj)
-        return [StoragePool(weakref.ref(self), parsexml=obj.XMLDesc(0))
-                for obj in ret]
+        return [self._build_pool_raw(poolobj) for poolobj in ret]
 
     def fetch_all_pools(self):
         """
@@ -210,23 +213,27 @@ class VirtualConnection(object):
             self._fetch_cache[key] = self._fetch_all_pools_raw()
         return self._fetch_cache[key][:]
 
+    def _fetch_vols_raw(self, poolxmlobj):
+        ret = []
+        pool = self._libvirtconn.storagePoolLookupByName(poolxmlobj.name)
+        if pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
+            return ret
+
+        ignore, ignore, vols = pollhelpers.fetch_volumes(
+            self, pool, {}, lambda obj, ignore: obj)
+
+        for vol in vols:
+            try:
+                xml = vol.XMLDesc(0)
+                ret.append(StorageVolume(weakref.ref(self), parsexml=xml))
+            except Exception as e:
+                logging.debug("Fetching volume XML failed: %s", e)
+        return ret
+
     def _fetch_all_vols_raw(self):
         ret = []
-        for xmlobj in self.fetch_all_pools():
-            pool = self._libvirtconn.storagePoolLookupByName(xmlobj.name)
-            if pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
-                continue
-
-            ignore, ignore, vols = pollhelpers.fetch_volumes(
-                self, pool, {}, lambda obj, ignore: obj)
-
-            for vol in vols:
-                try:
-                    xml = vol.XMLDesc(0)
-                    ret.append(StorageVolume(weakref.ref(self), parsexml=xml))
-                except Exception as e:
-                    logging.debug("Fetching volume XML failed: %s", e)
-
+        for poolxmlobj in self.fetch_all_pools():
+            ret.extend(self._fetch_vols_raw(poolxmlobj))
         return ret
 
     def fetch_all_vols(self):
@@ -240,6 +247,26 @@ class VirtualConnection(object):
         if key not in self._fetch_cache:
             self._fetch_cache[key] = self._fetch_all_vols_raw()
         return self._fetch_cache[key][:]
+
+    def cache_new_pool(self, poolobj):
+        """
+        Insert the passed poolobj into our cache
+        """
+        if self.cb_cache_new_pool:
+            # pylint: disable=not-callable
+            return self.cb_cache_new_pool(poolobj)
+
+        # Make sure cache is primed
+        if self._FETCH_KEY_POOLS not in self._fetch_cache:
+            # Nothing cached yet, so next poll will pull in latest bits,
+            # so there's nothing to do
+            return
+
+        poollist = self._fetch_cache[self._FETCH_KEY_POOLS]
+        poolxmlobj = self._build_pool_raw(poolobj)
+        poollist.append(poolxmlobj)
+        vollist = self._fetch_cache[self._FETCH_KEY_VOLS]
+        vollist.extend(self._fetch_vols_raw(poolxmlobj))
 
     def _fetch_all_nodedevs_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_nodedevs(

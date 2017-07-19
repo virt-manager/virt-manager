@@ -309,13 +309,13 @@ class vmmConnection(vmmGObject):
             return ret
         self._backend.cb_fetch_all_vols = fetch_all_vols
 
-        def cache_new_pool(obj, key):
-            ignore = obj
+        def cache_new_pool(obj):
             if not self.is_active():
                 return
+            name = obj.name()
             self.schedule_priority_tick(pollpool=True)
             def compare_cb():
-                return bool(self.get_pool(key))
+                return bool(self.get_pool(name))
             self._wait_for_condition(compare_cb)
         self._backend.cb_cache_new_pool = cache_new_pool
 
