@@ -376,6 +376,9 @@ class Cloner(object):
 
             old_nvram = VirtualDisk(self.conn)
             old_nvram.path = self._guest.os.nvram
+            if not old_nvram.get_vol_object():
+                raise RuntimeError(_("Path does not exist: %s") %
+                                     old_nvram.path)
 
             nvram_install = VirtualDisk.build_vol_install(
                     self.conn, os.path.basename(nvram.path),
