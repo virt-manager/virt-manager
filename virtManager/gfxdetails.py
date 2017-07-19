@@ -51,6 +51,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
             "on_graphics_port_auto_toggled": self._change_port_auto,
             "on_graphics_tlsport_auto_toggled": self._change_tlsport_auto,
             "on_graphics_use_password": self._change_password_chk,
+            "on_graphics_show_password": self._show_password_chk,
 
             "on_graphics_listen_type_changed": self._change_graphics_listen,
             "on_graphics_password_changed": lambda ignore: self.emit("changed-password"),
@@ -373,3 +374,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
             self.widget("graphics-password").set_text("")
             self.widget("graphics-password").set_sensitive(False)
         self.emit("changed-password")
+
+    def _show_password_chk(self, ignore=None):
+        if self.widget("graphics-visiblity-chk").get_active():
+            self.widget("graphics-password").set_visibility(True)
+        else:
+            self.widget("graphics-password").set_visibility(False)
