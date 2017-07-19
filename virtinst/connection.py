@@ -190,7 +190,7 @@ class VirtualConnection(object):
         key = self._FETCH_KEY_GUESTS
         if key not in self._fetch_cache:
             self._fetch_cache[key] = self._fetch_all_guests_raw()
-        return self._fetch_cache[key]
+        return self._fetch_cache[key][:]
 
     def _fetch_all_pools_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_pools(
@@ -208,7 +208,7 @@ class VirtualConnection(object):
         key = self._FETCH_KEY_POOLS
         if key not in self._fetch_cache:
             self._fetch_cache[key] = self._fetch_all_pools_raw()
-        return self._fetch_cache[key]
+        return self._fetch_cache[key][:]
 
     def _fetch_all_vols_raw(self):
         ret = []
@@ -239,7 +239,7 @@ class VirtualConnection(object):
         key = self._FETCH_KEY_VOLS
         if key not in self._fetch_cache:
             self._fetch_cache[key] = self._fetch_all_vols_raw()
-        return self._fetch_cache[key]
+        return self._fetch_cache[key][:]
 
     def _fetch_all_nodedevs_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_nodedevs(
@@ -257,7 +257,7 @@ class VirtualConnection(object):
         key = self._FETCH_KEY_NODEDEVS
         if key not in self._fetch_cache:
             self._fetch_cache[key] = self._fetch_all_nodedevs_raw()
-        return self._fetch_cache[key]
+        return self._fetch_cache[key][:]
 
 
     #########################
