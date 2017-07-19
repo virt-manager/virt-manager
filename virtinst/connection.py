@@ -81,7 +81,7 @@ class VirtualConnection(object):
         self.cb_fetch_all_vols = None
         self.cb_fetch_all_nodedevs = None
         self.cb_clear_cache = None
-        self.cb_add_new_pool = None
+        self.cb_cache_new_pool = None
 
 
     ##############

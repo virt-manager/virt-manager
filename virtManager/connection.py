@@ -309,7 +309,7 @@ class vmmConnection(vmmGObject):
             return ret
         self._backend.cb_fetch_all_vols = fetch_all_vols
 
-        def add_new_pool(obj, key):
+        def cache_new_pool(obj, key):
             ignore = obj
             if not self.is_active():
                 return
@@ -317,7 +317,7 @@ class vmmConnection(vmmGObject):
             def compare_cb():
                 return bool(self.get_pool(key))
             self._wait_for_condition(compare_cb)
-        self._backend.cb_add_new_pool = add_new_pool
+        self._backend.cb_cache_new_pool = cache_new_pool
 
         def clear_cache(pools=False):
             if not pools:
@@ -1008,7 +1008,7 @@ class vmmConnection(vmmGObject):
         self._backend.cb_fetch_all_nodedevs = None
         self._backend.cb_fetch_all_vols = None
         self._backend.cb_clear_cache = None
-        self._backend.cb_add_new_pool = None
+        self._backend.cb_cache_new_pool = None
 
     def open(self):
         if not self.is_disconnected():
