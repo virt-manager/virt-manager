@@ -175,7 +175,6 @@ def manage_path(conn, path):
     poolxml.type = poolxml.TYPE_DIR
     poolxml.target_path = dirname
     pool = poolxml.install(build=False, create=True, autostart=True)
-    conn.clear_cache(pools=True)
 
     vol = _lookup_vol_by_basename(pool, path)
     return vol, pool

@@ -319,16 +319,6 @@ class vmmConnection(vmmGObject):
             self._wait_for_condition(compare_cb)
         self._backend.cb_cache_new_pool = cache_new_pool
 
-        def clear_cache(pools=False):
-            if not pools:
-                return
-
-            # This isn't synchronous, so any virtinst callers need to
-            # take that into account.
-            self.schedule_priority_tick(pollpool=True)
-
-        self._backend.cb_clear_cache = clear_cache
-
 
     ########################
     # General data getters #
@@ -1007,7 +997,6 @@ class vmmConnection(vmmGObject):
         self._backend.cb_fetch_all_pools = None
         self._backend.cb_fetch_all_nodedevs = None
         self._backend.cb_fetch_all_vols = None
-        self._backend.cb_clear_cache = None
         self._backend.cb_cache_new_pool = None
 
     def open(self):

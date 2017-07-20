@@ -80,7 +80,6 @@ class VirtualConnection(object):
         self.cb_fetch_all_pools = None
         self.cb_fetch_all_vols = None
         self.cb_fetch_all_nodedevs = None
-        self.cb_clear_cache = None
         self.cb_cache_new_pool = None
 
 
@@ -165,14 +164,6 @@ class VirtualConnection(object):
     _FETCH_KEY_POOLS = "pools"
     _FETCH_KEY_VOLS = "vols"
     _FETCH_KEY_NODEDEVS = "nodedevs"
-
-    def clear_cache(self, pools=False):
-        if self.cb_clear_cache:
-            self.cb_clear_cache(pools=pools)  # pylint: disable=not-callable
-            return
-
-        if pools:
-            self._fetch_cache.pop(self._FETCH_KEY_POOLS, None)
 
     def _fetch_all_guests_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_vms(

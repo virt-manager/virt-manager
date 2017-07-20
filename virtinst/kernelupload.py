@@ -47,7 +47,6 @@ def _build_pool(conn, meter, path):
     # we probably don't have correct perms
     ret = poolbuild.install(meter=meter, create=True, build=False,
                             autostart=True)
-    conn.clear_cache(pools=True)
     return ret
 
 

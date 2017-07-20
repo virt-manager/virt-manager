@@ -226,7 +226,6 @@ class StoragePool(_StorageObject):
             defpool.name = name
             defpool.target_path = path
             defpool.install(build=True, create=True, autostart=True)
-            conn.clear_cache(pools=True)
             return defpool
         except Exception as e:
             raise RuntimeError(
