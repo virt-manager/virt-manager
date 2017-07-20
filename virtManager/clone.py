@@ -852,7 +852,6 @@ class vmmCloneVM(vmmGObjectUI):
                 if poolname not in refresh_pools:
                     refresh_pools.append(poolname)
 
-            self.clone_design.setup()
             self.clone_design.start_duplicate(meter)
 
             for poolname in refresh_pools:
