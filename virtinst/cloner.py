@@ -459,14 +459,6 @@ class Cloner(object):
         self._clone_xml = self._guest.get_xml_config()
         logging.debug("Clone guest xml is\n%s", self._clone_xml)
 
-    def setup(self):
-        """
-        Helper function that wraps setup_original and setup_clone, with
-        additional debug logging.
-        """
-        self.setup_original()
-        self.setup_clone()
-
     def start_duplicate(self, meter=None):
         """
         Actually perform the duplication: cloning disks if needed and defining

@@ -75,7 +75,8 @@ class TestClone(unittest.TestCase):
                                 clone_disks_file=clone_disks_file)
             self._clone_define(filebase)
         else:
-            cloneobj.setup()
+            cloneobj.setup_original()
+            cloneobj.setup_clone()
 
     def _default_clone_values(self, cloneobj, disks=None):
         """Sets default values for the cloned VM."""
@@ -96,7 +97,8 @@ class TestClone(unittest.TestCase):
         """Helps compare output from passed clone instance with an xml file"""
         outfile = os.path.join(clonexml_dir, outbase + "-out.xml")
 
-        cloneobj.setup()
+        cloneobj.setup_original()
+        cloneobj.setup_clone()
 
         utils.diff_compare(cloneobj.clone_xml, outfile)
         if clone_disks_file:
