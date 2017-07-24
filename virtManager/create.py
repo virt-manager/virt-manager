@@ -2616,7 +2616,7 @@ class vmmCreate(vmmGObjectUI):
     def _create_directory_tree(self, asyncjob, meter, bootstrap_args):
         """
         Call bootstrap method from virtBootstrap and show logger messages
-+        as state/details.
+        as state/details.
         """
         import virtBootstrap
 
