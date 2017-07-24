@@ -105,7 +105,7 @@ def _old_poll_helper(origmap, typename,
     for name in newActiveNames + newInactiveNames:
         try:
             check_obj(name)
-        except:
+        except Exception:
             logging.exception("Couldn't fetch %s '%s'", typename, name)
 
     return (origmap.values(), new.values(), current.values())
@@ -253,7 +253,7 @@ def _old_fetch_vms(backend, origmap, build_func):
                 connkey = vm.name()
 
                 check_new(vm, connkey)
-            except:
+            except Exception:
                 logging.exception("Couldn't fetch domain id '%s'", _id)
 
 
@@ -269,7 +269,7 @@ def _old_fetch_vms(backend, origmap, build_func):
                 connkey = name
 
                 check_new(vm, connkey)
-            except:
+            except Exception:
                 logging.exception("Couldn't fetch domain '%s'", name)
 
     return (origmap.values(), new.values(), current.values())

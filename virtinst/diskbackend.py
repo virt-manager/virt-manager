@@ -89,7 +89,7 @@ def _stat_disk(path):
             # os.SEEK_END is not present on all systems
             size = os.lseek(fd, 0, 2)
             os.close(fd)
-        except:
+        except Exception:
             size = 0
         return False, size
     elif stat.S_ISREG(mode):
@@ -121,7 +121,7 @@ def check_if_path_managed(conn, path):
         if verr:
             try:
                 vol = _lookup_vol_by_basename(pool, path)
-            except:
+            except Exception:
                 pass
     except Exception as e:
         vol = None

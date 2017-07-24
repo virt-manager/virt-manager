@@ -98,7 +98,7 @@ class Guest(XMLBuilder):
 
         try:
             conn.lookupByName(name)
-        except:
+        except Exception:
             return
         raise ValueError(_("Guest name '%s' is already in use.") % name)
 
@@ -323,7 +323,7 @@ class Guest(XMLBuilder):
         data = (self.os, self.on_reboot)
         try:
             self._propstore["os"] = self.os.copy()
-        except:
+        except Exception:
             self._finish_get_xml(data)
             raise
         return data
@@ -397,12 +397,12 @@ class Guest(XMLBuilder):
         # Handle undefining the VM if the initial startup fails
         try:
             domain.create()
-        except:
+        except Exception:
             import sys
             exc_info = sys.exc_info()
             try:
                 domain.undefine()
-            except:
+            except Exception:
                 pass
             raise exc_info[0], exc_info[1], exc_info[2]
 

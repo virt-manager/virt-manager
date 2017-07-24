@@ -50,7 +50,7 @@ def _make_ipaddr(addrstr):
         return None
     try:
         return ipaddr.IPNetwork(addrstr)
-    except:
+    except Exception:
         return None
 
 

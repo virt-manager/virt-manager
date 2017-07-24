@@ -123,7 +123,7 @@ class vmmStorageList(vmmGObjectUI):
             self.conn.disconnect_by_func(self._conn_pool_count_changed)
             self.conn.disconnect_by_func(self._conn_pool_count_changed)
             self.conn.disconnect_by_func(self._conn_state_changed)
-        except:
+        except Exception:
             pass
         self.conn = None
 
@@ -384,7 +384,7 @@ class vmmStorageList(vmmGObjectUI):
                 try:
                     pool.disconnect_by_func(self._pool_changed)
                     pool.disconnect_by_func(self._pool_changed)
-                except:
+                except Exception:
                     pass
                 pool.connect("state-changed", self._pool_changed)
                 pool.connect("refreshed", self._pool_changed)
@@ -426,7 +426,7 @@ class vmmStorageList(vmmGObjectUI):
                 cap = str(vol.get_capacity())
                 sizestr = vol.get_pretty_capacity()
                 fmt = vol.get_format() or ""
-            except:
+            except Exception:
                 logging.debug("Error getting volume info for '%s', "
                               "hiding it", key, exc_info=True)
                 continue
@@ -439,7 +439,7 @@ class vmmStorageList(vmmGObjectUI):
                     namestr = ", ".join(names)
                     if not namestr:
                         namestr = None
-            except:
+            except Exception:
                 logging.exception("Failed to determine if storage volume in "
                                   "use.")
 

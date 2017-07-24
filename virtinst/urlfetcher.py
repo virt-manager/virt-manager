@@ -195,7 +195,7 @@ class _HTTPURLFetcher(_URLFetcher):
         response.raise_for_status()
         try:
             size = int(response.headers.get('content-length'))
-        except:
+        except Exception:
             size = None
         return response, size
 
@@ -244,7 +244,7 @@ class _FTPURLFetcher(_URLFetcher):
 
         try:
             self._ftp.quit()
-        except:
+        except Exception:
             logging.debug("Error quitting ftp connection", exc_info=True)
 
         self._ftp = None
@@ -330,7 +330,7 @@ class _MountedURLFetcher(_LocalURLFetcher):
                 subprocess.call(cmd)
                 try:
                     os.rmdir(self._srcdir)
-                except:
+                except Exception:
                     pass
         finally:
             self._mounted = False
@@ -664,7 +664,7 @@ class Distro(object):
         try:
             initrd = self.fetcher.acquireFile(initrdpath)
             return kernel, initrd, args
-        except:
+        except Exception:
             os.unlink(kernel)
             raise
 
@@ -874,7 +874,7 @@ class RHELDistro(RedHatDistro):
         def _safeint(c):
             try:
                 val = int(c)
-            except:
+            except Exception:
                 val = 0
             return val
 

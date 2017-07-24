@@ -422,7 +422,7 @@ class TestBaseCommand(distutils.core.Command):
         try:
             import coverage
             use_cov = True
-        except:
+        except ImportError:
             use_cov = False
             cov = None
 
@@ -439,10 +439,8 @@ class TestBaseCommand(distutils.core.Command):
         testsmodule.utils.REGENERATE_OUTPUT = bool(self.regenerate_output)
 
         if hasattr(unittest, "installHandler"):
-            try:
-                unittest.installHandler()
-            except:
-                print("installHandler hack failed")
+            # Install the control-c handler.
+            unittest.installHandler()
 
         tests = unittest.TestLoader().loadTestsFromNames(self._testfiles)
         if self.only:

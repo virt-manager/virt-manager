@@ -90,7 +90,7 @@ class VirtualHostDevice(VirtualDevice):
         def safeint(val, fmt="%.3d"):
             try:
                 int(val)
-            except:
+            except Exception:
                 return str(val)
             return fmt % int(val)
 

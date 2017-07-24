@@ -163,7 +163,7 @@ class vmmMediaCombo(vmmGObjectUI):
     def reset_state(self):
         try:
             self._populate_media()
-        except:
+        except Exception:
             logging.debug("Error populating mediadev combo", exc_info=True)
 
     def get_path(self):

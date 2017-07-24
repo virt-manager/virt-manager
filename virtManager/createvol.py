@@ -66,7 +66,7 @@ class vmmCreateVolume(vmmGObjectUI):
     def show(self, parent):
         try:
             parent_xml = self.parent_pool.xmlobj.get_xml_config()
-        except:
+        except Exception:
             logging.debug("Error getting parent_pool xml", exc_info=True)
             parent_xml = None
 
@@ -112,7 +112,7 @@ class vmmCreateVolume(vmmGObjectUI):
         try:
             ret = StorageVolume.find_free_name(
                 self.parent_pool.get_backend(), self.name_hint, suffix=suffix)
-        except:
+        except Exception:
             logging.exception("Error finding a default vol name")
 
         return ret

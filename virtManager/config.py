@@ -199,7 +199,7 @@ class vmmConfig(object):
             from guestfs import GuestFS  # pylint: disable=import-error
             g = GuestFS(close_on_exit=False)
             return bool(getattr(g, "add_libvirt_dom", None))
-        except:
+        except Exception:
             return False
 
     # General app wide helpers (gsettings agnostic)

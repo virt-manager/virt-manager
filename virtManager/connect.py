@@ -47,7 +47,7 @@ def current_user():
     try:
         import getpass
         return getpass.getuser()
-    except:
+    except Exception:
         return ""
 
 
@@ -472,7 +472,7 @@ class vmmConnect(vmmGObjectUI):
             elif self.can_resolve_local is None:
                 try:
                     socket.getaddrinfo(host, None)
-                except:
+                except Exception:
                     logging.debug("Couldn't resolve host '%s'. Stripping "
                                   "'.local' and retrying.", host)
                     self.can_resolve_local = False
@@ -486,7 +486,7 @@ class vmmConnect(vmmGObjectUI):
             elif self.can_resolve_hostname is None:
                 try:
                     socket.getaddrinfo(host, None)
-                except:
+                except Exception:
                     logging.debug("Couldn't resolve host '%s'. Disabling "
                                   "host name resolution, only using IP addr",
                                   host)

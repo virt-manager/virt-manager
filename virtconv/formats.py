@@ -185,7 +185,7 @@ def _find_input(input_file, parser, print_cb):
                         return path, p, force_clean
 
         raise RuntimeError("Could not find parser for file %s" % input_file)
-    except:
+    except Exception:
         for f in force_clean:
             shutil.rmtree(f)
         raise

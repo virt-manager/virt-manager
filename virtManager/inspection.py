@@ -162,10 +162,10 @@ class vmmInspection(vmmGObject):
                     self._set_vm_inspection_data(vm, data)
                 else:
                     set_inspection_error(vm)
-            except:
+            except Exception:
                 set_inspection_error(vm)
                 raise
-        except:
+        except Exception:
             logging.exception("%s: exception while processing", prettyvm)
 
     def _inspect_vm(self, conn, vm):
@@ -217,13 +217,13 @@ class vmmInspection(vmmGObject):
             for mp_dev in mps:
                 try:
                     g.mount_ro(mp_dev[1], mp_dev[0])
-                except:
+                except Exception:
                     logging.exception("%s: exception mounting %s on %s "
                                       "(ignored)",
                                       prettyvm, mp_dev[1], mp_dev[0])
 
             filesystems_mounted = True
-        except:
+        except Exception:
             logging.exception("%s: exception while mounting disks (ignored)",
                               prettyvm)
 

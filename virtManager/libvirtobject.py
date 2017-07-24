@@ -96,7 +96,7 @@ class vmmLibvirtObject(vmmGObject):
     def __repr__(self):
         try:
             name = self.get_name()
-        except:
+        except Exception:
             name = ""
         return "<%s name=%s id=%s>" % (
                 self.__class__.__name__, name, hex(id(self)))
@@ -135,7 +135,7 @@ class vmmLibvirtObject(vmmGObject):
         try:
             self._key = newname
             self.conn.rename_object(self, origxml, newxml, oldconnkey)
-        except:
+        except Exception:
             self._key = oldname
             raise
         finally:
@@ -196,7 +196,7 @@ class vmmLibvirtObject(vmmGObject):
         initialize_failed = False
         try:
             self._init_libvirt_state()
-        except:
+        except Exception:
             logging.debug("Error initializing libvirt state for %s", self,
                 exc_info=True)
             initialize_failed = True

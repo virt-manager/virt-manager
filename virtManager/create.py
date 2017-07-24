@@ -1611,7 +1611,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             path, ignore = self._get_storage_path(newname, do_log=False)
             self._populate_summary_storage(path=path)
-        except:
+        except Exception:
             logging.debug("Error generating storage path on name change "
                 "for name=%s", newname, exc_info=True)
 
@@ -1862,7 +1862,7 @@ class vmmCreate(vmmGObjectUI):
         if guest.os.is_arm64():
             try:
                 guest.set_uefi_default()
-            except:
+            except Exception:
                 # If this errors we will have already informed the user
                 # on page 1.
                 pass
@@ -2365,7 +2365,7 @@ class vmmCreate(vmmGObjectUI):
 
             distro = installer.detect_distro(self._guest)
             thread_results.set_distro(distro)
-        except:
+        except Exception:
             logging.exception("Error detecting distro.")
             thread_results.set_failed()
 
@@ -2394,7 +2394,7 @@ class vmmCreate(vmmGObjectUI):
                 return
 
             distro = thread_results.get_distro()
-        except:
+        except Exception:
             distro = None
             logging.exception("Error in distro detect timeout")
 
@@ -2582,7 +2582,7 @@ class vmmCreate(vmmGObjectUI):
             try:
                 pool = self.conn.get_pool(poolname)
                 self.idle_add(pool.refresh)
-            except:
+            except Exception:
                 logging.debug("Error looking up pool=%s for refresh after "
                     "VM creation.", poolname, exc_info=True)
 

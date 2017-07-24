@@ -131,7 +131,7 @@ class VirtStreamHandler(logging.StreamHandler):
             self.flush()
         except (KeyboardInterrupt, SystemExit):
             raise
-        except:
+        except Exception:
             self.handleError(record)
 
 
@@ -158,7 +158,7 @@ class VirtHelpFormatter(argparse.RawDescriptionHelpFormatter):
             if "\n" in text:
                 return text.splitlines()
             return return_default()
-        except:
+        except Exception:
             return return_default()
 
 

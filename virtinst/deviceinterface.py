@@ -95,7 +95,7 @@ def _default_bridge(conn):
     # vif0.0 == netloop enslaved, eth0 == default route
     try:
         defn = int(dev[-1])
-    except:
+    except Exception:
         defn = -1
 
     if (defn >= 0 and

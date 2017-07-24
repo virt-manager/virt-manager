@@ -123,7 +123,7 @@ def main(conn=None):
             print_stdout(_("Creating guest '%s'.") % guest.name)
             guest.start_install()
             cli.connect_console(guest, conscb, True)
-    except:
+    except Exception:
         converter.cleanup()
         raise
 

@@ -62,7 +62,7 @@ class vmmNetworkList(vmmGObjectUI):
             self.conn.disconnect_by_func(self._repopulate_network_list)
             self.conn.disconnect_by_func(self._repopulate_network_list)
             self.conn.disconnect_by_func(self._repopulate_network_list)
-        except:
+        except Exception:
             pass
 
         self.conn = None

@@ -113,7 +113,7 @@ def _upload_file(conn, meter, destpool, src):
         # Cleanup
         stream.finish()
         meter.end(size)
-    except:
+    except Exception:
         if vol:
             vol.delete(0)
         raise

@@ -230,7 +230,7 @@ class vmmEngine(vmmGObject):
             packages = self.config.hv_packages + libvirt_packages
 
             ret = packageutils.check_packagekit(manager, manager.err, packages)
-        except:
+        except Exception:
             logging.exception("Error talking to PackageKit")
 
         if ret:
@@ -573,7 +573,7 @@ class vmmEngine(vmmGObject):
             else:
                 try:
                     conn.open()
-                except:
+                except Exception:
                     return None
             return conn
         except Exception:
@@ -593,7 +593,7 @@ class vmmEngine(vmmGObject):
                 win.cleanup()
 
             self.conns[uri]["conn"].cleanup()
-        except:
+        except Exception:
             logging.exception("Error cleaning up conn in engine")
 
 
@@ -1021,7 +1021,7 @@ class vmmEngine(vmmGObject):
                 return True
 
             return False
-        except:
+        except Exception:
             # In case of cli error, we may need to exit the app
             logging.debug("Error in cli connection callback", exc_info=True)
             self._exit_app_if_no_windows()
@@ -1065,7 +1065,7 @@ class vmmEngine(vmmGObject):
     def _handle_cli_command(self, actionobj, variant):
         try:
             return self._do_handle_cli_command(actionobj, variant)
-        except:
+        except Exception:
             # In case of cli error, we may need to exit the app
             logging.debug("Error handling cli command", exc_info=True)
             self._exit_app_if_no_windows()

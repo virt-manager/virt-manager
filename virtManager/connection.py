@@ -65,7 +65,7 @@ class _ObjectList(vmmGObject):
             for obj in self._objects:
                 try:
                     obj.cleanup()
-                except:
+                except Exception:
                     logging.debug("Failed to cleanup %s", exc_info=True)
             self._objects = []
         finally:
@@ -968,7 +968,7 @@ class vmmConnection(vmmGObject):
                     self._backend.storagePoolEventDeregisterAny(eid)
                 for eid in self._node_device_cb_ids:
                     self._backend.nodeDeviceEventDeregisterAny(eid)
-        except:
+        except Exception:
             logging.debug("Failed to deregister events in conn cleanup",
                 exc_info=True)
         finally:
@@ -1012,7 +1012,7 @@ class vmmConnection(vmmGObject):
     def _do_creds_password(self, creds):
         try:
             return connectauth.creds_dialog(self, creds)
-        except:
+        except Exception:
             logging.debug("Launching creds dialog failed", exc_info=True)
             return -1
 
@@ -1136,7 +1136,7 @@ class vmmConnection(vmmGObject):
             class_name = obj.class_name()
             try:
                 name = obj.get_name()
-            except:
+            except Exception:
                 name = str(obj)
 
             if not self._objects.remove(obj):

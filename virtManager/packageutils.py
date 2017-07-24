@@ -110,7 +110,7 @@ def start_libvirtd():
 
     try:
         bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
-    except:
+    except Exception:
         logging.exception("Error getting system bus handle")
         return
 
@@ -119,7 +119,7 @@ def start_libvirtd():
                                  "org.freedesktop.systemd1",
                                  "/org/freedesktop/systemd1",
                                  "org.freedesktop.systemd1.Manager", None)
-    except:
+    except Exception:
         logging.exception("Couldn't connect to systemd")
         return
 
@@ -134,7 +134,7 @@ def start_libvirtd():
         if str(state).lower().strip("'") == "active":
             logging.debug("libvirtd already active, not starting")
             return True
-    except:
+    except Exception:
         logging.exception("Failed to lookup libvirtd status")
         return
 
@@ -150,5 +150,5 @@ def start_libvirtd():
         time.sleep(2)
         logging.debug("Starting libvirtd appeared to succeed")
         return True
-    except:
+    except Exception:
         logging.exception("Failed to talk to system-config-services")

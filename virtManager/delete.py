@@ -217,7 +217,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         try:
             vol = conn.storageVolLookupByPath(path)
-        except:
+        except Exception:
             logging.debug("Path '%s' is not managed. Deleting locally", path)
 
         if vol:

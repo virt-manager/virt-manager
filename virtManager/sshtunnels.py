@@ -51,13 +51,13 @@ class ConnectionInfo(object):
     def _is_listen_localhost(self, host=None):
         try:
             return ipaddr.IPNetwork(host or self.gaddr).is_loopback
-        except:
+        except Exception:
             return False
 
     def _is_listen_any(self):
         try:
             return ipaddr.IPNetwork(self.gaddr).is_unspecified
-        except:
+        except Exception:
             return False
 
     def _is_listen_none(self):
@@ -180,7 +180,7 @@ class _Tunnel(object):
         while True:
             try:
                 new = self._errfd.recv(1024)
-            except:
+            except Exception:
                 break
 
             if not new:

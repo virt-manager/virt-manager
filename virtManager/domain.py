@@ -134,7 +134,7 @@ def start_job_progress_thread(vm, meter, progtext):
 
                 progress = data_total - data_remaining
                 meter.update(progress)
-            except:
+            except Exception:
                 logging.exception("Error calling jobinfo")
                 return False
 

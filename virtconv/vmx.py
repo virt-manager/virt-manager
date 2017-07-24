@@ -115,7 +115,7 @@ def parse_vmdk(filename):
 
     try:
         vmdkfile = _VMXFile(content)
-    except:
+    except Exception:
         logging.exception("%s looked like a vmdk file, but parsing failed",
                           filename)
         return

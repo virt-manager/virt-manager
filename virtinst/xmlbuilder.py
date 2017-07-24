@@ -721,7 +721,7 @@ class _XMLState(object):
 
         try:
             doc = libxml2.parseDoc(parsexml)
-        except:
+        except Exception:
             logging.debug("Error parsing xml=\n%s", parsexml)
             raise
 

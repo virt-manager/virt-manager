@@ -412,7 +412,7 @@ class VNCViewer(Viewer):
 
             try:
                 keys = [int(k) for k in keys.split(',')]
-            except:
+            except Exception:
                 logging.debug("Error in grab_keys configuration in Gsettings",
                               exc_info=True)
                 return
@@ -551,7 +551,7 @@ class SpiceViewer(Viewer):
             autoredir = self.config.get_auto_redirection()
             if autoredir:
                 gtk_session.set_property("auto-usbredir", True)
-        except:
+        except Exception:
             self._usbdev_manager = None
             logging.debug("Error initializing spice usb device manager",
                 exc_info=True)
@@ -678,7 +678,7 @@ class SpiceViewer(Viewer):
 
             try:
                 keys = [int(k) for k in keys.split(',')]
-            except:
+            except Exception:
                 logging.debug("Error in grab_keys configuration in Gsettings",
                               exc_info=True)
                 return

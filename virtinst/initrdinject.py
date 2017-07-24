@@ -31,7 +31,7 @@ def _rhel4_initrd_inject(initrd, injections):
                                      stderr=subprocess.PIPE)
         if "ext2 filesystem" not in file_proc.communicate()[0]:
             return False
-    except:
+    except Exception:
         logging.exception("Failed to file command for rhel4 initrd detection")
         return False
 

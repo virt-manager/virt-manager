@@ -858,7 +858,7 @@ class vmmCloneVM(vmmGObjectUI):
                 try:
                     pool = self.conn.get_pool(poolname)
                     self.idle_add(pool.refresh)
-                except:
+                except Exception:
                     logging.debug("Error looking up pool=%s for refresh after "
                         "VM clone.", poolname, exc_info=True)
 

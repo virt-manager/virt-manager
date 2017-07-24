@@ -277,7 +277,7 @@ class DistroInstaller(Installer):
                     "remote connection.")
             else:
                 distro = OSDB.lookup_os_by_media(self.location)
-        except:
+        except Exception:
             logging.debug("Error attempting to detect distro.", exc_info=True)
 
         logging.debug("installer.detect_distro returned=%s", distro)

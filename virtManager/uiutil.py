@@ -35,7 +35,7 @@ def spin_get_helper(widget):
 
     try:
         return int(txt)
-    except:
+    except Exception:
         return adj.get_value()
 
 

@@ -686,7 +686,7 @@ class vmmHost(vmmGObjectUI):
             for net in self.conn.list_nets():
                 try:
                     net.disconnect_by_func(self.refresh_network)
-                except:
+                except Exception:
                     pass
                 net.connect("state-changed", self.refresh_network)
                 model.append([net.get_connkey(), net.get_name(), "network-idle",
@@ -936,7 +936,7 @@ class vmmHost(vmmGObjectUI):
             for iface in self.conn.list_interfaces():
                 try:
                     iface.disconnect_by_func(self.refresh_interface)
-                except:
+                except Exception:
                     pass
                 iface.connect("state-changed", self.refresh_interface)
                 model.append([iface.get_connkey(), iface.get_name(),

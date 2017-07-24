@@ -90,7 +90,7 @@ class vmmAddStorage(vmmGObjectUI):
         widget = self.widget("phys-hd-label")
         try:
             max_storage = self._host_disk_space()
-        except:
+        except Exception:
             logging.exception("Error determining host disk space")
             widget.set_markup("")
             return

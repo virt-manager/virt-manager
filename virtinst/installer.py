@@ -198,7 +198,7 @@ class Installer(object):
         self.cleanup()
         try:
             self._prepare(guest, meter)
-        except:
+        except Exception:
             self.cleanup()
             raise
 

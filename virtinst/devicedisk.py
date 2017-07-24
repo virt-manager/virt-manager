@@ -186,7 +186,7 @@ class VirtualDisk(VirtualDevice):
 
             if not conn.is_remote():
                 return os.path.exists(path)
-        except:
+        except Exception:
             pass
 
         return False
@@ -257,7 +257,7 @@ class VirtualDisk(VirtualDevice):
                     int(label.split(":")[0].replace("+", "")))
                 if pwuid:
                     user = pwuid[0]
-        except:
+        except Exception:
             logging.debug("Exception grabbing qemu DAC user", exc_info=True)
             return None, []
 
@@ -308,7 +308,7 @@ class VirtualDisk(VirtualDevice):
             try:
                 try:
                     fix_perms(dirname, useacl)
-                except:
+                except Exception:
                     # If acl fails, fall back to chmod and retry
                     if not useacl:
                         raise

@@ -351,7 +351,7 @@ class _OsVariant(object):
             for n in t:
                 new_version = new_version + ("%.4i" % int(n))
             version = new_version
-        except:
+        except Exception:
             pass
 
         return "%s-%s" % (self.distro, version)

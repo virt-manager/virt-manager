@@ -238,7 +238,7 @@ class vmmPreferences(vmmGObjectUI):
             for k in val.split(','):
                 try:
                     key = int(k)
-                except:
+                except Exception:
                     key = None
 
                 if key is not None:

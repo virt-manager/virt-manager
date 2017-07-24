@@ -74,7 +74,7 @@ class vmmGObject(GObject.GObject):
                 self.remove_gobject_timeout(h)
 
             self._cleanup()
-        except:
+        except Exception:
             logging.exception("Error cleaning up %s", self)
 
     def _cleanup(self):
@@ -84,7 +84,7 @@ class vmmGObject(GObject.GObject):
         try:
             if self.config and self._leak_check:
                 self.config.remove_object(self.object_key)
-        except:
+        except Exception:
             logging.exception("Error removing %s", self.object_key)
 
     # pylint: disable=arguments-differ

@@ -262,7 +262,7 @@ class StoragePool(_StorageObject):
             for pool in conn.fetch_all_pools():
                 if pool.name == "default":
                     return pool.target_path
-        except:
+        except Exception:
             pass
 
         if build:
@@ -868,7 +868,7 @@ class StorageVolume(_StorageObject):
                     vol = self.pool.storageVolLookupByName(self.name)
                 vol.info()
                 break
-            except:
+            except Exception:
                 if time:  # pylint: disable=using-constant-test
                     # This 'if' check saves some noise from the test suite
                     time.sleep(.2)

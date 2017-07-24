@@ -30,7 +30,7 @@ def _compare_int(nodedev_val, hostdev_val):
                 return int(val or '0x00', 16)
             else:
                 return int(val)
-        except:
+        except Exception:
             return -1
 
     nodedev_val = _intify(nodedev_val)
@@ -375,7 +375,7 @@ def _AddressStringToHostdev(conn, addrstr):
             hostdev.device = device
         else:
             raise RuntimeError("Unknown address type")
-    except:
+    except Exception:
         logging.debug("Error parsing node device string.", exc_info=True)
         raise
 

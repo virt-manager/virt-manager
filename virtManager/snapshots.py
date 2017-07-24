@@ -192,7 +192,7 @@ class vmmSnapshotPage(vmmGObjectUI):
                 for snap in self.vm.list_snapshots():
                     if name == snap.get_name():
                         snaps.append(snap)
-            except:
+            except Exception:
                 pass
 
         snaps = []
@@ -406,7 +406,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             try:
                 if stream:
                     stream.finish()
-            except:
+            except Exception:
                 pass
 
     def _get_screenshot(self):
@@ -424,7 +424,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             # https://bugs.launchpad.net/qemu/+bug/1314293
             self._take_screenshot()
             mime, sdata = self._take_screenshot()
-        except:
+        except Exception:
             logging.exception("Error taking screenshot")
             return
 
@@ -518,7 +518,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             filename = basesn + "." + _mime_to_ext(mime)
             logging.debug("Writing screenshot to %s", filename)
             open(filename, "wb").write(sndata)
-        except:
+        except Exception:
             logging.exception("Error saving screenshot")
 
     def _create_new_snapshot(self):

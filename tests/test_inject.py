@@ -74,7 +74,7 @@ def exit_cleanup():
     for f in cleanup or []:
         try:
             os.unlink(f)
-        except:
+        except Exception:
             pass
 atexit.register(exit_cleanup)
 

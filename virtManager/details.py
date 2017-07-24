@@ -696,7 +696,7 @@ class vmmDetails(vmmGObjectUI):
         if self.console.details_viewer_is_visible():
             try:
                 self.console.details_close_viewer()
-            except:
+            except Exception:
                 logging.error("Failure when disconnecting from desktop server")
 
         self.emit("details-closed")
@@ -827,7 +827,7 @@ class vmmDetails(vmmGObjectUI):
                 machine=self.vm.get_machtype())
 
             machines = capsinfo.machines[:]
-        except:
+        except Exception:
             logging.exception("Error determining machine list")
 
         show_machine = (arch not in ["i686", "x86_64"])
@@ -2979,7 +2979,7 @@ class vmmDetails(vmmGObjectUI):
         heads = vid.heads
         try:
             ramlabel = ram and "%d MiB" % (int(ram) / 1024) or "-"
-        except:
+        except Exception:
             ramlabel = "-"
 
         self.widget("video-ram").set_text(ramlabel)

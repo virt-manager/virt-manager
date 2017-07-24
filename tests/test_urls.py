@@ -229,7 +229,7 @@ def _testURL(fetcher, distname, arch, distroobj):
         xenstore = None
         if distroobj.hasxen:
             xenstore = _storeForDistro(fetcher, xenguest)
-    except:
+    except Exception:
         raise AssertionError("\nFailed to detect URLDistro class:\n"
             "name   = %s\n"
             "url    = %s\n\n%s" %

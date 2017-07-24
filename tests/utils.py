@@ -147,14 +147,14 @@ def test_create(testconn, xml, define_func="defineXML"):
         obj.create()
         obj.destroy()
         obj.undefine()
-    except:
+    except Exception:
         try:
             obj.destroy()
-        except:
+        except Exception:
             pass
         try:
             obj.undefine()
-        except:
+        except Exception:
             pass
 
 

@@ -276,7 +276,7 @@ class Network(XMLBuilder):
                 net.create()
             if autostart:
                 net.setAutostart(autostart)
-        except:
+        except Exception:
             net.undefine()
             raise
 

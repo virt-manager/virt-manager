@@ -73,7 +73,7 @@ def supports_pxe(guest):
             xmlobj = virtinst.Network(nic.conn, parsexml=netobj.XMLDesc(0))
             if xmlobj.can_pxe():
                 return True
-        except:
+        except Exception:
             logging.debug("Error checking if PXE supported", exc_info=True)
             return True
 
