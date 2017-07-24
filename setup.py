@@ -566,7 +566,7 @@ class TestInitrdInject(TestBaseCommand):
 
 class CheckPylint(distutils.core.Command):
     user_options = []
-    description = "Check code using pylint and pep8"
+    description = "Check code using pylint and pycodestyle"
 
     def initialize_options(self):
         pass
@@ -582,9 +582,9 @@ class CheckPylint(distutils.core.Command):
         output_format = sys.stdout.isatty() and "colorized" or "text"
         exclude = ["virtinst/progress.py"]
 
-        print("running pep8")
-        cmd = "pep8 "
-        cmd += "--config tests/pep8.cfg "
+        print("running pycodestyle")
+        cmd = "pycodestyle "
+        cmd += "--config tests/pycodestyle.cfg "
         cmd += "--exclude %s " % ",".join(exclude)
         cmd += " ".join(files)
         os.system(cmd)

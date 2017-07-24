@@ -7,7 +7,7 @@ python setup.py pylint    # Run a pylint script against the codebase
 ```
 
 Any patches shouldn't change the output of 'test' or 'pylint'. The
-'pylint' requires `pylint` and `python-pep8` to be installed.
+'pylint' requires `pylint` and `pycodestyle` to be installed.
 
 Our pylint script uses a blacklist rather than a whitelist approach,
 so it could throw some false positives or useless messages. If you think
