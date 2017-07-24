@@ -1653,6 +1653,17 @@ class vmmCreate(vmmGObjectUI):
         enable_src = self.widget("install-oscontainer-bootstrap").get_active()
         self.widget("install-oscontainer-source").set_sensitive(enable_src)
 
+        # Auto-generate a path if not specified
+        if enable_src and not self.widget("install-oscontainer-fs").get_text():
+            if os.geteuid() == 0:
+                fs_dir = ['/var/lib/libvirt/filesystems/']
+            else:
+                fs_dir = [os.environ['HOME'],
+                          '.local/share/libvirt/filesystems/']
+
+            fs = fs_dir + [self._generate_default_name(None, None)]
+            self.widget("install-oscontainer-fs").set_text(os.path.join(*fs))
+
 
     ########################
     # Misc helper routines #
