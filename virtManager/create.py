@@ -2512,6 +2512,9 @@ class vmmCreate(vmmGObjectUI):
         if bootstrap_args:
             # Start container bootstrap
             self._create_directory_tree(asyncjob, meter, bootstrap_args)
+            if asyncjob.has_error():
+                # Do not continue if virt-bootstrap failed
+                return
 
         # Build a list of pools we should refresh, if we are creating storage
         refresh_pools = []
@@ -2648,4 +2651,5 @@ class vmmCreate(vmmGObjectUI):
                 self.widget("install-oscontainer-bootstrap").set_active(False)
             self.idle_add(cb)
         except Exception as err:
-            asyncjob.set_error(err, log_stream.getvalue())
+            asyncjob.set_error("virt-bootstrap did not complete successfully",
+                               '%s\n%s' % (err, log_stream.getvalue()))
