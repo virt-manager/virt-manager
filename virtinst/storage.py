@@ -364,10 +364,11 @@ class StoragePool(_StorageObject):
     source_path = property(_get_source, _set_source)
 
     def _default_source_name(self):
-        if not self.supports_property("source_name"):
-            return None
+        srcname = None
 
-        if self.type == StoragePool.TYPE_NETFS:
+        if not self.supports_property("source_name"):
+            srcname = None
+        elif self.type == StoragePool.TYPE_NETFS:
             srcname = self.name
         elif self.type == StoragePool.TYPE_RBD:
             srcname = "rbd"
