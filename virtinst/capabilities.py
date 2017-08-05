@@ -393,7 +393,7 @@ class Capabilities(XMLBuilder):
                 osstr = _("any virtualization options")
 
             raise ValueError(_("Host does not support %(virttype)s %(arch)s") %
-                               {'virttype' : osstr, 'arch' : archstr})
+                               {'virttype': osstr, 'arch': archstr})
 
         domain = guest.bestDomainType(dtype=typ, machine=machine)
         if domain is None:

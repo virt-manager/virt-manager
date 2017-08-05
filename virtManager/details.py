@@ -519,8 +519,8 @@ class vmmDetails(vmmGObjectUI):
 
 
             "on_boot_list_changed": self.config_bootdev_selected,
-            "on_boot_moveup_clicked" : lambda *x: self.config_boot_move(x, True),
-            "on_boot_movedown_clicked" : lambda *x: self.config_boot_move(x, False),
+            "on_boot_moveup_clicked": lambda *x: self.config_boot_move(x, True),
+            "on_boot_movedown_clicked": lambda *x: self.config_boot_move(x, False),
             "on_boot_autostart_changed": lambda *x: self.enable_apply(x, x, EDIT_AUTOSTART),
             "on_boot_menu_changed": lambda *x: self.enable_apply(x, EDIT_BOOTMENU),
             "on_boot_kernel_enable_toggled": self.boot_kernel_toggled,
@@ -745,7 +745,7 @@ class vmmDetails(vmmGObjectUI):
         rmHW.show()
         rmHW.connect("activate", self.remove_xml_dev)
 
-        self._addhwmenuitems = {"add" : addHW, "remove" : rmHW}
+        self._addhwmenuitems = {"add": addHW, "remove": rmHW}
         for i in self._addhwmenuitems.values():
             self.addhwmenu.add(i)
 
@@ -2473,7 +2473,7 @@ class vmmDetails(vmmGObjectUI):
                     pos = summary.find("\n")
                     if pos > -1:
                         summary = _("%(summary)s ...") % {
-                            "summary" : summary[0:pos]
+                            "summary": summary[0:pos]
                         }
 
                 apps_model.append([name, version, summary])
@@ -2813,20 +2813,20 @@ class vmmDetails(vmmGObjectUI):
     def refresh_rng_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
         values = {
-            "rng-bind-host" : "bind_host",
-            "rng-bind-service" : "bind_service",
-            "rng-connect-host" : "connect_host",
-            "rng-connect-service" : "connect_service",
-            "rng-type" : "type",
-            "rng-device" : "device",
-            "rng-backend-type" : "backend_type",
-            "rng-rate-bytes" : "rate_bytes",
-            "rng-rate-period" : "rate_period"
+            "rng-bind-host": "bind_host",
+            "rng-bind-service": "bind_service",
+            "rng-connect-host": "connect_host",
+            "rng-connect-service": "connect_service",
+            "rng-type": "type",
+            "rng-device": "device",
+            "rng-backend-type": "backend_type",
+            "rng-rate-bytes": "rate_bytes",
+            "rng-rate-period": "rate_period"
         }
         rewriter = {
-            "rng-type" : lambda x:
+            "rng-type": lambda x:
             VirtualRNGDevice.get_pretty_type(x),
-            "rng-backend-type" : lambda x:
+            "rng-backend-type": lambda x:
             VirtualRNGDevice.get_pretty_backend_type(x),
         }
 

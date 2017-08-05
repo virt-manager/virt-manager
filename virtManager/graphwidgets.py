@@ -100,11 +100,11 @@ def draw_fill(cairo_ct, x, y, w, h, points, taper=False):
 
 class CellRendererSparkline(Gtk.CellRenderer):
     __gproperties__ = {
-        # 'name' : (GObject.TYPE_*,
+        # 'name': (GObject.TYPE_*,
         #           nickname, long desc, (type related args), mode)
         # Type related args can be min, max for int (etc.), or default value
         # for strings and bool
-        'data_array' : (GObject.TYPE_PYOBJECT, "Data Array",
+        'data_array': (GObject.TYPE_PYOBJECT, "Data Array",
                         "Array of data points for the graph",
                         GObject.PARAM_READWRITE),
         'reversed': (GObject.TYPE_BOOLEAN, "Reverse data",
@@ -269,11 +269,11 @@ class CellRendererSparkline(Gtk.CellRenderer):
 
 class Sparkline(Gtk.DrawingArea):
     __gproperties__ = {
-        # 'name' : (GObject.TYPE_*,
+        # 'name': (GObject.TYPE_*,
         #           nickname, long desc, (type related args), mode)
         # Type related args can be min, max for int (etc.), or default value
         # for strings and bool
-        'data_array' : (GObject.TYPE_PYOBJECT, "Data Array",
+        'data_array': (GObject.TYPE_PYOBJECT, "Data Array",
                         "Array of data points for the graph",
                         GObject.PARAM_READWRITE),
         'filled': (GObject.TYPE_BOOLEAN, 'Filled', 'the foo of the object',

@@ -130,7 +130,7 @@ def check_if_path_managed(conn, path):
 
     if not vol and not pool and verr:
         raise ValueError(_("Cannot use storage %(path)s: %(err)s") %
-            {'path' : path, 'err' : verr})
+            {'path': path, 'err': verr})
 
     return vol, pool
 
@@ -407,7 +407,7 @@ class CloneStorageCreator(_StorageCreator):
 
     def create(self, progresscb):
         text = (_("Cloning %(srcfile)s") %
-                {'srcfile' : os.path.basename(self._input_path)})
+                {'srcfile': os.path.basename(self._input_path)})
 
         size_bytes = (long(self.get_size()) *
                       long(1024) * long(1024) * long(1024))

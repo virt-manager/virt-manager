@@ -40,14 +40,14 @@ class VirtualController(VirtualDevice):
     @staticmethod
     def pretty_type(ctype):
         pretty_mappings = {
-            VirtualController.TYPE_IDE           : "IDE",
-            VirtualController.TYPE_FDC           : _("Floppy"),
-            VirtualController.TYPE_SCSI          : "SCSI",
-            VirtualController.TYPE_SATA          : "SATA",
-            VirtualController.TYPE_VIRTIOSERIAL  : "VirtIO Serial",
-            VirtualController.TYPE_USB           : "USB",
-            VirtualController.TYPE_PCI           : "PCI",
-            VirtualController.TYPE_CCID          : "CCID",
+            VirtualController.TYPE_IDE:             "IDE",
+            VirtualController.TYPE_FDC:              _("Floppy"),
+            VirtualController.TYPE_SCSI:            "SCSI",
+            VirtualController.TYPE_SATA:            "SATA",
+            VirtualController.TYPE_VIRTIOSERIAL:    "VirtIO Serial",
+            VirtualController.TYPE_USB:             "USB",
+            VirtualController.TYPE_PCI:             "PCI",
+            VirtualController.TYPE_CCID:            "CCID",
        }
 
         if ctype not in pretty_mappings:

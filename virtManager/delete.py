@@ -51,10 +51,10 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.conn = None
 
         self.builder.connect_signals({
-            "on_vmm_delete_delete_event" : self.close,
-            "on_delete_cancel_clicked" : self.close,
-            "on_delete_ok_clicked" : self.finish,
-            "on_delete_remove_storage_toggled" : self.toggle_remove_storage,
+            "on_vmm_delete_delete_event": self.close,
+            "on_delete_cancel_clicked": self.close,
+            "on_delete_ok_clicked": self.finish,
+            "on_delete_remove_storage_toggled": self.toggle_remove_storage,
         })
         self.bind_escape_key_close()
 

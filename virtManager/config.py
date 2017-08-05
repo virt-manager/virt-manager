@@ -122,31 +122,31 @@ class vmmConfig(object):
     # Metadata mapping for browse types. Prob shouldn't go here, but works
     # for now.
     browse_reason_data = {
-        CONFIG_DIR_IMAGE : {
-            "enable_create" : True,
-            "storage_title" : _("Locate or create storage volume"),
-            "local_title"   : _("Locate existing storage"),
-            "dialog_type"   : Gtk.FileChooserAction.SAVE,
-            "choose_button" : Gtk.STOCK_OPEN,
+        CONFIG_DIR_IMAGE: {
+            "enable_create":  True,
+            "storage_title":  _("Locate or create storage volume"),
+            "local_title":    _("Locate existing storage"),
+            "dialog_type":    Gtk.FileChooserAction.SAVE,
+            "choose_button":  Gtk.STOCK_OPEN,
         },
 
-        CONFIG_DIR_ISO_MEDIA : {
-            "enable_create" : False,
-            "storage_title" : _("Locate ISO media volume"),
-            "local_title"   : _("Locate ISO media"),
+        CONFIG_DIR_ISO_MEDIA: {
+            "enable_create":  False,
+            "storage_title":  _("Locate ISO media volume"),
+            "local_title":    _("Locate ISO media"),
         },
 
-        CONFIG_DIR_FLOPPY_MEDIA : {
-            "enable_create" : False,
-            "storage_title" : _("Locate floppy media volume"),
-            "local_title"   : _("Locate floppy media"),
+        CONFIG_DIR_FLOPPY_MEDIA: {
+            "enable_create":  False,
+            "storage_title":  _("Locate floppy media volume"),
+            "local_title":    _("Locate floppy media"),
         },
 
-        CONFIG_DIR_FS : {
-            "enable_create" : False,
-            "storage_title" : _("Locate directory volume"),
-            "local_title"   : _("Locate directory volume"),
-            "dialog_type"   : Gtk.FileChooserAction.SELECT_FOLDER,
+        CONFIG_DIR_FS: {
+            "enable_create":  False,
+            "storage_title":  _("Locate directory volume"),
+            "local_title":    _("Locate directory volume"),
+            "dialog_type":    Gtk.FileChooserAction.SELECT_FOLDER,
         },
     }
 
@@ -713,7 +713,7 @@ class vmmConfig(object):
             return
 
         secret = vmmSecret(self.get_secret_name(vm), password,
-                           {"uuid" : vm.get_uuid(),
+                           {"uuid": vm.get_uuid(),
                             "hvuri": vm.conn.get_uri()})
         keyid = self.keyring.add_secret(secret)
         if keyid is None:

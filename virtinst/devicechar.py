@@ -141,17 +141,17 @@ class _VirtualCharDevice(VirtualDevice):
         Whether the character dev type supports the passed property name
         """
         users = {
-            "source_path"   : [self.TYPE_FILE, self.TYPE_UNIX,
-                               self.TYPE_DEV,  self.TYPE_PIPE],
-            "source_mode"   : [self.TYPE_UNIX, self.TYPE_TCP],
-            "source_host"   : [self.TYPE_TCP, self.TYPE_UDP],
-            "source_port"   : [self.TYPE_TCP, self.TYPE_UDP],
-            "source_channel": [self.TYPE_SPICEPORT],
-            "source_master" : [self.TYPE_NMDM],
-            "source_slave"  : [self.TYPE_NMDM],
-            "protocol"      : [self.TYPE_TCP],
-            "bind_host"     : [self.TYPE_UDP],
-            "bind_port"     : [self.TYPE_UDP],
+            "source_path":      [self.TYPE_FILE, self.TYPE_UNIX,
+                                    self.TYPE_DEV,  self.TYPE_PIPE],
+            "source_mode":      [self.TYPE_UNIX, self.TYPE_TCP],
+            "source_host":      [self.TYPE_TCP, self.TYPE_UDP],
+            "source_port":      [self.TYPE_TCP, self.TYPE_UDP],
+            "source_channel":   [self.TYPE_SPICEPORT],
+            "source_master":    [self.TYPE_NMDM],
+            "source_slave":     [self.TYPE_NMDM],
+            "protocol":         [self.TYPE_TCP],
+            "bind_host":        [self.TYPE_UDP],
+            "bind_port":        [self.TYPE_UDP],
         }
 
         if ro:

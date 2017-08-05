@@ -46,18 +46,18 @@ class vmmCreatePool(vmmGObjectUI):
         self._pool = None
 
         self.builder.connect_signals({
-            "on_pool_forward_clicked" : self.forward,
-            "on_pool_back_clicked"    : self.back,
-            "on_pool_cancel_clicked"  : self.close,
-            "on_vmm_create_pool_delete_event" : self.close,
-            "on_pool_finish_clicked"  : self.forward,
-            "on_pool_pages_change_page" : self.page_changed,
+            "on_pool_forward_clicked": self.forward,
+            "on_pool_back_clicked": self.back,
+            "on_pool_cancel_clicked": self.close,
+            "on_vmm_create_pool_delete_event": self.close,
+            "on_pool_finish_clicked": self.forward,
+            "on_pool_pages_change_page": self.page_changed,
 
-            "on_pool_source_button_clicked" : self.browse_source_path,
-            "on_pool_target_button_clicked" : self.browse_target_path,
+            "on_pool_source_button_clicked": self.browse_source_path,
+            "on_pool_target_button_clicked": self.browse_target_path,
 
             "on_pool_name_activate": self.forward,
-            "on_pool_hostname_activate" : self.hostname_changed,
+            "on_pool_hostname_activate": self.hostname_changed,
             "on_pool_iqn_chk_toggled": self.iqn_toggled,
         })
         self.bind_escape_key_close()

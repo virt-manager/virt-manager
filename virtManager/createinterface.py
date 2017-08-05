@@ -77,12 +77,12 @@ class vmmCreateInterface(vmmGObjectUI):
         self.ip_manually_changed = False
 
         self.builder.connect_signals({
-            "on_vmm_create_interface_delete_event" : self.close,
+            "on_vmm_create_interface_delete_event": self.close,
 
             "on_cancel_clicked": self.close,
-            "on_back_clicked" : self.back,
-            "on_forward_clicked" : self.forward,
-            "on_finish_clicked" : self.finish,
+            "on_back_clicked": self.back,
+            "on_forward_clicked": self.forward,
+            "on_finish_clicked": self.finish,
             "on_pages_switch_page": self.page_changed,
 
             "on_bridge_config_button_clicked": self.show_bridge_config,
@@ -92,7 +92,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
             # Bridge config dialog
             "on_bridge_config_delete_event": self.bridge_config_finish,
-            "on_bridge_ok_clicked" : self.bridge_config_finish,
+            "on_bridge_ok_clicked": self.bridge_config_finish,
 
             # IP config dialog
             "on_ip_config_delete_event": self.ip_config_finish,
@@ -109,7 +109,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
             # Bond config dialog
             "on_bond_config_delete_event": self.bond_config_finish,
-            "on_bond_ok_clicked" : self.bond_config_finish,
+            "on_bond_ok_clicked": self.bond_config_finish,
 
             "on_bond_monitor_mode_changed": self.bond_monitor_mode_changed,
         })
@@ -382,9 +382,9 @@ class vmmCreateInterface(vmmGObjectUI):
 
         # Make sure interface type specific fields are shown
         type_dict = {
-            Interface.INTERFACE_TYPE_BRIDGE : "bridge",
-            Interface.INTERFACE_TYPE_BOND : "bond",
-            Interface.INTERFACE_TYPE_VLAN : "vlan",
+            Interface.INTERFACE_TYPE_BRIDGE: "bridge",
+            Interface.INTERFACE_TYPE_BOND: "bond",
+            Interface.INTERFACE_TYPE_VLAN: "vlan",
         }
 
         for key, value in type_dict.items():

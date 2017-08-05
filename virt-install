@@ -439,7 +439,7 @@ def validate_required_options(options, guest):
         (not cdrom_specified(guest, options.disk))):
         msg += "\n" + (
             _("An install method must be specified\n(%(methods)s)") %
-             {"methods" : install_methods})
+             {"methods": install_methods})
 
     if msg:
         fail(msg)
@@ -457,7 +457,7 @@ def check_option_collisions(options, guest):
     if sum([bool(l) for l in [options.pxe, options.location,
                       options.cdrom, options.import_install]]) > 1:
         fail(_("Only one install method can be used (%(methods)s)") %
-             {"methods" : install_methods})
+             {"methods": install_methods})
 
     if (guest.os.is_container() and
         install_specified(options.location, options.cdrom,

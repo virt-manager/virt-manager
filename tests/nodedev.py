@@ -224,7 +224,7 @@ class TestNodeDev(unittest.TestCase):
         devname = "pci_10df_fe00_0_scsi_host"
         vals = {"name": "pci_10df_fe00_0_scsi_host",
                 "device_type": NodeDevice.CAPABILITY_TYPE_SCSIBUS,
-                "host": "4", "fc_host": True, "vport_ops" : True,
+                "host": "4", "fc_host": True, "vport_ops": True,
                 "wwnn": "20000000c9848141", "wwpn": "10000000c9848141"}
         self._testCompare(devname, vals)
 

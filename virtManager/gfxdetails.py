@@ -207,7 +207,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         is_sdl = (gtype == "sdl")
         is_spice = (gtype == "spice")
         title = (_("%(graphicstype)s Server") %
-                  {"graphicstype" : gfx.pretty_type_simple(gtype)})
+                  {"graphicstype": gfx.pretty_type_simple(gtype)})
 
         if is_vnc or is_spice:
             use_passwd = gfx.passwd is not None

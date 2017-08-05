@@ -132,7 +132,7 @@ class vmmManager(vmmGObjectUI):
                     self.toggle_stats_visible_host_cpu,
             "on_menu_view_memory_usage_activate":
                     self.toggle_stats_visible_memory_usage,
-            "on_menu_view_disk_io_activate" :
+            "on_menu_view_disk_io_activate":
                     self.toggle_stats_visible_disk,
             "on_menu_view_network_traffic_activate":
                     self.toggle_stats_visible_network,

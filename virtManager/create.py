@@ -150,12 +150,12 @@ class vmmCreate(vmmGObjectUI):
         self._addstorage.connect("browse-clicked", _browse_file_cb)
 
         self.builder.connect_signals({
-            "on_vmm_newcreate_delete_event" : self._close_requested,
+            "on_vmm_newcreate_delete_event": self._close_requested,
 
             "on_create_cancel_clicked": self._close_requested,
-            "on_create_back_clicked" : self._back_clicked,
-            "on_create_forward_clicked" : self._forward_clicked,
-            "on_create_finish_clicked" : self._finish_clicked,
+            "on_create_back_clicked": self._back_clicked,
+            "on_create_forward_clicked": self._forward_clicked,
+            "on_create_finish_clicked": self._finish_clicked,
             "on_create_pages_switch_page": self._page_changed,
 
             "on_create_conn_changed": self._conn_changed,

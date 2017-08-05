@@ -673,8 +673,8 @@ distutils.core.setup(
         'rpm': my_rpm,
         'test': TestCommand,
         'test_ui': TestUI,
-        'test_urls' : TestURLFetch,
-        'test_initrd_inject' : TestInitrdInject,
+        'test_urls': TestURLFetch,
+        'test_initrd_inject': TestInitrdInject,
     },
 
     distclass=VMMDistribution,

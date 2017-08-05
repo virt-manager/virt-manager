@@ -404,8 +404,8 @@ class Cloner(object):
         if len(self.clone_disks) < len(self.original_disks):
             raise ValueError(_("More disks to clone than new paths specified. "
                                "(%(passed)d specified, %(need)d needed") %
-                               {"passed" : len(self.clone_disks),
-                                "need"   : len(self.original_disks)})
+                               {"passed": len(self.clone_disks),
+                                "need": len(self.original_disks)})
 
         logging.debug("Clone paths: %s", [d.path for d in self.clone_disks])
 

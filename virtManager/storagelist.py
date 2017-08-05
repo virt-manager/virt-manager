@@ -93,7 +93,7 @@ class vmmStorageList(vmmGObjectUI):
         self.top_box = self.widget("storage-grid")
 
         self.builder.connect_signals({
-            "on_pool_add_clicked" : self._pool_add,
+            "on_pool_add_clicked": self._pool_add,
             "on_pool_stop_clicked": self._pool_stop,
             "on_pool_start_clicked": self._pool_start,
             "on_pool_delete_clicked": self._pool_delete,
@@ -103,12 +103,12 @@ class vmmStorageList(vmmGObjectUI):
             "on_vol_delete_clicked": self._vol_delete,
             "on_vol_list_button_press_event": self._vol_popup_menu,
             "on_vol_list_changed": self._vol_selected,
-            "on_vol_add_clicked" : self._vol_add,
+            "on_vol_add_clicked": self._vol_add,
 
-            "on_browse_cancel_clicked" : self._cancel_clicked,
-            "on_browse_local_clicked" : self._browse_local_clicked,
-            "on_choose_volume_clicked" : self._choose_volume_clicked,
-            "on_vol_list_row_activated" : self._vol_list_row_activated,
+            "on_browse_cancel_clicked": self._cancel_clicked,
+            "on_browse_local_clicked": self._browse_local_clicked,
+            "on_choose_volume_clicked": self._choose_volume_clicked,
+            "on_vol_list_row_activated": self._vol_list_row_activated,
 
             "on_pool_name_changed": (lambda *x:
                 self._enable_pool_apply(x, EDIT_POOL_NAME)),

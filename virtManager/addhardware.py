@@ -93,14 +93,14 @@ class vmmAddHardware(vmmGObjectUI):
         self.addstorage.connect("browse-clicked", self._browse_storage_cb)
 
         self.builder.connect_signals({
-            "on_create_cancel_clicked" : self.close,
-            "on_vmm_create_delete_event" : self.close,
-            "on_create_finish_clicked" : self._finish,
+            "on_create_cancel_clicked": self.close,
+            "on_vmm_create_delete_event": self.close,
+            "on_create_finish_clicked": self._finish,
             "on_hw_list_changed": self._hw_selected,
 
             "on_storage_devtype_changed": self._change_storage_devtype,
 
-            "on_mac_address_clicked" : self._change_macaddr_use,
+            "on_mac_address_clicked": self._change_macaddr_use,
 
             "on_char_device_type_changed": self._change_char_device_type,
             "on_char_target_name_changed": self._change_char_target_name,
@@ -1159,7 +1159,7 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         tpm_widget_mappings = {
-            "device_path" : "tpm-device-path",
+            "device_path": "tpm-device-path",
         }
 
         self._dev = VirtualTPMDevice(self.conn.get_backend())
@@ -1202,12 +1202,12 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         char_widget_mappings = {
-            "source_path" : "char-path",
-            "source_channel" : "char-channel",
-            "source_mode" : "char-mode",
-            "source_host" : "char-host",
-            "bind_host" : "char-bind-host",
-            "protocol"  : "char-use-telnet",
+            "source_path": "char-path",
+            "source_channel": "char-channel",
+            "source_mode": "char-mode",
+            "source_host": "char-host",
+            "bind_host": "char-bind-host",
+            "protocol": "char-use-telnet",
         }
 
         char_class = self._get_char_class()
@@ -1653,11 +1653,11 @@ class vmmAddHardware(vmmGObjectUI):
             source_host = source_port = source_mode = None
 
         value_mappings = {
-            "source_path" : source_path,
-            "source_channel" : source_channel,
-            "source_mode" : source_mode,
-            "source_host" : source_host,
-            "source_port" : source_port,
+            "source_path": source_path,
+            "source_channel": source_channel,
+            "source_mode": source_mode,
+            "source_host": source_host,
+            "source_port": source_port,
             "bind_port": bind_port,
             "bind_host": bind_host,
             "protocol": protocol,
@@ -1743,7 +1743,7 @@ class vmmAddHardware(vmmGObjectUI):
         device_path = self.widget("tpm-device-path").get_text()
 
         value_mappings = {
-            "device_path" : device_path,
+            "device_path": device_path,
         }
 
         try:
@@ -1761,7 +1761,7 @@ class vmmAddHardware(vmmGObjectUI):
         iobase = self.widget("panic-iobase").get_text()
 
         value_mappings = {
-            "iobase" : iobase,
+            "iobase": iobase,
         }
 
         try:
@@ -1848,13 +1848,13 @@ class vmmAddHardware(vmmGObjectUI):
                                      _("The EGD service must be specified."))
 
         value_mappings = {
-            "backend_type" : backend_type,
-            "backend_source_mode" : backend_mode,
-            "connect_host" : connect_host,
-            "connect_service" : connect_service,
-            "bind_host" : bind_host,
-            "bind_service" : bind_service,
-            "device" : device,
+            "backend_type": backend_type,
+            "backend_source_mode": backend_mode,
+            "connect_host": connect_host,
+            "connect_service": connect_service,
+            "bind_host": bind_host,
+            "bind_service": bind_service,
+            "device": device,
         }
 
         try:

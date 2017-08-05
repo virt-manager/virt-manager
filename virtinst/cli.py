@@ -1063,7 +1063,7 @@ class VirtCLIParser(object):
     @remove_first: List of parameters to peel off the front of the
         option string, and store in the optdict. So:
         remove_first=["char_type"] for --serial pty,foo=bar
-        maps to {"char_type", "pty", "foo" : "bar"}
+        maps to {"char_type", "pty", "foo": "bar"}
     @stub_none: If the parsed option string is just 'none', make it a no-op.
         This helps us be backwards compatible: for example, --rng none is
         a no-op, but one day we decide to add an rng device by default to
@@ -2544,9 +2544,9 @@ class _ParserChar(VirtCLIParser):
         if not inst.supports_property(virtarg.attrname):
             raise ValueError(_("%(devtype)s type '%(chartype)s' does not "
                 "support '%(optname)s' option.") %
-                {"devtype" : inst.virtual_device_type,
+                {"devtype": inst.virtual_device_type,
                  "chartype": inst.type,
-                 "optname" : virtarg.cliname})
+                 "optname": virtarg.cliname})
     support_cb = support_check
 
     def set_host_cb(self, inst, val, virtarg):

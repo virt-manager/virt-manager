@@ -80,8 +80,8 @@ class vmmHost(vmmGObjectUI):
         self.init_interface_state()
 
         self.builder.connect_signals({
-            "on_menu_file_view_manager_activate" : self.view_manager,
-            "on_menu_file_quit_activate" : self.exit_app,
+            "on_menu_file_view_manager_activate": self.view_manager,
+            "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
             "on_host_page_switch": self.page_changed,
@@ -98,12 +98,12 @@ class vmmHost(vmmGObjectUI):
             "on_net_name_changed": (lambda *x:
                 self.enable_net_apply(x, EDIT_NET_NAME)),
 
-            "on_interface_add_clicked" : self.add_interface,
-            "on_interface_start_clicked" : self.start_interface,
-            "on_interface_stop_clicked" : self.stop_interface,
-            "on_interface_delete_clicked" : self.delete_interface,
+            "on_interface_add_clicked": self.add_interface,
+            "on_interface_start_clicked": self.start_interface,
+            "on_interface_stop_clicked": self.stop_interface,
+            "on_interface_delete_clicked": self.delete_interface,
             "on_interface_startmode_changed": self.interface_startmode_changed,
-            "on_interface_apply_clicked" : (lambda *x: self.interface_apply()),
+            "on_interface_apply_clicked": (lambda *x: self.interface_apply()),
             "on_interface_list_changed": self.interface_selected,
 
             "on_overview_name_changed": self._overview_name_changed,

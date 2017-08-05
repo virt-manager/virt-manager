@@ -72,8 +72,8 @@ class vmmKeyring(object):
         ret = None
         try:
             props = {
-                "org.freedesktop.Secret.Item.Label" : GLib.Variant("s", secret.get_name()),
-                "org.freedesktop.Secret.Item.Attributes" : GLib.Variant("a{ss}", secret.attributes),
+                "org.freedesktop.Secret.Item.Label": GLib.Variant("s", secret.get_name()),
+                "org.freedesktop.Secret.Item.Attributes": GLib.Variant("a{ss}", secret.attributes),
             }
             params = (self._session, [],
                       [ord(v) for v in secret.get_secret()],

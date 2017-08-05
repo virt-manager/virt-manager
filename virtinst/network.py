@@ -173,7 +173,7 @@ class Network(XMLBuilder):
             else:
                 if dev:
                     desc = (_("%(mode)s to %(device)s") %
-                            {"mode" : mode, "device" : dev})
+                            {"mode": mode, "device": dev})
                 else:
                     desc = _("%s network") % mode.capitalize()
         else:

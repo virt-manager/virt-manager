@@ -60,24 +60,24 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.conn = conn
 
         self.builder.connect_signals({
-            "on_create_pages_switch_page" : self.page_changed,
-            "on_create_cancel_clicked" : self.close,
-            "on_vmm_create_delete_event" : self.close,
-            "on_create_forward_clicked" : self.forward,
-            "on_create_back_clicked" : self.back,
-            "on_create_finish_clicked" : self.finish,
+            "on_create_pages_switch_page": self.page_changed,
+            "on_create_cancel_clicked": self.close,
+            "on_vmm_create_delete_event": self.close,
+            "on_create_forward_clicked": self.forward,
+            "on_create_back_clicked": self.back,
+            "on_create_finish_clicked": self.finish,
 
             "on_net_name_activate": self.forward,
-            "on_net_forward_toggled" : self.change_forward_type,
-            "on_net_forward_mode_toggled" : self.change_forward_mode_type,
+            "on_net_forward_toggled": self.change_forward_type,
+            "on_net_forward_mode_toggled": self.change_forward_mode_type,
 
-            "on_net-ipv4-enable_toggled" :  self.change_ipv4_enable,
+            "on_net-ipv4-enable_toggled":  self.change_ipv4_enable,
             "on_net-ipv4-network_changed":  self.change_ipv4_network,
             "on_net-dhcpv4-enable_toggled": self.change_dhcpv4_enable,
             "on_net-dhcpv4-start_changed":  self.change_dhcpv4_start,
             "on_net-dhcpv4-end_changed":    self.change_dhcpv4_end,
 
-            "on_net-ipv6-enable_toggled" :  self.change_ipv6_enable,
+            "on_net-ipv6-enable_toggled":  self.change_ipv6_enable,
             "on_net-ipv6-network_changed":  self.change_ipv6_network,
             "on_net-dhcpv6-enable_toggled": self.change_dhcpv6_enable,
             "on_net-dhcpv6-start_changed":  self.change_dhcpv6_start,

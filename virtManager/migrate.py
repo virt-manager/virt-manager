@@ -47,14 +47,14 @@ class vmmMigrateDialog(vmmGObjectUI):
         self._conns = {}
 
         self.builder.connect_signals({
-            "on_vmm_migrate_delete_event" : self._delete_event,
-            "on_migrate_cancel_clicked" : self._cancel_clicked,
-            "on_migrate_finish_clicked" : self._finish_clicked,
+            "on_vmm_migrate_delete_event": self._delete_event,
+            "on_migrate_cancel_clicked": self._cancel_clicked,
+            "on_migrate_finish_clicked": self._finish_clicked,
 
-            "on_migrate_dest_changed" : self._destconn_changed,
-            "on_migrate_set_address_toggled" : self._set_address_toggled,
-            "on_migrate_set_port_toggled" : self._set_port_toggled,
-            "on_migrate_mode_changed" : self._mode_changed,
+            "on_migrate_dest_changed": self._destconn_changed,
+            "on_migrate_set_address_toggled": self._set_address_toggled,
+            "on_migrate_set_port_toggled": self._set_port_toggled,
+            "on_migrate_mode_changed": self._mode_changed,
         })
         self.bind_escape_key_close()
 

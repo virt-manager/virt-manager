@@ -420,19 +420,19 @@ class vmmConnection(vmmGObject):
             return self._get_config_pretty_name()
 
         pretty_map = {
-            "esx"       : "ESX",
-            "gsx"       : "GSX",
-            "libxl"     : "libxl",
-            "lxc"       : "LXC",
-            "openvz"    : "OpenVZ",
-            "phyp"      : "phyp",
-            "qemu"      : "QEMU/KVM",
-            "test"      : "test",
-            "uml"       : "UML",
-            "vbox"      : "VBox",
-            "vmware"    : "VMWare",
-            "xen"       : "Xen",
-            "xenapi"    : "XenAPI",
+            "esx":        "ESX",
+            "gsx":        "GSX",
+            "libxl":      "libxl",
+            "lxc":        "LXC",
+            "openvz":     "OpenVZ",
+            "phyp":       "phyp",
+            "qemu":       "QEMU/KVM",
+            "test":       "test",
+            "uml":        "UML",
+            "vbox":       "VBox",
+            "vmware":     "VMWare",
+            "xen":        "Xen",
+            "xenapi":     "XenAPI",
         }
 
         hv = pretty_map.get(self.get_driver(), self.get_driver())
@@ -1404,12 +1404,12 @@ class vmmConnection(vmmGObject):
             "memoryPercent": pcentMem,
             "cpuTime": cpuTime,
             "cpuHostPercent": pcentHostCpu,
-            "diskRdRate" : rdRate,
-            "diskWrRate" : wrRate,
-            "netRxRate" : rxRate,
-            "netTxRate" : txRate,
-            "diskMaxRate" : diskMaxRate,
-            "netMaxRate" : netMaxRate,
+            "diskRdRate": rdRate,
+            "diskWrRate": wrRate,
+            "netRxRate": rxRate,
+            "netTxRate": txRate,
+            "diskMaxRate": diskMaxRate,
+            "netMaxRate": netMaxRate,
         }
 
         self._stats.insert(0, newStats)

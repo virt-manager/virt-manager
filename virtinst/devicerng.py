@@ -47,12 +47,12 @@ class VirtualRNGDevice(VirtualDevice):
 
     @staticmethod
     def get_pretty_backend_type(backend_type):
-        return {"udp" : "UDP",
+        return {"udp": "UDP",
                 "tcp": "TCP"}.get(backend_type) or backend_type
 
     @staticmethod
     def get_pretty_mode(mode):
-        return {"bind" : _("Bind"),
+        return {"bind": _("Bind"),
                 "connect": _("Connect")}.get(mode) or mode
 
     def supports_property(self, propname):
@@ -60,16 +60,16 @@ class VirtualRNGDevice(VirtualDevice):
         Whether the rng dev type supports the passed property name
         """
         users = {
-            "type"                   : [self.TYPE_EGD, self.TYPE_RANDOM],
-            "model"                  : [self.TYPE_EGD, self.TYPE_RANDOM],
-            "bind_host"              : [self.TYPE_EGD],
-            "bind_service"           : [self.TYPE_EGD],
-            "connect_host"           : [self.TYPE_EGD],
-            "connect_service"        : [self.TYPE_EGD],
-            "backend_type"           : [self.TYPE_EGD],
-            "device"                 : [self.TYPE_RANDOM],
-            "rate_bytes"             : [self.TYPE_EGD, self.TYPE_RANDOM],
-            "rate_period"            : [self.TYPE_EGD, self.TYPE_RANDOM],
+            "type":                  [self.TYPE_EGD, self.TYPE_RANDOM],
+            "model":                 [self.TYPE_EGD, self.TYPE_RANDOM],
+            "bind_host":             [self.TYPE_EGD],
+            "bind_service":          [self.TYPE_EGD],
+            "connect_host":          [self.TYPE_EGD],
+            "connect_service":       [self.TYPE_EGD],
+            "backend_type":          [self.TYPE_EGD],
+            "device":                [self.TYPE_RANDOM],
+            "rate_bytes":            [self.TYPE_EGD, self.TYPE_RANDOM],
+            "rate_period":           [self.TYPE_EGD, self.TYPE_RANDOM],
         }
         if users.get(propname):
             return self.type in users[propname]

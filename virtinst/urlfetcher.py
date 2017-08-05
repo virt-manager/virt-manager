@@ -593,7 +593,7 @@ class Distro(object):
         if not kernelpath or not initrdpath:
             raise RuntimeError(_("Couldn't find %(type)s kernel for "
                                  "%(distro)s tree.") %
-                                 {"distro": self.name, "type" : self.type})
+                                 {"distro": self.name, "type": self.type})
 
         return self._kernelFetchHelper(guest, kernelpath, initrdpath)
 

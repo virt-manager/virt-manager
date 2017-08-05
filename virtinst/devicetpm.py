@@ -48,7 +48,7 @@ class VirtualTPMDevice(VirtualDevice):
         Whether the TPM dev type supports the passed property name
         """
         users = {
-            "device_path"     : [self.TYPE_PASSTHROUGH],
+            "device_path": [self.TYPE_PASSTHROUGH],
         }
 
         if users.get(propname):

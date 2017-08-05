@@ -194,8 +194,8 @@ class vmmAsyncJob(vmmGObjectUI):
         self._bg_thread.daemon = True
 
         self.builder.connect_signals({
-            "on_async_job_delete_event" : self._on_window_delete,
-            "on_async_job_cancel_clicked" : self._on_cancel,
+            "on_async_job_delete_event": self._on_window_delete,
+            "on_async_job_cancel_clicked": self._on_cancel,
         })
 
         # UI state

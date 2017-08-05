@@ -119,7 +119,7 @@ class TestClone(unittest.TestCase):
     def testRemoteNoStorage(self):
         """Test remote clone where VM has no storage that needs cloning"""
         conn = utils.open_test_remote()
-        for base in ["nostorage", "noclone-storage"] :
+        for base in ["nostorage", "noclone-storage"]:
             self._clone_helper(base, disks=[], conn=conn)
 
     def testRemoteWithStorage(self):
@@ -128,7 +128,7 @@ class TestClone(unittest.TestCase):
         since libvirt has no storage clone api.
         """
         conn = utils.open_test_remote()
-        for base in ["general-cfg"] :
+        for base in ["general-cfg"]:
             try:
                 self._clone_helper(base,
                                    disks=["%s/1.img" % POOL1,

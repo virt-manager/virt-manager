@@ -46,16 +46,16 @@ class vmmCreateVolume(vmmGObjectUI):
         self.storage_browser = None
 
         self.builder.connect_signals({
-            "on_vmm_create_vol_delete_event" : self.close,
-            "on_vol_cancel_clicked"  : self.close,
-            "on_vol_create_clicked"  : self.finish,
+            "on_vmm_create_vol_delete_event": self.close,
+            "on_vol_cancel_clicked": self.close,
+            "on_vol_create_clicked": self.finish,
 
-            "on_vol_name_changed"    : self.vol_name_changed,
-            "on_vol_format_changed"  : self.vol_format_changed,
-            "on_backing_store_changed" : self._show_alloc,
-            "on_vol_allocation_value_changed" : self.vol_allocation_changed,
-            "on_vol_capacity_value_changed"   : self.vol_capacity_changed,
-            "on_backing_browse_clicked" : self.browse_backing,
+            "on_vol_name_changed": self.vol_name_changed,
+            "on_vol_format_changed": self.vol_format_changed,
+            "on_backing_store_changed": self._show_alloc,
+            "on_vol_allocation_value_changed": self.vol_allocation_changed,
+            "on_vol_capacity_value_changed": self.vol_capacity_changed,
+            "on_backing_browse_clicked": self.browse_backing,
         })
         self.bind_escape_key_close()
 

@@ -154,22 +154,22 @@ class vmmCloneVM(vmmGObjectUI):
         self.change_storage.set_transient_for(self.topwin)
 
         self.builder.connect_signals({
-            "on_clone_delete_event" : self.close,
-            "on_clone_cancel_clicked" : self.close,
-            "on_clone_ok_clicked" : self.finish,
+            "on_clone_delete_event": self.close,
+            "on_clone_cancel_clicked": self.close,
+            "on_clone_ok_clicked": self.finish,
 
             # Change mac dialog
             "on_vmm_change_mac_delete_event": self.change_mac_close,
-            "on_change_mac_cancel_clicked" : self.change_mac_close,
-            "on_change_mac_ok_clicked" : self.change_mac_finish,
+            "on_change_mac_cancel_clicked": self.change_mac_close,
+            "on_change_mac_ok_clicked": self.change_mac_finish,
 
             # Change storage dialog
             "on_vmm_change_storage_delete_event": self.change_storage_close,
-            "on_change_storage_cancel_clicked" : self.change_storage_close,
-            "on_change_storage_ok_clicked" : self.change_storage_finish,
-            "on_change_storage_doclone_toggled" : self.change_storage_doclone_toggled,
+            "on_change_storage_cancel_clicked": self.change_storage_close,
+            "on_change_storage_ok_clicked": self.change_storage_finish,
+            "on_change_storage_doclone_toggled": self.change_storage_doclone_toggled,
 
-            "on_change_storage_browse_clicked" : self.change_storage_browse,
+            "on_change_storage_browse_clicked": self.change_storage_browse,
         })
         self.bind_escape_key_close()
 

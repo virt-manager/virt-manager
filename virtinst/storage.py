@@ -455,7 +455,7 @@ class StoragePool(_StorageObject):
                      self.TYPE_RBD, self.TYPE_SHEEPDOG],
             "format": [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_DISK],
             "iqn": [self.TYPE_ISCSI],
-            "target_path" : [self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,
+            "target_path": [self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,
                              self.TYPE_LOGICAL, self.TYPE_DISK, self.TYPE_ISCSI,
                              self.TYPE_SCSI, self.TYPE_MPATH]
         }
