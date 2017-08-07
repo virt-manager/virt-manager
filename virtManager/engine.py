@@ -233,9 +233,10 @@ class vmmEngine(vmmGObject):
         except Exception:
             logging.exception("Error talking to PackageKit")
 
+        tryuri = None
         if ret:
             tryuri = "qemu:///system"
-        else:
+        elif not self.config.test_first_run:
             tryuri = vmmConnect.default_uri()
 
         if tryuri is None:
