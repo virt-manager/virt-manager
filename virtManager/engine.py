@@ -643,17 +643,11 @@ class vmmEngine(vmmGObject):
             elif (conn.get_uri_transport() == "ssh" and
                   re.search(r"ssh-askpass", tb)):
 
-                if self.config.askpass_package:
-                    ret = packageutils.check_packagekit(
-                                            None,
-                                            self.err,
-                                            self.config.askpass_package)
-                    if ret:
-                        conn.open()
-                        return
-
-                hint += _("You need to install openssh-askpass or "
-                          "similar\nto connect to this host.")
+                askpass = (self.config.askpass_package and
+                           self.config.askpass_package[0] or
+                           "openssh-askpass")
+                hint += _("You need to install %s or "
+                          "similar\nto connect to this host.") % askpass
                 show_errmsg = False
             else:
                 hint += _("Verify that the 'libvirtd' daemon is running\n"
