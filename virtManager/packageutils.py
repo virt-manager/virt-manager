@@ -38,6 +38,8 @@ def check_packagekit(parent, errbox, packages):
     if not packages:
         logging.debug("No PackageKit packages to search for.")
         return
+    if type(packages) is not list:
+        packages = [packages]
 
     logging.debug("PackageKit check/install for packages=%s", packages)
     try:
