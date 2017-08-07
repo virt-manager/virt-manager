@@ -178,6 +178,14 @@ class vmmConfig(object):
         self.default_hvs = CLIConfig.default_hvs
         self.cli_usbredir = None
 
+        if self.test_first_run:
+            # Populate some package defaults to simplify git testing
+            if not self.libvirt_packages:
+                self.libvirt_packages = ["libvirt-daemon",
+                                         "libvirt-daemon-config-network"]
+            if not self.hv_packages:
+                self.hv_packages = ["qemu-kvm"]
+
         self.default_storage_format_from_config = "qcow2"
         self.cpu_default_from_config = CPU.SPECIAL_MODE_HOST_MODEL_ONLY
         self.default_console_resizeguest = 0
