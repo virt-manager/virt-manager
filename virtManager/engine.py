@@ -637,7 +637,7 @@ class vmmEngine(vmmGObject):
             logging.debug("connect_error: conn transport=%s",
                 conn.get_uri_transport())
             if re.search(r"nc: .* -- 'U'", tb):
-                hint += _("The remote host requires a version of netcat/nc\n"
+                hint += _("The remote host requires a version of netcat/nc "
                           "which supports the -U option.")
                 show_errmsg = False
             elif (conn.get_uri_transport() == "ssh" and
@@ -647,10 +647,10 @@ class vmmEngine(vmmGObject):
                            self.config.askpass_package[0] or
                            "openssh-askpass")
                 hint += _("You need to install %s or "
-                          "similar\nto connect to this host.") % askpass
+                          "similar to connect to this host.") % askpass
                 show_errmsg = False
             else:
-                hint += _("Verify that the 'libvirtd' daemon is running\n"
+                hint += _("Verify that the 'libvirtd' daemon is running "
                           "on the remote host.")
 
         elif conn.is_xen():
@@ -660,9 +660,9 @@ class vmmEngine(vmmGObject):
 
         else:
             if warnconsole:
-                hint += _("Could not detect a local session: if you are \n"
-                          "running virt-manager over ssh -X or VNC, you \n"
-                          "may not be able to connect to libvirt as a \n"
+                hint += _("Could not detect a local session: if you are "
+                          "running virt-manager over ssh -X or VNC, you "
+                          "may not be able to connect to libvirt as a "
                           "regular user. Try running as root.")
                 show_errmsg = False
             elif re.search(r"libvirt-sock", tb):
