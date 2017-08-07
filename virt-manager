@@ -136,26 +136,26 @@ def parse_commandline():
     parser.set_defaults(domain=None)
 
     # Trace every libvirt API call to debug output
-    parser.add_argument("--trace-libvirt", dest="tracelibvirt",
+    parser.add_argument("--trace-libvirt",
         help=argparse.SUPPRESS, action="store_true")
 
     # Don't load any connections on startup to test first run
     # PackageKit integration
-    parser.add_argument("--test-first-run", dest="testfirstrun",
+    parser.add_argument("--test-first-run",
         help=argparse.SUPPRESS, action="store_true")
     # Force use of old style libvirt polling APIs
-    parser.add_argument("--test-old-poll", dest="testoldpoll",
+    parser.add_argument("--test-old-poll",
         help=argparse.SUPPRESS, action="store_true")
     # Force disable use of libvirt object events
-    parser.add_argument("--test-no-events", dest="testnoevents",
+    parser.add_argument("--test-no-events",
         help=argparse.SUPPRESS, action="store_true")
 
     parser.add_argument("-c", "--connect", dest="uri",
         help="Connect to hypervisor at URI", metavar="URI")
-    parser.add_argument("--debug", action="store_true", dest="debug",
+    parser.add_argument("--debug", action="store_true",
         help="Print debug output to stdout (implies --no-fork)",
         default=False)
-    parser.add_argument("--no-fork", action="store_true", dest="nofork",
+    parser.add_argument("--no-fork", action="store_true",
         help="Don't fork into background on startup")
     parser.add_argument("--no-conn-autostart", action="store_true",
         dest="skip_autostart", help="Do not autostart connections")
@@ -185,7 +185,7 @@ def main():
     logging.debug("virt-manager version: %s", CLIConfig.version)
     logging.debug("virtManager import: %s", str(virtManager))
 
-    if options.tracelibvirt:
+    if options.trace_libvirt:
         logging.debug("Libvirt tracing requested")
         import virtManager.module_trace
         import libvirt
@@ -193,7 +193,7 @@ def main():
 
     # Now we've got basic environment up & running we can fork
     do_drop_stdio = False
-    if not options.nofork and not options.debug:
+    if not options.no_fork and not options.debug:
         drop_tty()
         do_drop_stdio = True
 
@@ -220,7 +220,7 @@ def main():
                   Gtk.get_micro_version())
 
     config = virtManager.config.vmmConfig(
-        "virt-manager", CLIConfig, options.testfirstrun)
+        "virt-manager", CLIConfig, options.test_first_run)
 
     if not util.local_libvirt_version() >= 6000:
         # We need this version for threaded virConnect access
@@ -241,10 +241,10 @@ def main():
     Gtk.Window.set_default_icon_name("virt-manager")
 
     import virtManager.connection
-    virtManager.connection.FORCE_DISABLE_EVENTS = bool(options.testnoevents)
+    virtManager.connection.FORCE_DISABLE_EVENTS = bool(options.test_no_events)
 
     import virtinst.pollhelpers
-    virtinst.pollhelpers.FORCE_OLD_POLL = bool(options.testoldpoll)
+    virtinst.pollhelpers.FORCE_OLD_POLL = bool(options.test_old_poll)
 
     show_window = None
     domain = None
