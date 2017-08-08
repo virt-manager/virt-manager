@@ -9,6 +9,13 @@ Qemu/KVM and Xen virtual machines, as well as LXC containers. The UI is
 primarily tested with KVM, but is intended to be reasonably portable to any
 virtualization backend libvirt supports.
 
+Several command line tools are also provided:
+
+ - `virt-install`: Create new libvirt virtual machines
+ - `virt-clone`: Duplicate existing libvirt virtual machines
+ - `virt-xml`: Edit existing libvirt virtual machines/manipulate libvirt XML
+ - `virt-convert`: Convert VMX or OVF configs to libvirt virtual machines
+
 For dependency info and installation instructions, see the
 [INSTALL.md](INSTALL.md) file.
 
