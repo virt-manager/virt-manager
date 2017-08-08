@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-08 18:46-0500\n"
+"POT-Creation-Date: 2017-08-08 18:06-0400\n"
 "PO-Revision-Date: 2017-02-05 04:02-0500\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Telugu (http://www.transifex.com/projects/p/virt-manager/"
@@ -25,11 +25,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Zanata 3.9.6\n"
 
-#: ../virt-manager:56
+#: ../virt-manager:58
 msgid "Error starting Virtual Machine Manager"
 msgstr "వర్చ్యువల్ మిషన్ నిర్వాహికను ప్రారంభించుటలో దోషము"
 
-#: ../virt-manager:226
+#: ../virt-manager:228
 msgid "virt-manager requires libvirt 0.6.0 or later."
 msgstr "అవసరమైనవి పొందింది."
 
@@ -82,24 +82,24 @@ msgstr "--hvm, --paravirt, లేదా --container వొకటి కన్న
 msgid "default"
 msgstr "అప్రమేయం"
 
-#: ../virt-install:404
+#: ../virt-install:405
 #, c-format
 msgid "Error validating install location: %s"
 msgstr "సంస్థాపన స్థానం నిర్థారించుటలో దోషం: %s"
 
-#: ../virt-install:424
+#: ../virt-install:425
 msgid "--name is required"
 msgstr "--name అవసరమైంది"
 
-#: ../virt-install:427
+#: ../virt-install:428
 msgid "--memory amount in MiB is required"
 msgstr "--పునఃప్రారంభము అవసరం"
 
-#: ../virt-install:432
+#: ../virt-install:433
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
-#: ../virt-install:440
+#: ../virt-install:441
 msgid ""
 "An install method must be specified\n"
 "(%(methods)s)"
@@ -107,44 +107,44 @@ msgstr ""
 "ఒక సంస్థాపన పద్దతి తప్పక తెలుపాలి\n"
 "(%(methods)s)"
 
-#: ../virt-install:447
+#: ../virt-install:448
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr "%S కి మీ ప్రాంతాన్ని తెలియజేయాలా"
 
-#: ../virt-install:453
+#: ../virt-install:454
 msgid "--noreboot and --transient can not be specified together"
 msgstr ""
 
-#: ../virt-install:458
+#: ../virt-install:459
 msgid "Only one install method can be used (%(methods)s)"
 msgstr "ఒక సంస్థాపనా పద్దతి మాత్రమే వుపయోగించగలం (%(methods)s)"
 
-#: ../virt-install:464
+#: ../virt-install:465
 #, c-format
 msgid "Install methods (%s) cannot be specified for container guests"
 msgstr "కంటైనర్ అతిథుల కొరకు సంస్థాపనా పద్దతులు (%s) తెలుపలేము"
 
-#: ../virt-install:469
+#: ../virt-install:470
 msgid "Network PXE boot is not supported for paravirtualized guests"
 msgstr "నెట్వర్కు PXE బూట్ అనునది పారావర్చ్యులైజ్డ్ అతిథుల కొరకు తోడ్పాటునీయదు"
 
-#: ../virt-install:472
+#: ../virt-install:473
 msgid "Paravirtualized guests cannot install off cdrom media."
 msgstr "పారావర్చ్యులైజ్డు అతిథులు cdrom మాధ్యమం నుండి సంస్థాపించలేము."
 
-#: ../virt-install:477
+#: ../virt-install:478
 msgid "Libvirt version does not support remote --location installs"
 msgstr "Libvirt వర్ట్ వర్షన్ రిమోట్ --location సంస్థాపనలకు తోడ్పాటునీయదు"
 
-#: ../virt-install:483
+#: ../virt-install:484
 msgid "--extra-args only work if specified with --location."
 msgstr "--extra-args అనునవి --location తో తెలిపితే మాత్రమే పనిచేయును."
 
-#: ../virt-install:486
+#: ../virt-install:487
 msgid "--initrd-inject only works if specified with --location."
 msgstr "--initrd-inject అనునవి --location తో తెలిపితే మాత్రమే పనిచేయును."
 
-#: ../virt-install:497
+#: ../virt-install:498
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -152,37 +152,45 @@ msgstr ""
 "CDROM మాద్యమం తరువాతి కన్సోల్‌కు అప్రమేయంగా ముద్రించదు, కనుక మీరు టెక్స్ట్ సంస్థాపన అవుట్పుట్ "
 "చూడరు. మీరు --location ఉపోయగించాలని అనుకోవచ్చు."
 
-#: ../virt-install:510
+#: ../virt-install:511
 msgid ""
 "No --console device added, you likely will not see text install output from "
 "the guest."
 msgstr "ఏ --console పరికరం జతచేయలేదు, మీరు అతిథినుండి టెక్స్ట్ సంస్థాపన అవుట్పుట్ చూడరు."
 
-#: ../virt-install:532
+#: ../virt-install:533
 msgid ""
 "Did not find '%(console_string)s' in --extra-args, which is likely required "
 "to see text install output from the guest."
 msgstr ""
 
-#: ../virt-install:539
+#: ../virt-install:540
 msgid "The guest's network configuration does not support PXE"
 msgstr "అతిథి యొక్క నెట్వర్కు ఆకృతీకరణ PXE ను తోడ్పాటునీయదు"
 
-#: ../virt-install:544
+#: ../virt-install:545
 msgid ""
 "No operating system detected, VM performance may suffer. Specify an OS with "
 "--os-variant for optimal results."
 msgstr ""
 
-#: ../virt-install:564
+#: ../virt-install:565
 msgid "A disk device must be specified with --import."
 msgstr "--import తో వొక డిస్కు పరికరం తప్పక తెలుపాలి."
 
-#: ../virt-install:679
+#: ../virt-install:640
+msgid "SMM feature is valid only for x86 architecture."
+msgstr ""
+
+#: ../virt-install:645
+msgid "SMM feature is valid only for q35 machine type"
+msgstr ""
+
+#: ../virt-install:690
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
-#: ../virt-install:689
+#: ../virt-install:700
 msgid ""
 "\n"
 "Starting install..."
@@ -190,30 +198,30 @@ msgstr ""
 "\n"
 "సంస్థాపన ప్రారంభిస్తోంది..."
 
-#: ../virt-install:701
+#: ../virt-install:712
 msgid "Domain creation completed."
 msgstr ""
 
-#: ../virt-install:705
+#: ../virt-install:716
 #, c-format
 msgid ""
 "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
-#: ../virt-install:708
+#: ../virt-install:719
 msgid "Restarting guest."
 msgstr ""
 
-#: ../virt-install:714
+#: ../virt-install:725
 msgid "Domain install interrupted."
 msgstr "డొమైన్ సంస్థాపన ఆటంకపరచబడెను."
 
-#: ../virt-install:736
+#: ../virt-install:747
 msgid "Domain has crashed."
 msgstr "డొమైన్ క్రాషైంది."
 
-#: ../virt-install:767
+#: ../virt-install:778
 msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
@@ -221,85 +229,85 @@ msgstr ""
 "డొమైన్ సంస్థాపన యింకా పురోగతి నందు వుంది. సంస్థాపనా కార్యక్రమం పూర్తచేయుటకు \n"
 "మీరు కన్సోల్‌కు తిరిగిఅనుసంధానం కాగలరు."
 
-#: ../virt-install:773
+#: ../virt-install:784
 #, c-format
 msgid " %d minutes"
 msgstr ""
 
-#: ../virt-install:775
+#: ../virt-install:786
 msgid ""
 "Domain installation still in progress. Waiting%(time_string)s for "
 "installation to complete."
 msgstr ""
 
-#: ../virt-install:782 ../virt-install:795
+#: ../virt-install:793 ../virt-install:806
 msgid "Domain has shutdown. Continuing."
 msgstr "డొమైన్ మూసివేయబడెను. కొనసాగిస్తోంది."
 
-#: ../virt-install:788
+#: ../virt-install:799
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "తెలిపిన సమయం పరిమితిని సంస్థాపన దాటినది. అనువర్తనం నిష్క్రమిస్తోంది."
 
-#: ../virt-install:810
+#: ../virt-install:821
 msgid "Dry run completed successfully"
 msgstr "డ్రై రన్ విజయవంతంగా పూర్తైను"
 
-#: ../virt-install:814
+#: ../virt-install:825
 #, c-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr ""
 
-#: ../virt-install:821
+#: ../virt-install:832
 msgid "Requested installation does not have XML step 2"
 msgstr "అభ్యర్ధించిన సంస్థాపన XML అంచె 2 కలిగిలేదు"
 
-#: ../virt-install:838
+#: ../virt-install:849
 msgid "Create a new virtual machine from specified install media."
 msgstr "తెలిపిన సంస్థాపనా మాద్యమంనుండి కొత్త వర్చ్యువల్ మిషన్ సృష్టించు."
 
-#: ../virt-install:842 ../virt-clone:109
+#: ../virt-install:853 ../virt-clone:109
 msgid "General Options"
 msgstr "సర్వసామన్యమైన ఐచ్ఛికాలు"
 
-#: ../virt-install:844
+#: ../virt-install:855
 msgid "Name of the guest instance"
 msgstr "గెస్టు యిన్‌స్టాన్స్ యొక్క పేరు"
 
-#: ../virt-install:851
+#: ../virt-install:862
 msgid "Installation Method Options"
 msgstr "సంస్థాపనా పద్దతి ఐచ్చికాలు"
 
-#: ../virt-install:853
+#: ../virt-install:864
 msgid "CD-ROM installation media"
 msgstr "CD-ROM సంస్థాపనా మాధ్యమం"
 
-#: ../virt-install:855
+#: ../virt-install:866
 msgid ""
 "Installation source (eg, nfs:host:/path, http://host/path, ftp://host/path)"
 msgstr "సంస్థాపనా మూలం (ఉదా, nfs:host:/path, http://host/path, ftp://host/path)"
 
-#: ../virt-install:858
+#: ../virt-install:869
 msgid "Boot from the network using the PXE protocol"
 msgstr "PXE ప్రొటోకాల్ వుపయోగించి నెట్వర్కు నుండి బూట్ చేయి"
 
-#: ../virt-install:860
+#: ../virt-install:871
 msgid "Build guest around an existing disk image"
 msgstr "ఇప్పటికే వున్న డిస్కు ప్రతిరూపం నందు అతిథి నిర్మించు"
 
-#: ../virt-install:862
+#: ../virt-install:873
 msgid "Treat the CD-ROM media as a Live CD"
 msgstr "CD-ROM మాధ్యమంను లైవ్ CD గా పరిగణించు"
 
-#: ../virt-install:864
+#: ../virt-install:875
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr "--location నుండి బూటైన సంస్థాపనా కెర్నల్‌కు పాస్ చేయుటకు అదనపు ఆర్గుమెంట్లు"
 
-#: ../virt-install:867
+#: ../virt-install:878
 msgid "Add given file to root of initrd from --location"
 msgstr "--location నుండి initrd root కు యిచ్చిన ఫైలు జతచేయి"
 
-#: ../virt-install:874
+#: ../virt-install:885
 msgid ""
 "The OS variant being installed guests, e.g. 'fedora18', 'rhel6', 'winxp', "
 "etc."
@@ -307,59 +315,59 @@ msgstr ""
 "The OS variant being installed guests, e.g. 'fedora18', 'rhel6', 'winxp', "
 "etc."
 
-#: ../virt-install:881
+#: ../virt-install:892
 msgid "Device Options"
 msgstr "పరికర ఐచ్ఛికాలు"
 
-#: ../virt-install:911
+#: ../virt-install:922
 msgid "Guest Configuration Options"
 msgstr ""
 
-#: ../virt-install:915
+#: ../virt-install:926
 msgid "Virtualization Platform Options"
 msgstr "వర్చ్యులైజేషన్ ప్లాట్‌ఫాం ఐచ్చికాలు"
 
-#: ../virt-install:917
+#: ../virt-install:928
 msgid "This guest should be a fully virtualized guest"
 msgstr "ఈ అతిథి పూర్తి వర్చ్యులైజ్డు అతిథి అయివుండాలి"
 
-#: ../virt-install:919
+#: ../virt-install:930
 msgid "This guest should be a paravirtualized guest"
 msgstr "ఈ అతిథి పారావర్చ్యులైజ్డ్ అతిథి అయివుండాలి"
 
-#: ../virt-install:921
+#: ../virt-install:932
 msgid "This guest should be a container guest"
 msgstr "ఈ అతిథి కంటైనర్ అతిథి కావాలి"
 
-#: ../virt-install:924
+#: ../virt-install:935
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "ఉపయోగించుటకు హైపర్విజర్ పేరు (kvm, qemu, xen, ...)"
 
-#: ../virt-install:928
+#: ../virt-install:939
 msgid "The CPU architecture to simulate"
 msgstr "సిమ్యులేట్ చేయుటకు CPU ఆకృతి"
 
-#: ../virt-install:930
+#: ../virt-install:941
 msgid "The machine type to emulate"
 msgstr "ఎమ్యులేట్‌కు యంత్రం రకం"
 
-#: ../virt-install:937 ../virt-clone:147 ../virt-xml:393
+#: ../virt-install:948 ../virt-clone:147 ../virt-xml:393
 msgid "Miscellaneous Options"
 msgstr "వివిధములైన ఐచ్ఛికాలు"
 
-#: ../virt-install:940
+#: ../virt-install:951
 msgid "Have domain autostart on host boot up."
 msgstr "అతిధేయ బూటప్ పై డొమైన్ స్వయంచాలకప్రారంభం కలిగివుండు."
 
-#: ../virt-install:943
+#: ../virt-install:954
 msgid "Create a transient domain."
 msgstr ""
 
-#: ../virt-install:945
+#: ../virt-install:956
 msgid "Minutes to wait for install to complete."
 msgstr "సంస్థాపన పూర్తగుటకు వేచివుండవలసిన నిమిషాలు."
 
-#: ../virt-install:1002 ../virt-clone:225
+#: ../virt-install:1013 ../virt-clone:225
 msgid "Installation aborted at user request"
 msgstr "వాడుకరి అభ్యర్ధనపై సంస్థాపన విరమించబడెను"
 
@@ -441,9 +449,8 @@ msgid ""
 msgstr "నిల్వ క్లోన్ చేయవద్దు, --file ద్వారా తెలిపిన కొత్త డిస్కు ప్రతిరూపాలు మారకుండా నిలిపివుంచబడతాయి"
 
 #: ../virt-clone:140
-#, fuzzy
 msgid "New file to use as storage for nvram VARS"
-msgstr "కొత్త అతిథి కొరకు డిస్కు ప్రతిరూపంగా వుపయోగించుటకు కొత్త ఫైలు"
+msgstr ""
 
 #: ../virt-clone:142
 msgid "Networking Configuration"
@@ -512,7 +519,7 @@ msgstr ""
 msgid "Creating guest '%s'."
 msgstr "అతిధేయ '%s' సృష్టిస్తోంది"
 
-#: ../virt-convert:139 ../virt-xml:483
+#: ../virt-convert:139 ../virt-xml:484
 msgid "Aborted at user request"
 msgstr "వాడుకరి అభ్యర్ధన వద్ద విరమించబడెను"
 
@@ -708,11 +715,11 @@ msgstr "డొమైన్ తప్పక తెలుపాలి"
 msgid "Don't know how to --update for --%s"
 msgstr "--update ను --%s కొరకు ఎలా చేయాలో తెలియదు"
 
-#: ../virt-xml:469
+#: ../virt-xml:470
 msgid "Changes will take effect after the next domain shutdown."
 msgstr "మార్పులు తదుపరి ఆట కోసం ప్రభావం చూపుతాయి"
 
-#: ../virtManager/addhardware.py:180 ../virtManager/details.py:795
+#: ../virtManager/addhardware.py:180 ../virtManager/details.py:793
 msgid "Hardware"
 msgstr ""
 
@@ -733,33 +740,33 @@ msgid "LUN Passthrough"
 msgstr ""
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:551
-#: ../virtManager/addhardware.py:663 ../virtManager/addhardware.py:679
-#: ../virtManager/addhardware.py:743 ../virtManager/details.py:2617
-#: ../virtManager/gfxdetails.py:98 ../virtManager/preferences.py:165
+#: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:555
+#: ../virtManager/addhardware.py:667 ../virtManager/addhardware.py:683
+#: ../virtManager/addhardware.py:747 ../virtManager/details.py:2610
+#: ../virtManager/gfxdetails.py:99 ../virtManager/preferences.py:165
 msgid "Hypervisor default"
 msgstr "హెపర్విజర్ అప్రమేయము"
 
 #: ../virtManager/addhardware.py:340 ../virtManager/addstorage.py:196
-#: ../virtManager/create.py:488
+#: ../virtManager/create.py:523
 msgid "Connection does not support storage management."
 msgstr "అనుసంధానము నిల్వ నిర్వహణను మద్దతీయదు."
 
-#: ../virtManager/addhardware.py:350 ../virtManager/addhardware.py:1084
-#: ../ui/create.ui.h:55
+#: ../virtManager/addhardware.py:350 ../virtManager/addhardware.py:1090
+#: ../ui/create.ui.h:69
 msgid "Storage"
 msgstr "నిల్వ"
 
-#: ../virtManager/addhardware.py:352 ../virtManager/addhardware.py:1086
+#: ../virtManager/addhardware.py:352 ../virtManager/addhardware.py:1092
 msgid "Controller"
 msgstr "నియంత్రిక"
 
-#: ../virtManager/addhardware.py:353 ../virtManager/addhardware.py:1088
-#: ../virtinst/network.py:195
+#: ../virtManager/addhardware.py:353 ../virtManager/addhardware.py:1094
+#: ../virtinst/network.py:207
 msgid "Network"
 msgstr "నెట్వర్కు"
 
-#: ../virtManager/addhardware.py:354 ../virtManager/addhardware.py:1090
+#: ../virtManager/addhardware.py:354 ../virtManager/addhardware.py:1096
 #: ../virtManager/details.py:204
 msgid "Input"
 msgstr "ఇన్‌పుట్"
@@ -770,11 +777,11 @@ msgstr "ఇన్‌పుట్"
 msgid "Not supported for this guest type."
 msgstr "ఈ గెస్టు రకమునకు మద్దతీయునది కాదు."
 
-#: ../virtManager/addhardware.py:356 ../virtManager/addhardware.py:1092
+#: ../virtManager/addhardware.py:356 ../virtManager/addhardware.py:1098
 msgid "Graphics"
 msgstr "గ్రాఫిక్స్"
 
-#: ../virtManager/addhardware.py:358 ../virtManager/addhardware.py:1094
+#: ../virtManager/addhardware.py:358 ../virtManager/addhardware.py:1100
 msgid "Sound"
 msgstr "ధ్వని"
 
@@ -820,7 +827,7 @@ msgstr ""
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt వర్షన్ వీడియో పరికరాలను మద్దతించదు."
 
-#: ../virtManager/addhardware.py:391 ../virtManager/details.py:256
+#: ../virtManager/addhardware.py:391 ../virtManager/details.py:254
 #: ../virtManager/domain.py:280
 msgid "Watchdog"
 msgstr "వాచ్‌డాగ్"
@@ -833,17 +840,17 @@ msgstr ""
 msgid "Not supported for this hypervisor/libvirt combination."
 msgstr "ఈ hypervisor/libvirt జోడీకు తోడ్పాటు నీయదు."
 
-#: ../virtManager/addhardware.py:400 ../virtManager/addhardware.py:1102
-#: ../virtManager/details.py:255
+#: ../virtManager/addhardware.py:400 ../virtManager/addhardware.py:1108
+#: ../virtManager/details.py:253
 msgid "Smartcard"
 msgstr "స్మార్టుకార్డ్"
 
-#: ../virtManager/addhardware.py:402 ../virtManager/addhardware.py:1104
+#: ../virtManager/addhardware.py:402 ../virtManager/addhardware.py:1110
 msgid "USB Redirection"
 msgstr "USB రీడైరెక్షన్"
 
-#: ../virtManager/addhardware.py:404 ../virtManager/addhardware.py:1106
-#: ../virtManager/details.py:248
+#: ../virtManager/addhardware.py:404 ../virtManager/addhardware.py:1112
+#: ../virtManager/details.py:246
 msgid "TPM"
 msgstr "TPM"
 
@@ -851,52 +858,52 @@ msgstr "TPM"
 msgid "RNG"
 msgstr "RNG"
 
-#: ../virtManager/addhardware.py:407 ../virtManager/addhardware.py:1110
-#: ../virtManager/details.py:254
+#: ../virtManager/addhardware.py:407 ../virtManager/addhardware.py:1116
+#: ../virtManager/details.py:252
 msgid "Panic Notifier"
 msgstr "పానిక్ నోటిఫైర్"
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:584 ../virtManager/netlist.py:96
+#: ../virtManager/addhardware.py:588 ../virtManager/netlist.py:96
 msgid "Passthrough"
 msgstr ""
 
-#: ../virtManager/addhardware.py:585
+#: ../virtManager/addhardware.py:589
 msgid "Host"
 msgstr ""
 
 #. [xml value, label, conn details]
-#: ../virtManager/addhardware.py:612
+#: ../virtManager/addhardware.py:616
 msgid "Spice channel"
 msgstr ""
 
-#: ../virtManager/addhardware.py:756
+#: ../virtManager/addhardware.py:760
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB గ్రాఫిక్స్‍ టాబ్లెట్"
 
-#: ../virtManager/addhardware.py:759 ../virtManager/create.py:1082
-#: ../virtManager/create.py:1085
+#: ../virtManager/addhardware.py:763 ../virtManager/create.py:1013
+#: ../virtManager/create.py:1230 ../virtManager/create.py:1233
 msgid "Generic"
 msgstr "సాదారణ"
 
-#: ../virtManager/addhardware.py:783
+#: ../virtManager/addhardware.py:787
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "VM ఆకృతీకరణ మార్చుటలో దోషము: %s"
 
-#: ../virtManager/addhardware.py:809
+#: ../virtManager/addhardware.py:813
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr "అతిథి మూసివేత ప్రభావితం అగుటకు కొన్ని మార్పులు అవసరం కావచ్చు."
 
-#: ../virtManager/addhardware.py:812
+#: ../virtManager/addhardware.py:816
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "అతిథి తదుపరి మూసివేత తరువాత యీ మార్పులు ప్రభావితం అగును."
 
-#: ../virtManager/addhardware.py:880
+#: ../virtManager/addhardware.py:886
 msgid "No Devices Available"
 msgstr "ఎటువంటి పరికరములు అందుబాటులో లేవు"
 
-#: ../virtManager/addhardware.py:901
+#: ../virtManager/addhardware.py:907
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -907,46 +914,46 @@ msgstr ""
 "ఒకటి కన్నా ఎక్కువ USB నియంత్రికలు జతచేయడం కుదరదు.\n"
 "VM వివరాల తెరనందు మీరు USB నియంత్రిక రకం మార్చవచ్చు."
 
-#: ../virtManager/addhardware.py:1082 ../virtManager/create.py:252
+#: ../virtManager/addhardware.py:1088 ../virtManager/create.py:262
 msgid "Error"
 msgstr "దోషము"
 
-#: ../virtManager/addhardware.py:1096
+#: ../virtManager/addhardware.py:1102
 msgid "Video Device"
 msgstr "వీడియో పరికరం"
 
-#: ../virtManager/addhardware.py:1098
+#: ../virtManager/addhardware.py:1104
 msgid "Watchdog Device"
 msgstr "వాచ్‌డాగ్ పరికరం"
 
-#: ../virtManager/addhardware.py:1100
+#: ../virtManager/addhardware.py:1106
 msgid "Filesystem Passthrough"
 msgstr "ఫైల్‌సిస్టమ్ పాస్‌త్రూ"
 
-#: ../virtManager/addhardware.py:1108
+#: ../virtManager/addhardware.py:1114
 msgid "Random Number Generator"
 msgstr "యాదృచ్ఛక సంఖ్యా ఉత్పాదకి"
 
-#: ../virtManager/addhardware.py:1114 ../virtManager/details.py:2923
+#: ../virtManager/addhardware.py:1120 ../virtManager/details.py:2916
 #, python-format
 msgid "%s Device"
 msgstr "%s పరికరం"
 
-#: ../virtManager/addhardware.py:1118
+#: ../virtManager/addhardware.py:1124
 #, fuzzy
 msgid "PCI Device"
 msgstr "%s పరికరం"
 
-#: ../virtManager/addhardware.py:1119
+#: ../virtManager/addhardware.py:1125
 #, fuzzy
 msgid "USB Device"
 msgstr "%s పరికరం"
 
-#: ../virtManager/addhardware.py:1320
+#: ../virtManager/addhardware.py:1326
 msgid "Are you sure you want to add this device?"
 msgstr "మీరు ఖచ్చితముగా ఈ పరికరమును జతచేయాలని అనుకొనుచున్నారా?"
 
-#: ../virtManager/addhardware.py:1323
+#: ../virtManager/addhardware.py:1329
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -954,140 +961,139 @@ msgstr ""
 "ఈ పరికరం నడుచుచున్న మిషన్‌కు అనుబందించలేము. అతిథి తదుపరి మూసివేత తరువాత పరికరం అందుబాటులో "
 "వుంచుటకు మీరు యిష్టపడతారా?"
 
-#: ../virtManager/addhardware.py:1339
+#: ../virtManager/addhardware.py:1345
 #, python-format
 msgid "Error adding device: %s"
 msgstr "పరికరము జతచేయుటలో దోషము: %s"
 
-#: ../virtManager/addhardware.py:1351
+#: ../virtManager/addhardware.py:1357
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "పరికరమును జతచేయలేక పోయింది: %s"
 
-#: ../virtManager/addhardware.py:1370
+#: ../virtManager/addhardware.py:1374
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr "హార్డువేర్ ఇన్‌పుట్‌ను విలువీకరించుటలో దొరకని దోషము: %s"
 
-#: ../virtManager/addhardware.py:1380
+#: ../virtManager/addhardware.py:1381
 msgid "Creating device"
 msgstr "పరికరం సృష్టించుట"
 
-#: ../virtManager/addhardware.py:1381
+#: ../virtManager/addhardware.py:1382
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "సబ్‌స్క్రిప్షన్ రిడీమ్ చేయుటకు కొన్ని నిమిషాలు పట్టవచ్చు."
 
-#: ../virtManager/addhardware.py:1494 ../virtManager/addhardware.py:1517
-#: ../virtManager/create.py:1972
+#: ../virtManager/addhardware.py:1495 ../virtManager/addhardware.py:1518
+#: ../virtManager/create.py:2220
 msgid "Storage parameter error."
 msgstr "నిల్వ పారామితి దోషము."
 
-#: ../virtManager/addhardware.py:1534
+#: ../virtManager/addhardware.py:1535
 msgid "Network selection error."
 msgstr "నెట్వర్కు యెంపిక దోషము."
 
-#: ../virtManager/addhardware.py:1535
+#: ../virtManager/addhardware.py:1536
 msgid "A network source must be selected."
 msgstr "నెట్వర్కు మూలము తప్పక యెంపికకావలెను."
 
-#: ../virtManager/addhardware.py:1538
+#: ../virtManager/addhardware.py:1539
 msgid "Invalid MAC address"
 msgstr "సరికాని MAC చిరునామా"
 
-#: ../virtManager/addhardware.py:1539
+#: ../virtManager/addhardware.py:1540
 msgid "A MAC address must be entered."
 msgstr "MAC చిరునామా తప్పక ప్రవేశపెట్టవలెను."
 
-#: ../virtManager/addhardware.py:1573
-#, fuzzy
+#: ../virtManager/addhardware.py:1574
 msgid "invalid listen type"
-msgstr "చెల్లని స్టాటిక్ రౌట్"
+msgstr ""
 
-#: ../virtManager/addhardware.py:1577
+#: ../virtManager/addhardware.py:1578
 msgid "Graphics device parameter error"
 msgstr "గ్రాఫిక్స్‍ పరికరము పారామితి దోషము"
 
-#: ../virtManager/addhardware.py:1586
+#: ../virtManager/addhardware.py:1587
 msgid "Sound device parameter error"
 msgstr "శబ్దపు పరికరము పారామితి దోషము"
 
-#: ../virtManager/addhardware.py:1591
+#: ../virtManager/addhardware.py:1592
 msgid "Physical Device Required"
 msgstr "భౌతిక పరికరం అవసరం"
 
-#: ../virtManager/addhardware.py:1592
+#: ../virtManager/addhardware.py:1593
 msgid "A device must be selected."
 msgstr "పరికరము తప్పక యెంపికచేయవలెను."
 
-#: ../virtManager/addhardware.py:1604
+#: ../virtManager/addhardware.py:1605
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1606
+#: ../virtManager/addhardware.py:1607
 msgid "Do you really want to use the device?"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1612
+#: ../virtManager/addhardware.py:1613
 msgid "Host device parameter error"
 msgstr "హోస్ట్ పరికరము పారామితి దోషము"
 
-#: ../virtManager/addhardware.py:1678
+#: ../virtManager/addhardware.py:1679
 #, python-format
 msgid "%s device parameter error"
 msgstr "%s పరికర పారామితి దోషము"
 
-#: ../virtManager/addhardware.py:1689
+#: ../virtManager/addhardware.py:1690
 msgid "Video device parameter error"
 msgstr "వీడియో పరికర పారామితి దోషము"
 
-#: ../virtManager/addhardware.py:1701
+#: ../virtManager/addhardware.py:1702
 msgid "Watchdog parameter error"
 msgstr "వాచ్‌డాగ్ పారామితి దోషము"
 
-#: ../virtManager/addhardware.py:1716
+#: ../virtManager/addhardware.py:1717
 msgid "Smartcard device parameter error"
 msgstr "స్మార్టుకార్డ్ పరికరం పారామితి దోషం"
 
-#: ../virtManager/addhardware.py:1735
+#: ../virtManager/addhardware.py:1736
 msgid "USB redirected device parameter error"
 msgstr "USB రీడైరెక్టెడ్ పరికరం పారామితి దోషం"
 
-#: ../virtManager/addhardware.py:1755
+#: ../virtManager/addhardware.py:1756
 msgid "TPM device parameter error"
 msgstr "TPM పరికర పారామితి దోషం"
 
-#: ../virtManager/addhardware.py:1773
+#: ../virtManager/addhardware.py:1774
 msgid "Panic device parameter error"
 msgstr "పానిక్ పరికర పారామితి దోషం"
 
-#: ../virtManager/addhardware.py:1816 ../virtManager/addhardware.py:1828
-#: ../virtManager/addhardware.py:1831 ../virtManager/addhardware.py:1843
-#: ../virtManager/addhardware.py:1846
+#: ../virtManager/addhardware.py:1817 ../virtManager/addhardware.py:1829
+#: ../virtManager/addhardware.py:1832 ../virtManager/addhardware.py:1844
+#: ../virtManager/addhardware.py:1847
 msgid "RNG selection error."
 msgstr "RNG ఎంపిక దోషం."
 
-#: ../virtManager/addhardware.py:1817
+#: ../virtManager/addhardware.py:1818
 msgid "A device must be specified."
 msgstr "తప్పకుండా ఒక పరికరం తెలుపాలి."
 
-#: ../virtManager/addhardware.py:1829
+#: ../virtManager/addhardware.py:1830
 msgid "Please specify both bind and connect host"
 msgstr "దయచేసి బందనం మరియు అనుసంధానం అతిధేయ రెంటినీ తెలుపండి"
 
-#: ../virtManager/addhardware.py:1832
+#: ../virtManager/addhardware.py:1833
 msgid "Please specify both bind and connect service"
 msgstr "దయచేసి బందనం మరియు అనుసంధానం సేవ రెంటినీ తెలుపండి "
 
-#: ../virtManager/addhardware.py:1844
+#: ../virtManager/addhardware.py:1845
 msgid "The EGD host must be specified."
 msgstr "EGD అతిధేయ తప్పకుండా తెలుపాలి."
 
-#: ../virtManager/addhardware.py:1847
+#: ../virtManager/addhardware.py:1848
 msgid "The EGD service must be specified."
 msgstr "EGD సేవ తప్పకుండా తెలుపాలి."
 
-#: ../virtManager/addhardware.py:1866
+#: ../virtManager/addhardware.py:1867
 msgid "RNG device parameter error"
 msgstr "RNG పరికరం పారామితి దోషం "
 
@@ -1146,16 +1152,16 @@ msgstr "డిస్కు \"%s\" ఇప్పటికే వేరే అత�
 msgid "Do you really want to use the disk?"
 msgstr "మీరు నింజంగా డిస్కును వుపయోగిద్దామని అనుకొనుచున్నారా?"
 
-#: ../virtManager/asyncjob.py:239
+#: ../virtManager/asyncjob.py:243
 msgid "Cancelling job..."
 msgstr "పని రద్దుచేయుచున్నది..."
 
-#: ../virtManager/asyncjob.py:323 ../virtManager/asyncjob.py:330
+#: ../virtManager/asyncjob.py:331 ../virtManager/asyncjob.py:338
 #: ../ui/asyncjob.ui.h:3
 msgid "Processing..."
 msgstr "కార్యనిర్వర్తనము..."
 
-#: ../virtManager/asyncjob.py:344
+#: ../virtManager/asyncjob.py:352
 msgid "Completed"
 msgstr "పూర్తైనది"
 
@@ -1167,7 +1173,7 @@ msgstr "ఫ్లాపి డ్రైవ్ (_r)"
 msgid "Floppy _Image"
 msgstr "ఫ్లాపి ప్రతిబింబము (_I)"
 
-#: ../virtManager/choosecd.py:101 ../virtManager/create.py:613
+#: ../virtManager/choosecd.py:101 ../virtManager/create.py:665
 msgid "Physical CDROM passthrough not supported with this hypervisor"
 msgstr "భౌతిక CDROM పాస్‌త్రూ ఈ హైపర్విజర్‌తో తోడ్పాటునీయదు."
 
@@ -1199,11 +1205,11 @@ msgstr ""
 "నిరుద్ద పరికరాల క్లోన్ తప్పక libvirt\n"
 "నిర్వాహిత నిల్వ వాల్యూమ్స్ అవ్వాలి."
 
-#: ../virtManager/clone.py:87 ../virtManager/delete.py:354
+#: ../virtManager/clone.py:87 ../virtManager/delete.py:350
 msgid "No write access to parent directory."
 msgstr "పేరెంటు డైరెక్టరీనకు వ్రాయు యాక్సెస్ లేదు."
 
-#: ../virtManager/clone.py:89 ../virtManager/delete.py:352
+#: ../virtManager/clone.py:89 ../virtManager/delete.py:348
 msgid "Path does not exist."
 msgstr "పాత్ లేదు."
 
@@ -1220,14 +1226,12 @@ msgid "No write access"
 msgstr "వ్రాయు యాక్సెస్ లేదు"
 
 #: ../virtManager/clone.py:122
-#, fuzzy
 msgid "SCSI device"
-msgstr "%s పరికరం"
+msgstr ""
 
 #: ../virtManager/clone.py:126
-#, fuzzy
 msgid "iSCSI share"
-msgstr "iSCSI లక్ష్యం"
+msgstr ""
 
 #: ../virtManager/clone.py:129
 msgid "Shareable"
@@ -1305,23 +1309,23 @@ msgstr ""
 "%s\n"
 "కొత్త గెస్టును నడుపుట అనునది ఈ డిస్కు ప్రతిబింబముల నందలి డాటాను తిరిగివ్రాయగలదు."
 
-#: ../virtManager/clone.py:811
+#: ../virtManager/clone.py:809
 #, python-format
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "వర్చ్యువల్ మిషన్ క్లోన్ '%s' సృష్టించుటలో దోషము: %s"
 
-#: ../virtManager/clone.py:824 ../virtManager/createpool.py:402
-#: ../virtManager/createvol.py:295 ../virtManager/migrate.py:383
+#: ../virtManager/clone.py:822 ../virtManager/createpool.py:402
+#: ../virtManager/createvol.py:293 ../virtManager/migrate.py:381
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "ఇన్‌పుట్ విలువీకరణకు దొరకని దోషము: %s"
 
-#: ../virtManager/clone.py:831
+#: ../virtManager/clone.py:827
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "వర్చ్యువల్ మిషన్ క్లోనును సృష్టించుచున్నది '%s'"
 
-#: ../virtManager/clone.py:835 ../virtManager/delete.py:159
+#: ../virtManager/clone.py:831 ../virtManager/delete.py:155
 msgid " and selected storage (this may take a while)"
 msgstr " మరియు యెంచుకొనిన నిల్వ (ఇది కొంత సమయాన్ని తీసుకొంటుంది)"
 
@@ -1353,19 +1357,19 @@ msgstr "ఫ్లాపీ మాధ్యమ స్థానముచూపు"
 msgid "Locate directory volume"
 msgstr "డైరెక్టరీ వాల్యూమ్ స్థానముచూపు"
 
-#: ../virtManager/connect.py:168
+#: ../virtManager/connect.py:170
 msgid "user session"
 msgstr ""
 
-#: ../virtManager/connect.py:170
+#: ../virtManager/connect.py:172
 msgid "Linux Containers"
 msgstr ""
 
-#: ../virtManager/connect.py:179
+#: ../virtManager/connect.py:182
 msgid "with certificates"
 msgstr ""
 
-#: ../virtManager/connect.py:423
+#: ../virtManager/connect.py:428
 msgid "A hostname is required for remote connections."
 msgstr "రిమోట్ అనుసంధానముల కొరకు అతిథేయిపేరు అవసరమైంది."
 
@@ -1373,34 +1377,34 @@ msgstr "రిమోట్ అనుసంధానముల కొరకు అ
 msgid "Authentication required"
 msgstr ""
 
-#: ../virtManager/connection.py:422
+#: ../virtManager/connection.py:446
 msgid "User session"
 msgstr ""
 
-#: ../virtManager/connection.py:579 ../virtManager/migrate.py:297
+#: ../virtManager/connection.py:604 ../virtManager/migrate.py:297
 msgid "Disconnected"
 msgstr "అననుసంధానించిన"
 
-#: ../virtManager/connection.py:581
+#: ../virtManager/connection.py:606
 msgid "Connecting"
 msgstr "అనుసంధానిస్తోంది"
 
-#: ../virtManager/connection.py:583 ../virtManager/host.py:631
-#: ../virtManager/host.py:844 ../virtManager/libvirtobject.py:214
+#: ../virtManager/connection.py:608 ../virtManager/host.py:627
+#: ../virtManager/host.py:839 ../virtManager/libvirtobject.py:221
 #: ../virtManager/storagelist.py:347 ../ui/storagelist.ui.h:11
 msgid "Active"
 msgstr "క్రియాశీల"
 
 #. Machine settings
-#: ../virtManager/connection.py:585 ../virtManager/create.py:1003
-#: ../virtManager/details.py:2380 ../virtManager/details.py:2396
-#: ../virtManager/details.py:2639 ../virtManager/domain.py:256
-#: ../virtManager/gfxdetails.py:296 ../virtManager/gfxdetails.py:298
-#: ../virtManager/host.py:838 ../virtManager/interface.py:112
+#: ../virtManager/connection.py:610 ../virtManager/create.py:1149
+#: ../virtManager/details.py:2373 ../virtManager/details.py:2389
+#: ../virtManager/details.py:2632 ../virtManager/domain.py:256
+#: ../virtManager/gfxdetails.py:297 ../virtManager/gfxdetails.py:299
+#: ../virtManager/host.py:833 ../virtManager/interface.py:112
 msgid "Unknown"
 msgstr "తెలియని"
 
-#: ../virtManager/connection.py:711
+#: ../virtManager/connection.py:736
 #, python-format
 msgid ""
 "%s rename failed. Attempting to recover also failed.\n"
@@ -1515,63 +1519,63 @@ msgstr ""
 msgid "virt-manager does not support more that one graphical console"
 msgstr ""
 
-#: ../virtManager/create.py:79
+#: ../virtManager/create.py:83
 #, python-format
 msgid "%.1f GiB"
 msgstr ""
 
-#: ../virtManager/create.py:83
+#: ../virtManager/create.py:87
 #, python-format
 msgid "%d MiB"
 msgstr ""
 
-#: ../virtManager/create.py:258 ../virtManager/create.py:263
+#: ../virtManager/create.py:268 ../virtManager/create.py:273
 msgid "Warning"
 msgstr ""
 
-#: ../virtManager/create.py:459
+#: ../virtManager/create.py:494
 #, python-format
 msgid ""
 "Failed to setup UEFI for AArch64: %s\n"
 "Install options are limited."
 msgstr ""
 
-#: ../virtManager/create.py:485
+#: ../virtManager/create.py:520
 msgid "Libvirt version does not support remote URL installs."
 msgstr "Libvirt వర్ట్ వర్షన్ రిమోట్ URL సంస్థాపనలకు తోడ్పాటునీయదు."
 
-#: ../virtManager/create.py:492
+#: ../virtManager/create.py:527
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "%s సంస్థాపనలు పారావర్ట్ గెస్టులకు అందుబాటులో లేవు."
 
-#: ../virtManager/create.py:497
+#: ../virtManager/create.py:532
 #, python-format
 msgid "Architecture '%s' is not installable"
 msgstr "ఆకృతి '%s' సంస్థాపించలేము"
 
-#: ../virtManager/create.py:513
+#: ../virtManager/create.py:548
 msgid "No install methods available for this connection."
 msgstr "ఈ అనుసంధానం కొరకు యే సంస్థాపన పద్దతులు అందుబాటులోలేవు."
 
-#: ../virtManager/create.py:548
+#: ../virtManager/create.py:585
 msgid "No hypervisor options were found for this connection."
 msgstr "ఈ అనుసంధానం కొరకు యే హైపర్విజర్ ఐచ్చికాలు కనుగొనబడలేదు."
 
-#: ../virtManager/create.py:553
+#: ../virtManager/create.py:590
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
 msgstr ""
 "సాధారణంగా దీనర్ధం QEMU లేదా KVM మీ మిషన్‌ నందు సంస్థాపించిలేవు, లేదా KVM కెర్నల్ మాడ్యూల్స్ లోడవలేదు."
 
-#: ../virtManager/create.py:577
+#: ../virtManager/create.py:614
 msgid ""
 "Host is not advertising support for full virtualization. Install options may "
 "be limited."
 msgstr ""
 
-#: ../virtManager/create.py:583
+#: ../virtManager/create.py:620
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
@@ -1579,186 +1583,297 @@ msgstr ""
 "KVM అందుబాటులోలేదు. దీనర్ధం KVM ప్యాకేజీ సంస్థాపించి వుండకపోవచ్చని, లేదా KVM కెర్నల్ మాడ్యూల్స్ "
 "లోడవలేదని. మీ వర్చ్యువల్ మిషన్ పేలవంగా పనిచేయవచ్చు."
 
-#: ../virtManager/create.py:624
+#: ../virtManager/create.py:690
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "హోస్టునందు %(maxmem)s వరకు అందుబాటులో వుంటుంది"
 
-#: ../virtManager/create.py:636
+#: ../virtManager/create.py:702
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "%(numcpus)d వరకు అందుబాటులో వుంటుంది"
 
-#: ../virtManager/create.py:667
+#: ../virtManager/create.py:733
 msgid "No active connection to install on."
 msgstr "సంస్థాపించుటకు యెటువంటి క్రియాశీల అనుసంధానములు లేవు."
 
-#: ../virtManager/create.py:952 ../virtManager/create.py:972
-msgid "Show all OS options"
-msgstr "అన్ని OS ఐచ్చికాలను చూపు"
+#: ../virtManager/create.py:1012
+msgid "BSD"
+msgstr ""
 
-#: ../virtManager/create.py:1049
-msgid "Host filesystem"
-msgstr "అతిథేయి ఫైల్‌సిస్టమ్"
-
-#: ../virtManager/create.py:1051 ../virtManager/details.py:2381
-#: ../virtManager/gfxdetails.py:91 ../virtinst/domcapabilities.py:140
-msgid "None"
-msgstr "ఏదీకాదు"
-
-#: ../virtManager/create.py:1065
-msgid "Local CDROM/ISO"
-msgstr "స్థానిక CDROM/ISO"
-
-#: ../virtManager/create.py:1067
-msgid "URL Install Tree"
-msgstr "URL సంస్థాపనా ట్రీ"
-
-#: ../virtManager/create.py:1069
-msgid "PXE Install"
-msgstr "PXE సంస్థాపనా"
-
-#: ../virtManager/create.py:1071
-msgid "Import existing OS image"
-msgstr "ఉన్న OS ప్రతిబింబమును దిగుమతి చేయుము"
-
-#: ../virtManager/create.py:1073
-msgid "Application container"
-msgstr "అనువర్తనం కలిగివుండునది"
-
-#: ../virtManager/create.py:1075
-msgid "Operating system container"
-msgstr "ఆపరేటింగ్ సిస్టమ్ కలిగివుండునది"
-
-#: ../virtManager/create.py:1080 ../virtManager/details.py:332
+#: ../virtManager/create.py:1014 ../virtManager/create.py:1228
+#: ../virtManager/details.py:330
 msgid "Linux"
 msgstr "లైనక్స్"
 
-#: ../virtManager/create.py:1234
+#: ../virtManager/create.py:1015
+msgid "macOS"
+msgstr ""
+
+#: ../virtManager/create.py:1016 ../virtManager/create.py:1087
+msgid "Others"
+msgstr ""
+
+#: ../virtManager/create.py:1017
+msgid "Solaris"
+msgstr ""
+
+#: ../virtManager/create.py:1018
+msgid "Windows"
+msgstr ""
+
+#: ../virtManager/create.py:1036 ../virtManager/create.py:1110
+msgid "Show all OS options"
+msgstr "అన్ని OS ఐచ్చికాలను చూపు"
+
+#: ../virtManager/create.py:1055
+msgid "ALT Linux"
+msgstr ""
+
+#: ../virtManager/create.py:1056
+msgid "CentOS"
+msgstr ""
+
+#: ../virtManager/create.py:1057
+msgid "Debian"
+msgstr ""
+
+#: ../virtManager/create.py:1058
+msgid "Fedora"
+msgstr ""
+
+#: ../virtManager/create.py:1059 ../virtManager/details.py:328
+msgid "FreeBSD"
+msgstr ""
+
+#: ../virtManager/create.py:1060
+msgid "Mageia"
+msgstr ""
+
+#: ../virtManager/create.py:1061 ../virtManager/details.py:332
+msgid "NetBSD"
+msgstr ""
+
+#: ../virtManager/create.py:1062 ../virtManager/details.py:333
+msgid "OpenBSD"
+msgstr ""
+
+#: ../virtManager/create.py:1063
+msgid "openSUSE"
+msgstr ""
+
+#: ../virtManager/create.py:1064
+msgid "Red Hat Enterprise Linux"
+msgstr ""
+
+#: ../virtManager/create.py:1065
+msgid "SUSE Linux Enterprise Desktop"
+msgstr ""
+
+#: ../virtManager/create.py:1066
+msgid "SUSE Linux Enterprise Server"
+msgstr ""
+
+#: ../virtManager/create.py:1067
+msgid "Ubuntu"
+msgstr ""
+
+#: ../virtManager/create.py:1195
+msgid "Host filesystem"
+msgstr "అతిథేయి ఫైల్‌సిస్టమ్"
+
+#: ../virtManager/create.py:1197 ../virtManager/details.py:2374
+#: ../virtManager/gfxdetails.py:92 ../virtinst/domcapabilities.py:140
+msgid "None"
+msgstr "ఏదీకాదు"
+
+#: ../virtManager/create.py:1211
+msgid "Local CDROM/ISO"
+msgstr "స్థానిక CDROM/ISO"
+
+#: ../virtManager/create.py:1213
+msgid "URL Install Tree"
+msgstr "URL సంస్థాపనా ట్రీ"
+
+#: ../virtManager/create.py:1215
+msgid "PXE Install"
+msgstr "PXE సంస్థాపనా"
+
+#: ../virtManager/create.py:1217
+msgid "Import existing OS image"
+msgstr "ఉన్న OS ప్రతిబింబమును దిగుమతి చేయుము"
+
+#: ../virtManager/create.py:1219
+msgid "Application container"
+msgstr "అనువర్తనం కలిగివుండునది"
+
+#: ../virtManager/create.py:1221
+msgid "Operating system container"
+msgstr "ఆపరేటింగ్ సిస్టమ్ కలిగివుండునది"
+
+#: ../virtManager/create.py:1223
+msgid "Virtuozzo container"
+msgstr ""
+
+#: ../virtManager/create.py:1409
 msgid "Removing disk images"
 msgstr ""
 
-#: ../virtManager/create.py:1235
+#: ../virtManager/create.py:1410
 msgid "Removing disk images we created for this virtual machine."
 msgstr ""
 
-#: ../virtManager/create.py:1465
+#: ../virtManager/create.py:1646
 msgid "No network selected"
 msgstr ""
 
-#: ../virtManager/create.py:1467
+#: ../virtManager/create.py:1648
 msgid "Network selection does not support PXE"
 msgstr "నెట్వర్కు విభాగము PXE కు తోడ్పాటునీయటలేదు"
 
-#: ../virtManager/create.py:1529 ../virtManager/createinterface.py:883
-#: ../virtManager/createnet.py:460 ../virtManager/createpool.py:453
+#: ../virtManager/create.py:1727 ../virtManager/createinterface.py:883
+#: ../virtManager/createnet.py:504 ../virtManager/createpool.py:449
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "%(max_page)d లో %(current_page)dవ అంచె"
 
-#: ../virtManager/create.py:1619
+#: ../virtManager/create.py:1817
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr "సంగ్రహపేజీ పాప్యులేట్ చేయుటలో దోషం: %s"
 
-#: ../virtManager/create.py:1653
+#: ../virtManager/create.py:1851
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "UUIDను అమర్చుటలో దోషము: %s"
 
-#: ../virtManager/create.py:1661
+#: ../virtManager/create.py:1859
 msgid "Error setting OS information."
 msgstr "OS సమాచారమును అమర్చుటలో దోషము."
 
-#: ../virtManager/create.py:1683
+#: ../virtManager/create.py:1881
 msgid "Error setting up default devices:"
 msgstr "అప్రమేయ పరికరాలను అమర్చుటలో దోషం:"
 
-#: ../virtManager/create.py:1701 ../virtManager/createinterface.py:911
+#: ../virtManager/create.py:1899 ../virtManager/createinterface.py:911
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "సంస్థాపనా పారామితులను దొరకని దోషము విలువీకరిస్తోంది: %s"
 
-#: ../virtManager/create.py:1751
+#: ../virtManager/create.py:1950
 msgid "Please specify a valid OS variant."
 msgstr "దయచేసి సమూహము యొక్క పేరును చెప్పండి."
 
-#: ../virtManager/create.py:1759
+#: ../virtManager/create.py:1958
 msgid "An install media selection is required."
 msgstr "ఒక సంస్థాపనా మాధ్యమం యెంపిక అవసరమైంది."
 
-#: ../virtManager/create.py:1769
+#: ../virtManager/create.py:1968
 msgid "An install tree is required."
 msgstr "ఒక సంస్థాపనా ట్రీ అవసరమైంది."
 
-#: ../virtManager/create.py:1783
+#: ../virtManager/create.py:1982
 msgid "A storage path to import is required."
 msgstr "దిగుమతి చేయుటకు వొక నిల్వ పాత్ అవసరమైంది."
 
-#: ../virtManager/create.py:1788
+#: ../virtManager/create.py:1987
 msgid "The import path must point to an existing storage."
 msgstr ""
 
-#: ../virtManager/create.py:1796
+#: ../virtManager/create.py:1995
 msgid "An application path is required."
 msgstr "ఒక అనువర్తనం పాత్ అవసరమైంది."
 
-#: ../virtManager/create.py:1803
+#: ../virtManager/create.py:2002
 msgid "An OS directory path is required."
 msgstr "ఒక OS డైరెక్టరీ పాత్ అవసరమైంది."
 
-#: ../virtManager/create.py:1815
+#: ../virtManager/create.py:2011
+#, fuzzy
+msgid "Source URL is required"
+msgstr "దోషం: 'id' అవసరమైంది"
+
+#: ../virtManager/create.py:2016
+msgid "Please specify password for accessing source registry"
+msgstr ""
+
+#: ../virtManager/create.py:2022
+#, python-format
+msgid "Destination path is not directory: %s"
+msgstr ""
+
+#: ../virtManager/create.py:2025
+#, fuzzy, python-format
+msgid "No write permissions for directory path: %s"
+msgstr "పేరెంటు డైరెక్టరీనకు వ్రాయు యాక్సెస్ లేదు."
+
+#: ../virtManager/create.py:2030
+msgid "OS root directory is not empty"
+msgstr ""
+
+#: ../virtManager/create.py:2031
+msgid ""
+"Creating root file system in a non-empty directory might fail due to file "
+"conflicts.\n"
+"Would you like to continue?"
+msgstr ""
+
+#: ../virtManager/create.py:2042
+msgid "A template name is required."
+msgstr ""
+
+#: ../virtManager/create.py:2054
 msgid "Error setting installer parameters."
 msgstr "సంస్థాపిక పారామితులను అమర్చుటలో దోషము."
 
-#: ../virtManager/create.py:1837
+#: ../virtManager/create.py:2084
 msgid "Error setting install media location."
 msgstr "సంస్థాపనా మాధ్యమం స్థానమును అమర్చుటలో దోషము."
 
-#: ../virtManager/create.py:1861
+#: ../virtManager/create.py:2108
 #, python-format
 msgid "A kernel is required for %s guests."
 msgstr "%s కొరకు సంకేతపదము అవసరము."
 
-#: ../virtManager/create.py:1869
+#: ../virtManager/create.py:2116
 msgid "Error setting default name."
 msgstr "విభజన పేరు అమర్చుటలో దోషం."
 
-#: ../virtManager/create.py:1924
+#: ../virtManager/create.py:2172
 msgid "Error setting CPUs."
 msgstr "CPUలను అమర్చుటలో దోషము."
 
-#: ../virtManager/create.py:1931
+#: ../virtManager/create.py:2179
 msgid "Error setting guest memory."
 msgstr "గెస్టు మెమొరీను అమర్చుటలో దోషము."
 
-#: ../virtManager/create.py:2003
+#: ../virtManager/create.py:2251
 msgid "Invalid guest name"
 msgstr ""
 
-#: ../virtManager/create.py:2024
+#: ../virtManager/create.py:2272
 #, python-format
 msgid "Network device required for %s install."
 msgstr "%s సంస్థాపనకు నెట్వర్కు పరికరము అవసరము."
 
-#: ../virtManager/create.py:2135
+#: ../virtManager/create.py:2383
 msgid "Detecting"
 msgstr "గుర్తించుచున్నది"
 
-#: ../virtManager/create.py:2202
+#: ../virtManager/create.py:2438
 msgid "Error starting installation: "
 msgstr "సంస్థాపనను ప్రారంభించుటలో దోషం: "
 
-#: ../virtManager/create.py:2240
+#: ../virtManager/create.py:2476
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "సంస్థాపనను పూర్తిచేయలేక పోయింది: '%s'"
 
-#: ../virtManager/create.py:2258
+#: ../virtManager/create.py:2508
 msgid "Creating Virtual Machine"
 msgstr "Virtual Machineకంప్యూటరును సృష్టిస్తోంది"
 
-#: ../virtManager/create.py:2259
+#: ../virtManager/create.py:2509
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1766,15 +1881,20 @@ msgstr ""
 "వర్చువల్ మిషన్ యిప్పుడు సృష్టించబడుచున్నది. డిస్కు నిల్వ కేటాయింపు మరియు సంస్థాపనా ప్రతిబింబముల "
 "స్వీకరణ ముగియుటకు కొంత సమయం పడుతుంది."
 
-#: ../virtManager/create.py:2306
+#: ../virtManager/create.py:2563
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "డొమైన్ %s చూపబడలేదు."
 
-#: ../virtManager/create.py:2354
+#: ../virtManager/create.py:2611
 #, python-format
 msgid "Error continue install: %s"
 msgstr "సంస్థాపనను కొనసాగించుటలో దోషము: %s"
+
+#: ../virtManager/create.py:2623
+#, fuzzy
+msgid "Bootstraping container"
+msgstr "ఆపరేటింగ్ సిస్టమ్ కలిగివుండునది"
 
 #: ../virtManager/createinterface.py:204 ../virtManager/netlist.py:93
 #: ../virtManager/netlist.py:116
@@ -1793,9 +1913,9 @@ msgstr "ఈథర్నెట్"
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../virtManager/createinterface.py:225 ../virtManager/details.py:926
+#: ../virtManager/createinterface.py:225 ../virtManager/details.py:924
 #: ../virtManager/host.py:207 ../virtManager/manager.py:352
-#: ../ui/create.ui.h:17
+#: ../ui/create.ui.h:20
 msgid "Name"
 msgstr "పేరు"
 
@@ -1813,7 +1933,7 @@ msgstr "సిస్టమ్ అప్రమేయం"
 
 #: ../virtManager/createinterface.py:300 ../virtManager/createinterface.py:308
 #: ../virtManager/createinterface.py:727 ../virtManager/createinterface.py:742
-#: ../virtManager/host.py:876 ../virtManager/host.py:889
+#: ../virtManager/host.py:871 ../virtManager/host.py:884
 msgid "Static"
 msgstr ""
 
@@ -1854,7 +1974,7 @@ msgstr "ఒక ఆకృతీకరించని యింటర్ఫేస�
 msgid "No interface selected"
 msgstr "ఏ యింటర్ఫేస్ యెంపికకాలేదు"
 
-#: ../virtManager/createinterface.py:736 ../virtManager/host.py:884
+#: ../virtManager/createinterface.py:736 ../virtManager/host.py:879
 msgid "Autoconf"
 msgstr ""
 
@@ -1901,68 +2021,81 @@ msgstr "ఇంటర్ఫేస్ పారామితులను అమర�
 msgid "Error validating IP configuration: %s"
 msgstr "IP ఆకృతీకరణను నిర్ధారించుటలో దోషము: %s"
 
-#: ../virtManager/createinterface.py:1119
+#: ../virtManager/createinterface.py:1117
 #, python-format
 msgid "Error creating interface: '%s'"
 msgstr "ఇంటర్ఫేస్‌ను సృష్టించుటలో దోషము: '%s'"
 
-#: ../virtManager/createinterface.py:1143
+#: ../virtManager/createinterface.py:1138
 msgid "Creating virtual interface"
 msgstr "వర్చ్యువల్ యింటర్ఫేస్‌ను సృష్టించుట"
 
-#: ../virtManager/createinterface.py:1144
+#: ../virtManager/createinterface.py:1139
 msgid "The virtual interface is now being created."
 msgstr "వర్చ్యువల్ యింటర్ఫేస్ యిప్పుడు సృష్టించబడెను."
 
-#: ../virtManager/createnet.py:134 ../virtinst/network.py:155
+#: ../virtManager/createnet.py:143 ../virtinst/network.py:167
 msgid "NAT"
 msgstr "NAT"
 
-#: ../virtManager/createnet.py:135 ../ui/host.ui.h:22
+#: ../virtManager/createnet.py:144 ../ui/host.ui.h:22
 msgid "Routed"
 msgstr "రౌటెడ్"
 
-#: ../virtManager/createnet.py:172
+#: ../virtManager/createnet.py:145
+msgid "Open"
+msgstr ""
+
+#: ../virtManager/createnet.py:184
 msgid "Any physical device"
 msgstr "ఏ భౌతిక పరికరమైనా"
 
-#: ../virtManager/createnet.py:182
+#: ../virtManager/createnet.py:194
 #, python-format
 msgid "Physical device %s"
 msgstr "భౌతిక పరికరము %s"
 
-#: ../virtManager/createnet.py:261
+#: ../virtManager/createnet.py:219
+#, python-format
+msgid "%s"
+msgstr ""
+
+#: ../virtManager/createnet.py:221
+msgid "No available device"
+msgstr ""
+
+#: ../virtManager/createnet.py:305
 msgid "Invalid network name"
 msgstr "చెల్లని నెట్వర్కు వడపోత"
 
-#: ../virtManager/createnet.py:270 ../virtManager/createnet.py:274
-#: ../virtManager/createnet.py:278 ../virtManager/createnet.py:282
-#: ../virtManager/createnet.py:353 ../virtManager/createnet.py:357
-#: ../virtManager/createnet.py:361
+#: ../virtManager/createnet.py:314 ../virtManager/createnet.py:318
+#: ../virtManager/createnet.py:322 ../virtManager/createnet.py:326
+#: ../virtManager/createnet.py:397 ../virtManager/createnet.py:401
+#: ../virtManager/createnet.py:405
 msgid "Invalid Network Address"
 msgstr "చెల్లని నెట్వర్కు చిరునామా"
 
-#: ../virtManager/createnet.py:271 ../virtManager/createnet.py:354
+#: ../virtManager/createnet.py:315 ../virtManager/createnet.py:398
 msgid "The network address could not be understood"
 msgstr "నెట్వర్కు చిరునామా అర్ధముకాకూడదు"
 
-#: ../virtManager/createnet.py:275
+#: ../virtManager/createnet.py:319
 msgid "The network must be an IPv4 address"
 msgstr "నెట్వర్కు తప్పక IPv4 చిరునామా అయివుండాలి"
 
-#: ../virtManager/createnet.py:279
+#: ../virtManager/createnet.py:323
 msgid "The network must address at least 8 addresses."
 msgstr "నెట్వర్కు చిరునామా."
 
-#: ../virtManager/createnet.py:283
+#: ../virtManager/createnet.py:327
 msgid "The network prefix must be >= 15"
 msgstr "Network Address / prefix >= 15"
 
-#: ../virtManager/createnet.py:286 ../virtManager/createnet.py:365
+#: ../virtManager/createnet.py:330 ../virtManager/createnet.py:409
 msgid "Check Network Address"
 msgstr "నెట్వర్కు చిరునామాను పరిశీలించుము"
 
-#: ../virtManager/createnet.py:287
+#: ../virtManager/createnet.py:331
 msgid ""
 "The network should normally use a private IPv4 address. Use this non-private "
 "address anyway?"
@@ -1970,111 +2103,111 @@ msgstr ""
 "నెట్వర్కు సాదారణంగా వ్యక్తిగత IPv4 చిరునామాను వుపయోగించాలి. ఈ వ్యక్తిగతం-కాని చిరునామాను యెలాగైనా "
 "వుపయోగించుము?"
 
-#: ../virtManager/createnet.py:297 ../virtManager/createnet.py:300
-#: ../virtManager/createnet.py:303 ../virtManager/createnet.py:307
+#: ../virtManager/createnet.py:341 ../virtManager/createnet.py:344
+#: ../virtManager/createnet.py:347 ../virtManager/createnet.py:351
 msgid "Invalid DHCP Address"
 msgstr "సరికాని DHCP చిరునామా"
 
-#: ../virtManager/createnet.py:298
+#: ../virtManager/createnet.py:342
 msgid "The DHCP start address could not be understood"
 msgstr "DHCP ప్రారంభ చిరునామా అర్ధంకాకూడదు"
 
-#: ../virtManager/createnet.py:301
+#: ../virtManager/createnet.py:345
 msgid "The DHCP end address could not be understood"
 msgstr "DHCP ముగింపు చిరునామా అర్ధముకాకూడదు"
 
-#: ../virtManager/createnet.py:304
+#: ../virtManager/createnet.py:348
 #, python-format
 msgid "The DHCP start address is not with the network %s"
 msgstr "DHCP ప్రారంభ చిరునామా నెట్వర్కు %sతో లేదు"
 
-#: ../virtManager/createnet.py:308
+#: ../virtManager/createnet.py:352
 #, python-format
 msgid "The DHCP end address is not with the network %s"
 msgstr "DHCP ముగింపు చిరునామా నెట్వర్కు %sతో లేదు"
 
-#: ../virtManager/createnet.py:340 ../virtManager/createnet.py:343
-#: ../virtManager/createnet.py:419 ../virtManager/createnet.py:422
+#: ../virtManager/createnet.py:384 ../virtManager/createnet.py:387
+#: ../virtManager/createnet.py:463 ../virtManager/createnet.py:466
 msgid "Invalid static route"
 msgstr "చెల్లని స్టాటిక్ రౌట్"
 
-#: ../virtManager/createnet.py:341 ../virtManager/createnet.py:420
+#: ../virtManager/createnet.py:385 ../virtManager/createnet.py:464
 msgid "The network address is incorrect."
 msgstr "నెట్వర్కు చిరునామా సరికానిది."
 
-#: ../virtManager/createnet.py:344 ../virtManager/createnet.py:423
+#: ../virtManager/createnet.py:388 ../virtManager/createnet.py:467
 msgid "The gateway address is incorrect."
 msgstr "గేట్‌వే చిరునామా సరికానిది."
 
-#: ../virtManager/createnet.py:358
+#: ../virtManager/createnet.py:402
 msgid "The network must be an IPv6 address"
 msgstr "నెట్వర్కు తప్పక IPv6 చిరునామా అయివుండాలి"
 
-#: ../virtManager/createnet.py:362
+#: ../virtManager/createnet.py:406
 msgid "For libvirt, the IPv6 network prefix must be /64"
 msgstr "libvirt, IPV6 నెట్వర్కు ప్రిఫిక్స్ తప్పక /64 కావాలి"
 
-#: ../virtManager/createnet.py:366
+#: ../virtManager/createnet.py:410
 msgid ""
 "The network should normally use a private IPv6 address. Use this non-private "
 "address anyway?"
 msgstr ""
 
-#: ../virtManager/createnet.py:376 ../virtManager/createnet.py:379
-#: ../virtManager/createnet.py:382 ../virtManager/createnet.py:386
+#: ../virtManager/createnet.py:420 ../virtManager/createnet.py:423
+#: ../virtManager/createnet.py:426 ../virtManager/createnet.py:430
 msgid "Invalid DHCPv6 Address"
 msgstr "చెల్లని DHCPv6 చిరునామా"
 
-#: ../virtManager/createnet.py:377
+#: ../virtManager/createnet.py:421
 msgid "The DHCPv6 start address could not be understood"
 msgstr "DHCPv6 ప్రారంభ చిరునామా అర్ధంకాలేదు"
 
-#: ../virtManager/createnet.py:380
+#: ../virtManager/createnet.py:424
 msgid "The DHCPv6 end address could not be understood"
 msgstr "DHCPv6 ముగింపు చిరునామా అర్ధంకాలేదు"
 
-#: ../virtManager/createnet.py:383
+#: ../virtManager/createnet.py:427
 #, python-format
 msgid "The DHCPv6 start address is not with the network %s"
 msgstr "DHCPv6 ప్రారంభ చిరునామా నెట్వర్కు %s తో లేదు"
 
-#: ../virtManager/createnet.py:387
+#: ../virtManager/createnet.py:431
 #, python-format
 msgid "The DHCPv6 end address is not with the network %s"
 msgstr "DHCPv6 ముగింపు చిరునామా నెట్వర్కు %s తో లేదు"
 
-#: ../virtManager/createnet.py:567 ../virtManager/createnet.py:621
+#: ../virtManager/createnet.py:629 ../virtManager/createnet.py:683
 #: ../virtManager/netlist.py:95
 msgid "Private"
 msgstr "వ్యక్తిగత"
 
-#: ../virtManager/createnet.py:567 ../virtManager/createnet.py:627
+#: ../virtManager/createnet.py:629 ../virtManager/createnet.py:689
 msgid "Other/Public"
 msgstr "ఇతర/పబ్లిక్"
 
-#: ../virtManager/createnet.py:623
+#: ../virtManager/createnet.py:685
 msgid "Reserved"
 msgstr "పొందివున్న"
 
-#: ../virtManager/createnet.py:625
+#: ../virtManager/createnet.py:687
 msgid "Unspecified"
 msgstr "తెలుపని"
 
-#: ../virtManager/createnet.py:738
+#: ../virtManager/createnet.py:810
 #, python-format
 msgid "Error creating virtual network: %s"
 msgstr "వర్చ్యువల్ నెట్వర్కును సృష్టించుటలో దోషము: %s"
 
-#: ../virtManager/createnet.py:755
+#: ../virtManager/createnet.py:827
 #, python-format
 msgid "Error generating network xml: %s"
 msgstr "వర్షన్ జనియింపచేయుటలో దోషం: %s"
 
-#: ../virtManager/createnet.py:764
+#: ../virtManager/createnet.py:833
 msgid "Creating virtual network..."
 msgstr "primary>VNC (వర్చ్యువల్ నెట్వర్క్ కంప్యూటింగ్)</primary..."
 
-#: ../virtManager/createnet.py:765
+#: ../virtManager/createnet.py:834
 msgid "Creating the virtual network may take a while..."
 msgstr "primary>VNC (వర్చ్యువల్ నెట్వర్క్ కంప్యూటింగ్)</primary..."
 
@@ -2094,24 +2227,24 @@ msgstr "మూలపు పాత్‌ను యెంచుకొనుము"
 msgid "Choose target directory"
 msgstr "లక్ష్యపు డైరెక్టరీని యెంచుకొనుము"
 
-#: ../virtManager/createpool.py:419
+#: ../virtManager/createpool.py:417
 #, python-format
 msgid "Error creating pool: %s"
 msgstr "పూల్ సృష్టించుటలో దోషము: %s"
 
-#: ../virtManager/createpool.py:436
+#: ../virtManager/createpool.py:432
 msgid "Creating storage pool..."
 msgstr "నిల్వ పూల్‌ను సృష్టించుము..."
 
-#: ../virtManager/createpool.py:437
+#: ../virtManager/createpool.py:433
 msgid "Creating the storage pool may take a while..."
 msgstr "నిల్వపూల్‌ను సృష్టించుట కొద్దిసమయం తీసుకొంటుంది..."
 
-#: ../virtManager/createpool.py:503 ../virtManager/createpool.py:533
+#: ../virtManager/createpool.py:499 ../virtManager/createpool.py:529
 msgid "Pool Parameter Error"
 msgstr "పూల్ పారామితి దోషము"
 
-#: ../virtManager/createpool.py:539
+#: ../virtManager/createpool.py:535
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
@@ -2119,20 +2252,20 @@ msgstr ""
 "ఈ రకమైన పూల్‌ను నిర్మించుట మూలపు పరికరాన్ని రూపీకరిస్తుంది(ఫార్మాట్). మీరు ఖచ్చితంగా ఈ పూల్‌ను "
 "'నిర్మిద్దామని' అనుకుంటున్నారా?"
 
-#: ../virtManager/createvol.py:281
+#: ../virtManager/createvol.py:279
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "vol సృష్టించుటలో దోషము: %s"
 
-#: ../virtManager/createvol.py:304
+#: ../virtManager/createvol.py:299
 msgid "Creating storage volume..."
 msgstr "నిల్వ వాల్యూమ్‌ను సృష్టించుట..."
 
-#: ../virtManager/createvol.py:305
+#: ../virtManager/createvol.py:300
 msgid "Creating the storage volume may take a while..."
 msgstr "నిల్వ వాల్యూమ్‌ను సృష్టించుట కొద్ది సమయము తీసుకొంటుంది..."
 
-#: ../virtManager/createvol.py:346
+#: ../virtManager/createvol.py:341
 msgid "Volume Parameter Error"
 msgstr "వాల్యూమ్ పారామితి దోషము"
 
@@ -2140,11 +2273,11 @@ msgstr "వాల్యూమ్ పారామితి దోషము"
 msgid "Delete"
 msgstr "తొలగించుము"
 
-#: ../virtManager/delete.py:142
+#: ../virtManager/delete.py:140
 msgid "Are you sure you want to delete the storage?"
 msgstr "మీరు నిశ్చయంగా నిల్వ అంతా తొలగించుదామని అనుకొనుచున్నారా?"
 
-#: ../virtManager/delete.py:143
+#: ../virtManager/delete.py:141
 #, python-format
 msgid ""
 "The following paths will be deleted:\n"
@@ -2155,71 +2288,70 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../virtManager/delete.py:156
+#: ../virtManager/delete.py:152
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "వర్చ్యువల్ మిషన్ '%s' తొలగించుచున్నది"
 
-#: ../virtManager/delete.py:181
+#: ../virtManager/delete.py:177
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "పాత్ '%s' తొలగించుచున్నది"
 
-#: ../virtManager/delete.py:192
+#: ../virtManager/delete.py:188
 #, python-format
 msgid "Error deleting virtual machine '%s': %s"
 msgstr "వర్చ్యువల్ మిషన్ '%s'ను తొలగించుటలో దోషము: %s"
 
-#: ../virtManager/delete.py:208
+#: ../virtManager/delete.py:204
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "అదనంగా, కొన్ని నిల్వ పరికరములను తీసివేయుటకు అక్కడ దోషములు వున్నాయి: \n"
 
-#: ../virtManager/delete.py:212
+#: ../virtManager/delete.py:208
 msgid "Errors encountered while removing certain storage devices."
 msgstr "కొన్ని నిల్వ పరికరాలను తీసివేయునప్పుడు దోషములు యైదురైనాయి."
 
-#: ../virtManager/delete.py:290 ../ui/details.ui.h:59
+#: ../virtManager/delete.py:286 ../ui/details.ui.h:59
 msgid "Target"
 msgstr "లక్ష్యము"
 
-#: ../virtManager/delete.py:292
+#: ../virtManager/delete.py:288
 msgid "Storage Path"
 msgstr "నిల్వ పాత్"
 
-#: ../virtManager/delete.py:345
+#: ../virtManager/delete.py:341
 msgid "Cannot delete iscsi share."
 msgstr "iscsi భాగస్వామ్యమును తొలగించలేదు."
 
-#: ../virtManager/delete.py:347
-#, fuzzy
+#: ../virtManager/delete.py:343
 msgid "Cannot delete SCSI device."
-msgstr "నిర్వహించని బ్లాక్ పరికరమును తొలగించలేదు."
+msgstr ""
 
-#: ../virtManager/delete.py:350
+#: ../virtManager/delete.py:346
 msgid "Cannot delete unmanaged remote storage."
 msgstr "నిర్వహించని దూరస్థ నిల్వను తొలగించలేక పోయింది."
 
-#: ../virtManager/delete.py:356
+#: ../virtManager/delete.py:352
 msgid "Cannot delete unmanaged block device."
 msgstr "నిర్వహించని బ్లాక్ పరికరమును తొలగించలేదు."
 
-#: ../virtManager/delete.py:377
+#: ../virtManager/delete.py:373
 msgid "Storage is read-only."
 msgstr "నిల్వ చదువుటకు-మాత్రమే"
 
-#: ../virtManager/delete.py:379
+#: ../virtManager/delete.py:375
 msgid "No write access to path."
 msgstr "పాత్‌కు వ్రాయు యాక్సెస్ లేదు."
 
-#: ../virtManager/delete.py:382
+#: ../virtManager/delete.py:378
 msgid "Storage is marked as shareable."
 msgstr "నిల్వ భాగస్వామ్యపరచదగినదిగా గుర్తుంచబడింది."
 
-#: ../virtManager/delete.py:385
+#: ../virtManager/delete.py:381
 msgid "Storage is a media device."
 msgstr ""
 
-#: ../virtManager/delete.py:395
+#: ../virtManager/delete.py:391
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
@@ -2232,12 +2364,12 @@ msgstr ""
 msgid "Remove this device from the virtual machine"
 msgstr ""
 
-#: ../virtManager/details.py:175 ../virtManager/details.py:3240
+#: ../virtManager/details.py:175 ../virtManager/details.py:3245
 #: ../virtinst/devicecontroller.py:44
 msgid "Floppy"
 msgstr ""
 
-#: ../virtManager/details.py:178 ../virtManager/details.py:3238
+#: ../virtManager/details.py:178 ../virtManager/details.py:3243
 msgid "CDROM"
 msgstr ""
 
@@ -2287,40 +2419,28 @@ msgstr "ఫైల్‌సిస్టమ్ %s"
 msgid "Controller %s"
 msgstr "నియంత్రిక %s"
 
-#: ../virtManager/details.py:329
+#: ../virtManager/details.py:327
 msgid "MS-DOS/FreeDOS"
 msgstr ""
 
-#: ../virtManager/details.py:330
-msgid "FreeBSD"
-msgstr ""
-
-#: ../virtManager/details.py:331
+#: ../virtManager/details.py:329
 msgid "GNU/Hurd"
 msgstr ""
 
-#: ../virtManager/details.py:333
+#: ../virtManager/details.py:331
 msgid "MINIX"
 msgstr ""
 
 #: ../virtManager/details.py:334
-msgid "NetBSD"
-msgstr ""
-
-#: ../virtManager/details.py:335
-msgid "OpenBSD"
-msgstr ""
-
-#: ../virtManager/details.py:336
 msgid "Microsoft Windows"
 msgstr ""
 
-#: ../virtManager/details.py:341 ../virtManager/details.py:2444
-#: ../virtManager/details.py:2452
+#: ../virtManager/details.py:339 ../virtManager/details.py:2437
+#: ../virtManager/details.py:2445
 msgid "unknown"
 msgstr "తెలియని"
 
-#: ../virtManager/details.py:669
+#: ../virtManager/details.py:667
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
 msgstr ""
@@ -2330,270 +2450,270 @@ msgstr ""
 "\n"
 "మీరు ఖచ్చితంగా వున్నారా?"
 
-#: ../virtManager/details.py:734
+#: ../virtManager/details.py:732
 msgid "_Add Hardware"
 msgstr "హార్డువేర్ జతచేయి (_A)"
 
-#: ../virtManager/details.py:742
+#: ../virtManager/details.py:740
 msgid "_Remove Hardware"
 msgstr "హార్డువేర్ తీసివేయి (_R)"
 
-#: ../virtManager/details.py:866
+#: ../virtManager/details.py:864
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr ""
 
-#: ../virtManager/details.py:869
+#: ../virtManager/details.py:867
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 
-#: ../virtManager/details.py:874
+#: ../virtManager/details.py:872
 msgid "UEFI not found"
 msgstr ""
 
-#: ../virtManager/details.py:927
+#: ../virtManager/details.py:925
 msgid "Version"
 msgstr "వర్షన్"
 
-#: ../virtManager/details.py:995
+#: ../virtManager/details.py:987
 msgid "Application Default"
 msgstr "అప్లికేషన్ అప్రమేయం"
 
-#: ../virtManager/details.py:996
+#: ../virtManager/details.py:988
 msgid "Hypervisor Default"
 msgstr "హైపర్విజర్ అప్రమేయం"
 
-#: ../virtManager/details.py:998
+#: ../virtManager/details.py:990
 msgid "Clear CPU configuration"
 msgstr "క్లియర్ CPU ఆకృతీకరణ"
 
-#: ../virtManager/details.py:1144 ../virtManager/host.py:977
-#: ../virtManager/snapshots.py:376 ../virtManager/storagelist.py:472
+#: ../virtManager/details.py:1136 ../virtManager/host.py:972
+#: ../virtManager/snapshots.py:377 ../virtManager/storagelist.py:471
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "అక్కడ వర్తింపచేయని మార్పులు వున్నాయి. మీరు వాటిని ఆపాదించుదామని అనుకొనుచున్నారా?"
 
-#: ../virtManager/details.py:1146 ../virtManager/host.py:979
-#: ../virtManager/snapshots.py:378 ../virtManager/storagelist.py:474
+#: ../virtManager/details.py:1138 ../virtManager/host.py:974
+#: ../virtManager/snapshots.py:379 ../virtManager/storagelist.py:473
 msgid "Don't warn me again."
 msgstr "నన్ను మరలా వారించవద్దు."
 
-#: ../virtManager/details.py:1232
+#: ../virtManager/details.py:1224
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "హార్డువేర్ పేజీను తాజాపరచుటలో దోషము: %s"
 
-#: ../virtManager/details.py:1304 ../virtManager/manager.py:821
+#: ../virtManager/details.py:1296 ../virtManager/manager.py:821
 msgid "_Restore"
 msgstr "తిరిగివుంచు (_R)"
 
-#: ../virtManager/details.py:1306 ../virtManager/manager.py:823
+#: ../virtManager/details.py:1298 ../virtManager/manager.py:823
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "ఉపయోగించు (_R)"
 
-#: ../virtManager/details.py:1334 ../virtManager/manager.py:856
+#: ../virtManager/details.py:1326 ../virtManager/manager.py:856
 msgid "Resume the virtual machine"
 msgstr ""
 
-#: ../virtManager/details.py:1336 ../virtManager/manager.py:858
+#: ../virtManager/details.py:1328 ../virtManager/manager.py:858
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
 msgid "Pause the virtual machine"
 msgstr "వర్చ్యువల్ మిషన్‌ను నిలిపివుంచుము"
 
-#: ../virtManager/details.py:1364
+#: ../virtManager/details.py:1356
 msgid "Manage VM snapshots"
 msgstr "VM స్నాప్‌షాట్స్ నిర్వహించు"
 
-#: ../virtManager/details.py:1421
+#: ../virtManager/details.py:1413
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "హార్డువేర్ డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/details.py:1502
+#: ../virtManager/details.py:1494
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "స్క్రీన్‌షాట్ తీయుటలో దోషము: %s"
 
-#: ../virtManager/details.py:1510
+#: ../virtManager/details.py:1502
 msgid "Error initializing spice USB device widget"
 msgstr "స్పైస్ USB పరికరం విడ్జట్ సిద్దపరచుటలో దోషం"
 
-#: ../virtManager/details.py:1514
+#: ../virtManager/details.py:1506
 msgid "Select USB devices for redirection"
 msgstr "రీడైరెక్షన్ కొరకు USB పరికరాలు ఎంపికచేయి"
 
-#: ../virtManager/details.py:1543
+#: ../virtManager/details.py:1536
 msgid "Save Virtual Machine Screenshot"
 msgstr "వర్చ్యువల్ కంప్యూటరు Screenshotని భద్రపరువు"
 
-#: ../virtManager/details.py:1544
+#: ../virtManager/details.py:1537
 msgid "PNG files"
 msgstr ""
 
-#: ../virtManager/details.py:1839
+#: ../virtManager/details.py:1832
 #, python-format
 msgid "Error disconnecting media: %s"
 msgstr "మాధ్యమాన్ని అననుసంధానించుటలో దోషం: %s"
 
-#: ../virtManager/details.py:1860
+#: ../virtManager/details.py:1853
 #, python-format
 msgid "Error launching media dialog: %s"
 msgstr "మాధ్యమం డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/details.py:1926
+#: ../virtManager/details.py:1919
 #, python-format
 msgid "Error apply changes: %s"
 msgstr "మార్పులను వర్తింపచేయుటలో దోషం: %s"
 
-#: ../virtManager/details.py:2059
+#: ../virtManager/details.py:2052
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "స్వయంచాలకప్రారంభం విలువ మార్చుటలో దోషము: %s"
 
-#: ../virtManager/details.py:2077
+#: ../virtManager/details.py:2070
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "కెర్నల్ పాత్ తెలుపకుండా initrd ను అమర్చలేము"
 
-#: ../virtManager/details.py:2080
+#: ../virtManager/details.py:2073
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "కెర్నల్ పాత్ తెలుపకుండా కెర్నల్ ఆర్గుమెంట్లను అమర్చలేము"
 
-#: ../virtManager/details.py:2086
+#: ../virtManager/details.py:2079
 msgid "An init path must be specified"
 msgstr "ఒక init పాత్ తప్పక తెలుపాలి"
 
-#: ../virtManager/details.py:2288
+#: ../virtManager/details.py:2281
 msgid "Are you sure you want to remove this device?"
 msgstr "మీరు ఖచ్చితంగా ఈ పరికరమును తొలగించుదామని అనుకుంటున్నారా?"
 
-#: ../virtManager/details.py:2295
+#: ../virtManager/details.py:2288
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "పరికరాన్ని తొలగించుటలో దోషము: %s"
 
-#: ../virtManager/details.py:2312
+#: ../virtManager/details.py:2305
 msgid "Device could not be removed from the running machine"
 msgstr "నడుచుచున్న మిషన్‌నుండి పరికరం తీసివేయబడలేదు"
 
-#: ../virtManager/details.py:2314
+#: ../virtManager/details.py:2307
 msgid "This change will take effect after the next guest shutdown."
 msgstr "అతిథి తదుపరి మూసివేత తరువాత యీ మార్పు ప్రభావితం అవుతుంది."
 
-#: ../virtManager/details.py:2436
+#: ../virtManager/details.py:2429
 msgid "Error while inspecting the guest configuration"
 msgstr "ఆకృతీకరణ అమర్చుటలో దోషం"
 
-#: ../virtManager/details.py:2482
+#: ../virtManager/details.py:2475
 #, python-format
 msgid "%(summary)s ..."
 msgstr ""
 
-#: ../virtManager/details.py:2494
+#: ../virtManager/details.py:2487
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr ""
 
-#: ../virtManager/details.py:2495
+#: ../virtManager/details.py:2488
 #, python-format
 msgid "%(transfered)d %(units)s write"
 msgstr ""
 
-#: ../virtManager/details.py:2498
+#: ../virtManager/details.py:2491
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr ""
 
-#: ../virtManager/details.py:2499
+#: ../virtManager/details.py:2492
 #, python-format
 msgid "%(transfered)d %(units)s out"
 msgstr ""
 
-#: ../virtManager/details.py:2501 ../virtManager/details.py:2502
-#: ../virtManager/details.py:2503 ../virtManager/details.py:2504
-#: ../virtManager/host.py:546 ../virtManager/host.py:577
+#: ../virtManager/details.py:2494 ../virtManager/details.py:2495
+#: ../virtManager/details.py:2496 ../virtManager/details.py:2497
+#: ../virtManager/host.py:542 ../virtManager/host.py:573
 msgid "Disabled"
 msgstr "అచేతనమైంది"
 
-#: ../virtManager/details.py:2512
+#: ../virtManager/details.py:2505
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr ""
 
-#: ../virtManager/details.py:2722
+#: ../virtManager/details.py:2715
 msgid "Absolute Movement"
 msgstr "ఖచ్చితమైన కదలిక"
 
-#: ../virtManager/details.py:2724
+#: ../virtManager/details.py:2717
 msgid "Relative Movement"
 msgstr "సారూప్య కదలిక"
 
-#: ../virtManager/details.py:2735
+#: ../virtManager/details.py:2728
 msgid "Hypervisor does not support removing this device"
 msgstr ""
 
-#: ../virtManager/details.py:2769
+#: ../virtManager/details.py:2762
 #, python-format
 msgid "%s:%s"
 msgstr "%s:%s"
 
-#: ../virtManager/details.py:2915
+#: ../virtManager/details.py:2908
 msgid "Serial Device"
 msgstr "సీరియల్ పరికరం"
 
-#: ../virtManager/details.py:2917
+#: ../virtManager/details.py:2910
 msgid "Parallel Device"
 msgstr "పార్లల్ పరికరం"
 
-#: ../virtManager/details.py:2919
+#: ../virtManager/details.py:2912
 msgid "Console Device"
 msgstr "కన్సోల్ పరికరం"
 
-#: ../virtManager/details.py:2921
+#: ../virtManager/details.py:2914
 msgid "Channel Device"
 msgstr "ఛానల్ పరికరం"
 
-#: ../virtManager/details.py:2931
+#: ../virtManager/details.py:2924
 msgid "Primary Console"
 msgstr "ప్రాధమిక తెర"
 
-#: ../virtManager/details.py:2971
+#: ../virtManager/details.py:2964
 #, python-format
 msgid "Physical %s Device"
 msgstr ""
 
-#: ../virtManager/details.py:3120
+#: ../virtManager/details.py:3119
 msgid "Overview"
 msgstr "మొత్తందృశ్యం"
 
-#: ../virtManager/details.py:3123
+#: ../virtManager/details.py:3122
 msgid "OS information"
 msgstr "సమాచారం"
 
-#: ../virtManager/details.py:3125
+#: ../virtManager/details.py:3124
 msgid "Performance"
 msgstr ""
 
-#: ../virtManager/details.py:3127
+#: ../virtManager/details.py:3126
 msgid "CPUs"
 msgstr ""
 
-#: ../virtManager/details.py:3128 ../ui/create.ui.h:53
+#: ../virtManager/details.py:3127 ../ui/create.ui.h:67
 msgid "Memory"
 msgstr "మెమొరి"
 
-#: ../virtManager/details.py:3129
+#: ../virtManager/details.py:3128
 msgid "Boot Options"
 msgstr ""
 
-#: ../virtManager/details.py:3237
+#: ../virtManager/details.py:3242
 msgid "Hard Disk"
 msgstr ""
 
-#: ../virtManager/details.py:3239
+#: ../virtManager/details.py:3244
 msgid "Network (PXE)"
 msgstr ""
 
-#: ../virtManager/details.py:3251
+#: ../virtManager/details.py:3256
 msgid "No bootable devices"
 msgstr "ఖాళీ NBD పరికరాలు లేవు"
 
@@ -2683,7 +2803,7 @@ msgstr "I/O దోషం"
 msgid "Shutting down"
 msgstr "మూస్తోంది"
 
-#: ../virtManager/domain.py:283 ../virtManager/snapshots.py:542
+#: ../virtManager/domain.py:283 ../virtManager/snapshots.py:538
 msgid "Creating snapshot"
 msgstr "స్నాప్‌షాట్ సృష్టిస్తోంది"
 
@@ -2737,19 +2857,19 @@ msgstr "స్నప్‌షాట్ కొరకు కనీసం వొక
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "తెలుపబడిన పరికరాన్ని క్రియాహీన VM ఆకృతీకరణ నందు కనుగొనలేక పోయింది: %s"
 
-#: ../virtManager/domain.py:1470
+#: ../virtManager/domain.py:1480
 msgid "Cannot start guest while cloning operation in progress"
 msgstr "క్లోనింగ్ ఆపరేషన్ పురోగతిలో వున్నప్పుడు అతిథిని ప్రారంభించలేదు"
 
-#: ../virtManager/domain.py:1512
+#: ../virtManager/domain.py:1522
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr "క్లోనింగ్ ఆపరేషన్ పురోగతిలో వున్నప్పుడు గెస్టును తిరిగికొనసాగించలేము"
 
-#: ../virtManager/domain.py:1521
+#: ../virtManager/domain.py:1531
 msgid "Saving domain to disk"
 msgstr "డొమైన్‌ డిస్కును దాచుచున్నది"
 
-#: ../virtManager/domain.py:1570
+#: ../virtManager/domain.py:1580
 msgid "Migrating domain"
 msgstr "డొమైన్‌ను వలసపంపుచున్నది"
 
@@ -2771,7 +2891,7 @@ msgstr ""
 "హెపర్విజర్ అనుసంధానము మానవీయంగా యిలా జతచేయవచ్చు \n"
 "ఫైలు->అనుసంధానమును జతచేయుము"
 
-#: ../virtManager/engine.py:245
+#: ../virtManager/engine.py:246
 msgid ""
 "The 'libvirtd' service will need to be started.\n"
 "\n"
@@ -2781,45 +2901,43 @@ msgstr ""
 "తరువాతిసారి అనువర్తనం ప్రారంభమైనప్పుడు virt-manager\n"
 "libvirt కు అనుసంధానమగును."
 
-#: ../virtManager/engine.py:256
+#: ../virtManager/engine.py:257
 msgid "Libvirt service must be started"
 msgstr "Libvirt సేవ తప్పక ప్రారంభంకావలెను"
 
-#: ../virtManager/engine.py:388
+#: ../virtManager/engine.py:389
 #, python-format
 msgid "Error polling connection '%s': %s"
 msgstr "అనుసంధానం '%s' పోలింగ్‌లో దోషం: %s"
 
-#: ../virtManager/engine.py:626
+#: ../virtManager/engine.py:627
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "తెలియని అనుసంధానము URI %s"
 
-#: ../virtManager/engine.py:639
+#: ../virtManager/engine.py:640
+#, fuzzy
 msgid ""
-"The remote host requires a version of netcat/nc\n"
-"which supports the -U option."
+"The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 "రిమోట్ అతిథేయికు netcat/nc యొక్క వర్షన్ అవసరం\n"
 "అది -U ఐచ్చికంకు తోడ్పాటునిచ్చును."
 
-#: ../virtManager/engine.py:654
-msgid ""
-"You need to install openssh-askpass or similar\n"
-"to connect to this host."
+#: ../virtManager/engine.py:649
+#, fuzzy, python-format
+msgid "You need to install %s or similar to connect to this host."
 msgstr ""
 "మీరు openssh-askpass లేదా సమానమైన దాన్ని సంస్థాపించాలి\n"
 "ఈ అతిథేయికు అనుసంధానమగుటకు."
 
-#: ../virtManager/engine.py:658
-msgid ""
-"Verify that the 'libvirtd' daemon is running\n"
-"on the remote host."
+#: ../virtManager/engine.py:653
+#, fuzzy
+msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr ""
 "'libvirtd' డెమోన్ నడుస్తోందని నిర్థారించండి\n"
 "రిమోట్ అతిథేయిపై."
 
-#: ../virtManager/engine.py:662
+#: ../virtManager/engine.py:657
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -2829,130 +2947,130 @@ msgstr ""
 " - ఒక Xen అతిథేయి కెర్నల్ బూటైందని\n"
 " -Xen సేవ ప్రారంభమైందని"
 
-#: ../virtManager/engine.py:668
+#: ../virtManager/engine.py:663
+#, fuzzy
 msgid ""
-"Could not detect a local session: if you are \n"
-"running virt-manager over ssh -X or VNC, you \n"
-"may not be able to connect to libvirt as a \n"
-"regular user. Try running as root."
+"Could not detect a local session: if you are running virt-manager over ssh -"
+"X or VNC, you may not be able to connect to libvirt as a regular user. Try "
+"running as root."
 msgstr ""
 "స్థానిక సెషన్‌ను గుర్తించలేక పోయింది: మీరు \n"
 "virt-manager ను ssh -X లేదా VNC నందు నడుపుతుంటే, మీరు \n"
 "libvirt నకు సాధారణ వాడుకరి వలె అనుసంధానం \n"
 "కాలేరు. root వలె నడుపుటకు ప్రయత్నించు."
 
-#: ../virtManager/engine.py:674
+#: ../virtManager/engine.py:669
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "'libvirtd' డెమోన్ నడుస్తోందని నిర్థారించుము."
 
-#: ../virtManager/engine.py:678
+#: ../virtManager/engine.py:673
 msgid "Unable to connect to libvirt."
 msgstr "libvirt కు అనుసంధానం కాలేకపోయింది."
 
-#: ../virtManager/engine.py:692
+#: ../virtManager/engine.py:687
 msgid "Would you still like to remember this connection?"
 msgstr "ఈ అనుసంధానమును చేతనముచేయుము (_n)?"
 
-#: ../virtManager/engine.py:694
+#: ../virtManager/engine.py:689
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "వర్చ్యువల్ కంప్యూటరు నిర్వాహక అనుసంధానం విఫలమైంది"
 
-#: ../virtManager/engine.py:721
+#: ../virtManager/engine.py:716
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "'గురించి' డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:735
+#: ../virtManager/engine.py:730
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "ప్రాధాన్యతలను ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:756
+#: ../virtManager/engine.py:751
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "అతిథేయి డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:782
+#: ../virtManager/engine.py:777
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "అనుసంధానం డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:834
+#: ../virtManager/engine.py:829
 #, python-format
 msgid "Error launching details: %s"
 msgstr "వివరాలను ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:888 ../virtManager/engine.py:905
+#: ../virtManager/engine.py:883 ../virtManager/engine.py:900
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "నిర్వాహికను ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:917
+#: ../virtManager/engine.py:912
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "మైగ్రేట్ డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:933
+#: ../virtManager/engine.py:928
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "క్లోన్ పారామితులను అమర్చుటలో దోషము: %s"
 
-#: ../virtManager/engine.py:1084
+#: ../virtManager/engine.py:1079
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s' ను దాయాలని అనుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1095
+#: ../virtManager/engine.py:1090
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "డొమైన్ భద్రపరచుటలో దోషము: %s"
 
-#: ../virtManager/engine.py:1100
+#: ../virtManager/engine.py:1095
 msgid "Saving Virtual Machine"
 msgstr "వర్చ్యువల్ కంప్యూటరును భద్రపరుస్తోంది"
 
-#: ../virtManager/engine.py:1101
+#: ../virtManager/engine.py:1096
 msgid "Saving virtual machine memory to disk "
 msgstr "వర్చ్యువల్ మిషన్ మెమొరీను డిస్కునకు దాచుచున్నది "
 
-#: ../virtManager/engine.py:1114
+#: ../virtManager/engine.py:1109
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "పనిని దాచుటను రద్దుచేయుటలో దోషం: %s"
 
-#: ../virtManager/engine.py:1127
+#: ../virtManager/engine.py:1122
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s'ను బలవంతంగా పవర్ఆఫ్ చేయాలని అనుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1129
+#: ../virtManager/engine.py:1124
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "ఇది OSను మూసివేయకుండా తక్షణమే VM పవర్ఆఫ్ చేస్తుంది మరియు మీ డాటా పోవుటకు కారణంకావచ్చును."
 
-#: ../virtManager/engine.py:1135 ../virtManager/engine.py:1212
+#: ../virtManager/engine.py:1130 ../virtManager/engine.py:1207
 msgid "Error shutting down domain"
 msgstr "డొమైన్ మూసివేతలో దోషం"
 
-#: ../virtManager/engine.py:1143
+#: ../virtManager/engine.py:1138
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s'ను నిలిపివుంచుదామని కోరుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1149
+#: ../virtManager/engine.py:1144
 msgid "Error pausing domain"
 msgstr "డొమైన్ నిలిపివుంచుటలో దోషం"
 
-#: ../virtManager/engine.py:1157
+#: ../virtManager/engine.py:1152
 msgid "Error unpausing domain"
 msgstr "డొమైన్‌ను తిరిగికొనసాగించుటలో దోషం"
 
-#: ../virtManager/engine.py:1169
+#: ../virtManager/engine.py:1164
 msgid "Error restoring domain"
 msgstr "డొమైన్ తిరిగివుంచుటలో దోషము"
 
-#: ../virtManager/engine.py:1172
+#: ../virtManager/engine.py:1167
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -2962,56 +3080,56 @@ msgstr ""
 "రోజువారి ప్రారంభమును జరుపుటకు\n"
 "మీరు యిష్టపడతారా?"
 
-#: ../virtManager/engine.py:1186
+#: ../virtManager/engine.py:1181
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "డొమైన్ స్థితిని తొలగించుటలో దోషం: %s"
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1190
+#: ../virtManager/engine.py:1185
 msgid "Restoring Virtual Machine"
 msgstr "వర్చ్యువల్ కంప్యూటరును తిరిగి స్టోరు చేస్తోంది"
 
-#: ../virtManager/engine.py:1191
+#: ../virtManager/engine.py:1186
 msgid "Restoring virtual machine memory from disk"
 msgstr "డిస్కునుండి వర్చ్యువల్ మిషన్ మెమొరీను తిరిగినిల్వవుంచుతోంది"
 
 #. Regular startup
-#: ../virtManager/engine.py:1197
+#: ../virtManager/engine.py:1192
 msgid "Error starting domain"
 msgstr "డొమైన్ ప్రారంభించుటలో దోషం"
 
-#: ../virtManager/engine.py:1206
+#: ../virtManager/engine.py:1201
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s'ను పవర్ఆఫ్ చేయాలని కోరుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1220
+#: ../virtManager/engine.py:1215
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s'ను పునఃప్రారంభించాలని కోరుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1226
+#: ../virtManager/engine.py:1221
 msgid "Error rebooting domain"
 msgstr ""
 
-#: ../virtManager/engine.py:1235
+#: ../virtManager/engine.py:1230
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "మీరు ఖచ్చితంగా '%s' ను బలవంతంగా తిరిగి అమర్చుదామని అనుకొనుచున్నారా?"
 
-#: ../virtManager/engine.py:1237
+#: ../virtManager/engine.py:1232
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
 "ఇది VM ను OS మూసివేయకుండానే తక్షణమే తిరిగివుంచును మరియు దత్తాంశం కోల్పోవుటకు కారణం కావచ్చు."
 
-#: ../virtManager/engine.py:1243
+#: ../virtManager/engine.py:1238
 msgid "Error resetting domain"
 msgstr "డొమైన్ తిరిగిఅమర్చుటలో దోషం"
 
-#: ../virtManager/engine.py:1254
+#: ../virtManager/engine.py:1249
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "అనుసంధానమగుటలో దోషము:%s"
@@ -3033,86 +3151,84 @@ msgstr "నన్ను మరలా అడుగవద్దు"
 msgid "Details"
 msgstr "వివరాలు"
 
-#: ../virtManager/fsdetails.py:263
+#: ../virtManager/fsdetails.py:254
 msgid "Te_mplate:"
 msgstr "మాదిరి (_m):"
 
-#: ../virtManager/fsdetails.py:265
+#: ../virtManager/fsdetails.py:256
 msgid "_Source path:"
 msgstr "మూలపు పాత్ (_S):"
 
-#: ../virtManager/fsdetails.py:295
+#: ../virtManager/fsdetails.py:286
 msgid "A filesystem source must be specified"
 msgstr "ఒక ఫైల్‌సిస్టమ్ మూలం తప్పక తెలుపాలి"
 
-#: ../virtManager/fsdetails.py:298
+#: ../virtManager/fsdetails.py:289
 msgid "A RAM filesystem usage must be specified"
 msgstr "డొమైన్ తప్పక తెలుపాలి"
 
-#: ../virtManager/fsdetails.py:300
+#: ../virtManager/fsdetails.py:291
 msgid "A filesystem target must be specified"
 msgstr "ఒక ఫైల్‌సిస్టమ్ లక్ష్యము తప్పక తెలుపాలి"
 
-#: ../virtManager/fsdetails.py:325
+#: ../virtManager/fsdetails.py:316
 msgid "Filesystem parameter error"
 msgstr "ఫైల్‌సిస్టమ్ పారామితి దోషం"
 
-#: ../virtManager/gfxdetails.py:82
+#: ../virtManager/gfxdetails.py:83
 msgid "Spice server"
 msgstr "స్పైస్ సేవిక"
 
-#: ../virtManager/gfxdetails.py:83
+#: ../virtManager/gfxdetails.py:84
 msgid "VNC server"
 msgstr "VNC సేవిక"
 
-#: ../virtManager/gfxdetails.py:90
-#, fuzzy
+#: ../virtManager/gfxdetails.py:91
 msgid "Address"
-msgstr "చిరునామా:"
+msgstr ""
 
-#: ../virtManager/gfxdetails.py:99
+#: ../virtManager/gfxdetails.py:100
 msgid "Localhost only"
 msgstr "మాత్రమే"
 
-#: ../virtManager/gfxdetails.py:100
+#: ../virtManager/gfxdetails.py:101
 msgid "All interfaces"
 msgstr "ప్లగ్ఇన్ అనుసంధానాలు అమలు"
 
-#: ../virtManager/gfxdetails.py:108 ../virtManager/gfxdetails.py:119
+#: ../virtManager/gfxdetails.py:109 ../virtManager/gfxdetails.py:120
 msgid "Auto"
 msgstr ""
 
-#: ../virtManager/gfxdetails.py:110
+#: ../virtManager/gfxdetails.py:111
 msgid "Copy local keymap"
 msgstr ""
 
-#: ../virtManager/gfxdetails.py:195
+#: ../virtManager/gfxdetails.py:196
 msgid "Port"
 msgstr "పోర్టు"
 
-#: ../virtManager/gfxdetails.py:208
+#: ../virtManager/gfxdetails.py:209
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s సేవిక"
 
-#: ../virtManager/gfxdetails.py:252
+#: ../virtManager/gfxdetails.py:253
 msgid "Hypervisor/libvirt does not support spice GL"
 msgstr ""
 
-#: ../virtManager/gfxdetails.py:255
+#: ../virtManager/gfxdetails.py:256
 msgid "Hypervisor/libvirt does not support manual rendernode"
 msgstr ""
 
-#: ../virtManager/gfxdetails.py:269
+#: ../virtManager/gfxdetails.py:270
 msgid "Spice GL requires virtio graphics configured with accel3d."
 msgstr ""
 
-#: ../virtManager/gfxdetails.py:272
-#, fuzzy
+#: ../virtManager/gfxdetails.py:273
 msgid "Graphics listen type does not support spice GL."
-msgstr "గ్రాఫిక్స్ రకం '%s' స్వయంచాలక పునఃపరిమాణంకు తోడ్పాటునీయదు"
+msgstr ""
 
-#: ../virtManager/gfxdetails.py:293
+#: ../virtManager/gfxdetails.py:294
 msgid "Local SDL Window"
 msgstr "స్థానిక SDL విండో"
 
@@ -3142,7 +3258,7 @@ msgid "Libvirt connection does not support interface management."
 msgstr "Libvirt అనుసంధానము యింటర్ఫేస్ నిర్వహణను మద్దతించదు."
 
 #: ../virtManager/host.py:348 ../virtManager/host.py:349
-#: ../virtManager/storagelist.py:579
+#: ../virtManager/storagelist.py:575
 msgid "Connection not active."
 msgstr "అనుసంధానము క్రియాశీలంగా లేదు."
 
@@ -3184,95 +3300,88 @@ msgstr "ఈ అమరిక మార్పు పర్యవసానం త�
 msgid "Error changing network settings: %s"
 msgstr "నెట్‌వర్క్ అమరికలు: %s"
 
-#: ../virtManager/host.py:486 ../virtManager/host.py:643
-#: ../virtManager/storagelist.py:349 ../virtManager/storagelist.py:541
-msgid "On Boot"
-msgstr "బూట్ నందు"
-
-#: ../virtManager/host.py:487 ../virtManager/host.py:643
-#: ../virtManager/host.py:662 ../virtManager/preferences.py:108
-#: ../virtManager/storagelist.py:317 ../virtManager/storagelist.py:349
-#: ../virtManager/storagelist.py:541
-msgid "Never"
-msgstr "ఎప్పటికికాదు"
-
-#: ../virtManager/host.py:516
+#: ../virtManager/host.py:512
 msgid "No virtual network selected."
 msgstr "ఎటువంటి వర్చ్యువల్ నెట్వర్కు యెంపికకాలేదు."
 
-#: ../virtManager/host.py:527
+#: ../virtManager/host.py:523
 #, python-format
 msgid "Error selecting network: %s"
 msgstr "నెట్వర్కును యెంపికచేయుటలో దోషము: %s"
 
-#: ../virtManager/host.py:570 ../virtinst/network.py:160
+#: ../virtManager/host.py:566 ../virtinst/network.py:172
 msgid "Routed network"
 msgstr "రౌటెడ్ నెట్వర్కు"
 
-#: ../virtManager/host.py:572
+#: ../virtManager/host.py:568
 msgid "Isolated network, internal routing only"
 msgstr "ఏకాకి నెట్వర్కు, అంతర్గత రౌటింగ్ మాత్రమే"
 
-#: ../virtManager/host.py:574
+#: ../virtManager/host.py:570
 msgid "Isolated network, routing disabled"
 msgstr "ఏకాకి నెట్వర్కు, రౌటింగ్ అచేతనమైంది"
 
-#: ../virtManager/host.py:631 ../virtManager/host.py:656
-#: ../virtManager/host.py:844 ../virtManager/libvirtobject.py:215
+#: ../virtManager/host.py:627 ../virtManager/host.py:651
+#: ../virtManager/host.py:839 ../virtManager/libvirtobject.py:222
 #: ../virtManager/netlist.py:147 ../virtManager/storagelist.py:315
 #: ../virtManager/storagelist.py:347
 msgid "Inactive"
 msgstr "క్రియాహీన"
 
-#: ../virtManager/host.py:670 ../virtManager/host.py:675
+#: ../virtManager/host.py:640 ../virtManager/host.py:657
+#: ../virtManager/storagelist.py:317 ../virtManager/storagelist.py:348
+msgid "On Boot"
+msgstr "బూట్ నందు"
+
+#: ../virtManager/host.py:665 ../virtManager/host.py:670
 msgid "Isolated network"
 msgstr "ఏకీకరించిన నెట్వర్క్"
 
-#: ../virtManager/host.py:718
+#: ../virtManager/host.py:713
 #, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
 msgstr "మీరు ఖచ్చితంగా యింటర్ఫేస్ '%s'ను నిలివేయాలని అనుకొనుచున్నారా?"
 
-#: ../virtManager/host.py:724
+#: ../virtManager/host.py:719
 #, python-format
 msgid "Error stopping interface '%s'"
 msgstr "ఇంటర్ఫేస్ '%s' ఆపుటలో దోషం"
 
-#: ../virtManager/host.py:733
+#: ../virtManager/host.py:728
 #, python-format
 msgid "Are you sure you want to start the interface '%s'?"
 msgstr "మీరు ఖచ్చితంగా యింటర్ఫేస్ '%s'ను ప్రారంభించాలని కోరుకొనుచున్నారా?"
 
-#: ../virtManager/host.py:739
+#: ../virtManager/host.py:734
 #, python-format
 msgid "Error starting interface '%s'"
 msgstr "ఇంటర్ఫేస్ '%s' ప్రారంభించుటలో దోషం"
 
-#: ../virtManager/host.py:746
+#: ../virtManager/host.py:741
 #, python-format
 msgid "Are you sure you want to permanently delete the interface %s?"
 msgstr "మీరు ఖచ్చితంగా యింటర్ఫేస్ %sను శాశ్వతంగా తొలగించాలని అనుకొనుచున్నారా?"
 
-#: ../virtManager/host.py:754
+#: ../virtManager/host.py:749
 #, python-format
 msgid "Error deleting interface '%s'"
 msgstr "ఇంటర్ఫేస్ '%s' తొలగించుటలో దోషం"
 
-#: ../virtManager/host.py:763
+#: ../virtManager/host.py:758
 #, python-format
 msgid "Error launching interface wizard: %s"
 msgstr "ఇంటర్ఫేస్ విజార్డును ఆరంభించుటలో దోషము: %s"
 
-#: ../virtManager/host.py:790
+#: ../virtManager/host.py:785
 #, python-format
 msgid "Error setting interface startmode: %s"
 msgstr "ఇంటర్ఫేస్ ప్రారంభరీతిని అమర్చుటలో దోషము: %s"
 
-#: ../virtManager/host.py:807
+#: ../virtManager/host.py:802
 msgid "No interface selected."
 msgstr "ఏ యింటర్ఫేస్ యెంపికకాలేదు."
 
-#: ../virtManager/host.py:817
+#: ../virtManager/host.py:812
 #, python-format
 msgid "Error selecting interface: %s"
 msgstr "ఇంటర్ఫేస్ యెంపికచేయుటలో దోషము: %s"
@@ -3394,22 +3503,22 @@ msgstr ""
 msgid "No usable connections available."
 msgstr ""
 
-#: ../virtManager/migrate.py:360
+#: ../virtManager/migrate.py:358
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "అతిథిని మైగ్రేట్ చేయలేదు: %s"
 
-#: ../virtManager/migrate.py:403
+#: ../virtManager/migrate.py:399
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "VM '%s'ను వలసపంపుచున్నది"
 
-#: ../virtManager/migrate.py:404
+#: ../virtManager/migrate.py:400
 #, python-format
 msgid "Migrating VM '%s' to %s. This may take a while."
 msgstr ""
 
-#: ../virtManager/migrate.py:418
+#: ../virtManager/migrate.py:414
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "మైగ్రేట్ పనిని రద్దుచేయుటలో దోషం: %s"
@@ -3422,72 +3531,76 @@ msgstr "వినియోగదారిరీతి నెట్వర్క�
 msgid "Virtual network"
 msgstr "వర్చ్యువల్ నెట్వర్కు"
 
-#: ../virtManager/netlist.py:163
+#: ../virtManager/netlist.py:166
 msgid "No virtual networks available"
 msgstr "ఎటువంటి వర్చ్యువల్ నెట్వర్కులు అందుబాటులో లేవు"
 
-#: ../virtManager/netlist.py:208 ../virtManager/netlist.py:212
+#: ../virtManager/netlist.py:211 ../virtManager/netlist.py:215
 #, python-format
 msgid "Host device %s"
 msgstr "అతిధేయ scsi పరికరం %s కనబడలేదు"
 
-#: ../virtManager/netlist.py:215
+#: ../virtManager/netlist.py:218
 msgid "Empty bridge"
 msgstr ""
 
-#: ../virtManager/netlist.py:216
+#: ../virtManager/netlist.py:219
 #, python-format
 msgid "Bridge %s: %s"
 msgstr ""
 
-#: ../virtManager/netlist.py:221
+#: ../virtManager/netlist.py:224
 msgid "macvtap"
 msgstr "macvtap"
 
-#: ../virtManager/netlist.py:227
+#: ../virtManager/netlist.py:230
 msgid "Not bridged"
 msgstr "బ్రిడ్జడ్ కాదు"
 
-#: ../virtManager/netlist.py:243
+#: ../virtManager/netlist.py:246
 msgid "Specify shared device name"
 msgstr "భాగస్వామ్య పరికర నామమును తెలుపుము"
 
-#: ../virtManager/netlist.py:284
+#: ../virtManager/netlist.py:287
 msgid "No networking"
 msgstr "నెట్వర్కింగ్ లేదు"
 
-#: ../virtManager/netlist.py:352
+#: ../virtManager/netlist.py:355
 msgid "Virtual Network is not active."
 msgstr "వర్చ్యువల్ నెట్వర్కు క్రియాశీలముగా లేదు."
 
-#: ../virtManager/netlist.py:353
+#: ../virtManager/netlist.py:356
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr ""
 "వర్చ్యువల్ నెట్వర్కు '%s' క్రియాహీనము కాదు. మీరు నెట్వర్కును యిప్పుడు ప్రారంభించుటకు యిష్టపడతారా?"
 
-#: ../virtManager/netlist.py:364
+#: ../virtManager/netlist.py:367
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "వర్చ్యువల్ నెట్వర్కు '%s'ను ప్రారంభించలేక పోయింది: %s"
 
-#: ../virtManager/netlist.py:389
+#: ../virtManager/netlist.py:392
 msgid "Error with network parameters."
 msgstr "నెట్వర్కు పారామితులతో దోషము."
 
-#: ../virtManager/netlist.py:394 ../virtManager/netlist.py:396
+#: ../virtManager/netlist.py:397 ../virtManager/netlist.py:399
 msgid "Mac address collision."
 msgstr "Mac చిరునామా సంఘట్టనము"
 
-#: ../virtManager/netlist.py:397
+#: ../virtManager/netlist.py:400
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s మీరు ఖచ్చితముగా ఈ చిరునామాను వుపయోగిద్దామని అనుకొనుచున్నారా?"
 
-#: ../virtManager/netlist.py:409
+#: ../virtManager/netlist.py:412
 msgid "Libvirt version does not support physical interface listing."
 msgstr "Libvirt వర్షన్ భౌతిక యింటర్ఫేస్ లిస్టింగ్‌ను మద్దతునీయదు."
+
+#: ../virtManager/preferences.py:108
+msgid "Never"
+msgstr "ఎప్పటికికాదు"
 
 #: ../virtManager/preferences.py:109
 msgid "Fullscreen only"
@@ -3590,33 +3703,33 @@ msgstr "బహిర్గత"
 msgid "VM State"
 msgstr "స్థితి"
 
-#: ../virtManager/snapshots.py:345
+#: ../virtManager/snapshots.py:346
 msgid "External disk and memory"
 msgstr "బహిర్గత"
 
-#: ../virtManager/snapshots.py:347
+#: ../virtManager/snapshots.py:348
 msgid "External memory only"
 msgstr "బహిర్గత"
 
-#: ../virtManager/snapshots.py:349
+#: ../virtManager/snapshots.py:350
 msgid "External disk only"
 msgstr "బహిర్గత"
 
-#: ../virtManager/snapshots.py:468
+#: ../virtManager/snapshots.py:467
 #, python-format
 msgid "Error creating snapshot: %s"
 msgstr "స్నాప్‌షాట్ సృష్టించుటలో అక్కడ ఒక దోషం ఉంది %s"
 
-#: ../virtManager/snapshots.py:486
+#: ../virtManager/snapshots.py:485
 #, python-format
 msgid "Error validating snapshot: %s"
 msgstr "స్నాప్‌షాట్ సృష్టించుటలో అక్కడ ఒక దోషం ఉంది %s"
 
-#: ../virtManager/snapshots.py:543
+#: ../virtManager/snapshots.py:539
 msgid "Creating virtual machine snapshot"
 msgstr "స్నాప్‌షాట్ సృష్టిస్తోంది"
 
-#: ../virtManager/snapshots.py:616
+#: ../virtManager/snapshots.py:612
 #, python-format
 msgid ""
 "Are you sure you want to run snapshot '%s'? All %s changes since the last "
@@ -3624,70 +3737,70 @@ msgid ""
 msgstr ""
 "నీవు స్నాప్‌షాట్ కొరకు నిశ్చయించుకొన్నావా '%s'? చివరి స్నాప్‌షాట్ నుండి చేసిన అన్ని %s మార్పులు తీసివేయబడును"
 
-#: ../virtManager/snapshots.py:620
+#: ../virtManager/snapshots.py:616
 msgid "disk"
 msgstr "డిస్కు"
 
-#: ../virtManager/snapshots.py:622
+#: ../virtManager/snapshots.py:618
 msgid "disk and configuration"
 msgstr "X11 రూపకరణ"
 
-#: ../virtManager/snapshots.py:631
+#: ../virtManager/snapshots.py:627
 msgid "Running snapshot"
 msgstr "తటాలున ఛాయాచిత్రమును దాచుము "
 
-#: ../virtManager/snapshots.py:632
+#: ../virtManager/snapshots.py:628
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "తటాలున ఛాయాచిత్రమును దాచుము '%s'"
 
-#: ../virtManager/snapshots.py:633
+#: ../virtManager/snapshots.py:629
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "తటాలున ఛాయాచిత్రమును దాచుము '%s'"
 
-#: ../virtManager/snapshots.py:642
+#: ../virtManager/snapshots.py:638
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "మీరు ఎంపిక చేసిన దస్త్రాలను శాశ్వతంగా తొలగించుదామని అనుకుంటున్నారా?"
 
-#: ../virtManager/snapshots.py:650
+#: ../virtManager/snapshots.py:646
 msgid "Deleting snapshot"
 msgstr "తయారవుతోంది"
 
-#: ../virtManager/snapshots.py:651
+#: ../virtManager/snapshots.py:647
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "తయారవుతోంది'%s'"
 
-#: ../virtManager/snapshots.py:652
+#: ../virtManager/snapshots.py:648
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "తయారవుతోంది'%s'"
 
-#: ../virtManager/snapshots.py:660
+#: ../virtManager/snapshots.py:656
 msgid "No snapshot selected."
 msgstr "ఏ ఫైలు ఎంపికకాలేదు."
 
-#: ../virtManager/snapshots.py:663
+#: ../virtManager/snapshots.py:659
 msgid "Multiple snapshots selected."
 msgstr "రెండు అడ్డపట్టీలు ఎంచుకొనుటకు అనుమతించు."
 
-#: ../virtManager/snapshots.py:673
+#: ../virtManager/snapshots.py:669
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "తటాలున ఛాయాచిత్రమును దాచుము %s"
 
-#: ../virtManager/sshtunnels.py:72
+#: ../virtManager/sshtunnels.py:75
 msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr ""
 
-#: ../virtManager/sshtunnels.py:76
+#: ../virtManager/sshtunnels.py:79
 msgid "Guest is configured for TLS only which does not work over SSH."
 msgstr ""
 
-#: ../virtManager/sshtunnels.py:82
+#: ../virtManager/sshtunnels.py:85
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
@@ -3728,73 +3841,73 @@ msgstr ""
 msgid "%s Free / <i>%s In Use</i>"
 msgstr ""
 
-#: ../virtManager/storagelist.py:360
+#: ../virtManager/storagelist.py:359
 msgid "Create new volume"
 msgstr "వాల్యూమ్ సృష్టించలేదు: %s"
 
-#: ../virtManager/storagelist.py:366
+#: ../virtManager/storagelist.py:365
 msgid "Pool does not support volume creation"
 msgstr "iSCSI నిల్వ పూల్ అనునది వాల్యూమ్ సృష్టీకరణను తోడ్పాటునీయలేదు"
 
-#: ../virtManager/storagelist.py:505
+#: ../virtManager/storagelist.py:504
 msgid "No storage pool selected."
 msgstr "ఏ నిల్వ పూల్ యెంపికకాలేదు."
 
-#: ../virtManager/storagelist.py:515
+#: ../virtManager/storagelist.py:514
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "పూల్ యెంపికచేయుటలో దోషము: %s"
 
-#: ../virtManager/storagelist.py:573
+#: ../virtManager/storagelist.py:569
 msgid "Libvirt connection does not support storage management."
 msgstr "Libvirt అనుసంధానము నిల్వ నిర్వాహణను మద్దతించదు."
 
-#: ../virtManager/storagelist.py:602
+#: ../virtManager/storagelist.py:598
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "పూల్ '%s' ఆపుటలో దోషం"
 
-#: ../virtManager/storagelist.py:612
+#: ../virtManager/storagelist.py:608
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "పూల్ '%s' ప్రారంభించుటలో దోషం"
 
-#: ../virtManager/storagelist.py:624
+#: ../virtManager/storagelist.py:620
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "పూల్ విజార్డు ఆరంభించుటలో దోషము: %s"
 
-#: ../virtManager/storagelist.py:632
+#: ../virtManager/storagelist.py:628
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "మీరు ఖచ్చితంగా పూల్ %sను శాశ్వతముగా తొలగించుదామని అనుకొనుచున్నారా?"
 
-#: ../virtManager/storagelist.py:639
+#: ../virtManager/storagelist.py:635
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "పూల్ '%s' తొలగించుటలో దోషం"
 
-#: ../virtManager/storagelist.py:652
+#: ../virtManager/storagelist.py:648
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "పూల్ '%s' తాజాపరచుటలో దోషం"
 
-#: ../virtManager/storagelist.py:668
+#: ../virtManager/storagelist.py:664
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "నెట్‌వర్క్ అమరికలు: %s"
 
-#: ../virtManager/storagelist.py:707
+#: ../virtManager/storagelist.py:703
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "వాల్యూమ్ విజార్డు ఆరంభించుటలో దోషము: %s"
 
-#: ../virtManager/storagelist.py:715
+#: ../virtManager/storagelist.py:711
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "మీరు ఖచ్చితముగా వాల్యూమ్ %sను శాశ్వతముగా తొలగించుదామని అనుకొనుచున్నారా?"
 
-#: ../virtManager/storagelist.py:728
+#: ../virtManager/storagelist.py:724
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr ""
@@ -3879,17 +3992,17 @@ msgstr "మైగ్రేట్: గడువుతీరుట చెల్ల
 msgid "_Delete"
 msgstr "తొలగించుము (_D)"
 
-#: ../virtconv/formats.py:73
+#: ../virtconv/formats.py:75
 #, python-format
 msgid "No parser found for type '%s'"
 msgstr "ఏ ఫైలులు కనబడలేదు'%s'"
 
-#: ../virtconv/formats.py:83
+#: ../virtconv/formats.py:85
 #, python-format
 msgid "Don't know how to parse file %s"
 msgstr "ఫైలు పార్స్ చేయుటకు విఫలమైను: %s"
 
-#: ../virtconv/formats.py:159
+#: ../virtconv/formats.py:161
 #, python-format
 msgid ""
 "%s appears to be an archive, but '%s' is not installed. Please either "
@@ -3897,17 +4010,17 @@ msgid ""
 "extracted directory."
 msgstr ""
 
-#: ../virtconv/formats.py:165
+#: ../virtconv/formats.py:167
 #, python-format
 msgid "%s appears to be an archive, running: %s"
 msgstr "%s దస్త్రమును ఒక సంగ్రహమునకు జతచేయి: %s"
 
-#: ../virtconv/formats.py:278
+#: ../virtconv/formats.py:280
 #, python-format
 msgid "None of %s tools found."
 msgstr "కనబడలేదు %s."
 
-#: ../virtconv/formats.py:327
+#: ../virtconv/formats.py:329
 #, python-format
 msgid "New path name '%s' already exists"
 msgstr "నామము యిప్పటికే వుంది %s"
@@ -3957,26 +4070,26 @@ msgstr "మల్టీస్టోరేజ్ VMDK వివరిణిలు
 msgid "No displayName defined in '%s'"
 msgstr "'%s' నందు యే ప్రదర్శనపేరు నిర్వచించలేదు"
 
-#: ../virtinst/capabilities.py:483
+#: ../virtinst/capabilities.py:387
 #, python-format
 msgid "for arch '%s'"
 msgstr "ఆకృతి '%s' కొరకు"
 
-#: ../virtinst/capabilities.py:487
+#: ../virtinst/capabilities.py:391
 #, python-format
 msgid "virtualization type '%s'"
 msgstr "వర్చ్యులైజేషన్ రకం '%s'"
 
-#: ../virtinst/capabilities.py:489
+#: ../virtinst/capabilities.py:393
 msgid "any virtualization options"
 msgstr "ఏదేని వర్చ్యులైజేషన్ ఐచ్చికాలు"
 
-#: ../virtinst/capabilities.py:491
+#: ../virtinst/capabilities.py:395
 #, python-format
 msgid "Host does not support %(virttype)s %(arch)s"
 msgstr "అతిధేయ  %(virttype)s %(arch)s కు తోడ్పాటునీయదు"
 
-#: ../virtinst/capabilities.py:499
+#: ../virtinst/capabilities.py:403
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s%(machine)s for virtualization "
@@ -3985,19 +4098,19 @@ msgstr ""
 "వర్చ్యులైజేషన్ రకం  '%(virttype)s' ఆకృతి '%(arch)s' కొరకు డొమైన్ రకం %(domain)s"
 "%(machine)s ను అతిధేయ తోడ్పాటునీయదు"
 
-#: ../virtinst/cli.py:162
+#: ../virtinst/cli.py:166
 msgid "See man page for examples and full option syntax."
 msgstr "%S కి మీ ప్రాంతాన్ని తెలియజేయాలా."
 
-#: ../virtinst/cli.py:164
+#: ../virtinst/cli.py:168
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr "అందుబాటులోవున్న అన్ని ఐచ్ఛికములను చూడుటకు దయచేసి \"%s --help\" టైపుచేయుము"
 
-#: ../virtinst/cli.py:336
+#: ../virtinst/cli.py:339
 msgid "Exiting at user request."
 msgstr "వాడుకరి అభ్యర్ధనపై నిష్క్రమిస్తోంది"
 
-#: ../virtinst/cli.py:348
+#: ../virtinst/cli.py:351
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -4009,22 +4122,22 @@ msgstr ""
 "ఒకవేళ అదే అయితే, మీరు మీ డొమైన్‌ను యిది నడుపుట ద్వారా పునఃప్రారంభించవచ్చు:   %s\n"
 "లేదంటే దయచేసి మీ సంస్థాపనను పునఃప్రారంభించండి."
 
-#: ../virtinst/cli.py:365
+#: ../virtinst/cli.py:368
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr ""
 
-#: ../virtinst/cli.py:381
+#: ../virtinst/cli.py:385
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "ఇది యిప్పటికే వున్న పాత్‌ '%s'ను వోవర్‌రైడ్ చేయును"
 
-#: ../virtinst/cli.py:392
+#: ../virtinst/cli.py:396
 #, python-format
 msgid "Disk %s is already in use by other guests %s."
 msgstr "డిస్కు \"%s\" ఇప్పటికే వేరే అతిథులు %s చేత ఉపయోగంలో ఉంది.."
 
-#: ../virtinst/cli.py:409
+#: ../virtinst/cli.py:413
 #, python-format
 msgid ""
 "%s may not be accessible by the hypervisor. You will need to grant the '%s' "
@@ -4033,7 +4146,7 @@ msgstr ""
 "%s may not be accessible by the hypervisor. You will need to grant the '%s' "
 "user search permissions for the following directories: %s"
 
-#: ../virtinst/cli.py:494
+#: ../virtinst/cli.py:498
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -4041,51 +4154,51 @@ msgstr ""
 "గ్రాఫికల్ కన్సోల్‌కు అనుసంధానం అవలేక పోయింది. virt-viewer సంస్థాపించలేదు. దయచేసి 'virt-viewer' "
 "ప్యాకేజీ సంస్థాపించండి."
 
-#: ../virtinst/cli.py:500
+#: ../virtinst/cli.py:504
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: ../virtinst/cli.py:519 ../virtinst/cli.py:522
+#: ../virtinst/cli.py:523 ../virtinst/cli.py:526
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "లిబ్‌వర్ట్ URI తో హైపర్విజర్‌కు అనుసంధానించు"
 
-#: ../virtinst/cli.py:538
+#: ../virtinst/cli.py:542
 msgid "Don't automatically try to connect to the guest console"
 msgstr "అతిథి కన్సోలుకు అనుసంధానించుటకు స్వయంచాలకంగా ప్రయత్నించవద్దు"
 
-#: ../virtinst/cli.py:542
+#: ../virtinst/cli.py:546
 msgid "Don't boot guest after completing install."
 msgstr "సంస్థాపన పూర్తైన తరువాత అతిథిని బూట్ చేయవద్దు."
 
-#: ../virtinst/cli.py:546
+#: ../virtinst/cli.py:550
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr "ఇదే నామముతో వొక ఫైలు వుంది."
 
-#: ../virtinst/cli.py:553
+#: ../virtinst/cli.py:557
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "సృష్టించుట కన్నా XML పత్రము ముద్రించు."
 
-#: ../virtinst/cli.py:572
+#: ../virtinst/cli.py:576
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr "సంస్థాపనా కార్యక్రమం నడుపు, అయితే పరికరాలను సృష్టించడం లేదా అతిథిని నిర్వచించడం చేయవద్దు."
 
-#: ../virtinst/cli.py:577
+#: ../virtinst/cli.py:581
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
 
-#: ../virtinst/cli.py:581
+#: ../virtinst/cli.py:585
 msgid "Suppress non-error output"
 msgstr "దోషం-కాని అవుట్పుట్ కొరకు సప్రెస్ చేయును"
 
-#: ../virtinst/cli.py:583
+#: ../virtinst/cli.py:587
 msgid "Print debugging information"
 msgstr "డీబగ్గింగ్ సమాచారం ముద్రించును"
 
-#: ../virtinst/cli.py:588
+#: ../virtinst/cli.py:592
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -4095,17 +4208,15 @@ msgstr ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 
-#: ../virtinst/cli.py:595
+#: ../virtinst/cli.py:599
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
-"--memory 512,maxmemory=1024"
+"--memory 512,maxmemory=1024\n"
+"--memory 512,maxmemory=1024,hotplugmemorymax=2048,hotplugmemoryslots=2"
 msgstr ""
-"Configure guest memory allocation. Ex:\n"
-"--memory 1024 (in MiB)\n"
-"--memory 512,maxmemory=1024"
 
-#: ../virtinst/cli.py:605
+#: ../virtinst/cli.py:611
 msgid ""
 "Number of vcpus to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -4117,7 +4228,7 @@ msgstr ""
 "--vcpus 5,maxcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2,"
 
-#: ../virtinst/cli.py:614
+#: ../virtinst/cli.py:620
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -4125,7 +4236,7 @@ msgstr ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 
-#: ../virtinst/cli.py:625
+#: ../virtinst/cli.py:631
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics vnc\n"
@@ -4139,7 +4250,7 @@ msgstr ""
 "--graphics none\n"
 "--graphics vnc,password=foobar,port=5910,keymap=ja"
 
-#: ../virtinst/cli.py:634
+#: ../virtinst/cli.py:640
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -4149,7 +4260,7 @@ msgid ""
 "--network help"
 msgstr ""
 
-#: ../virtinst/cli.py:644
+#: ../virtinst/cli.py:650
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=ich9-ehci1"
@@ -4157,34 +4268,34 @@ msgstr ""
 "అతిథి నియంత్రణ పరికరం ఆకృతీకరించుము. ఉదా:\n"
 "--controller type=usb,model=ich9-ehci1"
 
-#: ../virtinst/cli.py:647
+#: ../virtinst/cli.py:653
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
 
-#: ../virtinst/cli.py:651
+#: ../virtinst/cli.py:657
 msgid "Configure a guest serial device"
 msgstr "అతిథి వరుస పరికరం ఆకృతీకరించు"
 
-#: ../virtinst/cli.py:653
+#: ../virtinst/cli.py:659
 msgid "Configure a guest parallel device"
 msgstr "అతిథి సమాంతర పరికరం ఆకృతీకరించు"
 
-#: ../virtinst/cli.py:655
+#: ../virtinst/cli.py:661
 msgid "Configure a guest communication channel"
 msgstr "అతిథి సంప్రదింపు ఛానల్ ఆకృతీకరించు"
 
-#: ../virtinst/cli.py:657
+#: ../virtinst/cli.py:663
 msgid "Configure a text console connection between the guest and host"
 msgstr "అతిథి మరియు అతిధేయ మధ్యన టెక్స్ట్ కన్సోల్ అనుసంధానం ఆకృతీకరించు"
 
-#: ../virtinst/cli.py:660
+#: ../virtinst/cli.py:666
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
-#: ../virtinst/cli.py:663
+#: ../virtinst/cli.py:669
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -4194,19 +4305,19 @@ msgstr ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 
-#: ../virtinst/cli.py:674
+#: ../virtinst/cli.py:680
 msgid "Configure guest sound device emulation"
 msgstr "గెస్టు సౌండ్ పరికర ఎమ్యులేషన్ ఆకృతీకరించు"
 
-#: ../virtinst/cli.py:684
+#: ../virtinst/cli.py:690
 msgid "Configure a guest watchdog device"
 msgstr "అతిథి వాచ్‌డాగ్ పరికరం ఆకృతీకరించు"
 
-#: ../virtinst/cli.py:686
+#: ../virtinst/cli.py:692
 msgid "Configure guest video hardware."
 msgstr "అతిథి వీడియో హార్డువేర్ ఆకృతీకరించు."
 
-#: ../virtinst/cli.py:688
+#: ../virtinst/cli.py:694
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -4214,7 +4325,7 @@ msgstr ""
 "అతిథి స్మార్టుకార్డు పరికరం ఆకృతీకరించు. ఉదా:\n"
 "--smartcard mode=passthrough"
 
-#: ../virtinst/cli.py:691
+#: ../virtinst/cli.py:697
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -4222,7 +4333,7 @@ msgstr ""
 "అతిథి రీడైరక్షన్ పరికరం ఆకృతీకరించు. ఉదా:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: ../virtinst/cli.py:694
+#: ../virtinst/cli.py:700
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -4230,47 +4341,51 @@ msgstr ""
 "అతిథి మెమ్‌బలూన్ పరికరం ఆకృతీకరించు. ఉదా:\n"
 "--memballoon model=virtio"
 
-#: ../virtinst/cli.py:697
-msgid ""
-"Configure a guest TPM device. Ex:\n"
-"--tpm /dev/tpm"
-msgstr ""
-"Configure a guest TPM device. Ex:\n"
-"--tpm /dev/tpm"
-
-#: ../virtinst/cli.py:700
-msgid ""
-"Configure a guest RNG device. Ex:\n"
-"--rng /dev/random"
-msgstr ""
-"Configure a guest RNG device. Ex:\n"
-"--rng /dev/random"
-
 #: ../virtinst/cli.py:703
 msgid ""
+"Configure a guest TPM device. Ex:\n"
+"--tpm /dev/tpm"
+msgstr ""
+"Configure a guest TPM device. Ex:\n"
+"--tpm /dev/tpm"
+
+#: ../virtinst/cli.py:706
+msgid ""
+"Configure a guest RNG device. Ex:\n"
+"--rng /dev/urandom"
+msgstr ""
+
+#: ../virtinst/cli.py:709
+msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 
-#: ../virtinst/cli.py:709
+#: ../virtinst/cli.py:712
+msgid ""
+"Configure a guest memory device. Ex:\n"
+"--memdev dimm,target_size=1024"
+msgstr ""
+
+#: ../virtinst/cli.py:718
 msgid "Set domain security driver configuration."
 msgstr "డొమైన్ సెక్యూరిటీ చోదకి ఆకృతీకరణ."
 
-#: ../virtinst/cli.py:711
+#: ../virtinst/cli.py:720
 msgid "Tune NUMA policy for the domain process."
 msgstr "డొమైన్ ప్రోసెస్ కొరకు NUMA పాలసీ ట్యూన్ చేయి."
 
-#: ../virtinst/cli.py:713
+#: ../virtinst/cli.py:722
 msgid "Tune memory policy for the domain process."
 msgstr "Tune memory policy for the domain process."
 
-#: ../virtinst/cli.py:715
+#: ../virtinst/cli.py:724
 msgid "Tune blkio policy for the domain process."
 msgstr "Tune blkio policy for the domain process."
 
-#: ../virtinst/cli.py:717
+#: ../virtinst/cli.py:726
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -4278,7 +4393,7 @@ msgstr ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 
-#: ../virtinst/cli.py:720
+#: ../virtinst/cli.py:729
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -4288,7 +4403,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,eoi=on"
 
-#: ../virtinst/cli.py:724
+#: ../virtinst/cli.py:733
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -4296,19 +4411,19 @@ msgstr ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: ../virtinst/cli.py:727
+#: ../virtinst/cli.py:736
 msgid "Configure VM power management features"
 msgstr "పవర్ నిర్వహణను ఆకృతీకరించుము"
 
-#: ../virtinst/cli.py:729
+#: ../virtinst/cli.py:738
 msgid "Configure VM lifecycle management policy"
 msgstr "పవర్ నిర్వహణను ఆకృతీకరించుము"
 
-#: ../virtinst/cli.py:731
+#: ../virtinst/cli.py:740
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "VM రిసోర్స్ విభజనీకరణను ఆకృతీకరించుము (cgroups)"
 
-#: ../virtinst/cli.py:733
+#: ../virtinst/cli.py:742
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo emulate\n"
@@ -4319,14 +4434,14 @@ msgid ""
 "baseBoard_product=Motherboard,...\n"
 msgstr ""
 
-#: ../virtinst/cli.py:740
+#: ../virtinst/cli.py:749
 msgid ""
 "Pass arguments directly to the qemu emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: ../virtinst/cli.py:747
+#: ../virtinst/cli.py:756
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -4336,7 +4451,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 
-#: ../virtinst/cli.py:751
+#: ../virtinst/cli.py:760
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
@@ -4344,7 +4459,7 @@ msgstr ""
 "LXC కంటైనర్ కొరకు యూజర్ నేమ్‌స్పేస్. Ex:\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
 
-#: ../virtinst/cli.py:760
+#: ../virtinst/cli.py:769
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -4353,57 +4468,57 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: ../virtinst/cli.py:791
+#: ../virtinst/cli.py:800
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s తప్పక 'yes' లేదా 'no'"
 
-#: ../virtinst/cli.py:930
+#: ../virtinst/cli.py:942
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: ../virtinst/cli.py:1150
+#: ../virtinst/cli.py:1162
 #, python-format
 msgid "Unknown options %s"
 msgstr "తెలియని ఐచ్చికాలు %s"
 
-#: ../virtinst/cli.py:1203 ../virtinst/cli.py:1234
+#: ../virtinst/cli.py:1215 ../virtinst/cli.py:1246
 #, python-format
 msgid "Error: --%(cli_arg_name)s %(options)s: %(err)s"
 msgstr "దోషం: --%(cli_arg_name)s %(options)s: %(err)s"
 
-#: ../virtinst/cli.py:1754
+#: ../virtinst/cli.py:1788
 #, python-format
 msgid "Unknown sysinfo flag '%s'"
 msgstr ""
 
-#: ../virtinst/cli.py:1932
+#: ../virtinst/cli.py:1966
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' కు తగని విలువ: %s"
 
-#: ../virtinst/cli.py:1945
+#: ../virtinst/cli.py:1979
 #, python-format
 msgid "Unknown '%s' value '%s'"
 msgstr "తెలియని '%s' విలువ '%s'"
 
-#: ../virtinst/cli.py:1963
+#: ../virtinst/cli.py:1997
 msgid "Cannot specify more than 1 storage path"
 msgstr "1 కన్నా యెక్కువ నిల్వ పాత్‌ను తెలుప లేదు"
 
-#: ../virtinst/cli.py:1970
+#: ../virtinst/cli.py:2004
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "vol=poolname/volname తో నిల్వ వాల్యామ్ తప్పక తెలుపాలి"
 
-#: ../virtinst/cli.py:2180
+#: ../virtinst/cli.py:2217
 #, python-format
 msgid "Didn't match keymap '%s' in keytable!"
 msgstr "కీమాప్ '%s' కీటేబుల్ నందలి దానితో సరిపోలుటలేదు!"
 
-#: ../virtinst/cli.py:2484
+#: ../virtinst/cli.py:2545
 #, python-format
 msgid "%(devtype)s type '%(chartype)s' does not support '%(optname)s' option."
 msgstr "%(devtype)s రకం '%(chartype)s' అనునది '%(optname)s' ఐచ్చికంకు తోడ్పాటునీయదు."
@@ -4449,7 +4564,12 @@ msgstr "పరికరాలతో వున్న డొమైన్ క్ల
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr "ఉన్న నిల్వ వాల్యుమ్‌పై క్లోన్ చేయుట ప్రస్తుతం తోడ్పాటులేదు: '%s'"
 
-#: ../virtinst/cloner.py:402
+#: ../virtinst/cloner.py:380
+#, fuzzy, python-format
+msgid "Path does not exist: %s"
+msgstr "పాత్ లేదు."
+
+#: ../virtinst/cloner.py:405
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -4458,31 +4578,31 @@ msgstr ""
 "తెలుపబడిన కొత్త పాత్‌ల కన్నా క్లోన్ చేయుటకు మరిన్ని డిస్కులు. (%(passed)d తెలిపెను, %(need)d "
 "అవసరమైను"
 
-#: ../virtinst/cloner.py:414
+#: ../virtinst/cloner.py:417
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr "గ్రాఫిక్స్ పరికరం పోర్టును ఆటోపోర్టునకు అమర్చెను, వైరుధ్యం తప్పించుటకు"
 
-#: ../virtinst/cloner.py:581
+#: ../virtinst/cloner.py:576
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr ""
 
-#: ../virtinst/cloner.py:586
+#: ../virtinst/cloner.py:581
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "వాస్తవ డిస్కు సమాచారం నిర్ణయించలేక పోయింది: %s"
 
-#: ../virtinst/cloner.py:597
+#: ../virtinst/cloner.py:592
 msgid "XML has no 'dev' attribute in disk target"
 msgstr ""
 
-#: ../virtinst/cloner.py:627
+#: ../virtinst/cloner.py:622
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "డొమైన్ '%s' కనబడలేదు."
 
-#: ../virtinst/cpu.py:121
+#: ../virtinst/cpu.py:117
 msgid "No host CPU reported in capabilities"
 msgstr "సామర్ధ్యాలనందు యే అతిధేయ CPU నివేదించలేదు"
 
@@ -4491,11 +4611,11 @@ msgstr "సామర్ధ్యాలనందు యే అతిధేయ CPU
 msgid "Could not determine or unsupported format of '%s'"
 msgstr "నిర్థారించలేక పోయింది లేదా '%s' యొక్క తోడ్పాటులేని ఫార్మాట్"
 
-#: ../virtinst/device.py:170
+#: ../virtinst/device.py:172
 msgid "Virtual device type must be set in subclass."
 msgstr "సబ్‌క్లాస్ నందు తప్పక అమర్చవలసిన వర్చ్యువల్ పరికరం రకం."
 
-#: ../virtinst/device.py:173
+#: ../virtinst/device.py:175
 #, python-format
 msgid "Unknown virtual device type '%s'."
 msgstr "తెలియని వర్చ్యువల్ పరికర రకం '%s'."
@@ -4629,35 +4749,35 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "ఈ వాల్యూమ్ రకానికి ఫార్మాట్ యాట్రిబ్యూట్ తోడ్పాటునీయదు"
 
-#: ../virtinst/devicedisk.py:503
+#: ../virtinst/devicedisk.py:505
 msgid "Can't change disk path if storage creation info has been set."
 msgstr ""
 
-#: ../virtinst/devicedisk.py:844
+#: ../virtinst/devicedisk.py:854
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "పరికర రకం '%s' కు పాత్ అవసరం"
 
-#: ../virtinst/devicedisk.py:851
+#: ../virtinst/devicedisk.py:861
 #, python-format
 msgid "The path '%s' must be a file or a device, not a directory"
 msgstr "పాత్ '%s' తప్పక ఫైలు లేదా పరికరం కావాలి, సంచయం కాదు"
 
-#: ../virtinst/devicedisk.py:860
+#: ../virtinst/devicedisk.py:870
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "నాన్-ఎగ్జిస్టెంట్ పాత్ '%s' కొరకు నిల్వ సృష్టి పారామితులు తెలుపండి."
 
 #. This basically means that we either chose full
 #. controller or didn't add any
-#: ../virtinst/devicedisk.py:1024
+#: ../virtinst/devicedisk.py:1034
 #, python-format
 msgid "Controller number %d for disk of type %s has no empty slot to use"
 msgstr "నియంత్రిక %d డిస్కు %s కోరకు ఏమీకలిగిలేదు."
 
-#: ../virtinst/devicedisk.py:1027
-#, python-format
-msgid "Only %s disks of type '%s' are supported"
+#: ../virtinst/devicedisk.py:1037
+#, fuzzy, python-format
+msgid "Only %s disks for bus '%s' are supported"
 msgstr "%s డిస్కులు '%s' రకం మాత్రమే తోడ్పాటునిచ్చును"
 
 #: ../virtinst/devicefilesystem.py:85
@@ -4742,7 +4862,7 @@ msgstr "ఏ చర్యలేదు"
 msgid "Cannot use storage %(path)s: %(err)s"
 msgstr "నిల్వ %(path)s వుపయోగించలేదు: %(err)s"
 
-#: ../virtinst/diskbackend.py:343
+#: ../virtinst/diskbackend.py:342
 #, python-format
 msgid "Cannot create storage for %s device."
 msgstr "%s పరికరం కొరకు నిల్వను సృష్టించలేదు."
@@ -4773,7 +4893,7 @@ msgstr " %d M అవసరమైంది > %d M అందుబాటులో�
 msgid "Cloning %(srcfile)s"
 msgstr "%(srcfile)s క్లోనింగ్"
 
-#: ../virtinst/diskbackend.py:478
+#: ../virtinst/diskbackend.py:480
 #, python-format
 msgid "Error cloning diskimage %s to %s: %s"
 msgstr "డిస్కుప్రతిబింబం %s ను %s కు క్లోనింగ్ చేయుటలో దోషం: %s"
@@ -4840,44 +4960,48 @@ msgstr "అతిథి"
 msgid "Guest name '%s' is already in use."
 msgstr "అతిథి పేరు '%s' యిప్పటికే వుపయోగంలో వుంది."
 
-#: ../virtinst/guest.py:246
+#: ../virtinst/guest.py:248
 #, python-format
 msgid "Distro '%s' does not exist in our dictionary"
 msgstr "పంపిణీ '%s' మా డిక్షనరీనందు లేదు"
 
-#: ../virtinst/guest.py:392
+#: ../virtinst/guest.py:419
 msgid "Creating domain..."
 msgstr "డొమైన్ సృష్టిస్తోంది..."
 
-#: ../virtinst/guest.py:455
+#: ../virtinst/guest.py:426
+msgid "Domain type 'vz' doesn't support transient installs."
+msgstr ""
+
+#: ../virtinst/guest.py:475
 msgid "Domain has already been started!"
 msgstr "డొమైన్ యిప్పటికే ప్రారంభమైంది!"
 
-#: ../virtinst/guest.py:502
+#: ../virtinst/guest.py:522
 #, python-format
 msgid "Removing disk '%s'"
 msgstr ""
 
-#: ../virtinst/guest.py:528
+#: ../virtinst/guest.py:548
 msgid "Libvirt version does not support UEFI."
 msgstr ""
 
-#: ../virtinst/guest.py:532
+#: ../virtinst/guest.py:552
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: ../virtinst/guest.py:537
+#: ../virtinst/guest.py:557
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
 
-#: ../virtinst/guest.py:964
+#: ../virtinst/guest.py:1043
 #, python-format
 msgid "Duplicate address for devices %s and %s"
 msgstr "పరికరాలు %s మరియు %s కొరకు చిరునామాలను నకిలీ చేయి"
 
-#: ../virtinst/guest.py:1128
+#: ../virtinst/guest.py:1177
 msgid "Host does not support spice GL"
 msgstr ""
 
@@ -4978,64 +5102,64 @@ msgstr "ఇంటర్ఫేస్ నిర్వచించలేదు: %s"
 msgid "Could not create interface: %s"
 msgstr "ఇంటర్ఫేస్ సృష్టించలేక పోయింది: %s"
 
-#: ../virtinst/kernelupload.py:88
+#: ../virtinst/kernelupload.py:86
 msgid "Failed to lookup scratch media volume"
 msgstr "స్క్రాచ్ మాధ్యమ వాల్యూమ్ లుకప్ విఫలమైంది"
 
-#: ../virtinst/kernelupload.py:103
+#: ../virtinst/kernelupload.py:101
 #, python-format
 msgid "Transferring %s"
 msgstr "బదిలీచేస్తోంది %s"
 
-#: ../virtinst/network.py:106 ../virtinst/network.py:111
+#: ../virtinst/network.py:118 ../virtinst/network.py:123
 msgid "Average"
 msgstr "సగటు"
 
-#: ../virtinst/network.py:107 ../virtinst/network.py:112
+#: ../virtinst/network.py:119 ../virtinst/network.py:124
 msgid "Peak"
 msgstr "పీక్ గుర్తింపు"
 
-#: ../virtinst/network.py:108 ../virtinst/network.py:113
+#: ../virtinst/network.py:120 ../virtinst/network.py:125
 msgid "Burst"
 msgstr "బర్స్ట్"
 
-#: ../virtinst/network.py:109
+#: ../virtinst/network.py:121
 msgid "Floor"
 msgstr "నేల"
 
-#: ../virtinst/network.py:124
+#: ../virtinst/network.py:136
 msgid "Inbound: "
 msgstr "ఇన్‌బౌండ్: "
 
-#: ../virtinst/network.py:131
+#: ../virtinst/network.py:143
 msgid "Outbound: "
 msgstr "అవుట్‌బౌండ్: "
 
-#: ../virtinst/network.py:153
+#: ../virtinst/network.py:165
 #, python-format
 msgid "NAT to %s"
 msgstr "NAT నుండి %sకు"
 
-#: ../virtinst/network.py:158
+#: ../virtinst/network.py:170
 #, python-format
 msgid "Route to %s"
 msgstr "%sకు రౌంట్"
 
-#: ../virtinst/network.py:163
+#: ../virtinst/network.py:175
 #, python-format
 msgid "%(mode)s to %(device)s"
 msgstr ""
 
-#: ../virtinst/network.py:166
+#: ../virtinst/network.py:178
 #, python-format
 msgid "%s network"
 msgstr ""
 
-#: ../virtinst/network.py:168
+#: ../virtinst/network.py:180
 msgid "Isolated network, internal and host routing only"
 msgstr "ఏకాకి నెట్వర్కు, అంతర్గత మరియు అతిధేయి రౌంటింగ్ మాత్రమే"
 
-#: ../virtinst/network.py:201
+#: ../virtinst/network.py:213
 #, python-format
 msgid "Name '%s' already in use by another network."
 msgstr "ఫైలు పేరు '%s' ఇప్పటికే వుపయోగంలో వుంది."
@@ -5044,26 +5168,21 @@ msgstr "ఫైలు పేరు '%s' ఇప్పటికే వుపయో�
 msgid "Connection does not support host device enumeration."
 msgstr "అతిధేయ పరికరం యెన్యూమరేషన్‌ను అనుసంధానం తోడ్పాటునీయదు."
 
-#: ../virtinst/nodedev.py:90
-#, python-format
-msgid "Did not find node device matching '%s': %s"
-msgstr ""
-
-#: ../virtinst/nodedev.py:153
+#: ../virtinst/nodedev.py:152
 msgid "System"
 msgstr "వ్యవస్థ"
 
-#: ../virtinst/nodedev.py:170
+#: ../virtinst/nodedev.py:169
 #, python-format
 msgid "Interface %s"
 msgstr "ఇంటర్ఫేస్ %s"
 
-#: ../virtinst/nodedev.py:399
+#: ../virtinst/nodedev.py:400
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s బహుళ నోడ్ పరికరాలకు చెందును"
 
-#: ../virtinst/nodedev.py:402
+#: ../virtinst/nodedev.py:403
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' కొరకు సరిజోడీ నోడ్ పరికరం కనుగొనలేదు"
@@ -5137,106 +5256,106 @@ msgstr ""
 msgid "ZFS Pool"
 msgstr ""
 
-#: ../virtinst/storage.py:233
+#: ../virtinst/storage.py:232
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "అప్రమేయ నిల్వ పూల్‌ '%s'ను సృష్టించలేకపోయింది: %s"
 
-#: ../virtinst/storage.py:319
+#: ../virtinst/storage.py:323
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "పేరు '%s' యిప్పటికే వేరొక పూల్‌చే వుపయోగంలో వుంది."
 
-#: ../virtinst/storage.py:406
+#: ../virtinst/storage.py:411
 msgid "Storage device type the pool will represent."
 msgstr "పూల్ రిప్రజంట్ అయ్యే నిల్వ పరికర రకం."
 
-#: ../virtinst/storage.py:418
+#: ../virtinst/storage.py:423
 msgid "iSCSI initiator qualified name"
 msgstr "iSCSI సిద్దీకరణి ఉత్తీర్ణ పేరు"
 
-#: ../virtinst/storage.py:421
+#: ../virtinst/storage.py:426
 msgid "Name of the Volume Group"
 msgstr "వాల్యూమ్ సమూహం యొక్క పేరు"
 
-#: ../virtinst/storage.py:500
+#: ../virtinst/storage.py:505
 msgid "Hostname is required"
 msgstr "అతిధేయపేరు అవసరమైంది"
 
-#: ../virtinst/storage.py:504
+#: ../virtinst/storage.py:509
 msgid "Source path is required"
 msgstr "దోషం: 'id' అవసరమైంది"
 
-#: ../virtinst/storage.py:517
+#: ../virtinst/storage.py:522
 msgid "Must explicitly specify source path if building pool"
 msgstr "పూల్ నిర్మించుతుంటే సోర్సు పాత్‌ను స్పష్టంగా తెలుపాలి"
 
-#: ../virtinst/storage.py:521
+#: ../virtinst/storage.py:526
 msgid "Must explicitly specify disk format if formatting disk device."
 msgstr "ఒకవేళ డిస్కు పరికరం పార్మాటు చేస్తుంటే డిస్కు ఫార్మాట్ స్పష్టంగా తెలుపాలి."
 
-#: ../virtinst/storage.py:533
+#: ../virtinst/storage.py:538
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "నిల్వ పూల్‌ను నిర్వచించలేదు: %s"
 
-#: ../virtinst/storage.py:540
+#: ../virtinst/storage.py:545
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "నిల్వ పూల్ బిల్డ్ చేయలేక పోయింది: %s"
 
-#: ../virtinst/storage.py:546
+#: ../virtinst/storage.py:551
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "నిల్వ పూల్‌ను ప్రారంభించలేక పోయింది: %s"
 
-#: ../virtinst/storage.py:552
+#: ../virtinst/storage.py:557
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "పూల్ స్యయంచాలకప్రారంభం ఫ్లాగ్ అమర్చలేక పోయింది: %s"
 
-#: ../virtinst/storage.py:621
+#: ../virtinst/storage.py:628
 #, python-format
 msgid "pool '%s' must be active."
 msgstr "పూల్ '%s' తప్పక క్రియాశీలం కావాలి."
 
-#: ../virtinst/storage.py:635
+#: ../virtinst/storage.py:642
 msgid "input_vol must be a virStorageVol"
 msgstr "input_vol తప్పక virStorageVol కావాలి"
 
-#: ../virtinst/storage.py:639
+#: ../virtinst/storage.py:646
 msgid ""
 "Creating storage from an existing volume is not supported by this libvirt "
 "version."
 msgstr "ఇప్పటికే వున్న వాల్యూమ్‌ నుండి నిల్వను సృష్టించుటకు ఈ libvirt వర్షన్‌తో వీలుకాదు."
 
-#: ../virtinst/storage.py:644
+#: ../virtinst/storage.py:651
 msgid "virStorageVolume pointer to clone/use as input."
 msgstr "ఇన్పుట్ ను క్లోన్/ఉపయోగించుటకు virStorageVolume సూచకి."
 
-#: ../virtinst/storage.py:652
+#: ../virtinst/storage.py:659
 #, fuzzy
 msgid ""
 "Creating storage by btrfs COW copy is not supported by this libvirt version."
 msgstr "ఇప్పటికే వున్న వాల్యూమ్‌ నుండి నిల్వను సృష్టించుటకు ఈ libvirt వర్షన్‌తో వీలుకాదు."
 
-#: ../virtinst/storage.py:683
+#: ../virtinst/storage.py:690
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "పేరు '%s' యిప్పటికే వేరొక వాల్యముచే వుపయోగంలో వుంది."
 
-#: ../virtinst/storage.py:808
+#: ../virtinst/storage.py:797
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr "స్పేర్స్ లాజికల్ వాల్యూమ్స్ తోడ్పాటులేదు, సామర్ధ్యంకు సమానమైన కేటాయింపు అమర్చుతోంది"
 
-#: ../virtinst/storage.py:847
+#: ../virtinst/storage.py:842
 #, python-format
 msgid "Allocating '%s'"
 msgstr "'%s' కేటాయిస్తోంది"
 
-#: ../virtinst/storage.py:914
+#: ../virtinst/storage.py:904
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
@@ -5245,7 +5364,7 @@ msgstr ""
 "వాల్యూమ్ సృష్టించుటకు నిల్వ పూల్‌పై తగినంత ఖాళీ జాగా లేదు. (%d M అభ్యర్ధించిన కేటాయింపు > %d M "
 "అందుబాటులోవుంది)"
 
-#: ../virtinst/storage.py:920
+#: ../virtinst/storage.py:910
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -5284,11 +5403,11 @@ msgstr "%s తెరుచుటకు విఫలమైంది: %s"
 msgid "Mounting location '%s' failed"
 msgstr "స్థానం '%s' మౌంటింగ్ విఫలమైంది"
 
-#: ../virtinst/urlfetcher.py:522
+#: ../virtinst/urlfetcher.py:527
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:525
+#: ../virtinst/urlfetcher.py:530
 #, python-format
 msgid ""
 "Could not find an installable distribution at '%s'%s\n"
@@ -5297,22 +5416,22 @@ msgid ""
 "See virt-install man page for various distro examples."
 msgstr ""
 
-#: ../virtinst/urlfetcher.py:589
+#: ../virtinst/urlfetcher.py:594
 #, python-format
 msgid "Couldn't find %(type)s kernel for %(distro)s tree."
 msgstr "%(distro)s ట్రీ కొరకు %(type)s కెర్నల్ కనుగొనలేక పోయింది."
 
-#: ../virtinst/urlfetcher.py:604
+#: ../virtinst/urlfetcher.py:609
 #, python-format
 msgid "Could not find boot.iso in %s tree."
 msgstr "%s ట్రీ నందు boot.iso కనుగొనలేక పోయింది."
 
-#: ../virtinst/urlfetcher.py:746
+#: ../virtinst/urlfetcher.py:751
 #, python-format
 msgid "Could not find a kernel path for virt type '%s'"
 msgstr "virt రకం '%s' కొరకు కెర్నల్ పాత్ కనుగొనలేక పోయింది"
 
-#: ../virtinst/urlfetcher.py:755
+#: ../virtinst/urlfetcher.py:760
 msgid "Could not find a boot iso path for this tree."
 msgstr "ఈ ట్రీ కొరకు iso పాత్ కనుగొనలేకపోయింది."
 
@@ -5414,7 +5533,7 @@ msgid "<b>Ad_vanced options</b>"
 msgstr "<b>అధునాతన ఐచ్చికాలు (_v)</b>"
 
 #: ../ui/addhardware.ui.h:6 ../ui/createpool.ui.h:5 ../ui/fsdetails.ui.h:4
-#: ../ui/gfxdetails.ui.h:1 ../ui/netlist.ui.h:10
+#: ../ui/gfxdetails.ui.h:2 ../ui/netlist.ui.h:10
 msgid "_Type:"
 msgstr "రకము (_T):"
 
@@ -5442,7 +5561,7 @@ msgstr "పరికరం రీతి (_l):"
 msgid "Host _Device:"
 msgstr "హోస్ట్ పరికరం (_D):"
 
-#: ../ui/addhardware.ui.h:13 ../ui/gfxdetails.ui.h:4 ../ui/migrate.ui.h:6
+#: ../ui/addhardware.ui.h:13 ../ui/gfxdetails.ui.h:5 ../ui/migrate.ui.h:6
 msgid "_Port:"
 msgstr "పోర్టు (_P):"
 
@@ -5545,8 +5664,8 @@ msgstr "_IO బేస్:"
 msgid "panic"
 msgstr "పానిక్"
 
-#: ../ui/addhardware.ui.h:38 ../ui/create.ui.h:67 ../ui/createinterface.ui.h:32
-#: ../ui/createnet.ui.h:33 ../ui/createpool.ui.h:14 ../ui/createvol.ui.h:15
+#: ../ui/addhardware.ui.h:38 ../ui/create.ui.h:81 ../ui/createinterface.ui.h:32
+#: ../ui/createnet.ui.h:35 ../ui/createpool.ui.h:14 ../ui/createvol.ui.h:15
 #: ../ui/snapshots.ui.h:7
 msgid "_Finish"
 msgstr "ముగించు (_F)"
@@ -5578,6 +5697,10 @@ msgstr "ఆపరేషన్ జరుగుతోంది"
 #: ../ui/asyncjob.ui.h:2
 msgid "Please wait a few moments..."
 msgstr "దయచేసి కొద్దిసేపు వేచి ఉండండి..."
+
+#: ../ui/asyncjob.ui.h:4 ../ui/details.ui.h:10
+msgid "_Details"
+msgstr "వివరాలు (_D)"
 
 #: ../ui/choosecd.ui.h:1
 msgid "Choose Media"
@@ -5635,11 +5758,11 @@ msgstr "<span color='#484848'>నెట్వర్కింగ్:</span>"
 msgid "No storage to clone"
 msgstr "క్లోన్ చేయుటకు యెటువంటి నిల్వలేదు"
 
-#: ../ui/clone.ui.h:8 ../ui/create.ui.h:62
+#: ../ui/clone.ui.h:8 ../ui/create.ui.h:76
 msgid "<span color='#484848'>Storage:</span>"
 msgstr "<span color='#484848'>నిల్వ:</span>"
 
-#: ../ui/clone.ui.h:9 ../ui/create.ui.h:58
+#: ../ui/clone.ui.h:9 ../ui/create.ui.h:72
 msgid "<span color='#484848'>_Name:</span>"
 msgstr "<span color='#484848'>నామము (_N):</span>"
 
@@ -5769,244 +5892,307 @@ msgid "<span size='large' color='white'>Create a new virtual machine</span>"
 msgstr "<span size='large' color='white'>కొత్త వర్చ్యువల్ మిషన్ సృష్టించుము</span>"
 
 #: ../ui/create.ui.h:3
+msgid "Choose virtualization type"
+msgstr ""
+
+#: ../ui/create.ui.h:4
+msgid "_Virtual machine"
+msgstr ""
+
+#: ../ui/create.ui.h:5
+msgid "_Container"
+msgstr ""
+
+#: ../ui/create.ui.h:6
 msgid "Choose how you would like to install the operating system"
 msgstr "మీరు ఏవిధంగా ఆపరేటింగ్ సిస్టమ్ సంస్థాపించాలి అనుకొనుచున్నారో యెంచుకొనుము"
 
-#: ../ui/create.ui.h:4
+#: ../ui/create.ui.h:7
 msgid "_Local install media (ISO image or CDROM)"
 msgstr "స్థానిక సంస్థాపనా మాధ్యమం (ISO ప్రతిబింబము లేదా CDROM) (_L)"
 
-#: ../ui/create.ui.h:5
+#: ../ui/create.ui.h:8
 msgid "Network _Install (HTTP, FTP, or NFS)"
 msgstr "నెట్వర్కు సంస్థాపన (HTTP,FTP, లేదా NFS) (_I)"
 
-#: ../ui/create.ui.h:6
+#: ../ui/create.ui.h:9
 msgid "Network _Boot (PXE)"
 msgstr "నెట్వర్కు బూట్ (PXE) (_B)"
 
-#: ../ui/create.ui.h:7
+#: ../ui/create.ui.h:10
 msgid "Import _existing disk image"
 msgstr "ఉన్న డిస్కు ప్రతిబింబమును దిగుమతి చేయుము (_e)"
 
-#: ../ui/create.ui.h:8
+#: ../ui/create.ui.h:11
 msgid "Choose the container type"
 msgstr "కంటైనర్ రకము యెంపికచేయి"
 
-#: ../ui/create.ui.h:9
+#: ../ui/create.ui.h:12
 msgid "_Application container"
 msgstr "కార్యక్షేత్రము(_A)"
 
-#: ../ui/create.ui.h:10
+#: ../ui/create.ui.h:13
 msgid "O_perating system container"
 msgstr "ఆపరేటింగ్ సిస్టమ్ కంటైనర్ (_p)"
 
-#: ../ui/create.ui.h:11
+#: ../ui/create.ui.h:14
 msgid "C_onnection:"
 msgstr "అనుసంధానము (_o):"
 
-#: ../ui/create.ui.h:12
+#: ../ui/create.ui.h:15
 msgid "_Xen Type:"
 msgstr ""
 
-#: ../ui/create.ui.h:13
+#: ../ui/create.ui.h:16
 msgid "_Architecture:"
 msgstr "ఆకృతి (_A):"
 
-#: ../ui/create.ui.h:14
+#: ../ui/create.ui.h:17
 msgid "_Machine Type:"
 msgstr "మిషన్ రకం (_M):"
 
-#: ../ui/create.ui.h:15
+#: ../ui/create.ui.h:18
 msgid "_Virt Type:"
 msgstr "_Virt రకము:"
 
-#: ../ui/create.ui.h:16
+#: ../ui/create.ui.h:19
 msgid "Architecture options"
 msgstr "ఆకృతి ఐచ్చికాలు"
 
-#: ../ui/create.ui.h:18
+#: ../ui/create.ui.h:21
 msgid "Locate your install media"
 msgstr "మీ సంస్థాపనా మాధ్యమాన్ని గుర్తించుము"
 
-#: ../ui/create.ui.h:19
+#: ../ui/create.ui.h:22
 msgid "Use CD_ROM or DVD"
 msgstr "CD_ROM లేదా DVD వుపయోగించుము"
 
-#: ../ui/create.ui.h:20
+#: ../ui/create.ui.h:23
 msgid "Use _ISO image:"
 msgstr "_ISO ప్రతిబింబాన్ని వుపయోగించుము:"
 
-#: ../ui/create.ui.h:21
+#: ../ui/create.ui.h:24
 msgid "Bro_wse..."
 msgstr "అన్వేషించు... (_w)"
 
-#: ../ui/create.ui.h:22
+#: ../ui/create.ui.h:25
 msgid "ISO"
 msgstr "ISO"
 
-#: ../ui/create.ui.h:23
+#: ../ui/create.ui.h:26
 msgid "Provide the operating system install URL"
 msgstr "ఆపరేటింగ్ సిస్టమ్ సంస్థాపనా URLను అందివ్వుము"
 
-#: ../ui/create.ui.h:24
+#: ../ui/create.ui.h:27
 msgid "U_RL:"
 msgstr ""
 
-#: ../ui/create.ui.h:25
+#: ../ui/create.ui.h:28
 msgid "Kerne_l options:"
 msgstr ""
 
-#: ../ui/create.ui.h:26
+#: ../ui/create.ui.h:29
 msgid "URL _Options"
 msgstr ""
 
-#: ../ui/create.ui.h:27
+#: ../ui/create.ui.h:30
 msgid "URL"
 msgstr "URL"
 
-#: ../ui/create.ui.h:28
+#: ../ui/create.ui.h:31
 msgid "PXE"
 msgstr "PXE"
 
-#: ../ui/create.ui.h:29
+#: ../ui/create.ui.h:32
 msgid "Provide the existing stora_ge path:"
 msgstr ""
 
-#: ../ui/create.ui.h:30
+#: ../ui/create.ui.h:33
 msgid "B_rowse..."
 msgstr "అన్వేషించు... (_r)"
 
-#: ../ui/create.ui.h:31
+#: ../ui/create.ui.h:34
 msgid "Direct kernel boot:"
 msgstr "డైరెక్ట్ కెర్నల్ బూట్:"
 
-#: ../ui/create.ui.h:32
+#: ../ui/create.ui.h:35
 msgid "_Kernel path:"
 msgstr "కెర్నల్ పాత్ (_K):"
 
-#: ../ui/create.ui.h:33 ../ui/details.ui.h:100
+#: ../ui/create.ui.h:36 ../ui/details.ui.h:100
 msgid "_Initrd path:"
 msgstr "_Initrd పాత్:"
 
-#: ../ui/create.ui.h:34
+#: ../ui/create.ui.h:37
 msgid "_DTB path:"
 msgstr "_DTB పాత్:"
 
-#: ../ui/create.ui.h:35
+#: ../ui/create.ui.h:38
 msgid "Br_owse..."
 msgstr "బ్రౌజ్ (_o)..."
 
-#: ../ui/create.ui.h:36
+#: ../ui/create.ui.h:39
 msgid "Brow_se..."
 msgstr "బ్రౌజ్ (_s)..."
 
-#: ../ui/create.ui.h:37
+#: ../ui/create.ui.h:40
 msgid ""
 "<span size='small'>Specifying a DTB allows use of virtio for improved "
 "performance</span>"
 msgstr "<span size='small'>DTB తెలిపితే మరింత పనితనం కొరకు virtio ఉపయోగించవచ్చు</span>"
 
-#: ../ui/create.ui.h:38
+#: ../ui/create.ui.h:41
 msgid "Kerne_l args:"
 msgstr "కెర్నల్ ఆర్గుమెంట్లు (_I):"
 
-#: ../ui/create.ui.h:39
+#: ../ui/create.ui.h:42
 msgid "Provide the _application path:"
 msgstr "అనువర్తనం పాత్ అందించు (_a):"
 
-#: ../ui/create.ui.h:40
+#: ../ui/create.ui.h:43
 msgid "Provide the existing OS root _directory:"
 msgstr "ఉన్న OS రూట్ డైరెక్టరీ అందించు (_d):"
 
-#: ../ui/create.ui.h:41
+#: ../ui/create.ui.h:44
+#, fuzzy
 msgid ""
-"<small>The OS directory tree must already exist. Creating an OS directory "
-"tree\n"
-"is not yet supported.</small>"
+"<small>The OS directory tree must already exist. To enable OS directory tree "
+"creation,\n"
+"please install <a href=\"https://github.com/virt-manager/virt-bootstrap"
+"\">virt-bootrap</a></small>"
 msgstr ""
 "<small>OS డైరెక్టరీ ట్రీ తప్పక వుండితీరాలి. OS డైరెక్టరీ ట్రీ\n"
 "సృష్టించుట యింకా తోడ్పాటు నీయుటలేదు.</small>"
 
-#: ../ui/create.ui.h:43
+#: ../ui/create.ui.h:46
+#, fuzzy
+msgid ""
+"<small>The OS directory tree must already exist. Creating an OS directory "
+"tree for remote\n"
+"connections is not yet supported.</small>"
+msgstr ""
+"<small>OS డైరెక్టరీ ట్రీ తప్పక వుండితీరాలి. OS డైరెక్టరీ ట్రీ\n"
+"సృష్టించుట యింకా తోడ్పాటు నీయుటలేదు.</small>"
+
+#: ../ui/create.ui.h:48
+msgid "Create OS directory tree from container image"
+msgstr ""
+
+#: ../ui/create.ui.h:49
+#, fuzzy
+msgid "Source URI:"
+msgstr "మూలం (_S):"
+
+#: ../ui/create.ui.h:50
+msgid "docker://fedora"
+msgstr ""
+
+#: ../ui/create.ui.h:51
+msgid "Do not verify TLS certificates of registry"
+msgstr ""
+
+#: ../ui/create.ui.h:52
+#, fuzzy
+msgid "Username:"
+msgstr "వినియోగదారినామము (_U):"
+
+#: ../ui/create.ui.h:53
+#, fuzzy
+msgid "Password:"
+msgstr "సంకేతపదం (_P):"
+
+#: ../ui/create.ui.h:54
+msgid "Credentials for accessing the source registry"
+msgstr ""
+
+#: ../ui/create.ui.h:55
+msgid "Select _container template:"
+msgstr ""
+
+#: ../ui/create.ui.h:56
+msgid "VZ templates"
+msgstr ""
+
+#: ../ui/create.ui.h:57
 msgid "A_utomatically detect operating system based on install media"
 msgstr "సంస్థాపనా మాధ్యమంపైన ఆధారపడి ఆపరేటింగ్ సిస్టమ్‌ను స్వయంచాలకంగా గుర్తించుము (_u)"
 
-#: ../ui/create.ui.h:44
+#: ../ui/create.ui.h:58
 msgid "Choose an operating system type and version"
 msgstr "ఆపరేటింగ్ సిస్టమ్ రకము మరియు వర్షన్ యెంపికచేయి"
 
-#: ../ui/create.ui.h:45
+#: ../ui/create.ui.h:59
 msgid "_Version:"
 msgstr "వర్షన్ (_V):"
 
-#: ../ui/create.ui.h:46
+#: ../ui/create.ui.h:60
 msgid "OS _type:"
 msgstr "OS రకము (_t):"
 
-#: ../ui/create.ui.h:47
+#: ../ui/create.ui.h:61
 msgid "Install"
 msgstr "సంస్థాపన"
 
-#: ../ui/create.ui.h:48
+#: ../ui/create.ui.h:62
 msgid "Choose Memory and CPU settings"
 msgstr "మెమొరీ మరియు CPU అమరికలను యెంచుకొనుము"
 
-#: ../ui/create.ui.h:49
-msgid "C_PUs:"
-msgstr "C_PUs:"
-
-#: ../ui/create.ui.h:50
+#: ../ui/create.ui.h:63
 msgid "_Memory (RAM):"
 msgstr "మెమొరి (RAM) (_M):"
 
-#: ../ui/create.ui.h:51 ../ui/details.ui.h:91 ../ui/fsdetails.ui.h:9
-msgid "MiB"
-msgstr "MiB"
+#: ../ui/create.ui.h:64
+msgid "C_PUs:"
+msgstr "C_PUs:"
 
-#: ../ui/create.ui.h:52
+#: ../ui/create.ui.h:65
 msgid "(Insert host mem)"
 msgstr "(host mem చేర్చుము)"
 
-#: ../ui/create.ui.h:54
+#: ../ui/create.ui.h:66
+msgid "cpus"
+msgstr ""
+
+#: ../ui/create.ui.h:68
 msgid "_Enable storage for this virtual machine"
 msgstr "ఈ వర్చ్యువల్ మిషన్‌ కొరకు నిల్వను చేతనము చేయుము (_E)"
 
-#: ../ui/create.ui.h:56
+#: ../ui/create.ui.h:70
 #, fuzzy
 msgid "Ready to begin the installation"
 msgstr "సంస్థాపన ప్రారంభించు"
 
-#: ../ui/create.ui.h:57
+#: ../ui/create.ui.h:71
 msgid "C_ustomize configuration before install"
 msgstr "సంస్థాపన ముందు ఆకృతీకరణను మలచుకొనుము (_u)"
 
-#: ../ui/create.ui.h:59
+#: ../ui/create.ui.h:73
 msgid "<span color='#484848'>Install:</span>"
 msgstr "<span color='#484848'>సంస్థాపన:</span>"
 
-#: ../ui/create.ui.h:60
+#: ../ui/create.ui.h:74
 msgid "<span color='#484848'>Memory:</span>"
 msgstr "<span color='#484848'>మెమొరి:</span>"
 
-#: ../ui/create.ui.h:61
+#: ../ui/create.ui.h:75
 msgid "<span color='#484848'>CPUs:</span>"
 msgstr "<span color='#484848'>CPUs:</span>"
 
-#: ../ui/create.ui.h:63
+#: ../ui/create.ui.h:77
 msgid "<span color='#484848'>OS:</span>"
 msgstr "<span color='#484848'>OS:</span>"
 
-#: ../ui/create.ui.h:64
+#: ../ui/create.ui.h:78
 msgid ""
 "<small>Specifying an operating system is required for best performance</"
 "small>"
 msgstr "<small>ఆపరేటింగ్ సిస్టమ్‌ను తెలుపుట మంచి పనితనమిచ్చును</small>"
 
-#: ../ui/create.ui.h:65
+#: ../ui/create.ui.h:79
 msgid "N_etwork selection"
 msgstr ""
 
-#: ../ui/create.ui.h:66
+#: ../ui/create.ui.h:80
 msgid "Finish"
 msgstr "ముగించు"
 
@@ -6295,10 +6481,18 @@ msgid "_Destination:"
 msgstr "గమ్యము (_D):"
 
 #: ../ui/createnet.ui.h:30
+msgid "_Pool containing all of VFs of a SR-IOV device"
+msgstr ""
+
+#: ../ui/createnet.ui.h:31
+msgid "Device _List:"
+msgstr ""
+
+#: ../ui/createnet.ui.h:32
 msgid "Enable IPv6 internal routing/networking"
 msgstr "IPv6 అంతర్గత రౌటింగ్/నెట్వర్కింగ్ చేతనం చేయి"
 
-#: ../ui/createnet.ui.h:31
+#: ../ui/createnet.ui.h:33
 msgid ""
 "If an IPv6 network address is <b>not</b> specified, this will enable IPv6 "
 "internal routing between virtual machines.  By default, IPv4 internal "
@@ -6307,7 +6501,7 @@ msgstr ""
 "IPv6 నెట్వర్కు చిరునామా <b>తెలుపకపోతే</b>, ఇది IPv6 అంతర్గత రౌటింగ్ వర్చ్యువల్ మిషన్ల మధ్యన చేతనం "
 "చేయును. అప్రమేయంగా, IPv4 అంతర్గత రౌటింగ్ చేతనమైంది."
 
-#: ../ui/createnet.ui.h:32
+#: ../ui/createnet.ui.h:34
 msgid "DNS Domain Name:"
 msgstr "DNS డొమైన్ పేరు:"
 
@@ -6454,10 +6648,6 @@ msgstr "దృశ్యం (_V)"
 msgid "_Console"
 msgstr "కన్సోల్ (_C)"
 
-#: ../ui/details.ui.h:10
-msgid "_Details"
-msgstr "వివరాలు (_D)"
-
 #: ../ui/details.ui.h:11
 msgid "Sna_pshots"
 msgstr "స్నాప్‌షాట్లు (_p)"
@@ -6523,9 +6713,8 @@ msgid "Pause"
 msgstr "నిలిపివుంచు"
 
 #: ../ui/details.ui.h:30 ../ui/manager.ui.h:24
-#, fuzzy
 msgid "Shut down the virtual machine"
-msgstr "వర్చ్యువల్ మిషన్ మూసివేయుము"
+msgstr ""
 
 #: ../ui/details.ui.h:32
 msgid "Snapshots"
@@ -6754,6 +6943,10 @@ msgstr ""
 msgid "Total host memory:"
 msgstr "మొత్తము హోస్టు మెమొరీ:"
 
+#: ../ui/details.ui.h:91 ../ui/fsdetails.ui.h:9
+msgid "MiB"
+msgstr "MiB"
+
 #: ../ui/details.ui.h:92
 msgid "<b>Memory</b>"
 msgstr "<b>మెమోరీ</b>"
@@ -6979,9 +7172,8 @@ msgid "<b>TPM Device</b>"
 msgstr "<b>TPM పరికరం</b>"
 
 #: ../ui/details.ui.h:153
-#, fuzzy
 msgid "Host Device:"
-msgstr "హోస్ట్ పరికరం (_D):"
+msgstr ""
 
 #: ../ui/details.ui.h:154
 msgid "Backend type:"
@@ -7079,59 +7271,61 @@ msgstr "లక్ష్యపు పాత్ (_r):"
 msgid "_Format:"
 msgstr "రూపము (_F):"
 
-#: ../ui/gfxdetails.ui.h:2
+#: ../ui/gfxdetails.ui.h:1
+msgid "Show passwor_d"
+msgstr ""
+
+#: ../ui/gfxdetails.ui.h:3
 msgid "Addr_ess:"
 msgstr "చిరునామా (_e):"
 
-#: ../ui/gfxdetails.ui.h:3
+#: ../ui/gfxdetails.ui.h:4
 msgid "Pa_ssword:"
 msgstr "సంకేతపదం (_s):"
 
-#: ../ui/gfxdetails.ui.h:5
+#: ../ui/gfxdetails.ui.h:6
 msgid "T_LS port:"
 msgstr ""
 
-#: ../ui/gfxdetails.ui.h:6
+#: ../ui/gfxdetails.ui.h:7
 msgid "Aut_o"
 msgstr "స్వయంచాలక (_o)"
 
-#: ../ui/gfxdetails.ui.h:7
+#: ../ui/gfxdetails.ui.h:8
 msgid "5901"
 msgstr "5901"
 
-#: ../ui/gfxdetails.ui.h:8
+#: ../ui/gfxdetails.ui.h:9
 msgid "Ke_ymap:"
 msgstr "కీమాప్ (_y):"
 
-#: ../ui/gfxdetails.ui.h:9
+#: ../ui/gfxdetails.ui.h:10
 msgid "A_uto"
 msgstr "స్వయంచాలక (_u)"
 
-#: ../ui/gfxdetails.ui.h:10
+#: ../ui/gfxdetails.ui.h:11
 msgid "5900"
 msgstr "5900"
 
-#: ../ui/gfxdetails.ui.h:11
+#: ../ui/gfxdetails.ui.h:12
 msgid "Display:"
 msgstr "ప్రదర్శించు:"
 
-#: ../ui/gfxdetails.ui.h:12
+#: ../ui/gfxdetails.ui.h:13
 msgid "XAuth:"
 msgstr "XAuth:"
 
-#: ../ui/gfxdetails.ui.h:13 ../ui/snapshots.ui.h:12 ../ui/storagelist.ui.h:17
+#: ../ui/gfxdetails.ui.h:14 ../ui/snapshots.ui.h:12 ../ui/storagelist.ui.h:17
 msgid "label"
 msgstr "లేబుల్"
 
-#: ../ui/gfxdetails.ui.h:14
-#, fuzzy
-msgid "Open_GL:"
-msgstr "తెరువుము (_O)"
-
 #: ../ui/gfxdetails.ui.h:15
-#, fuzzy
+msgid "Open_GL:"
+msgstr ""
+
+#: ../ui/gfxdetails.ui.h:16
 msgid "L_isten type:"
-msgstr "బస్ రకం (_B):"
+msgstr ""
 
 #: ../ui/host.ui.h:1
 msgid "Connection Details"
@@ -7788,12 +7982,3 @@ msgstr "వాల్యూమ్ జాబితాను తాజాపరచ�
 #: ../ui/storagelist.ui.h:20
 msgid "Delete volume"
 msgstr ""
-
-#~ msgid "Shutdown"
-#~ msgstr "మూసివేయి"
-
-#~ msgid "Local block device path '%s' must exist."
-#~ msgstr "స్థానిక బ్లాక్ పరికరం పాత్ '%s' తప్పక వుండాలి."
-
-#~ msgid "_Shutdown"
-#~ msgstr "మూసివేయి (_S)"

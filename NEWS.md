@@ -1,5 +1,18 @@
 # Virtual Machine Manager News
 
+## Release 1.4.2 (August 08, 2017)
+
+- New VM wixard virt-bootstrap integration (Radostin Stoyanov)
+- New VM wizard support for virtuozzo containers (Mikhail Feoktistov)
+- network UI: add support to create SR-IOV VF pool (Lin Ma)
+- Nicer OS list in New VM wizard (Pino Toscano)
+- Better defaults for UEFI secureboot builds (Pavel Hrdina)
+- Fix defaults for aarch64 VMs if graphics are requested
+- virt-install: new `--memdev` option (Pavel Hrdina)
+- virt-install: add `--disk logical/physical_block_size` (Yuri Arabadji)
+- virt-install: add `--features hyperv_reset=, hyperv_synic=` (Venkat Datta N
+  H)
+
 ## Release 1.4.1 (March 08, 2017)
 
 - storage/nodedev event API support (Jovanka Gulicoska)
