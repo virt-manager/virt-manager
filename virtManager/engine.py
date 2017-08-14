@@ -217,8 +217,8 @@ class vmmEngine(vmmGObject):
         # Manager fail message
         msg = _("Could not detect a default hypervisor. Make\n"
                 "sure the appropriate virtualization packages\n"
-                "are installed (kvm, qemu, libvirt, etc.), and\n"
-                "that libvirtd is running.\n\n"
+                "containing kvm, qemu, libvirt, etc. are\n"
+                "installed, and that libvirtd is running.\n\n"
                 "A hypervisor connection can be manually\n"
                 "added via File->Add Connection")
 
