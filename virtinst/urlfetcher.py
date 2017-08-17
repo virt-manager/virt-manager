@@ -224,6 +224,8 @@ class _FTPURLFetcher(_URLFetcher):
             self._ftp = ftplib.FTP()
             self._ftp.connect(parsed.hostname, parsed.port)
             self._ftp.login()
+            # Force binary mode
+            self._ftp.voidcmd("TYPE I")
         except Exception as e:
             raise ValueError(_("Opening URL %s failed: %s.") %
                               (self.location, str(e)))
