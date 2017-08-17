@@ -238,9 +238,9 @@ class Command(object):
                 raise AssertionError(
                     ("Expected command to %s, but it didn't.\n" %
                      (self.check_success and "pass" or "fail")) +
-                     ("Command was: %s\n" % self.cmdstr) +
-                     ("Error code : %d\n" % code) +
-                     ("Output was:\n%s" % output))
+                    ("Command was: %s\n" % self.cmdstr) +
+                    ("Error code : %d\n" % code) +
+                    ("Output was:\n%s" % output))
 
             if self.compare_file:
                 if self._check_support(tests, conn, self.compare_check,

@@ -439,7 +439,7 @@ def validate_required_options(options, guest):
         (not cdrom_specified(guest, options.disk))):
         msg += "\n" + (
             _("An install method must be specified\n(%(methods)s)") %
-             {"methods": install_methods})
+            {"methods": install_methods})
 
     if msg:
         fail(msg)

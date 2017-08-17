@@ -792,7 +792,7 @@ class vmmCloneVM(vmmGObjectUI):
                 _("The following disk devices will not be cloned:\n\n%s\n"
                   "Running the new guest could overwrite data in these "
                   "disk images.")
-                  % warn_str)
+                % warn_str)
 
             if not res:
                 return False

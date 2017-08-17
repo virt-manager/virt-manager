@@ -975,7 +975,7 @@ class vmmCreateInterface(vmmGObjectUI):
                           "configured:\n\n%s\n\nUsing these may overwrite "
                           "their existing configuration. Are you sure you "
                           "want to use the selected interface(s)?") %
-                          defined_ifaces)
+                        defined_ifaces)
                 if not ret:
                     return ret
 

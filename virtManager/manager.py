@@ -127,15 +127,15 @@ class vmmManager(vmmGObjectUI):
 
         self.builder.connect_signals({
             "on_menu_view_guest_cpu_usage_activate":
-                    self.toggle_stats_visible_guest_cpu,
+            self.toggle_stats_visible_guest_cpu,
             "on_menu_view_host_cpu_usage_activate":
-                    self.toggle_stats_visible_host_cpu,
+            self.toggle_stats_visible_host_cpu,
             "on_menu_view_memory_usage_activate":
-                    self.toggle_stats_visible_memory_usage,
+            self.toggle_stats_visible_memory_usage,
             "on_menu_view_disk_io_activate":
-                    self.toggle_stats_visible_disk,
+            self.toggle_stats_visible_disk,
             "on_menu_view_network_traffic_activate":
-                    self.toggle_stats_visible_network,
+            self.toggle_stats_visible_network,
 
             "on_vm_manager_delete_event": self.close,
             "on_vmm_manager_configure_event": self.window_resized,
