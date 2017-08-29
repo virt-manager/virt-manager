@@ -58,7 +58,7 @@ UBUNTU_URL = "http://us.archive.ubuntu.com:80/ubuntu/dists/%s/main/installer-%s"
 
 OLD_DEBIAN_URL = "http://archive.debian.org/debian/dists/%s/main/installer-%s/"
 DAILY_DEBIAN_URL = "http://d-i.debian.org/daily-images/%s/"
-DEBIAN_URL = "ftp://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
+DEBIAN_URL = "http://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
 
 MAGEIA_URL = "http://distro.ibiblio.org/mageia/distrib/%s/%s"
 
@@ -117,7 +117,7 @@ _add(FEDORA_URL % ("24", "x86_64"), "fedora24")
 _add(FEDORA_URL % ("25", "x86_64"), "fedora25")
 # Any Dev release
 # _add(DEVFEDORA_URL % ("25", "x86_64"), "fedora23", name="fedora25")
-_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora25", name="fedora-rawhide")
+_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora26", name="fedora-rawhide")
 
 
 _set_distro(CentOSDistro)
@@ -166,10 +166,13 @@ _add(OPENSUSE_TUMBLEWEED, "opensusetumbleweed", hasbootiso=False)
 
 
 _set_distro(DebianDistro)
+# FTP test case (only one since ftp tends to be horribly slow)
+_add("ftp://ftp.nluug.nl/pub/os/Linux/distr/debian/dists/jessie/main/installer-amd64/", "debian8", name="debian8-ftp")
 # Debian releases rarely enough that we can just do every release since lenny
 _add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debian5", hasxen=False,
      testshortcircuit=True)
 _add(DEBIAN_URL % ("wheezy", "amd64"), "debian7")
+_add(DEBIAN_URL % ("jessie", "amd64"), "debian8")
 # And daily builds, since we specially handle that URL
 _add(DAILY_DEBIAN_URL % ("amd64"), "debiantesting", name="debiandaily")
 _add(DAILY_DEBIAN_URL % ("arm64"), "debiantesting",
