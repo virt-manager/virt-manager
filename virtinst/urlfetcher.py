@@ -1131,6 +1131,12 @@ class DebianDistro(Distro):
         kernel_basename = "linux"
         if self._treeArch in ["ppc64el"]:
             kernel_basename = "vmlinux"
+
+        if self._treeArch == "s390x":
+            hvmroot = "%s/generic/" % self._url_prefix
+            kernel_basename = "kernel.%s" % self.name.lower()
+            initrd_basename = "initrd.%s" % self.name.lower()
+
         self._hvm_kernel_paths = [
             (hvmroot + kernel_basename, hvmroot + initrd_basename)]
 
@@ -1149,7 +1155,11 @@ class DebianDistro(Distro):
             return False
 
         filename = "%s/MANIFEST" % self._url_prefix
-        regex = ".*%s.*" % self._installer_dirname
+        if self.arch == "s390x":
+            regex = ".*generic/kernel\.%s.*" % self.name.lower()
+        else:
+            regex = ".*%s.*" % self._installer_dirname
+
         if not self._fetchAndMatchRegex(filename, regex):
             logging.debug("Regex didn't match, not a %s distro", self.name)
             return False
@@ -1198,7 +1208,10 @@ class UbuntuDistro(DebianDistro):
         if self.fetcher.hasFile("%s/MANIFEST" % self._url_prefix):
             # For regular trees
             filename = "%s/MANIFEST" % self._url_prefix
-            regex = ".*%s.*" % self._installer_dirname
+            if self.arch == "s390x":
+                regex = ".*generic/kernel\.%s.*" % self.name.lower()
+            else:
+                regex = ".*%s.*" % self._installer_dirname
         elif self.fetcher.hasFile("install/netboot/version.info"):
             # For trees based on ISO's
             self._url_prefix = "install"
