@@ -173,6 +173,8 @@ _add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debian5", hasxen=False,
      testshortcircuit=True)
 _add(DEBIAN_URL % ("wheezy", "amd64"), "debian7")
 _add(DEBIAN_URL % ("jessie", "amd64"), "debian8")
+_add(DEBIAN_URL % ("jessie", "s390x"), "debian8",
+     hasbootiso=False, hasxen=False, arch="s390x")
 # And daily builds, since we specially handle that URL
 _add(DAILY_DEBIAN_URL % ("amd64"), "debiantesting", name="debiandaily")
 _add(DAILY_DEBIAN_URL % ("arm64"), "debiantesting",
