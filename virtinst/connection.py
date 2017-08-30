@@ -249,6 +249,9 @@ class VirtualConnection(object):
         poollist = self._fetch_cache[self._FETCH_KEY_POOLS]
         poolxmlobj = self._build_pool_raw(poolobj)
         poollist.append(poolxmlobj)
+
+        if self._FETCH_KEY_VOLS not in self._fetch_cache:
+            return
         vollist = self._fetch_cache[self._FETCH_KEY_VOLS]
         vollist.extend(self._fetch_vols_raw(poolxmlobj))
 
