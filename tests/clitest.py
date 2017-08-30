@@ -36,8 +36,6 @@ os.environ["LANG"] = "en_US.UTF-8"
 os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
 
-_defaultconn = utils.open_testdefault()
-
 # Location
 image_prefix = "/tmp/__virtinst_cli_"
 xmldir = "tests/cli-test-xml"
