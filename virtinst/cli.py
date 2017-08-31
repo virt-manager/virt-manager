@@ -2526,7 +2526,6 @@ class ParserPanic(VirtCLIParser):
         inst.iobase = val
 
 _register_virt_parser(ParserPanic)
-_add_device_address_args(ParserPanic)
 ParserPanic.add_arg(None, "iobase", cb=ParserPanic.set_iobase_cb)
 
 
