@@ -2795,20 +2795,8 @@ class vmmDetails(vmmGObjectUI):
         if not dev:
             return
 
-        def show_ui(param, val=None):
-            widgetname = "panic-" + param.replace("_", "-")
-            if not val:
-                val = getattr(dev, param)
-                if not val:
-                    propername = param.upper() + "_DEFAULT"
-                    val = getattr(virtinst.VirtualPanicDevice, propername, "-").upper()
-
-            uiutil.set_grid_row_visible(self.widget(widgetname), True)
-            self.widget(widgetname).set_text(val or "-")
-
         ptyp = virtinst.VirtualPanicDevice.get_pretty_type(dev.type)
-        show_ui("type", ptyp)
-        show_ui("iobase")
+        self.widget("panic-type").set_text(ptyp)
 
     def refresh_rng_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)

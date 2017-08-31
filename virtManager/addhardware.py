@@ -477,9 +477,6 @@ class vmmAddHardware(vmmGObjectUI):
         for i in ["rng-bind-service", "rng-connect-service"]:
             self.widget(i).set_text("708")
 
-        # Panic device params
-        self.widget("panic-iobase").set_text("0x505")
-
         # Controller device params
         self._populate_controller_type()
 
@@ -1758,18 +1755,11 @@ class vmmAddHardware(vmmGObjectUI):
     def _validate_page_panic(self):
         conn = self.conn.get_backend()
 
-        iobase = self.widget("panic-iobase").get_text()
-
-        value_mappings = {
-            "iobase": iobase,
-        }
+        type = uiutil.get_list_selection(self.widget("panic-type"))
 
         try:
             self._dev = VirtualPanicDevice(conn)
-            if not iobase:
-                iobase = self._dev.IOBASE_DEFAULT
-            for param_name, val in value_mappings.items():
-                setattr(self._dev, param_name, val)
+            self._dev.type = type
         except Exception as e:
             return self.err.val_err(_("Panic device parameter error"), e)
 
