@@ -24,20 +24,31 @@ from .xmlbuilder import XMLProperty
 class VirtualPanicDevice(VirtualDevice):
 
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_PANIC
-    ADDRESS_TYPE_ISA = "isa"
-    TYPES = [ADDRESS_TYPE_ISA]
+
+    MODEL_DEFAULT = "default"
+    MODEL_ISA = "isa"
+    MODELS = [MODEL_ISA]
+
+    ISA_ADDRESS_TYPE = "isa"
     IOBASE_DEFAULT = "0x505"
 
     @staticmethod
-    def get_pretty_type(panic_type):
-        if panic_type == VirtualPanicDevice.ADDRESS_TYPE_ISA:
+    def get_pretty_model(panic_model):
+        if panic_model == VirtualPanicDevice.MODEL_ISA:
             return _("ISA")
-        return panic_type
+        return panic_model
 
+    def _get_default_address_type(self):
+        if self.iobase:
+            return VirtualPanicDevice.ISA_ADDRESS_TYPE
+        return None
 
+    model = XMLProperty("./@model",
+                        default_cb=lambda s: VirtualPanicDevice.MODEL_ISA,
+                        default_name=MODEL_DEFAULT)
     type = XMLProperty("./address/@type",
-                       default_cb=lambda s: s.ADDRESS_TYPE_ISA)
+                       default_cb=_get_default_address_type)
     iobase = XMLProperty("./address/@iobase",
-                       default_cb=lambda s: s.IOBASE_DEFAULT)
+                         default_cb=lambda s: s.IOBASE_DEFAULT)
 
 VirtualPanicDevice.register_type()

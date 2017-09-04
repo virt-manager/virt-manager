@@ -317,8 +317,8 @@ class vmmAddHardware(vmmGObjectUI):
         self._build_rng_backend_mode_combo(combo)
 
         # Panic widgets
-        combo = self.widget("panic-type")
-        self._build_panic_address_type(combo)
+        combo = self.widget("panic-model")
+        self._build_panic_models(combo)
 
         # Controller widgets
         combo = self.widget("controller-type")
@@ -976,13 +976,13 @@ class vmmAddHardware(vmmGObjectUI):
         self._build_combo_with_values(combo, types, default)
 
 
-    def _build_panic_address_type(self, combo):
-        types = []
-        for t in virtinst.VirtualPanicDevice.TYPES:
-            types.append([t, virtinst.VirtualPanicDevice.get_pretty_type(t)])
+    def _build_panic_models(self, combo):
+        models = []
+        for m in virtinst.VirtualPanicDevice.MODELS:
+            models.append([m, virtinst.VirtualPanicDevice.get_pretty_model(m)])
 
-        self._build_combo_with_values(combo, types,
-                virtinst.VirtualPanicDevice.ADDRESS_TYPE_ISA)
+        self._build_combo_with_values(combo, models,
+                virtinst.VirtualPanicDevice.MODEL_ISA)
 
 
     #########################
@@ -1755,11 +1755,11 @@ class vmmAddHardware(vmmGObjectUI):
     def _validate_page_panic(self):
         conn = self.conn.get_backend()
 
-        type = uiutil.get_list_selection(self.widget("panic-type"))
+        model = uiutil.get_list_selection(self.widget("panic-model"))
 
         try:
             self._dev = VirtualPanicDevice(conn)
-            self._dev.type = type
+            self._dev.model = model
         except Exception as e:
             return self.err.val_err(_("Panic device parameter error"), e)
 

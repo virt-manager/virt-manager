@@ -63,7 +63,7 @@
     <rng model="virtio">
       <backend model="random">/dev/random</backend>
     </rng>
-    <panic>
+    <panic model="isa">
       <address type="isa" iobase="0x505"/>
     </panic>
   </devices>

@@ -645,6 +645,15 @@ c.add_invalid("--disk source_pool=default-pool,source_volume=idontexist")  # try
 c.add_invalid("--disk size=1 --security model=foo,type=bar")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
 
 
+################
+# Panic device #
+################
+
+c = vinst.add_category("panic", "--connect %(URI-KVM)s --noautoconsole --import --disk none --graphics none --controller usb,model=none --network none")
+c.add_compare("--panic default", "panic-default")
+c.add_compare("--panic isa", "panic-isa")
+c.add_compare("--panic isa,iobase=0x505", "panic-isa-iobase")
+
 
 ################################################
 # Invalid devices that hit virtinst code paths #
@@ -838,6 +847,7 @@ c.add_valid("--bridge mybr0 --mac 22:22:33:44:55:AF")  # Old bridge w/ mac
 c.add_valid("--network bridge:mybr0,model=e1000")  # --network bridge:
 c.add_valid("--network network:default --mac RANDOM")  # VirtualNetwork with a random macaddr
 c.add_valid("--vnc --keymap=local")  # --keymap local
+c.add_valid("--panic 0x505")  # ISA panic with iobase specified
 c.add_invalid("--nonetworks")  # no networks
 c.add_invalid("--graphics vnc --vnclisten 1.2.3.4")  # mixing old and new
 c.add_invalid("--network=FOO")  # Nonexistent network

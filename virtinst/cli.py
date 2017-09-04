@@ -2518,15 +2518,26 @@ ParserMemballoon.add_arg("model", "model")
 class ParserPanic(VirtCLIParser):
     cli_arg_name = "panic"
     objclass = VirtualPanicDevice
-    remove_first = "iobase"
+    remove_first = "model"
+    compat_mode = False
 
-    def set_iobase_cb(self, inst, val, virtarg):
-        if val == "default":
-            return
-        inst.iobase = val
+    def set_model_cb(self, inst, val, virtarg):
+        if self.compat_mode and val.startswith("0x"):
+            inst.model = VirtualPanicDevice.MODEL_ISA
+            inst.iobase = val
+        else:
+            inst.model = val
+
+    def _parse(self, inst):
+        if (len(self.optstr.split(",")) == 1 and
+                not self.optstr.startswith("model=")):
+            self.compat_mode = True
+        return VirtCLIParser._parse(self, inst)
 
 _register_virt_parser(ParserPanic)
-ParserPanic.add_arg(None, "iobase", cb=ParserPanic.set_iobase_cb)
+ParserPanic.add_arg(None, "model", cb=ParserPanic.set_model_cb,
+                    ignore_default=True)
+ParserPanic.add_arg("iobase", "iobase")
 
 
 ######################################################

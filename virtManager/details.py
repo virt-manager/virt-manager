@@ -2795,8 +2795,8 @@ class vmmDetails(vmmGObjectUI):
         if not dev:
             return
 
-        ptyp = virtinst.VirtualPanicDevice.get_pretty_type(dev.type)
-        self.widget("panic-type").set_text(ptyp)
+        pmodel = virtinst.VirtualPanicDevice.get_pretty_model(dev.model)
+        self.widget("panic-model").set_text(pmodel)
 
     def refresh_rng_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
