@@ -28,8 +28,6 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <controller type="usb" index="0" model="none"/>
     <console type="pty"/>
-    <panic model="isa">
-      <address type="isa" iobase="0x505"/>
-    </panic>
+    <panic model="isa"/>
   </devices>
 </domain>

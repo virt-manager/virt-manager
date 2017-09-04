@@ -30,7 +30,6 @@ class VirtualPanicDevice(VirtualDevice):
     MODELS = [MODEL_ISA]
 
     ISA_ADDRESS_TYPE = "isa"
-    IOBASE_DEFAULT = "0x505"
 
     @staticmethod
     def get_pretty_model(panic_model):
@@ -48,7 +47,6 @@ class VirtualPanicDevice(VirtualDevice):
                         default_name=MODEL_DEFAULT)
     type = XMLProperty("./address/@type",
                        default_cb=_get_default_address_type)
-    iobase = XMLProperty("./address/@iobase",
-                         default_cb=lambda s: s.IOBASE_DEFAULT)
+    iobase = XMLProperty("./address/@iobase")
 
 VirtualPanicDevice.register_type()
