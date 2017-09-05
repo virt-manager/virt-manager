@@ -1294,19 +1294,34 @@ class vmmDomain(vmmLibvirtObject):
     def _convert_old_boot_order(self):
         boot_order = self._get_old_boot_order()
         ret = []
-        disks = self.get_disk_devices()
-        nets = self.get_network_devices()
+        disk = None
+        cdrom = None
+        floppy = None
+        net = None
+
+        for d in self.get_disk_devices():
+            if not cdrom and d.device == "cdrom":
+                cdrom = d
+            if not floppy and d.device == "floppy":
+                floppy = d
+            if not disk and d.device not in ["cdrom", "floppy"]:
+                disk = d
+            if cdrom and disk and floppy:
+                break
+
+        for n in self.get_network_devices():
+            net = n
+            break
 
         for b in boot_order:
-            if b == "network":
-                ret += [n.vmmidstr for n in nets]
-            if b == "hd":
-                ret += [d.vmmidstr for d in disks if
-                        d.device not in ["cdrom", "floppy"]]
-            if b == "cdrom":
-                ret += [d.vmmidstr for d in disks if d.device == "cdrom"]
-            if b == "floppy":
-                ret += [d.vmmidstr for d in disks if d.device == "floppy"]
+            if b == "network" and net:
+                ret.append(net.vmmidstr)
+            if b == "hd" and disk:
+                ret.append(disk.vmmidstr)
+            if b == "cdrom" and cdrom:
+                ret.append(cdrom.vmmidstr)
+            if b == "fd" and floppy:
+                ret.append(floppy.vmmidstr)
         return ret
 
     def _get_device_boot_order(self):
