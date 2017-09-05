@@ -654,6 +654,12 @@ c.add_compare("--panic default", "panic-default")
 c.add_compare("--panic isa", "panic-isa")
 c.add_compare("--panic isa,iobase=0x505", "panic-isa-iobase")
 
+c = vinst.add_category("panic", "--connect %(URI-KVM-PPC64LE)s --noautoconsole --import --disk none --graphics none --controller usb,model=none --network none")
+c.add_compare("--panic default", "panic-pseries-default")
+
+c = vinst.add_category("panic", "--connect %(URI-KVM-S390X)s --noautoconsole --import --disk none --graphics none --controller usb,model=none --network none")
+c.add_compare("--panic default", "panic-s390x-default")
+
 
 ################################################
 # Invalid devices that hit virtinst code paths #

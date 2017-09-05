@@ -27,7 +27,10 @@ class VirtualPanicDevice(VirtualDevice):
 
     MODEL_DEFAULT = "default"
     MODEL_ISA = "isa"
-    MODELS = [MODEL_ISA]
+    MODEL_PSERIES = "pseries"
+    MODEL_HYPERV = "hyperv"
+    MODEL_S390 = "s390"
+    MODELS = [MODEL_ISA, MODEL_PSERIES, MODEL_HYPERV, MODEL_S390]
 
     ISA_ADDRESS_TYPE = "isa"
 
@@ -35,7 +38,30 @@ class VirtualPanicDevice(VirtualDevice):
     def get_pretty_model(panic_model):
         if panic_model == VirtualPanicDevice.MODEL_ISA:
             return _("ISA")
+        elif panic_model == VirtualPanicDevice.MODEL_PSERIES:
+            return _("pSeries")
+        elif panic_model == VirtualPanicDevice.MODEL_HYPERV:
+            return _("Hyper-V")
+        elif panic_model == VirtualPanicDevice.MODEL_S390:
+            return _("s390")
         return panic_model
+
+    @staticmethod
+    def get_models(os):
+        if os.is_x86():
+            return [VirtualPanicDevice.MODEL_ISA, VirtualPanicDevice.MODEL_HYPERV]
+        elif os.is_pseries():
+            return [VirtualPanicDevice.MODEL_PSERIES]
+        elif os.is_s390x():
+            return [VirtualPanicDevice.MODEL_S390]
+        return None
+
+    @staticmethod
+    def get_default_model(os):
+        models = VirtualPanicDevice.get_models(os)
+        if models:
+            return models[0]
+        return None
 
     def _get_default_address_type(self):
         if self.iobase:

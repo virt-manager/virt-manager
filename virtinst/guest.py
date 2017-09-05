@@ -38,6 +38,7 @@ from .devicecontroller import VirtualController
 from .devicedisk import VirtualDisk
 from .devicegraphics import VirtualGraphics
 from .deviceinput import VirtualInputDevice
+from .devicepanic import VirtualPanicDevice
 from .deviceredirdev import VirtualRedirDevice
 from .devicerng import VirtualRNGDevice
 from .devicevideo import VirtualVideoDevice
@@ -796,6 +797,7 @@ class Guest(XMLBuilder):
         self._set_net_defaults()
         self._set_video_defaults()
         self._set_sound_defaults()
+        self._set_panic_defaults()
 
     def _is_full_os_container(self):
         if not self.os.is_container():
@@ -1246,3 +1248,8 @@ class Guest(XMLBuilder):
                 video.model = video_model
                 if video.model == 'virtio' and self.has_gl():
                     video.accel3d = True
+
+    def _set_panic_defaults(self):
+        for panic in self.get_devices("panic"):
+            if panic.model == VirtualPanicDevice.MODEL_DEFAULT:
+                panic.model = VirtualPanicDevice.get_default_model(self.os)

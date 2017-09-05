@@ -1,0 +1,20 @@
+<domain type="kvm">
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="s390x" machine="s390-ccw-virtio">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <clock offset="utc"/>
+  <devices>
+    <emulator>/usr/bin/qemu-system-s390x</emulator>
+    <controller type="usb" index="0" model="none"/>
+    <console type="pty">
+      <target type="sclp"/>
+    </console>
+    <panic model="s390"/>
+  </devices>
+</domain>

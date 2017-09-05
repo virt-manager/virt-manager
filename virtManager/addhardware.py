@@ -978,11 +978,12 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _build_panic_models(self, combo):
         models = []
-        for m in virtinst.VirtualPanicDevice.MODELS:
+        for m in virtinst.VirtualPanicDevice.get_models(self.vm.get_xmlobj().os):
             models.append([m, virtinst.VirtualPanicDevice.get_pretty_model(m)])
 
         self._build_combo_with_values(combo, models,
-                virtinst.VirtualPanicDevice.MODEL_ISA)
+                virtinst.VirtualPanicDevice.get_default_model(
+                        self.vm.get_xmlobj().os))
 
 
     #########################
