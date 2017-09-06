@@ -1583,7 +1583,10 @@ class vmmDomain(vmmLibvirtObject):
         if dest_uri:
             params[libvirt.VIR_MIGRATE_PARAM_URI] = dest_uri
 
-        self._backend.migrate3(libvirt_destconn, params, flags)
+        if tunnel:
+            self._backend.migrateToURI3(dest_uri, params, flags)
+        else:
+            self._backend.migrate3(libvirt_destconn, params, flags)
 
         # Don't schedule any conn update, migrate dialog handles it for us
 
