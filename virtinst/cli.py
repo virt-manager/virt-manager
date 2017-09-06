@@ -2233,6 +2233,22 @@ class ParserGraphics(VirtCLIParser):
         else:
             inst.listen = val
 
+    def listens_find_inst_cb(self, inst, val, virtarg, can_edit):
+        graphics = inst
+        num = 0
+        if re.search("\d+", virtarg.key):
+            num = int(re.search("\d+", virtarg.key).group())
+
+        if can_edit:
+            while len(graphics.listens) < (num + 1):
+                graphics.add_listen()
+        try:
+            return graphics.listens[num]
+        except IndexError:
+            if not can_edit:
+                return None
+            raise
+
     def _parse(self, inst):
         if self.optstr == "none":
             self.guest.skip_default_graphics = True
@@ -2261,6 +2277,12 @@ ParserGraphics.add_arg(None, "type", cb=ParserGraphics.set_type_cb)
 ParserGraphics.add_arg("port", "port")
 ParserGraphics.add_arg("tlsPort", "tlsport")
 ParserGraphics.add_arg("listen", "listen", cb=ParserGraphics.set_listen_cb)
+ParserGraphics.add_arg("type", "listens[0-9]*.type",
+                       find_inst_cb=ParserGraphics.listens_find_inst_cb)
+ParserGraphics.add_arg("address", "listens[0-9]*.address",
+                       find_inst_cb=ParserGraphics.listens_find_inst_cb)
+ParserGraphics.add_arg("network", "listens[0-9]*.network",
+                       find_inst_cb=ParserGraphics.listens_find_inst_cb)
 ParserGraphics.add_arg(None, "keymap", cb=ParserGraphics.set_keymap_cb)
 ParserGraphics.add_arg("passwd", "password")
 ParserGraphics.add_arg("passwdValidTo", "passwordvalidto")

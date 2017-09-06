@@ -486,6 +486,8 @@ c.add_compare(""" \
 --graphics spice,gl=yes,listen=socket \
 --graphics spice,gl=yes,listen=none \
 --graphics spice,gl=yes,listen=none,rendernode=/dev/dri/foo \
+--graphics spice,listens0.type=address,listens0.address=1.2.3.4 \
+--graphics spice,listens0.type=network,listens0.network=default \
 \
 --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 \
 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 \
