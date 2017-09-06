@@ -2283,6 +2283,8 @@ ParserGraphics.add_arg("address", "listens[0-9]*.address",
                        find_inst_cb=ParserGraphics.listens_find_inst_cb)
 ParserGraphics.add_arg("network", "listens[0-9]*.network",
                        find_inst_cb=ParserGraphics.listens_find_inst_cb)
+ParserGraphics.add_arg("socket", "listens[0-9]*.socket",
+                       find_inst_cb=ParserGraphics.listens_find_inst_cb)
 ParserGraphics.add_arg(None, "keymap", cb=ParserGraphics.set_keymap_cb)
 ParserGraphics.add_arg("passwd", "password")
 ParserGraphics.add_arg("passwdValidTo", "passwordvalidto")

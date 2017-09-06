@@ -257,6 +257,10 @@
       <image compression="off"/>
       <listen type="network" network="default"/>
     </graphics>
+    <graphics type="spice">
+      <image compression="off"/>
+      <listen type="socket" socket="/tmp/foobar"/>
+    </graphics>
     <serial type="tcp">
       <source mode="bind" host="127.0.0.1" service="2222"/>
       <protocol type="telnet"/>

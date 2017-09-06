@@ -45,6 +45,7 @@ class _GraphicsListen(XMLBuilder):
     type = XMLProperty("./@type")
     address = XMLProperty("./@address")
     network = XMLProperty("./@network")
+    socket = XMLProperty("./@socket")
 
 
 class VirtualGraphics(VirtualDevice):
