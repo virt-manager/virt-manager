@@ -2069,6 +2069,7 @@ ParserDisk.add_arg("source_host_transport", "source_host_transport")
 
 ParserDisk.add_arg("path", "path")
 ParserDisk.add_arg("device", "device")
+ParserDisk.add_arg("snapshot_policy", "snapshot_policy")
 ParserDisk.add_arg("bus", "bus")
 ParserDisk.add_arg("removable", "removable", is_onoff=True)
 ParserDisk.add_arg("driver_cache", "cache")

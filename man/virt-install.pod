@@ -722,6 +722,12 @@ WD-WMAP9A966149
 It defines what to do with the disk if the source file is not accessible.  See
 possible values in L<http://www.libvirt.org/formatdomain.html#elementsDisks>
 
+=item B<snapshot_policy>
+
+Defines default behavior of the disk during disk snapshots.  See possible
+values in L<http://www.libvirt.org/formatdomain.html#elementsDisks>,
+"snapshot" attribute of the <disk> element.
+
 =back
 
 See the examples section for some uses. This option deprecates -f/--file,

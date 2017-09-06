@@ -626,6 +626,7 @@ c.add_valid("--disk /dev/zero")  # Referencing a local unmanaged /dev node
 c.add_valid("--disk pool=default,size=.00001")  # Building 'default' pool
 c.add_valid("--disk %(AUTOMANAGEIMG)s,size=.1")  # autocreate the pool
 c.add_valid("--disk %(NEWIMG1)s,sparse=true,size=100000000 --check disk_size=off")  # Don't warn about fully allocated file exceeding disk space
+c.add_valid("--disk %(EXISTIMG1)s,snapshot_policy=no")  # Disable snasphot for disk
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse")  # Nonexisting file, size too big
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000")  # Huge file, sparse, but no prompting
 c.add_invalid("--file %(NEWIMG1)s")  # Nonexisting file, no size

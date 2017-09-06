@@ -468,7 +468,7 @@ class VirtualDisk(VirtualDevice):
 
 
     _XML_PROP_ORDER = [
-        "type", "device",
+        "type", "device", "snapshot_policy",
         "driver_name", "driver_type",
         "driver_cache", "driver_discard", "driver_detect_zeroes",
         "driver_io", "error_policy",
@@ -727,6 +727,7 @@ class VirtualDisk(VirtualDevice):
 
     device = XMLProperty("./@device",
                          default_cb=lambda s: s.DEVICE_DISK)
+    snapshot_policy = XMLProperty("./@snapshot")
     driver_name = XMLProperty("./driver/@name",
                               default_cb=_get_default_driver_name)
     driver_type = XMLProperty("./driver/@type",
