@@ -35,7 +35,7 @@ class ConnectionInfo(object):
     def __init__(self, conn, gdev):
         self.gtype = gdev.type
         self.gport = gdev.port and str(gdev.port) or None
-        self.gsocket = gdev.socket
+        self.gsocket = (gdev.listens and gdev.listens[0].socket) or gdev.socket
         self.gaddr = gdev.listen or "127.0.0.1"
         self.gtlsport = gdev.tlsPort or None
         self.glistentype = gdev.get_first_listen_type()
