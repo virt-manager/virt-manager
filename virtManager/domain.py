@@ -1553,8 +1553,8 @@ class vmmDomain(vmmLibvirtObject):
         self._has_managed_save = None
 
 
-    def migrate(self, destconn, interface=None,
-        secure=False, unsafe=False, temporary=False, meter=None):
+    def migrate(self, destconn, dest_uri=None,
+        tunnel=False, unsafe=False, temporary=False, meter=None):
         self._install_abort = True
 
         flags = 0
@@ -1564,7 +1564,7 @@ class vmmDomain(vmmLibvirtObject):
             flags |= libvirt.VIR_MIGRATE_PERSIST_DEST
             flags |= libvirt.VIR_MIGRATE_UNDEFINE_SOURCE
 
-        if secure:
+        if tunnel:
             flags |= libvirt.VIR_MIGRATE_PEER2PEER
             flags |= libvirt.VIR_MIGRATE_TUNNELLED
 
@@ -1572,16 +1572,16 @@ class vmmDomain(vmmLibvirtObject):
             flags |= libvirt.VIR_MIGRATE_UNSAFE
 
         libvirt_destconn = destconn.get_backend().get_conn_for_api_arg()
-        logging.debug("Migrating: conn=%s flags=%s uri=%s secure=%s "
+        logging.debug("Migrating: conn=%s flags=%s uri=%s tunnel=%s "
             "unsafe=%s temporary=%s",
-            destconn, flags, interface, secure, unsafe, temporary)
+            destconn, flags, dest_uri, tunnel, unsafe, temporary)
 
         if meter:
             start_job_progress_thread(self, meter, _("Migrating domain"))
 
         params = {}
-        if interface:
-            params[libvirt.VIR_MIGRATE_PARAM_URI] = interface
+        if dest_uri:
+            params[libvirt.VIR_MIGRATE_PARAM_URI] = dest_uri
 
         self._backend.migrate3(libvirt_destconn, params, flags)
 
