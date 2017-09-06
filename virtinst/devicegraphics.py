@@ -144,12 +144,15 @@ class VirtualGraphics(VirtualDevice):
         val = _validate_port("TLS Port", val)
         self.autoport = self._get_default_autoport()
         return val
+    def _listen_need_port(self):
+        listen = self.get_first_listen_type()
+        return not listen or listen in ["address", "network"]
     def _get_default_port(self):
-        if self.type == "vnc" or self.type == "spice":
+        if (self.type == "vnc" or self.type == "spice") and self._listen_need_port():
             return -1
         return None
     def _get_default_tlsport(self):
-        if self.type == "spice":
+        if self.type == "spice" and self._listen_need_port():
             return -1
         return None
     def _get_default_autoport(self):
