@@ -681,17 +681,17 @@ class GenericDistro(Distro):
 
     _xen_paths = [("images/xen/vmlinuz",
                     "images/xen/initrd.img"),           # Fedora
-                ]
+                  ]
     _hvm_paths = [("images/pxeboot/vmlinuz",
                     "images/pxeboot/initrd.img"),       # Fedora
                   ("ppc/ppc64/vmlinuz",
                     "ppc/ppc64/initrd.img"),            # CenOS 7 ppc64le
-                ]
+                  ]
     _iso_paths = ["images/boot.iso",                   # RH/Fedora
                    "boot/boot.iso",                     # Suse
                    "current/images/netboot/mini.iso",   # Debian
                    "install/images/boot.iso",           # Mandriva
-                ]
+                  ]
 
     # Holds values to use when actually pulling down media
     _valid_kernel_path = None

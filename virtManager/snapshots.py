@@ -472,7 +472,7 @@ class vmmSnapshotPage(vmmGObjectUI):
     def _validate_new_snapshot(self):
         name = self.widget("snapshot-new-name").get_text()
         desc = self.widget("snapshot-new-description"
-            ).get_buffer().get_property("text")
+                           ).get_buffer().get_property("text")
 
         try:
             newsnap = DomainSnapshot(self.vm.conn.get_backend())
