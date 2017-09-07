@@ -1191,10 +1191,27 @@ class DebianDistro(Distro):
 
         return True
 
+    def _is_install_cd(self):
+        # For install CDs
+        if not self._check_info(".disk/info"):
+            return False
+
+        if self.arch == "x86_64":
+            kernel_initrd_pair = ("install.amd/vmlinuz", "install.amd/initrd.gz")
+        elif self.arch == "i686":
+            kernel_initrd_pair = ("install.386/vmlinuz", "install.386/initrd.gz")
+        else:
+            kernel_initrd_pair = ("install/vmlinuz", "install/initrd.gz")
+        self._hvm_kernel_paths += [kernel_initrd_pair]
+        self._xen_kernel_paths += [kernel_initrd_pair]
+
+        return True
+
     def isValidStore(self):
         return any(check() for check in [
             self._is_regular_tree,
             self._is_daily_tree,
+            self._is_install_cd,
             ])
 
 
@@ -1245,6 +1262,18 @@ class UbuntuDistro(DebianDistro):
 
         return True
 
+    def _is_install_cd(self):
+        # For install CDs
+        if not self._check_info(".disk/mini-info"):
+            return False
+
+        kernel_initrd_pair = ("linux", "initrd.gz")
+
+        self._hvm_kernel_paths += [kernel_initrd_pair]
+        self._xen_kernel_paths += [kernel_initrd_pair]
+
+        return True
+
     def _is_install_cd_s390x(self):
         # For install CDs (s390x)
         if not self.arch == "s390x":
@@ -1262,6 +1291,7 @@ class UbuntuDistro(DebianDistro):
         return any(check() for check in [
             self._is_regular_tree,
             self._is_tree_iso,
+            self._is_install_cd,
             self._is_install_cd_s390x,
             ])
 
