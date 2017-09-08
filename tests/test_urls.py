@@ -340,7 +340,6 @@ def _make_tests():
     if URLTEST_LOCAL_MEDIA:
         urls = {}
         newidx = 0
-        arch = platform.machine()
         for p in URLTEST_LOCAL_MEDIA:
             newidx += 1
 
