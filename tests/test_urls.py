@@ -160,7 +160,6 @@ _add(OLD_OPENSUSE_URL % ("12.2"), "opensuse12.2",
      hasbootiso=False, testshortcircuit=True, arch="i686")
 # Latest 13.x releases
 _add(OPENSUSE_URL % ("13.1"), "opensuse13.1", hasbootiso=False)
-_add(OPENSUSE_URL % ("13.2"), "opensuse13.2", hasbootiso=False)
 # tumbleweed (rolling distro)
 _add(OPENSUSE_TUMBLEWEED, "opensusetumbleweed", hasbootiso=False)
 
