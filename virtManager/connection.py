@@ -51,11 +51,14 @@ class _ObjectList(vmmGObject):
     """
     Class that wraps our internal list of libvirt objects
     """
+
+    BLACKLIST_COUNT = 3
+
     def __init__(self):
         vmmGObject.__init__(self)
 
         self._objects = []
-        self._blacklist = []
+        self._blacklist = {}
         self._lock = threading.Lock()
 
     def _cleanup(self):
@@ -80,19 +83,30 @@ class _ObjectList(vmmGObject):
         choose not to poll, because they threw an error at init time
 
         :param obj: vmmLibvirtObject to blacklist
-        :returns: True if object added, False if object was already in list
+        :returns: number of added object to list
         """
+        key = self._blacklist_key(obj)
         if self.in_blacklist(obj):
-            return False
-        self._blacklist.append(self._blacklist_key(obj))
-        return True
+            self._blacklist[key] += 1
+        self._blacklist[key] = 1
+        return self._blacklist[key]
+
+    def remove_blacklist(self, obj):
+        """
+        :param obj: vmmLibvirtObject to remove from blacklist
+        :returns: True if object was blacklisted or False otherwise.
+        """
+        return bool(self._blacklist.pop(self._blacklist_key(obj), 0))
 
     def in_blacklist(self, obj):
         """
+        If an object is in list only once don't consider it blacklisted,
+        give it one more chance.
+
         :param obj: vmmLibvirtObject to check
-        :returns: True if object is in the blacklist
+        :returns: True if object is blacklisted
         """
-        return self._blacklist_key(obj) in self._blacklist
+        return self._blacklist.get(self._blacklist_key(obj), 0) > _ObjectList.BLACKLIST_COUNT
 
     def remove(self, obj):
         """
@@ -107,11 +121,7 @@ class _ObjectList(vmmGObject):
             # Identity check is sufficient here, since we should never be
             # asked to remove an object that wasn't at one point in the list.
             if obj not in self._objects:
-                if self.in_blacklist(obj):
-                    self._blacklist.remove(self._blacklist_key(obj))
-                    return True
-
-                return False
+                return self.remove_blacklist(obj)
 
             self._objects.remove(obj)
             return True
@@ -1166,9 +1176,14 @@ class vmmConnection(vmmGObject):
 
             if initialize_failed:
                 logging.debug("Blacklisting %s=%s", class_name, obj.get_name())
-                if self._objects.add_blacklist(obj) is False:
+                count = self._objects.add_blacklist(obj)
+                if count <= _ObjectList.BLACKLIST_COUNT:
+                    logging.debug("Object added in blacklist, count=%d", count)
+                else:
                     logging.debug("Object already blacklisted?")
                 return
+            else:
+                self._objects.remove_blacklist(obj)
 
             if not self._objects.add(obj):
                 logging.debug("New %s=%s requested, but it's already tracked.",
