@@ -18,7 +18,6 @@
 import unittest
 import time
 import logging
-import platform
 import traceback
 
 from tests import URLTEST_LOCAL_MEDIA
