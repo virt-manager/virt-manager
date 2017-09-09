@@ -563,13 +563,17 @@ class TestInitrdInject(TestBaseCommand):
 
 
 class CheckPylint(distutils.core.Command):
-    user_options = []
+    user_options = [
+        ("jobs=", "j", "use multiple processes to speed up Pylint"),
+    ]
     description = "Check code using pylint and pycodestyle"
 
     def initialize_options(self):
-        pass
+        self.jobs = None
+
     def finalize_options(self):
-        pass
+        if self.jobs:
+            self.jobs = int(self.jobs)
 
     def run(self):
         files = ["setup.py", "virt-install", "virt-clone",
@@ -592,6 +596,8 @@ class CheckPylint(distutils.core.Command):
             cmd = "pylint-2 "
         else:
             cmd = "pylint "
+        if self.jobs:
+            cmd += "--jobs=%d " % self.jobs
         cmd += "--rcfile tests/pylint.cfg "
         cmd += "--output-format=%s " % output_format
         cmd += "--ignore %s " % ",".join(
