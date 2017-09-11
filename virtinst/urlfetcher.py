@@ -1267,33 +1267,16 @@ class UbuntuDistro(DebianDistro):
         if not self._check_info(".disk/info"):
             return False
 
-        kernel_initrd_pair = ("linux", "initrd.gz")
+        if not self.arch == "s390x":
+            kernel_initrd_pair = ("linux", "initrd.gz")
+        else:
+            kernel_initrd_pair = ("boot/kernel.ubuntu", "boot/initrd.ubuntu")
 
         self._hvm_kernel_paths += [kernel_initrd_pair]
         self._xen_kernel_paths += [kernel_initrd_pair]
 
         return True
 
-    def _is_install_cd_s390x(self):
-        # For install CDs (s390x)
-        if not self.arch == "s390x":
-            return False
-
-        if not self._check_info(".disk/info"):
-            return False
-
-        self._hvm_kernel_paths += [("boot/kernel.ubuntu", "boot/initrd.ubuntu")]
-        self._xen_kernel_paths += [("boot/kernel.ubuntu", "boot/initrd.ubuntu")]
-
-        return True
-
-    def isValidStore(self):
-        return any(check() for check in [
-            self._is_regular_tree,
-            self._is_tree_iso,
-            self._is_install_cd,
-            self._is_install_cd_s390x,
-            ])
 
 
 class MandrivaDistro(Distro):
