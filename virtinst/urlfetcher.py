@@ -1264,7 +1264,7 @@ class UbuntuDistro(DebianDistro):
 
     def _is_install_cd(self):
         # For install CDs
-        if not self._check_info(".disk/mini-info"):
+        if not self._check_info(".disk/info"):
             return False
 
         kernel_initrd_pair = ("linux", "initrd.gz")
