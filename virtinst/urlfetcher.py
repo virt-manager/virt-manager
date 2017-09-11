@@ -1200,6 +1200,8 @@ class DebianDistro(Distro):
             kernel_initrd_pair = ("install.amd/vmlinuz", "install.amd/initrd.gz")
         elif self.arch == "i686":
             kernel_initrd_pair = ("install.386/vmlinuz", "install.386/initrd.gz")
+        elif self.arch == "s390x":
+            kernel_initrd_pair = ("boot/linux_vm", "boot/root.bin")
         else:
             kernel_initrd_pair = ("install/vmlinuz", "install/initrd.gz")
         self._hvm_kernel_paths += [kernel_initrd_pair]
