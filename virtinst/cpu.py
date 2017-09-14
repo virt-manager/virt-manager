@@ -32,6 +32,18 @@ class _CPUCell(XMLBuilder):
     memory = XMLProperty("./@memory", is_int=True)
 
 
+class CPUCache(XMLBuilder):
+    """
+    Class for generating <cpu> child <cache> XML
+    """
+
+    _XML_ROOT_NAME = "cache"
+    _XML_PROP_ORDER = ["mode", "level"]
+
+    mode = XMLProperty("./@mode")
+    level = XMLProperty("./@level", is_int=True)
+
+
 class CPUFeature(XMLBuilder):
     """
     Class for generating <cpu> child <feature> XML
@@ -104,6 +116,12 @@ class CPU(XMLBuilder):
     cells = XMLChildProperty(_CPUCell, relative_xpath="./numa")
     def add_cell(self):
         obj = _CPUCell(self.conn)
+        self.add_child(obj)
+        return obj
+
+    cache = XMLChildProperty(CPUCache)
+    def set_l3_cache_mode(self):
+        obj = CPUCache(self.conn)
         self.add_child(obj)
         return obj
 

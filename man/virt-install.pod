@@ -247,6 +247,10 @@ Example of specifying two NUMA cells. This will generate XML like:
     </numa>
   </cpu>
 
+=item B<--cpu host-passthrough,cache.mode=passthrough>
+
+Example of passing through the host cpu's cache information.
+
 =back
 
 Use --cpu=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCPU>

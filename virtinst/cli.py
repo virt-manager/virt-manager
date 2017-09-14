@@ -1468,6 +1468,18 @@ class ParserCPU(VirtCLIParser):
             else:
                 inst.add_feature(feature_name, policy)
 
+    def set_l3_cache_cb(self, inst, val, virtarg, can_edit):
+        cpu = inst
+
+        if can_edit:
+            cpu.set_l3_cache_mode()
+        try:
+            return cpu.cache[0]
+        except IndexError:
+            if not can_edit:
+                return None
+            raise
+
     def _parse(self, inst):
         # Convert +feature, -feature into expected format
         for key, value in self.optdict.items():
@@ -1508,6 +1520,10 @@ ParserCPU.add_arg("cpus", "cell[0-9]*.cpus", can_comma=True,
                   find_inst_cb=ParserCPU.cell_find_inst_cb)
 ParserCPU.add_arg("memory", "cell[0-9]*.memory",
                   find_inst_cb=ParserCPU.cell_find_inst_cb)
+
+# Options for CPU.cache
+ParserCPU.add_arg("mode", "cache.mode", find_inst_cb=ParserCPU.set_l3_cache_cb)
+ParserCPU.add_arg("level", "cache.level", find_inst_cb=ParserCPU.set_l3_cache_cb)
 
 
 ###################
