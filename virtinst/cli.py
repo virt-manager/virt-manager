@@ -618,7 +618,8 @@ def vcpu_cli_options(grp, backcompat=True, editexample=False):
         extramsg = "--cpu host-model,clearxml=yes"
     grp.add_argument("--cpu",
         help=_("CPU model and features. Ex:\n"
-               "--cpu coreduo,+x2apic\n") + extramsg)
+               "--cpu coreduo,+x2apic\n"
+               "--cpu host-passthrough\n") + extramsg)
 
     if backcompat:
         grp.add_argument("--check-cpu", action="store_true",
