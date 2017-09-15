@@ -187,3 +187,7 @@ class TestClone(unittest.TestCase):
     def testCloneNvramNewpool(self):
         base = "nvram-newpool"
         self._clone_helper(base)
+
+    def testCloneGraphicsPassword(self):
+        base = "graphics-password"
+        self._clone_helper(base)

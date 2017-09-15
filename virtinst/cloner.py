@@ -282,7 +282,8 @@ class Cloner(object):
 
         if self.original_guest is not None and not self.original_xml:
             self.original_dom = self._lookup_vm(self.original_guest)
-            self.original_xml = self.original_dom.XMLDesc(0)
+            flags = libvirt.VIR_DOMAIN_XML_SECURE
+            self.original_xml = self.original_dom.XMLDesc(flags)
 
         logging.debug("Original XML:\n%s", self.original_xml)
 
