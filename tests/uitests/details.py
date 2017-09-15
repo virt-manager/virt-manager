@@ -122,4 +122,5 @@ class Details(unittest.TestCase):
         uiutils.find_fuzzy(self.app.root, origname, "table cell").click()
         uiutils.find_pattern(self.app.root, "Shut Down", "push button").click()
 
+        time.sleep(.5)
         self._testRename(origname, "test-new-name")
