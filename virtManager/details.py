@@ -2793,7 +2793,8 @@ class vmmDetails(vmmGObjectUI):
         if not dev:
             return
 
-        pmodel = virtinst.VirtualPanicDevice.get_pretty_model(dev.model)
+        model = dev.model or "isa"
+        pmodel = virtinst.VirtualPanicDevice.get_pretty_model(model)
         self.widget("panic-model").set_text(pmodel)
 
     def refresh_rng_page(self):
