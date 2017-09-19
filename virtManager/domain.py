@@ -680,6 +680,7 @@ class vmmDomain(vmmLibvirtObject):
         guest = self._make_xmlobj_to_define()
         if machine != _SENTINEL:
             guest.os.machine = machine
+            self._domain_caps = None
         if description != _SENTINEL:
             guest.description = description or None
         if title != _SENTINEL:
