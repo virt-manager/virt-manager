@@ -188,7 +188,7 @@ _add(OLD_UBUNTU_URL % ("hardy", "i386"), "ubuntu8.04",
 # Latest LTS
 _add(UBUNTU_URL % ("precise", "amd64"), "ubuntu12.04")
 # Latest release
-_add(UBUNTU_URL % ("wily", "amd64"), "ubuntu15.10")
+_add(UBUNTU_URL % ("xenial", "amd64"), "ubuntu16.04")
 
 
 _set_distro(MandrivaDistro)
