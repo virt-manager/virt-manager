@@ -1,5 +1,13 @@
 # Virtual Machine Manager News
 
+## Release 1.4.3 (September 19, 2017)
+- Improve install of debian/ubuntu non-x86 media (Viktor Mihajlovski, Andrew
+  Wong)
+- New virt-install --graphics listen.* (Pavel Hrdina)
+- New virt-install --disk snapshot_policy= (Pavel Hrdina)
+- New virt-install --cpu cache.* (Lin Ma)
+- Several bug fixes
+
 ## Release 1.4.2 (August 08, 2017)
 
 - New VM wixard virt-bootstrap integration (Radostin Stoyanov)
