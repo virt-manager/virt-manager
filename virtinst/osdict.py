@@ -300,7 +300,7 @@ class _OsVariant(object):
     ########################
 
     def _is_related_to(self, related_os_list, os=None,
-        check_derives=True, check_upgrades=True, check_clones=True):
+            check_derives=True, check_upgrades=True, check_clones=True):
         os = os or self._os
         if not os:
             return False

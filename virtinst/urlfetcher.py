@@ -448,7 +448,7 @@ def _distroFromSUSEContent(fetcher, arch, vmtype=None):
     dclass = GenericDistro
     if distribution:
         if re.match(".*SUSE Linux Enterprise Server*", distribution[1]) or \
-            re.match(".*SUSE SLES*", distribution[1]):
+                re.match(".*SUSE SLES*", distribution[1]):
             dclass = SLESDistro
             if distro_version is None:
                 distro_version = _parse_sle_distribution(distribution)

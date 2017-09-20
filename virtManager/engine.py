@@ -1075,8 +1075,8 @@ class vmmEngine(vmmGObject):
         vm = conn.get_vm(connkey)
 
         if not src.err.chkbox_helper(self.config.get_confirm_poweroff,
-            self.config.set_confirm_poweroff,
-            text1=_("Are you sure you want to save '%s'?") % vm.get_name()):
+                self.config.set_confirm_poweroff,
+                text1=_("Are you sure you want to save '%s'?") % vm.get_name()):
             return
 
         _cancel_cb = None

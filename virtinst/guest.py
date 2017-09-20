@@ -690,7 +690,7 @@ class Guest(XMLBuilder):
 
         if usb2:
             if not self.conn.check_support(
-                self.conn.SUPPORT_CONN_DEFAULT_USB2):
+                    self.conn.SUPPORT_CONN_DEFAULT_USB2):
                 return
             for dev in VirtualController.get_usb2_controllers(self.conn):
                 self.add_device(dev)
@@ -830,7 +830,7 @@ class Guest(XMLBuilder):
         if not self.os.is_x86():
             return
         if not self.conn.check_support(
-            self.conn.SUPPORT_CONN_ADVANCED_CLOCK):
+                self.conn.SUPPORT_CONN_ADVANCED_CLOCK):
             return
 
         # Set clock policy that maps to qemu options:

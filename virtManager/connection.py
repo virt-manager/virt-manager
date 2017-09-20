@@ -539,13 +539,13 @@ class vmmConnection(vmmGObject):
             inact = 0
 
             if self.check_support(
-                self._backend.SUPPORT_DOMAIN_XML_INACTIVE, vm):
+                    self._backend.SUPPORT_DOMAIN_XML_INACTIVE, vm):
                 inact = libvirt.VIR_DOMAIN_XML_INACTIVE
             else:
                 logging.debug("Domain XML inactive flag not supported.")
 
             if self.check_support(
-                self._backend.SUPPORT_DOMAIN_XML_SECURE, vm):
+                    self._backend.SUPPORT_DOMAIN_XML_SECURE, vm):
                 inact |= libvirt.VIR_DOMAIN_XML_SECURE
                 act = libvirt.VIR_DOMAIN_XML_SECURE
             else:
@@ -563,7 +563,7 @@ class vmmConnection(vmmGObject):
             inact = 0
 
             if self.check_support(
-                self._backend.SUPPORT_INTERFACE_XML_INACTIVE, iface):
+                    self._backend.SUPPORT_INTERFACE_XML_INACTIVE, iface):
                 inact = libvirt.VIR_INTERFACE_XML_INACTIVE
             else:
                 logging.debug("Interface XML inactive flag not supported.")

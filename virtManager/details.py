@@ -1129,12 +1129,12 @@ class vmmDetails(vmmGObjectUI):
             return False
 
         if not self.err.chkbox_helper(
-            self.config.get_confirm_unapplied,
-            self.config.set_confirm_unapplied,
-            text1=(_("There are unapplied changes. Would you like to apply "
-                     "them now?")),
-            chktext=_("Don't warn me again."),
-            default=False):
+                self.config.get_confirm_unapplied,
+                self.config.set_confirm_unapplied,
+                text1=(_("There are unapplied changes. Would you like to apply "
+                    "them now?")),
+                chktext=_("Don't warn me again."),
+                default=False):
             return False
 
         return not self.config_apply(row=row)
@@ -2275,8 +2275,8 @@ class vmmDetails(vmmGObjectUI):
         logging.debug("Removing device: %s", devobj)
 
         if not self.err.chkbox_helper(self.config.get_confirm_removedev,
-            self.config.set_confirm_removedev,
-            text1=(_("Are you sure you want to remove this device?"))):
+                self.config.set_confirm_removedev,
+                text1=(_("Are you sure you want to remove this device?"))):
             return
 
         # Define the change

@@ -375,8 +375,8 @@ class StoragePool(_StorageObject):
         elif self.type == StoragePool.TYPE_GLUSTER:
             srcname = "gv0"
         elif ("target_path" in self._propstore and
-            self.target_path and
-            self.target_path.startswith(_DEFAULT_LVM_TARGET_BASE)):
+                self.target_path and
+                self.target_path.startswith(_DEFAULT_LVM_TARGET_BASE)):
             # If there is a target path, parse it for an expected VG
             # location, and pull the name from there
             vg = self.target_path[len(_DEFAULT_LVM_TARGET_BASE):]
@@ -642,7 +642,7 @@ class StorageVolume(_StorageObject):
             raise ValueError(_("input_vol must be a virStorageVol"))
 
         if not self.conn.check_support(
-            self.conn.SUPPORT_POOL_CREATEVOLFROM, self.pool):
+                self.conn.SUPPORT_POOL_CREATEVOLFROM, self.pool):
             raise ValueError(_("Creating storage from an existing volume is"
                                " not supported by this libvirt version."))
 

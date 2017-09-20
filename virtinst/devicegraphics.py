@@ -242,7 +242,7 @@ class VirtualGraphics(VirtualDevice):
         self.socket = None
 
         if self.conn.check_support(
-            self.conn.SUPPORT_CONN_GRAPHICS_LISTEN_NONE):
+                self.conn.SUPPORT_CONN_GRAPHICS_LISTEN_NONE):
             obj = self.add_listen()
             obj.type = "none"
 

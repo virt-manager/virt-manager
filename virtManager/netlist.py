@@ -129,7 +129,7 @@ class vmmNetworkList(vmmGObjectUI):
         return ret
 
     def _build_source_row(self, nettype, source_name,
-        label, is_sensitive, is_running, manual_bridge=False, key=None):
+            label, is_sensitive, is_running, manual_bridge=False, key=None):
         return [nettype, source_name, label,
                 is_sensitive, is_running, manual_bridge,
                 key]

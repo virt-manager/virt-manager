@@ -486,8 +486,8 @@ def get_console_cb(guest):
 
     gtype = gdevs[0].type
     if gtype not in ["default",
-        VirtualGraphics.TYPE_VNC,
-        VirtualGraphics.TYPE_SPICE]:
+            VirtualGraphics.TYPE_VNC,
+            VirtualGraphics.TYPE_SPICE]:
         logging.debug("No viewer to launch for graphics type '%s'", gtype)
         return
 

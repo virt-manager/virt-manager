@@ -625,7 +625,7 @@ class SpiceViewer(Viewer):
             self._main_channel_hids.append(hid)
 
         elif (type(channel) == SpiceClientGLib.DisplayChannel and
-            not self._display):
+                not self._display):
             channel_id = channel.get_property("channel-id")
 
             if channel_id != 0:
@@ -640,7 +640,7 @@ class SpiceViewer(Viewer):
 
         elif (type(channel) in [SpiceClientGLib.PlaybackChannel,
                                 SpiceClientGLib.RecordChannel] and
-            not self._audio):
+                                not self._audio):
             self._audio = SpiceClientGLib.Audio.get(self._spice_session, None)
 
     def _agent_connected_cb(self, src, val):
