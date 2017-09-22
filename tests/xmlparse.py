@@ -1332,10 +1332,15 @@ class XMLParseTest(unittest.TestCase):
         check("mode", "hostdev")
         check("managed", "yes")
 
-        r = net.forward.add_pf()
-        r.dev = "eth3"
-        check = self._make_checker(r)
+        check = self._make_checker(net.forward.pf[0])
         check("dev", "eth3")
+
+        check = self._make_checker(net.forward.vfs[0])
+        check("type", "pci")
+        check("domain", 0x0000)
+        check("bus", 0x03)
+        check("slot", 0x10)
+        check("function", 0x0)
 
         utils.diff_compare(net.get_xml_config(), outfile)
         utils.test_create(conn, net.get_xml_config(), "networkDefineXML")

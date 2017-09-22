@@ -77,6 +77,15 @@ class _NetworkForwardPf(XMLBuilder):
     dev = XMLProperty("./@dev")
 
 
+class _NetworkForwardAddress(XMLBuilder):
+    _XML_ROOT_NAME = "address"
+    type = XMLProperty("./@type")
+    domain = XMLProperty("./@domain", is_int=True)
+    bus = XMLProperty("./@bus", is_int=True)
+    slot = XMLProperty("./@slot", is_int=True)
+    function = XMLProperty("./@function", is_int=True)
+
+
 class _NetworkForward(XMLBuilder):
     _XML_ROOT_NAME = "forward"
 
@@ -84,6 +93,7 @@ class _NetworkForward(XMLBuilder):
     dev = XMLProperty("./@dev")
     managed = XMLProperty("./@managed")
     pf = XMLChildProperty(_NetworkForwardPf)
+    vfs = XMLChildProperty(_NetworkForwardAddress)
 
     def add_pf(self):
         r = _NetworkForwardPf(self.conn)
