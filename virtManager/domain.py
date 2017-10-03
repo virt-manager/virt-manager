@@ -1596,7 +1596,7 @@ class vmmDomain(vmmLibvirtObject):
             start_job_progress_thread(self, meter, _("Migrating domain"))
 
         params = {}
-        if dest_uri:
+        if dest_uri and not tunnel:
             params[libvirt.VIR_MIGRATE_PARAM_URI] = dest_uri
 
         if tunnel:
