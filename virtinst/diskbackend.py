@@ -387,8 +387,11 @@ class CloneStorageCreator(_StorageCreator):
     def is_size_conflict(self):
         ret = False
         msg = None
-        vfs = os.statvfs(os.path.dirname(self._path))
-        avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
+        if self.get_dev_type() == "block":
+            avail = _stat_disk(self._path)[1]
+        else:
+            vfs = os.statvfs(os.path.dirname(self._path))
+            avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
         need = long(self._size * 1024 * 1024 * 1024)
         if need > avail:
             if self._sparse:
