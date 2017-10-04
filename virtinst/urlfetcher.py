@@ -1270,7 +1270,7 @@ class UbuntuDistro(DebianDistro):
             return False
 
         if not self.arch == "s390x":
-            kernel_initrd_pair = ("linux", "initrd.gz")
+            kernel_initrd_pair = ("install/vmlinuz", "install/initrd.gz")
         else:
             kernel_initrd_pair = ("boot/kernel.ubuntu", "boot/initrd.ubuntu")
 
