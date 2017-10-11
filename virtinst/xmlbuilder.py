@@ -829,7 +829,11 @@ class XMLBuilder(object):
         self.conn = conn
 
         if self._XML_SANITIZE:
-            parsexml = parsexml.decode('ascii', 'ignore').encode('ascii')
+            if hasattr(parsexml, 'decode'):
+                parsexml = parsexml.decode("ascii", "ignore").encode("ascii")
+            else:
+                parsexml = parsexml.encode("ascii", "ignore").decode("ascii")
+
             parsexml = "".join([c for c in parsexml if c in string.printable])
 
         self._propstore = {}
