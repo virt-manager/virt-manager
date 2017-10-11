@@ -17,7 +17,7 @@
 # MA 02110-1301 USA.
 #
 
-from Queue import Queue
+from queue import Queue
 from threading import Thread
 import logging
 

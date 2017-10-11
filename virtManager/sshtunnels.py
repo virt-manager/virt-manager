@@ -20,7 +20,7 @@
 import functools
 import logging
 import os
-import Queue
+import queue
 import socket
 import signal
 import sys
@@ -129,7 +129,7 @@ class _TunnelScheduler(object):
     """
     def __init__(self):
         self._thread = None
-        self._queue = Queue.Queue()
+        self._queue = queue.Queue()
         self._lock = threading.Lock()
 
     def _handle_queue(self):

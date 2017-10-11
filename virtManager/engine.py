@@ -20,7 +20,7 @@
 
 import logging
 import re
-import Queue
+import queue
 import threading
 import traceback
 
@@ -105,7 +105,7 @@ class vmmEngine(vmmGObject):
                                             target=self._handle_tick_queue,
                                             args=())
         self._tick_thread.daemon = True
-        self._tick_queue = Queue.PriorityQueue(100)
+        self._tick_queue = queue.PriorityQueue(100)
 
         self.inspection = None
         self._create_inspection_thread()
@@ -272,15 +272,15 @@ class vmmEngine(vmmGObject):
         """
         We serialize conn autostart, so polkit/ssh-askpass doesn't spam
         """
-        queue = Queue.Queue()
+        connections_queue = queue.Queue()
         auto_conns = [uri for uri in self.conns
                       if self.conns[uri]["conn"].get_autoconnect()]
 
         def add_next_to_queue():
             if not auto_conns:
-                queue.put(None)
+                connections_queue.put(None)
             else:
-                queue.put(auto_conns.pop(0))
+                connections_queue.put(auto_conns.pop(0))
 
         def state_change_cb(conn):
             if conn.is_active():
@@ -292,7 +292,7 @@ class vmmEngine(vmmGObject):
 
         def handle_queue():
             while True:
-                uri = queue.get()
+                uri = connections_queue.get()
                 if uri is None:
                     return
                 if uri not in self.conns:
