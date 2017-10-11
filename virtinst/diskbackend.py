@@ -22,7 +22,6 @@ import logging
 import os
 import re
 import stat
-import statvfs
 
 import libvirt
 
@@ -391,7 +390,7 @@ class CloneStorageCreator(_StorageCreator):
             avail = _stat_disk(self._path)[1]
         else:
             vfs = os.statvfs(os.path.dirname(self._path))
-            avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
+            avail = vfs.f_frsize * vfs.f_bavail
         need = long(self._size * 1024 * 1024 * 1024)
         if need > avail:
             if self._sparse:

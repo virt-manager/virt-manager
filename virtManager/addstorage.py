@@ -19,7 +19,6 @@
 
 import logging
 import os
-import statvfs
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -81,7 +80,7 @@ class vmmAddStorage(vmmGObjectUI):
 
         elif not self.conn.is_remote() and os.path.exists(path):
             vfs = os.statvfs(os.path.dirname(path))
-            avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
+            avail = vfs.f_frsize * vfs.f_bavail
 
         return float(avail / 1024.0 / 1024.0 / 1024.0)
 
