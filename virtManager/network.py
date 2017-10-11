@@ -18,24 +18,34 @@
 # MA 02110-1301 USA.
 #
 
-import ipaddr
+import ipaddress
+import sys
 
 from virtinst import Network
 
 from .libvirtobject import vmmLibvirtObject
 
+if sys.version_info[0] == 3:
+    unicode = str  # pylint: disable=redefined-builtin
+
 
 def _make_addr_str(addrStr, prefix, netmaskStr):
     if prefix:
-        return str(ipaddr.IPNetwork(str(addrStr) + "/" +
-                                      str(prefix)).masked())
+        return str(
+            ipaddress.ip_network(
+                unicode("{}/{}").format(addrStr, prefix), strict=False
+            )
+        )
     elif netmaskStr:
-        netmask = ipaddr.IPAddress(netmaskStr)
-        network = ipaddr.IPAddress(addrStr)
-        return str(ipaddr.IPNetwork(str(network) + "/" +
-                                    str(netmask)).masked())
+        netmask = ipaddress.ip_address(unicode((netmaskStr)))
+        network = ipaddress.ip_address(unicode((addrStr)))
+        return str(
+            ipaddress.ip_network(
+                unicode("{}/{}").format(network, netmask), strict=False
+            )
+        )
     else:
-        return str(ipaddr.IPNetwork(str(addrStr)))
+        return str(ipaddress.ip_network(unicode(addrStr), strict=False))
 
 
 class vmmNetwork(vmmLibvirtObject):
@@ -138,7 +148,7 @@ class vmmNetwork(vmmLibvirtObject):
             return [None, None]
 
         routeAddr = _make_addr_str(route.address, route.prefix, route.netmask)
-        routeVia = str(ipaddr.IPAddress(str(route.gateway)))
+        routeVia = str(ipaddress.ip_address(unicode(route.gateway)))
 
         if not routeAddr or not routeVia:
             return [None, None]
@@ -172,8 +182,8 @@ class vmmNetwork(vmmLibvirtObject):
 
         dhcp = [None, None]
         if dhcpstart and dhcpend:
-            dhcp = [str(ipaddr.IPAddress(dhcpstart)),
-                    str(ipaddr.IPAddress(dhcpend))]
+            dhcp = [str(ipaddress.ip_address(unicode(dhcpstart))),
+                    str(ipaddress.ip_address(unicode(dhcpend)))]
         return [ret, dhcp]
 
     def get_ipv4_network(self):

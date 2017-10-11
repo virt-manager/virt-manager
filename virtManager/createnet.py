@@ -18,13 +18,14 @@
 # MA 02110-1301 USA.
 #
 
+import ipaddress
 import logging
+import sys
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
 
-import ipaddr
 
 from virtinst import Network
 
@@ -44,12 +45,15 @@ _red = Gdk.Color.parse("#ffc0c0")[1]
 _black = Gdk.Color.parse("#000000")[1]
 _white = Gdk.Color.parse("#f0f0f0")[1]
 
+if sys.version_info[0] == 3:
+    unicode = str  # pylint: disable=redefined-builtin
+
 
 def _make_ipaddr(addrstr):
     if addrstr is None:
         return None
     try:
-        return ipaddr.IPNetwork(addrstr)
+        return ipaddress.ip_network(unicode(addrstr), strict=False)
     except Exception:
         return None
 
@@ -318,7 +322,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             return self.err.val_err(_("Invalid Network Address"),
                     _("The network must be an IPv4 address"))
 
-        if ip.numhosts < 8:
+        if ip.num_addresses < 8:
             return self.err.val_err(_("Invalid Network Address"),
                     _("The network must address at least 8 addresses."))
 
@@ -624,17 +628,19 @@ class vmmCreateNetwork(vmmGObjectUI):
             src.modify_bg(Gtk.StateType.NORMAL, _red)
             return
 
-        valid_ip = (ip.numhosts >= 8 and ip.is_private)
-        gateway = (ip.prefixlen != 32 and str(ip.network + 1) or "")
+        valid_ip = (ip.num_addresses >= 8 and ip.is_private)
+        gateway = (ip.prefixlen != 32 and str(ip.network_address + 1) or "")
         info = (ip.is_private and _("Private") or _("Other/Public"))
-        start = int(ip.numhosts // 2)
-        end = int(ip.numhosts - 2)
+        start = int(ip.num_addresses // 2)
+        end = int(ip.num_addresses - 2)
 
         src.modify_bg(Gtk.StateType.NORMAL, valid_ip and _green or _red)
         self.widget("net-info-gateway").set_text(gateway)
         self.widget("net-info-type").set_text(info)
-        self.widget("net-dhcpv4-start").set_text(str(ip.network + start))
-        self.widget("net-dhcpv4-end").set_text(str(ip.network + end))
+        self.widget("net-dhcpv4-start").set_text(
+            str(ip.network_address + start)
+        )
+        self.widget("net-dhcpv4-end").set_text(str(ip.network_address + end))
 
     def change_routev4_network(self, src):
         ntwk = self.get_config_routev4_network()
@@ -675,8 +681,8 @@ class vmmCreateNetwork(vmmGObjectUI):
             src.modify_bg(Gtk.StateType.NORMAL, _red)
             return
 
-        valid_ip = (ip.numhosts == 64 and ip.is_private)
-        gateway = (ip.prefixlen != 64 and str(ip.network + 1) or "")
+        valid_ip = (ip.num_addresses == 64 and ip.is_private)
+        gateway = (ip.prefixlen != 64 and str(ip.network_address + 1) or "")
         start = 256
         end = 512 - 1
         if ip.is_private:
@@ -691,8 +697,10 @@ class vmmCreateNetwork(vmmGObjectUI):
         src.modify_bg(Gtk.StateType.NORMAL, valid_ip and _green or _red)
         self.widget("net-info-gateway-ip6").set_text(gateway)
         self.widget("net-info-type-ip6").set_text(info)
-        self.widget("net-dhcpv6-start").set_text(str(ip.network + start))
-        self.widget("net-dhcpv6-end").set_text(str(ip.network + end))
+        self.widget("net-dhcpv6-start").set_text(
+            str(ip.network_address + start)
+        )
+        self.widget("net-dhcpv6-end").set_text(str(ip.network_address + end))
 
     def change_routev6_network(self, src):
         ntwk = self.get_config_routev6_network()
@@ -763,43 +771,49 @@ class vmmCreateNetwork(vmmGObjectUI):
         if self.get_config_ipv4_enable():
             ip = self.get_config_ip4()
             ipobj = net.add_ip()
-            ipobj.address = str(ip.network + 1)
+            ipobj.address = str(ip.network_address + 1)
             ipobj.netmask = str(ip.netmask)
 
             if self.get_config_dhcpv4_enable():
                 dhcpobj = ipobj.add_range()
-                dhcpobj.start = str(self.get_config_dhcpv4_start().network)
-                dhcpobj.end = str(self.get_config_dhcpv4_end().network)
+                dhcpobj.start = str(
+                    self.get_config_dhcpv4_start().network_address
+                )
+                dhcpobj.end = str(self.get_config_dhcpv4_end().network_address)
 
         if self.get_config_ipv6_enable():
             ip = self.get_config_ip6()
             ipobj = net.add_ip()
             ipobj.family = "ipv6"
-            ipobj.address = str(ip.network + 1)
+            ipobj.address = str(ip.network_address + 1)
             ipobj.prefix = str(ip.prefixlen)
 
             if self.get_config_dhcpv6_enable():
                 dhcpobj = ipobj.add_range()
-                dhcpobj.start = str(self.get_config_dhcpv6_start().network)
-                dhcpobj.end = str(self.get_config_dhcpv6_end().network)
+                dhcpobj.start = str(
+                    self.get_config_dhcpv6_start().network_address
+                )
+                dhcpobj.end = str(
+                    self.get_config_dhcpv6_end().network_address
+                )
 
         netaddr = _make_ipaddr(self.get_config_routev4_network())
         gwaddr = _make_ipaddr(self.get_config_routev4_gateway())
         if netaddr and gwaddr:
             route = net.add_route()
             route.family = "ipv4"
-            route.address = netaddr.network
+            route.address = netaddr.network_address
             route.prefix = netaddr.prefixlen
-            route.gateway = gwaddr.network
+            route.gateway = gwaddr.network_address
 
         netaddr = _make_ipaddr(self.get_config_routev6_network())
         gwaddr = _make_ipaddr(self.get_config_routev6_gateway())
         if netaddr and gwaddr:
             route = net.add_route()
             route.family = "ipv6"
-            route.address = netaddr.network
+            route.address = netaddr.network_address
             route.prefix = netaddr.prefixlen
-            route.gateway = gwaddr.network
+            route.gateway = gwaddr.network_address
 
         return net
 

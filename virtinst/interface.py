@@ -20,13 +20,17 @@
 Classes for building and installing libvirt interface xml
 """
 
+import ipaddress
 import logging
+import sys
 
 import libvirt
-import ipaddr
 
 from . import util
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+
+if sys.version_info[0] == 3:
+    unicode = str  # pylint: disable=redefined-builtin
 
 
 class _IPAddress(XMLBuilder):
@@ -38,7 +42,7 @@ class _IPAddress(XMLBuilder):
     ######################
 
     def _validate_ipaddr(self, addr):
-        ipaddr.IPAddress(addr)
+        ipaddress.ip_address(unicode(addr))
         return addr
 
     address = XMLProperty("./@address", validate_cb=_validate_ipaddr)
