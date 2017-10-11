@@ -234,8 +234,8 @@ class URLTests(unittest.TestCase):
 
 
 def _make_tests():
-    import ConfigParser
-    cfg = ConfigParser.ConfigParser()
+    import configparser
+    cfg = configparser.ConfigParser()
     cfg.read("tests/test_urls.ini")
 
     manualpath = "tests/test_urls_manual.ini"

@@ -21,11 +21,11 @@
 Configuration variables that can be set at build time
 """
 
-import ConfigParser
+import configparser
 import os
 
 
-_cfg = ConfigParser.ConfigParser()
+_cfg = configparser.ConfigParser()
 _filepath = os.path.abspath(__file__)
 _srcdir = os.path.abspath(os.path.join(os.path.dirname(_filepath), ".."))
 _cfgpath = os.path.join(os.path.dirname(_filepath), "cli.cfg")
@@ -46,7 +46,7 @@ def _get_param(name, default):
         return default
     try:
         return _cfg.get("config", name)
-    except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+    except (configparser.NoOptionError, configparser.NoSectionError):
         return default
 
 

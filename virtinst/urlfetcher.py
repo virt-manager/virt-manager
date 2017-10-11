@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import ConfigParser
+import configparser
 import ftplib
 import io
 import logging
@@ -393,14 +393,14 @@ def _grabTreeinfo(fetcher):
         return None
 
     try:
-        treeinfo = ConfigParser.SafeConfigParser()
+        treeinfo = configparser.SafeConfigParser()
         treeinfo.read(tmptreeinfo)
     finally:
         os.unlink(tmptreeinfo)
 
     try:
         treeinfo.get("general", "family")
-    except ConfigParser.NoSectionError:
+    except configparser.NoSectionError:
         logging.debug("Did not find 'family' section in treeinfo")
         return None
 
@@ -601,7 +601,7 @@ class Distro(object):
             try:
                 kernelpath = self._getTreeinfoMedia("kernel")
                 initrdpath = self._getTreeinfoMedia("initrd")
-            except ConfigParser.NoSectionError:
+            except configparser.NoSectionError:
                 pass
 
         if not kernelpath or not initrdpath:
@@ -737,15 +737,15 @@ class GenericDistro(Distro):
                     self._valid_kernel_path = (
                         self._getTreeinfoMedia("kernel"),
                         self._getTreeinfoMedia("initrd"))
-                except (ConfigParser.NoSectionError,
-                        ConfigParser.NoOptionError) as e:
+                except (configparser.NoSectionError,
+                        configparser.NoOptionError) as e:
                     logging.debug(e)
 
             if self.treeinfo.has_section(isoSection):
                 try:
                     self._valid_iso_path = self.treeinfo.get(isoSection,
                                                              "boot.iso")
-                except ConfigParser.NoOptionError as e:
+                except configparser.NoOptionError as e:
                     logging.debug(e)
 
         if self.type == "xen":
