@@ -27,7 +27,6 @@
 import sys
 import time
 import math
-import thread
 import fcntl
 import struct
 import termios
