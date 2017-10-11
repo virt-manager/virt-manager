@@ -19,7 +19,16 @@
 
 import logging
 import re
-import urllib
+import sys
+
+# pylint: disable=no-name-in-module,import-error
+if sys.version_info[0] == 3:
+    # Python 3
+    from urllib.parse import unquote
+else:
+    # Python 2
+    from urlparse import unquote
+
 
 from .cli import parse_optstr_tuples
 
@@ -47,7 +56,7 @@ class URI(object):
     """
     def __init__(self, uri):
         self.uri = uri
-        unquoted_uri = urllib.unquote(uri)
+        unquoted_uri = unquote(uri)
 
         (self.scheme, self.username, self.hostname,
          self.path, self.query, self.fragment) = self._split(unquoted_uri)
