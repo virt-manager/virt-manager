@@ -181,7 +181,7 @@ def diff_compare(actual_out, filename=None, expect_out=None):
 
     diff = "".join(difflib.unified_diff(expect_out.splitlines(1),
                                         actual_out.splitlines(1),
-                                        fromfile=filename,
+                                        fromfile=filename or '',
                                         tofile="Generated Output"))
     if diff:
         raise AssertionError("Conversion outputs did not match.\n%s" % diff)

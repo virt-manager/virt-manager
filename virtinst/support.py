@@ -187,7 +187,8 @@ class _SupportCheck(object):
         actual_hv_version = conn.conn_version()
 
         # Check that local libvirt version is sufficient
-        if _version_str_to_int(self.version) > actual_libvirt_version:
+        v = _version_str_to_int(self.version)
+        if v and (v > actual_libvirt_version):
             return False
 
         if self.hv_version:
