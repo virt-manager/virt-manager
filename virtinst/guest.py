@@ -399,13 +399,20 @@ class Guest(XMLBuilder):
         try:
             domain.create()
         except Exception:
+            # pylint: disable=exec-used, unused-variable
             import sys
             exc_info = sys.exc_info()
             try:
                 domain.undefine()
             except Exception:
                 pass
-            raise exc_info[0], exc_info[1], exc_info[2]
+
+            if sys.version_info[0] == 3:
+                raise
+            else:
+                # Use exec() to avoid syntax error from Python 3
+                exec("raise exc_info[0], exc_info[1], exc_info[2]")
+
 
         if install_xml and install_xml != final_xml:
             domain = self.conn.defineXML(final_xml)
