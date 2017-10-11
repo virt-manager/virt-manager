@@ -28,7 +28,7 @@ os.environ["VIRTINST_TEST_URL_DIR"] = os.path.abspath(
 # pylint: disable=wrong-import-position
 from virtcli import cliconfig
 # This sets all the cli bits back to their defaults
-reload(cliconfig)
+imp.reload(cliconfig)
 
 from tests import utils
 
