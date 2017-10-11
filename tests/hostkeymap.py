@@ -32,5 +32,5 @@ class TestHostkeymap(unittest.TestCase):
 
         self.assertEquals(
                 hostkeymap._sysconfig_keyboard(_open("sysconfig-comments.txt")),
-                "de-latin1-nodeadkeys")
+                "")
 

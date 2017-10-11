@@ -71,6 +71,9 @@ def _sysconfig_keyboard(f):
         s = f.readline()
         if s == "":
             break
+        s = s.strip()
+        if s.startswith("#"):
+            continue
         if (re.search("KEYMAP", s) is not None or
             re.search("KEYTABLE", s) is not None or
            (re.search("KEYBOARD", s) is not None and
