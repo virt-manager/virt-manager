@@ -2499,7 +2499,7 @@ class vmmCreate(vmmGObjectUI):
                 'passwd': self._get_config_oscontainer_source_password,
                 'insecure': self._get_config_oscontainer_isecure
             }
-            for key, getter in bootstrap_arg_keys.iteritems():
+            for key, getter in bootstrap_arg_keys.items():
                 bootstrap_args[key] = getter()
 
         parentobj = self._customize_window or self
