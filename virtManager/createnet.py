@@ -627,7 +627,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         valid_ip = (ip.numhosts >= 8 and ip.is_private)
         gateway = (ip.prefixlen != 32 and str(ip.network + 1) or "")
         info = (ip.is_private and _("Private") or _("Other/Public"))
-        start = int(ip.numhosts / 2)
+        start = int(ip.numhosts // 2)
         end = int(ip.numhosts - 2)
 
         src.modify_bg(Gtk.StateType.NORMAL, valid_ip and _green or _red)

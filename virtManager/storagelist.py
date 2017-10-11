@@ -415,7 +415,7 @@ class vmmStorageList(vmmGObjectUI):
         model.clear()
 
         vadj = self.widget("vol-scroll").get_vadjustment()
-        vscroll_percent = vadj.get_value() / max(vadj.get_upper(), 1)
+        vscroll_percent = vadj.get_value() // max(vadj.get_upper(), 1)
 
         for vol in vols:
             key = vol.get_connkey()

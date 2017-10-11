@@ -190,7 +190,7 @@ class vmmFSDetails(vmmGObjectUI):
         if dev.type != VirtualFilesystem.TYPE_RAM:
             self.widget("fs-source").set_text(dev.source)
         else:
-            self.widget("fs-ram-source-spin").set_value(int(dev.source) / 1024)
+            self.widget("fs-ram-source-spin").set_value(int(dev.source) // 1024)
         self.widget("fs-target").set_text(dev.target or "")
         self.widget("fs-readonly").set_active(dev.readonly)
 

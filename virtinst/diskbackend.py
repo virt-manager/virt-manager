@@ -404,7 +404,7 @@ class CloneStorageCreator(_StorageCreator):
 
             if msg:
                 msg += (_(" %d M requested > %d M available") %
-                        ((need / (1024 * 1024)), (avail / (1024 * 1024))))
+                        ((need // (1024 * 1024)), (avail // (1024 * 1024))))
         return (ret, msg)
 
     def create(self, progresscb):

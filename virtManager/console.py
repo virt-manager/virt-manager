@@ -402,12 +402,12 @@ class vmmConsolePages(vmmGObjectUI):
         if align_ratio > desktop_ratio:
             desktop_w = int(req.height * desktop_ratio)
             desktop_h = req.height
-            dx = (req.width - desktop_w) / 2
+            dx = (req.width - desktop_w) // 2
 
         else:
             desktop_w = req.width
-            desktop_h = int(req.width / desktop_ratio)
-            dy = (req.height - desktop_h) / 2
+            desktop_h = int(req.width // desktop_ratio)
+            dy = (req.height - desktop_h) // 2
 
         viewer_alloc = Gdk.Rectangle()
         viewer_alloc.x = dx

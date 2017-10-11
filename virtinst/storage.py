@@ -892,13 +892,13 @@ class StorageVolume(_StorageObject):
             return (True, _("There is not enough free space on the storage "
                             "pool to create the volume. "
                             "(%d M requested allocation > %d M available)") %
-                            ((self.allocation / (1024 * 1024)),
-                             (avail / (1024 * 1024))))
+                            ((self.allocation // (1024 * 1024)),
+                             (avail // (1024 * 1024))))
         elif self.capacity > avail:
             return (False, _("The requested volume capacity will exceed the "
                              "available pool space when the volume is fully "
                              "allocated. "
                              "(%d M requested capacity > %d M available)") %
-                             ((self.capacity / (1024 * 1024)),
-                              (avail / (1024 * 1024))))
+                             ((self.capacity // (1024 * 1024)),
+                              (avail // (1024 * 1024))))
         return (False, "")

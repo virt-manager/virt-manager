@@ -693,7 +693,7 @@ class vmmCreate(vmmGObjectUI):
                      {'maxmem': _pretty_memory(memory)})
         mem_label = ("<span size='small' color='#484848'>%s</span>" %
                      mem_label)
-        self.widget("mem").set_range(50, memory / 1024)
+        self.widget("mem").set_range(50, memory // 1024)
         self.widget("phys-mem-label").set_markup(mem_label)
 
         # CPU
@@ -2149,7 +2149,7 @@ class vmmCreate(vmmGObjectUI):
         # Change the default values suggested to the user.
         ram_size = DEFAULT_MEM
         if res and res.get("ram") > 0:
-            ram_size = res["ram"] / (1024 ** 2)
+            ram_size = res["ram"] // (1024 ** 2)
         self.widget("mem").set_value(ram_size)
 
         n_cpus = 1
@@ -2158,7 +2158,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("cpus").set_value(n_cpus)
 
         if res and res.get("storage"):
-            storage_size = int(res["storage"]) / (1024 ** 3)
+            storage_size = int(res["storage"]) // (1024 ** 3)
             self._addstorage.widget("storage-size").set_value(storage_size)
 
         # Validation passed, store the install path (if there is one) in

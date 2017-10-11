@@ -430,7 +430,7 @@ class VirtualDisk(VirtualDevice):
         """
         digits = []
         for factor in range(0, 3):
-            amt = (num % (26 ** (factor + 1))) / (26 ** factor)
+            amt = (num % (26 ** (factor + 1))) // (26 ** factor)
             if amt == 0 and num >= (26 ** (factor + 1)):
                 amt = 26
             num -= amt

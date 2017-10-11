@@ -2584,7 +2584,7 @@ class vmmDetails(vmmGObjectUI):
 
     def refresh_config_memory(self):
         host_mem_widget = self.widget("state-host-memory")
-        host_mem = self.vm.conn.host_memory_size() / 1024
+        host_mem = self.vm.conn.host_memory_size() // 1024
         vm_cur_mem = self.vm.get_memory() / 1024.0
         vm_max_mem = self.vm.maximum_memory() / 1024.0
 
@@ -2965,7 +2965,7 @@ class vmmDetails(vmmGObjectUI):
             ram = vid.vram
         heads = vid.heads
         try:
-            ramlabel = ram and "%d MiB" % (int(ram) / 1024) or "-"
+            ramlabel = ram and "%d MiB" % (int(ram) // 1024) or "-"
         except Exception:
             ramlabel = "-"
 

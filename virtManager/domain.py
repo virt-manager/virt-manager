@@ -1984,7 +1984,7 @@ class vmmDomain(vmmLibvirtObject):
         except libvirt.libvirtError as err:
             logging.error("Error reading mem stats: %s", err)
 
-        pcentCurrMem = (curmem / float(totalmem)) * 100
+        pcentCurrMem = (curmem // float(totalmem)) * 100
         pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
 
         return pcentCurrMem, curmem
@@ -2033,10 +2033,10 @@ class vmmDomain(vmmLibvirtObject):
             "cpuGuestPercent": pcentGuestCpu,
             "curmem": curmem,
             "currMemPercent": pcentCurrMem,
-            "diskRdKiB": rdBytes / 1024,
-            "diskWrKiB": wrBytes / 1024,
-            "netRxKiB": rxBytes / 1024,
-            "netTxKiB": txBytes / 1024,
+            "diskRdKiB": rdBytes // 1024,
+            "diskWrKiB": wrBytes // 1024,
+            "netRxKiB": rxBytes // 1024,
+            "netTxKiB": txBytes // 1024,
         }
 
         for r in ["diskRd", "diskWr", "netRx", "netTx"]:

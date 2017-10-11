@@ -175,18 +175,18 @@ class CPU(XMLBuilder):
         vcpus = int(vcpus or 0)
         if not self.sockets:
             if not self.cores:
-                self.sockets = vcpus / self.threads
+                self.sockets = vcpus // self.threads
             else:
-                self.sockets = vcpus / self.cores
+                self.sockets = vcpus // self.cores
 
         if not self.cores:
             if not self.threads:
-                self.cores = vcpus / self.sockets
+                self.cores = vcpus // self.sockets
             else:
-                self.cores = vcpus / (self.sockets * self.threads)
+                self.cores = vcpus // (self.sockets * self.threads)
 
         if not self.threads:
-            self.threads = vcpus / (self.sockets * self.cores)
+            self.threads = vcpus // (self.sockets * self.cores)
 
         return
 

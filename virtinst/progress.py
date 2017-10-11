@@ -79,7 +79,7 @@ class TerminalLine:
             a number of different elements (default=2). """
         if self._llen < fixed:
             return 0
-        return (self._llen - fixed) / elements
+        return (self._llen - fixed) // elements
 
     def add(self, element, full_len=None):
         """ If there is room left in the line, above min_len, add element.
@@ -249,7 +249,7 @@ class TextMeter(BaseMeter):
         sofar_size = None
         if _text_meter_total_size:
             sofar_size = _text_meter_sofar_size + amount_read
-            sofar_pc   = (sofar_size * 100) / _text_meter_total_size
+            sofar_pc   = (sofar_size * 100) // _text_meter_total_size
 
         # Include text + ui_rate in minimal
         tl = TerminalLine(8, 8+1+8)
@@ -385,7 +385,7 @@ class RateEstimator:
         (can be None for unknown transfer size)"""
         if self.total is None: return None
         elif self.total == 0: return 1.0
-        else: return float(self.last_amount_read)/self.total
+        else: return float(self.last_amount_read) / self.total
 
     #########################################################################
     # support methods
@@ -432,7 +432,7 @@ class RateEstimator:
         """
 
         if rt < 0: return 0.0
-        shift = int(math.log(rt/start_time)/math.log(2))
+        shift = int(math.log(rt / start_time) / math.log(2))
         rt = int(rt)
         if shift <= 0: return rt
         return float(int(rt) >> shift << shift)
@@ -446,10 +446,10 @@ def format_time(seconds, use_hours=0):
         return 'Infinite'
     else:
         seconds = int(seconds)
-        minutes = seconds / 60
+        minutes = seconds // 60
         seconds = seconds % 60
         if use_hours:
-            hours = minutes / 60
+            hours = minutes // 60
             minutes = minutes % 60
             return '%02i:%02i:%02i' % (hours, minutes, seconds)
         else:
