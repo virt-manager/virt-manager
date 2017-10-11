@@ -18,10 +18,10 @@
 # MA 02110-1301 USA.
 #
 
+import io
 import logging
 import pkgutil
 import os
-import cStringIO
 import threading
 import time
 
@@ -2633,7 +2633,7 @@ class vmmCreate(vmmGObjectUI):
                 return True
 
         # Use string buffer to store log messages
-        log_stream = cStringIO.StringIO()
+        log_stream = io.StringIO()
 
         # Get virt-bootstrap logger
         vbLogger = logging.getLogger('virtBootstrap')

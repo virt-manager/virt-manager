@@ -20,9 +20,9 @@
 
 import datetime
 import glob
+import io
 import logging
 import os
-import StringIO
 
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -394,7 +394,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             flags = 0
             mime = self.vm.get_backend().screenshot(stream, screen, flags)
 
-            ret = StringIO.StringIO()
+            ret = io.StringIO()
             def _write_cb(_stream, data, userdata):
                 ignore = stream
                 ignore = userdata

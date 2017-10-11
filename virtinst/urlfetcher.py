@@ -21,11 +21,11 @@
 
 import ConfigParser
 import ftplib
+import io
 import logging
 import os
 import re
 import stat
-import StringIO
 import subprocess
 import tempfile
 import urllib2
@@ -169,7 +169,7 @@ class _URLFetcher(object):
         """
         Grab the passed filename from self.location and return it as a string
         """
-        fileobj = StringIO.StringIO()
+        fileobj = io.StringIO()
         self._grabURL(filename, fileobj)
         return fileobj.getvalue()
 

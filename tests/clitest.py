@@ -16,6 +16,7 @@
 # MA 02110-1301 USA.
 
 import atexit
+import io
 import logging
 import os
 import shlex
@@ -23,7 +24,6 @@ import shutil
 import sys
 import traceback
 import unittest
-import StringIO
 
 from virtinst import support
 
@@ -144,7 +144,7 @@ class Command(object):
         oldstdin = sys.stdin
         oldargv = sys.argv
         try:
-            out = StringIO.StringIO()
+            out = io.BytesIO()
             sys.stdout = out
             sys.stderr = out
             sys.argv = self.argv
