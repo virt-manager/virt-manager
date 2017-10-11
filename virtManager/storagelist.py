@@ -36,7 +36,7 @@ from .createvol import vmmCreateVolume
 EDIT_POOL_IDS = (
 EDIT_POOL_NAME,
 EDIT_POOL_AUTOSTART,
-) = range(2)
+) = list(range(2))
 
 VOL_NUM_COLUMNS = 7
 (VOL_COLUMN_KEY,

@@ -144,7 +144,7 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
         else:
             return collision_cb(tryname)
 
-    numrange = range(start_num, start_num + 100000)
+    numrange = list(range(start_num, start_num + 100000))
     if not force_num:
         numrange = [None] + numrange
 

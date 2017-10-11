@@ -43,11 +43,11 @@ EDIT_NET_IDS = (
 EDIT_NET_NAME,
 EDIT_NET_AUTOSTART,
 EDIT_NET_QOS,
-) = range(3)
+) = list(range(3))
 
 EDIT_INTERFACE_IDS = (
 EDIT_INTERFACE_STARTMODE,
-) = range(200, 201)
+) = list(range(200, 201))
 
 
 class vmmHost(vmmGObjectUI):

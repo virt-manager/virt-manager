@@ -3228,7 +3228,7 @@ class vmmDetails(vmmGObjectUI):
         for dev in self.vm.get_panic_devices():
             update_hwlist(HW_LIST_TYPE_PANIC, dev)
 
-        devs = range(len(hw_list_model))
+        devs = list(range(len(hw_list_model)))
         devs.reverse()
         for i in devs:
             _iter = hw_list_model.iter_nth_child(None, i)
