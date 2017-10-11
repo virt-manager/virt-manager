@@ -20,6 +20,7 @@ from __future__ import print_function
 import glob
 import io
 import os
+import sys
 import unittest
 
 from virtconv import VirtConverter
@@ -32,7 +33,12 @@ out_dir = base_dir + "libvirt_output"
 
 class TestVirtConv(unittest.TestCase):
     def _convert_helper(self, infile, outfile, in_type, disk_format):
-        outbuf = io.BytesIO()
+
+        if sys.version_info[0] == 3:
+            outbuf = io.StringIO()
+        else:
+            outbuf = io.BytesIO()
+
         def print_cb(msg):
             print(msg, file=outbuf)
 
