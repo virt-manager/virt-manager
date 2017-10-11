@@ -296,7 +296,7 @@ def _do_creds_authname(creds):
 
         res = cred[retindex]
         if credtype == libvirt.VIR_CRED_AUTHNAME:
-            res = raw_input(prompt)
+            res = getattr(__builtins__, 'raw_input', input)(prompt)
         elif credtype == libvirt.VIR_CRED_PASSPHRASE:
             import getpass
             res = getpass.getpass(prompt)
