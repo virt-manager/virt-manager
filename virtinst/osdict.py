@@ -98,12 +98,12 @@ def _sort(tosort, sortpref=None, limit_point_releases=False):
     # debian5, debian4, fedora14, fedora13
     #   rather than
     # debian4, debian5, fedora13, fedora14
-    for distro_list in distro_mappings.values():
+    for distro_list in list(distro_mappings.values()):
         distro_list.sort()
         distro_list.reverse()
 
     # Move the sortpref values to the front of the list
-    sorted_distro_list = distro_mappings.keys()
+    sorted_distro_list = list(distro_mappings.keys())
     sorted_distro_list.sort()
     sortpref.reverse()
     for prefer in sortpref:

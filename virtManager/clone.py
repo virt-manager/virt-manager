@@ -336,7 +336,7 @@ class vmmCloneVM(vmmGObjectUI):
 
             build_net_row(label, mac, newmac)
 
-        no_net = bool(len(self.net_list.keys()) == 0)
+        no_net = (not list(self.net_list.keys()))
         self.widget("clone-network-box").set_visible(not no_net)
         self.widget("clone-no-net").set_visible(no_net)
 
@@ -460,7 +460,7 @@ class vmmCloneVM(vmmGObjectUI):
         if cd.clone_name == newname:
             return
 
-        for row in self.storage_list.values():
+        for row in list(self.storage_list.values()):
             origpath = row[STORAGE_INFO_ORIG_PATH]
             if row[STORAGE_INFO_MANUAL_PATH]:
                 continue
@@ -599,7 +599,7 @@ class vmmCloneVM(vmmGObjectUI):
         # If any storage cannot be cloned or shared, don't allow cloning
         clone = True
         tooltip = ""
-        for row in self.storage_list.values():
+        for row in list(self.storage_list.values()):
             can_clone = row[STORAGE_INFO_CAN_CLONE]
             can_share = row[STORAGE_INFO_CAN_SHARE]
             if not (can_clone or can_share):

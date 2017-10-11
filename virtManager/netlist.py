@@ -197,7 +197,7 @@ class vmmNetworkList(vmmGObjectUI):
             for slave in slave_names:
                 netdevs.pop(slave, None)
 
-        for name, is_bridge, slave_names in netdevs.values():
+        for name, is_bridge, slave_names in list(netdevs.values()):
             if ((name in vnet_taps) or
                 (name in [v + "-nic" for v in vnet_bridges]) or
                 (name in skip_ifaces)):

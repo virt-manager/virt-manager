@@ -84,7 +84,7 @@ class VirtualGraphics(VirtualDevice):
         """
         from . import hostkeymap
 
-        orig_list = hostkeymap.keytable.values()
+        orig_list = list(hostkeymap.keytable.values())
         sort_list = []
 
         orig_list.sort()

@@ -253,7 +253,7 @@ def _make_tests():
                        vals.get("testshortcircuit", "0") == "1")
         urls[d.name] = d
 
-    keys = urls.keys()
+    keys = list(urls.keys())
     keys.sort()
     for key in keys:
         distroobj = urls[key]

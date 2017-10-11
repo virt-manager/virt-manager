@@ -167,7 +167,7 @@ class _SupportCheck(object):
         self.hv_version = hv_version or {}
         self.hv_libvirt_version = hv_libvirt_version or {}
 
-        versions = ([self.version] + self.hv_libvirt_version.values())
+        versions = ([self.version] + list(self.hv_libvirt_version.values()))
         for vstr in versions:
             v = _version_str_to_int(vstr)
             if vstr is not None and v != 0 and v < 7009:

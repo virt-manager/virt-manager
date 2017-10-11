@@ -199,13 +199,13 @@ class vmmSystray(vmmGObject):
 
     def repopulate_menu_list(self):
         # Build sorted connection list
-        connsort = self.conn_menuitems.keys()
+        connsort = list(self.conn_menuitems.keys())
         connsort.sort()
         connsort.reverse()
 
         # Empty conn list
         for child in self.systray_menu.get_children():
-            if child in self.conn_menuitems.values():
+            if child in list(self.conn_menuitems.values()):
                 self.systray_menu.remove(child)
 
         # Build sorted conn list
@@ -265,7 +265,7 @@ class vmmSystray(vmmGObject):
         for vm in conn.list_vms():
             vm_mappings[vm.get_name()] = vm.get_connkey()
 
-        vm_names = vm_mappings.keys()
+        vm_names = list(vm_mappings.keys())
         vm_names.sort()
 
         if len(vm_names) == 0:

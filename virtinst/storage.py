@@ -130,7 +130,7 @@ class StoragePool(_StorageObject):
         """
         Return list of appropriate pool types
         """
-        return StoragePool._descs.keys()
+        return list(StoragePool._descs.keys())
 
     @staticmethod
     def get_pool_type_desc(pool_type):

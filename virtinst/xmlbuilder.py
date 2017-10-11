@@ -843,7 +843,7 @@ class XMLBuilder(object):
     def _initial_child_parse(self):
         # Walk the XML tree and hand of parsing to any registered
         # child classes
-        for xmlprop in self._all_child_props().values():
+        for xmlprop in list(self._all_child_props().values()):
             if xmlprop.is_single:
                 child_class = xmlprop.child_classes[0]
                 prop_path = xmlprop.get_prop_xpath(self, child_class)
@@ -926,8 +926,8 @@ class XMLBuilder(object):
             if leave_stub:
                 _top_node = _get_xpath_node(self._xmlstate.xml_ctx,
                                             self.get_root_xpath())
-            props = self._all_xml_props().values()
-            props += self._all_child_props().values()
+            props = list(self._all_xml_props().values())
+            props += list(self._all_child_props().values())
             for prop in props:
                 prop.clear(self)
         finally:
@@ -1025,7 +1025,7 @@ class XMLBuilder(object):
 
     def _find_child_prop(self, child_class, return_single=False):
         xmlprops = self._all_child_props()
-        for xmlprop in xmlprops.values():
+        for xmlprop in list(xmlprops.values()):
             if xmlprop.is_single and not return_single:
                 continue
             if child_class in xmlprop.child_classes:
@@ -1084,7 +1084,7 @@ class XMLBuilder(object):
         Return a list of all XML child objects with the passed class
         """
         ret = []
-        for prop in self._all_child_props().values():
+        for prop in list(self._all_child_props().values()):
             ret += [obj for obj in util.listify(prop._get(self))
                     if obj.__class__ == klass]
         return ret
@@ -1165,7 +1165,7 @@ class XMLBuilder(object):
         xmlprops = self._all_xml_props()
         childprops = self._all_child_props()
 
-        for prop in xmlprops.values():
+        for prop in list(xmlprops.values()):
             prop._set_default(self)
 
         # Set up preferred XML ordering
@@ -1180,7 +1180,7 @@ class XMLBuilder(object):
             elif key in childprops:
                 do_order.insert(0, key)
 
-        for key in childprops.keys():
+        for key in list(childprops.keys()):
             if key not in do_order:
                 do_order.append(key)
 

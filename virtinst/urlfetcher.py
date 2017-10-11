@@ -1382,7 +1382,7 @@ class ALTLinuxDistro(Distro):
 # Build list of all *Distro classes
 def _build_distro_list():
     allstores = []
-    for obj in globals().values():
+    for obj in list(globals().values()):
         if isinstance(obj, type) and issubclass(obj, Distro) and obj.name:
             allstores.append(obj)
 

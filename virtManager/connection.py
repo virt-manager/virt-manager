@@ -1215,35 +1215,35 @@ class vmmConnection(vmmGObject):
     def _update_nets(self, dopoll):
         keymap = dict((o.get_connkey(), o) for o in self.list_nets())
         if not dopoll or not self.is_network_capable():
-            return [], [], keymap.values()
+            return [], [], list(keymap.values())
         return pollhelpers.fetch_nets(self._backend, keymap,
                     (lambda obj, key: vmmNetwork(self, obj, key)))
 
     def _update_pools(self, dopoll):
         keymap = dict((o.get_connkey(), o) for o in self.list_pools())
         if not dopoll or not self.is_storage_capable():
-            return [], [], keymap.values()
+            return [], [], list(keymap.values())
         return pollhelpers.fetch_pools(self._backend, keymap,
                     (lambda obj, key: vmmStoragePool(self, obj, key)))
 
     def _update_interfaces(self, dopoll):
         keymap = dict((o.get_connkey(), o) for o in self.list_interfaces())
         if not dopoll or not self.is_interface_capable():
-            return [], [], keymap.values()
+            return [], [], list(keymap.values())
         return pollhelpers.fetch_interfaces(self._backend, keymap,
                     (lambda obj, key: vmmInterface(self, obj, key)))
 
     def _update_nodedevs(self, dopoll):
         keymap = dict((o.get_connkey(), o) for o in self.list_nodedevs())
         if not dopoll or not self.is_nodedev_capable():
-            return [], [], keymap.values()
+            return [], [], list(keymap.values())
         return pollhelpers.fetch_nodedevs(self._backend, keymap,
                     (lambda obj, key: vmmNodeDevice(self, obj, key)))
 
     def _update_vms(self, dopoll):
         keymap = dict((o.get_connkey(), o) for o in self.list_vms())
         if not dopoll:
-            return [], [], keymap.values()
+            return [], [], list(keymap.values())
         return pollhelpers.fetch_vms(self._backend, keymap,
                     (lambda obj, key: vmmDomain(self, obj, key)))
 

@@ -174,7 +174,7 @@ class vmmAddStorage(vmmGObjectUI):
                              _("Don't ask about these directories again."))
 
         if chkres:
-            src.config.add_perms_fix_ignore(errors.keys())
+            src.config.add_perms_fix_ignore(list(errors.keys()))
 
     def reset_state(self):
         self._update_host_space()

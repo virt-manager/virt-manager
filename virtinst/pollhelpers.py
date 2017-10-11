@@ -50,7 +50,7 @@ def _new_poll_helper(origmap, typename, listfunc, buildfunc):
             current[connkey] = origmap[connkey]
             del(origmap[connkey])
 
-    return (origmap.values(), new.values(), current.values())
+    return (list(origmap.values()), list(new.values()), list(current.values()))
 
 
 def _old_poll_helper(origmap, typename,
@@ -108,7 +108,7 @@ def _old_poll_helper(origmap, typename,
         except Exception:
             logging.exception("Couldn't fetch %s '%s'", typename, name)
 
-    return (origmap.values(), new.values(), current.values())
+    return (list(origmap.values()), list(new.values()), list(current.values()))
 
 
 def fetch_nets(backend, origmap, build_func):
@@ -209,7 +209,7 @@ def _old_fetch_vms(backend, origmap, build_func):
     new = {}
 
     # Build list of previous vms with proper id/name mappings
-    for vm in origmap.values():
+    for vm in list(origmap.values()):
         if vm.is_active():
             oldActiveIDs[vm.get_id()] = vm
         else:
@@ -272,7 +272,7 @@ def _old_fetch_vms(backend, origmap, build_func):
             except Exception:
                 logging.exception("Couldn't fetch domain '%s'", name)
 
-    return (origmap.values(), new.values(), current.values())
+    return (list(origmap.values()), list(new.values()), list(current.values()))
 
 
 def fetch_vms(backend, origmap, build_func):

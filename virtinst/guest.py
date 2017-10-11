@@ -1046,7 +1046,7 @@ class Guest(XMLBuilder):
                                  (str(d), str(addresses[addrstr][addr.function])))
             addresses[addrstr][addr.function] = d
 
-        for devs in addresses.values():
+        for devs in list(addresses.values()):
             if len(devs) > 1 and 0 in devs:
                 devs[0].address.multifunction = True
 

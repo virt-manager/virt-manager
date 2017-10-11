@@ -556,12 +556,12 @@ class vmmCreateInterface(vmmGObjectUI):
             row[INTERFACE_ROW_KEY] = key
             row_dict[name] = row
 
-        for row in row_dict.values():
+        for row in list(row_dict.values()):
             name = row[INTERFACE_ROW_NAME]
             row[INTERFACE_ROW_IN_USE_BY] = self.iface_in_use_by(self.conn,
                                                                 name)
 
-        for row in row_dict.values():
+        for row in list(row_dict.values()):
             model.append(row)
 
     def get_default_name(self):

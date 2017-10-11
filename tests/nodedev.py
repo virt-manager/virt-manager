@@ -69,7 +69,7 @@ class TestNodeDev(unittest.TestCase):
 
     def _testCompare(self, devname, vals, devxml=None):
         def _compare(dev, vals, root=""):
-            for attr in vals.keys():
+            for attr in list(vals.keys()):
                 expect = vals[attr]
                 actual = getattr(dev, attr)
                 if isinstance(expect, list):

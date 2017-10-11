@@ -507,7 +507,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             basesn = os.path.join(cachedir, "snap-screenshot-%s" % name)
 
             # Remove any pre-existing screenshots so we don't show stale data
-            for ext in mimemap.values():
+            for ext in list(mimemap.values()):
                 p = basesn + "." + ext
                 if os.path.exists(basesn + "." + ext):
                     os.unlink(p)

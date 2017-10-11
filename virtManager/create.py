@@ -932,7 +932,7 @@ class vmmCreate(vmmGObjectUI):
         model.clear()
 
         default = -1
-        for c in self.engine.conns.values():
+        for c in list(self.engine.conns.values()):
             connobj = c["conn"]
             if not connobj.is_active():
                 continue

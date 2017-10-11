@@ -154,7 +154,7 @@ class vmmEngine(vmmGObject):
         self._application.add_action(action)
 
     def _default_startup(self, skip_autostart, cliuri):
-        uris = self.conns.keys()
+        uris = list(self.conns.keys())
         if not uris:
             logging.debug("No stored URIs found.")
         else:
@@ -514,10 +514,10 @@ class vmmEngine(vmmGObject):
         focus, and use that
         """
         windowlist = [self.windowManager]
-        for conndict in self.conns.values():
-            windowlist.extend(conndict["windowDetails"].values())
+        for conndict in list(self.conns.values()):
+            windowlist.extend(list(conndict["windowDetails"].values()))
         windowlist.extend(
-            [conndict["windowHost"] for conndict in self.conns.values()])
+            [conndict["windowHost"] for conndict in list(self.conns.values())])
 
         use_win = None
         for window in windowlist:
@@ -593,7 +593,7 @@ class vmmEngine(vmmGObject):
                 self.conns[uri]["windowClone"].cleanup()
 
             details = self.conns[uri]["windowDetails"]
-            for win in details.values():
+            for win in list(details.values()):
                 win.cleanup()
 
             self.conns[uri]["conn"].cleanup()
@@ -613,7 +613,7 @@ class vmmEngine(vmmGObject):
         handle_id = vmmGObject.connect(self, name, callback, *args)
 
         if name == "conn-added":
-            for conn_dict in self.conns.values():
+            for conn_dict in list(self.conns.values()):
                 self.emit("conn-added", conn_dict["conn"])
 
         return handle_id
@@ -763,7 +763,7 @@ class vmmEngine(vmmGObject):
             return self.connect_to_uri(uri, autoconnect, probe=True)
 
         def cancelled(src):
-            if len(self.conns.keys()) == 0:
+            if not list(self.conns.keys()):
                 self.exit_app(src)
 
         obj = vmmConnect()

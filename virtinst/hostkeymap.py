@@ -202,7 +202,7 @@ def sanitize_keymap(kt):
         return len(b) - len(a)
 
     clean_kt = kt.replace("-", "").replace("_", "")
-    sorted_keys = sorted(keytable.keys(), len_cmp)
+    sorted_keys = sorted(list(keytable.keys()), len_cmp)
 
     for key in sorted_keys:
         origkey = key

@@ -744,7 +744,7 @@ class vmmDetails(vmmGObjectUI):
         rmHW.connect("activate", self.remove_xml_dev)
 
         self._addhwmenuitems = {"add": addHW, "remove": rmHW}
-        for i in self._addhwmenuitems.values():
+        for i in list(self._addhwmenuitems.values()):
             self.addhwmenu.add(i)
 
         self.widget("hw-panel").set_show_tabs(False)
@@ -1516,7 +1516,9 @@ class vmmDetails(vmmGObjectUI):
             'tEXt::Generator Version': self.config.get_appversion(),
         }
 
-        ret = image.save_to_bufferv('png', metadata.keys(), metadata.values())
+        ret = image.save_to_bufferv(
+            'png', list(metadata.keys()), list(metadata.values())
+        )
         # On Fedora 19, ret is (bool, str)
         # Someday the bindings might be fixed to just return the str, try
         # and future proof it a bit
