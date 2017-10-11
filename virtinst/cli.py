@@ -132,6 +132,8 @@ class VirtStreamHandler(logging.StreamHandler):
             self.flush()
         except (KeyboardInterrupt, SystemExit):
             raise
+        except (UnicodeError, TypeError):
+            stream.write((fs % msg).encode("utf-8"))
         except Exception:
             self.handleError(record)
 
