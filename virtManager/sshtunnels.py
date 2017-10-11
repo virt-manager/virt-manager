@@ -17,6 +17,7 @@
 # MA 02110-1301 USA.
 #
 
+import functools
 import logging
 import os
 import Queue
@@ -261,7 +262,7 @@ def _make_ssh_command(ginfo):
     argv.append("sh -c")
     argv.append("'%s'" % nc_cmd)
 
-    argv_str = reduce(lambda x, y: x + " " + y, argv[1:])
+    argv_str = functools.reduce(lambda x, y: x + " " + y, argv[1:])
     logging.debug("Pre-generated ssh command for ginfo: %s", argv_str)
     return argv
 

@@ -18,6 +18,7 @@
 # MA 02110-1301 USA.
 #
 
+import functools
 import logging
 
 from gi.repository import GObject
@@ -931,7 +932,7 @@ class vmmHost(vmmGObjectUI):
 
             addrstr = "-"
             if ipv6[2]:
-                addrstr = reduce(lambda x, y: x + "\n" + y, ipv6[2])
+                addrstr = functools.reduce(lambda x, y: x + "\n" + y, ipv6[2])
 
             self.widget("interface-ipv6-mode").set_text(mode)
             self.widget("interface-ipv6-address").set_text(addrstr)
