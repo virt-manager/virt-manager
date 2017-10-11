@@ -1002,7 +1002,7 @@ def _parse_optstr_to_dict(optstr, virtargs, remove_first):
             virtarg.is_list):
             optdict[cliname] = []
 
-        if type(optdict.get(cliname)) is list:
+        if isinstance(optdict.get(cliname), list):
             optdict[cliname].append(val)
         else:
             optdict[cliname] = val
@@ -2591,7 +2591,7 @@ class _ParserChar(VirtCLIParser):
     stub_none = False
 
     def support_check(self, inst, virtarg):
-        if type(virtarg.attrname) is not str:
+        if not isinstance(virtarg.attrname, str):
             return
         if not inst.supports_property(virtarg.attrname):
             raise ValueError(_("%(devtype)s type '%(chartype)s' does not "

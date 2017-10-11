@@ -275,7 +275,7 @@ class vmmErrorDialog(vmmGObject):
         if _type is not None:
             pattern = _type
             name = None
-            if type(_type) is tuple:
+            if isinstance(_type, tuple):
                 pattern = _type[0]
                 name = _type[1]
 

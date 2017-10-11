@@ -1692,7 +1692,7 @@ class vmmCreate(vmmGObjectUI):
         else:
             def callback(ignore, text):
                 widget = cbwidget
-                if type(cbwidget) is str:
+                if isinstance(cbwidget, str):
                     widget = self.widget(cbwidget)
                 widget.set_text(text)
 

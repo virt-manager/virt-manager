@@ -886,7 +886,7 @@ class XMLBuilder(object):
         # XMLChildProperty stores a list in propstore, which dict shallow
         # copy won't fix for us.
         for name, value in ret._propstore.items():
-            if type(value) is not list:
+            if not isinstance(value, list):
                 continue
             ret._propstore[name] = [obj.copy() for obj in ret._propstore[name]]
 

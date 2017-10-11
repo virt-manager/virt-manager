@@ -83,7 +83,7 @@ def compare_device(origdev, newdev, idx):
     if id(origdev) == id(newdev):
         return True
 
-    if type(origdev) is not type(newdev):
+    if not isinstance(origdev, type(newdev)):
         return False
 
     for devprop in devprops[origdev.virtual_device_type]:

@@ -1351,7 +1351,7 @@ class ALTLinuxDistro(Distro):
 def _build_distro_list():
     allstores = []
     for obj in globals().values():
-        if type(obj) is type and issubclass(obj, Distro) and obj.name:
+        if isinstance(obj, type) and issubclass(obj, Distro) and obj.name:
             allstores.append(obj)
 
     seen_urldistro = []

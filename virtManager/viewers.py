@@ -614,7 +614,7 @@ class SpiceViewer(Viewer):
         GObject.GObject.connect(channel, "open-fd",
                                 self._channel_open_fd_request)
 
-        if (type(channel) == SpiceClientGLib.MainChannel and
+        if (isinstance(channel, SpiceClientGLib.MainChannel) and
             not self._main_channel):
             self._main_channel = channel
             hid = self._main_channel.connect_after("channel-event",

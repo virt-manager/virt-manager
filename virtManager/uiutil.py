@@ -155,7 +155,7 @@ def set_grid_row_visible(child, visible):
     based on UI interraction
     """
     parent = child.get_parent()
-    if type(parent) is not Gtk.Grid:
+    if not isinstance(parent, Gtk.Grid):
         raise RuntimeError("Programming error, parent must be grid, "
                            "not %s" % type(parent))
 

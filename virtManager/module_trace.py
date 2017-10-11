@@ -83,7 +83,7 @@ def wrap_class(classobj):
 
     for name in dir(classobj):
         obj = getattr(classobj, name)
-        if type(obj) is MethodType:
+        if isinstance(obj, MethodType):
             wrap_method(classobj, obj)
 
 
@@ -92,7 +92,7 @@ def wrap_module(module, regex=None):
         if regex and not re.match(regex, name):
             continue
         obj = getattr(module, name)
-        if type(obj) is FunctionType:
+        if isinstance(obj, FunctionType):
             wrap_func(module, obj)
-        if type(obj) is ClassType or type(obj) is type:
+        if isinstance(obj, (ClassType, type)):
             wrap_class(obj)

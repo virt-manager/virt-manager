@@ -151,7 +151,7 @@ def _import_file(doc, ctx, conn, input_file):
         ret = ctx.xpathEval(path)
         result = None
         if ret is not None:
-            if type(ret) == list:
+            if isinstance(ret, list):
                 if len(ret) >= 1:
                     result = ret[0].content
             else:

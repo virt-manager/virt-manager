@@ -30,7 +30,7 @@ import libvirt
 def listify(l):
     if l is None:
         return []
-    elif type(l) != list:
+    elif not isinstance(l, list):
         return [l]
     else:
         return l
@@ -61,7 +61,7 @@ def libvirt_collision(collision_cb, val):
 
 
 def validate_uuid(val):
-    if type(val) is not str:
+    if not isinstance(val, str):
         raise ValueError(_("UUID must be a string."))
 
     form = re.match("[a-fA-F0-9]{8}[-]([a-fA-F0-9]{4}[-]){3}[a-fA-F0-9]{12}$",
@@ -99,7 +99,7 @@ def validate_macaddr(val):
     if val is None:
         return
 
-    if type(val) is not str:
+    if not isinstance(val, str):
         raise ValueError(_("MAC address must be a string."))
 
     form = re.match("^([0-9a-fA-F]{1,2}:){5}[0-9a-fA-F]{1,2}$", val)

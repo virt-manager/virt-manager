@@ -1520,7 +1520,7 @@ class vmmDetails(vmmGObjectUI):
         # On Fedora 19, ret is (bool, str)
         # Someday the bindings might be fixed to just return the str, try
         # and future proof it a bit
-        if type(ret) is tuple and len(ret) >= 2:
+        if isinstance(ret, tuple) and len(ret) >= 2:
             ret = ret[1]
         # F24 rawhide, ret[1] is a named tuple with a 'buffer' element...
         if hasattr(ret, "buffer"):
@@ -3218,7 +3218,7 @@ class vmmDetails(vmmGObjectUI):
             olddev = hw_list_model[i][HW_LIST_COL_DEVICE]
 
             # Existing device, don't remove it
-            if type(olddev) is str or olddev in currentDevices:
+            if isinstance(olddev, str) or olddev in currentDevices:
                 continue
 
             hw_list_model.remove(_iter)

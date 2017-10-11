@@ -88,7 +88,7 @@ class Cloner(object):
                               doc="Original guest name.")
 
     def set_original_xml(self, val):
-        if type(val) is not str:
+        if not isinstance(val, str):
             raise ValueError(_("Original xml must be a string."))
         self._original_xml = val
         self._original_guest = Guest(self.conn,
@@ -214,7 +214,7 @@ class Cloner(object):
                                "(not Cloner.preserve)")
 
     def set_force_target(self, dev):
-        if type(dev) is list:
+        if isinstance(dev, list):
             self._force_target = dev[:]
         else:
             self._force_target.append(dev)
@@ -225,7 +225,7 @@ class Cloner(object):
                                 "despite Cloner's recommendation.")
 
     def set_skip_target(self, dev):
-        if type(dev) is list:
+        if isinstance(dev, list):
             self._skip_target = dev[:]
         else:
             self._skip_target.append(dev)
@@ -237,7 +237,7 @@ class Cloner(object):
                                "takes precedence over force_target.")
 
     def set_clone_policy(self, policy_list):
-        if type(policy_list) != list:
+        if not isinstance(policy_list, list):
             raise ValueError(_("Cloning policy must be a list of rules."))
         self._clone_policy = policy_list
     def get_clone_policy(self):

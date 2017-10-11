@@ -201,7 +201,7 @@ class Command(object):
         if conn is None:
             raise RuntimeError("skip check is not None, but conn is None")
 
-        if type(check) is str:
+        if isinstance(check, str):
             # pylint: disable=protected-access
             if support._check_version(conn, check):
                 return
