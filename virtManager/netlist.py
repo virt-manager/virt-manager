@@ -288,8 +288,8 @@ class vmmNetworkList(vmmGObjectUI):
             model.insert(0, row)
             default = 0
         elif label:
-            default = [idx for idx in range(len(model)) if
-                       model[idx][2] == label][0]
+            default = [idx for idx, model_label in enumerate(model) if
+                       model_label[2] == label][0]
 
         _add_manual_bridge_row()
         return default

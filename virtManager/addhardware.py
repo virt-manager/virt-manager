@@ -594,9 +594,8 @@ class vmmAddHardware(vmmGObjectUI):
         vmmAddHardware.populate_smartcard_mode_combo(vm, combo)
 
         idx = -1
-        for rowid in range(len(combo.get_model())):
+        for rowid, row in enumerate(combo.get_model()):
             idx = 0
-            row = combo.get_model()[rowid]
             if row[0] == virtinst.VirtualSmartCardDevice.MODE_DEFAULT:
                 idx = rowid
                 break
@@ -641,9 +640,8 @@ class vmmAddHardware(vmmGObjectUI):
         vmmAddHardware.populate_tpm_type_combo(vm, combo)
 
         idx = -1
-        for rowid in range(len(combo.get_model())):
+        for rowid, row in enumerate(combo.get_model()):
             idx = 0
-            row = combo.get_model()[rowid]
             if row[0] == virtinst.VirtualTPMDevice.TYPE_DEFAULT:
                 idx = rowid
                 break

@@ -430,8 +430,7 @@ class Cloner(object):
             iface.macaddr = mac
 
         # Changing storage XML
-        for i in range(len(self._original_disks)):
-            orig_disk = self._original_disks[i]
+        for i, orig_disk in enumerate(self._original_disks):
             clone_disk = self._clone_disks[i]
 
             for disk in self._guest.get_devices("disk"):

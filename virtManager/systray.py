@@ -274,7 +274,7 @@ class vmmSystray(vmmGObject):
             vm_submenu.insert(menu_item, 0)
             return
 
-        for i in range(0, len(vm_names)):
+        for i, name in enumerate(vm_names):
             name = vm_names[i]
             connkey = vm_mappings[name]
             if connkey in self.conn_vm_menuitems[uri]:
