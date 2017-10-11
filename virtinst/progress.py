@@ -484,12 +484,12 @@ def format_number(number, SI=0, space=' '):
     if isinstance(number, int) or isinstance(number, long):
         # it's an int or a long, which means it didn't get divided,
         # which means it's already short enough
-        format = '%i%s%s'
+        fmt = '%i%s%s'
     elif number < 9.95:
         # must use 9.95 for proper sizing.  For example, 9.99 will be
         # rounded to 10.0 with the .1f format string (which is too long)
-        format = '%.1f%s%s'
+        fmt = '%.1f%s%s'
     else:
-        format = '%.0f%s%s'
+        fmt = '%.0f%s%s'
 
-    return(format % (float(number or 0), space, symbols[depth]))
+    return(fmt % (float(number or 0), space, symbols[depth]))
