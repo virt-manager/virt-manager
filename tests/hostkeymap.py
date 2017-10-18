@@ -25,12 +25,30 @@ class TestHostkeymap(unittest.TestCase):
     """
     Tests for hostkeymap.py file parsing
     """
+    # pylint: disable=protected-access
+
     def testFiles(self):
         def _open(filename):
             return file(os.path.join(os.getcwd(),
                 "tests/hostkeymap", filename))
 
         self.assertEquals(
-                hostkeymap._sysconfig_keyboard(_open("sysconfig-comments.txt")),
+                hostkeymap._sysconfig_keyboard(
+                    _open("sysconfig-comments.txt")),
                 "")
-
+        self.assertEquals(
+                hostkeymap._sysconfig_keyboard(
+                    _open("sysconfig-rhel5.txt")),
+                "us")
+        self.assertEquals(
+                hostkeymap._find_xkblayout(
+                    _open("default-keyboard-debian9.txt")),
+                "us")
+        self.assertEquals(
+                hostkeymap._find_xkblayout(
+                    _open("console-setup-debian9.txt")),
+                None)
+        self.assertEquals(
+                hostkeymap._xorg_keymap(
+                    _open("xorg-rhel5.txt")),
+                "us")

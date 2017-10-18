@@ -1,0 +1,30 @@
+# Xorg configuration created by pyxf86config
+
+Section "ServerLayout"
+	Identifier     "Default Layout"
+	Screen      0  "Screen0" 0 0
+	InputDevice    "Keyboard0" "CoreKeyboard"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Keyboard0"
+	Driver      "kbd"
+	Option	    "XkbModel" "pc105"
+	Option	    "XkbLayout" "us"
+EndSection
+
+Section "Device"
+	Identifier  "Videocard0"
+	Driver      "vesa"
+EndSection
+
+Section "Screen"
+	Identifier "Screen0"
+	Device     "Videocard0"
+	DefaultDepth     24
+	SubSection "Display"
+		Viewport   0 0
+		Depth     24
+	EndSubSection
+EndSection
+
