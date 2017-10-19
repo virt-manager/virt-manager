@@ -314,7 +314,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         if net_check_bridge and bridge_entry:
             net_type = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
-            net_src = bridge_entry.get_text()
+            net_src = bridge_entry.get_text() or None
 
         mode = None
         if self.widget("net-source-mode").is_visible():
