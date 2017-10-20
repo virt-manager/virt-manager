@@ -1482,7 +1482,7 @@ class ParserCPU(VirtCLIParser):
 
     def _parse(self, inst):
         # Convert +feature, -feature into expected format
-        for key, value in self.optdict.items():
+        for key, value in list(self.optdict.items()):
             policy = None
             if value or len(key) == 1:
                 continue
