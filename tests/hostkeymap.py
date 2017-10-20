@@ -29,7 +29,7 @@ class TestHostkeymap(unittest.TestCase):
 
     def testFiles(self):
         def _open(filename):
-            return file(os.path.join(os.getcwd(),
+            return open(os.path.join(os.getcwd(),
                 "tests/hostkeymap", filename))
 
         self.assertEquals(
