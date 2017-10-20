@@ -805,10 +805,10 @@ def _set_attribute(obj, attr, val):  # pylint: disable=unused-argument
     exec("obj." + attr + " = val ")  # pylint: disable=exec-used
 
 
-class _VirtCLIArgument(object):
+class _VirtCLIArgumentStatic(object):
     """
-    A single subargument passed to compound command lines like --disk,
-    --network, etc.
+    Helper class to hold all of the static data we need for knowing
+    how to parse a cli subargument, like --disk path=, or --network mac=.
 
     @attrname: The virtinst API attribute name the cliargument maps to.
         If this is a virtinst object method, it will be called.
@@ -838,66 +838,64 @@ class _VirtCLIArgument(object):
         VirtualDisk has multiple seclabel children, this provides a hook
         to lookup the specified child object.
     """
-    attrname = None
-    cliname = None
-    cb = None
-    can_comma = None
-    ignore_default = False
-    aliases = None
-    is_list = False
-    is_onoff = False
-    lookup_cb = None
-    is_novalue = False
-    find_inst_cb = None
+    def __init__(self, attrname, cliname,
+                 cb=None, can_comma=None,
+                 ignore_default=False, aliases=None,
+                 is_list=False, is_onoff=False,
+                 lookup_cb=None, is_novalue=False,
+                 find_inst_cb=None):
+        self.attrname = attrname
+        self.cliname = cliname
+        self.cb = cb
+        self.can_comma = can_comma
+        self.ignore_default = ignore_default
+        self.aliases = aliases
+        self.is_list = is_list
+        self.is_onoff = is_onoff
+        self.lookup_cb = lookup_cb
+        self.is_novalue = is_novalue
+        self.find_inst_cb = find_inst_cb
 
-    @staticmethod
-    def make_arg(attrname, cliname, **kwargs):
-        """
-        Generates a new VirtCLIArgument class with the passed static
-        values. Initialize it later with the actual command line and value.
-        kwargs can be any of the
-        """
-        class VirtAddArg(_VirtCLIArgument):
-            pass
-
-        VirtAddArg.attrname = attrname
-        VirtAddArg.cliname = cliname
-        for key, val in kwargs.items():
-            # getattr for validation
-            getattr(VirtAddArg, key)
-            setattr(VirtAddArg, key, val)
-        return VirtAddArg
-
-    @classmethod
-    def match_name(cls, cliname):
+    def match_name(self, cliname):
         """
         Return True if the passed argument name matches this
         VirtCLIArgument. So for an option like --foo bar=X, this
         checks if we are the parser for 'bar'
         """
-        for argname in [cls.cliname] + util.listify(cls.aliases):
+        for argname in [self.cliname] + util.listify(self.aliases):
             if re.match("^%s$" % argname, cliname):
                 return True
         return False
 
 
-    def __init__(self, key, val):
+class _VirtCLIArgument(object):
+    """
+    A class that combines the static parsing data _VirtCLIArgumentStatic
+    with actual values passed on the command line.
+    """
+
+    def __init__(self, virtarg, key, val):
         """
         Instantiate a VirtCLIArgument with the actual key=val pair
         from the command line.
         """
         # Sanitize the value
         if val is None:
-            if not self.is_novalue:
+            if not virtarg.is_novalue:
                 raise RuntimeError("Option '%s' had no value set." % key)
             val = ""
         if val == "":
             val = None
-        if self.is_onoff:
+        if virtarg.is_onoff:
             val = _on_off_convert(key, val)
 
         self.val = val
         self.key = key
+        self._virtarg = virtarg
+
+        # For convenience
+        self.attrname = virtarg.attrname
+        self.cliname = virtarg.cliname
 
     def parse_param(self, parser, inst, support_cb):
         """
@@ -909,12 +907,12 @@ class _VirtCLIArgument(object):
         """
         if support_cb:
             support_cb(inst, self)
-        if self.val == "default" and self.ignore_default:
+        if self.val == "default" and self._virtarg.ignore_default:
             return
 
-        if self.find_inst_cb:
-            inst = self.find_inst_cb(parser,  # pylint: disable=not-callable
-                                     inst, self.val, self, True)
+        if self._virtarg.find_inst_cb:
+            inst = self._virtarg.find_inst_cb(parser,
+                                              inst, self.val, self, True)
 
         try:
             if self.attrname:
@@ -923,9 +921,8 @@ class _VirtCLIArgument(object):
             raise RuntimeError("programming error: obj=%s does not have "
                                "member=%s" % (inst, self.attrname))
 
-        if self.cb:
-            self.cb(parser, inst,  # pylint: disable=not-callable
-                    self.val, self)
+        if self._virtarg.cb:
+            self._virtarg.cb(parser, inst, self.val, self)
         else:
             _set_attribute(inst, self.attrname, self.val)
 
@@ -938,22 +935,22 @@ class _VirtCLIArgument(object):
         instantiated with key=device val=floppy, so return
         'inst.device == floppy'
         """
-        if not self.attrname and not self.lookup_cb:
+        if not self.attrname and not self._virtarg.lookup_cb:
             raise RuntimeError(
                 _("Don't know how to match device type '%(device_type)s' "
                   "property '%(property_name)s'") %
                 {"device_type": getattr(inst, "virtual_device_type", ""),
                  "property_name": self.key})
 
-        if self.find_inst_cb:
-            inst = self.find_inst_cb(parser,  # pylint: disable=not-callable
-                                     inst, self.val, self, False)
+        if self._virtarg.find_inst_cb:
+            inst = self._virtarg.find_inst_cb(parser,
+                                              inst, self.val, self, False)
             if not inst:
                 return False
 
-        if self.lookup_cb:
-            return self.lookup_cb(parser,  # pylint: disable=not-callable
-                                  inst, self.val, self)
+        if self._virtarg.lookup_cb:
+            return self._virtarg.lookup_cb(parser,
+                                           inst, self.val, self)
         else:
             return eval(  # pylint: disable=eval-used
                 "inst." + self.attrname) == self.val
@@ -1095,9 +1092,9 @@ class VirtCLIParser(object):
         Add a VirtCLIArgument for this class.
         """
         if not cls._virtargs:
-            cls._virtargs = [_VirtCLIArgument.make_arg(
+            cls._virtargs = [_VirtCLIArgumentStatic(
                 None, "clearxml", cb=cls._clearxml_cb, is_onoff=True)]
-        cls._virtargs.append(_VirtCLIArgument.make_arg(*args, **kwargs))
+        cls._virtargs.append(_VirtCLIArgumentStatic(*args, **kwargs))
 
     @classmethod
     def print_introspection(cls):
@@ -1147,10 +1144,12 @@ class VirtCLIParser(object):
         VirtCLIArguments to actually interact with
         """
         ret = []
-        for param in self._virtargs:
-            for key in optdict.keys():
-                if param.match_name(key):
-                    ret.append(param(key, optdict.pop(key)))
+        for virtargstatic in self._virtargs:
+            for key in list(optdict.keys()):
+                if virtargstatic.match_name(key):
+                    arginst = _VirtCLIArgument(virtargstatic,
+                                               key, optdict.pop(key))
+                    ret.append(arginst)
         return ret
 
     def _check_leftover_opts(self, optdict):
