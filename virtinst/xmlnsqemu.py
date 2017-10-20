@@ -37,6 +37,7 @@ class XMLNSQemu(XMLBuilder):
     Class for generating <qemu:commandline> XML
     """
     _XML_ROOT_NAME = "qemu:commandline"
+    _XML_PROP_ORDER = ["args", "envs"]
 
     args = XMLChildProperty(_XMLNSQemuArg)
     def add_arg(self, value):
