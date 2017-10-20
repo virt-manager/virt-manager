@@ -528,6 +528,11 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       </virtualport>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x07" function="0x0"/>
     </interface>
+    <interface type="vhostuser">
+      <source type="unix" path="/tmp/vhost1.sock" mode="server"/>
+      <mac address="00:11:22:33:44:66"/>
+      <model type="virtio"/>
+    </interface>
 
 
     <!-- input devices -->
