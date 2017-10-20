@@ -152,7 +152,7 @@ class vmmEngine(vmmGObject):
         action.connect("activate", self._handle_cli_command)
         self._application.add_action(action)
 
-    def _default_startup(self, skip_autostart):
+    def _default_startup(self, skip_autostart, cliuri):
         uris = self.conns.keys()
         if not uris:
             logging.debug("No stored URIs found.")
@@ -163,7 +163,7 @@ class vmmEngine(vmmGObject):
         if not skip_autostart:
             self.idle_add(self.autostart_conns)
 
-        if not self.config.get_conn_uris():
+        if not self.config.get_conn_uris() and not cliuri:
             # Only add default if no connections are currently known
             self.timeout_add(1000, self._add_default_conn)
 
@@ -177,7 +177,7 @@ class vmmEngine(vmmGObject):
             logging.debug("Connected to remote app instance.")
             return
 
-        self._default_startup(skip_autostart)
+        self._default_startup(skip_autostart, uri)
         self._application.run(None)
 
 
@@ -670,7 +670,7 @@ class vmmEngine(vmmGObject):
                 show_errmsg = False
 
         probe_connection = self.conns[conn.get_uri()]["probeConnection"]
-        msg = _("Unable to connect to libvirt.")
+        msg = _("Unable to connect to libvirt %s." % conn.get_uri())
         if show_errmsg:
             msg += "\n\n%s" % errmsg
         if hint:
