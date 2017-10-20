@@ -6,7 +6,6 @@
   <vcpu>1</vcpu>
   <os>
     <type arch="x86_64">hvm</type>
-    <boot dev="cdrom"/>
     <boot dev="hd"/>
   </os>
   <features>
@@ -28,15 +27,15 @@
   </pm>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
-    <disk type="file" device="cdrom">
-      <driver type="raw"/>
-      <target dev="hda" bus="ide"/>
-      <readonly/>
-    </disk>
     <disk type="file" device="disk">
       <driver name="qemu"/>
       <source file="/var/lib/libvirt/images/MS-DOS"/>
+      <target dev="hda" bus="ide"/>
+    </disk>
+    <disk type="file" device="cdrom">
+      <driver type="raw"/>
       <target dev="hdb" bus="ide"/>
+      <readonly/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>
     <controller type="usb" index="0" model="ich9-uhci1">

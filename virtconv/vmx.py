@@ -19,6 +19,7 @@
 # MA 02110-1301 USA.
 #
 
+import collections
 import logging
 import os
 import re
@@ -88,7 +89,7 @@ class _VMXFile(object):
                     (len(self.lines) + 1, line.strip(), e))
 
     def pairs(self):
-        ret = {}
+        ret = collections.OrderedDict()
         for line in self.lines:
             if line.pair:
                 ret[line.pair[0]] = line.pair[1]

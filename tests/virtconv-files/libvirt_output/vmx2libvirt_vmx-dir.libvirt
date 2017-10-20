@@ -6,7 +6,6 @@
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64">hvm</type>
-    <boot dev="cdrom"/>
     <boot dev="hd"/>
   </os>
   <features>
@@ -28,14 +27,14 @@
   </pm>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
-    <disk type="file" device="cdrom">
-      <target dev="hda" bus="ide"/>
-      <readonly/>
-    </disk>
     <disk type="file" device="disk">
       <driver name="qemu"/>
       <source file="/var/lib/libvirt/images/ESX4.0-rhel4u8-32b-flat"/>
       <target dev="sda" bus="scsi"/>
+    </disk>
+    <disk type="file" device="cdrom">
+      <target dev="hda" bus="ide"/>
+      <readonly/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>
     <controller type="usb" index="0" model="ich9-uhci1">
