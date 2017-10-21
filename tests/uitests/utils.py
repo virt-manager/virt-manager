@@ -4,6 +4,7 @@ import os
 import re
 import time
 import subprocess
+import sys
 
 import dogtail.tree
 
@@ -65,7 +66,7 @@ class DogtailApp(object):
         return self._root
 
     def open(self, extra_opts=None):
-        self._proc = subprocess.Popen(["python",
+        self._proc = subprocess.Popen([sys.executable,
             os.path.join(os.getcwd(), "virt-manager"),
             "--test-first-run", "--no-fork", "--connect", self.uri] +
             (extra_opts or []),
