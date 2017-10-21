@@ -6,6 +6,7 @@ import time
 import subprocess
 import sys
 
+import tests
 import dogtail.tree
 
 
@@ -66,11 +67,21 @@ class DogtailApp(object):
         return self._root
 
     def open(self, extra_opts=None):
+        extra_opts = extra_opts or []
+
+        if tests.utils.get_debug():
+            stdout = sys.stdout
+            stderr = sys.stderr
+            extra_opts.append("--debug")
+        else:
+            stdout = open(os.devnull)
+            stderr = open(os.devnull)
+
         self._proc = subprocess.Popen([sys.executable,
             os.path.join(os.getcwd(), "virt-manager"),
             "--test-first-run", "--no-fork", "--connect", self.uri] +
-            (extra_opts or []),
-            stdout=open(os.devnull), stderr=open(os.devnull))
+            extra_opts,
+            stdout=stdout, stderr=stderr)
         time.sleep(1)
 
         self._root = dogtail.tree.root.application("virt-manager")
