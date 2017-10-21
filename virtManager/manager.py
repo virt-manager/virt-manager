@@ -66,6 +66,10 @@ def _style_get_prop(widget, propname):
     return value.get_int()
 
 
+def _cmp(a, b):
+    return ((a > b) - (a < b))
+
+
 def _get_inspection_icon_pixbuf(vm, w, h):
     # libguestfs gives us the PNG data as a string.
     png_data = vm.inspection.icon
@@ -911,40 +915,40 @@ class vmmManager(vmmGObjectUI):
     def vmlist_name_sorter(self, model, iter1, iter2, ignore):
         key1 = str(model[iter1][ROW_SORT_KEY]).lower()
         key2 = str(model[iter2][ROW_SORT_KEY]).lower()
-        return cmp(key1, key2)
+        return _cmp(key1, key2)
 
     def vmlist_guest_cpu_usage_sorter(self, model, iter1, iter2, ignore):
         obj1 = model[iter1][ROW_HANDLE]
         obj2 = model[iter2][ROW_HANDLE]
 
-        return cmp(obj1.guest_cpu_time_percentage(),
+        return _cmp(obj1.guest_cpu_time_percentage(),
                    obj2.guest_cpu_time_percentage())
 
     def vmlist_host_cpu_usage_sorter(self, model, iter1, iter2, ignore):
         obj1 = model[iter1][ROW_HANDLE]
         obj2 = model[iter2][ROW_HANDLE]
 
-        return cmp(obj1.host_cpu_time_percentage(),
+        return _cmp(obj1.host_cpu_time_percentage(),
                    obj2.host_cpu_time_percentage())
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2, ignore):
         obj1 = model[iter1][ROW_HANDLE]
         obj2 = model[iter2][ROW_HANDLE]
 
-        return cmp(obj1.stats_memory(),
+        return _cmp(obj1.stats_memory(),
                    obj2.stats_memory())
 
     def vmlist_disk_io_sorter(self, model, iter1, iter2, ignore):
         obj1 = model[iter1][ROW_HANDLE]
         obj2 = model[iter2][ROW_HANDLE]
 
-        return cmp(obj1.disk_io_rate(), obj2.disk_io_rate())
+        return _cmp(obj1.disk_io_rate(), obj2.disk_io_rate())
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2, ignore):
         obj1 = model[iter1][ROW_HANDLE]
         obj2 = model[iter2][ROW_HANDLE]
 
-        return cmp(obj1.network_traffic_rate(), obj2.network_traffic_rate())
+        return _cmp(obj1.network_traffic_rate(), obj2.network_traffic_rate())
 
     def enable_polling(self, column):
         # pylint: disable=redefined-variable-type
