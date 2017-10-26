@@ -275,7 +275,6 @@ class vmmSystray(vmmGObject):
             return
 
         for i, name in enumerate(vm_names):
-            name = vm_names[i]
             connkey = vm_mappings[name]
             if connkey in self.conn_vm_menuitems[uri]:
                 vm_item = self.conn_vm_menuitems[uri][connkey]
