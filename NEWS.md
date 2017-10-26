@@ -10,7 +10,7 @@
 
 ## Release 1.4.2 (August 08, 2017)
 
-- New VM wixard virt-bootstrap integration (Radostin Stoyanov)
+- New VM wizard virt-bootstrap integration (Radostin Stoyanov)
 - New VM wizard support for virtuozzo containers (Mikhail Feoktistov)
 - network UI: add support to create SR-IOV VF pool (Lin Ma)
 - Nicer OS list in New VM wizard (Pino Toscano)
