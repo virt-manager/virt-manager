@@ -953,21 +953,26 @@ class XMLParseTest(unittest.TestCase):
     def testAddRemoveDevices(self):
         guest, outfile = self._get_test_content("add-devices")
 
+        # Basic removal of existing device
         rmdev = guest.get_devices("disk")[2]
         guest.remove_device(rmdev)
 
+        # Basic device add
+        guest.add_device(virtinst.VirtualWatchdog(conn))
+
+        # Test adding device with child properties (address value)
         adddev = virtinst.VirtualNetworkInterface(conn=conn)
         adddev.type = "network"
         adddev.source = "default"
         adddev.macaddr = "1A:2A:3A:4A:5A:6A"
         adddev.address.set_addrstr("spapr-vio")
 
-        guest.add_device(virtinst.VirtualWatchdog(conn))
-
+        # Test adding and removing the same device
         guest.add_device(adddev)
         guest.remove_device(adddev)
         guest.add_device(adddev)
 
+        # Test adding device built from parsed XML
         guest.add_device(virtinst.VirtualAudio(conn,
             parsexml="""<sound model='pcspk'/>"""))
 
