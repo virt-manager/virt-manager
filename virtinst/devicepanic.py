@@ -49,12 +49,13 @@ class VirtualPanicDevice(VirtualDevice):
     @staticmethod
     def get_models(os):
         if os.is_x86():
-            return [VirtualPanicDevice.MODEL_ISA, VirtualPanicDevice.MODEL_HYPERV]
+            return [VirtualPanicDevice.MODEL_ISA,
+                    VirtualPanicDevice.MODEL_HYPERV]
         elif os.is_pseries():
             return [VirtualPanicDevice.MODEL_PSERIES]
         elif os.is_s390x():
             return [VirtualPanicDevice.MODEL_S390]
-        return None
+        return []
 
     @staticmethod
     def get_default_model(os):
