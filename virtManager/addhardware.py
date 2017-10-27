@@ -404,8 +404,9 @@ class vmmAddHardware(vmmGObjectUI):
                       True, None)
         add_hw_option(_("RNG"), "system-run", PAGE_RNG, True, None)
         add_hw_option(_("Panic Notifier"), "system-run", PAGE_PANIC,
-            self.conn.check_support(self.conn.SUPPORT_CONN_PANIC_DEVICE),
-            _("Not supported for this hypervisor/libvirt combination."))
+            self.conn.check_support(self.conn.SUPPORT_CONN_PANIC_DEVICE) and
+            virtinst.VirtualPanicDevice.get_models(self.vm.get_xmlobj().os),
+            _("Not supported for this hypervisor/libvirt/arch combination."))
 
     def _reset_state(self):
         # Storage init
