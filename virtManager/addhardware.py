@@ -1456,7 +1456,8 @@ class vmmAddHardware(vmmGObjectUI):
         # Save occupied places per controller
         occupied = {}
         for d in used_disks:
-            if d.get_target_prefix() == disk.get_target_prefix():
+            if (d.get_target_prefix() == disk.get_target_prefix() and
+                d.bus == "scsi"):
                 num = virtinst.VirtualDisk.target_to_num(d.target)
                 idx = num // 7
                 if idx not in occupied:
