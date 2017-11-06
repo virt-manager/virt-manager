@@ -234,7 +234,7 @@ def _label_for_device(dev):
     if devtype == "filesystem":
         return _("Filesystem %s") % dev.target[:8]
     if devtype == "controller":
-        return _("Controller %s") % dev.pretty_desc()
+        return _("Controller %s %s") % (dev.pretty_desc(), dev.index)
     if devtype == "rng":
         label = _("RNG")
         if dev.device:
