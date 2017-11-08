@@ -169,7 +169,7 @@ class _URLFetcher(object):
         """
         Grab the passed filename from self.location and return it as a string
         """
-        fileobj = io.StringIO()
+        fileobj = io.BytesIO()
         self._grabURL(filename, fileobj)
         return fileobj.getvalue()
 
