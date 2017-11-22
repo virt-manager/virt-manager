@@ -112,8 +112,8 @@ _set_distro(FedoraDistro)
 _add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14")
 _add(ARCHIVE_FEDORA_URL % ("14", "i386"), "fedora14", arch="i686")
 # 2 Latest releases
-_add(FEDORA_URL % ("24", "x86_64"), "fedora24")
-_add(FEDORA_URL % ("25", "x86_64"), "fedora25")
+_add(FEDORA_URL % ("26", "x86_64"), "fedora26")
+_add(FEDORA_URL % ("27", "x86_64"), "fedora26", name="fedora27")
 # Any Dev release
 # _add(DEVFEDORA_URL % ("25", "x86_64"), "fedora23", name="fedora25")
 _add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora26", name="fedora-rawhide")
@@ -144,7 +144,7 @@ _set_distro(SLDistro)
 # Latest scientific 6
 _add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6.9", name="sl-6latest")
 # Latest scientific 7
-_add(SCIENTIFIC_URL % ("7", "x86_64"), "rhel7.3", name="sl-7latest")
+_add(SCIENTIFIC_URL % ("7", "x86_64"), "rhel7.4", name="sl-7latest")
 
 
 _set_distro(SuseDistro)
