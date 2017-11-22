@@ -20,7 +20,6 @@
 
 import logging
 import traceback
-import collections
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -1455,13 +1454,18 @@ class vmmAddHardware(vmmGObjectUI):
                       if x.model == controller_model]
 
         # Save occupied places per controller
-        occupied = collections.defaultdict(int)
+        occupied = {}
         for d in used_disks:
             if d.get_target_prefix() == disk.get_target_prefix():
                 num = virtinst.VirtualDisk.target_to_num(d.target)
-                occupied[num / 7] += 1
+                idx = num // 7
+                if idx not in occupied:
+                    occupied[idx] = []
+                if d.target not in occupied[idx]:
+                    occupied[idx].append(d.target)
+
         for c in ctrls_scsi:
-            if occupied[c.index] < 7:
+            if c.index not in occupied or len(occupied[c.index]) < 7:
                 controller = c
                 break
         else:
