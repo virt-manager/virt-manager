@@ -3004,10 +3004,17 @@ class vmmDetails(vmmGObjectUI):
         if controller.type == "pci":
             can_remove = False
         if controller.type == "scsi":
+            model = self.widget("controller-device-list").get_model()
+            model.clear()
             for disk in self.vm.get_disk_devices():
                 if disk.address.compare_controller(controller, disk.bus):
                     can_remove = False
-                    break
+                    name = _label_for_device(disk)
+                    infoStr = ("%s on %s" % (name, disk.address.pretty_desc()))
+                    model.append([infoStr])
+            uiutil.set_grid_row_visible(self.widget("device-list-label"), True)
+            uiutil.set_grid_row_visible(self.widget("controller-device-box"), True)
+
         self.widget("config-remove").set_sensitive(can_remove)
 
         type_label = controller.pretty_desc()
