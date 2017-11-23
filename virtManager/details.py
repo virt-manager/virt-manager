@@ -1032,6 +1032,16 @@ class vmmDetails(vmmGObjectUI):
         uiutil.init_combo_text_column(combo, 1)
         combo.set_active(-1)
 
+        combo = self.widget("controller-device-list")
+        model = Gtk.ListStore(str)
+        combo.set_model(model)
+        combo.set_headers_visible(False)
+        col = Gtk.TreeViewColumn()
+        text = Gtk.CellRendererText()
+        col.pack_start(text, True)
+        col.add_attribute(text, 'text', 0)
+        combo.append_column(col)
+
 
     ##########################
     # Window state listeners #
@@ -2984,6 +2994,9 @@ class vmmDetails(vmmGObjectUI):
         controller = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not controller:
             return
+
+        uiutil.set_grid_row_visible(self.widget("device-list-label"), False)
+        uiutil.set_grid_row_visible(self.widget("controller-device-box"), False)
 
         can_remove = True
         if self.vm.get_xmlobj().os.is_x86() and controller.type == "usb":

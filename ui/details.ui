@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.1 -->
+<!-- Generated with glade 3.20.2 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -4930,6 +4930,8 @@
                                       <object class="GtkLabel" id="mlabel48">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="hexpand">False</property>
                                         <property name="label" translatable="yes">M_odel:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">combobox-entry16</property>
@@ -4937,6 +4939,56 @@
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="device-list-label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="valign">start</property>
+                                        <property name="vexpand">False</property>
+                                        <property name="label" translatable="yes">Devices:</property>
+                                        <property name="use_markup">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="controller-device-box">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">3</property>
+                                        <child>
+                                          <object class="GtkScrolledWindow" id="controller-device-scroll">
+                                            <property name="width_request">270</property>
+                                            <property name="height_request">100</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="shadow_type">in</property>
+                                            <child>
+                                              <object class="GtkTreeView" id="controller-device-list">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <child internal-child="selection">
+                                                  <object class="GtkTreeSelection" id="controller-device-selection"/>
+                                                </child>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">2</property>
                                       </packing>
                                     </child>
                                   </object>
