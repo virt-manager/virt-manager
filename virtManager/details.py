@@ -3003,6 +3003,11 @@ class vmmDetails(vmmGObjectUI):
             can_remove = False
         if controller.type == "pci":
             can_remove = False
+        if controller.type == "scsi":
+            for disk in self.vm.get_disk_devices():
+                if disk.address.compare_controller(controller, disk.bus):
+                    can_remove = False
+                    break
         self.widget("config-remove").set_sensitive(can_remove)
 
         type_label = controller.pretty_desc()
