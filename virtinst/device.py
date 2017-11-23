@@ -72,6 +72,12 @@ class VirtualDeviceAddress(XMLBuilder):
             raise ValueError(_("Could not determine or unsupported "
                                "format of '%s'") % addrstr)
 
+    def compare_controller(self, controller, dev_bus):
+        if (controller.type == dev_bus and
+            controller.index == self.controller):
+            return True
+        return False
+
 
     type = XMLProperty("./@type")
     # type=pci
