@@ -72,6 +72,13 @@ class VirtualDeviceAddress(XMLBuilder):
             raise ValueError(_("Could not determine or unsupported "
                                "format of '%s'") % addrstr)
 
+    def pretty_desc(self):
+        pretty_desc = None
+        if self.type == self.ADDRESS_TYPE_DRIVE:
+            pretty_desc = _("%s:%s:%s:%s" %
+                            (self.controller, self.bus, self.target, self.unit))
+        return pretty_desc
+
     def compare_controller(self, controller, dev_bus):
         if (controller.type == dev_bus and
             controller.index == self.controller):
