@@ -886,7 +886,8 @@ class vmmAddHardware(vmmGObjectUI):
         model.clear()
 
         for t in VirtualController.TYPES:
-            if t == VirtualController.TYPE_PCI:
+            if t in [VirtualController.TYPE_IDE,
+                     VirtualController.TYPE_PCI]:
                 continue
             model.append([t, VirtualController.pretty_type(t)])
 
