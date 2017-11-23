@@ -2981,28 +2981,28 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("watchdog-action"), action)
 
     def refresh_controller_page(self):
-        dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not dev:
+        controller = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not controller:
             return
 
         can_remove = True
-        if self.vm.get_xmlobj().os.is_x86() and dev.type == "usb":
+        if self.vm.get_xmlobj().os.is_x86() and controller.type == "usb":
             can_remove = False
-        if dev.type == "pci":
+        if controller.type == "pci":
             can_remove = False
         self.widget("config-remove").set_sensitive(can_remove)
 
-        type_label = dev.pretty_desc()
+        type_label = controller.pretty_desc()
         self.widget("controller-type").set_text(type_label)
 
         combo = self.widget("controller-model")
-        vmmAddHardware.populate_controller_model_combo(combo, dev.type)
-        show_model = (dev.model or len(combo.get_model()) > 1)
-        if dev.type == "pci":
+        vmmAddHardware.populate_controller_model_combo(combo, controller.type)
+        show_model = (controller.model or len(combo.get_model()) > 1)
+        if controller.type == "pci":
             show_model = False
         uiutil.set_grid_row_visible(combo, show_model)
         uiutil.set_list_selection(self.widget("controller-model"),
-            dev.model or None)
+            controller.model or None)
 
     def refresh_filesystem_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
