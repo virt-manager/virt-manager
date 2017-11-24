@@ -25,7 +25,6 @@ import io
 import logging
 import os
 import re
-import stat
 import subprocess
 import tempfile
 import urllib2
@@ -302,14 +301,7 @@ class _MountedURLFetcher(_LocalURLFetcher):
         mountcmd = "/bin/mount"
 
         logging.debug("Preparing mount at " + self._srcdir)
-        if self.location.startswith("nfs:"):
-            cmd = [mountcmd, "-o", "ro", self.location[4:], self._srcdir]
-        else:
-            if stat.S_ISBLK(os.stat(self.location)[stat.ST_MODE]):
-                mountopt = "ro"
-            else:
-                mountopt = "ro,loop"
-            cmd = [mountcmd, "-o", mountopt, self.location, self._srcdir]
+        cmd = [mountcmd, "-o", "ro", self.location[4:], self._srcdir]
 
         logging.debug("mount cmd: %s", cmd)
         if not self._in_test_suite:
@@ -338,6 +330,38 @@ class _MountedURLFetcher(_LocalURLFetcher):
             self._mounted = False
 
 
+class _ISOURLFetcher(_URLFetcher):
+    _cache_file_list = None
+
+    def _make_full_url(self, filename):
+        return "/" + filename
+
+    def _grabber(self, url):
+        """
+        Use isoinfo to grab the file
+        """
+        cmd = ["isoinfo", "-J", "-i", self.location, "-x", url]
+
+        logging.debug("Running isoinfo: %s", cmd)
+        output = subprocess.check_output(cmd)
+
+        return io.BytesIO(output), len(output)
+
+    def _hasFile(self, url):
+        """
+        Use isoinfo to list and search for the file
+        """
+        if not self._cache_file_list:
+            cmd = ["isoinfo", "-J", "-i", self.location, "-f"]
+
+            logging.debug("Running isoinfo: %s", cmd)
+            output = subprocess.check_output(cmd)
+
+            self._cache_file_list = output.splitlines(False)
+
+        return url in self._cache_file_list
+
+
 def fetcherForURI(uri, *args, **kwargs):
     if uri.startswith("http://") or uri.startswith("https://"):
         fclass = _HTTPURLFetcher
@@ -349,8 +373,8 @@ def fetcherForURI(uri, *args, **kwargs):
         # Pointing to a local tree
         fclass = _LocalURLFetcher
     else:
-        # Pointing to a path, like an .iso to mount
-        fclass = _MountedURLFetcher
+        # Pointing to a path (e.g. iso), or a block device (e.g. /dev/cdrom)
+        fclass = _ISOURLFetcher
     return fclass(uri, *args, **kwargs)
 
 
