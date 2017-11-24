@@ -162,6 +162,7 @@ class vmmDeleteDialog(vmmGObjectUI):
     def _async_delete(self, asyncjob, paths):
         storage_errors = []
         details = ""
+        undefine = self.vm.is_persistent()
 
         try:
             if self.vm.is_active():
@@ -181,8 +182,9 @@ class vmmDeleteDialog(vmmGObjectUI):
                                           "".join(traceback.format_exc())))
                 meter.end(0)
 
-            logging.debug("Removing VM '%s'", self.vm.get_name())
-            self.vm.delete()
+            if undefine:
+                logging.debug("Removing VM '%s'", self.vm.get_name())
+                self.vm.delete()
 
         except Exception as e:
             error = (_("Error deleting virtual machine '%s': %s") %

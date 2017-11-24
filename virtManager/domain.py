@@ -484,6 +484,9 @@ class vmmDomain(vmmLibvirtObject):
         return bool(self.get_xmlobj().os.loader_ro is True and
                     self.get_xmlobj().os.loader_type == "pflash")
 
+    def is_persistent(self):
+        return bool(self._backend.isPersistent())
+
     ##################
     # Support checks #
     ##################
