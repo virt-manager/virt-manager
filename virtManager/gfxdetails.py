@@ -125,7 +125,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
                 continue
             rendernode = drm.get_devnode().path
 
-            model.append([rendernode, i.xmlobj.drm_pretty_name(self.conn.get_backend())])
+            model.append([rendernode,
+                          i.xmlobj.drm_pretty_name(self.conn.get_backend())])
 
     def _get_config_graphics_ports(self):
         port = uiutil.spin_get_helper(self.widget("graphics-port"))
@@ -154,7 +155,10 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-listen-type").set_active(0)
         self.widget("graphics-address").set_active(0)
         self.widget("graphics-keymap").set_active(0)
-        self.widget("graphics-rendernode").set_active(-1)
+
+        # Select last entry in the list, which should be a rendernode path
+        rendermodel = self.widget("graphics-rendernode").get_model()
+        self.widget("graphics-rendernode").set_active_iter(rendermodel[-1].iter)
 
         self._change_ports()
         self.widget("graphics-port-auto").set_active(True)
@@ -274,8 +278,12 @@ class vmmGraphicsDetails(vmmGObjectUI):
                     "spice GL.")
 
             self.widget("graphics-opengl").set_active(glval)
-            uiutil.set_list_selection(
-                    self.widget("graphics-rendernode"), renderval)
+            if glval:
+                # Only sync rendernode UI with XML, if gl=on, otherwise
+                # we want to preserve the suggested rendernode already
+                # selected in the UI
+                uiutil.set_list_selection(
+                       self.widget("graphics-rendernode"), renderval)
 
             self.widget("graphics-opengl").set_sensitive(glsensitive)
             self.widget("graphics-opengl-warn").set_tooltip_text(
