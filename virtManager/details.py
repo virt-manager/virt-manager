@@ -896,16 +896,6 @@ class vmmDetails(vmmGObjectUI):
             model.append([_chipset_label_from_machine("q35"), "q35"])
         combo.set_active(0)
 
-        def chipset_changed(*args):
-            ignore = args
-            combo = self.widget("overview-chipset")
-            model = combo.get_model()
-            show_warn = (combo.get_active() >= 0 and
-                model[combo.get_active()][1] == "q35")
-            uiutil.set_grid_row_visible(
-                self.widget("overview-chipset-warn-box"), show_warn)
-        combo.connect("changed", chipset_changed)
-
         self.widget("overview-chipset").set_visible(self.is_customize_dialog)
         self.widget("overview-chipset-label").set_visible(
             not self.is_customize_dialog)
