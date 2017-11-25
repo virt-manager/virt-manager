@@ -44,7 +44,7 @@
     </interface>
     <input type="tablet" bus="usb"/>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
-      <gl enable="yes"/>
+      <gl enable="yes" rendernode="/dev/dri/by-path/pci-0000:00:02.0-render"/>
       <image compression="off"/>
     </graphics>
     <console type="pty"/>

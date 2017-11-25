@@ -1174,9 +1174,21 @@ class Guest(XMLBuilder):
                 if dev.image_compression is None:
                     dev.image_compression = "off"
 
-            if (dev.type == "spice" and dev.gl and
-                not self.conn.check_support(self.conn.SUPPORT_CONN_SPICE_GL)):
-                raise ValueError(_("Host does not support spice GL"))
+            if dev.type == "spice" and dev.gl:
+                if not self.conn.check_support(
+                        self.conn.SUPPORT_CONN_SPICE_GL):
+                    raise ValueError(_("Host does not support spice GL"))
+
+                # If spice GL but rendernode wasn't specified, hardcode
+                # the first one
+                if not dev.rendernode and self.conn.check_support(
+                        self.conn.SUPPORT_CONN_SPICE_RENDERNODE):
+                    for nodedev in self.conn.fetch_all_nodedevs():
+                        if (nodedev.device_type != 'drm' or
+                            nodedev.drm_type != 'render'):
+                            continue
+                        dev.rendernode = nodedev.get_devnode().path
+                        break
 
     def _add_spice_channels(self):
         if self.skip_default_channel:

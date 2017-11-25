@@ -235,12 +235,12 @@
       <filetransfer enable="yes"/>
     </graphics>
     <graphics type="spice">
-      <gl enable="yes"/>
+      <gl enable="yes" rendernode="/dev/dri/by-path/pci-0000:00:02.0-render"/>
       <image compression="off"/>
       <listen type="socket"/>
     </graphics>
     <graphics type="spice">
-      <gl enable="yes"/>
+      <gl enable="yes" rendernode="/dev/dri/by-path/pci-0000:00:02.0-render"/>
       <image compression="off"/>
       <listen type="none"/>
     </graphics>
