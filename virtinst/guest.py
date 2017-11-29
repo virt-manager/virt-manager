@@ -1012,7 +1012,7 @@ class Guest(XMLBuilder):
                     break
 
         # Add virtio-scsi controller if needed
-        if (self.os.is_arm_machvirt() and
+        if ((self.os.is_arm_machvirt() or self.os.is_pseries()) and
             not has_any_scsi and
             not has_virtio_scsi):
             for dev in self.get_devices("disk"):
