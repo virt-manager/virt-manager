@@ -240,9 +240,7 @@ class Network(XMLBuilder):
 
     ipv6 = XMLProperty("./@ipv6", is_yesno=True)
     name = XMLProperty("./name", validate_cb=_validate_name)
-    uuid = XMLProperty("./uuid",
-                       validate_cb=lambda s, v: util.validate_uuid(v),
-                       default_cb=_get_default_uuid)
+    uuid = XMLProperty("./uuid", default_cb=_get_default_uuid)
 
     virtualport_type = XMLProperty("./virtualport/@type")
 

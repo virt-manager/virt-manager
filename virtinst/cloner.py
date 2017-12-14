@@ -113,14 +113,6 @@ class Cloner(object):
                           doc="Name to use for the new guest clone.")
 
     def set_clone_uuid(self, uuid):
-        try:
-            util.validate_uuid(uuid)
-        except ValueError as e:
-            raise ValueError(_("Invalid uuid for new guest: %s") % e)
-
-        if util.vm_uuid_collision(self.conn, uuid):
-            raise ValueError(_("UUID '%s' is in use by another guest.") %
-                             uuid)
         self._clone_uuid = uuid
     def get_clone_uuid(self):
         return self._clone_uuid

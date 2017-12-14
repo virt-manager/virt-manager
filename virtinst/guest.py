@@ -190,9 +190,7 @@ class Guest(XMLBuilder):
         if self._random_uuid is None:
             self._random_uuid = util.generate_uuid(self.conn)
         return self._random_uuid
-    uuid = XMLProperty("./uuid",
-                       validate_cb=lambda s, v: util.validate_uuid(v),
-                       default_cb=_get_default_uuid)
+    uuid = XMLProperty("./uuid", default_cb=_get_default_uuid)
 
 
     id = XMLProperty("./@id", is_int=True)

@@ -21,6 +21,7 @@
 import difflib
 import logging
 import os
+import re
 import sys
 
 import libvirt
@@ -81,11 +82,8 @@ def get_domain_and_guest(conn, domstr):
     except ValueError:
         isint = False
 
-    try:
-        virtinst.util.validate_uuid(domstr)
-        isuuid = True
-    except ValueError:
-        isuuid = False
+    uuidre = "[a-fA-F0-9]{8}[-]([a-fA-F0-9]{4}[-]){3}[a-fA-F0-9]{12}$"
+    isuuid = bool(re.match(uuidre, domstr))
 
     try:
         if isint:

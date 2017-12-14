@@ -409,9 +409,7 @@ class StoragePool(_StorageObject):
 
     type = XMLProperty("./@type",
         doc=_("Storage device type the pool will represent."))
-    uuid = XMLProperty("./uuid",
-                       validate_cb=lambda s, v: util.validate_uuid(v),
-                       default_cb=_get_default_uuid)
+    uuid = XMLProperty("./uuid", default_cb=_get_default_uuid)
 
     capacity = XMLProperty("./capacity", is_int=True)
     allocation = XMLProperty("./allocation", is_int=True)

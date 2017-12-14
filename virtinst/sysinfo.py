@@ -23,7 +23,6 @@ Classes for building and installing with libvirt <sysinfo> XML
 import datetime
 
 from .xmlbuilder import XMLBuilder, XMLProperty
-from . import util
 
 
 class SYSInfo(XMLBuilder):
@@ -59,20 +58,7 @@ class SYSInfo(XMLBuilder):
     bios_version = XMLProperty("./bios/entry[@name='version']")
     bios_release = XMLProperty("./bios/entry[@name='release']")
 
-
-    def _validate_uuid(self, val):
-        try:
-            util.validate_uuid(val)
-        except ValueError:
-            raise ValueError(_("Invalid uuid for SMBios: %s") % val)
-
-        if util.vm_uuid_collision(self.conn, val):
-            raise ValueError(_("UUID '%s' is in use by another guest.") %
-                        val)
-        return val
-    system_uuid = XMLProperty("./system/entry[@name='uuid']",
-                              validate_cb=_validate_uuid)
-
+    system_uuid = XMLProperty("./system/entry[@name='uuid']")
     system_manufacturer = XMLProperty("./system/entry[@name='manufacturer']")
     system_product = XMLProperty("./system/entry[@name='product']")
     system_version = XMLProperty("./system/entry[@name='version']")
