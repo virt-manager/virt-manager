@@ -304,11 +304,6 @@ class StoragePool(_StorageObject):
         return util.generate_name(basename, cb, **kwargs)
 
 
-    def __init__(self, *args, **kwargs):
-        _StorageObject.__init__(self, *args, **kwargs)
-        self._random_uuid = None
-
-
     ######################
     # Validation helpers #
     ######################
@@ -342,11 +337,6 @@ class StoragePool(_StorageObject):
         if self.type == self.TYPE_MPATH:
             return _DEFAULT_MPATH_TARGET
         raise RuntimeError("No default target_path for type=%s" % self.type)
-
-    def _get_default_uuid(self):
-        if self._random_uuid is None:
-            self._random_uuid = util.generate_uuid(self.conn)
-        return self._random_uuid
 
     def _type_to_source_prop(self):
         if (self.type == self.TYPE_NETFS or
@@ -409,7 +399,7 @@ class StoragePool(_StorageObject):
 
     type = XMLProperty("./@type",
         doc=_("Storage device type the pool will represent."))
-    uuid = XMLProperty("./uuid", default_cb=_get_default_uuid)
+    uuid = XMLProperty("./uuid")
 
     capacity = XMLProperty("./capacity", is_int=True)
     allocation = XMLProperty("./allocation", is_int=True)
