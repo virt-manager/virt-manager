@@ -29,34 +29,15 @@ from tests import utils
 basepath = os.path.join(os.getcwd(), "tests", "storage-xml")
 
 
-def generate_uuid_from_string(msg):
-    res = msg.split("-", 1)
-    if len(res) > 1:
-        # Split off common prefix
-        msg = res[1]
-
-    numstr = ""
-    for c in msg:
-        numstr += str(ord(c))
-
-    numstr *= 32
-    return "-".join([numstr[0:8], numstr[8:12], numstr[12:16], numstr[16:20],
-                     numstr[20:32]])
-
-
 def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
-               source_path=None, source_name=None, uuid=None, iqn=None):
+               source_path=None, source_name=None, iqn=None):
 
     if poolname is None:
         poolname = StoragePool.find_free_name(conn, "%s-pool" % ptype)
 
-    if uuid is None:
-        uuid = generate_uuid_from_string(poolname)
-
     pool_inst = StoragePool(conn)
     pool_inst.name = poolname
     pool_inst.type = ptype
-    pool_inst.uuid = uuid
 
     if pool_inst.supports_property("hosts"):
         pool_inst.add_host("some.random.hostname")
@@ -218,7 +199,6 @@ class TestStorage(unittest.TestCase):
     def _enumerateCompare(self, name, pool_list):
         for pool in pool_list:
             pool.name = name + str(pool_list.index(pool))
-            pool.uuid = generate_uuid_from_string(pool.name)
             poolCompare(pool)
 
     def testEnumerateLogical(self):
