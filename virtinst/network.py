@@ -191,10 +191,6 @@ class Network(XMLBuilder):
 
         return desc
 
-    def __init__(self, *args, **kwargs):
-        XMLBuilder.__init__(self, *args, **kwargs)
-        self._random_uuid = None
-
 
     ###################
     # Helper routines #
@@ -223,11 +219,6 @@ class Network(XMLBuilder):
         raise ValueError(_("Name '%s' already in use by another network." %
                          name))
 
-    def _get_default_uuid(self):
-        if self._random_uuid is None:
-            self._random_uuid = util.generate_uuid(self.conn)
-        return self._random_uuid
-
 
     ##################
     # XML properties #
@@ -240,7 +231,7 @@ class Network(XMLBuilder):
 
     ipv6 = XMLProperty("./@ipv6", is_yesno=True)
     name = XMLProperty("./name", validate_cb=_validate_name)
-    uuid = XMLProperty("./uuid", default_cb=_get_default_uuid)
+    uuid = XMLProperty("./uuid")
 
     virtualport_type = XMLProperty("./virtualport/@type")
 
