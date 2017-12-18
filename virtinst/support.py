@@ -201,7 +201,7 @@ class _SupportCheck(object):
 
         if self.hv_libvirt_version:
             if hv_type not in self.hv_libvirt_version:
-                if "all" not in self.hv_version:
+                if "all" not in self.hv_libvirt_version:
                     return False
             elif (actual_libvirt_version <
                   _version_str_to_int(self.hv_libvirt_version[hv_type])):
