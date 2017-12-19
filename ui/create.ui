@@ -1776,7 +1776,12 @@ connections is not yet supported.&lt;/small&gt;</property>
                                                     <child internal-child="entry">
                                                       <object class="GtkEntry" id="install-oscontainer-source-url-entry">
                                                         <property name="can_focus">True</property>
-                                                        <property name="placeholder_text" translatable="yes">docker://fedora</property>
+                                                        <property name="tooltip_text" translatable="yes">Possible URL formats:
+ * file:///path/to/rootfs.tar
+ * docker://registry:port/image:tag
+ * virt-builder://template
+</property>
+
                                                       </object>
                                                     </child>
                                                   </object>
