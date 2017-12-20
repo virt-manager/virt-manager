@@ -220,7 +220,7 @@ class vmmGObjectUI(vmmGObject):
 
             self.builder = Gtk.Builder()
             self.builder.set_translation_domain("virt-manager")
-            self.builder.add_from_string(open(uifile).read())
+            self.builder.add_from_file(uifile)
 
             if not topwin:
                 self.topwin = self.widget(windowname)
