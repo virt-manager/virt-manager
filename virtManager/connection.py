@@ -1030,11 +1030,13 @@ class vmmConnection(vmmGObject):
         warnconsole = False
         libvirt_error_code = None
         libvirt_error_message = None
+        exc = None
 
         try:
             self._backend.open(self._do_creds_password)
             return True, None
-        except Exception as exc:
+        except Exception as e:
+            exc = e
             tb = "".join(traceback.format_exc())
             if isinstance(exc, libvirt.libvirtError):
                 # pylint: disable=no-member
