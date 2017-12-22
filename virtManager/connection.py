@@ -1443,7 +1443,6 @@ class vmmConnection(vmmGObject):
             raise
         except Exception as err:
             e = err
-            pass
 
         if e is None:
             return
