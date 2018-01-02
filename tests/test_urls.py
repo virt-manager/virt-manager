@@ -18,182 +18,88 @@
 import unittest
 import time
 import logging
+import sys
 import traceback
 
-from tests import URLTEST_LOCAL_MEDIA
 from tests import utils
 
 from virtinst import Guest
 from virtinst import urlfetcher
 from virtinst import util
-from virtinst.urlfetcher import FedoraDistro
-from virtinst.urlfetcher import SuseDistro
-from virtinst.urlfetcher import DebianDistro
+from virtinst.urlfetcher import ALTLinuxDistro
 from virtinst.urlfetcher import CentOSDistro
-from virtinst.urlfetcher import SLDistro
-from virtinst.urlfetcher import UbuntuDistro
+from virtinst.urlfetcher import DebianDistro
+from virtinst.urlfetcher import FedoraDistro
+from virtinst.urlfetcher import GenericDistro
 from virtinst.urlfetcher import MandrivaDistro
-
-
-# pylint: disable=protected-access
-# Access to protected member, needed to unittest stuff
-
-ARCHIVE_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"
-DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/Server/%s/os/"
-FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Server/%s/os/"
-
-OLD_CENTOS_URL = "http://vault.centos.org/%s/os/%s"
-CENTOS_URL = "http://mirrors.mit.edu/centos/%s/os/%s/"
-OLD_SCIENTIFIC_URL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/"
-SCIENTIFIC_URL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/os"
-
-OPENSUSE10 = "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/10.0"
-OLD_OPENSUSE_URL = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/%s/repo/oss"
-OPENSUSE_URL = "http://download.opensuse.org/distribution/%s/repo/oss/"
-OPENSUSE_TUMBLEWEED = "http://download.opensuse.org/tumbleweed/repo/oss/"
-
-OLD_UBUNTU_URL = "http://old-releases.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
-UBUNTU_URL = "http://us.archive.ubuntu.com:80/ubuntu/dists/%s/main/installer-%s"
-
-OLD_DEBIAN_URL = "http://archive.debian.org/debian/dists/%s/main/installer-%s/"
-DAILY_DEBIAN_URL = "http://d-i.debian.org/daily-images/%s/"
-DEBIAN_URL = "http://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
-
-MAGEIA_URL = "http://distro.ibiblio.org/mageia/distrib/%s/%s"
-
-
-urls = {}
-_distro = None
+from virtinst.urlfetcher import RHELDistro
+from virtinst.urlfetcher import SLDistro
+from virtinst.urlfetcher import SuseDistro
+from virtinst.urlfetcher import UbuntuDistro
 
 
 class _DistroURL(object):
-    def __init__(self, url, detectdistro=None,
-                 hasxen=True, hasbootiso=True, name=None,
-                 testshortcircuit=False, arch="x86_64"):
+    def __init__(self, name, url, detectdistro,
+            testxen, testbootiso, testshortcircuit):
+        self.name = name
         self.url = url
-        self.arch = arch
         self.detectdistro = detectdistro
-        self.hasxen = hasxen
-        self.hasbootiso = hasbootiso
-        if name:
-            self.name = name
-        else:
-            self.name = self.detectdistro
-            if self.arch != "x86_64":
-                self.name += "-%s" % self.arch
-        self.distroclass = _distro
+        self.arch = self._find_arch()
+        self.distroclass = self._distroclass_for_name(self.name)
+        logging.debug("Testing for media arch=%s distroclass=%s",
+                self.arch, self.distroclass)
+
+        self.testxen = testxen
+        self.testbootiso = testbootiso
 
         # If True, pass in the expected distro value to getDistroStore
-        # so it can short circuit the lookup checks
+        # so it can short circuit the lookup checks. Speeds up the tests
+        # and exercises the shortcircuit infrastructure
         self.testshortcircuit = testshortcircuit
 
+    def _distroclass_for_name(self, name):
+        # Map the test case name to the expected urlfetcher distro
+        # class we should be detecting
+        if "fedora" in name:
+            return FedoraDistro
+        if "centos" in name:
+            return CentOSDistro
+        if "rhel" in name:
+            return RHELDistro
+        if "suse" in name:
+            return SuseDistro
+        if "debian" in name:
+            return DebianDistro
+        if name.startswith("sl-"):
+            return SLDistro
+        if "ubuntu" in name:
+            return UbuntuDistro
+        if "mageia" in name:
+            return MandrivaDistro
+        if "altlinux" in name:
+            return ALTLinuxDistro
+        if "generic" in name:
+            return GenericDistro
+        raise RuntimeError("name=%s didn't map to any distro class. Extend "
+            "_distroclass_for_name" % name)
 
-def _set_distro(_d):
-    # Saves us from having to pass distro class to ever _add invocation
-    global _distro
-    _distro = _d
-
-
-def _add(*args, **kwargs):
-    _d = _DistroURL(*args, **kwargs)
-    if _d.name in urls:
-        raise RuntimeError("distro=%s url=%s collides with entry in urls, "
-                           "set a unique name" % (_d.name, _d.url))
-    urls[_d.name] = _d
-
-
-# Goal here is generally to cover all tree variants for each distro,
-# where feasible. Don't exhaustively test i686 trees since most people
-# aren't using it and it slows down the test, only use it in a couple
-# places. Follow the comments for what trees to keep around
-
-_set_distro(FedoraDistro)
-# One old Fedora
-_add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14")
-_add(ARCHIVE_FEDORA_URL % ("14", "i386"), "fedora14", arch="i686")
-# 2 Latest releases
-_add(FEDORA_URL % ("26", "x86_64"), "fedora26")
-_add(FEDORA_URL % ("27", "x86_64"), "fedora26", name="fedora27")
-# Any Dev release
-# _add(DEVFEDORA_URL % ("25", "x86_64"), "fedora23", name="fedora25")
-_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora26", name="fedora-rawhide")
-
-
-_set_distro(CentOSDistro)
-# One old and new centos 4. No distro detection since there's no treeinfo
-_add(OLD_CENTOS_URL % ("4.0", "x86_64"), hasxen=False, name="centos-4.0")
-_add(OLD_CENTOS_URL % ("4.9", "x86_64"), name="centos-4.9")
-# One old centos 5
-_add(OLD_CENTOS_URL % ("5.0", "x86_64"), name="centos-5.0")
-# Latest centos 5 w/ i686
-_add(OLD_CENTOS_URL % ("5.11", "x86_64"), "rhel5.11", name="centos-5.11")
-_add(OLD_CENTOS_URL % ("5.11", "i386"), "rhel5.11",
-     name="centos-5.11-i686", arch="i686")
-# Latest centos 6 w/ i686
-_add(CENTOS_URL % ("6", "x86_64"), "centos6.9", name="centos-6-latest")
-_add(CENTOS_URL % ("6", "i386"), "centos6.9",
-     name="centos-6-latest-i686", arch="1686")
-# Latest centos 7, but no i686 as of 2014-09-06
-_add(CENTOS_URL % ("7", "x86_64"), "centos7.0", name="centos-7-latest")
-# Centos 7 ppc64le
-_add("http://mirror.centos.org/altarch/7/os/ppc64le/",
-     "centos7.0", name="centos-7-ppc64", hasbootiso=False, hasxen=False)
-
-
-_set_distro(SLDistro)
-# Latest scientific 6
-_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6.9", name="sl-6latest")
-# Latest scientific 7
-_add(SCIENTIFIC_URL % ("7", "x86_64"), "rhel7.4", name="sl-7latest")
-
-
-_set_distro(SuseDistro)
-# Latest 10 series
-_add(OLD_OPENSUSE_URL % ("10.3"), "opensuse10.3", hasbootiso=False)
-# Latest 11 series
-_add(OLD_OPENSUSE_URL % ("11.4"), "opensuse11.4", hasbootiso=False)
-# Latest 12 series
-_add(OLD_OPENSUSE_URL % ("12.2"), "opensuse12.2",
-     hasbootiso=False, testshortcircuit=True)
-_add(OLD_OPENSUSE_URL % ("12.2"), "opensuse12.2",
-     hasbootiso=False, testshortcircuit=True, arch="i686")
-# Latest 13.x releases
-_add(OPENSUSE_URL % ("13.1"), "opensuse13.1", hasbootiso=False)
-# tumbleweed (rolling distro)
-_add(OPENSUSE_TUMBLEWEED, "opensusetumbleweed", hasbootiso=False)
-
-
-_set_distro(DebianDistro)
-# FTP test case (only one since ftp tends to be horribly slow)
-_add("ftp://ftp.nluug.nl/pub/os/Linux/distr/debian/dists/jessie/main/installer-amd64/", "debian8", name="debian8-ftp")
-# Debian releases rarely enough that we can just do every release since lenny
-_add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debian5", hasxen=False,
-     testshortcircuit=True)
-_add(DEBIAN_URL % ("wheezy", "amd64"), "debian7")
-_add(DEBIAN_URL % ("jessie", "amd64"), "debian8")
-_add(DEBIAN_URL % ("jessie", "s390x"), "debian8",
-     hasbootiso=False, hasxen=False, arch="s390x")
-# And daily builds, since we specially handle that URL
-_add(DAILY_DEBIAN_URL % ("amd64"), "debiantesting", name="debiandaily")
-_add(DAILY_DEBIAN_URL % ("arm64"), "debiantesting",
-    name="debiandailyarm64", hasxen=False)
-
-
-_set_distro(UbuntuDistro)
-# One old ubuntu
-_add(OLD_UBUNTU_URL % ("hardy", "amd64"), "ubuntu8.04",
-     hasxen=False, testshortcircuit=True)
-_add(OLD_UBUNTU_URL % ("hardy", "i386"), "ubuntu8.04",
-     hasxen=False, testshortcircuit=True, arch="1686")
-# Latest LTS
-_add(UBUNTU_URL % ("precise", "amd64"), "ubuntu12.04")
-# Latest release
-_add(UBUNTU_URL % ("xenial", "amd64"), "ubuntu16.04")
-
-
-_set_distro(MandrivaDistro)
-_add(MAGEIA_URL % ("5", "x86_64"), name="mageia5", hasxen=False)
-
+    def _find_arch(self):
+        if ("i686" in self.url or
+            "i386" in self.url or
+            "i586" in self.url):
+            return "i686"
+        if ("arm64" in self.url or
+            "aarch64" in self.url):
+            return "aarch64"
+        if ("ppc64el" in self.url or
+            "ppc64le" in self.url):
+            return "ppc64le"
+        if "s390" in self.url:
+            return "s390x"
+        if ("x86_64" in self.url or
+            "amd64" in self.url):
+            return "x86_64"
+        return "x86_64"
 
 testconn = utils.open_testdefault()
 hvmguest = Guest(testconn)
@@ -221,12 +127,14 @@ def _storeForDistro(fetcher, guest):
     raise  # pylint: disable=misplaced-bare-raise
 
 
-def _testURL(fetcher, distname, distroobj):
+def _testURL(fetcher, distroobj):
     """
     Test that our URL detection logic works for grabbing kernel, xen
     kernel, and boot.iso
     """
-    import sys
+    os.environ.pop("VIRTINST_TEST_SUITE", None)
+
+    distname = distroobj.name
     sys.stdout.write("\nTesting %-25s " % distname)
     sys.stdout.flush()
 
@@ -236,11 +144,14 @@ def _testURL(fetcher, distname, distroobj):
     if distroobj.testshortcircuit:
         hvmguest.os_variant = distroobj.detectdistro
         xenguest.os_variant = distroobj.detectdistro
+    else:
+        hvmguest.os_variant = None
+        xenguest.os_variant = None
 
     try:
         hvmstore = _storeForDistro(fetcher, hvmguest)
         xenstore = None
-        if distroobj.hasxen:
+        if distroobj.testxen:
             xenstore = _storeForDistro(fetcher, xenguest)
     except Exception:
         raise AssertionError("\nFailed to detect URLDistro class:\n"
@@ -261,7 +172,7 @@ def _testURL(fetcher, distname, distroobj):
 
         # Make sure the stores are reporting correct distro name/variant
         if (s and distroobj.detectdistro and
-            distroobj.detectdistro != s.os_variant):
+            distroobj.detectdistro != s.get_osdict_info()):
             raise AssertionError(
                 "Detected OS did not match expected values:\n"
                 "found  = %s\n"
@@ -280,10 +191,7 @@ def _testURL(fetcher, distname, distroobj):
     fetcher.acquireFile = fakeAcquireFile
 
     # Fetch boot iso
-    if not distroobj.hasbootiso:
-        logging.debug("Known lack of boot.iso in %s tree. Skipping.",
-                      distname)
-    else:
+    if distroobj.testbootiso:
         boot = hvmstore.acquireBootDisk(hvmguest)
         logging.debug("acquireBootDisk: %s", str(boot))
 
@@ -300,9 +208,7 @@ def _testURL(fetcher, distname, distroobj):
                        (distname, arch))
 
     # Fetch xen kernel
-    if not xenstore:
-        logging.debug("acquireKernel (xen): Hardcoded skipping.")
-    else:
+    if xenstore:
         kern = xenstore.acquireKernel(xenguest)
         logging.debug("acquireKernel (xen): %s", str(kern))
 
@@ -311,47 +217,42 @@ def _testURL(fetcher, distname, distroobj):
                                  (distname, arch))
 
 
-def _fetch_wrapper(url, cb, *args):
-    fetcher = urlfetcher.fetcherForURI(url, "/tmp", meter)
+def _testURLWrapper(distroobj):
+    fetcher = urlfetcher.fetcherForURI(distroobj.url, "/tmp", meter)
     try:
         fetcher.prepareLocation()
-        return cb(fetcher, *args)
+        return _testURL(fetcher, distroobj)
     finally:
         fetcher.cleanupLocation()
 
 
-def _make_test_wrapper(url, args):
-    def cmdtemplate():
-        return _fetch_wrapper(url, _testURL, *args)
-    return lambda _self: cmdtemplate()
-
-
 # Register tests to be picked up by unittest
-# If local ISO tests requested, skip all other URL tests
 class URLTests(unittest.TestCase):
     pass
 
 
 def _make_tests():
-    global urls
+    import ConfigParser
+    cfg = ConfigParser.ConfigParser()
+    cfg.read("tests/test_urls.ini")
 
-    if URLTEST_LOCAL_MEDIA:
-        urls = {}
-        newidx = 0
-        for p in URLTEST_LOCAL_MEDIA:
-            newidx += 1
-
-            d = _DistroURL(p, None, hasxen=False, hasbootiso=False,
-                           name="path%s" % newidx)
-            d.distroclass = None
-            urls[d.name] = d
+    urls = {}
+    for name in cfg.sections():
+        vals = dict(cfg.items(name))
+        d = _DistroURL(name, vals["url"],
+                       vals.get("distro", None),
+                       vals.get("testxen", "0") == "1",
+                       vals.get("testbootiso", "0") == "1",
+                       vals.get("testshortcircuit", "0") == "1")
+        urls[d.name] = d
 
     keys = urls.keys()
     keys.sort()
     for key in keys:
         distroobj = urls[key]
-        args = (key, distroobj)
-        testfunc = _make_test_wrapper(distroobj.url, args)
-        setattr(URLTests, "testURL%s" % key, testfunc)
+        def _make_wrapper(d):
+            return lambda _self: _testURLWrapper(d)
+        setattr(URLTests, "testURL%s" % key.replace("-", "_"),
+                _make_wrapper(distroobj))
 
 _make_tests()

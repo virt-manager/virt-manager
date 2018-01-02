@@ -529,11 +529,6 @@ class TestUI(TestBaseCommand):
 class TestURLFetch(TestBaseCommand):
     description = "Test fetching kernels and isos from various distro trees"
 
-    user_options = TestBaseCommand.user_options + [
-        ("path=", None, "Paths to local iso or directory or check"
-                        " for installable distro. Comma separated"),
-    ]
-
     def initialize_options(self):
         TestBaseCommand.initialize_options(self)
         self.path = ""
@@ -548,9 +543,6 @@ class TestURLFetch(TestBaseCommand):
 
     def run(self):
         self._testfiles = ["tests.test_urls"]
-        if self.path:
-            import tests
-            tests.URLTEST_LOCAL_MEDIA += self.path
         TestBaseCommand.run(self)
 
 
