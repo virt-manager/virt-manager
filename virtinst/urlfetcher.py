@@ -1221,9 +1221,17 @@ class DebianDistro(Distro):
             return False
 
         if self.arch == "x86_64":
-            kernel_initrd_pair = ("install.amd/vmlinuz", "install.amd/initrd.gz")
+            kernel_initrd_pair = ("install.amd/vmlinuz",
+                                  "install.amd/initrd.gz")
         elif self.arch == "i686":
-            kernel_initrd_pair = ("install.386/vmlinuz", "install.386/initrd.gz")
+            kernel_initrd_pair = ("install.386/vmlinuz",
+                                  "install.386/initrd.gz")
+        elif self.arch == "aarch64":
+            kernel_initrd_pair = ("install.a64/vmlinuz",
+                                  "install.a64/initrd.gz")
+        elif self.arch == "ppc64le":
+            kernel_initrd_pair = ("install/vmlinux",
+                                  "install/initrd.gz")
         elif self.arch == "s390x":
             kernel_initrd_pair = ("boot/linux_vm", "boot/root.bin")
         else:
