@@ -1243,6 +1243,13 @@ class Guest(XMLBuilder):
             if gfx.gl:
                 return True
 
+    def has_listen_none(self):
+        for gfx in self.get_devices("graphics"):
+            listen = gfx.get_first_listen_type()
+            if listen and listen == "none":
+                return True
+        return False
+
     def _set_video_defaults(self):
         if self.has_spice():
             self._add_spice_channels()

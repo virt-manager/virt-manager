@@ -442,8 +442,8 @@ def _gfx_console(guest):
             "--wait", guest.name]
 
     # Currently virt-viewer needs attaching to the local display while
-    # spice gl is enabled.
-    if guest.has_gl():
+    # spice gl is enabled or listen type none is used.
+    if guest.has_gl() or guest.has_listen_none():
         args.append("--attach")
 
     logging.debug("Launching virt-viewer for graphics type '%s'",
