@@ -481,13 +481,9 @@ class TestBaseCommand(distutils.core.Command):
 
 class TestCommand(TestBaseCommand):
     description = "Runs a quick unit test suite"
-    user_options = TestBaseCommand.user_options + [
-        ("skipcli", None, "Skip CLI tests"),
-    ]
 
     def initialize_options(self):
         TestBaseCommand.initialize_options(self)
-        self.skipcli = None
 
     def finalize_options(self):
         TestBaseCommand.finalize_options(self)
@@ -497,8 +493,6 @@ class TestCommand(TestBaseCommand):
         Finds all the tests modules in tests/, and runs them.
         '''
         excludes = ["test_urls.py", "test_inject.py"]
-        if self.skipcli:
-            excludes += ["clitest.py"]
         testfiles = self._find_tests_in_dir("tests", excludes)
 
         # Put clitest at the end, since it takes the longest
@@ -511,7 +505,7 @@ class TestCommand(TestBaseCommand):
         for f in testfiles[:]:
             if "checkprops" in f:
                 testfiles.remove(f)
-                if not self.testfile and not self.skipcli:
+                if not self.testfile:
                     testfiles.append(f)
 
         self._testfiles = testfiles
