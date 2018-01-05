@@ -15,11 +15,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import unittest
-import time
 import logging
+import os
 import sys
+import time
 import traceback
+import unittest
 
 from tests import utils
 
@@ -235,6 +236,11 @@ def _make_tests():
     import ConfigParser
     cfg = ConfigParser.ConfigParser()
     cfg.read("tests/test_urls.ini")
+
+    manualpath = "tests/test_urls_manual.ini"
+    cfg.read(manualpath)
+    if not os.path.exists(manualpath):
+        print("NOTE: Pass in manual data with %s" % manualpath)
 
     urls = {}
     for name in cfg.sections():
