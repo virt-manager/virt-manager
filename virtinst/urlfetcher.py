@@ -1372,7 +1372,7 @@ class ALTLinuxDistro(Distro):
         if not self.fetcher.hasFile(".disk/info"):
             return False
 
-        if self._fetchAndMatchRegex(".disk/info", ".*%s.*" % self.name):
+        if self._fetchAndMatchRegex(".disk/info", ".*ALT .*"):
             return True
 
         logging.debug("Regex didn't match, not a %s distro", self.name)
