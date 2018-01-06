@@ -40,6 +40,7 @@ os.environ["DISPLAY"] = ":3.4"
 image_prefix = "/tmp/__virtinst_cli_"
 xmldir = "tests/cli-test-xml"
 treedir = "%s/faketree" % xmldir
+fakeiso = "%s/fakefedora.iso" % xmldir
 vcdir = "%s/virtconv" % xmldir
 compare_xmldir = "%s/compare" % xmldir
 virtconv_out = "/tmp/__virtinst_tests__virtconv-outdir"
@@ -788,6 +789,7 @@ c.add_compare("--connect %(URI-KVM-SESSION)s --disk size=8 --os-variant fedora21
 
 # misc KVM config tests
 c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso")  # Using --location iso mounting
+c.add_compare("--disk none --location nfs:example.com/fake --nonetworks", "location-nfs")  # Using --location nfs
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7")  # RHEL7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7")  # Centos 7 defaults
@@ -1060,7 +1062,8 @@ def setup():
     """
     Create initial test files/dirs
     """
-    for i in exist_files:
+    os.system("ln -s %s %s" % (os.path.abspath(fakeiso), exist_files[0]))
+    for i in exist_files[1:]:
         os.system("touch %s" % i)
 
 
