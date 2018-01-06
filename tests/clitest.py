@@ -16,6 +16,7 @@
 # MA 02110-1301 USA.
 
 import atexit
+from distutils.spawn import find_executable
 import io
 import logging
 import os
@@ -202,7 +203,10 @@ class Command(object):
         if conn is None:
             raise RuntimeError("skip check is not None, but conn is None")
 
-        if isinstance(check, str):
+        if isinstance(check, bool):
+            if not check:
+                return
+        elif isinstance(check, str):
             # pylint: disable=protected-access
             if support._check_version(conn, check):
                 return
@@ -788,7 +792,7 @@ c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X-
 c.add_compare("--connect %(URI-KVM-SESSION)s --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults")
 
 # misc KVM config tests
-c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso")  # Using --location iso mounting
+c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso", skip_check=not find_executable("isoinfo"))  # Using --location iso mounting
 c.add_compare("--disk none --location nfs:example.com/fake --nonetworks", "location-nfs")  # Using --location nfs
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7")  # RHEL7 defaults
