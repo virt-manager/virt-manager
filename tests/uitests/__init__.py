@@ -1,4 +1,5 @@
 import os
+import signal
 import sys
 import warnings
 
@@ -27,6 +28,11 @@ dogtail.config.config.logDebugToFile = False
 # Dogtail screws with the default excepthook, disabling output if we turned
 # off logging, so fix it
 sys.excepthook = sys.__excepthook__
+
+# dogtail.utils.Blinker creates a GLib.MainLoop on module import, which
+# screws up SIGINT handling somehow. This reregisters the
+# unittest.installHandler magic
+signal.signal(signal.SIGINT, signal.getsignal(signal.SIGINT))
 
 # Needed so labels are matched in english
 os.environ['LANG'] = 'en_US.UTF-8'

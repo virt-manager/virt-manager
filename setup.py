@@ -433,9 +433,8 @@ class TestBaseCommand(distutils.core.Command):
         import tests as testsmodule
         testsmodule.utils.REGENERATE_OUTPUT = bool(self.regenerate_output)
 
-        if hasattr(unittest, "installHandler"):
-            # Install the control-c handler.
-            unittest.installHandler()
+        # This makes the test runner report results before exiting from ctrl-c
+        unittest.installHandler()
 
         tests = unittest.TestLoader().loadTestsFromNames(self._testfiles)
         if self.only:
