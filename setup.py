@@ -389,6 +389,7 @@ class TestBaseCommand(distutils.core.Command):
         self._testfiles = []
         self._dir = os.getcwd()
         self.testfile = None
+        self._force_verbose = False
 
     def finalize_options(self):
         if self.debug and "DEBUG_TESTS" not in os.environ:
@@ -454,7 +455,10 @@ class TestBaseCommand(distutils.core.Command):
                 print("%s" % test)
             print("")
 
-        t = unittest.TextTestRunner(verbosity=self.debug and 2 or 1)
+        verbosity = 1
+        if self.debug or self._force_verbose:
+            verbosity = 2
+        t = unittest.TextTestRunner(verbosity=verbosity)
 
         try:
             result = t.run(tests)
@@ -511,6 +515,7 @@ class TestUI(TestBaseCommand):
 
     def run(self):
         self._testfiles = self._find_tests_in_dir("tests/uitests", [])
+        self._force_verbose = True
         TestBaseCommand.run(self)
 
 
