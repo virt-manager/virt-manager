@@ -252,7 +252,8 @@ class Command(object):
 
                 # Generate test files that don't exist yet
                 filename = self.compare_file
-                if utils.REGENERATE_OUTPUT or not os.path.exists(filename):
+                if (utils.clistate.regenerate_output or
+                    not os.path.exists(filename)):
                     open(filename, "w").write(output)
 
                 if "--print-diff" in self.argv and output.count("\n") > 3:

@@ -431,7 +431,8 @@ class TestBaseCommand(distutils.core.Command):
             cov.start()
 
         import tests as testsmodule
-        testsmodule.utils.REGENERATE_OUTPUT = bool(self.regenerate_output)
+        testsmodule.utils.clistate.regenerate_output = bool(
+                self.regenerate_output)
 
         # This makes the test runner report results before exiting from ctrl-c
         unittest.installHandler()
