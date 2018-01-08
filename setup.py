@@ -390,6 +390,7 @@ class TestBaseCommand(distutils.core.Command):
         self._dir = os.getcwd()
         self.testfile = None
         self._force_verbose = False
+        self._external_coverage = False
 
     def finalize_options(self):
         if self.debug and "DEBUG_TESTS" not in os.environ:
@@ -423,16 +424,16 @@ class TestBaseCommand(distutils.core.Command):
         cov = None
         if self.coverage:
             import coverage
-            # The latter is required to not give errors on f23, probably
-            # a temporary bug.
-            omit = ["/usr/*", "/*/tests/*", "/builddir/*"]
+            omit = ["/usr/*", "/*/tests/*"]
             cov = coverage.coverage(omit=omit)
             cov.erase()
-            cov.start()
+            if not self._external_coverage:
+                cov.start()
 
         import tests as testsmodule
         testsmodule.utils.clistate.regenerate_output = bool(
                 self.regenerate_output)
+        testsmodule.utils.clistate.use_coverage = bool(cov)
 
         # This makes the test runner report results before exiting from ctrl-c
         unittest.installHandler()
@@ -466,8 +467,11 @@ class TestBaseCommand(distutils.core.Command):
             sys.exit(1)
 
         if cov:
-            cov.stop()
-            cov.save()
+            if self._external_coverage:
+                cov.load()
+            else:
+                cov.stop()
+                cov.save()
 
         err = int(bool(len(result.failures) > 0 or
                        len(result.errors) > 0))
@@ -516,6 +520,7 @@ class TestUI(TestBaseCommand):
     def run(self):
         self._testfiles = self._find_tests_in_dir("tests/uitests", [])
         self._force_verbose = True
+        self._external_coverage = True
         TestBaseCommand.run(self)
 
 

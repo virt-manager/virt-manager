@@ -32,6 +32,7 @@ class _CLIState(object):
     """
     def __init__(self):
         self.regenerate_output = False
+        self.use_coverage = False
 clistate = _CLIState()
 
 

@@ -16,8 +16,6 @@ class NewVM(uiutils.UITestCase):
     ###################
 
     def _open_create_wizard(self):
-        conn_label = "test testdriver.xml"
-        uiutils.find_pattern(self.app.root, conn_label, "table cell")
         b = uiutils.find_pattern(self.app.root, "New", "push button",
                                  wait_for_focus=True)
         b.click()

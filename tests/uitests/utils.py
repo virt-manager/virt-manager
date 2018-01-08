@@ -90,12 +90,14 @@ class DogtailApp(object):
             stdout = open(os.devnull)
             stderr = open(os.devnull)
 
-        self._proc = subprocess.Popen([sys.executable,
-            os.path.join(os.getcwd(), "virt-manager"),
-            "--test-first-run", "--no-fork", "--connect", self.uri] +
-            extra_opts,
-            stdout=stdout, stderr=stderr)
+        cmd = [sys.executable]
+        if tests.utils.clistate.use_coverage:
+            cmd += ["-m", "coverage", "run", "--append"]
+        cmd += [os.path.join(os.getcwd(), "virt-manager"),
+                "--test-first-run", "--no-fork", "--connect", self.uri]
+        cmd += extra_opts
 
+        self._proc = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
         self._root = dogtail.tree.root.application("virt-manager")
 
     def stop(self):
