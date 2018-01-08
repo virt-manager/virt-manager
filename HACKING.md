@@ -13,9 +13,6 @@ Our pylint script uses a blacklist rather than a whitelist approach,
 so it could throw some false positives or useless messages. If you think
 your patch exposes one of these, bring it up on the mailing list.
 
-If `python-coverage` is installed, you can run `coverage -r` after
-`python setup.py test` finished to see a code coverage report.
-
 'test*' have a `--debug` option if you are hitting problems.
 For more options, use `python setup.py test --help`.
 

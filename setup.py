@@ -419,14 +419,9 @@ class TestBaseCommand(distutils.core.Command):
         return testfiles
 
     def run(self):
-        try:
+        cov = None
+        if self.coverage:
             import coverage
-            use_cov = True
-        except ImportError:
-            use_cov = False
-            cov = None
-
-        if use_cov:
             # The latter is required to not give errors on f23, probably
             # a temporary bug.
             omit = ["/usr/*", "/*/tests/*", "/builddir/*"]
@@ -435,7 +430,6 @@ class TestBaseCommand(distutils.core.Command):
             cov.start()
 
         import tests as testsmodule
-        testsmodule.cov = cov
         testsmodule.utils.REGENERATE_OUTPUT = bool(self.regenerate_output)
 
         if hasattr(unittest, "installHandler"):
@@ -467,13 +461,13 @@ class TestBaseCommand(distutils.core.Command):
         except KeyboardInterrupt:
             sys.exit(1)
 
-        if use_cov:
+        if cov:
             cov.stop()
             cov.save()
 
         err = int(bool(len(result.failures) > 0 or
                        len(result.errors) > 0))
-        if not err and use_cov and self.coverage:
+        if cov and not err:
             cov.report(show_missing=False)
         sys.exit(err)
 
