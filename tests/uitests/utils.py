@@ -76,6 +76,9 @@ class DogtailApp(object):
             self.open()
         return self._root
 
+    def is_running(self):
+        return bool(self._proc and self._proc.poll() is None)
+
     def open(self, extra_opts=None):
         extra_opts = extra_opts or []
 
@@ -125,7 +128,8 @@ class DogtailApp(object):
 # Widget search helpers #
 #########################
 
-def find_pattern(root, name, roleName=None, labeller_text=None, retry=True):
+def find_pattern(root, name, roleName=None, labeller_text=None, retry=True,
+                 wait_for_focus=False):
     """
     Search root for any widget that contains the passed name/role regex
     strings.
@@ -133,14 +137,20 @@ def find_pattern(root, name, roleName=None, labeller_text=None, retry=True):
     pred = _FuzzyPredicate(name, roleName, labeller_text)
 
     try:
-        return root.findChild(pred, retry=retry)
+        ret = root.findChild(pred, retry=retry)
     except dogtail.tree.SearchError:
         raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
             "roleName='%s' labeller_text='%s'" %
             (name, roleName, labeller_text))
 
+    if wait_for_focus:
+        ret.grabFocus()
+        check_in_loop(lambda: ret.focused)
+    return ret
 
-def find_fuzzy(root, name, roleName=None, labeller_text=None, retry=True):
+
+def find_fuzzy(root, name, roleName=None, labeller_text=None, retry=True,
+               wait_for_focus=False):
     """
     Search root for any widget that contains the passed name/role strings.
     """
@@ -155,23 +165,22 @@ def find_fuzzy(root, name, roleName=None, labeller_text=None, retry=True):
         labeller_pattern = ".*%s.*" % labeller_text
 
     return find_pattern(root, name_pattern, role_pattern,
-        labeller_pattern, retry=retry)
+        labeller_pattern, retry=retry, wait_for_focus=wait_for_focus)
 
 
-def check_in_loop(func, timeout=-1):
+def check_in_loop(func, timeout=1):
     """
-    Run the passed func in a loop every .5 seconds until timeout is hit or
+    Run the passed func in a loop every .1 seconds until timeout is hit or
     the func returns True.
-    If timeout=-1, check indefinitely.
     """
-    total_time = 0.0
+    start_time = time.time()
+    interval = 0.1
     while True:
-        time.sleep(.5)
-        total_time += .5
         if func() is True:
             return
-        if timeout > 0 and total_time >= timeout:
+        if (time.time() - start_time) > timeout:
             raise RuntimeError("Loop condition wasn't met")
+        time.sleep(interval)
 
 
 #####################

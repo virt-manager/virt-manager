@@ -16,8 +16,9 @@ class Details(uiutils.UITestCase):
     ###################
 
     def _open_details_window(self, vmname="test-many-devices"):
-        uiutils.find_fuzzy(
-            self.app.root, vmname, "table cell").doubleClick()
+        c = uiutils.find_fuzzy(self.app.root, vmname, "table cell",
+                               wait_for_focus=True)
+        c.doubleClick()
         win = uiutils.find_pattern(self.app.root, "%s on" % vmname, "frame")
         uiutils.find_pattern(win, "Details", "radio button").click()
         return win
@@ -111,8 +112,11 @@ class Details(uiutils.UITestCase):
         """
         origname = "test-many-devices"
         # Shutdown the VM
-        uiutils.find_fuzzy(self.app.root, origname, "table cell").click()
-        uiutils.find_pattern(self.app.root, "Shut Down", "push button").click()
+        uiutils.find_fuzzy(self.app.root, origname, "table cell",
+                           wait_for_focus=True).click()
+        b = uiutils.find_pattern(self.app.root, "Shut Down", "push button",
+                                 wait_for_focus=True)
+        b.click()
+        uiutils.check_in_loop(lambda: b.sensitive is False)
 
-        time.sleep(.5)
         self._testRename(origname, "test-new-name")

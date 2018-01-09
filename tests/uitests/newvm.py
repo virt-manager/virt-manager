@@ -16,7 +16,9 @@ class NewVM(uiutils.UITestCase):
     ###################
 
     def _open_create_wizard(self):
-        uiutils.find_pattern(self.app.root, "New", "push button").click()
+        b = uiutils.find_pattern(self.app.root, "New", "push button",
+                                 wait_for_focus=True)
+        b.click()
         return uiutils.find_pattern(self.app.root, "New VM", "frame")
 
     def _do_simple_import(self, newvm):
@@ -28,7 +30,6 @@ class NewVM(uiutils.UITestCase):
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
         uiutils.find_fuzzy(newvm, "Finish", "button").click()
-        time.sleep(1)
 
 
     ##############
@@ -59,10 +60,9 @@ class NewVM(uiutils.UITestCase):
         uiutils.find_fuzzy(delete, "Delete", "button").click()
         alert = uiutils.find_pattern(self.app.root, "Warning", "alert")
         uiutils.find_fuzzy(alert, "Yes", "push button").click()
-        time.sleep(1)
 
         # Verify delete dialog and VM dialog are now gone
-        self.assertFalse(vmwindow.showing)
+        uiutils.check_in_loop(lambda: vmwindow.showing is False)
 
 
     def testNewVMCDROM(self):
@@ -82,12 +82,10 @@ class NewVM(uiutils.UITestCase):
         uiutils.find_fuzzy(browser, "default-pool", "table cell").click()
         uiutils.find_fuzzy(browser, "iso-vol", "table cell").click()
         uiutils.find_fuzzy(browser, "Choose Volume", "button").click()
-        time.sleep(1)
 
-        self.assertFalse(browser.showing)
-        self.assertEqual(
-            uiutils.find_fuzzy(newvm, "os-version-label", "label").text,
-            "Unknown")
+        label = uiutils.find_fuzzy(newvm, "os-version-label", "label")
+        uiutils.check_in_loop(lambda: browser.showing is False)
+        uiutils.check_in_loop(lambda: label.text == "Unknown")
 
         # Change distro to win8
         uiutils.find_fuzzy(newvm, "Automatically detect", "check").click()
@@ -123,12 +121,11 @@ class NewVM(uiutils.UITestCase):
 
         # Start the install, close via the VM window
         uiutils.find_fuzzy(vmwindow, "Begin Installation", "button").click()
-        time.sleep(1)
+        uiutils.check_in_loop(lambda: newvm.showing is False)
         vmwindow = uiutils.find_fuzzy(self.app.root, "win8 on", "frame")
-        self.assertFalse(newvm.showing)
         uiutils.find_fuzzy(vmwindow, "File", "menu").click()
         uiutils.find_fuzzy(vmwindow, "Quit", "menu item").click()
-        time.sleep(.5)
+        uiutils.check_in_loop(lambda: self.app.is_running())
 
 
     def testNewVMURL(self):
@@ -146,20 +143,19 @@ class NewVM(uiutils.UITestCase):
             "http://vault.centos.org/5.5/os/x86_64/")
 
         version = uiutils.find_pattern(newvm, "install-os-version-label")
-        time.sleep(1)
-        uiutils.check_in_loop(lambda: "Detecting" not in version.text)
-        self.assertEqual(version.text, "Red Hat Enterprise Linux 5.5")
+        uiutils.check_in_loop(lambda: "Detecting" in version.text)
+        uiutils.check_in_loop(
+            lambda: version.text == "Red Hat Enterprise Linux 5.5",
+            timeout=10)
 
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
         uiutils.find_fuzzy(newvm, "Finish", "button").click()
-        time.sleep(.5)
 
         progress = uiutils.find_fuzzy(self.app.root,
             "Creating Virtual Machine", "frame")
-        uiutils.check_in_loop(lambda: not progress.showing)
-        time.sleep(.5)
+        uiutils.check_in_loop(lambda: not progress.showing, timeout=120)
 
         uiutils.find_fuzzy(self.app.root, "rhel5.5 on", "frame")
         self.assertFalse(newvm.showing)
@@ -179,7 +175,6 @@ class NewVM(uiutils.UITestCase):
 
         self._do_simple_import(newvm)
 
-        time.sleep(1)
         uiutils.find_fuzzy(self.app.root, "generic-ppc64 on", "frame")
         self.assertFalse(newvm.showing)
 

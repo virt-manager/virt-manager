@@ -13,8 +13,9 @@ class CloneVM(uiutils.UITestCase):
 
     def _open_window(self, vmname):
         # Launch wizard via right click menu
-        uiutils.find_fuzzy(
-                self.app.root, vmname, "table cell").click(button=3)
+        c = uiutils.find_fuzzy(self.app.root, vmname, "table cell",
+                               wait_for_focus=True)
+        c.click(button=3)
         uiutils.find_pattern(self.app.root, "Clone...", "menu item").click()
         return uiutils.find_pattern(
                 self.app.root, "Clone Virtual Machine", "frame")
