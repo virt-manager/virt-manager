@@ -32,7 +32,10 @@ RUNNING_CONFIG = None
 
 class SettingsWrapper(object):
     """
-    Wrapper class to simplify interacting with gsettings APIs
+    Wrapper class to simplify interacting with gsettings APIs.
+    Basically it allows simple get/set of gconf style paths, and
+    we internally convert it to the settings nested hierarchy. Makes
+    client code much smaller.
     """
     def __init__(self, settings_id, schemadir, test_first_run):
         self._root = settings_id
@@ -50,12 +53,25 @@ class SettingsWrapper(object):
             self._settingsmap[child] = Gio.Settings.new(childschema)
 
 
+    ###################
+    # Private helpers #
+    ###################
+
     def _parse_key(self, key):
         value = key.strip("/")
         settingskey = ""
         if "/" in value:
             settingskey, value = value.rsplit("/", 1)
         return settingskey, value
+
+    def _find_settings(self, key):
+        settingskey, value = self._parse_key(key)
+        return self._settingsmap[settingskey], value
+
+
+    ###############
+    # Public APIs #
+    ###############
 
     def make_vm_settings(self, key):
         """
@@ -85,14 +101,6 @@ class SettingsWrapper(object):
                 schema, path)
         return True
 
-    def _find_settings(self, key):
-        settingskey, value = self._parse_key(key)
-        return self._settingsmap[settingskey], value
-
-    def _cmd_helper(self, cmd, key, *args, **kwargs):
-        settings, key = self._find_settings(key)
-        return getattr(settings, cmd)(key, *args, **kwargs)
-
     def notify_add(self, key, cb, *args, **kwargs):
         settings, key = self._find_settings(key)
         def wrapcb(*ignore):
@@ -105,12 +113,13 @@ class SettingsWrapper(object):
         return settings.disconnect(h)
 
     def get(self, key):
-        return self._cmd_helper("get_value", key).unpack()
+        settings, key = self._find_settings(key)
+        return settings.get_value(key).unpack()
     def set(self, key, value, *args, **kwargs):
-        fmt = self._cmd_helper("get_value", key).get_type_string()
-        return self._cmd_helper("set_value", key,
-                                GLib.Variant(fmt, value),
-                                *args, **kwargs)
+        settings, key = self._find_settings(key)
+        fmt = settings.get_value(key).get_type_string()
+        return settings.set_value(key, GLib.Variant(fmt, value),
+                                  *args, **kwargs)
 
 
 class vmmConfig(object):
