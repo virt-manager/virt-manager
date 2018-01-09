@@ -1,19 +1,12 @@
 import time
-import unittest
 
-import tests
 from tests.uitests import utils as uiutils
 
 
-class VMMCLI(unittest.TestCase):
+class VMMCLI(uiutils.UITestCase):
     """
     UI tests for virt-manager's command line --show options
     """
-    def setUp(self):
-        self.app = uiutils.DogtailApp(tests.utils.uri_test)
-    def tearDown(self):
-        self.app.kill()
-
 
     ##############
     # Test cases #

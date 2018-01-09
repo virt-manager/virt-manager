@@ -1,22 +1,15 @@
 import time
-import unittest
 
 import dogtail.rawinput
 import pyatspi
 
-import tests
 from tests.uitests import utils as uiutils
 
 
-class Host(unittest.TestCase):
+class Host(uiutils.UITestCase):
     """
     UI tests for virt-manager's VM details window
     """
-    def setUp(self):
-        self.app = uiutils.DogtailApp(tests.utils.uri_test)
-    def tearDown(self):
-        self.app.kill()
-
 
     ###################
     # Private helpers #

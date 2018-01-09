@@ -1,20 +1,13 @@
 import time
-import unittest
 
-import tests
 from tests.uitests import utils as uiutils
 
 
 
-class CloneVM(unittest.TestCase):
+class CloneVM(uiutils.UITestCase):
     """
     UI tests for virt-manager's CloneVM wizard
     """
-    def setUp(self):
-        self.app = uiutils.DogtailApp(tests.utils.uri_test)
-    def tearDown(self):
-        self.app.kill()
-
 
     ###################
     # Private helpers #

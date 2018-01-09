@@ -3,11 +3,19 @@ from __future__ import print_function
 import os
 import re
 import time
+import unittest
 import subprocess
 import sys
 
 import tests
 import dogtail.tree
+
+
+class UITestCase(unittest.TestCase):
+    def setUp(self):
+        self.app = DogtailApp(tests.utils.uri_test)
+    def tearDown(self):
+        self.app.kill()
 
 
 class _FuzzyPredicate(dogtail.predicate.Predicate):
