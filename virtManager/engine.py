@@ -64,6 +64,7 @@ DETAILS_CONSOLE = 3
 
 
 class vmmEngine(vmmGObject):
+    CLI_SHOW_MANAGER = "manager"
     CLI_SHOW_DOMAIN_CREATOR = "creator"
     CLI_SHOW_DOMAIN_EDITOR = "editor"
     CLI_SHOW_DOMAIN_PERFORMANCE = "performance"
@@ -169,6 +170,8 @@ class vmmEngine(vmmGObject):
 
     def start(self, uri, show_window, domain, skip_autostart):
         # Dispatch dbus CLI command
+        if uri and not show_window:
+            show_window = self.CLI_SHOW_MANAGER
         data = GLib.Variant("(sss)",
             (uri or "", show_window or "", domain or ""))
         self._application.activate_action("cli_command", data)
@@ -987,7 +990,10 @@ class vmmEngine(vmmGObject):
     def _launch_cli_window(self, uri, show_window, clistr):
         try:
             logging.debug("Launching requested window '%s'", show_window)
-            if show_window == self.CLI_SHOW_DOMAIN_CREATOR:
+            if show_window == self.CLI_SHOW_MANAGER:
+                self.get_manager().set_initial_selection(uri)
+                self._show_manager()
+            elif show_window == self.CLI_SHOW_DOMAIN_CREATOR:
                 self._show_domain_creator(uri)
             elif show_window == self.CLI_SHOW_DOMAIN_EDITOR:
                 self._show_domain_editor(uri, clistr)
