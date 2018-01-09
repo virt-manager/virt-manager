@@ -92,7 +92,6 @@ class DogtailApp(object):
             "--test-first-run", "--no-fork", "--connect", self.uri] +
             extra_opts,
             stdout=stdout, stderr=stderr)
-        time.sleep(1)
 
         self._root = dogtail.tree.root.application("virt-manager")
 

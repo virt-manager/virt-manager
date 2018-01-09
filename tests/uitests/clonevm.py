@@ -1,5 +1,3 @@
-import time
-
 from tests.uitests import utils as uiutils
 
 
@@ -32,7 +30,6 @@ class CloneVM(uiutils.UITestCase):
         """
         win = self._open_window("test-clone")
         uiutils.find_pattern(win, "Clone", "push button").click()
-        time.sleep(1)
 
         # Verify the new VM popped up
         uiutils.find_pattern(
@@ -44,7 +41,6 @@ class CloneVM(uiutils.UITestCase):
         """
         win = self._open_window("test-clone-simple")
         uiutils.find_pattern(win, "Clone", "push button").click()
-        time.sleep(1)
 
         # Verify the new VM popped up
         uiutils.find_pattern(
@@ -56,7 +52,6 @@ class CloneVM(uiutils.UITestCase):
         """
         win = self._open_window("test-clone-full")
         uiutils.find_pattern(win, "Clone", "push button").click()
-        time.sleep(1)
 
         # Verify error dialog popped up
         uiutils.find_pattern(
@@ -86,7 +81,6 @@ class CloneVM(uiutils.UITestCase):
         uiutils.find_pattern(stgwin, "OK", "push button").click()
 
         uiutils.find_pattern(win, "Clone", "push button").click()
-        time.sleep(1)
 
         # Verify the new VM popped up
         uiutils.find_pattern(

@@ -1,5 +1,3 @@
-import time
-
 from tests.uitests import utils as uiutils
 
 
@@ -14,13 +12,11 @@ class VMMCLI(uiutils.UITestCase):
 
     def testShowNewVM(self):
         self.app.open(extra_opts=["--show-domain-creator"])
-        time.sleep(.5)
 
         uiutils.find_pattern(self.app.root, "New VM", "frame")
 
     def testShowHost(self):
         self.app.open(extra_opts=["--show-host-summary"])
-        time.sleep(.5)
 
         win = uiutils.find_pattern(self.app.root,
             "test testdriver.xml Connection Details", "frame")
@@ -30,7 +26,6 @@ class VMMCLI(uiutils.UITestCase):
 
     def testShowDetails(self):
         self.app.open(extra_opts=["--show-domain-editor", "test-clone-simple"])
-        time.sleep(.5)
 
         win = uiutils.find_fuzzy(self.app.root, "test-clone-simple on", "frame")
         self.assertFalse(
@@ -41,7 +36,6 @@ class VMMCLI(uiutils.UITestCase):
     def testShowPerformance(self):
         self.app.open(extra_opts=["--show-domain-performance",
             "test-clone-simple"])
-        time.sleep(.5)
 
         win = uiutils.find_fuzzy(self.app.root, "test-clone-simple on", "frame")
         self.assertFalse(
@@ -51,7 +45,6 @@ class VMMCLI(uiutils.UITestCase):
 
     def testShowConsole(self):
         self.app.open(extra_opts=["--show-domain-console", "test-clone-simple"])
-        time.sleep(.5)
 
         win = uiutils.find_fuzzy(self.app.root, "test-clone-simple on", "frame")
         self.assertTrue(
