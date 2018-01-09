@@ -77,7 +77,6 @@ class Host(uiutils.UITestCase):
         self.assertTrue(cell.getState().contains(pyatspi.STATE_SELECTED))
 
         self._checkListEntrys(win, 13)
-        self.app.quit()
 
     def testHostStorageSmokeTest(self):
         """
@@ -90,7 +89,6 @@ class Host(uiutils.UITestCase):
         self.assertTrue(cell.getState().contains(pyatspi.STATE_SELECTED))
 
         self._checkListEntrys(win, 13)
-        self.app.quit()
 
     def testHostInterfaceSmokeTest(self):
         """
@@ -103,4 +101,3 @@ class Host(uiutils.UITestCase):
         self.assertTrue(cell.getState().contains(pyatspi.STATE_SELECTED))
 
         self._checkListEntrys(win, 18)
-        self.app.quit()

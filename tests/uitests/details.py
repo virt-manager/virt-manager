@@ -74,7 +74,6 @@ class Details(uiutils.UITestCase):
                 # so our testing is done
                 break
 
-        self.app.quit()
         return
 
     def _testRename(self, origname, newname):

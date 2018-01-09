@@ -17,7 +17,6 @@ class VMMCLI(uiutils.UITestCase):
         time.sleep(.5)
 
         uiutils.find_pattern(self.app.root, "New VM", "frame")
-        self.app.quit()
 
     def testShowHost(self):
         self.app.open(extra_opts=["--show-host-summary"])
@@ -28,7 +27,6 @@ class VMMCLI(uiutils.UITestCase):
         self.assertEqual(
             uiutils.find_fuzzy(win, None, "text", "Name:").text,
             "test testdriver.xml")
-        self.app.quit()
 
     def testShowDetails(self):
         self.app.open(extra_opts=["--show-domain-editor", "test-clone-simple"])
@@ -39,7 +37,6 @@ class VMMCLI(uiutils.UITestCase):
             uiutils.find_fuzzy(win, "Guest is not running", "label").showing)
         self.assertTrue(
             uiutils.find_fuzzy(win, "add-hardware", "button").showing)
-        self.app.quit()
 
     def testShowPerformance(self):
         self.app.open(extra_opts=["--show-domain-performance",
@@ -51,7 +48,6 @@ class VMMCLI(uiutils.UITestCase):
             uiutils.find_fuzzy(win, "Guest is not running", "label").showing)
         self.assertTrue(
             uiutils.find_fuzzy(win, "CPU usage", "label").showing)
-        self.app.quit()
 
     def testShowConsole(self):
         self.app.open(extra_opts=["--show-domain-console", "test-clone-simple"])
@@ -62,4 +58,3 @@ class VMMCLI(uiutils.UITestCase):
             uiutils.find_fuzzy(win, "Guest is not running", "label").showing)
         self.assertFalse(
             uiutils.find_fuzzy(win, "add-hardware", "button").showing)
-        self.app.quit()

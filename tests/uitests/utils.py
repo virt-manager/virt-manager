@@ -1,11 +1,13 @@
 from __future__ import print_function
 
+import logging
 import os
 import re
 import time
-import unittest
+import signal
 import subprocess
 import sys
+import unittest
 
 import tests
 import dogtail.tree
@@ -15,7 +17,7 @@ class UITestCase(unittest.TestCase):
     def setUp(self):
         self.app = DogtailApp(tests.utils.uri_test)
     def tearDown(self):
-        self.app.kill()
+        self.app.stop()
 
 
 class _FuzzyPredicate(dogtail.predicate.Predicate):
@@ -94,19 +96,30 @@ class DogtailApp(object):
 
         self._root = dogtail.tree.root.application("virt-manager")
 
-    def kill(self):
+    def stop(self):
         """
-        Force kill the process
+        Try graceful process shutdown, then kill it
         """
-        if self._proc:
-            self._proc.kill()
+        if not self._proc:
+            return
 
-    def quit(self):
-        """
-        Quit the app via Ctrl+q
-        """
-        self.root.keyCombo("<ctrl>q")
-        time.sleep(.5)
+        try:
+            self._proc.send_signal(signal.SIGINT)
+        except Exception:
+            logging.debug("Error terminating process", exc_info=True)
+            return
+
+        # Wait for shutdown for 1 second, with 20 checks
+        for ignore in range(20):
+            time.sleep(.05)
+            if self._proc.poll() is not None:
+                return
+
+        logging.warning("App didn't exit gracefully from SIGINT. Killing...")
+        try:
+            self._proc.kill()
+        finally:
+            time.sleep(1)
 
 
 #########################

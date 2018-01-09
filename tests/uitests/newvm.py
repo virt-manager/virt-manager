@@ -64,8 +64,6 @@ class NewVM(uiutils.UITestCase):
         # Verify delete dialog and VM dialog are now gone
         self.assertFalse(vmwindow.showing)
 
-        self.app.quit()
-
 
     def testNewVMCDROM(self):
         """
@@ -165,7 +163,7 @@ class NewVM(uiutils.UITestCase):
 
         uiutils.find_fuzzy(self.app.root, "rhel5.5 on", "frame")
         self.assertFalse(newvm.showing)
-        self.app.quit()
+
 
     def testNewPPC64(self):
         """
@@ -184,7 +182,6 @@ class NewVM(uiutils.UITestCase):
         time.sleep(1)
         uiutils.find_fuzzy(self.app.root, "generic-ppc64 on", "frame")
         self.assertFalse(newvm.showing)
-        self.app.quit()
 
 
     def testNewArmKernel(self):
@@ -232,7 +229,6 @@ class NewVM(uiutils.UITestCase):
         time.sleep(1)
         uiutils.find_fuzzy(self.app.root, "generic on", "frame")
         self.assertFalse(newvm.showing)
-        self.app.quit()
 
 
     def testNewVMContainerApp(self):
@@ -255,7 +251,6 @@ class NewVM(uiutils.UITestCase):
         time.sleep(1)
         uiutils.find_fuzzy(self.app.root, "container1 on", "frame")
         self.assertFalse(newvm.showing)
-        self.app.quit()
 
 
     def testNewVMContainerTree(self):
@@ -278,7 +273,7 @@ class NewVM(uiutils.UITestCase):
         time.sleep(1)
         uiutils.find_fuzzy(self.app.root, "container1 on", "frame")
         self.assertFalse(newvm.showing)
-        self.app.quit()
+
 
     def testNewVMContainerVZ(self):
         """
@@ -299,7 +294,7 @@ class NewVM(uiutils.UITestCase):
 
         uiutils.find_fuzzy(self.app.root, "container1 on", "frame")
         self.assertFalse(newvm.showing)
-        self.app.quit()
+
 
     def testNewXenPV(self):
         """
@@ -313,5 +308,3 @@ class NewVM(uiutils.UITestCase):
         uiutils.find_fuzzy(newvm, "paravirt", "menu item").click()
 
         self._do_simple_import(newvm)
-
-        self.app.quit()
