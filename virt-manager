@@ -272,16 +272,16 @@ def main():
     LibvirtGLib.init(None)
     LibvirtGLib.event_register()
 
+    engine = vmmEngine()
+
     # Actually exit when we receive ctrl-c
     from gi.repository import GLib
     def _sigint_handler(user_data):
         ignore = user_data
         logging.debug("Received KeyboardInterrupt. Exiting application.")
-        sys.exit(0)
+        engine.exit_app(None)
     GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGINT,
                          _sigint_handler, None)
-
-    engine = vmmEngine()
 
     engine.start(options.uri, show_window, domain, options.skip_autostart)
 

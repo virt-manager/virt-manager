@@ -482,7 +482,7 @@ class vmmEngine(vmmGObject):
             # Engine will always appear to leak
             objs.remove(self.object_key)
 
-            if src.object_key in objs:
+            if src and src.object_key in objs:
                 # UI that initiates the app exit will always appear to leak
                 objs.remove(src.object_key)
 
