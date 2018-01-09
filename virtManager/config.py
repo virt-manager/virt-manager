@@ -34,10 +34,12 @@ class SettingsWrapper(object):
     """
     Wrapper class to simplify interacting with gsettings APIs
     """
-    def __init__(self, settings_id, schemadir):
+    def __init__(self, settings_id, schemadir, test_first_run):
         self._root = settings_id
 
         os.environ["GSETTINGS_SCHEMA_DIR"] = schemadir
+        if test_first_run:
+            os.environ["GSETTINGS_BACKEND"] = "memory"
         self._settings = Gio.Settings.new(self._root)
 
         self._settingsmap = {"": self._settings}
@@ -154,7 +156,7 @@ class vmmConfig(object):
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
 
-    def __init__(self, appname, CLIConfig, test_first_run=False):
+    def __init__(self, appname, CLIConfig, test_first_run):
         self.appname = appname
         self.appversion = CLIConfig.version
         self.conf_dir = "/org/virt-manager/%s/" % self.appname
@@ -162,7 +164,7 @@ class vmmConfig(object):
         self.test_first_run = bool(test_first_run)
 
         self.conf = SettingsWrapper("org.virt-manager.virt-manager",
-                CLIConfig.gsettings_dir)
+                CLIConfig.gsettings_dir, self.test_first_run)
 
         # We don't create it straight away, since we don't want
         # to block the app pending user authorization to access
@@ -586,9 +588,6 @@ class vmmConfig(object):
 
     # Manager view connection list
     def add_conn(self, uri):
-        if self.test_first_run:
-            return
-
         uris = self.conf.get("/connections/uris")
         if uris is None:
             uris = []
@@ -612,8 +611,6 @@ class vmmConfig(object):
             self.conf.set("/connections/autoconnect", uris)
 
     def get_conn_uris(self):
-        if self.test_first_run:
-            return []
         return self.conf.get("/connections/uris")
 
     # Manager default window size
@@ -631,9 +628,6 @@ class vmmConfig(object):
         return ((uris is not None) and (uri in uris))
 
     def set_conn_autoconnect(self, uri, val):
-        if self.test_first_run:
-            return
-
         uris = self.conf.get("/connections/autoconnect")
         if uris is None:
             uris = []
