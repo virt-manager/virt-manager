@@ -3,9 +3,9 @@ import datetime
 from tests.uitests import utils as uiutils
 
 
-class VMMCLI(uiutils.UITestCase):
+class VMMAbout(uiutils.UITestCase):
     """
-    UI tests for virt-manager's command line --show options
+    UI tests for the 'About' dialog
     """
 
     ##############
