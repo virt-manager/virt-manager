@@ -58,7 +58,8 @@ class NewVM(uiutils.UITestCase):
 
         delete = uiutils.find_fuzzy(self.app.root, "Delete", "frame")
         uiutils.find_fuzzy(delete, "Delete", "button").click()
-        alert = uiutils.find_pattern(self.app.root, "Warning", "alert")
+        alert = uiutils.find_pattern(self.app.root,
+                                     "vmm error dialog", "alert")
         uiutils.find_fuzzy(alert, "Yes", "push button").click()
 
         # Verify delete dialog and VM dialog are now gone
@@ -215,7 +216,8 @@ class NewVM(uiutils.UITestCase):
         uiutils.find_fuzzy(newvm, "Forward", "button").click()
 
         # Disk collision box pops up, hit ok
-        alert = uiutils.find_pattern(self.app.root, "Warning", "alert")
+        alert = uiutils.find_pattern(self.app.root,
+                                     "vmm simple dialog", "alert")
         uiutils.find_fuzzy(alert, "Yes", "push button").click()
 
         uiutils.find_fuzzy(newvm, "Forward", "button").click()

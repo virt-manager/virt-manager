@@ -2,18 +2,17 @@ import dogtail
 import pyatspi
 
 from tests.uitests import utils as uiutils
-import time
 
 
 # From dogtail 9.9.0 which isn't widely distributed yet
 def _holdKey(keyName):
     code = dogtail.rawinput.keyNameToKeyCode(keyName)
-    pyatspi.Registry.generateKeyboardEvent(code, None, pyatspi.KEY_PRESS)
+    pyatspi.Registry().generateKeyboardEvent(code, None, pyatspi.KEY_PRESS)
 
 
 def _releaseKey(keyName):
     code = dogtail.rawinput.keyNameToKeyCode(keyName)
-    pyatspi.Registry.generateKeyboardEvent(code, None, pyatspi.KEY_RELEASE)
+    pyatspi.Registry().generateKeyboardEvent(code, None, pyatspi.KEY_RELEASE)
 
 
 class VMMPrefs(uiutils.UITestCase):

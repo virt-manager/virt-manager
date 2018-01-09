@@ -127,6 +127,7 @@ class vmmErrorDialog(vmmGObject):
         if self._simple:
             self._simple.destroy()
         self._simple = dialog
+        self._simple.get_accessible().set_name("vmm simple dialog")
 
         return _launch_dialog(self._simple,
                               text1, text2 or "", title or "",
@@ -318,6 +319,8 @@ class _errorDialog (Gtk.MessageDialog):
         for child in self.get_message_area().get_children():
             if hasattr(child, "set_max_width_chars"):
                 child.set_max_width_chars(40)
+
+        self.get_accessible().set_name("vmm error dialog")
 
         self.chk_vbox = None
         self.chk_align = None
