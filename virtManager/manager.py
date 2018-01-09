@@ -315,6 +315,7 @@ class vmmManager(vmmGObjectUI):
                 item.set_image(icon)
             if cb:
                 item.connect("activate", cb)
+            item.get_accessible().set_name("conn-%s" % idx)
             self.connmenu.add(item)
             self.connmenu_items[idx] = item
 
