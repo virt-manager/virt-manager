@@ -36,7 +36,8 @@ HV_XEN,
 HV_LXC,
 HV_QEMU_SESSION,
 HV_BHYVE,
-HV_VZ) = range(6)
+HV_VZ,
+HV_CUSTOM) = range(7)
 
 (CONN_SSH,
 CONN_TCP,
@@ -163,6 +164,7 @@ class vmmConnect(vmmGObjectUI):
 
         def _add_hv_row(rowid, config_name, label):
             if (not self.config.default_hvs or
+                not config_name or
                 config_name in self.config.default_hvs):
                 model.append([rowid, label])
 
@@ -172,8 +174,13 @@ class vmmConnect(vmmGObjectUI):
         _add_hv_row(HV_LXC, "lxc", "LXC (" + _("Linux Containers") + ")")
         _add_hv_row(HV_BHYVE, "bhyve", "Bhyve")
         _add_hv_row(HV_VZ, "vz", "Virtuozzo")
+        _add_hv_row(-1, None, "")
+        _add_hv_row(HV_CUSTOM, None, "Custom URI...")
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
+        def sepfunc(model, it):
+            return model[it][0] == -1
+        combo.set_row_separator_func(sepfunc)
 
         combo = self.widget("transport")
         model = Gtk.ListStore(str)
@@ -199,6 +206,7 @@ class vmmConnect(vmmGObjectUI):
         self.widget("hostname").get_child().set_text("")
         self.widget("connect-remote").set_active(False)
         self.widget("username-entry").set_text("")
+        self.widget("uri-entry").set_text("")
         self.connect_remote_toggled(self.widget("connect-remote"))
         self.populate_uri()
 
@@ -332,19 +340,26 @@ class vmmConnect(vmmGObjectUI):
     def hypervisor_changed(self, src):
         ignore = src
         hv = uiutil.get_list_selection(self.widget("hypervisor"))
-        is_session = (hv == HV_QEMU_SESSION)
+        is_session = hv == HV_QEMU_SESSION
+        is_custom = hv == HV_CUSTOM
+        show_remote = not is_session and not is_custom
         uiutil.set_grid_row_visible(
             self.widget("session-warning-box"), is_session)
         uiutil.set_grid_row_visible(
-            self.widget("connect-remote"), not is_session)
+            self.widget("connect-remote"), show_remote)
         uiutil.set_grid_row_visible(
-            self.widget("username-entry"), not is_session)
+            self.widget("username-entry"), show_remote)
         uiutil.set_grid_row_visible(
-            self.widget("hostname"), not is_session)
+            self.widget("hostname"), show_remote)
         uiutil.set_grid_row_visible(
-            self.widget("transport"), not is_session)
-        if is_session:
+            self.widget("transport"), show_remote)
+        if not show_remote:
             self.widget("connect-remote").set_active(False)
+
+        uiutil.set_grid_row_visible(self.widget("uri-label"), not is_custom)
+        uiutil.set_grid_row_visible(self.widget("uri-entry"), is_custom)
+        if is_custom:
+            self.widget("uri-entry").grab_focus()
         self.populate_uri()
 
     def username_changed(self, src_ignore):
@@ -366,7 +381,7 @@ class vmmConnect(vmmGObjectUI):
 
     def populate_uri(self):
         uri = self.generate_uri()
-        self.widget("uri-entry").set_text(uri)
+        self.widget("uri-label").set_text(uri)
 
     def populate_default_user(self):
         conn = self.widget("transport").get_active()
@@ -437,7 +452,10 @@ class vmmConnect(vmmGObjectUI):
         auto = False
         if self.widget("autoconnect").get_sensitive():
             auto = self.widget("autoconnect").get_active()
-        uri = self.generate_uri()
+        if self.widget("uri-label").is_visible():
+            uri = self.generate_uri()
+        else:
+            uri = self.widget("uri-entry").get_text()
 
         logging.debug("Generate URI=%s, auto=%s", uri, auto)
         self.close()
