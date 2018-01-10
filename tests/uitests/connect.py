@@ -13,8 +13,7 @@ class VMMConnect(uiutils.UITestCase):
     def testConnect(self):
         # Start with connection delete
         c = uiutils.find_pattern(self.app.root,
-                                 "test testdriver.xml", "table cell",
-                                 wait_for_focus=True)
+                                 "test testdriver.xml", "table cell")
         c.click(button=3)
         uiutils.find_pattern(self.app.root, "conn-disconnect",
                              "menu item").click()

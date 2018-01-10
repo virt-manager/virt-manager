@@ -1,5 +1,3 @@
-import time
-
 import dogtail.rawinput
 import pyatspi
 
@@ -16,9 +14,9 @@ class Details(uiutils.UITestCase):
     ###################
 
     def _open_details_window(self, vmname="test-many-devices"):
-        c = uiutils.find_fuzzy(self.app.root, vmname, "table cell",
-                               wait_for_focus=True)
-        c.doubleClick()
+        uiutils.find_fuzzy(self.app.root, vmname, "table cell").click(button=3)
+        uiutils.find_pattern(self.app.root, "Open", "menu item").click()
+
         win = uiutils.find_pattern(self.app.root, "%s on" % vmname, "frame")
         uiutils.find_pattern(win, "Details", "radio button").click()
         return win
@@ -44,7 +42,7 @@ class Details(uiutils.UITestCase):
         # don't check for widget focus unconditionally because it's slow.
         # The seemingly arbitrary number here is because it matches the
         # number of devices in test-many-devices at the time of this writing.
-        check_after = 88
+        check_after = 93
 
         focused = None
         old_focused = None
@@ -60,7 +58,7 @@ class Details(uiutils.UITestCase):
                     "One of the hardware pages raised an error")
 
             if count < check_after:
-                time.sleep(.1)
+                #time.sleep(.05)
                 continue
 
             # pylint: disable=not-an-iterable
@@ -84,6 +82,7 @@ class Details(uiutils.UITestCase):
         uiutils.find_pattern(win, "Hypervisor Details", "label")
         uiutils.find_pattern(win, "Overview", "table cell").click()
 
+        oldcell = uiutils.find_fuzzy(self.app.root, origname, "table cell")
         uiutils.find_pattern(win, None, "text", "Name:").text = newname
         uiutils.find_pattern(win, "config-apply", "push button").click()
 
@@ -91,14 +90,8 @@ class Details(uiutils.UITestCase):
         uiutils.find_pattern(self.app.root, "%s on" % newname, "frame")
         uiutils.find_fuzzy(self.app.root, newname, "table cell")
 
-        # Ensure old VM entry is gone
-        try:
-            uiutils.find_fuzzy(self.app.root, origname, "table cell",
-                               retry=False)
-            raise AssertionError("Still found manager row for %s" % origname)
-        except dogtail.tree.SearchError:
-            # We want this
-            pass
+        # Make sure the old entry is gone
+        uiutils.check_in_loop(lambda: origname not in oldcell.name)
 
     def testDetailsRenameSimple(self):
         """
@@ -112,11 +105,10 @@ class Details(uiutils.UITestCase):
         """
         origname = "test-many-devices"
         # Shutdown the VM
-        uiutils.find_fuzzy(self.app.root, origname, "table cell",
-                           wait_for_focus=True).click()
-        b = uiutils.find_pattern(self.app.root, "Shut Down", "push button",
-                                 wait_for_focus=True)
+        uiutils.find_fuzzy(self.app.root, origname, "table cell").click()
+        b = uiutils.find_pattern(self.app.root, "Shut Down", "push button")
         b.click()
+        # This insures the VM finished shutting down
         uiutils.check_in_loop(lambda: b.sensitive is False)
 
         self._testRename(origname, "test-new-name")

@@ -27,6 +27,7 @@ class VMMPrefs(uiutils.UITestCase):
     def testPrefs(self):
         uiutils.find_pattern(self.app.root, "Edit", "menu").click()
         uiutils.find_pattern(self.app.root, "Preferences", "menu item").click()
+
         win = uiutils.find_fuzzy(self.app.root, "Preferences", "frame")
 
         uiutils.find_fuzzy(win, "Enable system tray", "check").click()

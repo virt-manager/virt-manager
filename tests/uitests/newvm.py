@@ -16,9 +16,7 @@ class NewVM(uiutils.UITestCase):
     ###################
 
     def _open_create_wizard(self):
-        b = uiutils.find_pattern(self.app.root, "New", "push button",
-                                 wait_for_focus=True)
-        b.click()
+        uiutils.find_pattern(self.app.root, "New", "push button").click()
         return uiutils.find_pattern(self.app.root, "New VM", "frame")
 
     def _do_simple_import(self, newvm):

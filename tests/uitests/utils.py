@@ -9,15 +9,42 @@ import subprocess
 import sys
 import unittest
 
-import tests
+import pyatspi
 import dogtail.tree
+
+import tests
 
 
 class UITestCase(unittest.TestCase):
+    """
+    Common testcase bits shared for ui tests
+    """
     def setUp(self):
-        self.app = DogtailApp(tests.utils.uri_test)
+        self.app = VMMDogtailApp(tests.utils.uri_test)
     def tearDown(self):
         self.app.stop()
+
+
+class VMMDogtailNode(dogtail.tree.Node):
+    """
+    Our extensions to the dogtail node wrapper class.
+    """
+    # The class hackery means pylint can't figure this class out
+    # pylint: disable=no-member
+
+    @property
+    def active(self):
+        """
+        If the window is the raised and active window or not
+        """
+        return self.getState().contains(pyatspi.STATE_ACTIVE)
+
+
+# This is the same hack dogtail uses to extend the Accessible class.
+_bases = list(pyatspi.Accessibility.Accessible.__bases__)
+_bases.insert(_bases.index(dogtail.tree.Node), VMMDogtailNode)
+_bases.remove(dogtail.tree.Node)
+pyatspi.Accessibility.Accessible.__bases__ = tuple(_bases)
 
 
 class _FuzzyPredicate(dogtail.predicate.Predicate):
@@ -59,14 +86,14 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
             print("got predicate exception: %s" % e)
 
 
-
-class DogtailApp(object):
+class VMMDogtailApp(object):
     """
     Wrapper class to simplify dogtail app handling
     """
     def __init__(self, uri):
         self._proc = None
         self._root = None
+        self._topwin = None
         self.uri = uri
 
 
@@ -75,6 +102,12 @@ class DogtailApp(object):
         if self._root is None:
             self.open()
         return self._root
+
+    @property
+    def topwin(self):
+        if self._topwin is None:
+            self.open()
+        return self._topwin
 
     def is_running(self):
         return bool(self._proc and self._proc.poll() is None)
@@ -99,6 +132,7 @@ class DogtailApp(object):
 
         self._proc = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
         self._root = dogtail.tree.root.application("virt-manager")
+        self._topwin = find_pattern(self._root, None, "(frame|dialog|alert)")
 
     def stop(self):
         """
@@ -130,8 +164,7 @@ class DogtailApp(object):
 # Widget search helpers #
 #########################
 
-def find_pattern(root, name, roleName=None, labeller_text=None, retry=True,
-                 wait_for_focus=False):
+def find_pattern(root, name, roleName=None, labeller_text=None):
     """
     Search root for any widget that contains the passed name/role regex
     strings.
@@ -139,20 +172,21 @@ def find_pattern(root, name, roleName=None, labeller_text=None, retry=True,
     pred = _FuzzyPredicate(name, roleName, labeller_text)
 
     try:
-        ret = root.findChild(pred, retry=retry)
+        ret = root.findChild(pred)
     except dogtail.tree.SearchError:
         raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
             "roleName='%s' labeller_text='%s'" %
             (name, roleName, labeller_text))
 
-    if wait_for_focus:
-        ret.grabFocus()
-        check_in_loop(lambda: ret.focused)
+    # Wait for independent windows to become active in the window manager
+    # before we return them. This ensures the window is actually onscreen
+    # so it sidesteps a lot of race conditions
+    if ret.roleName in ["frame", "dialog", "alert"]:
+        check_in_loop(lambda: ret.active)
     return ret
 
 
-def find_fuzzy(root, name, roleName=None, labeller_text=None, retry=True,
-               wait_for_focus=False):
+def find_fuzzy(root, name, roleName=None, labeller_text=None):
     """
     Search root for any widget that contains the passed name/role strings.
     """
@@ -167,10 +201,10 @@ def find_fuzzy(root, name, roleName=None, labeller_text=None, retry=True,
         labeller_pattern = ".*%s.*" % labeller_text
 
     return find_pattern(root, name_pattern, role_pattern,
-        labeller_pattern, retry=retry, wait_for_focus=wait_for_focus)
+        labeller_pattern)
 
 
-def check_in_loop(func, timeout=1):
+def check_in_loop(func, timeout=2):
     """
     Run the passed func in a loop every .1 seconds until timeout is hit or
     the func returns True.
