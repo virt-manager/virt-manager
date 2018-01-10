@@ -17,15 +17,12 @@ class Host(uiutils.UITestCase):
 
     def _open_host_window(self, tab):
         conn_label = "test testdriver.xml"
-        uiutils.find_fuzzy(self.app.root, conn_label,
-                           "table cell").click()
-        uiutils.find_fuzzy(self.app.root, "Edit", "menu").click()
-        uiutils.find_fuzzy(self.app.root, "Connection Details",
-                           "menu item").click()
-        win = uiutils.find_fuzzy(self.app.root,
-                                 "%s Connection Details" % conn_label,
-                                 "frame")
-        uiutils.find_fuzzy(win, tab, "page tab").click()
+        self.app.root.find_fuzzy(conn_label, "table cell").click()
+        self.app.root.find_fuzzy("Edit", "menu").click()
+        self.app.root.find_fuzzy("Connection Details", "menu item").click()
+        win = self.app.root.find_fuzzy(
+                "%s Connection Details" % conn_label, "frame")
+        win.find_fuzzy(tab, "page tab").click()
         return win
 
     def _checkListEntrys(self, win, check_after):
@@ -41,7 +38,7 @@ class Host(uiutils.UITestCase):
 
             if not win.getState().contains(pyatspi.STATE_ACTIVE):
                 # Should mean an error dialog popped up
-                uiutils.find_pattern(self.app.root, "Error", "alert")
+                self.app.root.find_pattern("Error", "alert")
                 raise AssertionError(
                     "One of the pages raised an error")
 
@@ -51,7 +48,7 @@ class Host(uiutils.UITestCase):
 
             # pylint: disable=not-an-iterable
             old_focused = focused
-            focused = uiutils.focused_nodes(win)
+            focused = win.focused_nodes()
             if old_focused is None:
                 continue
 
@@ -73,7 +70,7 @@ class Host(uiutils.UITestCase):
         win = self._open_host_window("Virtual Networks")
 
         # Make sure the first item is selected
-        cell = uiutils.find_pattern(win, "default", "table cell")
+        cell = win.find_pattern("default", "table cell")
         self.assertTrue(cell.getState().contains(pyatspi.STATE_SELECTED))
 
         self._checkListEntrys(win, 13)
@@ -85,7 +82,7 @@ class Host(uiutils.UITestCase):
         win = self._open_host_window("Storage")
 
         # Make sure the first item is selected
-        cell = uiutils.find_pattern(win, "cross-pool", "table cell")
+        cell = win.find_pattern("cross-pool", "table cell")
         self.assertTrue(cell.getState().contains(pyatspi.STATE_SELECTED))
 
         self._checkListEntrys(win, 13)
@@ -97,7 +94,7 @@ class Host(uiutils.UITestCase):
         win = self._open_host_window("Network Interfaces")
 
         # Make sure the first item is selected
-        cell = uiutils.find_pattern(win, "bond0", "table cell")
+        cell = win.find_pattern("bond0", "table cell")
         self.assertTrue(cell.getState().contains(pyatspi.STATE_SELECTED))
 
         self._checkListEntrys(win, 18)

@@ -16,18 +16,18 @@ class NewVM(uiutils.UITestCase):
     ###################
 
     def _open_create_wizard(self):
-        uiutils.find_pattern(self.app.root, "New", "push button").click()
-        return uiutils.find_pattern(self.app.root, "New VM", "frame")
+        self.app.root.find_pattern("New", "push button").click()
+        return self.app.root.find_pattern("New VM", "frame")
 
     def _do_simple_import(self, newvm):
         # Create default PXE VM
-        uiutils.find_fuzzy(newvm, "Import", "radio").click()
-        uiutils.find_fuzzy(newvm, None,
+        newvm.find_fuzzy("Import", "radio").click()
+        newvm.find_fuzzy(None,
             "text", "existing storage").text = "/dev/default-pool/testvol1.img"
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Finish", "button").click()
 
 
     ##############
@@ -42,23 +42,22 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         # Create default PXE VM
-        uiutils.find_fuzzy(newvm, "PXE", "radio").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        newvm.find_fuzzy("PXE", "radio").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Finish", "button").click()
 
         # Delete it from the VM window
-        vmwindow = uiutils.find_fuzzy(self.app.root, "generic on", "frame")
-        uiutils.find_pattern(vmwindow, "Virtual Machine", "menu").click()
-        uiutils.find_pattern(vmwindow, "Delete", "menu item").click()
+        vmwindow = self.app.root.find_fuzzy("generic on", "frame")
+        vmwindow.find_pattern("Virtual Machine", "menu").click()
+        vmwindow.find_pattern("Delete", "menu item").click()
 
-        delete = uiutils.find_fuzzy(self.app.root, "Delete", "frame")
-        uiutils.find_fuzzy(delete, "Delete", "button").click()
-        alert = uiutils.find_pattern(self.app.root,
-                                     "vmm error dialog", "alert")
-        uiutils.find_fuzzy(alert, "Yes", "push button").click()
+        delete = self.app.root.find_fuzzy("Delete", "frame")
+        delete.find_fuzzy("Delete", "button").click()
+        alert = self.app.root.find_pattern("vmm error dialog", "alert")
+        alert.find_fuzzy("Yes", "push button").click()
 
         # Verify delete dialog and VM dialog are now gone
         uiutils.check_in_loop(lambda: vmwindow.showing is False)
@@ -71,59 +70,58 @@ class NewVM(uiutils.UITestCase):
         """
         newvm = self._open_create_wizard()
 
-        uiutils.find_fuzzy(newvm, "Local install media", "radio").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        newvm.find_fuzzy("Local install media", "radio").click()
+        newvm.find_fuzzy("Forward", "button").click()
 
         # Select a fake iso
-        uiutils.find_fuzzy(newvm, "Use ISO", "radio").click()
-        uiutils.find_fuzzy(newvm, "install-iso-browse", "button").click()
-        browser = uiutils.find_fuzzy(self.app.root, "Choose Storage", "frame")
-        uiutils.find_fuzzy(browser, "default-pool", "table cell").click()
-        uiutils.find_fuzzy(browser, "iso-vol", "table cell").click()
-        uiutils.find_fuzzy(browser, "Choose Volume", "button").click()
+        newvm.find_fuzzy("Use ISO", "radio").click()
+        newvm.find_fuzzy("install-iso-browse", "button").click()
+        browser = self.app.root.find_fuzzy("Choose Storage", "frame")
+        browser.find_fuzzy("default-pool", "table cell").click()
+        browser.find_fuzzy("iso-vol", "table cell").click()
+        browser.find_fuzzy("Choose Volume", "button").click()
 
-        label = uiutils.find_fuzzy(newvm, "os-version-label", "label")
+        label = newvm.find_fuzzy("os-version-label", "label")
         uiutils.check_in_loop(lambda: browser.showing is False)
         uiutils.check_in_loop(lambda: label.text == "Unknown")
 
         # Change distro to win8
-        uiutils.find_fuzzy(newvm, "Automatically detect", "check").click()
-        version = uiutils.find_fuzzy(newvm,
-            "install-os-version-entry", "text")
+        newvm.find_fuzzy("Automatically detect", "check").click()
+        version = newvm.find_fuzzy("install-os-version-entry", "text")
         self.assertEqual(version.text, "Generic")
 
-        ostype = uiutils.find_fuzzy(newvm, "install-os-type", "combo")
+        ostype = newvm.find_fuzzy("install-os-type", "combo")
         ostype.click()
-        uiutils.find_fuzzy(ostype, "Show all", "menu item").click()
-        uiutils.find_fuzzy(newvm, "install-os-type", "combo").click()
-        uiutils.find_fuzzy(newvm, "Windows", "menu item").click()
-        uiutils.find_fuzzy(newvm, "install-os-version-entry",
+        ostype.find_fuzzy("Show all", "menu item").click()
+        newvm.find_fuzzy("install-os-type", "combo").click()
+        newvm.find_fuzzy("Windows", "menu item").click()
+        newvm.find_fuzzy("install-os-version-entry",
             "text").typeText("Microsoft Windows 8")
-        uiutils.find_fuzzy(newvm, "install-os-version-entry", "text").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        newvm.find_fuzzy("install-os-version-entry", "text").click()
+        newvm.find_fuzzy("Forward", "button").click()
 
         # Verify that CPU values are non-default
-        cpus = uiutils.find_pattern(newvm, "cpus", "spin button")
+        cpus = newvm.find_pattern("cpus", "spin button")
         uiutils.check_in_loop(lambda: int(cpus.text) > 1, timeout=5)
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
 
         # Select customize wizard
-        uiutils.find_fuzzy(newvm, "Customize", "check").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        newvm.find_fuzzy("Customize", "check").click()
+        newvm.find_fuzzy("Finish", "button").click()
 
         # Change to 'copy host CPU'
-        vmwindow = uiutils.find_fuzzy(self.app.root, "win8 on", "frame")
-        uiutils.find_fuzzy(vmwindow, "CPUs", "table cell").click()
-        uiutils.find_fuzzy(vmwindow, "Copy host", "check").click()
-        uiutils.find_fuzzy(vmwindow, "config-apply").click()
+        vmwindow = self.app.root.find_fuzzy("win8 on", "frame")
+        vmwindow.find_fuzzy("CPUs", "table cell").click()
+        vmwindow.find_fuzzy("Copy host", "check").click()
+        vmwindow.find_fuzzy("config-apply").click()
 
         # Start the install, close via the VM window
-        uiutils.find_fuzzy(vmwindow, "Begin Installation", "button").click()
+        vmwindow.find_fuzzy("Begin Installation", "button").click()
         uiutils.check_in_loop(lambda: newvm.showing is False)
-        vmwindow = uiutils.find_fuzzy(self.app.root, "win8 on", "frame")
-        uiutils.find_fuzzy(vmwindow, "File", "menu").click()
-        uiutils.find_fuzzy(vmwindow, "Quit", "menu item").click()
+        vmwindow = self.app.root.find_fuzzy("win8 on", "frame")
+        vmwindow.find_fuzzy("File", "menu").click()
+        vmwindow.find_fuzzy("Quit", "menu item").click()
         uiutils.check_in_loop(lambda: self.app.is_running())
 
 
@@ -135,28 +133,28 @@ class NewVM(uiutils.UITestCase):
         self.app.uri = tests.utils.uri_kvm
         newvm = self._open_create_wizard()
 
-        uiutils.find_fuzzy(newvm, "Network Install", "radio").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        newvm.find_fuzzy("Network Install", "radio").click()
+        newvm.find_fuzzy("Forward", "button").click()
 
-        uiutils.find_pattern(newvm, None, "text", "URL").text = (
+        newvm.find_pattern(None, "text", "URL").text = (
             "http://vault.centos.org/5.5/os/x86_64/")
 
-        version = uiutils.find_pattern(newvm, "install-os-version-label")
+        version = newvm.find_pattern("install-os-version-label")
         uiutils.check_in_loop(lambda: "Detecting" in version.text)
         uiutils.check_in_loop(
             lambda: version.text == "Red Hat Enterprise Linux 5.5",
             timeout=10)
 
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Finish", "button").click()
 
-        progress = uiutils.find_fuzzy(self.app.root,
+        progress = self.app.root.find_fuzzy(
             "Creating Virtual Machine", "frame")
         uiutils.check_in_loop(lambda: not progress.showing, timeout=120)
 
-        uiutils.find_fuzzy(self.app.root, "rhel5.5 on", "frame")
+        self.app.root.find_fuzzy("rhel5.5 on", "frame")
         self.assertFalse(newvm.showing)
 
 
@@ -167,14 +165,14 @@ class NewVM(uiutils.UITestCase):
         self.app.uri = tests.utils.uri_kvm
         newvm = self._open_create_wizard()
 
-        uiutils.find_fuzzy(newvm, "Architecture options", "toggle").click()
-        uiutils.find_fuzzy(newvm, None, "combo", "Architecture").click()
-        uiutils.find_fuzzy(newvm, "ppc64", "menu item").click()
-        uiutils.find_fuzzy(newvm, "pseries", "menu item")
+        newvm.find_fuzzy("Architecture options", "toggle").click()
+        newvm.find_fuzzy(None, "combo", "Architecture").click()
+        newvm.find_fuzzy("ppc64", "menu item").click()
+        newvm.find_fuzzy("pseries", "menu item")
 
         self._do_simple_import(newvm)
 
-        uiutils.find_fuzzy(self.app.root, "generic-ppc64 on", "frame")
+        self.app.root.find_fuzzy("generic-ppc64 on", "frame")
         self.assertFalse(newvm.showing)
 
 
@@ -185,44 +183,43 @@ class NewVM(uiutils.UITestCase):
         self.app.uri = tests.utils.uri_kvm_armv7l
         newvm = self._open_create_wizard()
 
-        uiutils.find_fuzzy(newvm, "Architecture options", "toggle").click()
-        uiutils.find_fuzzy(newvm, None, "combo", "Virt Type").click()
-        KVM = uiutils.find_fuzzy(newvm, "KVM", "menu item")
-        TCG = uiutils.find_fuzzy(newvm, "TCG", "menu item")
+        newvm.find_fuzzy("Architecture options", "toggle").click()
+        newvm.find_fuzzy(None, "combo", "Virt Type").click()
+        KVM = newvm.find_fuzzy("KVM", "menu item")
+        TCG = newvm.find_fuzzy("TCG", "menu item")
         self.assertTrue(KVM.focused)
         self.assertTrue(TCG.showing)
-        uiutils.find_fuzzy(newvm, None, "combo", "Virt Type").click()
+        newvm.find_fuzzy(None, "combo", "Virt Type").click()
 
         # Validate some initial defaults
         self.assertFalse(
-            uiutils.find_fuzzy(newvm, "PXE", "radio").sensitive)
-        uiutils.find_fuzzy(newvm, "vexpress-a15", "menu item")
-        uiutils.find_pattern(newvm, "virt", "menu item")
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+            newvm.find_fuzzy("PXE", "radio").sensitive)
+        newvm.find_fuzzy("vexpress-a15", "menu item")
+        newvm.find_pattern("virt", "menu item")
+        newvm.find_fuzzy("Forward", "button").click()
 
         # Set the import media details
-        uiutils.find_fuzzy(newvm, None,
+        newvm.find_fuzzy(None,
             "text", "existing storage").text = "/dev/default-pool/default-vol"
-        uiutils.find_fuzzy(newvm, None,
+        newvm.find_fuzzy(None,
             "text", "Kernel path").text = "/tmp/kernel"
-        uiutils.find_fuzzy(newvm, None,
+        newvm.find_fuzzy(None,
             "text", "Initrd").text = "/tmp/initrd"
-        uiutils.find_fuzzy(newvm, None,
+        newvm.find_fuzzy(None,
             "text", "DTB").text = "/tmp/dtb"
-        uiutils.find_fuzzy(newvm, None,
+        newvm.find_fuzzy(None,
             "text", "Kernel args").text = "console=ttyS0"
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
 
         # Disk collision box pops up, hit ok
-        alert = uiutils.find_pattern(self.app.root,
-                                     "vmm simple dialog", "alert")
-        uiutils.find_fuzzy(alert, "Yes", "push button").click()
+        alert = self.app.root.find_pattern("vmm simple dialog", "alert")
+        alert.find_fuzzy("Yes", "push button").click()
 
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Finish", "button").click()
 
         time.sleep(1)
-        uiutils.find_fuzzy(self.app.root, "generic on", "frame")
+        self.app.root.find_fuzzy("generic on", "frame")
         self.assertFalse(newvm.showing)
 
 
@@ -233,18 +230,18 @@ class NewVM(uiutils.UITestCase):
         self.app.uri = tests.utils.uri_lxc
 
         newvm = self._open_create_wizard()
-        uiutils.find_fuzzy(newvm, "Application", "radio").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        newvm.find_fuzzy("Application", "radio").click()
+        newvm.find_fuzzy("Forward", "button").click()
 
         # Set custom init
-        uiutils.find_fuzzy(newvm, None,
+        newvm.find_fuzzy(None,
             "text", "application path").text = "/sbin/init"
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Finish", "button").click()
 
         time.sleep(1)
-        uiutils.find_fuzzy(self.app.root, "container1 on", "frame")
+        self.app.root.find_fuzzy("container1 on", "frame")
         self.assertFalse(newvm.showing)
 
 
@@ -255,18 +252,18 @@ class NewVM(uiutils.UITestCase):
         self.app.uri = tests.utils.uri_lxc
 
         newvm = self._open_create_wizard()
-        uiutils.find_fuzzy(newvm, "Operating system", "radio").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        newvm.find_fuzzy("Operating system", "radio").click()
+        newvm.find_fuzzy("Forward", "button").click()
 
         # Set directory path
-        uiutils.find_fuzzy(newvm, None,
+        newvm.find_fuzzy(None,
             "text", "root directory").text = "/tmp"
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Finish", "button").click()
 
         time.sleep(1)
-        uiutils.find_fuzzy(self.app.root, "container1 on", "frame")
+        self.app.root.find_fuzzy("container1 on", "frame")
         self.assertFalse(newvm.showing)
 
 
@@ -277,17 +274,17 @@ class NewVM(uiutils.UITestCase):
         self.app.uri = tests.utils.uri_vz
 
         newvm = self._open_create_wizard()
-        uiutils.find_fuzzy(newvm, "Container", "radio").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
+        newvm.find_fuzzy("Container", "radio").click()
+        newvm.find_fuzzy("Forward", "button").click()
 
         # Set directory path
-        uiutils.find_fuzzy(newvm, None,
+        newvm.find_fuzzy(None,
             "text", "container template").text = "centos-6-x86_64"
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Forward", "button").click()
-        uiutils.find_fuzzy(newvm, "Finish", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Finish", "button").click()
 
-        uiutils.find_fuzzy(self.app.root, "container1 on", "frame")
+        self.app.root.find_fuzzy("container1 on", "frame")
         self.assertFalse(newvm.showing)
 
 
@@ -298,8 +295,8 @@ class NewVM(uiutils.UITestCase):
         self.app.uri = tests.utils.uri_xen
         newvm = self._open_create_wizard()
 
-        uiutils.find_fuzzy(newvm, "Architecture options", "toggle").click()
-        uiutils.find_fuzzy(newvm, None, "combo", "Xen Type").click()
-        uiutils.find_fuzzy(newvm, "paravirt", "menu item").click()
+        newvm.find_fuzzy("Architecture options", "toggle").click()
+        newvm.find_fuzzy(None, "combo", "Xen Type").click()
+        newvm.find_fuzzy("paravirt", "menu item").click()
 
         self._do_simple_import(newvm)

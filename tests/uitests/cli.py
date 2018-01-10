@@ -20,7 +20,7 @@ class VMMCLI(uiutils.UITestCase):
         self.assertEqual(self.app.topwin.name,
             "test testdriver.xml Connection Details")
         self.assertEqual(
-            uiutils.find_fuzzy(self.app.topwin, None, "text", "Name:").text,
+            self.app.topwin.find_fuzzy(None, "text", "Name:").text,
             "test testdriver.xml")
 
     def testShowDetails(self):
@@ -28,10 +28,10 @@ class VMMCLI(uiutils.UITestCase):
 
         self.assertTrue("test-clone-simple on" in self.app.topwin.name)
         self.assertFalse(
-            uiutils.find_fuzzy(self.app.topwin,
+            self.app.topwin.find_fuzzy(
                                "Guest is not running", "label").showing)
         self.assertTrue(
-            uiutils.find_fuzzy(self.app.topwin,
+            self.app.topwin.find_fuzzy(
                                "add-hardware", "button").showing)
 
     def testShowPerformance(self):
@@ -40,18 +40,18 @@ class VMMCLI(uiutils.UITestCase):
 
         self.assertTrue("test-clone-simple on" in self.app.topwin.name)
         self.assertFalse(
-            uiutils.find_fuzzy(self.app.topwin,
+            self.app.topwin.find_fuzzy(
                                "Guest is not running", "label").showing)
         self.assertTrue(
-            uiutils.find_fuzzy(self.app.topwin, "CPU usage", "label").showing)
+            self.app.topwin.find_fuzzy("CPU usage", "label").showing)
 
     def testShowConsole(self):
         self.app.open(extra_opts=["--show-domain-console", "test-clone-simple"])
 
         self.assertTrue("test-clone-simple on" in self.app.topwin.name)
         self.assertTrue(
-            uiutils.find_fuzzy(self.app.topwin,
+            self.app.topwin.find_fuzzy(
                                "Guest is not running", "label").showing)
         self.assertFalse(
-            uiutils.find_fuzzy(self.app.topwin,
+            self.app.topwin.find_fuzzy(
                                "add-hardware", "button").showing)

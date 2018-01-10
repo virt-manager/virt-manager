@@ -25,28 +25,6 @@ class UITestCase(unittest.TestCase):
         self.app.stop()
 
 
-class VMMDogtailNode(dogtail.tree.Node):
-    """
-    Our extensions to the dogtail node wrapper class.
-    """
-    # The class hackery means pylint can't figure this class out
-    # pylint: disable=no-member
-
-    @property
-    def active(self):
-        """
-        If the window is the raised and active window or not
-        """
-        return self.getState().contains(pyatspi.STATE_ACTIVE)
-
-
-# This is the same hack dogtail uses to extend the Accessible class.
-_bases = list(pyatspi.Accessibility.Accessible.__bases__)
-_bases.insert(_bases.index(dogtail.tree.Node), VMMDogtailNode)
-_bases.remove(dogtail.tree.Node)
-pyatspi.Accessibility.Accessible.__bases__ = tuple(_bases)
-
-
 class _FuzzyPredicate(dogtail.predicate.Predicate):
     """
     Object dogtail/pyatspi want for node searching.
@@ -84,6 +62,123 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
             return True
         except Exception as e:
             print("got predicate exception: %s" % e)
+
+
+def check_in_loop(func, timeout=2):
+    """
+    Run the passed func in a loop every .1 seconds until timeout is hit or
+    the func returns True.
+    """
+    start_time = time.time()
+    interval = 0.1
+    while True:
+        if func() is True:
+            return
+        if (time.time() - start_time) > timeout:
+            raise RuntimeError("Loop condition wasn't met")
+        time.sleep(interval)
+
+
+class VMMDogtailNode(dogtail.tree.Node):
+    """
+    Our extensions to the dogtail node wrapper class.
+    """
+    # The class hackery means pylint can't figure this class out
+    # pylint: disable=no-member
+
+    @property
+    def active(self):
+        """
+        If the window is the raised and active window or not
+        """
+        return self.getState().contains(pyatspi.STATE_ACTIVE)
+
+
+    #########################
+    # Widget search helpers #
+    #########################
+
+    def find_pattern(self, name, roleName=None, labeller_text=None):
+        """
+        Search root for any widget that contains the passed name/role regex
+        strings.
+        """
+        pred = _FuzzyPredicate(name, roleName, labeller_text)
+
+        try:
+            ret = self.findChild(pred)
+        except dogtail.tree.SearchError:
+            raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
+                "roleName='%s' labeller_text='%s'" %
+                (name, roleName, labeller_text))
+
+        # Wait for independent windows to become active in the window manager
+        # before we return them. This ensures the window is actually onscreen
+        # so it sidesteps a lot of race conditions
+        if ret.roleName in ["frame", "dialog", "alert"]:
+            check_in_loop(lambda: ret.active)
+        return ret
+
+    def find_fuzzy(self, name, roleName=None, labeller_text=None):
+        """
+        Search root for any widget that contains the passed name/role strings.
+        """
+        name_pattern = None
+        role_pattern = None
+        labeller_pattern = None
+        if name:
+            name_pattern = ".*%s.*" % name
+        if roleName:
+            role_pattern = ".*%s.*" % roleName
+        if labeller_text:
+            labeller_pattern = ".*%s.*" % labeller_text
+
+        return self.find_pattern(name_pattern, role_pattern, labeller_pattern)
+
+
+    #####################
+    # Debugging helpers #
+    #####################
+
+    def node_string(self):
+        msg = "name='%s' roleName='%s'" % (self.name, self.roleName)
+        if self.labeller:
+            msg += " labeller.text='%s'" % self.labeller.text
+        return msg
+
+
+    def print_nodes(root):
+        """
+        Helper to print the entire node tree for the passed root. Useful
+        if to figure out the roleName for the object you are looking for
+        """
+        def _walk(node):
+            try:
+                print(node.node_string())
+            except Exception as e:
+                print("got exception: %s" % e)
+
+        self.findChildren(_walk, isLambda=True)
+
+    def focused_nodes(self):
+        """
+        Return a list of all focused nodes. Useful for debugging
+        """
+        def _walk(node):
+            try:
+                if node.focused:
+                   return node
+            except Exception as e:
+                print("got exception: %s" % e)
+
+        return self.findChildren(_walk, isLambda=True)
+
+
+# This is the same hack dogtail uses to extend the Accessible class.
+_bases = list(pyatspi.Accessibility.Accessible.__bases__)
+_bases.insert(_bases.index(dogtail.tree.Node), VMMDogtailNode)
+_bases.remove(dogtail.tree.Node)
+pyatspi.Accessibility.Accessible.__bases__ = tuple(_bases)
 
 
 class VMMDogtailApp(object):
@@ -132,7 +227,7 @@ class VMMDogtailApp(object):
 
         self._proc = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
         self._root = dogtail.tree.root.application("virt-manager")
-        self._topwin = find_pattern(self._root, None, "(frame|dialog|alert)")
+        self._topwin = self._root.find_pattern(None, "(frame|dialog|alert)")
 
     def stop(self):
         """
@@ -158,101 +253,3 @@ class VMMDogtailApp(object):
             self._proc.kill()
         finally:
             time.sleep(1)
-
-
-#########################
-# Widget search helpers #
-#########################
-
-def find_pattern(root, name, roleName=None, labeller_text=None):
-    """
-    Search root for any widget that contains the passed name/role regex
-    strings.
-    """
-    pred = _FuzzyPredicate(name, roleName, labeller_text)
-
-    try:
-        ret = root.findChild(pred)
-    except dogtail.tree.SearchError:
-        raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
-            "roleName='%s' labeller_text='%s'" %
-            (name, roleName, labeller_text))
-
-    # Wait for independent windows to become active in the window manager
-    # before we return them. This ensures the window is actually onscreen
-    # so it sidesteps a lot of race conditions
-    if ret.roleName in ["frame", "dialog", "alert"]:
-        check_in_loop(lambda: ret.active)
-    return ret
-
-
-def find_fuzzy(root, name, roleName=None, labeller_text=None):
-    """
-    Search root for any widget that contains the passed name/role strings.
-    """
-    name_pattern = None
-    role_pattern = None
-    labeller_pattern = None
-    if name:
-        name_pattern = ".*%s.*" % name
-    if roleName:
-        role_pattern = ".*%s.*" % roleName
-    if labeller_text:
-        labeller_pattern = ".*%s.*" % labeller_text
-
-    return find_pattern(root, name_pattern, role_pattern,
-        labeller_pattern)
-
-
-def check_in_loop(func, timeout=2):
-    """
-    Run the passed func in a loop every .1 seconds until timeout is hit or
-    the func returns True.
-    """
-    start_time = time.time()
-    interval = 0.1
-    while True:
-        if func() is True:
-            return
-        if (time.time() - start_time) > timeout:
-            raise RuntimeError("Loop condition wasn't met")
-        time.sleep(interval)
-
-
-#####################
-# Debugging helpers #
-#####################
-
-def node_string(node):
-    msg = "name='%s' roleName='%s'" % (node.name, node.roleName)
-    if node.labeller:
-        msg += " labeller.text='%s'" % node.labeller.text
-    return msg
-
-
-def print_nodes(root):
-    """
-    Helper to print the entire node tree for the passed root. Useful
-    if to figure out the roleName for the object you are looking for
-    """
-    def _walk(node):
-        try:
-            print(node_string(node))
-        except Exception as e:
-            print("got exception: %s" % e)
-
-    root.findChildren(_walk, isLambda=True)
-
-
-def focused_nodes(root):
-    """
-    Return a list of all focused nodes. Useful for debugging
-    """
-    def _walk(node):
-        try:
-            if node.focused:
-                return node
-        except Exception as e:
-            print("got exception: %s" % e)
-
-    return root.findChildren(_walk, isLambda=True)

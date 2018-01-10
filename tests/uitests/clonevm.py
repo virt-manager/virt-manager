@@ -13,11 +13,10 @@ class CloneVM(uiutils.UITestCase):
 
     def _open_window(self, vmname):
         # Launch wizard via right click menu
-        c = uiutils.find_fuzzy(self.app.root, vmname, "table cell")
+        c = self.app.root.find_fuzzy(vmname, "table cell")
         c.click(button=3)
-        uiutils.find_pattern(self.app.root, "Clone...", "menu item").click()
-        return uiutils.find_pattern(
-                self.app.root, "Clone Virtual Machine", "frame")
+        self.app.root.find_pattern("Clone...", "menu item").click()
+        return self.app.root.find_pattern("Clone Virtual Machine", "frame")
 
 
     ##############
@@ -29,59 +28,54 @@ class CloneVM(uiutils.UITestCase):
         Clone test-clone, which is meant to hit many clone code paths
         """
         win = self._open_window("test-clone")
-        uiutils.find_pattern(win, "Clone", "push button").click()
+        win.find_pattern("Clone", "push button").click()
 
         # Verify the new VM popped up
-        uiutils.find_pattern(
-                self.app.root, "test-clone1", "table cell")
+        self.app.root.find_pattern("test-clone1", "table cell")
 
     def testCloneSimple(self):
         """
         Clone test-clone-simple
         """
         win = self._open_window("test-clone-simple")
-        uiutils.find_pattern(win, "Clone", "push button").click()
+        win.find_pattern("Clone", "push button").click()
 
         # Verify the new VM popped up
-        uiutils.find_pattern(
-                self.app.root, "test-clone-simple-clone", "table cell")
+        self.app.root.find_pattern("test-clone-simple-clone", "table cell")
 
     def testFullClone(self):
         """
         Clone test-full-clone, which should error due to lack of space
         """
         win = self._open_window("test-clone-full")
-        uiutils.find_pattern(win, "Clone", "push button").click()
+        win.find_pattern("Clone", "push button").click()
 
         # Verify error dialog popped up
-        uiutils.find_pattern(
-                self.app.root, ".*There is not enough free space.*", "label")
+        self.app.root.find_pattern(
+                ".*There is not enough free space.*", "label")
 
     def testCloneTweaks(self):
         """
         Clone test-clone-simple, but tweak bits in the clone UI
         """
         win = self._open_window("test-clone-simple")
-        uiutils.find_fuzzy(win, None,
+        win.find_fuzzy(None,
             "text", "Name").text = "test-new-vm"
 
-        uiutils.find_pattern(win, "Details...", "push button").click()
-        macwin = uiutils.find_pattern(
-                self.app.root, "Change MAC address", "dialog")
-        uiutils.find_pattern(macwin, None,
+        win.find_pattern("Details...", "push button").click()
+        macwin = self.app.root.find_pattern("Change MAC address", "dialog")
+        macwin.find_pattern(None,
                 "text", "New MAC:").text = "00:16:3e:cc:cf:05"
-        uiutils.find_pattern(macwin, "OK", "push button").click()
+        macwin.find_pattern("OK", "push button").click()
 
-        uiutils.find_fuzzy(win, "Clone this disk.*", "combo box").click()
-        uiutils.find_fuzzy(win, "Details...", "menu item").click()
-        stgwin = uiutils.find_pattern(
-                self.app.root, "Change storage path", "dialog")
-        uiutils.find_pattern(stgwin, None, "text",
+        win.find_fuzzy("Clone this disk.*", "combo box").click()
+        win.find_fuzzy("Details...", "menu item").click()
+        stgwin = self.app.root.find_pattern("Change storage path", "dialog")
+        stgwin.find_pattern(None, "text",
                 "New Path:").text = "/dev/default-pool/my-new-path"
-        uiutils.find_pattern(stgwin, "OK", "push button").click()
+        stgwin.find_pattern("OK", "push button").click()
 
-        uiutils.find_pattern(win, "Clone", "push button").click()
+        win.find_pattern("Clone", "push button").click()
 
         # Verify the new VM popped up
-        uiutils.find_pattern(
-                self.app.root, "test-new-vm", "table cell")
+        self.app.root.find_pattern("test-new-vm", "table cell")

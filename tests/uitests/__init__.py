@@ -17,7 +17,7 @@ from tests.uitests import utils
 # Perform 5 search attempts if a widget lookup fails (default 20)
 dogtail.config.config.searchCutoffCount = 5
 
-# Use .4 second delay between each action (default 1)
+# Use .1 second delay between each action (default 1)
 dogtail.config.config.actionDelay = .1
 
 # Turn off needlessly noisy debugging

@@ -13,10 +13,10 @@ class VMMAbout(uiutils.UITestCase):
     ##############
 
     def testAbout(self):
-        uiutils.find_pattern(self.app.root, "Help", "menu").click()
-        uiutils.find_pattern(self.app.root, "About", "menu item").click()
-        win = uiutils.find_fuzzy(self.app.root, "About", "dialog")
-        l = uiutils.find_fuzzy(win, "Copyright", "label")
+        self.app.root.find_pattern("Help", "menu").click()
+        self.app.root.find_pattern("About", "menu item").click()
+        win = self.app.root.find_fuzzy("About", "dialog")
+        l = win.find_fuzzy("Copyright", "label")
 
         curyear = datetime.datetime.today().strftime("%Y")
         if curyear not in l.text:

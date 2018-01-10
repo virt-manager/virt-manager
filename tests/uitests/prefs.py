@@ -25,40 +25,39 @@ class VMMPrefs(uiutils.UITestCase):
     ##############
 
     def testPrefs(self):
-        uiutils.find_pattern(self.app.root, "Edit", "menu").click()
-        uiutils.find_pattern(self.app.root, "Preferences", "menu item").click()
+        self.app.root.find_pattern("Edit", "menu").click()
+        self.app.root.find_pattern("Preferences", "menu item").click()
 
-        win = uiutils.find_fuzzy(self.app.root, "Preferences", "frame")
+        win = self.app.root.find_fuzzy("Preferences", "frame")
 
-        uiutils.find_fuzzy(win, "Enable system tray", "check").click()
+        win.find_fuzzy("Enable system tray", "check").click()
 
-        uiutils.find_pattern(win, "Polling", "page tab").click()
-        uiutils.find_fuzzy(win, None, "check box",
+        win.find_pattern("Polling", "page tab").click()
+        win.find_fuzzy(None, "check box",
                            labeller_text="Poll CPU").click()
 
-        uiutils.find_pattern(win, "New VM", "page tab").click()
-        uiutils.find_pattern(win, "prefs-add-spice-usbredir",
+        win.find_pattern("New VM", "page tab").click()
+        win.find_pattern("prefs-add-spice-usbredir",
                              "combo box").click()
-        uiutils.find_pattern(win, "No", "menu item").click()
+        win.find_pattern("No", "menu item").click()
 
-        uiutils.find_pattern(win, "Console", "page tab").click()
-        uiutils.find_pattern(win, "Change...", "push button").click()
-        keyframe = uiutils.find_fuzzy(self.app.root,
-                                      "Configure grab", "dialog")
+        win.find_pattern("Console", "page tab").click()
+        win.find_pattern("Change...", "push button").click()
+        keyframe = self.app.root.find_fuzzy("Configure grab", "dialog")
         _holdKey("Alt_L")
         _holdKey("Z")
         try:
-            uiutils.find_fuzzy(keyframe, "OK", "push button").click()
+            keyframe.find_fuzzy("OK", "push button").click()
         finally:
             _releaseKey("Z")
             _releaseKey("Alt_L")
 
-        uiutils.find_pattern(win, "Feedback", "page tab").click()
-        uiutils.find_fuzzy(win, None, "check box",
+        win.find_pattern("Feedback", "page tab").click()
+        win.find_fuzzy(None, "check box",
                            labeller_text="Force Poweroff").click()
 
-        uiutils.find_pattern(win, "General", "page tab").click()
-        uiutils.find_fuzzy(win, "Enable system tray", "check").click()
+        win.find_pattern("General", "page tab").click()
+        win.find_fuzzy("Enable system tray", "check").click()
 
-        uiutils.find_fuzzy(win, "Close", "push button").click()
+        win.find_fuzzy("Close", "push button").click()
         uiutils.check_in_loop(lambda: win.visible is False)

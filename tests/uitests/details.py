@@ -14,11 +14,11 @@ class Details(uiutils.UITestCase):
     ###################
 
     def _open_details_window(self, vmname="test-many-devices"):
-        uiutils.find_fuzzy(self.app.root, vmname, "table cell").click(button=3)
-        uiutils.find_pattern(self.app.root, "Open", "menu item").click()
+        self.app.root.find_fuzzy(vmname, "table cell").click(button=3)
+        self.app.root.find_pattern("Open", "menu item").click()
 
-        win = uiutils.find_pattern(self.app.root, "%s on" % vmname, "frame")
-        uiutils.find_pattern(win, "Details", "radio button").click()
+        win = self.app.root.find_pattern("%s on" % vmname, "frame")
+        win.find_pattern("Details", "radio button").click()
         return win
 
 
@@ -34,8 +34,8 @@ class Details(uiutils.UITestCase):
         win = self._open_details_window()
 
         # Ensure the Overview page is the first selected
-        uiutils.find_pattern(win, "Hypervisor Details", "label")
-        uiutils.find_pattern(win, "Overview", "table cell").click()
+        win.find_pattern("Hypervisor Details", "label")
+        win.find_pattern("Overview", "table cell").click()
 
         # After we hit this number of down presses, start checking for
         # widget focus to determine if we hit the end of the list. We
@@ -53,7 +53,7 @@ class Details(uiutils.UITestCase):
 
             if not win.getState().contains(pyatspi.STATE_ACTIVE):
                 # Should mean an error dialog popped up
-                uiutils.find_pattern(self.app.root, "Error", "alert")
+                self.app.root.find_pattern("Error", "alert")
                 raise AssertionError(
                     "One of the hardware pages raised an error")
 
@@ -63,7 +63,7 @@ class Details(uiutils.UITestCase):
 
             # pylint: disable=not-an-iterable
             old_focused = focused
-            focused = uiutils.focused_nodes(win)
+            focused = win.focused_nodes()
             if old_focused is None:
                 continue
 
@@ -79,16 +79,16 @@ class Details(uiutils.UITestCase):
         win = self._open_details_window(origname)
 
         # Ensure the Overview page is the first selected
-        uiutils.find_pattern(win, "Hypervisor Details", "label")
-        uiutils.find_pattern(win, "Overview", "table cell").click()
+        win.find_pattern("Hypervisor Details", "label")
+        win.find_pattern("Overview", "table cell").click()
 
-        oldcell = uiutils.find_fuzzy(self.app.root, origname, "table cell")
-        uiutils.find_pattern(win, None, "text", "Name:").text = newname
-        uiutils.find_pattern(win, "config-apply", "push button").click()
+        oldcell = self.app.root.find_fuzzy(origname, "table cell")
+        win.find_pattern(None, "text", "Name:").text = newname
+        win.find_pattern("config-apply", "push button").click()
 
         # Confirm lists were updated
-        uiutils.find_pattern(self.app.root, "%s on" % newname, "frame")
-        uiutils.find_fuzzy(self.app.root, newname, "table cell")
+        self.app.root.find_pattern("%s on" % newname, "frame")
+        self.app.root.find_fuzzy(newname, "table cell")
 
         # Make sure the old entry is gone
         uiutils.check_in_loop(lambda: origname not in oldcell.name)
@@ -105,8 +105,8 @@ class Details(uiutils.UITestCase):
         """
         origname = "test-many-devices"
         # Shutdown the VM
-        uiutils.find_fuzzy(self.app.root, origname, "table cell").click()
-        b = uiutils.find_pattern(self.app.root, "Shut Down", "push button")
+        self.app.root.find_fuzzy(origname, "table cell").click()
+        b = self.app.root.find_pattern("Shut Down", "push button")
         b.click()
         # This insures the VM finished shutting down
         uiutils.check_in_loop(lambda: b.sensitive is False)
