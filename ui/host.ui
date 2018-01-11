@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.2 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -391,17 +391,23 @@
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow7">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
                         <property name="hscrollbar_policy">never</property>
                         <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkTreeView" id="net-list">
+                            <property name="width_request">134</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="headers_visible">False</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview-selection1">
                                 <signal name="changed" handler="on_net_list_changed" swapped="no"/>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-list-atkobject">
+                                <property name="AtkObject::accessible-name">net-list</property>
                               </object>
                             </child>
                           </object>
@@ -1238,6 +1244,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label">some error here</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="network-error-label-atkobject">
+                                <property name="AtkObject::accessible-name">net-error-label</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="position">1</property>
@@ -1472,6 +1483,11 @@
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview-selection4">
                                 <signal name="changed" handler="on_interface_list_changed" swapped="no"/>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="interface-list-atkobject">
+                                <property name="AtkObject::accessible-name">interface-list</property>
                               </object>
                             </child>
                           </object>
@@ -1904,6 +1920,11 @@
                             <property name="label">some message
 here</property>
                             <property name="justify">center</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="interface-error-label-atkobject">
+                                <property name="AtkObject::accessible-name">interface-error-label</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="position">1</property>
@@ -2095,6 +2116,9 @@ here</property>
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
   <object class="GtkImage" id="image3">

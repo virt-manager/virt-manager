@@ -1,6 +1,3 @@
-import dogtail.rawinput
-import pyatspi
-
 from tests.uitests import utils as uiutils
 
 
@@ -32,48 +29,8 @@ class Details(uiutils.UITestCase):
         HW panel shows itself without raising any error.
         """
         win = self._open_details_window()
-
-        # Ensure the Overview page is the first selected
-        win.find_pattern("Hypervisor Details", "label")
-        win.find_pattern("Overview", "table cell").click()
-
-        # After we hit this number of down presses, start checking for
-        # widget focus to determine if we hit the end of the list. We
-        # don't check for widget focus unconditionally because it's slow.
-        # The seemingly arbitrary number here is because it matches the
-        # number of devices in test-many-devices at the time of this writing.
-        check_after = 93
-
-        focused = None
-        old_focused = None
-        count = 0
-        while True:
-            count += 1
-            dogtail.rawinput.pressKey("Down")
-
-            if not win.getState().contains(pyatspi.STATE_ACTIVE):
-                # Should mean an error dialog popped up
-                self.app.root.find_pattern("Error", "alert")
-                raise AssertionError(
-                    "One of the hardware pages raised an error")
-
-            if count < check_after:
-                #time.sleep(.05)
-                continue
-
-            # pylint: disable=not-an-iterable
-            old_focused = focused
-            focused = win.focused_nodes()
-            if old_focused is None:
-                continue
-
-            overlap = [w for w in old_focused if w in focused]
-            if len(overlap) == len(old_focused):
-                # Focus didn't change, meaning we hit the end of the HW list,
-                # so our testing is done
-                break
-
-        return
+        lst = win.find_pattern("hw-list", "table")
+        self._walkUIList(win, lst, lambda: False)
 
     def _testRename(self, origname, newname):
         win = self._open_details_window(origname)

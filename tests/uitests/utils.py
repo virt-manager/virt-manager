@@ -24,6 +24,37 @@ class UITestCase(unittest.TestCase):
     def tearDown(self):
         self.app.stop()
 
+    def _walkUIList(self, win, lst, error_cb):
+        """
+        Toggle down through a UI list like addhardware, net/storage/iface
+        lists, and ensure an error isn't raised.
+        """
+        # Walk the lst UI and find all labelled table cells, these are
+        # the actual list entries
+        all_cells = lst.findChildren(lambda w: w.roleName == "table cell")
+        all_cells[0].click()
+        cells_per_selection = len([c for c in all_cells if c.focused])
+
+        idx = 0
+        while idx < len(all_cells):
+            cell = all_cells[idx]
+            self.assertTrue(cell.state_selected)
+            dogtail.rawinput.pressKey("Down")
+
+            if not win.active:
+                # Should mean an error dialog popped up
+                self.app.root.find_pattern("Error", "alert")
+                raise AssertionError("Error dialog raised?")
+            if error_cb():
+                raise AssertionError("Error found on a page")
+
+            idx += cells_per_selection
+            if idx >= len(all_cells):
+                # Last cell, selection shouldn't have changed
+                self.assertTrue(cell.state_selected)
+            else:
+                self.assertTrue(not cell.state_selected)
+
 
 class _FuzzyPredicate(dogtail.predicate.Predicate):
     """
@@ -43,7 +74,7 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
     def describeSearchResult(self, node=None):
         if not node:
             return ""
-        return node_string(node)
+        return node.node_string()
 
     def satisfiedByNode(self, node):
         """
@@ -92,6 +123,10 @@ class VMMDogtailNode(dogtail.tree.Node):
         If the window is the raised and active window or not
         """
         return self.getState().contains(pyatspi.STATE_ACTIVE)
+
+    @property
+    def state_selected(self):
+        return self.getState().contains(pyatspi.STATE_SELECTED)
 
 
     #########################
@@ -147,7 +182,7 @@ class VMMDogtailNode(dogtail.tree.Node):
         return msg
 
 
-    def print_nodes(root):
+    def print_nodes(self):
         """
         Helper to print the entire node tree for the passed root. Useful
         if to figure out the roleName for the object you are looking for
@@ -159,19 +194,6 @@ class VMMDogtailNode(dogtail.tree.Node):
                 print("got exception: %s" % e)
 
         self.findChildren(_walk, isLambda=True)
-
-    def focused_nodes(self):
-        """
-        Return a list of all focused nodes. Useful for debugging
-        """
-        def _walk(node):
-            try:
-                if node.focused:
-                   return node
-            except Exception as e:
-                print("got exception: %s" % e)
-
-        return self.findChildren(_walk, isLambda=True)
 
 
 # This is the same hack dogtail uses to extend the Accessible class.
