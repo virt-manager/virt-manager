@@ -35,6 +35,11 @@
                     <property name="stock">gtk-add</property>
                   </object>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="pool-add-atkobject">
+                    <property name="AtkObject::accessible-name">pool-add</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -54,6 +59,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="stock">gtk-media-play</property>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="pool-start-atkobject">
+                    <property name="AtkObject::accessible-name">pool-start</property>
                   </object>
                 </child>
               </object>
@@ -77,6 +87,11 @@
                     <property name="stock">gtk-stop</property>
                   </object>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="pool-stop-atkobject">
+                    <property name="AtkObject::accessible-name">pool-stop</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -96,6 +111,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="stock">gtk-delete</property>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="pool-delete-atkobject">
+                    <property name="AtkObject::accessible-name">pool-delete</property>
                   </object>
                 </child>
               </object>
@@ -466,6 +486,11 @@
                                         <property name="stock">gtk-add</property>
                                       </object>
                                     </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="vol-add-atkobject">
+                                        <property name="AtkObject::accessible-name">vol-new</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -488,6 +513,11 @@
                                         <property name="stock">gtk-refresh</property>
                                       </object>
                                     </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="pool-refresh-atkobject">
+                                        <property name="AtkObject::accessible-name">vol-refresh</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -508,6 +538,11 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="stock">gtk-delete</property>
+                                      </object>
+                                    </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="vol-delete-atkobject">
+                                        <property name="AtkObject::accessible-name">vol-delete</property>
                                       </object>
                                     </child>
                                   </object>
@@ -545,6 +580,11 @@
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection1">
                                     <signal name="changed" handler="on_vol_list_changed" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="vol-list-atkobject">
+                                    <property name="AtkObject::accessible-name">vol-list</property>
                                   </object>
                                 </child>
                               </object>

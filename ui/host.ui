@@ -1302,6 +1302,11 @@
                                 <property name="stock">gtk-add</property>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-add-atkobject">
+                                <property name="AtkObject::accessible-name">net-add</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1322,6 +1327,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="stock">gtk-media-play</property>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-start-atkobject">
+                                <property name="AtkObject::accessible-name">net-start</property>
                               </object>
                             </child>
                           </object>
@@ -1346,6 +1356,11 @@
                                 <property name="stock">gtk-stop</property>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-stop-atkobject">
+                                <property name="AtkObject::accessible-name">net-stop</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1366,6 +1381,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="stock">gtk-delete</property>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-delete-atkobject">
+                                <property name="AtkObject::accessible-name">net-delete</property>
                               </object>
                             </child>
                           </object>
@@ -1978,6 +1998,11 @@ here</property>
                                 <property name="stock">gtk-add</property>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="interface-add-atkobject">
+                                <property name="AtkObject::accessible-name">interface-add</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1998,6 +2023,11 @@ here</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="stock">gtk-media-play</property>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="interface-start-atkobject">
+                                <property name="AtkObject::accessible-name">interface-start</property>
                               </object>
                             </child>
                           </object>
@@ -2022,6 +2052,11 @@ here</property>
                                 <property name="stock">gtk-stop</property>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="interface-stop-atkobject">
+                                <property name="AtkObject::accessible-name">interface-stop</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2042,6 +2077,11 @@ here</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="stock">gtk-delete</property>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="interface-delete-atkobject">
+                                <property name="AtkObject::accessible-name">interface-delete</property>
                               </object>
                             </child>
                           </object>
@@ -2120,10 +2160,5 @@ here</property>
     <child type="titlebar">
       <placeholder/>
     </child>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-open</property>
   </object>
 </interface>

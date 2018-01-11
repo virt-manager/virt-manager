@@ -6,21 +6,6 @@ class Host(uiutils.UITestCase):
     UI tests for virt-manager's VM details window
     """
 
-    ###################
-    # Private helpers #
-    ###################
-
-    def _open_host_window(self, tab):
-        conn_label = "test testdriver.xml"
-        self.app.root.find_fuzzy(conn_label, "table cell").click()
-        self.app.root.find_fuzzy("Edit", "menu").click()
-        self.app.root.find_fuzzy("Connection Details", "menu item").click()
-        win = self.app.root.find_fuzzy(
-                "%s Connection Details" % conn_label, "frame")
-        win.find_fuzzy(tab, "page tab").click()
-        return win
-
-
     ##############
     # Test cases #
     ##############

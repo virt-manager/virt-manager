@@ -19,7 +19,7 @@ class VMMConnect(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: "Not Connected" in c.text)
         c.click(button=3)
         self.app.root.find_pattern("conn-delete", "menu item").click()
-        err = self.app.root.find_pattern("vmm simple dialog", "alert")
+        err = self.app.root.find_pattern("vmm dialog", "alert")
         err.find_fuzzy("will remove the connection", "label")
         err.find_fuzzy("Yes", "push button").click()
         uiutils.check_in_loop(lambda: c.dead)
@@ -56,7 +56,7 @@ class VMMConnect(uiutils.UITestCase):
                 urilabel.text == "xen+tcp://fribuser@redhat.com:12345/")
         connect.click()
 
-        err = self.app.root.find_fuzzy("vmm error dialog", "alert")
+        err = self.app.root.find_fuzzy("vmm dialog", "alert")
         err.find_fuzzy("No", "push button").click()
 
         # Test with custom test:///default connection

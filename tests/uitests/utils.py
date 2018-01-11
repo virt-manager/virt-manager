@@ -24,6 +24,21 @@ class UITestCase(unittest.TestCase):
     def tearDown(self):
         self.app.stop()
 
+    # A little helper to save test files from having to import time
+    sleep = time.sleep
+
+    def _open_host_window(self, tab, conn_label="test testdriver.xml"):
+        """
+        Helper to open host connection window and switch to a tab
+        """
+        self.app.root.find_fuzzy(conn_label, "table cell").click()
+        self.app.root.find_fuzzy("Edit", "menu").click()
+        self.app.root.find_fuzzy("Connection Details", "menu item").click()
+        win = self.app.root.find_fuzzy(
+                "%s Connection Details" % conn_label, "frame")
+        win.find_fuzzy(tab, "page tab").click()
+        return win
+
     def _walkUIList(self, win, lst, error_cb):
         """
         Toggle down through a UI list like addhardware, net/storage/iface
