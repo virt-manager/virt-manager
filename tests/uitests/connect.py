@@ -51,11 +51,16 @@ class VMMConnect(uiutils.UITestCase):
         meth.click()
         win.find_fuzzy("Kerberos", "menu item").click()
         user.text = "fribuser"
-        host.text = "redhat.com:12345"
+        fakehost = "ix8khfyidontexistkdjur.com"
+        host.text = fakehost + ":12345"
         self.assertTrue(
-                urilabel.text == "xen+tcp://fribuser@redhat.com:12345/")
+                urilabel.text == "xen+tcp://fribuser@%s:12345/" % fakehost)
         connect.click()
 
+        uiutils.check_in_loop(lambda: win.showing is False)
+        c = self.app.root.find_fuzzy(fakehost, "table cell")
+        uiutils.check_in_loop(lambda: "Connecting..." not in c.text,
+                timeout=10)
         err = self.app.root.find_fuzzy("vmm dialog", "alert")
         err.find_fuzzy("No", "push button").click()
 
