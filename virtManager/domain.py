@@ -1198,11 +1198,11 @@ class vmmDomain(vmmLibvirtObject):
         flags = 0
 
         # Ugly workaround for VNC bug where the display cannot be opened
-        # if the listen type is "none".  When this gets fixed in QEMU
-        # we should skip auth only for broken QEMUs.
+        # if the listen type is "none".  This bug was fixed in QEMU-2.9.0.
         graphics = self.get_graphics_devices()[0]
         if (graphics.type == "vnc" and
-            graphics.get_first_listen_type() == "none"):
+                graphics.get_first_listen_type() == "none" and
+                not self.conn.SUPPORT_CONN_VNC_NONE_AUTH):
             flags = libvirt.VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH
 
         return self._backend.openGraphicsFD(0, flags)
