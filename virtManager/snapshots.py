@@ -79,7 +79,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             "on_snapshot_apply_clicked": self._on_apply_clicked,
             "on_snapshot_list_changed": self._snapshot_selected,
             "on_snapshot_list_button_press_event": self._popup_snapshot_menu,
-            "on_snapshot_refresh_clicked": self._refresh_snapshots,
+            "on_snapshot_refresh_clicked": self._on_refresh_clicked,
             "on_snapshot_list_row_activated": self._on_start_clicked,
 
             # 'Create' dialog
@@ -602,6 +602,9 @@ class vmmSnapshotPage(vmmGObjectUI):
         self._reset_new_state()
         self._snapshot_new.show()
         self.widget("snapshot-new-name").grab_focus()
+
+    def _on_refresh_clicked(self, ignore):
+        self._refresh_snapshots()
 
     def _on_start_clicked(self, ignore, ignore2=None, ignore3=None):
         snaps = self._get_selected_snapshots()
