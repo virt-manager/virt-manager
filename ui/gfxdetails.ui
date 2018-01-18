@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.2 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAdjustment" id="adjustment4">
@@ -56,6 +56,11 @@
                 <property name="visibility">False</property>
                 <property name="invisible_char">●</property>
                 <signal name="changed" handler="on_graphics_password_changed" swapped="no"/>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="graphics-password-atkobject">
+                    <property name="AtkObject::accessible-name">graphics-password</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -187,6 +192,11 @@
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_graphics_tlsport_auto_toggled" swapped="no"/>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="graphics-tlsport-auto-atkobject">
+                <property name="AtkObject::accessible-name">graphics-tlsport-auto</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -207,6 +217,11 @@
             <property name="update_policy">if-valid</property>
             <property name="value">5901</property>
             <signal name="changed" handler="on_graphics_tlsport_changed" swapped="no"/>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="graphics-tlsport-atkobject">
+                <property name="AtkObject::accessible-name">graphics-tlsport</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -270,6 +285,11 @@
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_graphics_port_auto_toggled" swapped="no"/>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="graphics-port-auto-atkobject">
+                <property name="AtkObject::accessible-name">graphics-port-auto</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -290,6 +310,11 @@
             <property name="update_policy">if-valid</property>
             <property name="value">5900</property>
             <signal name="changed" handler="on_graphics_port_changed" swapped="no"/>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="graphics-port-atkobject">
+                <property name="AtkObject::accessible-name">graphics-port</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -395,6 +420,7 @@
         <property name="valign">start</property>
         <property name="label" translatable="yes">Open_GL:</property>
         <property name="use_underline">True</property>
+        <property name="mnemonic_widget">graphics-opengl</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -460,7 +486,6 @@
             </child>
             <child>
               <object class="GtkImage" id="graphics-opengl-warn">
-                <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="stock">gtk-dialog-warning</property>
               </object>
@@ -494,6 +519,11 @@
                     <property name="halign">start</property>
                   </object>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="graphics-rendernode-atkobject">
+                    <property name="AtkObject::accessible-name">graphics-rendernode</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -503,7 +533,6 @@
             </child>
             <child>
               <object class="GtkImage" id="graphics-rendernode-warn">
-                <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="stock">gtk-dialog-warning</property>
               </object>

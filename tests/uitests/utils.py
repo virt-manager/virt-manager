@@ -24,8 +24,13 @@ class UITestCase(unittest.TestCase):
     def tearDown(self):
         self.app.stop()
 
-    # A little helper to save test files from having to import time
-    sleep = time.sleep
+    # Helpers to save testfile imports
+    @staticmethod
+    def sleep(*args, **kwargs):
+        return time.sleep(*args, **kwargs)
+    @staticmethod
+    def pressKey(*args, **kwargs):
+        return dogtail.rawinput.pressKey(*args, **kwargs)
 
     def _open_host_window(self, tab, conn_label="test testdriver.xml"):
         """
@@ -150,6 +155,16 @@ class VMMDogtailNode(dogtail.tree.Node):
     def state_selected(self):
         return self.getState().contains(pyatspi.STATE_SELECTED)
 
+    def click_combo_entry(self):
+        """
+        Helper for clicking the arrow of a combo entry, to expose the menu.
+        Clicks middle of Y axis, but 1 pixel in from the right side
+        """
+        button = 1
+        clickX = self.position[0] + self.size[0] - 1
+        clickY = self.position[1] + self.size[1] / 2
+        dogtail.rawinput.click(clickX, clickY, button)
+
 
     #########################
     # Widget search helpers #
@@ -202,7 +217,6 @@ class VMMDogtailNode(dogtail.tree.Node):
         if self.labeller:
             msg += " labeller.text='%s'" % self.labeller.text
         return msg
-
 
     def print_nodes(self):
         """
