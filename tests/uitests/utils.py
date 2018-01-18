@@ -53,6 +53,13 @@ class UITestCase(unittest.TestCase):
         idx = 0
         while idx < len(all_cells):
             cell = all_cells[idx]
+            if not cell.state_selected:
+                # Could be a separator table cell. Try to figure it out
+                if not any([c.name for c in
+                            all_cells[idx:(idx + cells_per_selection)]]):
+                    idx += cells_per_selection
+                    continue
+
             self.assertTrue(cell.state_selected)
             dogtail.rawinput.pressKey("Down")
 
