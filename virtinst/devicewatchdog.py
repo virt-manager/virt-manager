@@ -40,7 +40,7 @@ class VirtualWatchdog(VirtualDevice):
     ACTION_DEFAULT  = "default"
     ACTIONS = [ACTION_RESET, ACTION_SHUTDOWN,
                ACTION_POWEROFF, ACTION_PAUSE,
-               ACTION_NONE, ACTION_DUMP]
+               ACTION_DUMP, ACTION_NONE]
 
     @staticmethod
     def get_action_desc(action):
@@ -54,6 +54,8 @@ class VirtualWatchdog(VirtualDevice):
             return _("Pause the guest")
         if action == VirtualWatchdog.ACTION_NONE:
             return _("No action")
+        if action == VirtualWatchdog.ACTION_DUMP:
+            return _("Dump guest memory core")
         return action
 
     _XML_PROP_ORDER = ["model", "action"]
