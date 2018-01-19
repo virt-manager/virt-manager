@@ -24,6 +24,8 @@ class UITestCase(unittest.TestCase):
     def tearDown(self):
         self.app.stop()
 
+    _default_vmname = "test-many-devices"
+
     # Helpers to save testfile imports
     @staticmethod
     def sleep(*args, **kwargs):
@@ -43,6 +45,23 @@ class UITestCase(unittest.TestCase):
                 "%s Connection Details" % conn_label, "frame")
         win.find_fuzzy(tab, "page tab").click()
         return win
+
+    def _open_details_window(self, vmname=None, shutdown=False):
+        if vmname is None:
+            vmname = self._default_vmname
+        self.app.root.find_fuzzy(vmname, "table cell").click(button=3)
+        self.app.root.find("Open", "menu item").click()
+
+        win = self.app.root.find("%s on" % vmname, "frame")
+        win.find("Details", "radio button").click()
+        if shutdown:
+            win.find("Shut Down", "push button").click()
+            run = win.find("Run", "push button")
+            check_in_loop(lambda: run.sensitive)
+        return win
+
+
+    ##############
 
     def _walkUIList(self, win, lst, error_cb):
         """

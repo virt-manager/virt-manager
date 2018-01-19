@@ -11,13 +11,7 @@ class AddHardware(uiutils.UITestCase):
     # Private helpers #
     ###################
 
-    def _open_details_window(self, vmname="test-clone-simple"):
-        self.app.root.find_fuzzy(vmname, "table cell").click(button=3)
-        self.app.root.find("Open", "menu item").click()
-
-        win = self.app.root.find("%s on" % vmname, "frame")
-        win.find("Details", "radio button").click()
-        return win
+    _default_vmname = "test-clone-simple"
 
     def _open_addhw_window(self, details):
         details.find("add-hardware", "push button").click()

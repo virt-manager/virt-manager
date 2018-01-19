@@ -6,19 +6,6 @@ class Details(uiutils.UITestCase):
     UI tests for virt-manager's VM details window
     """
 
-    ###################
-    # Private helpers #
-    ###################
-
-    def _open_details_window(self, vmname="test-many-devices"):
-        self.app.root.find_fuzzy(vmname, "table cell").click(button=3)
-        self.app.root.find("Open", "menu item").click()
-
-        win = self.app.root.find("%s on" % vmname, "frame")
-        win.find("Details", "radio button").click()
-        return win
-
-
     ##############
     # Test cases #
     ##############

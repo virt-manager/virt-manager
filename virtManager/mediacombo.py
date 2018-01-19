@@ -79,6 +79,7 @@ class vmmMediaCombo(vmmGObjectUI):
         text = Gtk.CellRendererText()
         self.combo.pack_start(text, True)
         self.combo.add_attribute(text, 'text', self.OPTICAL_LABEL)
+        self.combo.get_accessible().set_name("physical-device-combo")
 
         error = None
         if not self.conn.is_nodedev_capable():
