@@ -1537,10 +1537,6 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Network selection error."),
                                     _("A network source must be selected."))
 
-        if not mac:
-            return self.err.val_err(_("Invalid MAC address"),
-                                    _("A MAC address must be entered."))
-
         ret = self._netlist.validate_network(mac, model)
         if ret is False:
             return False

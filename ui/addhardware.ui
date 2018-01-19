@@ -416,6 +416,11 @@
                                         <property name="use_underline">True</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="clicked" handler="on_mac_address_clicked" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="mac-address-atkobject">
+                                            <property name="AtkObject::accessible-name">mac-address-enable</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>

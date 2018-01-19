@@ -35,6 +35,87 @@ class Details(uiutils.UITestCase):
     # Test cases #
     ##############
 
+    def testAddNetworks(self):
+        """
+        Test various network configs
+        """
+        details = self._open_details_window()
+        addhw = self._open_addhw_window(details)
+        finish = addhw.find("Finish", "push button")
+
+        # Basic network + opts
+        tab = self._select_hw(addhw, "Network", "network-tab")
+        src = tab.find(None, "combo box", "Network source:")
+        src.click()
+        tab.find_fuzzy("Virtual network 'default' : NAT", "menu item").click()
+        tab.find("MAC Address Field", "text").text = "00:11:00:11:00:11"
+        tab.find("Device model:", "combo box").click_combo_entry()
+        tab.find("virtio", "menu item").click()
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # macvtap
+        self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Network", "network-tab")
+        src.click()
+        tab.find_fuzzy("macvtap", "menu item").click()
+        mode = tab.find_fuzzy("Source mode:", "combo box")
+        mode.click_combo_entry()
+        self.assertTrue(mode.find("Bridge", "menu item").selected)
+        self.pressKey("Escape")
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Manual bridge
+        self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Network", "network-tab")
+        tab.find("mac-address-enable", "check box").click()
+        src.click()
+        self.pressKey("End")
+        tab.find_fuzzy("Specify shared device", "menu item").click()
+        finish.click()
+
+        # Check validation error
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("Error adding device", "label")
+        alert.find("Close", "push button").click()
+
+        # Enter bridge name
+        tab.find("Bridge name:", "text").text = "zbr0"
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Network with portops
+        self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Network", "network-tab")
+        tab.find("mac-address-enable", "check box").click()
+        src.click()
+        self.pressKey("Home")
+        tab.find_fuzzy("plainbridge-portgroups", "menu item").click()
+        c = tab.find_fuzzy("Portgroup:", "combo box")
+        c.click_combo_entry()
+        self.assertTrue(c.find("engineering", "menu item").selected)
+        self.pressKey("Escape")
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Network with vport stuff
+        self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Network", "network-tab")
+        tab.find("mac-address-enable", "check box").click()
+        src.click()
+        tab.find_fuzzy("OpenVSwitch", "menu item").click()
+        t = tab.find("Virtual port", "toggle button")
+        t.click()
+        t.find("Type:", "text").text = "foo1"
+        t.find("Managerid:", "text").text = "foo2"
+        t.find("Typeid:", "text").text = "foo3"
+        t.find("Typeid version:", "text").text = "foo4"
+        t.find("Instance id:", "text").text = "foo5"
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+
     def testAddGraphics(self):
         """
         Graphics device testing
