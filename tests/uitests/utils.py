@@ -88,10 +88,25 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
     Object dogtail/pyatspi want for node searching.
     """
     def __init__(self, name=None, roleName=None, labeller_text=None):
-        self._name_pattern = re.compile(name or ".*")
-        self._role_pattern = re.compile(roleName or ".*")
-        self._labeller_text = bool(labeller_text)
-        self._labeller_pattern = re.compile(labeller_text or ".*")
+        """
+        :param name: Match node.name or node.labeller.text if
+            labeller_text not specified
+        :param roleName: Match node.roleName
+        :param labeller_text: Match node.labeller.text
+        """
+        self._name = name
+        self._roleName = roleName
+        self._labeller_text = labeller_text
+
+        self._name_pattern = None
+        self._role_pattern = None
+        self._labeller_pattern = None
+        if self._name:
+            self._name_pattern = re.compile(self._name)
+        if self._roleName:
+            self._role_pattern = re.compile(self._roleName)
+        if self._labeller_text:
+            self._labeller_pattern = re.compile(self._labeller_text)
 
     def makeScriptMethodCall(self, isRecursive):
         ignore = isRecursive
@@ -108,15 +123,20 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
         The actual search routine
         """
         try:
-            if not self._name_pattern.match(node.name):
+            if self._roleName and not self._role_pattern.match(node.roleName):
                 return
-            if not self._role_pattern.match(node.roleName):
+
+            labeller = ""
+            if node.labeller:
+                labeller = node.labeller.text
+
+            if (self._name and
+                    not self._name_pattern.match(node.name) and
+                    not self._name_pattern.match(labeller)):
                 return
-            if self._labeller_text:
-                if not node.labeller:
-                    return
-                if not self._labeller_pattern.match(node.labeller.text):
-                    return
+            if (self._labeller_text and
+                    not self._labeller_pattern.match(labeller)):
+                return
             return True
         except Exception as e:
             print("got predicate exception: %s" % e)

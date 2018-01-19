@@ -21,7 +21,7 @@ class CreatePool(uiutils.UITestCase):
         newname = "a-test-new-pool"
         forward = win.find("Forward", "push button")
         finish = win.find("Finish", "push button")
-        name = win.find(None, "text", "Name:")
+        name = win.find("Name:", "text")
         name.text = newname
         forward.click()
         finish.click()
@@ -55,7 +55,7 @@ class CreatePool(uiutils.UITestCase):
         # Test a scsi pool
         hostwin.find("pool-add", "push button").click()
         uiutils.check_in_loop(lambda: win.active)
-        typ = win.find(None, "combo box", "Type:")
+        typ = win.find("Type:", "combo box")
         newname = "a-scsi-pool"
         name.text = "a-scsi-pool"
         typ.click()
@@ -72,8 +72,8 @@ class CreatePool(uiutils.UITestCase):
         typ.click()
         win.find_fuzzy("RADOS Block", "menu item").click()
         forward.click()
-        win.find_fuzzy(None, "text", "Host Name:").text = "example.com:1234"
-        win.find_fuzzy(None, "text", "Source Name:").typeText("frob")
+        win.find_fuzzy("Host Name:", "text").text = "example.com:1234"
+        win.find_fuzzy("Source Name:", "text").typeText("frob")
         finish.click()
         hostwin.find(newname, "table cell")
 

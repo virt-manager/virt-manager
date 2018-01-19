@@ -21,7 +21,7 @@ class CreateNet(uiutils.UITestCase):
         newname = "a-test-new-net"
         forward = win.find("Forward", "push button")
         finish = win.find("Finish", "push button")
-        name = win.find(None, "text", "Network Name:")
+        name = win.find("Network Name:", "text")
         name.text = newname
         forward.click()
         forward.click()

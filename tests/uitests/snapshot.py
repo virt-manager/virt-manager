@@ -62,7 +62,7 @@ class Snapshots(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: vmpause.checked)
 
         # Edit snapshot
-        desc = win.find(None, "text", "Description:")
+        desc = win.find("Description:", "text")
         desc.text = "Test description foofoo"
         win.find("snapshot-apply", "push button").click()
         win.find("snapshot-refresh", "push button").click()
@@ -71,10 +71,9 @@ class Snapshots(uiutils.UITestCase):
         # Create new snapshot
         win.find("snapshot-add", "push button").click()
         newwin = self.app.root.find("Create snapshot", "frame")
-        newwin.print_nodes()
         snapname = "testnewsnap"
-        newwin.find(None, "text", "Name:").text = snapname
-        newwin.find(None, "text", "Description:").text = "testdesc"
+        newwin.find("Name:", "text").text = snapname
+        newwin.find("Description:", "text").text = "testdesc"
         newwin.find("Finish", "push button").click()
         uiutils.check_in_loop(lambda: not newwin.showing)
         newc = win.find(snapname, "table cell")

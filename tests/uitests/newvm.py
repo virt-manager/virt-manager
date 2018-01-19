@@ -136,7 +136,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Network Install", "radio").click()
         newvm.find_fuzzy("Forward", "button").click()
 
-        newvm.find(None, "text", "URL").text = (
+        newvm.find("URL", "text").text = (
             "http://vault.centos.org/5.5/os/x86_64/")
 
         version = newvm.find("install-os-version-label")
@@ -166,7 +166,7 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Architecture options", "toggle").click()
-        newvm.find_fuzzy(None, "combo", "Architecture").click()
+        newvm.find_fuzzy("Architecture", "combo").click()
         newvm.find_fuzzy("ppc64", "menu item").click()
         newvm.find_fuzzy("pseries", "menu item")
 
@@ -184,12 +184,12 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Architecture options", "toggle").click()
-        newvm.find_fuzzy(None, "combo", "Virt Type").click()
+        newvm.find_fuzzy("Virt Type", "combo").click()
         KVM = newvm.find_fuzzy("KVM", "menu item")
         TCG = newvm.find_fuzzy("TCG", "menu item")
         self.assertTrue(KVM.focused)
         self.assertTrue(TCG.showing)
-        newvm.find_fuzzy(None, "combo", "Virt Type").click()
+        newvm.find_fuzzy("Virt Type", "combo").click()
 
         # Validate some initial defaults
         self.assertFalse(
@@ -296,7 +296,7 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Architecture options", "toggle").click()
-        newvm.find_fuzzy(None, "combo", "Xen Type").click()
+        newvm.find_fuzzy("Xen Type", "combo").click()
         newvm.find_fuzzy("paravirt", "menu item").click()
 
         self._do_simple_import(newvm)

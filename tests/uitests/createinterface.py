@@ -28,7 +28,7 @@ class CreateInterface(uiutils.UITestCase):
         bridgewin.find(None,
                 "spin button", "Forward delay:").text = "0.05"
         bridgewin.find("OK", "push button").click()
-        name = win.find(None, "text", "Name:")
+        name = win.find("Name:", "text")
         name.text = newname
         finish.click()
 
@@ -67,7 +67,7 @@ class CreateInterface(uiutils.UITestCase):
         # figure out clicking checked cell renderers for bond interfaces...
         hostwin.find("interface-add", "push button").click()
         uiutils.check_in_loop(lambda: win.active)
-        typ = win.find(None, "combo box", "Interface type:")
+        typ = win.find("Interface type:", "combo box")
         typ.click()
         typ.find("Bond", "menu item").click()
         forward.click()
@@ -81,7 +81,7 @@ class CreateInterface(uiutils.UITestCase):
 
         win.find("bond-configure", "push button").click()
         bondwin = self.app.root.find("Bonding configuration", "dialog")
-        combo = bondwin.find(None, "combo box", "Bond monitor mode:")
+        combo = bondwin.find("Bond monitor mode:", "combo box")
         combo.click()
         combo.find("miimon", "menu item").click()
         bondwin.find("OK", "push button").click()

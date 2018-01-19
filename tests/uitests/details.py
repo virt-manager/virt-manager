@@ -40,7 +40,7 @@ class Details(uiutils.UITestCase):
         win.find("Overview", "table cell").click()
 
         oldcell = self.app.root.find_fuzzy(origname, "table cell")
-        win.find(None, "text", "Name:").text = newname
+        win.find("Name:", "text").text = newname
         win.find("config-apply", "push button").click()
 
         # Confirm lists were updated

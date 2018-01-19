@@ -22,9 +22,9 @@ class CreateVol(uiutils.UITestCase):
         # Create a default qcow2 volume
         newname = "a-newvol"
         finish = win.find("Finish", "push button")
-        name = win.find(None, "text", "Name:")
+        name = win.find("Name:", "text")
         name.text = newname
-        win.find(None, "spin button", "Max Capacity:").text = "10.5"
+        win.find("Max Capacity:", "spin button").text = "10.5"
         finish.click()
 
         # Delete it
@@ -44,10 +44,10 @@ class CreateVol(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: win.active)
         newname = "a-newvol.raw"
         name.text = newname
-        combo = win.find(None, "combo box", "Format:")
+        combo = win.find("Format:", "combo box")
         combo.click()
         combo.find("raw", "menu item").click()
-        win.find(None, "spin button", "Allocation:").text = "0.5"
+        win.find("Allocation:", "spin button").text = "0.5"
         finish.click()
         vollist.find(newname)
 

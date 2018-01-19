@@ -20,7 +20,7 @@ class VMMCLI(uiutils.UITestCase):
         self.assertEqual(self.app.topwin.name,
             "test testdriver.xml Connection Details")
         self.assertEqual(
-            self.app.topwin.find_fuzzy(None, "text", "Name:").text,
+            self.app.topwin.find_fuzzy("Name:", "text").text,
             "test testdriver.xml")
 
     def testShowDetails(self):
