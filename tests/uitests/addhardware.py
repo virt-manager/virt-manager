@@ -541,3 +541,36 @@ class AddHardware(uiutils.UITestCase):
         tab.find("Hyper-V", "menu item").click()
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
+
+
+    def testAddCornerCases(self):
+        """
+        Could random addhardware related tests
+        """
+        details = self._open_details_window("test-many-devices")
+        addhw = self._open_addhw_window(details)
+        finish = addhw.find("Finish", "push button")
+
+        # Test cancel
+        addhw.find("Cancel", "push button").click()
+
+        # Test live adding, error dialog, click no
+        self._open_addhw_window(details)
+        finish.click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find(
+                "This device could not be attached to the running machine",
+                "label")
+        alert.find("Details", "toggle button").click_expander()
+        alert.find("No", "push button").click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        self._open_addhw_window(details)
+        finish.click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find(
+                "This device could not be attached to the running machine",
+                "label")
+        alert.find("Details", "toggle button").click_expander()
+        alert.find("Yes", "push button").click()
+        uiutils.check_in_loop(lambda: alert.dead)
