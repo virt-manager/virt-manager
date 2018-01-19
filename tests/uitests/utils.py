@@ -60,9 +60,6 @@ class UITestCase(unittest.TestCase):
             check_in_loop(lambda: run.sensitive)
         return win
 
-
-    ##############
-
     def _walkUIList(self, win, lst, error_cb):
         """
         Toggle down through a UI list like addhardware, net/storage/iface

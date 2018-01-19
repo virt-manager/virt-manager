@@ -55,3 +55,18 @@ class VMMCLI(uiutils.UITestCase):
         self.assertFalse(
             self.app.topwin.find_fuzzy(
                                "add-hardware", "button").showing)
+
+    def testShowRemoteConnect(self):
+        """
+        Test the remote app dbus connection
+        """
+        self.app.open()
+        newapp = uiutils.VMMDogtailApp("test:///default")
+        newapp.open()
+        uiutils.check_in_loop(lambda: not newapp.is_running())
+        import dogtail.tree
+        vapps = [a for a in dogtail.tree.root.applications() if
+                 a.name == "virt-manager"]
+        self.assertEqual(len(vapps), 1)
+
+        self.app.topwin.find("test default", "table cell")
