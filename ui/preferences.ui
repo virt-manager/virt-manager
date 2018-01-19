@@ -213,6 +213,11 @@
                                 <property name="invisible_char">●</property>
                                 <property name="adjustment">adjustment1</property>
                                 <signal name="value-changed" handler="on_prefs_stats_update_interval_changed" swapped="no"/>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="prefs-stats-update-interval-atkobject">
+                                    <property name="AtkObject::accessible-name">cpu-poll</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
