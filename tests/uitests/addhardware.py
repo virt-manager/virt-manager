@@ -2,9 +2,9 @@ import tests
 from tests.uitests import utils as uiutils
 
 
-class Details(uiutils.UITestCase):
+class AddHardware(uiutils.UITestCase):
     """
-    UI tests for virt-manager's VM details window
+    UI tests for virt-manager's VM addhardware window
     """
 
     ###################
@@ -34,6 +34,105 @@ class Details(uiutils.UITestCase):
     ##############
     # Test cases #
     ##############
+
+    def testAddDisks(self):
+        """
+        Add various disk configs and test storage browser
+        """
+        details = self._open_details_window()
+        addhw = self._open_addhw_window(details)
+        finish = addhw.find("Finish", "push button")
+
+        # Default disk
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Disk with some tweaks
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find("GiB", "spin button").text = "1.5"
+        tab.find("Bus type:", "combo box").click()
+        tab.find("VirtIO", "menu item").click()
+        tab.find("Advanced options", "toggle button").click_expander()
+        tab.find("Cache mode:", "combo box").click()
+        tab.find("none", "menu item").click()
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Managed storage tests
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find_fuzzy("Select or create", "radio").click()
+        tab.find("storage-browse", "push button").click()
+        browse = self.app.root.find("Choose Storage Volume", "frame")
+
+        # Create a vol, refresh, then delete it
+        browse.find_fuzzy("default-pool", "table cell").click()
+        browse.find("vol-new", "push button").click()
+        newvol = self.app.root.find("Add a Storage Volume", "frame")
+        newname = "a-newvol"
+        newvol.find("Name:", "text").text = newname
+        newvol.find("Finish", "push button").click()
+        uiutils.check_in_loop(lambda: not newvol.showing)
+        volcell = browse.find(newname, "table cell")
+        self.assertTrue(volcell.selected)
+        browse.find("vol-refresh", "push button").click()
+        volcell = browse.find(newname, "table cell")
+        self.assertTrue(volcell.selected)
+        browse.find("vol-delete", "push button").click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("permanently delete the volume", "label")
+        alert.find("Yes", "push button").click()
+        uiutils.check_in_loop(lambda: volcell.dead)
+
+        # Test browse local
+        browse.find("Browse Local", "push button").click()
+        chooser = self.app.root.find(
+                "Locate existing storage", "file chooser")
+        fname = "virt-manager.spec.in"
+        chooser.find(fname, "table cell").click()
+        chooser.find("Open", "push button").click()
+        uiutils.check_in_loop(lambda: not chooser.showing)
+        uiutils.check_in_loop(lambda: addhw.active)
+        self.assertTrue(("/" + fname) in tab.find("storage-entry").text)
+
+        # Reopen dialog, select a volume, etic
+        tab.find("storage-browse", "push button").click()
+        browse = self.app.root.find("Choose Storage Volume", "frame")
+
+        browse.find_fuzzy("disk-pool", "table cell").click()
+        browse.find("diskvol1", "table cell").click()
+        browse.find("Choose Volume", "push button").click()
+        self.assertTrue("/diskvol1" in tab.find("storage-entry").text)
+        finish.click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("already in use by", "label")
+        alert.find("Yes", "push button").click()
+        uiutils.check_in_loop(lambda: details.active)
+
+
+        # choose file for floppy
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find("Device type:", "combo box").click()
+        tab.find("Floppy device", "menu item").click()
+        self.assertFalse(
+                tab.find_fuzzy("Create a disk image", "radio").sensitive)
+        tab.find("storage-entry").text = "/dev/default-pool/bochs-vol"
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # empty cdrom
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find("Device type:", "combo box").click()
+        tab.find("CDROM device", "menu item").click()
+        tab.find("Bus type:", "combo box").click()
+        tab.find("SCSI", "menu item").click()
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
 
     def testAddNetworks(self):
         """

@@ -185,6 +185,16 @@ class VMMDogtailNode(dogtail.tree.Node):
         clickY = self.position[1] + self.size[1] / 2
         dogtail.rawinput.click(clickX, clickY, button)
 
+    def click_expander(self):
+        """
+        Helper for clicking expander, hitting the text part to actually
+        open it. Basically clicks top left corner with some indent
+        """
+        button = 1
+        clickX = self.position[0] + 10
+        clickY = self.position[1] + 5
+        dogtail.rawinput.click(clickX, clickY, button)
+
 
     #########################
     # Widget search helpers #

@@ -411,6 +411,8 @@ class vmmAddHardware(vmmGObjectUI):
         # Storage init
         self.widget("storage-devtype").set_active(0)
         self.widget("storage-devtype").emit("changed")
+        self.widget("storage-cache").set_active(0)
+        self.widget("disk-advanced-expander").set_expanded(False)
         self.addstorage.reset_state()
 
         # Network init
