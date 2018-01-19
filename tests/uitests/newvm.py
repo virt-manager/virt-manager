@@ -116,6 +116,12 @@ class NewVM(uiutils.UITestCase):
         vmwindow.find_fuzzy("Copy host", "check").click()
         vmwindow.find_fuzzy("config-apply").click()
 
+        # Add a default disk
+        vmwindow.find("add-hardware", "push button").click()
+        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
+        addhw.find("Finish", "push button").click()
+        uiutils.check_in_loop(lambda: vmwindow.active)
+
         # Start the install, close via the VM window
         vmwindow.find_fuzzy("Begin Installation", "button").click()
         uiutils.check_in_loop(lambda: newvm.showing is False)
