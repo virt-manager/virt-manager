@@ -70,7 +70,7 @@ class UITestCase(unittest.TestCase):
 
             if not win.active:
                 # Should mean an error dialog popped up
-                self.app.root.find_pattern("Error", "alert")
+                self.app.root.find("Error", "alert")
                 raise AssertionError("Error dialog raised?")
             if error_cb():
                 raise AssertionError("Error found on a page")
@@ -170,7 +170,7 @@ class VMMDogtailNode(dogtail.tree.Node):
     # Widget search helpers #
     #########################
 
-    def find_pattern(self, name, roleName=None, labeller_text=None):
+    def find(self, name, roleName=None, labeller_text=None):
         """
         Search root for any widget that contains the passed name/role regex
         strings.
@@ -205,7 +205,7 @@ class VMMDogtailNode(dogtail.tree.Node):
         if labeller_text:
             labeller_pattern = ".*%s.*" % labeller_text
 
-        return self.find_pattern(name_pattern, role_pattern, labeller_pattern)
+        return self.find(name_pattern, role_pattern, labeller_pattern)
 
 
     #####################
@@ -285,7 +285,7 @@ class VMMDogtailApp(object):
 
         self._proc = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
         self._root = dogtail.tree.root.application("virt-manager")
-        self._topwin = self._root.find_pattern(None, "(frame|dialog|alert)")
+        self._topwin = self._root.find(None, "(frame|dialog|alert)")
 
     def stop(self):
         """

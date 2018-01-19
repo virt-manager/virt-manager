@@ -25,24 +25,24 @@ class VMMPrefs(uiutils.UITestCase):
     ##############
 
     def testPrefs(self):
-        self.app.root.find_pattern("Edit", "menu").click()
-        self.app.root.find_pattern("Preferences", "menu item").click()
+        self.app.root.find("Edit", "menu").click()
+        self.app.root.find("Preferences", "menu item").click()
 
         win = self.app.root.find_fuzzy("Preferences", "frame")
 
         win.find_fuzzy("Enable system tray", "check").click()
 
-        win.find_pattern("Polling", "page tab").click()
+        win.find("Polling", "page tab").click()
         win.find_fuzzy(None, "check box",
                            labeller_text="Poll CPU").click()
 
-        win.find_pattern("New VM", "page tab").click()
-        win.find_pattern("prefs-add-spice-usbredir",
+        win.find("New VM", "page tab").click()
+        win.find("prefs-add-spice-usbredir",
                              "combo box").click()
-        win.find_pattern("No", "menu item").click()
+        win.find("No", "menu item").click()
 
-        win.find_pattern("Console", "page tab").click()
-        win.find_pattern("Change...", "push button").click()
+        win.find("Console", "page tab").click()
+        win.find("Change...", "push button").click()
         keyframe = self.app.root.find_fuzzy("Configure grab", "dialog")
         _holdKey("Alt_L")
         _holdKey("Z")
@@ -52,11 +52,11 @@ class VMMPrefs(uiutils.UITestCase):
             _releaseKey("Z")
             _releaseKey("Alt_L")
 
-        win.find_pattern("Feedback", "page tab").click()
+        win.find("Feedback", "page tab").click()
         win.find_fuzzy(None, "check box",
                            labeller_text="Force Poweroff").click()
 
-        win.find_pattern("General", "page tab").click()
+        win.find("General", "page tab").click()
         win.find_fuzzy("Enable system tray", "check").click()
 
         win.find_fuzzy("Close", "push button").click()

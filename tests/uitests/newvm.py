@@ -16,8 +16,8 @@ class NewVM(uiutils.UITestCase):
     ###################
 
     def _open_create_wizard(self):
-        self.app.root.find_pattern("New", "push button").click()
-        return self.app.root.find_pattern("New VM", "frame")
+        self.app.root.find("New", "push button").click()
+        return self.app.root.find("New VM", "frame")
 
     def _do_simple_import(self, newvm):
         # Create default PXE VM
@@ -51,12 +51,12 @@ class NewVM(uiutils.UITestCase):
 
         # Delete it from the VM window
         vmwindow = self.app.root.find_fuzzy("generic on", "frame")
-        vmwindow.find_pattern("Virtual Machine", "menu").click()
-        vmwindow.find_pattern("Delete", "menu item").click()
+        vmwindow.find("Virtual Machine", "menu").click()
+        vmwindow.find("Delete", "menu item").click()
 
         delete = self.app.root.find_fuzzy("Delete", "frame")
         delete.find_fuzzy("Delete", "button").click()
-        alert = self.app.root.find_pattern("vmm dialog", "alert")
+        alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy("Yes", "push button").click()
 
         # Verify delete dialog and VM dialog are now gone
@@ -101,7 +101,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Forward", "button").click()
 
         # Verify that CPU values are non-default
-        cpus = newvm.find_pattern("cpus", "spin button")
+        cpus = newvm.find("cpus", "spin button")
         uiutils.check_in_loop(lambda: int(cpus.text) > 1, timeout=5)
         newvm.find_fuzzy("Forward", "button").click()
         newvm.find_fuzzy("Forward", "button").click()
@@ -136,10 +136,10 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Network Install", "radio").click()
         newvm.find_fuzzy("Forward", "button").click()
 
-        newvm.find_pattern(None, "text", "URL").text = (
+        newvm.find(None, "text", "URL").text = (
             "http://vault.centos.org/5.5/os/x86_64/")
 
-        version = newvm.find_pattern("install-os-version-label")
+        version = newvm.find("install-os-version-label")
         uiutils.check_in_loop(lambda: "Detecting" in version.text)
         uiutils.check_in_loop(
             lambda: version.text == "Red Hat Enterprise Linux 5.5",
@@ -195,7 +195,7 @@ class NewVM(uiutils.UITestCase):
         self.assertFalse(
             newvm.find_fuzzy("PXE", "radio").sensitive)
         newvm.find_fuzzy("vexpress-a15", "menu item")
-        newvm.find_pattern("virt", "menu item")
+        newvm.find("virt", "menu item")
         newvm.find_fuzzy("Forward", "button").click()
 
         # Set the import media details
@@ -212,7 +212,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Forward", "button").click()
 
         # Disk collision box pops up, hit ok
-        alert = self.app.root.find_pattern("vmm dialog", "alert")
+        alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy("Yes", "push button").click()
 
         newvm.find_fuzzy("Forward", "button").click()

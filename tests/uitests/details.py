@@ -12,10 +12,10 @@ class Details(uiutils.UITestCase):
 
     def _open_details_window(self, vmname="test-many-devices"):
         self.app.root.find_fuzzy(vmname, "table cell").click(button=3)
-        self.app.root.find_pattern("Open", "menu item").click()
+        self.app.root.find("Open", "menu item").click()
 
-        win = self.app.root.find_pattern("%s on" % vmname, "frame")
-        win.find_pattern("Details", "radio button").click()
+        win = self.app.root.find("%s on" % vmname, "frame")
+        win.find("Details", "radio button").click()
         return win
 
 
@@ -29,22 +29,22 @@ class Details(uiutils.UITestCase):
         HW panel shows itself without raising any error.
         """
         win = self._open_details_window()
-        lst = win.find_pattern("hw-list", "table")
+        lst = win.find("hw-list", "table")
         self._walkUIList(win, lst, lambda: False)
 
     def _testRename(self, origname, newname):
         win = self._open_details_window(origname)
 
         # Ensure the Overview page is the first selected
-        win.find_pattern("Hypervisor Details", "label")
-        win.find_pattern("Overview", "table cell").click()
+        win.find("Hypervisor Details", "label")
+        win.find("Overview", "table cell").click()
 
         oldcell = self.app.root.find_fuzzy(origname, "table cell")
-        win.find_pattern(None, "text", "Name:").text = newname
-        win.find_pattern("config-apply", "push button").click()
+        win.find(None, "text", "Name:").text = newname
+        win.find("config-apply", "push button").click()
 
         # Confirm lists were updated
-        self.app.root.find_pattern("%s on" % newname, "frame")
+        self.app.root.find("%s on" % newname, "frame")
         self.app.root.find_fuzzy(newname, "table cell")
 
         # Make sure the old entry is gone
@@ -63,7 +63,7 @@ class Details(uiutils.UITestCase):
         origname = "test-many-devices"
         # Shutdown the VM
         self.app.root.find_fuzzy(origname, "table cell").click()
-        b = self.app.root.find_pattern("Shut Down", "push button")
+        b = self.app.root.find("Shut Down", "push button")
         b.click()
         # This insures the VM finished shutting down
         uiutils.check_in_loop(lambda: b.sensitive is False)

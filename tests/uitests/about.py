@@ -13,8 +13,8 @@ class VMMAbout(uiutils.UITestCase):
     ##############
 
     def testAbout(self):
-        self.app.root.find_pattern("Help", "menu").click()
-        self.app.root.find_pattern("About", "menu item").click()
+        self.app.root.find("Help", "menu").click()
+        self.app.root.find("About", "menu item").click()
         win = self.app.root.find_fuzzy("About", "dialog")
         l = win.find_fuzzy("Copyright", "label")
 

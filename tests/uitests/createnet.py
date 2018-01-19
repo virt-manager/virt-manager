@@ -13,15 +13,15 @@ class CreateNet(uiutils.UITestCase):
     def testCreateNet(self):
         # Open the createnet dialog
         hostwin = self._open_host_window("Virtual Networks")
-        hostwin.find_pattern("net-add", "push button").click()
-        win = self.app.root.find_pattern(
+        hostwin.find("net-add", "push button").click()
+        win = self.app.root.find(
                 "Create a new virtual network", "frame")
 
         # Create a simple default network
         newname = "a-test-new-net"
-        forward = win.find_pattern("Forward", "push button")
-        finish = win.find_pattern("Finish", "push button")
-        name = win.find_pattern(None, "text", "Network Name:")
+        forward = win.find("Forward", "push button")
+        finish = win.find("Finish", "push button")
+        name = win.find(None, "text", "Network Name:")
         name.text = newname
         forward.click()
         forward.click()
@@ -31,10 +31,10 @@ class CreateNet(uiutils.UITestCase):
         # Select the new network in the host window, then do
         # stop->start->stop->delete, for lifecycle testing
         uiutils.check_in_loop(lambda: hostwin.active)
-        cell = hostwin.find_pattern(newname, "table cell")
-        delete = hostwin.find_pattern("net-delete", "push button")
-        start = hostwin.find_pattern("net-start", "push button")
-        stop = hostwin.find_pattern("net-stop", "push button")
+        cell = hostwin.find(newname, "table cell")
+        delete = hostwin.find("net-delete", "push button")
+        start = hostwin.find("net-start", "push button")
+        stop = hostwin.find("net-stop", "push button")
 
         cell.click()
         stop.click()
@@ -46,9 +46,9 @@ class CreateNet(uiutils.UITestCase):
 
         # Delete it
         delete.click()
-        alert = self.app.root.find_pattern("vmm dialog", "alert")
+        alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy("permanently delete the network", "label")
-        alert.find_pattern("Yes", "push button").click()
+        alert.find("Yes", "push button").click()
 
         # Ensure it's gone
         uiutils.check_in_loop(lambda: cell.dead)

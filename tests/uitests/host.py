@@ -15,8 +15,8 @@ class Host(uiutils.UITestCase):
         Verify that each virtual network displays, without error.
         """
         win = self._open_host_window("Virtual Networks")
-        lst = win.find_pattern("net-list", "table")
-        errlabel = win.find_pattern("net-error-label", "label")
+        lst = win.find("net-list", "table")
+        errlabel = win.find("net-error-label", "label")
         self._walkUIList(win, lst, lambda: errlabel.showing)
 
     def testHostStorageSmokeTest(self):
@@ -24,8 +24,8 @@ class Host(uiutils.UITestCase):
         Verify that each storage pool displays, without error.
         """
         win = self._open_host_window("Storage")
-        lst = win.find_pattern("pool-list", "table")
-        errlabel = win.find_pattern("pool-error-label", "label")
+        lst = win.find("pool-list", "table")
+        errlabel = win.find("pool-error-label", "label")
         self._walkUIList(win, lst, lambda: errlabel.showing)
 
     def testHostInterfaceSmokeTest(self):
@@ -33,6 +33,6 @@ class Host(uiutils.UITestCase):
         Verify that each interface displays, without error.
         """
         win = self._open_host_window("Network Interfaces")
-        lst = win.find_pattern("interface-list", "table")
-        errlabel = win.find_pattern("interface-error-label", "label")
+        lst = win.find("interface-list", "table")
+        errlabel = win.find("interface-error-label", "label")
         self._walkUIList(win, lst, lambda: errlabel.showing)
