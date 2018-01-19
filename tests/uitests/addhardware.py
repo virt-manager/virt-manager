@@ -35,6 +35,52 @@ class AddHardware(uiutils.UITestCase):
     # Test cases #
     ##############
 
+    def testAddControllers(self):
+        """
+        Add various controller configs
+        """
+        details = self._open_details_window()
+        addhw = self._open_addhw_window(details)
+        finish = addhw.find("Finish", "push button")
+
+        # Default SCSI
+        tab = self._select_hw(addhw, "Controller", "controller-tab")
+        typ = tab.find("Type:", "combo box")
+        typ.click()
+        tab.find("SCSI", "menu item").click()
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Virtio SCSI
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Controller", "controller-tab")
+        typ.click()
+        tab.find("SCSI", "menu item").click()
+        tab.find("Model:", "combo box").click_combo_entry()
+        tab.find("VirtIO SCSI", "menu item").click()
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # USB 2
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Controller", "controller-tab")
+        typ.click()
+        tab.find("USB", "menu item").click()
+        tab.find("Model:", "combo box").click_combo_entry()
+        tab.find("USB 2", "menu item").click()
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # USB 3
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Controller", "controller-tab")
+        typ.click()
+        tab.find("USB", "menu item").click()
+        tab.find("Model:", "combo box").click_combo_entry()
+        tab.find("USB 3", "menu item").click()
+        # Can't add more than 1 USB controller, so finish isn't sensitive
+        self.assertFalse(finish.sensitive)
+
     def testAddDisks(self):
         """
         Add various disk configs and test storage browser
