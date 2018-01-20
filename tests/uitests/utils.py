@@ -191,6 +191,10 @@ class VMMDogtailNode(dogtail.tree.Node):
     def state_selected(self):
         return self.getState().contains(pyatspi.STATE_SELECTED)
 
+    @property
+    def onscreen(self):
+        return self.position[0] > 0 and self.position[1] > 0
+
     def click_combo_entry(self):
         """
         Helper for clicking the arrow of a combo entry, to expose the menu.

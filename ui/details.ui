@@ -2921,6 +2921,11 @@
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">True</property>
                                                         <signal name="clicked" handler="on_boot_initrd_browse_clicked" swapped="no"/>
+                                                        <child internal-child="accessible">
+                                                          <object class="AtkObject" id="boot-initrd-browse-atkobject">
+                                                            <property name="AtkObject::accessible-name">initrd-browse</property>
+                                                          </object>
+                                                        </child>
                                                       </object>
                                                       <packing>
                                                         <property name="expand">False</property>
@@ -2961,6 +2966,11 @@
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">True</property>
                                                         <signal name="clicked" handler="on_boot_kernel_browse_clicked" swapped="no"/>
+                                                        <child internal-child="accessible">
+                                                          <object class="AtkObject" id="boot-kernel-browse-atkobject">
+                                                            <property name="AtkObject::accessible-name">kernel-browse</property>
+                                                          </object>
+                                                        </child>
                                                       </object>
                                                       <packing>
                                                         <property name="expand">False</property>
@@ -3011,7 +3021,7 @@
                                                     <property name="halign">start</property>
                                                     <property name="margin_top">8</property>
                                                     <property name="margin_bottom">8</property>
-                                                    <property name="label" translatable="yes">D_TB Path:</property>
+                                                    <property name="label" translatable="yes">D_TB path:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">boot-dtb</property>
                                                   </object>
@@ -3047,6 +3057,11 @@
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">True</property>
                                                         <signal name="clicked" handler="on_boot_dtb_browse_clicked" swapped="no"/>
+                                                        <child internal-child="accessible">
+                                                          <object class="AtkObject" id="boot-dtb-browse-atkobject">
+                                                            <property name="AtkObject::accessible-name">dtb-browse</property>
+                                                          </object>
+                                                        </child>
                                                       </object>
                                                       <packing>
                                                         <property name="expand">False</property>
@@ -3065,20 +3080,6 @@
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
                                                 <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkAlignment" id="alignment12">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">1</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -3197,6 +3198,11 @@
                                                         <property name="stock">gtk-go-up</property>
                                                       </object>
                                                     </child>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="boot-moveup-atkobject">
+                                                        <property name="AtkObject::accessible-name">boot-moveup</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -3218,6 +3224,11 @@
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="stock">gtk-go-down</property>
+                                                      </object>
+                                                    </child>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="boot-movedown-atkobject">
+                                                        <property name="AtkObject::accessible-name">boot-movedown</property>
                                                       </object>
                                                     </child>
                                                   </object>
