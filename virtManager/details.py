@@ -228,7 +228,7 @@ def _label_for_device(dev):
     if devtype == "hostdev":
         return dev.pretty_name()
     if devtype == "sound":
-        return _("Sound: %s") % dev.model
+        return _("Sound %s") % dev.model
     if devtype == "video":
         return _("Video %s") % dev.pretty_model(dev.model)
     if devtype == "filesystem":
