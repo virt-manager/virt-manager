@@ -18,11 +18,6 @@ class Details(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: tab.showing)
         return tab
 
-    def _check_alert(self):
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("changes will take effect", "label")
-        alert.find("OK", "push button").click()
-
     def _stop_vm(self, win):
         run = win.find("Run", "push button")
         win.find("Shut Down", "push button").click()
@@ -90,18 +85,13 @@ class Details(uiutils.UITestCase):
         appl = win.find("config-apply", "push button")
         hwlist = win.find("hw-list")
 
-        """
         # Overview description
         tab = self._select_hw(win, "Overview", "overview-tab")
         tab.find("Description:", "text").text = "hey new description"
+        tab.find("Title:", "text").text = "hey new title"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
-        # CPU hotplug
-        tab = self._select_hw(win, "CPUs", "cpu-tab")
-        tab.find("Current allocation:", "spin button").text = "2"
-        appl.click()
-        uiutils.check_in_loop(lambda: not appl.sensitive)
 
         # Memory balloon
         tab = self._select_hw(win, "Memory", "memory-tab")
@@ -109,9 +99,44 @@ class Details(uiutils.UITestCase):
         tab.find("Maximum allocation:", "spin button").text = "800"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
-        """
+
+
+        # CPU hotplug
+        tab = self._select_hw(win, "CPUs", "cpu-tab")
+        tab.find("Current allocation:", "spin button").text = "2"
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+        # Static CPU config
         self._stop_vm(win)
-        """
+        # more cpu config: host-passthrough, copy, clear CPU, manual
+        tab.find("cpu-model").click_combo_entry()
+        tab.find_fuzzy("Clear CPU", "menu item").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+        tab.find("cpu-model").click_combo_entry()
+        tab.find("coreduo", "menu item").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+        tab.find("cpu-model").click_combo_entry()
+        tab.find("Application Default", "menu item").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+        tab.find("cpu-model").click_combo_entry()
+        tab.find("Hypervisor Default", "menu item").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+        # CPU topology
+        tab.find("Topology", "toggle button").click_expander()
+        tab.find_fuzzy("Manually set", "check").click()
+        tab.find("Sockets:", "spin button").typeText("8")
+        tab.find("Cores:", "spin button").typeText("2")
+        tab.find("Threads:", "spin button").typeText("2")
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+        self.assertTrue(tab.find_fuzzy("Maximum", "spin").text == "32")
+
 
         def check_bootorder(c):
             # Click the bootlist checkbox, which is hard to find in the tree
@@ -149,6 +174,7 @@ class Details(uiutils.UITestCase):
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
+
         # Disk options
         tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
         tab.find("Shareable:", "check box").click()
@@ -168,7 +194,6 @@ class Details(uiutils.UITestCase):
         tab.find("Removable:", "check box").click()
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
-        """
 
 
         # Network values
@@ -220,36 +245,170 @@ class Details(uiutils.UITestCase):
                 "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b")
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
-        #appl.click()
-        #uiutils.check_in_loop(lambda: not appl.sensitive)
-        tab.print_nodes()
-        self.sleep(5)
 
+
+        # Graphics
+        tab = self._select_hw(win, "Display VNC", "graphics-tab")
+        tab.find("Type:", "combo box").click_combo_entry()
+        tab.find("Spice server", "menu item").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+        tab.find("Type:", "combo box").click_combo_entry()
+        tab.find("VNC server", "menu item").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+        # Sound device
+        tab = self._select_hw(win, "Sound sb16", "sound-tab")
+        tab.find("Model:", "text").text = "ac97"
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+        # Host device
+        tab = self._select_hw(win, "PCI 0000:00:19.0", "host-tab")
+        tab.find("ROM BAR:", "check box").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+        # Video device
+        tab = self._select_hw(win, "Video VMVGA", "video-tab")
+        tab.find("Model:", "text").text = "virtio"
+        tab.find("3D acceleration:", "check box").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+        # Watchdog
+        tab = self._select_hw(win, "Watchdog", "watchdog-tab")
+        tab.find("Model:", "text").text = "diag288"
+        tab.find("Action:", "text").click()
+        self.pressKey("Down")
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+        # Controller SCSI
+        tab = self._select_hw(
+                win, "Controller Virtio SCSI 9", "controller-tab")
+        tab.find("controller-model", "combo box").click_combo_entry()
+        tab.find("Hypervisor default", "menu item").click()
+        tab.find("SCSI Disk 1 on 9:0:0:0", "table cell")
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+        # Controller USB
+        tab = self._select_hw(win, "Controller USB 0", "controller-tab")
+        tab.find("controller-model", "combo box").click_combo_entry()
+        tab.find("USB 2", "menu item").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+        tab = self._select_hw(win, "Controller USB 0", "controller-tab")
+        tab.find("controller-model", "combo box").click_combo_entry()
+        tab.find("USB 3", "menu item").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+        # Filesystem tweaks
+        tab = self._select_hw(win, "Filesystem /target/", "filesystem-tab")
+        tab.find("Driver:", "combo box").click()
+        tab.find("Path", "menu item").click()
+        tab.find("Write Policy:", "combo box").click()
+        tab.find("Immediate", "menu item").click()
+        tab.find("Source path:", "text").text = "/frib1"
+        tab.find("Target path:", "text").text = "newtarget"
+        tab.find_fuzzy("Export filesystem", "check box").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+        # Smartcard tweaks
+        tab = self._select_hw(win, "Smartcard", "smartcard-tab")
+        tab.find("smartcard-mode", "combo box").click_combo_entry()
+        tab.find("Passthrough", "menu item").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+    def testDetailsMiscEdits(self):
         """
-        sound model
-        usb2->usb3
-        change network source
-        vnc to spice
-        video 3d
-
+        Test misc editting behavior, like checking for unapplied
+        changes
         """
+        win = self._open_details_window(vmname="test-many-devices")
+        hwlist = win.find("hw-list")
+
+        # Live device removal, see results after shutdown
+        disklabel = "SCSI Disk 1"
+        tab = self._select_hw(win, disklabel, "disk-tab")
+        win.find("config-remove", "push button").click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("Are you sure you want to remove", "label")
+        alert.find_fuzzy("Don't ask", "check").click()
+        alert.find("Yes", "push button").click()
+
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("Device could not be removed", "label")
+        alert.find("OK", "push button").click()
+
+        c = hwlist.find(disklabel, "table cell")
+        self._stop_vm(win)
+        self.assertTrue(c.text != disklabel)
+
+        # Remove a device for offline VM
+        tab = self._select_hw(win, "SCSI CDROM 1", "disk-tab")
+        win.find("config-remove", "push button").click()
+        uiutils.check_in_loop(lambda: win.active)
+
+        # Cancelling changes
+        tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
+        share = tab.find("Shareable:", "check box")
+        self.assertFalse(share.checked)
+        share.click()
+        win.find("config-cancel").click()
+        self.assertFalse(share.checked)
+
+        # Unapplied, clicking no
+        share = tab.find("Shareable:", "check box")
+        share.click()
+        hwlist.find("CPUs", "table cell").click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("There are unapplied changes", "label")
+        alert.find("No", "push button").click()
+        tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
+        self.assertFalse(share.checked)
+
+        # Unapplied changes but clicking yes
+        share.click()
+        hwlist.find("CPUs", "table cell").click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("There are unapplied changes", "label")
+        alert.find_fuzzy("Don't warn", "check box").click()
+        alert.find("Yes", "push button").click()
+        tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
+        self.assertTrue(share.checked)
+
+        # Make sure no unapplied changes option sticks
+        share.click()
+        self._select_hw(win, "CPUs", "cpu-tab")
+        tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
+        self.assertTrue(share.checked)
 
 
-    """
-        # Live device removal
+        # VM State change doesn't refresh UI
+        share.click()
         self._start_vm(win)
-        tab = self._select_hw(win, "SCSI Disk 1", "disk-tab")
-        tab.find("Remove", "push button")
-        self._check_alert()
-        c = hwlist.find("SCSI Disk 1", "table cell")
-        self.assertTrue(lambda: c.showing)
-        self._stop_vm()
-        uiutils.check_in_loop(lambda: c.dead)
+        self.assertTrue(not share.checked)
 
-        misc stuff:
-            make changes, VM change state, changes stay in place
-            unapplied changes
-            cancel to reset changes
-            removing devices
-            - offline and online
-    """
+        # Now apply changes to running VM, ensure they show up on shutdown
+        win.find("config-apply").click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("changes will take effect", "label")
+        alert.find("OK", "push button").click()
+        self.assertTrue(share.checked)
+        self._stop_vm(win)
+        self.assertTrue(not share.checked)

@@ -2202,6 +2202,11 @@
                                                 <property name="can_focus">True</property>
                                               </object>
                                             </child>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="cpu-model-atkobject">
+                                                <property name="AtkObject::accessible-name">cpu-model</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -4272,7 +4277,7 @@
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
-                                            <property name="label" translatable="yes">Device m_odel:</property>
+                                            <property name="label" translatable="yes">M_odel:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">combobox-entry12</property>
                                           </object>
@@ -4770,7 +4775,9 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">end</property>
-                                        <property name="label" translatable="yes">3D acceleration:</property>
+                                        <property name="label" translatable="yes">_3D acceleration:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">video-3d</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -5011,6 +5018,11 @@
                                             <property name="can_focus">True</property>
                                           </object>
                                         </child>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="controller-model-atkobject">
+                                            <property name="AtkObject::accessible-name">controller-model</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -5209,6 +5221,11 @@
                                             <child internal-child="entry">
                                               <object class="GtkEntry" id="combobox-entry17">
                                                 <property name="can_focus">True</property>
+                                              </object>
+                                            </child>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="smartcard-mode-atkobject">
+                                                <property name="AtkObject::accessible-name">smartcard-mode</property>
                                               </object>
                                             </child>
                                           </object>
