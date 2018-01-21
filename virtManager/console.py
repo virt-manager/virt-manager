@@ -232,11 +232,13 @@ class vmmConsolePages(vmmGObjectUI):
         self._overlay_toolbar = Gtk.Toolbar()
         self._overlay_toolbar.set_show_arrow(False)
         self._overlay_toolbar.set_style(Gtk.ToolbarStyle.BOTH_HORIZ)
+        self._overlay_toolbar.get_accessible().set_name("Fullscreen Toolbar")
 
         # Exit fullscreen button
         button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_LEAVE_FULLSCREEN)
         button.set_tooltip_text(_("Leave fullscreen"))
         button.show()
+        button.get_accessible().set_name("Fullscreen Exit")
         self._overlay_toolbar.add(button)
         button.connect("clicked", self._leave_fullscreen)
 
@@ -265,6 +267,7 @@ class vmmConsolePages(vmmGObjectUI):
         self._send_key_button.set_tooltip_text(_("Send key combination"))
         self._send_key_button.show_all()
         self._send_key_button.connect("clicked", keycombo_menu_clicked)
+        self._send_key_button.get_accessible().set_name("Fullscreen Send Key")
         self._overlay_toolbar.add(self._send_key_button)
 
         self._timed_revealer = _TimedRevealer(self._overlay_toolbar)

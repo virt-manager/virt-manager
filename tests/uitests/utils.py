@@ -369,12 +369,14 @@ class VMMDogtailApp(object):
             self._proc.send_signal(signal.SIGINT)
         except Exception:
             logging.debug("Error terminating process", exc_info=True)
+            self._proc = None
             return
 
         # Wait for shutdown for 1 second, with 20 checks
         for ignore in range(20):
             time.sleep(.05)
             if self._proc.poll() is not None:
+                self._proc = None
                 return
 
         logging.warning("App didn't exit gracefully from SIGINT. Killing...")
@@ -382,3 +384,4 @@ class VMMDogtailApp(object):
             self._proc.kill()
         finally:
             time.sleep(1)
+        self._proc = None
