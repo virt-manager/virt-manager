@@ -34,6 +34,27 @@ class UITestCase(unittest.TestCase):
     def pressKey(*args, **kwargs):
         return dogtail.rawinput.pressKey(*args, **kwargs)
 
+    def holdKey(self, keyName):
+        # From dogtail 9.9.0 which isn't widely distributed yet
+        code = dogtail.rawinput.keyNameToKeyCode(keyName)
+        pyatspi.Registry().generateKeyboardEvent(
+                code, None, pyatspi.KEY_PRESS)
+
+    def releaseKey(self, keyName):
+        # From dogtail 9.9.0 which isn't widely distributed yet
+        code = dogtail.rawinput.keyNameToKeyCode(keyName)
+        pyatspi.Registry().generateKeyboardEvent(
+                code, None, pyatspi.KEY_RELEASE)
+
+    def point(self, x, y):
+        # From dogtail 9.9.0 which isn't widely distributed yet
+        pyatspi.Registry().generateMouseEvent(x, y, 'abs')
+
+
+    #################################
+    # virt-manager specific helpers #
+    #################################
+
     def _open_host_window(self, tab, conn_label="test testdriver.xml"):
         """
         Helper to open host connection window and switch to a tab

@@ -1,18 +1,4 @@
-import dogtail
-import pyatspi
-
 from tests.uitests import utils as uiutils
-
-
-# From dogtail 9.9.0 which isn't widely distributed yet
-def _holdKey(keyName):
-    code = dogtail.rawinput.keyNameToKeyCode(keyName)
-    pyatspi.Registry().generateKeyboardEvent(code, None, pyatspi.KEY_PRESS)
-
-
-def _releaseKey(keyName):
-    code = dogtail.rawinput.keyNameToKeyCode(keyName)
-    pyatspi.Registry().generateKeyboardEvent(code, None, pyatspi.KEY_RELEASE)
 
 
 class VMMPrefs(uiutils.UITestCase):
@@ -44,13 +30,13 @@ class VMMPrefs(uiutils.UITestCase):
         win.find("Console", "page tab").click()
         win.find("Change...", "push button").click()
         keyframe = self.app.root.find_fuzzy("Configure grab", "dialog")
-        _holdKey("Alt_L")
-        _holdKey("Z")
+        self.holdKey("Alt_L")
+        self.holdKey("Z")
         try:
             keyframe.find_fuzzy("OK", "push button").click()
         finally:
-            _releaseKey("Z")
-            _releaseKey("Alt_L")
+            self.releaseKey("Z")
+            self.releaseKey("Alt_L")
 
         win.find("Feedback", "page tab").click()
         win.find_fuzzy(None, "check box",
