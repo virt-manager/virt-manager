@@ -70,3 +70,8 @@ class VMMCLI(uiutils.UITestCase):
         self.assertEqual(len(vapps), 1)
 
         self.app.topwin.find("test default", "table cell")
+
+    def testShowError(self):
+        self.app.open(extra_opts=["--idontexist"])
+        alert = self.app.root.find("vmm dialog")
+        alert.find_fuzzy("Unhandled command line")
