@@ -1,0 +1,87 @@
+#!/usr/bin/python
+
+import argparse
+import os
+import sys
+
+
+def parse_options():
+    hvs = ["qemu", "xen", "lxc", "test", "vz"]
+    description = ("Generate a fake URI for use with virt-manager/virtinst "
+        "that wraps a standard test:/// URI but pretends to be a different "
+        "hypervisor. See virtinst/uri.py MagicURI for format details. "
+        "Example: magicuri qemu --fake-remote")
+    parser = argparse.ArgumentParser(description=description)
+
+    parser.add_argument("hv",
+            help="URI hypervisor to mock", choices=hvs)
+    parser.add_argument("--capsfile",
+            help="Path to file to use for capabilities XML")
+    parser.add_argument("--domcapsfile",
+            help="Path to file to use for domain capabilities XML")
+    parser.add_argument("--driverxml",
+            help="Path to driver xml (defaults to testdriver.xml)")
+    parser.add_argument("--fake-remote", action="store_true",
+            help="Fake a remote connection")
+
+    options = parser.parse_args()
+
+    testdir = os.path.dirname(__file__)
+    capsdir = os.path.join(testdir, "capabilities-xml/")
+
+    hv = options.hv
+    capsfile = None
+    domcapsfile = None
+    if hv == "qemu":
+        capsfile = capsdir + "kvm-x86_64.xml"
+        domcapsfile = capsdir + "kvm-x86_64-domcaps.xml"
+    elif hv == "xen":
+        capsfile = capsdir + "xen-rhel5.4.xml"
+    elif hv == "lxc":
+        capsfile = capsdir + "lxc.xml"
+    elif hv == "vz":
+        capsfile = capsdir + "vz.xml"
+    elif hv != "test":
+        parser.print_help()
+        sys.exit(1)
+
+    if options.capsfile:
+        capsfile = os.path.abspath(options.capsfile)
+    if options.domcapsfile:
+        domcapsfile = os.path.abspath(options.domcapsfile)
+
+    driverxml = os.path.join(testdir, "testdriver.xml")
+    if options.driverxml:
+        driverxml = os.path.abspath(options.driverxml)
+
+    return hv, capsfile, domcapsfile, options.fake_remote, driverxml
+
+
+def main():
+    hv, capsfile, domcapsfile, fake_remote, driverxml = parse_options()
+    uri = "__virtinst_test__test://%s" % driverxml
+
+    if hv != "test":
+        uri += ",%s" % hv
+    if capsfile:
+        uri += ",caps=%s" % capsfile
+    if domcapsfile:
+        uri += ",domcaps=%s" % domcapsfile
+    if fake_remote:
+        uri += ",remote"
+
+    if driverxml and not os.path.exists(driverxml):
+        print("%s does not exist" % capsfile)
+        return 1
+    if capsfile and not os.path.exists(capsfile):
+        print("%s does not exist" % capsfile)
+        return 1
+    if domcapsfile and not os.path.exists(domcapsfile):
+        print("%s does not exist" % domcapsfile)
+        return 1
+
+    print(uri)
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
