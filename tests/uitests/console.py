@@ -133,3 +133,20 @@ class Console(uiutils.UITestCase):
         self.assertTrue(term.showing)
         term.typeText("help\n")
         self.assertTrue("COMMANDS" in term.text)
+
+
+    @_vm_wrapper("uitests-spice-specific")
+    def testConsoleSpiceSpecific(self):
+        """
+        Spice specific behavior. Has lots of devices that will open
+        channels, spice GL + local config, and usbredir
+        """
+        win = self.app.topwin
+        con = win.find("console-gfx-viewport")
+        self.assertTrue(con.showing)
+
+        # Just ensure the dialog pops up, can't really test much more
+        # than that
+        win.find("Virtual Machine", "menu").click()
+        win.find("Redirect USB", "menu item").click()
+        self.app.root.find("Select USB devices for redirection", "label")

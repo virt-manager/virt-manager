@@ -1,0 +1,33 @@
+<domain type="kvm">
+  <name>uitests-spice-specific</name>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="x86_64">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <devices>
+    <graphics type="spice">
+      <listen type='none'/>
+      <gl enable="yes" rendernode="/dev/dri/renderD128"/>
+    </graphics>
+    <controller type="usb" index="0" model="nec-xhci"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <sound model="ich6"/>
+    <video>
+      <model type="virtio">
+        <acceleration accel3d="yes"/>
+      </model>
+    </video>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+  </devices>
+</domain>
+
