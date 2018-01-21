@@ -1,0 +1,14 @@
+<domain type='lxc'>
+  <name>uitests-lxc-serial</name>
+  <memory unit='KiB'>1048576</memory>
+  <currentMemory unit='KiB'>1048576</currentMemory>
+  <vcpu placement='static'>1</vcpu>
+  <os>
+    <type arch='x86_64'>exe</type>
+    <init>/bin/sh</init>
+  </os>
+  <devices>
+    <console type='pty'/>
+  </devices>
+</domain>
+

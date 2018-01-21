@@ -336,6 +336,7 @@ class vmmSerialConsole(vmmGObject):
         self.terminal = Vte.Terminal()
         self.terminal.set_scrollback_lines(1000)
         self.terminal.set_audible_bell(False)
+        self.terminal.get_accessible().set_name("Serial Terminal")
 
         self.terminal.connect("button-press-event", self.show_serial_rcpopup)
         self.terminal.connect("commit", self.console.send_data, self.terminal)

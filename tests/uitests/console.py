@@ -123,3 +123,13 @@ class Console(uiutils.UITestCase):
         return self._checkPassword()
 
 
+    @_vm_wrapper("uitests-lxc-serial", uri="lxc:///")
+    def testConsoleLXCSerial(self):
+        """
+        Ensure LXC has serial open, and we can send some data
+        """
+        win = self.app.topwin
+        term = win.find("Serial Terminal")
+        self.assertTrue(term.showing)
+        term.typeText("help\n")
+        self.assertTrue("COMMANDS" in term.text)
