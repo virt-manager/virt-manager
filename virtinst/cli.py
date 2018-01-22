@@ -1464,6 +1464,16 @@ class ParserCPU(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
         return cb(*args, **kwargs)
 
+    def sibling_find_inst_cb(self, inst, *args, **kwargs):
+        cell = self.cell_find_inst_cb(inst, *args, **kwargs)
+        inst = cell
+
+        cliarg = "sibling"  # cell[0-9]*.distances.sibling[0-9]*
+        objpropname = "siblings"  # cell.siblings
+        objaddfn = "add_sibling"  # cell.add_sibling
+        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        return cb(inst, *args, **kwargs)
+
     def set_model_cb(self, inst, val, virtarg):
         if val == "host":
             val = inst.SPECIAL_MODE_HOST_MODEL
@@ -1542,6 +1552,10 @@ ParserCPU.add_arg("cpus", "cell[0-9]*.cpus", can_comma=True,
                   find_inst_cb=ParserCPU.cell_find_inst_cb)
 ParserCPU.add_arg("memory", "cell[0-9]*.memory",
                   find_inst_cb=ParserCPU.cell_find_inst_cb)
+ParserCPU.add_arg("id", "cell[0-9]*.distances.sibling[0-9]*.id",
+                  find_inst_cb=ParserCPU.sibling_find_inst_cb)
+ParserCPU.add_arg("value", "cell[0-9]*.distances.sibling[0-9]*.value",
+                  find_inst_cb=ParserCPU.sibling_find_inst_cb)
 
 # Options for CPU.cache
 ParserCPU.add_arg("mode", "cache.mode", find_inst_cb=ParserCPU.set_l3_cache_cb)

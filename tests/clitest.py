@@ -422,7 +422,14 @@ c.add_compare(""" \
 c.add_compare("""--pxe \
 --memory 512,maxmemory=1024 \
 --vcpus 4,cores=2,threads=2,sockets=2 \
---cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee,cell.id=0,cell.cpus=1,2,3,cell.memory=1024,cell1.id=1,cell1.memory=256,cell1.cpus=5-8,cache.mode=emulate,cache.level=3 \
+--cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee,\
+cell.id=0,cell.cpus=1,2,3,cell.memory=1024,\
+cell1.id=1,cell1.memory=256,cell1.cpus=5-8,\
+cell0.distances.sibling0.id=0,cell0.distances.sibling0.value=10,\
+cell0.distances.sibling1.id=1,cell0.distances.sibling1.value=21,\
+cell1.distances.sibling0.id=0,cell1.distances.sibling0.value=21,\
+cell1.distances.sibling1.id=1,cell1.distances.sibling1.value=10,\
+cache.mode=emulate,cache.level=3 \
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444 \
 --boot cdrom,fd,hd,network,menu=off,loader=/foo/bar \
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10 \
