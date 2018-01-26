@@ -84,8 +84,13 @@
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu" type="raw"/>
+      <auth username="admin">
+        <secret type="ceph" uuid="f65cc5a8-b77b-4254-9030-d50a528fb456"/>
+      </auth>
       <source protocol="rbd" name="rbd/foobar">
         <host name="ceph-mon-1.example.com" port="6789"/>
+        <host name="ceph-mon-2.example.com" port="6789"/>
+        <host name="ceph-mon-3.example.com" port="6789"/>
       </source>
       <target dev="vdh" bus="virtio"/>
     </disk>

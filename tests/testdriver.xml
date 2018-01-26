@@ -2078,6 +2078,9 @@ ba</description>
     <host name='ceph-mon-2.example.com' port='6789'/>
     <host name='ceph-mon-3.example.com' port='6789'/>
     <name>rbd</name>
+    <auth type='ceph' username='admin'>
+      <secret uuid='f65cc5a8-b77b-4254-9030-d50a528fb456'/>
+    </auth>
   </source>
 
   <volume type='network'>

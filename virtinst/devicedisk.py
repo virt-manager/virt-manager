@@ -90,6 +90,14 @@ def _is_dir_searchable(uid, username, path):
     return bool(re.search("user:%s:..x" % username, out))
 
 
+class _Host(XMLBuilder):
+    _XML_PROP_ORDER = ["name", "port"]
+    _XML_ROOT_NAME = "host"
+
+    name = XMLProperty("./@name")
+    port = XMLProperty("./@port", is_int=True)
+
+
 class _DiskSeclabel(XMLBuilder):
     """
     This is for disk source <seclabel>. It's similar to a domain
@@ -473,6 +481,7 @@ class VirtualDisk(VirtualDevice):
         "driver_cache", "driver_discard", "driver_detect_zeroes",
         "driver_io", "error_policy",
         "_source_file", "_source_dev", "_source_dir",
+        "auth_username", "auth_secret_type", "auth_secret_uuid",
         "source_volume", "source_pool", "source_protocol", "source_name",
         "source_host_name", "source_host_port",
         "source_host_transport", "source_host_socket",
@@ -587,6 +596,21 @@ class VirtualDisk(VirtualDevice):
     source_pool = XMLProperty("./source/@pool")
     source_volume = XMLProperty("./source/@volume")
 
+    auth_username = XMLProperty("./auth/@username")
+    auth_secret_type = XMLProperty("./auth/secret/@type")
+    auth_secret_uuid = XMLProperty("./auth/secret/@uuid")
+
+    def add_host(self, name, port):
+        obj = _Host(self.conn)
+        obj.name = name
+        obj.port = port
+        self.add_child(obj)
+
+    def remove_host(self, obj):
+        self.remove_child(obj)
+
+    hosts = XMLChildProperty(_Host, relative_xpath="./source")
+
     source_name = XMLProperty("./source/@name")
     source_protocol = XMLProperty("./source/@protocol")
     # Technically multiple host lines can be listed
@@ -617,9 +641,17 @@ class VirtualDisk(VirtualDevice):
 
     def _set_source_network_from_storage(self, volxml, poolxml):
         self.source_protocol = poolxml.type
+        logging.debug("disk.set_vol_object: poolxml=\n%s",
+                      dir(poolxml))
+        if poolxml.auth_type:
+            self.auth_username = poolxml.auth_username
+            self.auth_secret_type = poolxml.auth_type
+            self.auth_secret_uuid = poolxml.auth_secret_uuid
         if poolxml.hosts:
             self.source_host_name = poolxml.hosts[0].name
             self.source_host_port = poolxml.hosts[0].port
+            for host in poolxml.hosts:
+                self.add_host(host.name, host.port)
 
         path = ""
         if poolxml.source_name:

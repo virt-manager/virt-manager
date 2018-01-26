@@ -390,7 +390,8 @@ class StoragePool(_StorageObject):
                        "format", "hosts",
                        "_source_dir", "_source_adapter", "_source_device",
                        "source_name", "target_path",
-                       "permissions"]
+                       "permissions",
+                       "auth_type", "auth_username", "auth_secret_uuid"]
 
 
     _source_dir = XMLProperty("./source/dir/@path")
@@ -412,6 +413,10 @@ class StoragePool(_StorageObject):
     source_name = XMLProperty("./source/name",
                               default_cb=_default_source_name,
                               doc=_("Name of the Volume Group"))
+
+    auth_type = XMLProperty("./source/auth/@type")
+    auth_username = XMLProperty("./source/auth/@username")
+    auth_secret_uuid = XMLProperty("./source/auth/secret/@uuid")
 
     target_path = XMLProperty("./target/path",
                               default_cb=_get_default_target_path)
