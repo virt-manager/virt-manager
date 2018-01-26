@@ -1138,6 +1138,37 @@ class VirtCLIParser(object):
         # end of the domain XML, which gives an ugly diff
         clear_inst.clear(leave_stub="," in self.optstr)
 
+    def _make_find_inst_cb(self, cliarg, objpropname, objaddfn):
+        """
+        Create a callback used for find_inst_cb command line lookup.
+
+        :param cliarg: The cliarg string that is followed by an index.
+            Example, for --disk seclabel[0-9]* mapping, this is 'seclabel'
+        :param objpropname: The property name on the virtinst object that
+            this parameter maps too. For the seclabel example, we want
+            disk.seclabels, so this value is 'seclabels'
+        :param objaddfn: The function name for adding a new instance of
+            this parameter to the virtinst object. For the seclabel example,
+            we want disk.add_seclabel(), so this value is "add_seclabels"
+        """
+        def cb(inst, val, virtarg, can_edit):
+            ignore = val
+            num = 0
+            reg = re.search("%s(\d+)" % cliarg, virtarg.key)
+            if reg:
+                num = int(reg.groups()[0])
+
+            if can_edit:
+                while len(getattr(inst, objpropname)) < (num + 1):
+                    getattr(inst, objaddfn)()
+            try:
+                return getattr(inst, objpropname)[num]
+            except IndexError:
+                if not can_edit:
+                    return None
+                raise
+        return cb
+
     def _optdict_to_param_list(self, optdict):
         """
         Convert the passed optdict to a list of instantiated
@@ -1425,21 +1456,13 @@ class ParserCPU(VirtCLIParser):
     remove_first = "model"
     stub_none = False
 
-    def cell_find_inst_cb(self, inst, val, virtarg, can_edit):
-        cpu = inst
-        num = 0
-        if re.search("\d+", virtarg.key):
-            num = int(re.search("\d+", virtarg.key).group())
 
-        if can_edit:
-            while len(cpu.cells) < (num + 1):
-                cpu.add_cell()
-        try:
-            return cpu.cells[num]
-        except IndexError:
-            if not can_edit:
-                return None
-            raise
+    def cell_find_inst_cb(self, *args, **kwargs):
+        cliarg = "cell"  # cell[0-9]*
+        objpropname = "cells"  # cpu.cells
+        objaddfn = "add_cell"  # cpu.add_cell
+        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        return cb(*args, **kwargs)
 
     def set_model_cb(self, inst, val, virtarg):
         if val == "host":
@@ -1953,21 +1976,12 @@ class ParserDisk(VirtCLIParser):
     def noset_cb(self, inst, val, virtarg):
         ignore = self, inst, val, virtarg
 
-    def seclabel_find_inst_cb(self, inst, val, virtarg, can_edit):
-        disk = inst
-        num = 0
-        if re.search("\d+", virtarg.key):
-            num = int(re.search("\d+", virtarg.key).group())
-
-        if can_edit:
-            while len(disk.seclabels) < (num + 1):
-                disk.add_seclabel()
-        try:
-            return disk.seclabels[num]
-        except IndexError:
-            if not can_edit:
-                return None
-            raise
+    def seclabel_find_inst_cb(self, *args, **kwargs):
+        cliarg = "seclabel"  # seclabel[0-9]*
+        objpropname = "seclabels"  # disk.seclabels
+        objaddfn = "add_seclabel"  # disk.add_seclabel
+        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        return cb(*args, **kwargs)
 
     def _parse(self, inst):
         if self.optstr == "none":
@@ -2250,21 +2264,12 @@ class ParserGraphics(VirtCLIParser):
         else:
             inst.listen = val
 
-    def listens_find_inst_cb(self, inst, val, virtarg, can_edit):
-        graphics = inst
-        num = 0
-        if re.search("\d+", virtarg.key):
-            num = int(re.search("\d+", virtarg.key).group())
-
-        if can_edit:
-            while len(graphics.listens) < (num + 1):
-                graphics.add_listen()
-        try:
-            return graphics.listens[num]
-        except IndexError:
-            if not can_edit:
-                return None
-            raise
+    def listens_find_inst_cb(self, *args, **kwargs):
+        cliarg = "listens"  # listens[0-9]*
+        objpropname = "listens"  # graphics.listens
+        objaddfn = "add_listen"  # graphics.add_listen
+        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        return cb(*args, **kwargs)
 
     def _parse(self, inst):
         if self.optstr == "none":
