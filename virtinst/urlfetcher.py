@@ -170,7 +170,7 @@ class _URLFetcher(object):
         """
         fileobj = io.BytesIO()
         self._grabURL(filename, fileobj)
-        return fileobj.getvalue()
+        return fileobj.getvalue().decode("utf-8")
 
 
 class _HTTPURLFetcher(_URLFetcher):
@@ -221,7 +221,7 @@ class _FTPURLFetcher(_URLFetcher):
         try:
             parsed = urllib.parse.urlparse(self.location)
             self._ftp = ftplib.FTP()
-            self._ftp.connect(parsed.hostname, parsed.port)
+            self._ftp.connect(parsed.hostname, parsed.port or 0)
             self._ftp.login()
             # Force binary mode
             self._ftp.voidcmd("TYPE I")
@@ -359,7 +359,7 @@ class _ISOURLFetcher(_URLFetcher):
 
             self._cache_file_list = output.splitlines(False)
 
-        return url in self._cache_file_list
+        return url.encode("ascii") in self._cache_file_list
 
 
 def fetcherForURI(uri, *args, **kwargs):

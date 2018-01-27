@@ -29,7 +29,8 @@ def _rhel4_initrd_inject(initrd, injections):
         file_proc = subprocess.Popen(["file", "-z", initrd],
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE)
-        if "ext2 filesystem" not in file_proc.communicate()[0]:
+        s = bytes("ext2 filesystem", "ascii")
+        if s not in file_proc.communicate()[0]:
             return False
     except Exception:
         logging.exception("Failed to file command for rhel4 initrd detection")
@@ -45,7 +46,7 @@ def _rhel4_initrd_inject(initrd, injections):
     gzip_proc.wait()
     newinitrd.close()
 
-    debugfserr = ""
+    debugfserr = bytes()
     for filename in injections:
         # We have an ext2 filesystem, use debugfs to inject files
         cmd = ["debugfs", "-w", "-R",
@@ -57,7 +58,7 @@ def _rhel4_initrd_inject(initrd, injections):
                                         stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE)
         debugfs_proc.wait()
-        debugfserr += debugfs_proc.stderr.read() or ""
+        debugfserr += debugfs_proc.stderr.read() or bytes()
 
     gziperr = gzip_proc.stderr.read()
     if gziperr:

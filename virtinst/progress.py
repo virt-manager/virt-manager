@@ -473,6 +473,7 @@ def format_number(number, SI=0, space=' '):
     thresh = 999
     depth = 0
     max_depth = len(symbols) - 1
+    number = number or 0
 
     # we want numbers between 0 and thresh, but don't exceed the length
     # of our list.  In that event, the formatting will be screwed up,
