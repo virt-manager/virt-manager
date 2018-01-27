@@ -476,7 +476,7 @@ def connect_console(guest, consolecb, wait):
     try:
         os.waitpid(child, 0)
     except OSError as e:
-        logging.debug("waitpid: %s: %s", e.errno, e.message)
+        logging.debug("waitpid error: %s", e)
 
 
 def get_console_cb(guest):
