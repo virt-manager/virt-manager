@@ -47,8 +47,6 @@ class _DistroURL(object):
         self.detectdistro = detectdistro
         self.arch = self._find_arch()
         self.distroclass = self._distroclass_for_name(self.name)
-        logging.debug("Testing for media arch=%s distroclass=%s",
-                self.arch, self.distroclass)
 
         self.testxen = testxen
         self.testbootiso = testbootiso
@@ -133,12 +131,6 @@ def _testURL(fetcher, distroobj):
     Test that our URL detection logic works for grabbing kernel, xen
     kernel, and boot.iso
     """
-    os.environ.pop("VIRTINST_TEST_SUITE", None)
-
-    distname = distroobj.name
-    sys.stdout.write("\nTesting %-25s " % distname)
-    sys.stdout.flush()
-
     arch = distroobj.arch
     hvmguest.os.arch = arch
     xenguest.os.arch = arch
@@ -219,6 +211,15 @@ def _testURL(fetcher, distroobj):
 
 
 def _testURLWrapper(distroobj):
+    os.environ.pop("VIRTINST_TEST_SUITE", None)
+
+    logging.debug("Testing for media arch=%s distroclass=%s",
+                  distroobj.arch, distroobj.distroclass)
+
+    distname = distroobj.name
+    sys.stdout.write("\nTesting %-25s " % distname)
+    sys.stdout.flush()
+
     fetcher = urlfetcher.fetcherForURI(distroobj.url, "/tmp", meter)
     try:
         fetcher.prepareLocation()
