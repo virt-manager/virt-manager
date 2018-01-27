@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import atexit
 import os
+import logging
 import sys
 import unittest
 
@@ -34,6 +35,7 @@ FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Server/%s
 
 def prompt():
     sys.stdout.write("(press enter to continue)")
+    sys.stdout.flush()
     return sys.stdin.readline()
 
 
@@ -66,8 +68,7 @@ _add("centos-6-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/6/os/x86_64/",
      warntype=WARN_RHEL5)
 _add("centos-7-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/7/os/x86_64/",
      ks2=True)
-_add("fedora-25", FEDORA_URL % ("25", "x86_64"), ks2=True)
-_add("fedora-26", DEVFEDORA_URL % ("26", "x86_64"), ks2=True)
+_add("fedora-27", FEDORA_URL % ("27", "x86_64"), ks2=True)
 
 
 def exit_cleanup():
@@ -92,8 +93,8 @@ def _fetch_distro(distro):
         cleanup.append(initrd)
         distro.kernel = kernel
         distro.initrd = initrd
-    except Exception as e:
-        print("fetching distro=%s failed: %s" % (distro.name, e))
+    except Exception:
+        logging.error("Fetching distro=%s failed", distro.name, exc_info=True)
     finally:
         fetcher.cleanupLocation()
         if origenv:
