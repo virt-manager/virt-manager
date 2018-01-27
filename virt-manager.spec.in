@@ -32,7 +32,7 @@ Source0: http://virt-manager.org/download/sources/%{name}/%{name}-%{version}.tar
 
 
 Requires: virt-manager-common = %{verrel}
-Requires: pygobject3
+Requires: python3-gobject
 Requires: gtk3
 Requires: libvirt-glib >= 0.0.9
 Requires: dconf
@@ -55,8 +55,7 @@ Requires: gnome-icon-theme
 
 BuildRequires: intltool
 BuildRequires: /usr/bin/pod2man
-# For python, and python2 rpm macros
-BuildRequires: python2-devel
+BuildRequires: python3-devel
 
 
 %description
@@ -71,15 +70,12 @@ management API.
 Summary: Common files used by the different Virtual Machine Manager interfaces
 Group: Applications/Emulators
 
-# This version not strictly required: virt-manager should work with older,
-# however varying amounts of functionality will not be enabled.
-Requires: libvirt-python >= 0.7.0
-Requires: libxml2-python
-Requires: python-requests
-Requires: python-ipaddress (For Python 2)
+Requires: python3-libvirt
+Requires: python3-libxml2
+Requires: python3-requests
 Requires: libosinfo >= 0.2.10
 # Required for gobject-introspection infrastructure
-Requires: pygobject3-base
+Requires: python3-gobject-base
 # Required for pulling files from iso media with isoinfo
 Requires: genisoimage
 
@@ -99,7 +95,6 @@ Provides: virt-install
 Provides: virt-clone
 Provides: virt-convert
 Provides: virt-xml
-Obsoletes: python-virtinst
 
 %description -n virt-install
 Package includes several command line utilities, including virt-install
@@ -140,7 +135,7 @@ machine).
 %global _default_hvs --default-hvs %{default_hvs}
 %endif
 
-python setup.py configure \
+./setup.py configure \
     %{?_qemu_user} \
     %{?_kvm_packages} \
     %{?_libvirt_packages} \
@@ -151,16 +146,16 @@ python setup.py configure \
 
 
 %install
-python setup.py \
+./setup.py \
     --no-update-icon-cache --no-compile-schemas \
     install -O1 --root=%{buildroot}
 %find_lang %{name}
 
-# Replace '#!/usr/bin/env python2' with '#!/usr/bin/python2'
+# Replace '#!/usr/bin/env python3' with '#!/usr/bin/python3'
 # The format is ideal for upstream, but not a distro. See:
 # https://fedoraproject.org/wiki/Features/SystemPythonExecutablesUseSystemPython
 for f in $(find %{buildroot} -type f -executable -print); do
-    sed -i "1 s|^#!/usr/bin/env python2|#!%{__python2}|" $f || :
+    sed -i "1 s|^#!/usr/bin/env python3|#!%{__python3}|" $f || :
 done
 
 # The conversion script was only added to virt-manager after several
