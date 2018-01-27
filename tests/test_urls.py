@@ -131,6 +131,7 @@ def _testURL(fetcher, distroobj):
     Test that our URL detection logic works for grabbing kernel, xen
     kernel, and boot.iso
     """
+    distname = distroobj.name
     arch = distroobj.arch
     hvmguest.os.arch = arch
     xenguest.os.arch = arch
@@ -216,8 +217,7 @@ def _testURLWrapper(distroobj):
     logging.debug("Testing for media arch=%s distroclass=%s",
                   distroobj.arch, distroobj.distroclass)
 
-    distname = distroobj.name
-    sys.stdout.write("\nTesting %-25s " % distname)
+    sys.stdout.write("\nTesting %-25s " % distroobj.name)
     sys.stdout.flush()
 
     fetcher = urlfetcher.fetcherForURI(distroobj.url, "/tmp", meter)
