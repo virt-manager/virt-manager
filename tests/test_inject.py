@@ -145,7 +145,7 @@ class FetchTests(unittest.TestCase):
         global _printfetch
         if _printfetch:
             return
-        print ("""
+        print("""
 
 
 
