@@ -285,7 +285,7 @@ class _LocalURLFetcher(_URLFetcher):
         return os.path.exists(url)
 
     def _grabber(self, url):
-        urlobj = open(url, "r")
+        urlobj = open(url, "rb")
         size = os.path.getsize(url)
         return urlobj, size
 
