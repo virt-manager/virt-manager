@@ -108,13 +108,16 @@ class vmmMigrateDialog(vmmGObjectUI):
         model.set_sort_column_id(COL_LABEL, Gtk.SortType.ASCENDING)
 
         def _sorter(model, iter1, iter2, ignore):
+            def _cmp(a, b):
+                return ((a > b) - (a < b))
+
             row1 = model[iter1]
             row2 = model[iter2]
             if row1[COL_URI] is None:
                 return -1
             if row2[COL_URI] is None:
                 return 1
-            return cmp(row1[COL_LABEL], row2[COL_LABEL])
+            return _cmp(row1[COL_LABEL], row2[COL_LABEL])
         model.set_sort_func(COL_LABEL, _sorter)
 
         # Mode combo

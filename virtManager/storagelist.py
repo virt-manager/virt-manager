@@ -152,8 +152,11 @@ class vmmStorageList(vmmGObjectUI):
     ##########################
 
     def _cap_sort_func(self, model, iter1, iter2, ignore):
-        return cmp(int(model[iter1][VOL_COLUMN_CAPACITY]),
-                   int(model[iter2][VOL_COLUMN_CAPACITY]))
+        def _cmp(a, b):
+            return ((a > b) - (a < b))
+
+        return _cmp(int(model[iter1][VOL_COLUMN_CAPACITY]),
+                    int(model[iter2][VOL_COLUMN_CAPACITY]))
 
     def _init_ui(self):
         self.widget("storage-pages").set_show_tabs(False)
