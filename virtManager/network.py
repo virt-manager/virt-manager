@@ -19,33 +19,29 @@
 #
 
 import ipaddress
-import sys
 
 from virtinst import Network
 
 from .libvirtobject import vmmLibvirtObject
-
-if sys.version_info[0] == 3:
-    unicode = str  # pylint: disable=redefined-builtin
 
 
 def _make_addr_str(addrStr, prefix, netmaskStr):
     if prefix:
         return str(
             ipaddress.ip_network(
-                unicode("{}/{}").format(addrStr, prefix), strict=False
+                str("{}/{}").format(addrStr, prefix), strict=False
             )
         )
     elif netmaskStr:
-        netmask = ipaddress.ip_address(unicode((netmaskStr)))
-        network = ipaddress.ip_address(unicode((addrStr)))
+        netmask = ipaddress.ip_address(str((netmaskStr)))
+        network = ipaddress.ip_address(str((addrStr)))
         return str(
             ipaddress.ip_network(
-                unicode("{}/{}").format(network, netmask), strict=False
+                str("{}/{}").format(network, netmask), strict=False
             )
         )
     else:
-        return str(ipaddress.ip_network(unicode(addrStr), strict=False))
+        return str(ipaddress.ip_network(str(addrStr), strict=False))
 
 
 class vmmNetwork(vmmLibvirtObject):
@@ -148,7 +144,7 @@ class vmmNetwork(vmmLibvirtObject):
             return [None, None]
 
         routeAddr = _make_addr_str(route.address, route.prefix, route.netmask)
-        routeVia = str(ipaddress.ip_address(unicode(route.gateway)))
+        routeVia = str(ipaddress.ip_address(str(route.gateway)))
 
         if not routeAddr or not routeVia:
             return [None, None]
@@ -182,8 +178,8 @@ class vmmNetwork(vmmLibvirtObject):
 
         dhcp = [None, None]
         if dhcpstart and dhcpend:
-            dhcp = [str(ipaddress.ip_address(unicode(dhcpstart))),
-                    str(ipaddress.ip_address(unicode(dhcpend)))]
+            dhcp = [str(ipaddress.ip_address(str(dhcpstart))),
+                    str(ipaddress.ip_address(str(dhcpend)))]
         return [ret, dhcp]
 
     def get_ipv4_network(self):

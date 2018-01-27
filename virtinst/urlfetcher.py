@@ -26,22 +26,13 @@ import logging
 import os
 import re
 import subprocess
-import sys
 import tempfile
+import urllib.parse
+import urllib.request
 
 import requests
 
 from .osdict import OSDB
-
-# pylint: disable=no-name-in-module, import-error
-if sys.version_info[0] == 3:
-    # Python 3
-    from urllib.parse import urlparse
-    from urllib.request import Request, urlopen
-else:
-    # Python 2
-    from urlparse import urlparse
-    from urllib2 import Request, urlopen
 
 
 #########################################################################
@@ -228,7 +219,7 @@ class _FTPURLFetcher(_URLFetcher):
             return
 
         try:
-            parsed = urlparse(self.location)
+            parsed = urllib.parse.urlparse(self.location)
             self._ftp = ftplib.FTP()
             self._ftp.connect(parsed.hostname, parsed.port)
             self._ftp.login()
@@ -242,9 +233,9 @@ class _FTPURLFetcher(_URLFetcher):
         """
         Use urllib and ftplib to grab the file
         """
-        request = Request(url)
-        urlobj = urlopen(request)
-        size = self._ftp.size(urlparse(url)[2])
+        request = urllib.request.Request(url)
+        urlobj = urllib.request.urlopen(request)
+        size = self._ftp.size(urllib.parse.urlparse(url)[2])
         return urlobj, size
 
 
@@ -260,7 +251,7 @@ class _FTPURLFetcher(_URLFetcher):
         self._ftp = None
 
     def _hasFile(self, url):
-        path = urlparse.urlparse(url)[2]
+        path = urllib.parse.urlparse(url)[2]
 
         try:
             try:

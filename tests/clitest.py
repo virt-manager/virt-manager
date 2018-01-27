@@ -146,10 +146,7 @@ class Command(object):
         oldstdin = sys.stdin
         oldargv = sys.argv
         try:
-            if sys.version_info[0] == 3:
-                out = io.StringIO()
-            else:
-                out = io.BytesIO()
+            out = io.StringIO()
 
             sys.stdout = out
             sys.stderr = out

@@ -23,14 +23,10 @@ import os
 import queue
 import socket
 import signal
-import sys
 import threading
 import ipaddress
 
 from .baseclass import vmmGObject
-
-if sys.version_info[0] == 3:
-    unicode = str  # pylint: disable=redefined-builtin
 
 
 class ConnectionInfo(object):
@@ -55,13 +51,13 @@ class ConnectionInfo(object):
 
     def _is_listen_localhost(self, host=None):
         try:
-            return ipaddress.ip_network(unicode(host or self.gaddr)).is_loopback
+            return ipaddress.ip_network(str(host or self.gaddr)).is_loopback
         except Exception:
             return False
 
     def _is_listen_any(self):
         try:
-            return ipaddress.ip_network(unicode(self.gaddr)).is_unspecified
+            return ipaddress.ip_network(str(self.gaddr)).is_unspecified
         except Exception:
             return False
 

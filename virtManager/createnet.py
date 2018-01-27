@@ -20,12 +20,10 @@
 
 import ipaddress
 import logging
-import sys
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
-
 
 from virtinst import Network
 
@@ -45,15 +43,12 @@ _red = Gdk.Color.parse("#ffc0c0")[1]
 _black = Gdk.Color.parse("#000000")[1]
 _white = Gdk.Color.parse("#f0f0f0")[1]
 
-if sys.version_info[0] == 3:
-    unicode = str  # pylint: disable=redefined-builtin
-
 
 def _make_ipaddr(addrstr):
     if addrstr is None:
         return None
     try:
-        return ipaddress.ip_network(unicode(addrstr), strict=False)
+        return ipaddress.ip_network(str(addrstr), strict=False)
     except Exception:
         return None
 
