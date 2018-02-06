@@ -159,6 +159,9 @@
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
   </seclabel>
   <on_lockfailure>ignore</on_lockfailure>
+  <cputune>
+    <vcpupin vcpu="0" cpuset="0-3"/>
+  </cputune>
 </domain>
 <domain type="kvm">
   <name>foobar</name>
@@ -324,4 +327,7 @@
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
   </seclabel>
   <on_lockfailure>ignore</on_lockfailure>
+  <cputune>
+    <vcpupin vcpu="0" cpuset="0-3"/>
+  </cputune>
 </domain>

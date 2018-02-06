@@ -39,6 +39,7 @@ from virtcli import CLIConfig
 from . import util
 from .clock import Clock
 from .cpu import CPU
+from .cputune import CPUTune
 from .deviceaudio import VirtualAudio
 from .devicechar import (VirtualChannelDevice, VirtualConsoleDevice,
                          VirtualSerialDevice, VirtualParallelDevice)
@@ -717,6 +718,8 @@ def add_device_options(devg, sound_back_compat=False):
 def add_guest_xml_options(geng):
     geng.add_argument("--security", action="append",
         help=_("Set domain security driver configuration."))
+    geng.add_argument("--cputune",
+        help=_("Tune CPU parameters for the domain process."))
     geng.add_argument("--numatune",
         help=_("Tune NUMA policy for the domain process."))
     geng.add_argument("--memtune", action="append",
@@ -1560,6 +1563,31 @@ ParserCPU.add_arg("value", "cell[0-9]*.distances.sibling[0-9]*.value",
 # Options for CPU.cache
 ParserCPU.add_arg("mode", "cache.mode", find_inst_cb=ParserCPU.set_l3_cache_cb)
 ParserCPU.add_arg("level", "cache.level", find_inst_cb=ParserCPU.set_l3_cache_cb)
+
+
+#####################
+# --cputune parsing #
+#####################
+
+class ParserCPUTune(VirtCLIParser):
+    cli_arg_name = "cputune"
+    objclass = CPUTune
+    remove_first = "model"
+    stub_none = False
+
+    def vcpu_find_inst_cb(self, *args, **kwargs):
+        cliarg = "vcpupin"  # vcpupin[0-9]*
+        objpropname = "vcpus"
+        objaddfn = "add_vcpu"
+        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        return cb(*args, **kwargs)
+
+_register_virt_parser(ParserCPUTune)
+# Options for CPU.vcpus config
+ParserCPUTune.add_arg("vcpu", "vcpupin[0-9]*.vcpu",
+                  find_inst_cb=ParserCPUTune.vcpu_find_inst_cb)
+ParserCPUTune.add_arg("cpuset", "vcpupin[0-9]*.cpuset", can_comma=True,
+                  find_inst_cb=ParserCPUTune.vcpu_find_inst_cb)
 
 
 ###################

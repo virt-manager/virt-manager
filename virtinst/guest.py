@@ -31,6 +31,7 @@ from . import support
 from .osdict import OSDB
 from .clock import Clock
 from .cpu import CPU
+from .cputune import CPUTune
 from .device import VirtualDevice
 from .deviceaudio import VirtualAudio
 from .devicechar import VirtualChannelDevice, VirtualConsoleDevice
@@ -210,6 +211,7 @@ class Guest(XMLBuilder):
     features = XMLChildProperty(DomainFeatures, is_single=True)
     clock = XMLChildProperty(Clock, is_single=True)
     cpu = XMLChildProperty(CPU, is_single=True)
+    cputune = XMLChildProperty(CPUTune, is_single=True)
     numatune = XMLChildProperty(DomainNumatune, is_single=True)
     pm = XMLChildProperty(PM, is_single=True)
     blkiotune = XMLChildProperty(DomainBlkiotune, is_single=True)

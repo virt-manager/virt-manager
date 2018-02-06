@@ -255,6 +255,16 @@ Example of passing through the host cpu's cache information.
 
 Use --cpu=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCPU>
 
+=item B<--cputune> OPTIONS
+
+Tune CPU parameters for the guest.
+
+Configure which of the host's physical CPUs the domain VCPU will be pinned to. Example invocation
+
+    --cputune vpcupin0.vcpu=0,vpcupin0.cpuset=0-3,vpcupin1.vcpu=1,vpcupin1.cpuset=4-7
+
+Use --cputune=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCPUTuning>
+
 =item B<--security> type=TYPE[,label=LABEL][,relabel=yes|no]
 
 Configure domain security driver settings. Type can be either 'static' or

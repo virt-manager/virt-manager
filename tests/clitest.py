@@ -430,6 +430,7 @@ cell0.distances.sibling1.id=1,cell0.distances.sibling1.value=21,\
 cell1.distances.sibling0.id=0,cell1.distances.sibling0.value=21,\
 cell1.distances.sibling1.id=1,cell1.distances.sibling1.value=10,\
 cache.mode=emulate,cache.level=3 \
+--cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3 \
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444 \
 --boot cdrom,fd,hd,network,menu=off,loader=/foo/bar \
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10 \
