@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-19 20:07-0400\n"
-"PO-Revision-Date: 2017-09-19 07:04-0400\n"
+"POT-Creation-Date: 2018-02-06 18:03-0500\n"
+"PO-Revision-Date: 2017-12-04 06:42-0500\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/projects/p/virt-manager/"
 "language/ca/)\n"
@@ -382,7 +382,7 @@ msgstr "L'arquitectura de CPU a simular"
 msgid "The machine type to emulate"
 msgstr "El tipus de màquina a emular"
 
-#: ../virt-install:948 ../virt-clone:147 ../virt-xml:393
+#: ../virt-install:948 ../virt-clone:147 ../virt-xml:391
 msgid "Miscellaneous Options"
 msgstr "Opcions de miscel·lània"
 
@@ -570,112 +570,112 @@ msgstr ""
 msgid "Creating guest '%s'."
 msgstr "S'està creant el convidat «%s»."
 
-#: ../virt-convert:139 ../virt-xml:484
+#: ../virt-convert:139 ../virt-xml:482
 msgid "Aborted at user request"
 msgstr "S'ha avortat a petició de l'usuari"
 
-#: ../virt-xml:54
+#: ../virt-xml:55
 msgid "Please enter 'yes' or 'no'."
 msgstr "Si us plau, introduïu 'yes' o 'no'."
 
-#: ../virt-xml:98
+#: ../virt-xml:96
 #, c-format
 msgid "Could not find domain '%s': %s"
 msgstr "No s'ha pogut el domini «%s»: %s"
 
-#: ../virt-xml:128
+#: ../virt-xml:126
 #, c-format
 msgid "Invalid --edit option '%s'"
 msgstr "L'opció «%s» per a --edit no és vàlida"
 
-#: ../virt-xml:131
+#: ../virt-xml:129
 #, c-format
 msgid "No --%s objects found in the XML"
 msgstr "No es va trobar cap objecte --%s al XML"
 
-#: ../virt-xml:134
+#: ../virt-xml:132
 #, c-format
 msgid "--edit %s requested but there's only %s --%s object in the XML"
 msgstr "Es va sol·licitar --edit %s però tan sols %s --%s al XML"
 
-#: ../virt-xml:151
+#: ../virt-xml:149
 #, c-format
 msgid "No matching objects found for --%s %s"
 msgstr "No es va trobar cap objecte que coincidís amb --%s %s"
 
-#: ../virt-xml:167
+#: ../virt-xml:165
 #, c-format
 msgid "One of %s must be specified."
 msgstr "S'ha d'especificar un de %s."
 
-#: ../virt-xml:170
+#: ../virt-xml:168
 #, c-format
 msgid "Conflicting options %s"
 msgstr "Opcions %s en conflicte"
 
-#: ../virt-xml:181
+#: ../virt-xml:179
 msgid "No change specified."
 msgstr "No s'ha especificat cap canvi."
 
-#: ../virt-xml:183
+#: ../virt-xml:181
 #, c-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr ""
 "Només es pot especificar una operació de canvi (opcions %s en conflicte)"
 
-#: ../virt-xml:196
+#: ../virt-xml:194
 #, c-format
 msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
 msgstr "«--edit %s» no té sentit amb --%s, utilitzeu «--edit» sense res"
 
-#: ../virt-xml:206
+#: ../virt-xml:204
 #, c-format
 msgid "Cannot use --add-device with --%s"
 msgstr "No es pot utilitzar --add-device amb --%s"
 
-#: ../virt-xml:213
+#: ../virt-xml:211
 #, c-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "No es pot utilitzar --remove-device amb --%s"
 
-#: ../virt-xml:235
+#: ../virt-xml:233
 #, c-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml no està admès per --%s"
 
-#: ../virt-xml:259
+#: ../virt-xml:257
 #, c-format
 msgid "Define '%s' with the changed XML?"
 msgstr "Es defineix «%s» amb el XML canviat?"
 
-#: ../virt-xml:267
+#: ../virt-xml:265
 #, c-format
 msgid "Domain '%s' defined successfully."
 msgstr "El domini «%s» s'ha definit correctament."
 
-#: ../virt-xml:299
+#: ../virt-xml:297
 #, c-format
 msgid "Error attempting device %s: %s"
 msgstr "S'ha produït un error en intentar el dispositiu %s: %s"
 
-#: ../virt-xml:301
+#: ../virt-xml:299
 #, c-format
 msgid "Device %s successful."
 msgstr "Dispositiu %s correcte."
 
-#: ../virt-xml:340
+#: ../virt-xml:338
 msgid "Edit libvirt XML using command line options."
 msgstr "Edita el XML de libvirt mitjançant les opcions de la línia d'ordres."
 
-#: ../virt-xml:346
+#: ../virt-xml:344
 msgid "Domain name, id, or uuid"
 msgstr "Nom de domini, id o uuid"
 
-#: ../virt-xml:348
+#: ../virt-xml:346
 msgid "XML actions"
 msgstr "Accions XML"
 
-#: ../virt-xml:350
+#: ../virt-xml:348
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -689,7 +689,7 @@ msgstr ""
 "--edit all --disk ...  (edita tots els dispositius de disc)\n"
 "--edit target=hda --disk ... (edita el disc 'hda')\n"
 
-#: ../virt-xml:356
+#: ../virt-xml:354
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -701,7 +701,7 @@ msgstr ""
 "--remove-device --disk all (elimina tots els discs)\n"
 "--remove-device --disk /algun/camí"
 
-#: ../virt-xml:361
+#: ../virt-xml:359
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -709,15 +709,15 @@ msgstr ""
 "Afegeix el dispositiu especificat. Exemple:\n"
 "--add-device --disk ..."
 
-#: ../virt-xml:364
+#: ../virt-xml:362
 msgid "Just output the built device XML, no domain required."
 msgstr "Mostra només el XML construït del dispositiu, no es requereix domini."
 
-#: ../virt-xml:366
+#: ../virt-xml:364
 msgid "Output options"
 msgstr "Opcions de sortida"
 
-#: ../virt-xml:368
+#: ../virt-xml:366
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -729,205 +729,209 @@ msgstr ""
 "Amb --remove-device, això és una operació de desconnexió en calent.\n"
 "Amb --edit, això és una operació d'actualització de dispositiu."
 
-#: ../virt-xml:373
+#: ../virt-xml:371
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "Força la definició del domini. Només es requereix si s'ha especificat una "
 "opció --print."
 
-#: ../virt-xml:376
+#: ../virt-xml:374
 msgid "Only print the requested change, in diff format"
 msgstr "Mostra només el canvi demanat, en format diff"
 
-#: ../virt-xml:378
+#: ../virt-xml:376
 msgid "Only print the requested change, in full XML format"
 msgstr "Mostra només el canvi demanat, en format XML complet"
 
-#: ../virt-xml:380
+#: ../virt-xml:378
 msgid "Require confirmation before saving any results."
 msgstr "Demana la confirmació abans de desar qualsevol resultat."
 
-#: ../virt-xml:382
+#: ../virt-xml:380
 msgid "XML options"
 msgstr "Opcions XML"
 
-#: ../virt-xml:419
+#: ../virt-xml:417
 msgid "Can't use --confirm with stdin input."
 msgstr "No es pot utilitzar --confirm amb l'entrada stdin."
 
-#: ../virt-xml:421
+#: ../virt-xml:419
 msgid "Can't use --update with stdin input."
 msgstr "No es pot utilitzar --update amb l'entrada stdin."
 
-#: ../virt-xml:424
+#: ../virt-xml:422
 msgid "A domain must be specified"
 msgstr "S'ha d'especificar un domini"
 
-#: ../virt-xml:451
+#: ../virt-xml:449
 #, c-format
 msgid "Don't know how to --update for --%s"
 msgstr "No sé com fer --update per a --%s"
 
-#: ../virt-xml:470
+#: ../virt-xml:468
 msgid "Changes will take effect after the next domain shutdown."
 msgstr "Els canvis tindran lloc després de la següent apagada del domini."
 
-#: ../virtManager/addhardware.py:179 ../virtManager/details.py:791
+#: ../virtManager/addhardware.py:178 ../virtManager/details.py:791
 msgid "Hardware"
 msgstr "Maquinari"
 
-#: ../virtManager/addhardware.py:217 ../virtManager/clone.py:124
+#: ../virtManager/addhardware.py:216 ../virtManager/clone.py:124
 msgid "Disk device"
 msgstr "Dispositiu de disc"
 
-#: ../virtManager/addhardware.py:219
+#: ../virtManager/addhardware.py:218
 msgid "CDROM device"
 msgstr "Dispositiu de CD-ROM"
 
-#: ../virtManager/addhardware.py:221
+#: ../virtManager/addhardware.py:220
 msgid "Floppy device"
 msgstr "Dispositiu de disquet"
 
-#: ../virtManager/addhardware.py:224
+#: ../virtManager/addhardware.py:223
 msgid "LUN Passthrough"
 msgstr "Traspàs del LUN"
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:276 ../virtManager/addhardware.py:551
+#: ../virtManager/addhardware.py:275 ../virtManager/addhardware.py:553
 #: ../virtManager/addhardware.py:663 ../virtManager/addhardware.py:679
 #: ../virtManager/addhardware.py:743 ../virtManager/details.py:2608
 #: ../virtManager/gfxdetails.py:99 ../virtManager/preferences.py:165
 msgid "Hypervisor default"
 msgstr "Valor per defecte de l'hipervisor"
 
-#: ../virtManager/addhardware.py:339 ../virtManager/addstorage.py:196
-#: ../virtManager/create.py:523
+#: ../virtManager/addhardware.py:338 ../virtManager/addstorage.py:195
+#: ../virtManager/create.py:524
 msgid "Connection does not support storage management."
 msgstr "La connexió no admet la gestió de l'emmagatzematge."
 
-#: ../virtManager/addhardware.py:349 ../virtManager/addhardware.py:1087
-#: ../ui/create.ui.h:69
+#: ../virtManager/addhardware.py:348 ../virtManager/addhardware.py:1089
+#: ../ui/create.ui.h:74
 msgid "Storage"
 msgstr "Emmagatzematge"
 
-#: ../virtManager/addhardware.py:351 ../virtManager/addhardware.py:1089
+#: ../virtManager/addhardware.py:350 ../virtManager/addhardware.py:1091
 msgid "Controller"
 msgstr "Controlador"
 
-#: ../virtManager/addhardware.py:352 ../virtManager/addhardware.py:1091
-#: ../virtinst/network.py:207
+#: ../virtManager/addhardware.py:351 ../virtManager/addhardware.py:1093
+#: ../virtinst/network.py:213
 msgid "Network"
 msgstr "Xarxa"
 
-#: ../virtManager/addhardware.py:353 ../virtManager/addhardware.py:1093
+#: ../virtManager/addhardware.py:352 ../virtManager/addhardware.py:1095
 #: ../virtManager/details.py:202
 msgid "Input"
 msgstr "Entrada"
 
-#: ../virtManager/addhardware.py:354 ../virtManager/addhardware.py:359
-#: ../virtManager/addhardware.py:362 ../virtManager/addhardware.py:366
-#: ../virtManager/addhardware.py:372 ../virtManager/addhardware.py:392
+#: ../virtManager/addhardware.py:353 ../virtManager/addhardware.py:358
+#: ../virtManager/addhardware.py:361 ../virtManager/addhardware.py:365
+#: ../virtManager/addhardware.py:371 ../virtManager/addhardware.py:391
 msgid "Not supported for this guest type."
 msgstr "No admès per a aquest tipus de convidat."
 
-#: ../virtManager/addhardware.py:355 ../virtManager/addhardware.py:1095
+#: ../virtManager/addhardware.py:354 ../virtManager/addhardware.py:1097
 msgid "Graphics"
 msgstr "Gràfics"
 
-#: ../virtManager/addhardware.py:357 ../virtManager/addhardware.py:1097
+#: ../virtManager/addhardware.py:356 ../virtManager/addhardware.py:1099
 msgid "Sound"
 msgstr "So"
 
-#: ../virtManager/addhardware.py:360 ../virtManager/details.py:206
-#: ../ui/details.ui.h:173
+#: ../virtManager/addhardware.py:359 ../virtManager/details.py:206
+#: ../ui/details.ui.h:170
 msgid "Serial"
 msgstr "Sèrie"
 
-#: ../virtManager/addhardware.py:364 ../virtManager/details.py:208
+#: ../virtManager/addhardware.py:363 ../virtManager/details.py:208
 msgid "Parallel"
 msgstr "Paral·lel"
 
-#: ../virtManager/addhardware.py:368 ../virtManager/details.py:210
+#: ../virtManager/addhardware.py:367 ../virtManager/details.py:210
 #: ../ui/details.ui.h:23
 msgid "Console"
 msgstr "Consola"
 
-#: ../virtManager/addhardware.py:370 ../virtManager/details.py:216
+#: ../virtManager/addhardware.py:369 ../virtManager/details.py:216
 msgid "Channel"
 msgstr "Canal"
 
-#: ../virtManager/addhardware.py:374
+#: ../virtManager/addhardware.py:373
 msgid "USB Host Device"
 msgstr "Dispositiu d'amfitrió USB"
 
-#: ../virtManager/addhardware.py:376 ../virtManager/addhardware.py:380
+#: ../virtManager/addhardware.py:375 ../virtManager/addhardware.py:379
 msgid "Connection does not support host device enumeration"
 msgstr "La connexió no admet l'inventari dels dispositius de l'amfitrió"
 
-#: ../virtManager/addhardware.py:384
+#: ../virtManager/addhardware.py:383
 msgid "Not supported for containers"
 msgstr "No és compatible per als contenidors"
 
-#: ../virtManager/addhardware.py:385
+#: ../virtManager/addhardware.py:384
 msgid "PCI Host Device"
 msgstr "Dispositiu d'amfitrió PCI"
 
-#: ../virtManager/addhardware.py:388
+#: ../virtManager/addhardware.py:387
 msgid "Video"
 msgstr "Vídeo"
 
-#: ../virtManager/addhardware.py:389
+#: ../virtManager/addhardware.py:388
 msgid "Libvirt version does not support video devices."
 msgstr "La versió de libvirt no admet dispositius de vídeo."
 
-#: ../virtManager/addhardware.py:390 ../virtManager/details.py:252
+#: ../virtManager/addhardware.py:389 ../virtManager/details.py:252
 #: ../virtManager/domain.py:280
 msgid "Watchdog"
 msgstr "Watchdog"
 
-#: ../virtManager/addhardware.py:393
+#: ../virtManager/addhardware.py:392
 msgid "Filesystem"
 msgstr "Sistema de fitxers"
 
-#: ../virtManager/addhardware.py:397 ../virtManager/addhardware.py:408
+#: ../virtManager/addhardware.py:396
 msgid "Not supported for this hypervisor/libvirt combination."
 msgstr "No admès per aquesta combinació d'hipervisor/libvirt."
 
-#: ../virtManager/addhardware.py:399 ../virtManager/addhardware.py:1105
+#: ../virtManager/addhardware.py:398 ../virtManager/addhardware.py:1107
 #: ../virtManager/details.py:251
 msgid "Smartcard"
 msgstr "Targeta intel·ligent"
 
-#: ../virtManager/addhardware.py:401 ../virtManager/addhardware.py:1107
+#: ../virtManager/addhardware.py:400 ../virtManager/addhardware.py:1109
 msgid "USB Redirection"
 msgstr "Redirecció USB"
 
-#: ../virtManager/addhardware.py:403 ../virtManager/addhardware.py:1109
+#: ../virtManager/addhardware.py:402 ../virtManager/addhardware.py:1111
 #: ../virtManager/details.py:244
 msgid "TPM"
 msgstr "TPM"
 
-#: ../virtManager/addhardware.py:405 ../virtManager/details.py:239
+#: ../virtManager/addhardware.py:404 ../virtManager/details.py:239
 msgid "RNG"
 msgstr "RNG"
 
-#: ../virtManager/addhardware.py:406 ../virtManager/addhardware.py:1113
+#: ../virtManager/addhardware.py:405 ../virtManager/addhardware.py:1115
 #: ../virtManager/details.py:250
 msgid "Panic Notifier"
 msgstr "Notificador de pànic"
 
+#: ../virtManager/addhardware.py:408
+msgid "Not supported for this hypervisor/libvirt/arch combination."
+msgstr "No admès per aquesta combinació d'hipervisor/libvirt/arquitectura."
+
 #. [xml value, label]
-#: ../virtManager/addhardware.py:584 ../virtManager/netlist.py:96
+#: ../virtManager/addhardware.py:586 ../virtManager/netlist.py:96
 msgid "Passthrough"
 msgstr "Traspàs"
 
-#: ../virtManager/addhardware.py:585
+#: ../virtManager/addhardware.py:587
 msgid "Host"
 msgstr "Amfitrió"
 
 #. [xml value, label, conn details]
-#: ../virtManager/addhardware.py:612
+#: ../virtManager/addhardware.py:613
 msgid "Spice channel"
 msgstr "Canal Spice"
 
@@ -935,8 +939,8 @@ msgstr "Canal Spice"
 msgid "EvTouch USB Graphics Tablet"
 msgstr "Tauleta gràfica USB EvTouch"
 
-#: ../virtManager/addhardware.py:759 ../virtManager/create.py:1013
-#: ../virtManager/create.py:1230 ../virtManager/create.py:1233
+#: ../virtManager/addhardware.py:759 ../virtManager/create.py:1015
+#: ../virtManager/create.py:1232 ../virtManager/create.py:1235
 msgid "Generic"
 msgstr "Genèric"
 
@@ -960,7 +964,7 @@ msgstr ""
 msgid "No Devices Available"
 msgstr "Cap dispositiu disponible"
 
-#: ../virtManager/addhardware.py:903
+#: ../virtManager/addhardware.py:905
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -971,44 +975,44 @@ msgstr ""
 "Afegir més d'un controlador USB no està admès.\n"
 "Podeu canviar el tipus de controlador USB en la pantalla de detalls de la MV."
 
-#: ../virtManager/addhardware.py:1085 ../virtManager/create.py:262
+#: ../virtManager/addhardware.py:1087 ../virtManager/create.py:262
 msgid "Error"
 msgstr "Error"
 
-#: ../virtManager/addhardware.py:1099
+#: ../virtManager/addhardware.py:1101
 msgid "Video Device"
 msgstr "Dispositiu de vídeo"
 
-#: ../virtManager/addhardware.py:1101
+#: ../virtManager/addhardware.py:1103
 msgid "Watchdog Device"
 msgstr "Dispositiu de watchdog"
 
-#: ../virtManager/addhardware.py:1103
+#: ../virtManager/addhardware.py:1105
 msgid "Filesystem Passthrough"
 msgstr "Traspàs del sistema de fitxers"
 
-#: ../virtManager/addhardware.py:1111
+#: ../virtManager/addhardware.py:1113
 msgid "Random Number Generator"
 msgstr "Generador de Nombres Aleatoris"
 
-#: ../virtManager/addhardware.py:1117 ../virtManager/details.py:2903
+#: ../virtManager/addhardware.py:1119 ../virtManager/details.py:2903
 #, python-format
 msgid "%s Device"
 msgstr "Dispositiu %s"
 
-#: ../virtManager/addhardware.py:1121
+#: ../virtManager/addhardware.py:1123
 msgid "PCI Device"
 msgstr "Dispositiu PCI"
 
-#: ../virtManager/addhardware.py:1122
+#: ../virtManager/addhardware.py:1124
 msgid "USB Device"
 msgstr "Dispositiu USB"
 
-#: ../virtManager/addhardware.py:1323
+#: ../virtManager/addhardware.py:1325
 msgid "Are you sure you want to add this device?"
 msgstr "Esteu segur que voleu afegir aquest dispositiu?"
 
-#: ../virtManager/addhardware.py:1326
+#: ../virtManager/addhardware.py:1328
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -1016,203 +1020,195 @@ msgstr ""
 "Aquest dispositiu no s'ha pogut associar a la màquina en execució. Voleu que "
 "el dispositiu estigui disponible després de la següent aturada del convidat?"
 
-#: ../virtManager/addhardware.py:1342
+#: ../virtManager/addhardware.py:1344
 #, python-format
 msgid "Error adding device: %s"
 msgstr "S'ha produït un error en afegir el dispositiu: %s"
 
-#: ../virtManager/addhardware.py:1354
+#: ../virtManager/addhardware.py:1356
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "No es pot afegir el dispositiu: %s"
 
-#: ../virtManager/addhardware.py:1371
+#: ../virtManager/addhardware.py:1373
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr ""
 "S'ha produït un error no capturat en validar l'entrada de maquinari: %s"
 
-#: ../virtManager/addhardware.py:1378
+#: ../virtManager/addhardware.py:1380
 msgid "Creating device"
 msgstr "S'està creant el dispositiu"
 
-#: ../virtManager/addhardware.py:1379
+#: ../virtManager/addhardware.py:1381
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "En funció del dispositiu, això pot trigar uns minuts a completar-se."
 
-#: ../virtManager/addhardware.py:1492 ../virtManager/addhardware.py:1515
-#: ../virtManager/create.py:2220
+#: ../virtManager/addhardware.py:1502 ../virtManager/addhardware.py:1525
+#: ../virtManager/create.py:2227
 msgid "Storage parameter error."
 msgstr "Error al paràmetre d'emmagatzematge."
 
-#: ../virtManager/addhardware.py:1532
+#: ../virtManager/addhardware.py:1542
 msgid "Network selection error."
 msgstr "Error de selecció de xarxa."
 
-#: ../virtManager/addhardware.py:1533
+#: ../virtManager/addhardware.py:1543
 msgid "A network source must be selected."
 msgstr "Cal seleccionar un origen de la xarxa."
 
-#: ../virtManager/addhardware.py:1536
-msgid "Invalid MAC address"
-msgstr "L'adreça MAC no és vàlida"
-
-#: ../virtManager/addhardware.py:1537
-msgid "A MAC address must be entered."
-msgstr "Cal introduir una adreça MAC."
-
-#: ../virtManager/addhardware.py:1571
+#: ../virtManager/addhardware.py:1577
 msgid "invalid listen type"
 msgstr "tipus d'escolta no vàlid"
 
-#: ../virtManager/addhardware.py:1575
+#: ../virtManager/addhardware.py:1581
 msgid "Graphics device parameter error"
 msgstr "Error al paràmetre del dispositiu gràfic"
 
-#: ../virtManager/addhardware.py:1584
+#: ../virtManager/addhardware.py:1590
 msgid "Sound device parameter error"
 msgstr "Error al paràmetre del dispositiu de so"
 
-#: ../virtManager/addhardware.py:1589
+#: ../virtManager/addhardware.py:1595
 msgid "Physical Device Required"
 msgstr "Es requereix el dispositiu físic"
 
-#: ../virtManager/addhardware.py:1590
+#: ../virtManager/addhardware.py:1596
 msgid "A device must be selected."
 msgstr "Cal seleccionar un dispositiu."
 
-#: ../virtManager/addhardware.py:1602
+#: ../virtManager/addhardware.py:1608
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "El dispositiu ja s'està utilitzant per a altres convidats %s."
 
-#: ../virtManager/addhardware.py:1604
+#: ../virtManager/addhardware.py:1610
 msgid "Do you really want to use the device?"
 msgstr "Realment voleu utilitzar el dispositiu?"
 
-#: ../virtManager/addhardware.py:1610
+#: ../virtManager/addhardware.py:1616
 msgid "Host device parameter error"
 msgstr "Error al paràmetre del dispositiu amfitrió"
 
-#: ../virtManager/addhardware.py:1676
+#: ../virtManager/addhardware.py:1682
 #, python-format
 msgid "%s device parameter error"
 msgstr "Error al paràmetre del dispositiu %s"
 
-#: ../virtManager/addhardware.py:1687
+#: ../virtManager/addhardware.py:1693
 msgid "Video device parameter error"
 msgstr "Error al paràmetre del dispositiu de vídeo"
 
-#: ../virtManager/addhardware.py:1699
+#: ../virtManager/addhardware.py:1705
 msgid "Watchdog parameter error"
 msgstr "Error al paràmetre del watchdog"
 
-#: ../virtManager/addhardware.py:1714
+#: ../virtManager/addhardware.py:1720
 msgid "Smartcard device parameter error"
 msgstr "Error al paràmetre del dispositiu de targetes intel·ligents"
 
-#: ../virtManager/addhardware.py:1733
+#: ../virtManager/addhardware.py:1739
 msgid "USB redirected device parameter error"
 msgstr "Error al paràmetre del dispositiu redirigit a l'USB"
 
-#: ../virtManager/addhardware.py:1753
+#: ../virtManager/addhardware.py:1759
 msgid "TPM device parameter error"
 msgstr "Error al paràmetre del dispositiu TPM"
 
-#: ../virtManager/addhardware.py:1764
+#: ../virtManager/addhardware.py:1770
 msgid "Panic device parameter error"
 msgstr "Error al paràmetre del dispositiu de pànic"
 
-#: ../virtManager/addhardware.py:1807 ../virtManager/addhardware.py:1819
-#: ../virtManager/addhardware.py:1822 ../virtManager/addhardware.py:1834
-#: ../virtManager/addhardware.py:1837
+#: ../virtManager/addhardware.py:1813 ../virtManager/addhardware.py:1825
+#: ../virtManager/addhardware.py:1828 ../virtManager/addhardware.py:1840
+#: ../virtManager/addhardware.py:1843
 msgid "RNG selection error."
 msgstr "Error de selecció de RNG."
 
-#: ../virtManager/addhardware.py:1808
+#: ../virtManager/addhardware.py:1814
 msgid "A device must be specified."
 msgstr "S'ha d'especificar un dispositiu."
 
-#: ../virtManager/addhardware.py:1820
+#: ../virtManager/addhardware.py:1826
 msgid "Please specify both bind and connect host"
 msgstr ""
 "Si us plau, especifiqueu l'amfitrió de la vinculació i l'amfitrió de la "
 "connexió"
 
-#: ../virtManager/addhardware.py:1823
+#: ../virtManager/addhardware.py:1829
 msgid "Please specify both bind and connect service"
 msgstr ""
 "Si us plau, especifiqueu el servei de la vinculació i el servei de la "
 "connexió"
 
-#: ../virtManager/addhardware.py:1835
+#: ../virtManager/addhardware.py:1841
 msgid "The EGD host must be specified."
 msgstr "S'ha d'especificar un amfitrió EGD."
 
-#: ../virtManager/addhardware.py:1838
+#: ../virtManager/addhardware.py:1844
 msgid "The EGD service must be specified."
 msgstr "S'ha d'especificar un servei EGD."
 
-#: ../virtManager/addhardware.py:1857
+#: ../virtManager/addhardware.py:1863
 msgid "RNG device parameter error"
 msgstr "Error al paràmetre del dispositiu RNG"
 
-#: ../virtManager/addstorage.py:101
+#: ../virtManager/addstorage.py:100
 #, fuzzy, python-format
 msgid "%s available in the default location"
 msgstr "%s disponible en la localització predeterminada"
 
-#: ../virtManager/addstorage.py:109
+#: ../virtManager/addstorage.py:108
 msgid "Default pool is not active."
 msgstr "La reserva per defecte no està activa."
 
-#: ../virtManager/addstorage.py:110
+#: ../virtManager/addstorage.py:109
 #, python-format
 msgid "Storage pool '%s' is not active. Would you like to start the pool now?"
 msgstr ""
 "La reserva d'emmagatzematge «%s» no està activa. Voleu iniciar ara la "
 "reserva?"
 
-#: ../virtManager/addstorage.py:121
+#: ../virtManager/addstorage.py:120
 #, python-format
 msgid "Could not start storage_pool '%s': %s"
 msgstr "No s'ha pogut iniciar storage_pool «%s»: %s"
 
-#: ../virtManager/addstorage.py:146
+#: ../virtManager/addstorage.py:145
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr ""
 "Podria ser que l'emulador no tingui permisos de cerca per al camí «%s»."
 
-#: ../virtManager/addstorage.py:148
+#: ../virtManager/addstorage.py:147
 msgid "Do you want to correct this now?"
 msgstr "Voleu corregir això ara?"
 
-#: ../virtManager/addstorage.py:149 ../virtManager/addstorage.py:175
+#: ../virtManager/addstorage.py:148 ../virtManager/addstorage.py:174
 msgid "Don't ask about these directories again."
 msgstr "No preguntis més sobre aquests directoris."
 
-#: ../virtManager/addstorage.py:163
+#: ../virtManager/addstorage.py:162
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr ""
 "S'han trobat errors en canviar els permisos per als següents directoris:"
 
-#: ../virtManager/addstorage.py:260
+#: ../virtManager/addstorage.py:259
 msgid "A storage path must be specified."
 msgstr "Cal indicar un camí d'emmagatzematge."
 
 #. Fatal errors are reported when setting 'size'
-#: ../virtManager/addstorage.py:292
+#: ../virtManager/addstorage.py:291
 msgid "Not Enough Free Space"
 msgstr "No hi ha prou espai al disc"
 
-#: ../virtManager/addstorage.py:300 ../virtManager/choosecd.py:122
+#: ../virtManager/addstorage.py:299 ../virtManager/choosecd.py:122
 #, python-format
 msgid "Disk \"%s\" is already in use by other guests %s"
 msgstr "El disc «%s» ja s'està utilitzant per a altres convidats %s"
 
-#: ../virtManager/addstorage.py:302 ../virtManager/choosecd.py:124
+#: ../virtManager/addstorage.py:301 ../virtManager/choosecd.py:124
 msgid "Do you really want to use the disk?"
 msgstr "Realment voleu utilitzar el disc?"
 
@@ -1237,7 +1233,7 @@ msgstr "_Unitat de disquet"
 msgid "Floppy _Image"
 msgstr "_Imatge de disquet"
 
-#: ../virtManager/choosecd.py:103 ../virtManager/create.py:665
+#: ../virtManager/choosecd.py:103 ../virtManager/create.py:666
 msgid "Physical CDROM passthrough not supported with this hypervisor"
 msgstr "El traspàs del CD-ROM físic no està admès amb aquest hipervisor"
 
@@ -1270,11 +1266,11 @@ msgstr ""
 "de ser volums d'emmagatzematge\n"
 "gestionats per libvirt."
 
-#: ../virtManager/clone.py:87 ../virtManager/delete.py:350
+#: ../virtManager/clone.py:87 ../virtManager/delete.py:352
 msgid "No write access to parent directory."
 msgstr "Sense accés d'escriptura al directori del nivell superior."
 
-#: ../virtManager/clone.py:89 ../virtManager/delete.py:348
+#: ../virtManager/clone.py:89 ../virtManager/delete.py:350
 msgid "Path does not exist."
 msgstr "No existeix el camí."
 
@@ -1381,7 +1377,7 @@ msgid "Error creating virtual machine clone '%s': %s"
 msgstr "S'ha produït un error en crear el clon de la màquina virtual «%s»: %s"
 
 #: ../virtManager/clone.py:822 ../virtManager/createpool.py:402
-#: ../virtManager/createvol.py:293 ../virtManager/migrate.py:381
+#: ../virtManager/createvol.py:293 ../virtManager/migrate.py:384
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "S'ha produït un error no capturat en validar l'entrada: %s"
@@ -1395,47 +1391,47 @@ msgstr "S'està creant el clon de la màquina virtual «%s»"
 msgid " and selected storage (this may take a while)"
 msgstr "i l'emmagatzematge seleccionat (això pot trigar una estona)"
 
-#: ../virtManager/config.py:127
+#: ../virtManager/config.py:138
 msgid "Locate or create storage volume"
 msgstr "Cerca o crea un volum d'emmagatzematge"
 
-#: ../virtManager/config.py:128
+#: ../virtManager/config.py:139
 msgid "Locate existing storage"
 msgstr "Cerca un emmagatzematge existent"
 
-#: ../virtManager/config.py:135
+#: ../virtManager/config.py:146
 msgid "Locate ISO media volume"
 msgstr "Cerca un volum de mitjà ISO"
 
-#: ../virtManager/config.py:136
+#: ../virtManager/config.py:147
 msgid "Locate ISO media"
 msgstr "Cerca el mitjà ISO"
 
-#: ../virtManager/config.py:141
+#: ../virtManager/config.py:152
 msgid "Locate floppy media volume"
 msgstr "Cerca el volum de mitjà de disquet"
 
-#: ../virtManager/config.py:142
+#: ../virtManager/config.py:153
 msgid "Locate floppy media"
 msgstr "Cerca el mitjà de disquet"
 
-#: ../virtManager/config.py:147 ../virtManager/config.py:148
+#: ../virtManager/config.py:158 ../virtManager/config.py:159
 msgid "Locate directory volume"
 msgstr "Cerca el volum del directori"
 
-#: ../virtManager/connect.py:170
+#: ../virtManager/connect.py:172
 msgid "user session"
 msgstr "sessió d'usuari"
 
-#: ../virtManager/connect.py:172
+#: ../virtManager/connect.py:174
 msgid "Linux Containers"
 msgstr "Contenidors Linux"
 
-#: ../virtManager/connect.py:182
+#: ../virtManager/connect.py:189
 msgid "with certificates"
 msgstr "amb certificats"
 
-#: ../virtManager/connect.py:428
+#: ../virtManager/connect.py:443
 msgid "A hostname is required for remote connections."
 msgstr "Es requereix un nom d'amfitrió per a les connexions remotes."
 
@@ -1447,7 +1443,7 @@ msgstr "Es necessita autenticació"
 msgid "User session"
 msgstr "Sessió d'usuari"
 
-#: ../virtManager/connection.py:614 ../virtManager/migrate.py:297
+#: ../virtManager/connection.py:614 ../virtManager/migrate.py:300
 msgid "Disconnected"
 msgstr "Desconnectat"
 
@@ -1455,18 +1451,18 @@ msgstr "Desconnectat"
 msgid "Connecting"
 msgstr "S'està connectant"
 
-#: ../virtManager/connection.py:618 ../virtManager/host.py:627
-#: ../virtManager/host.py:839 ../virtManager/libvirtobject.py:221
-#: ../virtManager/storagelist.py:347 ../ui/storagelist.ui.h:11
+#: ../virtManager/connection.py:618 ../virtManager/host.py:673
+#: ../virtManager/host.py:886 ../virtManager/libvirtobject.py:221
+#: ../virtManager/storagelist.py:350 ../ui/storagelist.ui.h:11
 msgid "Active"
 msgstr "Actiu"
 
 #. Machine settings
-#: ../virtManager/connection.py:620 ../virtManager/create.py:1149
+#: ../virtManager/connection.py:620 ../virtManager/create.py:1151
 #: ../virtManager/details.py:2371 ../virtManager/details.py:2387
 #: ../virtManager/details.py:2630 ../virtManager/domain.py:256
-#: ../virtManager/gfxdetails.py:297 ../virtManager/gfxdetails.py:299
-#: ../virtManager/host.py:833 ../virtManager/interface.py:112
+#: ../virtManager/gfxdetails.py:305 ../virtManager/gfxdetails.py:307
+#: ../virtManager/host.py:880 ../virtManager/interface.py:112
 msgid "Unknown"
 msgstr "Desconegut"
 
@@ -1485,103 +1481,103 @@ msgstr ""
 "\n"
 "Error de recuperació: %s"
 
-#: ../virtManager/console.py:238
+#: ../virtManager/console.py:239
 msgid "Leave fullscreen"
 msgstr "Surt de la pantalla completa"
 
-#: ../virtManager/console.py:265
+#: ../virtManager/console.py:267
 msgid "Send key combination"
 msgstr "Envia combinació de tecles"
 
-#: ../virtManager/console.py:289
+#: ../virtManager/console.py:292
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr "%(vm-name)s en %(connection-name)s"
 
-#: ../virtManager/console.py:296
+#: ../virtManager/console.py:299
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Premeu %s per alliberar el punter."
 
-#: ../virtManager/console.py:421
+#: ../virtManager/console.py:424
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr "El tipus de gràfics «%s» no admet el redimensionament automàtic. "
 
-#: ../virtManager/console.py:424
+#: ../virtManager/console.py:427
 msgid "Guest agent is not available."
 msgstr "L'agent del convidat no està disponible."
 
-#: ../virtManager/console.py:565
+#: ../virtManager/console.py:568
 msgid "Guest has crashed."
 msgstr "El convidat ha fallat."
 
-#: ../virtManager/console.py:567
+#: ../virtManager/console.py:570
 msgid "Guest is not running."
 msgstr "El convidat no està en execució."
 
-#: ../virtManager/console.py:702
+#: ../virtManager/console.py:705
 msgid "Graphical console not configured for guest"
 msgstr "La consola gràfica no està configurada per al convidat"
 
-#: ../virtManager/console.py:709
+#: ../virtManager/console.py:712
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "No es pot mostrar el tipus de consola gràfica «%s»"
 
-#: ../virtManager/console.py:716
+#: ../virtManager/console.py:719
 msgid "Connecting to graphical console for guest"
 msgstr "S'està connectant a la consola gràfica per al convidat"
 
-#: ../virtManager/console.py:739
+#: ../virtManager/console.py:742
 msgid "Error connecting to graphical console"
 msgstr "S'ha produït un error en connectar a la consola gràfica"
 
-#: ../virtManager/console.py:793
+#: ../virtManager/console.py:796
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Error en l'autenticació del visualitzador: %s"
 
-#: ../virtManager/console.py:811
+#: ../virtManager/console.py:814
 msgid "USB redirection error"
 msgstr "S'ha produït un error en la redirecció USB"
 
-#: ../virtManager/console.py:820
+#: ../virtManager/console.py:823
 msgid "Viewer was disconnected."
 msgstr "S'ha desconnectat el visualitzador."
 
-#: ../virtManager/console.py:826
+#: ../virtManager/console.py:829
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "Sortida de l'error del túnel SSH: %s"
 
-#: ../virtManager/console.py:831 ../virtManager/console.py:1016
+#: ../virtManager/console.py:834 ../virtManager/console.py:1019
 msgid "Viewer disconnected."
 msgstr "Visualitzador desconnectat."
 
-#: ../virtManager/console.py:921
+#: ../virtManager/console.py:924
 msgid "No text console available"
 msgstr "Cap consola de text disponible"
 
-#: ../virtManager/console.py:934
+#: ../virtManager/console.py:937
 #, python-format
 msgid "Text Console %d"
 msgstr "Consola de text %d"
 
-#: ../virtManager/console.py:936
+#: ../virtManager/console.py:939
 #, python-format
 msgid "Serial %d"
 msgstr "Sèrie %d"
 
-#: ../virtManager/console.py:948
+#: ../virtManager/console.py:951
 msgid "No graphical console available"
 msgstr "Cap consola gràfica disponible"
 
-#: ../virtManager/console.py:955
+#: ../virtManager/console.py:958
 msgid "Graphical Console"
 msgstr "Consola gràfica"
 
-#: ../virtManager/console.py:963
+#: ../virtManager/console.py:966
 msgid "virt-manager does not support more that one graphical console"
 msgstr "El virt-manager no admet més d'una consola gràfica"
 
@@ -1599,7 +1595,7 @@ msgstr "%d MiB"
 msgid "Warning"
 msgstr "Avís"
 
-#: ../virtManager/create.py:494
+#: ../virtManager/create.py:495
 #, python-format
 msgid ""
 "Failed to setup UEFI for AArch64: %s\n"
@@ -1608,29 +1604,29 @@ msgstr ""
 "Ha fallat la configuració de la UEFI per a l'AArch64: %s\n"
 "Les opcions d'instal·lació estan limitades."
 
-#: ../virtManager/create.py:520
+#: ../virtManager/create.py:521
 msgid "Libvirt version does not support remote URL installs."
 msgstr "La versió de libvirt no admet instal·lacions d'URL remot."
 
-#: ../virtManager/create.py:527
+#: ../virtManager/create.py:528
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "Les instal·lacions %s no estan disponibles per a convidats paravirt."
 
-#: ../virtManager/create.py:532
+#: ../virtManager/create.py:533
 #, python-format
 msgid "Architecture '%s' is not installable"
 msgstr "No es pot instal·lar l'arquitectura «%s»"
 
-#: ../virtManager/create.py:548
+#: ../virtManager/create.py:549
 msgid "No install methods available for this connection."
 msgstr "No hi ha cap mètode d'instal·lació disponible per aquesta connexió."
 
-#: ../virtManager/create.py:585
+#: ../virtManager/create.py:586
 msgid "No hypervisor options were found for this connection."
 msgstr "No s'ha trobat cap opció d'hipervisor per aquesta connexió."
 
-#: ../virtManager/create.py:590
+#: ../virtManager/create.py:591
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
@@ -1639,7 +1635,7 @@ msgstr ""
 "ordinador, o bé que no s'han carregat els mòduls KVM per al nucli del "
 "sistema operatiu."
 
-#: ../virtManager/create.py:614
+#: ../virtManager/create.py:615
 msgid ""
 "Host is not advertising support for full virtualization. Install options may "
 "be limited."
@@ -1647,7 +1643,7 @@ msgstr ""
 "L'amfitrió no està anunciant el suport per a una virtualització completa. "
 "Algunes opcions d'instal·lació poden tenir limitacions."
 
-#: ../virtManager/create.py:620
+#: ../virtManager/create.py:621
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
@@ -1657,238 +1653,238 @@ msgstr ""
 "sistema operatiu. Les vostres màquines virtuals podrien tenir un rendiment "
 "molt baix."
 
-#: ../virtManager/create.py:690
+#: ../virtManager/create.py:692
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "FIns a %(maxmem)s disponibles en l'amfitrió"
 
-#: ../virtManager/create.py:702
+#: ../virtManager/create.py:704
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "Fins a %(numcpus)d disponibles"
 
-#: ../virtManager/create.py:733
+#: ../virtManager/create.py:735
 msgid "No active connection to install on."
 msgstr "No s'ha trobat cap connexió activa on instal·lar."
 
-#: ../virtManager/create.py:1012
+#: ../virtManager/create.py:1014
 msgid "BSD"
 msgstr "BSD"
 
-#: ../virtManager/create.py:1014 ../virtManager/create.py:1228
+#: ../virtManager/create.py:1016 ../virtManager/create.py:1230
 #: ../virtManager/details.py:328
 msgid "Linux"
 msgstr "Linux"
 
-#: ../virtManager/create.py:1015
+#: ../virtManager/create.py:1017
 msgid "macOS"
 msgstr "macOS"
 
-#: ../virtManager/create.py:1016 ../virtManager/create.py:1087
+#: ../virtManager/create.py:1018 ../virtManager/create.py:1089
 msgid "Others"
 msgstr "Altres"
 
-#: ../virtManager/create.py:1017
+#: ../virtManager/create.py:1019
 msgid "Solaris"
 msgstr "Solaris"
 
-#: ../virtManager/create.py:1018
+#: ../virtManager/create.py:1020
 msgid "Windows"
 msgstr "Windows"
 
-#: ../virtManager/create.py:1036 ../virtManager/create.py:1110
+#: ../virtManager/create.py:1038 ../virtManager/create.py:1112
 msgid "Show all OS options"
 msgstr "Mostra totes les opcions del sistema operatiu"
 
-#: ../virtManager/create.py:1055
+#: ../virtManager/create.py:1057
 msgid "ALT Linux"
 msgstr "ALT Linux"
 
-#: ../virtManager/create.py:1056
+#: ../virtManager/create.py:1058
 msgid "CentOS"
 msgstr "CentOS"
 
-#: ../virtManager/create.py:1057
+#: ../virtManager/create.py:1059
 msgid "Debian"
 msgstr "Debian"
 
-#: ../virtManager/create.py:1058
+#: ../virtManager/create.py:1060
 msgid "Fedora"
 msgstr "Fedora"
 
-#: ../virtManager/create.py:1059 ../virtManager/details.py:326
+#: ../virtManager/create.py:1061 ../virtManager/details.py:326
 msgid "FreeBSD"
 msgstr "FreeBSD"
 
-#: ../virtManager/create.py:1060
+#: ../virtManager/create.py:1062
 msgid "Mageia"
 msgstr "Mageia"
 
-#: ../virtManager/create.py:1061 ../virtManager/details.py:330
+#: ../virtManager/create.py:1063 ../virtManager/details.py:330
 msgid "NetBSD"
 msgstr "NetBSD"
 
-#: ../virtManager/create.py:1062 ../virtManager/details.py:331
+#: ../virtManager/create.py:1064 ../virtManager/details.py:331
 msgid "OpenBSD"
 msgstr "OpenBSD"
 
-#: ../virtManager/create.py:1063
+#: ../virtManager/create.py:1065
 msgid "openSUSE"
 msgstr "openSUSE"
 
-#: ../virtManager/create.py:1064
+#: ../virtManager/create.py:1066
 msgid "Red Hat Enterprise Linux"
 msgstr "Red Hat Enterprise Linux"
 
-#: ../virtManager/create.py:1065
+#: ../virtManager/create.py:1067
 msgid "SUSE Linux Enterprise Desktop"
 msgstr "SUSE Linux Enterprise Desktop"
 
-#: ../virtManager/create.py:1066
+#: ../virtManager/create.py:1068
 msgid "SUSE Linux Enterprise Server"
 msgstr "SUSE Linux Enterprise Server"
 
-#: ../virtManager/create.py:1067
+#: ../virtManager/create.py:1069
 msgid "Ubuntu"
 msgstr "Ubuntu"
 
-#: ../virtManager/create.py:1195
+#: ../virtManager/create.py:1197
 msgid "Host filesystem"
 msgstr "Sistema de fitxers de l'amfitrió"
 
-#: ../virtManager/create.py:1197 ../virtManager/details.py:2372
+#: ../virtManager/create.py:1199 ../virtManager/details.py:2372
 #: ../virtManager/gfxdetails.py:92 ../virtinst/domcapabilities.py:140
 msgid "None"
 msgstr "Cap"
 
-#: ../virtManager/create.py:1211
+#: ../virtManager/create.py:1213
 msgid "Local CDROM/ISO"
 msgstr "CD-ROM/ISO local"
 
-#: ../virtManager/create.py:1213
+#: ../virtManager/create.py:1215
 msgid "URL Install Tree"
 msgstr "URL de l'arbre d'instal·lació"
 
-#: ../virtManager/create.py:1215
+#: ../virtManager/create.py:1217
 msgid "PXE Install"
 msgstr "Instal·lació PXE"
 
-#: ../virtManager/create.py:1217
+#: ../virtManager/create.py:1219
 msgid "Import existing OS image"
 msgstr "Importa la imatge d'un SO existent"
 
-#: ../virtManager/create.py:1219
+#: ../virtManager/create.py:1221
 msgid "Application container"
 msgstr "Contenidor d'aplicació"
 
-#: ../virtManager/create.py:1221
+#: ../virtManager/create.py:1223
 msgid "Operating system container"
 msgstr "Contenidor de sistema operatiu"
 
-#: ../virtManager/create.py:1223
+#: ../virtManager/create.py:1225
 msgid "Virtuozzo container"
 msgstr "Contenidor Virtuozzo"
 
-#: ../virtManager/create.py:1409
+#: ../virtManager/create.py:1415
 msgid "Removing disk images"
 msgstr "Eliminació de les imatges dels discs"
 
-#: ../virtManager/create.py:1410
+#: ../virtManager/create.py:1416
 msgid "Removing disk images we created for this virtual machine."
 msgstr ""
 "Eliminació de les imatges dels discs que vam crear per aquesta màquina "
 "virtual."
 
-#: ../virtManager/create.py:1646
+#: ../virtManager/create.py:1652
 msgid "No network selected"
 msgstr "No s'ha seleccionat cap xarxa"
 
-#: ../virtManager/create.py:1648
+#: ../virtManager/create.py:1654
 msgid "Network selection does not support PXE"
 msgstr "La selecció de la xarxa no admet PXE"
 
-#: ../virtManager/create.py:1727 ../virtManager/createinterface.py:883
+#: ../virtManager/create.py:1734 ../virtManager/createinterface.py:883
 #: ../virtManager/createnet.py:504 ../virtManager/createpool.py:449
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "Pas %(current_page)d de %(max_page)d"
 
-#: ../virtManager/create.py:1817
+#: ../virtManager/create.py:1824
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr "S'ha produït un error en emplenar la pàgina del resum: %s"
 
-#: ../virtManager/create.py:1851
+#: ../virtManager/create.py:1858
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "S'ha produït un error en establir l'UUID: %s"
 
-#: ../virtManager/create.py:1859
+#: ../virtManager/create.py:1866
 msgid "Error setting OS information."
 msgstr "S'ha produït un error en establir la informació del sistema operatiu."
 
-#: ../virtManager/create.py:1881
+#: ../virtManager/create.py:1888
 msgid "Error setting up default devices:"
 msgstr "S'ha produït un error en establir els dispositius per defecte:"
 
-#: ../virtManager/create.py:1899 ../virtManager/createinterface.py:911
+#: ../virtManager/create.py:1906 ../virtManager/createinterface.py:911
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr ""
 "S'ha produït un error no capturat en validar els paràmetres d'instal·lació: "
 "%s"
 
-#: ../virtManager/create.py:1950
+#: ../virtManager/create.py:1957
 msgid "Please specify a valid OS variant."
 msgstr "Si us plau, especifiqueu una variant de sistema operatiu vàlida."
 
-#: ../virtManager/create.py:1958
+#: ../virtManager/create.py:1965
 msgid "An install media selection is required."
 msgstr "Es requereix una selecció del mitjà d'instal·lació."
 
-#: ../virtManager/create.py:1968
+#: ../virtManager/create.py:1975
 msgid "An install tree is required."
 msgstr "Es requereix un arbre d'instal·lació."
 
-#: ../virtManager/create.py:1982
+#: ../virtManager/create.py:1989
 msgid "A storage path to import is required."
 msgstr "Es requereix un camí d'emmagatzematge per importar."
 
-#: ../virtManager/create.py:1987
+#: ../virtManager/create.py:1994
 msgid "The import path must point to an existing storage."
 msgstr "El camí d'importació ha d'apuntar a un emmagatzematge existent."
 
-#: ../virtManager/create.py:1995
+#: ../virtManager/create.py:2002
 msgid "An application path is required."
 msgstr "Es requereix un camí d'aplicació."
 
-#: ../virtManager/create.py:2002
+#: ../virtManager/create.py:2009
 msgid "An OS directory path is required."
 msgstr "Es requereix un camí al directori del sistema operatiu."
 
-#: ../virtManager/create.py:2011
+#: ../virtManager/create.py:2018
 msgid "Source URL is required"
 msgstr "Es requereix l'URL d'origen"
 
-#: ../virtManager/create.py:2016
+#: ../virtManager/create.py:2023
 msgid "Please specify password for accessing source registry"
 msgstr "Especifiqueu la contrasenya per accedir al registre origen"
 
-#: ../virtManager/create.py:2022
+#: ../virtManager/create.py:2029
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr "El camí de destinació no és un directori: %s"
 
-#: ../virtManager/create.py:2025
+#: ../virtManager/create.py:2032
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr "No hi ha permisos d'escriptura per al camí del directori: %s"
 
-#: ../virtManager/create.py:2030
+#: ../virtManager/create.py:2037
 msgid "OS root directory is not empty"
 msgstr "El directori arrel del SO no està buit"
 
-#: ../virtManager/create.py:2031
+#: ../virtManager/create.py:2038
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
@@ -1898,63 +1894,63 @@ msgstr ""
 "fracassar a causa de conflictes de fitxers.\n"
 "Voleu continuar?"
 
-#: ../virtManager/create.py:2042
+#: ../virtManager/create.py:2049
 msgid "A template name is required."
 msgstr "Es requereix el nom d'una plantilla."
 
-#: ../virtManager/create.py:2054
+#: ../virtManager/create.py:2061
 msgid "Error setting installer parameters."
 msgstr "S'ha produït un error en establir els paràmetres de l'instal·lador."
 
-#: ../virtManager/create.py:2084
+#: ../virtManager/create.py:2091
 msgid "Error setting install media location."
 msgstr ""
 "S'ha produït un error en establir la ubicació del mitjà d'instal·lació."
 
-#: ../virtManager/create.py:2108
+#: ../virtManager/create.py:2115
 #, python-format
 msgid "A kernel is required for %s guests."
 msgstr "Es requereix un nucli del sistema per als convidats %s."
 
-#: ../virtManager/create.py:2116
+#: ../virtManager/create.py:2123
 msgid "Error setting default name."
 msgstr "S'ha produït un error en establir el nom per defecte."
 
-#: ../virtManager/create.py:2172
+#: ../virtManager/create.py:2179
 msgid "Error setting CPUs."
 msgstr "S'ha produït un error en establir les CPU."
 
-#: ../virtManager/create.py:2179
+#: ../virtManager/create.py:2186
 msgid "Error setting guest memory."
 msgstr "S'ha produït un error en establir la memòria del convidat."
 
-#: ../virtManager/create.py:2251
+#: ../virtManager/create.py:2258
 msgid "Invalid guest name"
 msgstr "El nom del convidat no és vàlid"
 
-#: ../virtManager/create.py:2272
+#: ../virtManager/create.py:2279
 #, python-format
 msgid "Network device required for %s install."
 msgstr "Es requereix el dispositiu de xarxa per instal·lar %s."
 
-#: ../virtManager/create.py:2383
+#: ../virtManager/create.py:2390
 msgid "Detecting"
 msgstr "Detectant"
 
-#: ../virtManager/create.py:2438
+#: ../virtManager/create.py:2445
 msgid "Error starting installation: "
 msgstr "S'ha produït un error en iniciar la instal·lació:"
 
-#: ../virtManager/create.py:2476
+#: ../virtManager/create.py:2483
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "No s'ha pogut completar la instal·lació: «%s»"
 
-#: ../virtManager/create.py:2508
+#: ../virtManager/create.py:2516
 msgid "Creating Virtual Machine"
 msgstr "S'està creant la màquina virtual"
 
-#: ../virtManager/create.py:2509
+#: ../virtManager/create.py:2517
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1962,17 +1958,17 @@ msgstr ""
 "S'està creant la màquina virtual ara. L'assignació d'espai de disc i la "
 "recuperació de les imatges d'instal·lació poden trigar uns minuts a acabar."
 
-#: ../virtManager/create.py:2563
+#: ../virtManager/create.py:2571
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "La MV «%s» no ha aparegut després del temps esperat."
 
-#: ../virtManager/create.py:2611
+#: ../virtManager/create.py:2619
 #, python-format
 msgid "Error continue install: %s"
 msgstr "S'ha produït un error en continuar la instal·lació: %s"
 
-#: ../virtManager/create.py:2623
+#: ../virtManager/create.py:2631
 msgid "Bootstraping container"
 msgstr ""
 
@@ -1993,8 +1989,8 @@ msgstr "Cable"
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../virtManager/createinterface.py:225 ../virtManager/details.py:922
-#: ../virtManager/host.py:207 ../virtManager/manager.py:352
+#: ../virtManager/createinterface.py:225 ../virtManager/details.py:912
+#: ../virtManager/host.py:223 ../virtManager/manager.py:357
 #: ../ui/create.ui.h:20
 msgid "Name"
 msgstr "Nom"
@@ -2013,7 +2009,7 @@ msgstr "Valor per defecte del sistema"
 
 #: ../virtManager/createinterface.py:300 ../virtManager/createinterface.py:308
 #: ../virtManager/createinterface.py:727 ../virtManager/createinterface.py:742
-#: ../virtManager/host.py:871 ../virtManager/host.py:884
+#: ../virtManager/host.py:918 ../virtManager/host.py:931
 msgid "Static"
 msgstr "Estàtic"
 
@@ -2054,7 +2050,7 @@ msgstr "Trieu una interfície sense configurar:"
 msgid "No interface selected"
 msgstr "No hi ha cap interfície seleccionada"
 
-#: ../virtManager/createinterface.py:736 ../virtManager/host.py:879
+#: ../virtManager/createinterface.py:736 ../virtManager/host.py:926
 msgid "Autoconf"
 msgstr "Autoconfiguració"
 
@@ -2114,7 +2110,7 @@ msgstr "S'està creant una interfície virtual"
 msgid "The virtual interface is now being created."
 msgstr "S'està creant la interfície virtual."
 
-#: ../virtManager/createnet.py:143 ../virtinst/network.py:167
+#: ../virtManager/createnet.py:143 ../virtinst/network.py:177
 msgid "NAT"
 msgstr "NAT"
 
@@ -2375,69 +2371,69 @@ msgstr ""
 msgid "Deleting virtual machine '%s'"
 msgstr "S'està eliminant la màquina virtual «%s»"
 
-#: ../virtManager/delete.py:177
+#: ../virtManager/delete.py:178
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "S'està eliminant el camí «%s»"
 
-#: ../virtManager/delete.py:188
+#: ../virtManager/delete.py:190
 #, python-format
 msgid "Error deleting virtual machine '%s': %s"
 msgstr "S'ha produït un error en suprimir la màquina virtual «%s»: %s"
 
-#: ../virtManager/delete.py:204
+#: ../virtManager/delete.py:206
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 "A més, s'han produït errors en eliminar determinats dispositius "
 "d'emmagatzematge: \n"
 
-#: ../virtManager/delete.py:208
+#: ../virtManager/delete.py:210
 msgid "Errors encountered while removing certain storage devices."
 msgstr ""
 "S'han produït errors mentre s'eliminaven determinats dispositius "
 "d'emmagatzematge."
 
-#: ../virtManager/delete.py:286 ../ui/details.ui.h:59
+#: ../virtManager/delete.py:288 ../ui/details.ui.h:56
 msgid "Target"
 msgstr "Destinació"
 
-#: ../virtManager/delete.py:288
+#: ../virtManager/delete.py:290
 msgid "Storage Path"
 msgstr "Camí d'emmagatzematge"
 
-#: ../virtManager/delete.py:341
+#: ../virtManager/delete.py:343
 msgid "Cannot delete iscsi share."
 msgstr "No s'ha pogut suprimir el recurs compartit iscsi."
 
-#: ../virtManager/delete.py:343
+#: ../virtManager/delete.py:345
 msgid "Cannot delete SCSI device."
 msgstr "No es pot suprimir el dispositiu SCSI."
 
-#: ../virtManager/delete.py:346
+#: ../virtManager/delete.py:348
 msgid "Cannot delete unmanaged remote storage."
 msgstr "No es pot suprimir un emmagatzematge remot no gestionat."
 
-#: ../virtManager/delete.py:352
+#: ../virtManager/delete.py:354
 msgid "Cannot delete unmanaged block device."
 msgstr "No es pot suprimir el dispositiu de bloc no gestionat."
 
-#: ../virtManager/delete.py:373
+#: ../virtManager/delete.py:375
 msgid "Storage is read-only."
 msgstr "L'emmagatzematge és de només lectura."
 
-#: ../virtManager/delete.py:375
+#: ../virtManager/delete.py:377
 msgid "No write access to path."
 msgstr "No hi ha accés d'escriptura al camí."
 
-#: ../virtManager/delete.py:378
+#: ../virtManager/delete.py:380
 msgid "Storage is marked as shareable."
 msgstr "L'emmagatzematge està marcat com a recurs compartit."
 
-#: ../virtManager/delete.py:381
+#: ../virtManager/delete.py:383
 msgid "Storage is a media device."
 msgstr "L'emmagatzematge és un dispositiu de mitjans."
 
-#: ../virtManager/delete.py:391
+#: ../virtManager/delete.py:393
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
@@ -2450,12 +2446,12 @@ msgstr ""
 msgid "Remove this device from the virtual machine"
 msgstr "Suprimeix aquest dispositiu de la màquina virtual"
 
-#: ../virtManager/details.py:173 ../virtManager/details.py:3232
+#: ../virtManager/details.py:173 ../virtManager/details.py:3247
 #: ../virtinst/devicecontroller.py:44
 msgid "Floppy"
 msgstr "Disquet"
 
-#: ../virtManager/details.py:176 ../virtManager/details.py:3230
+#: ../virtManager/details.py:176 ../virtManager/details.py:3245
 msgid "CDROM"
 msgstr "CD-ROM"
 
@@ -2486,8 +2482,8 @@ msgid "%s Redirector %s"
 msgstr "%s Redirector %s"
 
 #: ../virtManager/details.py:231
-#, python-format
-msgid "Sound: %s"
+#, fuzzy, python-format
+msgid "Sound %s"
 msgstr "So: %s"
 
 #: ../virtManager/details.py:233
@@ -2502,8 +2498,8 @@ msgstr "Sistema de fitxers %s"
 
 #: ../virtManager/details.py:237
 #, python-format
-msgid "Controller %s"
-msgstr "Controlador %s"
+msgid "Controller %s %s"
+msgstr ""
 
 #: ../virtManager/details.py:325
 msgid "MS-DOS/FreeDOS"
@@ -2553,29 +2549,29 @@ msgstr ""
 msgid "UEFI not found"
 msgstr "No s'ha trobat la UEFI"
 
-#: ../virtManager/details.py:923
+#: ../virtManager/details.py:913
 msgid "Version"
 msgstr "Versió"
 
-#: ../virtManager/details.py:985
+#: ../virtManager/details.py:975
 msgid "Application Default"
 msgstr "Valor per defecte per a l'aplicació"
 
-#: ../virtManager/details.py:986
+#: ../virtManager/details.py:976
 msgid "Hypervisor Default"
 msgstr "Valor per defecte per a l'hipervisor"
 
-#: ../virtManager/details.py:988
+#: ../virtManager/details.py:978
 msgid "Clear CPU configuration"
 msgstr "Neteja la configuració de la CPU"
 
-#: ../virtManager/details.py:1134 ../virtManager/host.py:972
-#: ../virtManager/snapshots.py:377 ../virtManager/storagelist.py:471
+#: ../virtManager/details.py:1134 ../virtManager/host.py:1019
+#: ../virtManager/snapshots.py:377 ../virtManager/storagelist.py:474
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "Hi ha canvis pendents que no s'han aplicat. Voleu aplicar-los ara?"
 
-#: ../virtManager/details.py:1136 ../virtManager/host.py:974
-#: ../virtManager/snapshots.py:379 ../virtManager/storagelist.py:473
+#: ../virtManager/details.py:1136 ../virtManager/host.py:1021
+#: ../virtManager/snapshots.py:379 ../virtManager/storagelist.py:476
 msgid "Don't warn me again."
 msgstr "No m'avisis una altra vegada."
 
@@ -2584,20 +2580,20 @@ msgstr "No m'avisis una altra vegada."
 msgid "Error refreshing hardware page: %s"
 msgstr "S'ha produït un error en refrescar la pàgina de maquinari: %s"
 
-#: ../virtManager/details.py:1294 ../virtManager/manager.py:821
+#: ../virtManager/details.py:1294 ../virtManager/manager.py:826
 msgid "_Restore"
 msgstr "_Restaura"
 
-#: ../virtManager/details.py:1296 ../virtManager/manager.py:823
+#: ../virtManager/details.py:1296 ../virtManager/manager.py:828
 #: ../virtManager/vmmenu.py:107 ../ui/manager.ui.h:21
 msgid "_Run"
 msgstr "_Executa"
 
-#: ../virtManager/details.py:1324 ../virtManager/manager.py:856
+#: ../virtManager/details.py:1324 ../virtManager/manager.py:861
 msgid "Resume the virtual machine"
 msgstr "Reprèn la màquina virtual"
 
-#: ../virtManager/details.py:1326 ../virtManager/manager.py:858
+#: ../virtManager/details.py:1326 ../virtManager/manager.py:863
 #: ../ui/details.ui.h:28 ../ui/manager.ui.h:22
 msgid "Pause the virtual machine"
 msgstr "Posa en pausa la màquina virtual"
@@ -2719,7 +2715,7 @@ msgstr "%(transfered)d %(units)s de sortida"
 
 #: ../virtManager/details.py:2492 ../virtManager/details.py:2493
 #: ../virtManager/details.py:2494 ../virtManager/details.py:2495
-#: ../virtManager/host.py:542 ../virtManager/host.py:573
+#: ../virtManager/host.py:559 ../virtManager/host.py:590
 msgid "Disabled"
 msgstr "Inhabilitat"
 
@@ -2770,39 +2766,39 @@ msgstr "Consola primària"
 msgid "Physical %s Device"
 msgstr "Dispositiu %s físic"
 
-#: ../virtManager/details.py:3106
+#: ../virtManager/details.py:3121
 msgid "Overview"
 msgstr "Resum"
 
-#: ../virtManager/details.py:3109
+#: ../virtManager/details.py:3124
 msgid "OS information"
 msgstr "Informació del SO"
 
-#: ../virtManager/details.py:3111
+#: ../virtManager/details.py:3126
 msgid "Performance"
 msgstr "Rendiment"
 
-#: ../virtManager/details.py:3113
+#: ../virtManager/details.py:3128
 msgid "CPUs"
 msgstr "CPU"
 
-#: ../virtManager/details.py:3114 ../ui/create.ui.h:67
+#: ../virtManager/details.py:3129 ../ui/create.ui.h:72
 msgid "Memory"
 msgstr "Memòria"
 
-#: ../virtManager/details.py:3115
+#: ../virtManager/details.py:3130
 msgid "Boot Options"
 msgstr "Opcions d'arrencada"
 
-#: ../virtManager/details.py:3229
+#: ../virtManager/details.py:3244
 msgid "Hard Disk"
 msgstr "Disc dur"
 
-#: ../virtManager/details.py:3231
+#: ../virtManager/details.py:3246
 msgid "Network (PXE)"
 msgstr "Xarxa (PXE)"
 
-#: ../virtManager/details.py:3243
+#: ../virtManager/details.py:3258
 msgid "No bootable devices"
 msgstr "No hi ha dispositius d'arrencada"
 
@@ -2925,11 +2921,11 @@ msgstr ""
 "Per arreglar això, traieu i torneu a inserir el dispositiu USB en el "
 "convidat utilitzant l'assistent «Afegeix maquinari»."
 
-#: ../virtManager/domain.py:504
+#: ../virtManager/domain.py:507
 msgid "Libvirt connection does not support snapshots."
 msgstr "La connexió libvirt no admet instantànies."
 
-#: ../virtManager/domain.py:519
+#: ../virtManager/domain.py:522
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -2937,7 +2933,7 @@ msgstr ""
 "Només s'admeten instantànies, si totes les imatges dels discs assignades al "
 "convidat tenen el format qcow2."
 
-#: ../virtManager/domain.py:522
+#: ../virtManager/domain.py:525
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
@@ -2945,33 +2941,33 @@ msgstr ""
 "Les instantànies requereixen almenys una imatge de disc qcow2 amb permís "
 "d'escriptura assignada al convidat."
 
-#: ../virtManager/domain.py:557
+#: ../virtManager/domain.py:560
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "No s'ha pogut trobar el dispositiu especificat en la configuració de la MV "
 "inactiva: %s"
 
-#: ../virtManager/domain.py:1496
+#: ../virtManager/domain.py:1499
 msgid "Cannot start guest while cloning operation in progress"
 msgstr ""
 "No es pot iniciar un convidat mentre hi ha una operació de clonatge en curs"
 
-#: ../virtManager/domain.py:1538
+#: ../virtManager/domain.py:1541
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
 "No es pot reprendre un convidat mentre hi ha una operació de clonatge en curs"
 
-#: ../virtManager/domain.py:1547
+#: ../virtManager/domain.py:1550
 msgid "Saving domain to disk"
 msgstr "S'està desant el domini a disc"
 
-#: ../virtManager/domain.py:1596
+#: ../virtManager/domain.py:1599
 msgid "Migrating domain"
 msgstr "S'està migrant el domini"
 
 #. Manager fail message
-#: ../virtManager/engine.py:218
+#: ../virtManager/engine.py:221
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -2989,7 +2985,7 @@ msgstr ""
 "Podeu afegir manualment una connexió d'hipervisor\n"
 "a través de Fitxer->Afegeix una connexió"
 
-#: ../virtManager/engine.py:246
+#: ../virtManager/engine.py:249
 msgid ""
 "The 'libvirtd' service will need to be started.\n"
 "\n"
@@ -3001,37 +2997,37 @@ msgstr ""
 "Després d'això, virt-manager connectarà amb libvirt\n"
 "en el següent inici de l'aplicació."
 
-#: ../virtManager/engine.py:257
+#: ../virtManager/engine.py:260
 msgid "Libvirt service must be started"
 msgstr "S'ha d'iniciar el servei libvirt"
 
-#: ../virtManager/engine.py:389
+#: ../virtManager/engine.py:392
 #, python-format
 msgid "Error polling connection '%s': %s"
 msgstr "S'ha produït un error en consultar la connexió «%s»: %s"
 
-#: ../virtManager/engine.py:627
+#: ../virtManager/engine.py:630
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "URI de connexió %s desconegut"
 
-#: ../virtManager/engine.py:640
+#: ../virtManager/engine.py:643
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 "L'amfitrió remot requereix una versió de netcat/nc que admeti l'opció -U."
 
-#: ../virtManager/engine.py:649
+#: ../virtManager/engine.py:652
 #, python-format
 msgid "You need to install %s or similar to connect to this host."
 msgstr "Cal que instal·leu %s o similar per connectar amb aquest amfitrió."
 
-#: ../virtManager/engine.py:653
+#: ../virtManager/engine.py:656
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr ""
 "Verifiqueu que el dimoni «libvirtd» s'estigui executant en l'amfitrió remot."
 
-#: ../virtManager/engine.py:657
+#: ../virtManager/engine.py:660
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -3041,7 +3037,7 @@ msgstr ""
 " - S'hagi arrencat un nucli del sistema operatiu d'amfitrió Xen\n"
 " - S'hagi iniciat el servei Xen"
 
-#: ../virtManager/engine.py:663
+#: ../virtManager/engine.py:666
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
@@ -3051,91 +3047,92 @@ msgstr ""
 "ssh -X o VNC, pot ser que no pugueu connectar a libvirt com a usuari normal. "
 "Proveu d'executar-ho com a root."
 
-#: ../virtManager/engine.py:669
+#: ../virtManager/engine.py:672
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "Verifiqueu que el dimoni «libvirtd» s'estigui executant."
 
-#: ../virtManager/engine.py:673
-msgid "Unable to connect to libvirt."
-msgstr "No s'ha pogut connectar a libvirt."
+#: ../virtManager/engine.py:676
+#, python-format
+msgid "Unable to connect to libvirt %s."
+msgstr "No s'ha pogut connectar a libvirt %s."
 
-#: ../virtManager/engine.py:687
+#: ../virtManager/engine.py:690
 msgid "Would you still like to remember this connection?"
 msgstr "Us agradaria recordar encara aquesta connexió?"
 
-#: ../virtManager/engine.py:689
+#: ../virtManager/engine.py:692
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "La connexió amb l'eina de gestió de màquines virtuals ha fallat"
 
-#: ../virtManager/engine.py:716
+#: ../virtManager/engine.py:719
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "S'ha produït un error en iniciar el diàleg «Quant a»: %s"
 
-#: ../virtManager/engine.py:730
+#: ../virtManager/engine.py:733
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "S'ha produït un error en iniciar les preferències: %s"
 
-#: ../virtManager/engine.py:751
+#: ../virtManager/engine.py:754
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "S'ha produït un error en iniciar el diàleg d'amfitrió: %s"
 
-#: ../virtManager/engine.py:777
+#: ../virtManager/engine.py:780
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "S'ha produït un error en iniciar el diàleg de connexió: %s"
 
-#: ../virtManager/engine.py:829
+#: ../virtManager/engine.py:832
 #, python-format
 msgid "Error launching details: %s"
 msgstr "S'ha produït un error en iniciar detalls: %s"
 
-#: ../virtManager/engine.py:883 ../virtManager/engine.py:900
+#: ../virtManager/engine.py:886 ../virtManager/engine.py:903
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "S'ha produït un error en iniciar l'eina de gestió: %s"
 
-#: ../virtManager/engine.py:912
+#: ../virtManager/engine.py:915
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "S'ha produït un error en iniciar el diàleg de migració: %s"
 
-#: ../virtManager/engine.py:928
+#: ../virtManager/engine.py:931
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "S'ha produït un error en establir els paràmetres del clonatge: %s"
 
-#: ../virtManager/engine.py:1079
+#: ../virtManager/engine.py:1085
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "Esteu segur que voleu desar «%s»?"
 
-#: ../virtManager/engine.py:1090
+#: ../virtManager/engine.py:1096
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "S'ha produït un error desant el domini: %s"
 
-#: ../virtManager/engine.py:1095
+#: ../virtManager/engine.py:1101
 msgid "Saving Virtual Machine"
 msgstr "Desant la màquina virtual"
 
-#: ../virtManager/engine.py:1096
+#: ../virtManager/engine.py:1102
 msgid "Saving virtual machine memory to disk "
 msgstr "S'està desant a disc la memòria de la màquina virtual"
 
-#: ../virtManager/engine.py:1109
+#: ../virtManager/engine.py:1115
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "S'ha produït un error en cancel·lar la desada de la tasca: %s"
 
-#: ../virtManager/engine.py:1122
+#: ../virtManager/engine.py:1128
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Esteu segur que voleu forçar l'aturada «%s»?"
 
-#: ../virtManager/engine.py:1124
+#: ../virtManager/engine.py:1130
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -3143,28 +3140,28 @@ msgstr ""
 "Això farà que la MV s'apagui immediatament sense aturar el SO i pot provocar "
 "la pèrdua d'informació."
 
-#: ../virtManager/engine.py:1130 ../virtManager/engine.py:1207
+#: ../virtManager/engine.py:1136 ../virtManager/engine.py:1213
 msgid "Error shutting down domain"
 msgstr "S'ha produït un error en tancar el domini"
 
-#: ../virtManager/engine.py:1138
+#: ../virtManager/engine.py:1144
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Esteu segur que voleu posar en pausa «%s»?"
 
-#: ../virtManager/engine.py:1144
+#: ../virtManager/engine.py:1150
 msgid "Error pausing domain"
 msgstr "S'ha produït un error en posar en pausa el domini"
 
-#: ../virtManager/engine.py:1152
+#: ../virtManager/engine.py:1158
 msgid "Error unpausing domain"
 msgstr "S'ha produït un error en reactivar el domini"
 
-#: ../virtManager/engine.py:1164
+#: ../virtManager/engine.py:1170
 msgid "Error restoring domain"
 msgstr "S'ha produït un error en restaurar el domini"
 
-#: ../virtManager/engine.py:1167
+#: ../virtManager/engine.py:1173
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -3173,45 +3170,45 @@ msgstr ""
 "No s'ha pogut restaurar el domini. Voleu suprimir\n"
 "l'estat desat i realitzar una engegada normal?"
 
-#: ../virtManager/engine.py:1181
+#: ../virtManager/engine.py:1187
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "S'ha produït un error en treure l'estat del domini: %s"
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:1185
+#: ../virtManager/engine.py:1191
 msgid "Restoring Virtual Machine"
 msgstr "S'està restaurant la màquina virtual"
 
-#: ../virtManager/engine.py:1186
+#: ../virtManager/engine.py:1192
 msgid "Restoring virtual machine memory from disk"
 msgstr "S'està restaurant des de disc la memòria de la màquina virtual"
 
 #. Regular startup
-#: ../virtManager/engine.py:1192
+#: ../virtManager/engine.py:1198
 msgid "Error starting domain"
 msgstr "S'ha produït un error en iniciar el domini"
 
-#: ../virtManager/engine.py:1201
+#: ../virtManager/engine.py:1207
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Esteu segur que voleu apagar «%s»?"
 
-#: ../virtManager/engine.py:1215
+#: ../virtManager/engine.py:1221
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Esteu segur que voleu reiniciar «%s»?"
 
-#: ../virtManager/engine.py:1221
+#: ../virtManager/engine.py:1227
 msgid "Error rebooting domain"
 msgstr "Error en reiniciar el domini"
 
-#: ../virtManager/engine.py:1230
+#: ../virtManager/engine.py:1236
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "Esteu segur que voleu forçar la reinicialització de «%s»?"
 
-#: ../virtManager/engine.py:1232
+#: ../virtManager/engine.py:1238
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
@@ -3219,29 +3216,29 @@ msgstr ""
 "Això farà que la MV es reiniciï sense aturar el SO i pot provocar la pèrdua "
 "d'informació."
 
-#: ../virtManager/engine.py:1238
+#: ../virtManager/engine.py:1244
 msgid "Error resetting domain"
 msgstr "S'ha produït un error en reiniciar el domini"
 
-#: ../virtManager/engine.py:1249
+#: ../virtManager/engine.py:1255
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "S'ha produït un error en iniciar el diàleg de supressió: %s"
 
-#: ../virtManager/error.py:136
+#: ../virtManager/error.py:137
 msgid "Input Error"
 msgstr "S'ha produït un error en l'entrada"
 
-#: ../virtManager/error.py:137
+#: ../virtManager/error.py:138
 #, python-format
 msgid "Validation Error: %s"
 msgstr "Error de validació: %s"
 
-#: ../virtManager/error.py:204
+#: ../virtManager/error.py:205
 msgid "Don't ask me again"
 msgstr "No m'ho tornis a demanar"
 
-#: ../virtManager/error.py:346 ../ui/details.ui.h:25
+#: ../virtManager/error.py:349 ../ui/details.ui.h:25
 msgid "Details"
 msgstr "Detalls"
 
@@ -3297,186 +3294,186 @@ msgstr "Automàtic"
 msgid "Copy local keymap"
 msgstr "Copia el mapa de teclat local"
 
-#: ../virtManager/gfxdetails.py:196
+#: ../virtManager/gfxdetails.py:200
 msgid "Port"
 msgstr "Port"
 
-#: ../virtManager/gfxdetails.py:209
+#: ../virtManager/gfxdetails.py:213
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "Servidor %(graphicstype)s"
 
-#: ../virtManager/gfxdetails.py:253
+#: ../virtManager/gfxdetails.py:257
 msgid "Hypervisor/libvirt does not support spice GL"
 msgstr "L'hipervisor o libvirt no admet spice GL"
 
-#: ../virtManager/gfxdetails.py:256
+#: ../virtManager/gfxdetails.py:260
 msgid "Hypervisor/libvirt does not support manual rendernode"
 msgstr "L'hipervisor o libvirt no admet manual rendernode"
 
-#: ../virtManager/gfxdetails.py:270
+#: ../virtManager/gfxdetails.py:274
 msgid "Spice GL requires virtio graphics configured with accel3d."
 msgstr ""
 "Spice GL requereix que els gràfics virtio estiguin configurats amb accel3d."
 
-#: ../virtManager/gfxdetails.py:273
+#: ../virtManager/gfxdetails.py:277
 msgid "Graphics listen type does not support spice GL."
 msgstr "El tipus d'escolta dels gràfics no admet spice GL."
 
-#: ../virtManager/gfxdetails.py:294
+#: ../virtManager/gfxdetails.py:302
 msgid "Local SDL Window"
 msgstr "Finestra local SDL"
 
-#: ../virtManager/host.py:157
+#: ../virtManager/host.py:159
 msgid "Networks"
 msgstr "Xarxes"
 
-#: ../virtManager/host.py:185
+#: ../virtManager/host.py:201
 msgid "Interfaces"
 msgstr "Interfícies"
 
-#: ../virtManager/host.py:214
+#: ../virtManager/host.py:230
 msgid "Interface Type"
 msgstr "Tipus d'interfície"
 
-#: ../virtManager/host.py:316
+#: ../virtManager/host.py:332
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s de %(maxmem)s"
 
-#: ../virtManager/host.py:337
+#: ../virtManager/host.py:353
 msgid "Libvirt connection does not support virtual network management."
 msgstr "La connexió libvirt no admet la gestió de xarxes virtuals."
 
-#: ../virtManager/host.py:341
+#: ../virtManager/host.py:357
 msgid "Libvirt connection does not support interface management."
 msgstr "La connexió libvirt no admet la gestió d'interfícies."
 
-#: ../virtManager/host.py:348 ../virtManager/host.py:349
-#: ../virtManager/storagelist.py:575
+#: ../virtManager/host.py:364 ../virtManager/host.py:365
+#: ../virtManager/storagelist.py:578
 msgid "Connection not active."
 msgstr "La connexió no està activa."
 
-#: ../virtManager/host.py:377
+#: ../virtManager/host.py:393
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Esteu segur que voleu suprimir permanentment la xarxa %s?"
 
-#: ../virtManager/host.py:384
+#: ../virtManager/host.py:400
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "S'ha produït un error en suprimir la xarxa «%s»"
 
-#: ../virtManager/host.py:393
+#: ../virtManager/host.py:409
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "S'ha produït un error en iniciar la xarxa «%s»"
 
-#: ../virtManager/host.py:402
+#: ../virtManager/host.py:419
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "S'ha produït un error en aturar la xarxa «%s»"
 
-#: ../virtManager/host.py:411
+#: ../virtManager/host.py:428
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "S'ha produït un error en executar l'auxiliar de xarxes: %s"
 
-#: ../virtManager/host.py:446
+#: ../virtManager/host.py:463
 msgid "Network could not be updated"
 msgstr "No s'ha pogut actualitzar la xarxa"
 
-#: ../virtManager/host.py:447
+#: ../virtManager/host.py:464
 msgid "This change will take effect when the network is restarted"
 msgstr "Aquest canvi tindrà efecte quan es reiniciï la xarxa"
 
-#: ../virtManager/host.py:454
+#: ../virtManager/host.py:471
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "S'ha produït un error en canviar els ajusts de la xarxa: %s"
 
-#: ../virtManager/host.py:512
+#: ../virtManager/host.py:529
 msgid "No virtual network selected."
 msgstr "No s'ha seleccionat cap xarxa virtual."
 
-#: ../virtManager/host.py:523
+#: ../virtManager/host.py:540
 #, python-format
 msgid "Error selecting network: %s"
 msgstr "S'ha produït un error en seleccionar la xarxa: %s"
 
-#: ../virtManager/host.py:566 ../virtinst/network.py:172
+#: ../virtManager/host.py:583 ../virtinst/network.py:182
 msgid "Routed network"
 msgstr "Xarxa encaminada"
 
-#: ../virtManager/host.py:568
+#: ../virtManager/host.py:585
 msgid "Isolated network, internal routing only"
 msgstr "Xarxa aïllada, només amb encaminament intern"
 
-#: ../virtManager/host.py:570
+#: ../virtManager/host.py:587
 msgid "Isolated network, routing disabled"
 msgstr "Xarxa aïllada, amb l'encaminament desactivat"
 
-#: ../virtManager/host.py:627 ../virtManager/host.py:651
-#: ../virtManager/host.py:839 ../virtManager/libvirtobject.py:222
-#: ../virtManager/netlist.py:147 ../virtManager/storagelist.py:315
-#: ../virtManager/storagelist.py:347
+#: ../virtManager/host.py:673 ../virtManager/host.py:698
+#: ../virtManager/host.py:886 ../virtManager/libvirtobject.py:222
+#: ../virtManager/netlist.py:147 ../virtManager/storagelist.py:318
+#: ../virtManager/storagelist.py:350
 msgid "Inactive"
 msgstr "Inactiu"
 
-#: ../virtManager/host.py:640 ../virtManager/host.py:657
-#: ../virtManager/storagelist.py:317 ../virtManager/storagelist.py:348
+#: ../virtManager/host.py:686 ../virtManager/host.py:704
+#: ../virtManager/storagelist.py:320 ../virtManager/storagelist.py:351
 msgid "On Boot"
 msgstr "En arrencar"
 
-#: ../virtManager/host.py:665 ../virtManager/host.py:670
+#: ../virtManager/host.py:712 ../virtManager/host.py:717
 msgid "Isolated network"
 msgstr "Xarxa aïllada"
 
-#: ../virtManager/host.py:713
+#: ../virtManager/host.py:760
 #, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
 msgstr "Esteu segur que voleu aturar la interfície «%s»?"
 
-#: ../virtManager/host.py:719
+#: ../virtManager/host.py:766
 #, python-format
 msgid "Error stopping interface '%s'"
 msgstr "S'ha produït un error en aturar la interfície «%s»"
 
-#: ../virtManager/host.py:728
+#: ../virtManager/host.py:775
 #, python-format
 msgid "Are you sure you want to start the interface '%s'?"
 msgstr "Esteu segur que voleu iniciar la interfície «%s»?"
 
-#: ../virtManager/host.py:734
+#: ../virtManager/host.py:781
 #, python-format
 msgid "Error starting interface '%s'"
 msgstr "S'ha produït un error en iniciar la interfície «%s»"
 
-#: ../virtManager/host.py:741
+#: ../virtManager/host.py:788
 #, python-format
 msgid "Are you sure you want to permanently delete the interface %s?"
 msgstr "Esteu segur que voleu suprimir permanentment la interfície %s?"
 
-#: ../virtManager/host.py:749
+#: ../virtManager/host.py:796
 #, python-format
 msgid "Error deleting interface '%s'"
 msgstr "S'ha produït un error en eliminar la interfície: «%s»"
 
-#: ../virtManager/host.py:758
+#: ../virtManager/host.py:805
 #, python-format
 msgid "Error launching interface wizard: %s"
 msgstr "S'ha produït un error en executar l'auxiliar d'interfícies: %s"
 
-#: ../virtManager/host.py:785
+#: ../virtManager/host.py:832
 #, python-format
 msgid "Error setting interface startmode: %s"
 msgstr "S'ha produït un error en establir el mode d'inici de la interfície: %s"
 
-#: ../virtManager/host.py:802
+#: ../virtManager/host.py:849
 msgid "No interface selected."
 msgstr "No s'ha seleccionat cap interfície."
 
-#: ../virtManager/host.py:812
+#: ../virtManager/host.py:859
 #, python-format
 msgid "Error selecting interface: %s"
 msgstr "S'ha produït un error en seleccionar la interfície: %s"
@@ -3485,31 +3482,31 @@ msgstr "S'ha produït un error en seleccionar la interfície: %s"
 msgid "Interface"
 msgstr "Interfície"
 
-#: ../virtManager/manager.py:325
+#: ../virtManager/manager.py:330
 msgid "D_etails"
 msgstr "D_etalls"
 
-#: ../virtManager/manager.py:402
+#: ../virtManager/manager.py:407
 msgid "CPU usage"
 msgstr "Ús de la CPU"
 
-#: ../virtManager/manager.py:403
+#: ../virtManager/manager.py:408
 msgid "Host CPU usage"
 msgstr "Ús de la CPU de l'amfitrió"
 
-#: ../virtManager/manager.py:404
+#: ../virtManager/manager.py:409
 msgid "Memory usage"
 msgstr "Ús de la memòria"
 
-#: ../virtManager/manager.py:405
+#: ../virtManager/manager.py:410
 msgid "Disk I/O"
 msgstr "E/S del disc"
 
-#: ../virtManager/manager.py:406
+#: ../virtManager/manager.py:411
 msgid "Network I/O"
 msgstr "E/S de la xarxa"
 
-#: ../virtManager/manager.py:509
+#: ../virtManager/manager.py:514
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -3524,55 +3521,55 @@ msgstr ""
 "\n"
 "Esteu segur?"
 
-#: ../virtManager/manager.py:618
+#: ../virtManager/manager.py:623
 msgid "Double click to connect"
 msgstr "feu doble clic per connectar"
 
-#: ../virtManager/manager.py:625
+#: ../virtManager/manager.py:630
 msgid "Not Connected"
 msgstr "No connectat"
 
-#: ../virtManager/manager.py:627
+#: ../virtManager/manager.py:632
 msgid "Connecting..."
 msgstr "S'està connectant..."
 
-#: ../virtManager/manager.py:974
+#: ../virtManager/manager.py:979
 msgid "Disabled in preferences dialog."
 msgstr "Està inhabilitat al diàleg de preferències."
 
-#: ../virtManager/mediacombo.py:85
+#: ../virtManager/mediacombo.py:86
 msgid "Libvirt version does not support media listing."
 msgstr "La versió de libvirt no admet el llistat de mitjans."
 
-#: ../virtManager/mediacombo.py:97
+#: ../virtManager/mediacombo.py:98
 msgid "No device present"
 msgstr "No hi ha dispositiu"
 
-#: ../virtManager/mediacombo.py:105
+#: ../virtManager/mediacombo.py:106
 msgid "No media detected"
 msgstr "No s'ha detectat cap mitjà"
 
-#: ../virtManager/mediacombo.py:107
+#: ../virtManager/mediacombo.py:108
 msgid "Media Unknown"
 msgstr "Mitjà desconegut"
 
-#: ../virtManager/migrate.py:124
+#: ../virtManager/migrate.py:127
 msgid "Direct"
 msgstr "Directe"
 
-#: ../virtManager/migrate.py:125
+#: ../virtManager/migrate.py:128
 msgid "Tunnelled"
 msgstr "Per túnel"
 
-#: ../virtManager/migrate.py:143
+#: ../virtManager/migrate.py:146
 msgid "Migrate"
 msgstr "Migra"
 
-#: ../virtManager/migrate.py:202
+#: ../virtManager/migrate.py:205
 msgid "A valid destination connection must be selected."
 msgstr "S'ha de seleccionar una connexió de destí vàlida."
 
-#: ../virtManager/migrate.py:218
+#: ../virtManager/migrate.py:221
 msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
@@ -3582,7 +3579,7 @@ msgstr ""
 "migració per túnel, però la connexió seleccionada és un URI local. Libvirt "
 "ho rebutjarà, llevat que hi afegiu un transport."
 
-#: ../virtManager/migrate.py:228
+#: ../virtManager/migrate.py:231
 msgid ""
 "The destination's hostname is 'localhost', which will be rejected by "
 "libvirt. You must configure the destination to have a valid publicly "
@@ -3592,36 +3589,36 @@ msgstr ""
 "Heu de configurar la destinació de manera que tingui un nom de servidor "
 "vàlid accessible públicament."
 
-#: ../virtManager/migrate.py:295
+#: ../virtManager/migrate.py:298
 msgid "Hypervisors do not match"
 msgstr "Els hipervisors no concorden"
 
-#: ../virtManager/migrate.py:299
+#: ../virtManager/migrate.py:302
 msgid "Same connection"
 msgstr "Mateixa connexió"
 
-#: ../virtManager/migrate.py:318
+#: ../virtManager/migrate.py:321
 msgid "No usable connections available."
 msgstr "No hi ha cap connexió que es pugui utilitzar."
 
-#: ../virtManager/migrate.py:358
+#: ../virtManager/migrate.py:361
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "No s'ha pogut migrar el convidat: %s"
 
-#: ../virtManager/migrate.py:399
+#: ../virtManager/migrate.py:402
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "S'està migrant la MV «%s»"
 
-#: ../virtManager/migrate.py:400
+#: ../virtManager/migrate.py:403
 #, python-format
 msgid "Migrating VM '%s' to %s. This may take a while."
 msgstr ""
 "S'està fent la migració de la màquina virtual «%s» a %s. Això pot trigar una "
 "estona."
 
-#: ../virtManager/migrate.py:414
+#: ../virtManager/migrate.py:417
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "S'ha produït un error en cancel·lar la tasca de migració: %s"
@@ -3779,7 +3776,7 @@ msgstr "Encara no està implementada la consola per al tipus de dispositiu «%s�
 msgid "Can not access console path '%s'"
 msgstr "No es pot accedir al camí de consola «%s»"
 
-#: ../virtManager/serialcon.py:416
+#: ../virtManager/serialcon.py:417
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "S'ha produït un error en connectar amb la consola de text: %s"
@@ -3831,7 +3828,7 @@ msgstr "S'ha produït un error en validar la instantània: %s"
 msgid "Creating virtual machine snapshot"
 msgstr "S'està creant una instantània de la màquina virtual"
 
-#: ../virtManager/snapshots.py:612
+#: ../virtManager/snapshots.py:615
 #, python-format
 msgid ""
 "Are you sure you want to run snapshot '%s'? All %s changes since the last "
@@ -3840,62 +3837,62 @@ msgstr ""
 "Esteu segur que voleu executar la instantània «%s»? Totes les modificacions "
 "de %s des de la creació de la darrera instantània es descartaran."
 
-#: ../virtManager/snapshots.py:616
+#: ../virtManager/snapshots.py:619
 msgid "disk"
 msgstr "disc"
 
-#: ../virtManager/snapshots.py:618
+#: ../virtManager/snapshots.py:621
 msgid "disk and configuration"
 msgstr "disc i configuració"
 
-#: ../virtManager/snapshots.py:627
+#: ../virtManager/snapshots.py:630
 msgid "Running snapshot"
 msgstr "S'està executant una instantània"
 
-#: ../virtManager/snapshots.py:628
+#: ../virtManager/snapshots.py:631
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "S'està executant la instantània «%s»"
 
-#: ../virtManager/snapshots.py:629
+#: ../virtManager/snapshots.py:632
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "S'ha produït un error en executar la instantània: «%s»"
 
-#: ../virtManager/snapshots.py:638
+#: ../virtManager/snapshots.py:641
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr ""
 "Esteu segur que voleu suprimir permanentment les instantànies que heu "
 "seleccionat?"
 
-#: ../virtManager/snapshots.py:646
+#: ../virtManager/snapshots.py:649
 msgid "Deleting snapshot"
 msgstr "S'està eliminant la instantània"
 
-#: ../virtManager/snapshots.py:647
+#: ../virtManager/snapshots.py:650
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "S'està eliminant la instantània «%s»"
 
-#: ../virtManager/snapshots.py:648
+#: ../virtManager/snapshots.py:651
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "S'ha produït un error en eliminar la instantània «%s»"
 
-#: ../virtManager/snapshots.py:656
+#: ../virtManager/snapshots.py:659
 msgid "No snapshot selected."
 msgstr "No s'ha seleccionat cap instantània."
 
-#: ../virtManager/snapshots.py:659
+#: ../virtManager/snapshots.py:662
 msgid "Multiple snapshots selected."
 msgstr "S'han seleccionat múltiples instantànies."
 
-#: ../virtManager/snapshots.py:669
+#: ../virtManager/snapshots.py:672
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "S'ha produït un error en seleccionar la instantània: %s"
 
-#: ../virtManager/sshtunnels.py:75
+#: ../virtManager/sshtunnels.py:76
 msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
@@ -3903,13 +3900,13 @@ msgstr ""
 "El convidat es troba en un amfitrió remot, però només està configurat per "
 "permetre connexions de descriptors de fitxers locals."
 
-#: ../virtManager/sshtunnels.py:79
+#: ../virtManager/sshtunnels.py:80
 msgid "Guest is configured for TLS only which does not work over SSH."
 msgstr ""
 "El convidat només està configurat per TLS, el qual no funciona a través de "
 "SSH."
 
-#: ../virtManager/sshtunnels.py:85
+#: ../virtManager/sshtunnels.py:86
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
@@ -3924,102 +3921,102 @@ msgstr ""
 msgid "Cannot use local storage on remote connection."
 msgstr "No es pot utilitzar l'emmagatzematge local en una connexió remota."
 
-#: ../virtManager/storagelist.py:168
+#: ../virtManager/storagelist.py:171
 msgid "Copy Volume Path"
 msgstr "Copia el camí del volum"
 
-#: ../virtManager/storagelist.py:181
+#: ../virtManager/storagelist.py:184
 msgid "Volumes"
 msgstr "Volums"
 
-#: ../virtManager/storagelist.py:189
+#: ../virtManager/storagelist.py:192
 msgid "Size"
 msgstr "Mida"
 
-#: ../virtManager/storagelist.py:198
+#: ../virtManager/storagelist.py:201
 msgid "Format"
 msgstr "Format"
 
-#: ../virtManager/storagelist.py:206
+#: ../virtManager/storagelist.py:209
 msgid "Used By"
 msgstr "Utilitzat per"
 
-#: ../virtManager/storagelist.py:223
+#: ../virtManager/storagelist.py:226
 msgid "Storage Pools"
 msgstr "Reserves d'emmagatzematge"
 
-#: ../virtManager/storagelist.py:339
+#: ../virtManager/storagelist.py:342
 #, python-format
 msgid "%s Free / <i>%s In Use</i>"
 msgstr "%s lliures / <i>%s utilitzats</i>"
 
-#: ../virtManager/storagelist.py:359
+#: ../virtManager/storagelist.py:362
 msgid "Create new volume"
 msgstr "Crea un volum nou"
 
-#: ../virtManager/storagelist.py:365
+#: ../virtManager/storagelist.py:368
 msgid "Pool does not support volume creation"
 msgstr "La reserva no admet la creació de volums"
 
-#: ../virtManager/storagelist.py:504
+#: ../virtManager/storagelist.py:507
 msgid "No storage pool selected."
 msgstr "No s'ha seleccionat cap reserva d'emmagatzematge."
 
-#: ../virtManager/storagelist.py:514
+#: ../virtManager/storagelist.py:517
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "S'ha produït un error en seleccionar la reserva: %s"
 
-#: ../virtManager/storagelist.py:569
+#: ../virtManager/storagelist.py:572
 msgid "Libvirt connection does not support storage management."
 msgstr "La connexió libvirt no admet la gestió de l'emmagatzematge."
 
-#: ../virtManager/storagelist.py:598
+#: ../virtManager/storagelist.py:601
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "S'ha produït un error en aturar la reserva «%s»"
 
-#: ../virtManager/storagelist.py:608
+#: ../virtManager/storagelist.py:611
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "S'ha produït un error en iniciar la reserva «%s»"
 
-#: ../virtManager/storagelist.py:620
+#: ../virtManager/storagelist.py:623
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "S'ha produït un error en executar l'assistent de reserves: %s"
 
-#: ../virtManager/storagelist.py:628
+#: ../virtManager/storagelist.py:631
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Esteu segur que voleu suprimir definitivament la reserva %s?"
 
-#: ../virtManager/storagelist.py:635
+#: ../virtManager/storagelist.py:638
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "S'ha produït un error en eliminar la reserva «%s»"
 
-#: ../virtManager/storagelist.py:648
+#: ../virtManager/storagelist.py:651
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "S'ha produït un error en actualitzar la reserva «%s»"
 
-#: ../virtManager/storagelist.py:664
+#: ../virtManager/storagelist.py:667
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "S'ha produït un error canviar els ajusts de la reserva: %s"
 
-#: ../virtManager/storagelist.py:703
+#: ../virtManager/storagelist.py:706
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "S'ha produït un error en executar l'auxiliar de volums: %s"
 
-#: ../virtManager/storagelist.py:711
+#: ../virtManager/storagelist.py:714
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Esteu segur que voleu suprimir permanentment el volum %s?"
 
-#: ../virtManager/storagelist.py:724
+#: ../virtManager/storagelist.py:727
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "S'ha produït un error suprimir el volum «%s»"
@@ -4033,7 +4030,7 @@ msgstr "_Mostra l'eina de gestió de màquines virtuals"
 msgid "Virtual Machine Manager"
 msgstr "Eina de gestió de màquines virtuals"
 
-#: ../virtManager/systray.py:272 ../virtManager/systray.py:329
+#: ../virtManager/systray.py:272 ../virtManager/systray.py:328
 msgid "No virtual machines"
 msgstr "No hi ha cap màquina virtual"
 
@@ -4166,7 +4163,7 @@ msgstr ""
 "La secció OVF «%s» està indicada tal com es requereix, però l'analitzador "
 "sintàctic no sap com gestionar-la."
 
-#: ../virtconv/vmx.py:87
+#: ../virtconv/vmx.py:88
 #, python-format
 msgid ""
 "Syntax error at line %d: %s\n"
@@ -4175,16 +4172,16 @@ msgstr ""
 "Error de sintaxi a la línia %d: %s\n"
 "%s"
 
-#: ../virtconv/vmx.py:125
+#: ../virtconv/vmx.py:126
 msgid "Didn't detect a storage line in the VMDK descriptor file"
 msgstr ""
 "No s'ha detectat una línia d'emmagatzematge en el fitxer de descriptor VMDK"
 
-#: ../virtconv/vmx.py:128
+#: ../virtconv/vmx.py:129
 msgid "Don't know how to handle multistorage VMDK descriptors"
 msgstr "No sé com gestionar els descriptors VMDK d'emmagatzematge múltiple"
 
-#: ../virtconv/vmx.py:263
+#: ../virtconv/vmx.py:264
 #, python-format
 msgid "No displayName defined in '%s'"
 msgstr "No s'ha definit displayName a «%s»"
@@ -4217,21 +4214,21 @@ msgstr ""
 "L'amfitrió no admet el tipus de domini %(domain)s%(machine)s per al tipus de "
 "virtualització '%(virttype)s' amb arquitectura '%(arch)s'"
 
-#: ../virtinst/cli.py:166
+#: ../virtinst/cli.py:167
 msgid "See man page for examples and full option syntax."
 msgstr ""
 "Vegeu la pàgina man per obtenir exemples i sintaxi completa de les opcions."
 
-#: ../virtinst/cli.py:168
+#: ../virtinst/cli.py:169
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 "Utilitzeu «--option=?» o «--option help» per veure les subopcions disponibles"
 
-#: ../virtinst/cli.py:339
+#: ../virtinst/cli.py:340
 msgid "Exiting at user request."
 msgstr "S'ha sortit a petició de l'usuari."
 
-#: ../virtinst/cli.py:351
+#: ../virtinst/cli.py:352
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -4244,22 +4241,22 @@ msgstr ""
 "  %s\n"
 "En altre cas, si us plau, reinicieu la vostra instal·lació."
 
-#: ../virtinst/cli.py:368
+#: ../virtinst/cli.py:369
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr " (Utilitzeu --check %s=off o --check all=off per evitar-ho)"
 
-#: ../virtinst/cli.py:385
+#: ../virtinst/cli.py:386
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Això sobreescriurà el camí existent «%s»"
 
-#: ../virtinst/cli.py:396
+#: ../virtinst/cli.py:397
 #, python-format
 msgid "Disk %s is already in use by other guests %s."
 msgstr "El disc %s ja s'està utilitzant per a altres convidats %s."
 
-#: ../virtinst/cli.py:413
+#: ../virtinst/cli.py:414
 #, python-format
 msgid ""
 "%s may not be accessible by the hypervisor. You will need to grant the '%s' "
@@ -4268,7 +4265,7 @@ msgstr ""
 "Pot ser que %s no estigui disponible per a l'hipervisor. Necessitareu "
 "atorgar els permisos d'usuari de cerca «%s» per als següents directoris: %s"
 
-#: ../virtinst/cli.py:498
+#: ../virtinst/cli.py:499
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -4276,42 +4273,42 @@ msgstr ""
 "No s'ha pogut connectar a la consola gràfica: virt-viewer no està "
 "instal·lat. Si us plau, instal·leu el paquet «virt-viewer»."
 
-#: ../virtinst/cli.py:504
+#: ../virtinst/cli.py:505
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "S'han sol·licitat els gràfics però no s'ha establert DISPLAY. El virt-viewer "
 "no s'està executant."
 
-#: ../virtinst/cli.py:523 ../virtinst/cli.py:526
+#: ../virtinst/cli.py:524 ../virtinst/cli.py:527
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Connecta amb l'hipervisor amb un URI libvirt"
 
-#: ../virtinst/cli.py:542
+#: ../virtinst/cli.py:543
 msgid "Don't automatically try to connect to the guest console"
 msgstr "No intentis connectar automàticament amb la consola del convidat"
 
-#: ../virtinst/cli.py:546
+#: ../virtinst/cli.py:547
 msgid "Don't boot guest after completing install."
 msgstr "No arrenquis el convidat després de completar la instal·lació."
 
-#: ../virtinst/cli.py:550
+#: ../virtinst/cli.py:551
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "No verifica les col·lisions de noms, sobreescriu qualsevol convidat amb el "
 "mateix nom."
 
-#: ../virtinst/cli.py:557
+#: ../virtinst/cli.py:558
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "Visualitza el XML del domini generat en lloc de crear el convidat."
 
-#: ../virtinst/cli.py:576
+#: ../virtinst/cli.py:577
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "Executa el procés d'instal·lació, però no creïs dispositius ni defineixis el "
 "convidat."
 
-#: ../virtinst/cli.py:581
+#: ../virtinst/cli.py:582
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
@@ -4321,15 +4318,15 @@ msgstr ""
 "--check path_in_use=off\n"
 "--check all=off"
 
-#: ../virtinst/cli.py:585
+#: ../virtinst/cli.py:586
 msgid "Suppress non-error output"
 msgstr "Suprimeix la sortida sense errors"
 
-#: ../virtinst/cli.py:587
+#: ../virtinst/cli.py:588
 msgid "Print debugging information"
 msgstr "Mostra informació de depuració"
 
-#: ../virtinst/cli.py:592
+#: ../virtinst/cli.py:593
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -4339,7 +4336,7 @@ msgstr ""
 "--metadata name=foo,title=\"La meva petita\",uuid=...\n"
 "--metadata description=\"La meva bonica i llarga descripció\""
 
-#: ../virtinst/cli.py:599
+#: ../virtinst/cli.py:600
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
@@ -4351,7 +4348,7 @@ msgstr ""
 "--memory 512,maxmemory=1024\n"
 "--memory 512,maxmemory=1024,hotplugmemorymax=2048,hotplugmemoryslots=2"
 
-#: ../virtinst/cli.py:611
+#: ../virtinst/cli.py:612
 msgid ""
 "Number of vcpus to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -4363,8 +4360,7 @@ msgstr ""
 "--vcpus 5,maxcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2,"
 
-#: ../virtinst/cli.py:620
-#, fuzzy
+#: ../virtinst/cli.py:621
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -4372,8 +4368,9 @@ msgid ""
 msgstr ""
 "Model i característiques de CPU. P. ex.:\n"
 "--cpu coreduo,+x2apic\n"
+"--cpu host-passthrough\n"
 
-#: ../virtinst/cli.py:632
+#: ../virtinst/cli.py:633
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics vnc\n"
@@ -4387,7 +4384,7 @@ msgstr ""
 "--graphics none\n"
 "--graphics vnc,password=foobar,port=5910,keymap=ja"
 
-#: ../virtinst/cli.py:641
+#: ../virtinst/cli.py:642
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -4403,7 +4400,7 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: ../virtinst/cli.py:651
+#: ../virtinst/cli.py:652
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=ich9-ehci1"
@@ -4411,7 +4408,7 @@ msgstr ""
 "Configura un dispositiu controlador de convidat. P. ex.:\n"
 "--controller type=usb,model=ich9-ehci1"
 
-#: ../virtinst/cli.py:654
+#: ../virtinst/cli.py:655
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
@@ -4421,30 +4418,30 @@ msgstr ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
-#: ../virtinst/cli.py:658
+#: ../virtinst/cli.py:659
 msgid "Configure a guest serial device"
 msgstr "Configura un dispositiu sèrie del convidat"
 
-#: ../virtinst/cli.py:660
+#: ../virtinst/cli.py:661
 msgid "Configure a guest parallel device"
 msgstr "Configura un dispositiu paral·lel del convidat"
 
-#: ../virtinst/cli.py:662
+#: ../virtinst/cli.py:663
 msgid "Configure a guest communication channel"
 msgstr "Configura un canal de comunicació del convidat"
 
-#: ../virtinst/cli.py:664
+#: ../virtinst/cli.py:665
 msgid "Configure a text console connection between the guest and host"
 msgstr ""
 "Configura una connexió de consola de text entre el convidat i l'amfitrió"
 
-#: ../virtinst/cli.py:667
+#: ../virtinst/cli.py:668
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Configura els dispositius físics USB/PCI/etc de l'amfitrió a compartir amb "
 "el convidat"
 
-#: ../virtinst/cli.py:670
+#: ../virtinst/cli.py:671
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -4454,19 +4451,19 @@ msgstr ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 
-#: ../virtinst/cli.py:681
+#: ../virtinst/cli.py:682
 msgid "Configure guest sound device emulation"
 msgstr "Configura l'emulació de dispositiu de so del convidat"
 
-#: ../virtinst/cli.py:691
+#: ../virtinst/cli.py:692
 msgid "Configure a guest watchdog device"
 msgstr "Configura un dispositiu watchdog del convidat"
 
-#: ../virtinst/cli.py:693
+#: ../virtinst/cli.py:694
 msgid "Configure guest video hardware."
 msgstr "Configura el maquinari de vídeo del convidat."
 
-#: ../virtinst/cli.py:695
+#: ../virtinst/cli.py:696
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -4474,7 +4471,7 @@ msgstr ""
 "Configura un dispositiu de targetes intel·ligents del convidat. P. ex.\n"
 "--smartcard mode=passthrough"
 
-#: ../virtinst/cli.py:698
+#: ../virtinst/cli.py:699
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -4482,7 +4479,7 @@ msgstr ""
 "Configura un dispositiu de redirecció del convidat. P. ex.:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: ../virtinst/cli.py:701
+#: ../virtinst/cli.py:702
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -4490,7 +4487,7 @@ msgstr ""
 "Configura un dispositiu memballoon del convidat. P. ex.:\n"
 "--memballoon model=virtio"
 
-#: ../virtinst/cli.py:704
+#: ../virtinst/cli.py:705
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -4498,7 +4495,7 @@ msgstr ""
 "Configura un dispositiu TPM del convidat. P. ex.:\n"
 "--tpm /dev/tpm"
 
-#: ../virtinst/cli.py:707
+#: ../virtinst/cli.py:708
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
@@ -4506,7 +4503,7 @@ msgstr ""
 "Configureu un dispositiu RNG del convidat. P. ex.:\n"
 "--rng /dev/urandom"
 
-#: ../virtinst/cli.py:710
+#: ../virtinst/cli.py:711
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -4514,7 +4511,7 @@ msgstr ""
 "Configura un dispositiu de pànic del convidat. P. ex.:\n"
 "--panic default"
 
-#: ../virtinst/cli.py:713
+#: ../virtinst/cli.py:714
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target_size=1024"
@@ -4522,23 +4519,28 @@ msgstr ""
 "Configureu un dispositiu de memòria del convidat. P. ex.:\n"
 "--memdev dimm,target_size=1024"
 
-#: ../virtinst/cli.py:719
+#: ../virtinst/cli.py:720
 msgid "Set domain security driver configuration."
 msgstr "Estableix la configuració del controlador de seguretat del domini."
 
-#: ../virtinst/cli.py:721
+#: ../virtinst/cli.py:722
+#, fuzzy
+msgid "Tune CPU parameters for the domain process."
+msgstr "Ajusta la política NUMA per al procés del domini."
+
+#: ../virtinst/cli.py:724
 msgid "Tune NUMA policy for the domain process."
 msgstr "Ajusta la política NUMA per al procés del domini."
 
-#: ../virtinst/cli.py:723
+#: ../virtinst/cli.py:726
 msgid "Tune memory policy for the domain process."
 msgstr "Ajusta la política de memòria per al procés del domini."
 
-#: ../virtinst/cli.py:725
+#: ../virtinst/cli.py:728
 msgid "Tune blkio policy for the domain process."
 msgstr "Ajusta la política blkio per al procés del domini."
 
-#: ../virtinst/cli.py:727
+#: ../virtinst/cli.py:730
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -4546,7 +4548,7 @@ msgstr ""
 "Estableix la política de suport de memòria per al procés del domini. P. ex:\n"
 "--memorybacking hugepages=on"
 
-#: ../virtinst/cli.py:730
+#: ../virtinst/cli.py:733
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -4556,7 +4558,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,eoi=on"
 
-#: ../virtinst/cli.py:734
+#: ../virtinst/cli.py:737
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -4564,19 +4566,19 @@ msgstr ""
 "Estableix el XML del <clock> del domini. P. ex.:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: ../virtinst/cli.py:737
+#: ../virtinst/cli.py:740
 msgid "Configure VM power management features"
 msgstr "Configura les característiques de l'administració d'energia de la MV"
 
-#: ../virtinst/cli.py:739
+#: ../virtinst/cli.py:742
 msgid "Configure VM lifecycle management policy"
 msgstr "Configura la política de l'administració del cicle de vida de la MV"
 
-#: ../virtinst/cli.py:741
+#: ../virtinst/cli.py:744
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "Configura la repartició dels recursos de les MV (cgroups)"
 
-#: ../virtinst/cli.py:743
+#: ../virtinst/cli.py:746
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo emulate\n"
@@ -4594,7 +4596,7 @@ msgstr ""
 "--sysinfo baseBoard_manufacturer=Baseboard_Corp.,"
 "baseBoard_product=Motherboard,...\n"
 
-#: ../virtinst/cli.py:750
+#: ../virtinst/cli.py:753
 msgid ""
 "Pass arguments directly to the qemu emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
@@ -4604,7 +4606,7 @@ msgstr ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
-#: ../virtinst/cli.py:757
+#: ../virtinst/cli.py:760
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -4614,7 +4616,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (per a contenidors)"
 
-#: ../virtinst/cli.py:761
+#: ../virtinst/cli.py:764
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
@@ -4622,7 +4624,7 @@ msgstr ""
 "Permet espai de noms per al contenidor LXC. P. ex.:\n"
 "--idmap uid_start=0,uid_target=1000,uid_count=10"
 
-#: ../virtinst/cli.py:770
+#: ../virtinst/cli.py:773
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -4636,7 +4638,7 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: ../virtinst/cli.py:801
+#: ../virtinst/cli.py:804
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s ha de ser 'yes' o 'no'"
@@ -4650,47 +4652,47 @@ msgstr ""
 "No sé com emparellar el tipus de dispositiu '%(device_type)s' amb la "
 "propietat '%(property_name)s'"
 
-#: ../virtinst/cli.py:1163
+#: ../virtinst/cli.py:1196
 #, python-format
 msgid "Unknown options %s"
 msgstr "Opcions %s desconegudes"
 
-#: ../virtinst/cli.py:1216 ../virtinst/cli.py:1247
+#: ../virtinst/cli.py:1249 ../virtinst/cli.py:1280
 #, python-format
 msgid "Error: --%(cli_arg_name)s %(options)s: %(err)s"
 msgstr "Error: --%(cli_arg_name)s %(options)s: %(err)s"
 
-#: ../virtinst/cli.py:1805
+#: ../virtinst/cli.py:1869
 #, python-format
 msgid "Unknown sysinfo flag '%s'"
 msgstr "Indicador desconegut de sysinfo «%s»"
 
-#: ../virtinst/cli.py:1983
+#: ../virtinst/cli.py:2038
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Valor incorrecte per a «size»: %s"
 
-#: ../virtinst/cli.py:1996
+#: ../virtinst/cli.py:2051
 #, python-format
 msgid "Unknown '%s' value '%s'"
 msgstr "«%s» amb valor «%s» desconegut"
 
-#: ../virtinst/cli.py:2014
+#: ../virtinst/cli.py:2069
 msgid "Cannot specify more than 1 storage path"
 msgstr "No es pot especificar més d'1 camí d'emmagatzematge"
 
-#: ../virtinst/cli.py:2021
+#: ../virtinst/cli.py:2076
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Un volum d'emmagatzematge s'ha d'especificar com a vol=poolname/volname"
 
-#: ../virtinst/cli.py:2235
+#: ../virtinst/cli.py:2290
 #, python-format
 msgid "Didn't match keymap '%s' in keytable!"
 msgstr ""
 "No s'ha trobat el mapa de teclat «%s» en la taula de teclats 'keytable'!"
 
-#: ../virtinst/cli.py:2597
+#: ../virtinst/cli.py:2643
 #, python-format
 msgid "%(devtype)s type '%(chartype)s' does not support '%(optname)s' option."
 msgstr "El %(devtype)s de tipus '%(chartype)s' no admet l'opció '%(optname)s'."
@@ -4704,46 +4706,36 @@ msgstr "El XML original ha de ser una cadena."
 msgid "Invalid name for new guest: %s"
 msgstr "El nom per al nou convidat no és vàlid: %s"
 
-#: ../virtinst/cloner.py:119
-#, python-format
-msgid "Invalid uuid for new guest: %s"
-msgstr "L'UUID no és vàlid per al nou convidat: %s"
-
-#: ../virtinst/cloner.py:122 ../virtinst/sysinfo.py:70
-#, python-format
-msgid "UUID '%s' is in use by another guest."
-msgstr "L'UUID «%s» ja s'està utilitzant en un altre convidat."
-
-#: ../virtinst/cloner.py:152
+#: ../virtinst/cloner.py:144
 #, python-format
 msgid "Could not use path '%s' for cloning: %s"
 msgstr "No s'ha pogut utilitzar el camí «%s» per clonar: %s"
 
-#: ../virtinst/cloner.py:241
+#: ../virtinst/cloner.py:233
 msgid "Cloning policy must be a list of rules."
 msgstr "La política de clonatge ha de ser una llista de regles."
 
-#: ../virtinst/cloner.py:281
+#: ../virtinst/cloner.py:273
 msgid "Original guest name or xml is required."
 msgstr "Es requereix el XML o el nom de convidat original."
 
-#: ../virtinst/cloner.py:309
+#: ../virtinst/cloner.py:301
 msgid "Domain with devices to clone must be paused or shutoff."
 msgstr "El domini amb dispositius per clonar ha d'estar aturat o en pausa."
 
-#: ../virtinst/cloner.py:334
+#: ../virtinst/cloner.py:326
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 "La clonació en un volum d'emmagatzematge existent actualment no està admesa: "
 "«%s»"
 
-#: ../virtinst/cloner.py:381
+#: ../virtinst/cloner.py:373
 #, python-format
 msgid "Path does not exist: %s"
 msgstr "No existeix el camí: %s"
 
-#: ../virtinst/cloner.py:406
+#: ../virtinst/cloner.py:398
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -4752,33 +4744,33 @@ msgstr ""
 "Hi ha més discs per clonar que nous camins especificats. (%(passed)d "
 "especificats, i en fan falta %(need)d"
 
-#: ../virtinst/cloner.py:418
+#: ../virtinst/cloner.py:410
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "S'està establint el port del dispositiu gràfic a autoport, per tal d'evitar "
 "conflictes."
 
-#: ../virtinst/cloner.py:577
+#: ../virtinst/cloner.py:568
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "El camí al disc «%s» no existeix."
 
-#: ../virtinst/cloner.py:582
+#: ../virtinst/cloner.py:573
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "No s'ha pogut determinar la informació del disc original: %s"
 
-#: ../virtinst/cloner.py:593
+#: ../virtinst/cloner.py:584
 msgid "XML has no 'dev' attribute in disk target"
 msgstr "El XML no té cap atribut «dev» a l'objectiu del disc"
 
-#: ../virtinst/cloner.py:623
+#: ../virtinst/cloner.py:614
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "No s'ha trobat el domini «%s»."
 
-#: ../virtinst/cpu.py:135
+#: ../virtinst/cpu.py:152
 msgid "No host CPU reported in capabilities"
 msgstr "No s'ha reportat cap CPU d'amfitrió a les capacitats"
 
@@ -4787,11 +4779,16 @@ msgstr "No s'ha reportat cap CPU d'amfitrió a les capacitats"
 msgid "Could not determine or unsupported format of '%s'"
 msgstr "No s'ha pogut determinar o no s'admet el format de «%s»"
 
-#: ../virtinst/device.py:172
+#: ../virtinst/device.py:78
+#, fuzzy, python-format
+msgid "%s:%s:%s:%s"
+msgstr "%s:%s"
+
+#: ../virtinst/device.py:185
 msgid "Virtual device type must be set in subclass."
 msgstr "El tipus de dispositiu virtual s'ha d'establir a la subclasse."
 
-#: ../virtinst/device.py:175
+#: ../virtinst/device.py:188
 #, python-format
 msgid "Unknown virtual device type '%s'."
 msgstr "Tipus de dispositiu virtual «%s» desconegut."
@@ -4904,17 +4901,17 @@ msgstr "Nom sysfs del port virtio al convidat"
 
 #. Trying to change perms on vfat at least doesn't work
 #. but also doesn't seem to error. Try and detect that
-#: ../virtinst/devicedisk.py:296
+#: ../virtinst/devicedisk.py:304
 #, python-format
 msgid "Permissions on '%s' did not stick"
 msgstr "Els permisos a «%s» no lliguen"
 
-#: ../virtinst/devicedisk.py:391
+#: ../virtinst/devicedisk.py:399
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr "S'ha d'especificar la mida per al volum no existent «%s»"
 
-#: ../virtinst/devicedisk.py:396
+#: ../virtinst/devicedisk.py:404
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
@@ -4923,27 +4920,27 @@ msgstr ""
 "Es desconeix com crear l'emmagatzematge per al camí «%s». Primer utilitzeu "
 "les API de libvirt per gestionar el directori pare com a reserva."
 
-#: ../virtinst/devicedisk.py:419
+#: ../virtinst/devicedisk.py:427
 msgid "Format attribute not supported for this volume type"
 msgstr "L'atribut de format no està admès per a aquest tipus de volum"
 
-#: ../virtinst/devicedisk.py:505
+#: ../virtinst/devicedisk.py:514
 msgid "Can't change disk path if storage creation info has been set."
 msgstr ""
 "No es pot canviar el camí al disc si no s'ha establert la informació de "
 "creació de l'emmagatzematge."
 
-#: ../virtinst/devicedisk.py:855
+#: ../virtinst/devicedisk.py:887
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "El tipus de dispositiu «%s» requereix un camí"
 
-#: ../virtinst/devicedisk.py:862
+#: ../virtinst/devicedisk.py:894
 #, python-format
 msgid "The path '%s' must be a file or a device, not a directory"
 msgstr "El camí «%s» ha de ser un fitxer o un dispositiu, no pas un directori"
 
-#: ../virtinst/devicedisk.py:871
+#: ../virtinst/devicedisk.py:903
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
@@ -4952,14 +4949,14 @@ msgstr ""
 
 #. This basically means that we either chose full
 #. controller or didn't add any
-#: ../virtinst/devicedisk.py:1035
+#: ../virtinst/devicedisk.py:1067
 #, python-format
 msgid "Controller number %d for disk of type %s has no empty slot to use"
 msgstr ""
 "La controladora número %d per al disc de tipus %s no té cap ranura "
 "disponible per utilitzar"
 
-#: ../virtinst/devicedisk.py:1038
+#: ../virtinst/devicedisk.py:1070
 #, python-format
 msgid "Only %s disks for bus '%s' are supported"
 msgstr "Només s'admeten els discs %s per al bus «%s»"
@@ -5002,17 +4999,16 @@ msgid "ISA"
 msgstr "ISA"
 
 #: ../virtinst/devicepanic.py:42
-#, fuzzy
 msgid "pSeries"
-msgstr "Sèrie"
+msgstr "pSeries"
 
 #: ../virtinst/devicepanic.py:44
 msgid "Hyper-V"
-msgstr ""
+msgstr "Hyper-V"
 
 #: ../virtinst/devicepanic.py:46
 msgid "s390"
-msgstr ""
+msgstr "s390"
 
 #: ../virtinst/devicerng.py:43
 msgid "Random"
@@ -5054,22 +5050,26 @@ msgstr "Posa en pausa el convidat"
 msgid "No action"
 msgstr "Cap acció"
 
-#: ../virtinst/diskbackend.py:132
+#: ../virtinst/devicewatchdog.py:58
+msgid "Dump guest memory core"
+msgstr ""
+
+#: ../virtinst/diskbackend.py:131
 #, python-format
 msgid "Cannot use storage %(path)s: %(err)s"
 msgstr "No es pot utilitzar l'emmagatzematge %(path)s: %(err)s"
 
-#: ../virtinst/diskbackend.py:342
+#: ../virtinst/diskbackend.py:341
 #, python-format
 msgid "Cannot create storage for %s device."
 msgstr "No es pot crear un emmagatzematge per al dispositiu %s."
 
-#: ../virtinst/diskbackend.py:350
+#: ../virtinst/diskbackend.py:349
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr "Es requereix la mida per al disc «%s» inexistent"
 
-#: ../virtinst/diskbackend.py:395
+#: ../virtinst/diskbackend.py:397
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
@@ -5077,21 +5077,21 @@ msgstr ""
 "El sistema de fitxers no tindrà prou espai lliure per ubicar totalment el "
 "fitxer dispers quan el convidat s'estigui executant."
 
-#: ../virtinst/diskbackend.py:400
+#: ../virtinst/diskbackend.py:402
 msgid "There is not enough free space to create the disk."
 msgstr "No hi ha prou espai disponible per crear el disc."
 
-#: ../virtinst/diskbackend.py:404
+#: ../virtinst/diskbackend.py:406
 #, python-format
 msgid " %d M requested > %d M available"
 msgstr " %d M sol·licitats > %d M disponibles"
 
-#: ../virtinst/diskbackend.py:409
+#: ../virtinst/diskbackend.py:411
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "S'està clonant %(srcfile)s"
 
-#: ../virtinst/diskbackend.py:480
+#: ../virtinst/diskbackend.py:481
 #, python-format
 msgid "Error cloning diskimage %s to %s: %s"
 msgstr "S'ha produït un error en clonar la imatge de disc %s a %s: %s"
@@ -5140,21 +5140,21 @@ msgstr "UEFI %(arch)s: %(path)s"
 msgid "Custom: %(path)s"
 msgstr "Personalitzat: %(path)s"
 
-#: ../virtinst/guest.py:79
+#: ../virtinst/guest.py:80
 #, python-format
 msgid "Domain named %s already exists!"
 msgstr "El nom de domini %s ja existeix!"
 
-#: ../virtinst/guest.py:90
+#: ../virtinst/guest.py:91
 #, python-format
 msgid "Could not remove old vm '%s': %s"
 msgstr "No s'ha pogut eliminar l'anterior MV «%s»: %s"
 
-#: ../virtinst/guest.py:96
+#: ../virtinst/guest.py:97
 msgid "Guest"
 msgstr "Convidat"
 
-#: ../virtinst/guest.py:104
+#: ../virtinst/guest.py:105
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "El nom de convidat «%s» ja s'està utilitzant."
@@ -5201,7 +5201,7 @@ msgstr ""
 msgid "Duplicate address for devices %s and %s"
 msgstr "Adreça duplicada per als dispositius %s i %s"
 
-#: ../virtinst/guest.py:1179
+#: ../virtinst/guest.py:1180
 msgid "Host does not support spice GL"
 msgstr "L'amfitrió no admet spice GL"
 
@@ -5316,55 +5316,55 @@ msgstr "Ha fallat la cerca del volum d'un mitjà temporal"
 msgid "Transferring %s"
 msgstr "S'està transferint %s"
 
-#: ../virtinst/network.py:118 ../virtinst/network.py:123
+#: ../virtinst/network.py:128 ../virtinst/network.py:133
 msgid "Average"
 msgstr "Mitjana"
 
-#: ../virtinst/network.py:119 ../virtinst/network.py:124
+#: ../virtinst/network.py:129 ../virtinst/network.py:134
 msgid "Peak"
 msgstr "Pic"
 
-#: ../virtinst/network.py:120 ../virtinst/network.py:125
+#: ../virtinst/network.py:130 ../virtinst/network.py:135
 msgid "Burst"
 msgstr "Ràfega"
 
-#: ../virtinst/network.py:121
+#: ../virtinst/network.py:131
 msgid "Floor"
 msgstr "Mínim"
 
-#: ../virtinst/network.py:136
+#: ../virtinst/network.py:146
 msgid "Inbound: "
 msgstr "Entrant:"
 
-#: ../virtinst/network.py:143
+#: ../virtinst/network.py:153
 msgid "Outbound: "
 msgstr "Sortint:"
 
-#: ../virtinst/network.py:165
+#: ../virtinst/network.py:175
 #, python-format
 msgid "NAT to %s"
 msgstr "NAT a %s"
 
-#: ../virtinst/network.py:170
+#: ../virtinst/network.py:180
 #, python-format
 msgid "Route to %s"
 msgstr "Ruta a %s"
 
-#: ../virtinst/network.py:175
+#: ../virtinst/network.py:185
 #, python-format
 msgid "%(mode)s to %(device)s"
 msgstr "%(mode)s a %(device)s"
 
-#: ../virtinst/network.py:178
+#: ../virtinst/network.py:188
 #, python-format
 msgid "%s network"
 msgstr "xarxa %s"
 
-#: ../virtinst/network.py:180
+#: ../virtinst/network.py:190
 msgid "Isolated network, internal and host routing only"
 msgstr "Xarxa aïllada, només amb encaminament intern i d'amfitrió"
 
-#: ../virtinst/network.py:213
+#: ../virtinst/network.py:219
 #, python-format
 msgid "Name '%s' already in use by another network."
 msgstr "El nom «%s» ja s'està utilitzant en una altra xarxa."
@@ -5466,73 +5466,73 @@ msgstr "Reserva ZFS"
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "No s'ha pogut crear la reserva d'emmagatzematge per defecte «%s»: %s"
 
-#: ../virtinst/storage.py:323
+#: ../virtinst/storage.py:318
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "El nom «%s» ja s'està utilitzant en una altra reserva."
 
-#: ../virtinst/storage.py:411
+#: ../virtinst/storage.py:402
 msgid "Storage device type the pool will represent."
 msgstr "Tipus de dispositiu d'emmagatzematge que representarà la reserva."
 
-#: ../virtinst/storage.py:423
+#: ../virtinst/storage.py:412
 msgid "iSCSI initiator qualified name"
 msgstr "Nom qualificat de l'iniciador iSCSI"
 
-#: ../virtinst/storage.py:426
+#: ../virtinst/storage.py:415
 msgid "Name of the Volume Group"
 msgstr "Nom del grup de volums"
 
-#: ../virtinst/storage.py:505
+#: ../virtinst/storage.py:498
 msgid "Hostname is required"
 msgstr "Es requereix un nom d'amfitrió"
 
-#: ../virtinst/storage.py:509
+#: ../virtinst/storage.py:502
 msgid "Source path is required"
 msgstr "Es requereix un camí d'origen"
 
-#: ../virtinst/storage.py:522
+#: ../virtinst/storage.py:515
 msgid "Must explicitly specify source path if building pool"
 msgstr ""
 "S'ha d'especificar explícitament un camí d'origen si es vol construir una "
 "reserva"
 
-#: ../virtinst/storage.py:526
+#: ../virtinst/storage.py:519
 msgid "Must explicitly specify disk format if formatting disk device."
 msgstr ""
 "S'ha d'especificar explícitament el format del disc si es dóna format a un "
 "dispositiu de disc."
 
-#: ../virtinst/storage.py:538
+#: ../virtinst/storage.py:531
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "No s'ha pogut definir la reserva d'emmagatzematge: %s"
 
-#: ../virtinst/storage.py:545
+#: ../virtinst/storage.py:538
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "No s'ha pogut construir la reserva d'emmagatzematge: %s"
 
-#: ../virtinst/storage.py:551
+#: ../virtinst/storage.py:544
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "No s'ha pogut iniciar la reserva d'emmagatzematge: %s"
 
-#: ../virtinst/storage.py:557
+#: ../virtinst/storage.py:550
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "No s'ha pogut establir la bandera d'autoinici de la reserva: %s"
 
-#: ../virtinst/storage.py:628
+#: ../virtinst/storage.py:621
 #, python-format
 msgid "pool '%s' must be active."
 msgstr "La reserva «%s» ha d'estar activada."
 
-#: ../virtinst/storage.py:642
+#: ../virtinst/storage.py:635
 msgid "input_vol must be a virStorageVol"
 msgstr "input_vol ha de ser un virStorageVol"
 
-#: ../virtinst/storage.py:646
+#: ../virtinst/storage.py:639
 msgid ""
 "Creating storage from an existing volume is not supported by this libvirt "
 "version."
@@ -5540,23 +5540,23 @@ msgstr ""
 "La creació d'emmagatzematge a partir d'un volum existent no està admesa per "
 "aquesta versió de libvirt."
 
-#: ../virtinst/storage.py:651
+#: ../virtinst/storage.py:644
 msgid "virStorageVolume pointer to clone/use as input."
 msgstr "Punter virStorageVolume a clonar/utilitzar com a entrada."
 
-#: ../virtinst/storage.py:659
+#: ../virtinst/storage.py:652
 msgid ""
 "Creating storage by btrfs COW copy is not supported by this libvirt version."
 msgstr ""
 "La creació d'emmagatzematge amb còpia CoW de btrfs no està admesa per "
 "aquesta versió de libvirt."
 
-#: ../virtinst/storage.py:690
+#: ../virtinst/storage.py:683
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "El nom «%s» ja s'està utilitzant en un altre volum."
 
-#: ../virtinst/storage.py:797
+#: ../virtinst/storage.py:790
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
@@ -5564,12 +5564,12 @@ msgstr ""
 "Els volums lògics dispersos no estan admesos, s'estableix l'assignació igual "
 "que la capacitat"
 
-#: ../virtinst/storage.py:842
+#: ../virtinst/storage.py:835
 #, python-format
 msgid "Allocating '%s'"
 msgstr "S'està assignant «%s»"
 
-#: ../virtinst/storage.py:904
+#: ../virtinst/storage.py:897
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
@@ -5578,7 +5578,7 @@ msgstr ""
 "No hi ha prou espai lliure per crear el volum en la reserva "
 "d'emmagatzematge. (%d M assignació demanada > %d M disponible)"
 
-#: ../virtinst/storage.py:910
+#: ../virtinst/storage.py:903
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -5588,41 +5588,36 @@ msgstr ""
 "quan el volum quedi completament ocupat. (%d M capacitat sol·licitada > %d M "
 "disponible)"
 
-#: ../virtinst/sysinfo.py:52
+#: ../virtinst/sysinfo.py:51
 #, python-format
 msgid "SMBios date string '%s' is invalid."
 msgstr "La cadena de la data de SMBios «%s» no ès vàlida."
 
-#: ../virtinst/sysinfo.py:67
-#, python-format
-msgid "Invalid uuid for SMBios: %s"
-msgstr "L'UUID no és vàlid per SMBios: %s"
-
-#: ../virtinst/urlfetcher.py:87
+#: ../virtinst/urlfetcher.py:86
 #, python-format
 msgid "Couldn't acquire file %s: %s"
 msgstr "No s'ha pogut obtenir el fitxer %s: %s"
 
-#: ../virtinst/urlfetcher.py:92
+#: ../virtinst/urlfetcher.py:91
 #, python-format
 msgid "Retrieving file %s..."
 msgstr "S'està recuperant el fitxer %s..."
 
-#: ../virtinst/urlfetcher.py:230
+#: ../virtinst/urlfetcher.py:229
 #, python-format
 msgid "Opening URL %s failed: %s."
 msgstr "L'obertura de l'URL %s ha fallat: %s."
 
-#: ../virtinst/urlfetcher.py:319
+#: ../virtinst/urlfetcher.py:311
 #, python-format
 msgid "Mounting location '%s' failed"
 msgstr "Ha fallat el muntatge de la ubicació «%s»"
 
-#: ../virtinst/urlfetcher.py:529
+#: ../virtinst/urlfetcher.py:553
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "No es pot accedir a l'URL, potser l'heu teclejat malament?"
 
-#: ../virtinst/urlfetcher.py:532
+#: ../virtinst/urlfetcher.py:556
 #, python-format
 msgid ""
 "Could not find an installable distribution at '%s'%s\n"
@@ -5636,26 +5631,26 @@ msgstr ""
 "Consulteu la pàgina man de virt-install per a diversos exemples de "
 "distribucions."
 
-#: ../virtinst/urlfetcher.py:596
+#: ../virtinst/urlfetcher.py:620
 #, python-format
 msgid "Couldn't find %(type)s kernel for %(distro)s tree."
 msgstr ""
 "No s'ha pogut trobar un nucli del sistema operatiu %(type)s per a l'arbre "
 "%(distro)s."
 
-#: ../virtinst/urlfetcher.py:611
+#: ../virtinst/urlfetcher.py:635
 #, python-format
 msgid "Could not find boot.iso in %s tree."
 msgstr "No s'ha pogut trobar boot.iso a l'arbre %s."
 
-#: ../virtinst/urlfetcher.py:753
+#: ../virtinst/urlfetcher.py:777
 #, python-format
 msgid "Could not find a kernel path for virt type '%s'"
 msgstr ""
 "No s'ha pogut trobar cap camí al nucli del sistema operatiu per al tipus "
 "virt «%s»"
 
-#: ../virtinst/urlfetcher.py:762
+#: ../virtinst/urlfetcher.py:786
 msgid "Could not find a boot iso path for this tree."
 msgstr "No s'ha pogut trobar cap camí d'iso per a aquest arbre."
 
@@ -5730,7 +5725,8 @@ msgid "Graphical console connection for a virtual machine"
 msgstr "Connexió a la consola gràfica per a una màquina virtual"
 
 #: ../ui/about.ui.h:1
-msgid "Copyright (C) 2006-2017 Red Hat Inc."
+#, fuzzy
+msgid "Copyright (C) 2006-2018 Red Hat Inc."
 msgstr "Drets d'autor (C) 2006-2017 Red Hat Inc."
 
 #: ../ui/about.ui.h:2
@@ -5758,7 +5754,7 @@ msgstr "Tipus de _dispositiu:"
 msgid "_Bus type:"
 msgstr "Tipus de _bus:"
 
-#: ../ui/addhardware.ui.h:4 ../ui/details.ui.h:119
+#: ../ui/addhardware.ui.h:4 ../ui/details.ui.h:116
 msgid "Cac_he mode:"
 msgstr "Mode de memòria ca_u:"
 
@@ -5787,7 +5783,7 @@ msgstr "aa:bb:cc:dd:ee:ff"
 msgid "_MAC address:"
 msgstr "Adreça _MAC:"
 
-#: ../ui/addhardware.ui.h:11 ../ui/details.ui.h:124
+#: ../ui/addhardware.ui.h:11 ../ui/details.ui.h:121
 msgid "Device mode_l:"
 msgstr "Mode_l del dispositiu:"
 
@@ -5807,7 +5803,7 @@ msgstr "Po_rt:"
 msgid "_Path:"
 msgstr "_Camí:"
 
-#: ../ui/addhardware.ui.h:16 ../ui/createinterface.ui.h:36
+#: ../ui/addhardware.ui.h:16 ../ui/createinterface.ui.h:37
 #: ../ui/createnet.ui.h:29
 msgid "_Mode:"
 msgstr "_Mode:"
@@ -5846,7 +5842,7 @@ msgstr "Sòcol _automàtic:"
 msgid "_Channel:"
 msgstr "_Canal:"
 
-#: ../ui/addhardware.ui.h:25 ../ui/details.ui.h:143
+#: ../ui/addhardware.ui.h:25 ../ui/details.ui.h:139
 msgid "Ac_tion:"
 msgstr "Acc_ió:"
 
@@ -5882,15 +5878,15 @@ msgstr "P_ort:"
 msgid "_Device:"
 msgstr "_Dispositiu:"
 
-#: ../ui/addhardware.ui.h:34 ../ui/details.ui.h:162
+#: ../ui/addhardware.ui.h:34 ../ui/details.ui.h:159
 msgid "rng"
 msgstr "rng"
 
-#: ../ui/addhardware.ui.h:35 ../ui/details.ui.h:166
+#: ../ui/addhardware.ui.h:35 ../ui/details.ui.h:163
 msgid "panic"
 msgstr "pànic"
 
-#: ../ui/addhardware.ui.h:36 ../ui/create.ui.h:81 ../ui/createinterface.ui.h:32
+#: ../ui/addhardware.ui.h:36 ../ui/create.ui.h:86 ../ui/createinterface.ui.h:33
 #: ../ui/createnet.ui.h:35 ../ui/createpool.ui.h:14 ../ui/createvol.ui.h:15
 #: ../ui/snapshots.ui.h:7
 msgid "_Finish"
@@ -5937,11 +5933,13 @@ msgid "_Browse..."
 msgstr "_Navega..."
 
 #: ../ui/choosecd.ui.h:3
-msgid "CD-_ROM or DVD"
-msgstr "CD-_ROM o DVD"
+#, fuzzy
+msgid "P_hysical Device"
+msgstr "Dispositiu %s físic"
 
 #: ../ui/choosecd.ui.h:4
-msgid "_ISO Image Location"
+#, fuzzy
+msgid "_Image Location"
 msgstr "_Ubicació de la imatge ISO"
 
 #: ../ui/choosecd.ui.h:5
@@ -5984,11 +5982,11 @@ msgstr "<span color='#484848'>Xarxa:</span>"
 msgid "No storage to clone"
 msgstr "No hi ha emmagatzematge per clonar"
 
-#: ../ui/clone.ui.h:8 ../ui/create.ui.h:76
+#: ../ui/clone.ui.h:8 ../ui/create.ui.h:81
 msgid "<span color='#484848'>Storage:</span>"
 msgstr "<span color='#484848'>Emmagatzematge:</span>"
 
-#: ../ui/clone.ui.h:9 ../ui/create.ui.h:72
+#: ../ui/clone.ui.h:9 ../ui/create.ui.h:77
 msgid "<span color='#484848'>_Name:</span>"
 msgstr "<span color='#484848'>_Nom:</span>"
 
@@ -6077,30 +6075,41 @@ msgid "_Hypervisor:"
 msgstr "_Hipervisor:"
 
 #: ../ui/connect.ui.h:4
-msgid "Generated URI:"
-msgstr "URI generat:"
-
-#: ../ui/connect.ui.h:5
 msgid "Connect to _remote host"
 msgstr "Connecta amb l'amfitrió _remot"
 
-#: ../ui/connect.ui.h:6
+#: ../ui/connect.ui.h:5
 msgid "_Autoconnect:"
 msgstr "_Autoconnecta:"
 
+#: ../ui/connect.ui.h:6
+#, fuzzy
+msgid "Autoconnect"
+msgstr "_Autoconnecta:"
+
 #: ../ui/connect.ui.h:7
+#, fuzzy
+msgid "Username"
+msgstr "Nom d'usuari:"
+
+#: ../ui/connect.ui.h:8
+#, fuzzy
+msgid "Hostname"
+msgstr "Nom de l'amfitrió:"
+
+#: ../ui/connect.ui.h:9
 msgid "H_ostname:"
 msgstr "N_om d'amfitrió:"
 
-#: ../ui/connect.ui.h:8 ../ui/details.ui.h:171
+#: ../ui/connect.ui.h:10 ../ui/details.ui.h:168
 msgid "_Username:"
 msgstr "Nom d'_usuari:"
 
-#: ../ui/connect.ui.h:9
+#: ../ui/connect.ui.h:11
 msgid "Me_thod:"
 msgstr "Mè_tode:"
 
-#: ../ui/connect.ui.h:10
+#: ../ui/connect.ui.h:12
 msgid ""
 "<small>QEMU usermode session is not the virt-manager\n"
 "default. It is likely that any pre-existing QEMU/KVM\n"
@@ -6111,6 +6120,23 @@ msgstr ""
 "de  virt-manager. És probable que qualsevol convidat QEMU/KVM\n"
 "preexistent no estigui disponible. Les opcions de xarxa són molt\n"
 "limitades. </small>"
+
+#: ../ui/connect.ui.h:16
+msgid "Cu_stom URI:"
+msgstr ""
+
+#: ../ui/connect.ui.h:17
+msgid "uri-entry"
+msgstr ""
+
+#: ../ui/connect.ui.h:18
+#, fuzzy
+msgid "uri-label"
+msgstr "etiqueta"
+
+#: ../ui/connect.ui.h:19
+msgid "Generated URI:"
+msgstr "URI generat:"
 
 #: ../ui/create.ui.h:1
 msgid "New VM"
@@ -6249,7 +6275,7 @@ msgstr "Arrencada directa del nucli del sistema operatiu:"
 msgid "_Kernel path:"
 msgstr "Camí del _nucli del sistema operatiu:"
 
-#: ../ui/create.ui.h:36 ../ui/details.ui.h:100
+#: ../ui/create.ui.h:36 ../ui/details.ui.h:97
 msgid "_Initrd path:"
 msgstr "Camí de l'_initrd:"
 
@@ -6290,12 +6316,8 @@ msgid ""
 "<small>The OS directory tree must already exist. To enable OS directory tree "
 "creation,\n"
 "please install <a href=\"https://github.com/virt-manager/virt-bootstrap"
-"\">virt-bootrap</a></small>"
+"\">virt-bootstrap</a></small>"
 msgstr ""
-"<small>L'arbre de directoris del SO ha d'existir. Per habilitar la creació "
-"de l'arbre de directoris del SO,\n"
-"instal·leu <a href=\"https://github.com/virt-manager/virt-bootstrap\">virt-"
-"bootrap</a></small>"
 
 #: ../ui/create.ui.h:46
 msgid ""
@@ -6315,103 +6337,112 @@ msgid "Source URI:"
 msgstr "URI d'origen:"
 
 #: ../ui/create.ui.h:50
-msgid "docker://fedora"
-msgstr "docker://fedora"
+msgid ""
+"Possible URL formats:\n"
+" * file:///path/to/rootfs.tar\n"
+" * docker://registry:port/image:tag\n"
+" * virt-builder://template\n"
+msgstr ""
 
-#: ../ui/create.ui.h:51
+#: ../ui/create.ui.h:55
 msgid "Do not verify TLS certificates of registry"
 msgstr "No verifiquis els certificats TLS del registre"
 
-#: ../ui/create.ui.h:52
+#: ../ui/create.ui.h:56
 msgid "Username:"
 msgstr "Nom d'usuari:"
 
-#: ../ui/create.ui.h:53
+#: ../ui/create.ui.h:57
 msgid "Password:"
 msgstr "Contrasenya:"
 
-#: ../ui/create.ui.h:54
+#: ../ui/create.ui.h:58
 msgid "Credentials for accessing the source registry"
 msgstr "Especifiqueu les redencials per accedir al registre origen"
 
-#: ../ui/create.ui.h:55
+#: ../ui/create.ui.h:59
+#, fuzzy
+msgid "Root password:"
+msgstr "Mostra la contrasen_ya"
+
+#: ../ui/create.ui.h:60
 msgid "Select _container template:"
 msgstr "Seleccioneu la plantilla del _contenidor:"
 
-#: ../ui/create.ui.h:56
+#: ../ui/create.ui.h:61
 msgid "VZ templates"
 msgstr "plantilles VZ"
 
-#: ../ui/create.ui.h:57
+#: ../ui/create.ui.h:62
 msgid "A_utomatically detect operating system based on install media"
 msgstr ""
 "Detecta a_utomàticament el sistema operatiu segons el mitjà d'instal·lació"
 
-#: ../ui/create.ui.h:58
+#: ../ui/create.ui.h:63
 msgid "Choose an operating system type and version"
 msgstr "Trieu el tipus i la versió del sistema operatiu"
 
-#: ../ui/create.ui.h:59
+#: ../ui/create.ui.h:64
 msgid "_Version:"
 msgstr "_Versió:"
 
-#: ../ui/create.ui.h:60
+#: ../ui/create.ui.h:65
 msgid "OS _type:"
 msgstr "_Tipus de SO:"
 
-#: ../ui/create.ui.h:61
+#: ../ui/create.ui.h:66
 msgid "Install"
 msgstr "Instal·la"
 
-#: ../ui/create.ui.h:62
+#: ../ui/create.ui.h:67
 msgid "Choose Memory and CPU settings"
 msgstr "Trieu els ajusts de memòria i CPU"
 
-#: ../ui/create.ui.h:63
+#: ../ui/create.ui.h:68
 msgid "_Memory (RAM):"
 msgstr "_Memòria (RAM):"
 
-#: ../ui/create.ui.h:64
+#: ../ui/create.ui.h:69
 msgid "C_PUs:"
 msgstr "C_PU:"
 
-#: ../ui/create.ui.h:65
+#: ../ui/create.ui.h:70
 msgid "(Insert host mem)"
 msgstr "(Insereix mem. de l'amfitrió)"
 
-#: ../ui/create.ui.h:66
+#: ../ui/create.ui.h:71
 msgid "cpus"
-msgstr ""
+msgstr "cpus"
 
-#: ../ui/create.ui.h:68
+#: ../ui/create.ui.h:73
 msgid "_Enable storage for this virtual machine"
 msgstr "_Habilita l'emmagatzematge per aquesta màquina virtual"
 
-#: ../ui/create.ui.h:70
+#: ../ui/create.ui.h:75
 msgid "Ready to begin the installation"
 msgstr "A punt per començar la instal·lació"
 
-#: ../ui/create.ui.h:71
+#: ../ui/create.ui.h:76
 msgid "C_ustomize configuration before install"
 msgstr "_Personalitza la configuració abans d'instal·lar"
 
-#: ../ui/create.ui.h:73
+#: ../ui/create.ui.h:78
 msgid "<span color='#484848'>Install:</span>"
 msgstr "<span color='#484848'>Instal·lació:</span>"
 
-#: ../ui/create.ui.h:74
+#: ../ui/create.ui.h:79
 msgid "<span color='#484848'>Memory:</span>"
 msgstr "<span color='#484848'>Memòria:</span>"
 
-#: ../ui/create.ui.h:75
+#: ../ui/create.ui.h:80
 msgid "<span color='#484848'>CPUs:</span>"
 msgstr "<span color='#484848'>CPU:</span>"
 
-#: ../ui/create.ui.h:77
+#: ../ui/create.ui.h:82
 msgid "<span color='#484848'>OS:</span>"
 msgstr "<span color='#484848'>SO:</span>"
 
-#: ../ui/create.ui.h:78
+#: ../ui/create.ui.h:83
 msgid ""
 "<small>Specifying an operating system is required for best performance</"
 "small>"
@@ -6419,11 +6450,11 @@ msgstr ""
 "<small>Per un rendiment més gran es recomana l'especificació d'un sistema "
 "operatiu</small>"
 
-#: ../ui/create.ui.h:79
+#: ../ui/create.ui.h:84
 msgid "N_etwork selection"
 msgstr "S_elecció de la xarxa"
 
-#: ../ui/create.ui.h:80
+#: ../ui/create.ui.h:85
 msgid "Finish"
 msgstr "Finalitza"
 
@@ -6452,11 +6483,13 @@ msgid "Bonding configuration"
 msgstr "Configuració d'enllaç"
 
 #: ../ui/createinterface.ui.h:7
-msgid "Bond monitor mode:"
+#, fuzzy
+msgid "B_ond monitor mode:"
 msgstr "Mode del monitor de l'enllaç:"
 
 #: ../ui/createinterface.ui.h:8
-msgid "Bond mode:"
+#, fuzzy
+msgid "_Bond mode:"
 msgstr "Mode d'enllaç:"
 
 #: ../ui/createinterface.ui.h:9
@@ -6534,62 +6567,66 @@ msgid "Bridge settings:"
 msgstr "Ajusts del pont:"
 
 #: ../ui/createinterface.ui.h:28
+msgid "Bond mode:"
+msgstr "Mode d'enllaç:"
+
+#: ../ui/createinterface.ui.h:29
 msgid "C_onfigure"
 msgstr "C_onfigura"
 
-#: ../ui/createinterface.ui.h:29
+#: ../ui/createinterface.ui.h:30
 msgid "IP settings:"
 msgstr "Ajusts de la IP:"
 
-#: ../ui/createinterface.ui.h:30
+#: ../ui/createinterface.ui.h:31
 msgid "Config_ure"
 msgstr "Config_ura"
 
-#: ../ui/createinterface.ui.h:31
+#: ../ui/createinterface.ui.h:32
 msgid "Insert list desc:"
 msgstr "Insereix Desc. de llista:"
 
-#: ../ui/createinterface.ui.h:33
+#: ../ui/createinterface.ui.h:34
 msgid "IP Configuration"
 msgstr "Configuració IP"
 
-#: ../ui/createinterface.ui.h:34
+#: ../ui/createinterface.ui.h:35
 msgid "_Copy interface configuration from:"
 msgstr "_Copia la configuració de la interfície des de:"
 
-#: ../ui/createinterface.ui.h:35
+#: ../ui/createinterface.ui.h:36
 msgid "Ma_nually configure:"
 msgstr "Co_nfigura manualment:"
 
-#: ../ui/createinterface.ui.h:37
+#: ../ui/createinterface.ui.h:38
 msgid "Static configuration:"
 msgstr "Configuració estàtica:"
 
-#: ../ui/createinterface.ui.h:38 ../ui/migrate.ui.h:5
+#: ../ui/createinterface.ui.h:39 ../ui/migrate.ui.h:5
 msgid "_Address:"
 msgstr "_Adreça:"
 
-#: ../ui/createinterface.ui.h:39
+#: ../ui/createinterface.ui.h:40
 msgid "_Gateway:"
 msgstr "_Passarel·la:"
 
-#: ../ui/createinterface.ui.h:40
+#: ../ui/createinterface.ui.h:41
 msgid "IPv4"
 msgstr "Adreces IPv4"
 
-#: ../ui/createinterface.ui.h:41
+#: ../ui/createinterface.ui.h:42
 msgid "A_utoconf"
 msgstr "A_utoconf"
 
-#: ../ui/createinterface.ui.h:42
+#: ../ui/createinterface.ui.h:43
 msgid "Addresses:"
 msgstr "Adreces:"
 
-#: ../ui/createinterface.ui.h:43
+#: ../ui/createinterface.ui.h:44
 msgid "IPv6"
 msgstr "IPv6"
 
-#: ../ui/createinterface.ui.h:44
+#: ../ui/createinterface.ui.h:45
 msgid "<b>IP Configuration</b>"
 msgstr "<b>Configuració IP</b>"
 
@@ -6645,7 +6682,7 @@ msgstr "?"
 msgid "Gateway:"
 msgstr "Passarel·la:"
 
-#: ../ui/createnet.ui.h:13 ../ui/details.ui.h:127
+#: ../ui/createnet.ui.h:13 ../ui/details.ui.h:124
 msgid "Type:"
 msgstr "Tipus:"
 
@@ -6826,7 +6863,7 @@ msgstr "Ca_pacitat màx.:"
 msgid "_Allocation:"
 msgstr "_Assignació:"
 
-#: ../ui/createvol.ui.h:12 ../ui/details.ui.h:151
+#: ../ui/createvol.ui.h:12 ../ui/details.ui.h:148
 msgid "Path:"
 msgstr "Camí:"
 
@@ -7029,263 +7066,252 @@ msgid "Chipse_t:"
 msgstr "Joc de _xips:"
 
 #: ../ui/details.ui.h:50
-msgid ""
-"<small>Q35 is not the default chipset and has received far less testing.\n"
-"Once this change is made it is difficult to go back. Only use this\n"
-"if you know what you are doing.</small>"
-msgstr ""
-"<small>Q35 no és el joc de xips per defecte i ha rebut molta menys "
-"verificació.\n"
-"Un cop es fa aquest canvi, és difícil tornar enrere. Feu-ho només si sabeu "
-"el que \n"
-"esteu fent.</small>"
-
-#: ../ui/details.ui.h:53
 msgid "Firmware:"
 msgstr "Microprogramari:"
 
-#: ../ui/details.ui.h:54
+#: ../ui/details.ui.h:51
 msgid "<b>Hypervisor Details</b>"
 msgstr "<b>Detalls de l'hipervisor</b>"
 
-#: ../ui/details.ui.h:55
+#: ../ui/details.ui.h:52
 msgid "Enable User Namespace"
 msgstr "Habilita l'espai de noms d'usuari"
 
-#: ../ui/details.ui.h:56
+#: ../ui/details.ui.h:53
 msgid "User ID: "
 msgstr "ID d'usuari:"
 
-#: ../ui/details.ui.h:57
+#: ../ui/details.ui.h:54
 msgid "  Group ID: "
 msgstr "ID de grup:"
 
-#: ../ui/details.ui.h:58
+#: ../ui/details.ui.h:55
 msgid "Start"
 msgstr "Inicia"
 
-#: ../ui/details.ui.h:60
+#: ../ui/details.ui.h:57
 msgid "Count"
 msgstr "Recompte"
 
-#: ../ui/details.ui.h:61 ../ui/migrate.ui.h:7
+#: ../ui/details.ui.h:58 ../ui/migrate.ui.h:7
 msgid "0"
 msgstr "0"
 
-#: ../ui/details.ui.h:62
+#: ../ui/details.ui.h:59
 msgid "<b>User Namespace</b>"
 msgstr "<b>Espai de noms d'usuari</b>"
 
-#: ../ui/details.ui.h:63
+#: ../ui/details.ui.h:60
 msgid "Product name:"
 msgstr "Nom de producte:"
 
-#: ../ui/details.ui.h:64
+#: ../ui/details.ui.h:61
 msgid "Hostname:"
 msgstr "Nom de l'amfitrió:"
 
-#: ../ui/details.ui.h:65
+#: ../ui/details.ui.h:62
 msgid "Operating system:"
 msgstr "Sistema operatiu:"
 
-#: ../ui/details.ui.h:66
+#: ../ui/details.ui.h:63
 msgid "foo"
 msgstr "foo"
 
-#: ../ui/details.ui.h:67
+#: ../ui/details.ui.h:64
 msgid "<b>Operating System</b>"
 msgstr "<b>Sistema operatiu</b>"
 
-#: ../ui/details.ui.h:68
+#: ../ui/details.ui.h:65
 msgid "<b>Applications</b>"
 msgstr "<b>Aplicacions</b>"
 
-#: ../ui/details.ui.h:69
+#: ../ui/details.ui.h:66
 msgid "Error message bar"
 msgstr "Barra de missatges d'error"
 
-#: ../ui/details.ui.h:70
+#: ../ui/details.ui.h:67
 msgid "Refresh"
 msgstr "Refresca"
 
-#: ../ui/details.ui.h:71 ../ui/host.ui.h:8
+#: ../ui/details.ui.h:68 ../ui/host.ui.h:8
 msgid "<b>CPU usage</b>"
 msgstr "<b>Ús de la CPU</b>"
 
-#: ../ui/details.ui.h:72 ../ui/host.ui.h:9
+#: ../ui/details.ui.h:69 ../ui/host.ui.h:9
 msgid "<b>Memory usage</b>"
 msgstr "<b>Ús de la memòria</b>"
 
-#: ../ui/details.ui.h:73
+#: ../ui/details.ui.h:70
 msgid "0 KiBytes/s 0 KiBytes/s"
 msgstr "0 KiBytes/s 0 KiBytes/s"
 
-#: ../ui/details.ui.h:74
+#: ../ui/details.ui.h:71
 msgid "<b>Disk I/O</b>"
 msgstr "<b>E/S del disc</b>"
 
-#: ../ui/details.ui.h:75
+#: ../ui/details.ui.h:72
 msgid "<b>Network I/O</b>"
 msgstr "<b>E/S de la xarxa</b>"
 
-#: ../ui/details.ui.h:76
+#: ../ui/details.ui.h:73
 msgid "Logical host CPUs:"
 msgstr "CPU lògiques de l'amfitrió:"
 
-#: ../ui/details.ui.h:77
+#: ../ui/details.ui.h:74
 msgid "Ma_ximum allocation:"
 msgstr "Assignació _màxima:"
 
-#: ../ui/details.ui.h:78
+#: ../ui/details.ui.h:75
 msgid "Current a_llocation:"
 msgstr "Assignació _actual:"
 
-#: ../ui/details.ui.h:79
+#: ../ui/details.ui.h:76
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr "<small>El sobrepuig de les vCPU pot afectar el rendiment</small>"
 
-#: ../ui/details.ui.h:80
+#: ../ui/details.ui.h:77
 msgid "<b>CPUs</b>"
 msgstr "<b>CPU</b>"
 
-#: ../ui/details.ui.h:81
+#: ../ui/details.ui.h:78
 msgid "M_odel:"
 msgstr "M_odel:"
 
-#: ../ui/details.ui.h:82
+#: ../ui/details.ui.h:79
 msgid "Copy host CP_U configuration"
 msgstr "Copia la configuració de la CP_U de l'amfitrió"
 
-#: ../ui/details.ui.h:83
+#: ../ui/details.ui.h:80
 msgid "<b>Configu_ration</b>"
 msgstr "<b>Configu_ració</b>"
 
-#: ../ui/details.ui.h:84
+#: ../ui/details.ui.h:81
 msgid "Manuall_y set CPU topology"
 msgstr "Estableix _manualment la topologia de la CPU"
 
-#: ../ui/details.ui.h:85
+#: ../ui/details.ui.h:82
 msgid "Thread_s:"
 msgstr "Fil_s d'execució:"
 
-#: ../ui/details.ui.h:86
+#: ../ui/details.ui.h:83
 msgid "Cor_es:"
 msgstr "Nucl_is:"
 
-#: ../ui/details.ui.h:87
+#: ../ui/details.ui.h:84
 msgid "Socke_ts:"
 msgstr "Sòco_ls:"
 
-#: ../ui/details.ui.h:88
+#: ../ui/details.ui.h:85
 msgid "<small>Selected CPU model does not support Hyper-Threading</small>"
 msgstr ""
 "<small>El model de CPU que heu indicat no admet Hyper-Threading</small>"
 
-#: ../ui/details.ui.h:89
+#: ../ui/details.ui.h:86
 msgid "<b>To_pology</b>"
 msgstr "<b>To_pologia</b>"
 
-#: ../ui/details.ui.h:90
+#: ../ui/details.ui.h:87
 msgid "Total host memory:"
 msgstr "Memòria total de l'amfitrió:"
 
-#: ../ui/details.ui.h:91 ../ui/fsdetails.ui.h:9
+#: ../ui/details.ui.h:88 ../ui/fsdetails.ui.h:9
 msgid "MiB"
 msgstr "MiB"
 
-#: ../ui/details.ui.h:92
+#: ../ui/details.ui.h:89
 msgid "<b>Memory</b>"
 msgstr "<b>Memòria</b>"
 
-#: ../ui/details.ui.h:93
+#: ../ui/details.ui.h:90
 msgid "Start virt_ual machine on host boot up"
 msgstr "Inicia la màquina virt_ual en arrencar l'amfitrió"
 
-#: ../ui/details.ui.h:94
+#: ../ui/details.ui.h:91
 msgid "<b>Autostart</b>"
 msgstr "<b>Autoinici</b>"
 
-#: ../ui/details.ui.h:95
+#: ../ui/details.ui.h:92
 msgid "Init _path:"
 msgstr "_Camí de l'init:"
 
-#: ../ui/details.ui.h:96
+#: ../ui/details.ui.h:93
 msgid "Init ar_gs:"
 msgstr "Ar_gs de l'init:"
 
-#: ../ui/details.ui.h:97
+#: ../ui/details.ui.h:94
 msgid "<b>Container init</b>"
 msgstr "<b>init de contenidor</b>"
 
-#: ../ui/details.ui.h:98
+#: ../ui/details.ui.h:95
 msgid "Ena_ble direct kernel boot"
 msgstr "Ha_bilita l'arrencada directa del nucli del sistema operatiu"
 
-#: ../ui/details.ui.h:99
+#: ../ui/details.ui.h:96
 msgid "Ke_rnel path:"
 msgstr "_Camí del nucli:"
 
-#: ../ui/details.ui.h:101
+#: ../ui/details.ui.h:98
 msgid "Browse"
 msgstr "Navega"
 
-#: ../ui/details.ui.h:102
+#: ../ui/details.ui.h:99
 msgid "Kernel ar_gs:"
 msgstr "Ar_guments del nucli del sistema operatiu:"
 
-#: ../ui/details.ui.h:103
-msgid "D_TB Path:"
-msgstr "Camí del D_TB:"
+#: ../ui/details.ui.h:100
+#, fuzzy
+msgid "D_TB path:"
+msgstr "Camí del _DTB:"
 
-#: ../ui/details.ui.h:104
+#: ../ui/details.ui.h:101
 msgid "<b>Dir_ect kernel boot</b>"
 msgstr "<b>Arrencada dir_ecta del nucli del sistema operatiu</b>"
 
-#: ../ui/details.ui.h:105
+#: ../ui/details.ui.h:102
 msgid "Enable boot me_nu"
 msgstr "Habilita el me_nú d'arrencada"
 
-#: ../ui/details.ui.h:106
+#: ../ui/details.ui.h:103
 msgid "<b>Boot device order</b>"
 msgstr "<b>Ordre dels dispositius d'arrencada</b>"
 
-#: ../ui/details.ui.h:107
+#: ../ui/details.ui.h:104
 msgid "R_eadonly:"
 msgstr "De només l_ectura:"
 
-#: ../ui/details.ui.h:108
+#: ../ui/details.ui.h:105
 msgid "Sharea_ble:"
 msgstr "Comparti_ble:"
 
-#: ../ui/details.ui.h:109
+#: ../ui/details.ui.h:106
 msgid "Storage size:"
 msgstr "Mida de l'emmagatzematge:"
 
-#: ../ui/details.ui.h:110
+#: ../ui/details.ui.h:107
 msgid "Source path:"
 msgstr "Camí d'origen:"
 
-#: ../ui/details.ui.h:111
+#: ../ui/details.ui.h:108
 msgid "Connect or disconnect media"
 msgstr "Connecta o desconnecta el mitjà"
 
-#: ../ui/details.ui.h:112
+#: ../ui/details.ui.h:109
 msgid "Device type:"
 msgstr "Tipus de dispositiu:"
 
-#: ../ui/details.ui.h:113
+#: ../ui/details.ui.h:110
 msgid "Removab_le:"
 msgstr "Extraïb_le:"
 
-#: ../ui/details.ui.h:114
+#: ../ui/details.ui.h:111
 msgid "Disk b_us:"
 msgstr "B_us de disc:"
 
-#: ../ui/details.ui.h:115
+#: ../ui/details.ui.h:112
 msgid "Seria_l number:"
 msgstr "_Número de sèrie:"
 
-#: ../ui/details.ui.h:116
+#: ../ui/details.ui.h:113
 msgid ""
 "<small>Changing this will not change the disk image format, it only tells "
 "libvirt about the existing image format. </small>"
@@ -7293,199 +7319,199 @@ msgstr ""
 "<small>Canviar això no canvia el format de la imatge de disc, només informa "
 "libvirt sobre el format d'imatge existent. </small>"
 
-#: ../ui/details.ui.h:117
+#: ../ui/details.ui.h:114
 msgid "Storage forma_t:"
 msgstr "Forma_t d'emmagatzematge:"
 
-#: ../ui/details.ui.h:118
+#: ../ui/details.ui.h:115
 msgid "_SGIO:"
 msgstr "_SGIO:"
 
-#: ../ui/details.ui.h:120
+#: ../ui/details.ui.h:117
 msgid "_IO mode:"
 msgstr "Mode d'_E/S:"
 
-#: ../ui/details.ui.h:121
+#: ../ui/details.ui.h:118
 msgid "_Performance options"
 msgstr "O_pcions de rendiment"
 
-#: ../ui/details.ui.h:122
+#: ../ui/details.ui.h:119
 msgid "Advanced _options"
 msgstr "_Opcions avançades"
 
-#: ../ui/details.ui.h:123
+#: ../ui/details.ui.h:120
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>Disc virtual</b>"
 
-#: ../ui/details.ui.h:125
+#: ../ui/details.ui.h:122
 msgid "MAC address:"
 msgstr "Adreça MAC:"
 
-#: ../ui/details.ui.h:126
+#: ../ui/details.ui.h:123
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Interfície virtual de xarxa</b>"
 
-#: ../ui/details.ui.h:128 ../ui/host.ui.h:41
+#: ../ui/details.ui.h:125 ../ui/host.ui.h:44
 msgid "Mode:"
 msgstr "Mode:"
 
-#: ../ui/details.ui.h:129
+#: ../ui/details.ui.h:126
 msgid "<b>Virtual Input Device</b>"
 msgstr "<b>Dispositiu virtual d'entrada</b>"
 
-#: ../ui/details.ui.h:130
-msgid "Device m_odel:"
-msgstr "M_odel del dispositiu:"
-
-#: ../ui/details.ui.h:131
+#: ../ui/details.ui.h:127
 msgid "<b>Sound Device</b>"
 msgstr "<b>Dispositiu de so</b>"
 
-#: ../ui/details.ui.h:132
+#: ../ui/details.ui.h:128
 msgid "Source host:"
 msgstr "Amfitrió origen:"
 
-#: ../ui/details.ui.h:133
+#: ../ui/details.ui.h:129
 msgid "Bind host:"
 msgstr "Amfitrió de la vinculació:"
 
-#: ../ui/details.ui.h:134
+#: ../ui/details.ui.h:130
 msgid "Target type:"
 msgstr "Tipus de destinació:"
 
-#: ../ui/details.ui.h:135
+#: ../ui/details.ui.h:131
 msgid "Target name:"
 msgstr "Nom de destinació:"
 
-#: ../ui/details.ui.h:136
+#: ../ui/details.ui.h:132
 msgid "<b>insert type</b>"
 msgstr "<b>tipus d'inserció</b>"
 
-#: ../ui/details.ui.h:137 ../ui/host.ui.h:11
+#: ../ui/details.ui.h:133 ../ui/host.ui.h:11
 msgid "Device:"
 msgstr "Dispositiu:"
 
-#: ../ui/details.ui.h:138
+#: ../ui/details.ui.h:134
 msgid "ROM _BAR:"
 msgstr "ROM _BAR:"
 
-#: ../ui/details.ui.h:139
+#: ../ui/details.ui.h:135
 msgid "RAM:"
 msgstr "RAM:"
 
-#: ../ui/details.ui.h:140
+#: ../ui/details.ui.h:136
 msgid "Heads:"
 msgstr "Capçaleres:"
 
-#: ../ui/details.ui.h:141
-msgid "3D acceleration:"
+#: ../ui/details.ui.h:137
+#, fuzzy
+msgid "_3D acceleration:"
 msgstr "Acceleració 3D:"
 
-#: ../ui/details.ui.h:142
+#: ../ui/details.ui.h:138
 msgid "<b>Video</b>"
 msgstr "<b>Vídeo</b>"
 
-#: ../ui/details.ui.h:144
+#: ../ui/details.ui.h:140
+#, fuzzy
+msgid "Devices:"
+msgstr "Dispositiu:"
+
+#: ../ui/details.ui.h:141
 msgid "<b>Controller</b>"
 msgstr "<b>Controlador</b>"
 
-#: ../ui/details.ui.h:145
+#: ../ui/details.ui.h:142
 msgid "<b>Filesystem</b>"
 msgstr "<b>Sistema de fitxers</b>"
 
-#: ../ui/details.ui.h:146 ../ui/fsdetails.ui.h:5 ../ui/migrate.ui.h:12
+#: ../ui/details.ui.h:143 ../ui/fsdetails.ui.h:5 ../ui/migrate.ui.h:12
 msgid "M_ode:"
 msgstr "M_ode:"
 
-#: ../ui/details.ui.h:147
+#: ../ui/details.ui.h:144
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>Dispositiu de targetes intel·ligents</b>"
 
-#: ../ui/details.ui.h:148 ../ui/host.ui.h:42
+#: ../ui/details.ui.h:145 ../ui/host.ui.h:45
 msgid "Address:"
 msgstr "Adreça:"
 
-#: ../ui/details.ui.h:149
+#: ../ui/details.ui.h:146
 msgid "foo:12"
 msgstr "foo:12"
 
-#: ../ui/details.ui.h:150
+#: ../ui/details.ui.h:147
 msgid "<b>Redirected device</b>"
 msgstr "<b>Dispositiu redirigit</b>"
 
-#: ../ui/details.ui.h:152
+#: ../ui/details.ui.h:149
 msgid "<b>TPM Device</b>"
 msgstr "<b>Dispositiu TPM</b>"
 
-#: ../ui/details.ui.h:153
+#: ../ui/details.ui.h:150
 msgid "Host Device:"
 msgstr "Dispositiu de l'amfitrió:"
 
-#: ../ui/details.ui.h:154
+#: ../ui/details.ui.h:151
 msgid "Backend type:"
 msgstr "Tipus de capa d'accés de dades:"
 
-#: ../ui/details.ui.h:155
+#: ../ui/details.ui.h:152
 msgid "Host:"
 msgstr "Amfitrió:"
 
-#: ../ui/details.ui.h:156
+#: ../ui/details.ui.h:153
 msgid "Service:"
 msgstr "Servei:"
 
-#: ../ui/details.ui.h:157
+#: ../ui/details.ui.h:154
 msgid "Bind Host:"
 msgstr "Amfitrió de la vinculació:"
 
-#: ../ui/details.ui.h:158
+#: ../ui/details.ui.h:155
 msgid "Bind Service:"
 msgstr "Servei de la vinculació:"
 
-#: ../ui/details.ui.h:159
+#: ../ui/details.ui.h:156
 msgid "Rate (period):"
 msgstr "Ràtio (període):"
 
-#: ../ui/details.ui.h:160
+#: ../ui/details.ui.h:157
 msgid "Rate (bytes):"
 msgstr "Ràtio (bytes):"
 
-#: ../ui/details.ui.h:161
+#: ../ui/details.ui.h:158
 msgid "<b>Random Number Generator</b>"
 msgstr "<b>Generador de Nombres Aleatoris</b>"
 
-#: ../ui/details.ui.h:163
-#, fuzzy
+#: ../ui/details.ui.h:160
 msgid "Model:"
-msgstr "_Model:"
+msgstr "Model:"
 
-#: ../ui/details.ui.h:164
-#, fuzzy
+#: ../ui/details.ui.h:161
 msgid "panic-model"
-msgstr "panic-iobase"
+msgstr ""
 
-#: ../ui/details.ui.h:165
+#: ../ui/details.ui.h:162
 msgid "<b>Panic Notifier</b>"
 msgstr "<b>Notificador de Pànic</b>"
 
-#: ../ui/details.ui.h:167
+#: ../ui/details.ui.h:164
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>La consola no està disponible en aquest moment</b>"
 
-#: ../ui/details.ui.h:168
+#: ../ui/details.ui.h:165
 msgid "_Password:"
 msgstr "_Contrasenya:"
 
-#: ../ui/details.ui.h:169
+#: ../ui/details.ui.h:166
 msgid "_Save this password in your keyring"
 msgstr "De_sa aquesta contrasenya al vostre clauer"
 
-#: ../ui/details.ui.h:170
+#: ../ui/details.ui.h:167
 msgid "Check to save password, uncheck to forget password."
 msgstr ""
 "Marqueu-ho per a desar la contrasenya, desmarqueu-ho per a oblidar la "
 "contrasenya."
 
-#: ../ui/details.ui.h:172
+#: ../ui/details.ui.h:169
 msgid "_Login"
 msgstr "_Entra"
 
@@ -7662,74 +7688,86 @@ msgid "<b>_QoS configuration</b>"
 msgstr "<b>Configuració _QoS</b>"
 
 #: ../ui/host.ui.h:31
+msgid "Physical Function:"
+msgstr "Funció física:"
+
+#: ../ui/host.ui.h:32
+msgid "Virtual Functions:"
+msgstr "Funcions virtuals:"
+
+#: ../ui/host.ui.h:33
+msgid "<b>_SR-IOV information</b>"
+msgstr "<b>Informació _SR-IOV</b>"
+
+#: ../ui/host.ui.h:34
 msgid "Add Network"
 msgstr "Afegeix una xarxa"
 
-#: ../ui/host.ui.h:32
+#: ../ui/host.ui.h:35
 msgid "Start Network"
 msgstr "Inicia la xarxa"
 
-#: ../ui/host.ui.h:33
+#: ../ui/host.ui.h:36
 msgid "Stop Network"
 msgstr "Atura la xarxa"
 
-#: ../ui/host.ui.h:34
+#: ../ui/host.ui.h:37
 msgid "Delete Network"
 msgstr "Suprimeix la xarxa"
 
-#: ../ui/host.ui.h:35
+#: ../ui/host.ui.h:38
 msgid "_Virtual Networks"
 msgstr "Xarxes _virtuals"
 
-#: ../ui/host.ui.h:36
+#: ../ui/host.ui.h:39
 msgid "_Storage"
 msgstr "Emmaga_tzematge"
 
-#: ../ui/host.ui.h:37
+#: ../ui/host.ui.h:40
 msgid "<b>Name</b>"
 msgstr "<b>Nom</b>"
 
-#: ../ui/host.ui.h:38
+#: ../ui/host.ui.h:41
 msgid "MAC:"
 msgstr "MAC:"
 
-#: ../ui/host.ui.h:39
+#: ../ui/host.ui.h:42
 msgid "Start mode:"
 msgstr "Mode d'inici:"
 
-#: ../ui/host.ui.h:40
+#: ../ui/host.ui.h:43
 msgid "In use by:"
 msgstr "Utilitzat per:"
 
-#: ../ui/host.ui.h:43
+#: ../ui/host.ui.h:46
 msgid "<b>IPv4 Configuration</b>"
 msgstr "<b>Configuració IPv4</b>"
 
-#: ../ui/host.ui.h:44
+#: ../ui/host.ui.h:47
 msgid "<b>IPv6 Configuration</b>"
 msgstr "<b>Configuració IPv6</b>"
 
-#: ../ui/host.ui.h:45
+#: ../ui/host.ui.h:48
 msgid "<b>Slave Interfaces</b>"
 msgstr "<b>Interfícies esclaves</b>"
 
-#: ../ui/host.ui.h:46
+#: ../ui/host.ui.h:49
 msgid "Add Interface"
 msgstr "Afegeix una interfície"
 
-#: ../ui/host.ui.h:47
+#: ../ui/host.ui.h:50
 msgid "Start Interface"
 msgstr "Inicia la interfície"
 
-#: ../ui/host.ui.h:48
+#: ../ui/host.ui.h:51
 msgid "Stop Interface"
 msgstr "Atura la interfície"
 
-#: ../ui/host.ui.h:49
+#: ../ui/host.ui.h:52
 msgid "Delete Interface"
 msgstr "Suprimeix la interfície"
 
-#: ../ui/host.ui.h:50
+#: ../ui/host.ui.h:53
 msgid "N_etwork Interfaces"
 msgstr "Int_erfícies de xarxa"
 
@@ -8029,26 +8067,30 @@ msgstr ""
 "_USB d'SPICE:"
 
 #: ../ui/preferences.ui.h:23
+msgid "prefs-add-spice-usbredir"
+msgstr ""
+
+#: ../ui/preferences.ui.h:24
 msgid "<b>New VM Defaults</b>"
 msgstr "<b>Valors per defecte de la MV nova</b>"
 
-#: ../ui/preferences.ui.h:24
+#: ../ui/preferences.ui.h:25
 msgid "N_ew VM"
 msgstr "No_va MV"
 
-#: ../ui/preferences.ui.h:25
+#: ../ui/preferences.ui.h:26
 msgid "Graphical console _scaling:"
 msgstr "Canvi d'e_scala de la consola gràfica:"
 
-#: ../ui/preferences.ui.h:26
+#: ../ui/preferences.ui.h:27
 msgid "Gr_ab keys:"
 msgstr "Tecles d'_apropiació:"
 
-#: ../ui/preferences.ui.h:27
+#: ../ui/preferences.ui.h:28
 msgid "Not supported"
 msgstr "No admès"
 
-#: ../ui/preferences.ui.h:28
+#: ../ui/preferences.ui.h:29
 msgid ""
 "When the guest graphical console has keyboard focus, do not disable "
 "shortcuts for console window menus (Alt+F -> File, etc.) Normally these are "
@@ -8061,15 +8103,15 @@ msgstr ""
 "tecleig en el convidat no iniciï cap operació en la finestra de la consola "
 "de l'eina de gestió de màquines virtuals virt-manager."
 
-#: ../ui/preferences.ui.h:29
+#: ../ui/preferences.ui.h:30
 msgid "_Force console shortcuts:"
 msgstr "_Força les dreceres de consola:"
 
-#: ../ui/preferences.ui.h:30
+#: ../ui/preferences.ui.h:31
 msgid "Change..."
 msgstr "Canvia..."
 
-#: ../ui/preferences.ui.h:31
+#: ../ui/preferences.ui.h:32
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
@@ -8078,51 +8120,51 @@ msgstr ""
 "canviï. Només funciona amb un convidat configurat correctament que utilitzi "
 "spice i l'agent d'escriptori."
 
-#: ../ui/preferences.ui.h:32
+#: ../ui/preferences.ui.h:33
 msgid "_Resize guest with window:"
 msgstr "_Redimensiona el convidat amb finestra:"
 
-#: ../ui/preferences.ui.h:33
+#: ../ui/preferences.ui.h:34
 msgid "<b>Graphical Consoles</b>"
 msgstr "<b>Consoles gràfiques</b>"
 
-#: ../ui/preferences.ui.h:34
+#: ../ui/preferences.ui.h:35
 msgid "Conso_le"
 msgstr "Conso_la"
 
-#: ../ui/preferences.ui.h:35
+#: ../ui/preferences.ui.h:36
 msgid "_Force Poweroff:"
 msgstr "_Força l'apagada:"
 
-#: ../ui/preferences.ui.h:36
+#: ../ui/preferences.ui.h:37
 msgid "Poweroff/_Reboot/Save:"
 msgstr "Apaga, _reinicia o desa:"
 
-#: ../ui/preferences.ui.h:37
+#: ../ui/preferences.ui.h:38
 msgid "_Pause:"
 msgstr "_Posa en pausa:"
 
-#: ../ui/preferences.ui.h:38
+#: ../ui/preferences.ui.h:39
 msgid "Device re_moval:"
 msgstr "_Supressió de dispositiu:"
 
-#: ../ui/preferences.ui.h:39
+#: ../ui/preferences.ui.h:40
 msgid "_Interface start/stop:"
 msgstr "Aturada o inici de la _interfície:"
 
-#: ../ui/preferences.ui.h:40
+#: ../ui/preferences.ui.h:41
 msgid "_Unapplied changes:"
 msgstr "_Canvis no aplicats:"
 
-#: ../ui/preferences.ui.h:41
+#: ../ui/preferences.ui.h:42
 msgid "_Deleting storage:"
 msgstr "_Eliminació d'emmagatzematge:"
 
-#: ../ui/preferences.ui.h:42
+#: ../ui/preferences.ui.h:43
 msgid "<b>Confirmations</b>"
 msgstr "<b>Confirmacions</b>"
 
-#: ../ui/preferences.ui.h:43
+#: ../ui/preferences.ui.h:44
 msgid "Feed_back"
 msgstr "Re_troacció"
 
@@ -8251,17 +8293,20 @@ msgstr "Actualitza la llista de volums"
 msgid "Delete volume"
 msgstr "Suprimeix el volum"
 
-#~ msgid "Address _Type:"
-#~ msgstr "_Tipus d'adreça:"
+#~ msgid "Invalid MAC address"
+#~ msgstr "L'adreça MAC no és vàlida"
 
-#~ msgid "_IO Base:"
-#~ msgstr "_Base d'E/S:"
+#~ msgid "A MAC address must be entered."
+#~ msgstr "Cal introduir una adreça MAC."
 
-#~ msgid "Address Type:"
-#~ msgstr "Tipus d'adreça:"
+#~ msgid "CD-_ROM or DVD"
+#~ msgstr "CD-_ROM o DVD"
 
-#~ msgid "IO Base:"
-#~ msgstr "Base d'E/S:"
+#~ msgid "docker://fedora"
+#~ msgstr "docker://fedora"
 
-#~ msgid "panic-address-type"
-#~ msgstr "panic-address-type"
+#~ msgid "D_TB Path:"
+#~ msgstr "Camí del D_TB:"
+
+#~ msgid "Device m_odel:"
+#~ msgstr "M_odel del dispositiu:"
