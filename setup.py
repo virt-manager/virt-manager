@@ -575,17 +575,14 @@ class CheckPylint(distutils.core.Command):
         exclude = ["virtinst/progress.py"]
 
         print("running pycodestyle")
-        cmd = "pycodestyle "
+        cmd = "pycodestyle-3 "
         cmd += "--config tests/pycodestyle.cfg "
         cmd += "--exclude %s " % ",".join(exclude)
         cmd += " ".join(files)
         os.system(cmd)
 
         print("running pylint")
-        if os.path.exists("/usr/bin/pylint-2"):
-            cmd = "pylint-2 "
-        else:
-            cmd = "pylint "
+        cmd = "pylint-3 "
         if self.jobs:
             cmd += "--jobs=%d " % self.jobs
         cmd += "--rcfile tests/pylint.cfg "
