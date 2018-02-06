@@ -29,7 +29,6 @@ import time
 import traceback
 
 from types import FunctionType
-from types import ClassType
 from types import MethodType
 
 
@@ -94,5 +93,5 @@ def wrap_module(module, regex=None):
         obj = getattr(module, name)
         if isinstance(obj, FunctionType):
             wrap_func(module, obj)
-        if isinstance(obj, (ClassType, type)):
+        if isinstance(obj, type):
             wrap_class(obj)
