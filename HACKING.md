@@ -2,8 +2,8 @@
 
 The following commands will be useful for anyone writing patches:
 ```sh
-python setup.py test      # Run local unit test suite
-python setup.py pylint    # Run a pylint script against the codebase
+./setup.py test      # Run local unit test suite
+./setup.py pylint    # Run a pylint script against the codebase
 ```
 
 Any patches shouldn't change the output of 'test' or 'pylint'. The
@@ -14,7 +14,7 @@ so it could throw some false positives or useless messages. If you think
 your patch exposes one of these, bring it up on the mailing list.
 
 'test*' have a `--debug` option if you are hitting problems.
-For more options, use `python setup.py test --help`.
+For more options, use `./setup.py test --help`.
 
 One useful way to manually test virt-manager's UI is using libvirt's
 unit test driver. From the source directory, Launch virt-manager like:
@@ -28,8 +28,8 @@ having to alter your host virt config.
 
 Also, there's a few standalone specialty tests:
 ```sh
-python setup.py test_urls            # Test fetching media from distro URLs
-python setup.py test_initrd_inject   # Test --initrd-inject
+./setup.py test_urls            # Test fetching media from distro URLs
+./setup.py test_initrd_inject   # Test --initrd-inject
 ```
 
 We use [glade-3](https://glade.gnome.org/) for building virt-manager's UI.

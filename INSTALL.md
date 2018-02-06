@@ -8,19 +8,19 @@ changes, it can be done from the source directory:
 
 To install the software into `/usr/local` (usually), you can do:
 ```sh
-python setup.py install
+./setup.py install
 ```
 
 To build an RPM, you can run:
 ```sh
-python setup.py rpm
+./setup.py rpm
 ```
 
 `setup.py` generally has all the build and install commands, for more info see:
 
-   - `python setup.py --help-commands`
-   - `python setup.py install --help`
-   - [Python Standard Build and Install](https://docs.python.org/2/install/#standard-build-and-install)
+   - `./setup.py --help-commands`
+   - `./setup.py install --help`
+   - [Python Standard Build and Install](https://docs.python.org/3/install/#standard-build-and-install)
 
 
 ## Pre-requisite software
@@ -30,7 +30,7 @@ A detailed dependency list can be found in
 
 Minimum version requirements of major components:
 
-   - python >= 2.7
+   - python >= 3.3
    - gtk3 >= 3.14
    - libvirt-python >= 0.6.0
    - pygobject3 >= 3.14
