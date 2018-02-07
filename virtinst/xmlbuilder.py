@@ -298,6 +298,34 @@ def _remove_xpath_node(ctx, xpath, dofree=True):
             node.freeNode()
 
 
+class _XMLChildList(list):
+    """
+    Little wrapper for a list containing XMLChildProperty output.
+    This is just to insert a dynamically created add_new() function
+    which instantiates and appends a new child object
+    """
+    def __init__(self, childclass, copylist, xmlbuilder):
+        list.__init__(self)
+        self._childclass = childclass
+        self._xmlbuilder = xmlbuilder
+        for i in copylist:
+            self.append(i)
+
+    def new(self):
+        """
+        Instantiate a new child object and return it
+        """
+        return self._childclass(self._xmlbuilder.conn)
+
+    def add_new(self):
+        """
+        Instantiate a new child object, append it, and return it
+        """
+        obj = self.new()
+        self._xmlbuilder.add_child(obj)
+        return obj
+
+
 class XMLChildProperty(property):
     """
     Property that points to a class used for parsing a subsection of
@@ -305,6 +333,8 @@ class XMLChildProperty(property):
     /domain/cpu/feature of the /domain/cpu class.
 
     @child_classes: Single class or list of classes to parse state into
+        The list option is used by Guest._devices for parsing all
+        devices into a single list
     @relative_xpath: Relative location where the class is rooted compared
         to its _XML_ROOT_PATH. So interface xml can have nested
         interfaces rooted at /interface/bridge/interface, so we pass
@@ -344,7 +374,9 @@ class XMLChildProperty(property):
     def _fget(self, xmlbuilder):
         if self.is_single:
             return self._get(xmlbuilder)
-        return self._get(xmlbuilder)[:]
+        return _XMLChildList(self.child_classes[0],
+                             self._get(xmlbuilder),
+                             xmlbuilder)
 
     def clear(self, xmlbuilder):
         if self.is_single:

@@ -67,10 +67,9 @@ class InterfaceProtocol(XMLBuilder):
     #####################
 
     def add_ip(self, addr, prefix=None):
-        ip = _IPAddress(self.conn)
+        ip = self.ips.add_new()
         ip.address = addr
         ip.prefix = prefix
-        self.add_child(ip)
     def remove_ip(self, ip):
         self.remove_child(ip)
         ip.clear()

@@ -756,7 +756,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         if net.forward.mode == "hostdev":
             net.forward.managed = "yes"
-            pfobj = net.forward.add_pf()
+            pfobj = net.forward.pfs.add_new()
             pfobj.dev = net.forward.dev
             net.forward.dev = None
             net.domain_name = None
@@ -765,12 +765,12 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         if self.get_config_ipv4_enable():
             ip = self.get_config_ip4()
-            ipobj = net.add_ip()
+            ipobj = net.ips.add_new()
             ipobj.address = str(ip.network_address + 1)
             ipobj.netmask = str(ip.netmask)
 
             if self.get_config_dhcpv4_enable():
-                dhcpobj = ipobj.add_range()
+                dhcpobj = ipobj.ranges.add_new()
                 dhcpobj.start = str(
                     self.get_config_dhcpv4_start().network_address
                 )
@@ -778,13 +778,13 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         if self.get_config_ipv6_enable():
             ip = self.get_config_ip6()
-            ipobj = net.add_ip()
+            ipobj = net.ips.add_new()
             ipobj.family = "ipv6"
             ipobj.address = str(ip.network_address + 1)
             ipobj.prefix = str(ip.prefixlen)
 
             if self.get_config_dhcpv6_enable():
-                dhcpobj = ipobj.add_range()
+                dhcpobj = ipobj.ranges.add_new()
                 dhcpobj.start = str(
                     self.get_config_dhcpv6_start().network_address
                 )
@@ -795,7 +795,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         netaddr = _make_ipaddr(self.get_config_routev4_network())
         gwaddr = _make_ipaddr(self.get_config_routev4_gateway())
         if netaddr and gwaddr:
-            route = net.add_route()
+            route = net.routes.add_new()
             route.family = "ipv4"
             route.address = netaddr.network_address
             route.prefix = netaddr.prefixlen
@@ -804,7 +804,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         netaddr = _make_ipaddr(self.get_config_routev6_network())
         gwaddr = _make_ipaddr(self.get_config_routev6_gateway())
         if netaddr and gwaddr:
-            route = net.add_route()
+            route = net.routes.add_new()
             route.family = "ipv6"
             route.address = netaddr.network_address
             route.prefix = netaddr.prefixlen

@@ -86,23 +86,19 @@ class OSXML(XMLBuilder):
             self.remove_child(dev)
 
         for d in newdevs:
-            dev = _BootDevice(self.conn)
+            dev = self._bootdevs.add_new()
             dev.dev = d
-            self.add_child(dev)
     _bootdevs = XMLChildProperty(_BootDevice)
     bootorder = property(_get_bootorder, _set_bootorder)
 
     initargs = XMLChildProperty(_InitArg)
-    def add_initarg(self, val):
-        obj = _InitArg(self.conn)
-        obj.val = val
-        self.add_child(obj)
     def set_initargs_string(self, argstring):
         import shlex
         for obj in self.initargs:
             self.remove_child(obj)
         for val in shlex.split(argstring):
-            self.add_initarg(val)
+            obj = self.initargs.add_new()
+            obj.val = val
 
     enable_bootmenu = XMLProperty("./bootmenu/@enable", is_yesno=True)
     useserial = XMLProperty("./bios/@useserial", is_yesno=True)

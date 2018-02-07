@@ -1143,7 +1143,7 @@ class VirtCLIParser(object):
         # end of the domain XML, which gives an ugly diff
         clear_inst.clear(leave_stub="," in self.optstr)
 
-    def _make_find_inst_cb(self, cliarg, objpropname, objaddfn):
+    def _make_find_inst_cb(self, cliarg, objpropname):
         """
         Create a callback used for find_inst_cb command line lookup.
 
@@ -1152,9 +1152,6 @@ class VirtCLIParser(object):
         :param objpropname: The property name on the virtinst object that
             this parameter maps too. For the seclabel example, we want
             disk.seclabels, so this value is 'seclabels'
-        :param objaddfn: The function name for adding a new instance of
-            this parameter to the virtinst object. For the seclabel example,
-            we want disk.add_seclabel(), so this value is "add_seclabels"
         """
         def cb(inst, val, virtarg, can_edit):
             ignore = val
@@ -1165,7 +1162,7 @@ class VirtCLIParser(object):
 
             if can_edit:
                 while len(getattr(inst, objpropname)) < (num + 1):
-                    getattr(inst, objaddfn)()
+                    getattr(inst, objpropname).add_new()
             try:
                 return getattr(inst, objpropname)[num]
             except IndexError:
@@ -1465,8 +1462,7 @@ class ParserCPU(VirtCLIParser):
     def cell_find_inst_cb(self, *args, **kwargs):
         cliarg = "cell"  # cell[0-9]*
         objpropname = "cells"  # cpu.cells
-        objaddfn = "add_cell"  # cpu.add_cell
-        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        cb = self._make_find_inst_cb(cliarg, objpropname)
         return cb(*args, **kwargs)
 
     def sibling_find_inst_cb(self, inst, *args, **kwargs):
@@ -1475,8 +1471,7 @@ class ParserCPU(VirtCLIParser):
 
         cliarg = "sibling"  # cell[0-9]*.distances.sibling[0-9]*
         objpropname = "siblings"  # cell.siblings
-        objaddfn = "add_sibling"  # cell.add_sibling
-        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        cb = self._make_find_inst_cb(cliarg, objpropname)
         return cb(inst, *args, **kwargs)
 
     def set_model_cb(self, inst, val, virtarg):
@@ -1508,8 +1503,8 @@ class ParserCPU(VirtCLIParser):
     def set_l3_cache_cb(self, inst, val, virtarg, can_edit):
         cpu = inst
 
-        if can_edit:
-            cpu.set_l3_cache_mode()
+        if can_edit and not cpu.cache:
+            cpu.cache.add_new()
         try:
             return cpu.cache[0]
         except IndexError:
@@ -1580,8 +1575,7 @@ class ParserCPUTune(VirtCLIParser):
     def vcpu_find_inst_cb(self, *args, **kwargs):
         cliarg = "vcpupin"  # vcpupin[0-9]*
         objpropname = "vcpus"
-        objaddfn = "add_vcpu"
-        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        cb = self._make_find_inst_cb(cliarg, objpropname)
         return cb(*args, **kwargs)
 
 _register_virt_parser(ParserCPUTune)
@@ -1823,7 +1817,7 @@ class ParserClock(VirtCLIParser):
                 break
 
         if not timerobj:
-            timerobj = inst.add_timer()
+            timerobj = inst.timers.add_new()
             timerobj.name = tname
 
         setattr(timerobj, attrname, val)
@@ -1928,11 +1922,14 @@ class ParserQemuCLI(VirtCLIParser):
 
     def args_cb(self, inst, val, virtarg):
         for opt in shlex.split(val):
-            inst.add_arg(opt)
+            obj = inst.args.add_new()
+            obj.value = opt
 
     def env_cb(self, inst, val, virtarg):
         name, envval = val.split("=", 1)
-        inst.add_env(name, envval)
+        obj = inst.envs.add_new()
+        obj.name = name
+        obj.value = envval
 
     def _parse(self, inst):
         self.optdict.clear()
@@ -2023,8 +2020,7 @@ class ParserDisk(VirtCLIParser):
     def seclabel_find_inst_cb(self, *args, **kwargs):
         cliarg = "seclabel"  # seclabel[0-9]*
         objpropname = "seclabels"  # disk.seclabels
-        objaddfn = "add_seclabel"  # disk.add_seclabel
-        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        cb = self._make_find_inst_cb(cliarg, objpropname)
         return cb(*args, **kwargs)
 
     def _parse(self, inst):
@@ -2303,7 +2299,7 @@ class ParserGraphics(VirtCLIParser):
             inst.set_listen_none()
         elif val == "socket":
             inst.remove_all_listens()
-            obj = inst.add_listen()
+            obj = inst.listens.add_new()
             obj.type = "socket"
         else:
             inst.listen = val
@@ -2311,8 +2307,7 @@ class ParserGraphics(VirtCLIParser):
     def listens_find_inst_cb(self, *args, **kwargs):
         cliarg = "listens"  # listens[0-9]*
         objpropname = "listens"  # graphics.listens
-        objaddfn = "add_listen"  # graphics.add_listen
-        cb = self._make_find_inst_cb(cliarg, objpropname, objaddfn)
+        cb = self._make_find_inst_cb(cliarg, objpropname)
         return cb(*args, **kwargs)
 
     def _parse(self, inst):

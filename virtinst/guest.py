@@ -844,15 +844,15 @@ class Guest(XMLBuilder):
         #
         # This is what has been recommended by the RH qemu guys :)
 
-        rtc = self.clock.add_timer()
+        rtc = self.clock.timers.add_new()
         rtc.name = "rtc"
         rtc.tickpolicy = "catchup"
 
-        pit = self.clock.add_timer()
+        pit = self.clock.timers.add_new()
         pit.name = "pit"
         pit.tickpolicy = "delay"
 
-        hpet = self.clock.add_timer()
+        hpet = self.clock.timers.add_new()
         hpet.name = "hpet"
         hpet.present = False
 
@@ -861,7 +861,7 @@ class Guest(XMLBuilder):
 
         if (self._os_object.is_windows() and self._hyperv_supported() and
             (hv_clock or (self.stable_defaults() and hv_clock_rhel))):
-            hyperv = self.clock.add_timer()
+            hyperv = self.clock.timers.add_new()
             hyperv.name = "hypervclock"
             hyperv.present = True
 

@@ -56,11 +56,6 @@ class _NetworkIP(XMLBuilder):
     ranges = XMLChildProperty(_NetworkDHCPRange, relative_xpath="./dhcp")
     hosts = XMLChildProperty(_NetworkDHCPHost, relative_xpath="./dhcp")
 
-    def add_range(self):
-        r = _NetworkDHCPRange(self.conn)
-        self.add_child(r)
-        return r
-
 
 class _NetworkRoute(XMLBuilder):
     _XML_ROOT_NAME = "route"
@@ -94,11 +89,6 @@ class _NetworkForward(XMLBuilder):
     managed = XMLProperty("./@managed")
     pf = XMLChildProperty(_NetworkForwardPf)
     vfs = XMLChildProperty(_NetworkForwardAddress)
-
-    def add_pf(self):
-        r = _NetworkForwardPf(self.conn)
-        self.add_child(r)
-        return r
 
     def pretty_desc(self):
         return Network.pretty_forward_desc(self.mode, self.dev)
@@ -249,15 +239,6 @@ class Network(XMLBuilder):
     ips = XMLChildProperty(_NetworkIP)
     routes = XMLChildProperty(_NetworkRoute)
     bandwidth = XMLChildProperty(_NetworkBandwidth, is_single=True)
-
-    def add_ip(self):
-        ip = _NetworkIP(self.conn)
-        self.add_child(ip)
-        return ip
-    def add_route(self):
-        route = _NetworkRoute(self.conn)
-        self.add_child(route)
-        return route
 
 
     ##################

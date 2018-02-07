@@ -43,11 +43,6 @@ class _CPUCell(XMLBuilder):
     memory = XMLProperty("./@memory", is_int=True)
     siblings = XMLChildProperty(_CPUCellSibling, relative_xpath="./distances")
 
-    def add_sibling(self):
-        obj = _CPUCellSibling(self.conn)
-        self.add_child(obj)
-        return obj
-
 
 class CPUCache(XMLBuilder):
     """
@@ -103,7 +98,7 @@ class CPU(XMLBuilder):
             self.vendor = None
             self.model_fallback = None
             for f in self.features:
-                self.remove_feature(f)
+                self.remove_child(f)
             self.mode = val
         elif val == self.SPECIAL_MODE_HOST_COPY:
             self.copy_host_cpu()
@@ -121,26 +116,13 @@ class CPU(XMLBuilder):
         self.special_mode_was_set = True
 
     def add_feature(self, name, policy="require"):
-        feature = CPUFeature(self.conn)
+        feature = self.features.add_new()
         feature.name = name
         feature.policy = policy
-
-        self.add_child(feature)
-    def remove_feature(self, feature):
-        self.remove_child(feature)
     features = XMLChildProperty(CPUFeature)
 
     cells = XMLChildProperty(_CPUCell, relative_xpath="./numa")
-    def add_cell(self):
-        obj = _CPUCell(self.conn)
-        self.add_child(obj)
-        return obj
-
     cache = XMLChildProperty(CPUCache)
-    def set_l3_cache_mode(self):
-        obj = CPUCache(self.conn)
-        self.add_child(obj)
-        return obj
 
     def copy_host_cpu(self):
         """
@@ -157,7 +139,7 @@ class CPU(XMLBuilder):
         self.vendor = cpu.vendor
 
         for feature in self.features:
-            self.remove_feature(feature)
+            self.remove_child(feature)
         for feature in cpu.features:
             self.add_feature(feature.name)
 

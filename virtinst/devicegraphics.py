@@ -223,11 +223,6 @@ class VirtualGraphics(VirtualDevice):
         for listen in self.listens:
             self.remove_child(listen)
 
-    def add_listen(self):
-        obj = _GraphicsListen(self.conn)
-        self.add_child(obj)
-        return obj
-
     def get_first_listen_type(self):
         if len(self.listens) > 0:
             return self.listens[0].type
@@ -243,7 +238,7 @@ class VirtualGraphics(VirtualDevice):
 
         if self.conn.check_support(
                 self.conn.SUPPORT_CONN_GRAPHICS_LISTEN_NONE):
-            obj = self.add_listen()
+            obj = self.listens.add_new()
             obj.type = "none"
 
     # Spice bits

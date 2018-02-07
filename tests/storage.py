@@ -40,7 +40,8 @@ def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
     pool_inst.type = ptype
 
     if pool_inst.supports_property("hosts"):
-        pool_inst.add_host("some.random.hostname")
+        hostobj = pool_inst.hosts.add_new()
+        hostobj.name = "some.random.hostname"
     if pool_inst.supports_property("source_path"):
         pool_inst.source_path = source_path or "/some/source/path"
     if pool_inst.supports_property("target_path"):

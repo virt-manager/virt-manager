@@ -120,11 +120,11 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest.clock)
         check("offset", "utc", "localtime")
-        guest.clock.remove_timer(guest.clock.timers[0])
+        guest.clock.remove_child(guest.clock.timers[0])
         check = self._make_checker(guest.clock.timers[0])
         check("name", "pit", "rtc")
         check("tickpolicy", "delay", "merge")
-        timer = guest.clock.add_timer()
+        timer = guest.clock.timers.add_new()
         check = self._make_checker(timer)
         check("name", None, "hpet")
         check("present", None, False)
@@ -180,7 +180,7 @@ class XMLParseTest(unittest.TestCase):
         check("name", "x2apic")
         check("policy", "force", "disable")
         rmfeat = guest.cpu.features[3]
-        guest.cpu.remove_feature(rmfeat)
+        guest.cpu.remove_child(rmfeat)
         self.assertEqual(rmfeat.get_xml_config(),
                           """<feature name="foo" policy="bar"/>\n""")
         guest.cpu.add_feature("addfeature")
@@ -1196,7 +1196,9 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(pool.hosts[2])
         check("name", "ceph-mon-3.example.com")
         check("port", 6789, 1000)
-        pool.add_host("frobber", "5555")
+        hostobj = pool.hosts.add_new()
+        hostobj.name = "frobber"
+        hostobj.port = "5555"
 
         utils.diff_compare(pool.get_xml_config(), outfile)
         utils.test_create(conn, pool.get_xml_config(), "storagePoolDefineXML")
@@ -1287,7 +1289,7 @@ class XMLParseTest(unittest.TestCase):
         check("family", "ipv6", "ipv6")
         check("prefix", 64, 63)
 
-        r = net.add_route()
+        r = net.routes.add_new()
         r.family = "ipv4"
         r.address = "192.168.8.0"
         r.prefix = "24"

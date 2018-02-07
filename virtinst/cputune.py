@@ -34,7 +34,3 @@ class CPUTune(XMLBuilder):
     """
     _XML_ROOT_NAME = "cputune"
     vcpus = XMLChildProperty(_VCPUPin)
-    def add_vcpu(self):
-        obj = _VCPUPin(self.conn)
-        self.add_child(obj)
-        return obj

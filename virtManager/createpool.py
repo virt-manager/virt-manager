@@ -514,7 +514,8 @@ class vmmCreatePool(vmmGObjectUI):
         try:
             self._pool.target_path = target
             if host:
-                self._pool.add_host(host)
+                hostobj = self._pool.hosts.add_new()
+                hostobj.name = host
             if source:
                 self._pool.source_path = source
             if fmt:

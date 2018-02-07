@@ -600,15 +600,6 @@ class VirtualDisk(VirtualDevice):
     auth_secret_type = XMLProperty("./auth/secret/@type")
     auth_secret_uuid = XMLProperty("./auth/secret/@uuid")
 
-    def add_host(self, name, port):
-        obj = _Host(self.conn)
-        obj.name = name
-        obj.port = port
-        self.add_child(obj)
-
-    def remove_host(self, obj):
-        self.remove_child(obj)
-
     hosts = XMLChildProperty(_Host, relative_xpath="./source")
 
     source_name = XMLProperty("./source/@name")
@@ -651,7 +642,9 @@ class VirtualDisk(VirtualDevice):
             self.source_host_name = poolxml.hosts[0].name
             self.source_host_port = poolxml.hosts[0].port
             for host in poolxml.hosts:
-                self.add_host(host.name, host.port)
+                obj = self.hosts.add_new()
+                obj.name = host.name
+                obj.port = host.port
 
         path = ""
         if poolxml.source_name:
@@ -792,10 +785,6 @@ class VirtualDisk(VirtualDevice):
     iotune_wis = XMLProperty("./iotune/write_iops_sec", is_int=True)
 
     seclabels = XMLChildProperty(_DiskSeclabel, relative_xpath="./source")
-    def add_seclabel(self):
-        obj = _DiskSeclabel(self.conn)
-        self.add_child(obj)
-        return obj
 
 
     #################################

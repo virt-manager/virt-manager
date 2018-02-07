@@ -40,14 +40,4 @@ class XMLNSQemu(XMLBuilder):
     _XML_PROP_ORDER = ["args", "envs"]
 
     args = XMLChildProperty(_XMLNSQemuArg)
-    def add_arg(self, value):
-        arg = _XMLNSQemuArg(conn=self.conn)
-        arg.value = value
-        self.add_child(arg)
-
     envs = XMLChildProperty(_XMLNSQemuEnv)
-    def add_env(self, name, value):
-        env = _XMLNSQemuEnv(conn=self.conn)
-        env.name = name
-        env.value = value
-        self.add_child(env)

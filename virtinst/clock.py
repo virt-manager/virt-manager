@@ -36,10 +36,3 @@ class Clock(XMLBuilder):
 
     offset = XMLProperty("./@offset")
     timers = XMLChildProperty(_ClockTimer)
-
-    def add_timer(self):
-        obj = _ClockTimer(self.conn)
-        self.add_child(obj)
-        return obj
-    def remove_timer(self, obj):
-        self.remove_child(obj)

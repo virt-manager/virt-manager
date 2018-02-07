@@ -186,8 +186,8 @@ class StoragePool(_StorageObject):
             obj.type = pool_type
             obj.source_path = parseobj.source_path
             for h in parseobj.hosts:
-                parseobj.remove_host(h)
-                obj.add_host_obj(h)
+                parseobj.remove_child(h)
+                obj.add_child(h)
             obj.source_name = parseobj.source_name
             obj.format = parseobj.format
 
@@ -421,15 +421,6 @@ class StoragePool(_StorageObject):
     target_path = XMLProperty("./target/path",
                               default_cb=_get_default_target_path)
 
-    def add_host_obj(self, obj):
-        self.add_child(obj)
-    def add_host(self, name, port=None):
-        obj = _Host(self.conn)
-        obj.name = name
-        obj.port = port
-        self.add_child(obj)
-    def remove_host(self, obj):
-        self.remove_child(obj)
     hosts = XMLChildProperty(_Host, relative_xpath="./source")
 
 
