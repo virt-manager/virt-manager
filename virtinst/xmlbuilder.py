@@ -726,12 +726,11 @@ class _XMLState(object):
             raise
 
         self.xml_node = doc.children
-        self.xml_node.virtinst_node_top_xpath = self._stub_path
         self.xml_ctx = _make_xml_context(self.xml_node)
 
         # This just stores a reference to our root doc wrapper in
-        # the root node, so when the doc is autofree'd when the node
-        # and this xmlstate object are freed
+        # the root node, so the doc is autofree'd only when the node
+        # and this xmlstate object are free'd
         self._xml_root_doc_ref = _DocCleanupWrapper(doc)
         self.xml_node.virtinst_root_doc = self._xml_root_doc_ref
 
@@ -766,12 +765,6 @@ class _XMLState(object):
         if xpath.count("/") == 1:
             return fullpath
         return fullpath + "/" + xpath.split("/", 2)[2]
-
-    def get_node_top_xpath(self):
-        """
-        Return the XML path of the root xml_node
-        """
-        return self.xml_node.virtinst_node_top_xpath
 
     def get_node_xml(self, ctx):
         node = _get_xpath_node(ctx, self.fix_relative_xpath("."))
