@@ -706,13 +706,13 @@ class _XMLState(object):
         self.is_build = False
         if not parsexml and not parentxmlstate:
             self.is_build = True
-        self._parse(parsexml, parentxmlstate)
+        self.parse(parsexml, parentxmlstate)
 
-    def _parse(self, parsexml, parentxmlstate):
+    def parse(self, parsexml, parentxmlstate):
         if parentxmlstate:
             self._xml_root_doc_ref = None
             self.xml_node = parentxmlstate.xml_node
-            self.is_build = self.xml_node.virtinst_is_build or self.is_build
+            self.is_build = parentxmlstate.is_build or self.is_build
             self.xml_ctx = parentxmlstate.xml_ctx
             return
 
@@ -726,7 +726,6 @@ class _XMLState(object):
             raise
 
         self.xml_node = doc.children
-        self.xml_node.virtinst_is_build = self.is_build
         self.xml_node.virtinst_node_top_xpath = self._stub_path
         self.xml_ctx = _make_xml_context(self.xml_node)
 
@@ -1042,10 +1041,10 @@ class XMLBuilder(object):
         """
         Set new backing XML objects in ourselves and all our child props
         """
-        self._xmlstate._parse(*args, **kwargs)
+        self._xmlstate.parse(*args, **kwargs)
         for propname in self._all_child_props():
             for p in util.listify(getattr(self, propname, [])):
-                p._xmlstate._parse(None, self._xmlstate)
+                p._xmlstate.parse(None, self._xmlstate)
 
     def add_child(self, obj):
         """
