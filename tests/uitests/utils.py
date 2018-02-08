@@ -174,7 +174,9 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
                 return
             return True
         except Exception as e:
-            print("got predicate exception: %s" % e)
+            logging.debug(
+                    "got predicate exception name=%s role=%s labeller=%s: %s",
+                    (self._name, self._roleName, self._labeller_text, e))
 
 
 def check_in_loop(func, timeout=2):
