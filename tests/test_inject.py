@@ -1,7 +1,5 @@
 # Copyright (C) 2013, 2014 Red Hat, Inc.
 
-from __future__ import print_function
-
 import atexit
 import os
 import logging
