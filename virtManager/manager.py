@@ -1068,7 +1068,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         d1, d2 = obj.disk_io_vectors(GRAPH_LEN, self.max_disk_rate)
-        data = [(x + y) // 2 for x, y in zip(d1, d2)]
+        data = [(x + y) / 2 for x, y in zip(d1, d2)]
         cell.set_property('data_array', data)
 
     def network_traffic_img(self, column_ignore, cell, model, _iter, data):
@@ -1077,5 +1077,5 @@ class vmmManager(vmmGObjectUI):
             return
 
         d1, d2 = obj.network_traffic_vectors(GRAPH_LEN, self.max_net_rate)
-        data = [(x + y) // 2 for x, y in zip(d1, d2)]
+        data = [(x + y) / 2 for x, y in zip(d1, d2)]
         cell.set_property('data_array', data)
