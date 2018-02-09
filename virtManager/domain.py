@@ -1984,7 +1984,7 @@ class vmmDomain(vmmLibvirtObject):
         except libvirt.libvirtError as err:
             logging.error("Error reading mem stats: %s", err)
 
-        pcentCurrMem = (curmem // float(totalmem)) * 100
+        pcentCurrMem = (curmem / float(totalmem)) * 100
         pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
 
         return pcentCurrMem, curmem
