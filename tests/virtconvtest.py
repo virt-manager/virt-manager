@@ -78,8 +78,16 @@ class TestVirtConv(unittest.TestCase):
         if not os.path.exists(in_dir):
             raise RuntimeError("Directory does not exist: %s" % in_dir)
 
+        err = ""
         for in_path in glob.glob(os.path.join(in_dir, "*")):
-            self._compare_single_file(in_path, in_type)
+            try:
+                self._compare_single_file(in_path, in_type)
+            except Exception:
+                import traceback
+                err += traceback.format_exc()
+
+        if err:
+            raise AssertionError("Errors encountered:\n%s" % err)
 
     def testOVF2Libvirt(self):
         self._compare_files("ovf")
