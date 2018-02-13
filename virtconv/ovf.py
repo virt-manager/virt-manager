@@ -20,8 +20,7 @@
 
 import logging
 import os
-
-import libxml2
+import xml.etree.ElementTree
 
 import virtinst
 
@@ -75,54 +74,13 @@ DEVICE_GRAPHICS = "24"
 # http://www.dmtf.org/standards/documents/CIM/DSP0004.pdf
 
 
-
-def _ovf_register_namespace(ctx):
-    ctx.xpathRegisterNs("ovf", "http://schemas.dmtf.org/ovf/envelope/1")
-    ctx.xpathRegisterNs("ovfenv", "http://schemas.dmtf.org/ovf/environment/1")
-    ctx.xpathRegisterNs("rasd", "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData")
-    ctx.xpathRegisterNs("vssd", "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData")
-    ctx.xpathRegisterNs("vmw", "http://www.vmware.com/schema/ovf")
-    ctx.xpathRegisterNs("xsi", "http://www.w3.org/2001/XMLSchema-instance")
-
-
-def node_list(node):
-    child_list = []
-    child = node.children
-    while child:
-        child_list.append(child)
-        child = child.next
-    return child_list
-
-
-def _get_child_content(parent_node, child_name):
-    for node in node_list(parent_node):
-        if node.name == child_name:
-            return node.content
-
-    return None
-
-
-def _xml_parse_wrapper(xml, parse_func, *args, **kwargs):
-    """
-    Parse the passed xml string into an xpath context, which is passed
-    to parse_func, along with any extra arguments.
-    """
-    doc = None
-    ctx = None
-    ret = None
-
-    try:
-        doc = libxml2.parseDoc(xml)
-        ctx = doc.xpathNewContext()
-        _ovf_register_namespace(ctx)
-        ret = parse_func(doc, ctx, *args, **kwargs)
-    finally:
-        if ctx is not None:
-            ctx.xpathFreeContext()
-        if doc is not None:
-            doc.freeDoc()
-    return ret
-
+OVF_NAMESPACES = {
+    "ovf": "http://schemas.dmtf.org/ovf/envelope/1",
+    "ovfenv": "http://schemas.dmtf.org/ovf/environment/1",
+    "rasd": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData",
+    "vssd": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData",
+    "vmw": "http://www.vmware.com/schema/ovf",
+}
 
 
 def _convert_alloc_val(ignore, val):
@@ -145,111 +103,88 @@ def _convert_alloc_val(ignore, val):
     return int(val)
 
 
-def _import_file(doc, ctx, conn, input_file):
-    ignore = doc
-    def xpath_str(path):
-        ret = ctx.xpathEval(path)
-        result = None
-        if ret is not None:
-            if isinstance(ret, list):
-                if len(ret) >= 1:
-                    result = ret[0].content
-            else:
-                result = ret
-        return result
+def _convert_bool_val(val):
+    if str(val).lower() == "false":
+        return False
+    elif str(val).lower() == "true":
+        return True
 
-    def bool_val(val):
-        if str(val).lower() == "false":
-            return False
-        elif str(val).lower() == "true":
-            return True
+    return False
 
+
+def _find(_node, _xpath):
+    return _node.find(_xpath, namespaces=OVF_NAMESPACES)
+
+
+def _findall(_node, _xpath):
+    return _node.findall(_xpath, namespaces=OVF_NAMESPACES)
+
+
+def _text(_node):
+    if _node is not None:
+        return _node.text
+
+
+def _lookup_disk_path(root, path):
+    """
+    Map the passed HostResource ID to the actual host disk path
+    """
+    ref = None
+
+    def _path_has_prefix(prefix):
+        if path.startswith(prefix):
+            return path[len(prefix):]
+        if path.startswith("ovf:" + prefix):
+            return path[len("ovf:" + prefix):]
         return False
 
-    def xpath_nodechildren(path):
-        # Return the children of the first node found by the xpath
-        nodes = ctx.xpathEval(path)
-        if not nodes:
-            return []
-        return node_list(nodes[0])
+    if _path_has_prefix("/disk/"):
+        disk_ref = _path_has_prefix("/disk/")
+        xpath = "./ovf:DiskSection/ovf:Disk[@ovf:diskId='%s']" % disk_ref
+        dnode = _find(root, xpath)
 
-    def _lookup_disk_path(path):
-        fmt = "vmdk"
-        ref = None
+        if dnode is None:
+            raise ValueError(_("Unknown disk reference id '%s' "
+                               "for path %s.") % (path, disk_ref))
 
-        def _path_has_prefix(prefix):
-            if path.startswith(prefix):
-                return path[len(prefix):]
-            if path.startswith("ovf:" + prefix):
-                return path[len("ovf:" + prefix):]
-            return False
+        ref = dnode.attrib["{%s}fileRef" % OVF_NAMESPACES["ovf"]]
+    elif _path_has_prefix("/file/"):
+        ref = _path_has_prefix("/file/")
 
-        if _path_has_prefix("/disk/"):
-            disk_ref = _path_has_prefix("/disk/")
-            xpath = (_make_section_xpath(envbase, "DiskSection") +
-                "/ovf:Disk[@ovf:diskId='%s']" % disk_ref)
+    else:
+        raise ValueError(_("Unknown storage path type %s.") % path)
 
-            if not ctx.xpathEval(xpath):
-                raise ValueError(_("Unknown disk reference id '%s' "
-                                   "for path %s.") % (path, disk_ref))
+    xpath = "./ovf:References/ovf:File[@ovf:id='%s']" % ref
+    refnode = _find(root, xpath)
+    if refnode is None:
+        raise ValueError(_("Unknown reference id '%s' "
+            "for path %s.") % (ref, path))
 
-            ref = xpath_str(xpath + "/@ovf:fileRef")
+    return refnode.attrib["{%s}href" % OVF_NAMESPACES["ovf"]]
 
-        elif _path_has_prefix("/file/"):
-            ref = _path_has_prefix("/file/")
 
-        else:
-            raise ValueError(_("Unknown storage path type %s.") % path)
-
-        xpath = (envbase + "/ovf:References/ovf:File[@ovf:id='%s']" % ref)
-
-        if not ctx.xpathEval(xpath):
-            raise ValueError(_("Unknown reference id '%s' "
-                "for path %s.") % (ref, path))
-
-        return xpath_str(xpath + "/@ovf:href"), fmt
-
-    is_ovirt_format = False
-    envbase = "/ovf:Envelope[1]"
-    vsbase = envbase + "/ovf:VirtualSystem"
-    if not ctx.xpathEval(vsbase):
-        vsbase = envbase + "/ovf:Content[@xsi:type='ovf:VirtualSystem_Type']"
-        is_ovirt_format = True
-
-    def _make_section_xpath(base, section_name):
-        if is_ovirt_format:
-            return (base +
-                    "/ovf:Section[@xsi:type='ovf:%s_Type']" % section_name)
-        return base + "/ovf:%s" % section_name
-
-    osbase = _make_section_xpath(vsbase, "OperatingSystemSection")
-    vhstub = _make_section_xpath(vsbase, "VirtualHardwareSection")
-
-    if not ctx.xpathEval(vsbase):
-        raise RuntimeError("Did not find any VirtualSystem section")
-    if not ctx.xpathEval(vhstub):
-        raise RuntimeError("Did not find any VirtualHardwareSection")
-    vhbase = vhstub + "/ovf:Item[rasd:ResourceType='%s']"
+def _import_file(conn, input_file):
+    """
+    Parse the OVF file and generate a virtinst.Guest object from it
+    """
+    root = xml.etree.ElementTree.parse(input_file).getroot()
+    vsnode = _find(root, "./ovf:VirtualSystem")
+    vhnode = _find(vsnode, "./ovf:VirtualHardwareSection")
 
     # General info
-    name = xpath_str(vsbase + "/ovf:Name")
-    desc = xpath_str(vsbase + "/ovf:AnnotationSection/ovf:Annotation")
+    name = _text(vsnode.find("./ovf:Name", OVF_NAMESPACES))
+    desc = _text(vsnode.find("./ovf:AnnotationSection/ovf:Annotation",
+        OVF_NAMESPACES))
     if not desc:
-        desc = xpath_str(vsbase + "/ovf:Description")
-    vcpus = xpath_str((vhbase % DEVICE_CPU) + "/rasd:VirtualQuantity")
-    sockets = xpath_str((vhbase % DEVICE_CPU) + "/rasd:num_of_sockets")
-    cores = xpath_str((vhbase % DEVICE_CPU) + "/rasd:num_of_cores")
-    mem = xpath_str((vhbase % DEVICE_MEMORY) + "/rasd:VirtualQuantity")
-    alloc_mem = xpath_str((vhbase % DEVICE_MEMORY) +
-        "/rasd:AllocationUnits")
+        desc = _text(vsnode.find("./ovf:Description", OVF_NAMESPACES))
 
-    os_id = xpath_str(osbase + "/@id")
-    os_version = xpath_str(osbase + "/@version")
-    # This is the VMWare OS name
-    os_vmware = xpath_str(osbase + "/@osType")
-
-    logging.debug("OS parsed as: id=%s version=%s vmware=%s",
-        os_id, os_version, os_vmware)
+    vhxpath = "./ovf:Item[rasd:ResourceType='%s']"
+    vcpus = _text(_find(vhnode,
+        (vhxpath % DEVICE_CPU) + "/rasd:VirtualQuantity"))
+    mem = _text(_find(vhnode,
+        (vhxpath % DEVICE_MEMORY) + "/rasd:VirtualQuantity"))
+    alloc_mem = _text(_find(vhnode,
+        (vhxpath % DEVICE_MEMORY) + "/rasd:AllocationUnits"))
 
     # Sections that we handle
     # NetworkSection is ignored, since I don't have an example of
@@ -258,49 +193,48 @@ def _import_file(doc, ctx, conn, input_file):
         "VirtualSystem"]
 
     # Check for unhandled 'required' sections
-    for env_node in xpath_nodechildren(envbase):
-        if env_node.name in parsed_sections:
-            continue
-        elif env_node.isText():
+    for env_node in root.findall("./"):
+        if any([p for p in parsed_sections if p in env_node.tag]):
             continue
 
         logging.debug("Unhandled XML section '%s'",
-                      env_node.name)
+                      env_node.tag)
 
-        if not bool_val(env_node.prop("required")):
+        if not _convert_bool_val(env_node.attrib.get("required")):
             continue
         raise Exception(_("OVF section '%s' is listed as "
                           "required, but parser doesn't know "
                           "how to handle it.") % env_node.name)
 
     disk_buses = {}
-    for node in ctx.xpathEval(vhbase % DEVICE_IDE_BUS):
-        instance_id = _get_child_content(node, "InstanceID")
+    for node in _findall(vhnode, vhxpath % DEVICE_IDE_BUS):
+        instance_id = _text(_find(node, "rasd:InstanceID"))
         disk_buses[instance_id] = "ide"
-    for node in ctx.xpathEval(vhbase % DEVICE_SCSI_BUS):
-        instance_id = _get_child_content(node, "InstanceID")
+    for node in _findall(vhnode, vhxpath % DEVICE_SCSI_BUS):
+        instance_id = _text(_find(node, "rasd:InstanceID"))
         disk_buses[instance_id] = "scsi"
 
     ifaces = []
-    for node in ctx.xpathEval(vhbase % DEVICE_ETHERNET):
+    for node in _findall(vhnode, vhxpath % DEVICE_ETHERNET):
         iface = virtinst.VirtualNetworkInterface(conn)
-        # XXX: Just ignore 'source' info and choose the default
-        net_model = _get_child_content(node, "ResourceSubType")
+        # Just ignore 'source' info for now and choose the default
+        net_model = _text(_find(node, "rasd:ResourceSubType"))
         if net_model and not net_model.isdigit():
             iface.model = net_model.lower()
         iface.set_default_source()
         ifaces.append(iface)
 
     disks = []
-    for node in ctx.xpathEval(vhbase % DEVICE_DISK):
-        bus_id = _get_child_content(node, "Parent")
-        path = _get_child_content(node, "HostResource")
+    for node in _findall(vhnode, vhxpath % DEVICE_DISK):
+        bus_id = _text(_find(node, "rasd:Parent"))
+        path = _text(_find(node, "rasd:HostResource"))
 
         bus = disk_buses.get(bus_id, "ide")
         fmt = "raw"
 
         if path:
-            path, fmt = _lookup_disk_path(path)
+            path = _lookup_disk_path(root, path)
+            fmt = "vmdk"
 
         disk = virtinst.VirtualDisk(conn)
         disk.path = path
@@ -310,11 +244,7 @@ def _import_file(doc, ctx, conn, input_file):
         disks.append(disk)
 
 
-    # XXX: Convert these OS values to something useful
-    ignore = os_version
-    ignore = os_id
-    ignore = os_vmware
-
+    # Generate the Guest
     guest = conn.caps.lookup_virtinst_guest()
     guest.installer = virtinst.ImportInstaller(conn)
 
@@ -325,12 +255,6 @@ def _import_file(doc, ctx, conn, input_file):
     guest.description = desc or None
     if vcpus:
         guest.vcpus = int(vcpus)
-    elif sockets or cores:
-        if sockets:
-            guest.cpu.sockets = int(sockets)
-        if cores:
-            guest.cpu.cores = int(cores)
-        guest.cpu.vcpus_from_topology()
 
     if mem:
         guest.memory = _convert_alloc_val(alloc_mem, mem) * 1024
@@ -356,29 +280,20 @@ class ovf_parser(parser_class):
         """
         Return True if the given file is of this format.
         """
+        # Small heuristic to ensure we aren't attempting to identify
+        # a large .zip archive or similar
         if os.path.getsize(input_file) > (1024 * 1024 * 2):
             return
 
-        infile = open(input_file, "r")
-        xml = infile.read()
-        infile.close()
-
-        def parse_cb(doc, ctx):
-            ignore = doc
-            return bool(ctx.xpathEval("/ovf:Envelope"))
-
         try:
-            return _xml_parse_wrapper(xml, parse_cb)
-        except Exception as e:
-            logging.debug("Error parsing OVF XML: %s", str(e))
+            root = xml.etree.ElementTree.parse(input_file).getroot()
+            return root.tag == ("{%s}Envelope" % OVF_NAMESPACES["ovf"])
+        except Exception:
+            logging.debug("Error parsing OVF XML", exc_info=True)
 
         return False
 
     @staticmethod
     def export_libvirt(conn, input_file):
-        infile = open(input_file, "r")
-        xml = infile.read()
-        infile.close()
-        logging.debug("Importing OVF XML:\n%s", xml)
-
-        return _xml_parse_wrapper(xml, _import_file, conn, input_file)
+        logging.debug("Importing OVF XML:\n%s", open(input_file).read())
+        return _import_file(conn, input_file)
