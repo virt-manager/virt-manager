@@ -72,23 +72,6 @@ def _make_xml_context(node):
     return ctx
 
 
-def _tuplify_lists(*args):
-    """
-    Similar to zip(), but use None if lists aren't long enough, and
-    don't skip any None list entry
-    """
-    args = [util.listify(l) for l in args]
-    maxlen = max([len(l) for l in args])
-
-    ret = []
-    for idx in range(maxlen):
-        tup = tuple()
-        for l in args:
-            tup += (idx >= len(l) and (None,) or (l[idx],))
-        ret.append(tup)
-    return ret
-
-
 def _sanitize_libxml_xml(xml):
     # Strip starting <?...> line
     if xml.startswith("<?"):
@@ -517,14 +500,6 @@ class XMLProperty(property):
 
     def _make_xpath(self, xmlbuilder):
         return xmlbuilder.fix_relative_xpath(self._xpath)
-
-
-    def _build_node_list(self, xmlbuilder, xpath):
-        """
-        Build list of nodes that the passed xpaths reference
-        """
-        nodes = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
-        return util.listify(nodes)
 
     def _convert_get_value(self, val):
         # pylint: disable=redefined-variable-type
