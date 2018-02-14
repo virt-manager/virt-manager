@@ -47,27 +47,22 @@ _namespaces = {
 }
 
 
-class _DocCleanupWrapper(object):
-    def __init__(self, doc):
+class _CtxCleanupWrapper(object):
+    def __init__(self, ctx, doc):
+        self._ctx = ctx
         self._doc = doc
     def __del__(self):
         self._doc.freeDoc()
-
-
-class _CtxCleanupWrapper(object):
-    def __init__(self, ctx):
-        self._ctx = ctx
-    def __del__(self):
+        self._doc = None
         self._ctx.xpathFreeContext()
         self._ctx = None
     def __getattr__(self, attrname):
         return getattr(self._ctx, attrname)
 
 
-def _make_xml_context(node):
-    doc = node.doc
-    ctx = _CtxCleanupWrapper(doc.xpathNewContext())
-    ctx.setContextNode(node)
+def _make_xml_context(doc):
+    ctx = _CtxCleanupWrapper(doc.xpathNewContext(), doc)
+    ctx.setContextNode(doc.children)
     ctx.xpathRegisterNs("qemu", _namespaces["qemu"])
     return ctx
 
@@ -663,16 +658,11 @@ class XMLProperty(property):
         self._nonxml_fset(xmlbuilder,
                           self._convert_set_value(xmlbuilder, val))
 
-    def _set_xml(self, xmlbuilder, setval, root_node=None):
+    def _set_xml(self, xmlbuilder, setval):
         """
         Actually set the passed value in the XML document
         """
-        if root_node is None:
-            root_node = xmlbuilder._xmlstate.xml_node
-            ctx = xmlbuilder._xmlstate.xml_ctx
-        else:
-            ctx = _make_xml_context(root_node)
-
+        ctx = xmlbuilder._xmlstate.xml_ctx
         xpath = self._make_xpath(xmlbuilder)
 
         if setval is None or setval is False:
@@ -708,8 +698,6 @@ class _XMLState(object):
             parentxmlstate and parentxmlstate.get_root_xpath()) or ""
 
         self.xml_ctx = None
-        self.xml_node = None
-        self._xml_root_doc_ref = None
         self.is_build = False
         if not parsexml and not parentxmlstate:
             self.is_build = True
@@ -717,8 +705,6 @@ class _XMLState(object):
 
     def parse(self, parsexml, parentxmlstate):
         if parentxmlstate:
-            self._xml_root_doc_ref = None
-            self.xml_node = parentxmlstate.xml_node
             self.is_build = parentxmlstate.is_build or self.is_build
             self.xml_ctx = parentxmlstate.xml_ctx
             return
@@ -732,14 +718,7 @@ class _XMLState(object):
             logging.debug("Error parsing xml=\n%s", parsexml)
             raise
 
-        self.xml_node = doc.children
-        self.xml_ctx = _make_xml_context(self.xml_node)
-
-        # This just stores a reference to our root doc wrapper in
-        # the root node, so the doc is autofree'd only when the node
-        # and this xmlstate object are free'd
-        self._xml_root_doc_ref = _DocCleanupWrapper(doc)
-        self.xml_node.virtinst_root_doc = self._xml_root_doc_ref
+        self.xml_ctx = _make_xml_context(doc)
 
 
     def make_xml_stub(self):
@@ -1125,19 +1104,13 @@ class XMLBuilder(object):
     def _do_get_xml_config(self):
         xmlstub = self._xmlstate.make_xml_stub()
 
-        try:
-            node = None
-            ctx = self._xmlstate.xml_ctx
-            if self._xmlstate.is_build:
-                node = self._xmlstate.xml_node.docCopyNodeList(
-                    self._xmlstate.xml_node.doc)
-                ctx = node
+        ctx = self._xmlstate.xml_ctx
+        if self._xmlstate.is_build:
+            newdoc = self._xmlstate.xml_ctx.contextNode().doc.copyDoc(True)
+            ctx = _make_xml_context(newdoc)
 
-            self._add_parse_bits(node)
-            ret = self._xmlstate.get_node_xml(ctx)
-        finally:
-            if node:
-                node.freeNode()
+        self._add_parse_bits(ctx)
+        ret = self._xmlstate.get_node_xml(ctx)
 
         if ret == xmlstub:
             ret = ""
@@ -1148,20 +1121,23 @@ class XMLBuilder(object):
             ret += "\n"
         return ret
 
-    def _add_parse_bits(self, node):
+    def _add_parse_bits(self, ctx):
         """
         Callback that adds the implicitly tracked XML properties to
         the backing xml.
         """
         origproporder = self._proporder[:]
         origpropstore = self._propstore.copy()
+        origctx = self._xmlstate.xml_ctx
         try:
-            return self._do_add_parse_bits(node)
+            self._xmlstate.xml_ctx = ctx
+            return self._do_add_parse_bits(ctx)
         finally:
+            self._xmlstate.xml_ctx = origctx
             self._proporder = origproporder
             self._propstore = origpropstore
 
-    def _do_add_parse_bits(self, node):
+    def _do_add_parse_bits(self, ctx):
         # Set all defaults if the properties have one registered
         xmlprops = self._all_xml_props()
         childprops = self._all_child_props()
@@ -1188,10 +1164,10 @@ class XMLBuilder(object):
         # Alter the XML
         for key in do_order:
             if key in xmlprops:
-                xmlprops[key]._set_xml(self, self._propstore[key], node)
+                xmlprops[key]._set_xml(self, self._propstore[key])
             elif key in childprops:
                 for obj in util.listify(getattr(self, key)):
-                    obj._add_parse_bits(node)
+                    obj._add_parse_bits(ctx)
 
     def __repr__(self):
         return "<%s %s %s>" % (self.__class__.__name__.split(".")[-1],
