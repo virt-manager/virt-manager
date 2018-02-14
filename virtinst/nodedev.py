@@ -64,14 +64,14 @@ class NodeDevice(XMLBuilder):
         found, we will attempt to parse the name as would be passed to
         devAddressToNodeDev
 
-        @param conn: libvirt.virConnect instance to perform the lookup on
-        @param idstring: libvirt node device name to lookup, or address
+        :param conn: libvirt.virConnect instance to perform the lookup on
+        :param idstring: libvirt node device name to lookup, or address
             of the form:
             - bus.addr (ex. 001.003 for a usb device)
             - vendor:product (ex. 0x1234:0x5678 for a usb device
             - (domain:)bus:slot.func (ex. 00:10.0 for a pci device)
 
-        @rtype: L{NodeDevice} instance
+        :returns: NodeDevice instance
         """
         if not conn.check_support(conn.SUPPORT_CONN_NODEDEV):
             raise ValueError(_("Connection does not support host device "
@@ -128,8 +128,7 @@ class NodeDevice(XMLBuilder):
         Use device information to attempt to print a human readable device
         name.
 
-        @returns: Device description string
-        @rtype C{str}
+        :returns: Device description string
         """
         return self.name
 

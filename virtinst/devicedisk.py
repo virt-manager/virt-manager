@@ -205,8 +205,7 @@ class VirtualDisk(VirtualDevice):
         Check if the passed user has search permissions for all the
         directories in the disk path.
 
-        @return: List of the directories the user cannot search, or empty list
-        @rtype : C{list}
+        :returns: List of the directories the user cannot search, or empty list
         """
         if path is None:
             return []
@@ -276,8 +275,7 @@ class VirtualDisk(VirtualDevice):
         """
         Try to fix any permission problems found by check_path_search_for_user
 
-        @return: Return a dictionary of entries {broken path : error msg}
-        @rtype : C{dict}
+        :returns: Return a dictionary of entries {broken path : error msg}
         """
         def fix_perms(dirname, useacl=True):
             if useacl:
@@ -334,11 +332,11 @@ class VirtualDisk(VirtualDevice):
         """
         Return a list of VM names that are using the passed path.
 
-        @param conn: virConnect to check VMs
-        @param path: Path to check for
-        @param shareable: Path we are checking is marked shareable, so
+        :param conn: virConnect to check VMs
+        :param path: Path to check for
+        :param shareable: Path we are checking is marked shareable, so
             don't warn if it conflicts with another shareable source.
-        @param read_only: Path we are checking is marked read_only, so
+        :param read_only: Path we are checking is marked read_only, so
             don't warn if it conflicts with another read_only source.
         """
         if not path:
@@ -952,8 +950,7 @@ class VirtualDisk(VirtualDevice):
         check if specified storage is in use by any other VMs on passed
         connection.
 
-        @return: list of colliding VM names
-        @rtype: C{list}
+        :returns: list of colliding VM names
         """
         if not self.path:
             return False
@@ -970,7 +967,7 @@ class VirtualDisk(VirtualDevice):
         """
         Returns the suggested disk target prefix (hd, xvd, sd ...) for the
         disk.
-        @returns: str prefix, or None if no reasonable guess can be made
+        :returns: str prefix, or None if no reasonable guess can be made
         """
         # The upper limits here aren't necessarilly 1024, but let the HV
         # error as appropriate.
@@ -1012,13 +1009,9 @@ class VirtualDisk(VirtualDevice):
         mapped onto that controller.
         Sets self.target, and returns the generated value.
 
-        @param skip_targets: list of targets to exclude
-        @type skip_targets: C{list}
-        @param pref_ctrl: preferred controller to connect the disk to
-        @type pref_ctrl: C{int}
-        @raise ValueError: can't determine target type, no targets available
-        @returns generated target
-        @rtype C{str}
+        :param skip_targets: list of targets to exclude
+        :param pref_ctrl: preferred controller to connect the disk to
+        :returns: generated target
         """
         prefix, maxnode = self.get_target_prefix(skip_targets)
         skip_targets = [t for t in skip_targets if t and t.startswith(prefix)]

@@ -104,11 +104,9 @@ class Installer(object):
         Generate the portion of the guest xml that determines boot devices
         and parameters. (typically the <os></os> block)
 
-        @param guest: Guest instance we are installing
-        @type guest: L{Guest}
-        @param isinstall: Whether we want xml for the 'install' phase or the
+        :param guest: Guest instance we are installing
+        :param isinstall: Whether we want xml for the 'install' phase or the
                           'post-install' phase.
-        @type isinstall: C{bool}
         """
         if isinstall and not self.has_install_phase():
             return
@@ -216,7 +214,7 @@ class Installer(object):
         an error is encountered in the detection process (or if detection
         is not relevant for the Installer type), None is returned.
 
-        @returns: distro variant string, or None
+        :returns: distro variant string, or None
         """
         ignore = guest
         logging.debug("distro detection not available for this installer.")

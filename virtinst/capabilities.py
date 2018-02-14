@@ -358,12 +358,12 @@ class Capabilities(XMLBuilder):
         This function throws C{ValueError}s if any of the requested values are
         not found.
 
-        @param typ: Virtualization type ('hvm', 'xen', ...)
-        @param arch: Guest architecture ('x86_64', 'i686' ...)
-        @param os_type: Hypervisor name ('qemu', 'kvm', 'xen', ...)
-        @param machine: Optional machine type to emulate
+        :param typ: Virtualization type ('hvm', 'xen', ...)
+        :param arch: Guest architecture ('x86_64', 'i686' ...)
+        :param os_type: Hypervisor name ('qemu', 'kvm', 'xen', ...)
+        :param machine: Optional machine type to emulate
 
-        @returns: A _CapsInfo object containing the found guest and domain
+        :returns: A _CapsInfo object containing the found guest and domain
         """
         # F22 libxl xen still puts type=linux in the XML, so we need
         # to handle it for caps lookup

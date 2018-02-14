@@ -123,16 +123,16 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
 
     output = "foobar-2.img"
 
-    @param base: The base string to use for the name (e.g. "my-orig-vm-clone")
-    @param collision_cb: A callback function to check for collision,
+    :param base: The base string to use for the name (e.g. "my-orig-vm-clone")
+    :param collision_cb: A callback function to check for collision,
         receives the generated name as its only arg
-    @param lib_collision: If true, the collision_cb is not a boolean function,
+    :param lib_collision: If true, the collision_cb is not a boolean function,
         and instead throws a libvirt error on failure
-    @param start_num: The number to start at for generating non colliding names
-    @param sep: The seperator to use between the basename and the
+    :param start_num: The number to start at for generating non colliding names
+    :param sep: The seperator to use between the basename and the
         generated number (default is "-")
-    @param force_num: Force the generated name to always end with a number
-    @param collidelist: An extra list of names to check for collision
+    :param force_num: Force the generated name to always end with a number
+    :param collidelist: An extra list of names to check for collision
     """
     collidelist = collidelist or []
 
@@ -203,8 +203,8 @@ def is_error_nosupport(err):
     Check if passed exception indicates that the called libvirt command isn't
     supported
 
-    @param err: Exception raised from command call
-    @returns: True if command isn't supported, False if we can't determine
+    :param err: Exception raised from command call
+    :returns: True if command isn't supported, False if we can't determine
     """
     if not isinstance(err, libvirt.libvirtError):
         return False

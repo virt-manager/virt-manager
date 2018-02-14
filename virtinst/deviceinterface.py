@@ -176,7 +176,7 @@ class VirtualNetworkInterface(VirtualDevice):
     @staticmethod
     def is_conflict_net(conn, searchmac):
         """
-        @returns: a two element tuple:
+        :returns: a two element tuple:
             first element is True if fatal collision occured
             second element is a string description of the collision.
 

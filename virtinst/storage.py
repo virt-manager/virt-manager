@@ -145,10 +145,10 @@ class StoragePool(_StorageObject):
         Return a list of StoragePool instances built from libvirt's pool
         source enumeration (if supported).
 
-        @param conn: Libvirt connection
-        @param name: Name for the new pool
-        @param pool_type: Pool type string from I{Types}
-        @param host: Option host string to poll for sources
+        :param conn: Libvirt connection
+        :param name: Name for the new pool
+        :param pool_type: Pool type string from I{Types}
+        :param host: Option host string to poll for sources
         """
         if not conn.check_support(conn.SUPPORT_CONN_FINDPOOLSOURCES):
             return []
@@ -277,7 +277,7 @@ class StoragePool(_StorageObject):
         return the first we find, active or inactive. This iterates over
         all pools and dumps their xml, so it is NOT quick.
 
-        @returns: virStoragePool object if found, None otherwise
+        :returns: virStoragePool object if found, None otherwise
         """
         if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
             return None
@@ -874,10 +874,9 @@ class StorageVolume(_StorageObject):
         """
         Report if requested size exceeds its pool's available amount
 
-        @returns: 2 element tuple:
+        :returns: 2 element tuple:
             1. True if collision is fatal, false otherwise
             2. String message if some collision was encountered.
-        @rtype: 2 element C{tuple}: (C{bool}, C{str})
         """
         if not self.pool:
             return (False, "")

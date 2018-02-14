@@ -261,7 +261,7 @@ class Guest(XMLBuilder):
         """
         Add the passed device to the guest's device list.
 
-        @param dev: VirtualDevice instance to attach to guest
+        :param dev: VirtualDevice instance to attach to guest
         """
         self.add_child(dev)
 
@@ -269,7 +269,7 @@ class Guest(XMLBuilder):
         """
         Remove the passed device from the guest's device list
 
-        @param dev: VirtualDevice instance
+        :param dev: VirtualDevice instance
         """
         self.remove_child(dev)
 
@@ -278,7 +278,7 @@ class Guest(XMLBuilder):
         Return a list of devices of type 'devtype' that will installed on
         the guest.
 
-        @param devtype: Device type to search for (one of
+        :param devtype: Device type to search for (one of
                         VirtualDevice.virtual_device_types)
         """
         newlist = []
@@ -414,7 +414,7 @@ class Guest(XMLBuilder):
         """
         Actually do the XML logging, guest defining/creating
 
-        @param doboot: Boot guest even if it has no install phase
+        :param doboot: Boot guest even if it has no install phase
         """
         meter_label = _("Creating domain...")
         meter = util.ensure_meter(meter)
@@ -469,7 +469,7 @@ class Guest(XMLBuilder):
                       doboot=True, transient=False):
         """
         Begin the guest install (stage1).
-        @param return_xml: Don't create the guest, just return generated XML
+        :param return_xml: Don't create the guest, just return generated XML
         """
         if self.domain is not None:
             raise RuntimeError(_("Domain has already been started!"))

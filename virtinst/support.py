@@ -419,14 +419,13 @@ def check_support(virtconn, feature, data=None):
     Attempt to determine if a specific libvirt feature is support given
     the passed connection.
 
-    @param virtconn: Libvirt connection to check feature on
-    @param feature: Feature type to check support for
-    @type  feature: One of the SUPPORT_* flags
-    @param data: Option libvirt object to use in feature checking
-    @type  data: Could be virDomain, virNetwork, virStoragePool,
-                hv name, etc
+    :param virtconn: Libvirt connection to check feature on
+    :param feature: Feature type to check support for
+    :type feature: One of the SUPPORT_* flags
+    :param data: Option libvirt object to use in feature checking
+    :type data: Could be virDomain, virNetwork, virStoragePool, hv name, etc
 
-    @returns: True if feature is supported, False otherwise
+    :returns: True if feature is supported, False otherwise
     """
     if "VirtualConnection" in repr(data):
         data = data.get_conn_for_api_arg()

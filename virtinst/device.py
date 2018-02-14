@@ -176,7 +176,7 @@ class VirtualDevice(XMLBuilder):
         """
         Initialize device state
 
-        @param conn: libvirt connection to validate device against
+        :param conn: libvirt connection to validate device against
         """
         XMLBuilder.__init__(self, *args, **kwargs)
         self._XML_PROP_ORDER = self._XML_PROP_ORDER + ["alias", "address"]
@@ -198,7 +198,7 @@ class VirtualDevice(XMLBuilder):
         Perform potentially hazardous device initialization, like
         storage creation or host device reset
 
-        @param meter: Optional progress meter to use
+        :param meter: Optional progress meter to use
         """
         # Will be overwritten by subclasses if necessary.
         ignore = meter

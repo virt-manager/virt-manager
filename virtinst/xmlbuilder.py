@@ -420,29 +420,29 @@ class XMLProperty(property):
         existing guest XML, we  use the xpath value to get/set the value
         in the parsed XML document.
 
-        @param doc: option doc string for the property
-        @param xpath: xpath string which maps to the associated property
+        :param doc: option doc string for the property
+        :param xpath: xpath string which maps to the associated property
                       in a typical XML document
-        @param name: Just a string to print for debugging, only needed
+        :param name: Just a string to print for debugging, only needed
             if xpath isn't specified.
-        @param set_converter: optional function for converting the property
+        :param set_converter: optional function for converting the property
             value from the virtinst API to the guest XML. For example,
             the Guest.memory API was once in MiB, but the libvirt domain
             memory API is in KiB. So, if xpath is specified, on a 'get'
             operation we convert the XML value with int(val) / 1024.
-        @param validate_cb: Called once when value is set, should
+        :param validate_cb: Called once when value is set, should
             raise a RuntimeError if the value is not proper.
-        @param is_bool: Whether this is a boolean property in the XML
-        @param is_int: Whether this is an integer property in the XML
-        @param is_yesno: Whether this is a yes/no property in the XML
-        @param is_onoff: Whether this is an on/off property in the XML
-        @param default_cb: If building XML from scratch, and this property
+        :param is_bool: Whether this is a boolean property in the XML
+        :param is_int: Whether this is an integer property in the XML
+        :param is_yesno: Whether this is a yes/no property in the XML
+        :param is_onoff: Whether this is an on/off property in the XML
+        :param default_cb: If building XML from scratch, and this property
             is never explicitly altered, this function is called for setting
             a default value in the XML, and for any 'get' call before the
             first explicit 'set'.
-        @param default_name: If the user does a set and passes in this
+        :param default_name: If the user does a set and passes in this
             value, instead use the value of default_cb()
-        @param do_abspath: If True, run os.path.abspath on the passed value
+        :param do_abspath: If True, run os.path.abspath on the passed value
         """
         self._xpath = xpath
         if not self._xpath:
@@ -818,10 +818,8 @@ class XMLBuilder(object):
         """
         Initialize state
 
-        @param conn: libvirt connection to validate device against
-        @type conn: VirtualConnection
-        @param parsexml: Optional XML string to parse
-        @type parsexml: C{str}
+        :param conn: VirtualConnection to validate device against
+        :param parsexml: Optional XML string to parse
 
         The rest of the parameters are for internal use only
         """
