@@ -343,7 +343,8 @@ class VirtualConnection(object):
 
         for guest in self.caps.guests:
             for dom in guest.domains:
-                if dom.emulator.startswith("/usr/libexec"):
+                emulator = dom.emulator or guest.emulator
+                if emulator.startswith("/usr/libexec"):
                     return True
         return False
 

@@ -102,19 +102,10 @@ class _CapsMachine(XMLBuilder):
 
 
 class _CapsDomain(XMLBuilder):
-    def __init__(self, *args, **kwargs):
-        XMLBuilder.__init__(self, *args, **kwargs)
-
-        self.machines = []
-        for m in self._machines:
-            self.machines.append(m.name)
-            if m.canonical:
-                self.machines.append(m.canonical)
-
     _XML_ROOT_NAME = "domain"
     hypervisor_type = XMLProperty("./@type")
     emulator = XMLProperty("./emulator")
-    _machines = XMLChildProperty(_CapsMachine)
+    machines = XMLChildProperty(_CapsMachine)
 
 
 class _CapsGuestFeatures(XMLBuilder):
@@ -126,64 +117,34 @@ class _CapsGuestFeatures(XMLBuilder):
 
 
 class _CapsGuest(XMLBuilder):
-    def __init__(self, *args, **kwargs):
-        XMLBuilder.__init__(self, *args, **kwargs)
-
-        machines = []
-        for m in self._machines:
-            machines.append(m.name)
-            if m.canonical:
-                machines.append(m.canonical)
-
-        for d in self.domains:
-            if not d.emulator:
-                d.emulator = self._emulator
-            if not d.machines:
-                d.machines = machines
-
-
     _XML_ROOT_NAME = "guest"
 
     os_type = XMLProperty("./os_type")
     arch = XMLProperty("./arch/@name")
     loader = XMLProperty("./arch/loader")
-    _emulator = XMLProperty("./arch/emulator")
+    emulator = XMLProperty("./arch/emulator")
 
     domains = XMLChildProperty(_CapsDomain, relative_xpath="./arch")
     features = XMLChildProperty(_CapsGuestFeatures, is_single=True)
-    _machines = XMLChildProperty(_CapsMachine, relative_xpath="./arch")
+    machines = XMLChildProperty(_CapsMachine, relative_xpath="./arch")
 
 
     ###############
     # Public APIs #
     ###############
 
-    def bestDomainType(self, dtype=None, machine=None):
+    def all_machine_names(self, domain):
         """
-        Return the recommended domain for use if the user does not explicitly
-        request one.
+        Return all machine string names, including canonical aliases for
+        the guest+domain combo
         """
-        domains = []
-        for d in self.domains:
-            if dtype and d.hypervisor_type != dtype.lower():
-                continue
-            if machine and machine not in d.machines:
-                continue
-
-            domains.append(d)
-
-        if not domains:
-            return None
-
-        priority = ["kvm", "xen", "qemu"]
-
-        for t in priority:
-            for d in domains:
-                if d.hypervisor_type == t:
-                    return d
-
-        # Fallback, just return last item in list
-        return domains[-1]
+        mobjs = (domain and domain.machines) or self.machines
+        ret = []
+        for m in mobjs:
+            ret.append(m.name)
+            if m.canonical:
+                ret.append(m.canonical)
+        return ret
 
     def has_install_options(self):
         """
@@ -243,8 +204,8 @@ class _CapsInfo(object):
         self.arch = self.guest.arch
         self.loader = self.guest.loader
 
-        self.emulator = self.domain.emulator
-        self.machines = self.domain.machines[:]
+        self.emulator = self.domain.emulator or self.guest.emulator
+        self.machines = self.guest.all_machine_names(self.domain)
 
     def get_recommended_machine(self):
         """
@@ -339,7 +300,7 @@ class Capabilities(XMLBuilder):
     # Public XML building APIs #
     ############################
 
-    def _guestForOSType(self, typ=None, arch=None):
+    def _guestForOSType(self, os_type, arch):
         if self.host is None:
             return None
 
@@ -349,9 +310,36 @@ class Capabilities(XMLBuilder):
 
         for a in archs:
             for g in self.guests:
-                if ((typ is None or g.os_type == typ) and
+                if ((os_type is None or g.os_type == os_type) and
                     (a is None or g.arch == a)):
                     return g
+
+    def _bestDomainType(self, guest, dtype, machine):
+        """
+        Return the recommended domain for use if the user does not explicitly
+        request one.
+        """
+        domains = []
+        for d in guest.domains:
+            if dtype and d.hypervisor_type != dtype.lower():
+                continue
+            if machine and machine not in guest.all_machine_names(d):
+                continue
+
+            domains.append(d)
+
+        if not domains:
+            return None
+
+        priority = ["kvm", "xen", "qemu"]
+
+        for t in priority:
+            for d in domains:
+                if d.hypervisor_type == t:
+                    return d
+
+        # Fallback, just return last item in list
+        return domains[-1]
 
     def guest_lookup(self, os_type=None, arch=None, typ=None, machine=None):
         """
@@ -395,7 +383,7 @@ class Capabilities(XMLBuilder):
             raise ValueError(_("Host does not support %(virttype)s %(arch)s") %
                                {'virttype': osstr, 'arch': archstr})
 
-        domain = guest.bestDomainType(dtype=typ, machine=machine)
+        domain = self._bestDomainType(guest, typ, machine)
         if domain is None:
             machinestr = " with machine '%s'" % machine
             if not machine:
