@@ -57,6 +57,49 @@ def _sanitize_libxml_xml(xml):
     return xml
 
 
+class _XPathSegment(object):
+    def __init__(self, fullsegment):
+        self.fullsegment = fullsegment
+        self.nodename = fullsegment
+
+        # Check if the xpath snippet had an '=' expression in it, example:
+        #
+        #   ./foo[@bar='baz']
+        #
+        # If so, split out condition_prop='bar' and condition_val='baz'.
+        #
+        # However if we receive an expath like ./boot[2], just strip
+        # the bracket bit off nodename.
+        self.condition_prop = None
+        self.condition_val = None
+        if "[" in self.nodename:
+            self.nodename, cond = self.nodename.split("[")
+            if "=" in cond:
+                (cprop, cval) = cond.strip("]").split("=")
+                self.condition_prop = cprop.strip("@")
+                self.condition_val = cval.strip("'")
+
+        # If remaining nodename starts with "@", it's a property
+        self.is_prop = self.nodename.startswith("@")
+        if self.is_prop:
+            self.nodename = self.nodename[1:]
+
+        # If remaining nodename contains ":", it has a namespace tag
+        self.nsname = None
+        if ":" in self.nodename:
+            self.nsname, self.nodename = self.nodename.split(":")
+
+
+class _XPath(object):
+    """
+    Helper class for performing manipulations of XPath strings. Splits
+    the xpath into segments.
+    """
+    def __init__(self, fullxpath):
+        self.fullxpath = fullxpath
+        self.segments = [_XPathSegment(s) for s in self.fullxpath.split("/")]
+
+
 class _XMLAPI(object):
     """
     Class that encapsulates all our libxml2 API usage, so it doesn't
@@ -173,7 +216,7 @@ class _XMLAPI(object):
         newnode.addNextSibling(txt)
         return newnode
 
-    def node_make_stub(self, xpath):
+    def node_make_stub(self, fullxpath):
         """
         Build all nodes for the passed xpath. For example, if XML is <foo/>,
         and xpath=./bar/@baz, after this function the XML will be:
@@ -195,64 +238,34 @@ class _XMLAPI(object):
         Even if <bar> didn't exist before. So we fill in the dependent property
         expression values
         """
-        def _handle_node(nodename, parentnode, parentpath):
-            # If the passed xpath snippet (nodename) exists, return the node
-            # If it doesn't exist, create it, and return the new node
+        xpathobj = _XPath(fullxpath)
+        parentpath = "."
+        parentnode = self.find(parentpath)
+        if parentnode is None:
+            raise RuntimeError("programming error: "
+                "Did not find XML root node for xpath=%s" % fullxpath)
 
-            # If nodename is a node property, we can handle it up front
-            if nodename.startswith("@"):
-                nodename = nodename.strip("@")
-                return parentnode.setProp(nodename, ""), parentpath
+        for xpathseg in xpathobj.segments[1:]:
+            # If xpath ends with a property, set a stub value and exit
+            if xpathseg.is_prop:
+                parentnode = parentnode.setProp(xpathseg.nodename, "")
+                break
 
-            if not parentpath:
-                parentpath = nodename
-            else:
-                parentpath += "/%s" % nodename
-
-            # See if the xpath node already exists
-            node = self.find(parentpath)
-            if node:
-                # xpath node already exists, so we don't need to create anything
-                return node, parentpath
-
-            # If we don't have a parentnode by this point, the root of the
-            # xpath didn't find anything. Usually a coding error
-            if not parentnode:
-                raise RuntimeError("Could not find XML root node")
-
-            # Remove conditional xpath elements for node creation. We preserved
-            # them up until this point since it was needed for proper xpath
-            # lookup, but they aren't valid syntax when creating the node
-            if "[" in nodename:
-                nodename = nodename[:nodename.index("[")]
-
-            nsname = None
-            if ":" in nodename:
-                nsname, nodename = nodename.split(":")
-
-            newnode = self._node_new(nodename, nsname)
-            return self.node_add_child(parentnode, newnode), parentpath
-
-
-        # Split the xpath and lookup/create each individual piece
-        parentpath = None
-        parentnode = None
-        for nodename in xpath.split("/"):
-            parentnode, parentpath = _handle_node(
-                    nodename, parentnode, parentpath)
-
-            # Check if the xpath snippet had an '=' expression in it, example:
-            #
-            #   ./foo[@bar='baz']
-            #
-            # If so, we also want to set <foo bar='baz'/>, so that setting
-            # this XML element works as expected in this case.
-            if "[" not in nodename or "=" not in nodename:
+            parentpath += "/%s" % xpathseg.fullsegment
+            tmpnode = self.find(parentpath)
+            if tmpnode:
+                # xpath node already exists, nothing to create yet
+                parentnode = tmpnode
                 continue
 
-            propname, val = nodename.split("[")[1].strip("]").split("=")
-            propobj, ignore = _handle_node(propname, parentnode, parentpath)
-            propobj.setContent(val.strip("'"))
+            newnode = self._node_new(xpathseg.nodename, xpathseg.nsname)
+            parentnode = self.node_add_child(parentnode, newnode)
+
+            # For a conditional xpath like ./foo[@bar='baz'],
+            # we also want to implicitly set <foo bar='baz'/>
+            if xpathseg.condition_prop:
+                parentnode.setProp(xpathseg.condition_prop,
+                        xpathseg.condition_val)
 
         return parentnode
 
