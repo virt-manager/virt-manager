@@ -38,5 +38,18 @@
     <smartcard mode='host'>
       <address type='ccid' controller='0' slot='0'/>
     </smartcard>
+    <memory model='nvdimm' access='private'>
+      <source>
+        <path>/tmp/nvdimm</path>
+      </source>
+      <target>
+        <size unit='KiB'>523264</size>
+        <node>0</node>
+        <label>
+          <size unit='KiB'>128</size>
+        </label>
+      </target>
+      <address type='dimm' slot='0'/>
+    </memory>
   </devices>
 </domain>

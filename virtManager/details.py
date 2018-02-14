@@ -3146,10 +3146,7 @@ class vmmDetails(vmmGObjectUI):
             if origdev == newdev:
                 return True
 
-            if not origdev.get_root_xpath():
-                return False
-
-            return origdev.get_root_xpath() == newdev.get_root_xpath()
+            return origdev.get_xml_id() == newdev.get_xml_id()
 
         def add_hw_list_option(idx, name, page_id, info, icon_name):
             hw_list_model.insert(idx, [name, icon_name,

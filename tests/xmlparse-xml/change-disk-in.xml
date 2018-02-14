@@ -31,7 +31,6 @@
       <target dev="hdb" bus="ide"/>
     </disk>
     <disk type="block" device="cdrom">
-      <driver type="raw"/>
       <source dev="/dev/null"/>
       <target dev="hdc" bus="ide"/>
       <driver name='phy' error_policy='stop'/>

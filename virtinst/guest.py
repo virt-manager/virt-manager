@@ -321,17 +321,13 @@ class Guest(XMLBuilder):
         # We do a shallow copy of the OS block here, so that we can
         # set the install time properties but not permanently overwrite
         # any config the user explicitly requested.
-        data = (self.os, self.on_reboot)
-        try:
-            self._propstore["os"] = self.os.copy()
-        except Exception:
-            self._finish_get_xml(data)
-            raise
+        data = (self.os.bootorder, self.os.kernel, self.os.initrd,
+                self.os.kernel_args, self.on_reboot)
         return data
 
     def _finish_get_xml(self, data):
-        (self._propstore["os"],
-         self.on_reboot) = data
+        (self.os.bootorder, self.os.kernel, self.os.initrd,
+                self.os.kernel_args, self.on_reboot) = data
 
     def _get_install_xml(self, *args, **kwargs):
         data = self._prepare_get_xml()

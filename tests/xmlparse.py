@@ -823,12 +823,14 @@ class XMLParseTest(unittest.TestCase):
         dev2 = guest.get_devices("controller")[0]
         dev3 = guest.get_devices("channel")[0]
         dev4 = guest.get_devices("disk")[1]
+        dev5 = guest.get_devices("memory")[0]
 
         check = self._make_checker(dev1.address)
         check("type", "drive", "pci")
         check("type", "pci", "drive")
         check("controller", 3, 1)
         check("bus", 5, 4)
+        check("target", None, 7)
         check("unit", 33, 32)
         check = self._make_checker(dev1.alias)
         check("name", "foo2", None)
@@ -853,6 +855,14 @@ class XMLParseTest(unittest.TestCase):
         check("name", "channel0", "channel1")
 
         dev4.address.clear()
+
+        check = self._make_checker(dev5.address)
+        check("type", "dimm")
+        check("slot", 0, 2)
+        check("base", None, "0x1000")
+        # Need to remove this since the testdriver doesn't support
+        # memory devices?
+        guest.remove_device(dev5)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

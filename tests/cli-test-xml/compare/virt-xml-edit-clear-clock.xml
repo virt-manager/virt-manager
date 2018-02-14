@@ -1,12 +1,15 @@
+       <cell id="3" cpus="3" memory="1048576" unit="KiB"/>
      </numa>
    </cpu>
-   <clock offset="utc">
+-  <clock offset="utc">
 -    <timer name="rtc" tickpolicy="catchup"/>
 -    <timer name="pit" tickpolicy="delay"/>
 -    <timer name="hpet" present="no"/>
-   </clock>
+-  </clock>
++  <clock offset="utc"/>
    <on_poweroff>destroy</on_poweroff>
    <on_reboot>restart</on_reboot>
+   <on_crash>destroy</on_crash>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the next domain shutdown.

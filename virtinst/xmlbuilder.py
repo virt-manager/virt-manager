@@ -19,14 +19,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import copy
 import logging
 import os
 import re
 import string  # pylint: disable=deprecated-module
 
-import libxml2
-
+from .xmlapi import XMLAPI
 from . import util
 
 
@@ -37,284 +35,6 @@ from . import util
 _trackprops = bool("VIRTINST_TEST_SUITE" in os.environ)
 _allprops = []
 _seenprops = []
-
-# Convenience global to prevent _remove_xpath_node from unlinking the
-# top relavtive node in certain cases
-_top_node = None
-
-_namespaces = {
-    "qemu": "http://libvirt.org/schemas/domain/qemu/1.0",
-}
-
-
-
-def _sanitize_libxml_xml(xml):
-    # Strip starting <?...> line
-    if xml.startswith("<?"):
-        ignore, xml = xml.split("\n", 1)
-    if not xml.endswith("\n") and "\n" in xml:
-        xml += "\n"
-    return xml
-
-
-class _XPathSegment(object):
-    def __init__(self, fullsegment):
-        self.fullsegment = fullsegment
-        self.nodename = fullsegment
-
-        # Check if the xpath snippet had an '=' expression in it, example:
-        #
-        #   ./foo[@bar='baz']
-        #
-        # If so, split out condition_prop='bar' and condition_val='baz'.
-        #
-        # However if we receive an expath like ./boot[2], just strip
-        # the bracket bit off nodename.
-        self.condition_prop = None
-        self.condition_val = None
-        if "[" in self.nodename:
-            self.nodename, cond = self.nodename.split("[")
-            if "=" in cond:
-                (cprop, cval) = cond.strip("]").split("=")
-                self.condition_prop = cprop.strip("@")
-                self.condition_val = cval.strip("'")
-
-        # If remaining nodename starts with "@", it's a property
-        self.is_prop = self.nodename.startswith("@")
-        if self.is_prop:
-            self.nodename = self.nodename[1:]
-
-        # If remaining nodename contains ":", it has a namespace tag
-        self.nsname = None
-        if ":" in self.nodename:
-            self.nsname, self.nodename = self.nodename.split(":")
-
-
-class _XPath(object):
-    """
-    Helper class for performing manipulations of XPath strings. Splits
-    the xpath into segments.
-    """
-    def __init__(self, fullxpath):
-        self.fullxpath = fullxpath
-        self.segments = [_XPathSegment(s) for s in self.fullxpath.split("/")]
-
-
-class _XMLAPI(object):
-    """
-    Class that encapsulates all our libxml2 API usage, so it doesn't
-    bleed into other parts of the app
-    """
-    def __init__(self, doc):
-        self._doc = doc
-        self._ctx = doc.xpathNewContext()
-        self._ctx.setContextNode(doc.children)
-        self._ctx.xpathRegisterNs("qemu", _namespaces["qemu"])
-
-    def __del__(self):
-        self._doc.freeDoc()
-        self._doc = None
-        self._ctx.xpathFreeContext()
-        self._ctx = None
-
-
-    ###############
-    # Simple APIs #
-    ###############
-
-    def copy_api(self):
-        newdoc = self._ctx.contextNode().doc.copyDoc(True)
-        return _XMLAPI(newdoc)
-
-    def find(self, xpath):
-        node = self._ctx.xpathEval(xpath)
-        return (node and node[0] or None)
-
-    def findall(self, xpath):
-        return self._ctx.xpathEval(xpath)
-
-    def get_xml(self, xpath):
-        node = self.find(xpath)
-        if not node:
-            return ""
-        return _sanitize_libxml_xml(node.serialize())
-
-
-    #####################
-    # XML editting APIs #
-    #####################
-
-    def _node_new(self, nodename, nsname):
-        newnode = libxml2.newNode(nodename)
-        if not nsname:
-            return newnode
-
-        ctxnode = self._ctx.contextNode()
-        for ns in util.listify(ctxnode.nsDefs()):
-            if ns.name == nsname:
-                break
-        else:
-            ns = ctxnode.newNs(_namespaces[nsname], nsname)
-        newnode.setNs(ns)
-        return newnode
-
-    @staticmethod
-    def node_add_child(parentnode, newnode):
-        """
-        Add 'newnode' as a child of 'parentnode', but try to preserve
-        whitespace and nicely format the result.
-        """
-        def node_is_text(n):
-            return bool(n and n.type == "text" and "<" not in n.content)
-
-        def prevSibling(node):
-            parent = node.get_parent()
-            if not parent:
-                return None
-
-            prev = None
-            for child in parent.children:
-                if child == node:
-                    return prev
-                prev = child
-
-            return None
-
-        sib = parentnode.get_last()
-        if not node_is_text(sib):
-            # This case is when we add a child element to a node for the
-            # first time, like:
-            #
-            # <features/>
-            # to
-            # <features>
-            #   <acpi/>
-            # </features>
-            prevsib = prevSibling(parentnode)
-            if node_is_text(prevsib):
-                sib = libxml2.newText(prevsib.content)
-            else:
-                sib = libxml2.newText("\n")
-            parentnode.addChild(sib)
-
-        # This case is adding a child element to an already properly
-        # spaced element. Example:
-        # <features>
-        #   <acpi/>
-        # </features>
-        # to
-        # <features>
-        #   <acpi/>
-        #   <apic/>
-        # </features>
-        sib = parentnode.get_last()
-        content = sib.content
-        sib = sib.addNextSibling(libxml2.newText("  "))
-        txt = libxml2.newText(content)
-
-        sib.addNextSibling(newnode)
-        newnode.addNextSibling(txt)
-        return newnode
-
-    def node_make_stub(self, fullxpath):
-        """
-        Build all nodes for the passed xpath. For example, if XML is <foo/>,
-        and xpath=./bar/@baz, after this function the XML will be:
-
-          <foo>
-            <bar baz=''/>
-          </foo>
-
-        And the node pointing to @baz will be returned, for the caller to
-        do with as they please.
-
-        There's also special handling to ensure that setting
-        xpath=./bar[@baz='foo']/frob will create
-
-          <bar baz='foo'>
-            <frob></frob>
-          </bar>
-
-        Even if <bar> didn't exist before. So we fill in the dependent property
-        expression values
-        """
-        xpathobj = _XPath(fullxpath)
-        parentpath = "."
-        parentnode = self.find(parentpath)
-        if parentnode is None:
-            raise RuntimeError("programming error: "
-                "Did not find XML root node for xpath=%s" % fullxpath)
-
-        for xpathseg in xpathobj.segments[1:]:
-            # If xpath ends with a property, set a stub value and exit
-            if xpathseg.is_prop:
-                parentnode = parentnode.setProp(xpathseg.nodename, "")
-                break
-
-            parentpath += "/%s" % xpathseg.fullsegment
-            tmpnode = self.find(parentpath)
-            if tmpnode:
-                # xpath node already exists, nothing to create yet
-                parentnode = tmpnode
-                continue
-
-            newnode = self._node_new(xpathseg.nodename, xpathseg.nsname)
-            parentnode = self.node_add_child(parentnode, newnode)
-
-            # For a conditional xpath like ./foo[@bar='baz'],
-            # we also want to implicitly set <foo bar='baz'/>
-            if xpathseg.condition_prop:
-                parentnode.setProp(xpathseg.condition_prop,
-                        xpathseg.condition_val)
-
-        return parentnode
-
-    def node_remove(self, xpath, dofree=True):
-        """
-        Remove all XML content at the passed xpath, and free it
-
-        :param dofree: Actually don't free it. Used when removing
-            say a VirtualDevice, we really are just transferring the XMl
-            to a new independent object
-        """
-        nextxpath = xpath
-        root_node = self._ctx.contextNode()
-
-        while nextxpath:
-            curxpath = nextxpath
-            is_orig = (curxpath == xpath)
-            node = self.find(curxpath)
-
-            if "/" in curxpath:
-                nextxpath, ignore = curxpath.rsplit("/", 1)
-            else:
-                nextxpath = None
-
-            if not node:
-                continue
-
-            if node.type not in ["attribute", "element"]:
-                continue
-
-            if node.type == "element" and (node.children or node.properties):
-                # Only do a deep unlink if it was the original requested path
-                if not is_orig:
-                    continue
-
-            if node == root_node or node == _top_node:
-                # Don't unlink the root node, since it's spread out to all
-                # child objects and it ends up wreaking havoc.
-                break
-
-            # Look for preceding whitespace and remove it
-            white = node.get_prev()
-            if white and white.type == "text" and "<" not in white.content:
-                white.unlinkNode()
-                white.freeNode()
-
-            node.unlinkNode()
-            if dofree:
-                node.freeNode()
 
 
 class _XMLChildList(list):
@@ -534,9 +254,6 @@ class XMLProperty(property):
             raise RuntimeError("Didn't find expected property=%s" % self)
         return self._propname
 
-    def _make_xpath(self, xmlbuilder):
-        return xmlbuilder.fix_relative_xpath(self._xpath)
-
     def _convert_get_value(self, val):
         # pylint: disable=redefined-variable-type
         if self._default_name and val == self._default_name:
@@ -639,8 +356,11 @@ class XMLProperty(property):
         return xmlbuilder._propstore.get(propname, None)
 
     def clear(self, xmlbuilder):
-        self.setter(xmlbuilder, None)
-        self._set_xml(xmlbuilder, None)
+        # We only unset the cached data, since XML will be cleared elsewhere
+        propstore = xmlbuilder._propstore
+        propname = self._findpropname(xmlbuilder)
+        if propname in propstore:
+            self.setter(xmlbuilder, None)
 
 
     ##################################
@@ -674,15 +394,9 @@ class XMLProperty(property):
         """
         Actually fetch the associated value from the backing XML
         """
-        xpath = self._make_xpath(xmlbuilder)
-        node = xmlbuilder._xmlstate.xmlapi.find(xpath)
-        if not node:
-            return None
-
-        content = node.content
-        if self._is_bool:
-            content = True
-        return content
+        xpath = xmlbuilder._xmlstate.make_abs_xpath(self._xpath)
+        return xmlbuilder._xmlstate.xmlapi.get_xpath_content(
+                xpath, self._is_bool)
 
     def setter(self, xmlbuilder, val, validate=True):
         """
@@ -703,29 +417,14 @@ class XMLProperty(property):
         """
         Actually set the passed value in the XML document
         """
-        xmlapi = xmlbuilder._xmlstate.xmlapi
-        xpath = self._make_xpath(xmlbuilder)
-
-        if setval is None or setval is False:
-            xmlapi.node_remove(xpath)
-            return
-
-        node = xmlapi.find(xpath)
-        if not node:
-            node = xmlapi.node_make_stub(xpath)
-
-        if setval is True:
-            # Boolean property, creating the node is enough
-            return
-
-        node.setContent(util.xml_escape(str(setval)))
+        xpath = xmlbuilder._xmlstate.make_abs_xpath(self._xpath)
+        xmlbuilder._xmlstate.xmlapi.set_xpath_content(xpath, setval)
 
 
 class _XMLState(object):
     def __init__(self, root_name, parsexml, parentxmlstate,
                  relative_object_xpath):
         self._root_name = root_name
-        self._stub_path = "/%s" % self._root_name
 
         # xpath of this object relative to its parent. So for a standalone
         # <disk> this is empty, but if the disk is the forth one in a <domain>
@@ -736,7 +435,7 @@ class _XMLState(object):
         # is empty, but if the <domain> is part of a <domainsnapshot>,
         # it will be "./domain"
         self._parent_xpath = (
-            parentxmlstate and parentxmlstate.get_root_xpath()) or ""
+            parentxmlstate and parentxmlstate.abs_xpath()) or ""
 
         self.xmlapi = None
         self.is_build = False
@@ -751,24 +450,17 @@ class _XMLState(object):
             return
 
         if not parsexml:
-            parsexml = self.make_xml_stub()
+            parsexml = "<%s" % self._root_name
+            if ":" in self._root_name:
+                ns = self._root_name.split(":")[0]
+                parsexml += " xmlns:%s='%s'" % (ns, XMLAPI.NAMESPACES[ns])
+            parsexml += "/>"
 
         try:
-            doc = libxml2.parseDoc(parsexml)
+            self.xmlapi = XMLAPI(parsexml)
         except Exception:
             logging.debug("Error parsing xml=\n%s", parsexml)
             raise
-
-        self.xmlapi = _XMLAPI(doc)
-
-
-    def make_xml_stub(self):
-        ret = "<%s" % self._root_name
-        if ":" in self._root_name:
-            ns = self._root_name.split(":")[0]
-            ret += " xmlns:%s='%s'" % (ns, _namespaces[ns])
-        ret += "/>"
-        return ret
 
     def set_relative_object_xpath(self, xpath):
         self._relative_object_xpath = xpath or ""
@@ -776,22 +468,26 @@ class _XMLState(object):
     def set_parent_xpath(self, xpath):
         self._parent_xpath = xpath or ""
 
-    def get_root_xpath(self):
-        relpath = self._relative_object_xpath
-        if not self._parent_xpath:
-            return relpath
-        return self._parent_xpath + (relpath.startswith(".") and
-                                     relpath[1:] or relpath)
+    def _join_xpath(self, x1, x2):
+        if x1.endswith("/"):
+            x1 = x1[:-1]
+        if x2.startswith("."):
+            x2 = x2[1:]
+        return x1 + x2
 
-    def fix_relative_xpath(self, xpath):
-        fullpath = self.get_root_xpath()
-        if not fullpath or fullpath == self._stub_path:
-            return xpath
-        if xpath.startswith("."):
-            return "%s%s" % (fullpath, xpath.strip("."))
-        if xpath.count("/") == 1:
-            return fullpath
-        return fullpath + "/" + xpath.split("/", 2)[2]
+    def abs_xpath(self):
+        return self._join_xpath(self._parent_xpath or ".",
+                self._relative_object_xpath or ".")
+
+    def make_abs_xpath(self, xpath):
+        """
+        Convert a relative xpath to an absolute xpath. So for VirtualDisk
+        that's part of a Guest, accessing driver_name will do convert:
+            ./driver/@name
+        to an absolute xpath like:
+            ./devices/disk[3]/driver/@name
+        """
+        return self._join_xpath(self.abs_xpath() or ".", xpath)
 
 
 class XMLBuilder(object):
@@ -874,8 +570,8 @@ class XMLBuilder(object):
             for child_class in xmlprop.child_classes:
                 prop_path = xmlprop.get_prop_xpath(self, child_class)
 
-                nodecount = int(len(self._xmlstate.xmlapi.findall(
-                    self.fix_relative_xpath(prop_path))))
+                nodecount = self._xmlstate.xmlapi.count(
+                    self._xmlstate.make_abs_xpath(prop_path))
                 for idx in range(nodecount):
                     idxstr = "[%d]" % (idx + 1)
                     obj = child_class(self.conn,
@@ -883,35 +579,9 @@ class XMLBuilder(object):
                         relative_object_xpath=(prop_path + idxstr))
                     xmlprop.append(self, obj)
 
-        self._set_child_xpaths()
-
-
-    ########################
-    # Public XML Internals #
-    ########################
-
-    def copy(self):
-        """
-        Do a shallow copy of the device
-        """
-        ret = copy.copy(self)
-        ret._propstore = ret._propstore.copy()
-        ret._proporder = ret._proporder[:]
-
-        # XMLChildProperty stores a list in propstore, which dict shallow
-        # copy won't fix for us.
-        for name, value in ret._propstore.items():
-            if not isinstance(value, list):
-                continue
-            ret._propstore[name] = [obj.copy() for obj in ret._propstore[name]]
-
-        return ret
-
-    def get_root_xpath(self):
-        return self._xmlstate.get_root_xpath()
-
-    def fix_relative_xpath(self, xpath):
-        return self._xmlstate.fix_relative_xpath(xpath)
+    def __repr__(self):
+        return "<%s %s %s>" % (self.__class__.__name__.split(".")[-1],
+                               self._XML_ROOT_NAME, id(self))
 
 
     ############################
@@ -935,31 +605,21 @@ class XMLBuilder(object):
         :param leave_stub: if True, don't unlink the top stub node,
             see virtinst/cli usage for an explanation
         """
-        global _top_node
-        old_top_node = _top_node
-        try:
-            if leave_stub:
-                _top_node = self._xmlstate.xmlapi.find(self.get_root_xpath())
-            props = list(self._all_xml_props().values())
-            props += list(self._all_child_props().values())
-            for prop in props:
-                prop.clear(self)
-        finally:
-            _top_node = old_top_node
+        props = list(self._all_xml_props().values())
+        props += list(self._all_child_props().values())
+        for prop in props:
+            prop.clear(self)
 
-        is_child = bool(re.match("^.*\[\d+\]$", self.get_root_xpath()))
+        is_child = bool(re.match("^.*\[\d+\]$", self._xmlstate.abs_xpath()))
         if is_child or leave_stub:
             # User requested to clear an object that is the child of
             # another object (xpath ends in [1] etc). We can't fully remove
             # the node in that case, since then the xmlbuilder object is
             # no longer valid, and all the other child xpaths will be
             # pointing to the wrong node. So just stub out the content
-            node = self._xmlstate.xmlapi.find(self.get_root_xpath())
-            indent = 2 * self.get_root_xpath().count("/")
-            if node:
-                node.setContent("\n" + (indent * " "))
+            self._xmlstate.xmlapi.node_clear(self._xmlstate.abs_xpath())
         else:
-            self._xmlstate.xmlapi.node_remove(self.get_root_xpath())
+            self._xmlstate.xmlapi.node_force_remove(self._xmlstate.abs_xpath())
 
     def validate(self):
         """
@@ -973,6 +633,15 @@ class XMLBuilder(object):
         Encode any default values if needed
         """
         ignore = guest
+
+    def get_xml_id(self):
+        """
+        Return the location of the object in the XML document. This is
+        basically the absolute xpath, but the value returned should be
+        treated as opaque, it's just for cross XML comparisons. Used
+        in virt-manager code
+        """
+        return self._xmlstate.abs_xpath()
 
 
     ###################
@@ -1022,19 +691,6 @@ class XMLBuilder(object):
         cachename = self.__class__.__name__ + "_cached_child_props"
         return self.__get_prop_cache(cachename, XMLChildProperty)
 
-
-    def _set_parent_xpath(self, xpath):
-        self._xmlstate.set_parent_xpath(xpath)
-        for propname in self._all_child_props():
-            for p in util.listify(getattr(self, propname, [])):
-                p._set_parent_xpath(self.get_root_xpath())
-
-    def _set_relative_object_xpath(self, xpath):
-        self._xmlstate.set_relative_object_xpath(xpath)
-        for propname in self._all_child_props():
-            for p in util.listify(getattr(self, propname, [])):
-                p._set_parent_xpath(self.get_root_xpath())
-
     def _find_child_prop(self, child_class, return_single=False):
         xmlprops = self._all_child_props()
         for xmlprop in list(xmlprops.values()):
@@ -1046,6 +702,38 @@ class XMLBuilder(object):
                            "Didn't find child property for child_class=%s" %
                            child_class)
 
+    def _set_xpaths(self, parent_xpath, relative_object_xpath=-1):
+        """
+        Change the object hierarchy's cached xpaths
+        """
+        self._xmlstate.set_parent_xpath(parent_xpath)
+        if relative_object_xpath != -1:
+            self._xmlstate.set_relative_object_xpath(relative_object_xpath)
+        for propname in self._all_child_props():
+            for p in util.listify(getattr(self, propname, [])):
+                p._set_xpaths(self._xmlstate.abs_xpath())
+
+    def _set_child_xpaths(self):
+        """
+        Walk the list of child properties and make sure their
+        xpaths point at their particular element. Needs to be called
+        whenever child objects are added or removed
+        """
+        typecount = {}
+        for propname, xmlprop in self._all_child_props().items():
+            for obj in util.listify(getattr(self, propname)):
+                idxstr = ""
+                if not xmlprop.is_single:
+                    class_type = obj.__class__
+                    if class_type not in typecount:
+                        typecount[class_type] = 0
+                    typecount[class_type] += 1
+                    idxstr = "[%d]" % typecount[class_type]
+
+                prop_path = xmlprop.get_prop_xpath(self, obj)
+                obj._set_xpaths(self._xmlstate.abs_xpath(),
+                        prop_path + idxstr)
+
     def _parse_with_children(self, *args, **kwargs):
         """
         Set new backing XML objects in ourselves and all our child props
@@ -1053,13 +741,12 @@ class XMLBuilder(object):
         self._xmlstate.parse(*args, **kwargs)
         for propname in self._all_child_props():
             for p in util.listify(getattr(self, propname, [])):
-                p._xmlstate.parse(None, self._xmlstate)
+                p._parse_with_children(None, self._xmlstate)
 
     def add_child(self, obj):
         """
         Insert the passed XMLBuilder object into our XML document. The
         object needs to have an associated mapping via XMLChildProperty
-        or an error is thrown.
         """
         xmlprop = self._find_child_prop(obj.__class__)
         xml = obj.get_xml_config()
@@ -1067,12 +754,10 @@ class XMLBuilder(object):
         self._set_child_xpaths()
 
         if not obj._xmlstate.is_build:
-            use_xpath = obj.get_root_xpath().rsplit("/", 1)[0]
-            indent = 2 * obj.get_root_xpath().count("/")
-            newnode = libxml2.parseDoc(self.xml_indent(xml, indent)).children
-            parentnode = self._xmlstate.xmlapi.node_make_stub(use_xpath)
-            # Tack newnode on the end
-            self._xmlstate.xmlapi.node_add_child(parentnode, newnode)
+            use_xpath = obj._xmlstate.abs_xpath().rsplit("/", 1)[0]
+            indent = 2 * obj._xmlstate.abs_xpath().count("/")
+            self._xmlstate.xmlapi.node_add_xml(
+                    self.xml_indent(xml, indent), use_xpath)
         obj._parse_with_children(None, self._xmlstate)
 
     def remove_child(self, obj):
@@ -1083,12 +768,11 @@ class XMLBuilder(object):
         xmlprop = self._find_child_prop(obj.__class__)
         xmlprop.remove(self, obj)
 
-        xpath = obj.get_root_xpath()
+        xpath = obj._xmlstate.abs_xpath()
         xml = obj.get_xml_config()
-        obj._set_parent_xpath(None)
-        obj._set_relative_object_xpath(None)
+        obj._set_xpaths(None, None)
         obj._parse_with_children(xml, None)
-        self._xmlstate.xmlapi.node_remove(xpath, dofree=False)
+        self._xmlstate.xmlapi.node_force_remove(xpath)
         self._set_child_xpaths()
 
     def list_children_for_class(self, klass):
@@ -1113,42 +797,15 @@ class XMLBuilder(object):
     # Private XML building routines #
     #################################
 
-    def _set_child_xpaths(self):
-        """
-        Walk the list of child properties and make sure their
-        xpaths point at their particular element
-        """
-        typecount = {}
-        for propname, xmlprop in self._all_child_props().items():
-            for obj in util.listify(getattr(self, propname)):
-                idxstr = ""
-                if not xmlprop.is_single:
-                    class_type = obj.__class__
-                    if class_type not in typecount:
-                        typecount[class_type] = 0
-                    typecount[class_type] += 1
-                    idxstr = "[%d]" % typecount[class_type]
-
-                prop_path = xmlprop.get_prop_xpath(self, obj)
-                obj._set_parent_xpath(self.get_root_xpath())
-                obj._set_relative_object_xpath(prop_path + idxstr)
-
     def _do_get_xml_config(self):
-        xmlstub = self._xmlstate.make_xml_stub()
-
         xmlapi = self._xmlstate.xmlapi
         if self._xmlstate.is_build:
             xmlapi = xmlapi.copy_api()
 
         self._add_parse_bits(xmlapi)
-        ret = xmlapi.get_xml(self.fix_relative_xpath("."))
+        ret = xmlapi.get_xml(self._xmlstate.make_abs_xpath("."))
 
-        if ret == xmlstub:
-            ret = ""
-
-        # Ensure top level XML object always ends with a newline, just
-        # for back compat and readability
-        if (ret and not self.get_root_xpath() and not ret.endswith("\n")):
+        if ret and not ret.endswith("\n"):
             ret += "\n"
         return ret
 
@@ -1199,7 +856,3 @@ class XMLBuilder(object):
             elif key in childprops:
                 for obj in util.listify(getattr(self, key)):
                     obj._add_parse_bits(self._xmlstate.xmlapi)
-
-    def __repr__(self):
-        return "<%s %s %s>" % (self.__class__.__name__.split(".")[-1],
-                               self._XML_ROOT_NAME, id(self))
