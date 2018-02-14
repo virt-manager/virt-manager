@@ -93,7 +93,7 @@ def _sanitize_libxml_xml(xml):
     # Strip starting <?...> line
     if xml.startswith("<?"):
         ignore, xml = xml.split("\n", 1)
-    if not xml.endswith("\n") and xml.count("\n"):
+    if not xml.endswith("\n") and "\n" in xml:
         xml += "\n"
     return xml
 
@@ -116,7 +116,7 @@ def _add_pretty_child(parentnode, newnode):
     whitespace and nicely format the result.
     """
     def node_is_text(n):
-        return bool(n and n.type == "text" and not n.content.count("<"))
+        return bool(n and n.type == "text" and "<" not in n.content)
 
     def prevSibling(node):
         parent = node.get_parent()
@@ -266,7 +266,7 @@ def _remove_xpath_node(ctx, xpath, dofree=True):
         is_orig = (curxpath == xpath)
         node = _get_xpath_node(ctx, curxpath)
 
-        if curxpath.count("/"):
+        if "/" in curxpath:
             nextxpath, ignore = curxpath.rsplit("/", 1)
         else:
             nextxpath = None
@@ -289,7 +289,7 @@ def _remove_xpath_node(ctx, xpath, dofree=True):
 
         # Look for preceding whitespace and remove it
         white = node.get_prev()
-        if white and white.type == "text" and not white.content.count("<"):
+        if white and white.type == "text" and "<" not in white.content:
             white.unlinkNode()
             white.freeNode()
 

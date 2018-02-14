@@ -345,11 +345,11 @@ def _AddressStringToHostdev(conn, addrstr):
 
     try:
         # Determine addrstr type
-        if addrstr.count(":") in [1, 2] and addrstr.count("."):
+        if addrstr.count(":") in [1, 2] and "." in addrstr:
             addrstr, func = addrstr.split(".", 1)
             addrstr, slot = addrstr.rsplit(":", 1)
             domain = "0"
-            if addrstr.count(":"):
+            if ":" in addrstr:
                 domain, bus = addrstr.split(":", 1)
             else:
                 bus = addrstr
@@ -360,14 +360,14 @@ def _AddressStringToHostdev(conn, addrstr):
             hostdev.slot = "0x%.2X" % int(slot, 16)
             hostdev.bus = "0x%.2X" % int(bus, 16)
 
-        elif addrstr.count(":"):
+        elif ":" in addrstr:
             vendor, product = addrstr.split(":")
 
             hostdev.type = "usb"
             hostdev.vendor = "0x%.4X" % int(vendor, 16)
             hostdev.product = "0x%.4X" % int(product, 16)
 
-        elif addrstr.count("."):
+        elif "." in addrstr:
             bus, device = addrstr.split(".", 1)
 
             hostdev.type = "usb"

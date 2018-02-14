@@ -78,9 +78,9 @@ def _sysconfig_keyboard(f):
             re.search("KEYTABLE", s) is not None or
            (re.search("KEYBOARD", s) is not None and
             re.search("KEYBOARDTYPE", s) is None)):
-            if s.count('"'):
+            if '"' in s:
                 delim = '"'
-            elif s.count('='):
+            elif '=' in s:
                 delim = '='
             else:
                 continue

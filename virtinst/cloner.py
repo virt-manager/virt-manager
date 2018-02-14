@@ -493,7 +493,7 @@ class Cloner(object):
         # If the suffix is greater than 7 characters, assume it isn't
         # a file extension and is part of the disk name, at which point
         # just stick '-clone' on the end.
-        if origpath.count(".") and len(origpath.rsplit(".", 1)[1]) <= 7:
+        if "." in origpath and len(origpath.rsplit(".", 1)[1]) <= 7:
             path, suffix = origpath.rsplit(".", 1)
             suffix = "." + suffix
 

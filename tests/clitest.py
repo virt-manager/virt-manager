@@ -156,13 +156,13 @@ class Command(object):
 
             exc = ""
             try:
-                if app.count("virt-install"):
+                if "virt-install" in app:
                     ret = virtinstall.main(conn=conn)
-                elif app.count("virt-clone"):
+                elif "virt-clone" in app:
                     ret = virtclone.main(conn=conn)
-                elif app.count("virt-convert"):
+                elif "virt-convert" in app:
                     ret = virtconvert.main(conn=conn)
-                elif app.count("virt-xml"):
+                elif "virt-xml" in app:
                     ret = virtxml.main(conn=conn)
             except SystemExit as sys_e:
                 ret = sys_e.code
@@ -316,13 +316,13 @@ class App(object):
 
         if iscompare and auto_printarg:
             if self.appname == "virt-install":
-                if (not cli.count("--print-xml") and
-                    not cli.count("--print-step") and
-                    not cli.count("--quiet")):
+                if ("--print-xml" not in cli and
+                    "--print-step" not in cli and
+                    "--quiet" not in cli):
                     args += " --print-step all"
 
             elif self.appname == "virt-clone":
-                if not cli.count("--print-xml"):
+                if "--print-xml" not in cli:
                     args += " --print-xml"
 
         return args

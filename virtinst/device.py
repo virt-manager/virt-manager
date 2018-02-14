@@ -59,12 +59,12 @@ class VirtualDeviceAddress(XMLBuilder):
         if addrstr is None:
             return
 
-        if addrstr.count(":") in [1, 2] and addrstr.count("."):
+        if addrstr.count(":") in [1, 2] and "." in addrstr:
             self.type = self.ADDRESS_TYPE_PCI
             addrstr, self.function = addrstr.split(".", 1)
             addrstr, self.slot = addrstr.rsplit(":", 1)
             self.domain = "0"
-            if addrstr.count(":"):
+            if ":" in addrstr:
                 self.domain, self.bus = addrstr.split(":", 1)
         elif addrstr == "spapr-vio":
             self.type = self.ADDRESS_TYPE_SPAPR_VIO

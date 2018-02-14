@@ -976,7 +976,7 @@ def parse_optstr_tuples(optstr):
         if not opt:
             continue
 
-        if opt.count("="):
+        if "=" in opt:
             cliname, val = opt.split("=", 1)
         else:
             cliname = opt
