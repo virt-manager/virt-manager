@@ -47,25 +47,6 @@ _namespaces = {
 }
 
 
-class _CtxCleanupWrapper(object):
-    def __init__(self, ctx, doc):
-        self._ctx = ctx
-        self._doc = doc
-    def __del__(self):
-        self._doc.freeDoc()
-        self._doc = None
-        self._ctx.xpathFreeContext()
-        self._ctx = None
-    def __getattr__(self, attrname):
-        return getattr(self._ctx, attrname)
-
-
-def _make_xml_context(doc):
-    ctx = _CtxCleanupWrapper(doc.xpathNewContext(), doc)
-    ctx.setContextNode(doc.children)
-    ctx.xpathRegisterNs("qemu", _namespaces["qemu"])
-    return ctx
-
 
 def _sanitize_libxml_xml(xml):
     # Strip starting <?...> line
@@ -76,204 +57,251 @@ def _sanitize_libxml_xml(xml):
     return xml
 
 
-def _get_xpath_node(ctx, xpath):
-    node = ctx.xpathEval(xpath)
-    return (node and node[0] or None)
-
-
-def _add_namespace(node, nsname):
-    for ns in util.listify(node.nsDefs()):
-        if ns.name == nsname:
-            return ns
-    return node.newNs(_namespaces[nsname], nsname)
-
-
-def _add_pretty_child(parentnode, newnode):
+class _XMLAPI(object):
     """
-    Add 'newnode' as a child of 'parentnode', but try to preserve
-    whitespace and nicely format the result.
+    Class that encapsulates all our libxml2 API usage, so it doesn't
+    bleed into other parts of the app
     """
-    def node_is_text(n):
-        return bool(n and n.type == "text" and "<" not in n.content)
+    def __init__(self, doc):
+        self._doc = doc
+        self._ctx = doc.xpathNewContext()
+        self._ctx.setContextNode(doc.children)
+        self._ctx.xpathRegisterNs("qemu", _namespaces["qemu"])
 
-    def prevSibling(node):
-        parent = node.get_parent()
-        if not parent:
+    def __del__(self):
+        self._doc.freeDoc()
+        self._doc = None
+        self._ctx.xpathFreeContext()
+        self._ctx = None
+
+
+    ###############
+    # Simple APIs #
+    ###############
+
+    def copy_api(self):
+        newdoc = self._ctx.contextNode().doc.copyDoc(True)
+        return _XMLAPI(newdoc)
+
+    def find(self, xpath):
+        node = self._ctx.xpathEval(xpath)
+        return (node and node[0] or None)
+
+    def findall(self, xpath):
+        return self._ctx.xpathEval(xpath)
+
+    def get_xml(self, xpath):
+        node = self.find(xpath)
+        if not node:
+            return ""
+        return _sanitize_libxml_xml(node.serialize())
+
+
+    #####################
+    # XML editting APIs #
+    #####################
+
+    def _node_new(self, nodename, nsname):
+        newnode = libxml2.newNode(nodename)
+        if not nsname:
+            return newnode
+
+        ctxnode = self._ctx.contextNode()
+        for ns in util.listify(ctxnode.nsDefs()):
+            if ns.name == nsname:
+                break
+        else:
+            ns = ctxnode.newNs(_namespaces[nsname], nsname)
+        newnode.setNs(ns)
+        return newnode
+
+    @staticmethod
+    def node_add_child(parentnode, newnode):
+        """
+        Add 'newnode' as a child of 'parentnode', but try to preserve
+        whitespace and nicely format the result.
+        """
+        def node_is_text(n):
+            return bool(n and n.type == "text" and "<" not in n.content)
+
+        def prevSibling(node):
+            parent = node.get_parent()
+            if not parent:
+                return None
+
+            prev = None
+            for child in parent.children:
+                if child == node:
+                    return prev
+                prev = child
+
             return None
 
-        prev = None
-        for child in parent.children:
-            if child == node:
-                return prev
-            prev = child
+        sib = parentnode.get_last()
+        if not node_is_text(sib):
+            # This case is when we add a child element to a node for the
+            # first time, like:
+            #
+            # <features/>
+            # to
+            # <features>
+            #   <acpi/>
+            # </features>
+            prevsib = prevSibling(parentnode)
+            if node_is_text(prevsib):
+                sib = libxml2.newText(prevsib.content)
+            else:
+                sib = libxml2.newText("\n")
+            parentnode.addChild(sib)
 
-        return None
-
-    sib = parentnode.get_last()
-    if not node_is_text(sib):
-        # This case is when we add a child element to a node for the
-        # first time, like:
-        #
-        # <features/>
-        # to
+        # This case is adding a child element to an already properly
+        # spaced element. Example:
         # <features>
         #   <acpi/>
         # </features>
-        prevsib = prevSibling(parentnode)
-        if node_is_text(prevsib):
-            sib = libxml2.newText(prevsib.content)
-        else:
-            sib = libxml2.newText("\n")
-        parentnode.addChild(sib)
+        # to
+        # <features>
+        #   <acpi/>
+        #   <apic/>
+        # </features>
+        sib = parentnode.get_last()
+        content = sib.content
+        sib = sib.addNextSibling(libxml2.newText("  "))
+        txt = libxml2.newText(content)
 
-    # This case is adding a child element to an already properly
-    # spaced element. Example:
-    # <features>
-    #   <acpi/>
-    # </features>
-    # to
-    # <features>
-    #   <acpi/>
-    #   <apic/>
-    # </features>
-    sib = parentnode.get_last()
-    content = sib.content
-    sib = sib.addNextSibling(libxml2.newText("  "))
-    txt = libxml2.newText(content)
+        sib.addNextSibling(newnode)
+        newnode.addNextSibling(txt)
+        return newnode
 
-    sib.addNextSibling(newnode)
-    newnode.addNextSibling(txt)
-    return newnode
+    def node_make_stub(self, xpath):
+        """
+        Build all nodes for the passed xpath. For example, if XML is <foo/>,
+        and xpath=./bar/@baz, after this function the XML will be:
 
+          <foo>
+            <bar baz=''/>
+          </foo>
 
-def _build_xpath_node(ctx, xpath):
-    """
-    Build all nodes for the passed xpath. For example, if 'ctx' xml=<foo/>,
-    and xpath=./bar/@baz, after this function the 'ctx' XML will be:
+        And the node pointing to @baz will be returned, for the caller to
+        do with as they please.
 
-      <foo>
-        <bar baz=''/>
-      </foo>
+        There's also special handling to ensure that setting
+        xpath=./bar[@baz='foo']/frob will create
 
-    And the node pointing to @baz will be returned, for the caller to
-    do with as they please.
+          <bar baz='foo'>
+            <frob></frob>
+          </bar>
 
-    There's also special handling to ensure that setting
-    xpath=./bar[@baz='foo']/frob will create
+        Even if <bar> didn't exist before. So we fill in the dependent property
+        expression values
+        """
+        def _handle_node(nodename, parentnode, parentpath):
+            # If the passed xpath snippet (nodename) exists, return the node
+            # If it doesn't exist, create it, and return the new node
 
-      <bar baz='foo'>
-        <frob></frob>
-      </bar>
+            # If nodename is a node property, we can handle it up front
+            if nodename.startswith("@"):
+                nodename = nodename.strip("@")
+                return parentnode.setProp(nodename, ""), parentpath
 
-    Even if <bar> didn't exist before. So we fill in the dependent property
-    expression values
-    """
-    def _handle_node(nodename, parentnode, parentpath):
-        # If the passed xpath snippet (nodename) exists, return the node
-        # If it doesn't exist, create it, and return the new node
+            if not parentpath:
+                parentpath = nodename
+            else:
+                parentpath += "/%s" % nodename
 
-        # If nodename is a node property, we can handle it up front
-        if nodename.startswith("@"):
-            nodename = nodename.strip("@")
-            return parentnode.setProp(nodename, ""), parentpath
+            # See if the xpath node already exists
+            node = self.find(parentpath)
+            if node:
+                # xpath node already exists, so we don't need to create anything
+                return node, parentpath
 
-        if not parentpath:
-            parentpath = nodename
-        else:
-            parentpath += "/%s" % nodename
+            # If we don't have a parentnode by this point, the root of the
+            # xpath didn't find anything. Usually a coding error
+            if not parentnode:
+                raise RuntimeError("Could not find XML root node")
 
-        # See if the xpath node already exists
-        node = _get_xpath_node(ctx, parentpath)
-        if node:
-            # xpath node already exists, so we don't need to create anything
-            return node, parentpath
+            # Remove conditional xpath elements for node creation. We preserved
+            # them up until this point since it was needed for proper xpath
+            # lookup, but they aren't valid syntax when creating the node
+            if "[" in nodename:
+                nodename = nodename[:nodename.index("[")]
 
-        # If we don't have a parentnode by this point, the root of the
-        # xpath didn't find anything. Usually a coding error
-        if not parentnode:
-            raise RuntimeError("Could not find XML root node")
+            nsname = None
+            if ":" in nodename:
+                nsname, nodename = nodename.split(":")
 
-        # Remove conditional xpath elements for node creation. We preserved
-        # them up until this point since it was needed for proper xpath
-        # lookup, but they aren't valid syntax when creating the node
-        if "[" in nodename:
-            nodename = nodename[:nodename.index("[")]
-
-        nsname = None
-        if ":" in nodename:
-            nsname, nodename = nodename.split(":")
-
-        newnode = libxml2.newNode(nodename)
-        if nsname:
-            ns = _add_namespace(ctx.contextNode(), nsname)
-            newnode.setNs(ns)
-        return _add_pretty_child(parentnode, newnode), parentpath
+            newnode = self._node_new(nodename, nsname)
+            return self.node_add_child(parentnode, newnode), parentpath
 
 
-    # Split the xpath and lookup/create each individual piece
-    parentpath = None
-    parentnode = None
-    for nodename in xpath.split("/"):
-        parentnode, parentpath = _handle_node(nodename, parentnode, parentpath)
+        # Split the xpath and lookup/create each individual piece
+        parentpath = None
+        parentnode = None
+        for nodename in xpath.split("/"):
+            parentnode, parentpath = _handle_node(
+                    nodename, parentnode, parentpath)
 
-        # Check if the xpath snippet had an '=' expression in it, example:
-        #
-        #   ./foo[@bar='baz']
-        #
-        # If so, we also want to set <foo bar='baz'/>, so that setting
-        # this XML element works as expected in this case.
-        if "[" not in nodename or "=" not in nodename:
-            continue
-
-        propname, val = nodename.split("[")[1].strip("]").split("=")
-        propobj, ignore = _handle_node(propname, parentnode, parentpath)
-        propobj.setContent(val.strip("'"))
-
-    return parentnode
-
-
-def _remove_xpath_node(ctx, xpath, dofree=True):
-    """
-    Remove an XML node tree if it has no content
-    """
-    nextxpath = xpath
-    root_node = ctx.contextNode()
-
-    while nextxpath:
-        curxpath = nextxpath
-        is_orig = (curxpath == xpath)
-        node = _get_xpath_node(ctx, curxpath)
-
-        if "/" in curxpath:
-            nextxpath, ignore = curxpath.rsplit("/", 1)
-        else:
-            nextxpath = None
-
-        if not node:
-            continue
-
-        if node.type not in ["attribute", "element"]:
-            continue
-
-        if node.type == "element" and (node.children or node.properties):
-            # Only do a deep unlink if it was the original requested path
-            if not is_orig:
+            # Check if the xpath snippet had an '=' expression in it, example:
+            #
+            #   ./foo[@bar='baz']
+            #
+            # If so, we also want to set <foo bar='baz'/>, so that setting
+            # this XML element works as expected in this case.
+            if "[" not in nodename or "=" not in nodename:
                 continue
 
-        if node == root_node or node == _top_node:
-            # Don't unlink the root node, since it's spread out to all
-            # child objects and it ends up wreaking havoc.
-            break
+            propname, val = nodename.split("[")[1].strip("]").split("=")
+            propobj, ignore = _handle_node(propname, parentnode, parentpath)
+            propobj.setContent(val.strip("'"))
 
-        # Look for preceding whitespace and remove it
-        white = node.get_prev()
-        if white and white.type == "text" and "<" not in white.content:
-            white.unlinkNode()
-            white.freeNode()
+        return parentnode
 
-        node.unlinkNode()
-        if dofree:
-            node.freeNode()
+    def node_remove(self, xpath, dofree=True):
+        """
+        Remove all XML content at the passed xpath, and free it
+
+        :param dofree: Actually don't free it. Used when removing
+            say a VirtualDevice, we really are just transferring the XMl
+            to a new independent object
+        """
+        nextxpath = xpath
+        root_node = self._ctx.contextNode()
+
+        while nextxpath:
+            curxpath = nextxpath
+            is_orig = (curxpath == xpath)
+            node = self.find(curxpath)
+
+            if "/" in curxpath:
+                nextxpath, ignore = curxpath.rsplit("/", 1)
+            else:
+                nextxpath = None
+
+            if not node:
+                continue
+
+            if node.type not in ["attribute", "element"]:
+                continue
+
+            if node.type == "element" and (node.children or node.properties):
+                # Only do a deep unlink if it was the original requested path
+                if not is_orig:
+                    continue
+
+            if node == root_node or node == _top_node:
+                # Don't unlink the root node, since it's spread out to all
+                # child objects and it ends up wreaking havoc.
+                break
+
+            # Look for preceding whitespace and remove it
+            white = node.get_prev()
+            if white and white.type == "text" and "<" not in white.content:
+                white.unlinkNode()
+                white.freeNode()
+
+            node.unlinkNode()
+            if dofree:
+                node.freeNode()
 
 
 class _XMLChildList(list):
@@ -634,7 +662,7 @@ class XMLProperty(property):
         Actually fetch the associated value from the backing XML
         """
         xpath = self._make_xpath(xmlbuilder)
-        node = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
+        node = xmlbuilder._xmlstate.xmlapi.find(xpath)
         if not node:
             return None
 
@@ -662,16 +690,16 @@ class XMLProperty(property):
         """
         Actually set the passed value in the XML document
         """
-        ctx = xmlbuilder._xmlstate.xml_ctx
+        xmlapi = xmlbuilder._xmlstate.xmlapi
         xpath = self._make_xpath(xmlbuilder)
 
         if setval is None or setval is False:
-            _remove_xpath_node(ctx, xpath)
+            xmlapi.node_remove(xpath)
             return
 
-        node = _get_xpath_node(ctx, xpath)
+        node = xmlapi.find(xpath)
         if not node:
-            node = _build_xpath_node(ctx, xpath)
+            node = xmlapi.node_make_stub(xpath)
 
         if setval is True:
             # Boolean property, creating the node is enough
@@ -697,7 +725,7 @@ class _XMLState(object):
         self._parent_xpath = (
             parentxmlstate and parentxmlstate.get_root_xpath()) or ""
 
-        self.xml_ctx = None
+        self.xmlapi = None
         self.is_build = False
         if not parsexml and not parentxmlstate:
             self.is_build = True
@@ -706,7 +734,7 @@ class _XMLState(object):
     def parse(self, parsexml, parentxmlstate):
         if parentxmlstate:
             self.is_build = parentxmlstate.is_build or self.is_build
-            self.xml_ctx = parentxmlstate.xml_ctx
+            self.xmlapi = parentxmlstate.xmlapi
             return
 
         if not parsexml:
@@ -718,7 +746,7 @@ class _XMLState(object):
             logging.debug("Error parsing xml=\n%s", parsexml)
             raise
 
-        self.xml_ctx = _make_xml_context(doc)
+        self.xmlapi = _XMLAPI(doc)
 
 
     def make_xml_stub(self):
@@ -751,12 +779,6 @@ class _XMLState(object):
         if xpath.count("/") == 1:
             return fullpath
         return fullpath + "/" + xpath.split("/", 2)[2]
-
-    def get_node_xml(self, ctx):
-        node = _get_xpath_node(ctx, self.fix_relative_xpath("."))
-        if not node:
-            return ""
-        return _sanitize_libxml_xml(node.serialize())
 
 
 class XMLBuilder(object):
@@ -839,8 +861,8 @@ class XMLBuilder(object):
             for child_class in xmlprop.child_classes:
                 prop_path = xmlprop.get_prop_xpath(self, child_class)
 
-                nodecount = int(self._xmlstate.xml_ctx.xpathEval(
-                    "count(%s)" % self.fix_relative_xpath(prop_path)))
+                nodecount = int(len(self._xmlstate.xmlapi.findall(
+                    self.fix_relative_xpath(prop_path))))
                 for idx in range(nodecount):
                     idxstr = "[%d]" % (idx + 1)
                     obj = child_class(self.conn,
@@ -904,8 +926,7 @@ class XMLBuilder(object):
         old_top_node = _top_node
         try:
             if leave_stub:
-                _top_node = _get_xpath_node(self._xmlstate.xml_ctx,
-                                            self.get_root_xpath())
+                _top_node = self._xmlstate.xmlapi.find(self.get_root_xpath())
             props = list(self._all_xml_props().values())
             props += list(self._all_child_props().values())
             for prop in props:
@@ -920,14 +941,12 @@ class XMLBuilder(object):
             # the node in that case, since then the xmlbuilder object is
             # no longer valid, and all the other child xpaths will be
             # pointing to the wrong node. So just stub out the content
-            node = _get_xpath_node(self._xmlstate.xml_ctx,
-                                   self.get_root_xpath())
+            node = self._xmlstate.xmlapi.find(self.get_root_xpath())
             indent = 2 * self.get_root_xpath().count("/")
             if node:
                 node.setContent("\n" + (indent * " "))
         else:
-            _remove_xpath_node(self._xmlstate.xml_ctx,
-                               self.get_root_xpath())
+            self._xmlstate.xmlapi.node_remove(self.get_root_xpath())
 
     def validate(self):
         """
@@ -1038,9 +1057,9 @@ class XMLBuilder(object):
             use_xpath = obj.get_root_xpath().rsplit("/", 1)[0]
             indent = 2 * obj.get_root_xpath().count("/")
             newnode = libxml2.parseDoc(self.xml_indent(xml, indent)).children
-            parentnode = _build_xpath_node(self._xmlstate.xml_ctx, use_xpath)
+            parentnode = self._xmlstate.xmlapi.node_make_stub(use_xpath)
             # Tack newnode on the end
-            _add_pretty_child(parentnode, newnode)
+            self._xmlstate.xmlapi.node_add_child(parentnode, newnode)
         obj._parse_with_children(None, self._xmlstate)
 
     def remove_child(self, obj):
@@ -1056,7 +1075,7 @@ class XMLBuilder(object):
         obj._set_parent_xpath(None)
         obj._set_relative_object_xpath(None)
         obj._parse_with_children(xml, None)
-        _remove_xpath_node(self._xmlstate.xml_ctx, xpath, dofree=False)
+        self._xmlstate.xmlapi.node_remove(xpath, dofree=False)
         self._set_child_xpaths()
 
     def list_children_for_class(self, klass):
@@ -1104,13 +1123,12 @@ class XMLBuilder(object):
     def _do_get_xml_config(self):
         xmlstub = self._xmlstate.make_xml_stub()
 
-        ctx = self._xmlstate.xml_ctx
+        xmlapi = self._xmlstate.xmlapi
         if self._xmlstate.is_build:
-            newdoc = self._xmlstate.xml_ctx.contextNode().doc.copyDoc(True)
-            ctx = _make_xml_context(newdoc)
+            xmlapi = xmlapi.copy_api()
 
-        self._add_parse_bits(ctx)
-        ret = self._xmlstate.get_node_xml(ctx)
+        self._add_parse_bits(xmlapi)
+        ret = xmlapi.get_xml(self.fix_relative_xpath("."))
 
         if ret == xmlstub:
             ret = ""
@@ -1121,23 +1139,23 @@ class XMLBuilder(object):
             ret += "\n"
         return ret
 
-    def _add_parse_bits(self, ctx):
+    def _add_parse_bits(self, xmlapi):
         """
         Callback that adds the implicitly tracked XML properties to
         the backing xml.
         """
         origproporder = self._proporder[:]
         origpropstore = self._propstore.copy()
-        origctx = self._xmlstate.xml_ctx
+        origapi = self._xmlstate.xmlapi
         try:
-            self._xmlstate.xml_ctx = ctx
-            return self._do_add_parse_bits(ctx)
+            self._xmlstate.xmlapi = xmlapi
+            return self._do_add_parse_bits()
         finally:
-            self._xmlstate.xml_ctx = origctx
+            self._xmlstate.xmlapi = origapi
             self._proporder = origproporder
             self._propstore = origpropstore
 
-    def _do_add_parse_bits(self, ctx):
+    def _do_add_parse_bits(self):
         # Set all defaults if the properties have one registered
         xmlprops = self._all_xml_props()
         childprops = self._all_child_props()
@@ -1167,7 +1185,7 @@ class XMLBuilder(object):
                 xmlprops[key]._set_xml(self, self._propstore[key])
             elif key in childprops:
                 for obj in util.listify(getattr(self, key)):
-                    obj._add_parse_bits(ctx)
+                    obj._add_parse_bits(self._xmlstate.xmlapi)
 
     def __repr__(self):
         return "<%s %s %s>" % (self.__class__.__name__.split(".")[-1],
