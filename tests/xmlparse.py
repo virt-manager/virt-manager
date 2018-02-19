@@ -960,6 +960,28 @@ class XMLParseTest(unittest.TestCase):
         check("iobase", "0x505", None, "0x506")
         self._alter_compare(guest.get_xml_config(), outfile)
 
+    def testQEMUXMLNS(self):
+        basename = "change-xmlns-qemu"
+        infile = "tests/xmlparse-xml/%s-in.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        guest = virtinst.Guest(kvmconn, parsexml=open(infile).read())
+
+        check = self._make_checker(guest.xmlns_qemu.args[0])
+        check("value", "-somearg", "-somenewarg")
+        check = self._make_checker(guest.xmlns_qemu.args[1])
+        check("value", "bar,baz=wib wob", "testval")
+        guest.xmlns_qemu.args.add_new().value = "additional-arg"
+        guest.xmlns_qemu.remove_child(guest.xmlns_qemu.args[0])
+
+        check = self._make_checker(guest.xmlns_qemu.envs[0])
+        check("name", "SOMEENV")
+        check("value", "foo=bar baz,foo")
+        env = guest.xmlns_qemu.envs.add_new()
+        env.name = "DISPLAY"
+        env.value = "1:2"
+
+        self._alter_compare(guest.get_xml_config(), outfile)
+
     def testAddRemoveDevices(self):
         guest, outfile = self._get_test_content("add-devices")
 
