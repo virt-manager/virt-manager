@@ -349,7 +349,7 @@ class _Libxml2API(_XMLBase):
 
         # Look for preceding whitespace and remove it
         white = node.get_prev()
-        if white and white.type == "text" and "<" not in white.content:
+        if white and white.type == "text":
             white.unlinkNode()
             white.freeNode()
 
@@ -361,55 +361,20 @@ class _Libxml2API(_XMLBase):
     def _node_add_child(self, parentxpath, parentnode, newnode):
         ignore = parentxpath
         def node_is_text(n):
-            return bool(n and n.type == "text" and "<" not in n.content)
+            return bool(n and n.type == "text")
 
-        def prevSibling(node):
-            parent = node.get_parent()
-            if not parent:
-                return None
-
-            prev = None
-            for child in parent.children:
-                if child == node:
-                    return prev
-                prev = child
-
-            return None
-
-        sib = parentnode.get_last()
-        if not node_is_text(sib):
-            # This case is when we add a child element to a node for the
-            # first time, like:
-            #
-            # <features/>
-            # to
-            # <features>
-            #   <acpi/>
-            # </features>
-            prevsib = prevSibling(parentnode)
+        if not node_is_text(parentnode.get_last()):
+            prevsib = parentnode.get_prev()
             if node_is_text(prevsib):
-                sib = libxml2.newText(prevsib.content)
+                newlast = libxml2.newText(prevsib.content)
             else:
-                sib = libxml2.newText("\n")
-            parentnode.addChild(sib)
+                newlast = libxml2.newText("\n")
+            parentnode.addChild(newlast)
 
-        # This case is adding a child element to an already properly
-        # spaced element. Example:
-        # <features>
-        #   <acpi/>
-        # </features>
-        # to
-        # <features>
-        #   <acpi/>
-        #   <apic/>
-        # </features>
-        sib = parentnode.get_last()
-        content = sib.content
-        sib = sib.addNextSibling(libxml2.newText("  "))
-        txt = libxml2.newText(content)
-
-        sib.addNextSibling(newnode)
-        newnode.addNextSibling(txt)
+        endtext = parentnode.get_last().content
+        parentnode.addChild(libxml2.newText("  "))
+        parentnode.addChild(newnode)
+        parentnode.addChild(libxml2.newText(endtext))
 
 
 XMLAPI = _Libxml2API
