@@ -498,7 +498,7 @@ class TestCommand(TestBaseCommand):
         '''
         Finds all the tests modules in tests/, and runs them.
         '''
-        excludes = ["test_urls.py", "test_inject.py"]
+        excludes = ["dist.py", "test_urls.py", "test_inject.py"]
         testfiles = self._find_tests_in_dir("tests", excludes)
 
         # Put clitest at the end, since it takes the longest
@@ -553,6 +553,14 @@ class TestInitrdInject(TestBaseCommand):
 
     def run(self):
         self._testfiles = ["tests.test_inject"]
+        TestBaseCommand.run(self)
+
+
+class TestDist(TestBaseCommand):
+    description = "Tests to run before cutting a release"
+
+    def run(self):
+        self._testfiles = ["tests.dist"]
         TestBaseCommand.run(self)
 
 
@@ -672,6 +680,7 @@ distutils.core.setup(
         'test_ui': TestUI,
         'test_urls': TestURLFetch,
         'test_initrd_inject': TestInitrdInject,
+        'test_dist': TestDist,
     },
 
     distclass=VMMDistribution,

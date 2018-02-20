@@ -53,9 +53,9 @@ def _find_py(dirname):
     return ret
 
 
-class TestMisc(unittest.TestCase):
+class TestDist(unittest.TestCase):
     """
-    Miscellaneous tests
+    Tests to run before release
     """
     def _check_modules(self, files):
         for f in files:
