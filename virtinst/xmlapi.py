@@ -53,7 +53,7 @@ class _XPathSegment(object):
                 self.condition_prop = cprop.strip("@")
                 self.condition_val = cval.strip("'")
             elif cond.isdigit():
-                self.condtion_num = int(cond)
+                self.condition_num = int(cond)
 
         self.is_prop = self.nodename.startswith("@")
         if self.is_prop:
