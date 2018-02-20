@@ -1400,6 +1400,14 @@ class XMLParseTest(unittest.TestCase):
         guest.cpu.clear()
         utils.diff_compare(guest.get_xml_config(), outfile)
 
+    def testDomainRoundtrip(self):
+        # Make sure our XML engine doesn't mangle non-libvirt XML bits
+        infile = "tests/xmlparse-xml/domain-roundtrip.xml"
+        outfile = "tests/xmlparse-xml/domain-roundtrip.xml"
+        guest = virtinst.Guest(kvmconn, parsexml=open(infile).read())
+
+        utils.diff_compare(guest.get_xml_config(), outfile)
+
 
 if __name__ == "__main__":
     unittest.main()

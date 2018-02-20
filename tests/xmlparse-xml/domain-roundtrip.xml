@@ -1,0 +1,47 @@
+<domain xmlns:unknown="http://example.com/unknown" type="qemu">
+  <name>QEMUGuest1</name>
+  <uuid>c7a5fdbd-edaf-9455-926a-d65c16db1809</uuid>
+  <memory unit="KiB">219100</memory>
+  <currentMemory unit="KiB">219100</currentMemory>
+  <vcpu placement="static" cpuset="1-4,8-20,525">1</vcpu>
+  <os>
+    <type arch="i686" machine="pc">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <clock offset="utc"/>
+  <unknown:tagname>foo</unknown:tagname>
+  <!-- intentional mis-indentation -->
+  <!-- more comments -->
+  <metadata>
+      <herp2erp xmlns:foobar="http://foo.bar3/"/>
+      <herp2erp xmlns:foobar="http://foo.bar3/"/>
+      <herp2erp xmlns:foobar="http://foo.bar3/"/>
+      <app1:foo xmlns:app1="http://foo.org/">fooish</app1:foo>
+      <app3:foo xmlns:app3="http://foo.org/">fooish</app3:foo>
+      <app1:foo xmlns:app1="http://foo.org/">fooish</app1:foo>
+   <app2:bar xmlns:app2="http://bar.com/" maman="baz">barish</app2:bar>
+      <app1:foo xmlns:app1="http://foo.org/">fooish</app1:foo>
+   <app2:bar xmlns:app2="http://bar.com/" maman="baz">barish</app2:bar>
+      <nova:instance xmlns:nova="http://openstack.org/xmlns/libvirt/nova/1.0">
+        <nova:package version="2015.1"/>
+        <nova:name>vm1</nova:name>
+        <nova:creationTime>2015-02-19 18:23:44</nova:creationTime>
+        <nova:flavor name="m1.tiny">
+          <nova:memory>512</nova:memory>
+          <nova:disk>1</nova:disk>
+          <nova:swap>0</nova:swap>
+          <nova:ephemeral>0</nova:ephemeral>
+          <nova:vcpus>1</nova:vcpus>
+        </nova:flavor>
+        <nova:owner>
+          <nova:user uuid="ef53a6031fc643f2af7add439ece7e9d">admin</nova:user>
+          <nova:project uuid="60a60883d7de429aa45f8f9d689c1fd6">demo</nova:project>
+        </nova:owner>
+        <nova:root type="image" uuid="2344a0fc-a34b-4e2d-888e-01db795fc89a"/>
+      </nova:instance>
+    <boxes:gnome-boxes xmlns:boxes="https://wiki.gnome.org/Apps/Boxes">
+      <os-state>installed</os-state>
+      <media>/tmp/media.iso</media>
+    </boxes:gnome-boxes>
+  </metadata>
+</domain>
