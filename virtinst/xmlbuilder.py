@@ -845,7 +845,7 @@ class XMLBuilder(object):
             elif key in childprops:
                 do_order.insert(0, key)
 
-        for key in list(childprops.keys()):
+        for key in sorted(list(childprops.keys())):
             if key not in do_order:
                 do_order.append(key)
 
