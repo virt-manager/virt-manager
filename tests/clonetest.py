@@ -53,9 +53,9 @@ class TestClone(unittest.TestCase):
         for f in local_files:
             os.unlink(f)
 
-    def _clone_helper(self, filebase, disks=None, force_list=None,
-                      skip_list=None, compare=True, conn=None,
-                      clone_disks_file=None):
+    def _clone(self, filebase, disks=None, force_list=None,
+               skip_list=None, compare=True, conn=None,
+               clone_disks_file=None):
         """Helper for comparing clone input/output from 2 xml files"""
         infile = os.path.join(clonexml_dir, filebase + "-in.xml")
         in_content = utils.read_file(infile)
@@ -119,8 +119,8 @@ class TestClone(unittest.TestCase):
     def testRemoteNoStorage(self):
         """Test remote clone where VM has no storage that needs cloning"""
         conn = utils.open_test_remote()
-        for base in ["nostorage", "noclone-storage"]:
-            self._clone_helper(base, disks=[], conn=conn)
+        self._clone("nostorage", conn=conn)
+        self._clone("noclone-storage", conn=conn)
 
     def testRemoteWithStorage(self):
         """
@@ -128,66 +128,51 @@ class TestClone(unittest.TestCase):
         since libvirt has no storage clone api.
         """
         conn = utils.open_test_remote()
-        for base in ["general-cfg"]:
-            try:
-                self._clone_helper(base,
-                                   disks=["%s/1.img" % POOL1,
-                                          "%s/2.img" % POOL1],
-                                   conn=conn)
-
-                # We shouldn't succeed, so test fails
-                raise AssertionError("Remote clone with storage passed "
-                                     "when it shouldn't.")
-            except (ValueError, RuntimeError) as e:
-                # Exception expected
-                logging.debug("Received expected exception: %s", str(e))
+        disks = ["%s/1.img" % POOL1, "%s/2.img" % POOL1]
+        try:
+            self._clone("general-cfg", disks=disks, conn=conn)
+            # We shouldn't succeed, so test fails
+            raise AssertionError("Remote clone with storage passed "
+                                 "when it shouldn't.")
+        except (ValueError, RuntimeError) as e:
+            # Exception expected
+            logging.debug("Received expected exception: %s", str(e))
 
     def testCloneStorageManaged(self):
-        base = "managed-storage"
-        self._clone_helper(base, ["%s/new1.img" % POOL1,
-                                  "%s/new2.img" % DISKPOOL])
+        disks = ["%s/new1.img" % POOL1, "%s/new2.img" % DISKPOOL]
+        self._clone("managed-storage", disks=disks)
 
     def testCloneStorageCrossPool(self):
-        base = "cross-pool"
         conn = utils.open_test_remote()
-        clone_disks_file = os.path.join(clonexml_dir, base + "-disks-out.xml")
-        self._clone_helper(base, ["%s/new1.img" % POOL2,
-                                  "%s/new2.img" % POOL1],
-                           clone_disks_file=clone_disks_file,
-                           conn=conn)
+        clone_disks_file = os.path.join(
+                clonexml_dir, "cross-pool-disks-out.xml")
+        disks = ["%s/new1.img" % POOL2, "%s/new2.img" % POOL1]
+        self._clone("cross-pool", disks=disks,
+                clone_disks_file=clone_disks_file, conn=conn)
 
     def testCloneStorageForce(self):
-        base = "force"
-        self._clone_helper(base,
-                           disks=["/dev/default-pool/1234.img",
-                                  None, "/clone2.img"],
-                           force_list=["hda", "fdb", "sdb"])
+        disks = ["/dev/default-pool/1234.img", None, "/clone2.img"]
+        self._clone("force", disks=disks, force_list=["hda", "fdb", "sdb"])
 
     def testCloneStorageSkip(self):
-        base = "skip"
-        self._clone_helper(base,
-                           disks=["/dev/default-pool/1234.img",
-                                  None, "/tmp/clone2.img"],
-                           skip_list=["hda", "fdb"])
+        disks = ["/dev/default-pool/1234.img", None, "/tmp/clone2.img"]
+        skip_list = ["hda", "fdb"]
+        self._clone("skip", disks=disks, skip_list=skip_list)
 
     def testCloneFullPool(self):
-        base = "fullpool"
         try:
-            self._clone_helper(base, disks=["/full-pool/test.img"],
-                               compare=False)
+            self._clone("fullpool",
+                    disks=["/full-pool/test.img"], compare=False)
         except Exception:
             return
 
         raise AssertionError("Expected exception, but none raised.")
 
     def testCloneNvramAuto(self):
-        base = "nvram-auto"
-        self._clone_helper(base)
+        self._clone("nvram-auto")
 
     def testCloneNvramNewpool(self):
-        base = "nvram-newpool"
-        self._clone_helper(base)
+        self._clone("nvram-newpool")
 
     def testCloneGraphicsPassword(self):
-        base = "graphics-password"
-        self._clone_helper(base)
+        self._clone("graphics-password")
