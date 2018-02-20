@@ -25,12 +25,18 @@ from virtcli import CLIConfig
 from tests import utils
 
 
-_default_conn = utils.open_testdriver()
+_default_conn = utils.open_testdefault()
+_feature_conn = utils.open_testdriver()
 
 
 def _make_guest(installer=None, conn=None, os_variant=None):
-    if conn is None:
-        conn = _default_conn
+    if not conn:
+        if installer:
+            conn = installer.conn
+        else:
+            conn = _feature_conn
+    if not installer:
+        installer = _make_installer(conn=conn)
 
     g = conn.caps.lookup_virtinst_guest()
     g.type = "kvm"
@@ -45,8 +51,6 @@ def _make_guest(installer=None, conn=None, os_variant=None):
     g.features.pae = False
     g.vcpus = 5
 
-    if not installer:
-        installer = _make_installer(conn=conn)
     g.installer = installer
     g.emulator = "/usr/lib/xen/bin/qemu-dm"
     g.os.arch = "i686"
@@ -98,7 +102,7 @@ def _make_guest(installer=None, conn=None, os_variant=None):
 
 
 def _make_installer(location=None, conn=None):
-    conn = conn or _default_conn
+    conn = conn or _feature_conn
     inst = virtinst.DistroInstaller(conn)
     if location:
         inst.location = location

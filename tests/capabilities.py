@@ -24,7 +24,7 @@ from virtinst import Capabilities
 from virtinst import DomainCapabilities
 
 
-conn = utils.open_testdriver()
+conn = utils.open_testdefault()
 
 
 class TestCapabilities(unittest.TestCase):

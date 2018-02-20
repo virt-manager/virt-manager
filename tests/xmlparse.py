@@ -23,7 +23,7 @@ import virtinst
 
 from tests import utils
 
-conn = utils.open_testdriver()
+conn = utils.open_testdefault()
 kvmconn = utils.open_kvm()
 
 
@@ -1404,7 +1404,7 @@ class XMLParseTest(unittest.TestCase):
         # Make sure our XML engine doesn't mangle non-libvirt XML bits
         infile = "tests/xmlparse-xml/domain-roundtrip.xml"
         outfile = "tests/xmlparse-xml/domain-roundtrip.xml"
-        guest = virtinst.Guest(kvmconn, parsexml=open(infile).read())
+        guest = virtinst.Guest(conn, parsexml=open(infile).read())
 
         utils.diff_compare(guest.get_xml_config(), outfile)
 
