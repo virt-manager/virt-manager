@@ -41,7 +41,9 @@ _capsprefix  = ",caps=%s/tests/capabilities-xml/" % os.getcwd()
 _domcapsprefix  = ",domcaps=%s/tests/capabilities-xml/" % os.getcwd()
 
 uri_test_default = "__virtinst_test__test:///default,predictable"
-uri_test = "__virtinst_test__test:///%s/tests/testdriver.xml,predictable" % os.getcwd()
+uri_test_full = "__virtinst_test__test:///%s/tests/testdriver.xml,predictable" % os.getcwd()
+uri_test_suite = "__virtinst_test__test:///%s/tests/testsuite.xml,predictable" % os.getcwd()
+uri_test = uri_test_full
 uri_test_remote = uri_test + ",remote"
 
 _uri_qemu = "%s,qemu" % uri_test

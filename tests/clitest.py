@@ -68,7 +68,8 @@ clean_files = (new_images + exist_images)
 
 test_files = {
     'URI-TEST': utils.uri_test,
-    'URI-TEST-DEFAULT': utils.uri_test_default,
+    'URI-TEST-FULL': utils.uri_test_full,
+    'URI-TEST-SUITE': utils.uri_test_suite,
     'URI-TEST-REMOTE': utils.uri_test_remote,
     'URI-KVM': utils.uri_kvm,
     'URI-KVM-Q35': utils.uri_kvm_q35,
@@ -295,10 +296,12 @@ class _CategoryProxy(object):
 
 
 class App(object):
-    def __init__(self, appname):
+    def __init__(self, appname, uri=None, compare_check=None):
         self.appname = appname
         self.categories = {}
         self.cmds = []
+        self.compare_check = compare_check
+        self.uri = uri
 
     def _default_args(self, cli, iscompare, auto_printarg):
         args = ""
@@ -306,7 +309,8 @@ class App(object):
             args = "--debug"
 
         if "--connect " not in cli:
-            args += " --connect %(URI-TEST)s"
+            uri = self.uri or "%(URI-TEST-SUITE)s"
+            args += " --connect %s" % uri
 
         if self.appname in ["virt-install"]:
             if "--name " not in cli:
@@ -351,7 +355,9 @@ class App(object):
             compfile = os.path.basename(self.appname) + "-" + compfile
             cmd.compare_file = "%s/%s.xml" % (compare_xmldir, compfile)
         cmd.skip_check = skip_check or category.skip_check
-        cmd.compare_check = compare_check or category.compare_check
+        cmd.compare_check = (compare_check or
+                             category.compare_check or
+                             self.compare_check)
         cmd.input_file = input_file
         self.cmds.append(cmd)
 
@@ -654,12 +660,12 @@ c.add_invalid("--disk path=/dev/foo/bar/baz,format=qcow2,size=.0000001")  # Unma
 c.add_invalid("--disk path=%(MANAGEDDISKNEW1)s,format=raw,size=.0000001")  # Managed disk using any format
 c.add_invalid("--disk %(NEWIMG1)s")  # Not specifying path= and non existent storage w/ no size
 c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000")  # Fail if fully allocated file would exceed disk space
-c.add_invalid("--disk %(COLLIDE)s")  # Colliding storage without --force
-c.add_invalid("--disk %(COLLIDE)s --prompt")  # Colliding storage with --prompt should still fail
-c.add_invalid("--disk /dev/default-pool/backingl3.img")  # Colliding storage via backing store
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s")  # Colliding storage without --force
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt")  # Colliding storage with --prompt should still fail
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk /dev/default-pool/backingl3.img")  # Colliding storage via backing store
 c.add_invalid("--disk %(DIR)s,device=cdrom")  # Dir without floppy
 c.add_invalid("--disk %(EXISTIMG1)s,driver_name=foobar,driver_type=foobaz")  # Unknown driver name and type options (as of 1.0.0)
-c.add_invalid("--disk source_pool=rbd-ceph,source_volume=vol1")  # Collision with existing VM, via source pool/volume
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=rbd-ceph,source_volume=vol1")  # Collision with existing VM, via source pool/volume
 c.add_invalid("--disk source_pool=default-pool,source_volume=idontexist")  # trying to lookup non-existent volume, hit specific error code
 c.add_invalid("--disk size=1 --security model=foo,type=bar")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
 
@@ -685,8 +691,8 @@ c.add_compare("--panic default", "panic-s390x-default")
 ################################################
 
 c = vinst.add_category("invalid-devices", "--noautoconsole --nodisks --pxe")
-c.add_invalid("--host-device 1d6b:2")  # multiple USB devices with identical vendorId and productId
-c.add_invalid("--host-device pci_8086_2850_scsi_host_scsi_host")  # Unsupported hostdev type
+c.add_invalid("--connect %(URI-TEST-FULL)s --host-device 1d6b:2")  # multiple USB devices with identical vendorId and productId
+c.add_invalid("--connect %(URI-TEST-FULL)s --host-device pci_8086_2850_scsi_host_scsi_host")  # Unsupported hostdev type
 c.add_invalid("--host-device foobarhostdev")  # Unknown hostdev
 c.add_invalid("--host-device 300:400")  # Parseable hostdev, but unknown digits
 c.add_invalid("--graphics vnc,keymap=ZZZ")  # Invalid keymap
@@ -879,7 +885,7 @@ c.add_invalid("--graphics vnc --vnclisten 1.2.3.4")  # mixing old and new
 c.add_invalid("--network=FOO")  # Nonexistent network
 c.add_invalid("--mac 1234")  # Invalid mac
 c.add_invalid("--network user --bridge foo0")  # Mixing bridge and network
-c.add_invalid("--mac 22:22:33:12:34:AB")  # Colliding macaddr
+c.add_invalid("--connect %(URI-TEST-FULL)s --mac 22:22:33:12:34:AB")  # Colliding macaddr
 
 c = vinst.add_category("storage-back-compat", "--pxe --noautoconsole")
 c.add_valid("--file %(EXISTIMG1)s --nonsparse --file-size 4")  # Existing file, other opts
@@ -899,7 +905,7 @@ c.add_valid("--nographics --transient")  # --transient handling
 # virt-xml tests #
 ##################
 
-vixml = App("virt-xml")
+vixml = App("virt-xml", compare_check="1.2.2")  # compare_check for  input type=keyboard output change
 c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--sound=? --tpm=?")  # basic introspection test
@@ -908,7 +914,7 @@ c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specifi
 c.add_invalid("test --edit")  # specified no edit option
 c.add_invalid("test --edit 2 --cpu host-passthrough")  # specifing --edit number where it doesn't make sense
 c.add_invalid("test-for-virtxml --edit 5 --tpm /dev/tpm")  # device edit out of range
-c.add_invalid("test-for-virtxml --add-device --host-device 0x0781:0x5151 --update")  # test driver doesn't support attachdevice...
+c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --update")  # test driver doesn't support attachdevice...
 c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update")  # test driver doesn't support detachdevice...
 c.add_invalid("test-for-virtxml --edit --graphics password=foo --update")  # test driver doesn't support updatdevice...
 c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
@@ -923,7 +929,7 @@ c.add_compare("--confirm test --edit --cpu host-passthrough", "prompt-response")
 c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(xmldir + "/virtxml-qemu-commandline-clear.xml"))
 
 
-c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
+c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define")
 c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
 new
 very,very=new desc\\\'",title="This is my,funky=new title" """, "edit-simple-metadata")
@@ -960,9 +966,9 @@ c.add_compare("--console name=foo.bar.baz", "edit-simple-console")
 c.add_compare("--filesystem /1/2/3,/4/5/6,mode=mapped", "edit-simple-filesystem")
 c.add_compare("--video cirrus", "edit-simple-video", compare_check="1.3.3")  # compare_check=video primary= attribute
 c.add_compare("--sound pcspk", "edit-simple-soundhw", compare_check="1.3.5")  # compare_check=new graphics listen output
-c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "edit-simple-host-device")
+c.add_compare("--host-device 0x04b3:0x4485,driver_name=vfio", "edit-simple-host-device")
 
-c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
+c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define")
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
 c.add_invalid("--edit seclabel2.model=dac --disk /dev/null")  # no match found
 c.add_valid("--edit seclabel.model=dac --disk /dev/null")  # match found
@@ -974,7 +980,7 @@ c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
 
-c = vixml.add_category("edit clear", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
+c = vixml.add_category("edit clear", "test-for-virtxml --print-diff --define")
 c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
 c.add_compare("--edit --disk path=/foo/bar,size=2,target=fda,bus=fdc,device=floppy,clearxml=yes", "edit-clear-disk")
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
@@ -982,11 +988,11 @@ c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
 c.add_compare("--edit --video clearxml=yes,model=virtio,accel3d=yes", "edit-video-virtio")
 c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl", compare_check="2.0.0")  # compare_check=graphics listen=none support
 
-c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define", compare_check="1.2.2")  # compare_check=input type=keyboard output
+c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define")
 c.add_valid("--add-device --security model=dac")  # --add-device works for seclabel
 c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
-c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "add-host-device")
+c.add_compare("--add-device --host-device usb_device_4b3_4485_noserial", "add-host-device")
 c.add_compare("--add-device --sound pcspk", "add-sound")
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "add-disk-notarget")  # filling in acceptable target
@@ -1013,16 +1019,16 @@ c.add_invalid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ 
 
 c = vclon.add_category("misc", "")
 c.add_compare("--connect %(URI-KVM)s -o test-clone --auto-clone --clone-running", "clone-auto1", compare_check="1.2.15")
-c.add_compare("-o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", compare_check="1.2.15")
+c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", compare_check="1.2.15")
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage
 c.add_valid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ local storage
-c.add_valid("-o test-clone --auto-clone --clone-running")  # Auto flag, actual VM, skip state check
-c.add_valid("-o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s")  # Preserve data shouldn't complain about existing volume
+c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --clone-running")  # Auto flag, actual VM, skip state check
+c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s")  # Preserve data shouldn't complain about existing volume
 c.add_valid("-n clonetest --original-xml %(CLONE_DISK_XML)s --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
 c.add_invalid("--auto-clone")  # Just the auto flag
-c.add_invalid("-o test-many-devices --auto-clone")  # VM is running, but --clone-running isn't passed
-c.add_invalid("-o test-clone-simple -n newvm --file %(EXISTIMG1)s --clone-running")  # Should complain about overwriting existing file
+c.add_invalid("--connect %(URI-TEST-FULL)s -o test-many-devices --auto-clone")  # VM is running, but --clone-running isn't passed
+c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s --clone-running")  # Should complain about overwriting existing file
 
 
 c = vclon.add_category("general", "-n clonetest")
@@ -1035,7 +1041,7 @@ c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(
 c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --file %(MANAGEDNEW1)s")  # XML w/ managed storage, specify managed path
 c.add_valid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools# Libvirt test driver doesn't support cloning across pools# XML w/ non-existent storage, with --preserve
-c.add_valid("-o test -n test-clone --auto-clone --replace")  # Overwriting existing VM
+c.add_valid("--connect %(URI-TEST-FULL)s -o test -n test-clone --auto-clone --replace")  # Overwriting existing VM
 c.add_invalid("-o test foobar")  # Positional arguments error
 c.add_invalid("-o idontexist")  # Non-existent vm name
 c.add_invalid("-o idontexist --auto-clone")  # Non-existent vm name with auto flag,

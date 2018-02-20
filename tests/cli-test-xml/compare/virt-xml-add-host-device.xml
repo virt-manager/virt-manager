@@ -1,9 +1,10 @@
      <panic>
        <address type="isa" iobase="0x505"/>
      </panic>
-+    <hostdev mode="subsystem" type="pci" managed="yes">
++    <hostdev mode="subsystem" type="usb" managed="yes">
 +      <source>
-+        <address domain="0" bus="0" slot="25" function="0"/>
++        <vendor id="0x04b3"/>
++        <product id="0x4485"/>
 +      </source>
 +    </hostdev>
    </devices>
