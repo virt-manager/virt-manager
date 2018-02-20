@@ -15,7 +15,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import glob
 import io
 import os
 import unittest
@@ -29,21 +28,21 @@ out_dir = base_dir + "libvirt_output"
 
 
 class TestVirtConv(unittest.TestCase):
-    def _convert_helper(self, infile, outfile, in_type, disk_format):
+    def _convert_helper(self, in_path, out_path, in_type, disk_format):
         outbuf = io.StringIO()
 
         def print_cb(msg):
             print(msg, file=outbuf)
 
         conn = utils.open_kvm()
-        converter = VirtConverter(conn, infile, print_cb=print_cb)
+        converter = VirtConverter(conn, in_path, print_cb=print_cb)
 
         if converter.parser.name != in_type:
             raise AssertionError("find_parser_by_file for '%s' returned "
                                  "wrong parser type.\n"
                                  "Expected: %s\n"
                                  "Received: %s\n" %
-                                 (infile, in_type, converter.parser.name))
+                                 (in_path, in_type, converter.parser.name))
 
         converter.convert_disks(disk_format, dry=True)
         guest = converter.get_guest()
@@ -55,11 +54,16 @@ class TestVirtConv(unittest.TestCase):
         if not conn.check_support(conn.SUPPORT_CONN_VMPORT):
             self.skipTest("Not comparing XML because vmport isn't supported")
 
-        utils.diff_compare(out_expect, outfile)
+        utils.diff_compare(out_expect, out_path)
         utils.test_create(conn, out_xml)
 
-    def _compare_single_file(self, in_path, in_type, disk_format=None):
+    def _compare(self, in_path, disk_format=None):
         cwd = os.getcwd()
+        in_type = "ovf"
+        if "vmx" in in_path:
+            in_type = "vmx"
+
+        in_path = os.path.join(base_dir, in_path)
         base = in_type + "2libvirt"
         in_base = os.path.basename(in_path).rsplit(".", 1)[0]
         out_path = "%s/%s_%s.%s" % (out_dir, base, in_base, "libvirt")
@@ -72,32 +76,20 @@ class TestVirtConv(unittest.TestCase):
         finally:
             os.chdir(cwd)
 
-    def _compare_files(self, in_type):
-        in_dir = base_dir + in_type + "_input"
-
-        if not os.path.exists(in_dir):
-            raise RuntimeError("Directory does not exist: %s" % in_dir)
-
-        err = ""
-        for in_path in glob.glob(os.path.join(in_dir, "*")):
-            try:
-                self._compare_single_file(in_path, in_type)
-            except Exception:
-                import traceback
-                err += traceback.format_exc()
-
-        if err:
-            raise AssertionError("Errors encountered:\n%s" % err)
 
     def testOVF2Libvirt(self):
-        self._compare_files("ovf")
+        self._compare("ovf_input/test1.ovf")
+        self._compare("ovf_input/test2.ovf")
+        self._compare("ovf_input/test_gzip.ovf")
+        self._compare("ovf_input/ovf_directory")
+
     def testVMX2Libvirt(self):
-        self._compare_files("vmx")
+        self._compare("vmx_input/test1.vmx")
+        self._compare("vmx_input/test-nodisks.vmx")
+        self._compare("vmx_input/test-vmx-zip.zip")
+        self._compare("vmx_input/vmx-dir")
 
     def testDiskConvert(self):
-        self._compare_single_file(
-            base_dir + "ovf_input/test1.ovf", "ovf", disk_format="qcow2")
-        self._compare_single_file(
-            base_dir + "vmx_input/test1.vmx", "vmx", disk_format="raw")
-        self._compare_single_file(
-            base_dir + "ovf_input/test_gzip.ovf", "ovf", disk_format="raw")
+        self._compare("ovf_input/test1.ovf", disk_format="qcow2")
+        self._compare("vmx_input/test1.vmx", disk_format="raw")
+        self._compare("ovf_input/test_gzip.ovf", disk_format="raw")
