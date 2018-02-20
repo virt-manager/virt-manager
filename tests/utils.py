@@ -91,6 +91,7 @@ def openconn(uri):
     """
     virtinst.util.register_libvirt_error_handler()
     conn = virtinst.cli.getConnection(uri)
+    uri = conn._open_uri
 
     # For the basic test:///default URI, skip this caching, so we have
     # an option to test the stock code
