@@ -33,6 +33,7 @@ class _CLIState(object):
     def __init__(self):
         self.regenerate_output = False
         self.use_coverage = False
+        self.debug = False
 clistate = _CLIState()
 
 
@@ -62,11 +63,6 @@ uri_kvm_s390x_KVMIBM = (_uri_kvm_domcaps + _capsprefix + "kvm-s390x-KVMIBM.xml")
 uri_xen = uri_test + _capsprefix + "xen-rhel5.4.xml,xen"
 uri_lxc = uri_test + _capsprefix + "lxc.xml,lxc"
 uri_vz = uri_test + _capsprefix + "vz.xml,vz"
-
-
-def get_debug():
-    return ("DEBUG_TESTS" in os.environ and
-            os.environ["DEBUG_TESTS"] == "1")
 
 
 def _make_uri(base, connver=None, libver=None):

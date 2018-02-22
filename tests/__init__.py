@@ -38,7 +38,7 @@ virtconvert = None
 virtxml = None
 
 
-def _setup_logging():
+def setup_logging():
     rootLogger = logging.getLogger()
     for handler in rootLogger.handlers:
         rootLogger.removeHandler(handler)
@@ -46,13 +46,13 @@ def _setup_logging():
     logging.basicConfig(level=logging.DEBUG,
                         format="%(levelname)-8s %(message)s")
 
-    if utils.get_debug():
+    if utils.clistate.debug:
         rootLogger.setLevel(logging.DEBUG)
     else:
         rootLogger.setLevel(logging.ERROR)
 
 
-def _setup_cli_imports():
+def setup_cli_imports():
     _cleanup_imports = []
 
     def _cleanup_imports_cb():
@@ -73,7 +73,3 @@ def _setup_cli_imports():
     virtclone = _import("virtclone", "virt-clone")
     virtconvert = _import("virtconvert", "virt-convert")
     virtxml = _import("virtxml", "virt-xml")
-
-
-_setup_logging()
-_setup_cli_imports()

@@ -106,7 +106,7 @@ hvmguest.os.os_type = "hvm"
 xenguest = Guest(testconn)
 xenguest.os.os_type = "xen"
 
-meter = util.make_meter(quiet=not utils.get_debug())
+meter = util.make_meter(quiet=not utils.clistate.debug)
 
 
 def _storeForDistro(fetcher, guest):

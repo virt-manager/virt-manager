@@ -397,8 +397,6 @@ class TestBaseCommand(distutils.core.Command):
         self._external_coverage = False
 
     def finalize_options(self):
-        if self.debug and "DEBUG_TESTS" not in os.environ:
-            os.environ["DEBUG_TESTS"] = "1"
         if self.only:
             # Can do --only many-devices to match on the cli testcase
             # for "virt-install-many-devices", despite the actual test
@@ -438,6 +436,9 @@ class TestBaseCommand(distutils.core.Command):
         testsmodule.utils.clistate.regenerate_output = bool(
                 self.regenerate_output)
         testsmodule.utils.clistate.use_coverage = bool(cov)
+        testsmodule.utils.clistate.debug = bool(self.debug)
+        testsmodule.setup_logging()
+        testsmodule.setup_cli_imports()
 
         # This makes the test runner report results before exiting from ctrl-c
         unittest.installHandler()

@@ -339,7 +339,7 @@ class VMMDogtailApp(object):
     def open(self, extra_opts=None):
         extra_opts = extra_opts or []
 
-        if tests.utils.get_debug():
+        if tests.utils.clistate.debug:
             stdout = sys.stdout
             stderr = sys.stderr
             extra_opts.append("--debug")
