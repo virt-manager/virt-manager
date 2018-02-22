@@ -420,7 +420,6 @@ c.add_compare(""" \
 --memballoon none \
 --smartcard none \
 --watchdog default \
---panic default \
 --tpm /dev/tpm0 \
 --rng /dev/random \
 """, "singleton-config-1", compare_check=support.SUPPORT_CONN_VMPORT)
@@ -446,7 +445,7 @@ cache.mode=emulate,cache.level=3 \
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40 \
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200 \
 --memorybacking size=1,unit='G',nodeset='1,2-5',nosharepages=yes,locked=yes \
---features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234,vmport=off,pmu=off \
+--features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234,vmport=off,pmu=off,vmcoreinfo=on \
 --clock offset=utc,hpet_present=no,rtc_tickpolicy=merge \
 --sysinfo type=smbios,bios_vendor="Acme LLC",bios_version=1.2.3,bios_date=01/01/1970,bios_release=10.22 \
 --sysinfo type=smbios,system_manufacturer="Acme Inc.",system_product=Computer,system_version=3.2.1,system_serial=123456789,system_uuid=00000000-1111-2222-3333-444444444444,system_sku=abc-123,system_family=Server \
@@ -575,15 +574,6 @@ c.add_compare(""" \
 """, "spice-gl", compare_check=support.SUPPORT_CONN_VMPORT)
 
 
-############################
-# Features install options #
-############################
-
-c = vinst.add_category("features", "--nographics --noautoconsole --import --disk none --controller usb,model=none")
-c.add_compare("--features smm=on", "features-smm")
-c.add_invalid("--features smm=on --machine pc")
-c.add_compare("--features vmcoreinfo=on", "features-vmcoreinfo")
-
 
 ########################
 # Boot install options #
@@ -593,14 +583,6 @@ c = vinst.add_category("boot", "--nographics --noautoconsole --import --disk non
 c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-secure")
 
 
-######################################
-# Memory hot(un)plug install options #
-######################################
-
-c = vinst.add_category("memory-hotplug", "--nographics --noautoconsole --import --disk none")
-c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576", "memory-hotplug")
-c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2", "memory-device-dimm")
-c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128", "memory-device-nvdimm")
 
 
 ####################################################
@@ -616,11 +598,12 @@ c.add_valid("--cpu somemodel")  # Simple --cpu
 c.add_valid("--security label=foobar.label,relabel=yes")  # --security implicit static
 c.add_valid("--security label=foobar.label,a1,z2,b3,type=static,relabel=no")  # static with commas 1
 c.add_valid("--security label=foobar.label,a1,z2,b3")  # --security static with commas 2
-c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 c.add_invalid("--vcpus 32 --cpuset=969-1000")  # Bogus cpuset
 c.add_invalid("--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
 c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
 c.add_invalid("--security foobar")  # Busted --security
+c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
+c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128", "memory-hotplug")
 
 
 
@@ -671,21 +654,6 @@ c.add_invalid("--disk source_pool=default-pool,source_volume=idontexist")  # try
 c.add_invalid("--disk size=1 --security model=foo,type=bar")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
 
 
-################
-# Panic device #
-################
-
-c = vinst.add_category("panic", "--connect %(URI-KVM)s --noautoconsole --import --disk none --graphics none --controller usb,model=none --network none")
-c.add_compare("--panic default", "panic-default")
-c.add_compare("--panic isa", "panic-isa")
-c.add_compare("--panic isa,iobase=0x505", "panic-isa-iobase")
-
-c = vinst.add_category("panic", "--connect %(URI-KVM-PPC64LE)s --noautoconsole --import --disk none --graphics none --controller usb,model=none --network none")
-c.add_compare("--panic default", "panic-pseries-default")
-
-c = vinst.add_category("panic", "--connect %(URI-KVM-S390X)s --noautoconsole --import --disk none --graphics none --controller usb,model=none --network none")
-c.add_compare("--panic default", "panic-s390x-default")
-
 
 ################################################
 # Invalid devices that hit virtinst code paths #
@@ -704,6 +672,7 @@ c.add_invalid("--serial null,path=/tmp/foo")  # Path where it doesn't belong
 c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
 c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
 c.add_invalid("--connect %(URI-KVM)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
+c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machine=pc
 
 
 
@@ -799,11 +768,11 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --disk none --network none --os-var
 # ppc64 tests
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")
 c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-machdefault-f20")
-c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20", "ppc64le-kvm-import")
+c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20 --panic default", "ppc64le-kvm-import")
 
 # s390x tests
 c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom")
-c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X-KVMIBM)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --watchdog diag288,action=reset", "s390x-cdrom-KVMIBM")
+c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X-KVMIBM)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --watchdog diag288,action=reset --panic default", "s390x-cdrom-KVMIBM")
 
 # qemu:///session tests
 c.add_compare("--connect %(URI-KVM-SESSION)s --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults")
@@ -818,6 +787,7 @@ c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash
 c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
 c.add_compare("--disk size=20 --os-variant solaris10", "solaris10-defaults")  # test solaris OS defaults
 c.add_compare("--connect %(URI-KVM-REMOTE)s --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote")
+c.add_compare("--disk none --pxe --features smm=on", "features-smm")  # smm=on, which should set q35
 
 c.add_valid("--connect %(URI-KVM-NODOMCAPS)s --arch aarch64 --nodisks --pxe")  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
