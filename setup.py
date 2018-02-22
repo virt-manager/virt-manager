@@ -377,6 +377,7 @@ class configure(distutils.core.Command):
 class TestBaseCommand(distutils.core.Command):
     user_options = [
         ('debug', 'd', 'Show debug output'),
+        ('testverbose', None, 'Show verbose output'),
         ('coverage', 'c', 'Show coverage report'),
         ('regenerate-output', None, 'Regenerate test output'),
         ("only=", None,
@@ -387,6 +388,7 @@ class TestBaseCommand(distutils.core.Command):
 
     def initialize_options(self):
         self.debug = 0
+        self.testverbose = 0
         self.regenerate_output = 0
         self.coverage = 0
         self.only = None
@@ -462,7 +464,7 @@ class TestBaseCommand(distutils.core.Command):
             print("")
 
         verbosity = 1
-        if self.debug or self._force_verbose:
+        if self.debug or self.testverbose or self._force_verbose:
             verbosity = 2
         t = unittest.TextTestRunner(verbosity=verbosity)
 
