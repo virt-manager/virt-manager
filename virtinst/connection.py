@@ -409,13 +409,19 @@ class VirtualConnection(object):
                          _supportname.startswith("SUPPORT_")]:
         locals()[_supportname] = getattr(support, _supportname)
 
-    def check_support(self, feature, data=None):
-        key = feature
-        data = data or self
-        if key not in self._support_cache:
-            self._support_cache[key] = support.check_support(
-                self, feature, data)
-        return self._support_cache[key]
+
+    def check_support(self, features, data=None):
+        def _check_support(key):
+            if key not in self._support_cache:
+                self._support_cache[key] = support.check_support(
+                    self, key, data or self)
+            return self._support_cache[key]
+
+        for f in util.listify(features):
+            # 'and' condition over the feature list
+            if not _check_support(f):
+                return False
+        return True
 
     def support_remote_url_install(self):
         if self._magic_uri:
