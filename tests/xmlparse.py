@@ -172,6 +172,7 @@ class XMLParseTest(unittest.TestCase):
         check("hyperv_spinlocks", True, True)
         check("hyperv_spinlocks_retries", 12287, 54321)
         check("vmport", False, True)
+        check("vmcoreinfo", False, True)
         check("kvm_hidden", None, True)
         check("pvspinlock", None, True)
         check("gic_version", None, False)
@@ -232,7 +233,8 @@ class XMLParseTest(unittest.TestCase):
         check("locked", False, True)
 
         self._alter_compare(guest.get_xml_config(), outfile,
-            support_check=self.conn.SUPPORT_CONN_VMPORT)
+                            support_check=[self.conn.SUPPORT_CONN_VMPORT,
+                                           self.conn.SUPPORT_CONN_VMCOREINFO])
 
     def testSeclabel(self):
         guest, outfile = self._get_test_content("change-seclabel")
