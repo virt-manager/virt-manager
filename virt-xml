@@ -68,13 +68,6 @@ def get_diff(origxml, newxml):
     return ret
 
 
-def _make_guest(conn, xml):
-    # We do this to minimize the diff, sanitizing XML quotes to what libxml
-    # generates
-    return virtinst.Guest(conn,
-        parsexml=virtinst.Guest(conn, parsexml=xml).get_xml_config())
-
-
 def get_domain_and_guest(conn, domstr):
     try:
         int(domstr)
@@ -97,11 +90,11 @@ def get_domain_and_guest(conn, domstr):
 
     state = domain.info()[0]
     active_xmlobj = None
-    inactive_xmlobj = _make_guest(conn, domain.XMLDesc(0))
+    inactive_xmlobj = virtinst.Guest(conn, parsexml=domain.XMLDesc(0))
     if state != libvirt.VIR_DOMAIN_SHUTOFF:
         active_xmlobj = inactive_xmlobj
-        inactive_xmlobj = _make_guest(conn,
-            domain.XMLDesc(libvirt.VIR_DOMAIN_XML_INACTIVE))
+        inactive_xmlobj = virtinst.Guest(conn,
+                parsexml=domain.XMLDesc(libvirt.VIR_DOMAIN_XML_INACTIVE))
 
     return (domain, inactive_xmlobj, active_xmlobj)
 
@@ -440,7 +433,7 @@ def main(conn=None):
         domain, inactive_xmlobj, active_xmlobj = get_domain_and_guest(
             conn, options.domain)
     elif not options.build_xml:
-        inactive_xmlobj = _make_guest(conn, options.stdinxml)
+        inactive_xmlobj = virtinst.Guest(conn, options.stdinxml)
 
     check_action_collision(options)
     parserclass = check_xmlopt_collision(options)
