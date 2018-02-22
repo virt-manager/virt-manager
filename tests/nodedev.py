@@ -25,8 +25,6 @@ from virtinst import VirtualHostDevice
 
 from tests import utils
 
-conn = utils.open_testdriver()
-
 unknown_xml = """
 <device>
   <name>foodevice</name>
@@ -61,11 +59,14 @@ funky_chars_xml = """
 
 
 class TestNodeDev(unittest.TestCase):
+    @property
+    def conn(self):
+        return utils.URIs.open_testdriver_cached()
 
     def _nodeDevFromName(self, devname):
-        node = conn.nodeDeviceLookupByName(devname)
+        node = self.conn.nodeDeviceLookupByName(devname)
         xml = node.XMLDesc(0)
-        return NodeDevice.parse(conn, xml)
+        return NodeDevice.parse(self.conn, xml)
 
     def _testCompare(self, devname, vals, devxml=None):
         def _compare(dev, vals, root=""):
@@ -82,7 +83,7 @@ class TestNodeDev(unittest.TestCase):
                     self.assertEqual(vals[attr], getattr(dev, attr))
 
         if devxml:
-            dev = NodeDevice.parse(conn, devxml)
+            dev = NodeDevice.parse(self.conn, devxml)
         else:
             dev = self._nodeDevFromName(devname)
 
@@ -94,7 +95,7 @@ class TestNodeDev(unittest.TestCase):
         if not nodedev:
             nodedev = self._nodeDevFromName(nodename)
 
-        dev = VirtualHostDevice(conn)
+        dev = VirtualHostDevice(self.conn)
         dev.set_from_nodedev(nodedev)
         utils.diff_compare(dev.get_xml_config() + "\n", devfile)
 
@@ -248,7 +249,7 @@ class TestNodeDev(unittest.TestCase):
                 "device_type": NodeDevice.CAPABILITY_TYPE_DRM,
                 "drm_type": "render"}
         dev = self._testCompare(devname, vals)
-        self.assertEqual(dev.drm_pretty_name(conn),
+        self.assertEqual(dev.drm_pretty_name(self.conn),
                          "0000:00:02:0 Intel Corporation HD Graphics 530 (render)")
 
     def testUnknownDevice(self):

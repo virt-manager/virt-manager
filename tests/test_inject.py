@@ -16,7 +16,7 @@ from virtinst.initrdinject import perform_initrd_injections
 cleanup = []
 _alldistros = {}
 
-testconn = utils.open_testdefault()
+testconn = utils.URIs.open_testdefault_cached()
 guest = Guest(testconn)
 guest.os.os_type = "hvm"
 guest.os.arch = "x86_64"

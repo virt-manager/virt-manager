@@ -61,7 +61,7 @@ class TestClone(unittest.TestCase):
         in_content = utils.read_file(infile)
 
         if not conn:
-            conn = utils.open_testdriver()
+            conn = utils.URIs.open_testdriver_cached()
         cloneobj = Cloner(conn)
         cloneobj.original_xml = in_content
         for force in force_list or []:
@@ -113,12 +113,12 @@ class TestClone(unittest.TestCase):
            connection to ensure we don't get any errors"""
         outfile = os.path.join(clonexml_dir, filebase + "-out.xml")
         outxml = utils.read_file(outfile)
-        conn = utils.open_testdriver()
+        conn = utils.URIs.open_testdriver_cached()
         utils.test_create(conn, outxml)
 
     def testRemoteNoStorage(self):
         """Test remote clone where VM has no storage that needs cloning"""
-        conn = utils.open_test_remote()
+        conn = utils.URIs.open_test_remote()
         self._clone("nostorage", conn=conn)
         self._clone("noclone-storage", conn=conn)
 
@@ -127,7 +127,7 @@ class TestClone(unittest.TestCase):
         Test remote clone with storage needing cloning. Should fail,
         since libvirt has no storage clone api.
         """
-        conn = utils.open_test_remote()
+        conn = utils.URIs.open_test_remote()
         disks = ["%s/1.img" % POOL1, "%s/2.img" % POOL1]
         try:
             self._clone("general-cfg", disks=disks, conn=conn)
@@ -143,7 +143,7 @@ class TestClone(unittest.TestCase):
         self._clone("managed-storage", disks=disks)
 
     def testCloneStorageCrossPool(self):
-        conn = utils.open_test_remote()
+        conn = utils.URIs.open_test_remote()
         clone_disks_file = os.path.join(
                 clonexml_dir, "cross-pool-disks-out.xml")
         disks = ["%s/new1.img" % POOL2, "%s/new2.img" % POOL1]

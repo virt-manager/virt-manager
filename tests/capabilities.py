@@ -24,12 +24,10 @@ from virtinst import Capabilities
 from virtinst import DomainCapabilities
 
 
-conn = utils.open_testdefault()
-
-
 class TestCapabilities(unittest.TestCase):
     def _buildCaps(self, filename):
         path = os.path.join("tests/capabilities-xml", filename)
+        conn = utils.URIs.open_testdefault_cached()
         return Capabilities(conn, open(path).read())
 
     def testCapsCPUFeaturesOldSyntax(self):
@@ -122,7 +120,7 @@ class TestCapabilities(unittest.TestCase):
 
     def testDomainCapabilities(self):
         xml = open("tests/capabilities-xml/test-domcaps.xml").read()
-        caps = DomainCapabilities(utils.open_testdriver(), xml)
+        caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
 
         self.assertEqual(caps.os.loader.supported, True)
         self.assertEqual(caps.os.loader.get_values(),

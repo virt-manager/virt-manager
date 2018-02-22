@@ -34,7 +34,7 @@ class TestVirtConv(unittest.TestCase):
         def print_cb(msg):
             print(msg, file=outbuf)
 
-        conn = utils.open_kvm()
+        conn = utils.URIs.open_kvm()
         converter = VirtConverter(conn, in_path, print_cb=print_cb)
 
         if converter.parser.name != in_type:

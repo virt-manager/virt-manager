@@ -227,7 +227,7 @@ class Command(object):
             conn = None
             for idx in reversed(range(len(self.argv))):
                 if self.argv[idx] == "--connect":
-                    conn = utils.openconn(self.argv[idx + 1])
+                    conn = utils.URIs.openconn(self.argv[idx + 1])
                     break
 
             if not conn:

@@ -100,7 +100,7 @@ class _DistroURL(object):
             return "x86_64"
         return "x86_64"
 
-testconn = utils.open_testdefault()
+testconn = utils.URIs.open_testdefault_cached()
 hvmguest = Guest(testconn)
 hvmguest.os.os_type = "hvm"
 xenguest = Guest(testconn)

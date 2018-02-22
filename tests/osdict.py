@@ -47,7 +47,7 @@ class TestOSDB(unittest.TestCase):
                     (osobj.name, osobj.get_typename()))
 
     def test_recommended_resources(self):
-        conn = utils.open_testdefault()
+        conn = utils.URIs.open_testdefault_cached()
         guest = conn.caps.lookup_virtinst_guest()
         assert not OSDB.lookup_os("generic").get_recommended_resources(guest)
 

@@ -17,6 +17,10 @@
 
 import difflib
 import os
+import sys
+import unittest
+
+import libvirt
 
 import virtinst
 import virtinst.cli
@@ -75,75 +79,99 @@ def _make_uri(base, connver=None, libver=None):
     return base
 
 
-_conn_cache = {}
+class _URIs(object):
+    def __init__(self):
+        self._conn_cache = {}
+        self._testdriver_cache = None
+        self._testdriver_error = None
+        self._testdriver_default = None
 
+    def openconn(self, uri):
+        """
+        Extra super caching to speed up the test suite. We basically
+        cache the first guest/pool/vol poll attempt for each URI, and save it
+        across multiple reopenings of that connection. We aren't caching
+        libvirt objects, just parsed XML objects. This works fine since
+        generally every test uses a fresh virConnect, or undoes the
+        persistent changes it makes.
+        """
+        virtinst.util.register_libvirt_error_handler()
+        is_testdriver_xml = "/testdriver.xml" in uri
 
-def openconn(uri):
-    """
-    Extra super caching to speed up the test suite. We basically
-    cache the first guest/pool/vol poll attempt for each URI, and save it
-    across multiple reopenings of that connection. We aren't caching
-    libvirt objects, just parsed XML objects. This works fine since
-    generally every test uses a fresh virConnect, or undoes the
-    persistent changes it makes.
-    """
-    virtinst.util.register_libvirt_error_handler()
-    conn = virtinst.cli.getConnection(uri)
-    uri = conn._open_uri
+        if not (is_testdriver_xml and self._testdriver_error):
+            try:
+                conn = virtinst.cli.getConnection(uri)
+            except libvirt.libvirtError as e:
+                if not is_testdriver_xml:
+                    raise
+                self._testdriver_error = (
+                        "error opening testdriver.xml: %s\n"
+                        "libvirt is probably too old" % str(e))
+                print(self._testdriver_error, file=sys.stderr)
 
-    # For the basic test:///default URI, skip this caching, so we have
-    # an option to test the stock code
-    if uri == uri_test_default:
+        if is_testdriver_xml and self._testdriver_error:
+            raise unittest.SkipTest(self._testdriver_error)
+
+        uri = conn._open_uri
+
+        # For the basic test:///default URI, skip this caching, so we have
+        # an option to test the stock code
+        if uri == uri_test_default:
+            return conn
+
+        if uri not in self._conn_cache:
+            conn.fetch_all_guests()
+            conn.fetch_all_pools()
+            conn.fetch_all_vols()
+            conn.fetch_all_nodedevs()
+
+            self._conn_cache[uri] = {}
+            for key, value in conn._fetch_cache.items():
+                self._conn_cache[uri][key] = value[:]
+
+        # Prime the internal connection cache
+        for key, value in self._conn_cache[uri].items():
+            conn._fetch_cache[key] = value[:]
+
+        def cb_cache_new_pool(poolobj):
+            # Used by clonetest.py nvram-newpool test
+            if poolobj.name() == "nvram-newpool":
+                from virtinst import StorageVolume
+                vol = StorageVolume(conn)
+                vol.pool = poolobj
+                vol.name = "clone-orig-vars.fd"
+                vol.capacity = 1024 * 1024
+                vol.install()
+            conn._cache_new_pool_raw(poolobj)
+
+        conn.cb_cache_new_pool = cb_cache_new_pool
+
         return conn
 
-    if uri not in _conn_cache:
-        conn.fetch_all_guests()
-        conn.fetch_all_pools()
-        conn.fetch_all_vols()
-        conn.fetch_all_nodedevs()
+    def open_testdriver_cached(self):
+        """
+        Open plain testdriver.xml and cache the instance. Tests that
+        use this are expected to clean up after themselves so driver
+        state doesn't become polluted.
+        """
+        if not self._testdriver_cache:
+            self._testdriver_cache = self.openconn(uri_test)
+        return self._testdriver_cache
 
-        _conn_cache[uri] = {}
-        for key, value in conn._fetch_cache.items():
-            _conn_cache[uri][key] = value[:]
+    def open_testdefault_cached(self):
+        if not self._testdriver_default:
+            self._testdriver_default = self.openconn(uri_test_default)
+        return self._testdriver_default
 
-    # Prime the internal connection cache
-    for key, value in _conn_cache[uri].items():
-        conn._fetch_cache[key] = value[:]
+    def open_kvm(self, connver=None, libver=None):
+        return self.openconn(_make_uri(uri_kvm, connver, libver))
+    def open_kvm_rhel(self, connver=None):
+        return self.openconn(_make_uri(uri_kvm_rhel, connver))
+    def open_test_remote(self):
+        return self.openconn(uri_test_remote)
 
-    def cb_cache_new_pool(poolobj):
-        # Used by clonetest.py nvram-newpool test
-        if poolobj.name() == "nvram-newpool":
-            from virtinst import StorageVolume
-            vol = StorageVolume(conn)
-            vol.pool = poolobj
-            vol.name = "clone-orig-vars.fd"
-            vol.capacity = 1024 * 1024
-            vol.install()
-        conn._cache_new_pool_raw(poolobj)
+URIs = _URIs()
 
-    conn.cb_cache_new_pool = cb_cache_new_pool
-
-    return conn
-
-
-def open_testdefault():
-    return openconn(uri_test_default)
-
-
-def open_testdriver():
-    return openconn(uri_test)
-
-
-def open_kvm(connver=None, libver=None):
-    return openconn(_make_uri(uri_kvm, connver, libver))
-
-
-def open_kvm_rhel(connver=None):
-    return openconn(_make_uri(uri_kvm_rhel, connver))
-
-
-def open_test_remote():
-    return openconn(uri_test_remote)
 
 
 def test_create(testconn, xml, define_func="defineXML"):

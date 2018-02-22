@@ -105,9 +105,9 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
 
 
 class TestStorage(unittest.TestCase):
-
-    def setUp(self):
-        self.conn = utils.open_testdefault()
+    @property
+    def conn(self):
+        return utils.URIs.open_testdefault_cached()
 
     def testDirPool(self):
         poolobj = createPool(self.conn,

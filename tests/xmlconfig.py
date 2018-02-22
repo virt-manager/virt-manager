@@ -25,16 +25,12 @@ from virtcli import CLIConfig
 from tests import utils
 
 
-_default_conn = utils.open_testdefault()
-_feature_conn = utils.open_testdriver()
-
-
 def _make_guest(installer=None, conn=None, os_variant=None):
     if not conn:
         if installer:
             conn = installer.conn
         else:
-            conn = _feature_conn
+            conn = utils.URIs.open_testdriver_cached()
     if not installer:
         installer = _make_installer(conn=conn)
 
@@ -102,7 +98,7 @@ def _make_guest(installer=None, conn=None, os_variant=None):
 
 
 def _make_installer(location=None, conn=None):
-    conn = conn or _feature_conn
+    conn = conn or utils.URIs.open_testdriver_cached()
     inst = virtinst.DistroInstaller(conn)
     if location:
         inst.location = location
@@ -118,6 +114,10 @@ class TestXMLMisc(unittest.TestCase):
     testing any particularly tricky bits, general XML generation should
     be through virt-install examples in clitest
     """
+    @property
+    def conn(self):
+        return utils.URIs.open_testdefault_cached()
+
     def _compare(self, guest, filebase, do_install):
         filename = os.path.join("tests/xmlconfig-xml", filebase + ".xml")
 
@@ -139,16 +139,16 @@ class TestXMLMisc(unittest.TestCase):
                 return "bzz0"
             setattr(deviceinterface, "_default_bridge", newbridge)
 
-            dev1 = virtinst.VirtualNetworkInterface(_default_conn)
+            dev1 = virtinst.VirtualNetworkInterface(self.conn)
             dev1.macaddr = "22:22:33:44:55:66"
 
-            dev2 = virtinst.VirtualNetworkInterface(_default_conn,
+            dev2 = virtinst.VirtualNetworkInterface(self.conn,
                                     parsexml=dev1.get_xml_config())
             dev2.source = None
             dev2.source = "foobr0"
             dev2.macaddr = "22:22:33:44:55:67"
 
-            dev3 = virtinst.VirtualNetworkInterface(_default_conn,
+            dev3 = virtinst.VirtualNetworkInterface(self.conn,
                                     parsexml=dev1.get_xml_config())
             dev3.source = None
             dev3.macaddr = "22:22:33:44:55:68"
@@ -172,7 +172,7 @@ class TestXMLMisc(unittest.TestCase):
 
     def testCpustrToTuple(self):
         # Various testing our cpustr handling
-        conn = _default_conn
+        conn = self.conn
         base = [False] * 16
 
         expect = base[:]
@@ -213,7 +213,7 @@ class TestXMLMisc(unittest.TestCase):
         self.assertEqual(VirtualDisk.target_to_num("xvdaaa"),
             26 * 26 * 1 + 26 * 1 + 0)
 
-        disk = virtinst.VirtualDisk(_default_conn)
+        disk = virtinst.VirtualDisk(self.conn)
         disk.bus = "ide"
 
         self.assertEqual("hda", disk.generate_target([]))
@@ -243,27 +243,27 @@ class TestXMLMisc(unittest.TestCase):
 
     def testCPUTopology(self):
         # Test CPU topology determining
-        cpu = virtinst.CPU(_default_conn)
+        cpu = virtinst.CPU(self.conn)
         cpu.sockets = "2"
         cpu.set_topology_defaults(6)
         self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [2, 3, 1])
 
-        cpu = virtinst.CPU(_default_conn)
+        cpu = virtinst.CPU(self.conn)
         cpu.cores = "4"
         cpu.set_topology_defaults(9)
         self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [2, 4, 1])
 
-        cpu = virtinst.CPU(_default_conn)
+        cpu = virtinst.CPU(self.conn)
         cpu.threads = "3"
         cpu.set_topology_defaults(14)
         self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [4, 1, 3])
 
-        cpu = virtinst.CPU(_default_conn)
+        cpu = virtinst.CPU(self.conn)
         cpu.sockets = 5
         cpu.cores = 2
         self.assertEqual(cpu.vcpus_from_topology(), 10)
 
-        cpu = virtinst.CPU(_default_conn)
+        cpu = virtinst.CPU(self.conn)
         self.assertEqual(cpu.vcpus_from_topology(), 1)
 
     def testAC97(self):
@@ -275,9 +275,10 @@ class TestXMLMisc(unittest.TestCase):
             xml, ignore = g.start_install(return_xml=True, dry=True)
             return "ac97" in xml
 
-        self.assertTrue(has_ac97(utils.open_kvm(connver=11000)))
-        self.assertFalse(has_ac97(utils.open_kvm(libver=5000)))
-        self.assertFalse(has_ac97(utils.open_kvm(libver=7000, connver=7000)))
+        self.assertTrue(has_ac97(utils.URIs.open_kvm(connver=11000)))
+        self.assertFalse(has_ac97(utils.URIs.open_kvm(libver=5000)))
+        self.assertFalse(has_ac97(
+            utils.URIs.open_kvm(libver=7000, connver=7000)))
 
     def testOSDeviceDefaultChange(self):
         """
@@ -285,7 +286,7 @@ class TestXMLMisc(unittest.TestCase):
         distro/variant mid process
         """
         # Use connver=12005 so that non-rhel displays ac97
-        conn = utils.open_kvm_rhel(connver=12005)
+        conn = utils.URIs.open_kvm_rhel(connver=12005)
 
         g = _make_guest(conn=conn, os_variant="fedora11")
         self._compare(g, "install-f11-norheldefaults", False)
@@ -307,7 +308,7 @@ class TestXMLMisc(unittest.TestCase):
 
     def test_hyperv_clock(self):
         def _make(connver):
-            conn = utils.open_kvm(libver=1002002, connver=connver)
+            conn = utils.URIs.open_kvm(libver=1002002, connver=connver)
             g = _make_guest(conn=conn, os_variant="win7")
             g.emulator = "/usr/libexec/qemu-kvm"
             return g
