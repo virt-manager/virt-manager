@@ -582,6 +582,7 @@ c.add_compare(""" \
 c = vinst.add_category("features", "--nographics --noautoconsole --import --disk none --controller usb,model=none")
 c.add_compare("--features smm=on", "features-smm")
 c.add_invalid("--features smm=on --machine pc")
+c.add_compare("--features vmcoreinfo=on", "features-vmcoreinfo")
 
 
 ########################

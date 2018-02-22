@@ -56,3 +56,5 @@ class DomainFeatures(XMLBuilder):
     pvspinlock = XMLProperty("./pvspinlock/@state", is_onoff=True)
 
     smm = XMLProperty("./smm/@state", is_onoff=True)
+    vmcoreinfo = XMLProperty("./vmcoreinfo", is_bool=True,
+                       default_name="default", default_cb=lambda s: False)

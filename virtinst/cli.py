@@ -1795,6 +1795,7 @@ ParserFeatures.add_arg("pvspinlock", "pvspinlock", is_onoff=True)
 ParserFeatures.add_arg("gic_version", "gic_version")
 
 ParserFeatures.add_arg("smm", "smm", is_onoff=True, cb=ParserFeatures.set_smm_cb)
+ParserFeatures.add_arg("vmcoreinfo", "vmcoreinfo", is_onoff=True)
 
 
 ###################
