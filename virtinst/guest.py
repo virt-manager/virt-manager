@@ -317,7 +317,7 @@ class Guest(XMLBuilder):
             self._install_cdrom_device.path = self.installer.cdrom_path()
             self._install_cdrom_device.validate()
 
-    def _prepare_get_xml(self):
+    def _prepare_get_install_xml(self):
         # We do a shallow copy of the OS block here, so that we can
         # set the install time properties but not permanently overwrite
         # any config the user explicitly requested.
@@ -325,16 +325,16 @@ class Guest(XMLBuilder):
                 self.os.kernel_args, self.on_reboot)
         return data
 
-    def _finish_get_xml(self, data):
+    def _finish_get_install_xml(self, data):
         (self.os.bootorder, self.os.kernel, self.os.initrd,
                 self.os.kernel_args, self.on_reboot) = data
 
     def _get_install_xml(self, *args, **kwargs):
-        data = self._prepare_get_xml()
+        data = self._prepare_get_install_xml()
         try:
             return self._do_get_install_xml(*args, **kwargs)
         finally:
-            self._finish_get_xml(data)
+            self._finish_get_install_xml(data)
 
     def _do_get_install_xml(self, install):
         """

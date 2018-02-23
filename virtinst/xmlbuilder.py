@@ -592,11 +592,16 @@ class XMLBuilder(object):
         """
         Return XML string of the object
         """
-        data = self._prepare_get_xml()
-        try:
-            return self._do_get_xml_config()
-        finally:
-            self._finish_get_xml(data)
+        xmlapi = self._xmlstate.xmlapi
+        if self._xmlstate.is_build:
+            xmlapi = xmlapi.copy_api()
+
+        self._add_parse_bits(xmlapi)
+        ret = xmlapi.get_xml(self._xmlstate.make_abs_xpath("."))
+
+        if ret and not ret.endswith("\n"):
+            ret += "\n"
+        return ret
 
     def clear(self, leave_stub=False):
         """
@@ -642,25 +647,6 @@ class XMLBuilder(object):
         in virt-manager code
         """
         return self._xmlstate.abs_xpath()
-
-
-    ###################
-    # Child overrides #
-    ###################
-
-    def _prepare_get_xml(self):
-        """
-        Subclasses can override this to do any pre-get_xml_config setup.
-        Returns data to pass to finish_get_xml
-        """
-        return None
-
-    def _finish_get_xml(self, data):
-        """
-        Called after get_xml_config. Data is whatever was returned by
-        _prepare_get_xml
-        """
-        ignore = data
 
 
     ################
@@ -796,18 +782,6 @@ class XMLBuilder(object):
     #################################
     # Private XML building routines #
     #################################
-
-    def _do_get_xml_config(self):
-        xmlapi = self._xmlstate.xmlapi
-        if self._xmlstate.is_build:
-            xmlapi = xmlapi.copy_api()
-
-        self._add_parse_bits(xmlapi)
-        ret = xmlapi.get_xml(self._xmlstate.make_abs_xpath("."))
-
-        if ret and not ret.endswith("\n"):
-            ret += "\n"
-        return ret
 
     def _add_parse_bits(self, xmlapi):
         """
