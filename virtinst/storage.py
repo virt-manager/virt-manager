@@ -69,8 +69,7 @@ class _StorageObject(XMLBuilder):
     # Properties #
     ##############
 
-    name = XMLProperty("./name", validate_cb=_validate_name,
-                      doc=_("Name for the storage object."))
+    name = XMLProperty("./name", validate_cb=_validate_name)
     permissions = XMLChildProperty(_StoragePermissions,
                                    relative_xpath="./target",
                                    is_single=True)
@@ -397,8 +396,7 @@ class StoragePool(_StorageObject):
     _source_adapter = XMLProperty("./source/adapter/@name")
     _source_device = XMLProperty("./source/device/@path")
 
-    type = XMLProperty("./@type",
-        doc=_("Storage device type the pool will represent."))
+    type = XMLProperty("./@type")
     uuid = XMLProperty("./uuid")
 
     capacity = XMLProperty("./capacity", is_int=True)
@@ -407,11 +405,9 @@ class StoragePool(_StorageObject):
 
     format = XMLProperty("./source/format/@type",
                          default_cb=_default_format_cb)
-    iqn = XMLProperty("./source/initiator/iqn/@name",
-                      doc=_("iSCSI initiator qualified name"))
+    iqn = XMLProperty("./source/initiator/iqn/@name")
     source_name = XMLProperty("./source/name",
-                              default_cb=_default_source_name,
-                              doc=_("Name of the Volume Group"))
+                              default_cb=_default_source_name)
 
     auth_type = XMLProperty("./source/auth/@type")
     auth_username = XMLProperty("./source/auth/@username")
@@ -628,9 +624,7 @@ class StorageVolume(_StorageObject):
                                " not supported by this libvirt version."))
 
         self._input_vol = vol
-    input_vol = property(_get_input_vol, _set_input_vol,
-                         doc=_("virStorageVolume pointer to clone/use as "
-                               "input."))
+    input_vol = property(_get_input_vol, _set_input_vol)
 
     def _get_reflink(self):
         return self._reflink
@@ -641,8 +635,7 @@ class StorageVolume(_StorageObject):
                 " not supported by this libvirt version."))
 
         self._reflink = reflink
-    reflink = property(_get_reflink, _set_reflink,
-            doc="flags for VIR_STORAGE_VOL_CREATE_REFLINK")
+    reflink = property(_get_reflink, _set_reflink)
 
     def sync_input_vol(self, only_format=False):
         # Pull parameters from input vol into this class

@@ -55,11 +55,10 @@ class InterfaceProtocol(XMLBuilder):
     _XML_PROP_ORDER = ["autoconf", "dhcp", "dhcp_peerdns", "ips", "gateway"]
 
     family = XMLProperty("./@family")
-    dhcp = XMLProperty("./dhcp", is_bool=True, doc=_("Whether to enable DHCP"))
+    dhcp = XMLProperty("./dhcp", is_bool=True)
     dhcp_peerdns = XMLProperty("./dhcp/@peerdns", is_yesno=True)
-    gateway = XMLProperty("./route/@gateway", doc=_("Network gateway address"))
-    autoconf = XMLProperty("./autoconf", is_bool=True,
-        doc=_("Whether to enable IPv6 autoconfiguration"))
+    gateway = XMLProperty("./route/@gateway")
+    autoconf = XMLProperty("./autoconf", is_bool=True)
 
 
     #####################
@@ -173,64 +172,44 @@ class Interface(XMLBuilder):
     ##################
 
     type = XMLProperty("./@type")
-    mtu = XMLProperty("./mtu/@size", is_int=True,
-                      doc=_("Maximum transmit size in bytes"))
-    start_mode = XMLProperty("./start/@mode",
-                             doc=_("When the interface will be auto-started."))
+    mtu = XMLProperty("./mtu/@size", is_int=True)
+    start_mode = XMLProperty("./start/@mode")
 
-    name = XMLProperty("./@name", validate_cb=_validate_name,
-                       doc=_("Name for the interface object."))
+    name = XMLProperty("./@name", validate_cb=_validate_name)
 
-    macaddr = XMLProperty("./mac/@address", validate_cb=_validate_mac,
-                          doc=_("Interface MAC address"))
+    macaddr = XMLProperty("./mac/@address", validate_cb=_validate_mac)
 
 
     #################
     # Bridge params #
     #################
 
-    stp = XMLProperty("./bridge/@stp", is_onoff=True,
-                      doc=_("Whether STP is enabled on the bridge"))
-    delay = XMLProperty("./bridge/@delay",
-                        doc=_("Delay in seconds before forwarding begins when "
-                              "joining a network."))
+    stp = XMLProperty("./bridge/@stp", is_onoff=True)
+    delay = XMLProperty("./bridge/@delay")
+
 
     ###############
     # Bond params #
     ###############
 
-    bond_mode = XMLProperty("./bond/@mode",
-                            doc=_("Mode of operation of the bonding device"))
+    bond_mode = XMLProperty("./bond/@mode")
 
-    arp_interval = XMLProperty("./bond/arpmon/@interval", is_int=True,
-                               doc=_("ARP monitoring interval in "
-                                     "milliseconds"))
-    arp_target = XMLProperty("./bond/arpmon/@target",
-                             doc=_("IP target used in ARP monitoring packets"))
-    arp_validate_mode = XMLProperty("./bond/arpmon/@validate",
-                                    doc=_("ARP monitor validation mode"))
+    arp_interval = XMLProperty("./bond/arpmon/@interval", is_int=True)
+    arp_target = XMLProperty("./bond/arpmon/@target")
+    arp_validate_mode = XMLProperty("./bond/arpmon/@validate")
 
-    mii_carrier_mode = XMLProperty("./bond/miimon/@carrier",
-                                   doc=_("MII monitoring method."))
-    mii_frequency = XMLProperty("./bond/miimon/@freq", is_int=True,
-                                doc=_("MII monitoring interval in "
-                                      "milliseconds"))
-    mii_updelay = XMLProperty("./bond/miimon/@updelay", is_int=True,
-                              doc=_("Time in milliseconds to wait before "
-                                    "enabling a slave after link recovery "))
-    mii_downdelay = XMLProperty("./bond/miimon/@downdelay", is_int=True,
-                                doc=_("Time in milliseconds to wait before "
-                                      "disabling a slave after link failure"))
+    mii_carrier_mode = XMLProperty("./bond/miimon/@carrier")
+    mii_frequency = XMLProperty("./bond/miimon/@freq", is_int=True)
+    mii_updelay = XMLProperty("./bond/miimon/@updelay", is_int=True)
+    mii_downdelay = XMLProperty("./bond/miimon/@downdelay", is_int=True)
 
 
     ###############
     # VLAN params #
     ###############
 
-    tag = XMLProperty("./vlan/@tag", is_int=True,
-                      doc=_("VLAN device tag number"))
-    parent_interface = XMLProperty("./vlan/interface/@name",
-                                   doc=_("Parent interface to create VLAN on"))
+    tag = XMLProperty("./vlan/@tag", is_int=True)
+    parent_interface = XMLProperty("./vlan/interface/@name")
 
 
     ##################

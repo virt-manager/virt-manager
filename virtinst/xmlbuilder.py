@@ -160,7 +160,7 @@ class XMLChildProperty(property):
 
 
 class XMLProperty(property):
-    def __init__(self, xpath, doc=None,
+    def __init__(self, xpath,
                  set_converter=None, validate_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
                  default_cb=None, default_name=None, do_abspath=False):
@@ -176,7 +176,6 @@ class XMLProperty(property):
         existing guest XML, we  use the xpath value to get/set the value
         in the parsed XML document.
 
-        :param doc: option doc string for the property
         :param xpath: xpath string which maps to the associated property
                       in a typical XML document
         :param name: Just a string to print for debugging, only needed
@@ -229,7 +228,6 @@ class XMLProperty(property):
             _allprops.append(self)
 
         property.__init__(self, fget=self.getter, fset=self.setter)
-        self.__doc__ = doc
 
 
     def __repr__(self):

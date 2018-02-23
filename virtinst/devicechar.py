@@ -194,12 +194,9 @@ class _VirtualCharDevice(VirtualDevice):
                        "_source_path", "source_channel",
                        "target_type", "target_name"]
 
-    type = XMLProperty("./@type",
-        doc=_("Method used to expose character device in the host."))
-
+    type = XMLProperty("./@type")
     _tty = XMLProperty("./@tty")
-    _source_path = XMLProperty("./source/@path",
-        doc=_("Host input path to attach to the guest."))
+    _source_path = XMLProperty("./source/@path")
 
     def _get_source_path(self):
         source = self._source_path
@@ -210,8 +207,7 @@ class _VirtualCharDevice(VirtualDevice):
         self._source_path = val
     source_path = property(_get_source_path, _set_source_path)
 
-    source_channel = XMLProperty("./source/@channel",
-                                 doc=_("Source channel name."))
+    source_channel = XMLProperty("./source/@channel")
     source_master = XMLProperty("./source/@master")
     source_slave = XMLProperty("./source/@slave")
 
@@ -231,10 +227,8 @@ class _VirtualCharDevice(VirtualDevice):
         self._has_mode_connect = self.MODE_CONNECT
         return val
     source_host = XMLProperty("./source[@mode='connect']/@host",
-                            doc=_("Host address to connect to."),
                             set_converter=_set_source_validate)
     source_port = XMLProperty("./source[@mode='connect']/@service",
-                              doc=_("Host port to connect to."),
                               set_converter=_set_source_validate,
                               is_int=True)
 
@@ -244,10 +238,8 @@ class _VirtualCharDevice(VirtualDevice):
         self._has_mode_bind = self.MODE_BIND
         return val
     bind_host = XMLProperty("./source[@mode='bind']/@host",
-                            doc=_("Host address to bind to."),
                             set_converter=_set_bind_validate)
     bind_port = XMLProperty("./source[@mode='bind']/@service",
-                            doc=_("Host port to bind to."),
                             set_converter=_set_bind_validate,
                             is_int=True)
 
@@ -261,7 +253,6 @@ class _VirtualCharDevice(VirtualDevice):
             return None
         return self.PROTOCOL_RAW
     protocol = XMLProperty("./protocol/@type",
-                           doc=_("Format used when sending data."),
                            default_cb=_get_default_protocol)
 
     def _get_default_target_type(self):
@@ -269,21 +260,17 @@ class _VirtualCharDevice(VirtualDevice):
             return self.CHANNEL_TARGET_VIRTIO
         return None
     target_type = XMLProperty("./target/@type",
-                              doc=_("Channel type as exposed in the guest."),
                               default_cb=_get_default_target_type)
 
-    target_address = XMLProperty("./target/@address",
-                        doc=_("Guest forward channel address in the guest."))
+    target_address = XMLProperty("./target/@address")
 
-    target_port = XMLProperty("./target/@port", is_int=True,
-                           doc=_("Guest forward channel port in the guest."))
+    target_port = XMLProperty("./target/@port", is_int=True)
 
     def _default_target_name(self):
         if self.type == self.TYPE_SPICEVMC:
             return self.CHANNEL_NAME_SPICE
         return None
     target_name = XMLProperty("./target/@name",
-                           doc=_("Sysfs name of virtio port in the guest"),
                            default_cb=_default_target_name)
 
     log_file = XMLProperty("./log/@file")

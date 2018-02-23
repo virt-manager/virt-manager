@@ -77,16 +77,19 @@ class Cloner(object):
         self.clone_uuid = util.generate_uuid(conn)
 
 
-    # Getter/Setter methods
+    ##############
+    # Properties #
+    ##############
 
+    # Original guest name
     def get_original_guest(self):
         return self._original_guest
     def set_original_guest(self, original_guest):
         if self._lookup_vm(original_guest):
             self._original_guest = original_guest
-    original_guest = property(get_original_guest, set_original_guest,
-                              doc="Original guest name.")
+    original_guest = property(get_original_guest, set_original_guest)
 
+    # XML of the original guest
     def set_original_xml(self, val):
         if not isinstance(val, str):
             raise ValueError(_("Original xml must be a string."))
@@ -95,9 +98,9 @@ class Cloner(object):
                                      parsexml=self._original_xml).name
     def get_original_xml(self):
         return self._original_xml
-    original_xml = property(get_original_xml, set_original_xml,
-                            doc="XML of the original guest.")
+    original_xml = property(get_original_xml, set_original_xml)
 
+    # Name to use for the new guest clone
     def get_clone_name(self):
         return self._clone_name
     def set_clone_name(self, name):
@@ -109,16 +112,16 @@ class Cloner(object):
             raise ValueError(_("Invalid name for new guest: %s") % e)
 
         self._clone_name = name
-    clone_name = property(get_clone_name, set_clone_name,
-                          doc="Name to use for the new guest clone.")
+    clone_name = property(get_clone_name, set_clone_name)
 
+    # UUID to use for the new guest clone
     def set_clone_uuid(self, uuid):
         self._clone_uuid = uuid
     def get_clone_uuid(self):
         return self._clone_uuid
-    clone_uuid = property(get_clone_uuid, set_clone_uuid,
-                          doc="UUID to use for the new guest clone")
+    clone_uuid = property(get_clone_uuid, set_clone_uuid)
 
+    # Paths to use for the new disk locations
     def set_clone_paths(self, paths):
         disklist = []
         for path in util.listify(paths):
@@ -147,15 +150,14 @@ class Cloner(object):
         self._clone_disks = disklist
     def get_clone_paths(self):
         return [d.path for d in self.clone_disks]
-    clone_paths = property(get_clone_paths, set_clone_paths,
-                             doc="Paths to use for the new disk locations.")
+    clone_paths = property(get_clone_paths, set_clone_paths)
 
-    def get_clone_disks(self):
+    # VirtualDisk instances for the new disk paths
+    @property
+    def clone_disks(self):
         return self._clone_disks
-    clone_disks = property(get_clone_disks,
-                           doc="VirtualDisk instances for the new"
-                               " disk paths")
 
+    # MAC address for the new guest clone
     def set_clone_macs(self, mac):
         maclist = util.listify(mac)
         for m in maclist:
@@ -166,45 +168,43 @@ class Cloner(object):
         self._clone_macs = maclist
     def get_clone_macs(self):
         return self._clone_macs
-    clone_macs = property(get_clone_macs, set_clone_macs,
-                          doc="MAC address for the new guest clone.")
+    clone_macs = property(get_clone_macs, set_clone_macs)
 
-    def get_original_disks(self):
+    # VirtualDisk instances of the original disks being cloned
+    @property
+    def original_disks(self):
         return self._original_disks
-    original_disks = property(get_original_disks,
-                              doc="VirtualDisk instances of the "
-                                  "original disks being cloned.")
 
+    # Generated XML for the guest clone
     def get_clone_xml(self):
         return self._clone_xml
     def set_clone_xml(self, clone_xml):
         self._clone_xml = clone_xml
-    clone_xml = property(get_clone_xml, set_clone_xml,
-                         doc="Generated XML for the guest clone.")
+    clone_xml = property(get_clone_xml, set_clone_xml)
 
+    # Whether to attempt sparse allocation during cloning
     def get_clone_sparse(self):
         return self._clone_sparse
     def set_clone_sparse(self, flg):
         self._clone_sparse = flg
-    clone_sparse = property(get_clone_sparse, set_clone_sparse,
-                            doc="Whether to attempt sparse allocation during "
-                                "cloning.")
+    clone_sparse = property(get_clone_sparse, set_clone_sparse)
 
+    # If true, preserve ALL original disk devices
     def get_preserve(self):
         return self._preserve
     def set_preserve(self, flg):
         self._preserve = flg
-    preserve = property(get_preserve, set_preserve,
-                        doc="If true, preserve ALL original disk devices.")
+    preserve = property(get_preserve, set_preserve)
 
-    def get_preserve_dest_disks(self):
+    # If true, preserve ALL disk devices for the NEW guest.
+    # This means no storage cloning.
+    # This is a convenience access for not Cloner.preserve
+    @property
+    def preserve_dest_disks(self):
         return not self.preserve
-    preserve_dest_disks = property(get_preserve_dest_disks,
-                           doc="If true, preserve ALL disk devices for the "
-                               "NEW guest. This means no storage cloning. "
-                               "This is a convenience access for "
-                               "(not Cloner.preserve)")
 
+    # List of disk targets that we force cloning despite
+    # Cloner's recommendation
     def set_force_target(self, dev):
         if isinstance(dev, list):
             self._force_target = dev[:]
@@ -212,10 +212,10 @@ class Cloner(object):
             self._force_target.append(dev)
     def get_force_target(self):
         return self._force_target
-    force_target = property(get_force_target, set_force_target,
-                            doc="List of disk targets that we force cloning "
-                                "despite Cloner's recommendation.")
+    force_target = property(get_force_target, set_force_target)
 
+    # List of disk targets that we skip cloning despite Cloner's
+    # recommendation. This takes precedence over force_target.")
     def set_skip_target(self, dev):
         if isinstance(dev, list):
             self._skip_target = dev[:]
@@ -223,45 +223,45 @@ class Cloner(object):
             self._skip_target.append(dev)
     def get_skip_target(self):
         return self._skip_target
-    skip_target = property(get_skip_target, set_skip_target,
-                           doc="List of disk targets that we skip cloning "
-                               "despite Cloner's recommendation. This "
-                               "takes precedence over force_target.")
+    skip_target = property(get_skip_target, set_skip_target)
 
+    # List of policy rules for determining which vm disks to clone.
+    # See CLONE_POLICY_*
     def set_clone_policy(self, policy_list):
         if not isinstance(policy_list, list):
             raise ValueError(_("Cloning policy must be a list of rules."))
         self._clone_policy = policy_list
     def get_clone_policy(self):
         return self._clone_policy
-    clone_policy = property(get_clone_policy, set_clone_policy,
-                            doc="List of policy rules for determining which "
-                                "vm disks to clone. See CLONE_POLICY_*")
+    clone_policy = property(get_clone_policy, set_clone_policy)
 
+    # Allow cloning a running VM. If enabled, domain state is not
+    # checked before cloning.
     def get_clone_running(self):
         return self._clone_running
     def set_clone_running(self, val):
         self._clone_running = bool(val)
-    clone_running = property(get_clone_running, set_clone_running,
-                             doc="Allow cloning a running VM. If enabled, "
-                                 "domain state is not checked before "
-                                 "cloning.")
+    clone_running = property(get_clone_running, set_clone_running)
 
+    # If enabled, don't check for clone name collision, simply undefine
+    # any conflicting guest.
     def _get_replace(self):
         return self._replace
     def _set_replace(self, val):
         self._replace = bool(val)
-    replace = property(_get_replace, _set_replace,
-                       doc="If enabled, don't check for clone name collision, "
-                           "simply undefine any conflicting guest.")
+    replace = property(_get_replace, _set_replace)
+
+    # If true, use COW lightweight copy
     def _get_reflink(self):
         return self._reflink
     def _set_reflink(self, reflink):
         self._reflink = reflink
-    reflink = property(_get_reflink, _set_reflink,
-            doc="If true, use COW lightweight copy")
+    reflink = property(_get_reflink, _set_reflink)
 
-    # Functional methods
+
+    ######################
+    # Functional methods #
+    ######################
 
     def setup_original(self):
         """
