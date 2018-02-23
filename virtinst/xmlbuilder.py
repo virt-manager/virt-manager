@@ -423,6 +423,10 @@ class _XMLState(object):
     def __init__(self, root_name, parsexml, parentxmlstate,
                  relative_object_xpath):
         self._root_name = root_name
+        self._namespace = ""
+        if ":" in self._root_name:
+            ns = self._root_name.split(":")[0]
+            self._namespace = " xmlns:%s='%s'" % (ns, XMLAPI.NAMESPACES[ns])
 
         # xpath of this object relative to its parent. So for a standalone
         # <disk> this is empty, but if the disk is the forth one in a <domain>
@@ -447,12 +451,12 @@ class _XMLState(object):
             self.xmlapi = parentxmlstate.xmlapi
             return
 
+        # Make sure passed in XML has required xmlns inserted
         if not parsexml:
-            parsexml = "<%s" % self._root_name
-            if ":" in self._root_name:
-                ns = self._root_name.split(":")[0]
-                parsexml += " xmlns:%s='%s'" % (ns, XMLAPI.NAMESPACES[ns])
-            parsexml += "/>"
+            parsexml = "<%s%s/>" % (self._root_name, self._namespace)
+        elif self._namespace and "xmlns" not in parsexml:
+            parsexml = parsexml.replace(self._root_name,
+                    self._root_name + self._namespace)
 
         try:
             self.xmlapi = XMLAPI(parsexml)
