@@ -223,14 +223,9 @@ class VirtConverter(object):
         logging.debug("converter not input_file=%s parser=%s",
             self._input_file, self.parser)
 
-        cwd = os.getcwd()
-        try:
-            os.chdir(self._top_dir)
-            self._guest = self.parser.export_libvirt(self.conn,
-                self._input_file)
-            self._guest.add_default_devices()
-        finally:
-            os.chdir(cwd)
+        self._guest = self.parser.export_libvirt(self.conn,
+            self._input_file)
+        self._guest.add_default_devices()
 
     def __del__(self):
         for f in self._force_clean:

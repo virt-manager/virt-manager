@@ -166,10 +166,9 @@ def parse_netdev_entry(conn, ifaces, fullkey, value):
     return net, inst
 
 
-def parse_disk_entry(conn, disks, fullkey, value):
+def parse_disk_entry(conn, disks, fullkey, value, topdir):
     """
-    Parse a particular key/value for a disk.  FIXME: this should be a
-    lot smarter.
+    Parse a particular key/value for a disk.
     """
     # skip bus values, e.g. 'scsi0.present = "TRUE"'
     if re.match(r"^(scsi|ide)[0-9]+[^:]", fullkey):
@@ -213,7 +212,7 @@ def parse_disk_entry(conn, disks, fullkey, value):
         if lvalue.endswith(".vmdk"):
             fmt = "vmdk"
             # See if the filename is actually a VMDK descriptor file
-            newpath = parse_vmdk(disk.path)
+            newpath = parse_vmdk(os.path.join(topdir, disk.path))
             if newpath:
                 logging.debug("VMDK file parsed path %s->%s",
                     disk.path, newpath)
@@ -252,6 +251,7 @@ class vmx_parser(parser_class):
 
     @staticmethod
     def export_libvirt(conn, input_file):
+        topdir = os.path.dirname(os.path.abspath(input_file))
         infile = open(input_file, "r")
         contents = infile.readlines()
         infile.close()
@@ -280,7 +280,7 @@ class vmx_parser(parser_class):
 
         disks = []
         for key, value in _find_keys(["scsi", "ide"]):
-            parse_disk_entry(conn, disks, key, value)
+            parse_disk_entry(conn, disks, key, value, topdir)
 
         ifaces = []
         for key, value in _find_keys("ethernet"):

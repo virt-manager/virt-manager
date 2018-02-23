@@ -58,7 +58,6 @@ class TestVirtConv(unittest.TestCase):
         utils.test_create(conn, out_xml)
 
     def _compare(self, in_path, disk_format=None):
-        cwd = os.getcwd()
         in_type = "ovf"
         if "vmx" in in_path:
             in_type = "vmx"
@@ -70,11 +69,7 @@ class TestVirtConv(unittest.TestCase):
         if disk_format:
             out_path += ".disk_%s" % disk_format
 
-        try:
-            os.chdir(os.path.dirname(in_path))
-            self._convert_helper(in_path, out_path, in_type, disk_format)
-        finally:
-            os.chdir(cwd)
+        self._convert_helper(in_path, out_path, in_type, disk_format)
 
 
     def testOVF2Libvirt(self):
