@@ -57,6 +57,11 @@ def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
     return poolCompare(pool_inst)
 
 
+def removePool(poolobj):
+    poolobj.destroy()
+    poolobj.undefine()
+
+
 def poolCompare(pool_inst):
     filename = os.path.join(basepath, pool_inst.name + ".xml")
     out_expect = pool_inst.get_xml_config()
@@ -117,6 +122,7 @@ class TestStorage(unittest.TestCase):
                   volname=invol.name() + "input", input_vol=invol)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "clone", clone_vol=invol)
+        removePool(poolobj)
 
     def testFSPool(self):
         poolobj = createPool(self.conn,
@@ -126,6 +132,7 @@ class TestStorage(unittest.TestCase):
                   volname=invol.name() + "input", input_vol=invol)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "clone", clone_vol=invol)
+        removePool(poolobj)
 
     def testNetFSPool(self):
         poolobj = createPool(self.conn,
@@ -135,6 +142,7 @@ class TestStorage(unittest.TestCase):
                   volname=invol.name() + "input", input_vol=invol)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "clone", clone_vol=invol)
+        removePool(poolobj)
 
     def testLVPool(self):
         poolobj = createPool(self.conn,
@@ -146,23 +154,19 @@ class TestStorage(unittest.TestCase):
                   volname=invol.name() + "input", input_vol=invol)
         createVol(self.conn,
                   poolobj, volname=invol.name() + "clone", clone_vol=invol)
+        removePool(poolobj)
 
         # Test parsing source name for target path
-        createPool(self.conn, StoragePool.TYPE_LOGICAL,
+        poolobj = createPool(self.conn, StoragePool.TYPE_LOGICAL,
                    "pool-logical-target-srcname",
                    target_path="/dev/vgfoobar")
+        removePool(poolobj)
 
         # Test with source name
-        createPool(self.conn,
+        poolobj = createPool(self.conn,
                    StoragePool.TYPE_LOGICAL, "pool-logical-srcname",
                    source_name="vgname")
-
-        # Test creating with many devices
-        # XXX: Need to wire this up
-        # createPool(self.conn,
-        #            StoragePool.TYPE_LOGICAL, "pool-logical-manydev",
-        #            source_path=["/tmp/path1", "/tmp/path2", "/tmp/path3"],
-        #            target_path=None)
+        removePool(poolobj)
 
     def testDiskPool(self):
         poolobj = createPool(self.conn,
@@ -173,24 +177,30 @@ class TestStorage(unittest.TestCase):
                   volname=invol.name() + "input", input_vol=invol)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "clone", clone_vol=invol)
+        removePool(poolobj)
 
     def testISCSIPool(self):
-        createPool(self.conn,
+        poolobj = createPool(self.conn,
                    StoragePool.TYPE_ISCSI, "pool-iscsi",
                    iqn="foo.bar.baz.iqn")
+        removePool(poolobj)
 
     def testSCSIPool(self):
-        createPool(self.conn, StoragePool.TYPE_SCSI, "pool-scsi")
+        poolobj = createPool(self.conn, StoragePool.TYPE_SCSI, "pool-scsi")
+        removePool(poolobj)
 
     def testMpathPool(self):
-        createPool(self.conn, StoragePool.TYPE_MPATH, "pool-mpath")
+        poolobj = createPool(self.conn, StoragePool.TYPE_MPATH, "pool-mpath")
+        removePool(poolobj)
 
     def testGlusterPool(self):
         if not self.conn.check_support(self.conn.SUPPORT_CONN_POOL_GLUSTERFS):
             raise unittest.SkipTest("Gluster pools not supported with this "
                 "libvirt version.")
 
-        createPool(self.conn, StoragePool.TYPE_GLUSTER, "pool-gluster")
+        poolobj = createPool(self.conn,
+                StoragePool.TYPE_GLUSTER, "pool-gluster")
+        removePool(poolobj)
 
 
     ##############################
@@ -200,7 +210,8 @@ class TestStorage(unittest.TestCase):
     def _enumerateCompare(self, name, pool_list):
         for pool in pool_list:
             pool.name = name + str(pool_list.index(pool))
-            poolCompare(pool)
+            poolobj = poolCompare(pool)
+            removePool(poolobj)
 
     def testEnumerateLogical(self):
         name = "pool-logical-list"
