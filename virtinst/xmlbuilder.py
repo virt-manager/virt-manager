@@ -688,6 +688,10 @@ class _XMLState(object):
                  relative_object_xpath):
         self._root_name = root_name
         self._stub_path = "/%s" % self._root_name
+        self._namespace = ""
+        if ":" in self._root_name:
+            ns = self._root_name.split(":")[0]
+            self._namespace = " xmlns:%s='%s'" % (ns, _namespaces[ns])
 
         # xpath of this object relative to its parent. So for a standalone
         # <disk> this is empty, but if the disk is the forth one in a <domain>
@@ -718,6 +722,10 @@ class _XMLState(object):
 
         if not parsexml:
             parsexml = self.make_xml_stub()
+        elif self._namespace and "xmlns" not in parsexml:
+            # Make sure passed in XML has required xmlns inserted
+            parsexml = parsexml.replace("<" + self._root_name,
+                    "<" + self._root_name + self._namespace)
 
         try:
             doc = libxml2.parseDoc(parsexml)
@@ -738,12 +746,7 @@ class _XMLState(object):
 
 
     def make_xml_stub(self):
-        ret = "<%s" % self._root_name
-        if ":" in self._root_name:
-            ns = self._root_name.split(":")[0]
-            ret += " xmlns:%s='%s'" % (ns, _namespaces[ns])
-        ret += "/>"
-        return ret
+        return "<%s%s/>" % (self._root_name, self._namespace)
 
     def set_relative_object_xpath(self, xpath):
         self._relative_object_xpath = xpath or ""
