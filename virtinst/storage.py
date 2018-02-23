@@ -18,9 +18,8 @@
 # MA 02110-1301 USA.
 
 import os
-import threading
-import time
 import logging
+import threading
 
 import libvirt
 
@@ -596,9 +595,7 @@ class StorageVolume(_StorageObject):
         self._pool_xml = None
         self._reflink = False
 
-        # Indicate that the volume installation has finished. Used to
-        # definitively tell the storage progress thread to stop polling.
-        self._install_finished = True
+        self._install_finished = threading.Event()
 
 
     ######################
@@ -820,7 +817,7 @@ class StorageVolume(_StorageObject):
                 "VIR_STORAGE_VOL_CREATE_REFLINK", 1)
 
         try:
-            self._install_finished = False
+            self._install_finished.clear()
             t.start()
             meter.start(size=self.capacity,
                         text=_("Allocating '%s'") % self.name)
@@ -831,7 +828,7 @@ class StorageVolume(_StorageObject):
                 logging.debug("Using vol create flags=%s", createflags)
                 vol = self.pool.createXML(xml, createflags)
 
-            self._install_finished = True
+            self._install_finished.set()
             t.join()
             meter.end(self.capacity)
             logging.debug("Storage volume '%s' install complete.",
@@ -854,20 +851,18 @@ class StorageVolume(_StorageObject):
                 vol.info()
                 break
             except Exception:
-                if time:  # pylint: disable=using-constant-test
-                    # This 'if' check saves some noise from the test suite
-                    time.sleep(.2)
-                if self._install_finished:
+                if self._install_finished.wait(.2):
                     break
 
         if vol is None:
             logging.debug("Couldn't lookup storage volume in prog thread.")
             return
 
-        while not self._install_finished:
+        while True:
             ignore, ignore, alloc = vol.info()
             meter.update(alloc)
-            time.sleep(1)
+            if self._install_finished.wait(1):
+                break
 
 
     def is_size_conflict(self):
