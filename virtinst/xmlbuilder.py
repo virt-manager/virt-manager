@@ -455,8 +455,8 @@ class _XMLState(object):
         if not parsexml:
             parsexml = "<%s%s/>" % (self._root_name, self._namespace)
         elif self._namespace and "xmlns" not in parsexml:
-            parsexml = parsexml.replace(self._root_name,
-                    self._root_name + self._namespace)
+            parsexml = parsexml.replace("<" + self._root_name,
+                    "<" + self._root_name + self._namespace)
 
         try:
             self.xmlapi = XMLAPI(parsexml)

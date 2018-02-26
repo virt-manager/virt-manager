@@ -982,7 +982,10 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(guest.xmlns_qemu.args[1])
         check("value", "bar,baz=wib wob", "testval")
         guest.xmlns_qemu.args.add_new().value = "additional-arg"
+        arg0 = guest.xmlns_qemu.args[0]
         guest.xmlns_qemu.remove_child(guest.xmlns_qemu.args[0])
+        self.assertEqual(arg0.get_xml_config(),
+                "<qemu:arg xmlns:qemu=\"http://libvirt.org/schemas/domain/qemu/1.0\" value=\"-somenewarg\"/>\n")
 
         check = self._make_checker(guest.xmlns_qemu.envs[0])
         check("name", "SOMEENV")
