@@ -37,6 +37,7 @@ from . import connectauth
 from .baseclass import vmmGObject
 from .domain import vmmDomain
 from .interface import vmmInterface
+from .libvirtenummap import LibvirtEnumMap
 from .network import vmmNetwork
 from .nodedev import vmmNodeDevice
 from .storagepool import vmmStoragePool
@@ -782,13 +783,14 @@ class vmmConnection(vmmGObject):
 
         self.idle_add(obj.recache_from_event_loop)
 
-    def _domain_lifecycle_event(self, conn, domain, event, reason, userdata):
+    def _domain_lifecycle_event(self, conn, domain, state, reason, userdata):
         ignore = conn
         ignore = userdata
 
         name = domain.name()
-        logging.debug("domain lifecycle event: domain=%s event=%s "
-            "reason=%s", name, event, reason)
+        logging.debug("domain lifecycle event: domain=%s %s", name,
+                LibvirtEnumMap.domain_lifecycle_str(state, reason))
+
         obj = self.get_vm(name)
 
         if obj:
@@ -796,13 +798,13 @@ class vmmConnection(vmmGObject):
         else:
             self.schedule_priority_tick(pollvm=True, force=True)
 
-    def _network_lifecycle_event(self, conn, network, event, reason, userdata):
+    def _network_lifecycle_event(self, conn, network, state, reason, userdata):
         ignore = conn
         ignore = userdata
 
         name = network.name()
-        logging.debug("network lifecycle event: network=%s event=%s "
-            "reason=%s", name, event, reason)
+        logging.debug("network lifecycle event: network=%s %s",
+                name, LibvirtEnumMap.network_lifecycle_str(state, reason))
         obj = self.get_net(name)
 
         if obj:
@@ -811,13 +813,13 @@ class vmmConnection(vmmGObject):
             self.schedule_priority_tick(pollnet=True, force=True)
 
     def _storage_pool_lifecycle_event(self, conn, pool,
-                                      event, reason, userdata):
+                                      state, reason, userdata):
         ignore = conn
         ignore = userdata
 
         name = pool.name()
-        logging.debug("storage pool lifecycle event: storage=%s event=%s "
-            "reason=%s", name, event, reason)
+        logging.debug("storage pool lifecycle event: pool=%s %s",
+            name, LibvirtEnumMap.storage_lifecycle_str(state, reason))
 
         obj = self.get_pool(name)
 
@@ -841,13 +843,13 @@ class vmmConnection(vmmGObject):
         self.idle_add(obj.refresh_pool_cache_from_event_loop)
 
     def _node_device_lifecycle_event(self, conn, dev,
-                                     event, reason, userdata):
+                                     state, reason, userdata):
         ignore = conn
         ignore = userdata
 
         name = dev.name()
-        logging.debug("node device lifecycle event: device=%s event=%s "
-            "reason=%s", name, event, reason)
+        logging.debug("node device lifecycle event: nodedev=%s %s",
+            name, LibvirtEnumMap.nodedev_lifecycle_str(state, reason))
 
         self.schedule_priority_tick(pollnodedev=True, force=True)
 
@@ -856,7 +858,7 @@ class vmmConnection(vmmGObject):
         ignore = userdata
 
         name = dev.name()
-        logging.debug("node device update event: device=%s", name)
+        logging.debug("node device update event: nodedev=%s", name)
 
         obj = self.get_nodedev(name)
 
