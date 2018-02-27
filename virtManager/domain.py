@@ -35,20 +35,7 @@ from virtinst import VirtualController
 from virtinst import VirtualDisk
 
 from .libvirtobject import vmmLibvirtObject
-
-if not hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED"):
-    setattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7)
-
-vm_status_icons = {
-    libvirt.VIR_DOMAIN_BLOCKED: "state_running",
-    libvirt.VIR_DOMAIN_CRASHED: "state_shutoff",
-    libvirt.VIR_DOMAIN_PAUSED: "state_paused",
-    libvirt.VIR_DOMAIN_RUNNING: "state_running",
-    libvirt.VIR_DOMAIN_SHUTDOWN: "state_shutoff",
-    libvirt.VIR_DOMAIN_SHUTOFF: "state_shutoff",
-    libvirt.VIR_DOMAIN_NOSTATE: "state_running",
-    libvirt.VIR_DOMAIN_PMSUSPENDED: "state_paused",
-}
+from .libvirtenummap import LibvirtEnumMap
 
 
 class _SENTINEL(object):
@@ -204,13 +191,13 @@ class vmmDomainSnapshot(vmmLibvirtObject):
 
     def run_status(self):
         status = DomainSnapshot.state_str_to_int(self.get_xmlobj().state)
-        return vmmDomain.pretty_run_status(status)
+        return LibvirtEnumMap.pretty_run_status(status, False)
     def run_status_icon_name(self):
         status = DomainSnapshot.state_str_to_int(self.get_xmlobj().state)
-        if status not in vm_status_icons:
+        if status not in LibvirtEnumMap.VM_STATUS_ICONS:
             logging.debug("Unknown status %d, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
-        return vm_status_icons[status]
+        return LibvirtEnumMap.VM_STATUS_ICONS[status]
 
     def is_current(self):
         return self._backend.isCurrent()
@@ -233,73 +220,6 @@ class vmmDomain(vmmLibvirtObject):
         "inspection-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "pre-startup": (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
-
-    @staticmethod
-    def pretty_run_status(status, has_saved=False):
-        if status == libvirt.VIR_DOMAIN_RUNNING:
-            return _("Running")
-        elif status == libvirt.VIR_DOMAIN_PAUSED:
-            return _("Paused")
-        elif status == libvirt.VIR_DOMAIN_SHUTDOWN:
-            return _("Shutting Down")
-        elif status == libvirt.VIR_DOMAIN_SHUTOFF:
-            if has_saved:
-                return _("Saved")
-            else:
-                return _("Shutoff")
-        elif status == libvirt.VIR_DOMAIN_CRASHED:
-            return _("Crashed")
-        elif status == libvirt.VIR_DOMAIN_PMSUSPENDED:
-            return _("Suspended")
-
-        logging.debug("Unknown status %s, returning 'Unknown'", status)
-        return _("Unknown")
-
-    @staticmethod
-    def pretty_status_reason(status, reason):
-        def key(x, y):
-            return getattr(libvirt, "VIR_DOMAIN_" + x, y)
-        reasons = {
-            libvirt.VIR_DOMAIN_RUNNING: {
-                key("RUNNING_BOOTED", 1):             _("Booted"),
-                key("RUNNING_MIGRATED", 2):           _("Migrated"),
-                key("RUNNING_RESTORED", 3):           _("Restored"),
-                key("RUNNING_FROM_SNAPSHOT", 4):      _("From snapshot"),
-                key("RUNNING_UNPAUSED", 5):           _("Unpaused"),
-                key("RUNNING_MIGRATION_CANCELED", 6): _("Migration canceled"),
-                key("RUNNING_SAVE_CANCELED", 7):      _("Save canceled"),
-                key("RUNNING_WAKEUP", 8):             _("Event wakeup"),
-                key("RUNNING_CRASHED", 9):            _("Crashed"),
-            },
-            libvirt.VIR_DOMAIN_PAUSED: {
-                key("PAUSED_USER", 1):                _("User"),
-                key("PAUSED_MIGRATION", 2):           _("Migrating"),
-                key("PAUSED_SAVE", 3):                _("Saving"),
-                key("PAUSED_DUMP", 4):                _("Dumping"),
-                key("PAUSED_IOERROR", 5):             _("I/O error"),
-                key("PAUSED_WATCHDOG", 6):            _("Watchdog"),
-                key("PAUSED_FROM_SNAPSHOT", 7):       _("From snapshot"),
-                key("PAUSED_SHUTTING_DOWN", 8):       _("Shutting down"),
-                key("PAUSED_SNAPSHOT", 9):            _("Creating snapshot"),
-                key("PAUSED_CRASHED", 10):            _("Crashed"),
-            },
-            libvirt.VIR_DOMAIN_SHUTDOWN: {
-                key("SHUTDOWN_USER", 1):              _("User"),
-            },
-            libvirt.VIR_DOMAIN_SHUTOFF: {
-                key("SHUTOFF_SHUTDOWN", 1):           _("Shut Down"),
-                key("SHUTOFF_DESTROYED", 2):          _("Destroyed"),
-                key("SHUTOFF_CRASHED", 3):            _("Crashed"),
-                key("SHUTOFF_MIGRATED", 4):           _("Migrated"),
-                key("SHUTOFF_SAVED", 5):              _("Saved"),
-                key("SHUTOFF_FAILED", 6):             _("Failed"),
-                key("SHUTOFF_FROM_SNAPSHOT", 7):      _("From snapshot"),
-            },
-            libvirt.VIR_DOMAIN_CRASHED: {
-                key("CRASHED_PANICKED", 1):           _("Panicked"),
-            }
-        }
-        return reasons.get(status) and reasons[status].get(reason)
 
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Guest)
@@ -1776,17 +1696,19 @@ class vmmDomain(vmmLibvirtObject):
                                  libvirt.VIR_DOMAIN_PMSUSPENDED]
 
     def run_status(self):
-        return self.pretty_run_status(self.status(), self.has_managed_save())
+        return LibvirtEnumMap.pretty_run_status(
+                self.status(), self.has_managed_save())
 
     def run_status_reason(self):
-        return self.pretty_status_reason(self.status(), self.status_reason())
+        return LibvirtEnumMap.pretty_status_reason(
+                self.status(), self.status_reason())
 
     def run_status_icon_name(self):
         status = self.status()
-        if status not in vm_status_icons:
+        if status not in LibvirtEnumMap.VM_STATUS_ICONS:
             logging.debug("Unknown status %s, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
-        return vm_status_icons[status]
+        return LibvirtEnumMap.VM_STATUS_ICONS[status]
 
     def inspection_data_updated(self):
         self.idle_emit("inspection-changed")
