@@ -770,9 +770,12 @@ class vmmConnection(vmmGObject):
     def _domain_xml_misc_event(self, conn, domain, *args):
         # Just trigger a domain XML refresh for hotplug type events
         ignore = conn
+        args = list(args)
+        eventstr = args.pop(-1)
 
         name = domain.name()
-        logging.debug("domain xmlmisc event: domain=%s args=%s ", name, args)
+        logging.debug("domain xmlmisc event: domain=%s event=%s args=%s",
+                name, eventstr, args)
         obj = self.get_vm(name)
         if not obj:
             return
@@ -878,28 +881,22 @@ class vmmConnection(vmmGObject):
             self.using_domain_events = False
             logging.debug("Error registering domain events: %s", e)
 
-        def _add_domain_xml_event(eventid, typestr):
+        def _add_domain_xml_event(eventname, eventval):
             if not self.using_domain_events:
                 return
             try:
+                eventid = getattr(libvirt, eventname, eventval)
                 self._domain_cb_ids.append(
                     self.get_backend().domainEventRegisterAny(
-                    None, eventid, self._domain_xml_misc_event, None))
+                    None, eventid, self._domain_xml_misc_event, eventname))
             except Exception as e:
-                logging.debug("Error registering domain %s event: %s",
-                    typestr, e)
+                logging.debug("Error registering %s event: %s",
+                    eventname, e)
 
-        _add_domain_xml_event(
-            getattr(libvirt, "VIR_DOMAIN_EVENT_ID_BALLOON_CHANGE", 13),
-            "balloon")
-        _add_domain_xml_event(
-            getattr(libvirt, "VIR_DOMAIN_EVENT_ID_TRAY_CHANGE", 10), "tray")
-        _add_domain_xml_event(
-            getattr(libvirt, "VIR_DOMAIN_EVENT_ID_DEVICE_REMOVED", 15),
-            "device removed")
-        _add_domain_xml_event(
-            getattr(libvirt, "VIR_DOMAIN_EVENT_ID_DEVICE_ADDED", 19),
-            "device added")
+        _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_BALLOON_CHANGE", 13)
+        _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_TRAY_CHANGE", 10)
+        _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_DEVICE_REMOVED", 15)
+        _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_DEVICE_ADDED", 19)
 
         try:
             if FORCE_DISABLE_EVENTS:
