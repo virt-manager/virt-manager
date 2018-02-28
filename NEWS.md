@@ -1,5 +1,10 @@
 # Virtual Machine Manager News
 
+## Release 1.5.1 (February 28, 2018)
+- Bug fix release
+- Fix potential crash with libxml2 error callbacks
+- Fix disk/net/mem VM graphs
+
 ## Release 1.5.0 (February 06, 2018)
 - python3 prep work (Radostin Stoyanov, Cole Robinson, Cédric Bosdonnat)
 - Switch --location ISO to use isoinfo (Andrew Wong)
