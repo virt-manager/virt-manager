@@ -581,6 +581,8 @@ class CheckPylint(distutils.core.Command):
             self.jobs = int(self.jobs)
 
     def run(self):
+        import pylint.lint
+
         files = ["setup.py", "virt-install", "virt-clone",
                  "virt-convert", "virt-xml", "virt-manager",
                  "virtcli", "virtinst", "virtconv", "virtManager",
@@ -597,15 +599,14 @@ class CheckPylint(distutils.core.Command):
         os.system(cmd)
 
         print("running pylint")
-        cmd = "pylint-3 "
+        pylint_opts = [
+            "--rcfile", "tests/pylint.cfg",
+            "--output-format=%s" % output_format,
+        ] + ["--ignore"] + [os.path.basename(p) for p in exclude]
         if self.jobs:
-            cmd += "--jobs=%d " % self.jobs
-        cmd += "--rcfile tests/pylint.cfg "
-        cmd += "--output-format=%s " % output_format
-        cmd += "--ignore %s " % ",".join(
-            [os.path.basename(p) for p in exclude])
-        cmd += " ".join(files)
-        os.system(cmd)
+            pylint_opts += ["--jobs=%d" % self.jobs]
+
+        pylint.lint.Run(files + pylint_opts)
 
 
 class VMMDistribution(distutils.dist.Distribution):
