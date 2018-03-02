@@ -253,10 +253,8 @@ class TextMeter(BaseMeter):
 
         # Include text + ui_rate in minimal
         tl = TerminalLine(8, 8+1+8)
-        if tl._llen > 80:
-            use_hours = True # For big screens, make it more readable.
-        else:
-            use_hours = False
+        # For big screens, make it more readable.
+        use_hours = bool(tl._llen > 80)
         ui_size = tl.add(' | %5sB' % fread)
         if self.size is None:
             ui_time = tl.add('  %s' % format_time(etime, use_hours))
@@ -301,10 +299,8 @@ class TextMeter(BaseMeter):
             text = self.basename
 
         tl = TerminalLine(8)
-        if tl._llen > 80:
-            use_hours = True # For big screens, make it more readable.
-        else:
-            use_hours = False
+        # For big screens, make it more readable.
+        use_hours = bool(tl._llen > 80)
         ui_size = tl.add(' | %5sB' % total_size)
         ui_time = tl.add('  %s' % format_time(self.re.elapsed_time(), use_hours))
         ui_end, not_done = _term_add_end(tl, self.size, amount_read)
