@@ -247,8 +247,8 @@ class Interface(XMLBuilder):
             try:
                 iface.undefine()
             except Exception as e:
-                logging.debug("Error cleaning up interface after failure: " +
-                              "%s" % str(e))
+                logging.debug("Error cleaning up interface after failure: %s",
+                              str(e))
             raise RuntimeError(errmsg)
 
         return iface

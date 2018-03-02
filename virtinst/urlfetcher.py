@@ -161,7 +161,7 @@ class _URLFetcher(object):
             fn = fileobj.name
 
         self._grabURL(filename, fileobj)
-        logging.debug("Saved file to " + fn)
+        logging.debug("Saved file to %s", fn)
         return fn
 
     def acquireFileContent(self, filename):
@@ -300,7 +300,7 @@ class _MountedURLFetcher(_LocalURLFetcher):
                                            dir=self.scratchdir)
         mountcmd = "/bin/mount"
 
-        logging.debug("Preparing mount at " + self._srcdir)
+        logging.debug("Preparing mount at %s", self._srcdir)
         cmd = [mountcmd, "-o", "ro", self.location[4:], self._srcdir]
 
         logging.debug("mount cmd: %s", cmd)
@@ -317,7 +317,7 @@ class _MountedURLFetcher(_LocalURLFetcher):
         if not self._mounted:
             return
 
-        logging.debug("Cleaning up mount at " + self._srcdir)
+        logging.debug("Cleaning up mount at %s", self._srcdir)
         try:
             if not self._in_test_suite:
                 cmd = ["/bin/umount", self._srcdir]

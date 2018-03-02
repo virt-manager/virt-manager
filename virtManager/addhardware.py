@@ -1290,8 +1290,8 @@ class vmmAddHardware(vmmGObjectUI):
 
 
     def _add_device(self):
-        self._dev.get_xml_config()
-        logging.debug("Adding device:\n" + self._dev.get_xml_config())
+        xml = self._dev.get_xml_config()
+        logging.debug("Adding device:\n%s", xml)
 
         if self._remove_usb_controller:
             kwargs = {}

@@ -182,7 +182,7 @@ class Installer(object):
         Remove any temporary files retrieved during installation
         """
         for f in self._tmpfiles:
-            logging.debug("Removing " + f)
+            logging.debug("Removing %s", str(f))
             os.unlink(f)
 
         for vol in self._tmpvols:

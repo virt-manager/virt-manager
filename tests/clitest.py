@@ -194,7 +194,7 @@ class Command(object):
 
             code, output = self._launch_command(conn)
 
-            logging.debug(output + "\n")
+            logging.debug("%s\n", output)
             return code, output
         except Exception as e:
             return (-1, "".join(traceback.format_exc()) + str(e))

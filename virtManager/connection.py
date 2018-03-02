@@ -1014,8 +1014,8 @@ class vmmConnection(vmmGObject):
 
         self._change_state(self._STATE_CONNECTING)
 
-        logging.debug("Scheduling background open thread for " +
-                     self.get_uri())
+        logging.debug("Scheduling background open thread for %s",
+                      self.get_uri())
         self._start_thread(self._open_thread, "Connect %s" % self.get_uri())
 
     def _do_creds_password(self, creds):

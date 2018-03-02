@@ -540,8 +540,8 @@ class StoragePool(_StorageObject):
             try:
                 pool.undefine()
             except Exception as e:
-                logging.debug("Error cleaning up pool after failure: " +
-                              "%s" % str(e))
+                logging.debug("Error cleaning up pool after failure: %s",
+                              str(e))
             raise RuntimeError(errmsg)
 
         self.conn.cache_new_pool(pool)
