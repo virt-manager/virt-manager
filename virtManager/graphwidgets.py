@@ -29,14 +29,11 @@ def rect_print(name, rect):
           (name, rect.height, rect.width, rect.x, rect.y))
 
 
-def _line_helper(cairo_ct, x, y, w, h, points, for_fill=False):
-    ignore = w
-    bottom_baseline = y + h
+def _line_helper(cairo_ct, bottom_baseline, points, for_fill=False):
     last_was_zero = False
     last_point = None
 
-    for index in range(0, len(points)):
-        x, y = points[index]
+    for index, (x, y) in enumerate(points):
 
         # If stats value == 0, we don't want to draw a line
         is_zero = bool(y == bottom_baseline)
@@ -65,11 +62,11 @@ def _line_helper(cairo_ct, x, y, w, h, points, for_fill=False):
     return last_point
 
 
-def draw_line(cairo_ct, x, y, w, h, points):
+def draw_line(cairo_ct, y, h, points):
     if not len(points):
         return
 
-    last_point = _line_helper(cairo_ct, x, y, w, h, points)
+    last_point = _line_helper(cairo_ct, y + h, points)
     if not last_point:
         # Nothing to draw
         return
@@ -82,7 +79,7 @@ def draw_fill(cairo_ct, x, y, w, h, points, taper=False):
     if not len(points):
         return
 
-    _line_helper(cairo_ct, x, y, w, h, points, for_fill=True)
+    _line_helper(cairo_ct, y + h, points, for_fill=True)
 
     baseline_y = h + y + 1
     if taper:
@@ -217,10 +214,7 @@ class CellRendererSparkline(Gtk.CellRenderer):
         # Set color to dark blue for the actual sparkline
         cr.set_line_width(2)
         cr.set_source_rgb(0.421875, 0.640625, 0.73046875)
-        draw_line(cr,
-                  cell_area.x, cell_area.y,
-                  cell_area.width, cell_area.height,
-                  points)
+        draw_line(cr, cell_area.y, cell_area.height, points)
 
         # Set color to light blue for the fill
         cr.set_source_rgba(0.71484375, 0.84765625, 0.89453125, .5)
@@ -369,7 +363,7 @@ class Sparkline(Gtk.DrawingArea):
             if self.num_sets == 1:
                 pass
 
-            draw_line(cr, 0, 0, w, h, points)
+            draw_line(cr, 0, h, points)
             if self.filled:
                 # Fixes a fully filled graph from having an oddly
                 # tapered in end (bug 560913). Need to figure out
