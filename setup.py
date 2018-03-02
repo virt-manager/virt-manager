@@ -582,6 +582,7 @@ class CheckPylint(distutils.core.Command):
 
     def run(self):
         import pylint.lint
+        import pycodestyle
 
         files = ["setup.py", "virt-install", "virt-clone",
                  "virt-convert", "virt-xml", "virt-manager",
@@ -592,11 +593,16 @@ class CheckPylint(distutils.core.Command):
         exclude = ["virtinst/progress.py"]
 
         print("running pycodestyle")
-        cmd = "pycodestyle-3 "
-        cmd += "--config tests/pycodestyle.cfg "
-        cmd += "--exclude %s " % ",".join(exclude)
-        cmd += " ".join(files)
-        os.system(cmd)
+        style_guide = pycodestyle.StyleGuide(
+            config_file='tests/pycodestyle.cfg',
+            paths=files
+        )
+        style_guide.options.exclude = pycodestyle.normalize_paths(
+            ','.join(exclude)
+        )
+        report = style_guide.check_files()
+        if style_guide.options.count:
+            sys.stderr.write(str(report.total_errors) + '\n')
 
         print("running pylint")
         pylint_opts = [
