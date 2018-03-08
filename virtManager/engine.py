@@ -93,7 +93,7 @@ class vmmEngine(vmmGObject):
         self.timer = None
         self.last_timeout = 0
 
-        self.systray = None
+        self._systray = None
         self.delete_dialog = None
 
         self._gtkapplication = None
@@ -115,12 +115,8 @@ class vmmEngine(vmmGObject):
         # keep running in system tray if enabled
         self.windows = 0
 
-        self.init_systray()
-
         self.add_gsettings_handle(
             self.config.on_stats_update_interval_changed(self.reschedule_timer))
-        self.add_gsettings_handle(
-            self.config.on_view_system_tray_changed(self.system_tray_changed))
 
         self.schedule_timer()
         self.load_stored_uris()
@@ -154,6 +150,8 @@ class vmmEngine(vmmGObject):
         self._application.add_action(action)
 
     def _default_startup(self, skip_autostart, cliuri):
+        self._init_systray()
+
         uris = list(self.conns.keys())
         if not uris:
             logging.debug("No stored URIs found.")
@@ -184,31 +182,30 @@ class vmmEngine(vmmGObject):
         self._application.run(None)
 
 
-    def init_systray(self):
-        if self.systray:
-            return
+    def _init_systray(self):
+        self._systray = vmmSystray()
+        self._systray.connect("action-toggle-manager", self._do_toggle_manager)
+        self._systray.connect("action-suspend-domain", self._do_suspend_domain)
+        self._systray.connect("action-resume-domain", self._do_resume_domain)
+        self._systray.connect("action-run-domain", self._do_run_domain)
+        self._systray.connect("action-shutdown-domain", self._do_shutdown_domain)
+        self._systray.connect("action-reboot-domain", self._do_reboot_domain)
+        self._systray.connect("action-destroy-domain", self._do_destroy_domain)
+        self._systray.connect("action-reset-domain", self._do_reset_domain)
+        self._systray.connect("action-save-domain", self._do_save_domain)
+        self._systray.connect("action-show-domain", self._do_show_vm)
+        self._systray.connect("action-migrate-domain", self._do_show_migrate)
+        self._systray.connect("action-delete-domain", self._do_delete_domain)
+        self._systray.connect("action-clone-domain", self._do_show_clone)
+        self._systray.connect("action-exit-app", self.exit_app)
 
-        self.systray = vmmSystray()
-        self.systray.connect("action-toggle-manager", self._do_toggle_manager)
-        self.systray.connect("action-suspend-domain", self._do_suspend_domain)
-        self.systray.connect("action-resume-domain", self._do_resume_domain)
-        self.systray.connect("action-run-domain", self._do_run_domain)
-        self.systray.connect("action-shutdown-domain", self._do_shutdown_domain)
-        self.systray.connect("action-reboot-domain", self._do_reboot_domain)
-        self.systray.connect("action-destroy-domain", self._do_destroy_domain)
-        self.systray.connect("action-reset-domain", self._do_reset_domain)
-        self.systray.connect("action-save-domain", self._do_save_domain)
-        self.systray.connect("action-show-domain", self._do_show_vm)
-        self.systray.connect("action-migrate-domain", self._do_show_migrate)
-        self.systray.connect("action-delete-domain", self._do_delete_domain)
-        self.systray.connect("action-clone-domain", self._do_show_clone)
-        self.systray.connect("action-exit-app", self.exit_app)
+        self.connect("conn-added", self._systray.conn_added)
+        self.connect("conn-removed", self._systray.conn_removed)
 
-        self.connect("conn-added", self.systray.conn_added)
-        self.connect("conn-removed", self.systray.conn_removed)
+        self.add_gsettings_handle(
+            self.config.on_view_system_tray_changed(self._system_tray_changed))
 
-
-    def system_tray_changed(self, *ignore):
+    def _system_tray_changed(self, *ignore):
         systray_enabled = self.config.get_view_system_tray()
         if self.windows == 0 and not systray_enabled:
             # Show the manager so that the user can control the application
@@ -413,8 +410,8 @@ class vmmEngine(vmmGObject):
     def _can_exit(self):
         # Don't exit if system tray is enabled
         return (self.windows <= 0 and
-                self.systray and
-                not self.systray.is_visible())
+                self._systray and
+                not self._systray.is_visible())
 
     def _cleanup(self):
         self.err = None
@@ -426,9 +423,9 @@ class vmmEngine(vmmGObject):
         if self.timer is not None:
             GLib.source_remove(self.timer)
 
-        if self.systray:
-            self.systray.cleanup()
-            self.systray = None
+        if self._systray:
+            self._systray.cleanup()
+            self._systray = None
 
         self.get_manager()
         if self.windowManager:
