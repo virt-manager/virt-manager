@@ -1279,6 +1279,12 @@ class vmmConnection(vmmGObject):
         # Would prefer to start refreshing some objects before all polling
         # is complete, but we need init_object_count to be fully accurate
         # before we start initializing objects
+
+        if initial_poll and self._init_object_count == 0:
+            # If the connection doesn't have any objects, new_object_cb
+            # is never called and the event is never set, so let's do it here
+            self._init_object_event.set()
+
         for newlist in [new_vms, new_nets, new_pools,
                 new_ifaces, new_nodedevs]:
             if not newlist:
