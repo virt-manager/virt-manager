@@ -27,13 +27,6 @@ from . import vmmenu
 from .baseclass import vmmGObject
 from .error import vmmErrorDialog
 
-try:
-    # pylint: disable=no-name-in-module
-    # pylint: disable=wrong-import-order
-    from gi.repository import AppIndicator3
-except Exception:
-    AppIndicator3 = None
-
 
 class vmmSystray(vmmGObject):
     __gsignals__ = {
@@ -66,12 +59,6 @@ class vmmSystray(vmmGObject):
         self.vm_action_dict = {}
         self.systray_menu = None
         self.systray_icon = None
-        self.systray_indicator = False
-
-        # Are we using Application Indicators?
-        if AppIndicator3 is not None:
-            self.systray_indicator = True
-            logging.debug("Using AppIndicator3 for systray")
 
         self.init_systray_menu()
 
@@ -81,13 +68,9 @@ class vmmSystray(vmmGObject):
         self.show_systray()
 
     def is_visible(self):
-        if self.systray_indicator:
-            return (self.config.get_view_system_tray() and
-                    self.systray_icon)
-        else:
-            return (self.config.get_view_system_tray() and
-                    self.systray_icon and
-                    self.systray_icon.is_embedded())
+        return (self.config.get_view_system_tray() and
+                self.systray_icon and
+                self.systray_icon.is_embedded())
 
     def _cleanup(self):
         self.err = None
@@ -119,12 +102,6 @@ class vmmSystray(vmmGObject):
 
         self.systray_menu.add(Gtk.SeparatorMenuItem())
 
-        if self.systray_indicator:
-            hide_item = Gtk.MenuItem.new_with_mnemonic(
-                    _("_Show Virtual Machine Manager"))
-            hide_item.connect("activate", self.systray_activate)
-            self.systray_menu.add(hide_item)
-
         exit_item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_QUIT, None)
         exit_item.connect("activate", self.exit_app)
         self.systray_menu.add(exit_item)
@@ -135,21 +112,12 @@ class vmmSystray(vmmGObject):
         if self.systray_icon:
             return
 
-        if self.systray_indicator:
-            # pylint: disable=maybe-no-member
-            self.systray_icon = AppIndicator3.Indicator.new("virt-manager",
-                                "virt-manager",
-                                AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
-            self.systray_icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
-            self.systray_icon.set_menu(self.systray_menu)
-
-        else:
-            self.systray_icon = Gtk.StatusIcon()
-            self.systray_icon.set_visible(True)
-            self.systray_icon.set_property("icon-name", "virt-manager")
-            self.systray_icon.connect("activate", self.systray_activate)
-            self.systray_icon.connect("popup-menu", self.systray_popup)
-            self.systray_icon.set_tooltip_text(_("Virtual Machine Manager"))
+        self.systray_icon = Gtk.StatusIcon()
+        self.systray_icon.set_visible(True)
+        self.systray_icon.set_property("icon-name", "virt-manager")
+        self.systray_icon.connect("activate", self.systray_activate)
+        self.systray_icon.connect("popup-menu", self.systray_popup)
+        self.systray_icon.set_tooltip_text(_("Virtual Machine Manager"))
 
     def show_systray(self):
         do_show = self.config.get_view_system_tray()
@@ -159,14 +127,7 @@ class vmmSystray(vmmGObject):
             if do_show:
                 self.init_systray()
         else:
-            if self.systray_indicator:
-                # pylint: disable=maybe-no-member
-                status = AppIndicator3.IndicatorStatus.PASSIVE
-                if do_show:
-                    status = AppIndicator3.IndicatorStatus.ACTIVE
-                self.systray_icon.set_status(status)
-            else:
-                self.systray_icon.set_visible(do_show)
+            self.systray_icon.set_visible(do_show)
 
     # Helper functions
     def _get_vm_menu_item(self, vm):
