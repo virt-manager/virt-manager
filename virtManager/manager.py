@@ -96,14 +96,6 @@ class vmmManager(vmmGObjectUI):
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-preferences": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-show-create": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "action-suspend-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-resume-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-run-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-shutdown-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-reset-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-reboot-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-destroy-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-delete-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
@@ -534,34 +526,14 @@ class vmmManager(vmmGObjectUI):
         self.set_pause_state(not do_pause)
 
         if do_pause:
-            self.pause_vm(None)
+            vmmenu.VMActionUI.suspend(self, self.current_vm())
         else:
-            self.resume_vm(None)
+            vmmenu.VMActionUI.resume(self, self.current_vm())
 
     def start_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is None:
-            return
-        self.emit("action-run-domain", vm.conn.get_uri(), vm.get_connkey())
-
-    def poweroff_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is None:
-            return
-        self.emit("action-shutdown-domain",
-            vm.conn.get_uri(), vm.get_connkey())
-
-    def pause_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is None:
-            return
-        self.emit("action-suspend-domain", vm.conn.get_uri(), vm.get_connkey())
-
-    def resume_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is None:
-            return
-        self.emit("action-resume-domain", vm.conn.get_uri(), vm.get_connkey())
+        vmmenu.VMActionUI.run(self, self.current_vm())
+    def poweroff_vm(self, _src):
+        vmmenu.VMActionUI.shutdown(self, self.current_vm())
 
     def close_conn(self, ignore):
         conn = self.current_conn()

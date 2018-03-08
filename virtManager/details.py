@@ -339,14 +339,6 @@ def _label_for_os_type(os_type):
 
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
-        "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-destroy-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-suspend-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-resume-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-run-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-shutdown-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-reset-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-reboot-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
@@ -470,16 +462,6 @@ class vmmDetails(vmmGObjectUI):
             "on_details_cancel_customize_clicked": self._customize_cancel_clicked,
 
             "on_details_menu_virtual_manager_activate": self.control_vm_menu,
-            "on_details_menu_run_activate": self.control_vm_run,
-            "on_details_menu_poweroff_activate": self.control_vm_shutdown,
-            "on_details_menu_reboot_activate": self.control_vm_reboot,
-            "on_details_menu_save_activate": self.control_vm_save,
-            "on_details_menu_reset_activate": self.control_vm_reset,
-            "on_details_menu_destroy_activate": self.control_vm_destroy,
-            "on_details_menu_pause_activate": self.control_vm_pause,
-            "on_details_menu_clone_activate": self.control_vm_clone,
-            "on_details_menu_migrate_activate": self.control_vm_migrate,
-            "on_details_menu_delete_activate": self.control_vm_delete,
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
             "on_details_menu_usb_redirection": self.control_vm_usb_redirection,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
@@ -1433,13 +1415,9 @@ class vmmDetails(vmmGObjectUI):
         self.set_pause_state(not do_pause)
 
         if do_pause:
-            self.emit("action-suspend-domain",
-                      self.vm.conn.get_uri(),
-                      self.vm.get_connkey())
+            vmmenu.VMActionUI.suspend(self, self.vm)
         else:
-            self.emit("action-resume-domain",
-                      self.vm.conn.get_uri(),
-                      self.vm.get_connkey())
+            vmmenu.VMActionUI.resume(self, self.vm)
 
     def control_vm_menu(self, src_ignore):
         can_usb = bool(self.console.details_viewer_has_usb_redirection() and
@@ -1449,40 +1427,10 @@ class vmmDetails(vmmGObjectUI):
     def control_vm_run(self, src_ignore):
         if self.has_unapplied_changes(self.get_hw_row()):
             return
-        self.emit("action-run-domain",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
+        vmmenu.VMActionUI.run(self, self.vm)
 
     def control_vm_shutdown(self, src_ignore):
-        self.emit("action-shutdown-domain",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
-
-    def control_vm_reboot(self, src_ignore):
-        self.emit("action-reboot-domain",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
-
-    def control_vm_save(self, src_ignore):
-        self.emit("action-save-domain",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
-
-    def control_vm_reset(self, src_ignore):
-        self.emit("action-reset-domain",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
-
-    def control_vm_destroy(self, src_ignore):
-        self.emit("action-destroy-domain",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
-
-    def control_vm_clone(self, src_ignore):
-        self.emit("action-clone-domain",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
-
-    def control_vm_migrate(self, src_ignore):
-        self.emit("action-migrate-domain",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
-
-    def control_vm_delete(self, src_ignore):
-        self.emit("action-delete-domain",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
+        vmmenu.VMActionUI.shutdown(self, self.vm)
 
     def control_vm_screenshot(self, src):
         ignore = src
