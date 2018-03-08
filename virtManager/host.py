@@ -54,7 +54,6 @@ class vmmHost(vmmGObjectUI):
     __gsignals__ = {
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "action-restore-domain": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "host-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "host-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
@@ -87,8 +86,6 @@ class vmmHost(vmmGObjectUI):
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
             "on_host_page_switch": self.page_changed,
-
-            "on_menu_restore_saved_activate": self.restore_domain,
 
             "on_net_add_clicked": self.add_network,
             "on_net_delete_clicked": self.delete_network,
@@ -296,9 +293,6 @@ class vmmHost(vmmGObjectUI):
 
     def view_manager(self, src_ignore):
         self.emit("action-view-manager")
-
-    def restore_domain(self, src_ignore):
-        self.emit("action-restore-domain", self.conn.get_uri())
 
     def exit_app(self, src_ignore):
         self.emit("action-exit-app")
