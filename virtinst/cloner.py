@@ -309,8 +309,6 @@ class Cloner(object):
             return
 
         if clone_disk.get_vol_object():
-            # XXX We could always do this with vol upload?
-
             # Special case: non remote cloning of a guest using
             # managed block devices: fall back to local cloning if
             # we have permissions to do so. This validation check

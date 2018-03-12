@@ -109,8 +109,6 @@ def _default_network(conn):
     ret = _default_bridge(conn)
     if ret:
         return ["bridge", ret]
-
-    # FIXME: Check that this exists
     return ["network", "default"]
 
 

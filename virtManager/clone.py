@@ -56,10 +56,6 @@ NETWORK_INFO_LABEL = 0
 NETWORK_INFO_ORIG_MAC = 1
 NETWORK_INFO_NEW_MAC = 2
 
-# XXX: Some method to check all storage size
-# XXX: What to do for cleanup if clone fails?
-# XXX: Disable mouse scroll for combo boxes
-
 
 def can_we_clone(conn, vol, path):
     """Is the passed path even clone-able"""
