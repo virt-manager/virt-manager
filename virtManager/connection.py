@@ -1168,7 +1168,7 @@ class vmmConnection(vmmGObject):
                 self.emit("nodedev-removed", obj.get_connkey())
             obj.cleanup()
 
-    def _new_object_cb(self, obj, initialize_failed, skip_init=False):
+    def _new_object_cb(self, obj, initialize_failed):
         if not self._backend.is_open():
             return
 
@@ -1206,7 +1206,7 @@ class vmmConnection(vmmGObject):
             elif class_name == "nodedev":
                 self.emit("nodedev-added", obj.get_connkey())
         finally:
-            if self._init_object_event and not skip_init:
+            if self._init_object_event:
                 self._init_object_count -= 1
                 if self._init_object_count <= 0:
                     self._init_object_event.set()
