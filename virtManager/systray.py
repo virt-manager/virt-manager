@@ -282,7 +282,8 @@ class vmmSystray(vmmGObject):
         vm_menu = conn_item.get_submenu()
         vm_menu.remove(vm_menu_item)
         vm_menu_item.destroy()
-        del(vm_mappings[connkey])
+        vm_mappings.pop(connkey)
+        self.vm_action_dict.pop(connkey)
 
         if len(vm_menu.get_children()) == 0:
             placeholder = Gtk.MenuItem.new_with_label(
