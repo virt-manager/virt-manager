@@ -118,9 +118,13 @@ class VirtualConnection(object):
         return not bool(self._libvirtconn)
 
     def close(self):
+        ret = 0
+        if self._libvirtconn:
+            ret = self._libvirtconn.close()
         self._libvirtconn = None
         self._uri = None
         self._fetch_cache = {}
+        return ret
 
     def fake_conn_predictable(self):
         return self._fake_conn_predictable

@@ -986,7 +986,6 @@ class vmmConnection(vmmGObject):
             self._storage_pool_cb_ids = []
             self._node_device_cb_ids = []
 
-        self._backend.close()
         self._stats = []
 
         if self._init_object_event:
@@ -994,6 +993,11 @@ class vmmConnection(vmmGObject):
 
         self._objects.cleanup()
         self._objects = _ObjectList()
+
+        closeret = self._backend.close()
+        if closeret == 1 and self.config.test_leak_debug:
+            logging.debug("LEAK: conn close() returned 1, "
+                    "meaning refs may have leaked.")
 
         self._change_state(self._STATE_DISCONNECTED)
         self._closing = False

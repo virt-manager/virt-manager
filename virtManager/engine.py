@@ -478,7 +478,7 @@ class vmmEngine(vmmGObject):
                 objs.remove(src.object_key)
 
             for name in objs:
-                logging.debug("Leaked %s", name)
+                logging.debug("LEAK: %s", name)
 
         logging.debug("Exiting app normally.")
         self._application.quit()
