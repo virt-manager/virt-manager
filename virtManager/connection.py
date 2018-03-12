@@ -52,7 +52,8 @@ class _ObjectList(vmmGObject):
     """
     Class that wraps our internal list of libvirt objects
     """
-
+    # pylint: disable=not-context-manager
+    # pylint doesn't know that lock() has 'with' support
     BLACKLIST_COUNT = 3
 
     def __init__(self):
@@ -63,17 +64,7 @@ class _ObjectList(vmmGObject):
         self._lock = threading.Lock()
 
     def _cleanup(self):
-        try:
-            self._lock.acquire()
-
-            for obj in self._objects:
-                try:
-                    obj.cleanup()
-                except Exception:
-                    logging.debug("Failed to cleanup %s", exc_info=True)
-            self._objects = []
-        finally:
-            self._lock.release()
+        self._objects = []
 
     def _blacklist_key(self, obj):
         return str(obj.__class__) + obj.get_connkey()
@@ -116,9 +107,7 @@ class _ObjectList(vmmGObject):
         :param obj: vmmLibvirtObject to remove
         :returns: True if object removed, False if object was not found
         """
-        try:
-            self._lock.acquire()
-
+        with self._lock:
             # Identity check is sufficient here, since we should never be
             # asked to remove an object that wasn't at one point in the list.
             if obj not in self._objects:
@@ -126,8 +115,6 @@ class _ObjectList(vmmGObject):
 
             self._objects.remove(obj)
             return True
-        finally:
-            self._lock.release()
 
     def add(self, obj):
         """
@@ -136,9 +123,7 @@ class _ObjectList(vmmGObject):
         :param obj: vmmLibvirtObject to add
         :returns: True if object added, False if object already in the list
         """
-        try:
-            self._lock.acquire()
-
+        with self._lock:
             # We don't look up based on identity here, to prevent tick()
             # races from adding the same domain twice
             #
@@ -153,18 +138,13 @@ class _ObjectList(vmmGObject):
 
             self._objects.append(obj)
             return True
-        finally:
-            self._lock.release()
 
     def get_objects_for_class(self, classobj):
         """
         Return all objects over the passed vmmLibvirtObject class
         """
-        try:
-            self._lock.acquire()
+        with self._lock:
             return [o for o in self._objects if o.__class__ is classobj]
-        finally:
-            self._lock.release()
 
     def lookup_object(self, classobj, connkey):
         """
@@ -175,6 +155,10 @@ class _ObjectList(vmmGObject):
             if obj.get_connkey() == connkey:
                 return obj
         return None
+
+    def all_objects(self):
+        with self._lock:
+            return self._objects[:]
 
 
 class vmmConnection(vmmGObject):
@@ -991,6 +975,13 @@ class vmmConnection(vmmGObject):
         if self._init_object_event:
             self._init_object_event.clear()
 
+        for obj in self._objects.all_objects():
+            self._objects.remove(obj)
+            try:
+                self._remove_object_signal(obj)
+                obj.cleanup()
+            except Exception as e:
+                logging.debug("Failed to cleanup %s: %s", obj, e)
         self._objects.cleanup()
         self._objects = _ObjectList()
 
@@ -1138,6 +1129,19 @@ class vmmConnection(vmmGObject):
     # Tick/Update methods #
     #######################
 
+    def _remove_object_signal(self, obj):
+        class_name = obj.class_name()
+        if class_name == "domain":
+            self.emit("vm-removed", obj.get_connkey())
+        elif class_name == "network":
+            self.emit("net-removed", obj.get_connkey())
+        elif class_name == "pool":
+            self.emit("pool-removed", obj.get_connkey())
+        elif class_name == "interface":
+            self.emit("interface-removed", obj.get_connkey())
+        elif class_name == "nodedev":
+            self.emit("nodedev-removed", obj.get_connkey())
+
     def _gone_object_signals(self, gone_objects):
         """
         Responsible for signaling the UI for any updates. All possible UI
@@ -1160,16 +1164,7 @@ class vmmConnection(vmmGObject):
                 continue
 
             logging.debug("%s=%s removed", class_name, name)
-            if class_name == "domain":
-                self.emit("vm-removed", obj.get_connkey())
-            elif class_name == "network":
-                self.emit("net-removed", obj.get_connkey())
-            elif class_name == "pool":
-                self.emit("pool-removed", obj.get_connkey())
-            elif class_name == "interface":
-                self.emit("interface-removed", obj.get_connkey())
-            elif class_name == "nodedev":
-                self.emit("nodedev-removed", obj.get_connkey())
+            self._remove_object_signal(obj)
             obj.cleanup()
 
     def _new_object_cb(self, obj, initialize_failed):
