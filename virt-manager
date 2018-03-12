@@ -81,8 +81,9 @@ def _import_gtk(leftovers):
 
         # This will error if Gtk wasn't correctly initialized
         Gtk.init()
-
         globals()["Gtk"] = Gtk
+
+        # This ensures we can init gsettings correctly
         import virtManager.config
         ignore = virtManager.config
     except Exception as e:
@@ -146,6 +147,15 @@ def parse_commandline():
         help=argparse.SUPPRESS, action="store_true")
     # Force disable use of libvirt object events
     parser.add_argument("--test-no-events",
+        help=argparse.SUPPRESS, action="store_true")
+    # Enabling this will tell us, at app exit time, which vmmGObjects were not
+    # garbage collected. This is caused by circular references to other objects,
+    # like a signal that wasn't disconnected. It's not a big deal, but if we
+    # have objects that can be created and destroyed a lot over the course of
+    # the app lifecycle, every non-garbage collected class is a memory leak.
+    # So it's nice to poke at this every now and then and try to track down
+    # what we need to add to class _cleanup handling.
+    parser.add_argument("--test-leak-debug",
         help=argparse.SUPPRESS, action="store_true")
 
     parser.add_argument("-c", "--connect", dest="uri",
@@ -219,6 +229,7 @@ def main():
 
     config = virtManager.config.vmmConfig(
         "virt-manager", CLIConfig, options.test_first_run)
+    config.test_leak_debug = options.test_leak_debug
 
     if not util.local_libvirt_version() >= 6000:
         # We need this version for threaded virConnect access

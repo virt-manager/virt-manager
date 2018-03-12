@@ -171,6 +171,7 @@ class vmmConfig(object):
         self.conf_dir = "/org/virt-manager/%s/" % self.appname
         self.ui_dir = CLIConfig.ui_dir
         self.test_first_run = bool(test_first_run)
+        self.test_leak_debug = False
 
         self.conf = SettingsWrapper("org.virt-manager.virt-manager",
                 CLIConfig.gsettings_dir, self.test_first_run)

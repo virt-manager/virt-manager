@@ -46,15 +46,6 @@ from .error import vmmErrorDialog
 from .systray import vmmSystray
 from .delete import vmmDeleteDialog
 
-# Enabling this will tell us, at app exit time, which vmmGObjects were not
-# garbage collected. This is caused by circular references to other objects,
-# like a signal that wasn't disconnected. It's not a big deal, but if we
-# have objects that can be created and destroyed a lot over the course of
-# the app lifecycle, every non-garbage collected class is a memory leak.
-# So it's nice to poke at this every now and then and try to track down
-# what we need to add to class _cleanup handling.
-debug_ref_leaks = False
-
 DETAILS_PERF = 1
 DETAILS_CONFIG = 2
 DETAILS_CONSOLE = 3
@@ -476,7 +467,7 @@ class vmmEngine(vmmGObject):
 
         self.cleanup()
 
-        if debug_ref_leaks:
+        if self.config.test_leak_debug:
             objs = self.config.get_objects()
 
             # Engine will always appear to leak
