@@ -2370,61 +2370,62 @@ class vmmDetails(vmmGObjectUI):
                 self.widget(name).set_value(int(IdMap_proper))
 
     def refresh_inspection_page(self):
-        inspection_supported = self.config.support_inspection
+        inspection_supported = self.config.inspection_supported()
         uiutil.set_grid_row_visible(self.widget("details-overview-error"),
                                        self.vm.inspection.error)
         if self.vm.inspection.error:
             msg = _("Error while inspecting the guest configuration")
             self.widget("details-overview-error").set_text(msg)
 
-        # Operating System (ie. inspection data)
         self.widget("details-inspection-os").set_visible(inspection_supported)
-        if inspection_supported:
-            hostname = self.vm.inspection.hostname
-            if not hostname:
-                hostname = _("unknown")
-            self.widget("inspection-hostname").set_text(hostname)
-            os_type = self.vm.inspection.os_type
-            if not os_type:
-                os_type = "unknown"
-            self.widget("inspection-type").set_text(_label_for_os_type(os_type))
-            product_name = self.vm.inspection.product_name
-            if not product_name:
-                product_name = _("unknown")
-            self.widget("inspection-product-name").set_text(product_name)
+        self.widget("details-inspection-apps").set_visible(inspection_supported)
+        if not inspection_supported:
+            return
+
+        # Operating System (ie. inspection data)
+        hostname = self.vm.inspection.hostname
+        if not hostname:
+            hostname = _("unknown")
+        self.widget("inspection-hostname").set_text(hostname)
+        os_type = self.vm.inspection.os_type
+        if not os_type:
+            os_type = "unknown"
+        self.widget("inspection-type").set_text(_label_for_os_type(os_type))
+        product_name = self.vm.inspection.product_name
+        if not product_name:
+            product_name = _("unknown")
+        self.widget("inspection-product-name").set_text(product_name)
 
         # Applications (also inspection data)
-        self.widget("details-inspection-apps").set_visible(inspection_supported)
-        if inspection_supported:
-            apps = self.vm.inspection.applications or []
-            apps_list = self.widget("inspection-apps")
-            apps_model = apps_list.get_model()
-            apps_model.clear()
-            for app in apps:
-                name = ""
-                if app["app_name"]:
-                    name = app["app_name"]
-                if app["app_display_name"]:
-                    name = app["app_display_name"]
-                version = ""
-                if app["app_epoch"] > 0:
-                    version += str(app["app_epoch"]) + ":"
-                if app["app_version"]:
-                    version += app["app_version"]
-                if app["app_release"]:
-                    version += "-" + app["app_release"]
-                summary = ""
-                if app["app_summary"]:
-                    summary = app["app_summary"]
-                elif app["app_description"]:
-                    summary = app["app_description"]
-                    pos = summary.find("\n")
-                    if pos > -1:
-                        summary = _("%(summary)s ...") % {
-                            "summary": summary[0:pos]
-                        }
+        apps = self.vm.inspection.applications or []
+        apps_list = self.widget("inspection-apps")
+        apps_model = apps_list.get_model()
+        apps_model.clear()
+        for app in apps:
+            name = ""
+            if app["app_name"]:
+                name = app["app_name"]
+            if app["app_display_name"]:
+                name = app["app_display_name"]
+            version = ""
+            if app["app_epoch"] > 0:
+                version += str(app["app_epoch"]) + ":"
+            if app["app_version"]:
+                version += app["app_version"]
+            if app["app_release"]:
+                version += "-" + app["app_release"]
+            summary = ""
+            if app["app_summary"]:
+                summary = app["app_summary"]
+            elif app["app_description"]:
+                summary = app["app_description"]
+                pos = summary.find("\n")
+                if pos > -1:
+                    summary = _("%(summary)s ...") % {
+                        "summary": summary[0:pos]
+                    }
 
-                apps_model.append([name, version, summary])
+            apps_model.append([name, version, summary])
 
     def refresh_stats_page(self):
         def _multi_color(text1, text2):
@@ -3070,7 +3071,7 @@ class vmmDetails(vmmGObjectUI):
 
         add_hw_list_option(_("Overview"), HW_LIST_TYPE_GENERAL, "computer")
         if not self.is_customize_dialog:
-            if self.config.support_inspection:
+            if self.config.inspection_supported():
                 add_hw_list_option(_("OS information"),
                     HW_LIST_TYPE_INSPECTION, "computer")
             add_hw_list_option(_("Performance"), HW_LIST_TYPE_STATS,

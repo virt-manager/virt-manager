@@ -17,11 +17,10 @@
 # MA 02110-1301 USA.
 #
 
-from queue import Queue
-from threading import Thread
+import functools
 import logging
-
-from guestfs import GuestFS  # pylint: disable=import-error
+import queue
+import threading
 
 from .baseclass import vmmGObject
 from .domain import vmmInspectionData
@@ -30,22 +29,55 @@ from .domain import vmmInspectionData
 class vmmInspection(vmmGObject):
     # Can't find a way to make Thread release our reference
     _leak_check = False
+    _instance = None
+    _libguestfs_installed = None
 
-    def __init__(self):
+    @classmethod
+    def get_instance(cls, engine):
+        if not cls._instance:
+            if not cls.libguestfs_installed():
+                return None
+            cls._instance = cls(engine)
+        return cls._instance
+
+    @classmethod
+    def libguestfs_installed(cls):
+        if cls._libguestfs_installed is None:
+            try:
+                import guestfs as ignore  # pylint: disable=import-error
+                logging.debug("python guestfs is installed")
+                cls._libguestfs_installed = True
+            except ImportError:
+                logging.debug("python guestfs is not installed")
+                cls._libguestfs_installed = False
+            except Exception:
+                logging.debug("error importing guestfs",
+                        exc_info=True)
+                cls._libguestfs_installed = False
+        return cls._libguestfs_installed
+
+    def __init__(self, engine):
         vmmGObject.__init__(self)
 
-        self._thread = Thread(name="inspection thread", target=self._run)
-        self._thread.daemon = True
+        self._thread = None
         self._wait = 5 * 1000  # 5 seconds
 
-        self._q = Queue()
+        self._q = queue.Queue()
         self._conns = {}
         self._vmseen = {}
         self._cached_data = {}
 
+        val = self.config.get_libguestfs_inspect_vms()
+        logging.debug("libguestfs gsetting enabled=%s", str(val))
+        if not val:
+            return
+        engine.connect("conn-added", self._conn_added)
+        engine.connect("conn-removed", self._conn_removed)
+        self._start()
+
     def _cleanup(self):
-        self._thread = None
-        self._q = Queue()
+        self._stop()
+        self._q = queue.Queue()
         self._conns = {}
         self._vmseen = {}
         self._cached_data = {}
@@ -53,16 +85,16 @@ class vmmInspection(vmmGObject):
     # Called by the main thread whenever a connection is added or
     # removed.  We tell the inspection thread, so it can track
     # connections.
-    def conn_added(self, engine_ignore, conn):
+    def _conn_added(self, engine_ignore, conn):
         obj = ("conn_added", conn)
         self._q.put(obj)
 
-    def conn_removed(self, engine_ignore, uri):
+    def _conn_removed(self, engine_ignore, uri):
         obj = ("conn_removed", uri)
         self._q.put(obj)
 
     # Called by the main thread whenever a VM is added to vmlist.
-    def vm_added(self, conn, connkey):
+    def _vm_added(self, conn, connkey):
         if connkey.startswith("guestfs-"):
             logging.debug("ignore libvirt/guestfs temporary VM %s",
                           connkey)
@@ -75,58 +107,80 @@ class vmmInspection(vmmGObject):
         obj = ("vm_refresh", vm.conn.get_uri(), vm.get_name(), vm.get_uuid())
         self._q.put(obj)
 
-    def start(self):
-        # Wait a few seconds before we do anything.  This prevents
-        # inspection from being a burden for initial virt-manager
-        # interactivity (although it shouldn't affect interactivity at
-        # all).
+    def _start(self):
+        if self._thread:
+            return
+
         def cb():
-            self._thread.start()
+            if self._thread:
+                self._thread.start()
             return 0
 
-        logging.debug("waiting")
+        self._thread = threading.Thread(
+                name="inspection thread", target=self._run)
+        self._thread.daemon = True
+
+        # Wait a few seconds before we do anything.  This prevents
+        # inspection from being a burden for initial virt-manager
+        # interactivity (although it shouldn't affect interactivity at all)
+        logging.debug("waiting before startup wait=%s", self._wait)
         self.timeout_add(self._wait, cb)
+
+    def _stop(self):
+        if self._thread is None:
+            return
+
+        self._q.put(None)
+        self._thread = None
 
     def _run(self):
         # Process everything on the queue.  If the queue is empty when
         # called, block.
         while True:
             obj = self._q.get()
+            if obj is None:
+                logging.debug("libguestfs queue obj=None, exiting thread")
+                return
             self._process_queue_item(obj)
             self._q.task_done()
 
     def _process_queue_item(self, obj):
-        if obj[0] == "conn_added":
+        cmd = obj[0]
+        if cmd == "conn_added":
             conn = obj[1]
             uri = conn.get_uri()
-            if conn and not (conn.is_remote()) and not (uri in self._conns):
-                self._conns[uri] = conn
-                conn.connect("vm-added", self.vm_added)
-                for vm in conn.list_vms():
-                    self.vm_added(conn, vm.get_connkey())
-        elif obj[0] == "conn_removed":
+            if conn.is_remote() or uri in self._conns:
+                return
+
+            self._conns[uri] = conn
+            conn.connect("vm-added", self._vm_added)
+            for vm in conn.list_vms():
+                self._vm_added(conn, vm.get_connkey())
+
+        elif cmd == "conn_removed":
             uri = obj[1]
-            del self._conns[uri]
-        elif obj[0] == "vm_added" or obj[0] == "vm_refresh":
+            self._conns.pop(uri)
+
+        elif cmd == "vm_added" or cmd == "vm_refresh":
             uri = obj[1]
-            if not (uri in self._conns):
+            if uri not in self._conns:
                 # This connection disappeared in the meanwhile.
                 return
+
             conn = self._conns[uri]
-            if not conn.is_active():
-                return
-            connkey = obj[2]
-            vm = conn.get_vm(connkey)
+            vm = conn.get_vm(obj[2])
             if not vm:
                 # The VM was removed in the meanwhile.
                 return
-            if obj[0] == "vm_refresh":
+
+            if cmd == "vm_refresh":
                 vmuuid = obj[3]
                 # When refreshing the inspection data of a VM,
                 # all we need is to remove it from the "seen" cache,
                 # as the data itself will be replaced once the new
                 # results are available.
-                del self._vmseen[vmuuid]
+                self._vmseen.pop(vmuuid)
+
             self._process_vm(conn, vm)
 
     # Try processing a single VM, keeping into account whether it was
@@ -167,12 +221,21 @@ class vmmInspection(vmmGObject):
             logging.exception("%s: exception while processing", prettyvm)
 
     def _inspect_vm(self, conn, vm):
-        g = GuestFS(close_on_exit=False)
+        if self._thread is None:
+            return
+
+        import guestfs  # pylint: disable=import-error
+
+        g = guestfs.GuestFS(close_on_exit=False)
         prettyvm = conn.get_uri() + ":" + vm.get_name()
-
-        g.add_libvirt_dom(vm.get_backend(), readonly=1)
-
-        g.launch()
+        try:
+            g.add_libvirt_dom(vm.get_backend(), readonly=1)
+            g.launch()
+        except Exception as e:
+            logging.debug("%s: Error launching libguestfs appliance: %s",
+                    prettyvm, str(e))
+            return None
+        logging.debug("%s: inspection appliance connected", prettyvm)
 
         # Inspect the operating system.
         roots = g.inspect_os()
@@ -210,8 +273,8 @@ class vmmInspection(vmmGObject):
                     return 0
                 else:
                     return -1
-            mps.sort(compare)
 
+            mps.sort(key=functools.cmp_to_key(compare))
             for mp_dev in mps:
                 try:
                     g.mount_ro(mp_dev[1], mp_dev[0])
@@ -261,7 +324,7 @@ class vmmInspection(vmmGObject):
         data.product_name = str(product_name)
         data.product_variant = str(product_variant)
         data.icon = icon
-        data.applications = list(apps)
+        data.applications = list(apps or [])
         data.error = False
 
         return data

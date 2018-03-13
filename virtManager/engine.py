@@ -34,14 +34,15 @@ from .baseclass import vmmGObject
 from .clone import vmmCloneVM
 from .connect import vmmConnect
 from .connection import vmmConnection
+from .create import vmmCreate
+from .delete import vmmDeleteDialog
+from .details import vmmDetails
+from .error import vmmErrorDialog
+from .host import vmmHost
+from .inspection import vmmInspection
 from .manager import vmmManager
 from .migrate import vmmMigrateDialog
-from .details import vmmDetails
-from .create import vmmCreate
-from .host import vmmHost
-from .error import vmmErrorDialog
 from .systray import vmmSystray
-from .delete import vmmDeleteDialog
 
 DETAILS_PERF = 1
 DETAILS_CONFIG = 2
@@ -93,8 +94,7 @@ class vmmEngine(vmmGObject):
         self._tick_thread.daemon = True
         self._tick_queue = queue.PriorityQueue(100)
 
-        self.inspection = None
-        self._create_inspection_thread()
+        vmmInspection.get_instance(self)
 
         # Counter keeping track of how many manager and details windows
         # are open. When it is decremented to 0, close the app or
@@ -394,10 +394,6 @@ class vmmEngine(vmmGObject):
     def _cleanup(self):
         self.err = None
 
-        if self.inspection:
-            self.inspection.cleanup()
-            self.inspection = None
-
         if self.timer is not None:
             GLib.source_remove(self.timer)
 
@@ -461,19 +457,6 @@ class vmmEngine(vmmGObject):
 
         logging.debug("Exiting app normally.")
         self._application.quit()
-
-    def _create_inspection_thread(self):
-        logging.debug("libguestfs inspection support: %s",
-                      self.config.support_inspection)
-        if not self.config.support_inspection:
-            return
-
-        from .inspection import vmmInspection
-        self.inspection = vmmInspection()
-        self.inspection.start()
-        self.connect("conn-added", self.inspection.conn_added)
-        self.connect("conn-removed", self.inspection.conn_removed)
-        return
 
     def _find_error_parent_cb(self):
         """
@@ -858,12 +841,14 @@ class vmmEngine(vmmGObject):
             src.err.show_err(_("Error setting clone parameters: %s") % str(e))
 
     def _do_refresh_inspection(self, src_ignore, uri, connkey):
-        if not self.inspection:
+        inspection = vmmInspection.get_instance(self)
+        if not inspection:
             return
 
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(connkey)
-        self.inspection.vm_refresh(vm)
+        inspection.vm_refresh(vm)
+
 
     ##########################################
     # Window launchers from virt-manager cli #

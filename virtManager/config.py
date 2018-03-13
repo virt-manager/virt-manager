@@ -25,6 +25,8 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from virtinst import CPU
+
+from .inspection import vmmInspection
 from .keyring import vmmKeyring, vmmSecret
 
 
@@ -215,19 +217,6 @@ class vmmConfig(object):
 
         self._objects = []
 
-        self.support_inspection = self.check_inspection()
-
-        self._spice_error = None
-
-
-    def check_inspection(self):
-        try:
-            # Check we can open the Python guestfs module.
-            from guestfs import GuestFS  # pylint: disable=import-error
-            g = GuestFS(close_on_exit=False)
-            return bool(getattr(g, "add_libvirt_dom", None))
-        except Exception:
-            return False
 
     # General app wide helpers (gsettings agnostic)
 
@@ -241,6 +230,11 @@ class vmmConfig(object):
     def embeddable_graphics(self):
         ret = ["vnc", "spice"]
         return ret
+
+    def inspection_supported(self):
+        if not vmmInspection.libguestfs_installed():
+            return False
+        return self.get_libguestfs_inspect_vms()
 
     def remove_notifier(self, h):
         self.conf.notify_remove(h)
@@ -379,7 +373,6 @@ class vmmConfig(object):
     def get_confirm_delstorage(self):
         return self.conf.get("/confirm/delete-storage")
 
-
     def set_confirm_forcepoweroff(self, val):
         self.conf.set("/confirm/forcepoweroff", val)
     def set_confirm_poweroff(self, val):
@@ -403,6 +396,14 @@ class vmmConfig(object):
         return self.conf.get("/system-tray")
     def set_view_system_tray(self, val):
         self.conf.set("/system-tray", val)
+
+    # Libguestfs VM inspection
+    def on_libguestfs_inspect_vms_changed(self, cb):
+        return self.conf.notify_add("/enable-libguestfs-vm-inspection", cb)
+    def get_libguestfs_inspect_vms(self):
+        return self.conf.get("/enable-libguestfs-vm-inspection")
+    def set_libguestfs_inspect_vms(self, val):
+        self.conf.set("/enable-libguestfs-vm-inspection", val)
 
 
     # Stats history and interval length
