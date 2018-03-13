@@ -149,7 +149,9 @@ class vmmInspection(vmmGObject):
         if cmd == "conn_added":
             conn = obj[1]
             uri = conn.get_uri()
-            if conn.is_remote() or uri in self._conns:
+            if (conn.is_remote() or
+                conn.is_test() or
+                uri in self._conns):
                 return
 
             self._conns[uri] = conn
