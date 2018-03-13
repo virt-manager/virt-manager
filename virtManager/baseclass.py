@@ -46,7 +46,6 @@ class vmmGObject(GObject.GObject):
 
     def __init__(self):
         GObject.GObject.__init__(self)
-        self.config = config.RUNNING_CONFIG
 
         self._gobject_handles = []
         self._gobject_timeouts = []
@@ -58,7 +57,7 @@ class vmmGObject(GObject.GObject):
         self.object_key = str(self)
 
         # Config might not be available if we error early in startup
-        if self.config and self._leak_check:
+        if config.vmmConfig.is_initialized() and self._leak_check:
             self.config.add_object(self.object_key)
 
     def cleanup(self):
@@ -82,10 +81,15 @@ class vmmGObject(GObject.GObject):
 
     def __del__(self):
         try:
-            if self.config and self._leak_check:
+            if config.vmmConfig.is_initialized() and self._leak_check:
                 self.config.remove_object(self.object_key)
         except Exception:
             logging.exception("Error removing %s", self.object_key)
+
+    @property
+    def config(self):
+        return config.vmmConfig.get_instance()
+
 
     # pylint: disable=arguments-differ
     # Newer pylint can detect, but warns that overridden arguments are wrong

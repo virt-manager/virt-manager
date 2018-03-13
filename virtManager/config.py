@@ -27,10 +27,8 @@ from gi.repository import Gtk
 from virtinst import CPU
 from .keyring import vmmKeyring, vmmSecret
 
-RUNNING_CONFIG = None
 
-
-class SettingsWrapper(object):
+class _SettingsWrapper(object):
     """
     Wrapper class to simplify interacting with gsettings APIs.
     Basically it allows simple get/set of gconf style paths, and
@@ -165,15 +163,27 @@ class vmmConfig(object):
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
 
-    def __init__(self, appname, CLIConfig, test_first_run):
-        self.appname = appname
+    _instance = None
+
+    @classmethod
+    def get_instance(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = vmmConfig(*args, **kwargs)
+        return cls._instance
+
+    @classmethod
+    def is_initialized(cls):
+        return bool(cls._instance)
+
+    def __init__(self, CLIConfig, test_first_run):
+        self.appname = "virt-manager"
         self.appversion = CLIConfig.version
         self.conf_dir = "/org/virt-manager/%s/" % self.appname
         self.ui_dir = CLIConfig.ui_dir
         self.test_first_run = bool(test_first_run)
         self.test_leak_debug = False
 
-        self.conf = SettingsWrapper("org.virt-manager.virt-manager",
+        self.conf = _SettingsWrapper("org.virt-manager.virt-manager",
                 CLIConfig.gsettings_dir, self.test_first_run)
 
         # We don't create it straight away, since we don't want
@@ -208,9 +218,6 @@ class vmmConfig(object):
         self.support_inspection = self.check_inspection()
 
         self._spice_error = None
-
-        global RUNNING_CONFIG
-        RUNNING_CONFIG = self
 
 
     def check_inspection(self):

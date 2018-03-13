@@ -227,8 +227,8 @@ def main():
                   Gtk.get_minor_version(),
                   Gtk.get_micro_version())
 
-    config = virtManager.config.vmmConfig(
-        "virt-manager", CLIConfig, options.test_first_run)
+    config = virtManager.config.vmmConfig.get_instance(CLIConfig,
+            options.test_first_run)
     config.test_leak_debug = options.test_leak_debug
 
     if not util.local_libvirt_version() >= 6000:
