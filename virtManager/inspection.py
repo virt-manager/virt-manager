@@ -60,7 +60,6 @@ class vmmInspection(vmmGObject):
         vmmGObject.__init__(self)
 
         self._thread = None
-        self._wait = 5 * 1000  # 5 seconds
 
         self._q = queue.Queue()
         self._conns = {}
@@ -108,23 +107,10 @@ class vmmInspection(vmmGObject):
         self._q.put(obj)
 
     def _start(self):
-        if self._thread:
-            return
-
-        def cb():
-            if self._thread:
-                self._thread.start()
-            return 0
-
         self._thread = threading.Thread(
                 name="inspection thread", target=self._run)
         self._thread.daemon = True
-
-        # Wait a few seconds before we do anything.  This prevents
-        # inspection from being a burden for initial virt-manager
-        # interactivity (although it shouldn't affect interactivity at all)
-        logging.debug("waiting before startup wait=%s", self._wait)
-        self.timeout_add(self._wait, cb)
+        self._thread.start()
 
     def _stop(self):
         if self._thread is None:
