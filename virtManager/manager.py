@@ -92,7 +92,6 @@ class vmmManager(vmmGObjectUI):
     __gsignals__ = {
         "action-show-connect": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-show-about": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-preferences": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-show-create": (GObject.SignalFlags.RUN_FIRST, None, [str]),
@@ -469,8 +468,9 @@ class vmmManager(vmmGObjectUI):
     def new_vm(self, src_ignore=None):
         self.emit("action-show-create", self.current_conn_uri())
 
-    def show_about(self, src_ignore):
-        self.emit("action-show-about")
+    def show_about(self, _src):
+        from .about import vmmAbout
+        vmmAbout.show_instance(self)
 
     def show_preferences(self, src_ignore):
         self.emit("action-show-preferences")

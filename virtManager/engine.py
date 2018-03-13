@@ -30,7 +30,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from . import packageutils
-from .about import vmmAbout
 from .baseclass import vmmGObject
 from .clone import vmmCloneVM
 from .connect import vmmConnect
@@ -71,7 +70,6 @@ class vmmEngine(vmmGObject):
 
         self.windowConnect = None
         self.windowPreferences = None
-        self.windowAbout = None
         self.windowCreate = None
         self.windowManager = None
         self.windowMigrate = None
@@ -418,10 +416,6 @@ class vmmEngine(vmmGObject):
             self.windowPreferences.cleanup()
             self.windowPreferences = None
 
-        if self.windowAbout:
-            self.windowAbout.cleanup()
-            self.windowAbout = None
-
         if self.windowConnect:
             self.windowConnect.cleanup()
             self.windowConnect = None
@@ -689,14 +683,6 @@ class vmmEngine(vmmGObject):
     # Dialog launchers #
     ####################
 
-    def _do_show_about(self, src):
-        try:
-            if self.windowAbout is None:
-                self.windowAbout = vmmAbout()
-            self.windowAbout.show()
-        except Exception as e:
-            src.err.show_err(_("Error launching 'About' dialog: %s") % str(e))
-
     def _get_preferences(self):
         if self.windowPreferences:
             return self.windowPreferences
@@ -818,7 +804,6 @@ class vmmEngine(vmmGObject):
         obj.connect("action-show-domain", self._do_show_vm)
         obj.connect("action-show-preferences", self._do_show_preferences)
         obj.connect("action-show-create", self._do_show_create)
-        obj.connect("action-show-about", self._do_show_about)
         obj.connect("action-show-host", self._do_show_host)
         obj.connect("action-show-connect", self._do_show_connect)
         obj.connect("action-exit-app", self.exit_app)

@@ -24,6 +24,18 @@ from .baseclass import vmmGObjectUI
 
 
 class vmmAbout(vmmGObjectUI):
+    _instance = None
+
+    @classmethod
+    def show_instance(cls, parentobj):
+        try:
+            if not cls._instance:
+                cls._instance = cls()
+            cls._instance.show(parentobj.topwin)
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching 'About' dialog: %s") % str(e))
+
     def __init__(self):
         vmmGObjectUI.__init__(self, "about.ui", "vmm-about")
 
@@ -32,9 +44,10 @@ class vmmAbout(vmmGObjectUI):
             "on_vmm_about_response": self.close,
         })
 
-    def show(self):
+    def show(self, parent):
         logging.debug("Showing about")
         self.topwin.set_version(self.config.get_appversion())
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
