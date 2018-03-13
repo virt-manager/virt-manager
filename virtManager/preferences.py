@@ -28,6 +28,18 @@ from .baseclass import vmmGObjectUI
 
 
 class vmmPreferences(vmmGObjectUI):
+    _instance = None
+
+    @classmethod
+    def show_instance(cls, parentobj):
+        try:
+            if not cls._instance:
+                cls._instance = cls()
+            cls._instance.show(parentobj.topwin)
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching preferences: %s") % str(e))
+
     def __init__(self):
         vmmGObjectUI.__init__(self, "preferences.ui", "vmm-preferences")
 

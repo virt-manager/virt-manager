@@ -93,7 +93,6 @@ class vmmManager(vmmGObjectUI):
         "action-show-connect": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "action-show-preferences": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-show-create": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-delete-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
@@ -473,7 +472,8 @@ class vmmManager(vmmGObjectUI):
         vmmAbout.show_instance(self)
 
     def show_preferences(self, src_ignore):
-        self.emit("action-show-preferences")
+        from .preferences import vmmPreferences
+        vmmPreferences.show_instance(self)
 
     def show_host(self, src_ignore):
         uri = self.current_conn_uri(default_selection=True)

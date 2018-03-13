@@ -34,7 +34,6 @@ from .baseclass import vmmGObject
 from .clone import vmmCloneVM
 from .connect import vmmConnect
 from .connection import vmmConnection
-from .preferences import vmmPreferences
 from .manager import vmmManager
 from .migrate import vmmMigrateDialog
 from .details import vmmDetails
@@ -69,7 +68,6 @@ class vmmEngine(vmmGObject):
         vmmGObject.__init__(self)
 
         self.windowConnect = None
-        self.windowPreferences = None
         self.windowCreate = None
         self.windowManager = None
         self.windowMigrate = None
@@ -412,10 +410,6 @@ class vmmEngine(vmmGObject):
             self.windowManager.cleanup()
             self.windowManager = None
 
-        if self.windowPreferences:
-            self.windowPreferences.cleanup()
-            self.windowPreferences = None
-
         if self.windowConnect:
             self.windowConnect.cleanup()
             self.windowConnect = None
@@ -683,20 +677,6 @@ class vmmEngine(vmmGObject):
     # Dialog launchers #
     ####################
 
-    def _get_preferences(self):
-        if self.windowPreferences:
-            return self.windowPreferences
-
-        obj = vmmPreferences()
-        self.windowPreferences = obj
-        return self.windowPreferences
-
-    def _do_show_preferences(self, src):
-        try:
-            self._get_preferences().show(src.topwin)
-        except Exception as e:
-            src.err.show_err(_("Error launching preferences: %s") % str(e))
-
     def _get_host_dialog(self, uri):
         if self.conns[uri]["windowHost"]:
             return self.conns[uri]["windowHost"]
@@ -802,7 +782,6 @@ class vmmEngine(vmmGObject):
         obj.connect("action-delete-domain", self._do_delete_domain)
         obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("action-show-domain", self._do_show_vm)
-        obj.connect("action-show-preferences", self._do_show_preferences)
         obj.connect("action-show-create", self._do_show_create)
         obj.connect("action-show-host", self._do_show_host)
         obj.connect("action-show-connect", self._do_show_connect)
