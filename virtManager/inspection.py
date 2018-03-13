@@ -102,10 +102,8 @@ class vmmInspection(vmmGObject):
             if conn and not (conn.is_remote()) and not (uri in self._conns):
                 self._conns[uri] = conn
                 conn.connect("vm-added", self.vm_added)
-                # No need to push the VMs of the newly added
-                # connection manually into the queue, as the above
-                # connect() will emit vm-added signals for all of
-                # its VMs.
+                for vm in conn.list_vms():
+                    self.vm_added(conn, vm.get_connkey())
         elif obj[0] == "conn_removed":
             uri = obj[1]
             del self._conns[uri]

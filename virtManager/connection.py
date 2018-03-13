@@ -338,15 +338,6 @@ class vmmConnection(vmmGObject):
             return 0
         return self._hostinfo[2]
 
-    def connect(self, name, callback, *args):
-        handle_id = vmmGObject.connect(self, name, callback, *args)
-
-        if name == "vm-added":
-            for vm in self.list_vms():
-                self.emit("vm-added", vm.get_connkey())
-
-        return handle_id
-
 
     ##########################
     # URI + hostname helpers #

@@ -673,6 +673,9 @@ class vmmManager(vmmGObjectUI):
         conn.connect("resources-sampled", self.conn_row_updated)
         conn.connect("state-changed", self.conn_state_changed)
 
+        for vm in conn.list_vms():
+            self.vm_added(conn, vm.get_connkey())
+
     def remove_conn(self, engine_ignore, uri):
         # Called from engine.py signal conn-removed
 
