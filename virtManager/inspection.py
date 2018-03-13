@@ -26,6 +26,12 @@ from .baseclass import vmmGObject
 from .domain import vmmInspectionData
 
 
+def _inspection_error(_errstr):
+    data = vmmInspectionData()
+    data.errorstr = _errstr
+    return data
+
+
 class vmmInspection(vmmGObject):
     # Can't find a way to make Thread release our reference
     _leak_check = False
@@ -63,7 +69,6 @@ class vmmInspection(vmmGObject):
 
         self._q = queue.Queue()
         self._conns = {}
-        self._vmseen = {}
         self._cached_data = {}
 
         val = self.config.get_libguestfs_inspect_vms()
@@ -78,7 +83,6 @@ class vmmInspection(vmmGObject):
         self._stop()
         self._q = queue.Queue()
         self._conns = {}
-        self._vmseen = {}
         self._cached_data = {}
 
     # Called by the main thread whenever a connection is added or
@@ -135,9 +139,7 @@ class vmmInspection(vmmGObject):
         if cmd == "conn_added":
             conn = obj[1]
             uri = conn.get_uri()
-            if (conn.is_remote() or
-                conn.is_test() or
-                uri in self._conns):
+            if uri in self._conns:
                 return
 
             self._conns[uri] = conn
@@ -167,50 +169,44 @@ class vmmInspection(vmmGObject):
                 # all we need is to remove it from the "seen" cache,
                 # as the data itself will be replaced once the new
                 # results are available.
-                self._vmseen.pop(vmuuid)
+                self._cached_data.pop(vmuuid, None)
 
             self._process_vm(conn, vm)
 
-    # Try processing a single VM, keeping into account whether it was
-    # visited already, and whether there are cached data for it.
     def _process_vm(self, conn, vm):
-        def set_inspection_error(vm):
-            data = vmmInspectionData()
-            data.error = True
-            self._set_vm_inspection_data(vm, data)
+        # Try processing a single VM, keeping into account whether it was
+        # visited already, and whether there are cached data for it.
+        def _set_vm_inspection_data(_data):
+            vm.inspection = _data
+            vm.inspection_data_updated()
+            self._cached_data[vm.get_uuid()] = _data
 
+        prettyvm = conn.get_uri() + ":" + vm.get_name()
         vmuuid = vm.get_uuid()
-        prettyvm = vmuuid
+        if vmuuid in self._cached_data:
+            data = self._cached_data.get(vmuuid)
+            if vm.inspection != data:
+                logging.debug("Found cached data for %s", prettyvm)
+                _set_vm_inspection_data(data)
+            return
+
         try:
-            prettyvm = conn.get_uri() + ":" + vm.get_name()
-
-            if vmuuid in self._vmseen:
-                data = self._cached_data.get(vmuuid)
-                if not data:
-                    return
-
-                if vm.inspection != data:
-                    logging.debug("Found cached data for %s", prettyvm)
-                    self._set_vm_inspection_data(vm, data)
-                return
-
-            # Whether success or failure, we've "seen" this VM now.
-            self._vmseen[vmuuid] = True
-            try:
-                data = self._inspect_vm(conn, vm)
-                if data:
-                    self._set_vm_inspection_data(vm, data)
-                else:
-                    set_inspection_error(vm)
-            except Exception:
-                set_inspection_error(vm)
-                raise
-        except Exception:
+            data = self._inspect_vm(conn, vm)
+        except Exception as e:
+            data = _inspection_error(_("Error inspection VM: %s") % str(e))
             logging.exception("%s: exception while processing", prettyvm)
+
+        _set_vm_inspection_data(data)
 
     def _inspect_vm(self, conn, vm):
         if self._thread is None:
             return
+
+        if conn.is_remote():
+            return _inspection_error(
+                    _("Cannot inspect VM on remote connection"))
+        if conn.is_test():
+            return _inspection_error("Cannot inspect VM on test connection")
 
         import guestfs  # pylint: disable=import-error
 
@@ -222,14 +218,17 @@ class vmmInspection(vmmGObject):
         except Exception as e:
             logging.debug("%s: Error launching libguestfs appliance: %s",
                     prettyvm, str(e))
-            return None
+            return _inspection_error(
+                    _("Error launching libguestfs appliance: %s") % str(e))
+
         logging.debug("%s: inspection appliance connected", prettyvm)
 
         # Inspect the operating system.
         roots = g.inspect_os()
         if len(roots) == 0:
             logging.debug("%s: no operating systems found", prettyvm)
-            return None
+            return _inspection_error(
+                    _("Inspection found no operating systems."))
 
         # Arbitrarily pick the first root device.
         root = roots[0]
@@ -313,11 +312,5 @@ class vmmInspection(vmmGObject):
         data.product_variant = str(product_variant)
         data.icon = icon
         data.applications = list(apps or [])
-        data.error = False
 
         return data
-
-    def _set_vm_inspection_data(self, vm, data):
-        vm.inspection = data
-        vm.inspection_data_updated()
-        self._cached_data[vm.get_uuid()] = data

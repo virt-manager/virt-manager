@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.20.3 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -1399,171 +1399,114 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="box12">
+                          <object class="GtkBox" id="box14">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="valign">start</property>
                             <property name="orientation">vertical</property>
+                            <property name="spacing">12</property>
                             <child>
-                              <object class="GtkBox" id="box14">
+                              <object class="GtkFrame" id="details-inspection-os">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">12</property>
+                                <property name="label_xalign">0</property>
+                                <property name="shadow_type">none</property>
                                 <child>
-                                  <object class="GtkFrame" id="details-inspection-os">
+                                  <object class="GtkAlignment" id="alignment43">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label_xalign">0</property>
-                                    <property name="shadow_type">none</property>
+                                    <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkAlignment" id="alignment43">
+                                      <object class="GtkGrid" id="table17">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="left_padding">12</property>
+                                        <property name="border_width">3</property>
+                                        <property name="row_spacing">6</property>
+                                        <property name="column_spacing">6</property>
                                         <child>
-                                          <object class="GtkGrid" id="table17">
+                                          <object class="GtkLabel" id="label72">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="border_width">3</property>
-                                            <property name="row_spacing">6</property>
-                                            <property name="column_spacing">6</property>
-                                            <child>
-                                              <object class="GtkLabel" id="label72">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">end</property>
-                                                <property name="label" translatable="yes">Product name:</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">2</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="inspection-hostname">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label">foo</property>
-                                                <property name="selectable">True</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="label71">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">end</property>
-                                                <property name="label" translatable="yes">Hostname:</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="label">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">end</property>
-                                                <property name="label" translatable="yes">Operating system:</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="inspection-product-name">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label">foo</property>
-                                                <property name="selectable">True</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">2</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="inspection-type">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">foo</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">1</property>
-                                              </packing>
-                                            </child>
+                                            <property name="halign">end</property>
+                                            <property name="label" translatable="yes">Product name:</property>
                                           </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">2</property>
+                                          </packing>
                                         </child>
-                                      </object>
-                                    </child>
-                                    <child type="label">
-                                      <object class="GtkLabel" id="label70">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">&lt;b&gt;Operating System&lt;/b&gt;</property>
-                                        <property name="use_markup">True</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkExpander" id="details-inspection-apps">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment44">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="top_padding">3</property>
-                                        <property name="left_padding">21</property>
                                         <child>
-                                          <object class="GtkScrolledWindow" id="scrolledwindow6">
-                                            <property name="height_request">150</property>
+                                          <object class="GtkLabel" id="inspection-hostname">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="shadow_type">etched-in</property>
-                                            <child>
-                                              <object class="GtkTreeView" id="inspection-apps">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <child internal-child="selection">
-                                                  <object class="GtkTreeSelection" id="treeview-selection"/>
-                                                </child>
-                                              </object>
-                                            </child>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="label">foo</property>
+                                            <property name="selectable">True</property>
                                           </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label71">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">end</property>
+                                            <property name="label" translatable="yes">Hostname:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">end</property>
+                                            <property name="label" translatable="yes">Operating system:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="inspection-product-name">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="label">foo</property>
+                                            <property name="selectable">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">2</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="inspection-type">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="label" translatable="yes">foo</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">1</property>
+                                          </packing>
                                         </child>
                                       </object>
                                     </child>
-                                    <child type="label">
-                                      <object class="GtkLabel" id="label73">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">&lt;b&gt;Applications&lt;/b&gt;</property>
-                                        <property name="use_markup">True</property>
-                                      </object>
-                                    </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
+                                </child>
+                                <child type="label">
+                                  <object class="GtkLabel" id="label70">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Operating System&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
                                 </child>
                               </object>
                               <packing>
@@ -1573,71 +1516,124 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkGrid" id="details-overview-error-box">
+                              <object class="GtkExpander" id="details-inspection-apps">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="valign">end</property>
-                                <property name="orientation">vertical</property>
-                                <property name="column_spacing">6</property>
+                                <property name="can_focus">True</property>
                                 <child>
-                                  <object class="GtkImage" id="image1">
+                                  <object class="GtkAlignment" id="alignment44">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">start</property>
-                                    <property name="stock">gtk-dialog-warning</property>
+                                    <property name="top_padding">3</property>
+                                    <property name="left_padding">21</property>
+                                    <child>
+                                      <object class="GtkScrolledWindow" id="scrolledwindow6">
+                                        <property name="height_request">150</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="shadow_type">etched-in</property>
+                                        <child>
+                                          <object class="GtkTreeView" id="inspection-apps">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <child internal-child="selection">
+                                              <object class="GtkTreeSelection" id="treeview-selection"/>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
-                                  <packing>
-                                    <property name="left_attach">0</property>
-                                    <property name="top_attach">0</property>
-                                  </packing>
                                 </child>
-                                <child>
-                                  <object class="GtkLabel" id="details-overview-error">
+                                <child type="label">
+                                  <object class="GtkLabel" id="label73">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">start</property>
-                                    <property name="label" translatable="yes">Error message bar</property>
-                                    <property name="max_width_chars">80</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Applications&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
                                   </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">0</property>
-                                  </packing>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="details-inspection-refresh">
-                                <property name="label" translatable="yes">Refresh</property>
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="halign">end</property>
-                                <signal name="clicked" handler="on_details_inspection_refresh_clicked" swapped="no"/>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">12</property>
+                                <child>
+                                  <object class="GtkGrid" id="details-overview-error-box">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="valign">center</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="column_spacing">6</property>
+                                    <child>
+                                      <object class="GtkImage" id="image1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">start</property>
+                                        <property name="stock">gtk-dialog-warning</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="details-overview-error">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">start</property>
+                                        <property name="label">Error message baraaaaaaaa aaaaaaaaaaaaaa aaaaaaaaaaaaaaaa</property>
+                                        <property name="justify">fill</property>
+                                        <property name="wrap">True</property>
+                                        <property name="max_width_chars">60</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="details-inspection-refresh">
+                                    <property name="label" translatable="yes">Refresh</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="halign">end</property>
+                                    <property name="valign">start</property>
+                                    <signal name="clicked" handler="on_details_inspection_refresh_clicked" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="fill">False</property>
+                                <property name="fill">True</property>
                                 <property name="position">2</property>
                               </packing>
-                            </child>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="box12-atkobject">
-                                <property name="AtkObject::accessible-name">inspection-tab</property>
-                              </object>
                             </child>
                           </object>
                           <packing>
                             <property name="position">1</property>
-                            <property name="tab_fill">False</property>
                           </packing>
                         </child>
                         <child type="tab">

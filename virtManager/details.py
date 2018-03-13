@@ -2372,10 +2372,11 @@ class vmmDetails(vmmGObjectUI):
     def refresh_inspection_page(self):
         inspection_supported = self.config.inspection_supported()
         uiutil.set_grid_row_visible(self.widget("details-overview-error"),
-                                       self.vm.inspection.error)
-        if self.vm.inspection.error:
-            msg = _("Error while inspecting the guest configuration")
-            self.widget("details-overview-error").set_text(msg)
+                                    bool(self.vm.inspection.errorstr))
+        if self.vm.inspection.errorstr:
+            self.widget("details-overview-error").set_text(
+                    self.vm.inspection.errorstr)
+            inspection_supported = False
 
         self.widget("details-inspection-os").set_visible(inspection_supported)
         self.widget("details-inspection-apps").set_visible(inspection_supported)
