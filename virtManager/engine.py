@@ -66,6 +66,14 @@ class vmmEngine(vmmGObject):
     CLI_SHOW_DOMAIN_CONSOLE = "console"
     CLI_SHOW_HOST_SUMMARY = "summary"
 
+    _instance = None
+
+    @classmethod
+    def get_instance(cls):
+        if not cls._instance:
+            cls._instance = cls()
+        return cls._instance
+
     def __init__(self):
         vmmGObject.__init__(self)
 
@@ -77,9 +85,7 @@ class vmmEngine(vmmGObject):
         self.err = vmmErrorDialog()
         self.err.set_find_parent_cb(self._find_error_parent_cb)
 
-        self.timer = None
-        self.last_timeout = 0
-
+        self._timer = None
         self._systray = None
 
         self._gtkapplication = None
@@ -93,22 +99,10 @@ class vmmEngine(vmmGObject):
         self._tick_thread.daemon = True
         self._tick_queue = queue.PriorityQueue(100)
 
-        vmmInspection.get_instance()
-
         # Counter keeping track of how many manager and details windows
         # are open. When it is decremented to 0, close the app or
         # keep running in system tray if enabled
         self.windows = 0
-
-        self.add_gsettings_handle(
-            self.config.on_stats_update_interval_changed(self.reschedule_timer))
-
-        self.schedule_timer()
-        for uri in self._connobjs:
-            self._add_conn(uri, False)
-
-        self._tick_thread.start()
-        self.tick()
 
 
     @property
@@ -116,32 +110,80 @@ class vmmEngine(vmmGObject):
         return vmmConnectionManager.get_instance().conns
 
 
-    ############################
-    # Gtk Application handling #
-    ############################
+    def _cleanup(self):
+        self.err = None
 
-    def _on_gtk_application_activated(self, ignore):
+        if self._timer is not None:
+            GLib.source_remove(self._timer)
+
+        if self._systray:
+            self._systray.cleanup()
+            self._systray = None
+
+        self._get_manager()
+        if self.windowManager:
+            self.windowManager.cleanup()
+            self.windowManager = None
+
+        if self.windowConnect:
+            self.windowConnect.cleanup()
+            self.windowConnect = None
+
+        if self.windowCreate:
+            self.windowCreate.cleanup()
+            self.windowCreate = None
+
+        # Do this last, so any manually 'disconnected' signals
+        # take precedence over cleanup signal removal
+        for uri in self._connstates:
+            self._cleanup_connstate(uri)
+        self._connstates = {}
+        vmmConnectionManager.get_instance().cleanup()
+
+    def _find_error_parent_cb(self):
         """
-        Invoked after application.run()
+        Search over the toplevel windows for any that are visible or have
+        focus, and use that
         """
-        if not self._application.get_windows():
-            logging.debug("Initial gtkapplication activated")
-            self._application.add_window(Gtk.Window())
+        windowlist = [self.windowManager]
+        for connstate in self._connstates.values():
+            windowlist.extend(list(connstate.windowDetails.values()))
+            windowlist += [connstate.windowHost]
 
-    def _init_gtk_application(self):
-        self._application = Gtk.Application(
-            application_id="org.virt-manager.virt-manager", flags=0)
-        self._application.register(None)
-        self._application.connect("activate",
-            self._on_gtk_application_activated)
+        use_win = None
+        for window in windowlist:
+            if not window:
+                continue
+            if window.topwin.has_focus():
+                use_win = window
+                break
+            if not use_win and window.is_visible():
+                use_win = window
 
-        action = Gio.SimpleAction.new("cli_command",
-            GLib.VariantType.new("(sss)"))
-        action.connect("activate", self._handle_cli_command)
-        self._application.add_action(action)
+        if use_win:
+            return use_win.topwin
+
+    #################
+    # init handling #
+    #################
 
     def _default_startup(self, skip_autostart, cliuri):
+        """
+        Actual startup routines if we are running a new instance of the app
+        """
         self._init_systray()
+        vmmInspection.get_instance()
+
+        self.add_gsettings_handle(
+            self.config.on_stats_update_interval_changed(
+                self._timer_changed_cb))
+
+        self._schedule_timer()
+        for _uri in self._connobjs:
+            self._add_conn(_uri, False)
+
+        self._tick_thread.start()
+        self._tick()
 
         uris = list(self._connstates.keys())
         if not uris:
@@ -151,27 +193,11 @@ class vmmEngine(vmmGObject):
                 "  \n".join(sorted(uris)))
 
         if not skip_autostart:
-            self.idle_add(self.autostart_conns)
+            self.idle_add(self._autostart_conns)
 
         if not self.config.get_conn_uris() and not cliuri:
             # Only add default if no connections are currently known
             self.timeout_add(1000, self._add_default_conn)
-
-    def start(self, uri, show_window, domain, skip_autostart):
-        # Dispatch dbus CLI command
-        if uri and not show_window:
-            show_window = self.CLI_SHOW_MANAGER
-        data = GLib.Variant("(sss)",
-            (uri or "", show_window or "", domain or ""))
-        self._application.activate_action("cli_command", data)
-
-        if self._application.get_is_remote():
-            logging.debug("Connected to remote app instance.")
-            return
-
-        self._default_startup(skip_autostart, uri)
-        self._application.run(None)
-
 
     def _init_systray(self):
         self._systray = vmmSystray()
@@ -189,7 +215,12 @@ class vmmEngine(vmmGObject):
             self._show_manager()
 
     def _add_default_conn(self):
-        manager = self.get_manager()
+        """
+        If there's no cached connections, or any requested on the command
+        line, try to determine a default URI and open it, possibly talking
+        to packagekit and other bits
+        """
+        manager = self._get_manager()
 
         # Manager fail message
         msg = _("Could not detect a default hypervisor. Make\n"
@@ -231,7 +262,7 @@ class vmmEngine(vmmGObject):
             libvirtd_started = packageutils.start_libvirtd()
             connected = False
             try:
-                self.connect_to_uri(tryuri, autoconnect=True)
+                self._connect_to_uri(tryuri, autoconnect=True)
                 connected = True
             except Exception:
                 logging.exception("Error connecting to %s", tryuri)
@@ -241,7 +272,7 @@ class vmmEngine(vmmGObject):
 
         self.idle_add(idle_connect)
 
-    def autostart_conns(self):
+    def _autostart_conns(self):
         """
         We serialize conn autostart, so polkit/ssh-askpass doesn't spam
         """
@@ -271,56 +302,74 @@ class vmmEngine(vmmGObject):
 
                 conn = self._connobjs[uri]
                 conn.connect("state-changed", state_change_cb)
-                self.idle_add(self.connect_to_uri, uri)
+                self.idle_add(self._connect_to_uri, uri)
 
         add_next_to_queue()
         self._start_thread(handle_queue, "Conn autostart thread")
 
 
-    def _do_vm_removed(self, conn, connkey):
-        detailsmap = self._connstates[conn.get_uri()].windowDetails
-        if connkey not in detailsmap:
+    ############################
+    # Gtk Application handling #
+    ############################
+
+    def _on_gtk_application_activated(self, ignore):
+        """
+        Invoked after application.run()
+        """
+        if not self._application.get_windows():
+            logging.debug("Initial gtkapplication activated")
+            self._application.add_window(Gtk.Window())
+
+    def _init_gtk_application(self):
+        self._application = Gtk.Application(
+            application_id="org.virt-manager.virt-manager", flags=0)
+        self._application.register(None)
+        self._application.connect("activate",
+            self._on_gtk_application_activated)
+
+        action = Gio.SimpleAction.new("cli_command",
+            GLib.VariantType.new("(sss)"))
+        action.connect("activate", self._handle_cli_command)
+        self._application.add_action(action)
+
+    def start(self, uri, show_window, domain, skip_autostart):
+        """
+        Public entrypoint from virt-manager cli. If app is already
+        running, connect to it and exit, otherwise run our functional
+        default startup.
+        """
+        # Dispatch dbus CLI command
+        if uri and not show_window:
+            show_window = self.CLI_SHOW_MANAGER
+        data = GLib.Variant("(sss)",
+            (uri or "", show_window or "", domain or ""))
+        self._application.activate_action("cli_command", data)
+
+        if self._application.get_is_remote():
+            logging.debug("Connected to remote app instance.")
             return
 
-        detailsmap[connkey].cleanup()
-        detailsmap.pop(connkey)
+        self._default_startup(skip_autostart, uri)
+        self._application.run(None)
 
-    def _do_vm_renamed(self, conn, oldconnkey, newconnkey):
-        detailsmap = self._connstates[conn.get_uri()].windowDetails
-        if oldconnkey not in detailsmap:
-            return
 
-        detailsmap[newconnkey] = detailsmap.pop(oldconnkey)
+    ###########################
+    # timer and tick handling #
+    ###########################
 
-    def _do_conn_changed(self, conn):
-        if conn.is_active() or conn.is_connecting():
-            return
-
-        uri = conn.get_uri()
-
-        detailsmap = self._connstates[conn.get_uri()].windowDetails
-        for connkey in list(detailsmap):
-            detailsmap[connkey].cleanup()
-            detailsmap.pop(connkey)
-
-        if (self.windowCreate and
-            self.windowCreate.conn and
-            self.windowCreate.conn.get_uri() == uri):
-            self.windowCreate.close()
-
-    def reschedule_timer(self, *args, **kwargs):
+    def _timer_changed_cb(self, *args, **kwargs):
         ignore1 = args
         ignore2 = kwargs
-        self.schedule_timer()
+        self._schedule_timer()
 
-    def schedule_timer(self):
+    def _schedule_timer(self):
         interval = self.config.get_stats_update_interval() * 1000
 
-        if self.timer is not None:
-            self.remove_gobject_timeout(self.timer)
-            self.timer = None
+        if self._timer is not None:
+            self.remove_gobject_timeout(self._timer)
+            self._timer = None
 
-        self.timer = self.timeout_add(interval, self.tick)
+        self._timer = self.timeout_add(interval, self._tick)
 
     def _add_obj_to_tick_queue(self, obj, isprio, **kwargs):
         if self._tick_queue.full():
@@ -337,7 +386,7 @@ class vmmEngine(vmmGObject):
     def _schedule_priority_tick(self, conn, kwargs):
         self._add_obj_to_tick_queue(conn, True, **kwargs)
 
-    def tick(self):
+    def _tick(self):
         for conn in self._connobjs.values():
             self._add_obj_to_tick_queue(conn, False,
                                         stats_update=True, pollvm=True)
@@ -368,6 +417,10 @@ class vmmEngine(vmmGObject):
         return 1
 
 
+    #####################################
+    # window counting and exit handling #
+    #####################################
+
     def increment_window_counter(self, src):
         ignore = src
         self.windows += 1
@@ -384,36 +437,6 @@ class vmmEngine(vmmGObject):
         return (self.windows <= 0 and
                 self._systray and
                 not self._systray.is_visible())
-
-    def _cleanup(self):
-        self.err = None
-
-        if self.timer is not None:
-            GLib.source_remove(self.timer)
-
-        if self._systray:
-            self._systray.cleanup()
-            self._systray = None
-
-        self.get_manager()
-        if self.windowManager:
-            self.windowManager.cleanup()
-            self.windowManager = None
-
-        if self.windowConnect:
-            self.windowConnect.cleanup()
-            self.windowConnect = None
-
-        if self.windowCreate:
-            self.windowCreate.cleanup()
-            self.windowCreate = None
-
-        # Do this last, so any manually 'disconnected' signals
-        # take precedence over cleanup signal removal
-        for uri in self._connstates:
-            self._cleanup_connstate(uri)
-        self._connstates = {}
-        vmmConnectionManager.get_instance().cleanup()
 
     def _exit_app_if_no_windows(self, src=None):
         def cb():
@@ -445,28 +468,17 @@ class vmmEngine(vmmGObject):
         logging.debug("Exiting app normally.")
         self._application.quit()
 
-    def _find_error_parent_cb(self):
-        """
-        Search over the toplevel windows for any that are visible or have
-        focus, and use that
-        """
-        windowlist = [self.windowManager]
-        for connstate in self._connstates.values():
-            windowlist.extend(list(connstate.windowDetails.values()))
-            windowlist += [connstate.windowHost]
+    def _cleanup_connstate(self, uri):
+        try:
+            connstate = self._connstates[uri]
+            if connstate.windowHost:
+                connstate.windowHost.cleanup()
 
-        use_win = None
-        for window in windowlist:
-            if not window:
-                continue
-            if window.topwin.has_focus():
-                use_win = window
-                break
-            if not use_win and window.is_visible():
-                use_win = window
-
-        if use_win:
-            return use_win.topwin
+            detailsmap = connstate.windowDetails
+            for win in list(detailsmap.values()):
+                win.cleanup()
+        except Exception:
+            logging.exception("Error cleaning up conn in engine")
 
     def _add_conn(self, uri, probe):
         if uri in self._connstates:
@@ -487,27 +499,29 @@ class vmmEngine(vmmGObject):
         self._connstates.pop(uri)
         vmmConnectionManager.get_instance().remove_conn(uri)
 
-    def connect_to_uri(self, uri, autoconnect=None, probe=False):
+    def _do_conn_changed(self, conn):
+        if conn.is_active() or conn.is_connecting():
+            return
+
+        uri = conn.get_uri()
+
+        detailsmap = self._connstates[conn.get_uri()].windowDetails
+        for connkey in list(detailsmap):
+            detailsmap[connkey].cleanup()
+            detailsmap.pop(connkey)
+
+        if (self.windowCreate and
+            self.windowCreate.conn and
+            self.windowCreate.conn.get_uri() == uri):
+            self.windowCreate.close()
+
+    def _connect_to_uri(self, uri, autoconnect=None, probe=False):
         conn = self._add_conn(uri, probe=probe)
 
         if autoconnect is not None:
             conn.set_autoconnect(bool(autoconnect))
 
         conn.open()
-
-
-    def _cleanup_connstate(self, uri):
-        try:
-            connstate = self._connstates[uri]
-            if connstate.windowHost:
-                connstate.windowHost.cleanup()
-
-            detailsmap = connstate.windowDetails
-            for win in list(detailsmap.values()):
-                win.cleanup()
-        except Exception:
-            logging.exception("Error cleaning up conn in engine")
-
 
     def _connect_error(self, conn, errmsg, tb, warnconsole):
         errmsg = errmsg.strip(" \n")
@@ -585,9 +599,24 @@ class vmmEngine(vmmGObject):
                 self.err.show_err(msg, details, title)
 
 
-    ####################
-    # Dialog launchers #
-    ####################
+    ##################################
+    # callbacks and dialog launchers #
+    ##################################
+
+    def _do_vm_removed(self, conn, connkey):
+        detailsmap = self._connstates[conn.get_uri()].windowDetails
+        if connkey not in detailsmap:
+            return
+
+        detailsmap[connkey].cleanup()
+        detailsmap.pop(connkey)
+
+    def _do_vm_renamed(self, conn, oldconnkey, newconnkey):
+        detailsmap = self._connstates[conn.get_uri()].windowDetails
+        if oldconnkey not in detailsmap:
+            return
+
+        detailsmap[newconnkey] = detailsmap.pop(oldconnkey)
 
     def _get_host_dialog(self, uri):
         connstate = self._connstates[uri]
@@ -611,13 +640,12 @@ class vmmEngine(vmmGObject):
         except Exception as e:
             src.err.show_err(_("Error launching host dialog: %s") % str(e))
 
-
     def _get_connect_dialog(self):
         if self.windowConnect:
             return self.windowConnect
 
         def completed(_src, uri, autoconnect):
-            self.connect_to_uri(uri, autoconnect, probe=True)
+            self._connect_to_uri(uri, autoconnect, probe=True)
 
         def cancelled(src):
             if not self._connstates:
@@ -628,7 +656,6 @@ class vmmEngine(vmmGObject):
         obj.connect("cancelled", cancelled)
         self.windowConnect = obj
         return self.windowConnect
-
 
     def _do_show_connect(self, src, reset_state=True):
         try:
@@ -641,7 +668,6 @@ class vmmEngine(vmmGObject):
             self._do_show_connect(src, False)
         finally:
             self._remove_conn(src, connection.get_uri())
-
 
     def _get_details_dialog(self, uri, connkey):
         detailsmap = self._connstates[uri].windowDetails
@@ -678,7 +704,7 @@ class vmmEngine(vmmGObject):
     def _do_show_vm(self, src, uri, connkey):
         self._show_vm_helper(src, uri, connkey, None, False)
 
-    def get_manager(self):
+    def _get_manager(self):
         if self.windowManager:
             return self.windowManager
 
@@ -696,7 +722,7 @@ class vmmEngine(vmmGObject):
         return self.windowManager
 
     def _do_toggle_manager(self, ignore):
-        manager = self.get_manager()
+        manager = self._get_manager()
         if manager.is_visible():
             manager.close()
         else:
@@ -704,7 +730,7 @@ class vmmEngine(vmmGObject):
 
     def _do_show_manager(self, src):
         try:
-            manager = self.get_manager()
+            manager = self._get_manager()
             manager.show()
         except Exception as e:
             if not src:
@@ -750,7 +776,7 @@ class vmmEngine(vmmGObject):
                 return vm
 
     def _cli_show_vm_helper(self, uri, clistr, page):
-        src = self.get_manager()
+        src = self._get_manager()
 
         vm = self._find_vm_by_cli_str(uri, clistr)
         if not vm:
@@ -764,10 +790,10 @@ class vmmEngine(vmmGObject):
         self._do_show_manager(None)
 
     def _show_host_summary(self, uri):
-        self._do_show_host(self.get_manager(), uri)
+        self._do_show_host(self._get_manager(), uri)
 
     def _show_domain_creator(self, uri):
-        self._do_show_create(self.get_manager(), uri)
+        self._do_show_create(self._get_manager(), uri)
 
     def _show_domain_console(self, uri, clistr):
         self._cli_show_vm_helper(uri, clistr, DETAILS_CONSOLE)
@@ -782,7 +808,7 @@ class vmmEngine(vmmGObject):
         try:
             logging.debug("Launching requested window '%s'", show_window)
             if show_window == self.CLI_SHOW_MANAGER:
-                self.get_manager().set_initial_selection(uri)
+                self._get_manager().set_initial_selection(uri)
                 self._show_manager()
             elif show_window == self.CLI_SHOW_DOMAIN_CREATOR:
                 self._show_domain_creator(uri)
@@ -836,7 +862,7 @@ class vmmEngine(vmmGObject):
 
         if conn.is_disconnected():
             # Schedule connection open
-            self.idle_add(self.connect_to_uri, uri)
+            self.idle_add(self._connect_to_uri, uri)
 
         if show_window:
             if conn.is_active():
@@ -846,7 +872,7 @@ class vmmEngine(vmmGObject):
                 conn.connect_opt_out("state-changed",
                     self._cli_conn_connected_cb, uri, show_window, domain)
         else:
-            self.get_manager().set_initial_selection(uri)
+            self._get_manager().set_initial_selection(uri)
             self._show_manager()
 
     def _handle_cli_command(self, actionobj, variant):

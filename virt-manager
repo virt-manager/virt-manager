@@ -281,7 +281,7 @@ def main():
     LibvirtGLib.init(None)
     LibvirtGLib.event_register()
 
-    engine = vmmEngine()
+    engine = vmmEngine.get_instance()
 
     # Actually exit when we receive ctrl-c
     from gi.repository import GLib
