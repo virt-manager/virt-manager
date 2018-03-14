@@ -41,6 +41,18 @@ NUM_COLS = 3
 
 
 class vmmMigrateDialog(vmmGObjectUI):
+    _instance = None
+
+    @classmethod
+    def show_instance(cls, parentobj, vm):
+        try:
+            if not cls._instance:
+                cls._instance = cls()
+            cls._instance.show(parentobj.topwin, vm)
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching migrate dialog: %s") % str(e))
+
     def __init__(self):
         vmmGObjectUI.__init__(self, "migrate.ui", "vmm-migrate")
         self.vm = None

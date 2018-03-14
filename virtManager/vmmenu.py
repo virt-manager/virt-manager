@@ -131,7 +131,7 @@ class VMActionMenu(_VMMenu):
         self._add_action(_("Clone..."), "clone",
                 _make_emit_cb("action-clone-domain"), iconname=None)
         self._add_action(_("Migrate..."), "migrate",
-                _make_emit_cb("action-migrate-domain"), iconname=None)
+                VMActionUI.migrate, iconname=None)
         self._add_action(_("_Delete"), "delete",
                 VMActionUI.delete, iconname=Gtk.STOCK_DELETE)
 
@@ -333,3 +333,8 @@ class VMActionUI(object):
     def delete(src, vm):
         from .delete import vmmDeleteDialog
         vmmDeleteDialog.show_instance(src, vm)
+
+    @staticmethod
+    def migrate(src, vm):
+        from .migrate import vmmMigrateDialog
+        vmmMigrateDialog.show_instance(src, vm)

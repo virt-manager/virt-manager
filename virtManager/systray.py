@@ -33,7 +33,6 @@ class vmmSystray(vmmGObject):
     __gsignals__ = {
         "action-toggle-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),

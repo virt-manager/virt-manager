@@ -39,7 +39,6 @@ from .error import vmmErrorDialog
 from .host import vmmHost
 from .inspection import vmmInspection
 from .manager import vmmManager
-from .migrate import vmmMigrateDialog
 from .systray import vmmSystray
 
 DETAILS_PERF = 1
@@ -75,7 +74,6 @@ class vmmEngine(vmmGObject):
         self.windowConnect = None
         self.windowCreate = None
         self.windowManager = None
-        self.windowMigrate = None
 
         self._connstates = {}
         self.err = vmmErrorDialog()
@@ -181,7 +179,6 @@ class vmmEngine(vmmGObject):
         self._systray = vmmSystray()
         self._systray.connect("action-toggle-manager", self._do_toggle_manager)
         self._systray.connect("action-show-domain", self._do_show_vm)
-        self._systray.connect("action-migrate-domain", self._do_show_migrate)
         self._systray.connect("action-clone-domain", self._do_show_clone)
         self._systray.connect("action-exit-app", self.exit_app)
 
@@ -413,10 +410,6 @@ class vmmEngine(vmmGObject):
         if self.windowCreate:
             self.windowCreate.cleanup()
             self.windowCreate = None
-
-        if self.windowMigrate:
-            self.windowMigrate.cleanup()
-            self.windowMigrate = None
 
         # Do this last, so any manually 'disconnected' signals
         # take precedence over cleanup signal removal
@@ -663,7 +656,6 @@ class vmmEngine(vmmGObject):
         obj = vmmDetails(self._connobjs[uri].get_vm(connkey))
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
-        obj.connect("action-migrate-domain", self._do_show_migrate)
         obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("details-opened", self.increment_window_counter)
         obj.connect("details-closed", self.decrement_window_counter)
@@ -697,7 +689,6 @@ class vmmEngine(vmmGObject):
             return self.windowManager
 
         obj = vmmManager()
-        obj.connect("action-migrate-domain", self._do_show_migrate)
         obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("action-show-domain", self._do_show_vm)
         obj.connect("action-show-create", self._do_show_create)
@@ -743,17 +734,6 @@ class vmmEngine(vmmGObject):
             self._get_create_dialog().show(src.topwin, uri)
         except Exception as e:
             src.err.show_err(_("Error launching manager: %s") % str(e))
-
-    def _do_show_migrate(self, src, uri, connkey):
-        try:
-            vm = self._connobjs[uri].get_vm(connkey)
-
-            if not self.windowMigrate:
-                self.windowMigrate = vmmMigrateDialog()
-
-            self.windowMigrate.show(src.topwin, vm)
-        except Exception as e:
-            src.err.show_err(_("Error launching migrate dialog: %s") % str(e))
 
     def _do_show_clone(self, src, uri, connkey):
         conn = self._connobjs[uri]
