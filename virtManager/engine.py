@@ -675,7 +675,6 @@ class vmmEngine(vmmGObject):
         obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("details-opened", self.increment_window_counter)
         obj.connect("details-closed", self.decrement_window_counter)
-        obj.connect("inspection-refresh", self._do_refresh_inspection)
 
         detailsmap[connkey] = obj
         return detailsmap[connkey]
@@ -791,14 +790,6 @@ class vmmEngine(vmmGObject):
             self.delete_dialog.show(vm, src.topwin)
         except Exception as e:
             src.err.show_err(_("Error launching delete dialog: %s") % str(e))
-
-    def _do_refresh_inspection(self, _src, uri, connkey):
-        inspection = vmmInspection.get_instance()
-        if not inspection:
-            return
-
-        vm = self._connobjs[uri].get_vm(connkey)
-        inspection.vm_refresh(vm)
 
 
     ##########################################

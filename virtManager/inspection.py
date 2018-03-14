@@ -110,6 +110,7 @@ class vmmInspection(vmmGObject):
         self._q.put(obj)
 
     def vm_refresh(self, vm):
+        logging.debug("Refresh requested for vm=%s", vm.get_name())
         obj = ("vm_refresh", vm.conn.get_uri(), vm.get_name(), vm.get_uuid())
         self._q.put(obj)
 

@@ -347,7 +347,6 @@ class vmmDetails(vmmGObjectUI):
         "details-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "details-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
         "customize-finished": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "inspection-refresh": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
     }
 
     def __init__(self, vm, parent=None):
@@ -1530,9 +1529,11 @@ class vmmDetails(vmmGObjectUI):
             return self.config.get_default_cpu_setting(for_cpu=True)
         return key
 
-    def inspection_refresh(self, src_ignore):
-        self.emit("inspection-refresh",
-                  self.vm.conn.get_uri(), self.vm.get_connkey())
+    def inspection_refresh(self, _src):
+        from .inspection import vmmInspection
+        inspection = vmmInspection.get_instance()
+        if inspection:
+            inspection.vm_refresh(self.vm)
 
 
     ##############################
