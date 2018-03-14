@@ -96,8 +96,6 @@ class vmmManager(vmmGObjectUI):
         "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-create": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "manager-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "manager-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
         "remove-conn": (GObject.SignalFlags.RUN_FIRST, None, [str]),
     }
 
@@ -203,7 +201,7 @@ class vmmManager(vmmGObjectUI):
             self.topwin.move(*self.prev_position)
             self.prev_position = None
 
-        self.emit("manager-opened")
+        vmmEngine.get_instance().increment_window_counter()
 
     def close(self, src_ignore=None, src2_ignore=None):
         if not self.is_visible():
@@ -212,7 +210,7 @@ class vmmManager(vmmGObjectUI):
         logging.debug("Closing manager")
         self.prev_position = self.topwin.get_position()
         self.topwin.hide()
-        self.emit("manager-closed")
+        vmmEngine.get_instance().decrement_window_counter()
 
         return 1
 

@@ -341,8 +341,6 @@ def _label_for_os_type(os_type):
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "details-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "details-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
         "customize-finished": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
@@ -627,7 +625,7 @@ class vmmDetails(vmmGObjectUI):
         if vis:
             return
 
-        self.emit("details-opened")
+        vmmEngine.get_instance().increment_window_counter()
         self.refresh_vm_state()
 
     def customize_finish(self, src):
@@ -675,7 +673,7 @@ class vmmDetails(vmmGObjectUI):
             except Exception:
                 logging.error("Failure when disconnecting from desktop server")
 
-        self.emit("details-closed")
+        vmmEngine.get_instance().decrement_window_counter()
         return 1
 
     def is_visible(self):

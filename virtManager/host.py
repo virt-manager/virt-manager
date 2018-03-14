@@ -54,8 +54,6 @@ EDIT_INTERFACE_STARTMODE,
 class vmmHost(vmmGObjectUI):
     __gsignals__ = {
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "host-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "host-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
     def __init__(self, conn):
@@ -254,7 +252,7 @@ class vmmHost(vmmGObjectUI):
         if vis:
             return
 
-        self.emit("host-opened")
+        vmmEngine.get_instance().increment_window_counter()
 
     def is_visible(self):
         return self.topwin.get_visible()
@@ -267,7 +265,7 @@ class vmmHost(vmmGObjectUI):
         self.confirm_changes()
 
         self.topwin.hide()
-        self.emit("host-closed")
+        vmmEngine.get_instance().decrement_window_counter()
 
         return 1
 

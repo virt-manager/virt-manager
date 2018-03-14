@@ -416,16 +416,21 @@ class vmmEngine(vmmGObject):
     # window counting and exit handling #
     #####################################
 
-    def increment_window_counter(self, src):
-        ignore = src
+    def increment_window_counter(self):
+        """
+        Public function, called by toplevel windows
+        """
         self.windows += 1
         logging.debug("window counter incremented to %s", self.windows)
 
-    def decrement_window_counter(self, src):
+    def decrement_window_counter(self):
+        """
+        Public function, called by toplevel windows
+        """
         self.windows -= 1
         logging.debug("window counter decremented to %s", self.windows)
 
-        self._exit_app_if_no_windows(src)
+        self._exit_app_if_no_windows()
 
     def _can_exit(self):
         # Don't exit if system tray is enabled
@@ -433,11 +438,11 @@ class vmmEngine(vmmGObject):
                 self._systray and
                 not self._systray.is_visible())
 
-    def _exit_app_if_no_windows(self, src=None):
+    def _exit_app_if_no_windows(self):
         def cb():
             if self._can_exit():
                 logging.debug("No windows found, requesting app exit")
-                self.exit_app(src or self)
+                self.exit_app()
         self.idle_add(cb)
 
     def exit_app(self):
@@ -627,8 +632,6 @@ class vmmEngine(vmmGObject):
         obj = vmmHost(conn)
 
         obj.connect("action-view-manager", self._do_show_manager)
-        obj.connect("host-opened", self.increment_window_counter)
-        obj.connect("host-closed", self.decrement_window_counter)
 
         connstate.windowHost = obj
         return connstate.windowHost
@@ -676,8 +679,6 @@ class vmmEngine(vmmGObject):
         from .details import vmmDetails
         obj = vmmDetails(self._connobjs[uri].get_vm(connkey))
         obj.connect("action-view-manager", self._do_show_manager)
-        obj.connect("details-opened", self.increment_window_counter)
-        obj.connect("details-closed", self.decrement_window_counter)
 
         detailsmap[connkey] = obj
         return detailsmap[connkey]
@@ -713,8 +714,6 @@ class vmmEngine(vmmGObject):
         obj.connect("action-show-create", self._do_show_create)
         obj.connect("action-show-host", self._do_show_host)
         obj.connect("action-show-connect", self._do_show_connect)
-        obj.connect("manager-opened", self.increment_window_counter)
-        obj.connect("manager-closed", self.decrement_window_counter)
         obj.connect("remove-conn", self._remove_conn)
 
         self.windowManager = obj
@@ -743,8 +742,6 @@ class vmmEngine(vmmGObject):
         from .create import vmmCreate
         obj = vmmCreate()
         obj.connect("action-show-domain", self._do_show_vm)
-        obj.connect("create-opened", self.increment_window_counter)
-        obj.connect("create-closed", self.decrement_window_counter)
         self.windowCreate = obj
         return self.windowCreate
 
