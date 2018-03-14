@@ -45,7 +45,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "migrate.ui", "vmm-migrate")
         self.vm = None
         self.conn = None
-        self._conns = {}
 
         self.builder.connect_signals({
             "on_vmm_migrate_delete_event": self._delete_event,
@@ -61,19 +60,14 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         self._init_state()
 
-        connmanager = vmmConnectionManager.get_instance()
-        connmanager.connect("conn-added", self._conn_added)
-        connmanager.connect("conn-removed", self._conn_removed)
-        for conn in connmanager.conns.values():
-            self._conn_added(connmanager, conn)
-
-        self.widget("migrate-dest").emit("changed")
-
 
     def _cleanup(self):
         self.vm = None
         self.conn = None
-        self._conns = None
+
+    @property
+    def _connobjs(self):
+        return vmmConnectionManager.get_instance().conns
 
 
     ##############
@@ -91,6 +85,8 @@ class vmmMigrateDialog(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing migrate wizard")
         self.topwin.hide()
+        self.vm = None
+        self.conn = None
         return 1
 
 
@@ -137,6 +133,8 @@ class vmmMigrateDialog(vmmGObjectUI):
         model.append([_("Tunnelled"), True])
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 0)
+
+        self.widget("migrate-dest").emit("changed")
 
         self.widget("migrate-mode").set_tooltip_text(
             self.widget("migrate-mode-label").get_tooltip_text())
@@ -217,8 +215,8 @@ class vmmMigrateDialog(vmmGObjectUI):
         tunnel_warning = ""
         tunnel_uri = ""
 
-        if can_migrate and uri in self._conns:
-            destconn = self._conns[uri]
+        if can_migrate and uri in self._connobjs:
+            destconn = self._connobjs[uri]
 
             tunnel_uri = destconn.get_uri()
             if not destconn.is_remote():
@@ -273,12 +271,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-direct-box").set_visible(not is_tunnel)
         self.widget("migrate-tunnel-box").set_visible(is_tunnel)
 
-    def _conn_added(self, _src, conn):
-        self._conns[conn.get_uri()] = conn
-
-    def _conn_removed(self, _src, uri):
-        del(self._conns[uri])
-
 
     ###########################
     # destconn combo handling #
@@ -315,7 +307,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         model.clear()
 
         rows = []
-        for conn in list(self._conns.values()):
+        for conn in list(self._connobjs.values()):
             rows.append(self._build_dest_row(conn))
 
         if not any([row[COL_CAN_MIGRATE] for row in rows]):
@@ -363,15 +355,15 @@ class vmmMigrateDialog(vmmGObjectUI):
             error = _("Unable to migrate guest: %s") % error
             self.err.show_err(error, details=details)
         else:
-            self.conn.schedule_priority_tick(pollvm=True)
             destconn.schedule_priority_tick(pollvm=True)
+            self.conn.schedule_priority_tick(pollvm=True)
             self.close()
 
     def _finish(self):
         try:
             row = uiutil.get_list_selected_row(self.widget("migrate-dest"))
             destlabel = row[COL_LABEL]
-            destconn = self._conns.get(row[COL_URI])
+            destconn = self._connobjs.get(row[COL_URI])
 
             tunnel = self._is_tunnel_selected()
             unsafe = self.widget("migrate-unsafe").get_active()
