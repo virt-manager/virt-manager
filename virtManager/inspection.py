@@ -23,6 +23,7 @@ import queue
 import threading
 
 from .baseclass import vmmGObject
+from .connmanager import vmmConnectionManager
 from .domain import vmmInspectionData
 
 
@@ -39,11 +40,11 @@ class vmmInspection(vmmGObject):
     _libguestfs_installed = None
 
     @classmethod
-    def get_instance(cls, engine):
+    def get_instance(cls):
         if not cls._instance:
             if not cls.libguestfs_installed():
                 return None
-            cls._instance = cls(engine)
+            cls._instance = cls()
         return cls._instance
 
     @classmethod
@@ -62,7 +63,7 @@ class vmmInspection(vmmGObject):
                 cls._libguestfs_installed = False
         return cls._libguestfs_installed
 
-    def __init__(self, engine):
+    def __init__(self):
         vmmGObject.__init__(self)
 
         self._thread = None
@@ -76,10 +77,11 @@ class vmmInspection(vmmGObject):
         if not val:
             return
 
-        engine.connect("conn-added", self._conn_added)
-        engine.connect("conn-removed", self._conn_removed)
-        for conn in engine.connobjs.values():
-            self._conn_added(engine, conn)
+        connmanager = vmmConnectionManager.get_instance()
+        connmanager.connect("conn-added", self._conn_added)
+        connmanager.connect("conn-removed", self._conn_removed)
+        for conn in connmanager.conns.values():
+            self._conn_added(connmanager, conn)
 
         self._start()
 
@@ -89,11 +91,11 @@ class vmmInspection(vmmGObject):
         self._conns = {}
         self._cached_data = {}
 
-    def _conn_added(self, _engine, conn):
+    def _conn_added(self, _src, conn):
         obj = ("conn_added", conn)
         self._q.put(obj)
 
-    def _conn_removed(self, _engine, uri):
+    def _conn_removed(self, _src, uri):
         obj = ("conn_removed", uri)
         self._q.put(obj)
 

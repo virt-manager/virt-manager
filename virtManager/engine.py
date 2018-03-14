@@ -26,14 +26,13 @@ import traceback
 
 from gi.repository import Gio
 from gi.repository import GLib
-from gi.repository import GObject
 from gi.repository import Gtk
 
 from . import packageutils
 from .baseclass import vmmGObject
 from .clone import vmmCloneVM
+from .connmanager import vmmConnectionManager
 from .connect import vmmConnect
-from .connection import vmmConnection
 from .create import vmmCreate
 from .delete import vmmDeleteDialog
 from .details import vmmDetails
@@ -52,6 +51,17 @@ DETAILS_CONSOLE = 3
  PRIO_LOW) = range(1, 3)
 
 
+class _ConnState(object):
+    def __init__(self, uri, probe):
+        self.uri = uri
+
+        self.probeConnection = probe
+
+        self.windowClone = None
+        self.windowDetails = {}
+        self.windowHost = None
+
+
 class vmmEngine(vmmGObject):
     CLI_SHOW_MANAGER = "manager"
     CLI_SHOW_DOMAIN_CREATOR = "creator"
@@ -59,11 +69,6 @@ class vmmEngine(vmmGObject):
     CLI_SHOW_DOMAIN_PERFORMANCE = "performance"
     CLI_SHOW_DOMAIN_CONSOLE = "console"
     CLI_SHOW_HOST_SUMMARY = "summary"
-
-    __gsignals__ = {
-        "conn-added": (GObject.SignalFlags.RUN_FIRST, None, [object]),
-        "conn-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-    }
 
     def __init__(self):
         vmmGObject.__init__(self)
@@ -73,7 +78,7 @@ class vmmEngine(vmmGObject):
         self.windowManager = None
         self.windowMigrate = None
 
-        self.conns = {}
+        self._connstates = {}
         self.err = vmmErrorDialog()
         self.err.set_find_parent_cb(self._find_error_parent_cb)
 
@@ -94,7 +99,7 @@ class vmmEngine(vmmGObject):
         self._tick_thread.daemon = True
         self._tick_queue = queue.PriorityQueue(100)
 
-        vmmInspection.get_instance(self)
+        vmmInspection.get_instance()
 
         # Counter keeping track of how many manager and details windows
         # are open. When it is decremented to 0, close the app or
@@ -105,18 +110,16 @@ class vmmEngine(vmmGObject):
             self.config.on_stats_update_interval_changed(self.reschedule_timer))
 
         self.schedule_timer()
-        self.load_stored_uris()
+        for uri in self._connobjs:
+            self._add_conn(uri, False)
 
         self._tick_thread.start()
         self.tick()
 
 
     @property
-    def connobjs(self):
-        ret = {}
-        for uri, conndict in self.conns.items():
-            ret[uri] = conndict["conn"]
-        return ret
+    def _connobjs(self):
+        return vmmConnectionManager.get_instance().conns
 
 
     ############################
@@ -146,7 +149,7 @@ class vmmEngine(vmmGObject):
     def _default_startup(self, skip_autostart, cliuri):
         self._init_systray()
 
-        uris = list(self.conns.keys())
+        uris = list(self._connstates.keys())
         if not uris:
             logging.debug("No stored URIs found.")
         else:
@@ -177,7 +180,7 @@ class vmmEngine(vmmGObject):
 
 
     def _init_systray(self):
-        self._systray = vmmSystray(self)
+        self._systray = vmmSystray()
         self._systray.connect("action-toggle-manager", self._do_toggle_manager)
         self._systray.connect("action-show-domain", self._do_show_vm)
         self._systray.connect("action-migrate-domain", self._do_show_migrate)
@@ -207,17 +210,18 @@ class vmmEngine(vmmGObject):
 
         logging.debug("Determining default libvirt URI")
 
-        ret = None
+        packages_verified = False
         try:
             libvirt_packages = self.config.libvirt_packages
             packages = self.config.hv_packages + libvirt_packages
 
-            ret = packageutils.check_packagekit(manager, manager.err, packages)
+            packages_verified = packageutils.check_packagekit(
+                    manager, manager.err, packages)
         except Exception:
             logging.exception("Error talking to PackageKit")
 
         tryuri = None
-        if ret:
+        if packages_verified:
             tryuri = "qemu:///system"
         elif not self.config.test_first_run:
             tryuri = vmmConnect.default_uri()
@@ -233,28 +237,26 @@ class vmmEngine(vmmGObject):
         # Do the initial connection in an idle callback, so the
         # packagekit async dialog has a chance to go away
         def idle_connect():
-            do_start = packageutils.start_libvirtd()
-            connected = self.connect_to_uri(tryuri,
-                autoconnect=True, do_start=do_start)
-            if not connected and do_start:
+            libvirtd_started = packageutils.start_libvirtd()
+            connected = False
+            try:
+                self.connect_to_uri(tryuri, autoconnect=True)
+                connected = True
+            except Exception:
+                logging.exception("Error connecting to %s", tryuri)
+
+            if not connected and not libvirtd_started:
                 manager.err.ok(_("Libvirt service must be started"), warnmsg)
 
         self.idle_add(idle_connect)
-
-
-    def load_stored_uris(self):
-        uris = self.config.get_conn_uris() or []
-        for uri in uris:
-            conn = self.make_conn(uri)
-            self.register_conn(conn, skip_config=True)
 
     def autostart_conns(self):
         """
         We serialize conn autostart, so polkit/ssh-askpass doesn't spam
         """
         connections_queue = queue.Queue()
-        auto_conns = [uri for uri in self.conns
-                      if self.conns[uri]["conn"].get_autoconnect()]
+        auto_conns = [conn.get_uri() for conn in self._connobjs.values() if
+                      conn.get_autoconnect()]
 
         def add_next_to_queue():
             if not auto_conns:
@@ -267,55 +269,52 @@ class vmmEngine(vmmGObject):
                 add_next_to_queue()
                 conn.disconnect_by_func(state_change_cb)
 
-        def connect(uri):
-            self.connect_to_uri(uri)
-
         def handle_queue():
             while True:
                 uri = connections_queue.get()
                 if uri is None:
                     return
-                if uri not in self.conns:
+                if uri not in self._connobjs:
                     add_next_to_queue()
                     continue
 
-                conn = self.conns[uri]["conn"]
+                conn = self._connobjs[uri]
                 conn.connect("state-changed", state_change_cb)
-                self.idle_add(connect, uri)
+                self.idle_add(self.connect_to_uri, uri)
 
         add_next_to_queue()
         self._start_thread(handle_queue, "Conn autostart thread")
 
 
     def _do_vm_removed(self, conn, connkey):
-        hvuri = conn.get_uri()
-        if connkey not in self.conns[hvuri]["windowDetails"]:
+        detailsmap = self._connstates[conn.get_uri()].windowDetails
+        if connkey not in detailsmap:
             return
 
-        self.conns[hvuri]["windowDetails"][connkey].cleanup()
-        del(self.conns[hvuri]["windowDetails"][connkey])
+        detailsmap[connkey].cleanup()
+        detailsmap.pop(connkey)
 
     def _do_vm_renamed(self, conn, oldconnkey, newconnkey):
-        hvuri = conn.get_uri()
-        if oldconnkey not in self.conns[hvuri]["windowDetails"]:
+        detailsmap = self._connstates[conn.get_uri()].windowDetails
+        if oldconnkey not in detailsmap:
             return
 
-        self.conns[hvuri]["windowDetails"][newconnkey] = (
-            self.conns[hvuri]["windowDetails"].pop(oldconnkey))
+        detailsmap[newconnkey] = detailsmap.pop(oldconnkey)
 
     def _do_conn_changed(self, conn):
         if conn.is_active() or conn.is_connecting():
             return
 
-        hvuri = conn.get_uri()
+        uri = conn.get_uri()
 
-        for connkey in self.conns[hvuri]["windowDetails"].keys():
-            self.conns[hvuri]["windowDetails"][connkey].cleanup()
-            del(self.conns[hvuri]["windowDetails"][connkey])
+        detailsmap = self._connstates[conn.get_uri()].windowDetails
+        for connkey in list(detailsmap):
+            detailsmap[connkey].cleanup()
+            detailsmap.pop(connkey)
 
         if (self.windowCreate and
             self.windowCreate.conn and
-            self.windowCreate.conn.get_uri() == hvuri):
+            self.windowCreate.conn.get_uri() == uri):
             self.windowCreate.close()
 
     def reschedule_timer(self, *args, **kwargs):
@@ -348,8 +347,7 @@ class vmmEngine(vmmGObject):
         self._add_obj_to_tick_queue(conn, True, **kwargs)
 
     def tick(self):
-        for uri in self.conns:
-            conn = self.conns[uri]["conn"]
+        for conn in self._connobjs.values():
             self._add_obj_to_tick_queue(conn, False,
                                         stats_update=True, pollvm=True)
         return 1
@@ -429,9 +427,10 @@ class vmmEngine(vmmGObject):
 
         # Do this last, so any manually 'disconnected' signals
         # take precedence over cleanup signal removal
-        for uri in self.conns:
-            self.cleanup_conn(uri)
-        self.conns = {}
+        for uri in self._connstates:
+            self._cleanup_connstate(uri)
+        self._connstates = {}
+        vmmConnectionManager.get_instance().cleanup()
 
     def _exit_app_if_no_windows(self, src=None):
         def cb():
@@ -469,10 +468,9 @@ class vmmEngine(vmmGObject):
         focus, and use that
         """
         windowlist = [self.windowManager]
-        for conndict in list(self.conns.values()):
-            windowlist.extend(list(conndict["windowDetails"].values()))
-        windowlist.extend(
-            [conndict["windowHost"] for conndict in list(self.conns.values())])
+        for connstate in self._connstates.values():
+            windowlist.extend(list(connstate.windowDetails.values()))
+            windowlist += [connstate.windowHost]
 
         use_win = None
         for window in windowlist:
@@ -487,94 +485,48 @@ class vmmEngine(vmmGObject):
         if use_win:
             return use_win.topwin
 
-    def make_conn(self, uri, probe=False):
-        conn = self._check_conn(uri)
-        if conn:
-            return conn
+    def _add_conn(self, uri, probe):
+        if uri in self._connstates:
+            return self._connobjs[uri]
 
-        conn = vmmConnection(uri)
-        self.conns[uri] = {
-            "conn": conn,
-            "windowHost": None,
-            "windowDetails": {},
-            "windowClone": None,
-            "probeConnection": probe
-        }
-
+        connstate = _ConnState(uri, probe)
+        conn = vmmConnectionManager.get_instance().add_conn(uri)
         conn.connect("vm-removed", self._do_vm_removed)
         conn.connect("vm-renamed", self._do_vm_renamed)
         conn.connect("state-changed", self._do_conn_changed)
         conn.connect("connect-error", self._connect_error)
         conn.connect("priority-tick", self._schedule_priority_tick)
-
+        self._connstates[uri] = connstate
         return conn
 
+    def _remove_conn(self, _src, uri):
+        self._cleanup_connstate(uri)
+        self._connstates.pop(uri)
+        vmmConnectionManager.get_instance().remove_conn(uri)
 
-    def register_conn(self, conn, skip_config=False):
-        # if `skip_config' then the connection is only showed in the ui and
-        # not added to the config.
-        if not skip_config and conn.get_uri() not in \
-                               (self.config.get_conn_uris() or []):
-            self.config.add_conn(conn.get_uri())
-        self.emit("conn-added", conn)
+    def connect_to_uri(self, uri, autoconnect=None, probe=False):
+        conn = self._add_conn(uri, probe=probe)
+
+        if autoconnect is not None:
+            conn.set_autoconnect(bool(autoconnect))
+
+        conn.open()
 
 
-    def connect_to_uri(self, uri, autoconnect=None, do_start=True, probe=False):
+    def _cleanup_connstate(self, uri):
         try:
-            conn = self.make_conn(uri, probe=probe)
-            self.register_conn(conn)
+            connstate = self._connstates[uri]
+            if connstate.windowHost:
+                connstate.windowHost.cleanup()
+            if connstate.windowClone:
+                connstate.windowClone.cleanup()
 
-            if autoconnect is not None:
-                conn.set_autoconnect(bool(autoconnect))
-
-            if do_start:
-                conn.open()
-            else:
-                try:
-                    conn.open()
-                except Exception:
-                    return None
-            return conn
-        except Exception:
-            logging.exception("Error connecting to %s", uri)
-            return None
-
-
-    def cleanup_conn(self, uri):
-        try:
-            if self.conns[uri]["windowHost"]:
-                self.conns[uri]["windowHost"].cleanup()
-            if self.conns[uri]["windowClone"]:
-                self.conns[uri]["windowClone"].cleanup()
-
-            details = self.conns[uri]["windowDetails"]
-            for win in list(details.values()):
+            detailsmap = connstate.windowDetails
+            for win in list(detailsmap.values()):
                 win.cleanup()
-
-            self.conns[uri]["conn"].cleanup()
         except Exception:
             logging.exception("Error cleaning up conn in engine")
 
-
-    def remove_conn(self, src, uri):
-        ignore = src
-        self.cleanup_conn(uri)
-        del(self.conns[uri])
-
-        self.emit("conn-removed", uri)
-        self.config.remove_conn(uri)
-
-    def _check_conn(self, uri):
-        conn = self.conns.get(uri)
-        if conn:
-            return conn["conn"]
-        return None
-
-    def _lookup_conn(self, uri):
-        conn = self._check_conn(uri)
-        if not conn:
-            raise RuntimeError(_("Unknown connection URI %s") % uri)
-        return conn
 
     def _connect_error(self, conn, errmsg, tb, warnconsole):
         errmsg = errmsg.strip(" \n")
@@ -618,7 +570,7 @@ class vmmEngine(vmmGObject):
                 hint += _("Verify that the 'libvirtd' daemon is running.")
                 show_errmsg = False
 
-        probe_connection = self.conns[conn.get_uri()]["probeConnection"]
+        connstate = self._connstates[conn.get_uri()]
         msg = _("Unable to connect to libvirt %s." % conn.get_uri())
         if show_errmsg:
             msg += "\n\n%s" % errmsg
@@ -631,17 +583,17 @@ class vmmEngine(vmmGObject):
         details += "Libvirt URI is: %s\n\n" % conn.get_uri()
         details += tb
 
-        if probe_connection:
+        if connstate.probeConnection:
             msg += "\n\n"
             msg += _("Would you still like to remember this connection?")
 
         title = _("Virtual Machine Manager Connection Failure")
-        if probe_connection:
+        if connstate.probeConnection:
             remember_connection = self.err.show_err(msg, details, title,
                     buttons=Gtk.ButtonsType.YES_NO,
                     dialog_type=Gtk.MessageType.QUESTION, modal=True)
             if remember_connection:
-                self.conns[conn.get_uri()]["probeConnection"] = False
+                connstate.probeConnection = False
             else:
                 self.idle_add(self._do_edit_connect, self.windowManager, conn)
         else:
@@ -657,10 +609,11 @@ class vmmEngine(vmmGObject):
     ####################
 
     def _get_host_dialog(self, uri):
-        if self.conns[uri]["windowHost"]:
-            return self.conns[uri]["windowHost"]
+        connstate = self._connstates[uri]
+        if connstate.windowHost:
+            return connstate.windowHost
 
-        conn = self._lookup_conn(uri)
+        conn = self._connobjs[uri]
         obj = vmmHost(conn)
 
         obj.connect("action-exit-app", self.exit_app)
@@ -668,8 +621,8 @@ class vmmEngine(vmmGObject):
         obj.connect("host-opened", self.increment_window_counter)
         obj.connect("host-closed", self.decrement_window_counter)
 
-        self.conns[uri]["windowHost"] = obj
-        return self.conns[uri]["windowHost"]
+        connstate.windowHost = obj
+        return connstate.windowHost
 
     def _do_show_host(self, src, uri):
         try:
@@ -682,12 +635,11 @@ class vmmEngine(vmmGObject):
         if self.windowConnect:
             return self.windowConnect
 
-        def completed(src, uri, autoconnect):
-            ignore = src
-            return self.connect_to_uri(uri, autoconnect, probe=True)
+        def completed(_src, uri, autoconnect):
+            self.connect_to_uri(uri, autoconnect, probe=True)
 
         def cancelled(src):
-            if not list(self.conns.keys()):
+            if not self._connstates:
                 self.exit_app(src)
 
         obj = vmmConnect()
@@ -707,16 +659,15 @@ class vmmEngine(vmmGObject):
         try:
             self._do_show_connect(src, False)
         finally:
-            self.remove_conn(None, connection.get_uri())
+            self._remove_conn(src, connection.get_uri())
 
 
     def _get_details_dialog(self, uri, connkey):
-        if connkey in self.conns[uri]["windowDetails"]:
-            return self.conns[uri]["windowDetails"][connkey]
+        detailsmap = self._connstates[uri].windowDetails
+        if connkey in detailsmap:
+            return detailsmap[connkey]
 
-        conn = self._lookup_conn(uri)
-
-        obj = vmmDetails(conn.get_vm(connkey))
+        obj = vmmDetails(self._connobjs[uri].get_vm(connkey))
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
         obj.connect("action-migrate-domain", self._do_show_migrate)
@@ -726,12 +677,12 @@ class vmmEngine(vmmGObject):
         obj.connect("details-closed", self.decrement_window_counter)
         obj.connect("inspection-refresh", self._do_refresh_inspection)
 
-        self.conns[uri]["windowDetails"][connkey] = obj
-        return self.conns[uri]["windowDetails"][connkey]
+        detailsmap[connkey] = obj
+        return detailsmap[connkey]
 
-    def _show_vm_helper(self, src, uri, vm, page, forcepage):
+    def _show_vm_helper(self, src, uri, connkey, page, forcepage):
         try:
-            details = self._get_details_dialog(uri, vm.get_connkey())
+            details = self._get_details_dialog(uri, connkey)
 
             if forcepage or not details.is_visible():
                 if page == DETAILS_PERF:
@@ -748,15 +699,13 @@ class vmmEngine(vmmGObject):
             src.err.show_err(_("Error launching details: %s") % str(e))
 
     def _do_show_vm(self, src, uri, connkey):
-        conn = self._lookup_conn(uri)
-        vm = conn.get_vm(connkey)
-        self._show_vm_helper(src, uri, vm, None, False)
+        self._show_vm_helper(src, uri, connkey, None, False)
 
     def get_manager(self):
         if self.windowManager:
             return self.windowManager
 
-        obj = vmmManager(self)
+        obj = vmmManager()
         obj.connect("action-migrate-domain", self._do_show_migrate)
         obj.connect("action-delete-domain", self._do_delete_domain)
         obj.connect("action-clone-domain", self._do_show_clone)
@@ -767,7 +716,7 @@ class vmmEngine(vmmGObject):
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("manager-opened", self.increment_window_counter)
         obj.connect("manager-closed", self.decrement_window_counter)
-        obj.connect("remove-conn", self.remove_conn)
+        obj.connect("remove-conn", self._remove_conn)
 
         self.windowManager = obj
         return self.windowManager
@@ -792,7 +741,7 @@ class vmmEngine(vmmGObject):
         if self.windowCreate:
             return self.windowCreate
 
-        obj = vmmCreate(self)
+        obj = vmmCreate()
         obj.connect("action-show-domain", self._do_show_vm)
         obj.connect("create-opened", self.increment_window_counter)
         obj.connect("create-closed", self.decrement_window_counter)
@@ -807,25 +756,25 @@ class vmmEngine(vmmGObject):
 
     def _do_show_migrate(self, src, uri, connkey):
         try:
-            conn = self._lookup_conn(uri)
-            vm = conn.get_vm(connkey)
+            vm = self._connobjs[uri].get_vm(connkey)
 
             if not self.windowMigrate:
-                self.windowMigrate = vmmMigrateDialog(self)
+                self.windowMigrate = vmmMigrateDialog()
 
             self.windowMigrate.show(src.topwin, vm)
         except Exception as e:
             src.err.show_err(_("Error launching migrate dialog: %s") % str(e))
 
     def _do_show_clone(self, src, uri, connkey):
-        conn = self._lookup_conn(uri)
+        conn = self._connobjs[uri]
+        connstate = self._connstates[uri]
         orig_vm = conn.get_vm(connkey)
-        clone_window = self.conns[uri]["windowClone"]
 
+        clone_window = connstate.windowClone
         try:
             if clone_window is None:
                 clone_window = vmmCloneVM(orig_vm)
-                self.conns[uri]["windowClone"] = clone_window
+                connstate.windowClone = clone_window
             else:
                 clone_window.set_orig_vm(orig_vm)
 
@@ -833,13 +782,22 @@ class vmmEngine(vmmGObject):
         except Exception as e:
             src.err.show_err(_("Error setting clone parameters: %s") % str(e))
 
-    def _do_refresh_inspection(self, src_ignore, uri, connkey):
-        inspection = vmmInspection.get_instance(self)
+    def _do_delete_domain(self, src, uri, connkey):
+        vm = self._connobjs[uri].get_vm(connkey)
+
+        try:
+            if not self.delete_dialog:
+                self.delete_dialog = vmmDeleteDialog()
+            self.delete_dialog.show(vm, src.topwin)
+        except Exception as e:
+            src.err.show_err(_("Error launching delete dialog: %s") % str(e))
+
+    def _do_refresh_inspection(self, _src, uri, connkey):
+        inspection = vmmInspection.get_instance()
         if not inspection:
             return
 
-        conn = self._lookup_conn(uri)
-        vm = conn.get_vm(connkey)
+        vm = self._connobjs[uri].get_vm(connkey)
         inspection.vm_refresh(vm)
 
 
@@ -855,7 +813,7 @@ class vmmEngine(vmmGObject):
         if clistr.isdigit():
             clistr = int(clistr)
 
-        for vm in self.conns[uri]["conn"].list_vms():
+        for vm in self._connobjs[uri].list_vms():
             if clistr == vm.get_id():
                 return vm
             elif clistr == vm.get_name():
@@ -872,7 +830,7 @@ class vmmEngine(vmmGObject):
                 (uri, clistr), modal=True)
             return
 
-        self._show_vm_helper(src, uri, vm, page, True)
+        self._show_vm_helper(src, uri, vm.get_connkey(), page, True)
 
     def _show_manager(self):
         self._do_show_manager(None)
@@ -946,16 +904,11 @@ class vmmEngine(vmmGObject):
             self._show_manager()
             return
 
-        conn = self.make_conn(uri)
-        self.register_conn(conn, skip_config=True)
+        conn = self._add_conn(uri, False)
 
         if conn.is_disconnected():
             # Schedule connection open
-            def connect():
-                # We need to wrap this to ignore the return value, otherwise
-                # the callback will be rescheduled
-                self.connect_to_uri(uri)
-            self.idle_add(connect)
+            self.idle_add(self.connect_to_uri, uri)
 
         if show_window:
             if conn.is_active():
@@ -975,14 +928,3 @@ class vmmEngine(vmmGObject):
             # In case of cli error, we may need to exit the app
             logging.debug("Error handling cli command", exc_info=True)
             self._exit_app_if_no_windows()
-
-    def _do_delete_domain(self, src, uri, connkey):
-        conn = self._lookup_conn(uri)
-        vm = conn.get_vm(connkey)
-
-        try:
-            if not self.delete_dialog:
-                self.delete_dialog = vmmDeleteDialog()
-            self.delete_dialog.show(vm, src.topwin)
-        except Exception as e:
-            src.err.show_err(_("Error launching delete dialog: %s") % str(e))

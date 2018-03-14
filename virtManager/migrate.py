@@ -28,8 +28,9 @@ from gi.repository import Pango
 from virtinst import util
 
 from . import uiutil
-from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
+from .baseclass import vmmGObjectUI
+from .connmanager import vmmConnectionManager
 from .domain import vmmDomain
 
 
@@ -40,7 +41,7 @@ NUM_COLS = 3
 
 
 class vmmMigrateDialog(vmmGObjectUI):
-    def __init__(self, engine):
+    def __init__(self):
         vmmGObjectUI.__init__(self, "migrate.ui", "vmm-migrate")
         self.vm = None
         self.conn = None
@@ -58,7 +59,15 @@ class vmmMigrateDialog(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        self._init_state(engine)
+        self._init_state()
+
+        connmanager = vmmConnectionManager.get_instance()
+        connmanager.connect("conn-added", self._conn_added)
+        connmanager.connect("conn-removed", self._conn_removed)
+        for conn in connmanager.conns.values():
+            self._conn_added(connmanager, conn)
+
+        self.widget("migrate-dest").emit("changed")
 
 
     def _cleanup(self):
@@ -89,7 +98,7 @@ class vmmMigrateDialog(vmmGObjectUI):
     # Init helpers #
     ################
 
-    def _init_state(self, engine):
+    def _init_state(self):
         blue = Gdk.color_parse("#0072A8")
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
@@ -128,14 +137,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         model.append([_("Tunnelled"), True])
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 0)
-
-        # Hook up signals to get connection listing
-        engine.connect("conn-added", self._conn_added)
-        engine.connect("conn-removed", self._conn_removed)
-        for conn in engine.connobjs.values():
-            self._conn_added(engine, conn)
-
-        self.widget("migrate-dest").emit("changed")
 
         self.widget("migrate-mode").set_tooltip_text(
             self.widget("migrate-mode-label").get_tooltip_text())
@@ -272,10 +273,10 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-direct-box").set_visible(not is_tunnel)
         self.widget("migrate-tunnel-box").set_visible(is_tunnel)
 
-    def _conn_added(self, _engine, conn):
+    def _conn_added(self, _src, conn):
         self._conns[conn.get_uri()] = conn
 
-    def _conn_removed(self, _engine, uri):
+    def _conn_removed(self, _src, uri):
         del(self._conns[uri])
 
 

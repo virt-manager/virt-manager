@@ -32,6 +32,7 @@ from virtinst import util
 from . import vmmenu
 from . import uiutil
 from .baseclass import vmmGObjectUI
+from .connmanager import vmmConnectionManager
 from .graphwidgets import CellRendererSparkline
 
 # Number of data points for performance graphs
@@ -103,7 +104,7 @@ class vmmManager(vmmGObjectUI):
         "remove-conn": (GObject.SignalFlags.RUN_FIRST, None, [str]),
     }
 
-    def __init__(self, engine):
+    def __init__(self):
         vmmGObjectUI.__init__(self, "manager.ui", "vmm-manager")
 
         # Mapping of rowkey -> tree model rows to
@@ -183,10 +184,11 @@ class vmmManager(vmmGObjectUI):
         self.enable_polling(COL_NETWORK)
         self.enable_polling(COL_MEM)
 
-        engine.connect("conn-added", self._conn_added)
-        engine.connect("conn-removed", self._conn_removed)
-        for conn in engine.connobjs.values():
-            self._conn_added(engine, conn)
+        connmanager = vmmConnectionManager.get_instance()
+        connmanager.connect("conn-added", self._conn_added)
+        connmanager.connect("conn-removed", self._conn_removed)
+        for conn in connmanager.conns.values():
+            self._conn_added(connmanager, conn)
 
 
     ##################
@@ -658,7 +660,7 @@ class vmmManager(vmmGObjectUI):
 
         return row
 
-    def _conn_added(self, _engine, conn):
+    def _conn_added(self, _src, conn):
         # Make sure error page isn't showing
         self.widget("vm-notebook").set_current_page(0)
 
@@ -679,9 +681,7 @@ class vmmManager(vmmGObjectUI):
         for vm in conn.list_vms():
             self.vm_added(conn, vm.get_connkey())
 
-    def _conn_removed(self, _engine, uri):
-        # Called from engine.py signal conn-removed
-
+    def _conn_removed(self, _src, uri):
         model = self.widget("vm-list").get_model()
         parent = self.rows[uri].iter
 

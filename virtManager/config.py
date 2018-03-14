@@ -605,21 +605,16 @@ class vmmConfig(object):
 
 
     # Manager view connection list
-    def add_conn(self, uri):
-        uris = self.conf.get("/connections/uris")
-        if uris is None:
-            uris = []
-
-        if uris.count(uri) == 0:
+    def get_conn_uris(self):
+        return self.conf.get("/connections/uris") or []
+    def add_conn_uri(self, uri):
+        uris = self.get_conn_uris()
+        if uri not in uris:
             uris.insert(len(uris) - 1, uri)
             self.conf.set("/connections/uris", uris)
-    def remove_conn(self, uri):
-        uris = self.conf.get("/connections/uris")
-
-        if uris is None:
-            return
-
-        if uris.count(uri) != 0:
+    def remove_conn_uri(self, uri):
+        uris = self.get_conn_uris()
+        if uri in uris:
             uris.remove(uri)
             self.conf.set("/connections/uris", uris)
 
@@ -627,9 +622,6 @@ class vmmConfig(object):
             uris = self.conf.get("/connections/autoconnect")
             uris.remove(uri)
             self.conf.set("/connections/autoconnect", uris)
-
-    def get_conn_uris(self):
-        return self.conf.get("/connections/uris")
 
     # Manager default window size
     def get_manager_window_size(self):

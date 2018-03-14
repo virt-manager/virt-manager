@@ -25,6 +25,7 @@ from gi.repository import Gtk
 
 from . import vmmenu
 from .baseclass import vmmGObject
+from .connmanager import vmmConnectionManager
 from .error import vmmErrorDialog
 
 
@@ -40,7 +41,7 @@ class vmmSystray(vmmGObject):
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
-    def __init__(self, engine):
+    def __init__(self):
         vmmGObject.__init__(self)
 
         self.topwin = None
@@ -59,10 +60,11 @@ class vmmSystray(vmmGObject):
 
         self.show_systray()
 
-        engine.connect("conn-added", self._conn_added)
-        engine.connect("conn-removed", self._conn_removed)
-        for conn in engine.connobjs.values():
-            self._conn_added(engine, conn)
+        connmanager = vmmConnectionManager.get_instance()
+        connmanager.connect("conn-added", self._conn_added)
+        connmanager.connect("conn-removed", self._conn_removed)
+        for conn in connmanager.conns.values():
+            self._conn_added(connmanager, conn)
 
 
     def is_visible(self):
