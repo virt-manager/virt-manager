@@ -133,8 +133,7 @@ class VMActionMenu(_VMMenu):
         self._add_action(_("Migrate..."), "migrate",
                 _make_emit_cb("action-migrate-domain"), iconname=None)
         self._add_action(_("_Delete"), "delete",
-                _make_emit_cb("action-delete-domain"),
-                iconname=Gtk.STOCK_DELETE)
+                VMActionUI.delete, iconname=Gtk.STOCK_DELETE)
 
         if self._show_open:
             self.add(Gtk.SeparatorMenuItem())
@@ -329,3 +328,8 @@ class VMActionUI(object):
         logging.debug("Resetting vm '%s'", vm.get_name())
         vmmAsyncJob.simple_async_noshow(vm.reset, [], src,
                                         _("Error resetting domain"))
+
+    @staticmethod
+    def delete(src, vm):
+        from .delete import vmmDeleteDialog
+        vmmDeleteDialog.show_instance(src, vm)

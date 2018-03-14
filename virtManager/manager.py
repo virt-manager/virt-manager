@@ -96,7 +96,6 @@ class vmmManager(vmmGObjectUI):
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-create": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-delete-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "manager-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -504,7 +503,7 @@ class vmmManager(vmmGObjectUI):
         if vm is None:
             self._do_delete_conn(conn)
         else:
-            self.emit("action-delete-domain", conn.get_uri(), vm.get_connkey())
+            vmmenu.VMActionUI.delete(self, vm)
 
     def _do_delete_conn(self, conn):
         if conn is None:

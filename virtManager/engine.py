@@ -34,7 +34,6 @@ from .clone import vmmCloneVM
 from .connmanager import vmmConnectionManager
 from .connect import vmmConnect
 from .create import vmmCreate
-from .delete import vmmDeleteDialog
 from .details import vmmDetails
 from .error import vmmErrorDialog
 from .host import vmmHost
@@ -86,7 +85,6 @@ class vmmEngine(vmmGObject):
         self.last_timeout = 0
 
         self._systray = None
-        self.delete_dialog = None
 
         self._gtkapplication = None
         self._init_gtk_application()
@@ -184,7 +182,6 @@ class vmmEngine(vmmGObject):
         self._systray.connect("action-toggle-manager", self._do_toggle_manager)
         self._systray.connect("action-show-domain", self._do_show_vm)
         self._systray.connect("action-migrate-domain", self._do_show_migrate)
-        self._systray.connect("action-delete-domain", self._do_delete_domain)
         self._systray.connect("action-clone-domain", self._do_show_clone)
         self._systray.connect("action-exit-app", self.exit_app)
 
@@ -420,10 +417,6 @@ class vmmEngine(vmmGObject):
         if self.windowMigrate:
             self.windowMigrate.cleanup()
             self.windowMigrate = None
-
-        if self.delete_dialog:
-            self.delete_dialog.cleanup()
-            self.delete_dialog = None
 
         # Do this last, so any manually 'disconnected' signals
         # take precedence over cleanup signal removal
@@ -671,7 +664,6 @@ class vmmEngine(vmmGObject):
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
         obj.connect("action-migrate-domain", self._do_show_migrate)
-        obj.connect("action-delete-domain", self._do_delete_domain)
         obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("details-opened", self.increment_window_counter)
         obj.connect("details-closed", self.decrement_window_counter)
@@ -706,7 +698,6 @@ class vmmEngine(vmmGObject):
 
         obj = vmmManager()
         obj.connect("action-migrate-domain", self._do_show_migrate)
-        obj.connect("action-delete-domain", self._do_delete_domain)
         obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("action-show-domain", self._do_show_vm)
         obj.connect("action-show-create", self._do_show_create)
@@ -780,16 +771,6 @@ class vmmEngine(vmmGObject):
             clone_window.show(src.topwin)
         except Exception as e:
             src.err.show_err(_("Error setting clone parameters: %s") % str(e))
-
-    def _do_delete_domain(self, src, uri, connkey):
-        vm = self._connobjs[uri].get_vm(connkey)
-
-        try:
-            if not self.delete_dialog:
-                self.delete_dialog = vmmDeleteDialog()
-            self.delete_dialog.show(vm, src.topwin)
-        except Exception as e:
-            src.err.show_err(_("Error launching delete dialog: %s") % str(e))
 
 
     ##########################################

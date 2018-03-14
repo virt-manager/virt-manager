@@ -45,10 +45,21 @@ STORAGE_ROW_TOOLTIP = 7
 
 
 class vmmDeleteDialog(vmmGObjectUI):
+    _instance = None
+
+    @classmethod
+    def show_instance(cls, parentobj, vm):
+        try:
+            if not cls._instance:
+                cls._instance = cls()
+            cls._instance.show(parentobj.topwin, vm)
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching delete dialog: %s") % str(e))
+
     def __init__(self):
         vmmGObjectUI.__init__(self, "delete.ui", "vmm-delete")
         self.vm = None
-        self.conn = None
 
         self.builder.connect_signals({
             "on_vmm_delete_delete_event": self.close,
@@ -66,10 +77,9 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         prepare_storage_list(self.widget("delete-storage-list"))
 
-    def show(self, vm, parent):
+    def show(self, parent, vm):
         logging.debug("Showing delete wizard")
         self.vm = vm
-        self.conn = vm.conn
 
         self.reset_state()
         self.topwin.set_transient_for(parent)
@@ -79,12 +89,10 @@ class vmmDeleteDialog(vmmGObjectUI):
         logging.debug("Closing delete wizard")
         self.topwin.hide()
         self.vm = None
-        self.conn = None
         return 1
 
     def _cleanup(self):
         self.vm = None
-        self.conn = None
 
     def reset_state(self):
         # Set VM name in title'
@@ -105,7 +113,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.widget("delete-remove-storage").toggled()
 
         populate_storage_list(self.widget("delete-storage-list"),
-                              self.vm, self.conn)
+                              self.vm, self.vm.conn)
 
     def toggle_remove_storage(self, src):
         dodel = src.get_active()
@@ -130,7 +138,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         if error is not None:
             self.err.show_err(error, details=details)
 
-        self.conn.schedule_priority_tick(pollvm=True)
+        self.vm.conn.schedule_priority_tick(pollvm=True)
         self.close()
 
     def finish(self, src_ignore):
@@ -169,7 +177,7 @@ class vmmDeleteDialog(vmmGObjectUI):
                 logging.debug("Forcing VM '%s' power off.", self.vm.get_name())
                 self.vm.destroy()
 
-            conn = self.conn.get_backend()
+            conn = self.vm.conn.get_backend()
             meter = asyncjob.get_meter()
 
             for path in paths:
