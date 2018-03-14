@@ -341,7 +341,6 @@ class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "details-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "details-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
         "customize-finished": (GObject.SignalFlags.RUN_FIRST, None, []),

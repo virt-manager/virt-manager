@@ -128,11 +128,23 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
 
 
 class vmmCloneVM(vmmGObjectUI):
-    def __init__(self, orig_vm):
-        vmmGObjectUI.__init__(self, "clone.ui", "vmm-clone")
-        self.orig_vm = orig_vm
+    _instances = {}
 
-        self.conn = self.orig_vm.conn
+    @classmethod
+    def show_instance(cls, parentobj, vm):
+        try:
+            # Maintain one dialog per connection
+            uri = vm.conn.get_uri()
+            if uri not in cls._instances:
+                cls._instances[uri] = cls()
+            cls._instances[uri].show(parentobj.topwin, vm)
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching clone dialog: %s") % str(e))
+
+    def __init__(self):
+        vmmGObjectUI.__init__(self, "clone.ui", "vmm-clone")
+        self.vm = None
         self.clone_design = None
 
         self.storage_list = {}
@@ -169,10 +181,17 @@ class vmmCloneVM(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        self.set_initial_state()
+        self._init_ui()
 
-    def show(self, parent):
+    @property
+    def conn(self):
+        if self.vm:
+            return self.vm.conn
+        return None
+
+    def show(self, parent, vm):
         logging.debug("Showing clone wizard")
+        self.vm = vm
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.resize(1, 1)
@@ -184,7 +203,7 @@ class vmmCloneVM(vmmGObjectUI):
         self.change_storage_close()
         self.topwin.hide()
 
-        self.orig_vm = None
+        self.vm = None
         self.clone_design = None
         self.storage_list = {}
         self.target_list = []
@@ -194,8 +213,6 @@ class vmmCloneVM(vmmGObjectUI):
         return 1
 
     def _cleanup(self):
-        self.conn = None
-
         self.change_mac.destroy()
         self.change_mac = None
 
@@ -217,7 +234,7 @@ class vmmCloneVM(vmmGObjectUI):
 
     # First time setup
 
-    def set_initial_state(self):
+    def _init_ui(self):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
@@ -255,7 +272,7 @@ class vmmCloneVM(vmmGObjectUI):
 
     def build_new_clone_design(self, new_name=None):
         design = Cloner(self.conn.get_backend())
-        design.original_guest = self.orig_vm.get_name()
+        design.original_guest = self.vm.get_name()
         if not new_name:
             new_name = design.generate_clone_name()
         design.clone_name = new_name
@@ -295,7 +312,7 @@ class vmmCloneVM(vmmGObjectUI):
             self.net_list[origmac] = net_row
             self.mac_list.append(origmac)
 
-        for net in self.orig_vm.get_network_devices():
+        for net in self.vm.get_network_devices():
             mac = net.macaddr
             net_dev = net.source
             net_type = net.type
@@ -310,7 +327,7 @@ class vmmCloneVM(vmmGObjectUI):
 
             elif net_type == VirtualNetworkInterface.TYPE_VIRTUAL:
                 net = None
-                for netobj in self.orig_vm.conn.list_nets():
+                for netobj in self.vm.conn.list_nets():
                     if netobj.get_name() == net_dev:
                         net = netobj
                         break
@@ -340,7 +357,7 @@ class vmmCloneVM(vmmGObjectUI):
         """
         Determine which storage is cloneable, and which isn't
         """
-        diskinfos = self.orig_vm.get_disk_devices()
+        diskinfos = self.vm.get_disk_devices()
         cd = self.clone_design
 
         storage_list = {}
@@ -481,7 +498,7 @@ class vmmCloneVM(vmmGObjectUI):
         failinfo = disk[STORAGE_INFO_FAILINFO]
         target = disk[STORAGE_INFO_TARGET]
 
-        orig_name = self.orig_vm.get_name()
+        orig_name = self.vm.get_name()
 
         disk_label = os.path.basename(origpath)
         info_label = None
@@ -676,10 +693,6 @@ class vmmCloneVM(vmmGObjectUI):
 
         self.widget("vmm-change-storage").show_all()
 
-    def set_orig_vm(self, new_orig):
-        self.orig_vm = new_orig
-        self.conn = self.orig_vm.conn
-
     def change_mac_finish(self, ignore):
         orig = self.widget("change-mac-orig").get_text()
         new = self.widget("change-mac-new").get_text()
@@ -798,7 +811,7 @@ class vmmCloneVM(vmmGObjectUI):
         self.clone_design = cd
         return True
 
-    def _finish_cb(self, error, details):
+    def _finish_cb(self, error, details, conn):
         self.reset_finish_cursor()
 
         if error is not None:
@@ -807,8 +820,8 @@ class vmmCloneVM(vmmGObjectUI):
             self.err.show_err(error, details=details)
             return
 
+        conn.schedule_priority_tick(pollvm=True)
         self.close()
-        self.conn.schedule_priority_tick(pollvm=True)
 
     def finish(self, src_ignore):
         try:
@@ -826,13 +839,14 @@ class vmmCloneVM(vmmGObjectUI):
         if self.clone_design.clone_disks:
             text = title + _(" and selected storage (this may take a while)")
 
-        progWin = vmmAsyncJob(self._async_clone, [], self._finish_cb, [],
+        progWin = vmmAsyncJob(self._async_clone, [],
+                              self._finish_cb, [self.conn],
                               title, text, self.topwin)
         progWin.run()
 
     def _async_clone(self, asyncjob):
         try:
-            self.orig_vm.set_cloning(True)
+            self.vm.set_cloning(True)
             meter = asyncjob.get_meter()
 
             refresh_pools = []
@@ -859,7 +873,7 @@ class vmmCloneVM(vmmGObjectUI):
                         "VM clone.", poolname, exc_info=True)
 
         finally:
-            self.orig_vm.set_cloning(False)
+            self.vm.set_cloning(False)
 
     def change_storage_browse(self, ignore):
         def callback(src_ignore, txt):

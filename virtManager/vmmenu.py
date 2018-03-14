@@ -129,7 +129,7 @@ class VMActionMenu(_VMMenu):
 
         self.add(Gtk.SeparatorMenuItem())
         self._add_action(_("Clone..."), "clone",
-                _make_emit_cb("action-clone-domain"), iconname=None)
+                VMActionUI.clone, iconname=None)
         self._add_action(_("Migrate..."), "migrate",
                 VMActionUI.migrate, iconname=None)
         self._add_action(_("_Delete"), "delete",
@@ -338,3 +338,8 @@ class VMActionUI(object):
     def migrate(src, vm):
         from .migrate import vmmMigrateDialog
         vmmMigrateDialog.show_instance(src, vm)
+
+    @staticmethod
+    def clone(src, vm):
+        from .clone import vmmCloneVM
+        vmmCloneVM.show_instance(src, vm)

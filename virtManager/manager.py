@@ -95,7 +95,6 @@ class vmmManager(vmmGObjectUI):
         "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-create": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "manager-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "manager-opened": (GObject.SignalFlags.RUN_FIRST, None, []),

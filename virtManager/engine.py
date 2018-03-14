@@ -30,7 +30,6 @@ from gi.repository import Gtk
 
 from . import packageutils
 from .baseclass import vmmGObject
-from .clone import vmmCloneVM
 from .connmanager import vmmConnectionManager
 from .connect import vmmConnect
 from .create import vmmCreate
@@ -55,7 +54,6 @@ class _ConnState(object):
 
         self.probeConnection = probe
 
-        self.windowClone = None
         self.windowDetails = {}
         self.windowHost = None
 
@@ -179,7 +177,6 @@ class vmmEngine(vmmGObject):
         self._systray = vmmSystray()
         self._systray.connect("action-toggle-manager", self._do_toggle_manager)
         self._systray.connect("action-show-domain", self._do_show_vm)
-        self._systray.connect("action-clone-domain", self._do_show_clone)
         self._systray.connect("action-exit-app", self.exit_app)
 
         self.add_gsettings_handle(
@@ -504,8 +501,6 @@ class vmmEngine(vmmGObject):
             connstate = self._connstates[uri]
             if connstate.windowHost:
                 connstate.windowHost.cleanup()
-            if connstate.windowClone:
-                connstate.windowClone.cleanup()
 
             detailsmap = connstate.windowDetails
             for win in list(detailsmap.values()):
@@ -656,7 +651,6 @@ class vmmEngine(vmmGObject):
         obj = vmmDetails(self._connobjs[uri].get_vm(connkey))
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
-        obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("details-opened", self.increment_window_counter)
         obj.connect("details-closed", self.decrement_window_counter)
 
@@ -689,7 +683,6 @@ class vmmEngine(vmmGObject):
             return self.windowManager
 
         obj = vmmManager()
-        obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("action-show-domain", self._do_show_vm)
         obj.connect("action-show-create", self._do_show_create)
         obj.connect("action-show-host", self._do_show_host)
@@ -734,23 +727,6 @@ class vmmEngine(vmmGObject):
             self._get_create_dialog().show(src.topwin, uri)
         except Exception as e:
             src.err.show_err(_("Error launching manager: %s") % str(e))
-
-    def _do_show_clone(self, src, uri, connkey):
-        conn = self._connobjs[uri]
-        connstate = self._connstates[uri]
-        orig_vm = conn.get_vm(connkey)
-
-        clone_window = connstate.windowClone
-        try:
-            if clone_window is None:
-                clone_window = vmmCloneVM(orig_vm)
-                connstate.windowClone = clone_window
-            else:
-                clone_window.set_orig_vm(orig_vm)
-
-            clone_window.show(src.topwin)
-        except Exception as e:
-            src.err.show_err(_("Error setting clone parameters: %s") % str(e))
 
 
     ##########################################
