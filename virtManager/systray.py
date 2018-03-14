@@ -26,6 +26,7 @@ from gi.repository import Gtk
 from . import vmmenu
 from .baseclass import vmmGObject
 from .connmanager import vmmConnectionManager
+from .engine import vmmEngine
 from .error import vmmErrorDialog
 
 
@@ -35,7 +36,6 @@ class vmmSystray(vmmGObject):
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
     def __init__(self):
@@ -300,5 +300,5 @@ class vmmSystray(vmmGObject):
         menu = self.vm_action_dict[vm.get_connkey()]
         menu.update_widget_states(vm)
 
-    def exit_app(self, ignore):
-        self.emit("action-exit-app")
+    def exit_app(self, _src):
+        vmmEngine.get_instance().exit_app()

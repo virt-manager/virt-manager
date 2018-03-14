@@ -33,6 +33,7 @@ from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .createnet import vmmCreateNetwork
 from .createinterface import vmmCreateInterface
+from .engine import vmmEngine
 from .graphwidgets import Sparkline
 from .storagelist import vmmStorageList
 
@@ -52,7 +53,6 @@ EDIT_INTERFACE_STARTMODE,
 
 class vmmHost(vmmGObjectUI):
     __gsignals__ = {
-        "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
         "host-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "host-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -294,8 +294,8 @@ class vmmHost(vmmGObjectUI):
     def view_manager(self, src_ignore):
         self.emit("action-view-manager")
 
-    def exit_app(self, src_ignore):
-        self.emit("action-exit-app")
+    def exit_app(self, _src):
+        vmmEngine.get_instance().exit_app()
 
 
     def page_changed(self, src, child, pagenum):

@@ -36,6 +36,7 @@ from . import uiutil
 from .baseclass import vmmGObjectUI
 from .addhardware import vmmAddHardware
 from .choosecd import vmmChooseCD
+from .engine import vmmEngine
 from .fsdetails import vmmFSDetails
 from .gfxdetails import vmmGraphicsDetails
 from .netlist import vmmNetworkList
@@ -339,7 +340,6 @@ def _label_for_os_type(os_type):
 
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
-        "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
         "details-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "details-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -1342,8 +1342,8 @@ class vmmDetails(vmmGObjectUI):
     def view_manager(self, src_ignore):
         self.emit("action-view-manager")
 
-    def exit_app(self, src_ignore):
-        self.emit("action-exit-app")
+    def exit_app(self, _src):
+        vmmEngine.get_instance().exit_app()
 
     def activate_default_console_page(self):
         pages = self.widget("details-pages")

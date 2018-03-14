@@ -32,13 +32,8 @@ from . import packageutils
 from .baseclass import vmmGObject
 from .connmanager import vmmConnectionManager
 from .connect import vmmConnect
-from .create import vmmCreate
-from .details import vmmDetails
 from .error import vmmErrorDialog
-from .host import vmmHost
 from .inspection import vmmInspection
-from .manager import vmmManager
-from .systray import vmmSystray
 
 DETAILS_PERF = 1
 DETAILS_CONFIG = 2
@@ -200,10 +195,10 @@ class vmmEngine(vmmGObject):
             self.timeout_add(1000, self._add_default_conn)
 
     def _init_systray(self):
+        from .systray import vmmSystray
         self._systray = vmmSystray()
         self._systray.connect("action-toggle-manager", self._do_toggle_manager)
         self._systray.connect("action-show-domain", self._do_show_vm)
-        self._systray.connect("action-exit-app", self.exit_app)
 
         self.add_gsettings_handle(
             self.config.on_view_system_tray_changed(self._system_tray_changed))
@@ -445,7 +440,11 @@ class vmmEngine(vmmGObject):
                 self.exit_app(src or self)
         self.idle_add(cb)
 
-    def exit_app(self, src):
+    def exit_app(self):
+        """
+        Public call, manager/details/... use this to force exit the app
+        """
+        src = self
         if self.err is None:
             # Already in cleanup
             return
@@ -623,10 +622,10 @@ class vmmEngine(vmmGObject):
         if connstate.windowHost:
             return connstate.windowHost
 
+        from .host import vmmHost
         conn = self._connobjs[uri]
         obj = vmmHost(conn)
 
-        obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
         obj.connect("host-opened", self.increment_window_counter)
         obj.connect("host-closed", self.decrement_window_counter)
@@ -674,8 +673,8 @@ class vmmEngine(vmmGObject):
         if connkey in detailsmap:
             return detailsmap[connkey]
 
+        from .details import vmmDetails
         obj = vmmDetails(self._connobjs[uri].get_vm(connkey))
-        obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
         obj.connect("details-opened", self.increment_window_counter)
         obj.connect("details-closed", self.decrement_window_counter)
@@ -708,12 +707,12 @@ class vmmEngine(vmmGObject):
         if self.windowManager:
             return self.windowManager
 
+        from .manager import vmmManager
         obj = vmmManager()
         obj.connect("action-show-domain", self._do_show_vm)
         obj.connect("action-show-create", self._do_show_create)
         obj.connect("action-show-host", self._do_show_host)
         obj.connect("action-show-connect", self._do_show_connect)
-        obj.connect("action-exit-app", self.exit_app)
         obj.connect("manager-opened", self.increment_window_counter)
         obj.connect("manager-closed", self.decrement_window_counter)
         obj.connect("remove-conn", self._remove_conn)
@@ -741,6 +740,7 @@ class vmmEngine(vmmGObject):
         if self.windowCreate:
             return self.windowCreate
 
+        from .create import vmmCreate
         obj = vmmCreate()
         obj.connect("action-show-domain", self._do_show_vm)
         obj.connect("create-opened", self.increment_window_counter)

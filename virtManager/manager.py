@@ -33,6 +33,7 @@ from . import vmmenu
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager
+from .engine import vmmEngine
 from .graphwidgets import CellRendererSparkline
 
 # Number of data points for performance graphs
@@ -95,7 +96,6 @@ class vmmManager(vmmGObjectUI):
         "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-create": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "manager-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "manager-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
         "remove-conn": (GObject.SignalFlags.RUN_FIRST, None, [str]),
@@ -463,7 +463,7 @@ class vmmManager(vmmGObjectUI):
         self._window_size = self.topwin.get_size()
 
     def exit_app(self, src_ignore=None, src2_ignore=None):
-        self.emit("action-exit-app")
+        vmmEngine.get_instance().exit_app()
 
     def new_conn(self, src_ignore=None):
         self.emit("action-show-connect")

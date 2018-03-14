@@ -288,7 +288,7 @@ def main():
     def _sigint_handler(user_data):
         ignore = user_data
         logging.debug("Received KeyboardInterrupt. Exiting application.")
-        engine.exit_app(None)
+        engine.exit_app()
     GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGINT,
                          _sigint_handler, None)
 

@@ -40,6 +40,7 @@ from .connmanager import vmmConnectionManager
 from .baseclass import vmmGObjectUI
 from .details import vmmDetails
 from .domain import vmmDomainVirtinst
+from .engine import vmmEngine
 from .mediacombo import vmmMediaCombo
 from .netlist import vmmNetworkList
 from .storagebrowse import vmmStorageBrowser
