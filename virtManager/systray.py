@@ -40,7 +40,7 @@ class vmmSystray(vmmGObject):
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
-    def __init__(self):
+    def __init__(self, engine):
         vmmGObject.__init__(self)
 
         self.topwin = None
@@ -58,6 +58,12 @@ class vmmSystray(vmmGObject):
             self.config.on_view_system_tray_changed(self.show_systray))
 
         self.show_systray()
+
+        engine.connect("conn-added", self._conn_added)
+        engine.connect("conn-removed", self._conn_removed)
+        for conn in engine.connobjs.values():
+            self._conn_added(engine, conn)
+
 
     def is_visible(self):
         return (self.config.get_view_system_tray() and
@@ -166,7 +172,7 @@ class vmmSystray(vmmGObject):
             self.systray_menu.insert(self.conn_menuitems[uri], 0)
 
 
-    def conn_added(self, engine_ignore, conn):
+    def _conn_added(self, _engine, conn):
         conn.connect("vm-added", self.vm_added)
         conn.connect("vm-removed", self.vm_removed)
         conn.connect("state-changed", self.conn_state_changed)
@@ -188,7 +194,7 @@ class vmmSystray(vmmGObject):
         self.conn_state_changed(conn)
         self.populate_vm_list(conn)
 
-    def conn_removed(self, engine_ignore, uri):
+    def _conn_removed(self, _engine, uri):
         if uri not in self.conn_menuitems:
             return
 

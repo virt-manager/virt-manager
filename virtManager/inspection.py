@@ -75,8 +75,12 @@ class vmmInspection(vmmGObject):
         logging.debug("libguestfs gsetting enabled=%s", str(val))
         if not val:
             return
+
         engine.connect("conn-added", self._conn_added)
         engine.connect("conn-removed", self._conn_removed)
+        for conn in engine.connobjs.values():
+            self._conn_added(engine, conn)
+
         self._start()
 
     def _cleanup(self):
@@ -85,14 +89,11 @@ class vmmInspection(vmmGObject):
         self._conns = {}
         self._cached_data = {}
 
-    # Called by the main thread whenever a connection is added or
-    # removed.  We tell the inspection thread, so it can track
-    # connections.
-    def _conn_added(self, engine_ignore, conn):
+    def _conn_added(self, _engine, conn):
         obj = ("conn_added", conn)
         self._q.put(obj)
 
-    def _conn_removed(self, engine_ignore, uri):
+    def _conn_removed(self, _engine, uri):
         obj = ("conn_removed", uri)
         self._q.put(obj)
 

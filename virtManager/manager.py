@@ -103,7 +103,7 @@ class vmmManager(vmmGObjectUI):
         "remove-conn": (GObject.SignalFlags.RUN_FIRST, None, [str]),
     }
 
-    def __init__(self):
+    def __init__(self, engine):
         vmmGObjectUI.__init__(self, "manager.ui", "vmm-manager")
 
         # Mapping of rowkey -> tree model rows to
@@ -182,6 +182,11 @@ class vmmManager(vmmGObjectUI):
         self.enable_polling(COL_DISK)
         self.enable_polling(COL_NETWORK)
         self.enable_polling(COL_MEM)
+
+        engine.connect("conn-added", self._conn_added)
+        engine.connect("conn-removed", self._conn_removed)
+        for conn in engine.connobjs.values():
+            self._conn_added(engine, conn)
 
 
     ##################
@@ -653,9 +658,7 @@ class vmmManager(vmmGObjectUI):
 
         return row
 
-    def add_conn(self, engine_ignore, conn):
-        # Called from engine.py signal conn-added
-
+    def _conn_added(self, _engine, conn):
         # Make sure error page isn't showing
         self.widget("vm-notebook").set_current_page(0)
 
@@ -676,7 +679,7 @@ class vmmManager(vmmGObjectUI):
         for vm in conn.list_vms():
             self.vm_added(conn, vm.get_connkey())
 
-    def remove_conn(self, engine_ignore, uri):
+    def _conn_removed(self, _engine, uri):
         # Called from engine.py signal conn-removed
 
         model = self.widget("vm-list").get_model()

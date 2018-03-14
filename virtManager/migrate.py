@@ -130,8 +130,11 @@ class vmmMigrateDialog(vmmGObjectUI):
         uiutil.init_combo_text_column(combo, 0)
 
         # Hook up signals to get connection listing
-        engine.connect("conn-added", self._conn_added_cb)
-        engine.connect("conn-removed", self._conn_removed_cb)
+        engine.connect("conn-added", self._conn_added)
+        engine.connect("conn-removed", self._conn_removed)
+        for conn in engine.connobjs.values():
+            self._conn_added(engine, conn)
+
         self.widget("migrate-dest").emit("changed")
 
         self.widget("migrate-mode").set_tooltip_text(
@@ -269,12 +272,10 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-direct-box").set_visible(not is_tunnel)
         self.widget("migrate-tunnel-box").set_visible(is_tunnel)
 
-    def _conn_added_cb(self, engine, conn):
-        ignore = engine
+    def _conn_added(self, _engine, conn):
         self._conns[conn.get_uri()] = conn
 
-    def _conn_removed_cb(self, engine, uri):
-        ignore = engine
+    def _conn_removed(self, _engine, uri):
         del(self._conns[uri])
 
 

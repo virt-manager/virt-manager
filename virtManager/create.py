@@ -932,8 +932,7 @@ class vmmCreate(vmmGObjectUI):
         model.clear()
 
         default = -1
-        for c in list(self.engine.conns.values()):
-            connobj = c["conn"]
+        for connobj in self.engine.connobjs.values():
             if not connobj.is_active():
                 continue
 
@@ -956,7 +955,7 @@ class vmmCreate(vmmGObjectUI):
         if not no_conns:
             conn_list.set_active(default)
             activeuri, activedesc = model[default]
-            activeconn = self.engine.conns[activeuri]["conn"]
+            activeconn = self.engine.connobjs[activeuri]
 
         self.widget("create-conn-label").set_text(activedesc)
         if len(model) <= 1:
@@ -1428,7 +1427,7 @@ class vmmCreate(vmmGObjectUI):
         uri = uiutil.get_list_selection(src)
         newconn = None
         if uri:
-            newconn = self.engine.conns[uri]["conn"]
+            newconn = self.engine.connobjs[uri]
 
         # If we aren't visible, let reset_state handle this for us, which
         # has a better chance of reporting error

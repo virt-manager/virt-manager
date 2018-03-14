@@ -111,6 +111,14 @@ class vmmEngine(vmmGObject):
         self.tick()
 
 
+    @property
+    def connobjs(self):
+        ret = {}
+        for uri, conndict in self.conns.items():
+            ret[uri] = conndict["conn"]
+        return ret
+
+
     ############################
     # Gtk Application handling #
     ############################
@@ -169,16 +177,13 @@ class vmmEngine(vmmGObject):
 
 
     def _init_systray(self):
-        self._systray = vmmSystray()
+        self._systray = vmmSystray(self)
         self._systray.connect("action-toggle-manager", self._do_toggle_manager)
         self._systray.connect("action-show-domain", self._do_show_vm)
         self._systray.connect("action-migrate-domain", self._do_show_migrate)
         self._systray.connect("action-delete-domain", self._do_delete_domain)
         self._systray.connect("action-clone-domain", self._do_show_clone)
         self._systray.connect("action-exit-app", self.exit_app)
-
-        self.connect("conn-added", self._systray.conn_added)
-        self.connect("conn-removed", self._systray.conn_removed)
 
         self.add_gsettings_handle(
             self.config.on_view_system_tray_changed(self._system_tray_changed))
@@ -559,15 +564,6 @@ class vmmEngine(vmmGObject):
         self.emit("conn-removed", uri)
         self.config.remove_conn(uri)
 
-    def connect(self, name, callback, *args):
-        handle_id = vmmGObject.connect(self, name, callback, *args)
-
-        if name == "conn-added":
-            for conn_dict in list(self.conns.values()):
-                self.emit("conn-added", conn_dict["conn"])
-
-        return handle_id
-
     def _check_conn(self, uri):
         conn = self.conns.get(uri)
         if conn:
@@ -760,7 +756,7 @@ class vmmEngine(vmmGObject):
         if self.windowManager:
             return self.windowManager
 
-        obj = vmmManager()
+        obj = vmmManager(self)
         obj.connect("action-migrate-domain", self._do_show_migrate)
         obj.connect("action-delete-domain", self._do_delete_domain)
         obj.connect("action-clone-domain", self._do_show_clone)
@@ -772,9 +768,6 @@ class vmmEngine(vmmGObject):
         obj.connect("manager-opened", self.increment_window_counter)
         obj.connect("manager-closed", self.decrement_window_counter)
         obj.connect("remove-conn", self.remove_conn)
-
-        self.connect("conn-added", obj.add_conn)
-        self.connect("conn-removed", obj.remove_conn)
 
         self.windowManager = obj
         return self.windowManager
