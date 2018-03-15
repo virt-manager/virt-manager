@@ -43,16 +43,6 @@ DETAILS_CONSOLE = 3
  PRIO_LOW) = range(1, 3)
 
 
-class _ConnState(object):
-    def __init__(self, uri, probe):
-        self.uri = uri
-
-        self.probeConnection = probe
-
-        self.windowDetails = {}
-        self.windowHost = None
-
-
 class vmmEngine(vmmGObject):
     CLI_SHOW_MANAGER = "manager"
     CLI_SHOW_DOMAIN_CREATOR = "creator"
@@ -72,20 +62,15 @@ class vmmEngine(vmmGObject):
     def __init__(self):
         vmmGObject.__init__(self)
 
-        self.windowConnect = None
-        self.windowCreate = None
-        self.windowManager = None
-
-        self._connstates = {}
         self.err = vmmErrorDialog()
-        self.err.set_find_parent_cb(self._find_error_parent_cb)
 
-        self._timer = None
-        self._systray = None
+        self._exiting = False
 
+        self._window_count = 0
         self._gtkapplication = None
         self._init_gtk_application()
 
+        self._timer = None
         self._tick_counter = 0
         self._tick_thread_slow = False
         self._tick_thread = threading.Thread(name="Tick thread",
@@ -93,11 +78,6 @@ class vmmEngine(vmmGObject):
                                             args=())
         self._tick_thread.daemon = True
         self._tick_queue = queue.PriorityQueue(100)
-
-        # Counter keeping track of how many manager and details windows
-        # are open. When it is decremented to 0, close the app or
-        # keep running in system tray if enabled
-        self.windows = 0
 
 
     @property
@@ -111,52 +91,8 @@ class vmmEngine(vmmGObject):
         if self._timer is not None:
             GLib.source_remove(self._timer)
 
-        if self._systray:
-            self._systray.cleanup()
-            self._systray = None
-
-        self._get_manager()
-        if self.windowManager:
-            self.windowManager.cleanup()
-            self.windowManager = None
-
-        if self.windowConnect:
-            self.windowConnect.cleanup()
-            self.windowConnect = None
-
-        if self.windowCreate:
-            self.windowCreate.cleanup()
-            self.windowCreate = None
-
-        # Do this last, so any manually 'disconnected' signals
-        # take precedence over cleanup signal removal
-        for uri in self._connstates:
-            self._cleanup_connstate(uri)
-        self._connstates = {}
         vmmConnectionManager.get_instance().cleanup()
 
-    def _find_error_parent_cb(self):
-        """
-        Search over the toplevel windows for any that are visible or have
-        focus, and use that
-        """
-        windowlist = [self.windowManager]
-        for connstate in self._connstates.values():
-            windowlist.extend(list(connstate.windowDetails.values()))
-            windowlist += [connstate.windowHost]
-
-        use_win = None
-        for window in windowlist:
-            if not window:
-                continue
-            if window.topwin.has_focus():
-                use_win = window
-                break
-            if not use_win and window.is_visible():
-                use_win = window
-
-        if use_win:
-            return use_win.topwin
 
     #################
     # init handling #
@@ -166,7 +102,8 @@ class vmmEngine(vmmGObject):
         """
         Actual startup routines if we are running a new instance of the app
         """
-        self._init_systray()
+        from .systray import vmmSystray
+        vmmSystray.get_instance()
         vmmInspection.get_instance()
 
         self.add_gsettings_handle(
@@ -175,12 +112,12 @@ class vmmEngine(vmmGObject):
 
         self._schedule_timer()
         for _uri in self._connobjs:
-            self._add_conn(_uri, False)
+            self._add_conn(_uri, False, force_init=True)
 
         self._tick_thread.start()
         self._tick()
 
-        uris = list(self._connstates.keys())
+        uris = list(self._connobjs.keys())
         if not uris:
             logging.debug("No stored URIs found.")
         else:
@@ -193,21 +130,6 @@ class vmmEngine(vmmGObject):
         if not self.config.get_conn_uris() and not cliuri:
             # Only add default if no connections are currently known
             self.timeout_add(1000, self._add_default_conn)
-
-    def _init_systray(self):
-        from .systray import vmmSystray
-        self._systray = vmmSystray()
-        self._systray.connect("action-toggle-manager", self._do_toggle_manager)
-        self._systray.connect("action-show-domain", self._do_show_vm)
-
-        self.add_gsettings_handle(
-            self.config.on_view_system_tray_changed(self._system_tray_changed))
-
-    def _system_tray_changed(self, *ignore):
-        systray_enabled = self.config.get_view_system_tray()
-        if self.windows == 0 and not systray_enabled:
-            # Show the manager so that the user can control the application
-            self._show_manager()
 
     def _add_default_conn(self):
         """
@@ -388,7 +310,9 @@ class vmmEngine(vmmGObject):
         return 1
 
     def _handle_tick_error(self, msg, details):
-        if self.windows <= 0:
+        from .systray import vmmSystray
+        if (self._window_count == 1 and
+            vmmSystray.get_instance().is_visible()):
             # This means the systray icon is running. Don't raise an error
             # here to avoid spamming dialogs out of nowhere.
             logging.debug(msg + "\n\n" + details)
@@ -420,104 +344,63 @@ class vmmEngine(vmmGObject):
         """
         Public function, called by toplevel windows
         """
-        self.windows += 1
-        logging.debug("window counter incremented to %s", self.windows)
+        self._window_count += 1
+        logging.debug("window counter incremented to %s", self._window_count)
 
     def decrement_window_counter(self):
         """
         Public function, called by toplevel windows
         """
-        self.windows -= 1
-        logging.debug("window counter decremented to %s", self.windows)
+        self._window_count -= 1
+        logging.debug("window counter decremented to %s", self._window_count)
 
         self._exit_app_if_no_windows()
 
     def _can_exit(self):
-        # Don't exit if system tray is enabled
-        return (self.windows <= 0 and
-                self._systray and
-                not self._systray.is_visible())
+        return self._window_count <= 0
 
     def _exit_app_if_no_windows(self):
-        def cb():
-            if self._can_exit():
-                logging.debug("No windows found, requesting app exit")
-                self.exit_app()
-        self.idle_add(cb)
+        if self._can_exit():
+            logging.debug("No windows found, requesting app exit")
+            self.exit_app()
 
     def exit_app(self):
         """
         Public call, manager/details/... use this to force exit the app
         """
-        src = self
-        if self.err is None:
-            # Already in cleanup
+        if self._exiting:
             return
 
-        self.cleanup()
-
-        if self.config.test_leak_debug:
-            objs = self.config.get_objects()
-
-            # Engine will always appear to leak
-            objs.remove(self.object_key)
-
-            if src and src.object_key in objs:
-                # UI that initiates the app exit will always appear to leak
-                objs.remove(src.object_key)
-
-            for name in objs:
-                logging.debug("LEAK: %s", name)
-
-        logging.debug("Exiting app normally.")
-        self._application.quit()
-
-    def _cleanup_connstate(self, uri):
         try:
-            connstate = self._connstates[uri]
-            if connstate.windowHost:
-                connstate.windowHost.cleanup()
+            self._exiting = True
+            src = self
+            self.cleanup()
 
-            detailsmap = connstate.windowDetails
-            for win in list(detailsmap.values()):
-                win.cleanup()
-        except Exception:
-            logging.exception("Error cleaning up conn in engine")
+            if self.config.test_leak_debug:
+                objs = self.config.get_objects()
 
-    def _add_conn(self, uri, probe):
-        if uri in self._connstates:
-            return self._connobjs[uri]
+                # Engine will always appear to leak
+                objs.remove(self.object_key)
 
-        connstate = _ConnState(uri, probe)
+                if src and src.object_key in objs:
+                    # UI that initiates the app exit will always appear to leak
+                    objs.remove(src.object_key)
+
+                for name in objs:
+                    logging.debug("LEAK: %s", name)
+
+            logging.debug("Exiting app normally.")
+        finally:
+            self._application.quit()
+
+    def _add_conn(self, uri, probe, force_init=False):
+        is_init = (uri not in self._connobjs)
         conn = vmmConnectionManager.get_instance().add_conn(uri)
-        conn.connect("vm-removed", self._do_vm_removed)
-        conn.connect("vm-renamed", self._do_vm_renamed)
-        conn.connect("state-changed", self._do_conn_changed)
-        conn.connect("connect-error", self._connect_error)
-        conn.connect("priority-tick", self._schedule_priority_tick)
-        self._connstates[uri] = connstate
+        if is_init or force_init:
+            conn.connect("connect-error", self._connect_error)
+            conn.connect("priority-tick", self._schedule_priority_tick)
+            setattr(conn, "_from_connect_wizard", probe)
         return conn
-
-    def _remove_conn(self, _src, uri):
-        self._cleanup_connstate(uri)
-        self._connstates.pop(uri)
-        vmmConnectionManager.get_instance().remove_conn(uri)
-
-    def _do_conn_changed(self, conn):
-        if conn.is_active() or conn.is_connecting():
-            return
-
-        uri = conn.get_uri()
-
-        detailsmap = self._connstates[conn.get_uri()].windowDetails
-        for connkey in list(detailsmap):
-            detailsmap[connkey].cleanup()
-            detailsmap.pop(connkey)
-
-        if (self.windowCreate and
-            self.windowCreate.conn and
-            self.windowCreate.conn.get_uri() == uri):
-            self.windowCreate.close()
 
     def _connect_to_uri(self, uri, autoconnect=None, probe=False):
         conn = self._add_conn(uri, probe=probe)
@@ -569,7 +452,6 @@ class vmmEngine(vmmGObject):
                 hint += _("Verify that the 'libvirtd' daemon is running.")
                 show_errmsg = False
 
-        connstate = self._connstates[conn.get_uri()]
         msg = _("Unable to connect to libvirt %s." % conn.get_uri())
         if show_errmsg:
             msg += "\n\n%s" % errmsg
@@ -582,23 +464,24 @@ class vmmEngine(vmmGObject):
         details += "Libvirt URI is: %s\n\n" % conn.get_uri()
         details += tb
 
-        if connstate.probeConnection:
+        _from_connect_wizard = getattr(conn, "_from_connect_wizard", False)
+        if _from_connect_wizard:
             msg += "\n\n"
             msg += _("Would you still like to remember this connection?")
 
         title = _("Virtual Machine Manager Connection Failure")
-        if connstate.probeConnection:
+        if _from_connect_wizard:
             remember_connection = self.err.show_err(msg, details, title,
                     buttons=Gtk.ButtonsType.YES_NO,
                     dialog_type=Gtk.MessageType.QUESTION, modal=True)
             if remember_connection:
-                connstate.probeConnection = False
+                setattr(conn, "_from_connect_wizard", False)
             else:
-                self.idle_add(self._do_edit_connect, self.windowManager, conn)
+                self._edit_connect(conn.get_uri())
         else:
             if self._can_exit():
                 self.err.show_err(msg, details, title, modal=True)
-                self._exit_app_if_no_windows(conn)
+                self._exit_app_if_no_windows()
             else:
                 self.err.show_err(msg, details, title)
 
@@ -607,149 +490,30 @@ class vmmEngine(vmmGObject):
     # callbacks and dialog launchers #
     ##################################
 
-    def _do_vm_removed(self, conn, connkey):
-        detailsmap = self._connstates[conn.get_uri()].windowDetails
-        if connkey not in detailsmap:
-            return
+    def _connect_completed(self, _src, uri, autoconnect):
+        self._connect_to_uri(uri, autoconnect, probe=True)
 
-        detailsmap[connkey].cleanup()
-        detailsmap.pop(connkey)
+    def _connect_cancelled(self, _src):
+        if not self._connobjs:
+            self.exit_app()
 
-    def _do_vm_renamed(self, conn, oldconnkey, newconnkey):
-        detailsmap = self._connstates[conn.get_uri()].windowDetails
-        if oldconnkey not in detailsmap:
-            return
+    def _show_connect_dialog(self, src, reset_state):
+        is_init = vmmConnect.is_initialized()
+        obj = vmmConnect.get_instance(src)
+        if not is_init:
+            obj.connect("completed", self._connect_completed)
+            obj.connect("cancelled", self._connect_cancelled)
+        obj.show(src.topwin, reset_state)
 
-        detailsmap[newconnkey] = detailsmap.pop(oldconnkey)
-
-    def _get_host_dialog(self, uri):
-        connstate = self._connstates[uri]
-        if connstate.windowHost:
-            return connstate.windowHost
-
-        from .host import vmmHost
-        conn = self._connobjs[uri]
-        obj = vmmHost(conn)
-
-        obj.connect("action-view-manager", self._do_show_manager)
-
-        connstate.windowHost = obj
-        return connstate.windowHost
-
-    def _do_show_host(self, src, uri):
+    def do_show_connect(self, src, reset_state=True):
         try:
-            self._get_host_dialog(uri).show()
-        except Exception as e:
-            src.err.show_err(_("Error launching host dialog: %s") % str(e))
-
-    def _get_connect_dialog(self):
-        if self.windowConnect:
-            return self.windowConnect
-
-        def completed(_src, uri, autoconnect):
-            self._connect_to_uri(uri, autoconnect, probe=True)
-
-        def cancelled(src):
-            if not self._connstates:
-                self.exit_app(src)
-
-        obj = vmmConnect()
-        obj.connect("completed", completed)
-        obj.connect("cancelled", cancelled)
-        self.windowConnect = obj
-        return self.windowConnect
-
-    def _do_show_connect(self, src, reset_state=True):
-        try:
-            self._get_connect_dialog().show(src.topwin, reset_state)
+            self._show_connect_dialog(src, reset_state)
         except Exception as e:
             src.err.show_err(_("Error launching connect dialog: %s") % str(e))
 
-    def _do_edit_connect(self, src, connection):
-        try:
-            self._do_show_connect(src, False)
-        finally:
-            self._remove_conn(src, connection.get_uri())
-
-    def _get_details_dialog(self, uri, connkey):
-        detailsmap = self._connstates[uri].windowDetails
-        if connkey in detailsmap:
-            return detailsmap[connkey]
-
-        from .details import vmmDetails
-        obj = vmmDetails(self._connobjs[uri].get_vm(connkey))
-        obj.connect("action-view-manager", self._do_show_manager)
-
-        detailsmap[connkey] = obj
-        return detailsmap[connkey]
-
-    def _show_vm_helper(self, src, uri, connkey, page, forcepage):
-        try:
-            details = self._get_details_dialog(uri, connkey)
-
-            if forcepage or not details.is_visible():
-                if page == DETAILS_PERF:
-                    details.activate_performance_page()
-                elif page == DETAILS_CONFIG:
-                    details.activate_config_page()
-                elif page == DETAILS_CONSOLE:
-                    details.activate_console_page()
-                elif page is None:
-                    details.activate_default_page()
-
-            details.show()
-        except Exception as e:
-            src.err.show_err(_("Error launching details: %s") % str(e))
-
-    def _do_show_vm(self, src, uri, connkey):
-        self._show_vm_helper(src, uri, connkey, None, False)
-
-    def _get_manager(self):
-        if self.windowManager:
-            return self.windowManager
-
-        from .manager import vmmManager
-        obj = vmmManager()
-        obj.connect("action-show-domain", self._do_show_vm)
-        obj.connect("action-show-create", self._do_show_create)
-        obj.connect("action-show-host", self._do_show_host)
-        obj.connect("action-show-connect", self._do_show_connect)
-        obj.connect("remove-conn", self._remove_conn)
-
-        self.windowManager = obj
-        return self.windowManager
-
-    def _do_toggle_manager(self, ignore):
-        manager = self._get_manager()
-        if manager.is_visible():
-            manager.close()
-        else:
-            manager.show()
-
-    def _do_show_manager(self, src):
-        try:
-            manager = self._get_manager()
-            manager.show()
-        except Exception as e:
-            if not src:
-                raise
-            src.err.show_err(_("Error launching manager: %s") % str(e))
-
-    def _get_create_dialog(self):
-        if self.windowCreate:
-            return self.windowCreate
-
-        from .create import vmmCreate
-        obj = vmmCreate()
-        obj.connect("action-show-domain", self._do_show_vm)
-        self.windowCreate = obj
-        return self.windowCreate
-
-    def _do_show_create(self, src, uri):
-        try:
-            self._get_create_dialog().show(src.topwin, uri)
-        except Exception as e:
-            src.err.show_err(_("Error launching manager: %s") % str(e))
+    def _edit_connect(self, uri):
+        vmmConnectionManager.get_instance().remove_conn(uri)
+        self.do_show_connect(self._get_manager(), reset_state=False)
 
 
     ##########################################
@@ -781,16 +545,39 @@ class vmmEngine(vmmGObject):
                 (uri, clistr), modal=True)
             return
 
-        self._show_vm_helper(src, uri, vm.get_connkey(), page, True)
+        try:
+            from .details import vmmDetails
+            details = vmmDetails.get_instance(src, vm)
 
-    def _show_manager(self):
-        self._do_show_manager(None)
+            if page == DETAILS_PERF:
+                details.activate_performance_page()
+            elif page == DETAILS_CONFIG:
+                details.activate_config_page()
+            elif page == DETAILS_CONSOLE:
+                details.activate_console_page()
+            elif page is None:
+                details.activate_default_page()
+
+            details.show()
+        except Exception as e:
+            src.err.show_err(_("Error launching details: %s") % str(e))
+
+    def _get_manager(self):
+        from .manager import vmmManager
+        return vmmManager.get_instance(self)
+
+    def _show_manager_uri(self, uri):
+        manager = self._get_manager()
+        manager.set_initial_selection(uri)
+        manager.show()
 
     def _show_host_summary(self, uri):
-        self._do_show_host(self._get_manager(), uri)
+        from .host import vmmHost
+        vmmHost.show_instance(self._get_manager(), self._connobjs[uri])
 
     def _show_domain_creator(self, uri):
-        self._do_show_create(self._get_manager(), uri)
+        from .create import vmmCreate
+        vmmCreate.show_instance(self._get_manager(), uri)
 
     def _show_domain_console(self, uri, clistr):
         self._cli_show_vm_helper(uri, clistr, DETAILS_CONSOLE)
@@ -805,8 +592,7 @@ class vmmEngine(vmmGObject):
         try:
             logging.debug("Launching requested window '%s'", show_window)
             if show_window == self.CLI_SHOW_MANAGER:
-                self._get_manager().set_initial_selection(uri)
-                self._show_manager()
+                self._show_manager_uri(uri)
             elif show_window == self.CLI_SHOW_DOMAIN_CREATOR:
                 self._show_domain_creator(uri)
             elif show_window == self.CLI_SHOW_DOMAIN_EDITOR:
@@ -852,7 +638,7 @@ class vmmEngine(vmmGObject):
             uri, show_window, domain)
         if not uri:
             logging.debug("No cli action requested, launching default window")
-            self._show_manager()
+            self._get_manager().show()
             return
 
         conn = self._add_conn(uri, False)
@@ -869,8 +655,7 @@ class vmmEngine(vmmGObject):
                 conn.connect_opt_out("state-changed",
                     self._cli_conn_connected_cb, uri, show_window, domain)
         else:
-            self._get_manager().set_initial_selection(uri)
-            self._show_manager()
+            self._show_manager_uri(uri)
 
     def _handle_cli_command(self, actionobj, variant):
         try:

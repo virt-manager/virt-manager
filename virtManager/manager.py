@@ -91,13 +91,17 @@ def _get_inspection_icon_pixbuf(vm, w, h):
 
 
 class vmmManager(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-connect": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "action-show-create": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "remove-conn": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-    }
+    _instance = None
+
+    @classmethod
+    def get_instance(cls, parentobj):
+        try:
+            if not cls._instance:
+                cls._instance = cls()
+            return cls._instance
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching manager: %s") % str(e))
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "manager.ui", "vmm-manager")
@@ -143,7 +147,7 @@ class vmmManager(vmmGObjectUI):
             "on_menu_edit_delete_activate": self.do_delete,
             "on_menu_host_details_activate": self.show_host,
 
-            "on_vm_list_row_activated": self.show_vm,
+            "on_vm_list_row_activated": self.row_activated,
             "on_vm_list_button_press_event": self.popup_vm_menu_button,
             "on_vm_list_key_press_event": self.popup_vm_menu_key,
 
@@ -424,32 +428,22 @@ class vmmManager(vmmGObjectUI):
 
         return row[ROW_HANDLE]
 
-    def current_conn(self):
+    def current_conn(self, choose_default=False):
         row = self.current_row()
-        if not row:
-            return None
-
-        handle = row[ROW_HANDLE]
-        if row[ROW_IS_CONN]:
-            return handle
-        else:
+        if row:
+            handle = row[ROW_HANDLE]
+            if row[ROW_IS_CONN]:
+                return handle
             return handle.conn
 
-    def current_conn_uri(self, default_selection=False):
-        vmlist = self.widget("vm-list")
-        model = vmlist.get_model()
-
-        conn = self.current_conn()
-        if conn is None and default_selection:
+        if choose_default:
             # Nothing selected, use first connection row
+            vmlist = self.widget("vm-list")
+            model = vmlist.get_model()
             for row in model:
                 if row[ROW_IS_CONN]:
-                    conn = row[ROW_HANDLE]
-                    break
+                    return row[ROW_HANDLE]
 
-        if conn:
-            return conn.get_uri()
-        return None
 
     ####################
     # Action listeners #
@@ -463,11 +457,13 @@ class vmmManager(vmmGObjectUI):
     def exit_app(self, src_ignore=None, src2_ignore=None):
         vmmEngine.get_instance().exit_app()
 
-    def new_conn(self, src_ignore=None):
-        self.emit("action-show-connect")
+    def new_conn(self, _src):
+        vmmEngine.get_instance().do_show_connect(self)
 
-    def new_vm(self, src_ignore=None):
-        self.emit("action-show-create", self.current_conn_uri())
+    def new_vm(self, _src):
+        from .create import vmmCreate
+        conn = self.current_conn()
+        vmmCreate.show_instance(self, conn and conn.get_uri() or None)
 
     def show_about(self, _src):
         from .about import vmmAbout
@@ -477,21 +473,27 @@ class vmmManager(vmmGObjectUI):
         from .preferences import vmmPreferences
         vmmPreferences.show_instance(self)
 
-    def show_host(self, src_ignore):
-        uri = self.current_conn_uri(default_selection=True)
-        self.emit("action-show-host", uri)
+    def show_host(self, _src):
+        from .host import vmmHost
+        conn = self.current_conn(choose_default=True)
+        vmmHost.show_instance(self, conn)
 
-    def show_vm(self, ignore, ignore2=None, ignore3=None):
+    def show_vm(self, _src):
+        vmmenu.VMActionUI.show(self, self.current_vm())
+
+    def row_activated(self, _src, *args):
+        ignore = args
         conn = self.current_conn()
         vm = self.current_vm()
         if conn is None:
             return
 
         if vm:
-            self.emit("action-show-domain", conn.get_uri(), vm.get_connkey())
+            self.show_vm(_src)
+        elif conn.is_disconnected():
+            conn.open()
         else:
-            if not self.open_conn():
-                self.emit("action-show-host", conn.get_uri())
+            self.show_host(_src)
 
     def do_delete(self, ignore=None):
         conn = self.current_conn()
@@ -510,7 +512,7 @@ class vmmManager(vmmGObjectUI):
         if not result:
             return
 
-        self.emit("remove-conn", conn.get_uri())
+        vmmConnectionManager.get_instance().remove_conn(conn.get_uri())
 
     def set_pause_state(self, state):
         src = self.widget("vm-pause")

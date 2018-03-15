@@ -20,7 +20,6 @@
 
 import logging
 
-from gi.repository import GObject
 from gi.repository import Gtk
 
 from . import vmmenu
@@ -31,12 +30,13 @@ from .error import vmmErrorDialog
 
 
 class vmmSystray(vmmGObject):
-    __gsignals__ = {
-        "action-toggle-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-    }
+    _instance = None
+
+    @classmethod
+    def get_instance(cls):
+        if not cls._instance:
+            cls._instance = cls()
+        return cls._instance
 
     def __init__(self):
         vmmGObject.__init__(self)
@@ -47,15 +47,15 @@ class vmmSystray(vmmGObject):
         self.conn_menuitems = {}
         self.conn_vm_menuitems = {}
         self.vm_action_dict = {}
+
         self.systray_menu = None
         self.systray_icon = None
-
-        self.init_systray_menu()
+        self._init_ui()
 
         self.add_gsettings_handle(
-            self.config.on_view_system_tray_changed(self.show_systray))
-
-        self.show_systray()
+            self.config.on_view_system_tray_changed(
+                self._show_systray_changed_cb))
+        self._show_systray_changed_cb()
 
         connmanager = vmmConnectionManager.get_instance()
         connmanager.connect("conn-added", self._conn_added)
@@ -86,17 +86,8 @@ class vmmSystray(vmmGObject):
     # Initialization routines #
     ###########################
 
-    def init_systray_menu(self):
-        """
-        Do we want notifications?
-
-        Close App
-        Hide app? As in, only have systray active? is that possible?
-            Have one of those 'minimize to tray' notifications?
-
-        """
+    def _init_ui(self):
         self.systray_menu = Gtk.Menu()
-
         self.systray_menu.add(Gtk.SeparatorMenuItem())
 
         exit_item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_QUIT, None)
@@ -104,27 +95,26 @@ class vmmSystray(vmmGObject):
         self.systray_menu.add(exit_item)
         self.systray_menu.show_all()
 
-    def init_systray(self):
-        # Build the systray icon
-        if self.systray_icon:
-            return
-
         self.systray_icon = Gtk.StatusIcon()
-        self.systray_icon.set_visible(True)
+        self.systray_icon.set_visible(False)
         self.systray_icon.set_property("icon-name", "virt-manager")
         self.systray_icon.connect("activate", self.systray_activate)
         self.systray_icon.connect("popup-menu", self.systray_popup)
         self.systray_icon.set_tooltip_text(_("Virtual Machine Manager"))
 
-    def show_systray(self):
+    def _show_systray_changed_cb(self):
         do_show = self.config.get_view_system_tray()
         logging.debug("Showing systray: %s", do_show)
 
-        if not self.systray_icon:
-            if do_show:
-                self.init_systray()
+        oldvis = self.systray_icon.get_visible()
+        self.systray_icon.set_visible(do_show)
+        if oldvis == do_show:
+            return
+
+        if do_show:
+            vmmEngine.get_instance().increment_window_counter()
         else:
-            self.systray_icon.set_visible(do_show)
+            vmmEngine.get_instance().decrement_window_counter()
 
     # Helper functions
     def _get_vm_menu_item(self, vm):
@@ -145,8 +135,13 @@ class vmmSystray(vmmGObject):
 
     # Listeners
 
-    def systray_activate(self, widget_ignore):
-        self.emit("action-toggle-manager")
+    def systray_activate(self, _src):
+        from .manager import vmmManager
+        manager = vmmManager.get_instance(self)
+        if manager.is_visible():
+            manager.close()
+        else:
+            manager.show()
 
     def systray_popup(self, widget_ignore, button, event_time):
         if button != 3:

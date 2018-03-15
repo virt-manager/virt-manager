@@ -64,7 +64,25 @@ class VMMConnect(uiutils.UITestCase):
         err = self.app.root.find_fuzzy("vmm dialog", "alert")
         err.find_fuzzy("No", "push button").click()
 
+        # Ensure dialog shows old contents for editing
+        uiutils.check_in_loop(lambda: win.showing)
+        self.assertTrue(fakehost in host.text)
+
+        # This time say 'yes'
+        connect.click()
+        uiutils.check_in_loop(lambda: win.showing is False)
+        c = self.app.root.find_fuzzy(fakehost, "table cell")
+        uiutils.check_in_loop(lambda: "Connecting..." not in c.text,
+                timeout=10)
+        err = self.app.root.find_fuzzy("vmm dialog", "alert")
+        err.find_fuzzy("Yes", "push button").click()
+        c = self.app.root.find_fuzzy(fakehost, "table cell")
+
         # Test with custom test:///default connection
+        uiutils.check_in_loop(lambda: win.showing is False)
+        self.app.root.find("File", "menu").click()
+        self.app.root.find("Add Connection...", "menu item").click()
+        win = self.app.root.find_fuzzy("Add Connection", "dialog")
         win.find_fuzzy("Hypervisor", "combo box").click()
         win.find_fuzzy("Custom URI", "menu item").click()
         urientry.text = "test:///default"

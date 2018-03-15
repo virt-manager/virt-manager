@@ -25,9 +25,8 @@ import os
 import threading
 import time
 
-from gi.repository import GObject
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gtk
 from gi.repository import Pango
 
 import virtinst
@@ -118,9 +117,17 @@ def is_virt_bootstrap_installed():
 ##############
 
 class vmmCreate(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-    }
+    _instance = None
+
+    @classmethod
+    def show_instance(cls, parentobj, uri=None):
+        try:
+            if not cls._instance:
+                cls._instance = cls()
+            cls._instance.show(parentobj.topwin, uri=uri)
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching create dialog: %s") % str(e))
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "create.ui", "vmm-create")
@@ -2469,6 +2476,8 @@ class vmmCreate(vmmGObjectUI):
             logging.debug("User closed customize window, closing wizard")
             self._close_requested()
 
+        # We specifically don't use vmmDetails.get_instance here since
+        # it's not a top level Details window
         self._cleanup_customize_window()
         self._customize_window = vmmDetails(virtinst_guest, self.topwin)
         self._customize_window.connect(
@@ -2485,10 +2494,16 @@ class vmmCreate(vmmGObjectUI):
             self._failed_guest = self._guest
             return
 
+        foundvm = None
+        for vm in self.conn.list_vms():
+            if vm.get_uuid() == self._guest.uuid:
+                foundvm = vm
+                break
+
         self._close()
 
         # Launch details dialog for new VM
-        self.emit("action-show-domain", self.conn.get_uri(), self._guest.name)
+        vmmDetails.get_instance(self, foundvm).show()
 
 
     def _start_install(self, guest):

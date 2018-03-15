@@ -21,7 +21,6 @@
 import functools
 import logging
 
-from gi.repository import GObject
 from gi.repository import Gtk
 
 from virtinst import Interface
@@ -52,9 +51,19 @@ EDIT_INTERFACE_STARTMODE,
 
 
 class vmmHost(vmmGObjectUI):
-    __gsignals__ = {
-        "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
-    }
+    _instances = {}
+
+    @classmethod
+    def show_instance(cls, parentobj, conn):
+        try:
+            # Maintain one dialog per connection
+            uri = conn.get_uri()
+            if uri not in cls._instances:
+                cls._instances[uri] = cls(conn)
+            cls._instances[uri].show()
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching host dialog: %s") % str(e))
 
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "host.ui", "vmm-host")
@@ -289,8 +298,9 @@ class vmmHost(vmmGObjectUI):
         self.memory_usage_graph.destroy()
         self.memory_usage_graph = None
 
-    def view_manager(self, src_ignore):
-        self.emit("action-view-manager")
+    def view_manager(self, _src):
+        from .manager import vmmManager
+        vmmManager.get_instance(self).show()
 
     def exit_app(self, _src):
         vmmEngine.get_instance().exit_app()

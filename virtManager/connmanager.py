@@ -68,6 +68,7 @@ class vmmConnectionManager(vmmGObject):
     def add_conn(self, uri):
         if uri in self._conns:
             return self._conns[uri]
+        print("add uri", uri)
         conn = vmmConnection(uri)
         self._conns[uri] = conn
         self.config.add_conn_uri(uri)

@@ -21,9 +21,9 @@
 import logging
 import traceback
 
+from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
-from gi.repository import Gdk
 
 import libvirt
 
@@ -340,9 +340,22 @@ def _label_for_os_type(os_type):
 
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
-        "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
         "customize-finished": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
+
+    _instances = {}
+
+    @classmethod
+    def get_instance(cls, parentobj, vm):
+        try:
+            # Maintain one dialog per VM
+            connkey = vm.get_connkey()
+            if connkey not in cls._instances:
+                cls._instances[connkey] = cls(vm)
+            return cls._instances[connkey]
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching details: %s") % str(e))
 
     def __init__(self, vm, parent=None):
         vmmGObjectUI.__init__(self, "details.ui", "vmm-details")
@@ -621,6 +634,8 @@ class vmmDetails(vmmGObjectUI):
     def show(self):
         logging.debug("Showing VM details: %s", self.vm)
         vis = self.is_visible()
+        if not vis:
+            self.activate_default_page()
         self.topwin.present()
         if vis:
             return
@@ -1337,8 +1352,9 @@ class vmmDetails(vmmGObjectUI):
     # External action listeners #
     #############################
 
-    def view_manager(self, src_ignore):
-        self.emit("action-view-manager")
+    def view_manager(self, _src):
+        from .manager import vmmManager
+        vmmManager.get_instance(self).show()
 
     def exit_app(self, _src):
         vmmEngine.get_instance().exit_app()

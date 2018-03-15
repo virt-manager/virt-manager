@@ -122,11 +122,6 @@ class VMActionMenu(_VMMenu):
         s = self._add_action(_("_Shut Down"), "shutdown", None)
         s.set_submenu(VMShutdownMenu(self._parent, self._current_vm_cb))
 
-        def _make_emit_cb(_name):
-            def _emit_cb(_src, _vm):
-                return _src.emit(_name, _vm.conn.get_uri(), _vm.get_name())
-            return _emit_cb
-
         self.add(Gtk.SeparatorMenuItem())
         self._add_action(_("Clone..."), "clone",
                 VMActionUI.clone, iconname=None)
@@ -138,7 +133,7 @@ class VMActionMenu(_VMMenu):
         if self._show_open:
             self.add(Gtk.SeparatorMenuItem())
             self._add_action(Gtk.STOCK_OPEN, "show",
-                _make_emit_cb("action-show-domain"), iconname=None)
+                VMActionUI.show, iconname=None)
 
         self.show_all()
 
@@ -343,3 +338,8 @@ class VMActionUI(object):
     def clone(src, vm):
         from .clone import vmmCloneVM
         vmmCloneVM.show_instance(src, vm)
+
+    @staticmethod
+    def show(src, vm):
+        from .details import vmmDetails
+        vmmDetails.get_instance(src, vm).show()

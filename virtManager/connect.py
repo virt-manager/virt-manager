@@ -59,6 +59,22 @@ def default_conn_user(conn):
 
 
 class vmmConnect(vmmGObjectUI):
+    _instance = None
+
+    @classmethod
+    def get_instance(cls, parentobj):
+        try:
+            if not cls._instance:
+                cls._instance = cls()
+            return cls._instance
+        except Exception as e:
+            parentobj.err.show_err(
+                    _("Error launching connect dialog: %s") % str(e))
+
+    @classmethod
+    def is_initialized(cls):
+        return bool(cls._instance)
+
     __gsignals__ = {
         "completed": (GObject.SignalFlags.RUN_FIRST, None, [str, bool]),
         "cancelled": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -146,6 +162,10 @@ class vmmConnect(vmmGObjectUI):
 
     def show(self, parent, reset_state=True):
         logging.debug("Showing open connection")
+        if self.topwin.is_visible():
+            self.topwin.present()
+            return
+
         if reset_state:
             self.reset_state()
         self.topwin.set_transient_for(parent)
