@@ -394,7 +394,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             flags = 0
             mime = self.vm.get_backend().screenshot(stream, screen, flags)
 
-            ret = io.StringIO()
+            ret = io.BytesIO()
             def _write_cb(_stream, data, userdata):
                 ignore = stream
                 ignore = userdata
