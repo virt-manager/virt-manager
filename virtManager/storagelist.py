@@ -21,7 +21,6 @@ import logging
 
 from gi.repository import Gdk
 from gi.repository import Gtk
-from gi.repository import GObject
 
 from virtinst import StoragePool
 from virtinst import VirtualDisk
@@ -69,9 +68,9 @@ def _get_pool_size_percent(pool):
 
 class vmmStorageList(vmmGObjectUI):
     __gsignals__ = {
-        "browse-clicked": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "volume-chosen": (GObject.SignalFlags.RUN_FIRST, None, [object]),
-        "cancel-clicked": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "browse-clicked": (vmmGObjectUI.RUN_FIRST, None, []),
+        "volume-chosen": (vmmGObjectUI.RUN_FIRST, None, [object]),
+        "cancel-clicked": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
     def __init__(self, conn, builder, topwin, vol_sensitive_cb=None):

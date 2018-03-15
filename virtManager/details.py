@@ -22,7 +22,6 @@ import logging
 import traceback
 
 from gi.repository import Gdk
-from gi.repository import GObject
 from gi.repository import Gtk
 
 import libvirt
@@ -340,7 +339,7 @@ def _label_for_os_type(os_type):
 
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
-        "customize-finished": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "customize-finished": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
     _instances = {}

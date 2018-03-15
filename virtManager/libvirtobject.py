@@ -20,15 +20,13 @@
 
 import logging
 
-from gi.repository import GObject
-
 from .baseclass import vmmGObject
 
 
 class vmmLibvirtObject(vmmGObject):
     __gsignals__ = {
-        "state-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "initialized": (GObject.SignalFlags.RUN_FIRST, None, [bool]),
+        "state-changed": (vmmGObject.RUN_FIRST, None, []),
+        "initialized": (vmmGObject.RUN_FIRST, None, [bool]),
     }
 
     _STATUS_ACTIVE = 1

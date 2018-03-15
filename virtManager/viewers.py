@@ -22,8 +22,8 @@
 import logging
 import socket
 
-from gi.repository import GObject
 from gi.repository import Gdk
+from gi.repository import GObject
 
 import gi
 gi.require_version('GtkVnc', '2.0')
@@ -49,19 +49,19 @@ class Viewer(vmmGObject):
     Base class for viewer abstraction
     """
     __gsignals__ = {
-        "add-display-widget": (GObject.SignalFlags.RUN_FIRST, None, [object]),
-        "size-allocate": (GObject.SignalFlags.RUN_FIRST, None, [object]),
-        "focus-in-event": (GObject.SignalFlags.RUN_FIRST, None, [object]),
-        "focus-out-event": (GObject.SignalFlags.RUN_FIRST, None, [object]),
-        "pointer-grab": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "pointer-ungrab": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "connected": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "disconnected": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "auth-error": (GObject.SignalFlags.RUN_FIRST, None, [str, bool]),
-        "auth-rejected": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "need-auth": (GObject.SignalFlags.RUN_FIRST, None, [bool, bool]),
-        "agent-connected": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "usb-redirect-error": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "add-display-widget": (vmmGObject.RUN_FIRST, None, [object]),
+        "size-allocate": (vmmGObject.RUN_FIRST, None, [object]),
+        "focus-in-event": (vmmGObject.RUN_FIRST, None, [object]),
+        "focus-out-event": (vmmGObject.RUN_FIRST, None, [object]),
+        "pointer-grab": (vmmGObject.RUN_FIRST, None, []),
+        "pointer-ungrab": (vmmGObject.RUN_FIRST, None, []),
+        "connected": (vmmGObject.RUN_FIRST, None, []),
+        "disconnected": (vmmGObject.RUN_FIRST, None, [str, str]),
+        "auth-error": (vmmGObject.RUN_FIRST, None, [str, bool]),
+        "auth-rejected": (vmmGObject.RUN_FIRST, None, [str]),
+        "need-auth": (vmmGObject.RUN_FIRST, None, [bool, bool]),
+        "agent-connected": (vmmGObject.RUN_FIRST, None, []),
+        "usb-redirect-error": (vmmGObject.RUN_FIRST, None, [str]),
     }
 
     def __init__(self, vm, ginfo):

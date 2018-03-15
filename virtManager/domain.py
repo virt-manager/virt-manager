@@ -25,8 +25,6 @@ import threading
 
 import libvirt
 
-from gi.repository import GObject
-
 from virtinst import DomainCapabilities
 from virtinst import DomainSnapshot
 from virtinst import Guest
@@ -216,9 +214,9 @@ class vmmDomain(vmmLibvirtObject):
     backed by a virtinst.Guest object for new VM 'customize before install'
     """
     __gsignals__ = {
-        "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "inspection-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "pre-startup": (GObject.SignalFlags.RUN_FIRST, None, [object]),
+        "resources-sampled": (vmmLibvirtObject.RUN_FIRST, None, []),
+        "inspection-changed": (vmmLibvirtObject.RUN_FIRST, None, []),
+        "pre-startup": (vmmLibvirtObject.RUN_FIRST, None, [object]),
     }
 
     def __init__(self, conn, backend, key):

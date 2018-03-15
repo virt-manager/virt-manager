@@ -20,8 +20,6 @@
 
 import logging
 
-from gi.repository import GObject
-
 from virtinst import VirtualDisk
 
 from .baseclass import vmmGObjectUI
@@ -32,7 +30,7 @@ from .addstorage import vmmAddStorage
 
 class vmmChooseCD(vmmGObjectUI):
     __gsignals__ = {
-        "cdrom-chosen": (GObject.SignalFlags.RUN_FIRST, None, [object, str])
+        "cdrom-chosen": (vmmGObjectUI.RUN_FIRST, None, [object, str])
     }
 
     def __init__(self, vm, disk):

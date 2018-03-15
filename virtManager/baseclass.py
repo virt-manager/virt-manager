@@ -33,7 +33,11 @@ from . import config
 
 
 class vmmGObject(GObject.GObject):
+    # Objects can set this to false to disable leak tracking
     _leak_check = True
+
+    # This saves a bunch of imports and typing
+    RUN_FIRST = GObject.SignalFlags.RUN_FIRST
 
     @staticmethod
     def idle_add(func, *args, **kwargs):

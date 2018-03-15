@@ -21,8 +21,6 @@
 import logging
 import time
 
-from gi.repository import GObject
-
 from virtinst import pollhelpers
 from virtinst import StoragePool, StorageVolume
 from virtinst import util
@@ -111,7 +109,7 @@ class vmmStorageVolume(vmmLibvirtObject):
 
 class vmmStoragePool(vmmLibvirtObject):
     __gsignals__ = {
-        "refreshed": (GObject.SignalFlags.RUN_FIRST, None, [])
+        "refreshed": (vmmLibvirtObject.RUN_FIRST, None, [])
     }
 
     def __init__(self, conn, backend, key):

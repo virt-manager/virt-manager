@@ -20,7 +20,6 @@
 import logging
 
 from gi.repository import Gtk
-from gi.repository import GObject
 
 import virtinst
 from . import uiutil
@@ -29,8 +28,8 @@ from .baseclass import vmmGObjectUI
 
 class vmmNetworkList(vmmGObjectUI):
     __gsignals__ = {
-        "changed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "changed-vport": (GObject.SignalFlags.RUN_FIRST, None, [])
+        "changed": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed-vport": (vmmGObjectUI.RUN_FIRST, None, [])
     }
 
     def __init__(self, conn, builder, topwin):

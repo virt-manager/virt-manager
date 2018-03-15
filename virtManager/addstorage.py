@@ -20,7 +20,6 @@
 import logging
 import os
 
-from gi.repository import GObject
 from gi.repository import Gtk
 
 import virtinst
@@ -30,8 +29,8 @@ from .baseclass import vmmGObjectUI
 
 class vmmAddStorage(vmmGObjectUI):
     __gsignals__ = {
-        "browse-clicked": (GObject.SignalFlags.RUN_FIRST, None, [object]),
-        "storage-toggled": (GObject.SignalFlags.RUN_FIRST, None, [object])
+        "browse-clicked": (vmmGObjectUI.RUN_FIRST, None, [object]),
+        "storage-toggled": (vmmGObjectUI.RUN_FIRST, None, [object])
     }
 
     def __init__(self, conn, builder, topwin):

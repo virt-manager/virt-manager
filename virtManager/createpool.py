@@ -21,7 +21,6 @@
 import logging
 
 from gi.repository import Gdk
-from gi.repository import GObject
 from gi.repository import Gtk
 
 from virtinst import StoragePool
@@ -36,7 +35,7 @@ PAGE_FORMAT = 1
 
 class vmmCreatePool(vmmGObjectUI):
     __gsignals__ = {
-        "pool-created": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "pool-created": (vmmGObjectUI.RUN_FIRST, None, [str]),
     }
 
     def __init__(self, conn):

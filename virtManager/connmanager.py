@@ -19,8 +19,6 @@
 
 import logging
 
-from gi.repository import GObject
-
 from .baseclass import vmmGObject
 from .connection import vmmConnection
 
@@ -30,8 +28,8 @@ class vmmConnectionManager(vmmGObject):
     Tracks the list of connections, emits conn-added and conn-removed
     """
     __gsignals__ = {
-        "conn-added": (GObject.SignalFlags.RUN_FIRST, None, [object]),
-        "conn-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "conn-added": (vmmGObject.RUN_FIRST, None, [object]),
+        "conn-removed": (vmmGObject.RUN_FIRST, None, [str]),
     }
 
     _instance = None

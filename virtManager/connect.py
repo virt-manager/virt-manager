@@ -25,7 +25,6 @@ import socket
 import urllib.parse
 
 from gi.repository import Gio
-from gi.repository import GObject
 from gi.repository import Gtk
 
 from . import uiutil
@@ -76,8 +75,8 @@ class vmmConnect(vmmGObjectUI):
         return bool(cls._instance)
 
     __gsignals__ = {
-        "completed": (GObject.SignalFlags.RUN_FIRST, None, [str, bool]),
-        "cancelled": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "completed": (vmmGObjectUI.RUN_FIRST, None, [str, bool]),
+        "cancelled": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
     def __init__(self):

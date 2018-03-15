@@ -20,7 +20,6 @@
 #
 
 from gi.repository import Gtk
-from gi.repository import GObject
 
 import virtinst
 from . import uiutil
@@ -29,15 +28,15 @@ from .baseclass import vmmGObjectUI
 
 class vmmGraphicsDetails(vmmGObjectUI):
     __gsignals__ = {
-        "changed-password": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "changed-port": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "changed-tlsport": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "changed-type": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "changed-listen": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "changed-address": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "changed-keymap": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "changed-opengl": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "changed-rendernode": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "changed-password": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed-port": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed-tlsport": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed-type": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed-listen": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed-address": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed-keymap": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed-opengl": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed-rendernode": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
     def __init__(self, vm, builder, topwin):

@@ -26,8 +26,6 @@ import traceback
 
 import libvirt
 
-from gi.repository import GObject
-
 import virtinst
 from virtinst import pollhelpers
 from virtinst import support
@@ -163,22 +161,22 @@ class _ObjectList(vmmGObject):
 
 class vmmConnection(vmmGObject):
     __gsignals__ = {
-        "vm-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "vm-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "vm-renamed": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "net-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "net-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "pool-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "pool-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "interface-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "interface-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "nodedev-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "nodedev-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "state-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "connect-error": (GObject.SignalFlags.RUN_FIRST, None,
+        "vm-added": (vmmGObject.RUN_FIRST, None, [str]),
+        "vm-removed": (vmmGObject.RUN_FIRST, None, [str]),
+        "vm-renamed": (vmmGObject.RUN_FIRST, None, [str, str]),
+        "net-added": (vmmGObject.RUN_FIRST, None, [str]),
+        "net-removed": (vmmGObject.RUN_FIRST, None, [str]),
+        "pool-added": (vmmGObject.RUN_FIRST, None, [str]),
+        "pool-removed": (vmmGObject.RUN_FIRST, None, [str]),
+        "interface-added": (vmmGObject.RUN_FIRST, None, [str]),
+        "interface-removed": (vmmGObject.RUN_FIRST, None, [str]),
+        "nodedev-added": (vmmGObject.RUN_FIRST, None, [str]),
+        "nodedev-removed": (vmmGObject.RUN_FIRST, None, [str]),
+        "resources-sampled": (vmmGObject.RUN_FIRST, None, []),
+        "state-changed": (vmmGObject.RUN_FIRST, None, []),
+        "connect-error": (vmmGObject.RUN_FIRST, None,
                           [str, str, bool]),
-        "priority-tick": (GObject.SignalFlags.RUN_FIRST, None, [object]),
+        "priority-tick": (vmmGObject.RUN_FIRST, None, [object]),
     }
 
     (_STATE_DISCONNECTED,

@@ -20,7 +20,6 @@
 #
 
 from gi.repository import Gtk
-from gi.repository import GObject
 
 from virtinst import VirtualFilesystem, StorageVolume
 from . import uiutil
@@ -30,7 +29,7 @@ from .storagebrowse import vmmStorageBrowser
 
 class vmmFSDetails(vmmGObjectUI):
     __gsignals__ = {
-        "changed": (GObject.SignalFlags.RUN_FIRST, None, [])
+        "changed": (vmmGObjectUI.RUN_FIRST, None, [])
     }
 
     def __init__(self, vm, builder, topwin):

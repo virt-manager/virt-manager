@@ -20,7 +20,6 @@
 
 import logging
 
-from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -33,7 +32,7 @@ from .asyncjob import vmmAsyncJob
 
 class vmmCreateVolume(vmmGObjectUI):
     __gsignals__ = {
-        "vol-created": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "vol-created": (vmmGObjectUI.RUN_FIRST, None, [str, str]),
     }
 
     def __init__(self, conn, parent_pool):
