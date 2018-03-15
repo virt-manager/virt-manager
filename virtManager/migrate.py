@@ -41,8 +41,6 @@ NUM_COLS = 3
 
 
 class vmmMigrateDialog(vmmGObjectUI):
-    _instance = None
-
     @classmethod
     def show_instance(cls, parentobj, vm):
         try:
@@ -56,7 +54,6 @@ class vmmMigrateDialog(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "migrate.ui", "vmm-migrate")
         self.vm = None
-        self.conn = None
 
         self.builder.connect_signals({
             "on_vmm_migrate_delete_event": self._delete_event,
@@ -69,17 +66,21 @@ class vmmMigrateDialog(vmmGObjectUI):
             "on_migrate_mode_changed": self._mode_changed,
         })
         self.bind_escape_key_close()
+        self._cleanup_on_app_close()
 
         self._init_state()
 
 
     def _cleanup(self):
         self.vm = None
-        self.conn = None
 
     @property
     def _connobjs(self):
         return vmmConnectionManager.get_instance().conns
+
+    @property
+    def conn(self):
+        return self.vm and self.vm.conn or None
 
 
     ##############
@@ -89,7 +90,6 @@ class vmmMigrateDialog(vmmGObjectUI):
     def show(self, parent, vm):
         logging.debug("Showing migrate wizard")
         self.vm = vm
-        self.conn = vm.conn
         self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
@@ -98,7 +98,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         logging.debug("Closing migrate wizard")
         self.topwin.hide()
         self.vm = None
-        self.conn = None
         return 1
 
 

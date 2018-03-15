@@ -23,6 +23,7 @@ import os
 import sys
 import threading
 import traceback
+import types
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -35,6 +36,12 @@ from . import config
 class vmmGObject(GObject.GObject):
     # Objects can set this to false to disable leak tracking
     _leak_check = True
+
+    # Singleton reference, if applicable (vmmSystray, vmmInspection, ...)
+    _instance = None
+
+    # windowlist mapping, if applicable (vmmDetails, vmmHost, ...)
+    _instances = {}
 
     # This saves a bunch of imports and typing
     RUN_FIRST = GObject.SignalFlags.RUN_FIRST
@@ -51,7 +58,10 @@ class vmmGObject(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
 
+        self.__cleaned_up = False
+
         self._gobject_handles = []
+        self._gobject_handles_map = {}
         self._gobject_timeouts = []
         self._gsettings_handles = []
 
@@ -65,9 +75,23 @@ class vmmGObject(GObject.GObject):
             self.config.add_object(self.object_key)
 
     def cleanup(self):
+        if self.__cleaned_up:
+            return
+
         # Do any cleanup required to drop reference counts so object is
         # actually reaped by python. Usually means unregistering callbacks
         try:
+            # pylint: disable=protected-access
+            if self.__class__._instance == self:
+                # We set this to True which can help us catch instances
+                # where cleanup routines try to reinit singleton classes
+                self.__class__._instance = True
+            for k, v in list(self.__class__._instances.items()):
+                if v == self:
+                    self.__class__._instances.pop(k)
+
+            self._cleanup()
+
             for h in self._gsettings_handles[:]:
                 self.remove_gsettings_handle(h)
             for h in self._gobject_handles[:]:
@@ -75,10 +99,15 @@ class vmmGObject(GObject.GObject):
                     self.disconnect(h)
             for h in self._gobject_timeouts[:]:
                 self.remove_gobject_timeout(h)
-
-            self._cleanup()
         except Exception:
             logging.exception("Error cleaning up %s", self)
+
+        self.__cleaned_up = True
+
+    def _cleanup_on_app_close(self):
+        from .engine import vmmEngine
+        vmmEngine.get_instance().connect(
+                "app-closing", lambda src: self.cleanup())
 
     def _cleanup(self):
         raise NotImplementedError("_cleanup must be implemented in subclass")
@@ -104,6 +133,16 @@ class vmmGObject(GObject.GObject):
         for easy cleanup
         """
         ret = GObject.GObject.connect(self, name, callback, *args)
+
+        # If the passed callback is a method of a class instance,
+        # keep a mapping of id(instance):[handles]. This lets us
+        # implement disconnect_by_obj to simplify signal removal
+        if isinstance(callback, types.MethodType):
+            i = id(callback.__self__)
+            if i not in self._gobject_handles_map:
+                self._gobject_handles_map[i] = []
+            self._gobject_handles_map[i].append(ret)
+
         self._gobject_handles.append(ret)
         return ret
 
@@ -114,6 +153,16 @@ class vmmGObject(GObject.GObject):
         ret = GObject.GObject.disconnect(self, handle)
         self._gobject_handles.remove(handle)
         return ret
+
+    def disconnect_by_obj(self, instance):
+        """
+        disconnect() every signal attached to a method of the passed instance
+        """
+        i = id(instance)
+        for handle in self._gobject_handles_map.get(i, []):
+            if handle in self._gobject_handles:
+                self.disconnect(handle)
+        self._gobject_handles_map.pop(i, None)
 
     def timeout_add(self, timeout, func, *args):
         """
@@ -142,6 +191,9 @@ class vmmGObject(GObject.GObject):
         GLib.source_remove(handle)
         self._gobject_timeouts.remove(handle)
 
+    def _refcount(self):
+        return sys.getrefcount(self)
+
     def _logtrace(self, msg=""):
         if msg:
             msg += " "
@@ -149,9 +201,10 @@ class vmmGObject(GObject.GObject):
                       msg, self.object_key, self._refcount(),
                        "".join(traceback.format_stack()))
 
-    def _refcount(self):
-        # Function generates 2 temporary refs, so adjust total accordingly
-        return (sys.getrefcount(self) - 2)
+    def _gc_get_referrers(self):
+        import gc
+        import pprint
+        pprint.pprint(gc.get_referrers(self))
 
     def _start_thread(self, target=None, name=None, args=None, kwargs=None):
         # Helper for starting a daemonized thread
@@ -222,6 +275,7 @@ class vmmGObjectUI(vmmGObject):
     def __init__(self, filename, windowname, builder=None, topwin=None):
         vmmGObject.__init__(self)
         self._external_topwin = bool(topwin)
+        self.__cleaned_up = False
 
         if filename:
             uifile = os.path.join(self.config.get_ui_dir(), filename)
@@ -252,13 +306,21 @@ class vmmGObjectUI(vmmGObject):
         return self.builder.get_object(name)
 
     def cleanup(self):
-        self.close()
-        vmmGObject.cleanup(self)
-        self.builder = None
-        if not self._external_topwin:
-            self.topwin.destroy()
-        self.topwin = None
-        self._err = None
+        if self.__cleaned_up:
+            return
+
+        try:
+            self.close()
+            vmmGObject.cleanup(self)
+            self.builder = None
+            if not self._external_topwin:
+                self.topwin.destroy()
+            self.topwin = None
+            self._err = None
+        except Exception:
+            logging.exception("Error cleaning up %s", self)
+
+        self.__cleaned_up = True
 
     def _cleanup(self):
         raise NotImplementedError("_cleanup must be implemented in subclass")
@@ -285,3 +347,14 @@ class vmmGObjectUI(vmmGObject):
             return
         cursor = Gdk.Cursor.new_from_name(gdk_window.get_display(), "default")
         gdk_window.set_cursor(cursor)
+
+    def _cleanup_on_conn_removed(self):
+        from .connmanager import vmmConnectionManager
+        connmanager = vmmConnectionManager.get_instance()
+
+        def _cb(_src, uri):
+            _conn = getattr(self, "conn", None)
+            if _conn and _conn.get_uri() == uri:
+                self.cleanup()
+                return True
+        connmanager.connect_opt_out("conn-removed", _cb)

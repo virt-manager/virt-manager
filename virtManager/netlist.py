@@ -56,15 +56,12 @@ class vmmNetworkList(vmmGObjectUI):
         self.top_vport = self.widget("vport-expander")
 
     def _cleanup(self):
-        try:
-            self.conn.disconnect_by_func(self._repopulate_network_list)
-            self.conn.disconnect_by_func(self._repopulate_network_list)
-            self.conn.disconnect_by_func(self._repopulate_network_list)
-            self.conn.disconnect_by_func(self._repopulate_network_list)
-        except Exception:
-            pass
-
+        self.conn.disconnect_by_obj(self)
         self.conn = None
+
+        self.top_label.destroy()
+        self.top_box.destroy()
+        self.top_vport.destroy()
 
 
     ##########################

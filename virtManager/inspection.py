@@ -34,9 +34,6 @@ def _inspection_error(_errstr):
 
 
 class vmmInspection(vmmGObject):
-    # Can't find a way to make Thread release our reference
-    _leak_check = False
-    _instance = None
     _libguestfs_installed = None
 
     @classmethod
@@ -65,6 +62,7 @@ class vmmInspection(vmmGObject):
 
     def __init__(self):
         vmmGObject.__init__(self)
+        self._cleanup_on_app_close()
 
         self._thread = None
 

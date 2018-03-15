@@ -266,6 +266,7 @@ class vmmDomain(vmmLibvirtObject):
         for snap in self._snapshot_list or []:
             snap.cleanup()
         self._snapshot_list = None
+        vmmLibvirtObject._cleanup(self)
 
     def _init_libvirt_state(self):
         self.managedsave_supported = self.conn.check_support(

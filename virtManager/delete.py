@@ -45,8 +45,6 @@ STORAGE_ROW_TOOLTIP = 7
 
 
 class vmmDeleteDialog(vmmGObjectUI):
-    _instance = None
-
     @classmethod
     def show_instance(cls, parentobj, vm):
         try:
@@ -68,6 +66,7 @@ class vmmDeleteDialog(vmmGObjectUI):
             "on_delete_remove_storage_toggled": self.toggle_remove_storage,
         })
         self.bind_escape_key_close()
+        self._cleanup_on_app_close()
 
         self._init_state()
 
@@ -79,8 +78,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
     def show(self, parent, vm):
         logging.debug("Showing delete wizard")
-        self.vm = vm
-
+        self._set_vm(vm)
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
@@ -88,11 +86,23 @@ class vmmDeleteDialog(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing delete wizard")
         self.topwin.hide()
-        self.vm = None
+        self._set_vm(None)
         return 1
 
     def _cleanup(self):
-        self.vm = None
+        pass
+
+    def _vm_removed(self, _conn, connkey):
+        if self.vm.get_connkey() == connkey:
+            self.close()
+
+    def _set_vm(self, newvm):
+        oldvm = self.vm
+        if oldvm:
+            oldvm.conn.disconnect_by_obj(self)
+        if newvm:
+            newvm.conn.connect("vm-removed", self._vm_removed)
+        self.vm = newvm
 
     def reset_state(self):
         # Set VM name in title'
@@ -138,7 +148,6 @@ class vmmDeleteDialog(vmmGObjectUI):
         if error is not None:
             self.err.show_err(error, details=details)
 
-        self.vm.conn.schedule_priority_tick(pollvm=True)
         self.close()
 
     def finish(self, src_ignore):
@@ -162,22 +171,23 @@ class vmmDeleteDialog(vmmGObjectUI):
         if devs:
             text = title + _(" and selected storage (this may take a while)")
 
-        progWin = vmmAsyncJob(self._async_delete, [devs],
+        progWin = vmmAsyncJob(self._async_delete, [self.vm, devs],
                               self._finish_cb, [],
                               title, text, self.topwin)
         progWin.run()
+        self._set_vm(None)
 
-    def _async_delete(self, asyncjob, paths):
+    def _async_delete(self, asyncjob, vm, paths):
         storage_errors = []
         details = ""
-        undefine = self.vm.is_persistent()
+        undefine = vm.is_persistent()
 
         try:
-            if self.vm.is_active():
-                logging.debug("Forcing VM '%s' power off.", self.vm.get_name())
-                self.vm.destroy()
+            if vm.is_active():
+                logging.debug("Forcing VM '%s' power off.", vm.get_name())
+                vm.destroy()
 
-            conn = self.vm.conn.get_backend()
+            conn = vm.conn.get_backend()
             meter = asyncjob.get_meter()
 
             for path in paths:
@@ -191,12 +201,12 @@ class vmmDeleteDialog(vmmGObjectUI):
                 meter.end(0)
 
             if undefine:
-                logging.debug("Removing VM '%s'", self.vm.get_name())
-                self.vm.delete()
+                logging.debug("Removing VM '%s'", vm.get_name())
+                vm.delete()
 
         except Exception as e:
             error = (_("Error deleting virtual machine '%s': %s") %
-                      (self.vm.get_name(), str(e)))
+                      (vm.get_name(), str(e)))
             details = "".join(traceback.format_exc())
 
 
@@ -221,6 +231,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         if error:
             asyncjob.set_error(error, details)
+        vm.conn.schedule_priority_tick(pollvm=True)
 
     def _async_delete_path(self, conn, path, ignore):
         vol = None

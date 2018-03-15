@@ -51,13 +51,15 @@ class vmmEngine(vmmGObject):
     CLI_SHOW_DOMAIN_CONSOLE = "console"
     CLI_SHOW_HOST_SUMMARY = "summary"
 
-    _instance = None
-
     @classmethod
     def get_instance(cls):
         if not cls._instance:
             cls._instance = cls()
         return cls._instance
+
+    __gsignals__ = {
+        "app-closing": (vmmGObject.RUN_FIRST, None, []),
+    }
 
     def __init__(self):
         vmmGObject.__init__(self)
@@ -87,11 +89,8 @@ class vmmEngine(vmmGObject):
 
     def _cleanup(self):
         self.err = None
-
         if self._timer is not None:
             GLib.source_remove(self._timer)
-
-        vmmConnectionManager.get_instance().cleanup()
 
 
     #################
@@ -193,6 +192,9 @@ class vmmEngine(vmmGObject):
         """
         We serialize conn autostart, so polkit/ssh-askpass doesn't spam
         """
+        if self._exiting:
+            return
+
         connections_queue = queue.Queue()
         auto_conns = [conn.get_uri() for conn in self._connobjs.values() if
                       conn.get_autoconnect()]
@@ -206,19 +208,21 @@ class vmmEngine(vmmGObject):
         def state_change_cb(conn):
             if conn.is_active():
                 add_next_to_queue()
-                conn.disconnect_by_func(state_change_cb)
+                return True
 
         def handle_queue():
             while True:
                 uri = connections_queue.get()
                 if uri is None:
                     return
+                if self._exiting:
+                    return
                 if uri not in self._connobjs:
                     add_next_to_queue()
                     continue
 
                 conn = self._connobjs[uri]
-                conn.connect("state-changed", state_change_cb)
+                conn.connect_opt_out("state-changed", state_change_cb)
                 self.idle_add(self._connect_to_uri, uri)
 
         add_next_to_queue()
@@ -260,13 +264,16 @@ class vmmEngine(vmmGObject):
             show_window = self.CLI_SHOW_MANAGER
         data = GLib.Variant("(sss)",
             (uri or "", show_window or "", domain or ""))
+
+        is_remote = self._application.get_is_remote()
+        if not is_remote:
+            self._default_startup(skip_autostart, uri)
         self._application.activate_action("cli_command", data)
 
-        if self._application.get_is_remote():
+        if is_remote:
             logging.debug("Connected to remote app instance.")
             return
 
-        self._default_startup(skip_autostart, uri)
         self._application.run(None)
 
 
@@ -371,27 +378,30 @@ class vmmEngine(vmmGObject):
         if self._exiting:
             return
 
-        try:
-            self._exiting = True
-            src = self
-            self.cleanup()
+        self._exiting = True
 
-            if self.config.test_leak_debug:
-                objs = self.config.get_objects()
+        def _do_exit():
+            try:
+                vmmConnectionManager.get_instance().cleanup()
+                self.emit("app-closing")
+                self.cleanup()
 
-                # Engine will always appear to leak
-                objs.remove(self.object_key)
+                if self.config.test_leak_debug:
+                    objs = self.config.get_objects()
+                    # Engine will always appear to leak
+                    objs.remove(self.object_key)
 
-                if src and src.object_key in objs:
-                    # UI that initiates the app exit will always appear to leak
-                    objs.remove(src.object_key)
+                    for name in objs:
+                        logging.debug("LEAK: %s", name)
 
-                for name in objs:
-                    logging.debug("LEAK: %s", name)
+                logging.debug("Exiting app normally.")
+            finally:
+                self._application.quit()
 
-            logging.debug("Exiting app normally.")
-        finally:
-            self._application.quit()
+        # We stick this in an idle callback, so the exit_app() caller
+        # reference is dropped, and leak check debug doesn't give a
+        # false positive
+        self.idle_add(_do_exit)
 
     def _add_conn(self, uri, probe, force_init=False):
         is_init = (uri not in self._connobjs)
@@ -558,7 +568,7 @@ class vmmEngine(vmmGObject):
             elif page is None:
                 details.activate_default_page()
 
-            details.show()
+            details.show(default_page=False)
         except Exception as e:
             src.err.show_err(_("Error launching details: %s") % str(e))
 

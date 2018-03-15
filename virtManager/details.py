@@ -342,8 +342,6 @@ class vmmDetails(vmmGObjectUI):
         "customize-finished": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
-    _instances = {}
-
     @classmethod
     def get_instance(cls, parentobj, vm):
         try:
@@ -359,7 +357,6 @@ class vmmDetails(vmmGObjectUI):
     def __init__(self, vm, parent=None):
         vmmGObjectUI.__init__(self, "details.ui", "vmm-details")
         self.vm = vm
-        self.conn = self.vm.conn
 
         self.is_customize_dialog = False
         if parent:
@@ -375,7 +372,8 @@ class vmmDetails(vmmGObjectUI):
             self.widget("details-menubar").hide()
             pages = self.widget("details-pages")
             pages.set_current_page(DETAILS_PAGE_DETAILS)
-
+        else:
+            self.conn.connect("vm-removed", self._vm_removed)
 
         self.active_edits = []
 
@@ -438,7 +436,8 @@ class vmmDetails(vmmGObjectUI):
         self.oldhwkey = None
         self.addhwmenu = None
         self._addhwmenuitems = None
-        self.keycombo_menu = None
+        self._shutdownmenu = None
+        self._vmmenu = None
         self.init_menus()
         self.init_details()
 
@@ -594,6 +593,10 @@ class vmmDetails(vmmGObjectUI):
         self.hw_selected()
         self.refresh_vm_state()
 
+    @property
+    def conn(self):
+        return self.vm.conn
+
     def _cleanup(self):
         self.oldhwkey = None
 
@@ -614,12 +617,16 @@ class vmmDetails(vmmGObjectUI):
         self.console = None
         self.snapshots.cleanup()
         self.snapshots = None
+        self._shutdownmenu.destroy()
+        self._shutdownmenu = None
+        self._vmmenu.destroy()
+        self._vmmenu = None
 
         if self._window_size:
             self.vm.set_details_window_size(*self._window_size)
 
+        self.conn.disconnect_by_obj(self)
         self.vm = None
-        self.conn = None
         self.addhwmenu = None
         self._addhwmenuitems = None
 
@@ -630,10 +637,10 @@ class vmmDetails(vmmGObjectUI):
         self.netlist.cleanup()
         self.netlist = None
 
-    def show(self):
+    def show(self, default_page=False):
         logging.debug("Showing VM details: %s", self.vm)
         vis = self.is_visible()
-        if not vis:
+        if not vis and default_page:
             self.activate_default_page()
         self.topwin.present()
         if vis:
@@ -647,6 +654,10 @@ class vmmDetails(vmmGObjectUI):
         if self.has_unapplied_changes(self.get_hw_row()):
             return
         self.emit("customize-finished")
+
+    def _vm_removed(self, _conn, connkey):
+        if self.vm.get_connkey() == connkey:
+            self.cleanup()
 
     def _customize_cancel(self):
         logging.debug("Asking to cancel customization")
@@ -700,18 +711,18 @@ class vmmDetails(vmmGObjectUI):
 
     def init_menus(self):
         # Virtual Machine menu
-        menu = vmmenu.VMShutdownMenu(self, lambda: self.vm)
-        self.widget("control-shutdown").set_menu(menu)
+        self._shutdownmenu = vmmenu.VMShutdownMenu(self, lambda: self.vm)
+        self.widget("control-shutdown").set_menu(self._shutdownmenu)
         self.widget("control-shutdown").set_icon_name("system-shutdown")
 
         topmenu = self.widget("details-vm-menu")
         submenu = topmenu.get_submenu()
-        newmenu = vmmenu.VMActionMenu(self, lambda: self.vm,
-                                        show_open=False)
+        self._vmmenu = vmmenu.VMActionMenu(
+                self, lambda: self.vm, show_open=False)
         for child in submenu.get_children():
             submenu.remove(child)
-            newmenu.add(child)
-        topmenu.set_submenu(newmenu)
+            self._vmmenu.add(child)
+        topmenu.set_submenu(self._vmmenu)
         topmenu.show_all()
 
         # Add HW popup menu

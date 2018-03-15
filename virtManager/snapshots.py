@@ -106,6 +106,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self._snapshot_new.destroy()
         self._snapshot_new = None
+        self._snapmenu = None
 
     def _init_ui(self):
         # pylint: disable=redefined-variable-type

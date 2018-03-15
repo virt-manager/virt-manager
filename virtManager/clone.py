@@ -128,8 +128,6 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
 
 
 class vmmCloneVM(vmmGObjectUI):
-    _instances = {}
-
     @classmethod
     def show_instance(cls, parentobj, vm):
         try:
@@ -180,6 +178,7 @@ class vmmCloneVM(vmmGObjectUI):
             "on_change_storage_browse_clicked": self.change_storage_browse,
         })
         self.bind_escape_key_close()
+        self._cleanup_on_app_close()
 
         self._init_ui()
 
@@ -191,7 +190,7 @@ class vmmCloneVM(vmmGObjectUI):
 
     def show(self, parent, vm):
         logging.debug("Showing clone wizard")
-        self.vm = vm
+        self._set_vm(vm)
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.resize(1, 1)
@@ -203,7 +202,7 @@ class vmmCloneVM(vmmGObjectUI):
         self.change_storage_close()
         self.topwin.hide()
 
-        self.vm = None
+        self._set_vm(None)
         self.clone_design = None
         self.storage_list = {}
         self.target_list = []
@@ -211,6 +210,18 @@ class vmmCloneVM(vmmGObjectUI):
         self.mac_list = []
 
         return 1
+
+    def _vm_removed(self, _conn, connkey):
+        if self.vm.get_connkey() == connkey:
+            self.close()
+
+    def _set_vm(self, newvm):
+        oldvm = self.vm
+        if oldvm:
+            oldvm.conn.disconnect_by_obj(self)
+        if newvm:
+            newvm.conn.connect("vm-removed", self._vm_removed)
+        self.vm = newvm
 
     def _cleanup(self):
         self.change_mac.destroy()

@@ -184,11 +184,11 @@ class vmmConnection(vmmGObject):
      _STATE_ACTIVE) = range(1, 4)
 
     def __init__(self, uri):
-        vmmGObject.__init__(self)
-
         self._uri = uri
         if self._uri is None or self._uri.lower() == "xen":
             self._uri = "xen:///"
+
+        vmmGObject.__init__(self)
 
         self._state = self._STATE_DISCONNECTED
         self._backend = virtinst.VirtualConnection(self._uri)
@@ -252,6 +252,11 @@ class vmmConnection(vmmGObject):
             label = "KVM"
 
         return label
+
+    def __repr__(self):
+        return "<%s uri=%s id=%s>" % (
+                self.__class__.__name__, self.get_uri(), hex(id(self)))
+
 
     #################
     # Init routines #

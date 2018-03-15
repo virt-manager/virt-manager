@@ -656,9 +656,15 @@ class vmmConsolePages(vmmGObjectUI):
             self.widget("console-pages").get_nth_page(i).set_visible(
                 i == newpage)
 
+        # Dispatch the next bit in idle_add, so the UI size can change
         self.idle_add(self._refresh_widget_states)
 
     def _refresh_widget_states(self):
+        if not self.vm:
+            # This is triggered via cleanup + idle_add, so vm might
+            # disappear and spam the logs
+            return
+
         pagenum = self.widget("console-pages").get_current_page()
         paused = self.vm.is_paused()
         is_viewer = bool(pagenum == _CONSOLE_PAGE_VIEWER and

@@ -58,8 +58,6 @@ def default_conn_user(conn):
 
 
 class vmmConnect(vmmGObjectUI):
-    _instance = None
-
     @classmethod
     def get_instance(cls, parentobj):
         try:
@@ -81,6 +79,7 @@ class vmmConnect(vmmGObjectUI):
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "connect.ui", "vmm-open-connection")
+        self._cleanup_on_app_close()
 
         self.builder.connect_signals({
             "on_hypervisor_changed": self.hypervisor_changed,

@@ -100,7 +100,7 @@ class vmmLibvirtObject(vmmGObject):
                 self.__class__.__name__, name, hex(id(self)))
 
     def _cleanup(self):
-        pass
+        self._backend = None
 
     def _get_conn(self):
         return self._conn

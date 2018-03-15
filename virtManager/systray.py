@@ -30,8 +30,6 @@ from .error import vmmErrorDialog
 
 
 class vmmSystray(vmmGObject):
-    _instance = None
-
     @classmethod
     def get_instance(cls):
         if not cls._instance:
@@ -40,6 +38,7 @@ class vmmSystray(vmmGObject):
 
     def __init__(self):
         vmmGObject.__init__(self)
+        self._cleanup_on_app_close()
 
         self.topwin = None
         self.err = vmmErrorDialog()
@@ -62,7 +61,6 @@ class vmmSystray(vmmGObject):
         connmanager.connect("conn-removed", self._conn_removed)
         for conn in connmanager.conns.values():
             self._conn_added(connmanager, conn)
-
 
     def is_visible(self):
         return (self.config.get_view_system_tray() and

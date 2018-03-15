@@ -32,8 +32,6 @@ class vmmConnectionManager(vmmGObject):
         "conn-removed": (vmmGObject.RUN_FIRST, None, [str]),
     }
 
-    _instance = None
-
     @classmethod
     def get_instance(cls, *args, **kwargs):
         if not cls._instance:
@@ -53,6 +51,7 @@ class vmmConnectionManager(vmmGObject):
         for conn in self._conns.values():
             uri = conn.get_uri()
             try:
+                conn.close()
                 self.emit("conn-removed", uri)
                 conn.cleanup()
             except Exception:
@@ -66,7 +65,6 @@ class vmmConnectionManager(vmmGObject):
     def add_conn(self, uri):
         if uri in self._conns:
             return self._conns[uri]
-        print("add uri", uri)
         conn = vmmConnection(uri)
         self._conns[uri] = conn
         self.config.add_conn_uri(uri)

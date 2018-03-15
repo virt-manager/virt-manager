@@ -117,8 +117,6 @@ def is_virt_bootstrap_installed():
 ##############
 
 class vmmCreate(vmmGObjectUI):
-    _instance = None
-
     @classmethod
     def show_instance(cls, parentobj, uri=None):
         try:
@@ -131,6 +129,7 @@ class vmmCreate(vmmGObjectUI):
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "create.ui", "vmm-create")
+        self._cleanup_on_app_close()
 
         self.conn = None
         self._capsinfo = None
@@ -202,6 +201,7 @@ class vmmCreate(vmmGObjectUI):
         self._init_state()
 
 
+
     ###########################
     # Standard window methods #
     ###########################
@@ -209,7 +209,7 @@ class vmmCreate(vmmGObjectUI):
     def is_visible(self):
         return self.topwin.get_visible()
 
-    def show(self, parent, uri=None):
+    def show(self, parent, uri):
         logging.debug("Showing new vm wizard")
 
         if not self.is_visible():
@@ -229,20 +229,12 @@ class vmmCreate(vmmGObjectUI):
         self._cleanup_customize_window()
         if self._storage_browser:
             self._storage_browser.close()
+        self._set_conn(None)
 
     def _cleanup(self):
-        self.conn = None
-        self._capsinfo = None
-
-        self._guest = None
-
         if self._storage_browser:
             self._storage_browser.cleanup()
             self._storage_browser = None
-        if self._netlist:
-            self._netlist.cleanup()
-            self._netlist = None
-
         if self._netlist:
             self._netlist.cleanup()
             self._netlist = None
@@ -252,6 +244,10 @@ class vmmCreate(vmmGObjectUI):
         if self._addstorage:
             self._addstorage.cleanup()
             self._addstorage = None
+
+        self.conn = None
+        self._capsinfo = None
+        self._guest = None
 
 
     ##########################
@@ -721,31 +717,38 @@ class vmmCreate(vmmGObjectUI):
         # Networking
         self.widget("advanced-expander").set_expanded(False)
 
-        if self._netlist:
-            self.widget("netdev-ui-align").remove(self._netlist.top_box)
-            self._netlist.cleanup()
-            self._netlist = None
-
         self._netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
         self.widget("netdev-ui-align").add(self._netlist.top_box)
         self._netlist.connect("changed", self._netdev_changed)
         self._netlist.reset_state()
 
+    def _conn_state_changed(self, conn):
+        if conn.is_disconnected():
+            self._close()
+
     def _set_conn(self, newconn):
         self.widget("startup-error-box").hide()
         self.widget("arch-warning-box").hide()
 
+        oldconn = self.conn
         self.conn = newconn
+        if oldconn:
+            oldconn.disconnect_by_obj(self)
+        if self._netlist:
+            self.widget("netdev-ui-align").remove(self._netlist.top_box)
+            self._netlist.cleanup()
+            self._netlist = None
+
         if not self.conn:
             return self._show_startup_error(
                                 _("No active connection to install on."))
+        self.conn.connect("state-changed", self._conn_state_changed)
 
         try:
             self._populate_conn_state()
         except Exception as e:
             logging.exception("Error setting create wizard conn state.")
             return self._show_startup_error(str(e))
-
 
 
     def _change_caps(self, gtype=None, arch=None, domtype=None):

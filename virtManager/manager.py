@@ -91,8 +91,6 @@ def _get_inspection_icon_pixbuf(vm, w, h):
 
 
 class vmmManager(vmmGObjectUI):
-    _instance = None
-
     @classmethod
     def get_instance(cls, parentobj):
         try:
@@ -105,6 +103,7 @@ class vmmManager(vmmGObjectUI):
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "manager.ui", "vmm-manager")
+        self._cleanup_on_app_close()
 
         # Mapping of rowkey -> tree model rows to
         # allow O(1) access instead of O(n)
@@ -116,6 +115,7 @@ class vmmManager(vmmGObjectUI):
         self._window_size = None
 
         self.vmmenu = vmmenu.VMActionMenu(self, self.current_vm)
+        self.shutdownmenu = vmmenu.VMShutdownMenu(self, self.current_vm)
         self.connmenu = Gtk.Menu()
         self.connmenu_items = {}
 
@@ -228,6 +228,8 @@ class vmmManager(vmmGObjectUI):
         self.hostcpucol = None
         self.netcol = None
 
+        self.shutdownmenu.destroy()
+        self.shutdownmenu = None
         self.vmmenu.destroy()
         self.vmmenu = None
         self.connmenu.destroy()
@@ -292,9 +294,8 @@ class vmmManager(vmmGObjectUI):
         self.widget("vm-new").set_icon_name("vm_new")
         self.widget("vm-open").set_icon_name("icon_console")
 
-        menu = vmmenu.VMShutdownMenu(self, self.current_vm)
         self.widget("vm-shutdown").set_icon_name("system-shutdown")
-        self.widget("vm-shutdown").set_menu(menu)
+        self.widget("vm-shutdown").set_menu(self.shutdownmenu)
 
         tool = self.widget("vm-toolbar")
         tool.set_property("icon-size", Gtk.IconSize.LARGE_TOOLBAR)

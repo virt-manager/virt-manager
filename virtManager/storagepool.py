@@ -159,6 +159,10 @@ class vmmStoragePool(vmmLibvirtObject):
         vmmLibvirtObject._invalidate_xml(self)
         self._volumes = None
 
+    def _cleanup(self):
+        vmmLibvirtObject._cleanup(self)
+        self._volumes = None
+
 
     ###########
     # Actions #

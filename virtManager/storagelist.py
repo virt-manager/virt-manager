@@ -119,9 +119,7 @@ class vmmStorageList(vmmGObjectUI):
 
     def _cleanup(self):
         try:
-            self.conn.disconnect_by_func(self._conn_pool_count_changed)
-            self.conn.disconnect_by_func(self._conn_pool_count_changed)
-            self.conn.disconnect_by_func(self._conn_state_changed)
+            self.conn.disconnect_by_obj(self)
         except Exception:
             pass
         self.conn = None
@@ -383,11 +381,7 @@ class vmmStorageList(vmmGObjectUI):
             model.clear()
 
             for pool in self.conn.list_pools():
-                try:
-                    pool.disconnect_by_func(self._pool_changed)
-                    pool.disconnect_by_func(self._pool_changed)
-                except Exception:
-                    pass
+                pool.disconnect_by_obj(self)
                 pool.connect("state-changed", self._pool_changed)
                 pool.connect("refreshed", self._pool_changed)
 

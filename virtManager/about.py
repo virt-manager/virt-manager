@@ -24,8 +24,6 @@ from .baseclass import vmmGObjectUI
 
 
 class vmmAbout(vmmGObjectUI):
-    _instance = None
-
     @classmethod
     def show_instance(cls, parentobj):
         try:
@@ -38,6 +36,7 @@ class vmmAbout(vmmGObjectUI):
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "about.ui", "vmm-about")
+        self._cleanup_on_app_close()
 
         self.builder.connect_signals({
             "on_vmm_about_delete_event": self.close,

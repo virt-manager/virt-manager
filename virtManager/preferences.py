@@ -29,8 +29,6 @@ from .inspection import vmmInspection
 
 
 class vmmPreferences(vmmGObjectUI):
-    _instance = None
-
     @classmethod
     def show_instance(cls, parentobj):
         try:
@@ -43,6 +41,7 @@ class vmmPreferences(vmmGObjectUI):
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "preferences.ui", "vmm-preferences")
+        self._cleanup_on_app_close()
 
         self._init_ui()
 

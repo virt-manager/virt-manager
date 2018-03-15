@@ -51,8 +51,6 @@ EDIT_INTERFACE_STARTMODE,
 
 
 class vmmHost(vmmGObjectUI):
-    _instances = {}
-
     @classmethod
     def show_instance(cls, parentobj, conn):
         try:
@@ -148,6 +146,8 @@ class vmmHost(vmmGObjectUI):
         self.conn_state_changed()
         self.widget("config-autoconnect").set_active(
             self.conn.get_autoconnect())
+
+        self._cleanup_on_conn_removed()
 
 
     def init_net_state(self):
@@ -267,7 +267,7 @@ class vmmHost(vmmGObjectUI):
         return self.topwin.get_visible()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing host details: %s", self.conn)
+        logging.debug("Closing host window for %s", self.conn)
         if not self.is_visible():
             return
 
@@ -733,10 +733,7 @@ class vmmHost(vmmGObjectUI):
             net_list.get_selection().unselect_all()
             model.clear()
             for net in self.conn.list_nets():
-                try:
-                    net.disconnect_by_func(self.refresh_network)
-                except Exception:
-                    pass
+                net.disconnect_by_obj(self)
                 net.connect("state-changed", self.refresh_network)
                 model.append([net.get_connkey(), net.get_name(), "network-idle",
                               Gtk.IconSize.LARGE_TOOLBAR,
@@ -983,10 +980,7 @@ class vmmHost(vmmGObjectUI):
             model.clear()
             iface_list.get_selection().unselect_all()
             for iface in self.conn.list_interfaces():
-                try:
-                    iface.disconnect_by_func(self.refresh_interface)
-                except Exception:
-                    pass
+                iface.disconnect_by_obj(self)
                 iface.connect("state-changed", self.refresh_interface)
                 model.append([iface.get_connkey(), iface.get_name(),
                               "network-idle", Gtk.IconSize.LARGE_TOOLBAR,
