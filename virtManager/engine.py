@@ -173,12 +173,11 @@ class vmmEngine(vmmGObject):
             def _open_completed(c, ConnectError):
                 if ConnectError:
                     self._handle_conn_error(c, ConnectError)
-                return True
 
             packageutils.start_libvirtd()
             conn = vmmConnectionManager.get_instance().add_conn(tryuri)
             conn.set_autoconnect(True)
-            conn.connect_opt_out("open-completed", _open_completed)
+            conn.connect_once("open-completed", _open_completed)
             conn.open()
         self.idle_add(idle_connect)
 
@@ -205,7 +204,6 @@ class vmmEngine(vmmGObject):
             logging.debug("Autostart connection error: %s",
                     ConnectError.details)
             add_next_to_queue()
-            return True
 
         def handle_queue():
             while True:
@@ -219,7 +217,7 @@ class vmmEngine(vmmGObject):
                     continue
 
                 conn = self._connobjs[uri]
-                conn.connect_opt_out("open-completed", conn_open_completed)
+                conn.connect_once("open-completed", conn_open_completed)
                 self.idle_add(conn.open)
 
         add_next_to_queue()
@@ -530,9 +528,8 @@ class vmmEngine(vmmGObject):
                 self._handle_conn_error(conn, ConnectError)
             else:
                 self._launch_cli_window(uri, show_window, domain)
-            return True
 
-        conn.connect_opt_out("open-completed", _open_completed)
+        conn.connect_once("open-completed", _open_completed)
         conn.open()
 
     def _handle_cli_command(self, actionobj, variant):

@@ -487,7 +487,6 @@ class vmmManager(vmmGObjectUI):
         if ConnectError:
             msg, details, title = ConnectError
             self.err.show_err(msg, details, title)
-        return True
 
     def row_activated(self, _src, *args):
         ignore = args
@@ -499,7 +498,7 @@ class vmmManager(vmmGObjectUI):
         if vm:
             self.show_vm(_src)
         elif conn.is_disconnected():
-            conn.connect_opt_out("open-completed", self._conn_open_completed)
+            conn.connect_once("open-completed", self._conn_open_completed)
             conn.open()
         else:
             self.show_host(_src)

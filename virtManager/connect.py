@@ -461,12 +461,11 @@ class vmmConnect(vmmGObjectUI):
         if not ConnectError:
             self.close()
             self.reset_finish_cursor()
-            return True
+            return
 
         msg, details, title = ConnectError
         msg += "\n\n"
         msg += _("Would you still like to remember this connection?")
-
 
         remember = self.err.show_err(msg, details, title,
                 buttons=Gtk.ButtonsType.YES_NO,
@@ -476,7 +475,6 @@ class vmmConnect(vmmGObjectUI):
             self.close()
         else:
             vmmConnectionManager.get_instance().remove_conn(conn.get_uri())
-        return True
 
     def open_conn(self, ignore):
         if not self.validate():
@@ -497,7 +495,7 @@ class vmmConnect(vmmGObjectUI):
         if conn.is_active():
             return
 
-        conn.connect_opt_out("open-completed", self._conn_open_completed)
+        conn.connect_once("open-completed", self._conn_open_completed)
         self.set_finish_cursor()
         conn.open()
 
