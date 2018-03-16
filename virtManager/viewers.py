@@ -548,7 +548,7 @@ class SpiceViewer(Viewer):
             self._usbdev_manager.connect("device-error",
                                         self._usbdev_redirect_error)
 
-            autoredir = self.config.get_auto_redirection()
+            autoredir = self.config.get_auto_usbredir()
             if autoredir:
                 gtk_session.set_property("auto-usbredir", True)
         except Exception:

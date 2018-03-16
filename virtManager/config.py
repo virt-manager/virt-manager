@@ -200,7 +200,6 @@ class vmmConfig(object):
         self.askpass_package = CLIConfig.askpass_package
         self.default_graphics_from_config = CLIConfig.default_graphics
         self.default_hvs = CLIConfig.default_hvs
-        self.cli_usbredir = None
 
         if self.test_first_run:
             # Populate some package defaults to simplify git testing
@@ -476,11 +475,9 @@ class vmmConfig(object):
     def set_console_resizeguest(self, pref):
         self.conf.set("/console/resize-guest", pref)
 
-    def get_auto_redirection(self):
-        if self.cli_usbredir is not None:
-            return self.cli_usbredir
-        return self.conf.get("/console/auto-redirect")
-    def set_auto_redirection(self, state):
+    def get_auto_usbredir(self):
+        return bool(self.conf.get("/console/auto-redirect"))
+    def set_auto_usbredir(self, state):
         self.conf.set("/console/auto-redirect", state)
 
     # Show VM details toolbar

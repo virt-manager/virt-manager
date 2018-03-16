@@ -719,6 +719,31 @@ Redirection:</property>
                             <property name="top_attach">1</property>
                           </packing>
                         </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">SPICE _USB Redirection:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">prefs-add-spice-usbredir</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="prefs-console-autoredir">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <signal name="changed" handler="on_prefs_console_autoredir_changed" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
                       </object>
                     </child>
                   </object>

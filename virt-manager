@@ -236,9 +236,6 @@ def main():
         return
 
 
-    if options.usbredir and config.get_auto_redirection():
-        config.cli_usbredir = False
-
     # Add our icon dir to icon theme
     icon_theme = Gtk.IconTheme.get_default()
     icon_theme.prepend_search_path(CLIConfig.icon_dir)
