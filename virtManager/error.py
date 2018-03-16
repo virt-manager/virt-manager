@@ -102,7 +102,10 @@ class vmmErrorDialog(vmmGObject):
         if debug:
             debugmsg = "error dialog message:\nsummary=%s" % summary
             if details and details != summary:
-                debugmsg += "\ndetails=%s" % details
+                det = details
+                if details.startswith(summary):
+                    det = details[len(summary):].strip()
+                debugmsg += "\ndetails=%s" % det
             logging.debug(debugmsg)
 
         # Make sure we have consistent details for error dialogs
