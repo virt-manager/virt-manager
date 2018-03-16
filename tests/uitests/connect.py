@@ -57,7 +57,7 @@ class VMMConnect(uiutils.UITestCase):
                 urilabel.text == "xen+tcp://fribuser@%s:12345/" % fakehost)
         connect.click()
 
-        uiutils.check_in_loop(lambda: win.showing is False)
+        uiutils.check_in_loop(lambda: win.showing is True)
         c = self.app.root.find_fuzzy(fakehost, "table cell")
         uiutils.check_in_loop(lambda: "Connecting..." not in c.text,
                 timeout=10)
@@ -70,7 +70,7 @@ class VMMConnect(uiutils.UITestCase):
 
         # This time say 'yes'
         connect.click()
-        uiutils.check_in_loop(lambda: win.showing is False)
+        uiutils.check_in_loop(lambda: win.showing is True)
         c = self.app.root.find_fuzzy(fakehost, "table cell")
         uiutils.check_in_loop(lambda: "Connecting..." not in c.text,
                 timeout=10)

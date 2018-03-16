@@ -74,6 +74,11 @@ class vmmGObject(GObject.GObject):
         if config.vmmConfig.is_initialized() and self._leak_check:
             self.config.add_object(self.object_key)
 
+    def _get_err(self):
+        from . import error
+        return error.vmmErrorDialog.get_instance()
+    err = property(_get_err)
+
     def cleanup(self):
         if self.__cleaned_up:
             return

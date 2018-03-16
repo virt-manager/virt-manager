@@ -18,8 +18,10 @@
 # MA 02110-1301 USA.
 #
 
+import collections
 import logging
 import os
+import re
 import time
 
 from gi.repository import GLib
@@ -165,3 +167,68 @@ def acquire_tgt():
         logging.info("Cannot acquire tgt %s", str(e))
         ret = False
     return ret
+
+
+def connect_error(conn, errmsg, tb, warnconsole):
+    """
+    Format connection error message
+    """
+    errmsg = errmsg.strip(" \n")
+    tb = tb.strip(" \n")
+    hint = ""
+    show_errmsg = True
+    config = conn.config
+
+    if conn.is_remote():
+        logging.debug("connect_error: conn transport=%s",
+            conn.get_uri_transport())
+        if re.search(r"nc: .* -- 'U'", tb):
+            hint += _("The remote host requires a version of netcat/nc "
+                      "which supports the -U option.")
+            show_errmsg = False
+        elif (conn.get_uri_transport() == "ssh" and
+              re.search(r"ssh-askpass", tb)):
+
+            askpass = (config.askpass_package and
+                       config.askpass_package[0] or
+                       "openssh-askpass")
+            hint += _("You need to install %s or "
+                      "similar to connect to this host.") % askpass
+            show_errmsg = False
+        else:
+            hint += _("Verify that the 'libvirtd' daemon is running "
+                      "on the remote host.")
+
+    elif conn.is_xen():
+        hint += _("Verify that:\n"
+                  " - A Xen host kernel was booted\n"
+                  " - The Xen service has been started")
+
+    else:
+        if warnconsole:
+            hint += _("Could not detect a local session: if you are "
+                      "running virt-manager over ssh -X or VNC, you "
+                      "may not be able to connect to libvirt as a "
+                      "regular user. Try running as root.")
+            show_errmsg = False
+        elif re.search(r"libvirt-sock", tb):
+            hint += _("Verify that the 'libvirtd' daemon is running.")
+            show_errmsg = False
+
+    msg = _("Unable to connect to libvirt %s." % conn.get_uri())
+    if show_errmsg:
+        msg += "\n\n%s" % errmsg
+    if hint:
+        msg += "\n\n%s" % hint
+
+    msg = msg.strip("\n")
+    details = msg
+    details += "\n\n"
+    details += "Libvirt URI is: %s\n\n" % conn.get_uri()
+    details += tb
+
+    title = _("Virtual Machine Manager Connection Failure")
+
+    ConnectError = collections.namedtuple("ConnectError",
+            ["msg", "details", "title"])
+    return ConnectError(msg, details, title)

@@ -19,7 +19,6 @@
 #
 
 import logging
-import re
 import queue
 import threading
 import traceback
@@ -30,9 +29,8 @@ from gi.repository import Gtk
 
 from . import packageutils
 from .baseclass import vmmGObject
-from .connmanager import vmmConnectionManager
 from .connect import vmmConnect
-from .error import vmmErrorDialog
+from .connmanager import vmmConnectionManager
 from .inspection import vmmInspection
 
 DETAILS_PERF = 1
@@ -64,8 +62,6 @@ class vmmEngine(vmmGObject):
     def __init__(self):
         vmmGObject.__init__(self)
 
-        self.err = vmmErrorDialog()
-
         self._exiting = False
 
         self._window_count = 0
@@ -88,7 +84,6 @@ class vmmEngine(vmmGObject):
 
 
     def _cleanup(self):
-        self.err = None
         if self._timer is not None:
             GLib.source_remove(self._timer)
 
@@ -110,9 +105,6 @@ class vmmEngine(vmmGObject):
                 self._timer_changed_cb))
 
         self._schedule_timer()
-        for _uri in self._connobjs:
-            self._add_conn(_uri, False, force_init=True)
-
         self._tick_thread.start()
         self._tick()
 
@@ -168,24 +160,26 @@ class vmmEngine(vmmGObject):
             manager.set_startup_error(msg)
             return
 
-        warnmsg = _("The 'libvirtd' service will need to be started.\n\n"
-                    "After that, virt-manager will connect to libvirt on\n"
-                    "the next application start up.")
+        # packagekit API via gnome-software doesn't even work nicely these
+        # days. Not sure what the state of this warning is...
+        #
+        # warnmsg = _("The 'libvirtd' service will need to be started.\n\n"
+        #            "After that, virt-manager will connect to libvirt on\n"
+        #            "the next application start up.")
+        # if not connected and not libvirtd_started:
+        #    manager.err.ok(_("Libvirt service must be started"), warnmsg)
 
-        # Do the initial connection in an idle callback, so the
-        # packagekit async dialog has a chance to go away
         def idle_connect():
-            libvirtd_started = packageutils.start_libvirtd()
-            connected = False
-            try:
-                self._connect_to_uri(tryuri, autoconnect=True)
-                connected = True
-            except Exception:
-                logging.exception("Error connecting to %s", tryuri)
+            def _open_completed(c, ConnectError):
+                if ConnectError:
+                    self._handle_conn_error(c, ConnectError)
+                return True
 
-            if not connected and not libvirtd_started:
-                manager.err.ok(_("Libvirt service must be started"), warnmsg)
-
+            packageutils.start_libvirtd()
+            conn = vmmConnectionManager.get_instance().add_conn(tryuri)
+            conn.set_autoconnect(True)
+            conn.connect_opt_out("open-completed", _open_completed)
+            conn.open()
         self.idle_add(idle_connect)
 
     def _autostart_conns(self):
@@ -205,10 +199,13 @@ class vmmEngine(vmmGObject):
             else:
                 connections_queue.put(auto_conns.pop(0))
 
-        def state_change_cb(conn):
-            if conn.is_active():
-                add_next_to_queue()
-                return True
+        def conn_open_completed(_conn, ConnectError):
+            # Explicitly ignore connection errors, we've done that
+            # for a while and it can be noisy
+            logging.debug("Autostart connection error: %s",
+                    ConnectError.details)
+            add_next_to_queue()
+            return True
 
         def handle_queue():
             while True:
@@ -222,8 +219,8 @@ class vmmEngine(vmmGObject):
                     continue
 
                 conn = self._connobjs[uri]
-                conn.connect_opt_out("state-changed", state_change_cb)
-                self.idle_add(self._connect_to_uri, uri)
+                conn.connect_opt_out("open-completed", conn_open_completed)
+                self.idle_add(conn.open)
 
         add_next_to_queue()
         self._start_thread(handle_queue, "Conn autostart thread")
@@ -307,7 +304,8 @@ class vmmEngine(vmmGObject):
                               self._tick_counter,
                               obj, kwargs))
 
-    def _schedule_priority_tick(self, conn, kwargs):
+    def schedule_priority_tick(self, conn, kwargs):
+        # Called directly from connection
         self._add_obj_to_tick_queue(conn, True, **kwargs)
 
     def _tick(self):
@@ -402,128 +400,6 @@ class vmmEngine(vmmGObject):
         # reference is dropped, and leak check debug doesn't give a
         # false positive
         self.idle_add(_do_exit)
-
-    def _add_conn(self, uri, probe, force_init=False):
-        is_init = (uri not in self._connobjs)
-        conn = vmmConnectionManager.get_instance().add_conn(uri)
-        if is_init or force_init:
-            conn.connect("connect-error", self._connect_error)
-            conn.connect("priority-tick", self._schedule_priority_tick)
-            setattr(conn, "_from_connect_wizard", probe)
-        return conn
-
-    def _connect_to_uri(self, uri, autoconnect=None, probe=False):
-        conn = self._add_conn(uri, probe=probe)
-
-        if autoconnect is not None:
-            conn.set_autoconnect(bool(autoconnect))
-
-        conn.open()
-
-    def _connect_error(self, conn, errmsg, tb, warnconsole):
-        errmsg = errmsg.strip(" \n")
-        tb = tb.strip(" \n")
-        hint = ""
-        show_errmsg = True
-
-        if conn.is_remote():
-            logging.debug("connect_error: conn transport=%s",
-                conn.get_uri_transport())
-            if re.search(r"nc: .* -- 'U'", tb):
-                hint += _("The remote host requires a version of netcat/nc "
-                          "which supports the -U option.")
-                show_errmsg = False
-            elif (conn.get_uri_transport() == "ssh" and
-                  re.search(r"ssh-askpass", tb)):
-
-                askpass = (self.config.askpass_package and
-                           self.config.askpass_package[0] or
-                           "openssh-askpass")
-                hint += _("You need to install %s or "
-                          "similar to connect to this host.") % askpass
-                show_errmsg = False
-            else:
-                hint += _("Verify that the 'libvirtd' daemon is running "
-                          "on the remote host.")
-
-        elif conn.is_xen():
-            hint += _("Verify that:\n"
-                      " - A Xen host kernel was booted\n"
-                      " - The Xen service has been started")
-
-        else:
-            if warnconsole:
-                hint += _("Could not detect a local session: if you are "
-                          "running virt-manager over ssh -X or VNC, you "
-                          "may not be able to connect to libvirt as a "
-                          "regular user. Try running as root.")
-                show_errmsg = False
-            elif re.search(r"libvirt-sock", tb):
-                hint += _("Verify that the 'libvirtd' daemon is running.")
-                show_errmsg = False
-
-        msg = _("Unable to connect to libvirt %s." % conn.get_uri())
-        if show_errmsg:
-            msg += "\n\n%s" % errmsg
-        if hint:
-            msg += "\n\n%s" % hint
-
-        msg = msg.strip("\n")
-        details = msg
-        details += "\n\n"
-        details += "Libvirt URI is: %s\n\n" % conn.get_uri()
-        details += tb
-
-        _from_connect_wizard = getattr(conn, "_from_connect_wizard", False)
-        if _from_connect_wizard:
-            msg += "\n\n"
-            msg += _("Would you still like to remember this connection?")
-
-        title = _("Virtual Machine Manager Connection Failure")
-        if _from_connect_wizard:
-            remember_connection = self.err.show_err(msg, details, title,
-                    buttons=Gtk.ButtonsType.YES_NO,
-                    dialog_type=Gtk.MessageType.QUESTION, modal=True)
-            if remember_connection:
-                setattr(conn, "_from_connect_wizard", False)
-            else:
-                self._edit_connect(conn.get_uri())
-        else:
-            if self._can_exit():
-                self.err.show_err(msg, details, title, modal=True)
-                self._exit_app_if_no_windows()
-            else:
-                self.err.show_err(msg, details, title)
-
-
-    ##################################
-    # callbacks and dialog launchers #
-    ##################################
-
-    def _connect_completed(self, _src, uri, autoconnect):
-        self._connect_to_uri(uri, autoconnect, probe=True)
-
-    def _connect_cancelled(self, _src):
-        if not self._connobjs:
-            self.exit_app()
-
-    def _show_connect_dialog(self, src, reset_state):
-        is_init = vmmConnect.is_initialized()
-        obj = vmmConnect.get_instance(src)
-        if not is_init:
-            obj.connect("completed", self._connect_completed)
-            obj.connect("cancelled", self._connect_cancelled)
-        obj.show(src.topwin, reset_state)
-
-    def do_show_connect(self, src, reset_state=True):
-        try:
-            self._show_connect_dialog(src, reset_state)
-        except Exception as e:
-            src.err.show_err(_("Error launching connect dialog: %s") % str(e))
-
-    def _edit_connect(self, uri):
-        vmmConnectionManager.get_instance().remove_conn(uri)
-        self.do_show_connect(self._get_manager(), reset_state=False)
 
 
     ##########################################
@@ -620,28 +496,16 @@ class vmmEngine(vmmGObject):
             # In case of cli error, we may need to exit the app
             self._exit_app_if_no_windows()
 
-    def _cli_conn_connected_cb(self, conn, uri, show_window, domain):
-        try:
-            ignore = conn
-
-            if conn.is_disconnected():
-                raise RuntimeError("failed to connect to cli uri=%s" % uri)
-
-            if conn.is_active():
-                self._launch_cli_window(uri, show_window, domain)
-                return True
-
-            return False
-        except Exception:
-            # In case of cli error, we may need to exit the app
-            logging.debug("Error in cli connection callback", exc_info=True)
-            self._exit_app_if_no_windows()
-            return True
+    def _handle_conn_error(self, _conn, ConnectError):
+        msg, details, title = ConnectError
+        modal = self._can_exit()
+        self.err.show_err(msg, details, title, modal=modal)
+        self._exit_app_if_no_windows()
 
     def _do_handle_cli_command(self, actionobj, variant):
         ignore = actionobj
         uri = variant[0]
-        show_window = variant[1]
+        show_window = variant[1] or self.CLI_SHOW_MANAGER
         domain = variant[2]
 
         logging.debug("processing cli command uri=%s show_window=%s domain=%s",
@@ -651,21 +515,21 @@ class vmmEngine(vmmGObject):
             self._get_manager().show()
             return
 
-        conn = self._add_conn(uri, False)
+        conn = vmmConnectionManager.get_instance().add_conn(uri)
+        if conn.is_active():
+            self.idle_add(self._launch_cli_window,
+                uri, show_window, domain)
+            return
 
-        if conn.is_disconnected():
-            # Schedule connection open
-            self.idle_add(self._connect_to_uri, uri)
-
-        if show_window:
-            if conn.is_active():
-                self.idle_add(self._launch_cli_window,
-                    uri, show_window, domain)
+        def _open_completed(_c, ConnectError):
+            if ConnectError:
+                self._handle_conn_error(conn, ConnectError)
             else:
-                conn.connect_opt_out("state-changed",
-                    self._cli_conn_connected_cb, uri, show_window, domain)
-        else:
-            self._show_manager_uri(uri)
+                self._launch_cli_window(uri, show_window, domain)
+            return True
+
+        conn.connect_opt_out("open-completed", _open_completed)
+        conn.open()
 
     def _handle_cli_command(self, actionobj, variant):
         try:

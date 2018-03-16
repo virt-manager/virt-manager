@@ -133,7 +133,7 @@ class vmmManager(vmmGObjectUI):
 
             "on_vm_manager_delete_event": self.close,
             "on_vmm_manager_configure_event": self.window_resized,
-            "on_menu_file_add_connection_activate": self.new_conn,
+            "on_menu_file_add_connection_activate": self.open_newconn,
             "on_menu_new_vm_activate": self.new_vm,
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
@@ -458,8 +458,9 @@ class vmmManager(vmmGObjectUI):
     def exit_app(self, src_ignore=None, src2_ignore=None):
         vmmEngine.get_instance().exit_app()
 
-    def new_conn(self, _src):
-        vmmEngine.get_instance().do_show_connect(self)
+    def open_newconn(self, _src):
+        from .connect import vmmConnect
+        vmmConnect.get_instance(self).show(self.topwin)
 
     def new_vm(self, _src):
         from .create import vmmCreate
@@ -482,6 +483,12 @@ class vmmManager(vmmGObjectUI):
     def show_vm(self, _src):
         vmmenu.VMActionUI.show(self, self.current_vm())
 
+    def _conn_open_completed(self, _conn, ConnectError):
+        if ConnectError:
+            msg, details, title = ConnectError
+            self.err.show_err(msg, details, title)
+        return True
+
     def row_activated(self, _src, *args):
         ignore = args
         conn = self.current_conn()
@@ -492,6 +499,7 @@ class vmmManager(vmmGObjectUI):
         if vm:
             self.show_vm(_src)
         elif conn.is_disconnected():
+            conn.connect_opt_out("open-completed", self._conn_open_completed)
             conn.open()
         else:
             self.show_host(_src)

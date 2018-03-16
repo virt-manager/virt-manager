@@ -174,9 +174,7 @@ class vmmConnection(vmmGObject):
         "nodedev-removed": (vmmGObject.RUN_FIRST, None, [str]),
         "resources-sampled": (vmmGObject.RUN_FIRST, None, []),
         "state-changed": (vmmGObject.RUN_FIRST, None, []),
-        "connect-error": (vmmGObject.RUN_FIRST, None,
-                          [str, str, bool]),
-        "priority-tick": (vmmGObject.RUN_FIRST, None, [object]),
+        "open-completed": (vmmGObject.RUN_FIRST, None, [object]),
     }
 
     (_STATE_DISCONNECTED,
@@ -193,6 +191,9 @@ class vmmConnection(vmmGObject):
         self._state = self._STATE_DISCONNECTED
         self._backend = virtinst.VirtualConnection(self._uri)
         self._closing = False
+
+        # Error strings are stored here if open() fails
+        self.connect_error = None
 
         self._init_object_count = None
         self._init_object_event = None
@@ -1051,8 +1052,9 @@ class vmmConnection(vmmGObject):
             if retry_for_tgt and connectauth.acquire_tgt():
                 self._do_open(retry_for_tgt=False)
 
-        connectError = (str(exc), tb, warnconsole)
-        return False, connectError
+        ConnectError = connectauth.connect_error(
+                self, str(exc), tb, warnconsole)
+        return False, ConnectError
 
     def _populate_initial_state(self):
         logging.debug("libvirt version=%s",
@@ -1102,8 +1104,9 @@ class vmmConnection(vmmGObject):
         self._init_object_count = None
 
     def _open_thread(self):
+        ConnectError = None
         try:
-            is_active, connectError = self._do_open()
+            is_active, ConnectError = self._do_open()
             if is_active:
                 self._populate_initial_state()
 
@@ -1112,11 +1115,10 @@ class vmmConnection(vmmGObject):
         except Exception as e:
             is_active = False
             self._schedule_close()
-            connectError = (str(e), "".join(traceback.format_exc()), False)
+            ConnectError = connectauth.connect_error(self, str(e),
+                    "".join(traceback.format_exc()), False)
 
-        if not is_active:
-            if connectError:
-                self.idle_emit("connect-error", *connectError)
+        self.idle_emit("open-completed", ConnectError)
 
 
     #######################
@@ -1431,7 +1433,8 @@ class vmmConnection(vmmGObject):
 
 
     def schedule_priority_tick(self, **kwargs):
-        self.idle_emit("priority-tick", kwargs)
+        from .engine import vmmEngine
+        vmmEngine.get_instance().schedule_priority_tick(self, kwargs)
 
     def tick_from_engine(self, *args, **kwargs):
         e = None

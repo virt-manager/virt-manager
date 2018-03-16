@@ -29,6 +29,7 @@ from gi.repository import Gtk
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
+from .connmanager import vmmConnectionManager
 
 (HV_QEMU,
 HV_XEN,
@@ -71,11 +72,6 @@ class vmmConnect(vmmGObjectUI):
     @classmethod
     def is_initialized(cls):
         return bool(cls._instance)
-
-    __gsignals__ = {
-        "completed": (vmmGObjectUI.RUN_FIRST, None, [str, bool]),
-        "cancelled": (vmmGObjectUI.RUN_FIRST, None, []),
-    }
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "connect.ui", "vmm-open-connection")
@@ -144,7 +140,6 @@ class vmmConnect(vmmGObjectUI):
     def cancel(self, ignore1=None, ignore2=None):
         logging.debug("Cancelling open connection")
         self.close()
-        self.emit("cancelled")
         return 1
 
     def close(self, ignore1=None, ignore2=None):
@@ -158,14 +153,13 @@ class vmmConnect(vmmGObjectUI):
             self.browser = None
 
 
-    def show(self, parent, reset_state=True):
+    def show(self, parent):
         logging.debug("Showing open connection")
         if self.topwin.is_visible():
             self.topwin.present()
             return
 
-        if reset_state:
-            self.reset_state()
+        self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
         self.start_browse()
@@ -463,21 +457,49 @@ class vmmConnect(vmmGObjectUI):
 
         return True
 
+    def _conn_open_completed(self, conn, ConnectError):
+        if not ConnectError:
+            self.close()
+            self.reset_finish_cursor()
+            return True
+
+        msg, details, title = ConnectError
+        msg += "\n\n"
+        msg += _("Would you still like to remember this connection?")
+
+
+        remember = self.err.show_err(msg, details, title,
+                buttons=Gtk.ButtonsType.YES_NO,
+                dialog_type=Gtk.MessageType.QUESTION, modal=True)
+        self.reset_finish_cursor()
+        if remember:
+            self.close()
+        else:
+            vmmConnectionManager.get_instance().remove_conn(conn.get_uri())
+        return True
+
     def open_conn(self, ignore):
         if not self.validate():
             return
 
         auto = False
         if self.widget("autoconnect").get_sensitive():
-            auto = self.widget("autoconnect").get_active()
+            auto = bool(self.widget("autoconnect").get_active())
         if self.widget("uri-label").is_visible():
             uri = self.generate_uri()
         else:
             uri = self.widget("uri-entry").get_text()
 
         logging.debug("Generate URI=%s, auto=%s", uri, auto)
-        self.close()
-        self.emit("completed", uri, auto)
+
+        conn = vmmConnectionManager.get_instance().add_conn(uri)
+        conn.set_autoconnect(auto)
+        if conn.is_active():
+            return
+
+        conn.connect_opt_out("open-completed", self._conn_open_completed)
+        self.set_finish_cursor()
+        conn.open()
 
     def sanitize_hostname(self, host):
         if host == "linux" or host == "localhost":

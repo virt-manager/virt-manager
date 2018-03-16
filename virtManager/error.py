@@ -49,7 +49,14 @@ def _launch_dialog(dialog, primary_text, secondary_text, title,
 
 
 class vmmErrorDialog(vmmGObject):
-    def __init__(self, parent=None):
+    # singleton instance for non-UI classes
+    @classmethod
+    def get_instance(cls):
+        if not cls._instance:
+            cls._instance = cls(None)
+        return cls._instance
+
+    def __init__(self, parent):
         vmmGObject.__init__(self)
         self._parent = parent
         self._simple = None

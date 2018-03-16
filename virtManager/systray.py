@@ -26,7 +26,6 @@ from . import vmmenu
 from .baseclass import vmmGObject
 from .connmanager import vmmConnectionManager
 from .engine import vmmEngine
-from .error import vmmErrorDialog
 
 
 class vmmSystray(vmmGObject):
@@ -41,7 +40,6 @@ class vmmSystray(vmmGObject):
         self._cleanup_on_app_close()
 
         self.topwin = None
-        self.err = vmmErrorDialog()
 
         self.conn_menuitems = {}
         self.conn_vm_menuitems = {}
@@ -68,8 +66,6 @@ class vmmSystray(vmmGObject):
                 self.systray_icon.is_embedded())
 
     def _cleanup(self):
-        self.err = None
-
         if self.systray_menu:
             self.systray_menu.destroy()
             self.systray_menu = None
