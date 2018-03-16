@@ -2485,7 +2485,7 @@ class vmmCreate(vmmGObjectUI):
         self._customize_window = vmmDetails(virtinst_guest, self.topwin)
         self._customize_window.connect(
                 "customize-finished", start_install_wrapper, guest)
-        self._customize_window.connect("details-closed", config_canceled)
+        self._customize_window.connect("closed", config_canceled)
         self._customize_window.show()
 
     def _install_finished_cb(self, error, details, parentobj):

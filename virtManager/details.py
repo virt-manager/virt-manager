@@ -340,6 +340,7 @@ def _label_for_os_type(os_type):
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
         "customize-finished": (vmmGObjectUI.RUN_FIRST, None, []),
+        "closed": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
     @classmethod
@@ -698,6 +699,7 @@ class vmmDetails(vmmGObjectUI):
             except Exception:
                 logging.error("Failure when disconnecting from desktop server")
 
+        self.emit("closed")
         vmmEngine.get_instance().decrement_window_counter()
         return 1
 
