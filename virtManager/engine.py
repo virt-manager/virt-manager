@@ -515,6 +515,7 @@ class vmmEngine(vmmGObject):
             self._get_manager().show()
             return
 
+        conn_is_new = uri not in self._connobjs
         conn = vmmConnectionManager.get_instance().add_conn(uri)
         if conn.is_active():
             self.idle_add(self._launch_cli_window,
@@ -523,6 +524,9 @@ class vmmEngine(vmmGObject):
 
         def _open_completed(_c, ConnectError):
             if ConnectError:
+                if conn_is_new:
+                    logging.debug("Removing failed uri=%s", uri)
+                    vmmConnectionManager.get_instance().remove_conn(uri)
                 self._handle_conn_error(conn, ConnectError)
             else:
                 self._launch_cli_window(uri, show_window, domain)
