@@ -229,6 +229,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Network", "network-tab")
         tab.find("mac-address-enable", "check box").click()
         src.click()
+        self.sleep(1)
         self.pressKey("Home")
         tab.find_fuzzy("plainbridge-portgroups", "menu item").click()
         c = tab.find_fuzzy("Portgroup:", "combo box")
