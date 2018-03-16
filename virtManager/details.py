@@ -352,6 +352,8 @@ class vmmDetails(vmmGObjectUI):
                 cls._instances[connkey] = cls(vm)
             return cls._instances[connkey]
         except Exception as e:
+            if not parentobj:
+                raise
             parentobj.err.show_err(
                     _("Error launching details: %s") % str(e))
 

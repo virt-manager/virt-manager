@@ -52,7 +52,7 @@ def _show_startup_error(msg, details):
     logging.debug("Error starting virt-manager: %s\n%s", msg, details,
                   exc_info=True)
     from virtManager.error import vmmErrorDialog
-    err = vmmErrorDialog(None)
+    err = vmmErrorDialog.get_instance()
     title = _("Error starting Virtual Machine Manager")
     err.show_err(title + ": " + msg,
                  details=details,

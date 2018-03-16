@@ -98,6 +98,8 @@ class vmmManager(vmmGObjectUI):
                 cls._instance = cls()
             return cls._instance
         except Exception as e:
+            if not parentobj:
+                raise
             parentobj.err.show_err(
                     _("Error launching manager: %s") % str(e))
 

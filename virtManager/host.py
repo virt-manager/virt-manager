@@ -60,6 +60,8 @@ class vmmHost(vmmGObjectUI):
                 cls._instances[uri] = cls(conn)
             cls._instances[uri].show()
         except Exception as e:
+            if not parentobj:
+                raise
             parentobj.err.show_err(
                     _("Error launching host dialog: %s") % str(e))
 

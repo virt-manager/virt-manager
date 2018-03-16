@@ -122,8 +122,10 @@ class vmmCreate(vmmGObjectUI):
         try:
             if not cls._instance:
                 cls._instance = cls()
-            cls._instance.show(parentobj.topwin, uri=uri)
+            cls._instance.show(parentobj and parentobj.topwin or None, uri=uri)
         except Exception as e:
+            if not parentobj:
+                raise
             parentobj.err.show_err(
                     _("Error launching create dialog: %s") % str(e))
 

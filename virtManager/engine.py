@@ -448,45 +448,29 @@ class vmmEngine(vmmGObject):
 
     def _get_manager(self):
         from .manager import vmmManager
-        return vmmManager.get_instance(self)
-
-    def _show_manager_uri(self, uri):
-        manager = self._get_manager()
-        manager.set_initial_selection(uri)
-        manager.show()
-
-    def _show_host_summary(self, uri):
-        from .host import vmmHost
-        vmmHost.show_instance(self._get_manager(), self._connobjs[uri])
-
-    def _show_domain_creator(self, uri):
-        from .create import vmmCreate
-        vmmCreate.show_instance(self._get_manager(), uri)
-
-    def _show_domain_console(self, uri, clistr):
-        self._cli_show_vm_helper(uri, clistr, DETAILS_CONSOLE)
-
-    def _show_domain_editor(self, uri, clistr):
-        self._cli_show_vm_helper(uri, clistr, DETAILS_CONFIG)
-
-    def _show_domain_performance(self, uri, clistr):
-        self._cli_show_vm_helper(uri, clistr, DETAILS_PERF)
+        return vmmManager.get_instance(None)
 
     def _launch_cli_window(self, uri, show_window, clistr):
         try:
             logging.debug("Launching requested window '%s'", show_window)
             if show_window == self.CLI_SHOW_MANAGER:
-                self._show_manager_uri(uri)
+                manager = self._get_manager()
+                manager.set_initial_selection(uri)
+                manager.show()
             elif show_window == self.CLI_SHOW_DOMAIN_CREATOR:
-                self._show_domain_creator(uri)
+                from .create import vmmCreate
+                # Launch the manager here since there's no way to get
+                # back to it.
+                vmmCreate.show_instance(self._get_manager(), uri)
             elif show_window == self.CLI_SHOW_DOMAIN_EDITOR:
-                self._show_domain_editor(uri, clistr)
+                self._cli_show_vm_helper(uri, clistr, DETAILS_CONFIG)
             elif show_window == self.CLI_SHOW_DOMAIN_PERFORMANCE:
-                self._show_domain_performance(uri, clistr)
+                self._cli_show_vm_helper(uri, clistr, DETAILS_PERF)
             elif show_window == self.CLI_SHOW_DOMAIN_CONSOLE:
-                self._show_domain_console(uri, clistr)
+                self._cli_show_vm_helper(uri, clistr, DETAILS_CONSOLE)
             elif show_window == self.CLI_SHOW_HOST_SUMMARY:
-                self._show_host_summary(uri)
+                from .host import vmmHost
+                vmmHost.show_instance(None, self._connobjs[uri])
             else:
                 raise RuntimeError("Unknown cli window command '%s'" %
                     show_window)
@@ -535,7 +519,9 @@ class vmmEngine(vmmGObject):
     def _handle_cli_command(self, actionobj, variant):
         try:
             return self._do_handle_cli_command(actionobj, variant)
-        except Exception:
+        except Exception as e:
             # In case of cli error, we may need to exit the app
             logging.debug("Error handling cli command", exc_info=True)
+            modal = self._can_exit()
+            self.err.show_err(str(e), modal=modal)
             self._exit_app_if_no_windows()
