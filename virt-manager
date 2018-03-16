@@ -165,8 +165,6 @@ def parse_commandline():
         default=False)
     parser.add_argument("--no-fork", action="store_true",
         help="Don't fork into background on startup")
-    parser.add_argument("--no-conn-autostart", action="store_true",
-        dest="skip_autostart", help="Do not autostart connections")
     parser.add_argument("--spice-disable-auto-usbredir", action="store_true",
         dest="usbredir", help="Disable Auto USB redirection support")
 
@@ -274,8 +272,9 @@ def main():
     if show_window and options.uri is None:
         raise RuntimeError("can't use --show-* options without --connect")
 
+    skip_autostart = False
     if show_window:
-        options.skip_autostart = True
+        skip_autostart = True
 
     # Hook libvirt events into glib main loop
     LibvirtGLib.init(None)
@@ -292,7 +291,7 @@ def main():
     GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGINT,
                          _sigint_handler, None)
 
-    engine.start(options.uri, show_window, domain, options.skip_autostart)
+    engine.start(options.uri, show_window, domain, skip_autostart)
 
 
 if __name__ == "__main__":

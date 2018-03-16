@@ -48,14 +48,10 @@ List debugging output to the console (normally this is only logged in
 Don't fork C<virt-manager> off into the background: run it blocking the
 current terminal. Useful for seeing possible errors dumped to stdout/stderr.
 
-=item B<--no-conn-autostart>
-
-Don't autostart any libvirt connections when launching C<virt-manager>.
-
 =item B<--show-DIALOG-WINDOW>
 
-Display the corresponding C<DIALOG-WINDOW> when launching C<virt-manager>. This
-function implies --no-conn-autostart and the manager window will not be shown
+Display the corresponding C<DIALOG-WINDOW> when launching C<virt-manager>.
+Connection autostart is skipped, and the manager window will not be shown
 at startup in this case.
 
 The following C<DIALOG-WINDOW> options are currently available:
