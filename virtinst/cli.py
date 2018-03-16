@@ -256,7 +256,10 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     def exception_log(typ, val, tb):
         logging.debug("Uncaught exception:\n%s",
                       "".join(traceback.format_exception(typ, val, tb)))
-        sys.__excepthook__(typ, val, tb)
+        if not debug_stdout:
+            # If we are already logging to stdout, don't double print
+            # the backtrace
+            sys.__excepthook__(typ, val, tb)
     sys.excepthook = exception_log
 
     logging.getLogger("requests").setLevel(logging.ERROR)
