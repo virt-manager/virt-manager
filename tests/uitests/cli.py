@@ -71,7 +71,15 @@ class VMMCLI(uiutils.UITestCase):
 
         self.app.topwin.find("test default", "table cell")
 
-    def testShowError(self):
+    def testShowCLIError(self):
         self.app.open(extra_opts=["--idontexist"])
         alert = self.app.root.find("vmm dialog")
         alert.find_fuzzy("Unhandled command line")
+
+    def testShowConnectBadURI(self):
+        baduri = "fribfrobfroo"
+        self.app = uiutils.VMMDogtailApp(baduri)
+        alert = self.app.root.find("vmm dialog")
+        alert.find_fuzzy(baduri)
+        alert.find_fuzzy("Close", "push button").click()
+        uiutils.check_in_loop(lambda: not self.app.is_running())
