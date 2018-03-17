@@ -514,9 +514,6 @@ class vmmManager(vmmGObjectUI):
             vmmenu.VMActionUI.delete(self, vm)
 
     def _do_delete_conn(self, conn):
-        if conn is None:
-            return
-
         result = self.err.yes_no(_("This will remove the connection:\n\n%s\n\n"
                                    "Are you sure?") % conn.get_uri())
         if not result:
@@ -818,10 +815,12 @@ class vmmManager(vmmGObjectUI):
 
     def update_current_selection(self, ignore=None):
         vm = self.current_vm()
+        conn = self.current_conn()
 
         show_open = bool(vm)
         show_details = bool(vm)
-        host_details = bool(len(self.rows))
+        host_details = bool(vm or conn)
+        can_delete = bool(vm or conn)
 
         show_run = bool(vm and vm.is_runable())
         is_paused = bool(vm and vm.is_paused())
@@ -848,6 +847,7 @@ class vmmManager(vmmGObjectUI):
             pauseTooltip = _("Pause the virtual machine")
         self.widget("vm-pause").set_tooltip_text(pauseTooltip)
 
+        self.widget("menu_edit_delete").set_sensitive(can_delete)
         self.widget("menu_edit_details").set_sensitive(show_details)
         self.widget("menu_host_details").set_sensitive(host_details)
 
