@@ -38,7 +38,7 @@ class Details(uiutils.UITestCase):
         Open the VM with all the crazy hardware and just verify that each
         HW panel shows itself without raising any error.
         """
-        win = self._open_details_window()
+        win = self._open_details_window(double=True)
         lst = win.find("hw-list", "table")
         self._walkUIList(win, lst, lambda: False)
 
@@ -339,7 +339,8 @@ class Details(uiutils.UITestCase):
         Test misc editting behavior, like checking for unapplied
         changes
         """
-        win = self._open_details_window(vmname="test-many-devices")
+        win = self._open_details_window(vmname="test-many-devices",
+                double=True)
         hwlist = win.find("hw-list")
 
         # Live device removal, see results after shutdown
