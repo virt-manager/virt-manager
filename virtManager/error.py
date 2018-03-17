@@ -61,27 +61,15 @@ class vmmErrorDialog(vmmGObject):
         self._parent = parent
         self._simple = None
 
-        # Callback to lookup the parent window if none is specified.
-        # Used by engine.py for properly parenting windows
-        self._find_parent_cb = None
-
-        # Allows the error owner to easily override default modality
         self._modal_default = False
 
     def _cleanup(self):
-        self._find_parent_cb = None
+        pass
 
     def set_modal_default(self, val):
         self._modal_default = val
-    def set_find_parent_cb(self, cb):
-        self._find_parent_cb = cb
-    def set_parent(self, parent):
-        self._parent = parent
     def get_parent(self):
-        parent = self._parent
-        if parent is None and self._find_parent_cb:
-            parent = self._find_parent_cb()
-        return parent
+        return self._parent
 
     def show_err(self, summary, details=None, title="",
                  modal=None, debug=True,
