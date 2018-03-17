@@ -88,6 +88,18 @@ class VMMConnect(uiutils.UITestCase):
         urientry.text = "test:///default"
         connect.click()
 
+        # Try various connect/disconnect routines
         uiutils.check_in_loop(lambda: win.showing is False)
+        c = self.app.root.find("test default", "table cell")
+        c.click(button=3)
+        self.app.root.find("conn-disconnect", "menu item").click()
+        uiutils.check_in_loop(lambda: "Not Connected" in c.text)
+        c.click(button=3)
+        self.app.root.find("conn-connect", "menu item").click()
+        c = self.app.root.find("test default", "table cell")
+        c.click(button=3)
+        self.app.root.find("conn-disconnect", "menu item").click()
+        uiutils.check_in_loop(lambda: "Not Connected" in c.text)
+        c.doubleClick()
         c = self.app.root.find("test default", "table cell")
         c.click()
