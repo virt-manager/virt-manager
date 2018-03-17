@@ -197,6 +197,11 @@ def main():
         import libvirt
         virtManager.module_trace.wrap_module(libvirt, regex=None)
 
+    # With F27 gnome+wayland we need to set these before GTK import
+    os.environ["GSETTINGS_SCHEMA_DIR"] = CLIConfig.gsettings_dir
+    if options.test_first_run:
+        os.environ["GSETTINGS_BACKEND"] = "memory"
+
     # Now we've got basic environment up & running we can fork
     do_drop_stdio = False
     if not options.no_fork and not options.debug:

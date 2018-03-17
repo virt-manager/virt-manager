@@ -37,12 +37,8 @@ class _SettingsWrapper(object):
     we internally convert it to the settings nested hierarchy. Makes
     client code much smaller.
     """
-    def __init__(self, settings_id, schemadir, test_first_run):
+    def __init__(self, settings_id):
         self._root = settings_id
-
-        os.environ["GSETTINGS_SCHEMA_DIR"] = schemadir
-        if test_first_run:
-            os.environ["GSETTINGS_BACKEND"] = "memory"
         self._settings = Gio.Settings.new(self._root)
 
         self._settingsmap = {"": self._settings}
@@ -185,8 +181,7 @@ class vmmConfig(object):
         self.test_first_run = bool(test_first_run)
         self.test_leak_debug = False
 
-        self.conf = _SettingsWrapper("org.virt-manager.virt-manager",
-                CLIConfig.gsettings_dir, self.test_first_run)
+        self.conf = _SettingsWrapper("org.virt-manager.virt-manager")
 
         # We don't create it straight away, since we don't want
         # to block the app pending user authorization to access
