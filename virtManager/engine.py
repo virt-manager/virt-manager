@@ -375,6 +375,8 @@ class vmmEngine(vmmGObject):
                 self._systray_is_embedded())
 
     def _exit_app_if_no_windows(self):
+        if self._exiting:
+            return
         if self._can_exit():
             logging.debug("No windows found, requesting app exit")
             self.exit_app()
