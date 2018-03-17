@@ -21,7 +21,6 @@
 import logging
 import queue
 import threading
-import traceback
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -40,6 +39,22 @@ DETAILS_CONSOLE = 3
 
 (PRIO_HIGH,
  PRIO_LOW) = range(1, 3)
+
+
+def _show_startup_error(fn):
+    """
+    Decorator to show a modal error dialog if an exception is raised
+    from a startup routine
+    """
+    # pylint: disable=protected-access
+    def newfn(self, *args, **kwargs):
+        try:
+            return fn(self, *args, **kwargs)
+        except Exception as e:
+            modal = self._can_exit()
+            self.err.show_err(str(e), modal=modal)
+            self._exit_app_if_no_windows()
+    return newfn
 
 
 class vmmEngine(vmmGObject):
@@ -312,28 +327,17 @@ class vmmEngine(vmmGObject):
                                         stats_update=True, pollvm=True)
         return 1
 
-    def _handle_tick_error(self, msg, details):
-        if (self._window_count == 1 and
-            vmmSystray.get_instance().is_visible()):
-            # This means the systray icon is running. Don't raise an error
-            # here to avoid spamming dialogs out of nowhere.
-            logging.debug(msg + "\n\n" + details)
-            return
-        self.err.show_err(msg, details=details)
-
     def _handle_tick_queue(self):
         while True:
             ignore1, ignore2, conn, kwargs = self._tick_queue.get()
             try:
                 conn.tick_from_engine(**kwargs)
-            except Exception as e:
-                tb = "".join(traceback.format_exc())
-                error_msg = (_("Error polling connection '%s': %s")
-                    % (conn.get_uri(), e))
-                self.idle_add(self._handle_tick_error, error_msg, tb)
-
-            # Need to clear reference to make leak check happy
-            conn = None
+            except Exception:
+                # Don't attempt to show any UI error here, since it
+                # can cause dialogs to appear from nowhere if say
+                # libvirtd is shut down
+                logging.debug("Error polling connection %s",
+                        conn.get_uri(), exc_info=True)
             self._tick_queue.task_done()
         return 1
 
@@ -458,33 +462,30 @@ class vmmEngine(vmmGObject):
         from .manager import vmmManager
         return vmmManager.get_instance(None)
 
+    @_show_startup_error
     def _launch_cli_window(self, uri, show_window, clistr):
-        try:
-            logging.debug("Launching requested window '%s'", show_window)
-            if show_window == self.CLI_SHOW_MANAGER:
-                manager = self._get_manager()
-                manager.set_initial_selection(uri)
-                manager.show()
-            elif show_window == self.CLI_SHOW_DOMAIN_CREATOR:
-                from .create import vmmCreate
-                # Launch the manager here since there's no way to get
-                # back to it.
-                vmmCreate.show_instance(self._get_manager(), uri)
-            elif show_window == self.CLI_SHOW_DOMAIN_EDITOR:
-                self._cli_show_vm_helper(uri, clistr, DETAILS_CONFIG)
-            elif show_window == self.CLI_SHOW_DOMAIN_PERFORMANCE:
-                self._cli_show_vm_helper(uri, clistr, DETAILS_PERF)
-            elif show_window == self.CLI_SHOW_DOMAIN_CONSOLE:
-                self._cli_show_vm_helper(uri, clistr, DETAILS_CONSOLE)
-            elif show_window == self.CLI_SHOW_HOST_SUMMARY:
-                from .host import vmmHost
-                vmmHost.show_instance(None, self._connobjs[uri])
-            else:
-                raise RuntimeError("Unknown cli window command '%s'" %
-                    show_window)
-        finally:
-            # In case of cli error, we may need to exit the app
-            self._exit_app_if_no_windows()
+        logging.debug("Launching requested window '%s'", show_window)
+        if show_window == self.CLI_SHOW_MANAGER:
+            manager = self._get_manager()
+            manager.set_initial_selection(uri)
+            manager.show()
+        elif show_window == self.CLI_SHOW_DOMAIN_CREATOR:
+            from .create import vmmCreate
+            # Launch the manager here since there's no way to get
+            # back to it.
+            vmmCreate.show_instance(self._get_manager(), uri)
+        elif show_window == self.CLI_SHOW_DOMAIN_EDITOR:
+            self._cli_show_vm_helper(uri, clistr, DETAILS_CONFIG)
+        elif show_window == self.CLI_SHOW_DOMAIN_PERFORMANCE:
+            self._cli_show_vm_helper(uri, clistr, DETAILS_PERF)
+        elif show_window == self.CLI_SHOW_DOMAIN_CONSOLE:
+            self._cli_show_vm_helper(uri, clistr, DETAILS_CONSOLE)
+        elif show_window == self.CLI_SHOW_HOST_SUMMARY:
+            from .host import vmmHost
+            vmmHost.show_instance(None, self._connobjs[uri])
+        else:
+            raise RuntimeError("Unknown cli window command '%s'" %
+                show_window)
 
     def _handle_conn_error(self, _conn, ConnectError):
         msg, details, title = ConnectError
@@ -492,7 +493,8 @@ class vmmEngine(vmmGObject):
         self.err.show_err(msg, details, title, modal=modal)
         self._exit_app_if_no_windows()
 
-    def _do_handle_cli_command(self, actionobj, variant):
+    @_show_startup_error
+    def _handle_cli_command(self, actionobj, variant):
         ignore = actionobj
         uri = variant[0]
         show_window = variant[1] or self.CLI_SHOW_MANAGER
@@ -523,13 +525,3 @@ class vmmEngine(vmmGObject):
 
         conn.connect_once("open-completed", _open_completed)
         conn.open()
-
-    def _handle_cli_command(self, actionobj, variant):
-        try:
-            return self._do_handle_cli_command(actionobj, variant)
-        except Exception as e:
-            # In case of cli error, we may need to exit the app
-            logging.debug("Error handling cli command", exc_info=True)
-            modal = self._can_exit()
-            self.err.show_err(str(e), modal=modal)
-            self._exit_app_if_no_windows()
