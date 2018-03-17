@@ -32,6 +32,7 @@ from .baseclass import vmmGObject
 from .connect import vmmConnect
 from .connmanager import vmmConnectionManager
 from .inspection import vmmInspection
+from .systray import vmmSystray
 
 DETAILS_PERF = 1
 DETAILS_CONFIG = 2
@@ -96,7 +97,6 @@ class vmmEngine(vmmGObject):
         """
         Actual startup routines if we are running a new instance of the app
         """
-        from .systray import vmmSystray
         vmmSystray.get_instance()
         vmmInspection.get_instance()
 
@@ -313,7 +313,6 @@ class vmmEngine(vmmGObject):
         return 1
 
     def _handle_tick_error(self, msg, details):
-        from .systray import vmmSystray
         if (self._window_count == 1 and
             vmmSystray.get_instance().is_visible()):
             # This means the systray icon is running. Don't raise an error
@@ -359,8 +358,17 @@ class vmmEngine(vmmGObject):
 
         self._exit_app_if_no_windows()
 
+    def _systray_is_embedded(self):
+        """
+        We don't use window tracking here: systray isn't a window and even
+        when 'show' has been requested it may not be embedded in a visible
+        tray area, so we have to check it separately.
+        """
+        return vmmSystray.get_instance().is_embedded()
+
     def _can_exit(self):
-        return self._window_count <= 0
+        return (self._window_count <= 0 and not
+                self._systray_is_embedded())
 
     def _exit_app_if_no_windows(self):
         if self._can_exit():

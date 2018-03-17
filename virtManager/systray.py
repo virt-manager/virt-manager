@@ -25,7 +25,6 @@ from gi.repository import Gtk
 from . import vmmenu
 from .baseclass import vmmGObject
 from .connmanager import vmmConnectionManager
-from .engine import vmmEngine
 
 
 class vmmSystray(vmmGObject):
@@ -60,7 +59,7 @@ class vmmSystray(vmmGObject):
         for conn in connmanager.conns.values():
             self._conn_added(connmanager, conn)
 
-    def is_visible(self):
+    def is_embedded(self):
         return (self.systray_icon and
                 self.systray_icon.is_embedded())
 
@@ -97,14 +96,12 @@ class vmmSystray(vmmGObject):
         self.systray_icon.connect("activate", self.systray_activate)
         self.systray_icon.connect("popup-menu", self.systray_popup)
         self.systray_icon.set_tooltip_text(_("Virtual Machine Manager"))
-        vmmEngine.get_instance().increment_window_counter()
 
     def _hide(self):
         if not self.systray_icon:
             return
         self.systray_icon.set_visible(False)
         self.systray_icon = None
-        vmmEngine.get_instance().decrement_window_counter()
 
     def _show_systray_changed_cb(self):
         do_show = self.config.get_view_system_tray()
@@ -295,4 +292,5 @@ class vmmSystray(vmmGObject):
         menu.update_widget_states(vm)
 
     def exit_app(self, _src):
+        from .engine import vmmEngine
         vmmEngine.get_instance().exit_app()
