@@ -61,8 +61,7 @@ class vmmSystray(vmmGObject):
             self._conn_added(connmanager, conn)
 
     def is_visible(self):
-        return (self.config.get_view_system_tray() and
-                self.systray_icon and
+        return (self.systray_icon and
                 self.systray_icon.is_embedded())
 
     def _cleanup(self):
@@ -70,7 +69,7 @@ class vmmSystray(vmmGObject):
             self.systray_menu.destroy()
             self.systray_menu = None
 
-        self.systray_icon = None
+        self._hide()
         self.conn_menuitems = None
         self.conn_vm_menuitems = None
         self.vm_action_dict = None
@@ -89,26 +88,32 @@ class vmmSystray(vmmGObject):
         self.systray_menu.add(exit_item)
         self.systray_menu.show_all()
 
+    def _show(self):
+        if self.systray_icon:
+            return
         self.systray_icon = Gtk.StatusIcon()
-        self.systray_icon.set_visible(False)
+        self.systray_icon.set_visible(True)
         self.systray_icon.set_property("icon-name", "virt-manager")
         self.systray_icon.connect("activate", self.systray_activate)
         self.systray_icon.connect("popup-menu", self.systray_popup)
         self.systray_icon.set_tooltip_text(_("Virtual Machine Manager"))
+        vmmEngine.get_instance().increment_window_counter()
+
+    def _hide(self):
+        if not self.systray_icon:
+            return
+        self.systray_icon.set_visible(False)
+        self.systray_icon = None
+        vmmEngine.get_instance().decrement_window_counter()
 
     def _show_systray_changed_cb(self):
         do_show = self.config.get_view_system_tray()
         logging.debug("Showing systray: %s", do_show)
 
-        oldvis = self.systray_icon.get_visible()
-        self.systray_icon.set_visible(do_show)
-        if oldvis == do_show:
-            return
-
         if do_show:
-            vmmEngine.get_instance().increment_window_counter()
+            self._show()
         else:
-            vmmEngine.get_instance().decrement_window_counter()
+            self._hide()
 
     # Helper functions
     def _get_vm_menu_item(self, vm):
