@@ -107,10 +107,6 @@ class vmmManager(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "manager.ui", "vmm-manager")
         self._cleanup_on_app_close()
 
-        # Mapping of rowkey -> tree model rows to
-        # allow O(1) access instead of O(n)
-        self.rows = {}
-
         w, h = self.config.get_manager_window_size()
         self.topwin.set_default_size(w or 550, h or 550)
         self.prev_position = None
@@ -222,8 +218,6 @@ class vmmManager(vmmGObjectUI):
 
 
     def _cleanup(self):
-        self.rows = None
-
         self.diskcol = None
         self.guestcpucol = None
         self.memcol = None
@@ -417,9 +411,14 @@ class vmmManager(vmmGObjectUI):
         model.set_sort_func(COL_NETWORK, self.vmlist_network_usage_sorter)
         model.set_sort_column_id(COL_NAME, Gtk.SortType.ASCENDING)
 
+
     ##################
     # Helper methods #
     ##################
+
+    @property
+    def model(self):
+        return self.widget("vm-list").get_model()
 
     def current_row(self):
         return uiutil.get_list_selected_row(self.widget("vm-list"))
@@ -431,21 +430,30 @@ class vmmManager(vmmGObjectUI):
 
         return row[ROW_HANDLE]
 
-    def current_conn(self, choose_default=False):
+    def current_conn(self):
         row = self.current_row()
-        if row:
-            handle = row[ROW_HANDLE]
-            if row[ROW_IS_CONN]:
-                return handle
-            return handle.conn
+        if not row:
+            return None
+        handle = row[ROW_HANDLE]
+        if row[ROW_IS_CONN]:
+            return handle
+        return handle.conn
 
-        if choose_default:
-            # Nothing selected, use first connection row
-            vmlist = self.widget("vm-list")
-            model = vmlist.get_model()
-            for row in model:
-                if row[ROW_IS_CONN]:
-                    return row[ROW_HANDLE]
+    def get_row(self, conn_or_vm):
+        def _walk(rowiter):
+            while rowiter:
+                row = self.model[rowiter]
+                if row[ROW_HANDLE] == conn_or_vm:
+                    return row
+                if self.model.iter_has_child(rowiter):
+                    ret = _walk(self.model.iter_nth_child(rowiter, 0))
+                    if ret:
+                        return ret
+                rowiter = self.model.iter_next(rowiter)
+
+        if not len(self.model):
+            return None
+        return _walk(self.model.get_iter_first())
 
 
     ####################
@@ -479,7 +487,7 @@ class vmmManager(vmmGObjectUI):
 
     def show_host(self, _src):
         from .host import vmmHost
-        conn = self.current_conn(choose_default=True)
+        conn = self.current_conn()
         vmmHost.show_instance(self, conn)
 
     def show_vm(self, _src):
@@ -562,42 +570,29 @@ class vmmManager(vmmGObjectUI):
     # VM add/remove management methods #
     ####################################
 
-    def vm_row_key(self, vm):
-        return vm.get_uuid() + ":" + vm.conn.get_uri()
-
     def vm_added(self, conn, connkey):
         vm = conn.get_vm(connkey)
         if not vm:
             return
 
-        row_key = self.vm_row_key(vm)
-        if row_key in self.rows:
-            return
-
-        row = self._build_row(None, vm)
-        parent = self.rows[conn.get_uri()].iter
-        model = self.widget("vm-list").get_model()
-        _iter = model.append(parent, row)
-        path = model.get_path(_iter)
-        self.rows[row_key] = model[path]
+        vm_row = self._build_row(None, vm)
+        conn_row = self.get_row(conn)
+        self.model.append(conn_row.iter, vm_row)
 
         vm.connect("state-changed", self.vm_changed)
         vm.connect("resources-sampled", self.vm_row_updated)
         vm.connect("inspection-changed", self.vm_inspection_changed)
 
         # Expand a connection when adding a vm to it
-        self.widget("vm-list").expand_row(model.get_path(parent), False)
+        self.widget("vm-list").expand_row(conn_row.path, False)
 
     def vm_removed(self, conn, connkey):
-        vmlist = self.widget("vm-list")
-        model = vmlist.get_model()
-
-        parent = self.rows[conn.get_uri()].iter
-        for row in range(model.iter_n_children(parent)):
-            vm = model[model.iter_nth_child(parent, row)][ROW_HANDLE]
+        parent = self.get_row(conn).iter
+        for rowidx in range(self.model.iter_n_children(parent)):
+            rowiter = self.model.iter_nth_child(parent, rowidx)
+            vm = self.model[rowiter][ROW_HANDLE]
             if vm.get_connkey() == connkey:
-                model.remove(model.iter_nth_child(parent, row))
-                del self.rows[self.vm_row_key(vm)]
+                self.model.remove(rowiter)
                 break
 
     def _build_conn_hint(self, conn):
@@ -667,15 +662,11 @@ class vmmManager(vmmGObjectUI):
     def _conn_added(self, _src, conn):
         # Make sure error page isn't showing
         self.widget("vm-notebook").set_current_page(0)
-
-        if conn.get_uri() in self.rows:
+        if self.get_row(conn):
             return
 
-        model = self.widget("vm-list").get_model()
-        row = self._build_row(conn, None)
-        _iter = model.append(None, row)
-        path = model.get_path(_iter)
-        self.rows[conn.get_uri()] = model[path]
+        conn_row = self._build_row(conn, None)
+        self.model.append(None, conn_row)
 
         conn.connect("vm-added", self.vm_added)
         conn.connect("vm-removed", self.vm_removed)
@@ -686,20 +677,19 @@ class vmmManager(vmmGObjectUI):
             self.vm_added(conn, vm.get_connkey())
 
     def _conn_removed(self, _src, uri):
-        model = self.widget("vm-list").get_model()
-        parent = self.rows[uri].iter
-
-        if parent is None:
+        conn_row = None
+        for row in self.model:
+            if row[ROW_IS_CONN] and row[ROW_HANDLE].get_uri() == uri:
+                conn_row = row
+                break
+        if conn_row is None:
             return
 
-        child = model.iter_children(parent)
+        child = self.model.iter_children(conn_row.iter)
         while child is not None:
-            del self.rows[self.vm_row_key(model[child][ROW_HANDLE])]
-            model.remove(child)
-            child = model.iter_children(parent)
-        model.remove(parent)
-
-        del self.rows[uri]
+            self.model.remove(child)
+            child = self.model.iter_children(conn_row.iter)
+        self.model.remove(conn_row.iter)
 
 
     #############################
@@ -707,13 +697,13 @@ class vmmManager(vmmGObjectUI):
     #############################
 
     def vm_row_updated(self, vm):
-        row = self.rows.get(self.vm_row_key(vm), None)
+        row = self.get_row(vm)
         if row is None:
             return
-        self.widget("vm-list").get_model().row_changed(row.path, row.iter)
+        self.model.row_changed(row.path, row.iter)
 
     def vm_changed(self, vm):
-        row = self.rows.get(self.vm_row_key(vm), None)
+        row = self.get_row(vm)
         if row is None:
             return
 
@@ -739,7 +729,7 @@ class vmmManager(vmmGObjectUI):
         self.vm_row_updated(vm)
 
     def vm_inspection_changed(self, vm):
-        row = self.rows.get(self.vm_row_key(vm), None)
+        row = self.get_row(vm)
         if row is None:
             return
 
@@ -749,30 +739,22 @@ class vmmManager(vmmGObjectUI):
         self.vm_row_updated(vm)
 
     def set_initial_selection(self, uri):
-        vmlist = self.widget("vm-list")
-        model = vmlist.get_model()
-        it = model.get_iter_first()
-        selected = None
-        while it:
-            key = model.get_value(it, ROW_HANDLE)
+        """
+        Select the passed URI in the UI. Called from engine.py via
+        cli --connect $URI
+        """
+        sel = self.widget("vm-list").get_selection()
+        for row in self.model:
+            if not row[ROW_IS_CONN]:
+                continue
+            conn = row[ROW_HANDLE]
 
-            if key.get_uri() == uri:
-                vmlist.get_selection().select_iter(it)
+            if conn.get_uri() == uri:
+                sel.select_iter(row.iter)
                 return
 
-            if not selected:
-                vmlist.get_selection().select_iter(it)
-                selected = key
-            elif key.get_autoconnect() and not selected.get_autoconnect():
-                vmlist.get_selection().select_iter(it)
-                selected = key
-                if not uri:
-                    return
-
-            it = model.iter_next(it)
-
     def conn_state_changed(self, conn):
-        row = self.rows[conn.get_uri()]
+        row = self.get_row(conn)
         row[ROW_SORT_KEY] = conn.get_pretty_desc()
         row[ROW_MARKUP] = self._build_conn_markup(conn, row[ROW_SORT_KEY])
         row[ROW_IS_CONN_CONNECTED] = not conn.is_disconnected()
@@ -780,28 +762,22 @@ class vmmManager(vmmGObjectUI):
         row[ROW_HINT] = self._build_conn_hint(conn)
 
         if not conn.is_active():
-            # Connection went inactive, delete any VM child nodes
-            parent = row.iter
-            if parent is not None:
-                model = self.widget("vm-list").get_model()
-                child = model.iter_children(parent)
-                while child is not None:
-                    vm = model[child][ROW_HANDLE]
-                    del self.rows[self.vm_row_key(vm)]
-                    model.remove(child)
-                    child = model.iter_children(parent)
+            child = self.model.iter_children(row.iter)
+            while child is not None:
+                self.model.remove(child)
+                child = self.model.iter_children(row.iter)
 
         self.conn_row_updated(conn)
         self.update_current_selection()
 
     def conn_row_updated(self, conn):
-        row = self.rows[conn.get_uri()]
+        row = self.get_row(conn)
 
         self.max_disk_rate = max(self.max_disk_rate, conn.disk_io_max_rate())
         self.max_net_rate = max(self.max_net_rate,
                                 conn.network_traffic_max_rate())
 
-        self.widget("vm-list").get_model().row_changed(row.path, row.iter)
+        self.model.row_changed(row.path, row.iter)
 
     def change_run_text(self, can_restore):
         if can_restore:
@@ -859,18 +835,16 @@ class vmmManager(vmmGObjectUI):
         self.popup_vm_menu(model, treeiter, event)
         return True
 
-    def popup_vm_menu_button(self, widget, event):
+    def popup_vm_menu_button(self, vmlist, event):
         if event.button != 3:
             return False
 
-        tup = widget.get_path_at_pos(int(event.x), int(event.y))
+        tup = vmlist.get_path_at_pos(int(event.x), int(event.y))
         if tup is None:
             return False
         path = tup[0]
-        model = widget.get_model()
-        _iter = model.get_iter(path)
 
-        self.popup_vm_menu(model, _iter, event)
+        self.popup_vm_menu(self.model, self.model.get_iter(path), event)
         return False
 
     def popup_vm_menu(self, model, _iter, event):
