@@ -121,7 +121,7 @@ class vmmCreate(vmmGObjectUI):
     def show_instance(cls, parentobj, uri=None):
         try:
             if not cls._instance:
-                cls._instance = cls()
+                cls._instance = vmmCreate()
             cls._instance.show(parentobj and parentobj.topwin or None, uri=uri)
         except Exception as e:
             if not parentobj:

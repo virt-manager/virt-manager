@@ -53,7 +53,7 @@ class vmmEngine(vmmGObject):
     @classmethod
     def get_instance(cls):
         if not cls._instance:
-            cls._instance = cls()
+            cls._instance = vmmEngine()
         return cls._instance
 
     __gsignals__ = {

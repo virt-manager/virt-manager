@@ -33,7 +33,7 @@ class vmmPreferences(vmmGObjectUI):
     def show_instance(cls, parentobj):
         try:
             if not cls._instance:
-                cls._instance = cls()
+                cls._instance = vmmPreferences()
             cls._instance.show(parentobj.topwin)
         except Exception as e:
             parentobj.err.show_err(

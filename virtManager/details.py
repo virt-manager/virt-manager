@@ -349,7 +349,7 @@ class vmmDetails(vmmGObjectUI):
             # Maintain one dialog per VM
             connkey = vm.get_connkey()
             if connkey not in cls._instances:
-                cls._instances[connkey] = cls(vm)
+                cls._instances[connkey] = vmmDetails(vm)
             return cls._instances[connkey]
         except Exception as e:
             if not parentobj:

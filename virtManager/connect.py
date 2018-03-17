@@ -63,7 +63,7 @@ class vmmConnect(vmmGObjectUI):
     def get_instance(cls, parentobj):
         try:
             if not cls._instance:
-                cls._instance = cls()
+                cls._instance = vmmConnect()
             return cls._instance
         except Exception as e:
             parentobj.err.show_err(

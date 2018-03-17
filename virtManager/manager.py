@@ -95,7 +95,7 @@ class vmmManager(vmmGObjectUI):
     def get_instance(cls, parentobj):
         try:
             if not cls._instance:
-                cls._instance = cls()
+                cls._instance = vmmManager()
             return cls._instance
         except Exception as e:
             if not parentobj:

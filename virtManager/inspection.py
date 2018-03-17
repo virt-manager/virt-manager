@@ -41,7 +41,7 @@ class vmmInspection(vmmGObject):
         if not cls._instance:
             if not cls.libguestfs_installed():
                 return None
-            cls._instance = cls()
+            cls._instance = vmmInspection()
         return cls._instance
 
     @classmethod

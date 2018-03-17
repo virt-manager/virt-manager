@@ -57,7 +57,7 @@ class vmmHost(vmmGObjectUI):
             # Maintain one dialog per connection
             uri = conn.get_uri()
             if uri not in cls._instances:
-                cls._instances[uri] = cls(conn)
+                cls._instances[uri] = vmmHost(conn)
             cls._instances[uri].show()
         except Exception as e:
             if not parentobj:

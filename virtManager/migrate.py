@@ -45,7 +45,7 @@ class vmmMigrateDialog(vmmGObjectUI):
     def show_instance(cls, parentobj, vm):
         try:
             if not cls._instance:
-                cls._instance = cls()
+                cls._instance = vmmMigrateDialog()
             cls._instance.show(parentobj.topwin, vm)
         except Exception as e:
             parentobj.err.show_err(

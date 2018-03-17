@@ -31,7 +31,7 @@ class vmmSystray(vmmGObject):
     @classmethod
     def get_instance(cls):
         if not cls._instance:
-            cls._instance = cls()
+            cls._instance = vmmSystray()
         return cls._instance
 
     def __init__(self):

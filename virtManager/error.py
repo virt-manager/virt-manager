@@ -53,7 +53,7 @@ class vmmErrorDialog(vmmGObject):
     @classmethod
     def get_instance(cls):
         if not cls._instance:
-            cls._instance = cls(None)
+            cls._instance = vmmErrorDialog(None)
         return cls._instance
 
     def __init__(self, parent):
