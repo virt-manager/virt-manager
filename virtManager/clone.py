@@ -133,6 +133,8 @@ class vmmCloneVM(vmmGObjectUI):
         try:
             # Maintain one dialog per connection
             uri = vm.conn.get_uri()
+            if cls._instances is None:
+                cls._instances = {}
             if uri not in cls._instances:
                 cls._instances[uri] = vmmCloneVM()
             cls._instances[uri].show(parentobj.topwin, vm)

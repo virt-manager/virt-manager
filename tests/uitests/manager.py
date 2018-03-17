@@ -1,3 +1,5 @@
+import dogtail.rawinput
+
 from tests.uitests import utils as uiutils
 
 
@@ -91,3 +93,74 @@ class Manager(uiutils.UITestCase):
         manager.find("Memory usage", "table column header")
         manager.find("Disk I/O", "table column header")
         manager.find("Network I/O", "table column header")
+
+    def testManagerWindowCleanup(self):
+        """
+        Open migrate, clone, delete, newvm, details, host windows, close the
+        connection, make sure they all disappear
+        """
+        def _drag(win):
+            """
+            Drag a window so it's not obscuring the manager window
+            """
+            win.click()
+            clickX = win.position[0] + win.size[0] / 2
+            clickY = win.position[1] + 3
+            dogtail.rawinput.drag((clickX, clickY), (1000, 1000))
+
+        manager = self.app.topwin
+
+        # Open migrate dialog
+        c = manager.find("test-many-devices", "table cell")
+        c.click(button=3)
+        self.app.root.find("Migrate...", "menu item").click()
+        migrate = self.app.root.find("Migrate the virtual machine", "frame")
+        _drag(migrate)
+
+        # Open clone dialog
+        c = manager.find("test-clone", "table cell")
+        c.click(button=3)
+        self.app.root.find("Clone...", "menu item").click()
+        clone = self.app.root.find("Clone Virtual Machine", "frame")
+        _drag(clone)
+
+        # Open delete dialog
+        c.click()
+        manager.find("Edit", "menu").click()
+        manager.find("Delete", "menu item").click()
+        delete = self.app.root.find_fuzzy("Delete", "frame")
+        _drag(delete)
+
+        # Open NewVM
+        self.app.root.find("New", "push button").click()
+        create = self.app.root.find("New VM", "frame")
+        _drag(create)
+
+        # Open host
+        host = self._open_host_window("Virtual Networks")
+        _drag(host)
+
+        # Open details
+        details = self._open_details_window("test-many-devices")
+        _drag(details)
+
+        # Close the connection
+        c = manager.find_fuzzy("testdriver.xml", "table cell")
+        c.click(button=3)
+        self.app.root.find("conn-disconnect", "menu item").click()
+
+        # Ensure all those windows aren't showing
+        uiutils.check_in_loop(lambda: not migrate.showing)
+        uiutils.check_in_loop(lambda: not clone.showing)
+        uiutils.check_in_loop(lambda: not create.showing)
+        uiutils.check_in_loop(lambda: not details.showing)
+        uiutils.check_in_loop(lambda: not delete.showing)
+
+        # Delete the connection, ensure the host dialog disappears
+        c = manager.find_fuzzy("testdriver.xml", "table cell")
+        c.click(button=3)
+        self.app.root.find("conn-delete", "menu item").click()
+        err = self.app.root.find("vmm dialog", "alert")
+        err.find_fuzzy("will remove the connection", "label")
+        err.find_fuzzy("Yes", "push button").click()
+        uiutils.check_in_loop(lambda: not host.showing)

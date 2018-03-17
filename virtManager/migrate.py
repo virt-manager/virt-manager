@@ -89,7 +89,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def show(self, parent, vm):
         logging.debug("Showing migrate wizard")
-        self.vm = vm
+        self._set_vm(vm)
         self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
@@ -97,8 +97,20 @@ class vmmMigrateDialog(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing migrate wizard")
         self.topwin.hide()
-        self.vm = None
+        self._set_vm(None)
         return 1
+
+    def _vm_removed(self, _conn, connkey):
+        if self.vm.get_connkey() == connkey:
+            self.close()
+
+    def _set_vm(self, newvm):
+        oldvm = self.vm
+        if oldvm:
+            oldvm.conn.disconnect_by_obj(self)
+        if newvm:
+            newvm.conn.connect("vm-removed", self._vm_removed)
+        self.vm = newvm
 
 
     ################

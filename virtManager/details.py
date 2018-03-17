@@ -348,6 +348,8 @@ class vmmDetails(vmmGObjectUI):
         try:
             # Maintain one dialog per VM
             connkey = vm.get_connkey()
+            if cls._instances is None:
+                cls._instances = {}
             if connkey not in cls._instances:
                 cls._instances[connkey] = vmmDetails(vm)
             return cls._instances[connkey]

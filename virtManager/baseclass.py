@@ -41,7 +41,7 @@ class vmmGObject(GObject.GObject):
     _instance = None
 
     # windowlist mapping, if applicable (vmmDetails, vmmHost, ...)
-    _instances = {}
+    _instances = None
 
     # This saves a bunch of imports and typing
     RUN_FIRST = GObject.SignalFlags.RUN_FIRST
@@ -91,9 +91,11 @@ class vmmGObject(GObject.GObject):
                 # We set this to True which can help us catch instances
                 # where cleanup routines try to reinit singleton classes
                 self.__class__._instance = True
-            for k, v in list(self.__class__._instances.items()):
+
+            _instances = self.__class__._instances or {}
+            for k, v in list(_instances.items()):
                 if v == self:
-                    self.__class__._instances.pop(k)
+                    _instances.pop(k)
 
             self._cleanup()
 

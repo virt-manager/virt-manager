@@ -56,6 +56,8 @@ class vmmHost(vmmGObjectUI):
         try:
             # Maintain one dialog per connection
             uri = conn.get_uri()
+            if cls._instances is None:
+                cls._instances = {}
             if uri not in cls._instances:
                 cls._instances[uri] = vmmHost(conn)
             cls._instances[uri].show()
