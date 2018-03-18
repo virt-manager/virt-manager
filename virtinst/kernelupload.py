@@ -93,7 +93,7 @@ def _upload_file(conn, meter, destpool, src):
         vol.upload(stream, offset, length, flags)
 
         # Open source file
-        fileobj = open(src, "r")
+        fileobj = open(src, "rb")
 
         # Start transfer
         total = 0
@@ -114,8 +114,7 @@ def _upload_file(conn, meter, destpool, src):
         stream.finish()
         meter.end(size)
     except Exception:
-        if vol:
-            vol.delete(0)
+        vol.delete(0)
         raise
 
     return vol
