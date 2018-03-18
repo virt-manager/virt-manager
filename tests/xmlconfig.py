@@ -15,8 +15,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import unittest
 import os
+import tempfile
+import unittest
 
 import virtinst
 from virtinst import VirtualDisk
@@ -329,3 +330,16 @@ class TestXMLMisc(unittest.TestCase):
             self._compare(g, "install-hyperv-noclock", True)
         finally:
             CLIConfig.stable_defaults = False
+
+    def test_dir_searchable(self):
+        # Normally the dir searchable test is skipped in the unittest,
+        # but let's contrive an example that should trigger all the code
+        from virtinst.devicedisk import _is_dir_searchable
+        oldtest = os.environ.pop("VIRTINST_TEST_SUITE")
+        try:
+            uid = -1
+            username = "fakeuser-zzzz"
+            with tempfile.TemporaryDirectory() as tmpdir:
+                self.assertFalse(_is_dir_searchable(uid, username, tmpdir))
+        finally:
+            os.environ["VIRTINST_TEST_SUITE"] = oldtest

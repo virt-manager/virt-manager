@@ -87,7 +87,8 @@ def _is_dir_searchable(uid, username, path):
         logging.debug("Cmd '%s' failed: %s", cmd, err)
         return False
 
-    return bool(re.search("user:%s:..x" % username, out))
+    pattern = "user:%s:..x" % username
+    return bool(re.search(pattern.encode("utf-8", "replace"), out))
 
 
 class _Host(XMLBuilder):
