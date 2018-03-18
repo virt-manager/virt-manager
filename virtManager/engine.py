@@ -456,7 +456,7 @@ class vmmEngine(vmmGObject):
             elif page is None:
                 details.activate_default_page()
 
-            details.show(default_page=False)
+            details.show()
         except Exception as e:
             src.err.show_err(_("Error launching details: %s") % str(e))
 

@@ -597,6 +597,8 @@ class vmmDetails(vmmGObjectUI):
 
         self.hw_selected()
         self.refresh_vm_state()
+        self.activate_default_page()
+
 
     @property
     def conn(self):
@@ -642,11 +644,9 @@ class vmmDetails(vmmGObjectUI):
         self.netlist.cleanup()
         self.netlist = None
 
-    def show(self, default_page=False):
+    def show(self):
         logging.debug("Showing VM details: %s", self.vm)
         vis = self.is_visible()
-        if not vis and default_page:
-            self.activate_default_page()
         self.topwin.present()
         if vis:
             return
@@ -1388,6 +1388,8 @@ class vmmDetails(vmmGObjectUI):
 
     # activate_* are called from engine.py via CLI options
     def activate_default_page(self):
+        if self.is_customize_dialog:
+            return
         pages = self.widget("details-pages")
         pages.set_current_page(DETAILS_PAGE_CONSOLE)
         self.activate_default_console_page()
