@@ -480,7 +480,7 @@ class StoragePool(_StorageObject):
     ##################
 
     def validate(self):
-        if self.supports_property("host") and not self.hosts:
+        if self.supports_property("hosts") and not self.hosts:
             raise RuntimeError(_("Hostname is required"))
         if (self.supports_property("source_path") and
             self.type != self.TYPE_LOGICAL and
