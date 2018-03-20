@@ -25,12 +25,12 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 import virtinst
-from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
-                      VirtualSerialDevice, VirtualConsoleDevice,
-                      VirtualVideoDevice, VirtualWatchdog,
-                      VirtualSmartCardDevice, VirtualRedirDevice,
-                      VirtualTPMDevice, VirtualPanicDevice)
-from virtinst import VirtualController
+from virtinst import (DeviceChannel, DeviceParallel,
+                      DeviceSerial, DeviceConsole,
+                      DeviceVideo, DeviceWatchdog,
+                      DeviceSmartcard, DeviceRedirdev,
+                      DeviceTpm, DevicePanic)
+from virtinst import DeviceController
 
 from . import uiutil
 from .fsdetails import vmmFSDetails
@@ -212,14 +212,14 @@ class vmmAddHardware(vmmGObjectUI):
         text.set_property("xpad", 6)
         target_list.pack_start(text, True)
         target_list.add_attribute(text, 'text', 2)
-        target_model.append([virtinst.VirtualDisk.DEVICE_DISK,
+        target_model.append([virtinst.DeviceDisk.DEVICE_DISK,
                       "drive-harddisk", _("Disk device")])
-        target_model.append([virtinst.VirtualDisk.DEVICE_CDROM,
+        target_model.append([virtinst.DeviceDisk.DEVICE_CDROM,
                       "media-cdrom", _("CDROM device")])
-        target_model.append([virtinst.VirtualDisk.DEVICE_FLOPPY,
+        target_model.append([virtinst.DeviceDisk.DEVICE_FLOPPY,
                       "media-floppy", _("Floppy device")])
         if self.conn.is_qemu() or self.conn.is_test():
-            target_model.append([virtinst.VirtualDisk.DEVICE_LUN,
+            target_model.append([virtinst.DeviceDisk.DEVICE_LUN,
                           "drive-harddisk", _("LUN Passthrough")])
         target_list.set_active(0)
 
@@ -260,8 +260,8 @@ class vmmAddHardware(vmmGObjectUI):
         char_mode.set_model(char_mode_model)
         uiutil.init_combo_text_column(char_mode, 1)
         char_mode_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-        for t in VirtualSerialDevice.MODES:
-            desc = VirtualSerialDevice.pretty_mode(t)
+        for t in DeviceSerial.MODES:
+            desc = DeviceSerial.pretty_mode(t)
             char_mode_model.append([t, desc + " (%s)" % t])
 
         # Char target type
@@ -279,7 +279,7 @@ class vmmAddHardware(vmmGObjectUI):
         model = Gtk.ListStore(str)
         lst.set_model(model)
         uiutil.init_combo_text_column(lst, 0)
-        for n in VirtualChannelDevice.CHANNEL_NAMES:
+        for n in DeviceChannel.CHANNEL_NAMES:
             model.append([n])
 
         # Char device type
@@ -404,7 +404,7 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option(_("RNG"), "system-run", PAGE_RNG, True, None)
         add_hw_option(_("Panic Notifier"), "system-run", PAGE_PANIC,
             self.conn.check_support(self.conn.SUPPORT_CONN_PANIC_DEVICE) and
-            virtinst.VirtualPanicDevice.get_models(self.vm.get_xmlobj().os),
+            virtinst.DevicePanic.get_models(self.vm.get_xmlobj().os),
             _("Not supported for this hypervisor/libvirt/arch combination."))
 
     def _reset_state(self):
@@ -416,7 +416,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.addstorage.reset_state()
 
         # Network init
-        newmac = virtinst.VirtualNetworkInterface.generate_mac(
+        newmac = virtinst.DeviceInterface.generate_mac(
                 self.conn.get_backend())
         self.widget("mac-address").set_active(bool(newmac))
         self.widget("create-mac-address").set_text(newmac)
@@ -495,7 +495,7 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.init_combo_text_column(combo, 1)
         combo.get_model().set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
-        tmpdev = virtinst.VirtualVideoDevice(vm.conn.get_backend())
+        tmpdev = virtinst.DeviceVideo(vm.conn.get_backend())
         for m in tmpdev.MODELS:
             model.append([m, tmpdev.pretty_model(m)])
 
@@ -512,7 +512,7 @@ class vmmAddHardware(vmmGObjectUI):
         stable_defaults = vm.stable_defaults()
         stable_soundmodels = ["ich6", "ich9", "ac97"]
 
-        for m in virtinst.VirtualAudio.MODELS:
+        for m in virtinst.DeviceSound.MODELS:
             if (stable_defaults and m not in stable_soundmodels):
                 continue
 
@@ -527,7 +527,7 @@ class vmmAddHardware(vmmGObjectUI):
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 0)
 
-        for m in virtinst.VirtualWatchdog.MODELS:
+        for m in virtinst.DeviceWatchdog.MODELS:
             model.append([m])
         if len(model) > 0:
             combo.set_active(0)
@@ -539,8 +539,8 @@ class vmmAddHardware(vmmGObjectUI):
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
 
-        for m in virtinst.VirtualWatchdog.ACTIONS:
-            model.append([m, virtinst.VirtualWatchdog.get_action_desc(m)])
+        for m in virtinst.DeviceWatchdog.ACTIONS:
+            model.append([m, virtinst.DeviceWatchdog.get_action_desc(m)])
         if len(model) > 0:
             combo.set_active(0)
 
@@ -598,7 +598,7 @@ class vmmAddHardware(vmmGObjectUI):
         idx = -1
         for rowid, row in enumerate(combo.get_model()):
             idx = 0
-            if row[0] == virtinst.VirtualSmartCardDevice.MODE_DEFAULT:
+            if row[0] == virtinst.DeviceSmartcard.MODE_DEFAULT:
                 idx = rowid
                 break
         combo.set_active(idx)
@@ -629,8 +629,8 @@ class vmmAddHardware(vmmGObjectUI):
         types.clear()
 
         # [xml value, label]
-        for t in virtinst.VirtualTPMDevice.TYPES:
-            types.append([t, virtinst.VirtualTPMDevice.get_pretty_type(t)])
+        for t in virtinst.DeviceTpm.TYPES:
+            types.append([t, virtinst.DeviceTpm.get_pretty_type(t)])
 
     @staticmethod
     def build_tpm_type_combo(vm, combo):
@@ -644,7 +644,7 @@ class vmmAddHardware(vmmGObjectUI):
         idx = -1
         for rowid, row in enumerate(combo.get_model()):
             idx = 0
-            if row[0] == virtinst.VirtualTPMDevice.TYPE_DEFAULT:
+            if row[0] == virtinst.DeviceTpm.TYPE_DEFAULT:
                 idx = rowid
                 break
         combo.set_active(idx)
@@ -657,7 +657,7 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.init_combo_text_column(combo, 1)
 
         combo.set_active(-1)
-        for m in virtinst.VirtualDisk.cache_types:
+        for m in virtinst.DeviceDisk.cache_types:
             model.append([m, m])
 
         _iter = model.insert(0, [None, _("Hypervisor default")])
@@ -672,7 +672,7 @@ class vmmAddHardware(vmmGObjectUI):
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         combo.set_active(-1)
-        for m in virtinst.VirtualDisk.io_modes:
+        for m in virtinst.DeviceDisk.io_modes:
             model.append([m, m])
 
         if not no_default:
@@ -721,7 +721,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         rows = []
         for bus in disk_bus_types:
-            rows.append([bus, virtinst.VirtualDisk.pretty_disk_bus(bus)])
+            rows.append([bus, virtinst.DeviceDisk.pretty_disk_bus(bus)])
 
         model.clear()
 
@@ -741,10 +741,10 @@ class vmmAddHardware(vmmGObjectUI):
         model.clear()
 
         model.append([None, _("Hypervisor default")])
-        if controller_type == virtinst.VirtualController.TYPE_USB:
+        if controller_type == virtinst.DeviceController.TYPE_USB:
             model.append(["ich9-ehci1", "USB 2"])
             model.append(["nec-xhci", "USB 3"])
-        elif controller_type == virtinst.VirtualController.TYPE_SCSI:
+        elif controller_type == virtinst.DeviceController.TYPE_SCSI:
             model.append(["virtio-scsi", "VirtIO SCSI"])
 
         combo.set_active(0)
@@ -887,12 +887,12 @@ class vmmAddHardware(vmmGObjectUI):
         model = widget.get_model()
         model.clear()
 
-        for t in VirtualController.TYPES:
-            if t in [VirtualController.TYPE_IDE,
-                     VirtualController.TYPE_PCI,
-                     VirtualController.TYPE_FDC]:
+        for t in DeviceController.TYPES:
+            if t in [DeviceController.TYPE_IDE,
+                     DeviceController.TYPE_PCI,
+                     DeviceController.TYPE_FDC]:
                 continue
-            model.append([t, VirtualController.pretty_type(t)])
+            model.append([t, DeviceController.pretty_type(t)])
 
         if len(model) > 0:
             widget.set_active(0)
@@ -917,9 +917,9 @@ class vmmAddHardware(vmmGObjectUI):
         show_tooltip(model_tooltip, False)
 
         controllers = self.vm.get_controller_devices()
-        if controller_type == VirtualController.TYPE_USB:
+        if controller_type == DeviceController.TYPE_USB:
             usb_controllers = [x for x in controllers if
-                    (x.type == VirtualController.TYPE_USB)]
+                    (x.type == DeviceController.TYPE_USB)]
             if (len(usb_controllers) == 0):
                 self.widget("create-finish").set_sensitive(True)
             elif (len(usb_controllers) == 1 and
@@ -950,28 +950,28 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _build_rng_type_combo(self, combo):
         types = []
-        for t in virtinst.VirtualRNGDevice.TYPES:
-            types.append([t, virtinst.VirtualRNGDevice.get_pretty_type(t)])
+        for t in virtinst.DeviceRng.TYPES:
+            types.append([t, virtinst.DeviceRng.get_pretty_type(t)])
 
         self._build_combo_with_values(combo, types,
-                                virtinst.VirtualRNGDevice.TYPE_RANDOM)
+                                virtinst.DeviceRng.TYPE_RANDOM)
 
     def _build_rng_backend_type_combo(self, combo):
-        default = virtinst.VirtualRNGDevice.BACKEND_TYPE_TCP
+        default = virtinst.DeviceRng.BACKEND_TYPE_TCP
 
         types = []
-        for t in virtinst.VirtualRNGDevice.BACKEND_TYPES:
-            pprint = virtinst.VirtualRNGDevice.get_pretty_backend_type(t)
+        for t in virtinst.DeviceRng.BACKEND_TYPES:
+            pprint = virtinst.DeviceRng.get_pretty_backend_type(t)
             types.append([t, pprint])
 
         self._build_combo_with_values(combo, types, default)
 
     def _build_rng_backend_mode_combo(self, combo):
-        default = virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT
+        default = virtinst.DeviceRng.BACKEND_MODE_CONNECT
 
         types = []
-        for t in virtinst.VirtualRNGDevice.BACKEND_MODES:
-            pprint = virtinst.VirtualRNGDevice.get_pretty_backend_type(t)
+        for t in virtinst.DeviceRng.BACKEND_MODES:
+            pprint = virtinst.DeviceRng.get_pretty_backend_type(t)
             types.append([t, pprint])
 
         self._build_combo_with_values(combo, types, default)
@@ -979,11 +979,11 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _build_panic_models(self, combo):
         models = []
-        for m in virtinst.VirtualPanicDevice.get_models(self.vm.get_xmlobj().os):
-            models.append([m, virtinst.VirtualPanicDevice.get_pretty_model(m)])
+        for m in virtinst.DevicePanic.get_models(self.vm.get_xmlobj().os):
+            models.append([m, virtinst.DevicePanic.get_pretty_model(m)])
 
         self._build_combo_with_values(combo, models,
-                virtinst.VirtualPanicDevice.get_default_model(
+                virtinst.DevicePanic.get_default_model(
                         self.vm.get_xmlobj().os))
 
 
@@ -999,12 +999,12 @@ class vmmAddHardware(vmmGObjectUI):
             label = row[5]
 
         if label == "parallel":
-            return VirtualParallelDevice
+            return DeviceParallel
         elif label == "channel":
-            return VirtualChannelDevice
+            return DeviceChannel
         elif label == "console":
-            return VirtualConsoleDevice
-        return VirtualSerialDevice
+            return DeviceConsole
+        return DeviceSerial
 
     def _set_hw_selection(self, page):
         uiutil.set_list_selection_by_number(self.widget("hw-list"), page)
@@ -1161,7 +1161,7 @@ class vmmAddHardware(vmmGObjectUI):
             "device_path": "tpm-device-path",
         }
 
-        self._dev = VirtualTPMDevice(self.conn.get_backend())
+        self._dev = DeviceTpm(self.conn.get_backend())
         self._dev.type = devtype
 
         for param_name, widget_name in tpm_widget_mappings.items():
@@ -1183,13 +1183,13 @@ class vmmAddHardware(vmmGObjectUI):
 
         text = src.get_child().get_text()
         settype = None
-        if text == VirtualChannelDevice.CHANNEL_NAME_SPICE:
+        if text == DeviceChannel.CHANNEL_NAME_SPICE:
             settype = "spicevmc"
-        elif text == VirtualChannelDevice.CHANNEL_NAME_SPICE_WEBDAV:
+        elif text == DeviceChannel.CHANNEL_NAME_SPICE_WEBDAV:
             settype = "spiceport"
             self.widget("char-channel").set_text(text)
-        elif (text == VirtualChannelDevice.CHANNEL_NAME_QEMUGA or
-              text == VirtualChannelDevice.CHANNEL_NAME_LIBGUESTFS):
+        elif (text == DeviceChannel.CHANNEL_NAME_QEMUGA or
+              text == DeviceChannel.CHANNEL_NAME_LIBGUESTFS):
             settype = "unix"
         if settype:
             uiutil.set_list_selection(
@@ -1244,7 +1244,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _change_rng(self, ignore1):
         rtype = uiutil.get_list_selection(self.widget("rng-type"))
-        is_egd = rtype == virtinst.VirtualRNGDevice.TYPE_EGD
+        is_egd = rtype == virtinst.DeviceRng.TYPE_EGD
         uiutil.set_grid_row_visible(self.widget("rng-device"), not is_egd)
         uiutil.set_grid_row_visible(self.widget("rng-backend-type"), is_egd)
 
@@ -1252,8 +1252,8 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("rng-backend-type"))
         backend_mode = uiutil.get_list_selection(
             self.widget("rng-backend-mode"))
-        udp = backend_type == virtinst.VirtualRNGDevice.BACKEND_TYPE_UDP
-        bind = backend_mode == virtinst.VirtualRNGDevice.BACKEND_MODE_BIND
+        udp = backend_type == virtinst.DeviceRng.BACKEND_TYPE_UDP
+        bind = backend_mode == virtinst.DeviceRng.BACKEND_MODE_BIND
 
         v = is_egd and (udp or bind)
         uiutil.set_grid_row_visible(self.widget("rng-bind-host-box"), v)
@@ -1441,10 +1441,10 @@ class vmmAddHardware(vmmGObjectUI):
         # Get SCSI controllers
         controllers = self.vm.get_controller_devices()
         ctrls_scsi = [x for x in controllers if
-                (x.type == VirtualController.TYPE_SCSI)]
+                (x.type == DeviceController.TYPE_SCSI)]
 
         # Create possible new controller
-        controller = VirtualController(self.conn.get_backend())
+        controller = DeviceController(self.conn.get_backend())
         controller.type = "scsi"
         controller.model = controller_model
 
@@ -1462,7 +1462,7 @@ class vmmAddHardware(vmmGObjectUI):
         for d in used_disks:
             if (d.get_target_prefix() == disk.get_target_prefix() and
                 d.bus == "scsi"):
-                num = virtinst.VirtualDisk.target_to_num(d.target)
+                num = virtinst.DeviceDisk.target_to_num(d.target)
                 idx = num // 7
                 if idx not in occupied:
                     occupied[idx] = []
@@ -1550,7 +1550,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_input(self):
         row = uiutil.get_list_selected_row(self.widget("input-type"))
-        dev = virtinst.VirtualInputDevice(self.conn.get_backend())
+        dev = virtinst.DeviceInput(self.conn.get_backend())
         dev.type = row[1]
         dev.bus = row[2]
 
@@ -1561,7 +1561,7 @@ class vmmAddHardware(vmmGObjectUI):
             (gtype, port, tlsport, listen,
              addr, passwd, keymap, gl, rendernode) = self._gfxdetails.get_values()
 
-            self._dev = virtinst.VirtualGraphics(self.conn.get_backend())
+            self._dev = virtinst.DeviceGraphics(self.conn.get_backend())
             self._dev.type = gtype
             self._dev.passwd = passwd
             self._dev.gl = gl
@@ -1584,7 +1584,7 @@ class vmmAddHardware(vmmGObjectUI):
         smodel = uiutil.get_list_selection(self.widget("sound-model"))
 
         try:
-            self._dev = virtinst.VirtualAudio(self.conn.get_backend())
+            self._dev = virtinst.DeviceSound(self.conn.get_backend())
             self._dev.model = smodel
         except Exception as e:
             return self.err.val_err(_("Sound device parameter error"), e)
@@ -1596,7 +1596,7 @@ class vmmAddHardware(vmmGObjectUI):
                                     _("A device must be selected."))
 
         try:
-            dev = virtinst.VirtualHostDevice(self.conn.get_backend())
+            dev = virtinst.DeviceHostdev(self.conn.get_backend())
             # Hostdev collision
             names  = []
             for vm in self.conn.list_vms():
@@ -1637,9 +1637,9 @@ class vmmAddHardware(vmmGObjectUI):
         target_type = uiutil.get_list_selection(typebox)
 
         if self.widget("char-use-telnet").get_active():
-            protocol = VirtualSerialDevice.PROTOCOL_TELNET
+            protocol = DeviceSerial.PROTOCOL_TELNET
         else:
-            protocol = VirtualSerialDevice.PROTOCOL_RAW
+            protocol = DeviceSerial.PROTOCOL_RAW
 
         if not self.widget("char-target-name").get_visible():
             target_name = None
@@ -1687,7 +1687,7 @@ class vmmAddHardware(vmmGObjectUI):
         model = uiutil.get_list_selection(self.widget("video-model"))
 
         try:
-            self._dev = VirtualVideoDevice(conn)
+            self._dev = DeviceVideo(conn)
             self._dev.model = model
         except Exception as e:
             return self.err.val_err(_("Video device parameter error"), e)
@@ -1698,7 +1698,7 @@ class vmmAddHardware(vmmGObjectUI):
         action = uiutil.get_list_selection(self.widget("watchdog-action"))
 
         try:
-            self._dev = VirtualWatchdog(conn)
+            self._dev = DeviceWatchdog(conn)
             self._dev.model = model
             self._dev.action = action
         except Exception as e:
@@ -1714,7 +1714,7 @@ class vmmAddHardware(vmmGObjectUI):
         mode = uiutil.get_list_selection(self.widget("smartcard-mode"))
 
         try:
-            self._dev = VirtualSmartCardDevice(conn)
+            self._dev = DeviceSmartcard(conn)
             self._dev.mode = mode
         except Exception as e:
             return self.err.val_err(_("Smartcard device parameter error"), e)
@@ -1729,7 +1729,7 @@ class vmmAddHardware(vmmGObjectUI):
             service = uiutil.spin_get_helper(self.widget("usbredir-service"))
 
         try:
-            self._dev = VirtualRedirDevice(conn)
+            self._dev = DeviceRedirdev(conn)
             self._dev.type = stype
             if host:
                 self._dev.host = host
@@ -1750,7 +1750,7 @@ class vmmAddHardware(vmmGObjectUI):
         }
 
         try:
-            self._dev = VirtualTPMDevice(conn)
+            self._dev = DeviceTpm(conn)
             self._dev.type = typ
             for param_name, val in value_mappings.items():
                 if self._dev.supports_property(param_name):
@@ -1764,7 +1764,7 @@ class vmmAddHardware(vmmGObjectUI):
         model = uiutil.get_list_selection(self.widget("panic-model"))
 
         try:
-            self._dev = VirtualPanicDevice(conn)
+            self._dev = DevicePanic(conn)
             self._dev.model = model
         except Exception as e:
             return self.err.val_err(_("Panic device parameter error"), e)
@@ -1775,7 +1775,7 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("controller-type"))
         model = uiutil.get_list_selection(self.widget("controller-model"))
 
-        self._dev = VirtualController(conn)
+        self._dev = DeviceController(conn)
         self._selected_model = model
 
         controllers = self.vm.get_controller_devices()
@@ -1808,7 +1808,7 @@ class vmmAddHardware(vmmGObjectUI):
 
 
         device = self.widget("rng-device").get_text()
-        if rtype == virtinst.VirtualRNGDevice.TYPE_RANDOM:
+        if rtype == virtinst.DeviceRng.TYPE_RANDOM:
             if not device:
                 return self.err.val_err(_("RNG selection error."),
                                     _("A device must be specified."))
@@ -1819,8 +1819,8 @@ class vmmAddHardware(vmmGObjectUI):
         else:
             device = None
 
-        if rtype == virtinst.VirtualRNGDevice.TYPE_EGD:
-            if (backend_type == virtinst.VirtualRNGDevice.BACKEND_TYPE_UDP):
+        if rtype == virtinst.DeviceRng.TYPE_EGD:
+            if (backend_type == virtinst.DeviceRng.BACKEND_TYPE_UDP):
                 if not connect_host or not bind_host:
                     return self.err.val_err(_("RNG selection error."),
                              _("Please specify both bind and connect host"))
@@ -1829,7 +1829,7 @@ class vmmAddHardware(vmmGObjectUI):
                           _("Please specify both bind and connect service"))
             else:
                 if (backend_mode ==
-                    virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT):
+                    virtinst.DeviceRng.BACKEND_MODE_CONNECT):
                     bind_host = None
                     bind_service = None
                 else:
@@ -1854,7 +1854,7 @@ class vmmAddHardware(vmmGObjectUI):
         }
 
         try:
-            self._dev = virtinst.VirtualRNGDevice(self.conn.get_backend())
+            self._dev = virtinst.DeviceRng(self.conn.get_backend())
             self._dev.type = rtype
             for param_name, val in value_mappings.items():
                 if self._dev.supports_property(param_name):

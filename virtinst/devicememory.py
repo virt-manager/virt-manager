@@ -17,11 +17,11 @@
 # MA 02110-1301 USA.
 
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
-class VirtualMemoryTarget(XMLBuilder):
+class _DeviceMemoryTarget(XMLBuilder):
     _XML_ROOT_NAME = "target"
 
     size = XMLProperty("./size", is_int=True)
@@ -29,7 +29,7 @@ class VirtualMemoryTarget(XMLBuilder):
     label_size = XMLProperty("./label/size", is_int=True)
 
 
-class VirtualMemorySource(XMLBuilder):
+class _DeviceMemorySource(XMLBuilder):
     _XML_ROOT_NAME = "source"
 
     pagesize = XMLProperty("./pagesize", is_int=True)
@@ -37,8 +37,8 @@ class VirtualMemorySource(XMLBuilder):
     path = XMLProperty("./path")
 
 
-class VirtualMemoryDevice(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_MEMORY
+class DeviceMemory(Device):
+    virtual_device_type = Device.DEVICE_MEMORY
 
     MODEL_DIMM = "dimm"
     MODEL_NVDIMM = "nvdimm"
@@ -51,8 +51,8 @@ class VirtualMemoryDevice(VirtualDevice):
     model = XMLProperty("./@model")
     access = XMLProperty("./@access")
 
-    source = XMLChildProperty(VirtualMemorySource, is_single=True)
-    target = XMLChildProperty(VirtualMemoryTarget, is_single=True)
+    source = XMLChildProperty(_DeviceMemorySource, is_single=True)
+    target = XMLChildProperty(_DeviceMemoryTarget, is_single=True)
 
 
-VirtualMemoryDevice.register_type()
+DeviceMemory.register_type()

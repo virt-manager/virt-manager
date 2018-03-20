@@ -22,7 +22,7 @@ import os
 
 from . import urlfetcher
 from . import util
-from .devicedisk import VirtualDisk
+from .devicedisk import DeviceDisk
 from .initrdinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
 from .installer import Installer
@@ -181,7 +181,7 @@ class DistroInstaller(Installer):
             return _sanitize_url(val)
 
         try:
-            dev = VirtualDisk(self.conn)
+            dev = DeviceDisk(self.conn)
             dev.device = dev.DEVICE_CDROM
             dev.path = val
             dev.validate()

@@ -17,12 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualAudio(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_AUDIO
+class DeviceSound(Device):
+    virtual_device_type = Device.DEVICE_AUDIO
 
     MODEL_DEFAULT = "default"
     MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", "ich9"]
@@ -31,4 +31,4 @@ class VirtualAudio(VirtualDevice):
                         default_cb=lambda s: "es1370",
                         default_name=MODEL_DEFAULT)
 
-VirtualAudio.register_type()
+DeviceSound.register_type()

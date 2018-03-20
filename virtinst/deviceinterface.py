@@ -22,7 +22,7 @@ import os
 import random
 
 from . import util
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -112,7 +112,7 @@ def _default_network(conn):
     return ["network", "default"]
 
 
-class VirtualPort(XMLBuilder):
+class _VirtualPort(XMLBuilder):
     _XML_ROOT_NAME = "virtualport"
 
     type = XMLProperty("./@type")
@@ -124,8 +124,8 @@ class VirtualPort(XMLBuilder):
     interfaceid = XMLProperty("./parameters/@interfaceid")
 
 
-class VirtualNetworkInterface(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_NET
+class DeviceInterface(Device):
+    virtual_device_type = Device.DEVICE_NET
 
     TYPE_BRIDGE     = "bridge"
     TYPE_VIRTUAL    = "network"
@@ -143,11 +143,11 @@ class VirtualNetworkInterface(VirtualDevice):
         """
         desc = net_type.capitalize()
 
-        if net_type == VirtualNetworkInterface.TYPE_BRIDGE:
+        if net_type == DeviceInterface.TYPE_BRIDGE:
             desc = _("Shared physical device")
-        elif net_type == VirtualNetworkInterface.TYPE_VIRTUAL:
+        elif net_type == DeviceInterface.TYPE_VIRTUAL:
             desc = _("Virtual networking")
-        elif net_type == VirtualNetworkInterface.TYPE_USER:
+        elif net_type == DeviceInterface.TYPE_USER:
             desc = _("Usermode networking")
 
         return desc
@@ -164,7 +164,7 @@ class VirtualNetworkInterface(VirtualDevice):
 
         for ignore in range(256):
             mac = _random_mac(conn)
-            ret = VirtualNetworkInterface.is_conflict_net(conn, mac)
+            ret = DeviceInterface.is_conflict_net(conn, mac)
             if ret[1] is None:
                 return mac
 
@@ -195,7 +195,7 @@ class VirtualNetworkInterface(VirtualDevice):
 
 
     def __init__(self, *args, **kwargs):
-        VirtualDevice.__init__(self, *args, **kwargs)
+        Device.__init__(self, *args, **kwargs)
 
         self._random_mac = None
         self._default_bridge = None
@@ -279,7 +279,7 @@ class VirtualNetworkInterface(VirtualDevice):
     _network = XMLProperty("./source/@network")
     _source_dev = XMLProperty("./source/@dev")
 
-    virtualport = XMLChildProperty(VirtualPort, is_single=True)
+    virtualport = XMLChildProperty(_VirtualPort, is_single=True)
     type = XMLProperty("./@type",
                        default_cb=lambda s: s.TYPE_BRIDGE)
     trustGuestRxFilters = XMLProperty("./@trustGuestRxFilters", is_yesno=True)
@@ -329,4 +329,4 @@ class VirtualNetworkInterface(VirtualDevice):
             self.type, self.source = _default_network(self.conn)
 
 
-VirtualNetworkInterface.register_type()
+DeviceInterface.register_type()

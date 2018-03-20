@@ -17,13 +17,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .nodedev import NodeDevice
 from .xmlbuilder import XMLProperty
 
 
-class VirtualHostDevice(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_HOSTDEV
+class DeviceHostdev(Device):
+    virtual_device_type = Device.DEVICE_HOSTDEV
 
     def set_from_nodedev(self, nodedev):
         """
@@ -146,4 +146,4 @@ class VirtualHostDevice(VirtualDevice):
     scsi_unit = XMLProperty("./source/address/@unit", is_int=True)
 
 
-VirtualHostDevice.register_type()
+DeviceHostdev.register_type()

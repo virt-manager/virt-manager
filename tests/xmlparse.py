@@ -341,7 +341,7 @@ class XMLParseTest(unittest.TestCase):
 
     def testAlterDisk(self):
         """
-        Test changing VirtualDisk() parameters after parsing
+        Test changing DeviceDisk() parameters after parsing
         """
         guest, outfile = self._get_test_content("change-disk")
 
@@ -432,7 +432,7 @@ class XMLParseTest(unittest.TestCase):
     def testSingleDisk(self):
         xml = ("""<disk type="file" device="disk"><source file="/a.img"/>\n"""
                """<target dev="hda" bus="ide"/></disk>\n""")
-        d = virtinst.VirtualDisk(self.conn, parsexml=xml)
+        d = virtinst.DeviceDisk(self.conn, parsexml=xml)
         self._set_and_check(d, "target", "hda", "hdb")
         self.assertEqual(xml.replace("hda", "hdb"), d.get_xml_config())
 
@@ -1004,10 +1004,10 @@ class XMLParseTest(unittest.TestCase):
         guest.remove_device(rmdev)
 
         # Basic device add
-        guest.add_device(virtinst.VirtualWatchdog(self.conn))
+        guest.add_device(virtinst.DeviceWatchdog(self.conn))
 
         # Test adding device with child properties (address value)
-        adddev = virtinst.VirtualNetworkInterface(self.conn)
+        adddev = virtinst.DeviceInterface(self.conn)
         adddev.type = "network"
         adddev.source = "default"
         adddev.macaddr = "1A:2A:3A:4A:5A:6A"
@@ -1019,7 +1019,7 @@ class XMLParseTest(unittest.TestCase):
         guest.add_device(adddev)
 
         # Test adding device built from parsed XML
-        guest.add_device(virtinst.VirtualAudio(self.conn,
+        guest.add_device(virtinst.DeviceSound(self.conn,
             parsexml="""<sound model='pcspk'/>"""))
 
         self._alter_compare(guest.get_xml_config(), outfile)

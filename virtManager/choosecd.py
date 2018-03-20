@@ -20,7 +20,7 @@
 
 import logging
 
-from virtinst import VirtualDisk
+from virtinst import DeviceDisk
 
 from .baseclass import vmmGObjectUI
 from .mediacombo import vmmMediaCombo
@@ -114,7 +114,7 @@ class vmmChooseCD(vmmGObjectUI):
             return self.err.val_err(_("Invalid Media Path"),
                                     _("A media path must be specified."))
 
-        names = VirtualDisk.path_in_use_by(self.disk.conn, path)
+        names = DeviceDisk.path_in_use_by(self.disk.conn, path)
         if names:
             res = self.err.yes_no(
                     _('Disk "%s" is already in use by other guests %s') %

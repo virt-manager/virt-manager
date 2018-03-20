@@ -483,7 +483,7 @@ class _XMLState(object):
 
     def make_abs_xpath(self, xpath):
         """
-        Convert a relative xpath to an absolute xpath. So for VirtualDisk
+        Convert a relative xpath to an absolute xpath. So for DeviceDisk
         that's part of a Guest, accessing driver_name will do convert:
             ./driver/@name
         to an absolute xpath like:
@@ -516,7 +516,7 @@ class XMLBuilder(object):
         """
         Initialize state
 
-        :param conn: VirtualConnection to validate device against
+        :param conn: VirtinstConnection to validate device against
         :param parsexml: Optional XML string to parse
 
         The rest of the parameters are for internal use only

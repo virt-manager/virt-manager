@@ -181,7 +181,7 @@ class _SupportCheck(object):
             return ret
 
         # Do this after the function check, since there's an ordering issue
-        # with VirtualConnection
+        # with VirtinstConnection
         hv_type = conn.get_uri_driver()
         actual_libvirt_version = conn.daemon_version()
         actual_hv_version = conn.conn_version()
@@ -429,7 +429,7 @@ def check_support(virtconn, feature, data=None):
 
     :returns: True if feature is supported, False otherwise
     """
-    if "VirtualConnection" in repr(data):
+    if "VirtinstConnection" in repr(data):
         data = data.get_conn_for_api_arg()
 
     sobj = _support_objs[feature - 1]

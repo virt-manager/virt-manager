@@ -17,12 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualInputDevice(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_INPUT
+class DeviceInput(Device):
+    virtual_device_type = Device.DEVICE_INPUT
 
     TYPE_MOUSE = "mouse"
     TYPE_TABLET = "tablet"
@@ -51,4 +51,4 @@ class VirtualInputDevice(VirtualDevice):
                       default_name=BUS_DEFAULT)
 
 
-VirtualInputDevice.register_type()
+DeviceInput.register_type()

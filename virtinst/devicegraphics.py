@@ -19,7 +19,7 @@
 
 import os
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -48,8 +48,8 @@ class _GraphicsListen(XMLBuilder):
     socket = XMLProperty("./@socket")
 
 
-class VirtualGraphics(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_GRAPHICS
+class DeviceGraphics(Device):
+    virtual_device_type = Device.DEVICE_GRAPHICS
 
     TYPE_SDL = "sdl"
     TYPE_VNC = "vnc"
@@ -96,15 +96,15 @@ class VirtualGraphics(VirtualDevice):
 
     @staticmethod
     def pretty_type_simple(gtype):
-        if (gtype in [VirtualGraphics.TYPE_VNC,
-                      VirtualGraphics.TYPE_SDL,
-                      VirtualGraphics.TYPE_RDP]):
+        if (gtype in [DeviceGraphics.TYPE_VNC,
+                      DeviceGraphics.TYPE_SDL,
+                      DeviceGraphics.TYPE_RDP]):
             return str(gtype).upper()
 
         return str(gtype).capitalize()
 
     def __init__(self, *args, **kwargs):
-        VirtualDevice.__init__(self, *args, **kwargs)
+        Device.__init__(self, *args, **kwargs)
 
         self._local_keymap = -1
 
@@ -250,4 +250,4 @@ class VirtualGraphics(VirtualDevice):
     gl = XMLProperty("./gl/@enable", is_yesno=True)
     rendernode = XMLProperty("./gl/@rendernode")
 
-VirtualGraphics.register_type()
+DeviceGraphics.register_type()

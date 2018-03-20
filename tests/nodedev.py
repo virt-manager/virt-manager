@@ -21,7 +21,7 @@ import os.path
 import unittest
 
 from virtinst import NodeDevice
-from virtinst import VirtualHostDevice
+from virtinst import DeviceHostdev
 
 from tests import utils
 
@@ -95,7 +95,7 @@ class TestNodeDev(unittest.TestCase):
         if not nodedev:
             nodedev = self._nodeDevFromName(nodename)
 
-        dev = VirtualHostDevice(self.conn)
+        dev = DeviceHostdev(self.conn)
         dev.set_from_nodedev(nodedev)
         utils.diff_compare(dev.get_xml_config() + "\n", devfile)
 

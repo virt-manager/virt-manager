@@ -23,7 +23,7 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 
 from virtinst import StoragePool
-from virtinst import VirtualDisk
+from virtinst import DeviceDisk
 
 from . import uiutil
 from .asyncjob import vmmAsyncJob
@@ -430,7 +430,7 @@ class vmmStorageList(vmmGObjectUI):
             namestr = None
             try:
                 if path:
-                    names = VirtualDisk.path_in_use_by(vol.conn.get_backend(),
+                    names = DeviceDisk.path_in_use_by(vol.conn.get_backend(),
                                                        path)
                     namestr = ", ".join(names)
                     if not namestr:

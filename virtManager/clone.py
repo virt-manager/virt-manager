@@ -26,7 +26,7 @@ from gi.repository import Gdk
 
 import virtinst
 from virtinst import Cloner
-from virtinst import VirtualNetworkInterface
+from virtinst import DeviceInterface
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
@@ -103,8 +103,8 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
         str1 += str2
         return str1
 
-    if (devtype == virtinst.VirtualDisk.DEVICE_CDROM or
-        devtype == virtinst.VirtualDisk.DEVICE_FLOPPY):
+    if (devtype == virtinst.DeviceDisk.DEVICE_CDROM or
+        devtype == virtinst.DeviceDisk.DEVICE_FLOPPY):
         info = append_str(info, _("Removable"))
 
     if ro:
@@ -331,14 +331,14 @@ class vmmCloneVM(vmmGObjectUI):
             net_type = net.type
 
             # Generate a new MAC
-            newmac = VirtualNetworkInterface.generate_mac(
+            newmac = DeviceInterface.generate_mac(
                     self.conn.get_backend())
 
             # [ interface type, device name, origmac, newmac, label ]
-            if net_type == VirtualNetworkInterface.TYPE_USER:
+            if net_type == DeviceInterface.TYPE_USER:
                 label = _("Usermode")
 
-            elif net_type == VirtualNetworkInterface.TYPE_VIRTUAL:
+            elif net_type == DeviceInterface.TYPE_VIRTUAL:
                 net = None
                 for netobj in self.vm.conn.list_nets():
                     if netobj.get_name() == net_dev:
@@ -525,9 +525,9 @@ class vmmCloneVM(vmmGObjectUI):
 
         # Build icon
         icon = Gtk.Image()
-        if devtype == virtinst.VirtualDisk.DEVICE_FLOPPY:
+        if devtype == virtinst.DeviceDisk.DEVICE_FLOPPY:
             iconname = "media-floppy"
-        elif devtype == virtinst.VirtualDisk.DEVICE_CDROM:
+        elif devtype == virtinst.DeviceDisk.DEVICE_CDROM:
             iconname = "media-optical"
         else:
             iconname = "drive-harddisk"
@@ -712,7 +712,7 @@ class vmmCloneVM(vmmGObjectUI):
         row = self.net_list[orig]
 
         try:
-            ignore, msg = VirtualNetworkInterface.is_conflict_net(
+            ignore, msg = DeviceInterface.is_conflict_net(
                                 self.conn.get_backend(), new)
             if msg:
                 raise RuntimeError(msg)
@@ -742,7 +742,7 @@ class vmmCloneVM(vmmGObjectUI):
 
         new_path = self.widget("change-storage-new").get_text()
 
-        if virtinst.VirtualDisk.path_definitely_exists(self.clone_design.conn,
+        if virtinst.DeviceDisk.path_definitely_exists(self.clone_design.conn,
                                                        new_path):
             res = self.err.yes_no(_("Cloning will overwrite the existing "
                                     "file"),

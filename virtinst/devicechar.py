@@ -17,11 +17,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class _VirtualCharDevice(VirtualDevice):
+class _DeviceChar(Device):
     """
     Base class for all character devices. Shouldn't be instantiated
     directly.
@@ -78,13 +78,13 @@ class _VirtualCharDevice(VirtualDevice):
 
     @staticmethod
     def pretty_channel_name(val):
-        if val == _VirtualCharDevice.CHANNEL_NAME_SPICE:
+        if val == _DeviceChar.CHANNEL_NAME_SPICE:
             return "spice"
-        if val == _VirtualCharDevice.CHANNEL_NAME_QEMUGA:
+        if val == _DeviceChar.CHANNEL_NAME_QEMUGA:
             return "qemu-ga"
-        if val == _VirtualCharDevice.CHANNEL_NAME_LIBGUESTFS:
+        if val == _DeviceChar.CHANNEL_NAME_LIBGUESTFS:
             return "libguestfs"
-        if val == _VirtualCharDevice.CHANNEL_NAME_SPICE_WEBDAV:
+        if val == _DeviceChar.CHANNEL_NAME_SPICE_WEBDAV:
             return "spice-webdav"
         return None
 
@@ -95,29 +95,29 @@ class _VirtualCharDevice(VirtualDevice):
         """
         desc = ""
 
-        if ctype == _VirtualCharDevice.TYPE_PTY:
+        if ctype == _DeviceChar.TYPE_PTY:
             desc = _("Pseudo TTY")
-        elif ctype == _VirtualCharDevice.TYPE_DEV:
+        elif ctype == _DeviceChar.TYPE_DEV:
             desc = _("Physical host character device")
-        elif ctype == _VirtualCharDevice.TYPE_STDIO:
+        elif ctype == _DeviceChar.TYPE_STDIO:
             desc = _("Standard input/output")
-        elif ctype == _VirtualCharDevice.TYPE_PIPE:
+        elif ctype == _DeviceChar.TYPE_PIPE:
             desc = _("Named pipe")
-        elif ctype == _VirtualCharDevice.TYPE_FILE:
+        elif ctype == _DeviceChar.TYPE_FILE:
             desc = _("Output to a file")
-        elif ctype == _VirtualCharDevice.TYPE_VC:
+        elif ctype == _DeviceChar.TYPE_VC:
             desc = _("Virtual console")
-        elif ctype == _VirtualCharDevice.TYPE_NULL:
+        elif ctype == _DeviceChar.TYPE_NULL:
             desc = _("Null device")
-        elif ctype == _VirtualCharDevice.TYPE_TCP:
+        elif ctype == _DeviceChar.TYPE_TCP:
             desc = _("TCP net console")
-        elif ctype == _VirtualCharDevice.TYPE_UDP:
+        elif ctype == _DeviceChar.TYPE_UDP:
             desc = _("UDP net console")
-        elif ctype == _VirtualCharDevice.TYPE_UNIX:
+        elif ctype == _DeviceChar.TYPE_UNIX:
             desc = _("Unix socket")
-        elif ctype == _VirtualCharDevice.TYPE_SPICEVMC:
+        elif ctype == _DeviceChar.TYPE_SPICEVMC:
             desc = _("Spice agent")
-        elif ctype == _VirtualCharDevice.TYPE_SPICEPORT:
+        elif ctype == _DeviceChar.TYPE_SPICEPORT:
             desc = _("Spice port")
 
         return desc
@@ -129,9 +129,9 @@ class _VirtualCharDevice(VirtualDevice):
         """
         desc = ""
 
-        if char_mode == _VirtualCharDevice.MODE_CONNECT:
+        if char_mode == _DeviceChar.MODE_CONNECT:
             desc = _("Client mode")
-        elif char_mode == _VirtualCharDevice.MODE_BIND:
+        elif char_mode == _DeviceChar.MODE_BIND:
             desc = _("Server mode")
 
         return desc
@@ -277,26 +277,26 @@ class _VirtualCharDevice(VirtualDevice):
     log_append = XMLProperty("./log/@append", is_onoff=True)
 
 
-class VirtualConsoleDevice(_VirtualCharDevice):
+class DeviceConsole(_DeviceChar):
     virtual_device_type = "console"
-    TYPES = [_VirtualCharDevice.TYPE_PTY]
+    TYPES = [_DeviceChar.TYPE_PTY]
 
 
-class VirtualSerialDevice(_VirtualCharDevice):
+class DeviceSerial(_DeviceChar):
     virtual_device_type = "serial"
 
 
-class VirtualParallelDevice(_VirtualCharDevice):
+class DeviceParallel(_DeviceChar):
     virtual_device_type = "parallel"
 
 
-class VirtualChannelDevice(_VirtualCharDevice):
+class DeviceChannel(_DeviceChar):
     virtual_device_type = "channel"
-    TYPES = (_VirtualCharDevice._TYPES_FOR_CHANNEL +
-             _VirtualCharDevice._TYPES_FOR_ALL)
+    TYPES = (_DeviceChar._TYPES_FOR_CHANNEL +
+             _DeviceChar._TYPES_FOR_ALL)
 
 
-VirtualConsoleDevice.register_type()
-VirtualSerialDevice.register_type()
-VirtualParallelDevice.register_type()
-VirtualChannelDevice.register_type()
+DeviceConsole.register_type()
+DeviceSerial.register_type()
+DeviceParallel.register_type()
+DeviceChannel.register_type()

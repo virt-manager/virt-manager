@@ -27,10 +27,10 @@ import libvirt
 
 from . import util
 from .guest import Guest
-from .deviceinterface import VirtualNetworkInterface
-from .devicedisk import VirtualDisk
+from .deviceinterface import DeviceInterface
+from .devicedisk import DeviceDisk
 from .storage import StorageVolume
-from .devicechar import VirtualChannelDevice
+from .devicechar import DeviceChannel
 
 
 class Cloner(object):
@@ -126,17 +126,17 @@ class Cloner(object):
         disklist = []
         for path in util.listify(paths):
             try:
-                device = VirtualDisk.DEVICE_DISK
+                device = DeviceDisk.DEVICE_DISK
                 if not path:
-                    device = VirtualDisk.DEVICE_CDROM
+                    device = DeviceDisk.DEVICE_CDROM
 
-                disk = VirtualDisk(self.conn)
+                disk = DeviceDisk(self.conn)
                 disk.path = path
                 disk.device = device
 
                 if (not self.preserve_dest_disks and
                     disk.wants_storage_creation()):
-                    vol_install = VirtualDisk.build_vol_install(
+                    vol_install = DeviceDisk.build_vol_install(
                         self.conn, os.path.basename(disk.path),
                         disk.get_parent_pool(), .000001, False)
                     disk.set_vol_install(vol_install)
@@ -152,7 +152,7 @@ class Cloner(object):
         return [d.path for d in self.clone_disks]
     clone_paths = property(get_clone_paths, set_clone_paths)
 
-    # VirtualDisk instances for the new disk paths
+    # DeviceDisk instances for the new disk paths
     @property
     def clone_disks(self):
         return self._clone_disks
@@ -161,7 +161,7 @@ class Cloner(object):
     def set_clone_macs(self, mac):
         maclist = util.listify(mac)
         for m in maclist:
-            msg = VirtualNetworkInterface.is_conflict_net(self.conn, m)[1]
+            msg = DeviceInterface.is_conflict_net(self.conn, m)[1]
             if msg:
                 raise RuntimeError(msg)
 
@@ -170,7 +170,7 @@ class Cloner(object):
         return self._clone_macs
     clone_macs = property(get_clone_macs, set_clone_macs)
 
-    # VirtualDisk instances of the original disks being cloned
+    # DeviceDisk instances of the original disks being cloned
     @property
     def original_disks(self):
         return self._original_disks
@@ -360,18 +360,18 @@ class Cloner(object):
             self.clone_nvram = os.path.join(nvram_dir,
                                             "%s_VARS.fd" % self._clone_name)
 
-        nvram = VirtualDisk(self.conn)
+        nvram = DeviceDisk(self.conn)
         nvram.path = self.clone_nvram
         if (not self.preserve_dest_disks and
             nvram.wants_storage_creation()):
 
-            old_nvram = VirtualDisk(self.conn)
+            old_nvram = DeviceDisk(self.conn)
             old_nvram.path = self._guest.os.nvram
             if not old_nvram.get_vol_object():
                 raise RuntimeError(_("Path does not exist: %s") %
                                      old_nvram.path)
 
-            nvram_install = VirtualDisk.build_vol_install(
+            nvram_install = DeviceDisk.build_vol_install(
                     self.conn, os.path.basename(nvram.path),
                     nvram.get_parent_pool(), nvram.get_size(), False)
             nvram_install.input_vol = old_nvram.get_vol_object()
@@ -416,7 +416,7 @@ class Cloner(object):
             if clone_macs:
                 mac = clone_macs.pop()
             else:
-                mac = VirtualNetworkInterface.generate_mac(self.conn)
+                mac = DeviceInterface.generate_mac(self.conn)
             iface.macaddr = mac
 
         # Changing storage XML
@@ -439,7 +439,7 @@ class Cloner(object):
         # For guest agent channel, remove a path to generate a new one with
         # new guest name
         for channel in self._guest.get_devices("channel"):
-            if channel.type == VirtualChannelDevice.TYPE_UNIX:
+            if channel.type == DeviceChannel.TYPE_UNIX:
                 channel.source_path = None
 
         if self._guest.os.nvram:
@@ -505,7 +505,7 @@ class Cloner(object):
         clonebase = os.path.join(dirname, clonebase)
         return util.generate_name(
                     clonebase,
-                    lambda p: VirtualDisk.path_definitely_exists(self.conn, p),
+                    lambda p: DeviceDisk.path_definitely_exists(self.conn, p),
                     suffix,
                     lib_collision=False)
 
@@ -534,7 +534,7 @@ class Cloner(object):
     ############################
 
     # Parse disk paths that need to be cloned from the original guest's xml
-    # Return a list of VirtualDisk instances pointing to the original
+    # Return a list of DeviceDisk instances pointing to the original
     # storage
     def _get_original_disks_info(self):
         clonelist = []
@@ -550,12 +550,12 @@ class Cloner(object):
             validate = not self.preserve_dest_disks
 
             try:
-                device = VirtualDisk.DEVICE_DISK
+                device = DeviceDisk.DEVICE_DISK
                 if not disk.path:
-                    # Tell VirtualDisk we are a cdrom to allow empty media
-                    device = VirtualDisk.DEVICE_CDROM
+                    # Tell DeviceDisk we are a cdrom to allow empty media
+                    device = DeviceDisk.DEVICE_CDROM
 
-                newd = VirtualDisk(self.conn)
+                newd = DeviceDisk(self.conn)
                 newd.path = disk.path
                 newd.device = device
                 newd.driver_name = disk.driver_name

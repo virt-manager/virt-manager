@@ -19,12 +19,12 @@
 
 import os
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualFilesystem(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_FILESYSTEM
+class DeviceFilesystem(Device):
+    virtual_device_type = Device.DEVICE_FILESYSTEM
 
     TYPE_MOUNT = "mount"
     TYPE_TEMPLATE = "template"
@@ -94,13 +94,13 @@ class VirtualFilesystem(VirtualDevice):
     _source_dev = XMLProperty("./source/@dev")
     _source_usage = XMLProperty("./source/@usage")
     def _type_to_source_prop(self):
-        if self.type == VirtualFilesystem.TYPE_TEMPLATE:
+        if self.type == DeviceFilesystem.TYPE_TEMPLATE:
             return "_source_name"
-        elif self.type == VirtualFilesystem.TYPE_FILE:
+        elif self.type == DeviceFilesystem.TYPE_FILE:
             return "_source_file"
-        elif self.type == VirtualFilesystem.TYPE_BLOCK:
+        elif self.type == DeviceFilesystem.TYPE_BLOCK:
             return "_source_dev"
-        elif self.type == VirtualFilesystem.TYPE_RAM:
+        elif self.type == DeviceFilesystem.TYPE_RAM:
             return "_source_usage"
         else:
             return "_source_dir"
@@ -146,4 +146,4 @@ class VirtualFilesystem(VirtualDevice):
                 self.accessmode = self.MODE_MAPPED
 
 
-VirtualFilesystem.register_type()
+DeviceFilesystem.register_type()

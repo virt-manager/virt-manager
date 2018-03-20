@@ -46,7 +46,7 @@ def cdrom_specified(guest, disk=None):
     disks = guest.get_devices("disk")
 
     for d in disks:
-        if d.device == virtinst.VirtualDisk.DEVICE_CDROM:
+        if d.device == virtinst.DeviceDisk.DEVICE_CDROM:
             return True
 
     # Probably haven't set up disks yet

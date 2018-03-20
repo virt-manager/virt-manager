@@ -240,7 +240,7 @@ def _get_dev_type(path, vol_xml, vol_object, pool_xml, remote):
 
 class _StorageBase(object):
     """
-    Storage base class, defining the API used by VirtualDisk
+    Storage base class, defining the API used by DeviceDisk
     """
     def __init__(self, conn):
         self._conn = conn
@@ -491,7 +491,7 @@ class ManagedStorageCreator(_StorageCreator):
     """
     Handles storage creation via libvirt APIs. All the actual creation
     logic lives in StorageVolume, this is mostly about pulling out bits
-    from that class and mapping them to VirtualDisk elements
+    from that class and mapping them to DeviceDisk elements
     """
     def __init__(self, conn, vol_install):
         _StorageCreator.__init__(self, conn)

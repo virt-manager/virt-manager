@@ -62,27 +62,27 @@ from virtinst.network import Network
 from virtinst.nodedev import NodeDevice
 from virtinst.storage import StoragePool, StorageVolume
 
-from virtinst.device import VirtualDevice
-from virtinst.deviceinterface import VirtualNetworkInterface
-from virtinst.devicegraphics import VirtualGraphics
-from virtinst.deviceaudio import VirtualAudio
-from virtinst.deviceinput import VirtualInputDevice
-from virtinst.devicedisk import VirtualDisk
-from virtinst.devicehostdev import VirtualHostDevice
-from virtinst.devicechar import (VirtualChannelDevice,
-                                 VirtualConsoleDevice,
-                                 VirtualParallelDevice,
-                                 VirtualSerialDevice)
-from virtinst.devicevideo import VirtualVideoDevice
-from virtinst.devicecontroller import VirtualController
-from virtinst.devicewatchdog import VirtualWatchdog
-from virtinst.devicefilesystem import VirtualFilesystem
-from virtinst.devicesmartcard import VirtualSmartCardDevice
-from virtinst.deviceredirdev import VirtualRedirDevice
-from virtinst.devicememballoon import VirtualMemballoon
-from virtinst.devicetpm import VirtualTPMDevice
-from virtinst.devicerng import VirtualRNGDevice
-from virtinst.devicepanic import VirtualPanicDevice
+from virtinst.device import Device
+from virtinst.deviceinterface import DeviceInterface
+from virtinst.devicegraphics import DeviceGraphics
+from virtinst.deviceaudio import DeviceSound
+from virtinst.deviceinput import DeviceInput
+from virtinst.devicedisk import DeviceDisk
+from virtinst.devicehostdev import DeviceHostdev
+from virtinst.devicechar import (DeviceChannel,
+                                 DeviceConsole,
+                                 DeviceParallel,
+                                 DeviceSerial)
+from virtinst.devicevideo import DeviceVideo
+from virtinst.devicecontroller import DeviceController
+from virtinst.devicewatchdog import DeviceWatchdog
+from virtinst.devicefilesystem import DeviceFilesystem
+from virtinst.devicesmartcard import DeviceSmartcard
+from virtinst.deviceredirdev import DeviceRedirdev
+from virtinst.devicememballoon import DeviceMemballoon
+from virtinst.devicetpm import DeviceTpm
+from virtinst.devicerng import DeviceRng
+from virtinst.devicepanic import DevicePanic
 
 from virtinst.installer import (ContainerInstaller, ImportInstaller,
                                 PXEInstaller, Installer)
@@ -93,4 +93,4 @@ from virtinst.guest import Guest
 from virtinst.cloner import Cloner
 from virtinst.snapshot import DomainSnapshot
 
-from virtinst.connection import VirtualConnection
+from virtinst.connection import VirtinstConnection

@@ -18,12 +18,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualMemballoon(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_MEMBALLOON
+class DeviceMemballoon(Device):
+    virtual_device_type = Device.DEVICE_MEMBALLOON
 
     MODEL_DEFAULT = "default"
     MODELS = ["virtio", "xen", "none"]
@@ -33,4 +33,4 @@ class VirtualMemballoon(VirtualDevice):
                         default_cb=lambda s: "virtio")
 
 
-VirtualMemballoon.register_type()
+DeviceMemballoon.register_type()

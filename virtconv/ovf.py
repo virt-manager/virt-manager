@@ -216,7 +216,7 @@ def _import_file(conn, input_file):
 
     ifaces = []
     for node in _findall(vhnode, vhxpath % DEVICE_ETHERNET):
-        iface = virtinst.VirtualNetworkInterface(conn)
+        iface = virtinst.DeviceInterface(conn)
         # Just ignore 'source' info for now and choose the default
         net_model = _text(_find(node, "rasd:ResourceSubType"))
         if net_model and not net_model.isdigit():
@@ -236,7 +236,7 @@ def _import_file(conn, input_file):
             path = _lookup_disk_path(root, path)
             fmt = "vmdk"
 
-        disk = virtinst.VirtualDisk(conn)
+        disk = virtinst.DeviceDisk(conn)
         disk.path = path
         disk.driver_type = fmt
         disk.bus = bus

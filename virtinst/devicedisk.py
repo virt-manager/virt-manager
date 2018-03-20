@@ -28,7 +28,7 @@ import re
 
 from . import diskbackend
 from . import util
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -38,14 +38,14 @@ def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
     """
     raw_list = ["iso"]
 
-    if phystype == VirtualDisk.TYPE_BLOCK:
+    if phystype == DeviceDisk.TYPE_BLOCK:
         if not fmt:
-            return VirtualDisk.DRIVER_TYPE_RAW
+            return DeviceDisk.DRIVER_TYPE_RAW
         if fmt and not manual_format:
-            return VirtualDisk.DRIVER_TYPE_RAW
+            return DeviceDisk.DRIVER_TYPE_RAW
 
     if fmt in raw_list:
-        return VirtualDisk.DRIVER_TYPE_RAW
+        return DeviceDisk.DRIVER_TYPE_RAW
 
     return fmt
 
@@ -110,8 +110,8 @@ class _DiskSeclabel(XMLBuilder):
     label = XMLProperty("./label")
 
 
-class VirtualDisk(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_DISK
+class DeviceDisk(Device):
+    virtual_device_type = Device.DEVICE_DISK
 
     DRIVER_NAME_PHY = "phy"
     DRIVER_NAME_QEMU = "qemu"
@@ -151,12 +151,12 @@ class VirtualDisk(VirtualDevice):
     @staticmethod
     def disk_type_to_xen_driver_name(disk_type):
         """
-        Convert a value of VirtualDisk.type to it's associated Xen
+        Convert a value of DeviceDisk.type to it's associated Xen
         <driver name=/> property
         """
-        if disk_type == VirtualDisk.TYPE_BLOCK:
+        if disk_type == DeviceDisk.TYPE_BLOCK:
             return "phy"
-        elif disk_type == VirtualDisk.TYPE_FILE:
+        elif disk_type == DeviceDisk.TYPE_FILE:
             return "file"
         return "file"
 
@@ -269,7 +269,7 @@ class VirtualDisk(VirtualDevice):
             logging.debug("Exception grabbing qemu DAC user", exc_info=True)
             return None, []
 
-        return user, VirtualDisk.check_path_search_for_user(conn, path, user)
+        return user, DeviceDisk.check_path_search_for_user(conn, path, user)
 
     @staticmethod
     def fix_path_search_for_user(conn, path, username):
@@ -303,7 +303,7 @@ class VirtualDisk(VirtualDevice):
                     raise ValueError(_("Permissions on '%s' did not stick") %
                                      dirname)
 
-        fixlist = VirtualDisk.check_path_search_for_user(conn, path, username)
+        fixlist = DeviceDisk.check_path_search_for_user(conn, path, username)
         if not fixlist:
             return []
 
@@ -386,7 +386,7 @@ class VirtualDisk(VirtualDevice):
     def build_vol_install(conn, volname, poolobj, size, sparse,
                           fmt=None, backing_store=None, backing_format=None):
         """
-        Helper for building a StorageVolume instance to pass to VirtualDisk
+        Helper for building a StorageVolume instance to pass to DeviceDisk
         for eventual storage creation.
 
         :param volname: name of the volume to be created
@@ -488,7 +488,7 @@ class VirtualDisk(VirtualDevice):
     ]
 
     def __init__(self, *args, **kwargs):
-        VirtualDevice.__init__(self, *args, **kwargs)
+        Device.__init__(self, *args, **kwargs)
 
         self._source_volume_err = None
         self._storage_backend = None
@@ -686,11 +686,11 @@ class VirtualDisk(VirtualDevice):
 
     def _get_default_type(self):
         if self.source_pool or self.source_volume:
-            return VirtualDisk.TYPE_VOLUME
+            return DeviceDisk.TYPE_VOLUME
         if self._storage_backend:
             return self._storage_backend.get_dev_type()
         if self.source_protocol:
-            return VirtualDisk.TYPE_NETWORK
+            return DeviceDisk.TYPE_NETWORK
         return self.TYPE_FILE
     type = XMLProperty("./@type", default_cb=_get_default_type)
 
@@ -712,11 +712,11 @@ class VirtualDisk(VirtualDevice):
 
     def _disk_type_to_object_prop_name(self):
         disk_type = self.type
-        if disk_type == VirtualDisk.TYPE_BLOCK:
+        if disk_type == DeviceDisk.TYPE_BLOCK:
             return "_source_dev"
-        elif disk_type == VirtualDisk.TYPE_DIR:
+        elif disk_type == DeviceDisk.TYPE_DIR:
             return "_source_dir"
-        elif disk_type == VirtualDisk.TYPE_FILE:
+        elif disk_type == DeviceDisk.TYPE_FILE:
             return "_source_file"
         return None
 
@@ -797,11 +797,11 @@ class VirtualDisk(VirtualDevice):
         self._source_volume_err = None
         typ = self._get_default_type()
 
-        if self.type == VirtualDisk.TYPE_NETWORK:
+        if self.type == DeviceDisk.TYPE_NETWORK:
             # Fill in a completed URL for virt-manager UI, path comparison, etc
             path = self._build_url_from_network_source()
 
-        if typ == VirtualDisk.TYPE_VOLUME:
+        if typ == DeviceDisk.TYPE_VOLUME:
             conn = self.conn
             if "weakref" in str(type(conn)):
                 conn = conn()
@@ -877,7 +877,7 @@ class VirtualDisk(VirtualDevice):
 
             return
 
-        if (self.type == VirtualDisk.TYPE_DIR and
+        if (self.type == DeviceDisk.TYPE_DIR and
             not self.is_floppy()):
             raise ValueError(_("The path '%s' must be a file or a "
                                "device, not a directory") % self.path)
@@ -1053,4 +1053,4 @@ class VirtualDisk(VirtualDevice):
             raise ValueError(_("Only %s disks for bus '%s' are supported"
                                % (maxnode, self.bus)))
 
-VirtualDisk.register_type()
+DeviceDisk.register_type()

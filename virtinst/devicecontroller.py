@@ -17,12 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualController(VirtualDevice):
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_CONTROLLER
+class DeviceController(Device):
+    virtual_device_type = Device.DEVICE_CONTROLLER
 
     TYPE_IDE             = "ide"
     TYPE_FDC             = "fdc"
@@ -40,14 +40,14 @@ class VirtualController(VirtualDevice):
     @staticmethod
     def pretty_type(ctype):
         pretty_mappings = {
-            VirtualController.TYPE_IDE:             "IDE",
-            VirtualController.TYPE_FDC:              _("Floppy"),
-            VirtualController.TYPE_SCSI:            "SCSI",
-            VirtualController.TYPE_SATA:            "SATA",
-            VirtualController.TYPE_VIRTIOSERIAL:    "VirtIO Serial",
-            VirtualController.TYPE_USB:             "USB",
-            VirtualController.TYPE_PCI:             "PCI",
-            VirtualController.TYPE_CCID:            "CCID",
+            DeviceController.TYPE_IDE:             "IDE",
+            DeviceController.TYPE_FDC:              _("Floppy"),
+            DeviceController.TYPE_SCSI:            "SCSI",
+            DeviceController.TYPE_SATA:            "SATA",
+            DeviceController.TYPE_VIRTIOSERIAL:    "VirtIO Serial",
+            DeviceController.TYPE_USB:             "USB",
+            DeviceController.TYPE_PCI:             "PCI",
+            DeviceController.TYPE_CCID:            "CCID",
        }
 
         if ctype not in pretty_mappings:
@@ -57,24 +57,24 @@ class VirtualController(VirtualDevice):
     @staticmethod
     def get_usb2_controllers(conn):
         ret = []
-        ctrl = VirtualController(conn)
+        ctrl = DeviceController(conn)
         ctrl.type = "usb"
         ctrl.model = "ich9-ehci1"
         ret.append(ctrl)
 
-        ctrl = VirtualController(conn)
+        ctrl = DeviceController(conn)
         ctrl.type = "usb"
         ctrl.model = "ich9-uhci1"
         ctrl.master_startport = 0
         ret.append(ctrl)
 
-        ctrl = VirtualController(conn)
+        ctrl = DeviceController(conn)
         ctrl.type = "usb"
         ctrl.model = "ich9-uhci2"
         ctrl.master_startport = 2
         ret.append(ctrl)
 
-        ctrl = VirtualController(conn)
+        ctrl = DeviceController(conn)
         ctrl.type = "usb"
         ctrl.model = "ich9-uhci3"
         ctrl.master_startport = 4
@@ -83,7 +83,7 @@ class VirtualController(VirtualDevice):
 
     @staticmethod
     def get_usb3_controller(conn, guest):
-        ctrl = VirtualController(conn)
+        ctrl = DeviceController(conn)
         ctrl.type = "usb"
         ctrl.model = "nec-xhci"
         if ((guest.os.is_arm_machvirt() or guest.os.is_pseries()) and
@@ -115,4 +115,4 @@ class VirtualController(VirtualDevice):
             ret = "PCIe"
         return ret
 
-VirtualController.register_type()
+DeviceController.register_type()

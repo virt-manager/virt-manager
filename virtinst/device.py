@@ -22,17 +22,17 @@
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
-class VirtualDeviceAlias(XMLBuilder):
+class DeviceAlias(XMLBuilder):
     _XML_ROOT_NAME = "alias"
     name = XMLProperty("./@name")
 
 
-class VirtualDeviceBoot(XMLBuilder):
+class DeviceBoot(XMLBuilder):
     _XML_ROOT_NAME = "boot"
     order = XMLProperty("./@order", is_int=True)
 
 
-class VirtualDeviceAddress(XMLBuilder):
+class DeviceAddress(XMLBuilder):
     """
     Examples:
     <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
@@ -111,63 +111,63 @@ class VirtualDeviceAddress(XMLBuilder):
     base = XMLProperty("./@base")
 
 
-class VirtualDevice(XMLBuilder):
+class Device(XMLBuilder):
     """
     Base class for all domain xml device objects.
     """
 
-    VIRTUAL_DEV_DISK            = "disk"
-    VIRTUAL_DEV_NET             = "interface"
-    VIRTUAL_DEV_INPUT           = "input"
-    VIRTUAL_DEV_GRAPHICS        = "graphics"
-    VIRTUAL_DEV_AUDIO           = "sound"
-    VIRTUAL_DEV_HOSTDEV         = "hostdev"
-    VIRTUAL_DEV_SERIAL          = "serial"
-    VIRTUAL_DEV_PARALLEL        = "parallel"
-    VIRTUAL_DEV_CHANNEL         = "channel"
-    VIRTUAL_DEV_CONSOLE         = "console"
-    VIRTUAL_DEV_VIDEO           = "video"
-    VIRTUAL_DEV_CONTROLLER      = "controller"
-    VIRTUAL_DEV_WATCHDOG        = "watchdog"
-    VIRTUAL_DEV_FILESYSTEM      = "filesystem"
-    VIRTUAL_DEV_SMARTCARD       = "smartcard"
-    VIRTUAL_DEV_REDIRDEV        = "redirdev"
-    VIRTUAL_DEV_MEMBALLOON      = "memballoon"
-    VIRTUAL_DEV_TPM             = "tpm"
-    VIRTUAL_DEV_RNG             = "rng"
-    VIRTUAL_DEV_PANIC           = "panic"
-    VIRTUAL_DEV_MEMORY          = "memory"
+    DEVICE_DISK            = "disk"
+    DEVICE_NET             = "interface"
+    DEVICE_INPUT           = "input"
+    DEVICE_GRAPHICS        = "graphics"
+    DEVICE_AUDIO           = "sound"
+    DEVICE_HOSTDEV         = "hostdev"
+    DEVICE_SERIAL          = "serial"
+    DEVICE_PARALLEL        = "parallel"
+    DEVICE_CHANNEL         = "channel"
+    DEVICE_CONSOLE         = "console"
+    DEVICE_VIDEO           = "video"
+    DEVICE_CONTROLLER      = "controller"
+    DEVICE_WATCHDOG        = "watchdog"
+    DEVICE_FILESYSTEM      = "filesystem"
+    DEVICE_SMARTCARD       = "smartcard"
+    DEVICE_REDIRDEV        = "redirdev"
+    DEVICE_MEMBALLOON      = "memballoon"
+    DEVICE_TPM             = "tpm"
+    DEVICE_RNG             = "rng"
+    DEVICE_PANIC           = "panic"
+    DEVICE_MEMORY          = "memory"
 
     # Ordering in this list is important: it will be the order the
     # Guest class outputs XML. So changing this may upset the test suite
-    virtual_device_types = [VIRTUAL_DEV_DISK,
-                            VIRTUAL_DEV_CONTROLLER,
-                            VIRTUAL_DEV_FILESYSTEM,
-                            VIRTUAL_DEV_NET,
-                            VIRTUAL_DEV_INPUT,
-                            VIRTUAL_DEV_GRAPHICS,
-                            VIRTUAL_DEV_SERIAL,
-                            VIRTUAL_DEV_PARALLEL,
-                            VIRTUAL_DEV_CONSOLE,
-                            VIRTUAL_DEV_CHANNEL,
-                            VIRTUAL_DEV_AUDIO,
-                            VIRTUAL_DEV_VIDEO,
-                            VIRTUAL_DEV_HOSTDEV,
-                            VIRTUAL_DEV_WATCHDOG,
-                            VIRTUAL_DEV_SMARTCARD,
-                            VIRTUAL_DEV_REDIRDEV,
-                            VIRTUAL_DEV_MEMBALLOON,
-                            VIRTUAL_DEV_TPM,
-                            VIRTUAL_DEV_RNG,
-                            VIRTUAL_DEV_PANIC,
-                            VIRTUAL_DEV_MEMORY]
+    virtual_device_types = [DEVICE_DISK,
+                            DEVICE_CONTROLLER,
+                            DEVICE_FILESYSTEM,
+                            DEVICE_NET,
+                            DEVICE_INPUT,
+                            DEVICE_GRAPHICS,
+                            DEVICE_SERIAL,
+                            DEVICE_PARALLEL,
+                            DEVICE_CONSOLE,
+                            DEVICE_CHANNEL,
+                            DEVICE_AUDIO,
+                            DEVICE_VIDEO,
+                            DEVICE_HOSTDEV,
+                            DEVICE_WATCHDOG,
+                            DEVICE_SMARTCARD,
+                            DEVICE_REDIRDEV,
+                            DEVICE_MEMBALLOON,
+                            DEVICE_TPM,
+                            DEVICE_RNG,
+                            DEVICE_PANIC,
+                            DEVICE_MEMORY]
 
     virtual_device_classes = {}
 
     @classmethod
     def register_type(cls):
         cls._XML_ROOT_NAME = cls.virtual_device_type
-        VirtualDevice.virtual_device_classes[cls.virtual_device_type] = cls
+        Device.virtual_device_classes[cls.virtual_device_type] = cls
 
     # General device type (disk, interface, etc.)
     virtual_device_type = None
@@ -188,9 +188,9 @@ class VirtualDevice(XMLBuilder):
             raise ValueError(_("Unknown virtual device type '%s'.") %
                              self.virtual_device_type)
 
-    alias = XMLChildProperty(VirtualDeviceAlias, is_single=True)
-    address = XMLChildProperty(VirtualDeviceAddress, is_single=True)
-    boot = XMLChildProperty(VirtualDeviceBoot, is_single=True)
+    alias = XMLChildProperty(DeviceAlias, is_single=True)
+    address = XMLChildProperty(DeviceAddress, is_single=True)
+    boot = XMLChildProperty(DeviceBoot, is_single=True)
 
 
     def setup(self, meter=None):

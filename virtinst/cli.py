@@ -38,25 +38,25 @@ from . import util
 from .clock import Clock
 from .cpu import CPU
 from .cputune import CPUTune
-from .deviceaudio import VirtualAudio
-from .devicechar import (VirtualChannelDevice, VirtualConsoleDevice,
-                         VirtualSerialDevice, VirtualParallelDevice)
-from .devicecontroller import VirtualController
-from .devicedisk import VirtualDisk
-from .devicefilesystem import VirtualFilesystem
-from .devicegraphics import VirtualGraphics
-from .devicehostdev import VirtualHostDevice
-from .deviceinput import VirtualInputDevice
-from .deviceinterface import VirtualNetworkInterface
-from .devicememballoon import VirtualMemballoon
-from .devicememory import VirtualMemoryDevice
-from .devicepanic import VirtualPanicDevice
-from .deviceredirdev import VirtualRedirDevice
-from .devicerng import VirtualRNGDevice
-from .devicesmartcard import VirtualSmartCardDevice
-from .devicetpm import VirtualTPMDevice
-from .devicevideo import VirtualVideoDevice
-from .devicewatchdog import VirtualWatchdog
+from .deviceaudio import DeviceSound
+from .devicechar import (DeviceChannel, DeviceConsole,
+                         DeviceSerial, DeviceParallel)
+from .devicecontroller import DeviceController
+from .devicedisk import DeviceDisk
+from .devicefilesystem import DeviceFilesystem
+from .devicegraphics import DeviceGraphics
+from .devicehostdev import DeviceHostdev
+from .deviceinput import DeviceInput
+from .deviceinterface import DeviceInterface
+from .devicememballoon import DeviceMemballoon
+from .devicememory import DeviceMemory
+from .devicepanic import DevicePanic
+from .deviceredirdev import DeviceRedirdev
+from .devicerng import DeviceRng
+from .devicesmartcard import DeviceSmartcard
+from .devicetpm import DeviceTpm
+from .devicevideo import DeviceVideo
+from .devicewatchdog import DeviceWatchdog
 from .domainblkiotune import DomainBlkiotune
 from .domainfeatures import DomainFeatures
 from .domainmemorybacking import DomainMemorybacking
@@ -277,10 +277,10 @@ def _in_testsuite():
 ##############################
 
 def getConnection(uri):
-    from .connection import VirtualConnection
+    from .connection import VirtinstConnection
 
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
-    conn = VirtualConnection(uri)
+    conn = VirtinstConnection(uri)
     conn.open(_do_creds_authname)
     logging.debug("Received libvirt URI %s", conn.uri)
 
@@ -383,7 +383,7 @@ def validate_disk(dev, warn_overwrite=False):
         """
         if not warn_overwrite:
             return
-        if not VirtualDisk.path_definitely_exists(dev.conn, dev.path):
+        if not DeviceDisk.path_definitely_exists(dev.conn, dev.path):
             return
         _optional_fail(
             _("This will overwrite the existing path '%s'") % dev.path,
@@ -490,8 +490,8 @@ def get_console_cb(guest):
 
     gtype = gdevs[0].type
     if gtype not in ["default",
-            VirtualGraphics.TYPE_VNC,
-            VirtualGraphics.TYPE_SPICE]:
+            DeviceGraphics.TYPE_VNC,
+            DeviceGraphics.TYPE_SPICE]:
         logging.debug("No viewer to launch for graphics type '%s'", gtype)
         return
 
@@ -841,7 +841,7 @@ class _VirtCLIArgumentStatic(object):
         form FOO=BAR, but just FOO.
     @find_inst_cb: If specified, this can be used to return a different
         'inst' to check and set attributes against. For example,
-        VirtualDisk has multiple seclabel children, this provides a hook
+        DeviceDisk has multiple seclabel children, this provides a hook
         to lookup the specified child object.
     """
     def __init__(self, attrname, cliname,
@@ -1213,7 +1213,7 @@ class VirtCLIParser(object):
         self.optdict into 'inst'.
 
         For virt-xml, 'inst' is the virtinst object we are editing,
-        ex. a VirtualDisk from a parsed Guest object.
+        ex. a DeviceDisk from a parsed Guest object.
         For virt-install, 'inst' is None, and we will create a new
         inst from self.objclass, or edit a singleton object in place
         like Guest.features/DomainFeatures
@@ -1957,7 +1957,7 @@ ParserQemuCLI.add_arg(None, "env", cb=ParserQemuCLI.env_cb, can_comma=True)
 
 def _add_device_address_args(cls):
     """
-    Add VirtualDeviceAddress parameters if we are parsing for a device
+    Add DeviceAddress parameters if we are parsing for a device
     """
     cls.add_arg("address.type", "address.type")
     cls.add_arg("address.domain", "address.domain")
@@ -2012,7 +2012,7 @@ def _generate_new_volume_name(guest, poolobj, fmt):
 
 class ParserDisk(VirtCLIParser):
     cli_arg_name = "disk"
-    objclass = VirtualDisk
+    objclass = DeviceDisk
     remove_first = "path"
     stub_none = False
 
@@ -2104,7 +2104,7 @@ class ParserDisk(VirtCLIParser):
             if newvolname is None:
                 newvolname = _generate_new_volume_name(self.guest, poolobj,
                                                        fmt)
-            vol_install = VirtualDisk.build_vol_install(
+            vol_install = DeviceDisk.build_vol_install(
                     self.guest.conn, newvolname, poolobj, size, sparse,
                     fmt=fmt, backing_store=backing_store,
                     backing_format=backing_format)
@@ -2168,7 +2168,7 @@ ParserDisk.add_arg("sgio", "sgio")
 ParserDisk.add_arg("logical_block_size", "logical_block_size")
 ParserDisk.add_arg("physical_block_size", "physical_block_size")
 
-# VirtualDisk.seclabels properties
+# DeviceDisk.seclabels properties
 ParserDisk.add_arg("model", "seclabel[0-9]*.model",
                    find_inst_cb=ParserDisk.seclabel_find_inst_cb)
 ParserDisk.add_arg("relabel", "seclabel[0-9]*.relabel", is_onoff=True,
@@ -2183,7 +2183,7 @@ ParserDisk.add_arg("label", "seclabel[0-9]*.label", can_comma=True,
 
 class ParserNetwork(VirtCLIParser):
     cli_arg_name = "network"
-    objclass = VirtualNetworkInterface
+    objclass = DeviceInterface
     remove_first = "type"
     stub_none = False
 
@@ -2218,10 +2218,10 @@ class ParserNetwork(VirtCLIParser):
 
         if "type" not in self.optdict:
             if "network" in self.optdict:
-                self.optdict["type"] = VirtualNetworkInterface.TYPE_VIRTUAL
+                self.optdict["type"] = DeviceInterface.TYPE_VIRTUAL
                 self.optdict["source"] = self.optdict.pop("network")
             elif "bridge" in self.optdict:
-                self.optdict["type"] = VirtualNetworkInterface.TYPE_BRIDGE
+                self.optdict["type"] = DeviceInterface.TYPE_BRIDGE
                 self.optdict["source"] = self.optdict.pop("bridge")
 
         return VirtCLIParser._parse(self, inst)
@@ -2270,7 +2270,7 @@ ParserNetwork.add_arg("virtualport.interfaceid", "virtualport_interfaceid")
 
 class ParserGraphics(VirtCLIParser):
     cli_arg_name = "graphics"
-    objclass = VirtualGraphics
+    objclass = DeviceGraphics
     remove_first = "type"
     stub_none = False
 
@@ -2280,7 +2280,7 @@ class ParserGraphics(VirtCLIParser):
         if not val:
             val = None
         elif val.lower() == "local":
-            val = VirtualGraphics.KEYMAP_LOCAL
+            val = DeviceGraphics.KEYMAP_LOCAL
         elif val.lower() == "none":
             val = None
         else:
@@ -2371,7 +2371,7 @@ ParserGraphics.add_arg("rendernode", "rendernode")
 
 class ParserController(VirtCLIParser):
     cli_arg_name = "controller"
-    objclass = VirtualController
+    objclass = DeviceController
     remove_first = "type"
 
     def set_server_cb(self, inst, val, virtarg):
@@ -2379,7 +2379,7 @@ class ParserController(VirtCLIParser):
 
     def _parse(self, inst):
         if self.optstr == "usb2":
-            return VirtualController.get_usb2_controllers(inst.conn)
+            return DeviceController.get_usb2_controllers(inst.conn)
         elif self.optstr == "usb3":
             inst.type = "usb"
             inst.model = "nec-xhci"
@@ -2403,7 +2403,7 @@ ParserController.add_arg(None, "address", cb=ParserController.set_server_cb)
 
 class ParserInput(VirtCLIParser):
     cli_arg_name = "input"
-    objclass = VirtualInputDevice
+    objclass = DeviceInput
     remove_first = "type"
 
 _register_virt_parser(ParserInput)
@@ -2418,7 +2418,7 @@ ParserInput.add_arg("bus", "bus")
 
 class ParserSmartcard(VirtCLIParser):
     cli_arg_name = "smartcard"
-    objclass = VirtualSmartCardDevice
+    objclass = DeviceSmartcard
     remove_first = "mode"
 
 _register_virt_parser(ParserSmartcard)
@@ -2433,7 +2433,7 @@ ParserSmartcard.add_arg("type", "type")
 
 class ParserRedir(VirtCLIParser):
     cli_arg_name = "redirdev"
-    objclass = VirtualRedirDevice
+    objclass = DeviceRedirdev
     remove_first = "bus"
     stub_none = False
 
@@ -2460,7 +2460,7 @@ ParserRedir.add_arg(None, "server", cb=ParserRedir.set_server_cb)
 
 class ParserTPM(VirtCLIParser):
     cli_arg_name = "tpm"
-    objclass = VirtualTPMDevice
+    objclass = DeviceTpm
     remove_first = "type"
 
     def _parse(self, inst):
@@ -2481,7 +2481,7 @@ ParserTPM.add_arg("device_path", "path")
 
 class ParserRNG(VirtCLIParser):
     cli_arg_name = "rng"
-    objclass = VirtualRNGDevice
+    objclass = DeviceRng
     remove_first = "type"
     stub_none = False
 
@@ -2550,7 +2550,7 @@ ParserRNG.add_arg("rate_period", "rate_period")
 
 class ParserWatchdog(VirtCLIParser):
     cli_arg_name = "watchdog"
-    objclass = VirtualWatchdog
+    objclass = DeviceWatchdog
     remove_first = "model"
 
 _register_virt_parser(ParserWatchdog)
@@ -2565,7 +2565,7 @@ ParserWatchdog.add_arg("action", "action")
 
 class ParseMemdev(VirtCLIParser):
     cli_arg_name = "memdev"
-    objclass = VirtualMemoryDevice
+    objclass = DeviceMemory
     remove_first = "model"
 
     def set_target_size(self, inst, val, virtarg):
@@ -2589,7 +2589,7 @@ ParseMemdev.add_arg("source.nodemask", "source_nodemask", can_comma=True)
 
 class ParserMemballoon(VirtCLIParser):
     cli_arg_name = "memballoon"
-    objclass = VirtualMemballoon
+    objclass = DeviceMemballoon
     remove_first = "model"
     stub_none = False
 
@@ -2604,13 +2604,13 @@ ParserMemballoon.add_arg("model", "model")
 
 class ParserPanic(VirtCLIParser):
     cli_arg_name = "panic"
-    objclass = VirtualPanicDevice
+    objclass = DevicePanic
     remove_first = "model"
     compat_mode = False
 
     def set_model_cb(self, inst, val, virtarg):
         if self.compat_mode and val.startswith("0x"):
-            inst.model = VirtualPanicDevice.MODEL_ISA
+            inst.model = DevicePanic.MODEL_ISA
             inst.iobase = val
         else:
             inst.model = val
@@ -2689,25 +2689,25 @@ _ParserChar.add_arg("log_append", "log.append", is_onoff=True)
 
 class ParserSerial(_ParserChar):
     cli_arg_name = "serial"
-    objclass = VirtualSerialDevice
+    objclass = DeviceSerial
 _register_virt_parser(ParserSerial)
 
 
 class ParserParallel(_ParserChar):
     cli_arg_name = "parallel"
-    objclass = VirtualParallelDevice
+    objclass = DeviceParallel
 _register_virt_parser(ParserParallel)
 
 
 class ParserChannel(_ParserChar):
     cli_arg_name = "channel"
-    objclass = VirtualChannelDevice
+    objclass = DeviceChannel
 _register_virt_parser(ParserChannel)
 
 
 class ParserConsole(_ParserChar):
     cli_arg_name = "console"
-    objclass = VirtualConsoleDevice
+    objclass = DeviceConsole
 _register_virt_parser(ParserConsole)
 
 
@@ -2717,7 +2717,7 @@ _register_virt_parser(ParserConsole)
 
 class ParserFilesystem(VirtCLIParser):
     cli_arg_name = "filesystem"
-    objclass = VirtualFilesystem
+    objclass = DeviceFilesystem
     remove_first = ["source", "target"]
 
 _register_virt_parser(ParserFilesystem)
@@ -2734,7 +2734,7 @@ ParserFilesystem.add_arg("target", "target")
 
 class ParserVideo(VirtCLIParser):
     cli_arg_name = "video"
-    objclass = VirtualVideoDevice
+    objclass = DeviceVideo
     remove_first = "model"
 
     def _parse(self, inst):
@@ -2768,7 +2768,7 @@ ParserVideo.add_arg("vgamem", "vgamem")
 
 class ParserSound(VirtCLIParser):
     cli_arg_name = "sound"
-    objclass = VirtualAudio
+    objclass = DeviceSound
     remove_first = "model"
     stub_none = False
 
@@ -2789,7 +2789,7 @@ ParserSound.add_arg("model", "model", ignore_default=True)
 
 class ParserHostdev(VirtCLIParser):
     cli_arg_name = "hostdev"
-    objclass = VirtualHostDevice
+    objclass = DeviceHostdev
     remove_first = "name"
 
     def set_name_cb(self, inst, val, virtarg):

@@ -17,13 +17,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualVideoDevice(VirtualDevice):
+class DeviceVideo(Device):
 
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_VIDEO
+    virtual_device_type = Device.DEVICE_VIDEO
 
     # Default models list
     MODEL_DEFAULT = "default"
@@ -47,4 +47,4 @@ class VirtualVideoDevice(VirtualDevice):
     accel3d = XMLProperty("./model/acceleration/@accel3d", is_yesno=True)
 
 
-VirtualVideoDevice.register_type()
+DeviceVideo.register_type()

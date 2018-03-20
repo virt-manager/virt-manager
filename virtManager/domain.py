@@ -29,8 +29,8 @@ from virtinst import DomainCapabilities
 from virtinst import DomainSnapshot
 from virtinst import Guest
 from virtinst import util
-from virtinst import VirtualController
-from virtinst import VirtualDisk
+from virtinst import DeviceController
+from virtinst import DeviceDisk
 
 from .libvirtobject import vmmLibvirtObject
 from .libvirtenummap import LibvirtEnumMap
@@ -484,14 +484,14 @@ class vmmDomain(vmmLibvirtObject):
         We need to do this copy magic because there is no Libvirt storage API
         to rename storage volume.
         """
-        old_nvram = VirtualDisk(self.conn.get_backend())
+        old_nvram = DeviceDisk(self.conn.get_backend())
         old_nvram.path = self.get_xmlobj().os.nvram
 
         nvram_dir = os.path.dirname(old_nvram.path)
         new_nvram_path = os.path.join(nvram_dir, "%s_VARS.fd" % new_name)
-        new_nvram = VirtualDisk(self.conn.get_backend())
+        new_nvram = DeviceDisk(self.conn.get_backend())
 
-        nvram_install = VirtualDisk.build_vol_install(
+        nvram_install = DeviceDisk.build_vol_install(
                 self.conn.get_backend(), os.path.basename(new_nvram_path),
                 old_nvram.get_parent_pool(), old_nvram.get_size(), False)
         nvram_install.input_vol = old_nvram.get_vol_object()
@@ -930,16 +930,16 @@ class vmmDomain(vmmLibvirtObject):
             if editdev.type == "usb":
                 ctrls = xmlobj.get_devices("controller")
                 ctrls = [x for x in ctrls if (x.type ==
-                         VirtualController.TYPE_USB)]
+                         DeviceController.TYPE_USB)]
                 for dev in ctrls:
                     xmlobj.remove_device(dev)
 
                 if model == "ich9-ehci1":
-                    for dev in VirtualController.get_usb2_controllers(
+                    for dev in DeviceController.get_usb2_controllers(
                             xmlobj.conn):
                         xmlobj.add_device(dev)
                 else:
-                    dev = VirtualController(xmlobj.conn)
+                    dev = DeviceController(xmlobj.conn)
                     dev.type = "usb"
                     dev.model = model
                     xmlobj.add_device(dev)
@@ -1332,7 +1332,7 @@ class vmmDomain(vmmLibvirtObject):
         devs = self._build_device_list("disk", refresh_if_nec, inactive)
 
         # Iterate through all disks and calculate what number they are
-        # HACK: We are making a variable in VirtualDisk to store the index
+        # HACK: We are making a variable in DeviceDisk to store the index
         idx_mapping = {}
         for dev in devs:
             devtype = dev.device

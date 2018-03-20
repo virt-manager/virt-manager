@@ -21,7 +21,7 @@
 
 from gi.repository import Gtk
 
-from virtinst import VirtualFilesystem, StorageVolume
+from virtinst import DeviceFilesystem, StorageVolume
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .storagebrowse import vmmStorageBrowser
@@ -100,35 +100,35 @@ class vmmFSDetails(vmmGObjectUI):
         # Filesystem widgets
         if self.conn.is_openvz():
             simple_store_set("fs-type-combo",
-                [VirtualFilesystem.TYPE_MOUNT,
-                 VirtualFilesystem.TYPE_TEMPLATE], sort=False)
+                [DeviceFilesystem.TYPE_MOUNT,
+                 DeviceFilesystem.TYPE_TEMPLATE], sort=False)
         elif self.conn.is_lxc():
             simple_store_set("fs-type-combo",
-                [VirtualFilesystem.TYPE_MOUNT,
-                 VirtualFilesystem.TYPE_FILE,
-                 VirtualFilesystem.TYPE_BLOCK,
-                 VirtualFilesystem.TYPE_RAM], sort=False)
+                [DeviceFilesystem.TYPE_MOUNT,
+                 DeviceFilesystem.TYPE_FILE,
+                 DeviceFilesystem.TYPE_BLOCK,
+                 DeviceFilesystem.TYPE_RAM], sort=False)
         else:
-            simple_store_set("fs-type-combo", [VirtualFilesystem.TYPE_MOUNT])
-            self.widget("fs-type-label").set_text(VirtualFilesystem.TYPE_MOUNT)
+            simple_store_set("fs-type-combo", [DeviceFilesystem.TYPE_MOUNT])
+            self.widget("fs-type-label").set_text(DeviceFilesystem.TYPE_MOUNT)
 
-        simple_store_set("fs-mode-combo", VirtualFilesystem.MODES)
+        simple_store_set("fs-mode-combo", DeviceFilesystem.MODES)
         if self.conn.is_qemu() or self.conn.is_test():
             simple_store_set("fs-driver-combo",
-                [VirtualFilesystem.DRIVER_PATH,
-                 VirtualFilesystem.DRIVER_HANDLE,
-                 VirtualFilesystem.DRIVER_DEFAULT])
+                [DeviceFilesystem.DRIVER_PATH,
+                 DeviceFilesystem.DRIVER_HANDLE,
+                 DeviceFilesystem.DRIVER_DEFAULT])
         elif self.conn.is_lxc():
             simple_store_set("fs-driver-combo",
-                [VirtualFilesystem.DRIVER_LOOP,
-                 VirtualFilesystem.DRIVER_NBD,
-                 VirtualFilesystem.DRIVER_DEFAULT])
+                [DeviceFilesystem.DRIVER_LOOP,
+                 DeviceFilesystem.DRIVER_NBD,
+                 DeviceFilesystem.DRIVER_DEFAULT])
         else:
             simple_store_set("fs-driver-combo",
-                [VirtualFilesystem.DRIVER_DEFAULT])
+                [DeviceFilesystem.DRIVER_DEFAULT])
         simple_store_set("fs-format-combo",
             StorageVolume.ALL_FORMATS, capitalize=False)
-        simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
+        simple_store_set("fs-wrpolicy-combo", DeviceFilesystem.WRPOLICIES)
         self.show_pair_combo("fs-type",
             self.conn.is_openvz() or self.conn.is_lxc())
         self.show_check_button("fs-readonly",
@@ -186,7 +186,7 @@ class vmmFSDetails(vmmGObjectUI):
         self.set_config_value("fs-driver", dev.driver or "default")
         self.set_config_value("fs-wrpolicy", dev.wrpolicy or "default")
         self.set_config_value("fs-format", dev.format or "default")
-        if dev.type != VirtualFilesystem.TYPE_RAM:
+        if dev.type != DeviceFilesystem.TYPE_RAM:
             self.widget("fs-source").set_text(dev.source)
         else:
             self.widget("fs-ram-source-spin").set_value(int(dev.source) // 1024)
@@ -221,35 +221,35 @@ class vmmFSDetails(vmmGObjectUI):
         fstype = self.get_config_fs_type()
         fsdriver = self.get_config_fs_driver()
         ismount = bool(
-                fstype == VirtualFilesystem.TYPE_MOUNT or
+                fstype == DeviceFilesystem.TYPE_MOUNT or
                 self.conn.is_qemu() or self.conn.is_test())
 
         show_mode = bool(ismount and
-            (fsdriver == VirtualFilesystem.DRIVER_PATH or
-            fsdriver == VirtualFilesystem.DRIVER_DEFAULT))
+            (fsdriver == DeviceFilesystem.DRIVER_PATH or
+            fsdriver == DeviceFilesystem.DRIVER_DEFAULT))
         uiutil.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
 
         show_wrpol = bool(ismount and
-            fsdriver and (fsdriver == VirtualFilesystem.DRIVER_PATH or
-            fsdriver == VirtualFilesystem.DRIVER_HANDLE))
+            fsdriver and (fsdriver == DeviceFilesystem.DRIVER_PATH or
+            fsdriver == DeviceFilesystem.DRIVER_HANDLE))
         uiutil.set_grid_row_visible(self.widget("fs-wrpolicy-box"),
                                        show_wrpol)
 
-        show_ram_source = fstype == VirtualFilesystem.TYPE_RAM
+        show_ram_source = fstype == DeviceFilesystem.TYPE_RAM
         uiutil.set_grid_row_visible(
             self.widget("fs-ram-source-box"), show_ram_source)
         uiutil.set_grid_row_visible(
             self.widget("fs-source-box"), not show_ram_source)
 
         show_format = bool(
-            fsdriver == VirtualFilesystem.DRIVER_NBD)
+            fsdriver == DeviceFilesystem.DRIVER_NBD)
         uiutil.set_grid_row_visible(self.widget("fs-format-box"), show_format)
         self.show_pair_combo("fs-format", True)
 
         show_mode_combo = False
         show_driver_combo = False
         show_wrpolicy_combo = self.conn.is_qemu() or self.conn.is_test()
-        if fstype == VirtualFilesystem.TYPE_TEMPLATE:
+        if fstype == DeviceFilesystem.TYPE_TEMPLATE:
             source_text = _("Te_mplate:")
         else:
             source_text = _("_Source path:")
@@ -281,17 +281,17 @@ class vmmFSDetails(vmmGObjectUI):
         fsformat = self.get_config_fs_format()
         wrpolicy = self.get_config_fs_wrpolicy()
 
-        if not source and fstype != VirtualFilesystem.TYPE_RAM:
+        if not source and fstype != DeviceFilesystem.TYPE_RAM:
             return self.err.val_err(_("A filesystem source must be specified"))
-        elif usage == 0 and fstype == VirtualFilesystem.TYPE_RAM:
+        elif usage == 0 and fstype == DeviceFilesystem.TYPE_RAM:
             return self.err.val_err(
                 _("A RAM filesystem usage must be specified"))
         if not target:
             return self.err.val_err(_("A filesystem target must be specified"))
 
         try:
-            self._dev = VirtualFilesystem(conn)
-            if fstype == VirtualFilesystem.TYPE_RAM:
+            self._dev = DeviceFilesystem(conn)
+            if fstype == DeviceFilesystem.TYPE_RAM:
                 self._dev.source = usage
                 self._dev.units = 'MiB'
             else:
@@ -305,9 +305,9 @@ class vmmFSDetails(vmmGObjectUI):
                 self._dev.readonly = readonly
             if driver:
                 self._dev.driver = driver
-                if driver == VirtualFilesystem.DRIVER_LOOP:
+                if driver == DeviceFilesystem.DRIVER_LOOP:
                     self._dev.format = "raw"
-                elif driver == VirtualFilesystem.DRIVER_NBD:
+                elif driver == DeviceFilesystem.DRIVER_NBD:
                     self._dev.format = fsformat
             if wrpolicy:
                 self._dev.wrpolicy = wrpolicy

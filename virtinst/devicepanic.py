@@ -17,13 +17,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualPanicDevice(VirtualDevice):
+class DevicePanic(Device):
 
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_PANIC
+    virtual_device_type = Device.DEVICE_PANIC
 
     MODEL_DEFAULT = "default"
     MODEL_ISA = "isa"
@@ -36,44 +36,44 @@ class VirtualPanicDevice(VirtualDevice):
 
     @staticmethod
     def get_pretty_model(panic_model):
-        if panic_model == VirtualPanicDevice.MODEL_ISA:
+        if panic_model == DevicePanic.MODEL_ISA:
             return _("ISA")
-        elif panic_model == VirtualPanicDevice.MODEL_PSERIES:
+        elif panic_model == DevicePanic.MODEL_PSERIES:
             return _("pSeries")
-        elif panic_model == VirtualPanicDevice.MODEL_HYPERV:
+        elif panic_model == DevicePanic.MODEL_HYPERV:
             return _("Hyper-V")
-        elif panic_model == VirtualPanicDevice.MODEL_S390:
+        elif panic_model == DevicePanic.MODEL_S390:
             return _("s390")
         return panic_model
 
     @staticmethod
     def get_models(os):
         if os.is_x86():
-            return [VirtualPanicDevice.MODEL_ISA,
-                    VirtualPanicDevice.MODEL_HYPERV]
+            return [DevicePanic.MODEL_ISA,
+                    DevicePanic.MODEL_HYPERV]
         elif os.is_pseries():
-            return [VirtualPanicDevice.MODEL_PSERIES]
+            return [DevicePanic.MODEL_PSERIES]
         elif os.is_s390x():
-            return [VirtualPanicDevice.MODEL_S390]
+            return [DevicePanic.MODEL_S390]
         return []
 
     @staticmethod
     def get_default_model(os):
-        models = VirtualPanicDevice.get_models(os)
+        models = DevicePanic.get_models(os)
         if models:
             return models[0]
         return None
 
     def _get_default_address_type(self):
         if self.iobase:
-            return VirtualPanicDevice.ISA_ADDRESS_TYPE
+            return DevicePanic.ISA_ADDRESS_TYPE
         return None
 
     model = XMLProperty("./@model",
-                        default_cb=lambda s: VirtualPanicDevice.MODEL_ISA,
+                        default_cb=lambda s: DevicePanic.MODEL_ISA,
                         default_name=MODEL_DEFAULT)
     type = XMLProperty("./address/@type",
                        default_cb=_get_default_address_type)
     iobase = XMLProperty("./address/@iobase")
 
-VirtualPanicDevice.register_type()
+DevicePanic.register_type()

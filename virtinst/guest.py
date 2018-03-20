@@ -32,17 +32,17 @@ from .osdict import OSDB
 from .clock import Clock
 from .cpu import CPU
 from .cputune import CPUTune
-from .device import VirtualDevice
-from .deviceaudio import VirtualAudio
-from .devicechar import VirtualChannelDevice, VirtualConsoleDevice
-from .devicecontroller import VirtualController
-from .devicedisk import VirtualDisk
-from .devicegraphics import VirtualGraphics
-from .deviceinput import VirtualInputDevice
-from .devicepanic import VirtualPanicDevice
-from .deviceredirdev import VirtualRedirDevice
-from .devicerng import VirtualRNGDevice
-from .devicevideo import VirtualVideoDevice
+from .device import Device
+from .deviceaudio import DeviceSound
+from .devicechar import DeviceChannel, DeviceConsole
+from .devicecontroller import DeviceController
+from .devicedisk import DeviceDisk
+from .devicegraphics import DeviceGraphics
+from .deviceinput import DeviceInput
+from .devicepanic import DevicePanic
+from .deviceredirdev import DeviceRedirdev
+from .devicerng import DeviceRng
+from .devicevideo import DeviceVideo
 from .distroinstaller import DistroInstaller
 from .domainblkiotune import DomainBlkiotune
 from .domainfeatures import DomainFeatures
@@ -261,7 +261,7 @@ class Guest(XMLBuilder):
         """
         Add the passed device to the guest's device list.
 
-        :param dev: VirtualDevice instance to attach to guest
+        :param dev: Device instance to attach to guest
         """
         self.add_child(dev)
 
@@ -269,7 +269,7 @@ class Guest(XMLBuilder):
         """
         Remove the passed device from the guest's device list
 
-        :param dev: VirtualDevice instance
+        :param dev: Device instance
         """
         self.remove_child(dev)
 
@@ -279,7 +279,7 @@ class Guest(XMLBuilder):
         the guest.
 
         :param devtype: Device type to search for (one of
-                        VirtualDevice.virtual_device_types)
+                        Device.virtual_device_types)
         """
         newlist = []
         for i in self._devices:
@@ -288,8 +288,8 @@ class Guest(XMLBuilder):
         return newlist
 
     _devices = XMLChildProperty(
-        [VirtualDevice.virtual_device_classes[_n]
-         for _n in VirtualDevice.virtual_device_types],
+        [Device.virtual_device_classes[_n]
+         for _n in Device.virtual_device_types],
         relative_xpath="./devices")
 
     def get_all_devices(self):
@@ -297,7 +297,7 @@ class Guest(XMLBuilder):
         Return a list of all devices being installed with the guest
         """
         retlist = []
-        for devtype in VirtualDevice.virtual_device_types:
+        for devtype in Device.virtual_device_types:
             retlist.extend(self.get_devices(devtype))
         return retlist
 
@@ -633,12 +633,12 @@ class Guest(XMLBuilder):
             usb_keyboard = True
 
         if usb_tablet:
-            dev = VirtualInputDevice(self.conn)
+            dev = DeviceInput(self.conn)
             dev.type = "tablet"
             dev.bus = "usb"
             self.add_device(dev)
         if usb_keyboard:
-            dev = VirtualInputDevice(self.conn)
+            dev = DeviceInput(self.conn)
             dev.type = "keyboard"
             dev.bus = "usb"
             self.add_device(dev)
@@ -649,7 +649,7 @@ class Guest(XMLBuilder):
         if self.get_devices("console") or self.get_devices("serial"):
             return
 
-        dev = VirtualConsoleDevice(self.conn)
+        dev = DeviceConsole(self.conn)
         dev.type = dev.TYPE_PTY
         if self.os.is_s390x():
             dev.target_type = "sclp"
@@ -662,7 +662,7 @@ class Guest(XMLBuilder):
             return
         if not self.get_devices("graphics"):
             return
-        self.add_device(VirtualVideoDevice(self.conn))
+        self.add_device(DeviceVideo(self.conn))
 
     def add_default_usb_controller(self):
         if self.os.is_container():
@@ -687,12 +687,12 @@ class Guest(XMLBuilder):
             if not self.conn.check_support(
                     self.conn.SUPPORT_CONN_DEFAULT_USB2):
                 return
-            for dev in VirtualController.get_usb2_controllers(self.conn):
+            for dev in DeviceController.get_usb2_controllers(self.conn):
                 self.add_device(dev)
 
         if usb3:
             self.add_device(
-                VirtualController.get_usb3_controller(self.conn, self))
+                DeviceController.get_usb3_controller(self.conn, self))
 
     def add_default_channels(self):
         if self.skip_default_channel:
@@ -706,7 +706,7 @@ class Guest(XMLBuilder):
         if (self.conn.is_qemu() and
             self._os_object.supports_qemu_ga() and
             self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
-            dev = VirtualChannelDevice(self.conn)
+            dev = DeviceChannel(self.conn)
             dev.type = "unix"
             dev.target_type = "virtio"
             dev.target_name = dev.CHANNEL_NAME_QEMUGA
@@ -721,7 +721,7 @@ class Guest(XMLBuilder):
             return
         if self.os.arch not in ["x86_64", "i686", "ppc64", "ppc64le"]:
             return
-        self.add_device(VirtualGraphics(self.conn))
+        self.add_device(DeviceGraphics(self.conn))
 
     def add_default_rng(self):
         if self.skip_default_rng:
@@ -736,7 +736,7 @@ class Guest(XMLBuilder):
         if (self.conn.is_qemu() and
             self._os_object.supports_virtiorng() and
             self.conn.check_support(self.conn.SUPPORT_CONN_RNG_URANDOM)):
-            dev = VirtualRNGDevice(self.conn)
+            dev = DeviceRng(self.conn)
             dev.type = "random"
             dev.device = "/dev/urandom"
             self.add_device(dev)
@@ -756,7 +756,7 @@ class Guest(XMLBuilder):
         if not self.installer.needs_cdrom():
             return
 
-        dev = VirtualDisk(self.conn)
+        dev = DeviceDisk(self.conn)
         dev.device = dev.DEVICE_CDROM
         setattr(dev, "installer_media", not self.installer.livecd)
         self._install_cdrom_device = dev
@@ -1002,7 +1002,7 @@ class Guest(XMLBuilder):
         if not has_spapr_scsi:
             for dev in self.get_devices("disk"):
                 if dev.address.type == "spapr-vio":
-                    ctrl = VirtualController(self.conn)
+                    ctrl = DeviceController(self.conn)
                     ctrl.type = "scsi"
                     ctrl.address.set_addrstr("spapr-vio")
                     self.add_device(ctrl)
@@ -1014,7 +1014,7 @@ class Guest(XMLBuilder):
             not has_virtio_scsi):
             for dev in self.get_devices("disk"):
                 if dev.bus == "scsi":
-                    ctrl = VirtualController(self.conn)
+                    ctrl = DeviceController(self.conn)
                     ctrl.type = "scsi"
                     ctrl.model = "virtio-scsi"
                     self.add_device(ctrl)
@@ -1194,7 +1194,7 @@ class Guest(XMLBuilder):
                 return
 
         if self.conn.check_support(self.conn.SUPPORT_CONN_CHAR_SPICEVMC):
-            agentdev = VirtualChannelDevice(self.conn)
+            agentdev = DeviceChannel(self.conn)
             agentdev.type = agentdev.TYPE_SPICEVMC
             self.add_device(agentdev)
 
@@ -1209,7 +1209,7 @@ class Guest(XMLBuilder):
                 self.os.is_arm_machvirt):
             return
 
-        self.add_device(VirtualAudio(self.conn))
+        self.add_device(DeviceSound(self.conn))
 
     def _add_spice_usbredir(self):
         if self.skip_default_usbredir:
@@ -1225,7 +1225,7 @@ class Guest(XMLBuilder):
         # and directly assigned devices are forced to fall back to USB1
         # https://bugzilla.redhat.com/show_bug.cgi?id=1135488
         for ignore in range(2):
-            dev = VirtualRedirDevice(self.conn)
+            dev = DeviceRedirdev(self.conn)
             dev.bus = "usb"
             dev.type = "spicevmc"
             self.add_device(dev)
@@ -1265,5 +1265,5 @@ class Guest(XMLBuilder):
 
     def _set_panic_defaults(self):
         for panic in self.get_devices("panic"):
-            if panic.model == VirtualPanicDevice.MODEL_DEFAULT:
-                panic.model = VirtualPanicDevice.get_default_model(self.os)
+            if panic.model == DevicePanic.MODEL_DEFAULT:
+                panic.model = DevicePanic.get_default_model(self.os)

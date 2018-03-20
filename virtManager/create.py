@@ -1643,9 +1643,9 @@ class vmmCreate(vmmGObjectUI):
         expand = (ntype != "network" and ntype != "bridge")
         no_network = ntype is None
 
-        if (no_network or ntype == virtinst.VirtualNetworkInterface.TYPE_USER):
+        if (no_network or ntype == virtinst.DeviceInterface.TYPE_USER):
             can_pxe = False
-        elif ntype != virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
+        elif ntype != virtinst.DeviceInterface.TYPE_VIRTUAL:
             can_pxe = True
         else:
             can_pxe = self.conn.get_net(connkey).can_pxe()
@@ -2000,7 +2000,7 @@ class vmmCreate(vmmGObjectUI):
                 return self.err.val_err(
                                 _("A storage path to import is required."))
 
-            if not virtinst.VirtualDisk.path_definitely_exists(
+            if not virtinst.DeviceDisk.path_definitely_exists(
                                                 self.conn.get_backend(),
                                                 import_path):
                 return self.err.val_err(_("The import path must point to "
@@ -2086,13 +2086,13 @@ class vmmCreate(vmmGObjectUI):
                 self._guest.os.init = init
 
             if fs:
-                fsdev = virtinst.VirtualFilesystem(self._guest.conn)
+                fsdev = virtinst.DeviceFilesystem(self._guest.conn)
                 fsdev.target = "/"
                 fsdev.source = fs
                 self._guest.add_device(fsdev)
 
             if template:
-                fsdev = virtinst.VirtualFilesystem(self._guest.conn)
+                fsdev = virtinst.DeviceFilesystem(self._guest.conn)
                 fsdev.target = "/"
                 fsdev.type = "template"
                 fsdev.source = template
@@ -2291,7 +2291,7 @@ class vmmCreate(vmmGObjectUI):
                             _("Network device required for %s install.") %
                             methname)
 
-        macaddr = virtinst.VirtualNetworkInterface.generate_mac(
+        macaddr = virtinst.DeviceInterface.generate_mac(
             self.conn.get_backend())
         nic = self._netlist.validate_network(macaddr)
         if nic is False:

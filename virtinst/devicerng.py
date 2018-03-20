@@ -17,13 +17,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualRNGDevice(VirtualDevice):
+class DeviceRng(Device):
 
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_RNG
+    virtual_device_type = Device.DEVICE_RNG
 
     TYPE_RANDOM = "random"
     TYPE_EGD = "egd"
@@ -39,9 +39,9 @@ class VirtualRNGDevice(VirtualDevice):
 
     @staticmethod
     def get_pretty_type(rng_type):
-        if rng_type == VirtualRNGDevice.TYPE_RANDOM:
+        if rng_type == DeviceRng.TYPE_RANDOM:
             return _("Random")
-        if rng_type == VirtualRNGDevice.TYPE_EGD:
+        if rng_type == DeviceRng.TYPE_EGD:
             return _("Entropy Gathering Daemon")
         return rng_type
 
@@ -79,9 +79,9 @@ class VirtualRNGDevice(VirtualDevice):
     def backend_mode(self):
         ret = []
         if self._has_mode_bind:
-            ret.append(VirtualRNGDevice.BACKEND_MODE_BIND)
+            ret.append(DeviceRng.BACKEND_MODE_BIND)
         if self._has_mode_connect:
-            ret.append(VirtualRNGDevice.BACKEND_MODE_CONNECT)
+            ret.append(DeviceRng.BACKEND_MODE_CONNECT)
         return ret
 
     _XML_PROP_ORDER = ["_has_mode_bind", "_has_mode_connect"]
@@ -89,13 +89,13 @@ class VirtualRNGDevice(VirtualDevice):
     _has_mode_connect = XMLProperty("./backend/source[@mode='connect']/@mode")
     def _set_connect_validate(self, val):
         if val:
-            self._has_mode_connect = VirtualRNGDevice.BACKEND_MODE_CONNECT
+            self._has_mode_connect = DeviceRng.BACKEND_MODE_CONNECT
         return val
 
     _has_mode_bind = XMLProperty("./backend/source[@mode='bind']/@mode")
     def _set_bind_validate(self, val):
         if val:
-            self._has_mode_bind = VirtualRNGDevice.BACKEND_MODE_BIND
+            self._has_mode_bind = DeviceRng.BACKEND_MODE_BIND
         return val
 
     type = XMLProperty("./backend/@model")
@@ -118,4 +118,4 @@ class VirtualRNGDevice(VirtualDevice):
 
     device = XMLProperty("./backend[@model='random']")
 
-VirtualRNGDevice.register_type()
+DeviceRng.register_type()

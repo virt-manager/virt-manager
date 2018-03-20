@@ -104,13 +104,13 @@ class vmmNetworkList(vmmGObjectUI):
         self.conn.connect("interface-removed", self._repopulate_network_list)
 
     def _pretty_network_desc(self, nettype, source=None, netobj=None):
-        if nettype == virtinst.VirtualNetworkInterface.TYPE_USER:
+        if nettype == virtinst.DeviceInterface.TYPE_USER:
             return _("Usermode networking")
 
         extra = None
-        if nettype == virtinst.VirtualNetworkInterface.TYPE_BRIDGE:
+        if nettype == virtinst.DeviceInterface.TYPE_BRIDGE:
             ret = _("Bridge")
-        elif nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
+        elif nettype == virtinst.DeviceInterface.TYPE_VIRTUAL:
             ret = _("Virtual network")
             if netobj:
                 extra = ": %s" % netobj.pretty_forward_mode()
@@ -136,7 +136,7 @@ class vmmNetworkList(vmmGObjectUI):
         default_label = None
 
         for net in self.conn.list_nets():
-            nettype = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
+            nettype = virtinst.DeviceInterface.TYPE_VIRTUAL
 
             label = self._pretty_network_desc(nettype, net.get_name(), net)
             if not net.is_active():
@@ -206,7 +206,7 @@ class vmmNetworkList(vmmGObjectUI):
 
             label = _("Host device %s") % (name)
             if is_bridge:
-                nettype = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
+                nettype = virtinst.DeviceInterface.TYPE_BRIDGE
                 if slave_names:
                     extra = (_("Host device %s") % slave_names[0])
                     can_default = True
@@ -216,7 +216,7 @@ class vmmNetworkList(vmmGObjectUI):
 
             elif self.conn.check_support(
                     self.conn.SUPPORT_CONN_DIRECT_INTERFACE):
-                nettype = virtinst.VirtualNetworkInterface.TYPE_DIRECT
+                nettype = virtinst.DeviceInterface.TYPE_DIRECT
                 label += (": %s" % _("macvtap"))
 
             else:
@@ -244,7 +244,7 @@ class vmmNetworkList(vmmGObjectUI):
             model.append(manual_row)
 
         if self.conn.is_qemu_session():
-            nettype = virtinst.VirtualNetworkInterface.TYPE_USER
+            nettype = virtinst.DeviceInterface.TYPE_USER
             r = self._build_source_row(
                 nettype, None, self._pretty_network_desc(nettype), True, True)
             model.append(r)
@@ -309,7 +309,7 @@ class vmmNetworkList(vmmGObjectUI):
         net_check_bridge = row[5]
 
         if net_check_bridge and bridge_entry:
-            net_type = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
+            net_type = virtinst.DeviceInterface.TYPE_BRIDGE
             net_src = bridge_entry.get_text() or None
 
         mode = None
@@ -341,7 +341,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         # Make sure VirtualNetwork is running
         netobj = None
-        if nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
+        if nettype == virtinst.DeviceInterface.TYPE_VIRTUAL:
             for net in self.conn.list_nets():
                 if net.get_name() == devname:
                     netobj = net
@@ -365,7 +365,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         # Create network device
         try:
-            net = virtinst.VirtualNetworkInterface(self.conn.get_backend())
+            net = virtinst.DeviceInterface(self.conn.get_backend())
             net.type = nettype
             net.source = devname
             net.macaddr = macaddr
@@ -526,7 +526,7 @@ class vmmNetworkList(vmmGObjectUI):
             return
 
         is_openvswitch = row[2].endswith("(OpenVSwitch)")
-        is_direct = (row[0] == virtinst.VirtualNetworkInterface.TYPE_DIRECT)
+        is_direct = (row[0] == virtinst.DeviceInterface.TYPE_DIRECT)
         self.widget("vport-expander").set_visible(is_direct or is_openvswitch)
         uiutil.set_grid_row_visible(self.widget("net-source-mode"), is_direct)
         uiutil.set_grid_row_visible(
@@ -540,7 +540,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         portgroups = []
         connkey = row[6]
-        if connkey and row[0] == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
+        if connkey and row[0] == virtinst.DeviceInterface.TYPE_VIRTUAL:
             portgroups = self.conn.get_net(connkey).get_xmlobj().portgroups
 
         uiutil.set_grid_row_visible(

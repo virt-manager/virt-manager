@@ -21,7 +21,7 @@ import logging
 import os
 
 from . import util
-from .devicedisk import VirtualDisk
+from .devicedisk import DeviceDisk
 from .storage import StoragePool, StorageVolume
 
 
@@ -73,10 +73,10 @@ def _upload_file(conn, meter, destpool, src):
     if name != basename:
         logging.debug("Generated non-colliding volume name %s", name)
 
-    vol_install = VirtualDisk.build_vol_install(conn, name, destpool,
+    vol_install = DeviceDisk.build_vol_install(conn, name, destpool,
                     (float(size) / 1024.0 / 1024.0 / 1024.0), True)
 
-    disk = VirtualDisk(conn)
+    disk = DeviceDisk(conn)
     disk.set_vol_install(vol_install)
     disk.validate()
 

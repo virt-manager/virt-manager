@@ -33,7 +33,7 @@ from .storage import StoragePool, StorageVolume
 from .uri import URI, MagicURI
 
 
-class VirtualConnection(object):
+class VirtinstConnection(object):
     """
     Wrapper for libvirt connection that provides various bits like
     - caching static data

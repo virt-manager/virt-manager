@@ -106,9 +106,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
         uiutil.init_combo_text_column(combo, 1)
 
         model.append(["auto", _("Auto")])
-        model.append([virtinst.VirtualGraphics.KEYMAP_LOCAL,
+        model.append([virtinst.DeviceGraphics.KEYMAP_LOCAL,
                       _("Copy local keymap")])
-        for k in virtinst.VirtualGraphics.valid_keymaps():
+        for k in virtinst.DeviceGraphics.valid_keymaps():
             model.append([k, k])
 
         # Host GPU rendernode

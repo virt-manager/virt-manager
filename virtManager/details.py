@@ -28,7 +28,7 @@ import libvirt
 
 import virtinst
 from virtinst import util
-from virtinst import VirtualRNGDevice
+from virtinst import DeviceRng
 
 from . import vmmenu
 from . import uiutil
@@ -167,7 +167,7 @@ def _label_for_device(dev):
     devtype = dev.virtual_device_type
 
     if devtype == "disk":
-        busstr = virtinst.VirtualDisk.pretty_disk_bus(dev.bus) or ""
+        busstr = virtinst.DeviceDisk.pretty_disk_bus(dev.bus) or ""
 
         if dev.device == "floppy":
             devstr = _("Floppy")
@@ -2614,8 +2614,8 @@ class vmmDetails(vmmGObjectUI):
             if vol:
                 size = vol.get_pretty_capacity()
 
-        is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
-        is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)
+        is_cdrom = (devtype == virtinst.DeviceDisk.DEVICE_CDROM)
+        is_floppy = (devtype == virtinst.DeviceDisk.DEVICE_FLOPPY)
         is_usb = (bus == "usb")
 
         can_set_removable = (is_usb and (self.conn.is_qemu() or
@@ -2637,7 +2637,7 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(self.widget("disk-removable"),
                                        can_set_removable)
 
-        is_lun = disk.device == virtinst.VirtualDisk.DEVICE_LUN
+        is_lun = disk.device == virtinst.DeviceDisk.DEVICE_LUN
         uiutil.set_grid_row_visible(self.widget("disk-sgio"), is_lun)
         if is_lun:
             self.build_disk_sgio(self.vm, self.widget("disk-sgio"))
@@ -2765,7 +2765,7 @@ class vmmDetails(vmmGObjectUI):
 
         dev_type = tpmdev.type
         self.widget("tpm-dev-type").set_text(
-                virtinst.VirtualTPMDevice.get_pretty_type(dev_type))
+                virtinst.DeviceTpm.get_pretty_type(dev_type))
 
         # Device type specific properties, only show if apply to the cur dev
         show_ui("device_path")
@@ -2776,7 +2776,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         model = dev.model or "isa"
-        pmodel = virtinst.VirtualPanicDevice.get_pretty_model(model)
+        pmodel = virtinst.DevicePanic.get_pretty_model(model)
         self.widget("panic-model").set_text(pmodel)
 
     def refresh_rng_page(self):
@@ -2794,17 +2794,17 @@ class vmmDetails(vmmGObjectUI):
         }
         rewriter = {
             "rng-type": lambda x:
-            VirtualRNGDevice.get_pretty_type(x),
+            DeviceRng.get_pretty_type(x),
             "rng-backend-type": lambda x:
-            VirtualRNGDevice.get_pretty_backend_type(x),
+            DeviceRng.get_pretty_backend_type(x),
         }
 
         def set_visible(widget, v):
             uiutil.set_grid_row_visible(self.widget(widget), v)
 
-        is_egd = dev.type == VirtualRNGDevice.TYPE_EGD
-        udp = dev.backend_type == VirtualRNGDevice.BACKEND_TYPE_UDP
-        bind = VirtualRNGDevice.BACKEND_MODE_BIND in dev.backend_mode()
+        is_egd = dev.type == DeviceRng.TYPE_EGD
+        udp = dev.backend_type == DeviceRng.BACKEND_TYPE_UDP
+        bind = DeviceRng.BACKEND_MODE_BIND in dev.backend_mode()
 
         set_visible("rng-device", not is_egd)
         set_visible("rng-mode", is_egd and not udp)
@@ -2826,7 +2826,7 @@ class vmmDetails(vmmGObjectUI):
                 uiutil.set_grid_row_visible(self.widget(k), val != "-")
 
         if is_egd and not udp:
-            mode = VirtualRNGDevice.get_pretty_mode(dev.backend_mode()[0])
+            mode = DeviceRng.get_pretty_mode(dev.backend_mode()[0])
             self.widget("rng-mode").set_text(mode)
 
     def refresh_char_page(self):

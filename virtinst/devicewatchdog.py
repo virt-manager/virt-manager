@@ -17,13 +17,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualWatchdog(VirtualDevice):
+class DeviceWatchdog(Device):
 
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_WATCHDOG
+    virtual_device_type = Device.DEVICE_WATCHDOG
 
     MODEL_I6300 = "i6300esb"
     MODEL_IB700 = "ib700"
@@ -44,17 +44,17 @@ class VirtualWatchdog(VirtualDevice):
 
     @staticmethod
     def get_action_desc(action):
-        if action == VirtualWatchdog.ACTION_RESET:
+        if action == DeviceWatchdog.ACTION_RESET:
             return _("Forcefully reset the guest")
-        if action == VirtualWatchdog.ACTION_SHUTDOWN:
+        if action == DeviceWatchdog.ACTION_SHUTDOWN:
             return _("Gracefully shutdown the guest")
-        if action == VirtualWatchdog.ACTION_POWEROFF:
+        if action == DeviceWatchdog.ACTION_POWEROFF:
             return _("Forcefully power off the guest")
-        if action == VirtualWatchdog.ACTION_PAUSE:
+        if action == DeviceWatchdog.ACTION_PAUSE:
             return _("Pause the guest")
-        if action == VirtualWatchdog.ACTION_NONE:
+        if action == DeviceWatchdog.ACTION_NONE:
             return _("No action")
-        if action == VirtualWatchdog.ACTION_DUMP:
+        if action == DeviceWatchdog.ACTION_DUMP:
             return _("Dump guest memory core")
         return action
 
@@ -67,4 +67,4 @@ class VirtualWatchdog(VirtualDevice):
                          default_cb=lambda s: s.ACTION_RESET)
 
 
-VirtualWatchdog.register_type()
+DeviceWatchdog.register_type()

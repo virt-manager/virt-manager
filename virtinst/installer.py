@@ -22,7 +22,7 @@
 import os
 import logging
 
-from .devicedisk import VirtualDisk
+from .devicedisk import DeviceDisk
 from .osxml import OSXML
 
 
@@ -253,11 +253,11 @@ class ImportInstaller(Installer):
         return self._disk_to_bootdev(disks[0])
 
     def _disk_to_bootdev(self, disk):
-        if disk.device == VirtualDisk.DEVICE_DISK:
+        if disk.device == DeviceDisk.DEVICE_DISK:
             return OSXML.BOOT_DEVICE_HARDDISK
-        elif disk.device == VirtualDisk.DEVICE_CDROM:
+        elif disk.device == DeviceDisk.DEVICE_CDROM:
             return OSXML.BOOT_DEVICE_CDROM
-        elif disk.device == VirtualDisk.DEVICE_FLOPPY:
+        elif disk.device == DeviceDisk.DEVICE_FLOPPY:
             return OSXML.BOOT_DEVICE_FLOPPY
         else:
             return OSXML.BOOT_DEVICE_HARDDISK

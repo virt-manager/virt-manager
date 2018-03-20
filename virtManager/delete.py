@@ -402,7 +402,7 @@ def do_we_default(conn, vm_name, vol, path, ro, shared, is_media):
         info = append_str(info, _("Storage is a media device."))
 
     try:
-        names = virtinst.VirtualDisk.path_in_use_by(conn.get_backend(), path)
+        names = virtinst.DeviceDisk.path_in_use_by(conn.get_backend(), path)
 
         if len(names) > 1:
             namestr = ""

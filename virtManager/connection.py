@@ -189,7 +189,7 @@ class vmmConnection(vmmGObject):
         vmmGObject.__init__(self)
 
         self._state = self._STATE_DISCONNECTED
-        self._backend = virtinst.VirtualConnection(self._uri)
+        self._backend = virtinst.VirtinstConnection(self._uri)
         self._closing = False
 
         # Error strings are stored here if open() fails
@@ -449,9 +449,9 @@ class vmmConnection(vmmGObject):
     #######################
 
     for _supportname in [_supportname for _supportname in
-                         dir(virtinst.VirtualConnection) if
+                         dir(virtinst.VirtinstConnection) if
                          _supportname.startswith("SUPPORT_")]:
-        locals()[_supportname] = getattr(virtinst.VirtualConnection,
+        locals()[_supportname] = getattr(virtinst.VirtinstConnection,
                                          _supportname)
     def check_support(self, *args):
         # pylint: disable=no-value-for-parameter

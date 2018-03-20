@@ -18,13 +18,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualRedirDevice(VirtualDevice):
+class DeviceRedirdev(Device):
 
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_REDIRDEV
+    virtual_device_type = Device.DEVICE_REDIRDEV
 
     BUS_DEFAULT = "default"
     BUSES = ["usb"]
@@ -60,4 +60,4 @@ class VirtualRedirDevice(VirtualDevice):
     service = XMLProperty("./source/@service", is_int=True)
 
 
-VirtualRedirDevice.register_type()
+DeviceRedirdev.register_type()

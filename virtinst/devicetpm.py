@@ -21,13 +21,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from .device import VirtualDevice
+from .device import Device
 from .xmlbuilder import XMLProperty
 
 
-class VirtualTPMDevice(VirtualDevice):
+class DeviceTpm(Device):
 
-    virtual_device_type = VirtualDevice.VIRTUAL_DEV_TPM
+    virtual_device_type = Device.DEVICE_TPM
 
     TYPE_PASSTHROUGH = "passthrough"
     TYPE_DEFAULT = "default"
@@ -39,7 +39,7 @@ class VirtualTPMDevice(VirtualDevice):
 
     @staticmethod
     def get_pretty_type(tpm_type):
-        if tpm_type == VirtualTPMDevice.TYPE_PASSTHROUGH:
+        if tpm_type == DeviceTpm.TYPE_PASSTHROUGH:
             return _("Passthrough device")
         return tpm_type
 
@@ -64,4 +64,4 @@ class VirtualTPMDevice(VirtualDevice):
                               default_cb=lambda s: "/dev/tpm0")
 
 
-VirtualTPMDevice.register_type()
+DeviceTpm.register_type()

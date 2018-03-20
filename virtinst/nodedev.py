@@ -339,8 +339,8 @@ class DRMDevice(NodeDevice):
 
 
 def _AddressStringToHostdev(conn, addrstr):
-    from .devicehostdev import VirtualHostDevice
-    hostdev = VirtualHostDevice(conn)
+    from .devicehostdev import DeviceHostdev
+    hostdev = DeviceHostdev(conn)
 
     try:
         # Determine addrstr type

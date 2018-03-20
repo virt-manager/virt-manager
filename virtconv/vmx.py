@@ -148,7 +148,7 @@ def parse_netdev_entry(conn, ifaces, fullkey, value):
             net = checkiface
             break
     if not net:
-        net = virtinst.VirtualNetworkInterface(conn)
+        net = virtinst.DeviceInterface(conn)
         setattr(net, "vmx_inst", inst)
         net.set_default_source()
         ifaces.append(net)
@@ -195,7 +195,7 @@ def parse_disk_entry(conn, disks, fullkey, value, topdir):
             disk = checkdisk
             break
     if not disk:
-        disk = virtinst.VirtualDisk(conn)
+        disk = virtinst.DeviceDisk(conn)
         disk.bus = bus
         setattr(disk, "vmx_inst", inst)
         disks.append(disk)
