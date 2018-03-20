@@ -133,7 +133,7 @@ class TestXMLMisc(unittest.TestCase):
 
     def testDefaultBridge(self):
         # Test our handling of the default bridge routines
-        from virtinst import deviceinterface
+        from virtinst.devices import interface as deviceinterface
         origfunc = getattr(deviceinterface, "_default_bridge")
         try:
             def newbridge(ignore_conn):
@@ -334,7 +334,7 @@ class TestXMLMisc(unittest.TestCase):
     def test_dir_searchable(self):
         # Normally the dir searchable test is skipped in the unittest,
         # but let's contrive an example that should trigger all the code
-        from virtinst.devicedisk import _is_dir_searchable
+        from virtinst.devices.disk import _is_dir_searchable
         oldtest = os.environ.pop("VIRTINST_TEST_SUITE")
         try:
             uid = -1

@@ -339,7 +339,7 @@ class DRMDevice(NodeDevice):
 
 
 def _AddressStringToHostdev(conn, addrstr):
-    from .devicehostdev import DeviceHostdev
+    from .devices import DeviceHostdev
     hostdev = DeviceHostdev(conn)
 
     try:

@@ -1,6 +1,7 @@
 #
-# Copyright 2009, 2013 Red Hat, Inc.
+# Copyright 2011, 2013 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
+# Marc-Andre Lureau <marcandre.lureau@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,37 +19,34 @@
 # MA 02110-1301 USA.
 
 from .device import Device
-from .xmlbuilder import XMLProperty
+from ..xmlbuilder import XMLProperty
 
 
-class DeviceInput(Device):
-    virtual_device_type = Device.DEVICE_INPUT
+class DeviceSmartcard(Device):
 
-    TYPE_MOUSE = "mouse"
-    TYPE_TABLET = "tablet"
-    TYPE_KEYBOARD = "keyboard"
+    virtual_device_type = Device.DEVICE_SMARTCARD
+
+    # Default models list
+    MODE_DEFAULT = "default"
+    MODES = ["passthrough", "host-certificates", "host"]
+
     TYPE_DEFAULT = "default"
-    TYPES = [TYPE_MOUSE, TYPE_TABLET, TYPE_KEYBOARD, TYPE_DEFAULT]
+    TYPES = ["tcp", "spicevmc", "default"]
 
-    BUS_PS2 = "ps2"
-    BUS_USB = "usb"
-    BUS_XEN = "xen"
-    BUS_DEFAULT = "default"
-    BUSES = [BUS_PS2, BUS_USB, BUS_XEN, BUS_DEFAULT]
 
+    _XML_PROP_ORDER = ["mode", "type"]
+
+    mode = XMLProperty("./@mode",
+                       default_cb=lambda s: "passthrough",
+                       default_name=MODE_DEFAULT)
+
+    def _default_type(self):
+        if self.mode == self.MODE_DEFAULT or self.mode == "passthrough":
+            return "spicevmc"
+        return "tcp"
     type = XMLProperty("./@type",
-                       default_cb=lambda s: s.TYPE_MOUSE,
+                       default_cb=_default_type,
                        default_name=TYPE_DEFAULT)
 
-    def _default_bus(self):
-        if self.type == self.TYPE_TABLET:
-            return self.BUS_USB
-        if self.conn.is_xen():
-            return self.BUS_XEN
-        return self.BUS_PS2
-    bus = XMLProperty("./@bus",
-                      default_cb=_default_bus,
-                      default_name=BUS_DEFAULT)
 
-
-DeviceInput.register_type()
+DeviceSmartcard.register_type()

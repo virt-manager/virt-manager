@@ -21,7 +21,7 @@ import logging
 import os
 
 from . import util
-from .devicedisk import DeviceDisk
+from .devices import DeviceDisk
 from .storage import StoragePool, StorageVolume
 
 

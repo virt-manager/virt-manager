@@ -27,10 +27,10 @@ import libvirt
 
 from . import util
 from .guest import Guest
-from .deviceinterface import DeviceInterface
-from .devicedisk import DeviceDisk
+from .devices import DeviceInterface
+from .devices import DeviceDisk
 from .storage import StorageVolume
-from .devicechar import DeviceChannel
+from .devices import DeviceChannel
 
 
 class Cloner(object):

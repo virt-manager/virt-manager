@@ -1,6 +1,7 @@
+# Copyright (C) 2013 Red Hat, Inc.
 #
-# Copyright 2008-2009, 2013-2014 Red Hat, Inc.
-# Cole Robinson <crobinso@redhat.com>
+# Copyright 2012
+# Eiichi Tsukata <devel@etsukata.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,17 +19,18 @@
 # MA 02110-1301 USA.
 
 from .device import Device
-from .xmlbuilder import XMLProperty
+from ..xmlbuilder import XMLProperty
 
 
-class DeviceSound(Device):
-    virtual_device_type = Device.DEVICE_AUDIO
+class DeviceMemballoon(Device):
+    virtual_device_type = Device.DEVICE_MEMBALLOON
 
     MODEL_DEFAULT = "default"
-    MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", "ich9"]
+    MODELS = ["virtio", "xen", "none"]
 
     model = XMLProperty("./@model",
-                        default_cb=lambda s: "es1370",
-                        default_name=MODEL_DEFAULT)
+                        default_name=MODEL_DEFAULT,
+                        default_cb=lambda s: "virtio")
 
-DeviceSound.register_type()
+
+DeviceMemballoon.register_type()

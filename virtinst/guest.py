@@ -32,17 +32,9 @@ from .osdict import OSDB
 from .clock import Clock
 from .cpu import CPU
 from .cputune import CPUTune
-from .device import Device
-from .deviceaudio import DeviceSound
-from .devicechar import DeviceChannel, DeviceConsole
-from .devicecontroller import DeviceController
-from .devicedisk import DeviceDisk
-from .devicegraphics import DeviceGraphics
-from .deviceinput import DeviceInput
-from .devicepanic import DevicePanic
-from .deviceredirdev import DeviceRedirdev
-from .devicerng import DeviceRng
-from .devicevideo import DeviceVideo
+from .devices import (Device, DeviceChannel, DeviceConsole, DeviceController,
+        DeviceDisk, DeviceInput, DeviceGraphics, DevicePanic, DeviceRedirdev,
+        DeviceRng, DeviceSound, DeviceVideo)
 from .distroinstaller import DistroInstaller
 from .domainblkiotune import DomainBlkiotune
 from .domainfeatures import DomainFeatures

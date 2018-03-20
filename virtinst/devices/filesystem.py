@@ -20,7 +20,7 @@
 import os
 
 from .device import Device
-from .xmlbuilder import XMLProperty
+from ..xmlbuilder import XMLProperty
 
 
 class DeviceFilesystem(Device):

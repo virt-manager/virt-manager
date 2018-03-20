@@ -26,10 +26,10 @@ import subprocess
 import logging
 import re
 
-from . import diskbackend
-from . import util
+from .. import diskbackend
+from .. import util
 from .device import Device
-from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
@@ -392,7 +392,7 @@ class DeviceDisk(Device):
         :param volname: name of the volume to be created
         :param size: size in bytes
         """
-        from .storage import StorageVolume
+        from ..storage import StorageVolume
 
         if size is None:
             raise ValueError(_("Size must be specified for non "
@@ -610,7 +610,7 @@ class DeviceDisk(Device):
     source_host_socket = XMLProperty("./source/host/@socket")
 
     def _set_source_network_from_url(self, uri):
-        from .uri import URI
+        from ..uri import URI
         uriobj = URI(uri)
 
         if uriobj.scheme:

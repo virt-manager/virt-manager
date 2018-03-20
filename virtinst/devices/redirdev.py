@@ -19,7 +19,7 @@
 # MA 02110-1301 USA.
 
 from .device import Device
-from .xmlbuilder import XMLProperty
+from ..xmlbuilder import XMLProperty
 
 
 class DeviceRedirdev(Device):

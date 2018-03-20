@@ -21,9 +21,9 @@ import logging
 import os
 import random
 
-from . import util
+from .. import util
 from .device import Device
-from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 def _random_mac(conn):

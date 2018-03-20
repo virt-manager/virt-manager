@@ -20,7 +20,7 @@
 import os
 
 from .device import Device
-from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 def _get_mode_prop(channel_type):
@@ -82,7 +82,7 @@ class DeviceGraphics(Device):
         """
         Return a list of valid keymap values.
         """
-        from . import hostkeymap
+        from .. import hostkeymap
 
         orig_list = list(hostkeymap.keytable.values())
         sort_list = []
@@ -123,7 +123,7 @@ class DeviceGraphics(Device):
             return None
 
         if self._local_keymap == -1:
-            from . import hostkeymap
+            from .. import hostkeymap
             self._local_keymap = hostkeymap.default_keymap()
         return self._local_keymap
 

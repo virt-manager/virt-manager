@@ -18,8 +18,8 @@
 # MA 02110-1301 USA.
 
 from .device import Device
-from .nodedev import NodeDevice
-from .xmlbuilder import XMLProperty
+from ..nodedev import NodeDevice
+from ..xmlbuilder import XMLProperty
 
 
 class DeviceHostdev(Device):

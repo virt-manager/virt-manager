@@ -22,7 +22,7 @@
 import os
 import logging
 
-from .devicedisk import DeviceDisk
+from .devices import DeviceDisk
 from .osxml import OSXML
 
 

@@ -62,27 +62,7 @@ from virtinst.network import Network
 from virtinst.nodedev import NodeDevice
 from virtinst.storage import StoragePool, StorageVolume
 
-from virtinst.device import Device
-from virtinst.deviceinterface import DeviceInterface
-from virtinst.devicegraphics import DeviceGraphics
-from virtinst.deviceaudio import DeviceSound
-from virtinst.deviceinput import DeviceInput
-from virtinst.devicedisk import DeviceDisk
-from virtinst.devicehostdev import DeviceHostdev
-from virtinst.devicechar import (DeviceChannel,
-                                 DeviceConsole,
-                                 DeviceParallel,
-                                 DeviceSerial)
-from virtinst.devicevideo import DeviceVideo
-from virtinst.devicecontroller import DeviceController
-from virtinst.devicewatchdog import DeviceWatchdog
-from virtinst.devicefilesystem import DeviceFilesystem
-from virtinst.devicesmartcard import DeviceSmartcard
-from virtinst.deviceredirdev import DeviceRedirdev
-from virtinst.devicememballoon import DeviceMemballoon
-from virtinst.devicetpm import DeviceTpm
-from virtinst.devicerng import DeviceRng
-from virtinst.devicepanic import DevicePanic
+from virtinst.devices import *  # pylint: disable=wildcard-import
 
 from virtinst.installer import (ContainerInstaller, ImportInstaller,
                                 PXEInstaller, Installer)

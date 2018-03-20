@@ -22,7 +22,7 @@ import os
 
 from . import urlfetcher
 from . import util
-from .devicedisk import DeviceDisk
+from .devices import DeviceDisk
 from .initrdinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
 from .installer import Installer

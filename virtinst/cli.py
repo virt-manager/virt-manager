@@ -38,25 +38,7 @@ from . import util
 from .clock import Clock
 from .cpu import CPU
 from .cputune import CPUTune
-from .deviceaudio import DeviceSound
-from .devicechar import (DeviceChannel, DeviceConsole,
-                         DeviceSerial, DeviceParallel)
-from .devicecontroller import DeviceController
-from .devicedisk import DeviceDisk
-from .devicefilesystem import DeviceFilesystem
-from .devicegraphics import DeviceGraphics
-from .devicehostdev import DeviceHostdev
-from .deviceinput import DeviceInput
-from .deviceinterface import DeviceInterface
-from .devicememballoon import DeviceMemballoon
-from .devicememory import DeviceMemory
-from .devicepanic import DevicePanic
-from .deviceredirdev import DeviceRedirdev
-from .devicerng import DeviceRng
-from .devicesmartcard import DeviceSmartcard
-from .devicetpm import DeviceTpm
-from .devicevideo import DeviceVideo
-from .devicewatchdog import DeviceWatchdog
+from .devices import *  # pylint: disable=wildcard-import
 from .domainblkiotune import DomainBlkiotune
 from .domainfeatures import DomainFeatures
 from .domainmemorybacking import DomainMemorybacking
@@ -71,6 +53,8 @@ from .seclabel import Seclabel
 from .storage import StoragePool, StorageVolume
 from .sysinfo import SYSInfo
 from .xmlnsqemu import XMLNSQemu
+
+_ignore = Device
 
 
 ##########################

@@ -18,7 +18,7 @@
 
 
 from .device import Device
-from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _DeviceMemoryTarget(XMLBuilder):
