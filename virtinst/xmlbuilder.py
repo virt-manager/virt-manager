@@ -511,20 +511,6 @@ class XMLBuilder(object):
     # https://bugzilla.redhat.com/show_bug.cgi?id=1184131
     _XML_SANITIZE = False
 
-
-    @staticmethod
-    def xml_indent(xmlstr, level):
-        """
-        Indent the passed str the specified number of spaces
-        """
-        xml = ""
-        if not xmlstr:
-            return xml
-        if not level:
-            return xmlstr
-        return "\n".join((" " * level + l) for l in xmlstr.splitlines())
-
-
     def __init__(self, conn, parsexml=None,
                  parentxmlstate=None, relative_object_xpath=None):
         """
@@ -745,7 +731,7 @@ class XMLBuilder(object):
             use_xpath = obj._xmlstate.abs_xpath().rsplit("/", 1)[0]
             indent = 2 * obj._xmlstate.abs_xpath().count("/")
             self._xmlstate.xmlapi.node_add_xml(
-                    self.xml_indent(xml, indent), use_xpath)
+                    util.xml_indent(xml, indent), use_xpath)
         obj._parse_with_children(None, self._xmlstate)
 
     def remove_child(self, obj):

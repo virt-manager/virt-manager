@@ -176,7 +176,7 @@ class StoragePool(_StorageObject):
             source_xml = source.get_xml_config()
 
             pool_xml = "<pool>\n%s\n</pool>" % (
-                XMLBuilder.xml_indent(source_xml, 2))
+                util.xml_indent(source_xml, 2))
             parseobj = StoragePool(conn, parsexml=pool_xml)
             parseobj.type = pool_type
 
