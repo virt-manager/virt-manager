@@ -16,28 +16,14 @@ from virtcli import CLIConfig
 
 from . import util
 from . import support
-from .osdict import OSDB
-from .clock import Clock
-from .cpu import CPU
-from .cputune import CPUTune
 from .devices import (Device, DeviceChannel, DeviceConsole, DeviceController,
         DeviceDisk, DeviceInput, DeviceGraphics, DevicePanic, DeviceRedirdev,
         DeviceRng, DeviceSound, DeviceVideo)
 from .distroinstaller import DistroInstaller
-from .domainblkiotune import DomainBlkiotune
-from .domainfeatures import DomainFeatures
-from .domainmemorybacking import DomainMemorybacking
-from .domainmemorytune import DomainMemorytune
-from .domainnumatune import DomainNumatune
-from .domainresource import DomainResource
+from .domain import *  # pylint: disable=wildcard-import
 from .domcapabilities import DomainCapabilities
-from .idmap import IdMap
-from .osxml import OSXML
-from .pm import PM
-from .seclabel import Seclabel
-from .sysinfo import SYSInfo
+from .osdict import OSDB
 from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
-from .xmlnsqemu import XMLNSQemu
 
 
 class Guest(XMLBuilder):
@@ -186,22 +172,22 @@ class Guest(XMLBuilder):
     on_crash = XMLProperty("./on_crash")
     on_lockfailure = XMLProperty("./on_lockfailure")
 
-    seclabels = XMLChildProperty(Seclabel)
-    os = XMLChildProperty(OSXML, is_single=True)
+    seclabels = XMLChildProperty(DomainSeclabel)
+    os = XMLChildProperty(DomainOs, is_single=True)
     features = XMLChildProperty(DomainFeatures, is_single=True)
-    clock = XMLChildProperty(Clock, is_single=True)
-    cpu = XMLChildProperty(CPU, is_single=True)
-    cputune = XMLChildProperty(CPUTune, is_single=True)
+    clock = XMLChildProperty(DomainClock, is_single=True)
+    cpu = XMLChildProperty(DomainCpu, is_single=True)
+    cputune = XMLChildProperty(DomainCputune, is_single=True)
     numatune = XMLChildProperty(DomainNumatune, is_single=True)
-    pm = XMLChildProperty(PM, is_single=True)
+    pm = XMLChildProperty(DomainPm, is_single=True)
     blkiotune = XMLChildProperty(DomainBlkiotune, is_single=True)
-    memtune = XMLChildProperty(DomainMemorytune, is_single=True)
-    memoryBacking = XMLChildProperty(DomainMemorybacking, is_single=True)
-    idmap = XMLChildProperty(IdMap, is_single=True)
+    memtune = XMLChildProperty(DomainMemtune, is_single=True)
+    memoryBacking = XMLChildProperty(DomainMemoryBacking, is_single=True)
+    idmap = XMLChildProperty(DomainIdmap, is_single=True)
     resource = XMLChildProperty(DomainResource, is_single=True)
-    sysinfo = XMLChildProperty(SYSInfo, is_single=True)
+    sysinfo = XMLChildProperty(DomainSysinfo, is_single=True)
 
-    xmlns_qemu = XMLChildProperty(XMLNSQemu, is_single=True)
+    xmlns_qemu = XMLChildProperty(DomainXMLNSQemu, is_single=True)
 
 
     ###############################

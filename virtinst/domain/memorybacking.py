@@ -5,10 +5,10 @@
 # This work is licensed under the GNU GPLv2.
 # See the COPYING file in the top-level directory.
 
-from .xmlbuilder import XMLBuilder, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLProperty
 
 
-class DomainMemorybacking(XMLBuilder):
+class DomainMemoryBacking(XMLBuilder):
     """
     Class for generating <memoryBacking> XML
     """

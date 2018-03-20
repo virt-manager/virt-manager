@@ -1,21 +1,17 @@
-#
 # Copyright (C) 2016 Red Hat, Inc.
 # Copyright (C) 2016 SUSE LINUX Products GmbH, Nuernberg, Germany.
 # Charles Arnold <carnold suse com>
 #
 # This work is licensed under the GNU GPLv2.
 # See the COPYING file in the top-level directory.
-"""
-Classes for building and installing with libvirt <sysinfo> XML
-"""
 import datetime
 
-from .xmlbuilder import XMLBuilder, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLProperty
 
 
-class SYSInfo(XMLBuilder):
+class DomainSysinfo(XMLBuilder):
     """
-    Top level class for <sysinfo type='smbios'> object XML
+    Class for building and domain <sysinfo> XML
     """
 
     _XML_ROOT_NAME = "sysinfo"

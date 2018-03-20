@@ -5,7 +5,7 @@
 # This work is licensed under the GNU GPLv2.
 # See the COPYING file in the top-level directory.
 
-from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _ClockTimer(XMLBuilder):
@@ -16,7 +16,7 @@ class _ClockTimer(XMLBuilder):
     tickpolicy = XMLProperty("./@tickpolicy")
 
 
-class Clock(XMLBuilder):
+class DomainClock(XMLBuilder):
     _XML_ROOT_NAME = "clock"
 
     TIMER_NAMES = ["platform", "pit", "rtc", "hpet", "tsc", "kvmclock",

@@ -967,9 +967,9 @@ class vmmDetails(vmmGObjectUI):
         model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         model.append([_("Application Default"), "1", "appdefault", False])
         model.append([_("Hypervisor Default"), "2",
-            virtinst.CPU.SPECIAL_MODE_HV_DEFAULT, False])
+            virtinst.DomainCpu.SPECIAL_MODE_HV_DEFAULT, False])
         model.append([_("Clear CPU configuration"), "3",
-            virtinst.CPU.SPECIAL_MODE_CLEAR, False])
+            virtinst.DomainCpu.SPECIAL_MODE_CLEAR, False])
         model.append([None, None, None, True])
         for name in caps.get_cpu_values(self.vm.get_arch()):
             model.append([name, name, name, False])
@@ -1529,7 +1529,7 @@ class vmmDetails(vmmGObjectUI):
         text = cpu_list.get_child().get_text()
 
         if self.widget("cpu-copy-host").get_active():
-            return virtinst.CPU.SPECIAL_MODE_HOST_MODEL
+            return virtinst.DomainCpu.SPECIAL_MODE_HOST_MODEL
 
         key = None
         for row in cpu_list.get_model():
@@ -2539,7 +2539,7 @@ class vmmDetails(vmmGObjectUI):
         else:
             uiutil.set_list_selection(
                 self.widget("cpu-model"),
-                virtinst.CPU.SPECIAL_MODE_HV_DEFAULT, column=2)
+                virtinst.DomainCpu.SPECIAL_MODE_HV_DEFAULT, column=2)
 
         # Warn about hyper-threading setting
         cpu_model = self.get_config_cpu_model()

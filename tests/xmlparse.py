@@ -252,7 +252,7 @@ class XMLParseTest(unittest.TestCase):
         check("offset", None, "utc")
         self.assertTrue(guest.clock.get_xml_config().startswith("<clock"))
 
-        seclabel = virtinst.Seclabel(guest.conn)
+        seclabel = virtinst.DomainSeclabel(guest.conn)
         guest.add_child(seclabel)
         seclabel.model = "testSecurity"
         seclabel.type = "static"

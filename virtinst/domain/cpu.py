@@ -5,7 +5,7 @@
 # This work is licensed under the GNU GPLv2.
 # See the COPYING file in the top-level directory.
 
-from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
+from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
 class _CPUCellSibling(XMLBuilder):
@@ -32,7 +32,7 @@ class _CPUCell(XMLBuilder):
     siblings = XMLChildProperty(_CPUCellSibling, relative_xpath="./distances")
 
 
-class CPUCache(XMLBuilder):
+class _CPUCache(XMLBuilder):
     """
     Class for generating <cpu> child <cache> XML
     """
@@ -44,7 +44,7 @@ class CPUCache(XMLBuilder):
     level = XMLProperty("./@level", is_int=True)
 
 
-class CPUFeature(XMLBuilder):
+class _CPUFeature(XMLBuilder):
     """
     Class for generating <cpu> child <feature> XML
     """
@@ -58,7 +58,7 @@ class CPUFeature(XMLBuilder):
     policy = XMLProperty("./@policy")
 
 
-class CPU(XMLBuilder):
+class DomainCpu(XMLBuilder):
     """
     Class for generating <cpu> XML
     """
@@ -107,10 +107,10 @@ class CPU(XMLBuilder):
         feature = self.features.add_new()
         feature.name = name
         feature.policy = policy
-    features = XMLChildProperty(CPUFeature)
+    features = XMLChildProperty(_CPUFeature)
 
     cells = XMLChildProperty(_CPUCell, relative_xpath="./numa")
-    cache = XMLChildProperty(CPUCache)
+    cache = XMLChildProperty(_CPUCache)
 
     def copy_host_cpu(self):
         """

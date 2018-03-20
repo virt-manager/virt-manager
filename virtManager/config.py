@@ -11,7 +11,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 
-from virtinst import CPU
+from virtinst import DomainCpu
 
 from .inspection import vmmInspection
 from .keyring import vmmKeyring, vmmSecret
@@ -192,7 +192,7 @@ class vmmConfig(object):
                 self.hv_packages = ["qemu-kvm"]
 
         self.default_storage_format_from_config = "qcow2"
-        self.cpu_default_from_config = CPU.SPECIAL_MODE_HOST_MODEL_ONLY
+        self.cpu_default_from_config = DomainCpu.SPECIAL_MODE_HOST_MODEL_ONLY
         self.default_console_resizeguest = 0
         self.default_add_spice_usbredir = "yes"
 
@@ -521,9 +521,9 @@ class vmmConfig(object):
 
     def get_default_cpu_setting(self, raw=False, for_cpu=False):
         ret = self.conf.get("/new-vm/cpu-default")
-        whitelist = [CPU.SPECIAL_MODE_HOST_MODEL_ONLY,
-                     CPU.SPECIAL_MODE_HOST_MODEL,
-                     CPU.SPECIAL_MODE_HV_DEFAULT]
+        whitelist = [DomainCpu.SPECIAL_MODE_HOST_MODEL_ONLY,
+                     DomainCpu.SPECIAL_MODE_HOST_MODEL,
+                     DomainCpu.SPECIAL_MODE_HV_DEFAULT]
 
         if ret not in whitelist:
             ret = "default"
@@ -532,10 +532,10 @@ class vmmConfig(object):
             if ret not in whitelist:
                 ret = whitelist[0]
 
-        if for_cpu and ret == CPU.SPECIAL_MODE_HOST_MODEL:
+        if for_cpu and ret == DomainCpu.SPECIAL_MODE_HOST_MODEL:
             # host-model has known issues, so use our 'copy cpu'
             # behavior until host-model does what we need
-            ret = CPU.SPECIAL_MODE_HOST_COPY
+            ret = DomainCpu.SPECIAL_MODE_HOST_COPY
 
         return ret
     def set_default_cpu_setting(self, val):

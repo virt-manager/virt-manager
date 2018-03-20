@@ -9,7 +9,7 @@
 
 import logging
 
-from .cpu import CPU as DomainCPU
+from .domain import DomainCpu
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -17,7 +17,7 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 # capabilities host <cpu> parsing #
 ###################################
 
-class _CapsCPU(DomainCPU):
+class _CapsCPU(DomainCpu):
     arch = XMLProperty("./arch")
 
     # capabilities used to just expose these properties as bools

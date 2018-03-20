@@ -4,7 +4,7 @@
 # This work is licensed under the GNU GPLv2.
 # See the COPYING file in the top-level directory.
 
-from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _XMLNSQemuArg(XMLBuilder):
@@ -20,7 +20,7 @@ class _XMLNSQemuEnv(XMLBuilder):
     value = XMLProperty("./@value")
 
 
-class XMLNSQemu(XMLBuilder):
+class DomainXMLNSQemu(XMLBuilder):
     """
     Class for generating <qemu:commandline> XML
     """

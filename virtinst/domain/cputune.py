@@ -3,7 +3,7 @@
 # This work is licensed under the GNU GPLv2.
 # See the COPYING file in the top-level directory.
 
-from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
+from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
 class _VCPUPin(XMLBuilder):
@@ -17,7 +17,7 @@ class _VCPUPin(XMLBuilder):
     cpuset = XMLProperty("./@cpuset")
 
 
-class CPUTune(XMLBuilder):
+class DomainCputune(XMLBuilder):
     """
     Class for generating <cpu> XML
     """

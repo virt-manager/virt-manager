@@ -23,24 +23,10 @@ import libvirt
 from virtcli import CLIConfig
 
 from . import util
-from .clock import Clock
-from .cpu import CPU
-from .cputune import CPUTune
 from .devices import *  # pylint: disable=wildcard-import
-from .domainblkiotune import DomainBlkiotune
-from .domainfeatures import DomainFeatures
-from .domainmemorybacking import DomainMemorybacking
-from .domainmemorytune import DomainMemorytune
-from .domainnumatune import DomainNumatune
-from .domainresource import DomainResource
-from .idmap import IdMap
+from .domain import *  # pylint: disable=wildcard-import
 from .nodedev import NodeDevice
-from .osxml import OSXML
-from .pm import PM
-from .seclabel import Seclabel
 from .storage import StoragePool, StorageVolume
-from .sysinfo import SYSInfo
-from .xmlnsqemu import XMLNSQemu
 
 _ignore = Device
 
@@ -1377,16 +1363,16 @@ ParserMemory.add_arg("hotplugmemoryslots", "hotplugmemoryslots")
 # --memtune parsing #
 #####################
 
-class ParserMemorytune(VirtCLIParser):
+class ParserMemtune(VirtCLIParser):
     cli_arg_name = "memtune"
-    objclass = DomainMemorytune
+    objclass = DomainMemtune
     remove_first = "soft_limit"
 
-_register_virt_parser(ParserMemorytune)
-ParserMemorytune.add_arg("hard_limit", "hard_limit")
-ParserMemorytune.add_arg("soft_limit", "soft_limit")
-ParserMemorytune.add_arg("swap_hard_limit", "swap_hard_limit")
-ParserMemorytune.add_arg("min_guarantee", "min_guarantee")
+_register_virt_parser(ParserMemtune)
+ParserMemtune.add_arg("hard_limit", "hard_limit")
+ParserMemtune.add_arg("soft_limit", "soft_limit")
+ParserMemtune.add_arg("swap_hard_limit", "swap_hard_limit")
+ParserMemtune.add_arg("min_guarantee", "min_guarantee")
 
 
 #######################
@@ -1408,17 +1394,17 @@ ParserBlkiotune.add_arg("device_weight", "device_weight")
 # --memorybacking parsing #
 ###########################
 
-class ParserMemorybacking(VirtCLIParser):
+class ParserMemoryBacking(VirtCLIParser):
     cli_arg_name = "memorybacking"
-    objclass = DomainMemorybacking
+    objclass = DomainMemoryBacking
 
-_register_virt_parser(ParserMemorybacking)
-ParserMemorybacking.add_arg("hugepages", "hugepages", is_onoff=True)
-ParserMemorybacking.add_arg("page_size", "size")
-ParserMemorybacking.add_arg("page_unit", "unit")
-ParserMemorybacking.add_arg("page_nodeset", "nodeset", can_comma=True)
-ParserMemorybacking.add_arg("nosharepages", "nosharepages", is_onoff=True)
-ParserMemorybacking.add_arg("locked", "locked", is_onoff=True)
+_register_virt_parser(ParserMemoryBacking)
+ParserMemoryBacking.add_arg("hugepages", "hugepages", is_onoff=True)
+ParserMemoryBacking.add_arg("page_size", "size")
+ParserMemoryBacking.add_arg("page_unit", "unit")
+ParserMemoryBacking.add_arg("page_nodeset", "nodeset", can_comma=True)
+ParserMemoryBacking.add_arg("nosharepages", "nosharepages", is_onoff=True)
+ParserMemoryBacking.add_arg("locked", "locked", is_onoff=True)
 
 
 #################
@@ -1427,7 +1413,7 @@ ParserMemorybacking.add_arg("locked", "locked", is_onoff=True)
 
 class ParserCPU(VirtCLIParser):
     cli_arg_name = "cpu"
-    objclass = CPU
+    objclass = DomainCpu
     remove_first = "model"
     stub_none = False
 
@@ -1539,9 +1525,9 @@ ParserCPU.add_arg("level", "cache.level", find_inst_cb=ParserCPU.set_l3_cache_cb
 # --cputune parsing #
 #####################
 
-class ParserCPUTune(VirtCLIParser):
+class ParserCputune(VirtCLIParser):
     cli_arg_name = "cputune"
-    objclass = CPUTune
+    objclass = DomainCputune
     remove_first = "model"
     stub_none = False
 
@@ -1551,12 +1537,12 @@ class ParserCPUTune(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, objpropname)
         return cb(*args, **kwargs)
 
-_register_virt_parser(ParserCPUTune)
+_register_virt_parser(ParserCputune)
 # Options for CPU.vcpus config
-ParserCPUTune.add_arg("vcpu", "vcpupin[0-9]*.vcpu",
-                  find_inst_cb=ParserCPUTune.vcpu_find_inst_cb)
-ParserCPUTune.add_arg("cpuset", "vcpupin[0-9]*.cpuset", can_comma=True,
-                  find_inst_cb=ParserCPUTune.vcpu_find_inst_cb)
+ParserCputune.add_arg("vcpu", "vcpupin[0-9]*.vcpu",
+                  find_inst_cb=ParserCputune.vcpu_find_inst_cb)
+ParserCputune.add_arg("cpuset", "vcpupin[0-9]*.cpuset", can_comma=True,
+                  find_inst_cb=ParserCputune.vcpu_find_inst_cb)
 
 
 ###################
@@ -1694,7 +1680,7 @@ ParserBoot.add_arg("os.smbios_mode", "smbios_mode",
 
 # This is simply so the boot options are advertised with --boot help,
 # actual processing is handled by _parse
-for _bootdev in OSXML.BOOT_DEVICES:
+for _bootdev in DomainOs.BOOT_DEVICES:
     ParserBoot.add_arg(None, _bootdev, is_novalue=True, cb=ParserBoot.noset_cb)
 
 
@@ -1704,7 +1690,7 @@ for _bootdev in OSXML.BOOT_DEVICES:
 
 class ParserIdmap(VirtCLIParser):
     cli_arg_name = "idmap"
-    objclass = IdMap
+    objclass = DomainIdmap
 
 _register_virt_parser(ParserIdmap)
 ParserIdmap.add_arg("uid_start", "uid_start")
@@ -1721,7 +1707,7 @@ ParserIdmap.add_arg("gid_count", "gid_count")
 
 class ParserSecurity(VirtCLIParser):
     cli_arg_name = "security"
-    objclass = Seclabel
+    objclass = DomainSeclabel
 
 _register_virt_parser(ParserSecurity)
 ParserSecurity.add_arg("type", "type")
@@ -1779,7 +1765,7 @@ ParserFeatures.add_arg("vmcoreinfo", "vmcoreinfo", is_onoff=True)
 
 class ParserClock(VirtCLIParser):
     cli_arg_name = "clock"
-    objclass = Clock
+    objclass = DomainClock
 
     def set_timer(self, inst, val, virtarg):
         tname, attrname = virtarg.cliname.split("_")
@@ -1800,7 +1786,7 @@ class ParserClock(VirtCLIParser):
 _register_virt_parser(ParserClock)
 ParserClock.add_arg("offset", "offset")
 
-for _tname in Clock.TIMER_NAMES:
+for _tname in DomainClock.TIMER_NAMES:
     ParserClock.add_arg(None, _tname + "_present",
                         is_onoff=True,
                         cb=ParserClock.set_timer)
@@ -1813,7 +1799,7 @@ for _tname in Clock.TIMER_NAMES:
 
 class ParserPM(VirtCLIParser):
     cli_arg_name = "pm"
-    objclass = PM
+    objclass = DomainPm
 
 _register_virt_parser(ParserPM)
 ParserPM.add_arg("suspend_to_mem", "suspend_to_mem", is_onoff=True)
@@ -1824,9 +1810,9 @@ ParserPM.add_arg("suspend_to_disk", "suspend_to_disk", is_onoff=True)
 # --sysinfo parsing #
 #####################
 
-class ParserSYSInfo(VirtCLIParser):
+class ParserSysinfo(VirtCLIParser):
     cli_arg_name = "sysinfo"
-    objclass = SYSInfo
+    objclass = DomainSysinfo
     remove_first = "type"
 
     def set_type_cb(self, inst, val, virtarg):
@@ -1856,34 +1842,34 @@ class ParserSYSInfo(VirtCLIParser):
 
         return VirtCLIParser._parse(self, inst)
 
-_register_virt_parser(ParserSYSInfo)
+_register_virt_parser(ParserSysinfo)
 # <sysinfo type='smbios'>
-ParserSYSInfo.add_arg("type", "type",
-                      cb=ParserSYSInfo.set_type_cb, can_comma=True)
+ParserSysinfo.add_arg("type", "type",
+                      cb=ParserSysinfo.set_type_cb, can_comma=True)
 
 # <bios> type 0 BIOS Information
-ParserSYSInfo.add_arg("bios_vendor", "bios_vendor")
-ParserSYSInfo.add_arg("bios_version", "bios_version")
-ParserSYSInfo.add_arg("bios_date", "bios_date")
-ParserSYSInfo.add_arg("bios_release", "bios_release")
+ParserSysinfo.add_arg("bios_vendor", "bios_vendor")
+ParserSysinfo.add_arg("bios_version", "bios_version")
+ParserSysinfo.add_arg("bios_date", "bios_date")
+ParserSysinfo.add_arg("bios_release", "bios_release")
 
 # <system> type 1 System Information
-ParserSYSInfo.add_arg("system_manufacturer", "system_manufacturer")
-ParserSYSInfo.add_arg("system_product", "system_product")
-ParserSYSInfo.add_arg("system_version", "system_version")
-ParserSYSInfo.add_arg("system_serial", "system_serial")
-ParserSYSInfo.add_arg("system_uuid", "system_uuid",
-                      cb=ParserSYSInfo.set_uuid_cb)
-ParserSYSInfo.add_arg("system_sku", "system_sku")
-ParserSYSInfo.add_arg("system_family", "system_family")
+ParserSysinfo.add_arg("system_manufacturer", "system_manufacturer")
+ParserSysinfo.add_arg("system_product", "system_product")
+ParserSysinfo.add_arg("system_version", "system_version")
+ParserSysinfo.add_arg("system_serial", "system_serial")
+ParserSysinfo.add_arg("system_uuid", "system_uuid",
+                      cb=ParserSysinfo.set_uuid_cb)
+ParserSysinfo.add_arg("system_sku", "system_sku")
+ParserSysinfo.add_arg("system_family", "system_family")
 
 # <baseBoard> type 2 Baseboard (or Module) Information
-ParserSYSInfo.add_arg("baseBoard_manufacturer", "baseBoard_manufacturer")
-ParserSYSInfo.add_arg("baseBoard_product", "baseBoard_product")
-ParserSYSInfo.add_arg("baseBoard_version", "baseBoard_version")
-ParserSYSInfo.add_arg("baseBoard_serial", "baseBoard_serial")
-ParserSYSInfo.add_arg("baseBoard_asset", "baseBoard_asset")
-ParserSYSInfo.add_arg("baseBoard_location", "baseBoard_location")
+ParserSysinfo.add_arg("baseBoard_manufacturer", "baseBoard_manufacturer")
+ParserSysinfo.add_arg("baseBoard_product", "baseBoard_product")
+ParserSysinfo.add_arg("baseBoard_version", "baseBoard_version")
+ParserSysinfo.add_arg("baseBoard_serial", "baseBoard_serial")
+ParserSysinfo.add_arg("baseBoard_asset", "baseBoard_asset")
+ParserSysinfo.add_arg("baseBoard_location", "baseBoard_location")
 
 
 ##############################
@@ -1892,7 +1878,7 @@ ParserSYSInfo.add_arg("baseBoard_location", "baseBoard_location")
 
 class ParserQemuCLI(VirtCLIParser):
     cli_arg_name = "qemu_commandline"
-    objclass = XMLNSQemu
+    objclass = DomainXMLNSQemu
 
     def args_cb(self, inst, val, virtarg):
         for opt in shlex.split(val):

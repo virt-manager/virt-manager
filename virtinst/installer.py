@@ -11,7 +11,7 @@ import os
 import logging
 
 from .devices import DeviceDisk
-from .osxml import OSXML
+from .domain import DomainOs
 
 
 class Installer(object):
@@ -214,18 +214,18 @@ class ContainerInstaller(Installer):
     def _get_bootdev(self, isinstall, guest):
         ignore = isinstall
         ignore = guest
-        return OSXML.BOOT_DEVICE_HARDDISK
+        return DomainOs.BOOT_DEVICE_HARDDISK
 
 
 class PXEInstaller(Installer):
     def _get_bootdev(self, isinstall, guest):
-        bootdev = OSXML.BOOT_DEVICE_NETWORK
+        bootdev = DomainOs.BOOT_DEVICE_NETWORK
 
         if (not isinstall and
             [d for d in guest.get_devices("disk") if
              d.device == d.DEVICE_DISK]):
             # If doing post-install boot and guest has an HD attached
-            bootdev = OSXML.BOOT_DEVICE_HARDDISK
+            bootdev = DomainOs.BOOT_DEVICE_HARDDISK
 
         return bootdev
 
@@ -237,15 +237,15 @@ class ImportInstaller(Installer):
     def _get_bootdev(self, isinstall, guest):
         disks = guest.get_devices("disk")
         if not disks:
-            return OSXML.BOOT_DEVICE_HARDDISK
+            return DomainOs.BOOT_DEVICE_HARDDISK
         return self._disk_to_bootdev(disks[0])
 
     def _disk_to_bootdev(self, disk):
         if disk.device == DeviceDisk.DEVICE_DISK:
-            return OSXML.BOOT_DEVICE_HARDDISK
+            return DomainOs.BOOT_DEVICE_HARDDISK
         elif disk.device == DeviceDisk.DEVICE_CDROM:
-            return OSXML.BOOT_DEVICE_CDROM
+            return DomainOs.BOOT_DEVICE_CDROM
         elif disk.device == DeviceDisk.DEVICE_FLOPPY:
-            return OSXML.BOOT_DEVICE_FLOPPY
+            return DomainOs.BOOT_DEVICE_FLOPPY
         else:
-            return OSXML.BOOT_DEVICE_HARDDISK
+            return DomainOs.BOOT_DEVICE_HARDDISK

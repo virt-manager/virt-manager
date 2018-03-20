@@ -29,19 +29,7 @@ from virtinst import support
 from virtinst.uri import URI
 from virtinst.osdict import OSDB
 
-from virtinst.osxml import OSXML
-from virtinst.domainfeatures import DomainFeatures
-from virtinst.domainnumatune import DomainNumatune
-from virtinst.domainblkiotune import DomainBlkiotune
-from virtinst.domainmemorytune import DomainMemorytune
-from virtinst.domainmemorybacking import DomainMemorybacking
-from virtinst.domainresource import DomainResource
-from virtinst.clock import Clock
-from virtinst.cpu import CPU, CPUFeature
-from virtinst.cputune import CPUTune
-from virtinst.seclabel import Seclabel
-from virtinst.pm import PM
-from virtinst.idmap import IdMap
+from virtinst.domain import *  # pylint: disable=wildcard-import
 
 from virtinst.capabilities import Capabilities
 from virtinst.domcapabilities import DomainCapabilities

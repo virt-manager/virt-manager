@@ -232,27 +232,27 @@ class TestXMLMisc(unittest.TestCase):
 
     def testCPUTopology(self):
         # Test CPU topology determining
-        cpu = virtinst.CPU(self.conn)
+        cpu = virtinst.DomainCpu(self.conn)
         cpu.sockets = "2"
         cpu.set_topology_defaults(6)
         self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [2, 3, 1])
 
-        cpu = virtinst.CPU(self.conn)
+        cpu = virtinst.DomainCpu(self.conn)
         cpu.cores = "4"
         cpu.set_topology_defaults(9)
         self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [2, 4, 1])
 
-        cpu = virtinst.CPU(self.conn)
+        cpu = virtinst.DomainCpu(self.conn)
         cpu.threads = "3"
         cpu.set_topology_defaults(14)
         self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [4, 1, 3])
 
-        cpu = virtinst.CPU(self.conn)
+        cpu = virtinst.DomainCpu(self.conn)
         cpu.sockets = 5
         cpu.cores = 2
         self.assertEqual(cpu.vcpus_from_topology(), 10)
 
-        cpu = virtinst.CPU(self.conn)
+        cpu = virtinst.DomainCpu(self.conn)
         self.assertEqual(cpu.vcpus_from_topology(), 1)
 
     def testAC97(self):

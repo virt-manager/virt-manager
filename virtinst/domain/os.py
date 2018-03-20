@@ -5,7 +5,7 @@
 # This work is licensed under the GNU GPLv2.
 # See the COPYING file in the top-level directory.
 
-from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
+from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
 class _InitArg(XMLBuilder):
@@ -18,7 +18,7 @@ class _BootDevice(XMLBuilder):
     dev = XMLProperty("./@dev")
 
 
-class OSXML(XMLBuilder):
+class DomainOs(XMLBuilder):
     """
     Class for generating boot device related XML
     """
