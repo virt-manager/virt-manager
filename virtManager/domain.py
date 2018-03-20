@@ -57,7 +57,7 @@ def compare_device(origdev, newdev, idx):
     if not isinstance(origdev, type(newdev)):
         return False
 
-    for devprop in devprops[origdev.virtual_device_type]:
+    for devprop in devprops[origdev.DEVICE_TYPE]:
         origval = getattr(origdev, devprop)
         if devprop == "vmmindex":
             newval = idx
@@ -71,7 +71,7 @@ def compare_device(origdev, newdev, idx):
 
 
 def _find_device(guest, origdev):
-    devlist = getattr(guest.devices, origdev.virtual_device_type)
+    devlist = getattr(guest.devices, origdev.DEVICE_TYPE)
     for idx, dev in enumerate(devlist):
         if compare_device(origdev, dev, idx):
             return dev
@@ -1269,8 +1269,8 @@ class vmmDomain(vmmLibvirtObject):
         devs = self.get_char_devices()
         devlist = []
 
-        devlist += [x for x in devs if x.virtual_device_type == "serial"]
-        devlist += [x for x in devs if x.virtual_device_type == "console"]
+        devlist += [x for x in devs if x.DEVICE_TYPE == "serial"]
+        devlist += [x for x in devs if x.DEVICE_TYPE == "console"]
         return devlist
 
     def _build_device_list(self, device_type,
@@ -1281,7 +1281,7 @@ class vmmDomain(vmmLibvirtObject):
 
         for idx, dev in enumerate(devs):
             dev.vmmindex = idx
-            dev.vmmidstr = dev.virtual_device_type + ("%.3d" % idx)
+            dev.vmmidstr = dev.DEVICE_TYPE + ("%.3d" % idx)
 
         return devs
 

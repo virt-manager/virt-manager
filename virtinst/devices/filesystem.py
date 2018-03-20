@@ -12,7 +12,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceFilesystem(Device):
-    virtual_device_type = Device.DEVICE_FILESYSTEM
+    _XML_ROOT_NAME = "filesystem"
 
     TYPE_MOUNT = "mount"
     TYPE_TEMPLATE = "template"
@@ -132,6 +132,3 @@ class DeviceFilesystem(Device):
             # not the common case. so use mode=mapped
             if self.accessmode is None or self.accessmode == self.MODE_DEFAULT:
                 self.accessmode = self.MODE_MAPPED
-
-
-DeviceFilesystem.register_type()

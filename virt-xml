@@ -230,7 +230,7 @@ def action_build_xml(conn, options, parserclass):
 
 
 def setup_device(dev):
-    if getattr(dev, "virtual_device_type", None) != "disk":
+    if getattr(dev, "DEVICE_TYPE", None) != "disk":
         return
     if getattr(dev, "virt_xml_setup", None) is True:
         return

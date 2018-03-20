@@ -1101,8 +1101,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("Panic Notifier")
 
         if page == PAGE_CHAR:
-            char_class = self._get_char_class()
-            return _("%s Device") % char_class.virtual_device_type.capitalize()
+            devclass = self._get_char_class()(self.conn.get_backend())
+            return _("%s Device") % devclass.DEVICE_TYPE.capitalize()
         if page == PAGE_HOSTDEV:
             row = self._get_hw_selection()
             if row and row[5] == "pci":
@@ -1196,13 +1196,14 @@ class vmmAddHardware(vmmGObjectUI):
         }
 
         char_class = self._get_char_class()
-        ischan = char_class.virtual_device_type == "channel"
-        iscon = char_class.virtual_device_type == "console"
-        show_auto = (devtype == "unix" and ischan and
-            self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET))
 
         self._dev = char_class(self.conn.get_backend())
         self._dev.type = devtype
+
+        ischan = self._dev.DEVICE_TYPE == "channel"
+        iscon = self._dev.DEVICE_TYPE == "console"
+        show_auto = (devtype == "unix" and ischan and
+            self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET))
 
         for param_name, widget_name in char_widget_mappings.items():
             make_visible = self._dev.supports_property(param_name)
@@ -1257,7 +1258,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _setup_device(self, asyncjob):
         poolname = None
-        if (self._dev.virtual_device_type == "disk" and
+        if (self._dev.DEVICE_TYPE == "disk" and
             self._dev.wants_storage_creation() and
             self._dev.get_parent_pool()):
             poolname = self._dev.get_parent_pool().name()
@@ -1666,7 +1667,7 @@ class vmmAddHardware(vmmGObjectUI):
         except Exception as e:
             return self.err.val_err(
                     _("%s device parameter error") %
-                    char_class.virtual_device_type.capitalize(), e)
+                    devclass.DEVICE_TYPE.capitalize(), e)
 
     def _validate_page_video(self):
         conn = self.conn.get_backend()

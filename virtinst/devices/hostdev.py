@@ -11,7 +11,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceHostdev(Device):
-    virtual_device_type = Device.DEVICE_HOSTDEV
+    _XML_ROOT_NAME = "hostdev"
 
     def set_from_nodedev(self, nodedev):
         """
@@ -132,6 +132,3 @@ class DeviceHostdev(Device):
     scsi_bus = XMLProperty("./source/address/@bus", is_int=True)
     scsi_target = XMLProperty("./source/address/@target", is_int=True)
     scsi_unit = XMLProperty("./source/address/@unit", is_int=True)
-
-
-DeviceHostdev.register_type()

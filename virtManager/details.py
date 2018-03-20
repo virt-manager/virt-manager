@@ -150,7 +150,7 @@ _remove_tooltip = _("Remove this device from the virtual machine")
 
 
 def _label_for_device(dev):
-    devtype = dev.virtual_device_type
+    devtype = dev.DEVICE_TYPE
 
     if devtype == "disk":
         busstr = virtinst.DeviceDisk.pretty_disk_bus(dev.bus) or ""
@@ -241,7 +241,7 @@ def _label_for_device(dev):
 
 
 def _icon_for_device(dev):
-    devtype = dev.virtual_device_type
+    devtype = dev.DEVICE_TYPE
 
     if devtype == "disk":
         if dev.device == "cdrom":
@@ -2820,9 +2820,9 @@ class vmmDetails(vmmGObjectUI):
         if not chardev:
             return
 
-        show_target_type = not (chardev.virtual_device_type in
+        show_target_type = not (chardev.DEVICE_TYPE in
                                 ["serial", "parallel"])
-        show_target_name = chardev.virtual_device_type == "channel"
+        show_target_name = chardev.DEVICE_TYPE == "channel"
 
         def show_ui(param, val=None):
             widgetname = "char-" + param.replace("_", "-")
@@ -2853,7 +2853,7 @@ class vmmDetails(vmmGObjectUI):
                 ret += ":%s" % str(port)
             return ret
 
-        char_type = chardev.virtual_device_type.capitalize()
+        char_type = chardev.DEVICE_TYPE.capitalize()
         target_port = chardev.target_port
         dev_type = chardev.type or "pty"
         primary = hasattr(chardev, "virtmanager_console_dup")
@@ -2871,7 +2871,7 @@ class vmmDetails(vmmGObjectUI):
             typelabel = _("%s Device") % char_type.capitalize()
 
         if (target_port is not None and
-                chardev.virtual_device_type == "console"):
+                chardev.DEVICE_TYPE == "console"):
             typelabel += " %s" % (int(target_port) + 1)
         if target_port is not None and not show_target_type:
             typelabel += " %s" % (int(target_port) + 1)

@@ -14,8 +14,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceTpm(Device):
-
-    virtual_device_type = Device.DEVICE_TPM
+    _XML_ROOT_NAME = "tpm"
 
     TYPE_PASSTHROUGH = "passthrough"
     TYPE_DEFAULT = "default"
@@ -50,6 +49,3 @@ class DeviceTpm(Device):
                        default_cb=lambda s: s.MODEL_TIS)
     device_path = XMLProperty("./backend/device/@path",
                               default_cb=lambda s: "/dev/tpm0")
-
-
-DeviceTpm.register_type()

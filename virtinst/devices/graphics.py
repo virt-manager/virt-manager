@@ -37,7 +37,7 @@ class _GraphicsListen(XMLBuilder):
 
 
 class DeviceGraphics(Device):
-    virtual_device_type = Device.DEVICE_GRAPHICS
+    _XML_ROOT_NAME = "graphics"
 
     TYPE_SDL = "sdl"
     TYPE_VNC = "vnc"
@@ -237,5 +237,3 @@ class DeviceGraphics(Device):
     filetransfer_enable = XMLProperty("./filetransfer/@enable", is_yesno=True)
     gl = XMLProperty("./gl/@enable", is_yesno=True)
     rendernode = XMLProperty("./gl/@rendernode")
-
-DeviceGraphics.register_type()

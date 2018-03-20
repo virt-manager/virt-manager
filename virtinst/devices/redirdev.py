@@ -11,8 +11,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceRedirdev(Device):
-
-    virtual_device_type = Device.DEVICE_REDIRDEV
+    _XML_ROOT_NAME = "redirdev"
 
     BUS_DEFAULT = "default"
     BUSES = ["usb"]
@@ -46,6 +45,3 @@ class DeviceRedirdev(Device):
 
     host = XMLProperty("./source/@host")
     service = XMLProperty("./source/@service", is_int=True)
-
-
-DeviceRedirdev.register_type()

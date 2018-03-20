@@ -901,7 +901,7 @@ class _VirtCLIArgument(object):
             raise RuntimeError(
                 _("Don't know how to match device type '%(device_type)s' "
                   "property '%(property_name)s'") %
-                {"device_type": getattr(inst, "virtual_device_type", ""),
+                {"device_type": getattr(inst, "DEVICE_TYPE", ""),
                  "property_name": self.key})
 
         if self._virtarg.find_inst_cb:
@@ -2604,7 +2604,7 @@ class _ParserChar(VirtCLIParser):
         if not inst.supports_property(virtarg.attrname):
             raise ValueError(_("%(devtype)s type '%(chartype)s' does not "
                 "support '%(optname)s' option.") %
-                {"devtype": inst.virtual_device_type,
+                {"devtype": inst.DEVICE_TYPE,
                  "chartype": inst.type,
                  "optname": virtarg.cliname})
     support_cb = support_check
@@ -2623,10 +2623,10 @@ class _ParserChar(VirtCLIParser):
         inst.set_friendly_target(val)
 
     def _parse(self, inst):
-        if self.optstr == "none" and inst.virtual_device_type == "console":
+        if self.optstr == "none" and inst.DEVICE_TYPE == "console":
             self.guest.skip_default_console = True
             return
-        if self.optstr == "none" and inst.virtual_device_type == "channel":
+        if self.optstr == "none" and inst.DEVICE_TYPE == "channel":
             self.guest.skip_default_channel = True
             return
 

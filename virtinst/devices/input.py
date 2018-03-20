@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceInput(Device):
-    virtual_device_type = Device.DEVICE_INPUT
+    _XML_ROOT_NAME = "input"
 
     TYPE_MOUSE = "mouse"
     TYPE_TABLET = "tablet"
@@ -37,6 +37,3 @@ class DeviceInput(Device):
     bus = XMLProperty("./@bus",
                       default_cb=_default_bus,
                       default_name=BUS_DEFAULT)
-
-
-DeviceInput.register_type()

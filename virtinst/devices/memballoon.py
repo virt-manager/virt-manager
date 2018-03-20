@@ -11,7 +11,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceMemballoon(Device):
-    virtual_device_type = Device.DEVICE_MEMBALLOON
+    _XML_ROOT_NAME = "memballoon"
 
     MODEL_DEFAULT = "default"
     MODELS = ["virtio", "xen", "none"]
@@ -19,6 +19,3 @@ class DeviceMemballoon(Device):
     model = XMLProperty("./@model",
                         default_name=MODEL_DEFAULT,
                         default_cb=lambda s: "virtio")
-
-
-DeviceMemballoon.register_type()

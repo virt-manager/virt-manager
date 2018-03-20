@@ -244,7 +244,7 @@ class _DeviceChar(Device):
                            default_cb=_get_default_protocol)
 
     def _get_default_target_type(self):
-        if self.virtual_device_type == "channel":
+        if self.DEVICE_TYPE == "channel":
             return self.CHANNEL_TARGET_VIRTIO
         return None
     target_type = XMLProperty("./target/@type",
@@ -266,25 +266,19 @@ class _DeviceChar(Device):
 
 
 class DeviceConsole(_DeviceChar):
-    virtual_device_type = "console"
+    _XML_ROOT_NAME = "console"
     TYPES = [_DeviceChar.TYPE_PTY]
 
 
 class DeviceSerial(_DeviceChar):
-    virtual_device_type = "serial"
+    _XML_ROOT_NAME = "serial"
 
 
 class DeviceParallel(_DeviceChar):
-    virtual_device_type = "parallel"
+    _XML_ROOT_NAME = "parallel"
 
 
 class DeviceChannel(_DeviceChar):
-    virtual_device_type = "channel"
+    _XML_ROOT_NAME = "channel"
     TYPES = (_DeviceChar._TYPES_FOR_CHANNEL +
              _DeviceChar._TYPES_FOR_ALL)
-
-
-DeviceConsole.register_type()
-DeviceSerial.register_type()
-DeviceParallel.register_type()
-DeviceChannel.register_type()

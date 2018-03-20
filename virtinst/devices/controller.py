@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceController(Device):
-    virtual_device_type = Device.DEVICE_CONTROLLER
+    _XML_ROOT_NAME = "controller"
 
     TYPE_IDE             = "ide"
     TYPE_FDC             = "fdc"
@@ -102,5 +102,3 @@ class DeviceController(Device):
         if self.type == "pci" and self.model == "pcie-root":
             ret = "PCIe"
         return ret
-
-DeviceController.register_type()

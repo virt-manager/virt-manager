@@ -10,8 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceRng(Device):
-
-    virtual_device_type = Device.DEVICE_RNG
+    _XML_ROOT_NAME = "rng"
 
     TYPE_RANDOM = "random"
     TYPE_EGD = "egd"
@@ -105,5 +104,3 @@ class DeviceRng(Device):
     rate_period = XMLProperty("./rate/@period")
 
     device = XMLProperty("./backend[@model='random']")
-
-DeviceRng.register_type()

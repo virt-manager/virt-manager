@@ -882,7 +882,7 @@ class vmmConsolePages(vmmGObjectUI):
     def _console_menu_toggled(self, src, dev):
         self.widget("details-pages").set_current_page(DETAILS_PAGE_CONSOLE)
 
-        if dev.virtual_device_type == "graphics":
+        if dev.DEVICE_TYPE == "graphics":
             self.widget("console-pages").set_current_page(_CONSOLE_PAGE_VIEWER)
             return
 
@@ -925,7 +925,7 @@ class vmmConsolePages(vmmGObjectUI):
                 active_label = self._serial_consoles[serial_page].name
 
         for dev in devs:
-            if dev.virtual_device_type == "console":
+            if dev.DEVICE_TYPE == "console":
                 label = _("Text Console %d") % (dev.vmmindex + 1)
             else:
                 label = _("Serial %d") % (dev.vmmindex + 1)

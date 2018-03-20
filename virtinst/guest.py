@@ -23,10 +23,16 @@ from .domcapabilities import DomainCapabilities
 from .osdict import OSDB
 from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
+_ignore = Device
+
 
 class _DomainDevices(XMLBuilder):
     _XML_ROOT_NAME = "devices"
-    _XML_PROP_ORDER = Device.virtual_device_types[:]
+    _XML_PROP_ORDER = ['disk', 'controller', 'filesystem', 'interface',
+            'input', 'graphics', 'serial', 'parallel', 'console', 'channel',
+            'sound', 'video', 'hostdev', 'watchdog', 'smartcard', 'redirdev',
+            'memballoon', 'tpm', 'rng', 'panic', 'memory']
+
 
     disk = XMLChildProperty(DeviceDisk)
     controller = XMLChildProperty(DeviceController)
@@ -262,7 +268,9 @@ class Guest(XMLBuilder):
         Return a list of all devices being installed with the guest
         """
         retlist = []
-        for devtype in Device.virtual_device_types:
+        # pylint: disable=protected-access
+        devtypes = _DomainDevices._XML_PROP_ORDER
+        for devtype in devtypes:
             retlist.extend(getattr(self.devices, devtype))
         return retlist
 

@@ -10,8 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DevicePanic(Device):
-
-    virtual_device_type = Device.DEVICE_PANIC
+    _XML_ROOT_NAME = "panic"
 
     MODEL_DEFAULT = "default"
     MODEL_ISA = "isa"
@@ -63,5 +62,3 @@ class DevicePanic(Device):
     type = XMLProperty("./address/@type",
                        default_cb=_get_default_address_type)
     iobase = XMLProperty("./address/@iobase")
-
-DevicePanic.register_type()

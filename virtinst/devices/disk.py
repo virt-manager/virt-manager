@@ -99,7 +99,7 @@ class _DiskSeclabel(XMLBuilder):
 
 
 class DeviceDisk(Device):
-    virtual_device_type = Device.DEVICE_DISK
+    _XML_ROOT_NAME = "disk"
 
     DRIVER_NAME_PHY = "phy"
     DRIVER_NAME_QEMU = "qemu"
@@ -1040,5 +1040,3 @@ class DeviceDisk(Device):
         else:
             raise ValueError(_("Only %s disks for bus '%s' are supported"
                                % (maxnode, self.bus)))
-
-DeviceDisk.register_type()

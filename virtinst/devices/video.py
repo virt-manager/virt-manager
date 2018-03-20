@@ -10,8 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceVideo(Device):
-
-    virtual_device_type = Device.DEVICE_VIDEO
+    _XML_ROOT_NAME = "video"
 
     # Default models list
     MODEL_DEFAULT = "default"
@@ -33,6 +32,3 @@ class DeviceVideo(Device):
     heads = XMLProperty("./model/@heads", is_int=True)
     vgamem = XMLProperty("./model/@vgamem", is_int=True)
     accel3d = XMLProperty("./model/acceleration/@accel3d", is_yesno=True)
-
-
-DeviceVideo.register_type()

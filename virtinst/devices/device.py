@@ -103,63 +103,6 @@ class Device(XMLBuilder):
     """
     Base class for all domain xml device objects.
     """
-
-    DEVICE_DISK            = "disk"
-    DEVICE_NET             = "interface"
-    DEVICE_INPUT           = "input"
-    DEVICE_GRAPHICS        = "graphics"
-    DEVICE_AUDIO           = "sound"
-    DEVICE_HOSTDEV         = "hostdev"
-    DEVICE_SERIAL          = "serial"
-    DEVICE_PARALLEL        = "parallel"
-    DEVICE_CHANNEL         = "channel"
-    DEVICE_CONSOLE         = "console"
-    DEVICE_VIDEO           = "video"
-    DEVICE_CONTROLLER      = "controller"
-    DEVICE_WATCHDOG        = "watchdog"
-    DEVICE_FILESYSTEM      = "filesystem"
-    DEVICE_SMARTCARD       = "smartcard"
-    DEVICE_REDIRDEV        = "redirdev"
-    DEVICE_MEMBALLOON      = "memballoon"
-    DEVICE_TPM             = "tpm"
-    DEVICE_RNG             = "rng"
-    DEVICE_PANIC           = "panic"
-    DEVICE_MEMORY          = "memory"
-
-    # Ordering in this list is important: it will be the order the
-    # Guest class outputs XML. So changing this may upset the test suite
-    virtual_device_types = [DEVICE_DISK,
-                            DEVICE_CONTROLLER,
-                            DEVICE_FILESYSTEM,
-                            DEVICE_NET,
-                            DEVICE_INPUT,
-                            DEVICE_GRAPHICS,
-                            DEVICE_SERIAL,
-                            DEVICE_PARALLEL,
-                            DEVICE_CONSOLE,
-                            DEVICE_CHANNEL,
-                            DEVICE_AUDIO,
-                            DEVICE_VIDEO,
-                            DEVICE_HOSTDEV,
-                            DEVICE_WATCHDOG,
-                            DEVICE_SMARTCARD,
-                            DEVICE_REDIRDEV,
-                            DEVICE_MEMBALLOON,
-                            DEVICE_TPM,
-                            DEVICE_RNG,
-                            DEVICE_PANIC,
-                            DEVICE_MEMORY]
-
-    virtual_device_classes = {}
-
-    @classmethod
-    def register_type(cls):
-        cls._XML_ROOT_NAME = cls.virtual_device_type
-        Device.virtual_device_classes[cls.virtual_device_type] = cls
-
-    # General device type (disk, interface, etc.)
-    virtual_device_type = None
-
     def __init__(self, *args, **kwargs):
         """
         Initialize device state
@@ -169,17 +112,13 @@ class Device(XMLBuilder):
         XMLBuilder.__init__(self, *args, **kwargs)
         self._XML_PROP_ORDER = self._XML_PROP_ORDER + ["alias", "address"]
 
-        if not self.virtual_device_type:
-            raise ValueError(_("Virtual device type must be set in subclass."))
-
-        if self.virtual_device_type not in self.virtual_device_types:
-            raise ValueError(_("Unknown virtual device type '%s'.") %
-                             self.virtual_device_type)
-
     alias = XMLChildProperty(DeviceAlias, is_single=True)
     address = XMLChildProperty(DeviceAddress, is_single=True)
     boot = XMLChildProperty(DeviceBoot, is_single=True)
 
+    @property
+    def DEVICE_TYPE(self):
+        return self._XML_ROOT_NAME
 
     def setup(self, meter=None):
         """

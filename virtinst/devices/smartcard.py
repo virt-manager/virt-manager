@@ -11,8 +11,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceSmartcard(Device):
-
-    virtual_device_type = Device.DEVICE_SMARTCARD
+    _XML_ROOT_NAME = "smartcard"
 
     # Default models list
     MODE_DEFAULT = "default"
@@ -35,6 +34,3 @@ class DeviceSmartcard(Device):
     type = XMLProperty("./@type",
                        default_cb=_default_type,
                        default_name=TYPE_DEFAULT)
-
-
-DeviceSmartcard.register_type()

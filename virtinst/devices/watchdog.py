@@ -10,8 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceWatchdog(Device):
-
-    virtual_device_type = Device.DEVICE_WATCHDOG
+    _XML_ROOT_NAME = "watchdog"
 
     MODEL_I6300 = "i6300esb"
     MODEL_IB700 = "ib700"
@@ -53,6 +52,3 @@ class DeviceWatchdog(Device):
     action = XMLProperty("./@action",
                          default_name=ACTION_DEFAULT,
                          default_cb=lambda s: s.ACTION_RESET)
-
-
-DeviceWatchdog.register_type()

@@ -113,7 +113,7 @@ class _VirtualPort(XMLBuilder):
 
 
 class DeviceInterface(Device):
-    virtual_device_type = Device.DEVICE_NET
+    _XML_ROOT_NAME = "interface"
 
     TYPE_BRIDGE     = "bridge"
     TYPE_VIRTUAL    = "network"
@@ -315,6 +315,3 @@ class DeviceInterface(Device):
             self.type = self.TYPE_USER
         else:
             self.type, self.source = _default_network(self.conn)
-
-
-DeviceInterface.register_type()

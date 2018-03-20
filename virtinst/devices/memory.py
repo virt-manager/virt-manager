@@ -26,7 +26,7 @@ class _DeviceMemorySource(XMLBuilder):
 
 
 class DeviceMemory(Device):
-    virtual_device_type = Device.DEVICE_MEMORY
+    _XML_ROOT_NAME = "memory"
 
     MODEL_DIMM = "dimm"
     MODEL_NVDIMM = "nvdimm"
@@ -41,6 +41,3 @@ class DeviceMemory(Device):
 
     source = XMLChildProperty(_DeviceMemorySource, is_single=True)
     target = XMLChildProperty(_DeviceMemoryTarget, is_single=True)
-
-
-DeviceMemory.register_type()

@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceSound(Device):
-    virtual_device_type = Device.DEVICE_AUDIO
+    _XML_ROOT_NAME = "sound"
 
     MODEL_DEFAULT = "default"
     MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", "ich9"]
@@ -18,5 +18,3 @@ class DeviceSound(Device):
     model = XMLProperty("./@model",
                         default_cb=lambda s: "es1370",
                         default_name=MODEL_DEFAULT)
-
-DeviceSound.register_type()
