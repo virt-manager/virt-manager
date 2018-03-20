@@ -7,6 +7,7 @@
 # This work is licensed under the GNU GPLv2.
 # See the COPYING file in the top-level directory.
 
+import collections
 import logging
 import os
 import re
@@ -300,14 +301,10 @@ class XMLProperty(property):
         track every variable.
         """
         propstore = xmlbuilder._propstore
-        proporder = xmlbuilder._proporder
-
         propname = self._findpropname(xmlbuilder)
-        propstore[propname] = val
 
-        if propname in proporder:
-            proporder.remove(propname)
-        proporder.append(propname)
+        propstore.pop(propname, None)
+        propstore[propname] = val
 
     def _nonxml_fget(self, xmlbuilder):
         """
@@ -499,8 +496,7 @@ class XMLBuilder(object):
 
             parsexml = "".join([c for c in parsexml if c in string.printable])
 
-        self._propstore = {}
-        self._proporder = []
+        self._propstore = collections.OrderedDict()
         self._xmlstate = _XMLState(self._XML_ROOT_NAME,
                                    parsexml, parentxmlstate,
                                    relative_object_xpath)
@@ -725,7 +721,6 @@ class XMLBuilder(object):
         Callback that adds the implicitly tracked XML properties to
         the backing xml.
         """
-        origproporder = self._proporder[:]
         origpropstore = self._propstore.copy()
         origapi = self._xmlstate.xmlapi
         try:
@@ -733,7 +728,6 @@ class XMLBuilder(object):
             return self._do_add_parse_bits()
         finally:
             self._xmlstate.xmlapi = origapi
-            self._proporder = origproporder
             self._propstore = origpropstore
 
     def _do_add_parse_bits(self):
@@ -745,7 +739,7 @@ class XMLBuilder(object):
             prop._set_default(self)
 
         # Set up preferred XML ordering
-        do_order = self._proporder[:]
+        do_order = [p for p in self._propstore if p not in childprops]
         for key in reversed(self._XML_PROP_ORDER):
             if key not in xmlprops and key not in childprops:
                 raise RuntimeError("programming error: key '%s' must be "
