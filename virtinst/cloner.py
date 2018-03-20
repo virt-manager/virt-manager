@@ -391,14 +391,14 @@ class Cloner(object):
         self._guest.name = self._clone_name
         self._guest.uuid = self._clone_uuid
         self._clone_macs.reverse()
-        for dev in self._guest.get_devices("graphics"):
+        for dev in self._guest.devices.graphics:
             if dev.port and dev.port != -1:
                 logging.warning(_("Setting the graphics device port to autoport, "
                                "in order to avoid conflicting."))
                 dev.port = -1
 
         clone_macs = self._clone_macs[:]
-        for iface in self._guest.get_devices("interface"):
+        for iface in self._guest.devices.interface:
             iface.target_dev = None
 
             if clone_macs:
@@ -411,7 +411,7 @@ class Cloner(object):
         for i, orig_disk in enumerate(self._original_disks):
             clone_disk = self._clone_disks[i]
 
-            for disk in self._guest.get_devices("disk"):
+            for disk in self._guest.devices.disk:
                 if disk.target == orig_disk.target:
                     xmldisk = disk
 
@@ -426,7 +426,7 @@ class Cloner(object):
 
         # For guest agent channel, remove a path to generate a new one with
         # new guest name
-        for channel in self._guest.get_devices("channel"):
+        for channel in self._guest.devices.channel:
             if channel.type == DeviceChannel.TYPE_UNIX:
                 channel.source_path = None
 
@@ -528,7 +528,7 @@ class Cloner(object):
         clonelist = []
         retdisks = []
 
-        for disk in self._guest.get_devices("disk"):
+        for disk in self._guest.devices.disk:
             if self._do_we_clone_device(disk):
                 clonelist.append(disk)
                 continue

@@ -254,7 +254,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
             if opengl_warning:
                 pass
-            elif not [v for v in self.vm.xmlobj.get_devices("video") if
+            elif not [v for v in self.vm.xmlobj.devices.video if
                     (v.model == "virtio" and v.accel3d)]:
                 opengl_warning = _("Spice GL requires "
                     "virtio graphics configured with accel3d.")

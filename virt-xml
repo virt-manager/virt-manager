@@ -92,7 +92,10 @@ def get_domain_and_guest(conn, domstr):
 ################
 
 def _find_objects_to_edit(guest, action_name, editval, parserclass):
-    objlist = guest.list_children_for_class(parserclass.objclass)
+    if issubclass(parserclass.objclass, virtinst.Device):
+        objlist = guest.devices.list_children_for_class(parserclass.objclass)
+    else:
+        objlist = guest.list_children_for_class(parserclass.objclass)
     idx = None
 
     if editval is None:
@@ -179,16 +182,22 @@ def action_edit(guest, options, parserclass):
     return cli.parse_option_strings(options, guest, inst, update=True)
 
 
+def _is_singleton(guest, objclass):
+    if not objclass:
+        return True
+    if issubclass(objclass, virtinst.devices.Device):
+        return False
+    return guest.child_class_is_singleton(objclass)
+
+
 def action_add_device(guest, options, parserclass):
-    if (not parserclass.objclass or
-        guest.child_class_is_singleton(parserclass.objclass)):
+    if _is_singleton(guest, parserclass.objclass):
         fail(_("Cannot use --add-device with --%s") % parserclass.cli_arg_name)
     return cli.parse_option_strings(options, guest, None)
 
 
 def action_remove_device(guest, options, parserclass):
-    if (not parserclass.objclass or
-        guest.child_class_is_singleton(parserclass.objclass)):
+    if _is_singleton(guest, parserclass.objclass):
         fail(_("Cannot use --remove-device with --%s") %
              parserclass.cli_arg_name)
 

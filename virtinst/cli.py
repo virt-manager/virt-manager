@@ -28,8 +28,6 @@ from .domain import *  # pylint: disable=wildcard-import
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
 
-_ignore = Device
-
 
 ##########################
 # Global option handling #
@@ -409,7 +407,7 @@ def _gfx_console(guest):
         args.append("--attach")
 
     logging.debug("Launching virt-viewer for graphics type '%s'",
-        guest.get_devices("graphics")[0].type)
+        guest.devices.graphics[0].type)
     return _run_console(guest, args)
 
 
@@ -442,7 +440,7 @@ def connect_console(guest, consolecb, wait):
 
 
 def get_console_cb(guest):
-    gdevs = guest.get_devices("graphics")
+    gdevs = guest.devices.graphics
     if not gdevs:
         return _txt_console
 
@@ -1183,7 +1181,8 @@ class VirtCLIParser(object):
 
         new_object = False
         if self.objclass and not inst:
-            if self.guest.child_class_is_singleton(self.objclass):
+            if (not issubclass(self.objclass, Device) and
+                self.guest.child_class_is_singleton(self.objclass)):
                 inst = self.guest.list_children_for_class(self.objclass)[0]
             else:
                 new_object = True
@@ -1198,7 +1197,10 @@ class VirtCLIParser(object):
                     break
                 if validate:
                     obj.validate()
-                self.guest.add_child(obj)
+                if isinstance(obj, Device):
+                    self.guest.add_device(obj)
+                else:
+                    self.guest.add_child(obj)
 
             ret += util.listify(objs)
         except Exception as e:
@@ -1218,7 +1220,10 @@ class VirtCLIParser(object):
         Used only by virt-xml --edit lookups
         """
         ret = []
-        objlist = self.guest.list_children_for_class(self.objclass)
+        if issubclass(self.objclass, Device):
+            objlist = self.guest.devices.list_children_for_class(self.objclass)
+        else:
+            objlist = self.guest.list_children_for_class(self.objclass)
 
         try:
             for inst in objlist:
@@ -1958,7 +1963,7 @@ def _get_default_image_format(conn, poolobj):
 
 def _generate_new_volume_name(guest, poolobj, fmt):
     collidelist = []
-    for disk in guest.get_devices("disk"):
+    for disk in guest.devices.disk:
         if (disk.get_vol_install() and
             disk.get_vol_install().pool.name() == poolobj.name()):
             collidelist.append(os.path.basename(disk.path))
@@ -2069,7 +2074,7 @@ class ParserDisk(VirtCLIParser):
             inst.set_vol_install(vol_install)
 
         if not inst.target:
-            skip_targets = [d.target for d in self.guest.get_devices("disk")]
+            skip_targets = [d.target for d in self.guest.devices.disk]
             inst.generate_target(skip_targets)
             inst.cli_generated_target = True
 

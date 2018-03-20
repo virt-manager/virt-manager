@@ -292,7 +292,7 @@ class VirtConverter(object):
             destdir = StoragePool.get_default_dir(self.conn, build=not dry)
 
         guest = self.get_guest()
-        for disk in guest.get_devices("disk"):
+        for disk in guest.devices.disk:
             if disk.device != "disk":
                 continue
 

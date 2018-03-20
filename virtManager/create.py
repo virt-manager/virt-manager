@@ -83,7 +83,7 @@ def _mark_vmm_device(dev):
 
 
 def _get_vmm_device(guest, devkey):
-    for dev in guest.get_devices(devkey):
+    for dev in getattr(guest.devices, devkey):
         if hasattr(dev, "vmm_create_wizard_device"):
             return dev
 
@@ -1187,8 +1187,8 @@ class vmmCreate(vmmGObjectUI):
             if not path:
                 path = disk.path
             storagepath = (storagetmpl % path)
-        elif len(self._guest.get_devices("filesystem")):
-            fs = self._guest.get_devices("filesystem")[0]
+        elif len(self._guest.devices.filesystem):
+            fs = self._guest.devices.filesystem[0]
             storagepath = storagetmpl % fs.source
         elif self._guest.os.is_container():
             storagepath = _("Host filesystem")
@@ -2543,7 +2543,7 @@ class vmmCreate(vmmGObjectUI):
 
         # Build a list of pools we should refresh, if we are creating storage
         refresh_pools = []
-        for disk in guest.get_devices("disk"):
+        for disk in guest.devices.disk:
             if not disk.wants_storage_creation():
                 continue
 

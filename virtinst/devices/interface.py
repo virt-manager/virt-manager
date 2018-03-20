@@ -174,7 +174,7 @@ class DeviceInterface(Device):
 
         vms = conn.fetch_all_guests()
         for vm in vms:
-            for nic in vm.get_devices("interface"):
+            for nic in vm.devices.interface:
                 nicmac = nic.macaddr or ""
                 if nicmac.lower() == searchmac.lower():
                     return (True, _("The MAC address '%s' is in use "

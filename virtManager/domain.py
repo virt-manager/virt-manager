@@ -71,7 +71,7 @@ def compare_device(origdev, newdev, idx):
 
 
 def _find_device(guest, origdev):
-    devlist = guest.get_devices(origdev.virtual_device_type)
+    devlist = getattr(guest.devices, origdev.virtual_device_type)
     for idx, dev in enumerate(devlist):
         if compare_device(origdev, dev, idx):
             return dev
@@ -914,7 +914,7 @@ class vmmDomain(vmmLibvirtObject):
 
         def _change_model():
             if editdev.type == "usb":
-                ctrls = xmlobj.get_devices("controller")
+                ctrls = xmlobj.devices.controller
                 ctrls = [x for x in ctrls if (x.type ==
                          DeviceController.TYPE_USB)]
                 for dev in ctrls:
@@ -1277,7 +1277,7 @@ class vmmDomain(vmmLibvirtObject):
                            refresh_if_nec=True, inactive=False):
         guest = self.get_xmlobj(refresh_if_nec=refresh_if_nec,
                                 inactive=inactive)
-        devs = guest.get_devices(device_type)
+        devs = getattr(guest.devices, device_type)
 
         for idx, dev in enumerate(devs):
             dev.vmmindex = idx
@@ -1857,7 +1857,7 @@ class vmmDomain(vmmLibvirtObject):
             return
 
         # Only works for virtio balloon
-        if not any([b for b in self.get_xmlobj().get_devices("memballoon") if
+        if not any([b for b in self.get_xmlobj().devices.memballoon if
                     b.model == "virtio"]):
             return
 

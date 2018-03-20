@@ -31,7 +31,7 @@ def install_specified(location, cdpath, pxe, import_install):
 
 
 def cdrom_specified(guest, disk=None):
-    disks = guest.get_devices("disk")
+    disks = guest.devices.disk
 
     for d in disks:
         if d.device == virtinst.DeviceDisk.DEVICE_CDROM:
@@ -50,7 +50,7 @@ def supports_pxe(guest):
     """
     Return False if we are pretty sure the config doesn't support PXE
     """
-    for nic in guest.get_devices("interface"):
+    for nic in guest.devices.interface:
         if nic.type == nic.TYPE_USER:
             continue
         if nic.type != nic.TYPE_VIRTUAL:
@@ -477,7 +477,7 @@ def check_option_collisions(options, guest):
 
 
 def _show_nographics_warnings(options, guest):
-    if guest.get_devices("graphics"):
+    if guest.devices.graphics:
         return
     if not options.autoconsole:
         return
@@ -495,7 +495,7 @@ def _show_nographics_warnings(options, guest):
     # Trying --location --nographics with console connect. Warn if
     # they likely won't see any output.
 
-    if not guest.get_devices("console"):
+    if not guest.devices.console:
         logging.warning(_("No --console device added, you likely will not "
             "see text install output from the guest."))
         return
@@ -507,7 +507,7 @@ def _show_nographics_warnings(options, guest):
     console_type = serial_arg
     if guest.os.is_arm():
         console_type = serial_arm_arg
-    if guest.get_devices("console")[0].target_type in ["virtio", "xen"]:
+    if guest.devices.console[0].target_type in ["virtio", "xen"]:
         console_type = hvc_arg
     if guest.os.is_ppc64() or guest.os.is_arm_machvirt():
         # Later arm/ppc kernels figure out console= automatically, so don't
@@ -600,7 +600,7 @@ def build_guest_instance(conn, options):
     cli.parse_option_strings(options, guest, None)
 
     # Extra disk validation
-    for disk in guest.get_devices("disk"):
+    for disk in guest.devices.disk:
         cli.validate_disk(disk)
 
     set_install_media(guest, options.location, options.cdrom,

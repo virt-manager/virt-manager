@@ -351,7 +351,7 @@ class DeviceDisk(Device):
                     ret.append(vm.name)
                     continue
 
-            for disk in vm.get_devices("disk"):
+            for disk in vm.devices.disk:
                 if disk.path in vols and vm.name not in ret:
                     # VM uses the path indirectly via backing store
                     ret.append(vm.name)

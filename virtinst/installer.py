@@ -79,7 +79,7 @@ class Installer(object):
         # If guest has an attached disk, always have 'hd' in the boot
         # list, so disks are marked as bootable/installable (needed for
         # windows virtio installs, and booting local disk from PXE)
-        for disk in guest.get_devices("disk"):
+        for disk in guest.devices.disk:
             if disk.device == disk.DEVICE_DISK:
                 bootdev = "hd"
                 if bootdev not in bootorder:
@@ -222,7 +222,7 @@ class PXEInstaller(Installer):
         bootdev = DomainOs.BOOT_DEVICE_NETWORK
 
         if (not isinstall and
-            [d for d in guest.get_devices("disk") if
+            [d for d in guest.devices.disk if
              d.device == d.DEVICE_DISK]):
             # If doing post-install boot and guest has an HD attached
             bootdev = DomainOs.BOOT_DEVICE_HARDDISK
@@ -235,7 +235,7 @@ class ImportInstaller(Installer):
 
     # Private methods
     def _get_bootdev(self, isinstall, guest):
-        disks = guest.get_devices("disk")
+        disks = guest.devices.disk
         if not disks:
             return DomainOs.BOOT_DEVICE_HARDDISK
         return self._disk_to_bootdev(disks[0])
