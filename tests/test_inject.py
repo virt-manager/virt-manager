@@ -1,4 +1,8 @@
 # Copyright (C) 2013, 2014 Red Hat, Inc.
+#
+# This work is licensed under the GNU GPLv2.
+# See the COPYING file in the top-level directory.
+
 
 import atexit
 import os
