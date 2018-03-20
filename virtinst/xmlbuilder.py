@@ -26,6 +26,40 @@ _allprops = []
 _seenprops = []
 
 
+class _XMLPropertyCache(object):
+    """
+    Cache lookup tables mapping classes to their associated
+    XMLProperty and XMLChildProperty classes
+    """
+    def __init__(self):
+        self._name_to_prop = {}
+        self._prop_to_name = {}
+
+    def _get_prop_cache(self, cls, checkclass):
+        cachename = str(cls) + "-" + checkclass.__name__
+        if cachename not in self._name_to_prop:
+            ret = {}
+            for c in reversed(type.mro(cls)[:-1]):
+                for key, val in c.__dict__.items():
+                    if isinstance(val, checkclass):
+                        ret[key] = val
+                        self._prop_to_name[val] = key
+            self._name_to_prop[cachename] = ret
+        return self._name_to_prop[cachename]
+
+    def get_xml_props(self, inst):
+        return self._get_prop_cache(inst.__class__, XMLProperty)
+
+    def get_child_props(self, inst):
+        return self._get_prop_cache(inst.__class__, XMLChildProperty)
+
+    def get_prop_name(self, propinst):
+        return self._prop_to_name[propinst]
+
+
+_PropCache = _XMLPropertyCache()
+
+
 class _XMLChildList(list):
     """
     Little wrapper for a list containing XMLChildProperty output.
@@ -54,7 +88,27 @@ class _XMLChildList(list):
         return obj
 
 
-class XMLChildProperty(property):
+class _XMLPropertyBase(property):
+    def __init__(self, fget, fset):
+        self._propname = None
+        property.__init__(self, fget=fget, fset=fset)
+
+    @property
+    def propname(self):
+        """
+        The variable name associated with this XMLProperty. So with
+        a definition like
+
+            foo = XMLProperty("./@bar")
+
+        and this will return "foo".
+        """
+        if not self._propname:
+            self._propname = _PropCache.get_prop_name(self)
+        return self._propname
+
+
+class XMLChildProperty(_XMLPropertyBase):
     """
     Property that points to a class used for parsing a subsection of
     of the parent XML. For example when we deligate parsing
@@ -72,28 +126,17 @@ class XMLChildProperty(property):
         self.child_class = child_class
         self.is_single = is_single
         self.relative_xpath = relative_xpath
-        self._propname = None
 
-        property.__init__(self, self._fget)
+        _XMLPropertyBase.__init__(self, self._fget, None)
 
     def __repr__(self):
         return "<XMLChildProperty %s %s>" % (str(self.child_class), id(self))
 
-    def _findpropname(self, xmlbuilder):
-        if self._propname is None:
-            for key, val in xmlbuilder._all_child_props().items():
-                if val is self:
-                    self._propname = key
-                    break
-        if self._propname is None:
-            raise RuntimeError("Didn't find expected property=%s" % self)
-        return self._propname
 
     def _get(self, xmlbuilder):
-        propname = self._findpropname(xmlbuilder)
-        if propname not in xmlbuilder._propstore and not self.is_single:
-            xmlbuilder._propstore[propname] = []
-        return xmlbuilder._propstore[propname]
+        if self.propname not in xmlbuilder._propstore and not self.is_single:
+            xmlbuilder._propstore[self.propname] = []
+        return xmlbuilder._propstore[self.propname]
 
     def _fget(self, xmlbuilder):
         if self.is_single:
@@ -114,13 +157,13 @@ class XMLChildProperty(property):
     def remove(self, xmlbuilder, obj):
         self._get(xmlbuilder).remove(obj)
     def set(self, xmlbuilder, obj):
-        xmlbuilder._propstore[self._findpropname(xmlbuilder)] = obj
+        xmlbuilder._propstore[self.propname] = obj
 
     def get_prop_xpath(self, _xmlbuilder, obj):
         return self.relative_xpath + "/" + obj.XML_NAME
 
 
-class XMLProperty(property):
+class XMLProperty(_XMLPropertyBase):
     def __init__(self, xpath,
                  set_converter=None, validate_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
@@ -163,7 +206,6 @@ class XMLProperty(property):
         self._xpath = xpath
         if not self._xpath:
             raise RuntimeError("XMLProperty: xpath must be passed.")
-        self._propname = None
 
         self._is_bool = is_bool
         self._is_int = is_int
@@ -188,7 +230,7 @@ class XMLProperty(property):
         if _trackprops:
             _allprops.append(self)
 
-        property.__init__(self, fget=self.getter, fset=self.setter)
+        _XMLPropertyBase.__init__(self, self.getter, self.setter)
 
 
     def __repr__(self):
@@ -198,20 +240,6 @@ class XMLProperty(property):
     ####################
     # Internal helpers #
     ####################
-
-    def _findpropname(self, xmlbuilder):
-        """
-        Map the raw property() instance to the param name it's exposed
-        as in the XMLBuilder class. This is just for debug purposes.
-        """
-        if self._propname is None:
-            for key, val in xmlbuilder._all_xml_props().items():
-                if val is self:
-                    self._propname = key
-                    break
-        if self._propname is None:
-            raise RuntimeError("Didn't find expected property=%s" % self)
-        return self._propname
 
     def _convert_get_value(self, val):
         # pylint: disable=redefined-variable-type
@@ -251,10 +279,6 @@ class XMLProperty(property):
             val = self._convert_value_for_setter_cb(xmlbuilder, val)
         return val
 
-    def _prop_is_unset(self, xmlbuilder):
-        propname = self._findpropname(xmlbuilder)
-        return (propname not in xmlbuilder._propstore)
-
     def _default_get_value(self, xmlbuilder):
         """
         Return (can use default, default value)
@@ -262,7 +286,7 @@ class XMLProperty(property):
         ret = (False, -1)
         if not xmlbuilder._xmlstate.is_build:
             return ret
-        if not self._prop_is_unset(xmlbuilder):
+        if self.propname in xmlbuilder._propstore:
             return ret
         if not self._default_cb:
             return ret
@@ -293,10 +317,10 @@ class XMLProperty(property):
         track every variable.
         """
         propstore = xmlbuilder._propstore
-        propname = self._findpropname(xmlbuilder)
 
-        propstore.pop(propname, None)
-        propstore[propname] = val
+        if self.propname in propstore:
+            del(propstore[self.propname])
+        propstore[self.propname] = val
 
     def _nonxml_fget(self, xmlbuilder):
         """
@@ -306,15 +330,12 @@ class XMLProperty(property):
         candefault, val = self._default_get_value(xmlbuilder)
         if candefault:
             return val
-
-        propname = self._findpropname(xmlbuilder)
-        return xmlbuilder._propstore.get(propname, None)
+        return xmlbuilder._propstore.get(self.propname, None)
 
     def clear(self, xmlbuilder):
         # We only unset the cached data, since XML will be cleared elsewhere
         propstore = xmlbuilder._propstore
-        propname = self._findpropname(xmlbuilder)
-        if propname in propstore:
+        if self.propname in propstore:
             self.setter(xmlbuilder, None)
 
 
@@ -336,14 +357,12 @@ class XMLProperty(property):
             _seenprops.append(self)
             self._is_tracked = True
 
-        # pylint: disable=redefined-variable-type
-        if (self._prop_is_unset(xmlbuilder) and
-            not xmlbuilder._xmlstate.is_build):
-            val = self._get_xml(xmlbuilder)
-        else:
+        if (self.propname in xmlbuilder._propstore or
+            xmlbuilder._xmlstate.is_build):
             val = self._nonxml_fget(xmlbuilder)
-        ret = self._convert_get_value(val)
-        return ret
+        else:
+            val = self._get_xml(xmlbuilder)
+        return self._convert_get_value(val)
 
     def _get_xml(self, xmlbuilder):
         """
@@ -493,7 +512,30 @@ class XMLBuilder(object):
                                    parsexml, parentxmlstate,
                                    relative_object_xpath)
 
+        self._validate_xmlbuilder()
         self._initial_child_parse()
+
+    def _validate_xmlbuilder(self):
+        # This is one time validation we run once per XMLBuilder class
+        cachekey = self.__class__.__name__ + "_xmlbuilder_validated"
+        if getattr(self.__class__, cachekey, False):
+            return
+
+        xmlprops = self._all_xml_props()
+        childprops = self._all_child_props()
+        for key in self._XML_PROP_ORDER:
+            if key not in xmlprops and key not in childprops:
+                raise RuntimeError("programming error: key '%s' must be "
+                                   "xml prop or child prop" % key)
+
+        childclasses = []
+        for childprop in childprops.values():
+            if childprop.child_class in childclasses:
+                raise RuntimeError("programming error: can't register "
+                        "duplicate child_classs=%s" % childprop.child_class)
+            childclasses.append(childprop.child_class)
+
+        setattr(self.__class__, cachekey, True)
 
     def _initial_child_parse(self):
         # Walk the XML tree and hand of parsing to any registered
@@ -595,34 +637,22 @@ class XMLBuilder(object):
     # Internal API #
     ################
 
-    def __get_prop_cache(self, cachename, checkclass):
-        if not hasattr(self.__class__, cachename):
-            ret = {}
-            for c in reversed(type.mro(self.__class__)[:-1]):
-                for key, val in c.__dict__.items():
-                    if isinstance(val, checkclass):
-                        ret[key] = val
-            setattr(self.__class__, cachename, ret)
-        return getattr(self.__class__, cachename)
-
     def _all_xml_props(self):
         """
         Return a list of all XMLProperty instances that this class has.
         """
-        cachename = self.__class__.__name__ + "_cached_xml_props"
-        return self.__get_prop_cache(cachename, XMLProperty)
+        return _PropCache.get_xml_props(self)
 
     def _all_child_props(self):
         """
         Return a list of all XMLChildProperty instances that this class has.
         """
-        cachename = self.__class__.__name__ + "_cached_child_props"
-        return self.__get_prop_cache(cachename, XMLChildProperty)
+        return _PropCache.get_child_props(self)
 
-    def _find_child_prop(self, child_class, return_single=False):
+    def _find_child_prop(self, child_class):
         xmlprops = self._all_child_props()
         for xmlprop in list(xmlprops.values()):
-            if xmlprop.is_single and not return_single:
+            if xmlprop.is_single:
                 continue
             if child_class is xmlprop.child_class:
                 return xmlprop
@@ -733,9 +763,6 @@ class XMLBuilder(object):
         # Set up preferred XML ordering
         do_order = [p for p in self._propstore if p not in childprops]
         for key in reversed(self._XML_PROP_ORDER):
-            if key not in xmlprops and key not in childprops:
-                raise RuntimeError("programming error: key '%s' must be "
-                                   "xml prop or child prop" % key)
             if key in do_order:
                 do_order.remove(key)
                 do_order.insert(0, key)

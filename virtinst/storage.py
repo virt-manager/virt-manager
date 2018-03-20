@@ -70,6 +70,15 @@ def _get_default_pool_path(conn):
     return path
 
 
+class _EnumerateSource(XMLBuilder):
+    XML_NAME = "source"
+
+
+class _EnumerateSources(XMLBuilder):
+    XML_NAME = "sources"
+    sources = XMLChildProperty(_EnumerateSource)
+
+
 class _Host(XMLBuilder):
     _XML_PROP_ORDER = ["name", "port"]
     XML_NAME = "host"
@@ -150,13 +159,6 @@ class StoragePool(_StorageObject):
             if util.is_error_nosupport(e):
                 return []
             raise
-
-        class _EnumerateSource(XMLBuilder):
-            XML_NAME = "source"
-        class _EnumerateSources(XMLBuilder):
-            XML_NAME = "sources"
-            sources = XMLChildProperty(_EnumerateSource)
-
 
         ret = []
         sources = _EnumerateSources(conn, xml)
