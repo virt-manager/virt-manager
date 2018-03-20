@@ -23,8 +23,9 @@ import libvirt
 from virtcli import CLIConfig
 
 from . import util
-from .devices import *  # pylint: disable=wildcard-import
-from .domain import *  # pylint: disable=wildcard-import
+from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
+        DeviceInterface, DevicePanic)
+from .domain import DomainClock, DomainOs
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
 
@@ -1036,7 +1037,7 @@ class VirtCLIParser(object):
     @cli_arg_name: The command line argument this maps to, so
         "hostdev" for --hostdev
     """
-    objclass = None
+    propname = None
     remove_first = None
     stub_none = True
     support_cb = None
@@ -1063,6 +1064,26 @@ class VirtCLIParser(object):
             print("  %s" % arg.cliname)
         print("")
 
+    @classmethod
+    def lookup_prop(cls, obj):
+        """
+        For the passed obj, return the equivalent of
+        getattr(obj, cls.propname), but handle '.' in the propname
+        """
+        if not cls.propname:
+            return None
+        parent = obj
+        pieces = cls.propname.split(".")
+        for piece in pieces[:-1]:
+            parent = getattr(parent, piece)
+
+        return getattr(parent, pieces[-1])
+
+    @classmethod
+    def prop_is_list(cls, obj):
+        inst = cls.lookup_prop(obj)
+        return isinstance(inst, list)
+
 
     def __init__(self, guest, optstr):
         self.guest = guest
@@ -1074,7 +1095,7 @@ class VirtCLIParser(object):
         """
         Callback that handles virt-xml clearxml=yes|no magic
         """
-        if not self.objclass:
+        if not self.propname:
             raise RuntimeError("Don't know how to clearxml --%s" %
                                self.cli_arg_name)
         if val is not True:
@@ -1162,7 +1183,7 @@ class VirtCLIParser(object):
         For virt-xml, 'inst' is the virtinst object we are editing,
         ex. a DeviceDisk from a parsed Guest object.
         For virt-install, 'inst' is None, and we will create a new
-        inst from self.objclass, or edit a singleton object in place
+        inst for self.propname, or edit a singleton object in place
         like Guest.features/DomainFeatures
         """
         if not self.optstr:
@@ -1171,27 +1192,24 @@ class VirtCLIParser(object):
             return None
 
         new_object = False
-        if self.objclass and not inst:
-            if (not issubclass(self.objclass, Device) and
-                self.guest.child_class_is_singleton(self.objclass)):
-                inst = self.guest.list_children_for_class(self.objclass)[0]
-            else:
-                new_object = True
-                inst = self.objclass(  # pylint: disable=not-callable
-                        self.guest.conn)
+        if self.propname and not inst:
+            inst = self.lookup_prop(self.guest)
+            new_object = self.prop_is_list(self.guest)
+            if new_object:
+                inst = inst.new()
 
         ret = []
         try:
             objs = self._parse(inst or self.guest)
-            for obj in util.listify(objs):
-                if not new_object:
-                    break
-                if validate:
-                    obj.validate()
-                if isinstance(obj, Device):
-                    self.guest.add_device(obj)
-                else:
-                    self.guest.add_child(obj)
+            if new_object:
+                for obj in util.listify(objs):
+                    if validate:
+                        obj.validate()
+
+                    if isinstance(obj, Device):
+                        self.guest.add_device(obj)
+                    else:
+                        self.guest.add_child(obj)
 
             ret += util.listify(objs)
         except Exception as e:
@@ -1211,10 +1229,7 @@ class VirtCLIParser(object):
         Used only by virt-xml --edit lookups
         """
         ret = []
-        if issubclass(self.objclass, Device):
-            objlist = self.guest.devices.list_children_for_class(self.objclass)
-        else:
-            objlist = self.guest.list_children_for_class(self.objclass)
+        objlist = util.listify(self.lookup_prop(self.guest))
 
         try:
             for inst in objlist:
@@ -1313,7 +1328,7 @@ ParserEvents.add_arg("on_lockfailure", "on_lockfailure")
 
 class ParserResource(VirtCLIParser):
     cli_arg_name = "resource"
-    objclass = DomainResource
+    propname = "resource"
     remove_first = "partition"
 
 _register_virt_parser(ParserResource)
@@ -1326,7 +1341,7 @@ ParserResource.add_arg("partition", "partition")
 
 class ParserNumatune(VirtCLIParser):
     cli_arg_name = "numatune"
-    objclass = DomainNumatune
+    propname = "numatune"
     remove_first = "nodeset"
 
 _register_virt_parser(ParserNumatune)
@@ -1361,7 +1376,7 @@ ParserMemory.add_arg("hotplugmemoryslots", "hotplugmemoryslots")
 
 class ParserMemtune(VirtCLIParser):
     cli_arg_name = "memtune"
-    objclass = DomainMemtune
+    propname = "memtune"
     remove_first = "soft_limit"
 
 _register_virt_parser(ParserMemtune)
@@ -1377,7 +1392,7 @@ ParserMemtune.add_arg("min_guarantee", "min_guarantee")
 
 class ParserBlkiotune(VirtCLIParser):
     cli_arg_name = "blkiotune"
-    objclass = DomainBlkiotune
+    propname = "blkiotune"
     remove_first = "weight"
 
 _register_virt_parser(ParserBlkiotune)
@@ -1392,7 +1407,7 @@ ParserBlkiotune.add_arg("device_weight", "device_weight")
 
 class ParserMemoryBacking(VirtCLIParser):
     cli_arg_name = "memorybacking"
-    objclass = DomainMemoryBacking
+    propname = "memoryBacking"
 
 _register_virt_parser(ParserMemoryBacking)
 ParserMemoryBacking.add_arg("hugepages", "hugepages", is_onoff=True)
@@ -1409,7 +1424,7 @@ ParserMemoryBacking.add_arg("locked", "locked", is_onoff=True)
 
 class ParserCPU(VirtCLIParser):
     cli_arg_name = "cpu"
-    objclass = DomainCpu
+    propname = "cpu"
     remove_first = "model"
     stub_none = False
 
@@ -1523,7 +1538,7 @@ ParserCPU.add_arg("level", "cache.level", find_inst_cb=ParserCPU.set_l3_cache_cb
 
 class ParserCputune(VirtCLIParser):
     cli_arg_name = "cputune"
-    objclass = DomainCputune
+    propname = "cputune"
     remove_first = "model"
     stub_none = False
 
@@ -1602,7 +1617,7 @@ ParserVCPU.add_arg("vcpu_placement", "placement")
 
 class ParserBoot(VirtCLIParser):
     cli_arg_name = "boot"
-    objclass = DomainOs
+    propname = "os"
 
     def set_uefi_cb(self, inst, val, virtarg):
         self.guest.set_uefi_default()
@@ -1689,7 +1704,7 @@ for _bootdev in DomainOs.BOOT_DEVICES:
 
 class ParserIdmap(VirtCLIParser):
     cli_arg_name = "idmap"
-    objclass = DomainIdmap
+    propname = "idmap"
 
 _register_virt_parser(ParserIdmap)
 ParserIdmap.add_arg("uid_start", "uid_start")
@@ -1706,7 +1721,7 @@ ParserIdmap.add_arg("gid_count", "gid_count")
 
 class ParserSecurity(VirtCLIParser):
     cli_arg_name = "security"
-    objclass = DomainSeclabel
+    propname = "seclabels"
 
 _register_virt_parser(ParserSecurity)
 ParserSecurity.add_arg("type", "type")
@@ -1722,7 +1737,7 @@ ParserSecurity.add_arg("baselabel", "label", can_comma=True)
 
 class ParserFeatures(VirtCLIParser):
     cli_arg_name = "features"
-    objclass = DomainFeatures
+    propname = "features"
 
     def set_smm_cb(self, inst, val, virtarg):
         if not inst.conn.check_support(inst.conn.SUPPORT_DOMAIN_FEATURE_SMM):
@@ -1764,7 +1779,7 @@ ParserFeatures.add_arg("vmcoreinfo", "vmcoreinfo", is_onoff=True)
 
 class ParserClock(VirtCLIParser):
     cli_arg_name = "clock"
-    objclass = DomainClock
+    propname = "clock"
 
     def set_timer(self, inst, val, virtarg):
         tname, attrname = virtarg.cliname.split("_")
@@ -1798,7 +1813,7 @@ for _tname in DomainClock.TIMER_NAMES:
 
 class ParserPM(VirtCLIParser):
     cli_arg_name = "pm"
-    objclass = DomainPm
+    propname = "pm"
 
 _register_virt_parser(ParserPM)
 ParserPM.add_arg("suspend_to_mem", "suspend_to_mem", is_onoff=True)
@@ -1811,7 +1826,7 @@ ParserPM.add_arg("suspend_to_disk", "suspend_to_disk", is_onoff=True)
 
 class ParserSysinfo(VirtCLIParser):
     cli_arg_name = "sysinfo"
-    objclass = DomainSysinfo
+    propname = "sysinfo"
     remove_first = "type"
 
     def set_type_cb(self, inst, val, virtarg):
@@ -1877,7 +1892,7 @@ ParserSysinfo.add_arg("baseBoard_location", "baseBoard_location")
 
 class ParserQemuCLI(VirtCLIParser):
     cli_arg_name = "qemu_commandline"
-    objclass = DomainXMLNSQemu
+    propname = "xmlns_qemu"
 
     def args_cb(self, inst, val, virtarg):
         for opt in shlex.split(val):
@@ -1969,7 +1984,7 @@ def _generate_new_volume_name(guest, poolobj, fmt):
 
 class ParserDisk(VirtCLIParser):
     cli_arg_name = "disk"
-    objclass = DeviceDisk
+    propname = "devices.disk"
     remove_first = "path"
     stub_none = False
 
@@ -2140,7 +2155,7 @@ ParserDisk.add_arg("label", "seclabel[0-9]*.label", can_comma=True,
 
 class ParserNetwork(VirtCLIParser):
     cli_arg_name = "network"
-    objclass = DeviceInterface
+    propname = "devices.interface"
     remove_first = "type"
     stub_none = False
 
@@ -2227,7 +2242,7 @@ ParserNetwork.add_arg("virtualport.interfaceid", "virtualport_interfaceid")
 
 class ParserGraphics(VirtCLIParser):
     cli_arg_name = "graphics"
-    objclass = DeviceGraphics
+    propname = "devices.graphics"
     remove_first = "type"
     stub_none = False
 
@@ -2328,7 +2343,7 @@ ParserGraphics.add_arg("rendernode", "rendernode")
 
 class ParserController(VirtCLIParser):
     cli_arg_name = "controller"
-    objclass = DeviceController
+    propname = "devices.controller"
     remove_first = "type"
 
     def set_server_cb(self, inst, val, virtarg):
@@ -2360,7 +2375,7 @@ ParserController.add_arg(None, "address", cb=ParserController.set_server_cb)
 
 class ParserInput(VirtCLIParser):
     cli_arg_name = "input"
-    objclass = DeviceInput
+    propname = "devices.input"
     remove_first = "type"
 
 _register_virt_parser(ParserInput)
@@ -2375,7 +2390,7 @@ ParserInput.add_arg("bus", "bus")
 
 class ParserSmartcard(VirtCLIParser):
     cli_arg_name = "smartcard"
-    objclass = DeviceSmartcard
+    propname = "devices.smartcard"
     remove_first = "mode"
 
 _register_virt_parser(ParserSmartcard)
@@ -2390,7 +2405,7 @@ ParserSmartcard.add_arg("type", "type")
 
 class ParserRedir(VirtCLIParser):
     cli_arg_name = "redirdev"
-    objclass = DeviceRedirdev
+    propname = "devices.redirdev"
     remove_first = "bus"
     stub_none = False
 
@@ -2417,7 +2432,7 @@ ParserRedir.add_arg(None, "server", cb=ParserRedir.set_server_cb)
 
 class ParserTPM(VirtCLIParser):
     cli_arg_name = "tpm"
-    objclass = DeviceTpm
+    propname = "devices.tpm"
     remove_first = "type"
 
     def _parse(self, inst):
@@ -2438,7 +2453,7 @@ ParserTPM.add_arg("device_path", "path")
 
 class ParserRNG(VirtCLIParser):
     cli_arg_name = "rng"
-    objclass = DeviceRng
+    propname = "devices.rng"
     remove_first = "type"
     stub_none = False
 
@@ -2507,7 +2522,7 @@ ParserRNG.add_arg("rate_period", "rate_period")
 
 class ParserWatchdog(VirtCLIParser):
     cli_arg_name = "watchdog"
-    objclass = DeviceWatchdog
+    propname = "devices.watchdog"
     remove_first = "model"
 
 _register_virt_parser(ParserWatchdog)
@@ -2522,7 +2537,7 @@ ParserWatchdog.add_arg("action", "action")
 
 class ParseMemdev(VirtCLIParser):
     cli_arg_name = "memdev"
-    objclass = DeviceMemory
+    propname = "devices.memory"
     remove_first = "model"
 
     def set_target_size(self, inst, val, virtarg):
@@ -2546,7 +2561,7 @@ ParseMemdev.add_arg("source.nodemask", "source_nodemask", can_comma=True)
 
 class ParserMemballoon(VirtCLIParser):
     cli_arg_name = "memballoon"
-    objclass = DeviceMemballoon
+    propname = "devices.memballoon"
     remove_first = "model"
     stub_none = False
 
@@ -2561,7 +2576,7 @@ ParserMemballoon.add_arg("model", "model")
 
 class ParserPanic(VirtCLIParser):
     cli_arg_name = "panic"
-    objclass = DevicePanic
+    propname = "devices.panic"
     remove_first = "model"
     compat_mode = False
 
@@ -2646,25 +2661,25 @@ _ParserChar.add_arg("log_append", "log.append", is_onoff=True)
 
 class ParserSerial(_ParserChar):
     cli_arg_name = "serial"
-    objclass = DeviceSerial
+    propname = "devices.serial"
 _register_virt_parser(ParserSerial)
 
 
 class ParserParallel(_ParserChar):
     cli_arg_name = "parallel"
-    objclass = DeviceParallel
+    propname = "devices.parallel"
 _register_virt_parser(ParserParallel)
 
 
 class ParserChannel(_ParserChar):
     cli_arg_name = "channel"
-    objclass = DeviceChannel
+    propname = "devices.channel"
 _register_virt_parser(ParserChannel)
 
 
 class ParserConsole(_ParserChar):
     cli_arg_name = "console"
-    objclass = DeviceConsole
+    propname = "devices.console"
 _register_virt_parser(ParserConsole)
 
 
@@ -2674,7 +2689,7 @@ _register_virt_parser(ParserConsole)
 
 class ParserFilesystem(VirtCLIParser):
     cli_arg_name = "filesystem"
-    objclass = DeviceFilesystem
+    propname = "devices.filesystem"
     remove_first = ["source", "target"]
 
 _register_virt_parser(ParserFilesystem)
@@ -2691,7 +2706,7 @@ ParserFilesystem.add_arg("target", "target")
 
 class ParserVideo(VirtCLIParser):
     cli_arg_name = "video"
-    objclass = DeviceVideo
+    propname = "devices.video"
     remove_first = "model"
 
     def _parse(self, inst):
@@ -2725,7 +2740,7 @@ ParserVideo.add_arg("vgamem", "vgamem")
 
 class ParserSound(VirtCLIParser):
     cli_arg_name = "sound"
-    objclass = DeviceSound
+    propname = "devices.sound"
     remove_first = "model"
     stub_none = False
 
@@ -2746,7 +2761,7 @@ ParserSound.add_arg("model", "model", ignore_default=True)
 
 class ParserHostdev(VirtCLIParser):
     cli_arg_name = "hostdev"
-    objclass = DeviceHostdev
+    propname = "devices.hostdev"
     remove_first = "name"
 
     def set_name_cb(self, inst, val, virtarg):

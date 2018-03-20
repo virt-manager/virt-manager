@@ -715,23 +715,6 @@ class XMLBuilder(object):
         self._xmlstate.xmlapi.node_force_remove(xpath)
         self._set_child_xpaths()
 
-    def list_children_for_class(self, klass):
-        """
-        Return a list of all XML child objects with the passed class
-        """
-        ret = []
-        for prop in list(self._all_child_props().values()):
-            ret += [obj for obj in util.listify(prop._get(self))
-                    if obj.__class__ == klass]
-        return ret
-
-    def child_class_is_singleton(self, klass):
-        """
-        Return True if the passed class is registered as a singleton
-        child property
-        """
-        return self._find_child_prop(klass, return_single=True).is_single
-
 
     #################################
     # Private XML building routines #
