@@ -63,6 +63,18 @@ class InterfaceProtocol(XMLBuilder):
     ips = XMLChildProperty(_IPAddress)
 
 
+class _BondConfig(XMLBuilder):
+    _XML_ROOT_NAME = "bond"
+
+
+class _BridgeConfig(XMLBuilder):
+    _XML_ROOT_NAME = "bridge"
+
+
+class _VLANConfig(XMLBuilder):
+    _XML_ROOT_NAME = "vlan"
+
+
 class Interface(XMLBuilder):
     """
     Base class for building any libvirt interface object.
@@ -115,24 +127,30 @@ class Interface(XMLBuilder):
                        "arp_target", "arp_validate_mode", "mii_frequency",
                        "mii_downdelay", "mii_updelay", "mii_carrier_mode",
                        "tag", "parent_interface",
-                       "protocols", "interfaces"]
+                       "protocols", "_bond", "_bridge", "_vlan"]
 
-    ##################
-    # Child handling #
-    ##################
+    ######################
+    # Interface handling #
+    ######################
+
+    # The recursive nature of nested interfaces complicates things here,
+    # which is why this is strange. See bottom of the file for more
+    # weirdness
+
+    _bond = XMLChildProperty(_BondConfig, is_single=True)
+    _bridge = XMLChildProperty(_BridgeConfig, is_single=True)
+    _vlan = XMLChildProperty(_VLANConfig, is_single=True)
 
     def add_interface(self, obj):
-        self.add_child(obj)
+        getattr(self, "_" + self.type).add_child(obj)
     def remove_interface(self, obj):
-        self.remove_child(obj)
-    # 'interfaces' property is added outside this class, since it needs
-    # to reference the completed Interface class
+        getattr(self, "_" + self.type).remove_child(obj)
 
-    def add_protocol(self, obj):
-        self.add_child(obj)
-    def remove_protocol(self, obj):
-        self.remove_child(obj)
-    protocols = XMLChildProperty(InterfaceProtocol)
+    @property
+    def interfaces(self):
+        if self.type != "ethernet":
+            return getattr(self, "_" + self.type).interfaces
+        return []
 
 
     ######################
@@ -166,6 +184,12 @@ class Interface(XMLBuilder):
     name = XMLProperty("./@name", validate_cb=_validate_name)
 
     macaddr = XMLProperty("./mac/@address", validate_cb=_validate_mac)
+
+    def add_protocol(self, obj):
+        self.add_child(obj)
+    def remove_protocol(self, obj):
+        self.remove_child(obj)
+    protocols = XMLChildProperty(InterfaceProtocol)
 
 
     #################
@@ -241,5 +265,9 @@ class Interface(XMLBuilder):
 
         return iface
 
-Interface.interfaces = XMLChildProperty(Interface,
-                                        relative_xpath="./%(type)s")
+
+# Interface can recursively have child interfaces which we can't define
+# inline in the class config, hence this hackery
+_BondConfig.interfaces = XMLChildProperty(Interface)
+_BridgeConfig.interfaces = XMLChildProperty(Interface)
+_VLANConfig.interfaces = XMLChildProperty(Interface)

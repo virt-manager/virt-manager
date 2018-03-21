@@ -63,14 +63,15 @@ class XMLChildProperty(property):
     @child_class: XMLBuilder class this property is tracking. So for
         guest.devices.disk this is DeviceDisk
     @relative_xpath: Relative location where the class is rooted compared
-        to its _XML_ROOT_PATH. So interface xml can have nested
-        interfaces rooted at /interface/bridge/interface, so we pass
-        ./bridge/interface here for example.
+        to its xmlbuilder root path. So if xmlbuilder is ./foo and we
+        want to track ./foo/bar/baz instances, set relative_xpath=./bar
+    @is_single: If True, this represents an XML node that is only expected
+        to appear once, like <domain><cpu>
     """
     def __init__(self, child_class, relative_xpath=".", is_single=False):
         self.child_class = child_class
-        self.relative_xpath = relative_xpath
         self.is_single = is_single
+        self.relative_xpath = relative_xpath
         self._propname = None
 
         property.__init__(self, self._fget)
@@ -115,17 +116,8 @@ class XMLChildProperty(property):
     def set(self, xmlbuilder, obj):
         xmlbuilder._propstore[self._findpropname(xmlbuilder)] = obj
 
-    def get_prop_xpath(self, xmlbuilder, obj):
-        relative_xpath = self.relative_xpath + "/" + obj._XML_ROOT_NAME
-
-        match = re.search("%\((.*)\)", self.relative_xpath)
-        if match:
-            valuedict = {}
-            for paramname in match.groups():
-                valuedict[paramname] = getattr(xmlbuilder, paramname)
-            relative_xpath = relative_xpath % valuedict
-
-        return relative_xpath
+    def get_prop_xpath(self, _xmlbuilder, obj):
+        return self.relative_xpath + "/" + obj._XML_ROOT_NAME
 
 
 class XMLProperty(property):
