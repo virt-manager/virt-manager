@@ -415,9 +415,9 @@ class vmmSerialConsole(vmmGObject):
             self.console.close()
 
     def lookup_dev(self):
-        devs = self.vm.get_serial_devs()
+        devs = self.vm.get_serialcon_devices()
         for dev in devs:
-            port = dev.vmmindex
+            port = dev.get_xml_idx()
             path = dev.source_path
 
             if port == self.target_port:

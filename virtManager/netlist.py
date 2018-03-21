@@ -159,7 +159,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         vnet_taps = []
         for vm in self.conn.list_vms():
-            for nic in vm.get_network_devices(refresh_if_nec=False):
+            for nic in vm.get_interface_devices_norefresh():
                 if nic.target_dev and nic.target_dev not in vnet_taps:
                     vnet_taps.append(nic.target_dev)
 

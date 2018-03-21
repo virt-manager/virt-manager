@@ -632,6 +632,17 @@ class XMLBuilder(object):
         """
         return self._xmlstate.abs_xpath()
 
+    def get_xml_idx(self):
+        """
+        This is basically the offset parsed out of the object's xpath,
+        minus 1. So if this is the fifth <disk> in a <domain>, ret=4.
+        If this is the only <cpu> in a domain, ret=0.
+        """
+        xpath = self._xmlstate.abs_xpath()
+        if "[" not in xpath:
+            return 0
+        return int(xpath.rsplit("[", 1)[1].strip("]")) - 1
+
 
     ################
     # Internal API #

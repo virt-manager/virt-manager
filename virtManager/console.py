@@ -681,7 +681,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         ginfo = None
         try:
-            gdevs = self.vm.get_graphics_devices()
+            gdevs = self.vm.xmlobj.devices.graphics
             gdev = gdevs and gdevs[0] or None
             if gdev:
                 ginfo = ConnectionInfo(self.vm.conn, gdev)
@@ -864,7 +864,8 @@ class vmmConsolePages(vmmGObjectUI):
         """
         Find the default graphical or serial console for the VM
         """
-        if self.vm.get_graphics_devices() or not self.vm.get_serial_devs():
+        if (self.vm.xmlobj.devices.graphics or
+            not self.vm.get_serialcon_devices()):
             return
 
         # We iterate through the 'console' menu and activate the first
@@ -886,7 +887,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.widget("console-pages").set_current_page(_CONSOLE_PAGE_VIEWER)
             return
 
-        target_port = dev.vmmindex
+        target_port = dev.get_xml_idx()
         serial = None
         name = src.get_label()
         for s in self._serial_consoles:
@@ -911,7 +912,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("serial-pages").set_current_page(page_idx)
 
     def _build_serial_menu_items(self, menu_item_cb):
-        devs = self.vm.get_serial_devs()
+        devs = self.vm.get_serialcon_devices()
         if len(devs) == 0:
             menu_item_cb(_("No text console available"),
                          radio=False, sensitive=False)
@@ -926,9 +927,9 @@ class vmmConsolePages(vmmGObjectUI):
 
         for dev in devs:
             if dev.DEVICE_TYPE == "console":
-                label = _("Text Console %d") % (dev.vmmindex + 1)
+                label = _("Text Console %d") % (dev.get_xml_idx() + 1)
             else:
-                label = _("Serial %d") % (dev.vmmindex + 1)
+                label = _("Serial %d") % (dev.get_xml_idx() + 1)
 
             tooltip = vmmSerialConsole.can_connect(self.vm, dev)
             sensitive = not bool(tooltip)
@@ -938,7 +939,7 @@ class vmmConsolePages(vmmGObjectUI):
                 tooltip=tooltip, cb=self._console_menu_toggled, cbdata=dev)
 
     def _build_graphical_menu_items(self, menu_item_cb):
-        devs = self.vm.get_graphics_devices()
+        devs = self.vm.xmlobj.devices.graphics
         if len(devs) == 0:
             menu_item_cb(_("No graphical console available"),
                          radio=False, sensitive=False)

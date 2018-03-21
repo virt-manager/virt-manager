@@ -400,7 +400,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         if not self.vm.is_active():
             logging.debug("Skipping screenshot since VM is not active")
             return
-        if not self.vm.get_graphics_devices():
+        if not self.vm.xmlobj.devices.graphics:
             logging.debug("Skipping screenshot since VM has no graphics")
             return
 

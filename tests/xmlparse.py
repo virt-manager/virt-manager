@@ -267,6 +267,10 @@ class XMLParseTest(unittest.TestCase):
         guest.cpu.add_feature("x2apic", "forbid")
         guest.cpu.set_topology_defaults(guest.vcpus)
         self.assertTrue(guest.cpu.get_xml_config().startswith("<cpu"))
+        self.assertEqual(guest.cpu.get_xml_id(), "./cpu")
+        self.assertEqual(guest.cpu.get_xml_idx(), 0)
+        self.assertEqual(guest.get_xml_id(), ".")
+        self.assertEqual(guest.get_xml_idx(), 0)
 
         self.assertTrue(guest.os.get_xml_config().startswith("<os"))
 
@@ -487,6 +491,8 @@ class XMLParseTest(unittest.TestCase):
         check("source_channel", "org.spice-space.webdav.0", "test.1")
         check("target_type", "virtio")
         check("target_name", "org.spice-space.webdav.0", "test.2")
+        self.assertEqual(channel3.get_xml_id(), "./devices/channel[3]")
+        self.assertEqual(channel3.get_xml_idx(), 2)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

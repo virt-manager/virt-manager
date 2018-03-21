@@ -29,26 +29,26 @@ class _SENTINEL(object):
 def compare_device(origdev, newdev, idx):
     devprops = {
         "disk":          ["target", "bus"],
-        "interface":     ["macaddr", "vmmindex"],
-        "input":         ["bus", "type", "vmmindex"],
-        "sound":         ["model", "vmmindex"],
-        "video":         ["model", "vmmindex"],
-        "watchdog":      ["vmmindex"],
-        "hostdev":       ["type", "managed", "vmmindex",
+        "interface":     ["macaddr", "xmlindex"],
+        "input":         ["bus", "type", "xmlindex"],
+        "sound":         ["model", "xmlindex"],
+        "video":         ["model", "xmlindex"],
+        "watchdog":      ["xmlindex"],
+        "hostdev":       ["type", "managed", "xmlindex",
                             "product", "vendor",
                             "function", "domain", "slot"],
         "serial":        ["type", "target_port"],
         "parallel":      ["type", "target_port"],
         "console":       ["type", "target_type", "target_port"],
-        "graphics":      ["type", "vmmindex"],
+        "graphics":      ["type", "xmlindex"],
         "controller":    ["type", "index"],
         "channel":       ["type", "target_name"],
-        "filesystem":    ["target", "vmmindex"],
-        "smartcard":     ["mode", "vmmindex"],
-        "redirdev":      ["bus", "type", "vmmindex"],
-        "tpm":           ["type", "vmmindex"],
-        "rng":           ["type", "vmmindex"],
-        "panic":         ["type", "vmmindex"],
+        "filesystem":    ["target", "xmlindex"],
+        "smartcard":     ["mode", "xmlindex"],
+        "redirdev":      ["bus", "type", "xmlindex"],
+        "tpm":           ["type", "xmlindex"],
+        "rng":           ["type", "xmlindex"],
+        "panic":         ["type", "xmlindex"],
     }
 
     if id(origdev) == id(newdev):
@@ -58,10 +58,11 @@ def compare_device(origdev, newdev, idx):
         return False
 
     for devprop in devprops[origdev.DEVICE_TYPE]:
-        origval = getattr(origdev, devprop)
-        if devprop == "vmmindex":
+        if devprop == "xmlindex":
+            origval = origdev.get_xml_idx()
             newval = idx
         else:
+            origval = getattr(origdev, devprop)
             newval = getattr(newdev, devprop)
 
         if origval != newval:
@@ -315,7 +316,7 @@ class vmmDomain(vmmLibvirtObject):
                   "To fix this, remove and reattach the USB device "
                   "to your guest using the 'Add Hardware' wizard.")
 
-        for hostdev in self.get_hostdev_devices():
+        for hostdev in self.xmlobj.devices.hostdev:
             devtype = hostdev.type
 
             if devtype != "usb":
@@ -373,7 +374,7 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().stable_defaults()
 
     def has_spicevmc_type_redirdev(self):
-        devs = self.get_redirdev_devices()
+        devs = self.xmlobj.devices.redirdev
         for dev in devs:
             if dev.type == "spicevmc":
                 return True
@@ -416,7 +417,7 @@ class vmmDomain(vmmLibvirtObject):
 
         # Check if our disks are all qcow2
         seen_qcow2 = False
-        for disk in self.get_disk_devices(refresh_if_nec=False):
+        for disk in self.get_disk_devices_norefresh():
             if disk.read_only:
                 continue
             if not disk.path:
@@ -532,11 +533,11 @@ class vmmDomain(vmmLibvirtObject):
         """
         Remove passed device from the inactive guest XML
         """
-        # HACK: If serial and console are both present, they both need
+        # If serial and duplicate console are both present, they both need
         # to be removed at the same time
         con = None
-        if hasattr(devobj, "virtmanager_console_dup"):
-            con = getattr(devobj, "virtmanager_console_dup")
+        if self.serial_is_console_dup(devobj):
+            con = self.xmlobj.devices.consoles[0]
 
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, False)
@@ -634,7 +635,7 @@ class vmmDomain(vmmLibvirtObject):
         guest = self._make_xmlobj_to_define()
         def _change_boot_order():
             boot_dev_order = []
-            devmap = dict((dev.vmmidstr, dev) for dev in
+            devmap = dict((dev.get_xml_id(), dev) for dev in
                           self.get_bootable_devices())
             for b in boot_order:
                 if b in devmap:
@@ -708,8 +709,8 @@ class vmmDomain(vmmLibvirtObject):
                 return
 
             used = []
-            disks = (self.get_disk_devices() +
-                     self.get_disk_devices(inactive=True))
+            disks = (self.xmlobj.devices.disk +
+                     self.get_xmlobj(inactive=True).devices.disk)
             for d in disks:
                 used.append(d.target)
 
@@ -1104,7 +1105,7 @@ class vmmDomain(vmmLibvirtObject):
 
         # Ugly workaround for VNC bug where the display cannot be opened
         # if the listen type is "none".  This bug was fixed in QEMU-2.9.0.
-        graphics = self.get_graphics_devices()[0]
+        graphics = self.xmlobj.devices.graphics[0]
         if (graphics.type == "vnc" and
                 graphics.get_first_listen_type() == "none" and
                 not self.conn.SUPPORT_CONN_VNC_NONE_AUTH):
@@ -1208,7 +1209,7 @@ class vmmDomain(vmmLibvirtObject):
         floppy = None
         net = None
 
-        for d in self.get_disk_devices():
+        for d in self.xmlobj.devices.disk:
             if not cdrom and d.device == "cdrom":
                 cdrom = d
             if not floppy and d.device == "floppy":
@@ -1218,19 +1219,19 @@ class vmmDomain(vmmLibvirtObject):
             if cdrom and disk and floppy:
                 break
 
-        for n in self.get_network_devices():
+        for n in self.xmlobj.devices.interface:
             net = n
             break
 
         for b in boot_order:
             if b == "network" and net:
-                ret.append(net.vmmidstr)
+                ret.append(net.get_xml_id())
             if b == "hd" and disk:
-                ret.append(disk.vmmidstr)
+                ret.append(disk.get_xml_id())
             if b == "cdrom" and cdrom:
-                ret.append(cdrom.vmmidstr)
+                ret.append(cdrom.get_xml_id())
             if b == "fd" and floppy:
-                ret.append(floppy.vmmidstr)
+                ret.append(floppy.get_xml_id())
         return ret
 
     def _get_device_boot_order(self):
@@ -1239,7 +1240,7 @@ class vmmDomain(vmmLibvirtObject):
         for dev in devs:
             if not dev.boot.order:
                 continue
-            order.append((dev.vmmidstr, dev.boot.order))
+            order.append((dev.get_xml_id(), dev.boot.order))
 
         if not order:
             # No devices individually marked bootable, convert traditional
@@ -1263,97 +1264,26 @@ class vmmDomain(vmmLibvirtObject):
         return (guest.os.kernel, guest.os.initrd,
                 guest.os.dtb, guest.os.kernel_args)
 
-    # XML Device listing
+    def get_interface_devices_norefresh(self):
+        xmlobj = self.get_xmlobj(refresh_if_nec=False)
+        return xmlobj.devices.interface
+    def get_disk_devices_norefresh(self):
+        xmlobj = self.get_xmlobj(refresh_if_nec=False)
+        return xmlobj.devices.disk
 
-    def get_serial_devs(self):
-        devs = self.get_char_devices()
-        devlist = []
+    def serial_is_console_dup(self, serial):
+        if serial.DEVICE_TYPE != "serial":
+            return False
 
-        devlist += [x for x in devs if x.DEVICE_TYPE == "serial"]
-        devlist += [x for x in devs if x.DEVICE_TYPE == "console"]
-        return devlist
+        consoles = self.xmlobj.devices.console
+        if not consoles:
+            return False
 
-    def _build_device_list(self, device_type,
-                           refresh_if_nec=True, inactive=False):
-        guest = self.get_xmlobj(refresh_if_nec=refresh_if_nec,
-                                inactive=inactive)
-        devs = getattr(guest.devices, device_type)
-
-        for idx, dev in enumerate(devs):
-            dev.vmmindex = idx
-            dev.vmmidstr = dev.DEVICE_TYPE + ("%.3d" % idx)
-
-        return devs
-
-    def get_network_devices(self, refresh_if_nec=True):
-        return self._build_device_list("interface", refresh_if_nec)
-    def get_video_devices(self):
-        return self._build_device_list("video")
-    def get_hostdev_devices(self):
-        return self._build_device_list("hostdev")
-    def get_watchdog_devices(self):
-        return self._build_device_list("watchdog")
-    def get_input_devices(self):
-        return self._build_device_list("input")
-    def get_graphics_devices(self):
-        return self._build_device_list("graphics")
-    def get_sound_devices(self):
-        return self._build_device_list("sound")
-    def get_controller_devices(self):
-        return self._build_device_list("controller")
-    def get_filesystem_devices(self):
-        return self._build_device_list("filesystem")
-    def get_smartcard_devices(self):
-        return self._build_device_list("smartcard")
-    def get_redirdev_devices(self):
-        return self._build_device_list("redirdev")
-    def get_tpm_devices(self):
-        return self._build_device_list("tpm")
-    def get_rng_devices(self):
-        return self._build_device_list("rng")
-    def get_panic_devices(self):
-        return self._build_device_list("panic")
-
-    def get_disk_devices(self, refresh_if_nec=True, inactive=False):
-        devs = self._build_device_list("disk", refresh_if_nec, inactive)
-
-        # Iterate through all disks and calculate what number they are
-        # HACK: We are making a variable in DeviceDisk to store the index
-        idx_mapping = {}
-        for dev in devs:
-            devtype = dev.device
-            bus = dev.bus
-            key = devtype + (bus or "")
-
-            if key not in idx_mapping:
-                idx_mapping[key] = 1
-
-            dev.disk_bus_index = idx_mapping[key]
-            idx_mapping[key] += 1
-
-        return devs
-
-    def get_char_devices(self):
-        devs = []
-        serials     = self._build_device_list("serial")
-        parallels   = self._build_device_list("parallel")
-        consoles    = self._build_device_list("console")
-        channels    = self._build_device_list("channel")
-
-        for devicelist in [serials, parallels, consoles, channels]:
-            devs.extend(devicelist)
-
-        # Don't display <console> if it's just a duplicate of <serial>
-        if (len(consoles) > 0 and len(serials) > 0):
-            con = consoles[0]
-            ser = serials[0]
-
-            if (con.type == ser.type and
-                con.target_type is None or con.target_type == "serial"):
-                ser.virtmanager_console_dup = con
-                devs.remove(con)
-
-        return devs
+        console = consoles[0]
+        if (console.type == serial.type and
+            (console.target_type is None or console.target_type == "serial")):
+            return True
+        return False
 
     def can_use_device_boot_order(self):
         # Return 'True' if guest can use new style boot device ordering
@@ -1361,14 +1291,15 @@ class vmmDomain(vmmLibvirtObject):
             self.conn.SUPPORT_CONN_DEVICE_BOOTORDER)
 
     def get_bootable_devices(self):
-        devs = self.get_disk_devices()
-        devs += self.get_network_devices()
-        devs += self.get_hostdev_devices()
-
         # redirdev can also be marked bootable, but it should be rarely
         # used and clutters the UI
+        devs = (self.xmlobj.devices.disk +
+                self.xmlobj.devices.interface +
+                self.xmlobj.devices.hostdev)
         return devs
 
+    def get_serialcon_devices(self):
+        return self.xmlobj.devices.serial + self.xmlobj.devices.console
 
     ############################
     # Domain lifecycle methods #
@@ -1770,7 +1701,7 @@ class vmmDomain(vmmLibvirtObject):
             self._stats_net_skip = []
             return rx, tx
 
-        for netdev in self.get_network_devices(refresh_if_nec=False):
+        for netdev in self.get_interface_devices_norefresh():
             dev = netdev.target_dev
             if not dev:
                 continue
@@ -1820,7 +1751,7 @@ class vmmDomain(vmmLibvirtObject):
                 self._summary_disk_stats_skip = True
 
         # did not work, iterate over all disks
-        for disk in self.get_disk_devices(refresh_if_nec=False):
+        for disk in self.get_disk_devices_norefresh():
             dev = disk.target
             if not dev:
                 continue

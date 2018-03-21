@@ -239,7 +239,7 @@ def populate_storage_list(storage_list, vm, conn):
 
     diskdata = [(d.target, d.path, d.read_only, d.shareable,
                  d.device in ["cdrom", "floppy"]) for
-                d in vm.get_disk_devices()]
+                d in vm.xmlobj.devices.disk]
 
     diskdata.append(("kernel", vm.get_xmlobj().os.kernel, True, False, True))
     diskdata.append(("initrd", vm.get_xmlobj().os.initrd, True, False, True))

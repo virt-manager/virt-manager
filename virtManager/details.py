@@ -149,6 +149,24 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
 _remove_tooltip = _("Remove this device from the virtual machine")
 
 
+def _calculate_disk_bus_index(disklist):
+    # Iterate through all disks and calculate what number they are
+    # This sets disk.disk_bus_index which is not a standard property
+    idx_mapping = {}
+    for dev in disklist:
+        devtype = dev.device
+        bus = dev.bus
+        key = devtype + (bus or "")
+
+        if key not in idx_mapping:
+            idx_mapping[key] = 1
+
+        dev.disk_bus_index = idx_mapping[key]
+        idx_mapping[key] += 1
+
+    return disklist
+
+
 def _label_for_device(dev):
     devtype = dev.DEVICE_TYPE
 
@@ -210,7 +228,8 @@ def _label_for_device(dev):
     if devtype == "graphics":
         return _("Display %s") % dev.pretty_type_simple(dev.type)
     if devtype == "redirdev":
-        return _("%s Redirector %s") % (dev.bus.upper(), dev.vmmindex + 1)
+        return _("%s Redirector %s") % (dev.bus.upper(),
+                dev.get_xml_idx() + 1)
     if devtype == "hostdev":
         return dev.pretty_name()
     if devtype == "sound":
@@ -2856,7 +2875,7 @@ class vmmDetails(vmmGObjectUI):
         char_type = chardev.DEVICE_TYPE.capitalize()
         target_port = chardev.target_port
         dev_type = chardev.type or "pty"
-        primary = hasattr(chardev, "virtmanager_console_dup")
+        primary = self.vm.serial_is_console_dup(chardev)
 
         typelabel = ""
         if char_type == "serial":
@@ -2974,7 +2993,7 @@ class vmmDetails(vmmGObjectUI):
         if controller.type == "scsi":
             model = self.widget("controller-device-list").get_model()
             model.clear()
-            for disk in self.vm.get_disk_devices():
+            for disk in _calculate_disk_bus_index(self.vm.xmlobj.devices.disk):
                 if disk.address.compare_controller(controller, disk.bus):
                     can_remove = False
                     name = _label_for_device(disk)
@@ -3146,28 +3165,39 @@ class vmmDetails(vmmGObjectUI):
             add_hw_list_option(insertAt, label, hwtype, dev, icon)
 
 
-        for dev in self.vm.get_disk_devices():
+        consoles = self.vm.xmlobj.devices.console
+        serials = self.vm.xmlobj.devices.serial
+        if serials and consoles and self.vm.serial_is_console_dup(serials[0]):
+            consoles.pop(0)
+
+        for dev in _calculate_disk_bus_index(self.vm.xmlobj.devices.disk):
             update_hwlist(HW_LIST_TYPE_DISK, dev)
-        for dev in self.vm.get_network_devices():
+        for dev in self.vm.xmlobj.devices.interface:
             update_hwlist(HW_LIST_TYPE_NIC, dev)
-        for dev in self.vm.get_input_devices():
+        for dev in self.vm.xmlobj.devices.input:
             update_hwlist(HW_LIST_TYPE_INPUT, dev)
-        for dev in self.vm.get_graphics_devices():
+        for dev in self.vm.xmlobj.devices.graphics:
             update_hwlist(HW_LIST_TYPE_GRAPHICS, dev)
-        for dev in self.vm.get_sound_devices():
+        for dev in self.vm.xmlobj.devices.sound:
             update_hwlist(HW_LIST_TYPE_SOUND, dev)
-        for dev in self.vm.get_char_devices():
+        for dev in serials:
             update_hwlist(HW_LIST_TYPE_CHAR, dev)
-        for dev in self.vm.get_hostdev_devices():
+        for dev in self.vm.xmlobj.devices.parallel:
+            update_hwlist(HW_LIST_TYPE_CHAR, dev)
+        for dev in consoles:
+            update_hwlist(HW_LIST_TYPE_CHAR, dev)
+        for dev in self.vm.xmlobj.devices.channel:
+            update_hwlist(HW_LIST_TYPE_CHAR, dev)
+        for dev in self.vm.xmlobj.devices.hostdev:
             update_hwlist(HW_LIST_TYPE_HOSTDEV, dev)
-        for dev in self.vm.get_redirdev_devices():
+        for dev in self.vm.xmlobj.devices.redirdev:
             update_hwlist(HW_LIST_TYPE_REDIRDEV, dev)
-        for dev in self.vm.get_video_devices():
+        for dev in self.vm.xmlobj.devices.video:
             update_hwlist(HW_LIST_TYPE_VIDEO, dev)
-        for dev in self.vm.get_watchdog_devices():
+        for dev in self.vm.xmlobj.devices.watchdog:
             update_hwlist(HW_LIST_TYPE_WATCHDOG, dev)
 
-        for dev in self.vm.get_controller_devices():
+        for dev in self.vm.xmlobj.devices.controller:
             # skip USB2 ICH9 companion controllers
             if dev.model in ["ich9-uhci1", "ich9-uhci2", "ich9-uhci3"]:
                 continue
@@ -3180,15 +3210,15 @@ class vmmDetails(vmmGObjectUI):
 
             update_hwlist(HW_LIST_TYPE_CONTROLLER, dev)
 
-        for dev in self.vm.get_filesystem_devices():
+        for dev in self.vm.xmlobj.devices.filesystem:
             update_hwlist(HW_LIST_TYPE_FILESYSTEM, dev)
-        for dev in self.vm.get_smartcard_devices():
+        for dev in self.vm.xmlobj.devices.smartcard:
             update_hwlist(HW_LIST_TYPE_SMARTCARD, dev)
-        for dev in self.vm.get_tpm_devices():
+        for dev in self.vm.xmlobj.devices.tpm:
             update_hwlist(HW_LIST_TYPE_TPM, dev)
-        for dev in self.vm.get_rng_devices():
+        for dev in self.vm.xmlobj.devices.rng:
             update_hwlist(HW_LIST_TYPE_RNG, dev)
-        for dev in self.vm.get_panic_devices():
+        for dev in self.vm.xmlobj.devices.panic:
             update_hwlist(HW_LIST_TYPE_PANIC, dev)
 
         devs = list(range(len(hw_list_model)))
@@ -3217,7 +3247,7 @@ class vmmDetails(vmmGObjectUI):
             icon = _icon_for_device(dev)
             label = _label_for_device(dev)
 
-            ret.append([dev.vmmidstr, label, icon, False, True])
+            ret.append([dev.get_xml_id(), label, icon, False, True])
 
         if not ret:
             ret.append([None, _("No bootable devices"), None, False, False])

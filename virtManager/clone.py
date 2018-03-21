@@ -311,7 +311,7 @@ class vmmCloneVM(vmmGObjectUI):
             self.net_list[origmac] = net_row
             self.mac_list.append(origmac)
 
-        for net in self.vm.get_network_devices():
+        for net in self.vm.xmlobj.devices.interface:
             mac = net.macaddr
             net_dev = net.source
             net_type = net.type
@@ -356,7 +356,7 @@ class vmmCloneVM(vmmGObjectUI):
         """
         Determine which storage is cloneable, and which isn't
         """
-        diskinfos = self.vm.get_disk_devices()
+        diskinfos = self.vm.xmlobj.devices.disk
         cd = self.clone_design
 
         storage_list = {}

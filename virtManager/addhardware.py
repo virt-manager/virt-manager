@@ -824,7 +824,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         # By default, select bus of the first disk assigned to the VM
         default_bus = None
-        for i in self.vm.get_disk_devices():
+        for i in self.vm.xmlobj.devices.disk:
             if i.device == devtype:
                 default_bus = i.bus
                 break
@@ -902,7 +902,7 @@ class vmmAddHardware(vmmGObjectUI):
         model_tooltip = self.widget("controller-tooltip")
         show_tooltip(model_tooltip, False)
 
-        controllers = self.vm.get_controller_devices()
+        controllers = self.vm.xmlobj.devices.controller
         if controller_type == DeviceController.TYPE_USB:
             usb_controllers = [x for x in controllers if
                     (x.type == DeviceController.TYPE_USB)]
@@ -1426,7 +1426,7 @@ class vmmAddHardware(vmmGObjectUI):
             return None
 
         # Get SCSI controllers
-        controllers = self.vm.get_controller_devices()
+        controllers = self.vm.xmlobj.devices.controller
         ctrls_scsi = [x for x in controllers if
                 (x.type == DeviceController.TYPE_SCSI)]
 
@@ -1478,10 +1478,10 @@ class vmmAddHardware(vmmGObjectUI):
             self.vm.get_hv_type() in ["qemu", "kvm", "test"] and
             not self.vm.xmlobj.os.is_pseries() and not
             any([c.type == "scsi"
-                 for c in self.vm.get_controller_devices()])):
+                 for c in self.vm.xmlobj.devices.controller])):
             controller_model = "virtio-scsi"
 
-        collidelist = [d.path for d in self.vm.get_disk_devices()]
+        collidelist = [d.path for d in self.vm.xmlobj.devices.disk]
         try:
             disk = self.addstorage.validate_storage(self.vm.get_name(),
                 collidelist=collidelist, device=device)
@@ -1498,8 +1498,8 @@ class vmmAddHardware(vmmGObjectUI):
                 disk.driver_cache = cache
 
             # Generate target
-            disks = (self.vm.get_disk_devices() +
-                     self.vm.get_disk_devices(inactive=True))
+            disks = (self.vm.xmlobj.devices.disk +
+                     self.vm.get_xmlobj(inactive=True).devices.disk)
             for d in disks:
                 if d.target not in used:
                     used.append(d.target)
@@ -1587,7 +1587,7 @@ class vmmAddHardware(vmmGObjectUI):
             # Hostdev collision
             names  = []
             for vm in self.conn.list_vms():
-                for hostdev in vm.get_hostdev_devices():
+                for hostdev in vm.xmlobj.devices.hostdev:
                     if nodedev.compare_to_hostdev(hostdev):
                         names.append(vm.get_name())
             if names:
@@ -1765,7 +1765,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev = DeviceController(conn)
         self._selected_model = model
 
-        controllers = self.vm.get_controller_devices()
+        controllers = self.vm.xmlobj.devices.controller
         controller_num = [x for x in controllers if
                 (x.type == controller_type)]
         if len(controller_num) > 0:
