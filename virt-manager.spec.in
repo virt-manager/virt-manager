@@ -35,6 +35,13 @@ Requires: virt-manager-common = %{verrel}
 Requires: python3-gobject
 Requires: gtk3
 Requires: libvirt-glib >= 0.0.9
+
+# virt-manager is one of those apps that people will often install onto
+# a headless machine for use over SSH. This means the virt-manager dep
+# chain needs to provide everything we need to get a usable app experience.
+# Unfortunately nothing in our chain has an explicit dep on some kind
+# of usable gsettings backend, so we explicitly depend on dconf so that
+# user settings actually persist across app runs.
 Requires: dconf
 
 # The vte291 package is actually the latest vte with API version 2.91, while
