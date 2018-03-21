@@ -14,7 +14,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceTpm(Device):
-    _XML_ROOT_NAME = "tpm"
+    XML_NAME = "tpm"
 
     TYPE_PASSTHROUGH = "passthrough"
     TYPE_DEFAULT = "default"

@@ -27,7 +27,7 @@ def _compare_int(nodedev_val, hostdev_val):
 
 
 class DevNode(XMLBuilder):
-    _XML_ROOT_NAME = "devnode"
+    XML_NAME = "devnode"
 
     node_type = XMLProperty("./@type")
     path = XMLProperty(".")
@@ -91,7 +91,7 @@ class NodeDevice(XMLBuilder):
 
         XMLBuilder.__init__(self, *args, **kwargs)
 
-    _XML_ROOT_NAME = "device"
+    XML_NAME = "device"
 
     # Libvirt can generate bogus 'system' XML:
     # https://bugzilla.redhat.com/show_bug.cgi?id=1184131

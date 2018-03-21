@@ -13,7 +13,7 @@ class DomainMemoryBacking(XMLBuilder):
     Class for generating <memoryBacking> XML
     """
 
-    _XML_ROOT_NAME = "memoryBacking"
+    XML_NAME = "memoryBacking"
     _XML_PROP_ORDER = ["hugepages", "nosharepages", "locked"]
 
     hugepages = XMLProperty("./hugepages", is_bool=True)

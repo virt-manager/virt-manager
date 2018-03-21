@@ -9,7 +9,7 @@ from ..xmlbuilder import XMLBuilder, XMLProperty
 
 
 class DomainPm(XMLBuilder):
-    _XML_ROOT_NAME = "pm"
+    XML_NAME = "pm"
 
     suspend_to_mem = XMLProperty("./suspend-to-mem/@enabled", is_yesno=True)
     suspend_to_disk = XMLProperty("./suspend-to-disk/@enabled", is_yesno=True)

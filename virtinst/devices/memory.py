@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _DeviceMemoryTarget(XMLBuilder):
-    _XML_ROOT_NAME = "target"
+    XML_NAME = "target"
 
     size = XMLProperty("./size", is_int=True)
     node = XMLProperty("./node", is_int=True)
@@ -18,7 +18,7 @@ class _DeviceMemoryTarget(XMLBuilder):
 
 
 class _DeviceMemorySource(XMLBuilder):
-    _XML_ROOT_NAME = "source"
+    XML_NAME = "source"
 
     pagesize = XMLProperty("./pagesize", is_int=True)
     nodemask = XMLProperty("./nodemask")
@@ -26,7 +26,7 @@ class _DeviceMemorySource(XMLBuilder):
 
 
 class DeviceMemory(Device):
-    _XML_ROOT_NAME = "memory"
+    XML_NAME = "memory"
 
     MODEL_DIMM = "dimm"
     MODEL_NVDIMM = "nvdimm"

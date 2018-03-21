@@ -9,12 +9,12 @@ from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
 class _InitArg(XMLBuilder):
-    _XML_ROOT_NAME = "initarg"
+    XML_NAME = "initarg"
     val = XMLProperty(".")
 
 
 class _BootDevice(XMLBuilder):
-    _XML_ROOT_NAME = "boot"
+    XML_NAME = "boot"
     dev = XMLProperty("./@dev")
 
 
@@ -62,7 +62,7 @@ class DomainOs(XMLBuilder):
     def is_s390x(self):
         return self.arch == "s390x"
 
-    _XML_ROOT_NAME = "os"
+    XML_NAME = "os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader", "loader_ro", "loader_type",
                        "nvram", "nvram_template", "kernel", "initrd",
                        "kernel_args", "dtb", "_bootdevs", "smbios_mode"]

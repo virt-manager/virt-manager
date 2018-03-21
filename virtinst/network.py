@@ -17,20 +17,20 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _NetworkDHCPRange(XMLBuilder):
-    _XML_ROOT_NAME = "range"
+    XML_NAME = "range"
     start = XMLProperty("./@start")
     end = XMLProperty("./@end")
 
 
 class _NetworkDHCPHost(XMLBuilder):
-    _XML_ROOT_NAME = "host"
+    XML_NAME = "host"
     macaddr = XMLProperty("./@mac")
     name = XMLProperty("./@name")
     ip = XMLProperty("./@ip")
 
 
 class _NetworkIP(XMLBuilder):
-    _XML_ROOT_NAME = "ip"
+    XML_NAME = "ip"
 
     family = XMLProperty("./@family")
     address = XMLProperty("./@address")
@@ -46,7 +46,7 @@ class _NetworkIP(XMLBuilder):
 
 
 class _NetworkRoute(XMLBuilder):
-    _XML_ROOT_NAME = "route"
+    XML_NAME = "route"
 
     family = XMLProperty("./@family")
     address = XMLProperty("./@address")
@@ -56,12 +56,12 @@ class _NetworkRoute(XMLBuilder):
 
 
 class _NetworkForwardPf(XMLBuilder):
-    _XML_ROOT_NAME = "pf"
+    XML_NAME = "pf"
     dev = XMLProperty("./@dev")
 
 
 class _NetworkForwardAddress(XMLBuilder):
-    _XML_ROOT_NAME = "address"
+    XML_NAME = "address"
     type = XMLProperty("./@type")
     domain = XMLProperty("./@domain", is_int=True)
     bus = XMLProperty("./@bus", is_int=True)
@@ -70,7 +70,7 @@ class _NetworkForwardAddress(XMLBuilder):
 
 
 class _NetworkForward(XMLBuilder):
-    _XML_ROOT_NAME = "forward"
+    XML_NAME = "forward"
 
     mode = XMLProperty("./@mode")
     dev = XMLProperty("./@dev")
@@ -83,7 +83,7 @@ class _NetworkForward(XMLBuilder):
 
 
 class _NetworkBandwidth(XMLBuilder):
-    _XML_ROOT_NAME = "bandwidth"
+    XML_NAME = "bandwidth"
 
     inbound_average = XMLProperty("./inbound/@average")
     inbound_peak = XMLProperty("./inbound/@peak")
@@ -135,7 +135,7 @@ class _NetworkBandwidth(XMLBuilder):
 
 
 class _NetworkPortgroup(XMLBuilder):
-    _XML_ROOT_NAME = "portgroup"
+    XML_NAME = "portgroup"
 
     name = XMLProperty("./@name")
     default = XMLProperty("./@default", is_yesno=True)
@@ -202,7 +202,7 @@ class Network(XMLBuilder):
     # XML properties #
     ##################
 
-    _XML_ROOT_NAME = "network"
+    XML_NAME = "network"
     _XML_PROP_ORDER = ["ipv6", "name", "uuid", "forward", "virtualport_type",
                        "bridge", "stp", "delay", "domain_name",
                        "macaddr", "ips", "routes", "bandwidth"]

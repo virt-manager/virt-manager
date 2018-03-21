@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceWatchdog(Device):
-    _XML_ROOT_NAME = "watchdog"
+    XML_NAME = "watchdog"
 
     MODEL_I6300 = "i6300esb"
     MODEL_IB700 = "ib700"

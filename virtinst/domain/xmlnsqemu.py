@@ -8,13 +8,13 @@ from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _XMLNSQemuArg(XMLBuilder):
-    _XML_ROOT_NAME = "qemu:arg"
+    XML_NAME = "qemu:arg"
 
     value = XMLProperty("./@value")
 
 
 class _XMLNSQemuEnv(XMLBuilder):
-    _XML_ROOT_NAME = "qemu:env"
+    XML_NAME = "qemu:env"
 
     name = XMLProperty("./@name")
     value = XMLProperty("./@value")
@@ -24,7 +24,7 @@ class DomainXMLNSQemu(XMLBuilder):
     """
     Class for generating <qemu:commandline> XML
     """
-    _XML_ROOT_NAME = "qemu:commandline"
+    XML_NAME = "qemu:commandline"
     _XML_PROP_ORDER = ["args", "envs"]
 
     args = XMLChildProperty(_XMLNSQemuArg)

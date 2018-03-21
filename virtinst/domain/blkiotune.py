@@ -13,7 +13,7 @@ class DomainBlkiotune(XMLBuilder):
     Class for generating <blkiotune> XML
     """
 
-    _XML_ROOT_NAME = "blkiotune"
+    XML_NAME = "blkiotune"
     _XML_PROP_ORDER = ["weight", "device_path", "device_weight"]
 
     weight = XMLProperty("./weight", is_int=True)

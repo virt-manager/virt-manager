@@ -28,7 +28,7 @@ def _validate_port(name, val):
 
 
 class _GraphicsListen(XMLBuilder):
-    _XML_ROOT_NAME = "listen"
+    XML_NAME = "listen"
 
     type = XMLProperty("./@type")
     address = XMLProperty("./@address")
@@ -37,7 +37,7 @@ class _GraphicsListen(XMLBuilder):
 
 
 class DeviceGraphics(Device):
-    _XML_ROOT_NAME = "graphics"
+    XML_NAME = "graphics"
 
     TYPE_SDL = "sdl"
     TYPE_VNC = "vnc"

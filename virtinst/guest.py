@@ -27,7 +27,7 @@ _ignore = Device
 
 
 class _DomainDevices(XMLBuilder):
-    _XML_ROOT_NAME = "devices"
+    XML_NAME = "devices"
     _XML_PROP_ORDER = ['disk', 'controller', 'filesystem', 'interface',
             'smartcard', 'serial', 'parallel', 'console', 'channel',
             'input', 'tpm', 'graphics', 'sound', 'video', 'hostdev',
@@ -104,7 +104,7 @@ class Guest(XMLBuilder):
         raise ValueError(_("Guest name '%s' is already in use.") % name)
 
 
-    _XML_ROOT_NAME = "domain"
+    XML_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
         "hotplugmemorymax", "hotplugmemoryslots", "maxmemory", "memory",
         "blkiotune", "memtune", "memoryBacking",

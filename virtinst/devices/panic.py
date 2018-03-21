@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DevicePanic(Device):
-    _XML_ROOT_NAME = "panic"
+    XML_NAME = "panic"
 
     MODEL_DEFAULT = "default"
     MODEL_ISA = "isa"

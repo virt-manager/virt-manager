@@ -19,7 +19,7 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 class _IPAddress(XMLBuilder):
     _XML_PROP_ORDER = ["address", "prefix"]
-    _XML_ROOT_NAME = "ip"
+    XML_NAME = "ip"
 
     ######################
     # Validation helpers #
@@ -39,7 +39,7 @@ class InterfaceProtocol(XMLBuilder):
     INTERFACE_PROTOCOL_FAMILIES = [INTERFACE_PROTOCOL_FAMILY_IPV4,
                                     INTERFACE_PROTOCOL_FAMILY_IPV6]
 
-    _XML_ROOT_NAME = "protocol"
+    XML_NAME = "protocol"
     _XML_PROP_ORDER = ["autoconf", "dhcp", "dhcp_peerdns", "ips", "gateway"]
 
     family = XMLProperty("./@family")
@@ -64,15 +64,15 @@ class InterfaceProtocol(XMLBuilder):
 
 
 class _BondConfig(XMLBuilder):
-    _XML_ROOT_NAME = "bond"
+    XML_NAME = "bond"
 
 
 class _BridgeConfig(XMLBuilder):
-    _XML_ROOT_NAME = "bridge"
+    XML_NAME = "bridge"
 
 
 class _VLANConfig(XMLBuilder):
-    _XML_ROOT_NAME = "vlan"
+    XML_NAME = "vlan"
 
 
 class Interface(XMLBuilder):
@@ -121,7 +121,7 @@ class Interface(XMLBuilder):
         return util.generate_name(prefix, conn.interfaceLookupByName, sep="",
                                   force_num=True)
 
-    _XML_ROOT_NAME = "interface"
+    XML_NAME = "interface"
     _XML_PROP_ORDER = ["type", "name", "start_mode", "macaddr", "mtu",
                        "stp", "delay", "bond_mode", "arp_interval",
                        "arp_target", "arp_validate_mode", "mii_frequency",

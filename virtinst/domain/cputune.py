@@ -10,7 +10,7 @@ class _VCPUPin(XMLBuilder):
     """
     Class for generating <cputune> child <vcpupin> XML
     """
-    _XML_ROOT_NAME = "vcpupin"
+    XML_NAME = "vcpupin"
     _XML_PROP_ORDER = ["vcpu", "cpuset"]
 
     vcpu = XMLProperty("./@vcpu", is_int=True)
@@ -21,5 +21,5 @@ class DomainCputune(XMLBuilder):
     """
     Class for generating <cpu> XML
     """
-    _XML_ROOT_NAME = "cputune"
+    XML_NAME = "cputune"
     vcpus = XMLChildProperty(_VCPUPin)

@@ -101,7 +101,7 @@ def _default_network(conn):
 
 
 class _VirtualPort(XMLBuilder):
-    _XML_ROOT_NAME = "virtualport"
+    XML_NAME = "virtualport"
 
     type = XMLProperty("./@type")
     managerid = XMLProperty("./parameters/@managerid", is_int=True)
@@ -113,7 +113,7 @@ class _VirtualPort(XMLBuilder):
 
 
 class DeviceInterface(Device):
-    _XML_ROOT_NAME = "interface"
+    XML_NAME = "interface"
 
     TYPE_BRIDGE     = "bridge"
     TYPE_VIRTUAL    = "network"

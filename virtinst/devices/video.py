@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceVideo(Device):
-    _XML_ROOT_NAME = "video"
+    XML_NAME = "video"
 
     # Default models list
     MODEL_DEFAULT = "default"

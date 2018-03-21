@@ -12,7 +12,7 @@ class _CPUCellSibling(XMLBuilder):
     """
     Class for generating <distances> <sibling> nodes
     """
-    _XML_ROOT_NAME = "sibling"
+    XML_NAME = "sibling"
     _XML_PROP_ORDER = ["id", "value"]
 
     id = XMLProperty("./@id", is_int=True)
@@ -23,7 +23,7 @@ class _CPUCell(XMLBuilder):
     """
     Class for generating <cpu><numa> child <cell> XML
     """
-    _XML_ROOT_NAME = "cell"
+    XML_NAME = "cell"
     _XML_PROP_ORDER = ["id", "cpus", "memory"]
 
     id = XMLProperty("./@id", is_int=True)
@@ -37,7 +37,7 @@ class _CPUCache(XMLBuilder):
     Class for generating <cpu> child <cache> XML
     """
 
-    _XML_ROOT_NAME = "cache"
+    XML_NAME = "cache"
     _XML_PROP_ORDER = ["mode", "level"]
 
     mode = XMLProperty("./@mode")
@@ -51,7 +51,7 @@ class _CPUFeature(XMLBuilder):
 
     POLICIES = ["force", "require", "optional", "disable", "forbid"]
 
-    _XML_ROOT_NAME = "feature"
+    XML_NAME = "feature"
     _XML_PROP_ORDER = ["policy", "name"]
 
     name = XMLProperty("./@name")
@@ -64,7 +64,7 @@ class DomainCpu(XMLBuilder):
     """
     MATCHS = ["minimum", "exact", "strict"]
 
-    _XML_ROOT_NAME = "cpu"
+    XML_NAME = "cpu"
     _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
                        "sockets", "cores", "threads", "features"]
 

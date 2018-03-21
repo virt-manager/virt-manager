@@ -13,7 +13,7 @@ class DomainMemtune(XMLBuilder):
     Class for generating <memtune> XML
     """
 
-    _XML_ROOT_NAME = "memtune"
+    XML_NAME = "memtune"
     _XML_PROP_ORDER = ["hard_limit", "soft_limit", "swap_hard_limit",
             "min_guarantee"]
 

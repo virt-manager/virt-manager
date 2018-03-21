@@ -11,12 +11,12 @@ from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class DeviceAlias(XMLBuilder):
-    _XML_ROOT_NAME = "alias"
+    XML_NAME = "alias"
     name = XMLProperty("./@name")
 
 
 class DeviceBoot(XMLBuilder):
-    _XML_ROOT_NAME = "boot"
+    XML_NAME = "boot"
     order = XMLProperty("./@order", is_int=True)
 
 
@@ -39,7 +39,7 @@ class DeviceAddress(XMLBuilder):
              ADDRESS_TYPE_VIRTIO_SERIAL, ADDRESS_TYPE_CCID,
              ADDRESS_TYPE_SPAPR_VIO]
 
-    _XML_ROOT_NAME = "address"
+    XML_NAME = "address"
     _XML_PROP_ORDER = ["type", "domain", "controller", "bus", "slot",
                        "function", "target", "unit", "multifunction"]
 
@@ -118,7 +118,7 @@ class Device(XMLBuilder):
 
     @property
     def DEVICE_TYPE(self):
-        return self._XML_ROOT_NAME
+        return self.XML_NAME
 
     def setup(self, meter=None):
         """

@@ -117,7 +117,7 @@ class XMLChildProperty(property):
         xmlbuilder._propstore[self._findpropname(xmlbuilder)] = obj
 
     def get_prop_xpath(self, _xmlbuilder, obj):
-        return self.relative_xpath + "/" + obj._XML_ROOT_NAME
+        return self.relative_xpath + "/" + obj.XML_NAME
 
 
 class XMLProperty(property):
@@ -458,7 +458,7 @@ class XMLBuilder(object):
     _XML_PROP_ORDER = []
 
     # Name of the root XML element
-    _XML_ROOT_NAME = None
+    XML_NAME = None
 
     # In some cases, libvirt can incorrectly generate unparseable XML.
     # These are libvirt bugs, but this allows us to work around it in
@@ -489,7 +489,7 @@ class XMLBuilder(object):
             parsexml = "".join([c for c in parsexml if c in string.printable])
 
         self._propstore = collections.OrderedDict()
-        self._xmlstate = _XMLState(self._XML_ROOT_NAME,
+        self._xmlstate = _XMLState(self.XML_NAME,
                                    parsexml, parentxmlstate,
                                    relative_object_xpath)
 
@@ -523,7 +523,7 @@ class XMLBuilder(object):
 
     def __repr__(self):
         return "<%s %s %s>" % (self.__class__.__name__.split(".")[-1],
-                               self._XML_ROOT_NAME, id(self))
+                               self.XML_NAME, id(self))
 
 
     ############################

@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceInput(Device):
-    _XML_ROOT_NAME = "input"
+    XML_NAME = "input"
 
     TYPE_MOUSE = "mouse"
     TYPE_TABLET = "tablet"

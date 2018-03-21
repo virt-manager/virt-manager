@@ -14,7 +14,7 @@ class DomainSysinfo(XMLBuilder):
     Class for building and domain <sysinfo> XML
     """
 
-    _XML_ROOT_NAME = "sysinfo"
+    XML_NAME = "sysinfo"
     _XML_PROP_ORDER = ["type",
         "bios_vendor", "bios_version", "bios_date", "bios_release",
         "system_manufacturer", "system_product", "system_version",

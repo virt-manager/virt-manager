@@ -9,7 +9,7 @@ from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _ClockTimer(XMLBuilder):
-    _XML_ROOT_NAME = "timer"
+    XML_NAME = "timer"
 
     name = XMLProperty("./@name")
     present = XMLProperty("./@present", is_yesno=True)
@@ -17,7 +17,7 @@ class _ClockTimer(XMLBuilder):
 
 
 class DomainClock(XMLBuilder):
-    _XML_ROOT_NAME = "clock"
+    XML_NAME = "clock"
 
     TIMER_NAMES = ["platform", "pit", "rtc", "hpet", "tsc", "kvmclock",
         "hypervclock"]

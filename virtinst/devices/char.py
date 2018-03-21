@@ -266,19 +266,19 @@ class _DeviceChar(Device):
 
 
 class DeviceConsole(_DeviceChar):
-    _XML_ROOT_NAME = "console"
+    XML_NAME = "console"
     TYPES = [_DeviceChar.TYPE_PTY]
 
 
 class DeviceSerial(_DeviceChar):
-    _XML_ROOT_NAME = "serial"
+    XML_NAME = "serial"
 
 
 class DeviceParallel(_DeviceChar):
-    _XML_ROOT_NAME = "parallel"
+    XML_NAME = "parallel"
 
 
 class DeviceChannel(_DeviceChar):
-    _XML_ROOT_NAME = "channel"
+    XML_NAME = "channel"
     TYPES = (_DeviceChar._TYPES_FOR_CHANNEL +
              _DeviceChar._TYPES_FOR_ALL)

@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceRng(Device):
-    _XML_ROOT_NAME = "rng"
+    XML_NAME = "rng"
 
     TYPE_RANDOM = "random"
     TYPE_EGD = "egd"

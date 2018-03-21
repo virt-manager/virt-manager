@@ -12,7 +12,7 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _SnapshotDisk(XMLBuilder):
-    _XML_ROOT_NAME = "disk"
+    XML_NAME = "disk"
     name = XMLProperty("./@name")
     snapshot = XMLProperty("./@snapshot")
 
@@ -42,7 +42,7 @@ class DomainSnapshot(XMLBuilder):
         return statemap.get(state, libvirt.VIR_DOMAIN_NOSTATE)
 
 
-    _XML_ROOT_NAME = "domainsnapshot"
+    XML_NAME = "domainsnapshot"
     _XML_PROP_ORDER = ["name", "description", "creationTime"]
 
     name = XMLProperty("./name")

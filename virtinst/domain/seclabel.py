@@ -26,7 +26,7 @@ class DomainSeclabel(XMLBuilder):
     MODEL_NONE = "none"
     MODELS = [MODEL_SELINUX, MODEL_DAC, MODEL_NONE]
 
-    _XML_ROOT_NAME = "seclabel"
+    XML_NAME = "seclabel"
     _XML_PROP_ORDER = ["type", "model", "relabel", "label", "imagelabel"]
 
     def _guess_secmodel(self):

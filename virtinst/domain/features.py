@@ -12,7 +12,7 @@ class DomainFeatures(XMLBuilder):
     """
     Class for generating <features> XML
     """
-    _XML_ROOT_NAME = "features"
+    XML_NAME = "features"
     _XML_PROP_ORDER = ["acpi", "apic", "pae", "gic_version"]
 
     acpi = XMLProperty("./acpi", is_bool=True,

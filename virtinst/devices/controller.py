@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceController(Device):
-    _XML_ROOT_NAME = "controller"
+    XML_NAME = "controller"
 
     TYPE_IDE             = "ide"
     TYPE_FDC             = "fdc"

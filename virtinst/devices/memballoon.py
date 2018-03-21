@@ -11,7 +11,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceMemballoon(Device):
-    _XML_ROOT_NAME = "memballoon"
+    XML_NAME = "memballoon"
 
     MODEL_DEFAULT = "default"
     MODELS = ["virtio", "xen", "none"]

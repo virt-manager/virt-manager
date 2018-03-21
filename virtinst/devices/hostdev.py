@@ -11,7 +11,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceHostdev(Device):
-    _XML_ROOT_NAME = "hostdev"
+    XML_NAME = "hostdev"
 
     def set_from_nodedev(self, nodedev):
         """

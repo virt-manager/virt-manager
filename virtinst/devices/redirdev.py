@@ -11,7 +11,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceRedirdev(Device):
-    _XML_ROOT_NAME = "redirdev"
+    XML_NAME = "redirdev"
 
     BUS_DEFAULT = "default"
     BUSES = ["usb"]

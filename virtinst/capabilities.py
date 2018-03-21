@@ -42,17 +42,17 @@ class _CapsCPU(DomainCpu):
 ###########################
 
 class _CapsTopologyCPU(XMLBuilder):
-    _XML_ROOT_NAME = "cpu"
+    XML_NAME = "cpu"
     id = XMLProperty("./@id")
 
 
 class _TopologyCell(XMLBuilder):
-    _XML_ROOT_NAME = "cell"
+    XML_NAME = "cell"
     cpus = XMLChildProperty(_CapsTopologyCPU, relative_xpath="./cpus")
 
 
 class _CapsTopology(XMLBuilder):
-    _XML_ROOT_NAME = "topology"
+    XML_NAME = "topology"
     cells = XMLChildProperty(_TopologyCell, relative_xpath="./cells")
 
 
@@ -61,19 +61,19 @@ class _CapsTopology(XMLBuilder):
 ######################################
 
 class _CapsSecmodelBaselabel(XMLBuilder):
-    _XML_ROOT_NAME = "baselabel"
+    XML_NAME = "baselabel"
     type = XMLProperty("./@type")
     content = XMLProperty(".")
 
 
 class _CapsSecmodel(XMLBuilder):
-    _XML_ROOT_NAME = "secmodel"
+    XML_NAME = "secmodel"
     model = XMLProperty("./model")
     baselabels = XMLChildProperty(_CapsSecmodelBaselabel)
 
 
 class _CapsHost(XMLBuilder):
-    _XML_ROOT_NAME = "host"
+    XML_NAME = "host"
     secmodels = XMLChildProperty(_CapsSecmodel)
     cpu = XMLChildProperty(_CapsCPU, is_single=True)
     topology = XMLChildProperty(_CapsTopology, is_single=True)
@@ -84,20 +84,20 @@ class _CapsHost(XMLBuilder):
 ################################
 
 class _CapsMachine(XMLBuilder):
-    _XML_ROOT_NAME = "machine"
+    XML_NAME = "machine"
     name = XMLProperty(".")
     canonical = XMLProperty("./@canonical")
 
 
 class _CapsDomain(XMLBuilder):
-    _XML_ROOT_NAME = "domain"
+    XML_NAME = "domain"
     hypervisor_type = XMLProperty("./@type")
     emulator = XMLProperty("./emulator")
     machines = XMLChildProperty(_CapsMachine)
 
 
 class _CapsGuestFeatures(XMLBuilder):
-    _XML_ROOT_NAME = "features"
+    XML_NAME = "features"
 
     pae = XMLProperty("./pae", is_bool=True)
     acpi = XMLProperty("./acpi/@default", is_onoff=True)
@@ -105,7 +105,7 @@ class _CapsGuestFeatures(XMLBuilder):
 
 
 class _CapsGuest(XMLBuilder):
-    _XML_ROOT_NAME = "guest"
+    XML_NAME = "guest"
 
     os_type = XMLProperty("./os_type")
     arch = XMLProperty("./arch/@name")
@@ -237,7 +237,7 @@ class Capabilities(XMLBuilder):
         XMLBuilder.__init__(self, *args, **kwargs)
         self._cpu_models_cache = {}
 
-    _XML_ROOT_NAME = "capabilities"
+    XML_NAME = "capabilities"
 
     host = XMLChildProperty(_CapsHost, is_single=True)
     guests = XMLChildProperty(_CapsGuest)

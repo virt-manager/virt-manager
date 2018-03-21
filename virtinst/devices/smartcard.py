@@ -11,7 +11,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceSmartcard(Device):
-    _XML_ROOT_NAME = "smartcard"
+    XML_NAME = "smartcard"
 
     # Default models list
     MODE_DEFAULT = "default"

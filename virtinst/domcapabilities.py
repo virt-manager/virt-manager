@@ -13,7 +13,7 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _Value(XMLBuilder):
-    _XML_ROOT_NAME = "value"
+    XML_NAME = "value"
     value = XMLProperty(".")
 
 
@@ -25,7 +25,7 @@ class _HasValues(XMLBuilder):
 
 
 class _Enum(_HasValues):
-    _XML_ROOT_NAME = "enum"
+    XML_NAME = "enum"
     name = XMLProperty("./@name")
 
 
@@ -44,23 +44,23 @@ class _CapsBlock(_HasValues):
 def _make_capsblock(xml_root_name):
     class TmpClass(_CapsBlock):
         pass
-    setattr(TmpClass, "_XML_ROOT_NAME", xml_root_name)
+    setattr(TmpClass, "XML_NAME", xml_root_name)
     return TmpClass
 
 
 class _OS(_CapsBlock):
-    _XML_ROOT_NAME = "os"
+    XML_NAME = "os"
     loader = XMLChildProperty(_make_capsblock("loader"), is_single=True)
 
 
 class _Devices(_CapsBlock):
-    _XML_ROOT_NAME = "devices"
+    XML_NAME = "devices"
     hostdev = XMLChildProperty(_make_capsblock("hostdev"), is_single=True)
     disk = XMLChildProperty(_make_capsblock("disk"), is_single=True)
 
 
 class _Features(_CapsBlock):
-    _XML_ROOT_NAME = "features"
+    XML_NAME = "features"
     gic = XMLChildProperty(_make_capsblock("gic"), is_single=True)
 
 
@@ -149,7 +149,7 @@ class DomainCapabilities(XMLBuilder):
                 "yes" in self.os.loader.get_enum("readonly").get_values())
 
 
-    _XML_ROOT_NAME = "domainCapabilities"
+    XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
     devices = XMLChildProperty(_Devices, is_single=True)
 

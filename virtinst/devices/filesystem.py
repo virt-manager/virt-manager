@@ -12,7 +12,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceFilesystem(Device):
-    _XML_ROOT_NAME = "filesystem"
+    XML_NAME = "filesystem"
 
     TYPE_MOUNT = "mount"
     TYPE_TEMPLATE = "template"

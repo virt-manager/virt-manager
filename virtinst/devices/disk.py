@@ -81,7 +81,7 @@ def _is_dir_searchable(uid, username, path):
 
 class _Host(XMLBuilder):
     _XML_PROP_ORDER = ["name", "port"]
-    _XML_ROOT_NAME = "host"
+    XML_NAME = "host"
 
     name = XMLProperty("./@name")
     port = XMLProperty("./@port", is_int=True)
@@ -92,14 +92,14 @@ class _DiskSeclabel(XMLBuilder):
     This is for disk source <seclabel>. It's similar to a domain
     <seclabel> but has fewer options
     """
-    _XML_ROOT_NAME = "seclabel"
+    XML_NAME = "seclabel"
     model = XMLProperty("./@model")
     relabel = XMLProperty("./@relabel", is_yesno=True)
     label = XMLProperty("./label")
 
 
 class DeviceDisk(Device):
-    _XML_ROOT_NAME = "disk"
+    XML_NAME = "disk"
 
     DRIVER_NAME_PHY = "phy"
     DRIVER_NAME_QEMU = "qemu"

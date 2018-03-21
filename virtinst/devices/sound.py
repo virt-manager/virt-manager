@@ -10,7 +10,7 @@ from ..xmlbuilder import XMLProperty
 
 
 class DeviceSound(Device):
-    _XML_ROOT_NAME = "sound"
+    XML_NAME = "sound"
 
     MODEL_DEFAULT = "default"
     MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", "ich9"]

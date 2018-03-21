@@ -13,7 +13,7 @@ class DomainResource(XMLBuilder):
     Class for generating <resource> XML
     """
 
-    _XML_ROOT_NAME = "resource"
+    XML_NAME = "resource"
     _XML_PROP_ORDER = ["partition"]
 
     partition = XMLProperty("./partition")

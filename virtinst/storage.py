@@ -22,7 +22,7 @@ _DEFAULT_MPATH_TARGET = "/dev/mapper"
 
 
 class _StoragePermissions(XMLBuilder):
-    _XML_ROOT_NAME = "permissions"
+    XML_NAME = "permissions"
     _XML_PROP_ORDER = ["mode", "owner", "group", "label"]
 
     mode = XMLProperty("./mode")
@@ -72,7 +72,7 @@ def _get_default_pool_path(conn):
 
 class _Host(XMLBuilder):
     _XML_PROP_ORDER = ["name", "port"]
-    _XML_ROOT_NAME = "host"
+    XML_NAME = "host"
 
     name = XMLProperty("./@name")
     port = XMLProperty("./@port", is_int=True)
@@ -152,9 +152,9 @@ class StoragePool(_StorageObject):
             raise
 
         class _EnumerateSource(XMLBuilder):
-            _XML_ROOT_NAME = "source"
+            XML_NAME = "source"
         class _EnumerateSources(XMLBuilder):
-            _XML_ROOT_NAME = "sources"
+            XML_NAME = "sources"
             sources = XMLChildProperty(_EnumerateSource)
 
 
@@ -370,7 +370,7 @@ class StoragePool(_StorageObject):
     # Properties #
     ##############
 
-    _XML_ROOT_NAME = "pool"
+    XML_NAME = "pool"
     _XML_PROP_ORDER = ["name", "type", "uuid",
                        "capacity", "allocation", "available",
                        "format", "hosts",
@@ -675,7 +675,7 @@ class StorageVolume(_StorageObject):
     # XML properties #
     ##################
 
-    _XML_ROOT_NAME = "volume"
+    XML_NAME = "volume"
     _XML_PROP_ORDER = ["name", "key", "capacity", "allocation", "format",
                        "target_path", "permissions"]
 
