@@ -57,6 +57,13 @@ class _DomainDevices(XMLBuilder):
     panic = XMLChildProperty(DevicePanic)
     memory = XMLChildProperty(DeviceMemory)
 
+    def get_all(self):
+        retlist = []
+        # pylint: disable=protected-access
+        devtypes = _DomainDevices._XML_PROP_ORDER
+        for devtype in devtypes:
+            retlist.extend(getattr(self, devtype))
+        return retlist
 
 
 class Guest(XMLBuilder):
@@ -264,17 +271,6 @@ class Guest(XMLBuilder):
     def remove_device(self, dev):
         self.devices.remove_child(dev)
 
-    def get_all_devices(self):
-        """
-        Return a list of all devices being installed with the guest
-        """
-        retlist = []
-        # pylint: disable=protected-access
-        devtypes = _DomainDevices._XML_PROP_ORDER
-        for devtype in devtypes:
-            retlist.extend(getattr(self.devices, devtype))
-        return retlist
-
     devices = XMLChildProperty(_DomainDevices, is_single=True)
 
 
@@ -452,7 +448,7 @@ class Guest(XMLBuilder):
         try:
             # Create devices if required (disk images, etc.)
             if not dry:
-                for dev in self.get_all_devices():
+                for dev in self.devices.get_all():
                     dev.setup(meter)
 
             install_xml, final_xml = self._build_xml()
@@ -760,7 +756,7 @@ class Guest(XMLBuilder):
         self._set_feature_defaults()
         self._set_pm_defaults()
 
-        for dev in self.get_all_devices():
+        for dev in self.devices.get_all():
             dev.set_defaults(self)
         self._check_address_multi()
         self._set_disk_defaults()
@@ -999,7 +995,7 @@ class Guest(XMLBuilder):
 
     def _check_address_multi(self):
         addresses = {}
-        for d in self.get_all_devices():
+        for d in self.devices.get_all():
             if d.address.type != d.address.ADDRESS_TYPE_PCI:
                 continue
             if None in [d.address.domain, d.address.bus, d.address.slot]:

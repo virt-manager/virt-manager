@@ -644,7 +644,7 @@ class vmmDomain(vmmLibvirtObject):
             guest.os.bootorder = []
 
             # Unset device boot order
-            for dev in guest.get_all_devices():
+            for dev in guest.devices.get_all():
                 dev.boot.order = None
 
             count = 1
