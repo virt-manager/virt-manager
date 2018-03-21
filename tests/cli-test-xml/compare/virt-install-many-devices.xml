@@ -222,6 +222,35 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
     </interface>
+    <smartcard mode="passthrough" type="spicevmc"/>
+    <smartcard mode="passthrough" type="host"/>
+    <serial type="tcp">
+      <source mode="bind" host="127.0.0.1" service="2222"/>
+      <protocol type="telnet"/>
+      <log file="/tmp/foo.log" append="on"/>
+    </serial>
+    <serial type="nmdm">
+      <source master="/dev/foo1" slave="/dev/foo2"/>
+    </serial>
+    <parallel type="udp">
+      <source mode="bind" host="127.0.0.1" service="1234"/>
+      <source mode="connect" host="0.0.0.0" service="1234"/>
+    </parallel>
+    <parallel type="unix">
+      <source mode="bind" path="/tmp/foo-socket"/>
+    </parallel>
+    <console type="pty">
+      <target type="virtio"/>
+    </console>
+    <channel type="pty">
+      <target type="guestfwd" address="127.0.0.1" port="10000"/>
+    </channel>
+    <channel type="pty">
+      <target type="virtio" name="org.linux-kvm.port1"/>
+    </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <input type="keyboard" bus="usb"/>
     <input type="tablet" bus="usb"/>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
@@ -266,33 +295,6 @@
       <image compression="off"/>
       <listen type="socket" socket="/tmp/foobar"/>
     </graphics>
-    <serial type="tcp">
-      <source mode="bind" host="127.0.0.1" service="2222"/>
-      <protocol type="telnet"/>
-      <log file="/tmp/foo.log" append="on"/>
-    </serial>
-    <serial type="nmdm">
-      <source master="/dev/foo1" slave="/dev/foo2"/>
-    </serial>
-    <parallel type="udp">
-      <source mode="bind" host="127.0.0.1" service="1234"/>
-      <source mode="connect" host="0.0.0.0" service="1234"/>
-    </parallel>
-    <parallel type="unix">
-      <source mode="bind" path="/tmp/foo-socket"/>
-    </parallel>
-    <console type="pty">
-      <target type="virtio"/>
-    </console>
-    <channel type="pty">
-      <target type="guestfwd" address="127.0.0.1" port="10000"/>
-    </channel>
-    <channel type="pty">
-      <target type="virtio" name="org.linux-kvm.port1"/>
-    </channel>
-    <channel type="spicevmc">
-      <target type="virtio" name="com.redhat.spice.0"/>
-    </channel>
     <sound model="ich6"/>
     <sound model="ac97"/>
     <video>
@@ -371,8 +373,6 @@
         <address bus="1" device="21"/>
       </source>
     </hostdev>
-    <smartcard mode="passthrough" type="spicevmc"/>
-    <smartcard mode="passthrough" type="host"/>
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="tcp">
       <source host="localhost" service="4000"/>

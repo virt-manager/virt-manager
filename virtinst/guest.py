@@ -29,9 +29,10 @@ _ignore = Device
 class _DomainDevices(XMLBuilder):
     _XML_ROOT_NAME = "devices"
     _XML_PROP_ORDER = ['disk', 'controller', 'filesystem', 'interface',
-            'input', 'graphics', 'serial', 'parallel', 'console', 'channel',
-            'sound', 'video', 'hostdev', 'watchdog', 'smartcard', 'redirdev',
-            'memballoon', 'tpm', 'rng', 'panic', 'memory']
+            'smartcard', 'serial', 'parallel', 'console', 'channel',
+            'input', 'tpm', 'graphics', 'sound', 'video', 'hostdev',
+            'redirdev', 'watchdog', 'memballoon', 'rng', 'panic',
+            'memory']
 
 
     disk = XMLChildProperty(DeviceDisk)

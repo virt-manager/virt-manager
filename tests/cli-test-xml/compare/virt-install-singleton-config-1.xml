@@ -47,6 +47,11 @@
       <master startport="4"/>
     </controller>
     <input type="tablet" bus="usb"/>
+    <tpm model="tpm-tis">
+      <backend type="passthrough">
+        <device path="/dev/tpm0"/>
+      </backend>
+    </tpm>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
       <image compression="off"/>
     </graphics>
@@ -55,11 +60,6 @@
     </video>
     <watchdog model="i6300esb" action="reset"/>
     <memballoon model="none"/>
-    <tpm model="tpm-tis">
-      <backend type="passthrough">
-        <device path="/dev/tpm0"/>
-      </backend>
-    </tpm>
     <rng model="virtio">
       <backend model="random">/dev/random</backend>
     </rng>

@@ -47,8 +47,6 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
     </interface>
-    <input type="tablet" bus="usb"/>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
     <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>
@@ -57,6 +55,8 @@
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
+    <input type="tablet" bus="usb"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
     <sound model="ich6"/>
     <video>
       <model type="qxl"/>

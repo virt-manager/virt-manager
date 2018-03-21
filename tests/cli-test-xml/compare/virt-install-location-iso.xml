@@ -45,13 +45,13 @@
     <controller type="usb" index="0" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
-      <image compression="off"/>
-    </graphics>
     <console type="pty"/>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
     <sound model="ich6"/>
     <video>
       <model type="qxl"/>
@@ -103,13 +103,13 @@
     <controller type="usb" index="0" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
-      <image compression="off"/>
-    </graphics>
     <console type="pty"/>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
     <sound model="ich6"/>
     <video>
       <model type="qxl"/>

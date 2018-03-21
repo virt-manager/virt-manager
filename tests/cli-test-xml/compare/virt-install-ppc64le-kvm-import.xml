@@ -21,12 +21,12 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
     </interface>
-    <graphics type="vnc" port="-1"/>
     <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
+    <graphics type="vnc" port="-1"/>
     <video>
       <model type="vga"/>
     </video>

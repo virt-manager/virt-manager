@@ -16,9 +16,6 @@
       <source file="/dev/default-pool/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
     </disk>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
-      <image compression="off"/>
-    </graphics>
     <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>
@@ -27,6 +24,9 @@
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
     <sound model="ich6"/>
     <video>
       <model type="vga"/>

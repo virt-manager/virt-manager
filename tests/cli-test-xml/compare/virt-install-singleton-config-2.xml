@@ -132,20 +132,20 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
     </interface>
-    <input type="tablet" bus="usb"/>
-    <graphics type="vnc" port="-1"/>
     <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
-    <watchdog model="ib700" action="pause"/>
-    <memballoon model="virtio"/>
+    <input type="tablet" bus="usb"/>
     <tpm model="tpm-tis">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
       </backend>
     </tpm>
+    <graphics type="vnc" port="-1"/>
+    <watchdog model="ib700" action="pause"/>
+    <memballoon model="virtio"/>
     <rng model="virtio">
       <backend model="egd" type="udp">
         <source mode="bind" host="127.0.0.1" service="8000"/>
@@ -301,20 +301,20 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
     </interface>
-    <input type="tablet" bus="usb"/>
-    <graphics type="vnc" port="-1"/>
     <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
-    <watchdog model="ib700" action="pause"/>
-    <memballoon model="virtio"/>
+    <input type="tablet" bus="usb"/>
     <tpm model="tpm-tis">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
       </backend>
     </tpm>
+    <graphics type="vnc" port="-1"/>
+    <watchdog model="ib700" action="pause"/>
+    <memballoon model="virtio"/>
     <rng model="virtio">
       <backend model="egd" type="udp">
         <source mode="bind" host="127.0.0.1" service="8000"/>
