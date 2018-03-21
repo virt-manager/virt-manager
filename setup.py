@@ -20,14 +20,14 @@ import distutils.dist
 import distutils.log
 import distutils.sysconfig
 
+if sys.version_info.major < 3:
+    print("virt-manager is python3 only. Run this as ./setup.py")
+    sys.exit(1)
+
 from virtcli import CLIConfig
 
 sysprefix = distutils.sysconfig.get_config_var("prefix")
 
-
-if sys.version_info.major < 3:
-    print("virt-manager is python3 only. Run this as ./setup.py")
-    sys.exit(1)
 
 # pylint: disable=attribute-defined-outside-init
 

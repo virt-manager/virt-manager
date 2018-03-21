@@ -9,9 +9,15 @@
 Configuration variables that can be set at build time
 """
 
-import configparser
 import os
+import sys
 
+if sys.version_info.major != 3 or sys.version_info.minor < 4:
+    print("python 3.4 or later is required, your's is %s" %
+            sys.version_info)
+    sys.exit(1)
+
+import configparser
 
 _cfg = configparser.ConfigParser()
 _filepath = os.path.abspath(__file__)
