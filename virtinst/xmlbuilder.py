@@ -59,28 +59,23 @@ class XMLChildProperty(property):
     of the parent XML. For example when we deligate parsing
     /domain/cpu/feature of the /domain/cpu class.
 
-    @child_classes: Single class or list of classes to parse state into
-        The list option is used by Guest._devices for parsing all
-        devices into a single list
+    @child_class: XMLBuilder class this property is tracking. So for
+        guest.devices.disk this is DeviceDisk
     @relative_xpath: Relative location where the class is rooted compared
         to its _XML_ROOT_PATH. So interface xml can have nested
         interfaces rooted at /interface/bridge/interface, so we pass
         ./bridge/interface here for example.
     """
-    def __init__(self, child_classes, relative_xpath=".", is_single=False):
-        self.child_classes = util.listify(child_classes)
+    def __init__(self, child_class, relative_xpath=".", is_single=False):
+        self.child_class = child_class
         self.relative_xpath = relative_xpath
         self.is_single = is_single
         self._propname = None
 
-        if self.is_single and len(self.child_classes) > 1:
-            raise RuntimeError("programming error: Can't specify multiple "
-                               "child_classes with is_single")
-
         property.__init__(self, self._fget)
 
     def __repr__(self):
-        return "<XMLChildProperty %s %s>" % (str(self.child_classes), id(self))
+        return "<XMLChildProperty %s %s>" % (str(self.child_class), id(self))
 
     def _findpropname(self, xmlbuilder):
         if self._propname is None:
@@ -101,7 +96,7 @@ class XMLChildProperty(property):
     def _fget(self, xmlbuilder):
         if self.is_single:
             return self._get(xmlbuilder)
-        return _XMLChildList(self.child_classes[0],
+        return _XMLChildList(self.child_class,
                              self._get(xmlbuilder),
                              xmlbuilder)
 
@@ -113,22 +108,7 @@ class XMLChildProperty(property):
                 xmlbuilder.remove_child(obj)
 
     def append(self, xmlbuilder, newobj):
-        # Keep the list ordered by the order of passed in child classes
-        objlist = self._get(xmlbuilder)
-        if len(self.child_classes) == 1:
-            objlist.append(newobj)
-            return
-
-        idx = 0
-        for idx, obj in enumerate(objlist):
-            obj = objlist[idx]
-            if (obj.__class__ not in self.child_classes or
-                (self.child_classes.index(newobj.__class__) <
-                 self.child_classes.index(obj.__class__))):
-                break
-            idx += 1
-
-        objlist.insert(idx, newobj)
+        self._get(xmlbuilder).append(newobj)
     def remove(self, xmlbuilder, obj):
         self._get(xmlbuilder).remove(obj)
     def set(self, xmlbuilder, obj):
@@ -531,9 +511,10 @@ class XMLBuilder(object):
         # Walk the XML tree and hand of parsing to any registered
         # child classes
         for xmlprop in list(self._all_child_props().values()):
+            child_class = xmlprop.child_class
+            prop_path = xmlprop.get_prop_xpath(self, child_class)
+
             if xmlprop.is_single:
-                child_class = xmlprop.child_classes[0]
-                prop_path = xmlprop.get_prop_xpath(self, child_class)
                 obj = child_class(self.conn,
                     parentxmlstate=self._xmlstate,
                     relative_object_xpath=prop_path)
@@ -543,17 +524,14 @@ class XMLBuilder(object):
             if self._xmlstate.is_build:
                 continue
 
-            for child_class in xmlprop.child_classes:
-                prop_path = xmlprop.get_prop_xpath(self, child_class)
-
-                nodecount = self._xmlstate.xmlapi.count(
-                    self._xmlstate.make_abs_xpath(prop_path))
-                for idx in range(nodecount):
-                    idxstr = "[%d]" % (idx + 1)
-                    obj = child_class(self.conn,
-                        parentxmlstate=self._xmlstate,
-                        relative_object_xpath=(prop_path + idxstr))
-                    xmlprop.append(self, obj)
+            nodecount = self._xmlstate.xmlapi.count(
+                self._xmlstate.make_abs_xpath(prop_path))
+            for idx in range(nodecount):
+                idxstr = "[%d]" % (idx + 1)
+                obj = child_class(self.conn,
+                    parentxmlstate=self._xmlstate,
+                    relative_object_xpath=(prop_path + idxstr))
+                xmlprop.append(self, obj)
 
     def __repr__(self):
         return "<%s %s %s>" % (self.__class__.__name__.split(".")[-1],
@@ -658,7 +636,7 @@ class XMLBuilder(object):
         for xmlprop in list(xmlprops.values()):
             if xmlprop.is_single and not return_single:
                 continue
-            if child_class in xmlprop.child_classes:
+            if child_class is xmlprop.child_class:
                 return xmlprop
         raise RuntimeError("programming error: "
                            "Didn't find child property for child_class=%s" %
