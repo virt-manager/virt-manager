@@ -211,22 +211,13 @@ def action_remove_device(guest, options, parserclass):
 
 
 def action_build_xml(conn, options, parserclass):
-    guest = virtinst.Guest(conn)
-    ret_inst = None
-    inst = None
-
-    if parserclass.objclass:
-        inst = parserclass.objclass(conn)
-    elif parserclass.clear_attr:
-        ret_inst = getattr(guest, parserclass.clear_attr)
-    else:
+    if not parserclass.objclass:
         fail(_("--build-xml not supported for --%s") %
              parserclass.cli_arg_name)
 
-    ret = cli.parse_option_strings(options, guest, inst)
-    if ret_inst:
-        return ret_inst
-    return ret
+    guest = virtinst.Guest(conn)
+    inst = parserclass.objclass(conn)
+    return cli.parse_option_strings(options, guest, inst)
 
 
 def setup_device(dev):

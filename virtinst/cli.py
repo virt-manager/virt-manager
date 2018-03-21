@@ -1033,10 +1033,6 @@ class VirtCLIParser(object):
     @support_cb: An extra support check function for further validation.
         Called before the virtinst object is altered. Take arguments
         (inst, attrname, cliname)
-    @clear_attr: If the user requests to clear the XML (--disk clearxml),
-        this is the property name we grab from inst to actually clear
-        (so 'security' to get guest.security). If it's True, then
-        clear inst (in the case of devices)
     @cli_arg_name: The command line argument this maps to, so
         "hostdev" for --hostdev
     """
@@ -1044,7 +1040,6 @@ class VirtCLIParser(object):
     remove_first = None
     stub_none = True
     support_cb = None
-    clear_attr = None
     cli_arg_name = None
     _virtargs = []
 
@@ -1079,15 +1074,11 @@ class VirtCLIParser(object):
         """
         Callback that handles virt-xml clearxml=yes|no magic
         """
-        if not self.objclass and not self.clear_attr:
+        if not self.objclass:
             raise RuntimeError("Don't know how to clearxml --%s" %
                                self.cli_arg_name)
         if val is not True:
             return
-
-        clear_inst = inst
-        if self.clear_attr:
-            clear_inst = getattr(inst, self.clear_attr)
 
         # If there's any opts remaining, leave the root stub element
         # in place with leave_stub=True, so virt-xml updates are done
@@ -1098,7 +1089,7 @@ class VirtCLIParser(object):
         # a <cpu> stub in place, so that it gets model=foo in place,
         # otherwise the newly created cpu block gets appended to the
         # end of the domain XML, which gives an ugly diff
-        clear_inst.clear(leave_stub="," in self.optstr)
+        inst.clear(leave_stub=("," in self.optstr))
 
     def _make_find_inst_cb(self, cliarg, objpropname):
         """
@@ -1611,29 +1602,32 @@ ParserVCPU.add_arg("vcpu_placement", "placement")
 
 class ParserBoot(VirtCLIParser):
     cli_arg_name = "boot"
-    clear_attr = "os"
+    objclass = DomainOs
 
-    def set_uefi(self, inst, val, virtarg):
-        ignore = virtarg
-        ignore = val
-        inst.set_uefi_default()
+    def set_uefi_cb(self, inst, val, virtarg):
+        self.guest.set_uefi_default()
 
     def set_initargs_cb(self, inst, val, virtarg):
-        inst.os.set_initargs_string(val)
+        inst.set_initargs_string(val)
 
     def set_smbios_mode_cb(self, inst, val, virtarg):
         if not val.startswith("emulate") and not val.startswith("host"):
             inst.sysinfo.parse(val)
             val = "sysinfo"
-        inst.os.smbios_mode = val
+        inst.smbios_mode = val
         self.optdict["smbios_mode"] = val
 
     def set_loader_secure_cb(self, inst, val, virtarg):
         if not inst.conn.check_support(inst.conn.SUPPORT_DOMAIN_LOADER_SECURE):
             raise RuntimeError("secure attribute for loader is not supported "
                                "by libvirt.")
-        inst.os.loader_secure = val
-        return val
+        inst.loader_secure = val
+
+    def set_domain_type_cb(self, inst, val, virtarg):
+        self.guest.type = val
+
+    def set_emulator_cb(self, inst, val, virtarg):
+        self.guest.emulator = val
 
     def noset_cb(self, inst, val, virtarg):
         pass
@@ -1642,7 +1636,7 @@ class ParserBoot(VirtCLIParser):
         # Build boot order
         boot_order = []
         for cliname in list(self.optdict.keys()):
-            if cliname not in inst.os.BOOT_DEVICES:
+            if cliname not in inst.BOOT_DEVICES:
                 continue
 
             del(self.optdict[cliname])
@@ -1650,37 +1644,37 @@ class ParserBoot(VirtCLIParser):
                 boot_order.append(cliname)
 
         if boot_order:
-            inst.os.bootorder = boot_order
+            inst.bootorder = boot_order
 
         VirtCLIParser._parse(self, inst)
 
 
 _register_virt_parser(ParserBoot)
 # UEFI depends on these bits, so set them first
-ParserBoot.add_arg("os.arch", "arch")
-ParserBoot.add_arg("type", "domain_type")
-ParserBoot.add_arg("os.os_type", "os_type")
-ParserBoot.add_arg("emulator", "emulator")
-ParserBoot.add_arg(None, "uefi", cb=ParserBoot.set_uefi, is_novalue=True)
+ParserBoot.add_arg("arch", "arch")
+ParserBoot.add_arg(None, "domain_type", cb=ParserBoot.set_domain_type_cb)
+ParserBoot.add_arg("os_type", "os_type")
+ParserBoot.add_arg(None, "emulator", cb=ParserBoot.set_emulator_cb)
+ParserBoot.add_arg(None, "uefi", cb=ParserBoot.set_uefi_cb, is_novalue=True)
 
-ParserBoot.add_arg("os.useserial", "useserial", is_onoff=True)
-ParserBoot.add_arg("os.enable_bootmenu", "menu", is_onoff=True)
-ParserBoot.add_arg("os.kernel", "kernel")
-ParserBoot.add_arg("os.initrd", "initrd")
-ParserBoot.add_arg("os.dtb", "dtb")
-ParserBoot.add_arg("os.loader", "loader")
-ParserBoot.add_arg("os.loader_ro", "loader_ro", is_onoff=True)
-ParserBoot.add_arg("os.loader_type", "loader_type")
-ParserBoot.add_arg("os.loader_secure", "loader_secure", is_onoff=True,
+ParserBoot.add_arg("useserial", "useserial", is_onoff=True)
+ParserBoot.add_arg("enable_bootmenu", "menu", is_onoff=True)
+ParserBoot.add_arg("kernel", "kernel")
+ParserBoot.add_arg("initrd", "initrd")
+ParserBoot.add_arg("dtb", "dtb")
+ParserBoot.add_arg("loader", "loader")
+ParserBoot.add_arg("loader_ro", "loader_ro", is_onoff=True)
+ParserBoot.add_arg("loader_type", "loader_type")
+ParserBoot.add_arg("loader_secure", "loader_secure", is_onoff=True,
                    cb=ParserBoot.set_loader_secure_cb)
-ParserBoot.add_arg("os.nvram", "nvram")
-ParserBoot.add_arg("os.nvram_template", "nvram_template")
-ParserBoot.add_arg("os.kernel_args", "kernel_args",
+ParserBoot.add_arg("nvram", "nvram")
+ParserBoot.add_arg("nvram_template", "nvram_template")
+ParserBoot.add_arg("kernel_args", "kernel_args",
                    aliases=["extra_args"], can_comma=True)
-ParserBoot.add_arg("os.init", "init")
-ParserBoot.add_arg("os.machine", "machine")
-ParserBoot.add_arg("os.initargs", "initargs", cb=ParserBoot.set_initargs_cb)
-ParserBoot.add_arg("os.smbios_mode", "smbios_mode",
+ParserBoot.add_arg("init", "init")
+ParserBoot.add_arg("machine", "machine")
+ParserBoot.add_arg("initargs", "initargs", cb=ParserBoot.set_initargs_cb)
+ParserBoot.add_arg("smbios_mode", "smbios_mode",
                    can_comma=True, cb=ParserBoot.set_smbios_mode_cb)
 
 # This is simply so the boot options are advertised with --boot help,
