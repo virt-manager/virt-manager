@@ -22,7 +22,7 @@ from virtinst.urldetect import ALTLinuxDistro
 from virtinst.urldetect import CentOSDistro
 from virtinst.urldetect import DebianDistro
 from virtinst.urldetect import FedoraDistro
-from virtinst.urldetect import GenericDistro
+from virtinst.urldetect import GenericTreeinfoDistro
 from virtinst.urldetect import MandrivaDistro
 from virtinst.urldetect import RHELDistro
 from virtinst.urldetect import SLDistro
@@ -73,7 +73,7 @@ class _URLTestData(object):
         if "altlinux" in name:
             return ALTLinuxDistro
         if "generic" in name:
-            return GenericDistro
+            return GenericTreeinfoDistro
         raise RuntimeError("name=%s didn't map to any distro class. Extend "
             "_distroclass_for_name" % name)
 

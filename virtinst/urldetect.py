@@ -125,7 +125,7 @@ def _distroFromSUSEContent(fetcher, arch, vmtype):
             sle_version = sle_version + '.' + d[1].strip().rsplit(' ')[5][2]
         return ['VERSION', sle_version]
 
-    dclass = GenericDistro
+    dclass = OpensuseDistro
     if distribution:
         if re.match(".*SUSE Linux Enterprise Server*", distribution[1]) or \
                 re.match(".*SUSE SLES*", distribution[1]):
@@ -146,8 +146,7 @@ def _distroFromSUSEContent(fetcher, arch, vmtype):
         return None
 
     ob = dclass(fetcher, tree_arch or arch, vmtype)
-    if dclass != GenericDistro:
-        ob.version_from_content = distro_version
+    ob.version_from_content = distro_version
 
     # Explictly call this, so we populate os_type/variant info
     ob.isValidStore()
@@ -352,112 +351,33 @@ class Distro(object):
             raise
 
 
-class GenericDistro(Distro):
-    """
-    Generic distro store. Check well known paths for kernel locations
-    as a last resort if we can't recognize any actual distro
-    """
-    name = "Generic"
+class GenericTreeinfoDistro(Distro):
+    name = "Generic Treeinfo"
     uses_treeinfo = True
-
-    _xen_paths = [("images/xen/vmlinuz",
-                    "images/xen/initrd.img"),           # Fedora
-                  ]
-    _hvm_paths = [("images/pxeboot/vmlinuz",
-                    "images/pxeboot/initrd.img"),       # Fedora
-                  ("ppc/ppc64/vmlinuz",
-                    "ppc/ppc64/initrd.img"),            # CenOS 7 ppc64le
-                  ]
-    _iso_paths = ["images/boot.iso",                   # RH/Fedora
-                   "boot/boot.iso",                     # Suse
-                   "current/images/netboot/mini.iso",   # Debian
-                   "install/images/boot.iso",           # Mandriva
-                  ]
-
-    # Holds values to use when actually pulling down media
-    _valid_kernel_path = None
-    _valid_iso_path = None
+    urldistro = None
+    treeinfo_version = None
 
     def isValidStore(self):
-        if self.treeinfo:
-            # Use treeinfo to pull down media paths
-            if self.type == "xen":
-                typ = "xen"
-            else:
-                typ = self.treeinfo.get("general", "arch")
+        return bool(self.treeinfo)
 
-            kernelSection = "images-%s" % typ
-            isoSection = "images-%s" % self.treeinfo.get("general", "arch")
+    def _hasTreeinfoFamily(self, famregex):
+        if not self.treeinfo:
+            return False
 
-            if self.treeinfo.has_section(kernelSection):
-                try:
-                    self._valid_kernel_path = (
-                        self._getTreeinfoMedia("kernel"),
-                        self._getTreeinfoMedia("initrd"))
-                except (configparser.NoSectionError,
-                        configparser.NoOptionError) as e:
-                    logging.debug(e)
+        treeinfo_family = self.treeinfo.get("general", "family")
+        if self.treeinfo.has_option("general", "version"):
+            self.treeinfo_version = self.treeinfo.get("general", "version")
 
-            if self.treeinfo.has_section(isoSection):
-                try:
-                    self._valid_iso_path = self.treeinfo.get(isoSection,
-                                                             "boot.iso")
-                except configparser.NoOptionError as e:
-                    logging.debug(e)
-
-        if self.type == "xen":
-            kern_list = self._xen_paths
-        else:
-            kern_list = self._hvm_paths
-
-        # If validated media paths weren't found (no treeinfo), check against
-        # list of media location paths.
-        for kern, init in kern_list:
-            if (self._valid_kernel_path is None and
-                self.fetcher.hasFile(kern) and
-                self.fetcher.hasFile(init)):
-                self._valid_kernel_path = (kern, init)
-                break
-
-        for iso in self._iso_paths:
-            if (self._valid_iso_path is None and
-                self.fetcher.hasFile(iso)):
-                self._valid_iso_path = iso
-                break
-
-        if self._valid_kernel_path or self._valid_iso_path:
-            return True
-        return False
-
-    def acquireKernel(self, guest):
-        if self._valid_kernel_path is None:
-            raise ValueError(_("Could not find a kernel path for virt type "
-                               "'%s'" % self.type))
-
-        return self._kernelFetchHelper(guest,
-                                       self._valid_kernel_path[0],
-                                       self._valid_kernel_path[1])
-
-    def acquireBootDisk(self, guest):
-        if self._valid_iso_path is None:
-            raise ValueError(_("Could not find a boot iso path for this tree."))
-
-        return self.fetcher.acquireFile(self._valid_iso_path)
+        return bool(re.match(famregex, treeinfo_family))
 
 
-class RedHatDistro(Distro):
+class RedHatDistro(GenericTreeinfoDistro):
     """
     Base image store for any Red Hat related distros which have
     a common layout
     """
-    uses_treeinfo = True
+    name = None
     _version_number = None
-
-    _boot_iso_paths   = ["images/boot.iso"]
-    _hvm_kernel_paths = [("images/pxeboot/vmlinuz",
-                           "images/pxeboot/initrd.img")]
-    _xen_kernel_paths = [("images/xen/vmlinuz",
-                           "images/xen/initrd.img")]
 
     def isValidStore(self):
         raise NotImplementedError()
@@ -475,19 +395,8 @@ class FedoraDistro(RedHatDistro):
     name = "Fedora"
     urldistro = "fedora"
 
-    def isValidStore(self):
-        if not self.treeinfo:
-            return self.fetcher.hasFile("Fedora")
-
-        if not re.match(".*Fedora.*", self.treeinfo.get("general", "family")):
-            return False
-
-        ver = self.treeinfo.get("general", "version")
-        if not ver:
-            logging.debug("No version found in .treeinfo")
-            return False
-        logging.debug("Found treeinfo version=%s", ver)
-
+    def _parse_fedora_version(self):
+        ver = self.treeinfo_version
         latest_variant = OSDB.latest_fedora_version()
         if re.match("fedora[0-9]+", latest_variant):
             latest_vernum = int(latest_variant[6:])
@@ -498,9 +407,7 @@ class FedoraDistro(RedHatDistro):
 
         # rawhide trees changed to use version=Rawhide in Apr 2016
         if ver in ["development", "rawhide", "Rawhide"]:
-            self._version_number = latest_vernum
-            self.os_variant = latest_variant
-            return True
+            return latest_vernum, latest_variant
 
         # Dev versions can be like '23_Alpha'
         if "_" in ver:
@@ -516,11 +423,23 @@ class FedoraDistro(RedHatDistro):
             vernum = latest_vernum
 
         if vernum > latest_vernum:
-            self.os_variant = latest_variant
+            os_variant = latest_variant
         else:
-            self.os_variant = "fedora" + str(vernum)
+            os_variant = "fedora" + str(vernum)
 
-        self._version_number = vernum
+        return vernum, os_variant
+
+    def isValidStore(self):
+        famregex = ".*Fedora.*"
+        if not self._hasTreeinfoFamily(famregex):
+            return False
+
+        if not self.treeinfo_version:
+            logging.debug("No version found in .treeinfo")
+            return False
+        logging.debug("Found treeinfo version=%s", self.treeinfo_version)
+
+        self._version_number, self.os_variant = self._parse_fedora_version()
         return True
 
 
@@ -529,29 +448,6 @@ class RHELDistro(RedHatDistro):
     name = "Red Hat Enterprise Linux"
     urldistro = "rhel"
 
-    def isValidStore(self):
-        if self.treeinfo:
-            # Matches:
-            #   Red Hat Enterprise Linux
-            #   RHEL Atomic Host
-            m = re.match(".*(Red Hat Enterprise Linux|RHEL).*",
-                         self.treeinfo.get("general", "family"))
-            ret = (m is not None)
-
-            if ret:
-                self._variantFromVersion()
-            return ret
-
-        if (self.fetcher.hasFile("Server") or
-            self.fetcher.hasFile("Client")):
-            self.os_variant = "rhel5"
-            return True
-        return self.fetcher.hasFile("RedHat")
-
-
-    ################################
-    # osdict autodetection helpers #
-    ################################
 
     def _parseTreeinfoVersion(self, verstr):
         def _safeint(c):
@@ -572,24 +468,6 @@ class RHELDistro(RedHatDistro):
             update = _safeint(verstr[1])
 
         return version, update
-
-    def _variantFromVersion(self):
-        ver = self.treeinfo.get("general", "version")
-        name = None
-        if self.treeinfo.has_option("general", "name"):
-            name = self.treeinfo.get("general", "name")
-        if not ver:
-            return
-
-        if name and name.startswith("Red Hat Enterprise Linux Server for ARM"):
-            # Kind of a hack, but good enough for the time being
-            version = 7
-            update = 0
-        else:
-            version, update = self._parseTreeinfoVersion(ver)
-
-        self._version_number = version
-        self._setRHELVariant(version, update)
 
     def _setRHELVariant(self, version, update):
         base = "rhel" + str(version)
@@ -614,6 +492,26 @@ class RHELDistro(RedHatDistro):
         if ret:
             self.os_variant = ret
 
+    def _variantFromVersion(self):
+        if not self.treeinfo_version:
+            return
+
+        version, update = self._parseTreeinfoVersion(self.treeinfo_version)
+        self._version_number = version
+        self._setRHELVariant(version, update)
+
+
+    def isValidStore(self):
+        # Matches:
+        #   Red Hat Enterprise Linux
+        #   RHEL Atomic Host
+        famregex = ".*(Red Hat Enterprise Linux|RHEL).*"
+        if not self._hasTreeinfoFamily(famregex):
+            return False
+
+        self._variantFromVersion()
+        return True
+
 
 # CentOS distro check
 class CentOSDistro(RHELDistro):
@@ -621,18 +519,16 @@ class CentOSDistro(RHELDistro):
     urldistro = "centos"
 
     def isValidStore(self):
-        if not self.treeinfo:
-            return self.fetcher.hasFile("CentOS")
+        famregex = ".*CentOS.*"
+        if not self._hasTreeinfoFamily(famregex):
+            return False
 
-        m = re.match(".*CentOS.*", self.treeinfo.get("general", "family"))
-        ret = (m is not None)
-        if ret:
-            self._variantFromVersion()
-            if self.os_variant:
-                new_variant = self.os_variant.replace("rhel", "centos")
-                if self._check_osvariant_valid(new_variant):
-                    self.os_variant = new_variant
-        return ret
+        self._variantFromVersion()
+        if self.os_variant:
+            new_variant = self.os_variant.replace("rhel", "centos")
+            if self._check_osvariant_valid(new_variant):
+                self.os_variant = new_variant
+        return True
 
 
 # Scientific Linux distro check
@@ -640,21 +536,13 @@ class SLDistro(RHELDistro):
     name = "Scientific Linux"
     urldistro = None
 
-    _boot_iso_paths = RHELDistro._boot_iso_paths + ["images/SL/boot.iso"]
-    _hvm_kernel_paths = RHELDistro._hvm_kernel_paths + [
-        ("images/SL/pxeboot/vmlinuz", "images/SL/pxeboot/initrd.img")]
-
     def isValidStore(self):
-        if self.treeinfo:
-            m = re.match(".*Scientific.*",
-                         self.treeinfo.get("general", "family"))
-            ret = (m is not None)
+        famregex = ".*Scientific.*"
+        if not self._hasTreeinfoFamily(famregex):
+            return False
 
-            if ret:
-                self._variantFromVersion()
-            return ret
-
-        return self.fetcher.hasFile("SL")
+        self._variantFromVersion()
+        return True
 
 
 class SuseDistro(Distro):
@@ -1051,8 +939,8 @@ def _build_distro_list():
         seen_urldistro.append(obj.urldistro)
 
     # Always stick GenericDistro at the end, since it's a catchall
-    allstores.remove(GenericDistro)
-    allstores.append(GenericDistro)
+    allstores.remove(GenericTreeinfoDistro)
+    allstores.append(GenericTreeinfoDistro)
 
     return allstores
 

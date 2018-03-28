@@ -28,7 +28,7 @@ os.environ["DISPLAY"] = ":3.4"
 # Location
 image_prefix = "/tmp/__virtinst_cli_"
 xmldir = "tests/cli-test-xml"
-treedir = "%s/faketree" % xmldir
+treedir = "%s/fakefedoratree" % xmldir
 fakeiso = "%s/fakefedora.iso" % xmldir
 vcdir = "%s/virtconv" % xmldir
 compare_xmldir = "%s/compare" % xmldir
