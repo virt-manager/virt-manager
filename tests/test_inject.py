@@ -13,6 +13,7 @@ import unittest
 from tests import utils
 
 from virtinst import Guest
+from virtinst import urldetect
 from virtinst import urlfetcher
 from virtinst import util
 from virtinst.initrdinject import perform_initrd_injections
@@ -88,7 +89,7 @@ def _fetch_distro(distro):
     origenv = os.environ.pop("VIRTINST_TEST_SUITE")
     try:
         fetcher.prepareLocation()
-        store = urlfetcher.getDistroStore(guest, fetcher)
+        store = urldetect.getDistroStore(guest, fetcher)
         kernel, initrd, ignore = store.acquireKernel(guest)
         cleanup.append(kernel)
         cleanup.append(initrd)

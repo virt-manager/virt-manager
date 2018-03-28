@@ -15,18 +15,19 @@ from tests import utils
 
 from virtinst import Guest
 from virtinst import OSDB
+from virtinst import urldetect
 from virtinst import urlfetcher
 from virtinst import util
-from virtinst.urlfetcher import ALTLinuxDistro
-from virtinst.urlfetcher import CentOSDistro
-from virtinst.urlfetcher import DebianDistro
-from virtinst.urlfetcher import FedoraDistro
-from virtinst.urlfetcher import GenericDistro
-from virtinst.urlfetcher import MandrivaDistro
-from virtinst.urlfetcher import RHELDistro
-from virtinst.urlfetcher import SLDistro
-from virtinst.urlfetcher import SuseDistro
-from virtinst.urlfetcher import UbuntuDistro
+from virtinst.urldetect import ALTLinuxDistro
+from virtinst.urldetect import CentOSDistro
+from virtinst.urldetect import DebianDistro
+from virtinst.urldetect import FedoraDistro
+from virtinst.urldetect import GenericDistro
+from virtinst.urldetect import MandrivaDistro
+from virtinst.urldetect import RHELDistro
+from virtinst.urldetect import SLDistro
+from virtinst.urldetect import SuseDistro
+from virtinst.urldetect import UbuntuDistro
 
 
 class _URLTestData(object):
@@ -51,7 +52,7 @@ class _URLTestData(object):
         self.testshortcircuit = testshortcircuit
 
     def _distroclass_for_name(self, name):
-        # Map the test case name to the expected urlfetcher distro
+        # Map the test case name to the expected urldetect distro
         # class we should be detecting
         if "fedora" in name:
             return FedoraDistro
@@ -110,7 +111,7 @@ def _storeForDistro(fetcher, guest):
     """
     for ignore in range(0, 10):
         try:
-            return urlfetcher.getDistroStore(guest, fetcher)
+            return urldetect.getDistroStore(guest, fetcher)
         except Exception as e:
             if "502" in str(e):
                 logging.debug("Caught proxy error: %s", str(e))

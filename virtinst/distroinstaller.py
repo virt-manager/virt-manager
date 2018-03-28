@@ -8,6 +8,7 @@
 import logging
 import os
 
+from . import urldetect
 from . import urlfetcher
 from . import util
 from .devices import DeviceDisk
@@ -99,7 +100,7 @@ class DistroInstaller(Installer):
     def _get_store(self, guest, fetcher):
         # Caller is responsible for calling fetcher prepare/cleanup if needed
         if not self._cached_store:
-            self._cached_store = urlfetcher.getDistroStore(guest, fetcher)
+            self._cached_store = urldetect.getDistroStore(guest, fetcher)
         return self._cached_store
 
     def _prepare_local(self):
