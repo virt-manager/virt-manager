@@ -328,6 +328,9 @@ class _ISOURLFetcher(_URLFetcher):
         """
         Use isoinfo to grab the file
         """
+        if not self._hasFile(url):
+            raise RuntimeError("isoinfo didn't find file=%s" % url)
+
         cmd = ["isoinfo", "-J", "-i", self.location, "-x", url]
 
         logging.debug("Running isoinfo: %s", cmd)
