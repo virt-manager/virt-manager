@@ -18,6 +18,68 @@
       </enum>
     </loader>
   </os>
+  <cpu>
+    <mode name='host-passthrough' supported='yes'/>
+    <mode name='host-model' supported='yes'>
+      <model fallback='forbid'>Broadwell</model>
+      <vendor>Intel</vendor>
+      <feature policy='require' name='vme'/>
+      <feature policy='require' name='ss'/>
+      <feature policy='require' name='f16c'/>
+      <feature policy='require' name='rdrand'/>
+      <feature policy='require' name='hypervisor'/>
+      <feature policy='require' name='arat'/>
+      <feature policy='require' name='tsc_adjust'/>
+      <feature policy='require' name='xsaveopt'/>
+      <feature policy='require' name='pdpe1gb'/>
+      <feature policy='require' name='abm'/>
+      <feature policy='require' name='invtsc'/>
+    </mode>
+    <mode name='custom' supported='yes'>
+      <model usable='yes'>qemu64</model>
+      <model usable='yes'>qemu32</model>
+      <model usable='no'>phenom</model>
+      <model usable='yes'>pentium3</model>
+      <model usable='yes'>pentium2</model>
+      <model usable='yes'>pentium</model>
+      <model usable='yes'>n270</model>
+      <model usable='yes'>kvm64</model>
+      <model usable='yes'>kvm32</model>
+      <model usable='yes'>coreduo</model>
+      <model usable='yes'>core2duo</model>
+      <model usable='no'>athlon</model>
+      <model usable='yes'>Westmere</model>
+      <model usable='no'>Westmere-IBRS</model>
+      <model usable='no'>Skylake-Server</model>
+      <model usable='no'>Skylake-Server-IBRS</model>
+      <model usable='no'>Skylake-Client</model>
+      <model usable='no'>Skylake-Client-IBRS</model>
+      <model usable='yes'>SandyBridge</model>
+      <model usable='no'>SandyBridge-IBRS</model>
+      <model usable='yes'>Penryn</model>
+      <model usable='no'>Opteron_G5</model>
+      <model usable='yes'>Opteron_G4</model>
+      <model usable='no'>Opteron_G3</model>
+      <model usable='yes'>Opteron_G2</model>
+      <model usable='yes'>Opteron_G1</model>
+      <model usable='yes'>Nehalem</model>
+      <model usable='no'>Nehalem-IBRS</model>
+      <model usable='yes'>IvyBridge</model>
+      <model usable='no'>IvyBridge-IBRS</model>
+      <model usable='yes'>Haswell</model>
+      <model usable='yes'>Haswell-noTSX</model>
+      <model usable='no'>Haswell-noTSX-IBRS</model>
+      <model usable='no'>Haswell-IBRS</model>
+      <model usable='no'>EPYC</model>
+      <model usable='no'>EPYC-IBPB</model>
+      <model usable='yes'>Conroe</model>
+      <model usable='yes'>Broadwell</model>
+      <model usable='yes'>Broadwell-noTSX</model>
+      <model usable='no'>Broadwell-noTSX-IBRS</model>
+      <model usable='no'>Broadwell-IBRS</model>
+      <model usable='yes'>486</model>
+    </mode>
+  </cpu>
   <devices>
     <disk supported='yes'>
       <enum name='diskDevice'>
@@ -32,8 +94,25 @@
         <value>scsi</value>
         <value>virtio</value>
         <value>usb</value>
+        <value>sata</value>
       </enum>
     </disk>
+    <graphics supported='yes'>
+      <enum name='type'>
+        <value>sdl</value>
+        <value>vnc</value>
+        <value>spice</value>
+      </enum>
+    </graphics>
+    <video supported='yes'>
+      <enum name='modelType'>
+        <value>vga</value>
+        <value>cirrus</value>
+        <value>vmvga</value>
+        <value>qxl</value>
+        <value>virtio</value>
+      </enum>
+    </video>
     <hostdev supported='yes'>
       <enum name='mode'>
         <value>subsystem</value>
@@ -50,11 +129,10 @@
         <value>scsi</value>
       </enum>
       <enum name='capsType'/>
-      <enum name='pciBackend'>
-        <value>default</value>
-        <value>kvm</value>
-        <value>vfio</value>
-      </enum>
+      <enum name='pciBackend'/>
     </hostdev>
   </devices>
+  <features>
+    <gic supported='no'/>
+  </features>
 </domainCapabilities>
