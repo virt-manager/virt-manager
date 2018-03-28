@@ -27,7 +27,11 @@ from virtinst.urlfetcher import SuseDistro
 from virtinst.urlfetcher import UbuntuDistro
 
 
-class _DistroURL(object):
+class _URLTestData(object):
+    """
+    Class that tracks all data needed for a single URL test case.
+    Data is stored in test_urls.ini
+    """
     def __init__(self, name, url, detectdistro,
             testxen, testbootiso, testshortcircuit):
         self.name = name
@@ -114,18 +118,18 @@ def _storeForDistro(fetcher, guest):
     raise  # pylint: disable=misplaced-bare-raise
 
 
-def _testURL(fetcher, distroobj):
+def _testURL(fetcher, testdata):
     """
     Test that our URL detection logic works for grabbing kernel, xen
     kernel, and boot.iso
     """
-    distname = distroobj.name
-    arch = distroobj.arch
+    distname = testdata.name
+    arch = testdata.arch
     hvmguest.os.arch = arch
     xenguest.os.arch = arch
-    if distroobj.testshortcircuit:
-        hvmguest.os_variant = distroobj.detectdistro
-        xenguest.os_variant = distroobj.detectdistro
+    if testdata.testshortcircuit:
+        hvmguest.os_variant = testdata.detectdistro
+        xenguest.os_variant = testdata.detectdistro
     else:
         hvmguest.os_variant = None
         xenguest.os_variant = None
@@ -133,7 +137,7 @@ def _testURL(fetcher, distroobj):
     try:
         hvmstore = _storeForDistro(fetcher, hvmguest)
         xenstore = None
-        if distroobj.testxen:
+        if testdata.testxen:
             xenstore = _storeForDistro(fetcher, xenguest)
     except Exception:
         raise AssertionError("\nFailed to detect URLDistro class:\n"
@@ -142,19 +146,19 @@ def _testURL(fetcher, distroobj):
             (distname, fetcher.location, "".join(traceback.format_exc())))
 
     for s in [hvmstore, xenstore]:
-        if (s and distroobj.distroclass and
-            not isinstance(s, distroobj.distroclass)):
+        if (s and testdata.distroclass and
+            not isinstance(s, testdata.distroclass)):
             raise AssertionError("Unexpected URLDistro class:\n"
                 "found  = %s\n"
                 "expect = %s\n"
                 "name   = %s\n"
                 "url    = %s" %
-                (s.__class__, distroobj.distroclass, distname,
+                (s.__class__, testdata.distroclass, distname,
                  fetcher.location))
 
         # Make sure the stores are reporting correct distro name/variant
-        if (s and distroobj.detectdistro and
-            distroobj.detectdistro != s.get_osdict_info()):
+        if (s and testdata.detectdistro and
+            testdata.detectdistro != s.get_osdict_info()):
             raise AssertionError(
                 "Detected OS did not match expected values:\n"
                 "found  = %s\n"
@@ -162,8 +166,8 @@ def _testURL(fetcher, distroobj):
                 "name   = %s\n"
                 "url    = %s\n"
                 "store  = %s" %
-                (s.os_variant, distroobj.detectdistro,
-                 distname, fetcher.location, distroobj.distroclass))
+                (s.os_variant, testdata.detectdistro,
+                 distname, fetcher.location, testdata.distroclass))
 
     # Do this only after the distro detection, since we actually need
     # to fetch files for that part
@@ -173,7 +177,7 @@ def _testURL(fetcher, distroobj):
     fetcher.acquireFile = fakeAcquireFile
 
     # Fetch boot iso
-    if distroobj.testbootiso:
+    if testdata.testbootiso:
         boot = hvmstore.acquireBootDisk(hvmguest)
         logging.debug("acquireBootDisk: %s", str(boot))
 
@@ -199,19 +203,19 @@ def _testURL(fetcher, distroobj):
                                  (distname, arch))
 
 
-def _testURLWrapper(distroobj):
+def _testURLWrapper(testdata):
     os.environ.pop("VIRTINST_TEST_SUITE", None)
 
     logging.debug("Testing for media arch=%s distroclass=%s",
-                  distroobj.arch, distroobj.distroclass)
+                  testdata.arch, testdata.distroclass)
 
-    sys.stdout.write("\nTesting %-25s " % distroobj.name)
+    sys.stdout.write("\nTesting %-25s " % testdata.name)
     sys.stdout.flush()
 
-    fetcher = urlfetcher.fetcherForURI(distroobj.url, "/tmp", meter)
+    fetcher = urlfetcher.fetcherForURI(testdata.url, "/tmp", meter)
     try:
         fetcher.prepareLocation()
-        return _testURL(fetcher, distroobj)
+        return _testURL(fetcher, testdata)
     finally:
         fetcher.cleanupLocation()
 
@@ -234,20 +238,20 @@ def _make_tests():
     urls = {}
     for name in cfg.sections():
         vals = dict(cfg.items(name))
-        d = _DistroURL(name, vals["url"],
-                       vals.get("distro", None),
-                       vals.get("testxen", "0") == "1",
-                       vals.get("testbootiso", "0") == "1",
-                       vals.get("testshortcircuit", "0") == "1")
+        d = _URLTestData(name, vals["url"],
+                vals.get("distro", None),
+                vals.get("testxen", "0") == "1",
+                vals.get("testbootiso", "0") == "1",
+                vals.get("testshortcircuit", "0") == "1")
         urls[d.name] = d
 
     keys = list(urls.keys())
     keys.sort()
     for key in keys:
-        distroobj = urls[key]
+        testdata = urls[key]
         def _make_wrapper(d):
             return lambda _self: _testURLWrapper(d)
         setattr(URLTests, "testURL%s" % key.replace("-", "_"),
-                _make_wrapper(distroobj))
+                _make_wrapper(testdata))
 
 _make_tests()
