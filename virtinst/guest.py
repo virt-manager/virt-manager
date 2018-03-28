@@ -847,6 +847,33 @@ class Guest(XMLBuilder):
             else:
                 self.emulator = "/usr/lib/xen/bin/qemu-dm"
 
+    def _set_cpu_x86_kvm_default(self):
+        if self.os.arch != self.conn.caps.host.cpu.arch:
+            return
+
+        self.cpu.set_special_mode(self.x86_cpu_default)
+        if self.x86_cpu_default != self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY:
+            return
+        if not self.cpu.model:
+            return
+
+        # It's possible that the value HOST_MODEL_ONLY gets from
+        # <capabilities> is not actually supported by qemu/kvm
+        # combo which will be reported in <domainCapabilities>
+        domcaps = DomainCapabilities.build_from_guest(self)
+        domcaps_mode = domcaps.cpu.get_mode("custom")
+        if not domcaps_mode:
+            return
+
+        cpu_model = domcaps_mode.get_model(self.cpu.model)
+        if cpu_model and cpu_model.usable:
+            return
+
+        logging.debug("Host capabilities CPU '%s' is not supported "
+            "according to domain capabilities. Unsettings CPU model",
+            self.cpu.model)
+        self.cpu.model = None
+
     def _set_cpu_defaults(self):
         self.cpu.set_topology_defaults(self.vcpus)
 
@@ -865,13 +892,10 @@ class Guest(XMLBuilder):
             self.cpu.model = "cortex-a57"
 
         elif self.os.is_x86() and self.type == "kvm":
-            if self.os.arch != self.conn.caps.host.cpu.arch:
-                return
+            self._set_cpu_x86_kvm_default()
 
-            self.cpu.set_special_mode(self.x86_cpu_default)
             if self._os_object.broken_x2apic():
                 self.cpu.add_feature("x2apic", policy="disable")
-
 
     def _hyperv_supported(self):
         if (self.os.loader_type == "pflash" and
