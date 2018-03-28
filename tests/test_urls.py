@@ -5,6 +5,7 @@
 
 import logging
 import os
+import re
 import sys
 import time
 import traceback
@@ -13,6 +14,7 @@ import unittest
 from tests import utils
 
 from virtinst import Guest
+from virtinst import OSDB
 from virtinst import urlfetcher
 from virtinst import util
 from virtinst.urlfetcher import ALTLinuxDistro
@@ -118,6 +120,30 @@ def _storeForDistro(fetcher, guest):
     raise  # pylint: disable=misplaced-bare-raise
 
 
+def _sanitize_osdict_name(detectdistro):
+    """
+    Try to handle working with out of date osinfo-db data. Like if
+    checking distro FedoraXX but osinfo-db latest Fedora is
+    FedoraXX-1, convert to use that
+    """
+    if not detectdistro:
+        return detectdistro
+
+    if detectdistro == "testsuite-fedora-rawhide":
+        # Special value we use in the test suite to always return the latest
+        # fedora when checking rawhide URL
+        return OSDB.latest_fedora_version()
+
+    if re.match("fedora[0-9]+", detectdistro):
+        if not OSDB.lookup_os(detectdistro):
+            ret = OSDB.latest_fedora_version()
+            print("\nConverting detectdistro=%s to latest value=%s" %
+                    (detectdistro, ret))
+            return ret
+
+    return detectdistro
+
+
 def _testURL(fetcher, testdata):
     """
     Test that our URL detection logic works for grabbing kernel, xen
@@ -125,11 +151,13 @@ def _testURL(fetcher, testdata):
     """
     distname = testdata.name
     arch = testdata.arch
+    detectdistro = _sanitize_osdict_name(testdata.detectdistro)
+
     hvmguest.os.arch = arch
     xenguest.os.arch = arch
     if testdata.testshortcircuit:
-        hvmguest.os_variant = testdata.detectdistro
-        xenguest.os_variant = testdata.detectdistro
+        hvmguest.os_variant = detectdistro
+        xenguest.os_variant = detectdistro
     else:
         hvmguest.os_variant = None
         xenguest.os_variant = None
@@ -157,8 +185,8 @@ def _testURL(fetcher, testdata):
                  fetcher.location))
 
         # Make sure the stores are reporting correct distro name/variant
-        if (s and testdata.detectdistro and
-            testdata.detectdistro != s.get_osdict_info()):
+        if (s and detectdistro and
+            detectdistro != s.get_osdict_info()):
             raise AssertionError(
                 "Detected OS did not match expected values:\n"
                 "found  = %s\n"
@@ -166,7 +194,7 @@ def _testURL(fetcher, testdata):
                 "name   = %s\n"
                 "url    = %s\n"
                 "store  = %s" %
-                (s.os_variant, testdata.detectdistro,
+                (s.os_variant, detectdistro,
                  distname, fetcher.location, testdata.distroclass))
 
     # Do this only after the distro detection, since we actually need
