@@ -399,27 +399,28 @@ def _grabTreeinfo(fetcher):
     return treeinfo
 
 
-def _distroFromSUSEContent(fetcher, arch, vmtype=None):
-    # Parse content file for the 'LABEL' field containing the distribution name
-    # None if no content, GenericDistro if unknown label type.
-    try:
-        cbuf = fetcher.acquireFileContent("content")
-    except ValueError:
-        return None
-
+def _parseSUSEContent(cbuf):
     distribution = None
     distro_version = None
     distro_summary = None
     distro_distro = None
     distro_arch = None
 
-    lines = cbuf.splitlines()[1:]
-    for line in lines:
+    # As of 2018 all latest distros match only DISTRO and REPOID below
+    for line in cbuf.splitlines()[1:]:
         if line.startswith("LABEL "):
+            # opensuse 10.3: LABEL openSUSE 10.3
+            # opensuse 11.4: LABEL openSUSE 11.4
+            # opensuse 12.3: LABEL openSUSE
+            # sles11sp4 DVD: LABEL SUSE Linux Enterprise Server 11 SP4
             distribution = line.split(' ', 1)
         elif line.startswith("DISTRO "):
+            # DISTRO cpe:/o:opensuse:opensuse:13.2,openSUSE
+            # DISTRO cpe:/o:suse:sled:12:sp3,SUSE Linux Enterprise Desktop 12 SP3
             distro_distro = line.rsplit(',', 1)
         elif line.startswith("VERSION "):
+            # opensuse 10.3: VERSION 10.3
+            # opensuse 12.3: VERSION 12.3
             distro_version = line.split(' ', 1)
             if len(distro_version) > 1:
                 d_version = distro_version[1].split('-', 1)
@@ -428,10 +429,15 @@ def _distroFromSUSEContent(fetcher, arch, vmtype=None):
         elif line.startswith("SUMMARY "):
             distro_summary = line.split(' ', 1)
         elif line.startswith("BASEARCHS "):
+            # opensuse 11.4: BASEARCHS i586 x86_64
+            # opensuse 12.3: BASEARCHS i586 x86_64
             distro_arch = line.split(' ', 1)
         elif line.startswith("DEFAULTBASE "):
+            # opensuse 10.3: DEFAULTBASE i586
             distro_arch = line.split(' ', 1)
         elif line.startswith("REPOID "):
+            # REPOID obsproduct://build.suse.de/SUSE:SLE-11-SP4:GA/SUSE_SLES/11.4/DVD/x86_64
+            # REPOID obsproduct://build.suse.de/SUSE:SLE-12-SP3:GA/SLES/12.3/DVD/aarch64
             distro_arch = line.rsplit('/', 1)
         if distribution and distro_version and distro_arch:
             break
@@ -441,18 +447,33 @@ def _distroFromSUSEContent(fetcher, arch, vmtype=None):
             distribution = distro_summary
         elif distro_distro:
             distribution = distro_distro
+
+    tree_arch = None
     if distro_arch:
-        arch = distro_arch[1].strip()
+        tree_arch = distro_arch[1].strip()
         # Fix for 13.2 official oss repo
-        if arch.find("i586-x86_64") != -1:
-            arch = "x86_64"
+        if tree_arch.find("i586-x86_64") != -1:
+            tree_arch = "x86_64"
     else:
         if cbuf.find("x86_64") != -1:
-            arch = "x86_64"
+            tree_arch = "x86_64"
         elif cbuf.find("i586") != -1:
-            arch = "i586"
+            tree_arch = "i586"
         elif cbuf.find("s390x") != -1:
-            arch = "s390x"
+            tree_arch = "s390x"
+
+    return distribution, distro_version, tree_arch
+
+
+def _distroFromSUSEContent(fetcher, arch, vmtype):
+    try:
+        cbuf = fetcher.acquireFileContent("content")
+    except ValueError:
+        return None
+
+    distribution, distro_version, tree_arch = _parseSUSEContent(cbuf)
+    logging.debug("SUSE content file found distribution=%s distro_version=%s "
+        "tree_arch=%s", distribution, distro_version, tree_arch)
 
     def _parse_sle_distribution(d):
         sle_version = d[1].strip().rsplit(' ')[4]
@@ -477,9 +498,10 @@ def _distroFromSUSEContent(fetcher, arch, vmtype=None):
                 distro_version = ['VERSION', distribution[0].strip().rsplit(':')[4]]
 
     if distro_version is None:
+        logging.debug("No specified SUSE version detected")
         return None
 
-    ob = dclass(fetcher, arch, vmtype)
+    ob = dclass(fetcher, tree_arch or arch, vmtype)
     if dclass != GenericDistro:
         ob.version_from_content = distro_version
 
