@@ -229,6 +229,15 @@ def _testURL(fetcher, testdata):
                                  (distname, arch))
 
 
+def _fetchWrapper(url, cb):
+    fetcher = urlfetcher.fetcherForURI(url, "/tmp", meter)
+    try:
+        fetcher.prepareLocation()
+        return cb(fetcher)
+    finally:
+        fetcher.cleanupLocation()
+
+
 def _testURLWrapper(testdata):
     os.environ.pop("VIRTINST_TEST_SUITE", None)
 
@@ -238,17 +247,24 @@ def _testURLWrapper(testdata):
     sys.stdout.write("\nTesting %-25s " % testdata.name)
     sys.stdout.flush()
 
-    fetcher = urlfetcher.fetcherForURI(testdata.url, "/tmp", meter)
-    try:
-        fetcher.prepareLocation()
+    def cb(fetcher):
         return _testURL(fetcher, testdata)
-    finally:
-        fetcher.cleanupLocation()
+    return _fetchWrapper(testdata.url, cb)
 
 
 # Register tests to be picked up by unittest
 class URLTests(unittest.TestCase):
-    pass
+    def test001BadURL(self):
+        badurl = "http://aksdkakskdfa-idontexist.com/foo/tree"
+        def cb(fetcher):
+            return _storeForDistro(fetcher, hvmguest)
+
+        try:
+            _fetchWrapper(badurl, cb)
+            raise AssertionError("Expected URL failure")
+        except ValueError as e:
+            self.assertTrue("maybe you mistyped" in str(e))
+
 
 
 def _make_tests():

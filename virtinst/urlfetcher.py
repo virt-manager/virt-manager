@@ -114,6 +114,12 @@ class _URLFetcher(object):
         """
         pass
 
+    def can_access(self):
+        """
+        Return True if the location URL seems to be valid
+        """
+        return True
+
     def _hasFile(self, url):
         raise NotImplementedError("Must be implemented in subclass")
 
@@ -168,6 +174,9 @@ class _HTTPURLFetcher(_URLFetcher):
             except Exception:
                 logging.debug("Error closing requests.session", exc_info=True)
         self._session = None
+
+    def can_access(self):
+        return self.hasFile("")
 
     def _hasFile(self, url):
         """

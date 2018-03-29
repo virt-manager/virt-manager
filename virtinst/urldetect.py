@@ -234,7 +234,7 @@ def getDistroStore(guest, fetcher):
     # be true since some webservers don't allow directory listing.
     # http://www.redhat.com/archives/virt-tools-list/2014-December/msg00048.html
     extramsg = ""
-    if not fetcher.hasFile(""):
+    if not fetcher.can_access():
         extramsg = (": " +
             _("The URL could not be accessed, maybe you mistyped?"))
 
