@@ -823,17 +823,6 @@ class UbuntuDistro(DebianDistro):
     urldistro = "ubuntu"
     _debname = "ubuntu"
 
-    def _is_tree_iso(self):
-        # For trees based on ISO's
-        if not self._check_info("install/netboot/version.info"):
-            return False
-
-        self._url_prefix = "install"
-        self._set_media_paths()
-        self.os_variant = self._detect_debian_osdict_from_url()
-
-        return True
-
     def _is_install_cd(self):
         # For install CDs
         if not self._check_info(".disk/info"):
