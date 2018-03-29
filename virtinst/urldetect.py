@@ -246,37 +246,33 @@ class Distro(object):
         """Determine if uri points to a tree of the store's distro"""
         raise NotImplementedError
 
-    def acquireKernel(self, guest):
+    def acquireKernel(self):
         kernelpath = None
         initrdpath = None
-        if self.treeinfo:
-            try:
-                kernelpath = self._getTreeinfoMedia("kernel")
-                initrdpath = self._getTreeinfoMedia("initrd")
-            except configparser.NoSectionError:
-                pass
-
-        if not kernelpath or not initrdpath:
-            paths = self._kernel_paths
-
-            for kpath, ipath in paths:
-                if self.fetcher.hasFile(kpath) and self.fetcher.hasFile(ipath):
-                    kernelpath = kpath
-                    initrdpath = ipath
+        for kpath, ipath in self._kernel_paths:
+            if self.fetcher.hasFile(kpath) and self.fetcher.hasFile(ipath):
+                kernelpath = kpath
+                initrdpath = ipath
+                break
 
         if not kernelpath or not initrdpath:
             raise RuntimeError(_("Couldn't find kernel for "
                                  "%(distro)s tree.") %
                                  {"distro": self.PRETTY_NAME})
 
-        return self._kernelFetchHelper(guest, kernelpath, initrdpath)
+        args = ""
+        if not self.fetcher.location.startswith("/"):
+            args += "%s=%s" % (self._get_method_arg(), self.fetcher.location)
 
-    def acquireBootDisk(self, guest):
-        ignore = guest
+        kernel = self.fetcher.acquireFile(kernelpath)
+        try:
+            initrd = self.fetcher.acquireFile(initrdpath)
+            return kernel, initrd, args
+        except Exception:
+            os.unlink(kernel)
+            raise
 
-        if self.treeinfo:
-            return self.fetcher.acquireFile(self._getTreeinfoMedia("boot.iso"))
-
+    def acquireBootISO(self):
         for path in self._boot_iso_paths:
             if self.fetcher.hasFile(path):
                 return self.fetcher.acquireFile(path)
@@ -304,14 +300,6 @@ class Distro(object):
     def _get_method_arg(self):
         return "method"
 
-    def _getTreeinfoMedia(self, mediaName):
-        if self.type == "xen":
-            t = "xen"
-        else:
-            t = self.treeinfo.get("general", "arch")
-
-        return self.treeinfo.get("images-%s" % t, mediaName)
-
     def _fetchAndMatchRegex(self, filename, regex):
         # Fetch 'filename' and return True/False if it matches the regex
         try:
@@ -326,23 +314,6 @@ class Distro(object):
         logging.debug("%s: found filename=%s but regex didn't match",
                 self.__class__.__name__, filename)
         return False
-
-    def _kernelFetchHelper(self, guest, kernelpath, initrdpath):
-        # Simple helper for fetching kernel + initrd and performing
-        # cleanup if necessary
-        ignore = guest
-        kernel = self.fetcher.acquireFile(kernelpath)
-        args = ''
-
-        if not self.fetcher.location.startswith("/"):
-            args += "%s=%s" % (self._get_method_arg(), self.fetcher.location)
-
-        try:
-            initrd = self.fetcher.acquireFile(initrdpath)
-            return kernel, initrd, args
-        except Exception:
-            os.unlink(kernel)
-            raise
 
 
 class GenericTreeinfoDistro(Distro):
@@ -362,6 +333,31 @@ class GenericTreeinfoDistro(Distro):
             logging.debug("Found treeinfo version=%s", self.treeinfo_version)
 
         self._detect_version()
+
+        if not self.treeinfo:
+            return
+
+        self._kernel_paths = []
+        self._boot_iso_paths = []
+
+        try:
+            self._kernel_paths.append(
+                (self._getTreeinfoMedia("kernel"),
+                 self._getTreeinfoMedia("initrd")))
+        except Exception:
+            logging.debug("Failed to parse treeinfo kernel/initrd",
+                    exc_info=True)
+
+        try:
+            self._boot_iso_paths.append(self._getTreeinfoMedia("boot.iso"))
+        except Exception:
+            logging.debug("Failed to parse treeinfo boot.iso", exc_info=True)
+
+    def _getTreeinfoMedia(self, mediaName):
+        image_type = self.treeinfo.get("general", "arch")
+        if self.type == "xen":
+            image_type = "xen"
+        return self.treeinfo.get("images-%s" % image_type, mediaName)
 
     def _detect_version(self):
         pass

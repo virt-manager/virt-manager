@@ -108,13 +108,13 @@ class DistroInstaller(Installer):
 
     def _prepare_cdrom_url(self, guest, fetcher):
         store = self._get_store(guest, fetcher)
-        media = store.acquireBootDisk(guest)
+        media = store.acquireBootISO()
         self._tmpfiles.append(media)
         return media
 
     def _prepare_kernel_url(self, guest, fetcher):
         store = self._get_store(guest, fetcher)
-        kernel, initrd, args = store.acquireKernel(guest)
+        kernel, initrd, args = store.acquireKernel()
         self._tmpfiles.append(kernel)
         if initrd:
             self._tmpfiles.append(initrd)

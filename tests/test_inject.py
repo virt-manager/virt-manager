@@ -90,7 +90,7 @@ def _fetch_distro(distro):
     try:
         fetcher.prepareLocation()
         store = urldetect.getDistroStore(guest, fetcher)
-        kernel, initrd, ignore = store.acquireKernel(guest)
+        kernel, initrd, ignore = store.acquireKernel()
         cleanup.append(kernel)
         cleanup.append(initrd)
         distro.kernel = kernel

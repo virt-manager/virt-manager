@@ -207,15 +207,15 @@ def _testURL(fetcher, testdata):
 
     # Fetch boot iso
     if testdata.testbootiso:
-        boot = hvmstore.acquireBootDisk(hvmguest)
-        logging.debug("acquireBootDisk: %s", str(boot))
+        boot = hvmstore.acquireBootISO()
+        logging.debug("acquireBootISO: %s", str(boot))
 
         if boot is not True:
             raise AssertionError("%s-%s: bootiso fetching failed" %
                                  (distname, arch))
 
     # Fetch regular kernel
-    kern = hvmstore.acquireKernel(hvmguest)
+    kern = hvmstore.acquireKernel()
     logging.debug("acquireKernel (hvm): %s", str(kern))
 
     if kern[0] is not True or kern[1] is not True:
@@ -224,7 +224,7 @@ def _testURL(fetcher, testdata):
 
     # Fetch xen kernel
     if xenstore:
-        kern = xenstore.acquireKernel(xenguest)
+        kern = xenstore.acquireKernel()
         logging.debug("acquireKernel (xen): %s", str(kern))
 
         if kern[0] is not True or kern[1] is not True:
