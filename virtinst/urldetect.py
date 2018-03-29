@@ -195,8 +195,8 @@ def getDistroStore(guest, fetcher):
         store = sclass(fetcher, arch, _type)
         store.treeinfo = treeinfo
         if store.isValidStore():
-            logging.debug("Detected distro name=%s osvariant=%s",
-                          store.name, store.os_variant)
+            logging.debug("Detected class=%s osvariant=%s",
+                          store.__class__.__name__, store.os_variant)
             return store
 
     # No distro was detected. See if the URL even resolves, and if not
@@ -224,7 +224,7 @@ class Distro(object):
     An image store is a base class for retrieving either a bootable
     ISO image, or a kernel+initrd  pair for a particular OS distribution
     """
-    name = None
+    PRETTY_NAME = None
     urldistro = None
     uses_treeinfo = False
 
@@ -275,7 +275,8 @@ class Distro(object):
         if not kernelpath or not initrdpath:
             raise RuntimeError(_("Couldn't find %(type)s kernel for "
                                  "%(distro)s tree.") %
-                                 {"distro": self.name, "type": self.type})
+                                 {"distro": self.PRETTY_NAME,
+                                  "type": self.type})
 
         return self._kernelFetchHelper(guest, kernelpath, initrdpath)
 
@@ -289,7 +290,7 @@ class Distro(object):
             if self.fetcher.hasFile(path):
                 return self.fetcher.acquireFile(path)
         raise RuntimeError(_("Could not find boot.iso in %s tree." %
-                           self.name))
+                           self.PRETTY_NAME))
 
     def _check_osvariant_valid(self, os_variant):
         return OSDB.lookup_os(os_variant) is not None
@@ -331,6 +332,8 @@ class Distro(object):
             if re.match(regex, line):
                 return True
 
+        logging.debug("%s: found filename=%s but regex didn't match",
+                self.__class__.__name__, filename)
         return False
 
     def _kernelFetchHelper(self, guest, kernelpath, initrdpath):
@@ -352,7 +355,7 @@ class Distro(object):
 
 
 class GenericTreeinfoDistro(Distro):
-    name = "Generic Treeinfo"
+    PRETTY_NAME = "Generic Treeinfo"
     uses_treeinfo = True
     urldistro = None
     treeinfo_version = None
@@ -376,7 +379,7 @@ class RedHatDistro(GenericTreeinfoDistro):
     Base image store for any Red Hat related distros which have
     a common layout
     """
-    name = None
+    PRETTY_NAME = None
     _version_number = None
 
     def isValidStore(self):
@@ -392,7 +395,7 @@ class RedHatDistro(GenericTreeinfoDistro):
 
 # Fedora distro check
 class FedoraDistro(RedHatDistro):
-    name = "Fedora"
+    PRETTY_NAME = "Fedora"
     urldistro = "fedora"
 
     def _parse_fedora_version(self):
@@ -445,7 +448,7 @@ class FedoraDistro(RedHatDistro):
 
 # Red Hat Enterprise Linux distro check
 class RHELDistro(RedHatDistro):
-    name = "Red Hat Enterprise Linux"
+    PRETTY_NAME = "Red Hat Enterprise Linux"
     urldistro = "rhel"
 
 
@@ -515,7 +518,7 @@ class RHELDistro(RedHatDistro):
 
 # CentOS distro check
 class CentOSDistro(RHELDistro):
-    name = "CentOS"
+    PRETTY_NAME = "CentOS"
     urldistro = "centos"
 
     def isValidStore(self):
@@ -533,7 +536,7 @@ class CentOSDistro(RHELDistro):
 
 # Scientific Linux distro check
 class SLDistro(RHELDistro):
-    name = "Scientific Linux"
+    PRETTY_NAME = "Scientific Linux"
     urldistro = None
 
     def isValidStore(self):
@@ -546,7 +549,7 @@ class SLDistro(RHELDistro):
 
 
 class SuseDistro(Distro):
-    name = "SUSE"
+    PRETTY_NAME = "SUSE"
 
     _boot_iso_paths   = ["boot/boot.iso"]
 
@@ -655,15 +658,16 @@ class OpensuseDistro(SuseDistro):
 class DebianDistro(Distro):
     # ex. http://ftp.egr.msu.edu/debian/dists/sarge/main/installer-i386/
     # daily builds: http://d-i.debian.org/daily-images/amd64/
-    name = "Debian"
+    PRETTY_NAME = "Debian"
     urldistro = "debian"
+    _debname = "debian"
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
         self._url_prefix = ""
         self._treeArch = self._find_treearch()
-        self._installer_dirname = self.name.lower() + "-installer"
+        self._installer_dirname = self._debname + "-installer"
 
     def _find_treearch(self):
         for pattern in ["^.*/installer-(\w+)/?$",
@@ -702,8 +706,8 @@ class DebianDistro(Distro):
 
         if self._treeArch == "s390x":
             hvmroot = "%s/generic/" % self._url_prefix
-            kernel_basename = "kernel.%s" % self.name.lower()
-            initrd_basename = "initrd.%s" % self.name.lower()
+            kernel_basename = "kernel.%s" % self._debname.lower()
+            initrd_basename = "initrd.%s" % self._debname.lower()
 
         self._hvm_kernel_paths = [
             (hvmroot + kernel_basename, hvmroot + initrd_basename)]
@@ -716,27 +720,18 @@ class DebianDistro(Distro):
             return False
 
         if self.arch == "s390x":
-            regex = ".*generic/kernel\.%s.*" % self.name.lower()
+            regex = ".*generic/kernel\.%s.*" % self._debname.lower()
         else:
             regex = ".*%s.*" % self._installer_dirname
 
-        if not self._fetchAndMatchRegex(filename, regex):
-            logging.debug("Regex didn't match, not a %s distro", self.name)
-            return False
-
-        return True
+        return self._fetchAndMatchRegex(filename, regex)
 
     def _check_info(self, filename):
         if not self.fetcher.hasFile(filename):
             return False
 
-        regex = "%s.*" % self.name
-
-        if not self._fetchAndMatchRegex(filename, regex):
-            logging.debug("Regex didn't match, not a %s distro", self.name)
-            return False
-
-        return True
+        regex = "%s.*" % self._debname.capitalize()
+        return self._fetchAndMatchRegex(filename, regex)
 
     def _is_regular_tree(self):
         # For regular trees
@@ -799,8 +794,7 @@ class DebianDistro(Distro):
     ################################
 
     def _detect_debian_osdict_from_url(self):
-        root = self.name.lower()
-        oses = [n for n in OSDB.list_os() if n.name.startswith(root)]
+        oses = [n for n in OSDB.list_os() if n.name.startswith(self._debname)]
 
         if self._url_prefix == "daily":
             logging.debug("Appears to be debian 'daily' URL, using latest "
@@ -827,8 +821,9 @@ class DebianDistro(Distro):
 
 class UbuntuDistro(DebianDistro):
     # http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
-    name = "Ubuntu"
+    PRETTY_NAME = "Ubuntu"
     urldistro = "ubuntu"
+    _debname = "ubuntu"
 
     def _is_tree_iso(self):
         # For trees based on ISO's
@@ -860,7 +855,7 @@ class UbuntuDistro(DebianDistro):
 
 class MandrivaDistro(Distro):
     # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
-    name = "Mandriva/Mageia"
+    PRETTY_NAME = "Mandriva/Mageia"
     urldistro = "mandriva"
 
     _boot_iso_paths = ["install/images/boot.iso"]
@@ -891,18 +886,13 @@ class MandrivaDistro(Distro):
         if not self.fetcher.hasFile("VERSION"):
             return False
 
-        for name in ["Mandriva", "Mageia"]:
-            if self._fetchAndMatchRegex("VERSION", ".*%s.*" % name):
-                return True
-
-        logging.debug("Regex didn't match, not a %s distro", self.name)
-        return False
+        return self._fetchAndMatchRegex("VERSION", ".*(Mandriva|Mageia).*")
 
 
 class ALTLinuxDistro(Distro):
     # altlinux doesn't have installable URLs, so this is just for a
     # mounted ISO
-    name = "ALT Linux"
+    PRETTY_NAME = "ALT Linux"
     urldistro = "altlinux"
 
     _boot_iso_paths = [("altinst", "live")]
@@ -916,19 +906,16 @@ class ALTLinuxDistro(Distro):
 
         if not self.fetcher.hasFile(".disk/info"):
             return False
-
-        if self._fetchAndMatchRegex(".disk/info", ".*ALT .*"):
-            return True
-
-        logging.debug("Regex didn't match, not a %s distro", self.name)
-        return False
+        return self._fetchAndMatchRegex(".disk/info", ".*ALT .*")
 
 
 # Build list of all *Distro classes
 def _build_distro_list():
     allstores = []
     for obj in list(globals().values()):
-        if isinstance(obj, type) and issubclass(obj, Distro) and obj.name:
+        if (isinstance(obj, type) and
+            issubclass(obj, Distro) and
+            obj.PRETTY_NAME):
             allstores.append(obj)
 
     seen_urldistro = []
