@@ -145,8 +145,8 @@ def _distroFromSUSEContent(fetcher, arch, vmtype):
         logging.debug("No specified SUSE version detected")
         return None
 
-    ob = dclass(fetcher, tree_arch or arch, vmtype)
-    ob.version_from_content = distro_version
+    ob = dclass(fetcher, tree_arch or arch, vmtype,
+            suse_content_version=distro_version[1].strip())
 
     # Explictly call this, so we populate os_type/variant info
     ob.isValidStore()
@@ -192,8 +192,7 @@ def getDistroStore(guest, fetcher):
         stores.sort(key=lambda x: not x.uses_treeinfo)
 
     for sclass in stores:
-        store = sclass(fetcher, arch, _type)
-        store.treeinfo = treeinfo
+        store = sclass(fetcher, arch, _type, treeinfo=treeinfo)
         if store.isValidStore():
             logging.debug("Detected class=%s osvariant=%s",
                           store.__class__.__name__, store.os_variant)
@@ -234,15 +233,14 @@ class Distro(object):
     _boot_iso_paths = None
     _kernel_paths = None
 
-    def __init__(self, fetcher, arch, vmtype):
+    def __init__(self, fetcher, arch, vmtype,
+            treeinfo=None, suse_content_version=None):
         self.fetcher = fetcher
         self.type = vmtype
         self.arch = arch
-
         self.uri = fetcher.location
-
-        # This is set externally
-        self.treeinfo = None
+        self.treeinfo = treeinfo
+        self.suse_content_version = suse_content_version
 
     def isValidStore(self):
         """Determine if uri points to a tree of the store's distro"""
@@ -352,19 +350,32 @@ class GenericTreeinfoDistro(Distro):
     uses_treeinfo = True
     urldistro = None
     treeinfo_version = None
+    # This is set externally
 
-    def isValidStore(self):
-        return bool(self.treeinfo)
+    def __init__(self, *args, **kwargs):
+        Distro.__init__(self, *args, **kwargs)
+        if not self.treeinfo:
+            return
+
+        if self.treeinfo.has_option("general", "version"):
+            self.treeinfo_version = self.treeinfo.get("general", "version")
+            logging.debug("Found treeinfo version=%s", self.treeinfo_version)
+
+        self._detect_version()
+
+    def _detect_version(self):
+        pass
 
     def _hasTreeinfoFamily(self, famregex):
         if not self.treeinfo:
             return False
 
         treeinfo_family = self.treeinfo.get("general", "family")
-        if self.treeinfo.has_option("general", "version"):
-            self.treeinfo_version = self.treeinfo.get("general", "version")
-
         return bool(re.match(famregex, treeinfo_family))
+
+    def isValidStore(self):
+        return bool(self.treeinfo)
+
 
 
 class RedHatDistro(GenericTreeinfoDistro):
@@ -375,8 +386,8 @@ class RedHatDistro(GenericTreeinfoDistro):
     PRETTY_NAME = None
     _version_number = None
 
-    def isValidStore(self):
-        raise NotImplementedError()
+    def _detect_version(self):
+        pass
 
     def _get_method_arg(self):
         if (self._version_number is not None and
@@ -386,21 +397,24 @@ class RedHatDistro(GenericTreeinfoDistro):
         return "method"
 
 
-# Fedora distro check
 class FedoraDistro(RedHatDistro):
     PRETTY_NAME = "Fedora"
     urldistro = "fedora"
 
     def _parse_fedora_version(self):
-        ver = self.treeinfo_version
         latest_variant = OSDB.latest_fedora_version()
         if re.match("fedora[0-9]+", latest_variant):
             latest_vernum = int(latest_variant[6:])
         else:
+            latest_vernum = 99
             logging.debug("Failed to parse version number from latest "
-                "fedora variant=%s. Using safe default 22", latest_variant)
-            latest_vernum = 22
+                "fedora variant=%s. Setting vernum=%s",
+                latest_variant, latest_vernum)
 
+        ver = self.treeinfo_version
+        if not ver:
+            logging.debug("No treeinfo version? Assume rawhide")
+            ver = "rawhide"
         # rawhide trees changed to use version=Rawhide in Apr 2016
         if ver in ["development", "rawhide", "Rawhide"]:
             return latest_vernum, latest_variant
@@ -425,25 +439,17 @@ class FedoraDistro(RedHatDistro):
 
         return vernum, os_variant
 
+    def _detect_version(self):
+        self._version_number, self.os_variant = self._parse_fedora_version()
+
     def isValidStore(self):
         famregex = ".*Fedora.*"
-        if not self._hasTreeinfoFamily(famregex):
-            return False
-
-        if not self.treeinfo_version:
-            logging.debug("No version found in .treeinfo")
-            return False
-        logging.debug("Found treeinfo version=%s", self.treeinfo_version)
-
-        self._version_number, self.os_variant = self._parse_fedora_version()
-        return True
+        return self._hasTreeinfoFamily(famregex)
 
 
-# Red Hat Enterprise Linux distro check
 class RHELDistro(RedHatDistro):
     PRETTY_NAME = "Red Hat Enterprise Linux"
     urldistro = "rhel"
-
 
     def _parseTreeinfoVersion(self, verstr):
         def _safeint(c):
@@ -488,7 +494,7 @@ class RHELDistro(RedHatDistro):
         if ret:
             self.os_variant = ret
 
-    def _variantFromVersion(self):
+    def _detect_version(self):
         if not self.treeinfo_version:
             return
 
@@ -502,55 +508,47 @@ class RHELDistro(RedHatDistro):
         #   Red Hat Enterprise Linux
         #   RHEL Atomic Host
         famregex = ".*(Red Hat Enterprise Linux|RHEL).*"
-        if not self._hasTreeinfoFamily(famregex):
-            return False
-
-        self._variantFromVersion()
-        return True
+        return self._hasTreeinfoFamily(famregex)
 
 
-# CentOS distro check
 class CentOSDistro(RHELDistro):
     PRETTY_NAME = "CentOS"
     urldistro = "centos"
 
-    def isValidStore(self):
-        famregex = ".*CentOS.*"
-        if not self._hasTreeinfoFamily(famregex):
-            return False
+    def _detect_version(self):
+        RHELDistro._detect_version(self)
 
-        self._variantFromVersion()
         if self.os_variant:
             new_variant = self.os_variant.replace("rhel", "centos")
             if self._check_osvariant_valid(new_variant):
                 self.os_variant = new_variant
-        return True
+
+    def isValidStore(self):
+        famregex = ".*CentOS.*"
+        return self._hasTreeinfoFamily(famregex)
 
 
-# Scientific Linux distro check
 class SLDistro(RHELDistro):
     PRETTY_NAME = "Scientific Linux"
     urldistro = None
 
     def isValidStore(self):
         famregex = ".*Scientific.*"
-        if not self._hasTreeinfoFamily(famregex):
-            return False
-
-        self._variantFromVersion()
-        return True
+        return self._hasTreeinfoFamily(famregex)
 
 
 class SuseDistro(Distro):
     PRETTY_NAME = "SUSE"
 
     _boot_iso_paths   = ["boot/boot.iso"]
-    version_from_content = []
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
         if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
+
+        self._variantFromVersion()
+        self.os_variant = self._detect_osdict_from_url()
 
         oldkern = "linux"
         oldinit = "initrd"
@@ -565,6 +563,11 @@ class SuseDistro(Distro):
                 ("boot/%s/vmlinuz-xen" % self.arch,
                  "boot/%s/initrd-xen" % self.arch))
 
+        if (self.arch == "s390x" and
+            (self.os_variant == "sles11" or self.os_variant == "sled11")):
+            self._kernel_paths.append(
+                ("boot/s390x/vmrdr.ikr", "boot/s390x/initrd"))
+
         # Tested with SLES 12 for ppc64le, all s390x
         self._kernel_paths.append(
             ("boot/%s/linux" % self.arch,
@@ -578,9 +581,10 @@ class SuseDistro(Distro):
             ("boot/%s/loader/linux" % self.arch,
              "boot/%s/loader/initrd" % self.arch))
 
-
     def _variantFromVersion(self):
-        distro_version = self.version_from_content[1].strip()
+        if not self.suse_content_version:
+            return
+        distro_version = self.suse_content_version
         version = distro_version.split('.', 1)[0].strip()
         self.os_variant = self.urldistro
         if int(version) >= 10:
@@ -600,32 +604,6 @@ class SuseDistro(Distro):
         else:
             self.os_variant += "9"
 
-    def isValidStore(self):
-        # self.version_from_content is the VERSION line from the contents file
-        if (not self.version_from_content or
-            self.version_from_content[1] is None):
-            return False
-
-        self._variantFromVersion()
-
-        self.os_variant = self._detect_osdict_from_url()
-
-        # Reset kernel name for sle11 source on s390x
-        if self.arch == "s390x":
-            if self.os_variant == "sles11" or self.os_variant == "sled11":
-                self._kernel_paths = [("boot/%s/vmrdr.ikr" % self.arch,
-                                           "boot/%s/initrd" % self.arch)]
-
-        return True
-
-    def _get_method_arg(self):
-        return "install"
-
-
-    ################################
-    # osdict autodetection helpers #
-    ################################
-
     def _detect_osdict_from_url(self):
         root = "opensuse"
         oses = [n for n in OSDB.list_os() if n.name.startswith(root)]
@@ -636,6 +614,13 @@ class SuseDistro(Distro):
                 return osobj.name
         return self.os_variant
 
+    def isValidStore(self):
+        # self.suse_content_version is the VERSION line from the contents file
+        return bool(self.suse_content_version)
+
+    def _get_method_arg(self):
+        return "install"
+
 
 class SLESDistro(SuseDistro):
     urldistro = "sles"
@@ -645,8 +630,6 @@ class SLEDDistro(SuseDistro):
     urldistro = "sled"
 
 
-# Suse  image store is harder - we fetch the kernel RPM and a helper
-# RPM and then munge bits together to generate a initrd
 class OpensuseDistro(SuseDistro):
     urldistro = "opensuse"
 
@@ -663,8 +646,19 @@ class DebianDistro(Distro):
 
         self._kernel_paths = []
         self._url_prefix = ""
-        self._treeArch = self._find_treearch()
         self._installer_dirname = self._debname + "-installer"
+
+        self._media_type = self._detect_tree_media_type()
+        if self._media_type == "url" or self._media_type == "daily":
+            url_prefix = "current/images"
+            if self._media_type == "daily":
+                url_prefix = "daily"
+            self._set_url_paths(url_prefix)
+            self.os_variant = self._detect_debian_osdict_from_url(url_prefix)
+
+        elif self._media_type == "disk":
+            self._set_installcd_paths()
+
 
     def _find_treearch(self):
         for pattern in ["^.*/installer-(\w+)/?$",
@@ -676,7 +670,7 @@ class DebianDistro(Distro):
                 pattern, arch[0])
             return arch[0]
 
-        # Check for standard 'i386' and 'amd64' which will be
+        # Check for standard arch strings which will be
         # in the URI name for --location $ISO mounts
         for arch in ["i386", "amd64", "x86_64", "arm64"]:
             if arch in self.uri:
@@ -690,111 +684,56 @@ class DebianDistro(Distro):
         logging.debug("No treearch found in uri, defaulting to arch=%s", arch)
         return arch
 
-    def _set_media_paths(self):
-        self._boot_iso_paths   = ["%s/netboot/mini.iso" % self._url_prefix]
+    def _set_url_paths(self, url_prefix):
+        self._boot_iso_paths = ["%s/netboot/mini.iso" % url_prefix]
 
-        hvmroot = "%s/netboot/%s/%s/" % (self._url_prefix,
+        tree_arch = self._find_treearch()
+        hvmroot = "%s/netboot/%s/%s/" % (url_prefix,
                                          self._installer_dirname,
-                                         self._treeArch)
+                                         tree_arch)
         initrd_basename = "initrd.gz"
         kernel_basename = "linux"
-        if self._treeArch in ["ppc64el"]:
+        if tree_arch in ["ppc64el"]:
             kernel_basename = "vmlinux"
 
-        if self._treeArch == "s390x":
-            hvmroot = "%s/generic/" % self._url_prefix
+        if tree_arch == "s390x":
+            hvmroot = "%s/generic/" % url_prefix
             kernel_basename = "kernel.%s" % self._debname.lower()
             initrd_basename = "initrd.%s" % self._debname.lower()
 
 
         if self.type == "xen":
-            xenroot = "%s/netboot/xen/" % self._url_prefix
+            xenroot = "%s/netboot/xen/" % url_prefix
             self._kernel_paths.append(
                     (xenroot + "vmlinuz", xenroot + "initrd.gz"))
         self._kernel_paths.append(
                 (hvmroot + kernel_basename, hvmroot + initrd_basename))
 
-
-    def _check_manifest(self, filename):
-        if not self.fetcher.hasFile(filename):
-            return False
-
-        if self.arch == "s390x":
-            regex = ".*generic/kernel\.%s.*" % self._debname.lower()
-        else:
-            regex = ".*%s.*" % self._installer_dirname
-
-        return self._fetchAndMatchRegex(filename, regex)
-
-    def _check_info(self, filename):
-        if not self.fetcher.hasFile(filename):
-            return False
-
-        regex = "%s.*" % self._debname.capitalize()
-        return self._fetchAndMatchRegex(filename, regex)
-
-    def _is_regular_tree(self):
-        # For regular trees
-        if not self._check_manifest("current/images/MANIFEST"):
-            return False
-
-        self._url_prefix = "current/images"
-        self._set_media_paths()
-        self.os_variant = self._detect_debian_osdict_from_url()
-
-        return True
-
-    def _is_daily_tree(self):
-        # For daily trees
-        if not self._check_manifest("daily/MANIFEST"):
-            return False
-
-        self._url_prefix = "daily"
-        self._set_media_paths()
-        self.os_variant = self._detect_debian_osdict_from_url()
-
-        return True
-
-    def _is_install_cd(self):
-        # For install CDs
-        if not self._check_info(".disk/info"):
-            return False
-
-        if self.arch == "x86_64":
-            kernel_initrd_pair = ("install.amd/vmlinuz",
-                                  "install.amd/initrd.gz")
+    def _set_installcd_paths(self):
+        if self._debname == "ubuntu":
+            if not self.arch == "s390x":
+                kpair = ("install/vmlinuz", "install/initrd.gz")
+            else:
+                kpair = ("boot/kernel.ubuntu", "boot/initrd.ubuntu")
+        elif self.arch == "x86_64":
+            kpair = ("install.amd/vmlinuz", "install.amd/initrd.gz")
         elif self.arch == "i686":
-            kernel_initrd_pair = ("install.386/vmlinuz",
-                                  "install.386/initrd.gz")
+            kpair = ("install.386/vmlinuz", "install.386/initrd.gz")
         elif self.arch == "aarch64":
-            kernel_initrd_pair = ("install.a64/vmlinuz",
-                                  "install.a64/initrd.gz")
+            kpair = ("install.a64/vmlinuz", "install.a64/initrd.gz")
         elif self.arch == "ppc64le":
-            kernel_initrd_pair = ("install/vmlinux",
-                                  "install/initrd.gz")
+            kpair = ("install/vmlinux", "install/initrd.gz")
         elif self.arch == "s390x":
-            kernel_initrd_pair = ("boot/linux_vm", "boot/root.bin")
+            kpair = ("boot/linux_vm", "boot/root.bin")
         else:
-            kernel_initrd_pair = ("install/vmlinuz", "install/initrd.gz")
-        self._kernel_paths += [kernel_initrd_pair]
+            kpair = ("install/vmlinuz", "install/initrd.gz")
+        self._kernel_paths += [kpair]
         return True
 
-    def isValidStore(self):
-        return any(check() for check in [
-            self._is_regular_tree,
-            self._is_daily_tree,
-            self._is_install_cd,
-            ])
-
-
-    ################################
-    # osdict autodetection helpers #
-    ################################
-
-    def _detect_debian_osdict_from_url(self):
+    def _detect_debian_osdict_from_url(self, url_prefix):
         oses = [n for n in OSDB.list_os() if n.name.startswith(self._debname)]
 
-        if self._url_prefix == "daily":
+        if url_prefix == "daily":
             logging.debug("Appears to be debian 'daily' URL, using latest "
                 "debian OS")
             return oses[0].name
@@ -817,25 +756,46 @@ class DebianDistro(Distro):
         return self.os_variant
 
 
+    #########################
+    # isValidStore checking #
+    #########################
+
+    def _check_manifest(self, filename):
+        if not self.fetcher.hasFile(filename):
+            return False
+
+        if self.arch == "s390x":
+            regex = ".*generic/kernel\.%s.*" % self._debname.lower()
+        else:
+            regex = ".*%s.*" % self._installer_dirname
+
+        return self._fetchAndMatchRegex(filename, regex)
+
+    def _check_info(self, filename):
+        if not self.fetcher.hasFile(filename):
+            return False
+
+        regex = "%s.*" % self._debname.capitalize()
+        return self._fetchAndMatchRegex(filename, regex)
+
+    def _detect_tree_media_type(self):
+        if self._check_manifest("current/images/MANIFEST"):
+            return "url"
+        if self._check_manifest("daily/MANIFEST"):
+            return "daily"
+        if self._check_info(".disk/info"):
+            return "disk"
+        return None
+
+    def isValidStore(self):
+        return bool(self._media_type)
+
+
 class UbuntuDistro(DebianDistro):
     # http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
     PRETTY_NAME = "Ubuntu"
     urldistro = "ubuntu"
     _debname = "ubuntu"
-
-    def _is_install_cd(self):
-        # For install CDs
-        if not self._check_info(".disk/info"):
-            return False
-
-        if not self.arch == "s390x":
-            kernel_initrd_pair = ("install/vmlinuz", "install/initrd.gz")
-        else:
-            kernel_initrd_pair = ("boot/kernel.ubuntu", "boot/initrd.ubuntu")
-
-        self._kernel_paths += [kernel_initrd_pair]
-        return True
-
 
 
 class MandrivaDistro(Distro):
