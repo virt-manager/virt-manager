@@ -256,12 +256,17 @@ class _OSDB(object):
         return _sort(sortmap, sortpref=sortpref,
             limit_point_releases=only_supported)
 
+    def latest_regex(self, regex):
+        """
+        Return the latest distro name that matches the passed regex
+        """
+        oses = [o.name for o in self.list_os() if re.match(regex, o.name)]
+        if not oses:
+            return None
+        return oses[0]
+
     def latest_fedora_version(self):
-        for osinfo in self.list_os():
-            if (osinfo.name.startswith("fedora") and
-                "unknown" not in osinfo.name):
-                # First fedora* occurrence should be the newest
-                return osinfo.name
+        return self.latest_regex("fedora[0-9]+")
 
 
 #####################

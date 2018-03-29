@@ -404,41 +404,32 @@ class FedoraDistro(RedHatDistro):
 
     def _parse_fedora_version(self):
         latest_variant = OSDB.latest_fedora_version()
-        if re.match("fedora[0-9]+", latest_variant):
-            latest_vernum = int(latest_variant[6:])
-        else:
-            latest_vernum = 99
-            logging.debug("Failed to parse version number from latest "
-                "fedora variant=%s. Setting vernum=%s",
-                latest_variant, latest_vernum)
+        # Result is guaranteed to match fedoraXX
+        latest_verint = int(latest_variant[6:])
 
-        ver = self.cache.treeinfo_version
-        if not ver:
+        verstr = self.cache.treeinfo_version
+        if not verstr:
             logging.debug("No treeinfo version? Assume rawhide")
-            ver = "rawhide"
+            verstr = "rawhide"
+
         # rawhide trees changed to use version=Rawhide in Apr 2016
-        if ver in ["development", "rawhide", "Rawhide"]:
-            return latest_vernum, latest_variant
+        if verstr in ["development", "rawhide", "Rawhide"]:
+            return latest_verint, latest_variant
 
-        # Dev versions can be like '23_Alpha'
-        if "_" in ver:
-            ver = ver.split("_")[0]
-
-        # Typical versions are like 'fedora-23'
-        vernum = str(ver).split("-")[0]
-        if vernum.isdigit():
-            vernum = int(vernum)
+        # treeinfo version is just an integer
+        if verstr.isdigit():
+            verint = int(verstr)
         else:
             logging.debug("Failed to parse version number from treeinfo "
-                "version=%s, using vernum=latest=%s", ver, latest_vernum)
-            vernum = latest_vernum
+                "version=%s, using latest=%s", verstr, latest_verint)
+            verint = latest_verint
 
-        if vernum > latest_vernum:
+        if verint > latest_verint:
             os_variant = latest_variant
         else:
-            os_variant = "fedora" + str(vernum)
+            os_variant = "fedora" + str(verint)
 
-        return vernum, os_variant
+        return verint, os_variant
 
     def _detect_version(self):
         self._version_number, self.os_variant = self._parse_fedora_version()
