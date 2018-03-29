@@ -17,30 +17,79 @@ from .osdict import OSDB
 # Helpers for detecting distro from given URL #
 ###############################################
 
-def _grabTreeinfo(fetcher):
-    """
-    See if the URL has treeinfo, and if so return it as a ConfigParser
-    object.
-    """
-    try:
-        tmptreeinfo = fetcher.acquireFile(".treeinfo")
-    except ValueError:
-        return None
+class _DistroCache(object):
+    def __init__(self, fetcher):
+        self._fetcher = fetcher
+        self._filecache = {}
 
-    try:
+        self._treeinfo = None
+        self.treeinfo_family = None
+        self.treeinfo_version = None
+
+        self.suse_content_version = None
+        self.suse_tree_arch = None
+
+        self.debian_media_type = None
+
+
+    def acquire_file_content(self, path):
+        if path not in self._filecache:
+            try:
+                content = self._fetcher.acquireFileContent(path)
+            except ValueError:
+                content = None
+                logging.debug("Failed to acquire file=%s", path)
+            self._filecache[path] = content
+        return self._filecache[path]
+
+    @property
+    def treeinfo(self):
+        if self._treeinfo:
+            return self._treeinfo
+
+        treeinfostr = self.acquire_file_content(".treeinfo")
+        if treeinfostr is None:
+            return None
+
+        # If the file doesn't parse or there's no 'family', this will
+        # error, but that should be fine because we aren't going to
+        # successfully detect the tree anyways
         treeinfo = configparser.SafeConfigParser()
-        treeinfo.read(tmptreeinfo)
-    finally:
-        os.unlink(tmptreeinfo)
+        treeinfo.read_string(treeinfostr)
+        self.treeinfo_family = treeinfo.get("general", "family")
+        self._treeinfo = treeinfo
+        logging.debug("treeinfo family=%s", self.treeinfo_family)
 
-    try:
-        treeinfo.get("general", "family")
-    except configparser.NoSectionError:
-        logging.debug("Did not find 'family' section in treeinfo")
-        return None
+        if self._treeinfo.has_option("general", "version"):
+            self.treeinfo_version = self._treeinfo.get("general", "version")
+            logging.debug("Found treeinfo version=%s", self.treeinfo_version)
 
-    logging.debug("treeinfo family=%s", treeinfo.get("general", "family"))
-    return treeinfo
+        return self._treeinfo
+
+    def treeinfo_family_regex(self, famregex):
+        if not self.treeinfo:
+            return False
+
+        ret = bool(re.match(famregex, self.treeinfo_family))
+        if not ret:
+            logging.debug("Didn't match treeinfo family regex=%s", famregex)
+        return ret
+
+    def content_regex(self, filename, regex):
+        """
+        Fetch 'filename' and return True/False if it matches the regex
+        """
+        content = self.acquire_file_content(filename)
+        if content is None:
+            return False
+
+        for line in content.splitlines():
+            if re.match(regex, line):
+                return True
+
+        logging.debug("found filename=%s but regex=%s didn't match",
+                filename, regex)
+        return False
 
 
 def _parseSUSEContent(cbuf):
@@ -109,12 +158,7 @@ def _parseSUSEContent(cbuf):
     return distribution, distro_version, tree_arch
 
 
-def _distroFromSUSEContent(fetcher, arch, vmtype):
-    try:
-        cbuf = fetcher.acquireFileContent("content")
-    except ValueError:
-        return None
-
+def _distroFromSUSEContent(cbuf):
     distribution, distro_version, tree_arch = _parseSUSEContent(cbuf)
     logging.debug("SUSE content file found distribution=%s distro_version=%s "
         "tree_arch=%s", distribution, distro_version, tree_arch)
@@ -143,32 +187,20 @@ def _distroFromSUSEContent(fetcher, arch, vmtype):
 
     if distro_version is None:
         logging.debug("No specified SUSE version detected")
-        return None
+        return None, None, None
 
-    ob = dclass(fetcher, tree_arch or arch, vmtype,
-            suse_content_version=distro_version[1].strip())
-
-    # Explictly call this, so we populate os_type/variant info
-    ob.isValidStore()
-
-    return ob
+    distro_version = distro_version[1].strip()
+    return dclass, distro_version, tree_arch
 
 
 def getDistroStore(guest, fetcher):
-    stores = []
     logging.debug("Finding distro store for location=%s", fetcher.location)
 
     arch = guest.os.arch
     _type = guest.os.os_type
     urldistro = OSDB.lookup_os(guest.os_variant).urldistro
-
-    treeinfo = _grabTreeinfo(fetcher)
-    if not treeinfo:
-        dist = _distroFromSUSEContent(fetcher, arch, _type)
-        if dist:
-            return dist
-
     stores = _allstores[:]
+    cache = _DistroCache(fetcher)
 
     # If user manually specified an os_distro, bump it's URL class
     # to the top of the list
@@ -188,15 +220,14 @@ def getDistroStore(guest, fetcher):
         else:
             logging.debug("No matching store found, not prioritizing anything")
 
-    if treeinfo:
-        stores.sort(key=lambda x: not x.uses_treeinfo)
-
     for sclass in stores:
-        store = sclass(fetcher, arch, _type, treeinfo=treeinfo)
-        if store.isValidStore():
-            logging.debug("Detected class=%s osvariant=%s",
-                          store.__class__.__name__, store.os_variant)
-            return store
+        if not sclass.is_valid(cache):
+            continue
+
+        store = sclass(fetcher, arch, _type, cache)
+        logging.debug("Detected class=%s osvariant=%s",
+                      store.__class__.__name__, store.os_variant)
+        return store
 
     # No distro was detected. See if the URL even resolves, and if not
     # give the user a hint that maybe they mistyped. This won't always
@@ -233,17 +264,15 @@ class Distro(object):
     _boot_iso_paths = None
     _kernel_paths = None
 
-    def __init__(self, fetcher, arch, vmtype,
-            treeinfo=None, suse_content_version=None):
+    def __init__(self, fetcher, arch, vmtype, cache):
         self.fetcher = fetcher
         self.type = vmtype
         self.arch = arch
         self.uri = fetcher.location
-        self.treeinfo = treeinfo
-        self.suse_content_version = suse_content_version
+        self.cache = cache
 
-    def isValidStore(self):
-        """Determine if uri points to a tree of the store's distro"""
+    @classmethod
+    def is_valid(cls, cache):
         raise NotImplementedError
 
     def acquireKernel(self):
@@ -300,41 +329,18 @@ class Distro(object):
     def _get_method_arg(self):
         return "method"
 
-    def _fetchAndMatchRegex(self, filename, regex):
-        # Fetch 'filename' and return True/False if it matches the regex
-        try:
-            content = self.fetcher.acquireFileContent(filename)
-        except ValueError:
-            return False
-
-        for line in content.splitlines():
-            if re.match(regex, line):
-                return True
-
-        logging.debug("%s: found filename=%s but regex didn't match",
-                self.__class__.__name__, filename)
-        return False
-
 
 class GenericTreeinfoDistro(Distro):
     PRETTY_NAME = "Generic Treeinfo"
     uses_treeinfo = True
     urldistro = None
-    treeinfo_version = None
-    # This is set externally
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
-        if not self.treeinfo:
-            return
-
-        if self.treeinfo.has_option("general", "version"):
-            self.treeinfo_version = self.treeinfo.get("general", "version")
-            logging.debug("Found treeinfo version=%s", self.treeinfo_version)
 
         self._detect_version()
 
-        if not self.treeinfo:
+        if not self.cache.treeinfo:
             return
 
         self._kernel_paths = []
@@ -354,23 +360,17 @@ class GenericTreeinfoDistro(Distro):
             logging.debug("Failed to parse treeinfo boot.iso", exc_info=True)
 
     def _getTreeinfoMedia(self, mediaName):
-        image_type = self.treeinfo.get("general", "arch")
+        image_type = self.cache.treeinfo.get("general", "arch")
         if self.type == "xen":
             image_type = "xen"
-        return self.treeinfo.get("images-%s" % image_type, mediaName)
+        return self.cache.treeinfo.get("images-%s" % image_type, mediaName)
 
     def _detect_version(self):
         pass
 
-    def _hasTreeinfoFamily(self, famregex):
-        if not self.treeinfo:
-            return False
-
-        treeinfo_family = self.treeinfo.get("general", "family")
-        return bool(re.match(famregex, treeinfo_family))
-
-    def isValidStore(self):
-        return bool(self.treeinfo)
+    @classmethod
+    def is_valid(cls, cache):
+        return bool(cache.treeinfo)
 
 
 
@@ -397,6 +397,11 @@ class FedoraDistro(RedHatDistro):
     PRETTY_NAME = "Fedora"
     urldistro = "fedora"
 
+    @classmethod
+    def is_valid(cls, cache):
+        famregex = ".*Fedora.*"
+        return cache.treeinfo_family_regex(famregex)
+
     def _parse_fedora_version(self):
         latest_variant = OSDB.latest_fedora_version()
         if re.match("fedora[0-9]+", latest_variant):
@@ -407,7 +412,7 @@ class FedoraDistro(RedHatDistro):
                 "fedora variant=%s. Setting vernum=%s",
                 latest_variant, latest_vernum)
 
-        ver = self.treeinfo_version
+        ver = self.cache.treeinfo_version
         if not ver:
             logging.debug("No treeinfo version? Assume rawhide")
             ver = "rawhide"
@@ -438,14 +443,18 @@ class FedoraDistro(RedHatDistro):
     def _detect_version(self):
         self._version_number, self.os_variant = self._parse_fedora_version()
 
-    def isValidStore(self):
-        famregex = ".*Fedora.*"
-        return self._hasTreeinfoFamily(famregex)
-
 
 class RHELDistro(RedHatDistro):
     PRETTY_NAME = "Red Hat Enterprise Linux"
     urldistro = "rhel"
+
+    @classmethod
+    def is_valid(cls, cache):
+        # Matches:
+        #   Red Hat Enterprise Linux
+        #   RHEL Atomic Host
+        famregex = ".*(Red Hat Enterprise Linux|RHEL).*"
+        return cache.treeinfo_family_regex(famregex)
 
     def _parseTreeinfoVersion(self, verstr):
         def _safeint(c):
@@ -491,25 +500,23 @@ class RHELDistro(RedHatDistro):
             self.os_variant = ret
 
     def _detect_version(self):
-        if not self.treeinfo_version:
+        if not self.cache.treeinfo_version:
             return
 
-        version, update = self._parseTreeinfoVersion(self.treeinfo_version)
+        version, update = self._parseTreeinfoVersion(
+                self.cache.treeinfo_version)
         self._version_number = version
         self._setRHELVariant(version, update)
-
-
-    def isValidStore(self):
-        # Matches:
-        #   Red Hat Enterprise Linux
-        #   RHEL Atomic Host
-        famregex = ".*(Red Hat Enterprise Linux|RHEL).*"
-        return self._hasTreeinfoFamily(famregex)
 
 
 class CentOSDistro(RHELDistro):
     PRETTY_NAME = "CentOS"
     urldistro = "centos"
+
+    @classmethod
+    def is_valid(cls, cache):
+        famregex = ".*CentOS.*"
+        return cache.treeinfo_family_regex(famregex)
 
     def _detect_version(self):
         RHELDistro._detect_version(self)
@@ -519,27 +526,39 @@ class CentOSDistro(RHELDistro):
             if self._check_osvariant_valid(new_variant):
                 self.os_variant = new_variant
 
-    def isValidStore(self):
-        famregex = ".*CentOS.*"
-        return self._hasTreeinfoFamily(famregex)
-
 
 class SLDistro(RHELDistro):
     PRETTY_NAME = "Scientific Linux"
     urldistro = None
 
-    def isValidStore(self):
+    @classmethod
+    def is_valid(cls, cache):
         famregex = ".*Scientific.*"
-        return self._hasTreeinfoFamily(famregex)
+        return cache.treeinfo_family_regex(famregex)
 
 
 class SuseDistro(Distro):
     PRETTY_NAME = "SUSE"
 
-    _boot_iso_paths   = ["boot/boot.iso"]
+    @classmethod
+    def is_valid(cls, cache):
+        content = cache.acquire_file_content("content")
+        if content is None:
+            return False
+
+        dclass, distro_version, tree_arch = _distroFromSUSEContent(content)
+        if dclass == cls:
+            cache.suse_content_version = distro_version
+            cache.suse_tree_arch = tree_arch
+            return True
+        return False
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
+        if self.cache.suse_tree_arch:
+            self.arch = self.cache.suse_tree_arch
+        self.suse_content_version = self.cache.suse_content_version
+
         if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
 
@@ -552,6 +571,7 @@ class SuseDistro(Distro):
             oldkern += "64"
             oldinit += "64"
 
+        self._boot_iso_paths = ["boot/boot.iso"]
         self._kernel_paths = []
         if self.type == "xen":
             # Matches Opensuse > 10.2 and sles 10
@@ -610,10 +630,6 @@ class SuseDistro(Distro):
                 return osobj.name
         return self.os_variant
 
-    def isValidStore(self):
-        # self.suse_content_version is the VERSION line from the contents file
-        return bool(self.suse_content_version)
-
     def _get_method_arg(self):
         return "install"
 
@@ -637,22 +653,43 @@ class DebianDistro(Distro):
     urldistro = "debian"
     _debname = "debian"
 
+    @classmethod
+    def is_valid(cls, cache):
+        def check_manifest(mfile):
+            is_ubuntu = cls._debname == "ubuntu"
+            if cache.content_regex(mfile, ".*[Uu]buntu.*"):
+                return is_ubuntu
+            return cache.content_regex(mfile, ".*[Dd]ebian.*")
+
+        media_type = None
+        if check_manifest("current/images/MANIFEST"):
+            media_type = "url"
+        elif check_manifest("daily/MANIFEST"):
+            media_type = "daily"
+        elif cache.content_regex(".disk/info",
+                "%s.*" % cls._debname.capitalize()):
+            media_type = "disk"
+
+        if media_type:
+            cache.debian_media_type = media_type
+        return bool(media_type)
+
+
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
         self._kernel_paths = []
         self._url_prefix = ""
-        self._installer_dirname = self._debname + "-installer"
 
-        self._media_type = self._detect_tree_media_type()
-        if self._media_type == "url" or self._media_type == "daily":
+        media_type = self.cache.debian_media_type
+        if media_type == "url" or media_type == "daily":
             url_prefix = "current/images"
-            if self._media_type == "daily":
+            if media_type == "daily":
                 url_prefix = "daily"
             self._set_url_paths(url_prefix)
             self.os_variant = self._detect_debian_osdict_from_url(url_prefix)
 
-        elif self._media_type == "disk":
+        elif media_type == "disk":
             self._set_installcd_paths()
 
 
@@ -684,9 +721,8 @@ class DebianDistro(Distro):
         self._boot_iso_paths = ["%s/netboot/mini.iso" % url_prefix]
 
         tree_arch = self._find_treearch()
-        hvmroot = "%s/netboot/%s/%s/" % (url_prefix,
-                                         self._installer_dirname,
-                                         tree_arch)
+        hvmroot = "%s/netboot/%s-installer/%s/" % (url_prefix,
+                self._debname, tree_arch)
         initrd_basename = "initrd.gz"
         kernel_basename = "linux"
         if tree_arch in ["ppc64el"]:
@@ -694,8 +730,8 @@ class DebianDistro(Distro):
 
         if tree_arch == "s390x":
             hvmroot = "%s/generic/" % url_prefix
-            kernel_basename = "kernel.%s" % self._debname.lower()
-            initrd_basename = "initrd.%s" % self._debname.lower()
+            kernel_basename = "kernel.%s" % self._debname
+            initrd_basename = "initrd.%s" % self._debname
 
 
         if self.type == "xen":
@@ -752,46 +788,24 @@ class DebianDistro(Distro):
         return self.os_variant
 
 
-    #########################
-    # isValidStore checking #
-    #########################
-
-    def _check_manifest(self, filename):
-        if not self.fetcher.hasFile(filename):
-            return False
-
-        if self.arch == "s390x":
-            regex = ".*generic/kernel\.%s.*" % self._debname.lower()
-        else:
-            regex = ".*%s.*" % self._installer_dirname
-
-        return self._fetchAndMatchRegex(filename, regex)
-
-    def _check_info(self, filename):
-        if not self.fetcher.hasFile(filename):
-            return False
-
-        regex = "%s.*" % self._debname.capitalize()
-        return self._fetchAndMatchRegex(filename, regex)
-
-    def _detect_tree_media_type(self):
-        if self._check_manifest("current/images/MANIFEST"):
-            return "url"
-        if self._check_manifest("daily/MANIFEST"):
-            return "daily"
-        if self._check_info(".disk/info"):
-            return "disk"
-        return None
-
-    def isValidStore(self):
-        return bool(self._media_type)
-
-
 class UbuntuDistro(DebianDistro):
     # http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
     PRETTY_NAME = "Ubuntu"
     urldistro = "ubuntu"
     _debname = "ubuntu"
+
+
+class ALTLinuxDistro(Distro):
+    PRETTY_NAME = "ALT Linux"
+    urldistro = "altlinux"
+
+    _boot_iso_paths = [("altinst", "live")]
+    _kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
+
+    @classmethod
+    def is_valid(cls, cache):
+        # altlinux doesn't have installable URLs, so this is just for ISO
+        return cache.content_regex(".disk/info", ".*ALT .*")
 
 
 class MandrivaDistro(Distro):
@@ -800,6 +814,10 @@ class MandrivaDistro(Distro):
     urldistro = "mandriva"
 
     _boot_iso_paths = ["install/images/boot.iso"]
+
+    @classmethod
+    def is_valid(cls, cache):
+        return cache.content_regex("VERSION", ".*(Mandriva|Mageia).*")
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
@@ -813,26 +831,6 @@ class MandrivaDistro(Distro):
         # Kernels for HVM: valid for releases 2007.1, 2008.*, 2009.0
         self._kernel_paths += [
             ("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
-
-
-    def isValidStore(self):
-        if not self.fetcher.hasFile("VERSION"):
-            return False
-        return self._fetchAndMatchRegex("VERSION", ".*(Mandriva|Mageia).*")
-
-
-class ALTLinuxDistro(Distro):
-    PRETTY_NAME = "ALT Linux"
-    urldistro = "altlinux"
-
-    _boot_iso_paths = [("altinst", "live")]
-    _kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
-
-    def isValidStore(self):
-        # altlinux doesn't have installable URLs, so this is just for ISO
-        if not self.fetcher.hasFile(".disk/info"):
-            return False
-        return self._fetchAndMatchRegex(".disk/info", ".*ALT .*")
 
 
 # Build list of all *Distro classes
