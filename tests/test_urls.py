@@ -25,7 +25,6 @@ from virtinst.urldetect import FedoraDistro
 from virtinst.urldetect import GenericTreeinfoDistro
 from virtinst.urldetect import MandrivaDistro
 from virtinst.urldetect import RHELDistro
-from virtinst.urldetect import SLDistro
 from virtinst.urldetect import SuseDistro
 from virtinst.urldetect import UbuntuDistro
 
@@ -64,8 +63,6 @@ class _URLTestData(object):
             return SuseDistro
         if "debian" in name:
             return DebianDistro
-        if name.startswith("sl-"):
-            return SLDistro
         if "ubuntu" in name:
             return UbuntuDistro
         if "mageia" in name:

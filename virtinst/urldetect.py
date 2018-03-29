@@ -447,6 +447,7 @@ class FedoraDistro(RedHatDistro):
 class RHELDistro(RedHatDistro):
     PRETTY_NAME = "Red Hat Enterprise Linux"
     urldistro = "rhel"
+    _variant_prefix = "rhel"
 
     @classmethod
     def is_valid(cls, cache):
@@ -456,84 +457,54 @@ class RHELDistro(RedHatDistro):
         famregex = ".*(Red Hat Enterprise Linux|RHEL).*"
         return cache.treeinfo_family_regex(famregex)
 
-    def _parseTreeinfoVersion(self, verstr):
+    def _split_rhel_version(self):
+        verstr = self.cache.treeinfo_version
         def _safeint(c):
             try:
-                val = int(c)
+                return int(c)
             except Exception:
-                val = 0
-            return val
+                return 0
 
-        version = _safeint(verstr[0])
+        # Parse a string like 6.9 or 7.4 into its two parts
+        # centos altarch's have just version=7
         update = 0
+        version = _safeint(verstr)
+        if verstr.count(".") == 1:
+            version = _safeint(verstr.split(".")[0])
+            update = _safeint(verstr.split(".")[1])
 
-        # RHEL has version=5.4, scientific linux=54
-        updinfo = verstr.split(".")
-        if len(updinfo) > 1:
-            update = _safeint(updinfo[1])
-        elif len(verstr) > 1:
-            update = _safeint(verstr[1])
-
+        logging.debug("converted verstr=%s to version=%s update=%s",
+                verstr, version, update)
         return version, update
-
-    def _setRHELVariant(self, version, update):
-        base = "rhel" + str(version)
-        if update < 0:
-            update = 0
-
-        ret = None
-        while update >= 0:
-            tryvar = base + ".%s" % update
-            if not self._check_osvariant_valid(tryvar):
-                update -= 1
-                continue
-
-            ret = tryvar
-            break
-
-        if not ret:
-            # Try plain rhel5, rhel6, whatev
-            if self._check_osvariant_valid(base):
-                ret = base
-
-        if ret:
-            self.os_variant = ret
 
     def _detect_version(self):
         if not self.cache.treeinfo_version:
             return
 
-        version, update = self._parseTreeinfoVersion(
-                self.cache.treeinfo_version)
+        version, update = self._split_rhel_version()
         self._version_number = version
-        self._setRHELVariant(version, update)
+
+        # start with example base=rhel7, then walk backwards
+        # through the OS list to find the latest os name that matches
+        # this way we handle rhel7.6 from treeinfo when osdict only
+        # knows about rhel7.5
+        base = self._variant_prefix + str(version)
+        while update >= 0:
+            tryvar = base + ".%s" % update
+            if self._check_osvariant_valid(tryvar):
+                self.os_variant = tryvar
+                break
+            update -= 1
 
 
 class CentOSDistro(RHELDistro):
     PRETTY_NAME = "CentOS"
     urldistro = "centos"
+    _variant_prefix = "centos"
 
     @classmethod
     def is_valid(cls, cache):
-        famregex = ".*CentOS.*"
-        return cache.treeinfo_family_regex(famregex)
-
-    def _detect_version(self):
-        RHELDistro._detect_version(self)
-
-        if self.os_variant:
-            new_variant = self.os_variant.replace("rhel", "centos")
-            if self._check_osvariant_valid(new_variant):
-                self.os_variant = new_variant
-
-
-class SLDistro(RHELDistro):
-    PRETTY_NAME = "Scientific Linux"
-    urldistro = None
-
-    @classmethod
-    def is_valid(cls, cache):
-        famregex = ".*Scientific.*"
+        famregex = ".*(CentOS|Scientific).*"
         return cache.treeinfo_family_regex(famregex)
 
 
