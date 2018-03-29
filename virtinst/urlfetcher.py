@@ -156,12 +156,25 @@ class _URLFetcher(object):
 
 
 class _HTTPURLFetcher(_URLFetcher):
+    _session = None
+
+    def prepareLocation(self):
+        self._session = requests.Session()
+
+    def cleanupLocation(self):
+        if self._session:
+            try:
+                self._session.close()
+            except Exception:
+                logging.debug("Error closing requests.session", exc_info=True)
+        self._session = None
+
     def _hasFile(self, url):
         """
         We just do a HEAD request to see if the file exists
         """
         try:
-            response = requests.head(url, allow_redirects=True)
+            response = self._session.head(url, allow_redirects=True)
             response.raise_for_status()
         except Exception as e:
             logging.debug("HTTP hasFile request failed: %s", str(e))
@@ -172,7 +185,7 @@ class _HTTPURLFetcher(_URLFetcher):
         """
         Use requests for this
         """
-        response = requests.get(url, stream=True)
+        response = self._session.get(url, stream=True)
         response.raise_for_status()
         try:
             size = int(response.headers.get('content-length'))
