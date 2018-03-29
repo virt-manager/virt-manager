@@ -231,10 +231,8 @@ class Distro(object):
     # osdict variant value
     os_variant = None
 
-    _boot_iso_paths = []
-    _hvm_kernel_paths = []
-    _xen_kernel_paths = []
-    version_from_content = []
+    _boot_iso_paths = None
+    _kernel_paths = None
 
     def __init__(self, fetcher, arch, vmtype):
         self.fetcher = fetcher
@@ -261,11 +259,7 @@ class Distro(object):
                 pass
 
         if not kernelpath or not initrdpath:
-            # fall back to old code
-            if self.type is None or self.type == "hvm":
-                paths = self._hvm_kernel_paths
-            else:
-                paths = self._xen_kernel_paths
+            paths = self._kernel_paths
 
             for kpath, ipath in paths:
                 if self.fetcher.hasFile(kpath) and self.fetcher.hasFile(ipath):
@@ -273,10 +267,9 @@ class Distro(object):
                     initrdpath = ipath
 
         if not kernelpath or not initrdpath:
-            raise RuntimeError(_("Couldn't find %(type)s kernel for "
+            raise RuntimeError(_("Couldn't find kernel for "
                                  "%(distro)s tree.") %
-                                 {"distro": self.PRETTY_NAME,
-                                  "type": self.type})
+                                 {"distro": self.PRETTY_NAME})
 
         return self._kernelFetchHelper(guest, kernelpath, initrdpath)
 
@@ -552,6 +545,7 @@ class SuseDistro(Distro):
     PRETTY_NAME = "SUSE"
 
     _boot_iso_paths   = ["boot/boot.iso"]
+    version_from_content = []
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
@@ -564,25 +558,26 @@ class SuseDistro(Distro):
             oldkern += "64"
             oldinit += "64"
 
-        if self.arch == "s390x":
-            self._hvm_kernel_paths = [("boot/%s/linux" % self.arch,
-                                       "boot/%s/initrd" % self.arch)]
-            # No Xen on s390x
-            self._xen_kernel_paths = []
-        else:
-            # Tested with Opensuse >= 10.2, 11, and sles 10
-            self._hvm_kernel_paths = [("boot/%s/loader/linux" % self.arch,
-                                        "boot/%s/loader/initrd" % self.arch)]
-            # Tested with Opensuse 10.0
-            self._hvm_kernel_paths.append(("boot/loader/%s" % oldkern,
-                                           "boot/loader/%s" % oldinit))
-            # Tested with SLES 12 for ppc64le
-            self._hvm_kernel_paths.append(("boot/%s/linux" % self.arch,
-                                           "boot/%s/initrd" % self.arch))
-
+        self._kernel_paths = []
+        if self.type == "xen":
             # Matches Opensuse > 10.2 and sles 10
-            self._xen_kernel_paths = [("boot/%s/vmlinuz-xen" % self.arch,
-                                        "boot/%s/initrd-xen" % self.arch)]
+            self._kernel_paths.append(
+                ("boot/%s/vmlinuz-xen" % self.arch,
+                 "boot/%s/initrd-xen" % self.arch))
+
+        # Tested with SLES 12 for ppc64le, all s390x
+        self._kernel_paths.append(
+            ("boot/%s/linux" % self.arch,
+             "boot/%s/initrd" % self.arch))
+        # Tested with Opensuse 10.0
+        self._kernel_paths.append(
+            ("boot/loader/%s" % oldkern,
+             "boot/loader/%s" % oldinit))
+        # Tested with Opensuse >= 10.2, 11, and sles 10
+        self._kernel_paths.append(
+            ("boot/%s/loader/linux" % self.arch,
+             "boot/%s/loader/initrd" % self.arch))
+
 
     def _variantFromVersion(self):
         distro_version = self.version_from_content[1].strip()
@@ -618,13 +613,14 @@ class SuseDistro(Distro):
         # Reset kernel name for sle11 source on s390x
         if self.arch == "s390x":
             if self.os_variant == "sles11" or self.os_variant == "sled11":
-                self._hvm_kernel_paths = [("boot/%s/vmrdr.ikr" % self.arch,
+                self._kernel_paths = [("boot/%s/vmrdr.ikr" % self.arch,
                                            "boot/%s/initrd" % self.arch)]
 
         return True
 
     def _get_method_arg(self):
         return "install"
+
 
     ################################
     # osdict autodetection helpers #
@@ -665,6 +661,7 @@ class DebianDistro(Distro):
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
+        self._kernel_paths = []
         self._url_prefix = ""
         self._treeArch = self._find_treearch()
         self._installer_dirname = self._debname + "-installer"
@@ -709,11 +706,14 @@ class DebianDistro(Distro):
             kernel_basename = "kernel.%s" % self._debname.lower()
             initrd_basename = "initrd.%s" % self._debname.lower()
 
-        self._hvm_kernel_paths = [
-            (hvmroot + kernel_basename, hvmroot + initrd_basename)]
 
-        xenroot = "%s/netboot/xen/" % self._url_prefix
-        self._xen_kernel_paths = [(xenroot + "vmlinuz", xenroot + "initrd.gz")]
+        if self.type == "xen":
+            xenroot = "%s/netboot/xen/" % self._url_prefix
+            self._kernel_paths.append(
+                    (xenroot + "vmlinuz", xenroot + "initrd.gz"))
+        self._kernel_paths.append(
+                (hvmroot + kernel_basename, hvmroot + initrd_basename))
+
 
     def _check_manifest(self, filename):
         if not self.fetcher.hasFile(filename):
@@ -776,9 +776,7 @@ class DebianDistro(Distro):
             kernel_initrd_pair = ("boot/linux_vm", "boot/root.bin")
         else:
             kernel_initrd_pair = ("install/vmlinuz", "install/initrd.gz")
-        self._hvm_kernel_paths += [kernel_initrd_pair]
-        self._xen_kernel_paths += [kernel_initrd_pair]
-
+        self._kernel_paths += [kernel_initrd_pair]
         return True
 
     def isValidStore(self):
@@ -846,9 +844,7 @@ class UbuntuDistro(DebianDistro):
         else:
             kernel_initrd_pair = ("boot/kernel.ubuntu", "boot/initrd.ubuntu")
 
-        self._hvm_kernel_paths += [kernel_initrd_pair]
-        self._xen_kernel_paths += [kernel_initrd_pair]
-
+        self._kernel_paths += [kernel_initrd_pair]
         return True
 
 
@@ -859,51 +855,36 @@ class MandrivaDistro(Distro):
     urldistro = "mandriva"
 
     _boot_iso_paths = ["install/images/boot.iso"]
-    _xen_kernel_paths = []
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
-        self._hvm_kernel_paths = []
+        self._kernel_paths = []
 
         # At least Mageia 5 uses arch in the names
-        self._hvm_kernel_paths += [
+        self._kernel_paths += [
             ("isolinux/%s/vmlinuz" % self.arch,
              "isolinux/%s/all.rdz" % self.arch)]
 
         # Kernels for HVM: valid for releases 2007.1, 2008.*, 2009.0
-        self._hvm_kernel_paths += [
+        self._kernel_paths += [
             ("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
 
 
     def isValidStore(self):
-        # Don't support any paravirt installs
-        if self.type is not None and self.type != "hvm":
-            return False
-
-        # Mandriva websites / media appear to have a VERSION
-        # file in top level which we can use as our 'magic'
-        # check for validity
         if not self.fetcher.hasFile("VERSION"):
             return False
-
         return self._fetchAndMatchRegex("VERSION", ".*(Mandriva|Mageia).*")
 
 
 class ALTLinuxDistro(Distro):
-    # altlinux doesn't have installable URLs, so this is just for a
-    # mounted ISO
     PRETTY_NAME = "ALT Linux"
     urldistro = "altlinux"
 
     _boot_iso_paths = [("altinst", "live")]
-    _hvm_kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
-    _xen_kernel_paths = []
+    _kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
 
     def isValidStore(self):
-        # Don't support any paravirt installs
-        if self.type is not None and self.type != "hvm":
-            return False
-
+        # altlinux doesn't have installable URLs, so this is just for ISO
         if not self.fetcher.hasFile(".disk/info"):
             return False
         return self._fetchAndMatchRegex(".disk/info", ".*ALT .*")
