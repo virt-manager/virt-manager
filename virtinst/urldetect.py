@@ -202,17 +202,6 @@ class _SUSEContent(object):
 
         return distro_version
 
-    def get_product_store(self):
-        dclass = None
-        if (re.match(".*SUSE Linux Enterprise Server*", self.product_name) or
-                re.match(".*SUSE SLES*", self.product_name)):
-            dclass = SLESDistro
-        elif re.match(".*SUSE Linux Enterprise Desktop*", self.product_name):
-            dclass = SLEDDistro
-        elif re.match(".*openSUSE.*", self.product_name):
-            dclass = OpensuseDistro
-        return dclass
-
 
 def getDistroStore(guest, fetcher):
     logging.debug("Finding distro store for location=%s", fetcher.location)
@@ -522,17 +511,28 @@ class CentOSDistro(RHELDistro):
 
 class SuseDistro(Distro):
     PRETTY_NAME = "SUSE"
+    _suse_regex = []
 
     @classmethod
     def is_valid(cls, cache):
-        content_str = cache.acquire_file_content("content")
-        if content_str is None:
-            return False
-
         if not cache.suse_content:
-            cache.suse_content = _SUSEContent(content_str)
-        dclass = cache.suse_content.get_product_store()
-        return bool(dclass == cls)
+            cache.suse_content = -1
+            content_str = cache.acquire_file_content("content")
+            if content_str is None:
+                return False
+
+            try:
+                cache.suse_content = _SUSEContent(content_str)
+            except Exception as e:
+                logging.debug("Error parsing SUSE content file: %s", str(e))
+                return False
+
+        if cache.suse_content == -1:
+            return False
+        for regex in cls._suse_regex:
+            if re.match(regex, cache.suse_content.product_name):
+                return True
+        return False
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
@@ -616,14 +616,17 @@ class SuseDistro(Distro):
 
 class SLESDistro(SuseDistro):
     urldistro = "sles"
+    _suse_regex = [".*SUSE Linux Enterprise Server*", ".*SUSE SLES*"]
 
 
 class SLEDDistro(SuseDistro):
     urldistro = "sled"
+    _suse_regex = [".*SUSE Linux Enterprise Desktop*"]
 
 
 class OpensuseDistro(SuseDistro):
     urldistro = "opensuse"
+    _suse_regex = [".*openSUSE.*"]
 
 
 class DebianDistro(Distro):
