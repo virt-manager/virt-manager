@@ -338,6 +338,7 @@ class GenericTreeinfoDistro(Distro):
     PRETTY_NAME = "Generic Treeinfo"
     uses_treeinfo = True
     urldistro = None
+    _version_number = None
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
@@ -376,28 +377,23 @@ class GenericTreeinfoDistro(Distro):
     def is_valid(cls, cache):
         return bool(cache.treeinfo)
 
-
-
-class RedHatDistro(GenericTreeinfoDistro):
-    """
-    Base image store for any Red Hat related distros which have
-    a common layout
-    """
-    PRETTY_NAME = None
-    _version_number = None
-
-    def _detect_version(self):
-        pass
-
     def _get_kernel_url_arg(self):
-        if (self._version_number is not None and
-            ((self.urldistro == "rhel" and self._version_number >= 7) or
-             (self.urldistro == "fedora" and self._version_number >= 19))):
-            return "inst.repo"
-        return "method"
+        def _is_old_rhdistro():
+            if not self._version_number:
+                return False
+            if self.urldistro == "fedora" and self._version_number < 19:
+                return True
+            if self._version_number < 7:
+                # rhel, centos, scientific linux, etc
+                return True
+            return False
+
+        if _is_old_rhdistro():
+            return "method"
+        return "inst.repo"
 
 
-class FedoraDistro(RedHatDistro):
+class FedoraDistro(GenericTreeinfoDistro):
     PRETTY_NAME = "Fedora"
     urldistro = "fedora"
 
@@ -439,7 +435,7 @@ class FedoraDistro(RedHatDistro):
         self._version_number, self.os_variant = self._parse_fedora_version()
 
 
-class RHELDistro(RedHatDistro):
+class RHELDistro(GenericTreeinfoDistro):
     PRETTY_NAME = "Red Hat Enterprise Linux"
     urldistro = "rhel"
     _variant_prefix = "rhel"
