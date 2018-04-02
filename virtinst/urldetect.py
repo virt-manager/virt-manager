@@ -290,8 +290,8 @@ class Distro(object):
                                  {"distro": self.PRETTY_NAME})
 
         args = ""
-        if not self.fetcher.location.startswith("/"):
-            args += "%s=%s" % (self._get_method_arg(), self.fetcher.location)
+        if not self.uri.startswith("/") and self._get_kernel_url_arg():
+            args += "%s=%s" % (self._get_kernel_url_arg(), self.uri)
 
         kernel = self.fetcher.acquireFile(kernelpath)
         try:
@@ -326,8 +326,12 @@ class Distro(object):
 
         return self.os_variant
 
-    def _get_method_arg(self):
-        return "method"
+    def _get_kernel_url_arg(self):
+        """
+        Kernel argument name the distro's installer uses to reference
+        a network source, possibly bypassing some installer prompts
+        """
+        return None
 
 
 class GenericTreeinfoDistro(Distro):
@@ -385,7 +389,7 @@ class RedHatDistro(GenericTreeinfoDistro):
     def _detect_version(self):
         pass
 
-    def _get_method_arg(self):
+    def _get_kernel_url_arg(self):
         if (self._version_number is not None and
             ((self.urldistro == "rhel" and self._version_number >= 7) or
              (self.urldistro == "fedora" and self._version_number >= 19))):
@@ -592,7 +596,7 @@ class SuseDistro(Distro):
                 return osobj.name
         return self.os_variant
 
-    def _get_method_arg(self):
+    def _get_kernel_url_arg(self):
         return "install"
 
 

@@ -35,12 +35,13 @@ class _URLTestData(object):
     Data is stored in test_urls.ini
     """
     def __init__(self, name, url, detectdistro,
-            testxen, testbootiso, testshortcircuit):
+            testxen, testbootiso, testshortcircuit, kernelarg):
         self.name = name
         self.url = url
         self.detectdistro = detectdistro
         self.arch = self._find_arch()
         self.distroclass = self._distroclass_for_name(self.name)
+        self.kernelarg = kernelarg
 
         self.testxen = testxen
         self.testbootiso = testbootiso
@@ -212,19 +213,24 @@ def _testURL(fetcher, testdata):
                                  (distname, arch))
 
     # Fetch regular kernel
-    kern = hvmstore.acquireKernel()
-    logging.debug("acquireKernel (hvm): %s", str(kern))
-
-    if kern[0] is not True or kern[1] is not True:
+    kernel, initrd, kernelargs = hvmstore.acquireKernel()
+    if kernel is not True or initrd is not True:
         AssertionError("%s-%s: hvm kernel fetching failed" %
                        (distname, arch))
 
+    if testdata.kernelarg == "None":
+        if bool(kernelargs):
+            raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
+                    % (kernelargs, testdata.kernelarg))
+    elif testdata.kernelarg:
+        if not kernelargs.startswith(testdata.kernelarg):
+            raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
+                    % (kernelargs, testdata.kernelarg))
+
     # Fetch xen kernel
     if xenstore:
-        kern = xenstore.acquireKernel()
-        logging.debug("acquireKernel (xen): %s", str(kern))
-
-        if kern[0] is not True or kern[1] is not True:
+        kernel, initrd, kernelargs = xenstore.acquireKernel()
+        if kernel is not True or initrd is not True:
             raise AssertionError("%s-%s: xen kernel fetching" %
                                  (distname, arch))
 
@@ -284,7 +290,8 @@ def _make_tests():
                 vals.get("distro", None),
                 vals.get("testxen", "0") == "1",
                 vals.get("testbootiso", "0") == "1",
-                vals.get("testshortcircuit", "0") == "1")
+                vals.get("testshortcircuit", "0") == "1",
+                vals.get("kernelarg", None))
         urls[d.name] = d
 
     keys = list(urls.keys())
