@@ -26,9 +26,7 @@ class _DistroCache(object):
         self.treeinfo_family = None
         self.treeinfo_version = None
 
-        self.suse_content_version = None
-        self.suse_tree_arch = None
-
+        self.suse_content = None
         self.debian_media_type = None
 
 
@@ -92,105 +90,128 @@ class _DistroCache(object):
         return False
 
 
-def _parseSUSEContent(cbuf):
-    distribution = None
-    distro_version = None
-    distro_summary = None
-    distro_distro = None
-    distro_arch = None
+class _SUSEContent(object):
+    """
+    Helper class tracking the SUSE 'content' files
+    """
+    def __init__(self, content_str):
+        self.content_str = content_str
+        self.content_dict = {}
 
-    # As of 2018 all latest distros match only DISTRO and REPOID below
-    for line in cbuf.splitlines()[1:]:
-        if line.startswith("LABEL "):
-            # opensuse 10.3: LABEL openSUSE 10.3
-            # opensuse 11.4: LABEL openSUSE 11.4
-            # opensuse 12.3: LABEL openSUSE
-            # sles11sp4 DVD: LABEL SUSE Linux Enterprise Server 11 SP4
-            distribution = line.split(' ', 1)
-        elif line.startswith("DISTRO "):
-            # DISTRO cpe:/o:opensuse:opensuse:13.2,openSUSE
-            # DISTRO cpe:/o:suse:sled:12:sp3,SUSE Linux Enterprise Desktop 12 SP3
-            distro_distro = line.rsplit(',', 1)
-        elif line.startswith("VERSION "):
-            # opensuse 10.3: VERSION 10.3
-            # opensuse 12.3: VERSION 12.3
-            distro_version = line.split(' ', 1)
-            if len(distro_version) > 1:
-                d_version = distro_version[1].split('-', 1)
-                if len(d_version) > 1:
-                    distro_version[1] = d_version[0]
-        elif line.startswith("SUMMARY "):
-            distro_summary = line.split(' ', 1)
-        elif line.startswith("BASEARCHS "):
-            # opensuse 11.4: BASEARCHS i586 x86_64
-            # opensuse 12.3: BASEARCHS i586 x86_64
-            distro_arch = line.split(' ', 1)
-        elif line.startswith("DEFAULTBASE "):
-            # opensuse 10.3: DEFAULTBASE i586
-            distro_arch = line.split(' ', 1)
-        elif line.startswith("REPOID "):
-            # REPOID obsproduct://build.suse.de/SUSE:SLE-11-SP4:GA/SUSE_SLES/11.4/DVD/x86_64
-            # REPOID obsproduct://build.suse.de/SUSE:SLE-12-SP3:GA/SLES/12.3/DVD/aarch64
-            distro_arch = line.rsplit('/', 1)
-        if distribution and distro_version and distro_arch:
-            break
+        for line in self.content_str.splitlines():
+            for prefix in ["LABEL", "DISTRO", "VERSION",
+                           "SUMMARY", "BASEARCHS", "DEFAULTBASE", "REPOID"]:
+                if line.startswith(prefix + " "):
+                    self.content_dict[prefix] = line.split(" ", 1)[1]
 
-    if not distribution:
-        if distro_summary:
-            distribution = distro_summary
-        elif distro_distro:
-            distribution = distro_distro
+            logging.debug("SUSE content dict: %s", str(self.content_dict))
 
-    tree_arch = None
-    if distro_arch:
-        tree_arch = distro_arch[1].strip()
-        # Fix for 13.2 official oss repo
-        if tree_arch.find("i586-x86_64") != -1:
-            tree_arch = "x86_64"
-    else:
-        if cbuf.find("x86_64") != -1:
-            tree_arch = "x86_64"
-        elif cbuf.find("i586") != -1:
-            tree_arch = "i586"
-        elif cbuf.find("s390x") != -1:
-            tree_arch = "s390x"
+        self.tree_arch = self._get_tree_arch()
+        self.product_name = self._get_product_name()
+        self.product_version = self._get_product_version()
+        logging.debug("SUSE content product_name=%s product_version=%s "
+            "tree_arch=%s", self.product_name, self.product_version,
+            self.tree_arch)
 
-    return distribution, distro_version, tree_arch
+    def _get_tree_arch(self):
+        # Examples:
+        # opensuse 11.4: BASEARCHS i586 x86_64
+        # opensuse 12.3: BASEARCHS i586 x86_64
+        # opensuse 10.3: DEFAULTBASE i586
+        distro_arch = (self.content_dict.get("BASEARCHS") or
+                       self.content_dict.get("DEFAULTBASE"))
+        if not distro_arch and "REPOID" in self.content_dict:
+            distro_arch = self.content_dict["REPOID"].rsplit('/', 1)[1]
 
+        tree_arch = None
+        if distro_arch:
+            tree_arch = distro_arch.strip()
+            # Fix for 13.2 official oss repo
+            if tree_arch.find("i586-x86_64") != -1:
+                tree_arch = "x86_64"
+        else:
+            if self.content_str.find("x86_64") != -1:
+                tree_arch = "x86_64"
+            elif self.content_str.find("i586") != -1:
+                tree_arch = "i586"
+            elif self.content_str.find("s390x") != -1:
+                tree_arch = "s390x"
 
-def _distroFromSUSEContent(cbuf):
-    distribution, distro_version, tree_arch = _parseSUSEContent(cbuf)
-    logging.debug("SUSE content file found distribution=%s distro_version=%s "
-        "tree_arch=%s", distribution, distro_version, tree_arch)
+        return tree_arch
 
-    def _parse_sle_distribution(d):
-        sle_version = d[1].strip().rsplit(' ')[4]
-        if len(d[1].strip().rsplit(' ')) > 5:
-            sle_version = sle_version + '.' + d[1].strip().rsplit(' ')[5][2]
-        return ['VERSION', sle_version]
+    def _get_product_name(self):
+        """
+        Parse the SUSE product name. Examples:
+        SUSE Linux Enterprise Server 11 SP4
+        openSUSE 11.4
+        """
+        # Some field examples in the wild
+        #
+        # opensuse 10.3: LABEL openSUSE 10.3
+        # opensuse 11.4: LABEL openSUSE 11.4
+        # opensuse 12.3: LABEL openSUSE
+        # sles11sp4 DVD: LABEL SUSE Linux Enterprise Server 11 SP4
+        #
+        #
+        # DISTRO cpe:/o:opensuse:opensuse:13.2,openSUSE
+        # DISTRO cpe:/o:suse:sled:12:sp3,SUSE Linux Enterprise Desktop 12 SP3
+        #
+        # As of 2018 all latest distros match only DISTRO and REPOID.
+        product_name = None
+        if "LABEL" in self.content_dict:
+            product_name = self.content_dict["LABEL"]
+        elif "SUMMARY" in self.content_dict:
+            product_name = self.content_dict["SUMMARY"]
+        elif "," in self.content_dict.get("DISTRO", ""):
+            product_name = self.content_dict["DISTRO"].rsplit(",", 1)[1]
 
-    dclass = OpensuseDistro
-    if distribution:
-        if re.match(".*SUSE Linux Enterprise Server*", distribution[1]) or \
-                re.match(".*SUSE SLES*", distribution[1]):
+        logging.debug("SUSE content product_name=%s", product_name)
+        return product_name
+
+    def _get_product_version(self):
+        # Some example fields:
+        #
+        # opensuse 10.3: VERSION 10.3
+        # opensuse 12.3: VERSION 12.3
+        # SLES-10-SP4-DVD-x86_64-GM-DVD1.iso: VERSION 10.4-0
+        #
+        # REPOID obsproduct://build.suse.de/SUSE:SLE-11-SP4:GA/SUSE_SLES/11.4/DVD/x86_64
+        # REPOID obsproduct://build.suse.de/SUSE:SLE-12-SP3:GA/SLES/12.3/DVD/aarch64
+        #
+        # As of 2018 all latest distros match only DISTRO and REPOID.
+        if not self.product_name:
+            return None
+
+        distro_version = self.content_dict.get("VERSION", "")
+        if "-" in distro_version:
+            distro_version = distro_version.split('-', 1)[0]
+
+        # Special case, parse version out of a line like this
+        # cpe:/o:opensuse:opensuse:13.2,openSUSE
+        if (not distro_version and
+            re.match("^.*:.*,openSUSE$", self.content_dict["DISTRO"])):
+            distro_version = self.content_dict["DISTRO"].rsplit(
+                    ",", 1)[0].strip().rsplit(":")[4]
+
+        if "Enterprise" in self.product_name or "SLES" in self.product_name:
+            sle_version = self.product_name.strip().rsplit(' ')[4]
+            if len(self.product_name.strip().rsplit(' ')) > 5:
+                sle_version = (sle_version + '.' +
+                        self.product_name.strip().rsplit(' ')[5][2])
+            distro_version = sle_version
+
+        return distro_version
+
+    def get_product_store(self):
+        dclass = None
+        if (re.match(".*SUSE Linux Enterprise Server*", self.product_name) or
+                re.match(".*SUSE SLES*", self.product_name)):
             dclass = SLESDistro
-            if distro_version is None:
-                distro_version = _parse_sle_distribution(distribution)
-        elif re.match(".*SUSE Linux Enterprise Desktop*", distribution[1]):
+        elif re.match(".*SUSE Linux Enterprise Desktop*", self.product_name):
             dclass = SLEDDistro
-            if distro_version is None:
-                distro_version = _parse_sle_distribution(distribution)
-        elif re.match(".*openSUSE.*", distribution[1]):
+        elif re.match(".*openSUSE.*", self.product_name):
             dclass = OpensuseDistro
-            if distro_version is None:
-                distro_version = ['VERSION', distribution[0].strip().rsplit(':')[4]]
-
-    if distro_version is None:
-        logging.debug("No specified SUSE version detected")
-        return None, None, None
-
-    distro_version = distro_version[1].strip()
-    return dclass, distro_version, tree_arch
+        return dclass
 
 
 def getDistroStore(guest, fetcher):
@@ -504,22 +525,18 @@ class SuseDistro(Distro):
 
     @classmethod
     def is_valid(cls, cache):
-        content = cache.acquire_file_content("content")
-        if content is None:
+        content_str = cache.acquire_file_content("content")
+        if content_str is None:
             return False
 
-        dclass, distro_version, tree_arch = _distroFromSUSEContent(content)
-        if dclass == cls:
-            cache.suse_content_version = distro_version
-            cache.suse_tree_arch = tree_arch
-            return True
-        return False
+        if not cache.suse_content:
+            cache.suse_content = _SUSEContent(content_str)
+        dclass = cache.suse_content.get_product_store()
+        return bool(dclass == cls)
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
-        if self.cache.suse_tree_arch:
-            self.arch = self.cache.suse_tree_arch
-        self.suse_content_version = self.cache.suse_content_version
+        self.arch = self.cache.suse_content.tree_arch
 
         if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
@@ -560,9 +577,10 @@ class SuseDistro(Distro):
              "boot/%s/loader/initrd" % self.arch))
 
     def _variantFromVersion(self):
-        if not self.suse_content_version:
+        distro_version = self.cache.suse_content.product_version
+        if not distro_version:
             return
-        distro_version = self.suse_content_version
+
         version = distro_version.split('.', 1)[0].strip()
         self.os_variant = self.urldistro
         if int(version) >= 10:
