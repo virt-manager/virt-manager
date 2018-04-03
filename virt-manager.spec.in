@@ -39,6 +39,8 @@ Requires: virt-manager-common = %{verrel}
 Requires: python3-gobject
 Requires: gtk3
 Requires: libvirt-glib >= 0.0.9
+Requires: gtk-vnc2
+Requires: spice-gtk3
 
 # virt-manager is one of those apps that people will often install onto
 # a headless machine for use over SSH. This means the virt-manager dep
@@ -53,10 +55,6 @@ Requires: dconf
 # virt-manager works fine with either, so pull the latest bits so there's
 # no ambiguity.
 Requires: vte291
-
-# For console widget
-Requires: gtk-vnc2
-Requires: spice-gtk3
 
 BuildRequires: intltool
 BuildRequires: /usr/bin/pod2man
