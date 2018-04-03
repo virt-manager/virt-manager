@@ -199,7 +199,3 @@ class TestInterfaces(unittest.TestCase):
         obj.add_protocol(proto)
 
         self.define_xml(obj)
-
-
-if __name__ == "__main__":
-    unittest.main()

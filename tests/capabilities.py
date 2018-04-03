@@ -126,7 +126,3 @@ class TestCapabilities(unittest.TestCase):
         cpu_model = custom_mode.get_model("Opteron_G4")
         self.assertTrue(bool(cpu_model))
         self.assertTrue(cpu_model.usable)
-
-
-if __name__ == "__main__":
-    unittest.main()

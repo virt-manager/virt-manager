@@ -281,6 +281,3 @@ class TestNodeDev(unittest.TestCase):
         # pass to a guest.
         self.assertRaises(ValueError,
                           self._testNode2DeviceCompare, nodename, devfile)
-
-if __name__ == "__main__":
-    unittest.main()

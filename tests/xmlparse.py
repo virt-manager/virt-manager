@@ -1415,7 +1415,3 @@ class XMLParseTest(unittest.TestCase):
         guest = virtinst.Guest(self.conn, parsexml=open(infile).read())
 
         utils.diff_compare(guest.get_xml_config(), outfile)
-
-
-if __name__ == "__main__":
-    unittest.main()
