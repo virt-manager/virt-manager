@@ -12,6 +12,10 @@ import re
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
+########################################
+# Genering <enum> and <value> handling #
+########################################
+
 class _Value(XMLBuilder):
     XML_NAME = "value"
     value = XMLProperty(".")
@@ -42,11 +46,30 @@ class _CapsBlock(_HasValues):
 
 
 def _make_capsblock(xml_root_name):
+    """
+    Build a class object representing a list of <enum> in the XML. For
+    example, domcapabilities may have a block like:
+
+    <graphics supported='yes'>
+      <enum name='type'>
+        <value>sdl</value>
+        <value>vnc</value>
+        <value>spice</value>
+      </enum>
+    </graphics>
+
+    To build a class that tracks that whole <graphics> block, call this
+    like _make_capsblock("graphics")
+    """
     class TmpClass(_CapsBlock):
         pass
     setattr(TmpClass, "XML_NAME", xml_root_name)
     return TmpClass
 
+
+#############################
+# Misc toplevel XML classes #
+#############################
 
 class _OS(_CapsBlock):
     XML_NAME = "os"
@@ -64,6 +87,9 @@ class _Features(_CapsBlock):
     gic = XMLChildProperty(_make_capsblock("gic"), is_single=True)
 
 
+###############
+# CPU classes #
+###############
 
 class _CPUModel(XMLBuilder):
     XML_NAME = "model"
@@ -81,6 +107,7 @@ class _CPUMode(XMLBuilder):
             if model.model == name:
                 return model
 
+
 class _CPU(XMLBuilder):
     XML_NAME = "cpu"
     modes = XMLChildProperty(_CPUMode)
@@ -90,6 +117,10 @@ class _CPU(XMLBuilder):
             if mode.name == name:
                 return mode
 
+
+#################################
+# DomainCapabilities main class #
+#################################
 
 class DomainCapabilities(XMLBuilder):
     @staticmethod
