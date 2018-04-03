@@ -222,13 +222,20 @@ class _FTPURLFetcher(_URLFetcher):
             return
 
         try:
-            parsed = urllib.parse.urlparse(self.location)
-            self._ftp = ftplib.FTP()
-            self._ftp.connect(parsed.hostname, parsed.port or 0)
-            self._ftp.login()
-            # Force binary mode
-            self._ftp.voidcmd("TYPE I")
-        except Exception as e:
+             parsed = urllib.parse.urlparse(self.location)
+             self._ftp = ftplib.FTP()
+             from urllib2 import unquote
+             parsed = urlparse.urlparse(self.location)
+             username = parsed.username or ''
+             username = unquote(username).decode('utf8')
+             password = parsed.password or ''
+             password = unquote(password).decode('utf8')
+             self._ftp = ftplib.FTP(parsed.hostname, username, password)
+             self._ftp.connect(parsed.hostname, parsed.port or 0)
+             self._ftp.login(username, password)
+             # Force binary mode
+             self._ftp.voidcmd("TYPE I")
+         except Exception as e:
             raise ValueError(_("Opening URL %s failed: %s.") %
                               (self.location, str(e)))
 
