@@ -430,9 +430,13 @@ def main(conn=None):
             print_stdout(dev.get_xml_config())
         return 0
 
-    if options.update and active_xmlobj:
-        devs, action = prepare_changes(active_xmlobj, options, parserclass)
-        update_changes(domain, devs, action, options.confirm)
+    if options.update:
+        if active_xmlobj:
+            devs, action = prepare_changes(active_xmlobj, options, parserclass)
+            update_changes(domain, devs, action, options.confirm)
+        else:
+            print_stdout(
+                _("The VM is not running, --update is inapplicable."))
     if options.define:
         devs, action = prepare_changes(inactive_xmlobj, options, parserclass)
         applied = define_changes(conn, inactive_xmlobj,
