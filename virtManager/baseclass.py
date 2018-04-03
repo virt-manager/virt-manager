@@ -338,8 +338,15 @@ class vmmGObjectUI(vmmGObject):
         gdk_window = topwin.get_window()
         if not gdk_window:
             return
-        cursor = Gdk.Cursor.new_from_name(gdk_window.get_display(), "default")
-        gdk_window.set_cursor(cursor)
+
+        try:
+            cursor = Gdk.Cursor.new_from_name(
+                    gdk_window.get_display(), "default")
+            gdk_window.set_cursor(cursor)
+        except:
+            # If a cursor icon theme isn't installed this can cause errors
+            # https://bugzilla.redhat.com/show_bug.cgi?id=1516588
+            logging.debug("Error setting cursor", exc_info=True)
 
     def _cleanup_on_conn_removed(self):
         from .connmanager import vmmConnectionManager
