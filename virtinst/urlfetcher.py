@@ -11,8 +11,7 @@ import logging
 import os
 import subprocess
 import tempfile
-import urllib.parse
-import urllib.request
+import urllib
 
 import requests
 
