@@ -279,6 +279,12 @@
 </domain>
 
 
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <name>test-state-shutoff</name>
+  <memory>1048576</memory>
+  <bootloader>/tmp/bootfoo</bootloader>
+  <test:runstate>5</test:runstate>
+</domain>
 
 
 

@@ -868,6 +868,7 @@ vixml = App("virt-xml", compare_check="1.2.2")  # compare_check for  input type=
 c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--sound=? --tpm=?")  # basic introspection test
+c.add_valid("test-state-shutoff --edit --update --boot menu=on")  # --update with inactive VM, should work but warn
 c.add_invalid("test --edit --hostdev driver_name=vfio")  # Guest has no hostdev to edit
 c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
 c.add_invalid("test --edit")  # specified no edit option
