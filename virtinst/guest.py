@@ -870,7 +870,7 @@ class Guest(XMLBuilder):
             return
 
         logging.debug("Host capabilities CPU '%s' is not supported "
-            "according to domain capabilities. Unsettings CPU model",
+            "according to domain capabilities. Unsetting CPU model",
             self.cpu.model)
         self.cpu.model = None
 
