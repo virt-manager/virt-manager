@@ -324,29 +324,30 @@ class vmmGObjectUI(vmmGObject):
     def bind_escape_key_close(self):
         self.bind_escape_key_close_helper(self.topwin, self.close)
 
-    def set_finish_cursor(self):
-        self.topwin.set_sensitive(False)
+    def _set_cursor(self, cursor_type):
         gdk_window = self.topwin.get_window()
-        cursor = Gdk.Cursor.new_from_name(gdk_window.get_display(), "progress")
-        gdk_window.set_cursor(cursor)
-
-    def reset_finish_cursor(self, topwin=None):
-        if not topwin:
-            topwin = self.topwin
-
-        topwin.set_sensitive(True)
-        gdk_window = topwin.get_window()
         if not gdk_window:
             return
 
         try:
             cursor = Gdk.Cursor.new_from_name(
-                    gdk_window.get_display(), "default")
+                    gdk_window.get_display(), cursor_type)
             gdk_window.set_cursor(cursor)
-        except:
+        except Exception:
             # If a cursor icon theme isn't installed this can cause errors
             # https://bugzilla.redhat.com/show_bug.cgi?id=1516588
-            logging.debug("Error setting cursor", exc_info=True)
+            logging.debug("Error setting cursor_type=%s",
+                    cursor_type, exc_info=True)
+
+    def set_finish_cursor(self):
+        self.topwin.set_sensitive(False)
+        self._set_cursor("progress")
+
+    def reset_finish_cursor(self, topwin=None):
+        if not topwin:
+            topwin = self.topwin
+        topwin.set_sensitive(True)
+        self._set_cursor("default")
 
     def _cleanup_on_conn_removed(self):
         from .connmanager import vmmConnectionManager
