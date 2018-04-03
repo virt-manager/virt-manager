@@ -1,5 +1,9 @@
 # -*- rpm-spec -*-
 
+# RPM doesn't detect that code in /usr/share is python3, this forces it
+# https://fedoraproject.org/wiki/Changes/Avoid_usr_bin_python_in_RPM_Build#Python_bytecompilation
+%global __python %{__python3}
+
 
 %global with_guestfs               0
 %global stable_defaults            0
