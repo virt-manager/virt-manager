@@ -202,8 +202,9 @@ class vmmEngine(vmmGObject):
         def conn_open_completed(_conn, ConnectError):
             # Explicitly ignore connection errors, we've done that
             # for a while and it can be noisy
-            logging.debug("Autostart connection error: %s",
-                    ConnectError.details)
+            if ConnectError is not None:
+                logging.debug("Autostart connection error: %s",
+                              ConnectError.details)
             add_next_to_queue()
 
         def handle_queue():
