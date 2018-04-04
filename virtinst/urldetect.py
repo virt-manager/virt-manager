@@ -100,7 +100,7 @@ class _SUSEContent(object):
 
         for line in self.content_str.splitlines():
             for prefix in ["LABEL", "DISTRO", "VERSION",
-                           "SUMMARY", "BASEARCHS", "DEFAULTBASE", "REPOID"]:
+                           "BASEARCHS", "DEFAULTBASE", "REPOID"]:
                 if line.startswith(prefix + " "):
                     self.content_dict[prefix] = line.split(" ", 1)[1]
 
@@ -122,21 +122,13 @@ class _SUSEContent(object):
                        self.content_dict.get("DEFAULTBASE"))
         if not distro_arch and "REPOID" in self.content_dict:
             distro_arch = self.content_dict["REPOID"].rsplit('/', 1)[1]
+        if not distro_arch:
+            return None
 
-        tree_arch = None
-        if distro_arch:
-            tree_arch = distro_arch.strip()
-            # Fix for 13.2 official oss repo
-            if tree_arch.find("i586-x86_64") != -1:
-                tree_arch = "x86_64"
-        else:
-            if self.content_str.find("x86_64") != -1:
-                tree_arch = "x86_64"
-            elif self.content_str.find("i586") != -1:
-                tree_arch = "i586"
-            elif self.content_str.find("s390x") != -1:
-                tree_arch = "s390x"
-
+        tree_arch = distro_arch.strip()
+        # Fix for 13.2 official oss repo
+        if tree_arch.find("i586-x86_64") != -1:
+            tree_arch = "x86_64"
         return tree_arch
 
     def _get_product_name(self):
@@ -160,8 +152,6 @@ class _SUSEContent(object):
         product_name = None
         if "LABEL" in self.content_dict:
             product_name = self.content_dict["LABEL"]
-        elif "SUMMARY" in self.content_dict:
-            product_name = self.content_dict["SUMMARY"]
         elif "," in self.content_dict.get("DISTRO", ""):
             product_name = self.content_dict["DISTRO"].rsplit(",", 1)[1]
 
