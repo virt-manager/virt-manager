@@ -2,7 +2,7 @@
 # Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
 # Copyright (C) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
-# This work is licensed under the GNU GPLv2.
+# This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
 from gi.repository import Gtk

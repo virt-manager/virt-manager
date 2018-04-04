@@ -2,7 +2,7 @@
 # Copyright (C) 2016 SUSE LINUX Products GmbH, Nuernberg, Germany.
 # Charles Arnold <carnold suse com>
 #
-# This work is licensed under the GNU GPLv2.
+# This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 import datetime
 

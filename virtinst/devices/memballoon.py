@@ -3,7 +3,7 @@
 # Copyright 2012
 # Eiichi Tsukata <devel@etsukata.com>
 #
-# This work is licensed under the GNU GPLv2.
+# This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
 from .device import Device

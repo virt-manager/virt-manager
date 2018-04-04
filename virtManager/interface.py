@@ -1,7 +1,7 @@
 # Copyright (C) 2009, 2013 Red Hat, Inc.
 # Copyright (C) 2009 Cole Robinson <crobinso@redhat.com>
 #
-# This work is licensed under the GNU GPLv2.
+# This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
 from virtinst import Interface

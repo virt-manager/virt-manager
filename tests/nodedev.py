@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2013 Red Hat, Inc.
 #
-# This work is licensed under the GNU GPLv2.
+# This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
 import os.path
