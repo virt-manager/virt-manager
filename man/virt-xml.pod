@@ -137,6 +137,8 @@ If the specified domain is running, attempt to alter the running VM configuratio
 
 Keep in mind, most XML properties and devices do not support live update operations, so don't expect it to succeed in all cases.
 
+Note that --update implies --define: it can't be used in isolation.
+
 =item B<--define>
 
 Define the requested XML change. This is typically the default if no output option is specified, but if a --print option is specified, --define is required to force the change.
