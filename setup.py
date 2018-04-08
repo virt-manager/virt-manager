@@ -671,6 +671,8 @@ distutils.core.setup(
         ("share/virt-manager/virtcli",
          glob.glob("virtcli/*.py") + glob.glob("virtcli/cli.cfg")),
         ("share/virt-manager/virtinst", glob.glob("virtinst/*.py")),
+        ("share/virt-manager/virtinst/devices", glob.glob("virtinst/devices/*.py")),
+        ("share/virt-manager/virtinst/domain", glob.glob("virtinst/domain/*.py")),
         ("share/virt-manager/virtconv", glob.glob("virtconv/*.py")),
     ],
 
