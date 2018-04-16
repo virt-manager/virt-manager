@@ -35,10 +35,11 @@ class URI(object):
     """
     def __init__(self, uri):
         self.uri = uri
-        unquoted_uri = urllib.parse.unquote(uri)
 
-        (self.scheme, self.username, self.hostname,
-         self.path, self.query, self.fragment) = self._split(unquoted_uri)
+        split_uri = self._split(uri)
+        self.scheme = split_uri[0]
+        (self.username, self.hostname, self.path, self.query,
+         self.fragment) = map(urllib.parse.unquote, split_uri[1:])
 
         self.transport = ''
         if "+" in self.scheme:
