@@ -279,7 +279,7 @@ def _make_tests():
     cfg.read("tests/test_urls.ini")
 
     manualpath = "~/.config/virt-manager/test_urls_manual.ini"
-    cfg.read(manualpath)
+    cfg.read(os.path.expanduser(manualpath))
     if not os.path.exists(os.path.expanduser(manualpath)):
         print("NOTE: Pass in manual data with %s" % manualpath)
 
