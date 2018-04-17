@@ -193,7 +193,7 @@ def _testURL(fetcher, testdata):
                 "testname = %s\n"
                 "url      = %s\n"
                 "store    = %s" %
-                (s.os_variant, detectdistro,
+                (s.get_osdict_info(), detectdistro,
                  distname, fetcher.location, testdata.distroclass))
 
     # Do this only after the distro detection, since we actually need

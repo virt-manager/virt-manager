@@ -226,7 +226,7 @@ def getDistroStore(guest, fetcher):
 
         store = sclass(fetcher, arch, _type, cache)
         logging.debug("Detected class=%s osvariant=%s",
-                      store.__class__.__name__, store.os_variant)
+                      store.__class__.__name__, store.get_osdict_info())
         return store
 
     # No distro was detected. See if the URL even resolves, and if not
@@ -257,9 +257,6 @@ class Distro(object):
     PRETTY_NAME = None
     urldistro = None
 
-    # osdict variant value
-    os_variant = None
-
     _boot_iso_paths = None
     _kernel_paths = None
 
@@ -269,6 +266,13 @@ class Distro(object):
         self.arch = arch
         self.uri = fetcher.location
         self.cache = cache
+
+        self._os_variant = self._detect_version()
+        if self._os_variant and not OSDB.lookup_os(self._os_variant):
+            logging.debug("Detected os_variant as %s, which is not in osdict.",
+                          self._os_variant)
+            self._os_variant = None
+
 
     @classmethod
     def is_valid(cls, cache):
@@ -307,23 +311,18 @@ class Distro(object):
         raise RuntimeError(_("Could not find boot.iso in %s tree." %
                            self.PRETTY_NAME))
 
-    def _check_osvariant_valid(self, os_variant):
-        return OSDB.lookup_os(os_variant) is not None
-
     def get_osdict_info(self):
         """
-        Return (distro, variant) tuple, checking to make sure they are valid
-        osdict entries
+        Return detected osdict value
         """
-        if not self.os_variant:
-            return None
+        return self._os_variant
 
-        if not self._check_osvariant_valid(self.os_variant):
-            logging.debug("%s set os_variant to %s, which is not in osdict.",
-                          self, self.os_variant)
-            return None
-
-        return self.os_variant
+    def _detect_version(self):
+        """
+        Hook for subclasses to detect media os variant.
+        """
+        logging.debug("%s does not implement any osdict detection", self)
+        return None
 
     def _get_kernel_url_arg(self):
         """
@@ -340,8 +339,6 @@ class GenericTreeinfoDistro(Distro):
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
-
-        self._detect_version()
 
         if not self.cache.treeinfo:
             return
@@ -367,9 +364,6 @@ class GenericTreeinfoDistro(Distro):
         if self.type == "xen":
             image_type = "xen"
         return self.cache.treeinfo.get("images-%s" % image_type, mediaName)
-
-    def _detect_version(self):
-        pass
 
     @classmethod
     def is_valid(cls, cache):
@@ -430,7 +424,8 @@ class FedoraDistro(GenericTreeinfoDistro):
         return verint, os_variant
 
     def _detect_version(self):
-        self._version_number, self.os_variant = self._parse_fedora_version()
+        self._version_number, ret = self._parse_fedora_version()
+        return ret
 
 
 class RHELDistro(GenericTreeinfoDistro):
@@ -480,9 +475,8 @@ class RHELDistro(GenericTreeinfoDistro):
         base = self._variant_prefix + str(version)
         while update >= 0:
             tryvar = base + ".%s" % update
-            if self._check_osvariant_valid(tryvar):
-                self.os_variant = tryvar
-                break
+            if OSDB.lookup_os(tryvar):
+                return tryvar
             update -= 1
 
 
@@ -529,8 +523,6 @@ class SuseDistro(Distro):
         if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
 
-        self.os_variant = self._detect_version()
-
         oldkern = "linux"
         oldinit = "initrd"
         if self.arch == "x86_64":
@@ -546,7 +538,7 @@ class SuseDistro(Distro):
                  "boot/%s/initrd-xen" % self.arch))
 
         if (self.arch == "s390x" and
-            (self.os_variant == "sles11" or self.os_variant == "sled11")):
+            (self._os_variant == "sles11" or self._os_variant == "sled11")):
             self._kernel_paths.append(
                 ("boot/s390x/vmrdr.ikr", "boot/s390x/initrd"))
 
@@ -651,19 +643,12 @@ class DebianDistro(Distro):
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
+
         self._kernel_paths = []
-        self._url_prefix = ""
-
-        media_type = self.cache.debian_media_type
-        if media_type == "url" or media_type == "daily":
-            url_prefix = "current/images"
-            if media_type == "daily":
-                url_prefix = "daily"
-            self._set_url_paths(url_prefix)
-            self.os_variant = self._detect_debian_osdict_from_url(url_prefix)
-
-        elif media_type == "disk":
+        if self.cache.debian_media_type == "disk":
             self._set_installcd_paths()
+        else:
+            self._set_url_paths()
 
 
     def _find_treearch(self):
@@ -690,7 +675,11 @@ class DebianDistro(Distro):
         logging.debug("No treearch found in uri, defaulting to arch=%s", arch)
         return arch
 
-    def _set_url_paths(self, url_prefix):
+    def _set_url_paths(self):
+        url_prefix = "current/images"
+        if self.cache.debian_media_type == "daily":
+            url_prefix = "daily"
+
         self._boot_iso_paths = ["%s/netboot/mini.iso" % url_prefix]
 
         tree_arch = self._find_treearch()
@@ -735,10 +724,10 @@ class DebianDistro(Distro):
         self._kernel_paths += [kpair]
         return True
 
-    def _detect_debian_osdict_from_url(self, url_prefix):
+    def _detect_version(self):
         oses = [n for n in OSDB.list_os() if n.name.startswith(self._debname)]
 
-        if url_prefix == "daily":
+        if self.cache.debian_media_type == "daily":
             logging.debug("Appears to be debian 'daily' URL, using latest "
                 "debian OS")
             return oses[0].name
@@ -756,9 +745,6 @@ class DebianDistro(Distro):
             if ("/%s/" % codename) in self.uri:
                 logging.debug("Found codename=%s in the URL string", codename)
                 return osobj.name
-
-        logging.debug("Didn't find any known codename in the URL string")
-        return self.os_variant
 
 
 class UbuntuDistro(DebianDistro):
