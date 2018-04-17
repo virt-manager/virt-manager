@@ -177,9 +177,9 @@ def _testURL(fetcher, testdata):
             not isinstance(s, testdata.distroclass)):
             raise AssertionError("Unexpected URLDistro class:\n"
                 "found  = %s\n"
-                "expect = %s\n"
-                "name   = %s\n"
-                "url    = %s" %
+                "expect = %s\n\n"
+                "testname = %s\n"
+                "url      = %s" %
                 (s.__class__, testdata.distroclass, distname,
                  fetcher.location))
 
@@ -188,11 +188,11 @@ def _testURL(fetcher, testdata):
             detectdistro != s.get_osdict_info()):
             raise AssertionError(
                 "Detected OS did not match expected values:\n"
-                "found  = %s\n"
-                "expect = %s\n"
-                "name   = %s\n"
-                "url    = %s\n"
-                "store  = %s" %
+                "found   = %s\n"
+                "expect  = %s\n\n"
+                "testname = %s\n"
+                "url      = %s\n"
+                "store    = %s" %
                 (s.os_variant, detectdistro,
                  distname, fetcher.location, testdata.distroclass))
 
