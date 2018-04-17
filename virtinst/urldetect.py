@@ -335,7 +335,6 @@ class Distro(object):
 class GenericTreeinfoDistro(Distro):
     PRETTY_NAME = "Generic Treeinfo"
     urldistro = None
-    _version_number = None
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
@@ -371,13 +370,17 @@ class GenericTreeinfoDistro(Distro):
 
     def _get_kernel_url_arg(self):
         def _is_old_rhdistro():
-            if not self._version_number:
-                return False
-            if self.urldistro == "fedora" and self._version_number < 19:
-                return True
-            if self._version_number < 7:
-                # rhel, centos, scientific linux, etc
-                return True
+            m = re.match("^.*[^0-9\.]+([0-9\.]+)$", self._os_variant or "")
+            if m:
+                version = float(m.groups()[0])
+                if "fedora" in self._os_variant and version < 19:
+                    return True
+                elif version < 7:
+                    # rhel, centos, scientific linux, etc
+                    return True
+
+            # If we can't parse, assume it's something recentish and
+            # it supports the newer arg
             return False
 
         if _is_old_rhdistro():
@@ -394,38 +397,29 @@ class FedoraDistro(GenericTreeinfoDistro):
         famregex = ".*Fedora.*"
         return cache.treeinfo_family_regex(famregex)
 
-    def _parse_fedora_version(self):
+    def _detect_version(self):
         latest_variant = OSDB.latest_fedora_version()
-        # Result is guaranteed to match fedoraXX
-        latest_verint = int(latest_variant[6:])
 
         verstr = self.cache.treeinfo_version
         if not verstr:
-            logging.debug("No treeinfo version? Assume rawhide")
-            verstr = "rawhide"
+            logging.debug("No treeinfo version? Assume latest_variant=%s",
+                    latest_variant)
+            return latest_variant
 
         # rawhide trees changed to use version=Rawhide in Apr 2016
         if verstr in ["development", "rawhide", "Rawhide"]:
-            return latest_verint, latest_variant
+            logging.debug("treeinfo version=%s, using latest_variant=%s",
+                    verstr, latest_variant)
+            return latest_variant
 
         # treeinfo version is just an integer
-        if verstr.isdigit():
-            verint = int(verstr)
-        else:
-            logging.debug("Failed to parse version number from treeinfo "
-                "version=%s, using latest=%s", verstr, latest_verint)
-            verint = latest_verint
+        variant = "fedora" + verstr
+        if OSDB.lookup_os(variant):
+            return variant
 
-        if verint > latest_verint:
-            os_variant = latest_variant
-        else:
-            os_variant = "fedora" + str(verint)
-
-        return verint, os_variant
-
-    def _detect_version(self):
-        self._version_number, ret = self._parse_fedora_version()
-        return ret
+        logging.debug("variant=%s from treeinfo version=%s not found, "
+                "using latest_variant=%s", variant, verstr, latest_variant)
+        return latest_variant
 
 
 class RHELDistro(GenericTreeinfoDistro):
@@ -463,6 +457,7 @@ class RHELDistro(GenericTreeinfoDistro):
 
     def _detect_version(self):
         if not self.cache.treeinfo_version:
+            logging.debug("No treeinfo version? Not setting an os_variant")
             return
 
         version, update = self._split_rhel_version()
