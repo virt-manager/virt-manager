@@ -89,6 +89,34 @@ class _DistroCache(object):
                 filename, regex)
         return False
 
+    def get_treeinfo_media(self, typ):
+        """
+        Pull kernel/initrd/boot.iso paths out of the treeinfo for
+        the passed data
+        """
+        def _get_treeinfo_path(media_name):
+            image_type = self.treeinfo.get("general", "arch")
+            if typ == "xen":
+                image_type = "xen"
+            return self.treeinfo.get("images-%s" % image_type, media_name)
+
+        kernel_paths = []
+        boot_iso_paths = []
+
+        try:
+            kernel_paths.append(
+                (_get_treeinfo_path("kernel"), _get_treeinfo_path("initrd")))
+        except Exception:
+            logging.debug("Failed to parse treeinfo kernel/initrd",
+                    exc_info=True)
+
+        try:
+            boot_iso_paths.append(_get_treeinfo_path("boot.iso"))
+        except Exception:
+            logging.debug("Failed to parse treeinfo boot.iso", exc_info=True)
+
+        return kernel_paths, boot_iso_paths
+
 
 class _SUSEContent(object):
     """
@@ -332,41 +360,20 @@ class Distro(object):
         return None
 
 
-class GenericTreeinfoDistro(Distro):
-    PRETTY_NAME = "Generic Treeinfo"
-    urldistro = None
+class RedHatDistro(Distro):
+    """
+    Baseclass for Red Hat based distros
+    """
+    @classmethod
+    def is_valid(cls, cache):
+        raise NotImplementedError
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
-        if not self.cache.treeinfo:
-            return
-
-        self._kernel_paths = []
-        self._boot_iso_paths = []
-
-        try:
-            self._kernel_paths.append(
-                (self._getTreeinfoMedia("kernel"),
-                 self._getTreeinfoMedia("initrd")))
-        except Exception:
-            logging.debug("Failed to parse treeinfo kernel/initrd",
-                    exc_info=True)
-
-        try:
-            self._boot_iso_paths.append(self._getTreeinfoMedia("boot.iso"))
-        except Exception:
-            logging.debug("Failed to parse treeinfo boot.iso", exc_info=True)
-
-    def _getTreeinfoMedia(self, mediaName):
-        image_type = self.cache.treeinfo.get("general", "arch")
-        if self.type == "xen":
-            image_type = "xen"
-        return self.cache.treeinfo.get("images-%s" % image_type, mediaName)
-
-    @classmethod
-    def is_valid(cls, cache):
-        return bool(cache.treeinfo)
+        k, b = self.cache.get_treeinfo_media(self.type)
+        self._kernel_paths = k
+        self._boot_iso_paths = b
 
     def _get_kernel_url_arg(self):
         def _is_old_rhdistro():
@@ -388,7 +395,7 @@ class GenericTreeinfoDistro(Distro):
         return "inst.repo"
 
 
-class FedoraDistro(GenericTreeinfoDistro):
+class FedoraDistro(RedHatDistro):
     PRETTY_NAME = "Fedora"
     urldistro = "fedora"
 
@@ -422,7 +429,7 @@ class FedoraDistro(GenericTreeinfoDistro):
         return latest_variant
 
 
-class RHELDistro(GenericTreeinfoDistro):
+class RHELDistro(RedHatDistro):
     PRETTY_NAME = "Red Hat Enterprise Linux"
     urldistro = "rhel"
     _variant_prefix = "rhel"
@@ -785,6 +792,25 @@ class MandrivaDistro(Distro):
         # Kernels for HVM: valid for releases 2007.1, 2008.*, 2009.0
         self._kernel_paths += [
             ("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
+
+
+class GenericTreeinfoDistro(Distro):
+    """
+    Generic catchall class for .treeinfo using distros
+    """
+    PRETTY_NAME = "Generic Treeinfo"
+    urldistro = None
+
+    @classmethod
+    def is_valid(cls, cache):
+        return bool(cache.treeinfo)
+
+    def __init__(self, *args, **kwargs):
+        Distro.__init__(self, *args, **kwargs)
+
+        k, b = self.cache.get_treeinfo_media(self.type)
+        self._kernel_paths = k
+        self._boot_iso_paths = b
 
 
 # Build list of all *Distro classes
