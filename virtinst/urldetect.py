@@ -529,8 +529,7 @@ class SuseDistro(Distro):
         if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
 
-        self._variantFromVersion()
-        self.os_variant = self._detect_osdict_from_url()
+        self.os_variant = self._detect_version()
 
         oldkern = "linux"
         oldinit = "initrd"
@@ -564,29 +563,27 @@ class SuseDistro(Distro):
             ("boot/%s/loader/linux" % self.arch,
              "boot/%s/loader/initrd" % self.arch))
 
-    def _variantFromVersion(self):
+    def _detect_osdict_from_suse_content(self):
         distro_version = self.cache.suse_content.product_version
         if not distro_version:
             return
 
         version = distro_version.split('.', 1)[0].strip()
-        self.os_variant = self.urldistro
-        if int(version) >= 10:
-            if self.os_variant.startswith(("sles", "sled")):
-                sp_version = None
-                if len(distro_version.split('.', 1)) == 2:
-                    sp_version = 'sp' + distro_version.split('.', 1)[1].strip()
-                self.os_variant += version
-                if sp_version:
-                    self.os_variant += sp_version
-            else:
-                # Tumbleweed 8 digit date
-                if len(version) == 8:
-                    self.os_variant += "tumbleweed"
-                else:
-                    self.os_variant += distro_version
-        else:
-            self.os_variant += "9"
+        if len(version) == 8:
+            # Tumbleweed 8 digit date
+            return "opensusetumbleweed"
+
+        if int(version) < 10:
+            return self.urldistro + "9"
+
+        if self.urldistro.startswith(("sles", "sled")):
+            sp_version = ""
+            if len(distro_version.split('.', 1)) == 2:
+                sp_version = 'sp' + distro_version.split('.', 1)[1].strip()
+
+            return self.urldistro + version + sp_version
+
+        return self.urldistro + distro_version
 
     def _detect_osdict_from_url(self):
         root = "opensuse"
@@ -596,7 +593,12 @@ class SuseDistro(Distro):
             codename = osobj.name[len(root):]
             if re.search("/%s/" % codename, self.uri):
                 return osobj.name
-        return self.os_variant
+
+    def _detect_version(self):
+        var = self._detect_osdict_from_url()
+        if not var:
+            var = self._detect_osdict_from_suse_content()
+        return var
 
     def _get_kernel_url_arg(self):
         return "install"
