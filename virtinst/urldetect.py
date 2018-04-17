@@ -256,7 +256,6 @@ class Distro(object):
     """
     PRETTY_NAME = None
     urldistro = None
-    uses_treeinfo = False
 
     # osdict variant value
     os_variant = None
@@ -336,7 +335,6 @@ class Distro(object):
 
 class GenericTreeinfoDistro(Distro):
     PRETTY_NAME = "Generic Treeinfo"
-    uses_treeinfo = True
     urldistro = None
     _version_number = None
 
