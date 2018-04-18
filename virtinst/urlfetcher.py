@@ -224,8 +224,10 @@ class _FTPURLFetcher(_URLFetcher):
         try:
             parsed = urllib.parse.urlparse(self.location)
             self._ftp = ftplib.FTP()
+            username = urllib.parse.unquote(parsed.username or '')
+            password = urllib.parse.unquote(parsed.password or '')
             self._ftp.connect(parsed.hostname, parsed.port or 0)
-            self._ftp.login()
+            self._ftp.login(username, password)
             # Force binary mode
             self._ftp.voidcmd("TYPE I")
         except Exception as e:
