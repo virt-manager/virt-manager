@@ -49,3 +49,7 @@ class TestURI(unittest.TestCase):
             "qemu+ssh://foo%5Cbar@hostname/system",
             scheme="qemu", path="/system", transport="ssh",
             hostname="hostname", username="foo\\bar")
+        self._compare(
+            "qemu+ssh://user%40domain.org@hostname/system",
+            scheme="qemu", path="/system", transport="ssh",
+            hostname="hostname", username="user@domain.org")
