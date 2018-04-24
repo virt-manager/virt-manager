@@ -101,15 +101,7 @@ class DeviceGraphics(Device):
                        "keymap", "listen",
                        "passwd", "display", "xauth"]
 
-    def _default_keymap(self, force_local=False):
-        if self.type != "vnc" and self.type != "spice":
-            return None
-
-        if (not force_local and
-            self.conn.check_support(
-                self.conn.SUPPORT_CONN_KEYMAP_AUTODETECT)):
-            return None
-
+    def _get_local_keymap(self):
         if self._local_keymap == -1:
             from .. import hostkeymap
             self._local_keymap = hostkeymap.default_keymap()
@@ -117,13 +109,12 @@ class DeviceGraphics(Device):
 
     def _set_keymap_converter(self, val):
         if val == self.KEYMAP_DEFAULT:
-            return self._default_keymap()
+            # Leave it up to the hypervisor
+            return None
         if val == self.KEYMAP_LOCAL:
-            return self._default_keymap(force_local=True)
+            return self._get_local_keymap()
         return val
-    keymap = XMLProperty("./@keymap",
-                         default_cb=_default_keymap,
-                         set_converter=_set_keymap_converter)
+    keymap = XMLProperty("./@keymap", set_converter=_set_keymap_converter)
 
     def _set_port_converter(self, val):
         val = _validate_port("Port", val)

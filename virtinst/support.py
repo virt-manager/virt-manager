@@ -217,7 +217,6 @@ SUPPORT_CONN_NODEDEV = _make(
     function="virConnect.listDevices", run_args=(None, 0))
 SUPPORT_CONN_FINDPOOLSOURCES = _make(
     function="virConnect.findStoragePoolSources")
-SUPPORT_CONN_KEYMAP_AUTODETECT = _make(hv_version={"qemu": "0.11.0"})
 SUPPORT_CONN_GETHOSTNAME = _make(
     function="virConnect.getHostname", run_args=())
 SUPPORT_CONN_NETWORK = _make(function="virConnect.listNetworks", run_args=())
