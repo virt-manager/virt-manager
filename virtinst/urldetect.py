@@ -520,14 +520,14 @@ class SuseDistro(Distro):
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
-        self.arch = self.cache.suse_content.tree_arch
+        tree_arch = self.cache.suse_content.tree_arch
 
-        if re.match(r'i[4-9]86', self.arch):
-            self.arch = 'i386'
+        if re.match(r'i[4-9]86', tree_arch):
+            tree_arch = 'i386'
 
         oldkern = "linux"
         oldinit = "initrd"
-        if self.arch == "x86_64":
+        if tree_arch == "x86_64":
             oldkern += "64"
             oldinit += "64"
 
@@ -536,26 +536,26 @@ class SuseDistro(Distro):
         if self.type == "xen":
             # Matches Opensuse > 10.2 and sles 10
             self._kernel_paths.append(
-                ("boot/%s/vmlinuz-xen" % self.arch,
-                 "boot/%s/initrd-xen" % self.arch))
+                ("boot/%s/vmlinuz-xen" % tree_arch,
+                 "boot/%s/initrd-xen" % tree_arch))
 
-        if (self.arch == "s390x" and
+        if (tree_arch == "s390x" and
             (self._os_variant == "sles11" or self._os_variant == "sled11")):
             self._kernel_paths.append(
                 ("boot/s390x/vmrdr.ikr", "boot/s390x/initrd"))
 
         # Tested with SLES 12 for ppc64le, all s390x
         self._kernel_paths.append(
-            ("boot/%s/linux" % self.arch,
-             "boot/%s/initrd" % self.arch))
+            ("boot/%s/linux" % tree_arch,
+             "boot/%s/initrd" % tree_arch))
         # Tested with Opensuse 10.0
         self._kernel_paths.append(
             ("boot/loader/%s" % oldkern,
              "boot/loader/%s" % oldinit))
         # Tested with Opensuse >= 10.2, 11, and sles 10
         self._kernel_paths.append(
-            ("boot/%s/loader/linux" % self.arch,
-             "boot/%s/loader/initrd" % self.arch))
+            ("boot/%s/loader/linux" % tree_arch,
+             "boot/%s/loader/initrd" % tree_arch))
 
     def _detect_osdict_from_suse_content(self):
         distro_version = self.cache.suse_content.product_version
