@@ -25,6 +25,7 @@ class _DistroCache(object):
         self._treeinfo = None
         self.treeinfo_family = None
         self.treeinfo_version = None
+        self.treeinfo_name = None
 
         self.suse_content = None
         self.debian_media_type = None
@@ -61,6 +62,10 @@ class _DistroCache(object):
         if self._treeinfo.has_option("general", "version"):
             self.treeinfo_version = self._treeinfo.get("general", "version")
             logging.debug("Found treeinfo version=%s", self.treeinfo_version)
+
+        if self._treeinfo.has_option("general", "name"):
+            self.treeinfo_name = self._treeinfo.get("general", "name")
+            logging.debug("Found treeinfo name=%s", self.treeinfo_name)
 
         return self._treeinfo
 
@@ -499,6 +504,10 @@ class SuseDistro(Distro):
 
     @classmethod
     def is_valid(cls, cache):
+        famregex = ".*SUSE.*"
+        if cache.treeinfo_family_regex(famregex):
+            return True
+
         if not cache.suse_content:
             cache.suse_content = -1
             content_str = cache.acquire_file_content("content")
@@ -520,6 +529,14 @@ class SuseDistro(Distro):
 
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
+
+        if not self.cache.suse_content:
+            # This means we matched on treeinfo
+            k, b = self.cache.get_treeinfo_media(self.type)
+            self._kernel_paths = k
+            self._boot_iso_paths = b
+            return
+
         tree_arch = self.cache.suse_content.tree_arch
 
         if re.match(r'i[4-9]86', tree_arch):
@@ -558,6 +575,9 @@ class SuseDistro(Distro):
              "boot/%s/loader/initrd" % tree_arch))
 
     def _detect_osdict_from_suse_content(self):
+        if not self.cache.suse_content:
+            return
+
         distro_version = self.cache.suse_content.product_version
         if not distro_version:
             return
@@ -588,8 +608,16 @@ class SuseDistro(Distro):
             if re.search("/%s/" % codename, self.uri):
                 return osobj.name
 
+    def _detect_from_treeinfo(self):
+        if not self.cache.treeinfo_name:
+            return
+        if re.search("openSUSE Tumbleweed", self.cache.treeinfo_name):
+            return "opensusetumbleweed"
+
     def _detect_version(self):
-        var = self._detect_osdict_from_url()
+        var = self._detect_from_treeinfo()
+        if not var:
+            var = self._detect_osdict_from_url()
         if not var:
             var = self._detect_osdict_from_suse_content()
         return var
