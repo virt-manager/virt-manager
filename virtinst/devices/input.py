@@ -20,9 +20,21 @@ class DeviceInput(Device):
 
     BUS_PS2 = "ps2"
     BUS_USB = "usb"
+    BUS_VIRTIO = "virtio"
     BUS_XEN = "xen"
     BUS_DEFAULT = "default"
     BUSES = [BUS_PS2, BUS_USB, BUS_XEN, BUS_DEFAULT]
+
+    @staticmethod
+    def pretty_name(typ, bus):
+        if typ == "tablet" and bus == "usb":
+            return _("EvTouch USB Graphics Tablet")
+
+        if bus in ["usb", "ps2"]:
+            return _("Generic") + (" %s %s" %
+                (bus.upper(), str(typ).capitalize()))
+        return "%s %s" % (str(bus).capitalize(), str(typ).capitalize())
+
 
     type = XMLProperty("./@type",
                        default_cb=lambda s: s.TYPE_MOUSE,

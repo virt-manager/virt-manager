@@ -72,7 +72,7 @@ class AddHardware(uiutils.UITestCase):
         addhw = self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Controller", "controller-tab")
         typ.click()
-        tab.find("USB", "menu item").click()
+        tab.find("^USB$", "menu item").click()
         tab.find("Model:", "combo box").click_combo_entry()
         tab.find("USB 3", "menu item").click()
         # Can't add more than 1 USB controller, so finish isn't sensitive
@@ -293,8 +293,9 @@ class AddHardware(uiutils.UITestCase):
         # Catch a port error
         alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy("Port must be above 5900", "label")
-        alert.find("OK", "push button").click()
+        alert.find("Close", "push button").click()
         tab.find("graphics-port", "spin button").text = "5920"
+        finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
         # Spice regular example
@@ -481,7 +482,7 @@ class AddHardware(uiutils.UITestCase):
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Sound", "sound-tab")
         tab.find("Model:", "combo box").click()
-        tab.find("ich6", "menu item").click()
+        tab.find("HDA", "menu item").click()
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
@@ -497,7 +498,7 @@ class AddHardware(uiutils.UITestCase):
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Watchdog", "watchdog-tab")
         tab.find("Model:", "combo box").click()
-        tab.find("i6300esb", "menu item").click()
+        tab.find("I6300", "menu item").click()
         tab.find("Action:", "combo box").click()
         tab.find("Pause the guest", "menu item").click()
         finish.click()

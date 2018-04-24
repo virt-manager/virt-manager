@@ -15,6 +15,13 @@ class DeviceSound(Device):
     MODEL_DEFAULT = "default"
     MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", "ich9"]
 
+    @staticmethod
+    def pretty_model(model):
+        ret = model.upper()
+        if model in ["ich6", "ich9"]:
+            ret = "HDA (%s)" % model.upper()
+        return ret
+
     model = XMLProperty("./@model",
                         default_cb=lambda s: "es1370",
                         default_name=MODEL_DEFAULT)

@@ -1001,8 +1001,15 @@ class vmmDetails(vmmGObjectUI):
         vmmAddHardware.build_disk_cache_combo(self.vm, disk_cache)
 
         # Disk io combo
-        disk_io = self.widget("disk-io")
-        vmmAddHardware.build_disk_io_combo(self.vm, disk_io)
+        combo = self.widget("disk-io")
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uiutil.init_combo_text_column(combo, 1)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+        model.append([None, _("Hypervisor default")])
+        for m in virtinst.DeviceDisk.io_modes:
+            model.append([m, m])
+        combo.set_active(0)
 
         # Disk bus combo
         disk_bus = self.widget("disk-bus")
@@ -2693,7 +2700,7 @@ class vmmDetails(vmmGObjectUI):
         if not inp:
             return
 
-        dev = vmmAddHardware.label_for_input_device(inp.type, inp.bus)
+        dev = inp.pretty_name(inp.type, inp.bus)
 
         mode = None
         if inp.type == "tablet":
