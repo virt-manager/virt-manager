@@ -596,12 +596,11 @@ class vmmAddHardware(vmmGObjectUI):
         model.clear()
 
         # [xml value, label, conn details]
-        model.append(["spicevmc", _("Spice channel"), False])
-        model.append(["tcp", "TCP", True])
+        model.append(["spicevmc", _("Spice channel")])
 
     @staticmethod
     def build_redir_type_combo(vm, combo):
-        model = Gtk.ListStore(str, str, bool)
+        model = Gtk.ListStore(str, str)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
 
@@ -1223,11 +1222,7 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("char-mode").set_active(0)
 
     def _change_usbredir_type(self, src):
-        showhost = uiutil.get_list_selection(src, column=2)
-        if showhost is None:
-            return
-        uiutil.set_grid_row_visible(self.widget("usbredir-host-box"),
-                                       showhost)
+        pass
 
     def _change_rng(self, ignore1):
         rtype = uiutil.get_list_selection(self.widget("rng-type"))
@@ -1709,19 +1704,10 @@ class vmmAddHardware(vmmGObjectUI):
     def _validate_page_usbredir(self):
         conn = self.conn.get_backend()
         stype = uiutil.get_list_selection(self.widget("usbredir-list"))
-        host = None
-        service = None
-        if self.widget("usbredir-host").is_visible():
-            host = self.widget("usbredir-host").get_text()
-            service = uiutil.spin_get_helper(self.widget("usbredir-service"))
 
         try:
             self._dev = DeviceRedirdev(conn)
             self._dev.type = stype
-            if host:
-                self._dev.host = host
-            if service:
-                self._dev.service = service
         except Exception as e:
             return self.err.val_err(_("USB redirected device parameter error"),
                                     str(e))
