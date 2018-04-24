@@ -1626,9 +1626,6 @@ class ParserBoot(VirtCLIParser):
         inst.set_initargs_string(val)
 
     def set_smbios_mode_cb(self, inst, val, virtarg):
-        if not val.startswith("emulate") and not val.startswith("host"):
-            inst.sysinfo.parse(val)
-            val = "sysinfo"
         inst.smbios_mode = val
         self.optdict["smbios_mode"] = val
 
@@ -1689,8 +1686,7 @@ ParserBoot.add_arg("kernel_args", "kernel_args",
 ParserBoot.add_arg("init", "init")
 ParserBoot.add_arg("machine", "machine")
 ParserBoot.add_arg("initargs", "initargs", cb=ParserBoot.set_initargs_cb)
-ParserBoot.add_arg("smbios_mode", "smbios_mode",
-                   can_comma=True, cb=ParserBoot.set_smbios_mode_cb)
+ParserBoot.add_arg("smbios_mode", "smbios_mode")
 
 # This is simply so the boot options are advertised with --boot help,
 # actual processing is handled by _parse

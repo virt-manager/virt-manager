@@ -386,7 +386,7 @@ c.add_compare(""" \
 --vcpus 4 --cpuset=1,3-5 \
 --cpu host \
 --description \"foobar & baz\" \
---boot uefi \
+--boot uefi,smbios_mode=emulate \
 --security type=dynamic \
 --security type=none,model=dac \
 --numatune 1,2,3,5-7,^6 \
