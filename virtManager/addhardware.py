@@ -1173,8 +1173,8 @@ class vmmAddHardware(vmmGObjectUI):
             if self._validate() is False:
                 return
         except Exception as e:
-            self.err.show_err(_("Uncaught error validating hardware "
-                                "input: %s") % str(e))
+            self.err.show_err(
+                    _("Error validating device parameters: %s") % str(e))
             return
 
         self.set_finish_cursor()
@@ -1192,6 +1192,7 @@ class vmmAddHardware(vmmGObjectUI):
     ###########################
 
     def _validate(self):
+        # Any uncaught errors in this function are reported via _finish()
         page_num = self.widget("create-pages").get_current_page()
 
         if page_num == PAGE_ERROR:
@@ -1353,44 +1354,34 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_input(self):
         typ, bus = uiutil.get_list_selection(self.widget("input-type"))
-        dev = DeviceInput(self.conn.get_backend())
-        dev.type = typ
-        dev.bus = bus
-
-        self._dev = dev
+        self._dev = DeviceInput(self.conn.get_backend())
+        self._dev.type = typ
+        self._dev.bus = bus
 
     def _validate_page_graphics(self):
-        try:
-            (gtype, port, tlsport, listen,
-             addr, passwd, keymap, gl, rendernode) = self._gfxdetails.get_values()
+        (gtype, port, tlsport, listen,
+         addr, passwd, keymap, gl, rendernode) = self._gfxdetails.get_values()
+        self._dev = DeviceGraphics(self.conn.get_backend())
+        self._dev.type = gtype
+        self._dev.passwd = passwd
+        self._dev.gl = gl
+        self._dev.rendernode = rendernode
 
-            self._dev = DeviceGraphics(self.conn.get_backend())
-            self._dev.type = gtype
-            self._dev.passwd = passwd
-            self._dev.gl = gl
-            self._dev.rendernode = rendernode
-
-            if not listen or listen == "none":
-                self._dev.set_listen_none()
-            elif listen == "address":
-                self._dev.listen = addr
-                self._dev.port = port
-                self._dev.tlsPort = tlsport
-            else:
-                raise ValueError(_("invalid listen type"))
-            if keymap:
-                self._dev.keymap = keymap
-        except ValueError as e:
-            self.err.val_err(_("Graphics device parameter error"), e)
+        if not listen or listen == "none":
+            self._dev.set_listen_none()
+        elif listen == "address":
+            self._dev.listen = addr
+            self._dev.port = port
+            self._dev.tlsPort = tlsport
+        else:
+            raise ValueError(_("invalid listen type"))
+        if keymap:
+            self._dev.keymap = keymap
 
     def _validate_page_sound(self):
         smodel = uiutil.get_list_selection(self.widget("sound-model"))
-
-        try:
-            self._dev = DeviceSound(self.conn.get_backend())
-            self._dev.model = smodel
-        except Exception as e:
-            return self.err.val_err(_("Sound device parameter error"), e)
+        self._dev = DeviceSound(self.conn.get_backend())
+        self._dev.model = smodel
 
     def _validate_page_hostdev(self):
         nodedev = uiutil.get_list_selection(self.widget("host-device"))
@@ -1398,25 +1389,22 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Physical Device Required"),
                                     _("A device must be selected."))
 
-        try:
-            dev = DeviceHostdev(self.conn.get_backend())
-            # Hostdev collision
-            names  = []
-            for vm in self.conn.list_vms():
-                for hostdev in vm.xmlobj.devices.hostdev:
-                    if nodedev.compare_to_hostdev(hostdev):
-                        names.append(vm.get_name())
-            if names:
-                res = self.err.yes_no(
-                        _('The device is already in use by other guests %s') %
-                         (names),
-                        _("Do you really want to use the device?"))
-                if not res:
-                    return False
-            dev.set_from_nodedev(nodedev)
-            self._dev = dev
-        except Exception as e:
-            return self.err.val_err(_("Host device parameter error"), e)
+        dev = DeviceHostdev(self.conn.get_backend())
+        # Hostdev collision
+        names  = []
+        for vm in self.conn.list_vms():
+            for hostdev in vm.xmlobj.devices.hostdev:
+                if nodedev.compare_to_hostdev(hostdev):
+                    names.append(vm.get_name())
+        if names:
+            res = self.err.yes_no(
+                    _('The device is already in use by other guests %s') %
+                     (names),
+                    _("Do you really want to use the device?"))
+            if not res:
+                return False
+        dev.set_from_nodedev(nodedev)
+        self._dev = dev
 
     def _validate_page_char(self):
         char_class = self._get_char_class()
@@ -1424,9 +1412,8 @@ class vmmAddHardware(vmmGObjectUI):
         devbox = self.widget("char-device-type")
         typebox = self.widget("char-target-type")
         devtype = uiutil.get_list_selection(devbox)
-        conn = self.conn.get_backend()
 
-        devclass = char_class(conn)
+        devclass = char_class(self.conn.get_backend())
         devclass.type = devtype
 
         source_path = self.widget("char-path").get_text()
@@ -1471,41 +1458,26 @@ class vmmAddHardware(vmmGObjectUI):
             "target_type": target_type,
         }
 
-        try:
-            self._dev = devclass
+        self._dev = devclass
 
-            for param_name, val in value_mappings.items():
-                if self._dev.supports_property(param_name) and val is not None:
-                    setattr(self._dev, param_name, val)
+        for param_name, val in value_mappings.items():
+            if self._dev.supports_property(param_name) and val is not None:
+                setattr(self._dev, param_name, val)
 
-            # Dump XML for sanity checking
-            self._dev.get_xml_config()
-        except Exception as e:
-            return self.err.val_err(
-                    _("%s device parameter error") %
-                    devclass.DEVICE_TYPE.capitalize(), e)
+        # Dump XML for sanity checking
+        self._dev.get_xml_config()
 
     def _validate_page_video(self):
-        conn = self.conn.get_backend()
         model = uiutil.get_list_selection(self.widget("video-model"))
-
-        try:
-            self._dev = DeviceVideo(conn)
-            self._dev.model = model
-        except Exception as e:
-            return self.err.val_err(_("Video device parameter error"), e)
+        self._dev = DeviceVideo(self.conn.get_backend())
+        self._dev.model = model
 
     def _validate_page_watchdog(self):
-        conn = self.conn.get_backend()
         model = uiutil.get_list_selection(self.widget("watchdog-model"))
         action = uiutil.get_list_selection(self.widget("watchdog-action"))
-
-        try:
-            self._dev = DeviceWatchdog(conn)
-            self._dev.model = model
-            self._dev.action = action
-        except Exception as e:
-            return self.err.val_err(_("Watchdog parameter error"), e)
+        self._dev = DeviceWatchdog(self.conn.get_backend())
+        self._dev.model = model
+        self._dev.action = action
 
     def _validate_page_filesystem(self):
         if self._fsdetails.validate_page_filesystem() is False:
@@ -1513,63 +1485,33 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev = self._fsdetails.get_dev()
 
     def _validate_page_smartcard(self):
-        conn = self.conn.get_backend()
         mode = uiutil.get_list_selection(self.widget("smartcard-mode"))
-
-        try:
-            self._dev = DeviceSmartcard(conn)
-            self._dev.mode = mode
-        except Exception as e:
-            return self.err.val_err(_("Smartcard device parameter error"), e)
+        self._dev = DeviceSmartcard(self.conn.get_backend())
+        self._dev.mode = mode
 
     def _validate_page_usbredir(self):
-        conn = self.conn.get_backend()
         stype = uiutil.get_list_selection(self.widget("usbredir-list"))
-
-        try:
-            self._dev = DeviceRedirdev(conn)
-            self._dev.type = stype
-        except Exception as e:
-            return self.err.val_err(_("USB redirected device parameter error"),
-                                    str(e))
+        self._dev = DeviceRedirdev(self.conn.get_backend())
+        self._dev.type = stype
 
     def _validate_page_tpm(self):
-        conn = self.conn.get_backend()
         typ = uiutil.get_list_selection(self.widget("tpm-type"))
-
         device_path = self.widget("tpm-device-path").get_text()
-
-        value_mappings = {
-            "device_path": device_path,
-        }
-
-        try:
-            self._dev = DeviceTpm(conn)
-            self._dev.type = typ
-            for param_name, val in value_mappings.items():
-                if self._dev.supports_property(param_name):
-                    setattr(self._dev, param_name, val)
-        except Exception as e:
-            return self.err.val_err(_("TPM device parameter error"), e)
+        self._dev = DeviceTpm(self.conn.get_backend())
+        self._dev.type = typ
+        self._dev.device_path = device_path
 
     def _validate_page_panic(self):
-        conn = self.conn.get_backend()
-
         model = uiutil.get_list_selection(self.widget("panic-model"))
-
-        try:
-            self._dev = DevicePanic(conn)
-            self._dev.model = model
-        except Exception as e:
-            return self.err.val_err(_("Panic device parameter error"), e)
+        self._dev = DevicePanic(self.conn.get_backend())
+        self._dev.model = model
 
     def _validate_page_controller(self):
-        conn = self.conn.get_backend()
         controller_type = uiutil.get_list_selection(
             self.widget("controller-type"))
         model = uiutil.get_list_selection(self.widget("controller-model"))
 
-        self._dev = DeviceController(conn)
+        self._dev = DeviceController(self.conn.get_backend())
         self._selected_model = model
 
         controllers = self.vm.xmlobj.devices.controller
@@ -1647,14 +1589,11 @@ class vmmAddHardware(vmmGObjectUI):
             "device": device,
         }
 
-        try:
-            self._dev = DeviceRng(self.conn.get_backend())
-            self._dev.type = rtype
-            for param_name, val in value_mappings.items():
-                if self._dev.supports_property(param_name):
-                    setattr(self._dev, param_name, val)
-        except Exception as e:
-            return self.err.val_err(_("RNG device parameter error"), e)
+        self._dev = DeviceRng(self.conn.get_backend())
+        self._dev.type = rtype
+        for param_name, val in value_mappings.items():
+            if self._dev.supports_property(param_name):
+                setattr(self._dev, param_name, val)
 
 
     ####################
