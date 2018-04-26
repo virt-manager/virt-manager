@@ -146,12 +146,12 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Forward", "button").click()
 
         newvm.find("URL", "text").text = (
-            "http://vault.centos.org/5.5/os/x86_64/")
+            "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/14/Fedora/x86_64/os/")
 
         version = newvm.find("install-os-version-label")
         uiutils.check_in_loop(lambda: "Detecting" in version.text)
         uiutils.check_in_loop(
-            lambda: version.text == "Red Hat Enterprise Linux 5.5",
+            lambda: version.text == "Fedora 14",
             timeout=10)
 
         newvm.find_fuzzy("Forward", "button").click()
@@ -163,7 +163,7 @@ class NewVM(uiutils.UITestCase):
             "Creating Virtual Machine", "frame")
         uiutils.check_in_loop(lambda: not progress.showing, timeout=120)
 
-        self.app.root.find_fuzzy("rhel5.5 on", "frame")
+        self.app.root.find_fuzzy("fedora14 on", "frame")
         self.assertFalse(newvm.showing)
 
 
