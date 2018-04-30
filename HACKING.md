@@ -43,7 +43,7 @@ Patches should be developed against a git checkout and **not** a source
 release(see [git repository](https://github.com/virt-manager/virt-manager)).
 
 Patches should be sent to the
-[mailing list](http://www.redhat.com/mailman/listinfo/virt-tools-list).
+[mailing list](https://www.redhat.com/mailman/listinfo/virt-tools-list).
 
 Using git format-patch/send-email is preferred, but an attachment with
 format-patch output is fine too.
@@ -55,7 +55,7 @@ non-trivial should be sent to the mailing list.
 
 Translations are handled at `fedora.zanata.org`. Please register for a Fedora
 account and request access to a translation team, as described at
-[Translate on Zanata](http://fedoraproject.org/wiki/L10N/Translate_on_Zanata).
+[Translate on Zanata](https://fedoraproject.org/wiki/L10N/Translate_on_Zanata).
 
 And contribute to
 [virt-manager at Zanata](https://fedora.zanata.org/project/view/virt-manager/).

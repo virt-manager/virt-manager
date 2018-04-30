@@ -265,7 +265,7 @@ def getDistroStore(guest, fetcher):
     # No distro was detected. See if the URL even resolves, and if not
     # give the user a hint that maybe they mistyped. This won't always
     # be true since some webservers don't allow directory listing.
-    # http://www.redhat.com/archives/virt-tools-list/2014-December/msg00048.html
+    # https://www.redhat.com/archives/virt-tools-list/2014-December/msg00048.html
     extramsg = ""
     if not fetcher.can_access():
         extramsg = (": " +
@@ -643,7 +643,7 @@ class OpensuseDistro(SuseDistro):
 
 class DebianDistro(Distro):
     # ex. http://ftp.egr.msu.edu/debian/dists/sarge/main/installer-i386/
-    # daily builds: http://d-i.debian.org/daily-images/amd64/
+    # daily builds: https://d-i.debian.org/daily-images/amd64/
     PRETTY_NAME = "Debian"
     urldistro = "debian"
     _debname = "debian"
@@ -778,7 +778,7 @@ class DebianDistro(Distro):
 
 
 class UbuntuDistro(DebianDistro):
-    # http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
+    # https://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
     PRETTY_NAME = "Ubuntu"
     urldistro = "ubuntu"
     _debname = "ubuntu"

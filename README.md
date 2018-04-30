@@ -22,12 +22,12 @@ For dependency info and installation instructions, see the
 ## Contact
 
  - All comments / suggestions / patches should be directed to the
-   [virt-tools-list](http://www.redhat.com/mailman/listinfo/virt-tools-list)
+   [virt-tools-list](https://www.redhat.com/mailman/listinfo/virt-tools-list)
    mailing list.
  - For IRC we use #virt on OFTC.
  - For bug reporting info, see
-   [BugReporting](http://virt-manager.org/page/BugReporting).
+   [BugReporting](https://virt-manager.org/page/BugReporting).
  - There are further project details on the
-   [virt-manager](http://virt-manager.org/) website.
+   [virt-manager](https://virt-manager.org/) website.
  - See the [HACKING.md](HACKING.md) file for info about submitting patches or
    contributing translations.

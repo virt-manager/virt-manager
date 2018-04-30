@@ -20,7 +20,7 @@ def _random_mac(conn):
     00-16-3E allocated to xensource
     52-54-00 used by qemu/kvm
 
-    The OUI list is available at http://standards.ieee.org/regauth/oui/oui.txt.
+    The OUI list is available at https://standards.ieee.org/regauth/oui/oui.txt.
 
     The remaining 3 fields are random, with the first bit of the first
     random field set 0.

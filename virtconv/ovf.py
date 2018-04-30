@@ -59,7 +59,7 @@ DEVICE_DISK = "17"
 DEVICE_GRAPHICS = "24"
 
 # AllocationUnits mapping can be found in Appendix C here:
-# http://www.dmtf.org/standards/documents/CIM/DSP0004.pdf
+# https://www.dmtf.org/standards/documents/CIM/DSP0004.pdf
 
 
 OVF_NAMESPACES = {
@@ -257,8 +257,8 @@ class ovf_parser(parser_class):
     """
     Support for OVF appliance configurations.
 
-    Whitepaper: http://www.vmware.com/pdf/ovf_whitepaper_specification.pdf
-    Spec: http://www.dmtf.org/standards/published_documents/DSP0243_1.0.0.pdf
+    Whitepaper: https://www.vmware.com/pdf/ovf_whitepaper_specification.pdf
+    Spec: https://www.dmtf.org/standards/published_documents/DSP0243_1.0.0.pdf
     """
     name = "ovf"
     suffix = ".ovf"

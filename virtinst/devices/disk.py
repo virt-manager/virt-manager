@@ -563,7 +563,7 @@ class DeviceDisk(Device):
         a QEMU VM. Without telling QEMU to expect a raw file, the emulator
         is forced to autodetect, which has security implications:
 
-        http://lists.gnu.org/archive/html/qemu-devel/2008-04/msg00675.html
+        https://lists.gnu.org/archive/html/qemu-devel/2008-04/msg00675.html
         """
         if self.driver_name != self.DRIVER_NAME_QEMU:
             return None

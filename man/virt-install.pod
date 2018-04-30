@@ -101,13 +101,13 @@ and 'hotplugmemoryslots' are mapped to <maxMemory> element.
 
 To configure memory modules which can be hotunplugged see B<--memdev> description.
 
-Use --memory=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMemoryAllocation>
+Use --memory=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsMemoryAllocation>
 
 =item B<--memorybacking> OPTIONS
 
 This option will influence how virtual memory pages are backed by host pages.
 
-Use --memorybacking=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMemoryBacking>
+Use --memorybacking=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsMemoryBacking>
 
 =item B<--arch> ARCH
 
@@ -124,25 +124,25 @@ architectures.
 
 Specify metadata values for the guest. Possible options include name, uuid, title, and description. This option deprecates -u/--uuid and --description.
 
-Use --metadata=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMetadata>
+Use --metadata=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsMetadata>
 
 =item B<--events> OPT=VAL,[...]
 
 Specify events values for the guest. Possible options include on_poweroff, on_reboot, and on_crash.
 
-Use --events=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsEvents>
+Use --events=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsEvents>
 
 =item B<--resource> OPT=VAL,[...]
 
 Specify resource partitioning for the guest.
 
-Use --resource=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#resPartition>
+Use --resource=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#resPartition>
 
 =item B<--sysinfo> OPT=VAL,[...]
 
 Configure sysinfo/SMBIOS values exposed to the guest OS. '--sysinfo host' can be used to expose the host's SMBIOS info to the VM, otherwise values can be manually specified.
 
-Use --sysinfo=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsSysinfo>
+Use --sysinfo=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsSysinfo>
 
 =item B<--qemu-commandline> ARGS
 
@@ -174,7 +174,7 @@ cores over threads.
 If the value 'auto' is passed, virt-install attempts to automatically determine
 an optimal cpu pinning using NUMA data, if available.
 
-Use --vcpus=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCPUAllocation>
+Use --vcpus=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsCPUAllocation>
 
 =item B<--numatune> OPTIONS
 
@@ -188,7 +188,7 @@ as C<--vcpus cpuset=> option. mode can be one of 'interleave', 'preferred', or
 'strict' (the default). See 'man 8 numactl' for information about each
 mode.
 
-Use --numatune=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsNUMATuning>
+Use --numatune=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsNUMATuning>
 
 =item B<--memtune> OPTIONS
 
@@ -197,7 +197,7 @@ Tune memory policy for the domain process. Example invocations
     --memtune 1000
     --memtune hard_limit=100,soft_limit=60,swap_hard_limit=150,min_guarantee=80
 
-Use --memtune=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMemoryTuning>
+Use --memtune=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsMemoryTuning>
 
 =item B<--blkiotune> OPTIONS
 
@@ -206,7 +206,7 @@ Tune blkio policy for the domain process. Example invocations
     --blkiotune 100
     --blkiotune weight=100,device_path=/dev/sdc,device_weight=200
 
-Use --blkiotune=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsBlockTuning>
+Use --blkiotune=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsBlockTuning>
 
 =item B<--cpu> MODEL[,+feature][,-feature][,match=MATCH][,vendor=VENDOR],...
 
@@ -253,7 +253,7 @@ Example of passing through the host cpu's cache information.
 
 =back
 
-Use --cpu=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCPU>
+Use --cpu=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsCPU>
 
 =item B<--cputune> OPTIONS
 
@@ -263,7 +263,7 @@ Configure which of the host's physical CPUs the domain VCPU will be pinned to. E
 
     --cputune vpcupin0.vcpu=0,vpcupin0.cpuset=0-3,vpcupin1.vcpu=1,vpcupin1.cpuset=4-7
 
-Use --cputune=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCPUTuning>
+Use --cputune=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsCPUTuning>
 
 =item B<--security> type=TYPE[,label=LABEL][,relabel=yes|no]
 
@@ -275,7 +275,7 @@ To have libvirt automatically apply your static label, you must specify
 relabel=yes. Otherwise disk images must be manually labeled by the admin,
 including images that virt-install is asked to create.
 
-Use --security=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#seclabel>
+Use --security=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#seclabel>
 
 =item B<--features> FEAT=on|off,...
 
@@ -313,7 +313,7 @@ type.)
 
 =back
 
-Use --features=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsFeatures>
+Use --features=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsFeatures>
 
 =item B<--clock> offset=OFFSET,TIMER_OPT=VAL,...
 
@@ -336,14 +336,14 @@ might be catchup, delay, etc. Refer to the libvirt docs for all values.
 
 =back
 
-Use --clock=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsTime>
+Use --clock=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsTime>
 
 
 =item B<--pm> OPTIONS
 
 Configure guest power management features. Example suboptions include suspend_to_mem=on|off and suspend_to_disk=on|off
 
-Use --pm=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsPowerManagement>
+Use --pm=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsPowerManagement>
 
 
 
@@ -383,13 +383,13 @@ be accessible by both the local and remote host.
 
 * Mount the ISO at a local directory, and do --location DIRECTORY
 
-* Mount the ISO at a local directory, export that directory over local http, and do --location http://localhost/DIRECTORY
+* Mount the ISO at a local directory, export that directory over local http, and do --location https://localhost/DIRECTORY
 
 The C<LOCATION> can take one of the following forms:
 
 =over 4
 
-=item http://host/path
+=item https://host/path
 
 An HTTP server location containing an installable distribution image.
 
@@ -417,19 +417,19 @@ Some distro specific url samples:
 
 =item Fedora/Red Hat Based
 
-http://download.fedoraproject.org/pub/fedora/linux/releases/25/Server/x86_64/os
+https://download.fedoraproject.org/pub/fedora/linux/releases/25/Server/x86_64/os
 
 =item Debian
 
-http://ftp.us.debian.org/debian/dists/stable/main/installer-amd64/
+https://ftp.us.debian.org/debian/dists/stable/main/installer-amd64/
 
 =item Ubuntu
 
-http://us.archive.ubuntu.com/ubuntu/dists/wily/main/installer-amd64/
+https://us.archive.ubuntu.com/ubuntu/dists/wily/main/installer-amd64/
 
 =item Suse
 
-http://download.opensuse.org/pub/opensuse/distribution/leap/42.3/repo/oss/
+https://download.opensuse.org/pub/opensuse/distribution/leap/42.3/repo/oss/
 
 =item Mandriva
 
@@ -465,7 +465,7 @@ may be desirable to also use the C<--disk none> flag in combination.
 Additional kernel command line arguments to pass to the installer when
 performing a guest install from C<--location>. One common usage is specifying
 an anaconda kickstart file for automated installs, such as
---extra-args "ks=http://myserver/my.ks"
+--extra-args "ks=https://myserver/my.ks"
 
 =item B<--initrd-inject> PATH
 
@@ -555,7 +555,7 @@ supports Secure boot feature you can enable it via loader_secure.
 
 =back
 
-Use --boot=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsOS>
+Use --boot=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsOS>
 
 =item B<--idmap> OPTIONS
 
@@ -569,7 +569,7 @@ make containers secure, in the absence of sVirt confinement.
 Example:
     --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
 
-Use --idmap=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsOSContainer>
+Use --idmap=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsOSContainer>
 
 =back
 
@@ -610,7 +610,7 @@ and will require specifying a 'size' value. Even for remote hosts, virt-install
 will try to use libvirt storage APIs to automatically create the given path.
 
 If the hypervisor supports it, B<path> can also be a network URL, like
-http://example.com/some-disk.img . For network paths, they hypervisor will
+https://example.com/some-disk.img . For network paths, they hypervisor will
 directly access the storage, nothing is downloaded locally.
 
 =item B<pool>
@@ -700,7 +700,7 @@ request). Since 1.0.6 (QEMU and KVM only)
 
 =item B<format>
 
-Disk image format. For file volumes, this can be 'raw', 'qcow2', 'vmdk', etc. See format types in L<http://libvirt.org/storage.html> for possible values. This is often mapped to the B<driver_type> value as well.
+Disk image format. For file volumes, this can be 'raw', 'qcow2', 'vmdk', etc. See format types in L<https://libvirt.org/storage.html> for possible values. This is often mapped to the B<driver_type> value as well.
 
 If not specified when creating file images, this will default to 'qcow2'.
 
@@ -734,12 +734,12 @@ WD-WMAP9A966149
 =item B<startup_policy>
 
 It defines what to do with the disk if the source file is not accessible.  See
-possible values in L<http://www.libvirt.org/formatdomain.html#elementsDisks>, "startupPolicy" attribute of the <disk> element
+possible values in L<https://www.libvirt.org/formatdomain.html#elementsDisks>, "startupPolicy" attribute of the <disk> element
 
 =item B<snapshot_policy>
 
 Defines default behavior of the disk during disk snapshots.  See possible
-values in L<http://www.libvirt.org/formatdomain.html#elementsDisks>,
+values in L<https://www.libvirt.org/formatdomain.html#elementsDisks>,
 "snapshot" attribute of the <disk> element.
 
 =back
@@ -747,7 +747,7 @@ values in L<http://www.libvirt.org/formatdomain.html#elementsDisks>,
 See the examples section for some uses. This option deprecates -f/--file,
 -s/--file-size, --nonsparse, and --nodisks.
 
-Use --disk=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsDisks>
+Use --disk=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsDisks>
 
 =item B<--filesystem>
 
@@ -785,7 +785,7 @@ The mount location to use in the guest.
 
 =back
 
-Use --filesystem=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsFilesystems>
+Use --filesystem=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsFilesystems>
 
 =back
 
@@ -953,7 +953,7 @@ will be bound
 
 =back
 
-Use --network=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsNICS>
+Use --network=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsNICS>
 
 This option deprecates -m/--mac, -b/--bridge, and --nonetworks
 
@@ -1071,7 +1071,7 @@ DRM render node path to use. This is used when 'gl' is enabled.
 
 =back
 
-Use --graphics=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsGraphics>
+Use --graphics=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsGraphics>
 
 This deprecates the following options: --vnc, --vncport, --vnclisten, -k/--keymap, --sdl, --nographics
 
@@ -1134,7 +1134,7 @@ This deprecates the --accelerate option, which is now the default behavior. To i
 
 All devices have a set of B<address.*> options for configuring the
 particulars of the device's address on its parent controller or bus.
-See C<http://libvirt.org/formatdomain.html#elementsAddress> for details.
+See C<https://libvirt.org/formatdomain.html#elementsAddress> for details.
 
 =over 4
 
@@ -1155,7 +1155,7 @@ Controller model.  These may vary according to the hypervisor and its
 version.  Most commonly used models are e.g. B<auto>, B<virtio-scsi>
 for the B<scsi> controller, B<ehci> or B<none> for the B<usb>
 controller.  For full list and further details on controllers/models,
-see C<http://libvirt.org/formatdomain.html#elementsControllers>.
+see C<https://libvirt.org/formatdomain.html#elementsControllers>.
 
 =item B<address>
 
@@ -1191,14 +1191,14 @@ proper device (if needed).  This applies to all PCI devices.
 
 =back
 
-Use --controller=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsControllers>
+Use --controller=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsControllers>
 
 
 =item B<--input> OPTIONS
 
 Attach an input device to the guest. Example input device types are mouse, tablet, or keyboard.
 
-Use --input=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsInput>
+Use --input=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsInput>
 
 
 =item B<--hostdev> OPTIONS
@@ -1227,7 +1227,7 @@ PCI device (via lspci).
 
 =back
 
-Use --hostdev=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsHostDev>
+Use --hostdev=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsHostDev>
 
 =item B<--sound> MODEL
 
@@ -1238,7 +1238,7 @@ OS supports.
 
 This deprecates the old --soundhw option.
 
-Use --sound=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsSound>
+Use --sound=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsSound>
 
 =item B<--watchdog> MODEL[,action=ACTION]
 
@@ -1283,7 +1283,7 @@ Use the i6300esb with the 'poweroff' action
 
 --watchdog i6300esb,action=poweroff
 
-Use --watchdog=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsWatchdog>
+Use --watchdog=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsWatchdog>
 
 =item B<--parallel> OPTIONS
 
@@ -1362,7 +1362,7 @@ Unix socket, see unix(7). MODE has similar behavior and defaults as
 
 =back
 
-Use --serial=? or --parallel=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCharSerial> and L<http://libvirt.org/formatdomain.html#elementsCharParallel>
+Use --serial=? or --parallel=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsCharSerial> and L<https://libvirt.org/formatdomain.html#elementsCharParallel>
 
 =item B<--channel>
 
@@ -1398,7 +1398,7 @@ specifies how the guest will see the channel.
 
 =back
 
-Use --channel=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCharChannel>
+Use --channel=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsCharChannel>
 
 =item B<--console>
 
@@ -1415,12 +1415,12 @@ Example:
 
 Connect a virtio console to the guest, redirected to a PTY on the host.
 For supported guests, this exposes /dev/hvc0 in the guest. See
-http://fedoraproject.org/wiki/Features/VirtioSerial for more info. virtio
+https://fedoraproject.org/wiki/Features/VirtioSerial for more info. virtio
 console requires libvirt 0.8.3 or later.
 
 =back
 
-Use --console=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCharConsole>
+Use --console=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsCharConsole>
 
 =item B<--video> OPTIONS
 
@@ -1428,7 +1428,7 @@ Specify what video device model will be attached to the guest. Valid values
 for VIDEO are hypervisor specific, but some options for recent kvm are
 cirrus, vga, qxl, virtio, or vmvga (vmware).
 
-Use --video=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsVideo>
+Use --video=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsVideo>
 
 =item B<--smartcard> MODE[,OPTIONS]
 
@@ -1457,7 +1457,7 @@ to the guest
 
 =back
 
-Use --smartcard=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsSmartcard>
+Use --smartcard=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsSmartcard>
 
 =item B<--redirdev> BUS[,OPTIONS]
 
@@ -1490,7 +1490,7 @@ Add a USB device redirected via a dedicated Spice channel.
 
 =back
 
-Use --redirdev=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsRedir>
+Use --redirdev=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsRedir>
 
 =item B<--memballoon> MODEL
 
@@ -1509,7 +1509,7 @@ Do not use memballoon device:
 
 --memballoon none
 
-Use --memballoon=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMemBalloon>
+Use --memballoon=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsMemBalloon>
 
 =item B<--tpm> TYPE[,OPTIONS]
 
@@ -1540,7 +1540,7 @@ Convenience option for passing through the hosts TPM.
 
 =back
 
-Use --tpm=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsTpm>
+Use --tpm=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsTpm>
 
 =item B<--rng> TYPE[,OPTIONS]
 
@@ -1605,7 +1605,7 @@ Connect to localhost to the TCP port 8000 to get entropy data.
 Use the /dev/random device to get entropy data, this form implicitly uses the
 "random" model.
 
-Use --rng=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsRng>
+Use --rng=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsRng>
 
 =back
 
@@ -1615,14 +1615,14 @@ Attach a panic notifier device to the guest. For the recommended settings, use:
 
 --panic default
 
-Use --panic=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsPanic>
+Use --panic=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsPanic>
 
 =item B<--memdev> OPTS
 
 Add a memory module to a guest which can be hotunplugged. To add a memdev you need
 to configure hotplugmemory and NUMA for a guest.
 
-Use --memdev=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMemory>.
+Use --memdev=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsMemory>.
 
 
 =back
@@ -1653,7 +1653,7 @@ VM.  These VMs exist only until the domain is shut down or the host
 server is restarted.  Libvirt forgets the XML configuration of the VM
 after either of these events.  Note that the VM's disks will not be
 deleted.  See:
-L<http://wiki.libvirt.org/page/VM_lifecycle#Transient_guest_domains_vs_Persistent_guest_domains>
+L<https://wiki.libvirt.org/page/VM_lifecycle#Transient_guest_domains_vs_Persistent_guest_domains>
 
 =item B<--print-xml> [STEP]
 
@@ -1778,7 +1778,7 @@ options:
        --memory 500 \
        --disk /var/lib/xen/images/demo.img,size=6 \
        --graphics none \
-       --location http://download.fedora.redhat.com/pub/fedora/linux/core/6/x86_64/os/
+       --location https://download.fedora.redhat.com/pub/fedora/linux/core/6/x86_64/os/
 
 Create a guest from an existing disk image 'mydisk.img' using defaults for
 the rest of the options.
@@ -1801,17 +1801,17 @@ Start serial QEMU ARM VM, which requires specifying a manual kernel.
 
 =head1 BUGS
 
-Please see http://virt-manager.org/page/BugReporting
+Please see https://virt-manager.org/page/BugReporting
 
 =head1 COPYRIGHT
 
 Copyright (C) Red Hat, Inc, and various contributors.
 This is free software. You may redistribute copies of it under the terms of
-the GNU General Public License C<http://www.gnu.org/licenses/gpl.html>. There
+the GNU General Public License C<https://www.gnu.org/licenses/gpl.html>. There
 is NO WARRANTY, to the extent permitted by law.
 
 =head1 SEE ALSO
 
-C<virsh(1)>, C<virt-clone(1)>, C<virt-manager(1)>, the project website C<http://virt-manager.org>
+C<virsh(1)>, C<virt-clone(1)>, C<virt-manager(1)>, the project website C<https://virt-manager.org>
 
 =cut

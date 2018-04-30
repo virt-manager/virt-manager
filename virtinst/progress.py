@@ -17,7 +17,7 @@ import fcntl
 import struct
 import termios
 
-# Code from http://mail.python.org/pipermail/python-list/2000-May/033365.html
+# Code from https://mail.python.org/pipermail/python-list/2000-May/033365.html
 def terminal_width(fd=1):
     """ Get the real terminal width """
     try:
