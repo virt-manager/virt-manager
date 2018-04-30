@@ -152,8 +152,6 @@ def parse_commandline():
         default=False)
     parser.add_argument("--no-fork", action="store_true",
         help="Don't fork into background on startup")
-    parser.add_argument("--spice-disable-auto-usbredir", action="store_true",
-        dest="usbredir", help="Disable Auto USB redirection support")
 
     parser.add_argument("--show-domain-creator", action="store_true",
         help="Show 'New VM' wizard")
