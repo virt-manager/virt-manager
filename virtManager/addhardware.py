@@ -110,10 +110,6 @@ class vmmAddHardware(vmmGObjectUI):
 
             "on_usbredir_type_changed": self._change_usbredir_type,
 
-            "on_rng_type_changed": self._change_rng,
-            "on_rng_backend_mode_changed": self._change_rng,
-            "on_rng_backend_type_changed": self._change_rng,
-
             "on_controller_type_changed": self._change_controller_type,
         })
         self.bind_escape_key_close()
@@ -211,9 +207,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.build_smartcard_mode_combo(self.vm, self.widget("smartcard-mode"))
         self._build_redir_type_combo()
         self._build_tpm_type_combo()
-        self._build_rng_type_combo()
-        self._build_rng_backend_type_combo()
-        self._build_rng_backend_mode_combo()
         self._build_panic_model_combo()
         _build_combo(self.widget("controller-model"), [])
         self._build_controller_type_combo()
@@ -346,12 +339,6 @@ class vmmAddHardware(vmmGObjectUI):
         if self.conn.check_support(self.conn.SUPPORT_CONN_RNG_URANDOM):
             default_rng = "/dev/urandom"
         self.widget("rng-device").set_text(default_rng)
-
-        for i in ["rng-bind-host", "rng-connect-host"]:
-            self.widget(i).set_text("localhost")
-
-        for i in ["rng-bind-service", "rng-connect-service"]:
-            self.widget(i).set_text("708")
 
 
         # Remaining devices
@@ -695,27 +682,6 @@ class vmmAddHardware(vmmGObjectUI):
         _build_combo(self.widget("tpm-type"), values)
 
 
-    def _build_rng_type_combo(self):
-        values = []
-        for t in DeviceRng.TYPES:
-            values.append([t, DeviceRng.get_pretty_type(t)])
-        _build_combo(self.widget("rng-type"), values,
-                default_value=DeviceRng.TYPE_RANDOM)
-
-    def _build_rng_backend_type_combo(self):
-        values = []
-        for t in DeviceRng.BACKEND_TYPES:
-            values.append([t, DeviceRng.get_pretty_backend_type(t)])
-        _build_combo(self.widget("rng-backend-type"), values,
-                     default_value=DeviceRng.BACKEND_TYPE_TCP)
-
-    def _build_rng_backend_mode_combo(self):
-        values = []
-        for t in DeviceRng.BACKEND_MODES:
-            values.append([t, DeviceRng.get_pretty_backend_type(t)])
-        _build_combo(self.widget("rng-backend-mode"), values,
-                     default_value=DeviceRng.BACKEND_MODE_CONNECT)
-
     def _build_panic_model_combo(self):
         values = []
         for m in DevicePanic.get_models(self.vm.get_xmlobj().os):
@@ -1006,28 +972,6 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _change_usbredir_type(self, src):
         pass
-
-    def _change_rng(self, ignore1):
-        rtype = uiutil.get_list_selection(self.widget("rng-type"))
-        is_egd = rtype == DeviceRng.TYPE_EGD
-        uiutil.set_grid_row_visible(self.widget("rng-device"), not is_egd)
-        uiutil.set_grid_row_visible(self.widget("rng-backend-type"), is_egd)
-
-        backend_type = uiutil.get_list_selection(
-            self.widget("rng-backend-type"))
-        backend_mode = uiutil.get_list_selection(
-            self.widget("rng-backend-mode"))
-        udp = backend_type == DeviceRng.BACKEND_TYPE_UDP
-        bind = backend_mode == DeviceRng.BACKEND_MODE_BIND
-
-        v = is_egd and (udp or bind)
-        uiutil.set_grid_row_visible(self.widget("rng-bind-host-box"), v)
-
-        v = is_egd and (udp or not bind)
-        uiutil.set_grid_row_visible(self.widget("rng-connect-host-box"), v)
-
-        v = is_egd and not udp
-        uiutil.set_grid_row_visible(self.widget("rng-backend-mode"), v)
 
     def _change_controller_type(self, src):
         ignore = src
@@ -1529,71 +1473,14 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.model = model
 
     def _validate_page_rng(self):
-        rtype = uiutil.get_list_selection(self.widget("rng-type"))
-        backend_type = uiutil.get_list_selection(
-            self.widget("rng-backend-type"))
-        backend_mode = uiutil.get_list_selection(
-            self.widget("rng-backend-mode"))
-
-        connect_host = self.widget("rng-connect-host").get_text()
-        connect_service = uiutil.spin_get_helper(
-            self.widget("rng-connect-service"))
-        bind_host = self.widget("rng-bind-host").get_text()
-        bind_service = uiutil.spin_get_helper(
-            self.widget("rng-bind-service"))
-
-
         device = self.widget("rng-device").get_text()
-        if rtype == DeviceRng.TYPE_RANDOM:
-            if not device:
-                return self.err.val_err(_("RNG selection error."),
-                                    _("A device must be specified."))
-            connect_host = None
-            connect_service = None
-            bind_host = None
-            bind_service = None
-        else:
-            device = None
-
-        if rtype == DeviceRng.TYPE_EGD:
-            if (backend_type == DeviceRng.BACKEND_TYPE_UDP):
-                if not connect_host or not bind_host:
-                    return self.err.val_err(_("RNG selection error."),
-                             _("Please specify both bind and connect host"))
-                if not connect_service or not bind_service:
-                    return self.err.val_err(_("RNG selection error."),
-                          _("Please specify both bind and connect service"))
-            else:
-                if (backend_mode ==
-                    DeviceRng.BACKEND_MODE_CONNECT):
-                    bind_host = None
-                    bind_service = None
-                else:
-                    connect_host = None
-                    connect_service = None
-
-                if not connect_host and not bind_host:
-                    return self.err.val_err(_("RNG selection error."),
-                                        _("The EGD host must be specified."))
-                if not connect_service and not bind_service:
-                    return self.err.val_err(_("RNG selection error."),
-                                     _("The EGD service must be specified."))
-
-        value_mappings = {
-            "backend_type": backend_type,
-            "backend_source_mode": backend_mode,
-            "connect_host": connect_host,
-            "connect_service": connect_service,
-            "bind_host": bind_host,
-            "bind_service": bind_service,
-            "device": device,
-        }
+        if not device:
+            return self.err.val_err(_("RNG selection error."),
+                                _("A device must be specified."))
 
         self._dev = DeviceRng(self.conn.get_backend())
-        self._dev.type = rtype
-        for param_name, val in value_mappings.items():
-            if self._dev.supports_property(param_name):
-                setattr(self._dev, param_name, val)
+        self._dev.type = DeviceRng.TYPE_RANDOM
+        self._dev.device = device
 
 
     ####################

@@ -530,7 +530,7 @@ class AddHardware(uiutils.UITestCase):
         # Add RNG
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "RNG", "rng-tab")
-        tab.find("Device:", "text").text = "/dev/random"
+        tab.find("Host Device:", "text").text = "/dev/random"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
