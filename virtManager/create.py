@@ -1665,7 +1665,7 @@ class vmmCreate(vmmGObjectUI):
         fs = None
         template = None
 
-        if self._os is None:
+        if not self._is_container_install() and self._os is None:
             return self.err.val_err(_("Please specify a valid OS variant."))
 
         if instmethod == INSTALL_PAGE_ISO:
@@ -1764,7 +1764,8 @@ class vmmCreate(vmmGObjectUI):
         try:
             # Overwrite the guest
             installer = instclass(self.conn.get_backend())
-            self._guest = self._build_guest(self._os.name)
+            variant = self._os and self._os.name or None
+            self._guest = self._build_guest(variant)
             if not self._guest:
                 return False
             self._guest.installer = installer
