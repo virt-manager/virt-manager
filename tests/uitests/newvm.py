@@ -28,6 +28,8 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy(None,
             "text", "existing storage").text = "/dev/default-pool/testvol1.img"
         newvm.find_fuzzy("Forward", "button").click()
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
         newvm.find_fuzzy("Forward", "button").click()
         newvm.find_fuzzy("Forward", "button").click()
         newvm.find_fuzzy("Finish", "button").click()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAdjustment" id="adjustment2">
@@ -25,6 +25,9 @@
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_newcreate_delete_event" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="vbox1">
         <property name="visible">True</property>
@@ -2054,6 +2057,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                         <property name="primary_icon_sensitive">False</property>
                                         <signal name="search-changed" handler="on_install_os_name_search_changed" swapped="no"/>
                                         <signal name="stop-search" handler="on_install_os_name_stop_search" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="install-os-name-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes">oslist-entry</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -2861,9 +2869,6 @@ connections is not yet supported.&lt;/small&gt;</property>
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>
