@@ -3,8 +3,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
 from gi.repository import Gtk
 
 import virtinst
@@ -95,7 +93,6 @@ class vmmOSList(vmmGObjectUI):
         self._refilter()
 
     def show(self, parent):
-        logging.debug("Showing oslist")
         self.topwin.set_relative_to(parent)
         self.topwin.popup()
 
