@@ -1102,14 +1102,12 @@ class vmmCreate(vmmGObjectUI):
 
     def _get_config_detectable_media(self):
         instpage = self._get_config_install_page()
-        media = ""
+        media = None
 
         if instpage == INSTALL_PAGE_ISO:
             media = self._get_config_local_media()
         elif instpage == INSTALL_PAGE_URL:
             media = self.widget("install-url-entry").get_text()
-        elif instpage == INSTALL_PAGE_IMPORT:
-            media = self.widget("install-import-entry").get_text()
 
         return media
 
