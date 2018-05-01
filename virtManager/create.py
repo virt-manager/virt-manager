@@ -1637,11 +1637,11 @@ class vmmCreate(vmmGObjectUI):
         if self._guest.os.is_container():
             basename = "container"
             force_num = True
-        elif not osobj or not osobj.distro:
+        elif not osobj:
             basename = "vm"
             force_num = True
         else:
-            basename = osobj.distro
+            basename = osobj.name
 
         if self._guest.os.arch != self.conn.caps.host.cpu.arch:
             basename += "-%s" % _pretty_arch(self._guest.os.arch)
