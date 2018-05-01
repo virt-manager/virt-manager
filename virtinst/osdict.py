@@ -10,62 +10,22 @@
 import datetime
 import logging
 import re
+import time
 
 import gi
 gi.require_version('Libosinfo', '1.0')
 from gi.repository import Libosinfo as libosinfo
+from gi.repository import GLib
 
 
 ###################
 # Sorting helpers #
 ###################
 
-def _remove_older_point_releases(distro_list):
-    ret = distro_list[:]
-
-    def _get_minor_version(osobj):
-        return int(osobj.name.rsplit(".", 1)[-1])
-
-    def _find_latest(prefix):
-        """
-        Given a prefix like 'rhel4', find the latest 'rhel4.X',
-        and remove the rest from the os list
-        """
-        latest_os = None
-        first_id = None
-        for osobj in ret[:]:
-            if not re.match("%s\.\d+" % prefix, osobj.name):
-                continue
-
-            if first_id is None:
-                first_id = ret.index(osobj)
-            ret.remove(osobj)
-
-            if (latest_os and
-                _get_minor_version(latest_os) > _get_minor_version(osobj)):
-                continue
-            latest_os = osobj
-
-        if latest_os:
-            ret.insert(first_id, latest_os)
-
-    _find_latest("rhel4")
-    _find_latest("rhel5")
-    _find_latest("rhel6")
-    _find_latest("rhel7")
-    _find_latest("freebsd9")
-    _find_latest("freebsd10")
-    _find_latest("freebsd11")
-    _find_latest("centos6")
-    _find_latest("centos7")
-    return ret
-
-
-def _sort(tosort, sortpref=None, limit_point_releases=False):
+def _sort(tosort):
     sortby_mappings = {}
     distro_mappings = {}
     retlist = []
-    sortpref = sortpref or []
 
     for key, osinfo in tosort.items():
         # Libosinfo has some duplicate version numbers here, so append .1
@@ -90,15 +50,8 @@ def _sort(tosort, sortpref=None, limit_point_releases=False):
         distro_list.sort()
         distro_list.reverse()
 
-    # Move the sortpref values to the front of the list
     sorted_distro_list = list(distro_mappings.keys())
     sorted_distro_list.sort()
-    sortpref.reverse()
-    for prefer in sortpref:
-        if prefer not in sorted_distro_list:
-            continue
-        sorted_distro_list.remove(prefer)
-        sorted_distro_list.insert(0, prefer)
 
     # Build the final list of sorted os objects
     for distro in sorted_distro_list:
@@ -106,10 +59,6 @@ def _sort(tosort, sortpref=None, limit_point_releases=False):
         for key in distro_list:
             orig_key = sortby_mappings[key]
             retlist.append(tosort[orig_key])
-
-    # Filter out older point releases
-    if limit_point_releases:
-        retlist = _remove_older_point_releases(retlist)
 
     return retlist
 
@@ -236,25 +185,16 @@ class _OSDB(object):
             "solaris", "other", "generic"]
         return approved_types
 
-    def list_os(self, typename=None, only_supported=False, sortpref=None):
+    def list_os(self):
         """
         List all OSes in the DB
-
-        :param typename: Only list OSes of this type
-        :param only_supported: Only list OSses where self.supported == True
-        :param sortpref: Sort these OSes at the front of the list
         """
         sortmap = {}
 
         for name, osobj in self._all_variants.items():
-            if typename and typename != osobj.get_typename():
-                continue
-            if only_supported and not osobj.get_supported():
-                continue
             sortmap[name] = osobj
 
-        return _sort(sortmap, sortpref=sortpref,
-            limit_point_releases=only_supported)
+        return _sort(sortmap)
 
     def latest_regex(self, regex):
         """
@@ -282,6 +222,24 @@ class _OsVariant(object):
         self.label = self._os and self._os.get_name() or "Generic"
         self.codename = self._os and self._os.get_codename() or ""
         self.distro = self._os and self._os.get_distro() or ""
+        self.eol = False
+
+        eol = self._os and self._os.get_eol_date() or None
+        rel = self._os and self._os.get_release_date() or None
+
+        # End of life if an EOL date is present and has past,
+        # or if the release date is present and was 5 years or more
+        if eol is not None:
+            now = GLib.Date()
+            now.set_time_t(time.time())
+            if eol.compare(now) < 0:
+                self.eol = True
+        elif rel is not None:
+            then = GLib.Date()
+            then.set_time_t(time.time())
+            then.subtract_years(5)
+            if rel.compare(then) < 0:
+                self.eol = True
 
         self.sortby = self._get_sortby()
         self.urldistro = self._get_urldistro()

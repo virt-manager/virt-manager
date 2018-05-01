@@ -29,6 +29,7 @@ from .engine import vmmEngine
 from .mediacombo import vmmMediaCombo
 from .netlist import vmmNetworkList
 from .storagebrowse import vmmStorageBrowser
+from .oslist import vmmOSList
 
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20
@@ -124,6 +125,7 @@ class vmmCreate(vmmGObjectUI):
 
         self._guest = None
         self._failed_guest = None
+        self._os = None
 
         # Distro detection state variables
         self._detect_os_in_progress = False
@@ -171,10 +173,6 @@ class vmmCreate(vmmGObjectUI):
             "on_install_container_source_toggle": self._container_source_toggle,
 
             "on_install_detect_os_toggled": self._toggle_detect_os,
-            "on_install_os_type_changed": self._change_os_type,
-            "on_install_os_version_changed": self._change_os_version,
-            "on_install_detect_os_box_show": self._os_detect_visibility_changed,
-            "on_install_detect_os_box_hide": self._os_detect_visibility_changed,
 
             "on_kernel_browse_clicked": self._browse_kernel,
             "on_initrd_browse_clicked": self._browse_initrd,
@@ -183,6 +181,9 @@ class vmmCreate(vmmGObjectUI):
             "on_enable_storage_toggled": self._toggle_enable_storage,
 
             "on_create_vm_name_changed": self._name_changed,
+
+            "on_install_os_name_search_changed": self._os_name_search_changed,
+            "on_install_os_name_stop_search": self._os_name_stop_search,
         })
         self.bind_escape_key_close()
 
@@ -294,46 +295,6 @@ class vmmCreate(vmmGObjectUI):
         # Lists for OS container bootstrap
         set_model_list("install-oscontainer-source-url-combo")
 
-        def sep_func(model, it, combo):
-            ignore = combo
-            return model[it][OS_COL_IS_SEP]
-
-        def make_os_model():
-            # [os value, os label, is seperator, is 'show all']
-            cols = []
-            cols.insert(OS_COL_ID, str)
-            cols.insert(OS_COL_LABEL, str)
-            cols.insert(OS_COL_IS_SEP, bool)
-            cols.insert(OS_COL_IS_SHOW_ALL, bool)
-            return Gtk.TreeStore(*cols)
-
-        def make_completion_model():
-            # [os value, os label]
-            cols = []
-            cols.insert(OS_COL_ID, str)
-            cols.insert(OS_COL_LABEL, str)
-            return Gtk.ListStore(*cols)
-
-        # Lists for distro type + variant
-        os_type_list = self.widget("install-os-type")
-        os_type_model = make_os_model()
-        os_type_list.set_model(os_type_model)
-        uiutil.init_combo_text_column(os_type_list, 1)
-        os_type_list.set_row_separator_func(sep_func, os_type_list)
-
-        os_variant_list = self.widget("install-os-version")
-        os_variant_model = make_os_model()
-        os_variant_list.set_model(os_variant_model)
-        uiutil.init_combo_text_column(os_variant_list, 1)
-        os_variant_list.set_row_separator_func(sep_func, os_variant_list)
-
-        entry = self.widget("install-os-version-entry")
-        completion = Gtk.EntryCompletion()
-        entry.set_completion(completion)
-        completion.set_text_column(1)
-        completion.set_inline_completion(True)
-        completion.set_model(make_completion_model())
-
         # Archtecture
         archList = self.widget("arch")
         # [label, guest.os.arch value]
@@ -365,6 +326,16 @@ class vmmCreate(vmmGObjectUI):
         lst.set_model(model)
         uiutil.init_combo_text_column(lst, 0)
 
+        self._os_list = vmmOSList()
+        self._os_list.connect("os-selected", self._os_name_selected)
+
+    def _os_name_selected(self, ignore, osobj):
+        name = self.widget("install-os-name")
+        self._os = osobj
+        self._os_list.hide()
+
+        if self._os is not None:
+            name.set_text(self._os.label)
 
     def _reset_state(self, urihint=None):
         """
@@ -395,8 +366,6 @@ class vmmCreate(vmmGObjectUI):
 
         # Distro/Variant
         self._toggle_detect_os(self.widget("install-detect-os"))
-        self._populate_os_type_model()
-        self.widget("install-os-type").set_active(0)
 
         def _populate_media_model(media_model, urls):
             media_model.clear()
@@ -415,7 +384,6 @@ class vmmCreate(vmmGObjectUI):
         self.widget("install-url-options").set_expanded(False)
         urlmodel = self.widget("install-url-combo").get_model()
         _populate_media_model(urlmodel, self.config.get_media_urls())
-        self._set_distro_labels("-", "-")
 
         # Install import
         self.widget("install-import-entry").set_text("")
@@ -970,183 +938,6 @@ class vmmCreate(vmmGObjectUI):
     # Helpers for populating OS type/variant UI #
     #############################################
 
-    def _add_os_row(self, model, name="", label="",
-                      sep=False, action=False, parent=None):
-        """
-        Helper for building an os type/version row and adding it to
-        the list model if necessary
-        """
-
-        row = []
-        row.insert(OS_COL_ID, name)
-        row.insert(OS_COL_LABEL, label)
-        row.insert(OS_COL_IS_SEP, sep)
-        row.insert(OS_COL_IS_SHOW_ALL, action)
-
-        return model.append(parent, row)
-
-    def _add_completion_row(self, model, name, label):
-        row = []
-        row.insert(OS_COL_ID, name)
-        row.insert(OS_COL_LABEL, label)
-        model.append(row)
-
-    def _populate_os_type_model(self):
-        widget = self.widget("install-os-type")
-        model = widget.get_model()
-        model.clear()
-
-        # Kind of a hack, just show linux + windows by default since
-        # that's all 98% of people care about
-        supported = {"generic", "linux", "windows"}
-
-        # Move 'generic' to the front of the list
-        types = virtinst.OSDB.list_types()
-        types.remove("generic")
-        types.insert(0, "generic")
-
-        # Pretty names for OSes.  If a new OS is not found here,
-        # its capitalized name is used.
-        oses = {
-            "bsd": _("BSD"),
-            "generic": _("Generic"),
-            "linux": _("Linux"),
-            "macos": _("macOS"),
-            "other": _("Others"),
-            "solaris": _("Solaris"),
-            "windows": _("Windows"),
-        }
-
-        # When only the "supported" types are requested,
-        # filter them.
-        if not self._show_all_os_was_selected:
-            types = [t for t in types if t in supported]
-
-        for typename in types:
-            try:
-                typelabel = oses[typename]
-            except KeyError:
-                typelabel = typename.capitalize()
-
-            self._add_os_row(model, typename, typelabel)
-
-        if not self._show_all_os_was_selected:
-            self._add_os_row(model, sep=True)
-            self._add_os_row(model, label=_("Show all OS options"), action=True)
-
-        # Select 'generic' by default
-        widget.set_active(0)
-
-    def _populate_os_variant_model(self, _type):
-        widget = self.widget("install-os-version")
-        model = widget.get_model()
-        model.clear()
-
-        completion_model = self.widget("install-os-version-entry").get_completion().get_model()
-        completion_model.clear()
-
-        preferred = self.config.preferred_distros
-
-        # All the subgroups for top-level types.  Distributions not
-        # belonging to these groups will be shown either in a "Others"
-        # group, or top-level if there are no other groups.
-        groups = {
-            "altlinux": _("ALT Linux"),
-            "centos": _("CentOS"),
-            "debian": _("Debian"),
-            "fedora": _("Fedora"),
-            "freebsd": _("FreeBSD"),
-            "mageia": _("Mageia"),
-            "netbsd": _("NetBSD"),
-            "openbsd": _("OpenBSD"),
-            "opensuse": _("openSUSE"),
-            "rhel": _("Red Hat Enterprise Linux"),
-            "sled": _("SUSE Linux Enterprise Desktop"),
-            "sles": _("SUSE Linux Enterprise Server"),
-            "ubuntu": _("Ubuntu"),
-        }
-
-        if self._show_all_os_was_selected:
-            # List all the OSes, and determine which OSes have groups,
-            # and which do not.
-            variants = virtinst.OSDB.list_os(typename=_type,
-                sortpref=preferred)
-            all_distros = set([_os.distro for _os in variants])
-            distros = [_os for _os in all_distros if _os in groups]
-            distros.sort()
-            other_distros = [_os for _os in all_distros if _os not in groups]
-            parents = dict()
-            if len(distros) > 0:
-                # We have groups for the OSes, so create them.
-                for d in distros:
-                    parents[d] = self._add_os_row(model, "", groups[d])
-                # Create the "Others" group at the end, for the OSes
-                # without a group.
-                if len(other_distros):
-                    others_parent = self._add_os_row(model, "", _('Others'))
-                    for d in other_distros:
-                        parents[d] = others_parent
-            else:
-                # No groups, so assume the top-level will be the parent
-                # all the OSes.
-                for d in other_distros:
-                    parents[d] = None
-            for v in variants:
-                self._add_os_row(model, v.name, v.label,
-                    parent=parents[v.distro])
-                self._add_completion_row(completion_model, v.name, v.label)
-        else:
-            # We are showing only the supported systems, so query them,
-            # and add them directly to their type.
-            variants = virtinst.OSDB.list_os(typename=_type,
-                sortpref=preferred, only_supported=True)
-            for v in variants:
-                self._add_os_row(model, v.name, v.label)
-                self._add_completion_row(completion_model, v.name, v.label)
-
-            # Add the menu entries to show all the OSes
-            self._add_os_row(model, sep=True)
-            self._add_os_row(model, label=_("Show all OS options"), action=True)
-
-        widget.set_active(0)
-
-    def _set_distro_labels(self, distro, ver):
-        self.widget("install-os-type-label").set_text(distro)
-        self.widget("install-os-version-label").set_text(ver)
-
-    def _set_os_id_in_ui(self, os_widget, os_id):
-        """
-        Helper method to set the os type/version widgets to the passed
-        OS ID value
-        """
-        model = os_widget.get_model()
-        def find_row():
-            def cmp_func(model, path, it, user_data):
-                ignore = path
-                if model.get_value(it, OS_COL_ID) == os_id:
-                    os_widget.set_active_iter(it)
-                    user_data[0] = model.get_value(it, OS_COL_LABEL)
-                    return True
-                return False
-            data = [None]
-            model.foreach(cmp_func, data)
-            label = data[0]
-            if not label:
-                os_widget.set_active(0)
-            return label
-
-        label = None
-        if os_id:
-            label = find_row()
-
-            if not label and not self._show_all_os_was_selected:
-                # We didn't find the OS in the variant UI, but we are only
-                # showing the reduced OS list. Trigger the _show_all_os option,
-                # and try again.
-                os_widget.set_active(len(model) - 1)
-                label = find_row()
-        return label or _("Unknown")
-
     def _set_distro_selection(self, variant):
         """
         Update the UI with the distro that was detected from the detection
@@ -1157,18 +948,16 @@ class vmmCreate(vmmGObjectUI):
             # update the UI
             return
 
-        distro_type = None
-        distro_var = None
+        name = self.widget("install-os-name")
         if variant:
-            osclass = virtinst.OSDB.lookup_os(variant)
-            distro_type = osclass.get_typename()
-            distro_var = osclass.name
+            self._os = virtinst.OSDB.lookup_os(variant)
+        else:
+            self._os = None
 
-        dl = self._set_os_id_in_ui(
-            self.widget("install-os-type"), distro_type)
-        vl = self._set_os_id_in_ui(
-            self.widget("install-os-version"), distro_var)
-        self._set_distro_labels(dl, vl)
+        if self._os is None:
+            name.set_text(_("None detected"))
+        else:
+            name.set_text(self._os.label)
 
 
     ###############################
@@ -1200,7 +989,6 @@ class vmmCreate(vmmGObjectUI):
         self.widget("summary-storage-path").set_markup(storagepath)
 
     def _populate_summary(self):
-        distro, version, ignore1, dlabel, vlabel = self._get_config_os_info()
         mem = _pretty_memory(int(self._guest.memory))
         cpu = str(int(self._guest.vcpus))
 
@@ -1221,21 +1009,7 @@ class vmmCreate(vmmGObjectUI):
         elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
             install = _("Virtuozzo container")
 
-        osstr = ""
-        have_os = True
-        if self._guest.os.is_container():
-            osstr = _("Linux")
-        elif not distro:
-            osstr = _("Generic")
-            have_os = False
-        elif not version:
-            osstr = _("Generic") + " " + dlabel
-            have_os = False
-        else:
-            osstr = vlabel
-
-        self.widget("finish-warn-os").set_visible(not have_os)
-        self.widget("summary-os").set_text(osstr)
+        self.widget("summary-os").set_text(self._os and self._os.label or _("Unknown"))
         self.widget("summary-install").set_text(install)
         self.widget("summary-mem").set_text(mem)
         self.widget("summary-cpu").set_text(cpu)
@@ -1316,31 +1090,6 @@ class vmmCreate(vmmGObjectUI):
                                                    INSTALL_PAGE_CONTAINER_APP,
                                                    INSTALL_PAGE_CONTAINER_OS,
                                                    INSTALL_PAGE_VZ_TEMPLATE]
-
-    def _get_config_os_info(self):
-        drow = uiutil.get_list_selected_row(self.widget("install-os-type"))
-        distro = None
-        dlabel = None
-        variant = None
-        entry = self.widget("install-os-version-entry")
-        vlabel = entry.get_text()
-
-        for row in entry.get_completion().get_model():
-            if row[OS_COL_LABEL] == vlabel:
-                variant = row[OS_COL_ID]
-                break
-
-        if not variant:
-            return (None, None, False, None, None)
-
-        if drow:
-            distro = drow[OS_COL_ID]
-            dlabel = drow[OS_COL_LABEL]
-
-        return (distro and str(distro),
-                str(variant),
-                True,
-                str(dlabel), str(vlabel))
 
     def _get_config_local_media(self, store_media=False):
         if self.widget("install-cdrom-radio").get_active():
@@ -1506,56 +1255,30 @@ class vmmCreate(vmmGObjectUI):
     def _toggle_detect_os(self, src):
         dodetect = src.get_active()
 
-        self.widget("install-os-type-label").set_visible(dodetect)
-        self.widget("install-os-version-label").set_visible(dodetect)
-        self.widget("install-os-type").set_visible(not dodetect)
-        self.widget("install-os-version").set_visible(not dodetect)
+        self.widget("install-os-name").set_sensitive(not dodetect)
+        self.widget("install-os-name").set_text("")
+        self._os = None
 
         if dodetect:
-            self.widget("install-os-version-entry").set_text("")
             self._os_already_detected_for_media = False
             self._start_detect_os_if_needed()
 
-    def _selected_os_row(self):
-        return uiutil.get_list_selected_row(self.widget("install-os-type"))
+    def _os_name_search_changed(self, src):
+        searchname = src.get_text().strip()
+        if self._os is None:
+            if src.get_sensitive() and searchname != "":
+                self._os_list.filter_name(searchname)
+                self._os_list.show(src)
+            else:
+                self._os_list.hide()
+        else:
+            if self._os.label != searchname:
+                self._os = None
+            self._os_list.hide()
 
-    def _change_os_type(self, box):
-        ignore = box
-        row = self._selected_os_row()
-        if not row:
-            return
-
-        _type = row[OS_COL_ID]
-        self._populate_os_variant_model(_type)
-        if not row[OS_COL_IS_SHOW_ALL]:
-            return
-
-        self._show_all_os_was_selected = True
-        self._populate_os_type_model()
-
-    def _change_os_version(self, box):
-        show_all = uiutil.get_list_selection(box,
-            column=OS_COL_IS_SHOW_ALL, check_entry=False)
-        if not show_all:
-            return
-
-        # 'show all OS' was clicked
-        # Get previous type to reselect it later
-        type_row = self._selected_os_row()
-        if not type_row:
-            return
-        old_type = type_row[OS_COL_ID]
-
-        self._show_all_os_was_selected = True
-        self._populate_os_type_model()
-
-        # Reselect previous type row
-        os_type_list = self.widget("install-os-type")
-        os_type_model = os_type_list.get_model()
-        for idx, row in enumerate(os_type_model):
-            if row[OS_COL_ID] == old_type:
-                os_type_list.set_active(idx)
-                break
+    def _os_name_stop_search(self, src):
+        src.set_text("")
+        self._os_list.hide()
 
     def _local_media_toggled(self, src):
         usecdrom = src.get_active()
@@ -1567,19 +1290,6 @@ class vmmCreate(vmmGObjectUI):
             self._cdrom_changed(self._mediacombo.combo)
         else:
             self._iso_changed(self.widget("install-iso-entry"))
-
-    def _os_detect_visibility_changed(self, src, ignore=None):
-        is_visible = src.get_visible()
-        detect_chkbox = self.widget("install-detect-os")
-        nodetect_label = self.widget("install-nodetect-label")
-
-        detect_chkbox.set_active(is_visible)
-        detect_chkbox.toggled()
-
-        if is_visible:
-            nodetect_label.hide()
-        else:
-            nodetect_label.show()
 
     def _browse_oscontainer(self, ignore):
         self._browse_file("install-oscontainer-fs", is_dir=True)
@@ -1666,7 +1376,7 @@ class vmmCreate(vmmGObjectUI):
                 fs_dir = [os.environ['HOME'],
                           '.local/share/libvirt/filesystems/']
 
-            fs = fs_dir + [self._generate_default_name(None, None)]
+            fs = fs_dir + [self._generate_default_name(None)]
             self.widget("install-oscontainer-fs").set_text(os.path.join(*fs))
 
 
@@ -1737,7 +1447,9 @@ class vmmCreate(vmmGObjectUI):
     def _set_install_page(self):
         instnotebook = self.widget("install-method-pages")
         detectbox = self.widget("install-detect-os-box")
+        detect = self.widget("install-detect-os")
         osbox = self.widget("install-os-distro-box")
+        name = self.widget("install-os-name")
         instpage = self._get_config_install_page()
 
         # Setting OS value for a container guest doesn't really matter
@@ -1752,6 +1464,13 @@ class vmmCreate(vmmGObjectUI):
                         self._get_config_install_page() == INSTALL_PAGE_URL)
 
         detectbox.set_visible(enabledetect)
+        autodetect = detectbox.get_visible() and detect.get_active()
+        name.set_sensitive(not autodetect)
+        if enabledetect:
+            self._os = None
+        else:
+            if self._os is None:
+                name.set_text("")
 
         if instpage == INSTALL_PAGE_PXE:
             # Hide the install notebook for pxe, since there isn't anything
@@ -1915,18 +1634,16 @@ class vmmCreate(vmmGObjectUI):
             return False
         return True
 
-    def _generate_default_name(self, distro, variant):
+    def _generate_default_name(self, osobj):
         force_num = False
         if self._guest.os.is_container():
             basename = "container"
             force_num = True
-        elif not distro:
+        elif not osobj or not osobj.distro:
             basename = "vm"
             force_num = True
-        elif not variant:
-            basename = distro
         else:
-            basename = variant
+            basename = osobj.distro
 
         if self._guest.os.arch != self.conn.caps.host.cpu.arch:
             basename += "-%s" % _pretty_arch(self._guest.os.arch)
@@ -1949,9 +1666,8 @@ class vmmCreate(vmmGObjectUI):
         init = None
         fs = None
         template = None
-        distro, variant, valid, ignore1, ignore2 = self._get_config_os_info()
 
-        if not valid:
+        if self._os is None:
             return self.err.val_err(_("Please specify a valid OS variant."))
 
         if instmethod == INSTALL_PAGE_ISO:
@@ -2050,7 +1766,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             # Overwrite the guest
             installer = instclass(self.conn.get_backend())
-            self._guest = self._build_guest(variant or distro)
+            self._guest = self._build_guest(self._os.name)
             if not self._guest:
                 return False
             self._guest.installer = installer
@@ -2114,7 +1830,7 @@ class vmmCreate(vmmGObjectUI):
                     self._capsinfo.arch)
 
         try:
-            name = self._generate_default_name(distro, variant)
+            name = self._generate_default_name(self._os)
             self.widget("create-vm-name").set_text(name)
             self._guest.name = name
         except Exception as e:
@@ -2138,11 +1854,10 @@ class vmmCreate(vmmGObjectUI):
                 self, self.conn, path)
 
         res = None
-        osobj = virtinst.OSDB.lookup_os(variant)
-        if osobj:
-            res = osobj.get_recommended_resources(self._guest)
-            logging.debug("Recommended resources for variant=%s: %s",
-                variant, res)
+        if self._os is not None:
+            res = self._os.get_recommended_resources(self._guest)
+            logging.debug("Recommended resources for os=%s: %s",
+                self._os.label, res)
 
         # Change the default values suggested to the user.
         ram_size = DEFAULT_MEM
@@ -2313,6 +2028,9 @@ class vmmCreate(vmmGObjectUI):
         if check_install_page and not is_install_page:
             return
         if not media:
+            name = self.widget("install-os-name")
+            if not name.get_sensitive():
+                name.set_text(_("Waiting for install media / source"))
             return
         if not self._is_os_detect_active():
             return
@@ -2357,6 +2075,9 @@ class vmmCreate(vmmGObjectUI):
         detectThread.setDaemon(True)
         detectThread.start()
 
+        spin = self.widget("install-detect-os-spinner")
+        spin.start()
+
         self._report_detect_os_progress(0, thread_results,
                 forward_after_finish)
 
@@ -2385,15 +2106,10 @@ class vmmCreate(vmmGObjectUI):
         chance of the detection hanging (like slow URL lookup)
         """
         try:
-            base = _("Detecting")
-
             if (thread_results.in_progress() and
                 (idx < (DETECT_TIMEOUT * 2))):
                 # Thread is still going and we haven't hit the timeout yet,
                 # so update the UI labels and reschedule this function
-                detect_str = base + ("." * ((idx % 3) + 1))
-                self._set_distro_labels(detect_str, detect_str)
-
                 self.timeout_add(500, self._report_detect_os_progress,
                     idx + 1, thread_results, forward_after_finish)
                 return
@@ -2403,6 +2119,8 @@ class vmmCreate(vmmGObjectUI):
             distro = None
             logging.exception("Error in distro detect timeout")
 
+        spin = self.widget("install-detect-os-spinner")
+        spin.stop()
         logging.debug("Finished UI OS detection.")
 
         self.widget("create-forward").set_sensitive(True)

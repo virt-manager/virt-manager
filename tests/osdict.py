@@ -45,29 +45,3 @@ class TestOSDB(unittest.TestCase):
         guest.type = "qemu"
         res = OSDB.lookup_os("fedora21").get_recommended_resources(guest)
         assert res["n-cpus"] == 1
-
-    def test_list_os(self):
-        full_list = OSDB.list_os()
-        pref_list = OSDB.list_os(typename="linux", sortpref=["fedora", "rhel"])
-        support_list = OSDB.list_os(only_supported=True)
-
-        assert full_list[0] is not pref_list[0]
-        assert len(full_list) > len(support_list)
-        assert len(OSDB.list_os(typename="generic")) == 1
-
-        # Verify that sort order actually worked
-        found_fedora = False
-        found_rhel = False
-        for idx, osobj in enumerate(pref_list[:]):
-            if osobj.name.startswith("fedora"):
-                found_fedora = True
-                continue
-
-            for osobj2 in pref_list[idx:]:
-                if osobj2.name.startswith("rhel"):
-                    found_rhel = True
-                    continue
-                break
-            break
-
-        assert found_fedora and found_rhel
