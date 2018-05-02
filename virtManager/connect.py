@@ -327,6 +327,8 @@ class vmmConnect(vmmGObjectUI):
         uiutil.set_grid_row_visible(self.widget("uri-label"), not is_custom)
         uiutil.set_grid_row_visible(self.widget("uri-entry"), is_custom)
         if is_custom:
+            label = self.widget("uri-label").get_text()
+            self.widget("uri-entry").set_text(label)
             self.widget("uri-entry").grab_focus()
         self.populate_uri()
 
