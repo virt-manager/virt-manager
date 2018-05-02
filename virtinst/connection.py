@@ -123,17 +123,21 @@ class VirtinstConnection(object):
     def is_open(self):
         return bool(self._libvirtconn)
 
-    def open(self, passwordcb):
+    def open(self, authcb, cbdata):
+        # Mirror the set of libvirt.c virConnectCredTypeDefault
+        valid_auth_options = [
+            libvirt.VIR_CRED_AUTHNAME,
+            libvirt.VIR_CRED_ECHOPROMPT,
+            libvirt.VIR_CRED_REALM,
+            libvirt.VIR_CRED_PASSPHRASE,
+            libvirt.VIR_CRED_NOECHOPROMPT,
+            libvirt.VIR_CRED_EXTERNAL,
+        ]
         open_flags = 0
-        valid_auth_options = [libvirt.VIR_CRED_AUTHNAME,
-                              libvirt.VIR_CRED_PASSPHRASE]
-        authcb = self._auth_cb
-        authcb_data = passwordcb
 
         conn = libvirt.openAuth(self._open_uri,
-                    [valid_auth_options, authcb,
-                    (authcb_data, valid_auth_options)],
-                    open_flags)
+                [valid_auth_options, authcb, cbdata],
+                open_flags)
 
         if self._magic_uri:
             self._magic_uri.overwrite_conn_functions(conn)
@@ -420,16 +424,3 @@ class VirtinstConnection(object):
             return False
         return (self.check_support(self.SUPPORT_CONN_STREAM) and
                 self.check_support(self.SUPPORT_STREAM_UPLOAD))
-
-
-    ###################
-    # Private helpers #
-    ###################
-
-    def _auth_cb(self, creds, data):
-        passwordcb, passwordcreds = data
-        for cred in creds:
-            if cred[0] not in passwordcreds:
-                raise RuntimeError("Unknown cred type '%s', expected only "
-                                   "%s" % (cred[0], passwordcreds))
-        return passwordcb(creds)

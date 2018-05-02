@@ -238,31 +238,31 @@ def getConnection(uri):
 
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
     conn = VirtinstConnection(uri)
-    conn.open(_do_creds_authname)
+    conn.open(_openauth_cb, None)
     logging.debug("Received libvirt URI %s", conn.uri)
 
     return conn
 
 
-# SASL username/pass auth
-def _do_creds_authname(creds):
-    retindex = 4
-
+def _openauth_cb(creds, _cbdata):
     for cred in creds:
-        credtype, prompt, ignore, ignore, ignore = cred
-        prompt += ": "
+        # Libvirt virConnectCredential
+        credtype, prompt, _challenge, _defresult, _result = cred
+        noecho = credtype in [
+                libvirt.VIR_CRED_PASSPHRASE, libvirt.VIR_CRED_NOECHOPROMPT]
+        if not prompt:
+            logging.error("No prompt for auth credtype=%s", credtype)
+            return -1
 
-        res = cred[retindex]
-        if credtype == libvirt.VIR_CRED_AUTHNAME:
-            res = getattr(__builtins__, 'raw_input', input)(prompt)
-        elif credtype == libvirt.VIR_CRED_PASSPHRASE:
+        prompt += ": "
+        if noecho:
             import getpass
             res = getpass.getpass(prompt)
         else:
-            raise RuntimeError("Unknown auth type in creds callback: %d" %
-                               credtype)
+            res = input(prompt)
 
-        cred[retindex] = res
+        # Overwriting 'result' is how we return values to libvirt
+        cred[-1] = res
     return 0
 
 

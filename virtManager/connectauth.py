@@ -40,22 +40,21 @@ def do_we_have_session():
     return False
 
 
-def creds_dialog(conn, creds):
+def creds_dialog(creds, cbdata):
     """
     Thread safe wrapper for libvirt openAuth user/pass callback
     """
-
     retipc = []
 
-    def wrapper(fn, conn, creds):
+    def wrapper(fn, creds, cbdata):
         try:
-            ret = fn(conn, creds)
+            ret = fn(creds, cbdata)
         except Exception:
             logging.exception("Error from creds dialog")
             ret = -1
         retipc.append(ret)
 
-    GLib.idle_add(wrapper, _creds_dialog_main, conn, creds)
+    GLib.idle_add(wrapper, _creds_dialog_main, creds, cbdata)
 
     while not retipc:
         time.sleep(.1)
@@ -63,10 +62,11 @@ def creds_dialog(conn, creds):
     return retipc[0]
 
 
-def _creds_dialog_main(conn, creds):
+def _creds_dialog_main(creds, cbdata):
     """
     Libvirt openAuth callback for username/password credentials
     """
+    _conn = cbdata
     from gi.repository import Gtk
 
     dialog = Gtk.Dialog(_("Authentication required"), None, 0,
@@ -90,24 +90,22 @@ def _creds_dialog_main(conn, creds):
 
     row = 0
     for cred in creds:
-        if (cred[0] == libvirt.VIR_CRED_AUTHNAME or
-            cred[0] == libvirt.VIR_CRED_PASSPHRASE):
-            prompt = cred[1]
-            if not prompt.endswith(":"):
-                prompt += ":"
-
-            text_label = Gtk.Label(label=prompt)
-            text_label.set_alignment(0.0, 0.5)
-
-            label.append(text_label)
-        else:
+        # Libvirt virConnectCredential
+        credtype, prompt, _challenge, _defresult, _result = cred
+        noecho = credtype in [
+                libvirt.VIR_CRED_PASSPHRASE, libvirt.VIR_CRED_NOECHOPROMPT]
+        if not prompt:
+            logging.error("No prompt for auth credtype=%s", credtype)
             return -1
 
+        prompt += ": "
+        text_label = Gtk.Label(label=prompt)
+        text_label.set_alignment(0.0, 0.5)
+        label.append(text_label)
+
         ent = Gtk.Entry()
-        if cred[0] == libvirt.VIR_CRED_PASSPHRASE:
+        if noecho:
             ent.set_visibility(False)
-        elif conn.get_uri_username():
-            ent.set_text(conn.get_uri_username())
         ent.connect("activate", _on_ent_activate)
         entry.append(ent)
 

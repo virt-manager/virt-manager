@@ -994,13 +994,6 @@ class vmmConnection(vmmGObject):
                       self.get_uri())
         self._start_thread(self._open_thread, "Connect %s" % self.get_uri())
 
-    def _do_creds_password(self, creds):
-        try:
-            return connectauth.creds_dialog(self, creds)
-        except Exception:
-            logging.debug("Launching creds dialog failed", exc_info=True)
-            return -1
-
     def _do_open(self, retry_for_tgt=True):
         warnconsole = False
         libvirt_error_code = None
@@ -1008,7 +1001,7 @@ class vmmConnection(vmmGObject):
         exc = None
 
         try:
-            self._backend.open(self._do_creds_password)
+            self._backend.open(connectauth.creds_dialog, self)
             return True, None
         except Exception as e:
             exc = e
