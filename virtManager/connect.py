@@ -25,24 +25,6 @@ HV_BHYVE,
 HV_VZ,
 HV_CUSTOM) = range(7)
 
-(CONN_SSH,
-CONN_TCP,
-CONN_TLS) = range(3)
-
-
-def current_user():
-    try:
-        import getpass
-        return getpass.getuser()
-    except Exception:
-        return ""
-
-
-def default_conn_user(conn):
-    if conn == CONN_SSH:
-        return "root"
-    return current_user()
-
 
 class vmmConnect(vmmGObjectUI):
     @classmethod
@@ -65,7 +47,6 @@ class vmmConnect(vmmGObjectUI):
 
         self.builder.connect_signals({
             "on_hypervisor_changed": self.hypervisor_changed,
-            "on_transport_changed": self.transport_changed,
             "on_hostname_combo_changed": self.hostname_combo_changed,
             "on_connect_remote_toggled": self.connect_remote_toggled,
             "on_username_entry_changed": self.username_changed,
@@ -180,14 +161,6 @@ class vmmConnect(vmmGObjectUI):
             return model[it][0] == -1
         combo.set_row_separator_func(sepfunc)
 
-        combo = self.widget("transport")
-        model = Gtk.ListStore(str)
-        model.append(["SSH"])
-        model.append(["TCP (SASL, Kerberos)"])
-        model.append(["SSL/TLS " + _("with certificates")])
-        combo.set_model(model)
-        uiutil.init_combo_text_column(combo, 0)
-
         # Hostname combo box entry
         hostListModel = Gtk.ListStore(str, str, str)
         host = self.widget("hostname")
@@ -197,7 +170,6 @@ class vmmConnect(vmmGObjectUI):
 
     def reset_state(self):
         self.set_default_hypervisor()
-        self.widget("transport").set_active(0)
         self.widget("autoconnect").set_sensitive(True)
         self.widget("autoconnect").set_active(True)
         self.widget("hostname").get_model().clear()
@@ -349,8 +321,6 @@ class vmmConnect(vmmGObjectUI):
             self.widget("username-entry"), show_remote)
         uiutil.set_grid_row_visible(
             self.widget("hostname"), show_remote)
-        uiutil.set_grid_row_visible(
-            self.widget("transport"), show_remote)
         if not show_remote:
             self.widget("connect-remote").set_active(False)
 
@@ -366,29 +336,19 @@ class vmmConnect(vmmGObjectUI):
     def connect_remote_toggled(self, src_ignore):
         is_remote = self.is_remote()
         self.widget("hostname").set_sensitive(is_remote)
-        self.widget("transport").set_sensitive(is_remote)
         self.widget("autoconnect").set_active(not is_remote)
         self.widget("username-entry").set_sensitive(is_remote)
 
-        self.populate_default_user()
-        self.populate_uri()
-
-    def transport_changed(self, src_ignore):
-        self.populate_default_user()
+        if is_remote and not self.widget("username-entry").get_text():
+            self.widget("username-entry").set_text("root")
         self.populate_uri()
 
     def populate_uri(self):
         uri = self.generate_uri()
         self.widget("uri-label").set_text(uri)
 
-    def populate_default_user(self):
-        conn = self.widget("transport").get_active()
-        default_user = default_conn_user(conn)
-        self.widget("username-entry").set_text(default_user)
-
     def generate_uri(self):
         hv = uiutil.get_list_selection(self.widget("hypervisor"))
-        conn = self.widget("transport").get_active()
         host = self.widget("hostname").get_child().get_text().strip()
         user = self.widget("username-entry").get_text()
         is_remote = self.is_remote()
@@ -413,17 +373,10 @@ class vmmConnect(vmmGObjectUI):
             host = "[%s]" % host
         addrstr += host
 
-        hoststr = ""
-        if not is_remote:
-            hoststr = ":///"
+        if is_remote:
+            hoststr = "+ssh://" + addrstr + "/"
         else:
-            if conn == CONN_TLS:
-                hoststr = "+tls://"
-            if conn == CONN_SSH:
-                hoststr = "+ssh://"
-            if conn == CONN_TCP:
-                hoststr = "+tcp://"
-            hoststr += addrstr + "/"
+            hoststr = ":///"
 
         uri = hvstr + hoststr
         if hv in (HV_QEMU, HV_BHYVE, HV_VZ):
