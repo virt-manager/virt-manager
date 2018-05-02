@@ -34,16 +34,15 @@ class VMMConnect(uiutils.UITestCase):
 
         connect = win.find("Connect", "push button")
         remote = win.find_fuzzy("Connect to remote", "check box")
-        meth = win.find("Method", "combo box")
         user = win.find("Username", "text")
         host = win.find("Hostname", "text")
         urilabel = win.find("uri-label", "label")
         urientry = win.find("uri-entry", "text")
-        self.assertTrue(meth.showing is user.showing is host.showing is True)
+        self.assertTrue(user.showing is host.showing is True)
 
         win.find_fuzzy("Hypervisor", "combo box").click()
         win.find_fuzzy("QEMU/KVM user session", "menu item").click()
-        self.assertTrue(meth.showing is user.showing is host.showing is False)
+        self.assertTrue(user.showing is host.showing is False)
         self.assertTrue(urilabel.text == "qemu:///session")
 
         # Enter a failing URI, make sure error is raised, and we can
@@ -51,13 +50,11 @@ class VMMConnect(uiutils.UITestCase):
         win.find_fuzzy("Hypervisor", "combo box").click()
         win.find_fuzzy("Xen", "menu item").click()
         remote.click()
-        meth.click()
-        win.find_fuzzy("Kerberos", "menu item").click()
         user.text = "fribuser"
         fakehost = "ix8khfyidontexistkdjur.com"
         host.text = fakehost + ":12345"
         self.assertTrue(
-                urilabel.text == "xen+tcp://fribuser@%s:12345/" % fakehost)
+                urilabel.text == "xen+ssh://fribuser@%s:12345/" % fakehost)
         connect.click()
 
         uiutils.check_in_loop(lambda: win.showing is True)
