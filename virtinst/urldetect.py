@@ -614,6 +614,19 @@ class SuseDistro(Distro):
         if re.search("openSUSE Tumbleweed", self.cache.treeinfo_name):
             return "opensusetumbleweed"
 
+        version, update = self.cache.split_version()
+        self._version_number = version
+
+        base = self._variant_prefix + str(version)
+        while update >= 0:
+            tryvar = base
+            # SLE doesn't use '.0' for initial releases in osinfo-db (sles11, sles12, etc)
+            if update > 0 or not base.startswith('sle'):
+                tryvar += ".%s" % update
+            if OSDB.lookup_os(tryvar):
+                return tryvar
+            update -= 1
+
     def _detect_version(self):
         var = self._detect_from_treeinfo()
         if not var:
