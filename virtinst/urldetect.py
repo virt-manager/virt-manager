@@ -500,13 +500,13 @@ class CentOSDistro(RHELDistro):
 
 
 class SuseDistro(Distro):
-    PRETTY_NAME = "SUSE"
+    PRETTY_NAME = None
     _suse_regex = []
+    urldistro = None
 
     @classmethod
     def is_valid(cls, cache):
-        famregex = ".*SUSE.*"
-        if cache.treeinfo_family_regex(famregex):
+        if cache.treeinfo_family_regex(cls.famregex):
             return True
 
         if not cache.suse_content:
@@ -531,7 +531,7 @@ class SuseDistro(Distro):
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
-        if not self.cache.suse_content:
+        if not self.cache.suse_content or self.cache.suse_content == -1:
             # This means we matched on treeinfo
             k, b = self.cache.get_treeinfo_media(self.type)
             self._kernel_paths = k
@@ -641,18 +641,27 @@ class SuseDistro(Distro):
 
 
 class SLESDistro(SuseDistro):
+    PRETTY_NAME = "SLES"
     urldistro = "sles"
+    _variant_prefix = "sles"
     _suse_regex = [".*SUSE Linux Enterprise Server*", ".*SUSE SLES*"]
+    famregex = ".*SUSE Linux Enterprise.*"
 
 
 class SLEDDistro(SuseDistro):
+    PRETTY_NAME = "SLED"
     urldistro = "sled"
+    _variant_prefix = "sled"
     _suse_regex = [".*SUSE Linux Enterprise Desktop*"]
+    famregex = ".*SUSE Linux Enterprise.*"
 
 
 class OpensuseDistro(SuseDistro):
+    PRETTY_NAME = "openSUSE"
     urldistro = "opensuse"
+    _variant_prefix = "opensuse"
     _suse_regex = [".*openSUSE.*"]
+    famregex = ".*openSUSE.*"
 
 
 class DebianDistro(Distro):
