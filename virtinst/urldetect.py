@@ -122,6 +122,26 @@ class _DistroCache(object):
 
         return kernel_paths, boot_iso_paths
 
+    def split_version(self):
+        verstr = self.treeinfo_version
+        def _safeint(c):
+            try:
+                return int(c)
+            except Exception:
+                return 0
+
+        # Parse a string like 6.9 or 7.4 into its two parts
+        # centos altarch's have just version=7
+        update = 0
+        version = _safeint(verstr)
+        if verstr.count(".") == 1:
+            version = _safeint(verstr.split(".")[0])
+            update = _safeint(verstr.split(".")[1])
+
+        logging.debug("converted verstr=%s to version=%s update=%s",
+                verstr, version, update)
+        return version, update
+
 
 class _SUSEContent(object):
     """
@@ -447,32 +467,12 @@ class RHELDistro(RedHatDistro):
         famregex = ".*(Red Hat Enterprise Linux|RHEL).*"
         return cache.treeinfo_family_regex(famregex)
 
-    def _split_rhel_version(self):
-        verstr = self.cache.treeinfo_version
-        def _safeint(c):
-            try:
-                return int(c)
-            except Exception:
-                return 0
-
-        # Parse a string like 6.9 or 7.4 into its two parts
-        # centos altarch's have just version=7
-        update = 0
-        version = _safeint(verstr)
-        if verstr.count(".") == 1:
-            version = _safeint(verstr.split(".")[0])
-            update = _safeint(verstr.split(".")[1])
-
-        logging.debug("converted verstr=%s to version=%s update=%s",
-                verstr, version, update)
-        return version, update
-
     def _detect_version(self):
         if not self.cache.treeinfo_version:
             logging.debug("No treeinfo version? Not setting an os_variant")
             return
 
-        version, update = self._split_rhel_version()
+        version, update = self.cache.split_version()
         self._version_number = version
 
         # start with example base=rhel7, then walk backwards
