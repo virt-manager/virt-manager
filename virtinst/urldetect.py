@@ -232,9 +232,10 @@ class _SUSEContent(object):
         # Special case, parse version out of a line like this
         # cpe:/o:opensuse:opensuse:13.2,openSUSE
         if (not distro_version and
-            re.match("^.*:.*,openSUSE$", self.content_dict["DISTRO"])):
+            re.match("^.*:.*,openSUSE*", self.content_dict["DISTRO"])):
             distro_version = self.content_dict["DISTRO"].rsplit(
                     ",", 1)[0].strip().rsplit(":")[4]
+        distro_version = distro_version.strip()
 
         if "Enterprise" in self.product_name or "SLES" in self.product_name:
             sle_version = self.product_name.strip().rsplit(' ')[4]
