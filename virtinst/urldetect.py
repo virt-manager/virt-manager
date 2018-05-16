@@ -474,7 +474,6 @@ class RHELDistro(RedHatDistro):
             return
 
         version, update = self.cache.split_version()
-        self._version_number = version
 
         # start with example base=rhel7, then walk backwards
         # through the OS list to find the latest os name that matches
@@ -503,6 +502,8 @@ class SuseDistro(Distro):
     PRETTY_NAME = None
     _suse_regex = []
     urldistro = None
+    _variant_prefix = NotImplementedError
+    famregex = NotImplementedError
 
     @classmethod
     def is_valid(cls, cache):
@@ -616,8 +617,6 @@ class SuseDistro(Distro):
             return "opensusetumbleweed"
 
         version, update = self.cache.split_version()
-        self._version_number = version
-
         base = self._variant_prefix + str(version)
         while update >= 0:
             tryvar = base
