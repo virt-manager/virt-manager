@@ -865,7 +865,7 @@ class _VirtCLIArgument(object):
         Process the cli param against the pass inst.
 
         So if we are VirtCLIArgument for --disk device=, and the user
-        specified --disk device=foo, we were instanciated with
+        specified --disk device=foo, we were instantiated with
         key=device val=foo, so set inst.device = foo
         """
         if support_cb:

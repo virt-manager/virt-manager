@@ -339,7 +339,7 @@ class Details(uiutils.UITestCase):
 
     def testDetailsMiscEdits(self):
         """
-        Test misc editting behavior, like checking for unapplied
+        Test misc editing behavior, like checking for unapplied
         changes
         """
         win = self._open_details_window(vmname="test-many-devices",

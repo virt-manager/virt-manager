@@ -958,7 +958,7 @@ class DeviceDisk(Device):
         disk.
         :returns: str prefix, or None if no reasonable guess can be made
         """
-        # The upper limits here aren't necessarilly 1024, but let the HV
+        # The upper limits here aren't necessarily 1024, but let the HV
         # error as appropriate.
         def _return(prefix):
             nummap = {

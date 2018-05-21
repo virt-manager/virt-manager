@@ -669,7 +669,7 @@ c = vinst.add_category("nodisk-install", "--nographics --noautoconsole --nodisks
 c.add_valid("--hvm --cdrom %(EXISTIMG1)s")  # Simple cdrom install
 c.add_valid("--wait 0 --os-variant winxp --cdrom %(EXISTIMG1)s")  # Windows (2 stage) install
 c.add_valid("--pxe --virt-type test")  # Explicit virt-type
-c.add_valid("--arch i686 --pxe")  # Explicity fullvirt + arch
+c.add_valid("--arch i686 --pxe")  # Explicitly fullvirt + arch
 c.add_valid("--arch i486 --pxe")  # Convert i*86 -> i686
 c.add_valid("--location %(TREEDIR)s")  # Directory tree URL install
 c.add_valid("--location %(TREEDIR)s --initrd-inject virt-install --extra-args ks=file:/virt-install")  # initrd-inject
@@ -869,7 +869,7 @@ c.add_valid("test-state-shutoff --edit --update --boot menu=on")  # --update wit
 c.add_invalid("test --edit --hostdev driver_name=vfio")  # Guest has no hostdev to edit
 c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
 c.add_invalid("test --edit")  # specified no edit option
-c.add_invalid("test --edit 2 --cpu host-passthrough")  # specifing --edit number where it doesn't make sense
+c.add_invalid("test --edit 2 --cpu host-passthrough")  # specifying --edit number where it doesn't make sense
 c.add_invalid("test-for-virtxml --edit 5 --tpm /dev/tpm")  # device edit out of range
 c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --update")  # test driver doesn't support attachdevice...
 c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update")  # test driver doesn't support detachdevice...

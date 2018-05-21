@@ -1781,8 +1781,8 @@ class vmmDomain(vmmLibvirtObject):
         return rd, wr
 
     def _set_mem_stats_period(self):
-        # QEMU requires we explicitly enable memory stats polling per VM
-        # if we wan't fine grained memory stats
+        # QEMU requires to explicitly enable memory stats polling per VM
+        # if we want fine grained memory stats
         if not self.conn.check_support(
                 self.conn.SUPPORT_CONN_MEM_STATS_PERIOD):
             return

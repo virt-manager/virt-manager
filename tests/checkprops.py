@@ -19,7 +19,7 @@ class CheckPropsTest(unittest.TestCase):
         try:
             # Accessing an internal detail of unittest, but it's only
             # to prevent incorrect output in the case that other tests
-            # failed or were skipped, which can give a false postive here
+            # failed or were skipped, which can give a false positive here
             result = self._outcome.result
             skip = bool(result.errors or result.failures or result.skipped)
         except Exception:

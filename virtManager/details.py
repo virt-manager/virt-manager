@@ -2329,7 +2329,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         # This function should only be called when the VM xml actually
-        # changes (not everytime it is refreshed). This saves us from blindly
+        # changes (not every time it is refreshed). This saves us from blindly
         # parsing the xml every tick
 
         # Add / remove new devices
@@ -2475,13 +2475,13 @@ class vmmDetails(vmmGObjectUI):
             return ('<span color="#82003B">%s</span> '
                     '<span color="#295C45">%s</span>' % (text1, text2))
         def _dsk_rx_tx_text(rx, tx, unit):
-            opts = {"received": rx, "transfered": tx, "units": unit}
+            opts = {"received": rx, "transferred": tx, "units": unit}
             return _multi_color(_("%(received)d %(units)s read") % opts,
-                                _("%(transfered)d %(units)s write") % opts)
+                                _("%(transferred)d %(units)s write") % opts)
         def _net_rx_tx_text(rx, tx, unit):
-            opts = {"received": rx, "transfered": tx, "units": unit}
+            opts = {"received": rx, "transferred": tx, "units": unit}
             return _multi_color(_("%(received)d %(units)s in") % opts,
-                                _("%(transfered)d %(units)s out") % opts)
+                                _("%(transferred)d %(units)s out") % opts)
 
         cpu_txt = _("Disabled")
         mem_txt = _("Disabled")

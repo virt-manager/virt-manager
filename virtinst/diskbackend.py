@@ -100,7 +100,7 @@ def check_if_path_managed(conn, path):
         return None, None
 
     # We have the parent pool, but didn't find a volume on first lookup
-    # attempt. Refresh the pool and try again, incase we were just out
+    # attempt. Refresh the pool and try again, in case we were just out
     # of date.
     try:
         pool.refresh(0)

@@ -204,7 +204,7 @@ class _HTTPURLFetcher(_URLFetcher):
     def _write(self, urlobj, fileobj):
         """
         The requests object doesn't have a file-like read() option, so
-        we need to implemente it ourselves
+        we need to implement it ourselves
         """
         total = 0
         for data in urlobj.iter_content(chunk_size=self._block_size):

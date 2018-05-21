@@ -456,7 +456,7 @@ virtual console and even greater coverage for translations.
 The release focus has been on major bug fixing. This is also the
 first release in which (partial) translations are available for
 the UI in approximately 20 languages - thanks to the Fedora i18n
-team for excellant progress on this. It is now possible to control 
+team for excellent progress on this. It is now possible to control
 the virt-manager UI with command line arguments as well as the DBus
 API & it DBus activation is no longer used by default which fixes
 interaction with GNOME keyring & AT-SPI accesibility. Numerous
