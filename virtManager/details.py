@@ -2329,7 +2329,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         # This function should only be called when the VM xml actually
-        # changes (not everytime it is refreshed). This saves us from blindly
+        # changes (not every time it is refreshed). This saves us from blindly
         # parsing the xml every tick
 
         # Add / remove new devices

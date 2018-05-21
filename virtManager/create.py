@@ -295,7 +295,7 @@ class vmmCreate(vmmGObjectUI):
         # Lists for OS container bootstrap
         set_model_list("install-oscontainer-source-url-combo")
 
-        # Archtecture
+        # Architecture
         archList = self.widget("arch")
         # [label, guest.os.arch value]
         archModel = Gtk.ListStore(str, str)
@@ -944,8 +944,8 @@ class vmmCreate(vmmGObjectUI):
         thread.
         """
         if not self._is_os_detect_active():
-            # If the user changed the OS detect checkbox inbetween, don't
-            # update the UI
+            # If the user changed the OS detect checkbox in the meantime,
+            # don't update the UI
             return
 
         name = self.widget("install-os-name")

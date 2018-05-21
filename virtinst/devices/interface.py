@@ -163,7 +163,7 @@ class DeviceInterface(Device):
     def is_conflict_net(conn, searchmac):
         """
         :returns: a two element tuple:
-            first element is True if fatal collision occured
+            first element is True if fatal collision occurred
             second element is a string description of the collision.
 
             Non fatal collisions (mac addr collides with inactive guest) will

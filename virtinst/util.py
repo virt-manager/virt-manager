@@ -129,7 +129,7 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
     :param lib_collision: If true, the collision_cb is not a boolean function,
         and instead throws a libvirt error on failure
     :param start_num: The number to start at for generating non colliding names
-    :param sep: The seperator to use between the basename and the
+    :param sep: The separator to use between the basename and the
         generated number (default is "-")
     :param force_num: Force the generated name to always end with a number
     :param collidelist: An extra list of names to check for collision
