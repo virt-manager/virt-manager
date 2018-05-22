@@ -31,7 +31,7 @@ class DomainNumatune(XMLBuilder):
 
         if not isinstance(val, str) or len(val) == 0:
             raise ValueError(_("cpuset must be string"))
-        if re.match("^[0-9,-^]*$", val) is None:
+        if re.match("^[0-9,\-^]*$", val) is None:
             raise ValueError(_("cpuset can only contain numeric, ',', '^', or "
                                "'-' characters"))
 
