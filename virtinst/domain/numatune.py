@@ -59,27 +59,6 @@ class DomainNumatune(XMLBuilder):
                     raise ValueError(_("cpuset's pCPU numbers must be less "
                                        "than pCPUs."))
 
-    @staticmethod
-    def cpuset_str_to_tuple(conn, cpuset):
-        DomainNumatune.validate_cpuset(conn, cpuset)
-        pinlist = [False] * get_phy_cpus(conn)
-
-        entries = cpuset.split(",")
-        for e in entries:
-            series = e.split("-", 1)
-
-            if len(series) == 1:
-                pinlist[int(series[0])] = True
-                continue
-
-            start = int(series[0])
-            end = int(series[1])
-
-            for i in range(start, end + 1):
-                pinlist[i] = True
-
-        return tuple(pinlist)
-
 
     MEMORY_MODES = ["interleave", "strict", "preferred"]
 

@@ -159,25 +159,6 @@ class TestXMLMisc(unittest.TestCase):
         finally:
             setattr(deviceinterface, "_default_bridge", origfunc)
 
-    def testCpustrToTuple(self):
-        # Various testing our cpustr handling
-        conn = self.conn
-        base = [False] * 16
-
-        expect = base[:]
-        expect[1] = expect[2] = expect[3] = True
-        self.assertEqual(tuple(expect),
-            virtinst.DomainNumatune.cpuset_str_to_tuple(conn, "1-3"))
-
-        expect = base[:]
-        expect[1] = expect[3] = expect[5] = expect[10] = expect[11] = True
-        self.assertEqual(tuple(expect),
-            virtinst.DomainNumatune.cpuset_str_to_tuple(conn, "1,3,5,10-11"))
-
-        self.assertRaises(ValueError,
-            virtinst.DomainNumatune.cpuset_str_to_tuple,
-            conn, "16")
-
     def testDiskNumbers(self):
         # Various testing our target generation
         self.assertEqual("a", DeviceDisk.num_to_target(1))
