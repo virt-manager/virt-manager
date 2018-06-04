@@ -189,11 +189,7 @@ class Guest(XMLBuilder):
                         default_cb=lambda s: 1)
     curvcpus = XMLProperty("./vcpu/@current", is_int=True)
     vcpu_placement = XMLProperty("./vcpu/@placement")
-
-    def _validate_cpuset(self, val):
-        DomainNumatune.validate_cpuset(self.conn, val)
-    cpuset = XMLProperty("./vcpu/@cpuset",
-                         validate_cb=_validate_cpuset)
+    cpuset = XMLProperty("./vcpu/@cpuset")
 
     def _get_default_uuid(self):
         if self._random_uuid is None:

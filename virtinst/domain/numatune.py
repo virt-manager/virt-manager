@@ -5,61 +5,13 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import re
-
 from ..xmlbuilder import XMLBuilder, XMLProperty
-
-
-def get_phy_cpus(conn):
-    """
-    Get number of physical CPUs.
-    """
-    hostinfo = conn.getInfo()
-    pcpus = hostinfo[4] * hostinfo[5] * hostinfo[6] * hostinfo[7]
-    return pcpus
 
 
 class DomainNumatune(XMLBuilder):
     """
     Class for generating <numatune> XML
     """
-
-    @staticmethod
-    def validate_cpuset(conn, val):
-        if val is None or val == "":
-            return
-
-        if not isinstance(val, str) or len(val) == 0:
-            raise ValueError(_("cpuset must be string"))
-        if re.match("^[0-9,\-^]*$", val) is None:
-            raise ValueError(_("cpuset can only contain numeric, ',', '^', or "
-                               "'-' characters"))
-
-        pcpus = get_phy_cpus(conn)
-        for c in val.split(','):
-            # Redundant commas
-            if not c:
-                continue
-
-            if "-" in c:
-                (x, y) = c.split('-', 1)
-                x = int(x)
-                y = int(y)
-                if x > y:
-                    raise ValueError(_("cpuset contains invalid format."))
-                if x >= pcpus or y >= pcpus:
-                    raise ValueError(_("cpuset's pCPU numbers must be less "
-                                       "than pCPUs."))
-            else:
-                if c.startswith("^"):
-                    c = c[1:]
-                c = int(c)
-
-                if c >= pcpus:
-                    raise ValueError(_("cpuset's pCPU numbers must be less "
-                                       "than pCPUs."))
-
-
     XML_NAME = "numatune"
     _XML_PROP_ORDER = ["memory_mode", "memory_nodeset"]
 

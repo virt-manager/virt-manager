@@ -578,7 +578,6 @@ c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-se
 ####################################################
 
 c = vinst.add_category("cpuram", "--hvm --nographics --noautoconsole --nodisks --pxe")
-c.add_valid("--vcpus 4 --cpuset=1,3-5,")  # Cpuset with trailing comma
 c.add_valid("--connect %(URI-XEN)s --vcpus 4 --cpuset=auto")  # cpuset=auto but xen doesn't support it
 c.add_valid("--ram 4000000")  # Ram overcommit
 c.add_valid("--vcpus sockets=2,threads=2")  # Topology only
@@ -586,8 +585,6 @@ c.add_valid("--cpu somemodel")  # Simple --cpu
 c.add_valid("--security label=foobar.label,relabel=yes")  # --security implicit static
 c.add_valid("--security label=foobar.label,a1,z2,b3,type=static,relabel=no")  # static with commas 1
 c.add_valid("--security label=foobar.label,a1,z2,b3")  # --security static with commas 2
-c.add_invalid("--vcpus 32 --cpuset=969-1000")  # Bogus cpuset
-c.add_invalid("--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
 c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
 c.add_invalid("--security foobar")  # Busted --security
 c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
