@@ -258,15 +258,7 @@ def convert_old_networks(options):
     logging.debug("Distilled --network options: %s", options.network)
 
 
-def _determine_default_graphics(guest, default_override):
-    if default_override is True:
-        return
-    elif default_override is False:
-        guest.skip_default_graphics = True
-        return
-
-
-def convert_old_graphics(guest, options, default_override=None):
+def convert_old_graphics(options):
     vnc = options.vnc
     vncport = options.vncport
     vnclisten = options.vnclisten
@@ -287,7 +279,6 @@ def convert_old_graphics(guest, options, default_override=None):
         return
 
     if optnum == 0:
-        _determine_default_graphics(guest, default_override)
         return
 
     # Build a --graphics command line from old style opts
@@ -576,7 +567,7 @@ def build_guest_instance(conn, options):
     convert_old_memory(options)
     convert_old_sound(options)
     convert_old_networks(options)
-    convert_old_graphics(guest, options)
+    convert_old_graphics(options)
     convert_old_disks(options)
     convert_old_features(options)
     convert_old_cpuset(options)
