@@ -562,16 +562,6 @@ def build_guest_instance(conn, options):
 
     guest.installer = build_installer(options, conn, guest.os.os_type)
 
-    convert_old_memory(options)
-    convert_old_sound(options)
-    convert_old_networks(options)
-    convert_old_graphics(options)
-    convert_old_disks(options)
-    convert_old_features(options)
-    convert_old_cpuset(options)
-    convert_old_init(options)
-    convert_old_os_options(options)
-
     # non-xml install options
     options.extra_args = options.extra_args or []
     guest.installer.extraargs = options.extra_args
@@ -942,22 +932,28 @@ def main(conn=None):
     cli.earlyLogging()
     options = parse_args()
 
-    convert_old_printxml(options)
-
     # Default setup options
+    convert_old_printxml(options)
     options.quiet = (options.xmlonly or
         options.test_media_detection or options.quiet)
-
     cli.setupLogging("virt-install", options.debug, options.quiet)
-
-    check_cdrom_option_error(options)
-
-    cli.convert_old_force(options)
-    cli.parse_check(options.check)
-    cli.set_prompt(options.prompt)
 
     if cli.check_option_introspection(options):
         return 0
+
+    check_cdrom_option_error(options)
+    cli.convert_old_force(options)
+    cli.parse_check(options.check)
+    cli.set_prompt(options.prompt)
+    convert_old_memory(options)
+    convert_old_sound(options)
+    convert_old_networks(options)
+    convert_old_graphics(options)
+    convert_old_disks(options)
+    convert_old_features(options)
+    convert_old_cpuset(options)
+    convert_old_init(options)
+    convert_old_os_options(options)
 
     if conn is None:
         conn = cli.getConnection(options.connect)
