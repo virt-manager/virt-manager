@@ -2219,6 +2219,8 @@ ParserNetwork.add_arg("driver_queues", "driver_queues")
 ParserNetwork.add_arg("rom_file", "rom_file")
 ParserNetwork.add_arg("rom_bar", "rom_bar", is_onoff=True)
 
+ParserNetwork.add_arg("mtu_size", "mtu.size")
+
 # For 802.1Qbg
 ParserNetwork.add_arg("virtualport.type", "virtualport_type")
 ParserNetwork.add_arg("virtualport.managerid", "virtualport_managerid")

@@ -261,7 +261,7 @@ class DeviceInterface(Device):
     _XML_PROP_ORDER = [
         "_bridge", "_network", "_source_dev", "source_type", "source_path",
         "source_mode", "portgroup", "macaddr", "target_dev", "model",
-        "virtualport", "filterref", "rom_bar", "rom_file"]
+        "virtualport", "filterref", "rom_bar", "rom_file", "mtu_size"]
 
     _bridge = XMLProperty("./source/@bridge", default_cb=_get_default_bridge)
     _network = XMLProperty("./source/@network")
@@ -291,6 +291,8 @@ class DeviceInterface(Device):
 
     rom_bar = XMLProperty("./rom/@bar", is_onoff=True)
     rom_file = XMLProperty("./rom/@file")
+
+    mtu_size = XMLProperty("./mtu/@size", is_int=True)
 
 
     #############
