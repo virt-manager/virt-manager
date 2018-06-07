@@ -2145,6 +2145,11 @@ ParserDisk.add_arg("relabel", "seclabel[0-9]*.relabel", is_onoff=True,
 ParserDisk.add_arg("label", "seclabel[0-9]*.label", can_comma=True,
                    find_inst_cb=ParserDisk.seclabel_find_inst_cb)
 
+ParserDisk.add_arg("geometry_cyls", "geometry.cyls")
+ParserDisk.add_arg("geometry_heads", "geometry.heads")
+ParserDisk.add_arg("geometry_secs", "geometry.secs")
+ParserDisk.add_arg("geometry_trans", "geometry.trans")
+
 
 #####################
 # --network parsing #

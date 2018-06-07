@@ -775,6 +775,11 @@ class DeviceDisk(Device):
 
     seclabels = XMLChildProperty(_DiskSeclabel, relative_xpath="./source")
 
+    geometry_cyls = XMLProperty("./geometry/@cyls", is_int=True)
+    geometry_heads = XMLProperty("./geometry/@heads", is_int=True)
+    geometry_secs = XMLProperty("./geometry/@secs", is_int=True)
+    geometry_trans = XMLProperty("./geometry/@trans")
+
 
     #################################
     # Validation assistance methods #
