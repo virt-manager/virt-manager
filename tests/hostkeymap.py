@@ -40,3 +40,11 @@ class TestHostkeymap(unittest.TestCase):
                 hostkeymap._xorg_keymap(
                     _open("xorg-rhel5.txt")),
                 "us")
+
+    def testSanitize(self):
+        def san(inp):
+            return hostkeymap.sanitize_keymap(inp)
+
+        self.assertEqual(san("pt"), "pt")
+        self.assertEqual(san("de-us"), "de")
+        self.assertEqual(san("en_us"), "en-us")

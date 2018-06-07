@@ -186,11 +186,8 @@ def sanitize_keymap(kt):
     # Try a more intelligent lookup: strip out all '-' and '_', sort
     # the keytable keys putting the longest first, then compare
     # by string prefix
-    def len_cmp(a, b):
-        return len(b) - len(a)
-
     clean_kt = kt.replace("-", "").replace("_", "")
-    sorted_keys = sorted(list(keytable.keys()), len_cmp)
+    sorted_keys = sorted(list(keytable.keys()), key=len)
 
     for key in sorted_keys:
         origkey = key
