@@ -42,6 +42,7 @@
     </disk>
     <disk type="file" device="cdrom">
       <target dev="sda" bus="sata"/>
+      <driver copy_on_read="on"/>
       <iotune>
         <read_bytes_sec>1</read_bytes_sec>
         <write_bytes_sec>5</write_bytes_sec>

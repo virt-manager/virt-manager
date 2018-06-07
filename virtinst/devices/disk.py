@@ -745,6 +745,8 @@ class DeviceDisk(Device):
     driver_type = XMLProperty("./driver/@type",
                               default_cb=_get_default_driver_type)
 
+    driver_copy_on_read = XMLProperty("./driver/@copy_on_read", is_onoff=True)
+
     sgio = XMLProperty("./@sgio")
 
     bus = XMLProperty("./target/@bus")
