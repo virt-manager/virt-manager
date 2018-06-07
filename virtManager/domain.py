@@ -537,7 +537,7 @@ class vmmDomain(vmmLibvirtObject):
         # to be removed at the same time
         con = None
         if self.serial_is_console_dup(devobj):
-            con = self.xmlobj.devices.consoles[0]
+            con = self.xmlobj.devices.console[0]
 
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, False)
