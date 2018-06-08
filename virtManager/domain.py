@@ -982,6 +982,17 @@ class vmmDomain(vmmLibvirtObject):
         else:
             self._redefine_xmlobj(xmlobj)
 
+    def define_tpm(self, devobj, do_hotplug, model=_SENTINEL):
+        xmlobj = self._make_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        if model != _SENTINEL:
+            editdev.model = model
+
+        self._redefine_xmlobj(xmlobj)
+
 
     ####################
     # Hotplug routines #

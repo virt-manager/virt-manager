@@ -89,10 +89,11 @@ from .graphwidgets import Sparkline
  EDIT_CONTROLLER_MODEL,
 
  EDIT_TPM_TYPE,
+ EDIT_TPM_MODEL,
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 49)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 50)
 
 
 # Columns in hw list model
@@ -573,6 +574,8 @@ class vmmDetails(vmmGObjectUI):
 
             "on_hw_list_button_press_event": self.popup_addhw_menu,
 
+            "on_tpm_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_TPM_MODEL),
+
             # Listeners stored in vmmConsolePages
             "on_details_menu_view_fullscreen_activate": (
                 self.console.details_toggle_fullscreen),
@@ -1045,6 +1048,10 @@ class vmmDetails(vmmGObjectUI):
         # Smartcard mode
         sc_mode = self.widget("smartcard-mode")
         vmmAddHardware.build_smartcard_mode_combo(self.vm, sc_mode)
+
+        # TPM model
+        tpm_model = self.widget("tpm-model")
+        vmmAddHardware.build_tpm_model_combo(self.vm, tpm_model, None)
 
         # Controller model
         combo = self.widget("controller-model")
@@ -1905,6 +1912,8 @@ class vmmDetails(vmmGObjectUI):
                 ret = self.config_filesystem_apply(key)
             elif pagetype is HW_LIST_TYPE_HOSTDEV:
                 ret = self.config_hostdev_apply(key)
+            elif pagetype is HW_LIST_TYPE_TPM:
+                ret = self.config_tpm_apply(key)
             else:
                 ret = False
         except Exception as e:
@@ -2260,6 +2269,17 @@ class vmmDetails(vmmGObjectUI):
             kwargs["rom_bar"] = self.widget("hostdev-rombar").get_active()
 
         return vmmAddHardware.change_config_helper(self.vm.define_hostdev,
+                                          kwargs, self.vm, self.err,
+                                          devobj=devobj)
+
+    def config_tpm_apply(self, devobj):
+        kwargs = {}
+
+        if self.edited(EDIT_TPM_MODEL):
+            model = uiutil.get_list_selection(self.widget("tpm-model"))
+            kwargs["model"] = model
+
+        return vmmAddHardware.change_config_helper(self.vm.define_tpm,
                                           kwargs, self.vm, self.err,
                                           devobj=devobj)
 
@@ -2780,6 +2800,10 @@ class vmmDetails(vmmGObjectUI):
         dev_type = tpmdev.type
         self.widget("tpm-dev-type").set_text(
                 virtinst.DeviceTpm.get_pretty_type(dev_type))
+
+        vmmAddHardware.populate_tpm_model_combo(
+            self.vm, self.widget("tpm-model"), tpmdev.version)
+        uiutil.set_list_selection(self.widget("tpm-model"), tpmdev.model)
 
         # Device type specific properties, only show if apply to the cur dev
         show_ui("device_path")

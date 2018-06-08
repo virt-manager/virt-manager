@@ -689,6 +689,31 @@ class vmmAddHardware(vmmGObjectUI):
             values.append([t, t])
         _build_combo(self.widget("tpm-version"), values)
 
+    @staticmethod
+    def _get_tpm_model_list(vm, tpmversion):
+        mod_list = []
+        if vm.is_hvm():
+            mod_list.append("tpm-tis")
+            if tpmversion != '1.2':
+                mod_list.append("tpm-crb")
+            mod_list.sort()
+        return mod_list
+
+    @staticmethod
+    def populate_tpm_model_combo(vm, combo, tpmversion):
+        model = combo.get_model()
+        model.clear()
+
+        mod_list = vmmAddHardware._get_tpm_model_list(vm, tpmversion)
+        for m in mod_list:
+            model.append([m, DeviceTpm.get_pretty_model(m)])
+        combo.set_active(0)
+
+    @staticmethod
+    def build_tpm_model_combo(vm, combo, tpmversion):
+        _build_combo(combo, [])
+        vmmAddHardware.populate_tpm_model_combo(vm, combo, tpmversion)
+
 
     def _build_panic_model_combo(self):
         values = []
