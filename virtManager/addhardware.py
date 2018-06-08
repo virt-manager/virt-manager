@@ -684,6 +684,10 @@ class vmmAddHardware(vmmGObjectUI):
         for t in DeviceTpm.MODELS:
             values.append([t, DeviceTpm.get_pretty_model(t)])
         _build_combo(self.widget("tpm-model"), values)
+        values = []
+        for t in DeviceTpm.VERSIONS:
+            values.append([t, t])
+        _build_combo(self.widget("tpm-version"), values)
 
 
     def _build_panic_model_combo(self):
@@ -897,6 +901,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         tpm_widget_mappings = {
             "device_path": "tpm-device-path",
+            "version": "tpm-version",
         }
 
         self._dev = DeviceTpm(self.conn.get_backend())
@@ -1446,10 +1451,19 @@ class vmmAddHardware(vmmGObjectUI):
         typ = uiutil.get_list_selection(self.widget("tpm-type"))
         model = uiutil.get_list_selection(self.widget("tpm-model"))
         device_path = self.widget("tpm-device-path").get_text()
+        version = uiutil.get_list_selection(self.widget("tpm-version"))
+
+        value_mappings = {
+            "type": typ,
+            "model": model,
+            "device_path": device_path,
+            "version": version,
+        }
+
         self._dev = DeviceTpm(self.conn.get_backend())
-        self._dev.type = typ
-        self._dev.model = model
-        self._dev.device_path = device_path
+        for param_name, val in value_mappings.items():
+            if self._dev.supports_property(param_name) and val is not None:
+                setattr(self._dev, param_name, val)
 
     def _validate_page_panic(self):
         model = uiutil.get_list_selection(self.widget("panic-model"))

@@ -1477,6 +1477,30 @@
                                 <property name="top_attach">0</property>
                               </packing>
                             </child>
+                            <child>
+                              <object class="GtkLabel" id="tpm-version-label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">_Version:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">tpm-version</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="tpm-version">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="table12-atkobject">
                                 <property name="AtkObject::accessible-name">tpm-tab</property>
