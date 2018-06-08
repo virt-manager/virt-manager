@@ -707,6 +707,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --vsock cid=17
 
 --tpm emulator,model=tpm-crb,version=2.0
+--tpm emulator,model=tpm-spapr,version=2.0
 
 --qemu-commandline env=DISPLAY=:0.1
 --qemu-commandline="-display gtk,gl=on"

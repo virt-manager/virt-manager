@@ -207,7 +207,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.build_watchdogaction_combo(self.vm, self.widget("watchdog-action"))
         self.build_smartcard_mode_combo(self.vm, self.widget("smartcard-mode"))
         self._build_redir_type_combo()
-        self._build_tpm_type_combo()
+        self._build_tpm_type_combo(self.vm)
         self._build_panic_model_combo()
         _build_combo(self.widget("controller-model"), [])
         self._build_controller_type_combo()
@@ -551,6 +551,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("TIS")
         if tpm_model == DeviceTpm.MODEL_CRB:
             return _("CRB")
+        if tpm_model == DeviceTpm.MODEL_SPAPR:
+            return _("SPAPR")
         return tpm_model
 
     @staticmethod
@@ -901,13 +903,13 @@ class vmmAddHardware(vmmGObjectUI):
         _build_combo(self.widget("usbredir-list"), values)
 
 
-    def _build_tpm_type_combo(self):
+    def _build_tpm_type_combo(self, vm):
         values = []
         for t in DeviceTpm.TYPES:
             values.append([t, vmmAddHardware.tpm_pretty_type(t)])
         _build_combo(self.widget("tpm-type"), values)
         values = []
-        for t in DeviceTpm.MODELS:
+        for t in vmmAddHardware._get_tpm_model_list(vm, None):
             values.append([t, vmmAddHardware.tpm_pretty_model(t)])
         _build_combo(self.widget("tpm-model"), values)
         values = []
@@ -920,9 +922,12 @@ class vmmAddHardware(vmmGObjectUI):
     def _get_tpm_model_list(vm, tpmversion):
         mod_list = []
         if vm.is_hvm():
-            mod_list.append("tpm-tis")
-            if tpmversion != '1.2':
-                mod_list.append("tpm-crb")
+            if vm.xmlobj.os.is_pseries():
+                mod_list.append("tpm-spapr")
+            else:
+                mod_list.append("tpm-tis")
+                if tpmversion == None or tpmversion != '1.2':
+                    mod_list.append("tpm-crb")
             mod_list.sort()
         return mod_list
 

@@ -196,6 +196,9 @@
         <encryption secret="11111111-2222-3333-4444-5555555555"/>
       </backend>
     </tpm>
+    <tpm model="tpm-spapr">
+      <backend type="emulator" version="2.0"/>
+    </tpm>
     <graphics type="vnc" port="-1"/>
     <video>
       <model type="bochs"/>
@@ -436,6 +439,9 @@
         <device path="/dev/tpm0"/>
         <encryption secret="11111111-2222-3333-4444-5555555555"/>
       </backend>
+    </tpm>
+    <tpm model="tpm-spapr">
+      <backend type="emulator" version="2.0"/>
     </tpm>
     <graphics type="vnc" port="-1"/>
     <video>

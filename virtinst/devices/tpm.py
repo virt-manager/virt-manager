@@ -22,7 +22,8 @@ class DeviceTpm(Device):
 
     MODEL_TIS = "tpm-tis"
     MODEL_CRB = "tpm-crb"
-    MODELS = [MODEL_TIS, MODEL_CRB]
+    MODEL_SPAPR = "tpm-spapr"
+    MODELS = [MODEL_TIS, MODEL_CRB, MODEL_SPAPR]
 
     type = XMLProperty("./backend/@type")
     version = XMLProperty("./backend/@version")
