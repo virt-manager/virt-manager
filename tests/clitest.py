@@ -450,6 +450,7 @@ cache.mode=emulate,cache.level=3 \
 --watchdog ib700,action=pause \
 --tpm passthrough,model=tpm-tis,path=/dev/tpm0 \
 --tpm passthrough,model=tpm-crb,path=/dev/tpm0 \
+--tpm emulator,model=tpm-crb,version=2.0 \
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708 \
 --panic iobase=0x506 \
 """, "singleton-config-2")

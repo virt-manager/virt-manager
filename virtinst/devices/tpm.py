@@ -16,9 +16,15 @@ from ..xmlbuilder import XMLProperty
 class DeviceTpm(Device):
     XML_NAME = "tpm"
 
+    VERSION_1_2 = "1.2"
+    VERSION_2_0 = "2.0"
+    VERSION_DEFAULT = "default"
+    VERSIONS = [VERSION_1_2, VERSION_2_0]
+
     TYPE_PASSTHROUGH = "passthrough"
+    TYPE_EMULATOR = "emulator"
     TYPE_DEFAULT = "default"
-    TYPES = [TYPE_PASSTHROUGH]
+    TYPES = [TYPE_PASSTHROUGH, TYPE_EMULATOR]
 
     MODEL_TIS = "tpm-tis"
     MODEL_CRB = "tpm-crb"
@@ -29,6 +35,8 @@ class DeviceTpm(Device):
     def get_pretty_type(tpm_type):
         if tpm_type == DeviceTpm.TYPE_PASSTHROUGH:
             return _("Passthrough device")
+        if tpm_type == DeviceTpm.TYPE_EMULATOR:
+            return _("Emulated device")
         return tpm_type
 
     @staticmethod
@@ -45,6 +53,7 @@ class DeviceTpm(Device):
         """
         users = {
             "device_path": [self.TYPE_PASSTHROUGH],
+            "version": [self.TYPE_EMULATOR],
         }
 
         if users.get(propname):
@@ -54,7 +63,20 @@ class DeviceTpm(Device):
 
     type = XMLProperty("./backend/@type",
                        default_cb=lambda s: s.TYPE_PASSTHROUGH)
+
+    def _get_default_version(self):
+        if not self.supports_property("version"):
+            return None
+        return self.VERSION_1_2
+    version = XMLProperty("./backend/@version",
+                          default_cb=_get_default_version)
     model = XMLProperty("./@model",
                        default_cb=lambda s: s.MODEL_TIS)
+
+
+    def _get_default_device_path(self):
+        if not self.supports_property("device_path"):
+            return None
+        return "/dev/tpm0"
     device_path = XMLProperty("./backend/device/@path",
-                              default_cb=lambda s: "/dev/tpm0")
+                              default_cb=_get_default_device_path)

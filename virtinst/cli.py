@@ -2448,6 +2448,7 @@ _register_virt_parser(ParserTPM)
 _add_device_address_args(ParserTPM)
 ParserTPM.add_arg("type", "type")
 ParserTPM.add_arg("model", "model")
+ParserTPM.add_arg("version", "version")
 ParserTPM.add_arg("device_path", "path")
 
 
