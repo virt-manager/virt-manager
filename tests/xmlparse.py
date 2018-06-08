@@ -909,7 +909,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev1)
         check("type", "passthrough", "foo", "passthrough")
-        check("model", "tpm-tis", "tpm-tis")
+        check("model", "tpm-tis", "tpm-crb", "tpm-tis")
         check("device_path", "/dev/tpm0", "frob")
 
         self._alter_compare(guest.get_xml_config(), outfile)

@@ -143,6 +143,11 @@
         <device path="/dev/tpm0"/>
       </backend>
     </tpm>
+    <tpm model="tpm-crb">
+      <backend type="passthrough">
+        <device path="/dev/tpm0"/>
+      </backend>
+    </tpm>
     <graphics type="vnc" port="-1"/>
     <watchdog model="ib700" action="pause"/>
     <memballoon model="virtio"/>
@@ -308,6 +313,11 @@
     </channel>
     <input type="tablet" bus="usb"/>
     <tpm model="tpm-tis">
+      <backend type="passthrough">
+        <device path="/dev/tpm0"/>
+      </backend>
+    </tpm>
+    <tpm model="tpm-crb">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
       </backend>
