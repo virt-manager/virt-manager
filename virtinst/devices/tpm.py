@@ -30,6 +30,12 @@ class DeviceTpm(Device):
             return _("Passthrough device")
         return tpm_type
 
+    @staticmethod
+    def get_pretty_model(tpm_model):
+        if tpm_model == DeviceTpm.MODEL_TIS:
+            return _("TIS")
+        return tpm_model
+
     def supports_property(self, propname):
         """
         Whether the TPM dev type supports the passed property name

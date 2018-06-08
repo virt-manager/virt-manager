@@ -1403,6 +1403,20 @@
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">6</property>
                             <child>
+                              <object class="GtkLabel" id="tpm-device-path-label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Device _Path:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">tpm-device-path</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkEntry" id="tpm-device-path">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -1411,17 +1425,17 @@
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
+                                <property name="top_attach">2</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="tpm-device-path-label">
+                              <object class="GtkLabel" id="label35">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes">Device _Path:</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">_Backend:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">tpm-device-path</property>
+                                <property name="mnemonic_widget">tpm-type</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1436,20 +1450,30 @@
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">_Model:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">tpm-model</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label35">
+                              <object class="GtkComboBox" id="tpm-model">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">end</property>
-                                <property name="label" translatable="yes">_Backend:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">tpm-type</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
+                                <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
                               </packing>
                             </child>

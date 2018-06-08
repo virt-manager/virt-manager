@@ -680,6 +680,10 @@ class vmmAddHardware(vmmGObjectUI):
         for t in DeviceTpm.TYPES:
             values.append([t, DeviceTpm.get_pretty_type(t)])
         _build_combo(self.widget("tpm-type"), values)
+        values = []
+        for t in DeviceTpm.MODELS:
+            values.append([t, DeviceTpm.get_pretty_model(t)])
+        _build_combo(self.widget("tpm-model"), values)
 
 
     def _build_panic_model_combo(self):
@@ -1440,9 +1444,11 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_tpm(self):
         typ = uiutil.get_list_selection(self.widget("tpm-type"))
+        model = uiutil.get_list_selection(self.widget("tpm-model"))
         device_path = self.widget("tpm-device-path").get_text()
         self._dev = DeviceTpm(self.conn.get_backend())
         self._dev.type = typ
+        self._dev.model = model
         self._dev.device_path = device_path
 
     def _validate_page_panic(self):
