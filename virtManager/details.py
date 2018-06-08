@@ -249,6 +249,8 @@ def _label_for_device(dev):
         label = _("TPM")
         if dev.device_path:
             label += (" %s" % dev.device_path)
+        else:
+            label += (" v%s" % dev.version)
         return label
 
     devmap = {
@@ -2781,6 +2783,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Device type specific properties, only show if apply to the cur dev
         show_ui("device_path")
+        show_ui("version")
 
     def refresh_panic_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
