@@ -2754,9 +2754,18 @@ class ParserSound(VirtCLIParser):
             return
         return VirtCLIParser._parse(self, inst)
 
+    def codec_find_inst_cb(self, *args, **kwargs):
+        cliarg = "codec"  # codec[0-9]*
+        objpropname = "codecs"
+        cb = self._make_find_inst_cb(cliarg, objpropname)
+        return cb(*args, **kwargs)
+
 _register_virt_parser(ParserSound)
 _add_device_address_args(ParserSound)
 ParserSound.add_arg("model", "model", ignore_default=True)
+# Options for sound.codecs config
+ParserSound.add_arg("type", "codec[0-9]*.type",
+                  find_inst_cb=ParserSound.codec_find_inst_cb)
 
 
 #####################

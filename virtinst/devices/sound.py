@@ -6,7 +6,16 @@
 # See the COPYING file in the top-level directory.
 
 from .device import Device
-from ..xmlbuilder import XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
+
+
+class _Codec(XMLBuilder):
+    """
+    Class for generating <sound> child <codec> XML
+    """
+    XML_NAME = "codec"
+
+    type = XMLProperty("./@type")
 
 
 class DeviceSound(Device):
@@ -25,3 +34,5 @@ class DeviceSound(Device):
     model = XMLProperty("./@model",
                         default_cb=lambda s: "es1370",
                         default_name=MODEL_DEFAULT)
+
+    codecs = XMLChildProperty(_Codec)
