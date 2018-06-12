@@ -706,6 +706,7 @@ c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom")  # Implied cdrom install
 c.add_compare("", "noargs-fail", auto_printarg=False)  # No arguments
 c.add_valid("--panic help --disk=?")  # Make sure introspection doesn't blow up
+c.add_valid("--test-stub-command")  # --test-stub-command
 c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error
 c.add_invalid("--nodisks --pxe --name test")  # Colliding name
 

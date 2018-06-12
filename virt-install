@@ -840,6 +840,9 @@ def parse_args():
 
     # Takes a URL and just prints to stdout the detected distro name
     insg.add_argument("--test-media-detection", help=argparse.SUPPRESS)
+    # Helper for cli testing, fills in standard stub options
+    insg.add_argument("--test-stub-command", action="store_true",
+            help=argparse.SUPPRESS)
 
     insg.add_argument("--os-type", dest="distro_type", help=argparse.SUPPRESS)
     insg.add_argument("--os-variant", dest="distro_variant",
@@ -926,6 +929,28 @@ def parse_args():
 # main() handling #
 ###################
 
+def set_test_stub_options(options):
+    # Set some basic options that will let virt-install succeed. Helps
+    # save boiler plate typing when testing new command line additions
+    if not options.test_stub_command:
+        return
+
+    if not options.connect:
+        options.connect = "test:///default"
+    if not options.name:
+        options.name = "test-stub-command"
+    if not options.memory:
+        options.memory = "256"
+    if not options.disk:
+        options.disk = "none"
+    if not install_specified(options):
+        options.import_install = True
+    if not options.graphics:
+        options.graphics = "none"
+    if not options.distro_variant:
+        options.distro_variant = "fedora27"
+
+
 def main(conn=None):
     cli.earlyLogging()
     options = parse_args()
@@ -951,6 +976,7 @@ def main(conn=None):
     convert_old_features(options)
     convert_old_cpuset(options)
     convert_old_init(options)
+    set_test_stub_options(options)
     convert_old_os_options(options)
 
     if conn is None:
