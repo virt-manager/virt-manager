@@ -25,29 +25,23 @@ os.environ["LANG"] = "en_US.UTF-8"
 os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
 
-# Location
-image_prefix = "/tmp/__virtinst_cli_"
-xmldir = "tests/cli-test-xml"
-treedir = "%s/fakefedoratree" % xmldir
-fakeiso = "%s/fakefedora.iso" % xmldir
-vcdir = "%s/virtconv" % xmldir
-compare_xmldir = "%s/compare" % xmldir
-virtconv_out = "/tmp/__virtinst_tests__virtconv-outdir"
+TMP_IMAGE_DIR = "/tmp/__virtinst_cli_"
+XMLDIR = "tests/cli-test-xml"
 
 # Images that will be created by virt-install/virt-clone, and removed before
 # each run
 new_images = [
-    image_prefix + "new1.img",
-    image_prefix + "new2.img",
-    image_prefix + "new3.img",
-    image_prefix + "exist1-clone.img",
-    image_prefix + "exist2-clone.img",
+    TMP_IMAGE_DIR + "new1.img",
+    TMP_IMAGE_DIR + "new2.img",
+    TMP_IMAGE_DIR + "new3.img",
+    TMP_IMAGE_DIR + "exist1-clone.img",
+    TMP_IMAGE_DIR + "exist2-clone.img",
 ]
 
 # Images that are expected to exist before a command is run
 exist_images = [
-    image_prefix + "exist1.img",
-    image_prefix + "exist2.img",
+    TMP_IMAGE_DIR + "exist1.img",
+    TMP_IMAGE_DIR + "exist2.img",
 ]
 
 exist_files = exist_images
@@ -56,50 +50,24 @@ clean_files = (new_images + exist_images)
 
 test_files = {
     'URI-TEST-FULL': utils.URIs.test_full,
-    'URI-TEST-SUITE': utils.URIs.test_suite,
     'URI-TEST-REMOTE': utils.URIs.test_remote,
     'URI-KVM': utils.URIs.kvm,
-    'URI-KVM-Q35': utils.URIs.kvm_q35,
-    'URI-KVM-SESSION': utils.URIs.kvm_session,
-    'URI-KVM-REMOTE': utils.URIs.kvm + ",remote",
-    'URI-KVM-NODOMCAPS': utils.URIs.kvm_nodomcaps,
     'URI-KVM-ARMV7L': utils.URIs.kvm_armv7l,
     'URI-KVM-AARCH64': utils.URIs.kvm_aarch64,
     'URI-KVM-PPC64LE': utils.URIs.kvm_ppc64le,
     'URI-KVM-S390X': utils.URIs.kvm_s390x,
-    'URI-KVM-S390X-KVMIBM': utils.URIs.kvm_s390x_KVMIBM,
-    'URI-XEN': utils.URIs.xen,
-    'URI-LXC': utils.URIs.lxc,
-    'URI-VZ': utils.URIs.vz,
 
-    'CLONE_DISK_XML':     "%s/clone-disk.xml" % xmldir,
-    'CLONE_STORAGE_XML':  "%s/clone-disk-managed.xml" % xmldir,
-    'CLONE_NOEXIST_XML':  "%s/clone-disk-noexist.xml" % xmldir,
-    'IMAGE_XML':          "%s/image.xml" % xmldir,
-    'IMAGE_NOGFX_XML':    "%s/image-nogfx.xml" % xmldir,
-    'OVF_IMG1':           "%s/tests/virtconv-files/ovf_input/test1.ovf" % os.getcwd(),
-    'VMX_IMG1':           "%s/tests/virtconv-files/vmx_input/test1.vmx" % os.getcwd(),
-
-    'NEWIMG1':            "/dev/default-pool/new1.img",
-    'NEWIMG2':            "/dev/default-pool/new2.img",
-    'NEWCLONEIMG1':       new_images[0],
-    'NEWCLONEIMG2':       new_images[1],
-    'NEWCLONEIMG3':       new_images[2],
-    'AUTOMANAGEIMG':      "/some/new/pool/dir/new",
-    'BLOCKVOL':           '/iscsi-pool/diskvol1',
-    'EXISTIMG1':          "/dev/default-pool/testvol1.img",
-    'EXISTIMG2':          "/dev/default-pool/testvol2.img",
-    'EXISTIMG3':          exist_images[0],
-    'EXISTIMG4':          exist_images[1],
-    'EXISTUPPER':         "/dev/default-pool/UPPER",
-    'POOL':               "default-pool",
-    'VOL':                "testvol1.img",
-    'DIR':                "/var",
-    'TREEDIR':            treedir,
-    'MANAGEDNEW1':        "/dev/default-pool/clonevol",
-    'MANAGEDDISKNEW1':    "/dev/disk-pool/newvol1.img",
-    'COLLIDE':            "/dev/default-pool/collidevol1.img",
-    'SHARE':              "/dev/default-pool/sharevol.img",
+    'NEWIMG1': "/dev/default-pool/new1.img",
+    'NEWIMG2': "/dev/default-pool/new2.img",
+    'NEWCLONEIMG1': new_images[0],
+    'NEWCLONEIMG2': new_images[1],
+    'NEWCLONEIMG3': new_images[2],
+    'EXISTIMG1': "/dev/default-pool/testvol1.img",
+    'EXISTIMG2': "/dev/default-pool/testvol2.img",
+    'EXISTIMG3': exist_images[0],
+    'EXISTIMG4': exist_images[1],
+    'TREEDIR': "%s/fakefedoratree" % XMLDIR,
+    'COLLIDE': "/dev/default-pool/collidevol1.img",
 }
 
 
@@ -296,7 +264,7 @@ class App(object):
             args = "--debug"
 
         if "--connect " not in cli:
-            uri = self.uri or "%(URI-TEST-SUITE)s"
+            uri = self.uri or utils.URIs.test_suite
             args += " --connect %s" % uri
 
         if self.appname in ["virt-install"]:
@@ -340,7 +308,8 @@ class App(object):
         cmd.check_success = valid
         if compfile:
             compfile = os.path.basename(self.appname) + "-" + compfile
-            cmd.compare_file = "%s/%s.xml" % (compare_xmldir, compfile)
+            compare_XMLDIR = "%s/compare" % XMLDIR
+            cmd.compare_file = "%s/%s.xml" % (compare_XMLDIR, compfile)
         cmd.skip_check = skip_check or category.skip_check
         cmd.compare_check = (compare_check or
                              category.compare_check or
@@ -461,11 +430,11 @@ c.add_compare(""" \
 --vcpus 4,cores=1,placement=static \
 --cpu none \
 \
---disk %(EXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,boot_order=2 \
+--disk /dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,boot_order=2 \
 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap,detect_zeroes=yes \
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,total_bytes_sec=10,total_iops_sec=20,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba \
 --disk size=1 \
---disk %(BLOCKVOL)s \
+--disk /iscsi-pool/diskvol1 \
 --disk /dev/default-pool/iso-vol,seclabel.model=dac,seclabel1.model=selinux,seclabel1.relabel=no,seclabel0.label=foo,bar,baz \
 --disk /dev/default-pool/iso-vol,format=qcow2 \
 --disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1 \
@@ -476,7 +445,7 @@ c.add_compare(""" \
 --disk qemu+nbd:///var/foo/bar/socket,bus=usb,removable=on \
 --disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo \
 --disk vol=gluster-pool/test-gluster.raw,startup_policy=optional \
---disk %(DIR)s,device=floppy,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01 \
+--disk /var,device=floppy,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01 \
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk \
 --disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol \
 \
@@ -580,7 +549,7 @@ c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-se
 ####################################################
 
 c = vinst.add_category("cpuram", "--hvm --nographics --noautoconsole --nodisks --pxe")
-c.add_valid("--connect %(URI-XEN)s --vcpus 4 --cpuset=auto")  # cpuset=auto but xen doesn't support it
+c.add_valid("--connect " + utils.URIs.xen + " --vcpus 4 --cpuset=auto")  # cpuset=auto but xen doesn't support it
 c.add_valid("--ram 4000000")  # Ram overcommit
 c.add_valid("--vcpus sockets=2,threads=2")  # Topology only
 c.add_valid("--cpu somemodel")  # Simple --cpu
@@ -600,23 +569,22 @@ c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu ce
 
 c = vinst.add_category("storage", "--pxe --nographics --noautoconsole --hvm")
 c.add_valid("--disk path=%(EXISTIMG1)s")  # Existing disk, no extra options
-c.add_valid("--disk pool=%(POOL)s,size=.0001 --disk pool=%(POOL)s,size=.0001")  # Create 2 volumes in a pool
-c.add_valid("--disk vol=%(POOL)s/%(VOL)s")  # Existing volume
+c.add_valid("--disk pool=default-pool,size=.0001 --disk pool=default-pool,size=.0001")  # Create 2 volumes in a pool
+c.add_valid("--disk vol=default-pool/testvol1.img")  # Existing volume
 c.add_valid("--disk path=%(EXISTIMG1)s --disk path=%(EXISTIMG1)s --disk path=%(EXISTIMG1)s --disk path=%(EXISTIMG1)s,device=cdrom")  # 3 IDE and CD
 c.add_valid("--disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi")  # > 16 scsi disks
-c.add_valid("--disk path=%(NEWIMG1)s,format=raw,size=.0000001")  # Unmanaged file using format 'raw'
-c.add_valid("--disk path=%(MANAGEDNEW1)s,format=raw,size=.0000001")  # Managed file using format raw
-c.add_valid("--disk path=%(MANAGEDNEW1)s,format=qcow2,size=.0000001")  # Managed file using format qcow2
+c.add_valid("--disk path=%(NEWIMG1)s,format=raw,size=.0000001")  # Managed file using format raw
+c.add_valid("--disk path=%(NEWIMG1)s,format=qcow2,size=.0000001")  # Managed file using format qcow2
 c.add_valid("--disk %(EXISTIMG1)s")  # Not specifying path=
 c.add_valid("--disk %(NEWIMG1)s,format=raw,size=.0000001")  # Not specifying path= but creating storage
 c.add_valid("--disk %(COLLIDE)s --check path_in_use=off")  # Colliding storage with --check
 c.add_valid("--disk %(COLLIDE)s --force")  # Colliding storage with --force
-c.add_valid("--disk %(SHARE)s,perms=sh")  # Colliding shareable storage
+c.add_valid("--disk /dev/default-pool/sharevol.img,perms=sh")  # Colliding shareable storage
 c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom --disk path=%(EXISTIMG1)s,device=cdrom")  # Two IDE cds
 c.add_valid("--disk %(EXISTIMG1)s,driver_name=qemu,driver_type=qcow2")  # Driver name and type options
 c.add_valid("--disk /dev/zero")  # Referencing a local unmanaged /dev node
 c.add_valid("--disk pool=default,size=.00001")  # Building 'default' pool
-c.add_valid("--disk %(AUTOMANAGEIMG)s,size=.1")  # autocreate the pool
+c.add_valid("--disk /some/new/pool/dir/new,size=.1")  # autocreate the pool
 c.add_valid("--disk %(NEWIMG1)s,sparse=true,size=100000000 --check disk_size=off")  # Don't warn about fully allocated file exceeding disk space
 c.add_valid("--disk %(EXISTIMG1)s,snapshot_policy=no")  # Disable snasphot for disk
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse")  # Nonexisting file, size too big
@@ -624,17 +592,17 @@ c.add_invalid("--file %(NEWIMG1)s --file-size 100000")  # Huge file, sparse, but
 c.add_invalid("--file %(NEWIMG1)s")  # Nonexisting file, no size
 c.add_invalid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Too many IDE
 c.add_invalid("--disk pool=foopool,size=.0001")  # Specify a nonexistent pool
-c.add_invalid("--disk vol=%(POOL)s/foovol")  # Specify a nonexistent volume
-c.add_invalid("--disk pool=%(POOL)s")  # Specify a pool with no size
+c.add_invalid("--disk vol=default-pool/foovol")  # Specify a nonexistent volume
+c.add_invalid("--disk pool=default-pool")  # Specify a pool with no size
 c.add_invalid("--disk path=%(EXISTIMG1)s,perms=ro,size=.0001,cache=FOOBAR")  # Unknown cache type
 c.add_invalid("--disk path=/dev/foo/bar/baz,format=qcow2,size=.0000001")  # Unmanaged file using non-raw format
-c.add_invalid("--disk path=%(MANAGEDDISKNEW1)s,format=raw,size=.0000001")  # Managed disk using any format
+c.add_invalid("--disk path=/dev/disk-pool/newvol1.img,format=raw,size=.0000001")  # Managed disk using any format
 c.add_invalid("--disk %(NEWIMG1)s")  # Not specifying path= and non existent storage w/ no size
 c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000")  # Fail if fully allocated file would exceed disk space
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s")  # Colliding storage without --force
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt")  # Colliding storage with --prompt should still fail
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk /dev/default-pool/backingl3.img")  # Colliding storage via backing store
-c.add_invalid("--disk %(DIR)s,device=cdrom")  # Dir without floppy
+c.add_invalid("--disk /var,device=cdrom")  # Dir without floppy
 c.add_invalid("--disk %(EXISTIMG1)s,driver_name=foobar,driver_type=foobaz")  # Unknown driver name and type options (as of 1.0.0)
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=rbd-ceph,source_volume=vol1")  # Collision with existing VM, via source pool/volume
 c.add_invalid("--disk source_pool=default-pool,source_volume=idontexist")  # trying to lookup non-existent volume, hit specific error code
@@ -759,10 +727,10 @@ c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-
 
 # s390x tests
 c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom")
-c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X-KVMIBM)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --watchdog diag288,action=reset --panic default", "s390x-cdrom-KVMIBM")
+c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.kvm_s390x_KVMIBM + " --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --watchdog diag288,action=reset --panic default", "s390x-cdrom-KVMIBM")
 
 # qemu:///session tests
-c.add_compare("--connect %(URI-KVM-SESSION)s --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults")
+c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults")
 
 # misc KVM config tests
 c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso", skip_check=not find_executable("isoinfo"))  # Using --location iso mounting
@@ -773,15 +741,15 @@ c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7"
 c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi")  # no HYPER-V with UEFI
 c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
 c.add_compare("--disk size=20 --os-variant solaris10", "solaris10-defaults")  # test solaris OS defaults
-c.add_compare("--connect %(URI-KVM-REMOTE)s --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote")
+c.add_compare("--connect " + utils.URIs.kvm_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote")
 c.add_compare("--disk none --pxe --features smm=on", "features-smm")  # smm=on, which should set q35
 
-c.add_valid("--connect %(URI-KVM-NODOMCAPS)s --arch aarch64 --nodisks --pxe")  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
+c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
 c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm")  # Invalid domain type for arch
 c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch/virt combo
 
-c = vinst.add_category("kvm-q35", "--connect %(URI-KVM-Q35)s --noautoconsole", compare_check=support.SUPPORT_CONN_VMPORT)
+c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_q35, compare_check=support.SUPPORT_CONN_VMPORT)
 c.add_compare("--boot uefi --disk none", "boot-uefi")
 
 
@@ -789,7 +757,7 @@ c.add_compare("--boot uefi --disk none", "boot-uefi")
 # LXC specific tests #
 ######################
 
-c = vinst.add_category("lxc", "--connect %(URI-LXC)s --noautoconsole --name foolxc --memory 64")
+c = vinst.add_category("lxc", "--name foolxc --memory 64 --noautoconsole --connect " + utils.URIs.lxc)
 c.add_compare("", "default")
 c.add_compare("--filesystem /source,/", "fs-default")
 c.add_compare("--init /usr/bin/httpd", "manual-init")
@@ -800,11 +768,11 @@ c.add_compare("--init /usr/bin/httpd", "manual-init")
 # Xen specific tests #
 ######################
 
-c = vinst.add_category("xen", "--connect %(URI-XEN)s --noautoconsole")
+c = vinst.add_category("xen", "--noautoconsole --connect " + utils.URIs.xen)
 c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none")  # Xen PV install headless
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-pv")  # Xen PV
-c.add_compare("--disk %(BLOCKVOL)s --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
+c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
 
 
 
@@ -812,7 +780,7 @@ c.add_compare("--disk %(BLOCKVOL)s --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-h
 # VZ specific tests #
 #####################
 
-c = vinst.add_category("vz", "--connect %(URI-VZ)s --noautoconsole")
+c = vinst.add_category("vz", "--noautoconsole --connect " + utils.URIs.vz)
 c.add_valid("--container")  # validate the special define+start logic
 c.add_invalid("--container --transient")  # doesn't support --transient
 c.add_compare(""" \
@@ -878,14 +846,14 @@ c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update")  # te
 c.add_invalid("test-for-virtxml --edit --graphics password=foo --update")  # test driver doesn't support updatdevice...
 c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
-c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(xmldir + "/virtxml-stdin-edit.xml"))  # stdin test
+c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"))  # stdin test
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm /dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device_path=/dev/sdf,device_weight=200", "build-blkiotune")
 c.add_compare("--build-xml --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10", "build-idmap")
 c.add_compare("test --edit --boot network,cdrom", "edit-bootorder")
 c.add_compare("--confirm test --edit --cpu host-passthrough", "prompt-response")
-c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(xmldir + "/virtxml-qemu-commandline-clear.xml"))
+c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(XMLDIR + "/virtxml-qemu-commandline-clear.xml"))
 
 
 c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define")
@@ -969,22 +937,26 @@ c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-nam
 # virt-clone tests #
 ####################
 
+_CLONE_UNMANAGED = "%s/clone-disk.xml" % XMLDIR
+_CLONE_MANAGED = "%s/clone-disk-managed.xml" % XMLDIR
+_CLONE_NOEXIST = "%s/clone-disk-noexist.xml" % XMLDIR
+
 vclon = App("virt-clone")
 c = vclon.add_category("remote", "--connect %(URI-TEST-REMOTE)s")
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
-c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage
-c.add_invalid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ local storage, which is invalid for remote connection
+c.add_valid("--original-xml " + _CLONE_MANAGED + " --auto-clone")  # Auto flag w/ managed storage
+c.add_invalid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage, which is invalid for remote connection
 
 
 c = vclon.add_category("misc", "")
 c.add_compare("--connect %(URI-KVM)s -o test-clone --auto-clone --clone-running", "clone-auto1", compare_check="1.2.15")
 c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", compare_check="1.2.15")
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
-c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage
-c.add_valid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ local storage
+c.add_valid("--original-xml " + _CLONE_MANAGED + " --auto-clone")  # Auto flag w/ managed storage
+c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --clone-running")  # Auto flag, actual VM, skip state check
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s")  # Preserve data shouldn't complain about existing volume
-c.add_valid("-n clonetest --original-xml %(CLONE_DISK_XML)s --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
+c.add_valid("-n clonetest --original-xml " + _CLONE_UNMANAGED + " --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
 c.add_invalid("--auto-clone")  # Just the auto flag
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-many-devices --auto-clone")  # VM is running, but --clone-running isn't passed
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s --clone-running")  # Should complain about overwriting existing file
@@ -994,22 +966,22 @@ c = vclon.add_category("general", "-n clonetest")
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("-o test --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # Nodisk, but with spurious files passed
 c.add_valid("-o test --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --prompt")  # Working scenario w/ prompt shouldn't ask anything
-c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # XML File with 2 disks
-c.add_valid("--original-xml %(CLONE_DISK_XML)s --file virt-install --file %(EXISTIMG1)s --preserve")  # XML w/ disks, overwriting existing files with --preserve
-c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --file %(NEWCLONEIMG3)s --force-copy=hdc")  # XML w/ disks, force copy a readonly target
-c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
-c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --file %(MANAGEDNEW1)s")  # XML w/ managed storage, specify managed path
-c.add_valid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools# Libvirt test driver doesn't support cloning across pools# XML w/ non-existent storage, with --preserve
+c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # XML File with 2 disks
+c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --file virt-install --file %(EXISTIMG1)s --preserve")  # XML w/ disks, overwriting existing files with --preserve
+c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --file %(NEWCLONEIMG3)s --force-copy=hdc")  # XML w/ disks, force copy a readonly target
+c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
+c.add_valid("--original-xml " + _CLONE_MANAGED + " --file %(NEWIMG1)s")  # XML w/ managed storage, specify managed path
+c.add_valid("--original-xml " + _CLONE_NOEXIST + " --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools# Libvirt test driver doesn't support cloning across pools# XML w/ non-existent storage, with --preserve
 c.add_valid("--connect %(URI-TEST-FULL)s -o test -n test-clone --auto-clone --replace")  # Overwriting existing VM
 c.add_invalid("-o test foobar")  # Positional arguments error
 c.add_invalid("-o idontexist")  # Non-existent vm name
 c.add_invalid("-o idontexist --auto-clone")  # Non-existent vm name with auto flag,
 c.add_invalid("-o test -n test")  # Colliding new name
-c.add_invalid("--original-xml %(CLONE_DISK_XML)s")  # XML file with several disks, but non specified
-c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file virt-install --file %(EXISTIMG1)s")  # XML w/ disks, overwriting existing files with no --preserve
-c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=hdc")  # XML w/ disks, force copy but not enough disks passed
-c.add_invalid("--original-xml %(CLONE_STORAGE_XML)s --file /tmp/clonevol")  # XML w/ managed storage, specify unmanaged path (should fail)
-c.add_invalid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s")  # XML w/ non-existent storage, WITHOUT --preserve
+c.add_invalid("--original-xml " + _CLONE_UNMANAGED + "")  # XML file with several disks, but non specified
+c.add_invalid("--original-xml " + _CLONE_UNMANAGED + " --file virt-install --file %(EXISTIMG1)s")  # XML w/ disks, overwriting existing files with no --preserve
+c.add_invalid("--original-xml " + _CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=hdc")  # XML w/ disks, force copy but not enough disks passed
+c.add_invalid("--original-xml " + _CLONE_MANAGED + " --file /tmp/clonevol")  # XML w/ managed storage, specify unmanaged path (should fail)
+c.add_invalid("--original-xml " + _CLONE_NOEXIST + " --file %(EXISTIMG1)s")  # XML w/ non-existent storage, WITHOUT --preserve
 
 
 
@@ -1018,13 +990,16 @@ c.add_invalid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s")  # XM
 # virt-convert tests #
 ######################
 
+_OVF_IMG = "%s/tests/virtconv-files/ovf_input/test1.ovf" % os.getcwd()
+_VMX_IMG = "%s/tests/virtconv-files/vmx_input/test1.vmx" % os.getcwd()
+
 vconv = App("virt-convert")
 c = vconv.add_category("misc", "--connect %(URI-KVM)s --dry", compare_check=support.SUPPORT_CONN_VMPORT)
-c.add_invalid("%(VMX_IMG1)s --input-format foo")  # invalid input format
+c.add_invalid(_VMX_IMG + " --input-format foo")  # invalid input format
 c.add_invalid("%(EXISTIMG1)s")  # invalid input file
 
-c.add_compare("%(VMX_IMG1)s --disk-format qcow2 --print-xml", "vmx-compare")
-c.add_compare("%(OVF_IMG1)s --disk-format none --destination /tmp --print-xml", "ovf-compare")
+c.add_compare(_VMX_IMG + " --disk-format qcow2 --print-xml", "vmx-compare")
+c.add_compare(_OVF_IMG + " --disk-format none --destination /tmp --print-xml", "ovf-compare")
 
 
 
@@ -1041,6 +1016,7 @@ def setup():
     """
     Create initial test files/dirs
     """
+    fakeiso = "%s/fakefedora.iso" % XMLDIR
     os.system("ln -s %s %s" % (os.path.abspath(fakeiso), exist_files[0]))
     for i in exist_files[1:]:
         os.system("touch %s" % i)

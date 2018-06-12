@@ -58,6 +58,7 @@ class _URIs(object):
         _uri_kvm_aarch64 = _uri_qemu + _domcaps("kvm-aarch64-domcaps.xml")
 
         self.kvm = _uri_kvm + _caps("kvm-x86_64.xml")
+        self.kvm_remote = _uri_kvm + _caps("kvm-x86_64.xml") + ",remote"
         self.kvm_nodomcaps = _uri_qemu + _caps("kvm-x86_64.xml")
         self.kvm_rhel = _uri_kvm + _caps("kvm-x86_64-rhel7.xml")
         self.kvm_q35 = _uri_kvm_q35 + _caps("kvm-x86_64.xml")
