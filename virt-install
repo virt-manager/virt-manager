@@ -26,8 +26,9 @@ from virtinst.cli import fail, print_stdout, print_stderr
 install_methods = "--location URL, --cdrom CD/ISO, --pxe, --import, --boot hd|cdrom|..."
 
 
-def install_specified(location, cdpath, pxe, import_install):
-    return bool(pxe or cdpath or location or import_install)
+def install_specified(options):
+    return bool(options.location or options.cdrom or
+            options.pxe or options.import_install)
 
 
 def cdrom_specified(guest, disk=None):
@@ -413,9 +414,8 @@ def validate_required_options(options, guest):
 
     if (not guest.os.is_container() and
         not options.xmlonly and
-        (not install_specified(options.location, options.cdrom,
-                               options.pxe, options.import_install)) and
-        (not cdrom_specified(guest, options.disk))):
+        not install_specified(options) and
+        not cdrom_specified(guest, options.disk)):
         msg += "\n" + (
             _("An install method must be specified\n(%(methods)s)") %
             {"methods": install_methods})
@@ -438,9 +438,7 @@ def check_option_collisions(options, guest):
         fail(_("Only one install method can be used (%(methods)s)") %
              {"methods": install_methods})
 
-    if (guest.os.is_container() and
-        install_specified(options.location, options.cdrom,
-                          options.pxe, options.import_install)):
+    if (guest.os.is_container() and install_specified(options)):
         fail(_("Install methods (%s) cannot be specified for "
                "container guests") % install_methods)
 
