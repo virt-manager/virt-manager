@@ -229,7 +229,7 @@ class vmmDomain(vmmLibvirtObject):
         self._status_reason = None
 
         self.managedsave_supported = False
-        self.remote_console_supported = False
+        self.console_stream_supported = False
         self.title_supported = False
         self.mem_stats_supported = False
         self.domain_state_supported = False
@@ -258,7 +258,7 @@ class vmmDomain(vmmLibvirtObject):
     def _init_libvirt_state(self):
         self.managedsave_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_MANAGED_SAVE, self._backend)
-        self.remote_console_supported = self.conn.check_support(
+        self.console_stream_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_CONSOLE_STREAM, self._backend)
         self.title_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_GET_METADATA, self._backend)

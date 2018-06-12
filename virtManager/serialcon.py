@@ -4,16 +4,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import os
-import termios
-import tty
-import pty
-import fcntl
 import logging
 
 import gi
 from gi.repository import Gdk
-from gi.repository import GLib
 from gi.repository import Gtk
 
 # We can use either 2.91 or 2.90. This is just to silence runtime warnings
@@ -38,105 +32,16 @@ class ConsoleConnection(vmmGObject):
         self.vm = vm
         self.conn = vm.conn
 
+        self.stream = None
+
+        self.streamToTerminal = b""
+        self.terminalToStream = ""
+
     def _cleanup(self):
         self.close()
 
         self.vm = None
         self.conn = None
-
-    def is_open(self):
-        raise NotImplementedError()
-    def open(self, dev, terminal):
-        raise NotImplementedError()
-    def close(self):
-        raise NotImplementedError()
-
-    def send_data(self, src, text, length, terminal):
-        """
-        Callback when data has been entered into VTE terminal
-        """
-        raise NotImplementedError()
-
-
-class LocalConsoleConnection(ConsoleConnection):
-    def __init__(self, vm):
-        ConsoleConnection.__init__(self, vm)
-
-        self.fd = None
-        self.source = None
-        self.origtermios = None
-
-    def is_open(self):
-        return self.fd is not None
-
-    def open(self, dev, terminal):
-        if self.fd is not None:
-            self.close()
-
-        ipty = dev and dev.source_path or None
-        logging.debug("Opening serial tty path: %s", ipty)
-        if ipty is None:
-            return
-
-        self.fd = pty.slave_open(ipty)
-        fcntl.fcntl(self.fd, fcntl.F_SETFL, os.O_NONBLOCK)
-        self.source = GLib.io_add_watch(self.fd,
-                            GLib.IO_IN | GLib.IO_ERR | GLib.IO_HUP,
-                            self.display_data, terminal)
-
-        # Save term settings & set to raw mode
-        self.origtermios = termios.tcgetattr(self.fd)
-        tty.setraw(self.fd, termios.TCSANOW)
-
-    def close(self):
-        if self.fd is None:
-            return
-
-        # Restore term settings
-        try:
-            if self.origtermios:
-                termios.tcsetattr(self.fd, termios.TCSANOW, self.origtermios)
-        except Exception:
-            # domain may already have exited, destroying the pty, so ignore
-            pass
-
-        os.close(self.fd)
-        self.fd = None
-
-        GLib.source_remove(self.source)
-        self.source = None
-        self.origtermios = None
-
-    def send_data(self, src, text, length, terminal):
-        ignore = src
-        ignore = length
-        ignore = terminal
-
-        if self.fd is None:
-            return
-
-        os.write(self.fd, text)
-
-    def display_data(self, src, cond, terminal):
-        ignore = src
-
-        if cond != GLib.IO_IN:
-            self.close()
-            return False
-
-        data = os.read(self.fd, 1024)
-        terminal.feed(data)
-        return True
-
-
-class LibvirtConsoleConnection(ConsoleConnection):
-    def __init__(self, vm):
-        ConsoleConnection.__init__(self, vm)
-
-        self.stream = None
-
-        self.streamToTerminal = b""
-        self.terminalToStream = ""
 
     def _event_on_stream(self, stream, events, opaque):
         ignore = stream
@@ -229,6 +134,9 @@ class LibvirtConsoleConnection(ConsoleConnection):
         self.stream = None
 
     def send_data(self, src, text, length, terminal):
+        """
+        Callback when data has been entered into VTE terminal
+        """
         ignore = src
         ignore = length
         ignore = terminal
@@ -252,12 +160,6 @@ class LibvirtConsoleConnection(ConsoleConnection):
 
 
 class vmmSerialConsole(vmmGObject):
-    @staticmethod
-    def support_remote_console(vm):
-        """
-        Check if we can connect to a remote console
-        """
-        return bool(vm.remote_console_supported)
 
     @staticmethod
     def can_connect(vm, dev):
@@ -265,26 +167,16 @@ class vmmSerialConsole(vmmGObject):
         Check if we think we can actually open passed console/serial dev
         """
         usable_types = ["pty"]
-
         ctype = dev.type
-        path = dev.source_path
-        is_remote = vm.conn.is_remote()
-        support_tunnel = vmmSerialConsole.support_remote_console(vm)
 
         err = ""
 
-        if is_remote and not support_tunnel:
-            err = _("Remote serial console not supported for this "
-                    "connection")
+        if not vm.console_stream_supported:
+            err = _("Serial console not supported for this libvirt connection")
         elif not vm.is_active():
             err = _("Serial console not available for inactive guest")
         elif ctype not in usable_types:
-            err = (_("Console for device type '%s' not yet supported") %
-                     ctype)
-        elif (not is_remote and
-              not support_tunnel and
-              (path and not os.access(path, os.R_OK | os.W_OK))):
-            err = _("Can not access console path '%s'") % str(path)
+            err = (_("Console for device type '%s' is not supported") % ctype)
 
         return err
 
@@ -296,12 +188,7 @@ class vmmSerialConsole(vmmGObject):
         self.name = name
         self.lastpath = None
 
-        # Always use libvirt console streaming if available, so
-        # we exercise the same code path (it's what virsh console does)
-        if vmmSerialConsole.support_remote_console(self.vm):
-            self.console = LibvirtConsoleConnection(self.vm)
-        else:
-            self.console = LocalConsoleConnection(self.vm)
+        self.console = ConsoleConnection(self.vm)
 
         self.serial_popup = None
         self.serial_copy = None
