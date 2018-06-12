@@ -425,7 +425,7 @@ class AddHardware(uiutils.UITestCase):
         """
         Adding LXC specific filesystems
         """
-        self.app.uri = tests.utils.uri_lxc
+        self.app.uri = tests.utils.URIs.lxc
 
         details = self._open_details_window()
         addhw = self._open_addhw_window(details)

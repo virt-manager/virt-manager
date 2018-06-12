@@ -21,7 +21,7 @@ class UITestCase(unittest.TestCase):
     Common testcase bits shared for ui tests
     """
     def setUp(self):
-        self.app = VMMDogtailApp(tests.utils.uri_test)
+        self.app = VMMDogtailApp(tests.utils.URIs.test_full)
     def tearDown(self):
         self.app.stop()
 

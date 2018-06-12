@@ -136,7 +136,7 @@ class NewVM(uiutils.UITestCase):
         New VM with URL and distro detection, plus having fun with
         the storage browser and network selection.
         """
-        self.app.uri = tests.utils.uri_kvm
+        self.app.uri = tests.utils.URIs.kvm
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Network Install", "radio").click()
@@ -167,7 +167,7 @@ class NewVM(uiutils.UITestCase):
         """
         New PPC64 VM to test architecture selection
         """
-        self.app.uri = tests.utils.uri_kvm
+        self.app.uri = tests.utils.URIs.kvm
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Architecture options", "toggle").click()
@@ -185,7 +185,7 @@ class NewVM(uiutils.UITestCase):
         """
         New arm VM that requires kernel/initrd/dtb
         """
-        self.app.uri = tests.utils.uri_kvm_armv7l
+        self.app.uri = tests.utils.URIs.kvm_armv7l
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Architecture options", "toggle").click()
@@ -234,7 +234,7 @@ class NewVM(uiutils.UITestCase):
         """
         Simple LXC app install
         """
-        self.app.uri = tests.utils.uri_lxc
+        self.app.uri = tests.utils.URIs.lxc
 
         newvm = self._open_create_wizard()
         newvm.find_fuzzy("Application", "radio").click()
@@ -256,7 +256,7 @@ class NewVM(uiutils.UITestCase):
         """
         Simple LXC tree install
         """
-        self.app.uri = tests.utils.uri_lxc
+        self.app.uri = tests.utils.URIs.lxc
 
         newvm = self._open_create_wizard()
         newvm.find_fuzzy("Operating system", "radio").click()
@@ -278,7 +278,7 @@ class NewVM(uiutils.UITestCase):
         """
         Virtuozzo container install
         """
-        self.app.uri = tests.utils.uri_vz
+        self.app.uri = tests.utils.URIs.vz
 
         newvm = self._open_create_wizard()
         newvm.find_fuzzy("Container", "radio").click()
@@ -299,7 +299,7 @@ class NewVM(uiutils.UITestCase):
         """
         Test the create wizard with a fake xen PV install
         """
-        self.app.uri = tests.utils.uri_xen
+        self.app.uri = tests.utils.URIs.xen
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Architecture options", "toggle").click()

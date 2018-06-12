@@ -29,50 +29,47 @@ class _CLIState(object):
 clistate = _CLIState()
 
 
-_capsprefix  = ",caps=%s/tests/capabilities-xml/" % os.getcwd()
-_domcapsprefix  = ",domcaps=%s/tests/capabilities-xml/" % os.getcwd()
-
-uri_test_default = "__virtinst_test__test:///default,predictable"
-uri_test_full = "__virtinst_test__test:///%s/tests/testdriver.xml,predictable" % os.getcwd()
-uri_test_suite = "__virtinst_test__test:///%s/tests/testsuite.xml,predictable" % os.getcwd()
-uri_test = uri_test_full
-uri_test_remote = uri_test + ",remote"
-
-_uri_qemu = "%s,qemu" % uri_test
-_uri_kvm_domcaps = (_uri_qemu + _domcapsprefix + "kvm-x86_64-domcaps.xml")
-_uri_kvm_domcaps_q35 = (_uri_qemu + _domcapsprefix + "kvm-x86_64-domcaps-q35.xml")
-_uri_kvm_aarch64_domcaps = (_uri_qemu + _domcapsprefix + "kvm-aarch64-domcaps.xml")
-uri_kvm_nodomcaps = (_uri_qemu + _capsprefix + "kvm-x86_64.xml")
-uri_kvm_rhel = (_uri_kvm_domcaps + _capsprefix + "kvm-x86_64-rhel7.xml")
-uri_kvm = (_uri_kvm_domcaps + _capsprefix + "kvm-x86_64.xml")
-uri_kvm_q35 = (_uri_kvm_domcaps_q35 + _capsprefix + "kvm-x86_64.xml")
-uri_kvm_session = uri_kvm + ",session"
-
-uri_kvm_armv7l = (_uri_kvm_domcaps + _capsprefix + "kvm-armv7l.xml")
-uri_kvm_aarch64 = (_uri_kvm_aarch64_domcaps + _capsprefix + "kvm-aarch64.xml")
-uri_kvm_ppc64le = (_uri_kvm_domcaps + _capsprefix + "kvm-ppc64le.xml")
-uri_kvm_s390x = (_uri_kvm_domcaps + _capsprefix + "kvm-s390x.xml")
-uri_kvm_s390x_KVMIBM = (_uri_kvm_domcaps + _capsprefix + "kvm-s390x-KVMIBM.xml")
-
-uri_xen = uri_test + _capsprefix + "xen-rhel5.4.xml,xen"
-uri_lxc = uri_test + _capsprefix + "lxc.xml,lxc"
-uri_vz = uri_test + _capsprefix + "vz.xml,vz"
-
-
-def _make_uri(base, connver=None, libver=None):
-    if connver:
-        base += ",connver=%s" % connver
-    if libver:
-        base += ",libver=%s" % libver
-    return base
-
-
 class _URIs(object):
     def __init__(self):
         self._conn_cache = {}
         self._testdriver_cache = None
         self._testdriver_error = None
         self._testdriver_default = None
+
+        _capspath = "%s/tests/capabilities-xml/" % os.getcwd()
+        def _domcaps(path):
+            return ",domcaps=" + _capspath + path
+        def _caps(path):
+            return ",caps=" + _capspath + path
+
+        _testtmpl = "__virtinst_test__test://%s,predictable"
+        self.test_default = _testtmpl % "/default"
+        self.test_full = _testtmpl % (os.getcwd() + "/tests/testdriver.xml")
+        self.test_suite = _testtmpl % (os.getcwd() + "/tests/testsuite.xml")
+        self.test_remote = self.test_full + ",remote"
+
+        self.xen = self.test_full + _caps("xen-rhel5.4.xml") + ",xen"
+        self.lxc = self.test_full + _caps("lxc.xml") + ",lxc"
+        self.vz = self.test_full + _caps("vz.xml") + ",vz"
+
+        _uri_qemu = "%s,qemu" % self.test_full
+        _uri_kvm = _uri_qemu + _domcaps("kvm-x86_64-domcaps.xml")
+        _uri_kvm_q35 = _uri_qemu + _domcaps("kvm-x86_64-domcaps-q35.xml")
+        _uri_kvm_aarch64 = _uri_qemu + _domcaps("kvm-aarch64-domcaps.xml")
+
+        self.kvm = _uri_kvm + _caps("kvm-x86_64.xml")
+        self.kvm_nodomcaps = _uri_qemu + _caps("kvm-x86_64.xml")
+        self.kvm_rhel = _uri_kvm + _caps("kvm-x86_64-rhel7.xml")
+        self.kvm_q35 = _uri_kvm_q35 + _caps("kvm-x86_64.xml")
+        self.kvm_session = self.kvm + ",session"
+
+        self.kvm_armv7l = _uri_kvm + _caps("kvm-armv7l.xml")
+        self.kvm_aarch64 = _uri_kvm_aarch64 + _caps("kvm-aarch64.xml")
+        self.kvm_ppc64le = _uri_kvm + _caps("kvm-ppc64le.xml")
+        self.kvm_s390x = _uri_kvm + _caps("kvm-s390x.xml")
+        self.kvm_s390x_KVMIBM = _uri_kvm + _caps("kvm-s390x-KVMIBM.xml")
+
+
 
     def openconn(self, uri):
         """
@@ -104,7 +101,7 @@ class _URIs(object):
 
         # For the basic test:///default URI, skip this caching, so we have
         # an option to test the stock code
-        if uri == uri_test_default:
+        if uri == self.test_default:
             return conn
 
         if uri not in self._conn_cache:
@@ -143,20 +140,27 @@ class _URIs(object):
         state doesn't become polluted.
         """
         if not self._testdriver_cache:
-            self._testdriver_cache = self.openconn(uri_test)
+            self._testdriver_cache = self.openconn(self.test_full)
         return self._testdriver_cache
 
     def open_testdefault_cached(self):
         if not self._testdriver_default:
-            self._testdriver_default = self.openconn(uri_test_default)
+            self._testdriver_default = self.openconn(self.test_default)
         return self._testdriver_default
 
+    def _make_uri(self, base, connver=None, libver=None):
+        if connver:
+            base += ",connver=%s" % connver
+        if libver:
+            base += ",libver=%s" % libver
+        return base
+
     def open_kvm(self, connver=None, libver=None):
-        return self.openconn(_make_uri(uri_kvm, connver, libver))
+        return self.openconn(self._make_uri(self.kvm, connver, libver))
     def open_kvm_rhel(self, connver=None):
-        return self.openconn(_make_uri(uri_kvm_rhel, connver))
+        return self.openconn(self._make_uri(self.kvm_rhel, connver))
     def open_test_remote(self):
-        return self.openconn(uri_test_remote)
+        return self.openconn(self.test_remote)
 
 URIs = _URIs()
 
