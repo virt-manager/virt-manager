@@ -734,7 +734,6 @@ c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-varia
 
 # misc KVM config tests
 c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso", skip_check=not find_executable("isoinfo"))  # Using --location iso mounting
-c.add_compare("--disk none --location nfs:example.com/fake --nonetworks", "location-nfs")  # Using --location nfs
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7")  # RHEL7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7")  # Centos 7 defaults
@@ -748,6 +747,7 @@ c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_nodomca
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
 c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm")  # Invalid domain type for arch
 c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch/virt combo
+c.add_invalid("--disk none --location nfs:example.com/fake --nonetworks")  # Using --location nfs, no longer supported
 
 c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_q35, compare_check=support.SUPPORT_CONN_VMPORT)
 c.add_compare("--boot uefi --disk none", "boot-uefi")

@@ -19,8 +19,9 @@ VNC or SPICE, as well as text mode installs over serial console. The guest
 can be configured to use one or more virtual disks, network interfaces,
 audio devices, physical USB or PCI devices, among others.
 
-The installation media can be held locally or remotely on NFS, HTTP, FTP
-servers. In the latter case C<virt-install> will fetch the minimal files
+The installation media can be local ISO or CDROM media, or a distro install
+tree hosted remotely over HTTP, FTP, or in a local directory. In the install
+tree case C<virt-install> will fetch the minimal files
 necessary to kick off the installation process, allowing the guest
 to fetch the rest of the OS distribution as needed. PXE booting, and importing
 an existing disk image (thus skipping the install phase) are also supported.
@@ -396,10 +397,6 @@ An HTTP server location containing an installable distribution image.
 =item ftp://host/path
 
 An FTP server location containing an installable distribution image.
-
-=item nfs:host:/path or nfs://host/path
-
-An NFS server location containing an installable distribution image. This requires running virt-install as root.
 
 =item DIRECTORY
 

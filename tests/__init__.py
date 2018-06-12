@@ -10,8 +10,6 @@ import os
 
 # Need to do this before any tests or virtinst import
 os.environ["VIRTINST_TEST_SUITE"] = "1"
-os.environ["VIRTINST_TEST_URL_DIR"] = os.path.abspath(
-    "tests/cli-test-xml/fakefedoratree/")
 
 # pylint: disable=wrong-import-position
 from virtcli import cliconfig

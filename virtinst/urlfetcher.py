@@ -16,14 +16,14 @@ import urllib
 import requests
 
 
-#########################################################################
-# Backends for the various URL types we support (http, ftp, nfs, local) #
-#########################################################################
+###########################################################################
+# Backends for the various URL types we support (http, https, ftp, local) #
+###########################################################################
 
 class _URLFetcher(object):
     """
     This is a generic base class for fetching/extracting files from
-    a media source, such as CD ISO, NFS server, or HTTP/FTP server
+    a media source, such as CD ISO, or HTTP/HTTPS/FTP server
     """
     _block_size = 16384
 
@@ -286,55 +286,6 @@ class _LocalURLFetcher(_URLFetcher):
         return urlobj, size
 
 
-class _MountedURLFetcher(_LocalURLFetcher):
-    """
-    Fetcher capable of extracting files from a NFS server
-    or loopback mounted file, or local CDROM device
-    """
-    _in_test_suite = bool("VIRTINST_TEST_SUITE" in os.environ)
-    _mounted = False
-
-    def prepareLocation(self):
-        if self._mounted:
-            return
-
-        if self._in_test_suite:
-            self._srcdir = os.environ["VIRTINST_TEST_URL_DIR"]
-        else:
-            self._srcdir = tempfile.mkdtemp(prefix="virtinstmnt.",
-                                           dir=self.scratchdir)
-        mountcmd = "/bin/mount"
-
-        logging.debug("Preparing mount at %s", self._srcdir)
-        cmd = [mountcmd, "-o", "ro", self.location[4:], self._srcdir]
-
-        logging.debug("mount cmd: %s", cmd)
-        if not self._in_test_suite:
-            ret = subprocess.call(cmd)
-            if ret != 0:
-                self.cleanupLocation()
-                raise ValueError(_("Mounting location '%s' failed") %
-                                 (self.location))
-
-        self._mounted = True
-
-    def cleanupLocation(self):
-        if not self._mounted:
-            return
-
-        logging.debug("Cleaning up mount at %s", self._srcdir)
-        try:
-            if not self._in_test_suite:
-                cmd = ["/bin/umount", self._srcdir]
-                subprocess.call(cmd)
-                try:
-                    os.rmdir(self._srcdir)
-                except Exception:
-                    pass
-        finally:
-            self._mounted = False
-
-
 class _ISOURLFetcher(_URLFetcher):
     _cache_file_list = None
 
@@ -375,8 +326,6 @@ def fetcherForURI(uri, *args, **kwargs):
         fclass = _HTTPURLFetcher
     elif uri.startswith("ftp://"):
         fclass = _FTPURLFetcher
-    elif uri.startswith("nfs:"):
-        fclass = _MountedURLFetcher
     elif os.path.isdir(uri):
         # Pointing to a local tree
         fclass = _LocalURLFetcher

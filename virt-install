@@ -824,8 +824,8 @@ def parse_args():
     insg.add_argument("-c", dest="cdrom_short", help=argparse.SUPPRESS)
     insg.add_argument("--cdrom", help=_("CD-ROM installation media"))
     insg.add_argument("-l", "--location",
-                    help=_("Installation source (eg, nfs:host:/path, "
-                           "https://host/path, ftp://host/path)"))
+            help=_("Distro install URL, eg. https://host/path. See man "
+                   "page for specific distro examples."))
     insg.add_argument("--pxe", action="store_true",
                     help=_("Boot from the network using the PXE protocol"))
     insg.add_argument("--import", action="store_true", dest="import_install",

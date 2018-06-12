@@ -20,33 +20,14 @@ from .osdict import OSDB
 
 def _is_url(conn, url):
     """
-    Check if passed string is a (pseudo) valid http, ftp, or nfs url.
+    Check if passed string is an http or ftp URL
     """
     if not conn.is_remote() and os.path.exists(url):
         return os.path.isdir(url)
 
-    return (url.startswith("http://") or url.startswith("https://") or
-            url.startswith("ftp://") or url.startswith("nfs:"))
-
-
-def _sanitize_url(url):
-    """
-    Do nothing for http or ftp, but make sure nfs is in the expected format
-    """
-    if url.startswith("nfs://"):
-        # Convert RFC compliant NFS      nfs://server/path/to/distro
-        # to what mount/anaconda expect  nfs:server:/path/to/distro
-        # and carry the latter form around internally
-        url = "nfs:" + url[6:]
-
-        # If we need to add the : after the server
-        index = url.find("/", 4)
-        if index == -1:
-            raise ValueError(_("Invalid NFS format: No path specified."))
-        if url[index - 1] != ":":
-            url = url[:index] + ":" + url[index:]
-
-    return url
+    return (url.startswith("http://") or
+            url.startswith("https://") or
+            url.startswith("ftp://"))
 
 
 # Enum of the various install media types we can have
@@ -160,14 +141,14 @@ class DistroInstaller(Installer):
         1) it can be a local file (ex. boot.iso), directory (ex. distro
         tree) or physical device (ex. cdrom media)
 
-        2) http, ftp, or nfs path for an install tree
+        2) http, https, or ftp for an install tree
         """
         self._cached_store = None
         self._cached_fetcher = None
 
         if _is_url(self.conn, val):
             logging.debug("DistroInstaller location is a network source.")
-            return _sanitize_url(val)
+            return val
 
         try:
             dev = DeviceDisk(self.conn)
@@ -178,6 +159,12 @@ class DistroInstaller(Installer):
             val = dev.path
         except Exception as e:
             logging.debug("Error validating install location", exc_info=True)
+            if val.startswith("nfs:"):
+                logging.warning("NFS URL installs are no longer supported. "
+                    "Access your install media over an alternate transport "
+                    "like HTTP, or manually mount the NFS share and install "
+                    "from the local directory mount point.")
+
             raise ValueError(_("Validating install media '%s' failed: %s") %
                 (str(val), e))
 
