@@ -46,7 +46,7 @@ class TestClone(unittest.TestCase):
                clone_disks_file=None):
         """Helper for comparing clone input/output from 2 xml files"""
         infile = os.path.join(clonexml_dir, filebase + "-in.xml")
-        in_content = utils.read_file(infile)
+        in_content = open(infile).read()
 
         if not conn:
             conn = utils.URIs.open_testdriver_cached()
@@ -100,7 +100,7 @@ class TestClone(unittest.TestCase):
         """Take the valid output xml and attempt to define it on the
            connection to ensure we don't get any errors"""
         outfile = os.path.join(clonexml_dir, filebase + "-out.xml")
-        outxml = utils.read_file(outfile)
+        outxml = open(outfile).read()
         conn = utils.URIs.open_testdriver_cached()
         utils.test_create(conn, outxml)
 

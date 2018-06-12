@@ -186,21 +186,12 @@ def test_create(testconn, xml, define_func="defineXML"):
             pass
 
 
-def read_file(filename):
-    """Helper function to read a files contents and return them"""
-    f = open(filename, "r")
-    out = f.read()
-    f.close()
-
-    return out
-
-
 def diff_compare(actual_out, filename=None, expect_out=None):
     """Compare passed string output to contents of filename"""
     if not expect_out:
         if not os.path.exists(filename) or clistate.regenerate_output:
             open(filename, "w").write(actual_out)
-        expect_out = read_file(filename)
+        expect_out = open(filename).read()
 
     diff = "".join(difflib.unified_diff(expect_out.splitlines(1),
                                         actual_out.splitlines(1),
