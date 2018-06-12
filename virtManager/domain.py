@@ -991,7 +991,10 @@ class vmmDomain(vmmLibvirtObject):
         if model != _SENTINEL:
             editdev.model = model
 
-        self._redefine_xmlobj(xmlobj)
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self._redefine_xmlobj(xmlobj)
 
 
     ####################
