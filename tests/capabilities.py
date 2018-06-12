@@ -18,22 +18,6 @@ class TestCapabilities(unittest.TestCase):
         conn = utils.URIs.open_testdefault_cached()
         return Capabilities(conn, open(path).read())
 
-    def testCapsCPUFeaturesOldSyntax(self):
-        filename = "test-old-vmx.xml"
-        host_feature_list = ["vmx"]
-
-        caps = self._buildCaps(filename)
-        for f in host_feature_list:
-            self.assertEqual(caps.host.cpu.has_feature(f), True)
-
-    def testCapsCPUFeaturesOldSyntaxSVM(self):
-        filename = "test-old-svm.xml"
-        host_feature_list = ["svm"]
-
-        caps = self._buildCaps(filename)
-        for f in host_feature_list:
-            self.assertEqual(caps.host.cpu.has_feature(f), True)
-
     def testCapsCPUFeaturesNewSyntax(self):
         filename = "test-qemu-with-kvm.xml"
         host_feature_list = ['lahf_lm', 'xtpr', 'cx16', 'tm2', 'est', 'vmx',
@@ -41,7 +25,8 @@ class TestCapabilities(unittest.TestCase):
 
         caps = self._buildCaps(filename)
         for f in host_feature_list:
-            self.assertEqual(caps.host.cpu.has_feature(f), True)
+            self.assertEqual(
+                    f in [feat.name for feat in caps.host.cpu.features], True)
 
         self.assertEqual(caps.host.cpu.model, "core2duo")
         self.assertEqual(caps.host.cpu.vendor, "Intel")
@@ -52,7 +37,7 @@ class TestCapabilities(unittest.TestCase):
     def testCapsUtilFuncs(self):
         caps_with_kvm = self._buildCaps("test-qemu-with-kvm.xml")
         caps_no_kvm = self._buildCaps("test-qemu-no-kvm.xml")
-        caps_empty = self._buildCaps("test-old-vmx.xml")
+        caps_empty = self._buildCaps("test-empty.xml")
 
         def test_utils(caps, has_guests, is_kvm):
             if caps.guests:

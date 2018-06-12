@@ -20,22 +20,6 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 class _CapsCPU(DomainCpu):
     arch = XMLProperty("./arch")
 
-    # capabilities used to just expose these properties as bools
-    _svm_bool = XMLProperty("./features/svm", is_bool=True)
-    _vmx_bool = XMLProperty("./features/vmx", is_bool=True)
-
-
-    ##############
-    # Public API #
-    ##############
-
-    def has_feature(self, name):
-        if name == "svm" and self._svm_bool:
-            return True
-        if name == "vmx" and self._vmx_bool:
-            return True
-        return name in [f.name for f in self.features]
-
 
 ###########################
 # Caps <topology> parsers #
