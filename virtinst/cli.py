@@ -2785,6 +2785,9 @@ class ParserHostdev(VirtCLIParser):
         elif inst.type == "misc":
             inst.mode = "capabilities"
             inst.misc_char = val
+        elif inst.type == "storage":
+            inst.mode = "capabilities"
+            inst.storage_block = val
         else:
             val = NodeDevice.lookupNodedevFromString(inst.conn, val)
             inst.set_from_nodedev(val)

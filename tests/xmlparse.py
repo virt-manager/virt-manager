@@ -697,6 +697,7 @@ class XMLParseTest(unittest.TestCase):
         dev4 = guest.devices.hostdev[3]
         dev5 = guest.devices.hostdev[4]
         dev6 = guest.devices.hostdev[5]
+        dev7 = guest.devices.hostdev[6]
 
         check = self._make_checker(dev1)
         check("type", "usb", "foo", "usb")
@@ -739,6 +740,10 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev6)
         check("type", "misc")
         check("misc_char", "/dev/net/tun", "/dev/null")
+
+        check = self._make_checker(dev7)
+        check("type", "storage")
+        check("storage_block", "/dev/sdf", "/dev/fd0")
         self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterWatchdogs(self):

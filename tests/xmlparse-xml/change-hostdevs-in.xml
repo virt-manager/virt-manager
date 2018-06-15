@@ -53,5 +53,10 @@
         <char>/dev/net/tun</char>
       </source>
     </hostdev>
+    <hostdev mode="capabilities" type="storage" managed="yes">
+      <source>
+        <block>/dev/sdf</block>
+      </source>
+    </hostdev>
   </devices>
 </domain>

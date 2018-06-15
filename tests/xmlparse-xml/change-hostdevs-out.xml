@@ -56,5 +56,10 @@
         <char>/dev/null</char>
       </source>
     </hostdev>
+    <hostdev mode="capabilities" type="storage" managed="yes">
+      <source>
+        <block>/dev/fd0</block>
+      </source>
+    </hostdev>
   </devices>
 </domain>

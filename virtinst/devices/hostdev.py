@@ -138,3 +138,6 @@ class DeviceHostdev(Device):
 
     # type=misc handling
     misc_char = XMLProperty("./source/char")
+
+    # type=misc handling
+    storage_block = XMLProperty("./source/block")
