@@ -46,5 +46,10 @@
         <address bus="1" target="2" unit="3"/>
       </source>
     </hostdev>
+    <hostdev mode="capabilities" type="net" managed="yes">
+      <source>
+        <interface>eth0</interface>
+      </source>
+    </hostdev>
   </devices>
 </domain>

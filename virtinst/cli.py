@@ -2779,8 +2779,12 @@ class ParserHostdev(VirtCLIParser):
     remove_first = "name"
 
     def set_name_cb(self, inst, val, virtarg):
-        val = NodeDevice.lookupNodedevFromString(inst.conn, val)
-        inst.set_from_nodedev(val)
+        if inst.type == "net":
+            inst.mode = "capabilities"
+            inst.net_interface = val
+        else:
+            val = NodeDevice.lookupNodedevFromString(inst.conn, val)
+            inst.set_from_nodedev(val)
 
     def name_lookup_cb(self, inst, val, virtarg):
         nodedev = NodeDevice.lookupNodedevFromString(inst.conn, val)
@@ -2788,6 +2792,7 @@ class ParserHostdev(VirtCLIParser):
 
 _register_virt_parser(ParserHostdev)
 _add_device_address_args(ParserHostdev)
+ParserHostdev.add_arg("type", "type")
 ParserHostdev.add_arg(None, "name",
                       cb=ParserHostdev.set_name_cb,
                       lookup_cb=ParserHostdev.name_lookup_cb)

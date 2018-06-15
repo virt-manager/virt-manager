@@ -132,3 +132,6 @@ class DeviceHostdev(Device):
     scsi_bus = XMLProperty("./source/address/@bus", is_int=True)
     scsi_target = XMLProperty("./source/address/@target", is_int=True)
     scsi_unit = XMLProperty("./source/address/@unit", is_int=True)
+
+    # type=net handling
+    net_interface = XMLProperty("./source/interface")
