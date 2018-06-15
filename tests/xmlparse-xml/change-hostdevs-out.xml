@@ -51,5 +51,10 @@
         <interface>eth0</interface>
       </source>
     </hostdev>
+    <hostdev mode="capabilities" type="misc" managed="yes">
+      <source>
+        <char>/dev/null</char>
+      </source>
+    </hostdev>
   </devices>
 </domain>

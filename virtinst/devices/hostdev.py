@@ -135,3 +135,6 @@ class DeviceHostdev(Device):
 
     # type=net handling
     net_interface = XMLProperty("./source/interface")
+
+    # type=misc handling
+    misc_char = XMLProperty("./source/char")

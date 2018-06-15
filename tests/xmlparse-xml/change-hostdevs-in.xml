@@ -48,5 +48,10 @@
         <interface>wlan0</interface>
       </source>
     </hostdev>
+    <hostdev mode="capabilities" type="misc" managed="yes">
+      <source>
+        <char>/dev/net/tun</char>
+      </source>
+    </hostdev>
   </devices>
 </domain>

@@ -2782,6 +2782,9 @@ class ParserHostdev(VirtCLIParser):
         if inst.type == "net":
             inst.mode = "capabilities"
             inst.net_interface = val
+        elif inst.type == "misc":
+            inst.mode = "capabilities"
+            inst.misc_char = val
         else:
             val = NodeDevice.lookupNodedevFromString(inst.conn, val)
             inst.set_from_nodedev(val)
