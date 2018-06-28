@@ -1,0 +1,35 @@
+<domain type="kvm">
+  <name>clone-new</name>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <memory>262144</memory>
+  <currentMemory>262144</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="i686" machine="pc">hvm</type>
+    <boot dev="cdrom"/>
+  </os>
+  <features>
+    <acpi/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+    <channel type="unix">
+      <source mode="bind" path="/tmp/guestfwd"/>
+      <target type="guestfwd" address="10.0.0.1" port="1234"/>
+    </channel>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <channel type="unix">
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <channel type="unix">
+      <target type="virtio"/>
+    </channel>
+  </devices>
+</domain>

@@ -164,3 +164,6 @@ class TestClone(unittest.TestCase):
 
     def testCloneGraphicsPassword(self):
         self._clone("graphics-password")
+
+    def testCloneChannelSource(self):
+        self._clone("channel-source")
