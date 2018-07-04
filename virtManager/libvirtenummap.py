@@ -18,13 +18,15 @@ class _LibvirtEnumMap(object):
     """
     # Some values we define to distinguish between API objects
     (DOMAIN_EVENT,
+     DOMAIN_AGENT_EVENT,
      NETWORK_EVENT,
      STORAGE_EVENT,
-     NODEDEV_EVENT) = range(1, 5)
+     NODEDEV_EVENT) = range(1, 6)
 
     # Regex map for naming all event types depending on the API object
     _EVENT_PREFIX = {
         DOMAIN_EVENT: "VIR_DOMAIN_EVENT_ID_",
+        DOMAIN_AGENT_EVENT: "VIR_DOMAIN_EVENT_ID_AGENT_",
         NETWORK_EVENT: "VIR_NETWORK_EVENT_ID_",
         STORAGE_EVENT: "VIR_STORAGE_POOL_EVENT_ID_",
         NODEDEV_EVENT: "VIR_NODE_DEVICE_EVENT_ID_",
@@ -33,6 +35,8 @@ class _LibvirtEnumMap(object):
     # Regex map for 'state' values returned from lifecycle and other events
     _DETAIL1_PREFIX = {
         "VIR_DOMAIN_EVENT_ID_LIFECYCLE": "VIR_DOMAIN_EVENT_[^_]+$",
+        "VIR_DOMAIN_EVENT_ID_AGENT_LIFECYCLE": _("VIR_CONNECT_DOMAIN_EVENT_AGENT"
+                                                 "_LIFECYCLE_STATE_[^_]+$"),
         "VIR_NETWORK_EVENT_ID_LIFECYCLE": "VIR_NETWORK_EVENT_[^_]+$",
         "VIR_STORAGE_POOL_EVENT_ID_LIFECYCLE": "VIR_STORAGE_POOL_EVENT_[^_]+$",
         "VIR_NODE_DEVICE_EVENT_ID_LIFECYCLE": "VIR_NODE_DEVICE_EVENT_[^_]+$",
@@ -161,7 +165,9 @@ class _LibvirtEnumMap(object):
         detail2str = str(detail2)
         eventmap = self._get_map(api, self._EVENT_PREFIX[api])
 
-        if event in eventmap:
+        if eventmap:
+            if event not in eventmap:
+                event = next(iter(eventmap))
             eventstr = eventmap[event]
             detail1map = self._get_map(eventstr,
                     self._DETAIL1_PREFIX.get(eventstr))
@@ -187,6 +193,8 @@ class _LibvirtEnumMap(object):
         return self._state_str(self.STORAGE_EVENT, detail1, detail2)
     def nodedev_lifecycle_str(self, detail1, detail2):
         return self._state_str(self.NODEDEV_EVENT, detail1, detail2)
+    def domain_agent_lifecycle_str(self, detail1, detail2):
+        return self._state_str(self.DOMAIN_AGENT_EVENT, detail1, detail2)
 
 
 LibvirtEnumMap = _LibvirtEnumMap()
