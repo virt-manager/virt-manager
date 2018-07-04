@@ -848,14 +848,16 @@ class vmmConnection(vmmGObject):
             self.using_domain_events = False
             logging.debug("Error registering domain events: %s", e)
 
-        def _add_domain_xml_event(eventname, eventval):
+        def _add_domain_xml_event(eventname, eventval, cb=None):
             if not self.using_domain_events:
                 return
+            if not cb:
+                cb = self._domain_xml_misc_event
             try:
                 eventid = getattr(libvirt, eventname, eventval)
                 self._domain_cb_ids.append(
                     self.get_backend().domainEventRegisterAny(
-                    None, eventid, self._domain_xml_misc_event, eventname))
+                    None, eventid, cb, eventname))
             except Exception as e:
                 logging.debug("Error registering %s event: %s",
                     eventname, e)
