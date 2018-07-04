@@ -763,6 +763,14 @@ class vmmConnection(vmmGObject):
         else:
             self.schedule_priority_tick(pollvm=True, force=True)
 
+    def _domain_agent_lifecycle_event(self, conn, domain, state, reason, userdata):
+        ignore = conn
+        ignore = userdata
+
+        name = domain.name()
+        logging.debug("domain agent lifecycle event: domain=%s %s", name,
+                LibvirtEnumMap.domain_agent_lifecycle_str(state, reason))
+
     def _network_lifecycle_event(self, conn, network, state, reason, userdata):
         ignore = conn
         ignore = userdata
@@ -866,6 +874,8 @@ class vmmConnection(vmmGObject):
         _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_TRAY_CHANGE", 10)
         _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_DEVICE_REMOVED", 15)
         _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_DEVICE_ADDED", 19)
+        _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_AGENT_LIFECYCLE", 18,
+                              self._domain_agent_lifecycle_event)
 
         try:
             if FORCE_DISABLE_EVENTS:
