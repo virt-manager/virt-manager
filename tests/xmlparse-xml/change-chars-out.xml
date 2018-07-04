@@ -38,7 +38,7 @@
     <console type="pty"/>
     <console type="file">
       <source path="/root/foo"/>
-      <target type="virtio"/>
+      <target type="virtio" state="connected"/>
     </console>
     <channel type="pty">
       <target type="virtio" name="test.changed"/>

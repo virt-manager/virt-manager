@@ -771,6 +771,13 @@ class vmmConnection(vmmGObject):
         logging.debug("domain agent lifecycle event: domain=%s %s", name,
                 LibvirtEnumMap.domain_agent_lifecycle_str(state, reason))
 
+        obj = self.get_vm(name)
+
+        if obj:
+            self.idle_add(obj.recache_from_event_loop)
+        else:
+            self.schedule_priority_tick(pollvm=True, force=True)
+
     def _network_lifecycle_event(self, conn, network, state, reason, userdata):
         ignore = conn
         ignore = userdata

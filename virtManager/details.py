@@ -2941,6 +2941,7 @@ class vmmDetails(vmmGObjectUI):
         show_ui("source_path")
         show_ui("target_type")
         show_ui("target_name")
+        show_ui("target_state")
 
     def refresh_hostdev_page(self):
         hostdev = self.get_hw_selection(HW_LIST_COL_DEVICE)

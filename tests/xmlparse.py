@@ -474,6 +474,7 @@ class XMLParseTest(unittest.TestCase):
         check("source_path", "/tmp/foo.img", None)
         check("source_path", None, "/root/foo")
         check("target_type", "virtio")
+        check("target_state", None, "connected")
 
         check = self._make_checker(channel1)
         check("type", "pty")

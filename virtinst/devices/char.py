@@ -180,7 +180,7 @@ class _DeviceChar(Device):
                        "bind_host", "bind_port",
                        "source_mode", "source_host", "source_port",
                        "_source_path", "source_channel",
-                       "target_type", "target_name"]
+                       "target_type", "target_name", "target_state"]
 
     type = XMLProperty("./@type")
     _tty = XMLProperty("./@tty")
@@ -198,6 +198,8 @@ class _DeviceChar(Device):
     source_channel = XMLProperty("./source/@channel")
     source_master = XMLProperty("./source/@master")
     source_slave = XMLProperty("./source/@slave")
+
+    target_state = XMLProperty("./target/@state")
 
 
     ###################
