@@ -3025,7 +3025,7 @@ class vmmDetails(vmmGObjectUI):
             can_remove = False
         if controller.type == "pci":
             can_remove = False
-        if controller.type == "scsi":
+        elif controller.type in ["scsi", "sata", "ide", "fdc"]:
             model = self.widget("controller-device-list").get_model()
             model.clear()
             for disk in _calculate_disk_bus_index(self.vm.xmlobj.devices.disk):
