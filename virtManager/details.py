@@ -3033,6 +3033,16 @@ class vmmDetails(vmmGObjectUI):
                     model.append([infoStr])
             uiutil.set_grid_row_visible(self.widget("device-list-label"), True)
             uiutil.set_grid_row_visible(self.widget("controller-device-box"), True)
+        elif controller.type == "virtio-serial":
+            for dev in self.vm.xmlobj.devices.channel:
+                if dev.address.compare_controller(controller, dev.address.type):
+                    can_remove = False
+                    break
+            for dev in self.vm.xmlobj.devices.console:
+                # virtio console is implied to be on virtio-serial index=0
+                if controller.index == 0 and dev.target_type == "virtio":
+                    can_remove = False
+                    break
 
         self.widget("config-remove").set_sensitive(can_remove)
 
