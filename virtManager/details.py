@@ -147,7 +147,6 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
  DETAILS_PAGE_CONSOLE,
  DETAILS_PAGE_SNAPSHOTS) = range(3)
 
-_remove_tooltip = _("Remove this device from the virtual machine")
 
 
 def _calculate_disk_bus_index(disklist):
@@ -1189,11 +1188,16 @@ class vmmDetails(vmmGObjectUI):
             self.oldhwkey = newrow[HW_LIST_COL_DEVICE]
             self.hw_selected()
 
+    def _disable_device_remove(self, tooltip):
+        self.widget("config-remove").set_sensitive(False)
+        self.widget("config-remove").set_tooltip_text(tooltip)
+
     def hw_selected(self, page=None):
         pagetype = self.force_get_hw_pagetype(page)
 
         self.widget("config-remove").set_sensitive(True)
-        self.widget("config-remove").set_tooltip_text(_remove_tooltip)
+        self.widget("config-remove").set_tooltip_text(
+                _("Remove this device from the virtual machine"))
         self.widget("hw-panel").set_sensitive(True)
         self.widget("hw-panel").show()
 
@@ -2732,15 +2736,10 @@ class vmmDetails(vmmGObjectUI):
         self.widget("input-dev-mode").set_text(mode or "")
         uiutil.set_grid_row_visible(self.widget("input-dev-mode"), bool(mode))
 
-        tooltip = _remove_tooltip
-        sensitive = True
         if ((inp.type == "mouse" and inp.bus in ("xen", "ps2")) or
             (inp.type == "keyboard" and inp.bus in ("xen", "ps2"))):
-            sensitive = False
-            tooltip = _("Hypervisor does not support removing this device")
-
-        self.widget("config-remove").set_sensitive(sensitive)
-        self.widget("config-remove").set_tooltip_text(tooltip)
+            self._disable_device_remove(
+                _("Hypervisor does not support removing this device"))
 
     def refresh_graphics_page(self):
         gfx = self.get_hw_selection(HW_LIST_COL_DEVICE)
