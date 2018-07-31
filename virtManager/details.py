@@ -998,9 +998,6 @@ class vmmDetails(vmmGObjectUI):
         for name in caps.get_cpu_values(self.vm.get_arch()):
             model.append([name, name, name, False])
 
-        # Remove button tooltip
-        self.widget("config-remove").set_tooltip_text(_remove_tooltip)
-
         # Disk cache combo
         disk_cache = self.widget("disk-cache")
         vmmAddHardware.build_disk_cache_combo(self.vm, disk_cache)
@@ -1196,6 +1193,7 @@ class vmmDetails(vmmGObjectUI):
         pagetype = self.force_get_hw_pagetype(page)
 
         self.widget("config-remove").set_sensitive(True)
+        self.widget("config-remove").set_tooltip_text(_remove_tooltip)
         self.widget("hw-panel").set_sensitive(True)
         self.widget("hw-panel").show()
 
