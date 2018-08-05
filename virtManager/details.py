@@ -2998,6 +2998,10 @@ class vmmDetails(vmmGObjectUI):
         else:
             self.widget("video-3d").set_active(vid.accel3d)
 
+        if self.vm.xmlobj.devices.graphics:
+            self._disable_device_remove(
+                _("Cannot remove device while Graphics/Display is attached."))
+
     def refresh_watchdog_page(self):
         watch = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not watch:
@@ -3017,34 +3021,36 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(self.widget("device-list-label"), False)
         uiutil.set_grid_row_visible(self.widget("controller-device-box"), False)
 
-        can_remove = True
         if self.vm.get_xmlobj().os.is_x86() and controller.type == "usb":
-            can_remove = False
+            self._disable_device_remove(
+                _("Hypervisor does not support removing this device"))
         if controller.type == "pci":
-            can_remove = False
+            self._disable_device_remove(
+                _("Hypervisor does not support removing this device"))
         elif controller.type in ["scsi", "sata", "ide", "fdc"]:
             model = self.widget("controller-device-list").get_model()
             model.clear()
             for disk in _calculate_disk_bus_index(self.vm.xmlobj.devices.disk):
                 if disk.address.compare_controller(controller, disk.bus):
-                    can_remove = False
                     name = _label_for_device(disk)
                     infoStr = ("%s on %s" % (name, disk.address.pretty_desc()))
                     model.append([infoStr])
+                    self._disable_device_remove(
+                        _("Cannot remove controller while devices are attached."))
             uiutil.set_grid_row_visible(self.widget("device-list-label"), True)
             uiutil.set_grid_row_visible(self.widget("controller-device-box"), True)
         elif controller.type == "virtio-serial":
             for dev in self.vm.xmlobj.devices.channel:
                 if dev.address.compare_controller(controller, dev.address.type):
-                    can_remove = False
+                    self._disable_device_remove(
+                        _("Cannot remove controller while devices are attached."))
                     break
             for dev in self.vm.xmlobj.devices.console:
                 # virtio console is implied to be on virtio-serial index=0
                 if controller.index == 0 and dev.target_type == "virtio":
-                    can_remove = False
+                    self._disable_device_remove(
+                        _("Cannot remove controller while devices are attached."))
                     break
-
-        self.widget("config-remove").set_sensitive(can_remove)
 
         type_label = controller.pretty_desc()
         self.widget("controller-type").set_text(type_label)
