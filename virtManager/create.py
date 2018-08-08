@@ -440,17 +440,17 @@ class vmmCreate(vmmGObjectUI):
         installable_arch = (self._capsinfo.arch in
             ["i686", "x86_64", "ppc64", "ppc64le", "s390x"])
 
-        if self._capsinfo.arch == "aarch64":
+        if self._capsinfo.arch in ["aarch64", "armv7l"]:
             try:
                 guest = self.conn.caps.build_virtinst_guest(self._capsinfo)
                 guest.set_uefi_default()
                 installable_arch = True
-                logging.debug("UEFI found for aarch64, setting it as default.")
+                logging.debug("UEFI found, setting it as default.")
             except Exception as e:
                 installable_arch = False
-                logging.debug("Error checking for aarch64 UEFI default",
+                logging.debug("Error checking for UEFI default",
                     exc_info=True)
-                msg = _("Failed to setup UEFI for AArch64: %s\n"
+                msg = _("Failed to setup UEFI: %s\n"
                         "Install options are limited.") % e
                 self._show_arch_warning(msg)
 
@@ -1581,7 +1581,7 @@ class vmmCreate(vmmGObjectUI):
             self.err.val_err(_("Error setting OS information."), str(e))
             return None
 
-        if guest.os.is_arm64():
+        if guest.os.is_arm64() or guest.os.is_arm():
             try:
                 guest.set_uefi_default()
             except Exception:
