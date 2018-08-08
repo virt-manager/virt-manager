@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -130,6 +130,9 @@
     </accel-groups>
     <signal name="configure-event" handler="on_vmm_details_configure_event" swapped="no"/>
     <signal name="delete-event" handler="on_vmm_details_delete_event" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="vbox2">
         <property name="visible">True</property>
@@ -982,7 +985,6 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">end</property>
-                                            <property name="valign">start</property>
                                             <property name="label" translatable="yes">Machine _Type: </property>
                                             <property name="use_underline">True</property>
                                           </object>
@@ -996,14 +998,13 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="valign">start</property>
                                             <property name="label" translatable="yes">Chipse_t:</property>
                                             <property name="use_underline">True</property>
                                             <property name="ellipsize">middle</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
-                                            <property name="top_attach">5</property>
+                                            <property name="top_attach">4</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1011,12 +1012,11 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="valign">start</property>
                                             <property name="label" translatable="yes">Firmware:</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
-                                            <property name="top_attach">4</property>
+                                            <property name="top_attach">5</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1044,9 +1044,8 @@
                                                   <object class="GtkLabel" id="overview-firmware-label">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="valign">start</property>
-                                                    <property name="vexpand">False</property>
                                                     <property name="label">label</property>
+                                                    <property name="selectable">True</property>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -1076,7 +1075,7 @@
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="top_attach">4</property>
+                                            <property name="top_attach">5</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1101,6 +1100,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label">label</property>
+                                                <property name="selectable">True</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -1137,9 +1137,8 @@
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">start</property>
-                                                <property name="valign">start</property>
-                                                <property name="vexpand">True</property>
                                                 <property name="label">label</property>
+                                                <property name="selectable">True</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -1150,7 +1149,7 @@
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
-                                            <property name="top_attach">5</property>
+                                            <property name="top_attach">4</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -6357,9 +6356,6 @@
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>
