@@ -586,7 +586,7 @@ def build_guest_instance(conn, options):
     guest.add_default_devices()
 
     # Default to UEFI for aarch64
-    if (guest.os.is_arm64() and
+    if ((guest.os.is_arm64() or guest.os.is_arm32()) and
         not guest.os.kernel and
         not guest.os.loader and
         guest.os.loader_ro is None and
@@ -594,10 +594,10 @@ def build_guest_instance(conn, options):
         try:
             guest.set_uefi_default()
         except Exception as e:
-            logging.debug("Error setting UEFI default for aarch64",
+            logging.debug("Error setting UEFI default",
                 exc_info=True)
             logging.warning("Couldn't configure UEFI: %s", e)
-            logging.warning("Your aarch64 VM may not boot successfully.")
+            logging.warning("Your VM may not boot successfully.")
 
     # Check usability of SMM feature
     if guest.features.smm:
