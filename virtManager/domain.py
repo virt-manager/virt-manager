@@ -757,7 +757,7 @@ class vmmDomain(vmmLibvirtObject):
             mode=_SENTINEL, model=_SENTINEL, addrstr=_SENTINEL,
             vtype=_SENTINEL, managerid=_SENTINEL, typeid=_SENTINEL,
             typeidversion=_SENTINEL, instanceid=_SENTINEL,
-            portgroup=_SENTINEL, macaddr=_SENTINEL):
+            portgroup=_SENTINEL, macaddr=_SENTINEL, linkstate=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -786,6 +786,9 @@ class vmmDomain(vmmLibvirtObject):
 
         if macaddr != _SENTINEL:
             editdev.macaddr = macaddr
+
+        if linkstate != _SENTINEL:
+            editdev.link_state = "up" if linkstate else "down"
 
         if do_hotplug:
             self.hotplug(device=editdev)

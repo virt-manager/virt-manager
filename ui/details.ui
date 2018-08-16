@@ -4014,6 +4014,35 @@
                                             <property name="top_attach">2</property>
                                           </packing>
                                         </child>
+                                        <child>
+                                          <object class="GtkLabel" id="network-link-state-label">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">end</property>
+                                            <property name="label" translatable="yes">Link _state:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">network_link_state_checkbox</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">3</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkCheckButton" id="network-link-state-checkbox">
+                                            <property name="label" translatable="yes">active</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_network_link_state_checkbox_toggled" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">3</property>
+                                          </packing>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>

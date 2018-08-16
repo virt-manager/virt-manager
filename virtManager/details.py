@@ -69,6 +69,7 @@ from .graphwidgets import Sparkline
  EDIT_NET_VPORT,
  EDIT_NET_SOURCE,
  EDIT_NET_MAC,
+ EDIT_NET_LINKSTATE,
 
  EDIT_GFX_PASSWD,
  EDIT_GFX_TYPE,
@@ -93,7 +94,7 @@ from .graphwidgets import Sparkline
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 50)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 51)
 
 
 # Columns in hw list model
@@ -545,6 +546,9 @@ class vmmDetails(vmmGObjectUI):
             "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
             "on_network_mac_entry_changed": lambda *x: self.enable_apply(x,
                 EDIT_NET_MAC),
+            "on_network_link_state_checkbox_toggled": lambda *x: self.enable_apply(x,
+                EDIT_NET_LINKSTATE),
+
 
             "on_sound_model_combo_changed": lambda *x: self.enable_apply(x,
                                              EDIT_SOUND_MODEL),
@@ -2178,6 +2182,9 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_NET_MAC):
             kwargs["macaddr"] = self.widget("network-mac-entry").get_text()
 
+        if self.edited(EDIT_NET_LINKSTATE):
+            kwargs["linkstate"] = self.widget("network-link-state-checkbox").get_active()
+
         return vmmAddHardware.change_config_helper(self.vm.define_network,
                                           kwargs, self.vm, self.err,
                                           devobj=devobj)
@@ -2716,6 +2723,9 @@ class vmmDetails(vmmGObjectUI):
             self.widget("network-mac-label").set_text(macaddr)
         else:
             self.widget("network-mac-entry").set_text(macaddr)
+
+        state = net.link_state == "up" or net.link_state is None
+        self.widget("network-link-state-checkbox").set_active(state)
 
         self.netlist.set_dev(net)
 
