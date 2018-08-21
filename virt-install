@@ -599,16 +599,6 @@ def build_guest_instance(conn, options):
             logging.warning("Couldn't configure UEFI: %s", e)
             logging.warning("Your VM may not boot successfully.")
 
-    # Check usability of SMM feature
-    if guest.features.smm:
-        if not guest.os.is_x86():
-            fail(_("SMM feature is valid only for x86 architecture."))
-
-        if guest.os.machine is None:
-            guest.os.machine = "q35"
-        elif not guest.os.is_q35():
-            fail(_("SMM feature is valid only for q35 machine type"))
-
     # Various little validations about option collisions. Need to do
     # this after setting guest.installer at least
     check_option_collisions(options, guest)
