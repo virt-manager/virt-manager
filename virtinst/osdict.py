@@ -382,9 +382,6 @@ class _OsVariant(object):
     def is_windows(self):
         return self.get_typename() == "windows"
 
-    def need_old_xen_disable_acpi(self):
-        return self._is_related_to(["winxp", "win2k"], check_upgrades=False)
-
     def broken_x2apic(self):
         # x2apic breaks networking in solaris10
         # https://bugs.launchpad.net/bugs/1395217

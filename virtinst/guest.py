@@ -925,16 +925,8 @@ class Guest(XMLBuilder):
         if not self.os.is_hvm():
             return
 
-        default = True
-        if (self._os_object.need_old_xen_disable_acpi() and
-            not self.conn.check_support(support.SUPPORT_CONN_CAN_ACPI)):
-            default = False
-
         if self.features.acpi == "default":
-            if default:
-                self.features.acpi = self.capsinfo.guest.supports_acpi()
-            else:
-                self.features.acpi = False
+            self.features.acpi = self.capsinfo.guest.supports_acpi()
         if self.features.apic == "default":
             self.features.apic = self.capsinfo.guest.supports_apic()
         if self.features.pae == "default":
