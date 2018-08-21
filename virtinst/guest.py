@@ -1113,7 +1113,9 @@ class Guest(XMLBuilder):
                     net.model = net_model
 
     def _set_sound_defaults(self):
-        if self.conn.check_support(
+        if self.os.is_q35():
+            default = "ich9"
+        elif self.conn.check_support(
                 support.SUPPORT_CONN_SOUND_ICH6):
             default = "ich6"
         elif self.conn.check_support(
