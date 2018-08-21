@@ -1107,6 +1107,9 @@ class Guest(XMLBuilder):
         else:
             net_model = self._os_object.default_netmodel()
 
+        if not net_model and self.os.is_q35():
+            net_model = "e1000e"
+
         if net_model:
             for net in self.devices.interface:
                 if not net.model:
