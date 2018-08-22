@@ -1635,6 +1635,9 @@ class ParserBoot(VirtCLIParser):
                                "by libvirt.")
         inst.loader_secure = val
 
+    def set_bootloader_cb(self, inst, val, virtarg):
+        self.guest.bootloader = val
+
     def set_domain_type_cb(self, inst, val, virtarg):
         self.guest.type = val
 
@@ -1664,6 +1667,7 @@ class ParserBoot(VirtCLIParser):
 _register_virt_parser(ParserBoot)
 # UEFI depends on these bits, so set them first
 ParserBoot.add_arg("arch", "arch")
+ParserBoot.add_arg(None, "bootloader", cb=ParserBoot.set_bootloader_cb)
 ParserBoot.add_arg(None, "domain_type", cb=ParserBoot.set_domain_type_cb)
 ParserBoot.add_arg("os_type", "os_type")
 ParserBoot.add_arg(None, "emulator", cb=ParserBoot.set_emulator_cb)
