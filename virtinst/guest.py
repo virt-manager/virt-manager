@@ -325,14 +325,6 @@ class Guest(XMLBuilder):
             self.on_reboot = "destroy"
 
         self._set_osxml_defaults()
-
-        self.bootloader = None
-        if (not install and
-            self.os.is_xenpv() and
-            not self.os.kernel):
-            self.bootloader = "/usr/bin/pygrub"
-            self.os.clear()
-
         return self.get_xml_config()
 
 

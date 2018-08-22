@@ -4,7 +4,10 @@
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
-  <bootloader>/usr/bin/pygrub</bootloader>
+  <os>
+    <type arch="x86_64" machine="xenpv">xen</type>
+    <boot dev="hd"/>
+  </os>
   <devices>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
