@@ -173,7 +173,7 @@ class _Tunnel(object):
             if not new:
                 break
 
-            errout += new
+            errout += new.decode()
 
         return errout
 
