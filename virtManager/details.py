@@ -56,6 +56,7 @@ from .graphwidgets import Sparkline
  EDIT_DISK_REMOVABLE,
  EDIT_DISK_CACHE,
  EDIT_DISK_IO,
+ EDIT_DISK_DISCARD,
  EDIT_DISK_BUS,
  EDIT_DISK_SERIAL,
  EDIT_DISK_FORMAT,
@@ -94,7 +95,7 @@ from .graphwidgets import Sparkline
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 51)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 52)
 
 
 # Columns in hw list model
@@ -538,6 +539,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_removable_changed": lambda *x: self.enable_apply(x, EDIT_DISK_REMOVABLE),
             "on_disk_cache_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_CACHE),
             "on_disk_io_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_IO),
+            "on_disk_discard_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DISCARD),
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
             "on_disk_format_changed": self.disk_format_changed,
             "on_disk_serial_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SERIAL),
@@ -1015,6 +1017,10 @@ class vmmDetails(vmmGObjectUI):
         for m in virtinst.DeviceDisk.io_modes:
             model.append([m, m])
         combo.set_active(0)
+
+        # Discard combo
+        combo = self.widget("disk-discard")
+        vmmAddHardware.build_disk_discard_combo(self.vm, combo)
 
         # Disk bus combo
         disk_bus = self.widget("disk-bus")
@@ -2113,6 +2119,10 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_DISK_IO):
             kwargs["io"] = uiutil.get_list_selection(self.widget("disk-io"))
 
+        if self.edited(EDIT_DISK_DISCARD):
+            kwargs["discard"] = uiutil.get_list_selection(
+                self.widget("disk-discard"))
+
         if self.edited(EDIT_DISK_FORMAT):
             kwargs["driver_type"] = self.widget("disk-format").get_text()
 
@@ -2646,6 +2656,7 @@ class vmmDetails(vmmGObjectUI):
         removable = disk.removable
         cache = disk.driver_cache
         io = disk.driver_io
+        discard = disk.driver_discard
         driver_type = disk.driver_type or ""
         serial = disk.serial
 
@@ -2688,6 +2699,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-size").set_text(size)
         uiutil.set_list_selection(self.widget("disk-cache"), cache)
         uiutil.set_list_selection(self.widget("disk-io"), io)
+        uiutil.set_list_selection(self.widget("disk-discard"), discard)
 
         self.widget("disk-format").set_text(driver_type)
         self.widget("disk-format-warn").hide()

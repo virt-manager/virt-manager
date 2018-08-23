@@ -3788,6 +3788,37 @@
                                                             <property name="top_attach">1</property>
                                                           </packing>
                                                         </child>
+                                                        <child>
+                                                          <object class="GtkLabel" id="label-disk-discard">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="halign">end</property>
+                                                            <property name="label" translatable="yes">Discard mod_e:</property>
+                                                            <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">discardmode-entry-box</property>
+                                                          </object>
+                                                          <packing>
+                                                            <property name="left_attach">0</property>
+                                                            <property name="top_attach">2</property>
+                                                          </packing>
+                                                        </child>
+                                                        <child>
+                                                          <object class="GtkComboBox" id="disk-discard">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="has_entry">True</property>
+                                                            <signal name="changed" handler="on_disk_discard_combo_changed" swapped="no"/>
+                                                            <child internal-child="entry">
+                                                            <object class="GtkEntry" id="discardmode-entry-box">
+                                                            <property name="can_focus">True</property>
+                                                            </object>
+                                                            </child>
+                                                          </object>
+                                                          <packing>
+                                                            <property name="left_attach">1</property>
+                                                            <property name="top_attach">2</property>
+                                                          </packing>
+                                                        </child>
                                                       </object>
                                                     </child>
                                                     <child type="label">
