@@ -57,6 +57,7 @@ from .graphwidgets import Sparkline
  EDIT_DISK_CACHE,
  EDIT_DISK_IO,
  EDIT_DISK_DISCARD,
+ EDIT_DISK_DETECT_ZEROES,
  EDIT_DISK_BUS,
  EDIT_DISK_SERIAL,
  EDIT_DISK_FORMAT,
@@ -95,7 +96,7 @@ from .graphwidgets import Sparkline
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 52)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 53)
 
 
 # Columns in hw list model
@@ -540,6 +541,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_cache_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_CACHE),
             "on_disk_io_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_IO),
             "on_disk_discard_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DISCARD),
+            "on_disk_detect_zeroes_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DETECT_ZEROES),
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
             "on_disk_format_changed": self.disk_format_changed,
             "on_disk_serial_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SERIAL),
@@ -1021,6 +1023,10 @@ class vmmDetails(vmmGObjectUI):
         # Discard combo
         combo = self.widget("disk-discard")
         vmmAddHardware.build_disk_discard_combo(self.vm, combo)
+
+        # Detect zeroes combo
+        combo = self.widget("disk-detect-zeroes")
+        vmmAddHardware.build_disk_detect_zeroes_combo(self.vm, combo)
 
         # Disk bus combo
         disk_bus = self.widget("disk-bus")
@@ -2123,6 +2129,10 @@ class vmmDetails(vmmGObjectUI):
             kwargs["discard"] = uiutil.get_list_selection(
                 self.widget("disk-discard"))
 
+        if self.edited(EDIT_DISK_DETECT_ZEROES):
+            kwargs["detect_zeroes"] = uiutil.get_list_selection(
+                self.widget("disk-detect-zeroes"))
+
         if self.edited(EDIT_DISK_FORMAT):
             kwargs["driver_type"] = self.widget("disk-format").get_text()
 
@@ -2657,6 +2667,7 @@ class vmmDetails(vmmGObjectUI):
         cache = disk.driver_cache
         io = disk.driver_io
         discard = disk.driver_discard
+        detect_zeroes = disk.driver_detect_zeroes
         driver_type = disk.driver_type or ""
         serial = disk.serial
 
@@ -2700,6 +2711,8 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("disk-cache"), cache)
         uiutil.set_list_selection(self.widget("disk-io"), io)
         uiutil.set_list_selection(self.widget("disk-discard"), discard)
+        uiutil.set_list_selection(self.widget("disk-detect-zeroes"),
+                                  detect_zeroes)
 
         self.widget("disk-format").set_text(driver_type)
         self.widget("disk-format-warn").hide()

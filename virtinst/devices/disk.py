@@ -117,6 +117,12 @@ class DeviceDisk(Device):
     DISCARD_MODE_UNMAP = "unmap"
     discard_types = [DISCARD_MODE_IGNORE, DISCARD_MODE_UNMAP]
 
+    DETECT_ZEROES_OFF = "off"
+    DETECT_ZEROES_ON = "on"
+    DETECT_ZEROES_UNMAP = "unmap"
+    detect_zeroes_types = [DETECT_ZEROES_OFF, DETECT_ZEROES_ON,
+                           DETECT_ZEROES_UNMAP]
+
     DEVICE_DISK = "disk"
     DEVICE_LUN = "lun"
     DEVICE_CDROM = "cdrom"

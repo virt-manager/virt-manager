@@ -59,7 +59,7 @@
         <total_iops_sec>5</total_iops_sec>
         <total_bytes_sec>6</total_bytes_sec>
       </iotune>
-      <driver cache="writeback" discard="unmap" io="native"/>
+      <driver cache="writeback" discard="unmap" detect_zeroes="unmap" io="native"/>
       <source file="/dev/default-pool/default-vol" startupPolicy="optional"/>
       <shareable/>
     </disk>

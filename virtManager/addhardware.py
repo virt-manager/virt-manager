@@ -194,6 +194,8 @@ class vmmAddHardware(vmmGObjectUI):
         self._build_disk_device_combo()
         self.build_disk_cache_combo(self.vm, self.widget("storage-cache"))
         self.build_disk_discard_combo(self.vm, self.widget("storage-discard"))
+        self.build_disk_detect_zeroes_combo(self.vm,
+            self.widget("storage-detect-zeroes"))
         self.build_network_model_combo(self.vm, self.widget("net-model"))
         self._build_input_combo()
         self.build_sound_combo(self.vm, self.widget("sound-model"))
@@ -452,6 +454,13 @@ class vmmAddHardware(vmmGObjectUI):
     def build_disk_discard_combo(_vm, combo):
         values = [[None, _("Hypervisor default")]]
         for m in DeviceDisk.discard_types:
+            values.append([m, m])
+        _build_combo(combo, values, sort=False)
+
+    @staticmethod
+    def build_disk_detect_zeroes_combo(_vm, combo):
+        values = [[None, _("Hypervisor default")]]
+        for m in DeviceDisk.detect_zeroes_types:
             values.append([m, m])
         _build_combo(combo, values, sort=False)
 
