@@ -1061,7 +1061,7 @@ class vmmConnection(vmmGObject):
                       self._backend.daemon_version())
         logging.debug("conn version=%s", self._backend.conn_version())
         logging.debug("%s capabilities:\n%s",
-                      self.get_uri(), self.caps.get_xml_config())
+                      self.get_uri(), self.caps.get_xml())
 
         # Try to create the default storage pool
         # We want this before events setup to save some needless polling

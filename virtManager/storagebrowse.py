@@ -121,7 +121,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def _volume_chosen(self, src, volume):
         ignore = src
-        logging.debug("Chosen volume XML:\n%s", volume.xmlobj.get_xml_config())
+        logging.debug("Chosen volume XML:\n%s", volume.xmlobj.get_xml())
         self._finish(volume.get_target_path())
 
     def _vol_sensitive_cb(self, fmt):

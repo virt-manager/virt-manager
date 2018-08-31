@@ -132,27 +132,27 @@ class TestXMLMisc(unittest.TestCase):
             dev1.macaddr = "22:22:33:44:55:66"
 
             dev2 = virtinst.DeviceInterface(self.conn,
-                                    parsexml=dev1.get_xml_config())
+                                    parsexml=dev1.get_xml())
             dev2.source = None
             dev2.source = "foobr0"
             dev2.macaddr = "22:22:33:44:55:67"
 
             dev3 = virtinst.DeviceInterface(self.conn,
-                                    parsexml=dev1.get_xml_config())
+                                    parsexml=dev1.get_xml())
             dev3.source = None
             dev3.macaddr = "22:22:33:44:55:68"
 
-            utils.diff_compare(dev1.get_xml_config(), None,
+            utils.diff_compare(dev1.get_xml(), None,
                                "<interface type=\"bridge\">\n"
                                "  <source bridge=\"bzz0\"/>\n"
                                "  <mac address=\"22:22:33:44:55:66\"/>\n"
                                "</interface>\n")
-            utils.diff_compare(dev2.get_xml_config(), None,
+            utils.diff_compare(dev2.get_xml(), None,
                                "<interface type=\"bridge\">\n"
                                "  <source bridge=\"foobr0\"/>\n"
                                "  <mac address=\"22:22:33:44:55:67\"/>\n"
                                "</interface>\n")
-            utils.diff_compare(dev3.get_xml_config(), None,
+            utils.diff_compare(dev3.get_xml(), None,
                                "<interface type=\"bridge\">\n"
                                "  <mac address=\"22:22:33:44:55:68\"/>\n"
                                "</interface>\n")

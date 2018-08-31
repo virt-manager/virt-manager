@@ -52,7 +52,7 @@ def removePool(poolobj):
 
 def poolCompare(pool_inst):
     filename = os.path.join(basepath, pool_inst.name + ".xml")
-    out_expect = pool_inst.get_xml_config()
+    out_expect = pool_inst.get_xml()
 
     if not os.path.exists(filename):
         open(filename, "w").write(out_expect)
@@ -93,7 +93,7 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
 
     vol_inst.validate()
     filename = os.path.join(basepath, vol_inst.name + ".xml")
-    utils.diff_compare(vol_inst.get_xml_config(), filename)
+    utils.diff_compare(vol_inst.get_xml(), filename)
     return vol_inst.install(meter=False)
 
 

@@ -302,7 +302,7 @@ class XMLProperty(_XMLPropertyBase):
         only if a default is registered, and only if the property was
         not already explicitly set by the API user.
 
-        This is called during the get_xml_config process and shouldn't
+        This is called during the get_xml process and shouldn't
         be called from outside this file.
         """
         candefault, val = self._default_get_value(xmlbuilder)
@@ -376,7 +376,7 @@ class XMLProperty(_XMLPropertyBase):
         """
         Set the value at user request. This just stores the value
         in propstore. Setting the actual XML is only done at
-        get_xml_config time.
+        get_xml time.
         """
         if _trackprops and not self._is_tracked:
             _seenprops.append(self)
@@ -572,7 +572,7 @@ class XMLBuilder(object):
     # Public XML managing APIs #
     ############################
 
-    def get_xml_config(self):
+    def get_xml(self):
         """
         Return XML string of the object
         """
@@ -718,7 +718,7 @@ class XMLBuilder(object):
         object needs to have an associated mapping via XMLChildProperty
         """
         xmlprop = self._find_child_prop(obj.__class__)
-        xml = obj.get_xml_config()
+        xml = obj.get_xml()
         xmlprop.append(self, obj)
         self._set_child_xpaths()
 
@@ -738,7 +738,7 @@ class XMLBuilder(object):
         xmlprop.remove(self, obj)
 
         xpath = obj._xmlstate.abs_xpath()
-        xml = obj.get_xml_config()
+        xml = obj.get_xml()
         obj._set_xpaths(None, None)
         obj._parse_with_children(xml, None)
         self._xmlstate.xmlapi.node_force_remove(xpath)

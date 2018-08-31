@@ -325,7 +325,7 @@ class Guest(XMLBuilder):
             self.on_reboot = "destroy"
 
         self._set_osxml_defaults()
-        return self.get_xml_config()
+        return self.get_xml()
 
 
     ###########################
@@ -867,7 +867,7 @@ class Guest(XMLBuilder):
 
         if not self.conn.is_test() and not self.conn.is_qemu():
             return
-        if (self.cpu.get_xml_config().strip() or
+        if (self.cpu.get_xml().strip() or
             self.cpu.special_mode_was_set):
             # User already configured CPU
             return

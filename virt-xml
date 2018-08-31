@@ -235,14 +235,14 @@ def define_changes(conn, inactive_xmlobj, devs, action, confirm):
         for dev in devs:
             setup_device(dev)
 
-    conn.defineXML(inactive_xmlobj.get_xml_config())
+    conn.defineXML(inactive_xmlobj.get_xml())
     print_stdout(_("Domain '%s' defined successfully.") % inactive_xmlobj.name)
     return True
 
 
 def update_changes(domain, devs, action, confirm):
     for dev in devs:
-        xml = dev.get_xml_config()
+        xml = dev.get_xml()
 
         if confirm:
             if action == "hotplug":
@@ -276,7 +276,7 @@ def update_changes(domain, devs, action, confirm):
 
 
 def prepare_changes(xmlobj, options, parserclass):
-    origxml = xmlobj.get_xml_config()
+    origxml = xmlobj.get_xml()
 
     if options.edit != -1:
         devs = action_edit(xmlobj, options, parserclass)
@@ -290,7 +290,7 @@ def prepare_changes(xmlobj, options, parserclass):
         devs = action_remove_device(xmlobj, options, parserclass)
         action = "hotunplug"
 
-    newxml = xmlobj.get_xml_config()
+    newxml = xmlobj.get_xml()
     diff = get_diff(origxml, newxml)
 
     if options.print_diff:
@@ -427,7 +427,7 @@ def main(conn=None):
         devs = action_build_xml(conn, options, parserclass)
         for dev in devs:
             # pylint: disable=no-member
-            print_stdout(dev.get_xml_config())
+            print_stdout(dev.get_xml())
         return 0
 
     if options.update:

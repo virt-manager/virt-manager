@@ -436,7 +436,7 @@ class Cloner(object):
             self._prepare_nvram()
 
         # Save altered clone xml
-        self._clone_xml = self._guest.get_xml_config()
+        self._clone_xml = self._guest.get_xml()
         logging.debug("Clone guest xml is\n%s", self._clone_xml)
 
     def start_duplicate(self, meter=None):

@@ -85,7 +85,7 @@ class TestNodeDev(unittest.TestCase):
 
         dev = DeviceHostdev(self.conn)
         dev.set_from_nodedev(nodedev)
-        utils.diff_compare(dev.get_xml_config() + "\n", devfile)
+        utils.diff_compare(dev.get_xml() + "\n", devfile)
 
     def testSystemDevice(self):
         devname = "computer"

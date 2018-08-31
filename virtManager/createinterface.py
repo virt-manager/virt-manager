@@ -930,9 +930,9 @@ class vmmCreateInterface(vmmGObjectUI):
                         # elements that might cause netcf to choke on
                         # for a sub-interface
                         xml = vmmiface.get_xmlobj(
-                            inactive=True).get_xml_config()
+                            inactive=True).get_xml()
                     else:
-                        xml = row[INTERFACE_ROW_KEY].get_xml_config()
+                        xml = row[INTERFACE_ROW_KEY].get_xml()
 
                     child = Interface(self.conn.get_backend(), parsexml=xml)
                     iobj.add_interface(child)
@@ -979,7 +979,7 @@ class vmmCreateInterface(vmmGObjectUI):
                 for proto in proto_xml:
                     iobj.add_protocol(InterfaceProtocol(
                         self.conn.get_backend(),
-                        parsexml=proto.get_xml_config()))
+                        parsexml=proto.get_xml()))
 
             if itype == Interface.INTERFACE_TYPE_BRIDGE:
                 ret = self.validate_bridge(iobj)
@@ -993,7 +993,7 @@ class vmmCreateInterface(vmmGObjectUI):
             if not ret:
                 return ret
 
-            iobj.get_xml_config()
+            iobj.get_xml()
             iobj.validate()
 
             self.interface = iobj

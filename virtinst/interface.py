@@ -238,7 +238,7 @@ class Interface(XMLBuilder):
         Install network interface xml.
         """
         ignore = meter
-        xml = self.get_xml_config()
+        xml = self.get_xml()
         logging.debug("Creating interface '%s' with xml:\n%s",
                       self.name, xml)
 

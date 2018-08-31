@@ -163,7 +163,7 @@ class StoragePool(_StorageObject):
         ret = []
         sources = _EnumerateSources(conn, xml)
         for source in sources.sources:
-            source_xml = source.get_xml_config()
+            source_xml = source.get_xml()
 
             pool_xml = "<pool>\n%s\n</pool>" % (
                 util.xml_indent(source_xml, 2))
@@ -495,7 +495,7 @@ class StoragePool(_StorageObject):
             raise ValueError(_("Must explicitly specify disk format if "
                                "formatting disk device."))
 
-        xml = self.get_xml_config()
+        xml = self.get_xml()
         logging.debug("Creating storage pool '%s' with xml:\n%s",
                       self.name, xml)
 
@@ -713,7 +713,7 @@ class StorageVolume(_StorageObject):
         volxml = StorageVolume(self.conn, vol.XMLDesc(0))
         volxml.pool = pool
         logging.debug("Found backing store volume XML:\n%s",
-                volxml.get_xml_config())
+                volxml.get_xml())
 
         if volxml.supports_property("format"):
             logging.debug("Returning format=%s", volxml.format)
@@ -775,7 +775,7 @@ class StorageVolume(_StorageObject):
         if self.backing_store and not self.backing_format:
             self.backing_format = self._detect_backing_store_format()
 
-        xml = self.get_xml_config()
+        xml = self.get_xml()
         logging.debug("Creating storage volume '%s' with xml:\n%s",
                       self.name, xml)
 

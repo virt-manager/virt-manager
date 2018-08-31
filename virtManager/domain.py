@@ -1011,7 +1011,7 @@ class vmmDomain(vmmLibvirtObject):
         if not self.is_active():
             return
 
-        devxml = devobj.get_xml_config()
+        devxml = devobj.get_xml()
         logging.debug("attach_device with xml=\n%s", devxml)
         self._backend.attachDevice(devxml)
 
@@ -1022,7 +1022,7 @@ class vmmDomain(vmmLibvirtObject):
         if not self.is_active():
             return
 
-        devxml = devobj.get_xml_config()
+        devxml = devobj.get_xml()
         logging.debug("detach_device with xml=\n%s", devxml)
         self._backend.detachDevice(devxml)
 
@@ -1030,7 +1030,7 @@ class vmmDomain(vmmLibvirtObject):
         if flags is None:
             flags = getattr(libvirt, "VIR_DOMAIN_DEVICE_MODIFY_LIVE", 1)
 
-        xml = devobj.get_xml_config()
+        xml = devobj.get_xml()
         logging.debug("update_device with xml=\n%s", xml)
         self._backend.updateDeviceFlags(xml, flags)
 
@@ -1965,7 +1965,7 @@ class vmmDomainVirtinst(vmmDomain):
 
     def _XMLDesc(self, flags):
         ignore = flags
-        return self._backend.get_xml_config()
+        return self._backend.get_xml()
 
     def _define(self, xml):
         ignore = xml
@@ -1977,7 +1977,7 @@ class vmmDomainVirtinst(vmmDomain):
 
     def _make_xmlobj_to_define(self):
         if not self._orig_xml:
-            self._orig_xml = self._backend.get_xml_config()
+            self._orig_xml = self._backend.get_xml()
         return self._backend
 
     def _redefine_xmlobj(self, xmlobj, origxml=None):

@@ -1071,7 +1071,7 @@ class vmmAddHardware(vmmGObjectUI):
 
 
     def _add_device(self):
-        xml = self._dev.get_xml_config()
+        xml = self._dev.get_xml()
         logging.debug("Adding device:\n%s", xml)
 
         if self._remove_usb_controller:
@@ -1090,7 +1090,7 @@ class vmmAddHardware(vmmGObjectUI):
         controller = getattr(self._dev, "vmm_controller", None)
         if controller is not None:
             logging.debug("Adding controller:\n%s",
-                          controller.get_xml_config())
+                          controller.get_xml())
         # Hotplug device
         attach_err = False
         try:
@@ -1443,7 +1443,7 @@ class vmmAddHardware(vmmGObjectUI):
                 setattr(self._dev, param_name, val)
 
         # Dump XML for sanity checking
-        self._dev.get_xml_config()
+        self._dev.get_xml()
 
     def _validate_page_video(self):
         model = uiutil.get_list_selection(self.widget("video-model"))

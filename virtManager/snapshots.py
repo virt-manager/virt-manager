@@ -466,7 +466,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             newsnap.name = name
             newsnap.description = desc or None
             newsnap.validate()
-            newsnap.get_xml_config()
+            newsnap.get_xml()
             return newsnap
         except Exception as e:
             return self.err.val_err(_("Error validating snapshot: %s") % e)
@@ -513,7 +513,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         if not snap:
             return
 
-        xml = snap.get_xml_config()
+        xml = snap.get_xml()
         name = snap.name
         mime, sndata = self._get_screenshot_data_for_save()
         self._snapshot_new_close()
@@ -537,9 +537,9 @@ class vmmSnapshotPage(vmmGObjectUI):
         desc = desc_widget.get_buffer().get_property("text") or ""
 
         xmlobj = snap.get_xmlobj()
-        origxml = xmlobj.get_xml_config()
+        origxml = xmlobj.get_xml()
         xmlobj.description = desc
-        newxml = xmlobj.get_xml_config()
+        newxml = xmlobj.get_xml()
 
         self.vm.log_redefine_xml_diff(snap, origxml, newxml)
         if newxml == origxml:

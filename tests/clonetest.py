@@ -93,7 +93,7 @@ class TestClone(unittest.TestCase):
         if clone_disks_file:
             xml_clone_disks = ""
             for i in cloneobj.clone_disks:
-                xml_clone_disks += i.get_vol_install().get_xml_config()
+                xml_clone_disks += i.get_vol_install().get_xml()
             utils.diff_compare(xml_clone_disks, clone_disks_file)
 
     def _clone_define(self, filebase):

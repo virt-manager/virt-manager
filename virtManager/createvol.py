@@ -50,7 +50,7 @@ class vmmCreateVolume(vmmGObjectUI):
 
     def show(self, parent):
         try:
-            parent_xml = self.parent_pool.xmlobj.get_xml_config()
+            parent_xml = self.parent_pool.xmlobj.get_xml()
         except Exception:
             logging.debug("Error getting parent_pool xml", exc_info=True)
             parent_xml = None

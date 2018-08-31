@@ -51,7 +51,7 @@ class TestInterfaces(unittest.TestCase):
     def define_xml(self, obj, compare=True):
         obj.validate()
 
-        xml = obj.get_xml_config()
+        xml = obj.get_xml()
         logging.debug("Defining interface XML:\n%s", xml)
 
         if compare:

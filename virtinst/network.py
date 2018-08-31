@@ -234,7 +234,7 @@ class Network(XMLBuilder):
     ##################
 
     def install(self, start=True, autostart=True):
-        xml = self.get_xml_config()
+        xml = self.get_xml()
         logging.debug("Creating virtual network '%s' with xml:\n%s",
                       self.name, xml)
 
