@@ -523,6 +523,10 @@ class AddHardware(uiutils.UITestCase):
         # Add TPM
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "TPM", "tpm-tab")
+        tab.find("Model:", "combo").click()
+        tab.find("TIS", "menu item").click()
+        tab.find("Backend:", "combo").click()
+        tab.find("Passthrough", "menu item").click()
         tab.find("Device Path:", "text").text = "/tmp/foo"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)

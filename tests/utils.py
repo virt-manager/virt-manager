@@ -65,6 +65,7 @@ class _URIs(object):
         self.kvm_session = self.kvm + ",session"
 
         self.kvm_armv7l = _uri_kvm + _caps("kvm-armv7l.xml")
+        self.kvm_armv7l_nodomcaps = _uri_qemu + _caps("kvm-armv7l.xml")
         self.kvm_aarch64 = _uri_kvm_aarch64 + _caps("kvm-aarch64.xml")
         self.kvm_ppc64le = _uri_kvm + _caps("kvm-ppc64le.xml")
         self.kvm_s390x = _uri_kvm + _caps("kvm-s390x.xml")

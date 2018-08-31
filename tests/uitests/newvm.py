@@ -185,20 +185,19 @@ class NewVM(uiutils.UITestCase):
         """
         New arm VM that requires kernel/initrd/dtb
         """
-        self.app.uri = tests.utils.URIs.kvm_armv7l
+        self.app.uri = tests.utils.URIs.kvm_armv7l_nodomcaps
         newvm = self._open_create_wizard()
 
-        newvm.find_fuzzy("Architecture options", "toggle").click()
+        newvm.find_fuzzy("Architecture options", "toggle").click_expander()
         newvm.find_fuzzy("Virt Type", "combo").click()
         KVM = newvm.find_fuzzy("KVM", "menu item")
         TCG = newvm.find_fuzzy("TCG", "menu item")
         self.assertTrue(KVM.focused)
         self.assertTrue(TCG.showing)
-        newvm.find_fuzzy("Virt Type", "combo").click()
 
         # Validate some initial defaults
-        self.assertFalse(
-            newvm.find_fuzzy("PXE", "radio").sensitive)
+        newvm.find_fuzzy("Virt Type", "combo").click()
+        self.assertFalse(newvm.find_fuzzy("PXE", "radio").sensitive)
         newvm.find_fuzzy("vexpress-a15", "menu item")
         newvm.find("virt", "menu item")
         newvm.find_fuzzy("Forward", "button").click()
