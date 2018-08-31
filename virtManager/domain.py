@@ -1125,6 +1125,33 @@ class vmmDomain(vmmLibvirtObject):
 
         return self._backend.openGraphicsFD(0, flags)
 
+    def interface_addresses(self, source, mac):
+        def extract(info, mac):
+            import re
+            addrs = None
+            ipv4 = None
+            ipv6 = None
+            for iface in info:
+                if iface != "lo" and info[iface]["hwaddr"] == mac:
+                    addrs = info[iface]["addrs"]
+                    break
+            # In case of both of ipv4 and ipv6 not found
+            if addrs is None:
+                return {'ipv4': ipv4, 'ipv6': ipv6}
+            for addr in addrs:
+                if addr["type"] == 0:
+                    ipv4 = addr["addr"] + "/" + str(addr["prefix"])
+                elif addr["type"] == 1 and not re.match("^fe80", addr["addr"]):
+                    ipv6 = addr["addr"] + "/" + str(addr["prefix"])
+            return {'ipv4': ipv4, 'ipv6': ipv6}
+
+        try:
+            all_addrinfo = self._backend.interfaceAddresses(source)
+            addrinfo = extract(all_addrinfo, mac)
+        except Exception:
+            addrinfo = None
+        return addrinfo
+
     def refresh_snapshots(self):
         self._snapshot_list = None
 
