@@ -405,7 +405,7 @@ def check_support(virtconn, feature, data=None):
     return sobj.check_support(virtconn, data)
 
 
-def _check_version(virtconn, version):
+def check_version(virtconn, version):
     """
     Check libvirt version. Useful for the test suite so we don't need
     to keep adding new support checks.

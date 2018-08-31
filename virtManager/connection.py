@@ -14,7 +14,6 @@ import libvirt
 
 import virtinst
 from virtinst import pollhelpers
-from virtinst import support
 from virtinst import util
 
 from . import connectauth
@@ -846,7 +845,8 @@ class vmmConnection(vmmGObject):
             self.idle_add(obj.recache_from_event_loop)
 
     def _add_conn_events(self):
-        if not self.check_support(support.SUPPORT_CONN_WORKING_XEN_EVENTS):
+        if not self.check_support(
+                self._backend.SUPPORT_CONN_WORKING_XEN_EVENTS):
             return
 
         try:

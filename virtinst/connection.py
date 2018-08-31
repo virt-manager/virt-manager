@@ -421,6 +421,11 @@ class VirtinstConnection(object):
                 return False
         return True
 
+    def _check_version(self, version):
+        # Entry point for the test suite to do simple version checks,
+        # actual code should only use check_support
+        return support.check_version(self, version)
+
     def support_remote_url_install(self):
         if self._magic_uri:
             return False

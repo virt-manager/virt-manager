@@ -15,7 +15,6 @@ import libvirt
 from virtcli import CLIConfig
 
 from . import util
-from . import support
 from .devices import *  # pylint: disable=wildcard-import
 from .distroinstaller import DistroInstaller
 from .domain import *  # pylint: disable=wildcard-import
@@ -1104,11 +1103,9 @@ class Guest(XMLBuilder):
     def _set_sound_defaults(self):
         if self.os.is_q35():
             default = "ich9"
-        elif self.conn.check_support(
-                support.SUPPORT_CONN_SOUND_ICH6):
+        elif self.conn.check_support(self.conn.SUPPORT_CONN_SOUND_ICH6):
             default = "ich6"
-        elif self.conn.check_support(
-                support.SUPPORT_CONN_SOUND_AC97):
+        elif self.conn.check_support(self.conn.SUPPORT_CONN_SOUND_AC97):
             default = "ac97"
         else:
             default = "es1370"
