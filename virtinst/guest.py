@@ -1037,12 +1037,6 @@ class Guest(XMLBuilder):
         if self.os.is_x86():
             return True
 
-        if (self.os.is_arm_vexpress() and
-            self.os.dtb and
-            self._os_object.supports_virtiommio() and
-            self.conn.check_support(support.SUPPORT_CONN_VIRTIO_MMIO)):
-            return True
-
         return False
 
     def _set_disk_defaults(self):

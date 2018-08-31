@@ -392,9 +392,6 @@ class _OsVariant(object):
             return "localtime"
         return "utc"
 
-    def supports_virtiommio(self):
-        return self._is_related_to(["fedora19"])
-
     def default_netmodel(self):
         """
         Default non-virtio net-model, since we check for that separately

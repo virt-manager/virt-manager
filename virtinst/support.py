@@ -239,9 +239,6 @@ SUPPORT_CONN_LISTALLINTERFACES = _make(
     function="virConnect.listAllInterfaces", run_args=())
 SUPPORT_CONN_LISTALLDEVICES = _make(
     function="virConnect.listAllDevices", run_args=())
-SUPPORT_CONN_VIRTIO_MMIO = _make(
-    version="1.1.2", hv_version={"qemu": "1.6.0"})
-SUPPORT_CONN_DISK_SD = _make(version="1.1.2")
 # This is an arbitrary check to say whether it's a good idea to
 # default to qcow2. It might be fine for xen or qemu older than the versions
 # here, but until someone tests things I'm going to be a bit conservative.
