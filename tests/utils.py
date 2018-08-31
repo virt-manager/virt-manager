@@ -107,7 +107,7 @@ class _URIs(object):
             return conn
 
         if uri not in self._conn_cache:
-            conn.fetch_all_guests()
+            conn.fetch_all_domains()
             conn.fetch_all_pools()
             conn.fetch_all_vols()
             conn.fetch_all_nodedevs()

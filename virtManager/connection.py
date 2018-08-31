@@ -273,7 +273,7 @@ class vmmConnection(vmmGObject):
             time.sleep(.1)
 
     def _init_virtconn(self):
-        self._backend.cb_fetch_all_guests = (
+        self._backend.cb_fetch_all_domains = (
             lambda: [obj.get_xmlobj(refresh_if_nec=False)
                      for obj in self.list_vms()])
         self._backend.cb_fetch_all_pools = (
@@ -997,7 +997,7 @@ class vmmConnection(vmmGObject):
         self.close()
 
         self._objects = None
-        self._backend.cb_fetch_all_guests = None
+        self._backend.cb_fetch_all_domains = None
         self._backend.cb_fetch_all_pools = None
         self._backend.cb_fetch_all_nodedevs = None
         self._backend.cb_fetch_all_vols = None

@@ -64,7 +64,7 @@ class VirtinstConnection(object):
 
         # These let virt-manager register a callback which provides its
         # own cached object lists, rather than doing fresh calls
-        self.cb_fetch_all_guests = None
+        self.cb_fetch_all_domains = None
         self.cb_fetch_all_pools = None
         self.cb_fetch_all_vols = None
         self.cb_fetch_all_nodedevs = None
@@ -156,27 +156,27 @@ class VirtinstConnection(object):
     # Polling routines #
     ####################
 
-    _FETCH_KEY_GUESTS = "vms"
+    _FETCH_KEY_DOMAINS = "vms"
     _FETCH_KEY_POOLS = "pools"
     _FETCH_KEY_VOLS = "vols"
     _FETCH_KEY_NODEDEVS = "nodedevs"
 
-    def _fetch_all_guests_raw(self):
+    def _fetch_all_domains_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_vms(
             self, {}, lambda obj, ignore: obj)
         return [Guest(weakref.ref(self), parsexml=obj.XMLDesc(0))
                 for obj in ret]
 
-    def fetch_all_guests(self):
+    def fetch_all_domains(self):
         """
         Returns a list of Guest() objects
         """
-        if self.cb_fetch_all_guests:
-            return self.cb_fetch_all_guests()  # pylint: disable=not-callable
+        if self.cb_fetch_all_domains:
+            return self.cb_fetch_all_domains()  # pylint: disable=not-callable
 
-        key = self._FETCH_KEY_GUESTS
+        key = self._FETCH_KEY_DOMAINS
         if key not in self._fetch_cache:
-            self._fetch_cache[key] = self._fetch_all_guests_raw()
+            self._fetch_cache[key] = self._fetch_all_domains_raw()
         return self._fetch_cache[key][:]
 
     def _build_pool_raw(self, poolobj):

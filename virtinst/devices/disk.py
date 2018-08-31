@@ -344,7 +344,7 @@ class DeviceDisk(Device):
             vols.append(backpath)
 
         ret = []
-        vms = conn.fetch_all_guests()
+        vms = conn.fetch_all_domains()
         for vm in vms:
             if not read_only:
                 if path in [vm.os.kernel, vm.os.initrd, vm.os.dtb]:

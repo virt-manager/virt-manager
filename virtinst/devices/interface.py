@@ -172,7 +172,7 @@ class DeviceInterface(Device):
         if searchmac is None:
             return (False, None)
 
-        vms = conn.fetch_all_guests()
+        vms = conn.fetch_all_domains()
         for vm in vms:
             for nic in vm.devices.interface:
                 nicmac = nic.macaddr or ""
