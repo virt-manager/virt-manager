@@ -4105,6 +4105,85 @@
                                             <property name="top_attach">3</property>
                                           </packing>
                                         </child>
+                                        <child>
+                                          <object class="GtkButton" id="show-ip">
+                                            <property name="label">Show IP</property>
+                                            <property name="image">image6</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="use_stock">True</property>
+                                            <signal name="clicked" handler="on_network_show_ip_clicked" swapped="no"/>
+                                            <child>
+                                              <object class="GtkImage" id="image6">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="stock">gtk-refresh</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">4</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkGrid" id="grid8">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="column_spacing">3</property>
+                                            <child>
+                                              <object class="GtkLabel" id="ipv4-label">
+                                                <property name="label" translatable="yes">IPv4:</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="ipv4">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="ipv6-label">
+                                                <property name="label" translatable="yes">IPv6:</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="ipv6">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">4</property>
+                                          </packing>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
