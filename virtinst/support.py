@@ -217,12 +217,9 @@ SUPPORT_CONN_NODEDEV = _make(
     function="virConnect.listDevices", run_args=(None, 0))
 SUPPORT_CONN_FINDPOOLSOURCES = _make(
     function="virConnect.findStoragePoolSources")
-SUPPORT_CONN_GETHOSTNAME = _make(
-    function="virConnect.getHostname", run_args=())
 SUPPORT_CONN_NETWORK = _make(function="virConnect.listNetworks", run_args=())
 SUPPORT_CONN_INTERFACE = _make(
     function="virConnect.listInterfaces", run_args=())
-SUPPORT_CONN_MAXVCPUS_XML = _make(version="0.8.5")
 # Earliest version with working bindings
 SUPPORT_CONN_STREAM = _make(
     version="0.9.3", function="virConnect.newStream", run_args=(0,))
@@ -259,7 +256,6 @@ SUPPORT_CONN_FILESYSTEM = _make(
     hv_libvirt_version={"qemu": "0.8.5", "lxc": 0, "openvz": 0, "test": 0})
 SUPPORT_CONN_AUTOSOCKET = _make(hv_libvirt_version={"qemu": "1.0.6"})
 SUPPORT_CONN_ADVANCED_CLOCK = _make(hv_libvirt_version={"qemu": "0.8.0"})
-SUPPORT_CONN_VIRTIO_CONSOLE = _make(hv_libvirt_version={"qemu": "0.8.3"})
 SUPPORT_CONN_PANIC_DEVICE = _make(
     version="1.2.1", hv_version={"qemu": "1.5.0", "test": 0})
 SUPPORT_CONN_PM_DISABLE = _make(
@@ -330,15 +326,8 @@ SUPPORT_DOMAIN_XML_SECURE = _make(function="virDomain.XMLDesc", run_args=(),
 SUPPORT_DOMAIN_MANAGED_SAVE = _make(
     function="virDomain.hasManagedSaveImage",
     run_args=(0,))
-SUPPORT_DOMAIN_MIGRATE_DOWNTIME = _make(
-    function="virDomain.migrateSetMaxDowntime",
-    # Use a bogus flags value, so that we don't overwrite existing
-    # downtime value
-    run_args=(30, 12345678))
 SUPPORT_DOMAIN_JOB_INFO = _make(function="virDomain.jobInfo", run_args=())
 SUPPORT_DOMAIN_CONSOLE_STREAM = _make(version="0.8.6")
-SUPPORT_DOMAIN_SET_METADATA = _make(version="0.9.10")
-SUPPORT_DOMAIN_CPU_HOST_MODEL = _make(version="0.9.10")
 SUPPORT_DOMAIN_LIST_SNAPSHOTS = _make(
     function="virDomain.listAllSnapshots", run_args=())
 SUPPORT_DOMAIN_GET_METADATA = _make(function="virDomain.metadata",
