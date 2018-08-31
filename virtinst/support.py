@@ -226,9 +226,6 @@ SUPPORT_CONN_MAXVCPUS_XML = _make(version="0.8.5")
 # Earliest version with working bindings
 SUPPORT_CONN_STREAM = _make(
     version="0.9.3", function="virConnect.newStream", run_args=(0,))
-SUPPORT_CONN_GETVERSION = _make(function="virConnect.getVersion", run_args=())
-SUPPORT_CONN_LIBVERSION = _make(
-    function="virConnect.getLibVersion", run_args=())
 SUPPORT_CONN_LISTALLDOMAINS = _make(
     function="virConnect.listAllDomains", run_args=())
 SUPPORT_CONN_LISTALLNETWORKS = _make(

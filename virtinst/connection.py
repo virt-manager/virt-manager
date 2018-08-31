@@ -303,22 +303,24 @@ class VirtinstConnection(object):
         if not self.is_remote():
             return self.local_libvirt_version()
 
-        if not self._daemon_version:
-            if not self.check_support(support.SUPPORT_CONN_LIBVERSION):
-                self._daemon_version = 0
-            else:
+        if self._daemon_version is None:
+            self._daemon_version = 0
+            try:
                 self._daemon_version = self._libvirtconn.getLibVersion()
+            except Exception:
+                logging.debug("Error calling getLibVersion", exc_info=True)
         return self._daemon_version
 
     def conn_version(self):
         if self._fake_conn_version is not None:
             return self._fake_conn_version
 
-        if not self._conn_version:
-            if not self.check_support(support.SUPPORT_CONN_GETVERSION):
-                self._conn_version = 0
-            else:
+        if self._conn_version is None:
+            self._conn_version = 0
+            try:
                 self._conn_version = self._libvirtconn.getVersion()
+            except Exception:
+                logging.debug("Error calling getVersion", exc_info=True)
         return self._conn_version
 
     def stable_defaults(self, emulator=None, force=False):
