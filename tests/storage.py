@@ -182,10 +182,6 @@ class TestStorage(unittest.TestCase):
         removePool(poolobj)
 
     def testGlusterPool(self):
-        if not self.conn.check_support(self.conn.SUPPORT_CONN_POOL_GLUSTERFS):
-            raise unittest.SkipTest("Gluster pools not supported with this "
-                "libvirt version.")
-
         poolobj = createPool(self.conn,
                 StoragePool.TYPE_GLUSTER, "pool-gluster")
         removePool(poolobj)

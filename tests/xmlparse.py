@@ -220,9 +220,7 @@ class XMLParseTest(unittest.TestCase):
         check("nosharepages", False, True)
         check("locked", False, True)
 
-        self._alter_compare(guest.get_xml(), outfile,
-                            support_check=[self.conn.SUPPORT_CONN_VMPORT,
-                                           self.conn.SUPPORT_CONN_VMCOREINFO])
+        self._alter_compare(guest.get_xml(), outfile)
 
     def testSeclabel(self):
         guest, outfile = self._get_test_content("change-seclabel")
@@ -1220,10 +1218,6 @@ class XMLParseTest(unittest.TestCase):
         utils.test_create(self.conn, pool.get_xml(), "storagePoolDefineXML")
 
     def testGlusterPool(self):
-        if not self.conn.check_support(self.conn.SUPPORT_CONN_POOL_GLUSTERFS):
-            raise unittest.SkipTest("Gluster pools not supported with this "
-                "libvirt version.")
-
         basename = "pool-gluster"
         infile = "tests/storage-xml/%s.xml" % basename
         outfile = "tests/xmlparse-xml/%s-out.xml" % basename

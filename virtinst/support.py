@@ -266,7 +266,6 @@ SUPPORT_CONN_USBREDIR = _make(
     version="0.9.5", hv_version={"qemu": "1.3.0", "test": 0})
 SUPPORT_CONN_DEVICE_BOOTORDER = _make(
     version="0.8.8", hv_version={"qemu": 0, "test": 0})
-SUPPORT_CONN_POOL_GLUSTERFS = _make(version="1.2.0")
 SUPPORT_CONN_CPU_MODEL_NAMES = _make(function="virConnect.getCPUModelNames",
                                      run_args=("x86_64", 0))
 SUPPORT_CONN_HYPERV_VAPIC = _make(
@@ -275,7 +274,6 @@ SUPPORT_CONN_HYPERV_CLOCK = _make(
     version="1.2.2", hv_version={"qemu": "2.0.0", "test": 0})
 SUPPORT_CONN_HYPERV_CLOCK_RHEL = _make(
     version="1.2.2", hv_version={"qemu": "1.5.3", "test": 0})
-SUPPORT_CONN_LOADER_ROM = _make(version="1.2.9")
 SUPPORT_CONN_DOMAIN_CAPABILITIES = _make(
     function="virConnect.getDomainCapabilities",
     run_args=(None, None, None, None))
