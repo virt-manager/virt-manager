@@ -133,7 +133,11 @@ class AddHardware(uiutils.UITestCase):
         browse.find("Browse Local", "push button").click()
         chooser = self.app.root.find(
                 "Locate existing storage", "file chooser")
-        fname = "virt-manager.spec.in"
+
+        # use filename that is near the beginning of the file list when sorted,
+        # as the row in the file dialog may become scrolled out of the view and
+        # cause the test to fail
+        fname = "COPYING"
         chooser.find(fname, "table cell").click()
         chooser.find("Open", "push button").click()
         uiutils.check_in_loop(lambda: not chooser.showing)
