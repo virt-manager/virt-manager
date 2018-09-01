@@ -256,6 +256,18 @@ class VMMDogtailNode(dogtail.tree.Node):
         clickY = self.position[1] + 5
         dogtail.rawinput.click(clickX, clickY, button)
 
+    def bring_on_screen(self, key_name="Down", max_tries=100):
+        """
+        Attempts to bring the item to screen by repeatedly clicking the given
+        key. Raises exception if max_tries attempts are exceeded.
+        """
+        cur_try = 0
+        while not self.onscreen:
+            dogtail.rawinput.pressKey(key_name)
+            cur_try += 1
+            if cur_try > max_tries:
+                raise RuntimeError("Could not bring widget on screen")
+        return self
 
     #########################
     # Widget search helpers #

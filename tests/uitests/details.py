@@ -203,7 +203,7 @@ class Details(uiutils.UITestCase):
         tab = self._select_hw(win, "NIC :54:32:10", "network-tab")
         src = tab.find("Network source:", "combo box")
         src.click()
-        tab.find_fuzzy("macvtap", "menu item").click()
+        tab.find_fuzzy("macvtap", "menu item").bring_on_screen().click()
         tab.find("Device model:", "combo box").click_combo_entry()
         tab.find("rtl8139", "menu item").click()
         mode = tab.find_fuzzy("Source mode:", "combo box")
@@ -215,7 +215,8 @@ class Details(uiutils.UITestCase):
 
         # Manual bridge
         src.click()
-        tab.find_fuzzy("Specify shared device", "menu item").click()
+        tab.find_fuzzy("Specify shared device",
+                       "menu item").bring_on_screen().click()
         appl.click()
         # Check validation error
         alert = self.app.root.find("vmm dialog", "alert")
@@ -228,7 +229,8 @@ class Details(uiutils.UITestCase):
         # Network with portops
         src.click()
         self.pressKey("Home")
-        tab.find_fuzzy("plainbridge-portgroups", "menu item").click()
+        tab.find_fuzzy("plainbridge-portgroups",
+                       "menu item").bring_on_screen().click()
         c = tab.find_fuzzy("Portgroup:", "combo box")
         c.click_combo_entry()
         self.assertTrue(c.find("engineering", "menu item").selected)
@@ -238,7 +240,8 @@ class Details(uiutils.UITestCase):
 
         # Network with vport stuff
         src.click()
-        tab.find_fuzzy("OpenVSwitch", "menu item").click()
+        tab.find_fuzzy("OpenVSwitch",
+                       "menu item").bring_on_screen().click()
         t = tab.find("Virtual port", "toggle button")
         t.click()
         t.find("Type:", "text").text = "802.1Qbg"
