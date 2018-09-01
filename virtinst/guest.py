@@ -1078,22 +1078,26 @@ class Guest(XMLBuilder):
                 disk.cli_generated_target = False
                 used_targets.append(disk.generate_target(used_targets))
 
-    def _set_net_defaults(self):
-        net_model = None
+    def _default_netmodel(self):
         if not self.os.is_hvm():
-            net_model = None
-        elif self._supports_virtio(self._os_object.supports_virtionet()):
-            net_model = "virtio"
-        else:
-            net_model = self._os_object.default_netmodel()
+            return None
+        if self._supports_virtio(self._os_object.supports_virtionet()):
+            return "virtio"
+        if self.os.is_q35():
+            return "e1000e"
 
-        if not net_model and self.os.is_q35():
-            net_model = "e1000e"
+        prefs = ["e1000", "rtl8139", "ne2k_pci", "pcnet"]
+        supported_models = self._os_object.supported_netmodels()
+        for pref in prefs:
+            if pref in supported_models:
+                return pref
+        return None
 
-        if net_model:
-            for net in self.devices.interface:
-                if not net.model:
-                    net.model = net_model
+    def _set_net_defaults(self):
+        default_model = self._default_netmodel()
+        for net in self.devices.interface:
+            if not net.model:
+                net.model = default_model
 
     def _set_sound_defaults(self):
         if self.os.is_q35():

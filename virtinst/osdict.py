@@ -340,14 +340,8 @@ class _OsVariant(object):
         return self._is_related_to(
                 ["debian8", "fedora18", "rhel6.0", "sles11sp4"])
 
-    def default_netmodel(self):
-        """
-        Default non-virtio net-model, since we check for that separately
-        """
-        for devname in self._device_filter(cls="net"):
-            if devname in ["pcnet", "ne2k_pci", "rtl8139", "e1000"]:
-                return devname
-        return None
+    def supported_netmodels(self):
+        return self._device_filter(cls="net")
 
     def supports_usbtablet(self):
         return bool(self._device_filter(cls="input", name="tablet", bus="usb"))
