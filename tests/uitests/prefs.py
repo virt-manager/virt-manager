@@ -33,6 +33,10 @@ class VMMPrefs(uiutils.UITestCase):
         win.find("Console", "page tab").click()
         win.find("Change...", "push button").click()
         keyframe = self.app.root.find_fuzzy("Configure grab", "dialog")
+
+        # On certain environments pressing "Alt_L" and clicking a window starts
+        # window drag operation. Work around by pushing both Control and Alt.
+        self.holdKey("Control_L")
         self.holdKey("Alt_L")
         self.holdKey("Z")
         try:
@@ -40,6 +44,7 @@ class VMMPrefs(uiutils.UITestCase):
         finally:
             self.releaseKey("Z")
             self.releaseKey("Alt_L")
+            self.releaseKey("Control_L")
 
         win.find("Feedback", "page tab").click()
         win.find_fuzzy(None, "check box",
