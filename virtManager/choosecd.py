@@ -116,8 +116,8 @@ class vmmChooseCD(vmmGObjectUI):
         except Exception as e:
             return self.err.val_err(_("Invalid Media Path"), e)
 
-        self.emit("cdrom-chosen", self.disk, path)
         self.close()
+        self.emit("cdrom-chosen", self.disk, path)
 
     def media_toggled(self, ignore1=None, ignore2=None):
         is_phys = bool(self.widget("physical-media").get_active())
