@@ -336,10 +336,6 @@ class _OsVariant(object):
             return "localtime"
         return "utc"
 
-    def supports_qemu_ga(self):
-        return self._is_related_to(
-                ["debian8", "fedora18", "rhel6.0", "sles11sp4"])
-
     def supported_netmodels(self):
         return self._device_filter(cls="net")
 
@@ -354,6 +350,12 @@ class _OsVariant(object):
 
     def supports_virtiorng(self):
         return bool(self._device_filter(cls="rng", name="virtio.*-rng"))
+
+    def supports_virtioserial(self):
+        if self._device_filter(cls="console", name="virtio.*-console"):
+            return True
+        # 2018-09-01: osinfo data is wrong for RHEL/centos here
+        return self._is_related_to("rhel6.0")
 
     def get_recommended_resources(self, guest):
         ret = {}

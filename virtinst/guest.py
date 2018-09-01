@@ -659,7 +659,7 @@ class Guest(XMLBuilder):
             return
 
         if (self.conn.is_qemu() and
-            self._os_object.supports_qemu_ga() and
+            self._supports_virtio(self._os_object.supports_virtioserial()) and
             self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
             dev = DeviceChannel(self.conn)
             dev.type = "unix"
