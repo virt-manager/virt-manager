@@ -734,8 +734,7 @@ class vmmAddHardware(vmmGObjectUI):
         for m in DevicePanic.get_models(self.vm.get_xmlobj().os):
             values.append([m, DevicePanic.get_pretty_model(m)])
 
-        default = DevicePanic.get_default_model(
-                self.vm.get_xmlobj().os)
+        default = DevicePanic.get_default_model(self.vm.get_xmlobj())
         _build_combo(self.widget("panic-model"), values, default_value=default)
 
 
