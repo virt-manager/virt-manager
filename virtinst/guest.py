@@ -966,6 +966,7 @@ class Guest(XMLBuilder):
                     ctrl = DeviceController(self.conn)
                     ctrl.type = "scsi"
                     ctrl.address.set_addrstr("spapr-vio")
+                    ctrl.set_defaults(self)
                     self.add_device(ctrl)
                     break
 
@@ -978,6 +979,7 @@ class Guest(XMLBuilder):
                     ctrl = DeviceController(self.conn)
                     ctrl.type = "scsi"
                     ctrl.model = "virtio-scsi"
+                    ctrl.set_defaults(self)
                     self.add_device(ctrl)
                     break
 
@@ -1128,9 +1130,10 @@ class Guest(XMLBuilder):
             if chn.type == chn.TYPE_SPICEVMC:
                 return
 
-        agentdev = DeviceChannel(self.conn)
-        agentdev.type = agentdev.TYPE_SPICEVMC
-        self.add_device(agentdev)
+        dev = DeviceChannel(self.conn)
+        dev.type = DeviceChannel.TYPE_SPICEVMC
+        dev.set_defaults(self)
+        self.add_device(dev)
 
     def _add_spice_sound(self):
         if self.skip_default_sound:
@@ -1143,7 +1146,9 @@ class Guest(XMLBuilder):
                 self.os.is_arm_machvirt):
             return
 
-        self.add_device(DeviceSound(self.conn))
+        dev = DeviceSound(self.conn)
+        dev.set_defaults(self)
+        self.add_device(dev)
 
     def _add_spice_usbredir(self):
         if self.skip_default_usbredir:
@@ -1160,6 +1165,7 @@ class Guest(XMLBuilder):
             dev = DeviceRedirdev(self.conn)
             dev.bus = "usb"
             dev.type = "spicevmc"
+            dev.set_defaults(self)
             self.add_device(dev)
 
     def has_spice(self):
