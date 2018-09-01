@@ -228,10 +228,12 @@ class VMMDogtailNode(dogtail.tree.Node):
     def click_combo_entry(self):
         """
         Helper for clicking the arrow of a combo entry, to expose the menu.
-        Clicks middle of Y axis, but 1 pixel in from the right side
+        Clicks middle of Y axis, but 1/10th of the height from the right side.
+        Using a small, hardcoded offset may not work on some themes (e.g. when
+        running virt-manager on KDE)
         """
         button = 1
-        clickX = self.position[0] + self.size[0] - 1
+        clickX = self.position[0] + self.size[0] - self.size[1] / 4
         clickY = self.position[1] + self.size[1] / 2
         dogtail.rawinput.click(clickX, clickY, button)
 
