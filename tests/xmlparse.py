@@ -1012,7 +1012,9 @@ class XMLParseTest(unittest.TestCase):
         guest.remove_device(rmdev)
 
         # Basic device add
-        guest.add_device(virtinst.DeviceWatchdog(self.conn))
+        d = virtinst.DeviceWatchdog(self.conn)
+        d.set_defaults(guest)
+        guest.add_device(d)
 
         # Test adding device with child properties (address value)
         adddev = virtinst.DeviceInterface(self.conn)
@@ -1020,6 +1022,7 @@ class XMLParseTest(unittest.TestCase):
         adddev.source = "default"
         adddev.macaddr = "1A:2A:3A:4A:5A:6A"
         adddev.address.set_addrstr("spapr-vio")
+        adddev.set_defaults(guest)
 
         # Test adding and removing the same device
         guest.add_device(adddev)

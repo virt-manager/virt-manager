@@ -2369,8 +2369,8 @@ class ParserInput(VirtCLIParser):
 
 _register_virt_parser(ParserInput)
 _add_device_address_args(ParserInput)
-ParserInput.add_arg("type", "type")
-ParserInput.add_arg("bus", "bus")
+ParserInput.add_arg("type", "type", ignore_default=True)
+ParserInput.add_arg("bus", "bus", ignore_default=True)
 
 
 #######################
@@ -2517,8 +2517,8 @@ class ParserWatchdog(VirtCLIParser):
 
 _register_virt_parser(ParserWatchdog)
 _add_device_address_args(ParserWatchdog)
-ParserWatchdog.add_arg("model", "model")
-ParserWatchdog.add_arg("action", "action")
+ParserWatchdog.add_arg("model", "model", ignore_default=True)
+ParserWatchdog.add_arg("action", "action", ignore_default=True)
 
 
 ####################

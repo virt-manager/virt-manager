@@ -15,7 +15,6 @@ class DeviceWatchdog(Device):
     MODEL_I6300 = "i6300esb"
     MODEL_IB700 = "ib700"
     MODEL_DIAG288 = "diag288"
-    MODEL_DEFAULT = "default"
     MODELS = [MODEL_I6300, MODEL_IB700, MODEL_DIAG288]
 
     ACTION_SHUTDOWN = "shutdown"
@@ -24,7 +23,6 @@ class DeviceWatchdog(Device):
     ACTION_PAUSE    = "pause"
     ACTION_NONE     = "none"
     ACTION_DUMP     = "dump"
-    ACTION_DEFAULT  = "default"
     ACTIONS = [ACTION_RESET, ACTION_SHUTDOWN,
                ACTION_POWEROFF, ACTION_PAUSE,
                ACTION_DUMP, ACTION_NONE]
@@ -46,9 +44,16 @@ class DeviceWatchdog(Device):
         return action
 
     _XML_PROP_ORDER = ["model", "action"]
-    model = XMLProperty("./@model",
-                        default_name=MODEL_DEFAULT,
-                        default_cb=lambda s: s.MODEL_I6300)
-    action = XMLProperty("./@action",
-                         default_name=ACTION_DEFAULT,
-                         default_cb=lambda s: s.ACTION_RESET)
+    model = XMLProperty("./@model")
+    action = XMLProperty("./@action")
+
+
+    ##################
+    # Default config #
+    ##################
+
+    def set_defaults(self, _guest):
+        if not self.model:
+            self.model = self.MODEL_I6300
+        if not self.action:
+            self.action = self.ACTION_RESET
