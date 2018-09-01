@@ -570,7 +570,8 @@ class vmmAddHardware(vmmGObjectUI):
                 continue
             values.append([m, DeviceSound.pretty_model(m)])
 
-        _build_combo(combo, values)
+        default = DeviceSound.default_model(vm.xmlobj)
+        _build_combo(combo, values, default_value=default)
 
 
     def _build_hostdev_treeview(self):

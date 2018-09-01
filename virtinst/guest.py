@@ -744,7 +744,6 @@ class Guest(XMLBuilder):
         self._set_graphics_defaults()
         self._add_spice_devices()
         self._set_net_defaults()
-        self._set_sound_defaults()
 
     def _is_full_os_container(self):
         if not self.os.is_container():
@@ -1066,16 +1065,6 @@ class Guest(XMLBuilder):
         for net in self.devices.interface:
             if not net.model:
                 net.model = default_model
-
-    def _set_sound_defaults(self):
-        if self.os.is_q35():
-            default = "ich9"
-        else:
-            default = "ich6"
-
-        for sound in self.devices.sound:
-            if sound.model == sound.MODEL_DEFAULT:
-                sound.model = default
 
     def _spice_supported(self):
         if not self.conn.is_qemu() and not self.conn.is_test():

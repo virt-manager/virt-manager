@@ -21,8 +21,10 @@ class _Codec(XMLBuilder):
 class DeviceSound(Device):
     XML_NAME = "sound"
 
-    MODEL_DEFAULT = "default"
     MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", "ich9"]
+
+    model = XMLProperty("./@model")
+    codecs = XMLChildProperty(_Codec)
 
     @staticmethod
     def pretty_model(model):
@@ -31,8 +33,17 @@ class DeviceSound(Device):
             ret = "HDA (%s)" % model.upper()
         return ret
 
-    model = XMLProperty("./@model",
-                        default_cb=lambda s: "es1370",
-                        default_name=MODEL_DEFAULT)
 
-    codecs = XMLChildProperty(_Codec)
+    ##################
+    # Default config #
+    ##################
+
+    @staticmethod
+    def default_model(guest):
+        if guest.os.is_q35():
+            return "ich9"
+        return "ich6"
+
+    def set_defaults(self, guest):
+        if not self.model:
+            self.model = self.default_model(guest)
