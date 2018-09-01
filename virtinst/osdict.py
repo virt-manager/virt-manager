@@ -347,13 +347,13 @@ class _OsVariant(object):
         return bool(self._device_filter(cls="input", name="tablet", bus="usb"))
 
     def supports_virtiodisk(self):
-        return bool(self._device_filter(cls="block", name="virtio-block"))
+        return bool(self._device_filter(cls="block", name="virtio.*-block"))
 
     def supports_virtionet(self):
-        return bool(self._device_filter(cls="net", name="virtio-net"))
+        return bool(self._device_filter(cls="net", name="virtio.*-net"))
 
     def supports_virtiorng(self):
-        return bool(self._device_filter(cls="rng", name="virtio-rng"))
+        return bool(self._device_filter(cls="rng", name="virtio.*-rng"))
 
     def get_recommended_resources(self, guest):
         ret = {}
