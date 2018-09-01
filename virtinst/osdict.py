@@ -7,7 +7,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import datetime
 import logging
 import re
 import time
@@ -180,11 +179,6 @@ class _OSDB(object):
 
         return osname
 
-    def list_types(self):
-        approved_types = ["linux", "windows", "bsd", "macos",
-            "solaris", "other", "generic"]
-        return approved_types
-
     def list_os(self):
         """
         List all OSes in the DB
@@ -243,7 +237,6 @@ class _OsVariant(object):
 
         self.sortby = self._get_sortby()
         self.urldistro = self._get_urldistro()
-        self._supported = None
 
 
     ########################
@@ -307,29 +300,6 @@ class _OsVariant(object):
 
         return "%s-%s" % (self.distro, version)
 
-    def _get_supported(self):
-        if not self._os:
-            return True
-
-        eol_date = self._os.get_eol_date_string()
-
-        if eol_date:
-            return (datetime.datetime.strptime(eol_date, "%Y-%m-%d") >
-                    datetime.datetime.now())
-
-        if self.name == "fedora-unknown":
-            return False
-
-        # As of libosinfo 2.11, many clearly EOL distros don't have an
-        # EOL date. So assume None == EOL, add some manual work arounds.
-        # We should fix this in a new libosinfo version, and then drop
-        # this hack
-        if self._is_related_to(["fedora24", "rhel7.0", "debian6",
-            "ubuntu13.04", "win8", "win2k12", "mageia5", "centos7.0"],
-            check_clones=False, check_derives=False):
-            return True
-        return False
-
     def _get_urldistro(self):
         if not self._os:
             return None
@@ -350,37 +320,8 @@ class _OsVariant(object):
     # Public APIs #
     ###############
 
-    def get_supported(self):
-        if self._supported is None:
-            self._supported = self._get_supported()
-        return self._supported
-
-    def get_typename(self):
-        """
-        Streamline the family name for use in the virt-manager UI
-        """
-        if not self._os:
-            return "generic"
-
-        if self._family in ['linux']:
-            return "linux"
-
-        if self._family in ['win9x', 'winnt', 'win16']:
-            return "windows"
-
-        if self._family in ['solaris']:
-            return "solaris"
-
-        if self._family in ['openbsd', 'freebsd', 'netbsd']:
-            return "bsd"
-
-        if self._family in ['darwin']:
-            return "macos"
-
-        return "other"
-
     def is_windows(self):
-        return self.get_typename() == "windows"
+        return self._family in ['win9x', 'winnt', 'win16']
 
     def broken_x2apic(self):
         # x2apic breaks networking in solaris10
