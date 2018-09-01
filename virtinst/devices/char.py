@@ -149,10 +149,15 @@ class _DeviceChar(Device):
             return self.type in users[propname]
         return hasattr(self, propname)
 
-    def set_defaults(self, guest):
-        ignore = guest
+    def set_defaults(self, _guest):
         if not self.source_mode and self.supports_property("source_mode"):
             self.source_mode = self.MODE_BIND
+        if not self.protocol and self.supports_property("protocol"):
+            self.protocol = self.PROTOCOL_RAW
+        if not self.target_type and self.DEVICE_TYPE == "channel":
+            self.target_type = self.CHANNEL_TARGET_VIRTIO
+        if not self.target_name and self.type == self.TYPE_SPICEVMC:
+            self.target_name = self.CHANNEL_NAME_SPICE
 
 
     def _set_host_helper(self, hostparam, portparam, val):
@@ -238,30 +243,12 @@ class _DeviceChar(Device):
     # Remaining XML props #
     #######################
 
-    def _get_default_protocol(self):
-        if not self.supports_property("protocol"):
-            return None
-        return self.PROTOCOL_RAW
-    protocol = XMLProperty("./protocol/@type",
-                           default_cb=_get_default_protocol)
-
-    def _get_default_target_type(self):
-        if self.DEVICE_TYPE == "channel":
-            return self.CHANNEL_TARGET_VIRTIO
-        return None
-    target_type = XMLProperty("./target/@type",
-                              default_cb=_get_default_target_type)
+    protocol = XMLProperty("./protocol/@type")
 
     target_address = XMLProperty("./target/@address")
-
     target_port = XMLProperty("./target/@port", is_int=True)
-
-    def _default_target_name(self):
-        if self.type == self.TYPE_SPICEVMC:
-            return self.CHANNEL_NAME_SPICE
-        return None
-    target_name = XMLProperty("./target/@name",
-                           default_cb=_default_target_name)
+    target_type = XMLProperty("./target/@type")
+    target_name = XMLProperty("./target/@name")
 
     log_file = XMLProperty("./log/@file")
     log_append = XMLProperty("./log/@append", is_onoff=True)
