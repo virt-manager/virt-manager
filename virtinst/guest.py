@@ -741,7 +741,6 @@ class Guest(XMLBuilder):
 
         self._set_disk_defaults()
         self._add_implied_controllers()
-        self._set_graphics_defaults()
         self._add_spice_devices()
         self._set_net_defaults()
 
@@ -1065,51 +1064,6 @@ class Guest(XMLBuilder):
         for net in self.devices.interface:
             if not net.model:
                 net.model = default_model
-
-    def _spice_supported(self):
-        if not self.conn.is_qemu() and not self.conn.is_test():
-            return False
-        # Spice has issues on some host arches, like ppc, so whitelist it
-        if self.conn.caps.host.cpu.arch not in ["i686", "x86_64"]:
-            return False
-        return True
-
-    def _set_graphics_defaults(self):
-        def _set_type(gfx):
-            gtype = self.default_graphics_type
-            logging.debug("Using default_graphics=%s", gtype)
-            if gtype == "spice" and not self._spice_supported():
-                logging.debug("spice requested but HV doesn't support it. "
-                              "Using vnc.")
-                gtype = "vnc"
-
-            gfx.type = gtype
-
-        for dev in self.devices.graphics:
-            if dev.type == "default":
-                _set_type(dev)
-
-            if (dev.type == "spice" and not self.conn.is_remote()):
-                logging.debug("Local connection, disabling spice image "
-                    "compression.")
-                if dev.image_compression is None:
-                    dev.image_compression = "off"
-
-            if dev.type == "spice" and dev.gl:
-                if not self.conn.check_support(
-                        self.conn.SUPPORT_CONN_SPICE_GL):
-                    raise ValueError(_("Host does not support spice GL"))
-
-                # If spice GL but rendernode wasn't specified, hardcode
-                # the first one
-                if not dev.rendernode and self.conn.check_support(
-                        self.conn.SUPPORT_CONN_SPICE_RENDERNODE):
-                    for nodedev in self.conn.fetch_all_nodedevs():
-                        if (nodedev.device_type != 'drm' or
-                            nodedev.drm_type != 'render'):
-                            continue
-                        dev.rendernode = nodedev.get_devnode().path
-                        break
 
     def _add_spice_channels(self):
         if self.skip_default_channel:
