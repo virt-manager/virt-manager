@@ -108,7 +108,7 @@ class Manager(uiutils.UITestCase):
             """
             win.click()
             clickX = win.position[0] + win.size[0] / 2
-            clickY = win.position[1] + 3
+            clickY = win.position[1] + 10
             dogtail.rawinput.drag((clickX, clickY), (1000, 1000))
 
         manager = self.app.topwin
