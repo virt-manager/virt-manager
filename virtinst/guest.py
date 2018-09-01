@@ -1189,7 +1189,9 @@ class Guest(XMLBuilder):
             if self.has_gl():
                 return "virtio"
             return "qxl"
-        if self._os_object.is_windows():
+        if self.os.is_hvm():
+            if self.conn.is_qemu():
+                return "qxl"
             return "vga"
         return None
 
