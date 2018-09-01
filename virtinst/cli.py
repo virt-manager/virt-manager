@@ -2384,8 +2384,8 @@ class ParserSmartcard(VirtCLIParser):
 
 _register_virt_parser(ParserSmartcard)
 _add_device_address_args(ParserSmartcard)
-ParserSmartcard.add_arg("mode", "mode")
-ParserSmartcard.add_arg("type", "type")
+ParserSmartcard.add_arg("mode", "mode", ignore_default=True)
+ParserSmartcard.add_arg("type", "type", ignore_default=True)
 
 
 ######################
@@ -2409,8 +2409,8 @@ class ParserRedir(VirtCLIParser):
 
 _register_virt_parser(ParserRedir)
 _add_device_address_args(ParserRedir)
-ParserRedir.add_arg("bus", "bus")
-ParserRedir.add_arg("type", "type")
+ParserRedir.add_arg("bus", "bus", ignore_default=True)
+ParserRedir.add_arg("type", "type", ignore_default=True)
 ParserRedir.add_arg("boot.order", "boot_order")
 ParserRedir.add_arg(None, "server", cb=ParserRedir.set_server_cb)
 

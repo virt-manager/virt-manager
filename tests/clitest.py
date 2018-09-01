@@ -500,10 +500,12 @@ c.add_compare(""" \
 \
 --smartcard passthrough,type=spicevmc \
 --smartcard type=host \
+--smartcard default \
 \
 --redirdev usb,type=spicevmc \
 --redirdev usb,type=tcp,server=localhost:4000 \
 --redirdev usb,type=tcp,server=127.0.0.1:4002,boot_order=3 \
+--redirdev default \
 \
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp \
 \

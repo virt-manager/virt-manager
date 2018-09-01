@@ -14,15 +14,12 @@ class DeviceRng(Device):
 
     TYPE_RANDOM = "random"
     TYPE_EGD = "egd"
-    TYPES = [TYPE_RANDOM, TYPE_EGD]
 
     BACKEND_TYPE_UDP = "udp"
     BACKEND_TYPE_TCP = "tcp"
-    BACKEND_TYPES = [BACKEND_TYPE_UDP, BACKEND_TYPE_TCP]
 
     BACKEND_MODE_BIND = "bind"
     BACKEND_MODE_CONNECT = "connect"
-    BACKEND_MODES = [BACKEND_MODE_BIND, BACKEND_MODE_CONNECT]
 
     @staticmethod
     def get_pretty_type(rng_type):
@@ -86,7 +83,7 @@ class DeviceRng(Device):
         return val
 
     type = XMLProperty("./backend/@model")
-    model = XMLProperty("./@model", default_cb=lambda s: "virtio")
+    model = XMLProperty("./@model")
 
     backend_type = XMLProperty("./backend/@type")
 
@@ -104,3 +101,12 @@ class DeviceRng(Device):
     rate_period = XMLProperty("./rate/@period")
 
     device = XMLProperty("./backend[@model='random']")
+
+
+    ##################
+    # Default config #
+    ##################
+
+    def set_defaults(self, guest):
+        if not self.model:
+            self.model = "virtio"

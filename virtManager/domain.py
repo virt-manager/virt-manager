@@ -897,7 +897,8 @@ class vmmDomain(vmmLibvirtObject):
 
         if model != _SENTINEL:
             editdev.mode = model
-            editdev.type = editdev.TYPE_DEFAULT
+            editdev.type = None
+            editdev.type = editdev.default_type()
 
         if do_hotplug:
             self.hotplug(device=editdev)

@@ -12,25 +12,21 @@ from ..xmlbuilder import XMLProperty
 
 class DeviceSmartcard(Device):
     XML_NAME = "smartcard"
-
-    # Default models list
-    MODE_DEFAULT = "default"
-    MODES = ["passthrough", "host-certificates", "host"]
-
-    TYPE_DEFAULT = "default"
-    TYPES = ["tcp", "spicevmc", "default"]
-
-
     _XML_PROP_ORDER = ["mode", "type"]
 
-    mode = XMLProperty("./@mode",
-                       default_cb=lambda s: "passthrough",
-                       default_name=MODE_DEFAULT)
+    mode = XMLProperty("./@mode")
+    type = XMLProperty("./@type")
 
-    def _default_type(self):
-        if self.mode == self.MODE_DEFAULT or self.mode == "passthrough":
-            return "spicevmc"
-        return "tcp"
-    type = XMLProperty("./@type",
-                       default_cb=_default_type,
-                       default_name=TYPE_DEFAULT)
+
+    ##################
+    # Default config #
+    ##################
+
+    def default_type(self):
+        return self.mode == "passthrough" and "spicevmc" or "tcp"
+
+    def set_defaults(self, guest):
+        if not self.mode:
+            self.mode = "passthrough"
+        if not self.type:
+            self.type = self.default_type()

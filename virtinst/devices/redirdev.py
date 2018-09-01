@@ -13,12 +13,6 @@ from ..xmlbuilder import XMLProperty
 class DeviceRedirdev(Device):
     XML_NAME = "redirdev"
 
-    BUS_DEFAULT = "default"
-    BUSES = ["usb"]
-
-    TYPE_DEFAULT = "default"
-    TYPES = ["tcp", "spicevmc"]
-
     @staticmethod
     def pretty_type(typ):
         if typ == "tcp":
@@ -36,12 +30,19 @@ class DeviceRedirdev(Device):
 
     _XML_PROP_ORDER = ["bus", "type"]
 
-    bus = XMLProperty("./@bus",
-                      default_cb=lambda s: "usb",
-                      default_name=BUS_DEFAULT)
-    type = XMLProperty("./@type",
-                       default_cb=lambda s: "spicevmc",
-                       default_name=TYPE_DEFAULT)
+    bus = XMLProperty("./@bus")
+    type = XMLProperty("./@type")
 
     host = XMLProperty("./source/@host")
     service = XMLProperty("./source/@service", is_int=True)
+
+
+    ##################
+    # Default config #
+    ##################
+
+    def set_defaults(self, guest):
+        if not self.bus:
+            self.bus = "usb"
+        if not self.type:
+            self.type = "spicevmc"

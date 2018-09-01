@@ -227,6 +227,7 @@
     </interface>
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="passthrough" type="host"/>
+    <smartcard mode="passthrough" type="spicevmc"/>
     <serial type="tcp">
       <source mode="bind" host="127.0.0.1" service="2222"/>
       <protocol type="telnet"/>
@@ -389,6 +390,7 @@
       <source host="127.0.0.1" service="4002"/>
       <boot order="3"/>
     </redirdev>
+    <redirdev bus="usb" type="spicevmc"/>
     <rng model="virtio">
       <backend model="egd" type="tcp">
         <source mode="connect" host="127.0.0.1" service="8000"/>

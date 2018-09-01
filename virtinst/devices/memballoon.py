@@ -13,9 +13,13 @@ from ..xmlbuilder import XMLProperty
 class DeviceMemballoon(Device):
     XML_NAME = "memballoon"
 
-    MODEL_DEFAULT = "default"
-    MODELS = ["virtio", "xen", "none"]
+    model = XMLProperty("./@model")
 
-    model = XMLProperty("./@model",
-                        default_name=MODEL_DEFAULT,
-                        default_cb=lambda s: "virtio")
+
+    ##################
+    # Default config #
+    ##################
+
+    def set_defaults(self, guest):
+        if not self.model:
+            self.model = "virtio"
