@@ -18,17 +18,14 @@ class DeviceTpm(Device):
 
     VERSION_1_2 = "1.2"
     VERSION_2_0 = "2.0"
-    VERSION_DEFAULT = "default"
     VERSIONS = [VERSION_1_2, VERSION_2_0]
 
     TYPE_PASSTHROUGH = "passthrough"
     TYPE_EMULATOR = "emulator"
-    TYPE_DEFAULT = "default"
     TYPES = [TYPE_PASSTHROUGH, TYPE_EMULATOR]
 
     MODEL_TIS = "tpm-tis"
     MODEL_CRB = "tpm-crb"
-    MODEL_DEFAULT = "default"
     MODELS = [MODEL_TIS, MODEL_CRB]
 
     @staticmethod
@@ -61,22 +58,22 @@ class DeviceTpm(Device):
 
         return hasattr(self, propname)
 
-    type = XMLProperty("./backend/@type",
-                       default_cb=lambda s: s.TYPE_PASSTHROUGH)
-
-    def _get_default_version(self):
-        if not self.supports_property("version"):
-            return None
-        return self.VERSION_1_2
-    version = XMLProperty("./backend/@version",
-                          default_cb=_get_default_version)
-    model = XMLProperty("./@model",
-                       default_cb=lambda s: s.MODEL_TIS)
+    type = XMLProperty("./backend/@type")
+    version = XMLProperty("./backend/@version")
+    model = XMLProperty("./@model")
+    device_path = XMLProperty("./backend/device/@path")
 
 
-    def _get_default_device_path(self):
-        if not self.supports_property("device_path"):
-            return None
-        return "/dev/tpm0"
-    device_path = XMLProperty("./backend/device/@path",
-                              default_cb=_get_default_device_path)
+    ##################
+    # Default config #
+    ##################
+
+    def set_defaults(self, guest):
+        if not self.type:
+            self.type = self.TYPE_PASSTHROUGH
+        if not self.model:
+            self.model = self.MODEL_TIS
+        if not self.version and self.supports_property("version"):
+            self.version = self.VERSION_1_2
+        if not self.device_path and self.supports_property("device_path"):
+            self.device_path = "/dev/tpm0"
