@@ -744,7 +744,6 @@ class Guest(XMLBuilder):
         self._set_graphics_defaults()
         self._add_spice_devices()
         self._set_net_defaults()
-        self._set_video_defaults()
         self._set_sound_defaults()
 
     def _is_full_os_container(self):
@@ -1179,29 +1178,6 @@ class Guest(XMLBuilder):
             if listen and listen == "none":
                 return True
         return False
-
-    def _default_videomodel(self):
-        if self.os.is_pseries():
-            return "vga"
-        if self.os.is_arm_machvirt():
-            return "virtio"
-        if self.has_spice() and self.os.is_x86():
-            if self.has_gl():
-                return "virtio"
-            return "qxl"
-        if self.os.is_hvm():
-            if self.conn.is_qemu():
-                return "qxl"
-            return "vga"
-        return None
-
-    def _set_video_defaults(self):
-        video_model = self._default_videomodel()
-        for video in self.devices.video:
-            if video.model == video.MODEL_DEFAULT:
-                video.model = video_model
-                if video.model == 'virtio' and self.has_gl():
-                    video.accel3d = True
 
     def _add_spice_devices(self):
         if not self.has_spice():

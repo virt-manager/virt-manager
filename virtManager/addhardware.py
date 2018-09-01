@@ -610,11 +610,12 @@ class vmmAddHardware(vmmGObjectUI):
 
 
     @staticmethod
-    def build_video_combo(_vm, combo):
+    def build_video_combo(vm, combo):
         values = []
         for m in DeviceVideo.MODELS:
             values.append([m, DeviceVideo.pretty_model(m)])
-        _build_combo(combo, values)
+        default = DeviceVideo.default_model(vm.xmlobj)
+        _build_combo(combo, values, default_value=default)
 
 
     def _build_char_mode_combo(self):
