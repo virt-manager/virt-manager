@@ -259,6 +259,24 @@ class _OsVariant(object):
 
         return False
 
+    def _get_all_devices(self):
+        if not self._os:
+            return []
+        devlist = self._os.get_all_devices()
+        return [devlist.get_nth(i) for i in range(devlist.get_length())]
+
+    def _device_filter(self, name=None, cls=None, bus=None):
+        ret = []
+        for dev in self._get_all_devices():
+            if name and not re.match(name, dev.get_name()):
+                continue
+            if cls and not re.match(cls, dev.get_class()):
+                continue
+            if bus and not re.match(bus, dev.get_bus_type()):
+                continue
+            ret.append(dev.get_name())
+        return ret
+
 
     ###############
     # Cached APIs #
@@ -318,73 +336,30 @@ class _OsVariant(object):
             return "localtime"
         return "utc"
 
+    def supports_qemu_ga(self):
+        return self._is_related_to(
+                ["debian8", "fedora18", "rhel6.0", "sles11sp4"])
+
     def default_netmodel(self):
         """
         Default non-virtio net-model, since we check for that separately
         """
-        if not self._os:
-            return None
-
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "net")
-        devs = self._os.get_all_devices(fltr)
-        for idx in range(devs.get_length()):
-            devname = devs.get_nth(idx).get_name()
+        for devname in self._device_filter(cls="net"):
             if devname in ["pcnet", "ne2k_pci", "rtl8139", "e1000"]:
                 return devname
         return None
 
     def supports_usbtablet(self):
-        if not self._os:
-            return False
-
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "input")
-        fltr.add_constraint("name", "tablet")
-        devs = self._os.get_all_devices(fltr)
-        for idx in range(devs.get_length()):
-            if devs.get_nth(idx).get_bus_type() == "usb":
-                return True
-        return False
+        return bool(self._device_filter(cls="input", name="tablet", bus="usb"))
 
     def supports_virtiodisk(self):
-        if self._os:
-            fltr = libosinfo.Filter()
-            fltr.add_constraint("class", "block")
-            devs = self._os.get_all_devices(fltr)
-            for dev in range(devs.get_length()):
-                d = devs.get_nth(dev)
-                if d.get_name() == "virtio-block":
-                    return True
-
-        return False
+        return bool(self._device_filter(cls="block", name="virtio-block"))
 
     def supports_virtionet(self):
-        if self._os:
-            fltr = libosinfo.Filter()
-            fltr.add_constraint("class", "net")
-            devs = self._os.get_all_devices(fltr)
-            for dev in range(devs.get_length()):
-                d = devs.get_nth(dev)
-                if d.get_name() == "virtio-net":
-                    return True
-
-        return False
+        return bool(self._device_filter(cls="net", name="virtio-net"))
 
     def supports_virtiorng(self):
-        if self._os:
-            fltr = libosinfo.Filter()
-            fltr.add_constraint("class", "rng")
-            devs = self._os.get_all_devices(fltr)
-            for dev in range(devs.get_length()):
-                d = devs.get_nth(dev)
-                if d.get_name() == "virtio-rng":
-                    return True
-
-        return False
-
-    def supports_qemu_ga(self):
-        return self._is_related_to(["debian8", "fedora18", "rhel6.0", "sles11sp4"])
+        return bool(self._device_filter(cls="rng", name="virtio-rng"))
 
     def default_videomodel(self, guest):
         if guest.os.is_pseries():
