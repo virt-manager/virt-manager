@@ -11,6 +11,7 @@ import sys
 import unittest
 
 from gi.repository import Gio
+from gi.repository import Gdk
 import pyatspi
 import dogtail.tree
 
@@ -223,7 +224,15 @@ class VMMDogtailNode(dogtail.tree.Node):
 
     @property
     def onscreen(self):
-        return self.position[0] > 0 and self.position[1] > 0
+        # We need to check that full widget is on screen because we use this
+        # function to check whether we can click a widget. We may click
+        # anywhere within the widget and clicks outside the screen bounds are
+        # silently ignored.
+        screen = Gdk.Screen.get_default()
+        return (self.position[0] > 0 and
+                self.position[0] + self.size[0] < screen.get_width() and
+                self.position[1] > 0 and
+                self.position[1] + self.size[1] < screen.get_height())
 
     def click_combo_entry(self):
         """
