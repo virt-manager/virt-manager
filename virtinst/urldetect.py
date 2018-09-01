@@ -252,19 +252,19 @@ def getDistroStore(guest, fetcher):
 
     arch = guest.os.arch
     _type = guest.os.os_type
-    urldistro = OSDB.lookup_os(guest.os_variant).urldistro
+    osobj = OSDB.lookup_os(guest.os_variant)
     stores = _allstores[:]
     cache = _DistroCache(fetcher)
 
     # If user manually specified an os_distro, bump it's URL class
     # to the top of the list
-    if urldistro:
+    if osobj.distro:
         logging.debug("variant=%s has distro=%s, looking for matching "
                       "distro store to prioritize",
-                      guest.os_variant, urldistro)
+                      guest.os_variant, osobj.distro)
         found_store = None
         for store in stores:
-            if store.urldistro == urldistro:
+            if osobj.distro in store.matching_distros:
                 found_store = store
 
         if found_store:
@@ -309,7 +309,7 @@ class Distro(object):
     ISO image, or a kernel+initrd  pair for a particular OS distribution
     """
     PRETTY_NAME = None
-    urldistro = None
+    matching_distros = []
 
     _boot_iso_paths = None
     _kernel_paths = None
@@ -423,7 +423,7 @@ class RedHatDistro(Distro):
 
 class FedoraDistro(RedHatDistro):
     PRETTY_NAME = "Fedora"
-    urldistro = "fedora"
+    matching_distros = ["fedora"]
 
     @classmethod
     def is_valid(cls, cache):
@@ -457,7 +457,7 @@ class FedoraDistro(RedHatDistro):
 
 class RHELDistro(RedHatDistro):
     PRETTY_NAME = "Red Hat Enterprise Linux"
-    urldistro = "rhel"
+    matching_distros = ["rhel"]
     _variant_prefix = "rhel"
 
     @classmethod
@@ -489,7 +489,7 @@ class RHELDistro(RedHatDistro):
 
 class CentOSDistro(RHELDistro):
     PRETTY_NAME = "CentOS"
-    urldistro = "centos"
+    matching_distros = ["centos"]
     _variant_prefix = "centos"
 
     @classmethod
@@ -501,7 +501,7 @@ class CentOSDistro(RHELDistro):
 class SuseDistro(Distro):
     PRETTY_NAME = None
     _suse_regex = []
-    urldistro = None
+    matching_distros = []
     _variant_prefix = NotImplementedError
     famregex = NotImplementedError
 
@@ -590,16 +590,16 @@ class SuseDistro(Distro):
             return "opensusetumbleweed"
 
         if int(version) < 10:
-            return self.urldistro + "9"
+            return self._variant_prefix + "9"
 
-        if self.urldistro.startswith(("sles", "sled")):
+        if str(self._variant_prefix).startswith(("sles", "sled")):
             sp_version = ""
             if len(distro_version.split('.', 1)) == 2:
                 sp_version = 'sp' + distro_version.split('.', 1)[1].strip()
 
-            return self.urldistro + version + sp_version
+            return self._variant_prefix + version + sp_version
 
-        return self.urldistro + distro_version
+        return self._variant_prefix + distro_version
 
     def _detect_osdict_from_url(self):
         root = "opensuse"
@@ -620,7 +620,8 @@ class SuseDistro(Distro):
         base = self._variant_prefix + str(version)
         while update >= 0:
             tryvar = base
-            # SLE doesn't use '.0' for initial releases in osinfo-db (sles11, sles12, etc)
+            # SLE doesn't use '.0' for initial releases in
+            # osinfo-db (sles11, sles12, etc)
             if update > 0 or not base.startswith('sle'):
                 tryvar += ".%s" % update
             if OSDB.lookup_os(tryvar):
@@ -641,7 +642,7 @@ class SuseDistro(Distro):
 
 class SLESDistro(SuseDistro):
     PRETTY_NAME = "SLES"
-    urldistro = "sles"
+    matching_distros = ["sles"]
     _variant_prefix = "sles"
     _suse_regex = [".*SUSE Linux Enterprise Server*", ".*SUSE SLES*"]
     famregex = ".*SUSE Linux Enterprise.*"
@@ -649,7 +650,7 @@ class SLESDistro(SuseDistro):
 
 class SLEDDistro(SuseDistro):
     PRETTY_NAME = "SLED"
-    urldistro = "sled"
+    matching_distros = ["sled"]
     _variant_prefix = "sled"
     _suse_regex = [".*SUSE Linux Enterprise Desktop*"]
     famregex = ".*SUSE Linux Enterprise.*"
@@ -657,7 +658,7 @@ class SLEDDistro(SuseDistro):
 
 class OpensuseDistro(SuseDistro):
     PRETTY_NAME = "openSUSE"
-    urldistro = "opensuse"
+    matching_distros = ["opensuse"]
     _variant_prefix = "opensuse"
     _suse_regex = [".*openSUSE.*"]
     famregex = ".*openSUSE.*"
@@ -667,7 +668,7 @@ class DebianDistro(Distro):
     # ex. http://ftp.egr.msu.edu/debian/dists/sarge/main/installer-i386/
     # daily builds: https://d-i.debian.org/daily-images/amd64/
     PRETTY_NAME = "Debian"
-    urldistro = "debian"
+    matching_distros = ["debian"]
     _debname = "debian"
 
     @classmethod
@@ -802,13 +803,13 @@ class DebianDistro(Distro):
 class UbuntuDistro(DebianDistro):
     # https://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
     PRETTY_NAME = "Ubuntu"
-    urldistro = "ubuntu"
+    matching_distros = ["ubuntu"]
     _debname = "ubuntu"
 
 
 class ALTLinuxDistro(Distro):
     PRETTY_NAME = "ALT Linux"
-    urldistro = "altlinux"
+    matching_distros = ["altlinux"]
 
     _boot_iso_paths = [("altinst", "live")]
     _kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
@@ -822,7 +823,7 @@ class ALTLinuxDistro(Distro):
 class MandrivaDistro(Distro):
     # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
     PRETTY_NAME = "Mandriva/Mageia"
-    urldistro = "mandriva"
+    matching_distros = ["mandriva", "mes"]
 
     _boot_iso_paths = ["install/images/boot.iso"]
 
@@ -849,7 +850,7 @@ class GenericTreeinfoDistro(Distro):
     Generic catchall class for .treeinfo using distros
     """
     PRETTY_NAME = "Generic Treeinfo"
-    urldistro = None
+    matching_distros = []
 
     @classmethod
     def is_valid(cls, cache):
@@ -871,13 +872,6 @@ def _build_distro_list():
             issubclass(obj, Distro) and
             obj.PRETTY_NAME):
             allstores.append(obj)
-
-    seen_urldistro = []
-    for obj in allstores:
-        if obj.urldistro and obj.urldistro in seen_urldistro:
-            raise RuntimeError("programming error: duplicate urldistro=%s" %
-                               obj.urldistro)
-        seen_urldistro.append(obj.urldistro)
 
     # Always stick GenericDistro at the end, since it's a catchall
     allstores.remove(GenericTreeinfoDistro)

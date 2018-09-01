@@ -6,6 +6,7 @@
 import unittest
 
 from virtinst import OSDB
+from virtinst import urldetect
 
 from tests import utils
 
@@ -33,3 +34,15 @@ class TestOSDB(unittest.TestCase):
         guest.type = "qemu"
         res = OSDB.lookup_os("fedora21").get_recommended_resources(guest)
         assert res["n-cpus"] == 1
+
+    def test_urldetct_matching_distros(self):
+        allstores = urldetect._allstores  # pylint: disable=protected-access
+
+        seen_distro = []
+        for store in allstores:
+            for distro in store.matching_distros:
+                if distro in seen_distro:
+                    raise RuntimeError("programming error: "
+                            "store=%s has conflicting matching_distro=%s " %
+                            (store.PRETTY_NAME, distro))
+                seen_distro.append(distro)

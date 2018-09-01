@@ -34,9 +34,8 @@ def _sort(tosort):
             sortby = sortby + ".1"
         sortby_mappings[sortby] = key
 
-        # Group distros by their urldistro value first, so debian is clumped
-        # together, and fedora, etc.
-        distro = osinfo.urldistro or "zzzzzzz"
+        # Group by distro first, so debian is clumped together, fedora, etc.
+        distro = osinfo.distro
         if distro not in distro_mappings:
             distro_mappings[distro] = []
         distro_mappings[distro].append(sortby)
@@ -219,7 +218,6 @@ class _OsVariant(object):
 
         self.eol = self._get_eol()
         self.sortby = self._get_sortby()
-        self.urldistro = self._get_urldistro()
 
 
     ########################
@@ -301,21 +299,6 @@ class _OsVariant(object):
             pass
 
         return "%s-%s" % (self.distro, version)
-
-    def _get_urldistro(self):
-        if not self._os:
-            return None
-        urldistro = self.distro
-        remap = {
-            "opensuse": "suse",
-            "sles": "suse",
-            "mes": "mandriva"
-        }
-
-        if remap.get(urldistro):
-            return remap[urldistro]
-
-        return urldistro
 
 
     ###############
