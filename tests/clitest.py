@@ -459,7 +459,7 @@ c.add_compare(""" \
 --graphics spice,listens0.type=socket,listens0.socket=/tmp/foobar \
 \
 --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 \
---controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 \
+--controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0,address.multifunction=on \
 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 \
 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 \
 \
