@@ -361,21 +361,6 @@ class _OsVariant(object):
     def supports_virtiorng(self):
         return bool(self._device_filter(cls="rng", name="virtio-rng"))
 
-    def default_videomodel(self, guest):
-        if guest.os.is_pseries():
-            return "vga"
-
-        if guest.has_spice() and guest.os.is_x86():
-            if guest.has_gl():
-                return "virtio"
-            else:
-                return "qxl"
-
-        if self.is_windows():
-            return "vga"
-
-        return None
-
     def get_recommended_resources(self, guest):
         ret = {}
         if not self._os:

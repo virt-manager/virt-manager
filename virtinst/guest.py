@@ -1209,16 +1209,26 @@ class Guest(XMLBuilder):
                 return True
         return False
 
+    def _default_videomodel(self):
+        if self.os.is_pseries():
+            return "vga"
+        if self.os.is_arm_machvirt():
+            return "virtio"
+        if self.has_spice() and self.os.is_x86():
+            if self.has_gl():
+                return "virtio"
+            return "qxl"
+        if self._os_object.is_windows():
+            return "vga"
+        return None
+
     def _set_video_defaults(self):
         if self.has_spice():
             self._add_spice_channels()
             self._add_spice_sound()
             self._add_spice_usbredir()
 
-        video_model = self._os_object.default_videomodel(self)
-        if self.os.is_arm_machvirt():
-            video_model = "virtio"
-
+        video_model = self._default_videomodel()
         for video in self.devices.video:
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model
