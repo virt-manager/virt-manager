@@ -12,12 +12,12 @@
   <features>
     <acpi/>
     <apic/>
-    <vmport state="off"/>
     <hyperv>
       <relaxed state="on"/>
       <vapic state="on"/>
       <spinlocks state="on" retries="8191"/>
     </hyperv>
+    <vmport state="off"/>
   </features>
   <cpu mode="custom" match="exact">
     <model>Opteron_G4</model>
@@ -80,12 +80,12 @@
   <features>
     <acpi/>
     <apic/>
-    <vmport state="off"/>
     <hyperv>
       <relaxed state="on"/>
       <vapic state="on"/>
       <spinlocks state="on" retries="8191"/>
     </hyperv>
+    <vmport state="off"/>
   </features>
   <cpu mode="custom" match="exact">
     <model>Opteron_G4</model>

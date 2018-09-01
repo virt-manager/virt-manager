@@ -730,9 +730,6 @@ class Guest(XMLBuilder):
     def _set_defaults(self):
         self._add_install_cdrom()
 
-        # some options check for has_spice() which is resolved after this:
-        self._set_graphics_defaults()
-
         self._set_clock_defaults()
         self._set_emulator_defaults()
         self._set_cpu_defaults()
@@ -741,8 +738,11 @@ class Guest(XMLBuilder):
 
         for dev in self.devices.get_all():
             dev.set_defaults(self)
+
         self._set_disk_defaults()
         self._add_implied_controllers()
+        self._set_graphics_defaults()
+        self._add_spice_devices()
         self._set_net_defaults()
         self._set_video_defaults()
         self._set_sound_defaults()
@@ -920,12 +920,6 @@ class Guest(XMLBuilder):
                 self.features.pae = True
             else:
                 self.features.pae = self.capsinfo.guest.supports_pae()
-
-        if (self.features.vmport == "default" and
-            self.os.is_x86() and
-            self.has_spice() and
-            self.conn.check_support(self.conn.SUPPORT_CONN_VMPORT)):
-            self.features.vmport = False
 
         if (self._os_object.is_windows() and
             self._hyperv_supported() and
@@ -1200,14 +1194,22 @@ class Guest(XMLBuilder):
         return None
 
     def _set_video_defaults(self):
-        if self.has_spice():
-            self._add_spice_channels()
-            self._add_spice_sound()
-            self._add_spice_usbredir()
-
         video_model = self._default_videomodel()
         for video in self.devices.video:
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model
                 if video.model == 'virtio' and self.has_gl():
                     video.accel3d = True
+
+    def _add_spice_devices(self):
+        if not self.has_spice():
+            return
+
+        if (self.features.vmport == "default" and
+            self.os.is_x86() and
+            self.conn.check_support(self.conn.SUPPORT_CONN_VMPORT)):
+            self.features.vmport = False
+
+        self._add_spice_channels()
+        self._add_spice_sound()
+        self._add_spice_usbredir()
