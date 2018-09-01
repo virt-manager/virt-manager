@@ -216,25 +216,8 @@ class _OsVariant(object):
         self.label = self._os and self._os.get_name() or "Generic"
         self.codename = self._os and self._os.get_codename() or ""
         self.distro = self._os and self._os.get_distro() or ""
-        self.eol = False
 
-        eol = self._os and self._os.get_eol_date() or None
-        rel = self._os and self._os.get_release_date() or None
-
-        # End of life if an EOL date is present and has past,
-        # or if the release date is present and was 5 years or more
-        if eol is not None:
-            now = GLib.Date()
-            now.set_time_t(time.time())
-            if eol.compare(now) < 0:
-                self.eol = True
-        elif rel is not None:
-            then = GLib.Date()
-            then.set_time_t(time.time())
-            then.subtract_years(5)
-            if rel.compare(then) < 0:
-                self.eol = True
-
+        self.eol = self._get_eol()
         self.sortby = self._get_sortby()
         self.urldistro = self._get_urldistro()
 
@@ -282,6 +265,25 @@ class _OsVariant(object):
     ###############
     # Cached APIs #
     ###############
+
+    def _get_eol(self):
+        eol = self._os and self._os.get_eol_date() or None
+        rel = self._os and self._os.get_release_date() or None
+
+        # End of life if an EOL date is present and has past,
+        # or if the release date is present and was 5 years or more
+        if eol is not None:
+            now = GLib.Date()
+            now.set_time_t(time.time())
+            if eol.compare(now) < 0:
+                return True
+        elif rel is not None:
+            then = GLib.Date()
+            then.set_time_t(time.time())
+            then.subtract_years(5)
+            if rel.compare(then) < 0:
+                return True
+        return False
 
     def _get_sortby(self):
         if not self._os:
