@@ -182,7 +182,11 @@ def action_edit(guest, options, parserclass):
 def action_add_device(guest, options, parserclass):
     if not parserclass.prop_is_list(guest):
         fail(_("Cannot use --add-device with --%s") % parserclass.cli_arg_name)
-    return cli.parse_option_strings(options, guest, None)
+    devs = cli.parse_option_strings(options, guest, None)
+    devs = util.listify(devs)
+    for dev in devs:
+        dev.set_defaults(guest)
+    return devs
 
 
 def action_remove_device(guest, options, parserclass):
@@ -210,7 +214,12 @@ def action_build_xml(conn, options, parserclass):
         inst = inst.new()
     else:
         inst = inst.__class__(conn)
-    return cli.parse_option_strings(options, guest, inst)
+
+    devs = cli.parse_option_strings(options, guest, inst)
+    devs = util.listify(devs)
+    for dev in devs:
+        dev.set_defaults(guest)
+    return devs
 
 
 def setup_device(dev):
