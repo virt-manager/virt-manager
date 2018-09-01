@@ -201,10 +201,11 @@ class Details(uiutils.UITestCase):
 
         # Network values
         tab = self._select_hw(win, "NIC :54:32:10", "network-tab")
-        src = tab.find(None, "combo box", "Network source:")
-        tab.find("Device model:", "text").text = "rtl8139"
+        src = tab.find("Network source:", "combo box")
         src.click()
         tab.find_fuzzy("macvtap", "menu item").click()
+        tab.find("Device model:", "combo box").click_combo_entry()
+        tab.find("rtl8139", "menu item").click()
         mode = tab.find_fuzzy("Source mode:", "combo box")
         mode.click_combo_entry()
         self.assertTrue(mode.find("Bridge", "menu item").selected)

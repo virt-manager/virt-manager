@@ -3971,7 +3971,7 @@
                                             <property name="halign">end</property>
                                             <property name="label" translatable="yes">Device mode_l:</property>
                                             <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">network-model-combobox</property>
+                                            <property name="mnemonic_widget">network-model</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -4000,7 +4000,7 @@
                                             <property name="has_entry">True</property>
                                             <signal name="changed" handler="on_network_model_combo_changed" swapped="no"/>
                                             <child internal-child="entry">
-                                              <object class="GtkEntry" id="network-model-combobox">
+                                              <object class="GtkEntry" id="network-model-entry">
                                                 <property name="can_focus">True</property>
                                               </object>
                                             </child>
