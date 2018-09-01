@@ -200,8 +200,7 @@ class vmmNetworkList(vmmGObjectUI):
                     extra = _("Empty bridge")
                 label = _("Bridge %s: %s") % (name, extra)
 
-            elif self.conn.check_support(
-                    self.conn.SUPPORT_CONN_DIRECT_INTERFACE):
+            elif self.conn.is_qemu() or self.conn.is_test():
                 nettype = virtinst.DeviceInterface.TYPE_DIRECT
                 label += (": %s" % _("macvtap"))
 

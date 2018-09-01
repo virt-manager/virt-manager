@@ -171,9 +171,7 @@ class vmmSerialConsole(vmmGObject):
 
         err = ""
 
-        if not vm.console_stream_supported:
-            err = _("Serial console not supported for this libvirt connection")
-        elif not vm.is_active():
+        if not vm.is_active():
             err = _("Serial console not available for inactive guest")
         elif ctype not in usable_types:
             err = (_("Console for device type '%s' is not supported") % ctype)

@@ -229,10 +229,8 @@ class vmmDomain(vmmLibvirtObject):
         self._status_reason = None
 
         self.managedsave_supported = False
-        self.console_stream_supported = False
-        self.title_supported = False
         self.mem_stats_supported = False
-        self.domain_state_supported = False
+        self._domain_state_supported = False
 
         self._enable_mem_stats = False
         self._enable_cpu_stats = False
@@ -258,13 +256,9 @@ class vmmDomain(vmmLibvirtObject):
     def _init_libvirt_state(self):
         self.managedsave_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_MANAGED_SAVE, self._backend)
-        self.console_stream_supported = self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_CONSOLE_STREAM, self._backend)
-        self.title_supported = self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_GET_METADATA, self._backend)
         self.mem_stats_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_MEMORY_STATS, self._backend)
-        self.domain_state_supported = self.conn.check_support(
+        self._domain_state_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_STATE, self._backend)
 
         # Determine available XML flags (older libvirt versions will error
@@ -356,7 +350,7 @@ class vmmDomain(vmmLibvirtObject):
     def status_reason(self):
         if self._status_reason is None:
             self._status_reason = 1
-            if self.domain_state_supported:
+            if self._domain_state_supported:
                 self._status_reason = self._backend.state()[1]
         return self._status_reason
 
@@ -396,11 +390,6 @@ class vmmDomain(vmmLibvirtObject):
     ##################
     # Support checks #
     ##################
-
-    def _get_getvcpus_supported(self):
-        return self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_GETVCPUS, self._backend)
-    getvcpus_supported = property(_get_getvcpus_supported)
 
     def _get_getjobinfo_supported(self):
         return self.conn.check_support(
@@ -1304,8 +1293,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def can_use_device_boot_order(self):
         # Return 'True' if guest can use new style boot device ordering
-        return self.conn.check_support(
-            self.conn.SUPPORT_CONN_DEVICE_BOOTORDER)
+        return self.conn.is_qemu() or self.conn.is_test()
 
     def get_bootable_devices(self):
         # redirdev can also be marked bootable, but it should be rarely
@@ -1919,7 +1907,6 @@ class vmmDomainVirtinst(vmmDomain):
         # dialog actually shows disk buses, cache values, default devices, etc.
         backend.set_install_defaults()
 
-        self.title_supported = True
         self._refresh_status()
         logging.debug("%s initialized with XML=\n%s", self, self._XMLDesc(0))
 

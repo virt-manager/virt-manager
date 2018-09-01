@@ -1579,13 +1579,7 @@ class ParserVCPU(VirtCLIParser):
         # Previously we did our own one-time cpuset placement
         # based on current NUMA memory availability, but that's
         # pretty dumb unless the conditions on the host never change.
-        # So instead use newer vcpu placement=, but only if it's
-        # supported.
-        if not inst.conn.check_support(
-                inst.conn.SUPPORT_CONN_VCPU_PLACEMENT):
-            logging.warning("vcpu placement=auto not supported, skipping.")
-            return
-
+        # So instead use newer vcpu placement=
         inst.vcpu_placement = "auto"
 
     def _parse(self, inst):
@@ -1628,12 +1622,6 @@ class ParserBoot(VirtCLIParser):
     def set_smbios_mode_cb(self, inst, val, virtarg):
         inst.smbios_mode = val
         self.optdict["smbios_mode"] = val
-
-    def set_loader_secure_cb(self, inst, val, virtarg):
-        if not inst.conn.check_support(inst.conn.SUPPORT_DOMAIN_LOADER_SECURE):
-            raise RuntimeError("secure attribute for loader is not supported "
-                               "by libvirt.")
-        inst.loader_secure = val
 
     def set_bootloader_cb(self, inst, val, virtarg):
         self.guest.bootloader = val
@@ -1681,8 +1669,7 @@ ParserBoot.add_arg("dtb", "dtb")
 ParserBoot.add_arg("loader", "loader")
 ParserBoot.add_arg("loader_ro", "loader_ro", is_onoff=True)
 ParserBoot.add_arg("loader_type", "loader_type")
-ParserBoot.add_arg("loader_secure", "loader_secure", is_onoff=True,
-                   cb=ParserBoot.set_loader_secure_cb)
+ParserBoot.add_arg("loader_secure", "loader_secure", is_onoff=True)
 ParserBoot.add_arg("nvram", "nvram")
 ParserBoot.add_arg("nvram_template", "nvram_template")
 ParserBoot.add_arg("kernel_args", "kernel_args",
@@ -1739,12 +1726,6 @@ class ParserFeatures(VirtCLIParser):
     cli_arg_name = "features"
     propname = "features"
 
-    def set_smm_cb(self, inst, val, virtarg):
-        if not inst.conn.check_support(inst.conn.SUPPORT_DOMAIN_FEATURE_SMM):
-            raise RuntimeError("smm is not supported by libvirt")
-        inst.smm = val
-        return val
-
 _register_virt_parser(ParserFeatures)
 ParserFeatures.add_arg("acpi", "acpi", is_onoff=True)
 ParserFeatures.add_arg("apic", "apic", is_onoff=True)
@@ -1769,7 +1750,7 @@ ParserFeatures.add_arg("pvspinlock", "pvspinlock", is_onoff=True)
 
 ParserFeatures.add_arg("gic_version", "gic_version")
 
-ParserFeatures.add_arg("smm", "smm", is_onoff=True, cb=ParserFeatures.set_smm_cb)
+ParserFeatures.add_arg("smm", "smm", is_onoff=True)
 ParserFeatures.add_arg("vmcoreinfo", "vmcoreinfo", is_onoff=True)
 
 

@@ -429,5 +429,4 @@ class VirtinstConnection(object):
     def support_remote_url_install(self):
         if self._magic_uri:
             return False
-        return (self.check_support(self.SUPPORT_CONN_STREAM) and
-                self.check_support(self.SUPPORT_STREAM_UPLOAD))
+        return self.check_support(self.SUPPORT_CONN_STREAM)

@@ -2386,7 +2386,6 @@ class vmmDetails(vmmGObjectUI):
         desc_widget.get_buffer().set_text(desc)
 
         title = self.vm.get_title()
-        self.widget("overview-title").set_sensitive(self.vm.title_supported)
         self.widget("overview-title").set_text(title or "")
 
         # Hypervisor Details

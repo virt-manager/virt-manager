@@ -529,20 +529,16 @@ class Guest(XMLBuilder):
         To actually enforce the secure boot for the guest if Secure Boot
         Mode is configured we need to enable loader secure feature.
         """
-
         if not self.os.is_x86():
             return
 
         if "secboot" not in self.os.loader:
             return
 
-        if (not self.conn.check_support(self.conn.SUPPORT_DOMAIN_FEATURE_SMM) or
-            not self.conn.check_support(self.conn.SUPPORT_DOMAIN_LOADER_SECURE)):
-            return
-
         self.features.smm = True
         self.os.loader_secure = True
         self.os.machine = "q35"
+
 
     ###################
     # Device defaults #
@@ -783,8 +779,7 @@ class Guest(XMLBuilder):
             return
         if not self.os.is_x86():
             return
-        if not self.conn.check_support(
-                self.conn.SUPPORT_CONN_ADVANCED_CLOCK):
+        if not self.conn.is_qemu():
             return
 
         # Set clock policy that maps to qemu options:
@@ -1103,25 +1098,26 @@ class Guest(XMLBuilder):
     def _set_sound_defaults(self):
         if self.os.is_q35():
             default = "ich9"
-        elif self.conn.check_support(self.conn.SUPPORT_CONN_SOUND_ICH6):
-            default = "ich6"
-        elif self.conn.check_support(self.conn.SUPPORT_CONN_SOUND_AC97):
-            default = "ac97"
         else:
-            default = "es1370"
+            default = "ich6"
 
         for sound in self.devices.sound:
             if sound.model == sound.MODEL_DEFAULT:
                 sound.model = default
 
+    def _spice_supported(self):
+        if not self.conn.is_qemu() and not self.conn.is_test():
+            return False
+        # Spice has issues on some host arches, like ppc, so whitelist it
+        if self.conn.caps.host.cpu.arch not in ["i686", "x86_64"]:
+            return False
+        return True
+
     def _set_graphics_defaults(self):
         def _set_type(gfx):
             gtype = self.default_graphics_type
             logging.debug("Using default_graphics=%s", gtype)
-            if (gtype == "spice" and not
-                (self.conn.caps.host.cpu.arch in ["i686", "x86_64"] and
-                 self.conn.check_support(
-                     self.conn.SUPPORT_CONN_GRAPHICS_SPICE))):
+            if gtype == "spice" and not self._spice_supported():
                 logging.debug("spice requested but HV doesn't support it. "
                               "Using vnc.")
                 gtype = "vnc"
@@ -1132,10 +1128,7 @@ class Guest(XMLBuilder):
             if dev.type == "default":
                 _set_type(dev)
 
-            if (dev.type == "spice" and
-                not self.conn.is_remote() and
-                self.conn.check_support(
-                    self.conn.SUPPORT_CONN_SPICE_COMPRESSION)):
+            if (dev.type == "spice" and not self.conn.is_remote()):
                 logging.debug("Local connection, disabling spice image "
                     "compression.")
                 if dev.image_compression is None:
@@ -1165,10 +1158,9 @@ class Guest(XMLBuilder):
             if chn.type == chn.TYPE_SPICEVMC:
                 return
 
-        if self.conn.check_support(self.conn.SUPPORT_CONN_CHAR_SPICEVMC):
-            agentdev = DeviceChannel(self.conn)
-            agentdev.type = agentdev.TYPE_SPICEVMC
-            self.add_device(agentdev)
+        agentdev = DeviceChannel(self.conn)
+        agentdev.type = agentdev.TYPE_SPICEVMC
+        self.add_device(agentdev)
 
     def _add_spice_sound(self):
         if self.skip_default_sound:
@@ -1189,8 +1181,6 @@ class Guest(XMLBuilder):
         if self.devices.redirdev:
             return
         if not self.os.is_x86():
-            return
-        if not self.conn.check_support(self.conn.SUPPORT_CONN_USBREDIR):
             return
 
         # If we use 4 devices here, we fill up all the emulated USB2 slots,

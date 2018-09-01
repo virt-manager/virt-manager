@@ -145,9 +145,6 @@ class StoragePool(_StorageObject):
         :param pool_type: Pool type string from I{Types}
         :param host: Option host string to poll for sources
         """
-        if not conn.check_support(conn.SUPPORT_CONN_FINDPOOLSOURCES):
-            return []
-
         if host:
             source_xml = "<source><host name='%s'/></source>" % host
         else:
@@ -608,22 +605,12 @@ class StorageVolume(_StorageObject):
         if not isinstance(vol, libvirt.virStorageVol):
             raise ValueError(_("input_vol must be a virStorageVol"))
 
-        if not self.conn.check_support(
-                self.conn.SUPPORT_POOL_CREATEVOLFROM, self.pool):
-            raise ValueError(_("Creating storage from an existing volume is"
-                               " not supported by this libvirt version."))
-
         self._input_vol = vol
     input_vol = property(_get_input_vol, _set_input_vol)
 
     def _get_reflink(self):
         return self._reflink
     def _set_reflink(self, reflink):
-        if (reflink and not
-            self.conn.check_support(self.conn.SUPPORT_POOL_REFLINK)):
-            raise ValueError(_("Creating storage by btrfs COW copy is"
-                " not supported by this libvirt version."))
-
         self._reflink = reflink
     reflink = property(_get_reflink, _set_reflink)
 

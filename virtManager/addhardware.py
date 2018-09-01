@@ -274,8 +274,6 @@ class vmmAddHardware(vmmGObjectUI):
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
         add_hw_option(_("Filesystem"), "folder", PAGE_FILESYSTEM,
-                      self.conn.check_support(
-                        self.conn.SUPPORT_CONN_FILESYSTEM) and
                       not self.vm.stable_defaults(),
                       _("Not supported for this hypervisor/libvirt "
                         "combination."))
@@ -287,8 +285,7 @@ class vmmAddHardware(vmmGObjectUI):
                       True, None)
         add_hw_option(_("RNG"), "system-run", PAGE_RNG, True, None)
         add_hw_option(_("Panic Notifier"), "system-run", PAGE_PANIC,
-            self.conn.check_support(self.conn.SUPPORT_CONN_PANIC_DEVICE) and
-            DevicePanic.get_models(self.vm.get_xmlobj().os),
+            bool(DevicePanic.get_models(self.vm.get_xmlobj().os)),
             _("Not supported for this hypervisor/libvirt/arch combination."))
 
 

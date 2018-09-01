@@ -236,46 +236,6 @@ class TestXMLMisc(unittest.TestCase):
         cpu = virtinst.DomainCpu(self.conn)
         self.assertEqual(cpu.vcpus_from_topology(), 1)
 
-    def testAC97(self):
-        # Test setting ac97 version given various version combos
-        def has_ac97(conn):
-            g = _make_guest(conn=conn, os_variant="fedora11")
-
-            # pylint: disable=unpacking-non-sequence
-            xml, ignore = g.start_install(return_xml=True, dry=True)
-            return "ac97" in xml
-
-        self.assertTrue(has_ac97(utils.URIs.open_kvm(connver=11000)))
-        self.assertFalse(has_ac97(utils.URIs.open_kvm(libver=5000)))
-        self.assertFalse(has_ac97(
-            utils.URIs.open_kvm(libver=7000, connver=7000)))
-
-    def testOSDeviceDefaultChange(self):
-        """
-        Make sure device defaults are properly changed if we change OS
-        distro/variant mid process
-        """
-        # Use connver=12005 so that non-rhel displays ac97
-        conn = utils.URIs.open_kvm_rhel(connver=12005)
-
-        g = _make_guest(conn=conn, os_variant="fedora11")
-        self._compare(g, "install-f11-norheldefaults", False)
-
-        try:
-            CLIConfig.stable_defaults = True
-
-            g = _make_guest(conn=conn, os_variant="fedora11")
-            origemu = g.emulator
-            g.emulator = "/usr/libexec/qemu-kvm"
-            self.assertTrue(g.conn.stable_defaults())
-
-            setattr(g.conn, "_support_cache", {})
-            self._compare(g, "install-f11-rheldefaults", False)
-            g.emulator = origemu
-            setattr(g.conn, "_support_cache", {})
-        finally:
-            CLIConfig.stable_defaults = False
-
     def test_hyperv_clock(self):
         def _make(connver):
             conn = utils.URIs.open_kvm(libver=1002002, connver=connver)
