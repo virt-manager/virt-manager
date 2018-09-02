@@ -266,6 +266,8 @@ class Guest(XMLBuilder):
 
     def supports_virtionet(self):
         return self._supports_virtio(self.osinfo.supports_virtionet())
+    def supports_virtiodisk(self):
+        return self._supports_virtio(self.osinfo.supports_virtiodisk())
 
 
     ########################################
@@ -758,7 +760,6 @@ class Guest(XMLBuilder):
         for dev in self.devices.get_all():
             dev.set_defaults(self)
 
-        self._set_disk_defaults()
         self._add_implied_controllers()
         self._add_spice_devices()
 
@@ -827,51 +828,6 @@ class Guest(XMLBuilder):
                     ctrl.set_defaults(self)
                     self.add_device(ctrl)
                     break
-
-    def _set_disk_defaults(self):
-        disks = self.devices.disk
-
-        def set_disk_bus(d):
-            if d.is_floppy():
-                d.bus = "fdc"
-                return
-            if self.os.is_xenpv():
-                d.bus = "xen"
-                return
-            if not self.os.is_hvm():
-                # This likely isn't correct, but it's kind of a catch all
-                # for virt types we don't know how to handle.
-                d.bus = "ide"
-                return
-
-            if self.os.is_arm_machvirt():
-                # We prefer virtio-scsi for machvirt, gets us hotplug
-                d.bus = "scsi"
-            elif (d.is_disk() and
-                  self._supports_virtio(self.osinfo.supports_virtiodisk())):
-                d.bus = "virtio"
-            elif self.os.is_pseries() and d.is_cdrom():
-                d.bus = "scsi"
-            elif self.os.is_arm():
-                d.bus = "sd"
-            elif self.os.is_q35():
-                d.bus = "sata"
-            else:
-                d.bus = "ide"
-
-        # Generate disk targets
-        used_targets = []
-        for disk in disks:
-            if not disk.bus:
-                set_disk_bus(disk)
-
-        for disk in disks:
-            if (disk.target and
-                not getattr(disk, "cli_generated_target", False)):
-                used_targets.append(disk.target)
-            else:
-                disk.cli_generated_target = False
-                used_targets.append(disk.generate_target(used_targets))
 
     def _add_spice_channels(self):
         if self.skip_default_channel:

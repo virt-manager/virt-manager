@@ -2063,11 +2063,6 @@ class ParserDisk(VirtCLIParser):
                     backing_format=backing_format)
             inst.set_vol_install(vol_install)
 
-        if not inst.target:
-            skip_targets = [d.target for d in self.guest.devices.disk]
-            inst.generate_target(skip_targets)
-            inst.cli_generated_target = True
-
         return inst
 
 

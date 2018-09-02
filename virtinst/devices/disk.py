@@ -913,28 +913,6 @@ class DeviceDisk(Device):
         parent_pool = self.get_vol_install().pool
         self._change_backend(None, vol_object, parent_pool)
 
-    def set_defaults(self, guest):
-        if self.is_cdrom():
-            self.read_only = True
-
-        if self.is_cdrom() and guest.os.is_s390x():
-            self.bus = "scsi"
-
-        if not self.conn.is_qemu():
-            return
-        if not self.is_disk():
-            return
-        if not self.type == self.TYPE_BLOCK:
-            return
-
-        # Enable cache=none and io=native for block devices. Would
-        # be nice if qemu did this for us but that time has long passed.
-        if not self.driver_cache:
-            self.driver_cache = self.CACHE_MODE_NONE
-        if not self.driver_io:
-            self.driver_io = self.IO_MODE_NATIVE
-
-
     def is_size_conflict(self):
         """
         reports if disk size conflicts with available space
@@ -1053,3 +1031,51 @@ class DeviceDisk(Device):
         else:
             raise ValueError(_("Only %s disks for bus '%s' are supported"
                                % (maxnode, self.bus)))
+
+
+    ##################
+    # Default config #
+    ##################
+
+    def _default_bus(self, guest):
+        if self.is_floppy():
+            return "fdc"
+        if guest.os.is_xenpv():
+            return "xen"
+        if not guest.os.is_hvm():
+            # This likely isn't correct, but it's kind of a catch all
+            # for virt types we don't know how to handle.
+            return "ide"
+
+        if guest.os.is_arm_machvirt():
+            # We prefer virtio-scsi for machvirt, gets us hotplug
+            return "scsi"
+        if self.is_disk() and guest.supports_virtiodisk():
+            return "virtio"
+        if guest.os.is_pseries() and self.is_cdrom():
+            return "scsi"
+        if guest.os.is_arm():
+            return "sd"
+        if guest.os.is_q35():
+            return "sata"
+        if self.is_cdrom() and guest.os.is_s390x():
+            return "scsi"
+        return "ide"
+
+    def set_defaults(self, guest):
+        if not self.bus:
+            self.bus = self._default_bus(guest)
+        if self.is_cdrom():
+            self.read_only = True
+
+        if (self.conn.is_qemu() and
+            self.is_disk() and
+            self.type == self.TYPE_BLOCK):
+            if not self.driver_cache:
+                self.driver_cache = self.CACHE_MODE_NONE
+            if not self.driver_io:
+                self.driver_io = self.IO_MODE_NATIVE
+
+        if not self.target:
+            used_targets = [d.target for d in guest.devices.disk if d.target]
+            self.generate_target(used_targets)
