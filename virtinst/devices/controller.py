@@ -90,7 +90,7 @@ class DeviceController(Device):
     ports = XMLProperty("./@ports", is_int=True)
     master_startport = XMLProperty("./master/@startport", is_int=True)
 
-    index = XMLProperty("./@index", is_int=True, default_cb=lambda s: 0)
+    index = XMLProperty("./@index", is_int=True)
 
     def pretty_desc(self):
         ret = self.pretty_type(self.type)
@@ -102,3 +102,12 @@ class DeviceController(Device):
         if self.type == "pci" and self.model == "pcie-root":
             ret = "PCIe"
         return ret
+
+
+    ##################
+    # Default config #
+    ##################
+
+    def set_defaults(self, _guest):
+        if self.index is None:
+            self.index = 0
