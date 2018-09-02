@@ -137,7 +137,7 @@ class Guest(XMLBuilder):
         self.skip_default_rng = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
 
-        self.__os_object = None
+        self.__osinfo = None
         self._random_uuid = None
         self._install_cdrom_device = None
         self._defaults_are_set = False
@@ -231,19 +231,19 @@ class Guest(XMLBuilder):
     # Distro detection properties #
     ###############################
 
-    def _set_os_object(self, variant):
+    def _set_osinfo(self, variant):
         obj = OSDB.lookup_os(variant)
         if not obj:
             obj = OSDB.lookup_os("generic")
-        self.__os_object = obj
-    def _get_os_object(self):
-        if not self.__os_object:
-            self._set_os_object(None)
-        return self.__os_object
-    _os_object = property(_get_os_object)
+        self.__osinfo = obj
+    def _get_osinfo(self):
+        if not self.__osinfo:
+            self._set_osinfo(None)
+        return self.__osinfo
+    osinfo = property(_get_osinfo)
 
     def _get_os_variant(self):
-        return self._os_object.name
+        return self.osinfo.name
     def _set_os_variant(self, val):
         if val:
             val = val.lower()
@@ -252,7 +252,7 @@ class Guest(XMLBuilder):
                     _("Distro '%s' does not exist in our dictionary") % val)
 
         logging.debug("Setting Guest.os_variant to '%s'", val)
-        self._set_os_object(val)
+        self._set_osinfo(val)
     os_variant = property(_get_os_variant, _set_os_variant)
 
 
@@ -582,7 +582,7 @@ class Guest(XMLBuilder):
         usb_tablet = False
         usb_keyboard = False
         if self.os.is_x86() and not self.os.is_xenpv():
-            usb_tablet = self._os_object.supports_usbtablet()
+            usb_tablet = self.osinfo.supports_usbtablet()
         if self.os.is_arm_machvirt():
             usb_tablet = True
             usb_keyboard = True
@@ -659,7 +659,7 @@ class Guest(XMLBuilder):
             return
 
         if (self.conn.is_qemu() and
-            self._supports_virtio(self._os_object.supports_virtioserial()) and
+            self._supports_virtio(self.osinfo.supports_virtioserial()) and
             self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
             dev = DeviceChannel(self.conn)
             dev.type = "unix"
@@ -689,7 +689,7 @@ class Guest(XMLBuilder):
             return
 
         if (self.conn.is_qemu() and
-            self._os_object.supports_virtiorng() and
+            self.osinfo.supports_virtiorng() and
             self.conn.check_support(self.conn.SUPPORT_CONN_RNG_URANDOM)):
             dev = DeviceRng(self.conn)
             dev.type = "random"
@@ -724,7 +724,7 @@ class Guest(XMLBuilder):
             # install.
             if (dev.is_cdrom() and
                 getattr(dev, "installer_media", False) and
-                not self._os_object.is_windows()):
+                not self.osinfo.is_windows()):
                 dev.path = None
 
     def _set_defaults(self):
@@ -768,7 +768,7 @@ class Guest(XMLBuilder):
             return
 
         if self.clock.offset is None:
-            self.clock.offset = self._os_object.get_clock()
+            self.clock.offset = self.osinfo.get_clock()
 
         if self.clock.timers:
             return
@@ -804,7 +804,7 @@ class Guest(XMLBuilder):
         hv_clock = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK)
         hv_clock_rhel = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK_RHEL)
 
-        if (self._os_object.is_windows() and self._hyperv_supported() and
+        if (self.osinfo.is_windows() and self._hyperv_supported() and
             (hv_clock or (self.stable_defaults() and hv_clock_rhel))):
             hyperv = self.clock.timers.add_new()
             hyperv.name = "hypervclock"
@@ -871,7 +871,7 @@ class Guest(XMLBuilder):
         elif self.os.is_x86() and self.type == "kvm":
             self._set_cpu_x86_kvm_default()
 
-            if self._os_object.broken_x2apic():
+            if self.osinfo.broken_x2apic():
                 self.cpu.add_feature("x2apic", policy="disable")
 
     def _hyperv_supported(self):
@@ -918,7 +918,7 @@ class Guest(XMLBuilder):
             else:
                 self.features.pae = self.capsinfo.guest.supports_pae()
 
-        if (self._os_object.is_windows() and
+        if (self.osinfo.is_windows() and
             self._hyperv_supported() and
             self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_VAPIC)):
             if self.features.hyperv_relaxed is None:
@@ -1019,7 +1019,7 @@ class Guest(XMLBuilder):
                 # We prefer virtio-scsi for machvirt, gets us hotplug
                 d.bus = "scsi"
             elif (d.is_disk() and
-                  self._supports_virtio(self._os_object.supports_virtiodisk())):
+                  self._supports_virtio(self.osinfo.supports_virtiodisk())):
                 d.bus = "virtio"
             elif self.os.is_pseries() and d.is_cdrom():
                 d.bus = "scsi"
@@ -1047,13 +1047,13 @@ class Guest(XMLBuilder):
     def _default_netmodel(self):
         if not self.os.is_hvm():
             return None
-        if self._supports_virtio(self._os_object.supports_virtionet()):
+        if self._supports_virtio(self.osinfo.supports_virtionet()):
             return "virtio"
         if self.os.is_q35():
             return "e1000e"
 
         prefs = ["e1000", "rtl8139", "ne2k_pci", "pcnet"]
-        supported_models = self._os_object.supported_netmodels()
+        supported_models = self.osinfo.supported_netmodels()
         for pref in prefs:
             if pref in supported_models:
                 return pref
