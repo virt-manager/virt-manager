@@ -749,10 +749,12 @@ class Guest(XMLBuilder):
                 dev.path = None
 
     def _set_defaults(self):
+        if self.os.is_xenpv() or self.type == "vz":
+            self.emulator = None
+
         self._add_install_cdrom()
 
         self._set_clock_defaults()
-        self._set_emulator_defaults()
         self._set_cpu_defaults()
         self.features.set_defaults(self)
         for seclabel in self.seclabels:
@@ -779,9 +781,6 @@ class Guest(XMLBuilder):
             if self.is_full_os_container():
                 self.os.init = "/sbin/init"
             self.os.init = self.os.init or "/bin/sh"
-
-        if not self.os.loader and self.os.is_hvm() and self.type == "xen":
-            self.os.loader = "/usr/lib/xen/boot/hvmloader"
         if self.os.kernel or self.os.init:
             self.os.bootorder = []
 
@@ -831,20 +830,6 @@ class Guest(XMLBuilder):
             hyperv = self.clock.timers.add_new()
             hyperv.name = "hypervclock"
             hyperv.present = True
-
-    def _set_emulator_defaults(self):
-        if self.os.is_xenpv() or self.type == "vz":
-            self.emulator = None
-            return
-
-        if self.emulator:
-            return
-
-        if self.os.is_hvm() and self.type == "xen":
-            if self.conn.caps.host.cpu.arch == "x86_64":
-                self.emulator = "/usr/lib64/xen/bin/qemu-dm"
-            else:
-                self.emulator = "/usr/lib/xen/bin/qemu-dm"
 
     def _set_cpu_x86_kvm_default(self):
         if self.os.arch != self.conn.caps.host.cpu.arch:
