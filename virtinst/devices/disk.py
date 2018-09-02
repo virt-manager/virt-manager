@@ -469,7 +469,7 @@ class DeviceDisk(Device):
 
 
     _XML_PROP_ORDER = [
-        "type", "device", "snapshot_policy",
+        "_type", "_device", "snapshot_policy",
         "driver_name", "driver_type",
         "driver_cache", "driver_discard", "driver_detect_zeroes",
         "driver_io", "error_policy",
@@ -686,7 +686,6 @@ class DeviceDisk(Device):
         if self.source_protocol:
             return DeviceDisk.TYPE_NETWORK
         return self.TYPE_FILE
-    type = XMLProperty("./@type", default_cb=_get_default_type)
 
     def _clear_source_xml(self):
         """
@@ -743,13 +742,30 @@ class DeviceDisk(Device):
     # XML properties #
     ##################
 
-    device = XMLProperty("./@device",
-                         default_cb=lambda s: s.DEVICE_DISK)
+    # type, device, driver_name, driver_type handling
+    # These are all weirdly intertwined so require some special handling
+    def _get_type(self):
+        if self._type:
+            return self._type
+        return self._get_default_type()
+    def _set_type(self, val):
+        self._type = val
+    type = property(_get_type, _set_type)
+    _type = XMLProperty("./@type")
+
+    def _get_device(self):
+        if self._device:
+            return self._device
+        return self.DEVICE_DISK
+    def _set_device(self, val):
+        self._device = val
+    device = property(_get_device, _set_device)
+    _device = XMLProperty("./@device")
+    driver_name = XMLProperty("./driver/@name")
+    driver_type = XMLProperty("./driver/@type")
+
+
     snapshot_policy = XMLProperty("./@snapshot")
-    driver_name = XMLProperty("./driver/@name",
-                              default_cb=_get_default_driver_name)
-    driver_type = XMLProperty("./driver/@type",
-                              default_cb=_get_default_driver_type)
 
     driver_copy_on_read = XMLProperty("./driver/@copy_on_read", is_onoff=True)
 
@@ -1063,6 +1079,14 @@ class DeviceDisk(Device):
         return "ide"
 
     def set_defaults(self, guest):
+        if not self._device:
+            self._device = self._get_device()
+        if not self._type:
+            self._type = self._get_default_type()
+        if not self.driver_name:
+            self.driver_name = self._get_default_driver_name()
+        if not self.driver_type:
+            self.driver_type = self._get_default_driver_type()
         if not self.bus:
             self.bus = self._default_bus(guest)
         if self.is_cdrom():

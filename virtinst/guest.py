@@ -296,6 +296,7 @@ class Guest(XMLBuilder):
         # Initialize install device list
         if self._install_cdrom_device:
             self._install_cdrom_device.path = self.installer.cdrom_path()
+            self._install_cdrom_device.sync_path_props()
             self._install_cdrom_device.validate()
 
     def _prepare_get_install_xml(self):
@@ -740,6 +741,7 @@ class Guest(XMLBuilder):
                 getattr(dev, "installer_media", False) and
                 not self.osinfo.is_windows()):
                 dev.path = None
+                dev.sync_path_props()
 
     def _set_defaults(self):
         if not self.uuid:
