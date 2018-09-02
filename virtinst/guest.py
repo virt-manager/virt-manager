@@ -138,7 +138,6 @@ class Guest(XMLBuilder):
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
 
         self.__osinfo = None
-        self._random_uuid = None
         self._install_cdrom_device = None
         self._defaults_are_set = False
 
@@ -169,7 +168,6 @@ class Guest(XMLBuilder):
             self.maxmemory = val
         return val
     memory = XMLProperty("./currentMemory", is_int=True,
-                         default_cb=lambda s: 1,
                          set_converter=_set_memory)
     maxmemory = XMLProperty("./memory", is_int=True)
     hotplugmemorymax = XMLProperty("./maxMemory", is_int=True)
@@ -184,21 +182,14 @@ class Guest(XMLBuilder):
             self.curvcpus = val
         return val
     vcpus = XMLProperty("./vcpu", is_int=True,
-                        set_converter=_set_vcpus,
-                        default_cb=lambda s: 1)
+                        set_converter=_set_vcpus)
     curvcpus = XMLProperty("./vcpu/@current", is_int=True)
     vcpu_placement = XMLProperty("./vcpu/@placement")
     cpuset = XMLProperty("./vcpu/@cpuset")
 
-    def _get_default_uuid(self):
-        if self._random_uuid is None:
-            self._random_uuid = util.generate_uuid(self.conn)
-        return self._random_uuid
-    uuid = XMLProperty("./uuid", default_cb=_get_default_uuid)
-
-
+    uuid = XMLProperty("./uuid")
     id = XMLProperty("./@id", is_int=True)
-    type = XMLProperty("./@type", default_cb=lambda s: "xen")
+    type = XMLProperty("./@type")
     bootloader = XMLProperty("./bootloader")
     description = XMLProperty("./description")
     title = XMLProperty("./title")
@@ -749,6 +740,10 @@ class Guest(XMLBuilder):
                 dev.path = None
 
     def _set_defaults(self):
+        if not self.uuid:
+            self.uuid = util.generate_uuid(self.conn)
+        if not self.vcpus:
+            self.vcpus = 1
         if self.os.is_xenpv() or self.type == "vz":
             self.emulator = None
 

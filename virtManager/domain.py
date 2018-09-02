@@ -1909,10 +1909,6 @@ class vmmDomainVirtinst(vmmDomain):
         vmmDomain.__init__(self, conn, backend, key)
         self._orig_xml = None
 
-        # This encodes all the virtinst defaults up front, so the customize
-        # dialog actually shows disk buses, cache values, default devices, etc.
-        backend.set_install_defaults()
-
         self._refresh_status()
         logging.debug("%s initialized with XML=\n%s", self, self._XMLDesc(0))
 

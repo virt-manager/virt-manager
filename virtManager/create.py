@@ -1566,13 +1566,6 @@ class vmmCreate(vmmGObjectUI):
         if machine:
             guest.os.machine = machine
 
-        # Generate UUID (makes customize dialog happy)
-        try:
-            guest.uuid = util.randomUUID(guest.conn)
-        except Exception as e:
-            self.err.show_err(_("Error setting UUID: %s") % str(e))
-            return None
-
         # OS distro/variant validation
         try:
             if variant:
@@ -2142,19 +2135,22 @@ class vmmCreate(vmmGObjectUI):
             return False
 
         logging.debug("Starting create finish() sequence")
-        guest = self._guest
-
-        # Start the install
         self._failed_guest = None
-        self.set_finish_cursor()
 
-        if not self.widget("summary-customize").get_active():
-            self._start_install(guest)
-            return
-
-        logging.debug("User requested 'customize', launching dialog")
         try:
-            self._show_customize_dialog(guest)
+            self.set_finish_cursor()
+
+            # This encodes all the virtinst defaults up front, so the customize
+            # dialog actually shows disk buses, cache values, default devices,
+            # etc. Not required for straight start_install but doesn't hurt.
+            self._guest.set_install_defaults()
+
+            if not self.widget("summary-customize").get_active():
+                self._start_install(self._guest)
+                return
+
+            logging.debug("User requested 'customize', launching dialog")
+            self._show_customize_dialog()
         except Exception as e:
             self.reset_finish_cursor()
             self.err.show_err(_("Error starting installation: ") + str(e))
@@ -2169,8 +2165,9 @@ class vmmCreate(vmmGObjectUI):
         self._customize_window = None
         window.cleanup()
 
-    def _show_customize_dialog(self, guest):
-        virtinst_guest = vmmDomainVirtinst(self.conn, guest, self._guest.uuid)
+    def _show_customize_dialog(self):
+        guest = self._guest
+        virtinst_guest = vmmDomainVirtinst(self.conn, guest, guest.uuid)
 
         def start_install_wrapper(ignore, guest):
             if not self.is_visible():
