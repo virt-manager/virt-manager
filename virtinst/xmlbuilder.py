@@ -167,7 +167,7 @@ class XMLProperty(_XMLPropertyBase):
     def __init__(self, xpath,
                  set_converter=None, validate_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
-                 default_cb=None, default_name=None, do_abspath=False):
+                 do_abspath=False):
         """
         Set a XMLBuilder class property that maps to a value in an XML
         document, indicated by the passed xpath. For example, for a
@@ -195,12 +195,6 @@ class XMLProperty(_XMLPropertyBase):
         :param is_int: Whether this is an integer property in the XML
         :param is_yesno: Whether this is a yes/no property in the XML
         :param is_onoff: Whether this is an on/off property in the XML
-        :param default_cb: If building XML from scratch, and this property
-            is never explicitly altered, this function is called for setting
-            a default value in the XML, and for any 'get' call before the
-            first explicit 'set'.
-        :param default_name: If the user does a set and passes in this
-            value, instead use the value of default_cb()
         :param do_abspath: If True, run os.path.abspath on the passed value
         """
         self._xpath = xpath
@@ -215,16 +209,11 @@ class XMLProperty(_XMLPropertyBase):
 
         self._validate_cb = validate_cb
         self._convert_value_for_setter_cb = set_converter
-        self._default_cb = default_cb
-        self._default_name = default_name
 
         if sum([int(bool(i)) for i in
                 [self._is_bool, self._is_int,
                  self._is_yesno, self._is_onoff]]) > 1:
             raise RuntimeError("Conflict property converter options.")
-
-        if self._default_name and not self._default_cb:
-            raise RuntimeError("default_name requires default_cb.")
 
         self._is_tracked = False
         if _trackprops:
@@ -243,9 +232,7 @@ class XMLProperty(_XMLPropertyBase):
 
     def _convert_get_value(self, val):
         # pylint: disable=redefined-variable-type
-        if self._default_name and val == self._default_name:
-            ret = val
-        elif self._is_bool:
+        if self._is_bool:
             ret = bool(val)
         elif self._is_int and val is not None:
             intkwargs = {}
@@ -261,9 +248,7 @@ class XMLProperty(_XMLPropertyBase):
         return ret
 
     def _convert_set_value(self, xmlbuilder, val):
-        if self._default_name and val == self._default_name:
-            val = self._default_cb(xmlbuilder)
-        elif self._do_abspath and val is not None:
+        if self._do_abspath and val is not None:
             val = os.path.abspath(val)
         elif self._is_onoff and val is not None:
             val = bool(val) and "on" or "off"
@@ -278,37 +263,6 @@ class XMLProperty(_XMLPropertyBase):
         if self._convert_value_for_setter_cb:
             val = self._convert_value_for_setter_cb(xmlbuilder, val)
         return val
-
-    def _default_get_value(self, xmlbuilder):
-        """
-        Return (can use default, default value)
-        """
-        ret = (False, -1)
-        if not xmlbuilder._xmlstate.is_build:
-            return ret
-        if self.propname in xmlbuilder._propstore:
-            return ret
-        if not self._default_cb:
-            return ret
-
-        if self._default_name:
-            return (True, self._default_name)
-        return (True, self._default_cb(xmlbuilder))
-
-
-    def _set_default(self, xmlbuilder):
-        """
-        Encode the property default into the XML and propstore, but
-        only if a default is registered, and only if the property was
-        not already explicitly set by the API user.
-
-        This is called during the get_xml process and shouldn't
-        be called from outside this file.
-        """
-        candefault, val = self._default_get_value(xmlbuilder)
-        if not candefault:
-            return
-        self.setter(xmlbuilder, val, validate=False)
 
     def _nonxml_fset(self, xmlbuilder, val):
         """
@@ -327,9 +281,6 @@ class XMLProperty(_XMLPropertyBase):
         The flip side to nonxml_fset, fetch the value from
         XMLBuilder._propstore
         """
-        candefault, val = self._default_get_value(xmlbuilder)
-        if candefault:
-            return val
         return xmlbuilder._propstore.get(self.propname, None)
 
     def clear(self, xmlbuilder):
@@ -357,8 +308,7 @@ class XMLProperty(_XMLPropertyBase):
             _seenprops.append(self)
             self._is_tracked = True
 
-        if (self.propname in xmlbuilder._propstore or
-            xmlbuilder._xmlstate.is_build):
+        if self.propname in xmlbuilder._propstore:
             val = self._nonxml_fget(xmlbuilder)
         else:
             val = self._get_xml(xmlbuilder)
@@ -416,9 +366,7 @@ class _XMLState(object):
             parentxmlstate and parentxmlstate.abs_xpath()) or ""
 
         self.xmlapi = None
-        self.is_build = False
-        if not parsexml and not parentxmlstate:
-            self.is_build = True
+        self.is_build = not parsexml and not parentxmlstate
         self.parse(parsexml, parentxmlstate)
 
     def parse(self, parsexml, parentxmlstate):
@@ -549,9 +497,6 @@ class XMLBuilder(object):
                     parentxmlstate=self._xmlstate,
                     relative_object_xpath=prop_path)
                 xmlprop.set(self, obj)
-                continue
-
-            if self._xmlstate.is_build:
                 continue
 
             nodecount = self._xmlstate.xmlapi.count(
@@ -722,6 +667,10 @@ class XMLBuilder(object):
         xmlprop.append(self, obj)
         self._set_child_xpaths()
 
+        # Only insert the XML directly into the parent XML for !is_build
+        # This is the only way to dictate XML ordering when building
+        # from scratch, otherwise elements appear in the order they
+        # are set. It's just a style issue but annoying nonetheless
         if not obj._xmlstate.is_build:
             use_xpath = obj._xmlstate.abs_xpath().rsplit("/", 1)[0]
             indent = 2 * obj._xmlstate.abs_xpath().count("/")
@@ -775,9 +724,6 @@ class XMLBuilder(object):
         # Set all defaults if the properties have one registered
         xmlprops = self._all_xml_props()
         childprops = self._all_child_props()
-
-        for prop in list(xmlprops.values()):
-            prop._set_default(self)
 
         # Set up preferred XML ordering
         do_order = [p for p in self._propstore if p not in childprops]
