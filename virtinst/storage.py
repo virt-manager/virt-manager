@@ -303,7 +303,7 @@ class StoragePool(_StorageObject):
             raise ValueError(_("Name '%s' already in use by another pool." %
                                 name))
 
-    def _get_default_target_path(self):
+    def default_target_path(self):
         if not self.supports_property("target_path"):
             return None
         if (self.type == self.TYPE_DIR or
@@ -338,7 +338,7 @@ class StoragePool(_StorageObject):
         return setattr(self, self._type_to_source_prop(), val)
     source_path = property(_get_source, _set_source)
 
-    def _default_source_name(self):
+    def default_source_name(self):
         srcname = None
 
         if not self.supports_property("source_name"):
@@ -358,11 +358,6 @@ class StoragePool(_StorageObject):
             srcname = vg.split("/", 1)[0]
 
         return srcname
-
-    def _default_format_cb(self):
-        if not self.supports_property("format"):
-            return None
-        return "auto"
 
 
     ##############
@@ -390,18 +385,15 @@ class StoragePool(_StorageObject):
     allocation = XMLProperty("./allocation", is_int=True)
     available = XMLProperty("./available", is_int=True)
 
-    format = XMLProperty("./source/format/@type",
-                         default_cb=_default_format_cb)
+    format = XMLProperty("./source/format/@type")
     iqn = XMLProperty("./source/initiator/iqn/@name")
-    source_name = XMLProperty("./source/name",
-                              default_cb=_default_source_name)
+    source_name = XMLProperty("./source/name")
 
     auth_type = XMLProperty("./source/auth/@type")
     auth_username = XMLProperty("./source/auth/@username")
     auth_secret_uuid = XMLProperty("./source/auth/secret/@uuid")
 
-    target_path = XMLProperty("./target/path",
-                              default_cb=_get_default_target_path)
+    target_path = XMLProperty("./target/path")
 
     hosts = XMLChildProperty(_Host, relative_xpath="./source")
 
@@ -462,11 +454,19 @@ class StoragePool(_StorageObject):
             return StorageVolume.TYPE_NETWORK
         return StorageVolume.TYPE_FILE
 
+
     ##################
     # Build routines #
     ##################
 
     def validate(self):
+        if not self.target_path:
+            self.target_path = self.default_target_path()
+        if not self.source_name:
+            self.source_name = self.default_source_name()
+        if not self.format and self.supports_property("format"):
+            self.format = "auto"
+
         if self.supports_property("hosts") and not self.hosts:
             raise RuntimeError(_("Hostname is required"))
         if (self.supports_property("source_path") and
@@ -641,11 +641,6 @@ class StorageVolume(_StorageObject):
             raise ValueError(_("Name '%s' already in use by another volume." %
                                 name))
 
-    def _default_format(self):
-        if self.file_type == self.TYPE_FILE:
-            return "raw"
-        return None
-
     def _get_vol_type(self):
         if self.type:
             if self.type == "file":
@@ -672,18 +667,12 @@ class StorageVolume(_StorageObject):
     key = XMLProperty("./key")
     capacity = XMLProperty("./capacity", is_int=True)
     allocation = XMLProperty("./allocation", is_int=True)
-    format = XMLProperty("./target/format/@type", default_cb=_default_format)
+    format = XMLProperty("./target/format/@type")
     target_path = XMLProperty("./target/path")
     backing_store = XMLProperty("./backingStore/path")
     backing_format = XMLProperty("./backingStore/format/@type")
-
-    def _lazy_refcounts_default_cb(self):
-        if self.format != "qcow2":
-            return False
-        return self.conn.check_support(
-            self.conn.SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS)
-    lazy_refcounts = XMLProperty("./target/features/lazy_refcounts",
-        is_bool=True, default_cb=_lazy_refcounts_default_cb)
+    lazy_refcounts = XMLProperty(
+            "./target/features/lazy_refcounts", is_bool=True)
 
 
     def _detect_backing_store_format(self):
@@ -743,6 +732,12 @@ class StorageVolume(_StorageObject):
     ##################
 
     def validate(self):
+        if not self.format and self.file_type == self.TYPE_FILE:
+            self.format = "raw"
+        if self._prop_is_unset("lazy_refcounts") and self.format == "qcow2":
+            self.lazy_refcounts = self.conn.check_support(
+                self.conn.SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS)
+
         if self._pool_xml.type == StoragePool.TYPE_LOGICAL:
             if self.allocation != self.capacity:
                 logging.warning(_("Sparse logical volumes are not supported, "

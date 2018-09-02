@@ -277,14 +277,15 @@ class vmmCreatePool(vmmGObjectUI):
 
         if tgt:
             self.widget("pool-target-path").get_child().set_text(
-                self._pool.target_path)
+                self._pool.default_target_path())
 
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
         self.widget("pool-build").set_active(builddef)
 
         if src_name:
-            self.widget("pool-source-name").set_text(self._pool.source_name)
+            self.widget("pool-source-name").set_text(
+                    self._pool.default_source_name())
 
         self.widget("pool-format").set_active(-1)
         if fmt:

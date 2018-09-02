@@ -41,7 +41,6 @@ def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
     if iqn and pool_inst.supports_property("iqn"):
         pool_inst.iqn = iqn
 
-    pool_inst.validate()
     return poolCompare(pool_inst)
 
 
@@ -51,6 +50,7 @@ def removePool(poolobj):
 
 
 def poolCompare(pool_inst):
+    pool_inst.validate()
     filename = os.path.join(basepath, pool_inst.name + ".xml")
     out_expect = pool_inst.get_xml()
 
