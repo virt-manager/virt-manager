@@ -219,22 +219,24 @@ class AddHardware(uiutils.UITestCase):
         src.click()
         self.pressKey("End")
         tab.find_fuzzy("Specify shared device", "menu item").click()
+        tab.find("Bridge name:", "text").text = "zbr0"
         finish.click()
 
-        # Check validation error
+        # Check MAC validation error
         alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("Error adding device", "label")
+        alert.find_fuzzy("00:11:22:33:44:55", "label")
         alert.find("Close", "push button").click()
 
-        # Enter bridge name
-        tab.find("Bridge name:", "text").text = "zbr0"
+        # Fix MAC
+        tab.find("mac-address-enable", "check box").click()
+        tab.find("MAC Address Field", "text").text = "00:11:0A:11:00:11"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
         # Network with portops
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Network", "network-tab")
-        tab.find("mac-address-enable", "check box").click()
+        tab.find("MAC Address Field", "text").text = "00:11:0B:11:00:11"
         src.click()
         self.sleep(1)
         self.pressKey("Home")
@@ -249,7 +251,7 @@ class AddHardware(uiutils.UITestCase):
         # Network with vport stuff
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Network", "network-tab")
-        tab.find("mac-address-enable", "check box").click()
+        tab.find("MAC Address Field", "text").text = "00:11:0C:11:00:11"
         src.click()
         tab.find_fuzzy("OpenVSwitch", "menu item").click()
         t = tab.find("Virtual port", "toggle button")

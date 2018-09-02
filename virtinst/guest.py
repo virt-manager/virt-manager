@@ -227,9 +227,9 @@ class Guest(XMLBuilder):
     xmlns_qemu = XMLChildProperty(DomainXMLNSQemu, is_single=True)
 
 
-    ###############################
-    # Distro detection properties #
-    ###############################
+    ##############################
+    # osinfo related definitions #
+    ##############################
 
     def _set_osinfo(self, variant):
         obj = OSDB.lookup_os(variant)
@@ -254,6 +254,27 @@ class Guest(XMLBuilder):
         logging.debug("Setting Guest.os_variant to '%s'", val)
         self._set_osinfo(val)
     os_variant = property(_get_os_variant, _set_os_variant)
+
+    def _supports_virtio(self, os_support):
+        if not self.conn.is_qemu():
+            return False
+
+        # These _only_ support virtio so don't check the OS
+        if (self.os.is_arm_machvirt() or
+            self.os.is_s390x() or
+            self.os.is_pseries()):
+            return True
+
+        if not os_support:
+            return False
+
+        if self.os.is_x86():
+            return True
+
+        return False
+
+    def supports_virtionet(self):
+        return self._supports_virtio(self.osinfo.supports_virtionet())
 
 
     ########################################
@@ -742,7 +763,6 @@ class Guest(XMLBuilder):
         self._set_disk_defaults()
         self._add_implied_controllers()
         self._add_spice_devices()
-        self._set_net_defaults()
 
     def _is_full_os_container(self):
         if not self.os.is_container():
@@ -981,24 +1001,6 @@ class Guest(XMLBuilder):
                     self.add_device(ctrl)
                     break
 
-    def _supports_virtio(self, os_support):
-        if not self.conn.is_qemu():
-            return False
-
-        # These _only_ support virtio so don't check the OS
-        if (self.os.is_arm_machvirt() or
-            self.os.is_s390x() or
-            self.os.is_pseries()):
-            return True
-
-        if not os_support:
-            return False
-
-        if self.os.is_x86():
-            return True
-
-        return False
-
     def _set_disk_defaults(self):
         disks = self.devices.disk
 
@@ -1043,27 +1045,6 @@ class Guest(XMLBuilder):
             else:
                 disk.cli_generated_target = False
                 used_targets.append(disk.generate_target(used_targets))
-
-    def _default_netmodel(self):
-        if not self.os.is_hvm():
-            return None
-        if self._supports_virtio(self.osinfo.supports_virtionet()):
-            return "virtio"
-        if self.os.is_q35():
-            return "e1000e"
-
-        prefs = ["e1000", "rtl8139", "ne2k_pci", "pcnet"]
-        supported_models = self.osinfo.supported_netmodels()
-        for pref in prefs:
-            if pref in supported_models:
-                return pref
-        return None
-
-    def _set_net_defaults(self):
-        default_model = self._default_netmodel()
-        for net in self.devices.interface:
-            if not net.model:
-                net.model = default_model
 
     def _add_spice_channels(self):
         if self.skip_default_channel:

@@ -121,8 +121,6 @@ class DeviceInterface(Device):
     TYPE_VHOSTUSER  = "vhostuser"
     TYPE_ETHERNET   = "ethernet"
     TYPE_DIRECT   = "direct"
-    network_types = [TYPE_BRIDGE, TYPE_VIRTUAL, TYPE_USER, TYPE_ETHERNET,
-                     TYPE_DIRECT]
 
     @staticmethod
     def get_network_type_desc(net_type):
@@ -182,42 +180,10 @@ class DeviceInterface(Device):
         return (False, None)
 
 
-    def __init__(self, *args, **kwargs):
-        Device.__init__(self, *args, **kwargs)
-
-        self._random_mac = None
-        self._default_bridge = None
-
-
     ###############
     # XML helpers #
     ###############
 
-    def _generate_default_bridge(self):
-        ret = self._default_bridge
-        if ret is None:
-            ret = False
-            default = _default_bridge(self.conn)
-            if default:
-                ret = default
-
-        self._default_bridge = ret
-        return ret or None
-
-    def _get_default_bridge(self):
-        if self.type == self.TYPE_BRIDGE:
-            return self._generate_default_bridge()
-        return None
-
-    def _default_source_mode(self):
-        if self.type == self.TYPE_DIRECT:
-            return "vepa"
-        return None
-
-    def _get_default_mac(self):
-        if not self._random_mac:
-            self._random_mac = self.generate_mac(self.conn)
-        return self._random_mac
     def _validate_mac(self, val):
         util.validate_macaddr(val)
         return val
@@ -263,23 +229,19 @@ class DeviceInterface(Device):
         "source_mode", "portgroup", "macaddr", "target_dev", "model",
         "virtualport", "filterref", "rom_bar", "rom_file", "mtu_size"]
 
-    _bridge = XMLProperty("./source/@bridge", default_cb=_get_default_bridge)
+    _bridge = XMLProperty("./source/@bridge")
     _network = XMLProperty("./source/@network")
     _source_dev = XMLProperty("./source/@dev")
 
     virtualport = XMLChildProperty(_VirtualPort, is_single=True)
-    type = XMLProperty("./@type",
-                       default_cb=lambda s: s.TYPE_BRIDGE)
+    type = XMLProperty("./@type")
     trustGuestRxFilters = XMLProperty("./@trustGuestRxFilters", is_yesno=True)
 
-    macaddr = XMLProperty("./mac/@address",
-                          set_converter=_validate_mac,
-                          default_cb=_get_default_mac)
+    macaddr = XMLProperty("./mac/@address", set_converter=_validate_mac)
 
     source_type = XMLProperty("./source/@type")
     source_path = XMLProperty("./source/@path")
-    source_mode = XMLProperty("./source/@mode",
-                              default_cb=_default_source_mode)
+    source_mode = XMLProperty("./source/@mode")
     portgroup = XMLProperty("./source/@portgroup")
     model = XMLProperty("./model/@type")
     target_dev = XMLProperty("./target/@dev")
@@ -317,3 +279,36 @@ class DeviceInterface(Device):
             self.type = self.TYPE_USER
         else:
             self.type, self.source = _default_network(self.conn)
+
+
+    ##################
+    # Default config #
+    ##################
+
+    @staticmethod
+    def default_netmodel(guest):
+        if not guest.os.is_hvm():
+            return None
+        if guest.supports_virtionet():
+            return "virtio"
+        if guest.os.is_q35():
+            return "e1000e"
+
+        prefs = ["e1000", "rtl8139", "ne2k_pci", "pcnet"]
+        supported_models = guest.osinfo.supported_netmodels()
+        for pref in prefs:
+            if pref in supported_models:
+                return pref
+        return None
+
+    def set_defaults(self, guest):
+        if not self.type:
+            self.type = self.TYPE_BRIDGE
+        if not self.macaddr:
+            self.macaddr = self.generate_mac(self.conn)
+        if self.type == self.TYPE_BRIDGE and not self._bridge:
+            self._bridge = _default_bridge(self.conn)
+        if self.type == self.TYPE_DIRECT and not self.source_mode:
+            self.source_mode = "vepa"
+        if not self.model:
+            self.model = self.default_netmodel(guest)

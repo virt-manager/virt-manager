@@ -119,46 +119,6 @@ class TestXMLMisc(unittest.TestCase):
         utils.diff_compare(actualXML, filename)
         utils.test_create(guest.conn, actualXML)
 
-    def testDefaultBridge(self):
-        # Test our handling of the default bridge routines
-        from virtinst.devices import interface as deviceinterface
-        origfunc = getattr(deviceinterface, "_default_bridge")
-        try:
-            def newbridge(ignore_conn):
-                return "bzz0"
-            setattr(deviceinterface, "_default_bridge", newbridge)
-
-            dev1 = virtinst.DeviceInterface(self.conn)
-            dev1.macaddr = "22:22:33:44:55:66"
-
-            dev2 = virtinst.DeviceInterface(self.conn,
-                                    parsexml=dev1.get_xml())
-            dev2.source = None
-            dev2.source = "foobr0"
-            dev2.macaddr = "22:22:33:44:55:67"
-
-            dev3 = virtinst.DeviceInterface(self.conn,
-                                    parsexml=dev1.get_xml())
-            dev3.source = None
-            dev3.macaddr = "22:22:33:44:55:68"
-
-            utils.diff_compare(dev1.get_xml(), None,
-                               "<interface type=\"bridge\">\n"
-                               "  <source bridge=\"bzz0\"/>\n"
-                               "  <mac address=\"22:22:33:44:55:66\"/>\n"
-                               "</interface>\n")
-            utils.diff_compare(dev2.get_xml(), None,
-                               "<interface type=\"bridge\">\n"
-                               "  <source bridge=\"foobr0\"/>\n"
-                               "  <mac address=\"22:22:33:44:55:67\"/>\n"
-                               "</interface>\n")
-            utils.diff_compare(dev3.get_xml(), None,
-                               "<interface type=\"bridge\">\n"
-                               "  <mac address=\"22:22:33:44:55:68\"/>\n"
-                               "</interface>\n")
-        finally:
-            setattr(deviceinterface, "_default_bridge", origfunc)
-
     def testDiskNumbers(self):
         # Various testing our target generation
         self.assertEqual("a", DeviceDisk.num_to_target(1))
