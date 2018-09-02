@@ -748,8 +748,7 @@ class Guest(XMLBuilder):
             self.emulator = None
 
         self._add_install_cdrom()
-
-        self._set_clock_defaults()
+        self.clock.set_defaults(self)
         self._set_cpu_defaults()
         self.features.set_defaults(self)
         for seclabel in self.seclabels:
@@ -770,53 +769,6 @@ class Guest(XMLBuilder):
             if fs.target == "/":
                 return True
         return False
-
-    def _set_clock_defaults(self):
-        if not self.os.is_hvm():
-            return
-
-        if self.clock.offset is None:
-            self.clock.offset = self.osinfo.get_clock()
-
-        if self.clock.timers:
-            return
-        if not self.os.is_x86():
-            return
-        if not self.conn.is_qemu():
-            return
-
-        # Set clock policy that maps to qemu options:
-        #   -no-hpet -no-kvm-pit-reinjection -rtc driftfix=slew
-        #
-        # hpet: Is unneeded and has a performance penalty
-        # pit: While it has no effect on windows, it doesn't hurt and
-        #   is beneficial for linux
-        #
-        # If libvirt/qemu supports it and using a windows VM, also
-        # specify hypervclock.
-        #
-        # This is what has been recommended by the RH qemu guys :)
-
-        rtc = self.clock.timers.add_new()
-        rtc.name = "rtc"
-        rtc.tickpolicy = "catchup"
-
-        pit = self.clock.timers.add_new()
-        pit.name = "pit"
-        pit.tickpolicy = "delay"
-
-        hpet = self.clock.timers.add_new()
-        hpet.name = "hpet"
-        hpet.present = False
-
-        hv_clock = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK)
-        hv_clock_rhel = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK_RHEL)
-
-        if (self.hyperv_supported() and
-            (hv_clock or (self.stable_defaults() and hv_clock_rhel))):
-            hyperv = self.clock.timers.add_new()
-            hyperv.name = "hypervclock"
-            hyperv.present = True
 
     def _set_cpu_x86_kvm_default(self):
         if self.os.arch != self.conn.caps.host.cpu.arch:
