@@ -104,7 +104,20 @@ class DomainOs(XMLBuilder):
     smbios_mode = XMLProperty("./smbios/@mode")
     nvram = XMLProperty("./nvram", do_abspath=True)
     nvram_template = XMLProperty("./nvram/@template")
-    arch = XMLProperty("./type/@arch",
-                       default_cb=lambda s: s.conn.caps.host.cpu.arch)
+    arch = XMLProperty("./type/@arch")
     machine = XMLProperty("./type/@machine")
-    os_type = XMLProperty("./type", default_cb=lambda s: "xen")
+    os_type = XMLProperty("./type")
+
+
+    ##################
+    # Default config #
+    ##################
+
+    def set_defaults(self, guest):
+        if self.is_container() and not self.init:
+            if guest.is_full_os_container():
+                self.init = "/sbin/init"
+            else:
+                self.init = "/bin/sh"
+        if self.kernel or self.init:
+            self.bootorder = []

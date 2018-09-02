@@ -344,7 +344,7 @@ class Guest(XMLBuilder):
         if install:
             self.on_reboot = "destroy"
 
-        self._set_osxml_defaults()
+        self.os.set_defaults(self)
         return self.get_xml()
 
 
@@ -775,14 +775,6 @@ class Guest(XMLBuilder):
             if fs.target == "/":
                 return True
         return False
-
-    def _set_osxml_defaults(self):
-        if self.os.is_container() and not self.os.init:
-            if self.is_full_os_container():
-                self.os.init = "/sbin/init"
-            self.os.init = self.os.init or "/bin/sh"
-        if self.os.kernel or self.os.init:
-            self.os.bootorder = []
 
     def _set_clock_defaults(self):
         if not self.os.is_hvm():
