@@ -8,6 +8,7 @@
 import os.path
 import unittest
 
+from virtinst import Guest
 from virtinst import NodeDevice
 from virtinst import DeviceHostdev
 
@@ -85,6 +86,7 @@ class TestNodeDev(unittest.TestCase):
 
         dev = DeviceHostdev(self.conn)
         dev.set_from_nodedev(nodedev)
+        dev.set_defaults(Guest(self.conn))
         utils.diff_compare(dev.get_xml() + "\n", devfile)
 
     def testSystemDevice(self):
