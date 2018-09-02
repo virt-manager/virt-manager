@@ -749,7 +749,7 @@ class Guest(XMLBuilder):
 
         self._add_install_cdrom()
         self.clock.set_defaults(self)
-        self._set_cpu_defaults()
+        self.cpu.set_defaults(self)
         self.features.set_defaults(self)
         for seclabel in self.seclabels:
             seclabel.set_defaults(self)
@@ -769,56 +769,6 @@ class Guest(XMLBuilder):
             if fs.target == "/":
                 return True
         return False
-
-    def _set_cpu_x86_kvm_default(self):
-        if self.os.arch != self.conn.caps.host.cpu.arch:
-            return
-
-        self.cpu.set_special_mode(self.x86_cpu_default)
-        if self.x86_cpu_default != self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY:
-            return
-        if not self.cpu.model:
-            return
-
-        # It's possible that the value HOST_MODEL_ONLY gets from
-        # <capabilities> is not actually supported by qemu/kvm
-        # combo which will be reported in <domainCapabilities>
-        domcaps = DomainCapabilities.build_from_guest(self)
-        domcaps_mode = domcaps.cpu.get_mode("custom")
-        if not domcaps_mode:
-            return
-
-        cpu_model = domcaps_mode.get_model(self.cpu.model)
-        if cpu_model and cpu_model.usable:
-            return
-
-        logging.debug("Host capabilities CPU '%s' is not supported "
-            "according to domain capabilities. Unsetting CPU model",
-            self.cpu.model)
-        self.cpu.model = None
-
-    def _set_cpu_defaults(self):
-        self.cpu.set_topology_defaults(self.vcpus)
-
-        if not self.conn.is_test() and not self.conn.is_qemu():
-            return
-        if (self.cpu.get_xml().strip() or
-            self.cpu.special_mode_was_set):
-            # User already configured CPU
-            return
-
-        if self.os.is_arm_machvirt() and self.type == "kvm":
-            self.cpu.mode = self.cpu.SPECIAL_MODE_HOST_PASSTHROUGH
-
-        elif self.os.is_arm64() and self.os.is_arm_machvirt():
-            # -M virt defaults to a 32bit CPU, even if using aarch64
-            self.cpu.model = "cortex-a57"
-
-        elif self.os.is_x86() and self.type == "kvm":
-            self._set_cpu_x86_kvm_default()
-
-            if self.osinfo.broken_x2apic():
-                self.cpu.add_feature("x2apic", policy="disable")
 
     def hyperv_supported(self):
         if not self.osinfo.is_windows():

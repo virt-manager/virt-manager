@@ -5,6 +5,9 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import logging
+
+from ..domcapabilities import DomainCapabilities
 from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
@@ -198,3 +201,58 @@ class DomainCpu(XMLBuilder):
     sockets = XMLProperty("./topology/@sockets", is_int=True)
     cores = XMLProperty("./topology/@cores", is_int=True)
     threads = XMLProperty("./topology/@threads", is_int=True)
+
+
+    ##################
+    # Default config #
+    ##################
+
+    def _set_cpu_x86_kvm_default(self, guest):
+        if guest.os.arch != self.conn.caps.host.cpu.arch:
+            return
+
+        self.set_special_mode(guest.x86_cpu_default)
+        if guest.x86_cpu_default != self.SPECIAL_MODE_HOST_MODEL_ONLY:
+            return
+        if not self.model:
+            return
+
+        # It's possible that the value HOST_MODEL_ONLY gets from
+        # <capabilities> is not actually supported by qemu/kvm
+        # combo which will be reported in <domainCapabilities>
+        domcaps = DomainCapabilities.build_from_guest(guest)
+        domcaps_mode = domcaps.cpu.get_mode("custom")
+        if not domcaps_mode:
+            return
+
+        cpu_model = domcaps_mode.get_model(self.model)
+        if cpu_model and cpu_model.usable:
+            return
+
+        logging.debug("Host capabilities CPU '%s' is not supported "
+            "according to domain capabilities. Unsetting CPU model",
+            self.model)
+        self.model = None
+
+    def set_defaults(self, guest):
+        self.set_topology_defaults(guest.vcpus)
+
+        if not self.conn.is_test() and not self.conn.is_qemu():
+            return
+        if (self.get_xml().strip() or
+            self.special_mode_was_set):
+            # User already configured CPU
+            return
+
+        if guest.os.is_arm_machvirt() and guest.type == "kvm":
+            self.mode = self.SPECIAL_MODE_HOST_PASSTHROUGH
+
+        elif guest.os.is_arm64() and guest.os.is_arm_machvirt():
+            # -M virt defaults to a 32bit CPU, even if using aarch64
+            self.model = "cortex-a57"
+
+        elif guest.os.is_x86() and guest.type == "kvm":
+            self._set_cpu_x86_kvm_default(guest)
+
+            if guest.osinfo.broken_x2apic():
+                self.add_feature("x2apic", policy="disable")
