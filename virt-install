@@ -26,9 +26,13 @@ from virtinst.cli import fail, print_stdout, print_stderr
 install_methods = "--location URL, --cdrom CD/ISO, --pxe, --import, --boot hd|cdrom|..."
 
 
+def all_install_options(options):
+    return [options.pxe, options.cdrom, options.location,
+            options.import_install]
+
+
 def install_specified(options):
-    return bool(options.location or options.cdrom or
-            options.pxe or options.import_install)
+    return any([bool(o) for o in all_install_options(options)])
 
 
 def cdrom_specified(guest, disk=None):
@@ -215,9 +219,6 @@ def convert_old_networks(options):
         if options.network:
             fail(_("Cannot use --nonetworks with --network"))
         options.network = ["none"]
-
-    if options.pxe and options.network and "none" in options.network:
-        fail(_("Can't use --pxe without any network"))
 
     macs = virtinst.util.listify(options.mac)
     networks = virtinst.util.listify(options.network)
@@ -433,12 +434,11 @@ def check_option_collisions(options, guest):
         fail(_("--noreboot and --transient can not be specified together"))
 
     # Install collisions
-    if sum([bool(l) for l in [options.pxe, options.location,
-                      options.cdrom, options.import_install]]) > 1:
+    if sum([bool(l) for l in all_install_options(options)]) > 1:
         fail(_("Only one install method can be used (%(methods)s)") %
              {"methods": install_methods})
 
-    if (guest.os.is_container() and install_specified(options)):
+    if guest.os.is_container() and install_specified(options):
         fail(_("Install methods (%s) cannot be specified for "
                "container guests") % install_methods)
 

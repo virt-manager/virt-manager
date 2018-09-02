@@ -800,7 +800,6 @@ c.add_valid("--network bridge:mybr0,model=e1000")  # --network bridge:
 c.add_valid("--network network:default --mac RANDOM")  # VirtualNetwork with a random macaddr
 c.add_valid("--vnc --keymap=local")  # --keymap local
 c.add_valid("--panic 0x505")  # ISA panic with iobase specified
-c.add_invalid("--nonetworks")  # no networks
 c.add_invalid("--graphics vnc --vnclisten 1.2.3.4")  # mixing old and new
 c.add_invalid("--network=FOO")  # Nonexistent network
 c.add_invalid("--mac 1234")  # Invalid mac
