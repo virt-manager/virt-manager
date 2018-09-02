@@ -755,6 +755,8 @@ class Guest(XMLBuilder):
         self._set_emulator_defaults()
         self._set_cpu_defaults()
         self.features.set_defaults(self)
+        for seclabel in self.seclabels:
+            seclabel.set_defaults(self)
         self._set_pm_defaults()
 
         for dev in self.devices.get_all():
