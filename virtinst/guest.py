@@ -754,7 +754,7 @@ class Guest(XMLBuilder):
         self._set_clock_defaults()
         self._set_emulator_defaults()
         self._set_cpu_defaults()
-        self._set_feature_defaults()
+        self.features.set_defaults(self)
         self._set_pm_defaults()
 
         for dev in self.devices.get_all():
@@ -764,7 +764,7 @@ class Guest(XMLBuilder):
         self._add_implied_controllers()
         self._add_spice_devices()
 
-    def _is_full_os_container(self):
+    def is_full_os_container(self):
         if not self.os.is_container():
             return False
         for fs in self.devices.filesystem:
@@ -774,7 +774,7 @@ class Guest(XMLBuilder):
 
     def _set_osxml_defaults(self):
         if self.os.is_container() and not self.os.init:
-            if self._is_full_os_container():
+            if self.is_full_os_container():
                 self.os.init = "/sbin/init"
             self.os.init = self.os.init or "/bin/sh"
 
@@ -824,7 +824,7 @@ class Guest(XMLBuilder):
         hv_clock = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK)
         hv_clock_rhel = self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK_RHEL)
 
-        if (self.osinfo.is_windows() and self._hyperv_supported() and
+        if (self.hyperv_supported() and
             (hv_clock or (self.stable_defaults() and hv_clock_rhel))):
             hyperv = self.clock.timers.add_new()
             hyperv.name = "hypervclock"
@@ -894,7 +894,9 @@ class Guest(XMLBuilder):
             if self.osinfo.broken_x2apic():
                 self.cpu.add_feature("x2apic", policy="disable")
 
-    def _hyperv_supported(self):
+    def hyperv_supported(self):
+        if not self.osinfo.is_windows():
+            return False
         if (self.os.loader_type == "pflash" and
             self.os_variant in ("win2k8r2", "win7")):
             return False
@@ -905,7 +907,7 @@ class Guest(XMLBuilder):
         # changed through manual intervention via the customize wizard.
 
         # UEFI doesn't work with hyperv bits
-        if not self._hyperv_supported():
+        if not self.hyperv_supported():
             self.features.hyperv_relaxed = None
             self.features.hyperv_vapic = None
             self.features.hyperv_spinlocks = None
@@ -913,42 +915,6 @@ class Guest(XMLBuilder):
             for i in self.clock.timers:
                 if i.name == "hypervclock":
                     self.clock.remove_timer(i)
-
-    def _set_feature_defaults(self):
-        if self.os.is_container():
-            self.features.acpi = None
-            self.features.apic = None
-            self.features.pae = None
-            if self._is_full_os_container() and self.type != "vz":
-                self.features.privnet = True
-            return
-
-        if not self.os.is_hvm():
-            return
-
-        if self.features.acpi == "default":
-            self.features.acpi = self.capsinfo.guest.supports_acpi()
-        if self.features.apic == "default":
-            self.features.apic = self.capsinfo.guest.supports_apic()
-        if self.features.pae == "default":
-            if (self.os.is_hvm() and
-                self.type == "xen" and
-                self.os.arch == "x86_64"):
-                self.features.pae = True
-            else:
-                self.features.pae = self.capsinfo.guest.supports_pae()
-
-        if (self.osinfo.is_windows() and
-            self._hyperv_supported() and
-            self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_VAPIC)):
-            if self.features.hyperv_relaxed is None:
-                self.features.hyperv_relaxed = True
-            if self.features.hyperv_vapic is None:
-                self.features.hyperv_vapic = True
-            if self.features.hyperv_spinlocks is None:
-                self.features.hyperv_spinlocks = True
-            if self.features.hyperv_spinlocks_retries is None:
-                self.features.hyperv_spinlocks_retries = 8191
 
     def _set_pm_defaults(self):
         # When the suspend feature is exposed to VMs, an ACPI shutdown
@@ -1113,7 +1079,7 @@ class Guest(XMLBuilder):
         if not self.has_spice():
             return
 
-        if (self.features.vmport == "default" and
+        if (self.features.vmport is None and
             self.os.is_x86() and
             self.conn.check_support(self.conn.SUPPORT_CONN_VMPORT)):
             self.features.vmport = False

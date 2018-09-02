@@ -744,6 +744,14 @@ class XMLBuilder(object):
         self._xmlstate.xmlapi.node_force_remove(xpath)
         self._set_child_xpaths()
 
+    def _prop_is_unset(self, propname):
+        """
+        Return True if the property name has never had a value set
+        """
+        if getattr(self, propname):
+            return False
+        return propname not in self._propstore
+
 
     #################################
     # Private XML building routines #
