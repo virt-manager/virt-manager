@@ -123,6 +123,26 @@ class DeviceInterface(Device):
     TYPE_DIRECT   = "direct"
 
     @staticmethod
+    def get_models(guest):
+        if not guest.os.is_hvm():
+            return []
+
+        ret = []
+        if guest.type in ["kvm", "qemu", "vz", "test"]:
+            ret.append("virtio")
+        if guest.os.is_x86():
+            if guest.os.is_q35():
+                ret.append("e1000e")
+            else:
+                ret.append("rtl8139")
+                ret.append("e1000")
+        if guest.type in ["xen", "test"]:
+            ret.append("netfront")
+
+        ret.sort()
+        return ret
+
+    @staticmethod
     def get_network_type_desc(net_type):
         """
         Return human readable description for passed network type
@@ -286,7 +306,7 @@ class DeviceInterface(Device):
     ##################
 
     @staticmethod
-    def default_netmodel(guest):
+    def default_model(guest):
         if not guest.os.is_hvm():
             return None
         if guest.supports_virtionet():
@@ -311,4 +331,4 @@ class DeviceInterface(Device):
         if self.type == self.TYPE_DIRECT and not self.source_mode:
             self.source_mode = "vepa"
         if not self.model:
-            self.model = self.default_netmodel(guest)
+            self.model = self.default_model(guest)

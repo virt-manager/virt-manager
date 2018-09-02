@@ -523,27 +523,16 @@ class vmmAddHardware(vmmGObjectUI):
 
         # [xml value, label]
         model.append([None, _("Hypervisor default")])
-        mod_list = []
-        if vm.is_hvm():
-            if vm.get_hv_type() in ["kvm", "qemu", "vz", "test"]:
-                mod_list.append("virtio")
-            mod_list.append("rtl8139")
-            mod_list.append("e1000")
-            if vm.xmlobj.os.is_pseries():
-                mod_list.append("spapr-vlan")
-            if vm.get_hv_type() in ["xen", "test"]:
-                mod_list.append("netfront")
-            mod_list.sort()
+        for netmodel in DeviceInterface.get_models(vm.xmlobj):
+            model.append([netmodel, netmodel])
 
-        for m in mod_list:
-            model.append([m, m])
-        combo.set_active(0)
+        uiutil.set_list_selection(
+                combo, DeviceInterface.default_model(vm.xmlobj))
 
     @staticmethod
     def build_network_model_combo(vm, combo):
         _build_combo(combo, [])
         vmmAddHardware.populate_network_model_combo(vm, combo)
-        combo.set_active(0)
 
 
     def _build_input_combo(self):
