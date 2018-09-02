@@ -71,17 +71,20 @@ class vmmFSDetails(vmmGObjectUI):
     def set_initial_state(self):
         def simple_store_set(comboname, values, sort=True, capitalize=True):
             combo = self.widget(comboname)
+            # [XML value, label]
             model = Gtk.ListStore(str, str)
             combo.set_model(model)
             uiutil.init_combo_text_column(combo, 1)
             if sort:
                 model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-            if capitalize:
-                for val in values:
-                    model.append([val, val.capitalize()])
-            else:
-                for val in values:
-                    model.append([val.lower(), val])
+
+            for xmlval in values:
+                label = xmlval
+                if xmlval is None:
+                    label = "Default"
+                if capitalize:
+                    label = label.capitalize()
+                model.append([xmlval, label])
 
         # Filesystem widgets
         if self.conn.is_openvz():
@@ -98,23 +101,23 @@ class vmmFSDetails(vmmGObjectUI):
             simple_store_set("fs-type-combo", [DeviceFilesystem.TYPE_MOUNT])
             self.widget("fs-type-label").set_text(DeviceFilesystem.TYPE_MOUNT)
 
-        simple_store_set("fs-mode-combo", DeviceFilesystem.MODES)
+        simple_store_set("fs-mode-combo", DeviceFilesystem.MODES + [None])
         if self.conn.is_qemu() or self.conn.is_test():
             simple_store_set("fs-driver-combo",
                 [DeviceFilesystem.DRIVER_PATH,
                  DeviceFilesystem.DRIVER_HANDLE,
-                 DeviceFilesystem.DRIVER_DEFAULT])
+                 None])
         elif self.conn.is_lxc():
             simple_store_set("fs-driver-combo",
                 [DeviceFilesystem.DRIVER_LOOP,
                  DeviceFilesystem.DRIVER_NBD,
-                 DeviceFilesystem.DRIVER_DEFAULT])
+                 None])
         else:
-            simple_store_set("fs-driver-combo",
-                [DeviceFilesystem.DRIVER_DEFAULT])
+            simple_store_set("fs-driver-combo", [None])
         simple_store_set("fs-format-combo",
             StorageVolume.ALL_FORMATS, capitalize=False)
-        simple_store_set("fs-wrpolicy-combo", DeviceFilesystem.WRPOLICIES)
+        simple_store_set("fs-wrpolicy-combo",
+                DeviceFilesystem.WRPOLICIES + [None])
         self.show_pair_combo("fs-type",
             self.conn.is_openvz() or self.conn.is_lxc())
         self.show_check_button("fs-readonly",
@@ -167,11 +170,11 @@ class vmmFSDetails(vmmGObjectUI):
     def set_dev(self, dev):
         self._dev = dev
 
-        self.set_config_value("fs-type", dev.type or "default")
-        self.set_config_value("fs-mode", dev.accessmode or "default")
-        self.set_config_value("fs-driver", dev.driver or "default")
-        self.set_config_value("fs-wrpolicy", dev.wrpolicy or "default")
-        self.set_config_value("fs-format", dev.format or "default")
+        self.set_config_value("fs-type", dev.type)
+        self.set_config_value("fs-mode", dev.accessmode)
+        self.set_config_value("fs-driver", dev.driver)
+        self.set_config_value("fs-wrpolicy", dev.wrpolicy)
+        self.set_config_value("fs-format", dev.format)
         if dev.type != DeviceFilesystem.TYPE_RAM:
             self.widget("fs-source").set_text(dev.source)
         else:
@@ -194,7 +197,7 @@ class vmmFSDetails(vmmGObjectUI):
 
         combo.set_active(idx)
         if label:
-            label.set_text(value)
+            label.set_text(value or "default")
 
     # listeners
     def notify_change(self, ignore):
@@ -212,7 +215,7 @@ class vmmFSDetails(vmmGObjectUI):
 
         show_mode = bool(ismount and
             (fsdriver == DeviceFilesystem.DRIVER_PATH or
-            fsdriver == DeviceFilesystem.DRIVER_DEFAULT))
+            fsdriver is None))
         uiutil.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
 
         show_wrpol = bool(ismount and
