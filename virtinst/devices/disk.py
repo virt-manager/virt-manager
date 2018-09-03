@@ -910,7 +910,7 @@ class DeviceDisk(Device):
 
         self._storage_backend.validate(self)
 
-    def setup(self, meter=None):
+    def build_storage(self, meter):
         """
         Build storage (if required)
 

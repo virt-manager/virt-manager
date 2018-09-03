@@ -230,7 +230,7 @@ def setup_device(dev):
 
     logging.debug("Doing setup for disk=%s", dev)
 
-    dev.setup(cli.get_meter())
+    dev.build_storage(cli.get_meter())
     dev.virt_xml_setup = True
 
 

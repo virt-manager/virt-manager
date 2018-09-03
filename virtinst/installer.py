@@ -393,10 +393,9 @@ class Installer(object):
             self._cleanup(guest)
             self._prepare(guest, meter)
 
-            # Create devices if required (disk images, etc.)
             if not dry:
-                for dev in guest.devices.get_all():
-                    dev.setup(meter)
+                for dev in guest.devices.disk:
+                    dev.build_storage(meter)
 
             install_xml, final_xml = self._build_xml(guest)
             if return_xml:

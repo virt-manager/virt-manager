@@ -454,9 +454,9 @@ class Cloner(object):
 
             if self.preserve:
                 for dst_dev in self.clone_disks:
-                    dst_dev.setup(meter=meter)
+                    dst_dev.build_storage(meter)
                 if self._nvram_disk:
-                    self._nvram_disk.setup(meter=meter)
+                    self._nvram_disk.build_storage(meter)
         except Exception as e:
             logging.debug("Duplicate failed: %s", str(e))
             if dom:

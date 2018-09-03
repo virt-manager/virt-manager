@@ -119,14 +119,3 @@ class Device(XMLBuilder):
     @property
     def DEVICE_TYPE(self):
         return self.XML_NAME
-
-    def setup(self, meter=None):
-        """
-        Perform potentially hazardous device initialization, like
-        storage creation or host device reset
-
-        :param meter: Optional progress meter to use
-        """
-        # Will be overwritten by subclasses if necessary.
-        ignore = meter
-        return

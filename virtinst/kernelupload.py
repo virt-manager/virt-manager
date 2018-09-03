@@ -68,7 +68,7 @@ def _upload_file(conn, meter, destpool, src):
     disk.set_vol_install(vol_install)
     disk.validate()
 
-    disk.setup(meter=meter)
+    disk.build_storage(meter)
     vol = disk.get_vol_object()
     if not vol:
         raise RuntimeError(_("Failed to lookup scratch media volume"))

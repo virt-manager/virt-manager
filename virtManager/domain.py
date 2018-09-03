@@ -475,7 +475,7 @@ class vmmDomain(vmmLibvirtObject):
 
         new_nvram.set_vol_install(nvram_install)
         new_nvram.validate()
-        new_nvram.setup()
+        new_nvram.build_storage(None)
 
         return new_nvram, old_nvram
 
