@@ -7,6 +7,7 @@ import io
 import os
 import unittest
 
+from virtinst import Installer
 from virtconv import VirtConverter
 
 from tests import utils
@@ -34,7 +35,8 @@ class TestVirtConv(unittest.TestCase):
 
         converter.convert_disks(disk_format, dry=True)
         guest = converter.get_guest()
-        ignore, out_xml = guest.start_install(return_xml=True)
+        installer = Installer(guest.conn)
+        ignore, out_xml = installer.start_install(guest, return_xml=True)
         out_expect = out_xml
         if outbuf.getvalue():
             out_expect += ("\n\n" + outbuf.getvalue().replace(base_dir, ""))

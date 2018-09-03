@@ -13,6 +13,7 @@
 import sys
 
 from virtinst import cli
+from virtinst import Installer
 from virtinst.cli import fail, print_stderr, print_stdout
 
 from virtconv import VirtConverter
@@ -99,17 +100,18 @@ def main(conn=None):
             destdir=options.destination, dry=options.dry)
 
         guest = converter.get_guest()
+        installer = Installer(guest.conn)
 
         conscb = None
         if options.autoconsole:
             conscb = cli.get_console_cb(guest) or None
 
         if options.xmlonly:
-            print_stdout(guest.start_install(return_xml=True)[1],
+            print_stdout(installer.start_install(guest, return_xml=True)[1],
                 do_force=True)
         elif not options.dry:
             print_stdout(_("Creating guest '%s'.") % guest.name)
-            domain = guest.start_install()
+            domain = installer.start_install(guest)
             cli.connect_console(guest, domain, conscb, True)
     except Exception:
         converter.cleanup()

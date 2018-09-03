@@ -285,8 +285,6 @@ class vmx_parser(parser_class):
                 disk.path = None
 
         guest = conn.caps.lookup_virtinst_guest()
-        guest.installer = virtinst.Installer(conn)
-
         guest.name = name.replace(" ", "_")
         guest.description = desc or None
         if vcpus:

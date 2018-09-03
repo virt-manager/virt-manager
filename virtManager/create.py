@@ -1141,11 +1141,13 @@ class vmmCreate(vmmGObjectUI):
         we should auto cleanup
         """
         if (self._failed_guest and
-            self._failed_guest.get_created_disks()):
+            self._failed_guest.installer_instance.get_created_disks(
+                self._failed_guest)):
 
             def _cleanup_disks(asyncjob):
                 meter = asyncjob.get_meter()
-                self._failed_guest.cleanup_created_disks(meter)
+                self._failed_guest.installer_instance.cleanup_created_disks(
+                        self._failed_guest, meter)
 
             def _cleanup_disks_finished(error, details):
                 if error:
@@ -1754,7 +1756,6 @@ class vmmCreate(vmmGObjectUI):
             self._guest = self._build_guest(variant)
             if not self._guest:
                 return False
-            self._guest.installer = installer
         except Exception as e:
             return self.err.val_err(
                         _("Error setting installer parameters."), e)
@@ -1762,12 +1763,12 @@ class vmmCreate(vmmGObjectUI):
         # Validate media location
         try:
             if location is not None:
-                self._guest.installer.location = location
+                installer.location = location
             if cdrom:
-                self._guest.installer.cdrom = True
+                installer.cdrom = True
 
             if extra:
-                self._guest.installer.extraargs = [extra]
+                installer.extraargs = [extra]
 
             if init:
                 self._guest.os.init = init
@@ -1827,10 +1828,10 @@ class vmmCreate(vmmGObjectUI):
             if not self._validate_storage_page():
                 return False
 
-        if self._guest.installer.scratchdir_required():
+        if installer.scratchdir_required():
             path = util.make_scratchdir(self._guest.conn, self._guest.type)
         elif instmethod == INSTALL_PAGE_ISO:
-            path = self._guest.installer.location
+            path = installer.location
         else:
             path = None
 
@@ -1858,6 +1859,10 @@ class vmmCreate(vmmGObjectUI):
         if res and res.get("storage"):
             storage_size = int(res["storage"]) // (1024 ** 3)
             self._addstorage.widget("storage-size").set_value(storage_size)
+
+        # Stash the installer in the _guest instance so we don't need
+        # to cache both objects individually
+        self._guest.installer_instance = installer
 
         # Validation passed, store the install path (if there is one) in
         # gsettings
@@ -1929,7 +1934,7 @@ class vmmCreate(vmmGObjectUI):
 
         if self._get_config_install_page() == INSTALL_PAGE_ISO:
             # CD/ISO install and no disks implies LiveCD
-            self._guest.installer.livecd = not storage_enabled
+            self._guest.installer_instance.livecd = not storage_enabled
 
         if disk and self._addstorage.validate_disk_object(disk) is False:
             return False
@@ -2136,7 +2141,7 @@ class vmmCreate(vmmGObjectUI):
             # This encodes all the virtinst defaults up front, so the customize
             # dialog actually shows disk buses, cache values, default devices,
             # etc. Not required for straight start_install but doesn't hurt.
-            self._guest.installer.set_install_defaults(self._guest)
+            self._guest.installer_instance.set_install_defaults(self._guest)
 
             if not self.widget("summary-customize").get_active():
                 self._start_install(self._guest)
@@ -2263,7 +2268,7 @@ class vmmCreate(vmmGObjectUI):
                 refresh_pools.append(poolname)
 
         logging.debug("Starting background install process")
-        guest.start_install(meter=meter)
+        guest.installer_instance.start_install(guest, meter=meter)
         logging.debug("Install completed")
 
         # Wait for VM to show up
@@ -2289,7 +2294,7 @@ class vmmCreate(vmmGObjectUI):
             # Probably means guest had no 'install' phase, as in
             # for live cds. Try to restart the domain.
             vm.startup()
-        elif guest.installer.has_install_phase():
+        elif guest.installer_instance.has_install_phase():
             # Register a status listener, which will restart the
             # guest after the install has finished
             def cb():

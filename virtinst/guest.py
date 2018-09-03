@@ -15,7 +15,6 @@ from virtcli import CLIConfig
 
 from . import util
 from .devices import *  # pylint: disable=wildcard-import
-from .distroinstaller import DistroInstaller
 from .domain import *  # pylint: disable=wildcard-import
 from .domcapabilities import DomainCapabilities
 from .osdict import OSDB
@@ -137,8 +136,6 @@ class Guest(XMLBuilder):
 
         # This is set via Capabilities.build_virtinst_guest
         self.capsinfo = None
-
-        self.installer = DistroInstaller(self.conn)
 
 
     ######################
@@ -272,18 +269,6 @@ class Guest(XMLBuilder):
         self.devices.remove_child(dev)
 
     devices = XMLChildProperty(_DomainDevices, is_single=True)
-
-
-    #################################
-    # Install API transition compat #
-    #################################
-
-    def start_install(self, *args, **kwargs):
-        return self.installer.start_install(self, *args, **kwargs)
-    def get_created_disks(self):
-        return self.installer.get_created_disks(self)
-    def cleanup_created_disks(self, meter):
-        return self.installer.cleanup_created_disks(self, meter)
 
 
     ###########################

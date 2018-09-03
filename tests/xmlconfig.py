@@ -14,14 +14,9 @@ from virtcli import CLIConfig
 from tests import utils
 
 
-def _make_guest(installer=None, conn=None, os_variant=None):
+def _make_guest(conn=None, os_variant=None):
     if not conn:
-        if installer:
-            conn = installer.conn
-        else:
-            conn = utils.URIs.open_testdriver_cached()
-    if not installer:
-        installer = _make_installer(conn=conn)
+        conn = utils.URIs.open_testdriver_cached()
 
     g = conn.caps.lookup_virtinst_guest()
     g.type = "kvm"
@@ -36,7 +31,6 @@ def _make_guest(installer=None, conn=None, os_variant=None):
     g.features.pae = False
     g.vcpus = 5
 
-    g.installer = installer
     g.emulator = "/usr/lib/xen/bin/qemu-dm"
     g.os.arch = "i686"
     g.os.os_type = "hvm"
@@ -107,7 +101,9 @@ class TestXMLMisc(unittest.TestCase):
     def _compare(self, guest, filebase, do_install):
         filename = os.path.join("tests/xmlconfig-xml", filebase + ".xml")
 
-        inst_xml, boot_xml = guest.start_install(return_xml=True, dry=True)
+        installer = _make_installer(conn=guest.conn)
+        inst_xml, boot_xml = installer.start_install(
+                guest, return_xml=True, dry=True)
         if do_install:
             actualXML = inst_xml
         else:
@@ -158,13 +154,13 @@ class TestXMLMisc(unittest.TestCase):
         # does much more exhaustive testing but it's only run occasionally
         i = _make_installer(
             location="tests/cli-test-xml/fakefedoratree")
-        g = _make_guest(i)
+        g = _make_guest()
         v = i.detect_distro(g)
         self.assertEqual(v, "fedora17")
 
         i = _make_installer(
             location="tests/cli-test-xml/fakerhel6tree")
-        g = _make_guest(i)
+        g = _make_guest()
         v = i.detect_distro(g)
         self.assertEqual(v, "rhel6.0")
 

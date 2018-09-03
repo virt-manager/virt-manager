@@ -354,31 +354,31 @@ def get_guest(conn, options):
 # Install media setup/validation #
 ##################################
 
-def set_distro_variant(options, guest):
+def set_distro_variant(options, guest, installer):
     try:
         if options.distro_variant not in ["auto", "none"]:
             guest.os_variant = options.distro_variant
 
-        guest.installer.check_location(guest)
+        installer.check_location(guest)
 
         if options.distro_variant == "auto":
-            guest.os_variant = guest.installer.detect_distro(guest)
+            guest.os_variant = installer.detect_distro(guest)
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
 
 
 def do_test_media_detection(conn, url):
     guest = conn.caps.lookup_virtinst_guest()
-    guest.installer = virtinst.DistroInstaller(conn)
-    guest.installer.location = url
-    print_stdout(guest.installer.detect_distro(guest), do_force=True)
+    installer = virtinst.DistroInstaller(conn)
+    installer.location = url
+    print_stdout(installer.detect_distro(guest), do_force=True)
 
 
 #############################
 # General option validation #
 #############################
 
-def validate_required_options(options, guest):
+def validate_required_options(options, guest, installer):
     # Required config. Don't error right away if nothing is specified,
     # aggregate the errors to help first time users get it right
     msg = ""
@@ -394,7 +394,7 @@ def validate_required_options(options, guest):
         msg += "\n" + (
             _("--disk storage must be specified (override with --disk none)"))
 
-    if not guest.installer:
+    if not installer:
         msg += "\n" + (
             _("An install method must be specified\n(%(methods)s)") %
             {"methods": install_methods})
@@ -407,7 +407,7 @@ _cdrom_location_man_page = _("See the man page for examples of "
     "using --location with CDROM media")
 
 
-def check_option_collisions(options, guest):
+def check_option_collisions(options, guest, installer):
     if options.noreboot and options.transient:
         fail(_("--noreboot and --transient can not be specified together"))
 
@@ -433,7 +433,7 @@ def check_option_collisions(options, guest):
         fail(_("Libvirt version does not support remote --location installs"))
 
     cdrom_err = ""
-    if guest.installer.cdrom:
+    if installer.cdrom:
         cdrom_err = " " + _cdrom_location_man_page
     if not options.location and options.extra_args:
         fail(_("--extra-args only work if specified with --location.") +
@@ -443,13 +443,13 @@ def check_option_collisions(options, guest):
              cdrom_err)
 
 
-def _show_nographics_warnings(options, guest):
+def _show_nographics_warnings(options, guest, installer):
     if guest.devices.graphics:
         return
     if not options.autoconsole:
         return
 
-    if guest.installer.cdrom:
+    if installer.cdrom:
         logging.warning(_("CDROM media does not print to the text console "
             "by default, so you likely will not see text install output. "
             "You might want to use --location.") + " " +
@@ -490,7 +490,7 @@ def _show_nographics_warnings(options, guest):
         "guest."), {"console_string": console_type})
 
 
-def show_warnings(options, guest):
+def show_warnings(options, guest, installer):
     if options.pxe and not supports_pxe(guest):
         logging.warning(_("The guest's network configuration does not support "
                        "PXE"))
@@ -500,7 +500,7 @@ def show_warnings(options, guest):
         logging.warning(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
 
-    _show_nographics_warnings(options, guest)
+    _show_nographics_warnings(options, guest, installer)
 
 
 ##########################
@@ -582,21 +582,21 @@ def build_guest_instance(conn, options):
             logging.warning("Couldn't configure UEFI: %s", e)
             logging.warning("Your VM may not boot successfully.")
 
-    guest.installer = build_installer(options, guest)
-    validate_required_options(options, guest)
-    set_distro_variant(options, guest)
+    installer = build_installer(options, guest)
+    validate_required_options(options, guest, installer)
+    set_distro_variant(options, guest, installer)
 
-    check_option_collisions(options, guest)
-    show_warnings(options, guest)
+    check_option_collisions(options, guest, installer)
+    show_warnings(options, guest, installer)
 
-    return guest
+    return guest, installer
 
 
 ###########################
 # Install process helpers #
 ###########################
 
-def start_install(guest, options):
+def start_install(guest, installer, options):
     if options.wait is not None:
         wait_on_install = True
         wait_time = options.wait * 60
@@ -633,7 +633,7 @@ def start_install(guest, options):
 
     meter = cli.get_meter()
     logging.debug("Guest.has_install_phase: %s",
-                  guest.installer.has_install_phase())
+                  installer.has_install_phase())
 
     # we've got everything -- try to start the install
     print_stdout(_("\nStarting install..."))
@@ -642,18 +642,17 @@ def start_install(guest, options):
     try:
         start_time = time.time()
 
-        # Do first install phase
-        domain = guest.start_install(meter=meter,
+        domain = installer.start_install(guest, meter=meter,
                 doboot=not options.noreboot,
                 transient=options.transient,
                 autostart=options.autostart)
         cli.connect_console(guest, domain, conscb, wait_on_console)
-        check_domain(guest, domain, conscb, options.transient,
+        check_domain(installer, domain, conscb, options.transient,
                      wait_on_install, wait_time, start_time)
 
         print_stdout(_("Domain creation completed."))
         if not options.transient and not domain.isActive():
-            if options.noreboot or not guest.installer.has_install_phase():
+            if options.noreboot or not installer.has_install_phase():
                 print_stdout(
                     _("You can restart your domain by running:\n  %s") %
                     cli.virsh_start_cmd(guest))
@@ -669,11 +668,11 @@ def start_install(guest, options):
     except Exception as e:
         fail(e, do_exit=False)
         if domain is None:
-            guest.cleanup_created_disks(meter)
+            installer.cleanup_created_disks(guest, meter)
         cli.install_fail(guest)
 
 
-def check_domain(guest, domain, conscb, transient,
+def check_domain(installer, domain, conscb, transient,
                  wait_for_install, wait_time, start_time):
     """
     Make sure domain ends up in expected state, and wait if for install
@@ -713,7 +712,7 @@ def check_domain(guest, domain, conscb, transient,
         #   used --noautoconsole
         #   used --wait 0
         #   killed console and guest is still running
-        if not guest.installer.has_install_phase():
+        if not installer.has_install_phase():
             return
 
         print_stdout(
@@ -749,8 +748,9 @@ def check_domain(guest, domain, conscb, transient,
 # XML printing helpers #
 ########################
 
-def xml_to_print(guest, xmlonly, dry):
-    start_xml, final_xml = guest.start_install(dry=dry, return_xml=True)
+def xml_to_print(guest, installer, xmlonly, dry):
+    start_xml, final_xml = installer.start_install(
+            guest, dry=dry, return_xml=True)
     if not start_xml:
         start_xml = final_xml
         final_xml = None
@@ -963,13 +963,13 @@ def main(conn=None):
         do_test_media_detection(conn, options.test_media_detection)
         return 0
 
-    guest = build_guest_instance(conn, options)
+    guest, installer = build_guest_instance(conn, options)
     if options.xmlonly or options.dry:
-        xml = xml_to_print(guest, options.xmlonly, options.dry)
+        xml = xml_to_print(guest, installer, options.xmlonly, options.dry)
         if xml:
             print_stdout(xml, do_force=True)
     else:
-        start_install(guest, options)
+        start_install(guest, installer, options)
 
     return 0
 
