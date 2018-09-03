@@ -165,7 +165,7 @@ class XMLChildProperty(_XMLPropertyBase):
 
 class XMLProperty(_XMLPropertyBase):
     def __init__(self, xpath,
-                 set_converter=None, validate_cb=None,
+                 set_converter=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
                  do_abspath=False):
         """
@@ -189,8 +189,6 @@ class XMLProperty(_XMLPropertyBase):
             the Guest.memory API was once in MiB, but the libvirt domain
             memory API is in KiB. So, if xpath is specified, on a 'get'
             operation we convert the XML value with int(val) / 1024.
-        :param validate_cb: Called once when value is set, should
-            raise a RuntimeError if the value is not proper.
         :param is_bool: Whether this is a boolean property in the XML
         :param is_int: Whether this is an integer property in the XML
         :param is_yesno: Whether this is a yes/no property in the XML
@@ -207,7 +205,6 @@ class XMLProperty(_XMLPropertyBase):
         self._is_onoff = is_onoff
         self._do_abspath = do_abspath
 
-        self._validate_cb = validate_cb
         self._convert_value_for_setter_cb = set_converter
 
         if sum([int(bool(i)) for i in
@@ -322,7 +319,7 @@ class XMLProperty(_XMLPropertyBase):
         return xmlbuilder._xmlstate.xmlapi.get_xpath_content(
                 xpath, self._is_bool)
 
-    def setter(self, xmlbuilder, val, validate=True):
+    def setter(self, xmlbuilder, val):
         """
         Set the value at user request. This just stores the value
         in propstore. Setting the actual XML is only done at
@@ -332,10 +329,8 @@ class XMLProperty(_XMLPropertyBase):
             _seenprops.append(self)
             self._is_tracked = True
 
-        if validate and self._validate_cb:
-            self._validate_cb(xmlbuilder, val)
-        self._nonxml_fset(xmlbuilder,
-                          self._convert_set_value(xmlbuilder, val))
+        setval = self._convert_set_value(xmlbuilder, val)
+        self._nonxml_fset(xmlbuilder, setval)
 
     def _set_xml(self, xmlbuilder, setval):
         """

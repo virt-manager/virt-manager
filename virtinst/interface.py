@@ -21,15 +21,7 @@ class _IPAddress(XMLBuilder):
     _XML_PROP_ORDER = ["address", "prefix"]
     XML_NAME = "ip"
 
-    ######################
-    # Validation helpers #
-    ######################
-
-    def _validate_ipaddr(self, addr):
-        ipaddress.ip_address(str(addr))
-        return addr
-
-    address = XMLProperty("./@address", validate_cb=_validate_ipaddr)
+    address = XMLProperty("./@address")
     prefix = XMLProperty("./@prefix", is_int=True)
 
 
@@ -167,10 +159,6 @@ class Interface(XMLBuilder):
         raise ValueError(_("Name '%s' already in use by another interface.") %
                            name)
 
-    def _validate_mac(self, val):
-        util.validate_macaddr(val)
-        return val
-
 
     ##################
     # General params #
@@ -181,7 +169,7 @@ class Interface(XMLBuilder):
     start_mode = XMLProperty("./start/@mode")
 
     name = XMLProperty("./@name")
-    macaddr = XMLProperty("./mac/@address", validate_cb=_validate_mac)
+    macaddr = XMLProperty("./mac/@address")
 
     def add_protocol(self, obj):
         self.add_child(obj)
@@ -228,6 +216,12 @@ class Interface(XMLBuilder):
 
     def validate(self):
         self.validate_name(self.conn, self.name)
+        if self.macaddr:
+            util.validate_macaddr(self.macaddr)
+
+        for protocol in self.protocols:
+            for ip in protocol.ips:
+                ipaddress.ip_address(ip.address)
 
         if (self.type == self.INTERFACE_TYPE_VLAN and
             (self.tag is None or self.parent_interface is None)):
