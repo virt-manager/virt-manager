@@ -204,10 +204,6 @@ class DeviceInterface(Device):
     # XML helpers #
     ###############
 
-    def _validate_mac(self, val):
-        util.validate_macaddr(val)
-        return val
-
     def _get_source(self):
         """
         Convenience function, try to return the relevant <source> value
@@ -257,7 +253,7 @@ class DeviceInterface(Device):
     type = XMLProperty("./@type")
     trustGuestRxFilters = XMLProperty("./@trustGuestRxFilters", is_yesno=True)
 
-    macaddr = XMLProperty("./mac/@address", set_converter=_validate_mac)
+    macaddr = XMLProperty("./mac/@address")
 
     source_type = XMLProperty("./source/@type")
     source_path = XMLProperty("./source/@path")
@@ -281,11 +277,11 @@ class DeviceInterface(Device):
     # Build API #
     #############
 
-    def setup(self, meter=None):
-        ignore = meter
+    def validate(self):
         if not self.macaddr:
             return
 
+        util.validate_macaddr(self.macaddr)
         ret, msg = self.is_conflict_net(self.conn, self.macaddr)
         if msg is None:
             return

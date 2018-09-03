@@ -369,6 +369,8 @@ class vmmNetworkList(vmmGObjectUI):
                 net.virtualport.typeid = vport_typeid or None
                 net.virtualport.typeidversion = vport_idver or None
                 net.virtualport.instanceid = vport_instid or None
+
+            net.validate()
         except Exception as e:
             return self.err.val_err(_("Error with network parameters."), e)
 
