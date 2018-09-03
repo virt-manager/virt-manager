@@ -134,7 +134,6 @@ class Guest(XMLBuilder):
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
 
         self.__osinfo = None
-        self._defaults_are_set = False
 
         # This is set via Capabilities.build_virtinst_guest
         self.capsinfo = None
@@ -343,21 +342,6 @@ class Guest(XMLBuilder):
     # Device defaults #
     ###################
 
-    def set_install_defaults(self):
-        """
-        Allow API users to set defaults ahead of time if they want it.
-        Used by vmmDomainVirtinst so the 'Customize before install' dialog
-        shows accurate values.
-
-        If the user doesn't explicitly call this, it will be called by
-        start_install()
-        """
-        if self._defaults_are_set:
-            return
-
-        self._set_defaults()
-        self._defaults_are_set = True
-
     def stable_defaults(self, *args, **kwargs):
         return self.conn.stable_defaults(self.emulator, *args, **kwargs)
 
@@ -504,19 +488,13 @@ class Guest(XMLBuilder):
         self.add_default_channels()
         self.add_default_rng()
 
-    def _set_defaults(self):
+    def set_defaults(self, _guest):
         if not self.uuid:
             self.uuid = util.generate_uuid(self.conn)
         if not self.vcpus:
             self.vcpus = 1
         if self.os.is_xenpv() or self.type == "vz":
             self.emulator = None
-
-        if (not self.os.is_container() and
-            not self.os.kernel and
-            not self.os.bootorder and
-            not any([d.boot.order for d in self.devices.get_all()])):
-            self.os.bootorder = self.installer.get_postinstall_bootorder(self)
 
         self.clock.set_defaults(self)
         self.cpu.set_defaults(self)

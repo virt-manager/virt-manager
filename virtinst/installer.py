@@ -55,6 +55,7 @@ class Installer(object):
         self._install_kernel = None
         self._install_initrd = None
         self._install_cdrom_device = None
+        self._defaults_are_set = False
 
         self._tmpfiles = []
         self._tmpvols = []
@@ -119,6 +120,11 @@ class Installer(object):
                 break
         return bootorder
 
+    def _can_set_guest_bootorder(self, guest):
+        return (not guest.os.is_container() and
+            not guest.os.kernel and
+            not any([d.boot.order for d in guest.devices.get_all()]))
+
     def _alter_bootconfig(self, guest):
         """
         Generate the portion of the guest xml that determines boot devices
@@ -136,10 +142,7 @@ class Installer(object):
             guest.os.kernel_args = " ".join(self.extraargs)
 
         bootdev = self._get_install_bootdev(guest)
-        if (bootdev and
-            not guest.os.is_container() and
-            not guest.os.kernel and
-            not any(d.boot.order for d in guest.devices.get_all())):
+        if bootdev and self._can_set_guest_bootorder(guest):
             guest.os.bootorder = self._build_boot_order(guest, bootdev)
         else:
             guest.os.bootorder = []
@@ -188,12 +191,26 @@ class Installer(object):
     # Public API #
     ##############
 
-    def get_postinstall_bootorder(self, guest):
+    def set_install_defaults(self, guest):
         """
-        Return the preferred guest postinstall bootorder
+        Allow API users to set defaults ahead of time if they want it.
+        Used by vmmDomainVirtinst so the 'Customize before install' dialog
+        shows accurate values.
+
+        If the user doesn't explicitly call this, it will be called by
+        start_install()
         """
-        bootdev = self._get_postinstall_bootdev(guest)
-        return self._build_boot_order(guest, bootdev)
+        if self._defaults_are_set:
+            return
+
+        self._add_install_cdrom_device(guest)
+
+        if not guest.os.bootorder and self._can_set_guest_bootorder(guest):
+            bootdev = self._get_postinstall_bootdev(guest)
+            guest.os.bootorder = self._build_boot_order(guest, bootdev)
+
+        guest.set_defaults(None)
+        self._defaults_are_set = True
 
     def scratchdir_required(self):
         """
@@ -271,7 +288,6 @@ class Installer(object):
         finally:
             self._remove_install_cdrom_media(guest)
             self._finish_get_install_xml(guest, data)
-
 
     def _build_xml(self, guest):
         install_xml = None
@@ -370,8 +386,7 @@ class Installer(object):
         :param return_xml: Don't create the guest, just return generated XML
         :param autostart: If True, mark the VM to autostart on host boot
         """
-        self._add_install_cdrom_device(guest)
-        guest.set_install_defaults()
+        self.set_install_defaults(guest)
 
         try:
             self._cleanup(guest)

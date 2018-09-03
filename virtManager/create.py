@@ -2143,7 +2143,7 @@ class vmmCreate(vmmGObjectUI):
             # This encodes all the virtinst defaults up front, so the customize
             # dialog actually shows disk buses, cache values, default devices,
             # etc. Not required for straight start_install but doesn't hurt.
-            self._guest.set_install_defaults()
+            self._guest.installer.set_install_defaults(self._guest)
 
             if not self.widget("summary-customize").get_active():
                 self._start_install(self._guest)
