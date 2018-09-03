@@ -381,12 +381,12 @@ def validate_disk(dev, warn_overwrite=False):
     check_path_search(dev)
 
 
-def _run_console(guest, args):
+def _run_console(domain, args):
     logging.debug("Running: %s", " ".join(args))
     if _in_testsuite():
         # Add this destroy() in here to trigger more virt-install code
         # for the test suite
-        guest.domain.destroy()
+        domain.destroy()
         return None
 
     child = os.fork()
@@ -397,7 +397,7 @@ def _run_console(guest, args):
     os._exit(1)  # pylint: disable=protected-access
 
 
-def _gfx_console(guest):
+def _gfx_console(guest, domain):
     args = ["virt-viewer",
             "--connect", guest.conn.uri,
             "--wait", guest.name]
@@ -409,26 +409,26 @@ def _gfx_console(guest):
 
     logging.debug("Launching virt-viewer for graphics type '%s'",
         guest.devices.graphics[0].type)
-    return _run_console(guest, args)
+    return _run_console(domain, args)
 
 
-def _txt_console(guest):
+def _txt_console(guest, domain):
     args = ["virsh",
             "--connect", guest.conn.uri,
             "console", guest.name]
 
     logging.debug("Connecting to text console")
-    return _run_console(guest, args)
+    return _run_console(domain, args)
 
 
-def connect_console(guest, consolecb, wait):
+def connect_console(guest, domain, consolecb, wait):
     """
     Launched the passed console callback for the already defined
     domain. If domain isn't running, return an error.
     """
     child = None
     if consolecb:
-        child = consolecb(guest)
+        child = consolecb(guest, domain)
 
     if not child or not wait:
         return

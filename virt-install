@@ -641,26 +641,28 @@ def start_install(guest, options):
     # we've got everything -- try to start the install
     print_stdout(_("\nStarting install..."))
 
+    domain = None
     try:
         start_time = time.time()
 
         # Do first install phase
-        guest.start_install(meter=meter, doboot=not options.noreboot,
-                            transient=options.transient)
-        cli.connect_console(guest, conscb, wait_on_console)
-        check_domain(guest, conscb, options.transient,
+        domain = guest.start_install(
+                meter=meter, doboot=not options.noreboot,
+                transient=options.transient)
+        cli.connect_console(guest, domain, conscb, wait_on_console)
+        check_domain(guest, domain, conscb, options.transient,
                      wait_on_install, wait_time, start_time)
 
         print_stdout(_("Domain creation completed."))
-        if not options.transient and not guest.domain.isActive():
+        if not options.transient and not domain.isActive():
             if options.noreboot or not guest.installer.has_install_phase():
                 print_stdout(
                     _("You can restart your domain by running:\n  %s") %
                     cli.virsh_start_cmd(guest))
             else:
                 print_stdout(_("Restarting guest."))
-                guest.domain.create()
-                cli.connect_console(guest, conscb, True)
+                domain.create()
+                cli.connect_console(guest, domain, conscb, True)
 
     except KeyboardInterrupt:
         logging.debug("", exc_info=True)
@@ -668,12 +670,12 @@ def start_install(guest, options):
         raise
     except Exception as e:
         fail(e, do_exit=False)
-        if guest.domain is None:
+        if domain is None:
             guest.cleanup_created_disks(meter)
         cli.install_fail(guest)
 
 
-def check_domain(guest, conscb, transient,
+def check_domain(guest, domain, conscb, transient,
                  wait_for_install, wait_time, start_time):
     """
     Make sure domain ends up in expected state, and wait if for install
@@ -681,14 +683,14 @@ def check_domain(guest, conscb, transient,
     """
     def check_domain_inactive():
         try:
-            dominfo = guest.domain.info()
+            dominfo = domain.info()
             state = dominfo[0]
             logging.debug("Domain state after install: %s", state)
 
             if state == libvirt.VIR_DOMAIN_CRASHED:
                 fail(_("Domain has crashed."))
 
-            return not guest.domain.isActive()
+            return not domain.isActive()
         except libvirt.libvirtError as e:
             if transient and e.get_error_code() == libvirt.VIR_ERR_NO_DOMAIN:
                 logging.debug("transient VM shutdown and disappeared.")
@@ -731,7 +733,7 @@ def check_domain(guest, conscb, transient,
 
     # Wait loop
     while True:
-        if not guest.domain.isActive():
+        if not domain.isActive():
             print_stdout(_("Domain has shutdown. Continuing."))
             break
 

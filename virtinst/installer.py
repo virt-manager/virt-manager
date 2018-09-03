@@ -59,7 +59,6 @@ class Installer(object):
         self._tmpfiles = []
         self._tmpvols = []
 
-        self.domain = None
         self.autostart = False
         self.replace = False
 
@@ -339,23 +338,22 @@ class Installer(object):
             if not transient:
                 domain = self.conn.defineXML(final_xml)
 
-        self.domain = domain
         try:
             logging.debug("XML fetched from libvirt object:\n%s",
-                          self.domain.XMLDesc(0))
+                          domain.XMLDesc(0))
         except Exception as e:
             logging.debug("Error fetching XML from libvirt object: %s", e)
+        return domain
 
-
-    def _flag_autostart(self):
+    def _flag_autostart(self, domain):
         """
-        Set the autostart flag for self.domain if the user requested it
+        Set the autostart flag for domain if the user requested it
         """
         if not self.autostart:
             return
 
         try:
-            self.domain.setAutostart(True)
+            domain.setAutostart(True)
         except libvirt.libvirtError as e:
             if util.is_error_nosupport(e):
                 logging.warning("Could not set autostart flag: libvirt "
@@ -375,9 +373,6 @@ class Installer(object):
         Begin the guest install (stage1).
         :param return_xml: Don't create the guest, just return generated XML
         """
-        if self.domain is not None:
-            raise RuntimeError(_("Domain has already been started!"))
-
         self._add_install_cdrom_device(guest)
         guest.set_install_defaults()
 
@@ -400,11 +395,13 @@ class Installer(object):
             guest.check_vm_collision(self.conn, guest.name,
                                      do_remove=self.replace)
 
-            self._create_guest(guest, meter, install_xml, final_xml,
-                               doboot, transient)
+            domain = self._create_guest(
+                    guest, meter, install_xml, final_xml,
+                    doboot, transient)
 
             # Set domain autostart flag if requested
-            self._flag_autostart()
+            self._flag_autostart(domain)
+            return domain
         finally:
             self._cleanup(guest)
 

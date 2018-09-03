@@ -291,10 +291,6 @@ class Guest(XMLBuilder):
     def cleanup_created_disks(self, meter):
         return self.installer.cleanup_created_disks(self, meter)
 
-    def _get_domain(self):
-        return self.installer.domain
-    domain = property(_get_domain)
-
 
     ###########################
     # XML convenience helpers #
