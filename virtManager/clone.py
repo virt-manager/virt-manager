@@ -692,10 +692,7 @@ class vmmCloneVM(vmmGObjectUI):
         row = self.net_list[orig]
 
         try:
-            ignore, msg = DeviceInterface.is_conflict_net(
-                                self.conn.get_backend(), new)
-            if msg:
-                raise RuntimeError(msg)
+            DeviceInterface.is_conflict_net(self.conn.get_backend(), new)
             row[NETWORK_INFO_NEW_MAC] = new
         except Exception as e:
             self.err.show_err(_("Error changing MAC address: %s") % str(e))

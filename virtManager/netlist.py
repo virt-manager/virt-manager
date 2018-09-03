@@ -373,17 +373,6 @@ class vmmNetworkList(vmmGObjectUI):
             net.validate()
         except Exception as e:
             return self.err.val_err(_("Error with network parameters."), e)
-
-        # Make sure there is no mac address collision
-        isfatal, errmsg = net.is_conflict_net(net.conn, net.macaddr)
-        if isfatal:
-            return self.err.val_err(_("Mac address collision."), errmsg)
-        elif errmsg is not None:
-            retv = self.err.yes_no(_("Mac address collision."),
-                _("%s Are you sure you want to use this address?") % errmsg)
-            if not retv:
-                return False
-
         return net
 
     def reset_state(self):

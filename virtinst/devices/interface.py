@@ -170,9 +170,11 @@ class DeviceInterface(Device):
 
         for ignore in range(256):
             mac = _random_mac(conn)
-            ret = DeviceInterface.is_conflict_net(conn, mac)
-            if ret[1] is None:
+            try:
+                DeviceInterface.is_conflict_net(conn, mac)
                 return mac
+            except RuntimeError:
+                continue
 
         logging.debug("Failed to generate non-conflicting MAC")
         return None
@@ -180,24 +182,16 @@ class DeviceInterface(Device):
     @staticmethod
     def is_conflict_net(conn, searchmac):
         """
-        :returns: a two element tuple:
-            first element is True if fatal collision occurred
-            second element is a string description of the collision.
-
-            Non fatal collisions (mac addr collides with inactive guest) will
-            return (False, "description of collision")
+        Raise RuntimeError if the passed mac conflicts with a defined VM
         """
-        if searchmac is None:
-            return (False, None)
-
         vms = conn.fetch_all_domains()
         for vm in vms:
             for nic in vm.devices.interface:
                 nicmac = nic.macaddr or ""
                 if nicmac.lower() == searchmac.lower():
-                    return (True, _("The MAC address '%s' is in use "
-                                    "by another virtual machine.") % searchmac)
-        return (False, None)
+                    raise RuntimeError(
+                            _("The MAC address '%s' is in use "
+                              "by another virtual machine.") % searchmac)
 
 
     ###############
@@ -282,13 +276,7 @@ class DeviceInterface(Device):
             return
 
         util.validate_macaddr(self.macaddr)
-        ret, msg = self.is_conflict_net(self.conn, self.macaddr)
-        if msg is None:
-            return
-        if ret is False:
-            logging.warning(msg)
-        else:
-            raise RuntimeError(msg)
+        self.is_conflict_net(self.conn, self.macaddr)
 
     def set_default_source(self):
         if (self.conn.is_qemu_session() or self.conn.is_test()):
