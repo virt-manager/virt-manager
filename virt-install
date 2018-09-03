@@ -35,20 +35,8 @@ def install_specified(options):
     return any([bool(o) for o in all_install_options(options)])
 
 
-def cdrom_specified(guest, disk=None):
-    disks = guest.devices.disk
-
-    for d in disks:
-        if d.device == virtinst.DeviceDisk.DEVICE_CDROM:
-            return True
-
-    # Probably haven't set up disks yet
-    if not disks and disk:
-        for opts in disk:
-            if opts.count("device=cdrom"):
-                return True
-
-    return False
+def implied_cdrom_install(guest):
+    return [d.is_cdrom() for d in guest.devices.disk]
 
 
 def supports_pxe(guest):
@@ -366,21 +354,14 @@ def get_guest(conn, options):
 # Install media setup/validation #
 ##################################
 
-def set_install_media(guest, location, cdpath, distro_variant):
+def set_distro_variant(options, guest):
     try:
-        cdinstall = bool(not location and (cdpath or cdrom_specified(guest)))
-
-        if cdinstall or cdpath:
-            guest.installer.cdrom = True
-        if location or cdpath:
-            guest.installer.location = (location or cdpath)
-
-        if distro_variant not in ["auto", "none"]:
-            guest.os_variant = distro_variant
+        if options.distro_variant not in ["auto", "none"]:
+            guest.os_variant = options.distro_variant
 
         guest.installer.check_location(guest)
 
-        if distro_variant == "auto":
+        if options.distro_variant == "auto":
             guest.os_variant = guest.installer.detect_distro(guest)
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
@@ -402,10 +383,10 @@ def validate_required_options(options, guest):
     # aggregate the errors to help first time users get it right
     msg = ""
 
-    if not options.name:
+    if not guest.name:
         msg += "\n" + _("--name is required")
 
-    if not options.memory:
+    if not guest.memory:
         msg += "\n" + _("--memory amount in MiB is required")
 
     if (not guest.os.is_container() and
@@ -413,10 +394,7 @@ def validate_required_options(options, guest):
         msg += "\n" + (
             _("--disk storage must be specified (override with --disk none)"))
 
-    if (not guest.os.is_container() and
-        not options.xmlonly and
-        not install_specified(options) and
-        not cdrom_specified(guest, options.disk)):
+    if not guest.installer:
         msg += "\n" + (
             _("An install method must be specified\n(%(methods)s)") %
             {"methods": install_methods})
@@ -503,7 +481,7 @@ def _show_nographics_warnings(options, guest):
         # warn about it.
         return
 
-    for args in options.extra_args:
+    for args in (options.extra_args or []):
         if console_type in (args or ""):
             return
 
@@ -529,25 +507,45 @@ def show_warnings(options, guest):
 # Guest building helpers #
 ##########################
 
-def build_installer(options, conn, virt_type):
-    # Build the Installer instance
-    if options.pxe:
-        instclass = virtinst.PXEInstaller
-    elif options.cdrom or options.location or options.livecd:
-        instclass = virtinst.DistroInstaller
-    elif virt_type == "exe":
+def build_installer(options, guest):
+    instclass = None
+    cdrom = False
+    location = None
+
+    if guest.os.is_container():
         instclass = virtinst.ContainerInstaller
-    elif options.import_install or options.boot:
-        options.import_install = True
+    elif (options.cdrom or
+          options.location or
+          options.livecd):
+        location = options.location or options.cdrom
+        cdrom = bool(options.cdrom)
+        instclass = virtinst.DistroInstaller
+    elif options.pxe:
+        instclass = virtinst.PXEInstaller
+    elif (options.import_install or
+          options.xmlonly or
+          options.boot):
         instclass = virtinst.ImportInstaller
-    elif options.xmlonly:
-        instclass = virtinst.ImportInstaller
-    else:
+    elif implied_cdrom_install(guest):
+        # Explicit install options always take precedent over this case
+        cdrom = True
         instclass = virtinst.DistroInstaller
 
-    installer = instclass(conn)
+    if not instclass:
+        # This triggers an error in validate_required_options
+        return None
+
+    installer = instclass(guest.conn)
     if options.livecd:
         installer.livecd = True
+    if cdrom:
+        installer.cdrom = cdrom
+    if location:
+        installer.location = location
+    if options.extra_args:
+        installer.extraargs = options.extra_args
+    if options.initrd_inject:
+        installer.initrd_injections = options.initrd_inject
 
     return installer
 
@@ -558,32 +556,19 @@ def build_guest_instance(conn, options):
     logging.debug("Received virt method '%s'", guest.type)
     logging.debug("Hypervisor name is '%s'", guest.os.os_type)
 
-    guest.installer = build_installer(options, conn, guest.os.os_type)
-
-    # non-xml install options
-    options.extra_args = options.extra_args or []
-    guest.installer.extraargs = options.extra_args
-    guest.installer.initrd_injections = options.initrd_inject
-    guest.autostart = options.autostart
-
     if options.name:
         guest.name = options.name
     if options.uuid:
         guest.uuid = options.uuid
     if options.description:
         guest.description = options.description
+    guest.autostart = options.autostart
 
-    validate_required_options(options, guest)
     cli.parse_option_strings(options, guest, None)
 
     # Extra disk validation
     for disk in guest.devices.disk:
         cli.validate_disk(disk)
-
-    set_install_media(guest, options.location, options.cdrom,
-        options.distro_variant)
-
-    guest.add_default_devices()
 
     # Default to UEFI for aarch64
     if ((guest.os.is_arm64() or guest.os.is_arm32()) and
@@ -599,10 +584,13 @@ def build_guest_instance(conn, options):
             logging.warning("Couldn't configure UEFI: %s", e)
             logging.warning("Your VM may not boot successfully.")
 
-    # Various little validations about option collisions. Need to do
-    # this after setting guest.installer at least
-    check_option_collisions(options, guest)
+    guest.installer = build_installer(options, guest)
+    validate_required_options(options, guest)
+    set_distro_variant(options, guest)
 
+    guest.add_default_devices()
+
+    check_option_collisions(options, guest)
     show_warnings(options, guest)
 
     return guest
