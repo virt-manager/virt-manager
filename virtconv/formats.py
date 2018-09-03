@@ -213,7 +213,6 @@ class VirtConverter(object):
 
         self._guest = self.parser.export_libvirt(self.conn,
             self._input_file)
-        self._guest.add_default_devices()
 
     def __del__(self):
         for f in self._force_clean:

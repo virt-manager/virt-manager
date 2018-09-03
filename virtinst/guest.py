@@ -352,7 +352,7 @@ class Guest(XMLBuilder):
             return False
         return all([c.model == "none" for c in controllers])
 
-    def add_default_input_device(self):
+    def _add_default_input_device(self):
         if self.os.is_container():
             return
         if self.devices.input:
@@ -381,7 +381,7 @@ class Guest(XMLBuilder):
             dev.bus = "usb"
             self.add_device(dev)
 
-    def add_default_console_device(self):
+    def _add_default_console_device(self):
         if self.skip_default_console:
             return
         if self.devices.console or self.devices.serial:
@@ -393,7 +393,7 @@ class Guest(XMLBuilder):
             dev.target_type = "sclp"
         self.add_device(dev)
 
-    def add_default_video_device(self):
+    def _add_default_video_device(self):
         if self.os.is_container():
             return
         if self.devices.video:
@@ -402,7 +402,7 @@ class Guest(XMLBuilder):
             return
         self.add_device(DeviceVideo(self.conn))
 
-    def add_default_usb_controller(self):
+    def _add_default_usb_controller(self):
         if self.os.is_container():
             return
         if any([d.type == "usb" for d in self.devices.controller]):
@@ -432,7 +432,7 @@ class Guest(XMLBuilder):
             self.add_device(
                 DeviceController.get_usb3_controller(self.conn, self))
 
-    def add_default_channels(self):
+    def _add_default_channels(self):
         if self.skip_default_channel:
             return
         if self.devices.channel:
@@ -450,7 +450,7 @@ class Guest(XMLBuilder):
             dev.target_name = dev.CHANNEL_NAME_QEMUGA
             self.add_device(dev)
 
-    def add_default_graphics(self):
+    def _add_default_graphics(self):
         if self.skip_default_graphics:
             return
         if self.devices.graphics:
@@ -461,7 +461,7 @@ class Guest(XMLBuilder):
             return
         self.add_device(DeviceGraphics(self.conn))
 
-    def add_default_rng(self):
+    def _add_default_rng(self):
         if self.skip_default_rng:
             return
         if self.devices.rng:
@@ -479,15 +479,6 @@ class Guest(XMLBuilder):
             dev.device = "/dev/urandom"
             self.add_device(dev)
 
-    def add_default_devices(self):
-        self.add_default_graphics()
-        self.add_default_video_device()
-        self.add_default_input_device()
-        self.add_default_console_device()
-        self.add_default_usb_controller()
-        self.add_default_channels()
-        self.add_default_rng()
-
     def set_defaults(self, _guest):
         if not self.uuid:
             self.uuid = util.generate_uuid(self.conn)
@@ -495,6 +486,14 @@ class Guest(XMLBuilder):
             self.vcpus = 1
         if self.os.is_xenpv() or self.type == "vz":
             self.emulator = None
+
+        self._add_default_graphics()
+        self._add_default_video_device()
+        self._add_default_input_device()
+        self._add_default_console_device()
+        self._add_default_usb_controller()
+        self._add_default_channels()
+        self._add_default_rng()
 
         self.clock.set_defaults(self)
         self.cpu.set_defaults(self)

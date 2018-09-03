@@ -52,6 +52,16 @@
       <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>
+    <controller type="usb" index="0" model="ich9-ehci1"/>
+    <controller type="usb" index="0" model="ich9-uhci1">
+      <master startport="0"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci2">
+      <master startport="2"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci3">
+      <master startport="4"/>
+    </controller>
     <interface type="network">
       <source network="default"/>
       <mac address="22:22:33:44:55:66"/>
@@ -59,6 +69,8 @@
     <console type="pty"/>
     <input type="tablet" bus="usb"/>
     <graphics type="vnc" port="-1" keymap="ja"/>
-    <sound model="ich6"/>
+    <video>
+      <model type="qxl"/>
+    </video>
   </devices>
 </domain>

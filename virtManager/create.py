@@ -1582,19 +1582,12 @@ class vmmCreate(vmmGObjectUI):
                 # on page 1.
                 pass
 
-        # Set up default devices
-        try:
-            guest.default_graphics_type = self.config.get_graphics_type()
-            guest.skip_default_sound = not self.config.get_new_vm_sound()
-            guest.skip_default_usbredir = (
-                self.config.get_add_spice_usbredir() == "no")
-            guest.x86_cpu_default = self.config.get_default_cpu_setting(
-                for_cpu=True)
-
-            guest.add_default_devices()
-        except Exception as e:
-            self.err.show_err(_("Error setting up default devices:") + str(e))
-            return None
+        guest.default_graphics_type = self.config.get_graphics_type()
+        guest.skip_default_sound = not self.config.get_new_vm_sound()
+        guest.skip_default_usbredir = (
+            self.config.get_add_spice_usbredir() == "no")
+        guest.x86_cpu_default = self.config.get_default_cpu_setting(
+            for_cpu=True)
 
         return guest
 

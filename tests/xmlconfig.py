@@ -43,9 +43,6 @@ def _make_guest(installer=None, conn=None, os_variant=None):
 
     if os_variant:
         g.os_variant = os_variant
-    g.add_default_input_device()
-    g.add_default_console_device()
-    g.add_device(virtinst.DeviceSound(g.conn))
 
     # Floppy disk
     path = "/dev/default-pool/testvol1.img"
