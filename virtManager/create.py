@@ -1818,6 +1818,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             name = self._generate_default_name(self._os)
             self.widget("create-vm-name").set_text(name)
+            self._guest.validate_name(self._guest.conn, name)
             self._guest.name = name
         except Exception as e:
             return self.err.val_err(_("Error setting default name."), e)
@@ -1956,6 +1957,7 @@ class vmmCreate(vmmGObjectUI):
         name = self._get_config_name()
         if name != self._guest.name:
             try:
+                self._guest.validate_name(self._guest.conn, name)
                 self._guest.name = name
             except Exception as e:
                 return self.err.val_err(_("Invalid guest name"), str(e))

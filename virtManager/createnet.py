@@ -284,8 +284,8 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def validate_name(self):
         try:
-            net = self._build_xmlstub()
-            net.name = self.widget("net-name").get_text()
+            name = self.widget("net-name").get_text()
+            Network.validate_name(self.conn.get_backend(), name)
         except Exception as e:
             return self.err.val_err(_("Invalid network name"), str(e))
 
@@ -720,11 +720,9 @@ class vmmCreateNetwork(vmmGObjectUI):
     # XML build and install #
     #########################
 
-    def _build_xmlstub(self):
-        return Network(self.conn.get_backend())
 
     def _build_xmlobj(self):
-        net = self._build_xmlstub()
+        net = Network(self.conn.get_backend())
 
         net.name = self.widget("net-name").get_text()
         net.domain_name = self.widget("net-domain-name").get_text() or None

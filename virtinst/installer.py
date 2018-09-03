@@ -386,6 +386,7 @@ class Installer(object):
         :param return_xml: Don't create the guest, just return generated XML
         :param autostart: If True, mark the VM to autostart on host boot
         """
+        guest.validate_name(guest.conn, guest.name)
         self.set_install_defaults(guest)
 
         try:
@@ -403,7 +404,6 @@ class Installer(object):
             if dry:
                 return
 
-            guest.check_vm_collision(self.conn, guest.name, False)
             domain = self._create_guest(
                     guest, meter, install_xml, final_xml,
                     doboot, transient)

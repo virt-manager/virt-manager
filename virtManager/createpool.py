@@ -480,7 +480,10 @@ class vmmCreatePool(vmmGObjectUI):
                 self._pool = usepool
             else:
                 self._pool = self._make_stub_pool()
-            self._pool.name = self.get_config_name()
+
+            name = self.get_config_name()
+            self._pool.validate_name(self._pool.conn, name)
+            self._pool.name = name
         except ValueError as e:
             return self.err.val_err(_("Pool Parameter Error"), e)
 

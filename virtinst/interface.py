@@ -157,11 +157,10 @@ class Interface(XMLBuilder):
     # Validation helpers #
     ######################
 
-    def _validate_name(self, name):
-        if name == self.name:
-            return
+    @staticmethod
+    def validate_name(conn, name):
         try:
-            self.conn.interfaceLookupByName(name)
+            conn.interfaceLookupByName(name)
         except libvirt.libvirtError:
             return
 
@@ -181,8 +180,7 @@ class Interface(XMLBuilder):
     mtu = XMLProperty("./mtu/@size", is_int=True)
     start_mode = XMLProperty("./start/@mode")
 
-    name = XMLProperty("./@name", validate_cb=_validate_name)
-
+    name = XMLProperty("./@name")
     macaddr = XMLProperty("./mac/@address", validate_cb=_validate_mac)
 
     def add_protocol(self, obj):
@@ -229,6 +227,8 @@ class Interface(XMLBuilder):
     ##################
 
     def validate(self):
+        self.validate_name(self.conn, self.name)
+
         if (self.type == self.INTERFACE_TYPE_VLAN and
             (self.tag is None or self.parent_interface is None)):
             raise ValueError(_("VLAN Tag and parent interface are required."))

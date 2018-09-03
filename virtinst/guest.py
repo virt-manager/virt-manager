@@ -95,7 +95,7 @@ class Guest(XMLBuilder):
                                (str(e)))
 
     @staticmethod
-    def validate_name(conn, name, check_collision, validate=True):
+    def validate_name(conn, name, check_collision=True, validate=True):
         if validate:
             util.validate_name(_("Guest"), name)
         if not check_collision:
@@ -142,11 +142,7 @@ class Guest(XMLBuilder):
     # Property accessors #
     ######################
 
-    def _validate_name(self, val):
-        if val == self.name:
-            return
-        self.validate_name(self.conn, val, check_collision=False)
-    name = XMLProperty("./name", validate_cb=_validate_name)
+    name = XMLProperty("./name")
 
     def _set_memory(self, val):
         if val is None:

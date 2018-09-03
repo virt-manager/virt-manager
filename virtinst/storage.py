@@ -38,26 +38,11 @@ class _StorageObject(XMLBuilder):
     Meaningless to directly instantiate.
     """
 
-    ######################
-    # Validation helpers #
-    ######################
-
-    def _check_name_collision(self, name):
-        raise NotImplementedError()
-
-    def _validate_name(self, name):
-        if name == self.name:
-            return
-        util.validate_name(_("Storage object"), name)
-        self._check_name_collision(name)
-        return name
-
-
     ##############
     # Properties #
     ##############
 
-    name = XMLProperty("./name", validate_cb=_validate_name)
+    name = XMLProperty("./name")
     permissions = XMLChildProperty(_StoragePermissions,
                                    relative_xpath="./target",
                                    is_single=True)
@@ -293,15 +278,16 @@ class StoragePool(_StorageObject):
     # Validation helpers #
     ######################
 
-    def _check_name_collision(self, name):
-        pool = None
+    @staticmethod
+    def validate_name(conn, name):
+        util.validate_name(_("Storage object"), name)
+
         try:
-            pool = self.conn.storagePoolLookupByName(name)
+            conn.storagePoolLookupByName(name)
         except libvirt.libvirtError:
-            pass
-        if pool:
-            raise ValueError(_("Name '%s' already in use by another pool." %
-                                name))
+            return
+        raise ValueError(_("Name '%s' already in use by another pool." %
+                            name))
 
     def default_target_path(self):
         if not self.supports_property("target_path"):
@@ -460,6 +446,8 @@ class StoragePool(_StorageObject):
     ##################
 
     def validate(self):
+        self.validate_name(self.conn, self.name)
+
         if not self.target_path:
             self.target_path = self.default_target_path()
         if not self.source_name:
@@ -631,15 +619,16 @@ class StorageVolume(_StorageObject):
     # XML validation helpers #
     ##########################
 
-    def _check_name_collision(self, name):
-        vol = None
+    @staticmethod
+    def validate_name(pool, name):
+        util.validate_name(_("Storage object"), name)
+
         try:
-            vol = self.pool.storageVolLookupByName(name)
+            pool.storageVolLookupByName(name)
         except libvirt.libvirtError:
-            pass
-        if vol:
-            raise ValueError(_("Name '%s' already in use by another volume." %
-                                name))
+            return
+        raise ValueError(_("Name '%s' already in use by another volume." %
+                            name))
 
     def _get_vol_type(self):
         if self.type:
@@ -732,6 +721,8 @@ class StorageVolume(_StorageObject):
     ##################
 
     def validate(self):
+        self.validate_name(self.pool, self.name)
+
         if not self.format and self.file_type == self.TYPE_FILE:
             self.format = "raw"
         if self._prop_is_unset("lazy_refcounts") and self.format == "qcow2":
