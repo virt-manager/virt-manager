@@ -119,5 +119,3 @@ class DomainOs(XMLBuilder):
                 self.init = "/sbin/init"
             else:
                 self.init = "/bin/sh"
-        if self.kernel or self.init:
-            self.bootorder = []

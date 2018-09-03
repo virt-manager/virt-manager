@@ -318,27 +318,8 @@ class Guest(XMLBuilder):
         finally:
             self._finish_get_install_xml(data)
 
-    def _do_get_install_xml(self, install):
-        """
-        Return the full Guest xml configuration.
-
-        @install: Whether we want the 'OS install' configuration or
-            the 'post-install' configuration. The difference is mostly
-            whether the install media is attached and set as the boot
-            device. Some installs, like an import or livecd, do not have
-            an 'install' config.
-        """
-        if install and not self.installer.has_install_phase():
-            return None
-
-        self.installer.alter_bootconfig(self, install)
-        if not install:
-            self._remove_cdrom_install_media()
-
-        if install:
-            self.on_reboot = "destroy"
-
-        self.os.set_defaults(self)
+    def _do_get_install_xml(self):
+        self.installer.alter_bootconfig(self)
         return self.get_xml()
 
 
@@ -347,8 +328,11 @@ class Guest(XMLBuilder):
     ###########################
 
     def _build_xml(self):
-        install_xml = self._get_install_xml(install=True)
-        final_xml = self._get_install_xml(install=False)
+        install_xml = None
+        if self.installer.has_install_phase():
+            install_xml = self._get_install_xml()
+        self._remove_cdrom_install_media()
+        final_xml = self.get_xml()
 
         logging.debug("Generated install XML: %s",
             (install_xml and ("\n" + install_xml) or "None required"))
@@ -752,12 +736,19 @@ class Guest(XMLBuilder):
             self.emulator = None
 
         self._add_install_cdrom()
+        if (not self.os.is_container() and
+            not self.os.kernel and
+            not self.os.bootorder and
+            not any([d.boot.order for d in self.devices.get_all()])):
+            self.os.bootorder = self.installer.get_postinstall_bootorder(self)
+
         self.clock.set_defaults(self)
         self.cpu.set_defaults(self)
         self.features.set_defaults(self)
         for seclabel in self.seclabels:
             seclabel.set_defaults(self)
         self.pm.set_defaults(self)
+        self.os.set_defaults(self)
 
         for dev in self.devices.get_all():
             dev.set_defaults(self)

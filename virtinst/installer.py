@@ -71,8 +71,8 @@ class Installer(object):
     # Private helpers #
     ###################
 
-    def _build_boot_order(self, isinstall, guest):
-        bootorder = [self._get_bootdev(isinstall, guest)]
+    def _build_boot_order(self, guest, bootdev):
+        bootorder = [bootdev]
 
         # If guest has an attached disk, always have 'hd' in the boot
         # list, so disks are marked as bootable/installable (needed for
@@ -85,27 +85,14 @@ class Installer(object):
                 break
         return bootorder
 
-    def alter_bootconfig(self, guest, isinstall):
+    def alter_bootconfig(self, guest):
         """
         Generate the portion of the guest xml that determines boot devices
         and parameters. (typically the <os></os> block)
 
         :param guest: Guest instance we are installing
-        :param isinstall: Whether we want xml for the 'install' phase or the
-                          'post-install' phase.
         """
-        if isinstall and not self.has_install_phase():
-            return
-
-        bootorder = guest.os.bootorder
-        if isinstall or not bootorder:
-            # Per device <boot order> is not compatible with os/boot.
-            if not any(d.boot.order for d in guest.devices.get_all()):
-                bootorder = self._build_boot_order(isinstall, guest)
-
-        guest.os.bootorder = bootorder
-        if not isinstall:
-            return
+        guest.on_reboot = "destroy"
 
         if self._install_kernel:
             guest.os.kernel = self._install_kernel
@@ -114,13 +101,32 @@ class Installer(object):
         if self.extraargs:
             guest.os.kernel_args = " ".join(self.extraargs)
 
+        bootdev = self._get_install_bootdev(guest)
+        if (bootdev and
+            not guest.os.is_container() and
+            not guest.os.kernel and
+            not any(d.boot.order for d in guest.devices.get_all())):
+            guest.os.bootorder = self._build_boot_order(guest, bootdev)
+        else:
+            guest.os.bootorder = []
+
 
     ##########################
     # Internal API overrides #
     ##########################
 
-    def _get_bootdev(self, isinstall, guest):
-        ignore = isinstall
+    def _validate_location(self, val):
+        return val
+
+    def _prepare(self, guest, meter):
+        ignore = guest
+        ignore = meter
+
+    def _get_install_bootdev(self, guest):
+        ignore = guest
+        return None
+
+    def _get_postinstall_bootdev(self, guest):
         device = guest.devices.disk and guest.devices.disk[0].device or None
         if device == DeviceDisk.DEVICE_DISK:
             return DomainOs.BOOT_DEVICE_HARDDISK
@@ -130,17 +136,17 @@ class Installer(object):
             return DomainOs.BOOT_DEVICE_FLOPPY
         return DomainOs.BOOT_DEVICE_HARDDISK
 
-    def _validate_location(self, val):
-        return val
-
-    def _prepare(self, guest, meter):
-        ignore = guest
-        ignore = meter
-
 
     ##############
     # Public API #
     ##############
+
+    def get_postinstall_bootorder(self, guest):
+        """
+        Return the preferred guest postinstall bootorder
+        """
+        bootdev = self._get_postinstall_bootdev(guest)
+        return self._build_boot_order(guest, bootdev)
 
     def scratchdir_required(self):
         """
@@ -216,16 +222,14 @@ class Installer(object):
 
 
 class PXEInstaller(Installer):
-    def _get_bootdev(self, isinstall, guest):
-        bootdev = DomainOs.BOOT_DEVICE_NETWORK
+    def _get_install_bootdev(self, guest):
+        ignore = guest
+        return DomainOs.BOOT_DEVICE_NETWORK
 
-        if (not isinstall and
-            [d for d in guest.devices.disk if
-             d.device == d.DEVICE_DISK]):
-            # If doing post-install boot and guest has an HD attached
-            bootdev = DomainOs.BOOT_DEVICE_HARDDISK
-
-        return bootdev
+    def _get_postinstall_bootdev(self, guest):
+        if any([d for d in guest.devices.disk if d.device == d.DEVICE_DISK]):
+            return DomainOs.BOOT_DEVICE_HARDDISK
+        return DomainOs.BOOT_DEVICE_NETWORK
 
     def has_install_phase(self):
         return True

@@ -120,19 +120,19 @@ class DistroInstaller(Installer):
     # Private installer impls #
     ###########################
 
-    def _get_bootdev(self, isinstall, guest):
+    def _is_persistent_cd(self):
         mediatype = self._get_media_type()
         local = mediatype in [MEDIA_CDROM_PATH, MEDIA_CDROM_IMPLIED,
                               MEDIA_LOCATION_DIR, MEDIA_LOCATION_CDROM]
-        persistent_cd = (local and
-                         self.cdrom and
-                         self.livecd)
+        persistent_cd = bool(local and self.cdrom and self.livecd)
+        return persistent_cd
 
-        if isinstall or persistent_cd:
-            bootdev = "cdrom"
-        else:
-            bootdev = "hd"
-        return bootdev
+    def _get_install_bootdev(self, _guest):
+        return "cdrom"
+    def _get_postinstall_bootdev(self, _guest):
+        if self._is_persistent_cd():
+            return "cdrom"
+        return "hd"
 
     def _validate_location(self, val):
         """
