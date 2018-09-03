@@ -561,7 +561,6 @@ def build_guest_instance(conn, options):
         guest.uuid = options.uuid
     if options.description:
         guest.description = options.description
-    guest.autostart = options.autostart
 
     cli.parse_option_strings(options, guest, None)
 
@@ -646,9 +645,10 @@ def start_install(guest, options):
         start_time = time.time()
 
         # Do first install phase
-        domain = guest.start_install(
-                meter=meter, doboot=not options.noreboot,
-                transient=options.transient)
+        domain = guest.start_install(meter=meter,
+                doboot=not options.noreboot,
+                transient=options.transient,
+                autostart=options.autostart)
         cli.connect_console(guest, domain, conscb, wait_on_console)
         check_domain(guest, domain, conscb, options.transient,
                      wait_on_install, wait_time, start_time)

@@ -59,9 +59,6 @@ class Installer(object):
         self._tmpfiles = []
         self._tmpvols = []
 
-        self.autostart = False
-        self.replace = False
-
 
     #########################
     # Properties properties #
@@ -349,9 +346,6 @@ class Installer(object):
         """
         Set the autostart flag for domain if the user requested it
         """
-        if not self.autostart:
-            return
-
         try:
             domain.setAutostart(True)
         except libvirt.libvirtError as e:
@@ -368,10 +362,13 @@ class Installer(object):
 
     def start_install(self, guest, meter=None,
                       dry=False, return_xml=False,
-                      doboot=True, transient=False):
+                      doboot=True, transient=False, autostart=False):
         """
-        Begin the guest install (stage1).
+        Begin the guest install. Will add install media to the guest config,
+        launch it, then redefine the XML with the postinstall config.
+
         :param return_xml: Don't create the guest, just return generated XML
+        :param autostart: If True, mark the VM to autostart on host boot
         """
         self._add_install_cdrom_device(guest)
         guest.set_install_defaults()
@@ -391,16 +388,13 @@ class Installer(object):
             if dry:
                 return
 
-            # Remove existing VM if requested
-            guest.check_vm_collision(self.conn, guest.name,
-                                     do_remove=self.replace)
-
+            guest.check_vm_collision(self.conn, guest.name, False)
             domain = self._create_guest(
                     guest, meter, install_xml, final_xml,
                     doboot, transient)
 
-            # Set domain autostart flag if requested
-            self._flag_autostart(domain)
+            if autostart:
+                self._flag_autostart(domain)
             return domain
         finally:
             self._cleanup(guest)

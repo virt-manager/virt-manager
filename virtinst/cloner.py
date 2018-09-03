@@ -269,7 +269,6 @@ class Cloner(object):
 
         self._guest = Guest(self.conn, parsexml=self.original_xml)
         self._guest.id = None
-        self._guest.replace = self.replace
 
         # Pull clonable storage info from the original xml
         self._original_disks = self._get_original_disks_info()

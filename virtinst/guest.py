@@ -122,9 +122,6 @@ class Guest(XMLBuilder):
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
 
-        self.autostart = False
-        self.replace = False
-
         # Allow virt-manager to override the default graphics type
         self.default_graphics_type = CLIConfig.default_graphics
 
@@ -152,7 +149,7 @@ class Guest(XMLBuilder):
     def _validate_name(self, val):
         if val == self.name:
             return
-        self.validate_name(self.conn, val, check_collision=not self.replace)
+        self.validate_name(self.conn, val, check_collision=False)
     name = XMLProperty("./name", validate_cb=_validate_name)
 
     def _set_memory(self, val):
@@ -283,8 +280,6 @@ class Guest(XMLBuilder):
     #################################
 
     def start_install(self, *args, **kwargs):
-        self.installer.autostart = self.autostart
-        self.installer.replace = self.replace
         return self.installer.start_install(self, *args, **kwargs)
     def get_created_disks(self):
         return self.installer.get_created_disks(self)
