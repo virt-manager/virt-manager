@@ -110,9 +110,9 @@ class Guest(XMLBuilder):
 
     XML_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
-        "hotplugmemorymax", "hotplugmemoryslots", "maxmemory", "memory",
+        "hotplugmemorymax", "hotplugmemoryslots", "maxmemory", "_memory",
         "blkiotune", "memtune", "memoryBacking",
-        "vcpus", "curvcpus", "vcpu_placement",
+        "_vcpus", "curvcpus", "vcpu_placement",
         "cpuset", "numatune", "resource", "sysinfo",
         "bootloader", "os", "idmap", "features", "cpu", "clock",
         "on_poweroff", "on_reboot", "on_crash",
@@ -145,28 +145,32 @@ class Guest(XMLBuilder):
     name = XMLProperty("./name")
 
     def _set_memory(self, val):
-        if val is None:
-            return None
+        if val is not None:
+            val = int(val)
+            if self.maxmemory is None or self.maxmemory < val:
+                self.maxmemory = val
+        self._memory = val
+    def _get_memory(self):
+        return self._memory
+    _memory = XMLProperty("./currentMemory", is_int=True)
+    memory = property(_get_memory, _set_memory)
 
-        if self.maxmemory is None or self.maxmemory < val:
-            self.maxmemory = val
-        return val
-    memory = XMLProperty("./currentMemory", is_int=True,
-                         set_converter=_set_memory)
     maxmemory = XMLProperty("./memory", is_int=True)
     hotplugmemorymax = XMLProperty("./maxMemory", is_int=True)
     hotplugmemoryslots = XMLProperty("./maxMemory/@slots", is_int=True)
 
     def _set_vcpus(self, val):
-        if val is None:
-            return None
+        if val is not None:
+            val = int(val)
+            # Don't force set curvcpus unless already specified
+            if self.curvcpus is not None and self.curvcpus > val:
+                self.curvcpus = val
+        self._vcpus = val
+    def _get_vcpus(self):
+        return self._vcpus
+    _vcpus = XMLProperty("./vcpu", is_int=True)
+    vcpus = property(_get_vcpus, _set_vcpus)
 
-        # Don't force set curvcpus unless already specified
-        if self.curvcpus is not None and self.curvcpus > val:
-            self.curvcpus = val
-        return val
-    vcpus = XMLProperty("./vcpu", is_int=True,
-                        set_converter=_set_vcpus)
     curvcpus = XMLProperty("./vcpu/@current", is_int=True)
     vcpu_placement = XMLProperty("./vcpu/@placement")
     cpuset = XMLProperty("./vcpu/@cpuset")

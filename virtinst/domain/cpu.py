@@ -68,7 +68,7 @@ class DomainCpu(XMLBuilder):
     MATCHS = ["minimum", "exact", "strict"]
 
     XML_NAME = "cpu"
-    _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
+    _XML_PROP_ORDER = ["mode", "match", "_model", "vendor",
                        "sockets", "cores", "threads", "features"]
 
     special_mode_was_set = False
@@ -190,8 +190,12 @@ class DomainCpu(XMLBuilder):
             self.mode = "custom"
             if not self.match:
                 self.match = "exact"
-        return val
-    model = XMLProperty("./model", set_converter=_set_model)
+        self._model = val
+    def _get_model(self):
+        return self._model
+    _model = XMLProperty("./model")
+    model = property(_get_model, _set_model)
+
     model_fallback = XMLProperty("./model/@fallback")
 
     match = XMLProperty("./@match")

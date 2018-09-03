@@ -43,21 +43,7 @@ class DeviceFilesystem(Device):
     readonly = XMLProperty("./readonly", is_bool=True)
 
     units = XMLProperty("./source/@units")
-
-    def _validate_set_target(self, val):
-        # In case of qemu for default fs type (mount) target is not
-        # actually a directory, it is merely a arbitrary string tag
-        # that is exported to the guest as a hint for where to mount
-        if ((self.conn.is_qemu() or self.conn.is_test()) and
-            (self.type is None or
-             self.type == self.TYPE_MOUNT)):
-            pass
-        elif not os.path.isabs(val):
-            raise ValueError(_("Filesystem target '%s' must be an absolute "
-                               "path") % val)
-        return val
-    target = XMLProperty("./target/@dir",
-                         set_converter=_validate_set_target)
+    target = XMLProperty("./target/@dir")
 
     _source_dir = XMLProperty("./source/@dir")
     _source_name = XMLProperty("./source/@name")
@@ -100,6 +86,33 @@ class DeviceFilesystem(Device):
         return new_type
 
     type = property(_get_type, _set_type)
+
+
+    ##############
+    # Validation #
+    ##############
+
+    def validate_target(self, target):
+        # In case of qemu for default fs type (mount) target is not
+        # actually a directory, it is merely a arbitrary string tag
+        # that is exported to the guest as a hint for where to mount
+        if ((self.conn.is_qemu() or self.conn.is_test()) and
+            (self.type is None or
+             self.type == self.TYPE_MOUNT)):
+            return
+
+        if not os.path.isabs(target):
+            raise ValueError(_("Filesystem target '%s' must be an absolute "
+                               "path") % target)
+
+    def validate(self):
+        if self.target:
+            self.validate_target(self.target)
+
+
+    ##################
+    # Default config #
+    ##################
 
     def set_defaults(self, guest):
         ignore = guest

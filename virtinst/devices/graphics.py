@@ -98,8 +98,8 @@ class DeviceGraphics(Device):
         self._local_keymap = -1
 
 
-    _XML_PROP_ORDER = ["type", "gl", "port", "tlsPort", "autoport",
-                       "keymap", "listen",
+    _XML_PROP_ORDER = ["type", "gl", "_port", "_tlsPort", "autoport",
+                       "_keymap", "_listen",
                        "passwd", "display", "xauth"]
 
     def _get_local_keymap(self):
@@ -108,27 +108,36 @@ class DeviceGraphics(Device):
             self._local_keymap = hostkeymap.default_keymap()
         return self._local_keymap
 
-    def _set_keymap_converter(self, val):
+    def _set_keymap(self, val):
         if val == self.KEYMAP_DEFAULT:
             # Leave it up to the hypervisor
-            return None
-        if val == self.KEYMAP_LOCAL:
-            return self._get_local_keymap()
-        return val
-    keymap = XMLProperty("./@keymap", set_converter=_set_keymap_converter)
+            val = None
+        elif val == self.KEYMAP_LOCAL:
+            val = self._get_local_keymap()
+        self._keymap = val
+    def _get_keymap(self):
+        return self._keymap
+    _keymap = XMLProperty("./@keymap")
+    keymap = property(_get_keymap, _set_keymap)
 
-    def _set_port_converter(self, val):
+    def _set_port(self, val):
         val = _validate_port("Port", val)
         self.autoport = self._get_default_autoport()
-        return val
-    def _set_tlsport_converter(self, val):
+        self._port = val
+    def _get_port(self):
+        return self._port
+    _port = XMLProperty("./@port", is_int=True)
+    port = property(_get_port, _set_port)
+
+    def _set_tlsport(self, val):
         val = _validate_port("TLS Port", val)
         self.autoport = self._get_default_autoport()
-        return val
-    port = XMLProperty("./@port", is_int=True,
-            set_converter=_set_port_converter)
-    tlsPort = XMLProperty("./@tlsPort", is_int=True,
-            set_converter=_set_tlsport_converter)
+        self._tlsPort = val
+    def _get_tlsport(self):
+        return self._tlsPort
+    _tlsPort = XMLProperty("./@tlsPort", is_int=True)
+    tlsPort = property(_get_tlsport, _set_tlsport)
+
     autoport = XMLProperty("./@autoport", is_yesno=True)
 
     channel_main_mode = _get_mode_prop(CHANNEL_TYPE_MAIN)
@@ -145,14 +154,17 @@ class DeviceGraphics(Device):
     def _set_listen(self, val):
         # Update the corresponding <listen> block
         find_listen = [l for l in self.listens if
-                       (l.type == "address" and l.address == self.listen)]
+                       (l.type == "address" and l.address == self._listen)]
         if find_listen:
             if val is None:
                 self.remove_child(find_listen[0])
             else:
                 find_listen[0].address = val
-        return val
-    listen = XMLProperty("./@listen", set_converter=_set_listen)
+        self._listen = val
+    def _get_listen(self):
+        return self._listen
+    _listen = XMLProperty("./@listen")
+    listen = property(_get_listen, _set_listen)
 
     type = XMLProperty("./@type")
     passwd = XMLProperty("./@passwd")

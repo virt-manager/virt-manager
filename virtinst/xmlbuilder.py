@@ -165,7 +165,6 @@ class XMLChildProperty(_XMLPropertyBase):
 
 class XMLProperty(_XMLPropertyBase):
     def __init__(self, xpath,
-                 set_converter=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
                  do_abspath=False):
         """
@@ -184,11 +183,6 @@ class XMLProperty(_XMLPropertyBase):
                       in a typical XML document
         :param name: Just a string to print for debugging, only needed
             if xpath isn't specified.
-        :param set_converter: optional function for converting the property
-            value from the virtinst API to the guest XML. For example,
-            the Guest.memory API was once in MiB, but the libvirt domain
-            memory API is in KiB. So, if xpath is specified, on a 'get'
-            operation we convert the XML value with int(val) / 1024.
         :param is_bool: Whether this is a boolean property in the XML
         :param is_int: Whether this is an integer property in the XML
         :param is_yesno: Whether this is a yes/no property in the XML
@@ -204,8 +198,6 @@ class XMLProperty(_XMLPropertyBase):
         self._is_yesno = is_yesno
         self._is_onoff = is_onoff
         self._do_abspath = do_abspath
-
-        self._convert_value_for_setter_cb = set_converter
 
         if sum([int(bool(i)) for i in
                 [self._is_bool, self._is_int,
@@ -244,7 +236,7 @@ class XMLProperty(_XMLPropertyBase):
             ret = val
         return ret
 
-    def _convert_set_value(self, xmlbuilder, val):
+    def _convert_set_value(self, val):
         if self._do_abspath and val is not None:
             val = os.path.abspath(val)
         elif self._is_onoff and val is not None:
@@ -256,9 +248,6 @@ class XMLProperty(_XMLPropertyBase):
             if "0x" in str(val):
                 intkwargs["base"] = 16
             val = int(val, **intkwargs)
-
-        if self._convert_value_for_setter_cb:
-            val = self._convert_value_for_setter_cb(xmlbuilder, val)
         return val
 
     def _nonxml_fset(self, xmlbuilder, val):
@@ -329,7 +318,7 @@ class XMLProperty(_XMLPropertyBase):
             _seenprops.append(self)
             self._is_tracked = True
 
-        setval = self._convert_set_value(xmlbuilder, val)
+        setval = self._convert_set_value(val)
         self._nonxml_fset(xmlbuilder, setval)
 
     def _set_xml(self, xmlbuilder, setval):

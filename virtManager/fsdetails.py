@@ -286,6 +286,7 @@ class vmmFSDetails(vmmGObjectUI):
             else:
                 self._dev.source = source
             self._dev.target = target
+            self._dev.validate_target(target)
             if mode:
                 self._dev.accessmode = mode
             if fstype:
