@@ -14,7 +14,6 @@ import libvirt
 
 import virtinst
 from virtinst import util
-from virtinst import DeviceRng
 
 from . import vmmenu
 from . import uiutil
@@ -2851,53 +2850,12 @@ class vmmDetails(vmmGObjectUI):
 
     def refresh_rng_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        values = {
-            "rng-bind-host": "bind_host",
-            "rng-bind-service": "bind_service",
-            "rng-connect-host": "connect_host",
-            "rng-connect-service": "connect_service",
-            "rng-type": "type",
-            "rng-device": "device",
-            "rng-backend-type": "backend_type",
-            "rng-rate-bytes": "rate_bytes",
-            "rng-rate-period": "rate_period"
-        }
-        rewriter = {
-            "rng-type": lambda x:
-            DeviceRng.get_pretty_type(x),
-            "rng-backend-type": lambda x:
-            DeviceRng.get_pretty_backend_type(x),
-        }
 
-        def set_visible(widget, v):
-            uiutil.set_grid_row_visible(self.widget(widget), v)
+        is_random = dev.type == "random"
+        uiutil.set_grid_row_visible(self.widget("rng-device"), is_random)
 
-        is_egd = dev.type == DeviceRng.TYPE_EGD
-        udp = dev.backend_type == DeviceRng.BACKEND_TYPE_UDP
-        bind = DeviceRng.BACKEND_MODE_BIND in dev.backend_mode()
-
-        set_visible("rng-device", not is_egd)
-        set_visible("rng-mode", is_egd and not udp)
-        set_visible("rng-backend-type", is_egd)
-        set_visible("rng-connect-host", is_egd and (udp or not bind))
-        set_visible("rng-connect-service", is_egd and (udp or not bind))
-        set_visible("rng-bind-host", is_egd and (udp or bind))
-        set_visible("rng-bind-service", is_egd and (udp or bind))
-
-        for k, prop in values.items():
-            val = "-"
-            if dev.supports_property(prop):
-                val = getattr(dev, prop) or "-"
-                r = rewriter.get(k)
-                if r:
-                    val = r(val)
-            self.widget(k).set_text(val)
-            if "rate" in k:
-                uiutil.set_grid_row_visible(self.widget(k), val != "-")
-
-        if is_egd and not udp:
-            mode = DeviceRng.get_pretty_mode(dev.backend_mode()[0])
-            self.widget("rng-mode").set_text(mode)
+        self.widget("rng-type").set_text(dev.get_pretty_type(dev.type))
+        self.widget("rng-device").set_text(dev.device or "")
 
     def refresh_char_page(self):
         chardev = self.get_hw_selection(HW_LIST_COL_DEVICE)
