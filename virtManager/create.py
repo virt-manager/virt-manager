@@ -1685,7 +1685,7 @@ class vmmCreate(vmmGObjectUI):
             instclass = virtinst.PXEInstaller
 
         elif instmethod == INSTALL_PAGE_IMPORT:
-            instclass = virtinst.ImportInstaller
+            instclass = virtinst.Installer
             is_import = True
 
             import_path = self._get_config_import_path()
@@ -1700,14 +1700,14 @@ class vmmCreate(vmmGObjectUI):
                                           "an existing storage."))
 
         elif instmethod == INSTALL_PAGE_CONTAINER_APP:
-            instclass = virtinst.ContainerInstaller
+            instclass = virtinst.Installer
 
             init = self.widget("install-app-entry").get_text()
             if not init:
                 return self.err.val_err(_("An application path is required."))
 
         elif instmethod == INSTALL_PAGE_CONTAINER_OS:
-            instclass = virtinst.ContainerInstaller
+            instclass = virtinst.Installer
 
             fs = self.widget("install-oscontainer-fs").get_text()
             if not fs:
@@ -1748,7 +1748,7 @@ class vmmCreate(vmmGObjectUI):
 
 
         elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
-            instclass = virtinst.ContainerInstaller
+            instclass = virtinst.Installer
             template = self.widget("install-container-template").get_text()
             if not template:
                 return self.err.val_err(_("A template name is required."))

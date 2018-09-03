@@ -39,8 +39,6 @@ class Installer(object):
         - Hypervisor name (parameter 'type') ('qemu', 'kvm', 'xen', etc.)
         - Guest architecture ('i686', 'x86_64')
     """
-    _has_install_phase = True
-
     def __init__(self, conn):
         self.conn = conn
         self._location = None
@@ -122,7 +120,15 @@ class Installer(object):
     ##########################
 
     def _get_bootdev(self, isinstall, guest):
-        raise NotImplementedError("Must be implemented in subclass")
+        ignore = isinstall
+        device = guest.devices.disk and guest.devices.disk[0].device or None
+        if device == DeviceDisk.DEVICE_DISK:
+            return DomainOs.BOOT_DEVICE_HARDDISK
+        elif device == DeviceDisk.DEVICE_CDROM:
+            return DomainOs.BOOT_DEVICE_CDROM
+        elif device == DeviceDisk.DEVICE_FLOPPY:
+            return DomainOs.BOOT_DEVICE_FLOPPY
+        return DomainOs.BOOT_DEVICE_HARDDISK
 
     def _validate_location(self, val):
         return val
@@ -150,7 +156,7 @@ class Installer(object):
         into the guest. Things like LiveCDs, Import, or a manually specified
         bootorder do not have an install phase.
         """
-        return self._has_install_phase
+        return False
 
     def needs_cdrom(self):
         """
@@ -209,14 +215,6 @@ class Installer(object):
         return None
 
 
-class ContainerInstaller(Installer):
-    _has_install_phase = False
-    def _get_bootdev(self, isinstall, guest):
-        ignore = isinstall
-        ignore = guest
-        return DomainOs.BOOT_DEVICE_HARDDISK
-
-
 class PXEInstaller(Installer):
     def _get_bootdev(self, isinstall, guest):
         bootdev = DomainOs.BOOT_DEVICE_NETWORK
@@ -229,23 +227,5 @@ class PXEInstaller(Installer):
 
         return bootdev
 
-
-class ImportInstaller(Installer):
-    _has_install_phase = False
-
-    # Private methods
-    def _get_bootdev(self, isinstall, guest):
-        disks = guest.devices.disk
-        if not disks:
-            return DomainOs.BOOT_DEVICE_HARDDISK
-        return self._disk_to_bootdev(disks[0])
-
-    def _disk_to_bootdev(self, disk):
-        if disk.device == DeviceDisk.DEVICE_DISK:
-            return DomainOs.BOOT_DEVICE_HARDDISK
-        elif disk.device == DeviceDisk.DEVICE_CDROM:
-            return DomainOs.BOOT_DEVICE_CDROM
-        elif disk.device == DeviceDisk.DEVICE_FLOPPY:
-            return DomainOs.BOOT_DEVICE_FLOPPY
-        else:
-            return DomainOs.BOOT_DEVICE_HARDDISK
+    def has_install_phase(self):
+        return True

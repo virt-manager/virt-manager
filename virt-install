@@ -512,20 +512,19 @@ def build_installer(options, guest):
     cdrom = False
     location = None
 
-    if guest.os.is_container():
-        instclass = virtinst.ContainerInstaller
-    elif (options.cdrom or
-          options.location or
-          options.livecd):
+    if (options.cdrom or
+        options.location or
+        options.livecd):
         location = options.location or options.cdrom
         cdrom = bool(options.cdrom)
         instclass = virtinst.DistroInstaller
     elif options.pxe:
         instclass = virtinst.PXEInstaller
-    elif (options.import_install or
+    elif (guest.os.is_container() or
+          options.import_install or
           options.xmlonly or
           options.boot):
-        instclass = virtinst.ImportInstaller
+        instclass = virtinst.Installer
     elif implied_cdrom_install(guest):
         # Explicit install options always take precedent over this case
         cdrom = True

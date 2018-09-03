@@ -39,8 +39,7 @@ from virtinst.storage import StoragePool, StorageVolume
 
 from virtinst.devices import *  # pylint: disable=wildcard-import
 
-from virtinst.installer import (ContainerInstaller, ImportInstaller,
-                                PXEInstaller, Installer)
+from virtinst.installer import PXEInstaller, Installer
 
 from virtinst.distroinstaller import DistroInstaller
 

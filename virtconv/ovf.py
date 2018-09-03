@@ -234,7 +234,7 @@ def _import_file(conn, input_file):
 
     # Generate the Guest
     guest = conn.caps.lookup_virtinst_guest()
-    guest.installer = virtinst.ImportInstaller(conn)
+    guest.installer = virtinst.Installer(conn)
 
     if not name:
         name = os.path.basename(input_file)
