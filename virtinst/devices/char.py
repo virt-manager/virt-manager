@@ -149,17 +149,6 @@ class _DeviceChar(Device):
             return self.type in users[propname]
         return hasattr(self, propname)
 
-    def set_defaults(self, _guest):
-        if not self.source_mode and self.supports_property("source_mode"):
-            self.source_mode = self.MODE_BIND
-        if not self.protocol and self.supports_property("protocol"):
-            self.protocol = self.PROTOCOL_RAW
-        if not self.target_type and self.DEVICE_TYPE == "channel":
-            self.target_type = self.CHANNEL_TARGET_VIRTIO
-        if not self.target_name and self.type == self.TYPE_SPICEVMC:
-            self.target_name = self.CHANNEL_NAME_SPICE
-
-
     def _set_host_helper(self, hostparam, portparam, val):
         def parse_host(val):
             host, ignore, port = (val or "").partition(":")
@@ -181,7 +170,7 @@ class _DeviceChar(Device):
         self._set_host_helper("target_address", "target_port", val)
 
 
-    _XML_PROP_ORDER = ["type", "_has_mode_bind", "_has_mode_connect",
+    _XML_PROP_ORDER = ["type",
                        "bind_host", "bind_port",
                        "source_mode", "source_host", "source_port",
                        "_source_path", "source_channel",
@@ -213,30 +202,12 @@ class _DeviceChar(Device):
 
     source_mode = XMLProperty("./source/@mode")
 
-    _has_mode_connect = XMLProperty("./source[@mode='connect']/@mode")
-    _has_mode_bind = XMLProperty("./source[@mode='bind']/@mode")
+    source_host = XMLProperty("./source[@mode='connect']/@host")
+    source_port = XMLProperty(
+            "./source[@mode='connect']/@service", is_int=True)
 
-    def _set_source_validate(self, val):
-        if val is None:
-            return None
-        self._has_mode_connect = self.MODE_CONNECT
-        return val
-    source_host = XMLProperty("./source[@mode='connect']/@host",
-                            set_converter=_set_source_validate)
-    source_port = XMLProperty("./source[@mode='connect']/@service",
-                              set_converter=_set_source_validate,
-                              is_int=True)
-
-    def _set_bind_validate(self, val):
-        if val is None:
-            return None
-        self._has_mode_bind = self.MODE_BIND
-        return val
-    bind_host = XMLProperty("./source[@mode='bind']/@host",
-                            set_converter=_set_bind_validate)
-    bind_port = XMLProperty("./source[@mode='bind']/@service",
-                            set_converter=_set_bind_validate,
-                            is_int=True)
+    bind_host = XMLProperty("./source[@mode='bind']/@host")
+    bind_port = XMLProperty("./source[@mode='bind']/@service", is_int=True)
 
 
     #######################
@@ -252,6 +223,22 @@ class _DeviceChar(Device):
 
     log_file = XMLProperty("./log/@file")
     log_append = XMLProperty("./log/@append", is_onoff=True)
+
+
+    ##################
+    # Default config #
+    ##################
+
+    def set_defaults(self, _guest):
+        if not self.source_mode and self.supports_property("source_mode"):
+            self.source_mode = self.MODE_BIND
+        if not self.protocol and self.supports_property("protocol"):
+            self.protocol = self.PROTOCOL_RAW
+        if not self.target_type and self.DEVICE_TYPE == "channel":
+            self.target_type = self.CHANNEL_TARGET_VIRTIO
+        if not self.target_name and self.type == self.TYPE_SPICEVMC:
+            self.target_name = self.CHANNEL_NAME_SPICE
+
 
 
 class DeviceConsole(_DeviceChar):
