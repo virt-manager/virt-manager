@@ -4,7 +4,6 @@
 #
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
-import datetime
 
 from ..xmlbuilder import XMLBuilder, XMLProperty
 
@@ -24,20 +23,7 @@ class DomainSysinfo(XMLBuilder):
 
     type = XMLProperty("./@type")
 
-    def _validate_date(self, val):
-        # If supplied, date must be in either mm/dd/yy or mm/dd/yyyy format
-        try:
-            datetime.datetime.strptime(val, '%m/%d/%Y')
-        except ValueError:
-            try:
-                datetime.datetime.strptime(val, '%m/%d/%y')
-            except ValueError:
-                raise RuntimeError(_("SMBios date string '%s' is invalid.")
-                            % val)
-        return val
-
-    bios_date = XMLProperty("./bios/entry[@name='date']",
-                            validate_cb=_validate_date)
+    bios_date = XMLProperty("./bios/entry[@name='date']")
     bios_vendor = XMLProperty("./bios/entry[@name='vendor']")
     bios_version = XMLProperty("./bios/entry[@name='version']")
     bios_release = XMLProperty("./bios/entry[@name='release']")
