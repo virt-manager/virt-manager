@@ -10,8 +10,11 @@
 import os
 import logging
 
+import libvirt
+
 from .devices import DeviceDisk
 from .domain import DomainOs
+from . import util
 
 
 class Installer(object):
@@ -51,9 +54,14 @@ class Installer(object):
 
         self._install_kernel = None
         self._install_initrd = None
+        self._install_cdrom_device = None
 
         self._tmpfiles = []
         self._tmpvols = []
+
+        self.domain = None
+        self.autostart = False
+        self.replace = False
 
 
     #########################
@@ -71,6 +79,36 @@ class Installer(object):
     # Private helpers #
     ###################
 
+    def _add_install_cdrom_device(self, guest):
+        if self._install_cdrom_device:
+            return
+        if not self.needs_cdrom():
+            return
+
+        dev = DeviceDisk(self.conn)
+        dev.device = dev.DEVICE_CDROM
+        self._install_cdrom_device = dev
+        guest.add_device(dev)
+
+    def _insert_install_cdrom_media(self, guest):
+        ignore = guest
+        if not self._install_cdrom_device:
+            return
+        self._install_cdrom_device.path = self.cdrom_path()
+        self._install_cdrom_device.sync_path_props()
+        self._install_cdrom_device.validate()
+
+    def _remove_install_cdrom_media(self, guest):
+        if not self._install_cdrom_device:
+            return
+        if self.livecd:
+            return
+        if guest.osinfo.is_windows():
+            # Keep media attached for windows which has a multi stage install
+            return
+        self._install_cdrom_device.path = None
+        self._install_cdrom_device.sync_path_props()
+
     def _build_boot_order(self, guest, bootdev):
         bootorder = [bootdev]
 
@@ -85,7 +123,7 @@ class Installer(object):
                 break
         return bootorder
 
-    def alter_bootconfig(self, guest):
+    def _alter_bootconfig(self, guest):
         """
         Generate the portion of the guest xml that determines boot devices
         and parameters. (typically the <os></os> block)
@@ -121,6 +159,19 @@ class Installer(object):
     def _prepare(self, guest, meter):
         ignore = guest
         ignore = meter
+
+    def _cleanup(self, guest):
+        ignore = guest
+        for f in self._tmpfiles:
+            logging.debug("Removing %s", str(f))
+            os.unlink(f)
+
+        for vol in self._tmpvols:
+            logging.debug("Removing volume '%s'", vol.name())
+            vol.delete(0)
+
+        self._tmpvols = []
+        self._tmpfiles = []
 
     def _get_install_bootdev(self, guest):
         ignore = guest
@@ -177,29 +228,6 @@ class Installer(object):
         """
         return None
 
-    def cleanup(self):
-        """
-        Remove any temporary files retrieved during installation
-        """
-        for f in self._tmpfiles:
-            logging.debug("Removing %s", str(f))
-            os.unlink(f)
-
-        for vol in self._tmpvols:
-            logging.debug("Removing volume '%s'", vol.name())
-            vol.delete(0)
-
-        self._tmpvols = []
-        self._tmpfiles = []
-
-    def prepare(self, guest, meter):
-        self.cleanup()
-        try:
-            self._prepare(guest, meter)
-        except Exception:
-            self.cleanup()
-            raise
-
     def check_location(self, guest):
         """
         Validate self.location seems to work. This will might hit the
@@ -219,6 +247,197 @@ class Installer(object):
         ignore = guest
         logging.debug("distro detection not available for this installer.")
         return None
+
+
+    ##########################
+    # guest install handling #
+    ##########################
+
+    def _prepare_get_install_xml(self, guest):
+        # We do a shallow copy of the OS block here, so that we can
+        # set the install time properties but not permanently overwrite
+        # any config the user explicitly requested.
+        data = (guest.os.bootorder, guest.os.kernel, guest.os.initrd,
+                guest.os.kernel_args, guest.on_reboot)
+        return data
+
+    def _finish_get_install_xml(self, guest, data):
+        (guest.os.bootorder, guest.os.kernel, guest.os.initrd,
+                guest.os.kernel_args, guest.on_reboot) = data
+
+    def _get_install_xml(self, guest):
+        data = self._prepare_get_install_xml(guest)
+        try:
+            self._alter_bootconfig(guest)
+            self._insert_install_cdrom_media(guest)
+            ret = guest.get_xml()
+            return ret
+        finally:
+            self._remove_install_cdrom_media(guest)
+            self._finish_get_install_xml(guest, data)
+
+
+    def _build_xml(self, guest):
+        install_xml = None
+        if self.has_install_phase():
+            install_xml = self._get_install_xml(guest)
+        else:
+            self._insert_install_cdrom_media(guest)
+        final_xml = guest.get_xml()
+
+        logging.debug("Generated install XML: %s",
+            (install_xml and ("\n" + install_xml) or "None required"))
+        logging.debug("Generated boot XML: \n%s", final_xml)
+
+        return install_xml, final_xml
+
+    def _manual_transient_create(self, install_xml, final_xml, needs_boot):
+        """
+        For hypervisors (like vz) that don't implement createXML,
+        we need to define+start, and undefine on start failure
+        """
+        domain = self.conn.defineXML(install_xml or final_xml)
+        if not needs_boot:
+            return domain
+
+        # Handle undefining the VM if the initial startup fails
+        try:
+            domain.create()
+        except Exception:
+            try:
+                domain.undefine()
+            except Exception:
+                pass
+            raise
+
+        if install_xml and install_xml != final_xml:
+            domain = self.conn.defineXML(final_xml)
+        return domain
+
+    def _create_guest(self, guest,
+                      meter, install_xml, final_xml, doboot, transient):
+        """
+        Actually do the XML logging, guest defining/creating
+
+        :param doboot: Boot guest even if it has no install phase
+        """
+        meter_label = _("Creating domain...")
+        meter = util.ensure_meter(meter)
+        meter.start(size=None, text=meter_label)
+        needs_boot = doboot or self.has_install_phase()
+
+        if guest.type == "vz":
+            if transient:
+                raise RuntimeError(_("Domain type 'vz' doesn't support "
+                    "transient installs."))
+            domain = self._manual_transient_create(
+                    install_xml, final_xml, needs_boot)
+
+        else:
+            if transient or needs_boot:
+                domain = self.conn.createXML(install_xml or final_xml, 0)
+            if not transient:
+                domain = self.conn.defineXML(final_xml)
+
+        self.domain = domain
+        try:
+            logging.debug("XML fetched from libvirt object:\n%s",
+                          self.domain.XMLDesc(0))
+        except Exception as e:
+            logging.debug("Error fetching XML from libvirt object: %s", e)
+
+
+    def _flag_autostart(self):
+        """
+        Set the autostart flag for self.domain if the user requested it
+        """
+        if not self.autostart:
+            return
+
+        try:
+            self.domain.setAutostart(True)
+        except libvirt.libvirtError as e:
+            if util.is_error_nosupport(e):
+                logging.warning("Could not set autostart flag: libvirt "
+                             "connection does not support autostart.")
+            else:
+                raise e
+
+
+    ######################
+    # Public install API #
+    ######################
+
+    def start_install(self, guest, meter=None,
+                      dry=False, return_xml=False,
+                      doboot=True, transient=False):
+        """
+        Begin the guest install (stage1).
+        :param return_xml: Don't create the guest, just return generated XML
+        """
+        if self.domain is not None:
+            raise RuntimeError(_("Domain has already been started!"))
+
+        self._add_install_cdrom_device(guest)
+        guest.set_install_defaults()
+
+        try:
+            self._cleanup(guest)
+            self._prepare(guest, meter)
+
+            # Create devices if required (disk images, etc.)
+            if not dry:
+                for dev in guest.devices.get_all():
+                    dev.setup(meter)
+
+            install_xml, final_xml = self._build_xml(guest)
+            if return_xml:
+                return (install_xml, final_xml)
+            if dry:
+                return
+
+            # Remove existing VM if requested
+            guest.check_vm_collision(self.conn, guest.name,
+                                     do_remove=self.replace)
+
+            self._create_guest(guest, meter, install_xml, final_xml,
+                               doboot, transient)
+
+            # Set domain autostart flag if requested
+            self._flag_autostart()
+        finally:
+            self._cleanup(guest)
+
+    def get_created_disks(self, guest):
+        return [d for d in guest.devices.disk if d.storage_was_created]
+
+    def cleanup_created_disks(self, guest, meter):
+        """
+        Remove any disks we created as part of the install. Only ever
+        called by clients.
+        """
+        clean_disks = self.get_created_disks(guest)
+        if not clean_disks:
+            return
+
+        for disk in clean_disks:
+            logging.debug("Removing created disk path=%s vol_object=%s",
+                disk.path, disk.get_vol_object())
+            name = os.path.basename(disk.path)
+
+            try:
+                meter.start(size=None, text=_("Removing disk '%s'") % name)
+
+                if disk.get_vol_object():
+                    disk.get_vol_object().delete()
+                else:
+                    os.unlink(disk.path)
+
+                meter.end(0)
+            except Exception as e:
+                logging.debug("Failed to remove disk '%s'",
+                    name, exc_info=True)
+                logging.error("Failed to remove disk '%s': %s", name, e)
 
 
 class PXEInstaller(Installer):

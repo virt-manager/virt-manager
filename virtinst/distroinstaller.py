@@ -47,6 +47,12 @@ class DistroInstaller(Installer):
         self._cached_fetcher = None
         self._cached_store = None
         self._cdrom_path = None
+        self._install_cdrom_device = None
+
+        if self._install_cdrom_device:
+            self._install_cdrom_device.path = self.cdrom_path()
+            self._install_cdrom_device.sync_path_props()
+            self._install_cdrom_device.validate()
 
 
     ########################
@@ -198,7 +204,6 @@ class DistroInstaller(Installer):
                 fetcher.cleanupLocation()
 
         self._cdrom_path = cdrom_path
-
 
 
     ##########################
