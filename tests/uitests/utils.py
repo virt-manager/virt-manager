@@ -10,6 +10,7 @@ import subprocess
 import sys
 import unittest
 
+from gi.repository import Gio
 import pyatspi
 import dogtail.tree
 
@@ -341,6 +342,16 @@ class VMMDogtailApp(object):
             self.open()
         return self._topwin
 
+    def error_if_already_running(self):
+        # Ensure virt-manager isn't already running
+        dbus = Gio.DBusProxy.new_sync(
+                Gio.bus_get_sync(Gio.BusType.SESSION, None), 0, None,
+                "org.freedesktop.DBus", "/org/freedesktop/DBus",
+                "org.freedesktop.DBus", None)
+        if "org.virt-manager.virt-manager" in dbus.ListNames():
+            raise RuntimeError("virt-manager is already running. "
+                    "Close it before running this test suite.")
+
     def is_running(self):
         return bool(self._proc and self._proc.poll() is None)
 
@@ -363,6 +374,7 @@ class VMMDogtailApp(object):
                 "--test-first-run", "--no-fork", "--connect", self.uri]
         cmd += extra_opts
 
+        self.error_if_already_running()
         self._proc = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
         self._root = dogtail.tree.root.application("virt-manager")
         self._topwin = self._root.find(None, "(frame|dialog|alert)")
