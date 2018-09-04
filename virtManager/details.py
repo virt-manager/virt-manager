@@ -551,8 +551,7 @@ class vmmDetails(vmmGObjectUI):
                 EDIT_NET_MAC),
             "on_network_link_state_checkbox_toggled": lambda *x: self.enable_apply(x,
                 EDIT_NET_LINKSTATE),
-            "on_network_show_ip_clicked": self.show_ip,
-
+            "on_network_refresh_ip_clicked": self.refresh_ip,
 
             "on_sound_model_combo_changed": lambda *x: self.enable_apply(x,
                                              EDIT_SOUND_MODEL),
@@ -1879,59 +1878,10 @@ class vmmDetails(vmmGObjectUI):
             return self._eject_media(disk)
         return self._insert_media(disk)
 
-
-    # Interface IP
-    def show_ip(self, src_ignore):
-        def agent_ready():
-            chardevs = self.vm.xmlobj.devices.channel
-            if chardevs:
-                for dev in chardevs:
-                    if (dev.DEVICE_TYPE == "channel" and dev.type == "unix" and
-                        dev.target_name == "org.qemu.guest_agent.0" and
-                        dev.target_state == "connected"):
-                        return True
-            return False
-
-        if not self.vm.is_active():
-            self.widget("ipv4").set_text("N/A")
-            self.widget("ipv6").set_text("N/A")
-            return
-
+    # Net IP refresh
+    def refresh_ip(self, src_ignore):
         net = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not net:
-            return
-
-        macaddr = net.macaddr or ""
-
-        if net.type == "network":
-            addrinfo = self.vm.interface_addresses(
-                libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_LEASE, macaddr)
-            if addrinfo and (addrinfo["ipv4"] or addrinfo["ipv6"]):
-                self.widget("ipv4").set_text(addrinfo['ipv4'] if
-                    addrinfo['ipv4'] else "N/A")
-                self.widget("ipv6").set_text(addrinfo['ipv6'] if
-                    addrinfo['ipv6'] else "N/A")
-                return
-        if agent_ready() is True:
-            addrinfo = self.vm.interface_addresses(
-                libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT, macaddr)
-            if addrinfo and (addrinfo["ipv4"] or addrinfo["ipv6"]):
-                self.widget("ipv4").set_text(addrinfo['ipv4']
-                    if addrinfo['ipv4'] else "N/A")
-                self.widget("ipv6").set_text(addrinfo['ipv6'] if
-                    addrinfo['ipv6'] else "N/A")
-                return
-        addrinfo = self.vm.interface_addresses(
-            libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_ARP, macaddr)
-        if addrinfo and (addrinfo["ipv4"] or addrinfo["ipv6"]):
-            self.widget("ipv4").set_text(addrinfo['ipv4'] if addrinfo['ipv4']
-                else "N/A")
-            self.widget("ipv6").set_text(addrinfo['ipv6'] if addrinfo['ipv6']
-                else "N/A")
-            return
-
-        self.widget("ipv4").set_text("N/A")
-        self.widget("ipv6").set_text("N/A")
+        self.vm.refresh_interface_addresses(net)
 
 
     ##################################################
@@ -2805,9 +2755,13 @@ class vmmDetails(vmmGObjectUI):
         state = net.link_state == "up" or net.link_state is None
         self.widget("network-link-state-checkbox").set_active(state)
 
-        if len(self.vm.xmlobj.devices.interface) > 1:
-            self.widget("ipv4").set_text("")
-            self.widget("ipv6").set_text("")
+        ipv4, ipv6 = self.vm.get_interface_addresses(net)
+        label = ipv4
+        if ipv6:
+            if label:
+                label += "\n"
+            label += ipv6
+        self.widget("network-ip").set_text(label or _("Unknown"))
 
         self.netlist.set_dev(net)
 

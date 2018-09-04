@@ -227,6 +227,7 @@ class vmmDomain(vmmLibvirtObject):
         self._autostart = None
         self._domain_caps = None
         self._status_reason = None
+        self._ip_cache = None
 
         self.managedsave_supported = False
         self.mem_stats_supported = False
@@ -1125,36 +1126,6 @@ class vmmDomain(vmmLibvirtObject):
 
         return self._backend.openGraphicsFD(0, flags)
 
-    def interface_addresses(self, source, mac):
-        def extract(info, mac):
-            import re
-            addrs = None
-            ipv4 = None
-            ipv6 = None
-            for iface in info:
-                if iface != "lo" and info[iface]["hwaddr"] == mac:
-                    addrs = info[iface]["addrs"]
-                    break
-            # In case of both of ipv4 and ipv6 not found
-            if addrs is None:
-                return {'ipv4': ipv4, 'ipv6': ipv6}
-            for addr in addrs:
-                if addr["type"] == 0:
-                    ipv4 = addr["addr"] + "/" + str(addr["prefix"])
-                elif addr["type"] == 1 and not re.match("^fe80", addr["addr"]):
-                    ipv6 = addr["addr"] + "/" + str(addr["prefix"])
-            return {'ipv4': ipv4, 'ipv6': ipv6}
-
-        try:
-            all_addrinfo = self._backend.interfaceAddresses(source)
-            addrinfo = extract(all_addrinfo, mac)
-        except Exception:
-            addrinfo = None
-        return addrinfo
-
-    def refresh_snapshots(self):
-        self._snapshot_list = None
-
     def list_snapshots(self):
         if self._snapshot_list is None:
             newlist = []
@@ -1177,6 +1148,87 @@ class vmmDomain(vmmLibvirtObject):
         if not redefine:
             logging.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
         self._backend.snapshotCreateXML(xml, flags)
+
+    def refresh_interface_addresses(self, iface):
+        def agent_ready():
+            for dev in self.xmlobj.devices.channel:
+                if (dev.type == "unix" and
+                    dev.target_name == dev.CHANNEL_NAME_QEMUGA and
+                    dev.target_state == "connected"):
+                    return True
+            return False
+
+        self._ip_cache = {"qemuga": {}, "arp": {}}
+        if iface.type == "network":
+            net = self.conn.get_net(iface.source)
+            if net:
+                net.refresh_dhcp_leases()
+        if not self.is_active():
+            return
+
+        if agent_ready():
+            self._ip_cache["qemuga"] = self._get_interface_addresses(
+                libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT)
+
+        arp_flag = getattr(libvirt,
+            "VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_ARP", 3)
+        self._ip_cache["arp"] = self._get_interface_addresses(arp_flag)
+
+    def _get_interface_addresses(self, source):
+        logging.debug("Calling interfaceAddresses source=%s", source)
+        try:
+            return self._backend.interfaceAddresses(source)
+        except Exception as e:
+            logging.debug("interfaceAddresses failed: %s", str(e))
+        return {}
+
+    def get_interface_addresses(self, iface):
+        if self._ip_cache is None:
+            self.refresh_interface_addresses(iface)
+
+        qemuga = self._ip_cache["qemuga"]
+        arp = self._ip_cache["arp"]
+        leases = []
+        if iface.type == "network":
+            net = self.conn.get_net(iface.source)
+            if net:
+                leases = net.get_dhcp_leases()
+
+        def extract_dom(info):
+            ipv4 = None
+            ipv6 = None
+            for addrs in info.values():
+                if addrs["hwaddr"] != iface.macaddr:
+                    continue
+                for addr in addrs["addrs"]:
+                    if addr["type"] == 0:
+                        ipv4 = addr["addr"]
+                    elif (addr["type"] == 1 and
+                          not str(addr["addr"]).startswith("fe80")):
+                        ipv6 = addr["addr"] + "/" + str(addr["prefix"])
+            return ipv4, ipv6
+
+        def extract_lease(info):
+            ipv4 = None
+            ipv6 = None
+            if info["mac"] == iface.macaddr:
+                if info["type"] == 0:
+                    ipv4 = info["ipaddr"]
+                if info["type"] == 1:
+                    ipv6 = info["ipaddr"]
+            return ipv4, ipv6
+
+        for ips in ([qemuga] + leases + [arp]):
+            if "expirytime" in ips:
+                ipv4, ipv6 = extract_lease(ips)
+            else:
+                ipv4, ipv6 = extract_dom(ips)
+            if ipv4 or ipv6:
+                return ipv4, ipv6
+        return None, None
+
+    def refresh_snapshots(self):
+        self._snapshot_list = None
 
 
     ########################

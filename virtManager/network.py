@@ -5,6 +5,7 @@
 # See the COPYING file in the top-level directory.
 
 import ipaddress
+import logging
 
 from virtinst import Network
 
@@ -33,6 +34,8 @@ def _make_addr_str(addrStr, prefix, netmaskStr):
 class vmmNetwork(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Network)
+
+        self._leases = None
 
 
     ##########################
@@ -91,6 +94,18 @@ class vmmNetwork(vmmLibvirtObject):
         return self._backend.autostart()
     def set_autostart(self, value):
         self._backend.setAutostart(value)
+
+    def refresh_dhcp_leases(self):
+        try:
+            self._leases = self._backend.DHCPLeases()
+        except Exception as e:
+            logging.debug("Error getting %s DHCP leases: %s", self, str(e))
+            self._leases = []
+
+    def get_dhcp_leases(self):
+        if self._leases is None:
+            self.refresh_dhcp_leases()
+        return self._leases
 
     def set_qos(self, **kwargs):
         xmlobj = self._make_xmlobj_to_define()
