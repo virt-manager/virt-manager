@@ -355,7 +355,7 @@ class VMMDogtailApp(object):
     def is_running(self):
         return bool(self._proc and self._proc.poll() is None)
 
-    def open(self, extra_opts=None):
+    def open(self, extra_opts=None, check_already_running=True):
         extra_opts = extra_opts or []
 
         if tests.utils.clistate.debug:
@@ -374,7 +374,8 @@ class VMMDogtailApp(object):
                 "--test-first-run", "--no-fork", "--connect", self.uri]
         cmd += extra_opts
 
-        self.error_if_already_running()
+        if check_already_running:
+            self.error_if_already_running()
         self._proc = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
         self._root = dogtail.tree.root.application("virt-manager")
         self._topwin = self._root.find(None, "(frame|dialog|alert)")

@@ -65,7 +65,7 @@ class VMMCLI(uiutils.UITestCase):
         """
         self.app.open()
         newapp = uiutils.VMMDogtailApp("test:///default")
-        newapp.open()
+        newapp.open(check_already_running=False)
         uiutils.check_in_loop(lambda: not newapp.is_running())
         import dogtail.tree
         vapps = [a for a in dogtail.tree.root.applications() if
