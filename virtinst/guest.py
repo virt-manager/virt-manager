@@ -506,7 +506,7 @@ class Guest(XMLBuilder):
         if not self.osinfo.is_windows():
             return False
         if (self.os.loader_type == "pflash" and
-            self.os_variant in ("win2k8r2", "win7")):
+            self.osinfo.broken_uefi_with_hyperv()):
             return False
         return True
 
