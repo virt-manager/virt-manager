@@ -216,7 +216,6 @@ class XMLParseTest(unittest.TestCase):
         check("hugepages", False, True)
         check("page_size", None, 1)
         check("page_unit", None, "G")
-        check("page_nodeset", None, "1,5-8")
         check("nosharepages", False, True)
         check("locked", False, True)
 
