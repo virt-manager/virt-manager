@@ -178,7 +178,8 @@ class Command(object):
                 raise RuntimeError("couldn't parse URI from command %s" %
                                    self.argv)
 
-            if self._check_support(tests, conn, self.skip_check, "skipped"):
+            if self.skip_check:
+                tests.skipTest("skipped with skip_check")
                 return
 
             code, output = self._get_output(conn)
