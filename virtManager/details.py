@@ -1096,7 +1096,7 @@ class vmmDetails(vmmGObjectUI):
         if event.button != 3:
             return
 
-        devobj = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        devobj = self.get_hw_row()[HW_LIST_COL_DEVICE]
         if not devobj:
             return
 
@@ -1142,23 +1142,6 @@ class vmmDetails(vmmGObjectUI):
 
     def get_hw_row(self):
         return uiutil.get_list_selected_row(self.widget("hw-list"))
-
-    def get_hw_selection(self, field):
-        row = self.get_hw_row()
-        if not row:
-            return None
-        return row[field]
-
-    def force_get_hw_pagetype(self, page=None):
-        if page:
-            return page
-
-        page = self.get_hw_selection(HW_LIST_COL_TYPE)
-        if page is None:
-            page = HW_LIST_TYPE_GENERAL
-            self.set_hw_selection(0)
-
-        return page
 
     def has_unapplied_changes(self, row):
         if not row:
@@ -1207,14 +1190,13 @@ class vmmDetails(vmmGObjectUI):
         self.widget("config-remove").set_sensitive(False)
         self.widget("config-remove").set_tooltip_text(tooltip)
 
-    def hw_selected(self, page=None):
-        pagetype = self.force_get_hw_pagetype(page)
+    def hw_selected(self, pagetype=None):
+        if pagetype is None:
+            pagetype = self.get_hw_row()[HW_LIST_COL_TYPE]
 
         self.widget("config-remove").set_sensitive(True)
         self.widget("config-remove").set_tooltip_text(
                 _("Remove this device from the virtual machine"))
-        self.widget("hw-panel").set_sensitive(True)
-        self.widget("hw-panel").show()
 
         try:
             dev = self.get_hw_row()[HW_LIST_COL_DEVICE]
@@ -2373,7 +2355,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Stats page needs to be refreshed every tick
         if (page == DETAILS_PAGE_DETAILS and
-            self.get_hw_selection(HW_LIST_COL_TYPE) == HW_LIST_TYPE_STATS):
+            self.get_hw_row()[HW_LIST_COL_TYPE] == HW_LIST_TYPE_STATS):
             self.refresh_stats_page()
 
     def page_refresh(self, page):
@@ -2387,7 +2369,7 @@ class vmmDetails(vmmGObjectUI):
         # Add / remove new devices
         self.repopulate_hw_list()
 
-        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+        pagetype = self.get_hw_row()[HW_LIST_COL_TYPE]
         if pagetype is None:
             return
 
@@ -2396,7 +2378,7 @@ class vmmDetails(vmmGObjectUI):
             # erase them
             return
 
-        self.hw_selected(page=pagetype)
+        self.hw_selected(pagetype=pagetype)
 
     def refresh_overview_page(self):
         # Basic details
@@ -3105,6 +3087,7 @@ class vmmDetails(vmmGObjectUI):
         add_hw_list_option(_("Boot Options"), HW_LIST_TYPE_BOOT, "system-run")
 
         self.repopulate_hw_list()
+        self.set_hw_selection(0)
 
     def repopulate_hw_list(self):
         hw_list = self.widget("hw-list")

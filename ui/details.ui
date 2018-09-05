@@ -619,6 +619,7 @@
                             <signal name="button-press-event" handler="on_hw_list_button_press_event" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview-selection1">
+                                <property name="mode">browse</property>
                                 <signal name="changed" handler="on_hw_list_changed" swapped="no"/>
                               </object>
                             </child>
