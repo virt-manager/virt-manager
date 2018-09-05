@@ -1217,6 +1217,8 @@ class vmmDetails(vmmGObjectUI):
         self.widget("hw-panel").show()
 
         try:
+            dev = self.get_hw_row()[HW_LIST_COL_DEVICE]
+
             if pagetype == HW_LIST_TYPE_GENERAL:
                 self.refresh_overview_page()
             elif pagetype == HW_LIST_TYPE_INSPECTION:
@@ -1230,37 +1232,37 @@ class vmmDetails(vmmGObjectUI):
             elif pagetype == HW_LIST_TYPE_BOOT:
                 self.refresh_boot_page()
             elif pagetype == HW_LIST_TYPE_DISK:
-                self.refresh_disk_page()
+                self.refresh_disk_page(dev)
             elif pagetype == HW_LIST_TYPE_NIC:
-                self.refresh_network_page()
+                self.refresh_network_page(dev)
             elif pagetype == HW_LIST_TYPE_INPUT:
-                self.refresh_input_page()
+                self.refresh_input_page(dev)
             elif pagetype == HW_LIST_TYPE_GRAPHICS:
-                self.refresh_graphics_page()
+                self.refresh_graphics_page(dev)
             elif pagetype == HW_LIST_TYPE_SOUND:
-                self.refresh_sound_page()
+                self.refresh_sound_page(dev)
             elif pagetype == HW_LIST_TYPE_CHAR:
-                self.refresh_char_page()
+                self.refresh_char_page(dev)
             elif pagetype == HW_LIST_TYPE_HOSTDEV:
-                self.refresh_hostdev_page()
+                self.refresh_hostdev_page(dev)
             elif pagetype == HW_LIST_TYPE_VIDEO:
-                self.refresh_video_page()
+                self.refresh_video_page(dev)
             elif pagetype == HW_LIST_TYPE_WATCHDOG:
-                self.refresh_watchdog_page()
+                self.refresh_watchdog_page(dev)
             elif pagetype == HW_LIST_TYPE_CONTROLLER:
-                self.refresh_controller_page()
+                self.refresh_controller_page(dev)
             elif pagetype == HW_LIST_TYPE_FILESYSTEM:
-                self.refresh_filesystem_page()
+                self.refresh_filesystem_page(dev)
             elif pagetype == HW_LIST_TYPE_SMARTCARD:
-                self.refresh_smartcard_page()
+                self.refresh_smartcard_page(dev)
             elif pagetype == HW_LIST_TYPE_REDIRDEV:
-                self.refresh_redir_page()
+                self.refresh_redir_page(dev)
             elif pagetype == HW_LIST_TYPE_TPM:
-                self.refresh_tpm_page()
+                self.refresh_tpm_page(dev)
             elif pagetype == HW_LIST_TYPE_RNG:
-                self.refresh_rng_page()
+                self.refresh_rng_page(dev)
             elif pagetype == HW_LIST_TYPE_PANIC:
-                self.refresh_panic_page()
+                self.refresh_panic_page(dev)
             else:
                 pagetype = -1
         except Exception as e:
@@ -1460,9 +1462,7 @@ class vmmDetails(vmmGObjectUI):
                                str(e)))
 
     def remove_xml_dev(self, src_ignore):
-        devobj = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not devobj:
-            return
+        devobj = self.get_hw_row()[HW_LIST_COL_DEVICE]
         self.remove_device(devobj)
 
     def set_pause_state(self, state):
@@ -1870,17 +1870,14 @@ class vmmDetails(vmmGObjectUI):
             return
 
     def toggle_storage_media(self, src_ignore):
-        disk = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not disk:
-            return
-
+        disk = self.get_hw_row()[HW_LIST_COL_DEVICE]
         if disk.path:
             return self._eject_media(disk)
         return self._insert_media(disk)
 
     # Net IP refresh
     def refresh_ip(self, src_ignore):
-        net = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        net = self.get_hw_row()[HW_LIST_COL_DEVICE]
         self.vm.refresh_interface_addresses(net)
 
 
@@ -2657,11 +2654,7 @@ class vmmDetails(vmmGObjectUI):
         model.append(["filtered", "filtered"])
         model.append(["unfiltered", "unfiltered"])
 
-    def refresh_disk_page(self):
-        disk = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not disk:
-            return
-
+    def refresh_disk_page(self, disk):
         path = disk.path
         devtype = disk.device
         ro = disk.read_only
@@ -2737,11 +2730,7 @@ class vmmDetails(vmmGObjectUI):
         else:
             button.hide()
 
-    def refresh_network_page(self):
-        net = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not net:
-            return
-
+    def refresh_network_page(self, net):
         vmmAddHardware.populate_network_model_combo(
             self.vm, self.widget("network-model"))
         uiutil.set_list_selection(self.widget("network-model"), net.model)
@@ -2765,11 +2754,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.netlist.set_dev(net)
 
-    def refresh_input_page(self):
-        inp = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not inp:
-            return
-
+    def refresh_input_page(self, inp):
         dev = inp.pretty_name(inp.type, inp.bus)
 
         mode = None
@@ -2787,33 +2772,17 @@ class vmmDetails(vmmGObjectUI):
             self._disable_device_remove(
                 _("Hypervisor does not support removing this device"))
 
-    def refresh_graphics_page(self):
-        gfx = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not gfx:
-            return
-
+    def refresh_graphics_page(self, gfx):
         title = self.gfxdetails.set_dev(gfx)
         self.widget("graphics-title").set_markup("<b>%s</b>" % title)
 
-    def refresh_sound_page(self):
-        sound = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not sound:
-            return
-
+    def refresh_sound_page(self, sound):
         uiutil.set_list_selection(self.widget("sound-model"), sound.model)
 
-    def refresh_smartcard_page(self):
-        sc = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not sc:
-            return
-
+    def refresh_smartcard_page(self, sc):
         uiutil.set_list_selection(self.widget("smartcard-mode"), sc.mode)
 
-    def refresh_redir_page(self):
-        rd = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not rd:
-            return
-
+    def refresh_redir_page(self, rd):
         address = None
         if rd.type == 'tcp':
             address = _("%s:%s") % (rd.host, rd.service)
@@ -2825,11 +2794,7 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.widget("redir-address"), bool(address))
 
-    def refresh_tpm_page(self):
-        tpmdev = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not tpmdev:
-            return
-
+    def refresh_tpm_page(self, tpmdev):
         def show_ui(param, val=None):
             widgetname = "tpm-" + param.replace("_", "-")
             doshow = tpmdev.supports_property(param)
@@ -2852,29 +2817,19 @@ class vmmDetails(vmmGObjectUI):
         show_ui("device_path")
         show_ui("version")
 
-    def refresh_panic_page(self):
-        dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not dev:
-            return
-
+    def refresh_panic_page(self, dev):
         model = dev.model or "isa"
         pmodel = virtinst.DevicePanic.get_pretty_model(model)
         self.widget("panic-model").set_text(pmodel)
 
-    def refresh_rng_page(self):
-        dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
-
+    def refresh_rng_page(self, dev):
         is_random = dev.type == "random"
         uiutil.set_grid_row_visible(self.widget("rng-device"), is_random)
 
         self.widget("rng-type").set_text(dev.get_pretty_type(dev.type))
         self.widget("rng-device").set_text(dev.device or "")
 
-    def refresh_char_page(self):
-        chardev = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not chardev:
-            return
-
+    def refresh_char_page(self, chardev):
         show_target_type = not (chardev.DEVICE_TYPE in
                                 ["serial", "parallel"])
         show_target_name = chardev.DEVICE_TYPE == "channel"
@@ -2945,11 +2900,7 @@ class vmmDetails(vmmGObjectUI):
         show_ui("target_name")
         show_ui("target_state")
 
-    def refresh_hostdev_page(self):
-        hostdev = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not hostdev:
-            return
-
+    def refresh_hostdev_page(self, hostdev):
         rom_bar = hostdev.rom_bar
         if rom_bar is None:
             rom_bar = True
@@ -2977,11 +2928,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("hostdev-source").set_text(pretty_name)
         self.widget("hostdev-rombar").set_active(rom_bar)
 
-    def refresh_video_page(self):
-        vid = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not vid:
-            return
-
+    def refresh_video_page(self, vid):
         model = vid.model
         if model == "qxl" and vid.vgamem:
             ram = vid.vgamem
@@ -3007,22 +2954,14 @@ class vmmDetails(vmmGObjectUI):
             self._disable_device_remove(
                 _("Cannot remove device while Graphics/Display is attached."))
 
-    def refresh_watchdog_page(self):
-        watch = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not watch:
-            return
-
+    def refresh_watchdog_page(self, watch):
         model = watch.model
         action = watch.action
 
         uiutil.set_list_selection(self.widget("watchdog-model"), model)
         uiutil.set_list_selection(self.widget("watchdog-action"), action)
 
-    def refresh_controller_page(self):
-        controller = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not controller:
-            return
-
+    def refresh_controller_page(self, controller):
         uiutil.set_grid_row_visible(self.widget("device-list-label"), False)
         uiutil.set_grid_row_visible(self.widget("controller-device-box"), False)
 
@@ -3069,11 +3008,7 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("controller-model"),
             controller.model or None)
 
-    def refresh_filesystem_page(self):
-        dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not dev:
-            return
-
+    def refresh_filesystem_page(self, dev):
         self.fsDetails.set_dev(dev)
         self.fsDetails.update_fs_rows()
 
