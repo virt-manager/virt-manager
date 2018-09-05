@@ -1273,6 +1273,8 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-devtype"))
         cache = uiutil.get_list_selection(
             self.widget("storage-cache"))
+        discard = uiutil.get_list_selection(
+            self.widget("storage-discard"))
 
         controller_model = None
         if (bus == "scsi" and
@@ -1297,6 +1299,8 @@ class vmmAddHardware(vmmGObjectUI):
             disk.bus = bus
             if cache:
                 disk.driver_cache = cache
+            if discard:
+                disk.driver_discard = discard
 
             # Generate target
             disks = (self.vm.xmlobj.devices.disk +
