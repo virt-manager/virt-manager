@@ -1275,6 +1275,8 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-cache"))
         discard = uiutil.get_list_selection(
             self.widget("storage-discard"))
+        detect_zeroes = uiutil.get_list_selection(
+            self.widget("storage-detect-zeroes"))
 
         controller_model = None
         if (bus == "scsi" and
@@ -1301,6 +1303,8 @@ class vmmAddHardware(vmmGObjectUI):
                 disk.driver_cache = cache
             if discard:
                 disk.driver_discard = discard
+            if detect_zeroes:
+                disk.driver_detect_zeroes = detect_zeroes
 
             # Generate target
             disks = (self.vm.xmlobj.devices.disk +
