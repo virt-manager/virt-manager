@@ -276,7 +276,7 @@ def fail(msg, do_exit=True):
     """
     logging.debug("".join(traceback.format_stack()))
     logging.error(msg)
-    if traceback.format_exc().strip() != "None":
+    if sys.exc_info()[0] is not None:
         logging.debug("", exc_info=True)
     if do_exit:
         _fail_exit()

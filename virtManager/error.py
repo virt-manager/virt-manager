@@ -4,6 +4,7 @@
 # See the COPYING file in the top-level directory.
 
 import logging
+import sys
 import traceback
 
 from gi.repository import Gtk
@@ -67,9 +68,8 @@ class vmmErrorDialog(vmmGObject):
 
         if details is None:
             details = summary
-            tb = "".join(traceback.format_exc()).strip()
-            if tb != "None":
-                details += "\n\n" + tb
+            if sys.exc_info()[0] is not None:
+                details += "\n\n" + "".join(traceback.format_exc()).strip()
         else:
             details = str(details)
 
