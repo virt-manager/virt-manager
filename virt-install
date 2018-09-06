@@ -8,7 +8,6 @@
 import argparse
 import logging
 import os
-import re
 import sys
 import time
 
@@ -300,56 +299,6 @@ def convert_old_features(options):
     options.features = opts or None
 
 
-########################
-# Virt type validation #
-########################
-
-def get_guest(conn, options):
-    # Set up all virt/hypervisor parameters
-    if sum([bool(f) for f in [options.fullvirt,
-                              options.paravirt,
-                              options.container]]) > 1:
-        fail(_("Can't do more than one of --hvm, --paravirt, or --container"))
-
-    req_hv_type = options.hv_type and options.hv_type.lower() or None
-    if options.fullvirt:
-        req_virt_type = "hvm"
-    elif options.paravirt:
-        req_virt_type = "xen"
-    elif options.container:
-        req_virt_type = "exe"
-    else:
-        # This should force capabilities to give us the most sensible default
-        req_virt_type = None
-
-    logging.debug("Requesting virt method '%s', hv type '%s'.",
-                  (req_virt_type and req_virt_type or _("default")),
-                  (req_hv_type and req_hv_type or _("default")))
-
-    arch = options.arch
-    if re.match("i.86", arch or ""):
-        arch = "i686"
-
-    try:
-        guest = conn.caps.lookup_virtinst_guest(
-            os_type=req_virt_type,
-            arch=arch,
-            typ=req_hv_type,
-            machine=options.machine)
-    except Exception as e:
-        fail(e)
-
-    if (not req_virt_type and
-        not req_hv_type and
-        conn.is_qemu() and
-        guest.os.arch in ["i686", "x86_64"] and
-        not guest.type == "kvm"):
-        logging.warning("KVM acceleration not available, using '%s'",
-                     guest.type)
-
-    return guest
-
-
 ##################################
 # Install media setup/validation #
 ##################################
@@ -550,10 +499,7 @@ def build_installer(options, guest):
 
 
 def build_guest_instance(conn, options):
-    guest = get_guest(conn, options)
-
-    logging.debug("Received virt method '%s'", guest.type)
-    logging.debug("Hypervisor name is '%s'", guest.os.os_type)
+    guest = virtinst.Guest(conn)
 
     if options.name:
         guest.name = options.name
@@ -561,12 +507,23 @@ def build_guest_instance(conn, options):
         guest.uuid = options.uuid
     if options.description:
         guest.description = options.description
+    if options.os_type:
+        guest.os.os_type = options.os_type
+    if options.virt_type:
+        guest.type = options.virt_type
+    if options.arch:
+        guest.os.arch = options.arch
+    if options.machine:
+        guest.os.machine = options.machine
 
     cli.parse_option_strings(options, guest, None)
 
-    # Extra disk validation
+    # cli specific disk validation
     for disk in guest.devices.disk:
         cli.validate_disk(disk)
+
+    # Do this a bit early so we can do arch/os_type checks up ahead
+    guest.set_capabilities_defaults()
 
     # Default to UEFI for aarch64
     if ((guest.os.is_arm64() or guest.os.is_arm32()) and
@@ -865,21 +822,22 @@ def parse_args():
 
 
     virg = parser.add_argument_group(_("Virtualization Platform Options"))
-    virg.add_argument("-v", "--hvm", action="store_true", dest="fullvirt",
-                      help=_("This guest should be a fully virtualized guest"))
-    virg.add_argument("-p", "--paravirt", action="store_true",
-                    help=_("This guest should be a paravirtualized guest"))
-    virg.add_argument("--container", action="store_true", default=False,
-                    help=_("This guest should be a container guest"))
-    virg.add_argument("--virt-type", dest="hv_type",
-                    default="",
-                    help=_("Hypervisor name to use (kvm, qemu, xen, ...)"))
-    virg.add_argument("--accelerate", action="store_true", default=False,
-                     help=argparse.SUPPRESS)
-    virg.add_argument("--arch",
-                    help=_("The CPU architecture to simulate"))
-    virg.add_argument("--machine",
-                    help=_("The machine type to emulate"))
+    ostypeg = virg.add_mutually_exclusive_group()
+    ostypeg.add_argument("-v", "--hvm",
+        action="store_const", const="hvm", dest="os_type",
+        help=_("This guest should be a fully virtualized guest"))
+    ostypeg.add_argument("-p", "--paravirt",
+        action="store_const", const="xen", dest="os_type",
+        help=_("This guest should be a paravirtualized guest"))
+    ostypeg.add_argument("--container",
+        action="store_const", const="exe", dest="os_type",
+        help=_("This guest should be a container guest"))
+    virg.add_argument("--virt-type",
+        help=_("Hypervisor name to use (kvm, qemu, xen, ...)"))
+    virg.add_argument("--arch", help=_("The CPU architecture to simulate"))
+    virg.add_argument("--machine", help=_("The machine type to emulate"))
+    virg.add_argument("--accelerate", action="store_true",
+        help=argparse.SUPPRESS)
     virg.add_argument("--noapic", action="store_true",
         default=False, help=argparse.SUPPRESS)
     virg.add_argument("--noacpi", action="store_true",

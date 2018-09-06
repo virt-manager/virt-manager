@@ -165,11 +165,10 @@ class _CapsInfo(object):
     Container object to hold the results of guest_lookup, so users don't
     need to juggle two objects
     """
-    def __init__(self, conn, guest, domain, requested_machine):
+    def __init__(self, conn, guest, domain):
         self.conn = conn
         self.guest = guest
         self.domain = domain
-        self._requested_machine = requested_machine
 
         self.hypervisor_type = self.domain.hypervisor_type
         self.os_type = self.guest.os_type
@@ -178,42 +177,6 @@ class _CapsInfo(object):
 
         self.emulator = self.domain.emulator or self.guest.emulator
         self.machines = self.guest.all_machine_names(self.domain)
-
-    def get_recommended_machine(self):
-        """
-        Return the recommended machine type.
-
-        However, if the user already requested an explicit machine type,
-        via guest_lookup, return that instead.
-        """
-        if self._requested_machine:
-            return self._requested_machine
-
-        # For any other HV just let libvirt get us the default, these
-        # are the only ones we've tested.
-        if (not self.conn.is_test() and
-            not self.conn.is_qemu() and
-            not self.conn.is_xen()):
-            return None
-
-        if self.conn.is_xen() and len(self.machines):
-            return self.machines[0]
-
-        if (self.arch in ["ppc64", "ppc64le"] and
-            "pseries" in self.machines):
-            return "pseries"
-
-        if self.arch in ["armv7l", "aarch64"]:
-            if "virt" in self.machines:
-                return "virt"
-            if "vexpress-a15" in self.machines:
-                return "vexpress-a15"
-
-        if self.arch in ["s390x"]:
-            if "s390-ccw-virtio" in self.machines:
-                return "s390-ccw-virtio"
-
-        return None
 
 
 class Capabilities(XMLBuilder):
@@ -366,7 +329,7 @@ class Capabilities(XMLBuilder):
                                {'domain': typ, 'virttype': guest.os_type,
                                 'arch': guest.arch, 'machine': machinestr})
 
-        capsinfo = _CapsInfo(self.conn, guest, domain, machine)
+        capsinfo = _CapsInfo(self.conn, guest, domain)
         return capsinfo
 
     def build_virtinst_guest(self, capsinfo):
@@ -381,7 +344,7 @@ class Capabilities(XMLBuilder):
         gobj.os.loader = capsinfo.loader
         gobj.emulator = capsinfo.emulator
 
-        gobj.os.machine = capsinfo.get_recommended_machine()
+        gobj.os.machine = Guest.get_recommended_machine(capsinfo)
 
         gobj.capsinfo = capsinfo
 

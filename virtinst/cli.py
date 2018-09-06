@@ -1659,6 +1659,7 @@ ParserBoot.add_arg(None, "bootloader", cb=ParserBoot.set_bootloader_cb)
 ParserBoot.add_arg(None, "domain_type", cb=ParserBoot.set_domain_type_cb)
 ParserBoot.add_arg("os_type", "os_type")
 ParserBoot.add_arg(None, "emulator", cb=ParserBoot.set_emulator_cb)
+ParserBoot.add_arg("machine", "machine")
 ParserBoot.add_arg(None, "uefi", cb=ParserBoot.set_uefi_cb, is_novalue=True)
 
 ParserBoot.add_arg("useserial", "useserial", is_onoff=True)
@@ -1675,7 +1676,6 @@ ParserBoot.add_arg("nvram_template", "nvram_template")
 ParserBoot.add_arg("kernel_args", "kernel_args",
                    aliases=["extra_args"], can_comma=True)
 ParserBoot.add_arg("init", "init")
-ParserBoot.add_arg("machine", "machine")
 ParserBoot.add_arg("initargs", "initargs", cb=ParserBoot.set_initargs_cb)
 ParserBoot.add_arg("smbios_mode", "smbios_mode")
 

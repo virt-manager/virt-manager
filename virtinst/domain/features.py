@@ -59,17 +59,18 @@ class DomainFeatures(XMLBuilder):
         if not guest.os.is_hvm():
             return
 
+        capsinfo = guest.lookup_capsinfo()
         if self._prop_is_unset("acpi"):
-            self.acpi = guest.capsinfo.guest.supports_acpi()
+            self.acpi = capsinfo.guest.supports_acpi()
         if self._prop_is_unset("apic"):
-            self.apic = guest.capsinfo.guest.supports_apic()
+            self.apic = capsinfo.guest.supports_apic()
         if self._prop_is_unset("pae"):
             if (guest.os.is_hvm() and
                 guest.type == "xen" and
                 guest.os.arch == "x86_64"):
                 self.pae = True
             else:
-                self.pae = guest.capsinfo.guest.supports_pae()
+                self.pae = capsinfo.guest.supports_pae()
 
         if (guest.hyperv_supported() and
             self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_VAPIC)):

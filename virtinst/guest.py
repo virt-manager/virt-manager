@@ -134,9 +134,6 @@ class Guest(XMLBuilder):
 
         self.__osinfo = None
 
-        # This is set via Capabilities.build_virtinst_guest
-        self.capsinfo = None
-
 
     ######################
     # Property accessors #
@@ -280,6 +277,7 @@ class Guest(XMLBuilder):
         Configure UEFI for the VM, but only if libvirt is advertising
         a known UEFI binary path.
         """
+        self.set_capabilities_defaults()
         domcaps = DomainCapabilities.build_from_guest(self)
 
         if not domcaps.supports_uefi_xml():
@@ -464,13 +462,73 @@ class Guest(XMLBuilder):
             dev.device = "/dev/urandom"
             self.add_device(dev)
 
+    def lookup_capsinfo(self):
+        return self.conn.caps.guest_lookup(
+                os_type=self.os.os_type,
+                arch=self.os.arch,
+                typ=self.type,
+                machine=self.os.machine)
+
+    def set_capabilities_defaults(self):
+        capsinfo = self.lookup_capsinfo()
+        wants_default_type = not self.type and not self.os.os_type
+
+        self.type = capsinfo.hypervisor_type
+        self.os.os_type = capsinfo.os_type
+        self.os.arch = capsinfo.arch
+        if not self.os.loader:
+            self.os.loader = capsinfo.loader
+        if (not self.emulator and
+            not self.os.is_xenpv() and
+            not self.type == "vz"):
+            self.emulator = capsinfo.emulator
+        if not self.os.machine:
+            self.os.machine = Guest.get_recommended_machine(capsinfo)
+
+        if (wants_default_type and
+            self.conn.is_qemu() and
+            self.os.is_x86() and
+            not self.type == "kvm"):
+            logging.warning("KVM acceleration not available, using '%s'",
+                            self.type)
+
+    @staticmethod
+    def get_recommended_machine(capsinfo):
+        """
+        Return the recommended machine type for the passed capsinfo
+        """
+        # For any other HV just let libvirt get us the default, these
+        # are the only ones we've tested.
+        if (not capsinfo.conn.is_test() and
+            not capsinfo.conn.is_qemu() and
+            not capsinfo.conn.is_xen()):
+            return None
+
+        if capsinfo.conn.is_xen() and len(capsinfo.machines):
+            return capsinfo.machines[0]
+
+        if (capsinfo.arch in ["ppc64", "ppc64le"] and
+            "pseries" in capsinfo.machines):
+            return "pseries"
+
+        if capsinfo.arch in ["armv7l", "aarch64"]:
+            if "virt" in capsinfo.machines:
+                return "virt"
+            if "vexpress-a15" in capsinfo.machines:
+                return "vexpress-a15"
+
+        if capsinfo.arch in ["s390x"]:
+            if "s390-ccw-virtio" in capsinfo.machines:
+                return "s390-ccw-virtio"
+
+        return None
+
     def set_defaults(self, _guest):
         if not self.uuid:
             self.uuid = util.generate_uuid(self.conn)
         if not self.vcpus:
             self.vcpus = 1
-        if self.os.is_xenpv() or self.type == "vz":
-            self.emulator = None
+        self.set_capabilities_defaults()
 
         self._add_default_graphics()
         self._add_default_video_device()

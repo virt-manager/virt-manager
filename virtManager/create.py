@@ -864,7 +864,8 @@ class vmmCreate(vmmGObjectUI):
 
         defmachine = None
         prios = []
-        recommended_machine = self._capsinfo.get_recommended_machine()
+        recommended_machine = virtinst.Guest.get_recommended_machine(
+                self._capsinfo)
         if recommended_machine:
             defmachine = recommended_machine
             prios = [defmachine]
