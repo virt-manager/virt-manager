@@ -81,7 +81,7 @@ class vmmChooseCD(vmmGObjectUI):
     def reset_state(self):
         self.mediacombo.reset_state()
 
-        enable_phys = not self.vm.stable_defaults()
+        enable_phys = not self.vm.xmlobj.stable_defaults()
         self.widget("physical-media").set_sensitive(enable_phys)
         self.widget("physical-media").set_tooltip_text("" if enable_phys else
             _("Physical CDROM passthrough not supported with this hypervisor"))

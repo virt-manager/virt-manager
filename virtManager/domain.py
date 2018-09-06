@@ -365,9 +365,6 @@ class vmmDomain(vmmLibvirtObject):
     def get_install_abort(self):
         return bool(self._install_abort)
 
-    def stable_defaults(self):
-        return self.get_xmlobj().stable_defaults()
-
     def has_spicevmc_type_redirdev(self):
         devs = self.xmlobj.devices.redirdev
         for dev in devs:

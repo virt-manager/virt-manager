@@ -483,7 +483,7 @@ class vmmAddHardware(vmmGObjectUI):
                 disk_bus_types.append("sata")
                 disk_bus_types.append("fdc")
 
-                if not vm.stable_defaults():
+                if not vm.xmlobj.stable_defaults():
                     disk_bus_types.append("scsi")
                     disk_bus_types.append("usb")
 
@@ -633,7 +633,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Type name, desc
         for t in char_class.TYPES:
             if (t in stable_blacklist and
-                self.vm.stable_defaults()):
+                self.vm.xmlobj.stable_defaults()):
                 continue
 
             desc = char_class.pretty_type(t)
