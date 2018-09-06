@@ -408,16 +408,6 @@ class StoragePool(_StorageObject):
             return self.type in users[propname]
         return hasattr(self, propname)
 
-    def list_formats(self):
-        if self.type == self.TYPE_FS:
-            return ["auto", "ext2", "ext3", "ext4", "ufs", "iso9660", "udf",
-                    "gfs", "gfs2", "vfat", "hfs+", "xfs"]
-        if self.type == self.TYPE_NETFS:
-            return ["auto", "nfs", "glusterfs"]
-        if self.type == self.TYPE_DISK:
-            return ["auto", "bsd", "dos", "dvh", "gpt", "mac", "pc98", "sun"]
-        return []
-
     def supports_volume_creation(self):
         return self.type in [
             StoragePool.TYPE_DIR, StoragePool.TYPE_FS,

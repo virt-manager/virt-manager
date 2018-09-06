@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkWindow" id="vmm-create-pool">
@@ -9,6 +9,9 @@
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_create_pool_delete_event" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="vbox1">
         <property name="visible">True</property>
@@ -390,18 +393,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="pool-format">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="events">GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
-                            <property name="halign">start</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkEntry" id="pool-hostname">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -450,6 +441,25 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="pool-format">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="events">GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
+                            <property name="halign">start</property>
+                            <property name="has_entry">True</property>
+                            <child internal-child="entry">
+                              <object class="GtkEntry" id="pool-format-entry">
+                                <property name="can_focus">True</property>
+                                <property name="width_chars">10</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
                           </packing>
                         </child>
                         <child>

@@ -80,6 +80,8 @@ class vmmCreatePool(vmmGObjectUI):
         format_model = Gtk.ListStore(str, str)
         format_list.set_model(format_model)
         uiutil.init_combo_text_column(format_list, 1)
+        for f in ["auto"]:
+            format_model.append([f, f])
 
         # Target path combo box entry
         target_list = self.widget("pool-target-path")
@@ -114,7 +116,7 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-iqn-chk").set_active(False)
         self.widget("pool-iqn-chk").toggled()
         self.widget("pool-iqn").set_text("")
-        self.widget("pool-format").set_active(-1)
+        self.widget("pool-format").set_active(0)
         self.widget("pool-build").set_sensitive(True)
         self.widget("pool-build").set_active(False)
         self.widget("pool-details-grid").set_visible(False)
@@ -135,12 +137,6 @@ class vmmCreatePool(vmmGObjectUI):
         for typ in types:
             model.append([typ, "%s: %s" %
                          (typ, StoragePool.get_pool_type_desc(typ))])
-
-    def populate_pool_format(self, formats):
-        model = self.widget("pool-format").get_model()
-        model.clear()
-        for f in formats:
-            model.append([f, f])
 
     def populate_pool_sources(self):
         source_list = self.widget("pool-source-path")
@@ -246,7 +242,7 @@ class vmmCreatePool(vmmGObjectUI):
         tgt = self._pool.supports_property("target_path")
         tgt_b = tgt and not self.conn.is_remote()
         host = self._pool.supports_property("hosts")
-        fmt = self._pool.supports_property("formats")
+        fmt = self._pool.supports_property("format")
         iqn = self._pool.supports_property("iqn")
         builddef, buildsens = self.get_build_default()
 
@@ -286,11 +282,6 @@ class vmmCreatePool(vmmGObjectUI):
         if src_name:
             self.widget("pool-source-name").set_text(
                     self._pool.default_source_name())
-
-        self.widget("pool-format").set_active(-1)
-        if fmt:
-            self.populate_pool_format(self._pool.list_formats("formats"))
-            self.widget("pool-format").set_active(0)
 
         self.populate_pool_sources()
 
@@ -507,7 +498,7 @@ class vmmCreatePool(vmmGObjectUI):
                 hostobj.name = host
             if source:
                 self._pool.source_path = source
-            if fmt:
+            if fmt and self._pool.supports_property("format"):
                 self._pool.format = fmt
             if iqn:
                 self._pool.iqn = iqn
