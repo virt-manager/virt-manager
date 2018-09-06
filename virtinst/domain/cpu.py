@@ -51,9 +51,6 @@ class _CPUFeature(XMLBuilder):
     """
     Class for generating <cpu> child <feature> XML
     """
-
-    POLICIES = ["force", "require", "optional", "disable", "forbid"]
-
     XML_NAME = "feature"
     _XML_PROP_ORDER = ["policy", "name"]
 
@@ -65,8 +62,6 @@ class DomainCpu(XMLBuilder):
     """
     Class for generating <cpu> XML
     """
-    MATCHS = ["minimum", "exact", "strict"]
-
     XML_NAME = "cpu"
     _XML_PROP_ORDER = ["mode", "match", "_model", "vendor",
                        "sockets", "cores", "threads", "features"]

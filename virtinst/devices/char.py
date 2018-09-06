@@ -39,22 +39,6 @@ class _DeviceChar(Device):
     MODE_BIND = "bind"
     MODES = [MODE_CONNECT, MODE_BIND]
 
-    PROTOCOL_RAW = "raw"
-    PROTOCOL_TELNET = "telnet"
-    PROTOCOLS = [PROTOCOL_RAW, PROTOCOL_TELNET]
-
-    CHANNEL_TARGET_GUESTFWD = "guestfwd"
-    CHANNEL_TARGET_VIRTIO = "virtio"
-    CHANNEL_TARGETS = [CHANNEL_TARGET_GUESTFWD,
-                       CHANNEL_TARGET_VIRTIO]
-
-    CONSOLE_TARGET_SERIAL = "serial"
-    CONSOLE_TARGET_UML = "uml"
-    CONSOLE_TARGET_XEN = "xen"
-    CONSOLE_TARGET_VIRTIO = "virtio"
-    CONSOLE_TARGETS = [CONSOLE_TARGET_SERIAL, CONSOLE_TARGET_UML,
-                       CONSOLE_TARGET_XEN, CONSOLE_TARGET_VIRTIO]
-
     CHANNEL_NAME_SPICE = "com.redhat.spice.0"
     CHANNEL_NAME_QEMUGA = "org.qemu.guest_agent.0"
     CHANNEL_NAME_LIBGUESTFS = "org.libguestfs.channel.0"
@@ -233,9 +217,9 @@ class _DeviceChar(Device):
         if not self.source_mode and self.supports_property("source_mode"):
             self.source_mode = self.MODE_BIND
         if not self.protocol and self.supports_property("protocol"):
-            self.protocol = self.PROTOCOL_RAW
+            self.protocol = "raw"
         if not self.target_type and self.DEVICE_TYPE == "channel":
-            self.target_type = self.CHANNEL_TARGET_VIRTIO
+            self.target_type = "virtio"
         if not self.target_name and self.type == self.TYPE_SPICEVMC:
             self.target_name = self.CHANNEL_NAME_SPICE
 

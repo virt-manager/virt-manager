@@ -44,7 +44,6 @@ class DeviceGraphics(Device):
     TYPE_VNC = "vnc"
     TYPE_RDP = "rdp"
     TYPE_SPICE = "spice"
-    TYPES = [TYPE_VNC, TYPE_SDL, TYPE_RDP, TYPE_SPICE]
 
     CHANNEL_TYPE_MAIN     = "main"
     CHANNEL_TYPE_DISPLAY  = "display"
@@ -52,15 +51,6 @@ class DeviceGraphics(Device):
     CHANNEL_TYPE_CURSOR   = "cursor"
     CHANNEL_TYPE_PLAYBACK = "playback"
     CHANNEL_TYPE_RECORD   = "record"
-    CHANNEL_TYPES = [CHANNEL_TYPE_MAIN, CHANNEL_TYPE_DISPLAY,
-                     CHANNEL_TYPE_INPUTS, CHANNEL_TYPE_CURSOR,
-                     CHANNEL_TYPE_PLAYBACK, CHANNEL_TYPE_RECORD]
-
-    CHANNEL_MODE_SECURE   = "secure"
-    CHANNEL_MODE_INSECURE = "insecure"
-    CHANNEL_MODE_ANY      = "any"
-    CHANNEL_MODES = [CHANNEL_MODE_SECURE, CHANNEL_MODE_INSECURE,
-                     CHANNEL_MODE_ANY]
 
     KEYMAP_LOCAL = "local"
     KEYMAP_DEFAULT = "default"

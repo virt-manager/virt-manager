@@ -35,10 +35,6 @@ class DeviceAddress(XMLBuilder):
     ADDRESS_TYPE_CCID          = "ccid"
     ADDRESS_TYPE_SPAPR_VIO     = "spapr-vio"
 
-    TYPES = [ADDRESS_TYPE_PCI, ADDRESS_TYPE_DRIVE,
-             ADDRESS_TYPE_VIRTIO_SERIAL, ADDRESS_TYPE_CCID,
-             ADDRESS_TYPE_SPAPR_VIO]
-
     XML_NAME = "address"
     _XML_PROP_ORDER = ["type", "domain", "controller", "bus", "slot",
                        "function", "target", "unit", "multifunction"]
