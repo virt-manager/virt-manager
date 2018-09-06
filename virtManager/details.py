@@ -2720,7 +2720,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("network-link-state-checkbox").set_active(state)
 
         ipv4, ipv6 = self.vm.get_interface_addresses(net)
-        label = ipv4
+        label = ipv4 or ""
         if ipv6:
             if label:
                 label += "\n"
