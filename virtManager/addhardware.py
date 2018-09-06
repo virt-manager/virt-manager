@@ -193,6 +193,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.build_disk_bus_combo(self.vm, self.widget("storage-bustype"))
         self._build_disk_device_combo()
         self.build_disk_cache_combo(self.vm, self.widget("storage-cache"))
+        self.build_disk_io_combo(self.vm, self.widget("storage-io"))
         self.build_disk_discard_combo(self.vm, self.widget("storage-discard"))
         self.build_disk_detect_zeroes_combo(self.vm,
             self.widget("storage-detect-zeroes"))
@@ -1231,6 +1232,8 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-devtype"))
         cache = uiutil.get_list_selection(
             self.widget("storage-cache"))
+        io = uiutil.get_list_selection(
+            self.widget("storage-io"))
         discard = uiutil.get_list_selection(
             self.widget("storage-discard"))
         detect_zeroes = uiutil.get_list_selection(
@@ -1259,6 +1262,8 @@ class vmmAddHardware(vmmGObjectUI):
             disk.bus = bus
             if cache:
                 disk.driver_cache = cache
+            if io:
+                disk.driver_io = io
             if discard:
                 disk.driver_discard = discard
             if detect_zeroes:
