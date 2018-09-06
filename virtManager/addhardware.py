@@ -442,6 +442,13 @@ class vmmAddHardware(vmmGObjectUI):
         _build_combo(combo, values, sort=False)
 
     @staticmethod
+    def build_disk_io_combo(_vm, combo):
+        values = [[None, _("Hypervisor default")]]
+        for m in DeviceDisk.io_modes:
+            values.append([m, m])
+        _build_combo(combo, values, sort=False)
+
+    @staticmethod
     def build_disk_discard_combo(_vm, combo):
         values = [[None, _("Hypervisor default")]]
         for m in DeviceDisk.discard_types:

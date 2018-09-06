@@ -1009,15 +1009,8 @@ class vmmDetails(vmmGObjectUI):
         vmmAddHardware.build_disk_cache_combo(self.vm, disk_cache)
 
         # Disk io combo
-        combo = self.widget("disk-io")
-        model = Gtk.ListStore(str, str)
-        combo.set_model(model)
-        uiutil.init_combo_text_column(combo, 1)
-        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-        model.append([None, _("Hypervisor default")])
-        for m in virtinst.DeviceDisk.io_modes:
-            model.append([m, m])
-        combo.set_active(0)
+        disk_io = self.widget("disk-io")
+        vmmAddHardware.build_disk_io_combo(self.vm, disk_io)
 
         # Discard combo
         combo = self.widget("disk-discard")
