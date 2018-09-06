@@ -1417,7 +1417,6 @@ class vmmCreate(vmmGObjectUI):
         if self._storage_browser is None:
             self._storage_browser = vmmStorageBrowser(self.conn)
 
-        self._storage_browser.set_stable_defaults(self._stable_defaults())
         self._storage_browser.set_vm_name(self._get_config_name())
         self._storage_browser.set_finish_cb(callback)
         self._storage_browser.set_browse_reason(reason)

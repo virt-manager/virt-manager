@@ -136,8 +136,6 @@ class vmmChooseCD(vmmGObjectUI):
             self.storage_browser = vmmStorageBrowser(self.conn)
             self.storage_browser.set_finish_cb(self.set_storage_path)
 
-        self.storage_browser.set_stable_defaults(self.vm.stable_defaults())
-
         if self.media_type == vmmMediaCombo.MEDIA_FLOPPY:
             self.storage_browser.set_browse_reason(
                                     self.config.CONFIG_DIR_FLOPPY_MEDIA)

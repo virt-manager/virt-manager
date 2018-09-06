@@ -22,9 +22,6 @@ class vmmStorageBrowser(vmmGObjectUI):
         # Passed to browse_local
         self._browse_reason = None
 
-        # Whether we should abide stable defaults
-        self._stable_defaults = False
-
         self.storagelist = vmmStorageList(self.conn, self.builder, self.topwin,
             self._vol_sensitive_cb)
         self._init_ui()
@@ -71,8 +68,6 @@ class vmmStorageBrowser(vmmGObjectUI):
         self._browse_reason = reason
     def set_vm_name(self, name):
         self.storagelist.set_name_hint(name)
-    def set_stable_defaults(self, val):
-        self._stable_defaults = val
 
     def _init_ui(self):
         self.storagelist.connect("browse-clicked", self._browse_clicked)
@@ -128,9 +123,6 @@ class vmmStorageBrowser(vmmGObjectUI):
         if ((self._browse_reason == self.config.CONFIG_DIR_FS) and
             fmt != 'dir'):
             return False
-        elif self._stable_defaults:
-            if fmt == "vmdk":
-                return False
         return True
 
 

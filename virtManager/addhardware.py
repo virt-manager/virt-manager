@@ -1560,7 +1560,6 @@ class vmmAddHardware(vmmGObjectUI):
         if self._storagebrowser is None:
             self._storagebrowser = vmmStorageBrowser(self.conn)
 
-        self._storagebrowser.set_stable_defaults(self.vm.stable_defaults())
         self._storagebrowser.set_finish_cb(set_storage_cb)
         self._storagebrowser.set_browse_reason(reason)
 
