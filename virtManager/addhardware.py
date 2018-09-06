@@ -547,13 +547,8 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def build_sound_combo(vm, combo):
-        stable_defaults = vm.stable_defaults()
-        stable_soundmodels = ["ich6", "ich9", "ac97"]
-
         values = []
-        for m in DeviceSound.MODELS:
-            if (stable_defaults and m not in stable_soundmodels):
-                continue
+        for m in DeviceSound.get_recommended_models(vm.xmlobj):
             values.append([m, DeviceSound.pretty_model(m)])
 
         default = DeviceSound.default_model(vm.xmlobj)

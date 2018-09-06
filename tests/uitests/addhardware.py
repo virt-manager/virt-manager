@@ -487,7 +487,7 @@ class AddHardware(uiutils.UITestCase):
         # Add sound
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Sound", "sound-tab")
-        tab.find("Model:", "combo box").click()
+        tab.find("Model:", "combo box").click_combo_entry()
         tab.find("HDA", "menu item").click()
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
