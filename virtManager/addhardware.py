@@ -202,7 +202,6 @@ class vmmAddHardware(vmmGObjectUI):
         self._build_hostdev_treeview()
         self.build_video_combo(self.vm, self.widget("video-model"))
         _build_combo(self.widget("char-device-type"), [])
-        self._build_char_mode_combo()
         self._build_char_target_type_combo()
         self._build_char_target_name_combo()
         self.build_watchdogmodel_combo(self.vm, self.widget("watchdog-model"))
@@ -323,11 +322,6 @@ class vmmAddHardware(vmmGObjectUI):
         # Char parameters
         self.widget("char-path").set_text("")
         self.widget("char-channel").set_text("")
-        self.widget("char-host").set_text("127.0.0.1")
-        self.widget("char-port").set_value(4555)
-        self.widget("char-bind-host").set_text("127.0.0.1")
-        self.widget("char-bind-port").set_value(4556)
-        self.widget("char-use-telnet").set_active(False)
         self.widget("char-auto-socket").set_active(True)
 
 
@@ -600,13 +594,6 @@ class vmmAddHardware(vmmGObjectUI):
         _build_combo(combo, values, default_value=default)
 
 
-    def _build_char_mode_combo(self):
-        values = []
-        for t in DeviceSerial.MODES:
-            desc = DeviceSerial.pretty_mode(t)
-            values.append([t, desc + " (%s)" % t])
-        _build_combo(self.widget("char-mode"), values)
-
     def _build_char_target_type_combo(self):
         values = []
         if self.conn.is_qemu():
@@ -622,25 +609,13 @@ class vmmAddHardware(vmmGObjectUI):
         _build_combo(self.widget("char-target-name"), values)
 
     def _populate_char_device_type_combo(self):
-        stable_blacklist = ["pipe", "udp"]
-
-        # Char device type
-        char_devtype = self.widget("char-device-type")
-        char_devtype_model = char_devtype.get_model()
-        char_devtype_model.clear()
         char_class = self._get_char_class()
+        model = self.widget("char-device-type").get_model()
+        model.clear()
 
-        # Type name, desc
-        for t in char_class.TYPES:
-            if (t in stable_blacklist and
-                self.vm.xmlobj.stable_defaults()):
-                continue
-
-            desc = char_class.pretty_type(t)
-            row = [t, desc + " (%s)" % t]
-            char_devtype_model.append(row)
-
-        uiutil.set_list_selection(char_devtype, "pty")
+        for t in char_class.get_recommended_types(self.vm.xmlobj):
+            model.append([t, char_class.pretty_type(t) + " (%s)" % t])
+        uiutil.set_list_selection(self.widget("char-device-type"), "pty")
 
 
     @staticmethod
@@ -939,7 +914,6 @@ class vmmAddHardware(vmmGObjectUI):
 
         doshow = not src.get_active()
         uiutil.set_grid_row_visible(self.widget("char-path-label"), doshow)
-        uiutil.set_grid_row_visible(self.widget("char-mode-label"), doshow)
 
     def _change_char_target_name(self, src):
         if not src.get_visible():
@@ -964,29 +938,18 @@ class vmmAddHardware(vmmGObjectUI):
         if devtype is None:
             return
 
-        char_widget_mappings = {
-            "source_path": "char-path",
-            "source_channel": "char-channel",
-            "source_mode": "char-mode",
-            "source_host": "char-host",
-            "bind_host": "char-bind-host",
-            "protocol": "char-use-telnet",
-        }
-
         char_class = self._get_char_class()
+        dev = char_class(self.conn.get_backend())
+        dev.type = devtype
 
-        self._dev = char_class(self.conn.get_backend())
-        self._dev.type = devtype
+        ischan = dev.DEVICE_TYPE == "channel"
+        iscon = dev.DEVICE_TYPE == "console"
+        show_auto = devtype == "unix" and ischan
 
-        ischan = self._dev.DEVICE_TYPE == "channel"
-        iscon = self._dev.DEVICE_TYPE == "console"
-        show_auto = (devtype == "unix" and ischan and
-            self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET))
-
-        for param_name, widget_name in char_widget_mappings.items():
-            make_visible = self._dev.supports_property(param_name)
-            uiutil.set_grid_row_visible(self.widget(widget_name + "-label"),
-                                           make_visible)
+        uiutil.set_grid_row_visible(self.widget("char-path-label"),
+                dev.supports_property("source_path"))
+        uiutil.set_grid_row_visible(self.widget("char-channel-label"),
+                dev.supports_property("source_channel"))
 
         uiutil.set_grid_row_visible(
             self.widget("char-target-name-label"), ischan)
@@ -995,10 +958,6 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.widget("char-auto-socket-label"), show_auto)
         self.widget("char-auto-socket").emit("toggled")
-
-        has_mode = self._dev.supports_property("source_mode")
-        if has_mode and self.widget("char-mode").get_active() == -1:
-            self.widget("char-mode").set_active(0)
 
     def _change_usbredir_type(self, src):
         pass
@@ -1392,28 +1351,13 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _validate_page_char(self):
         char_class = self._get_char_class()
-        modebox = self.widget("char-mode")
-        devbox = self.widget("char-device-type")
+        devtype = uiutil.get_list_selection(self.widget("char-device-type"))
+
         typebox = self.widget("char-target-type")
-        devtype = uiutil.get_list_selection(devbox)
-
-        devclass = char_class(self.conn.get_backend())
-        devclass.type = devtype
-
         source_path = self.widget("char-path").get_text()
         source_channel = self.widget("char-channel").get_text()
-        source_mode = uiutil.get_list_selection(modebox)
-        source_host = self.widget("char-host").get_text()
-        bind_host = self.widget("char-bind-host").get_text()
-        source_port = self.widget("char-port").get_value()
-        bind_port = self.widget("char-bind-port").get_value()
         target_name = self.widget("char-target-name").get_child().get_text()
         target_type = uiutil.get_list_selection(typebox)
-
-        if self.widget("char-use-telnet").get_active():
-            protocol = DeviceSerial.PROTOCOL_TELNET
-        else:
-            protocol = DeviceSerial.PROTOCOL_RAW
 
         if not self.widget("char-target-name").get_visible():
             target_name = None
@@ -1422,34 +1366,17 @@ class vmmAddHardware(vmmGObjectUI):
         if (self.widget("char-auto-socket").get_visible() and
             self.widget("char-auto-socket").get_active()):
             source_path = None
-            source_mode = "bind"
 
-        if (devclass.type == "tcp" and source_mode == "bind"):
-            devclass.bind_host = source_host
-            devclass.bind_port = source_port
-            source_host = source_port = source_mode = None
-
-        value_mappings = {
-            "source_path": source_path,
-            "source_channel": source_channel,
-            "source_mode": source_mode,
-            "source_host": source_host,
-            "source_port": source_port,
-            "bind_port": bind_port,
-            "bind_host": bind_host,
-            "protocol": protocol,
-            "target_name": target_name,
-            "target_type": target_type,
-        }
-
-        self._dev = devclass
-
-        for param_name, val in value_mappings.items():
-            if self._dev.supports_property(param_name) and val is not None:
-                setattr(self._dev, param_name, val)
-
-        # Dump XML for sanity checking
-        self._dev.get_xml()
+        self._dev = char_class(self.conn.get_backend())
+        self._dev.type = devtype
+        if self._dev.supports_property("source_path"):
+            self._dev.source_path = source_path
+        if self._dev.supports_property("source_channel"):
+            self._dev.source_channel = source_channel
+        if self._dev.supports_property("target_name"):
+            self._dev.target_name = target_name
+        if self._dev.supports_property("target_type"):
+            self._dev.target_type = target_type
 
     def _validate_page_video(self):
         model = uiutil.get_list_selection(self.widget("video-model"))

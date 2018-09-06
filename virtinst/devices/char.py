@@ -29,16 +29,6 @@ class _DeviceChar(Device):
     TYPE_SPICEPORT = "spiceport"
     TYPE_NMDM = "nmdm"
 
-    # We don't list the non-UI friendly types here
-    _TYPES_FOR_ALL = [TYPE_PTY, TYPE_DEV, TYPE_FILE,
-                      TYPE_TCP, TYPE_UDP, TYPE_UNIX]
-    _TYPES_FOR_CHANNEL = [TYPE_SPICEVMC, TYPE_SPICEPORT]
-    TYPES = _TYPES_FOR_ALL
-
-    MODE_CONNECT = "connect"
-    MODE_BIND = "bind"
-    MODES = [MODE_CONNECT, MODE_BIND]
-
     CHANNEL_NAME_SPICE = "com.redhat.spice.0"
     CHANNEL_NAME_QEMUGA = "org.qemu.guest_agent.0"
     CHANNEL_NAME_LIBGUESTFS = "org.libguestfs.channel.0"
@@ -47,6 +37,16 @@ class _DeviceChar(Device):
                      CHANNEL_NAME_QEMUGA,
                      CHANNEL_NAME_LIBGUESTFS,
                      CHANNEL_NAME_SPICE_WEBDAV]
+
+    @classmethod
+    def get_recommended_types(cls, _guest):
+        if cls.XML_NAME == "console":
+            return [cls.TYPE_PTY]
+
+        ret = [cls.TYPE_PTY, cls.TYPE_FILE, cls.TYPE_UNIX]
+        if cls.XML_NAME == "channel":
+            ret = [cls.TYPE_SPICEVMC, cls.TYPE_SPICEPORT] + ret
+        return ret
 
     @staticmethod
     def pretty_channel_name(val):
@@ -91,20 +91,6 @@ class _DeviceChar(Device):
             desc = _("Spice agent")
         elif ctype == _DeviceChar.TYPE_SPICEPORT:
             desc = _("Spice port")
-
-        return desc
-
-    @staticmethod
-    def pretty_mode(char_mode):
-        """
-        Return a human readable description of the passed char type
-        """
-        desc = ""
-
-        if char_mode == _DeviceChar.MODE_CONNECT:
-            desc = _("Client mode")
-        elif char_mode == _DeviceChar.MODE_BIND:
-            desc = _("Server mode")
 
         return desc
 
@@ -215,7 +201,7 @@ class _DeviceChar(Device):
 
     def set_defaults(self, _guest):
         if not self.source_mode and self.supports_property("source_mode"):
-            self.source_mode = self.MODE_BIND
+            self.source_mode = "bind"
         if not self.protocol and self.supports_property("protocol"):
             self.protocol = "raw"
         if not self.target_type and self.DEVICE_TYPE == "channel":
@@ -227,7 +213,6 @@ class _DeviceChar(Device):
 
 class DeviceConsole(_DeviceChar):
     XML_NAME = "console"
-    TYPES = [_DeviceChar.TYPE_PTY]
 
 
 class DeviceSerial(_DeviceChar):
@@ -240,5 +225,3 @@ class DeviceParallel(_DeviceChar):
 
 class DeviceChannel(_DeviceChar):
     XML_NAME = "channel"
-    TYPES = (_DeviceChar._TYPES_FOR_CHANNEL +
-             _DeviceChar._TYPES_FOR_ALL)

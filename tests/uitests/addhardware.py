@@ -387,7 +387,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Console", "char-tab")
         tab.find("Device Type:", "combo box").click()
         tab.find_fuzzy("Pseudo TTY", "menu item").click()
-        tab.find("Type:", "combo box").click()
+        tab.find("Type:", "combo box").click_combo_entry()
         tab.find_fuzzy("Hypervisor default", "menu item").click()
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
@@ -401,20 +401,10 @@ class AddHardware(uiutils.UITestCase):
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
-        # Add udp serial
-        self._open_addhw_window(details)
-        tab = self._select_hw(addhw, "Serial", "char-tab")
-        tab.find("Device Type:", "combo box").click()
-        tab.find_fuzzy("UDP", "menu item").click()
-        finish.click()
-        uiutils.check_in_loop(lambda: details.active)
-
-        # Add parallel+device
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Parallel", "char-tab")
         tab.find("Device Type:", "combo box").click()
-        tab.find_fuzzy("Physical host character", "menu item").click()
-        tab.find("Path:", "text").text = "/dev/parallel0"
+        tab.find_fuzzy("Unix", "menu item").click()
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
