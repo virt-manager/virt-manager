@@ -1197,6 +1197,8 @@ class vmmDomain(vmmLibvirtObject):
             for addrs in info.values():
                 if addrs["hwaddr"] != iface.macaddr:
                     continue
+                if not addrs["addrs"]:
+                    continue
                 for addr in addrs["addrs"]:
                     if addr["type"] == 0:
                         ipv4 = addr["addr"]
