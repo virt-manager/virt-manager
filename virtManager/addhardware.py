@@ -708,11 +708,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _build_controller_type_combo(self):
         values = []
-        for t in DeviceController.TYPES:
-            if t in [DeviceController.TYPE_IDE,
-                     DeviceController.TYPE_PCI,
-                     DeviceController.TYPE_FDC]:
-                continue
+        for t in DeviceController.get_recommended_types(self.vm.xmlobj):
             values.append([t, DeviceController.pretty_type(t)])
 
         _build_combo(self.widget("controller-type"), values,
@@ -723,14 +719,17 @@ class vmmAddHardware(vmmGObjectUI):
         model = combo.get_model()
         model.clear()
 
-        model.append([None, _("Hypervisor default")])
+        rows = []
         if controller_type == DeviceController.TYPE_USB:
-            model.append(["ich9-ehci1", "USB 2"])
-            model.append(["nec-xhci", "USB 3"])
+            rows.append(["nec-xhci", "USB 3"])
+            rows.append(["ich9-ehci1", "USB 2"])
         elif controller_type == DeviceController.TYPE_SCSI:
-            model.append(["virtio-scsi", "VirtIO SCSI"])
+            rows.append(["virtio-scsi", "VirtIO SCSI"])
+        rows.append([None, _("Hypervisor default")])
 
-        combo.set_active(0)
+        for row in rows:
+            model.append(row)
+        uiutil.set_list_selection(combo, rows[0][0])
 
 
 

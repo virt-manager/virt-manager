@@ -20,10 +20,13 @@ class DeviceController(Device):
     TYPE_USB             = "usb"
     TYPE_PCI             = "pci"
     TYPE_CCID            = "ccid"
-    TYPES = [TYPE_IDE, TYPE_FDC,
-             TYPE_SCSI, TYPE_SATA,
-             TYPE_VIRTIOSERIAL, TYPE_USB,
-             TYPE_PCI, TYPE_CCID]
+
+    @staticmethod
+    def get_recommended_types(_guest):
+        return [DeviceController.TYPE_SCSI,
+                DeviceController.TYPE_USB,
+                DeviceController.TYPE_VIRTIOSERIAL,
+                DeviceController.TYPE_CCID]
 
     @staticmethod
     def pretty_type(ctype):
