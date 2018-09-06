@@ -110,37 +110,33 @@ class DeviceDisk(Device):
     CACHE_MODE_WRITEBACK = "writeback"
     CACHE_MODE_DIRECTSYNC = "directsync"
     CACHE_MODE_UNSAFE = "unsafe"
-    cache_types = [CACHE_MODE_NONE, CACHE_MODE_WRITETHROUGH,
+    CACHE_MODES = [CACHE_MODE_NONE, CACHE_MODE_WRITETHROUGH,
         CACHE_MODE_WRITEBACK, CACHE_MODE_DIRECTSYNC, CACHE_MODE_UNSAFE]
 
     DISCARD_MODE_IGNORE = "ignore"
     DISCARD_MODE_UNMAP = "unmap"
-    discard_types = [DISCARD_MODE_IGNORE, DISCARD_MODE_UNMAP]
+    DISCARD_MODES = [DISCARD_MODE_IGNORE, DISCARD_MODE_UNMAP]
 
-    DETECT_ZEROES_OFF = "off"
-    DETECT_ZEROES_ON = "on"
-    DETECT_ZEROES_UNMAP = "unmap"
-    detect_zeroes_types = [DETECT_ZEROES_OFF, DETECT_ZEROES_ON,
-                           DETECT_ZEROES_UNMAP]
+    DETECT_ZEROES_MODE_OFF = "off"
+    DETECT_ZEROES_MODE_ON = "on"
+    DETECT_ZEROES_MODE_UNMAP = "unmap"
+    DETECT_ZEROES_MODES = [DETECT_ZEROES_MODE_OFF, DETECT_ZEROES_MODE_ON,
+                           DETECT_ZEROES_MODE_UNMAP]
 
     DEVICE_DISK = "disk"
     DEVICE_LUN = "lun"
     DEVICE_CDROM = "cdrom"
     DEVICE_FLOPPY = "floppy"
-    devices = [DEVICE_DISK, DEVICE_LUN, DEVICE_CDROM, DEVICE_FLOPPY]
 
     TYPE_FILE = "file"
     TYPE_BLOCK = "block"
     TYPE_DIR = "dir"
     TYPE_VOLUME = "volume"
     TYPE_NETWORK = "network"
-    types = [TYPE_FILE, TYPE_BLOCK, TYPE_DIR, TYPE_NETWORK]
 
     IO_MODE_NATIVE = "native"
     IO_MODE_THREADS = "threads"
-    io_modes = [IO_MODE_NATIVE, IO_MODE_THREADS]
-
-    error_policies = ["ignore", "stop", "enospace", "report"]
+    IO_MODES = [IO_MODE_NATIVE, IO_MODE_THREADS]
 
     @staticmethod
     def get_old_recommended_buses(guest):

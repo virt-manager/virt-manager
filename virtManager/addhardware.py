@@ -438,28 +438,28 @@ class vmmAddHardware(vmmGObjectUI):
     @staticmethod
     def build_disk_cache_combo(_vm, combo):
         values = [[None, _("Hypervisor default")]]
-        for m in DeviceDisk.cache_types:
+        for m in DeviceDisk.CACHE_MODES:
             values.append([m, m])
         _build_combo(combo, values, sort=False)
 
     @staticmethod
     def build_disk_io_combo(_vm, combo):
         values = [[None, _("Hypervisor default")]]
-        for m in DeviceDisk.io_modes:
+        for m in DeviceDisk.IO_MODES:
             values.append([m, m])
         _build_combo(combo, values, sort=False)
 
     @staticmethod
     def build_disk_discard_combo(_vm, combo):
         values = [[None, _("Hypervisor default")]]
-        for m in DeviceDisk.discard_types:
+        for m in DeviceDisk.DISCARD_MODES:
             values.append([m, m])
         _build_combo(combo, values, sort=False)
 
     @staticmethod
     def build_disk_detect_zeroes_combo(_vm, combo):
         values = [[None, _("Hypervisor default")]]
-        for m in DeviceDisk.detect_zeroes_types:
+        for m in DeviceDisk.DETECT_ZEROES_MODES:
             values.append([m, m])
         _build_combo(combo, values, sort=False)
 
