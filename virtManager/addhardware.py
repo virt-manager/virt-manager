@@ -469,50 +469,12 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def populate_disk_bus_combo(vm, devtype, model):
-        # try to get supported disk bus types from domain capabilities
         domcaps = vm.get_domain_capabilities()
-        disk_bus_types = None
-        if "bus" in domcaps.devices.disk.enum_names():
-            disk_bus_types = domcaps.devices.disk.get_enum("bus").get_values()
-
-        # if there are no disk bus types in domain capabilities fallback to
-        # old code
-        if not disk_bus_types:
-            disk_bus_types = []
-            if vm.is_hvm():
-                if not vm.get_xmlobj().os.is_q35():
-                    disk_bus_types.append("ide")
-                disk_bus_types.append("sata")
-                disk_bus_types.append("fdc")
-
-                if not vm.xmlobj.stable_defaults():
-                    disk_bus_types.append("scsi")
-                    disk_bus_types.append("usb")
-
-            if vm.get_hv_type() in ["qemu", "kvm", "test"]:
-                disk_bus_types.append("sd")
-                disk_bus_types.append("virtio")
-                if "scsi" not in disk_bus_types:
-                    disk_bus_types.append("scsi")
-
-            if vm.conn.is_xen() or vm.conn.is_test():
-                disk_bus_types.append("xen")
-
-        rows = []
-        for bus in disk_bus_types:
-            rows.append([bus, DeviceDisk.pretty_disk_bus(bus)])
+        buses = DeviceDisk.get_recommended_buses(vm.xmlobj, domcaps, devtype)
 
         model.clear()
-
-        bus_map = {
-            "disk": ["ide", "sata", "scsi", "sd", "usb", "virtio", "xen"],
-            "floppy": ["fdc"],
-            "cdrom": ["ide", "sata", "scsi"],
-            "lun": ["scsi"],
-        }
-        for row in rows:
-            if row[0] in bus_map[devtype]:
-                model.append(row)
+        for bus in buses:
+            model.append([bus, DeviceDisk.pretty_disk_bus(bus)])
 
 
     @staticmethod

@@ -143,6 +143,44 @@ class DeviceDisk(Device):
     error_policies = ["ignore", "stop", "enospace", "report"]
 
     @staticmethod
+    def get_old_recommended_buses(guest):
+        ret = []
+        if guest.os.is_hvm() or guest.conn.is_test():
+            if not guest.os.is_q35():
+                ret.append("ide")
+            ret.append("sata")
+            ret.append("fdc")
+            ret.append("scsi")
+            ret.append("usb")
+
+            if guest.type in ["qemu", "kvm", "test"]:
+                ret.append("sd")
+                ret.append("virtio")
+                if "scsi" not in ret:
+                    ret.append("scsi")
+
+        if guest.conn.is_xen() or guest.conn.is_test():
+            ret.append("xen")
+
+        return ret
+
+    @staticmethod
+    def get_recommended_buses(guest, domcaps, devtype):
+        # try to get supported disk bus types from domain capabilities
+        if "bus" in domcaps.devices.disk.enum_names():
+            buses = domcaps.devices.disk.get_enum("bus").get_values()
+        else:
+            buses = DeviceDisk.get_old_recommended_buses(guest)
+
+        bus_map = {
+            "disk": ["ide", "sata", "scsi", "sd", "usb", "virtio", "xen"],
+            "floppy": ["fdc"],
+            "cdrom": ["ide", "sata", "scsi"],
+            "lun": ["scsi"],
+        }
+        return [bus for bus in buses if bus in bus_map.get(devtype, [])]
+
+    @staticmethod
     def disk_type_to_xen_driver_name(disk_type):
         """
         Convert a value of DeviceDisk.type to it's associated Xen
