@@ -505,7 +505,11 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <source usage='8192' units='KiB'/>
       <target dir='/run'/>
     </filesystem>
-
+    <filesystem type='file' accessmode='passthrough'>
+      <driver type='nbd' format='vmdk'/>
+      <source file='/root/container.vmdk'/>
+      <target dir='/home'/>
+    </filesystem>
 
     <!-- tpm devices -->
     <tpm model='tpm-tis'>

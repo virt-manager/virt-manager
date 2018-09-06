@@ -7,7 +7,7 @@
 
 from gi.repository import Gtk
 
-from virtinst import DeviceFilesystem, StorageVolume
+from virtinst import DeviceFilesystem
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .storagebrowse import vmmStorageBrowser
@@ -102,20 +102,17 @@ class vmmFSDetails(vmmGObjectUI):
             self.widget("fs-type-label").set_text(DeviceFilesystem.TYPE_MOUNT)
 
         simple_store_set("fs-mode-combo", DeviceFilesystem.MODES + [None])
+
+        drivers = []
         if self.conn.is_qemu() or self.conn.is_test():
-            simple_store_set("fs-driver-combo",
-                [DeviceFilesystem.DRIVER_PATH,
-                 DeviceFilesystem.DRIVER_HANDLE,
-                 None])
-        elif self.conn.is_lxc():
-            simple_store_set("fs-driver-combo",
-                [DeviceFilesystem.DRIVER_LOOP,
-                 DeviceFilesystem.DRIVER_NBD,
-                 None])
-        else:
-            simple_store_set("fs-driver-combo", [None])
-        simple_store_set("fs-format-combo",
-            StorageVolume.ALL_FORMATS, capitalize=False)
+            drivers += [DeviceFilesystem.DRIVER_PATH,
+                    DeviceFilesystem.DRIVER_HANDLE]
+        if self.conn.is_lxc() or self.conn.is_test():
+            drivers += [DeviceFilesystem.DRIVER_LOOP,
+                 DeviceFilesystem.DRIVER_NBD]
+        simple_store_set("fs-driver-combo", drivers + [None])
+
+        simple_store_set("fs-format-combo", ["raw", "qcow2"], capitalize=False)
         simple_store_set("fs-wrpolicy-combo",
                 DeviceFilesystem.WRPOLICIES + [None])
         self.show_pair_combo("fs-type",
@@ -189,13 +186,7 @@ class vmmFSDetails(vmmGObjectUI):
         combo = self.widget("%s-combo" % name)
         label = self.widget("%s-label" % name)
 
-        idx = -1
-        model_list = [x[0] for x in combo.get_model()]
-        model_in_list = (value in model_list)
-        if model_in_list:
-            idx = model_list.index(value)
-
-        combo.set_active(idx)
+        uiutil.set_list_selection(combo, value)
         if label:
             label.set_text(value or "default")
 

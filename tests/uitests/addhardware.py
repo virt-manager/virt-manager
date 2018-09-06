@@ -443,7 +443,7 @@ class AddHardware(uiutils.UITestCase):
         tab.find("File", "menu item").click()
         tab.find("Driver:", "combo box").click()
         tab.find("Nbd", "menu item").click()
-        tab.find("Format:", "combo box").click()
+        tab.find("Format:", "combo box").click_combo_entry()
         tab.find("qcow2", "menu item").click()
         tab.find("Browse...", "push button").click()
 
