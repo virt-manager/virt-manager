@@ -276,10 +276,7 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option(_("Watchdog"), "device_pci", PAGE_WATCHDOG,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
-        add_hw_option(_("Filesystem"), "folder", PAGE_FILESYSTEM,
-                      not self.vm.stable_defaults(),
-                      _("Not supported for this hypervisor/libvirt "
-                        "combination."))
+        add_hw_option(_("Filesystem"), "folder", PAGE_FILESYSTEM, True, None)
         add_hw_option(_("Smartcard"), "device_serial", PAGE_SMARTCARD,
                       True, None)
         add_hw_option(_("USB Redirection"), "device_usb", PAGE_USBREDIR,
