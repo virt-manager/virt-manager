@@ -48,7 +48,7 @@ class CreateVol(uiutils.UITestCase):
         newname = "a-newvol.raw"
         name.text = newname
         combo = win.find("Format:", "combo box")
-        combo.click()
+        combo.click_combo_entry()
         combo.find("raw", "menu item").click()
         win.find("Allocation:", "spin button").text = "0.5"
         finish.click()

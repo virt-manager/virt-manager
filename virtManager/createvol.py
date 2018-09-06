@@ -116,6 +116,8 @@ class vmmCreateVolume(vmmGObjectUI):
         format_model = Gtk.ListStore(str, str)
         format_list.set_model(format_model)
         uiutil.init_combo_text_column(format_list, 1)
+        for fmt in ["raw", "qcow2"]:
+            format_model.append([fmt, fmt])
 
 
     def _make_stub_vol(self):
@@ -159,17 +161,10 @@ class vmmCreateVolume(vmmGObjectUI):
         self.widget("vol-name").grab_focus()
         self.vol_name_changed(self.widget("vol-name"))
 
-        self.populate_vol_format()
-        hasformat = bool(len(self.vol.list_formats()))
+        hasformat = self.vol.supports_property("format")
         uiutil.set_grid_row_visible(self.widget("vol-format"), hasformat)
-        if hasformat:
-            # Select the default storage format
-            self.widget("vol-format").set_active(0)
-            default = self.conn.get_default_storage_format()
-            for row in self.widget("vol-format").get_model():
-                if row[0] == default:
-                    self.widget("vol-format").set_active_iter(row.iter)
-                    break
+        uiutil.set_list_selection(self.widget("vol-format"),
+            self.conn.get_default_storage_format())
 
         default_alloc = 0
         default_cap = 20
@@ -193,29 +188,10 @@ class vmmCreateVolume(vmmGObjectUI):
         self.widget("vol-parent-space").set_text(
                         self.parent_pool.get_pretty_available())
 
-
     def get_config_format(self):
+        if not self.widget("vol-format").is_visible():
+            return None
         return uiutil.get_list_selection(self.widget("vol-format"))
-
-    def populate_vol_format(self):
-        stable_whitelist = ["raw", "qcow2", "qed"]
-        model = self.widget("vol-format").get_model()
-        model.clear()
-
-        formats = self.vol.list_formats()
-        if self.vol.list_create_formats() is not None:
-            formats = self.vol.list_create_formats()
-
-        if (self.vol.file_type == self.vol.TYPE_FILE and
-            self.conn.stable_defaults()):
-            newfmts = []
-            for f in stable_whitelist:
-                if f in formats:
-                    newfmts.append(f)
-            formats = newfmts
-
-        for f in formats:
-            model.append([f, f])
 
     def vol_name_changed(self, src):
         text = src.get_text()
