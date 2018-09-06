@@ -596,8 +596,10 @@ class vmmAddHardware(vmmGObjectUI):
     @staticmethod
     def build_video_combo(vm, combo):
         values = []
-        for m in DeviceVideo.MODELS:
+        for m in DeviceVideo.get_recommended_models(vm.xmlobj):
             values.append([m, DeviceVideo.pretty_model(m)])
+        if not values:
+            values.append([None, _("Hypervisor default")])
         default = DeviceVideo.default_model(vm.xmlobj)
         _build_combo(combo, values, default_value=default)
 

@@ -485,8 +485,8 @@ class AddHardware(uiutils.UITestCase):
         # Add video
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Video", "video-tab")
-        tab.find("Model:", "combo box").click()
-        tab.find("QXL", "menu item").click()
+        tab.find("Model:", "combo box").click_combo_entry()
+        tab.find("Virtio", "menu item").click()
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 

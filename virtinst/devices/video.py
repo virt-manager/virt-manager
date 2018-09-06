@@ -12,8 +12,13 @@ from ..xmlbuilder import XMLProperty
 class DeviceVideo(Device):
     XML_NAME = "video"
 
-    # Default models list
-    MODELS = ["cirrus", "vga", "vmvga", "xen", "qxl", "virtio"]
+    @staticmethod
+    def get_recommended_models(guest):
+        if guest.conn.is_xen():
+            return ["xen", "vga"]
+        if guest.conn.is_qemu() or guest.conn.is_test():
+            return ["vga", "qxl", "virtio"]
+        return []
 
     @staticmethod
     def pretty_model(model):
