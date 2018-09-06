@@ -1850,10 +1850,21 @@ class vmmDetails(vmmGObjectUI):
             return self._eject_media(disk)
         return self._insert_media(disk)
 
+
     # Net IP refresh
+    def _set_network_ip_details(self, net):
+        ipv4, ipv6 = self.vm.get_interface_addresses(net)
+        label = ipv4 or ""
+        if ipv6:
+            if label:
+                label += "\n"
+            label += ipv6
+        self.widget("network-ip").set_text(label or _("Unknown"))
+
     def refresh_ip(self, src_ignore):
         net = self.get_hw_row()[HW_LIST_COL_DEVICE]
         self.vm.refresh_interface_addresses(net)
+        self._set_network_ip_details(net)
 
 
     ##################################################
@@ -2718,14 +2729,7 @@ class vmmDetails(vmmGObjectUI):
 
         state = net.link_state == "up" or net.link_state is None
         self.widget("network-link-state-checkbox").set_active(state)
-
-        ipv4, ipv6 = self.vm.get_interface_addresses(net)
-        label = ipv4 or ""
-        if ipv6:
-            if label:
-                label += "\n"
-            label += ipv6
-        self.widget("network-ip").set_text(label or _("Unknown"))
+        self._set_network_ip_details(net)
 
         self.netlist.set_dev(net)
 
