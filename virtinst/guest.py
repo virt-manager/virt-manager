@@ -107,6 +107,41 @@ class Guest(XMLBuilder):
             return
         raise ValueError(_("Guest name '%s' is already in use.") % name)
 
+    @staticmethod
+    def get_recommended_machine(capsinfo):
+        """
+        Return the recommended machine type for the passed capsinfo
+        """
+        # For any other HV just let libvirt get us the default, these
+        # are the only ones we've tested.
+        if (not capsinfo.conn.is_test() and
+            not capsinfo.conn.is_qemu() and
+            not capsinfo.conn.is_xen()):
+            return None
+
+        if capsinfo.conn.is_xen() and len(capsinfo.machines):
+            return capsinfo.machines[0]
+
+        if (capsinfo.arch in ["ppc64", "ppc64le"] and
+            "pseries" in capsinfo.machines):
+            return "pseries"
+
+        if capsinfo.arch in ["armv7l", "aarch64"]:
+            if "virt" in capsinfo.machines:
+                return "virt"
+            if "vexpress-a15" in capsinfo.machines:
+                return "vexpress-a15"
+
+        if capsinfo.arch in ["s390x"]:
+            if "s390-ccw-virtio" in capsinfo.machines:
+                return "s390-ccw-virtio"
+
+        return None
+
+
+    #################
+    # init handling #
+    #################
 
     XML_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
@@ -254,23 +289,19 @@ class Guest(XMLBuilder):
     def supports_virtiodisk(self):
         return self._supports_virtio(self.osinfo.supports_virtiodisk())
 
+    def stable_defaults(self, *args, **kwargs):
+        return self.conn.stable_defaults(self.emulator, *args, **kwargs)
 
-    ########################################
-    # Device Add/Remove Public API methods #
-    ########################################
+
+    ###############################
+    # Public XML APIs and helpers #
+    ###############################
 
     def add_device(self, dev):
         self.devices.add_child(dev)
-
     def remove_device(self, dev):
         self.devices.remove_child(dev)
-
     devices = XMLChildProperty(_DomainDevices, is_single=True)
-
-
-    ###########################
-    # XML convenience helpers #
-    ###########################
 
     def set_uefi_default(self):
         """
@@ -299,7 +330,6 @@ class Guest(XMLBuilder):
 
         self.check_uefi_secure()
 
-
     def check_uefi_secure(self):
         """
         If the firmware name contains "secboot" it is probably build
@@ -320,13 +350,116 @@ class Guest(XMLBuilder):
         self.os.loader_secure = True
         self.os.machine = "q35"
 
+    def has_spice(self):
+        for gfx in self.devices.graphics:
+            if gfx.type == gfx.TYPE_SPICE:
+                return True
 
-    ###################
-    # Device defaults #
-    ###################
+    def has_gl(self):
+        for gfx in self.devices.graphics:
+            if gfx.gl:
+                return True
 
-    def stable_defaults(self, *args, **kwargs):
-        return self.conn.stable_defaults(self.emulator, *args, **kwargs)
+    def has_listen_none(self):
+        for gfx in self.devices.graphics:
+            listen = gfx.get_first_listen_type()
+            if listen and listen == "none":
+                return True
+        return False
+
+    def is_full_os_container(self):
+        if not self.os.is_container():
+            return False
+        for fs in self.devices.filesystem:
+            if fs.target == "/":
+                return True
+        return False
+
+    def hyperv_supported(self):
+        if not self.osinfo.is_windows():
+            return False
+        if (self.os.loader_type == "pflash" and
+            self.osinfo.broken_uefi_with_hyperv()):
+            return False
+        return True
+
+    def lookup_capsinfo(self):
+        return self.conn.caps.guest_lookup(
+                os_type=self.os.os_type,
+                arch=self.os.arch,
+                typ=self.type,
+                machine=self.os.machine)
+
+    def update_defaults(self):
+        # This is used only by virt-manager to reset any defaults that may have
+        # changed through manual intervention via the customize wizard.
+
+        # UEFI doesn't work with hyperv bits
+        if not self.hyperv_supported():
+            self.features.hyperv_relaxed = None
+            self.features.hyperv_vapic = None
+            self.features.hyperv_spinlocks = None
+            self.features.hyperv_spinlocks_retries = None
+            for i in self.clock.timers:
+                if i.name == "hypervclock":
+                    self.clock.remove_timer(i)
+
+    def set_capabilities_defaults(self):
+        capsinfo = self.lookup_capsinfo()
+        wants_default_type = not self.type and not self.os.os_type
+
+        self.type = capsinfo.hypervisor_type
+        self.os.os_type = capsinfo.os_type
+        self.os.arch = capsinfo.arch
+        if not self.os.loader:
+            self.os.loader = capsinfo.loader
+        if (not self.emulator and
+            not self.os.is_xenpv() and
+            not self.type == "vz"):
+            self.emulator = capsinfo.emulator
+        if not self.os.machine:
+            self.os.machine = Guest.get_recommended_machine(capsinfo)
+
+        if (wants_default_type and
+            self.conn.is_qemu() and
+            self.os.is_x86() and
+            not self.type == "kvm"):
+            logging.warning("KVM acceleration not available, using '%s'",
+                            self.type)
+
+    def set_defaults(self, _guest):
+        if not self.uuid:
+            self.uuid = util.generate_uuid(self.conn)
+        if not self.vcpus:
+            self.vcpus = 1
+        self.set_capabilities_defaults()
+
+        self._add_default_graphics()
+        self._add_default_video_device()
+        self._add_default_input_device()
+        self._add_default_console_device()
+        self._add_default_usb_controller()
+        self._add_default_channels()
+        self._add_default_rng()
+
+        self.clock.set_defaults(self)
+        self.cpu.set_defaults(self)
+        self.features.set_defaults(self)
+        for seclabel in self.seclabels:
+            seclabel.set_defaults(self)
+        self.pm.set_defaults(self)
+        self.os.set_defaults(self)
+
+        for dev in self.devices.get_all():
+            dev.set_defaults(self)
+
+        self._add_implied_controllers()
+        self._add_spice_devices()
+
+
+    ########################
+    # Private xml routines #
+    ########################
 
     def _usb_disabled(self):
         controllers = [c for c in self.devices.controller if
@@ -462,126 +595,6 @@ class Guest(XMLBuilder):
             dev.device = "/dev/urandom"
             self.add_device(dev)
 
-    def lookup_capsinfo(self):
-        return self.conn.caps.guest_lookup(
-                os_type=self.os.os_type,
-                arch=self.os.arch,
-                typ=self.type,
-                machine=self.os.machine)
-
-    def set_capabilities_defaults(self):
-        capsinfo = self.lookup_capsinfo()
-        wants_default_type = not self.type and not self.os.os_type
-
-        self.type = capsinfo.hypervisor_type
-        self.os.os_type = capsinfo.os_type
-        self.os.arch = capsinfo.arch
-        if not self.os.loader:
-            self.os.loader = capsinfo.loader
-        if (not self.emulator and
-            not self.os.is_xenpv() and
-            not self.type == "vz"):
-            self.emulator = capsinfo.emulator
-        if not self.os.machine:
-            self.os.machine = Guest.get_recommended_machine(capsinfo)
-
-        if (wants_default_type and
-            self.conn.is_qemu() and
-            self.os.is_x86() and
-            not self.type == "kvm"):
-            logging.warning("KVM acceleration not available, using '%s'",
-                            self.type)
-
-    @staticmethod
-    def get_recommended_machine(capsinfo):
-        """
-        Return the recommended machine type for the passed capsinfo
-        """
-        # For any other HV just let libvirt get us the default, these
-        # are the only ones we've tested.
-        if (not capsinfo.conn.is_test() and
-            not capsinfo.conn.is_qemu() and
-            not capsinfo.conn.is_xen()):
-            return None
-
-        if capsinfo.conn.is_xen() and len(capsinfo.machines):
-            return capsinfo.machines[0]
-
-        if (capsinfo.arch in ["ppc64", "ppc64le"] and
-            "pseries" in capsinfo.machines):
-            return "pseries"
-
-        if capsinfo.arch in ["armv7l", "aarch64"]:
-            if "virt" in capsinfo.machines:
-                return "virt"
-            if "vexpress-a15" in capsinfo.machines:
-                return "vexpress-a15"
-
-        if capsinfo.arch in ["s390x"]:
-            if "s390-ccw-virtio" in capsinfo.machines:
-                return "s390-ccw-virtio"
-
-        return None
-
-    def set_defaults(self, _guest):
-        if not self.uuid:
-            self.uuid = util.generate_uuid(self.conn)
-        if not self.vcpus:
-            self.vcpus = 1
-        self.set_capabilities_defaults()
-
-        self._add_default_graphics()
-        self._add_default_video_device()
-        self._add_default_input_device()
-        self._add_default_console_device()
-        self._add_default_usb_controller()
-        self._add_default_channels()
-        self._add_default_rng()
-
-        self.clock.set_defaults(self)
-        self.cpu.set_defaults(self)
-        self.features.set_defaults(self)
-        for seclabel in self.seclabels:
-            seclabel.set_defaults(self)
-        self.pm.set_defaults(self)
-        self.os.set_defaults(self)
-
-        for dev in self.devices.get_all():
-            dev.set_defaults(self)
-
-        self._add_implied_controllers()
-        self._add_spice_devices()
-
-    def is_full_os_container(self):
-        if not self.os.is_container():
-            return False
-        for fs in self.devices.filesystem:
-            if fs.target == "/":
-                return True
-        return False
-
-    def hyperv_supported(self):
-        if not self.osinfo.is_windows():
-            return False
-        if (self.os.loader_type == "pflash" and
-            self.osinfo.broken_uefi_with_hyperv()):
-            return False
-        return True
-
-    def update_defaults(self):
-        # This is used only by virt-manager to reset any defaults that may have
-        # changed through manual intervention via the customize wizard.
-
-        # UEFI doesn't work with hyperv bits
-        if not self.hyperv_supported():
-            self.features.hyperv_relaxed = None
-            self.features.hyperv_vapic = None
-            self.features.hyperv_spinlocks = None
-            self.features.hyperv_spinlocks_retries = None
-            for i in self.clock.timers:
-                if i.name == "hypervclock":
-                    self.clock.remove_timer(i)
-
     def _add_implied_controllers(self):
         has_spapr_scsi = False
         has_virtio_scsi = False
@@ -663,23 +676,6 @@ class Guest(XMLBuilder):
             dev.type = "spicevmc"
             dev.set_defaults(self)
             self.add_device(dev)
-
-    def has_spice(self):
-        for gfx in self.devices.graphics:
-            if gfx.type == gfx.TYPE_SPICE:
-                return True
-
-    def has_gl(self):
-        for gfx in self.devices.graphics:
-            if gfx.gl:
-                return True
-
-    def has_listen_none(self):
-        for gfx in self.devices.graphics:
-            listen = gfx.get_first_listen_type()
-            if listen and listen == "none":
-                return True
-        return False
 
     def _add_spice_devices(self):
         if not self.has_spice():
