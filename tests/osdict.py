@@ -5,6 +5,7 @@
 
 import unittest
 
+from virtinst import Guest
 from virtinst import OSDB
 from virtinst import urldetect
 
@@ -25,7 +26,7 @@ class TestOSDB(unittest.TestCase):
 
     def test_recommended_resources(self):
         conn = utils.URIs.open_testdefault_cached()
-        guest = conn.caps.lookup_virtinst_guest()
+        guest = Guest(conn)
         assert not OSDB.lookup_os("generic").get_recommended_resources(guest)
 
         res = OSDB.lookup_os("fedora21").get_recommended_resources(guest)

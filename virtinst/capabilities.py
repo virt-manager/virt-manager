@@ -349,13 +349,3 @@ class Capabilities(XMLBuilder):
         gobj.capsinfo = capsinfo
 
         return gobj
-
-    def lookup_virtinst_guest(self, *args, **kwargs):
-        """
-        Call guest_lookup and pass the results to build_virtinst_guest.
-
-        This is a shortcut for API users that don't need to do anything
-        with the output from guest_lookup
-        """
-        capsinfo = self.guest_lookup(*args, **kwargs)
-        return self.build_virtinst_guest(capsinfo)

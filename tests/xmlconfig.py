@@ -18,7 +18,7 @@ def _make_guest(conn=None, os_variant=None):
     if not conn:
         conn = utils.URIs.open_testdriver_cached()
 
-    g = conn.caps.lookup_virtinst_guest()
+    g = virtinst.Guest(conn)
     g.type = "kvm"
     g.name = "TestGuest"
     g.memory = int(200 * 1024)
