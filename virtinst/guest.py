@@ -420,8 +420,11 @@ class Guest(XMLBuilder):
                 if i.name == "hypervclock":
                     self.clock.remove_timer(i)
 
-    def set_capabilities_defaults(self):
-        capsinfo = self.lookup_capsinfo()
+    def set_capabilities_defaults(self, capsinfo=None):
+        if capsinfo:
+            self._capsinfo = capsinfo
+        else:
+            capsinfo = self.lookup_capsinfo()
         wants_default_type = not self.type and not self.os.os_type
 
         self.type = capsinfo.hypervisor_type

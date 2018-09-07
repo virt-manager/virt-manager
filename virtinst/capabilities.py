@@ -331,21 +331,3 @@ class Capabilities(XMLBuilder):
 
         capsinfo = _CapsInfo(self.conn, guest, domain)
         return capsinfo
-
-    def build_virtinst_guest(self, capsinfo):
-        """
-        Fill in a new Guest() object from the results of guest_lookup
-        """
-        from .guest import Guest
-        gobj = Guest(self.conn)
-        gobj.type = capsinfo.hypervisor_type
-        gobj.os.os_type = capsinfo.os_type
-        gobj.os.arch = capsinfo.arch
-        gobj.os.loader = capsinfo.loader
-        gobj.emulator = capsinfo.emulator
-
-        gobj.os.machine = Guest.get_recommended_machine(capsinfo)
-
-        gobj.capsinfo = capsinfo
-
-        return gobj

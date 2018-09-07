@@ -442,7 +442,8 @@ class vmmCreate(vmmGObjectUI):
 
         if self._capsinfo.arch in ["aarch64", "armv7l"]:
             try:
-                guest = self.conn.caps.build_virtinst_guest(self._capsinfo)
+                guest = virtinst.Guest(self.conn.get_backend())
+                guest.set_capabilities_defaults(self._capsinfo)
                 guest.set_uefi_default()
                 installable_arch = True
                 logging.debug("UEFI found, setting it as default.")
@@ -1561,7 +1562,8 @@ class vmmCreate(vmmGObjectUI):
     ############################
 
     def _build_guest(self, variant):
-        guest = self.conn.caps.build_virtinst_guest(self._capsinfo)
+        guest = virtinst.Guest(self.conn.get_backend())
+        guest.set_capabilities_defaults(self._capsinfo)
 
         # If no machine was selected don't clear recommended machine
         machine = self._get_config_machine()
