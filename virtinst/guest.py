@@ -168,6 +168,7 @@ class Guest(XMLBuilder):
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
 
         self.__osinfo = None
+        self._capsinfo = None
 
 
     ######################
@@ -384,11 +385,26 @@ class Guest(XMLBuilder):
         return True
 
     def lookup_capsinfo(self):
-        return self.conn.caps.guest_lookup(
+        def _compare_to_capsinfo(capsinfo):
+            if not capsinfo:
+                return False
+            if self.type and self.type != capsinfo.hypervisor_type:
+                return False
+            if self.os.os_type and self.os.os_type != capsinfo.os_type:
+                return False
+            if self.os.arch and self.os.arch != capsinfo.arch:
+                return False
+            if self.os.machine and self.os.machine not in capsinfo.machines:
+                return False
+            return True
+
+        if not _compare_to_capsinfo(self._capsinfo):
+            self._capsinfo = self.conn.caps.guest_lookup(
                 os_type=self.os.os_type,
                 arch=self.os.arch,
                 typ=self.type,
                 machine=self.os.machine)
+        return self._capsinfo
 
     def update_defaults(self):
         # This is used only by virt-manager to reset any defaults that may have
