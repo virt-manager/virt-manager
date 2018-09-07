@@ -110,32 +110,27 @@ class Guest(XMLBuilder):
     @staticmethod
     def get_recommended_machine(capsinfo):
         """
-        Return the recommended machine type for the passed capsinfo
+        Return the recommended machine type for the passed capsinfo.
+        We only return this for arch cases where there's a very clear
+        preference that's different from the default machine type
         """
-        # For any other HV just let libvirt get us the default, these
-        # are the only ones we've tested.
-        if (not capsinfo.conn.is_test() and
-            not capsinfo.conn.is_qemu() and
-            not capsinfo.conn.is_xen()):
-            return None
+        def _qemu_machine():
+            if (capsinfo.arch in ["ppc64", "ppc64le"] and
+                "pseries" in capsinfo.machines):
+                return "pseries"
 
-        if capsinfo.conn.is_xen() and len(capsinfo.machines):
-            return capsinfo.machines[0]
+            if capsinfo.arch in ["armv7l", "aarch64"]:
+                if "virt" in capsinfo.machines:
+                    return "virt"
+                if "vexpress-a15" in capsinfo.machines:
+                    return "vexpress-a15"
 
-        if (capsinfo.arch in ["ppc64", "ppc64le"] and
-            "pseries" in capsinfo.machines):
-            return "pseries"
+            if capsinfo.arch in ["s390x"]:
+                if "s390-ccw-virtio" in capsinfo.machines:
+                    return "s390-ccw-virtio"
 
-        if capsinfo.arch in ["armv7l", "aarch64"]:
-            if "virt" in capsinfo.machines:
-                return "virt"
-            if "vexpress-a15" in capsinfo.machines:
-                return "vexpress-a15"
-
-        if capsinfo.arch in ["s390x"]:
-            if "s390-ccw-virtio" in capsinfo.machines:
-                return "s390-ccw-virtio"
-
+        if capsinfo.conn.is_qemu() or capsinfo.conn.is_test():
+            return _qemu_machine()
         return None
 
 
@@ -451,7 +446,12 @@ class Guest(XMLBuilder):
             self.uuid = util.generate_uuid(self.conn)
         if not self.vcpus:
             self.vcpus = 1
+
         self.set_capabilities_defaults()
+        if not self.os.machine:
+            capsinfo = self.lookup_capsinfo()
+            default = capsinfo.machines and capsinfo.machines[0] or None
+            self.os.machine = default
 
         self._add_default_graphics()
         self._add_default_video_device()

@@ -5,7 +5,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="i686">hvm</type>
+    <type arch="i686" machine="pc">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</loader>
     <boot dev="network"/>
   </os>
@@ -63,7 +63,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="i686">hvm</type>
+    <type arch="i686" machine="pc">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</loader>
     <boot dev="network"/>
   </os>

@@ -15,7 +15,7 @@
     <partition>/virtualmachines/production</partition>
   </resource>
   <os>
-    <type arch="x86_64">hvm</type>
+    <type arch="x86_64" machine="pc">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE.fd</loader>
     <boot dev="hd"/>
     <smbios mode="emulate"/>

@@ -59,7 +59,7 @@
   </sysinfo>
   <bootloader>/new/bootld</bootloader>
   <os>
-    <type arch="x86_64">hvm</type>
+    <type arch="x86_64" machine="pc">hvm</type>
     <loader>/foo/bar</loader>
     <boot dev="network"/>
     <smbios mode="sysinfo"/>
@@ -237,7 +237,7 @@
   </sysinfo>
   <bootloader>/new/bootld</bootloader>
   <os>
-    <type arch="x86_64">hvm</type>
+    <type arch="x86_64" machine="pc">hvm</type>
     <loader>/foo/bar</loader>
     <boot dev="cdrom"/>
     <boot dev="fd"/>
