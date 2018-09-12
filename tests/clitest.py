@@ -336,7 +336,7 @@ vinst = App("virt-install")
 # virt-install verbose XML comparison tests #
 #############################################
 
-c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole --os-variant fedora20")
+c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole --os-variant fedora-unknown")
 
 # Singleton element test #1, for simpler strings
 c.add_compare(""" \
