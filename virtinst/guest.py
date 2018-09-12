@@ -299,10 +299,17 @@ class Guest(XMLBuilder):
         self.devices.remove_child(dev)
     devices = XMLChildProperty(_DomainDevices, is_single=True)
 
-    def set_uefi_default(self):
+    def prefers_uefi(self):
         """
-        Configure UEFI for the VM, but only if libvirt is advertising
-        a known UEFI binary path.
+        Return True if this config prefers UEFI. For example,
+        arm+machvirt prefers UEFI since it's required for traditional
+        install methods
+        """
+        return self.os.is_arm_machvirt()
+
+    def get_uefi_path(self):
+        """
+        If UEFI firmware path is found, return it, otherwise raise an error
         """
         self.set_capabilities_defaults()
         domcaps = DomainCapabilities.build_from_guest(self)
@@ -320,31 +327,29 @@ class Guest(XMLBuilder):
             raise RuntimeError(_("Did not find any UEFI binary path for "
                 "arch '%s'") % self.os.arch)
 
+        return path
+
+    def set_uefi_path(self, path):
+        """
+        Configure UEFI for the VM, but only if libvirt is advertising
+        a known UEFI binary path.
+        """
         self.os.loader_ro = True
         self.os.loader_type = "pflash"
         self.os.loader = path
 
-        self.check_uefi_secure()
-
-    def check_uefi_secure(self):
-        """
-        If the firmware name contains "secboot" it is probably build
-        with SMM feature required so we need to enable that feature,
-        otherwise the firmware may fail to load.  True secure boot is
-        currently supported only on x86 architecture and with q35 with
-        SMM feature enabled so change the machine to q35 as well.
-        To actually enforce the secure boot for the guest if Secure Boot
-        Mode is configured we need to enable loader secure feature.
-        """
-        if not self.os.is_x86():
-            return
-
-        if "secboot" not in self.os.loader:
-            return
-
-        self.features.smm = True
-        self.os.loader_secure = True
-        self.os.machine = "q35"
+        # If the firmware name contains "secboot" it is probably build
+        # with SMM feature required so we need to enable that feature,
+        # otherwise the firmware may fail to load.  True secure boot is
+        # currently supported only on x86 architecture and with q35 with
+        # SMM feature enabled so change the machine to q35 as well.
+        # To actually enforce the secure boot for the guest if Secure Boot
+        # Mode is configured we need to enable loader secure feature.
+        if (self.os.is_x86() and
+            "secboot" in self.os.loader):
+            self.features.smm = True
+            self.os.loader_secure = True
+            self.os.machine = "q35"
 
     def has_spice(self):
         for gfx in self.devices.graphics:
@@ -448,11 +453,13 @@ class Guest(XMLBuilder):
             self.vcpus = 1
 
         self.set_capabilities_defaults()
+
         if not self.os.machine:
             capsinfo = self.lookup_capsinfo()
             default = capsinfo.machines and capsinfo.machines[0] or None
             self.os.machine = default
 
+        self._set_default_uefi()
         self._add_default_graphics()
         self._add_default_video_device()
         self._add_default_input_device()
@@ -479,6 +486,21 @@ class Guest(XMLBuilder):
     ########################
     # Private xml routines #
     ########################
+
+    def _set_default_uefi(self):
+        if (self.prefers_uefi() and
+            not self.os.kernel and
+            not self.os.loader and
+            self.os.loader_ro is None and
+            self.os.nvram is None):
+            try:
+                path = self.get_uefi_path()
+                self.set_uefi_path(path)
+            except RuntimeError as e:
+                logging.debug("Error setting UEFI default",
+                    exc_info=True)
+                logging.warning("Couldn't configure UEFI: %s", e)
+                logging.warning("Your VM may not boot successfully.")
 
     def _usb_disabled(self):
         controllers = [c for c in self.devices.controller if

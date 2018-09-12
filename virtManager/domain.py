@@ -592,10 +592,7 @@ class vmmDomain(vmmLibvirtObject):
                 guest.os.nvram_template = None
             else:
                 # Implies UEFI
-                guest.os.loader = loader
-                guest.os.loader_type = "pflash"
-                guest.os.loader_ro = True
-                guest.check_uefi_secure()
+                guest.set_uefi_path(loader)
 
         if nvram != _SENTINEL:
             guest.os.nvram = nvram

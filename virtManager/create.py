@@ -426,31 +426,30 @@ class vmmCreate(vmmGObjectUI):
         """
         self._populate_machine()
         self.widget("arch-warning-box").hide()
+        guest = self._build_guest(None)
 
         # Helper state
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
         can_storage = (is_local or is_storage_capable)
-        is_pv = (self._capsinfo.os_type == "xen")
+        is_pv = guest.os.is_xenpv()
         is_container = self.conn.is_container()
         is_vz = self.conn.is_vz()
-        is_vz_container = (is_vz and self._capsinfo.os_type == "exe")
+        is_vz_container = is_vz and guest.os.is_container()
         can_remote_url = self.conn.get_backend().support_remote_url_install()
 
-        installable_arch = (self._capsinfo.arch in
-            ["i686", "x86_64", "ppc64", "ppc64le", "s390x"])
+        installable_arch = bool(guest.os.is_x86() or
+                guest.os.is_ppc64() or
+                guest.os.is_s390x())
 
-        if self._capsinfo.arch in ["aarch64", "armv7l"]:
+        if guest.prefers_uefi():
             try:
-                guest = virtinst.Guest(self.conn.get_backend())
-                guest.set_capabilities_defaults(self._capsinfo)
-                guest.set_uefi_default()
+                guest.set_uefi_path(guest.get_uefi_path())
                 installable_arch = True
                 logging.debug("UEFI found, setting it as default.")
             except Exception as e:
                 installable_arch = False
-                logging.debug("Error checking for UEFI default",
-                    exc_info=True)
+                logging.debug("Error checking for UEFI default", exc_info=True)
                 msg = _("Failed to setup UEFI: %s\n"
                         "Install options are limited.") % e
                 self._show_arch_warning(msg)
@@ -490,7 +489,7 @@ class vmmCreate(vmmGObjectUI):
 
         if not installable_arch:
             msg = (_("Architecture '%s' is not installable") %
-                   self._capsinfo.arch)
+                   guest.os.arch)
             tree_tt = msg
             local_tt = msg
             pxe_tt = msg
@@ -520,9 +519,9 @@ class vmmCreate(vmmGObjectUI):
         self.widget("virt-install-box").set_visible(
             not is_container and not is_vz_container)
 
-        show_dtb = ("arm" in self._capsinfo.arch or
-                    "microblaze" in self._capsinfo.arch or
-                    "ppc" in self._capsinfo.arch)
+        show_dtb = ("arm" in guest.os.arch or
+                    "microblaze" in guest.os.arch or
+                    "ppc" in guest.os.arch)
         self.widget("kernel-box").set_visible(not installable_arch)
         uiutil.set_grid_row_visible(self.widget("dtb"), show_dtb)
 
@@ -1577,14 +1576,6 @@ class vmmCreate(vmmGObjectUI):
         except ValueError as e:
             self.err.val_err(_("Error setting OS information."), str(e))
             return None
-
-        if guest.os.is_arm64() or guest.os.is_arm():
-            try:
-                guest.set_uefi_default()
-            except Exception:
-                # If this errors we will have already informed the user
-                # on page 1.
-                pass
 
         guest.default_graphics_type = self.config.get_graphics_type()
         guest.skip_default_sound = not self.config.get_new_vm_sound()

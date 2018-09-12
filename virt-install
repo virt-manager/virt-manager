@@ -532,20 +532,6 @@ def build_guest_instance(conn, options):
     # Do this a bit early so we can do arch/os_type checks up ahead
     guest.set_capabilities_defaults()
 
-    # Default to UEFI for aarch64
-    if ((guest.os.is_arm64() or guest.os.is_arm32()) and
-        not guest.os.kernel and
-        not guest.os.loader and
-        guest.os.loader_ro is None and
-        guest.os.nvram is None):
-        try:
-            guest.set_uefi_default()
-        except Exception as e:
-            logging.debug("Error setting UEFI default",
-                exc_info=True)
-            logging.warning("Couldn't configure UEFI: %s", e)
-            logging.warning("Your VM may not boot successfully.")
-
     installer = build_installer(options, guest)
     validate_required_options(options, guest, installer)
     set_distro_variant(options, guest, installer)

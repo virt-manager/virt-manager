@@ -1614,7 +1614,7 @@ class ParserBoot(VirtCLIParser):
     propname = "os"
 
     def set_uefi_cb(self, inst, val, virtarg):
-        self.guest.set_uefi_default()
+        self.guest.set_uefi_path(self.guest.get_uefi_path())
 
     def set_initargs_cb(self, inst, val, virtarg):
         inst.set_initargs_string(val)
