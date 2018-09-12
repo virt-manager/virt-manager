@@ -363,6 +363,9 @@ class _OsVariant(object):
         # 2018-09-01: osinfo data is wrong for RHEL/centos here
         return self._is_related_to("rhel6.0")
 
+    def supports_chipset_q35(self):
+        return False
+
     def get_recommended_resources(self, guest):
         ret = {}
         if not self._os:

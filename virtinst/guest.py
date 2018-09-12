@@ -454,12 +454,9 @@ class Guest(XMLBuilder):
 
         self.set_capabilities_defaults()
 
-        if not self.os.machine:
-            capsinfo = self.lookup_capsinfo()
-            default = capsinfo.machines and capsinfo.machines[0] or None
-            self.os.machine = default
-
+        self._set_default_machine()
         self._set_default_uefi()
+
         self._add_default_graphics()
         self._add_default_video_device()
         self._add_default_input_device()
@@ -486,6 +483,20 @@ class Guest(XMLBuilder):
     ########################
     # Private xml routines #
     ########################
+
+    def _set_default_machine(self):
+        if self.os.machine:
+            return
+        if (self.os.is_x86() and
+            self.conn.is_qemu() and
+            self.osinfo.supports_chipset_q35()):
+            self.os.machine = "q35"
+            return
+
+        capsinfo = self.lookup_capsinfo()
+        default = capsinfo.machines and capsinfo.machines[0] or None
+        self.os.machine = default
+
 
     def _set_default_uefi(self):
         if (self.prefers_uefi() and
