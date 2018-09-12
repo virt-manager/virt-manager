@@ -213,6 +213,19 @@ class TestXMLMisc(unittest.TestCase):
         finally:
             CLIConfig.stable_defaults = False
 
+    def test_set_defaults_double(self):
+        """
+        Check that a common config has idempotent set_defaults
+        """
+        g = _make_guest(conn=utils.URIs.open_kvm())
+        g.os_variant = "fedora-unknown"
+
+        g.set_defaults(None)
+        xml1 = g.get_xml()
+        g.set_defaults(None)
+        xml2 = g.get_xml()
+        self.assertEqual(xml1, xml2)
+
     def test_dir_searchable(self):
         # Normally the dir searchable test is skipped in the unittest,
         # but let's contrive an example that should trigger all the code
