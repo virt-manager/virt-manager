@@ -424,7 +424,6 @@ class vmmCreate(vmmGObjectUI):
         """
         Set state that is dependent on when capsinfo changes
         """
-        self._populate_machine()
         self.widget("arch-warning-box").hide()
         guest = self._build_guest(None)
 
@@ -734,6 +733,7 @@ class vmmCreate(vmmGObjectUI):
                       self._capsinfo.os_type,
                       self._capsinfo.arch,
                       self._capsinfo.hypervisor_type)
+        self._populate_machine()
         self._set_caps_state()
 
 
@@ -855,7 +855,6 @@ class vmmCreate(vmmGObjectUI):
 
     def _populate_machine(self):
         model = self.widget("machine").get_model()
-        model.clear()
 
         machines = self._capsinfo.machines[:]
         if self._capsinfo.arch in ["i686", "x86_64"]:
@@ -882,15 +881,18 @@ class vmmCreate(vmmGObjectUI):
         if defmachine and defmachine in machines:
             default = machines.index(defmachine)
 
-        for m in machines:
-            model.append([m])
+        self.widget("machine").disconnect_by_func(self._machine_changed)
+        try:
+            model.clear()
+            for m in machines:
+                model.append([m])
 
-        show = (len(machines) > 1)
-        uiutil.set_grid_row_visible(self.widget("machine"), show)
-        if show:
-            self.widget("machine").set_active(default)
-        else:
-            self.widget("machine").emit("changed")
+            show = (len(machines) > 1)
+            uiutil.set_grid_row_visible(self.widget("machine"), show)
+            if show:
+                self.widget("machine").set_active(default)
+        finally:
+            self.widget("machine").connect("changed", self._machine_changed)
 
     def _populate_conn_list(self, urihint=None):
         conn_list = self.widget("create-conn")
@@ -1193,11 +1195,7 @@ class vmmCreate(vmmGObjectUI):
         self._set_page_num_text(0)
 
     def _machine_changed(self, ignore):
-        machine = self._get_config_machine()
-        show_dtb_virtio = (self._capsinfo.arch == "armv7l" and
-                           machine in ["vexpress-a9", "vexpress-15"])
-        uiutil.set_grid_row_visible(
-            self.widget("dtb-warn-virtio"), show_dtb_virtio)
+        self._set_caps_state()
 
     def _xen_type_changed(self, ignore):
         os_type = uiutil.get_list_selection(self.widget("xen-type"), column=1)
