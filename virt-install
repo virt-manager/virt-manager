@@ -305,13 +305,16 @@ def convert_old_features(options):
 
 def set_distro_variant(options, guest, installer):
     try:
-        if options.distro_variant not in ["auto", "none"]:
-            guest.os_variant = options.distro_variant
-
         installer.check_location(guest)
 
+        distro = None
         if options.distro_variant == "auto":
-            guest.os_variant = installer.detect_distro(guest)
+            distro = installer.detect_distro(guest)
+        elif options.distro_variant != "none":
+            distro = options.distro_variant
+
+        if distro:
+            guest.set_os_name(distro)
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
 
@@ -451,7 +454,7 @@ def show_warnings(options, guest, installer):
         logging.warning(_("The guest's network configuration does not support "
                        "PXE"))
 
-    if (guest.os_variant == "generic" and
+    if (guest.osinfo.name == "generic" and
         options.distro_variant not in ["none", "generic"]):
         logging.warning(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
@@ -529,13 +532,15 @@ def build_guest_instance(conn, options):
     for disk in guest.devices.disk:
         cli.validate_disk(disk)
 
-    # Do this a bit early so we can do arch/os_type checks up ahead
+    # Do this a bit early so we have os_type/arch checks for installer
+    # building, and distro variant detection
     guest.set_capabilities_defaults()
 
     installer = build_installer(options, guest)
-    validate_required_options(options, guest, installer)
-    set_distro_variant(options, guest, installer)
+    if installer:
+        set_distro_variant(options, guest, installer)
 
+    validate_required_options(options, guest, installer)
     check_option_collisions(options, guest, installer)
     show_warnings(options, guest, installer)
 

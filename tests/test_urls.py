@@ -155,11 +155,11 @@ def _testURL(fetcher, testdata):
     hvmguest.os.arch = arch
     xenguest.os.arch = arch
     if testdata.testshortcircuit:
-        hvmguest.os_variant = detectdistro
-        xenguest.os_variant = detectdistro
+        hvmguest.set_os_name(detectdistro)
+        xenguest.set_os_name(detectdistro)
     else:
-        hvmguest.os_variant = None
-        xenguest.os_variant = None
+        hvmguest.set_os_name("generic")
+        xenguest.set_os_name("generic")
 
     try:
         hvmstore = _storeForDistro(fetcher, hvmguest)

@@ -252,7 +252,7 @@ def getDistroStore(guest, fetcher):
 
     arch = guest.os.arch
     _type = guest.os.os_type
-    osobj = OSDB.lookup_os(guest.os_variant)
+    osobj = guest.osinfo
     stores = _allstores[:]
     cache = _DistroCache(fetcher)
 
@@ -261,7 +261,7 @@ def getDistroStore(guest, fetcher):
     if osobj.distro:
         logging.debug("variant=%s has distro=%s, looking for matching "
                       "distro store to prioritize",
-                      guest.os_variant, osobj.distro)
+                      osobj.name, osobj.distro)
         found_store = None
         for store in stores:
             if osobj.distro in store.matching_distros:

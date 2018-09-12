@@ -1567,10 +1567,10 @@ class vmmCreate(vmmGObjectUI):
         if machine:
             guest.os.machine = machine
 
-        # OS distro/variant validation
+        # Validation catches user manually typing an invalid value
         try:
             if variant:
-                guest.os_variant = variant
+                guest.set_os_name(variant)
         except ValueError as e:
             self.err.val_err(_("Error setting OS information."), str(e))
             return None

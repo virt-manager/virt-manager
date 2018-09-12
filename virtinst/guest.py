@@ -238,29 +238,19 @@ class Guest(XMLBuilder):
     # osinfo related definitions #
     ##############################
 
-    def _set_osinfo(self, variant):
-        obj = OSDB.lookup_os(variant)
-        if not obj:
-            obj = OSDB.lookup_os("generic")
-        self.__osinfo = obj
     def _get_osinfo(self):
         if not self.__osinfo:
-            self._set_osinfo(None)
+            self.set_os_name("generic")
         return self.__osinfo
     osinfo = property(_get_osinfo)
 
-    def _get_os_variant(self):
-        return self.osinfo.name
-    def _set_os_variant(self, val):
-        if val:
-            val = val.lower()
-            if OSDB.lookup_os(val) is None:
-                raise ValueError(
-                    _("Distro '%s' does not exist in our dictionary") % val)
-
-        logging.debug("Setting Guest.os_variant to '%s'", val)
-        self._set_osinfo(val)
-    os_variant = property(_get_os_variant, _set_os_variant)
+    def set_os_name(self, name):
+        obj = OSDB.lookup_os(name)
+        if obj is None:
+            raise ValueError(
+                _("Distro '%s' does not exist in our dictionary") % name)
+        logging.debug("Setting Guest os_name=%s", name)
+        self.__osinfo = obj
 
     def _supports_virtio(self, os_support):
         if not self.conn.is_qemu():

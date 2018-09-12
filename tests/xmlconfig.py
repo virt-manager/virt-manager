@@ -36,7 +36,7 @@ def _make_guest(conn=None, os_variant=None):
     g.os.os_type = "hvm"
 
     if os_variant:
-        g.os_variant = os_variant
+        g.set_os_name(os_variant)
 
     # Floppy disk
     path = "/dev/default-pool/testvol1.img"
@@ -217,8 +217,7 @@ class TestXMLMisc(unittest.TestCase):
         """
         Check that a common config has idempotent set_defaults
         """
-        g = _make_guest(conn=utils.URIs.open_kvm())
-        g.os_variant = "fedora-unknown"
+        g = _make_guest(conn=utils.URIs.open_kvm(), os_variant="fedora-unknown")
 
         g.set_defaults(None)
         xml1 = g.get_xml()
