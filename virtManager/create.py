@@ -1802,12 +1802,6 @@ class vmmCreate(vmmGObjectUI):
             self._guest.os.dtb = dtb
             self._guest.os.kernel_args = kargs
 
-            require_kernel = ("arm" in self._capsinfo.arch)
-            if require_kernel and not kernel:
-                return self.err.val_err(
-                    _("A kernel is required for %s guests.") %
-                    self._capsinfo.arch)
-
         try:
             name = self._generate_default_name(self._os)
             self.widget("create-vm-name").set_text(name)
