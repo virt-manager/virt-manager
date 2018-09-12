@@ -8,6 +8,7 @@ from .cpu import DomainCpu
 from .cputune import DomainCputune
 from .features import DomainFeatures
 from .idmap import DomainIdmap
+from .metadata import DomainMetadata
 from .memorybacking import DomainMemoryBacking
 from .memtune import DomainMemtune
 from .numatune import DomainNumatune

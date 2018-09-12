@@ -139,7 +139,8 @@ class Guest(XMLBuilder):
     #################
 
     XML_NAME = "domain"
-    _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
+    _XML_PROP_ORDER = [
+        "type", "name", "uuid", "title", "description", "_metadata",
         "hotplugmemorymax", "hotplugmemoryslots", "maxmemory", "_memory",
         "blkiotune", "memtune", "memoryBacking",
         "_vcpus", "curvcpus", "vcpu_placement",
@@ -230,6 +231,7 @@ class Guest(XMLBuilder):
     idmap = XMLChildProperty(DomainIdmap, is_single=True)
     resource = XMLChildProperty(DomainResource, is_single=True)
     sysinfo = XMLChildProperty(DomainSysinfo, is_single=True)
+    _metadata = XMLChildProperty(DomainMetadata, is_single=True)
 
     xmlns_qemu = XMLChildProperty(DomainXMLNSQemu, is_single=True)
 

@@ -115,6 +115,9 @@ class XMLParseTest(unittest.TestCase):
         check("on_crash", "destroy", "restart")
         check("on_lockfailure", "poweroff", "restart")
 
+        check = self._make_checker(guest._metadata.libosinfo)  # pylint: disable=protected-access
+        check("os_id", "http://fedoraproject.org/fedora/17", "frib")
+
         check = self._make_checker(guest.clock)
         check("offset", "utc", "localtime")
         guest.clock.remove_child(guest.clock.timers[0])
