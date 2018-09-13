@@ -316,7 +316,8 @@ class Guest(XMLBuilder):
         """
         If UEFI firmware path is found, return it, otherwise raise an error
         """
-        self.set_capabilities_defaults()
+        if not self.os.arch:
+            self.set_capabilities_defaults()
         domcaps = DomainCapabilities.build_from_guest(self)
 
         if not domcaps.supports_uefi_xml():
@@ -355,6 +356,16 @@ class Guest(XMLBuilder):
             self.features.smm = True
             self.os.loader_secure = True
             self.os.machine = "q35"
+
+        # UEFI doesn't work with hyperv bits for some OS
+        if self.osinfo.broken_uefi_with_hyperv():
+            self.features.hyperv_relaxed = None
+            self.features.hyperv_vapic = None
+            self.features.hyperv_spinlocks = None
+            self.features.hyperv_spinlocks_retries = None
+            for i in self.clock.timers:
+                if i.name == "hypervclock":
+                    self.clock.timers.remove(i)
 
     def has_spice(self):
         for gfx in self.devices.graphics:
@@ -410,20 +421,6 @@ class Guest(XMLBuilder):
                 typ=self.type,
                 machine=self.os.machine)
         return self._capsinfo
-
-    def update_defaults(self):
-        # This is used only by virt-manager to reset any defaults that may have
-        # changed through manual intervention via the customize wizard.
-
-        # UEFI doesn't work with hyperv bits
-        if not self.hyperv_supported():
-            self.features.hyperv_relaxed = None
-            self.features.hyperv_vapic = None
-            self.features.hyperv_spinlocks = None
-            self.features.hyperv_spinlocks_retries = None
-            for i in self.clock.timers:
-                if i.name == "hypervclock":
-                    self.clock.remove_timer(i)
 
     def set_capabilities_defaults(self, capsinfo=None):
         if capsinfo:

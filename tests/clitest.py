@@ -846,6 +846,7 @@ c.add_compare("--build-xml --idmap uid_start=0,uid_target=1000,uid_count=10,gid_
 c.add_compare("test --edit --boot network,cdrom", "edit-bootorder")
 c.add_compare("--confirm test --edit --cpu host-passthrough", "prompt-response")
 c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(XMLDIR + "/virtxml-qemu-commandline-clear.xml"))
+c.add_compare("--connect %(URI-KVM)s test-hyperv-uefi --edit --boot uefi", "hyperv-uefi-collision")
 
 
 c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define")
