@@ -225,6 +225,20 @@ class TestXMLMisc(unittest.TestCase):
         xml2 = g.get_xml()
         self.assertEqual(xml1, xml2)
 
+    def test_guest_osinfo_metadata(self):
+        g = _make_guest()
+        self.assertEqual(g.osinfo.name, "generic")
+        g.set_os_name("fedora17")
+        self.assertEqual(g.osinfo.name, "fedora17")
+
+        g = _make_guest()
+        g._metadata.libosinfo.os_id = "http://fedoraproject.org/fedora/20"  # pylint: disable=protected-access
+        self.assertEqual(g.osinfo.name, "fedora20")
+
+        g = _make_guest()
+        g._metadata.libosinfo.os_id = "http://example.com/idontexit"  # pylint: disable=protected-access
+        self.assertEqual(g.osinfo.name, "generic")
+
     def test_dir_searchable(self):
         # Normally the dir searchable test is skipped in the unittest,
         # but let's contrive an example that should trigger all the code

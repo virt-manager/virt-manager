@@ -241,6 +241,16 @@ class Guest(XMLBuilder):
     ##############################
 
     def _get_osinfo(self):
+        if self.__osinfo:
+            return self.__osinfo
+
+        os_id = self._metadata.libosinfo.os_id
+        if os_id:
+            self.__osinfo = OSDB.lookup_os_by_full_id(os_id)
+            if not self.__osinfo:
+                logging.debug("XML had libosinfo os id=%s but we didn't "
+                        "find any libosinfo object matching that", os_id)
+
         if not self.__osinfo:
             self.set_os_name("generic")
         return self.__osinfo

@@ -159,6 +159,11 @@ class _OSDB(object):
     # Public APIs #
     ###############
 
+    def lookup_os_by_full_id(self, full_id):
+        for osobj in self._all_variants.values():
+            if osobj.full_id == full_id:
+                return osobj
+
     def lookup_os(self, key):
         key = self._aliases.get(key) or key
         return self._all_variants.get(key)
@@ -211,6 +216,7 @@ class _OsVariant(object):
         self._os = o
         self._family = self._os and self._os.get_family() or None
 
+        self.full_id = self._os and self._os.get_id() or None
         self.name = self._os and self._os.get_short_id() or "generic"
         self.label = self._os and self._os.get_name() or "Generic"
         self.codename = self._os and self._os.get_codename() or ""
