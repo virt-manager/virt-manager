@@ -1,4 +1,4 @@
-<domain xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0" type="kvm">
+<domain type="kvm">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
@@ -400,7 +400,7 @@
       <address iobase="507" type="isa"/>
     </panic>
   </devices>
-  <qemu:commandline>
+  <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
     <qemu:arg value="-display"/>
     <qemu:arg value="gtk,gl=on"/>
     <qemu:arg value="-device"/>
