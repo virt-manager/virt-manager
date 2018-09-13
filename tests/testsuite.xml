@@ -73,7 +73,12 @@
 
 
 <domain type='test'>
-  <name>test-for-virtxml</name>
+   <name>test-for-virtxml</name>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/27"/>
+    </libosinfo:libosinfo>
+  </metadata>
   <currentMemory>204800</currentMemory>
   <memory>409600</memory>
   <blkiotune>

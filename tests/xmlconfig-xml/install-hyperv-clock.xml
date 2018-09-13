@@ -1,6 +1,11 @@
 <domain type="kvm">
   <name>TestGuest</name>
   <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://microsoft.com/win/7"/>
+    </libosinfo:libosinfo>
+  </metadata>
   <memory>409600</memory>
   <currentMemory>204800</currentMemory>
   <vcpu>5</vcpu>
