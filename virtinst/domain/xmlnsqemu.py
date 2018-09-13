@@ -7,6 +7,10 @@
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
+XMLBuilder.register_namespace(
+        "qemu", "http://libvirt.org/schemas/domain/qemu/1.0")
+
+
 class _XMLNSQemuArg(XMLBuilder):
     XML_NAME = "qemu:arg"
 

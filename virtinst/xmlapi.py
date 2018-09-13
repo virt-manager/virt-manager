@@ -76,9 +76,10 @@ class _XPath(object):
 
 
 class _XMLBase(object):
-    NAMESPACES = {
-        "qemu": "http://libvirt.org/schemas/domain/qemu/1.0",
-    }
+    NAMESPACES = {}
+    @classmethod
+    def register_namespace(cls, nsname, uri):
+        cls.NAMESPACES[nsname] = uri
 
     def copy_api(self):
         raise NotImplementedError()

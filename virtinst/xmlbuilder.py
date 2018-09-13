@@ -419,6 +419,11 @@ class XMLBuilder(object):
     # https://bugzilla.redhat.com/show_bug.cgi?id=1184131
     _XML_SANITIZE = False
 
+    @staticmethod
+    def register_namespace(nsname, uri):
+        XMLAPI.register_namespace(nsname, uri)
+
+
     def __init__(self, conn, parsexml=None,
                  parentxmlstate=None, relative_object_xpath=None):
         """
