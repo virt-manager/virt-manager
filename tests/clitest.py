@@ -393,7 +393,7 @@ cache.mode=emulate,cache.level=3 \
 --numatune 1-3,4,mode=strict \
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40 \
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200 \
---memorybacking size=1,unit='G',nodeset='1,2-5',nosharepages=yes,locked=yes \
+--memorybacking size=1,unit='G',nodeset='1,2-5',nosharepages=yes,locked=yes,access_mode=shared,source_type=anonymous \
 --features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234,vmport=off,pmu=off,vmcoreinfo=on \
 --clock offset=utc,hpet_present=no,rtc_tickpolicy=merge \
 --sysinfo type=smbios,bios_vendor="Acme LLC",bios_version=1.2.3,bios_date=01/01/1970,bios_release=10.22 \

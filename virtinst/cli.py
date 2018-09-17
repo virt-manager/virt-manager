@@ -1422,6 +1422,8 @@ ParserMemoryBacking.add_arg("page_unit", "unit")
 ParserMemoryBacking.add_arg("page_nodeset", "nodeset", can_comma=True)
 ParserMemoryBacking.add_arg("nosharepages", "nosharepages", is_onoff=True)
 ParserMemoryBacking.add_arg("locked", "locked", is_onoff=True)
+ParserMemoryBacking.add_arg("access_mode", "access_mode")
+ParserMemoryBacking.add_arg("source_type", "source_type")
 
 
 #################

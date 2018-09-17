@@ -22,3 +22,5 @@ class DomainMemoryBacking(XMLBuilder):
     page_nodeset = XMLProperty("./hugepages/page/@nodeset")
     nosharepages = XMLProperty("./nosharepages", is_bool=True)
     locked = XMLProperty("./locked", is_bool=True)
+    access_mode = XMLProperty("./access/@mode")
+    source_type = XMLProperty("./source/@type")
