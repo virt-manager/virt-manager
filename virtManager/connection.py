@@ -318,12 +318,12 @@ class vmmConnection(vmmGObject):
     caps = property(lambda self: getattr(self, "_backend").caps)
 
     def host_memory_size(self):
-        if not self._backend.is_open():
+        if not self._backend.is_open() or self._hostinfo is None:
             return 0
         return self._hostinfo[1] * 1024
 
     def host_active_processor_count(self):
-        if not self._backend.is_open():
+        if not self._backend.is_open() or self._hostinfo is None:
             return 0
         return self._hostinfo[2]
 
