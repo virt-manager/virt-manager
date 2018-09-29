@@ -28,8 +28,8 @@ from .domain import vmmDomainVirtinst
 from .engine import vmmEngine
 from .mediacombo import vmmMediaCombo
 from .netlist import vmmNetworkList
-from .storagebrowse import vmmStorageBrowser
 from .oslist import vmmOSList
+from .storagebrowse import vmmStorageBrowser
 
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20
@@ -125,12 +125,10 @@ class vmmCreate(vmmGObjectUI):
 
         self._guest = None
         self._failed_guest = None
-        self._os = None
 
         # Distro detection state variables
         self._detect_os_in_progress = False
         self._os_already_detected_for_media = False
-        self._show_all_os_was_selected = False
 
         self._customize_window = None
 
@@ -172,7 +170,7 @@ class vmmCreate(vmmGObjectUI):
             "on_install_oscontainer_browse_clicked": self._browse_oscontainer,
             "on_install_container_source_toggle": self._container_source_toggle,
 
-            "on_install_detect_os_toggled": self._toggle_detect_os,
+            "on_install_detect_os_toggled": self._detect_os_toggled_cb,
 
             "on_kernel_browse_clicked": self._browse_kernel,
             "on_initrd_browse_clicked": self._browse_initrd,
@@ -181,9 +179,6 @@ class vmmCreate(vmmGObjectUI):
             "on_enable_storage_toggled": self._toggle_enable_storage,
 
             "on_create_vm_name_changed": self._name_changed,
-
-            "on_install_os_name_search_changed": self._os_name_search_changed,
-            "on_install_os_name_stop_search": self._os_name_stop_search,
         })
         self.bind_escape_key_close()
 
@@ -326,16 +321,10 @@ class vmmCreate(vmmGObjectUI):
         lst.set_model(model)
         uiutil.init_combo_text_column(lst, 0)
 
+        # OS distro list
         self._os_list = vmmOSList()
-        self._os_list.connect("os-selected", self._os_name_selected)
-
-    def _os_name_selected(self, ignore, osobj):
-        name = self.widget("install-os-name")
-        self._os = osobj
-        self._os_list.hide()
-
-        if self._os is not None:
-            name.set_text(self._os.label)
+        self.widget("install-os-align").add(self._os_list.search_entry)
+        self.widget("os-label").set_mnemonic_widget(self._os_list.search_entry)
 
     def _reset_state(self, urihint=None):
         """
@@ -344,7 +333,6 @@ class vmmCreate(vmmGObjectUI):
         """
         self._failed_guest = None
         self._guest = None
-        self._show_all_os_was_selected = False
         self.reset_finish_cursor()
 
         self.widget("create-pages").set_current_page(PAGE_NAME)
@@ -365,7 +353,8 @@ class vmmCreate(vmmGObjectUI):
         # Everything from this point forward should be connection independent
 
         # Distro/Variant
-        self._toggle_detect_os(self.widget("install-detect-os"))
+        self._os_list.reset_state()
+        self._os_already_detected_for_media = False
 
         def _populate_media_model(media_model, urls):
             media_model.clear()
@@ -937,32 +926,6 @@ class vmmCreate(vmmGObjectUI):
         return activeconn
 
 
-    #############################################
-    # Helpers for populating OS type/variant UI #
-    #############################################
-
-    def _set_distro_selection(self, variant):
-        """
-        Update the UI with the distro that was detected from the detection
-        thread.
-        """
-        if not self._is_os_detect_active():
-            # If the user changed the OS detect checkbox in the meantime,
-            # don't update the UI
-            return
-
-        name = self.widget("install-os-name")
-        if variant:
-            self._os = virtinst.OSDB.lookup_os(variant)
-        else:
-            self._os = None
-
-        if self._os is None:
-            name.set_text(_("None detected"))
-        else:
-            name.set_text(self._os.label)
-
-
     ###############################
     # Misc UI populating routines #
     ###############################
@@ -1012,7 +975,7 @@ class vmmCreate(vmmGObjectUI):
         elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
             install = _("Virtuozzo container")
 
-        self.widget("summary-os").set_text(self._os and self._os.label or _("Unknown"))
+        self.widget("summary-os").set_text(self._guest.osinfo.label)
         self.widget("summary-install").set_text(install)
         self.widget("summary-mem").set_text(mem)
         self.widget("summary-cpu").set_text(cpu)
@@ -1251,33 +1214,16 @@ class vmmCreate(vmmGObjectUI):
     def _cdrom_changed(self, src):
         self._detectable_media_widget_changed(src)
 
-    def _toggle_detect_os(self, src):
+    def _detect_os_toggled_cb(self, src):
+        if not src.is_visible():
+            return
+
+        # We are only here if the user explicitly changed detection UI
         dodetect = src.get_active()
-
-        self.widget("install-os-name").set_sensitive(not dodetect)
-        self.widget("install-os-name").set_text("")
-        self._os = None
-
+        self._change_os_detect(not dodetect)
         if dodetect:
             self._os_already_detected_for_media = False
             self._start_detect_os_if_needed()
-
-    def _os_name_search_changed(self, src):
-        searchname = src.get_text().strip()
-        if self._os is None:
-            if src.get_sensitive() and searchname != "":
-                self._os_list.filter_name(searchname)
-                self._os_list.show(src)
-            else:
-                self._os_list.hide()
-        else:
-            if self._os.label != searchname:
-                self._os = None
-            self._os_list.hide()
-
-    def _os_name_stop_search(self, src):
-        src.set_text("")
-        self._os_list.hide()
 
     def _local_media_toggled(self, src):
         usecdrom = src.get_active()
@@ -1442,43 +1388,34 @@ class vmmCreate(vmmGObjectUI):
 
         self.widget("header-pagenum").set_markup(page_lbl)
 
+    def _change_os_detect(self, sensitive):
+        self._os_list.set_sensitive(sensitive)
+        if not sensitive and not self._os_list.get_selected_os():
+            self._os_list.search_entry.set_text(
+                    _("Waiting for install media / source"))
+
     def _set_install_page(self):
-        instnotebook = self.widget("install-method-pages")
-        detectbox = self.widget("install-detect-os-box")
-        detect = self.widget("install-detect-os")
-        osbox = self.widget("install-os-distro-box")
-        name = self.widget("install-os-name")
         instpage = self._get_config_install_page()
 
-        # Setting OS value for a container guest doesn't really matter
-        # at the moment
-        iscontainer = instpage in [INSTALL_PAGE_CONTAINER_APP,
-                                   INSTALL_PAGE_CONTAINER_OS]
-        osbox.set_visible(iscontainer)
+        # Setting OS value for container doesn't matter presently
+        self.widget("install-os-distro-box").set_visible(
+                not self._is_container_install())
 
-        enabledetect = (instpage == INSTALL_PAGE_ISO and
-                        self.conn and
-                        not self.conn.is_remote() or
-                        self._get_config_install_page() == INSTALL_PAGE_URL)
+        enabledetect = False
+        if instpage == INSTALL_PAGE_URL:
+            enabledetect = True
+        elif instpage == INSTALL_PAGE_ISO and not self.conn.is_remote():
+            enabledetect = True
 
-        detectbox.set_visible(enabledetect)
-        autodetect = detectbox.get_visible() and detect.get_active()
-        name.set_sensitive(not autodetect)
-        if enabledetect:
-            self._os = None
-        else:
-            if self._os is None:
-                name.set_text("")
+        self.widget("install-detect-os-box").set_visible(enabledetect)
+        dodetect = (enabledetect and
+                self.widget("install-detect-os").get_active())
+        self._change_os_detect(not dodetect)
 
-        if instpage == INSTALL_PAGE_PXE:
-            # Hide the install notebook for pxe, since there isn't anything
-            # to ask for
-            instnotebook.hide()
-        else:
-            instnotebook.show()
-
-
-        instnotebook.set_current_page(instpage)
+        # PXE installs have nothing to ask for
+        self.widget("install-method-pages").set_visible(
+                instpage != INSTALL_PAGE_PXE)
+        self.widget("install-method-pages").set_current_page(instpage)
 
     def _back_clicked(self, src_ignore):
         notebook = self.widget("create-pages")
@@ -1524,15 +1461,7 @@ class vmmCreate(vmmGObjectUI):
 
 
     def _page_changed(self, ignore1, ignore2, pagenum):
-        if pagenum == PAGE_INSTALL:
-            self.widget("install-os-distro-box").set_visible(
-                not self._is_container_install())
-
-            # Kick off distro detection when we switch to the install
-            # page, to detect the default selected media
-            self._start_detect_os_if_needed(check_install_page=False)
-
-        elif pagenum == PAGE_FINISH:
+        if pagenum == PAGE_FINISH:
             try:
                 self._populate_summary()
             except Exception as e:
@@ -1643,9 +1572,11 @@ class vmmCreate(vmmGObjectUI):
         init = None
         fs = None
         template = None
+        osobj = self._os_list.get_selected_os()
 
-        if not self._is_container_install() and self._os is None:
-            return self.err.val_err(_("Please specify a valid OS variant."))
+        if not self._is_container_install() and not osobj:
+            return self.err.val_err(_("You must select an OS.")
+                    + "\n\n" + self._os_list.eol_text)
 
         if instmethod == INSTALL_PAGE_ISO:
             instclass = virtinst.DistroInstaller
@@ -1743,7 +1674,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             # Overwrite the guest
             installer = instclass(self.conn.get_backend())
-            variant = self._os and self._os.name or None
+            variant = osobj and osobj.name or None
             self._guest = self._build_guest(variant)
             if not self._guest:
                 return False
@@ -1801,7 +1732,7 @@ class vmmCreate(vmmGObjectUI):
             self._guest.os.kernel_args = kargs
 
         try:
-            name = self._generate_default_name(self._os)
+            name = self._generate_default_name(self._guest.osinfo)
             self.widget("create-vm-name").set_text(name)
             self._guest.validate_name(self._guest.conn, name)
             self._guest.name = name
@@ -1825,11 +1756,9 @@ class vmmCreate(vmmGObjectUI):
             self._addstorage.check_path_search(
                 self, self.conn, path)
 
-        res = None
-        if self._os is not None:
-            res = self._os.get_recommended_resources(self._guest)
-            logging.debug("Recommended resources for os=%s: %s",
-                self._os.label, res)
+        res = self._guest.osinfo.get_recommended_resources(self._guest)
+        logging.debug("Recommended resources for os=%s: %s",
+            self._guest.osinfo.name, res)
 
         # Change the default values suggested to the user.
         ram_size = DEFAULT_MEM
@@ -1987,8 +1916,7 @@ class vmmCreate(vmmGObjectUI):
     # Distro detection handling #
     #############################
 
-    def _start_detect_os_if_needed(self,
-            forward_after_finish=False, check_install_page=True):
+    def _start_detect_os_if_needed(self, forward_after_finish=False):
         """
         Will kick off the OS detection thread if all conditions are met,
         like we actually have media to detect, detection isn't already
@@ -2002,12 +1930,9 @@ class vmmCreate(vmmGObjectUI):
 
         if self._detect_os_in_progress:
             return
-        if check_install_page and not is_install_page:
+        if not is_install_page:
             return
         if not media:
-            name = self.widget("install-os-name")
-            if not name.get_sensitive():
-                name.set_text(_("Waiting for install media / source"))
             return
         if not self._is_os_detect_active():
             return
@@ -2052,6 +1977,7 @@ class vmmCreate(vmmGObjectUI):
         detectThread.setDaemon(True)
         detectThread.start()
 
+        self._os_list.search_entry.set_text(_("Detecting..."))
         spin = self.widget("install-detect-os-spinner")
         spin.start()
 
@@ -2103,7 +2029,17 @@ class vmmCreate(vmmGObjectUI):
         self.widget("create-forward").set_sensitive(True)
         self._os_already_detected_for_media = True
         self._detect_os_in_progress = False
-        self._set_distro_selection(distro)
+
+        if not self._is_os_detect_active():
+            # If the user changed the OS detect checkbox in the meantime,
+            # don't update the UI
+            return
+
+        if distro:
+            self._os_list.select_os(virtinst.OSDB.lookup_os(distro))
+        else:
+            self._os_list.reset_state()
+            self._os_list.search_entry.set_text(_("None detected"))
 
         if forward_after_finish:
             self.idle_add(self._forward_clicked, ())

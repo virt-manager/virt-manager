@@ -2024,18 +2024,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                     <property name="orientation">vertical</property>
                                     <property name="spacing">6</property>
                                     <child>
-                                      <object class="GtkSearchEntry" id="install-os-name">
+                                      <object class="GtkAlignment" id="install-os-align">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="primary_icon_name">edit-find-symbolic</property>
-                                        <property name="primary_icon_activatable">False</property>
-                                        <property name="primary_icon_sensitive">False</property>
-                                        <signal name="search-changed" handler="on_install_os_name_search_changed" swapped="no"/>
-                                        <signal name="stop-search" handler="on_install_os_name_stop_search" swapped="no"/>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="install-os-name-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes">oslist-entry</property>
-                                          </object>
+                                        <property name="can_focus">False</property>
+                                        <child>
+                                          <placeholder/>
                                         </child>
                                       </object>
                                       <packing>
@@ -2088,10 +2081,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                               </object>
                             </child>
                             <child type="label">
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="os-label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Operating system distribution:</property>
+                                <property name="label" translatable="yes">C_hoose the operating system you are installing:</property>
+                                <property name="use_underline">True</property>
                               </object>
                             </child>
                           </object>

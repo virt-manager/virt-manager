@@ -17,16 +17,17 @@ from virtinst import util
 
 from . import vmmenu
 from . import uiutil
-from .baseclass import vmmGObjectUI
 from .addhardware import vmmAddHardware
+from .baseclass import vmmGObjectUI
 from .choosecd import vmmChooseCD
 from .engine import vmmEngine
 from .fsdetails import vmmFSDetails
 from .gfxdetails import vmmGraphicsDetails
+from .graphwidgets import Sparkline
 from .netlist import vmmNetworkList
+from .oslist import vmmOSList
 from .snapshots import vmmSnapshotPage
 from .storagebrowse import vmmStorageBrowser
-from .graphwidgets import Sparkline
 
 
 # Parameters that can be edited in the details window
@@ -36,6 +37,8 @@ from .graphwidgets import Sparkline
  EDIT_FIRMWARE,
  EDIT_DESC,
  EDIT_IDMAP,
+
+ EDIT_OS_NAME,
 
  EDIT_VCPUS,
  EDIT_MAXVCPUS,
@@ -95,7 +98,7 @@ from .graphwidgets import Sparkline
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 53)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 54)
 
 
 # Columns in hw list model
@@ -107,7 +110,7 @@ from .graphwidgets import Sparkline
 
 # Types for the hw list model: numbers specify what order they will be listed
 (HW_LIST_TYPE_GENERAL,
- HW_LIST_TYPE_INSPECTION,
+ HW_LIST_TYPE_OS,
  HW_LIST_TYPE_STATS,
  HW_LIST_TYPE_CPU,
  HW_LIST_TYPE_MEMORY,
@@ -452,6 +455,7 @@ class vmmDetails(vmmGObjectUI):
         self._addhwmenuitems = None
         self._shutdownmenu = None
         self._vmmenu = None
+        self._os_list = None
         self.init_menus()
         self.init_details()
 
@@ -607,7 +611,8 @@ class vmmDetails(vmmGObjectUI):
         # Deliberately keep all this after signal connection
         self.vm.connect("state-changed", self.refresh_vm_state)
         self.vm.connect("resources-sampled", self.refresh_resources)
-        self.vm.connect("inspection-changed", lambda *x: self.refresh_inspection_page())
+        self.vm.connect("inspection-changed",
+                lambda *x: self.refresh_os_page())
 
         self.populate_hw_list()
 
@@ -927,7 +932,13 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.widget("overview-chipset-title"), show_chipset)
 
-        # Inspection page
+        # OS/Inspection page
+        self._os_list = vmmOSList()
+        self.widget("details-os-align").add(self._os_list.search_entry)
+        self.widget("details-os-label").set_mnemonic_widget(
+                self._os_list.search_entry)
+        self._os_list.connect("os-selected", self._os_list_name_selected_cb)
+
         apps_list = self.widget("inspection-apps")
         apps_model = Gtk.ListStore(str, str, str)
         apps_list.set_model(apps_model)
@@ -1196,8 +1207,8 @@ class vmmDetails(vmmGObjectUI):
 
             if pagetype == HW_LIST_TYPE_GENERAL:
                 self.refresh_overview_page()
-            elif pagetype == HW_LIST_TYPE_INSPECTION:
-                self.refresh_inspection_page()
+            elif pagetype == HW_LIST_TYPE_OS:
+                self.refresh_os_page()
             elif pagetype == HW_LIST_TYPE_STATS:
                 self.refresh_stats_page()
             elif pagetype == HW_LIST_TYPE_CPU:
@@ -1577,6 +1588,9 @@ class vmmDetails(vmmGObjectUI):
         if inspection:
             inspection.vm_refresh(self.vm)
 
+    def _os_list_name_selected_cb(self, src, osobj):
+        self.enable_apply(EDIT_OS_NAME)
+
 
     ##############################
     # Details/Hardware listeners #
@@ -1891,6 +1905,8 @@ class vmmDetails(vmmGObjectUI):
         try:
             if pagetype is HW_LIST_TYPE_GENERAL:
                 ret = self.config_overview_apply()
+            elif pagetype is HW_LIST_TYPE_OS:
+                ret = self.config_os_apply()
             elif pagetype is HW_LIST_TYPE_CPU:
                 ret = self.config_vcpus_apply()
             elif pagetype is HW_LIST_TYPE_MEMORY:
@@ -1993,6 +2009,16 @@ class vmmDetails(vmmGObjectUI):
         return vmmAddHardware.change_config_helper(self.vm.define_overview,
                                           kwargs, self.vm, self.err,
                                           hotplug_args=hotplug_args)
+
+    def config_os_apply(self):
+        kwargs = {}
+
+        if self.edited(EDIT_OS_NAME):
+            osobj = self._os_list.get_selected_os()
+            kwargs["os_name"] = osobj and osobj.name or "generic"
+
+        return vmmAddHardware.change_config_helper(self.vm.define_os,
+                                          kwargs, self.vm, self.err)
 
     def config_vcpus_apply(self):
         kwargs = {}
@@ -2448,7 +2474,9 @@ class vmmDetails(vmmGObjectUI):
                 IdMap_proper = getattr(IdMap, name.replace("-", "_"))
                 self.widget(name).set_value(int(IdMap_proper))
 
-    def refresh_inspection_page(self):
+    def refresh_os_page(self):
+        self._os_list.select_os(self.vm.xmlobj.osinfo)
+
         inspection_supported = self.config.inspection_supported()
         uiutil.set_grid_row_visible(self.widget("details-overview-error"),
                                     bool(self.vm.inspection.errorstr))
@@ -2457,24 +2485,11 @@ class vmmDetails(vmmGObjectUI):
                     self.vm.inspection.errorstr)
             inspection_supported = False
 
-        self.widget("details-inspection-os").set_visible(inspection_supported)
         self.widget("details-inspection-apps").set_visible(inspection_supported)
+        self.widget("details-inspection-refresh").set_visible(
+                inspection_supported)
         if not inspection_supported:
             return
-
-        # Operating System (ie. inspection data)
-        hostname = self.vm.inspection.hostname
-        if not hostname:
-            hostname = _("unknown")
-        self.widget("inspection-hostname").set_text(hostname)
-        os_type = self.vm.inspection.os_type
-        if not os_type:
-            os_type = "unknown"
-        self.widget("inspection-type").set_text(_label_for_os_type(os_type))
-        product_name = self.vm.inspection.product_name
-        if not product_name:
-            product_name = _("unknown")
-        self.widget("inspection-product-name").set_text(product_name)
 
         # Applications (also inspection data)
         apps = self.vm.inspection.applications or []
@@ -3073,10 +3088,8 @@ class vmmDetails(vmmGObjectUI):
                                   page_id, title])
 
         add_hw_list_option(_("Overview"), HW_LIST_TYPE_GENERAL, "computer")
+        add_hw_list_option(_("OS information"), HW_LIST_TYPE_OS, "computer")
         if not self.is_customize_dialog:
-            if self.config.inspection_supported():
-                add_hw_list_option(_("OS information"),
-                    HW_LIST_TYPE_INSPECTION, "computer")
             add_hw_list_option(_("Performance"), HW_LIST_TYPE_STATS,
                                "utilities-system-monitor")
         add_hw_list_option(_("CPUs"), HW_LIST_TYPE_CPU, "device_cpu")

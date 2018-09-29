@@ -49,8 +49,28 @@ class NewVM(uiutils.UITestCase):
         # Create default PXE VM
         newvm.find_fuzzy("PXE", "radio").click()
         newvm.find_fuzzy("Forward", "button").click()
-        newvm.find("oslist-entry").text = "generic"
-        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        osentry = newvm.find("oslist-entry")
+        uiutils.check_in_loop(lambda: not osentry.text)
+
+        # Make sure we throw an error if no OS selected
+        newvm.find_fuzzy("Forward", "button").click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find("You must select", "label")
+        alert.find("OK", "push button").click()
+
+        # Test activating the osentry to grab the popover selection
+        osentry.click()
+        osentry.typeText("generic")
+        newvm.find("oslist-popover")
+        osentry.click()
+        self.pressKey("Enter")
+        uiutils.check_in_loop(lambda: osentry.text == "Generic default")
+
+        # Verify back+forward still keeps Generic selected
+        newvm.find_fuzzy("Back", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        uiutils.check_in_loop(lambda: "Generic" in osentry.text)
+
         newvm.find_fuzzy("Forward", "button").click()
         newvm.find_fuzzy("Forward", "button").click()
         newvm.find_fuzzy("Forward", "button").click()
@@ -88,15 +108,15 @@ class NewVM(uiutils.UITestCase):
         browser.find_fuzzy("iso-vol", "table cell").click()
         browser.find_fuzzy("Choose Volume", "button").click()
 
-        label = newvm.find("oslist-entry")
+        osentry = newvm.find("oslist-entry")
         uiutils.check_in_loop(lambda: browser.showing is False)
-        uiutils.check_in_loop(lambda: label.text == "None detected")
+        uiutils.check_in_loop(lambda: osentry.text == "None detected")
 
         # Change distro to win8
         newvm.find_fuzzy("Automatically detect", "check").click()
-        label.text = "windows 8"
+        osentry.text = "windows 8"
         popover = newvm.find("oslist-popover")
-        popover.find_fuzzy("Include end of life").click()
+        popover.find_fuzzy("include-eol").click()
         popover.find_fuzzy(r"\(win8\)").click()
         newvm.find_fuzzy("Forward", "button").click()
 
@@ -141,15 +161,40 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Network Install", "radio").click()
         newvm.find_fuzzy("Forward", "button").click()
+        osentry = newvm.find("oslist-entry")
+        uiutils.check_in_loop(lambda: osentry.text.startswith("Waiting"))
 
-        newvm.find("URL", "text").text = (
-            "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/14/Fedora/x86_64/os/")
+        url = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/x86_64/os/"
+        oslabel = "Fedora 10"
+        newvm.find("URL", "text").text = url
 
-        version = newvm.find("oslist-entry")
-        uiutils.check_in_loop(
-            lambda: version.text == "Fedora 14",
-            timeout=10)
+        uiutils.check_in_loop(lambda: osentry.text == oslabel, timeout=10)
 
+        # Move forward, then back, ensure OS stays selected
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Back", "button").click()
+        uiutils.check_in_loop(lambda: osentry.text == oslabel)
+
+        # Disable autodetect, make sure OS still selected
+        newvm.find_fuzzy("Automatically detect", "check").click()
+        uiutils.check_in_loop(lambda: osentry.text == oslabel)
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Back", "button").click()
+
+        # Ensure the EOL field was selected
+        osentry.click()
+        self.pressKey("Down")
+        popover = newvm.find("oslist-popover")
+        uiutils.check_in_loop(lambda: popover.showing)
+        self.assertTrue(newvm.find("include-eol", "check").isChecked)
+
+        # Re-enable autodetect, check for detecting text
+        newvm.find_fuzzy("Automatically detect", "check").click()
+        uiutils.check_in_loop(lambda: not popover.showing)
+        uiutils.check_in_loop(lambda: "Detecting" in osentry.text)
+        uiutils.check_in_loop(lambda: osentry.text == oslabel, timeout=10)
+
+        # Progress the install
         newvm.find_fuzzy("Forward", "button").click()
         newvm.find_fuzzy("Forward", "button").click()
         newvm.find_fuzzy("Forward", "button").click()
@@ -159,7 +204,7 @@ class NewVM(uiutils.UITestCase):
             "Creating Virtual Machine", "frame")
         uiutils.check_in_loop(lambda: not progress.showing, timeout=120)
 
-        self.app.root.find_fuzzy("fedora14 on", "frame")
+        self.app.root.find_fuzzy("fedora10 on", "frame")
         self.assertFalse(newvm.showing)
 
 

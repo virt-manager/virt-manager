@@ -264,8 +264,7 @@ class Guest(XMLBuilder):
 
         logging.debug("Setting Guest os_name=%s", name)
         self.__osinfo = obj
-        if self.__osinfo.full_id:
-            self._metadata.libosinfo.os_id = self.__osinfo.full_id
+        self._metadata.libosinfo.os_id = self.__osinfo.full_id
 
     def _supports_virtio(self, os_support):
         if not self.conn.is_qemu():

@@ -83,10 +83,12 @@ class Details(uiutils.UITestCase):
 
         self._testRename(origname, "test-new-name")
 
-    def testDetailsEdits(self):
+    def testDetailsEditDomain1(self):
+        """
+        Test overview, memory, cpu pages
+        """
         win = self._open_details_window(vmname="test-many-devices")
         appl = win.find("config-apply", "push button")
-        hwlist = win.find("hw-list")
 
         # Overview description
         tab = self._select_hw(win, "Overview", "overview-tab")
@@ -141,6 +143,33 @@ class Details(uiutils.UITestCase):
         self.assertTrue(tab.find_fuzzy("Maximum", "spin").text == "32")
 
 
+    def testDetailsEditDomain2(self):
+        """
+        Test boot and OS pages
+        """
+        win = self._open_details_window(vmname="test-many-devices")
+        appl = win.find("config-apply", "push button")
+        self._stop_vm(win)
+
+
+        # OS edits
+        tab = self._select_hw(win, "OS information", "os-tab")
+        entry = tab.find("oslist-entry")
+        self.assertEqual(entry.text, "Fedora")
+        entry.click()
+        self.pressKey("Down")
+        popover = win.find("oslist-popover")
+        popover.find("include-eol").click()
+        entry.text = "fedora12"
+        popover.find_fuzzy("fedora12").bring_on_screen().click()
+        uiutils.check_in_loop(lambda: not popover.visible)
+        self.assertEqual(entry.text, "Fedora 12")
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+        self.assertEqual(entry.text, "Fedora 12")
+
+
+        # Boot tweaks
         def check_bootorder(c):
             # Click the bootlist checkbox, which is hard to find in the tree
             import dogtail.rawinput
@@ -149,7 +178,6 @@ class Details(uiutils.UITestCase):
             button = 1
             dogtail.rawinput.click(x, y, button)
 
-        # Boot tweaks
         tab = self._select_hw(win, "Boot Options", "boot-tab")
         self._stop_vm(win)
         tab.find_fuzzy("Start virtual machine on host", "check box").click()
@@ -176,6 +204,16 @@ class Details(uiutils.UITestCase):
         tab.find("Kernel args:", "text").text = "console=ttyS0"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+    def testDetailsEditDiskNet(self):
+        """
+        Test disk and network devices
+        """
+        win = self._open_details_window(vmname="test-many-devices")
+        appl = win.find("config-apply", "push button")
+        hwlist = win.find("hw-list")
+        self._stop_vm(win)
 
 
         # Disk options
@@ -252,6 +290,15 @@ class Details(uiutils.UITestCase):
                 "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b")
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
+
+
+    def testDetailsEditDevices(self):
+        """
+        Test all other devices
+        """
+        win = self._open_details_window(vmname="test-many-devices")
+        appl = win.find("config-apply", "push button")
+        self._stop_vm(win)
 
 
         # Graphics

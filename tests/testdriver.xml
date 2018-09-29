@@ -58,7 +58,7 @@
   <name>test-many-devices</name>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
-      <libosinfo:os id="http://fedoraproject.org/fedora/27"/>
+      <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
     </libosinfo:libosinfo>
   </metadata>
   <currentMemory>204800</currentMemory>
@@ -550,14 +550,18 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
 </domain>
 
 
-
 <domain type='test'>
   <name>test-alternate-devs</name>
   <uuid>4a64cc71-19c4-2fd0-2323-00aa941ea3c3</uuid>
   <description>Test alternate devices that can't be crammed in
-test-many-devices, like an alternate RNG.
+test-many-devices, like an alternate RNG, EOL OS ID, title field
   </description>
   <title>test alternate devs (title)</title>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://microsoft.com/msdos/6.22"/>
+    </libosinfo:libosinfo>
+  </metadata>
   <memory>8388608</memory>
   <currentMemory>2097152</currentMemory>
   <vcpu>2</vcpu>
@@ -577,6 +581,7 @@ test-many-devices, like an alternate RNG.
     </rng>
   </devices>
 </domain>
+
 
 <domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
   <test:runstate>5</test:runstate>

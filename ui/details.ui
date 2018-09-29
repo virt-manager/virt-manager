@@ -1389,77 +1389,17 @@
                                         <property name="row_spacing">6</property>
                                         <property name="column_spacing">6</property>
                                         <child>
-                                          <object class="GtkLabel" id="label72">
+                                          <object class="GtkAlignment" id="details-os-align">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="yes">Product name:</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">0</property>
-                                            <property name="top_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="inspection-hostname">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="label">foo</property>
-                                            <property name="selectable">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label71">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="yes">Hostname:</property>
+                                            <property name="hexpand">True</property>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="yes">Operating system:</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">0</property>
-                                            <property name="top_attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="inspection-product-name">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="label">foo</property>
-                                            <property name="selectable">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="inspection-type">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="label" translatable="yes">foo</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">1</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -1467,11 +1407,12 @@
                                   </object>
                                 </child>
                                 <child type="label">
-                                  <object class="GtkLabel" id="label70">
+                                  <object class="GtkLabel" id="details-os-label">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;Operating System&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Operating Sys_tem&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -1531,7 +1472,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="spacing">12</property>
                                 <child>
-                                  <object class="GtkGrid" id="details-overview-error-box">
+                                  <object class="GtkGrid" id="details-inspection-error-box">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
@@ -1597,6 +1538,11 @@
                                 <property name="position">2</property>
                               </packing>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="box14-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">os-tab</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="position">1</property>
@@ -1606,7 +1552,7 @@
                           <object class="GtkLabel" id="label14">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label">inspect</property>
+                            <property name="label">osinfo</property>
                           </object>
                           <packing>
                             <property name="position">1</property>

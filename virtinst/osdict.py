@@ -20,6 +20,31 @@ from gi.repository import Libosinfo as libosinfo
 # Sorting helpers #
 ###################
 
+def _sortby(osobj):
+    """
+    Combines distro+version to make a more sort friendly string. Examples
+
+    fedora25    -> fedora-0025000000000000
+    ubuntu17.04 -> ubuntu-0017000400000000
+    win2k8r2    -> win-0006000100000000
+    """
+    if osobj.is_generic():
+        # Sort generic at the end of the list
+        return "zzzzzz-000000000000"
+
+    version = osobj.version
+    try:
+        t = version.split(".")
+        t = t[:min(4, len(t))] + [0] * (4 - min(4, len(t)))
+        new_version = ""
+        for n in t:
+            new_version = new_version + ("%.4i" % int(n))
+        version = new_version
+    except Exception:
+        pass
+
+    return "%s-%s" % (osobj.distro, version)
+
 def _sort(tosort):
     sortby_mappings = {}
     distro_mappings = {}
@@ -28,13 +53,15 @@ def _sort(tosort):
     for key, osinfo in tosort.items():
         # Libosinfo has some duplicate version numbers here, so append .1
         # if there's a collision
-        sortby = osinfo.sortby
+        sortby = _sortby(osinfo)
         while sortby_mappings.get(sortby):
             sortby = sortby + ".1"
         sortby_mappings[sortby] = key
 
         # Group by distro first, so debian is clumped together, fedora, etc.
         distro = osinfo.distro
+        if osinfo.is_generic():
+            distro = "zzzzzz"
         if distro not in distro_mappings:
             distro_mappings[distro] = []
         distro_mappings[distro].append(sortby)
@@ -217,12 +244,12 @@ class _OsVariant(object):
 
         self.full_id = self._os and self._os.get_id() or None
         self.name = self._os and self._os.get_short_id() or "generic"
-        self.label = self._os and self._os.get_name() or "Generic"
+        self.label = self._os and self._os.get_name() or "Generic default"
         self.codename = self._os and self._os.get_codename() or ""
         self.distro = self._os and self._os.get_distro() or ""
+        self.version = self._os and self._os.get_version() or None
 
         self.eol = self._get_eol()
-        self.sortby = self._get_sortby()
 
     def __repr__(self):
         return "<%s name=%s>" % (self.__class__.__name__, self.name)
@@ -308,27 +335,13 @@ class _OsVariant(object):
             return now > rel5
         return False
 
-    def _get_sortby(self):
-        if not self._os:
-            return "1"
-
-        version = self._os.get_version()
-        try:
-            t = version.split(".")
-            t = t[:min(4, len(t))] + [0] * (4 - min(4, len(t)))
-            new_version = ""
-            for n in t:
-                new_version = new_version + ("%.4i" % int(n))
-            version = new_version
-        except Exception:
-            pass
-
-        return "%s-%s" % (self.distro, version)
-
 
     ###############
     # Public APIs #
     ###############
+
+    def is_generic(self):
+        return self._os is None
 
     def is_windows(self):
         return self._family in ['win9x', 'winnt', 'win16']

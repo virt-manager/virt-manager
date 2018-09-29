@@ -269,6 +269,7 @@ class VMMDogtailNode(dogtail.tree.Node):
                 raise RuntimeError("Could not bring widget on screen")
         return self
 
+
     #########################
     # Widget search helpers #
     #########################

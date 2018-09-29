@@ -612,6 +612,14 @@ class vmmDomain(vmmLibvirtObject):
 
         self._redefine_xmlobj(guest)
 
+    def define_os(self, os_name=_SENTINEL):
+        guest = self._make_xmlobj_to_define()
+
+        if os_name != _SENTINEL:
+            guest.set_os_name(os_name)
+
+        self._redefine_xmlobj(guest)
+
     def define_boot(self, boot_order=_SENTINEL, boot_menu=_SENTINEL,
             kernel=_SENTINEL, initrd=_SENTINEL, dtb=_SENTINEL,
             kernel_args=_SENTINEL, init=_SENTINEL, initargs=_SENTINEL):
