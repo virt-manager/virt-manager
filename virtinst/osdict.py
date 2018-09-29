@@ -352,6 +352,9 @@ class _OsVariant(object):
         return self._device_filter(cls="net")
 
     def supports_usbtablet(self):
+        # If no OS specified, still default to tablet
+        if not self._os:
+            return True
         return bool(self._device_filter(cls="input", name="tablet", bus="usb"))
 
     def supports_virtiodisk(self):
