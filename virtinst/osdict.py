@@ -7,14 +7,13 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import datetime
 import logging
 import re
-import time
 
 import gi
 gi.require_version('Libosinfo', '1.0')
 from gi.repository import Libosinfo as libosinfo
-from gi.repository import GLib
 
 
 ###################
@@ -292,19 +291,18 @@ class _OsVariant(object):
         eol = self._os and self._os.get_eol_date() or None
         rel = self._os and self._os.get_release_date() or None
 
-        # End of life if an EOL date is present and has past,
-        # or if the release date is present and was 5 years or more
+        def _glib_to_datetime(glibdate):
+            date = "%s-%s" % (glibdate.get_year(), glibdate.get_day_of_year())
+            return datetime.datetime.strptime(date, "%Y-%j")
+
+        now = datetime.datetime.today()
         if eol is not None:
-            now = GLib.Date()
-            now.set_time_t(time.time())
-            if eol.compare(now) < 0:
-                return True
-        elif rel is not None:
-            then = GLib.Date()
-            then.set_time_t(time.time())
-            then.subtract_years(5)
-            if rel.compare(then) < 0:
-                return True
+            return now > _glib_to_datetime(eol)
+
+        # If no EOL is present, assume EOL if release was > 5 years ago
+        if rel is not None:
+            rel5 = _glib_to_datetime(rel) + datetime.timedelta(days=365 * 5)
+            return now > rel5
         return False
 
     def _get_sortby(self):
