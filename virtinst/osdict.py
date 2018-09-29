@@ -224,6 +224,9 @@ class _OsVariant(object):
         self.eol = self._get_eol()
         self.sortby = self._get_sortby()
 
+    def __repr__(self):
+        return "<%s name=%s>" % (self.__class__.__name__, self.name)
+
 
     ########################
     # Internal helper APIs #
