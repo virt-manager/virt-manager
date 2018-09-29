@@ -297,13 +297,15 @@ class DeviceInterface(Device):
             return "virtio"
         if guest.os.is_q35():
             return "e1000e"
+        if not guest.os.is_x86():
+            return None
 
         prefs = ["e1000", "rtl8139", "ne2k_pci", "pcnet"]
         supported_models = guest.osinfo.supported_netmodels()
         for pref in prefs:
             if pref in supported_models:
                 return pref
-        return None
+        return "e1000"
 
     def set_defaults(self, guest):
         if not self.type:
