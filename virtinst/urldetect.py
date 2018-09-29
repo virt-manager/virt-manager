@@ -403,7 +403,7 @@ class RedHatDistro(Distro):
 
     def _get_kernel_url_arg(self):
         def _is_old_rhdistro():
-            m = re.match("^.*[^0-9\.]+([0-9\.]+)$", self._os_variant or "")
+            m = re.match(r"^.*[^0-9\.]+([0-9\.]+)$", self._os_variant or "")
             if m:
                 version = float(m.groups()[0])
                 if "fedora" in self._os_variant and version < 19:
@@ -705,8 +705,8 @@ class DebianDistro(Distro):
 
 
     def _find_treearch(self):
-        for pattern in ["^.*/installer-(\w+)/?$",
-                        "^.*/daily-images/(\w+)/?$"]:
+        for pattern in [r"^.*/installer-(\w+)/?$",
+                        r"^.*/daily-images/(\w+)/?$"]:
             arch = re.findall(pattern, self.uri)
             if not arch:
                 continue

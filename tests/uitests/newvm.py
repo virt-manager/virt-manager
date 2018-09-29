@@ -97,7 +97,7 @@ class NewVM(uiutils.UITestCase):
         label.text = "windows 8"
         popover = newvm.find("oslist-popover")
         popover.find_fuzzy("Include end of life").click()
-        popover.find_fuzzy("\(win8\)").click()
+        popover.find_fuzzy(r"\(win8\)").click()
         newvm.find_fuzzy("Forward", "button").click()
 
         # Verify that CPU values are non-default

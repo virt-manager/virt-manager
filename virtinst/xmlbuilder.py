@@ -533,7 +533,7 @@ class XMLBuilder(object):
         for prop in props:
             prop.clear(self)
 
-        is_child = bool(re.match("^.*\[\d+\]$", self._xmlstate.abs_xpath()))
+        is_child = bool(re.match(r"^.*\[\d+\]$", self._xmlstate.abs_xpath()))
         if is_child or leave_stub:
             # User requested to clear an object that is the child of
             # another object (xpath ends in [1] etc). We can't fully remove

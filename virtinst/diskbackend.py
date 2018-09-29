@@ -173,7 +173,7 @@ def path_is_url(path):
     """
     if not path:
         return False
-    return bool(re.match("[a-zA-Z]+(\+[a-zA-Z]+)?://.*", path))
+    return bool(re.match(r"[a-zA-Z]+(\+[a-zA-Z]+)?://.*", path))
 
 
 def _get_dev_type(path, vol_xml, vol_object, pool_xml, remote):

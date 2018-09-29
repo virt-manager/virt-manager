@@ -1125,7 +1125,7 @@ class VirtCLIParser(object):
         def cb(inst, val, virtarg, can_edit):
             ignore = val
             num = 0
-            reg = re.search("%s(\d+)" % cliarg, virtarg.key)
+            reg = re.search(r"%s(\d+)" % cliarg, virtarg.key)
             if reg:
                 num = int(reg.groups()[0])
 

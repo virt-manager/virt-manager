@@ -68,11 +68,11 @@ class Console(uiutils.UITestCase):
         self.assertTrue(lambda: win.active)
 
         win.find("Send Key", "menu").click()
-        win.find("Ctrl\+Alt\+F1", "menu item").click()
+        win.find(r"Ctrl\+Alt\+F1", "menu item").click()
         win.find("Send Key", "menu").click()
-        win.find("Ctrl\+Alt\+F10", "menu item").click()
+        win.find(r"Ctrl\+Alt\+F10", "menu item").click()
         win.find("Send Key", "menu").click()
-        win.find("Ctrl\+Alt\+Delete", "menu item").click()
+        win.find(r"Ctrl\+Alt\+Delete", "menu item").click()
 
         # 'Resize to VM' testing
         oldsize = win.size
