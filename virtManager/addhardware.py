@@ -1101,6 +1101,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Any uncaught errors in this function are reported via _finish()
         page_num = self.widget("create-pages").get_current_page()
 
+        # pylint: disable=assignment-from-no-return
         if page_num == PAGE_ERROR:
             self._dev = None
             ret = True

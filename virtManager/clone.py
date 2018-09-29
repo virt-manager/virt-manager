@@ -649,7 +649,7 @@ class vmmCloneVM(vmmGObjectUI):
             src.set_active(STORAGE_COMBO_SHARE)
 
         # Show storage
-        row = self.storage_change_path(row)
+        self.storage_change_path(row)
 
     def change_storage_doclone_toggled(self, src):
         do_clone = src.get_active()

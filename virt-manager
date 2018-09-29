@@ -17,8 +17,8 @@ import gi
 gi.require_version('LibvirtGLib', '1.0')
 from gi.repository import LibvirtGLib
 
-from virtinst import util as util
-from virtinst import cli as virtinstcli
+from virtinst import util
+from virtinst import cli
 from virtcli import CLIConfig
 
 # This is massively heavy handed, but I can't figure out any way to shut
@@ -170,7 +170,7 @@ def parse_commandline():
 def main():
     (options, leftovers) = parse_commandline()
 
-    virtinstcli.setupLogging("virt-manager", options.debug, False, False)
+    cli.setupLogging("virt-manager", options.debug, False, False)
 
     import virtManager
     logging.debug("virt-manager version: %s", CLIConfig.version)
@@ -286,8 +286,6 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         logging.debug("Received KeyboardInterrupt. Exiting application.")
-    except SystemExit:
-        raise
     except Exception as run_e:
         if "Gtk" not in globals():
             raise

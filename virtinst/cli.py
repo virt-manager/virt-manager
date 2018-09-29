@@ -85,8 +85,6 @@ class VirtStreamHandler(logging.StreamHandler):
             stream.write(fs % msg)
 
             self.flush()
-        except (KeyboardInterrupt, SystemExit):
-            raise
         except (UnicodeError, TypeError):
             stream.write((fs % msg).encode("utf-8"))
         except Exception:

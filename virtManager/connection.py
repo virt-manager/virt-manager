@@ -1438,8 +1438,6 @@ class vmmConnection(vmmGObject):
         e = None
         try:
             self._tick(*args, **kwargs)
-        except KeyboardInterrupt:
-            raise
         except Exception as err:
             e = err
 
