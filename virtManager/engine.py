@@ -19,10 +19,6 @@ from .connmanager import vmmConnectionManager
 from .inspection import vmmInspection
 from .systray import vmmSystray
 
-DETAILS_PERF = 1
-DETAILS_CONFIG = 2
-DETAILS_CONSOLE = 3
-
 (PRIO_HIGH,
  PRIO_LOW) = range(1, 3)
 
@@ -422,30 +418,22 @@ class vmmEngine(vmmGObject):
                 return vm
 
     def _cli_show_vm_helper(self, uri, clistr, page):
-        src = self._get_manager()
-
         vm = self._find_vm_by_cli_str(uri, clistr)
         if not vm:
-            src.err.show_err("%s does not have VM '%s'" %
-                (uri, clistr), modal=True)
-            return
+            raise RuntimeError("%s does not have VM '%s'" %
+                (uri, clistr))
 
-        try:
-            from .details import vmmDetails
-            details = vmmDetails.get_instance(src, vm)
+        from .details import vmmDetails
+        details = vmmDetails.get_instance(None, vm)
 
-            if page == DETAILS_PERF:
-                details.activate_performance_page()
-            elif page == DETAILS_CONFIG:
-                details.activate_config_page()
-            elif page == DETAILS_CONSOLE:
-                details.activate_console_page()
-            elif page is None:
-                details.activate_default_page()
+        if page == self.CLI_SHOW_DOMAIN_PERFORMANCE:
+            details.activate_performance_page()
+        elif page == self.CLI_SHOW_DOMAIN_EDITOR:
+            details.activate_config_page()
+        elif page == self.CLI_SHOW_DOMAIN_CONSOLE:
+            details.activate_console_page()
 
-            details.show()
-        except Exception as e:
-            src.err.show_err(_("Error launching details: %s") % str(e))
+        details.show()
 
     def _get_manager(self):
         from .manager import vmmManager
@@ -460,18 +448,14 @@ class vmmEngine(vmmGObject):
             manager.show()
         elif show_window == self.CLI_SHOW_DOMAIN_CREATOR:
             from .create import vmmCreate
-            # Launch the manager here since there's no way to get
-            # back to it.
-            vmmCreate.show_instance(self._get_manager(), uri)
-        elif show_window == self.CLI_SHOW_DOMAIN_EDITOR:
-            self._cli_show_vm_helper(uri, clistr, DETAILS_CONFIG)
-        elif show_window == self.CLI_SHOW_DOMAIN_PERFORMANCE:
-            self._cli_show_vm_helper(uri, clistr, DETAILS_PERF)
-        elif show_window == self.CLI_SHOW_DOMAIN_CONSOLE:
-            self._cli_show_vm_helper(uri, clistr, DETAILS_CONSOLE)
+            vmmCreate.show_instance(None, uri)
         elif show_window == self.CLI_SHOW_HOST_SUMMARY:
             from .host import vmmHost
             vmmHost.show_instance(None, self._connobjs[uri])
+        elif (show_window in [self.CLI_SHOW_DOMAIN_EDITOR,
+                              self.CLI_SHOW_DOMAIN_PERFORMANCE,
+                              self.CLI_SHOW_DOMAIN_CONSOLE]):
+            self._cli_show_vm_helper(uri, clistr, show_window)
         else:
             raise RuntimeError("Unknown cli window command '%s'" %
                 show_window)

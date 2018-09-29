@@ -16,6 +16,8 @@ class VMMCLI(uiutils.UITestCase):
     def testShowNewVM(self):
         self.app.open(extra_opts=["--show-domain-creator"])
         self.assertEqual(self.app.topwin.name, "New VM")
+        self.app.topwin.keyCombo("<alt>F4")
+        uiutils.check_in_loop(lambda: self.app.is_running() is False)
 
     def testShowHost(self):
         self.app.open(extra_opts=["--show-host-summary"])
@@ -25,6 +27,8 @@ class VMMCLI(uiutils.UITestCase):
         self.assertEqual(
             self.app.topwin.find_fuzzy("Name:", "text").text,
             "test testdriver.xml")
+        self.app.topwin.keyCombo("<alt>F4")
+        uiutils.check_in_loop(lambda: self.app.is_running() is False)
 
     def testShowDetails(self):
         self.app.open(extra_opts=["--show-domain-editor", "test-clone-simple"])
@@ -36,6 +40,8 @@ class VMMCLI(uiutils.UITestCase):
         self.assertTrue(
             self.app.topwin.find_fuzzy(
                                "add-hardware", "button").showing)
+        self.app.topwin.keyCombo("<alt>F4")
+        uiutils.check_in_loop(lambda: self.app.is_running() is False)
 
     def testShowPerformance(self):
         self.app.open(extra_opts=["--show-domain-performance",
@@ -59,7 +65,7 @@ class VMMCLI(uiutils.UITestCase):
             self.app.topwin.find_fuzzy(
                                "add-hardware", "button").showing)
 
-    def testShowRemoteConnect(self):
+    def testShowRemoteDBusConnect(self):
         """
         Test the remote app dbus connection
         """
