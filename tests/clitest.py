@@ -852,9 +852,10 @@ c.add_compare("--connect %(URI-KVM)s test-hyperv-uefi --edit --boot uefi", "hype
 
 
 c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define")
-c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
+c.add_compare("""--metadata name=foo-my-new-name,os_name=fedora13,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
 new
 very,very=new desc\\\'",title="This is my,funky=new title" """, "edit-simple-metadata")
+c.add_compare("""--metadata os_full_id=http://fedoraproject.org/fedora/23""", "edit-metadata-full-os")
 c.add_compare("--events on_poweroff=destroy,on_reboot=restart,on_crash=preserve", "edit-simple-events")
 c.add_compare("--qemu-commandline='-foo bar,baz=\"wib wob\"'", "edit-simple-qemu-commandline")
 c.add_compare("--memory 500,maxmemory=1000,hugepages=off", "edit-simple-memory")

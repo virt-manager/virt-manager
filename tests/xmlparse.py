@@ -117,6 +117,9 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest._metadata.libosinfo)  # pylint: disable=protected-access
         check("os_id", "http://fedoraproject.org/fedora/17")
+        guest.set_os_full_id("http://fedoraproject.org/fedora/10")
+        check("os_id", "http://fedoraproject.org/fedora/10")
+        self.assertEqual(guest.osinfo.name, "fedora10")
         guest.set_os_name("generic")
         check("os_id", None, "frib")
         self.assertEqual(guest.osinfo.name, "generic")

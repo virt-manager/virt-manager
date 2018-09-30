@@ -262,7 +262,16 @@ class Guest(XMLBuilder):
             raise ValueError(
                 _("Distro '%s' does not exist in our dictionary") % name)
 
-        logging.debug("Setting Guest os_name=%s", name)
+        logging.debug("Setting Guest osinfo %s", obj)
+        self.__osinfo = obj
+        self._metadata.libosinfo.os_id = self.__osinfo.full_id
+
+    def set_os_full_id(self, full_id):
+        obj = OSDB.lookup_os_by_full_id(full_id)
+        if obj is None:
+            raise ValueError(_("Unknown libosinfo ID '%s'") % full_id)
+
+        logging.debug("Setting Guest osinfo %s", obj)
         self.__osinfo = obj
         self._metadata.libosinfo.os_id = self.__osinfo.full_id
 

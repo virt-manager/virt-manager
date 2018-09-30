@@ -1299,11 +1299,19 @@ def parse_check(checkstr):
 class ParserMetadata(VirtCLIParser):
     cli_arg_name = "metadata"
 
+    def set_os_name_cb(self, inst, val, virtarg):
+        inst.set_os_name(val)
+
+    def set_os_full_id_cb(self, inst, val, virtarg):
+        inst.set_os_full_id(val)
+
 _register_virt_parser(ParserMetadata)
 ParserMetadata.add_arg("name", "name", can_comma=True)
 ParserMetadata.add_arg("title", "title", can_comma=True)
 ParserMetadata.add_arg("uuid", "uuid")
 ParserMetadata.add_arg("description", "description", can_comma=True)
+ParserMetadata.add_arg(None, "os_name", cb=ParserMetadata.set_os_name_cb)
+ParserMetadata.add_arg(None, "os_full_id", cb=ParserMetadata.set_os_full_id_cb)
 
 
 ####################
