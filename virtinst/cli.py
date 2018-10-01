@@ -513,7 +513,7 @@ def add_misc_options(grp, prompt=False, replace=False,
                               "create devices or define the guest."))
 
     if prompt:
-        grp.add_argument("--check",
+        grp.add_argument("--check", action="append",
             help=_("Enable or disable validation checks. Example:\n"
                    "--check path_in_use=off\n"
                    "--check all=off"))
@@ -524,14 +524,14 @@ def add_misc_options(grp, prompt=False, replace=False,
 
 
 def add_metadata_option(grp):
-    grp.add_argument("--metadata",
+    grp.add_argument("--metadata", action="append",
         help=_("Configure guest metadata. Ex:\n"
         "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
         "--metadata description=\"My nice long description\""))
 
 
 def add_memory_option(grp, backcompat=False):
-    grp.add_argument("--memory",
+    grp.add_argument("--memory", action="append",
         help=_("Configure guest memory allocation. Ex:\n"
                "--memory 1024 (in MiB)\n"
                "--memory 512,maxmemory=1024\n"
@@ -543,7 +543,7 @@ def add_memory_option(grp, backcompat=False):
 
 
 def vcpu_cli_options(grp, backcompat=True, editexample=False):
-    grp.add_argument("--vcpus",
+    grp.add_argument("--vcpus", action="append",
         help=_("Number of vcpus to configure for your guest. Ex:\n"
                "--vcpus 5\n"
                "--vcpus 5,maxcpus=10,cpuset=1-4,6,8\n"
@@ -552,7 +552,7 @@ def vcpu_cli_options(grp, backcompat=True, editexample=False):
     extramsg = "--cpu host"
     if editexample:
         extramsg = "--cpu host-model,clearxml=yes"
-    grp.add_argument("--cpu",
+    grp.add_argument("--cpu", action="append",
         help=_("CPU model and features. Ex:\n"
                "--cpu coreduo,+x2apic\n"
                "--cpu host-passthrough\n") + extramsg)
@@ -654,9 +654,9 @@ def add_device_options(devg, sound_back_compat=False):
 def add_guest_xml_options(geng):
     geng.add_argument("--security", action="append",
         help=_("Set domain security driver configuration."))
-    geng.add_argument("--cputune",
+    geng.add_argument("--cputune", action="append",
         help=_("Tune CPU parameters for the domain process."))
-    geng.add_argument("--numatune",
+    geng.add_argument("--numatune", action="append",
         help=_("Tune NUMA policy for the domain process."))
     geng.add_argument("--memtune", action="append",
         help=_("Tune memory policy for the domain process."))
@@ -665,16 +665,16 @@ def add_guest_xml_options(geng):
     geng.add_argument("--memorybacking", action="append",
         help=_("Set memory backing policy for the domain process. Ex:\n"
                "--memorybacking hugepages=on"))
-    geng.add_argument("--features",
+    geng.add_argument("--features", action="append",
         help=_("Set domain <features> XML. Ex:\n"
                "--features acpi=off\n"
                "--features apic=on,eoi=on"))
-    geng.add_argument("--clock",
+    geng.add_argument("--clock", action="append",
         help=_("Set domain <clock> XML. Ex:\n"
                "--clock offset=localtime,rtc_tickpolicy=catchup"))
-    geng.add_argument("--pm",
+    geng.add_argument("--pm", action="append",
         help=_("Configure VM power management features"))
-    geng.add_argument("--events",
+    geng.add_argument("--events", action="append",
         help=_("Configure VM lifecycle management policy"))
     geng.add_argument("--resource", action="append",
         help=_("Configure VM resource partitioning (cgroups)"))
@@ -689,11 +689,11 @@ def add_guest_xml_options(geng):
 
 
 def add_boot_options(insg):
-    insg.add_argument("--boot",
+    insg.add_argument("--boot", action="append",
         help=_("Configure guest boot settings. Ex:\n"
                "--boot hd,cdrom,menu=on\n"
                "--boot init=/sbin/init (for containers)"))
-    insg.add_argument("--idmap",
+    insg.add_argument("--idmap", action="append",
         help=_("Enable user namespace for LXC container. Ex:\n"
                "--idmap uid_start=0,uid_target=1000,uid_count=10"))
 
@@ -1261,10 +1261,11 @@ ParseCLICheck.add_arg(None, "path_exists", is_onoff=True,
 ParseCLICheck.add_arg("all_checks", "all", is_onoff=True)
 
 
-def parse_check(checkstr):
+def parse_check(checks):
     # Overwrite this for each parse
-    parser = ParseCLICheck(None, checkstr)
-    parser.parse(get_global_state())
+    for checkstr in util.listify(checks):
+        parser = ParseCLICheck(None, checkstr)
+        parser.parse(get_global_state())
 
 
 ######################

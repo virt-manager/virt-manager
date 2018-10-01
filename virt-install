@@ -103,9 +103,9 @@ def convert_old_init(options):
     if not options.init:
         return
     if not options.boot:
-        options.boot = ""
-    options.boot += ",init=%s" % options.init
-    logging.debug("Converted old --init to --boot %s", options.boot)
+        options.boot = [""]
+    options.boot[-1] += ",init=%s" % options.init
+    logging.debug("Converted old --init to --boot %s", options.boot[-1])
 
 
 def _do_convert_old_disks(options):
@@ -192,9 +192,9 @@ def convert_old_cpuset(options):
     if not options.cpuset:
         return
     if not options.vcpus:
-        options.vcpus = ""
-    options.vcpus += ",cpuset=%s" % options.cpuset
-    logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus)
+        options.vcpus = [""]
+    options.vcpus[-1] += ",cpuset=%s" % options.cpuset
+    logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus[-1])
 
 
 def convert_old_networks(options):
@@ -286,7 +286,7 @@ def convert_old_graphics(options):
 
 
 def convert_old_features(options):
-    if getattr(options, "features", None):
+    if options.features:
         return
 
     opts = ""
@@ -296,7 +296,8 @@ def convert_old_features(options):
         if opts:
             opts += ","
         opts += "apic=off"
-    options.features = opts or None
+    if opts:
+        options.features = [opts]
 
 
 ##################################
