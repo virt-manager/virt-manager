@@ -300,14 +300,13 @@ class _OsVariant(object):
         devlist = self._os.get_all_devices()
         return [devlist.get_nth(i) for i in range(devlist.get_length())]
 
-    def _device_filter(self, name=None, cls=None, bus=None):
+    def _device_filter(self, devids=None, cls=None):
         ret = []
+        devids = devids or []
         for dev in self._get_all_devices():
-            if name and not re.match(name, dev.get_name()):
+            if devids and dev.get_id() not in devids:
                 continue
             if cls and not re.match(cls, dev.get_class()):
-                continue
-            if bus and not re.match(bus, dev.get_bus_type()):
                 continue
             ret.append(dev.get_name())
         return ret
@@ -369,19 +368,32 @@ class _OsVariant(object):
         # If no OS specified, still default to tablet
         if not self._os:
             return True
-        return bool(self._device_filter(cls="input", name="tablet", bus="usb"))
+
+        devids = ["http://usb.org/usb/80ee/0021"]
+        return bool(self._device_filter(devids=devids))
 
     def supports_virtiodisk(self):
-        return bool(self._device_filter(cls="block", name="virtio.*-block"))
+        # virtio-block and virtio1.0-block
+        devids = ["http://pcisig.com/pci/1af4/1001",
+                  "http://pcisig.com/pci/1af4/1042"]
+        return bool(self._device_filter(devids=devids))
 
     def supports_virtionet(self):
-        return bool(self._device_filter(cls="net", name="virtio.*-net"))
+        # virtio-net and virtio1.0-net
+        devids = ["http://pcisig.com/pci/1af4/1000",
+                  "http://pcisig.com/pci/1af4/1041"]
+        return bool(self._device_filter(devids=devids))
 
     def supports_virtiorng(self):
-        return bool(self._device_filter(cls="rng", name="virtio.*-rng"))
+        # virtio-rng and virtio1.0-rng
+        devids = ["http://pcisig.com/pci/1af4/1005",
+                  "http://pcisig.com/pci/1af4/1044"]
+        return bool(self._device_filter(devids=devids))
 
     def supports_virtioserial(self):
-        if self._device_filter(cls="console", name="virtio.*-console"):
+        devids = ["http://pcisig.com/pci/1af4/1003",
+                  "http://pcisig.com/pci/1af4/1043"]
+        if self._device_filter(devids=devids):
             return True
         # 2018-09-01: osinfo data is wrong for RHEL/centos here
         return self._is_related_to("rhel6.0")
