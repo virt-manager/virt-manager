@@ -396,7 +396,8 @@ class _OsVariant(object):
                   "http://pcisig.com/pci/1af4/1043"]
         if self._device_filter(devids=devids):
             return True
-        # 2018-09-01: osinfo data is wrong for RHEL/centos here
+        # osinfo data was wrong for RHEL/centos here until Oct 2018
+        # Remove this hack after 6 months or so
         return self._is_related_to("rhel6.0")
 
     def supports_chipset_q35(self):
