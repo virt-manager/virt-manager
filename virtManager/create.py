@@ -1575,8 +1575,8 @@ class vmmCreate(vmmGObjectUI):
         osobj = self._os_list.get_selected_os()
 
         if not self._is_container_install() and not osobj:
-            return self.err.val_err(_("You must select an OS.")
-                    + "\n\n" + self._os_list.eol_text)
+            return self.err.val_err(_("You must select an OS.") +
+                    "\n\n" + self._os_list.eol_text)
 
         if instmethod == INSTALL_PAGE_ISO:
             instclass = virtinst.DistroInstaller

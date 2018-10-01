@@ -45,6 +45,7 @@ def _sortby(osobj):
 
     return "%s-%s" % (osobj.distro, version)
 
+
 def _sort(tosort):
     sortby_mappings = {}
     distro_mappings = {}
