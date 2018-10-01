@@ -14,14 +14,17 @@ import sys
 import traceback
 import unittest
 
+import virtinst
 from tests import virtinstall, virtclone, virtconvert, virtxml
 from tests import utils
 
 os.environ["LANG"] = "en_US.UTF-8"
-
-# Used to ensure consistent SDL xml output
 os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
+
+OLD_OSINFO = False
+if virtinst.OSDB.lookup_os("rhel7.0"):
+    OLD_OSINFO = not virtinst.OSDB.lookup_os("rhel7.0").supports_virtiorng()
 
 TMP_IMAGE_DIR = "/tmp/__virtinst_cli_"
 XMLDIR = "tests/cli-test-xml"
@@ -712,8 +715,8 @@ c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-varia
 c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso", skip_check=not find_executable("isoinfo"))  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel5.4", "kvm-rhel5")  # RHEL5 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7")  # RHEL7 defaults
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7")  # Centos 7 defaults
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7", skip_check=OLD_OSINFO)  # RHEL7 defaults
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", skip_check=OLD_OSINFO)  # Centos 7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10", "kvm-win10")  # win10 defaults
 c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi")  # no HYPER-V with UEFI
 c.add_compare("--arch i686 --boot uefi --pxe --disk none", "kvm-i686-uefi")  # i686 uefi
