@@ -150,6 +150,7 @@ class vmmOSList(vmmGObjectUI):
             selected_label = self._selected_os.label
 
         if (not src.get_sensitive() or
+            not searchname or
             selected_label == searchname):
             self.topwin.popdown()
             self._clear_filter()
