@@ -192,7 +192,14 @@ class _OSDB(object):
                 return osobj
 
     def lookup_os(self, key):
-        key = self._aliases.get(key) or key
+        if key in self._aliases:
+            alias = self._aliases[key]
+            # Added 2018-10-02. Maybe remove aliases in a year
+            logging.warning(
+                _("OS name '%s' is deprecated, using '%s' instead. "
+                  "This alias will be removed in the future."),
+                  (key, alias))
+            key = alias
         return self._all_variants.get(key)
 
     def lookup_os_by_media(self, location):
