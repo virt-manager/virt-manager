@@ -166,7 +166,7 @@ class NewVM(uiutils.UITestCase):
 
         url = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/x86_64/os/"
         oslabel = "Fedora 10"
-        newvm.find("URL", "text").text = url
+        newvm.find("install-url-entry").text = url
 
         uiutils.check_in_loop(lambda: osentry.text == oslabel, timeout=10)
 
