@@ -109,6 +109,11 @@ class vmmOSList(vmmGObjectUI):
         self.emit("os-selected", self._selected_os)
 
     def _show_popover(self):
+        # Match width to the search_entry width. Height is based on
+        # whatever we can fit into the hardcoded create wizard sizes
+        r = self.search_entry.get_allocation()
+        self.topwin.set_size_request(r.width, 350)
+
         self.topwin.set_relative_to(self.search_entry)
         self.topwin.popup()
         self._set_default_selection()
