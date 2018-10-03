@@ -259,8 +259,8 @@ class Guest(XMLBuilder):
     def set_os_name(self, name):
         obj = OSDB.lookup_os(name)
         if obj is None:
-            raise ValueError(
-                _("Distro '%s' does not exist in our dictionary") % name)
+            raise ValueError(_("Unknown OS name '%s'. "
+                    "See `osinfo-query os` for valid values.") % name)
 
         logging.debug("Setting Guest osinfo %s", obj)
         self.__osinfo = obj

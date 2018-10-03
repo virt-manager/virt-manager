@@ -304,19 +304,20 @@ def convert_old_features(options):
 ##################################
 
 def set_distro_variant(options, guest, installer):
+    distro = None
     try:
         installer.check_location(guest)
 
-        distro = None
         if options.distro_variant == "auto":
             distro = installer.detect_distro(guest)
         elif options.distro_variant != "none":
             distro = options.distro_variant
 
-        if distro:
-            guest.set_os_name(distro)
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
+
+    if distro:
+        guest.set_os_name(distro)
 
 
 def do_test_media_detection(conn, options):
