@@ -234,7 +234,6 @@ SUPPORT_CONN_WORKING_XEN_EVENTS = _make(hv_version={"xen": "4.0.0", "all": 0})
 # default to qcow2. It might be fine for xen or qemu older than the versions
 # here, but until someone tests things I'm going to be a bit conservative.
 SUPPORT_CONN_DEFAULT_QCOW2 = _make(hv_version={"qemu": "1.2.0", "test": 0})
-SUPPORT_CONN_DEFAULT_USB2 = _make(hv_version={"qemu": "1.0.0", "test": 0})
 SUPPORT_CONN_AUTOSOCKET = _make(hv_libvirt_version={"qemu": "1.0.6"})
 SUPPORT_CONN_PM_DISABLE = _make(hv_version={"qemu": "1.2.0", "test": 0})
 SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS = _make(

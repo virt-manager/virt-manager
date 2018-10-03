@@ -51,16 +51,7 @@
       <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
-    <controller type="usb" index="0" model="ich9-ehci1"/>
-    <controller type="usb" index="0" model="ich9-uhci1">
-      <master startport="0"/>
-    </controller>
-    <controller type="usb" index="0" model="ich9-uhci2">
-      <master startport="2"/>
-    </controller>
-    <controller type="usb" index="0" model="ich9-uhci3">
-      <master startport="4"/>
-    </controller>
+    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
@@ -133,16 +124,7 @@
       <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
-    <controller type="usb" index="0" model="ich9-ehci1"/>
-    <controller type="usb" index="0" model="ich9-uhci1">
-      <master startport="0"/>
-    </controller>
-    <controller type="usb" index="0" model="ich9-uhci2">
-      <master startport="2"/>
-    </controller>
-    <controller type="usb" index="0" model="ich9-uhci3">
-      <master startport="4"/>
-    </controller>
+    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>

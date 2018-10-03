@@ -581,32 +581,35 @@ class Guest(XMLBuilder):
         self.add_device(DeviceVideo(self.conn))
 
     def _add_default_usb_controller(self):
-        if self.os.is_container():
-            return
         if any([d.type == "usb" for d in self.devices.controller]):
             return
+        if not self.conn.is_qemu() and not self.conn.is_test():
+            return
 
+        qemu_usb3 = self.conn.check_support(self.conn.SUPPORT_CONN_QEMU_XHCI)
         usb2 = False
         usb3 = False
         if self.os.is_x86():
-            usb2 = True
-        elif (self.os.is_arm_machvirt() and
-              self.conn.check_support(
-                  self.conn.SUPPORT_CONN_MACHVIRT_PCI_DEFAULT)):
-            usb3 = True
+            if self.osinfo.supports_usb3() and qemu_usb3:
+                usb3 = True
+            else:
+                usb2 = True
+        elif self.os.is_arm_machvirt():
+            # For machvirt, we always assume OS supports usb3
+            if (qemu_usb3 and
+                self.conn.check_support(
+                        self.conn.SUPPORT_CONN_MACHVIRT_PCI_DEFAULT)):
+                usb3 = True
+        elif self.os.is_pseries():
+            # For pseries, we always assume OS supports usb3
+            if qemu_usb3:
+                usb3 = True
 
-
-        if not usb2 and not usb3:
-            return
 
         if usb2:
-            if not self.conn.check_support(
-                    self.conn.SUPPORT_CONN_DEFAULT_USB2):
-                return
             for dev in DeviceController.get_usb2_controllers(self.conn):
                 self.add_device(dev)
-
-        if usb3:
+        elif usb3:
             self.add_device(
                 DeviceController.get_usb3_controller(self.conn, self))
 

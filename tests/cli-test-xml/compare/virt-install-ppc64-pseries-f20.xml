@@ -25,6 +25,7 @@
       <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
+    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
     <controller type="scsi" index="0" model="virtio-scsi"/>
     <console type="pty"/>
     <channel type="unix">

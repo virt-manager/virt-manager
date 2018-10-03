@@ -197,8 +197,7 @@ class _OSDB(object):
             # Added 2018-10-02. Maybe remove aliases in a year
             logging.warning(
                 _("OS name '%s' is deprecated, using '%s' instead. "
-                  "This alias will be removed in the future."),
-                  (key, alias))
+                  "This alias will be removed in the future."), (key, alias))
             key = alias
         return self._all_variants.get(key)
 
@@ -406,6 +405,11 @@ class _OsVariant(object):
         # osinfo data was wrong for RHEL/centos here until Oct 2018
         # Remove this hack after 6 months or so
         return self._is_related_to("rhel6.0")
+
+    def supports_usb3(self):
+        # qemu-xhci
+        devids = ["http://pcisig.com/pci/1b36/0004"]
+        return bool(self._device_filter(devids=devids))
 
     def supports_chipset_q35(self):
         return False
