@@ -21,9 +21,7 @@
     <apic/>
     <vmport state="off"/>
   </features>
-  <cpu mode="custom" match="exact">
-    <model>Opteron_G4</model>
-  </cpu>
+  <cpu mode="host-model"/>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
@@ -100,9 +98,7 @@
     <apic/>
     <vmport state="off"/>
   </features>
-  <cpu mode="custom" match="exact">
-    <model>Opteron_G4</model>
-  </cpu>
+  <cpu mode="host-model"/>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>

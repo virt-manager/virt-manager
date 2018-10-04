@@ -18,8 +18,7 @@
     <apic/>
     <vmport state="off"/>
   </features>
-  <cpu mode="custom" match="exact">
-    <model>Opteron_G4</model>
+  <cpu mode="host-model">
     <feature policy="disable" name="x2apic"/>
   </cpu>
   <clock offset="localtime">

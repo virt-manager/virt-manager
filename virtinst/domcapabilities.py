@@ -100,6 +100,7 @@ class _CPUModel(XMLBuilder):
 class _CPUMode(XMLBuilder):
     XML_NAME = "mode"
     name = XMLProperty("./@name")
+    supported = XMLProperty("./@supported", is_yesno=True)
     models = XMLChildProperty(_CPUModel)
 
     def get_model(self, name):
@@ -211,6 +212,15 @@ class DomainCapabilities(XMLBuilder):
         """
         return ("readonly" in self.os.loader.enum_names() and
                 "yes" in self.os.loader.get_enum("readonly").get_values())
+
+    def supports_safe_host_model(self):
+        """
+        Return True if domcaps reports support for cpu mode=host-model.
+        host-model infact predates this support, however it wasn't
+        general purpose safe prior to domcaps advertisement
+        """
+        return [(m.name == "host-model" and m.supported)
+                for m in self.cpu.modes]
 
 
     XML_NAME = "domainCapabilities"
