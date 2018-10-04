@@ -10,7 +10,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu placement="static">4</vcpu>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="q35">hvm</type>
   </os>
   <features>
     <acpi/>
@@ -313,9 +313,9 @@
       <image compression="off"/>
       <listen type="socket" socket="/tmp/foobar"/>
     </graphics>
-    <sound model="ich6"/>
+    <sound model="ich9"/>
     <sound model="ac97"/>
-    <sound model="ich6">
+    <sound model="ich9">
       <codec type="micro"/>
       <codec type="duplex"/>
       <codec type="output"/>
