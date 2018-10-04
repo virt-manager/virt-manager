@@ -683,7 +683,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         rows = []
         if controller_type == DeviceController.TYPE_USB:
-            rows.append(["nec-xhci", "USB 3"])
+            rows.append(["usb3", "USB 3"])
             rows.append(["ich9-ehci1", "USB 2"])
         elif controller_type == DeviceController.TYPE_SCSI:
             rows.append(["virtio-scsi", "VirtIO SCSI"])
@@ -1409,8 +1409,13 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("controller-type"))
         model = uiutil.get_list_selection(self.widget("controller-model"))
 
-        self._dev = DeviceController(self.conn.get_backend())
         self._selected_model = model
+        if model == "usb3":
+            self._dev = DeviceController.get_usb3_controller(
+                    self.conn.get_backend(), self.vm.xmlobj)
+            model = None
+        else:
+            self._dev = DeviceController(self.conn.get_backend())
 
         controllers = self.vm.xmlobj.devices.controller
         controller_num = [x for x in controllers if
@@ -1421,9 +1426,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         self._dev.type = controller_type
 
-        if model != "none":
-            if model == "default":
-                model = None
+        if model and model != "none":
             self._dev.model = model
 
     def _validate_page_rng(self):

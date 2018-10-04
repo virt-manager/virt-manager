@@ -926,6 +926,10 @@ class vmmDomain(vmmLibvirtObject):
                     for dev in DeviceController.get_usb2_controllers(
                             xmlobj.conn):
                         xmlobj.add_device(dev)
+                elif model == "usb3":
+                    dev = DeviceController.get_usb3_controller(
+                        xmlobj.conn, xmlobj)
+                    xmlobj.add_device(dev)
                 else:
                     dev = DeviceController(xmlobj.conn)
                     dev.type = "usb"

@@ -2999,8 +2999,11 @@ class vmmDetails(vmmGObjectUI):
         if controller.type == "pci":
             show_model = False
         uiutil.set_grid_row_visible(combo, show_model)
-        uiutil.set_list_selection(self.widget("controller-model"),
-            controller.model or None)
+
+        model = controller.model
+        if controller.type == "usb" and "xhci" in str(model):
+            model = "usb3"
+        uiutil.set_list_selection(self.widget("controller-model"), model)
 
     def refresh_filesystem_page(self, dev):
         self.fsDetails.set_dev(dev)
