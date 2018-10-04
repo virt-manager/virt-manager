@@ -51,7 +51,7 @@
       <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
-    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
+    <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
@@ -124,7 +124,7 @@
       <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
-    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
+    <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
