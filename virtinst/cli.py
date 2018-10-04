@@ -2346,9 +2346,7 @@ class ParserController(VirtCLIParser):
         if self.optstr == "usb2":
             return DeviceController.get_usb2_controllers(inst.conn)
         elif self.optstr == "usb3":
-            inst.type = "usb"
-            inst.model = "nec-xhci"
-            return inst
+            return DeviceController.get_usb3_controller(inst.conn, self.guest)
         return VirtCLIParser._parse(self, inst)
 
 

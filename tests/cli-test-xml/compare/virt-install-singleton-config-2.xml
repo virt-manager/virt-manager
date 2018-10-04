@@ -129,7 +129,7 @@
   </pm>
   <devices>
     <emulator>/new/emu</emulator>
-    <controller type="usb" index="0" model="nec-xhci"/>
+    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
     <controller type="virtio-scsi" index="0"/>
     <filesystem type="mount" accessmode="mapped">
       <source dir="/foo/source"/>
@@ -317,7 +317,7 @@
   </pm>
   <devices>
     <emulator>/new/emu</emulator>
-    <controller type="usb" index="0" model="nec-xhci"/>
+    <controller type="usb" index="0" model="qemu-xhci" ports="8"/>
     <controller type="virtio-scsi" index="0"/>
     <filesystem type="mount" accessmode="mapped">
       <source dir="/foo/source"/>
