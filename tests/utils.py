@@ -29,6 +29,15 @@ class _CLIState(object):
 clistate = _CLIState()
 
 
+def has_old_osinfo():
+    # Some tests rely on newer osinfo data. Check for a new condition
+    # here, and older tests will be skipped
+    osname = "rhel7.0"
+    if not virtinst.OSDB.lookup_os(osname):
+        return True
+    return not virtinst.OSDB.lookup_os(osname).supports_usb3()
+
+
 class _URIs(object):
     def __init__(self):
         self._conn_cache = {}

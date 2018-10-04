@@ -14,7 +14,6 @@ import sys
 import traceback
 import unittest
 
-import virtinst
 from tests import virtinstall, virtclone, virtconvert, virtxml
 from tests import utils
 
@@ -22,10 +21,7 @@ os.environ["LANG"] = "en_US.UTF-8"
 os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
 
-OLD_OSINFO = False
-if virtinst.OSDB.lookup_os("rhel7.0"):
-    OLD_OSINFO = not virtinst.OSDB.lookup_os("rhel7.0").supports_usb3()
-
+OLD_OSINFO = utils.has_old_osinfo()
 TMP_IMAGE_DIR = "/tmp/__virtinst_cli_"
 XMLDIR = "tests/cli-test-xml"
 
