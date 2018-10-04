@@ -9,6 +9,8 @@ import logging
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+from virtinst import DomainCpu
+
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .inspection import vmmInspection
@@ -176,11 +178,13 @@ class vmmPreferences(vmmGObjectUI):
         combo = self.widget("prefs-cpu-default")
         # [gsettings value, string]
         model = Gtk.ListStore(str, str)
-        for row in [["default", _("System default (%s)") %
-                    self.config.cpu_default_from_config],
-                    ["hv-default", _("Hypervisor default")],
-                    ["host-model-only", _("Nearest host CPU model")],
-                    ["host-model", _("Copy host CPU definition")]]:
+        for row in [
+            [DomainCpu.SPECIAL_MODE_APP_DEFAULT, _("Application default")],
+            [DomainCpu.SPECIAL_MODE_HV_DEFAULT, _("Hypervisor default")],
+            [DomainCpu.SPECIAL_MODE_HOST_MODEL_ONLY,
+                _("Nearest host CPU model")],
+            [DomainCpu.SPECIAL_MODE_HOST_MODEL,
+                _("Copy host CPU definition")]]:
             model.append(row)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
@@ -242,7 +246,7 @@ class vmmPreferences(vmmGObjectUI):
         uiutil.set_list_selection(combo, val)
     def refresh_cpu_default(self):
         combo = self.widget("prefs-cpu-default")
-        val = self.config.get_default_cpu_setting(raw=True)
+        val = self.config.get_default_cpu_setting()
         uiutil.set_list_selection(combo, val)
 
     def refresh_cpu_poll(self):

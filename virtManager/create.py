@@ -1508,8 +1508,7 @@ class vmmCreate(vmmGObjectUI):
         guest.skip_default_sound = not self.config.get_new_vm_sound()
         guest.skip_default_usbredir = (
             self.config.get_add_spice_usbredir() == "no")
-        guest.x86_cpu_default = self.config.get_default_cpu_setting(
-            for_cpu=True)
+        guest.x86_cpu_default = self.config.get_default_cpu_setting()
 
         return guest
 

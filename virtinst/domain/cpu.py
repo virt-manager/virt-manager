@@ -78,7 +78,15 @@ class DomainCpu(XMLBuilder):
                      SPECIAL_MODE_HOST_COPY, SPECIAL_MODE_HOST_MODEL,
                      SPECIAL_MODE_HOST_PASSTHROUGH, SPECIAL_MODE_CLEAR,
                      SPECIAL_MODE_APP_DEFAULT]
-    def set_special_mode(self, val):
+    def set_special_mode(self, guest, val):
+        if val == self.SPECIAL_MODE_APP_DEFAULT:
+            # If libvirt is new enough to support reliable mode=host-model
+            # then use it, otherwise use previous default HOST_MODEL_ONLY
+            domcaps = guest.lookup_domcaps()
+            val = self.SPECIAL_MODE_HOST_MODEL_ONLY
+            if domcaps.supports_safe_host_model():
+                val = self.SPECIAL_MODE_HOST_MODEL
+
         if (val == self.SPECIAL_MODE_HOST_MODEL or
             val == self.SPECIAL_MODE_HOST_PASSTHROUGH):
             self.model = None
@@ -233,15 +241,8 @@ class DomainCpu(XMLBuilder):
             return
 
         mode = guest.x86_cpu_default
-        if mode == self.SPECIAL_MODE_APP_DEFAULT:
-            # If libvirt is new enough to support reliable mode=host-model
-            # then use it, otherwise use previous default HOST_MODEL_ONLY
-            domcaps = guest.lookup_domcaps()
-            mode = self.SPECIAL_MODE_HOST_MODEL_ONLY
-            if domcaps.supports_safe_host_model():
-                mode = self.SPECIAL_MODE_HOST_MODEL
 
-        self.set_special_mode(mode)
+        self.set_special_mode(guest, mode)
         if mode == self.SPECIAL_MODE_HOST_MODEL_ONLY:
             self._validate_default_host_model_only(guest)
 

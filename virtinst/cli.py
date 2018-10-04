@@ -1460,7 +1460,7 @@ class ParserCPU(VirtCLIParser):
             val = inst.SPECIAL_MODE_CLEAR
 
         if val in inst.SPECIAL_MODES:
-            inst.set_special_mode(val)
+            inst.set_special_mode(self.guest, val)
         else:
             inst.model = val
 

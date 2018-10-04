@@ -556,7 +556,7 @@ class vmmDomain(vmmLibvirtObject):
 
         if model != _SENTINEL:
             if model in guest.cpu.SPECIAL_MODES:
-                guest.cpu.set_special_mode(model)
+                guest.cpu.set_special_mode(guest, model)
             else:
                 guest.cpu.model = model
         self._redefine_xmlobj(guest)
