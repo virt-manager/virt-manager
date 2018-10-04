@@ -165,6 +165,7 @@ class Guest(XMLBuilder):
 
         self.__osinfo = None
         self._capsinfo = None
+        self._domcaps = None
 
 
     ######################
@@ -326,7 +327,7 @@ class Guest(XMLBuilder):
         """
         if not self.os.arch:
             self.set_capabilities_defaults()
-        domcaps = DomainCapabilities.build_from_guest(self)
+        domcaps = self.lookup_domcaps()
 
         if not domcaps.supports_uefi_xml():
             raise RuntimeError(_("Libvirt version does not support UEFI."))
@@ -408,10 +409,26 @@ class Guest(XMLBuilder):
             return False
         return True
 
-    def lookup_capsinfo(self):
-        def _compare_to_capsinfo(capsinfo):
-            if not capsinfo:
+    def lookup_domcaps(self):
+        # We need to regenerate domcaps cache if any of these values change
+        def _compare(domcaps):
+            if self.os.machine and self.os.machine != domcaps.machine:
                 return False
+            if self.type and self.type != domcaps.domain:
+                return False
+            if self.os.arch and self.os.arch != domcaps.arch:
+                return False
+            if self.emulator and self.emulator != domcaps.path:
+                return False
+            return True
+
+        if not self._domcaps or not _compare(self._domcaps):
+            self._domcaps = DomainCapabilities.build_from_guest(self)
+        return self._domcaps
+
+    def lookup_capsinfo(self):
+        # We need to regenerate capsinfo cache if any of these values change
+        def _compare(capsinfo):
             if self.type and self.type != capsinfo.hypervisor_type:
                 return False
             if self.os.os_type and self.os.os_type != capsinfo.os_type:
@@ -422,7 +439,7 @@ class Guest(XMLBuilder):
                 return False
             return True
 
-        if not _compare_to_capsinfo(self._capsinfo):
+        if not self._capsinfo or not _compare(self._capsinfo):
             self._capsinfo = self.conn.caps.guest_lookup(
                 os_type=self.os.os_type,
                 arch=self.os.arch,

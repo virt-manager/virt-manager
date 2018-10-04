@@ -7,7 +7,6 @@
 
 import logging
 
-from ..domcapabilities import DomainCapabilities
 from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
@@ -206,20 +205,14 @@ class DomainCpu(XMLBuilder):
     # Default config #
     ##################
 
-    def _set_cpu_x86_kvm_default(self, guest):
-        if guest.os.arch != self.conn.caps.host.cpu.arch:
-            return
-
-        self.set_special_mode(guest.x86_cpu_default)
-        if guest.x86_cpu_default != self.SPECIAL_MODE_HOST_MODEL_ONLY:
-            return
-        if not self.model:
-            return
-
+    def _validate_default_host_model_only(self, guest):
         # It's possible that the value HOST_MODEL_ONLY gets from
         # <capabilities> is not actually supported by qemu/kvm
         # combo which will be reported in <domainCapabilities>
-        domcaps = DomainCapabilities.build_from_guest(guest)
+        if not self.model:
+            return
+
+        domcaps = guest.lookup_domcaps()
         domcaps_mode = domcaps.cpu.get_mode("custom")
         if not domcaps_mode:
             return
@@ -232,6 +225,15 @@ class DomainCpu(XMLBuilder):
             "according to domain capabilities. Unsetting CPU model",
             self.model)
         self.model = None
+
+    def _set_cpu_x86_kvm_default(self, guest):
+        if guest.os.arch != self.conn.caps.host.cpu.arch:
+            return
+
+        mode = guest.x86_cpu_default
+        self.set_special_mode(mode)
+        if mode == self.SPECIAL_MODE_HOST_MODEL_ONLY:
+            self._validate_default_host_model_only(guest)
 
     def set_defaults(self, guest):
         self.set_topology_defaults(guest.vcpus)

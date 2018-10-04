@@ -217,6 +217,9 @@ class DomainCapabilities(XMLBuilder):
     os = XMLChildProperty(_OS, is_single=True)
     cpu = XMLChildProperty(_CPU, is_single=True)
     devices = XMLChildProperty(_Devices, is_single=True)
+    features = XMLChildProperty(_Features, is_single=True)
 
     arch = XMLProperty("./arch")
-    features = XMLChildProperty(_Features, is_single=True)
+    domain = XMLProperty("./domain")
+    machine = XMLProperty("./machine")
+    path = XMLProperty("./path")
