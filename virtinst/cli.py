@@ -68,29 +68,6 @@ def _reset_global_state():
 # CLI init helpers #
 ####################
 
-class VirtStreamHandler(logging.StreamHandler):
-    def emit(self, record):
-        """
-        Based on the StreamHandler code from python 2.6: ripping out all
-        the unicode handling and just unconditionally logging seems to fix
-        logging backtraces with unicode locales (for me at least).
-
-        No doubt this is atrocious, but it WORKSFORME!
-        """
-        try:
-            msg = self.format(record)
-            stream = self.stream
-            fs = "%s\n"
-
-            stream.write(fs % msg)
-
-            self.flush()
-        except (UnicodeError, TypeError):
-            stream.write((fs % msg).encode("utf-8"))
-        except Exception:
-            self.handleError(record)
-
-
 class VirtHelpFormatter(argparse.RawDescriptionHelpFormatter):
     '''
     Subclass the default help formatter to allow printing newline characters
@@ -187,7 +164,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
             logging.Formatter(fileFormat, dateFormat))
         rootLogger.addHandler(fileHandler)
 
-    streamHandler = VirtStreamHandler(sys.stderr)
+    streamHandler = logging.StreamHandler(sys.stderr)
     if debug_stdout:
         streamHandler.setLevel(logging.DEBUG)
         streamHandler.setFormatter(logging.Formatter(fileFormat,
