@@ -680,11 +680,8 @@ def add_guest_xml_options(geng):
         help=_("Configure VM resource partitioning (cgroups)"))
     geng.add_argument("--sysinfo", action="append",
         help=_("Configure SMBIOS System Information. Ex:\n"
-               "--sysinfo emulate\n"
                "--sysinfo host\n"
-               "--sysinfo bios_vendor=Vendor_Inc.,bios_version=1.2.3-abc,...\n"
-               "--sysinfo system_manufacturer=System_Corp.,system_product=Computer,...\n"
-               "--sysinfo baseBoard_manufacturer=Baseboard_Corp.,baseBoard_product=Motherboard,...\n"))
+               "--sysinfo bios_vendor=MyVendor,bios_version=1.2.3,...\n"))
     geng.add_argument("--qemu-commandline", action="append",
         help=_("Pass arguments directly to the qemu emulator. Ex:\n"
                "--qemu-commandline='-display gtk,gl=on'\n"
