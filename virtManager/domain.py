@@ -211,7 +211,7 @@ class vmmDomain(vmmLibvirtObject):
 
         self.cloning = False
 
-        self._stats = []
+        self.stats = []
         self._stats_rates = {
             "diskRdRate":   10.0,
             "diskWrRate":   10.0,
@@ -233,18 +233,18 @@ class vmmDomain(vmmLibvirtObject):
         self.mem_stats_supported = False
         self._domain_state_supported = False
 
-        self._enable_mem_stats = False
-        self._enable_cpu_stats = False
-        self._mem_stats_period_is_set = False
+        self.enable_mem_stats = False
+        self.enable_cpu_stats = False
+        self.mem_stats_period_is_set = False
 
-        self._enable_net_poll = False
-        self._stats_net_supported = True
-        self._stats_net_skip = []
+        self.enable_net_poll = False
+        self.stats_net_supported = True
+        self.stats_net_skip = []
 
-        self._enable_disk_poll = False
-        self._stats_disk_supported = True
-        self._stats_disk_skip = []
-        self._summary_disk_stats_skip = False
+        self.enable_disk_poll = False
+        self.stats_disk_supported = True
+        self.stats_disk_skip = []
+        self.summary_disk_stats_skip = False
 
         self.inspection = vmmInspectionData()
 
@@ -276,7 +276,7 @@ class vmmDomain(vmmLibvirtObject):
         # Prime caches
         info = self._backend.info()
         self._refresh_status(newstatus=info[0])
-        self._tick_stats(info)
+        self._tick_stats()
         self.has_managed_save()
         self.snapshots_supported()
 
@@ -1548,48 +1548,12 @@ class vmmDomain(vmmLibvirtObject):
     # Stats helpers #
     #################
 
-    def _sample_cpu_stats(self, info, now):
-        if not self._enable_cpu_stats:
-            return 0, 0, 0, 0
-        if not info:
-            info = self._backend.info()
-
-        prevCpuTime = 0
-        prevTimestamp = 0
-        cpuTime = 0
-        cpuTimeAbs = 0
-        pcentHostCpu = 0
-        pcentGuestCpu = 0
-
-        if len(self._stats) > 0:
-            prevTimestamp = self._stats[0]["timestamp"]
-            prevCpuTime = self._stats[0]["cpuTimeAbs"]
-
-        if not (info[0] in [libvirt.VIR_DOMAIN_SHUTOFF,
-                            libvirt.VIR_DOMAIN_CRASHED]):
-            guestcpus = info[3]
-            cpuTime = info[4] - prevCpuTime
-            cpuTimeAbs = info[4]
-            hostcpus = self.conn.host_active_processor_count()
-
-            pcentbase = (((cpuTime) * 100.0) /
-                         ((now - prevTimestamp) * 1000.0 * 1000.0 * 1000.0))
-            pcentHostCpu = pcentbase / hostcpus
-            # Under RHEL-5.9 using a XEN HV guestcpus can be 0 during shutdown
-            # so play safe and check it.
-            pcentGuestCpu = guestcpus > 0 and pcentbase / guestcpus or 0
-
-        pcentHostCpu = max(0.0, min(100.0, pcentHostCpu))
-        pcentGuestCpu = max(0.0, min(100.0, pcentGuestCpu))
-
-        return cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu
-
     def _get_cur_rate(self, what):
-        if len(self._stats) > 1:
-            ret = (float(self._stats[0][what] -
-                         self._stats[1][what]) /
-                   float(self._stats[0]["timestamp"] -
-                         self._stats[1]["timestamp"]))
+        if len(self.stats) > 1:
+            ret = (float(self.stats[0][what] -
+                         self.stats[1][what]) /
+                   float(self.stats[0]["timestamp"] -
+                         self.stats[1]["timestamp"]))
         else:
             ret = 0.0
         return max(ret, 0, 0)  # avoid negative values at poweroff
@@ -1601,9 +1565,9 @@ class vmmDomain(vmmLibvirtObject):
         return float(max(self._stats_rates[name1], self._stats_rates[name2]))
 
     def _get_record_helper(self, record_name):
-        if len(self._stats) == 0:
+        if len(self.stats) == 0:
             return 0
-        return self._stats[0][record_name]
+        return self.stats[0][record_name]
 
     def _vector_helper(self, record_name, limit, ceil=100.0):
         vector = []
@@ -1612,8 +1576,8 @@ class vmmDomain(vmmLibvirtObject):
             statslen = min(statslen, limit)
 
         for i in range(statslen):
-            if i < len(self._stats):
-                vector.append(self._stats[i][record_name] / ceil)
+            if i < len(self.stats):
+                vector.append(self.stats[i][record_name] / ceil)
             else:
                 vector.append(0)
 
@@ -1771,13 +1735,13 @@ class vmmDomain(vmmLibvirtObject):
 
 
     def _on_config_sample_network_traffic_changed(self, ignore=None):
-        self._enable_net_poll = self.config.get_stats_enable_net_poll()
+        self.enable_net_poll = self.config.get_stats_enable_net_poll()
     def _on_config_sample_disk_io_changed(self, ignore=None):
-        self._enable_disk_poll = self.config.get_stats_enable_disk_poll()
+        self.enable_disk_poll = self.config.get_stats_enable_disk_poll()
     def _on_config_sample_mem_stats_changed(self, ignore=None):
-        self._enable_mem_stats = self.config.get_stats_enable_memory_poll()
+        self.enable_mem_stats = self.config.get_stats_enable_memory_poll()
     def _on_config_sample_cpu_stats_changed(self, ignore=None):
-        self._enable_cpu_stats = self.config.get_stats_enable_cpu_poll()
+        self.enable_cpu_stats = self.config.get_stats_enable_cpu_poll()
 
     def get_cache_dir(self):
         ret = os.path.join(self.conn.get_cache_dir(), self.get_uuid())
@@ -1790,148 +1754,11 @@ class vmmDomain(vmmLibvirtObject):
     # Polling helpers #
     ###################
 
-    def _sample_network_traffic(self):
-        rx = 0
-        tx = 0
-        if (not self._stats_net_supported or
-            not self._enable_net_poll or
-            not self.is_active()):
-            self._stats_net_skip = []
-            return rx, tx
-
-        for netdev in self.get_interface_devices_norefresh():
-            dev = netdev.target_dev
-            if not dev:
-                continue
-
-            if dev in self._stats_net_skip:
-                continue
-
-            try:
-                io = self._backend.interfaceStats(dev)
-                if io:
-                    rx += io[0]
-                    tx += io[4]
-            except libvirt.libvirtError as err:
-                if util.is_error_nosupport(err):
-                    logging.debug("Net stats not supported: %s", err)
-                    self._stats_net_supported = False
-                else:
-                    logging.error("Error reading net stats for "
-                                  "'%s' dev '%s': %s",
-                                  self.get_name(), dev, err)
-                    if self.is_active():
-                        logging.debug("Adding %s to skip list", dev)
-                        self._stats_net_skip.append(dev)
-                    else:
-                        logging.debug("Aren't running, don't add to skiplist")
-
-        return rx, tx
-
-    def _sample_disk_io(self):
-        rd = 0
-        wr = 0
-        if (not self._stats_disk_supported or
-            not self._enable_disk_poll or
-            not self.is_active()):
-            self._stats_disk_skip = []
-            return rd, wr
-
-        # Some drivers support this method for getting all usage at once
-        if not self._summary_disk_stats_skip:
-            try:
-                io = self._backend.blockStats('')
-                if io:
-                    rd = io[1]
-                    wr = io[3]
-                    return rd, wr
-            except libvirt.libvirtError:
-                self._summary_disk_stats_skip = True
-
-        # did not work, iterate over all disks
-        for disk in self.get_disk_devices_norefresh():
-            dev = disk.target
-            if not dev:
-                continue
-
-            if dev in self._stats_disk_skip:
-                continue
-
-            try:
-                io = self._backend.blockStats(dev)
-                if io:
-                    rd += io[1]
-                    wr += io[3]
-            except libvirt.libvirtError as err:
-                if util.is_error_nosupport(err):
-                    logging.debug("Disk stats not supported: %s", err)
-                    self._stats_disk_supported = False
-                else:
-                    logging.error("Error reading disk stats for "
-                                  "'%s' dev '%s': %s",
-                                  self.get_name(), dev, err)
-                    if self.is_active():
-                        logging.debug("Adding %s to skip list", dev)
-                        self._stats_disk_skip.append(dev)
-                    else:
-                        logging.debug("Aren't running, don't add to skiplist")
-
-        return rd, wr
-
-    def _set_mem_stats_period(self):
-        # QEMU requires to explicitly enable memory stats polling per VM
-        # if we want fine grained memory stats
-        if not self.conn.check_support(
-                self.conn.SUPPORT_CONN_MEM_STATS_PERIOD):
-            return
-
-        # Only works for virtio balloon
-        if not any([b for b in self.get_xmlobj().devices.memballoon if
-                    b.model == "virtio"]):
-            return
-
-        try:
-            secs = 5
-            self._backend.setMemoryStatsPeriod(secs,
-                libvirt.VIR_DOMAIN_AFFECT_LIVE)
-        except Exception as e:
-            logging.debug("Error setting memstats period: %s", e)
-
-    def _sample_mem_stats(self):
-        if (not self.mem_stats_supported or
-            not self._enable_mem_stats or
-            not self.is_active()):
-            self._mem_stats_period_is_set = False
-            return 0, 0
-
-        if self._mem_stats_period_is_set is False:
-            self._set_mem_stats_period()
-            self._mem_stats_period_is_set = True
-
-        curmem = 0
-        totalmem = 1
-        try:
-            stats = self._backend.memoryStats()
-            totalmem = stats.get("actual", 1)
-            curmem = stats.get("rss", 0)
-
-            if "unused" in stats:
-                curmem = max(0, totalmem - stats.get("unused", totalmem))
-        except libvirt.libvirtError as err:
-            logging.error("Error reading mem stats: %s", err)
-
-        pcentCurrMem = (curmem / float(totalmem)) * 100
-        pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
-
-        return pcentCurrMem, curmem
-
-
     def tick(self, stats_update=True):
         if (not self._using_events() and
             not stats_update):
             return
 
-        info = []
         dosignal = False
         if not self._using_events():
             # For domains it's pretty important that we are always using
@@ -1942,44 +1769,25 @@ class vmmDomain(vmmLibvirtObject):
             dosignal = self._refresh_status(newstatus=info[0], cansignal=False)
 
         if stats_update:
-            self._tick_stats(info)
+            self._tick_stats()
         if dosignal:
             self.idle_emit("state-changed")
         if stats_update:
             self.idle_emit("resources-sampled")
 
-    def _tick_stats(self, info):
+    def _tick_stats(self):
         expected = self.config.get_stats_history_length()
-        current = len(self._stats)
+        current = len(self.stats)
         if current > expected:
-            del self._stats[expected:current]
+            del self.stats[expected:current]
 
-        now = time.time()
-        (cpuTime, cpuTimeAbs,
-         pcentHostCpu, pcentGuestCpu) = self._sample_cpu_stats(info, now)
-        pcentCurrMem, curmem = self._sample_mem_stats()
-        rdBytes, wrBytes = self._sample_disk_io()
-        rxBytes, txBytes = self._sample_network_traffic()
-
-        newStats = {
-            "timestamp": now,
-            "cpuTime": cpuTime,
-            "cpuTimeAbs": cpuTimeAbs,
-            "cpuHostPercent": pcentHostCpu,
-            "cpuGuestPercent": pcentGuestCpu,
-            "curmem": curmem,
-            "currMemPercent": pcentCurrMem,
-            "diskRdKiB": rdBytes // 1024,
-            "diskWrKiB": wrBytes // 1024,
-            "netRxKiB": rxBytes // 1024,
-            "netTxKiB": txBytes // 1024,
-        }
+        newStats = self.conn.statsmanager.get_vm_stats(self)
 
         for r in ["diskRd", "diskWr", "netRx", "netTx"]:
             newStats[r + "Rate"] = self._get_cur_rate(r + "KiB")
             self._set_max_rate(newStats, r + "Rate")
 
-        self._stats.insert(0, newStats)
+        self.stats.insert(0, newStats)
 
 
 ########################

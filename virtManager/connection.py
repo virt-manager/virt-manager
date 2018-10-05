@@ -23,6 +23,7 @@ from .interface import vmmInterface
 from .libvirtenummap import LibvirtEnumMap
 from .network import vmmNetwork
 from .nodedev import vmmNodeDevice
+from .statsmanager import vmmStatsManager
 from .storagepool import vmmStoragePool
 
 
@@ -200,6 +201,7 @@ class vmmConnection(vmmGObject):
         self._xml_flags = {}
 
         self._objects = _ObjectList()
+        self.statsmanager = vmmStatsManager()
 
         self._stats = []
         self._hostinfo = None
@@ -1321,6 +1323,10 @@ class vmmConnection(vmmGObject):
         gone_objects, preexisting_objects = self._poll(
             initial_poll, pollvm, pollnet, pollpool, polliface, pollnodedev)
         self.idle_add(self._gone_object_signals, gone_objects)
+
+        # if stats_update:
+        self.statsmanager.refresh_vms_stats(self,
+            [o for o in preexisting_objects if o.reports_stats()])
 
         # Only tick() pre-existing objects, since new objects will be
         # initialized asynchronously and tick() would be redundant
