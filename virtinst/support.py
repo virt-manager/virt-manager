@@ -267,7 +267,7 @@ SUPPORT_CONN_GRAPHICS_LISTEN_NONE = _make(version="2.0.0")
 SUPPORT_CONN_RNG_URANDOM = _make(version="1.3.4")
 SUPPORT_CONN_USB3_PORTS = _make(version="1.3.5")
 SUPPORT_CONN_MACHVIRT_PCI_DEFAULT = _make(version="3.0.0")
-SUPPORT_CONN_QEMU_XHCI = _make(version="3.3.0")
+SUPPORT_CONN_QEMU_XHCI = _make(version="3.3.0", hv_version={"qemu": "2.9.0"})
 SUPPORT_CONN_VNC_NONE_AUTH = _make(hv_version={"qemu": "2.9.0"})
 
 
