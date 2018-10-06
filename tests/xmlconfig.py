@@ -9,7 +9,6 @@ import unittest
 
 import virtinst
 from virtinst import DeviceDisk
-from virtcli import CLIConfig
 
 from tests import utils
 
@@ -188,30 +187,6 @@ class TestXMLMisc(unittest.TestCase):
 
         cpu = virtinst.DomainCpu(self.conn)
         self.assertEqual(cpu.vcpus_from_topology(), 1)
-
-    def test_hyperv_clock(self):
-        def _make(connver):
-            conn = utils.URIs.open_kvm(libver=1002002, connver=connver)
-            g = _make_guest(conn=conn, os_variant="win7")
-            g.emulator = "/usr/libexec/qemu-kvm"
-            return g
-
-        try:
-            g = _make(2000000)
-            self._compare(g, "install-hyperv-clock", True)
-
-            g = _make(1009000)
-            self._compare(g, "install-hyperv-noclock", True)
-
-            CLIConfig.stable_defaults = True
-
-            g = _make(1005003)
-            self._compare(g, "install-hyperv-clock", True)
-
-            g = _make(1005002)
-            self._compare(g, "install-hyperv-noclock", True)
-        finally:
-            CLIConfig.stable_defaults = False
 
     def test_set_defaults_double(self):
         """
