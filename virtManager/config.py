@@ -175,7 +175,6 @@ class vmmConfig(object):
         # the keyring
         self.keyring = None
 
-        self.preferred_distros = CLIConfig.preferred_distros
         self.hv_packages = CLIConfig.hv_packages
         self.libvirt_packages = CLIConfig.libvirt_packages
         self.askpass_package = CLIConfig.askpass_package

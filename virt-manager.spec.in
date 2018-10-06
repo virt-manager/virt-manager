@@ -10,11 +10,9 @@
 %global askpass_package            "openssh-askpass"
 %global libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
 %global kvm_packages               ""
-%global preferred_distros          "fedora,rhel"
 %global default_hvs                "qemu,xen,lxc"
 
 %if 0%{?rhel}
-%global preferred_distros          "rhel,fedora"
 %global stable_defaults            1
 %endif
 
@@ -113,10 +111,6 @@ machine).
 %global _kvm_packages --kvm-package-names=%{kvm_packages}
 %endif
 
-%if %{preferred_distros}
-%global _preferred_distros --preferred-distros=%{preferred_distros}
-%endif
-
 %if %{libvirt_packages}
 %global _libvirt_packages --libvirt-package-names=%{libvirt_packages}
 %endif
@@ -137,7 +131,6 @@ machine).
     %{?_kvm_packages} \
     %{?_libvirt_packages} \
     %{?_askpass_package} \
-    %{?_preferred_distros} \
     %{?_stable_defaults} \
     %{?_default_hvs}
 

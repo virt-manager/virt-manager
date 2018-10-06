@@ -72,8 +72,6 @@ class _CLIConfig(object):
 
         self.stable_defaults = bool(int(_get_param("stable_defaults", "0")))
 
-        self.preferred_distros = _split_list(
-            _get_param("preferred_distros", ""))
         self.hv_packages = _split_list(_get_param("hv_packages", ""))
         self.askpass_package = _split_list(_get_param("askpass_packages", ""))
         self.libvirt_packages = _split_list(_get_param("libvirt_packages", ""))

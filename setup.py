@@ -321,8 +321,6 @@ class configure(distutils.core.Command):
          "(default=none)"),
         ("askpass-package-names=", None,
          "name of your distro's askpass package(s) (default=none)"),
-        ("preferred-distros=", None,
-         "Distros to list first in the New VM wizard (default=none)"),
         ("stable-defaults", None,
          "Hide config bits that are not considered stable (default=no)"),
         ("default-graphics=", None,
@@ -342,7 +340,6 @@ class configure(distutils.core.Command):
         self.libvirt_package_names = None
         self.kvm_package_names = None
         self.askpass_package_names = None
-        self.preferred_distros = None
         self.stable_defaults = None
         self.default_graphics = None
         self.default_hvs = None
@@ -358,8 +355,6 @@ class configure(distutils.core.Command):
             template += "hv_packages = %s\n" % self.kvm_package_names
         if self.askpass_package_names is not None:
             template += "askpass_packages = %s\n" % self.askpass_package_names
-        if self.preferred_distros is not None:
-            template += "preferred_distros = %s\n" % self.preferred_distros
         if self.stable_defaults is not None:
             template += ("stable_defaults = %s\n" %
                          self.stable_defaults)
