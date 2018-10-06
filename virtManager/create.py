@@ -1281,16 +1281,6 @@ class vmmCreate(vmmGObjectUI):
     # Misc helper routines #
     ########################
 
-    def _stable_defaults(self):
-        emu = None
-        if self._guest:
-            emu = self._guest.emulator
-        elif self._capsinfo:
-            emu = self._capsinfo.emulator
-
-        ret = self.conn.stable_defaults(emu)
-        return ret
-
     def _browse_file(self, cbwidget, cb=None, is_media=False, is_dir=False):
         if is_media:
             reason = self.config.CONFIG_DIR_ISO_MEDIA

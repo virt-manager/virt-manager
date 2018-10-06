@@ -6,15 +6,10 @@
 
 
 %global with_guestfs               0
-%global stable_defaults            0
 %global askpass_package            "openssh-askpass"
 %global libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
 %global kvm_packages               ""
 %global default_hvs                "qemu,xen,lxc"
-
-%if 0%{?rhel}
-%global stable_defaults            1
-%endif
 
 
 # End local config
@@ -119,10 +114,6 @@ machine).
 %global _askpass_package --askpass-package-names=%{askpass_package}
 %endif
 
-%if %{stable_defaults}
-%global _stable_defaults --stable-defaults
-%endif
-
 %if %{default_hvs}
 %global _default_hvs --default-hvs %{default_hvs}
 %endif
@@ -131,7 +122,6 @@ machine).
     %{?_kvm_packages} \
     %{?_libvirt_packages} \
     %{?_askpass_package} \
-    %{?_stable_defaults} \
     %{?_default_hvs}
 
 

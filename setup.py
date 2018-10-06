@@ -321,8 +321,6 @@ class configure(distutils.core.Command):
          "(default=none)"),
         ("askpass-package-names=", None,
          "name of your distro's askpass package(s) (default=none)"),
-        ("stable-defaults", None,
-         "Hide config bits that are not considered stable (default=no)"),
         ("default-graphics=", None,
          "Default graphics type (spice or vnc) (default=spice)"),
         ("default-hvs=", None,
@@ -340,7 +338,6 @@ class configure(distutils.core.Command):
         self.libvirt_package_names = None
         self.kvm_package_names = None
         self.askpass_package_names = None
-        self.stable_defaults = None
         self.default_graphics = None
         self.default_hvs = None
 
@@ -355,9 +352,6 @@ class configure(distutils.core.Command):
             template += "hv_packages = %s\n" % self.kvm_package_names
         if self.askpass_package_names is not None:
             template += "askpass_packages = %s\n" % self.askpass_package_names
-        if self.stable_defaults is not None:
-            template += ("stable_defaults = %s\n" %
-                         self.stable_defaults)
         if self.default_graphics is not None:
             template += "default_graphics = %s\n" % self.default_graphics
         if self.default_hvs is not None:

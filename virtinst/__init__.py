@@ -22,7 +22,6 @@ def _setup_i18n():
     gettext.bindtextdomain("virt-manager", _CLIConfig.gettext_dir)
 
 _setup_i18n()
-stable_defaults = _CLIConfig.stable_defaults
 
 from virtinst import util
 from virtinst.uri import URI

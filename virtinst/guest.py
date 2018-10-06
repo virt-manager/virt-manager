@@ -299,9 +299,6 @@ class Guest(XMLBuilder):
     def supports_virtiodisk(self):
         return self._supports_virtio(self.osinfo.supports_virtiodisk())
 
-    def stable_defaults(self, *args, **kwargs):
-        return self.conn.stable_defaults(self.emulator, *args, **kwargs)
-
 
     ###############################
     # Public XML APIs and helpers #

@@ -357,10 +357,6 @@ class vmmConnection(vmmGObject):
     is_session_uri = property(lambda s: getattr(s, "_backend").is_session_uri)
 
 
-    # Connection capabilities debug helpers
-    def stable_defaults(self, *args, **kwargs):
-        return self._backend.stable_defaults(*args, **kwargs)
-
     def get_cache_dir(self):
         uri = self.get_uri().replace("/", "_")
         ret = os.path.join(util.get_cache_dir(), uri)

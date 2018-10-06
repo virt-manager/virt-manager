@@ -9,8 +9,6 @@ import weakref
 
 import libvirt
 
-from virtcli import CLIConfig
-
 from . import pollhelpers
 from . import support
 from . import util
@@ -322,29 +320,6 @@ class VirtinstConnection(object):
             except Exception:
                 logging.debug("Error calling getVersion", exc_info=True)
         return self._conn_version
-
-    def stable_defaults(self, emulator=None, force=False):
-        """
-        :param force: Just check if we are running on RHEL, regardless of
-            whether stable defaults are requested by the build. This is needed
-            to ensure we don't enable VM devices that are compiled out on
-            RHEL, like vmvga
-        """
-        if not CLIConfig.stable_defaults and not force:
-            return False
-
-        if not self.is_qemu():
-            return False
-
-        if emulator:
-            return str(emulator).startswith("/usr/libexec")
-
-        for guest in self.caps.guests:
-            for dom in guest.domains:
-                emulator = dom.emulator or guest.emulator
-                if emulator.startswith("/usr/libexec"):
-                    return True
-        return False
 
 
     ###################
