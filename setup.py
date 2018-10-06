@@ -313,8 +313,6 @@ class my_rpm(distutils.core.Command):
 class configure(distutils.core.Command):
     user_options = [
         ("prefix=", None, "installation prefix"),
-        ("qemu-user=", None,
-         "user libvirt uses to launch qemu processes (default=root)"),
         ("libvirt-package-names=", None,
          "list of libvirt distro packages virt-manager will check for on "
          "first run. comma separated string (default=none)"),
@@ -341,7 +339,6 @@ class configure(distutils.core.Command):
 
     def initialize_options(self):
         self.prefix = sysprefix
-        self.qemu_user = None
         self.libvirt_package_names = None
         self.kvm_package_names = None
         self.askpass_package_names = None
@@ -355,8 +352,6 @@ class configure(distutils.core.Command):
         template = ""
         template += "[config]\n"
         template += "prefix = %s\n" % self.prefix
-        if self.qemu_user is not None:
-            template += "default_qemu_user = %s\n" % self.qemu_user
         if self.libvirt_package_names is not None:
             template += "libvirt_packages = %s\n" % self.libvirt_package_names
         if self.kvm_package_names is not None:

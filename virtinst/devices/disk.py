@@ -274,8 +274,7 @@ class DeviceDisk(Device):
         if conn.is_remote() or not conn.is_qemu_system():
             return None, []
 
-        from virtcli import CLIConfig
-        user = CLIConfig.default_qemu_user
+        user = None
         try:
             for secmodel in conn.caps.host.secmodels:
                 if secmodel.model != "dac":

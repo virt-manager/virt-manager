@@ -8,7 +8,6 @@
 %global with_guestfs               0
 %global stable_defaults            0
 %global askpass_package            "openssh-askpass"
-%global qemu_user                  "qemu"
 %global libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
 %global kvm_packages               ""
 %global preferred_distros          "fedora,rhel"
@@ -110,10 +109,6 @@ machine).
 
 
 %build
-%if %{qemu_user}
-%global _qemu_user --qemu-user=%{qemu_user}
-%endif
-
 %if %{kvm_packages}
 %global _kvm_packages --kvm-package-names=%{kvm_packages}
 %endif
@@ -139,7 +134,6 @@ machine).
 %endif
 
 ./setup.py configure \
-    %{?_qemu_user} \
     %{?_kvm_packages} \
     %{?_libvirt_packages} \
     %{?_askpass_package} \

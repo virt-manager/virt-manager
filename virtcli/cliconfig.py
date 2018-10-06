@@ -70,7 +70,6 @@ class _CLIConfig(object):
         self.cfgpath = _cfgpath
         self.version = __version__
 
-        self.default_qemu_user = _get_param("default_qemu_user", "root")
         self.stable_defaults = bool(int(_get_param("stable_defaults", "0")))
 
         self.preferred_distros = _split_list(
