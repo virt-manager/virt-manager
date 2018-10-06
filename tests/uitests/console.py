@@ -195,15 +195,17 @@ class Console(uiutils.UITestCase):
         # Change CDROM
         win.find("IDE CDROM 1", "table cell").click()
         tab = win.find("disk-tab", None)
+        entry = win.find("media-entry")
+        appl = win.find("config-apply")
         uiutils.check_in_loop(lambda: tab.showing)
-        tab.find("Connect", "push button").click()
-        cm = self.app.root.find("Choose Media", "dialog")
-        cm.find("Image Location", "radio button").click()
-        cm.find("Location:", "text").text = fname
-        cm.find("OK", "push button").click()
-        self.assertTrue(tab.find("disk-source-path").text == fname)
-        tab.find("Disconnect", "push button").click()
-        self.assertTrue("-" in tab.find("disk-source-path").text)
+        entry.text = fname
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+        self.assertTrue(entry.text == fname)
+        entry.click_secondary_icon()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+        self.assertTrue(not entry.text)
 
 
     @_vm_wrapper("uitests-hotplug")

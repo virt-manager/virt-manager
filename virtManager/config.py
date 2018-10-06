@@ -542,17 +542,20 @@ class vmmConfig(object):
 
     def add_container_url(self, url):
         self._url_add_helper("/urls/containers", url)
+    def get_container_urls(self):
+        return self.conf.get("/urls/containers") or []
+
     def add_media_url(self, url):
         self._url_add_helper("/urls/urls", url)
+    def get_media_urls(self):
+        return self.conf.get("/urls/urls") or []
+
     def add_iso_path(self, path):
         self._url_add_helper("/urls/isos", path)
-
-    def get_container_urls(self):
-        return self.conf.get("/urls/containers")
-    def get_media_urls(self):
-        return self.conf.get("/urls/urls")
     def get_iso_paths(self):
-        return self.conf.get("/urls/isos")
+        return self.conf.get("/urls/isos") or []
+    def on_iso_paths_changed(self, cb):
+        return self.conf.notify_add("/urls/isos", cb)
 
 
     # Whether to ask about fixing path permissions

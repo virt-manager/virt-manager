@@ -3315,11 +3315,11 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel" id="label392">
+                                              <object class="GtkLabel" id="disk-source-mnemonic">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">end</property>
-                                                <property name="label" translatable="yes">Source path:</property>
+                                                <property name="label" translatable="yes">Source _path:</property>
                                                 <property name="use_underline">True</property>
                                               </object>
                                               <packing>
@@ -3344,17 +3344,18 @@
                                               <object class="GtkBox" id="box9">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="hexpand">True</property>
                                                 <property name="spacing">6</property>
                                                 <child>
-                                                  <object class="GtkLabel" id="disk-source-path">
+                                                  <object class="GtkLabel" id="disk-source-label">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
-                                                    <property name="label">path</property>
+                                                    <property name="label">pathlabel</property>
                                                     <property name="selectable">True</property>
                                                     <property name="ellipsize">start</property>
                                                     <child internal-child="accessible">
-                                                      <object class="AtkObject" id="disk-source-path-atkobject">
+                                                      <object class="AtkObject" id="disk-source-label-atkobject">
                                                         <property name="AtkObject::accessible-name">disk-source-path</property>
                                                       </object>
                                                     </child>
@@ -3366,19 +3367,42 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkButton" id="disk-cdrom-connect">
-                                                    <property name="label">gtk-connect</property>
+                                                  <object class="GtkBox" id="disk-source-box">
                                                     <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="can_default">True</property>
-                                                    <property name="receives_default">True</property>
-                                                    <property name="has_tooltip">True</property>
-                                                    <property name="tooltip_text" translatable="yes">Connect or disconnect media</property>
-                                                    <property name="use_stock">True</property>
-                                                    <signal name="clicked" handler="on_disk_cdrom_connect_clicked" swapped="no"/>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="spacing">6</property>
+                                                    <child>
+                                                      <object class="GtkAlignment" id="disk-source-align">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <child>
+                                                          <placeholder/>
+                                                        </child>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkButton" id="disk-source-browse">
+                                                        <property name="label" translatable="yes">_Browse</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <property name="use_underline">True</property>
+                                                        <signal name="clicked" handler="on_disk_source_browse_clicked" swapped="no"/>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">False</property>
+                                                    <property name="expand">True</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">1</property>
                                                   </packing>

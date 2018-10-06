@@ -3,34 +3,44 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
 from gi.repository import Gtk
 
 from . import uiutil
-from .baseclass import vmmGObjectUI
+from .baseclass import vmmGObject, vmmGObjectUI
 
 
 class vmmMediaCombo(vmmGObjectUI):
-    MEDIA_FLOPPY = "floppy"
-    MEDIA_CDROM = "cdrom"
+    __gsignals__ = {
+        "changed": (vmmGObject.RUN_FIRST, None, [object]),
+        "activate": (vmmGObject.RUN_FIRST, None, [object]),
+    }
 
-    OPTICAL_FIELDS = 4
-    (OPTICAL_DEV_PATH,
-    OPTICAL_LABEL,
-    OPTICAL_HAS_MEDIA,
-    OPTICAL_DEV_KEY) = range(OPTICAL_FIELDS)
+    MEDIA_TYPE_FLOPPY = "floppy"
+    MEDIA_TYPE_CDROM = "cdrom"
 
-    def __init__(self, conn, builder, topwin, media_type):
+    MEDIA_FIELDS_NUM = 4
+    (MEDIA_FIELD_PATH,
+    MEDIA_FIELD_LABEL,
+    MEDIA_FIELD_HAS_MEDIA,
+    MEDIA_FIELD_KEY) = range(MEDIA_FIELDS_NUM)
+
+    def __init__(self, conn, builder, topwin):
         vmmGObjectUI.__init__(self, None, None, builder=builder, topwin=topwin)
         self.conn = conn
-        self.media_type = media_type
 
         self.top_box = None
-        self.combo = None
-        self._warn_icon = None
+        self._combo = None
         self._populated = False
         self._init_ui()
+
+        self._iso_rows = []
+        self._cdrom_rows = []
+        self._floppy_rows = []
+        self._rows_inited = False
+
+        self.add_gsettings_handle(
+                self.config.on_iso_paths_changed(self._iso_paths_changed_cb))
+
 
     def _cleanup(self):
         self.conn = None
@@ -46,117 +56,138 @@ class vmmMediaCombo(vmmGObjectUI):
         self.top_box = Gtk.Box()
         self.top_box.set_spacing(6)
         self.top_box.set_orientation(Gtk.Orientation.HORIZONTAL)
-        self._warn_icon = Gtk.Image()
-        self._warn_icon.set_from_stock(
-            Gtk.STOCK_DIALOG_WARNING, Gtk.IconSize.MENU)
-        self.combo = Gtk.ComboBox()
-        self.top_box.add(self.combo)
-        self.top_box.add(self._warn_icon)
+        self._combo = Gtk.ComboBox(has_entry=True)
+        self._combo.set_entry_text_column(self.MEDIA_FIELD_LABEL)
+        self._combo.get_accessible().set_name("media-combo")
+        def separator_cb(_model, _iter):
+            return _model[_iter][self.MEDIA_FIELD_PATH] is None
+        self._combo.set_row_separator_func(separator_cb)
+
+        self._entry = self._combo.get_child()
+        self._entry.set_placeholder_text(_("No media selected"))
+        self._entry.set_hexpand(True)
+        self._entry.get_accessible().set_name("media-entry")
+        self._entry.connect("changed", self._on_entry_changed_cb)
+        self._entry.connect("activate", self._on_entry_activated_cb)
+        self._entry.connect("icon-press", self._on_entry_icon_press_cb)
+
+        self._browse = Gtk.Button()
+
+        self.top_box.add(self._combo)
         self.top_box.show_all()
 
-        # [Device path, pretty label, has_media?, device key]
-        fields = []
-        fields.insert(self.OPTICAL_DEV_PATH, str)
-        fields.insert(self.OPTICAL_LABEL, str)
-        fields.insert(self.OPTICAL_HAS_MEDIA, bool)
-        fields.insert(self.OPTICAL_DEV_KEY, str)
-        self.combo.set_model(Gtk.ListStore(*fields))
+        # [path, label, has_media?, device key]
+        store = Gtk.ListStore(str, str, bool, str)
+        self._combo.set_model(store)
 
-        text = Gtk.CellRendererText()
-        self.combo.pack_start(text, True)
-        self.combo.add_attribute(text, 'text', self.OPTICAL_LABEL)
-        self.combo.get_accessible().set_name("physical-device-combo")
+    def _make_row(self, path, label, has_media, key):
+        row = [None] * self.MEDIA_FIELDS_NUM
+        row[self.MEDIA_FIELD_PATH] = path
+        row[self.MEDIA_FIELD_LABEL] = label
+        row[self.MEDIA_FIELD_HAS_MEDIA] = has_media
+        row[self.MEDIA_FIELD_KEY] = key
+        return row
 
-        error = None
-        if not self.conn.is_nodedev_capable():
-            error = _("Libvirt version does not support media listing.")
-        self._warn_icon.set_tooltip_text(error)
-        self._warn_icon.set_visible(bool(error))
-
-
-    def _set_mediadev_default(self):
-        model = self.combo.get_model()
-        if len(model) != 0:
-            return
-
-        row = [None] * self.OPTICAL_FIELDS
-        row[self.OPTICAL_DEV_PATH] = None
-        row[self.OPTICAL_LABEL] = _("No device present")
-        row[self.OPTICAL_HAS_MEDIA] = False
-        row[self.OPTICAL_DEV_KEY] = None
-        model.append(row)
-
-    def _pretty_label(self, nodedev):
-        media_label = nodedev.xmlobj.media_label
-        if not nodedev.xmlobj.media_available:
-            media_label = _("No media detected")
-        elif not nodedev.xmlobj.media_label:
-            media_label = _("Media Unknown")
-
-        return "%s (%s)" % (media_label, nodedev.xmlobj.block)
-
-    def _mediadev_set_default_selection(self):
-        # Set the first active cdrom device as selected, otherwise none
-        widget = self.combo
-        model = widget.get_model()
-        idx = 0
-        active = widget.get_active()
-
-        if active != -1:
-            # already a selection, don't change it
-            return
-
-        for row in model:
-            if row[self.OPTICAL_HAS_MEDIA] is True:
-                widget.set_active(idx)
-                return
-            idx += 1
-
-        widget.set_active(0)
-
-    def _populate_media(self):
-        if self._populated:
-            return
-
-        widget = self.combo
-        model = widget.get_model()
-        model.clear()
-
+    def _make_nodedev_rows(self, media_type):
+        rows = []
         for nodedev in self.conn.filter_nodedevs(devtype="storage"):
             if not (nodedev.xmlobj.device_type == "storage" and
                     nodedev.xmlobj.drive_type in ["cdrom", "floppy"]):
                 continue
-            if nodedev.xmlobj.drive_type != self.media_type:
+            if nodedev.xmlobj.drive_type != media_type:
                 continue
 
-            row = [None] * self.OPTICAL_FIELDS
-            row[self.OPTICAL_DEV_PATH] = nodedev.xmlobj.block
-            row[self.OPTICAL_LABEL] = self._pretty_label(nodedev)
-            row[self.OPTICAL_HAS_MEDIA] = nodedev.xmlobj.media_available
-            row[self.OPTICAL_DEV_KEY] = nodedev.xmlobj.name
-            model.append(row)
+            media_label = nodedev.xmlobj.media_label
+            if not nodedev.xmlobj.media_available:
+                media_label = _("No media detected")
+            elif not nodedev.xmlobj.media_label:
+                media_label = _("Media Unknown")
+            label = "%s (%s)" % (media_label, nodedev.xmlobj.block)
 
-        self._set_mediadev_default()
+            row = self._make_row(nodedev.xmlobj.block, label,
+                    nodedev.xmlobj.media_available,
+                    nodedev.xmlobj.name)
+            rows.append(row)
+        return rows
 
-        widget.set_active(-1)
-        self._mediadev_set_default_selection()
-        self._populated = True
+    def _make_iso_rows(self):
+        rows = []
+        for path in self.config.get_iso_paths():
+            row = self._make_row(path, path, True, path)
+            rows.append(row)
+        return rows
+
+    def _init_rows(self):
+        self._cdrom_rows = self._make_nodedev_rows("cdrom")
+        self._floppy_rows = self._make_nodedev_rows("floppy")
+        self._iso_rows = self._make_iso_rows()
+        self._rows_inited = True
+
+
+    ################
+    # UI callbacks #
+    ################
+
+    def _on_entry_changed_cb(self, src):
+        self.emit("changed", self._entry)
+
+    def _on_entry_activated_cb(self, src):
+        self.emit("activate", self._entry)
+
+    def _on_entry_icon_press_cb(self, src, icon_pos, event):
+        self._entry.set_text("")
+
+    def _iso_paths_changed_cb(self):
+        self._iso_rows = self._make_iso_rows()
 
 
     ##############
     # Public API #
     ##############
 
-    def reset_state(self):
-        try:
-            self._populate_media()
-        except Exception:
-            logging.debug("Error populating mediadev combo", exc_info=True)
+    def set_conn(self, conn):
+        if conn == self.conn:
+            return
+        self.conn = conn
+        self._init_rows()
 
-    def get_path(self):
-        return uiutil.get_list_selection(
-            self.combo, column=self.OPTICAL_DEV_PATH)
+    def reset_state(self, is_floppy=False):
+        if not self._rows_inited:
+            self._init_rows()
 
-    def has_media(self):
-        return uiutil.get_list_selection(
-            self.combo, column=self.OPTICAL_HAS_MEDIA) or False
+        model = self._combo.get_model()
+        model.clear()
+
+        for row in self._iso_rows:
+            model.append(row)
+
+        nodedev_rows = self._cdrom_rows
+        if is_floppy:
+            nodedev_rows = self._floppy_rows
+
+        if len(model) and nodedev_rows:
+            model.append(self._make_row(None, None, False, None))
+        for row in nodedev_rows:
+            model.append(row)
+
+        self._combo.set_active(-1)
+
+    def get_path(self, store_media=True):
+        ret = uiutil.get_list_selection(
+            self._combo, column=self.MEDIA_FIELD_PATH)
+        if store_media and not ret.startswith("/dev"):
+            self.config.add_iso_path(ret)
+        return ret
+
+    def set_path(self, path):
+        uiutil.set_list_selection(
+            self._combo, path, column=self.MEDIA_FIELD_PATH)
+        self._entry.set_position(-1)
+
+    def set_mnemonic_label(self, label):
+        label.set_mnemonic_widget(self._entry)
+
+    def show_clear_icon(self):
+        pos = Gtk.EntryIconPosition.SECONDARY
+        self._entry.set_icon_from_icon_name(pos, "edit-clear-symbolic")
+        self._entry.set_icon_activatable(pos, True)

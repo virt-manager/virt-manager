@@ -167,7 +167,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
 
     <!-- bus fdc -->
     <disk type='block' device='floppy'>
-      <source dev='/dev/null'>
+      <source dev='/dev/fda'>
         <seclabel model='selinux' relabel='no'/>
         <seclabel model='dac' relabel='no'/>
       </source>
@@ -206,7 +206,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
 
     <disk type='file' device='disk'>
       <driver name="qemu" type="qcow2" cache="none"/>
-      <source file='/tmp/foobar2'/>
+      <source file='/tmp/foobar2/this_is_a_really_long_path_to_see_how_the_ui_handles_it/hopefully_it_doesnt_mess_things_up_too_bad/i_guess_we_will_see/in_fact_can_we_see_this_filename.img'/>
       <target dev='sda' bus='scsi'/>
       <boot order='1'/>
       <address type='drive' controller='9' bus='0' target='0' unit='0'/>

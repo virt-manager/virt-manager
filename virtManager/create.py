@@ -134,13 +134,19 @@ class vmmCreate(vmmGObjectUI):
 
         self._storage_browser = None
         self._netlist = None
-        self._mediacombo = None
 
         self._addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
         self.widget("storage-align").add(self._addstorage.top_box)
         def _browse_file_cb(ignore, widget):
             self._browse_file(widget)
         self._addstorage.connect("browse-clicked", _browse_file_cb)
+
+        self._mediacombo = vmmMediaCombo(self.conn, self.builder, self.topwin)
+        self._mediacombo.connect("changed", self._iso_changed_cb)
+        self._mediacombo.connect("activate", self._iso_activated_cb)
+        self._mediacombo.set_mnemonic_label(
+                self.widget("install-iso-label"))
+        self.widget("install-iso-align").add(self._mediacombo.top_box)
 
         self.builder.connect_signals({
             "on_vmm_newcreate_delete_event": self._close_requested,
@@ -159,9 +165,6 @@ class vmmCreate(vmmGObjectUI):
             "on_machine_changed": self._machine_changed,
             "on_vz_virt_type_changed": self._vz_virt_type_changed,
 
-            "on_install_cdrom_radio_toggled": self._local_media_toggled,
-            "on_install_iso_entry_changed": self._iso_changed,
-            "on_install_iso_entry_activate": self._iso_activated,
             "on_install_iso_browse_clicked": self._browse_iso,
             "on_install_url_entry_changed": self._url_changed,
             "on_install_url_entry_activate": self._url_activated,
@@ -281,9 +284,6 @@ class vmmCreate(vmmGObjectUI):
             lst.set_model(model)
             lst.set_entry_text_column(0)
 
-        # ISO media list
-        set_model_list("install-iso-combo")
-
         # Lists for the install urls
         set_model_list("install-url-combo")
 
@@ -363,9 +363,8 @@ class vmmCreate(vmmGObjectUI):
             for url in urls:
                 media_model.append([url])
 
-        self.widget("install-iso-entry").set_text("")
-        iso_model = self.widget("install-iso-combo").get_model()
-        _populate_media_model(iso_model, self.config.get_iso_paths())
+        # Install local
+        self._mediacombo.reset_state()
 
         # Install URL
         self.widget("install-urlopts-entry").set_text("")
@@ -527,6 +526,7 @@ class vmmCreate(vmmGObjectUI):
         self._capsinfo = None
         self.conn.invalidate_caps()
         self._change_caps()
+        is_local = not self.conn.is_remote()
 
         if not self._capsinfo.guest.has_install_options():
             error = _("No hypervisor options were found for this "
@@ -584,39 +584,10 @@ class vmmCreate(vmmGObjectUI):
             self.widget("vz-virt-type-exe").set_active(
                 not has_hvm_guests and has_exe_guests)
 
-        # Install local
-        iso_option = self.widget("install-iso-radio")
-        cdrom_option = self.widget("install-cdrom-radio")
-
-        if self._mediacombo:
-            self.widget("install-cdrom-align").remove(
-                self._mediacombo.top_box)
-            self._mediacombo.cleanup()
-            self._mediacombo = None
-
-        self._mediacombo = vmmMediaCombo(self.conn, self.builder, self.topwin,
-                                        vmmMediaCombo.MEDIA_CDROM)
-
-        self._mediacombo.combo.connect("changed", self._cdrom_changed)
+        # ISO media
+        # Dependent on connection so we need to do this here
+        self._mediacombo.set_conn(self.conn)
         self._mediacombo.reset_state()
-        self.widget("install-cdrom-align").add(
-            self._mediacombo.top_box)
-
-        # Don't select physical CDROM if no valid media is present
-        cdrom_option.set_active(self._mediacombo.has_media())
-        iso_option.set_active(not self._mediacombo.has_media())
-
-        enable_phys = not self._stable_defaults()
-        cdrom_option.set_sensitive(enable_phys)
-        cdrom_option.set_tooltip_text("" if enable_phys else
-            _("Physical CDROM passthrough not supported with this hypervisor"))
-
-        # Only allow ISO option for remote VM
-        is_local = not self.conn.is_remote()
-        if not is_local or not enable_phys:
-            iso_option.set_active(True)
-
-        self._local_media_toggled(cdrom_option)
 
         # Allow container bootstrap only for local connection and
         # only if virt-bootstrap is installed. Otherwise, show message.
@@ -1058,13 +1029,7 @@ class vmmCreate(vmmGObjectUI):
                                                    INSTALL_PAGE_VZ_TEMPLATE]
 
     def _get_config_local_media(self, store_media=False):
-        if self.widget("install-cdrom-radio").get_active():
-            return self._mediacombo.get_path()
-        else:
-            ret = self.widget("install-iso-entry").get_text()
-            if ret and store_media:
-                self.config.add_iso_path(ret)
-            return ret
+        return self._mediacombo.get_path(store_media=store_media)
 
     def _get_config_detectable_media(self):
         instpage = self._get_config_install_page()
@@ -1207,12 +1172,10 @@ class vmmCreate(vmmGObjectUI):
         self._detectable_media_widget_changed(src)
     def _url_activated(self, src):
         self._detectable_media_widget_changed(src, checkfocus=False)
-    def _iso_changed(self, src):
-        self._detectable_media_widget_changed(src)
-    def _iso_activated(self, src):
-        self._detectable_media_widget_changed(src, checkfocus=False)
-    def _cdrom_changed(self, src):
-        self._detectable_media_widget_changed(src)
+    def _iso_changed_cb(self, mediacombo, entry):
+        self._detectable_media_widget_changed(entry)
+    def _iso_activated_cb(self, mediacombo, entry):
+        self._detectable_media_widget_changed(entry, checkfocus=False)
 
     def _detect_os_toggled_cb(self, src):
         if not src.is_visible():
@@ -1225,17 +1188,6 @@ class vmmCreate(vmmGObjectUI):
             self._os_already_detected_for_media = False
             self._start_detect_os_if_needed()
 
-    def _local_media_toggled(self, src):
-        usecdrom = src.get_active()
-        self.widget("install-cdrom-align").set_sensitive(usecdrom)
-        self.widget("install-iso-combo").set_sensitive(not usecdrom)
-        self.widget("install-iso-browse").set_sensitive(not usecdrom)
-
-        if usecdrom:
-            self._cdrom_changed(self._mediacombo.combo)
-        else:
-            self._iso_changed(self.widget("install-iso-entry"))
-
     def _browse_oscontainer(self, ignore):
         self._browse_file("install-oscontainer-fs", is_dir=True)
     def _browse_app(self, ignore):
@@ -1244,7 +1196,7 @@ class vmmCreate(vmmGObjectUI):
         self._browse_file("install-import-entry")
     def _browse_iso(self, ignore):
         def set_path(ignore, path):
-            self.widget("install-iso-entry").set_text(path)
+            self._mediacombo.set_path(path)
         self._browse_file(None, cb=set_path, is_media=True)
     def _browse_kernel(self, ignore):
         self._browse_file("kernel")

@@ -234,6 +234,15 @@ class VMMDogtailNode(dogtail.tree.Node):
                 self.position[1] > 0 and
                 self.position[1] + self.size[1] < screen.get_height())
 
+    def click_secondary_icon(self):
+        """
+        Helper for clicking the secondary icon of a text entry
+        """
+        button = 1
+        clickX = self.position[0] + self.size[0] - 10
+        clickY = self.position[1] + (self.size[1] / 2)
+        dogtail.rawinput.click(clickX, clickY, button)
+
     def click_combo_entry(self):
         """
         Helper for clicking the arrow of a combo entry, to expose the menu.

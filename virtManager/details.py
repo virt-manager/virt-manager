@@ -18,12 +18,13 @@ from virtinst import util
 from . import vmmenu
 from . import uiutil
 from .addhardware import vmmAddHardware
+from .addstorage import vmmAddStorage
 from .baseclass import vmmGObjectUI
-from .choosecd import vmmChooseCD
 from .engine import vmmEngine
 from .fsdetails import vmmFSDetails
 from .gfxdetails import vmmGraphicsDetails
 from .graphwidgets import Sparkline
+from .mediacombo import vmmMediaCombo
 from .netlist import vmmNetworkList
 from .oslist import vmmOSList
 from .snapshots import vmmSnapshotPage
@@ -64,6 +65,7 @@ from .storagebrowse import vmmStorageBrowser
  EDIT_DISK_SERIAL,
  EDIT_DISK_FORMAT,
  EDIT_DISK_SGIO,
+ EDIT_DISK_PATH,
 
  EDIT_SOUND_MODEL,
 
@@ -98,7 +100,7 @@ from .storagebrowse import vmmStorageBrowser
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 54)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 55)
 
 
 # Columns in hw list model
@@ -395,8 +397,8 @@ class vmmDetails(vmmGObjectUI):
         self.active_edits = []
 
         self.addhw = None
-        self.media_choosers = {"cdrom": None, "floppy": None}
         self.storage_browser = None
+        self._mediacombo = None
 
         self.ignoreDetails = False
 
@@ -404,6 +406,14 @@ class vmmDetails(vmmGObjectUI):
         self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
         self.snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
         self.widget("snapshot-placeholder").add(self.snapshots.top_box)
+
+        self._mediacombo = vmmMediaCombo(self.conn, self.builder, self.topwin)
+        self.widget("disk-source-align").add(self._mediacombo.top_box)
+        self._mediacombo.set_mnemonic_label(
+                self.widget("disk-source-mnemonic"))
+        self._mediacombo.connect("changed",
+                lambda *x: self.enable_apply(x, EDIT_DISK_PATH))
+        self._mediacombo.show_clear_icon()
 
         self.fsDetails = vmmFSDetails(self.vm, self.builder, self.topwin)
         self.widget("fs-alignment").add(self.fsDetails.top_box)
@@ -537,7 +547,8 @@ class vmmDetails(vmmGObjectUI):
             "on_boot_init_path_changed": lambda *x: self.enable_apply(x, EDIT_INIT),
             "on_boot_init_args_changed": lambda *x: self.enable_apply(x, EDIT_INIT),
 
-            "on_disk_cdrom_connect_clicked": self.toggle_storage_media,
+
+            "on_disk_source_browse_clicked": self._disk_source_browse_clicked_cb,
             "on_disk_readonly_changed": lambda *x: self.enable_apply(x, EDIT_DISK_RO),
             "on_disk_shareable_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SHARE),
             "on_disk_removable_changed": lambda *x: self.enable_apply(x, EDIT_DISK_REMOVABLE),
@@ -631,16 +642,12 @@ class vmmDetails(vmmGObjectUI):
         if self.addhw:
             self.addhw.cleanup()
             self.addhw = None
-
         if self.storage_browser:
             self.storage_browser.cleanup()
             self.storage_browser = None
 
-        for key in self.media_choosers:
-            if self.media_choosers[key]:
-                self.media_choosers[key].cleanup()
-        self.media_choosers = {}
-
+        self._mediacombo.cleanup()
+        self._mediacombo = None
         self.console.cleanup()
         self.console = None
         self.snapshots.cleanup()
@@ -1596,11 +1603,11 @@ class vmmDetails(vmmGObjectUI):
     # Details/Hardware listeners #
     ##############################
 
-    def _browse_file(self, callback, is_media=False):
-        if is_media:
-            reason = self.config.CONFIG_DIR_ISO_MEDIA
-        else:
+    def _browse_file(self, callback, is_media=False, reason=None):
+        if not reason:
             reason = self.config.CONFIG_DIR_IMAGE
+            if is_media:
+                reason = self.config.CONFIG_DIR_ISO_MEDIA
 
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
@@ -1819,50 +1826,22 @@ class vmmDetails(vmmGObjectUI):
         boot_list.get_selection().emit("changed")
         self.enable_apply(EDIT_BOOTORDER)
 
+
+    # Disk callbacks
     def disk_format_changed(self, ignore):
         self.widget("disk-format-warn").show()
         self.enable_apply(EDIT_DISK_FORMAT)
 
-
-    # CDROM Eject/Connect
-    def _change_storage_media(self, devobj, newpath):
-        kwargs = {"path": newpath}
-        return vmmAddHardware.change_config_helper(self.vm.define_disk,
-            kwargs, self.vm, self.err, devobj=devobj)
-
-    def _eject_media(self, disk):
-        try:
-            self._change_storage_media(disk, None)
-        except Exception as e:
-            self.err.show_err((_("Error disconnecting media: %s") % e))
-
-    def _insert_media(self, disk):
-        try:
-            devtype = disk.device
-
-            def change_cdrom_wrapper(src_ignore, devobj, newpath):
-                return self._change_storage_media(devobj, newpath)
-
-            # Launch 'Choose CD' dialog
-            if self.media_choosers[devtype] is None:
-                ret = vmmChooseCD(self.vm, disk)
-
-                ret.connect("cdrom-chosen", change_cdrom_wrapper)
-                self.media_choosers[devtype] = ret
-
-            dialog = self.media_choosers[devtype]
-            dialog.disk = disk
-
-            dialog.show(self.topwin)
-        except Exception as e:
-            self.err.show_err((_("Error launching media dialog: %s") % e))
-            return
-
-    def toggle_storage_media(self, src_ignore):
+    def _disk_source_browse_clicked_cb(self, src):
         disk = self.get_hw_row()[HW_LIST_COL_DEVICE]
-        if disk.path:
-            return self._eject_media(disk)
-        return self._insert_media(disk)
+        if disk.is_floppy():
+            reason = self.config.CONFIG_DIR_FLOPPY_MEDIA
+        else:
+            reason = self.config.CONFIG_DIR_ISO_MEDIA
+
+        def cb(ignore, path):
+            self._mediacombo.set_path(path)
+        self._browse_file(cb, reason=reason)
 
 
     # Net IP refresh
@@ -2120,6 +2099,21 @@ class vmmDetails(vmmGObjectUI):
 
     def config_disk_apply(self, devobj):
         kwargs = {}
+
+        if self.edited(EDIT_DISK_PATH):
+            path = self._mediacombo.get_path()
+
+            names = virtinst.DeviceDisk.path_in_use_by(devobj.conn, path)
+            if names:
+                res = self.err.yes_no(
+                        _('Disk "%s" is already in use by other guests %s') %
+                         (path, names),
+                        _("Do you really want to use the disk?"))
+                if not res:
+                    return False
+
+            vmmAddStorage.check_path_search(self, self.conn, path)
+            kwargs["path"] = path or None
 
         if self.edited(EDIT_DISK_RO):
             kwargs["readonly"] = self.widget("disk-readonly").get_active()
@@ -2676,8 +2670,6 @@ class vmmDetails(vmmGObjectUI):
             if vol:
                 size = vol.get_pretty_capacity()
 
-        is_cdrom = (devtype == virtinst.DeviceDisk.DEVICE_CDROM)
-        is_floppy = (devtype == virtinst.DeviceDisk.DEVICE_FLOPPY)
         is_usb = (bus == "usb")
 
         can_set_removable = (is_usb and (self.conn.is_qemu() or
@@ -2689,11 +2681,10 @@ class vmmDetails(vmmGObjectUI):
 
         pretty_name = _label_for_device(disk)
 
-        self.widget("disk-source-path").set_text(path or "-")
         self.widget("disk-target-type").set_text(pretty_name)
 
         self.widget("disk-readonly").set_active(ro)
-        self.widget("disk-readonly").set_sensitive(not is_cdrom)
+        self.widget("disk-readonly").set_sensitive(not disk.is_cdrom())
         self.widget("disk-shareable").set_active(share)
         self.widget("disk-removable").set_active(removable)
         uiutil.set_grid_row_visible(self.widget("disk-removable"),
@@ -2720,16 +2711,14 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("disk-bus"), bus)
         self.widget("disk-serial").set_text(serial or "")
 
-        button = self.widget("disk-cdrom-connect")
-        if is_cdrom or is_floppy:
-            if not path:
-                # source device not connected
-                button.set_label(Gtk.STOCK_CONNECT)
-            else:
-                button.set_label(Gtk.STOCK_DISCONNECT)
-            button.show()
-        else:
-            button.hide()
+        is_removable = disk.is_cdrom() or disk.is_floppy()
+        self.widget("disk-source-box").set_visible(is_removable)
+        self.widget("disk-source-label").set_visible(not is_removable)
+
+        self.widget("disk-source-label").set_text(path or "-")
+        if is_removable:
+            self._mediacombo.reset_state(is_floppy=disk.is_floppy())
+            self._mediacombo.set_path(path or "")
 
     def refresh_network_page(self, net):
         vmmAddHardware.populate_network_model_combo(

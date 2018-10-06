@@ -100,8 +100,13 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Local install media", "radio").click()
         newvm.find_fuzzy("Forward", "button").click()
 
+        # check prepopulated cdrom media
+        combo = newvm.find("media-combo")
+        combo.click_combo_entry()
+        combo.find(r"No media detected \(/dev/sr1\)")
+        combo.find(r"Fedora12_media \(/dev/sr0\)").click()
+
         # Select a fake iso
-        newvm.find_fuzzy("Use ISO", "radio").click()
         newvm.find_fuzzy("install-iso-browse", "button").click()
         browser = self.app.root.find_fuzzy("Choose Storage", "frame")
         browser.find_fuzzy("default-pool", "table cell").click()
