@@ -427,7 +427,7 @@ class vmmAddHardware(vmmGObjectUI):
         target_model.append([DeviceDisk.DEVICE_DISK,
                       "drive-harddisk", _("Disk device")])
         target_model.append([DeviceDisk.DEVICE_CDROM,
-                      "media-cdrom", _("CDROM device")])
+                      "media-optical", _("CDROM device")])
         target_model.append([DeviceDisk.DEVICE_FLOPPY,
                       "media-floppy", _("Floppy device")])
         if self.conn.is_qemu() or self.conn.is_test():
