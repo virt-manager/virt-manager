@@ -90,7 +90,7 @@ class Console(uiutils.UITestCase):
 
         # Wait for toolbar to hide, then reveal it again
         uiutils.check_in_loop(lambda: not fstb.showing, timeout=5)
-        self.point(win.size[0] / 2, 0)
+        self.point(win.position[0] + win.size[0] / 2, 0)
         uiutils.check_in_loop(lambda: fstb.showing)
 
         # Click stuff and exit fullscreen
