@@ -313,12 +313,6 @@ class my_rpm(distutils.core.Command):
 class configure(distutils.core.Command):
     user_options = [
         ("prefix=", None, "installation prefix"),
-        ("libvirt-package-names=", None,
-         "list of libvirt distro packages virt-manager will check for on "
-         "first run. comma separated string (default=none)"),
-        ("kvm-package-names=", None,
-         "recommended kvm packages virt-manager will check for on first run "
-         "(default=none)"),
         ("askpass-package-names=", None,
          "name of your distro's askpass package(s) (default=none)"),
         ("default-graphics=", None,
@@ -335,8 +329,6 @@ class configure(distutils.core.Command):
 
     def initialize_options(self):
         self.prefix = sysprefix
-        self.libvirt_package_names = None
-        self.kvm_package_names = None
         self.askpass_package_names = None
         self.default_graphics = None
         self.default_hvs = None
@@ -346,10 +338,6 @@ class configure(distutils.core.Command):
         template = ""
         template += "[config]\n"
         template += "prefix = %s\n" % self.prefix
-        if self.libvirt_package_names is not None:
-            template += "libvirt_packages = %s\n" % self.libvirt_package_names
-        if self.kvm_package_names is not None:
-            template += "hv_packages = %s\n" % self.kvm_package_names
         if self.askpass_package_names is not None:
             template += "askpass_packages = %s\n" % self.askpass_package_names
         if self.default_graphics is not None:

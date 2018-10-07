@@ -7,8 +7,6 @@
 
 %global with_guestfs               0
 %global askpass_package            "openssh-askpass"
-%global libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
-%global kvm_packages               ""
 %global default_hvs                "qemu,xen,lxc"
 
 
@@ -102,14 +100,6 @@ machine).
 
 
 %build
-%if %{kvm_packages}
-%global _kvm_packages --kvm-package-names=%{kvm_packages}
-%endif
-
-%if %{libvirt_packages}
-%global _libvirt_packages --libvirt-package-names=%{libvirt_packages}
-%endif
-
 %if %{askpass_package}
 %global _askpass_package --askpass-package-names=%{askpass_package}
 %endif
@@ -119,8 +109,6 @@ machine).
 %endif
 
 ./setup.py configure \
-    %{?_kvm_packages} \
-    %{?_libvirt_packages} \
     %{?_askpass_package} \
     %{?_default_hvs}
 

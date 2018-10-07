@@ -175,19 +175,9 @@ class vmmConfig(object):
         # the keyring
         self.keyring = None
 
-        self.hv_packages = CLIConfig.hv_packages
-        self.libvirt_packages = CLIConfig.libvirt_packages
         self.askpass_package = CLIConfig.askpass_package
         self.default_graphics_from_config = CLIConfig.default_graphics
         self.default_hvs = CLIConfig.default_hvs
-
-        if self.test_first_run:
-            # Populate some package defaults to simplify git testing
-            if not self.libvirt_packages:
-                self.libvirt_packages = ["libvirt-daemon",
-                                         "libvirt-daemon-config-network"]
-            if not self.hv_packages:
-                self.hv_packages = ["qemu-kvm"]
 
         self.default_storage_format_from_config = "qcow2"
         self.default_console_resizeguest = 0
