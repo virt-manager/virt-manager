@@ -111,6 +111,7 @@ def start_libvirtd():
         logging.exception("Couldn't connect to systemd")
         return
 
+    # Lookup the unit and attempt to start it if it is state=inactive
     try:
         unitpath = systemd.GetUnit("(s)", unitname)
         unit = Gio.DBusProxy.new_sync(bus, 0, None,
@@ -122,21 +123,11 @@ def start_libvirtd():
         if str(state).lower().strip("'") == "active":
             logging.debug("libvirtd already active, not starting")
             return True
+
+        logging.debug("libvirtd is not running, attempting startup")
+        unit.Start("(s)", "fail")
+        logging.debug("Starting libvirtd appeared to succeed")
+        time.sleep(2)
     except Exception:
         logging.exception("Failed to lookup libvirtd status")
         return
-
-    # Connect to system-config-services and offer to start
-    try:
-        logging.debug("libvirtd not running, asking system-config-services "
-                      "to start it")
-        scs = Gio.DBusProxy.new_sync(bus, 0, None,
-                             "org.fedoraproject.Config.Services",
-                             "/org/fedoraproject/Config/Services/systemd1",
-                             "org.freedesktop.systemd1.Manager", None)
-        scs.StartUnit("(ss)", unitname, "replace")
-        time.sleep(2)
-        logging.debug("Starting libvirtd appeared to succeed")
-        return True
-    except Exception:
-        logging.exception("Failed to talk to system-config-services")
