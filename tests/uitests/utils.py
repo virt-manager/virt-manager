@@ -393,7 +393,7 @@ class VMMDogtailApp(object):
     def is_running(self):
         return bool(self._proc and self._proc.poll() is None)
 
-    def open(self, extra_opts=None, check_already_running=True):
+    def open(self, extra_opts=None, check_already_running=True, use_uri=True):
         extra_opts = extra_opts or []
 
         if tests.utils.clistate.debug:
@@ -409,7 +409,9 @@ class VMMDogtailApp(object):
             cmd += ["-m", "coverage", "run", "--append",
                     "--omit", "/usr/*"]
         cmd += [os.path.join(os.getcwd(), "virt-manager"),
-                "--test-first-run", "--no-fork", "--connect", self.uri]
+                "--test-first-run", "--no-fork"]
+        if use_uri:
+            cmd += ["--connect", self.uri]
         cmd += extra_opts
 
         if check_already_running:

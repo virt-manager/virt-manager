@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -29,6 +29,9 @@
     </accel-groups>
     <signal name="configure-event" handler="on_vmm_manager_configure_event" swapped="no"/>
     <signal name="delete-event" handler="on_vm_manager_delete_event" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="vbox1">
         <property name="visible">True</property>
@@ -417,7 +420,16 @@
                   <object class="GtkLabel" id="startup-error-label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
                     <property name="label">error</property>
+                    <property name="wrap">True</property>
+                    <property name="selectable">True</property>
+                    <property name="max_width_chars">40</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="startup-error-label-atkobject">
+                        <property name="AtkObject::accessible-name">error-label</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="position">1</property>
@@ -449,9 +461,6 @@
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>
