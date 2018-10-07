@@ -6,11 +6,118 @@
 
 import logging
 
+from gi.repository import Gio
 from gi.repository import Gtk
 
 from . import vmmenu
 from .baseclass import vmmGObject
 from .connmanager import vmmConnectionManager
+
+try:
+    # pylint: disable=ungrouped-imports
+    from gi.repository import AppIndicator3
+except Exception:
+    AppIndicator3 = None
+
+
+def _toggle_manager(*args, **kwargs):
+    ignore = args
+    ignore = kwargs
+    from .manager import vmmManager
+    manager = vmmManager.get_instance(None)
+    if manager.is_visible():
+        manager.close()
+    else:
+        manager.show()
+
+
+def _has_appindicator_dbus():
+    try:
+        bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        dbus = Gio.DBusProxy.new_sync(bus, 0, None,
+                "org.freedesktop.DBus",
+                "/org/freedesktop/DBus",
+                "org.freedesktop.DBus", None)
+        if dbus.NameHasOwner("(s)", "org.kde.StatusNotifierWatcher"):
+            return True
+        if dbus.NameHasOwner("(s)", "org.freedesktop.StatusNotifierWatcher"):
+            return True
+        return False
+    except Exception:
+        logging.exception("Error checking for appindicator dbus")
+        return False
+
+
+###########################
+# systray backend classes #
+###########################
+
+class _Systray(object):
+    def is_embedded(self):
+        raise NotImplementedError()
+    def show(self):
+        raise NotImplementedError()
+    def hide(self):
+        raise NotImplementedError()
+    def set_menu(self, menu):
+        raise NotImplementedError()
+
+
+class _SystrayIndicator(_Systray):
+    def __init__(self):
+        self._icon = AppIndicator3.Indicator.new(
+                "virt-manager", "virt-manager",
+                AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
+
+    def set_menu(self, menu):
+        hide_item = Gtk.MenuItem.new_with_mnemonic(
+                _("_Show Virtual Machine Manager"))
+        hide_item.connect("activate", _toggle_manager)
+        hide_item.show()
+        menu.insert(hide_item, len(menu.get_children()) - 1)
+
+        self._icon.set_menu(menu)
+        self._icon.set_secondary_activate_target(hide_item)
+
+    def is_embedded(self):
+        if not self._icon.get_property("connected"):
+            return False
+        return (self._icon.get_status() !=
+                AppIndicator3.IndicatorStatus.PASSIVE)
+
+    def show(self):
+        self._icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
+    def hide(self):
+        self._icon.set_status(AppIndicator3.IndicatorStatus.PASSIVE)
+
+
+class _SystrayStatusIcon(_Systray):
+    def __init__(self):
+        self._icon = Gtk.StatusIcon()
+        self._icon.set_property("icon-name", "virt-manager")
+        self._icon.connect("activate", _toggle_manager)
+        self._icon.connect("popup-menu", self._popup_cb)
+        self._icon.set_tooltip_text(_("Virtual Machine Manager"))
+        self._menu = None
+
+    def is_embedded(self):
+        return self._icon.is_embedded()
+
+    def set_menu(self, menu):
+        self._menu = menu
+
+    def _popup_cb(self, src, button, event_time):
+        if button != 3:
+            return
+
+        self._menu.popup(None, None,
+                Gtk.StatusIcon.position_menu,
+                self._icon, 0, event_time)
+
+    def show(self):
+        self._icon.set_visible(True)
+    def hide(self):
+        self._icon.set_visible(False)
 
 
 class vmmSystray(vmmGObject):
@@ -23,260 +130,148 @@ class vmmSystray(vmmGObject):
     def __init__(self):
         vmmGObject.__init__(self)
         self._cleanup_on_app_close()
+        self.topwin = None  # Need this for error callbacks from VMActionMenu
 
-        self.topwin = None
+        self._systray = None
+        self._using_appindicator = False
 
-        self.conn_menuitems = {}
-        self.conn_vm_menuitems = {}
-        self.vm_action_dict = {}
+        if AppIndicator3:
+            if not _has_appindicator_dbus():
+                logging.debug("AppIndicator3 is available, but didn't "
+                              "find any dbus watcher.")
+            else:
+                self._using_appindicator = True
+                logging.debug("Using AppIndicator3 for systray")
 
-        self.systray_menu = None
-        self.systray_icon = None
-        self._init_ui()
+        connmanager = vmmConnectionManager.get_instance()
+        connmanager.connect("conn-added", self._conn_added_cb)
+        connmanager.connect("conn-removed", self._rebuild_menu)
+        for conn in connmanager.conns.values():
+            self._conn_added_cb(connmanager, conn)
 
         self.add_gsettings_handle(
             self.config.on_view_system_tray_changed(
                 self._show_systray_changed_cb))
-        self._show_systray_changed_cb()
+        self._startup()
 
-        connmanager = vmmConnectionManager.get_instance()
-        connmanager.connect("conn-added", self._conn_added)
-        connmanager.connect("conn-removed", self._conn_removed)
-        for conn in connmanager.conns.values():
-            self._conn_added(connmanager, conn)
 
     def is_embedded(self):
-        return (self.systray_icon and
-                self.systray_icon.is_embedded())
+        return self._systray and self._systray.is_embedded()
 
     def _cleanup(self):
-        if self.systray_menu:
-            self.systray_menu.destroy()
-            self.systray_menu = None
-
-        self._hide()
-        self.conn_menuitems = None
-        self.conn_vm_menuitems = None
-        self.vm_action_dict = None
+        self._hide_systray()
+        self._systray = None
 
 
     ###########################
     # Initialization routines #
     ###########################
 
-    def _init_ui(self):
-        self.systray_menu = Gtk.Menu()
-        self.systray_menu.add(Gtk.SeparatorMenuItem())
+    def _show_systray(self):
+        if not self._systray:
+            if self._using_appindicator:
+                self._systray = _SystrayIndicator()
+            else:
+                self._systray = _SystrayStatusIcon()
+        self._rebuild_menu(force=True)
+        self._systray.show()
 
-        exit_item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_QUIT, None)
-        exit_item.connect("activate", self.exit_app)
-        self.systray_menu.add(exit_item)
-        self.systray_menu.show_all()
-
-    def _show(self):
-        if self.systray_icon:
+    def _hide_systray(self):
+        if not self._systray:
             return
-        self.systray_icon = Gtk.StatusIcon()
-        self.systray_icon.set_visible(True)
-        self.systray_icon.set_property("icon-name", "virt-manager")
-        self.systray_icon.connect("activate", self.systray_activate)
-        self.systray_icon.connect("popup-menu", self.systray_popup)
-        self.systray_icon.set_tooltip_text(_("Virtual Machine Manager"))
-
-    def _hide(self):
-        if not self.systray_icon:
-            return
-        self.systray_icon.set_visible(False)
-        self.systray_icon = None
+        self._systray.hide()
 
     def _show_systray_changed_cb(self):
         do_show = self.config.get_view_system_tray()
         logging.debug("Showing systray: %s", do_show)
 
         if do_show:
-            self._show()
+            self._show_systray()
         else:
-            self._hide()
+            self._hide_systray()
 
-    # Helper functions
-    def _get_vm_menu_item(self, vm):
-        connkey = vm.get_connkey()
-        uri = vm.conn.get_uri()
-
-        if uri in self.conn_vm_menuitems:
-            if connkey in self.conn_vm_menuitems[uri]:
-                return self.conn_vm_menuitems[uri][connkey]
-        return None
-
-    def _set_vm_status_icon(self, vm, menu_item):
-        image = Gtk.Image()
-        image.set_from_icon_name(vm.run_status_icon_name(),
-                                 Gtk.IconSize.MENU)
-        image.set_sensitive(vm.is_active())
-        menu_item.set_image(image)
-
-    # Listeners
-
-    def systray_activate(self, _src):
-        from .manager import vmmManager
-        manager = vmmManager.get_instance(self)
-        if manager.is_visible():
-            manager.close()
-        else:
-            manager.show()
-
-    def systray_popup(self, widget_ignore, button, event_time):
-        if button != 3:
-            return
-
-        self.systray_menu.popup(None, None, Gtk.StatusIcon.position_menu,
-                                self.systray_icon, 0, event_time)
-
-    def repopulate_menu_list(self):
-        # Build sorted connection list
-        connsort = list(self.conn_menuitems.keys())
-        connsort.sort()
-        connsort.reverse()
-
-        # Empty conn list
-        for child in self.systray_menu.get_children():
-            if child in list(self.conn_menuitems.values()):
-                self.systray_menu.remove(child)
-
-        # Build sorted conn list
-        for uri in connsort:
-            self.systray_menu.insert(self.conn_menuitems[uri], 0)
+    def _startup(self):
+        # This will trigger the actual UI showing
+        self._show_systray_changed_cb()
 
 
-    def _conn_added(self, _engine, conn):
-        conn.connect("vm-added", self.vm_added)
-        conn.connect("vm-removed", self.vm_removed)
-        conn.connect("state-changed", self.conn_state_changed)
+    #################
+    # Menu building #
+    #################
 
-        if conn.get_uri() in self.conn_menuitems:
-            return
-
-        menu_item = Gtk.MenuItem.new_with_label(conn.get_pretty_desc())
-        menu_item.show()
-        vm_submenu = Gtk.Menu()
-        vm_submenu.show()
-        menu_item.set_submenu(vm_submenu)
-
-        self.conn_menuitems[conn.get_uri()] = menu_item
-        self.conn_vm_menuitems[conn.get_uri()] = {}
-
-        self.repopulate_menu_list()
-
-        self.conn_state_changed(conn)
-        self.populate_vm_list(conn)
-
-    def _conn_removed(self, _engine, uri):
-        if uri not in self.conn_menuitems:
-            return
-
-        menu_item = self.conn_menuitems[uri]
-        self.systray_menu.remove(menu_item)
-        menu_item.destroy()
-        del(self.conn_menuitems[uri])
-        self.conn_vm_menuitems[uri] = {}
-
-        self.repopulate_menu_list()
-
-    def conn_state_changed(self, conn):
-        sensitive = conn.is_active()
-        menu_item = self.conn_menuitems[conn.get_uri()]
-        menu_item.set_sensitive(sensitive)
-
-    def populate_vm_list(self, conn):
-        uri = conn.get_uri()
-        conn_menu_item = self.conn_menuitems[uri]
-        vm_submenu = conn_menu_item.get_submenu()
-
-        # Empty conn menu
-        for c in vm_submenu.get_children():
-            vm_submenu.remove(c)
-
-        vm_mappings = {}
-        for vm in conn.list_vms():
-            vm_mappings[vm.get_name()] = vm.get_connkey()
-
-        vm_names = list(vm_mappings.keys())
-        vm_names.sort()
-
-        if len(vm_names) == 0:
-            menu_item = Gtk.MenuItem.new_with_label(_("No virtual machines"))
-            menu_item.set_sensitive(False)
-            vm_submenu.insert(menu_item, 0)
-            return
-
-        for i, name in enumerate(vm_names):
-            connkey = vm_mappings[name]
-            if connkey in self.conn_vm_menuitems[uri]:
-                vm_item = self.conn_vm_menuitems[uri][connkey]
-                vm_submenu.insert(vm_item, i)
-
-    def vm_added(self, conn, connkey):
-        uri = conn.get_uri()
-        vm = conn.get_vm(connkey)
-        if not vm:
-            return
-        vm.connect("state-changed", self.vm_state_changed)
-
-        vm_mappings = self.conn_vm_menuitems[uri]
-        if connkey in vm_mappings:
-            return
-
-        # Build VM list entry
-        menu_item = Gtk.ImageMenuItem.new_with_label(vm.get_name())
+    def _build_vm_menuitem(self, vm):
+        menu_item = Gtk.ImageMenuItem.new_with_label(vm.get_name_or_title())
         menu_item.set_use_underline(False)
-
-        vm_mappings[connkey] = menu_item
         vm_action_menu = vmmenu.VMActionMenu(self, lambda: vm)
+        vm_action_menu.update_widget_states(vm)
         menu_item.set_submenu(vm_action_menu)
-        self.vm_action_dict[connkey] = vm_action_menu
+        return menu_item
 
-        # Add VM to menu list
-        self.populate_vm_list(conn)
+    def _build_conn_menuitem(self, conn):
+        menu_item = Gtk.MenuItem.new_with_label(conn.get_pretty_desc())
+        menu_item.set_sensitive(conn.is_active())
 
-        # Update state
-        self.vm_state_changed(vm)
-        menu_item.show()
+        menu = Gtk.Menu()
+        vms = conn.list_vms()
+        vms.sort(key=lambda v: v.get_name_or_title())
 
-    def vm_removed(self, conn, connkey):
-        uri = conn.get_uri()
-        vm_mappings = self.conn_vm_menuitems[uri]
-        if not vm_mappings:
+        for vm in vms:
+            menu.add(self._build_vm_menuitem(vm))
+        if not vms:
+            vmitem = Gtk.MenuItem.new_with_label(_("No virtual machines"))
+            vmitem.set_sensitive(False)
+            menu.add(vmitem)
+
+        menu_item.set_submenu(menu)
+        return menu_item
+
+    def _build_menu(self):
+        connmanager = vmmConnectionManager.get_instance()
+        conns = connmanager.conns.copy()
+        menu = Gtk.Menu()
+
+        for uri in reversed(sorted(list(conns.keys()))):
+            connmenu = self._build_conn_menuitem(conns[uri])
+            menu.add(connmenu)
+
+        menu.add(Gtk.SeparatorMenuItem())
+
+        exit_item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_QUIT, None)
+        exit_item.connect("activate", self._exit_app_cb)
+        menu.add(exit_item)
+        menu.show_all()
+        return menu
+
+    def _rebuild_menu(self, *args, **kwargs):
+        ignore = args
+        ignore = kwargs
+        if "force" not in kwargs and not self.is_embedded():
+            return
+        if vmmConnectionManager.get_instance() is True:
+            # In app cleanup, don't do anything
             return
 
-        if connkey not in vm_mappings:
-            return
+        # Yeah, this is kinda nutty, we rebuild the whole menu widget
+        # on any conn or VM state change. We kinda need to do this
+        # for appindicator, because we communicate with the remote
+        # UI via changing the menu widget, unlike statusicon which
+        # we could delay until 'show' time. This is likely slow as
+        # dirt for a virt-manager instance with a lot of connections
+        # and VMs...
+        menu = self._build_menu()
+        self._systray.set_menu(menu)
 
-        conn_item = self.conn_menuitems[uri]
-        vm_menu_item = vm_mappings[connkey]
-        vm_menu = conn_item.get_submenu()
-        vm_menu.remove(vm_menu_item)
-        vm_menu_item.destroy()
-        vm_mappings.pop(connkey)
-        self.vm_action_dict.pop(connkey)
+    def _conn_added_cb(self, src, conn):
+        conn.connect("vm-added", self._vm_added_cb)
+        conn.connect("vm-removed", self._rebuild_menu)
+        conn.connect("state-changed", self._rebuild_menu)
+        self._rebuild_menu()
 
-        if len(vm_menu.get_children()) == 0:
-            placeholder = Gtk.MenuItem.new_with_label(
-                _("No virtual machines"))
-            placeholder.show()
-            placeholder.set_sensitive(False)
-            vm_menu.add(placeholder)
+    def _vm_added_cb(self, conn, connkey):
+        vm = conn.get_vm(connkey)
+        vm.connect("state-changed", self._rebuild_menu)
+        self._rebuild_menu()
 
-    def vm_state_changed(self, vm):
-        menu_item = self._get_vm_menu_item(vm)
-        if not menu_item:
-            return
-
-        self._set_vm_status_icon(vm, menu_item)
-
-        # Update action widget states
-        menu = self.vm_action_dict[vm.get_connkey()]
-        menu.update_widget_states(vm)
-
-    def exit_app(self, _src):
+    def _exit_app_cb(self, src):
         from .engine import vmmEngine
         vmmEngine.get_instance().exit_app()
