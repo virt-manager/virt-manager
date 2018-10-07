@@ -3,7 +3,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import fileinput
 import fnmatch
 import glob
 import imp
@@ -120,7 +119,7 @@ class TestDist(unittest.TestCase):
         failures = []
         for filename in glob.glob("ui/*.ui"):
             required_version = None
-            for line in fileinput.input(filename):
+            for line in open(filename).readlines():
                 # This is much faster than XML parsing the whole file
                 if not line.strip().startswith('<requires '):
                     continue
@@ -145,4 +144,29 @@ class TestDist(unittest.TestCase):
         err = ("The following files should require version of gtk-%s:\n" %
             minimum_version_str)
         err += "\n".join([("%s version=%s" % tup) for tup in failures])
+        raise AssertionError(err)
+
+
+    def test_ui_translatable_atknames(self):
+        """
+        We only use accessible names for uitests, they shouldn't be
+        marked as translatable
+        """
+        failures = []
+        atkstr = "AtkObject::accessible-name"
+        for filename in glob.glob("ui/*.ui"):
+            for line in open(filename).readlines():
+                if atkstr not in line:
+                    continue
+                if "translatable=" in line:
+                    failures.append(filename)
+                    break
+
+        if not failures:
+            return
+        err = "Some files incorrectly have translatable ATK names.\n"
+        err += "Run this command to fix:\n\n"
+        err += ("""sed -i -e 's/%s" translatable="yes"/%s"/g' """ %
+                (atkstr, atkstr))
+        err += " ".join(failures)
         raise AssertionError(err)
