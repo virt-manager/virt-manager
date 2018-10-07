@@ -7,10 +7,8 @@
 import glob
 import os
 import logging
-import socket
 import urllib.parse
 
-from gi.repository import Gio
 from gi.repository import Gtk
 
 from . import uiutil
@@ -47,7 +45,6 @@ class vmmConnect(vmmGObjectUI):
 
         self.builder.connect_signals({
             "on_hypervisor_changed": self.hypervisor_changed,
-            "on_hostname_combo_changed": self.hostname_combo_changed,
             "on_connect_remote_toggled": self.connect_remote_toggled,
             "on_username_entry_changed": self.username_changed,
             "on_hostname_changed": self.hostname_changed,
@@ -57,32 +54,7 @@ class vmmConnect(vmmGObjectUI):
             "on_vmm_open_connection_delete_event": self.cancel,
         })
 
-        self.browser = None
-        self.browser_sigs = []
-
-        # Set this if we can't resolve 'hostname.local': means avahi
-        # prob isn't configured correctly, and we should strip .local
-        self.can_resolve_local = None
-
-        # Plain hostname resolve failed, means we should just use IP addr
-        self.can_resolve_hostname = None
-
         self.set_initial_state()
-
-        try:
-            self.dbus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
-            self.avahiserver = Gio.DBusProxy.new_sync(self.dbus, 0, None,
-                                    "org.freedesktop.Avahi", "/",
-                                    "org.freedesktop.Avahi.Server", None)
-
-            # Call any API, so we detect if avahi is even available or not
-            self.avahiserver.GetAPIVersion()
-            logging.debug("Connected to avahi")
-        except Exception as e:
-            self.dbus = None
-            self.avahiserver = None
-            logging.debug("Couldn't contact avahi: %s", str(e))
-
         self.reset_state()
 
     @staticmethod
@@ -113,12 +85,6 @@ class vmmConnect(vmmGObjectUI):
         logging.debug("Closing open connection")
         self.topwin.hide()
 
-        if self.browser:
-            for obj, sig in self.browser_sigs:
-                obj.disconnect(sig)
-            self.browser_sigs = []
-            self.browser = None
-
 
     def show(self, parent):
         logging.debug("Showing open connection")
@@ -129,7 +95,6 @@ class vmmConnect(vmmGObjectUI):
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
-        self.start_browse()
 
     def _cleanup(self):
         pass
@@ -161,19 +126,11 @@ class vmmConnect(vmmGObjectUI):
             return model[it][0] == -1
         combo.set_row_separator_func(sepfunc)
 
-        # Hostname combo box entry
-        hostListModel = Gtk.ListStore(str, str, str)
-        host = self.widget("hostname")
-        host.set_model(hostListModel)
-        host.set_entry_text_column(2)
-        hostListModel.set_sort_column_id(2, Gtk.SortType.ASCENDING)
-
     def reset_state(self):
         self.set_default_hypervisor()
         self.widget("autoconnect").set_sensitive(True)
         self.widget("autoconnect").set_active(True)
-        self.widget("hostname").get_model().clear()
-        self.widget("hostname").get_child().set_text("")
+        self.widget("hostname").set_text("")
         self.widget("connect-remote").set_active(False)
         self.widget("username-entry").set_text("")
         self.widget("uri-entry").set_text("")
@@ -190,119 +147,6 @@ class vmmConnect(vmmGObjectUI):
             uiutil.set_list_selection(self.widget("hypervisor"), HV_QEMU)
         elif default.startswith("xen"):
             uiutil.set_list_selection(self.widget("hypervisor"), HV_XEN)
-
-    def add_service(self, interface, protocol, name, typ, domain, flags):
-        ignore = flags
-        try:
-            # Async service resolving
-            res = self.avahiserver.ServiceResolverNew("(iisssiu)",
-                                                 interface, protocol,
-                                                 name, typ, domain, -1, 0)
-            resint = Gio.DBusProxy.new_sync(self.dbus, 0, None,
-                                    "org.freedesktop.Avahi", res,
-                                    "org.freedesktop.Avahi.ServiceResolver",
-                                    None)
-
-            def cb(proxy, sender, signal, args):
-                ignore = proxy
-                ignore = sender
-                if signal == "Found":
-                    self.add_conn_to_list(*args)
-
-            sig = resint.connect("g-signal", cb)
-            self.browser_sigs.append((resint, sig))
-        except Exception as e:
-            logging.exception(e)
-
-    def remove_service(self, interface, protocol, name, typ, domain, flags):
-        ignore = domain
-        ignore = protocol
-        ignore = flags
-        ignore = interface
-        ignore = typ
-
-        try:
-            model = self.widget("hostname").get_model()
-            name = str(name)
-            for row in model:
-                if row[0] == name:
-                    model.remove(row.iter)
-        except Exception as e:
-            logging.exception(e)
-
-    def add_conn_to_list(self, interface, protocol, name, typ, domain,
-                         host, aprotocol, address, port, text, flags):
-        ignore = domain
-        ignore = protocol
-        ignore = flags
-        ignore = interface
-        ignore = typ
-        ignore = text
-        ignore = aprotocol
-        ignore = port
-
-        try:
-            model = self.widget("hostname").get_model()
-            for row in model:
-                if row[2] == str(name):
-                    # Already present in list
-                    return
-
-            host = self.sanitize_hostname(str(host))
-            model.append([str(address), str(host), str(name)])
-        except Exception as e:
-            logging.exception(e)
-
-    def start_browse(self):
-        if self.browser or not self.avahiserver:
-            return
-        # Call method to create new browser, and get back an object path for it.
-        interface = -1              # physical interface to use? -1 is unspec
-        protocol  = 0               # 0 = IPv4, 1 = IPv6, -1 = Unspecified
-        service   = '_libvirt._tcp'  # Service name to poll for
-        flags     = 0               # Extra option flags
-        domain    = ""              # Domain to browse in. NULL uses default
-        bpath = self.avahiserver.ServiceBrowserNew("(iissu)",
-                                                   interface, protocol,
-                                                   service, domain, flags)
-
-        # Create browser interface for the new object
-        self.browser = Gio.DBusProxy.new_sync(self.dbus, 0, None,
-                                    "org.freedesktop.Avahi", bpath,
-                                    "org.freedesktop.Avahi.ServiceBrowser",
-                                    None)
-
-        def cb(proxy, sender, signal, args):
-            ignore = proxy
-            ignore = sender
-            if signal == "ItemNew":
-                self.add_service(*args)
-            elif signal == "ItemRemove":
-                self.remove_service(*args)
-
-        self.browser_sigs.append((self.browser,
-                                  self.browser.connect("g-signal", cb)))
-
-    def hostname_combo_changed(self, src):
-        model = src.get_model()
-        txt = src.get_child().get_text()
-        row = None
-
-        for currow in model:
-            if currow[2] == txt:
-                row = currow
-                break
-
-        if not row:
-            return
-
-        ip = row[0]
-        host = row[1]
-        entry = host
-        if not entry:
-            entry = ip
-
-        self.widget("hostname").get_child().set_text(entry)
 
     def hostname_changed(self, src_ignore):
         self.populate_uri()
@@ -351,7 +195,7 @@ class vmmConnect(vmmGObjectUI):
 
     def generate_uri(self):
         hv = uiutil.get_list_selection(self.widget("hypervisor"))
-        host = self.widget("hostname").get_child().get_text().strip()
+        host = self.widget("hostname").get_text().strip()
         user = self.widget("username-entry").get_text()
         is_remote = self.is_remote()
 
@@ -390,7 +234,7 @@ class vmmConnect(vmmGObjectUI):
 
     def validate(self):
         is_remote = self.is_remote()
-        host = self.widget("hostname").get_child().get_text()
+        host = self.widget("hostname").get_text()
 
         if is_remote and not host:
             return self.err.val_err(_("A hostname is required for "
@@ -439,56 +283,3 @@ class vmmConnect(vmmGObjectUI):
         conn.connect_once("open-completed", self._conn_open_completed)
         self.set_finish_cursor()
         conn.open()
-
-    def sanitize_hostname(self, host):
-        if host == "linux" or host == "localhost":
-            host = ""
-        if host.startswith("linux-"):
-            tmphost = host[6:]
-            try:
-                int(tmphost)
-                host = ""
-            except ValueError:
-                pass
-
-        if host:
-            host = self.check_resolve_host(host)
-        return host
-
-    def check_resolve_host(self, host):
-        # Try to resolve hostname
-        #
-        # Avahi always uses 'hostname.local', but for some reason
-        # fedora 12 out of the box can't resolve '.local' names
-        # Attempt to resolve the name. If it fails, remove .local
-        # if present, and try again
-        if host.endswith(".local"):
-            if self.can_resolve_local is False:
-                host = host[:-6]
-
-            elif self.can_resolve_local is None:
-                try:
-                    socket.getaddrinfo(host, None)
-                except Exception:
-                    logging.debug("Couldn't resolve host '%s'. Stripping "
-                                  "'.local' and retrying.", host)
-                    self.can_resolve_local = False
-                    host = self.check_resolve_host(host[:-6])
-                else:
-                    self.can_resolve_local = True
-
-        else:
-            if self.can_resolve_hostname is False:
-                host = ""
-            elif self.can_resolve_hostname is None:
-                try:
-                    socket.getaddrinfo(host, None)
-                except Exception:
-                    logging.debug("Couldn't resolve host '%s'. Disabling "
-                                  "host name resolution, only using IP addr",
-                                  host)
-                    self.can_resolve_hostname = False
-                else:
-                    self.can_resolve_hostname = True
-
-        return host

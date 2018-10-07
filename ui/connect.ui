@@ -183,29 +183,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="hostname">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_entry">True</property>
-                <signal name="changed" handler="on_hostname_combo_changed" swapped="no"/>
-                <child internal-child="entry">
-                  <object class="GtkEntry" id="combobox-entry">
-                    <property name="can_focus">True</property>
-                    <signal name="changed" handler="on_hostname_changed" swapped="no"/>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="combobox-entry-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Hostname</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="label91">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -341,6 +318,17 @@ are very limited. &lt;/small&gt;</property>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="hostname">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <signal name="changed" handler="on_hostname_changed" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
               </packing>
             </child>
           </object>
