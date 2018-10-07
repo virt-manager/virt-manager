@@ -331,18 +331,23 @@ class VMMDogtailNode(dogtail.tree.Node):
             msg += " labeller.text='%s'" % self.labeller.text
         return msg
 
+    def fmt_nodes(self):
+        strs = []
+        def _walk(node):
+            try:
+                strs.append(node.node_string())
+            except Exception as e:
+                strs.append("got exception: %s" % e)
+
+        self.findChildren(_walk, isLambda=True)
+        return "\n".join(strs)
+
     def print_nodes(self):
         """
         Helper to print the entire node tree for the passed root. Useful
         if to figure out the roleName for the object you are looking for
         """
-        def _walk(node):
-            try:
-                print(node.node_string())
-            except Exception as e:
-                print("got exception: %s" % e)
-
-        self.findChildren(_walk, isLambda=True)
+        print(self.fmt_nodes())
 
 
 # This is the same hack dogtail uses to extend the Accessible class.

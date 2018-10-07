@@ -39,6 +39,43 @@ class NewVM(uiutils.UITestCase):
     # Test cases #
     ##############
 
+    def testNewVMMultiConnection(self):
+        """
+        Test the wizard's multiple connection handling
+        """
+        # Add an extra connection for test:///default
+        self.app.root.find("File", "menu").click()
+        self.app.root.find("Add Connection...", "menu item").click()
+        win = self.app.root.find_fuzzy("Add Connection", "dialog")
+        win.find_fuzzy("Hypervisor", "combo box").click()
+        win.find_fuzzy("Custom URI", "menu item").click()
+        win.find("uri-entry", "text").text = "test:///default"
+        win.find("Connect", "push button").click()
+
+        # Open the new VM wizard, select a connection
+        newvm = self._open_create_wizard()
+        combo = newvm.find("create-conn")
+        combo.click()
+        combo.find_fuzzy("testdriver.xml").click()
+        newvm.find_fuzzy("Forward", "button").click()
+
+        # Verify media-combo contents for testdriver.xml
+        cdrom = newvm.find("media-combo")
+        entry = newvm.find("media-entry")
+        cdrom.click_combo_entry()
+        cdrom.find_fuzzy(r"\(/dev/sr1\)")
+        entry.click()
+
+        # Back up, select test:///default, verify media-combo is now empty
+        back = newvm.find_fuzzy("Back", "button")
+        back.click()
+        uiutils.check_in_loop(lambda: not back.sensitive)
+        combo.click()
+        combo.find_fuzzy("test default").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        cdrom.click_combo_entry()
+        self.assertTrue("/dev/sr1" not in cdrom.fmt_nodes())
+
     def testNewVMPXEDefault(self):
         """
         Click through the New VM wizard with default values + PXE, then

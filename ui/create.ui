@@ -466,6 +466,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <signal name="changed" handler="on_create_conn_changed" swapped="no"/>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="create-conn-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes">create-conn</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
