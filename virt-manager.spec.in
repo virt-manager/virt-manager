@@ -46,6 +46,10 @@ Requires: dconf
 # no ambiguity.
 Requires: vte291
 
+# Weak dependencies for the common virt-manager usecase
+Recommends: (libvirt-daemon-kvm or libvirt-daemon-qemu)
+Recommends: libvirt-daemon-config-network
+
 BuildRequires: intltool
 BuildRequires: /usr/bin/pod2man
 BuildRequires: python3-devel
