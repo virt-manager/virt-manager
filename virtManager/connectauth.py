@@ -72,19 +72,22 @@ def _creds_dialog_main(creds, cbdata):
     dialog = Gtk.Dialog(_("Authentication required"), None, 0,
                         (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                          Gtk.STOCK_OK, Gtk.ResponseType.OK))
-    label = []
-    entry = []
+    dialog.set_resizable(False)
+    labels = []
+    entrys = []
 
-    box = Gtk.Table(2, len(creds))
-    box.set_border_width(6)
-    box.set_row_spacings(6)
-    box.set_col_spacings(12)
+    dialog.set_border_width(6)
+    box = Gtk.Grid()
+    box.set_hexpand(False)
+    box.set_vexpand(False)
+    box.set_row_spacing(6)
+    box.set_column_spacing(6)
+    box.set_margin_bottom(12)
 
     def _on_ent_activate(ent):
-        idx = entry.index(ent)
-
-        if idx < len(entry) - 1:
-            entry[idx + 1].grab_focus()
+        idx = entrys.index(ent)
+        if idx < len(entrys) - 1:
+            entrys[idx + 1].grab_focus()
         else:
             dialog.response(Gtk.ResponseType.OK)
 
@@ -99,25 +102,26 @@ def _creds_dialog_main(creds, cbdata):
             return -1
 
         prompt += ": "
-        text_label = Gtk.Label(label=prompt)
-        text_label.set_alignment(0.0, 0.5)
-        label.append(text_label)
+        label = Gtk.Label()
+        label.set_hexpand(False)
+        label.set_halign(Gtk.Align.START)
+        label.set_line_wrap(True)
+        label.set_max_width_chars(40)
+        label.set_text(prompt)
+        labels.append(label)
 
-        ent = Gtk.Entry()
+        entry = Gtk.Entry()
         if noecho:
-            ent.set_visibility(False)
-        ent.connect("activate", _on_ent_activate)
-        entry.append(ent)
+            entry.set_visibility(False)
+        entry.set_valign(Gtk.Align.START)
+        entry.connect("activate", _on_ent_activate)
+        entrys.append(entry)
 
-        box.attach(label[row], 0, 1, row, row + 1,
-            Gtk.AttachOptions.FILL, 0, 0, 0)
-        box.attach(entry[row], 1, 2, row, row + 1,
-            Gtk.AttachOptions.FILL, 0, 0, 0)
+        box.attach(labels[row], row, row, 1, 1)
+        box.attach(entrys[row], row + 1, row, 1, 1)
         row = row + 1
 
-    vbox = dialog.get_child()
-    vbox.add(box)
-
+    dialog.get_child().add(box)
     dialog.show_all()
     res = dialog.run()
     dialog.hide()
@@ -125,7 +129,7 @@ def _creds_dialog_main(creds, cbdata):
     if res == Gtk.ResponseType.OK:
         row = 0
         for cred in creds:
-            cred[4] = entry[row].get_text()
+            cred[4] = entrys[row].get_text()
             row = row + 1
         ret = 0
     else:
