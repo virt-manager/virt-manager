@@ -135,24 +135,6 @@ def _creds_dialog_main(creds, cbdata):
     return ret
 
 
-def acquire_tgt():
-    """
-    Try to get kerberos ticket if openAuth seems to require it
-    """
-    logging.debug("In acquire tgt.")
-    try:
-        bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
-        ka = Gio.DBusProxy.new_sync(bus, 0, None,
-                                "org.gnome.KrbAuthDialog",
-                                "/org/gnome/KrbAuthDialog",
-                                "org.freedesktop.KrbAuthDialog", None)
-        ret = ka.acquireTgt("(s)", "")
-    except Exception as e:
-        logging.info("Cannot acquire tgt %s", str(e))
-        ret = False
-    return ret
-
-
 def connect_error(conn, errmsg, tb, warnconsole):
     """
     Format connection error message

@@ -1009,7 +1009,7 @@ class vmmConnection(vmmGObject):
                       self.get_uri())
         self._start_thread(self._open_thread, "Connect %s" % self.get_uri())
 
-    def _do_open(self, retry_for_tgt=True):
+    def _do_open(self):
         warnconsole = False
         libvirt_error_code = None
         libvirt_error_message = None
@@ -1039,12 +1039,6 @@ class vmmConnection(vmmGObject):
             if (not self.is_remote() and
                 not connectauth.do_we_have_session()):
                 warnconsole = True
-
-        if (libvirt_error_code == libvirt.VIR_ERR_AUTH_FAILED and
-            "GSSAPI Error" in libvirt_error_message and
-            "No credentials cache found" in libvirt_error_message):
-            if retry_for_tgt and connectauth.acquire_tgt():
-                self._do_open(retry_for_tgt=False)
 
         ConnectError = connectauth.connect_error(
                 self, str(exc), tb, warnconsole)
