@@ -70,7 +70,6 @@ class _CLIConfig(object):
         self.cfgpath = _cfgpath
         self.version = __version__
 
-        self.askpass_package = _split_list(_get_param("askpass_packages", ""))
         self.default_graphics = _get_param("default_graphics", "spice")
         self.default_hvs = _split_list(_get_param("default_hvs", ""))
 

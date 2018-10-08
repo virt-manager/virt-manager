@@ -175,7 +175,6 @@ class vmmConfig(object):
         # the keyring
         self.keyring = None
 
-        self.askpass_package = CLIConfig.askpass_package
         self.default_graphics_from_config = CLIConfig.default_graphics
         self.default_hvs = CLIConfig.default_hvs
 

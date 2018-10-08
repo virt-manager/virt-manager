@@ -6,7 +6,6 @@
 
 
 %global with_guestfs               0
-%global askpass_package            "openssh-askpass"
 %global default_hvs                "qemu,xen,lxc"
 
 
@@ -104,16 +103,11 @@ machine).
 
 
 %build
-%if %{askpass_package}
-%global _askpass_package --askpass-package-names=%{askpass_package}
-%endif
-
 %if %{default_hvs}
 %global _default_hvs --default-hvs %{default_hvs}
 %endif
 
 ./setup.py configure \
-    %{?_askpass_package} \
     %{?_default_hvs}
 
 

@@ -313,8 +313,6 @@ class my_rpm(distutils.core.Command):
 class configure(distutils.core.Command):
     user_options = [
         ("prefix=", None, "installation prefix"),
-        ("askpass-package-names=", None,
-         "name of your distro's askpass package(s) (default=none)"),
         ("default-graphics=", None,
          "Default graphics type (spice or vnc) (default=spice)"),
         ("default-hvs=", None,
@@ -329,7 +327,6 @@ class configure(distutils.core.Command):
 
     def initialize_options(self):
         self.prefix = sysprefix
-        self.askpass_package_names = None
         self.default_graphics = None
         self.default_hvs = None
 
@@ -338,8 +335,6 @@ class configure(distutils.core.Command):
         template = ""
         template += "[config]\n"
         template += "prefix = %s\n" % self.prefix
-        if self.askpass_package_names is not None:
-            template += "askpass_packages = %s\n" % self.askpass_package_names
         if self.default_graphics is not None:
             template += "default_graphics = %s\n" % self.default_graphics
         if self.default_hvs is not None:

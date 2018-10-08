@@ -147,7 +147,6 @@ def connect_error(conn, errmsg, tb, warnconsole):
     tb = tb.strip(" \n")
     hint = ""
     show_errmsg = True
-    config = conn.config
 
     if conn.is_remote():
         logging.debug("connect_error: conn transport=%s",
@@ -157,13 +156,10 @@ def connect_error(conn, errmsg, tb, warnconsole):
                       "which supports the -U option.")
             show_errmsg = False
         elif (conn.get_uri_transport() == "ssh" and
-              re.search(r"ssh-askpass", tb)):
+              re.search(r"askpass", tb)):
 
-            askpass = (config.askpass_package and
-                       config.askpass_package[0] or
-                       "openssh-askpass")
-            hint += _("You need to install %s or "
-                      "similar to connect to this host.") % askpass
+            hint += _("Configure SSH key access for the remote host, "
+                      "or install an SSH askpass package locally.")
             show_errmsg = False
         else:
             hint += _("Verify that the 'libvirtd' daemon is running "
