@@ -228,6 +228,7 @@ def _openauth_cb(creds, _cbdata):
         if not prompt:
             logging.error("No prompt for auth credtype=%s", credtype)
             return -1
+        logging.debug("openauth_cb prompt=%s", prompt)
 
         prompt += ": "
         if noecho:
