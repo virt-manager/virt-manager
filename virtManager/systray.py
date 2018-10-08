@@ -9,6 +9,8 @@ import logging
 from gi.repository import Gio
 from gi.repository import Gtk
 
+from virtinst import util
+
 from . import vmmenu
 from .baseclass import vmmGObject
 from .connmanager import vmmConnectionManager
@@ -29,6 +31,20 @@ def _toggle_manager(*args, **kwargs):
         manager.close()
     else:
         manager.show()
+
+
+def _conn_connect_cb(src, uri):
+    connmanager = vmmConnectionManager.get_instance()
+    conn = connmanager.conns[uri]
+    if conn.is_disconnected():
+        conn.open()
+
+
+def _conn_disconnect_cb(src, uri):
+    connmanager = vmmConnectionManager.get_instance()
+    conn = connmanager.conns[uri]
+    if not conn.is_disconnected():
+        conn.close()
 
 
 def _has_appindicator_dbus():
@@ -209,7 +225,10 @@ class vmmSystray(vmmGObject):
 
     def _build_conn_menuitem(self, conn):
         menu_item = Gtk.MenuItem.new_with_label(conn.get_pretty_desc())
-        menu_item.set_sensitive(conn.is_active())
+        if conn.is_active():
+            label = menu_item.get_child()
+            markup = "<b>%s</b>" % util.xml_escape(conn.get_pretty_desc())
+            label.set_markup(markup)
 
         menu = Gtk.Menu()
         vms = conn.list_vms()
@@ -222,16 +241,29 @@ class vmmSystray(vmmGObject):
             vmitem.set_sensitive(False)
             menu.add(vmitem)
 
+        menu.add(Gtk.SeparatorMenuItem())
+        if conn.is_active():
+            citem = Gtk.ImageMenuItem.new_from_stock(
+                    Gtk.STOCK_DISCONNECT, None)
+            citem.connect("activate", _conn_disconnect_cb, conn.get_uri())
+        else:
+            citem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CONNECT, None)
+            citem.connect("activate", _conn_connect_cb, conn.get_uri())
+        menu.add(citem)
+
         menu_item.set_submenu(menu)
         return menu_item
 
     def _build_menu(self):
         connmanager = vmmConnectionManager.get_instance()
-        conns = connmanager.conns.copy()
+        conns = list(connmanager.conns.values())
         menu = Gtk.Menu()
 
-        for uri in reversed(sorted(list(conns.keys()))):
-            connmenu = self._build_conn_menuitem(conns[uri])
+        conns.sort(key=lambda c: c.get_pretty_desc().lower())
+        conns.sort(key=lambda c: not c.is_active())
+
+        for conn in conns:
+            connmenu = self._build_conn_menuitem(conn)
             menu.add(connmenu)
 
         menu.add(Gtk.SeparatorMenuItem())
