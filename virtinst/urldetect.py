@@ -30,7 +30,6 @@ class _DistroCache(object):
         self.suse_content = None
         self.debian_media_type = None
 
-
     def acquire_file_content(self, path):
         if path not in self._filecache:
             try:
@@ -132,6 +131,9 @@ class _DistroCache(object):
         logging.debug("converted verstr=%s to version=%s update=%s",
                 verstr, version, update)
         return version, update
+
+    def fetcher_is_iso(self):
+        return self._fetcher.is_iso()
 
 
 class _SUSEContent(object):
@@ -664,7 +666,16 @@ class DebianDistro(Distro):
             media_type = "daily"
         elif cache.content_regex(".disk/info",
                 "%s.*" % cls._debname.capitalize()):
-            media_type = "disk"
+            # There's two cases here:
+            # 1) Direct access ISO, attached as CDROM afterwards. We
+            #    use one set of kernels in that case which seem to
+            #    assume the prescence of CDROM media
+            # 2) ISO mounted and exported over URL. We use a different
+            #    set of kernels that expect to boot from the network
+            if cache.fetcher_is_iso():
+                media_type = "disk"
+            else:
+                media_type = "mounted_iso_url"
 
         if media_type:
             cache.debian_media_type = media_type
@@ -710,6 +721,8 @@ class DebianDistro(Distro):
         url_prefix = "current/images"
         if self.cache.debian_media_type == "daily":
             url_prefix = "daily"
+        elif self.cache.debian_media_type == "mounted_iso_url":
+            url_prefix = "install"
 
         tree_arch = self._find_treearch()
         hvmroot = "%s/netboot/%s-installer/%s/" % (url_prefix,

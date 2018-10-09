@@ -26,6 +26,7 @@ class _URLFetcher(object):
     a media source, such as CD ISO, or HTTP/HTTPS/FTP server
     """
     _block_size = 16384
+    _is_iso = False
 
     def __init__(self, location, scratchdir, meter):
         self.location = location
@@ -100,6 +101,12 @@ class _URLFetcher(object):
     ##############
     # Public API #
     ##############
+
+    def is_iso(self):
+        """
+        If this is a fetcher for local CDROM/ISO
+        """
+        return self._is_iso
 
     def prepareLocation(self):
         """
@@ -288,6 +295,7 @@ class _LocalURLFetcher(_URLFetcher):
 
 class _ISOURLFetcher(_URLFetcher):
     _cache_file_list = None
+    _is_iso = True
 
     def _make_full_url(self, filename):
         return "/" + filename
