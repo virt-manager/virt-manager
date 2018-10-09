@@ -30,9 +30,8 @@ meter = util.make_meter(quiet=False)
 DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/Server/%s/os/"
 FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Server/%s/os/"
 
-(WARN_RHEL4,
- WARN_RHEL5,
- WARN_LATEST) = range(1, 4)
+(WARN_RHEL5,
+ WARN_LATEST) = range(1, 3)
 
 
 def prompt():
@@ -62,8 +61,6 @@ def _add(*args, **kwargs):
     _alldistros[_d.name] = _d
 
 
-_add("centos-4.9", "http://vault.centos.org/4.9/os/x86_64",
-     warntype=WARN_RHEL4, ks2=True, virtio=False)
 _add("centos-5.11", "http://vault.centos.org/5.11/os/x86_64/",
      warntype=WARN_RHEL5)
 _add("centos-6-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/6/os/x86_64/",
@@ -106,10 +103,7 @@ def _fetch_distro(distro):
 def _test_distro(distro):
     os.system("clear")
     print("\n")
-    if distro.warntype == WARN_RHEL4:
-        print("RHEL4: Makes its way to the text installer, then chokes ")
-        print("on our bogus URI http://HEY-THIS-IS-OUR-BAD-KICKSTART-URL.com/")
-    elif distro.warntype == WARN_RHEL5:
+    if distro.warntype == WARN_RHEL5:
         print("RHEL5, RHEL6, Fedora < 17: You'll get an error about a ")
         print("bogus bootproto ITREADTHEKICKSTART. This means anaconda ")
         print("read our busted kickstart.")
