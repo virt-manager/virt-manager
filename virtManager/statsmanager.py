@@ -172,7 +172,7 @@ class vmmStatsManager(vmmGObject):
 
         # Some drivers support this method for getting all usage at once
         if not vm.summary_disk_stats_skip:
-            rd, wr = self._sample_disk_io_helper(vm, stats, 0)
+            rd, wr = self._sample_disk_io_helper(vm, stats, 0, '')
             return rd, wr
 
         # did not work, iterate over all disks
@@ -211,11 +211,11 @@ class vmmStatsManager(vmmGObject):
             logging.debug("Error setting memstats period: %s", e)
 
     @staticmethod
-    def _sample_mem_stats_helper(vm, stats):
-        if stats:
+    def _sample_mem_stats_helper(vm, allstats):
+        if allstats:
             # @stats are available if new API call is supported
-            totalmem = stats.get("balloon.current", 0)
-            curmem = stats.get("balloon.rss", 0)
+            totalmem = allstats.get("balloon.current", 0)
+            curmem = allstats.get("balloon.rss", 0)
         else:
             # Legacy call
             try:
@@ -243,15 +243,15 @@ class vmmStatsManager(vmmGObject):
 
         totalmem, curmem = self._sample_mem_stats_helper(vm, stats)
 
-        if "unused" in stats:
-            curmem = max(0, totalmem - stats.get("unused", totalmem))
-
         pcentCurrMem = (curmem / float(totalmem)) * 100
         pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
 
         return pcentCurrMem, curmem
 
     def _get_all_stats(self, con):
+        if not self._all_stats_supported:
+            return []
+
         stats = []
         try:
             stats = con.get_backend().getAllDomainStats(
@@ -270,31 +270,21 @@ class vmmStatsManager(vmmGObject):
                 logging.error("Error loading statistics: %s", err)
         return stats
 
-    def refresh_vms_stats(self, con, vm_list):
+    def refresh_vms_stats(self, conn, vm_list):
         for vm in vm_list:
-            stats = None
             now = time.time()
-            if self._all_stats_supported:
-                stats = self._get_all_stats(con)
-            if stats:
-                # using new API
-                for domstat in stats:
-                    if vm.get_backend().UUID() == domstat[0].UUID():
-                        cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu = \
-                            self._sample_cpu_stats(now, vm, domstat[1])
-                        pcentCurrMem, curmem = self._sample_mem_stats(vm, domstat[1])
-                        rdBytes, wrBytes = self._sample_disk_io(vm, domstat[1])
-                        rxBytes, txBytes = self._sample_network_traffic(vm, domstat[1])
-                        # this if statement is true only once, so we can break out
-                        # of the cycle
-                        break
-            else:
-                # legacy method of gathering stats
-                cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu = \
-                    self._sample_cpu_stats(now, vm)
-                pcentCurrMem, curmem = self._sample_mem_stats(vm)
-                rdBytes, wrBytes = self._sample_disk_io(vm)
-                rxBytes, txBytes = self._sample_network_traffic(vm)
+
+            domallstats = None
+            for _domstat in self._get_all_stats(conn):
+                if vm.get_name() == _domstat[0].name():
+                    domallstats = _domstat[1]
+                    break
+
+            cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu = \
+                self._sample_cpu_stats(now, vm, domallstats)
+            pcentCurrMem, curmem = self._sample_mem_stats(vm, domallstats)
+            rdBytes, wrBytes = self._sample_disk_io(vm, domallstats)
+            rxBytes, txBytes = self._sample_network_traffic(vm, domallstats)
 
             newStats = {
                 "timestamp": now,
@@ -313,9 +303,6 @@ class vmmStatsManager(vmmGObject):
             self._newStatsDict[vm] = newStats
 
     def get_vm_stats(self, vm):
-        if not self._all_stats_supported:
-            return None
-
         # this should happen only during initialization of vm when
         # caches are primed
         if not self._newStatsDict.get(vm):
