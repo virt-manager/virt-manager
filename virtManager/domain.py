@@ -230,19 +230,9 @@ class vmmDomain(vmmLibvirtObject):
         self._ip_cache = None
 
         self.managedsave_supported = False
-        self.mem_stats_supported = False
         self._domain_state_supported = False
 
-        self.enable_mem_stats = False
-        self.enable_cpu_stats = False
-        self.mem_stats_period_is_set = False
-
-        self.enable_net_poll = False
-        self.stats_net_supported = True
         self.stats_net_skip = []
-
-        self.enable_disk_poll = False
-        self.stats_disk_supported = True
         self.stats_disk_skip = []
         self.summary_disk_stats_skip = False
 
@@ -257,8 +247,6 @@ class vmmDomain(vmmLibvirtObject):
     def _init_libvirt_state(self):
         self.managedsave_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_MANAGED_SAVE, self._backend)
-        self.mem_stats_supported = self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_MEMORY_STATS, self._backend)
         self._domain_state_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_STATE, self._backend)
 
@@ -267,32 +255,12 @@ class vmmDomain(vmmLibvirtObject):
         (self._inactive_xml_flags,
          self._active_xml_flags) = self.conn.get_dom_flags(self._backend)
 
-        # This needs to come before initial stats tick
-        self._on_config_sample_network_traffic_changed()
-        self._on_config_sample_disk_io_changed()
-        self._on_config_sample_mem_stats_changed()
-        self._on_config_sample_cpu_stats_changed()
-
         # Prime caches
         info = self._backend.info()
         self._refresh_status(newstatus=info[0])
         self._tick_stats()
         self.has_managed_save()
         self.snapshots_supported()
-
-        # Hook up listeners that need to be cleaned up
-        self.add_gsettings_handle(
-            self.config.on_stats_enable_cpu_poll_changed(
-                self._on_config_sample_cpu_stats_changed))
-        self.add_gsettings_handle(
-            self.config.on_stats_enable_net_poll_changed(
-                self._on_config_sample_network_traffic_changed))
-        self.add_gsettings_handle(
-            self.config.on_stats_enable_disk_poll_changed(
-                self._on_config_sample_disk_io_changed))
-        self.add_gsettings_handle(
-            self.config.on_stats_enable_memory_poll_changed(
-                self._on_config_sample_mem_stats_changed))
 
         if (self.get_name() == "Domain-0" and
             self.get_uuid() == "00000000-0000-0000-0000-000000000000"):
@@ -1732,16 +1700,6 @@ class vmmDomain(vmmLibvirtObject):
     def del_console_password(self):
         return self.config.set_pervm(self.get_uuid(), "/console-password",
                                      ("", -1))
-
-
-    def _on_config_sample_network_traffic_changed(self, ignore=None):
-        self.enable_net_poll = self.config.get_stats_enable_net_poll()
-    def _on_config_sample_disk_io_changed(self, ignore=None):
-        self.enable_disk_poll = self.config.get_stats_enable_disk_poll()
-    def _on_config_sample_mem_stats_changed(self, ignore=None):
-        self.enable_mem_stats = self.config.get_stats_enable_memory_poll()
-    def _on_config_sample_cpu_stats_changed(self, ignore=None):
-        self.enable_cpu_stats = self.config.get_stats_enable_cpu_poll()
 
     def get_cache_dir(self):
         ret = os.path.join(self.conn.get_cache_dir(), self.get_uuid())
