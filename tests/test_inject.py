@@ -31,7 +31,8 @@ DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/Ser
 FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Server/%s/os/"
 
 (WARN_RHEL5,
- WARN_LATEST) = range(1, 3)
+ WARN_DEBIAN,
+ WARN_FEDORA) = range(1, 4)
 
 
 def prompt():
@@ -40,17 +41,17 @@ def prompt():
     return sys.stdin.readline()
 
 
+KSOLD = "tests/inject-data/old-kickstart.ks"
+KSNEW = "tests/inject-data/new-kickstart.ks"
+PRESEED = "tests/inject-data/preseed.cfg"
+
+
 class Distro(object):
-    def __init__(self, name, url, warntype=WARN_LATEST,
-                 ks2=False, virtio=True):
+    def __init__(self, name, url, filename, warntype=WARN_FEDORA):
         self.name = name
         self.url = url
-        self.virtio = virtio
         self.warntype = warntype
-
-        self.ks = "tests/inject-data/old-kickstart.ks"
-        if ks2:
-            self.ks = "tests/inject-data/new-kickstart.ks"
+        self.filename = filename
 
         self.kernel = None
         self.initrd = None
@@ -62,12 +63,15 @@ def _add(*args, **kwargs):
 
 
 _add("centos-5.11", "http://vault.centos.org/5.11/os/x86_64/",
-     warntype=WARN_RHEL5)
+     warntype=WARN_RHEL5, filename=KSOLD)
 _add("centos-6-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/6/os/x86_64/",
-     warntype=WARN_RHEL5)
+     warntype=WARN_RHEL5, filename=KSOLD)
 _add("centos-7-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/7/os/x86_64/",
-     ks2=True)
-_add("fedora-27", FEDORA_URL % ("27", "x86_64"), ks2=True)
+     filename=KSNEW)
+_add("fedora-27", FEDORA_URL % ("27", "x86_64"), filename=KSNEW)
+_add("debian-9",
+     "http://ftp.us.debian.org/debian/dists/stretch/main/installer-amd64/",
+     filename=PRESEED, warntype=WARN_DEBIAN)
 
 
 def exit_cleanup():
@@ -107,26 +111,31 @@ def _test_distro(distro):
         print("RHEL5, RHEL6, Fedora < 17: You'll get an error about a ")
         print("bogus bootproto ITREADTHEKICKSTART. This means anaconda ")
         print("read our busted kickstart.")
-    else:
+    elif distro.warntype == WARN_DEBIAN:
+        print("Debian: Won't ask any questions, will autoconfig network, "
+              "then print a big red text box about a bad mirror config.")
+    elif distro.warntype == WARN_FEDORA:
         print("RHEL7, Fedora >= 17: Chokes on the bogus URI in the early ")
         print("console screen when fetching the installer squashfs image.")
 
     originitrd = distro.initrd
     kernel = distro.kernel
     newinitrd = originitrd + ".copy"
-    injectfile = distro.ks
+    injectfile = distro.filename
 
     os.system("cp -f %s %s" % (originitrd, newinitrd))
     cleanup.append(newinitrd)
     perform_initrd_injections(newinitrd, [injectfile], ".")
 
-    nic = distro.virtio and "virtio" or "rtl8139"
-    append = "-append \"ks=file:/%s\"" % os.path.basename(injectfile)
+    if distro.warntype == WARN_DEBIAN:
+        append = "auto=true"
+    else:
+        append = "\"ks=file:/%s\"" % os.path.basename(injectfile)
     cmd = ("sudo qemu-kvm -enable-kvm -name %s "
            "-cpu host -m 1500 -display gtk "
-           "-net bridge,br=virbr0 -net nic,model=%s "
-           "-kernel %s -initrd %s %s" %
-           (distro.name, nic, kernel, newinitrd, append))
+           "-net bridge,br=virbr0 -net nic,model=virtio "
+           "-kernel %s -initrd %s -append %s" %
+           (distro.name, kernel, newinitrd, append))
     print("\n\n" + cmd)
     os.system(cmd)
 
