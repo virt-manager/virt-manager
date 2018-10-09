@@ -176,6 +176,8 @@ class DeviceDisk(Device):
             return searchdata
         if diskbackend.path_is_url(path):
             return searchdata
+        if diskbackend.path_is_network_vol(conn, path):
+            return searchdata
 
         user, uid = conn.caps.host.get_qemu_baselabel()
         if not user:

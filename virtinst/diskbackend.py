@@ -145,7 +145,7 @@ def manage_path(conn, path):
     if not path:
         return None, None
 
-    if not path_is_url(path):
+    if not path_is_url(path) and not path_is_network_vol(conn, path):
         path = os.path.abspath(path)
     vol, pool = _check_if_path_managed(conn, path)
     if vol or pool or not _can_auto_manage(path):
@@ -175,6 +175,19 @@ def path_is_url(path):
     if not path:
         return False
     return bool(re.match(r"[a-zA-Z]+(\+[a-zA-Z]+)?://.*", path))
+
+
+def path_is_network_vol(conn, path):
+    """
+    Detect if path is a network volume such as rbd, gluster, etc
+    """
+    if not path:
+        return False
+
+    for volxml in conn.fetch_all_vols():
+        if volxml.target_path == path:
+            return volxml.type == "network"
+    return False
 
 
 def _get_dev_type(path, vol_xml, vol_object, pool_xml, remote):
