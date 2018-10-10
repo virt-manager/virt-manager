@@ -71,12 +71,12 @@ class TestOSDB(unittest.TestCase):
         found_fedora = False
         found_rhel = False
         for idx, osobj in enumerate(pref_list[:]):
-            if osobj.name.startswith("fedora"):
+            if osobj.urldistro == "fedora":
                 found_fedora = True
                 continue
 
             for osobj2 in pref_list[idx:]:
-                if osobj2.name.startswith("rhel"):
+                if osobj2.urldistro == "rhel":
                     found_rhel = True
                     continue
                 break
