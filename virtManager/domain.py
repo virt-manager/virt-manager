@@ -246,8 +246,6 @@ class vmmDomain(vmmLibvirtObject):
         # Prime caches
         info = self._backend.info()
         self._refresh_status(newstatus=info[0])
-        # XXX _tick_stats
-        # self._tick_stats()
         self.has_managed_save()
         self.snapshots_supported()
 
