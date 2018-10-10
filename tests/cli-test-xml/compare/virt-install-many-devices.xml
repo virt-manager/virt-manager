@@ -160,6 +160,15 @@
       <source file="/tmp/brand-new.img"/>
       <target dev="vdn" bus="virtio"/>
     </disk>
+    <disk type="block" device="lun">
+      <driver name="qemu" type="raw"/>
+      <source dev="/dev/sda">
+        <reservations managed="no">
+          <source type="unix" path="/var/run/test/pr-helper0.sock" mode="client"/>
+        </reservations>
+      </source>
+      <target dev="sdd" bus="scsi"/>
+    </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
     </controller>

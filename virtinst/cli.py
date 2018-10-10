@@ -2119,6 +2119,11 @@ ParserDisk.add_arg("geometry_heads", "geometry.heads")
 ParserDisk.add_arg("geometry_secs", "geometry.secs")
 ParserDisk.add_arg("geometry_trans", "geometry.trans")
 
+ParserDisk.add_arg("reservations_managed", "reservations.managed")
+ParserDisk.add_arg("reservations_source_type", "reservations.source.type")
+ParserDisk.add_arg("reservations_source_path", "reservations.source.path")
+ParserDisk.add_arg("reservations_source_mode", "reservations.source.mode")
+
 
 #####################
 # --network parsing #

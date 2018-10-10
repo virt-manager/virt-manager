@@ -835,6 +835,11 @@ class DeviceDisk(Device):
     geometry_secs = XMLProperty("./geometry/@secs", is_int=True)
     geometry_trans = XMLProperty("./geometry/@trans")
 
+    reservations_managed = XMLProperty("./source/reservations/@managed")
+    reservations_source_type = XMLProperty("./source/reservations/source/@type")
+    reservations_source_path = XMLProperty("./source/reservations/source/@path")
+    reservations_source_mode = XMLProperty("./source/reservations/source/@mode")
+
 
     #################################
     # Validation assistance methods #
