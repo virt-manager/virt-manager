@@ -15,7 +15,9 @@ import time
 import traceback
 
 from types import FunctionType
-from types import MethodType
+
+
+CHECK_MAINLOOP = False
 
 
 def generate_wrapper(origfunc, name):
@@ -35,7 +37,8 @@ def generate_wrapper(origfunc, name):
             name.endswith(".connect") or
             name.startswith("libvirtError"))
 
-        if not is_non_network_libvirt_call and is_main_thread:
+        if (not is_non_network_libvirt_call and
+            (is_main_thread or not CHECK_MAINLOOP)):
             tb = ""
             if is_main_thread:
                 tb = "\n%s" % "".join(traceback.format_stack())
@@ -68,11 +71,13 @@ def wrap_class(classobj):
 
     for name in dir(classobj):
         obj = getattr(classobj, name)
-        if isinstance(obj, MethodType):
+        if isinstance(obj, FunctionType):
             wrap_method(classobj, obj)
 
 
-def wrap_module(module, regex=None):
+def wrap_module(module, mainloop, regex):
+    global CHECK_MAINLOOP
+    CHECK_MAINLOOP = mainloop
     for name in dir(module):
         if regex and not re.match(regex, name):
             continue
