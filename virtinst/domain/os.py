@@ -89,6 +89,7 @@ class DomainOs(XMLBuilder):
             obj.val = val
 
     enable_bootmenu = XMLProperty("./bootmenu/@enable", is_yesno=True)
+    rebootTimeout = XMLProperty("./bios/@rebootTimeout")
     useserial = XMLProperty("./bios/@useserial", is_yesno=True)
 
     kernel = XMLProperty("./kernel", do_abspath=True)
