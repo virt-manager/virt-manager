@@ -849,6 +849,11 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-devtype"))
         self._refresh_disk_bus(devtype)
 
+        # Reset the status of disk-pr-checkbox to inactive
+        self.widget("disk-pr-checkbox").set_active(False)
+        is_lun = devtype == "lun"
+        uiutil.set_grid_row_visible(self.widget("disk-pr-checkbox"), is_lun)
+
         allow_create = devtype not in ["cdrom", "floppy"]
         self.addstorage.widget("storage-create-box").set_sensitive(
             allow_create)
@@ -1202,6 +1207,8 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-discard"))
         detect_zeroes = uiutil.get_list_selection(
             self.widget("storage-detect-zeroes"))
+        if device == "lun":
+            reservations_managed = self.widget("disk-pr-checkbox").get_active()
 
         controller_model = None
         if (bus == "scsi" and
@@ -1232,6 +1239,8 @@ class vmmAddHardware(vmmGObjectUI):
                 disk.driver_discard = discard
             if detect_zeroes:
                 disk.driver_detect_zeroes = detect_zeroes
+            if device == "lun" and reservations_managed:
+                disk.reservations_managed = "yes"
 
             # Generate target
             disks = (self.vm.xmlobj.devices.disk +

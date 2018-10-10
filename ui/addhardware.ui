@@ -328,6 +328,30 @@
                                         <property name="top_attach">3</property>
                                       </packing>
                                     </child>
+                                    <child>
+                                      <object class="GtkLabel" id="disk-pr-label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">Persistent _Reservations:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">disk-pr-checkbox</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="disk-pr-checkbox">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">4</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                 </child>
                                 <child type="label">
