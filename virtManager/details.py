@@ -66,6 +66,7 @@ from .storagebrowse import vmmStorageBrowser
  EDIT_DISK_FORMAT,
  EDIT_DISK_SGIO,
  EDIT_DISK_PATH,
+ EDIT_DISK_PR,
 
  EDIT_SOUND_MODEL,
 
@@ -100,7 +101,7 @@ from .storagebrowse import vmmStorageBrowser
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 55)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 56)
 
 
 # Columns in hw list model
@@ -560,6 +561,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_format_changed": self.disk_format_changed,
             "on_disk_serial_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SERIAL),
             "on_disk_sgio_entry_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SGIO),
+            "on_disk_pr_checkbox_toggled": lambda *x: self.enable_apply(x, EDIT_DISK_PR),
 
             "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
             "on_network_mac_entry_changed": lambda *x: self.enable_apply(x,
@@ -2150,6 +2152,9 @@ class vmmDetails(vmmGObjectUI):
             sgio = uiutil.get_list_selection(self.widget("disk-sgio"))
             kwargs["sgio"] = sgio
 
+        if self.edited(EDIT_DISK_PR):
+            kwargs["managed_pr"] = self.widget("disk-pr-checkbox").get_active()
+
         if self.edited(EDIT_DISK_BUS):
             bus = uiutil.get_list_selection(self.widget("disk-bus"))
             addr = None
@@ -2692,9 +2697,12 @@ class vmmDetails(vmmGObjectUI):
 
         is_lun = disk.device == virtinst.DeviceDisk.DEVICE_LUN
         uiutil.set_grid_row_visible(self.widget("disk-sgio"), is_lun)
+        uiutil.set_grid_row_visible(self.widget("disk-pr-checkbox"), is_lun)
         if is_lun:
             self.build_disk_sgio(self.vm, self.widget("disk-sgio"))
             uiutil.set_list_selection(self.widget("disk-sgio"), disk.sgio)
+            managed = disk.reservations_managed == "yes"
+            self.widget("disk-pr-checkbox").set_active(managed)
 
         self.widget("disk-size").set_text(size)
         uiutil.set_list_selection(self.widget("disk-cache"), cache)

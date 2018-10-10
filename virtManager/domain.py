@@ -636,7 +636,7 @@ class vmmDomain(vmmLibvirtObject):
             shareable=_SENTINEL, removable=_SENTINEL, cache=_SENTINEL,
             io=_SENTINEL, discard=_SENTINEL, detect_zeroes=_SENTINEL,
             driver_type=_SENTINEL, bus=_SENTINEL, addrstr=_SENTINEL,
-            sgio=_SENTINEL):
+            sgio=_SENTINEL, managed_pr=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -695,6 +695,9 @@ class vmmDomain(vmmLibvirtObject):
 
         if sgio != _SENTINEL:
             editdev.sgio = sgio or None
+
+        if managed_pr != _SENTINEL:
+            editdev.reservations_managed = "yes" if managed_pr else None
 
         if bus != _SENTINEL:
             _change_bus()
