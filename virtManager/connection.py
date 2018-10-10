@@ -1324,9 +1324,8 @@ class vmmConnection(vmmGObject):
             initial_poll, pollvm, pollnet, pollpool, polliface, pollnodedev)
         self.idle_add(self._gone_object_signals, gone_objects)
 
-        # if stats_update:
-        self.statsmanager.refresh_vms_stats(self,
-            [o for o in preexisting_objects if o.reports_stats()])
+        if stats_update:
+            self.statsmanager.cache_all_stats(self)
 
         # Only tick() pre-existing objects, since new objects will be
         # initialized asynchronously and tick() would be redundant

@@ -1739,7 +1739,7 @@ class vmmDomain(vmmLibvirtObject):
         if current > expected:
             del self.stats[expected:current]
 
-        newStats = self.conn.statsmanager.get_vm_stats(self)
+        newStats = self.conn.statsmanager.refresh_vm_stats(self)
 
         for r in ["diskRd", "diskWr", "netRx", "netTx"]:
             newStats[r + "Rate"] = self._get_cur_rate(r + "KiB")

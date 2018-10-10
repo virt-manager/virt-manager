@@ -20,7 +20,7 @@ class vmmStatsManager(vmmGObject):
     """
     def __init__(self):
         vmmGObject.__init__(self)
-        self._newStatsDict = {}
+        self._latest_all_stats = []
         self._all_stats_supported = True
         self._enable_mem_stats = False
         self._enable_cpu_stats = False
@@ -53,7 +53,7 @@ class vmmStatsManager(vmmGObject):
 
 
     def _cleanup(self):
-        self._newStatsDict = {}
+        self._latest_all_stats = None
 
     def _on_config_sample_network_traffic_changed(self, ignore=None):
         self._enable_net_stats = self.config.get_stats_enable_net_poll()
@@ -315,13 +315,13 @@ class vmmStatsManager(vmmGObject):
     # allstats handling #
     #####################
 
-    def _get_all_stats(self, con):
+    def _get_all_stats(self, conn):
         if not self._all_stats_supported:
             return []
 
         stats = []
         try:
-            stats = con.get_backend().getAllDomainStats(
+            stats = conn.get_backend().getAllDomainStats(
                 libvirt.VIR_DOMAIN_STATS_STATE |
                 libvirt.VIR_DOMAIN_STATS_CPU_TOTAL |
                 libvirt.VIR_DOMAIN_STATS_VCPU |
@@ -337,42 +337,36 @@ class vmmStatsManager(vmmGObject):
                 logging.debug("Error call getAllDomainStats(): %s", err)
         return stats
 
-    def refresh_vms_stats(self, conn, vm_list):
-        for vm in vm_list:
-            now = time.time()
+    def refresh_vm_stats(self, vm):
+        now = time.time()
 
-            domallstats = None
-            for _domstat in self._get_all_stats(conn):
-                if vm.get_name() == _domstat[0].name():
-                    domallstats = _domstat[1]
-                    break
+        domallstats = None
+        for _domstat in self._latest_all_stats:
+            if vm.get_name() == _domstat[0].name():
+                domallstats = _domstat[1]
+                break
 
-            cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu = \
-                self._sample_cpu_stats(now, vm, domallstats)
-            pcentCurrMem, curmem = self._sample_mem_stats(vm, domallstats)
-            rdBytes, wrBytes = self._sample_disk_stats(vm, domallstats)
-            rxBytes, txBytes = self._sample_net_stats(vm, domallstats)
+        cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu = \
+            self._sample_cpu_stats(now, vm, domallstats)
+        pcentCurrMem, curmem = self._sample_mem_stats(vm, domallstats)
+        rdBytes, wrBytes = self._sample_disk_stats(vm, domallstats)
+        rxBytes, txBytes = self._sample_net_stats(vm, domallstats)
 
-            newStats = {
-                "timestamp": now,
-                "cpuTime": cpuTime,
-                "cpuTimeAbs": cpuTimeAbs,
-                "cpuHostPercent": pcentHostCpu,
-                "cpuGuestPercent": pcentGuestCpu,
-                "curmem": curmem,
-                "currMemPercent": pcentCurrMem,
-                "diskRdKiB": rdBytes // 1024,
-                "diskWrKiB": wrBytes // 1024,
-                "netRxKiB": rxBytes // 1024,
-                "netTxKiB": txBytes // 1024,
-            }
+        newStats = {
+            "timestamp": now,
+            "cpuTime": cpuTime,
+            "cpuTimeAbs": cpuTimeAbs,
+            "cpuHostPercent": pcentHostCpu,
+            "cpuGuestPercent": pcentGuestCpu,
+            "curmem": curmem,
+            "currMemPercent": pcentCurrMem,
+            "diskRdKiB": rdBytes // 1024,
+            "diskWrKiB": wrBytes // 1024,
+            "netRxKiB": rxBytes // 1024,
+            "netTxKiB": txBytes // 1024,
+        }
 
-            self._newStatsDict[vm] = newStats
+        return newStats
 
-    def get_vm_stats(self, vm):
-        # this should happen only during initialization of vm when
-        # caches are primed
-        if not self._newStatsDict.get(vm):
-            self.refresh_vms_stats(vm.conn, [vm])
-
-        return self._newStatsDict.get(vm)
+    def cache_all_stats(self, conn):
+        self._latest_all_stats = self._get_all_stats(conn)
