@@ -149,7 +149,8 @@ class vmmStatsManager(vmmGObject):
 
     def _sample_cpu_stats(self, vm, allstats):
         timestamp = time.time()
-        if not self.config.get_stats_enable_cpu_poll():
+        if (not vm.is_active() or
+            not self.config.get_stats_enable_cpu_poll()):
             return 0, 0, 0, 0, timestamp
 
         cpuTime = 0
