@@ -123,7 +123,7 @@ class vmmStatsManager(vmmGObject):
     def __init__(self):
         vmmGObject.__init__(self)
         self._vm_stats = {}
-        self._latest_all_stats = []
+        self._latest_all_stats = {}
         self._all_stats_supported = True
         self._enable_mem_stats = False
         self._enable_cpu_stats = False
@@ -178,9 +178,10 @@ class vmmStatsManager(vmmGObject):
         cpuTimeAbs = info[4]
         return state, guestcpus, cpuTimeAbs
 
-    def _sample_cpu_stats(self, now, vm, allstats):
+    def _sample_cpu_stats(self, vm, allstats):
+        timestamp = time.time()
         if not self._enable_cpu_stats:
-            return 0, 0, 0, 0
+            return 0, 0, 0, 0, timestamp
 
         cpuTime = 0
         cpuHostPercent = 0
@@ -192,6 +193,7 @@ class vmmStatsManager(vmmGObject):
             state = allstats.get("state.state", 0)
             guestcpus = allstats.get("vcpu.current", 0)
             cpuTimeAbs = allstats.get("cpu.time", 0)
+            timestamp = allstats.get("virt-manager.timestamp")
         else:
             state, guestcpus, cpuTimeAbs = self._old_cpu_stats_helper(vm)
 
@@ -205,8 +207,9 @@ class vmmStatsManager(vmmGObject):
         if not is_offline:
             hostcpus = vm.conn.host_active_processor_count()
 
-            pcentbase = (((cpuTime) * 100.0) /
-                         ((now - prevTimestamp) * 1000.0 * 1000.0 * 1000.0))
+            pcentbase = (
+                    ((cpuTime) * 100.0) /
+                    ((timestamp - prevTimestamp) * 1000.0 * 1000.0 * 1000.0))
             cpuHostPercent = pcentbase / hostcpus
             # Under RHEL-5.9 using a XEN HV guestcpus can be 0 during shutdown
             # so play safe and check it.
@@ -215,7 +218,7 @@ class vmmStatsManager(vmmGObject):
         cpuHostPercent = max(0.0, min(100.0, cpuHostPercent))
         cpuGuestPercent = max(0.0, min(100.0, cpuGuestPercent))
 
-        return cpuTime, cpuTimeAbs, cpuHostPercent, cpuGuestPercent
+        return cpuTime, cpuTimeAbs, cpuHostPercent, cpuGuestPercent, timestamp
 
 
     ######################
@@ -420,11 +423,12 @@ class vmmStatsManager(vmmGObject):
 
     def _get_all_stats(self, conn):
         if not self._all_stats_supported:
-            return []
+            return {}
 
-        stats = []
+        ret = {}
         try:
-            stats = conn.get_backend().getAllDomainStats(
+            timestamp = time.time()
+            rawallstats = conn.get_backend().getAllDomainStats(
                 libvirt.VIR_DOMAIN_STATS_STATE |
                 libvirt.VIR_DOMAIN_STATS_CPU_TOTAL |
                 libvirt.VIR_DOMAIN_STATS_VCPU |
@@ -432,13 +436,18 @@ class vmmStatsManager(vmmGObject):
                 libvirt.VIR_DOMAIN_STATS_BLOCK |
                 libvirt.VIR_DOMAIN_STATS_INTERFACE,
                 0)
+
+            # Reformat the output to be a bit more friendly
+            for dom, domallstats in rawallstats:
+                domallstats["virt-manager.timestamp"] = timestamp
+                ret[dom.UUIDString()] = domallstats
         except libvirt.libvirtError as err:
             if util.is_error_nosupport(err):
                 logging.debug("conn does not support getAllDomainStats()")
                 self._all_stats_supported = False
             else:
                 logging.debug("Error call getAllDomainStats(): %s", err)
-        return stats
+        return ret
 
 
     ##############
@@ -446,16 +455,10 @@ class vmmStatsManager(vmmGObject):
     ##############
 
     def refresh_vm_stats(self, vm):
-        timestamp = time.time()
+        domallstats = self._latest_all_stats.get(vm.get_uuid(), None)
 
-        domallstats = None
-        for _domstat in self._latest_all_stats:
-            if vm.get_name() == _domstat[0].name():
-                domallstats = _domstat[1]
-                break
-
-        cpuTime, cpuTimeAbs, cpuHostPercent, cpuGuestPercent = \
-            self._sample_cpu_stats(timestamp, vm, domallstats)
+        (cpuTime, cpuTimeAbs, cpuHostPercent, cpuGuestPercent, timestamp) = \
+                self._sample_cpu_stats(vm, domallstats)
         currMemPercent, curmem = self._sample_mem_stats(vm, domallstats)
         diskRdBytes, diskWrBytes = self._sample_disk_stats(vm, domallstats)
         netRxBytes, netTxBytes = self._sample_net_stats(vm, domallstats)
