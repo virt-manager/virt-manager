@@ -211,14 +211,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self.cloning = False
 
-        self.stats = []
-        self._stats_rates = {
-            "diskRdRate":   10.0,
-            "diskWrRate":   10.0,
-            "netTxRate":    10.0,
-            "netRxRate":    10.0,
-        }
-
         self._install_abort = False
         self._id = None
         self._uuid = None
@@ -231,10 +223,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self.managedsave_supported = False
         self._domain_state_supported = False
-
-        self.stats_net_skip = []
-        self.stats_disk_skip = []
-        self.summary_disk_stats_skip = False
 
         self.inspection = vmmInspectionData()
 
@@ -258,7 +246,8 @@ class vmmDomain(vmmLibvirtObject):
         # Prime caches
         info = self._backend.info()
         self._refresh_status(newstatus=info[0])
-        self._tick_stats()
+        # XXX _tick_stats
+        # self._tick_stats()
         self.has_managed_save()
         self.snapshots_supported()
 
@@ -1512,95 +1501,52 @@ class vmmDomain(vmmLibvirtObject):
         # Don't schedule any conn update, migrate dialog handles it for us
 
 
-    #################
-    # Stats helpers #
-    #################
-
-    def _get_cur_rate(self, what):
-        if len(self.stats) > 1:
-            ret = (float(self.stats[0][what] -
-                         self.stats[1][what]) /
-                   float(self.stats[0]["timestamp"] -
-                         self.stats[1]["timestamp"]))
-        else:
-            ret = 0.0
-        return max(ret, 0, 0)  # avoid negative values at poweroff
-
-    def _set_max_rate(self, record, what):
-        if record[what] > self._stats_rates[what]:
-            self._stats_rates[what] = record[what]
-    def _get_max_rate(self, name1, name2):
-        return float(max(self._stats_rates[name1], self._stats_rates[name2]))
-
-    def _get_record_helper(self, record_name):
-        if len(self.stats) == 0:
-            return 0
-        return self.stats[0][record_name]
-
-    def _vector_helper(self, record_name, limit, ceil=100.0):
-        vector = []
-        statslen = self.config.get_stats_history_length() + 1
-        if limit is not None:
-            statslen = min(statslen, limit)
-
-        for i in range(statslen):
-            if i < len(self.stats):
-                vector.append(self.stats[i][record_name] / ceil)
-            else:
-                vector.append(0)
-
-        return vector
-
-    def _in_out_vector_helper(self, name1, name2, limit, ceil):
-        if ceil is None:
-            ceil = self._get_max_rate(name1, name2)
-
-        return (self._vector_helper(name1, limit, ceil=ceil),
-                self._vector_helper(name2, limit, ceil=ceil))
-
-
     ###################
     # Stats accessors #
     ###################
 
+    def _get_stats(self):
+        return self.conn.statsmanager.get_vm_statslist(self)
     def stats_memory(self):
-        return self._get_record_helper("curmem")
+        return self._get_stats().get_record("curmem")
     def cpu_time(self):
-        return self._get_record_helper("cpuTime")
+        return self._get_stats().get_record("cpuTime")
     def host_cpu_time_percentage(self):
-        return self._get_record_helper("cpuHostPercent")
+        return self._get_stats().get_record("cpuHostPercent")
     def guest_cpu_time_percentage(self):
-        return self._get_record_helper("cpuGuestPercent")
+        return self._get_stats().get_record("cpuGuestPercent")
     def network_rx_rate(self):
-        return self._get_record_helper("netRxRate")
+        return self._get_stats().get_record("netRxRate")
     def network_tx_rate(self):
-        return self._get_record_helper("netTxRate")
+        return self._get_stats().get_record("netTxRate")
     def disk_read_rate(self):
-        return self._get_record_helper("diskRdRate")
+        return self._get_stats().get_record("diskRdRate")
     def disk_write_rate(self):
-        return self._get_record_helper("diskWrRate")
+        return self._get_stats().get_record("diskWrRate")
 
     def network_traffic_rate(self):
         return self.network_tx_rate() + self.network_rx_rate()
     def network_traffic_max_rate(self):
-        return self._get_max_rate("netRxRate", "netTxRate")
+        stats = self._get_stats()
+        return max(stats.netRxMaxRate, stats.netTxMaxRate)
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()
     def disk_io_max_rate(self):
-        return self._get_max_rate("diskRdRate", "diskWrRate")
+        stats = self._get_stats()
+        return max(stats.diskRdMaxRate, stats.diskWrMaxRate)
 
     def host_cpu_time_vector(self, limit=None):
-        return self._vector_helper("cpuHostPercent", limit)
+        return self._get_stats().get_vector("cpuHostPercent", limit)
     def guest_cpu_time_vector(self, limit=None):
-        return self._vector_helper("cpuGuestPercent", limit)
+        return self._get_stats().get_vector("cpuGuestPercent", limit)
     def stats_memory_vector(self, limit=None):
-        return self._vector_helper("currMemPercent", limit)
+        return self._get_stats().get_vector("currMemPercent", limit)
     def network_traffic_vectors(self, limit=None, ceil=None):
-        return self._in_out_vector_helper(
-            "netRxRate", "netTxRate", limit, ceil)
+        return self._get_stats().get_in_out_vector(
+                "netRxRate", "netTxRate", limit, ceil)
     def disk_io_vectors(self, limit=None, ceil=None):
-        return self._in_out_vector_helper(
-            "diskRdRate", "diskWrRate", limit, ceil)
+        return self._get_stats().get_in_out_vector(
+                "diskRdRate", "diskWrRate", limit, ceil)
 
 
     ###################
@@ -1727,25 +1673,11 @@ class vmmDomain(vmmLibvirtObject):
             dosignal = self._refresh_status(newstatus=info[0], cansignal=False)
 
         if stats_update:
-            self._tick_stats()
+            self.conn.statsmanager.refresh_vm_stats(self)
         if dosignal:
             self.idle_emit("state-changed")
         if stats_update:
             self.idle_emit("resources-sampled")
-
-    def _tick_stats(self):
-        expected = self.config.get_stats_history_length()
-        current = len(self.stats)
-        if current > expected:
-            del self.stats[expected:current]
-
-        newStats = self.conn.statsmanager.refresh_vm_stats(self)
-
-        for r in ["diskRd", "diskWr", "netRx", "netTx"]:
-            newStats[r + "Rate"] = self._get_cur_rate(r + "KiB")
-            self._set_max_rate(newStats, r + "Rate")
-
-        self.stats.insert(0, newStats)
 
 
 ########################

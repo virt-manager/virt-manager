@@ -14,12 +14,115 @@ from virtinst import util
 from .baseclass import vmmGObject
 
 
+class _VMStatsRecord(object):
+    """
+    Tracks a set of VM stats for a single timestamp
+    """
+    def __init__(self, timestamp,
+                 cpuTime, cpuTimeAbs,
+                 cpuHostPercent, cpuGuestPercent,
+                 curmem, currMemPercent,
+                 diskRdBytes, diskWrBytes,
+                 netRxBytes, netTxBytes):
+        self.timestamp = timestamp
+        self.cpuTime = cpuTime
+        self.cpuTimeAbs = cpuTimeAbs
+        self.cpuHostPercent = cpuHostPercent
+        self.cpuGuestPercent = cpuGuestPercent
+        self.curmem = curmem
+        self.currMemPercent = currMemPercent
+        self.diskRdKiB = diskRdBytes // 1024
+        self.diskWrKiB = diskWrBytes // 1024
+        self.netRxKiB = netRxBytes // 1024
+        self.netTxKiB = netTxBytes // 1024
+
+        # These are set in _VMStatsList.append_stats
+        self.diskRdRate = None
+        self.diskWrRate = None
+        self.netRxRate = None
+        self.netTxRate = None
+
+
+class _VMStatsList(vmmGObject):
+    """
+    Tracks a list of VMStatsRecords for a single VM
+    """
+    def __init__(self):
+        vmmGObject.__init__(self)
+        self._stats = []
+
+        self.diskRdMaxRate = 10.0
+        self.diskWrMaxRate = 10.0
+        self.netRxMaxRate = 10.0
+        self.netTxMaxRate = 10.0
+
+        self.mem_stats_period_is_set = False
+        self.stats_disk_skip = []
+        self.stats_net_skip = []
+
+    def _cleanup(self):
+        pass
+
+    def append_stats(self, newstats):
+        expected = self.config.get_stats_history_length()
+        current = len(self._stats)
+        if current > expected:
+            del(self._stats[expected:current])
+
+        def _calculate_rate(record_name):
+            ret = 0.0
+            if self._stats:
+                oldstats = self._stats[0]
+                ratediff = (getattr(newstats, record_name) -
+                            getattr(oldstats, record_name))
+                timediff = newstats.timestamp - oldstats.timestamp
+                ret = float(ratediff) / float(timediff)
+            return max(ret, 0.0)
+
+        newstats.diskRdRate = _calculate_rate("diskRdKiB")
+        newstats.diskWrRate = _calculate_rate("diskWrKiB")
+        newstats.netRxRate = _calculate_rate("netRxKiB")
+        newstats.netTxRate = _calculate_rate("netTxKiB")
+
+        self.diskRdMaxRate = max(newstats.diskRdRate, self.diskRdMaxRate)
+        self.diskWrMaxRate = max(newstats.diskWrRate, self.diskWrMaxRate)
+        self.netRxMaxRate = max(newstats.netRxRate, self.netRxMaxRate)
+        self.netTxMaxRate = max(newstats.netTxRate, self.netTxMaxRate)
+
+        self._stats.insert(0, newstats)
+
+    def get_record(self, record_name):
+        if not self._stats:
+            return 0
+        return getattr(self._stats[0], record_name)
+
+    def get_vector(self, record_name, limit, ceil=100.0):
+        vector = []
+        statslen = self.config.get_stats_history_length() + 1
+        if limit is not None:
+            statslen = min(statslen, limit)
+
+        for i in range(statslen):
+            if i < len(self._stats):
+                vector.append(getattr(self._stats[i], record_name) / ceil)
+            else:
+                vector.append(0)
+        return vector
+
+    def get_in_out_vector(self, name1, name2, limit, ceil):
+        if ceil is None:
+            ceil = max(self.get_record(name1), self.get_record(name2), 10.0)
+        return (self.get_vector(name1, limit, ceil=ceil),
+                self.get_vector(name2, limit, ceil=ceil))
+
+
 class vmmStatsManager(vmmGObject):
     """
     Class for polling statistics
     """
     def __init__(self):
         vmmGObject.__init__(self)
+        self._vm_stats = {}
         self._latest_all_stats = []
         self._all_stats_supported = True
         self._enable_mem_stats = False
@@ -31,7 +134,6 @@ class vmmStatsManager(vmmGObject):
         self._disk_stats_supported = True
         self._disk_stats_lxc_supported = True
         self._mem_stats_supported = True
-        self._mem_stats_period_is_set = False
 
         self._on_config_sample_network_traffic_changed()
         self._on_config_sample_disk_io_changed()
@@ -80,15 +182,11 @@ class vmmStatsManager(vmmGObject):
         if not self._enable_cpu_stats:
             return 0, 0, 0, 0
 
-        prevCpuTime = 0
-        prevTimestamp = 0
         cpuTime = 0
-        pcentHostCpu = 0
-        pcentGuestCpu = 0
-
-        if len(vm.stats) > 0:
-            prevTimestamp = vm.stats[0]["timestamp"]
-            prevCpuTime = vm.stats[0]["cpuTimeAbs"]
+        cpuHostPercent = 0
+        cpuGuestPercent = 0
+        prevTimestamp = self.get_vm_statslist(vm).get_record("timestamp")
+        prevCpuTime = self.get_vm_statslist(vm).get_record("cpuTimeAbs")
 
         if allstats:
             state = allstats.get("state.state", 0)
@@ -109,15 +207,15 @@ class vmmStatsManager(vmmGObject):
 
             pcentbase = (((cpuTime) * 100.0) /
                          ((now - prevTimestamp) * 1000.0 * 1000.0 * 1000.0))
-            pcentHostCpu = pcentbase / hostcpus
+            cpuHostPercent = pcentbase / hostcpus
             # Under RHEL-5.9 using a XEN HV guestcpus can be 0 during shutdown
             # so play safe and check it.
-            pcentGuestCpu = guestcpus > 0 and pcentbase / guestcpus or 0
+            cpuGuestPercent = guestcpus > 0 and pcentbase / guestcpus or 0
 
-        pcentHostCpu = max(0.0, min(100.0, pcentHostCpu))
-        pcentGuestCpu = max(0.0, min(100.0, pcentGuestCpu))
+        cpuHostPercent = max(0.0, min(100.0, cpuHostPercent))
+        cpuGuestPercent = max(0.0, min(100.0, cpuGuestPercent))
 
-        return cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu
+        return cpuTime, cpuTimeAbs, cpuHostPercent, cpuGuestPercent
 
 
     ######################
@@ -125,6 +223,7 @@ class vmmStatsManager(vmmGObject):
     ######################
 
     def _old_net_stats_helper(self, vm, dev):
+        statslist = self.get_vm_statslist(vm)
         try:
             io = vm.get_backend().interfaceStats(dev)
             if io:
@@ -141,7 +240,7 @@ class vmmStatsManager(vmmGObject):
                           vm.get_name(), dev, err)
             if vm.is_active():
                 logging.debug("Adding %s to skip list", dev)
-                vm.stats_net_skip.append(dev)
+                statslist.stats_net_skip.append(dev)
             else:
                 logging.debug("Aren't running, don't add to skiplist")
 
@@ -150,10 +249,11 @@ class vmmStatsManager(vmmGObject):
     def _sample_net_stats(self, vm, allstats):
         rx = 0
         tx = 0
+        statslist = self.get_vm_statslist(vm)
         if (not self._net_stats_supported or
             not self._enable_net_stats or
             not vm.is_active()):
-            vm.stats_net_skip = []
+            statslist.stats_net_skip = []
             return rx, tx
 
         if allstats:
@@ -168,7 +268,7 @@ class vmmStatsManager(vmmGObject):
             dev = iface.target_dev
             if not dev:
                 continue
-            if dev in vm.stats_net_skip:
+            if dev in statslist.stats_net_skip:
                 continue
 
             devrx, devtx = self._old_net_stats_helper(vm, dev)
@@ -183,6 +283,7 @@ class vmmStatsManager(vmmGObject):
     #######################
 
     def _old_disk_stats_helper(self, vm, dev):
+        statslist = self.get_vm_statslist(vm)
         try:
             io = vm.get_backend().blockStats(dev)
             if io:
@@ -199,7 +300,7 @@ class vmmStatsManager(vmmGObject):
                           vm.get_name(), dev, err)
             if vm.is_active():
                 logging.debug("Adding %s to skip list", dev)
-                vm.stats_disk_skip.append(dev)
+                statslist.stats_disk_skip.append(dev)
             else:
                 logging.debug("Aren't running, don't add to skiplist")
 
@@ -208,10 +309,11 @@ class vmmStatsManager(vmmGObject):
     def _sample_disk_stats(self, vm, allstats):
         rd = 0
         wr = 0
+        statslist = self.get_vm_statslist(vm)
         if (not self._disk_stats_supported or
             not self._enable_disk_stats or
             not vm.is_active()):
-            vm.stats_disk_skip = []
+            statslist.stats_disk_skip = []
             return rd, wr
 
         if allstats:
@@ -238,7 +340,7 @@ class vmmStatsManager(vmmGObject):
             dev = disk.target
             if not dev:
                 continue
-            if dev in vm.stats_disk_skip:
+            if dev in statslist.stats_disk_skip:
                 continue
 
             diskrd, diskwr = self._old_disk_stats_helper(vm, dev)
@@ -288,15 +390,16 @@ class vmmStatsManager(vmmGObject):
         return totalmem, curmem
 
     def _sample_mem_stats(self, vm, allstats):
+        statslist = self.get_vm_statslist(vm)
         if (not self._mem_stats_supported or
             not self._enable_mem_stats or
             not vm.is_active()):
-            self._mem_stats_period_is_set = False
+            statslist.mem_stats_period_is_set = False
             return 0, 0
 
-        if self._mem_stats_period_is_set is False:
+        if statslist.mem_stats_period_is_set is False:
             self._set_mem_stats_period(vm)
-            self._mem_stats_period_is_set = True
+            statslist.mem_stats_period_is_set = True
 
         if allstats:
             totalmem = allstats.get("balloon.current", 1)
@@ -305,15 +408,15 @@ class vmmStatsManager(vmmGObject):
         else:
             totalmem, curmem = self._old_mem_stats_helper(vm)
 
-        pcentCurrMem = (curmem / float(totalmem)) * 100
-        pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
+        currMemPercent = (curmem / float(totalmem)) * 100
+        currMemPercent = max(0.0, min(currMemPercent, 100.0))
 
-        return pcentCurrMem, curmem
+        return currMemPercent, curmem
 
 
-    #####################
-    # allstats handling #
-    #####################
+    ####################
+    # alltats handling #
+    ####################
 
     def _get_all_stats(self, conn):
         if not self._all_stats_supported:
@@ -337,8 +440,13 @@ class vmmStatsManager(vmmGObject):
                 logging.debug("Error call getAllDomainStats(): %s", err)
         return stats
 
+
+    ##############
+    # Public API #
+    ##############
+
     def refresh_vm_stats(self, vm):
-        now = time.time()
+        timestamp = time.time()
 
         domallstats = None
         for _domstat in self._latest_all_stats:
@@ -346,27 +454,24 @@ class vmmStatsManager(vmmGObject):
                 domallstats = _domstat[1]
                 break
 
-        cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu = \
-            self._sample_cpu_stats(now, vm, domallstats)
-        pcentCurrMem, curmem = self._sample_mem_stats(vm, domallstats)
-        rdBytes, wrBytes = self._sample_disk_stats(vm, domallstats)
-        rxBytes, txBytes = self._sample_net_stats(vm, domallstats)
+        cpuTime, cpuTimeAbs, cpuHostPercent, cpuGuestPercent = \
+            self._sample_cpu_stats(timestamp, vm, domallstats)
+        currMemPercent, curmem = self._sample_mem_stats(vm, domallstats)
+        diskRdBytes, diskWrBytes = self._sample_disk_stats(vm, domallstats)
+        netRxBytes, netTxBytes = self._sample_net_stats(vm, domallstats)
 
-        newStats = {
-            "timestamp": now,
-            "cpuTime": cpuTime,
-            "cpuTimeAbs": cpuTimeAbs,
-            "cpuHostPercent": pcentHostCpu,
-            "cpuGuestPercent": pcentGuestCpu,
-            "curmem": curmem,
-            "currMemPercent": pcentCurrMem,
-            "diskRdKiB": rdBytes // 1024,
-            "diskWrKiB": wrBytes // 1024,
-            "netRxKiB": rxBytes // 1024,
-            "netTxKiB": txBytes // 1024,
-        }
-
-        return newStats
+        newstats = _VMStatsRecord(
+                timestamp, cpuTime, cpuTimeAbs,
+                cpuHostPercent, cpuGuestPercent,
+                curmem, currMemPercent,
+                diskRdBytes, diskWrBytes,
+                netRxBytes, netTxBytes)
+        self.get_vm_statslist(vm).append_stats(newstats)
 
     def cache_all_stats(self, conn):
         self._latest_all_stats = self._get_all_stats(conn)
+
+    def get_vm_statslist(self, vm):
+        if vm.get_connkey() not in self._vm_stats:
+            self._vm_stats[vm.get_connkey()] = _VMStatsList()
+        return self._vm_stats[vm.get_connkey()]
