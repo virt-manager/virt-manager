@@ -124,47 +124,16 @@ class vmmStatsManager(vmmGObject):
         vmmGObject.__init__(self)
         self._vm_stats = {}
         self._latest_all_stats = {}
-        self._all_stats_supported = True
-        self._enable_mem_stats = False
-        self._enable_cpu_stats = False
-        self._enable_net_stats = False
-        self._enable_disk_stats = False
 
+        self._all_stats_supported = True
         self._net_stats_supported = True
         self._disk_stats_supported = True
         self._disk_stats_lxc_supported = True
         self._mem_stats_supported = True
 
-        self._on_config_sample_network_traffic_changed()
-        self._on_config_sample_disk_io_changed()
-        self._on_config_sample_mem_stats_changed()
-        self._on_config_sample_cpu_stats_changed()
-
-        self.add_gsettings_handle(
-            self.config.on_stats_enable_cpu_poll_changed(
-                self._on_config_sample_cpu_stats_changed))
-        self.add_gsettings_handle(
-            self.config.on_stats_enable_net_poll_changed(
-                self._on_config_sample_network_traffic_changed))
-        self.add_gsettings_handle(
-            self.config.on_stats_enable_disk_poll_changed(
-                self._on_config_sample_disk_io_changed))
-        self.add_gsettings_handle(
-            self.config.on_stats_enable_memory_poll_changed(
-                self._on_config_sample_mem_stats_changed))
-
 
     def _cleanup(self):
         self._latest_all_stats = None
-
-    def _on_config_sample_network_traffic_changed(self, ignore=None):
-        self._enable_net_stats = self.config.get_stats_enable_net_poll()
-    def _on_config_sample_disk_io_changed(self, ignore=None):
-        self._enable_disk_stats = self.config.get_stats_enable_disk_poll()
-    def _on_config_sample_mem_stats_changed(self, ignore=None):
-        self._enable_mem_stats = self.config.get_stats_enable_memory_poll()
-    def _on_config_sample_cpu_stats_changed(self, ignore=None):
-        self._enable_cpu_stats = self.config.get_stats_enable_cpu_poll()
 
 
     ######################
@@ -180,7 +149,7 @@ class vmmStatsManager(vmmGObject):
 
     def _sample_cpu_stats(self, vm, allstats):
         timestamp = time.time()
-        if not self._enable_cpu_stats:
+        if not self.config.get_stats_enable_cpu_poll():
             return 0, 0, 0, 0, timestamp
 
         cpuTime = 0
@@ -254,8 +223,8 @@ class vmmStatsManager(vmmGObject):
         tx = 0
         statslist = self.get_vm_statslist(vm)
         if (not self._net_stats_supported or
-            not self._enable_net_stats or
-            not vm.is_active()):
+            not vm.is_active() or
+            not self.config.get_stats_enable_net_poll()):
             statslist.stats_net_skip = []
             return rx, tx
 
@@ -314,8 +283,8 @@ class vmmStatsManager(vmmGObject):
         wr = 0
         statslist = self.get_vm_statslist(vm)
         if (not self._disk_stats_supported or
-            not self._enable_disk_stats or
-            not vm.is_active()):
+            not vm.is_active() or
+            not self.config.get_stats_enable_disk_poll()):
             statslist.stats_disk_skip = []
             return rd, wr
 
@@ -395,8 +364,8 @@ class vmmStatsManager(vmmGObject):
     def _sample_mem_stats(self, vm, allstats):
         statslist = self.get_vm_statslist(vm)
         if (not self._mem_stats_supported or
-            not self._enable_mem_stats or
-            not vm.is_active()):
+            not vm.is_active() or
+            not self.config.get_stats_enable_memory_poll()):
             statslist.mem_stats_period_is_set = False
             return 0, 0
 
@@ -426,15 +395,15 @@ class vmmStatsManager(vmmGObject):
             return {}
 
         statflags = 0
-        if self._enable_cpu_stats:
+        if self.config.get_stats_enable_cpu_poll():
             statflags |= libvirt.VIR_DOMAIN_STATS_STATE
             statflags |= libvirt.VIR_DOMAIN_STATS_CPU_TOTAL
             statflags |= libvirt.VIR_DOMAIN_STATS_VCPU
-        if self._enable_mem_stats:
+        if self.config.get_stats_enable_memory_poll():
             statflags |= libvirt.VIR_DOMAIN_STATS_BALLOON
-        if self._enable_disk_stats:
+        if self.config.get_stats_enable_disk_poll():
             statflags |= libvirt.VIR_DOMAIN_STATS_BLOCK
-        if self._enable_net_stats:
+        if self.config.get_stats_enable_net_poll():
             statflags |= libvirt.VIR_DOMAIN_STATS_INTERFACE
         if statflags == 0:
             return {}
