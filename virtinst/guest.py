@@ -604,10 +604,8 @@ class Guest(XMLBuilder):
         usb2 = False
         usb3 = False
         if self.os.is_x86():
-            if self.osinfo.supports_usb3() and qemu_usb3:
-                usb3 = True
-            else:
-                usb2 = True
+            usb3 = bool(self.osinfo.supports_usb3() and qemu_usb3)
+            usb2 = not usb3
         elif self.os.is_arm_machvirt():
             # For machvirt, we always assume OS supports usb3
             if (qemu_usb3 and
