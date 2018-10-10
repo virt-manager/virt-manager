@@ -425,17 +425,24 @@ class vmmStatsManager(vmmGObject):
         if not self._all_stats_supported:
             return {}
 
+        statflags = 0
+        if self._enable_cpu_stats:
+            statflags |= libvirt.VIR_DOMAIN_STATS_STATE
+            statflags |= libvirt.VIR_DOMAIN_STATS_CPU_TOTAL
+            statflags |= libvirt.VIR_DOMAIN_STATS_VCPU
+        if self._enable_mem_stats:
+            statflags |= libvirt.VIR_DOMAIN_STATS_BALLOON
+        if self._enable_disk_stats:
+            statflags |= libvirt.VIR_DOMAIN_STATS_BLOCK
+        if self._enable_net_stats:
+            statflags |= libvirt.VIR_DOMAIN_STATS_INTERFACE
+        if statflags == 0:
+            return {}
+
         ret = {}
         try:
             timestamp = time.time()
-            rawallstats = conn.get_backend().getAllDomainStats(
-                libvirt.VIR_DOMAIN_STATS_STATE |
-                libvirt.VIR_DOMAIN_STATS_CPU_TOTAL |
-                libvirt.VIR_DOMAIN_STATS_VCPU |
-                libvirt.VIR_DOMAIN_STATS_BALLOON |
-                libvirt.VIR_DOMAIN_STATS_BLOCK |
-                libvirt.VIR_DOMAIN_STATS_INTERFACE,
-                0)
+            rawallstats = conn.get_backend().getAllDomainStats(statflags, 0)
 
             # Reformat the output to be a bit more friendly
             for dom, domallstats in rawallstats:
