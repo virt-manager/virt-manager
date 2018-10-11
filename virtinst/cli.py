@@ -344,12 +344,13 @@ def validate_disk(dev, warn_overwrite=False):
             _optional_fail(errmsg, "disk_size", warn_on_skip=False)
 
     def check_path_search(dev):
-        user, broken_paths = dev.check_path_search(dev.conn, dev.path)
-        if not broken_paths:
+        searchdata = dev.check_path_search(dev.conn, dev.path)
+        if not searchdata.fixlist:
             return
         logging.warning(_("%s may not be accessible by the hypervisor. "
             "You will need to grant the '%s' user search permissions for "
-            "the following directories: %s"), dev.path, user, broken_paths)
+            "the following directories: %s"),
+            dev.path, searchdata.username, searchdata.fixlist)
 
     check_path_exists(dev)
     check_inuse_conflict(dev)

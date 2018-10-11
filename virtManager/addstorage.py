@@ -115,9 +115,10 @@ class vmmAddStorage(vmmGObjectUI):
     @staticmethod
     def check_path_search(src, conn, path):
         skip_paths = src.config.get_perms_fix_ignore()
-        user, broken_paths = virtinst.DeviceDisk.check_path_search(
+        searchdata = virtinst.DeviceDisk.check_path_search(
             conn.get_backend(), path)
 
+        broken_paths = searchdata.fixlist[:]
         for p in broken_paths[:]:
             if p in skip_paths:
                 broken_paths.remove(p)
@@ -139,8 +140,8 @@ class vmmAddStorage(vmmGObjectUI):
             return
 
         logging.debug("Attempting to correct permission issues.")
-        errors = virtinst.DeviceDisk.fix_path_search_for_user(
-            conn.get_backend(), path, user)
+        errors = virtinst.DeviceDisk.fix_path_search(
+                conn.get_backend(), searchdata)
         if not errors:
             return
 

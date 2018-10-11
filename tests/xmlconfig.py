@@ -217,12 +217,22 @@ class TestXMLMisc(unittest.TestCase):
     def test_dir_searchable(self):
         # Normally the dir searchable test is skipped in the unittest,
         # but let's contrive an example that should trigger all the code
-        from virtinst.devices.disk import _is_dir_searchable
+        # to ensure it isn't horribly broken
+        from virtinst import diskbackend
         oldtest = os.environ.pop("VIRTINST_TEST_SUITE")
         try:
             uid = -1
             username = "fakeuser-zzzz"
             with tempfile.TemporaryDirectory() as tmpdir:
-                self.assertFalse(_is_dir_searchable(uid, username, tmpdir))
+                fixlist = diskbackend.is_path_searchable(tmpdir, uid, username)
+                self.assertTrue(bool(fixlist))
+                errdict = diskbackend.set_dirs_searchable(fixlist, username)
+                self.assertTrue(not bool(errdict))
+
+
+            import getpass
+            fixlist = diskbackend.is_path_searchable(
+                    os.getcwd(), os.getuid(), getpass.getuser())
+            self.assertTrue(not bool(fixlist))
         finally:
             os.environ["VIRTINST_TEST_SUITE"] = oldtest

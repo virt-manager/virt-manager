@@ -8,6 +8,7 @@
 # See the COPYING file in the top-level directory.
 
 import logging
+import pwd
 
 from .domain import DomainCpu
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
@@ -61,6 +62,36 @@ class _CapsHost(XMLBuilder):
     secmodels = XMLChildProperty(_CapsSecmodel)
     cpu = XMLChildProperty(_CapsCPU, is_single=True)
     topology = XMLChildProperty(_CapsTopology, is_single=True)
+
+    def get_qemu_baselabel(self):
+        for secmodel in self.secmodels:
+            if secmodel.model != "dac":
+                continue
+
+            label = None
+            for baselabel in secmodel.baselabels:
+                if baselabel.type in ["qemu", "kvm"]:
+                    label = baselabel.content
+                    break
+            if not label:
+                continue
+
+            # XML we are looking at is like:
+            #
+            # <secmodel>
+            #   <model>dac</model>
+            #   <doi>0</doi>
+            #   <baselabel type='kvm'>+107:+107</baselabel>
+            #   <baselabel type='qemu'>+107:+107</baselabel>
+            # </secmodel>
+            try:
+                uid = int(label.split(":")[0].replace("+", ""))
+                user = pwd.getpwuid(uid)[0]
+                return user, uid
+            except Exception:
+                logging.debug("Exception parsing qemu dac baselabel=%s",
+                    label, exc_info=True)
+        return None, None
 
 
 ################################

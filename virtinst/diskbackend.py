@@ -10,6 +10,7 @@ import logging
 import os
 import re
 import stat
+import subprocess
 
 import libvirt
 
@@ -220,6 +221,121 @@ def _get_dev_type(path, vol_xml, vol_object, pool_xml, remote):
                 return "block"
 
     return "file"
+
+
+#########################
+# ACL/path perm helpers #
+#########################
+
+def _fix_perms_acl(dirname, username):
+    cmd = ["setfacl", "--modify", "user:%s:x" % username, dirname]
+    proc = subprocess.Popen(cmd,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+    out, err = proc.communicate()
+
+    logging.debug("Ran command '%s'", cmd)
+    if out or err:
+        logging.debug("out=%s\nerr=%s", out, err)
+
+    if proc.returncode != 0:
+        raise ValueError(err)
+
+
+def _fix_perms_chmod(dirname):
+    logging.debug("Setting +x on %s", dirname)
+    mode = os.stat(dirname).st_mode
+    newmode = mode | stat.S_IXOTH
+    os.chmod(dirname, newmode)
+    if os.stat(dirname).st_mode != newmode:
+        # Trying to change perms on vfat at least doesn't work
+        # but also doesn't seem to error. Try and detect that
+        raise ValueError(_("Permissions on '%s' did not stick") %
+                         dirname)
+
+
+def set_dirs_searchable(dirlist, username):
+    useacl = True
+    errdict = {}
+    for dirname in dirlist:
+        if useacl:
+            try:
+                _fix_perms_acl(dirname, username)
+                continue
+            except Exception as e:
+                logging.debug("setfacl failed: %s", e)
+                logging.debug("trying chmod")
+                useacl = False
+
+        try:
+            # If we reach here, ACL setting failed, try chmod
+            _fix_perms_chmod(dirname)
+        except Exception as e:
+            errdict[dirname] = str(e)
+
+    return errdict
+
+
+def _is_dir_searchable(dirname, uid, username):
+    """
+    Check if passed directory is searchable by uid
+    """
+    if "VIRTINST_TEST_SUITE" in os.environ:
+        return True
+
+    try:
+        statinfo = os.stat(dirname)
+    except OSError:
+        return False
+
+    if uid == statinfo.st_uid:
+        flag = stat.S_IXUSR
+    elif uid == statinfo.st_gid:
+        flag = stat.S_IXGRP
+    else:
+        flag = stat.S_IXOTH
+
+    if bool(statinfo.st_mode & flag):
+        return True
+
+    # Check POSIX ACL (since that is what we use to 'fix' access)
+    cmd = ["getfacl", dirname]
+    try:
+        proc = subprocess.Popen(cmd,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+    except OSError:
+        logging.debug("Didn't find the getfacl command.")
+        return False
+
+    if proc.returncode != 0:
+        logging.debug("Cmd '%s' failed: %s", cmd, err)
+        return False
+
+    pattern = "user:%s:..x" % username
+    return bool(re.search(pattern.encode("utf-8", "replace"), out))
+
+
+def is_path_searchable(path, uid, username):
+    """
+    Check each dir component of the passed path, see if they are
+    searchable by the uid/username, and return a list of paths
+    which aren't searchable
+    """
+    if os.path.isdir(path):
+        dirname = path
+        base = "-"
+    else:
+        dirname, base = os.path.split(path)
+
+    fixlist = []
+    while base:
+        if not _is_dir_searchable(dirname, uid, username):
+            fixlist.append(dirname)
+        dirname, base = os.path.split(dirname)
+
+    return fixlist
 
 
 ##############################################

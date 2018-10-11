@@ -7,12 +7,8 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import os
-import stat
-import pwd
-import subprocess
 import logging
-import re
+import os
 
 from .. import diskbackend
 from .. import util
@@ -31,47 +27,6 @@ def _qemu_sanitize_drvtype(phystype, fmt):
     if fmt in raw_list:
         return DeviceDisk.DRIVER_TYPE_RAW
     return fmt
-
-
-def _is_dir_searchable(uid, username, path):
-    """
-    Check if passed directory is searchable by uid
-    """
-    if "VIRTINST_TEST_SUITE" in os.environ:
-        return True
-
-    try:
-        statinfo = os.stat(path)
-    except OSError:
-        return False
-
-    if uid == statinfo.st_uid:
-        flag = stat.S_IXUSR
-    elif uid == statinfo.st_gid:
-        flag = stat.S_IXGRP
-    else:
-        flag = stat.S_IXOTH
-
-    if bool(statinfo.st_mode & flag):
-        return True
-
-    # Check POSIX ACL (since that is what we use to 'fix' access)
-    cmd = ["getfacl", path]
-    try:
-        proc = subprocess.Popen(cmd,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        out, err = proc.communicate()
-    except OSError:
-        logging.debug("Didn't find the getfacl command.")
-        return False
-
-    if proc.returncode != 0:
-        logging.debug("Cmd '%s' failed: %s", cmd, err)
-        return False
-
-    pattern = "user:%s:..x" % username
-    return bool(re.search(pattern.encode("utf-8", "replace"), out))
 
 
 class _Host(XMLBuilder):
@@ -212,130 +167,54 @@ class DeviceDisk(Device):
         return False
 
     @staticmethod
-    def check_path_search_for_user(conn, path, username):
-        """
-        Check if the passed user has search permissions for all the
-        directories in the disk path.
-
-        :returns: List of the directories the user cannot search, or empty list
-        """
-        if path is None:
-            return []
-        if conn.is_remote():
-            return []
-        if username == "root":
-            return []
-        if diskbackend.path_is_url(path):
-            return []
-
-        try:
-            # Get UID for string name
-            uid = pwd.getpwnam(username)[2]
-        except Exception as e:
-            logging.debug("Error looking up username: %s", str(e))
-            return []
-
-        fixlist = []
-
-        if os.path.isdir(path):
-            dirname = path
-            base = "-"
-        else:
-            dirname, base = os.path.split(path)
-
-        while base:
-            if not _is_dir_searchable(uid, username, dirname):
-                fixlist.append(dirname)
-
-            dirname, base = os.path.split(dirname)
-
-        return fixlist
-
-    @staticmethod
     def check_path_search(conn, path):
-        # Only works for qemu and DAC
-        if conn.is_remote() or not conn.is_qemu_system():
-            return None, []
+        """
+        Check if the connection DAC user has search permissions for all the
+        directories in the passed path.
 
-        user = None
-        try:
-            for secmodel in conn.caps.host.secmodels:
-                if secmodel.model != "dac":
-                    continue
+        :returns: Class with:
+            - List of the directories the user cannot search, or empty list
+            - username we checked for or None if not applicable
+            - uid we checked for or None if not application
+        """
+        class SearchData(object):
+            def __init__(self):
+                self.user = None
+                self.uid = None
+                self.fixlist = []
 
-                label = None
-                for baselabel in secmodel.baselabels:
-                    if baselabel.type in ["qemu", "kvm"]:
-                        label = baselabel.content
-                        break
-                if not label:
-                    continue
+        searchdata = SearchData()
+        if path is None:
+            return searchdata
+        if conn.is_remote():
+            return searchdata
+        if not conn.is_qemu_system():
+            return searchdata
+        if diskbackend.path_is_url(path):
+            return searchdata
 
-                pwuid = pwd.getpwuid(
-                    int(label.split(":")[0].replace("+", "")))
-                if pwuid:
-                    user = pwuid[0]
-        except Exception:
-            logging.debug("Exception grabbing qemu DAC user", exc_info=True)
-            return None, []
+        user, uid = conn.caps.host.get_qemu_baselabel()
+        if not user:
+            return searchdata
+        if uid == 0:
+            return searchdata
 
-        return user, DeviceDisk.check_path_search_for_user(conn, path, user)
+        searchdata.user = user
+        searchdata.uid = uid
+        searchdata.fixlist = diskbackend.is_path_searchable(path, uid, user)
+        searchdata.fixlist.reverse()
+        return searchdata
 
     @staticmethod
-    def fix_path_search_for_user(conn, path, username):
+    def fix_path_search(conn, searchdata):
         """
-        Try to fix any permission problems found by check_path_search_for_user
+        Try to fix any permission problems found by check_path_search
 
         :returns: Return a dictionary of entries {broken path : error msg}
         """
-        def fix_perms(dirname, useacl=True):
-            if useacl:
-                cmd = ["setfacl", "--modify", "user:%s:x" % username, dirname]
-                proc = subprocess.Popen(cmd,
-                                        stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE)
-                out, err = proc.communicate()
-
-                logging.debug("Ran command '%s'", cmd)
-                if out or err:
-                    logging.debug("out=%s\nerr=%s", out, err)
-
-                if proc.returncode != 0:
-                    raise ValueError(err)
-            else:
-                logging.debug("Setting +x on %s", dirname)
-                mode = os.stat(dirname).st_mode
-                newmode = mode | stat.S_IXOTH
-                os.chmod(dirname, newmode)
-                if os.stat(dirname).st_mode != newmode:
-                    # Trying to change perms on vfat at least doesn't work
-                    # but also doesn't seem to error. Try and detect that
-                    raise ValueError(_("Permissions on '%s' did not stick") %
-                                     dirname)
-
-        fixlist = DeviceDisk.check_path_search_for_user(conn, path, username)
-        if not fixlist:
-            return []
-
-        fixlist.reverse()
-        errdict = {}
-
-        useacl = True
-        for dirname in fixlist:
-            try:
-                try:
-                    fix_perms(dirname, useacl)
-                except Exception:
-                    # If acl fails, fall back to chmod and retry
-                    if not useacl:
-                        raise
-                    useacl = False
-
-                    logging.debug("setfacl failed, trying old fashioned way")
-                    fix_perms(dirname, useacl)
-            except Exception as e:
-                errdict[dirname] = str(e)
-
+        ignore = conn
+        errdict = diskbackend.set_dirs_searchable(
+                searchdata.fixlist, searchdata.username)
         return errdict
 
     @staticmethod
