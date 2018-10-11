@@ -20,21 +20,16 @@ from .device import Device
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
-def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
+def _qemu_sanitize_drvtype(phystype, fmt):
     """
     Sanitize libvirt storage volume format to a valid qemu driver type
     """
     raw_list = ["iso"]
 
     if phystype == DeviceDisk.TYPE_BLOCK:
-        if not fmt:
-            return DeviceDisk.DRIVER_TYPE_RAW
-        if fmt and not manual_format:
-            return DeviceDisk.DRIVER_TYPE_RAW
-
+        return DeviceDisk.DRIVER_TYPE_RAW
     if fmt in raw_list:
         return DeviceDisk.DRIVER_TYPE_RAW
-
     return fmt
 
 
@@ -175,18 +170,6 @@ class DeviceDisk(Device):
             "lun": ["scsi"],
         }
         return [bus for bus in buses if bus in bus_map.get(devtype, [])]
-
-    @staticmethod
-    def disk_type_to_xen_driver_name(disk_type):
-        """
-        Convert a value of DeviceDisk.type to it's associated Xen
-        <driver name=/> property
-        """
-        if disk_type == DeviceDisk.TYPE_BLOCK:
-            return "phy"
-        elif disk_type == DeviceDisk.TYPE_FILE:
-            return "file"
-        return "file"
 
     @staticmethod
     def pretty_disk_bus(bus):
