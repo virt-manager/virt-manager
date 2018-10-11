@@ -162,7 +162,7 @@
     </disk>
     <disk type="block" device="lun">
       <driver name="qemu" type="raw"/>
-      <source dev="/dev/sda">
+      <source dev="/dev/disk-pool/diskvol7">
         <reservations managed="no">
           <source type="unix" path="/var/run/test/pr-helper0.sock" mode="client"/>
         </reservations>
