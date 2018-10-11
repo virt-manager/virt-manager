@@ -848,14 +848,12 @@ def parse_args():
 
 
     misc = parser.add_argument_group(_("Miscellaneous Options"))
-    misc.add_argument("--autostart", action="store_true", dest="autostart",
-                    default=False,
-                    help=_("Have domain autostart on host boot up."))
-    misc.add_argument("--transient", action="store_true", dest="transient",
-                      default=False,
+    misc.add_argument("--autostart", action="store_true", default=False,
+                      help=_("Have domain autostart on host boot up."))
+    misc.add_argument("--transient", action="store_true", default=False,
                       help=_("Create a transient domain."))
-    misc.add_argument("--wait", type=int, dest="wait",
-                    help=_("Minutes to wait for install to complete."))
+    misc.add_argument("--wait", type=int,
+                      help=_("Minutes to wait for install to complete."))
 
     cli.add_misc_options(misc, prompt=True, printxml=True, printstep=True,
                          noreboot=True, dryrun=True, noautoconsole=True)
