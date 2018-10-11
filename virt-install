@@ -541,6 +541,7 @@ def build_guest_instance(conn, options):
     installer = build_installer(options, guest)
     if installer:
         set_distro_variant(options, guest, installer)
+        installer.set_install_defaults(guest)
 
     validate_required_options(options, guest, installer)
     check_option_collisions(options, guest, installer)

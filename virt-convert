@@ -101,6 +101,7 @@ def main(conn=None):
 
         guest = converter.get_guest()
         installer = Installer(guest.conn)
+        installer.set_install_defaults(guest)
 
         conscb = None
         if options.autoconsole:
