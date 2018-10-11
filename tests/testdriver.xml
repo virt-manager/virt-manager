@@ -213,6 +213,14 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <shareable/>
     </disk>
 
+    <disk type='block' device='lun' rawio='no' sgio='unfiltered'>
+      <driver name='qemu' type='raw'/>
+      <source dev='/dev/szz'>
+        <reservations managed="yes"/>
+      </source>
+      <target dev='sdc' bus='scsi'/>
+    </disk>
+
     <!-- bus virtio -->
     <disk type="volume" device="disk">
       <driver name="qemu"/>
