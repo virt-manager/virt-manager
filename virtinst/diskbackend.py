@@ -86,7 +86,7 @@ def _stat_disk(path):
     return True, 0
 
 
-def check_if_path_managed(conn, path):
+def _check_if_path_managed(conn, path):
     """
     Try to lookup storage objects for the passed path.
 
@@ -147,7 +147,7 @@ def manage_path(conn, path):
 
     if not path_is_url(path):
         path = os.path.abspath(path)
-    vol, pool = check_if_path_managed(conn, path)
+    vol, pool = _check_if_path_managed(conn, path)
     if vol or pool or not _can_auto_manage(path):
         return vol, pool
 
@@ -221,6 +221,28 @@ def _get_dev_type(path, vol_xml, vol_object, pool_xml, remote):
                 return "block"
 
     return "file"
+
+
+def path_definitely_exists(conn, path):
+    """
+    Return True if the path certainly exists, False if we are unsure.
+    See DeviceDisk entry point for more details
+    """
+    if path is None:
+        return False
+
+    try:
+        (vol, pool) = _check_if_path_managed(conn, path)
+        ignore = pool
+        if vol:
+            return True
+
+        if not conn.is_remote():
+            return os.path.exists(path)
+    except Exception:
+        pass
+
+    return False
 
 
 #########################

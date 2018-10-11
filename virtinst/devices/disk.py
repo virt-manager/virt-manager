@@ -8,7 +8,6 @@
 # See the COPYING file in the top-level directory.
 
 import logging
-import os
 
 from .. import diskbackend
 from .. import util
@@ -149,22 +148,7 @@ class DeviceDisk(Device):
          may have disappeared behind our back, but that shouldn't have bad
          effects in practice.)
         """
-        if path is None:
-            return False
-
-        try:
-            (vol, pool) = diskbackend.check_if_path_managed(conn, path)
-            ignore = pool
-
-            if vol:
-                return True
-
-            if not conn.is_remote():
-                return os.path.exists(path)
-        except Exception:
-            pass
-
-        return False
+        return diskbackend.path_definitely_exists(conn, path)
 
     @staticmethod
     def check_path_search(conn, path):
