@@ -121,7 +121,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 
     vi_dir = None
     logfile = None
-    if not _in_testsuite():
+    if not in_testsuite():
         vi_dir = util.get_cache_dir()
         logfile = os.path.join(vi_dir, appname + ".log")
 
@@ -200,7 +200,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     logging.debug("Launched with command line: %s", " ".join(sys.argv))
 
 
-def _in_testsuite():
+def in_testsuite():
     return "VIRTINST_TEST_SUITE" in os.environ
 
 
@@ -359,7 +359,8 @@ def validate_disk(dev, warn_overwrite=False):
 
 def _run_console(domain, args):
     logging.debug("Running: %s", " ".join(args))
-    if _in_testsuite():
+    if in_testsuite():
+        print_stdout("testsuite console command: %s" % args)
         # Add this destroy() in here to trigger more virt-install code
         # for the test suite
         domain.destroy()
@@ -428,7 +429,7 @@ def get_console_cb(guest):
         logging.debug("No viewer to launch for graphics type '%s'", gtype)
         return
 
-    if not _in_testsuite():
+    if not in_testsuite():
         try:
             subprocess.check_output(["virt-viewer", "--version"])
         except OSError:
@@ -446,7 +447,7 @@ def get_console_cb(guest):
 
 
 def get_meter():
-    quiet = (get_global_state().quiet or _in_testsuite())
+    quiet = (get_global_state().quiet or in_testsuite())
     return util.make_meter(quiet=quiet)
 
 

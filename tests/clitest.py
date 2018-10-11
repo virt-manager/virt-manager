@@ -84,6 +84,7 @@ class Command(object):
 
         self.skip_check = None
         self.check_version = None
+        self.grep = None
 
         app, opts = self.cmdstr.split(" ", 1)
         self.app = app
@@ -183,13 +184,20 @@ class Command(object):
 
             code, output = self._get_output(conn)
 
-            if bool(code) == self.check_success:
+            def _raise_error(_msg):
                 raise AssertionError(
-                    ("Expected command to %s, but it didn't.\n" %
-                     (self.check_success and "pass" or "fail")) +
                     ("Command was: %s\n" % self.cmdstr) +
                     ("Error code : %d\n" % code) +
-                    ("Output was:\n%s" % output))
+                    ("Output was:\n%s" % output) +
+                    ("\n\n\nTESTSUITE: " + _msg + "\n"))
+
+
+            if bool(code) == self.check_success:
+                _raise_error("Expected command to %s, but it didn't.\n" %
+                     (self.check_success and "pass" or "fail"))
+
+            if self.grep and self.grep not in output:
+                _raise_error("Didn't find grep=%s" % self.grep)
 
             if self.compare_file:
                 if self._check_support(tests, conn, self.check_version,
@@ -285,7 +293,7 @@ class App(object):
 
     def _add(self, catname, testargs, valid, compfile,
              skip_check=None, check_version=None, input_file=None,
-             auto_printarg=True):
+             auto_printarg=True, grep=None):
 
         category = self.categories[catname]
         args = category.default_args + " " + testargs
@@ -304,6 +312,7 @@ class App(object):
                              category.check_version or
                              self.check_version)
         cmd.input_file = input_file
+        cmd.grep = grep
         self.cmds.append(cmd)
 
     def add_valid(self, cat, args, **kwargs):
@@ -814,10 +823,10 @@ c.add_valid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Multiple existing fi
 c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent file
 
 c = vinst.add_category("console-tests", "--pxe --nodisks")
-c.add_valid("--nographics")  # mock virsh console waiting
-c.add_valid("--graphics vnc --noreboot")  # mock virt-viewer waiting, with noreboot magic
-c.add_invalid("--noautoconsole --wait 1")  # --wait 1 is converted to 1 second if we are in the test suite, so this should actually touch the wait machinery. however in this case it exits with failure
-c.add_valid("--nographics --transient")  # --transient handling
+c.add_valid("", grep="testsuite console command: ['virt-viewer'")  # mock default graphics+virt-viewer usage
+c.add_valid("--graphics vnc --noreboot", grep="testsuite console command: ['virt-viewer'")  # mock virt-viewer waiting, with noreboot magic
+c.add_invalid("--noautoconsole --wait 1", grep="Installation has exceeded specified time limit")  # --wait 1 is converted to 1 second if we are in the test suite, so this should actually touch the wait machinery. however in this case it exits with failure
+c.add_valid("--nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling
 
 
 
