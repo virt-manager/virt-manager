@@ -113,7 +113,7 @@ def main(conn=None):
         elif not options.dry:
             print_stdout(_("Creating guest '%s'.") % guest.name)
             domain = installer.start_install(guest)
-            cli.connect_console(guest, domain, conscb, True)
+            cli.connect_console(guest, domain, conscb, True, False)
     except Exception:
         converter.cleanup()
         raise

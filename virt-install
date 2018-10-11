@@ -6,6 +6,7 @@
 # See the COPYING file in the top-level directory.
 
 import argparse
+import atexit
 import logging
 import sys
 import time
@@ -600,7 +601,12 @@ def start_install(guest, installer, options):
                 doboot=not options.noreboot,
                 transient=options.transient,
                 autostart=options.autostart)
-        cli.connect_console(guest, domain, conscb, wait_on_console)
+
+        if options.destroy_on_exit:
+            atexit.register(_destroy_on_exit, domain)
+
+        cli.connect_console(guest, domain, conscb, wait_on_console,
+                options.destroy_on_exit)
         check_domain(installer, domain, conscb, options.transient,
                      wait_on_install, wait_time, start_time)
 
@@ -613,7 +619,8 @@ def start_install(guest, installer, options):
             else:
                 print_stdout(_("Restarting guest."))
                 domain.create()
-                cli.connect_console(guest, domain, conscb, True)
+                cli.connect_console(guest, domain, conscb, True,
+                        options.destroy_on_exit)
 
     except KeyboardInterrupt:
         logging.debug("", exc_info=True)
@@ -656,7 +663,8 @@ def check_domain(installer, domain, conscb, transient,
         # just closed the console and the VM is still running. In the
         # the former case, libvirt may not have caught up yet with the
         # VM having exited, so wait a bit and check again
-        time.sleep(2)
+        if not cli.in_testsuite():
+            time.sleep(2)
         if check_domain_inactive():
             return
 
@@ -852,6 +860,9 @@ def parse_args():
                       help=_("Have domain autostart on host boot up."))
     misc.add_argument("--transient", action="store_true", default=False,
                       help=_("Create a transient domain."))
+    misc.add_argument("--destroy-on-exit", action="store_true", default=False,
+                      help=_("Force power off the domain when the console "
+                             "viewer is closed."))
     misc.add_argument("--wait", type=int,
                       help=_("Minutes to wait for install to complete."))
 
@@ -864,6 +875,18 @@ def parse_args():
 ###################
 # main() handling #
 ###################
+
+# Catchall for destroying the VM on ex. ctrl-c
+def _destroy_on_exit(domain):
+    try:
+        isactive = bool(domain and domain.isActive())
+        if isactive:
+            domain.destroy()
+    except libvirt.libvirtError as e:
+        if e.get_error_code() != libvirt.VIR_ERR_NO_DOMAIN:
+            logging.debug("Error invoking atexit destroy_on_exit",
+                    exc_info=True)
+
 
 def set_test_stub_options(options):
     # Set some basic options that will let virt-install succeed. Helps

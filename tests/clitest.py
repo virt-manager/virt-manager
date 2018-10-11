@@ -824,6 +824,8 @@ c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent 
 
 c = vinst.add_category("console-tests", "--pxe --nodisks")
 c.add_valid("", grep="testsuite console command: ['virt-viewer'")  # mock default graphics+virt-viewer usage
+c.add_valid("--destroy-on-exit", grep="Restarting guest.\n")  # destroy-on-exit
+c.add_valid("--transient --destroy-on-exit", grep="Domain creation completed.")  # destroy-on-exit + transient
 c.add_valid("--graphics vnc --noreboot", grep="testsuite console command: ['virt-viewer'")  # mock virt-viewer waiting, with noreboot magic
 c.add_invalid("--noautoconsole --wait 1", grep="Installation has exceeded specified time limit")  # --wait 1 is converted to 1 second if we are in the test suite, so this should actually touch the wait machinery. however in this case it exits with failure
 c.add_valid("--nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling

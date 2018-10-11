@@ -358,13 +358,11 @@ def validate_disk(dev, warn_overwrite=False):
 
 
 def _run_console(domain, args):
+    ignore = domain
     logging.debug("Running: %s", " ".join(args))
     if in_testsuite():
         print_stdout("testsuite console command: %s" % args)
-        # Add this destroy() in here to trigger more virt-install code
-        # for the test suite
-        domain.destroy()
-        return None
+        args = ["/bin/true"]
 
     child = os.fork()
     if child:
@@ -398,7 +396,7 @@ def _txt_console(guest, domain):
     return _run_console(domain, args)
 
 
-def connect_console(guest, domain, consolecb, wait):
+def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
     """
     Launched the passed console callback for the already defined
     domain. If domain isn't running, return an error.
@@ -415,6 +413,10 @@ def connect_console(guest, domain, consolecb, wait):
         os.waitpid(child, 0)
     except OSError as e:
         logging.debug("waitpid error: %s", e)
+
+    if destroy_on_exit and domain.isActive():
+        logging.debug("console exited and destroy_on_exit passed, destroying")
+        domain.destroy()
 
 
 def get_console_cb(guest):
