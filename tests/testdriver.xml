@@ -1943,7 +1943,7 @@ ba</description>
     <host name='ceph-mon-1.example.com' port='6789'/>
     <host name='ceph-mon-2.example.com' port='6789'/>
     <host name='ceph-mon-3.example.com' port='6789'/>
-    <name>rbd</name>
+    <name>rbd-sourcename</name>
     <auth type='ceph' username='admin'>
       <secret uuid='f65cc5a8-b77b-4254-9030-d50a528fb456'/>
     </auth>
@@ -1951,22 +1951,22 @@ ba</description>
 
   <volume type='network'>
     <name>vol1</name>
-    <key>rbd/vol1</key>
+    <key>rbd-sourcename/vol1</key>
     <capacity unit='bytes'>8302592</capacity>
     <allocation unit='bytes'>8388608</allocation>
     <target>
-      <path>rbd/vol1</path>
+      <path>rbd-sourcename/vol1</path>
       <format type='raw'/>
     </target>
   </volume>
 
   <volume type='network'>
     <name>some-rbd-vol</name>
-    <key>rbd/some-rbd-vol</key>
+    <key>rbd-sourcename/some-rbd-vol</key>
     <capacity unit='bytes'>104857600</capacity>
     <allocation unit='bytes'>104857600</allocation>
     <target>
-      <path>rbd/some-rbd-vol</path>
+      <path>rbd-sourcename/some-rbd-vol</path>
       <format type='raw'/>
     </target>
   </volume>
