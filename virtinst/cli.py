@@ -1649,6 +1649,7 @@ ParserBoot.add_arg(None, "uefi", cb=ParserBoot.set_uefi_cb, is_novalue=True)
 
 ParserBoot.add_arg("useserial", "useserial", is_onoff=True)
 ParserBoot.add_arg("enable_bootmenu", "menu", is_onoff=True)
+ParserBoot.add_arg("os.rebootTimeout", "rebootTimeout")
 ParserBoot.add_arg("kernel", "kernel")
 ParserBoot.add_arg("initrd", "initrd")
 ParserBoot.add_arg("dtb", "dtb")
