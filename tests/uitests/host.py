@@ -30,12 +30,3 @@ class Host(uiutils.UITestCase):
         lst = win.find("pool-list", "table")
         errlabel = win.find("pool-error-label", "label")
         self._walkUIList(win, lst, lambda: errlabel.showing)
-
-    def testHostInterfaceSmokeTest(self):
-        """
-        Verify that each interface displays, without error.
-        """
-        win = self._open_host_window("Network Interfaces")
-        lst = win.find("interface-list", "table")
-        errlabel = win.find("interface-error-label", "label")
-        self._walkUIList(win, lst, lambda: errlabel.showing)

@@ -4,12 +4,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import functools
 import logging
 
 from gi.repository import Gtk
 
-from virtinst import Interface
 from virtinst import NodeDevice
 from virtinst import util
 
@@ -17,23 +15,15 @@ from . import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .createnet import vmmCreateNetwork
-from .createinterface import vmmCreateInterface
 from .engine import vmmEngine
 from .graphwidgets import Sparkline
 from .storagelist import vmmStorageList
-
-INTERFACE_PAGE_INFO = 0
-INTERFACE_PAGE_ERROR = 1
 
 EDIT_NET_IDS = (
 EDIT_NET_NAME,
 EDIT_NET_AUTOSTART,
 EDIT_NET_QOS,
 ) = list(range(3))
-
-EDIT_INTERFACE_IDS = (
-EDIT_INTERFACE_STARTMODE,
-) = list(range(200, 201))
 
 
 class vmmHost(vmmGObjectUI):
@@ -62,7 +52,6 @@ class vmmHost(vmmGObjectUI):
         self.ICON_SHUTOFF = "state_shutoff"
 
         self.addnet = None
-        self.addinterface = None
 
         self.active_edits = []
 
@@ -73,7 +62,6 @@ class vmmHost(vmmGObjectUI):
         self.storagelist = None
         self.init_storage_state()
         self.init_net_state()
-        self.init_interface_state()
 
         self.builder.connect_signals({
             "on_menu_file_view_manager_activate": self.view_manager,
@@ -91,14 +79,6 @@ class vmmHost(vmmGObjectUI):
             "on_net_autostart_toggled": self.net_autostart_changed,
             "on_net_name_changed": (lambda *x:
                 self.enable_net_apply(x, EDIT_NET_NAME)),
-
-            "on_interface_add_clicked": self.add_interface,
-            "on_interface_start_clicked": self.start_interface,
-            "on_interface_stop_clicked": self.stop_interface,
-            "on_interface_delete_clicked": self.delete_interface,
-            "on_interface_startmode_changed": self.interface_startmode_changed,
-            "on_interface_apply_clicked": (lambda *x: self.interface_apply()),
-            "on_interface_list_changed": self.interface_selected,
 
             "on_overview_name_changed": self._overview_name_changed,
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
@@ -121,13 +101,9 @@ class vmmHost(vmmGObjectUI):
         })
 
         self.populate_networks()
-        self.populate_interfaces()
 
         self.conn.connect("net-added", self.populate_networks)
         self.conn.connect("net-removed", self.populate_networks)
-
-        self.conn.connect("interface-added", self.populate_interfaces)
-        self.conn.connect("interface-removed", self.populate_interfaces)
 
         self.conn.connect("state-changed", self.conn_state_changed)
         self.conn.connect("resources-sampled", self.refresh_resources)
@@ -182,53 +158,6 @@ class vmmHost(vmmGObjectUI):
         self.widget("storage-align").add(self.storagelist.top_box)
 
 
-    def init_interface_state(self):
-        self.widget("interface-pages").set_show_tabs(False)
-
-        # [ unique, label, icon name, icon size, is_active ]
-        interfaceListModel = Gtk.ListStore(str, str, str, int, bool)
-        self.widget("interface-list").set_model(interfaceListModel)
-
-        sel = self.widget("interface-list").get_selection()
-        sel.set_select_function((lambda *x: self.confirm_changes()), None)
-
-        interfaceCol = Gtk.TreeViewColumn(_("Interfaces"))
-        interfaceCol.set_spacing(6)
-        interface_txt = Gtk.CellRendererText()
-        interface_img = Gtk.CellRendererPixbuf()
-        interfaceCol.pack_start(interface_img, False)
-        interfaceCol.pack_start(interface_txt, True)
-        interfaceCol.add_attribute(interface_txt, 'text', 1)
-        interfaceCol.add_attribute(interface_txt, 'sensitive', 4)
-        interfaceCol.add_attribute(interface_img, 'icon-name', 2)
-        interfaceCol.add_attribute(interface_img, 'stock-size', 3)
-        self.widget("interface-list").append_column(interfaceCol)
-        interfaceListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-
-        # Startmode combo
-        vmmCreateInterface.build_interface_startmode_combo(
-            self.widget("interface-startmode"))
-
-        # [ name, type ]
-        childListModel = Gtk.ListStore(str, str)
-        childList = self.widget("interface-child-list")
-        childList.set_model(childListModel)
-
-        childNameCol = Gtk.TreeViewColumn(_("Name"))
-        child_txt1 = Gtk.CellRendererText()
-        childNameCol.pack_start(child_txt1, True)
-        childNameCol.add_attribute(child_txt1, 'text', 0)
-        childNameCol.set_sort_column_id(0)
-        childList.append_column(childNameCol)
-
-        childTypeCol = Gtk.TreeViewColumn(_("Interface Type"))
-        child_txt2 = Gtk.CellRendererText()
-        childTypeCol.pack_start(child_txt2, True)
-        childTypeCol.add_attribute(child_txt2, 'text', 1)
-        childTypeCol.set_sort_column_id(1)
-        childList.append_column(childTypeCol)
-        childListModel.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
     def init_conn_state(self):
         uri = self.conn.get_uri()
         auto = self.conn.get_autoconnect()
@@ -278,10 +207,6 @@ class vmmHost(vmmGObjectUI):
             self.addnet.cleanup()
             self.addnet = None
 
-        if self.addinterface:
-            self.addinterface.cleanup()
-            self.addinterface = None
-
         self.cpu_usage_graph.destroy()
         self.cpu_usage_graph = None
 
@@ -305,9 +230,6 @@ class vmmHost(vmmGObjectUI):
             self.conn.schedule_priority_tick(pollnet=True)
         elif pagenum == 2:
             self.storagelist.refresh_page()
-        elif pagenum == 3:
-            self.populate_interfaces()
-            self.conn.schedule_priority_tick(polliface=True)
 
     def refresh_resources(self, ignore=None):
         vm_memory = util.pretty_mem(self.conn.stats_memory())
@@ -337,31 +259,21 @@ class vmmHost(vmmGObjectUI):
 
         self.widget("net-add").set_sensitive(conn_active and
             self.conn.is_network_capable())
-        self.widget("interface-add").set_sensitive(conn_active and
-            self.conn.is_interface_capable())
 
         if conn_active and not self.conn.is_network_capable():
             self.set_net_error_page(
                 _("Libvirt connection does not support virtual network "
                   "management."))
-        if conn_active and not self.conn.is_interface_capable():
-            self.set_interface_error_page(
-                _("Libvirt connection does not support interface management."))
 
         if conn_active:
             uiutil.set_list_selection_by_number(self.widget("net-list"), 0)
-            uiutil.set_list_selection_by_number(self.widget("interface-list"), 0)
             return
 
         self.set_net_error_page(_("Connection not active."))
-        self.set_interface_error_page(_("Connection not active."))
 
         self.populate_networks()
-        self.populate_interfaces()
 
         self.storagelist.close()
-        if self.addinterface:
-            self.addinterface.close()
         if self.addnet:
             self.addnet.close()
 
@@ -471,21 +383,9 @@ class vmmHost(vmmGObjectUI):
                 self.active_edits.remove(i)
         self.widget("net-apply").set_sensitive(False)
 
-    def disable_interface_apply(self):
-        for i in EDIT_INTERFACE_IDS:
-            if i in self.active_edits:
-                self.active_edits.remove(i)
-        self.widget("interface-apply").set_sensitive(False)
-
     def enable_net_apply(self, *arglist):
         edittype = arglist[-1]
         self.widget("net-apply").set_sensitive(True)
-        if edittype not in self.active_edits:
-            self.active_edits.append(edittype)
-
-    def enable_interface_apply(self, *arglist):
-        edittype = arglist[-1]
-        self.widget("interface-apply").set_sensitive(True)
         if edittype not in self.active_edits:
             self.active_edits.append(edittype)
 
@@ -735,266 +635,6 @@ class vmmHost(vmmGObjectUI):
             curnet and curnet.get_connkey() or None)
 
 
-    #############################
-    # Interface manager methods #
-    #############################
-
-    def stop_interface(self, src_ignore):
-        interface = self.current_interface()
-        if interface is None:
-            return
-
-        if not self.err.chkbox_helper(self.config.get_confirm_interface,
-            self.config.set_confirm_interface,
-            text1=_("Are you sure you want to stop the interface "
-                    "'%s'?" % interface.get_name())):
-            return
-
-        logging.debug("Stopping interface '%s'", interface.get_name())
-        vmmAsyncJob.simple_async_noshow(interface.stop, [], self,
-                    _("Error stopping interface '%s'") % interface.get_name())
-
-    def start_interface(self, src_ignore):
-        interface = self.current_interface()
-        if interface is None:
-            return
-
-        if not self.err.chkbox_helper(self.config.get_confirm_interface,
-            self.config.set_confirm_interface,
-            text1=_("Are you sure you want to start the interface "
-                    "'%s'?" % interface.get_name())):
-            return
-
-        logging.debug("Starting interface '%s'", interface.get_name())
-        vmmAsyncJob.simple_async_noshow(interface.start, [], self,
-                    _("Error starting interface '%s'") % interface.get_name())
-
-    def delete_interface(self, src_ignore):
-        interface = self.current_interface()
-        if interface is None:
-            return
-
-        result = self.err.yes_no(_("Are you sure you want to permanently "
-                                   "delete the interface %s?")
-                                   % interface.get_name())
-        if not result:
-            return
-
-        logging.debug("Deleting interface '%s'", interface.get_name())
-        vmmAsyncJob.simple_async_noshow(interface.delete, [], self,
-                    _("Error deleting interface '%s'") % interface.get_name())
-
-    def add_interface(self, src_ignore):
-        logging.debug("Launching 'Add Interface' wizard")
-        try:
-            if self.addinterface is None:
-                self.addinterface = vmmCreateInterface(self.conn)
-            self.addinterface.show(self.topwin)
-        except Exception as e:
-            self.err.show_err(_("Error launching interface wizard: %s") %
-                              str(e))
-
-    def refresh_current_interface(self, ignore1=None):
-        cp = self.current_interface()
-        if cp is None:
-            return
-
-        self.refresh_interface(cp)
-
-    def current_interface(self):
-        connkey = uiutil.get_list_selection(self.widget("interface-list"))
-        return connkey and self.conn.get_interface(connkey)
-
-    def interface_apply(self):
-        interface = self.current_interface()
-        if interface is None:
-            return
-
-        newmode = uiutil.get_list_selection(
-            self.widget("interface-startmode"))
-
-        logging.debug("Applying changes for interface '%s'",
-                      interface.get_name())
-        try:
-            interface.set_startmode(newmode)
-        except Exception as e:
-            self.err.show_err(_("Error setting interface startmode: %s") %
-                              str(e))
-            return
-
-        self.disable_interface_apply()
-
-    def interface_startmode_changed(self, src_ignore):
-        self.enable_interface_apply(EDIT_INTERFACE_STARTMODE)
-
-    def set_interface_error_page(self, msg):
-        self.reset_interface_state()
-        self.widget("interface-pages").set_current_page(INTERFACE_PAGE_ERROR)
-        self.widget("interface-error-label").set_text(msg)
-
-    def interface_selected(self, src):
-        model, treeiter = src.get_selected()
-        if treeiter is None:
-            self.set_interface_error_page(_("No interface selected."))
-            return
-
-        self.widget("interface-pages").set_current_page(INTERFACE_PAGE_INFO)
-        connkey = model[treeiter][0]
-
-        try:
-            self.populate_interface_state(connkey)
-        except Exception as e:
-            logging.exception(e)
-            self.set_interface_error_page(_("Error selecting interface: %s") %
-                                          e)
-
-        self.disable_interface_apply()
-
-
-    def populate_interface_state(self, connkey):
-        interface = self.conn.get_interface(connkey)
-        name = interface.get_name()
-        children = interface.get_slaves()
-        itype = interface.get_type()
-        mac = interface.get_mac()
-        active = interface.is_active()
-        startmode = interface.get_startmode()
-        ipv4 = interface.get_ipv4()
-        ipv6 = interface.get_ipv6()
-
-        self.widget("interface-details").set_sensitive(True)
-        self.widget("interface-name").set_markup(
-            "<b>%s %s:</b>" % (interface.get_pretty_type(),
-                               interface.get_name()))
-        self.widget("interface-mac").set_text(mac or _("Unknown"))
-
-        self.widget("interface-state-icon").set_from_icon_name(
-            ((active and self.ICON_RUNNING) or self.ICON_SHUTOFF),
-            Gtk.IconSize.BUTTON)
-        self.widget("interface-state").set_text(
-                                    (active and _("Active")) or _("Inactive"))
-
-        # Set start mode
-        start_list = self.widget("interface-startmode")
-        start_model = start_list.get_model()
-        start_label = self.widget("interface-startmode-label")
-        start_list.hide()
-        start_label.show()
-        start_label.set_text(startmode)
-
-        idx = 0
-        for row in start_model:
-            if row[0] == startmode:
-                start_list.set_active(idx)
-                start_list.show()
-                start_label.hide()
-                break
-            idx += 1
-
-        # This can fail if other interfaces are busted, so ignore errors
-        used_by = None
-        try:
-            used_by = vmmCreateInterface.iface_in_use_by(self.conn, name)
-        except Exception as e:
-            logging.debug("Error looking up iface usage: %s", e)
-        self.widget("interface-inuseby").set_text(used_by or "-")
-
-        # IP info
-        self.widget("interface-ipv4-expander").set_visible(bool(ipv4))
-        self.widget("interface-ipv6-expander").set_visible(bool(ipv6))
-
-        if ipv4:
-            mode = ipv4[0] and "DHCP" or _("Static")
-            addr = ipv4[1] or "-"
-            self.widget("interface-ipv4-mode").set_text(mode)
-            self.widget("interface-ipv4-address").set_text(addr)
-
-        if ipv6:
-            mode = ""
-            if ipv6[1]:
-                mode = _("Autoconf") + " "
-
-            if ipv6[0]:
-                mode += "DHCP"
-            else:
-                mode = _("Static")
-
-            addrstr = "-"
-            if ipv6[2]:
-                addrstr = functools.reduce(lambda x, y: x + "\n" + y, ipv6[2])
-
-            self.widget("interface-ipv6-mode").set_text(mode)
-            self.widget("interface-ipv6-address").set_text(addrstr)
-
-        self.widget("interface-delete").set_sensitive(not active)
-        self.widget("interface-stop").set_sensitive(active)
-        self.widget("interface-start").set_sensitive(not active)
-
-        show_child = (children or
-                      itype in [Interface.INTERFACE_TYPE_BRIDGE,
-                                Interface.INTERFACE_TYPE_BOND])
-        self.widget("interface-child-box").set_visible(show_child)
-        self.populate_interface_children()
-
-    def refresh_interface(self, iface):
-        iface_list = self.widget("interface-list")
-        sel = iface_list.get_selection()
-        model, treeiter = sel.get_selected()
-        name = iface.get_name()
-
-        for row in iface_list.get_model():
-            if row[0] == name:
-                row[4] = iface.is_active()
-
-        if treeiter is not None:
-            if model[treeiter][0] == name:
-                self.interface_selected(sel)
-
-
-    def reset_interface_state(self):
-        self.widget("interface-delete").set_sensitive(False)
-        self.widget("interface-stop").set_sensitive(False)
-        self.widget("interface-start").set_sensitive(False)
-        self.widget("interface-apply").set_sensitive(False)
-
-    def populate_interfaces(self, src=None, connkey=None):
-        ignore = src
-        ignore = connkey
-        iface_list = self.widget("interface-list")
-        curiface = self.current_interface()
-
-        model = iface_list.get_model()
-        # Prevent events while the model is modified
-        iface_list.set_model(None)
-        try:
-            model.clear()
-            iface_list.get_selection().unselect_all()
-            for iface in self.conn.list_interfaces():
-                iface.disconnect_by_obj(self)
-                iface.connect("state-changed", self.refresh_interface)
-                model.append([iface.get_connkey(), iface.get_name(),
-                              "network-idle", Gtk.IconSize.LARGE_TOOLBAR,
-                          bool(iface.is_active())])
-        finally:
-            iface_list.set_model(model)
-
-        uiutil.set_list_selection(iface_list,
-            curiface and curiface.get_connkey() or None)
-
-    def populate_interface_children(self):
-        interface = self.current_interface()
-        child_list = self.widget("interface-child-list")
-        model = child_list.get_model()
-        child_list.get_selection().unselect_all()
-        model.clear()
-
-        if not interface:
-            return
-
-        for name, itype in interface.get_slaves():
-            row = [name, itype]
-            model.append(row)
-
     def confirm_changes(self):
         if not self.active_edits:
             return True
@@ -1009,9 +649,6 @@ class vmmHost(vmmGObjectUI):
 
             if all([edit in EDIT_NET_IDS for edit in self.active_edits]):
                 self.net_apply()
-            elif all([edit in EDIT_INTERFACE_IDS
-                      for edit in self.active_edits]):
-                self.interface_apply()
 
         self.active_edits = []
         return True
