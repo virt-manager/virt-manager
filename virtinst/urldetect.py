@@ -105,22 +105,13 @@ class _DistroCache(object):
                 image_type = "xen"
             return self.treeinfo.get("images-%s" % image_type, media_name)
 
-        kernel_paths = []
-        boot_iso_paths = []
-
         try:
-            kernel_paths.append(
-                (_get_treeinfo_path("kernel"), _get_treeinfo_path("initrd")))
+            return [(_get_treeinfo_path("kernel"),
+                     _get_treeinfo_path("initrd"))]
         except Exception:
             logging.debug("Failed to parse treeinfo kernel/initrd",
                     exc_info=True)
-
-        try:
-            boot_iso_paths.append(_get_treeinfo_path("boot.iso"))
-        except Exception:
-            logging.debug("Failed to parse treeinfo boot.iso", exc_info=True)
-
-        return kernel_paths, boot_iso_paths
+            return []
 
     def split_version(self):
         verstr = self.treeinfo_version
@@ -311,7 +302,6 @@ class Distro(object):
     PRETTY_NAME = None
     matching_distros = []
 
-    _boot_iso_paths = None
     _kernel_paths = None
 
     def __init__(self, fetcher, arch, vmtype, cache):
@@ -358,13 +348,6 @@ class Distro(object):
             os.unlink(kernel)
             raise
 
-    def acquireBootISO(self):
-        for path in self._boot_iso_paths:
-            if self.fetcher.hasFile(path):
-                return self.fetcher.acquireFile(path)
-        raise RuntimeError(_("Could not find boot.iso in %s tree." %
-                           self.PRETTY_NAME))
-
     def get_osdict_info(self):
         """
         Return detected osdict value
@@ -397,9 +380,7 @@ class RedHatDistro(Distro):
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
-        k, b = self.cache.get_treeinfo_media(self.type)
-        self._kernel_paths = k
-        self._boot_iso_paths = b
+        self._kernel_paths = self.cache.get_treeinfo_media(self.type)
 
     def _get_kernel_url_arg(self):
         def _is_old_rhdistro():
@@ -534,9 +515,7 @@ class SuseDistro(Distro):
 
         if not self.cache.suse_content or self.cache.suse_content == -1:
             # This means we matched on treeinfo
-            k, b = self.cache.get_treeinfo_media(self.type)
-            self._kernel_paths = k
-            self._boot_iso_paths = b
+            self._kernel_paths = self.cache.get_treeinfo_media(self.type)
             return
 
         tree_arch = self.cache.suse_content.tree_arch
@@ -550,7 +529,6 @@ class SuseDistro(Distro):
             oldkern += "64"
             oldinit += "64"
 
-        self._boot_iso_paths = ["boot/boot.iso"]
         self._kernel_paths = []
         if self.type == "xen":
             # Matches Opensuse > 10.2 and sles 10
@@ -733,8 +711,6 @@ class DebianDistro(Distro):
         if self.cache.debian_media_type == "daily":
             url_prefix = "daily"
 
-        self._boot_iso_paths = ["%s/netboot/mini.iso" % url_prefix]
-
         tree_arch = self._find_treearch()
         hvmroot = "%s/netboot/%s-installer/%s/" % (url_prefix,
                 self._debname, tree_arch)
@@ -811,7 +787,6 @@ class ALTLinuxDistro(Distro):
     PRETTY_NAME = "ALT Linux"
     matching_distros = ["altlinux"]
 
-    _boot_iso_paths = [("altinst", "live")]
     _kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
 
     @classmethod
@@ -824,8 +799,6 @@ class MandrivaDistro(Distro):
     # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
     PRETTY_NAME = "Mandriva/Mageia"
     matching_distros = ["mandriva", "mes"]
-
-    _boot_iso_paths = ["install/images/boot.iso"]
 
     @classmethod
     def is_valid(cls, cache):
@@ -859,9 +832,7 @@ class GenericTreeinfoDistro(Distro):
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
-        k, b = self.cache.get_treeinfo_media(self.type)
-        self._kernel_paths = k
-        self._boot_iso_paths = b
+        self._kernel_paths = self.cache.get_treeinfo_media(self.type)
 
 
 # Build list of all *Distro classes
