@@ -644,13 +644,13 @@ c.add_valid("--arch i686 --pxe")  # Explicitly fullvirt + arch
 c.add_valid("--location %(TREEDIR)s")  # Directory tree URL install
 c.add_valid("--location %(TREEDIR)s --initrd-inject virt-install --extra-args ks=file:/virt-install")  # initrd-inject
 c.add_valid("--hvm --location %(TREEDIR)s --extra-args console=ttyS0")  # Directory tree URL install with extra-args
-c.add_valid("--hvm --cdrom %(TREEDIR)s")  # Directory tree CDROM install
 c.add_valid("--paravirt --location %(TREEDIR)s")  # Paravirt location
 c.add_valid("--paravirt --location %(TREEDIR)s --os-variant none")  # Paravirt location with --os-variant none
 c.add_valid("--location %(TREEDIR)s --os-variant fedora12")  # URL install with manual os-variant
 c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0")  # HVM windows install with disk
 c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --print-step 2")  # HVM windows install, print 3rd stage XML
 c.add_valid("--pxe --autostart")  # --autostart flag
+c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
 c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch

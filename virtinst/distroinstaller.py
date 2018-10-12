@@ -34,8 +34,7 @@ def _is_url(conn, url):
 (MEDIA_LOCATION_DIR,
  MEDIA_LOCATION_CDROM,
  MEDIA_LOCATION_URL,
- MEDIA_CDROM_PATH,
- MEDIA_CDROM_URL) = range(1, 6)
+ MEDIA_CDROM_PATH) = range(1, 5)
 
 
 class DistroInstaller(Installer):
@@ -60,7 +59,7 @@ class DistroInstaller(Installer):
 
     def _get_media_type(self):
         if self.location and _is_url(self.conn, self.location):
-            return self.cdrom and MEDIA_CDROM_URL or MEDIA_LOCATION_URL
+            return self.cdrom and MEDIA_CDROM_PATH or MEDIA_LOCATION_URL
         if self.cdrom:
             return MEDIA_CDROM_PATH
         if self.location and os.path.isdir(self.location):
@@ -87,12 +86,6 @@ class DistroInstaller(Installer):
 
     def _prepare_local(self):
         return self.location
-
-    def _prepare_cdrom_url(self, guest, fetcher):
-        store = self._get_store(guest, fetcher)
-        media = store.acquireBootISO()
-        self._tmpfiles.append(media)
-        return media
 
     def _prepare_kernel_url(self, guest, fetcher):
         store = self._get_store(guest, fetcher)
@@ -186,10 +179,7 @@ class DistroInstaller(Installer):
                         exc_info=True)
                     raise ValueError(_("Invalid install location: ") + str(e))
 
-                if mediatype == MEDIA_CDROM_URL:
-                    cdrom_path = self._prepare_cdrom_url(guest, fetcher)
-                else:
-                    self._prepare_kernel_url(guest, fetcher)
+                self._prepare_kernel_url(guest, fetcher)
             finally:
                 fetcher.cleanupLocation()
 
@@ -205,20 +195,19 @@ class DistroInstaller(Installer):
 
     def needs_cdrom(self):
         mediatype = self._get_media_type()
-        return mediatype in [MEDIA_CDROM_PATH, MEDIA_LOCATION_CDROM,
-                             MEDIA_CDROM_URL]
+        return mediatype in [MEDIA_CDROM_PATH, MEDIA_LOCATION_CDROM]
 
     def cdrom_path(self):
         return self._cdrom_path
 
     def scratchdir_required(self):
         mediatype = self._get_media_type()
-        return mediatype in [MEDIA_CDROM_URL, MEDIA_LOCATION_URL,
+        return mediatype in [MEDIA_LOCATION_URL,
                              MEDIA_LOCATION_DIR, MEDIA_LOCATION_CDROM]
 
     def check_location(self, guest):
         mediatype = self._get_media_type()
-        if mediatype not in [MEDIA_CDROM_URL, MEDIA_LOCATION_URL]:
+        if mediatype not in [MEDIA_LOCATION_URL]:
             return True
 
         try:
