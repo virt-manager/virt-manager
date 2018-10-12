@@ -34,10 +34,6 @@ def install_specified(options):
     return any([bool(o) for o in all_install_options(options)])
 
 
-def implied_cdrom_install(guest):
-    return [d.is_cdrom() for d in guest.devices.disk]
-
-
 def supports_pxe(guest):
     """
     Return False if we are pretty sure the config doesn't support PXE
@@ -488,10 +484,6 @@ def build_installer(options, guest):
           options.xmlonly or
           options.boot):
         instclass = virtinst.Installer
-    elif implied_cdrom_install(guest):
-        # Explicit install options always take precedent over this case
-        cdrom = True
-        instclass = virtinst.DistroInstaller
 
     if not instclass:
         # This triggers an error in validate_required_options

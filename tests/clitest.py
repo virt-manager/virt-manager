@@ -670,7 +670,6 @@ c.add_compare("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --vcpus cores=
 c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no second XML step
 
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
-c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom")  # Implied cdrom install
 c.add_compare("", "noargs-fail", auto_printarg=False)  # No arguments
 c.add_valid("--panic help --disk=?")  # Make sure introspection doesn't blow up
 c.add_valid("--test-stub-command")  # --test-stub-command

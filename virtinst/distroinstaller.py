@@ -35,8 +35,7 @@ def _is_url(conn, url):
  MEDIA_LOCATION_CDROM,
  MEDIA_LOCATION_URL,
  MEDIA_CDROM_PATH,
- MEDIA_CDROM_URL,
- MEDIA_CDROM_IMPLIED) = range(1, 7)
+ MEDIA_CDROM_URL) = range(1, 6)
 
 
 class DistroInstaller(Installer):
@@ -60,10 +59,6 @@ class DistroInstaller(Installer):
     ########################
 
     def _get_media_type(self):
-        if self.cdrom and not self.location:
-            # CDROM install requested from a disk already attached to VM
-            return MEDIA_CDROM_IMPLIED
-
         if self.location and _is_url(self.conn, self.location):
             return self.cdrom and MEDIA_CDROM_URL or MEDIA_LOCATION_URL
         if self.cdrom:
@@ -128,7 +123,7 @@ class DistroInstaller(Installer):
 
     def _is_persistent_cd(self):
         mediatype = self._get_media_type()
-        local = mediatype in [MEDIA_CDROM_PATH, MEDIA_CDROM_IMPLIED,
+        local = mediatype in [MEDIA_CDROM_PATH,
                               MEDIA_LOCATION_DIR, MEDIA_LOCATION_CDROM]
         persistent_cd = bool(local and self.cdrom and self.livecd)
         return persistent_cd
@@ -176,9 +171,6 @@ class DistroInstaller(Installer):
 
     def _prepare(self, guest, meter):
         mediatype = self._get_media_type()
-
-        if mediatype == MEDIA_CDROM_IMPLIED:
-            return
 
         cdrom_path = None
         if mediatype == MEDIA_CDROM_PATH or mediatype == MEDIA_LOCATION_CDROM:
