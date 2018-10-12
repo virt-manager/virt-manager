@@ -200,7 +200,7 @@ class DeviceDisk(Device):
         """
         ignore = conn
         errdict = diskbackend.set_dirs_searchable(
-                searchdata.fixlist, searchdata.username)
+                searchdata.fixlist, searchdata.user)
         return errdict
 
     @staticmethod
