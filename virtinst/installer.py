@@ -49,6 +49,7 @@ class Installer(object):
         self.cdrom = False
         self.livecd = False
         self.extraargs = []
+        self.install_bootdev = None
 
         self.initrd_injections = []
 
@@ -141,7 +142,7 @@ class Installer(object):
         if self.extraargs:
             guest.os.kernel_args = " ".join(self.extraargs)
 
-        bootdev = self._get_install_bootdev(guest)
+        bootdev = self.install_bootdev
         if bootdev and self._can_set_guest_bootorder(guest):
             guest.os.bootorder = self._build_boot_order(guest, bootdev)
         else:
@@ -172,11 +173,13 @@ class Installer(object):
         self._tmpvols = []
         self._tmpfiles = []
 
-    def _get_install_bootdev(self, guest):
-        ignore = guest
-        return None
-
     def _get_postinstall_bootdev(self, guest):
+        if self.install_bootdev:
+            if any([d for d in guest.devices.disk
+                    if d.device == d.DEVICE_DISK]):
+                return DomainOs.BOOT_DEVICE_HARDDISK
+            return DomainOs.BOOT_DEVICE_NETWORK
+
         device = guest.devices.disk and guest.devices.disk[0].device or None
         if device == DeviceDisk.DEVICE_DISK:
             return DomainOs.BOOT_DEVICE_HARDDISK
@@ -226,7 +229,7 @@ class Installer(object):
         into the guest. Things like LiveCDs, Import, or a manually specified
         bootorder do not have an install phase.
         """
-        return False
+        return bool(self.install_bootdev)
 
     def needs_cdrom(self):
         """
@@ -443,17 +446,3 @@ class Installer(object):
                 logging.debug("Failed to remove disk '%s'",
                     name, exc_info=True)
                 logging.error("Failed to remove disk '%s': %s", name, e)
-
-
-class PXEInstaller(Installer):
-    def _get_install_bootdev(self, guest):
-        ignore = guest
-        return DomainOs.BOOT_DEVICE_NETWORK
-
-    def _get_postinstall_bootdev(self, guest):
-        if any([d for d in guest.devices.disk if d.device == d.DEVICE_DISK]):
-            return DomainOs.BOOT_DEVICE_HARDDISK
-        return DomainOs.BOOT_DEVICE_NETWORK
-
-    def has_install_phase(self):
-        return True

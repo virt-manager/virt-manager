@@ -1509,6 +1509,7 @@ class vmmCreate(vmmGObjectUI):
         location = None
         extra = None
         cdrom = False
+        install_bootdev = None
         is_import = False
         init = None
         fs = None
@@ -1540,7 +1541,8 @@ class vmmCreate(vmmGObjectUI):
             location = media
 
         elif instmethod == INSTALL_PAGE_PXE:
-            instclass = virtinst.PXEInstaller
+            instclass = virtinst.Installer
+            install_bootdev = "network"
 
         elif instmethod == INSTALL_PAGE_IMPORT:
             instclass = virtinst.Installer
@@ -1629,6 +1631,8 @@ class vmmCreate(vmmGObjectUI):
                 installer.location = location
             if cdrom:
                 installer.cdrom = True
+            if install_bootdev:
+                installer.install_bootdev = install_bootdev
 
             if extra:
                 installer.extraargs = [extra]

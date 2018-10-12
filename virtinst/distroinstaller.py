@@ -43,7 +43,7 @@ class DistroInstaller(Installer):
     def __init__(self, *args, **kwargs):
         Installer.__init__(self, *args, **kwargs)
 
-        self.livecd = False
+        self.install_bootdev = "cdrom"
         self._cached_fetcher = None
         self._cached_store = None
         self._cdrom_path = None
@@ -133,8 +133,6 @@ class DistroInstaller(Installer):
         persistent_cd = bool(local and self.cdrom and self.livecd)
         return persistent_cd
 
-    def _get_install_bootdev(self, _guest):
-        return "cdrom"
     def _get_postinstall_bootdev(self, _guest):
         if self._is_persistent_cd():
             return "cdrom"

@@ -472,6 +472,7 @@ def build_installer(options, guest):
     instclass = None
     cdrom = False
     location = None
+    install_bootdev = None
 
     if (options.cdrom or
         options.location or
@@ -480,7 +481,8 @@ def build_installer(options, guest):
         cdrom = bool(options.cdrom)
         instclass = virtinst.DistroInstaller
     elif options.pxe:
-        instclass = virtinst.PXEInstaller
+        instclass = virtinst.Installer
+        install_bootdev = "network"
     elif (guest.os.is_container() or
           options.import_install or
           options.xmlonly or
@@ -502,6 +504,8 @@ def build_installer(options, guest):
         installer.cdrom = cdrom
     if location:
         installer.location = location
+    if install_bootdev:
+        installer.install_bootdev = install_bootdev
     if options.extra_args:
         installer.extraargs = options.extra_args
     if options.initrd_inject:
