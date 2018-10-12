@@ -326,8 +326,7 @@ def do_test_media_detection(conn, options):
         guest.os.os_type = options.os_type
     guest.set_capabilities_defaults()
 
-    installer = virtinst.DistroInstaller(conn)
-    installer.location = url
+    installer = virtinst.Installer(conn, location=url)
     print_stdout(installer.detect_distro(guest), do_force=True)
 
 
@@ -465,43 +464,39 @@ def show_warnings(options, guest, installer):
 ##########################
 
 def build_installer(options, guest):
-    instclass = None
-    cdrom = False
+    cdrom = None
     location = None
     install_bootdev = None
 
-    if (options.cdrom or
-        options.location or
-        options.livecd):
-        location = options.location or options.cdrom
-        cdrom = bool(options.cdrom)
-        instclass = virtinst.DistroInstaller
+    has_installer = True
+    if options.location:
+        location = options.location
+    elif options.cdrom:
+        cdrom = options.cdrom
     elif options.pxe:
-        instclass = virtinst.Installer
         install_bootdev = "network"
     elif (guest.os.is_container() or
           options.import_install or
           options.xmlonly or
           options.boot):
-        instclass = virtinst.Installer
+        pass
+    else:
+        has_installer = False
 
-    if not instclass:
+    if not has_installer:
         # This triggers an error in validate_required_options
         return None
 
-    installer = instclass(guest.conn)
-    if options.livecd:
+    installer = virtinst.Installer(guest.conn,
+            cdrom=cdrom,
+            location=location,
+            install_bootdev=install_bootdev)
+    if cdrom and options.livecd:
         installer.livecd = True
-    if cdrom:
-        installer.cdrom = cdrom
-    if location:
-        installer.location = location
-    if install_bootdev:
-        installer.install_bootdev = install_bootdev
     if options.extra_args:
         installer.extraargs = options.extra_args
     if options.initrd_inject:
-        installer.initrd_injections = options.initrd_inject
+        installer.set_initrd_injections(options.initrd_inject)
 
     return installer
 

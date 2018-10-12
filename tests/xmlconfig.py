@@ -78,12 +78,8 @@ def _make_guest(conn=None, os_variant=None):
 
 def _make_installer(location=None, conn=None):
     conn = conn or utils.URIs.open_testdriver_cached()
-    inst = virtinst.DistroInstaller(conn)
-    if location:
-        inst.location = location
-    else:
-        inst.location = "/dev/null"
-        inst.cdrom = True
+    cdrom = not location and "/dev/null" or None
+    inst = virtinst.Installer(conn, location=location, cdrom=cdrom)
     return inst
 
 

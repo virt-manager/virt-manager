@@ -1508,7 +1508,7 @@ class vmmCreate(vmmGObjectUI):
         installer = None
         location = None
         extra = None
-        cdrom = False
+        cdrom = None
         install_bootdev = None
         is_import = False
         init = None
@@ -1521,18 +1521,13 @@ class vmmCreate(vmmGObjectUI):
                     "\n\n" + self._os_list.eol_text)
 
         if instmethod == INSTALL_PAGE_ISO:
-            instclass = virtinst.DistroInstaller
             media = self._get_config_local_media()
-
             if not media:
                 return self.err.val_err(
                                 _("An install media selection is required."))
-
-            location = media
-            cdrom = True
+            cdrom = media
 
         elif instmethod == INSTALL_PAGE_URL:
-            instclass = virtinst.DistroInstaller
             media, extra = self._get_config_url_info()
 
             if not media:
@@ -1541,13 +1536,10 @@ class vmmCreate(vmmGObjectUI):
             location = media
 
         elif instmethod == INSTALL_PAGE_PXE:
-            instclass = virtinst.Installer
             install_bootdev = "network"
 
         elif instmethod == INSTALL_PAGE_IMPORT:
-            instclass = virtinst.Installer
             is_import = True
-
             import_path = self._get_config_import_path()
             if not import_path:
                 return self.err.val_err(
@@ -1560,15 +1552,11 @@ class vmmCreate(vmmGObjectUI):
                                           "an existing storage."))
 
         elif instmethod == INSTALL_PAGE_CONTAINER_APP:
-            instclass = virtinst.Installer
-
             init = self.widget("install-app-entry").get_text()
             if not init:
                 return self.err.val_err(_("An application path is required."))
 
         elif instmethod == INSTALL_PAGE_CONTAINER_OS:
-            instclass = virtinst.Installer
-
             fs = self.widget("install-oscontainer-fs").get_text()
             if not fs:
                 return self.err.val_err(_("An OS directory path is required."))
@@ -1608,7 +1596,6 @@ class vmmCreate(vmmGObjectUI):
 
 
         elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
-            instclass = virtinst.Installer
             template = self.widget("install-container-template").get_text()
             if not template:
                 return self.err.val_err(_("A template name is required."))
@@ -1616,7 +1603,10 @@ class vmmCreate(vmmGObjectUI):
         # Build the installer and Guest instance
         try:
             # Overwrite the guest
-            installer = instclass(self.conn.get_backend())
+            installer = virtinst.Installer(
+                    self.conn.get_backend(),
+                    location=location, cdrom=cdrom,
+                    install_bootdev=install_bootdev)
             variant = osobj and osobj.name or None
             self._guest = self._build_guest(variant)
             if not self._guest:
@@ -1627,16 +1617,8 @@ class vmmCreate(vmmGObjectUI):
 
         # Validate media location
         try:
-            if location is not None:
-                installer.location = location
-            if cdrom:
-                installer.cdrom = True
-            if install_bootdev:
-                installer.install_bootdev = install_bootdev
-
             if extra:
                 installer.extraargs = [extra]
-
             if init:
                 self._guest.os.init = init
 
@@ -1693,7 +1675,7 @@ class vmmCreate(vmmGObjectUI):
         if installer.scratchdir_required():
             path = util.make_scratchdir(self._guest.conn, self._guest.type)
         elif instmethod == INSTALL_PAGE_ISO:
-            path = installer.location
+            path = installer.cdrom or installer.location
         else:
             path = None
 
@@ -1934,9 +1916,8 @@ class vmmCreate(vmmGObjectUI):
         Thread callback that does the actual detection
         """
         try:
-            installer = virtinst.DistroInstaller(self.conn.get_backend())
-            installer.location = media
-
+            installer = virtinst.Installer(self.conn.get_backend(),
+                                           location=media)
             distro = installer.detect_distro(self._guest)
             thread_results.set_distro(distro)
         except Exception:

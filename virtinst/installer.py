@@ -14,6 +14,7 @@ import libvirt
 
 from .devices import DeviceDisk
 from .domain import DomainOs
+from .installertreemedia import InstallerTreeMedia
 from . import util
 
 
@@ -42,45 +43,41 @@ class Installer(object):
         - Hypervisor name (parameter 'type') ('qemu', 'kvm', 'xen', etc.)
         - Guest architecture ('i686', 'x86_64')
     """
-    def __init__(self, conn):
+    def __init__(self, conn, cdrom=None, location=None, install_bootdev=None):
         self.conn = conn
-        self._location = None
 
-        self.cdrom = False
         self.livecd = False
         self.extraargs = []
-        self.install_bootdev = None
 
-        self.initrd_injections = []
-
+        self._install_bootdev = install_bootdev
         self._install_kernel = None
         self._install_initrd = None
         self._install_cdrom_device = None
         self._defaults_are_set = False
 
-        self._tmpfiles = []
-        self._tmpvols = []
-
-
-    #########################
-    # Properties properties #
-    #########################
-
-    def get_location(self):
-        return self._location
-    def set_location(self, val):
-        self._location = self._validate_location(val)
-    location = property(get_location, set_location)
+        self._cdrom = None
+        self._treemedia = None
+        if cdrom:
+            cdrom = InstallerTreeMedia.validate_path(self.conn, cdrom)
+            self._cdrom = cdrom
+            self._install_bootdev = "cdrom"
+        if location:
+            self._treemedia = InstallerTreeMedia(self.conn, location)
 
 
     ###################
     # Private helpers #
     ###################
 
+    def _cdrom_path(self):
+        if self._treemedia:
+            return self._treemedia.cdrom_path()
+        return self._cdrom
+
     def _add_install_cdrom_device(self, guest):
         if self._install_cdrom_device:
             return
-        if not self.needs_cdrom():
+        if not bool(self._cdrom_path()):
             return
 
         dev = DeviceDisk(self.conn)
@@ -92,7 +89,7 @@ class Installer(object):
         ignore = guest
         if not self._install_cdrom_device:
             return
-        self._install_cdrom_device.path = self.cdrom_path()
+        self._install_cdrom_device.path = self._cdrom_path()
         self._install_cdrom_device.sync_path_props()
         self._install_cdrom_device.validate()
 
@@ -142,7 +139,7 @@ class Installer(object):
         if self.extraargs:
             guest.os.kernel_args = " ".join(self.extraargs)
 
-        bootdev = self.install_bootdev
+        bootdev = self._install_bootdev
         if bootdev and self._can_set_guest_bootorder(guest):
             guest.os.bootorder = self._build_boot_order(guest, bootdev)
         else:
@@ -153,32 +150,27 @@ class Installer(object):
     # Internal API overrides #
     ##########################
 
-    def _validate_location(self, val):
-        return val
-
     def _prepare(self, guest, meter):
-        ignore = guest
-        ignore = meter
+        if self._treemedia:
+            k, i, a = self._treemedia.prepare(guest, meter)
+            self._install_kernel = k
+            self._install_initrd = i
+            if a:
+                self.extraargs.append(a)
 
     def _cleanup(self, guest):
-        ignore = guest
-        for f in self._tmpfiles:
-            logging.debug("Removing %s", str(f))
-            os.unlink(f)
-
-        for vol in self._tmpvols:
-            logging.debug("Removing volume '%s'", vol.name())
-            vol.delete(0)
-
-        self._tmpvols = []
-        self._tmpfiles = []
+        if self._treemedia:
+            self._treemedia.cleanup(guest)
 
     def _get_postinstall_bootdev(self, guest):
-        if self.install_bootdev:
+        if self.cdrom and self.livecd:
+            return DomainOs.BOOT_DEVICE_CDROM
+
+        if self._install_bootdev:
             if any([d for d in guest.devices.disk
                     if d.device == d.DEVICE_DISK]):
                 return DomainOs.BOOT_DEVICE_HARDDISK
-            return DomainOs.BOOT_DEVICE_NETWORK
+            return self._install_bootdev
 
         device = guest.devices.disk and guest.devices.disk[0].device or None
         if device == DeviceDisk.DEVICE_DISK:
@@ -193,6 +185,19 @@ class Installer(object):
     ##############
     # Public API #
     ##############
+
+    @property
+    def location(self):
+        if self._treemedia:
+            return self._treemedia.location
+
+    @property
+    def cdrom(self):
+        return self._cdrom
+
+    def set_initrd_injections(self, initrd_injections):
+        if self._treemedia:
+            self._treemedia.initrd_injects = initrd_injections
 
     def set_install_defaults(self, guest):
         """
@@ -221,7 +226,7 @@ class Installer(object):
         Apps can use this to determine if they should attempt to ensure
         scratchdir permissions are adequate
         """
-        return False
+        return bool(self._treemedia)
 
     def has_install_phase(self):
         """
@@ -229,27 +234,19 @@ class Installer(object):
         into the guest. Things like LiveCDs, Import, or a manually specified
         bootorder do not have an install phase.
         """
-        return bool(self.install_bootdev)
-
-    def needs_cdrom(self):
-        """
-        If this installer uses cdrom media, so it needs a cdrom device
-        attached to the VM
-        """
-        return False
-
-    def cdrom_path(self):
-        """
-        Return the cdrom path needed for needs_cdrom() installs
-        """
-        return None
+        if self.cdrom and self.livecd:
+            return False
+        return bool(self._cdrom or
+                    self._install_bootdev or
+                    self._treemedia)
 
     def check_location(self, guest):
         """
         Validate self.location seems to work. This will might hit the
         network so we don't want to do it on demand.
         """
-        ignore = guest
+        if self._treemedia:
+            return self._treemedia.check_location(guest)
         return True
 
     def detect_distro(self, guest):
@@ -260,9 +257,19 @@ class Installer(object):
 
         :returns: distro variant string, or None
         """
-        ignore = guest
-        logging.debug("distro detection not available for this installer.")
-        return None
+        ret = None
+        try:
+            if self._treemedia:
+                ret = self._treemedia.detect_distro(guest)
+            elif self.cdrom:
+                ret = InstallerTreeMedia.detect_iso_distro(guest, self.cdrom)
+            else:
+                logging.debug("No media for distro detection.")
+        except Exception:
+            logging.debug("Error attempting to detect distro.", exc_info=True)
+
+        logging.debug("installer.detect_distro returned=%s", ret)
+        return ret
 
 
     ##########################

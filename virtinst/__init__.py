@@ -39,7 +39,6 @@ from virtinst.storage import StoragePool, StorageVolume
 from virtinst.devices import *  # pylint: disable=wildcard-import
 
 from virtinst.installer import Installer
-from virtinst.distroinstaller import DistroInstaller
 
 from virtinst.guest import Guest
 from virtinst.cloner import Cloner
