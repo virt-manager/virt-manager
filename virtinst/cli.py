@@ -350,7 +350,7 @@ def validate_disk(dev, warn_overwrite=False):
         logging.warning(_("%s may not be accessible by the hypervisor. "
             "You will need to grant the '%s' user search permissions for "
             "the following directories: %s"),
-            dev.path, searchdata.username, searchdata.fixlist)
+            dev.path, searchdata.user, searchdata.fixlist)
 
     check_path_exists(dev)
     check_inuse_conflict(dev)
