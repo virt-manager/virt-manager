@@ -41,9 +41,14 @@ exist_images = [
     TMP_IMAGE_DIR + "exist2.img",
 ]
 
+iso_links = [
+    "/tmp/fake-fedora17-tree.iso",
+    "/tmp/fake-centos65-label.iso",
+]
+
 exist_files = exist_images
 new_files   = new_images
-clean_files = (new_images + exist_images)
+clean_files = (new_images + exist_images + iso_links)
 
 test_files = {
     'URI-TEST-FULL': utils.URIs.test_full,
@@ -63,6 +68,8 @@ test_files = {
     'EXISTIMG2': "/dev/default-pool/testvol2.img",
     'EXISTIMG3': exist_images[0],
     'EXISTIMG4': exist_images[1],
+    'ISOTREE': iso_links[0],
+    'ISOLABEL': iso_links[1],
     'TREEDIR': "%s/fakefedoratree" % XMLDIR,
     'COLLIDE': "/dev/default-pool/collidevol1.img",
 }
@@ -717,7 +724,8 @@ c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.k
 c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", skip_check=OLD_OSINFO)
 
 # misc KVM config tests
-c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso", skip_check=not find_executable("isoinfo"))  # Using --location iso mounting
+c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", skip_check=not find_executable("isoinfo"))  # Using --location iso mounting
+c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel5.4", "kvm-rhel5")  # RHEL5 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7", skip_check=OLD_OSINFO)  # RHEL7 defaults
@@ -1023,10 +1031,11 @@ def setup():
     """
     Create initial test files/dirs
     """
-    fakeiso = "%s/fakefedora.iso" % XMLDIR
-    os.system("ln -s %s %s" % (os.path.abspath(fakeiso), exist_files[0]))
-    for i in exist_files[1:]:
-        os.system("touch %s" % i)
+    for i in iso_links:
+        src = "%s/%s" % (os.path.abspath(XMLDIR), os.path.basename(i))
+        os.symlink(src, i)
+    for i in exist_files:
+        open(i, "a")
 
 
 def cleanup():

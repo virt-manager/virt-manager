@@ -1,13 +1,18 @@
 <domain type="kvm">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://centos.org/centos/6.5"/>
+    </libosinfo:libosinfo>
+  </metadata>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
     <type arch="x86_64" machine="pc">hvm</type>
-    <kernel>/tmp/virtinst-vmlinuz.</kernel>
-    <initrd>/tmp/virtinst-initrd.img.</initrd>
+    <boot dev="cdrom"/>
+    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -30,12 +35,12 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
-      <target dev="hda" bus="ide"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
-      <source file="/tmp/fake-fedora17-tree.iso"/>
-      <target dev="hdb" bus="ide"/>
+      <source file="/tmp/fake-centos65-label.iso"/>
+      <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>
@@ -48,7 +53,16 @@
     <controller type="usb" index="0" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
+    <interface type="bridge">
+      <source bridge="eth0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+    </interface>
     <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
@@ -67,6 +81,11 @@
 <domain type="kvm">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://centos.org/centos/6.5"/>
+    </libosinfo:libosinfo>
+  </metadata>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
@@ -94,10 +113,10 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
-      <target dev="hda" bus="ide"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">
-      <target dev="hdb" bus="ide"/>
+      <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>
@@ -110,7 +129,16 @@
     <controller type="usb" index="0" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
+    <interface type="bridge">
+      <source bridge="eth0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+    </interface>
     <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
