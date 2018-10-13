@@ -831,13 +831,17 @@ c.add_valid("--file %(EXISTIMG1)s")  # Existing file, no opts
 c.add_valid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Multiple existing files
 c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent file
 
-c = vinst.add_category("console-tests", "--pxe --nodisks")
-c.add_valid("", grep="testsuite console command: ['virt-viewer'")  # mock default graphics+virt-viewer usage
-c.add_valid("--destroy-on-exit", grep="Restarting guest.\n")  # destroy-on-exit
-c.add_valid("--transient --destroy-on-exit", grep="Domain creation completed.")  # destroy-on-exit + transient
-c.add_valid("--graphics vnc --noreboot", grep="testsuite console command: ['virt-viewer'")  # mock virt-viewer waiting, with noreboot magic
-c.add_invalid("--noautoconsole --wait 1", grep="Installation has exceeded specified time limit")  # --wait 1 is converted to 1 second if we are in the test suite, so this should actually touch the wait machinery. however in this case it exits with failure
-c.add_valid("--nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling
+c = vinst.add_category("console-tests", "--nodisks")
+c.add_valid("--pxe", grep="testsuite console command: ['virt-viewer'")  # mock default graphics+virt-viewer usage
+c.add_valid("--pxe --destroy-on-exit", grep="Restarting guest.\n")  # destroy-on-exit
+c.add_valid("--pxe --transient --destroy-on-exit", grep="Domain creation completed.")  # destroy-on-exit + transient
+c.add_valid("--pxe --graphics vnc --noreboot", grep="testsuite console command: ['virt-viewer'")  # mock virt-viewer waiting, with noreboot magic
+c.add_valid("--nographics --cdrom %(EXISTIMG1)s")  # console warning about cdrom + nographics
+c.add_valid("--nographics --console none --location %(TREEDIR)s")  # console warning about nographics + --console none
+c.add_valid("--nographics --console none --location %(TREEDIR)s")  # console warning about nographics + --console none
+c.add_valid("--nographics --location %(TREEDIR)s")  # console warning about nographics + missing extra args
+c.add_invalid("--pxe --noautoconsole --wait 1", grep="Installation has exceeded specified time limit")  # --wait 1 is converted to 1 second if we are in the test suite, so this should actually touch the wait machinery. however in this case it exits with failure
+c.add_valid("--pxe --nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling
 
 
 
