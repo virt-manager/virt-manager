@@ -132,6 +132,16 @@ class TestXMLMisc(unittest.TestCase):
         v = i.detect_distro(g)
         self.assertEqual(v, "rhel6.0")
 
+    def testCDROMInsert(self):
+        # After set_install_defaults, cdrom media should be inserted
+        i = _make_installer()
+        g = _make_guest()
+        i.set_install_defaults(g)
+        for disk in g.devices.disk:
+            if disk.device == "cdrom" and disk.path == "/dev/null":
+                return
+        raise AssertionError("Didn't find inserted cdrom media")
+
     def testCPUTopology(self):
         # Test CPU topology determining
         cpu = virtinst.DomainCpu(self.conn)

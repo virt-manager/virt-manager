@@ -85,16 +85,11 @@ class Installer(object):
 
         dev = DeviceDisk(self.conn)
         dev.device = dev.DEVICE_CDROM
+        dev.path = self._cdrom_path()
+        dev.sync_path_props()
+        dev.validate()
         self._install_cdrom_device = dev
         guest.add_device(dev)
-
-    def _insert_install_cdrom_media(self, guest):
-        ignore = guest
-        if not self._install_cdrom_device:
-            return
-        self._install_cdrom_device.path = self._cdrom_path()
-        self._install_cdrom_device.sync_path_props()
-        self._install_cdrom_device.validate()
 
     def _remove_install_cdrom_media(self, guest):
         if not self._install_cdrom_device:
@@ -295,7 +290,6 @@ class Installer(object):
         data = self._prepare_get_install_xml(guest)
         try:
             self._alter_bootconfig(guest)
-            self._insert_install_cdrom_media(guest)
             ret = guest.get_xml()
             return ret
         finally:
@@ -306,8 +300,6 @@ class Installer(object):
         install_xml = None
         if self.has_install_phase():
             install_xml = self._get_install_xml(guest)
-        else:
-            self._insert_install_cdrom_media(guest)
         final_xml = guest.get_xml()
 
         logging.debug("Generated install XML: %s",
