@@ -29,7 +29,21 @@
     <acpi/>
     <vmport state="off"/>
   </features>
-  <cpu mode="host-model"/>
+  <cpu mode="custom" match="exact">
+    <model fallback="forbid">Broadwell</model>
+    <vendor>Intel</vendor>
+    <feature policy="require" name="vme"/>
+    <feature policy="require" name="ss"/>
+    <feature policy="require" name="f16c"/>
+    <feature policy="require" name="rdrand"/>
+    <feature policy="require" name="hypervisor"/>
+    <feature policy="require" name="arat"/>
+    <feature policy="require" name="tsc_adjust"/>
+    <feature policy="require" name="xsaveopt"/>
+    <feature policy="require" name="pdpe1gb"/>
+    <feature policy="require" name="abm"/>
+    <feature policy="require" name="invtsc"/>
+  </cpu>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>

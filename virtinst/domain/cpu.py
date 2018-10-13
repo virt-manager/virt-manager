@@ -96,7 +96,7 @@ class DomainCpu(XMLBuilder):
                 self.remove_child(f)
             self.mode = val
         elif val == self.SPECIAL_MODE_HOST_COPY:
-            self.copy_host_cpu()
+            self.copy_host_cpu(guest)
         elif (val == self.SPECIAL_MODE_HV_DEFAULT or
               val == self.SPECIAL_MODE_CLEAR):
             self.clear()
@@ -119,24 +119,36 @@ class DomainCpu(XMLBuilder):
     cells = XMLChildProperty(_CPUCell, relative_xpath="./numa")
     cache = XMLChildProperty(_CPUCache)
 
-    def copy_host_cpu(self):
+    def copy_host_cpu(self, guest):
         """
-        Enact the equivalent of qemu -cpu host, pulling all info
-        from capabilities about the host CPU
+        Try to manually mimic host-model, copying all the info
+        preferably out of domcapabilities, but capabilities as fallback.
         """
-        cpu = self.conn.caps.host.cpu
-        if not cpu.model:
-            raise ValueError(_("No host CPU reported in capabilities"))
+        domcaps = guest.lookup_domcaps()
+        if domcaps.supports_safe_host_model():
+            logging.debug("Using domcaps for host-copy")
+            cpu = domcaps.cpu.get_mode("host-model")
+            model = cpu.models[0].model
+            fallback = cpu.models[0].fallback
+        else:
+            cpu = self.conn.caps.host.cpu
+            model = cpu.model
+            fallback = None
+            if not model:
+                raise ValueError(_("No host CPU reported in capabilities"))
 
         self.mode = "custom"
         self.match = "exact"
-        self.model = cpu.model
+        self.model = model
+        if fallback:
+            self.model_fallback = fallback
         self.vendor = cpu.vendor
 
         for feature in self.features:
             self.remove_child(feature)
         for feature in cpu.features:
-            self.add_feature(feature.name)
+            policy = getattr(feature, "policy", "require")
+            self.add_feature(feature.name, policy)
 
     def vcpus_from_topology(self):
         """
