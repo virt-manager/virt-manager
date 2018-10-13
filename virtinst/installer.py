@@ -202,7 +202,7 @@ class Installer(object):
 
     def set_initrd_injections(self, initrd_injections):
         if self._treemedia:
-            self._treemedia.initrd_injects = initrd_injections
+            self._treemedia.initrd_injections = initrd_injections
 
     def set_install_defaults(self, guest):
         """
