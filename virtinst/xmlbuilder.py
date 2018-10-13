@@ -152,6 +152,8 @@ class XMLChildProperty(_XMLPropertyBase):
             for obj in self._get(xmlbuilder)[:]:
                 xmlbuilder.remove_child(obj)
 
+    def insert(self, xmlbuilder, newobj, idx):
+        self._get(xmlbuilder).insert(idx, newobj)
     def append(self, xmlbuilder, newobj):
         self._get(xmlbuilder).append(newobj)
     def remove(self, xmlbuilder, obj):
@@ -646,14 +648,17 @@ class XMLBuilder(object):
             for p in util.listify(getattr(self, propname, [])):
                 p._parse_with_children(None, self._xmlstate)
 
-    def add_child(self, obj):
+    def add_child(self, obj, idx=None):
         """
         Insert the passed XMLBuilder object into our XML document. The
         object needs to have an associated mapping via XMLChildProperty
         """
         xmlprop = self._find_child_prop(obj.__class__)
         xml = obj.get_xml()
-        xmlprop.append(self, obj)
+        if idx is None:
+            xmlprop.append(self, obj)
+        else:
+            xmlprop.insert(self, obj, idx)
         self._set_child_xpaths()
 
         # Only insert the XML directly into the parent XML for !is_build

@@ -89,7 +89,14 @@ class Installer(object):
         dev.sync_path_props()
         dev.validate()
         self._install_cdrom_device = dev
-        guest.add_device(dev)
+
+        # Insert the CDROM before any other CDROM, so boot=cdrom picks
+        # it as the priority
+        for idx, disk in enumerate(guest.devices.disk):
+            if disk.is_cdrom():
+                guest.devices.add_child(self._install_cdrom_device, idx=idx)
+                return
+        guest.add_device(self._install_cdrom_device)
 
     def _remove_install_cdrom_media(self, guest):
         if not self._install_cdrom_device:
