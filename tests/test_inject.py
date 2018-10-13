@@ -3,29 +3,12 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-
-import atexit
 import os
-import logging
 import sys
 import unittest
 
-from tests import utils
 
-from virtinst import Guest
-from virtinst import urldetect
-from virtinst import urlfetcher
-from virtinst import util
-from virtinst.initrdinject import perform_initrd_injections
-
-cleanup = []
 _alldistros = {}
-
-testconn = utils.URIs.open_testdefault_cached()
-guest = Guest(testconn)
-guest.os.os_type = "hvm"
-guest.os.arch = "x86_64"
-meter = util.make_meter(quiet=False)
 
 DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/Server/%s/os/"
 FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Server/%s/os/"
@@ -74,36 +57,6 @@ _add("debian-9",
      filename=PRESEED, warntype=WARN_DEBIAN)
 
 
-def exit_cleanup():
-    for f in cleanup or []:
-        try:
-            os.unlink(f)
-        except Exception:
-            pass
-atexit.register(exit_cleanup)
-
-
-def _fetch_distro(distro):
-    print("Fetching distro=%s" % distro.name)
-
-    fetcher = urlfetcher.fetcherForURI(distro.url, "/tmp", meter)
-    origenv = os.environ.pop("VIRTINST_TEST_SUITE")
-    try:
-        fetcher.prepareLocation()
-        store = urldetect.getDistroStore(guest, fetcher)
-        kernel, initrd, ignore = store.acquireKernel()
-        cleanup.append(kernel)
-        cleanup.append(initrd)
-        distro.kernel = kernel
-        distro.initrd = initrd
-    except Exception:
-        logging.error("Fetching distro=%s failed", distro.name, exc_info=True)
-    finally:
-        fetcher.cleanupLocation()
-        if origenv:
-            os.environ["VIRTINST_TEST_SUITE"] = origenv
-
-
 def _test_distro(distro):
     os.system("clear")
     print("\n")
@@ -118,53 +71,23 @@ def _test_distro(distro):
         print("RHEL7, Fedora >= 17: Chokes on the bogus URI in the early ")
         print("console screen when fetching the installer squashfs image.")
 
-    originitrd = distro.initrd
-    kernel = distro.kernel
-    newinitrd = originitrd + ".copy"
-    injectfile = distro.filename
-
-    os.system("cp -f %s %s" % (originitrd, newinitrd))
-    cleanup.append(newinitrd)
-    perform_initrd_injections(newinitrd, [injectfile], ".")
+    os.environ.pop("VIRTINST_TEST_SUITE", None)
+    os.environ["VIRTINST_INITRD_TEST"] = "1"
 
     if distro.warntype == WARN_DEBIAN:
         append = "auto=true"
     else:
-        append = "\"ks=file:/%s\"" % os.path.basename(injectfile)
-    cmd = ("sudo qemu-kvm -enable-kvm -name %s "
-           "-cpu host -m 1500 -display gtk "
-           "-net bridge,br=virbr0 -net nic,model=virtio "
-           "-kernel %s -initrd %s -append %s" %
-           (distro.name, kernel, newinitrd, append))
+        append = "\"ks=file:/%s\"" % os.path.basename(distro.filename)
+    cmd = ("./virt-install --connect qemu:///session "
+        "--name __virtinst__test__initrd__ --ram 2048 "
+        "--transient --destroy-on-exit --disk none "
+        "--location %s --initrd-inject %s --extra-args %s" %
+        (distro.url, distro.filename, append))
     print("\n\n" + cmd)
     os.system(cmd)
 
 
 _printinitrd = False
-_printfetch = False
-
-
-class FetchTests(unittest.TestCase):
-    def setUp(self):
-        self.failfast = True
-        global _printfetch
-        if _printfetch:
-            return
-        print("""
-
-
-
-This is an interactive test.
-
-First step is we need to go and fetch a bunch of distro kernel/initrd
-from public trees. This is going to take a while. Let it run then come
-back later and we will be waiting to continue.
-
-""")
-        prompt()
-        _printfetch = True
-
-
 class InjectTests(unittest.TestCase):
     def setUp(self):
         global _printinitrd
@@ -174,10 +97,11 @@ class InjectTests(unittest.TestCase):
         print("""
 
 
-Okay, we have all the media. We are going to perform the initrd injection
-of some broken kickstarts, then manually launch a qemu instance to verify
-the kickstart is detected. How you know it's working depends on the distro.
-When each test launches, we will print the manual verification instructions.
+This is an interactive test suite.
+
+We are going to launch various transient virt-installs, using initrd
+injections, that will cause installs to quickly fail. Look for the
+failure pattern to confirm that initrd injections are working as expected.
 
 """)
         prompt()
@@ -185,16 +109,12 @@ When each test launches, we will print the manual verification instructions.
 
 
 def _make_tests():
-    def _make_fetch_cb(_d):
-        return lambda s: _fetch_distro(_d)
     def _make_check_cb(_d):
         return lambda s: _test_distro(_d)
 
     idx = 0
     for dname, dobj in _alldistros.items():
         idx += 1
-        setattr(FetchTests, "testFetch%.3d_%s" %
-                (idx, dname.replace("-", "_")), _make_fetch_cb(dobj))
         setattr(InjectTests, "testInitrd%.3d_%s" %
                 (idx, dname.replace("-", "_")), _make_check_cb(dobj))
 

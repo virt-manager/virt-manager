@@ -160,7 +160,7 @@ class Installer(object):
             k, i, a = self._treemedia.prepare(guest, meter)
             self._install_kernel = k
             self._install_initrd = i
-            if a:
+            if a and "VIRTINST_INITRD_TEST" not in os.environ:
                 self.extra_args.append(a)
 
     def _cleanup(self, guest):
