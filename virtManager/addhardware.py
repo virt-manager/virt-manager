@@ -531,22 +531,23 @@ class vmmAddHardware(vmmGObjectUI):
         host_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         host_dev.append_column(host_col)
 
-    def _populate_hostdev_model(self, devtype, devcap, subtype, subcap):
+    def _populate_hostdev_model(self, devtype):
         devlist = self.widget("host-device")
         model = devlist.get_model()
         model.clear()
         subdevs = []
 
-        if subtype:
-            subdevs = self.conn.filter_nodedevs(subtype, subcap)
-
-        devs = self.conn.filter_nodedevs(devtype, devcap)
+        devs = self.conn.filter_nodedevs(devtype)
+        netdevs = self.conn.filter_nodedevs("net")
         for dev in devs:
+            if devtype == "usb_device" and dev.xmlobj.is_linux_root_hub():
+                continue
             prettyname = dev.xmlobj.pretty_name()
 
-            for subdev in subdevs:
-                if dev.xmlobj.name == subdev.xmlobj.parent:
-                    prettyname += " (%s)" % subdev.xmlobj.pretty_name()
+            if devtype == "pci":
+                for subdev in netdevs:
+                    if dev.xmlobj.name == subdev.xmlobj.parent:
+                        prettyname += " (%s)" % subdev.xmlobj.pretty_name()
 
             model.append([dev.xmlobj, prettyname])
 
@@ -755,16 +756,11 @@ class vmmAddHardware(vmmGObjectUI):
         if page == PAGE_HOSTDEV:
             # Need to do this here, since we share the hostdev page
             # between two different HW options
-            pci_info = ["pci", None, "net", "80203"]
-            usb_info = ["usb_device", None, None, None]
             row = self._get_hw_selection()
+            devtype = "usb_device"
             if row and row[5] == "pci":
-                info = pci_info
-            else:
-                info = usb_info
-
-            (devtype, devcap, subtype, subcap) = info
-            self._populate_hostdev_model(devtype, devcap, subtype, subcap)
+                devtype = "pci"
+            self._populate_hostdev_model(devtype)
 
         if page == PAGE_CONTROLLER:
             # We need to trigger this as it can desensitive 'finish'

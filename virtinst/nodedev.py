@@ -200,6 +200,10 @@ class USBDevice(NodeDevice):
     vendor_name = XMLProperty("./capability/vendor")
     vendor_id = XMLProperty("./capability/vendor/@id")
 
+    def is_linux_root_hub(self):
+        return (self.vendor_id == "0x1d6b" and
+                self.product_id in ["0x0001", "0x0002", "0x0003"])
+
     def pretty_name(self):
         # Hypervisor may return a rather sparse structure, missing
         # some ol all stringular descriptions of the device altogether.

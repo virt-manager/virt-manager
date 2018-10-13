@@ -637,15 +637,6 @@ class vmmConnection(vmmGObject):
                     xmlobj.capability_type != devcap):
                     continue
 
-            if (devtype == "usb_device" and
-                (("Linux Foundation" in str(xmlobj.vendor_name) or
-                 ("Linux" in str(xmlobj.vendor_name) and
-                  xmlobj.vendor_id == "0x1d6b")) and
-                 ("root hub" in str(xmlobj.product_name) or
-                  ("host controller" in str(xmlobj.product_name).lower() and
-                   str(xmlobj.product_id).startswith("0x000"))))):
-                continue
-
             retdevs.append(dev)
 
         return retdevs
