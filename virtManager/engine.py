@@ -363,6 +363,9 @@ class vmmEngine(vmmGObject):
                 # libvirtd is shut down
                 logging.debug("Error polling connection %s",
                         conn.get_uri(), exc_info=True)
+
+            # Need to clear reference to make leak check happy
+            conn = None
             self._tick_queue.task_done()
         return 1
 
