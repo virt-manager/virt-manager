@@ -47,7 +47,7 @@ class Installer(object):
         self.conn = conn
 
         self.livecd = False
-        self.extraargs = []
+        self.extra_args = []
 
         # Entry point for virt-manager 'Customize' wizard to change autostart
         self.autostart = False
@@ -141,8 +141,8 @@ class Installer(object):
             guest.os.kernel = self._install_kernel
         if self._install_initrd:
             guest.os.initrd = self._install_initrd
-        if self.extraargs:
-            guest.os.kernel_args = " ".join(self.extraargs)
+        if self.extra_args:
+            guest.os.kernel_args = " ".join(self.extra_args)
 
         bootdev = self._install_bootdev
         if bootdev and self._can_set_guest_bootorder(guest):
@@ -161,7 +161,7 @@ class Installer(object):
             self._install_kernel = k
             self._install_initrd = i
             if a:
-                self.extraargs.append(a)
+                self.extra_args.append(a)
 
     def _cleanup(self, guest):
         if self._treemedia:

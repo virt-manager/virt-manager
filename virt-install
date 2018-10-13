@@ -497,7 +497,7 @@ def build_installer(options, guest):
     if cdrom and options.livecd:
         installer.livecd = True
     if options.extra_args:
-        installer.extraargs = options.extra_args
+        installer.extra_args = options.extra_args
     if options.initrd_inject:
         installer.set_initrd_injections(options.initrd_inject)
     if options.autostart:
