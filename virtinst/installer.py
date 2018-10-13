@@ -49,6 +49,9 @@ class Installer(object):
         self.livecd = False
         self.extraargs = []
 
+        # Entry point for virt-manager 'Customize' wizard to change autostart
+        self.autostart = False
+
         self._install_bootdev = install_bootdev
         self._install_kernel = None
         self._install_initrd = None
@@ -388,13 +391,12 @@ class Installer(object):
 
     def start_install(self, guest, meter=None,
                       dry=False, return_xml=False,
-                      doboot=True, transient=False, autostart=False):
+                      doboot=True, transient=False):
         """
         Begin the guest install. Will add install media to the guest config,
         launch it, then redefine the XML with the postinstall config.
 
         :param return_xml: Don't create the guest, just return generated XML
-        :param autostart: If True, mark the VM to autostart on host boot
         """
         guest.validate_name(guest.conn, guest.name)
         self.set_install_defaults(guest)
@@ -417,7 +419,7 @@ class Installer(object):
                     guest, meter, install_xml, final_xml,
                     doboot, transient)
 
-            if autostart:
+            if self.autostart:
                 self._flag_autostart(domain)
             return domain
         finally:

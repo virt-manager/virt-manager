@@ -497,6 +497,8 @@ def build_installer(options, guest):
         installer.extraargs = options.extra_args
     if options.initrd_inject:
         installer.set_initrd_injections(options.initrd_inject)
+    if options.autostart:
+        installer.autostart = True
 
     return installer
 
@@ -590,8 +592,7 @@ def start_install(guest, installer, options):
 
         domain = installer.start_install(guest, meter=meter,
                 doboot=not options.noreboot,
-                transient=options.transient,
-                autostart=options.autostart)
+                transient=options.transient)
 
         if options.destroy_on_exit:
             atexit.register(_destroy_on_exit, domain)

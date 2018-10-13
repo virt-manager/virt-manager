@@ -1711,9 +1711,9 @@ class vmmDomainVirtinst(vmmDomain):
         return False
 
     def get_autostart(self):
-        return self._backend.autostart
+        return self._backend.installer_instance.autostart
     def set_autostart(self, val):
-        self._backend.autostart = bool(val)
+        self._backend.installer_instance.autostart = bool(val)
         self.emit("state-changed")
 
     def _using_events(self):
