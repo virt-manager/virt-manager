@@ -18,59 +18,32 @@ def _make_guest(conn=None, os_variant=None):
         conn = utils.URIs.open_testdriver_cached()
 
     g = virtinst.Guest(conn)
-    g.type = "kvm"
     g.name = "TestGuest"
     g.memory = int(200 * 1024)
     g.maxmemory = int(400 * 1024)
-    g.uuid = "12345678-1234-1234-1234-123456789012"
-    gdev = virtinst.DeviceGraphics(conn)
-    gdev.type = "vnc"
-    gdev.keymap = "ja"
-    g.add_device(gdev)
-    g.features.pae = False
-    g.vcpus = 5
-
-    g.emulator = "/usr/lib/xen/bin/qemu-dm"
-    g.os.arch = "i686"
-    g.os.os_type = "hvm"
 
     if os_variant:
         g.set_os_name(os_variant)
 
-    # Floppy disk
-    path = "/dev/default-pool/testvol1.img"
-    d = DeviceDisk(conn)
-    d.path = path
-    d.device = d.DEVICE_FLOPPY
-    d.validate()
-    g.add_device(d)
-
     # File disk
-    path = "/dev/default-pool/new-test-suite.img"
     d = virtinst.DeviceDisk(conn)
-    d.path = path
-
+    d.path = "/dev/default-pool/new-test-suite.img"
     if d.wants_storage_creation():
         parent_pool = d.get_parent_pool()
         vol_install = virtinst.DeviceDisk.build_vol_install(conn,
-            os.path.basename(path), parent_pool, .0000001, True)
+            os.path.basename(d.path), parent_pool, .0000001, True)
         d.set_vol_install(vol_install)
-
     d.validate()
     g.add_device(d)
 
     # Block disk
-    path = "/dev/disk-pool/diskvol1"
     d = virtinst.DeviceDisk(conn)
-    d.path = path
+    d.path = "/dev/disk-pool/diskvol1"
     d.validate()
     g.add_device(d)
 
     # Network device
     dev = virtinst.DeviceInterface(conn)
-    dev.macaddr = "22:22:33:44:55:66"
-    dev.type = virtinst.DeviceInterface.TYPE_VIRTUAL
-    dev.source = "default"
     g.add_device(dev)
 
     return g
