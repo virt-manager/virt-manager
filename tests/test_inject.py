@@ -88,6 +88,8 @@ def _test_distro(distro):
 
 
 _printinitrd = False
+
+
 class InjectTests(unittest.TestCase):
     def setUp(self):
         global _printinitrd
