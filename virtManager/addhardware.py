@@ -535,7 +535,6 @@ class vmmAddHardware(vmmGObjectUI):
         devlist = self.widget("host-device")
         model = devlist.get_model()
         model.clear()
-        subdevs = []
 
         devs = self.conn.filter_nodedevs(devtype)
         netdevs = self.conn.filter_nodedevs("net")
