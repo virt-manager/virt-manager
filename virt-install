@@ -451,8 +451,11 @@ def show_warnings(options, guest, installer):
         logging.warning(_("The guest's network configuration does not support "
                        "PXE"))
 
+    # Limit it to hvm x86 guests which presently our defaults
+    # only really matter for
     if (guest.osinfo.name == "generic" and
-        options.distro_variant not in ["none", "generic"]):
+        options.distro_variant not in ["none", "generic"] and
+        guest.os.is_x86() and guest.os.is_hvm()):
         logging.warning(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
 

@@ -680,6 +680,7 @@ c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_compare("", "noargs-fail", auto_printarg=False)  # No arguments
 c.add_valid("--panic help --disk=?")  # Make sure introspection doesn't blow up
 c.add_valid("--test-stub-command")  # --test-stub-command
+c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning
 c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error
 c.add_invalid("--nodisks --pxe --name test")  # Colliding name
 c.add_compare("--cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
