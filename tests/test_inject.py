@@ -78,7 +78,7 @@ def _test_distro(distro):
         append = "auto=true"
     else:
         append = "\"ks=file:/%s\"" % os.path.basename(distro.filename)
-    cmd = ("./virt-install --connect qemu:///session "
+    cmd = ("./virt-install --connect qemu:///system "
         "--name __virtinst__test__initrd__ --ram 2048 "
         "--transient --destroy-on-exit --disk none "
         "--location %s --initrd-inject %s --extra-args %s" %
