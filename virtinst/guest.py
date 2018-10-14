@@ -298,6 +298,8 @@ class Guest(XMLBuilder):
         return self._supports_virtio(self.osinfo.supports_virtionet())
     def supports_virtiodisk(self):
         return self._supports_virtio(self.osinfo.supports_virtiodisk())
+    def _supports_virtioserial(self):
+        return self._supports_virtio(self.osinfo.supports_virtioserial())
 
 
     ###############################
@@ -639,7 +641,7 @@ class Guest(XMLBuilder):
             return
 
         if (self.conn.is_qemu() and
-            self._supports_virtio(self.osinfo.supports_virtioserial()) and
+            self._supports_virtioserial() and
             self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
             dev = DeviceChannel(self.conn)
             dev.type = "unix"
@@ -715,10 +717,11 @@ class Guest(XMLBuilder):
     def _add_spice_channels(self):
         if self.skip_default_channel:
             return
-
         for chn in self.devices.channel:
             if chn.type == chn.TYPE_SPICEVMC:
                 return
+        if not self._supports_virtioserial():
+            return
 
         dev = DeviceChannel(self.conn)
         dev.type = DeviceChannel.TYPE_SPICEVMC
