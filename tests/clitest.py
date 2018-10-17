@@ -41,9 +41,14 @@ exist_images = [
     TMP_IMAGE_DIR + "exist2.img",
 ]
 
+iso_links = [
+    "/tmp/fake-fedora17-tree.iso",
+    "/tmp/fake-centos65-label.iso",
+]
+
 exist_files = exist_images
 new_files   = new_images
-clean_files = (new_images + exist_images)
+clean_files = (new_images + exist_images + iso_links)
 
 test_files = {
     'URI-TEST-FULL': utils.URIs.test_full,
@@ -63,6 +68,8 @@ test_files = {
     'EXISTIMG2': "/dev/default-pool/testvol2.img",
     'EXISTIMG3': exist_images[0],
     'EXISTIMG4': exist_images[1],
+    'ISOTREE': iso_links[0],
+    'ISOLABEL': iso_links[1],
     'TREEDIR': "%s/fakefedoratree" % XMLDIR,
     'COLLIDE': "/dev/default-pool/collidevol1.img",
 }
@@ -84,6 +91,7 @@ class Command(object):
 
         self.skip_check = None
         self.check_version = None
+        self.grep = None
 
         app, opts = self.cmdstr.split(" ", 1)
         self.app = app
@@ -183,13 +191,20 @@ class Command(object):
 
             code, output = self._get_output(conn)
 
-            if bool(code) == self.check_success:
+            def _raise_error(_msg):
                 raise AssertionError(
-                    ("Expected command to %s, but it didn't.\n" %
-                     (self.check_success and "pass" or "fail")) +
                     ("Command was: %s\n" % self.cmdstr) +
                     ("Error code : %d\n" % code) +
-                    ("Output was:\n%s" % output))
+                    ("Output was:\n%s" % output) +
+                    ("\n\n\nTESTSUITE: " + _msg + "\n"))
+
+
+            if bool(code) == self.check_success:
+                _raise_error("Expected command to %s, but it didn't.\n" %
+                     (self.check_success and "pass" or "fail"))
+
+            if self.grep and self.grep not in output:
+                _raise_error("Didn't find grep=%s" % self.grep)
 
             if self.compare_file:
                 if self._check_support(tests, conn, self.check_version,
@@ -285,7 +300,7 @@ class App(object):
 
     def _add(self, catname, testargs, valid, compfile,
              skip_check=None, check_version=None, input_file=None,
-             auto_printarg=True):
+             auto_printarg=True, grep=None):
 
         category = self.categories[catname]
         args = category.default_args + " " + testargs
@@ -304,6 +319,7 @@ class App(object):
                              category.check_version or
                              self.check_version)
         cmd.input_file = input_file
+        cmd.grep = grep
         self.cmds.append(cmd)
 
     def add_valid(self, cat, args, **kwargs):
@@ -341,7 +357,7 @@ c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole 
 c.add_compare(""" \
 --memory 1024 \
 --vcpus 4 --cpuset=1,3-5 \
---cpu host \
+--cpu host-copy \
 --description \"foobar & baz\" \
 --boot uefi,smbios_mode=emulate \
 --security type=dynamic \
@@ -383,7 +399,7 @@ cell1.distances.sibling1.id=1,cell1.distances.sibling1.value=10,\
 cache.mode=emulate,cache.level=3 \
 --cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3 \
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444 \
---boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld \
+--boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3 \
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10 \
 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes \
 --numatune 1-3,4,mode=strict \
@@ -437,6 +453,7 @@ c.add_compare(""" \
 --disk /var,device=floppy,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01 \
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk \
 --disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol \
+--disk path=/dev/disk-pool/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client \
 \
 --network user,mac=12:34:56:78:11:22,portgroup=foo,link_state=down,rom_bar=on,rom_file=/tmp/foo \
 --network bridge=foobar,model=virtio,driver_name=qemu,driver_queues=3 \
@@ -634,13 +651,13 @@ c.add_valid("--arch i686 --pxe")  # Explicitly fullvirt + arch
 c.add_valid("--location %(TREEDIR)s")  # Directory tree URL install
 c.add_valid("--location %(TREEDIR)s --initrd-inject virt-install --extra-args ks=file:/virt-install")  # initrd-inject
 c.add_valid("--hvm --location %(TREEDIR)s --extra-args console=ttyS0")  # Directory tree URL install with extra-args
-c.add_valid("--hvm --cdrom %(TREEDIR)s")  # Directory tree CDROM install
 c.add_valid("--paravirt --location %(TREEDIR)s")  # Paravirt location
 c.add_valid("--paravirt --location %(TREEDIR)s --os-variant none")  # Paravirt location with --os-variant none
 c.add_valid("--location %(TREEDIR)s --os-variant fedora12")  # URL install with manual os-variant
 c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0")  # HVM windows install with disk
 c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --print-step 2")  # HVM windows install, print 3rd stage XML
 c.add_valid("--pxe --autostart")  # --autostart flag
+c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
 c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
@@ -660,12 +677,13 @@ c.add_compare("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --vcpus cores=
 c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no second XML step
 
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
-c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom")  # Implied cdrom install
 c.add_compare("", "noargs-fail", auto_printarg=False)  # No arguments
 c.add_valid("--panic help --disk=?")  # Make sure introspection doesn't blow up
 c.add_valid("--test-stub-command")  # --test-stub-command
+c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning
 c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error
 c.add_invalid("--nodisks --pxe --name test")  # Colliding name
+c.add_compare("--cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
 
 
 
@@ -708,17 +726,21 @@ c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.k
 c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", skip_check=OLD_OSINFO)
 
 # misc KVM config tests
-c.add_compare("--disk none --location %(EXISTIMG3)s --nonetworks", "location-iso", skip_check=not find_executable("isoinfo"))  # Using --location iso mounting
+c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", skip_check=not find_executable("isoinfo"))  # Using --location iso mounting
+c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel5.4", "kvm-rhel5")  # RHEL5 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7", skip_check=OLD_OSINFO)  # RHEL7 defaults
 c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", skip_check=OLD_OSINFO)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
+c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --cpu host-copy --disk none --pxe", "kvm-hostcopy-fallback")  # No domcaps so need to use capabilities for CPU host-copy
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", skip_check=OLD_OSINFO)  # Centos 7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", skip_check=OLD_OSINFO)  # Centos 7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10", "kvm-win10", skip_check=OLD_OSINFO)  # win10 defaults
-c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi")  # no HYPER-V with UEFI
+c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi", skip_check=OLD_OSINFO)  # no HYPER-V with UEFI
 c.add_compare("--arch i686 --boot uefi --pxe --disk none", "kvm-i686-uefi")  # i686 uefi
 c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
-c.add_compare("--disk size=20 --os-variant solaris10", "solaris10-defaults")  # test solaris OS defaults
+c.add_compare("--disk size=20 --os-variant solaris10", "solaris10-defaults")  # test solaris OS defaults, triggers a couple specific code paths
+c.add_compare("--disk size=1 --os-variant openbsd4.9", "openbsd-defaults")  # triggers net fallback scenario
 c.add_compare("--connect " + utils.URIs.kvm_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", skip_check=OLD_OSINFO)
 
 c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
@@ -813,11 +835,17 @@ c.add_valid("--file %(EXISTIMG1)s")  # Existing file, no opts
 c.add_valid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Multiple existing files
 c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent file
 
-c = vinst.add_category("console-tests", "--pxe --nodisks")
-c.add_valid("--nographics")  # mock virsh console waiting
-c.add_valid("--graphics vnc --noreboot")  # mock virt-viewer waiting, with noreboot magic
-c.add_invalid("--noautoconsole --wait 1")  # --wait 1 is converted to 1 second if we are in the test suite, so this should actually touch the wait machinery. however in this case it exits with failure
-c.add_valid("--nographics --transient")  # --transient handling
+c = vinst.add_category("console-tests", "--nodisks")
+c.add_valid("--pxe", grep="testsuite console command: ['virt-viewer'")  # mock default graphics+virt-viewer usage
+c.add_valid("--pxe --destroy-on-exit", grep="Restarting guest.\n")  # destroy-on-exit
+c.add_valid("--pxe --transient --destroy-on-exit", grep="Domain creation completed.")  # destroy-on-exit + transient
+c.add_valid("--pxe --graphics vnc --noreboot", grep="testsuite console command: ['virt-viewer'")  # mock virt-viewer waiting, with noreboot magic
+c.add_valid("--nographics --cdrom %(EXISTIMG1)s")  # console warning about cdrom + nographics
+c.add_valid("--nographics --console none --location %(TREEDIR)s")  # console warning about nographics + --console none
+c.add_valid("--nographics --console none --location %(TREEDIR)s")  # console warning about nographics + --console none
+c.add_valid("--nographics --location %(TREEDIR)s")  # console warning about nographics + missing extra args
+c.add_invalid("--pxe --noautoconsole --wait 1", grep="Installation has exceeded specified time limit")  # --wait 1 is converted to 1 second if we are in the test suite, so this should actually touch the wait machinery. however in this case it exits with failure
+c.add_valid("--pxe --nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling
 
 
 
@@ -1012,10 +1040,11 @@ def setup():
     """
     Create initial test files/dirs
     """
-    fakeiso = "%s/fakefedora.iso" % XMLDIR
-    os.system("ln -s %s %s" % (os.path.abspath(fakeiso), exist_files[0]))
-    for i in exist_files[1:]:
-        os.system("touch %s" % i)
+    for i in iso_links:
+        src = "%s/%s" % (os.path.abspath(XMLDIR), os.path.basename(i))
+        os.symlink(src, i)
+    for i in exist_files:
+        open(i, "a")
 
 
 def cleanup():

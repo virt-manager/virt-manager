@@ -10,7 +10,7 @@
   <currentMemory>1048576</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="q35">hvm</type>
     <boot dev="hd"/>
   </os>
   <features>
@@ -49,7 +49,7 @@
       <gl enable="yes" rendernode="/dev/dri/by-path/pci-0000:00:02.0-render"/>
       <image compression="off"/>
     </graphics>
-    <sound model="ich6"/>
+    <sound model="ich9"/>
     <video>
       <model type="virtio">
         <acceleration accel3d="yes"/>

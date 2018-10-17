@@ -66,11 +66,12 @@
   </sysinfo>
   <bootloader>/new/bootld</bootloader>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="q35">hvm</type>
     <loader>/foo/bar</loader>
     <boot dev="network"/>
     <smbios mode="sysinfo"/>
     <bootmenu enable="no"/>
+    <bios rebootTimeout="3"/>
   </os>
   <idmap>
     <uid start="0" target="1000" count="10"/>
@@ -251,7 +252,7 @@
   </sysinfo>
   <bootloader>/new/bootld</bootloader>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="q35">hvm</type>
     <loader>/foo/bar</loader>
     <boot dev="cdrom"/>
     <boot dev="fd"/>
@@ -259,6 +260,7 @@
     <boot dev="network"/>
     <smbios mode="sysinfo"/>
     <bootmenu enable="no"/>
+    <bios rebootTimeout="3"/>
   </os>
   <idmap>
     <uid start="0" target="1000" count="10"/>

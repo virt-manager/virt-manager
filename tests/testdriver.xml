@@ -213,6 +213,14 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <shareable/>
     </disk>
 
+    <disk type='block' device='lun' rawio='no' sgio='unfiltered'>
+      <driver name='qemu' type='raw'/>
+      <source dev='/dev/szz'>
+        <reservations managed="yes"/>
+      </source>
+      <target dev='sdc' bus='scsi'/>
+    </disk>
+
     <!-- bus virtio -->
     <disk type="volume" device="disk">
       <driver name="qemu"/>
@@ -1875,6 +1883,18 @@ ba</description>
       </permissions>
     </target>
   </volume>
+  <volume type='block'>
+    <name>diskvol7</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
 </pool>
 
 
@@ -1923,7 +1943,7 @@ ba</description>
     <host name='ceph-mon-1.example.com' port='6789'/>
     <host name='ceph-mon-2.example.com' port='6789'/>
     <host name='ceph-mon-3.example.com' port='6789'/>
-    <name>rbd</name>
+    <name>rbd-sourcename</name>
     <auth type='ceph' username='admin'>
       <secret uuid='f65cc5a8-b77b-4254-9030-d50a528fb456'/>
     </auth>
@@ -1931,22 +1951,22 @@ ba</description>
 
   <volume type='network'>
     <name>vol1</name>
-    <key>rbd/vol1</key>
+    <key>rbd-sourcename/vol1</key>
     <capacity unit='bytes'>8302592</capacity>
     <allocation unit='bytes'>8388608</allocation>
     <target>
-      <path>rbd/vol1</path>
+      <path>rbd-sourcename/vol1</path>
       <format type='raw'/>
     </target>
   </volume>
 
   <volume type='network'>
     <name>some-rbd-vol</name>
-    <key>rbd/some-rbd-vol</key>
+    <key>rbd-sourcename/some-rbd-vol</key>
     <capacity unit='bytes'>104857600</capacity>
     <allocation unit='bytes'>104857600</allocation>
     <target>
-      <path>rbd/some-rbd-vol</path>
+      <path>rbd-sourcename/some-rbd-vol</path>
       <format type='raw'/>
     </target>
   </volume>
@@ -2389,6 +2409,7 @@ ba</description>
     <function>0</function>
     <product id='0x2448'>82801 Mobile PCI Bridge</product>
     <vendor id='0x8086'>Intel Corporation</vendor>
+    <capability type='pci-bridge'/>
   </capability>
 </device>
 
@@ -2625,6 +2646,7 @@ ba</description>
     <function>0</function>
     <product id='0x283f'>82801H (ICH8 Family) PCI Express Port 1</product>
     <vendor id='0x8086'>Intel Corporation</vendor>
+    <capability type='pci-bridge'/>
   </capability>
 </device>
 
@@ -2642,6 +2664,7 @@ ba</description>
     <function>1</function>
     <product id='0x2841'>82801H (ICH8 Family) PCI Express Port 2</product>
     <vendor id='0x8086'>Intel Corporation</vendor>
+    <capability type='pci-bridge'/>
   </capability>
 </device>
 
@@ -2659,6 +2682,7 @@ ba</description>
     <function>2</function>
     <product id='0x2843'>82801H (ICH8 Family) PCI Express Port 3</product>
     <vendor id='0x8086'>Intel Corporation</vendor>
+    <capability type='pci-bridge'/>
   </capability>
 </device>
 
@@ -2676,6 +2700,7 @@ ba</description>
     <function>3</function>
     <product id='0x2845'>82801H (ICH8 Family) PCI Express Port 4</product>
     <vendor id='0x8086'>Intel Corporation</vendor>
+    <capability type='pci-bridge'/>
   </capability>
 </device>
 
@@ -2693,6 +2718,7 @@ ba</description>
     <function>4</function>
     <product id='0x2847'>82801H (ICH8 Family) PCI Express Port 5</product>
     <vendor id='0x8086'>Intel Corporation</vendor>
+    <capability type='pci-bridge'/>
   </capability>
 </device>
 
@@ -3331,6 +3357,7 @@ ba</description>
     <function>0</function>
     <product id='0x25f8'>5000 Series Chipset PCI Express x8 Port 4-5</product>
     <vendor id='0x8086'>Intel Corporation</vendor>
+    <capability type='pci-bridge'/>
   </capability>
 </device>
 

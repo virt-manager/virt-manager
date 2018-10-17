@@ -1,5 +1,32 @@
 # Virtual Machine Manager News
 
+## Release 2.0.0 (October 15, 2018)
+- Finish port to Python 3 (Radostin Stoyanov, Cole Robinson)
+- Improved VM defaults for supported OS: q35 PCIe, usb3, CPU host-model
+- Search based OS selection UI for new VMs (Daniel P. Berrangé, Cole
+  Robinson)
+- Track OS name for lifetime of domain in <metadata> XML
+- Host interface management UI has been completely removed
+- Show domain IP on interface details page (Lin Ma, Cole Robinson)
+- More efficient stats polling with AllDomainStats (Simon Kobyda, Cole
+  Robinson)
+- TPM device model and backend UI (Marc-André Lureau, Stefan Berger)
+- Show <channel> connection state in UI (Lin Ma)
+- Show attached devices in <controller> UI (Lin Ma)
+- UI option to plug/unplug VM nic link (Simon Kobyda)
+- UI support for disk discard and detect_zeroes (Povilas Kanapickas, Lin Ma)
+- Improved SUSE --location URL/ISO detection (Charles Arnold)
+- cli and UI support for SCSI persistent reservations (Lin Ma)
+- cli: Add --network mtu.size= option (Anya Harter)
+- cli: Add --disk driver.copy_on_read (Anya Harter)
+- cli: Add --disk geometry support (Anya Harter)
+- cli: Add --sound codec support (Anya Harter)
+- cli: Add --hostdev net/char/block for LXC (Lubomir Rintel)
+- cli: Add --memorybacking access_mode and source_type (Marc-André Lureau)
+- cli: Add --boot rebootTimout (Yossi Ovadia)
+- cli: Add --boot bootloader=
+- cli: Add --destroy-on-exit
+
 ## Release 1.5.0 (February 06, 2018)
 - python3 prep work (Radostin Stoyanov, Cole Robinson, Cédric Bosdonnat)
 - Switch --location ISO to use isoinfo (Andrew Wong)

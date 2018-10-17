@@ -1664,6 +1664,13 @@ after either of these events.  Note that the VM's disks will not be
 deleted.  See:
 L<https://wiki.libvirt.org/page/VM_lifecycle#Transient_guest_domains_vs_Persistent_guest_domains>
 
+=item B<--destroy-on-exit>
+
+When the VM console window is exited, destroy (force poweroff) the VM.
+If you combine this with --transient, this makes the virt-install command
+work similar to qemu, where the VM is shutdown when the console window
+is closed by the user.
+
 =item B<--print-xml> [STEP]
 
 Print the generated XML of the guest, instead of defining it. By default this WILL do storage creation (can be disabled with --dry-run). This option implies --quiet.

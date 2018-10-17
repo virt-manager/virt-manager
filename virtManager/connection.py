@@ -23,6 +23,7 @@ from .interface import vmmInterface
 from .libvirtenummap import LibvirtEnumMap
 from .network import vmmNetwork
 from .nodedev import vmmNodeDevice
+from .statsmanager import vmmStatsManager
 from .storagepool import vmmStoragePool
 
 
@@ -200,6 +201,7 @@ class vmmConnection(vmmGObject):
         self._xml_flags = {}
 
         self._objects = _ObjectList()
+        self.statsmanager = vmmStatsManager()
 
         self._stats = []
         self._hostinfo = None
@@ -635,15 +637,6 @@ class vmmConnection(vmmGObject):
                     xmlobj.capability_type != devcap):
                     continue
 
-            if (devtype == "usb_device" and
-                (("Linux Foundation" in str(xmlobj.vendor_name) or
-                 ("Linux" in str(xmlobj.vendor_name) and
-                  xmlobj.vendor_id == "0x1d6b")) and
-                 ("root hub" in str(xmlobj.product_name) or
-                  ("host controller" in str(xmlobj.product_name).lower() and
-                   str(xmlobj.product_id).startswith("0x000"))))):
-                continue
-
             retdevs.append(dev)
 
         return retdevs
@@ -678,11 +671,11 @@ class vmmConnection(vmmGObject):
         return self._backend.interfaceDefineXML(xml, 0)
 
     def rename_object(self, obj, origxml, newxml, oldconnkey):
-        if obj.class_name() == "domain":
+        if obj.is_domain():
             define_cb = self.define_domain
-        elif obj.class_name() == "pool":
+        elif obj.is_pool():
             define_cb = self.define_pool
-        elif obj.class_name() == "network":
+        elif obj.is_network():
             define_cb = self.define_network
         else:
             raise RuntimeError("programming error: rename_object "
@@ -715,7 +708,7 @@ class vmmConnection(vmmGObject):
                 # Reinsert handle into new obj
                 obj.change_name_backend(newobj)
 
-        if newobj and obj.class_name() == "domain":
+        if newobj and obj.is_domain():
             self.emit("vm-renamed", oldconnkey, obj.get_connkey())
 
 
@@ -1114,16 +1107,15 @@ class vmmConnection(vmmGObject):
     #######################
 
     def _remove_object_signal(self, obj):
-        class_name = obj.class_name()
-        if class_name == "domain":
+        if obj.is_domain():
             self.emit("vm-removed", obj.get_connkey())
-        elif class_name == "network":
+        elif obj.is_network():
             self.emit("net-removed", obj.get_connkey())
-        elif class_name == "pool":
+        elif obj.is_pool():
             self.emit("pool-removed", obj.get_connkey())
-        elif class_name == "interface":
+        elif obj.is_interface():
             self.emit("interface-removed", obj.get_connkey())
-        elif class_name == "nodedev":
+        elif obj.is_nodedev():
             self.emit("nodedev-removed", obj.get_connkey())
 
     def _gone_object_signals(self, gone_objects):
@@ -1174,19 +1166,19 @@ class vmmConnection(vmmGObject):
                     class_name, obj.get_name())
                 return
 
-            if class_name != "nodedev":
+            if not obj.is_nodedev():
                 # Skip nodedev logging since it's noisy and not interesting
                 logging.debug("%s=%s status=%s added", class_name,
                     obj.get_name(), obj.run_status())
-            if class_name == "domain":
+            if obj.is_domain():
                 self.emit("vm-added", obj.get_connkey())
-            elif class_name == "network":
+            elif obj.is_network():
                 self.emit("net-added", obj.get_connkey())
-            elif class_name == "pool":
+            elif obj.is_pool():
                 self.emit("pool-added", obj.get_connkey())
-            elif class_name == "interface":
+            elif obj.is_interface():
                 self.emit("interface-added", obj.get_connkey())
-            elif class_name == "nodedev":
+            elif obj.is_nodedev():
                 self.emit("nodedev-added", obj.get_connkey())
         finally:
             if self._init_object_event:
@@ -1317,6 +1309,8 @@ class vmmConnection(vmmGObject):
             pollnodedev = False
 
         self._hostinfo = self._backend.getInfo()
+        if stats_update:
+            self.statsmanager.cache_all_stats(self)
 
         gone_objects, preexisting_objects = self._poll(
             initial_poll, pollvm, pollnet, pollpool, polliface, pollnodedev)
@@ -1328,15 +1322,15 @@ class vmmConnection(vmmGObject):
             try:
                 if obj.reports_stats() and stats_update:
                     pass
-                elif obj.__class__ is vmmDomain and not pollvm:
+                elif obj.is_domain() and not pollvm:
                     continue
-                elif obj.__class__ is vmmNetwork and not pollnet:
+                elif obj.is_network() and not pollnet:
                     continue
-                elif obj.__class__ is vmmStoragePool and not pollpool:
+                elif obj.is_pool() and not pollpool:
                     continue
-                elif obj.__class__ is vmmInterface and not polliface:
+                elif obj.is_interface() and not polliface:
                     continue
-                elif obj.__class__ is vmmNodeDevice and not pollnodedev:
+                elif obj.is_nodedev() and not pollnodedev:
                     continue
 
                 obj.tick(stats_update=stats_update)

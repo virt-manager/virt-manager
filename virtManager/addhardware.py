@@ -531,22 +531,25 @@ class vmmAddHardware(vmmGObjectUI):
         host_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         host_dev.append_column(host_col)
 
-    def _populate_hostdev_model(self, devtype, devcap, subtype, subcap):
+    def _populate_hostdev_model(self, devtype):
         devlist = self.widget("host-device")
         model = devlist.get_model()
         model.clear()
-        subdevs = []
 
-        if subtype:
-            subdevs = self.conn.filter_nodedevs(subtype, subcap)
-
-        devs = self.conn.filter_nodedevs(devtype, devcap)
+        devs = self.conn.filter_nodedevs(devtype)
+        netdevs = self.conn.filter_nodedevs("net")
         for dev in devs:
+            if devtype == "usb_device" and dev.xmlobj.is_linux_root_hub():
+                continue
+            if (devtype == "pci" and
+                dev.xmlobj.capability_type == "pci-bridge"):
+                continue
             prettyname = dev.xmlobj.pretty_name()
 
-            for subdev in subdevs:
-                if dev.xmlobj.name == subdev.xmlobj.parent:
-                    prettyname += " (%s)" % subdev.xmlobj.pretty_name()
+            if devtype == "pci":
+                for subdev in netdevs:
+                    if dev.xmlobj.name == subdev.xmlobj.parent:
+                        prettyname += " (%s)" % subdev.xmlobj.pretty_name()
 
             model.append([dev.xmlobj, prettyname])
 
@@ -755,16 +758,11 @@ class vmmAddHardware(vmmGObjectUI):
         if page == PAGE_HOSTDEV:
             # Need to do this here, since we share the hostdev page
             # between two different HW options
-            pci_info = ["pci", None, "net", "80203"]
-            usb_info = ["usb_device", None, None, None]
             row = self._get_hw_selection()
+            devtype = "usb_device"
             if row and row[5] == "pci":
-                info = pci_info
-            else:
-                info = usb_info
-
-            (devtype, devcap, subtype, subcap) = info
-            self._populate_hostdev_model(devtype, devcap, subtype, subcap)
+                devtype = "pci"
+            self._populate_hostdev_model(devtype)
 
         if page == PAGE_CONTROLLER:
             # We need to trigger this as it can desensitive 'finish'
@@ -848,6 +846,11 @@ class vmmAddHardware(vmmGObjectUI):
         devtype = uiutil.get_list_selection(
             self.widget("storage-devtype"))
         self._refresh_disk_bus(devtype)
+
+        # Reset the status of disk-pr-checkbox to inactive
+        self.widget("disk-pr-checkbox").set_active(False)
+        is_lun = devtype == "lun"
+        uiutil.set_grid_row_visible(self.widget("disk-pr-checkbox"), is_lun)
 
         allow_create = devtype not in ["cdrom", "floppy"]
         self.addstorage.widget("storage-create-box").set_sensitive(
@@ -1202,6 +1205,8 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-discard"))
         detect_zeroes = uiutil.get_list_selection(
             self.widget("storage-detect-zeroes"))
+        if device == "lun":
+            reservations_managed = self.widget("disk-pr-checkbox").get_active()
 
         controller_model = None
         if (bus == "scsi" and
@@ -1232,6 +1237,8 @@ class vmmAddHardware(vmmGObjectUI):
                 disk.driver_discard = discard
             if detect_zeroes:
                 disk.driver_detect_zeroes = detect_zeroes
+            if device == "lun" and reservations_managed:
+                disk.reservations_managed = "yes"
 
             # Generate target
             disks = (self.vm.xmlobj.devices.disk +

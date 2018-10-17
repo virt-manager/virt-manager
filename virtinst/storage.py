@@ -203,18 +203,6 @@ class StoragePool(_StorageObject):
                 (path, str(e)))
 
     @staticmethod
-    def manage_path(conn, path):
-        """
-        If the passed path is managed, lookup its storage objects.
-        If the passed path isn't managed, attempt to manage it if
-        we can.
-
-        :returns: (vol, parent pool) tuple
-        """
-        from . import diskbackend
-        return diskbackend.manage_path(conn, path)
-
-    @staticmethod
     def get_default_dir(conn, build=False):
         """
         Return the default storage dir. If there's a 'default' pool,
@@ -654,7 +642,8 @@ class StorageVolume(_StorageObject):
     def _detect_backing_store_format(self):
         logging.debug("Attempting to detect format for backing_store=%s",
                 self.backing_store)
-        vol, pool = StoragePool.manage_path(self.conn, self.backing_store)
+        from . import diskbackend
+        vol, pool = diskbackend.manage_path(self.conn, self.backing_store)
 
         if not vol:
             logging.debug("Didn't find any volume for backing_store")

@@ -10,7 +10,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu placement="static">4</vcpu>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="q35">hvm</type>
   </os>
   <features>
     <acpi/>
@@ -94,7 +94,7 @@
       <auth username="admin">
         <secret type="ceph" uuid="f65cc5a8-b77b-4254-9030-d50a528fb456"/>
       </auth>
-      <source protocol="rbd" name="rbd/foobar">
+      <source protocol="rbd" name="rbd-sourcename/foobar">
         <host name="ceph-mon-1.example.com" port="6789"/>
         <host name="ceph-mon-2.example.com" port="6789"/>
         <host name="ceph-mon-3.example.com" port="6789"/>
@@ -159,6 +159,15 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/tmp/brand-new.img"/>
       <target dev="vdn" bus="virtio"/>
+    </disk>
+    <disk type="block" device="lun">
+      <driver name="qemu" type="raw"/>
+      <source dev="/dev/disk-pool/diskvol7">
+        <reservations managed="no">
+          <source type="unix" path="/var/run/test/pr-helper0.sock" mode="client"/>
+        </reservations>
+      </source>
+      <target dev="sdd" bus="scsi"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
@@ -304,9 +313,9 @@
       <image compression="off"/>
       <listen type="socket" socket="/tmp/foobar"/>
     </graphics>
-    <sound model="ich6"/>
+    <sound model="ich9"/>
     <sound model="ac97"/>
-    <sound model="ich6">
+    <sound model="ich9">
       <codec type="micro"/>
       <codec type="duplex"/>
       <codec type="output"/>

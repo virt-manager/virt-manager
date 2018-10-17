@@ -35,7 +35,7 @@ class _URLTestData(object):
     Data is stored in test_urls.ini
     """
     def __init__(self, name, url, detectdistro,
-            testxen, testbootiso, testshortcircuit, kernelarg):
+            testxen, testshortcircuit, kernelarg):
         self.name = name
         self.url = url
         self.detectdistro = detectdistro
@@ -44,7 +44,6 @@ class _URLTestData(object):
         self.kernelarg = kernelarg
 
         self.testxen = testxen
-        self.testbootiso = testbootiso
 
         # If True, pass in the expected distro value to getDistroStore
         # so it can short circuit the lookup checks. Speeds up the tests
@@ -145,8 +144,7 @@ def _sanitize_osdict_name(detectdistro):
 
 def _testURL(fetcher, testdata):
     """
-    Test that our URL detection logic works for grabbing kernel, xen
-    kernel, and boot.iso
+    Test that our URL detection logic works for grabbing kernels
     """
     distname = testdata.name
     arch = testdata.arch
@@ -202,15 +200,6 @@ def _testURL(fetcher, testdata):
         logging.debug("Fake acquiring %s", filename)
         return fetcher.hasFile(filename)
     fetcher.acquireFile = fakeAcquireFile
-
-    # Fetch boot iso
-    if testdata.testbootiso:
-        boot = hvmstore.acquireBootISO()
-        logging.debug("acquireBootISO: %s", str(boot))
-
-        if boot is not True:
-            raise AssertionError("%s-%s: bootiso fetching failed" %
-                                 (distname, arch))
 
     # Fetch regular kernel
     kernel, initrd, kernelargs = hvmstore.acquireKernel()
@@ -289,7 +278,6 @@ def _make_tests():
         d = _URLTestData(name, vals["url"],
                 vals.get("distro", None),
                 vals.get("testxen", "0") == "1",
-                vals.get("testbootiso", "0") == "1",
                 vals.get("testshortcircuit", "0") == "1",
                 vals.get("kernelarg", None))
         urls[d.name] = d

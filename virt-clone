@@ -104,7 +104,7 @@ def parse_args():
     geng.add_argument("-n", "--name", dest="new_name",
                     help=_("Name for the new guest"))
     geng.add_argument("-u", "--uuid", dest="new_uuid", help=argparse.SUPPRESS)
-    geng.add_argument("--reflink", action="store_true", dest="reflink",
+    geng.add_argument("--reflink", action="store_true",
             help=_("use btrfs COW lightweight copy"))
 
     stog = parser.add_argument_group(_("Storage Configuration"))

@@ -122,8 +122,8 @@ def parse_commandline():
     parser.set_defaults(domain=None)
 
     # Trace every libvirt API call to debug output
-    parser.add_argument("--trace-libvirt",
-        help=argparse.SUPPRESS, action="store_true")
+    parser.add_argument("--trace-libvirt", choices=["all", "mainloop"],
+        help=argparse.SUPPRESS)
 
     # Don't load any connections on startup to test first run
     # PackageKit integration
@@ -180,7 +180,9 @@ def main():
         logging.debug("Libvirt tracing requested")
         import virtManager.module_trace
         import libvirt
-        virtManager.module_trace.wrap_module(libvirt, regex=None)
+        virtManager.module_trace.wrap_module(libvirt,
+                mainloop=(options.trace_libvirt == "mainloop"),
+                regex=None)
 
     # With F27 gnome+wayland we need to set these before GTK import
     os.environ["GSETTINGS_SCHEMA_DIR"] = CLIConfig.gsettings_dir

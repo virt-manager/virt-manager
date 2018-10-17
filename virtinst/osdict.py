@@ -411,8 +411,17 @@ class _OsVariant(object):
         devids = ["http://pcisig.com/pci/1b36/0004"]
         return bool(self._device_filter(devids=devids))
 
+    def supports_virtio1(self):
+        # Use virtio1.0-net device as a proxy for virtio1.0 as a whole
+        devids = ["http://pcisig.com/pci/1af4/1041"]
+        return bool(self._device_filter(devids=devids))
+
     def supports_chipset_q35(self):
-        return False
+        # For our purposes, check for the union of q35 + virtio1.0 support
+        if self.supports_virtionet() and not self.supports_virtio1():
+            return False
+        devids = ["http://qemu.org/chipset/x86/q35"]
+        return bool(self._device_filter(devids=devids))
 
     def get_recommended_resources(self, guest):
         ret = {}

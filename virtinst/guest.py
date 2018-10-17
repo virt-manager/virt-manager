@@ -298,6 +298,8 @@ class Guest(XMLBuilder):
         return self._supports_virtio(self.osinfo.supports_virtionet())
     def supports_virtiodisk(self):
         return self._supports_virtio(self.osinfo.supports_virtiodisk())
+    def _supports_virtioserial(self):
+        return self._supports_virtio(self.osinfo.supports_virtioserial())
 
 
     ###############################
@@ -511,13 +513,17 @@ class Guest(XMLBuilder):
     def _set_default_machine(self):
         if self.os.machine:
             return
+
+        capsinfo = self.lookup_capsinfo()
+
         if (self.os.is_x86() and
             self.conn.is_qemu() and
+            "q35" in capsinfo.machines and
+            self.conn.check_support(self.conn.SUPPORT_QEMU_Q35_DEFAULT) and
             self.osinfo.supports_chipset_q35()):
             self.os.machine = "q35"
             return
 
-        capsinfo = self.lookup_capsinfo()
         default = capsinfo.machines and capsinfo.machines[0] or None
         self.os.machine = default
 
@@ -604,10 +610,8 @@ class Guest(XMLBuilder):
         usb2 = False
         usb3 = False
         if self.os.is_x86():
-            if self.osinfo.supports_usb3() and qemu_usb3:
-                usb3 = True
-            else:
-                usb2 = True
+            usb3 = bool(self.osinfo.supports_usb3() and qemu_usb3)
+            usb2 = not usb3
         elif self.os.is_arm_machvirt():
             # For machvirt, we always assume OS supports usb3
             if (qemu_usb3 and
@@ -637,7 +641,7 @@ class Guest(XMLBuilder):
             return
 
         if (self.conn.is_qemu() and
-            self._supports_virtio(self.osinfo.supports_virtioserial()) and
+            self._supports_virtioserial() and
             self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
             dev = DeviceChannel(self.conn)
             dev.type = "unix"
@@ -713,10 +717,11 @@ class Guest(XMLBuilder):
     def _add_spice_channels(self):
         if self.skip_default_channel:
             return
-
         for chn in self.devices.channel:
             if chn.type == chn.TYPE_SPICEVMC:
                 return
+        if not self._supports_virtioserial():
+            return
 
         dev = DeviceChannel(self.conn)
         dev.type = DeviceChannel.TYPE_SPICEVMC

@@ -10,7 +10,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="q35">hvm</type>
     <boot dev="network"/>
     <boot dev="hd"/>
   </os>
@@ -55,7 +55,7 @@
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
       <image compression="off"/>
     </graphics>
-    <sound model="ich6"/>
+    <sound model="ich9"/>
     <video>
       <model type="qxl"/>
     </video>
@@ -78,7 +78,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="q35">hvm</type>
     <boot dev="hd"/>
   </os>
   <features>
@@ -121,7 +121,7 @@
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
       <image compression="off"/>
     </graphics>
-    <sound model="ich6"/>
+    <sound model="ich9"/>
     <video>
       <model type="qxl"/>
     </video>

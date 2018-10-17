@@ -121,7 +121,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 
     vi_dir = None
     logfile = None
-    if not _in_testsuite():
+    if not in_testsuite():
         vi_dir = util.get_cache_dir()
         logfile = os.path.join(vi_dir, appname + ".log")
 
@@ -200,7 +200,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     logging.debug("Launched with command line: %s", " ".join(sys.argv))
 
 
-def _in_testsuite():
+def in_testsuite():
     return "VIRTINST_TEST_SUITE" in os.environ
 
 
@@ -344,12 +344,13 @@ def validate_disk(dev, warn_overwrite=False):
             _optional_fail(errmsg, "disk_size", warn_on_skip=False)
 
     def check_path_search(dev):
-        user, broken_paths = dev.check_path_search(dev.conn, dev.path)
-        if not broken_paths:
+        searchdata = dev.check_path_search(dev.conn, dev.path)
+        if not searchdata.fixlist:
             return
         logging.warning(_("%s may not be accessible by the hypervisor. "
             "You will need to grant the '%s' user search permissions for "
-            "the following directories: %s"), dev.path, user, broken_paths)
+            "the following directories: %s"),
+            dev.path, searchdata.user, searchdata.fixlist)
 
     check_path_exists(dev)
     check_inuse_conflict(dev)
@@ -358,12 +359,11 @@ def validate_disk(dev, warn_overwrite=False):
 
 
 def _run_console(domain, args):
+    ignore = domain
     logging.debug("Running: %s", " ".join(args))
-    if _in_testsuite():
-        # Add this destroy() in here to trigger more virt-install code
-        # for the test suite
-        domain.destroy()
-        return None
+    if in_testsuite():
+        print_stdout("testsuite console command: %s" % args)
+        args = ["/bin/true"]
 
     child = os.fork()
     if child:
@@ -397,7 +397,7 @@ def _txt_console(guest, domain):
     return _run_console(domain, args)
 
 
-def connect_console(guest, domain, consolecb, wait):
+def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
     """
     Launched the passed console callback for the already defined
     domain. If domain isn't running, return an error.
@@ -415,6 +415,10 @@ def connect_console(guest, domain, consolecb, wait):
     except OSError as e:
         logging.debug("waitpid error: %s", e)
 
+    if destroy_on_exit and domain.isActive():
+        logging.debug("console exited and destroy_on_exit passed, destroying")
+        domain.destroy()
+
 
 def get_console_cb(guest):
     gdevs = guest.devices.graphics
@@ -428,7 +432,7 @@ def get_console_cb(guest):
         logging.debug("No viewer to launch for graphics type '%s'", gtype)
         return
 
-    if not _in_testsuite():
+    if not in_testsuite():
         try:
             subprocess.check_output(["virt-viewer", "--version"])
         except OSError:
@@ -446,7 +450,7 @@ def get_console_cb(guest):
 
 
 def get_meter():
-    quiet = (get_global_state().quiet or _in_testsuite())
+    quiet = (get_global_state().quiet or in_testsuite())
     return util.make_meter(quiet=quiet)
 
 
@@ -1649,6 +1653,7 @@ ParserBoot.add_arg(None, "uefi", cb=ParserBoot.set_uefi_cb, is_novalue=True)
 
 ParserBoot.add_arg("useserial", "useserial", is_onoff=True)
 ParserBoot.add_arg("enable_bootmenu", "menu", is_onoff=True)
+ParserBoot.add_arg("rebootTimeout", "rebootTimeout")
 ParserBoot.add_arg("kernel", "kernel")
 ParserBoot.add_arg("initrd", "initrd")
 ParserBoot.add_arg("dtb", "dtb")
@@ -2114,6 +2119,11 @@ ParserDisk.add_arg("geometry_cyls", "geometry.cyls")
 ParserDisk.add_arg("geometry_heads", "geometry.heads")
 ParserDisk.add_arg("geometry_secs", "geometry.secs")
 ParserDisk.add_arg("geometry_trans", "geometry.trans")
+
+ParserDisk.add_arg("reservations_managed", "reservations.managed")
+ParserDisk.add_arg("reservations_source_type", "reservations.source.type")
+ParserDisk.add_arg("reservations_source_path", "reservations.source.path")
+ParserDisk.add_arg("reservations_source_mode", "reservations.source.mode")
 
 
 #####################

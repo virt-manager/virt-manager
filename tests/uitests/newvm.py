@@ -172,8 +172,17 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Customize", "check").click()
         newvm.find_fuzzy("Finish", "button").click()
 
-        # Change to 'copy host CPU'
+        # Verify CDROM media is inserted
         vmwindow = self.app.root.find_fuzzy("win8 on", "frame")
+        vmwindow.find_fuzzy("IDE CDROM", "table cell").click()
+        self.assertTrue("iso-vol" in vmwindow.find("media-entry").text)
+
+        # Change boot autostart
+        vmwindow.find_fuzzy("Boot", "table cell").click()
+        vmwindow.find_fuzzy("Start virtual machine", "check").click()
+        vmwindow.find_fuzzy("config-apply").click()
+
+        # Change to 'copy host CPU'
         vmwindow.find_fuzzy("CPUs", "table cell").click()
         vmwindow.find_fuzzy("Copy host", "check").click()
         vmwindow.find_fuzzy("config-apply").click()

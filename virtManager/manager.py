@@ -221,7 +221,6 @@ class vmmManager(vmmGObjectUI):
         if self._window_size:
             self.config.set_manager_window_size(*self._window_size)
 
-
     def is_visible(self):
         return bool(self.topwin.get_visible())
 
@@ -426,20 +425,20 @@ class vmmManager(vmmGObjectUI):
         return handle.conn
 
     def get_row(self, conn_or_vm):
-        def _walk(rowiter):
+        def _walk(model, rowiter, obj):
             while rowiter:
-                row = self.model[rowiter]
-                if row[ROW_HANDLE] == conn_or_vm:
+                row = model[rowiter]
+                if row[ROW_HANDLE] == obj:
                     return row
-                if self.model.iter_has_child(rowiter):
-                    ret = _walk(self.model.iter_nth_child(rowiter, 0))
+                if model.iter_has_child(rowiter):
+                    ret = _walk(model, model.iter_nth_child(rowiter, 0), obj)
                     if ret:
                         return ret
-                rowiter = self.model.iter_next(rowiter)
+                rowiter = model.iter_next(rowiter)
 
         if not len(self.model):
             return None
-        return _walk(self.model.get_iter_first())
+        return _walk(self.model, self.model.get_iter_first(), conn_or_vm)
 
 
     ####################

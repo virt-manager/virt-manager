@@ -1,0 +1,103 @@
+<domain type="test">
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="cdrom"/>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <pae/>
+  </features>
+  <clock offset="utc"/>
+  <on_reboot>destroy</on_reboot>
+  <pm>
+    <suspend-to-mem enabled="no"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/test-hv</emulator>
+    <disk type="file" device="disk">
+      <source file="/var/lib/libvirt/images/foobar.qcow2"/>
+      <target dev="hda" bus="ide"/>
+    </disk>
+    <disk type="file" device="cdrom">
+      <source file="/dev/default-pool/testvol1.img"/>
+      <target dev="hdb" bus="ide"/>
+      <readonly/>
+    </disk>
+    <disk type="file" device="cdrom">
+      <source file="/dev/default-pool/testvol2.img"/>
+      <target dev="hdc" bus="ide"/>
+      <readonly/>
+    </disk>
+    <controller type="usb" index="0" model="ich9-ehci1"/>
+    <controller type="usb" index="0" model="ich9-uhci1">
+      <master startport="0"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci2">
+      <master startport="2"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci3">
+      <master startport="4"/>
+    </controller>
+    <interface type="user">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000"/>
+    </interface>
+    <console type="pty"/>
+  </devices>
+</domain>
+<domain type="test">
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <pae/>
+  </features>
+  <clock offset="utc"/>
+  <pm>
+    <suspend-to-mem enabled="no"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/test-hv</emulator>
+    <disk type="file" device="disk">
+      <source file="/var/lib/libvirt/images/foobar.qcow2"/>
+      <target dev="hda" bus="ide"/>
+    </disk>
+    <disk type="file" device="cdrom">
+      <target dev="hdb" bus="ide"/>
+      <readonly/>
+    </disk>
+    <disk type="file" device="cdrom">
+      <source file="/dev/default-pool/testvol2.img"/>
+      <target dev="hdc" bus="ide"/>
+      <readonly/>
+    </disk>
+    <controller type="usb" index="0" model="ich9-ehci1"/>
+    <controller type="usb" index="0" model="ich9-uhci1">
+      <master startport="0"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci2">
+      <master startport="2"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci3">
+      <master startport="4"/>
+    </controller>
+    <interface type="user">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000"/>
+    </interface>
+    <console type="pty"/>
+  </devices>
+</domain>

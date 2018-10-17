@@ -1426,7 +1426,7 @@ class XMLParseTest(unittest.TestCase):
         outfile = "tests/xmlparse-xml/%s-out.xml" % basename
         guest = virtinst.Guest(self.kvmconn, parsexml=open(infile).read())
 
-        guest.cpu.copy_host_cpu()
+        guest.cpu.copy_host_cpu(guest)
         guest.cpu.clear()
         utils.diff_compare(guest.get_xml(), outfile)
 

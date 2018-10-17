@@ -32,10 +32,10 @@ clistate = _CLIState()
 def has_old_osinfo():
     # Some tests rely on newer osinfo data. Check for a new condition
     # here, and older tests will be skipped
-    osname = "rhel7.0"
+    osname = "centos7.0"
     if not virtinst.OSDB.lookup_os(osname):
         return True
-    return not virtinst.OSDB.lookup_os(osname).supports_usb3()
+    return not virtinst.OSDB.lookup_os(osname).supports_chipset_q35()
 
 
 class _URIs(object):
