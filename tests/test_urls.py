@@ -133,13 +133,6 @@ def _sanitize_osdict_name(detectdistro):
         # fedora when checking rawhide URL
         return OSDB.latest_fedora_version()
 
-    if re.match("fedora[0-9]+", detectdistro):
-        if not OSDB.lookup_os(detectdistro):
-            ret = OSDB.latest_fedora_version()
-            print("\nConverting detectdistro=%s to latest value=%s" %
-                    (detectdistro, ret))
-            return ret
-
     return detectdistro
 
 
