@@ -35,13 +35,14 @@ class _URLTestData(object):
     Data is stored in test_urls.ini
     """
     def __init__(self, name, url, detectdistro,
-            testxen, testshortcircuit, kernelarg):
+            testxen, testshortcircuit, kernelarg, kernelregex):
         self.name = name
         self.url = url
         self.detectdistro = detectdistro
         self.arch = self._find_arch()
         self.distroclass = self._distroclass_for_name(self.name)
         self.kernelarg = kernelarg
+        self.kernelregex = kernelregex
 
         self.testxen = testxen
 
@@ -198,14 +199,20 @@ def _testURL(fetcher, testdata):
     # to fetch files for that part
     def fakeAcquireFile(filename):
         logging.debug("Fake acquiring %s", filename)
-        return fetcher.hasFile(filename)
+        if not fetcher.hasFile(filename):
+            return False
+        return filename
     fetcher.acquireFile = fakeAcquireFile
 
     # Fetch regular kernel
     kernel, initrd, kernelargs = hvmstore.acquireKernel()
-    if kernel is not True or initrd is not True:
+    if kernel is False or initrd is False:
         AssertionError("%s-%s: hvm kernel fetching failed" %
                        (distname, arch))
+
+    if testdata.kernelregex and not re.match(testdata.kernelregex, kernel):
+        raise AssertionError("kernel=%s but testdata.kernelregex='%s'" %
+                (kernel, testdata.kernelregex))
 
     if testdata.kernelarg == "None":
         if bool(kernelargs):
@@ -219,8 +226,8 @@ def _testURL(fetcher, testdata):
     # Fetch xen kernel
     if xenstore:
         kernel, initrd, kernelargs = xenstore.acquireKernel()
-        if kernel is not True or initrd is not True:
-            raise AssertionError("%s-%s: xen kernel fetching" %
+        if kernel is False or initrd is False:
+            raise AssertionError("%s-%s: xen kernel fetching failed" %
                                  (distname, arch))
 
 
@@ -279,7 +286,8 @@ def _make_tests():
                 vals.get("distro", None),
                 vals.get("testxen", "0") == "1",
                 vals.get("testshortcircuit", "0") == "1",
-                vals.get("kernelarg", None))
+                vals.get("kernelarg", None),
+                vals.get("kernelregex", None))
         urls[d.name] = d
 
     keys = list(urls.keys())
