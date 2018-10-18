@@ -120,13 +120,8 @@ def _storeForDistro(fetcher, guest):
 
 
 def _sanitize_osdict_name(detectdistro):
-    """
-    Try to handle working with out of date osinfo-db data. Like if
-    checking distro FedoraXX but osinfo-db latest Fedora is
-    FedoraXX-1, convert to use that
-    """
-    if not detectdistro:
-        return detectdistro
+    if detectdistro in ["none", "None", None]:
+        return None
 
     if detectdistro == "testsuite-fedora-rawhide":
         # Special value we use in the test suite to always return the latest
@@ -149,9 +144,6 @@ def _testURL(fetcher, testdata):
     if testdata.testshortcircuit:
         hvmguest.set_os_name(detectdistro)
         xenguest.set_os_name(detectdistro)
-    else:
-        hvmguest.set_os_name("generic")
-        xenguest.set_os_name("generic")
 
     try:
         hvmstore = _storeForDistro(fetcher, hvmguest)
@@ -165,8 +157,10 @@ def _testURL(fetcher, testdata):
             (distname, fetcher.location, "".join(traceback.format_exc())))
 
     for s in [hvmstore, xenstore]:
-        if (s and testdata.distroclass and
-            not isinstance(s, testdata.distroclass)):
+        if not s:
+            continue
+
+        if not isinstance(s, testdata.distroclass):
             raise AssertionError("Unexpected URLDistro class:\n"
                 "found  = %s\n"
                 "expect = %s\n\n"
@@ -176,8 +170,7 @@ def _testURL(fetcher, testdata):
                  fetcher.location))
 
         # Make sure the stores are reporting correct distro name/variant
-        if (s and detectdistro and
-            detectdistro != s.get_osdict_info()):
+        if detectdistro != s.get_osdict_info():
             raise AssertionError(
                 "Detected OS did not match expected values:\n"
                 "found   = %s\n"
