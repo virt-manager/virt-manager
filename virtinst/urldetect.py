@@ -664,6 +664,9 @@ class DebianDistro(Distro):
             media_type = "url"
         elif check_manifest("daily/MANIFEST"):
             media_type = "daily"
+        elif cache.content_regex("install/netboot/version.info",
+                "%s.*" % cls._debname.capitalize()):
+            media_type = "mounted_iso_url"
         elif cache.content_regex(".disk/info",
                 "%s.*" % cls._debname.capitalize()):
             # There's two cases here:
@@ -722,6 +725,9 @@ class DebianDistro(Distro):
         if self.cache.debian_media_type == "daily":
             url_prefix = "daily"
         elif self.cache.debian_media_type == "mounted_iso_url":
+            url_prefix = "install"
+
+        if self.cache.debian_media_type == "mounted_iso_url":
             url_prefix = "install"
 
         tree_arch = self._find_treearch()
