@@ -28,6 +28,7 @@ class _DistroCache(object):
         self.treeinfo_name = None
 
         self.suse_content = None
+        self.checked_for_suse_content = False
         self.debian_media_type = None
 
     def acquire_file_content(self, path):
@@ -493,8 +494,8 @@ class SuseDistro(Distro):
         if cache.treeinfo_family_regex(cls.famregex):
             return True
 
-        if not cache.suse_content:
-            cache.suse_content = -1
+        if not cache.checked_for_suse_content:
+            cache.checked_for_suse_content = True
             content_str = cache.acquire_file_content("content")
             if content_str is None:
                 return False
@@ -505,7 +506,7 @@ class SuseDistro(Distro):
                 logging.debug("Error parsing SUSE content file: %s", str(e))
                 return False
 
-        if cache.suse_content == -1:
+        if not cache.suse_content:
             return False
         for regex in cls._suse_regex:
             if re.match(regex, cache.suse_content.product_name):
@@ -515,7 +516,7 @@ class SuseDistro(Distro):
     def __init__(self, *args, **kwargs):
         Distro.__init__(self, *args, **kwargs)
 
-        if not self.cache.suse_content or self.cache.suse_content == -1:
+        if not self.cache.suse_content:
             # This means we matched on treeinfo
             self._kernel_paths = self.cache.get_treeinfo_media(self.type)
             return
