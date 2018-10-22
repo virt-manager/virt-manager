@@ -262,7 +262,7 @@ Tune CPU parameters for the guest.
 
 Configure which of the host's physical CPUs the domain VCPU will be pinned to. Example invocation
 
-    --cputune vpcupin0.vcpu=0,vpcupin0.cpuset=0-3,vpcupin1.vcpu=1,vpcupin1.cpuset=4-7
+    --cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3,vcpupin1.vcpu=1,vcpupin1.cpuset=4-7
 
 Use --cputune=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsCPUTuning>
 
