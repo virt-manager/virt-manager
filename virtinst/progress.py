@@ -284,9 +284,11 @@ class TextMeter(BaseMeter):
             # Make text grow a bit before we start growing the bar too
             blen = 4 + tl.rest_split(8 + 8 + 4)
             ui_bar = _term_add_bar(tl, blen, frac)
-            out = '\r%-*.*s%s%s%s%s%s%s%s\r' % (tl.rest(), tl.rest(), text,
-                                                ui_sofar_pc, ui_pc, ui_bar,
-                                                ui_rate, ui_size, ui_time, ui_end)
+            out = '\r%-*.*s%s%s%s%s%s%s%s\r' % (
+                tl.rest(), tl.rest(), text,
+                ui_sofar_pc, ui_pc, ui_bar,
+                ui_rate, ui_size, ui_time, ui_end
+            )
 
         self.fo.write(out)
         self.fo.flush()
@@ -305,7 +307,8 @@ class TextMeter(BaseMeter):
         # For big screens, make it more readable.
         use_hours = bool(tl._llen > 80)
         ui_size = tl.add(' | %5sB' % total_size)
-        ui_time = tl.add('  %s' % format_time(self.re.elapsed_time(), use_hours))
+        ui_time = tl.add('  %s' % format_time(self.re.elapsed_time(),
+                                              use_hours))
         ui_end, not_done = _term_add_end(tl, self.size, amount_read)
         out = '\r%-*.*s%s%s%s\n' % (tl.rest(), tl.rest(), text,
                                     ui_size, ui_time, ui_end)
@@ -322,6 +325,7 @@ class TextMeter(BaseMeter):
         if _text_meter_total_size <= _text_meter_sofar_size:
             _text_meter_total_size = 0
             _text_meter_sofar_size = 0
+
 
 text_progress_meter = TextMeter
 
