@@ -257,7 +257,7 @@ class TextMeter(BaseMeter):
             sofar_pc = (sofar_size * 100) // _text_meter_total_size
 
         # Include text + ui_rate in minimal
-        tl = TerminalLine(8, 8+1+8)
+        tl = TerminalLine(8, 8 + 1 + 8)
         # For big screens, make it more readable.
         use_hours = bool(tl._llen > 80)
         ui_size = tl.add(' | %5sB' % fread)
