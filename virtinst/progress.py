@@ -218,11 +218,13 @@ def text_meter_total_size(size, downloaded=0):
 
 
 def _term_add_bar(tl, bar_max_length, pc):
-    blen = bar_max_length
-    bar = '='*int(blen * pc)
-    if (blen * pc) - int(blen * pc) >= 0.5:
-        bar += '-'
-    return tl.add(' [%-*.*s]' % (blen, blen, bar))
+    bar_len = bar_max_length * pc
+    ibar_len = int(bar_len)
+    progressbar = '=' * ibar_len
+    if (bar_len - ibar_len) >= 0.5:
+        progressbar += '-'
+    return tl.add(' [%-*.*s]' % (bar_max_length, bar_max_length,
+                                 progressbar))
 
 
 def _term_add_end(tl, osize, size):
