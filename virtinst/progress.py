@@ -29,7 +29,7 @@ def terminal_width(fd=1):
             return 80
         # Add minimum too?
         return ret
-    except: # IOError
+    except:  # IOError
         return 80
 
 
@@ -93,7 +93,7 @@ class TerminalLine:
 
 class BaseMeter:
     def __init__(self):
-        self.update_period = 0.3 # seconds
+        self.update_period = 0.3  # seconds
 
         self.filename = None
         self.url = None
@@ -226,8 +226,8 @@ def _term_add_bar(tl, bar_max_length, pc):
 
 
 def _term_add_end(tl, osize, size):
-    if osize: # osize should be None or >0, but that's been broken.
-        if size > osize: # Is ??? better? Really need something to say < vs >.
+    if osize:  # osize should be None or >0, but that's been broken.
+        if size > osize:  # Is ??? better? Really need something to say < vs >.
             return tl.add(' !!! '), True
         elif size != osize:
             return tl.add(' ... '), True
@@ -477,14 +477,14 @@ def format_time(seconds, use_hours=0):
 def format_number(number, SI=0, space=' '):
     """Turn numbers into human-readable metric-like numbers"""
     symbols = ['',  # (none)
-               'k', # kilo
-               'M', # mega
-               'G', # giga
-               'T', # tera
-               'P', # peta
-               'E', # exa
-               'Z', # zetta
-               'Y'] # yotta
+               'k',  # kilo
+               'M',  # mega
+               'G',  # giga
+               'T',  # tera
+               'P',  # peta
+               'E',  # exa
+               'Z',  # zetta
+               'Y']  # yotta
 
     if SI:
         step = 1000.0
