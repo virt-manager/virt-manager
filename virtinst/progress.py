@@ -56,21 +56,21 @@ class TerminalLine:
         if beg_len is None:
             beg_len = min_rest
         self._min_len = min_rest
-        self._llen = terminal_width_cached(fd, cache_timeout)
-        if self._llen < beg_len:
-            self._llen = beg_len
+        self.llen = terminal_width_cached(fd, cache_timeout)
+        if self.llen < beg_len:
+            self.llen = beg_len
         self._fin = False
 
     def __len__(self):
         """ Usable length for elements. """
-        return self._llen - self._min_len
+        return self.llen - self._min_len
 
     def rest_split(self, fixed, elements=2):
         """ After a fixed length, split the rest of the line length among
             a number of different elements (default=2). """
-        if self._llen < fixed:
+        if self.llen < fixed:
             return 0
-        return (self._llen - fixed) // elements
+        return (self.llen - fixed) // elements
 
     def add(self, element, full_len=None):
         """ If there is room left in the line, above min_len, add element.
@@ -83,12 +83,12 @@ class TerminalLine:
         if self._fin:
             return ''
 
-        self._llen -= len(element)
+        self.llen -= len(element)
         return element
 
     def rest(self):
         """ Current rest of line, same as .rest_split(fixed=0, elements=1). """
-        return self._llen
+        return self.llen
 
 
 class BaseMeter:
@@ -259,7 +259,7 @@ class TextMeter(BaseMeter):
         # Include text + ui_rate in minimal
         tl = TerminalLine(8, 8 + 1 + 8)
         # For big screens, make it more readable.
-        use_hours = bool(tl._llen > 80)
+        use_hours = bool(tl.llen > 80)
         ui_size = tl.add(' | %5sB' % fread)
         if self.size is None:
             ui_time = tl.add('  %s' % format_time(etime, use_hours))
@@ -281,7 +281,7 @@ class TextMeter(BaseMeter):
                 ui_sofar_pc = tl.add(' (%i%%)' % sofar_pc,
                                      full_len=len(" (100%)"))
 
-            ui_pc = tl.add(' %2i%%' % (frac*100))
+            ui_pc = tl.add(' %2i%%' % (frac * 100))
             ui_rate = tl.add(' %5sB/s' % ave_dl)
             # Make text grow a bit before we start growing the bar too
             blen = 4 + tl.rest_split(8 + 8 + 4)
@@ -307,7 +307,7 @@ class TextMeter(BaseMeter):
 
         tl = TerminalLine(8)
         # For big screens, make it more readable.
-        use_hours = bool(tl._llen > 80)
+        use_hours = bool(tl.llen > 80)
         ui_size = tl.add(' | %5sB' % total_size)
         ui_time = tl.add('  %s' % format_time(self.re.elapsed_time(),
                                               use_hours))
