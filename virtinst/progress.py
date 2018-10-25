@@ -115,7 +115,7 @@ class BaseMeter:
 
         # size = None #########  TESTING
         self.size = size
-        if not size is None:
+        if size is not None:
             self.fsize = format_number(size) + 'B'
 
         if now is None:
