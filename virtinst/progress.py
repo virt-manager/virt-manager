@@ -33,7 +33,7 @@ def terminal_width(fd=1):
         return 80
 
 
-_term_width_val  = None
+_term_width_val = None
 _term_width_last = None
 
 
@@ -44,7 +44,7 @@ def terminal_width_cached(fd=1, cache_timeout=1.000):
 
     now = time.time()
     if _term_width_val is None or (now - _term_width_last) > cache_timeout:
-        _term_width_val  = terminal_width(fd)
+        _term_width_val = terminal_width(fd)
         _term_width_last = now
     return _term_width_val
 
@@ -56,7 +56,7 @@ class TerminalLine:
         if beg_len is None:
             beg_len = min_rest
         self._min_len = min_rest
-        self._llen    = terminal_width_cached(fd, cache_timeout)
+        self._llen = terminal_width_cached(fd, cache_timeout)
         if self._llen < beg_len:
             self._llen = beg_len
         self._fin = False
@@ -95,13 +95,13 @@ class BaseMeter:
     def __init__(self):
         self.update_period = 0.3 # seconds
 
-        self.filename   = None
-        self.url        = None
-        self.basename   = None
-        self.text       = None
-        self.size       = None
+        self.filename = None
+        self.url = None
+        self.basename = None
+        self.text = None
+        self.size = None
         self.start_time = None
-        self.fsize      = None
+        self.fsize = None
         self.last_amount_read = 0
         self.last_update_time = None
         self.re = RateEstimator()
@@ -109,9 +109,9 @@ class BaseMeter:
     def start(self, filename=None, url=None, basename=None,
               size=None, now=None, text=None):
         self.filename = filename
-        self.url      = url
+        self.url = url
         self.basename = basename
-        self.text     = text
+        self.text = text
 
         #size = None #########  TESTING
         self.size = size
@@ -215,7 +215,7 @@ def text_meter_total_size(size, downloaded=0):
 
 def _term_add_bar(tl, bar_max_length, pc):
     blen = bar_max_length
-    bar  = '='*int(blen * pc)
+    bar = '='*int(blen * pc)
     if (blen * pc) - int(blen * pc) >= 0.5:
         bar += '-'
     return tl.add(' [%-*.*s]' % (blen, blen, bar))
@@ -248,7 +248,7 @@ class TextMeter(BaseMeter):
         sofar_size = None
         if _text_meter_total_size:
             sofar_size = _text_meter_sofar_size + amount_read
-            sofar_pc   = (sofar_size * 100) // _text_meter_total_size
+            sofar_pc = (sofar_size * 100) // _text_meter_total_size
 
         # Include text + ui_rate in minimal
         tl = TerminalLine(8, 8+1+8)
@@ -257,7 +257,7 @@ class TextMeter(BaseMeter):
         ui_size = tl.add(' | %5sB' % fread)
         if self.size is None:
             ui_time = tl.add('  %s' % format_time(etime, use_hours))
-            ui_end  = tl.add(' ' * 5)
+            ui_end = tl.add(' ' * 5)
             ui_rate = tl.add(' %5sB/s' % ave_dl)
             out = '%-*.*s%s%s%s%s\r' % (tl.rest(), tl.rest(), text,
                                         ui_rate, ui_size, ui_time, ui_end)
@@ -267,7 +267,7 @@ class TextMeter(BaseMeter):
             frac = self.re.fraction_read()
 
             ui_time = tl.add('  %s' % frtime)
-            ui_end  = tl.add(' ETA ')
+            ui_end = tl.add(' ETA ')
 
             if sofar_size is None:
                 ui_sofar_pc = ''
@@ -275,7 +275,7 @@ class TextMeter(BaseMeter):
                 ui_sofar_pc = tl.add(' (%i%%)' % sofar_pc,
                                      full_len=len(" (100%)"))
 
-            ui_pc   = tl.add(' %2i%%' % (frac*100))
+            ui_pc = tl.add(' %2i%%' % (frac*100))
             ui_rate = tl.add(' %5sB/s' % ave_dl)
             # Make text grow a bit before we start growing the bar too
             blen = 4 + tl.rest_split(8 + 8 + 4)
@@ -356,7 +356,7 @@ class RateEstimator:
             return
 
         #print 'times', now, self.last_update_time
-        time_diff = now         - self.last_update_time
+        time_diff = now - self.last_update_time
         read_diff = amount_read - self.last_amount_read
         # First update, on reget is the file size
         if self.last_amount_read:
@@ -417,7 +417,7 @@ class RateEstimator:
         elif recent_rate is None: return last_ave
 
         # at this point, both last_ave and recent_rate are numbers
-        return epsilon * recent_rate  +  (1 - epsilon) * last_ave
+        return epsilon * recent_rate + (1 - epsilon) * last_ave
 
     def _round_remaining_time(self, rt, start_time=15.0):
         """round the remaining time, depending on its size
@@ -481,7 +481,7 @@ def format_number(number, SI=0, space=' '):
     # of our list.  In that event, the formatting will be screwed up,
     # but it'll still show the right number.
     while number > thresh and depth < max_depth:
-        depth  = depth + 1
+        depth = depth + 1
         number = number / step
 
     if isinstance(number, int):
