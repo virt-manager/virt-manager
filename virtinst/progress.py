@@ -17,6 +17,7 @@ import fcntl
 import struct
 import termios
 
+
 # Code from https://mail.python.org/pipermail/python-list/2000-May/033365.html
 def terminal_width(fd=1):
     """ Get the real terminal width """
@@ -31,8 +32,11 @@ def terminal_width(fd=1):
     except: # IOError
         return 80
 
+
 _term_width_val  = None
 _term_width_last = None
+
+
 def terminal_width_cached(fd=1, cache_timeout=1.000):
     """ Get the real terminal width, but cache it for a bit. """
     global _term_width_val
@@ -43,6 +47,7 @@ def terminal_width_cached(fd=1, cache_timeout=1.000):
         _term_width_val  = terminal_width(fd)
         _term_width_last = now
     return _term_width_val
+
 
 class TerminalLine:
     """ Help create dynamic progress bars, uses terminal_width_cached(). """
@@ -84,6 +89,7 @@ class TerminalLine:
     def rest(self):
         """ Current rest of line, same as .rest_split(fixed=0, elements=1). """
         return self._llen
+
 
 class BaseMeter:
     def __init__(self):
@@ -145,11 +151,14 @@ class BaseMeter:
     def _do_end(self, amount_read, now=None):
         pass
 
+
 #  This is kind of a hack, but progress is gotten from grabber which doesn't
 # know about the total size to download. So we do this so we can get the data
 # out of band here. This will be "fixed" one way or anther soon.
 _text_meter_total_size = 0
 _text_meter_sofar_size = 0
+
+
 def text_meter_total_size(size, downloaded=0):
     global _text_meter_total_size
     global _text_meter_sofar_size
@@ -203,12 +212,14 @@ def text_meter_total_size(size, downloaded=0):
 #        4. +                     ( 5, total: 32)
 #
 
+
 def _term_add_bar(tl, bar_max_length, pc):
     blen = bar_max_length
     bar  = '='*int(blen * pc)
     if (blen * pc) - int(blen * pc) >= 0.5:
         bar += '-'
     return tl.add(' [%-*.*s]' % (blen, blen, bar))
+
 
 def _term_add_end(tl, osize, size):
     if osize: # osize should be None or >0, but that's been broken.
@@ -217,6 +228,7 @@ def _term_add_end(tl, osize, size):
         elif size != osize:
             return tl.add(' ... '), True
     return tl.add(' ' * 5), False
+
 
 class TextMeter(BaseMeter):
     def __init__(self, fo=sys.stderr):
@@ -311,6 +323,7 @@ text_progress_meter = TextMeter
 
 ######################################################################
 # support classes and functions
+
 
 class RateEstimator:
     def __init__(self, timescale=5.0):
@@ -442,6 +455,7 @@ def format_time(seconds, use_hours=0):
             return '%02i:%02i:%02i' % (hours, minutes, seconds)
         else:
             return '%02i:%02i' % (minutes, seconds)
+
 
 def format_number(number, SI=0, space=' '):
     """Turn numbers into human-readable metric-like numbers"""
