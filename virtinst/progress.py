@@ -135,7 +135,7 @@ class BaseMeter:
         if now is None:
             now = time.time()
         if (not self.last_update_time or
-            (now >= self.last_update_time + self.update_period)):
+                (now >= self.last_update_time + self.update_period)):
             self.re.update(amount_read, now)
             self.last_amount_read = amount_read
             self.last_update_time = now
