@@ -586,15 +586,11 @@ class CheckPylint(distutils.core.Command):
                  "tests"]
 
         output_format = sys.stdout.isatty() and "colorized" or "text"
-        exclude = ["virtinst/progress.py"]
 
         print("running pycodestyle")
         style_guide = pycodestyle.StyleGuide(
             config_file='tests/pycodestyle.cfg',
             paths=files
-        )
-        style_guide.options.exclude = pycodestyle.normalize_paths(
-            ','.join(exclude)
         )
         report = style_guide.check_files()
         if style_guide.options.count:
@@ -604,7 +600,7 @@ class CheckPylint(distutils.core.Command):
         pylint_opts = [
             "--rcfile", "tests/pylint.cfg",
             "--output-format=%s" % output_format,
-        ] + ["--ignore"] + [os.path.basename(p) for p in exclude]
+        ]
         if self.jobs:
             pylint_opts += ["--jobs=%d" % self.jobs]
 
