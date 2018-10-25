@@ -95,6 +95,7 @@ class BaseMeter:
         self.text       = None
         self.size       = None
         self.start_time = None
+        self.fsize      = None
         self.last_amount_read = 0
         self.last_update_time = None
         self.re = RateEstimator()
@@ -314,6 +315,11 @@ text_progress_meter = TextMeter
 class RateEstimator:
     def __init__(self, timescale=5.0):
         self.timescale = timescale
+        self.total = None
+        self.start_time = None
+        self.last_update_time = None
+        self.last_amount_read = 0
+        self.ave_rate = None
 
     def start(self, total=None, now=None):
         if now is None: now = time.time()
