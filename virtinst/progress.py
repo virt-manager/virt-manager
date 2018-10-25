@@ -286,7 +286,7 @@ class TextMeter(BaseMeter):
             ui_bar = _term_add_bar(tl, blen, frac)
             out = '\r%-*.*s%s%s%s%s%s%s%s\r' % (tl.rest(), tl.rest(), text,
                                                 ui_sofar_pc, ui_pc, ui_bar,
-                                                ui_rate,ui_size,ui_time, ui_end)
+                                                ui_rate, ui_size, ui_time, ui_end)
 
         self.fo.write(out)
         self.fo.flush()
