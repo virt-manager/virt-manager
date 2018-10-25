@@ -115,9 +115,11 @@ class BaseMeter:
 
         #size = None #########  TESTING
         self.size = size
-        if not size is None: self.fsize = format_number(size) + 'B'
+        if not size is None:
+            self.fsize = format_number(size) + 'B'
 
-        if now is None: now = time.time()
+        if now is None:
+            now = time.time()
         self.start_time = now
         self.re.start(size, now)
         self.last_amount_read = 0
@@ -130,7 +132,8 @@ class BaseMeter:
     def update(self, amount_read, now=None):
         # for a real gui, you probably want to override and put a call
         # to your mainloop iteration function here
-        if now is None: now = time.time()
+        if now is None:
+            now = time.time()
         if (not self.last_update_time or
             (now >= self.last_update_time + self.update_period)):
             self.re.update(amount_read, now)
@@ -142,7 +145,8 @@ class BaseMeter:
         pass
 
     def end(self, amount_read, now=None):
-        if now is None: now = time.time()
+        if now is None:
+            now = time.time()
         self.re.update(amount_read, now)
         self.last_amount_read = amount_read
         self.last_update_time = now
@@ -335,7 +339,8 @@ class RateEstimator:
         self.ave_rate = None
 
     def start(self, total=None, now=None):
-        if now is None: now = time.time()
+        if now is None:
+            now = time.time()
         self.total = total
         self.start_time = now
         self.last_update_time = now
@@ -343,7 +348,8 @@ class RateEstimator:
         self.ave_rate = None
 
     def update(self, amount_read, now=None):
-        if now is None: now = time.time()
+        if now is None:
+            now = time.time()
         # libcurl calls the progress callback when fetching headers
         # too, thus amount_read = 0 .. hdr_size .. 0 .. content_size.
         # Occasionally we miss the 2nd zero and report avg speed < 0.
@@ -378,15 +384,19 @@ class RateEstimator:
 
     def remaining_time(self):
         "estimated time remaining"
-        if not self.ave_rate or not self.total: return None
+        if not self.ave_rate or not self.total:
+            return None
         return (self.total - self.last_amount_read) / self.ave_rate
 
     def fraction_read(self):
         """the fraction of the data that has been read
         (can be None for unknown transfer size)"""
-        if self.total is None: return None
-        elif self.total == 0: return 1.0
-        else: return float(self.last_amount_read) / self.total
+        if self.total is None:
+            return None
+        elif self.total == 0:
+            return 1.0
+        else:
+            return float(self.last_amount_read) / self.total
 
     #########################################################################
     # support methods
@@ -399,7 +409,8 @@ class RateEstimator:
         As a general rule, the average will take on a completely new value
         after 'timescale' seconds."""
         epsilon = time_diff / timescale
-        if epsilon > 1: epsilon = 1.0
+        if epsilon > 1:
+            epsilon = 1.0
         return self._rolling_ave(time_diff, read_diff, last_ave, epsilon)
 
     def _rolling_ave(self, time_diff, read_diff, last_ave, epsilon):
@@ -413,8 +424,10 @@ class RateEstimator:
             recent_rate = read_diff / time_diff
         except ZeroDivisionError:
             recent_rate = None
-        if last_ave is None: return recent_rate
-        elif recent_rate is None: return last_ave
+        if last_ave is None:
+            return recent_rate
+        elif recent_rate is None:
+            return last_ave
 
         # at this point, both last_ave and recent_rate are numbers
         return epsilon * recent_rate + (1 - epsilon) * last_ave
@@ -432,17 +445,21 @@ class RateEstimator:
          63.6 -> 60.0
         """
 
-        if rt < 0: return 0.0
+        if rt < 0:
+            return 0.0
         shift = int(math.log(rt / start_time) / math.log(2))
         rt = int(rt)
-        if shift <= 0: return rt
+        if shift <= 0:
+            return rt
         return float(int(rt) >> shift << shift)
 
 
 def format_time(seconds, use_hours=0):
     if seconds is None or seconds < 0:
-        if use_hours: return '--:--:--'
-        else:         return '--:--'
+        if use_hours:
+            return '--:--:--'
+        else:
+            return '--:--'
     elif seconds == float('inf'):
         return 'Infinite'
     else:
@@ -469,8 +486,10 @@ def format_number(number, SI=0, space=' '):
                'Z', # zetta
                'Y'] # yotta
 
-    if SI: step = 1000.0
-    else: step = 1024.0
+    if SI:
+        step = 1000.0
+    else:
+        step = 1024.0
 
     thresh = 999
     depth = 0
