@@ -113,7 +113,7 @@ class BaseMeter:
         self.basename = basename
         self.text = text
 
-        #size = None #########  TESTING
+        # size = None #########  TESTING
         self.size = size
         if not size is None:
             self.fsize = format_number(size) + 'B'
@@ -242,7 +242,7 @@ class TextMeter(BaseMeter):
     def _do_update(self, amount_read, now=None):
         etime = self.re.elapsed_time()
         fread = format_number(amount_read)
-        #self.size = None
+        # self.size = None
         if self.text is not None:
             text = self.text
         else:
@@ -361,7 +361,7 @@ class RateEstimator:
             self.ave_rate = None
             return
 
-        #print 'times', now, self.last_update_time
+        # print 'times', now, self.last_update_time
         time_diff = now - self.last_update_time
         read_diff = amount_read - self.last_amount_read
         # First update, on reget is the file size
@@ -370,7 +370,7 @@ class RateEstimator:
             self.ave_rate = self._temporal_rolling_ave(\
                 time_diff, read_diff, self.ave_rate, self.timescale)
         self.last_amount_read = amount_read
-        #print 'results', time_diff, read_diff, self.ave_rate
+        # print 'results', time_diff, read_diff, self.ave_rate
 
     #####################################################################
     # result methods
