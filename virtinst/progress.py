@@ -29,7 +29,7 @@ def terminal_width(fd=1):
             return 80
         # Add minimum too?
         return ret
-    except:  # IOError
+    except IOError:
         return 80
 
 
