@@ -2123,7 +2123,7 @@ class vmmCreate(vmmGObjectUI):
         self.conn.schedule_priority_tick(pollvm=True)
         count = 0
         foundvm = None
-        while count < 100:
+        while count < 200:
             for vm in self.conn.list_vms():
                 if vm.get_uuid() == guest.uuid:
                     foundvm = vm
