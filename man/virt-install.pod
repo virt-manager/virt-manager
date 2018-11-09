@@ -472,21 +472,6 @@ file:
 
 --initrd-inject=/path/to/my.ks --extra-args "ks=file:/my.ks"
 
-=item B<--os-variant> OS_VARIANT
-
-Optimize the guest configuration for a specific operating system (ex.
-'fedora29', 'rhel7', 'win10'). While not required, specifying this
-options is HIGHLY RECOMMENDED, as it can greatly increase performance
-by specifying virtio among other guest tweaks.
-
-By default, virt-install will attempt to auto detect this value from
-the install media (currently only supported for URL installs). Autodetection
-can be disabled with the special value 'none'. Autodetection can be
-forced with the special value 'auto'.
-
-Use the command "osinfo-query os" to get the list of the accepted OS
-variants.
-
 =item B<--boot> BOOTOPTS
 
 Optionally specify the post-install VM boot configuration. This option allows
@@ -570,6 +555,29 @@ Use --idmap=? to see a list of all available sub options. Complete details at L<
 
 =back
 
+
+
+
+=head1 GUEST OS OPTIONS
+
+=over 4
+
+=item B<--os-variant> OS_VARIANT
+
+Optimize the guest configuration for a specific operating system (ex.
+'fedora29', 'rhel7', 'win10'). While not required, specifying this
+options is HIGHLY RECOMMENDED, as it can greatly increase performance
+by specifying virtio among other guest tweaks.
+
+By default, virt-install will attempt to auto detect this value from
+the install media (currently only supported for URL installs). Autodetection
+can be disabled with the special value 'none'. Autodetection can be
+forced with the special value 'auto'.
+
+Use the command "osinfo-query os" to get the list of the accepted OS
+variants.
+
+=back
 
 
 
