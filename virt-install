@@ -786,8 +786,8 @@ def parse_args():
 
     insg.add_argument("--os-type", dest="distro_type", help=argparse.SUPPRESS)
     insg.add_argument("--os-variant", dest="distro_variant",
-        help=_("The OS variant being installed guests, "
-               "e.g. 'fedora18', 'rhel6', 'winxp', etc."))
+        help=_("The OS variant being installed in the guest, "
+               "e.g. 'fedora29', 'rhel7', 'win10 etc."))
 
     cli.add_boot_options(insg)
     insg.add_argument("--init", help=argparse.SUPPRESS)
