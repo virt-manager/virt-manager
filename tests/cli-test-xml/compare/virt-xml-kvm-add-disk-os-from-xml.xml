@@ -1,0 +1,14 @@
+     <panic model="s390"/>
+     <panic model="pseries"/>
+     <panic model="hyperv"/>
++    <disk type="file" device="disk">
++      <driver name="qemu" type="qcow2"/>
++      <source file="/dev/default-pool/testvol1.img"/>
++      <target dev="vdaf" bus="virtio"/>
++    </disk>
+   </devices>
+   <seclabel type="dynamic" model="selinux" relabel="yes"/>
+   <seclabel type="static" model="dac" relabel="yes">
+
+Domain 'test-many-devices' defined successfully.
+Changes will take effect after the domain is fully powered off.

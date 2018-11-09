@@ -954,6 +954,13 @@ c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all", check_version="1.3.3")  # check_version=video primary= attribute
 c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name", check_version="1.2.11")  # check_version=video ram output change
 
+c = vixml.add_category("add/rm devices (KVM)", "--connect %(URI-KVM)s --print-diff --define")
+c.add_compare("test --add-device --disk %(EXISTIMG1)s", "kvm-add-disk-default")  # Guest OS is not known
+c.add_compare("test-many-devices --add-device --disk %(EXISTIMG1)s", "kvm-add-disk-os-from-xml")  # Guest OS information taken from the guest XML
+c.add_compare("test-many-devices --add-device --disk %(EXISTIMG1)s --os-variant winme", "kvm-add-disk-os-from-cmdline")  # Guest OS information provided on the command line
+c.add_compare("test --add-device --network default", "kvm-add-network-default")  # Guest OS is not known
+c.add_compare("test-many-devices --add-device --network default", "kvm-add-network-os-from-xml")  # Guest OS information taken from the guest XML
+c.add_compare("test-many-devices --add-device --network default --os-variant winme", "kvm-add-network-os-from-cmdline")  # Guest OS information provided on the command line
 
 
 

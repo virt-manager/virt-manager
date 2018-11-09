@@ -1,0 +1,13 @@
+   <on_reboot>restart</on_reboot>
+   <on_crash>destroy</on_crash>
+   <devices>
++    <disk type="file" device="disk">
++      <driver name="qemu" type="qcow2"/>
++      <source file="/dev/default-pool/testvol1.img"/>
++      <target dev="hda" bus="ide"/>
++    </disk>
+   </devices>
+ </domain>
+
+Domain 'test' defined successfully.
+Changes will take effect after the domain is fully powered off.
