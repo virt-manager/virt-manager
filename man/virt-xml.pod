@@ -160,6 +160,30 @@ Before defining or updating the domain, show the generated XML diff and interact
 
 
 
+=head1 GUEST OS OPTIONS
+
+=over 4
+
+=item B<--os-variant> OS_VARIANT
+
+Optimize the guest configuration for a specific operating system (ex.
+'fedora29', 'rhel7', 'win10'). While not required, specifying this
+options is HIGHLY RECOMMENDED, as it can greatly increase performance
+by specifying virtio among other guest tweaks.
+
+If the guest has been installed using virt-manager version 2.0.0 or newer,
+providing this information should not be necessary, as the OS variant will
+have been stored in the guest configuration during installation and virt-xml
+will retrieve it from there automatically.
+
+Use the command "osinfo-query os" to get the list of the accepted OS
+variants.
+
+=back
+
+
+
+
 =head1 XML OPTIONS
 
 =over 4
@@ -329,6 +353,12 @@ Add a spicevmc channel to the domain 'winxp', that will be available after the n
 Create a 10G qcow2 disk image and attach it to 'fedora18' for the next VM startup:
 
   # virt-xml fedora18 --add-device \
+    --disk /var/lib/libvirt/images/newimage.qcow2,format=qcow2,size=10
+
+Same as above, but ensure the disk is attached to the most appropriate bus
+for the guest OS by providing information about it on the command line:
+
+  # virt-xml fedora18 --os-variant fedora18 --add-device \
     --disk /var/lib/libvirt/images/newimage.qcow2,format=qcow2,size=10
 
 Hotunplug the disk vdb from the running domain 'rhel7':

@@ -360,6 +360,11 @@ def parse_args():
     outg.add_argument("--confirm", action="store_true",
         help=_("Require confirmation before saving any results."))
 
+    osg = parser.add_argument_group(_("OS options"))
+    osg.add_argument("--os-variant", dest="distro_variant",
+        help=_("The OS variant installed in the guest, "
+               "e.g. 'fedora29', 'rhel7', 'win10 etc."))
+
     g = parser.add_argument_group(_("XML options"))
     cli.add_disk_option(g, editexample=True)
     cli.add_net_option(g)
