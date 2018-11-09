@@ -56,6 +56,13 @@ def get_diff(origxml, newxml):
     return ret
 
 
+def set_distro_variant(options, guest):
+    if options.distro_variant is None:
+        return
+
+    guest.set_os_name(options.distro_variant)
+
+
 def get_domain_and_guest(conn, domstr):
     try:
         int(domstr)
@@ -175,6 +182,8 @@ def action_edit(guest, options, parserclass):
             fail(_("'--edit %s' doesn't make sense with --%s, "
                    "just use empty '--edit'") %
             (options.edit, parserclass.cli_arg_name))
+    if options.distro_variant is not None:
+        fail(_("--os-variant is not supported with --edit"))
 
     return cli.parse_option_strings(options, guest, inst, update=True)
 
@@ -182,6 +191,7 @@ def action_edit(guest, options, parserclass):
 def action_add_device(guest, options, parserclass):
     if not parserclass.prop_is_list(guest):
         fail(_("Cannot use --add-device with --%s") % parserclass.cli_arg_name)
+    set_distro_variant(options, guest)
     devs = cli.parse_option_strings(options, guest, None)
     devs = util.listify(devs)
     for dev in devs:
@@ -193,6 +203,8 @@ def action_remove_device(guest, options, parserclass):
     if not parserclass.prop_is_list(guest):
         fail(_("Cannot use --remove-device with --%s") %
              parserclass.cli_arg_name)
+    if options.distro_variant is not None:
+        fail(_("--os-variant is not supported with --remove-device"))
 
     devs = _find_objects_to_edit(guest, "remove-device",
         getattr(options, parserclass.cli_arg_name)[-1], parserclass)
@@ -207,6 +219,8 @@ def action_build_xml(conn, options, parserclass):
     if not parserclass.propname:
         fail(_("--build-xml not supported for --%s") %
              parserclass.cli_arg_name)
+    if options.distro_variant is not None:
+        fail(_("--os-variant is not supported with --build-xml"))
 
     guest = virtinst.Guest(conn)
     inst = parserclass.lookup_prop(guest)

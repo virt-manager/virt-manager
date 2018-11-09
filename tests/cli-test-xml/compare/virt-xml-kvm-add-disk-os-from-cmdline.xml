@@ -1,10 +1,19 @@
+   </description>
+   <metadata>
+     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+-      <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
++      <libosinfo:os id="http://microsoft.com/win/me"/>
+     </libosinfo:libosinfo>
+   </metadata>
+   <memory unit="KiB">409600</memory>
+@@
      <panic model="s390"/>
      <panic model="pseries"/>
      <panic model="hyperv"/>
 +    <disk type="file" device="disk">
 +      <driver name="qemu" type="qcow2"/>
 +      <source file="/dev/default-pool/testvol1.img"/>
-+      <target dev="vdaf" bus="virtio"/>
++      <target dev="hdd" bus="ide"/>
 +    </disk>
    </devices>
    <seclabel type="dynamic" model="selinux" relabel="yes"/>

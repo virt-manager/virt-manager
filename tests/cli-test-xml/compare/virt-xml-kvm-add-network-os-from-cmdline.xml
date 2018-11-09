@@ -1,10 +1,19 @@
+   </description>
+   <metadata>
+     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+-      <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
++      <libosinfo:os id="http://microsoft.com/win/me"/>
+     </libosinfo:libosinfo>
+   </metadata>
+   <memory unit="KiB">409600</memory>
+@@
      <panic model="s390"/>
      <panic model="pseries"/>
      <panic model="hyperv"/>
 +    <interface type="bridge">
 +      <source bridge="eth0"/>
 +      <mac address="00:11:22:33:44:55"/>
-+      <model type="virtio"/>
++      <model type="e1000"/>
 +    </interface>
    </devices>
    <seclabel type="dynamic" model="selinux" relabel="yes"/>
