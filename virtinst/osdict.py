@@ -197,7 +197,7 @@ class _OSDB(object):
             # Added 2018-10-02. Maybe remove aliases in a year
             logging.warning(
                 _("OS name '%s' is deprecated, using '%s' instead. "
-                  "This alias will be removed in the future."), (key, alias))
+                  "This alias will be removed in the future."), key, alias)
             key = alias
         return self._all_variants.get(key)
 
