@@ -250,7 +250,7 @@ class _OSDB(object):
         return oses[0]
 
     def latest_os_version(self, osdistro):
-        version = r"\.[0-9]+" if osdistro[-1].isdigit() else "[0-9]+"
+        version = r"\.[0-9]+(?!-unknown$)" if osdistro[-1].isdigit() else "[0-9]+(?!-unknown$)"
         return self.latest_regex(osdistro + version)
 
 
