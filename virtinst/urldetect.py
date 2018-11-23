@@ -415,7 +415,7 @@ class FedoraDistro(RedHatDistro):
         return cache.treeinfo_family_regex(famregex)
 
     def _detect_version(self):
-        latest_variant = OSDB.latest_fedora_version()
+        latest_variant = OSDB.latest_os_version("fedora")
 
         verstr = self.cache.treeinfo_version
         if not verstr:

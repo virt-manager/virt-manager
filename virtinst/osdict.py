@@ -208,11 +208,15 @@ class _OSDB(object):
             return None
 
         osname = ret[0].get_short_id()
-        if osname == "fedora-unknown":
-            osname = self.latest_fedora_version()
-            logging.debug("Detected location=%s as os=fedora-unknown. "
-                "Converting that to the latest fedora OS version=%s",
-                location, osname)
+        if osname.endswith("-unknown"):
+            # We want to get whatever the name is apart from unknown, instead
+            # of getting the distro, as some enterprise distros may have more
+            # than one "unknown" entry and we'd like to match the correct one.
+            osdistro = osname.split("-unknown")[0]
+            osname = self.latest_os_version(osdistro)
+            logging.debug("Detected location=%s as os=%s-unknown. "
+                "Converting that to the latest %s OS version=%s",
+                location, osdistro, osdistro, osname)
 
         return osname
 
@@ -236,8 +240,9 @@ class _OSDB(object):
             return None
         return oses[0]
 
-    def latest_fedora_version(self):
-        return self.latest_regex("fedora[0-9]+")
+    def latest_os_version(self, osdistro):
+        version = r"\.[0-9]+" if osdistro[-1].isdigit() else "[0-9]+"
+        return self.latest_regex(osdistro + version)
 
 
 #####################

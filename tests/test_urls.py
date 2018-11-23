@@ -126,7 +126,7 @@ def _sanitize_osdict_name(detectdistro):
     if detectdistro == "testsuite-fedora-rawhide":
         # Special value we use in the test suite to always return the latest
         # fedora when checking rawhide URL
-        return OSDB.latest_fedora_version()
+        return OSDB.latest_os_version("fedora")
 
     return detectdistro
 
