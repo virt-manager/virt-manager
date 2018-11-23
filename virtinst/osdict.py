@@ -238,6 +238,15 @@ class _OSDB(object):
         oses = [o.name for o in self.list_os() if re.match(regex, o.name)]
         if not oses:
             return None
+
+        # OpenSUSE's decision of having their versioning as 11.x, 12.x, 42.x,
+        # 15.x forces us to have this specific check for then.
+        # Knowing that 42 series was composed of 42.[1-3] and that the series
+        # will not have any more release, we can safely return the 4th element
+        # of the oses.
+        if regex.startswith("opensuse"):
+            return oses[3]
+
         return oses[0]
 
     def latest_os_version(self, osdistro):
