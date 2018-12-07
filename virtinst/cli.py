@@ -18,6 +18,7 @@ import subprocess
 import sys
 import traceback
 
+import argcomplete
 import libvirt
 
 from virtcli import CLIConfig
@@ -452,6 +453,44 @@ def get_console_cb(guest):
 def get_meter():
     quiet = (get_global_state().quiet or in_testsuite())
     return util.make_meter(quiet=quiet)
+
+
+###########################
+# bash completion helpers #
+###########################
+
+def _completer(prefix, **kwargs):
+    sub_options = []
+    for parserclass in VIRT_PARSERS:
+        if kwargs['action'].dest == parserclass.cli_arg_name:
+            # pylint: disable=protected-access
+            for arg in sorted(parserclass._virtargs, key=lambda p: p.cliname):
+                sub_options.append(arg.cliname + "=")
+    entered_options = prefix.split(",")
+    for option in entered_options:
+        pos = option.find("=")
+        if pos > 0 and option[: pos + 1] in sub_options:
+            sub_options.remove(option[: pos + 1])
+    return sub_options
+
+
+def _completer_validator(current_input, keyword_to_check_against):
+    entered_options = keyword_to_check_against.split(",")
+
+    # e.g. for: --disk <TAB><TAB>
+    if keyword_to_check_against == "":
+        return True
+    # e.g. for: --disk bu<TAB><TAB> or --disk bus=ide,<TAB><TAB>
+    #                               or --disk bus=ide,pa<TAB><TAB>
+    if (len(entered_options) >= 1 and "=" not in entered_options[-1]):
+        if entered_options[-1] == "":
+            return True
+        else:
+            return current_input.startswith(entered_options[-1])
+
+
+def autocomplete(parser):
+    argcomplete.autocomplete(parser, validator=_completer_validator)
 
 
 ###########################
