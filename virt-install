@@ -864,6 +864,8 @@ def parse_args():
     cli.add_misc_options(misc, prompt=True, printxml=True, printstep=True,
                          noreboot=True, dryrun=True, noautoconsole=True)
 
+    cli.autocomplete(parser)
+
     return parser.parse_args()
 
 
