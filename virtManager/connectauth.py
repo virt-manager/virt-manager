@@ -74,7 +74,7 @@ def _creds_dialog_main(creds, cbdata):
                          Gtk.STOCK_OK, Gtk.ResponseType.OK))
     dialog.set_resizable(False)
     labels = []
-    entrys = []
+    entries = []
 
     dialog.set_border_width(6)
     box = Gtk.Grid()
@@ -85,9 +85,9 @@ def _creds_dialog_main(creds, cbdata):
     box.set_margin_bottom(12)
 
     def _on_ent_activate(ent):
-        idx = entrys.index(ent)
-        if idx < len(entrys) - 1:
-            entrys[idx + 1].grab_focus()
+        idx = entries.index(ent)
+        if idx < len(entries) - 1:
+            entries[idx + 1].grab_focus()
         else:
             dialog.response(Gtk.ResponseType.OK)
 
@@ -115,10 +115,10 @@ def _creds_dialog_main(creds, cbdata):
             entry.set_visibility(False)
         entry.set_valign(Gtk.Align.START)
         entry.connect("activate", _on_ent_activate)
-        entrys.append(entry)
+        entries.append(entry)
 
         box.attach(labels[row], row, row, 1, 1)
-        box.attach(entrys[row], row + 1, row, 1, 1)
+        box.attach(entries[row], row + 1, row, 1, 1)
         row = row + 1
 
     dialog.get_child().add(box)
@@ -129,7 +129,7 @@ def _creds_dialog_main(creds, cbdata):
     if res == Gtk.ResponseType.OK:
         row = 0
         for cred in creds:
-            cred[4] = entrys[row].get_text()
+            cred[4] = entries[row].get_text()
             row = row + 1
         ret = 0
     else:
