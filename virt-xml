@@ -393,6 +393,8 @@ def parse_args():
     misc = parser.add_argument_group(_("Miscellaneous Options"))
     cli.add_misc_options(misc, prompt=False, printxml=False, dryrun=False)
 
+    cli.autocomplete(parser)
+
     return parser.parse_args()
 
 
