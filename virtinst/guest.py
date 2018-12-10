@@ -476,11 +476,10 @@ class Guest(XMLBuilder):
     def set_defaults(self, _guest):
         if not self.uuid:
             self.uuid = util.generate_uuid(self.conn)
-        if not self.vcpus:
-            self.vcpus = 1
 
         self.set_capabilities_defaults()
 
+        self._set_default_resources()
         self._set_default_machine()
         self._set_default_uefi()
 
@@ -510,6 +509,16 @@ class Guest(XMLBuilder):
     ########################
     # Private xml routines #
     ########################
+
+    def _set_default_resources(self):
+        res = self.osinfo.get_recommended_resources(self)
+
+        if not self.memory and res and res.get('ram') > 0:
+            self.memory = res['ram'] // 1024
+
+        if not self.vcpus:
+            self.vcpus = res.get('n-cpus') if res and res.get('n-cpus') > 0 else 1
+
 
     def _set_default_machine(self):
         if self.os.machine:
