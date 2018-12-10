@@ -524,19 +524,23 @@ def build_guest_instance(conn, options):
     if options.machine:
         guest.os.machine = options.machine
 
+    guest.set_capabilities_defaults()
+    installer = build_installer(options, guest)
+    if installer:
+        set_distro_variant(options, guest, installer)
+
+    if not options.disk:
+        res = guest.osinfo.get_recommended_resources(guest)
+        if res and res.get('storage') > 0:
+            options.disk = ['size=%d' % (res.get('storage') // (1024 ** 3))]
+
     cli.parse_option_strings(options, guest, None)
 
     # cli specific disk validation
     for disk in guest.devices.disk:
         cli.validate_disk(disk)
 
-    # Do this a bit early so we have os_type/arch checks for installer
-    # building, and distro variant detection
-    guest.set_capabilities_defaults()
-
-    installer = build_installer(options, guest)
     if installer:
-        set_distro_variant(options, guest, installer)
         installer.set_install_defaults(guest)
 
     validate_required_options(options, guest, installer)
