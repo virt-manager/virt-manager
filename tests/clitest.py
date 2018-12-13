@@ -720,7 +720,7 @@ c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-
 
 # s390x tests
 c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom", skip_check=OLD_OSINFO)
-c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.kvm_s390x_KVMIBM + " --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --watchdog diag288,action=reset --panic default", "s390x-cdrom-KVMIBM")
+c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.kvm_s390x_KVMIBM + " --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --watchdog diag288,action=reset --panic default --graphics vnc", "s390x-cdrom-KVMIBM")
 
 # qemu:///session tests
 c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", skip_check=OLD_OSINFO)

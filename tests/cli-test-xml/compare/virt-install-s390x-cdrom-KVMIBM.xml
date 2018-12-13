@@ -36,6 +36,10 @@
     <console type="pty">
       <target type="sclp"/>
     </console>
+    <graphics type="vnc" port="-1"/>
+    <video>
+      <model type="virtio"/>
+    </video>
     <watchdog model="diag288" action="reset"/>
     <panic model="s390"/>
   </devices>

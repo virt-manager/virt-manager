@@ -46,6 +46,8 @@ class DeviceVideo(Device):
             return "vga"
         if guest.os.is_arm_machvirt():
             return "virtio"
+        if guest.conn.is_qemu() and guest.os.is_s390x():
+            return "virtio"
         if guest.has_spice() and guest.os.is_x86():
             if guest.has_gl():
                 return "virtio"
