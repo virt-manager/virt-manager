@@ -29,6 +29,7 @@ from .netlist import vmmNetworkList
 from .oslist import vmmOSList
 from .snapshots import vmmSnapshotPage
 from .storagebrowse import vmmStorageBrowser
+from .vsockdetails import vmmVsockDetails
 
 
 # Parameters that can be edited in the details window
@@ -99,9 +100,12 @@ from .storagebrowse import vmmStorageBrowser
  EDIT_TPM_TYPE,
  EDIT_TPM_MODEL,
 
+ EDIT_VSOCK_AUTO,
+ EDIT_VSOCK_CID,
+
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 56)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 58)
 
 
 # Columns in hw list model
@@ -133,7 +137,8 @@ from .storagebrowse import vmmStorageBrowser
  HW_LIST_TYPE_REDIRDEV,
  HW_LIST_TYPE_TPM,
  HW_LIST_TYPE_RNG,
- HW_LIST_TYPE_PANIC) = range(22)
+ HW_LIST_TYPE_PANIC,
+ HW_LIST_TYPE_VSOCK) = range(23)
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
@@ -141,7 +146,7 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_WATCHDOG, HW_LIST_TYPE_CONTROLLER,
                 HW_LIST_TYPE_FILESYSTEM, HW_LIST_TYPE_SMARTCARD,
                 HW_LIST_TYPE_REDIRDEV, HW_LIST_TYPE_TPM,
-                HW_LIST_TYPE_RNG, HW_LIST_TYPE_PANIC]
+                HW_LIST_TYPE_RNG, HW_LIST_TYPE_PANIC, HW_LIST_TYPE_VSOCK]
 
 # Boot device columns
 (BOOT_KEY,
@@ -264,6 +269,7 @@ def _label_for_device(dev):
     devmap = {
         "panic": _("Panic Notifier"),
         "smartcard": _("Smartcard"),
+        "vsock": _("Virtio VSOCK"),
         "watchdog": _("Watchdog"),
     }
     return devmap[devtype]
@@ -312,6 +318,7 @@ def _icon_for_device(dev):
         "filesystem": "folder",
         "controller": "device_pci",
         "panic": "system-run",
+        "vsock": "network-idle",
     }
     return typemap[devtype]
 
@@ -451,6 +458,13 @@ class vmmDetails(vmmGObjectUI):
             lambda x: self.enable_apply(x, EDIT_NET_SOURCE))
         self.netlist.connect("changed-vport",
             lambda x: self.enable_apply(x, EDIT_NET_VPORT))
+
+        self.vsockdetails = vmmVsockDetails(self.vm, self.builder, self.topwin)
+        self.widget("vsock-align").add(self.vsockdetails.top_box)
+        self.vsockdetails.connect("changed-auto-cid",
+            lambda *x: self.enable_apply(x, EDIT_VSOCK_AUTO))
+        self.vsockdetails.connect("changed-cid",
+            lambda *x: self.enable_apply(x, EDIT_VSOCK_CID))
 
         # Set default window size
         w, h = self.vm.get_details_window_size()
@@ -1259,6 +1273,8 @@ class vmmDetails(vmmGObjectUI):
                 self.refresh_rng_page(dev)
             elif pagetype == HW_LIST_TYPE_PANIC:
                 self.refresh_panic_page(dev)
+            elif pagetype == HW_LIST_TYPE_VSOCK:
+                self.refresh_vsock_page(dev)
             else:
                 pagetype = -1
         except Exception as e:
@@ -1916,6 +1932,8 @@ class vmmDetails(vmmGObjectUI):
                 ret = self.config_hostdev_apply(key)
             elif pagetype is HW_LIST_TYPE_TPM:
                 ret = self.config_tpm_apply(key)
+            elif pagetype is HW_LIST_TYPE_VSOCK:
+                ret = self.config_vsock_apply(key)
             else:
                 ret = False
         except Exception as e:
@@ -2324,6 +2342,19 @@ class vmmDetails(vmmGObjectUI):
                                           kwargs, self.vm, self.err,
                                           devobj=devobj)
 
+    def config_vsock_apply(self, devobj):
+        auto_cid, cid = self.vsockdetails.get_values()
+
+        kwargs = {}
+
+        if self.edited(EDIT_VSOCK_AUTO):
+            kwargs["auto_cid"] = auto_cid
+        if self.edited(EDIT_VSOCK_CID):
+            kwargs["cid"] = cid
+
+        return vmmAddHardware.change_config_helper(self.vm.define_vsock,
+                                          kwargs, self.vm, self.err,
+                                          devobj=devobj)
 
     # Device removal
     def remove_device(self, devobj):
@@ -2820,6 +2851,9 @@ class vmmDetails(vmmGObjectUI):
         self.widget("rng-type").set_text(dev.get_pretty_type(dev.type))
         self.widget("rng-device").set_text(dev.device or "")
 
+    def refresh_vsock_page(self, dev):
+        self.vsockdetails.set_dev(dev)
+
     def refresh_char_page(self, chardev):
         show_target_type = not (chardev.DEVICE_TYPE in
                                 ["serial", "parallel"])
@@ -3201,6 +3235,8 @@ class vmmDetails(vmmGObjectUI):
             update_hwlist(HW_LIST_TYPE_RNG, dev)
         for dev in self.vm.xmlobj.devices.panic:
             update_hwlist(HW_LIST_TYPE_PANIC, dev)
+        for dev in self.vm.xmlobj.devices.vsock:
+            update_hwlist(HW_LIST_TYPE_VSOCK, dev)
 
         devs = list(range(len(hw_list_model)))
         devs.reverse()

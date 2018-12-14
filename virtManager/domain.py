@@ -49,6 +49,7 @@ def compare_device(origdev, newdev, idx):
         "tpm":           ["type", "xmlindex"],
         "rng":           ["type", "xmlindex"],
         "panic":         ["type", "xmlindex"],
+        "vsock":         ["xmlindex"],
     }
 
     if id(origdev) == id(newdev):
@@ -953,6 +954,23 @@ class vmmDomain(vmmLibvirtObject):
 
         if model != _SENTINEL:
             editdev.model = model
+
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self._redefine_xmlobj(xmlobj)
+
+    def define_vsock(self, devobj, do_hotplug,
+            auto_cid=_SENTINEL, cid=_SENTINEL):
+        xmlobj = self._make_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        if auto_cid != _SENTINEL:
+            editdev.auto_cid = auto_cid
+        if cid != _SENTINEL:
+            editdev.cid = cid
 
         if do_hotplug:
             self.hotplug(device=editdev)

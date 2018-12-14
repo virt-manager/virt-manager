@@ -3665,6 +3665,8 @@
                                                       <object class="GtkCheckButton" id="disk-pr-checkbox">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
+                                                        <property name="receives_default">False</property>
+                                                        <property name="draw_indicator">False</property>
                                                         <signal name="toggled" handler="on_disk_pr_checkbox_toggled" swapped="no"/>
                                                       </object>
                                                       <packing>
@@ -5853,6 +5855,52 @@
                           </object>
                           <packing>
                             <property name="position">21</property>
+                            <property name="tab_fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkFrame" id="frame25">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">none</property>
+                            <child>
+                              <object class="GtkAlignment" id="vsock-align">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="top_padding">3</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label67">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label">&lt;b&gt;Virtio VSOCK&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="frame25-atkobject">
+                                <property name="AtkObject::accessible-name">vsock-tab</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">22</property>
+                          </packing>
+                        </child>
+                        <child type="tab">
+                          <object class="GtkLabel" id="label95">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">vsock</property>
+                          </object>
+                          <packing>
+                            <property name="position">22</property>
                             <property name="tab_fill">False</property>
                           </packing>
                         </child>
