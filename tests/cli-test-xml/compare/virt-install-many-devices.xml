@@ -413,6 +413,9 @@
     <panic model="isa">
       <address iobase="507" type="isa"/>
     </panic>
+    <vsock model="virtio">
+      <cid address="17"/>
+    </vsock>
   </devices>
   <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
     <qemu:arg value="-display"/>

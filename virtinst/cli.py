@@ -717,6 +717,10 @@ def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--memdev", action="append",
                     help=_("Configure a guest memory device. Ex:\n"
                            "--memdev dimm,target_size=1024"))
+    devg.add_argument("--vsock", action="append",
+                    help=_("Configure guest vsock sockets. Ex:\n"
+                           "--vsock auto_cid=yes\n"
+                           "--vsock cid=7"))
 
 
 def add_guest_xml_options(geng):
@@ -2638,6 +2642,23 @@ _register_virt_parser(ParserPanic)
 ParserPanic.add_arg(None, "model", cb=ParserPanic.set_model_cb,
                     ignore_default=True)
 ParserPanic.add_arg("iobase", "iobase")
+
+
+###################
+# --vsock parsing #
+###################
+
+class ParserVsock(VirtCLIParser):
+    cli_arg_name = "vsock"
+    propname = "devices.vsock"
+    remove_first = "model"
+    stub_none = False
+
+_register_virt_parser(ParserVsock)
+_add_device_address_args(ParserVsock)
+ParserVsock.add_arg("model", "model")
+ParserVsock.add_arg("auto_cid", "auto_cid")
+ParserVsock.add_arg("cid", "cid")
 
 
 ######################################################

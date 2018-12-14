@@ -22,6 +22,7 @@ from .redirdev import DeviceRedirdev
 from .rng import DeviceRng
 from .tpm import DeviceTpm
 from .video import DeviceVideo
+from .vsock import DeviceVsock
 from .watchdog import DeviceWatchdog
 
 

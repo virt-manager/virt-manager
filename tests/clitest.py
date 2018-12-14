@@ -545,6 +545,8 @@ c.add_compare(""" \
 \
 --panic iobase=507 \
 \
+--vsock cid=17 \
+\
 --qemu-commandline env=DISPLAY=:0.1 \
 --qemu-commandline="-display gtk,gl=on" \
 --qemu-commandline="-device vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c" \

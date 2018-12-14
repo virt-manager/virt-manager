@@ -29,7 +29,7 @@ class _DomainDevices(XMLBuilder):
             'smartcard', 'serial', 'parallel', 'console', 'channel',
             'input', 'tpm', 'graphics', 'sound', 'video', 'hostdev',
             'redirdev', 'watchdog', 'memballoon', 'rng', 'panic',
-            'memory']
+            'memory', 'vsock']
 
 
     disk = XMLChildProperty(DeviceDisk)
@@ -53,6 +53,7 @@ class _DomainDevices(XMLBuilder):
     rng = XMLChildProperty(DeviceRng)
     panic = XMLChildProperty(DevicePanic)
     memory = XMLChildProperty(DeviceMemory)
+    vsock = XMLChildProperty(DeviceVsock)
 
     def get_all(self):
         retlist = []
