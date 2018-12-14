@@ -14,7 +14,7 @@ from virtinst import (DeviceChannel, DeviceConsole,
         DeviceController, DeviceDisk, DeviceGraphics, DeviceHostdev,
         DeviceInput, DeviceInterface, DevicePanic, DeviceParallel,
         DeviceRedirdev, DeviceRng, DeviceSerial, DeviceSmartcard,
-        DeviceSound, DeviceTpm, DeviceVideo, DeviceWatchdog)
+        DeviceSound, DeviceTpm, DeviceVideo, DeviceVsock, DeviceWatchdog)
 
 from . import uiutil
 from .fsdetails import vmmFSDetails
@@ -24,6 +24,7 @@ from .asyncjob import vmmAsyncJob
 from .storagebrowse import vmmStorageBrowser
 from .baseclass import vmmGObjectUI
 from .addstorage import vmmAddStorage
+from .vsockdetails import vmmVsockDetails
 
 (PAGE_ERROR,
  PAGE_DISK,
@@ -41,7 +42,8 @@ from .addstorage import vmmAddStorage
  PAGE_USBREDIR,
  PAGE_TPM,
  PAGE_RNG,
- PAGE_PANIC) = range(0, 17)
+ PAGE_PANIC,
+ PAGE_VSOCK) = range(18)
 
 
 def _build_combo(combo, values, default_value=None, sort=True):
@@ -91,6 +93,9 @@ class vmmAddHardware(vmmGObjectUI):
         self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
         self.widget("storage-align").add(self.addstorage.top_box)
         self.addstorage.connect("browse-clicked", self._browse_storage_cb)
+
+        self._vsockdetails = vmmVsockDetails(self.vm, self.builder, self.topwin)
+        self.widget("vsock-align").add(self._vsockdetails.top_box)
 
         self.builder.connect_signals({
             "on_create_cancel_clicked": self.close,
@@ -151,6 +156,8 @@ class vmmAddHardware(vmmGObjectUI):
         self._netlist = None
         self.addstorage.cleanup()
         self.addstorage = None
+        self._vsockdetails.cleanup()
+        self._vsockdetails = None
 
     def is_visible(self):
         return self.topwin.get_visible()
@@ -287,6 +294,9 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option(_("Panic Notifier"), "system-run", PAGE_PANIC,
             bool(DevicePanic.get_models(self.vm.get_xmlobj().os)),
             _("Not supported for this hypervisor/libvirt/arch combination."))
+        add_hw_option(_("Virtio VSOCK"), "network-idle", PAGE_VSOCK,
+            self.vm.is_hvm(),
+            _("Not supported for this hypervisor/libvirt/arch combination."))
 
 
     def _reset_state(self):
@@ -337,6 +347,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._fsdetails.reset_state()
         self.widget("tpm-device-path").set_text("/dev/tpm0")
         self._gfxdetails.reset_state()
+        self._vsockdetails.reset_state()
 
 
     @staticmethod
@@ -803,6 +814,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("Random Number Generator")
         if page == PAGE_PANIC:
             return _("Panic Notifier")
+        if page == PAGE_VSOCK:
+            return _("VM Sockets")
 
         if page == PAGE_CHAR:
             devclass = self._get_char_class()(self.conn.get_backend())
@@ -1140,6 +1153,8 @@ class vmmAddHardware(vmmGObjectUI):
             ret = self._validate_page_rng()
         elif page_num == PAGE_PANIC:
             ret = self._validate_page_panic()
+        elif page_num == PAGE_VSOCK:
+            ret = self._validate_page_vsock()
 
         if ret is not False and self._dev:
             self._dev.set_defaults(self.vm.get_xmlobj())
@@ -1410,6 +1425,12 @@ class vmmAddHardware(vmmGObjectUI):
         model = uiutil.get_list_selection(self.widget("panic-model"))
         self._dev = DevicePanic(self.conn.get_backend())
         self._dev.model = model
+
+    def _validate_page_vsock(self):
+        auto_cid, cid = self._vsockdetails.get_values()
+        self._dev = DeviceVsock(self.conn.get_backend())
+        self._dev.auto_cid = auto_cid
+        self._dev.cid = cid
 
     def _validate_page_controller(self):
         controller_type = uiutil.get_list_selection(

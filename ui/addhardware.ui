@@ -346,6 +346,8 @@
                                       <object class="GtkCheckButton" id="disk-pr-checkbox">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="draw_indicator">False</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -1566,6 +1568,34 @@
                           </object>
                           <packing>
                             <property name="position">16</property>
+                            <property name="tab_fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="vsock-align">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="vsock-align-atkobject">
+                                <property name="AtkObject::accessible-name">vsock-tab</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">17</property>
+                          </packing>
+                        </child>
+                        <child type="tab">
+                          <object class="GtkLabel" id="vsock">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">vsock</property>
+                          </object>
+                          <packing>
+                            <property name="position">17</property>
                             <property name="tab_fill">False</property>
                           </packing>
                         </child>
