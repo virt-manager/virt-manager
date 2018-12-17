@@ -401,7 +401,7 @@ cache.mode=emulate,cache.level=3 \
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444 \
 --boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3 \
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10 \
---security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes \
+--security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes,baselabel=baselabel \
 --numatune 1-3,4,mode=strict \
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40 \
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200 \

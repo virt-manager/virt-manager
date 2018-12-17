@@ -1705,7 +1705,7 @@ ParserSecurity.add_arg("type", "type")
 ParserSecurity.add_arg("model", "model")
 ParserSecurity.add_arg("relabel", "relabel", is_onoff=True)
 ParserSecurity.add_arg("label", "label", can_comma=True)
-ParserSecurity.add_arg("baselabel", "label", can_comma=True)
+ParserSecurity.add_arg("baselabel", "baselabel", can_comma=True)
 
 
 ######################
