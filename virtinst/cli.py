@@ -1610,7 +1610,7 @@ class ParserCPU(VirtCLIParser):
                     self.optdict[policy] = []
                 self.optdict[policy].append(key[1:])
 
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 
 ParserCPU.add_arg(None, "model", cb=ParserCPU.set_model_cb)
@@ -1694,7 +1694,7 @@ class ParserVCPU(VirtCLIParser):
         set_from_top = ("maxvcpus" not in self.optdict and
                         "vcpus" not in self.optdict)
 
-        ret = VirtCLIParser._parse(self, inst)
+        ret = super()._parse(inst)
 
         if set_from_top:
             inst.vcpus = inst.cpu.vcpus_from_topology()
@@ -1756,7 +1756,7 @@ class ParserBoot(VirtCLIParser):
         if boot_order:
             inst.bootorder = boot_order
 
-        VirtCLIParser._parse(self, inst)
+        super()._parse(inst)
 
 
 # UEFI depends on these bits, so set them first
@@ -1937,7 +1937,7 @@ class ParserSysinfo(VirtCLIParser):
             # libvirt errors. User args can still override this though
             self.optdict['type'] = 'smbios'
 
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 # <sysinfo type='smbios'>
 ParserSysinfo.add_arg("type", "type",
@@ -1997,7 +1997,7 @@ class ParserQemuCLI(VirtCLIParser):
             self.optdict["clearxml"] = self.optstr.split("=", 1)[1]
         else:
             self.optdict["args"] = self.optstr
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 
 ParserQemuCLI.add_arg(None, "args", cb=ParserQemuCLI.args_cb, can_comma=True)
@@ -2132,7 +2132,7 @@ class ParserDisk(VirtCLIParser):
             logging.debug("Parsed --disk volume as: pool=%s vol=%s",
                           poolname, volname)
 
-        VirtCLIParser._parse(self, inst)
+        super()._parse(inst)
 
         # Generate and fill in the disk source info
         newvolname = None
@@ -2282,7 +2282,7 @@ class ParserNetwork(VirtCLIParser):
                 self.optdict["type"] = DeviceInterface.TYPE_BRIDGE
                 self.optdict["source"] = self.optdict.pop("bridge")
 
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 
 _add_device_address_args(ParserNetwork)
@@ -2376,7 +2376,7 @@ class ParserGraphics(VirtCLIParser):
             self.guest.skip_default_graphics = True
             return
 
-        ret = VirtCLIParser._parse(self, inst)
+        ret = super()._parse(inst)
 
         if inst.conn.is_qemu() and inst.gl:
             if inst.type != "spice":
@@ -2440,7 +2440,7 @@ class ParserController(VirtCLIParser):
             return DeviceController.get_usb2_controllers(inst.conn)
         elif self.optstr == "usb3":
             return DeviceController.get_usb3_controller(inst.conn, self.guest)
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 
 _add_device_address_args(ParserController)
@@ -2497,7 +2497,7 @@ class ParserRedir(VirtCLIParser):
         if self.optstr == "none":
             self.guest.skip_default_usbredir = True
             return
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 _add_device_address_args(ParserRedir)
 ParserRedir.add_arg("bus", "bus", ignore_default=True)
@@ -2518,7 +2518,7 @@ class ParserTPM(VirtCLIParser):
     def _parse(self, inst):
         if (self.optdict.get("type", "").startswith("/")):
             self.optdict["path"] = self.optdict.pop("type")
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 _add_device_address_args(ParserTPM)
 ParserTPM.add_arg("type", "type")
@@ -2575,7 +2575,7 @@ class ParserRNG(VirtCLIParser):
             self.optdict["device"] = self.optdict.pop("type")
             self.optdict["type"] = "random"
 
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 
 _add_device_address_args(ParserRNG)
@@ -2667,7 +2667,7 @@ class ParserPanic(VirtCLIParser):
         if (len(self.optstr.split(",")) == 1 and
                 not self.optstr.startswith("model=")):
             self.compat_mode = True
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 ParserPanic.add_arg(None, "model", cb=ParserPanic.set_model_cb,
                     ignore_default=True)
@@ -2730,7 +2730,7 @@ class _ParserChar(VirtCLIParser):
             self.guest.skip_default_channel = True
             return
 
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
 
 _add_device_address_args(_ParserChar)
@@ -2796,7 +2796,7 @@ class ParserVideo(VirtCLIParser):
     remove_first = "model"
 
     def _parse(self, inst):
-        ret = VirtCLIParser._parse(self, inst)
+        ret = super()._parse(inst)
 
         if inst.conn.is_qemu() and inst.accel3d:
             if inst.model != "virtio":
@@ -2833,7 +2833,7 @@ class ParserSound(VirtCLIParser):
         if self.optstr == "none":
             self.guest.skip_default_sound = True
             return
-        return VirtCLIParser._parse(self, inst)
+        return super()._parse(inst)
 
     def codec_find_inst_cb(self, *args, **kwargs):
         cliarg = "codec"  # codec[0-9]*
