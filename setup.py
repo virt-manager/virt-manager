@@ -7,7 +7,6 @@
 import glob
 import fnmatch
 import os
-import subprocess
 import sys
 import unittest
 
@@ -39,12 +38,6 @@ _desktop_files = [
 _appdata_files = [
     ("share/appdata", ["data/virt-manager.appdata.xml.in"]),
 ]
-
-
-def bash_completion_dir():
-    (sts, output) = subprocess.getstatusoutput(
-        'pkg-config --variable=completionsdir bash-completion')
-    return output if not sts and output else '/etc/bash_completion.d'
 
 
 def _generate_potfiles_in():
@@ -228,20 +221,23 @@ class my_build(distutils.command.build.build):
 
     def _make_bash_completion_files(self):
         scripts = ["virt-install", "virt-clone", "virt-convert", "virt-xml"]
-        path = "data/bash-completion"
-        for script in scripts:
-            print("Generating %s/%s" % (path, script))
-            ret = os.system('cp -f '
-                            '%s/virtmanager %s/%s' % (path, path, script))
-            if ret != 0:
-                raise RuntimeError("Copying template file "
-                                   "%s/virtmanager to %s/%s' failed."
-                                   % (path, path, script))
+        srcfile = "data/bash-completion.sh.in"
+        builddir = "build/bash-completion/"
+        if not os.path.exists(builddir):
+            os.makedirs(builddir)
 
-            ret = os.system('sed -i s/virtmanager/%s/ %s/%s'
-                            % (script, path, script))
-            if ret != 0:
-                raise RuntimeError("Updating %s/%s' failed." % (path, script))
+        instpaths = []
+        for script in scripts:
+            genfile = os.path.join(builddir, script)
+            print("Generating %s" % genfile)
+            src = open(srcfile, "r")
+            dst = open(genfile, "w")
+            dst.write(src.read().replace("::SCRIPTNAME::", script))
+            dst.close()
+            instpaths.append(genfile)
+
+        bashdir = "share/bash-completion/completions/"
+        self.distribution.data_files.append((bashdir, instpaths))
 
 
     def run(self):
@@ -690,8 +686,6 @@ distutils.core.setup(
         ("share/virt-manager/virtinst/devices", glob.glob("virtinst/devices/*.py")),
         ("share/virt-manager/virtinst/domain", glob.glob("virtinst/domain/*.py")),
         ("share/virt-manager/virtconv", glob.glob("virtconv/*.py")),
-
-        (bash_completion_dir(), glob.glob("data/bash-completion/virt-*")),
     ],
 
     cmdclass={
