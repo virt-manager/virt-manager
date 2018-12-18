@@ -89,24 +89,32 @@ class Command(object):
         self.compare_file = None
         self.input_file = None
 
+        self.need_conn = True
         self.skip_check = None
         self.check_version = None
         self.grep = None
+        self.nogrep = None
 
         app, opts = self.cmdstr.split(" ", 1)
         self.app = app
         self.argv = [os.path.abspath(app)] + shlex.split(opts)
+        self.env = None
 
     def _launch_command(self, conn):
         logging.debug(self.cmdstr)
 
         app = self.argv[0]
 
+        oldenv = None
         oldstdout = sys.stdout
         oldstderr = sys.stderr
         oldstdin = sys.stdin
         oldargv = sys.argv
         try:
+            if self.env:
+                oldenv = os.environ.copy()
+                os.environ.update(self.env)
+
             out = io.StringIO()
 
             sys.stdout = out
@@ -142,6 +150,8 @@ class Command(object):
             sys.stderr = oldstderr
             sys.stdin = oldstdin
             sys.argv = oldargv
+            if oldenv:
+                os.environ = oldenv
 
 
     def _get_output(self, conn):
@@ -181,7 +191,7 @@ class Command(object):
                     conn = utils.URIs.openconn(self.argv[idx + 1])
                     break
 
-            if not conn:
+            if not conn and self.need_conn:
                 raise RuntimeError("couldn't parse URI from command %s" %
                                    self.argv)
 
@@ -205,6 +215,9 @@ class Command(object):
 
             if self.grep and self.grep not in output:
                 _raise_error("Didn't find grep=%s" % self.grep)
+            if self.nogrep and self.nogrep in output:
+                _raise_error("Found grep=%s when we shouldn't see it" %
+                        self.nogrep)
 
             if self.compare_file:
                 if self._check_support(tests, conn, self.check_version,
@@ -848,7 +861,6 @@ c.add_invalid("--pxe --noautoconsole --wait 1", grep="Installation has exceeded 
 c.add_valid("--pxe --nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling
 
 
-
 ##################
 # virt-xml tests #
 ##################
@@ -1033,6 +1045,39 @@ c.add_compare(_VMX_IMG + " --disk-format qcow2 --print-xml", "vmx-compare")
 c.add_compare(_OVF_IMG + " --disk-format none --destination /tmp --print-xml", "ovf-compare")
 
 
+#################################
+# argparse/autocomplete testing #
+#################################
+
+ARGCOMPLETE_CMDS = []
+
+
+def _add_argcomplete_cmd(line, grep, nogrep=None):
+    env = {
+        "_ARGCOMPLETE": "1",
+        "COMP_TYPE": "9",
+        "COMP_POINT": str(len(line)),
+        "COMP_LINE": line,
+        "_ARGCOMPLETE_COMP_WORDBREAKS": "\"'><;|&(:",
+    }
+    cmd = Command(line)
+    cmd.grep = grep
+    if nogrep:
+        cmd.nogrep = nogrep
+    cmd.env = env
+    cmd.need_conn = False
+    ARGCOMPLETE_CMDS.append(cmd)
+
+_add_argcomplete_cmd("virt-install --di", "--disk")
+_add_argcomplete_cmd("virt-install --disk ", "driver.copy_on_read=")  # will list all --disk subprops
+_add_argcomplete_cmd("virt-install --disk a", "address.base")
+_add_argcomplete_cmd("virt-install --disk address.u", "address.unit")
+_add_argcomplete_cmd("virt-install --disk address.unit=foo,sg", "sgio")
+_add_argcomplete_cmd("virt-install --test-stub", None,
+        nogrep="--test-stub-command")
+_add_argcomplete_cmd("virt-clone --preserve", "--preserve-data")
+_add_argcomplete_cmd("virt-xml --sound mode", "model")
+_add_argcomplete_cmd("virt-convert --dest", "--destination")
 
 
 #########################
@@ -1087,6 +1132,7 @@ _cmdlist += vinst.cmds
 _cmdlist += vclon.cmds
 _cmdlist += vconv.cmds
 _cmdlist += vixml.cmds
+_cmdlist += ARGCOMPLETE_CMDS
 
 # Generate numbered names like testCLI%d
 for _cmd in _cmdlist:

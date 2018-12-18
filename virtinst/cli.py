@@ -490,7 +490,20 @@ def _completer_validator(current_input, keyword_to_check_against):
 
 
 def autocomplete(parser):
-    argcomplete.autocomplete(parser, validator=_completer_validator)
+    kwargs = {"validator": _completer_validator}
+    testing_argcomplete = in_testsuite() and "_ARGCOMPLETE" in os.environ
+    if testing_argcomplete:
+        import io
+        kwargs["output_stream"] = io.BytesIO()
+        kwargs["exit_method"] = sys.exit
+
+    try:
+        argcomplete.autocomplete(parser, **kwargs)
+    except SystemExit:
+        if testing_argcomplete:
+            output = kwargs["output_stream"].getvalue().decode("utf-8")
+            print(output)
+        raise
 
 
 ###########################
