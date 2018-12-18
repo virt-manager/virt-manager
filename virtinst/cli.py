@@ -64,6 +64,9 @@ def _reset_global_state():
     _globalstate = _GlobalState()
 
 
+VIRT_PARSERS = []
+
+
 ####################
 # CLI init helpers #
 ####################
@@ -597,6 +600,7 @@ def add_misc_options(grp, prompt=False, replace=False,
 
 
 def add_metadata_option(grp):
+    ParserMetadata.register()
     grp.add_argument("--metadata", action="append",
         help=_("Configure guest metadata. Ex:\n"
         "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -604,6 +608,7 @@ def add_metadata_option(grp):
 
 
 def add_memory_option(grp, backcompat=False):
+    ParserMemory.register()
     grp.add_argument("--memory", action="append",
         help=_("Configure guest memory allocation. Ex:\n"
                "--memory 1024 (in MiB)\n"
@@ -616,6 +621,9 @@ def add_memory_option(grp, backcompat=False):
 
 
 def vcpu_cli_options(grp, backcompat=True, editexample=False):
+    # The order of the parser registration is important here!
+    ParserCPU.register()
+    ParserVCPU.register()
     grp.add_argument("--vcpus", action="append",
         help=_("Number of vcpus to configure for your guest. Ex:\n"
                "--vcpus 5\n"
@@ -637,6 +645,7 @@ def vcpu_cli_options(grp, backcompat=True, editexample=False):
 
 
 def add_gfx_option(devg):
+    ParserGraphics.register()
     devg.add_argument("--graphics", action="append",
       help=_("Configure guest display settings. Ex:\n"
              "--graphics vnc\n"
@@ -646,6 +655,7 @@ def add_gfx_option(devg):
 
 
 def add_net_option(devg):
+    ParserNetwork.register()
     devg.add_argument("-w", "--network", action="append",
       help=_("Configure a guest network interface. Ex:\n"
              "--network bridge=mybr0\n"
@@ -656,35 +666,44 @@ def add_net_option(devg):
 
 
 def add_device_options(devg, sound_back_compat=False):
+    ParserController.register()
     devg.add_argument("--controller", action="append",
         help=_("Configure a guest controller device. Ex:\n"
                "--controller type=usb,model=qemu-xhci\n"
                "--controller virtio-scsi\n"))
+    ParserInput.register()
     devg.add_argument("--input", action="append",
         help=_("Configure a guest input device. Ex:\n"
                "--input tablet\n"
                "--input keyboard,bus=usb"))
+    ParserSerial.register()
     devg.add_argument("--serial", action="append",
                     help=_("Configure a guest serial device"))
+    ParserParallel.register()
     devg.add_argument("--parallel", action="append",
                     help=_("Configure a guest parallel device"))
+    ParserChannel.register()
     devg.add_argument("--channel", action="append",
                     help=_("Configure a guest communication channel"))
+    ParserConsole.register()
     devg.add_argument("--console", action="append",
                     help=_("Configure a text console connection between "
                            "the guest and host"))
+    ParserHostdev.register()
     devg.add_argument("--hostdev", action="append",
                     help=_("Configure physical USB/PCI/etc host devices "
                            "to be shared with the guest"))
+    # Back compat name
+    devg.add_argument("--host-device", action="append", dest="hostdev",
+                    help=argparse.SUPPRESS)
+
+    ParserFilesystem.register()
     devg.add_argument("--filesystem", action="append",
         help=_("Pass host directory to the guest. Ex: \n"
                "--filesystem /my/source/dir,/dir/in/guest\n"
                "--filesystem template_name,/,type=template"))
 
-    # Back compat name
-    devg.add_argument("--host-device", action="append", dest="hostdev",
-                    help=argparse.SUPPRESS)
-
+    ParserSound.register()
     # --sound used to be a boolean option, hence the nargs handling
     sound_kwargs = {
         "action": "append",
@@ -697,31 +716,41 @@ def add_device_options(devg, sound_back_compat=False):
         devg.add_argument("--soundhw", action="append", dest="sound",
             help=argparse.SUPPRESS)
 
+    ParserWatchdog.register()
     devg.add_argument("--watchdog", action="append",
                     help=_("Configure a guest watchdog device"))
+    ParserVideo.register()
     devg.add_argument("--video", action="append",
                     help=_("Configure guest video hardware."))
+    ParserSmartcard.register()
     devg.add_argument("--smartcard", action="append",
                     help=_("Configure a guest smartcard device. Ex:\n"
                            "--smartcard mode=passthrough"))
+    ParserRedir.register()
     devg.add_argument("--redirdev", action="append",
                     help=_("Configure a guest redirection device. Ex:\n"
                            "--redirdev usb,type=tcp,server=192.168.1.1:4000"))
+    ParserMemballoon.register()
     devg.add_argument("--memballoon", action="append",
                     help=_("Configure a guest memballoon device. Ex:\n"
                            "--memballoon model=virtio"))
+    ParserTPM.register()
     devg.add_argument("--tpm", action="append",
                     help=_("Configure a guest TPM device. Ex:\n"
                            "--tpm /dev/tpm"))
+    ParserRNG.register()
     devg.add_argument("--rng", action="append",
                     help=_("Configure a guest RNG device. Ex:\n"
                            "--rng /dev/urandom"))
+    ParserPanic.register()
     devg.add_argument("--panic", action="append",
                     help=_("Configure a guest panic device. Ex:\n"
                            "--panic default"))
+    ParseMemdev.register()
     devg.add_argument("--memdev", action="append",
                     help=_("Configure a guest memory device. Ex:\n"
                            "--memdev dimm,target_size=1024"))
+    ParserVsock.register()
     devg.add_argument("--vsock", action="append",
                     help=_("Configure guest vsock sockets. Ex:\n"
                            "--vsock auto_cid=yes\n"
@@ -729,36 +758,61 @@ def add_device_options(devg, sound_back_compat=False):
 
 
 def add_guest_xml_options(geng):
+    ParserSecurity.register()
     geng.add_argument("--security", action="append",
         help=_("Set domain security driver configuration."))
+
+    ParserCputune.register()
     geng.add_argument("--cputune", action="append",
         help=_("Tune CPU parameters for the domain process."))
+
+    ParserNumatune.register()
     geng.add_argument("--numatune", action="append",
         help=_("Tune NUMA policy for the domain process."))
+
+    ParserMemtune.register()
     geng.add_argument("--memtune", action="append",
         help=_("Tune memory policy for the domain process."))
+
+    ParserBlkiotune.register()
     geng.add_argument("--blkiotune", action="append",
         help=_("Tune blkio policy for the domain process."))
+
+    ParserMemoryBacking.register()
     geng.add_argument("--memorybacking", action="append",
         help=_("Set memory backing policy for the domain process. Ex:\n"
                "--memorybacking hugepages=on"))
+
+    ParserFeatures.register()
     geng.add_argument("--features", action="append",
         help=_("Set domain <features> XML. Ex:\n"
                "--features acpi=off\n"
                "--features apic=on,eoi=on"))
+
+    ParserClock.register()
     geng.add_argument("--clock", action="append",
         help=_("Set domain <clock> XML. Ex:\n"
                "--clock offset=localtime,rtc_tickpolicy=catchup"))
+
+    ParserPM.register()
     geng.add_argument("--pm", action="append",
         help=_("Configure VM power management features"))
+
+    ParserEvents.register()
     geng.add_argument("--events", action="append",
         help=_("Configure VM lifecycle management policy"))
+
+    ParserResource.register()
     geng.add_argument("--resource", action="append",
         help=_("Configure VM resource partitioning (cgroups)"))
+
+    ParserSysinfo.register()
     geng.add_argument("--sysinfo", action="append",
         help=_("Configure SMBIOS System Information. Ex:\n"
                "--sysinfo host\n"
                "--sysinfo bios_vendor=MyVendor,bios_version=1.2.3,...\n"))
+
+    ParserQemuCLI.register()
     geng.add_argument("--qemu-commandline", action="append",
         help=_("Pass arguments directly to the qemu emulator. Ex:\n"
                "--qemu-commandline='-display gtk,gl=on'\n"
@@ -766,16 +820,20 @@ def add_guest_xml_options(geng):
 
 
 def add_boot_options(insg):
+    ParserBoot.register()
     insg.add_argument("--boot", action="append",
         help=_("Configure guest boot settings. Ex:\n"
                "--boot hd,cdrom,menu=on\n"
                "--boot init=/sbin/init (for containers)"))
+
+    ParserIdmap.register()
     insg.add_argument("--idmap", action="append",
         help=_("Enable user namespace for LXC container. Ex:\n"
                "--idmap uid_start=0,uid_target=1000,uid_count=10"))
 
 
 def add_disk_option(stog, editexample=False):
+    ParserDisk.register()
     editmsg = ""
     if editexample:
         editmsg += "\n--disk cache=  (unset cache)"
@@ -1134,6 +1192,12 @@ class VirtCLIParser(object):
         inst = cls.lookup_prop(obj)
         return isinstance(inst, list)
 
+    @classmethod
+    def register(cls):
+        # register the parser class only once
+        if cls not in VIRT_PARSERS:
+            VIRT_PARSERS.append(cls)
+
 
     def __init__(self, guest, optstr):
         self.guest = guest
@@ -1303,15 +1367,6 @@ class VirtCLIParser(object):
         return ret
 
 
-VIRT_PARSERS = []
-
-
-def _register_virt_parser(parserclass):
-    # register the parser class only once
-    if parserclass not in VIRT_PARSERS:
-        VIRT_PARSERS.append(parserclass)
-
-
 ###################
 # --check parsing #
 ###################
@@ -1360,7 +1415,6 @@ class ParserMetadata(VirtCLIParser):
     def set_os_full_id_cb(self, inst, val, virtarg):
         inst.set_os_full_id(val)
 
-_register_virt_parser(ParserMetadata)
 ParserMetadata.add_arg("name", "name", can_comma=True)
 ParserMetadata.add_arg("title", "title", can_comma=True)
 ParserMetadata.add_arg("uuid", "uuid")
@@ -1376,7 +1430,6 @@ ParserMetadata.add_arg(None, "os_full_id", cb=ParserMetadata.set_os_full_id_cb)
 class ParserEvents(VirtCLIParser):
     cli_arg_name = "events"
 
-_register_virt_parser(ParserEvents)
 ParserEvents.add_arg("on_poweroff", "on_poweroff")
 ParserEvents.add_arg("on_reboot", "on_reboot")
 ParserEvents.add_arg("on_crash", "on_crash")
@@ -1392,7 +1445,6 @@ class ParserResource(VirtCLIParser):
     propname = "resource"
     remove_first = "partition"
 
-_register_virt_parser(ParserResource)
 ParserResource.add_arg("partition", "partition")
 
 
@@ -1405,7 +1457,6 @@ class ParserNumatune(VirtCLIParser):
     propname = "numatune"
     remove_first = "nodeset"
 
-_register_virt_parser(ParserNumatune)
 ParserNumatune.add_arg("memory_nodeset", "nodeset", can_comma=True)
 ParserNumatune.add_arg("memory_mode", "mode")
 
@@ -1422,7 +1473,6 @@ class ParserMemory(VirtCLIParser):
         setattr(inst, virtarg.cliname, int(val) * 1024)
 
 
-_register_virt_parser(ParserMemory)
 ParserMemory.add_arg("memory", "memory", cb=ParserMemory.set_memory_cb)
 ParserMemory.add_arg("maxmemory", "maxmemory", cb=ParserMemory.set_memory_cb)
 ParserMemory.add_arg("memoryBacking.hugepages", "hugepages", is_onoff=True)
@@ -1440,7 +1490,6 @@ class ParserMemtune(VirtCLIParser):
     propname = "memtune"
     remove_first = "soft_limit"
 
-_register_virt_parser(ParserMemtune)
 ParserMemtune.add_arg("hard_limit", "hard_limit")
 ParserMemtune.add_arg("soft_limit", "soft_limit")
 ParserMemtune.add_arg("swap_hard_limit", "swap_hard_limit")
@@ -1456,7 +1505,6 @@ class ParserBlkiotune(VirtCLIParser):
     propname = "blkiotune"
     remove_first = "weight"
 
-_register_virt_parser(ParserBlkiotune)
 ParserBlkiotune.add_arg("weight", "weight")
 ParserBlkiotune.add_arg("device_path", "device_path")
 ParserBlkiotune.add_arg("device_weight", "device_weight")
@@ -1470,7 +1518,6 @@ class ParserMemoryBacking(VirtCLIParser):
     cli_arg_name = "memorybacking"
     propname = "memoryBacking"
 
-_register_virt_parser(ParserMemoryBacking)
 ParserMemoryBacking.add_arg("hugepages", "hugepages", is_onoff=True)
 ParserMemoryBacking.add_arg("page_size", "size")
 ParserMemoryBacking.add_arg("page_unit", "unit")
@@ -1566,7 +1613,6 @@ class ParserCPU(VirtCLIParser):
         return VirtCLIParser._parse(self, inst)
 
 
-_register_virt_parser(ParserCPU)
 ParserCPU.add_arg(None, "model", cb=ParserCPU.set_model_cb)
 ParserCPU.add_arg("mode", "mode")
 ParserCPU.add_arg("match", "match")
@@ -1611,7 +1657,6 @@ class ParserCputune(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, objpropname)
         return cb(*args, **kwargs)
 
-_register_virt_parser(ParserCputune)
 # Options for CPU.vcpus config
 ParserCputune.add_arg("vcpu", "vcpupin[0-9]*.vcpu",
                   find_inst_cb=ParserCputune.vcpu_find_inst_cb)
@@ -1656,7 +1701,6 @@ class ParserVCPU(VirtCLIParser):
         return ret
 
 
-_register_virt_parser(ParserVCPU)
 ParserVCPU.add_arg("cpu.sockets", "sockets")
 ParserVCPU.add_arg("cpu.cores", "cores")
 ParserVCPU.add_arg("cpu.threads", "threads")
@@ -1715,7 +1759,6 @@ class ParserBoot(VirtCLIParser):
         VirtCLIParser._parse(self, inst)
 
 
-_register_virt_parser(ParserBoot)
 # UEFI depends on these bits, so set them first
 ParserBoot.add_arg("arch", "arch")
 ParserBoot.add_arg(None, "bootloader", cb=ParserBoot.set_bootloader_cb)
@@ -1757,7 +1800,6 @@ class ParserIdmap(VirtCLIParser):
     cli_arg_name = "idmap"
     propname = "idmap"
 
-_register_virt_parser(ParserIdmap)
 ParserIdmap.add_arg("uid_start", "uid_start")
 ParserIdmap.add_arg("uid_target", "uid_target")
 ParserIdmap.add_arg("uid_count", "uid_count")
@@ -1774,7 +1816,6 @@ class ParserSecurity(VirtCLIParser):
     cli_arg_name = "security"
     propname = "seclabels"
 
-_register_virt_parser(ParserSecurity)
 ParserSecurity.add_arg("type", "type")
 ParserSecurity.add_arg("model", "model")
 ParserSecurity.add_arg("relabel", "relabel", is_onoff=True)
@@ -1790,7 +1831,6 @@ class ParserFeatures(VirtCLIParser):
     cli_arg_name = "features"
     propname = "features"
 
-_register_virt_parser(ParserFeatures)
 ParserFeatures.add_arg("acpi", "acpi", is_onoff=True)
 ParserFeatures.add_arg("apic", "apic", is_onoff=True)
 ParserFeatures.add_arg("pae", "pae", is_onoff=True)
@@ -1842,7 +1882,6 @@ class ParserClock(VirtCLIParser):
         setattr(timerobj, attrname, val)
 
 
-_register_virt_parser(ParserClock)
 ParserClock.add_arg("offset", "offset")
 
 for _tname in DomainClock.TIMER_NAMES:
@@ -1860,7 +1899,6 @@ class ParserPM(VirtCLIParser):
     cli_arg_name = "pm"
     propname = "pm"
 
-_register_virt_parser(ParserPM)
 ParserPM.add_arg("suspend_to_mem", "suspend_to_mem", is_onoff=True)
 ParserPM.add_arg("suspend_to_disk", "suspend_to_disk", is_onoff=True)
 
@@ -1901,7 +1939,6 @@ class ParserSysinfo(VirtCLIParser):
 
         return VirtCLIParser._parse(self, inst)
 
-_register_virt_parser(ParserSysinfo)
 # <sysinfo type='smbios'>
 ParserSysinfo.add_arg("type", "type",
                       cb=ParserSysinfo.set_type_cb, can_comma=True)
@@ -1963,7 +2000,6 @@ class ParserQemuCLI(VirtCLIParser):
         return VirtCLIParser._parse(self, inst)
 
 
-_register_virt_parser(ParserQemuCLI)
 ParserQemuCLI.add_arg(None, "args", cb=ParserQemuCLI.args_cb, can_comma=True)
 ParserQemuCLI.add_arg(None, "env", cb=ParserQemuCLI.env_cb, can_comma=True)
 
@@ -2130,7 +2166,6 @@ class ParserDisk(VirtCLIParser):
         return inst
 
 
-_register_virt_parser(ParserDisk)
 _add_device_address_args(ParserDisk)
 
 # These are all handled specially in _parse
@@ -2250,7 +2285,6 @@ class ParserNetwork(VirtCLIParser):
         return VirtCLIParser._parse(self, inst)
 
 
-_register_virt_parser(ParserNetwork)
 _add_device_address_args(ParserNetwork)
 ParserNetwork.add_arg("type", "type", cb=ParserNetwork.set_type_cb)
 ParserNetwork.add_arg("trustGuestRxFilters", "trustGuestRxFilters",
@@ -2359,7 +2393,6 @@ class ParserGraphics(VirtCLIParser):
 
         return ret
 
-_register_virt_parser(ParserGraphics)
 _add_device_address_args(ParserGraphics)
 ParserGraphics.add_arg(None, "type", cb=ParserGraphics.set_type_cb)
 ParserGraphics.add_arg("port", "port")
@@ -2410,7 +2443,6 @@ class ParserController(VirtCLIParser):
         return VirtCLIParser._parse(self, inst)
 
 
-_register_virt_parser(ParserController)
 _add_device_address_args(ParserController)
 ParserController.add_arg("type", "type")
 ParserController.add_arg("model", "model")
@@ -2429,7 +2461,6 @@ class ParserInput(VirtCLIParser):
     propname = "devices.input"
     remove_first = "type"
 
-_register_virt_parser(ParserInput)
 _add_device_address_args(ParserInput)
 ParserInput.add_arg("type", "type", ignore_default=True)
 ParserInput.add_arg("bus", "bus", ignore_default=True)
@@ -2444,7 +2475,6 @@ class ParserSmartcard(VirtCLIParser):
     propname = "devices.smartcard"
     remove_first = "mode"
 
-_register_virt_parser(ParserSmartcard)
 _add_device_address_args(ParserSmartcard)
 ParserSmartcard.add_arg("mode", "mode", ignore_default=True)
 ParserSmartcard.add_arg("type", "type", ignore_default=True)
@@ -2469,7 +2499,6 @@ class ParserRedir(VirtCLIParser):
             return
         return VirtCLIParser._parse(self, inst)
 
-_register_virt_parser(ParserRedir)
 _add_device_address_args(ParserRedir)
 ParserRedir.add_arg("bus", "bus", ignore_default=True)
 ParserRedir.add_arg("type", "type", ignore_default=True)
@@ -2491,7 +2520,6 @@ class ParserTPM(VirtCLIParser):
             self.optdict["path"] = self.optdict.pop("type")
         return VirtCLIParser._parse(self, inst)
 
-_register_virt_parser(ParserTPM)
 _add_device_address_args(ParserTPM)
 ParserTPM.add_arg("type", "type")
 ParserTPM.add_arg("model", "model")
@@ -2550,7 +2578,6 @@ class ParserRNG(VirtCLIParser):
         return VirtCLIParser._parse(self, inst)
 
 
-_register_virt_parser(ParserRNG)
 _add_device_address_args(ParserRNG)
 ParserRNG.add_arg("type", "type")
 
@@ -2577,7 +2604,6 @@ class ParserWatchdog(VirtCLIParser):
     propname = "devices.watchdog"
     remove_first = "model"
 
-_register_virt_parser(ParserWatchdog)
 _add_device_address_args(ParserWatchdog)
 ParserWatchdog.add_arg("model", "model", ignore_default=True)
 ParserWatchdog.add_arg("action", "action", ignore_default=True)
@@ -2595,7 +2621,6 @@ class ParseMemdev(VirtCLIParser):
     def set_target_size(self, inst, val, virtarg):
         _set_attribute(inst, virtarg.attrname, int(val) * 1024)
 
-_register_virt_parser(ParseMemdev)
 ParseMemdev.add_arg("model", "model")
 ParseMemdev.add_arg("access", "access")
 ParseMemdev.add_arg("target.size", "target_size", cb=ParseMemdev.set_target_size)
@@ -2617,7 +2642,6 @@ class ParserMemballoon(VirtCLIParser):
     remove_first = "model"
     stub_none = False
 
-_register_virt_parser(ParserMemballoon)
 _add_device_address_args(ParserMemballoon)
 ParserMemballoon.add_arg("model", "model")
 
@@ -2645,7 +2669,6 @@ class ParserPanic(VirtCLIParser):
             self.compat_mode = True
         return VirtCLIParser._parse(self, inst)
 
-_register_virt_parser(ParserPanic)
 ParserPanic.add_arg(None, "model", cb=ParserPanic.set_model_cb,
                     ignore_default=True)
 ParserPanic.add_arg("iobase", "iobase")
@@ -2661,7 +2684,6 @@ class ParserVsock(VirtCLIParser):
     remove_first = "model"
     stub_none = False
 
-_register_virt_parser(ParserVsock)
 _add_device_address_args(ParserVsock)
 ParserVsock.add_arg("model", "model")
 ParserVsock.add_arg("auto_cid", "auto_cid")
@@ -2731,25 +2753,21 @@ _ParserChar.add_arg("log_append", "log.append", is_onoff=True)
 class ParserSerial(_ParserChar):
     cli_arg_name = "serial"
     propname = "devices.serial"
-_register_virt_parser(ParserSerial)
 
 
 class ParserParallel(_ParserChar):
     cli_arg_name = "parallel"
     propname = "devices.parallel"
-_register_virt_parser(ParserParallel)
 
 
 class ParserChannel(_ParserChar):
     cli_arg_name = "channel"
     propname = "devices.channel"
-_register_virt_parser(ParserChannel)
 
 
 class ParserConsole(_ParserChar):
     cli_arg_name = "console"
     propname = "devices.console"
-_register_virt_parser(ParserConsole)
 
 
 ########################
@@ -2761,7 +2779,6 @@ class ParserFilesystem(VirtCLIParser):
     propname = "devices.filesystem"
     remove_first = ["source", "target"]
 
-_register_virt_parser(ParserFilesystem)
 _add_device_address_args(ParserFilesystem)
 ParserFilesystem.add_arg("type", "type")
 ParserFilesystem.add_arg("accessmode", "accessmode", aliases=["mode"])
@@ -2792,7 +2809,6 @@ class ParserVideo(VirtCLIParser):
 
         return ret
 
-_register_virt_parser(ParserVideo)
 _add_device_address_args(ParserVideo)
 ParserVideo.add_arg("model", "model", ignore_default=True)
 ParserVideo.add_arg("accel3d", "accel3d", is_onoff=True)
@@ -2825,7 +2841,6 @@ class ParserSound(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, objpropname)
         return cb(*args, **kwargs)
 
-_register_virt_parser(ParserSound)
 _add_device_address_args(ParserSound)
 ParserSound.add_arg("model", "model", ignore_default=True)
 # Options for sound.codecs config
@@ -2860,7 +2875,6 @@ class ParserHostdev(VirtCLIParser):
         nodedev = NodeDevice.lookupNodedevFromString(inst.conn, val)
         return nodedev.compare_to_hostdev(inst)
 
-_register_virt_parser(ParserHostdev)
 _add_device_address_args(ParserHostdev)
 ParserHostdev.add_arg("type", "type")
 ParserHostdev.add_arg(None, "name",
