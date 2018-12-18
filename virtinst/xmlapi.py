@@ -248,6 +248,10 @@ class _XMLBase(object):
             self._node_remove_child(parent, child)
 
 
+def node_is_text(n):
+    return bool(n and n.type == "text")
+
+
 class _Libxml2API(_XMLBase):
     def __init__(self, xml):
         _XMLBase.__init__(self)
@@ -343,20 +347,17 @@ class _Libxml2API(_XMLBase):
 
         # Look for preceding whitespace and remove it
         white = node.get_prev()
-        if white and white.type == "text":
+        if node_is_text(white):
             white.unlinkNode()
             white.freeNode()
 
         node.unlinkNode()
         node.freeNode()
-        if all([n.type == "text" for n in parentnode.children]):
+        if all([node_is_text(n) for n in parentnode.children]):
             parentnode.setContent(None)
 
     def _node_add_child(self, parentxpath, parentnode, newnode):
         ignore = parentxpath
-        def node_is_text(n):
-            return bool(n and n.type == "text")
-
         if not node_is_text(parentnode.get_last()):
             prevsib = parentnode.get_prev()
             if node_is_text(prevsib):
