@@ -1126,8 +1126,7 @@ class vmmDomain(vmmLibvirtObject):
         flags = 0
         if redefine:
             flags = (flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE)
-
-        if not redefine:
+        else:
             logging.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
         self._backend.snapshotCreateXML(xml, flags)
 
@@ -1198,7 +1197,7 @@ class vmmDomain(vmmLibvirtObject):
             if info["mac"] == iface.macaddr:
                 if info["type"] == 0:
                     ipv4 = info["ipaddr"]
-                if info["type"] == 1:
+                elif info["type"] == 1:
                     ipv6 = info["ipaddr"]
             return ipv4, ipv6
 
@@ -1301,11 +1300,11 @@ class vmmDomain(vmmLibvirtObject):
         for b in boot_order:
             if b == "network" and net:
                 ret.append(net.get_xml_id())
-            if b == "hd" and disk:
+            elif b == "hd" and disk:
                 ret.append(disk.get_xml_id())
-            if b == "cdrom" and cdrom:
+            elif b == "cdrom" and cdrom:
                 ret.append(cdrom.get_xml_id())
-            if b == "fd" and floppy:
+            elif b == "fd" and floppy:
                 ret.append(floppy.get_xml_id())
         return ret
 
