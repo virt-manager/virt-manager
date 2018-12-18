@@ -1307,7 +1307,9 @@ VIRT_PARSERS = []
 
 
 def _register_virt_parser(parserclass):
-    VIRT_PARSERS.append(parserclass)
+    # register the parser class only once
+    if parserclass not in VIRT_PARSERS:
+        VIRT_PARSERS.append(parserclass)
 
 
 ###################
