@@ -18,7 +18,6 @@ import subprocess
 import sys
 import traceback
 
-import argcomplete
 import libvirt
 
 from virtcli import CLIConfig
@@ -492,6 +491,8 @@ def _completer_validator(current_input, keyword_to_check_against):
 def autocomplete(parser):
     if "_ARGCOMPLETE" not in os.environ:
         return
+
+    import argcomplete
 
     parsernames = ["--" + pclass.cli_arg_name for pclass in VIRT_PARSERS]
     # pylint: disable=protected-access
