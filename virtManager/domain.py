@@ -1276,6 +1276,10 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().cpu
 
     def _convert_old_boot_order(self):
+        """Converts the old boot order (e.g. <boot dev='hd'/>) into the
+        per-device boot order format.
+
+        """
         boot_order = self._get_old_boot_order()
         ret = []
         disk = None
