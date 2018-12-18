@@ -1390,6 +1390,9 @@ class VirtCLIParser(metaclass=InitClass):
 
         return ret
 
+    def noset_cb(self, inst, val, virtarg):
+        """Do nothing callback"""
+
 
 ###################
 # --check parsing #
@@ -1794,9 +1797,6 @@ class ParserBoot(VirtCLIParser):
     def set_emulator_cb(self, inst, val, virtarg):
         self.guest.emulator = val
 
-    def noset_cb(self, inst, val, virtarg):
-        pass
-
     def _parse(self, inst):
         # Build boot order
         boot_order = []
@@ -2144,9 +2144,6 @@ class ParserDisk(VirtCLIParser):
     propname = "devices.disk"
     remove_first = "path"
     stub_none = False
-
-    def noset_cb(self, inst, val, virtarg):
-        ignore = self, inst, val, virtarg
 
     def seclabel_find_inst_cb(self, *args, **kwargs):
         cliarg = "seclabel"  # seclabel[0-9]*
