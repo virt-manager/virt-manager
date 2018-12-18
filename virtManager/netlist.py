@@ -3,6 +3,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import collections
 import logging
 
 from gi.repository import Gtk
@@ -10,6 +11,9 @@ from gi.repository import Gtk
 import virtinst
 from . import uiutil
 from .baseclass import vmmGObjectUI
+
+
+NetDev = collections.namedtuple('Netdev', ['name', 'is_bridge', 'slave_names'])
 
 
 class vmmNetworkList(vmmGObjectUI):
@@ -165,17 +169,19 @@ class vmmNetworkList(vmmGObjectUI):
 
         netdevs = {}
         for iface in self.conn.list_interfaces():
-            netdevs[iface.get_name()] = [
-                iface.get_name(), iface.is_bridge(), iface.get_slave_names()]
+            name = iface.get_name()
+            netdevs[name] = NetDev(name, iface.is_bridge(),
+                                   iface.get_slave_names())
         for nodedev in self.conn.filter_nodedevs("net"):
             if nodedev.xmlobj.interface not in netdevs:
-                netdevs[nodedev.xmlobj.interface] = [nodedev.xmlobj.interface,
-                    False, []]
+                netdev = NetDev(nodedev.xmlobj.interface, False, [])
+                netdevs[nodedev.xmlobj.interface] = netdev
 
         # For every bridge used by a virtual network, and any slaves of
         # those devices, don't list them.
         for vnet_bridge in vnet_bridges:
-            slave_names = netdevs.pop(vnet_bridge, [None, None, []])[2]
+            slave_names = netdevs.pop(vnet_bridge,
+                                      NetDev(None, None, [])).slave_names
             for slave in slave_names:
                 netdevs.pop(slave, None)
 
