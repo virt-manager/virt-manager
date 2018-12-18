@@ -1310,9 +1310,8 @@ class vmmDomain(vmmLibvirtObject):
         return ret
 
     def _get_device_boot_order(self):
-        devs = self.get_bootable_devices()
         order = []
-        for dev in devs:
+        for dev in self.get_bootable_devices():
             if not dev.boot.order:
                 continue
             order.append((dev.get_xml_id(), dev.boot.order))
