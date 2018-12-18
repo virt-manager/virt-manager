@@ -70,6 +70,7 @@ management API.
 Summary: Common files used by the different Virtual Machine Manager interfaces
 Group: Applications/Emulators
 
+Requires: python3-argcomplete
 Requires: python3-libvirt
 Requires: python3-libxml2
 Requires: python3-requests
@@ -165,6 +166,11 @@ done
 %{_datadir}/%{name}/virt-clone
 %{_datadir}/%{name}/virt-convert
 %{_datadir}/%{name}/virt-xml
+
+%{_datadir}/bash-completion/completions/virt-install
+%{_datadir}/bash-completion/completions/virt-clone
+%{_datadir}/bash-completion/completions/virt-convert
+%{_datadir}/bash-completion/completions/virt-xml
 
 %{_bindir}/virt-install
 %{_bindir}/virt-clone
