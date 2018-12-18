@@ -746,7 +746,7 @@ def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--panic", action="append",
                     help=_("Configure a guest panic device. Ex:\n"
                            "--panic default"))
-    ParseMemdev.register()
+    ParserMemdev.register()
     devg.add_argument("--memdev", action="append",
                     help=_("Configure a guest memory device. Ex:\n"
                            "--memdev dimm,target_size=1024"))
@@ -2613,7 +2613,7 @@ ParserWatchdog.add_arg("action", "action", ignore_default=True)
 # --memdev parsing #
 ####################
 
-class ParseMemdev(VirtCLIParser):
+class ParserMemdev(VirtCLIParser):
     cli_arg_name = "memdev"
     propname = "devices.memory"
     remove_first = "model"
@@ -2621,15 +2621,15 @@ class ParseMemdev(VirtCLIParser):
     def set_target_size(self, inst, val, virtarg):
         _set_attribute(inst, virtarg.attrname, int(val) * 1024)
 
-ParseMemdev.add_arg("model", "model")
-ParseMemdev.add_arg("access", "access")
-ParseMemdev.add_arg("target.size", "target_size", cb=ParseMemdev.set_target_size)
-ParseMemdev.add_arg("target.node", "target_node")
-ParseMemdev.add_arg("target.label_size", "target_label_size",
-                    cb=ParseMemdev.set_target_size)
-ParseMemdev.add_arg("source.pagesize", "source_pagesize")
-ParseMemdev.add_arg("source.path", "source_path")
-ParseMemdev.add_arg("source.nodemask", "source_nodemask", can_comma=True)
+ParserMemdev.add_arg("model", "model")
+ParserMemdev.add_arg("access", "access")
+ParserMemdev.add_arg("target.size", "target_size", cb=ParserMemdev.set_target_size)
+ParserMemdev.add_arg("target.node", "target_node")
+ParserMemdev.add_arg("target.label_size", "target_label_size",
+                     cb=ParserMemdev.set_target_size)
+ParserMemdev.add_arg("source.pagesize", "source_pagesize")
+ParserMemdev.add_arg("source.path", "source_path")
+ParserMemdev.add_arg("source.nodemask", "source_nodemask", can_comma=True)
 
 
 ########################
