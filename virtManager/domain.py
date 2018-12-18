@@ -576,37 +576,37 @@ class vmmDomain(vmmLibvirtObject):
 
         self._redefine_xmlobj(guest)
 
+    def __use_device_boot_order(self, boot_order, guest):
+        boot_dev_order = []
+        devmap = dict((dev.get_xml_id(), dev) for dev in
+                      self.get_bootable_devices())
+        for b in boot_order:
+            if b in devmap:
+                boot_dev_order.append(devmap[b])
+
+        # Unset the traditional boot order
+        guest.os.bootorder = []
+
+        # Unset device boot order
+        for dev in guest.devices.get_all():
+            dev.boot.order = None
+
+        count = 1
+        for origdev in boot_dev_order:
+            dev = self._lookup_device_to_define(guest, origdev, False)
+            if not dev:
+                continue
+            dev.boot.order = count
+            count += 1
+
     def define_boot(self, boot_order=_SENTINEL, boot_menu=_SENTINEL,
-            kernel=_SENTINEL, initrd=_SENTINEL, dtb=_SENTINEL,
-            kernel_args=_SENTINEL, init=_SENTINEL, initargs=_SENTINEL):
+                    kernel=_SENTINEL, initrd=_SENTINEL, dtb=_SENTINEL,
+                    kernel_args=_SENTINEL, init=_SENTINEL, initargs=_SENTINEL):
 
         guest = self._make_xmlobj_to_define()
-        def _change_boot_order():
-            boot_dev_order = []
-            devmap = dict((dev.get_xml_id(), dev) for dev in
-                          self.get_bootable_devices())
-            for b in boot_order:
-                if b in devmap:
-                    boot_dev_order.append(devmap[b])
-
-            # Unset the traditional boot order
-            guest.os.bootorder = []
-
-            # Unset device boot order
-            for dev in guest.devices.get_all():
-                dev.boot.order = None
-
-            count = 1
-            for origdev in boot_dev_order:
-                dev = self._lookup_device_to_define(guest, origdev, False)
-                if not dev:
-                    continue
-                dev.boot.order = count
-                count += 1
-
         if boot_order != _SENTINEL:
             if self.can_use_device_boot_order():
-                _change_boot_order()
+                self.__use_device_boot_order(boot_order, guest)
             else:
                 guest.os.bootorder = boot_order
 
