@@ -459,7 +459,7 @@ def get_meter():
 # bash completion helpers #
 ###########################
 
-def _completer(prefix, **kwargs):
+def _virtparser_completer(prefix, **kwargs):
     sub_options = []
     for parserclass in VIRT_PARSERS:
         if kwargs['action'].dest == parserclass.cli_arg_name:
@@ -490,9 +490,19 @@ def _completer_validator(current_input, keyword_to_check_against):
 
 
 def autocomplete(parser):
+    if "_ARGCOMPLETE" not in os.environ:
+        return
+
+    parsernames = ["--" + pclass.cli_arg_name for pclass in VIRT_PARSERS]
+    # pylint: disable=protected-access
+    for action in parser._actions:
+        for opt in action.option_strings:
+            if opt in parsernames:
+                action.completer = _virtparser_completer
+                break
+
     kwargs = {"validator": _completer_validator}
-    testing_argcomplete = in_testsuite() and "_ARGCOMPLETE" in os.environ
-    if testing_argcomplete:
+    if in_testsuite():
         import io
         kwargs["output_stream"] = io.BytesIO()
         kwargs["exit_method"] = sys.exit
@@ -500,7 +510,7 @@ def autocomplete(parser):
     try:
         argcomplete.autocomplete(parser, **kwargs)
     except SystemExit:
-        if testing_argcomplete:
+        if in_testsuite():
             output = kwargs["output_stream"].getvalue().decode("utf-8")
             print(output)
         raise
@@ -573,7 +583,7 @@ def add_misc_options(grp, prompt=False, replace=False,
         grp.add_argument("--check", action="append",
             help=_("Enable or disable validation checks. Example:\n"
                    "--check path_in_use=off\n"
-                   "--check all=off")).completer = _completer
+                   "--check all=off"))
     grp.add_argument("-q", "--quiet", action="store_true",
                    help=_("Suppress non-error output"))
     grp.add_argument("-d", "--debug", action="store_true",
@@ -584,7 +594,7 @@ def add_metadata_option(grp):
     grp.add_argument("--metadata", action="append",
         help=_("Configure guest metadata. Ex:\n"
         "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
-        "--metadata description=\"My nice long description\"")).completer = _completer
+        "--metadata description=\"My nice long description\""))
 
 
 def add_memory_option(grp, backcompat=False):
@@ -593,7 +603,7 @@ def add_memory_option(grp, backcompat=False):
                "--memory 1024 (in MiB)\n"
                "--memory 512,maxmemory=1024\n"
                "--memory 512,maxmemory=1024,hotplugmemorymax=2048,"
-               "hotplugmemoryslots=2")).completer = _completer
+               "hotplugmemoryslots=2"))
     if backcompat:
         grp.add_argument("-r", "--ram", type=int, dest="oldmemory",
             help=argparse.SUPPRESS)
@@ -604,7 +614,7 @@ def vcpu_cli_options(grp, backcompat=True, editexample=False):
         help=_("Number of vcpus to configure for your guest. Ex:\n"
                "--vcpus 5\n"
                "--vcpus 5,maxcpus=10,cpuset=1-4,6,8\n"
-               "--vcpus sockets=2,cores=4,threads=2,")).completer = _completer
+               "--vcpus sockets=2,cores=4,threads=2,"))
 
     extramsg = "--cpu host"
     if editexample:
@@ -612,7 +622,7 @@ def vcpu_cli_options(grp, backcompat=True, editexample=False):
     grp.add_argument("--cpu", action="append",
         help=_("CPU model and features. Ex:\n"
                "--cpu coreduo,+x2apic\n"
-               "--cpu host-passthrough\n") + extramsg).completer = _completer
+               "--cpu host-passthrough\n") + extramsg)
 
     if backcompat:
         grp.add_argument("--check-cpu", action="store_true",
@@ -626,7 +636,7 @@ def add_gfx_option(devg):
              "--graphics vnc\n"
              "--graphics spice,port=5901,tlsport=5902\n"
              "--graphics none\n"
-             "--graphics vnc,password=foobar,port=5910,keymap=ja")).completer = _completer
+             "--graphics vnc,password=foobar,port=5910,keymap=ja"))
 
 
 def add_net_option(devg):
@@ -636,34 +646,34 @@ def add_net_option(devg):
              "--network network=my_libvirt_virtual_net\n"
              "--network network=mynet,model=virtio,mac=00:11...\n"
              "--network none\n"
-             "--network help")).completer = _completer
+             "--network help"))
 
 
 def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--controller", action="append",
         help=_("Configure a guest controller device. Ex:\n"
                "--controller type=usb,model=qemu-xhci\n"
-               "--controller virtio-scsi\n")).completer = _completer
+               "--controller virtio-scsi\n"))
     devg.add_argument("--input", action="append",
         help=_("Configure a guest input device. Ex:\n"
                "--input tablet\n"
-               "--input keyboard,bus=usb")).completer = _completer
+               "--input keyboard,bus=usb"))
     devg.add_argument("--serial", action="append",
-                    help=_("Configure a guest serial device")).completer = _completer
+                    help=_("Configure a guest serial device"))
     devg.add_argument("--parallel", action="append",
-                    help=_("Configure a guest parallel device")).completer = _completer
+                    help=_("Configure a guest parallel device"))
     devg.add_argument("--channel", action="append",
-                    help=_("Configure a guest communication channel")).completer = _completer
+                    help=_("Configure a guest communication channel"))
     devg.add_argument("--console", action="append",
                     help=_("Configure a text console connection between "
-                           "the guest and host")).completer = _completer
+                           "the guest and host"))
     devg.add_argument("--hostdev", action="append",
                     help=_("Configure physical USB/PCI/etc host devices "
-                           "to be shared with the guest")).completer = _completer
+                           "to be shared with the guest"))
     devg.add_argument("--filesystem", action="append",
         help=_("Pass host directory to the guest. Ex: \n"
                "--filesystem /my/source/dir,/dir/in/guest\n"
-               "--filesystem template_name,/,type=template")).completer = _completer
+               "--filesystem template_name,/,type=template"))
 
     # Back compat name
     devg.add_argument("--host-device", action="append", dest="hostdev",
@@ -676,83 +686,83 @@ def add_device_options(devg, sound_back_compat=False):
     }
     if sound_back_compat:
         sound_kwargs["nargs"] = '?'
-    devg.add_argument("--sound", **sound_kwargs).completer = _completer
+    devg.add_argument("--sound", **sound_kwargs)
     if sound_back_compat:
         devg.add_argument("--soundhw", action="append", dest="sound",
-            help=argparse.SUPPRESS).completer = _completer
+            help=argparse.SUPPRESS)
 
     devg.add_argument("--watchdog", action="append",
-                    help=_("Configure a guest watchdog device")).completer = _completer
+                    help=_("Configure a guest watchdog device"))
     devg.add_argument("--video", action="append",
-                    help=_("Configure guest video hardware.")).completer = _completer
+                    help=_("Configure guest video hardware."))
     devg.add_argument("--smartcard", action="append",
                     help=_("Configure a guest smartcard device. Ex:\n"
-                           "--smartcard mode=passthrough")).completer = _completer
+                           "--smartcard mode=passthrough"))
     devg.add_argument("--redirdev", action="append",
                     help=_("Configure a guest redirection device. Ex:\n"
-                           "--redirdev usb,type=tcp,server=192.168.1.1:4000")).completer = _completer
+                           "--redirdev usb,type=tcp,server=192.168.1.1:4000"))
     devg.add_argument("--memballoon", action="append",
                     help=_("Configure a guest memballoon device. Ex:\n"
-                           "--memballoon model=virtio")).completer = _completer
+                           "--memballoon model=virtio"))
     devg.add_argument("--tpm", action="append",
                     help=_("Configure a guest TPM device. Ex:\n"
-                           "--tpm /dev/tpm")).completer = _completer
+                           "--tpm /dev/tpm"))
     devg.add_argument("--rng", action="append",
                     help=_("Configure a guest RNG device. Ex:\n"
-                           "--rng /dev/urandom")).completer = _completer
+                           "--rng /dev/urandom"))
     devg.add_argument("--panic", action="append",
                     help=_("Configure a guest panic device. Ex:\n"
-                           "--panic default")).completer = _completer
+                           "--panic default"))
     devg.add_argument("--memdev", action="append",
                     help=_("Configure a guest memory device. Ex:\n"
-                           "--memdev dimm,target_size=1024")).completer = _completer
+                           "--memdev dimm,target_size=1024"))
 
 
 def add_guest_xml_options(geng):
     geng.add_argument("--security", action="append",
-        help=_("Set domain security driver configuration.")).completer = _completer
+        help=_("Set domain security driver configuration."))
     geng.add_argument("--cputune", action="append",
-        help=_("Tune CPU parameters for the domain process.")).completer = _completer
+        help=_("Tune CPU parameters for the domain process."))
     geng.add_argument("--numatune", action="append",
-        help=_("Tune NUMA policy for the domain process.")).completer = _completer
+        help=_("Tune NUMA policy for the domain process."))
     geng.add_argument("--memtune", action="append",
-        help=_("Tune memory policy for the domain process.")).completer = _completer
+        help=_("Tune memory policy for the domain process."))
     geng.add_argument("--blkiotune", action="append",
-        help=_("Tune blkio policy for the domain process.")).completer = _completer
+        help=_("Tune blkio policy for the domain process."))
     geng.add_argument("--memorybacking", action="append",
         help=_("Set memory backing policy for the domain process. Ex:\n"
-               "--memorybacking hugepages=on")).completer = _completer
+               "--memorybacking hugepages=on"))
     geng.add_argument("--features", action="append",
         help=_("Set domain <features> XML. Ex:\n"
                "--features acpi=off\n"
-               "--features apic=on,eoi=on")).completer = _completer
+               "--features apic=on,eoi=on"))
     geng.add_argument("--clock", action="append",
         help=_("Set domain <clock> XML. Ex:\n"
-               "--clock offset=localtime,rtc_tickpolicy=catchup")).completer = _completer
+               "--clock offset=localtime,rtc_tickpolicy=catchup"))
     geng.add_argument("--pm", action="append",
-        help=_("Configure VM power management features")).completer = _completer
+        help=_("Configure VM power management features"))
     geng.add_argument("--events", action="append",
-        help=_("Configure VM lifecycle management policy")).completer = _completer
+        help=_("Configure VM lifecycle management policy"))
     geng.add_argument("--resource", action="append",
-        help=_("Configure VM resource partitioning (cgroups)")).completer = _completer
+        help=_("Configure VM resource partitioning (cgroups)"))
     geng.add_argument("--sysinfo", action="append",
         help=_("Configure SMBIOS System Information. Ex:\n"
                "--sysinfo host\n"
-               "--sysinfo bios_vendor=MyVendor,bios_version=1.2.3,...\n")).completer = _completer
+               "--sysinfo bios_vendor=MyVendor,bios_version=1.2.3,...\n"))
     geng.add_argument("--qemu-commandline", action="append",
         help=_("Pass arguments directly to the qemu emulator. Ex:\n"
                "--qemu-commandline='-display gtk,gl=on'\n"
-               "--qemu-commandline env=DISPLAY=:0.1")).completer = _completer
+               "--qemu-commandline env=DISPLAY=:0.1"))
 
 
 def add_boot_options(insg):
     insg.add_argument("--boot", action="append",
         help=_("Configure guest boot settings. Ex:\n"
                "--boot hd,cdrom,menu=on\n"
-               "--boot init=/sbin/init (for containers)")).completer = _completer
+               "--boot init=/sbin/init (for containers)"))
     insg.add_argument("--idmap", action="append",
         help=_("Enable user namespace for LXC container. Ex:\n"
-               "--idmap uid_start=0,uid_target=1000,uid_count=10")).completer = _completer
+               "--idmap uid_start=0,uid_target=1000,uid_count=10"))
 
 
 def add_disk_option(stog, editexample=False):
@@ -764,7 +774,7 @@ def add_disk_option(stog, editexample=False):
                "--disk size=10 (new 10GiB image in default location)\n"
                "--disk /my/existing/disk,cache=none\n"
                "--disk device=cdrom,bus=scsi\n"
-               "--disk=?") + editmsg).completer = _completer
+               "--disk=?") + editmsg)
 
 
 #############################################
