@@ -276,10 +276,7 @@ def _make_tests():
                 vals.get("kernelregex", None))
         urls[d.name] = d
 
-    keys = list(urls.keys())
-    keys.sort()
-    for key in keys:
-        testdata = urls[key]
+    for key, testdata in sorted(urls.items()):
         def _make_wrapper(d):
             return lambda _self: _testURLWrapper(d)
         setattr(URLTests, "testURL%s" % key.replace("-", "_"),
