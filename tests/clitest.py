@@ -14,6 +14,11 @@ import sys
 import traceback
 import unittest
 
+try:
+    import argcomplete
+except ImportError:
+    argcomplete = None
+
 from tests import virtinstall, virtclone, virtconvert, virtxml
 from tests import utils
 
@@ -1066,6 +1071,7 @@ def _add_argcomplete_cmd(line, grep, nogrep=None):
         cmd.nogrep = nogrep
     cmd.env = env
     cmd.need_conn = False
+    cmd.skip_check = not(argcomplete)
     ARGCOMPLETE_CMDS.append(cmd)
 
 _add_argcomplete_cmd("virt-install --di", "--disk")
