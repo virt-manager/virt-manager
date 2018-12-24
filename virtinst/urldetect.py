@@ -41,6 +41,9 @@ class _DistroCache(object):
             self._filecache[path] = content
         return self._filecache[path]
 
+    def paths_exist(self, paths):
+        return all([self._fetcher.hasFile(p) for p in paths])
+
     @property
     def treeinfo(self):
         if self._treeinfo:
@@ -849,6 +852,19 @@ class GenericTreeinfoDistro(Distro):
         self._kernel_paths = self.cache.get_treeinfo_media(self.type)
 
 
+class GenericDistro(Distro):
+    """
+    Generic class for distros with kernel and initrd under images/pxeboot
+    """
+    PRETTY_NAME = "Generic Distro"
+    matching_distros = []
+    _kernel_paths = [("images/pxeboot/vmlinuz", "images/pxeboot/initrd.img")]
+
+    @classmethod
+    def is_valid(cls, cache):
+        return all([cache.paths_exist(x) for x in cls._kernel_paths])
+
+
 # Build list of all *Distro classes
 def _build_distro_list():
     allstores = []
@@ -859,8 +875,9 @@ def _build_distro_list():
             allstores.append(obj)
 
     # Always stick GenericDistro at the end, since it's a catchall
-    allstores.remove(GenericTreeinfoDistro)
-    allstores.append(GenericTreeinfoDistro)
+    for distro in (GenericTreeinfoDistro, GenericDistro):
+        allstores.remove(distro)
+        allstores.append(distro)
 
     return allstores
 
