@@ -549,6 +549,11 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
 
     <!-- memballoon device -->
     <memballoon model='virtio'/>
+
+    <!-- vsock device -->
+    <vsock model='virtio'>
+      <cid address='5'/>
+    </vsock>
   </devices>
 
   <seclabel model='selinux' type='dynamic' relabel='yes'/>

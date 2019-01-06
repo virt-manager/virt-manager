@@ -1,6 +1,6 @@
-     <panic model="s390"/>
-     <panic model="pseries"/>
-     <panic model="hyperv"/>
+     <vsock model="virtio">
+       <cid auto="no" address="5"/>
+     </vsock>
 +    <interface type="bridge">
 +      <source bridge="eth0"/>
 +      <mac address="00:11:22:33:44:55"/>

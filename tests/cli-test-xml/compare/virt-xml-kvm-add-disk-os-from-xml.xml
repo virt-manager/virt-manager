@@ -1,6 +1,6 @@
-     <panic model="s390"/>
-     <panic model="pseries"/>
-     <panic model="hyperv"/>
+     <vsock model="virtio">
+       <cid auto="no" address="5"/>
+     </vsock>
 +    <disk type="file" device="disk">
 +      <driver name="qemu" type="qcow2"/>
 +      <source file="/dev/default-pool/testvol1.img"/>
