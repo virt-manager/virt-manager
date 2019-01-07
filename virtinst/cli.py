@@ -458,9 +458,13 @@ def get_meter():
 # bash completion helpers #
 ###########################
 
+def _get_completer_parsers():
+    return VIRT_PARSERS + [ParseCLICheck]
+
+
 def _virtparser_completer(prefix, **kwargs):
     sub_options = []
-    for parserclass in VIRT_PARSERS:
+    for parserclass in _get_completer_parsers():
         if kwargs['action'].dest == parserclass.cli_arg_name:
             # pylint: disable=protected-access
             for arg in sorted(parserclass._virtargs, key=lambda p: p.cliname):
@@ -494,7 +498,8 @@ def autocomplete(parser):
 
     import argcomplete
 
-    parsernames = ["--" + pclass.cli_arg_name for pclass in VIRT_PARSERS]
+    parsernames = ["--" + pclass.cli_arg_name for pclass in
+                   _get_completer_parsers()]
     # pylint: disable=protected-access
     for action in parser._actions:
         for opt in action.option_strings:
