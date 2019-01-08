@@ -618,6 +618,14 @@ class AddHardware(uiutils.UITestCase):
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
+        # Add vsock
+        self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Virtio VSOCK", "vsock-tab")
+        tab.find("vsock-auto").click()
+        tab.find("vsock-cid").text = "7"
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
 
     def testAddCornerCases(self):
         """

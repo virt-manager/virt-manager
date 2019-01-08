@@ -388,6 +388,16 @@ class Details(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
 
+        # vsock tweaks
+        tab = self._select_hw(win, "Virtio VSOCK", "vsock-tab")
+        addr = tab.find("vsock-cid")
+        auto = tab.find("vsock-auto")
+        self.assertTrue(addr.text == "5")
+        auto.click()
+        uiutils.check_in_loop(lambda: not addr.visible)
+        appl.click()
+
+
     def testDetailsMiscEdits(self):
         """
         Test misc editing behavior, like checking for unapplied
