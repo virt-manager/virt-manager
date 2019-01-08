@@ -1,6 +1,5 @@
 #
 # Copyright 2013 Red Hat, Inc.
-# Giuseppe Scrivano <gscrivan@redhat.com>
 #
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.

@@ -2,7 +2,6 @@
 # Some code for parsing libvirt's capabilities XML
 #
 # Copyright 2007, 2012-2014 Red Hat, Inc.
-# Mark McLoughlin <markmc@redhat.com>
 #
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.

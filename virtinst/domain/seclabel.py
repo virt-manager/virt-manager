@@ -1,6 +1,5 @@
 #
 # Copyright 2010, 2012-2013 Red Hat, Inc.
-# Cole Robinson <crobinso@redhat.com>
 #
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.

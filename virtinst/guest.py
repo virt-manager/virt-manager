@@ -2,7 +2,6 @@
 # Common code for all guests
 #
 # Copyright 2006-2009, 2013, 2014, 2015 Red Hat, Inc.
-# Jeremy Katz <katzj@redhat.com>
 #
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.

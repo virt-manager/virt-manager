@@ -1,10 +1,6 @@
 #
 # Copyright 2011, 2013 Red Hat, Inc.
-# Cole Robinson <crobinso@redhat.com>
-# Marc-Andre Lureau <marcandre.lureau@redhat.com>
-#
 # Copyright 2013 IBM Corporation
-# Author: Stefan Berger <stefanb@linux.vnet.ibm.com>
 #
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
