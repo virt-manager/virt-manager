@@ -1298,7 +1298,8 @@ class VirtCLIParser(metaclass=InitClass):
         passed an invalid argument such as --disk idontexist=foo
         """
         if optdict:
-            fail(_("Unknown options %s") % list(optdict.keys()))
+            fail(_("Unknown --%s options: %s") %
+                    (self.cli_arg_name, list(optdict.keys())))
 
     def _parse(self, inst):
         """
