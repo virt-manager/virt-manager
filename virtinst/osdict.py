@@ -205,19 +205,7 @@ class _OSDB(object):
         ret = self._os_loader.get_db().guess_os_from_media(media)
         if not (ret and len(ret) > 0 and ret[0]):
             return None
-
-        osname = ret[0].get_short_id()
-        if osname.endswith("-unknown"):
-            # We want to get whatever the name is apart from unknown, instead
-            # of getting the distro, as some enterprise distros may have more
-            # than one "unknown" entry and we'd like to match the correct one.
-            osdistro = osname.split("-unknown")[0]
-            osname = self.latest_os_version(osdistro)
-            logging.debug("Detected location=%s as os=%s-unknown. "
-                "Converting that to the latest %s OS version=%s",
-                location, osdistro, osdistro, osname)
-
-        return osname
+        return ret[0].get_short_id()
 
     def list_os(self):
         """
@@ -229,28 +217,6 @@ class _OSDB(object):
             sortmap[name] = osobj
 
         return _sort(sortmap)
-
-    def latest_regex(self, regex):
-        """
-        Return the latest distro name that matches the passed regex
-        """
-        oses = [o.name for o in self.list_os() if re.match(regex, o.name)]
-        if not oses:
-            return None
-
-        # OpenSUSE's decision of having their versioning as 11.x, 12.x, 42.x,
-        # 15.x forces us to have this specific check for then.
-        # Knowing that 42 series was composed of 42.[1-3] and that the series
-        # will not have any more release, we can safely return the 4th element
-        # of the oses.
-        if regex.startswith("opensuse"):
-            return oses[3]
-
-        return oses[0]
-
-    def latest_os_version(self, osdistro):
-        version = r"\.[0-9]+(?!-unknown$)" if osdistro[-1].isdigit() else "[0-9]+(?!-unknown$)"
-        return self.latest_regex(osdistro + version)
 
 
 #####################
