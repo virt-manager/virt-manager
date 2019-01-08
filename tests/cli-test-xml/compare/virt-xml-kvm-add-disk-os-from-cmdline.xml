@@ -1,23 +1,18 @@
-   </description>
-   <metadata>
-     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
--      <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
-+      <libosinfo:os id="http://microsoft.com/win/me"/>
-     </libosinfo:libosinfo>
-   </metadata>
-   <memory unit="KiB">409600</memory>
-@@
-     <vsock model="virtio">
-       <cid auto="no" address="5"/>
-     </vsock>
+   <on_reboot>restart</on_reboot>
+   <on_crash>destroy</on_crash>
+   <devices>
 +    <disk type="file" device="disk">
 +      <driver name="qemu" type="qcow2"/>
 +      <source file="/dev/default-pool/testvol1.img"/>
-+      <target dev="hdd" bus="ide"/>
++      <target dev="vda" bus="virtio"/>
 +    </disk>
    </devices>
-   <seclabel type="dynamic" model="selinux" relabel="yes"/>
-   <seclabel type="static" model="dac" relabel="yes">
++  <metadata>
++    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
++      <libosinfo:os id="http://fedoraproject.org/fedora/28"/>
++    </libosinfo:libosinfo>
++  </metadata>
+ </domain>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test' defined successfully.
 Changes will take effect after the domain is fully powered off.

@@ -1,14 +1,13 @@
-     <vsock model="virtio">
-       <cid auto="no" address="5"/>
-     </vsock>
+   <on_reboot>restart</on_reboot>
+   <on_crash>destroy</on_crash>
+   <devices>
 +    <disk type="file" device="disk">
 +      <driver name="qemu" type="qcow2"/>
 +      <source file="/dev/default-pool/testvol1.img"/>
-+      <target dev="vdaf" bus="virtio"/>
++      <target dev="hda" bus="ide"/>
 +    </disk>
    </devices>
-   <seclabel type="dynamic" model="selinux" relabel="yes"/>
-   <seclabel type="static" model="dac" relabel="yes">
+ </domain>
 
-Domain 'test-many-devices' defined successfully.
+Domain 'test' defined successfully.
 Changes will take effect after the domain is fully powered off.
