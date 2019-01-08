@@ -845,6 +845,22 @@ def add_disk_option(stog, editexample=False):
                "--disk=?") + editmsg)
 
 
+def add_os_variant_option(parser, virtinstall):
+    osg = parser.add_argument_group(_("OS options"))
+
+    if virtinstall:
+        msg = _("The OS being installed in the guest.")
+    else:
+        msg = _("The OS installed in the guest.")
+    msg += "\n"
+    msg += _("This is used for deciding optimal defaults like virtio.\n"
+             "Example values: fedora29, rhel7.0, win10, ...\n"
+             "See 'osinfo-query os' for a full list.")
+
+    osg.add_argument("--os-variant", dest="distro_variant", help=msg)
+    return osg
+
+
 #############################################
 # CLI complex parsing helpers               #
 # (for options like --disk, --network, etc. #
