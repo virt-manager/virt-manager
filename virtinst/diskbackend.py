@@ -530,7 +530,7 @@ class CloneStorageCreator(_StorageCreator):
         else:
             vfs = os.statvfs(os.path.dirname(self._path))
             avail = vfs.f_frsize * vfs.f_bavail
-            need = int(self._size) * 1024 * 1024 * 1024
+        need = int(self._size) * 1024 * 1024 * 1024
         if need > avail:
             if self._sparse:
                 msg = _("The filesystem will not have enough free space"
