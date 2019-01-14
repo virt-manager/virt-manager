@@ -167,7 +167,7 @@ def check_xmlopt_collision(options):
     if len(collisions) != 1:
         fail(_("Only one change operation may be specified "
                "(conflicting options %s)") %
-               ["--" + c.cli_arg_name for c in collisions])
+               [c.cli_flag_name() for c in collisions])
 
     return collisions[0]
 

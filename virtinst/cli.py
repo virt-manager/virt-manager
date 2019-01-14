@@ -501,7 +501,7 @@ def autocomplete(parser):
 
     import argcomplete
 
-    parsernames = ["--" + pclass.cli_arg_name for pclass in
+    parsernames = [pclass.cli_flag_name() for pclass in
                    _get_completer_parsers()]
     # pylint: disable=protected-access
     for action in parser._actions:
@@ -1199,11 +1199,15 @@ class VirtCLIParser(metaclass=InitClass):
         cls._virtargs.append(_VirtCLIArgumentStatic(*args, **kwargs))
 
     @classmethod
+    def cli_flag_name(cls):
+        return "--" + cls.cli_arg_name.replace("_", "-")
+
+    @classmethod
     def print_introspection(cls):
         """
         Print out all _param names, triggered via ex. --disk help
         """
-        print("--%s options:" % cls.cli_arg_name)
+        print("%s options:" % cls.cli_flag_name())
         for arg in sorted(cls._virtargs, key=lambda p: p.cliname):
             print("  %s" % arg.cliname)
         print("")
@@ -1249,8 +1253,8 @@ class VirtCLIParser(metaclass=InitClass):
         Callback that handles virt-xml clearxml=yes|no magic
         """
         if not self.propname:
-            raise RuntimeError("Don't know how to clearxml --%s" %
-                               self.cli_arg_name)
+            raise RuntimeError("Don't know how to clearxml %s" %
+                               self.cli_flag_name())
         if val is not True:
             return
 
@@ -1314,8 +1318,8 @@ class VirtCLIParser(metaclass=InitClass):
         passed an invalid argument such as --disk idontexist=foo
         """
         if optdict:
-            fail(_("Unknown --%s options: %s") %
-                    (self.cli_arg_name, list(optdict.keys())))
+            fail(_("Unknown %s options: %s") %
+                    (self.cli_flag_name(), list(optdict.keys())))
 
     def _parse(self, inst):
         """
@@ -1369,8 +1373,8 @@ class VirtCLIParser(metaclass=InitClass):
         except Exception as e:
             logging.debug("Exception parsing inst=%s optstr=%s",
                           inst, self.optstr, exc_info=True)
-            fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
-                    {"cli_arg_name": self.cli_arg_name,
+            fail(_("Error: %(cli_flag_name)s %(options)s: %(err)s") %
+                    {"cli_flag_name": self.cli_flag_name(),
                      "options": self.optstr, "err": str(e)})
 
         return ret
@@ -1400,8 +1404,8 @@ class VirtCLIParser(metaclass=InitClass):
         except Exception as e:
             logging.debug("Exception parsing inst=%s optstr=%s",
                           inst, self.optstr, exc_info=True)
-            fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
-                    {"cli_arg_name": self.cli_arg_name,
+            fail(_("Error: %(cli_flag_name)s %(options)s: %(err)s") %
+                    {"cli_flag_name": self.cli_flag_name(),
                      "options": self.optstr, "err": str(e)})
 
         return ret
