@@ -740,7 +740,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         if net.forward.mode == "hostdev":
             net.forward.managed = "yes"
-            pfobj = net.forward.pfs.add_new()
+            pfobj = net.forward.pf.add_new()
             pfobj.dev = net.forward.dev
             net.forward.dev = None
             net.domain_name = None
