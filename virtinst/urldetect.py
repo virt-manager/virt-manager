@@ -539,7 +539,7 @@ class SuseDistro(Distro):
                  "boot/%s/initrd-xen" % tree_arch))
 
         if (tree_arch == "s390x" and
-            (self._os_variant == "sles11" or self._os_variant == "sled11")):
+            str(self._os_variant).startswith(("sles11", "sled11"))):
             self._kernel_paths.append(
                 ("boot/s390x/vmrdr.ikr", "boot/s390x/initrd"))
 
