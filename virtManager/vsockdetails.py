@@ -56,6 +56,11 @@ class vmmVsockDetails(vmmGObjectUI):
         else:
             cid = self.MIN_GUEST_CID
 
+        label = self.widget("vsock-auto").get_label().split(" (")[0]
+        if is_auto and self.vm.is_active():
+            label += " (%s %s)" % (_("CID"), cid)
+        self.widget("vsock-auto").set_label(label)
+
         self.widget("vsock-auto").set_active(is_auto)
         self.widget("vsock-cid").set_value(cid)
         self.widget("vsock-cid").set_visible(not is_auto)
