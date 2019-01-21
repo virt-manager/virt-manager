@@ -1912,7 +1912,7 @@ class ParserBoot(VirtCLIParser):
         if boot_order:
             inst.bootorder = boot_order
 
-        super()._parse(inst)
+        return super()._parse(inst)
 
     @classmethod
     def __init_class__(cls, **kwargs):
