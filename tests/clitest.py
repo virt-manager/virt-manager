@@ -967,6 +967,7 @@ c.add_compare("--add-device --sound pcspk", "add-sound")
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "add-disk-notarget")  # filling in acceptable target
 c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-storage")
+c.add_compare("--add-device --disk size=.01", "add-disk-default-storage")
 c.add_compare("--remove-device --sound ich6", "remove-sound-model", check_version="1.3.5")  # check_version=new graphics listen output
 c.add_compare("--remove-device --disk 3", "remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")

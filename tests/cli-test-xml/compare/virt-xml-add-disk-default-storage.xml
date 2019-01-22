@@ -1,0 +1,13 @@
+     <panic>
+       <address type="isa" iobase="0x505"/>
+     </panic>
++    <disk type="file" device="disk">
++      <source file="/var/lib/libvirt/images/test-for-virtxml.qcow2"/>
++      <target dev="hdb" bus="ide"/>
++    </disk>
+   </devices>
+   <seclabel type="dynamic" model="selinux" relabel="yes"/>
+ </domain>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the domain is fully powered off.

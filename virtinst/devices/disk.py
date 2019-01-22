@@ -413,6 +413,8 @@ class DeviceDisk(Device):
     def get_vol_object(self):
         return self._storage_backend.get_vol_object()
     def get_vol_install(self):
+        if not self._storage_backend:
+            return None
         return self._storage_backend.get_vol_install()
     def get_parent_pool(self):
         if self.get_vol_install():
