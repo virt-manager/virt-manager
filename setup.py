@@ -612,7 +612,7 @@ class CheckPylint(distutils.core.Command):
 
         print("running pycodestyle")
         style_guide = pycodestyle.StyleGuide(
-            config_file='tests/pycodestyle.cfg',
+            config_file='setup.cfg',
             paths=files
         )
         report = style_guide.check_files()
