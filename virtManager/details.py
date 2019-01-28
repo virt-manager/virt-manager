@@ -2975,9 +2975,11 @@ class vmmDetails(vmmGObjectUI):
         else:
             self.widget("video-3d").set_active(vid.accel3d)
 
-        if self.vm.xmlobj.devices.graphics:
+        if (self.vm.xmlobj.devices.graphics and
+            len(self.vm.xmlobj.devices.video) <= 1):
             self._disable_device_remove(
-                _("Cannot remove device while Graphics/Display is attached."))
+                _("Cannot remove last video device while "
+                  "Graphics/Display is attached."))
 
     def refresh_watchdog_page(self, watch):
         model = watch.model
