@@ -414,7 +414,7 @@ Some distro specific url samples:
 
 =item Fedora/Red Hat Based
 
-https://download.fedoraproject.org/pub/fedora/linux/releases/25/Server/x86_64/os
+https://download.fedoraproject.org/pub/fedora/linux/releases/29/Server/x86_64/os
 
 =item Debian
 
@@ -1729,7 +1729,7 @@ C<~/.cache/virt-manager/virt-install.log> even if this parameter is omitted.
 
 =head1 EXAMPLES
 
-Install a Fedora 20 KVM guest with virtio accelerated disk/network,
+Install a Fedora 29 KVM guest with virtio accelerated disk/network,
 creating a new 10GiB qcow2 file, installing from media in the hosts
 CDROM drive. This will use Spice graphics by default, and launch autolaunch
 a graphical client.
@@ -1741,7 +1741,7 @@ a graphical client.
        --memory 500 \
        --disk size=10 \
        --cdrom /dev/cdrom \
-       --os-variant fedora20
+       --os-variant fedora29
 
 Install a Fedora 9 plain QEMU guest, using LVM partition, virtual networking,
 booting from PXE, using VNC server/viewer, with virtio-scsi disk
