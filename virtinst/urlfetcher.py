@@ -32,8 +32,6 @@ class _URLFetcher(object):
         self.scratchdir = scratchdir
         self.meter = meter
 
-        self._srcdir = None
-
         logging.debug("Using scratchdir=%s", scratchdir)
 
 
@@ -46,13 +44,11 @@ class _URLFetcher(object):
         Generate a full fetchable URL from the passed filename, which
         is relative to the self.location
         """
-        ret = self._srcdir or self.location
+        if self._is_iso:
+            return os.path.join("/", filename)
         if not filename:
-            return ret
-
-        if not ret.endswith("/"):
-            ret += "/"
-        return ret + filename
+            return self.location
+        return os.path.join(self.location, filename)
 
     def _grabURL(self, filename, fileobj):
         """
@@ -295,9 +291,6 @@ class _LocalURLFetcher(_URLFetcher):
 class _ISOURLFetcher(_URLFetcher):
     _cache_file_list = None
     _is_iso = True
-
-    def _make_full_url(self, filename):
-        return "/" + filename
 
     def _grabber(self, url):
         """
