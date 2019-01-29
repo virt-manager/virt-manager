@@ -25,6 +25,7 @@ class _DistroCache(object):
         self.treeinfo_family = None
         self.treeinfo_version = None
         self.treeinfo_name = None
+        self.treeinfo_matched = False
 
         self.suse_content = None
         self.checked_for_suse_content = False
@@ -73,6 +74,7 @@ class _DistroCache(object):
             return False
 
         ret = bool(re.match(famregex, self.treeinfo_family))
+        self.treeinfo_matched = ret
         if not ret:
             logging.debug("Didn't match treeinfo family regex=%s", famregex)
         return ret
@@ -318,7 +320,10 @@ class Distro(object):
             self._os_variant = None
 
         self._kernel_paths = []
-        self._set_kernel_paths()
+        if self.cache.treeinfo_matched:
+            self._kernel_paths = self.cache.get_treeinfo_media(self.type)
+        else:
+            self._set_kernel_paths()
 
 
     @classmethod
@@ -326,7 +331,7 @@ class Distro(object):
         raise NotImplementedError
 
     def _set_kernel_paths(self):
-        raise NotImplementedError()
+        pass
 
     def acquireKernel(self):
         kernelpath = None
@@ -382,9 +387,6 @@ class RedHatDistro(Distro):
     @classmethod
     def is_valid(cls, cache):
         raise NotImplementedError
-
-    def _set_kernel_paths(self):
-        self._kernel_paths = self.cache.get_treeinfo_media(self.type)
 
     def _get_kernel_url_arg(self):
         def _is_old_rhdistro():
@@ -515,11 +517,7 @@ class SuseDistro(Distro):
         return False
 
     def _set_kernel_paths(self):
-        if not self.cache.suse_content:
-            # This means we matched on treeinfo
-            self._kernel_paths = self.cache.get_treeinfo_media(self.type)
-            return
-
+        # We only reach here if no treeinfo was matched
         tree_arch = self.cache.suse_content.tree_arch
 
         if re.match(r'i[4-9]86', tree_arch):
@@ -614,9 +612,6 @@ class SuseDistro(Distro):
         if not var:
             var = self._detect_osdict_from_suse_content()
         return var
-
-    def _get_kernel_url_arg(self):
-        return "install"
 
 
 class SLESDistro(SuseDistro):
@@ -834,10 +829,10 @@ class GenericTreeinfoDistro(Distro):
 
     @classmethod
     def is_valid(cls, cache):
-        return bool(cache.treeinfo)
-
-    def _set_kernel_paths(self):
-        self._kernel_paths = self.cache.get_treeinfo_media(self.type)
+        if cache.treeinfo:
+            cache.treeinfo_matched = True
+            return True
+        return False
 
 
 # Build list of all *Distro classes
