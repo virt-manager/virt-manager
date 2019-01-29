@@ -304,8 +304,6 @@ class Distro(object):
     PRETTY_NAME = None
     matching_distros = []
 
-    _kernel_paths = None
-
     def __init__(self, fetcher, arch, vmtype, cache):
         self.fetcher = fetcher
         self.type = vmtype
@@ -319,10 +317,16 @@ class Distro(object):
                           self._os_variant)
             self._os_variant = None
 
+        self._kernel_paths = []
+        self._set_kernel_paths()
+
 
     @classmethod
     def is_valid(cls, cache):
         raise NotImplementedError
+
+    def _set_kernel_paths(self):
+        raise NotImplementedError()
 
     def acquireKernel(self):
         kernelpath = None
@@ -379,9 +383,7 @@ class RedHatDistro(Distro):
     def is_valid(cls, cache):
         raise NotImplementedError
 
-    def __init__(self, *args, **kwargs):
-        Distro.__init__(self, *args, **kwargs)
-
+    def _set_kernel_paths(self):
         self._kernel_paths = self.cache.get_treeinfo_media(self.type)
 
     def _get_kernel_url_arg(self):
@@ -512,9 +514,7 @@ class SuseDistro(Distro):
                 return True
         return False
 
-    def __init__(self, *args, **kwargs):
-        Distro.__init__(self, *args, **kwargs)
-
+    def _set_kernel_paths(self):
         if not self.cache.suse_content:
             # This means we matched on treeinfo
             self._kernel_paths = self.cache.get_treeinfo_media(self.type)
@@ -531,7 +531,6 @@ class SuseDistro(Distro):
             oldkern += "64"
             oldinit += "64"
 
-        self._kernel_paths = []
         if self.type == "xen":
             # Matches Opensuse > 10.2 and sles 10
             self._kernel_paths.append(
@@ -682,11 +681,7 @@ class DebianDistro(Distro):
         return bool(media_type)
 
 
-    def __init__(self, *args, **kwargs):
-        Distro.__init__(self, *args, **kwargs)
-
-
-        self._kernel_paths = []
+    def _set_kernel_paths(self):
         if self.cache.debian_media_type == "disk":
             self._set_installcd_paths()
         else:
@@ -800,7 +795,9 @@ class ALTLinuxDistro(Distro):
     PRETTY_NAME = "ALT Linux"
     matching_distros = ["altlinux"]
 
-    _kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
+    def _set_kernel_paths(self):
+        self._kernel_paths = [
+                ("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
 
     @classmethod
     def is_valid(cls, cache):
@@ -817,10 +814,7 @@ class MandrivaDistro(Distro):
     def is_valid(cls, cache):
         return cache.content_regex("VERSION", ".*(Mandriva|Mageia).*")
 
-    def __init__(self, *args, **kwargs):
-        Distro.__init__(self, *args, **kwargs)
-        self._kernel_paths = []
-
+    def _set_kernel_paths(self):
         # At least Mageia 5 uses arch in the names
         self._kernel_paths += [
             ("isolinux/%s/vmlinuz" % self.arch,
@@ -842,9 +836,7 @@ class GenericTreeinfoDistro(Distro):
     def is_valid(cls, cache):
         return bool(cache.treeinfo)
 
-    def __init__(self, *args, **kwargs):
-        Distro.__init__(self, *args, **kwargs)
-
+    def _set_kernel_paths(self):
         self._kernel_paths = self.cache.get_treeinfo_media(self.type)
 
 
