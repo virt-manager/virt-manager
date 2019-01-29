@@ -174,40 +174,26 @@ def _testURL(fetcher, testdata):
                 (s.get_osdict_info(), detectdistro,
                  distname, fetcher.location, testdata.distroclass))
 
-    # Do this only after the distro detection, since we actually need
-    # to fetch files for that part
-    def fakeAcquireFile(filename):
-        logging.debug("Fake acquiring %s", filename)
-        if not fetcher.hasFile(filename):
-            return False
-        return filename
-    fetcher.acquireFile = fakeAcquireFile
-
     # Fetch regular kernel
-    kernel, initrd, kernelargs = hvmstore.acquireKernel()
-    if kernel is False or initrd is False:
-        AssertionError("%s-%s: hvm kernel fetching failed" %
-                       (distname, arch))
-
+    kernel, initrd = hvmstore.check_kernel_paths()
+    dummy = initrd
     if testdata.kernelregex and not re.match(testdata.kernelregex, kernel):
         raise AssertionError("kernel=%s but testdata.kernelregex='%s'" %
                 (kernel, testdata.kernelregex))
 
+    kernelargs = hvmstore.get_kernel_url_arg()
     if testdata.kernelarg == "None":
         if bool(kernelargs):
             raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
                     % (kernelargs, testdata.kernelarg))
     elif testdata.kernelarg:
-        if not kernelargs.startswith(testdata.kernelarg):
+        if not kernelargs == testdata.kernelarg:
             raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
                     % (kernelargs, testdata.kernelarg))
 
     # Fetch xen kernel
     if xenstore:
-        kernel, initrd, kernelargs = xenstore.acquireKernel()
-        if kernel is False or initrd is False:
-            raise AssertionError("%s-%s: xen kernel fetching failed" %
-                                 (distname, arch))
+        xenstore.check_kernel_paths()
 
 
 def _fetchWrapper(url, cb):

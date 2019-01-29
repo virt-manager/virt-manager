@@ -113,10 +113,16 @@ class InstallerTreeMedia(object):
 
     def _prepare_kernel_url(self, guest, fetcher):
         store = self._get_store(guest, fetcher)
-        kernel, initrd, args = store.acquireKernel()
+        kernelpath, initrdpath = store.check_kernel_paths()
+
+        kernel = fetcher.acquireFile(kernelpath)
         self._tmpfiles.append(kernel)
-        if initrd:
-            self._tmpfiles.append(initrd)
+        initrd = fetcher.acquireFile(initrdpath)
+        self._tmpfiles.append(initrd)
+
+        args = ""
+        if not self.location.startswith("/") and store.get_kernel_url_arg():
+            args += "%s=%s" % (store.get_kernel_url_arg(), self.location)
 
         perform_initrd_injections(initrd,
                                   self.initrd_injections,

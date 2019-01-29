@@ -6,7 +6,6 @@
 
 import configparser
 import logging
-import os
 import re
 
 from .osdict import OSDB
@@ -326,10 +325,6 @@ class Distro(object):
             self._set_manual_kernel_paths()
 
 
-    @classmethod
-    def is_valid(cls, cache):
-        raise NotImplementedError
-
     def _set_manual_kernel_paths(self):
         """
         If kernel/initrd path could not be determined from a source
@@ -338,38 +333,6 @@ class Distro(object):
         """
         pass
 
-    def acquireKernel(self):
-        kernelpath = None
-        initrdpath = None
-        for kpath, ipath in self._kernel_paths:
-            if self.fetcher.hasFile(kpath) and self.fetcher.hasFile(ipath):
-                kernelpath = kpath
-                initrdpath = ipath
-                break
-
-        if not kernelpath or not initrdpath:
-            raise RuntimeError(_("Couldn't find kernel for "
-                                 "%(distro)s tree.") %
-                                 {"distro": self.PRETTY_NAME})
-
-        args = ""
-        if not self.uri.startswith("/") and self._get_kernel_url_arg():
-            args += "%s=%s" % (self._get_kernel_url_arg(), self.uri)
-
-        kernel = self.fetcher.acquireFile(kernelpath)
-        try:
-            initrd = self.fetcher.acquireFile(initrdpath)
-            return kernel, initrd, args
-        except Exception:
-            os.unlink(kernel)
-            raise
-
-    def get_osdict_info(self):
-        """
-        Return detected osdict value
-        """
-        return self._os_variant
-
     def _detect_version(self):
         """
         Hook for subclasses to detect media os variant.
@@ -377,7 +340,30 @@ class Distro(object):
         logging.debug("%s does not implement any osdict detection", self)
         return None
 
-    def _get_kernel_url_arg(self):
+
+    ##############
+    # Public API #
+    ##############
+
+    @classmethod
+    def is_valid(cls, cache):
+        raise NotImplementedError
+
+    def check_kernel_paths(self):
+        for kpath, ipath in self._kernel_paths:
+            if self.fetcher.hasFile(kpath) and self.fetcher.hasFile(ipath):
+                return kpath, ipath
+        raise RuntimeError(_("Couldn't find kernel for "
+                             "%(distro)s tree.") %
+                             {"distro": self.PRETTY_NAME})
+
+    def get_osdict_info(self):
+        """
+        Return detected osdict value
+        """
+        return self._os_variant
+
+    def get_kernel_url_arg(self):
         """
         Kernel argument name the distro's installer uses to reference
         a network source, possibly bypassing some installer prompts
