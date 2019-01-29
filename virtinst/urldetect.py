@@ -382,23 +382,28 @@ class Distro(object):
         Kernel argument name the distro's installer uses to reference
         a network source, possibly bypassing some installer prompts
         """
-        return None
+        os_variant = self.get_osdict_info()
+        if not os_variant:
+            return None
 
+        # SUSE distros
+        if (re.match("opensuse.*", os_variant) or
+            re.match("sled.*", os_variant) or
+            re.match("sles.*", os_variant) or
+            re.match("sle-.*", os_variant) or
+            re.match("caasp-.*", os_variant)):
+            return "install"
 
-class RedHatDistro(Distro):
-    """
-    Baseclass for Red Hat based distros
-    """
-    @classmethod
-    def is_valid(cls, cache):
-        raise NotImplementedError
+        if not (re.match("fedora.*", os_variant) or
+                re.match("centos.*", os_variant) or
+                re.match("rhel.*", os_variant)):
+            return None
 
-    def _get_kernel_url_arg(self):
         def _is_old_rhdistro():
-            m = re.match(r"^.*[^0-9\.]+([0-9\.]+)$", self._os_variant or "")
+            m = re.match(r"^.*[^0-9\.]+([0-9\.]+)$", os_variant or "")
             if m:
                 version = float(m.groups()[0])
-                if "fedora" in self._os_variant and version < 19:
+                if "fedora" in os_variant and version < 19:
                     return True
                 elif version < 7:
                     # rhel, centos, scientific linux, etc
@@ -413,7 +418,7 @@ class RedHatDistro(Distro):
         return "inst.repo"
 
 
-class FedoraDistro(RedHatDistro):
+class FedoraDistro(Distro):
     PRETTY_NAME = "Fedora"
     matching_distros = ["fedora"]
 
@@ -447,7 +452,7 @@ class FedoraDistro(RedHatDistro):
         return latest_variant
 
 
-class RHELDistro(RedHatDistro):
+class RHELDistro(Distro):
     PRETTY_NAME = "Red Hat Enterprise Linux"
     matching_distros = ["rhel"]
     _variant_prefix = "rhel"
@@ -490,7 +495,7 @@ class CentOSDistro(RHELDistro):
         return cache.treeinfo_family_regex(famregex)
 
 
-class SuseDistro(Distro):
+class SuseDistro(RHELDistro):
     PRETTY_NAME = None
     _suse_regex = []
     matching_distros = []
