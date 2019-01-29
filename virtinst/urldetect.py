@@ -323,14 +323,19 @@ class Distro(object):
         if self.cache.treeinfo_matched:
             self._kernel_paths = self.cache.get_treeinfo_media(self.type)
         else:
-            self._set_kernel_paths()
+            self._set_manual_kernel_paths()
 
 
     @classmethod
     def is_valid(cls, cache):
         raise NotImplementedError
 
-    def _set_kernel_paths(self):
+    def _set_manual_kernel_paths(self):
+        """
+        If kernel/initrd path could not be determined from a source
+        like treeinfo, subclasses can override this to set a list
+        of manual paths
+        """
         pass
 
     def acquireKernel(self):
@@ -516,7 +521,7 @@ class SuseDistro(Distro):
                 return True
         return False
 
-    def _set_kernel_paths(self):
+    def _set_manual_kernel_paths(self):
         # We only reach here if no treeinfo was matched
         tree_arch = self.cache.suse_content.tree_arch
 
@@ -676,7 +681,7 @@ class DebianDistro(Distro):
         return bool(media_type)
 
 
-    def _set_kernel_paths(self):
+    def _set_manual_kernel_paths(self):
         if self.cache.debian_media_type == "disk":
             self._set_installcd_paths()
         else:
@@ -790,7 +795,7 @@ class ALTLinuxDistro(Distro):
     PRETTY_NAME = "ALT Linux"
     matching_distros = ["altlinux"]
 
-    def _set_kernel_paths(self):
+    def _set_manual_kernel_paths(self):
         self._kernel_paths = [
                 ("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
 
@@ -809,7 +814,7 @@ class MandrivaDistro(Distro):
     def is_valid(cls, cache):
         return cache.content_regex("VERSION", ".*(Mandriva|Mageia).*")
 
-    def _set_kernel_paths(self):
+    def _set_manual_kernel_paths(self):
         # At least Mageia 5 uses arch in the names
         self._kernel_paths += [
             ("isolinux/%s/vmlinuz" % self.arch,
