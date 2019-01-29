@@ -106,7 +106,6 @@ class InstallerTreeMedia(object):
         return self._cached_fetcher
 
     def _get_store(self, guest, fetcher):
-        # Caller is responsible for calling fetcher prepare/cleanup if needed
         if not self._cached_store:
             self._cached_store = urldetect.getDistroStore(guest, fetcher)
         return self._cached_store
@@ -143,17 +142,7 @@ class InstallerTreeMedia(object):
 
     def prepare(self, guest, meter):
         fetcher = self._get_fetcher(guest, meter)
-        try:
-            try:
-                fetcher.prepareLocation()
-            except ValueError as e:
-                logging.debug("Error preparing install location",
-                    exc_info=True)
-                raise ValueError(_("Invalid install location: ") + str(e))
-
-            return self._prepare_kernel_url(guest, fetcher)
-        finally:
-            fetcher.cleanupLocation()
+        return self._prepare_kernel_url(guest, fetcher)
 
     def cleanup(self, guest):
         ignore = guest
@@ -176,25 +165,15 @@ class InstallerTreeMedia(object):
         if self._media_type not in [MEDIA_URL]:
             return True
 
-        try:
-            fetcher = self._get_fetcher(guest, None)
-            fetcher.prepareLocation()
-
-            # This will throw an error for us
-            ignore = self._get_store(guest, fetcher)
-        finally:
-            fetcher.cleanupLocation()
+        fetcher = self._get_fetcher(guest, None)
+        # This will throw an error for us
+        ignore = self._get_store(guest, fetcher)
         return True
 
     def detect_distro(self, guest):
         if self._media_type in [MEDIA_ISO]:
             return InstallerTreeMedia.detect_iso_distro(guest, self.location)
 
-        try:
-            fetcher = self._get_fetcher(guest, None)
-            fetcher.prepareLocation()
-
-            store = self._get_store(guest, fetcher)
-            return store.get_osdict_info()
-        finally:
-            fetcher.cleanupLocation()
+        fetcher = self._get_fetcher(guest, None)
+        store = self._get_store(guest, fetcher)
+        return store.get_osdict_info()

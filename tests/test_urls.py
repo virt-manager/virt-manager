@@ -198,11 +198,7 @@ def _testURL(fetcher, testdata):
 
 def _fetchWrapper(url, cb):
     fetcher = urlfetcher.fetcherForURI(url, "/tmp", meter)
-    try:
-        fetcher.prepareLocation()
-        return cb(fetcher)
-    finally:
-        fetcher.cleanupLocation()
+    return cb(fetcher)
 
 
 def _testURLWrapper(testdata):

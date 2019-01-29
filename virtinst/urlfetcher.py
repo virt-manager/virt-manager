@@ -33,6 +33,7 @@ class _URLFetcher(object):
         self.meter = meter
 
         logging.debug("Using scratchdir=%s", scratchdir)
+        self._prepare()
 
 
     ####################
@@ -103,17 +104,20 @@ class _URLFetcher(object):
         """
         return self._is_iso
 
-    def prepareLocation(self):
+    def _prepare(self):
         """
         Perform any necessary setup
         """
         pass
 
-    def cleanupLocation(self):
+    def _cleanup(self):
         """
         Perform any necessary cleanup
         """
         pass
+
+    def __del__(self):
+        self._cleanup()
 
     def can_access(self):
         """
@@ -165,10 +169,10 @@ class _URLFetcher(object):
 class _HTTPURLFetcher(_URLFetcher):
     _session = None
 
-    def prepareLocation(self):
+    def _prepare(self):
         self._session = requests.Session()
 
-    def cleanupLocation(self):
+    def _cleanup(self):
         if self._session:
             try:
                 self._session.close()
@@ -219,7 +223,7 @@ class _HTTPURLFetcher(_URLFetcher):
 class _FTPURLFetcher(_URLFetcher):
     _ftp = None
 
-    def prepareLocation(self):
+    def _prepare(self):
         if self._ftp:
             return
 
@@ -246,7 +250,7 @@ class _FTPURLFetcher(_URLFetcher):
         return urlobj, size
 
 
-    def cleanupLocation(self):
+    def _cleanup(self):
         if not self._ftp:
             return
 

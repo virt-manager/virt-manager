@@ -217,6 +217,8 @@ class vmmCreate(vmmGObjectUI):
         if self._storage_browser:
             self._storage_browser.close()
         self._set_conn(None)
+        self._failed_guest = None
+        self._guest = None
 
     def _cleanup(self):
         if self._storage_browser:
@@ -331,8 +333,6 @@ class vmmCreate(vmmGObjectUI):
         Reset all UI state to default values. Conn specific state is
         populated in _populate_conn_state
         """
-        self._failed_guest = None
-        self._guest = None
         self.reset_finish_cursor()
 
         self.widget("create-pages").set_current_page(PAGE_NAME)
