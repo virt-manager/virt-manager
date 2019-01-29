@@ -251,7 +251,7 @@ def getDistroStore(guest, fetcher):
     stores = _allstores[:]
     cache = _DistroCache(fetcher)
 
-    # If user manually specified an os_distro, bump it's URL class
+    # If user manually specified an os_distro, bump its URL class
     # to the top of the list
     if osobj.distro:
         logging.debug("variant=%s has distro=%s, looking for matching "
