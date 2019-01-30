@@ -20,28 +20,17 @@ from . import util
 
 class Installer(object):
     """
-    Installer classes attempt to encapsulate all the parameters needed
-    to 'install' a guest: essentially, booting the guest with the correct
-    media for the OS install phase (if there is one), and setting up the
-    guest to boot to the correct media for all subsequent runs.
+    Class for kicking off VM installs. The VM is set up separately in a Guest
+    instance. This class tracks the install media/bootdev choice, alters the
+    Guest XML, boots it for the install, then saves the post install XML
+    config. The Guest is passed in via start_install, only install media
+    selection is done at __init__ time
 
-    Some of the actual functionality:
-
-        - Determining what type of install media has been requested, and
-          representing it correctly to the Guest
-
-        - Fetching install kernel/initrd or boot.iso from a URL
-
-        - Setting the boot device as appropriate depending on whether we
-          are booting into an OS install, or booting post-install
-
-    Some of the information that the Installer needs to know to accomplish
-    this:
-
-        - Install media location (could be a URL, local path, ...)
-        - Virtualization type (parameter 'os_type') ('xen', 'hvm', etc.)
-        - Hypervisor name (parameter 'type') ('qemu', 'kvm', 'xen', etc.)
-        - Guest architecture ('i686', 'x86_64')
+    :param cdrom: Path to a cdrom device or iso. Maps to virt-install --cdrom
+    :param location: An install tree URI, local directory, or ISO/CDROM path.
+        Largely handled by installtreemedia helper class. Maps to virt-install
+        --location
+    :param install_bootdev: The VM bootdev to use (HD, NETWORK, CDROM, FLOPPY)
     """
     def __init__(self, conn, cdrom=None, location=None, install_bootdev=None):
         self.conn = conn
