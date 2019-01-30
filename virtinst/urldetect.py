@@ -30,6 +30,9 @@ class _DistroCache(object):
         self.checked_for_suse_content = False
         self.debian_media_type = None
 
+        self.libosinfo_os_variant = None
+        self.libosinfo_mediaobj = None
+
     def acquire_file_content(self, path):
         if path not in self._filecache:
             try:
@@ -135,6 +138,23 @@ class _DistroCache(object):
 
     def fetcher_is_iso(self):
         return self._fetcher.is_iso()
+
+    def guess_os_from_iso(self):
+        ret = OSDB.guess_os_by_iso(self._fetcher.location)
+        if not ret:
+            return False
+
+        self.libosinfo_os_variant, self.libosinfo_mediaobj = ret
+        if (not self.libosinfo_mediaobj.get_kernel_path() or
+            not self.libosinfo_mediaobj.get_initrd_path()):
+            # This can happen if the media is live media, or just
+            # with incomplete libosinfo data
+            logging.debug("libosinfo didn't report any media kernel/initrd "
+                          "path for detected os_variant=%s",
+                          self.libosinfo_mediaobj)
+            return False
+
+        return True
 
 
 class _SUSEContent(object):
@@ -312,9 +332,14 @@ class _DistroTree(object):
         self.uri = fetcher.location
         self.cache = cache
 
-        self._os_variant = self._detect_version()
+        if self.cache.libosinfo_os_variant:
+            self._os_variant = self.cache.libosinfo_os_variant
+        else:
+            self._os_variant = self._detect_version()
+
         if self._os_variant and not OSDB.lookup_os(self._os_variant):
-            logging.debug("Detected os_variant as %s, which is not in osdict.",
+            logging.debug("Detected os_variant as %s, which is not "
+                          "in osdict.",
                           self._os_variant)
             self._os_variant = None
 
@@ -831,6 +856,26 @@ class _GenericTreeinfoDistro(_DistroTree):
         return False
 
 
+class _LibosinfoDistro(_DistroTree):
+    """
+    For ISO media detection that was fully handled by libosinfo
+    """
+    PRETTY_NAME = "Libosinfo detected"
+    matching_distros = []
+
+    @classmethod
+    def is_valid(cls, cache):
+        if cache.fetcher_is_iso():
+            return cache.guess_os_from_iso()
+        return False
+
+    def _set_manual_kernel_paths(self):
+        self._kernel_paths += [
+                (self.cache.libosinfo_mediaobj.get_kernel_path(),
+                 self.cache.libosinfo_mediaobj.get_initrd_path())
+        ]
+
+
 # Build list of all *Distro classes
 def _build_distro_list():
     allstores = []
@@ -839,6 +884,10 @@ def _build_distro_list():
             issubclass(obj, _DistroTree) and
             obj.PRETTY_NAME):
             allstores.append(obj)
+
+    # Always stick Libosinfo first, it takes priority
+    allstores.remove(_LibosinfoDistro)
+    allstores.insert(0, _LibosinfoDistro)
 
     # Always stick GenericDistro at the end, since it's a catchall
     allstores.remove(_GenericTreeinfoDistro)
