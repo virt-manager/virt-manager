@@ -26,9 +26,10 @@ os.environ["LANG"] = "en_US.UTF-8"
 os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
 
-OLD_OSINFO = utils.has_old_osinfo()
 TMP_IMAGE_DIR = "/tmp/__virtinst_cli_"
 XMLDIR = "tests/cli-test-xml"
+OLD_OSINFO = utils.has_old_osinfo()
+HAS_ISOINFO = find_executable("isoinfo")
 
 # Images that will be created by virt-install/virt-clone, and removed before
 # each run
@@ -80,6 +81,16 @@ test_files = {
 }
 
 
+def has_old_osinfo():
+    if OLD_OSINFO:
+        return "osinfo is too old"
+
+
+def has_isoinfo():
+    if not HAS_ISOINFO:
+        return "isoinfo not installed"
+
+
 ######################
 # Test class helpers #
 ######################
@@ -95,7 +106,7 @@ class Command(object):
         self.input_file = None
 
         self.need_conn = True
-        self.skip_check = None
+        self.skip_cb = None
         self.check_version = None
         self.grep = None
         self.nogrep = None
@@ -200,8 +211,8 @@ class Command(object):
                 raise RuntimeError("couldn't parse URI from command %s" %
                                    self.argv)
 
-            if self.skip_check:
-                tests.skipTest("skipped with skip_check")
+            if self.skip_cb and self.skip_cb():
+                tests.skipTest("skip_cb: %s" % self.skip_cb())
                 return
 
             code, output = self._get_output(conn)
@@ -256,12 +267,12 @@ class Command(object):
 
 
 class _CategoryProxy(object):
-    def __init__(self, app, name, default_args, skip_check, check_version):
+    def __init__(self, app, name, default_args, skip_cb, check_version):
         self._app = app
         self._name = name
 
         self.default_args = default_args
-        self.skip_check = skip_check
+        self.skip_cb = skip_cb
         self.check_version = check_version
 
     def add_valid(self, *args, **kwargs):
@@ -310,14 +321,14 @@ class App(object):
 
 
     def add_category(self, catname, default_args,
-                     skip_check=None, check_version=None):
+                     skip_cb=None, check_version=None):
         obj = _CategoryProxy(self, catname, default_args,
-                             skip_check, check_version)
+                             skip_cb, check_version)
         self.categories[catname] = obj
         return obj
 
     def _add(self, catname, testargs, valid, compfile,
-             skip_check=None, check_version=None, input_file=None,
+             skip_cb=None, check_version=None, input_file=None,
              auto_printarg=True, grep=None):
 
         category = self.categories[catname]
@@ -332,7 +343,7 @@ class App(object):
             compfile = os.path.basename(self.appname) + "-" + compfile
             compare_XMLDIR = "%s/compare" % XMLDIR
             cmd.compare_file = "%s/%s.xml" % (compare_XMLDIR, compfile)
-        cmd.skip_check = skip_check or category.skip_check
+        cmd.skip_cb = skip_cb or category.skip_cb
         cmd.check_version = (check_version or
                              category.check_version or
                              self.check_version)
@@ -369,7 +380,7 @@ vinst = App("virt-install")
 # virt-install verbose XML comparison tests #
 #############################################
 
-c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole --os-variant fedora-unknown", skip_check=OLD_OSINFO)
+c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole --os-variant fedora-unknown", skip_cb=has_old_osinfo)
 
 # Singleton element test #1, for simpler strings
 c.add_compare(""" \
@@ -726,12 +737,12 @@ c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage wi
 ###########################
 
 c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --noautoconsole")
-c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none", "kvm-fedoralatest-url", skip_check=OLD_OSINFO)  # Fedora Directory tree URL install with extra-args
+c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none", "kvm-fedoralatest-url", skip_cb=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s", "test-url-detection")  # --test-media-detection
-c.add_compare("--os-variant fedora20 --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", skip_check=OLD_OSINFO)  # Quiet URL install should make no noise
+c.add_compare("--os-variant fedora20 --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", skip_cb=has_old_osinfo)  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet", "qemu-plain")  # plain qemu
-c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64", skip_check=OLD_OSINFO)  # 32 on 64
+c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64", skip_cb=has_old_osinfo)  # 32 on 64
 
 # ppc64 tests
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")
@@ -739,29 +750,29 @@ c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fed
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20 --panic default", "ppc64le-kvm-import")
 
 # s390x tests
-c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom", skip_check=OLD_OSINFO)
+c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom", skip_cb=has_old_osinfo)
 c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.kvm_s390x_KVMIBM + " --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --watchdog diag288,action=reset --panic default --graphics vnc", "s390x-cdrom-KVMIBM")
 
 # qemu:///session tests
-c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", skip_check=OLD_OSINFO)
+c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", skip_cb=has_old_osinfo)
 
 # misc KVM config tests
-c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", skip_check=not find_executable("isoinfo"))  # Using --location iso mounting
+c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", skip_cb=has_isoinfo)  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel5.4", "kvm-rhel5")  # RHEL5 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7", skip_check=OLD_OSINFO)  # RHEL7 defaults
-c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", skip_check=OLD_OSINFO)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7", skip_cb=has_old_osinfo)  # RHEL7 defaults
+c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", skip_cb=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
 c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --cpu host-copy --disk none --pxe", "kvm-hostcopy-fallback")  # No domcaps so need to use capabilities for CPU host-copy
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", skip_check=OLD_OSINFO)  # Centos 7 defaults
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", skip_check=OLD_OSINFO)  # Centos 7 defaults
-c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10", "kvm-win10", skip_check=OLD_OSINFO)  # win10 defaults
-c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi", skip_check=OLD_OSINFO)  # no HYPER-V with UEFI
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", skip_cb=has_old_osinfo)  # Centos 7 defaults
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", skip_cb=has_old_osinfo)  # Centos 7 defaults
+c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10", "kvm-win10", skip_cb=has_old_osinfo)  # win10 defaults
+c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi", skip_cb=has_old_osinfo)  # no HYPER-V with UEFI
 c.add_compare("--arch i686 --boot uefi --pxe --disk none", "kvm-i686-uefi")  # i686 uefi
 c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
 c.add_compare("--disk size=20 --os-variant solaris10", "solaris10-defaults")  # test solaris OS defaults, triggers a couple specific code paths
 c.add_compare("--disk size=1 --os-variant openbsd4.9", "openbsd-defaults")  # triggers net fallback scenario
-c.add_compare("--connect " + utils.URIs.kvm_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", skip_check=OLD_OSINFO)
+c.add_compare("--connect " + utils.URIs.kvm_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", skip_cb=has_old_osinfo)
 
 c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
@@ -1072,7 +1083,10 @@ def _add_argcomplete_cmd(line, grep, nogrep=None):
         cmd.nogrep = nogrep
     cmd.env = env
     cmd.need_conn = False
-    cmd.skip_check = not(argcomplete)
+    def have_argcomplete():
+        if not argcomplete:
+            return "argcomplete not installed"
+    cmd.skip_cb = have_argcomplete
     ARGCOMPLETE_CMDS.append(cmd)
 
 _add_argcomplete_cmd("virt-install --di", "--disk")
