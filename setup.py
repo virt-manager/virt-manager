@@ -527,18 +527,6 @@ class TestUI(TestBaseCommand):
 class TestURLFetch(TestBaseCommand):
     description = "Test fetching kernels and isos from various distro trees"
 
-    def initialize_options(self):
-        TestBaseCommand.initialize_options(self)
-        self.path = ""
-
-    def finalize_options(self):
-        TestBaseCommand.finalize_options(self)
-        origpath = str(self.path)
-        if not origpath:
-            self.path = []
-        else:
-            self.path = origpath.split(",")
-
     def run(self):
         self._testfiles = ["tests.test_urls"]
         TestBaseCommand.run(self)
