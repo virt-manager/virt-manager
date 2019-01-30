@@ -128,7 +128,7 @@ class _DistroCache(object):
         # centos altarch's have just version=7
         update = 0
         version = _safeint(verstr)
-        if verstr.count(".") == 1:
+        if verstr.count(".") >= 1:
             version = _safeint(verstr.split(".")[0])
             update = _safeint(verstr.split(".")[1])
 
