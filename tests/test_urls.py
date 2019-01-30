@@ -17,15 +17,6 @@ from virtinst import Guest
 from virtinst import urldetect
 from virtinst import urlfetcher
 from virtinst import util
-from virtinst.urldetect import ALTLinuxDistro
-from virtinst.urldetect import CentOSDistro
-from virtinst.urldetect import DebianDistro
-from virtinst.urldetect import FedoraDistro
-from virtinst.urldetect import GenericTreeinfoDistro
-from virtinst.urldetect import MandrivaDistro
-from virtinst.urldetect import RHELDistro
-from virtinst.urldetect import SuseDistro
-from virtinst.urldetect import UbuntuDistro
 
 
 class _URLTestData(object):
@@ -39,7 +30,6 @@ class _URLTestData(object):
         self.url = url
         self.detectdistro = detectdistro
         self.arch = self._find_arch()
-        self.distroclass = self._distroclass_for_name(self.name)
         self.kernelarg = kernelarg
         self.kernelregex = kernelregex
 
@@ -49,30 +39,6 @@ class _URLTestData(object):
         # so it can short circuit the lookup checks. Speeds up the tests
         # and exercises the shortcircuit infrastructure
         self.testshortcircuit = testshortcircuit
-
-    def _distroclass_for_name(self, name):
-        # Map the test case name to the expected urldetect distro
-        # class we should be detecting
-        if "fedora" in name:
-            return FedoraDistro
-        if "centos" in name:
-            return CentOSDistro
-        if "rhel" in name:
-            return RHELDistro
-        if "suse" in name:
-            return SuseDistro
-        if "debian" in name:
-            return DebianDistro
-        if "ubuntu" in name:
-            return UbuntuDistro
-        if "mageia" in name:
-            return MandrivaDistro
-        if "altlinux" in name:
-            return ALTLinuxDistro
-        if "generic" in name:
-            return GenericTreeinfoDistro
-        raise RuntimeError("name=%s didn't map to any distro class. Extend "
-            "_distroclass_for_name" % name)
 
     def _find_arch(self):
         if ("i686" in self.url or
@@ -153,15 +119,6 @@ def _testURL(fetcher, testdata):
         if not s:
             continue
 
-        if not isinstance(s, testdata.distroclass):
-            raise AssertionError("Unexpected URLDistro class:\n"
-                "found  = %s\n"
-                "expect = %s\n\n"
-                "testname = %s\n"
-                "url      = %s" %
-                (s.__class__, testdata.distroclass, distname,
-                 fetcher.location))
-
         # Make sure the stores are reporting correct distro name/variant
         if detectdistro != s.get_osdict_info():
             raise AssertionError(
@@ -169,10 +126,9 @@ def _testURL(fetcher, testdata):
                 "found   = %s\n"
                 "expect  = %s\n\n"
                 "testname = %s\n"
-                "url      = %s\n"
-                "store    = %s" %
+                "url      = %s\n" %
                 (s.get_osdict_info(), detectdistro,
-                 distname, fetcher.location, testdata.distroclass))
+                 distname, fetcher.location))
 
     # Fetch regular kernel
     kernel, initrd = hvmstore.check_kernel_paths()
@@ -203,9 +159,6 @@ def _fetchWrapper(url, cb):
 
 def _testURLWrapper(testdata):
     os.environ.pop("VIRTINST_TEST_SUITE", None)
-
-    logging.debug("Testing for media arch=%s distroclass=%s",
-                  testdata.arch, testdata.distroclass)
 
     sys.stdout.write("\nTesting %-25s " % testdata.name)
     sys.stdout.flush()
