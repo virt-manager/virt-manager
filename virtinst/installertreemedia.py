@@ -64,7 +64,9 @@ class InstallerTreeMedia(object):
             logging.debug("Can't detect distro for media on "
                 "remote connection.")
             return None
-        return OSDB.lookup_os_by_media(path)
+        ret = OSDB.guess_os_by_iso(path)
+        if ret:
+            return ret[0]
 
     def __init__(self, conn, location):
         self.conn = conn

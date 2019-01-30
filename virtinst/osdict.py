@@ -200,12 +200,17 @@ class _OSDB(object):
             key = alias
         return self._all_variants.get(key)
 
-    def lookup_os_by_media(self, location):
-        media = libosinfo.Media.create_from_location(location, None)
-        ret = self._os_loader.get_db().guess_os_from_media(media)
-        if not (ret and len(ret) > 0 and ret[0]):
+    def guess_os_by_iso(self, location):
+        try:
+            media = libosinfo.Media.create_from_location(location, None)
+        except Exception as e:
+            logging.debug("Error creating libosinfo media object: %s", str(e))
             return None
-        return ret[0].get_short_id()
+
+        osobj, mediaobj = self._os_loader.get_db().guess_os_from_media(media)
+        if not osobj:
+            return None
+        return osobj.get_short_id(), mediaobj
 
     def list_os(self):
         """
