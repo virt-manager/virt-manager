@@ -297,10 +297,10 @@ def getDistroStore(guest, fetcher):
 # Distro classes #
 ##################
 
-class Distro(object):
+class _DistroTree(object):
     """
-    An image store is a base class for retrieving either a bootable
-    ISO image, or a kernel+initrd  pair for a particular OS distribution
+    Class for determining the kernel/initrd path for an install
+    tree (URL, ISO, or local directory)
     """
     PRETTY_NAME = None
     matching_distros = []
@@ -404,7 +404,7 @@ class Distro(object):
         return "inst.repo"
 
 
-class FedoraDistro(Distro):
+class _FedoraDistro(_DistroTree):
     PRETTY_NAME = "Fedora"
     matching_distros = ["fedora"]
 
@@ -438,7 +438,7 @@ class FedoraDistro(Distro):
         return latest_variant
 
 
-class RHELDistro(Distro):
+class _RHELDistro(_DistroTree):
     PRETTY_NAME = "Red Hat Enterprise Linux"
     matching_distros = ["rhel"]
     _variant_prefix = "rhel"
@@ -470,7 +470,7 @@ class RHELDistro(Distro):
             update -= 1
 
 
-class CentOSDistro(RHELDistro):
+class _CentOSDistro(_RHELDistro):
     PRETTY_NAME = "CentOS"
     matching_distros = ["centos"]
     _variant_prefix = "centos"
@@ -481,7 +481,7 @@ class CentOSDistro(RHELDistro):
         return cache.treeinfo_family_regex(famregex)
 
 
-class SuseDistro(RHELDistro):
+class _SuseDistro(_RHELDistro):
     PRETTY_NAME = None
     _suse_regex = []
     matching_distros = []
@@ -610,7 +610,7 @@ class SuseDistro(RHELDistro):
         return var
 
 
-class SLESDistro(SuseDistro):
+class _SLESDistro(_SuseDistro):
     PRETTY_NAME = "SLES"
     matching_distros = ["sles"]
     _variant_prefix = "sles"
@@ -618,7 +618,7 @@ class SLESDistro(SuseDistro):
     famregex = ".*SUSE Linux Enterprise.*"
 
 
-class SLEDDistro(SuseDistro):
+class _SLEDDistro(_SuseDistro):
     PRETTY_NAME = "SLED"
     matching_distros = ["sled"]
     _variant_prefix = "sled"
@@ -626,7 +626,7 @@ class SLEDDistro(SuseDistro):
     famregex = ".*SUSE Linux Enterprise.*"
 
 
-class OpensuseDistro(SuseDistro):
+class _OpensuseDistro(_SuseDistro):
     PRETTY_NAME = "openSUSE"
     matching_distros = ["opensuse"]
     _variant_prefix = "opensuse"
@@ -634,7 +634,7 @@ class OpensuseDistro(SuseDistro):
     famregex = ".*openSUSE.*"
 
 
-class DebianDistro(Distro):
+class _DebianDistro(_DistroTree):
     # ex. http://ftp.egr.msu.edu/debian/dists/sarge/main/installer-i386/
     # daily builds: https://d-i.debian.org/daily-images/amd64/
     PRETTY_NAME = "Debian"
@@ -775,14 +775,14 @@ class DebianDistro(Distro):
                 return osobj.name
 
 
-class UbuntuDistro(DebianDistro):
+class _UbuntuDistro(_DebianDistro):
     # https://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
     PRETTY_NAME = "Ubuntu"
     matching_distros = ["ubuntu"]
     _debname = "ubuntu"
 
 
-class ALTLinuxDistro(Distro):
+class _ALTLinuxDistro(_DistroTree):
     PRETTY_NAME = "ALT Linux"
     matching_distros = ["altlinux"]
 
@@ -796,7 +796,7 @@ class ALTLinuxDistro(Distro):
         return cache.content_regex(".disk/info", ".*ALT .*")
 
 
-class MandrivaDistro(Distro):
+class _MandrivaDistro(_DistroTree):
     # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
     PRETTY_NAME = "Mandriva/Mageia"
     matching_distros = ["mandriva", "mes"]
@@ -816,7 +816,7 @@ class MandrivaDistro(Distro):
             ("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
 
 
-class GenericTreeinfoDistro(Distro):
+class _GenericTreeinfoDistro(_DistroTree):
     """
     Generic catchall class for .treeinfo using distros
     """
@@ -836,13 +836,13 @@ def _build_distro_list():
     allstores = []
     for obj in list(globals().values()):
         if (isinstance(obj, type) and
-            issubclass(obj, Distro) and
+            issubclass(obj, _DistroTree) and
             obj.PRETTY_NAME):
             allstores.append(obj)
 
     # Always stick GenericDistro at the end, since it's a catchall
-    allstores.remove(GenericTreeinfoDistro)
-    allstores.append(GenericTreeinfoDistro)
+    allstores.remove(_GenericTreeinfoDistro)
+    allstores.append(_GenericTreeinfoDistro)
 
     return allstores
 
