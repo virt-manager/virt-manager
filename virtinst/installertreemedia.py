@@ -13,9 +13,6 @@ from . import util
 from .devices import DeviceDisk
 from .initrdinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
-from .osdict import OSDB
-
-
 
 
 # Enum of the various install media types we can have
@@ -58,16 +55,6 @@ class InstallerTreeMedia(object):
             raise ValueError(_("Validating install media '%s' failed: %s") %
                 (str(path), e))
 
-    @staticmethod
-    def detect_iso_distro(guest, path):
-        if guest.conn.is_remote():
-            logging.debug("Can't detect distro for media on "
-                "remote connection.")
-            return None
-        ret = OSDB.guess_os_by_iso(path)
-        if ret:
-            return ret[0]
-
     def __init__(self, conn, location):
         self.conn = conn
         self.location = location
@@ -86,6 +73,10 @@ class InstallerTreeMedia(object):
             self._media_type = MEDIA_DIR
         elif _is_url(self.location):
             self._media_type = MEDIA_URL
+
+        if self.conn.is_remote() and not self._media_type == MEDIA_URL:
+            raise ValueError(_("Cannot access install tree on remote "
+                "connection: %s") % self.location)
 
         if self._media_type == MEDIA_ISO:
             InstallerTreeMedia.validate_path(self.conn, self.location)
@@ -163,19 +154,7 @@ class InstallerTreeMedia(object):
         if self._media_type in [MEDIA_ISO]:
             return self.location
 
-    def check_location(self, guest):
-        if self._media_type not in [MEDIA_URL]:
-            return True
-
-        fetcher = self._get_fetcher(guest, None)
-        # This will throw an error for us
-        ignore = self._get_store(guest, fetcher)
-        return True
-
     def detect_distro(self, guest):
-        if self._media_type in [MEDIA_ISO]:
-            return InstallerTreeMedia.detect_iso_distro(guest, self.location)
-
         fetcher = self._get_fetcher(guest, None)
         store = self._get_store(guest, fetcher)
         return store.get_osdict_info()

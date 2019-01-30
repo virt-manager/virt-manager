@@ -13,6 +13,7 @@ import libvirt
 
 from .devices import DeviceDisk
 from .domain import DomainOs
+from .osdict import OSDB
 from .installertreemedia import InstallerTreeMedia
 from . import util
 
@@ -244,15 +245,6 @@ class Installer(object):
                     self._install_bootdev or
                     self._treemedia)
 
-    def check_location(self, guest):
-        """
-        Validate self.location seems to work. This will might hit the
-        network so we don't want to do it on demand.
-        """
-        if self._treemedia:
-            return self._treemedia.check_location(guest)
-        return True
-
     def detect_distro(self, guest):
         """
         Attempt to detect the distro for the Installer's 'location'. If
@@ -262,15 +254,18 @@ class Installer(object):
         :returns: distro variant string, or None
         """
         ret = None
-        try:
-            if self._treemedia:
-                ret = self._treemedia.detect_distro(guest)
-            elif self.cdrom:
-                ret = InstallerTreeMedia.detect_iso_distro(guest, self.cdrom)
+        if self._treemedia:
+            ret = self._treemedia.detect_distro(guest)
+        elif self.cdrom:
+            if guest.conn.is_remote():
+                logging.debug("Can't detect distro for cdrom "
+                    "remote connection.")
             else:
-                logging.debug("No media for distro detection.")
-        except Exception:
-            logging.debug("Error attempting to detect distro.", exc_info=True)
+                osguess = OSDB.guess_os_by_iso(self.cdrom)
+                if osguess:
+                    ret = osguess[0]
+        else:
+            logging.debug("No media for distro detection.")
 
         logging.debug("installer.detect_distro returned=%s", ret)
         return ret

@@ -303,13 +303,13 @@ def convert_old_features(options):
 def set_distro_variant(options, guest, installer):
     distro = None
     try:
-        installer.check_location(guest)
+        # This also validates the install location
+        autodistro = installer.detect_distro(guest)
 
         if options.distro_variant == "auto":
-            distro = installer.detect_distro(guest)
+            distro = autodistro
         elif options.distro_variant != "none":
             distro = options.distro_variant
-
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
 
