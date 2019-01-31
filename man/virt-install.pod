@@ -358,12 +358,9 @@ Use --pm=? to see a list of all available sub options. Complete details at L<htt
 
 =item B<--cdrom> OPTIONS
 
-File or device used as a virtual CD-ROM device.
-It can be path to an ISO image, or to a CDROM device. It can also be a URL
-from which to fetch/access a minimal boot ISO image. The URLs take the same
-format as described for the C<--location> argument. If a cdrom has been
-specified via the C<--disk> option, and neither C<--cdrom> nor any other
-install option is specified, the C<--disk> cdrom is used as the install media.
+ISO file or CDROM device to use for VM install media. After install,
+the the virtual CDROM device will remain attached to the VM, but with
+the ISO or host path media ejected.
 
 =item B<-l> LOCATION
 
@@ -373,18 +370,9 @@ Distribution tree installation source. virt-install can recognize
 certain distribution trees and fetches a bootable kernel/initrd pair to
 launch the install.
 
-With libvirt 0.9.4 or later, network URL installs work for remote connections.
-virt-install will download kernel/initrd to the local machine, and then
-upload the media to the remote host. This option requires the URL to
-be accessible by both the local and remote host.
-
---location allows things like --extra-args for kernel arguments, and using --initrd-inject. If you want to use those options with CDROM media, you have a few options:
-
-* Run virt-install as root and do --location ISO
-
-* Mount the ISO at a local directory, and do --location DIRECTORY
-
-* Mount the ISO at a local directory, export that directory over local http, and do --location https://localhost/DIRECTORY
+--location allows things like --extra-args for kernel arguments,
+and using --initrd-inject. If you want to use those options with CDROM media,
+you can pass the ISO to --location as well.
 
 The C<LOCATION> can take one of the following forms:
 
@@ -398,13 +386,13 @@ An HTTP server location containing an installable distribution image.
 
 An FTP server location containing an installable distribution image.
 
+=item ISO
+
+Probe the ISO and extract files using 'isoinfo'
+
 =item DIRECTORY
 
 Path to a local directory containing an installable distribution image. Note that the directory will not be accessible by the guest after initial boot, so the OS installer will need another way to access the rest of the install media.
-
-=item ISO
-
-Mount the ISO and probe the directory. This requires running virt-install as root, and has the same VM access caveat as DIRECTORY.
 
 =back
 
