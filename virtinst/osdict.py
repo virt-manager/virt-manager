@@ -442,4 +442,41 @@ class _OsVariant(object):
 
         return ret
 
+    def get_kernel_url_arg(self):
+        """
+        Kernel argument name the distro's installer uses to reference
+        a network source, possibly bypassing some installer prompts
+        """
+        if not self._os:
+            return None
+
+        # SUSE distros
+        if self.distro in ["caasp", "sle", "sled", "sles", "opensuse"]:
+            return "install"
+
+        if self.distro not in ["centos", "rhel", "fedora"]:
+            return None
+
+        # Red Hat distros
+        if self.name.endswith("-unknown"):
+            return "inst.repo"
+
+        try:
+            version = float(self.version)
+        except Exception:
+            return None
+
+        if self.distro in ["centos", "rhel"]:
+            if version < 7:
+                return "method"
+            return "inst.repo"
+
+        if self.distro in ["fedora"]:
+            if version < 19:
+                return "method"
+            return "inst.repo"
+
+        return None
+
+
 OSDB = _OSDB()

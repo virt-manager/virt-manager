@@ -13,6 +13,7 @@ from . import util
 from .devices import DeviceDisk
 from .initrdinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
+from .osdict import OSDB
 
 
 # Enum of the various install media types we can have
@@ -28,10 +29,13 @@ def _is_url(url):
 
 
 class _LocationData(object):
-    def __init__(self, os_variant, kernel_pairs, kernel_url_arg):
+    def __init__(self, os_variant, kernel_pairs):
         self.os_variant = os_variant
         self.kernel_pairs = kernel_pairs
-        self.kernel_url_arg = kernel_url_arg
+        self.kernel_url_arg = None
+        if self.os_variant:
+            osobj = OSDB.lookup_os(self.os_variant)
+            self.kernel_url_arg = osobj.get_kernel_url_arg()
 
 
 class InstallerTreeMedia(object):
@@ -110,8 +114,7 @@ class InstallerTreeMedia(object):
             store = urldetect.getDistroStore(guest, fetcher)
             self._cached_data = _LocationData(
                     store.get_osdict_info(),
-                    store.get_kernel_paths(),
-                    store.get_kernel_url_arg())
+                    store.get_kernel_paths())
         return self._cached_data
 
     def _prepare_kernel_url(self, guest, fetcher):

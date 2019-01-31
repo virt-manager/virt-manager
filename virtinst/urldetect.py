@@ -382,46 +382,6 @@ class _DistroTree(object):
         """
         return self._os_variant
 
-    def get_kernel_url_arg(self):
-        """
-        Kernel argument name the distro's installer uses to reference
-        a network source, possibly bypassing some installer prompts
-        """
-        os_variant = self.get_osdict_info()
-        if not os_variant:
-            return None
-
-        # SUSE distros
-        if (re.match("opensuse.*", os_variant) or
-            re.match("sled.*", os_variant) or
-            re.match("sles.*", os_variant) or
-            re.match("sle-.*", os_variant) or
-            re.match("caasp-.*", os_variant)):
-            return "install"
-
-        if not (re.match("fedora.*", os_variant) or
-                re.match("centos.*", os_variant) or
-                re.match("rhel.*", os_variant)):
-            return None
-
-        def _is_old_rhdistro():
-            m = re.match(r"^.*[^0-9\.]+([0-9\.]+)$", os_variant or "")
-            if m:
-                version = float(m.groups()[0])
-                if "fedora" in os_variant and version < 19:
-                    return True
-                elif version < 7:
-                    # rhel, centos, scientific linux, etc
-                    return True
-
-            # If we can't parse, assume it's something recentish and
-            # it supports the newer arg
-            return False
-
-        if _is_old_rhdistro():
-            return "method"
-        return "inst.repo"
-
 
 class _FedoraDistro(_DistroTree):
     PRETTY_NAME = "Fedora"
