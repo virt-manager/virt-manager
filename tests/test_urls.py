@@ -153,6 +153,17 @@ class URLTests(unittest.TestCase):
         except ValueError as e:
             self.assertTrue("maybe you mistyped" in str(e))
 
+        # Non-existent cdrom fails
+        try:
+            installer = Installer(hvmguest.conn, cdrom="/i/dont/exist/foobar")
+            self.assertEqual(None, installer.detect_distro(hvmguest))
+            raise AssertionError("Expected cdrom failure")
+        except ValueError as e:
+            self.assertTrue("non-existent path" in str(e))
+
+        # Ensure existing but non-distro file doesn't error
+        installer = Installer(hvmguest.conn, cdrom="/dev/null")
+        self.assertEqual(None, installer.detect_distro(hvmguest))
 
 
 def _make_tests():
