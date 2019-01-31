@@ -318,7 +318,7 @@ class _ISOURLFetcher(_URLFetcher):
             cmd = ["isoinfo", "-J", "-i", self.location, "-f"]
 
             logging.debug("Running isoinfo: %s", cmd)
-            output = subprocess.check_output(cmd)
+            output = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
 
             self._cache_file_list = output.splitlines(False)
 
