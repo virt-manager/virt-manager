@@ -473,7 +473,8 @@ def build_installer(options, guest):
 
     has_installer = True
     if options.location:
-        location = options.location
+        locopts = cli.parse_location(options.location)
+        location = locopts.get("location")
     elif options.cdrom:
         cdrom = options.cdrom
     elif options.pxe:

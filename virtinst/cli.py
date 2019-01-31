@@ -462,7 +462,7 @@ def get_meter():
 ###########################
 
 def _get_completer_parsers():
-    return VIRT_PARSERS + [ParseCLICheck]
+    return VIRT_PARSERS + [ParseCLICheck, ParserLocation]
 
 
 def _virtparser_completer(prefix, **kwargs):
@@ -888,8 +888,11 @@ def _on_off_convert(key, val):
     raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
 
 
-def _set_attribute(obj, attr, val):  # pylint: disable=unused-argument
-    exec("obj." + attr + " = val ")  # pylint: disable=exec-used
+def _set_attribute(obj, attr, val):
+    if isinstance(obj, dict):
+        obj[attr] = val
+    else:
+        exec("obj." + attr + " = val ")  # pylint: disable=exec-used
 
 
 class _VirtCLIArgumentStatic(object):
@@ -1002,7 +1005,7 @@ class _VirtCLIArgument(object):
                                               inst, self.val, self, True)
 
         try:
-            if self.attrname:
+            if not isinstance(inst, dict) and self.attrname:
                 eval("inst." + self.attrname)  # pylint: disable=eval-used
         except AttributeError:
             raise RuntimeError("programming error: obj=%s does not have "
@@ -1358,7 +1361,7 @@ class VirtCLIParser(metaclass=InitClass):
 
         ret = []
         try:
-            objs = self._parse(inst or self.guest)
+            objs = self._parse(inst is None and self.guest or inst)
             if new_object:
                 for obj in util.listify(objs):
                     if validate:
@@ -1449,6 +1452,27 @@ def parse_check(checks):
     for checkstr in util.listify(checks):
         parser = ParseCLICheck(None, checkstr)
         parser.parse(get_global_state())
+
+
+######################
+# --location parsing #
+######################
+
+class ParserLocation(VirtCLIParser):
+    cli_arg_name = "location"
+    remove_first = "location"
+
+    @classmethod
+    def __init_class__(cls, **kwargs):
+        VirtCLIParser.__init_class__(**kwargs)
+        cls.add_arg("location", "location", can_comma=True)
+
+
+def parse_location(optstr):
+    parser = ParserLocation(None, optstr)
+    parsedata = collections.OrderedDict()
+    parser.parse(parsedata)
+    return parsedata
 
 
 ######################

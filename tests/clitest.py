@@ -679,7 +679,7 @@ c.add_valid("--hvm --cdrom %(EXISTIMG1)s")  # Simple cdrom install
 c.add_valid("--wait 0 --os-variant winxp --cdrom %(EXISTIMG1)s")  # Windows (2 stage) install
 c.add_valid("--pxe --virt-type test")  # Explicit virt-type
 c.add_valid("--arch i686 --pxe")  # Explicitly fullvirt + arch
-c.add_valid("--location %(TREEDIR)s")  # Directory tree URL install
+c.add_valid("--location location=%(TREEDIR)s")  # Directory tree URL install
 c.add_valid("--location %(TREEDIR)s --initrd-inject virt-install --extra-args ks=file:/virt-install")  # initrd-inject
 c.add_valid("--hvm --location %(TREEDIR)s --extra-args console=ttyS0")  # Directory tree URL install with extra-args
 c.add_valid("--paravirt --location %(TREEDIR)s")  # Paravirt location
