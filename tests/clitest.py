@@ -50,6 +50,7 @@ exist_images = [
 iso_links = [
     "/tmp/fake-fedora17-tree.iso",
     "/tmp/fake-centos65-label.iso",
+    "/tmp/fake-no-osinfo.iso",
 ]
 
 exist_files = exist_images
@@ -76,6 +77,7 @@ test_files = {
     'EXISTIMG4': exist_images[1],
     'ISOTREE': iso_links[0],
     'ISOLABEL': iso_links[1],
+    'ISO-NO-OS': iso_links[2],
     'TREEDIR': "%s/fakefedoratree" % XMLDIR,
     'COLLIDE': "/dev/default-pool/collidevol1.img",
 }
@@ -698,6 +700,7 @@ c.add_invalid("--pxe --os-variant farrrrrrrge")  # Bogus --os-variant
 c.add_invalid("--pxe --boot menu=foobar")
 c.add_invalid("--cdrom %(EXISTIMG1)s --extra-args console=ttyS0")  # cdrom fail w/ extra-args
 c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img,kernel_args='foo bar' --initrd-inject virt-install")  # initrd-inject with manual kernel/initrd
+c.add_invalid("--disk none --location kernel=/dev/null,initrd=/dev/null")  # --location with manual kernel/initrd, but not URL
 
 c = vinst.add_category("single-disk-install", "--nographics --noautoconsole --disk %(EXISTIMG1)s")
 c.add_valid("--hvm --import")  # FV Import install
@@ -757,6 +760,7 @@ c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.k
 c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", skip_cb=has_old_osinfo)
 
 # misc KVM config tests
+c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel")  # --location with an unknown ISO but manually specified kernel paths
 c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", skip_cb=has_isoinfo)  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel5.4", "kvm-rhel5")  # RHEL5 defaults

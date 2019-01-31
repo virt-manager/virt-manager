@@ -469,12 +469,15 @@ def show_warnings(options, guest, installer):
 def build_installer(options, guest):
     cdrom = None
     location = None
+    location_kernel = None
+    location_initrd = None
     install_bootdev = None
 
     has_installer = True
     if options.location:
-        locopts = cli.parse_location(options.location)
-        location = locopts.get("location")
+        (location,
+         location_kernel,
+         location_initrd) = cli.parse_location(options.location)
     elif options.cdrom:
         cdrom = options.cdrom
     elif options.pxe:
@@ -494,6 +497,8 @@ def build_installer(options, guest):
     installer = virtinst.Installer(guest.conn,
             cdrom=cdrom,
             location=location,
+            location_kernel=location_kernel,
+            location_initrd=location_initrd,
             install_bootdev=install_bootdev)
     if cdrom and options.livecd:
         installer.livecd = True

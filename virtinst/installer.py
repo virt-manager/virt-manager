@@ -31,8 +31,12 @@ class Installer(object):
         Largely handled by installtreemedia helper class. Maps to virt-install
         --location
     :param install_bootdev: The VM bootdev to use (HD, NETWORK, CDROM, FLOPPY)
+    :param location_kernel: URL pointing to a kernel to fetch, or a relative
+        path to indicate where the kernel is stored in location
+    :param location_initrd: location_kernel, but pointing to an initrd
     """
-    def __init__(self, conn, cdrom=None, location=None, install_bootdev=None):
+    def __init__(self, conn, cdrom=None, location=None, install_bootdev=None,
+            location_kernel=None, location_initrd=None):
         self.conn = conn
 
         self.livecd = False
@@ -47,6 +51,14 @@ class Installer(object):
         self._install_cdrom_device = None
         self._defaults_are_set = False
 
+        if location_kernel or location_initrd:
+            if not location:
+                raise ValueError(_("location kernel/initrd may only "
+                    "be specified with a location URL/path"))
+            if not (location_kernel and location_initrd):
+                raise ValueError(_("location kernel/initrd must be "
+                    "be specified as a pair"))
+
         self._cdrom = None
         self._treemedia = None
         if cdrom:
@@ -54,7 +66,8 @@ class Installer(object):
             self._cdrom = cdrom
             self._install_bootdev = "cdrom"
         if location:
-            self._treemedia = InstallerTreeMedia(self.conn, location)
+            self._treemedia = InstallerTreeMedia(self.conn, location,
+                    location_kernel, location_initrd)
 
 
     ###################

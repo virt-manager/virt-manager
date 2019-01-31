@@ -66,9 +66,11 @@ class InstallerTreeMedia(object):
             raise ValueError(_("Validating install media '%s' failed: %s") %
                 (str(path), e))
 
-    def __init__(self, conn, location):
+    def __init__(self, conn, location, location_kernel, location_initrd):
         self.conn = conn
         self.location = location
+        self._location_kernel = location_kernel
+        self._location_initrd = location_initrd
         self.initrd_injections = []
 
         self._cached_fetcher = None
@@ -111,10 +113,21 @@ class InstallerTreeMedia(object):
 
     def _get_cached_data(self, guest, fetcher):
         if not self._cached_data:
-            store = urldetect.getDistroStore(guest, fetcher)
-            self._cached_data = _LocationData(
-                    store.get_osdict_info(),
-                    store.get_kernel_paths())
+            has_location_kernel = bool(
+                    self._location_kernel and self._location_initrd)
+            store = urldetect.getDistroStore(guest, fetcher,
+                    skip_error=has_location_kernel)
+
+            os_variant = None
+            kernel_paths = []
+            if store:
+                kernel_paths = store.get_kernel_paths()
+                os_variant = store.get_osdict_info()
+            if has_location_kernel:
+                kernel_paths = [
+                        (self._location_kernel, self._location_initrd)]
+
+            self._cached_data = _LocationData(os_variant, kernel_paths)
         return self._cached_data
 
     def _prepare_kernel_url(self, guest, fetcher):

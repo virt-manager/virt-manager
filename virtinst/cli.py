@@ -1466,13 +1466,20 @@ class ParserLocation(VirtCLIParser):
     def __init_class__(cls, **kwargs):
         VirtCLIParser.__init_class__(**kwargs)
         cls.add_arg("location", "location", can_comma=True)
+        cls.add_arg("kernel", "kernel", can_comma=True)
+        cls.add_arg("initrd", "initrd", can_comma=True)
 
 
 def parse_location(optstr):
-    parser = ParserLocation(None, optstr)
     parsedata = collections.OrderedDict()
-    parser.parse(parsedata)
-    return parsedata
+    if optstr:
+        parser = ParserLocation(None, optstr)
+        parser.parse(parsedata)
+
+    location = parsedata.get("location")
+    kernel = parsedata.get("kernel")
+    initrd = parsedata.get("initrd")
+    return location, kernel, initrd
 
 
 ######################

@@ -426,6 +426,17 @@ ftp://distrib-coffee.ipsl.jussieu.fr/pub/linux/Mageia/distrib/1
 
 =back
 
+Additionally, --location can take 'kernel' and 'initrd' sub options. These paths
+relative to the specified location URL/ISO that allow selecting specific files
+for kernel/initrd within the install tree. This can be useful if virt-install/
+libosinfo doesn't know where to find the kernel in the specified --location.
+
+For example, if you have an ISO that libosinfo doesn't know about called
+my-unknown.iso, with a kernel at 'kernel/fookernel' and initrd at
+'kernel/fooinitrd', you can make this work with:
+
+  --location my-unknown.iso,kernel=kernel/fookernel,initrd=kernel/fooinitrd
+
 =item B<--pxe>
 
 Use the PXE boot protocol to load the initial ramdisk and kernel for starting

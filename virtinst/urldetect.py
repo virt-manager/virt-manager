@@ -261,7 +261,7 @@ class _SUSEContent(object):
         return distro_version
 
 
-def getDistroStore(guest, fetcher):
+def getDistroStore(guest, fetcher, skip_error):
     logging.debug("Finding distro store for location=%s", fetcher.location)
 
     arch = guest.os.arch
@@ -296,6 +296,9 @@ def getDistroStore(guest, fetcher):
         logging.debug("Detected class=%s osvariant=%s",
                       store.__class__.__name__, store.get_osdict_info())
         return store
+
+    if skip_error:
+        return None
 
     # No distro was detected. See if the URL even resolves, and if not
     # give the user a hint that maybe they mistyped. This won't always
