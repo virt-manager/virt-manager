@@ -7,15 +7,13 @@ import logging
 import os
 import re
 import sys
-import time
 import traceback
 import unittest
 
 from tests import utils
 
+from virtinst import Installer
 from virtinst import Guest
-from virtinst import urldetect
-from virtinst import urlfetcher
 from virtinst import util
 
 
@@ -67,77 +65,53 @@ xenguest.os.os_type = "xen"
 meter = util.make_meter(quiet=not utils.clistate.debug)
 
 
-def _storeForDistro(fetcher, guest):
-    """
-    Helper to lookup the Distro store object, basically detecting the
-    URL. Handle occasional proxy errors
-    """
-    for ignore in range(0, 10):
-        try:
-            return urldetect.getDistroStore(guest, fetcher)
-        except Exception as e:
-            if "502" in str(e):
-                logging.debug("Caught proxy error: %s", str(e))
-                time.sleep(.5)
-                continue
-            raise
-    raise  # pylint: disable=misplaced-bare-raise
-
-
 def _sanitize_osdict_name(detectdistro):
     if detectdistro in ["none", "None", None]:
         return None
     return detectdistro
 
 
-def _testURL(fetcher, testdata):
-    """
-    Test that our URL detection logic works for grabbing kernels
-    """
+def _testGuest(testdata, guest):
     distname = testdata.name
     arch = testdata.arch
-    detectdistro = _sanitize_osdict_name(testdata.detectdistro)
+    url = testdata.url
+    checkdistro = testdata.detectdistro
 
-    hvmguest.os.arch = arch
-    xenguest.os.arch = arch
+    guest.os.arch = arch
     if testdata.testshortcircuit:
-        hvmguest.set_os_name(detectdistro)
-        xenguest.set_os_name(detectdistro)
+        guest.set_os_name(checkdistro)
 
+    installer = Installer(guest.conn, location=url)
     try:
-        hvmstore = _storeForDistro(fetcher, hvmguest)
-        xenstore = None
-        if testdata.testxen:
-            xenstore = _storeForDistro(fetcher, xenguest)
+        detected_distro = installer.detect_distro(guest)
     except Exception:
-        raise AssertionError("\nFailed to detect URLDistro class:\n"
+        raise AssertionError("\nFailed in installer detect_distro():\n"
             "name   = %s\n"
             "url    = %s\n\n%s" %
-            (distname, fetcher.location, "".join(traceback.format_exc())))
+            (distname, url, "".join(traceback.format_exc())))
 
-    for s in [hvmstore, xenstore]:
-        if not s:
-            continue
+    # Make sure the stores are reporting correct distro name/variant
+    if checkdistro != detected_distro:
+        raise AssertionError(
+            "Detected OS did not match expected values:\n"
+            "found   = %s\n"
+            "expect  = %s\n\n"
+            "testname = %s\n"
+            "url      = %s\n" %
+            (detected_distro, checkdistro, distname, url))
 
-        # Make sure the stores are reporting correct distro name/variant
-        if detectdistro != s.get_osdict_info():
-            raise AssertionError(
-                "Detected OS did not match expected values:\n"
-                "found   = %s\n"
-                "expect  = %s\n\n"
-                "testname = %s\n"
-                "url      = %s\n" %
-                (s.get_osdict_info(), detectdistro,
-                 distname, fetcher.location))
+    if guest is xenguest:
+        return
 
     # Fetch regular kernel
-    kernel, initrd = hvmstore.check_kernel_paths()
+    store = installer._treemedia._cached_store
+    kernel, initrd = store.check_kernel_paths()
     dummy = initrd
     if testdata.kernelregex and not re.match(testdata.kernelregex, kernel):
         raise AssertionError("kernel=%s but testdata.kernelregex='%s'" %
                 (kernel, testdata.kernelregex))
 
-    kernelargs = hvmstore.get_kernel_url_arg()
+    kernelargs = store.get_kernel_url_arg()
     if testdata.kernelarg == "None":
         if bool(kernelargs):
             raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
@@ -147,14 +121,15 @@ def _testURL(fetcher, testdata):
             raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
                     % (kernelargs, testdata.kernelarg))
 
-    # Fetch xen kernel
-    if xenstore:
-        xenstore.check_kernel_paths()
 
-
-def _fetchWrapper(url, cb):
-    fetcher = urlfetcher.fetcherForURI(url, "/tmp", meter)
-    return cb(fetcher)
+def _testURL(testdata):
+    """
+    Test that our URL detection logic works for grabbing kernels
+    """
+    testdata.detectdistro = _sanitize_osdict_name(testdata.detectdistro)
+    _testGuest(testdata, hvmguest)
+    if testdata.testxen:
+        _testGuest(testdata, xenguest)
 
 
 def _testURLWrapper(testdata):
@@ -163,20 +138,17 @@ def _testURLWrapper(testdata):
     sys.stdout.write("\nTesting %-25s " % testdata.name)
     sys.stdout.flush()
 
-    def cb(fetcher):
-        return _testURL(fetcher, testdata)
-    return _fetchWrapper(testdata.url, cb)
+    return _testURL(testdata)
 
 
 # Register tests to be picked up by unittest
 class URLTests(unittest.TestCase):
     def test001BadURL(self):
         badurl = "http://aksdkakskdfa-idontexist.com/foo/tree"
-        def cb(fetcher):
-            return _storeForDistro(fetcher, hvmguest)
 
         try:
-            _fetchWrapper(badurl, cb)
+            installer = Installer(hvmguest.conn, location=badurl)
+            installer.detect_distro(hvmguest)
             raise AssertionError("Expected URL failure")
         except ValueError as e:
             self.assertTrue("maybe you mistyped" in str(e))
