@@ -103,21 +103,28 @@ def _testGuest(testdata, guest):
     if guest is xenguest:
         return
 
+    # Do this only after the distro detection, since we actually need
+    # to fetch files for that part
+    treemedia = installer._treemedia  # pylint: disable=protected-access
+    fetcher = treemedia._cached_fetcher  # pylint: disable=protected-access
+    def fakeAcquireFile(filename):
+        logging.debug("Fake acquiring %s", filename)
+        return filename
+    fetcher.acquireFile = fakeAcquireFile
+
     # Fetch regular kernel
-    store = installer._treemedia._cached_store
-    kernel, initrd = store.check_kernel_paths()
+    kernel, initrd, kernelargs = treemedia.prepare(guest, meter)
     dummy = initrd
     if testdata.kernelregex and not re.match(testdata.kernelregex, kernel):
         raise AssertionError("kernel=%s but testdata.kernelregex='%s'" %
                 (kernel, testdata.kernelregex))
 
-    kernelargs = store.get_kernel_url_arg()
     if testdata.kernelarg == "None":
         if bool(kernelargs):
             raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
                     % (kernelargs, testdata.kernelarg))
     elif testdata.kernelarg:
-        if not kernelargs == testdata.kernelarg:
+        if testdata.kernelarg != str(kernelargs).split("=")[0]:
             raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
                     % (kernelargs, testdata.kernelarg))
 

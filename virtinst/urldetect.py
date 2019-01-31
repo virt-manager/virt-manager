@@ -292,7 +292,7 @@ def getDistroStore(guest, fetcher):
         if not sclass.is_valid(cache):
             continue
 
-        store = sclass(fetcher, arch, _type, cache)
+        store = sclass(fetcher.location, arch, _type, cache)
         logging.debug("Detected class=%s osvariant=%s",
                       store.__class__.__name__, store.get_osdict_info())
         return store
@@ -325,11 +325,10 @@ class _DistroTree(object):
     PRETTY_NAME = None
     matching_distros = []
 
-    def __init__(self, fetcher, arch, vmtype, cache):
-        self.fetcher = fetcher
+    def __init__(self, location, arch, vmtype, cache):
         self.type = vmtype
         self.arch = arch
-        self.uri = fetcher.location
+        self.uri = location
         self.cache = cache
 
         if self.cache.libosinfo_os_variant:
@@ -374,13 +373,8 @@ class _DistroTree(object):
     def is_valid(cls, cache):
         raise NotImplementedError
 
-    def check_kernel_paths(self):
-        for kpath, ipath in self._kernel_paths:
-            if self.fetcher.hasFile(kpath) and self.fetcher.hasFile(ipath):
-                return kpath, ipath
-        raise RuntimeError(_("Couldn't find kernel for "
-                             "%(distro)s tree.") %
-                             {"distro": self.PRETTY_NAME})
+    def get_kernel_paths(self):
+        return self._kernel_paths
 
     def get_osdict_info(self):
         """

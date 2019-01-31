@@ -27,6 +27,13 @@ def _is_url(url):
             url.startswith("ftp://"))
 
 
+class _LocationData(object):
+    def __init__(self, os_variant, kernel_pairs, kernel_url_arg):
+        self.os_variant = os_variant
+        self.kernel_pairs = kernel_pairs
+        self.kernel_url_arg = kernel_url_arg
+
+
 class InstallerTreeMedia(object):
     """
     Class representing --location Tree media. Can be one of
@@ -61,7 +68,7 @@ class InstallerTreeMedia(object):
         self.initrd_injections = []
 
         self._cached_fetcher = None
-        self._cached_store = None
+        self._cached_data = None
 
         self._tmpfiles = []
         self._tmpvols = []
@@ -98,23 +105,33 @@ class InstallerTreeMedia(object):
         self._cached_fetcher.meter = meter
         return self._cached_fetcher
 
-    def _get_store(self, guest, fetcher):
-        if not self._cached_store:
-            self._cached_store = urldetect.getDistroStore(guest, fetcher)
-        return self._cached_store
+    def _get_cached_data(self, guest, fetcher):
+        if not self._cached_data:
+            store = urldetect.getDistroStore(guest, fetcher)
+            self._cached_data = _LocationData(
+                    store.get_osdict_info(),
+                    store.get_kernel_paths(),
+                    store.get_kernel_url_arg())
+        return self._cached_data
 
     def _prepare_kernel_url(self, guest, fetcher):
-        store = self._get_store(guest, fetcher)
-        kernelpath, initrdpath = store.check_kernel_paths()
+        cache = self._get_cached_data(guest, fetcher)
 
+        def _check_kernel_pairs():
+            for kpath, ipath in cache.kernel_pairs:
+                if fetcher.hasFile(kpath) and fetcher.hasFile(ipath):
+                    return kpath, ipath
+            raise RuntimeError(_("Couldn't find kernel for install tree."))
+
+        kernelpath, initrdpath = _check_kernel_pairs()
         kernel = fetcher.acquireFile(kernelpath)
         self._tmpfiles.append(kernel)
         initrd = fetcher.acquireFile(initrdpath)
         self._tmpfiles.append(initrd)
 
         args = ""
-        if not self.location.startswith("/") and store.get_kernel_url_arg():
-            args += "%s=%s" % (store.get_kernel_url_arg(), self.location)
+        if not self.location.startswith("/") and cache.kernel_url_arg:
+            args += "%s=%s" % (cache.kernel_url_arg, self.location)
 
         perform_initrd_injections(initrd,
                                   self.initrd_injections,
@@ -156,5 +173,5 @@ class InstallerTreeMedia(object):
 
     def detect_distro(self, guest):
         fetcher = self._get_fetcher(guest, None)
-        store = self._get_store(guest, fetcher)
-        return store.get_osdict_info()
+        cache = self._get_cached_data(guest, fetcher)
+        return cache.os_variant
