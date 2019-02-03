@@ -229,6 +229,20 @@ class _OSDB(object):
             return None
         return media.get_os().get_short_id(), media
 
+    def guess_os_by_tree(self, location):
+        if location.startswith("/"):
+            location = "file://" + location
+        try:
+            tree = Libosinfo.Tree.create_from_location(location, None)
+        except Exception as e:
+            logging.debug("Error creating libosinfo tree object: %s", str(e))
+            return None
+
+        osobj, treeobj = self._os_loader.get_db().guess_os_from_tree(tree)
+        if not osobj:
+            return None
+        return osobj.get_short_id(), treeobj
+
     def list_os(self):
         """
         List all OSes in the DB

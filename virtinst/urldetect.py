@@ -162,7 +162,14 @@ class _DistroCache(object):
                           "path for detected os_variant=%s",
                           self.libosinfo_mediaobj)
             return False
+        return True
 
+    def guess_os_from_tree(self):
+        ret = OSDB.guess_os_by_tree(self._fetcher.location)
+        if not ret:
+            return False
+        self.libosinfo_os_variant = ret[0]
+        self.treeinfo_matched = True
         return True
 
 
@@ -821,7 +828,7 @@ class _LibosinfoDistro(_DistroTree):
     def is_valid(cls, cache):
         if cache.fetcher_is_iso():
             return cache.guess_os_from_iso()
-        return False
+        return cache.guess_os_from_tree()
 
     def _set_manual_kernel_paths(self):
         self._kernel_paths += [
