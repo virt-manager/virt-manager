@@ -1,5 +1,17 @@
 # Virtual Machine Manager News
 
+## Release 2.1.0 (February 03, 2019)
+- Bash autocompletion support (Lin Ma, Cole Robinson)
+- UI and command line --vsock support (Slavomir Kaslev)
+- virt-xml: Add --os-variant option (Andrea Bolognani)
+- virt-install: use libosinfo cpu, mem, disk size defaults (Fabiano
+  Fidencio)
+- virt-install: Better usage of libosinfo -unknown distro IDs (Fabiano
+  Fidencio)
+- virt-install: More usage of libosinfo for ISO --location detection
+- virt-install: Add --location LOCATION,kernel=X,initrd=Y for pointing to
+  kernel/initrd in media that virt-install/libosinfo fails to detect
+
 ## Release 2.0.0 (October 15, 2018)
 - Finish port to Python 3 (Radostin Stoyanov, Cole Robinson)
 - Improved VM defaults for supported OS: q35 PCIe, usb3, CPU host-model
