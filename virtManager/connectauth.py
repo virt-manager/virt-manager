@@ -12,8 +12,12 @@ import time
 
 from gi.repository import GLib
 from gi.repository import Gio
+from gi.repository import Gtk
 
 import libvirt
+
+from .baseclass import vmmGObjectUI
+from . import uiutil
 
 
 def do_we_have_session():
@@ -40,103 +44,98 @@ def do_we_have_session():
     return False
 
 
+class _vmmConnectAuth(vmmGObjectUI):
+    def __init__(self, creds):
+        vmmGObjectUI.__init__(self, "connectauth.ui", "connectauth")
+        self.creds = creds
+        self.topwin.set_title(_("Authentication required"))
+
+        self.builder.connect_signals({
+            "on_connectauth_cancel_clicked": self._cancel_cb,
+            "on_connectauth_ok_clicked": self._ok_cb,
+            "on_entry1_activate": self._entry_cb,
+            "on_entry2_activate": self._entry_cb,
+        })
+
+        self.entry1 = self.widget("entry1")
+        self.entry2 = self.widget("entry2")
+        self._init_ui()
+
+    def _cleanup(self):
+        pass
+
+    def _init_ui(self):
+        uiutil.set_grid_row_visible(self.entry1, False)
+        uiutil.set_grid_row_visible(self.entry2, False)
+
+        for idx, cred in enumerate(self.creds):
+            # Libvirt virConnectCredential
+            credtype, prompt, _challenge, _defresult, _result = cred
+            noecho = credtype in [
+                    libvirt.VIR_CRED_PASSPHRASE,
+                    libvirt.VIR_CRED_NOECHOPROMPT]
+            if not prompt:
+                raise RuntimeError("No prompt for auth credtype=%s" % credtype)
+
+            prompt += ": "
+            label = self.widget("label%s" % (idx + 1))
+            entry = self.widget("entry%s" % (idx + 1))
+            uiutil.set_grid_row_visible(label, True)
+            label.set_text(prompt)
+            entry.set_visibility(not noecho)
+
+    def run(self):
+        self.topwin.show()
+        res = self.topwin.run()
+        self.topwin.hide()
+
+        if res != Gtk.ResponseType.OK:
+            return -1
+
+        self.creds[0][4] = self.entry1.get_text()
+        if self.entry2.get_visible():
+            self.creds[1][4] = self.entry2.get_text()
+        self.topwin.destroy()
+        return 0
+
+    def _ok_cb(self, src):
+        self.topwin.response(Gtk.ResponseType.OK)
+    def _cancel_cb(self, src):
+        self.topwin.response(Gtk.ResponseType.CANCEL)
+
+    def _entry_cb(self, src):
+        """
+        If entry 1 activated and entry2 visible, jump to entry 2.
+        Otherwise, click OK
+        """
+        if src == self.entry1 and self.entry2.is_visible():
+            self.entry2.grab_focus()
+            return
+        self.topwin.response(Gtk.ResponseType.OK)
+
+
 def creds_dialog(creds, cbdata):
     """
     Thread safe wrapper for libvirt openAuth user/pass callback
     """
     retipc = []
 
-    def wrapper(fn, creds, cbdata):
+    def wrapper(creds, cbdata):
         try:
-            ret = fn(creds, cbdata)
+            _conn = cbdata
+            dialogobj = _vmmConnectAuth(creds)
+            ret = dialogobj.run()
         except Exception:
             logging.exception("Error from creds dialog")
             ret = -1
         retipc.append(ret)
 
-    GLib.idle_add(wrapper, _creds_dialog_main, creds, cbdata)
+    GLib.idle_add(wrapper, creds, cbdata)
 
     while not retipc:
         time.sleep(.1)
 
     return retipc[0]
-
-
-def _creds_dialog_main(creds, cbdata):
-    """
-    Libvirt openAuth callback for username/password credentials
-    """
-    _conn = cbdata
-    from gi.repository import Gtk
-
-    dialog = Gtk.Dialog(_("Authentication required"), None, 0,
-                        (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                         Gtk.STOCK_OK, Gtk.ResponseType.OK))
-    dialog.set_resizable(False)
-    labels = []
-    entries = []
-
-    dialog.set_border_width(6)
-    box = Gtk.Grid()
-    box.set_hexpand(False)
-    box.set_vexpand(False)
-    box.set_row_spacing(6)
-    box.set_column_spacing(6)
-    box.set_margin_bottom(12)
-
-    def _on_ent_activate(ent):
-        idx = entries.index(ent)
-        if idx < len(entries) - 1:
-            entries[idx + 1].grab_focus()
-        else:
-            dialog.response(Gtk.ResponseType.OK)
-
-    row = 0
-    for cred in creds:
-        # Libvirt virConnectCredential
-        credtype, prompt, _challenge, _defresult, _result = cred
-        noecho = credtype in [
-                libvirt.VIR_CRED_PASSPHRASE, libvirt.VIR_CRED_NOECHOPROMPT]
-        if not prompt:
-            logging.error("No prompt for auth credtype=%s", credtype)
-            return -1
-
-        prompt += ": "
-        label = Gtk.Label()
-        label.set_hexpand(False)
-        label.set_halign(Gtk.Align.START)
-        label.set_line_wrap(True)
-        label.set_max_width_chars(40)
-        label.set_text(prompt)
-        labels.append(label)
-
-        entry = Gtk.Entry()
-        if noecho:
-            entry.set_visibility(False)
-        entry.set_valign(Gtk.Align.START)
-        entry.connect("activate", _on_ent_activate)
-        entries.append(entry)
-
-        box.attach(labels[row], row, row, 1, 1)
-        box.attach(entries[row], row + 1, row, 1, 1)
-        row = row + 1
-
-    dialog.get_child().add(box)
-    dialog.show_all()
-    res = dialog.run()
-    dialog.hide()
-
-    if res == Gtk.ResponseType.OK:
-        row = 0
-        for cred in creds:
-            cred[4] = entries[row].get_text()
-            row = row + 1
-        ret = 0
-    else:
-        ret = -1
-
-    dialog.destroy()
-    return ret
 
 
 def connect_error(conn, errmsg, tb, warnconsole):
