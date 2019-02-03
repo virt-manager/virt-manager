@@ -1033,14 +1033,15 @@ class vmmCreate(vmmGObjectUI):
 
     def _get_config_detectable_media(self):
         instpage = self._get_config_install_page()
-        media = None
+        cdrom = None
+        location = None
 
         if instpage == INSTALL_PAGE_ISO:
-            media = self._get_config_local_media()
+            cdrom = self._get_config_local_media()
         elif instpage == INSTALL_PAGE_URL:
-            media = self.widget("install-url-entry").get_text()
+            location = self.widget("install-url-entry").get_text()
 
-        return media
+        return cdrom, location
 
     def _get_config_url_info(self, store_media=False):
         media = self.widget("install-url-entry").get_text().strip()
@@ -1853,26 +1854,27 @@ class vmmCreate(vmmGObjectUI):
         """
         is_install_page = (self.widget("create-pages").get_current_page() ==
             PAGE_INSTALL)
-        media = self._get_config_detectable_media()
+        cdrom, location = self._get_config_detectable_media()
 
         if self._detect_os_in_progress:
             return
         if not is_install_page:
             return
-        if not media:
+        if not cdrom and not location:
             return
         if not self._is_os_detect_active():
             return
         if self._os_already_detected_for_media:
             return
 
-        self._do_start_detect_os(media, forward_after_finish)
+        self._do_start_detect_os(cdrom, location, forward_after_finish)
         return True
 
-    def _do_start_detect_os(self, media, forward_after_finish):
+    def _do_start_detect_os(self, cdrom, location, forward_after_finish):
         self._detect_os_in_progress = False
 
-        logging.debug("Starting OS detection thread for media=%s", media)
+        logging.debug("Starting OS detection thread for cdrom=%s location=%s",
+                cdrom, location)
         self.widget("create-forward").set_sensitive(False)
 
         class ThreadResults(object):
@@ -1900,7 +1902,7 @@ class vmmCreate(vmmGObjectUI):
         thread_results = ThreadResults()
         detectThread = threading.Thread(target=self._detect_thread_cb,
                                         name="Actual media detection",
-                                        args=(media, thread_results))
+                                        args=(cdrom, location, thread_results))
         detectThread.setDaemon(True)
         detectThread.start()
 
@@ -1911,13 +1913,14 @@ class vmmCreate(vmmGObjectUI):
         self._report_detect_os_progress(0, thread_results,
                 forward_after_finish)
 
-    def _detect_thread_cb(self, media, thread_results):
+    def _detect_thread_cb(self, cdrom, location, thread_results):
         """
         Thread callback that does the actual detection
         """
         try:
             installer = virtinst.Installer(self.conn.get_backend(),
-                                           location=media)
+                                           cdrom=cdrom,
+                                           location=location)
             distro = installer.detect_distro(self._guest)
             thread_results.set_distro(distro)
         except Exception:
