@@ -144,6 +144,7 @@ class vmmEngine(vmmGObject):
                                      "/org/freedesktop/systemd1",
                                      "org.freedesktop.systemd1.Manager", None)
             units = systemd.ListUnits()
+            logging.debug("Successfully listed units via systemd")
         except Exception:
             units = []
             logging.exception("Couldn't connect to systemd")
@@ -159,6 +160,9 @@ class vmmEngine(vmmGObject):
             unitpath = unitinfo[6]
             break
 
+        logging.debug("libvirtd_installed=%s libvirtd_active=%s unitpath=%s",
+                libvirtd_installed, libvirtd_active, unitpath)
+
         # If it's not running, try to start it
         try:
             if units and libvirtd_installed and not libvirtd_active:
@@ -173,12 +177,14 @@ class vmmEngine(vmmGObject):
         except Exception:
             logging.exception("Error starting libvirtd")
 
-        # Manager fail message
-        tryuri = None
-        if not self.config.test_first_run:
+        if self.config.test_first_run:
+            logging.debug("--test-first-run, using uri=None to trigger error")
+            tryuri = None
+        else:
             tryuri = vmmConnect.default_uri()
-        logging.debug("Probed default URI=%s", tryuri)
+            logging.debug("Probed default URI=%s", tryuri)
 
+        # Manager fail message
         msg = ""
         if not libvirtd_installed:
             msg += _("The libvirtd service does not appear to be installed. "
