@@ -21,7 +21,6 @@ Release: 1%{?dist}
 %global verrel %{version}-%{release}
 
 Summary: Desktop tool for managing virtual machines via libvirt
-Group: Applications/Emulators
 License: GPLv2+
 BuildArch: noarch
 URL: https://virt-manager.org/
@@ -68,7 +67,6 @@ management API.
 
 %package common
 Summary: Common files used by the different Virtual Machine Manager interfaces
-Group: Applications/Emulators
 
 Requires: python3-argcomplete
 Requires: python3-libvirt
