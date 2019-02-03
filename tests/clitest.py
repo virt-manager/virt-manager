@@ -811,6 +811,7 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --disk none --network none --os-var
 
 c = vinst.add_category("lxc", "--name foolxc --memory 64 --noautoconsole --connect " + utils.URIs.lxc)
 c.add_compare("", "default")
+c.add_compare("--os-variant fedora27", "default-f27")
 c.add_compare("--filesystem /source,/", "fs-default")
 c.add_compare("--init /usr/bin/httpd", "manual-init")
 

@@ -535,7 +535,7 @@ def build_guest_instance(conn, options):
     if installer:
         set_distro_variant(options, guest, installer)
 
-    if not options.disk:
+    if not options.disk and not guest.os.is_container():
         res = guest.osinfo.get_recommended_resources(guest)
         if res and res.get('storage') > 0:
             options.disk = ['size=%d' % (res.get('storage') // (1024 ** 3))]
