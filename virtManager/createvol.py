@@ -189,7 +189,7 @@ class vmmCreateVolume(vmmGObjectUI):
                         self.parent_pool.get_pretty_available())
 
     def get_config_format(self):
-        if not self.widget("vol-format").is_visible():
+        if not self.widget("vol-format").get_visible():
             return None
         return uiutil.get_list_selection(self.widget("vol-format"))
 
