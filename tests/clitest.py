@@ -88,7 +88,7 @@ def has_old_osinfo():
         return "osinfo is too old"
 
 
-def has_isoinfo():
+def missing_isoinfo():
     if not HAS_ISOINFO:
         return "isoinfo not installed"
 
@@ -760,8 +760,8 @@ c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.k
 c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", skip_cb=has_old_osinfo)
 
 # misc KVM config tests
-c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel")  # --location with an unknown ISO but manually specified kernel paths
-c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", skip_cb=has_isoinfo)  # Using --location iso mounting
+c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", skip_cb=missing_isoinfo)  # --location with an unknown ISO but manually specified kernel paths
+c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", skip_cb=missing_isoinfo)  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel5.4", "kvm-rhel5")  # RHEL5 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
