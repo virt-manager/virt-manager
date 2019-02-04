@@ -203,29 +203,29 @@ class DeviceInterface(Device):
         per the network type.
         """
         if self.type == self.TYPE_VIRTUAL:
-            return self._network
+            return self.network
         if self.type == self.TYPE_BRIDGE:
-            return self._bridge
+            return self.bridge
         if self.type == self.TYPE_DIRECT:
-            return self._source_dev
+            return self.source_dev
         if self.type == self.TYPE_USER or self.type == self.TYPE_ETHERNET:
             return None
-        return self._network or self._bridge or self._source_dev
+        return self.network or self.bridge or self.source_dev
     def _set_source(self, newsource):
         """
         Convenience function, try to set the relevant <source> value
         per the network type
         """
-        self._bridge = None
-        self._network = None
-        self._source_dev = None
+        self.bridge = None
+        self.network = None
+        self.source_dev = None
 
         if self.type == self.TYPE_VIRTUAL:
-            self._network = newsource
+            self.network = newsource
         elif self.type == self.TYPE_BRIDGE:
-            self._bridge = newsource
+            self.bridge = newsource
         elif self.type == self.TYPE_DIRECT:
-            self._source_dev = newsource
+            self.source_dev = newsource
     source = property(_get_source, _set_source)
 
 
@@ -234,13 +234,13 @@ class DeviceInterface(Device):
     ##################
 
     _XML_PROP_ORDER = [
-        "_bridge", "_network", "_source_dev", "source_type", "source_path",
+        "bridge", "network", "source_dev", "source_type", "source_path",
         "source_mode", "portgroup", "macaddr", "target_dev", "model",
         "virtualport", "filterref", "rom_bar", "rom_file", "mtu_size"]
 
-    _bridge = XMLProperty("./source/@bridge")
-    _network = XMLProperty("./source/@network")
-    _source_dev = XMLProperty("./source/@dev")
+    bridge = XMLProperty("./source/@bridge")
+    network = XMLProperty("./source/@network")
+    source_dev = XMLProperty("./source/@dev")
 
     virtualport = XMLChildProperty(_VirtualPort, is_single=True)
     type = XMLProperty("./@type")
@@ -311,8 +311,8 @@ class DeviceInterface(Device):
             self.type = self.TYPE_BRIDGE
         if not self.macaddr:
             self.macaddr = self.generate_mac(self.conn)
-        if self.type == self.TYPE_BRIDGE and not self._bridge:
-            self._bridge = _default_bridge(self.conn)
+        if self.type == self.TYPE_BRIDGE and not self.bridge:
+            self.bridge = _default_bridge(self.conn)
         if self.type == self.TYPE_DIRECT and not self.source_mode:
             self.source_mode = "vepa"
         if not self.model:
