@@ -409,6 +409,14 @@ class vmmNetworkList(vmmGObjectUI):
 
         nettype = net.type
         source = net.source
+        if net.network:
+            # If using type=network with a forward mode=bridge network,
+            # on domain startup the runtime XML will be changed to
+            # type=bridge and both source/@bridge and source/@network will
+            # be filled in. For our purposes, treat this as a type=network
+            source = net.network
+            nettype = "network"
+
         source_mode = net.source_mode
         is_direct = (net.type == "direct")
 
