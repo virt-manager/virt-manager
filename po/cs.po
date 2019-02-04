@@ -978,9 +978,8 @@ msgid "Random Number Generator"
 msgstr "Generátor náhodných čísel"
 
 #: ../virtManager/addhardware.py:818
-#, fuzzy
 msgid "VM Sockets"
-msgstr "Pa_tic:"
+msgstr "Patic virt. stroje"
 
 #: ../virtManager/addhardware.py:822 ../virtManager/details.py:2906
 #, python-format
@@ -2525,9 +2524,8 @@ msgid "Physical %s Device"
 msgstr "Fyzické %s zařízení"
 
 #: ../virtManager/details.py:2981
-#, fuzzy
 msgid "Cannot remove last video device while Graphics/Display is attached."
-msgstr "Není možné odebrat zařízení když je grafika/konzole připojená."
+msgstr "Není možné odebrat poslední zařízení když je grafika/konzole připojená."
 
 #: ../virtManager/details.py:3010 ../virtManager/details.py:3017
 #: ../virtManager/details.py:3023
@@ -3994,7 +3992,6 @@ msgstr ""
 "--memory 512,maxmemory=1024,hotplugmemorymax=2048,hotplugmemoryslots=2"
 
 #: ../virtinst/cli.py:628
-#, fuzzy
 msgid ""
 "Number of vcpus to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -4172,6 +4169,9 @@ msgid ""
 "--vsock auto_cid=yes\n"
 "--vsock cid=7"
 msgstr ""
+"Nastavit vsock patice hosta. Např.:\n"
+"--vsock auto_cid=yes\n"
+"--vsock cid=7"
 
 #: ../virtinst/cli.py:763
 msgid "Set domain security driver configuration."
@@ -4288,14 +4288,12 @@ msgid "OS options"
 msgstr ""
 
 #: ../virtinst/cli.py:852
-#, fuzzy
 msgid "The OS being installed in the guest."
-msgstr "Zařízení už je používáno jiným hostem %s"
+msgstr "Operační systém je instalován v hostovi."
 
 #: ../virtinst/cli.py:854
-#, fuzzy
 msgid "The OS installed in the guest."
-msgstr "Zařízení už je používáno jiným hostem %s"
+msgstr "Operační systém nainstalovaný v hostovi."
 
 #: ../virtinst/cli.py:856
 msgid ""
@@ -4303,6 +4301,9 @@ msgid ""
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
+"Toto slouží pro rozhodování optimálních výchozích jako virtio.\n"
+"Hodnoty pro ukázku: fedora29, rhel7.0, win10, …\n"
+"Úplný seznam viz „osinfo-query os“."
 
 #: ../virtinst/cli.py:888
 #, python-format
@@ -4319,14 +4320,14 @@ msgstr ""
 "„%(property_name)s“"
 
 #: ../virtinst/cli.py:1324
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown %s options: %s"
-msgstr "Neznámá volba %s"
+msgstr "Neznámé volby: %s"
 
 #: ../virtinst/cli.py:1379 ../virtinst/cli.py:1410
-#, fuzzy, python-format
+#, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
-msgstr "Chyba: --%(cli_arg_name)s %(options)s: %(err)s"
+msgstr "Chyba: %(cli_arg_name)s %(options)s: %(err)s"
 
 #: ../virtinst/cli.py:2044
 #, python-format
@@ -4792,11 +4793,11 @@ msgstr "Nenalezeno žádné umístění UEFI binárky pro architekturu „%s“"
 
 #: ../virtinst/installer.py:56
 msgid "location kernel/initrd may only be specified with a location URL/path"
-msgstr ""
+msgstr "umístění jádra/initrd je možné zadat pouze s URL / popisem umístění"
 
 #: ../virtinst/installer.py:59
 msgid "location kernel/initrd must be be specified as a pair"
-msgstr ""
+msgstr "umístění jádra/initrd je třeba zadat společně"
 
 #: ../virtinst/installer.py:344
 msgid "Creating domain..."
@@ -4817,14 +4818,13 @@ msgid "Validating install media '%s' failed: %s"
 msgstr "Ověřování instalačního média „%s“ se nezdařilo: %s"
 
 #: ../virtinst/installertreemedia.py:91
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot access install tree on remote connection: %s"
-msgstr "Nelze použít místní úložiště na vzdáleném připojení."
+msgstr "Nelze přistupovat k instalačnímu  stromu na vzdáleném připojení."
 
 #: ../virtinst/installertreemedia.py:140
-#, fuzzy
 msgid "Couldn't find kernel for install tree."
-msgstr "Nedaří se nalézt jádro systému pro strom %(distro)s."
+msgstr "Nedaří se nalézt jádro systému pro instalační strom"
 
 #: ../virtinst/interface.py:158
 #, python-format
@@ -5182,9 +5182,8 @@ msgid "Graphical console connection for a virtual machine"
 msgstr "Připojení grafickou konzolí ke vzdálenému stroji"
 
 #: ../ui/about.ui.h:1
-#, fuzzy
 msgid "Copyright (C) 2006-2019 Red Hat Inc."
-msgstr "Autorská práva © 2006-2018 Red Hat Inc."
+msgstr "Autorská práva © 2006-2019 Red Hat Inc."
 
 #: ../ui/about.ui.h:2
 msgid "Powered by libvirt"
@@ -7405,9 +7404,8 @@ msgid "Delete volume"
 msgstr "Smazat svazek"
 
 #: ../ui/vsockdetails.ui.h:1
-#, fuzzy
 msgid "Guest C_ID:"
-msgstr "Host"
+msgstr "C_ID hosta"
 
 #~ msgid "Invalid install location: "
 #~ msgstr "Neplatné umístění instalace:"
