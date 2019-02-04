@@ -327,7 +327,6 @@ class vmmAddHardware(vmmGObjectUI):
 
         netmodel = self.widget("net-model")
         self.populate_network_model_combo(self.vm, netmodel)
-        netmodel.set_active(0)
 
 
         # Char parameters
