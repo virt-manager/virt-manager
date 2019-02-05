@@ -275,7 +275,11 @@ class vmmInspection(vmmGObject):
                     icon = None
 
             # Inspection applications.
-            apps = g.inspect_list_applications(root)
+            try:
+                apps = g.inspect_list_applications(root)
+            except Exception:
+                logging.exception("%s: exception while listing apps (ignored)",
+                                  prettyvm)
 
         # Force the libguestfs handle to close right now.
         del g
