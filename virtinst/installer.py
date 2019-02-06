@@ -397,7 +397,6 @@ class Installer(object):
         self.set_install_defaults(guest)
 
         try:
-            self._cleanup(guest)
             self._prepare(guest, meter)
 
             if not dry:
