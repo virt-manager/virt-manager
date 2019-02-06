@@ -521,22 +521,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self._redefine_xmlobj(guest)
 
-    def __use_device_boot_order(self, boot_order, guest):
-        # Unset the traditional boot order
-        guest.os.bootorder = []
-
-        # Unset device boot order
-        for dev in guest.devices.get_all():
-            dev.boot.order = None
-
-        dev_map = dict((dev.get_xml_id(), dev) for dev in
-                       guest.get_bootable_devices(exclude_redirdev=True))
-        for boot_order_idx, dev_xml_id in enumerate(boot_order, 1):
-            try:
-                dev_map[dev_xml_id].boot.order = boot_order_idx
-            except KeyError:
-                pass
-
     def define_boot(self, boot_order=_SENTINEL, boot_menu=_SENTINEL,
                     kernel=_SENTINEL, initrd=_SENTINEL, dtb=_SENTINEL,
                     kernel_args=_SENTINEL, init=_SENTINEL, initargs=_SENTINEL):
@@ -544,7 +528,7 @@ class vmmDomain(vmmLibvirtObject):
         guest = self._make_xmlobj_to_define()
         if boot_order != _SENTINEL:
             if self.can_use_device_boot_order():
-                self.__use_device_boot_order(boot_order, guest)
+                guest.set_device_boot_order(boot_order)
             else:
                 guest.os.bootorder = boot_order
 

@@ -312,6 +312,23 @@ class Guest(XMLBuilder):
         return self.__osinfo
     osinfo = property(_get_osinfo)
 
+    def set_device_boot_order(self, boot_order):
+        """Sets the new device boot order for the domain"""
+        # Unset the traditional boot order
+        self.os.bootorder = []
+
+        # Unset device boot order
+        for dev in self.devices.get_all():
+            dev.boot.order = None
+
+        dev_map = dict((dev.get_xml_id(), dev) for dev in
+                       self.get_bootable_devices(exclude_redirdev=True))
+        for boot_idx, dev_xml_id in enumerate(boot_order, 1):
+            try:
+                dev_map[dev_xml_id].boot.order = boot_idx
+            except KeyError:
+                pass
+
     def set_os_name(self, name):
         obj = OSDB.lookup_os(name)
         if obj is None:
