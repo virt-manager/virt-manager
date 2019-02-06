@@ -207,10 +207,9 @@ class _OSDB(object):
             logging.debug("Error creating libosinfo media object: %s", str(e))
             return None
 
-        osobj, mediaobj = self._os_loader.get_db().guess_os_from_media(media)
-        if not osobj:
+        if not self._os_loader.get_db().identify_media(media):
             return None
-        return osobj.get_short_id(), mediaobj
+        return media.get_os().get_short_id(), media
 
     def list_os(self):
         """
