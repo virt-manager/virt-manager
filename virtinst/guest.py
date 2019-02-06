@@ -384,10 +384,7 @@ class Guest(XMLBuilder):
         dev_map = dict((dev.get_xml_id(), dev) for dev in
                        self.get_bootable_devices())
         for boot_idx, dev_xml_id in enumerate(boot_order, 1):
-            try:
-                dev_map[dev_xml_id].boot.order = boot_idx
-            except KeyError:
-                pass
+            dev_map[dev_xml_id].boot.order = boot_idx
 
     def set_boot_order(self, boot_order, legacy=False):
         """Modifies the boot order"""
