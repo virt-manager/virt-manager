@@ -312,6 +312,61 @@ class Guest(XMLBuilder):
         return self.__osinfo
     osinfo = property(_get_osinfo)
 
+    def get_old_boot_order(self):
+        return self.os.bootorder
+
+    def _convert_old_boot_order(self):
+        """Converts the old boot order (e.g. <boot dev='hd'/>) into the
+        per-device boot order format.
+
+        """
+        boot_order = self.get_old_boot_order()
+        ret = []
+        disk = None
+        cdrom = None
+        floppy = None
+        net = None
+
+        for d in self.devices.disk:
+            if not cdrom and d.device == "cdrom":
+                cdrom = d
+            if not floppy and d.device == "floppy":
+                floppy = d
+            if not disk and d.device not in ["cdrom", "floppy"]:
+                disk = d
+            if cdrom and disk and floppy:
+                break
+
+        for n in self.devices.interface:
+            net = n
+            break
+
+        for b in boot_order:
+            if b == "network" and net:
+                ret.append(net.get_xml_id())
+            elif b == "hd" and disk:
+                ret.append(disk.get_xml_id())
+            elif b == "cdrom" and cdrom:
+                ret.append(cdrom.get_xml_id())
+            elif b == "fd" and floppy:
+                ret.append(floppy.get_xml_id())
+        return ret
+
+    def get_device_boot_order(self):
+        order = []
+        for dev in self.get_bootable_devices(exclude_redirdev=True):
+            if not dev.boot.order:
+                continue
+            order.append((dev.get_xml_id(), dev.boot.order))
+
+        if not order:
+            # No devices individually marked bootable, convert traditional
+            # boot XML to fine grained
+            return self._convert_old_boot_order()
+
+        order.sort(key=lambda p: p[1])
+        return [p[0] for p in order]
+
     def set_device_boot_order(self, boot_order):
         """Sets the new device boot order for the domain"""
         # Unset the traditional boot order
