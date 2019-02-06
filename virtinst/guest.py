@@ -312,7 +312,7 @@ class Guest(XMLBuilder):
         return self.__osinfo
     osinfo = property(_get_osinfo)
 
-    def get_old_boot_order(self):
+    def _get_old_boot_order(self):
         return self.os.bootorder
 
     def _convert_old_boot_order(self):
@@ -320,7 +320,7 @@ class Guest(XMLBuilder):
         per-device boot order format.
 
         """
-        boot_order = self.get_old_boot_order()
+        boot_order = self._get_old_boot_order()
         ret = []
         disk = None
         cdrom = None
@@ -352,7 +352,7 @@ class Guest(XMLBuilder):
                 ret.append(floppy.get_xml_id())
         return ret
 
-    def get_device_boot_order(self):
+    def _get_device_boot_order(self):
         order = []
         for dev in self.get_bootable_devices(exclude_redirdev=True):
             if not dev.boot.order:
@@ -366,6 +366,11 @@ class Guest(XMLBuilder):
 
         order.sort(key=lambda p: p[1])
         return [p[0] for p in order]
+
+    def get_boot_order(self, legacy=False):
+        if legacy:
+            return self._get_old_boot_order()
+        return self._get_device_boot_order()
 
     def set_device_boot_order(self, boot_order):
         """Sets the new device boot order for the domain"""

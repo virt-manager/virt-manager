@@ -1198,9 +1198,8 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().cpu
 
     def get_boot_order(self):
-        if self.can_use_device_boot_order():
-            return self.xmlobj.get_device_boot_order()
-        return self.xmlobj.get_old_boot_order()
+        legacy = not self.can_use_device_boot_order()
+        return self.xmlobj.get_boot_order(legacy=legacy)
 
     def get_boot_menu(self):
         guest = self.get_xmlobj()
