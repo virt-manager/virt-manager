@@ -367,6 +367,19 @@ class Guest(XMLBuilder):
         self.devices.remove_child(dev)
     devices = XMLChildProperty(_DomainDevices, is_single=True)
 
+    def get_bootable_devices(self, exclude_redirdev=False):
+        """
+        Returns bootable devices of the guest definition. If
+        @exclude_redirdev is `True` redirected devices will be
+        skipped in the output.
+
+        """
+        devices = self.devices
+        devs = devices.disk + devices.interface + devices.hostdev
+        if not exclude_redirdev:
+            devs = devs + devices.redirdev
+        return devs
+
     def prefers_uefi(self):
         """
         Return True if this config prefers UEFI. For example,
