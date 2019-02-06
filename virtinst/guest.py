@@ -354,7 +354,7 @@ class Guest(XMLBuilder):
 
     def _get_device_boot_order(self):
         order = []
-        for dev in self.get_bootable_devices(exclude_redirdev=True):
+        for dev in self.get_bootable_devices():
             if not dev.boot.order:
                 continue
             order.append((dev.get_xml_id(), dev.boot.order))
@@ -382,7 +382,7 @@ class Guest(XMLBuilder):
             dev.boot.order = None
 
         dev_map = dict((dev.get_xml_id(), dev) for dev in
-                       self.get_bootable_devices(exclude_redirdev=True))
+                       self.get_bootable_devices())
         for boot_idx, dev_xml_id in enumerate(boot_order, 1):
             try:
                 dev_map[dev_xml_id].boot.order = boot_idx
