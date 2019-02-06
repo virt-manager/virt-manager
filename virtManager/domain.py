@@ -527,10 +527,8 @@ class vmmDomain(vmmLibvirtObject):
 
         guest = self._make_xmlobj_to_define()
         if boot_order != _SENTINEL:
-            if self.can_use_device_boot_order():
-                guest.set_device_boot_order(boot_order)
-            else:
-                guest.os.bootorder = boot_order
+            legacy = not self.can_use_device_boot_order()
+            guest.set_boot_order(boot_order, legacy=legacy)
 
         if boot_menu != _SENTINEL:
             guest.os.enable_bootmenu = bool(boot_menu)

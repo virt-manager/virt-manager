@@ -372,7 +372,7 @@ class Guest(XMLBuilder):
             return self._get_old_boot_order()
         return self._get_device_boot_order()
 
-    def set_device_boot_order(self, boot_order):
+    def _set_device_boot_order(self, boot_order):
         """Sets the new device boot order for the domain"""
         # Unset the traditional boot order
         self.os.bootorder = []
@@ -388,6 +388,13 @@ class Guest(XMLBuilder):
                 dev_map[dev_xml_id].boot.order = boot_idx
             except KeyError:
                 pass
+
+    def set_boot_order(self, boot_order, legacy=False):
+        """Modifies the boot order"""
+        if legacy:
+            self.os.bootorder = boot_order
+        else:
+            self._set_device_boot_order(boot_order)
 
     def set_os_name(self, name):
         obj = OSDB.lookup_os(name)
