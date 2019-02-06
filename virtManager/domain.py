@@ -524,7 +524,7 @@ class vmmDomain(vmmLibvirtObject):
     def __use_device_boot_order(self, boot_order, guest):
         boot_dev_order = []
         devmap = dict((dev.get_xml_id(), dev) for dev in
-                      self.get_bootable_devices())
+                      guest.get_bootable_devices(exclude_redirdev=True))
         for b in boot_order:
             if b in devmap:
                 boot_dev_order.append(devmap[b])
