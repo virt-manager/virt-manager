@@ -40,7 +40,7 @@ from virtinst.devices import *  # pylint: disable=wildcard-import
 
 from virtinst.installer import Installer
 
-from virtinst.guest import Guest
+from virtinst.guest import Guest, find_device
 from virtinst.cloner import Cloner
 from virtinst.snapshot import DomainSnapshot
 

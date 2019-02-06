@@ -13,7 +13,7 @@ import libvirt
 
 from virtinst import DomainCapabilities
 from virtinst import DomainSnapshot
-from virtinst import Guest
+from virtinst import Guest, find_device
 from virtinst import util
 from virtinst import DeviceController
 from virtinst import DeviceDisk
@@ -24,61 +24,6 @@ from .libvirtenummap import LibvirtEnumMap
 
 class _SENTINEL(object):
     pass
-
-
-def compare_device(origdev, newdev, idx):
-    devprops = {
-        "disk":          ["target", "bus"],
-        "interface":     ["macaddr", "xmlindex"],
-        "input":         ["bus", "type", "xmlindex"],
-        "sound":         ["model", "xmlindex"],
-        "video":         ["model", "xmlindex"],
-        "watchdog":      ["xmlindex"],
-        "hostdev":       ["type", "managed", "xmlindex",
-                            "product", "vendor",
-                            "function", "domain", "slot"],
-        "serial":        ["type", "target_port"],
-        "parallel":      ["type", "target_port"],
-        "console":       ["type", "target_type", "target_port"],
-        "graphics":      ["type", "xmlindex"],
-        "controller":    ["type", "index"],
-        "channel":       ["type", "target_name"],
-        "filesystem":    ["target", "xmlindex"],
-        "smartcard":     ["mode", "xmlindex"],
-        "redirdev":      ["bus", "type", "xmlindex"],
-        "tpm":           ["type", "xmlindex"],
-        "rng":           ["type", "xmlindex"],
-        "panic":         ["type", "xmlindex"],
-        "vsock":         ["xmlindex"],
-    }
-
-    if id(origdev) == id(newdev):
-        return True
-
-    if not isinstance(origdev, type(newdev)):
-        return False
-
-    for devprop in devprops[origdev.DEVICE_TYPE]:
-        if devprop == "xmlindex":
-            origval = origdev.get_xml_idx()
-            newval = idx
-        else:
-            origval = getattr(origdev, devprop)
-            newval = getattr(newdev, devprop)
-
-        if origval != newval:
-            return False
-
-    return True
-
-
-def _find_device(guest, origdev):
-    devlist = getattr(guest.devices, origdev.DEVICE_TYPE)
-    for idx, dev in enumerate(devlist):
-        if compare_device(origdev, dev, idx):
-            return dev
-
-    return None
 
 
 def start_job_progress_thread(vm, meter, progtext):
@@ -395,14 +340,14 @@ class vmmDomain(vmmLibvirtObject):
         if for_hotplug:
             return origdev
 
-        dev = _find_device(xmlobj, origdev)
+        dev = find_device(xmlobj, origdev)
         if dev:
             return dev
 
         # If we are removing multiple dev from an active VM, a double
         # attempt may result in a lookup failure. If device is present
         # in the active XML, assume all is good.
-        if _find_device(self.get_xmlobj(), origdev):
+        if find_device(self.get_xmlobj(), origdev):
             logging.debug("Device in active config but not inactive config.")
             return
 
@@ -488,7 +433,7 @@ class vmmDomain(vmmLibvirtObject):
             return
 
         if con:
-            rmcon = _find_device(xmlobj, con)
+            rmcon = find_device(xmlobj, con)
             if rmcon:
                 xmlobj.remove_device(rmcon)
         xmlobj.remove_device(editdev)

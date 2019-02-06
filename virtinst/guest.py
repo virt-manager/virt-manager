@@ -22,6 +22,61 @@ from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 _ignore = Device
 
 
+def compare_device(origdev, newdev, idx):
+    devprops = {
+        "disk":          ["target", "bus"],
+        "interface":     ["macaddr", "xmlindex"],
+        "input":         ["bus", "type", "xmlindex"],
+        "sound":         ["model", "xmlindex"],
+        "video":         ["model", "xmlindex"],
+        "watchdog":      ["xmlindex"],
+        "hostdev":       ["type", "managed", "xmlindex",
+                          "product", "vendor",
+                          "function", "domain", "slot"],
+        "serial":        ["type", "target_port"],
+        "parallel":      ["type", "target_port"],
+        "console":       ["type", "target_type", "target_port"],
+        "graphics":      ["type", "xmlindex"],
+        "controller":    ["type", "index"],
+        "channel":       ["type", "target_name"],
+        "filesystem":    ["target", "xmlindex"],
+        "smartcard":     ["mode", "xmlindex"],
+        "redirdev":      ["bus", "type", "xmlindex"],
+        "tpm":           ["type", "xmlindex"],
+        "rng":           ["type", "xmlindex"],
+        "panic":         ["type", "xmlindex"],
+        "vsock":         ["xmlindex"],
+    }
+
+    if id(origdev) == id(newdev):
+        return True
+
+    if not isinstance(origdev, type(newdev)):
+        return False
+
+    for devprop in devprops[origdev.DEVICE_TYPE]:
+        if devprop == "xmlindex":
+            origval = origdev.get_xml_idx()
+            newval = idx
+        else:
+            origval = getattr(origdev, devprop)
+            newval = getattr(newdev, devprop)
+
+        if origval != newval:
+            return False
+
+    return True
+
+
+def find_device(guest, origdev):
+    devlist = getattr(guest.devices, origdev.DEVICE_TYPE)
+    for idx, dev in enumerate(devlist):
+        if compare_device(origdev, dev, idx):
+            return dev
+
+    return None
+
+
 class _DomainDevices(XMLBuilder):
     XML_NAME = "devices"
     _XML_PROP_ORDER = ['disk', 'controller', 'filesystem', 'interface',
