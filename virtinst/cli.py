@@ -857,7 +857,7 @@ def add_os_variant_option(parser, virtinstall):
              "Example values: fedora29, rhel7.0, win10, ...\n"
              "See 'osinfo-query os' for a full list.")
 
-    osg.add_argument("--os-variant", dest="distro_variant", help=msg)
+    osg.add_argument("--os-variant", help=msg)
     return osg
 
 

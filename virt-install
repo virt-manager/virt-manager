@@ -162,13 +162,13 @@ def convert_old_disks(options):
 def convert_old_os_options(options):
     # Default to distro autodetection
     distkey = "auto"
-    if options.distro_variant:
-        distkey = str(options.distro_variant).lower()
-    elif options.distro_type:
-        distkey = str(options.distro_type).lower()
+    if options.os_variant:
+        distkey = str(options.os_variant).lower()
+    elif options.old_os_type:
+        distkey = str(options.old_os_type).lower()
 
-    options.distro_variant = distkey
-    del(options.distro_type)
+    options.os_variant = distkey
+    del(options.old_os_type)
 
 
 def convert_old_memory(options):
@@ -420,7 +420,7 @@ def show_warnings(options, guest, installer):
     # Limit it to hvm x86 guests which presently our defaults
     # only really matter for
     if (guest.osinfo.name == "generic" and
-        options.distro_variant not in ["none", "generic"] and
+        options.os_variant not in ["none", "generic"] and
         guest.os.is_x86() and guest.os.is_hvm()):
         logging.warning(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
@@ -479,7 +479,7 @@ def build_installer(options, guest):
     try:
         # This also validates the install location
         autodistro = installer.detect_distro(guest)
-        if options.distro_variant == "auto":
+        if options.os_variant == "auto":
             distro = autodistro
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
@@ -519,10 +519,10 @@ def build_guest_instance(conn, options):
         guest.os.arch = options.arch
     if options.machine:
         guest.os.machine = options.machine
-    if options.distro_variant not in ["auto", "none"]:
+    if options.os_variant not in ["auto", "none"]:
         # If explicit os-variant requested, set it early since it will
         # provide more defaults in the future
-        guest.set_os_name(options.distro_variant)
+        guest.set_os_name(options.os_variant)
 
     cli.parse_option_strings(options, guest, None)
 
@@ -790,7 +790,7 @@ def parse_args():
     insg.add_argument("--init", help=argparse.SUPPRESS)
 
     osg = cli.add_os_variant_option(parser, virtinstall=True)
-    osg.add_argument("--os-type", dest="distro_type", help=argparse.SUPPRESS)
+    osg.add_argument("--os-type", dest="old_os_type", help=argparse.SUPPRESS)
 
     devg = parser.add_argument_group(_("Device Options"))
     cli.add_disk_option(devg)
@@ -902,8 +902,8 @@ def set_test_stub_options(options):
         options.import_install = True
     if not options.graphics:
         options.graphics = "none"
-    if not options.distro_variant:
-        options.distro_variant = "fedora27"
+    if not options.os_variant:
+        options.os_variant = "fedora27"
 
 
 def main(conn=None):
