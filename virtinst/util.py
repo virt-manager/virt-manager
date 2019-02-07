@@ -223,10 +223,10 @@ def get_system_scratchdir(hvtype):
         return "/var/lib/libvirt/boot"
 
 
-def make_scratchdir(conn, hvtype):
+def make_scratchdir(guest):
     scratch = None
-    if not conn.is_session_uri():
-        scratch = get_system_scratchdir(hvtype)
+    if not guest.conn.is_session_uri():
+        scratch = get_system_scratchdir(guest.type)
 
     if (not scratch or
         not os.path.exists(scratch) or

@@ -1673,14 +1673,7 @@ class vmmCreate(vmmGObjectUI):
             if not self._validate_storage_page():
                 return False
 
-        if installer.scratchdir_required():
-            path = util.make_scratchdir(self._guest.conn, self._guest.type)
-        elif instmethod == INSTALL_PAGE_ISO:
-            path = installer.cdrom or installer.location
-        else:
-            path = None
-
-        if path:
+        for path in installer.get_search_paths(self._guest):
             self._addstorage.check_path_search(
                 self, self.conn, path)
 

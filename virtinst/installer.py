@@ -227,13 +227,17 @@ class Installer(object):
         guest.set_defaults(None)
         self._defaults_are_set = True
 
-    def scratchdir_required(self):
+    def get_search_paths(self, guest):
         """
-        Returns true if scratchdir is needed for the passed install parameters.
-        Apps can use this to determine if they should attempt to ensure
-        scratchdir permissions are adequate
+        Return a list of paths that the hypervisor will need search access
+        for to perform this install.
         """
-        return bool(self._treemedia)
+        search_paths = []
+        if self._treemedia:
+            search_paths.append(util.make_scratchdir(guest))
+        if self._cdrom_path():
+            search_paths.append(self._cdrom_path())
+        return search_paths
 
     def has_install_phase(self):
         """

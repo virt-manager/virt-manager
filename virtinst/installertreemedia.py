@@ -103,7 +103,7 @@ class InstallerTreeMedia(object):
         meter = util.ensure_meter(meter)
 
         if not self._cached_fetcher:
-            scratchdir = util.make_scratchdir(guest.conn, guest.type)
+            scratchdir = util.make_scratchdir(guest)
 
             self._cached_fetcher = urlfetcher.fetcherForURI(
                 self.location, scratchdir, meter)
