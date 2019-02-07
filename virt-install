@@ -501,6 +501,19 @@ def build_installer(options, guest):
     return installer
 
 
+def set_resources_from_osinfo(options, guest):
+    if guest.os.is_container():
+        return
+    if options.disk:
+        return
+
+    res = guest.osinfo.get_recommended_resources(guest)
+    if res and res.get('storage') > 0:
+        diskstr = 'size=%d' % (res.get('storage') // (1024 ** 3))
+        logging.debug("Generated default libosinfo '--disk %s'", diskstr)
+        options.disk = [diskstr]
+
+
 def build_guest_instance(conn, options):
     guest = virtinst.Guest(conn)
 
@@ -525,11 +538,7 @@ def build_guest_instance(conn, options):
 
     guest.set_capabilities_defaults()
     installer = build_installer(options, guest)
-
-    if not options.disk and not guest.os.is_container():
-        res = guest.osinfo.get_recommended_resources(guest)
-        if res and res.get('storage') > 0:
-            options.disk = ['size=%d' % (res.get('storage') // (1024 ** 3))]
+    set_resources_from_osinfo(options, guest)
 
     cli.parse_option_strings(options, guest, None)
 
