@@ -163,9 +163,9 @@ def convert_old_os_options(options):
     # Default to distro autodetection
     distkey = "auto"
     if options.os_variant:
-        distkey = str(options.os_variant).lower()
+        distkey = options.os_variant
     elif options.old_os_type:
-        distkey = str(options.old_os_type).lower()
+        distkey = options.old_os_type
 
     options.os_variant = distkey
     del(options.old_os_type)
