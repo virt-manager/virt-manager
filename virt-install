@@ -511,7 +511,7 @@ def set_resources_from_osinfo(options, guest):
     if res and res.get('storage') > 0:
         diskstr = 'size=%d' % (res.get('storage') // (1024 ** 3))
         logging.debug("Generated default libosinfo '--disk %s'", diskstr)
-        options.disk = [diskstr]
+        cli.ParserDisk(guest, diskstr).parse(None)
 
 
 def build_guest_instance(conn, options):
@@ -536,11 +536,15 @@ def build_guest_instance(conn, options):
         # provide more defaults in the future
         guest.set_os_name(options.distro_variant)
 
+    cli.parse_option_strings(options, guest, None)
+
+    # Call set_capabilities_defaults explicitly here rather than depend
+    # on set_defaults calling it. Installer setup needs filled in values.
+    # However we want to do it after parse_option_strings to ensure
+    # we are operating on any arch/os/type values passed in with --boot
     guest.set_capabilities_defaults()
     installer = build_installer(options, guest)
     set_resources_from_osinfo(options, guest)
-
-    cli.parse_option_strings(options, guest, None)
 
     # cli specific disk validation
     for disk in guest.devices.disk:
