@@ -295,23 +295,6 @@ def convert_old_features(options):
 # Install media setup/validation #
 ##################################
 
-def set_distro_variant(options, guest, installer):
-    distro = None
-    try:
-        # This also validates the install location
-        autodistro = installer.detect_distro(guest)
-
-        if options.distro_variant == "auto":
-            distro = autodistro
-        elif options.distro_variant != "none":
-            distro = options.distro_variant
-    except ValueError as e:
-        fail(_("Error validating install location: %s") % str(e))
-
-    if distro:
-        guest.set_os_name(distro)
-
-
 def do_test_media_detection(conn, options):
     url = options.test_media_detection
     guest = virtinst.Guest(conn)
@@ -504,6 +487,17 @@ def build_installer(options, guest):
     if options.autostart:
         installer.autostart = True
 
+    distro = None
+    try:
+        # This also validates the install location
+        autodistro = installer.detect_distro(guest)
+        if options.distro_variant == "auto":
+            distro = autodistro
+    except ValueError as e:
+        fail(_("Error validating install location: %s") % str(e))
+
+    if distro:
+        guest.set_os_name(distro)
     return installer
 
 
@@ -524,11 +518,13 @@ def build_guest_instance(conn, options):
         guest.os.arch = options.arch
     if options.machine:
         guest.os.machine = options.machine
+    if options.distro_variant not in ["auto", "none"]:
+        # If explicit os-variant requested, set it early since it will
+        # provide more defaults in the future
+        guest.set_os_name(options.distro_variant)
 
     guest.set_capabilities_defaults()
     installer = build_installer(options, guest)
-    if installer:
-        set_distro_variant(options, guest, installer)
 
     if not options.disk and not guest.os.is_container():
         res = guest.osinfo.get_recommended_resources(guest)
