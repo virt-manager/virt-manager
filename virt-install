@@ -167,7 +167,7 @@ def convert_old_os_options(options):
     elif options.old_os_type:
         distkey = options.old_os_type
 
-    options.os_variant = distkey
+    options.os_variant = cli.parse_os_variant(distkey)
     del(options.old_os_type)
 
 
@@ -420,7 +420,8 @@ def show_warnings(options, guest, installer):
     # Limit it to hvm x86 guests which presently our defaults
     # only really matter for
     if (guest.osinfo.name == "generic" and
-        options.os_variant not in ["none", "generic"] and
+        not options.os_variant.is_none and
+        not options.os_variant.name == "generic" and
         guest.os.is_x86() and guest.os.is_hvm()):
         logging.warning(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
@@ -479,7 +480,7 @@ def build_installer(options, guest):
     try:
         # This also validates the install location
         autodistro = installer.detect_distro(guest)
-        if options.os_variant == "auto":
+        if options.os_variant.is_auto:
             distro = autodistro
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
@@ -519,10 +520,10 @@ def build_guest_instance(conn, options):
         guest.os.arch = options.arch
     if options.machine:
         guest.os.machine = options.machine
-    if options.os_variant not in ["auto", "none"]:
-        # If explicit os-variant requested, set it early since it will
-        # provide more defaults in the future
-        guest.set_os_name(options.os_variant)
+
+    # If explicit os-variant requested, set it early since it will
+    # provide more defaults in the future
+    options.os_variant.set_os_name(guest)
 
     cli.parse_option_strings(options, guest, None)
 

@@ -462,7 +462,7 @@ def get_meter():
 ###########################
 
 def _get_completer_parsers():
-    return VIRT_PARSERS + [ParseCLICheck, ParserLocation]
+    return VIRT_PARSERS + [ParseCLICheck, ParserLocation, ParserOSVariant]
 
 
 def _virtparser_completer(prefix, **kwargs):
@@ -1480,6 +1480,50 @@ def parse_location(optstr):
     kernel = parsedata.get("kernel")
     initrd = parsedata.get("initrd")
     return location, kernel, initrd
+
+
+########################
+# --os-variant parsing #
+########################
+
+class OSVariantData(object):
+    def __init__(self):
+        self._name = None
+        self.is_none = False
+        self.is_auto = False
+
+    def _set_name(self, val):
+        if val == "auto":
+            self.is_auto = True
+        elif val == "none":
+            self.is_none = True
+        else:
+            self._name = val
+    def _get_name(self):
+        return self._name
+    name = property(_get_name, _set_name)
+
+    def set_os_name(self, guest):
+        if self.name:
+            guest.set_os_name(self.name)
+
+
+class ParserOSVariant(VirtCLIParser):
+    cli_arg_name = "os_variant"
+    remove_first = "name"
+
+    @classmethod
+    def __init_class__(cls, **kwargs):
+        VirtCLIParser.__init_class__(**kwargs)
+        cls.add_arg("name", "name")
+
+
+def parse_os_variant(optstr):
+    parsedata = OSVariantData()
+    if optstr:
+        parser = ParserOSVariant(None, optstr)
+        parser.parse(parsedata)
+    return parsedata
 
 
 ######################

@@ -1099,6 +1099,8 @@ _add_argcomplete_cmd("virt-install --disk a", "address.base")
 _add_argcomplete_cmd("virt-install --disk address.u", "address.unit")
 _add_argcomplete_cmd("virt-install --disk address.unit=foo,sg", "sgio")
 _add_argcomplete_cmd("virt-install --check d", "disk_size")
+_add_argcomplete_cmd("virt-install --location k", "kernel")
+_add_argcomplete_cmd("virt-install --os-variant nam", "name")
 _add_argcomplete_cmd("virt-install --test-stub", None,
         nogrep="--test-stub-command")
 _add_argcomplete_cmd("virt-clone --preserve", "--preserve-data")

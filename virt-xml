@@ -59,7 +59,8 @@ def set_os_variant(options, guest):
     if options.os_variant is None:
         return
 
-    guest.set_os_name(options.os_variant)
+    osdata = cli.parse_os_variant(options.os_variant)
+    osdata.set_os_name(guest)
 
 
 def get_domain_and_guest(conn, domstr):
