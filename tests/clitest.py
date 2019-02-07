@@ -741,7 +741,7 @@ c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage wi
 c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --noautoconsole")
 c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none", "kvm-fedoralatest-url", skip_cb=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s", "test-url-detection")  # --test-media-detection
-c.add_compare("--os-variant fedora20 --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", skip_cb=has_old_osinfo)  # Quiet URL install should make no noise
+c.add_compare("--os-variant full_id=http://fedoraproject.org/fedora/20 --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", skip_cb=has_old_osinfo)  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64", skip_cb=has_old_osinfo)  # 32 on 64
@@ -993,7 +993,7 @@ c = vixml.add_category("add/rm devices OS KVM", "--connect %(URI-KVM)s test --pr
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "kvm-add-disk-os-from-xml")  # Guest OS (none) from XML
 c.add_compare("--add-device --disk %(EXISTIMG1)s --os-variant fedora28", "kvm-add-disk-os-from-cmdline")  # Guest OS (fedora) provided on command line
 c.add_compare("--add-device --network default", "kvm-add-network-os-from-xml")  # Guest OS information taken from the guest XML
-c.add_compare("--add-device --network default --os-variant fedora28", "kvm-add-network-os-from-cmdline")  # Guest OS information provided on the command line
+c.add_compare("--add-device --network default --os-variant full_id=http://fedoraproject.org/fedora/28", "kvm-add-network-os-from-cmdline")  # Guest OS information provided on the command line
 
 
 

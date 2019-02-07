@@ -1489,6 +1489,7 @@ def parse_location(optstr):
 class OSVariantData(object):
     def __init__(self):
         self._name = None
+        self.full_id = None
         self.is_none = False
         self.is_auto = False
 
@@ -1504,7 +1505,9 @@ class OSVariantData(object):
     name = property(_get_name, _set_name)
 
     def set_os_name(self, guest):
-        if self.name:
+        if self.full_id:
+            guest.set_os_full_id(self.full_id)
+        elif self.name:
             guest.set_os_name(self.name)
 
 
@@ -1516,6 +1519,7 @@ class ParserOSVariant(VirtCLIParser):
     def __init_class__(cls, **kwargs):
         VirtCLIParser.__init_class__(**kwargs)
         cls.add_arg("name", "name")
+        cls.add_arg("full_id", "full_id")
 
 
 def parse_os_variant(optstr):
