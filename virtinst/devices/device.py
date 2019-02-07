@@ -114,3 +114,56 @@ class Device(XMLBuilder):
     @property
     def DEVICE_TYPE(self):
         return self.XML_NAME
+
+    def compare_device(self, newdev, idx):
+        """
+        Attempt to compare this device against the passed @newdev,
+        using various heuristics. For example, when removing a device
+        from both active and inactive XML, the device XML my be very
+        different or the devices may appear in different orders, so
+        we have to do some fuzzy matching to determine if the devices
+        are a 'match'
+        """
+        devprops = {
+            "disk":          ["target", "bus"],
+            "interface":     ["macaddr", "xmlindex"],
+            "input":         ["bus", "type", "xmlindex"],
+            "sound":         ["model", "xmlindex"],
+            "video":         ["model", "xmlindex"],
+            "watchdog":      ["xmlindex"],
+            "hostdev":       ["type", "managed", "xmlindex",
+                              "product", "vendor",
+                              "function", "domain", "slot"],
+            "serial":        ["type", "target_port"],
+            "parallel":      ["type", "target_port"],
+            "console":       ["type", "target_type", "target_port"],
+            "graphics":      ["type", "xmlindex"],
+            "controller":    ["type", "index"],
+            "channel":       ["type", "target_name"],
+            "filesystem":    ["target", "xmlindex"],
+            "smartcard":     ["mode", "xmlindex"],
+            "redirdev":      ["bus", "type", "xmlindex"],
+            "tpm":           ["type", "xmlindex"],
+            "rng":           ["type", "xmlindex"],
+            "panic":         ["type", "xmlindex"],
+            "vsock":         ["xmlindex"],
+        }
+
+        if id(self) == id(newdev):
+            return True
+
+        if not isinstance(self, type(newdev)):
+            return False
+
+        for devprop in devprops[self.DEVICE_TYPE]:
+            if devprop == "xmlindex":
+                origval = self.get_xml_idx()
+                newval = idx
+            else:
+                origval = getattr(self, devprop)
+                newval = getattr(newdev, devprop)
+
+            if origval != newval:
+                return False
+
+        return True
