@@ -694,7 +694,6 @@ c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
 c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
-c.add_invalid("--paravirt --pxe")  # PXE w/ paravirt
 c.add_invalid("--livecd")  # LiveCD with no media
 c.add_invalid("--pxe --os-variant farrrrrrrge")  # Bogus --os-variant
 c.add_invalid("--pxe --boot menu=foobar")

@@ -354,13 +354,6 @@ def check_option_collisions(options, guest, installer):
         fail(_("Install methods (%s) cannot be specified for "
                "container guests") % install_methods)
 
-    if guest.os.is_xenpv():
-        if options.pxe:
-            fail(_("Network PXE boot is not supported for paravirtualized "
-                   "guests"))
-        if options.cdrom or options.livecd:
-            fail(_("Paravirtualized guests cannot install off cdrom media."))
-
     if (options.location and
         guest.conn.is_remote() and not
         guest.conn.support_remote_url_install()):
