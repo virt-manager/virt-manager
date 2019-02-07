@@ -160,20 +160,15 @@ def convert_old_disks(options):
 
 
 def convert_old_os_options(options):
-    distro_variant = options.distro_variant
-    distro_type = options.distro_type
-    if not distro_type and not distro_variant:
-        # Default to distro autodetection
-        options.distro_variant = "auto"
-        return
+    # Default to distro autodetection
+    distkey = "auto"
+    if options.distro_variant:
+        distkey = str(options.distro_variant).lower()
+    elif options.distro_type:
+        distkey = str(options.distro_type).lower()
 
-    distro_variant = distro_variant and str(distro_variant).lower() or None
-    distro_type = distro_type and str(distro_type).lower() or None
-    distkey = distro_variant or distro_type
-    if not distkey or distkey == "none":
-        options.distro_variant = "none"
-    else:
-        options.distro_variant = distkey
+    options.distro_variant = distkey
+    del(options.distro_type)
 
 
 def convert_old_memory(options):
