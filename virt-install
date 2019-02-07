@@ -546,12 +546,12 @@ def build_guest_instance(conn, options):
     installer = build_installer(options, guest)
     set_resources_from_osinfo(options, guest)
 
+    if installer:
+        installer.set_install_defaults(guest)
+
     # cli specific disk validation
     for disk in guest.devices.disk:
         cli.validate_disk(disk)
-
-    if installer:
-        installer.set_install_defaults(guest)
 
     validate_required_options(options, guest, installer)
     check_option_collisions(options, guest, installer)

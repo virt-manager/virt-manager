@@ -220,6 +220,11 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       </source>
       <target dev='sdc' bus='scsi'/>
     </disk>
+    <disk type='file' device='cdrom'>
+      <source file='/dev/default-pool/testvol2.img'/>
+      <target dev='sdf' bus='scsi'/>
+      <readonly/>
+    </disk>
 
     <!-- bus virtio -->
     <disk type="volume" device="disk">
@@ -678,7 +683,7 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
       <target dev='hda' bus='ide'/>
     </disk>
     <disk type='file' device='disk'>
-      <source file='/dev/default-pool/testvol2.img'/>
+      <source file='/dev/default-pool/testvol9.img'/>
       <target dev='hdb' bus='ide'/>
     </disk>
     <interface type='network'>
@@ -1586,6 +1591,19 @@ ba</description>
   </volume>
   <volume type='file'>
     <name>testvol2.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='qcow2'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume type='file'>
+    <name>testvol9.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
     <target>
