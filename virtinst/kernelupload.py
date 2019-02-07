@@ -121,10 +121,6 @@ def upload_kernel_initrd(conn, scratchdir, system_scratchdir,
                       " nothing to upload")
         return kernel, initrd, tmpvols
 
-    if not conn.support_remote_url_install():
-        logging.debug("Media upload not supported")
-        return kernel, initrd, tmpvols
-
     # Build pool
     logging.debug("Uploading kernel/initrd media")
     pool = _build_pool(conn, meter, system_scratchdir)
