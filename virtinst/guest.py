@@ -68,15 +68,6 @@ def compare_device(origdev, newdev, idx):
     return True
 
 
-def find_device(guest, origdev):
-    devlist = getattr(guest.devices, origdev.DEVICE_TYPE)
-    for idx, dev in enumerate(devlist):
-        if compare_device(origdev, dev, idx):
-            return dev
-
-    return None
-
-
 class _DomainDevices(XMLBuilder):
     XML_NAME = "devices"
     _XML_PROP_ORDER = ['disk', 'controller', 'filesystem', 'interface',
@@ -447,6 +438,17 @@ class Guest(XMLBuilder):
     def remove_device(self, dev):
         self.devices.remove_child(dev)
     devices = XMLChildProperty(_DomainDevices, is_single=True)
+
+    def find_device(self, origdev):
+        """
+        Try to find a child device that matches the content of
+        the passed @origdev.
+        """
+        devlist = getattr(self.devices, origdev.DEVICE_TYPE)
+        for idx, dev in enumerate(devlist):
+            if compare_device(origdev, dev, idx):
+                return dev
+        return None
 
     def get_bootable_devices(self, exclude_redirdev=False):
         """

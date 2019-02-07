@@ -13,7 +13,7 @@ import libvirt
 
 from virtinst import DomainCapabilities
 from virtinst import DomainSnapshot
-from virtinst import Guest, find_device
+from virtinst import Guest
 from virtinst import util
 from virtinst import DeviceController
 from virtinst import DeviceDisk
@@ -340,14 +340,14 @@ class vmmDomain(vmmLibvirtObject):
         if for_hotplug:
             return origdev
 
-        dev = find_device(xmlobj, origdev)
+        dev = xmlobj.find_device(origdev)
         if dev:
             return dev
 
         # If we are removing multiple dev from an active VM, a double
         # attempt may result in a lookup failure. If device is present
         # in the active XML, assume all is good.
-        if find_device(self.get_xmlobj(), origdev):
+        if self.get_xmlobj().find_device(origdev):
             logging.debug("Device in active config but not inactive config.")
             return
 
@@ -433,7 +433,7 @@ class vmmDomain(vmmLibvirtObject):
             return
 
         if con:
-            rmcon = find_device(xmlobj, con)
+            rmcon = xmlobj.find_device(con)
             if rmcon:
                 xmlobj.remove_device(rmcon)
         xmlobj.remove_device(editdev)
