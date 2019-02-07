@@ -19,18 +19,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-03 16:25-0500\n"
+"POT-Creation-Date: 2019-02-07 09:43-0500\n"
 "PO-Revision-Date: 2017-02-05 04:10+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/virt-manager/"
-"language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/projects/p/virt-manager/language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Generator: Zanata 4.6.2\n"
 
 #: ../virt-manager:43
@@ -49,8 +46,8 @@ msgstr ""
 
 #: ../virt-install:146
 msgid ""
-"Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
-"disk PATH[,size=SIZE][,sparse=yes|no]"
+"Cannot mix --file, --nonsparse, or --file-size with --disk options. Use "
+"--disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
 "--file, --nonsparse, --file-size не могут использоваться вместе с --disk. "
 "Допустимый формат: ПУТЬ[,size=РАЗМЕР][,sparse=yes|no]"
@@ -112,8 +109,8 @@ msgstr ""
 #: ../virt-install:362
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
-"Посмотрите страницы руководства на предмет примеров использования --location "
-"с CDROM"
+"Посмотрите страницы руководства на предмет примеров использования --location"
+" с CDROM"
 
 #: ../virt-install:368
 msgid "--noreboot and --transient can not be specified together"
@@ -126,7 +123,8 @@ msgstr "Может быть определен только один метод 
 #: ../virt-install:376
 #, c-format
 msgid "Install methods (%s) cannot be specified for container guests"
-msgstr "Для гостевых систем в контейнерах методы установки не выбираются (%s)."
+msgstr ""
+"Для гостевых систем в контейнерах методы установки не выбираются (%s)."
 
 #: ../virt-install:381
 msgid "Network PXE boot is not supported for paravirtualized guests"
@@ -140,8 +138,8 @@ msgstr "Паравиртуализированные гости не могут 
 #: ../virt-install:389
 msgid "Libvirt version does not support remote --location installs"
 msgstr ""
-"Текущая версия libvirt не поддерживает удаленную установку из указанного --"
-"location."
+"Текущая версия libvirt не поддерживает удаленную установку из указанного "
+"--location."
 
 #: ../virt-install:395
 msgid "--extra-args only work if specified with --location."
@@ -165,16 +163,16 @@ msgid ""
 "No --console device added, you likely will not see text install output from "
 "the guest."
 msgstr ""
-"Устройство --console не задано, поэтому вы не сможете видеть текстовый вывод "
-"процесса установки этой гостевой системы."
+"Устройство --console не задано, поэтому вы не сможете видеть текстовый вывод"
+" процесса установки этой гостевой системы."
 
 #: ../virt-install:444
 msgid ""
 "Did not find '%(console_string)s' in --extra-args, which is likely required "
 "to see text install output from the guest."
 msgstr ""
-"Строка --extra-args не содержит аргумент «%(console_string)s», который может "
-"потребоваться для получения текстового вывода во время установки гостевой "
+"Строка --extra-args не содержит аргумент «%(console_string)s», который может"
+" потребоваться для получения текстового вывода во время установки гостевой "
 "системы."
 
 #: ../virt-install:451
@@ -313,7 +311,8 @@ msgstr "Рассматривать носитель как LiveCD"
 #: ../virt-install:786
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
-msgstr "Дополнительные параметры для передачи ядру, загруженному из --location"
+msgstr ""
+"Дополнительные параметры для передачи ядру, загруженному из --location"
 
 #: ../virt-install:789
 msgid "Add given file to root of initrd from --location"
@@ -392,29 +391,18 @@ msgid ""
 "An original machine name is required, use '--original ORIGINAL_GUEST' and "
 "try again."
 msgstr ""
-"Необходимо определить имя исходной виртуальной машины. Используйте «--"
-"original ИМЯ_МАШИНЫ» и повторите попытку."
+"Необходимо определить имя исходной виртуальной машины. Используйте "
+"«--original ИМЯ_МАШИНЫ» и повторите попытку."
 
 #: ../virt-clone:85
 msgid ""
-"Duplicate a virtual machine, changing all the unique host side configuration "
-"like MAC address, name, etc. \n"
+"Duplicate a virtual machine, changing all the unique host side configuration like MAC address, name, etc. \n"
 "\n"
-"The VM contents are NOT altered: virt-clone does not change anything "
-"_inside_ the guest OS, it only duplicates disks and does host side changes. "
-"So things like changing passwords, changing static IP address, etc are "
-"outside the scope of this tool. For these types of changes, please see virt-"
-"sysprep(1)."
+"The VM contents are NOT altered: virt-clone does not change anything _inside_ the guest OS, it only duplicates disks and does host side changes. So things like changing passwords, changing static IP address, etc are outside the scope of this tool. For these types of changes, please see virt-sysprep(1)."
 msgstr ""
-"Дублировать виртуальную машину, изменив ее уникальные характеристики, "
-"включая MAC-адрес, имя и т.д. \n"
+"Дублировать виртуальную машину, изменив ее уникальные характеристики, включая MAC-адрес, имя и т.д. \n"
 "\n"
-"Содержимое виртуальной машины НЕ изменится: virt-clone не меняет ничего "
-"_внутри_ гостевой ОС, а просто дублирует диски и совершает изменения на "
-"стороне хоста. Такие действия как изменение паролей, изменение статического "
-"IP-адреса и т.п. выходят за пределы возможностей этого инструмента. "
-"Обратитесь к virt-sysprep(1) для получения информации по внесению изменений "
-"подобного рода."
+"Содержимое виртуальной машины НЕ изменится: virt-clone не меняет ничего _внутри_ гостевой ОС, а просто дублирует диски и совершает изменения на стороне хоста. Такие действия как изменение паролей, изменение статического IP-адреса и т.п. выходят за пределы возможностей этого инструмента. Обратитесь к virt-sysprep(1) для получения информации по внесению изменений подобного рода."
 
 #: ../virt-clone:97
 msgid "Name of the original guest; The status must be shut off or paused."
@@ -505,8 +493,7 @@ msgid ""
 "  virt-convert fedora18.ova\n"
 "  virt-convert centos6.zip --disk-format qcow2"
 msgstr ""
-"Конвертировать модуль OVF или VMX в libvirt XML и запустить гостевую "
-"систему.\n"
+"Конвертировать модуль OVF или VMX в libvirt XML и запустить гостевую систему.\n"
 "Содержимое виртуальной машины не изменится. Образы дисков будут\n"
 "скопированы в стандартное пространство данных гипервизора.\n"
 "\n"
@@ -516,8 +503,8 @@ msgstr ""
 
 #: ../virt-convert:49
 msgid ""
-"Conversion input. Can be a ovf/vmx file, a directory containing a config and "
-"disk images, or a zip/ova/7z/etc archive."
+"Conversion input. Can be a ovf/vmx file, a directory containing a config and"
+" disk images, or a zip/ova/7z/etc archive."
 msgstr ""
 "Входные данные для конвертации. Могут содержать файл ovf/vmx, каталог, "
 "содержащий файл конфигурации и образы дисков, или архив zip, ova, 7z и т.п."
@@ -722,8 +709,8 @@ msgstr ""
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
-"Принудительное объявление домена. Необходимо только при наличии параметра --"
-"print."
+"Принудительное объявление домена. Необходимо только при наличии параметра "
+"--print."
 
 #: ../virt-xml:370
 msgid "Only print the requested change, in diff format"
@@ -780,21 +767,21 @@ msgstr "Оборудование"
 msgid "Connection does not support storage management."
 msgstr "Подключение не поддерживает управление пространством данных."
 
-#: ../virtManager/addhardware.py:242 ../virtManager/addhardware.py:790
+#: ../virtManager/addhardware.py:242 ../virtManager/addhardware.py:789
 #: ../ui/create.ui.h:66
 msgid "Storage"
 msgstr "Хранилище"
 
-#: ../virtManager/addhardware.py:244 ../virtManager/addhardware.py:792
+#: ../virtManager/addhardware.py:244 ../virtManager/addhardware.py:791
 msgid "Controller"
 msgstr "Контроллер"
 
-#: ../virtManager/addhardware.py:245 ../virtManager/addhardware.py:794
+#: ../virtManager/addhardware.py:245 ../virtManager/addhardware.py:793
 #: ../virtinst/network.py:191
 msgid "Network"
 msgstr "Сеть"
 
-#: ../virtManager/addhardware.py:246 ../virtManager/addhardware.py:796
+#: ../virtManager/addhardware.py:246 ../virtManager/addhardware.py:795
 #: ../virtManager/details.py:219
 msgid "Input"
 msgstr "Ввод"
@@ -805,11 +792,11 @@ msgstr "Ввод"
 msgid "Not supported for this guest type."
 msgstr "Не поддерживается для этого типа гостевой системы."
 
-#: ../virtManager/addhardware.py:248 ../virtManager/addhardware.py:798
+#: ../virtManager/addhardware.py:248 ../virtManager/addhardware.py:797
 msgid "Graphics"
 msgstr "Графика"
 
-#: ../virtManager/addhardware.py:250 ../virtManager/addhardware.py:800
+#: ../virtManager/addhardware.py:250 ../virtManager/addhardware.py:799
 msgid "Sound"
 msgstr "Звук"
 
@@ -864,16 +851,16 @@ msgstr "Слежение"
 msgid "Filesystem"
 msgstr "Файловая система"
 
-#: ../virtManager/addhardware.py:287 ../virtManager/addhardware.py:808
+#: ../virtManager/addhardware.py:287 ../virtManager/addhardware.py:807
 #: ../virtManager/details.py:271
 msgid "Smartcard"
 msgstr "Смарт-карты"
 
-#: ../virtManager/addhardware.py:289 ../virtManager/addhardware.py:810
+#: ../virtManager/addhardware.py:289 ../virtManager/addhardware.py:809
 msgid "USB Redirection"
 msgstr "Перенаправление USB"
 
-#: ../virtManager/addhardware.py:291 ../virtManager/addhardware.py:812
+#: ../virtManager/addhardware.py:291 ../virtManager/addhardware.py:811
 #: ../virtManager/details.py:262
 msgid "TPM"
 msgstr "TPM"
@@ -882,7 +869,7 @@ msgstr "TPM"
 msgid "RNG"
 msgstr "RNG"
 
-#: ../virtManager/addhardware.py:294 ../virtManager/addhardware.py:816
+#: ../virtManager/addhardware.py:294 ../virtManager/addhardware.py:815
 #: ../virtManager/details.py:270
 msgid "Panic Notifier"
 msgstr "Оповещение о панике"
@@ -895,100 +882,99 @@ msgstr ""
 msgid "Virtio VSOCK"
 msgstr ""
 
-#: ../virtManager/addhardware.py:373
+#: ../virtManager/addhardware.py:372
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Ошибка изменения конфигурации виртуальной машины: %s"
 
-#: ../virtManager/addhardware.py:399
+#: ../virtManager/addhardware.py:398
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr "Некоторые изменения могут потребовать выключения гостевой системы."
 
-#: ../virtManager/addhardware.py:402
+#: ../virtManager/addhardware.py:401
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "Изменения вступят в силу после выключения гостевой системы."
 
-#: ../virtManager/addhardware.py:439 ../virtManager/clone.py:100
+#: ../virtManager/addhardware.py:438 ../virtManager/clone.py:100
 msgid "Disk device"
 msgstr "Дисковое устройство"
 
-#: ../virtManager/addhardware.py:441
+#: ../virtManager/addhardware.py:440
 msgid "CDROM device"
 msgstr "Устройство CDROM"
 
-#: ../virtManager/addhardware.py:443
+#: ../virtManager/addhardware.py:442
 msgid "Floppy device"
 msgstr "Устройство чтения дискет"
 
-#: ../virtManager/addhardware.py:446
+#: ../virtManager/addhardware.py:445
 msgid "LUN Passthrough"
 msgstr "Проброс LUN"
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:451 ../virtManager/addhardware.py:458
-#: ../virtManager/addhardware.py:465 ../virtManager/addhardware.py:472
-#: ../virtManager/addhardware.py:497 ../virtManager/addhardware.py:578
-#: ../virtManager/addhardware.py:588 ../virtManager/addhardware.py:704
+#: ../virtManager/addhardware.py:450 ../virtManager/addhardware.py:457
+#: ../virtManager/addhardware.py:464 ../virtManager/addhardware.py:471
+#: ../virtManager/addhardware.py:496 ../virtManager/addhardware.py:577
+#: ../virtManager/addhardware.py:587 ../virtManager/addhardware.py:703
 #: ../virtManager/details.py:2684 ../virtManager/gfxdetails.py:84
 #: ../virtManager/preferences.py:183
 msgid "Hypervisor default"
 msgstr "По умолчанию для гипервизора"
 
-#: ../virtManager/addhardware.py:568
+#: ../virtManager/addhardware.py:567
 msgid "No Devices Available"
 msgstr "Нет доступных устройств"
 
-#: ../virtManager/addhardware.py:625 ../virtManager/netlist.py:82
+#: ../virtManager/addhardware.py:624 ../virtManager/netlist.py:82
 msgid "Passthrough"
 msgstr "Проброс"
 
-#: ../virtManager/addhardware.py:626
+#: ../virtManager/addhardware.py:625
 msgid "Host"
 msgstr "Узел"
 
-#: ../virtManager/addhardware.py:632
+#: ../virtManager/addhardware.py:631
 msgid "Spice channel"
 msgstr "Канал Spice"
 
-#: ../virtManager/addhardware.py:788 ../virtManager/create.py:253
+#: ../virtManager/addhardware.py:787 ../virtManager/create.py:253
 msgid "Error"
 msgstr "Ошибка"
 
-#: ../virtManager/addhardware.py:802
+#: ../virtManager/addhardware.py:801
 msgid "Video Device"
 msgstr "Видеоустройство"
 
-#: ../virtManager/addhardware.py:804
+#: ../virtManager/addhardware.py:803
 msgid "Watchdog Device"
 msgstr "Устройство слежения"
 
-#: ../virtManager/addhardware.py:806
+#: ../virtManager/addhardware.py:805
 msgid "Filesystem Passthrough"
 msgstr "Проброс файловой системы"
 
-#: ../virtManager/addhardware.py:814
+#: ../virtManager/addhardware.py:813
 msgid "Random Number Generator"
 msgstr "Генератор случайных чисел"
 
-#: ../virtManager/addhardware.py:818
-#, fuzzy
+#: ../virtManager/addhardware.py:817
 msgid "VM Sockets"
-msgstr "Соке_ты:"
+msgstr ""
 
-#: ../virtManager/addhardware.py:822 ../virtManager/details.py:2906
+#: ../virtManager/addhardware.py:821 ../virtManager/details.py:2906
 #, python-format
 msgid "%s Device"
 msgstr "Устройство %s"
 
-#: ../virtManager/addhardware.py:826
+#: ../virtManager/addhardware.py:825
 msgid "PCI Device"
 msgstr "Устройство PCI"
 
-#: ../virtManager/addhardware.py:827
+#: ../virtManager/addhardware.py:826
 msgid "USB Device"
 msgstr "Устройство USB"
 
-#: ../virtManager/addhardware.py:958
+#: ../virtManager/addhardware.py:957
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -999,11 +985,11 @@ msgstr ""
 "Добавление нескольких контроллеров USB не поддерживается.\n"
 "Вы можете изменить тип контроллера USB на экране параметров ВМ."
 
-#: ../virtManager/addhardware.py:1050
+#: ../virtManager/addhardware.py:1049
 msgid "Are you sure you want to add this device?"
 msgstr "Вы действительно хотите добавить это устройство?"
 
-#: ../virtManager/addhardware.py:1053
+#: ../virtManager/addhardware.py:1052
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -1011,68 +997,68 @@ msgstr ""
 "Это устройство не может быть подключено к работающей машине. Подключить его "
 "после того, как гостевая система будет выключена?"
 
-#: ../virtManager/addhardware.py:1069
+#: ../virtManager/addhardware.py:1068
 #, python-format
 msgid "Error adding device: %s"
 msgstr "Ошибка добавления устройства: %s"
 
-#: ../virtManager/addhardware.py:1081
+#: ../virtManager/addhardware.py:1080
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Не удалось добавить устройство: %s"
 
-#: ../virtManager/addhardware.py:1099
+#: ../virtManager/addhardware.py:1098
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1105
+#: ../virtManager/addhardware.py:1104
 msgid "Creating device"
 msgstr "Создание устройства"
 
-#: ../virtManager/addhardware.py:1106
+#: ../virtManager/addhardware.py:1105
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "В зависимости от устройства это может занять несколько минут."
 
-#: ../virtManager/addhardware.py:1239 ../virtManager/addhardware.py:1270
+#: ../virtManager/addhardware.py:1238 ../virtManager/addhardware.py:1269
 #: ../virtManager/create.py:1773
 msgid "Storage parameter error."
 msgstr "Ошибка в параметрах пространства хранения."
 
-#: ../virtManager/addhardware.py:1287
+#: ../virtManager/addhardware.py:1286
 msgid "Network selection error."
 msgstr "Ошибка выбора сети."
 
-#: ../virtManager/addhardware.py:1288
+#: ../virtManager/addhardware.py:1287
 msgid "A network source must be selected."
 msgstr "Должен быть выбран сетевой источник."
 
-#: ../virtManager/addhardware.py:1318
+#: ../virtManager/addhardware.py:1317
 msgid "invalid listen type"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1330
+#: ../virtManager/addhardware.py:1329
 msgid "Physical Device Required"
 msgstr "Требуется физическое устройство"
 
-#: ../virtManager/addhardware.py:1331
+#: ../virtManager/addhardware.py:1330
 msgid "A device must be selected."
 msgstr "Устройство должно быть выбрано."
 
-#: ../virtManager/addhardware.py:1342
+#: ../virtManager/addhardware.py:1341
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "Устройство уже используется другими гостевыми машинами %s"
 
-#: ../virtManager/addhardware.py:1344
+#: ../virtManager/addhardware.py:1343
 msgid "Do you really want to use the device?"
 msgstr "Действительно хотите использовать устройство?"
 
-#: ../virtManager/addhardware.py:1463
+#: ../virtManager/addhardware.py:1462
 msgid "RNG selection error."
 msgstr "Ошибка выбора RNG."
 
-#: ../virtManager/addhardware.py:1464
+#: ../virtManager/addhardware.py:1463
 msgid "A device must be specified."
 msgstr "Необходимо указать устройство."
 
@@ -1246,8 +1232,8 @@ msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
 msgstr ""
-"Использование существующего образа перезапишет его во время клонирования. Вы "
-"действительно хотите использовать этот путь?"
+"Использование существующего образа перезапишет его во время клонирования. Вы"
+" действительно хотите использовать этот путь?"
 
 #: ../virtManager/clone.py:738
 #, python-format
@@ -1346,7 +1332,8 @@ msgstr "Требуется проверка подлинности"
 
 #: ../virtManager/connectauth.py:154
 msgid ""
-"The remote host requires a version of netcat/nc which supports the -U option."
+"The remote host requires a version of netcat/nc which supports the -U "
+"option."
 msgstr ""
 
 #: ../virtManager/connectauth.py:160
@@ -1371,8 +1358,8 @@ msgstr ""
 
 #: ../virtManager/connectauth.py:174
 msgid ""
-"Could not detect a local session: if you are running virt-manager over ssh -"
-"X or VNC, you may not be able to connect to libvirt as a regular user. Try "
+"Could not detect a local session: if you are running virt-manager over ssh "
+"-X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
 
@@ -1425,8 +1412,7 @@ msgid ""
 "\n"
 "Recover error: %s"
 msgstr ""
-"Ошибка переименования %s. Попытка восстановления также завершилось "
-"неудачей.\n"
+"Ошибка переименования %s. Попытка восстановления также завершилось неудачей.\n"
 "\n"
 "Исходная ошибка: %s\n"
 "\n"
@@ -1584,24 +1570,25 @@ msgstr "Для этого соединения не обнаружено нас�
 
 #: ../virtManager/create.py:537
 msgid ""
-"This usually means that QEMU or KVM is not installed on your machine, or the "
-"KVM kernel modules are not loaded."
+"This usually means that QEMU or KVM is not installed on your machine, or the"
+" KVM kernel modules are not loaded."
 msgstr ""
 "Обычно это означает, что QEMU или KVM не установлены на вашем компьютере, "
 "или модули ядра KVM не загружены."
 
 #: ../virtManager/create.py:561
 msgid ""
-"Host is not advertising support for full virtualization. Install options may "
-"be limited."
+"Host is not advertising support for full virtualization. Install options may"
+" be limited."
 msgstr ""
 "Эта платформа может не поддерживать полную виртуализацию, поэтому "
 "возможности установки могут быть ограничены"
 
 #: ../virtManager/create.py:567
 msgid ""
-"KVM is not available. This may mean the KVM package is not installed, or the "
-"KVM kernel modules are not loaded. Your virtual machines may perform poorly."
+"KVM is not available. This may mean the KVM package is not installed, or the"
+" KVM kernel modules are not loaded. Your virtual machines may perform "
+"poorly."
 msgstr ""
 "KVM недоступен. Возможно, KVM не был установлен или его модуль ядра не "
 "загружен. Функциональность виртуальной машины может быть ограничена."
@@ -1750,8 +1737,7 @@ msgstr ""
 
 #: ../virtManager/create.py:1592
 msgid ""
-"Creating root file system in a non-empty directory might fail due to file "
-"conflicts.\n"
+"Creating root file system in a non-empty directory might fail due to file conflicts.\n"
 "Would you like to continue?"
 msgstr ""
 
@@ -1895,8 +1881,8 @@ msgstr "Проверка сетевого адреса"
 
 #: ../virtManager/createnet.py:316
 msgid ""
-"The network should normally use a private IPv4 address. Use this non-private "
-"address anyway?"
+"The network should normally use a private IPv4 address. Use this non-private"
+" address anyway?"
 msgstr ""
 "Сеть, как правило, использует частный адрес IPv4. Все равно использовать "
 "этот общедоступный адрес?"
@@ -1947,8 +1933,8 @@ msgstr "Префикс сети IPv6 для libvirt должен быть рав
 
 #: ../virtManager/createnet.py:395
 msgid ""
-"The network should normally use a private IPv6 address. Use this non-private "
-"address anyway?"
+"The network should normally use a private IPv6 address. Use this non-private"
+" address anyway?"
 msgstr ""
 "Обычно сеть использует частный адрес IPv6. Все равно использовать этот "
 "открытый адрес?"
@@ -2046,8 +2032,8 @@ msgstr "Ошибка параметров пула"
 
 #: ../virtManager/createpool.py:516
 msgid ""
-"Building a pool of this type will format the source device. Are you sure you "
-"want to 'build' this pool?"
+"Building a pool of this type will format the source device. Are you sure you"
+" want to 'build' this pool?"
 msgstr ""
 "Построение пула этого типа отформатирует исходное устройство. Приступить к "
 "сборке?"
@@ -2116,7 +2102,8 @@ msgstr ""
 
 #: ../virtManager/delete.py:214
 msgid "Errors encountered while removing certain storage devices."
-msgstr "Обнаружены ошибки при удалении определенных устройств хранения данных."
+msgstr ""
+"Обнаружены ошибки при удалении определенных устройств хранения данных."
 
 #: ../virtManager/delete.py:293 ../ui/details.ui.h:56
 msgid "Target"
@@ -2542,15 +2529,11 @@ msgstr "Нет загрузочных устройств"
 #: ../virtManager/domain.py:264
 #, python-format
 msgid ""
-"There is more than one '%s' device attached to your host, and we can't "
-"determine which one to use for your guest.\n"
-"To fix this, remove and reattach the USB device to your guest using the 'Add "
-"Hardware' wizard."
+"There is more than one '%s' device attached to your host, and we can't determine which one to use for your guest.\n"
+"To fix this, remove and reattach the USB device to your guest using the 'Add Hardware' wizard."
 msgstr ""
-"Обнаружено несколько устройств «%s». Чтобы выбрать одно устройство, которое "
-"будет подключено \n"
-"к гостевой системе, удалите его и подключите заново, нажав кнопку «Добавить "
-"оборудование»."
+"Обнаружено несколько устройств «%s». Чтобы выбрать одно устройство, которое будет подключено \n"
+"к гостевой системе, удалите его и подключите заново, нажав кнопку «Добавить оборудование»."
 
 #: ../virtManager/domain.py:356
 msgid "Libvirt connection does not support snapshots."
@@ -2586,7 +2569,8 @@ msgstr ""
 #: ../virtManager/domain.py:1453
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
-"Невозможно возобновить работу гостевой системы во время операции клонирования"
+"Невозможно возобновить работу гостевой системы во время операции "
+"клонирования"
 
 #: ../virtManager/domain.py:1462
 msgid "Saving domain to disk"
@@ -3319,8 +3303,8 @@ msgid ""
 "Are you sure you want to run snapshot '%s'? All %s changes since the last "
 "snapshot was created will be discarded."
 msgstr ""
-"Вы действительно хотите запустить снимок «%s»? Все изменения %s, совершенные "
-"с момента создания последнего снимка, будут отменены."
+"Вы действительно хотите запустить снимок «%s»? Все изменения %s, совершенные"
+" с момента создания последнего снимка, будут отменены."
 
 #: ../virtManager/snapshots.py:606
 msgid "disk"
@@ -3757,8 +3741,8 @@ msgid ""
 "OVF section '%s' is listed as required, but parser doesn't know how to "
 "handle it."
 msgstr ""
-"Секция OVF «%s» отмечена как обязательная, но обработчик не знает, как с ней "
-"работать."
+"Секция OVF «%s» отмечена как обязательная, но обработчик не знает, как с ней"
+" работать."
 
 #: ../virtconv/vmx.py:76
 #, python-format
@@ -3819,8 +3803,8 @@ msgstr ""
 #: ../virtinst/cli.py:104
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
-"Для просмотра дополнительных параметров используйте «--option=?» или «--"
-"option help»."
+"Для просмотра дополнительных параметров используйте «--option=?» или "
+"«--option help»."
 
 #: ../virtinst/cli.py:279
 msgid "Exiting at user request."
@@ -3941,17 +3925,12 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:628
-#, fuzzy
 msgid ""
 "Number of vcpus to configure for your guest. Ex:\n"
 "--vcpus 5\n"
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
-"Число виртуальных процессоров, например:\n"
-"--vcpus 5\n"
-"--vcpus 5,maxcpus=10,cpuset=1-4,6,8\n"
-"--vcpus sockets=2,cores=4,threads=2,"
 
 #: ../virtinst/cli.py:637
 msgid ""
@@ -4024,7 +4003,8 @@ msgid "Configure a text console connection between the guest and host"
 msgstr "Настройте соединение между гостем и хостом в текстовой консоли"
 
 #: ../virtinst/cli.py:694
-msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
+msgid ""
+"Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Конфигурация физических USB/PCI и других устройств хоста для совместного "
 "использования гостевой машиной."
@@ -4219,14 +4199,12 @@ msgid "OS options"
 msgstr ""
 
 #: ../virtinst/cli.py:852
-#, fuzzy
 msgid "The OS being installed in the guest."
-msgstr "Устройство уже используется другими гостевыми машинами %s"
+msgstr ""
 
 #: ../virtinst/cli.py:854
-#, fuzzy
 msgid "The OS installed in the guest."
-msgstr "Устройство уже используется другими гостевыми машинами %s"
+msgstr ""
 
 #: ../virtinst/cli.py:856
 msgid ""
@@ -4250,14 +4228,14 @@ msgstr ""
 "«%(device_type)s» и свойством «%(property_name)s»."
 
 #: ../virtinst/cli.py:1324
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown %s options: %s"
-msgstr "Неизвестные параметры %s"
+msgstr ""
 
 #: ../virtinst/cli.py:1379 ../virtinst/cli.py:1410
-#, fuzzy, python-format
+#, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
-msgstr "Ошибка: --%(cli_arg_name)s %(options)s: %(err)s"
+msgstr ""
 
 #: ../virtinst/cli.py:2044
 #, python-format
@@ -4276,7 +4254,8 @@ msgstr "Неизвестное значение «%s»: «%s»"
 
 #: ../virtinst/cli.py:2246
 msgid "Cannot specify more than 1 storage path"
-msgstr "Должен быть определен только один путь к пространству хранения данных."
+msgstr ""
+"Должен быть определен только один путь к пространству хранения данных."
 
 #: ../virtinst/cli.py:2253
 msgid "Storage volume must be specified as vol=poolname/volname"
@@ -4621,8 +4600,8 @@ msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr ""
-"Недостаточно места для полного размещения разреженного файла во время работы "
-"гостя."
+"Недостаточно места для полного размещения разреженного файла во время работы"
+" гостя."
 
 #: ../virtinst/diskbackend.py:541
 msgid "There is not enough free space to create the disk."
@@ -4741,9 +4720,9 @@ msgid "Validating install media '%s' failed: %s"
 msgstr "Проверка «%s» завершилась неудачей: %s"
 
 #: ../virtinst/installertreemedia.py:91
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot access install tree on remote connection: %s"
-msgstr "Нельзя использовать локальное хранилище при удалённом подключении."
+msgstr ""
 
 #: ../virtinst/installertreemedia.py:140
 msgid "Couldn't find kernel for install tree."
@@ -4992,8 +4971,8 @@ msgstr "Выделение ресурсов «%s»..."
 #: ../virtinst/storage.py:803
 #, python-format
 msgid ""
-"There is not enough free space on the storage pool to create the volume. (%d "
-"M requested allocation > %d M available)"
+"There is not enough free space on the storage pool to create the volume. (%d"
+" M requested allocation > %d M available)"
 msgstr ""
 "Недостаточно места в пуле для создания тома (требуется %d  МБ, доступно %d "
 "МБ)."
@@ -5303,10 +5282,8 @@ msgstr "<span color='#484848'>_Название:</span>"
 
 #: ../ui/clone.ui.h:10
 msgid ""
-"<span size='small'>Cloning creates a new, independent copy of the original "
-"disk. Sharing\n"
-"uses the existing disk image for both the original and the new machine.</"
-"span>"
+"<span size='small'>Cloning creates a new, independent copy of the original disk. Sharing\n"
+"uses the existing disk image for both the original and the new machine.</span>"
 msgstr ""
 "<span size='small'>Клонирование создает независимую копию исходного диска. "
 "Совместный доступ означает, что существующий образ может использоваться как "
@@ -5314,15 +5291,11 @@ msgstr ""
 
 #: ../ui/clone.ui.h:12
 msgid ""
-"<span size='small'>Cloning does <u>not</u> alter the guest OS contents. If "
-"you need to do things\n"
-"like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
-"span>"
+"<span size='small'>Cloning does <u>not</u> alter the guest OS contents. If you need to do things\n"
+"like change passwords or static IPs, please see the virt-sysprep(1) tool.</span>"
 msgstr ""
-"<span size='small'>Клонирование <u>НЕ</u> изменяет содержимое гостевой ОС. "
-"Если вы хотите изменить\n"
-"пароли или статические адреса, это можно сделать с помощью virt-sysprep(1).</"
-"span>"
+"<span size='small'>Клонирование <u>НЕ</u> изменяет содержимое гостевой ОС. Если вы хотите изменить\n"
+"пароли или статические адреса, это можно сделать с помощью virt-sysprep(1).</span>"
 
 #: ../ui/clone.ui.h:14
 msgid "C_lone"
@@ -5574,16 +5547,13 @@ msgstr "Укажите существующий корневой каталог 
 
 #: ../ui/create.ui.h:39
 msgid ""
-"<small>The OS directory tree must already exist. To enable OS directory tree "
-"creation,\n"
-"please install <a href=\"https://github.com/virt-manager/virt-bootstrap"
-"\">virt-bootstrap</a></small>"
+"<small>The OS directory tree must already exist. To enable OS directory tree creation,\n"
+"please install <a href=\"https://github.com/virt-manager/virt-bootstrap\">virt-bootstrap</a></small>"
 msgstr ""
 
 #: ../ui/create.ui.h:41
 msgid ""
-"<small>The OS directory tree must already exist. Creating an OS directory "
-"tree for remote\n"
+"<small>The OS directory tree must already exist. Creating an OS directory tree for remote\n"
 "connections is not yet supported.</small>"
 msgstr ""
 
@@ -5732,8 +5702,8 @@ msgid ""
 "<b>Hint:</b> The network should be chosen from one of the IPv4 private "
 "address ranges. eg 10.0.0.0/8 or 192.168.0.0/16"
 msgstr ""
-"<b>Совет.</b> Сеть должна быть выбрана в рамках одного из частных диапазонов "
-"адресов IPv4, например: 10.0.0.0/8, 192.168.0.0/16"
+"<b>Совет.</b> Сеть должна быть выбрана в рамках одного из частных диапазонов"
+" адресов IPv4, например: 10.0.0.0/8, 192.168.0.0/16"
 
 #: ../ui/createnet.ui.h:10
 msgid "192.168.100.1"
@@ -5832,8 +5802,8 @@ msgid ""
 "internal routing between virtual machines.  By default, IPv4 internal "
 "routing is enabled."
 msgstr ""
-"Если адрес IPv6 <b>не</b> задан, этот пункт включит внутреннюю маршрутизацию "
-"IPv6 между виртуальными машинами. По умолчанию используется маршрутизация "
+"Если адрес IPv6 <b>не</b> задан, этот пункт включит внутреннюю маршрутизацию"
+" IPv6 между виртуальными машинами. По умолчанию используется маршрутизация "
 "IPv4."
 
 #: ../ui/createnet.ui.h:34
@@ -6841,23 +6811,13 @@ msgstr "Решает libvirt"
 
 #: ../ui/migrate.ui.h:9
 msgid ""
-"Tunnel migration through the libvirtd connection channel, rather than having "
-"the hypervisor open a separate network connection to the destination. The "
-"source libvirt instance connects directly to the destination libvirt "
-"instance.\n"
+"Tunnel migration through the libvirtd connection channel, rather than having the hypervisor open a separate network connection to the destination. The source libvirt instance connects directly to the destination libvirt instance.\n"
 "\n"
-"This can simplify setup since no additional firewall ports need to be open, "
-"and will encrypt migration traffic if your libvirt connection is encrypted. "
-"But it can be difficult to make this work with SSH transport."
+"This can simplify setup since no additional firewall ports need to be open, and will encrypt migration traffic if your libvirt connection is encrypted. But it can be difficult to make this work with SSH transport."
 msgstr ""
-"Туннельная миграция через канал соединения libvirtd вместо открытия "
-"гипервизором отдельного соединения со вторым узлом. При этом экземпляр "
-"libvrit исходного узла напрямую подключается к libvirt на втором узле.\n"
+"Туннельная миграция через канал соединения libvirtd вместо открытия гипервизором отдельного соединения со вторым узлом. При этом экземпляр libvrit исходного узла напрямую подключается к libvirt на втором узле.\n"
 "\n"
-"Это упрощает процедуру настройки, так как необходимость в открытии "
-"дополнительных портов межсетевого экрана отпадает, и позволяет шифровать "
-"трафик при условии, что соединение libvirt зашифровано. Однако эта схема "
-"может не работать с SSH."
+"Это упрощает процедуру настройки, так как необходимость в открытии дополнительных портов межсетевого экрана отпадает, и позволяет шифровать трафик при условии, что соединение libvirt зашифровано. Однако эта схема может не работать с SSH."
 
 #: ../ui/migrate.ui.h:13
 msgid "_URI:"
@@ -6869,15 +6829,11 @@ msgstr "<b>Соединение</b>"
 
 #: ../ui/migrate.ui.h:15
 msgid ""
-"By default libvirt will refuse to migrate a VM for certain configurations "
-"that could lead to malfunctioning guests, like if a disk's cache mode is not "
-"'none'.\n"
+"By default libvirt will refuse to migrate a VM for certain configurations that could lead to malfunctioning guests, like if a disk's cache mode is not 'none'.\n"
 "\n"
 "Enabling this option tells libvirt to skip those checks."
 msgstr ""
-"Libvirt может отказать в миграции виртуальной машины, если это может "
-"нарушить ее работоспособность. Например, если режим кэширования диска не "
-"равен \"none\", миграция будет отменена.\n"
+"Libvirt может отказать в миграции виртуальной машины, если это может нарушить ее работоспособность. Например, если режим кэширования диска не равен \"none\", миграция будет отменена.\n"
 "\n"
 "При активации этого параметра libvrit пропустит соответствующие проверки."
 
@@ -6887,21 +6843,13 @@ msgstr "_Не проверять конфигурацию:"
 
 #: ../ui/migrate.ui.h:19
 msgid ""
-"By default, the migrated VM config is removed from the source host, and "
-"saved persistently on the destination host. The destination host is "
-"considered the new home of the VM.\n"
+"By default, the migrated VM config is removed from the source host, and saved persistently on the destination host. The destination host is considered the new home of the VM.\n"
 "\n"
-"If 'temporary' is selected, the migration is considered only a temporary "
-"move: the source host maintains a copy of the VM config, and the running "
-"copy moved to the destination is only transient, and will disappear when it "
-"is shutdown."
+"If 'temporary' is selected, the migration is considered only a temporary move: the source host maintains a copy of the VM config, and the running copy moved to the destination is only transient, and will disappear when it is shutdown."
 msgstr ""
-"По умолчанию конфигурация виртуальной машины будет удалена с исходного узла "
-"и сохранена на новом узле.\n"
+"По умолчанию конфигурация виртуальной машины будет удалена с исходного узла и сохранена на новом узле.\n"
 "\n"
-"При выполнении временной миграции конфигурация останется на исходном узле, а "
-"на новом узле будет создана временная копия, которая будет удалена после "
-"выключения виртуальной машины."
+"При выполнении временной миграции конфигурация останется на исходном узле, а на новом узле будет создана временная копия, которая будет удалена после выключения виртуальной машины."
 
 #: ../ui/migrate.ui.h:22
 msgid "_Temporary move:"
@@ -7033,18 +6981,13 @@ msgstr "Добавить _звуковое устройство:"
 
 #: ../ui/preferences.ui.h:18
 msgid ""
-"Default CPU setting for new VMs. This is typically a tradeoff between "
-"performance\n"
-"and migration compatibility: if using the 'copy host' option, your servers "
-"will need\n"
+"Default CPU setting for new VMs. This is typically a tradeoff between performance\n"
+"and migration compatibility: if using the 'copy host' option, your servers will need\n"
 "identical CPUs in order to migrate the VM."
 msgstr ""
-"Стандартные параметры процессора для новых виртуальных машин. Обычно "
-"представляет компромисс \n"
-"между быстродействием и совместимостью с миграцией: при выборе варианта "
-"копирования хоста \n"
-"для успешной миграции машины необходимо, чтобы оба сервера имели идентичные "
-"процессоры."
+"Стандартные параметры процессора для новых виртуальных машин. Обычно представляет компромисс \n"
+"между быстродействием и совместимостью с миграцией: при выборе варианта копирования хоста \n"
+"для успешной миграции машины необходимо, чтобы оба сервера имели идентичные процессоры."
 
 #: ../ui/preferences.ui.h:21
 msgid "CPU _default:"
@@ -7082,13 +7025,13 @@ msgstr "Не поддерживается"
 msgid ""
 "When the guest graphical console has keyboard focus, do not disable "
 "shortcuts for console window menus (Alt+F -> File, etc.) Normally these are "
-"disabled to ensure that typing in the guest does not accidentally perform an "
-"operation in virt-manager's console window."
+"disabled to ensure that typing in the guest does not accidentally perform an"
+" operation in virt-manager's console window."
 msgstr ""
-"Не отключать комбинации клавиш для главного меню окна (Alt+Ф -> Файл и т."
-"д.), даже если фокус клавиатуры находится в графической консоли гостевой "
-"системы. Обычно они отключаются во избежание выполнения действий в окне virt-"
-"manager при попытке взаимодействия с гостевой системой."
+"Не отключать комбинации клавиш для главного меню окна (Alt+Ф -> Файл и "
+"т.д.), даже если фокус клавиатуры находится в графической консоли гостевой "
+"системы. Обычно они отключаются во избежание выполнения действий в окне "
+"virt-manager при попытке взаимодействия с гостевой системой."
 
 #: ../ui/preferences.ui.h:30
 msgid "_Force console shortcuts:"
@@ -7285,9 +7228,5 @@ msgid "Delete volume"
 msgstr "Удалить том"
 
 #: ../ui/vsockdetails.ui.h:1
-#, fuzzy
 msgid "Guest C_ID:"
-msgstr "Гость"
-
-#~ msgid "Invalid install location: "
-#~ msgstr "Неверное расположение:"
+msgstr ""
