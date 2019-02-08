@@ -500,6 +500,7 @@ def set_resources_from_osinfo(options, guest):
     if res and res.get('storage') > 0:
         diskstr = 'size=%d' % (res.get('storage') // (1024 ** 3))
         logging.debug("Generated default libosinfo '--disk %s'", diskstr)
+        options.disk = [diskstr]
         cli.ParserDisk(guest, diskstr).parse(None)
 
 
