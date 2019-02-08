@@ -441,6 +441,19 @@ def build_installer(options, guest):
     install_bootdev = None
 
     has_installer = True
+    if options.os_variant.install == "location":
+        if not options.location:
+            location = guest.osinfo.get_location(guest.os.arch)
+            if not location:
+                logging.debug(_("No location could be guessed from osinfo-db "
+                    "and the installation cannot proceed"))
+                # This triggers an error in validate_required_options
+                return None
+            logging.debug("Generated default libosinfo '--location %s'", location)
+            options.location = location
+    elif options.os_variant.install == "cdrom":
+        pass
+
     if options.location:
         (location,
          location_kernel,
