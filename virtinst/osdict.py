@@ -477,5 +477,30 @@ class _OsVariant(object):
 
         return None
 
+    def get_location(self, arch):
+        if not self._os:
+            return None
+
+        treefilter = libosinfo.Filter()
+        treefilter.add_constraint(libosinfo.TREE_PROP_ARCHITECTURE, arch)
+
+        treelist = self._os.get_tree_list()
+        if treelist.get_length() < 1:
+            logging.error(
+                _("%s does not have a URL location"), self.name)
+            return None
+
+        filtered_treelist = treelist.new_filtered(treefilter)
+        if filtered_treelist.get_length() < 1:
+            logging.error(
+                _("%s does not have a URL location for the %s architecture"),
+                  self.name, arch)
+            return None
+
+        # Some distros have more than one URL for a specific architecture,
+        # which is the case for Fedora and different variants (Server,
+        # Workstation). Later on, we'll have to differentiate that and return
+        # the right one.
+        return filtered_treelist.get_nth(0).get_url()
 
 OSDB = _OSDB()
