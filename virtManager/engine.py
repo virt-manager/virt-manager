@@ -135,6 +135,7 @@ class vmmEngine(vmmGObject):
         unitname = "libvirtd.service"
         libvirtd_installed = False
         libvirtd_active = False
+        unitpath = None
 
         # Fetch all units from systemd
         try:
@@ -165,7 +166,7 @@ class vmmEngine(vmmGObject):
 
         # If it's not running, try to start it
         try:
-            if units and libvirtd_installed and not libvirtd_active:
+            if unitpath and libvirtd_installed and not libvirtd_active:
                 unit = Gio.DBusProxy.new_sync(
                         bus, 0, None,
                         "org.freedesktop.systemd1", unitpath,
