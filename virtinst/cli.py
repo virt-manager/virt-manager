@@ -1492,6 +1492,7 @@ class OSVariantData(object):
         self.full_id = None
         self.is_none = False
         self.is_auto = False
+        self.install = None
 
     def _set_name(self, val):
         if val == "auto":
@@ -1520,6 +1521,7 @@ class ParserOSVariant(VirtCLIParser):
         VirtCLIParser.__init_class__(**kwargs)
         cls.add_arg("name", "name")
         cls.add_arg("full_id", "full_id")
+        cls.add_arg("install", "install")
 
 
 def parse_os_variant(optstr):
