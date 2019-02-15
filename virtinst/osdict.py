@@ -310,6 +310,11 @@ class _OsVariant(object):
         eol = self._os and self._os.get_eol_date() or None
         rel = self._os and self._os.get_release_date() or None
 
+        # We can use os.get_release_status() & osinfo.ReleaseStatus.ROLLING
+        # if we require libosinfo >= 1.4.0.
+        release_status = self._os and self._os.get_param_value(
+                libosinfo.OS_PROP_RELEASE_STATUS) or None
+
         def _glib_to_datetime(glibdate):
             date = "%s-%s" % (glibdate.get_year(), glibdate.get_day_of_year())
             return datetime.datetime.strptime(date, "%Y-%j")
@@ -317,6 +322,10 @@ class _OsVariant(object):
         now = datetime.datetime.today()
         if eol is not None:
             return now > _glib_to_datetime(eol)
+
+        # Rolling distributions are never EOL.
+        if release_status == "rolling":
+            return False
 
         # If no EOL is present, assume EOL if release was > 5 years ago
         if rel is not None:
