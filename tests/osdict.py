@@ -47,3 +47,24 @@ class TestOSDB(unittest.TestCase):
                             "store=%s has conflicting matching_distro=%s " %
                             (store.PRETTY_NAME, distro))
                 seen_distro.append(distro)
+
+    def test_tree_url(self):
+        f26 = OSDB.lookup_os("fedora26")
+        winxp = OSDB.lookup_os("winxp")
+
+        # Valid tree URL
+        assert "fedoraproject.org" in f26.get_location("x86_64")
+
+        # Has tree URLs, but none for arch
+        try:
+            f26.get_location("ia64")
+            raise AssertionError("Expected failure")
+        except RuntimeError as e:
+            assert "ia64" in str(e)
+
+        # Has no tree URLs
+        try:
+            winxp.get_location("x86_64")
+            raise AssertionError("Expected failure")
+        except RuntimeError as e:
+            assert str(e).endswith("URL location")
