@@ -486,16 +486,14 @@ class _OsVariant(object):
 
         treelist = self._os.get_tree_list()
         if treelist.get_length() < 1:
-            logging.error(
-                _("%s does not have a URL location"), self.name)
-            return None
+            raise RuntimeError(
+                _("%s does not have a URL location") % self.name)
 
         filtered_treelist = treelist.new_filtered(treefilter)
         if filtered_treelist.get_length() < 1:
-            logging.error(
-                _("%s does not have a URL location for the %s architecture"),
-                  self.name, arch)
-            return None
+            raise RuntimeError(
+                _("%s does not have a URL location for the %s architecture") %
+                (self.name, arch))
 
         # Some distros have more than one URL for a specific architecture,
         # which is the case for Fedora and different variants (Server,
