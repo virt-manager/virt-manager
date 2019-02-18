@@ -447,8 +447,9 @@ def build_installer(options, guest):
             logging.debug(
                     "Generated default libosinfo '--location %s'", location)
             options.location = location
-    elif options.os_variant.install == "cdrom":
-        pass
+    elif options.os_variant.install:
+        fail(_("Unknown --os-variant install=%s") %
+                options.os_variant.install)
 
     if options.location:
         (location,
