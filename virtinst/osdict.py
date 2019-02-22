@@ -13,7 +13,7 @@ import re
 import gi
 gi.require_version('Libosinfo', '1.0')
 from gi.repository import Libosinfo as libosinfo
-from gi.repository import GLib as glib
+from gi.repository import GLib as glib, Gio as gio
 
 
 ###################
@@ -554,6 +554,24 @@ class _OsVariant(object):
         def requires_admin_password():
             return requires_param(libosinfo.INSTALL_CONFIG_PROP_ADMIN_PASSWORD)
 
+        def get_timezone():
+            TZ_FILE = "/etc/localtime"
+            localtime = gio.File.new_for_path(TZ_FILE)
+            if not localtime.query_exists():
+                return None
+            info = localtime.query_info(
+                gio.FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET,
+                gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS)
+            if not info:
+                return None
+            target = info.get_symlink_target()
+            if not target:
+                return None
+            tokens = target.split("zoneinfo/")
+            if not tokens or len(tokens) < 2:
+                return None
+            return tokens[1]
+
         config = libosinfo.InstallConfig()
 
         # Set user login and name based on the one from the system
@@ -591,6 +609,16 @@ class _OsVariant(object):
         config.set_hardware_arch(arch)
         config.set_hostname(hostname)
 
+        # Try to guess the timezone from '/etc/localtime', in case it's not
+        # possible 'America/New_York' will be used.
+        timezone = get_timezone()
+        if timezone:
+            config.set_l10n_timezone(timezone)
+        else:
+            logging.warning(
+                _("'America/New_York' timezone will be used for this "
+                  "unattended installation."))
+
         logging.debug("InstallScriptConfig created with the following params:")
         logging.debug("username: %s", config.get_user_login())
         logging.debug("realname: %s", config.get_user_realname())
@@ -599,6 +627,7 @@ class _OsVariant(object):
         logging.debug("target disk: %s", config.get_target_disk())
         logging.debug("hardware arch: %s", config.get_hardware_arch())
         logging.debug("hostname: %s", config.get_hostname())
+        logging.debug("timezone: %s", config.get_l10n_timezone())
 
         return config
 
