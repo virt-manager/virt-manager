@@ -276,6 +276,10 @@ class Installer(object):
         logging.debug("installer.detect_distro returned=%s", ret)
         return ret
 
+    def set_unattended_data(self, unattended_data):
+        if self._treemedia:
+            self._treemedia.set_unattended_data(unattended_data)
+
 
     ##########################
     # guest install handling #
