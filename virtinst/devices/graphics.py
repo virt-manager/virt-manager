@@ -141,15 +141,15 @@ class DeviceGraphics(Device):
 
 
     def _set_listen(self, val):
-        # Update the corresponding <listen> block
-        find_listen = [l for l in self.listens if
-                       (l.type == "address" and l.address == self._listen)]
-        if find_listen:
-            if val is None:
-                self.remove_child(find_listen[0])
-            else:
-                find_listen[0].address = val
-        self._listen = val
+        if val == "none":
+            self._set_listen_none()
+        elif val == "socket":
+            self._remove_all_listens()
+            obj = self.listens.add_new()
+            obj.type = "socket"
+        else:
+            self._remove_all_listens()
+            self._listen = val
     def _get_listen(self):
         return self._listen
     _listen = XMLProperty("./@listen")
@@ -163,7 +163,7 @@ class DeviceGraphics(Device):
     defaultMode = XMLProperty("./@defaultMode")
 
     listens = XMLChildProperty(_GraphicsListen)
-    def remove_all_listens(self):
+    def _remove_all_listens(self):
         for listen in self.listens:
             self.remove_child(listen)
 
@@ -172,8 +172,8 @@ class DeviceGraphics(Device):
             return self.listens[0].type
         return None
 
-    def set_listen_none(self):
-        self.remove_all_listens()
+    def _set_listen_none(self):
+        self._remove_all_listens()
         self.listen = None
         self.port = None
         self.tlsPort = None

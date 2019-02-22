@@ -680,8 +680,11 @@ class vmmDomain(vmmLibvirtObject):
         if not editdev:
             return
 
-        if addr != _SENTINEL:
-            editdev.listen = addr
+        if addr != _SENTINEL or listen != _SENTINEL:
+            if listen == "none":
+                editdev.listen = listen
+            else:
+                editdev.listen = addr
         if port != _SENTINEL:
             editdev.port = port
         if tlsport != _SENTINEL:
@@ -696,12 +699,6 @@ class vmmDomain(vmmLibvirtObject):
             editdev.gl = gl
         if rendernode != _SENTINEL:
             editdev.rendernode = rendernode
-        if listen != _SENTINEL:
-            listentype = editdev.get_first_listen_type()
-            if listen == 'none':
-                editdev.set_listen_none()
-            elif listentype and listentype == 'none':
-                editdev.remove_all_listens()
 
         if do_hotplug:
             self.hotplug(device=editdev)
