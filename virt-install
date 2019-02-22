@@ -451,7 +451,7 @@ def build_installer(options, guest):
     has_installer = True
 
     if options.unattended:
-        fail(_("--unattended is not supported yet"))
+        options.os_variant.install = "location"
 
     if options.os_variant.install == "location":
         if not options.location:
@@ -492,7 +492,10 @@ def build_installer(options, guest):
     if cdrom and options.livecd:
         installer.livecd = True
     if options.unattended:
-        pass
+        unattended_data = cli.parse_unattended(options.unattended)
+        options.unattended = None
+
+        installer.set_unattended_data(unattended_data)
     else:
         if options.extra_args:
             installer.extra_args = options.extra_args
