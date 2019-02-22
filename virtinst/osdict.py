@@ -699,4 +699,16 @@ class _OsVariant(object):
 
         return config
 
+    def generate_install_script_output(self, script, config, output_dir):
+        if not self._os:
+            return
+
+        script.generate_output(self._os, config, output_dir)
+
+    def generate_install_script_cmdline(self, script, config):
+        if not self._os:
+            return None
+
+        return script.generate_command_line(self._os, config)
+
 OSDB = _OSDB()
