@@ -563,6 +563,25 @@ class _OsVariant(object):
         logging.debug("Using '%s' injection method", method)
         script.set_preferred_injection_method(injection_method)
 
+    def set_install_script_installation_source(self, script, source):
+        def nick_to_value(source):
+            installation_sources = [
+                    libosinfo.InstallScriptInstallationSource.MEDIA,
+                    libosinfo.InstallScriptInstallationSource.NETWORK]
+
+            for s in installation_sources:
+                if source == s.value_nick:
+                    return s
+
+            raise RuntimeError(
+                _("%s is a non-valid installation source in libosinfo.") %
+                source)
+
+        installation_source = nick_to_value(source)
+
+        logging.debug("Using '%s' installation source", source)
+        script.set_installation_source(installation_source)
+
     def get_install_script_config(self, script, unattended_data, arch,
             hostname):
         def requires_param(config_param):
