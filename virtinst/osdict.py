@@ -572,6 +572,12 @@ class _OsVariant(object):
                 return None
             return tokens[1]
 
+        def get_language():
+            names = glib.get_language_names()
+            if not names or len(names) < 2:
+                return None
+            return names[1]
+
         config = libosinfo.InstallConfig()
 
         # Set user login and name based on the one from the system
@@ -619,6 +625,22 @@ class _OsVariant(object):
                 _("'America/New_York' timezone will be used for this "
                   "unattended installation."))
 
+        # Try to guess to language and keyboard layout from the system's
+        # language.
+        #
+        # This method has flows as it's quite common to have language and
+        # keyboard layout not matching. Otherwise, there's no easy way to guess
+        # the keyboard layout without relying on a set of APIs of an specific
+        # Desktop Environment.
+        language = get_language()
+        if language:
+            config.set_l10n_language(language)
+            config.set_l10n_keyboard(language)
+        else:
+            logging.warning(
+                _("'en_US' will be used as both language and keyboard layout "
+                  "for unattended installation."))
+
         logging.debug("InstallScriptConfig created with the following params:")
         logging.debug("username: %s", config.get_user_login())
         logging.debug("realname: %s", config.get_user_realname())
@@ -628,6 +650,8 @@ class _OsVariant(object):
         logging.debug("hardware arch: %s", config.get_hardware_arch())
         logging.debug("hostname: %s", config.get_hostname())
         logging.debug("timezone: %s", config.get_l10n_timezone())
+        logging.debug("language: %s", config.get_l10n_language())
+        logging.debug("keyboard: %s", config.get_l10n_keyboard())
 
         return config
 
