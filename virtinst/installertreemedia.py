@@ -14,6 +14,7 @@ from .devices import DeviceDisk
 from .initrdinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
 from .osdict import OSDB
+from .unattended import generate_install_script
 
 
 # Enum of the various install media types we can have
@@ -172,11 +173,24 @@ class InstallerTreeMedia(object):
         self._unattended_data = unattended_data
 
     def prepare(self, guest, meter):
+        cmdline = None
         if self._unattended_data:
-            pass
+            path, cmdline = generate_install_script(
+                    guest, self._unattended_data)
+
+            self.initrd_injections.append(path)
+            self._tmpfiles.append(path)
 
         fetcher = self._get_fetcher(guest, meter)
-        return self._prepare_kernel_url(guest, fetcher)
+        k, i, a = self._prepare_kernel_url(guest, fetcher)
+
+        # If a cmdline was set due to unattended installation, prepend the
+        # unattended kernel cmdline to the args returned by
+        # _prepare_kernel_url()
+        if cmdline:
+            a = "%s %s" % (cmdline, a)
+
+        return k, i, a
 
     def cleanup(self, guest):
         ignore = guest
