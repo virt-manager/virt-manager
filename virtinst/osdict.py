@@ -510,4 +510,31 @@ class _OsVariant(object):
         # the right one.
         return filtered_treelist.get_nth(0).get_url()
 
+    def get_install_script(self, profile):
+        if not self._os:
+            return None
+
+        script_list = self._os.get_install_script_list()
+        if script_list.get_length() == 0:
+            raise RuntimeError(
+                _("%s does not support unattended installation.") % self.name)
+
+        profile_filter = libosinfo.Filter()
+        profile_filter.add_constraint(
+            libosinfo.INSTALL_SCRIPT_PROP_PROFILE, profile)
+
+        filtered_script_list = script_list.new_filtered(profile_filter)
+        if filtered_script_list.get_length() == 0:
+            raise RuntimeError(
+                _("%s does not support unattended installation for the '%s' "
+                  "profile.") % (self.name, profile))
+
+        logging.debug("Install script found for profile '%s'", profile)
+
+        # Some OSes (as Windows) have more than one installer script, depending
+        # on the OS version and profile choosen, to be used to perform the
+        # unattended installation. Let's just deal with multiple installer
+        # scripts when its actually needed, though.
+        return filtered_script_list.get_nth(0)
+
 OSDB = _OSDB()
