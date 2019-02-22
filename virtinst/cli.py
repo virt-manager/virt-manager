@@ -28,6 +28,7 @@ from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
 from .domain import DomainClock, DomainOs
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
+from .unattended import UnattendedData
 
 
 ##########################
@@ -462,7 +463,8 @@ def get_meter():
 ###########################
 
 def _get_completer_parsers():
-    return VIRT_PARSERS + [ParseCLICheck, ParserLocation, ParserOSVariant]
+    return VIRT_PARSERS + [ParseCLICheck, ParserLocation, ParserOSVariant,
+            ParseCLIUnattended]
 
 
 def _virtparser_completer(prefix, **kwargs):
@@ -1415,6 +1417,28 @@ class VirtCLIParser(metaclass=InitClass):
 
     def noset_cb(self, inst, val, virtarg):
         """Do nothing callback"""
+
+
+########################
+# --unattended parsing #
+########################
+
+class ParseCLIUnattended(VirtCLIParser):
+    cli_arg_name = "unattended"
+
+    @classmethod
+    def __init_class__(cls, **kwargs):
+        VirtCLIParser.__init_class__(**kwargs)
+        cls.add_arg("profile", "profile")
+        cls.add_arg("admin_password", "admin-password")
+        cls.add_arg("user_password", "user-password")
+
+
+def parse_unattended(unattended):
+    ret = UnattendedData()
+    parser = ParseCLIUnattended(None, unattended)
+    parser.parse(ret)
+    return ret
 
 
 ###################
