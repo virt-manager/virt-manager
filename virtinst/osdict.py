@@ -538,6 +538,31 @@ class _OsVariant(object):
         # scripts when its actually needed, though.
         return filtered_script_list.get_nth(0)
 
+    def set_install_script_preferred_injection_method(self, script, method):
+        def nick_to_value(method):
+            injection_methods = [
+                    libosinfo.InstallScriptInjectionMethod.CDROM,
+                    libosinfo.InstallScriptInjectionMethod.DISK,
+                    libosinfo.InstallScriptInjectionMethod.FLOPPY,
+                    libosinfo.InstallScriptInjectionMethod.INITRD,
+                    libosinfo.InstallScriptInjectionMethod.WEB]
+
+            for m in injection_methods:
+                if method == m.value_nicks[0]:
+                    return m
+
+            raise RuntimeError(
+                _("%s is a non-valid injection method in libosinfo."))
+
+        injection_method = nick_to_value(method)
+        supported_injection_methods = script.get_injection_methods()
+        if (injection_method & supported_injection_methods == 0):
+            raise RuntimeError(
+                _("OS '%s' unattended install is not supported") % (self.name))
+
+        logging.debug("Using '%s' injection method", method)
+        script.set_preferred_injection_method(injection_method)
+
     def get_install_script_config(self, script, unattended_data, arch,
             hostname):
         def requires_param(config_param):
