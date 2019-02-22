@@ -13,6 +13,7 @@ import re
 import gi
 gi.require_version('Libosinfo', '1.0')
 from gi.repository import Libosinfo as libosinfo
+from gi.repository import GLib as glib
 
 
 ###################
@@ -536,5 +537,69 @@ class _OsVariant(object):
         # unattended installation. Let's just deal with multiple installer
         # scripts when its actually needed, though.
         return filtered_script_list.get_nth(0)
+
+    def get_install_script_config(self, script, unattended_data, arch,
+            hostname):
+        def requires_param(config_param):
+            param = script.get_config_param(config_param)
+
+            if not param or param.is_optional():
+                return False
+
+            return True
+
+        def requires_user_password():
+            return requires_param(libosinfo.INSTALL_CONFIG_PROP_USER_PASSWORD)
+
+        def requires_admin_password():
+            return requires_param(libosinfo.INSTALL_CONFIG_PROP_ADMIN_PASSWORD)
+
+        config = libosinfo.InstallConfig()
+
+        # Set user login and name based on the one from the system
+        config.set_user_login(glib.get_user_name())
+        config.set_user_realname(glib.get_real_name())
+
+        # Set user-password.
+        # In case it's required and not passed, just raise a RuntimeError.
+        if requires_user_password() and not unattended_data.user_password:
+            raise RuntimeError(
+                _("%s requires the user-password to be set.") % self.name)
+        config.set_user_password(
+            unattended_data.user_password if unattended_data.user_password
+            else "")
+
+        # Set the admin-password:
+        # In case it's required and not passed, just raise a RuntimeError.
+        if requires_admin_password() and not unattended_data.admin_password:
+            raise RuntimeError(
+                _("%s requires the admin-password to be set.") % self.name)
+        config.set_admin_password(
+            unattended_data.admin_password if unattended_data.admin_password
+            else "")
+
+        # Set the target disk.
+        # virtiodisk is the preferred way, in case it's supported, otherwise
+        # just fallback to scsi.
+        #
+        # Note: this is linux specific and will require some changes whenever
+        # support for Windows will be added.
+        config.set_target_disk(
+                "/dev/vda" if self.supports_virtiodisk() else "/dev/sda")
+
+        # Set hardware architecture and hostname
+        config.set_hardware_arch(arch)
+        config.set_hostname(hostname)
+
+        logging.debug("InstallScriptConfig created with the following params:")
+        logging.debug("username: %s", config.get_user_login())
+        logging.debug("realname: %s", config.get_user_realname())
+        logging.debug("user password: %s", config.get_user_password())
+        logging.debug("admin password: %s", config.get_admin_password())
+        logging.debug("target disk: %s", config.get_target_disk())
+        logging.debug("hardware arch: %s", config.get_hardware_arch())
+        logging.debug("hostname: %s", config.get_hostname())
+
+        return config
 
 OSDB = _OSDB()
