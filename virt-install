@@ -368,6 +368,10 @@ def check_option_collisions(options, guest, installer):
         fail(_("--initrd-inject only works if specified with --location.") +
              cdrom_err)
 
+    if options.unattended:
+        if options.initrd_inject or options.extra_args:
+            fail(_("--unattended does not support --initrd-inject nor --extra-args."))
+
 
 def _show_nographics_warnings(options, guest, installer):
     if guest.devices.graphics:
@@ -487,10 +491,13 @@ def build_installer(options, guest):
             install_bootdev=install_bootdev)
     if cdrom and options.livecd:
         installer.livecd = True
-    if options.extra_args:
-        installer.extra_args = options.extra_args
-    if options.initrd_inject:
-        installer.set_initrd_injections(options.initrd_inject)
+    if options.unattended:
+        pass
+    else:
+        if options.extra_args:
+            installer.extra_args = options.extra_args
+        if options.initrd_inject:
+            installer.set_initrd_injections(options.initrd_inject)
     if options.autostart:
         installer.autostart = True
 
