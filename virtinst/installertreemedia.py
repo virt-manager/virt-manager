@@ -79,6 +79,8 @@ class InstallerTreeMedia(object):
         self._tmpfiles = []
         self._tmpvols = []
 
+        self._unattended_data = None
+
         self._media_type = MEDIA_ISO
         if (not self.conn.is_remote() and
             os.path.exists(self.location) and
@@ -166,7 +168,13 @@ class InstallerTreeMedia(object):
     # Public API #
     ##############
 
+    def set_unattended_data(self, unattended_data):
+        self._unattended_data = unattended_data
+
     def prepare(self, guest, meter):
+        if self._unattended_data:
+            pass
+
         fetcher = self._get_fetcher(guest, meter)
         return self._prepare_kernel_url(guest, fetcher)
 
