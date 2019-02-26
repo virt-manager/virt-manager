@@ -338,6 +338,40 @@ class Guest(XMLBuilder):
         else:
             self._set_device_boot_order(boot_order)
 
+    def reorder_boot_order(self, dev, boot_index):
+        """Sets boot order of `dev` to `boot_index`
+
+        Sets the boot order for device `dev` to value `boot_index` and
+        adjusts all other boot indices accordingly. Additionally the
+        boot order defined in the 'os' node of a domain definition is
+        disabled since they are mutually exclusive in libvirt.
+
+        """
+        # unset legacy boot order
+        self.os.bootorder = []
+
+        # Sort the bootable devices by boot order
+        devs_sorted = sorted([device for device in self.get_bootable_devices()
+                              if device.boot.order is not None],
+                             key=lambda device: device.boot.order)
+
+        # set new boot order
+        dev.boot.order = boot_index
+
+        next_boot_index = None
+        for device in devs_sorted:
+            if device is dev:
+                continue
+
+            if device.boot.order in [next_boot_index, boot_index]:
+                next_boot_index = device.boot.order + 1
+                device.boot.order = next_boot_index
+                continue
+
+            if next_boot_index is not None:
+                # we found a hole so we can stop here
+                break
+
     def set_os_name(self, name):
         obj = OSDB.lookup_os(name)
         if obj is None:
