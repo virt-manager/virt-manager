@@ -17,6 +17,7 @@ from virtinst import Guest
 from virtinst import util
 from virtinst import DeviceController
 from virtinst import DeviceDisk
+from virtinst import support
 
 from .libvirtobject import vmmLibvirtObject
 from .libvirtenummap import LibvirtEnumMap
@@ -1227,7 +1228,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def can_use_device_boot_order(self):
         # Return 'True' if guest can use new style boot device ordering
-        return self.conn.is_qemu() or self.conn.is_test()
+        return self.conn.check_support(support.SUPPORT_CONN_DEVICE_BOOT_ORDER)
 
     def get_bootable_devices(self):
         # redirdev can also be marked bootable, but it should be rarely
