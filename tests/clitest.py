@@ -893,6 +893,7 @@ c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--sound=? --tpm=?")  # basic introspection test
 c.add_valid("test-state-shutoff --edit --update --boot menu=on")  # --update with inactive VM, should work but warn
+c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start")
 c.add_invalid("test --edit --hostdev driver_name=vfio")  # Guest has no hostdev to edit
 c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
 c.add_invalid("test --edit")  # specified no edit option
@@ -968,6 +969,12 @@ c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-sele
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
 c.add_compare("--edit target=hda --disk boot_order=1", "edit-select-disk-bootorder")
 
+c = vixml.add_category("edit and start selection", "test-state-shutoff --print-diff --start")
+c.add_compare("--define --edit target=vda --disk boot_order=1", "start-select-disk-bootorder")
+c.add_invalid("--define --no-define --edit target=vda --disk boot_order=1")
+c.add_compare("--edit target=vda --disk boot_order=1", "start-select-disk-bootorder2")
+c.add_compare("--no-define --edit target=vda --disk boot_order=1", "start-select-disk-bootorder2")
+
 c = vixml.add_category("edit selection 2", "test-collide --print-diff --define")
 c.add_compare("--edit target=hda --disk boot_order=1", "edit-select-disk-bootorder2")
 
@@ -994,6 +1001,16 @@ c.add_compare("--remove-device --disk 3", "remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all", check_version="1.3.3")  # check_version=video primary= attribute
 c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name", check_version="1.2.11")  # check_version=video ram output change
+
+c = vixml.add_category("add/rm devices and start", "test-state-shutoff --print-diff --start")
+c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
+c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
+# one test in combination with --define
+c.add_compare("--define --add-device --host-device usb_device_4b3_4485_noserial", "add-host-device-start")
+# all other test cases without
+c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic-start")
+c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-storage-start")
+c.add_compare("--remove-device --disk /dev/null", "remove-disk-path-start")
 
 c = vixml.add_category("add/rm devices OS KVM", "--connect %(URI-KVM)s test --print-diff --define")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "kvm-add-disk-os-from-xml")  # Guest OS (none) from XML

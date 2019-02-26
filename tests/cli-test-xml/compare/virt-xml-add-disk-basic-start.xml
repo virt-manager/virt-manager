@@ -1,0 +1,11 @@
+       <model type="cirrus" vram="16384" heads="1" primary="yes"/>
+     </video>
+     <memballoon model="virtio"/>
++    <disk type="file" device="disk">
++      <source file="/dev/default-pool/testvol1.img"/>
++      <target dev="vdf" bus="virtio"/>
++    </disk>
+   </devices>
+ </domain>
+
+Domain 'test-state-shutoff' started successfully.

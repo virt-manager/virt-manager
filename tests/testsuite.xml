@@ -289,6 +289,64 @@
   <memory>1048576</memory>
   <bootloader>/tmp/bootfoo</bootloader>
   <test:runstate>5</test:runstate>
+    <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/17"/>
+    </libosinfo:libosinfo>
+  </metadata>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <os>
+    <type arch="i686" machine="foobar">hvm</type>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <hyperv>
+      <vapic state="off"/>
+      <spinlocks state="on" retries="12287"/>
+    </hyperv>
+    <vmport state="off"/>
+  </features>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <on_lockfailure>poweroff</on_lockfailure>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+     <disk type="block" device="disk">
+      <driver name="qemu"/>
+      <source dev="/dev/null"/>
+      <target dev="vda" bus="virtio"/>
+      <boot order="10"/>
+     </disk>
+     <disk type="block" device="disk">
+      <driver name="qemu"/>
+      <source dev="/dev/null"/>
+      <target dev="vdb" bus="virtio"/>
+      <boot order="3"/>
+    </disk>
+    <disk type="block" device="cdrom">
+      <target dev="hdc" bus="ide"/>
+      <readonly/>
+      <boot order="1"/>
+    </disk>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="22:22:33:44:55:66"/>
+      <model type="virtio"/>
+      <boot order="2"/>
+    </interface>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="52:54:00:11:fa:28"/>
+      <model type="virtio"/>
+    </interface>
+    <graphics type="vnc" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <console type="pty"/>
+    <memballoon model="virtio"/>
+  </devices>
 </domain>
 
 

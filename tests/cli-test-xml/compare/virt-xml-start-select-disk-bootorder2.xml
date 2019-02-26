@@ -1,0 +1,32 @@
+       <driver name="qemu"/>
+       <source dev="/dev/null"/>
+       <target dev="vda" bus="virtio"/>
+-      <boot order="10"/>
++      <boot order="1"/>
+     </disk>
+     <disk type="block" device="disk">
+       <driver name="qemu"/>
+       <source dev="/dev/null"/>
+       <target dev="vdb" bus="virtio"/>
+-      <boot order="3"/>
++      <boot order="4"/>
+     </disk>
+     <disk type="block" device="cdrom">
+       <target dev="hdc" bus="ide"/>
+       <readonly/>
+-      <boot order="1"/>
++      <boot order="2"/>
+       <address type="drive" controller="0" bus="1" target="0" unit="0"/>
+     </disk>
+     <controller type="ide" index="0"/>
+@@
+       <source network="default"/>
+       <target dev="testnet0"/>
+       <model type="virtio"/>
+-      <boot order="2"/>
++      <boot order="3"/>
+     </interface>
+     <interface type="network">
+       <mac address="52:54:00:11:fa:28"/>
+
+Domain 'test-state-shutoff' started successfully.

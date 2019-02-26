@@ -1,0 +1,20 @@
+   <on_lockfailure>poweroff</on_lockfailure>
+   <devices>
+     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+-    <disk type="block" device="disk">
+-      <driver name="qemu"/>
+-      <source dev="/dev/null"/>
+-      <target dev="vda" bus="virtio"/>
+-      <boot order="10"/>
+-    </disk>
+-    <disk type="block" device="disk">
+-      <driver name="qemu"/>
+-      <source dev="/dev/null"/>
+-      <target dev="vdb" bus="virtio"/>
+-      <boot order="3"/>
+-    </disk>
+     <disk type="block" device="cdrom">
+       <target dev="hdc" bus="ide"/>
+       <readonly/>
+
+Domain 'test-state-shutoff' started successfully.
