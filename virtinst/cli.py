@@ -22,7 +22,7 @@ import libvirt
 
 from virtcli import CLIConfig
 
-from . import util
+from . import util, xmlapi
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
 from .domain import DomainClock, DomainOs
@@ -1225,12 +1225,7 @@ class VirtCLIParser(metaclass=InitClass):
         """
         if not cls.propname:
             return None
-        parent = obj
-        pieces = cls.propname.split(".")
-        for piece in pieces[:-1]:
-            parent = getattr(parent, piece)
-
-        return getattr(parent, pieces[-1])
+        return xmlapi.get_prop(obj, cls.propname)
 
     @classmethod
     def prop_is_list(cls, obj):

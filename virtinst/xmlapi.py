@@ -11,6 +11,22 @@ from . import util
 # pylint: disable=protected-access
 
 
+def get_prop(obj, prop_path):
+    """Return value of attribute identified by `prop_path`
+
+    Look up the attribute of `obj` identified by `prop_path`
+    (separated by "."). If any component along the path is missing an
+    `AttributeError` is raised.
+
+    """
+    parent = obj
+    pieces = prop_path.split(".")
+    for piece in pieces[:-1]:
+        parent = getattr(parent, piece)
+
+    return getattr(parent, pieces[-1])
+
+
 class _XPathSegment(object):
     """
     Class representing a single 'segment' of an xpath string. For example,
