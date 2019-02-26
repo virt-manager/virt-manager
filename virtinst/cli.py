@@ -2236,7 +2236,7 @@ def _add_device_boot_order_arg(cls):
         if not guest.conn.check_support(support.SUPPORT_CONN_DEVICE_BOOT_ORDER):
             raise NotImplementedError('Device boot order isn\'t supported by the connection')
 
-        inst.boot.order = val
+        guest.reorder_boot_order(inst, val)
     cls.set_boot_order_cb = set_boot_order_cb
     cls.add_arg("boot.order", "boot_order", cb=cls.set_boot_order_cb)
 
