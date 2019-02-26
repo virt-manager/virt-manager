@@ -258,9 +258,28 @@ def define_changes(conn, inactive_xmlobj, devs, action, confirm):
         for dev in devs:
             setup_device(dev)
 
-    conn.defineXML(inactive_xmlobj.get_xml())
+    dom = conn.defineXML(inactive_xmlobj.get_xml())
     print_stdout(_("Domain '%s' defined successfully.") % inactive_xmlobj.name)
-    return True
+    return dom
+
+
+def start_domain_transient(conn, xmlobj, devs, action, confirm):
+    if confirm:
+        if not prompt_yes_or_no(
+                _("Start '%s' with the changed XML?") % xmlobj.name):
+            return False
+
+    if action == "hotplug":
+        for dev in devs:
+            setup_device(dev)
+
+    try:
+        dom = conn.createXML(xmlobj.get_xml())
+    except libvirt.libvirtError as e:
+        fail(_("Failed starting domain '%s': %s") % (xmlobj.name, e))
+    else:
+        print_stdout(_("Domain '%s' started successfully.") % xmlobj.name)
+        return dom
 
 
 def update_changes(domain, devs, action, confirm):
@@ -371,6 +390,8 @@ def parse_args():
     define_g.add_argument("--no-define", dest='define', action="store_false",
                           help=_("Force not defining the domain."))
     define_g.set_defaults(define=None)
+    outg.add_argument("--start", action="store_true",
+                      help=_("Start the domain."))
     outg.add_argument("--print-diff", action="store_true",
         help=_("Only print the requested change, in diff format"))
     outg.add_argument("--print-xml", action="store_true",
@@ -411,6 +432,9 @@ def main(conn=None):
         options.print_diff or options.build_xml):
         options.quiet = False
     cli.setupLogging("virt-xml", options.debug, options.quiet)
+
+    if options.update and options.start:
+        fail(_("Either update or start a domain"))
 
     if cli.check_option_introspection(options):
         return 0
@@ -469,14 +493,27 @@ def main(conn=None):
         else:
             logging.warning(
                 _("The VM is not running, --update is inapplicable."))
-    if options.define:
+
+    if options.define or options.start:
         devs, action = prepare_changes(inactive_xmlobj, options, parserclass)
-        applied = define_changes(conn, inactive_xmlobj,
+        if options.define:
+            dom = define_changes(conn, inactive_xmlobj,
                                  devs, action, options.confirm)
-        if not options.update and active_xmlobj and applied:
-            print_stdout(
-                _("Changes will take effect after the domain is fully powered off."))
-    if not options.update and not options.define:
+            if dom and options.start:
+                try:
+                    dom.create()
+                except libvirt.libvirtError as e:
+                    fail(_("Failed starting domain '%s': %s") % (inactive_xmlobj.name, e))
+                print_stdout(_("Domain '%s' started successfully.") %
+                             inactive_xmlobj.name)
+            elif not options.update and active_xmlobj and dom:
+                print_stdout(
+                    _("Changes will take effect after the domain is fully powered off."))
+        else:
+            dom = start_domain_transient(conn, inactive_xmlobj, devs,
+                                         action, options.confirm)
+
+    if not options.update and not options.define and not options.start:
         prepare_changes(inactive_xmlobj, options, parserclass)
 
     return 0
