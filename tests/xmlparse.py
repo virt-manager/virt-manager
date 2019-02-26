@@ -81,9 +81,17 @@ class XMLParseTest(unittest.TestCase):
             return self._set_and_check(obj, name, initval, *args)
         return check
 
+    def _gen_outfile_path(self, basename):
+        """
+        Returns relative path to the file containing the expected XML
+        output
+
+        """
+        return "tests/xmlparse-xml/{!s}-out.xml".format(basename)
+
     def _get_test_content(self, basename, kvm=False):
         infile = "tests/xmlparse-xml/%s-in.xml" % basename
-        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        outfile = self._gen_outfile_path(basename)
         guest = virtinst.Guest(kvm and self.kvmconn or self.conn,
                                parsexml=open(infile).read())
         return guest, outfile
