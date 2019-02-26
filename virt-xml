@@ -364,9 +364,13 @@ def parse_args():
                "With --add-device, this is a hotplug operation.\n"
                "With --remove-device, this is a hotunplug operation.\n"
                "With --edit, this is an update device operation."))
-    outg.add_argument("--define", action="store_true",
-        help=_("Force defining the domain. Only required if a --print "
-               "option was specified."))
+    define_g = outg.add_mutually_exclusive_group()
+    define_g.add_argument("--define", action="store_true",
+                          help=_("Force defining the domain. Only required if a --print "
+                                 "option was specified."))
+    define_g.add_argument("--no-define", dest='define', action="store_false",
+                          help=_("Force not defining the domain."))
+    define_g.set_defaults(define=None)
     outg.add_argument("--print-diff", action="store_true",
         help=_("Only print the requested change, in diff format"))
     outg.add_argument("--print-xml", action="store_true",
@@ -427,7 +431,8 @@ def main(conn=None):
             if not options.define:
                 options.print_xml = True
         else:
-            options.define = True
+            if options.define is None:
+                options.define = True
     if options.confirm and not options.print_xml:
         options.print_diff = True
 
