@@ -436,6 +436,55 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml(), outfile)
 
+    def testAlterDevicesBootorder(self):
+        basename = "change-devices-bootorder"
+        guest, outfile = self._get_test_content(basename)
+        disk_1 = guest.devices.disk[0]
+        disk_2 = guest.devices.disk[1]
+        disk_3 = guest.devices.disk[2]
+        disk_4 = guest.devices.disk[3]
+        iface_1 = guest.devices.interface[0]
+        iface_2 = guest.devices.interface[1]
+        redirdev_1 = guest.devices.redirdev[0]
+
+        self.assertEqual(guest.os.bootorder, ['hd'])
+        self.assertEqual(disk_1.boot.order, None)
+        self.assertEqual(disk_2.boot.order, 10)
+        self.assertEqual(disk_3.boot.order, 10)
+        self.assertEqual(disk_4.boot.order, 1)
+        self.assertEqual(iface_1.boot.order, 2)
+        self.assertEqual(iface_2.boot.order, None)
+        self.assertEqual(redirdev_1.boot.order, 3)
+
+        guest.reorder_boot_order(disk_1, 1)
+
+        self.assertEqual(guest.os.bootorder, [])
+        self.assertEqual(disk_1.boot.order, 1)
+        self.assertEqual(disk_2.boot.order, 10)
+        self.assertEqual(disk_3.boot.order, 10)
+        # verify that the used algorithm preserves the order of
+        # records with equal boot indices
+        self.assertIs(disk_2, guest.devices.disk[1])
+        self.assertIs(disk_3, guest.devices.disk[2])
+        self.assertEqual(disk_4.boot.order, 2)
+        self.assertEqual(iface_1.boot.order, 3)
+        self.assertEqual(iface_2.boot.order, None)
+        self.assertEqual(redirdev_1.boot.order, 4)
+
+        try:
+            self._alter_compare(guest.get_xml(), outfile)
+        except RuntimeError as error:
+            self.assertIn("unsupported configuration", str(error))
+
+        guest.reorder_boot_order(disk_2, 10)
+        self.assertEqual(disk_2.boot.order, 10)
+        self.assertEqual(disk_3.boot.order, 11)
+        self.assertIs(disk_2, guest.devices.disk[1])
+        self.assertIs(disk_3, guest.devices.disk[2])
+
+        outfile = self._gen_outfile_path("change-devices-bootorder-fixed")
+        self._alter_compare(guest.get_xml(), outfile)
+
     def testSingleDisk(self):
         xml = ("""<disk type="file" device="disk"><source file="/a.img"/>\n"""
                """<target dev="hda" bus="ide"/></disk>\n""")
