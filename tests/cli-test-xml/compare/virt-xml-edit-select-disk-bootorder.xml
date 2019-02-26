@@ -1,0 +1,19 @@
+         <total_iops_sec>50</total_iops_sec>
+       </iotune>
+       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
++      <boot order="1"/>
+     </disk>
+     <disk type="file" device="disk">
+       <driver name="qemu" type="qcow2" cache="none"/>
+@@
+       </source>
+       <target dev="sda" bus="scsi"/>
+       <shareable/>
+-      <boot order="1"/>
++      <boot order="2"/>
+       <address type="drive" controller="9" bus="0" target="0" unit="0"/>
+     </disk>
+     <controller type="scsi" index="0"/>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the domain is fully powered off.

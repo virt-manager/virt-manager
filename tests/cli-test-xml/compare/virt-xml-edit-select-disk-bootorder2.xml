@@ -1,0 +1,18 @@
+   <os>
+     <type arch="i686">hvm</type>
+     <loader type="rom">/usr/lib/xen/boot/hvmloader</loader>
+-    <boot dev="hd"/>
+   </os>
+   <features>
+     <acpi/>
+@@
+       <source file="/dev/default-pool/collidevol1.img"/>
+       <target dev="hda" bus="ide"/>
+       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
++      <boot order="1"/>
+     </disk>
+     <controller type="ide" index="0"/>
+     <interface type="user">
+
+Domain 'test-collide' defined successfully.
+Changes will take effect after the domain is fully powered off.

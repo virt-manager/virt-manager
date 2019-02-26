@@ -965,6 +965,10 @@ c.add_compare("--edit ich6 --sound pcspk", "edit-select-sound-model", check_vers
 c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
+c.add_compare("--edit target=hda --disk boot_order=1", "edit-select-disk-bootorder")
+
+c = vixml.add_category("edit selection 2", "test-collide --print-diff --define")
+c.add_compare("--edit target=hda --disk boot_order=1", "edit-select-disk-bootorder2")
 
 c = vixml.add_category("edit clear", "test-for-virtxml --print-diff --define")
 c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
