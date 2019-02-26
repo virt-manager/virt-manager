@@ -902,6 +902,7 @@ c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --updat
 c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update")  # test driver doesn't support detachdevice...
 c.add_invalid("test-for-virtxml --edit --graphics password=foo --update")  # test driver doesn't support updatdevice...
 c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
+c.add_invalid("test --edit --boot network,cdrom --define --no-define")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"))  # stdin test
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
