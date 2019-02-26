@@ -20,6 +20,7 @@ import types
 
 import libvirt
 
+from virtinst import support
 from virtcli import CLIConfig
 
 from . import util, xmlapi
@@ -2228,6 +2229,18 @@ def _add_device_address_args(cls):
     cls.add_arg("address.base", "address.base")
 
 
+def _add_device_boot_order_arg(cls):
+    def set_boot_order_cb(self, inst, val, virtarg):
+        val = int(val)
+        guest = self.guest
+        if not guest.conn.check_support(support.SUPPORT_CONN_DEVICE_BOOT_ORDER):
+            raise NotImplementedError('Device boot order isn\'t supported by the connection')
+
+        inst.boot.order = val
+    cls.set_boot_order_cb = set_boot_order_cb
+    cls.add_arg("boot.order", "boot_order", cb=cls.set_boot_order_cb)
+
+
 ##################
 # --disk parsing #
 ##################
@@ -2397,7 +2410,7 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("startup_policy", "startup_policy")
         cls.add_arg("read_only", "readonly", is_onoff=True)
         cls.add_arg("shareable", "shareable", is_onoff=True)
-        cls.add_arg("boot.order", "boot_order")
+        _add_device_boot_order_arg(cls)
 
         cls.add_arg("iotune_rbs", "read_bytes_sec")
         cls.add_arg("iotune_wbs", "write_bytes_sec")
@@ -2493,7 +2506,7 @@ class ParserNetwork(VirtCLIParser):
         cls.add_arg("model", "model")
         cls.add_arg("macaddr", "mac", cb=cls.set_mac_cb)
         cls.add_arg("filterref", "filterref")
-        cls.add_arg("boot.order", "boot_order")
+        _add_device_boot_order_arg(cls)
         cls.add_arg("link_state", "link_state",
                               cb=cls.set_link_state)
 
@@ -2701,7 +2714,7 @@ class ParserRedir(VirtCLIParser):
         _add_device_address_args(cls)
         cls.add_arg("bus", "bus", ignore_default=True)
         cls.add_arg("type", "type", ignore_default=True)
-        cls.add_arg("boot.order", "boot_order")
+        _add_device_boot_order_arg(cls)
         cls.add_arg(None, "server", cb=cls.set_server_cb)
 
 
@@ -3112,7 +3125,7 @@ class ParserHostdev(VirtCLIParser):
                     cb=cls.set_name_cb,
                     lookup_cb=cls.name_lookup_cb)
         cls.add_arg("driver_name", "driver_name")
-        cls.add_arg("boot.order", "boot_order")
+        _add_device_boot_order_arg(cls)
         cls.add_arg("rom_bar", "rom_bar", is_onoff=True)
 
 
