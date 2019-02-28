@@ -1048,6 +1048,7 @@ c.add_invalid("--original-xml " + _CLONE_UNMANAGED + " --file virt-install --fil
 c.add_invalid("--original-xml " + _CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=hdc")  # XML w/ disks, force copy but not enough disks passed
 c.add_invalid("--original-xml " + _CLONE_MANAGED + " --file /tmp/clonevol")  # XML w/ managed storage, specify unmanaged path (should fail)
 c.add_invalid("--original-xml " + _CLONE_NOEXIST + " --file %(EXISTIMG1)s")  # XML w/ non-existent storage, WITHOUT --preserve
+c.add_valid("--original-xml " + _CLONE_MANAGED + " --auto-clone --force-copy fda")  # force copy empty floppy drive
 
 
 

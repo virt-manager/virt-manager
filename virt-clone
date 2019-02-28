@@ -67,11 +67,10 @@ def get_clone_diskfile(new_diskfiles, design, preserve, auto_clone):
             new_diskfiles.append(None)
         newpath = new_diskfiles[newidx]
 
-        if newpath is None and auto_clone:
-            newpath = design.generate_clone_disk_path(origpath)
-
         if origpath is None:
             newpath = None
+        elif newpath is None and auto_clone:
+            newpath = design.generate_clone_disk_path(origpath)
 
         clonepaths.append(newpath)
         newidx += 1
