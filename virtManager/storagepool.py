@@ -238,8 +238,8 @@ class vmmStoragePool(vmmLibvirtObject):
     def can_change_alloc(self):
         typ = self.get_type()
         return (typ in [StoragePool.TYPE_LOGICAL, StoragePool.TYPE_ZFS])
-    def supports_volume_creation(self):
-        return self.get_xmlobj().supports_volume_creation()
+    def supports_volume_creation(self, clone=False):
+        return self.get_xmlobj().supports_volume_creation(clone=clone)
 
     def get_type(self):
         return self.get_xmlobj().type

@@ -395,13 +395,25 @@ class StoragePool(_StorageObject):
             return self.type in users[propname]
         return hasattr(self, propname)
 
-    def supports_volume_creation(self):
-        return self.type in [
-            StoragePool.TYPE_DIR, StoragePool.TYPE_FS,
-            StoragePool.TYPE_NETFS, StoragePool.TYPE_LOGICAL,
+    def supports_volume_creation(self, clone=False):
+        """
+        Returns if pool supports volume creation.  If @clone is set to True
+        returns if pool supports volume cloning (virVolCreateXMLFrom).
+        """
+        supported = [
+            StoragePool.TYPE_DIR,
+            StoragePool.TYPE_FS,
+            StoragePool.TYPE_NETFS,
             StoragePool.TYPE_DISK,
-            StoragePool.TYPE_RBD, StoragePool.TYPE_SHEEPDOG,
-            StoragePool.TYPE_ZFS]
+            StoragePool.TYPE_LOGICAL,
+            StoragePool.TYPE_RBD,
+        ]
+        if not clone:
+            supported.extend([
+                StoragePool.TYPE_SHEEPDOG,
+                StoragePool.TYPE_ZFS,
+            ])
+        return self.type in supported
 
     def get_disk_type(self):
         if (self.type == StoragePool.TYPE_DISK or
