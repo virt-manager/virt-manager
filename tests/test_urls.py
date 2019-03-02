@@ -186,8 +186,12 @@ def _make_tests():
     urls = {}
     for name in cfg.sections():
         vals = dict(cfg.items(name))
-        d = _URLTestData(name, vals["url"],
-                vals.get("distro", None),
+        url = vals["url"]
+
+        if "distro" not in vals:
+            print("url needs an explicit distro= value: %s" % url)
+            sys.exit(1)
+        d = _URLTestData(name, url, vals["distro"],
                 vals.get("testxen", "0") == "1",
                 vals.get("testshortcircuit", "0") == "1",
                 vals.get("kernelarg", None),
