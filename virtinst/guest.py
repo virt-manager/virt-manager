@@ -413,6 +413,8 @@ class Guest(XMLBuilder):
         return self._supports_virtio(self.osinfo.supports_virtionet())
     def supports_virtiodisk(self):
         return self._supports_virtio(self.osinfo.supports_virtiodisk())
+    def supports_virtioscsi(self):
+        return self._supports_virtio(self.osinfo.supports_virtioscsi())
     def _supports_virtioserial(self):
         return self._supports_virtio(self.osinfo.supports_virtioserial())
 

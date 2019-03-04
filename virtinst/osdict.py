@@ -400,6 +400,12 @@ class _OsVariant(object):
                   "http://pcisig.com/pci/1af4/1042"]
         return bool(self._device_filter(devids=devids))
 
+    def supports_virtioscsi(self):
+        # virtio-scsi and virtio1.0-scsi
+        devids = ["http://pcisig.com/pci/1af4/1004",
+                  "http://pcisig.com/pci/1af4/1048"]
+        return bool(self._device_filter(devids=devids))
+
     def supports_virtionet(self):
         # virtio-net and virtio1.0-net
         devids = ["http://pcisig.com/pci/1af4/1000",
