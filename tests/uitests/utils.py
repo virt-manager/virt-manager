@@ -300,7 +300,7 @@ class VMMDogtailNode(dogtail.tree.Node):
     # Widget search helpers #
     #########################
 
-    def find(self, name, roleName=None, labeller_text=None):
+    def find(self, name, roleName=None, labeller_text=None, check_active=True):
         """
         Search root for any widget that contains the passed name/role regex
         strings.
@@ -317,7 +317,7 @@ class VMMDogtailNode(dogtail.tree.Node):
         # Wait for independent windows to become active in the window manager
         # before we return them. This ensures the window is actually onscreen
         # so it sidesteps a lot of race conditions
-        if ret.roleName in ["frame", "dialog", "alert"]:
+        if ret.roleName in ["frame", "dialog", "alert"] and check_active:
             check_in_loop(lambda: ret.active)
         return ret
 
@@ -410,7 +410,8 @@ class VMMDogtailApp(object):
     def is_running(self):
         return bool(self._proc and self._proc.poll() is None)
 
-    def open(self, extra_opts=None, check_already_running=True, use_uri=True):
+    def open(self, extra_opts=None, check_already_running=True, use_uri=True,
+            window_name=None):
         extra_opts = extra_opts or []
 
         if tests.utils.clistate.debug:
@@ -435,7 +436,7 @@ class VMMDogtailApp(object):
             self.error_if_already_running()
         self._proc = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
         self._root = dogtail.tree.root.application("virt-manager")
-        self._topwin = self._root.find(None, "(frame|dialog|alert)")
+        self._topwin = self._root.find(window_name, "(frame|dialog|alert)")
 
     def stop(self):
         """

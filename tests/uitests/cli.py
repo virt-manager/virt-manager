@@ -65,6 +65,23 @@ class VMMCLI(uiutils.UITestCase):
             self.app.topwin.find_fuzzy(
                                "add-hardware", "button").showing)
 
+    def testShowDelete(self):
+        self.app.open(
+                extra_opts=["--show-domain-delete", "test-clone"],
+                window_name="Delete")
+        # Ensure details opened too
+        self.app.root.find("test-clone on", "frame",
+                check_active=False)
+
+        delete = self.app.topwin
+        delete.find_fuzzy("Delete", "button").click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("Yes", "push button").click()
+
+        # Ensure app exits
+        uiutils.check_in_loop(lambda: not self.app.is_running())
+
+
     def testShowRemoteDBusConnect(self):
         """
         Test the remote app dbus connection

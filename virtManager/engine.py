@@ -46,6 +46,7 @@ class vmmEngine(vmmGObject):
     CLI_SHOW_DOMAIN_EDITOR = "editor"
     CLI_SHOW_DOMAIN_PERFORMANCE = "performance"
     CLI_SHOW_DOMAIN_CONSOLE = "console"
+    CLI_SHOW_DOMAIN_DELETE = "delete"
     CLI_SHOW_HOST_SUMMARY = "summary"
 
     @classmethod
@@ -480,12 +481,17 @@ class vmmEngine(vmmGObject):
 
         if page == self.CLI_SHOW_DOMAIN_PERFORMANCE:
             details.activate_performance_page()
-        elif page == self.CLI_SHOW_DOMAIN_EDITOR:
+        elif (page in [self.CLI_SHOW_DOMAIN_EDITOR,
+                       self.CLI_SHOW_DOMAIN_DELETE]):
             details.activate_config_page()
         elif page == self.CLI_SHOW_DOMAIN_CONSOLE:
             details.activate_console_page()
 
         details.show()
+
+        if page == self.CLI_SHOW_DOMAIN_DELETE:
+            from .delete import vmmDeleteDialog
+            vmmDeleteDialog.show_instance(details, vm)
 
     def _get_manager(self):
         from .manager import vmmManager
@@ -506,7 +512,8 @@ class vmmEngine(vmmGObject):
             vmmHost.show_instance(None, self._connobjs[uri])
         elif (show_window in [self.CLI_SHOW_DOMAIN_EDITOR,
                               self.CLI_SHOW_DOMAIN_PERFORMANCE,
-                              self.CLI_SHOW_DOMAIN_CONSOLE]):
+                              self.CLI_SHOW_DOMAIN_CONSOLE,
+                              self.CLI_SHOW_DOMAIN_DELETE]):
             self._cli_show_vm_helper(uri, clistr, show_window)
         else:
             raise RuntimeError("Unknown cli window command '%s'" %

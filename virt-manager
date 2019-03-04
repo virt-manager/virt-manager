@@ -161,6 +161,8 @@ def parse_commandline():
         help="Show domain performance window")
     parser.add_argument("--show-domain-console", metavar="NAME|ID|UUID",
         help="Show domain graphical console window")
+    parser.add_argument("--show-domain-delete", metavar="NAME|ID|UUID",
+        help="Show domain delete window")
     parser.add_argument("--show-host-summary", action="store_true",
         help="Show connection details window")
 
@@ -257,6 +259,9 @@ def main():
     elif options.show_domain_console:
         show_window = vmmEngine.CLI_SHOW_DOMAIN_CONSOLE
         domain = options.show_domain_console
+    elif options.show_domain_delete:
+        show_window = vmmEngine.CLI_SHOW_DOMAIN_DELETE
+        domain = options.show_domain_delete
 
     if show_window and options.uri is None:
         raise RuntimeError("can't use --show-* options without --connect")
