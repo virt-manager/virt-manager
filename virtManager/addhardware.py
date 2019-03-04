@@ -1225,8 +1225,7 @@ class vmmAddHardware(vmmGObjectUI):
         controller_model = None
         if (bus == "scsi" and
             self.vm.get_hv_type() in ["qemu", "kvm", "test"] and
-            not self.vm.xmlobj.os.is_pseries() and not
-            any([c.type == "scsi"
+            not any([c.type == "scsi"
                  for c in self.vm.xmlobj.devices.controller])):
             controller_model = "virtio-scsi"
 
