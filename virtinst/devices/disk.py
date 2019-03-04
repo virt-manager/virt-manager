@@ -949,10 +949,6 @@ class DeviceDisk(Device):
             # This likely isn't correct, but it's kind of a catch all
             # for virt types we don't know how to handle.
             return "ide"
-
-        if guest.os.is_arm_machvirt():
-            # We prefer virtio-scsi for machvirt, gets us hotplug
-            return "scsi"
         if self.is_disk() and guest.supports_virtiodisk():
             return "virtio"
         if self.is_cdrom() and guest.supports_virtioscsi():

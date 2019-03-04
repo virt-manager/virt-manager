@@ -24,7 +24,7 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/var/lib/libvirt/images/foobar.qcow2"/>
-      <target dev="sda" bus="scsi"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
     <controller type="scsi" index="0" model="virtio-scsi">
       <address type="pci"/>
