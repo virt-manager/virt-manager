@@ -827,24 +827,10 @@ class Guest(XMLBuilder):
             self.add_device(dev)
 
     def _add_implied_controllers(self):
-        has_spapr_scsi = False
         has_any_scsi = False
         for dev in self.devices.controller:
             if dev.type == "scsi":
                 has_any_scsi = True
-                if dev.address.type == "spapr-vio":
-                    has_spapr_scsi = True
-
-        # Add spapr-vio controller if needed
-        if not has_spapr_scsi:
-            for dev in self.devices.disk:
-                if dev.address.type == "spapr-vio":
-                    ctrl = DeviceController(self.conn)
-                    ctrl.type = "scsi"
-                    ctrl.address.set_addrstr("spapr-vio")
-                    ctrl.set_defaults(self)
-                    self.add_device(ctrl)
-                    break
 
         # Add virtio-scsi controller if needed
         if ((self.os.is_arm_machvirt() or self.os.is_pseries()) and
