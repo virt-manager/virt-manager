@@ -744,6 +744,10 @@ class StorageVolume(_StorageObject):
             self.conn.check_support(
                 self.conn.SUPPORT_POOL_METADATA_PREALLOC, self.pool)):
             createflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
+            if self.capacity == self.allocation:
+                # For cloning, this flag will make libvirt+qemu-img preallocate
+                # the new disk image
+                cloneflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
 
         if self.reflink:
             cloneflags |= getattr(libvirt,
