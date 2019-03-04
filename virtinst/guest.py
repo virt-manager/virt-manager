@@ -835,8 +835,7 @@ class Guest(XMLBuilder):
                 has_any_scsi = True
 
         # Add virtio-scsi controller if needed
-        if ((self.os.is_arm_machvirt() or self.os.is_pseries()) and
-                not has_any_scsi):
+        if not has_any_scsi and self.supports_virtioscsi():
             for dev in self.devices.disk:
                 if dev.bus == "scsi":
                     ctrl = DeviceController(self.conn)

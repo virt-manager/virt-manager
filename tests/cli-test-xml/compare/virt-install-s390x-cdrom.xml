@@ -28,6 +28,7 @@
       <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
+    <controller type="scsi" index="0" model="virtio-scsi"/>
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
