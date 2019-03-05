@@ -22,9 +22,17 @@ class OSInstallScript:
     """
     Wrapper for Libosinfo.InstallScript interactions
     """
+    @staticmethod
+    def have_new_libosinfo():
+        return hasattr(Libosinfo, "InstallScriptInstallationSource")
+
     def __init__(self, script, osobj):
         self._script = script
         self._osobj = osobj
+
+        if not OSInstallScript.have_new_libosinfo():
+            raise RuntimeError(_("libosinfo is too old to support unattended "
+                "installs."))
 
     def get_expected_filename(self):
         return self._script.get_expected_filename()
@@ -39,11 +47,12 @@ class OSInstallScript:
                     Libosinfo.InstallScriptInjectionMethod.WEB]
 
             for m in injection_methods:
+                # pylint: disable=no-member
                 if method == m.value_nicks[0]:
                     return m
 
             raise RuntimeError(
-                _("%s is a non-valid injection method in libosinfo."))
+                _("%s is a non-valid injection method in libosinfo.") % method)
 
         injection_method = nick_to_value(method)
         supported_injection_methods = self._script.get_injection_methods()
@@ -57,6 +66,9 @@ class OSInstallScript:
 
     def set_installation_source(self, source):
         def nick_to_value(source):
+            # This requires quite new libosinfo as of Mar 2019, disable
+            # pylint errors here.
+            # pylint: disable=no-member
             installation_sources = [
                     Libosinfo.InstallScriptInstallationSource.MEDIA,
                     Libosinfo.InstallScriptInstallationSource.NETWORK]
