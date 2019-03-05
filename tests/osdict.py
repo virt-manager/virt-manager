@@ -89,3 +89,25 @@ class TestOSDB(unittest.TestCase):
 
         script = winxp.get_install_script("desktop")
         self.assertTrue(bool(script))
+
+    def test_prepare_install_script(self):
+        from virtinst import unattended
+
+        conn = utils.URIs.open_testdriver_cached()
+        g = Guest(conn)
+        g.set_os_name("fedora26")
+        g.set_capabilities_defaults()
+        g.name = "foo-vm"
+
+        u = unattended.UnattendedData()
+        u.profile = "desktop"
+        u.admin_password = "fooadmin"
+        u.user_password = "foouser"
+
+        try:
+            script = unattended.prepare_install_script(g, u)
+            dummy = script
+        except RuntimeError as e:
+            if "libosinfo is too old" not in str(e):
+                raise
+            self.skipTest(str(e))
