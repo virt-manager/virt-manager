@@ -463,8 +463,8 @@ def get_meter():
 ###########################
 
 def _get_completer_parsers():
-    return VIRT_PARSERS + [ParseCLICheck, ParserLocation, ParserOSVariant,
-            ParseCLIUnattended]
+    return VIRT_PARSERS + [ParseCheck, ParseLocation, ParseOSVariant,
+            ParseUnattended]
 
 
 def _virtparser_completer(prefix, **kwargs):
@@ -1423,7 +1423,7 @@ class VirtCLIParser(metaclass=InitClass):
 # --unattended parsing #
 ########################
 
-class ParseCLIUnattended(VirtCLIParser):
+class ParseUnattended(VirtCLIParser):
     cli_arg_name = "unattended"
 
     @classmethod
@@ -1436,7 +1436,7 @@ class ParseCLIUnattended(VirtCLIParser):
 
 def parse_unattended(unattended):
     ret = UnattendedData()
-    parser = ParseCLIUnattended(None, unattended)
+    parser = ParseUnattended(None, unattended)
     parser.parse(ret)
     return ret
 
@@ -1452,7 +1452,7 @@ def convert_old_force(options):
         del(options.force)
 
 
-class ParseCLICheck(VirtCLIParser):
+class ParseCheck(VirtCLIParser):
     cli_arg_name = "check"
 
     @classmethod
@@ -1474,7 +1474,7 @@ class ParseCLICheck(VirtCLIParser):
 def parse_check(checks):
     # Overwrite this for each parse
     for checkstr in util.listify(checks):
-        parser = ParseCLICheck(None, checkstr)
+        parser = ParseCheck(None, checkstr)
         parser.parse(get_global_state())
 
 
@@ -1482,7 +1482,7 @@ def parse_check(checks):
 # --location parsing #
 ######################
 
-class ParserLocation(VirtCLIParser):
+class ParseLocation(VirtCLIParser):
     cli_arg_name = "location"
     remove_first = "location"
 
@@ -1497,7 +1497,7 @@ class ParserLocation(VirtCLIParser):
 def parse_location(optstr):
     parsedata = collections.OrderedDict()
     if optstr:
-        parser = ParserLocation(None, optstr)
+        parser = ParseLocation(None, optstr)
         parser.parse(parsedata)
 
     location = parsedata.get("location")
@@ -1536,7 +1536,7 @@ class OSVariantData(object):
             guest.set_os_name(self.name)
 
 
-class ParserOSVariant(VirtCLIParser):
+class ParseOSVariant(VirtCLIParser):
     cli_arg_name = "os_variant"
     remove_first = "name"
 
@@ -1551,7 +1551,7 @@ class ParserOSVariant(VirtCLIParser):
 def parse_os_variant(optstr):
     parsedata = OSVariantData()
     if optstr:
-        parser = ParserOSVariant(None, optstr)
+        parser = ParseOSVariant(None, optstr)
         parser.parse(parsedata)
     return parsedata
 
