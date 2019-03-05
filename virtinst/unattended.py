@@ -9,6 +9,7 @@
 import os
 
 from . import util
+from .osdict import OSInstallScript
 
 
 class UnattendedData():
@@ -20,25 +21,22 @@ class UnattendedData():
 def generate_install_script(guest, unattended_data):
     from gi.repository import Gio as gio
 
-    script = guest.osinfo.get_install_script(unattended_data.profile)
+    rawscript = guest.osinfo.get_install_script(unattended_data.profile)
+    script = OSInstallScript(rawscript, guest.osinfo)
 
     # For all tree based installations we're going to perform initrd injection
     # and install the systems via network.
-    guest.osinfo.set_install_script_preferred_injection_method(
-            script, "initrd")
-    guest.osinfo.set_install_script_installation_source(script, "network")
+    script.set_preferred_injection_method("initrd")
+    script.set_installation_source("network")
 
-    config = guest.osinfo.get_install_script_config(
-            script, unattended_data, guest.os.arch, guest.name)
+    config = script.get_config(unattended_data, guest.os.arch, guest.name)
 
     scratch = os.path.join(util.get_cache_dir(), "unattended")
     if not os.path.exists(scratch):
         os.makedirs(scratch, 0o751)
 
-    guest.osinfo.generate_install_script_output(script, config,
-            gio.File.new_for_path(scratch))
-
+    script.generate_output(config, gio.File.new_for_path(scratch))
     path = os.path.join(scratch, script.get_expected_filename())
-    cmdline = guest.osinfo.generate_install_script_cmdline(script, config)
+    cmdline = script.generate_cmdline(config)
 
     return path, cmdline

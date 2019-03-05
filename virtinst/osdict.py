@@ -339,6 +339,9 @@ class _OsVariant(object):
     # Public APIs #
     ###############
 
+    def get_handle(self):
+        return self._os
+
     def is_generic(self):
         return self._os is None
 
@@ -536,9 +539,22 @@ class _OsVariant(object):
         # on the OS version and profile choosen, to be used to perform the
         # unattended installation. Let's just deal with multiple installer
         # scripts when its actually needed, though.
-        return filtered_script_list.get_nth(0)
+        installscript = filtered_script_list.get_nth(0)
+        return installscript
 
-    def set_install_script_preferred_injection_method(self, script, method):
+
+class OSInstallScript:
+    """
+    Wrapper for Libosinfo.InstallScript interactions
+    """
+    def __init__(self, script, osobj):
+        self._script = script
+        self._osobj = osobj
+
+    def get_expected_filename(self):
+        return self._script.get_expected_filename()
+
+    def set_preferred_injection_method(self, method):
         def nick_to_value(method):
             injection_methods = [
                     libosinfo.InstallScriptInjectionMethod.CDROM,
@@ -555,15 +571,16 @@ class _OsVariant(object):
                 _("%s is a non-valid injection method in libosinfo."))
 
         injection_method = nick_to_value(method)
-        supported_injection_methods = script.get_injection_methods()
+        supported_injection_methods = self._script.get_injection_methods()
         if (injection_method & supported_injection_methods == 0):
             raise RuntimeError(
-                _("OS '%s' unattended install is not supported") % (self.name))
+                _("OS '%s' unattended install is not supported") %
+                self._osobj.name)
 
         logging.debug("Using '%s' injection method", method)
-        script.set_preferred_injection_method(injection_method)
+        self._script.set_preferred_injection_method(injection_method)
 
-    def set_install_script_installation_source(self, script, source):
+    def set_installation_source(self, source):
         def nick_to_value(source):
             installation_sources = [
                     libosinfo.InstallScriptInstallationSource.MEDIA,
@@ -580,12 +597,11 @@ class _OsVariant(object):
         installation_source = nick_to_value(source)
 
         logging.debug("Using '%s' installation source", source)
-        script.set_installation_source(installation_source)
+        self._script.set_installation_source(installation_source)
 
-    def get_install_script_config(self, script, unattended_data, arch,
-            hostname):
+    def get_config(self, unattended_data, arch, hostname):
         def requires_param(config_param):
-            param = script.get_config_param(config_param)
+            param = self._script.get_config_param(config_param)
 
             if not param or param.is_optional():
                 return False
@@ -632,7 +648,8 @@ class _OsVariant(object):
         # In case it's required and not passed, just raise a RuntimeError.
         if requires_user_password() and not unattended_data.user_password:
             raise RuntimeError(
-                _("%s requires the user-password to be set.") % self.name)
+                _("%s requires the user-password to be set.") %
+                self._osobj.name)
         config.set_user_password(
             unattended_data.user_password if unattended_data.user_password
             else "")
@@ -641,7 +658,8 @@ class _OsVariant(object):
         # In case it's required and not passed, just raise a RuntimeError.
         if requires_admin_password() and not unattended_data.admin_password:
             raise RuntimeError(
-                _("%s requires the admin-password to be set.") % self.name)
+                _("%s requires the admin-password to be set.") %
+                self._osobj.name)
         config.set_admin_password(
             unattended_data.admin_password if unattended_data.admin_password
             else "")
@@ -652,8 +670,8 @@ class _OsVariant(object):
         #
         # Note: this is linux specific and will require some changes whenever
         # support for Windows will be added.
-        config.set_target_disk(
-                "/dev/vda" if self.supports_virtiodisk() else "/dev/sda")
+        tgt = "/dev/vda" if self._osobj.supports_virtiodisk() else "/dev/sda"
+        config.set_target_disk(tgt)
 
         # Set hardware architecture and hostname
         config.set_hardware_arch(arch)
@@ -699,16 +717,13 @@ class _OsVariant(object):
 
         return config
 
-    def generate_install_script_output(self, script, config, output_dir):
-        if not self._os:
-            return
+    def generate_output(self, config, output_dir):
+        self._script.generate_output(
+                self._osobj.get_handle(), config, output_dir)
 
-        script.generate_output(self._os, config, output_dir)
+    def generate_cmdline(self, config):
+        return self._script.generate_command_line(
+                self._osobj.get_handle(), config)
 
-    def generate_install_script_cmdline(self, script, config):
-        if not self._os:
-            return None
-
-        return script.generate_command_line(self._os, config)
 
 OSDB = _OSDB()
