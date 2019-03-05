@@ -530,24 +530,27 @@ class _OsVariant(object):
             (self.name, arch))
 
     def get_install_script(self, profile):
-        script_list = None
+        script_list = []
         if self._os:
-            script_list = self._os.get_install_script_list()
+            script_list = list(_OsinfoIter(self._os.get_install_script_list()))
 
-        if not script_list or script_list.get_length() == 0:
+        if not script_list:
             raise RuntimeError(
                 _("'%s' does not support unattended installation.") %
                 self.name)
 
-        profile_filter = Libosinfo.Filter()
-        profile_filter.add_constraint(
-            Libosinfo.INSTALL_SCRIPT_PROP_PROFILE, profile)
+        installscripts = []
+        profile_names = set()
+        for script in script_list:
+            profile_names.add(script.get_profile())
+            if script.get_profile() == profile:
+                installscripts.append(script)
 
-        filtered_script_list = script_list.new_filtered(profile_filter)
-        if filtered_script_list.get_length() == 0:
+        if not installscripts:
             raise RuntimeError(
                 _("'%s' does not support unattended installation for the '%s' "
-                  "profile.") % (self.name, profile))
+                  "profile. Available profiles: %s") %
+                (self.name, profile, ", ".join(list(profile_names))))
 
         logging.debug("Install script found for profile '%s'", profile)
 
@@ -555,5 +558,5 @@ class _OsVariant(object):
         # on the OS version and profile choosen, to be used to perform the
         # unattended installation. Let's just deal with multiple installer
         # scripts when its actually needed, though.
-        installscript = filtered_script_list.get_nth(0)
+        installscript = installscripts[0]
         return installscript
