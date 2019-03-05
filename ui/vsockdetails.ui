@@ -67,7 +67,7 @@
             <property name="numeric">True</property>
             <property name="update_policy">if-valid</property>
             <property name="value">5900</property>
-            <signal name="value-changed" handler="on_vsock_cid_changed" swapped="no"/>
+            <signal name="changed" handler="on_vsock_cid_changed" swapped="no"/>
             <child internal-child="accessible">
               <object class="AtkObject" id="vsock-cid-atkobject">
                 <property name="AtkObject::accessible-name">vsock-cid</property>
