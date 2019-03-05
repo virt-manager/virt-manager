@@ -79,6 +79,7 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
     """ Returns (do we clone by default?, info string if not)"""
     ignore = conn
     info = ""
+    can_default = True
 
     def append_str(str1, str2, delim=", "):
         if not str2:
@@ -101,11 +102,12 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
         pool_type = vol.get_parent_pool().get_type()
         if pool_type == virtinst.StoragePool.TYPE_DISK:
             info = append_str(info, _("Disk device"))
+            can_default = False
 
     if shared:
         info = append_str(info, _("Shareable"))
 
-    return (not info, info)
+    return (not info, info, can_default)
 
 
 class vmmCloneVM(vmmGObjectUI):
@@ -390,8 +392,8 @@ class vmmCloneVM(vmmGObjectUI):
             skip_targets.remove(force_target)
 
             vol = self.conn.get_vol_by_path(path)
-            default, definfo = do_we_default(self.conn, vol, path, ro, shared,
-                                             devtype)
+            default, definfo, can_default = do_we_default(self.conn, vol, path,
+                                                          ro, shared, devtype)
 
             def storage_add(failinfo=None):
                 # pylint: disable=cell-var-from-loop
@@ -426,7 +428,7 @@ class vmmCloneVM(vmmGObjectUI):
             storage_row[STORAGE_INFO_CAN_CLONE] = True
 
             # If we cannot create default clone_path don't even try to do that
-            if not default:
+            if not can_default:
                 storage_add()
                 continue
 
