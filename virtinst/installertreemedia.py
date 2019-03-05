@@ -7,6 +7,7 @@
 import logging
 import os
 
+from . import unattended
 from . import urldetect
 from . import urlfetcher
 from . import util
@@ -14,7 +15,6 @@ from .devices import DeviceDisk
 from .initrdinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
 from .osdict import OSDB
-from .unattended import generate_install_script
 
 
 # Enum of the various install media types we can have
@@ -175,8 +175,9 @@ class InstallerTreeMedia(object):
     def prepare(self, guest, meter):
         cmdline = None
         if self._unattended_data:
-            path, cmdline = generate_install_script(
+            script, config = unattended.prepare_install_script(
                     guest, self._unattended_data)
+            path, cmdline = unattended.generate_install_script(script, config)
 
             self.initrd_injections.append(path)
             self._tmpfiles.append(path)

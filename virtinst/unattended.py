@@ -207,7 +207,7 @@ class UnattendedData():
     user_password = None
 
 
-def generate_install_script(guest, unattended_data):
+def prepare_install_script(guest, unattended_data):
     rawscript = guest.osinfo.get_install_script(unattended_data.profile)
     script = OSInstallScript(rawscript, guest.osinfo)
 
@@ -217,7 +217,10 @@ def generate_install_script(guest, unattended_data):
     script.set_installation_source("network")
 
     config = script.get_config(unattended_data, guest.os.arch, guest.name)
+    return script, config
 
+
+def generate_install_script(script, config):
     scratch = os.path.join(util.get_cache_dir(), "unattended")
     if not os.path.exists(scratch):
         os.makedirs(scratch, 0o751)
