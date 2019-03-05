@@ -333,10 +333,6 @@ def validate_required_options(options, guest, installer):
             _("An install method must be specified\n(%(methods)s)") %
             {"methods": install_methods})
 
-    if options.unattended:
-        if options.os_variant.is_none or options.os_variant.is_auto:
-            msg += "\n" + _("--unattended requires an explicit --os-variant")
-
     if msg:
         fail(msg)
 
@@ -451,6 +447,8 @@ def build_installer(options, guest):
     has_installer = True
 
     if options.unattended:
+        if options.os_variant.is_none or options.os_variant.is_auto:
+            fail(_("--unattended requires an explicit --os-variant"))
         options.os_variant.install = "location"
 
     if options.os_variant.install == "location":
