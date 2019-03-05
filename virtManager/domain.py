@@ -1637,3 +1637,6 @@ class vmmDomainVirtinst(vmmDomain):
 
     def _redefine_xmlobj(self, xmlobj, origxml=None):
         vmmDomain._redefine_xmlobj(self, xmlobj, origxml=self._orig_xml)
+
+    def rename_domain(self, new_name):
+        self.define_name(new_name)
