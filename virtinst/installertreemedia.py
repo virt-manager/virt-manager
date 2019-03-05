@@ -175,9 +175,9 @@ class InstallerTreeMedia(object):
     def prepare(self, guest, meter):
         cmdline = None
         if self._unattended_data:
-            script, config = unattended.prepare_install_script(
+            script = unattended.prepare_install_script(
                     guest, self._unattended_data)
-            path, cmdline = unattended.generate_install_script(script, config)
+            path, cmdline = unattended.generate_install_script(script)
 
             self.initrd_injections.append(path)
             self._tmpfiles.append(path)
