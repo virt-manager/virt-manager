@@ -12,8 +12,9 @@ import re
 
 import gi
 gi.require_version('Libosinfo', '1.0')
-from gi.repository import Libosinfo as libosinfo
-from gi.repository import GLib as glib, Gio as gio
+from gi.repository import Libosinfo
+from gi.repository import Gio
+from gi.repository import GLib
 
 
 ###################
@@ -161,7 +162,7 @@ class _OSDB(object):
     @property
     def _os_loader(self):
         if not self.__os_loader:
-            loader = libosinfo.Loader()
+            loader = Libosinfo.Loader()
             loader.process_default_path()
 
             self.__os_loader = loader
@@ -203,7 +204,7 @@ class _OSDB(object):
 
     def guess_os_by_iso(self, location):
         try:
-            media = libosinfo.Media.create_from_location(location, None)
+            media = Libosinfo.Media.create_from_location(location, None)
         except Exception as e:
             logging.debug("Error creating libosinfo media object: %s", str(e))
             return None
@@ -270,13 +271,13 @@ class _OsVariant(object):
 
         if check_derives:
             _extend(os.get_related(
-                libosinfo.ProductRelationship.DERIVES_FROM).get_elements())
+                Libosinfo.ProductRelationship.DERIVES_FROM).get_elements())
         if check_clones:
             _extend(os.get_related(
-                libosinfo.ProductRelationship.CLONES).get_elements())
+                Libosinfo.ProductRelationship.CLONES).get_elements())
         if check_upgrades:
             _extend(os.get_related(
-                libosinfo.ProductRelationship.UPGRADES).get_elements())
+                Libosinfo.ProductRelationship.UPGRADES).get_elements())
 
         for checkobj in check_list:
             if (checkobj.get_short_id() in related_os_list or
@@ -317,7 +318,7 @@ class _OsVariant(object):
         # We can use os.get_release_status() & osinfo.ReleaseStatus.ROLLING
         # if we require libosinfo >= 1.4.0.
         release_status = self._os and self._os.get_param_value(
-                libosinfo.OS_PROP_RELEASE_STATUS) or None
+                Libosinfo.OS_PROP_RELEASE_STATUS) or None
 
         def _glib_to_datetime(glibdate):
             date = "%s-%s" % (glibdate.get_year(), glibdate.get_day_of_year())
@@ -497,8 +498,8 @@ class _OsVariant(object):
         if not self._os:
             return None
 
-        treefilter = libosinfo.Filter()
-        treefilter.add_constraint(libosinfo.TREE_PROP_ARCHITECTURE, arch)
+        treefilter = Libosinfo.Filter()
+        treefilter.add_constraint(Libosinfo.TREE_PROP_ARCHITECTURE, arch)
 
         treelist = self._os.get_tree_list()
         if treelist.get_length() < 1:
@@ -526,9 +527,9 @@ class _OsVariant(object):
             raise RuntimeError(
                 _("%s does not support unattended installation.") % self.name)
 
-        profile_filter = libosinfo.Filter()
+        profile_filter = Libosinfo.Filter()
         profile_filter.add_constraint(
-            libosinfo.INSTALL_SCRIPT_PROP_PROFILE, profile)
+            Libosinfo.INSTALL_SCRIPT_PROP_PROFILE, profile)
 
         filtered_script_list = script_list.new_filtered(profile_filter)
         if filtered_script_list.get_length() == 0:
@@ -560,11 +561,11 @@ class OSInstallScript:
     def set_preferred_injection_method(self, method):
         def nick_to_value(method):
             injection_methods = [
-                    libosinfo.InstallScriptInjectionMethod.CDROM,
-                    libosinfo.InstallScriptInjectionMethod.DISK,
-                    libosinfo.InstallScriptInjectionMethod.FLOPPY,
-                    libosinfo.InstallScriptInjectionMethod.INITRD,
-                    libosinfo.InstallScriptInjectionMethod.WEB]
+                    Libosinfo.InstallScriptInjectionMethod.CDROM,
+                    Libosinfo.InstallScriptInjectionMethod.DISK,
+                    Libosinfo.InstallScriptInjectionMethod.FLOPPY,
+                    Libosinfo.InstallScriptInjectionMethod.INITRD,
+                    Libosinfo.InstallScriptInjectionMethod.WEB]
 
             for m in injection_methods:
                 if method == m.value_nicks[0]:
@@ -586,8 +587,8 @@ class OSInstallScript:
     def set_installation_source(self, source):
         def nick_to_value(source):
             installation_sources = [
-                    libosinfo.InstallScriptInstallationSource.MEDIA,
-                    libosinfo.InstallScriptInstallationSource.NETWORK]
+                    Libosinfo.InstallScriptInstallationSource.MEDIA,
+                    Libosinfo.InstallScriptInstallationSource.NETWORK]
 
             for s in installation_sources:
                 if source == s.value_nick:
@@ -612,19 +613,19 @@ class OSInstallScript:
             return True
 
         def requires_user_password():
-            return requires_param(libosinfo.INSTALL_CONFIG_PROP_USER_PASSWORD)
+            return requires_param(Libosinfo.INSTALL_CONFIG_PROP_USER_PASSWORD)
 
         def requires_admin_password():
-            return requires_param(libosinfo.INSTALL_CONFIG_PROP_ADMIN_PASSWORD)
+            return requires_param(Libosinfo.INSTALL_CONFIG_PROP_ADMIN_PASSWORD)
 
         def get_timezone():
             TZ_FILE = "/etc/localtime"
-            localtime = gio.File.new_for_path(TZ_FILE)
+            localtime = Gio.File.new_for_path(TZ_FILE)
             if not localtime.query_exists():
                 return None
             info = localtime.query_info(
-                gio.FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET,
-                gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS)
+                Gio.FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET,
+                Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS)
             if not info:
                 return None
             target = info.get_symlink_target()
@@ -636,16 +637,16 @@ class OSInstallScript:
             return tokens[1]
 
         def get_language():
-            names = glib.get_language_names()
+            names = GLib.get_language_names()
             if not names or len(names) < 2:
                 return None
             return names[1]
 
-        config = libosinfo.InstallConfig()
+        config = Libosinfo.InstallConfig()
 
         # Set user login and name based on the one from the system
-        config.set_user_login(glib.get_user_name())
-        config.set_user_realname(glib.get_real_name())
+        config.set_user_login(GLib.get_user_name())
+        config.set_user_realname(GLib.get_real_name())
 
         # Set user-password.
         # In case it's required and not passed, just raise a RuntimeError.
