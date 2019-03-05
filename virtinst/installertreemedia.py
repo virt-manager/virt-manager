@@ -179,6 +179,11 @@ class InstallerTreeMedia(object):
                     guest, self._unattended_data)
             path, cmdline = unattended.generate_install_script(script)
 
+            logging.debug("Generated unattended cmdline: %s", cmdline)
+            logging.debug("Generated unattended script: %s", path)
+            logging.debug("Generated script contents:\n%s",
+                    open(path).read())
+
             self.initrd_injections.append(path)
             self._tmpfiles.append(path)
 
