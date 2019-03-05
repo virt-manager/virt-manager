@@ -85,6 +85,26 @@ def _sort(tosort):
     return retlist
 
 
+class _OsinfoIter:
+    """
+    Helper to turn osinfo style get_length/get_nth lists into python
+    iterables
+    """
+    def __init__(self, listobj):
+        self.current = 0
+        self.listobj = listobj
+        self.high = self.listobj.get_length() - 1
+
+    def __iter__(self):
+        return self
+    def __next__(self):
+        if self.current > self.high:
+            raise StopIteration
+        ret = self.listobj.get_nth(self.current)
+        self.current += 1
+        return ret
+
+
 class _OSDB(object):
     """
     Entry point for the public API
@@ -171,8 +191,8 @@ class _OSDB(object):
             allvariants = self._make_default_variants()
             db = loader.get_db()
             oslist = db.get_os_list()
-            for os in range(oslist.get_length()):
-                osi = _OsVariant(oslist.get_nth(os))
+            for o in _OsinfoIter(oslist):
+                osi = _OsVariant(o)
                 allvariants[osi.name] = osi
 
             self.__all_variants = allvariants
@@ -288,8 +308,7 @@ class _OsVariant(object):
     def _get_all_devices(self):
         if not self._os:
             return []
-        devlist = self._os.get_all_devices()
-        return [devlist.get_nth(i) for i in range(devlist.get_length())]
+        return list(_OsinfoIter(self._os.get_all_devices()))
 
     def _device_filter(self, devids=None, cls=None):
         ret = []
@@ -430,8 +449,7 @@ class _OsVariant(object):
             ram_scale = minimum and 2 or 1
             n_cpus_scale = minimum and 2 or 1
             storage_scale = minimum and 2 or 1
-            for i in range(resources.get_length()):
-                r = resources.get_nth(i)
+            for r in _OsinfoIter(resources):
                 if r.get_architecture() == arch:
                     ret["ram"] = r.get_ram() * ram_scale
                     ret["cpu"] = r.get_cpu()
@@ -491,28 +509,25 @@ class _OsVariant(object):
         return None
 
     def get_location(self, arch):
-        treelist = None
+        treelist = []
         if self._os:
-            treelist = self._os.get_tree_list()
+            treelist = list(_OsinfoIter(self._os.get_tree_list()))
 
-        if not treelist or treelist.get_length() < 1:
+        if not treelist:
             raise RuntimeError(
                 _("'%s' does not have a URL location") % self.name)
-
-        treefilter = Libosinfo.Filter()
-        treefilter.add_constraint(Libosinfo.TREE_PROP_ARCHITECTURE, arch)
-
-        filtered_treelist = treelist.new_filtered(treefilter)
-        if filtered_treelist.get_length() < 1:
-            raise RuntimeError(
-                _("'%s' does not have a URL location for the %s architecture") %
-                (self.name, arch))
 
         # Some distros have more than one URL for a specific architecture,
         # which is the case for Fedora and different variants (Server,
         # Workstation). Later on, we'll have to differentiate that and return
         # the right one.
-        return filtered_treelist.get_nth(0).get_url()
+        for tree in treelist:
+            if tree.get_architecture() == arch:
+                return tree.get_url()
+
+        raise RuntimeError(
+            _("'%s' does not have a URL location for the %s architecture") %
+            (self.name, arch))
 
     def get_install_script(self, profile):
         script_list = None
