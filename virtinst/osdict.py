@@ -491,21 +491,21 @@ class _OsVariant(object):
         return None
 
     def get_location(self, arch):
-        if not self._os:
-            return None
+        treelist = None
+        if self._os:
+            treelist = self._os.get_tree_list()
+
+        if not treelist or treelist.get_length() < 1:
+            raise RuntimeError(
+                _("'%s' does not have a URL location") % self.name)
 
         treefilter = Libosinfo.Filter()
         treefilter.add_constraint(Libosinfo.TREE_PROP_ARCHITECTURE, arch)
 
-        treelist = self._os.get_tree_list()
-        if treelist.get_length() < 1:
-            raise RuntimeError(
-                _("%s does not have a URL location") % self.name)
-
         filtered_treelist = treelist.new_filtered(treefilter)
         if filtered_treelist.get_length() < 1:
             raise RuntimeError(
-                _("%s does not have a URL location for the %s architecture") %
+                _("'%s' does not have a URL location for the %s architecture") %
                 (self.name, arch))
 
         # Some distros have more than one URL for a specific architecture,
@@ -515,13 +515,14 @@ class _OsVariant(object):
         return filtered_treelist.get_nth(0).get_url()
 
     def get_install_script(self, profile):
-        if not self._os:
-            return None
+        script_list = None
+        if self._os:
+            script_list = self._os.get_install_script_list()
 
-        script_list = self._os.get_install_script_list()
-        if script_list.get_length() == 0:
+        if not script_list or script_list.get_length() == 0:
             raise RuntimeError(
-                _("%s does not support unattended installation.") % self.name)
+                _("'%s' does not support unattended installation.") %
+                self.name)
 
         profile_filter = Libosinfo.Filter()
         profile_filter.add_constraint(
@@ -530,7 +531,7 @@ class _OsVariant(object):
         filtered_script_list = script_list.new_filtered(profile_filter)
         if filtered_script_list.get_length() == 0:
             raise RuntimeError(
-                _("%s does not support unattended installation for the '%s' "
+                _("'%s' does not support unattended installation for the '%s' "
                   "profile.") % (self.name, profile))
 
         logging.debug("Install script found for profile '%s'", profile)
