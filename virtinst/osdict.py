@@ -224,6 +224,9 @@ class _OSDB(object):
         return _sort(sortmap)
 
 
+OSDB = _OSDB()
+
+
 #####################
 # OsVariant classes #
 #####################
@@ -724,6 +727,3 @@ class OSInstallScript:
     def generate_cmdline(self, config):
         return self._script.generate_command_line(
                 self._osobj.get_handle(), config)
-
-
-OSDB = _OSDB()
