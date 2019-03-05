@@ -114,6 +114,7 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
     :param collidelist: An extra list of names to check for collision
     """
     collidelist = collidelist or []
+    base = str(base)
 
     def collide(n):
         if n in collidelist:
