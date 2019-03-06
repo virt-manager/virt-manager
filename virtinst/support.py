@@ -131,7 +131,7 @@ class _SupportCheck(object):
         for an 'unsupported' error from libvirt.
 
     @flag: A flag to check exists. This will be appended to the argument
-        list if run_args are provided, otherwise we will only check against
+        :list if run_args are provided, otherwise we will only check against
         that the flag is present in the python bindings.
 
     @hv_version: A dictionary with hypervisor names for keys, and
@@ -157,9 +157,9 @@ class _SupportCheck(object):
         versions = ([self.version] + list(self.hv_libvirt_version.values()))
         for vstr in versions:
             v = _version_str_to_int(vstr)
-            if vstr is not None and v != 0 and v < 7009:
+            if vstr is not None and v != 0 and v < 7003:
                 raise RuntimeError("programming error: Cannot enforce "
-                    "support checks for libvirt versions less than 0.7.9, "
+                    "support checks for libvirt versions less than 0.7.3, "
                     "since required APIs were not available. ver=%s" % vstr)
 
     def check_support(self, conn, data):
