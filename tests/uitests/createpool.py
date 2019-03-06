@@ -64,6 +64,8 @@ class CreatePool(uiutils.UITestCase):
         typ.click()
         win.find_fuzzy("SCSI Host Adapter", "menu item").click()
         forward.click()
+        win.find_fuzzy("Source Path:", "combo").click_combo_entry()
+        win.find_fuzzy("host2", "menu item").click()
         finish.click()
         hostwin.find(newname, "table cell")
 
