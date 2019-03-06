@@ -473,7 +473,7 @@ c.add_compare(""" \
 --disk /iscsi-pool/diskvol1 \
 --disk /dev/default-pool/iso-vol,seclabel.model=dac,seclabel1.model=selinux,seclabel1.relabel=no,seclabel0.label=foo,bar,baz \
 --disk /dev/default-pool/iso-vol,format=qcow2 \
---disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1 \
+--disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1,driver_type=raw \
 --disk pool=rbd-ceph,size=.1 \
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file \
 --disk source_protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi,logical_block_size=512,physical_block_size=512 \
