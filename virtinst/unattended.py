@@ -18,7 +18,7 @@ from gi.repository import GLib
 from . import util
 
 
-def _make_installconfig(script, osobj, unattended_data, arch, hostname):
+def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     """
     Build a Libosinfo.InstallConfig instance
     """
@@ -111,6 +111,9 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname):
             _("'en_US' will be used as both language and keyboard layout "
               "for unattended installation."))
 
+    if url:
+        config.set_installation_url(url)
+
     logging.debug("InstallScriptConfig created with the following params:")
     logging.debug("username: %s", config.get_user_login())
     logging.debug("realname: %s", config.get_user_realname())
@@ -122,6 +125,7 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname):
     logging.debug("timezone: %s", config.get_l10n_timezone())
     logging.debug("language: %s", config.get_l10n_language())
     logging.debug("keyboard: %s", config.get_l10n_keyboard())
+    logging.debug("url: %s", config.get_installation_url())
 
     return config
 
@@ -224,7 +228,7 @@ class UnattendedData():
     user_password = None
 
 
-def prepare_install_script(guest, unattended_data):
+def prepare_install_script(guest, unattended_data, url=None):
     rawscript = guest.osinfo.get_install_script(unattended_data.profile)
     script = OSInstallScript(rawscript, guest.osinfo)
 
@@ -234,7 +238,7 @@ def prepare_install_script(guest, unattended_data):
     script.set_installation_source("network")
 
     config = _make_installconfig(script, guest.osinfo, unattended_data,
-            guest.os.arch, guest.name)
+            guest.os.arch, guest.name, url)
     script.set_config(config)
     return script
 

@@ -175,8 +175,9 @@ class InstallerTreeMedia(object):
     def prepare(self, guest, meter):
         cmdline = None
         if self._unattended_data:
+            location = self.location if self._media_type == MEDIA_URL else None
             script = unattended.prepare_install_script(
-                    guest, self._unattended_data)
+                    guest, self._unattended_data, location)
             path, cmdline = unattended.generate_install_script(script)
 
             logging.debug("Generated unattended cmdline: %s", cmdline)
