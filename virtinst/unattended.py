@@ -229,7 +229,8 @@ class UnattendedData():
     user_password = None
 
 
-def prepare_install_script(guest, unattended_data, url=None):
+def prepare_install_script(guest, unattended_data, url=None, media=None):
+    dummy = media
     rawscript = guest.osinfo.get_install_script(unattended_data.profile)
     script = OSInstallScript(rawscript, guest.osinfo)
 
