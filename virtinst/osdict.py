@@ -564,6 +564,28 @@ class _OsVariant(object):
             return installscripts[0]
 
         script_list = []
+
+        # In case we're dealing with a media installation, let's try to get
+        # the installer scripts from the media, in case any is set.
+        if media:
+            if not media.supports_installer_script():
+                raise RuntimeError(
+                    _("'%s' used media does not support unattended "
+                      "installation") % (self.name))
+
+            script_list = list(_OsinfoIter(media.get_install_script_list()))
+
+            # In case some script is set, but not one matching the specified
+            # profile, let's just error out as trying to use the OS' installer
+            # is too much error prone.
+            # However, if no script is found, let's just follow with the
+            # current code path and get the script from the installer, as some
+            # OSes only have the installer scripts set to the Libosinfo.Os
+            # itself.
+            if script_list:
+                installscript = _get_install_script(script_list)
+                return installscript
+
         if self._os:
             script_list = list(_OsinfoIter(self._os.get_install_script_list()))
 
