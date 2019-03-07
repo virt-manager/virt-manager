@@ -535,7 +535,7 @@ class _OsVariant(object):
             _("'%s' does not have a URL location for the %s architecture") %
             (self.name, arch))
 
-    def get_install_script(self, profile):
+    def get_install_script(self, profile, media=None):
         def _get_install_script(script_list):
             if not script_list:
                 raise RuntimeError(

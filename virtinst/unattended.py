@@ -244,7 +244,7 @@ def prepare_install_script(guest, unattended_data, url=None, media=None):
 
         return "media"
 
-    rawscript = guest.osinfo.get_install_script(unattended_data.profile)
+    rawscript = guest.osinfo.get_install_script(unattended_data.profile, media)
     script = OSInstallScript(rawscript, guest.osinfo)
 
     # For all tree based installations we're going to perform initrd injection
