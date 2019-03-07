@@ -16,6 +16,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 
 from . import util
+from .osdict import _OsinfoIter
 
 
 def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
@@ -230,14 +231,28 @@ class UnattendedData():
 
 
 def prepare_install_script(guest, unattended_data, url=None, media=None):
-    dummy = media
+    # This is ugly, but that's only the current way to deal with netinstall
+    # medias.
+    def _get_installation_source(media):
+        if not media:
+            return "network"
+
+        variant_list = list(_OsinfoIter(media.get_os_variants()))
+        for variant in variant_list:
+            if "netinst" in variant.get_id():
+                return "network"
+
+        return "media"
+
     rawscript = guest.osinfo.get_install_script(unattended_data.profile)
     script = OSInstallScript(rawscript, guest.osinfo)
 
     # For all tree based installations we're going to perform initrd injection
     # and install the systems via network.
     script.set_preferred_injection_method("initrd")
-    script.set_installation_source("network")
+
+    installationsource = _get_installation_source(media)
+    script.set_installation_source(installationsource)
 
     config = _make_installconfig(script, guest.osinfo, unattended_data,
             guest.os.arch, guest.name, url)
