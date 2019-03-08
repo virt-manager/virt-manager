@@ -521,7 +521,7 @@ class _OsVariant(object):
 
         if not treelist:
             raise RuntimeError(
-                _("'%s' does not have a URL location") % self.name)
+                _("OS '%s' does not have a URL location") % self.name)
 
         # Some distros have more than one URL for a specific architecture,
         # which is the case for Fedora and different variants (Server,
@@ -532,14 +532,14 @@ class _OsVariant(object):
                 return tree.get_url()
 
         raise RuntimeError(
-            _("'%s' does not have a URL location for the %s architecture") %
+            _("OS '%s' does not have a URL location for the %s architecture") %
             (self.name, arch))
 
     def get_install_script(self, profile, media=None):
         def _get_install_script(script_list):
             if not script_list:
                 raise RuntimeError(
-                    _("'%s' does not support unattended installation.") %
+                    _("OS '%s' does not support unattended installation.") %
                     self.name)
 
             installscripts = []
@@ -551,8 +551,8 @@ class _OsVariant(object):
 
             if not installscripts:
                 raise RuntimeError(
-                    _("'%s' does not support unattended installation for the "
-                      "'%s' profile. Available profiles: %s") %
+                    _("OS '%s' does not support unattended installation for "
+                      "the '%s' profile. Available profiles: %s") %
                     (self.name, profile, ", ".join(list(profile_names))))
 
             logging.debug("Install script found for profile '%s'", profile)
@@ -570,7 +570,7 @@ class _OsVariant(object):
         if media:
             if not media.supports_installer_script():
                 raise RuntimeError(
-                    _("'%s' used media does not support unattended "
+                    _("OS '%s' media does not support unattended "
                       "installation") % (self.name))
 
             script_list = list(_OsinfoIter(media.get_install_script_list()))
