@@ -37,7 +37,7 @@ class TestOSDB(unittest.TestCase):
         assert res["n-cpus"] == 1
 
     def test_urldetct_matching_distros(self):
-        allstores = urldetect._allstores  # pylint: disable=protected-access
+        allstores = urldetect.ALLSTORES
 
         seen_distro = []
         for store in allstores:

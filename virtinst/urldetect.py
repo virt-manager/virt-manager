@@ -267,7 +267,7 @@ def getDistroStore(guest, fetcher, skip_error):
     arch = guest.os.arch
     _type = guest.os.os_type
     osobj = guest.osinfo
-    stores = _allstores[:]
+    stores = _build_distro_list()
     cache = _DistroCache(fetcher)
 
     # If user manually specified an os_distro, bump its URL class
@@ -834,13 +834,18 @@ class _LibosinfoDistro(_DistroTree):
 
 
 # Build list of all *Distro classes
-def _build_distro_list():
+def _make_all_stores():
     allstores = []
     for obj in list(globals().values()):
         if (isinstance(obj, type) and
             issubclass(obj, _DistroTree) and
             obj.PRETTY_NAME):
             allstores.append(obj)
+    return allstores
+
+
+def _build_distro_list():
+    allstores = ALLSTORES[:]
 
     # Always stick Libosinfo first, it takes priority
     allstores.remove(_LibosinfoDistro)
@@ -852,4 +857,5 @@ def _build_distro_list():
 
     return allstores
 
-_allstores = _build_distro_list()
+
+ALLSTORES = _make_all_stores()
