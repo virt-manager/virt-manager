@@ -112,7 +112,7 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
               "for unattended installation."))
 
     if url:
-        config.set_installation_url(url)
+        config.set_installation_url(url)  # pylint: disable=no-member
 
     logging.debug("InstallScriptConfig created with the following params:")
     logging.debug("username: %s", config.get_user_login())
@@ -125,7 +125,8 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     logging.debug("timezone: %s", config.get_l10n_timezone())
     logging.debug("language: %s", config.get_l10n_language())
     logging.debug("keyboard: %s", config.get_l10n_keyboard())
-    logging.debug("url: %s", config.get_installation_url())
+    logging.debug("url: %s",
+            config.get_installation_url())  # pylint: disable=no-member
 
     return config
 
@@ -136,7 +137,7 @@ class OSInstallScript:
     """
     @staticmethod
     def have_new_libosinfo():
-        return hasattr(Libosinfo, "InstallScriptInstallationSource")
+        return hasattr(Libosinfo.InstallConfig, "set_installation_url")
 
     def __init__(self, script, osobj):
         self._script = script
