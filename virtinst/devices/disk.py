@@ -951,12 +951,19 @@ class DeviceDisk(Device):
             return "ide"
         if self.is_disk() and guest.supports_virtiodisk():
             return "virtio"
-        if self.is_cdrom() and guest.supports_virtioscsi():
+        if (self.is_cdrom() and
+            guest.supports_virtioscsi() and
+            not guest.os.is_x86()):
+            # x86 long time default has been IDE CDROM, stick with that to
+            # avoid churn, but every newer virt arch that supports virtio-scsi
+            # should use it
             return "scsi"
         if guest.os.is_arm():
             return "sd"
         if guest.os.is_q35():
             return "sata"
+        if self.is_cdrom() and guest.os.is_s390x():
+            return "scsi"
         return "ide"
 
     def set_defaults(self, guest):

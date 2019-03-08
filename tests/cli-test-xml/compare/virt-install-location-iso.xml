@@ -40,7 +40,7 @@
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
       <source file="/tmp/fake-fedora17-tree.iso"/>
-      <target dev="sda" bus="scsi"/>
+      <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>
@@ -53,7 +53,6 @@
     <controller type="usb" index="0" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
-    <controller type="scsi" index="0" model="virtio-scsi"/>
     <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>
@@ -115,7 +114,7 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">
-      <target dev="sda" bus="scsi"/>
+      <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>
@@ -128,7 +127,6 @@
     <controller type="usb" index="0" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
-    <controller type="scsi" index="0" model="virtio-scsi"/>
     <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>

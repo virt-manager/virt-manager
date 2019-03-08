@@ -40,11 +40,10 @@
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
-      <target dev="sda" bus="scsi"/>
+      <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
-    <controller type="scsi" index="0" model="virtio-scsi"/>
     <interface type="user">
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
@@ -110,11 +109,10 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">
-      <target dev="sda" bus="scsi"/>
+      <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
-    <controller type="scsi" index="0" model="virtio-scsi"/>
     <interface type="user">
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
