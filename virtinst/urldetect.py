@@ -829,14 +829,6 @@ def _make_all_stores():
 def _build_distro_list(osobj):
     allstores = ALLSTORES[:]
 
-    # Always stick Libosinfo first, it takes priority
-    allstores.remove(_LibosinfoDistro)
-    allstores.insert(0, _LibosinfoDistro)
-
-    # Always stick GenericDistro at the end, since it's a catchall
-    allstores.remove(_GenericTreeinfoDistro)
-    allstores.append(_GenericTreeinfoDistro)
-
     # If user manually specified an os_distro, bump its URL class
     # to the top of the list
     if osobj.distro:
@@ -854,6 +846,14 @@ def _build_distro_list(osobj):
             allstores.insert(0, found_store)
         else:
             logging.debug("No matching store found, not prioritizing anything")
+
+    # Always stick Libosinfo first, it takes priority
+    allstores.remove(_LibosinfoDistro)
+    allstores.insert(0, _LibosinfoDistro)
+
+    # Always stick GenericDistro at the end, since it's a catchall
+    allstores.remove(_GenericTreeinfoDistro)
+    allstores.append(_GenericTreeinfoDistro)
 
     return allstores
 
