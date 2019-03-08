@@ -267,26 +267,8 @@ def getDistroStore(guest, fetcher, skip_error):
     arch = guest.os.arch
     _type = guest.os.os_type
     osobj = guest.osinfo
-    stores = _build_distro_list()
+    stores = _build_distro_list(osobj)
     cache = _DistroCache(fetcher)
-
-    # If user manually specified an os_distro, bump its URL class
-    # to the top of the list
-    if osobj.distro:
-        logging.debug("variant=%s has distro=%s, looking for matching "
-                      "distro store to prioritize",
-                      osobj.name, osobj.distro)
-        found_store = None
-        for store in stores:
-            if osobj.distro in store.matching_distros:
-                found_store = store
-
-        if found_store:
-            logging.debug("Prioritizing distro store=%s", found_store)
-            stores.remove(found_store)
-            stores.insert(0, found_store)
-        else:
-            logging.debug("No matching store found, not prioritizing anything")
 
     for sclass in stores:
         if not sclass.is_valid(cache):
@@ -844,7 +826,7 @@ def _make_all_stores():
     return allstores
 
 
-def _build_distro_list():
+def _build_distro_list(osobj):
     allstores = ALLSTORES[:]
 
     # Always stick Libosinfo first, it takes priority
@@ -854,6 +836,24 @@ def _build_distro_list():
     # Always stick GenericDistro at the end, since it's a catchall
     allstores.remove(_GenericTreeinfoDistro)
     allstores.append(_GenericTreeinfoDistro)
+
+    # If user manually specified an os_distro, bump its URL class
+    # to the top of the list
+    if osobj.distro:
+        logging.debug("variant=%s has distro=%s, looking for matching "
+                      "distro store to prioritize",
+                      osobj.name, osobj.distro)
+        found_store = None
+        for store in allstores:
+            if osobj.distro in store.matching_distros:
+                found_store = store
+
+        if found_store:
+            logging.debug("Prioritizing distro store=%s", found_store)
+            allstores.remove(found_store)
+            allstores.insert(0, found_store)
+        else:
+            logging.debug("No matching store found, not prioritizing anything")
 
     return allstores
 
