@@ -30,9 +30,11 @@ def _is_url(url):
 
 
 class _LocationData(object):
-    def __init__(self, os_variant, kernel_pairs):
+    def __init__(self, os_variant, kernel_pairs, osinfo_media):
         self.os_variant = os_variant
         self.kernel_pairs = kernel_pairs
+        self.osinfo_media = osinfo_media
+
         self.kernel_url_arg = None
         if self.os_variant:
             osobj = OSDB.lookup_os(self.os_variant)
@@ -122,15 +124,18 @@ class InstallerTreeMedia(object):
                     skip_error=has_location_kernel)
 
             os_variant = None
+            osinfo_media = None
             kernel_paths = []
             if store:
                 kernel_paths = store.get_kernel_paths()
                 os_variant = store.get_osdict_info()
+                osinfo_media = store.get_osinfo_media()
             if has_location_kernel:
                 kernel_paths = [
                         (self._location_kernel, self._location_initrd)]
 
-            self._cached_data = _LocationData(os_variant, kernel_paths)
+            self._cached_data = _LocationData(os_variant, kernel_paths,
+                    osinfo_media)
         return self._cached_data
 
     def _prepare_kernel_url(self, guest, fetcher):
