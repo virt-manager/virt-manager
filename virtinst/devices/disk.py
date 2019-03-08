@@ -962,8 +962,6 @@ class DeviceDisk(Device):
             return "sd"
         if guest.os.is_q35():
             return "sata"
-        if self.is_cdrom() and guest.os.is_s390x():
-            return "scsi"
         return "ide"
 
     def set_defaults(self, guest):
