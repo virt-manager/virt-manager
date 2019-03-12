@@ -86,13 +86,14 @@ class DeviceController(Device):
         return ctrl
 
 
-    _XML_PROP_ORDER = ["type", "index", "model", "master_startport"]
+    _XML_PROP_ORDER = ["type", "index", "model", "master_startport", "driver_queues"]
 
     type = XMLProperty("./@type")
     model = XMLProperty("./@model")
     vectors = XMLProperty("./@vectors", is_int=True)
     ports = XMLProperty("./@ports", is_int=True)
     master_startport = XMLProperty("./master/@startport", is_int=True)
+    driver_queues = XMLProperty("./driver/@queues", is_int=True)
 
     index = XMLProperty("./@index", is_int=True)
 

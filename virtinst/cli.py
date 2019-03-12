@@ -2646,6 +2646,7 @@ class ParserController(VirtCLIParser):
         cls.add_arg("model", "model")
         cls.add_arg("index", "index")
         cls.add_arg("master_startport", "master")
+        cls.add_arg("driver_queues", "driver_queues")
 
         cls.add_arg(None, "address", cb=cls.set_server_cb)
 

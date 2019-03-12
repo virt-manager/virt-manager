@@ -184,7 +184,9 @@
       <master startport="4"/>
       <address type="pci" domain="0" bus="0" slot="4" function="2"/>
     </controller>
-    <controller type="scsi" index="0" model="virtio-scsi"/>
+    <controller type="scsi" index="0" model="virtio-scsi">
+      <driver queues="4"/>
+    </controller>
     <filesystem type="mount" accessmode="mapped">
       <source dir="/source"/>
       <target dir="/target"/>
