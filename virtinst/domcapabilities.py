@@ -227,9 +227,10 @@ class DomainCapabilities(XMLBuilder):
         """
         Return True if domcaps reports support for cpu mode=host-model.
         host-model infact predates this support, however it wasn't
-        general purpose safe prior to domcaps advertisement
+        general purpose safe prior to domcaps advertisement.
         """
-        return [(m.name == "host-model" and m.supported)
+        return [(m.name == "host-model" and m.supported and
+                 m.models[0].fallback == "forbid")
                 for m in self.cpu.modes]
 
 
