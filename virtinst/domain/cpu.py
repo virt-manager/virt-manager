@@ -61,7 +61,7 @@ class DomainCpu(XMLBuilder):
     Class for generating <cpu> XML
     """
     XML_NAME = "cpu"
-    _XML_PROP_ORDER = ["mode", "match", "_model", "vendor",
+    _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
                        "sockets", "cores", "threads", "features"]
 
     special_mode_was_set = False
@@ -102,12 +102,20 @@ class DomainCpu(XMLBuilder):
         elif val == self.SPECIAL_MODE_HOST_MODEL_ONLY:
             if self.conn.caps.host.cpu.model:
                 self.clear()
-                self.model = self.conn.caps.host.cpu.model
+                self.set_model(self.conn.caps.host.cpu.model)
         else:
             raise RuntimeError("programming error: unknown "
                 "special cpu mode '%s'" % val)
 
         self.special_mode_was_set = True
+
+    def set_model(self, val):
+        logging.debug("setting cpu model %s", val)
+        if val:
+            self.mode = "custom"
+            if not self.match:
+                self.match = "exact"
+        self.model = val
 
     def add_feature(self, name, policy="require"):
         feature = self.features.add_new()
@@ -138,7 +146,7 @@ class DomainCpu(XMLBuilder):
 
         self.mode = "custom"
         self.match = "exact"
-        self.model = model
+        self.set_model(model)
         if fallback:
             self.model_fallback = fallback
         self.vendor = cpu.vendor
@@ -200,17 +208,7 @@ class DomainCpu(XMLBuilder):
     # XML properties #
     ##################
 
-    def _set_model(self, val):
-        if val:
-            self.mode = "custom"
-            if not self.match:
-                self.match = "exact"
-        self._model = val
-    def _get_model(self):
-        return self._model
-    _model = XMLProperty("./model")
-    model = property(_get_model, _set_model)
-
+    model = XMLProperty("./model")
     model_fallback = XMLProperty("./model/@fallback")
 
     match = XMLProperty("./@match")
@@ -272,7 +270,7 @@ class DomainCpu(XMLBuilder):
 
         elif guest.os.is_arm64() and guest.os.is_arm_machvirt():
             # -M virt defaults to a 32bit CPU, even if using aarch64
-            self.model = "cortex-a57"
+            self.set_model("cortex-a57")
 
         elif guest.os.is_x86() and guest.type == "kvm":
             self._set_cpu_x86_kvm_default(guest)
