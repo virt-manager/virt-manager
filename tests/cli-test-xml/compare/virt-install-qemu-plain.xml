@@ -20,6 +20,8 @@
   </features>
   <cpu mode="custom" match="exact">
     <model>Penryn</model>
+    <feature policy="require" name="pcid"/>
+    <feature policy="require" name="pdpe1gb"/>
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>

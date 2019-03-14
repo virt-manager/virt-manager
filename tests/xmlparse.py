@@ -184,7 +184,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest.cpu)
         check("match", "exact", "strict")
-        guest.cpu.set_model("qemu64")
+        guest.cpu.set_model(guest, "qemu64")
         check("model", "qemu64")
         check("vendor", "Intel", "qemuvendor")
         check("threads", 2, 1)
@@ -277,7 +277,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest.cpu)
         check("model", None)
-        guest.cpu.set_model("foobar")
+        guest.cpu.set_model(guest, "foobar")
         check("model", "foobar")
         check("model_fallback", None, "allow")
         check("cores", None, 4)
@@ -344,7 +344,7 @@ class XMLParseTest(unittest.TestCase):
         check("mode", "host-passthrough")
         guest.cpu.set_special_mode(guest, "host-model")
         check("mode", "host-model")
-        guest.cpu.set_model("qemu64")
+        guest.cpu.set_model(guest, "qemu64")
         check("model", "qemu64")
 
         self._alter_compare(guest.get_xml(), outfile)

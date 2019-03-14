@@ -102,19 +102,31 @@ class DomainCpu(XMLBuilder):
         elif val == self.SPECIAL_MODE_HOST_MODEL_ONLY:
             if self.conn.caps.host.cpu.model:
                 self.clear()
-                self.set_model(self.conn.caps.host.cpu.model)
+                self.set_model(guest, self.conn.caps.host.cpu.model)
         else:
             raise RuntimeError("programming error: unknown "
                 "special cpu mode '%s'" % val)
 
         self.special_mode_was_set = True
 
-    def set_model(self, val):
+    def _add_security_features(self, guest):
+        domcaps = guest.lookup_domcaps()
+        for feature in domcaps.get_cpu_security_features():
+            exists = False
+            for f in self.features:
+                if f.name == feature:
+                    exists = True
+                    break
+            if not exists:
+                self.add_feature(feature)
+
+    def set_model(self, guest, val):
         logging.debug("setting cpu model %s", val)
         if val:
             self.mode = "custom"
             if not self.match:
                 self.match = "exact"
+            self._add_security_features(guest)
         self.model = val
 
     def add_feature(self, name, policy="require"):
@@ -146,7 +158,7 @@ class DomainCpu(XMLBuilder):
 
         self.mode = "custom"
         self.match = "exact"
-        self.set_model(model)
+        self.set_model(guest, model)
         if fallback:
             self.model_fallback = fallback
         self.vendor = cpu.vendor
@@ -270,7 +282,7 @@ class DomainCpu(XMLBuilder):
 
         elif guest.os.is_arm64() and guest.os.is_arm_machvirt():
             # -M virt defaults to a 32bit CPU, even if using aarch64
-            self.set_model("cortex-a57")
+            self.set_model(guest, "cortex-a57")
 
         elif guest.os.is_x86() and guest.type == "kvm":
             self._set_cpu_x86_kvm_default(guest)

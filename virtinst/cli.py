@@ -1734,7 +1734,7 @@ class ParserCPU(VirtCLIParser):
         if val in inst.SPECIAL_MODES:
             inst.set_special_mode(self.guest, val)
         else:
-            inst.set_model(val)
+            inst.set_model(self.guest, val)
 
     def set_feature_cb(self, inst, val, virtarg):
         policy = virtarg.cliname

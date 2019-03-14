@@ -460,7 +460,7 @@ class vmmDomain(vmmLibvirtObject):
             if model in guest.cpu.SPECIAL_MODES:
                 guest.cpu.set_special_mode(guest, model)
             else:
-                guest.cpu.set_model(model)
+                guest.cpu.set_model(guest, model)
         self._redefine_xmlobj(guest)
 
     def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL):
