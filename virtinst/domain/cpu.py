@@ -239,7 +239,7 @@ class DomainCpu(XMLBuilder):
             return
 
         cpu_model = domcaps_mode.get_model(self.model)
-        if cpu_model and cpu_model.usable:
+        if cpu_model and cpu_model.usable != "no":
             return
 
         logging.debug("Host capabilities CPU '%s' is not supported "

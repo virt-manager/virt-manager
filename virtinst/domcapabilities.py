@@ -94,7 +94,7 @@ class _Features(_CapsBlock):
 class _CPUModel(XMLBuilder):
     XML_NAME = "model"
     model = XMLProperty(".")
-    usable = XMLProperty("./@usable", is_yesno=True)
+    usable = XMLProperty("./@usable")
     fallback = XMLProperty("./@fallback")
 
 
