@@ -402,9 +402,9 @@ def _show_nographics_warnings(options, guest, installer):
         console_type = serial_arm_arg
     if guest.devices.console[0].target_type in ["virtio", "xen"]:
         console_type = hvc_arg
-    if guest.os.is_ppc64() or guest.os.is_arm_machvirt():
-        # Later arm/ppc kernels figure out console= automatically, so don't
-        # warn about it.
+    if guest.os.is_ppc64() or guest.os.is_arm_machvirt() or guest.os.is_s390x():
+        # Later arm/ppc/s390x kernels figure out console= automatically, so
+        # don't warn about it.
         return
 
     for args in (options.extra_args or []):
