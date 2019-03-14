@@ -338,8 +338,9 @@ class XMLParseTest(unittest.TestCase):
         guest, outfile = self._get_test_content("change-cpumode")
 
         check = self._make_checker(guest.cpu)
-        check("mode", "host-passthrough", "custom")
-        check("mode", "custom", "host-model")
+        check("mode", "host-passthrough")
+        guest.cpu.set_special_mode(guest, "host-model")
+        check("mode", "host-model")
         # mode will be "custom"
         check("model", None, "qemu64")
 
