@@ -237,8 +237,6 @@ SUPPORT_CONN_AUTOSOCKET = _make(hv_libvirt_version={"qemu": "1.0.6"})
 SUPPORT_CONN_PM_DISABLE = _make(hv_version={"qemu": "1.2.0", "test": 0})
 SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS = _make(
     version="1.1.0", hv_version={"qemu": "1.2.0", "test": 0})
-SUPPORT_CONN_CPU_MODEL_NAMES = _make(function="virConnect.getCPUModelNames",
-                                     run_args=("x86_64", 0))
 SUPPORT_CONN_HYPERV_VAPIC = _make(
     version="1.1.0", hv_version={"qemu": "1.1.0", "test": 0})
 SUPPORT_CONN_HYPERV_CLOCK = _make(

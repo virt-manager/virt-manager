@@ -236,31 +236,6 @@ class Capabilities(XMLBuilder):
         return False
 
 
-    ##############
-    # Public API #
-    ##############
-
-    def get_cpu_values(self, arch):
-        if not arch:
-            return []
-        if not self.conn.check_support(self.conn.SUPPORT_CONN_CPU_MODEL_NAMES):
-            return []
-        if arch in self._cpu_models_cache:
-            return self._cpu_models_cache[arch]
-
-        try:
-            names = self.conn.getCPUModelNames(arch, 0)
-            if names == -1:
-                names = []
-        except Exception as e:
-            logging.debug("Error fetching CPU model names for arch=%s: %s",
-                          arch, e)
-            names = []
-
-        self._cpu_models_cache[arch] = names
-        return names
-
-
     ############################
     # Public XML building APIs #
     ############################

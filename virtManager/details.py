@@ -1036,7 +1036,7 @@ class vmmDetails(vmmGObjectUI):
         model.append([_("Clear CPU configuration"), "3",
             virtinst.DomainCpu.SPECIAL_MODE_CLEAR, False])
         model.append([None, None, None, True])
-        for name in caps.get_cpu_values(self.vm.get_arch()):
+        for name in domcaps.get_cpu_models():
             model.append([name, name, name, False])
 
         # Disk cache combo

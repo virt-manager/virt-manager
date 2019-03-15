@@ -1055,9 +1055,6 @@ class vmmConnection(vmmGObject):
 
         self._add_conn_events()
 
-        # Prime CPU cache
-        self.caps.get_cpu_values(self.caps.host.cpu.arch)
-
         try:
             self._backend.setKeepAlive(20, 1)
         except Exception as e:

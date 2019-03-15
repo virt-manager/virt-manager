@@ -233,6 +233,17 @@ class DomainCapabilities(XMLBuilder):
                  m.models[0].fallback == "forbid")
                 for m in self.cpu.modes]
 
+    def get_cpu_models(self):
+        models = []
+
+        for m in self.cpu.modes:
+            if m.name == "custom" and m.supported:
+                for model in m.models:
+                    if model.usable != "no":
+                        models.append(model.model)
+
+        return models
+
 
     XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
