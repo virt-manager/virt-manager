@@ -48,7 +48,16 @@ class _DistroCache(object):
         if self._treeinfo:
             return self._treeinfo
 
-        treeinfostr = self.acquire_file_content(".treeinfo")
+        # Vast majority of trees here use .treeinfo. However, trees via
+        # Red Hat satellite on akamai CDN will use treeinfo, because akamai
+        # doesn't do dotfiles apparently:
+        #
+        #   https://bugzilla.redhat.com/show_bug.cgi?id=635065
+        #
+        # Anaconda is the canonical treeinfo consumer and they check for both
+        # locations, so we need to do the same
+        treeinfostr = (self.acquire_file_content(".treeinfo") or
+            self.acquire_file_content("treeinfo"))
         if treeinfostr is None:
             return None
 
