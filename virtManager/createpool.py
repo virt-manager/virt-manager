@@ -415,7 +415,7 @@ class vmmCreatePool(vmmGObjectUI):
     def _async_pool_create(self, asyncjob, build):
         meter = asyncjob.get_meter()
 
-        logging.debug("Starting backround pool creation.")
+        logging.debug("Starting background pool creation.")
         poolobj = self._pool.install(create=True, meter=meter, build=build)
         poolobj.setAutostart(True)
         logging.debug("Pool creation succeeded")

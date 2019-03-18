@@ -271,7 +271,7 @@ class vmmCreateVolume(vmmGObjectUI):
         self.vol.pool = newpool
 
         meter = asyncjob.get_meter()
-        logging.debug("Starting backround vol creation.")
+        logging.debug("Starting background vol creation.")
         self.vol.install(meter=meter)
         logging.debug("vol creation complete.")
 

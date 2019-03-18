@@ -1883,7 +1883,7 @@ class vmmDetails(vmmGObjectUI):
     ##################################################
 
     def config_cancel(self, ignore=None):
-        # Remove current changes and deactive 'apply' button
+        # Remove current changes and deactivate 'apply' button
         self.hw_selected()
 
     def config_apply(self, ignore=None, row=None):

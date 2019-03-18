@@ -558,7 +558,7 @@ class _OsVariant(object):
             logging.debug("Install script found for profile '%s'", profile)
 
             # Some OSes (as Windows) have more than one installer script,
-            # depending on the OS version and profile choosen, to be used to
+            # depending on the OS version and profile chosen, to be used to
             # perform the unattended installation. Let's just deal with
             # multiple installer scripts when its actually needed, though.
             return installscripts[0]
