@@ -714,7 +714,7 @@ class Guest(XMLBuilder):
         usb_keyboard = False
         if self.os.is_x86() and not self.os.is_xenpv():
             usb_tablet = self.osinfo.supports_usbtablet()
-        if self.os.is_arm_machvirt():
+        if self.os.is_arm_machvirt() or self.os.is_pseries():
             usb_tablet = True
             usb_keyboard = True
 
