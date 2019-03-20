@@ -427,6 +427,11 @@ class _OsVariant(object):
         # Remove this hack after 6 months or so
         return self._is_related_to("rhel6.0")
 
+    def supports_virtioinput(self):
+        # virtio1.0-input
+        devids = ["http://pcisig.com/pci/1af4/1052"]
+        return bool(self._device_filter(devids=devids))
+
     def supports_usb3(self):
         # qemu-xhci
         devids = ["http://pcisig.com/pci/1b36/0004"]
