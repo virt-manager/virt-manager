@@ -22,6 +22,7 @@
       <source file="/dev/default-pool/testvol1.img"/>
       <target dev="xvda" bus="xen"/>
     </disk>
+    <controller type="xenbus" index="0" maxGrantFrames="64"/>
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
@@ -51,6 +52,7 @@
       <source file="/dev/default-pool/testvol1.img"/>
       <target dev="xvda" bus="xen"/>
     </disk>
+    <controller type="xenbus" index="0" maxGrantFrames="64"/>
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>

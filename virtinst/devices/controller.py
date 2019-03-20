@@ -19,6 +19,7 @@ class DeviceController(Device):
     TYPE_USB             = "usb"
     TYPE_PCI             = "pci"
     TYPE_CCID            = "ccid"
+    TYPE_XENBUS          = "xenbus"
 
     @staticmethod
     def get_recommended_types(_guest):
@@ -38,6 +39,7 @@ class DeviceController(Device):
             DeviceController.TYPE_USB:             "USB",
             DeviceController.TYPE_PCI:             "PCI",
             DeviceController.TYPE_CCID:            "CCID",
+            DeviceController.TYPE_XENBUS:          "xenbus",
        }
 
         if ctype not in pretty_mappings:
@@ -86,7 +88,7 @@ class DeviceController(Device):
         return ctrl
 
 
-    _XML_PROP_ORDER = ["type", "index", "model", "master_startport", "driver_queues"]
+    _XML_PROP_ORDER = ["type", "index", "model", "master_startport", "driver_queues", "maxGrantFrames"]
 
     type = XMLProperty("./@type")
     model = XMLProperty("./@model")
@@ -94,6 +96,7 @@ class DeviceController(Device):
     ports = XMLProperty("./@ports", is_int=True)
     master_startport = XMLProperty("./master/@startport", is_int=True)
     driver_queues = XMLProperty("./driver/@queues", is_int=True)
+    maxGrantFrames = XMLProperty("./@maxGrantFrames", is_int=True)
 
     index = XMLProperty("./@index", is_int=True)
 

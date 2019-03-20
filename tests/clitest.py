@@ -510,6 +510,7 @@ c.add_compare(""" \
 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 \
 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 \
 --controller scsi,model=virtio-scsi,driver_queues=4 \
+--controller xenbus,maxGrantFrames=64 \
 \
 --input type=keyboard,bus=usb \
 --input tablet \
@@ -840,7 +841,7 @@ c.add_compare("--init /usr/bin/httpd", "manual-init")
 c = vinst.add_category("xen", "--noautoconsole --connect " + utils.URIs.xen)
 c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none")  # Xen PV install headless
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
-c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-pv")  # Xen PV
+c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64", "xen-pv")  # Xen PV
 c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
 
 

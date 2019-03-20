@@ -187,6 +187,7 @@
     <controller type="scsi" index="0" model="virtio-scsi">
       <driver queues="4"/>
     </controller>
+    <controller type="xenbus" index="0" maxGrantFrames="64"/>
     <filesystem type="mount" accessmode="mapped">
       <source dir="/source"/>
       <target dir="/target"/>
