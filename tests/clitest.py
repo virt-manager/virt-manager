@@ -802,7 +802,6 @@ c.add_compare("--arch aarch64 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.init
 c.add_compare("--arch aarch64 --cdrom %(EXISTIMG2)s --boot loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s --cpu none --events on_crash=preserve,on_reboot=destroy,on_poweroff=restart", "aarch64-cdrom")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21", "aarch64-kvm-import")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk size=1 --os-variant fedora22 --features gic_version=host --network network=default,address.type=pci --controller type=scsi,model=virtio-scsi,address.type=pci", "aarch64-kvm-gic")
-c.add_compare("--connect %(URI-KVM-AARCH64)s --disk none --network none --os-variant fedora25 --graphics spice", "aarch64-graphics")
 
 
 
