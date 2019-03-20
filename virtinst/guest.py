@@ -729,6 +729,17 @@ class Guest(XMLBuilder):
             dev.bus = "usb"
             self.add_device(dev)
 
+        # s390x guests need VirtIO input devices
+        if self.os.is_s390x() and self.osinfo.supports_virtioinput():
+            dev = DeviceInput(self.conn)
+            dev.type = "tablet"
+            dev.bus = "virtio"
+            self.add_device(dev)
+            dev = DeviceInput(self.conn)
+            dev.type = "keyboard"
+            dev.bus = "virtio"
+            self.add_device(dev)
+
     def _add_default_console_device(self):
         if self.skip_default_console:
             return

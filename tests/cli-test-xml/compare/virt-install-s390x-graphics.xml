@@ -29,6 +29,8 @@
     <console type="pty">
       <target type="sclp"/>
     </console>
+    <input type="tablet" bus="virtio"/>
+    <input type="keyboard" bus="virtio"/>
     <graphics type="vnc" port="-1"/>
     <video>
       <model type="virtio"/>
