@@ -804,6 +804,14 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk size=1 --os-variant fedora22 --features gic_version=host --network network=default,address.type=pci --controller type=scsi,model=virtio-scsi,address.type=pci", "aarch64-kvm-gic")
 
 
+# Simple headless guests for various architectures
+c = vinst.add_category("kvm-headless", "--os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none")
+c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-headless")
+c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-headless")
+c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-headless")
+c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-headless")
+
+
 
 ######################
 # LXC specific tests #
