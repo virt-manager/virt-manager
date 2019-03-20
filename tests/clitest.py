@@ -812,6 +812,14 @@ c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-headless")
 c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-headless")
 
 
+# Simple guests with graphics for various architectures
+c = vinst.add_category("kvm-graphics", "--os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc")
+c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-graphics")
+c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-graphics")
+c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-graphics")
+c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-graphics")
+
+
 
 ######################
 # LXC specific tests #
