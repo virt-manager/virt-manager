@@ -37,5 +37,8 @@
     <console type="pty">
       <target type="sclp"/>
     </console>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
   </devices>
 </domain>

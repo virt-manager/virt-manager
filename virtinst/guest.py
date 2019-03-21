@@ -828,6 +828,7 @@ class Guest(XMLBuilder):
             return
         if not (self.os.is_x86() or
                 self.os.is_arm_machvirt() or
+                self.os.is_s390x() or
                 self.os.is_pseries()):
             return
 
