@@ -74,12 +74,18 @@ def get_domain_and_guest(conn, domstr):
     isuuid = bool(re.match(uuidre, domstr))
 
     try:
-        if isint:
-            domain = conn.lookupByID(int(domstr))
-        elif isuuid:
-            domain = conn.lookupByUUIDString(domstr)
-        else:
+        domain = None
+        try:
             domain = conn.lookupByName(domstr)
+        except Exception:
+            # Incase the VM has a UUID or ID for a name
+            logging.debug("Error looking up domain by name", exc_info=True)
+            if isint:
+                domain = conn.lookupByID(int(domstr))
+            elif isuuid:
+                domain = conn.lookupByUUIDString(domstr)
+            else:
+                raise
     except libvirt.libvirtError as e:
         fail(_("Could not find domain '%s': %s") % (domstr, e))
 
