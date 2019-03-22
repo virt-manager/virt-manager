@@ -569,7 +569,7 @@ class _OsVariant(object):
             _("OS '%s' does not have a URL location for the %s architecture") %
             (self.name, arch))
 
-    def get_install_script(self, profile, media=None):
+    def get_install_script(self, profile, os_media=None):
         def _get_install_script(script_list):
             if not script_list:
                 raise RuntimeError(
@@ -601,6 +601,7 @@ class _OsVariant(object):
 
         # In case we're dealing with a media installation, let's try to get
         # the installer scripts from the media, in case any is set.
+        media = os_media.osinfo_media if os_media else None
         if media:
             if not media.supports_installer_script():
                 raise RuntimeError(

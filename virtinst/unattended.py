@@ -230,10 +230,11 @@ class UnattendedData():
     user_password = None
 
 
-def prepare_install_script(guest, unattended_data, url=None, media=None):
+def prepare_install_script(guest, unattended_data, url=None, os_media=None):
     # This is ugly, but that's only the current way to deal with netinstall
     # medias.
-    def _get_installation_source(media):
+    def _get_installation_source(os_media):
+        media = os_media.osinfo_media if os_media else None
         if not media:
             return "network"
 
@@ -244,14 +245,15 @@ def prepare_install_script(guest, unattended_data, url=None, media=None):
 
         return "media"
 
-    rawscript = guest.osinfo.get_install_script(unattended_data.profile, media)
+    rawscript = guest.osinfo.get_install_script(unattended_data.profile,
+            os_media)
     script = OSInstallScript(rawscript, guest.osinfo)
 
     # For all tree based installations we're going to perform initrd injection
     # and install the systems via network.
     script.set_preferred_injection_method("initrd")
 
-    installationsource = _get_installation_source(media)
+    installationsource = _get_installation_source(os_media)
     script.set_installation_source(installationsource)
 
     config = _make_installconfig(script, guest.osinfo, unattended_data,

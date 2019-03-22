@@ -8,7 +8,7 @@ import configparser
 import logging
 import re
 
-from .osdict import OSDB
+from .osdict import OSDB, OsMedia
 
 
 ###############################################
@@ -383,11 +383,11 @@ class _DistroTree(object):
         """
         return self._os_variant
 
-    def get_osinfo_media(self):
+    def get_os_media(self):
         """
-        Return detected libosinfo media object
+        Return an OsMedia wrapper around the detected libosinfo media object
         """
-        return self.cache.libosinfo_mediaobj
+        return OsMedia(self.cache.libosinfo_mediaobj)
 
 
 class _FedoraDistro(_DistroTree):

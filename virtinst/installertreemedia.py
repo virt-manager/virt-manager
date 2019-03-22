@@ -30,10 +30,10 @@ def _is_url(url):
 
 
 class _LocationData(object):
-    def __init__(self, os_variant, kernel_pairs, osinfo_media):
+    def __init__(self, os_variant, kernel_pairs, os_media):
         self.os_variant = os_variant
         self.kernel_pairs = kernel_pairs
-        self.osinfo_media = osinfo_media
+        self.os_media = os_media
 
         self.kernel_url_arg = None
         if self.os_variant:
@@ -124,18 +124,18 @@ class InstallerTreeMedia(object):
                     skip_error=has_location_kernel)
 
             os_variant = None
-            osinfo_media = None
+            os_media = None
             kernel_paths = []
             if store:
                 kernel_paths = store.get_kernel_paths()
                 os_variant = store.get_osdict_info()
-                osinfo_media = store.get_osinfo_media()
+                os_media = store.get_os_media()
             if has_location_kernel:
                 kernel_paths = [
                         (self._location_kernel, self._location_initrd)]
 
             self._cached_data = _LocationData(os_variant, kernel_paths,
-                    osinfo_media)
+                    os_media)
         return self._cached_data
 
     def _prepare_kernel_url(self, guest, fetcher):
@@ -185,7 +185,7 @@ class InstallerTreeMedia(object):
         if self._unattended_data:
             location = self.location if self._media_type == MEDIA_URL else None
             script = unattended.prepare_install_script(
-                    guest, self._unattended_data, location, cache.osinfo_media)
+                    guest, self._unattended_data, location, cache.os_media)
             path, cmdline = unattended.generate_install_script(script)
 
             logging.debug("Generated unattended cmdline: %s", cmdline)
