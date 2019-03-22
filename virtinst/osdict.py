@@ -630,3 +630,11 @@ class _OsVariant(object):
 class OsMedia(object):
     def __init__(self, osinfo_media):
         self.osinfo_media = osinfo_media
+
+    def requires_internet(self):
+        if self.osinfo_media:
+            variants = list(_OsinfoIter(self.osinfo_media.get_os_variants()))
+            for variant in variants:
+                if "netinst" in variant.get_id():
+                    return True
+        return False
