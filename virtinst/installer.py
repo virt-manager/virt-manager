@@ -152,6 +152,23 @@ class Installer(object):
         else:
             guest.os.bootorder = []
 
+    def _alter_install_resources(self, guest, meter):
+        """
+        Sets the appropriate amount of ram needed when performing a "network"
+        based installation
+
+        :param guest: Guest instance we are installing
+        """
+        if not self._treemedia:
+            return
+        if not self._treemedia.requires_internet(guest, meter):
+            return
+
+        res = guest.osinfo.get_network_install_resources(guest)
+        if res and res.get("ram") > 0 and res["ram"] // 1024 > guest.memory:
+            logging.debug("Setting ram from libosinfo network-install "
+                          "resources: '%d'", res["ram"] // 1024)
+            guest.memory = res["ram"] // 1024
 
     ##########################
     # Internal API overrides #
@@ -290,27 +307,30 @@ class Installer(object):
         # set the install time properties but not permanently overwrite
         # any config the user explicitly requested.
         data = (guest.os.bootorder, guest.os.kernel, guest.os.initrd,
-                guest.os.kernel_args, guest.on_reboot)
+                guest.os.kernel_args, guest.on_reboot, guest.memory,
+                guest.maxmemory)
         return data
 
     def _finish_get_install_xml(self, guest, data):
         (guest.os.bootorder, guest.os.kernel, guest.os.initrd,
-                guest.os.kernel_args, guest.on_reboot) = data
+                guest.os.kernel_args, guest.on_reboot, guest.memory,
+                guest.maxmemory) = data
 
-    def _get_install_xml(self, guest):
+    def _get_install_xml(self, guest, meter):
         data = self._prepare_get_install_xml(guest)
         try:
             self._alter_bootconfig(guest)
+            self._alter_install_resources(guest, meter)
             ret = guest.get_xml()
             return ret
         finally:
             self._remove_install_cdrom_media(guest)
             self._finish_get_install_xml(guest, data)
 
-    def _build_xml(self, guest):
+    def _build_xml(self, guest, meter):
         install_xml = None
         if self.has_install_phase():
-            install_xml = self._get_install_xml(guest)
+            install_xml = self._get_install_xml(guest, meter)
         final_xml = guest.get_xml()
 
         logging.debug("Generated install XML: %s",
@@ -411,7 +431,7 @@ class Installer(object):
                 for dev in guest.devices.disk:
                     dev.build_storage(meter)
 
-            install_xml, final_xml = self._build_xml(guest)
+            install_xml, final_xml = self._build_xml(guest, meter)
             if return_xml:
                 return (install_xml, final_xml)
             if dry:
