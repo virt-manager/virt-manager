@@ -497,6 +497,21 @@ class _OsVariant(object):
 
         return ret
 
+    def get_network_install_resources(self, guest):
+        ret = {}
+
+        if not self._os:
+            return ret
+
+        resources = self._os.get_network_install_resources()
+        for r in _OsinfoIter(resources):
+            arch = r.get_architecture()
+            if arch == guest.os.arch or arch == "all":
+                ret["ram"] = r.get_ram()
+                break
+
+        return ret
+
     def get_kernel_url_arg(self):
         """
         Kernel argument name the distro's installer uses to reference
