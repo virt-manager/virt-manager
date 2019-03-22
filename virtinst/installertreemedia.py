@@ -227,3 +227,13 @@ class InstallerTreeMedia(object):
         fetcher = self._get_fetcher(guest, None)
         cache = self._get_cached_data(guest, fetcher)
         return cache.os_variant
+
+    def requires_internet(self, guest, meter):
+        if self._media_type in [MEDIA_URL, MEDIA_DIR]:
+            return True
+
+        fetcher = self._get_fetcher(guest, meter)
+        cache = self._get_cached_data(guest, fetcher)
+        if cache.os_media:
+            return cache.os_media.requires_internet()
+        return False
