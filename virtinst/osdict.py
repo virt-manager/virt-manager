@@ -625,3 +625,8 @@ class _OsVariant(object):
 
         installscript = _get_install_script(script_list)
         return installscript
+
+
+class OsMedia(object):
+    def __init__(self, osinfo_media):
+        self.osinfo_media = osinfo_media
