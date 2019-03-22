@@ -16,7 +16,6 @@ from gi.repository import Gio
 from gi.repository import GLib
 
 from . import util
-from .osdict import _OsinfoIter
 
 
 def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
@@ -234,16 +233,10 @@ def prepare_install_script(guest, unattended_data, url=None, os_media=None):
     # This is ugly, but that's only the current way to deal with netinstall
     # medias.
     def _get_installation_source(os_media):
-        media = os_media.osinfo_media if os_media else None
-        if not media:
+        if not os_media:
             return "network"
 
-        variant_list = list(_OsinfoIter(media.get_os_variants()))
-        for variant in variant_list:
-            if "netinst" in variant.get_id():
-                return "network"
-
-        return "media"
+        return "network" if os_media.requires_internet() else "media"
 
     rawscript = guest.osinfo.get_install_script(unattended_data.profile,
             os_media)
