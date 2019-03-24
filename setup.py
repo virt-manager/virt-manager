@@ -484,12 +484,6 @@ class TestBaseCommand(distutils.core.Command):
 class TestCommand(TestBaseCommand):
     description = "Runs a quick unit test suite"
 
-    def initialize_options(self):
-        TestBaseCommand.initialize_options(self)
-
-    def finalize_options(self):
-        TestBaseCommand.finalize_options(self)
-
     def run(self):
         '''
         Finds all the tests modules in tests/, and runs them.
@@ -526,9 +520,35 @@ class TestUI(TestBaseCommand):
 
 class TestURLFetch(TestBaseCommand):
     description = "Test fetching kernels and isos from various distro trees"
+    user_options = TestBaseCommand.user_options + [
+        ('skip-libosinfo', None,
+            "Don't use libosinfo for media/tree detection, "
+            "Use our internal detection logic."),
+        ('force-libosinfo', None,
+            "Only use libosinfo for media/tree detection. This will skip "
+            "some cases that are known not to work, like debian/ubuntu "
+            "tree detection."),
+        ('iso-only', None, "Only run iso tests"),
+        ('url-only', None, "Only run url tests"),
+    ]
+
+    def initialize_options(self):
+        TestBaseCommand.initialize_options(self)
+        self.skip_libosinfo = 0
+        self.force_libosinfo = 0
+        self.iso_only = 0
+        self.url_only = 0
+
+    def finalize_options(self):
+        TestBaseCommand.finalize_options(self)
 
     def run(self):
         self._testfiles = ["tests.test_urls"]
+        from tests.utils import clistate
+        clistate.url_iso_only = bool(self.iso_only)
+        clistate.url_only = bool(self.url_only)
+        clistate.url_skip_libosinfo = bool(self.skip_libosinfo)
+        clistate.url_force_libosinfo = bool(self.force_libosinfo)
         TestBaseCommand.run(self)
 
 

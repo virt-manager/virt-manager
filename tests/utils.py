@@ -26,6 +26,13 @@ class _CLIState(object):
         self.regenerate_output = False
         self.use_coverage = False
         self.debug = False
+
+        self.url_only = False
+        self.url_iso_only = False
+        self.url_skip_libosinfo = False
+        self.url_force_libosinfo = False
+
+
 clistate = _CLIState()
 
 

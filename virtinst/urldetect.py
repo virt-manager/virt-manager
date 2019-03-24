@@ -877,6 +877,14 @@ def _build_distro_list(osobj):
     allstores.remove(_GenericTreeinfoDistro)
     allstores.append(_GenericTreeinfoDistro)
 
+    import os
+    force_libosinfo = os.environ.get("VIRTINST_TEST_SUITE_FORCE_LIBOSINFO")
+    if force_libosinfo:
+        if bool(int(force_libosinfo)):
+            allstores = [_LibosinfoDistro]
+        else:
+            allstores.remove(_LibosinfoDistro)
+
     return allstores
 
 

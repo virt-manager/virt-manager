@@ -23,13 +23,15 @@ class _URLTestData(object):
     Data is stored in test_urls.ini
     """
     def __init__(self, name, url, detectdistro,
-            testxen, testshortcircuit, kernelarg, kernelregex):
+            testxen, testshortcircuit, kernelarg, kernelregex,
+            skip_libosinfo):
         self.name = name
         self.url = url
         self.detectdistro = detectdistro
         self.arch = self._find_arch()
         self.kernelarg = kernelarg
         self.kernelregex = kernelregex
+        self.skip_libosinfo = skip_libosinfo
 
         self.testxen = testxen
 
@@ -64,11 +66,46 @@ xenguest.os.os_type = "xen"
 
 meter = util.make_meter(quiet=not utils.clistate.debug)
 
+if utils.clistate.url_skip_libosinfo:
+    os.environ["VIRTINST_TEST_SUITE_FORCE_LIBOSINFO"] = "0"
+elif utils.clistate.url_force_libosinfo:
+    os.environ["VIRTINST_TEST_SUITE_FORCE_LIBOSINFO"] = "1"
+
 
 def _sanitize_osdict_name(detectdistro):
     if detectdistro in ["none", "None", None]:
         return None
     return detectdistro
+
+
+def _skipmsg(testdata):
+    is_iso = testdata.url.lower().endswith(".iso")
+    distname = testdata.name
+
+    if utils.clistate.url_iso_only and not is_iso:
+        return "skipping non-iso test"
+    elif utils.clistate.url_only and is_iso:
+        return "skipping non-url test"
+
+    if not utils.clistate.url_force_libosinfo:
+        return
+    if testdata.skip_libosinfo:
+        return "force-libosinfo requested but test has skip_libosinfo set"
+    if is_iso:
+        return
+
+    # If --force-libosinfo used, don't run tests that we know libosinfo
+    # can't detect, non-treeinfo URLs basically
+    if ("ubuntu" in distname or
+        "debian" in distname or
+        "mageia" in distname or
+        "opensuse10" in distname or
+        "opensuse11" in distname or
+        "opensuse12" in distname or
+        "opensuse13" in distname or
+        "opensuseleap-42" in distname or
+        "generic" in distname):
+        return "skipping known busted libosinfo URL tests"
 
 
 def _testGuest(testdata, guest):
@@ -80,6 +117,10 @@ def _testGuest(testdata, guest):
     guest.os.arch = arch
     if testdata.testshortcircuit:
         guest.set_os_name(checkdistro)
+
+    msg = _skipmsg(testdata)
+    if msg:
+        raise unittest.SkipTest(msg)
 
     installer = Installer(guest.conn, location=url)
     try:
@@ -102,6 +143,7 @@ def _testGuest(testdata, guest):
 
     if guest is xenguest:
         return
+
 
     # Do this only after the distro detection, since we actually need
     # to fetch files for that part
@@ -195,7 +237,8 @@ def _make_tests():
                 vals.get("testxen", "0") == "1",
                 vals.get("testshortcircuit", "0") == "1",
                 vals.get("kernelarg", None),
-                vals.get("kernelregex", None))
+                vals.get("kernelregex", None),
+                vals.get("skiplibosinfo", "0") == "1")
         urls[d.name] = d
 
     for key, testdata in sorted(urls.items()):
