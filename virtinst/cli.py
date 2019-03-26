@@ -2340,7 +2340,9 @@ class ParserDisk(VirtCLIParser):
         poolobj = None
         if poolname:
             if poolname == "default":
-                StoragePool.build_default_pool(self.guest.conn)
+                poolxml = StoragePool.build_default_pool(self.guest.conn)
+                if poolxml:
+                    poolname = poolxml.name
             poolobj = self.guest.conn.storagePoolLookupByName(poolname)
 
         if volname:
