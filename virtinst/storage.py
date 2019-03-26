@@ -185,7 +185,10 @@ class StoragePool(_StorageObject):
 
         if pool:
             # This is a libvirt pool object so create a StoragePool from it
-            return StoragePool(conn, parsexml=pool.XMLDesc(0))
+            poolxml = StoragePool(conn, parsexml=pool.XMLDesc(0))
+            logging.debug("Using default pool name=%s target=%s",
+                    poolxml.name, poolxml.target_path)
+            return poolxml
 
         try:
             logging.debug("Attempting to build default pool with target '%s'",
