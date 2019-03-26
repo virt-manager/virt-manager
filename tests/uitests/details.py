@@ -2,6 +2,7 @@
 # See the COPYING file in the top-level directory.
 
 from tests.uitests import utils as uiutils
+import tests.utils
 
 
 class Details(uiutils.UITestCase):
@@ -87,6 +88,7 @@ class Details(uiutils.UITestCase):
         """
         Test overview, memory, cpu pages
         """
+        self.app.uri = tests.utils.URIs.kvm
         win = self._open_details_window(vmname="test-many-devices")
         appl = win.find("config-apply", "push button")
 
@@ -127,6 +129,7 @@ class Details(uiutils.UITestCase):
         tab.find("Application Default", "menu item").click()
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
+        tab.find_fuzzy("Copy host").click()
         tab.find("cpu-model").click_combo_entry()
         tab.find("Hypervisor Default", "menu item").click()
         appl.click()
