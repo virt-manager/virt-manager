@@ -1,0 +1,47 @@
+<node>
+
+  <cpu>
+    <nodes>1</nodes>
+    <sockets>4</sockets>
+    <cores>4</cores>
+    <threads>1</threads>
+    <active>4</active>
+    <mhz>4000</mhz>
+    <model>i686</model>
+  </cpu>
+  <memory>10000000</memory>
+
+
+<network>
+  <name>default</name>
+  <uuid>715666b7-dbd4-6c78-fa55-94863da09f2d</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr0' stp='on' forwardDelay='0' />
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254' />
+    </dhcp>
+  </ip>
+</network>
+
+
+
+<pool type='dir'>
+  <name>default-pool-path-collision</name>
+  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e53fe</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+  </source>
+  <target>
+    <path>/var/lib/libvirt/images</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+</pool>
+
+</node>
