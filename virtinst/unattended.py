@@ -79,6 +79,8 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     # Note: this is linux specific and will require some changes whenever
     # support for Windows will be added.
     tgt = "/dev/vda" if osobj.supports_virtiodisk() else "/dev/sda"
+    if osobj.is_windows():
+        tgt = "C"
     config.set_target_disk(tgt)
 
     # Set hardware architecture and hostname
@@ -114,6 +116,9 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     if url:
         config.set_installation_url(url)  # pylint: disable=no-member
 
+    if unattended_data.product_key:
+        config.set_reg_product_key(unattended_data.product_key)
+
     logging.debug("InstallScriptConfig created with the following params:")
     logging.debug("username: %s", config.get_user_login())
     logging.debug("realname: %s", config.get_user_realname())
@@ -127,6 +132,7 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     logging.debug("keyboard: %s", config.get_l10n_keyboard())
     logging.debug("url: %s",
             config.get_installation_url())  # pylint: disable=no-member
+    logging.debug("product-key: %s", config.get_reg_product_key())
 
     return config
 
@@ -245,7 +251,8 @@ def prepare_install_script(guest, unattended_data, url=None, os_media=None):
 
     # For all tree based installations we're going to perform initrd injection
     # and install the systems via network.
-    script.set_preferred_injection_method("initrd")
+    injection_method = "floppy" if guest.osinfo.is_windows() else "initrd"
+    script.set_preferred_injection_method(injection_method)
 
     installationsource = _get_installation_source(os_media)
     script.set_installation_source(installationsource)
