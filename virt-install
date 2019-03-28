@@ -449,10 +449,11 @@ def build_installer(options, guest):
     if options.unattended:
         if options.os_variant.is_none or options.os_variant.is_auto:
             fail(_("--unattended requires an explicit --os-variant"))
-        if options.cdrom:
-            options.location = options.cdrom
-            options.cdrom = None
-        options.os_variant.install = "location"
+        if not guest.osinfo.is_windows():
+            if options.cdrom:
+                options.location = options.cdrom
+                options.cdrom = None
+            options.os_variant.install = "location"
 
     if options.os_variant.install == "location":
         if not options.location:

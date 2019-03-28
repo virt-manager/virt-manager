@@ -13,8 +13,10 @@ import libvirt
 
 from .devices import DeviceDisk
 from .domain import DomainOs
-from .osdict import OSDB
+from .osdict import OSDB, OsMedia
 from .installertreemedia import InstallerTreeMedia
+from .floppyinject import perform_floppy_injections
+from . import unattended
 from . import util
 
 
@@ -208,10 +210,26 @@ class Installer(object):
             self._install_initrd = i
             if a and "VIRTINST_INITRD_TEST" not in os.environ:
                 self.extra_args.append(a)
+        elif self._unattended_data:
+            osguess = OSDB.guess_os_by_iso(self.cdrom)
+            osmedia = OsMedia(osguess[1])
+            script = unattended.prepare_install_script(
+                    guest, self._unattended_data, self.cdrom, osmedia)
+            path, _ = unattended.generate_install_script(script)
+            logging.debug("Generated unattended script: %s", path)
+            logging.debug("Generated script contents:\n%s",
+                    open(path).read())
+
+            floppy = perform_floppy_injections([path], util.get_cache_dir())
+            self._add_install_floppy_device(guest, floppy)
+
+            self._unattended_files.extend([path, floppy])
 
     def _cleanup(self, guest):
         if self._treemedia:
             self._treemedia.cleanup(guest)
+        elif self._unattended_files:
+            self._cleanup_unattended_files()
 
     def _get_postinstall_bootdev(self, guest):
         if self.cdrom and self.livecd:
@@ -354,6 +372,7 @@ class Installer(object):
             return ret
         finally:
             self._remove_install_cdrom_media(guest)
+            self._remove_install_floppy_device(guest)
             self._finish_get_install_xml(guest, data)
 
     def _build_xml(self, guest, meter):
