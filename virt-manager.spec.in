@@ -48,6 +48,11 @@ Requires: dconf
 # no ambiguity.
 Requires: vte291
 
+# Those two dependencies are needed in order to support unattended
+# installation for Windows guests.
+Requires: dosfstools
+Requires: mtools
+
 # Weak dependencies for the common virt-manager usecase
 Recommends: (libvirt-daemon-kvm or libvirt-daemon-qemu)
 Recommends: libvirt-daemon-config-network
