@@ -49,6 +49,7 @@ class Installer(object):
         self._install_kernel = None
         self._install_initrd = None
         self._install_cdrom_device = None
+        self._install_floppy_device = None
         self._defaults_are_set = False
 
         if location_kernel or location_initrd:
@@ -110,6 +111,26 @@ class Installer(object):
             return
         self._install_cdrom_device.path = None
         self._install_cdrom_device.sync_path_props()
+
+    def _add_install_floppy_device(self, guest, location):
+        if self._install_floppy_device:
+            return
+        dev = DeviceDisk(self.conn)
+        dev.device = dev.DEVICE_FLOPPY
+        dev.path = location
+        dev.sync_path_props()
+        dev.validate()
+        dev.set_defaults(guest)
+        self._install_floppy_device = dev
+        guest.add_device(self._install_floppy_device)
+
+    def _remove_install_floppy_device(self, guest):
+        dummy = guest
+        if not self._install_floppy_device:
+            return
+
+        self._install_floppy_device.path = None
+        self._install_floppy_device.sync_path_props()
 
     def _build_boot_order(self, guest, bootdev):
         bootorder = [bootdev]
