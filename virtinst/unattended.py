@@ -227,6 +227,7 @@ class UnattendedData():
     profile = None
     admin_password = None
     user_password = None
+    product_key = None
 
 
 def prepare_install_script(guest, unattended_data, url=None, os_media=None):

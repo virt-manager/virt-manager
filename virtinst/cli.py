@@ -1427,6 +1427,7 @@ class ParseUnattended(VirtCLIParser):
         cls.add_arg("profile", "profile")
         cls.add_arg("admin_password", "admin-password")
         cls.add_arg("user_password", "user-password")
+        cls.add_arg("product_key", "product-key")
 
 
 def parse_unattended(unattended):

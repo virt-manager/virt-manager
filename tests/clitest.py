@@ -1150,6 +1150,7 @@ _add_argcomplete_cmd("virt-install --unattended ", "profile=")  # will list all 
 _add_argcomplete_cmd("virt-install --unattended p", "profile=")
 _add_argcomplete_cmd("virt-install --unattended a", "admin-password=")
 _add_argcomplete_cmd("virt-install --unattended u", "user-password=")
+_add_argcomplete_cmd("virt-install --unattended prod", "product-key")
 _add_argcomplete_cmd("virt-clone --preserve", "--preserve-data")
 _add_argcomplete_cmd("virt-xml --sound mode", "model")
 _add_argcomplete_cmd("virt-convert --dest", "--destination")
