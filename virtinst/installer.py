@@ -52,6 +52,7 @@ class Installer(object):
         self._install_floppy_device = None
         self._unattended_files = []
         self._defaults_are_set = False
+        self._unattended_data = None
 
         if location_kernel or location_initrd:
             if not location:
@@ -322,6 +323,8 @@ class Installer(object):
     def set_unattended_data(self, unattended_data):
         if self._treemedia:
             self._treemedia.set_unattended_data(unattended_data)
+        else:
+            self._unattended_data = unattended_data
 
 
     ##########################
