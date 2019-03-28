@@ -162,6 +162,9 @@ class TestClone(unittest.TestCase):
     def testCloneNvramNewpool(self):
         self._clone("nvram-newpool")
 
+    def testCloneNvramMissing(self):
+        self._clone("nvram-missing")
+
     def testCloneGraphicsPassword(self):
         self._clone("graphics-password")
 

@@ -346,16 +346,15 @@ class Cloner(object):
             self.clone_nvram = os.path.join(nvram_dir,
                                             "%s_VARS.fd" % self._clone_name)
 
+        old_nvram = DeviceDisk(self.conn)
+        old_nvram.path = self._guest.os.nvram
+
         nvram = DeviceDisk(self.conn)
         nvram.path = self.clone_nvram
-        if (not self.preserve_dest_disks and
-            nvram.wants_storage_creation()):
 
-            old_nvram = DeviceDisk(self.conn)
-            old_nvram.path = self._guest.os.nvram
-            if not old_nvram.get_vol_object():
-                raise RuntimeError(_("Path does not exist: %s") %
-                                     old_nvram.path)
+        if (not self.preserve_dest_disks and
+            nvram.wants_storage_creation() and
+            old_nvram.get_vol_object()):
 
             nvram_install = DeviceDisk.build_vol_install(
                     self.conn, os.path.basename(nvram.path),
@@ -365,8 +364,9 @@ class Cloner(object):
             nvram_install.reflink = self.reflink
             nvram.set_vol_install(nvram_install)
 
-        nvram.validate()
-        self._nvram_disk = nvram
+            nvram.validate()
+            self._nvram_disk = nvram
+
         self._guest.os.nvram = nvram.path
 
 
