@@ -50,6 +50,7 @@ class Installer(object):
         self._install_initrd = None
         self._install_cdrom_device = None
         self._install_floppy_device = None
+        self._unattended_files = []
         self._defaults_are_set = False
 
         if location_kernel or location_initrd:
@@ -131,6 +132,10 @@ class Installer(object):
 
         self._install_floppy_device.path = None
         self._install_floppy_device.sync_path_props()
+
+    def _cleanup_unattended_files(self):
+        for f in self._unattended_files:
+            os.unlink(f)
 
     def _build_boot_order(self, guest, bootdev):
         bootorder = [bootdev]
