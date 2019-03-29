@@ -274,14 +274,10 @@ class DomainCapabilities(XMLBuilder):
 
     def get_cpu_security_features(self):
         sec_features = [
-                'pcid',
                 'spec-ctrl',
                 'ssbd',
-                'pdpe1gb',
                 'ibpb',
-                'virt-ssbd',
-                'amd-ssbd',
-                'amd-no-ssb']
+                'virt-ssbd']
 
         features = []
 
