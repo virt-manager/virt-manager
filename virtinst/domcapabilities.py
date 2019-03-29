@@ -256,7 +256,7 @@ class DomainCapabilities(XMLBuilder):
         arch.text = self.arch
         return ET.tostring(root, encoding="unicode")
 
-    def _get_expandned_cpu(self, mode):
+    def _get_expanded_cpu(self, mode):
         cpuXML = self._convert_mode_to_cpu(mode.get_xml())
         logging.debug("CPU XML for security flag baseline: %s", cpuXML)
 
@@ -286,7 +286,7 @@ class DomainCapabilities(XMLBuilder):
                 continue
 
             try:
-                cpu = self._get_expandned_cpu(m)
+                cpu = self._get_expanded_cpu(m)
             except libvirt.libvirtError as e:
                 logging.warning(_("Failed to get expanded CPU XML: %s"), e)
                 break
