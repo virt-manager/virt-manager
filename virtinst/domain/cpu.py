@@ -64,6 +64,8 @@ class DomainCpu(XMLBuilder):
     _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
                        "sockets", "cores", "threads", "features"]
 
+    secure = True
+
     special_mode_was_set = False
     # These values are exposed on the command line, so are stable API
     SPECIAL_MODE_HOST_MODEL_ONLY = "host-model-only"
@@ -126,7 +128,10 @@ class DomainCpu(XMLBuilder):
             self.mode = "custom"
             if not self.match:
                 self.match = "exact"
-            self._add_security_features(guest)
+            if self.secure:
+                self._add_security_features(guest)
+            else:
+                self._remove_security_features(guest)
         self.model = val
 
     def add_feature(self, name, policy="require"):

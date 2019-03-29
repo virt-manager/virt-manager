@@ -1791,6 +1791,7 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("mode", "mode")
         cls.add_arg("match", "match")
         cls.add_arg("vendor", "vendor")
+        cls.add_arg("secure", "secure", is_onoff=True)
 
         cls.add_arg(None, "force", is_list=True, cb=cls.set_feature_cb)
         cls.add_arg(None, "require", is_list=True, cb=cls.set_feature_cb)
