@@ -638,4 +638,5 @@ class OsMedia(object):
             for variant in variants:
                 if "netinst" in variant.get_id():
                     return True
-        return False
+            return False
+        return True
