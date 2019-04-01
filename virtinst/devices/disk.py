@@ -931,9 +931,8 @@ class DeviceDisk(Device):
             # controller or didn't add any
             raise ValueError(_("Controller number %d for disk of type %s has "
                                "no empty slot to use" % (pref_ctrl, prefix)))
-        else:
-            raise ValueError(_("Only %s disks for bus '%s' are supported"
-                               % (maxnode, self.bus)))
+        raise ValueError(_("Only %s disks for bus '%s' are supported"
+                           % (maxnode, self.bus)))
 
 
     ##################

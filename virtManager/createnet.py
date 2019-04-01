@@ -202,7 +202,7 @@ class vmmCreateNetwork(vmmGObjectUI):
                 break
         for devprettyname, ifname in zip(devprettynames, ifnames):
             pf_model.append([_("%s") % devprettyname, ifname])
-        if len(pf_model) is 0:
+        if len(pf_model) == 0:
             pf_model.append([_("No available device"), None])
         self.widget("pf-list").set_active(0)
 
