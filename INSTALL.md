@@ -31,9 +31,9 @@ A detailed dependency list can be found in
 Minimum version requirements of major components:
 
    - python >= 3.3
-   - gtk3 >= 3.14
+   - gtk3 >= 3.22
    - libvirt-python >= 0.6.0
-   - pygobject3 >= 3.14
+   - pygobject3 >= 3.22
    - libosinfo >= 0.2.10
 
 On Debian or Ubuntu based distributions, you need to install the

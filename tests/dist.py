@@ -110,9 +110,11 @@ class TestDist(unittest.TestCase):
         Ensure all glade XML files don't _require_ UI bits later than
         our minimum supported version
         """
-        # RHEL 7.3 has gtk 3.14, so that's our current minimum target
+        # Minimum dep is 3.22 to fix popups on some wayland window managers.
+        # 3.22 is from Sep 2016, so coupled with python3 deps this seems fine
+        # to enforce
         minimum_version_major = 3
-        minimum_version_minor = 14
+        minimum_version_minor = 22
         minimum_version_str = "%s.%s" % (minimum_version_major,
                                          minimum_version_minor)
 

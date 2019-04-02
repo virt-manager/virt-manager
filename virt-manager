@@ -29,9 +29,9 @@ import warnings  # pylint: disable=wrong-import-order
 warnings.simplefilter("ignore")
 
 try:
-    gi.check_version("3.14.0")
+    gi.check_version("3.22.0")
 except (ValueError, AttributeError):
-    print("pygobject3 3.14.0 or later is required.")
+    print("pygobject3 3.22.0 or later is required.")
     sys.exit(1)
 
 
@@ -62,8 +62,8 @@ def _import_gtk(leftovers):
         from gi.repository import Gtk
         leftovers = sys.argv[1:]
 
-        if Gtk.check_version(3, 14, 0):
-            print("gtk3 3.14.0 or later is required.")
+        if Gtk.check_version(3, 22, 0):
+            print("gtk3 3.22.0 or later is required.")
             sys.exit(1)
 
         # This will error if Gtk wasn't correctly initialized
