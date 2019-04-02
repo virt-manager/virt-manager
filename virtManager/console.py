@@ -126,33 +126,29 @@ def build_keycombo_menu(on_send_key_fn):
 
 
 class vmmOverlayToolbar:
+    def __init__(self, on_leave_fn, on_send_key_fn):
+        self._send_key_button = None
+        self._keycombo_menu = None
+        self._toolbar = None
 
-    def __init__(self):
-        self.send_key_button = None
         self.timed_revealer = None
-        self.keycombo_toolbar = None
-        self.toolbar = None
-        self.send_key_button = None
-        self.timed_revealer = None
-        self.overlay_toolbar = None
+        self._init_ui(on_leave_fn, on_send_key_fn)
 
-    def create(self, name, tooltip_text, accessible_name,
-               send_key_accessible_name, on_leave_fn, on_send_key_fn):
-        self.keycombo_toolbar = build_keycombo_menu(on_send_key_fn)
+    def _init_ui(self, on_leave_fn, on_send_key_fn):
+        self._keycombo_menu = build_keycombo_menu(on_send_key_fn)
 
-        self.overlay_toolbar = Gtk.Toolbar()
-        self.overlay_toolbar.set_show_arrow(False)
-        self.overlay_toolbar.set_style(Gtk.ToolbarStyle.BOTH_HORIZ)
-        self.overlay_toolbar.get_accessible().set_name(name)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_LEAVE_FULLSCREEN)
-        button.set_tooltip_text(tooltip_text)
-        button.show()
-        button.get_accessible().set_name(accessible_name)
-        self.overlay_toolbar.add(button)
-        button.connect("clicked", on_leave_fn)
+        self._toolbar = Gtk.Toolbar()
+        self._toolbar.set_show_arrow(False)
+        self._toolbar.set_style(Gtk.ToolbarStyle.BOTH_HORIZ)
+        self._toolbar.get_accessible().set_name("Fullscreen Toolbar")
 
         # Exit button
+        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_LEAVE_FULLSCREEN)
+        button.set_tooltip_text(_("Leave fullscreen"))
+        button.show()
+        button.get_accessible().set_name("Fullscreen Exit")
+        self._toolbar.add(button)
+        button.connect("clicked", on_leave_fn)
 
         def keycombo_menu_clicked(src):
             ignore = src
@@ -169,33 +165,31 @@ class vmmOverlayToolbar:
                 height = toolbar.get_window().get_height()
                 return x, y + height, True
 
-            self.keycombo_toolbar.popup(None, None, menu_location,
-                                        self.overlay_toolbar, 0,
+            self._keycombo_menu.popup(None, None, menu_location,
+                                        self._toolbar, 0,
                                         Gtk.get_current_event_time())
 
-        self.send_key_button = Gtk.ToolButton()
-        self.send_key_button.set_icon_name(
+        self._send_key_button = Gtk.ToolButton()
+        self._send_key_button.set_icon_name(
                                 "preferences-desktop-keyboard-shortcuts")
-        self.send_key_button.set_tooltip_text(_("Send key combination"))
-        self.send_key_button.show_all()
-        self.send_key_button.connect("clicked", keycombo_menu_clicked)
-        self.send_key_button.get_accessible().set_name(
-            send_key_accessible_name)
-        self.overlay_toolbar.add(self.send_key_button)
+        self._send_key_button.set_tooltip_text(_("Send key combination"))
+        self._send_key_button.show_all()
+        self._send_key_button.connect("clicked", keycombo_menu_clicked)
+        self._send_key_button.get_accessible().set_name("Fullscreen Send Key")
+        self._toolbar.add(self._send_key_button)
 
-        self.timed_revealer = _TimedRevealer(self.overlay_toolbar)
-        return self.timed_revealer.get_overlay_widget()
+        self.timed_revealer = _TimedRevealer(self._toolbar)
 
     def cleanup(self):
-        self.keycombo_toolbar.destroy()
-        self.keycombo_toolbar = None
-        self.overlay_toolbar.destroy()
-        self.overlay_toolbar = None
+        self._keycombo_menu.destroy()
+        self._keycombo_menu = None
+        self._toolbar.destroy()
+        self._toolbar = None
         self.timed_revealer.cleanup()
         self.timed_revealer = None
 
     def set_sensitive(self, can_sendkey):
-        self.send_key_button.set_sensitive(can_sendkey)
+        self._send_key_button.set_sensitive(can_sendkey)
 
 
 class vmmConsolePages(vmmGObjectUI):
@@ -221,15 +215,11 @@ class vmmConsolePages(vmmGObjectUI):
         # Fullscreen toolbar
         self._keycombo_menu = build_keycombo_menu(self._do_send_key)
 
-        self._overlay_toolbar_fullscreen = vmmOverlayToolbar()
-        overlay = self._overlay_toolbar_fullscreen.create(
-            name="Fullscreen Toolbar",
-            tooltip_text=_("Leave fullscreen"),
-            accessible_name="Fullscreen Exit",
-            send_key_accessible_name="Fullscreen Send Key",
+        self._overlay_toolbar_fullscreen = vmmOverlayToolbar(
             on_leave_fn=self._leave_fullscreen,
             on_send_key_fn=self._do_send_key)
-        self.widget("console-overlay").add_overlay(overlay)
+        self.widget("console-overlay").add_overlay(
+                self._overlay_toolbar_fullscreen.timed_revealer.get_overlay_widget())
 
         # Make viewer widget background always be black
         black = Gdk.Color(0, 0, 0)
