@@ -30,7 +30,8 @@ def perform_initrd_injections(initrd, injections, scratchdir):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  cwd=tempdir)
-    cpio_proc = subprocess.Popen(['cpio', '-o', '--null', '-Hnewc', '--quiet'],
+    cpio_proc = subprocess.Popen(['cpio', '--create', '--null', '--quiet',
+                                  '--format=newc'],
                                  stdin=find_proc.stdout,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
