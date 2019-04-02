@@ -530,7 +530,7 @@ class vmmStorageList(vmmGObjectUI):
         if event.button != 3:
             return
 
-        self._volmenu.popup(None, None, None, None, 0, event.time)
+        self._volmenu.popup_at_pointer(event)
 
     def _cancel_clicked(self, src):
         ignore = src

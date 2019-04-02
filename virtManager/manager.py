@@ -837,7 +837,7 @@ class vmmManager(vmmGObjectUI):
             # Popup the vm menu
             vm = model[_iter][ROW_HANDLE]
             self.vmmenu.update_widget_states(vm)
-            self.vmmenu.popup(None, None, None, None, 0, event.time)
+            self.vmmenu.popup_at_pointer(event)
         else:
             # Pop up connection menu
             conn = model[_iter][ROW_HANDLE]
@@ -850,7 +850,7 @@ class vmmManager(vmmGObjectUI):
             self.connmenu_items["connect"].set_sensitive(disconn)
             self.connmenu_items["delete"].set_sensitive(disconn)
 
-            self.connmenu.popup(None, None, None, None, 0, event.time)
+            self.connmenu.popup_at_pointer(event)
 
 
     #################

@@ -558,7 +558,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         ignore = src
         if event.button != 3:
             return
-        self._snapmenu.popup(None, None, None, None, 0, event.time)
+        self._snapmenu.popup_at_pointer(event)
 
     def _snapshot_new_close(self, *args, **kwargs):
         ignore = args

@@ -1141,7 +1141,7 @@ class vmmDetails(vmmGObjectUI):
         rmdev.set_visible(self.widget("config-remove").get_visible())
         rmdev.set_sensitive(self.widget("config-remove").get_sensitive())
 
-        self.addhwmenu.popup(None, None, None, None, 0, event.time)
+        self.addhwmenu.popup_at_pointer(event)
 
     def control_fullscreen(self, src):
         menu = self.widget("details-menu-view-fullscreen")
