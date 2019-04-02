@@ -150,35 +150,35 @@ class vmmOverlayToolbar:
         self._toolbar.add(button)
         button.connect("clicked", on_leave_fn)
 
-        def keycombo_menu_clicked(src):
-            ignore = src
-            def menu_location(*args):
-                # Signature changed at some point.
-                #  f23+    : args = menu, x, y, toolbar
-                #  rhel7.3 : args = menu, toolbar
-                if len(args) == 4:
-                    toolbar = args[3]
-                else:
-                    toolbar = args[1]
-
-                ignore, x, y = toolbar.get_window().get_origin()
-                height = toolbar.get_window().get_height()
-                return x, y + height, True
-
-            self._keycombo_menu.popup(None, None, menu_location,
-                                        self._toolbar, 0,
-                                        Gtk.get_current_event_time())
-
         self._send_key_button = Gtk.ToolButton()
         self._send_key_button.set_icon_name(
                                 "preferences-desktop-keyboard-shortcuts")
         self._send_key_button.set_tooltip_text(_("Send key combination"))
         self._send_key_button.show_all()
-        self._send_key_button.connect("clicked", keycombo_menu_clicked)
+        self._send_key_button.connect("clicked",
+                self._on_send_key_button_clicked_cb)
         self._send_key_button.get_accessible().set_name("Fullscreen Send Key")
         self._toolbar.add(self._send_key_button)
 
         self.timed_revealer = _TimedRevealer(self._toolbar)
+
+    def _on_send_key_button_clicked_cb(self, src):
+        def menu_location_cb(*args):
+            # Signature changed at some point.
+            #  f23+    : args = menu, x, y, toolbar
+            #  rhel7.3 : args = menu, toolbar
+            if len(args) == 4:
+                toolbar = args[3]
+            else:
+                toolbar = args[1]
+
+            ignore, x, y = toolbar.get_window().get_origin()
+            height = toolbar.get_window().get_height()
+            return x, y + height, True
+
+        self._keycombo_menu.popup(None, None, menu_location_cb,
+                                  self._toolbar, 0,
+                                  Gtk.get_current_event_time())
 
     def cleanup(self):
         self._keycombo_menu.destroy()
