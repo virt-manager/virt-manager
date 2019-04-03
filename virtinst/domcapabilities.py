@@ -272,6 +272,8 @@ class DomainCapabilities(XMLBuilder):
 
         return DomainCpu(self.conn, expandedXML)
 
+    _features = None
+
     def get_cpu_security_features(self):
         sec_features = [
                 'spec-ctrl',
@@ -279,7 +281,10 @@ class DomainCapabilities(XMLBuilder):
                 'ibpb',
                 'virt-ssbd']
 
-        features = []
+        if self._features:
+            return self._features
+
+        self._features = []
 
         for m in self.cpu.modes:
             if m.name != "host-model" or not m.supported:
@@ -293,9 +298,9 @@ class DomainCapabilities(XMLBuilder):
 
             for feature in cpu.features:
                 if feature.name in sec_features:
-                    features.append(feature.name)
+                    self._features.append(feature.name)
 
-        return features
+        return self._features
 
 
     XML_NAME = "domainCapabilities"
