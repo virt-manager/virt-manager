@@ -442,7 +442,7 @@ class vmmDomain(vmmLibvirtObject):
         self._redefine_xmlobj(xmlobj)
 
     def define_cpu(self, vcpus=_SENTINEL, maxvcpus=_SENTINEL,
-            model=_SENTINEL, sockets=_SENTINEL,
+            model=_SENTINEL, secure=_SENTINEL, sockets=_SENTINEL,
             cores=_SENTINEL, threads=_SENTINEL):
         guest = self._make_xmlobj_to_define()
 
@@ -456,7 +456,8 @@ class vmmDomain(vmmLibvirtObject):
             guest.cpu.cores = cores
             guest.cpu.threads = threads
 
-        if model != _SENTINEL:
+        if secure != _SENTINEL or model != _SENTINEL:
+            guest.cpu.secure = secure
             if model in guest.cpu.SPECIAL_MODES:
                 guest.cpu.set_special_mode(guest, model)
             else:

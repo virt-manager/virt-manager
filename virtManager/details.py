@@ -537,6 +537,7 @@ class vmmDetails(vmmGObjectUI):
             "on_cpu_maxvcpus_changed": self.config_maxvcpus_changed,
             "on_cpu_model_changed": lambda *x: self.config_cpu_model_changed(x),
             "on_cpu_copy_host_clicked": self.on_cpu_copy_host_clicked,
+            "on_cpu_secure_toggled": self.on_cpu_secure_toggled,
             "on_cpu_cores_changed": self.config_cpu_topology_changed,
             "on_cpu_sockets_changed": self.config_cpu_topology_changed,
             "on_cpu_threads_changed": self.config_cpu_topology_changed,
@@ -1732,6 +1733,11 @@ class vmmDetails(vmmGObjectUI):
     def on_cpu_copy_host_clicked(self, src):
         uiutil.set_grid_row_visible(
             self.widget("cpu-model"), not src.get_active())
+        uiutil.set_grid_row_visible(
+            self.widget("cpu-secure"), not src.get_active())
+        self.enable_apply(EDIT_CPU)
+
+    def on_cpu_secure_toggled(self, ignore):
         self.enable_apply(EDIT_CPU)
 
     def config_cpu_model_changed(self, ignore):
@@ -2032,6 +2038,7 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_CPU):
             kwargs["model"] = self.get_config_cpu_model()
+            kwargs["secure"] = self.widget("cpu-secure").get_active()
 
         if self.edited(EDIT_TOPOLOGY):
             do_top = self.widget("cpu-topology-enable").get_active()
@@ -2605,6 +2612,11 @@ class vmmDetails(vmmGObjectUI):
         n1, n2 = self.vm.network_traffic_vectors()
         self.network_traffic_graph.set_property("data_array", n1 + n2)
 
+    def _cpu_secure_is_available(self):
+        domcaps = self.vm.get_domain_capabilities()
+        features = domcaps.get_cpu_security_features()
+        return self.vm.get_xmlobj().os.is_x86() and len(features) > 0
+
     def refresh_config_cpu(self):
         # Set topology first, because it impacts maxvcpus values
         cpu = self.vm.get_cpu_config()
@@ -2657,6 +2669,15 @@ class vmmDetails(vmmGObjectUI):
         is_host = (cpu.mode == "host-model")
         self.widget("cpu-copy-host").set_active(bool(is_host))
         self.on_cpu_copy_host_clicked(self.widget("cpu-copy-host"))
+
+        if not self._cpu_secure_is_available():
+            self.widget("cpu-secure").set_sensitive(False)
+            self.widget("cpu-secure").set_tooltip_text(
+                    "No security features to copy, the host is missing "
+                    "security patches or the host CPU is not vulnerable.")
+
+        cpu.check_security_features(self.vm.get_xmlobj())
+        self.widget("cpu-secure").set_active(cpu.secure)
 
     def refresh_config_memory(self):
         host_mem_widget = self.widget("state-host-memory")

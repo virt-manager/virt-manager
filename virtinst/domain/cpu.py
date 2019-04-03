@@ -122,6 +122,36 @@ class DomainCpu(XMLBuilder):
             if not exists:
                 self.add_feature(feature)
 
+    def check_security_features(self, guest):
+        """
+        Since 'secure' property is not exported into the domain XML
+        we might need to refresh its state.
+        """
+        domcaps = guest.lookup_domcaps()
+        features = domcaps.get_cpu_security_features()
+
+        if len(features) == 0:
+            self.secure = False
+            return
+
+        for feature in features:
+            exists = False
+            for f in self.features:
+                if f.name == feature and f.policy == "require":
+                    exists = True
+                    break
+            if not exists:
+                self.secure = False
+                return
+
+    def _remove_security_features(self, guest):
+        domcaps = guest.lookup_domcaps()
+        for feature in domcaps.get_cpu_security_features():
+            for f in self.features:
+                if f.name == feature and f.policy == "require":
+                    self.remove_child(f)
+                    break
+
     def set_model(self, guest, val):
         logging.debug("setting cpu model %s", val)
         if val:
