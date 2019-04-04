@@ -265,6 +265,7 @@ SUPPORT_CONN_MACHVIRT_PCI_DEFAULT = _make(version="3.0.0")
 SUPPORT_CONN_QEMU_XHCI = _make(version="3.3.0", hv_version={"qemu": "2.9.0"})
 SUPPORT_CONN_VNC_NONE_AUTH = _make(hv_version={"qemu": "2.9.0"})
 SUPPORT_CONN_DEVICE_BOOT_ORDER = _make(hv_version={"qemu": 0, "test": 0})
+SUPPORT_CONN_RISCV_VIRT_PCI_DEFAULT = _make(version="5.3.0", hv_version={"qemu": "4.0.0"})
 
 # We choose qemu 2.11.0 as the first version to target for q35 default.
 # That's not really based on anything except reasonably modern at the

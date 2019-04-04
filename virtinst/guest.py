@@ -784,6 +784,14 @@ class Guest(XMLBuilder):
                 self.conn.check_support(
                         self.conn.SUPPORT_CONN_MACHVIRT_PCI_DEFAULT)):
                 usb3 = True
+        elif self.os.is_riscv_virt():
+            # For RISC-V we can assume the guest OS supports USB3, but we
+            # have to make sure libvirt and QEMU are new enough to be using
+            # PCI by default
+            if (qemu_usb3 and
+                self.conn.check_support(
+                        self.conn.SUPPORT_CONN_RISCV_VIRT_PCI_DEFAULT)):
+                usb3 = True
         elif self.os.is_pseries():
             # For pseries, we always assume OS supports usb3
             if qemu_usb3:
