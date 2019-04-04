@@ -129,6 +129,10 @@ class Guest(XMLBuilder):
                 if "s390-ccw-virtio" in capsinfo.machines:
                     return "s390-ccw-virtio"
 
+            if capsinfo.arch in ["riscv64", "riscv32"]:
+                if "virt" in capsinfo.machines:
+                    return "virt"
+
         if capsinfo.conn.is_qemu() or capsinfo.conn.is_test():
             return _qemu_machine()
         return None
