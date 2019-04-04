@@ -43,7 +43,7 @@ class DeviceVideo(Device):
     def default_model(guest):
         if guest.os.is_pseries():
             return "vga"
-        if guest.os.is_arm_machvirt():
+        if guest.os.is_arm_machvirt() or guest.os.is_riscv_virt():
             return "virtio"
         if guest.conn.is_qemu() and guest.os.is_s390x():
             return "virtio"
