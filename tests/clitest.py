@@ -812,6 +812,7 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --disk size=1 --os-variant fedora22
 c = vinst.add_category("kvm-headless", "--os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-headless")
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-headless")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-headless")
 c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-headless")
 c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-headless")
 
@@ -820,6 +821,7 @@ c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-headless")
 c = vinst.add_category("kvm-graphics", "--os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-graphics")
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-graphics")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-graphics")
 c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-graphics")
 c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-graphics")
 
