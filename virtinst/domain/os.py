@@ -61,6 +61,11 @@ class DomainOs(XMLBuilder):
     def is_s390x(self):
         return self.arch == "s390x"
 
+    def is_riscv(self):
+        return self.arch == "riscv64" or self.arch == "riscv32"
+    def is_riscv_virt(self):
+        return self.is_riscv() and str(self.machine).startswith("virt")
+
     XML_NAME = "os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader", "loader_ro", "loader_type",
                        "nvram", "nvram_template", "kernel", "initrd",
