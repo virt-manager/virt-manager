@@ -65,6 +65,7 @@ test_files = {
     'URI-KVM-AARCH64': utils.URIs.kvm_aarch64,
     'URI-KVM-PPC64LE': utils.URIs.kvm_ppc64le,
     'URI-KVM-S390X': utils.URIs.kvm_s390x,
+    'URI-QEMU-RISCV64': utils.URIs.qemu_riscv64,
 
     'NEWIMG1': "/dev/default-pool/new1.img",
     'NEWIMG2': "/dev/default-pool/new2.img",
