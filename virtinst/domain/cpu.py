@@ -134,15 +134,13 @@ class DomainCpu(XMLBuilder):
             self.secure = False
             return
 
-        for feature in features:
-            exists = False
-            for f in self.features:
-                if f.name == feature and f.policy == "require":
-                    exists = True
-                    break
-            if not exists:
-                self.secure = False
-                return
+        guestFeatures = [f.name for f in self.features if f.policy == "require"]
+        if self.model.endswith("IBRS"):
+            guestFeatures.append("spec-ctrl")
+        if self.model.endswith("IBPB"):
+            guestFeatures.append("ibpb")
+
+        self.secure = set(features) <= set(guestFeatures)
 
     def _remove_security_features(self, guest):
         domcaps = guest.lookup_domcaps()
