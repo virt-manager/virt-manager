@@ -135,10 +135,11 @@ class DomainCpu(XMLBuilder):
             return
 
         guestFeatures = [f.name for f in self.features if f.policy == "require"]
-        if self.model.endswith("IBRS"):
-            guestFeatures.append("spec-ctrl")
-        if self.model.endswith("IBPB"):
-            guestFeatures.append("ibpb")
+        if self.model:
+            if self.model.endswith("IBRS"):
+                guestFeatures.append("spec-ctrl")
+            if self.model.endswith("IBPB"):
+                guestFeatures.append("ibpb")
 
         self.secure = set(features) <= set(guestFeatures)
 
