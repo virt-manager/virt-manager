@@ -12,7 +12,11 @@
     <acpi/>
     <apic/>
   </features>
-  <cpu mode="host-model"/>
+  <cpu mode="custom" match="exact">
+    <model>Skylake-Client-IBRS</model>
+    <feature policy="require" name="spec-ctrl"/>
+    <feature policy="require" name="ssbd"/>
+  </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
@@ -57,7 +61,11 @@
     <acpi/>
     <apic/>
   </features>
-  <cpu mode="host-model"/>
+  <cpu mode="custom" match="exact">
+    <model>Skylake-Client-IBRS</model>
+    <feature policy="require" name="spec-ctrl"/>
+    <feature policy="require" name="ssbd"/>
+  </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>

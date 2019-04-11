@@ -233,9 +233,11 @@ class DomainCapabilities(XMLBuilder):
         host-model infact predates this support, however it wasn't
         general purpose safe prior to domcaps advertisement.
         """
-        return [(m.name == "host-model" and m.supported and
-                 m.models[0].fallback == "forbid")
-                for m in self.cpu.modes]
+        for m in self.cpu.modes:
+            if (m.name == "host-model" and m.supported and
+                    m.models[0].fallback == "forbid"):
+                return True
+        return False
 
     def get_cpu_models(self):
         models = []
