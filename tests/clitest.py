@@ -605,6 +605,7 @@ c.add_invalid("--security foobar")  # Busted --security
 c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128", "memory-hotplug")
 c.add_compare("--connect " + utils.URIs.kvm_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
+c.add_compare("--connect " + utils.URIs.kvm_rhel, "cpu-rhel7-default")  # default CPU for old QEMU where we cannot use host-model
 
 
 
