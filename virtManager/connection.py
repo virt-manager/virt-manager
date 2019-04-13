@@ -1523,3 +1523,9 @@ class vmmConnection(vmmGObject):
             *args, **kwargs)
     def _config_pretty_name_changed_cb(self):
         self.emit("state-changed")
+
+    def set_details_window_size(self, w, h):
+        self.config.set_perconn(self.get_uri(), "/window-size", (w, h))
+    def get_details_window_size(self):
+        ret = self.config.get_perconn(self.get_uri(), "/window-size")
+        return ret

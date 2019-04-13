@@ -51,6 +51,15 @@ class vmmHost(vmmGObjectUI):
         self.ICON_RUNNING = "state_running"
         self.ICON_SHUTOFF = "state_shutoff"
 
+        # Set default window size
+        w, h = self.conn.get_details_window_size()
+        if w <= 0:
+            w = 800
+        if h <= 0:
+            h = 600
+        self.topwin.set_default_size(w, h)
+        self._window_size = None
+
         self.addnet = None
 
         self.active_edits = []
@@ -68,6 +77,7 @@ class vmmHost(vmmGObjectUI):
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
+            "on_vmm_host_configure_event": self._window_resized_cb,
             "on_host_page_switch": self.page_changed,
 
             "on_net_add_clicked": self.add_network,
@@ -195,6 +205,9 @@ class vmmHost(vmmGObjectUI):
         return 1
 
     def _cleanup(self):
+        if self._window_size:
+            self.conn.set_details_window_size(*self._window_size)
+
         self.conn = None
 
         self.storagelist.cleanup()
@@ -216,6 +229,11 @@ class vmmHost(vmmGObjectUI):
 
     def exit_app(self, _src):
         vmmEngine.get_instance().exit_app()
+
+    def _window_resized_cb(self, ignore, ignore2):
+        if not self.is_visible():
+            return
+        self._window_size = self.topwin.get_size()
 
 
     def page_changed(self, src, child, pagenum):
