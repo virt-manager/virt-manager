@@ -88,7 +88,7 @@ class vmmConnect(vmmGObjectUI):
 
     def show(self, parent):
         logging.debug("Showing open connection")
-        if self.topwin.is_visible():
+        if self.is_visible():
             self.topwin.present()
             return
 

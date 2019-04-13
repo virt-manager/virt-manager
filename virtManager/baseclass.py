@@ -321,6 +321,9 @@ class vmmGObjectUI(vmmGObject):
     def close(self, ignore1=None, ignore2=None):
         pass
 
+    def is_visible(self):
+        return bool(self.topwin and self.topwin.get_visible())
+
     def bind_escape_key_close(self):
         self.bind_escape_key_close_helper(self.topwin, self.close)
 

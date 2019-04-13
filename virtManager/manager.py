@@ -221,12 +221,10 @@ class vmmManager(vmmGObjectUI):
         if self._window_size:
             self.config.set_manager_window_size(*self._window_size)
 
-    def is_visible(self):
-        return bool(self.topwin.get_visible())
-
     def set_startup_error(self, msg):
         self.widget("vm-notebook").set_current_page(1)
         self.widget("startup-error-label").set_text(msg)
+
 
     ################
     # Init methods #

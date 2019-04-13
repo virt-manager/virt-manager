@@ -182,9 +182,6 @@ class vmmHost(vmmGObjectUI):
 
         vmmEngine.get_instance().increment_window_counter()
 
-    def is_visible(self):
-        return self.topwin.get_visible()
-
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing host window for %s", self.conn)
         if not self.is_visible():

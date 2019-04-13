@@ -243,12 +243,6 @@ class vmmConsolePages(vmmGObjectUI):
             self.config.on_console_accels_changed(self._refresh_enable_accel))
 
 
-    def is_visible(self):
-        if self.topwin:
-            return self.topwin.get_visible()
-        else:
-            return False
-
     def _cleanup(self):
         self.vm = None
 

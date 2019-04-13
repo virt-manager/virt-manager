@@ -78,7 +78,7 @@ class vmmOSList(vmmGObjectUI):
     def _set_default_selection(self):
         os_list = self.widget("os-list")
         sel = os_list.get_selection()
-        if not self.topwin.get_visible():
+        if not self.is_visible():
             return
         if not len(os_list.get_model()):
             return

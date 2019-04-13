@@ -131,7 +131,7 @@ class vmmAddHardware(vmmGObjectUI):
                                          pollnodedev=True)
 
     def close(self, ignore1=None, ignore2=None):
-        if self.topwin.is_visible():
+        if self.is_visible():
             logging.debug("Closing addhw")
             self.topwin.hide()
         if self._storagebrowser:
@@ -158,9 +158,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.addstorage = None
         self._vsockdetails.cleanup()
         self._vsockdetails = None
-
-    def is_visible(self):
-        return self.topwin.get_visible()
 
 
     ##########################

@@ -193,9 +193,6 @@ class vmmCreate(vmmGObjectUI):
     # Standard window methods #
     ###########################
 
-    def is_visible(self):
-        return self.topwin.get_visible()
-
     def show(self, parent, uri):
         logging.debug("Showing new vm wizard")
 

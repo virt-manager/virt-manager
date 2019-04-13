@@ -754,9 +754,6 @@ class vmmDetails(vmmGObjectUI):
         vmmEngine.get_instance().decrement_window_counter()
         return 1
 
-    def is_visible(self):
-        return bool(self.topwin.get_visible())
-
 
     ##########################
     # Initialization helpers #
