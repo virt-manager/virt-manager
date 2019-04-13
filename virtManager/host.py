@@ -26,6 +26,10 @@ EDIT_NET_QOS,
 ) = list(range(3))
 
 
+ICON_RUNNING = "state_running"
+ICON_SHUTOFF = "state_shutoff"
+
+
 class vmmHost(vmmGObjectUI):
     @classmethod
     def show_instance(cls, parentobj, conn):
@@ -48,8 +52,6 @@ class vmmHost(vmmGObjectUI):
         self.conn = conn
 
         self._orig_title = self.topwin.get_title()
-        self.ICON_RUNNING = "state_running"
-        self.ICON_SHUTOFF = "state_shutoff"
 
         # Set default window size
         w, h = self.conn.get_details_window_size()
@@ -60,73 +62,125 @@ class vmmHost(vmmGObjectUI):
         self.topwin.set_default_size(w, h)
         self._window_size = None
 
-        self.addnet = None
+        self._addnet = None
 
-        self.active_edits = []
+        self._active_edits = set()
 
-        self.cpu_usage_graph = None
-        self.memory_usage_graph = None
-        self.init_conn_state()
+        self._cpu_usage_graph = None
+        self._memory_usage_graph = None
+        self._init_conn_state()
 
-        self.storagelist = None
-        self.init_storage_state()
-        self.init_net_state()
+        self._storagelist = None
+        self._init_storage_state()
+        self._init_net_state()
 
         self.builder.connect_signals({
-            "on_menu_file_view_manager_activate": self.view_manager,
-            "on_menu_file_quit_activate": self.exit_app,
+            "on_menu_file_view_manager_activate": self._view_manager_cb,
+            "on_menu_file_quit_activate": self._exit_app_cb,
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
             "on_vmm_host_configure_event": self._window_resized_cb,
-            "on_host_page_switch": self.page_changed,
+            "on_host_page_switch": self._page_changed_cb,
 
-            "on_net_add_clicked": self.add_network,
-            "on_net_delete_clicked": self.delete_network,
-            "on_net_stop_clicked": self.stop_network,
-            "on_net_start_clicked": self.start_network,
-            "on_net_apply_clicked": (lambda *x: self.net_apply()),
-            "on_net_list_changed": self.net_selected,
-            "on_net_autostart_toggled": self.net_autostart_changed,
+            "on_net_add_clicked": self._add_network_cb,
+            "on_net_delete_clicked": self._delete_network_cb,
+            "on_net_stop_clicked": self._stop_network_cb,
+            "on_net_start_clicked": self._start_network_cb,
+            "on_net_apply_clicked": (lambda *x: self._net_apply()),
+            "on_net_list_changed": self._net_selected_cb,
+            "on_net_autostart_toggled": (lambda *x:
+                self._enable_net_apply(EDIT_NET_AUTOSTART)),
             "on_net_name_changed": (lambda *x:
-                self.enable_net_apply(x, EDIT_NET_NAME)),
+                self._enable_net_apply(EDIT_NET_NAME)),
 
-            "on_overview_name_changed": self._overview_name_changed,
-            "on_config_autoconnect_toggled": self.toggle_autoconnect,
+            "on_overview_name_changed": self._overview_name_changed_cb,
+            "on_config_autoconnect_toggled": self._autoconnect_toggled_cb,
 
             "on_qos_inbound_average_changed":  (lambda *x:
-                self.enable_net_apply(x, EDIT_NET_QOS)),
+                self._enable_net_apply(EDIT_NET_QOS)),
             "on_qos_inbound_peak_changed":  (lambda *x:
-                self.enable_net_apply(x, EDIT_NET_QOS)),
+                self._enable_net_apply(EDIT_NET_QOS)),
             "on_qos_inbound_burst_changed":  (lambda *x:
-                self.enable_net_apply(x, EDIT_NET_QOS)),
+                self._enable_net_apply(EDIT_NET_QOS)),
             "on_qos_outbound_average_changed":  (lambda *x:
-                self.enable_net_apply(x, EDIT_NET_QOS)),
+                self._enable_net_apply(EDIT_NET_QOS)),
             "on_qos_outbound_peak_changed":  (lambda *x:
-                self.enable_net_apply(x, EDIT_NET_QOS)),
+                self._enable_net_apply(EDIT_NET_QOS)),
             "on_qos_outbound_burst_changed":  (lambda *x:
-                self.enable_net_apply(x, EDIT_NET_QOS)),
+                self._enable_net_apply(EDIT_NET_QOS)),
 
-            "on_net_qos_inbound_enable_toggled": self.change_qos_in_enable,
-            "on_net_qos_outbound_enable_toggled": self.change_qos_out_enable,
+            "on_net_qos_inbound_enable_toggled": self._change_qos_cb,
+            "on_net_qos_outbound_enable_toggled": self._change_qos_cb,
         })
 
-        self.populate_networks()
+        self._populate_networks()
 
-        self.conn.connect("net-added", self.populate_networks)
-        self.conn.connect("net-removed", self.populate_networks)
+        self.conn.connect("net-added", self._conn_nets_changed_cb)
+        self.conn.connect("net-removed", self._conn_nets_changed_cb)
 
-        self.conn.connect("state-changed", self.conn_state_changed)
-        self.conn.connect("resources-sampled", self.refresh_resources)
+        self.conn.connect("state-changed", self._conn_state_changed_cb)
+        self.conn.connect("resources-sampled", self._conn_resources_sampled_cb)
 
-        self.refresh_resources()
-        self.conn_state_changed()
+        self._refresh_resources()
+        self._refresh_conn()
         self.widget("config-autoconnect").set_active(
             self.conn.get_autoconnect())
 
         self._cleanup_on_conn_removed()
 
 
-    def init_net_state(self):
+    #######################
+    # Standard UI methods #
+    #######################
+
+    def show(self):
+        logging.debug("Showing host details: %s", self.conn)
+        vis = self.is_visible()
+        self.topwin.present()
+        if vis:
+            return
+
+        vmmEngine.get_instance().increment_window_counter()
+
+    def close(self, src=None, event=None):
+        dummy = src
+        dummy = event
+        logging.debug("Closing host window for %s", self.conn)
+        if not self.is_visible():
+            return
+
+        self._confirm_changes()
+
+        self.topwin.hide()
+        vmmEngine.get_instance().decrement_window_counter()
+
+        return 1
+
+    def _cleanup(self):
+        if self._window_size:
+            self.conn.set_details_window_size(*self._window_size)
+
+        self.conn = None
+
+        self._storagelist.cleanup()
+        self._storagelist = None
+
+        if self._addnet:
+            self._addnet.cleanup()
+            self._addnet = None
+
+        self._cpu_usage_graph.destroy()
+        self._cpu_usage_graph = None
+
+        self._memory_usage_graph.destroy()
+        self._memory_usage_graph = None
+
+
+    ###########
+    # UI init #
+    ###########
+
+    def _init_net_state(self):
         self.widget("network-pages").set_show_tabs(False)
 
         # [ unique, label, icon name, icon size, is_active ]
@@ -134,7 +188,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-list").set_model(netListModel)
 
         sel = self.widget("net-list").get_selection()
-        sel.set_select_function((lambda *x: self.confirm_changes()), None)
+        sel.set_select_function((lambda *x: self._confirm_changes()), None)
 
         netCol = Gtk.TreeViewColumn(_("Networks"))
         netCol.set_spacing(6)
@@ -162,91 +216,31 @@ class vmmHost(vmmGObjectUI):
         vfTextCol.add_attribute(vf_txt, 'text', 0)
         vf_list.append_column(vfTextCol)
 
+    def _init_storage_state(self):
+        self._storagelist = vmmStorageList(self.conn, self.builder, self.topwin)
+        self.widget("storage-align").add(self._storagelist.top_box)
 
-    def init_storage_state(self):
-        self.storagelist = vmmStorageList(self.conn, self.builder, self.topwin)
-        self.widget("storage-align").add(self.storagelist.top_box)
-
-
-    def init_conn_state(self):
+    def _init_conn_state(self):
         uri = self.conn.get_uri()
         auto = self.conn.get_autoconnect()
 
         self.widget("overview-uri").set_text(uri)
         self.widget("config-autoconnect").set_active(auto)
 
-        self.cpu_usage_graph = Sparkline()
-        self.cpu_usage_graph.show()
-        self.widget("performance-cpu-align").add(self.cpu_usage_graph)
+        self._cpu_usage_graph = Sparkline()
+        self._cpu_usage_graph.show()
+        self.widget("performance-cpu-align").add(self._cpu_usage_graph)
 
-        self.memory_usage_graph = Sparkline()
-        self.memory_usage_graph.show()
-        self.widget("performance-memory-align").add(self.memory_usage_graph)
-
-    def show(self):
-        logging.debug("Showing host details: %s", self.conn)
-        vis = self.is_visible()
-        self.topwin.present()
-        if vis:
-            return
-
-        vmmEngine.get_instance().increment_window_counter()
-
-    def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing host window for %s", self.conn)
-        if not self.is_visible():
-            return
-
-        self.confirm_changes()
-
-        self.topwin.hide()
-        vmmEngine.get_instance().decrement_window_counter()
-
-        return 1
-
-    def _cleanup(self):
-        if self._window_size:
-            self.conn.set_details_window_size(*self._window_size)
-
-        self.conn = None
-
-        self.storagelist.cleanup()
-        self.storagelist = None
-
-        if self.addnet:
-            self.addnet.cleanup()
-            self.addnet = None
-
-        self.cpu_usage_graph.destroy()
-        self.cpu_usage_graph = None
-
-        self.memory_usage_graph.destroy()
-        self.memory_usage_graph = None
-
-    def view_manager(self, _src):
-        from .manager import vmmManager
-        vmmManager.get_instance(self).show()
-
-    def exit_app(self, _src):
-        vmmEngine.get_instance().exit_app()
-
-    def _window_resized_cb(self, ignore, ignore2):
-        if not self.is_visible():
-            return
-        self._window_size = self.topwin.get_size()
+        self._memory_usage_graph = Sparkline()
+        self._memory_usage_graph.show()
+        self.widget("performance-memory-align").add(self._memory_usage_graph)
 
 
-    def page_changed(self, src, child, pagenum):
-        ignore = src
-        ignore = child
-        self.confirm_changes()
-        if pagenum == 1:
-            self.populate_networks()
-            self.conn.schedule_priority_tick(pollnet=True)
-        elif pagenum == 2:
-            self.storagelist.refresh_page()
+    ######################
+    # UI conn populating #
+    ######################
 
-    def refresh_resources(self, ignore=None):
+    def _refresh_resources(self):
         vm_memory = util.pretty_mem(self.conn.stats_memory())
         host_memory = util.pretty_mem(self.conn.host_memory_size())
 
@@ -261,10 +255,10 @@ class vmmHost(vmmGObjectUI):
                             _("%(currentmem)s of %(maxmem)s") %
                             {'currentmem': vm_memory, 'maxmem': host_memory})
 
-        self.cpu_usage_graph.set_property("data_array", cpu_vector)
-        self.memory_usage_graph.set_property("data_array", memory_vector)
+        self._cpu_usage_graph.set_property("data_array", cpu_vector)
+        self._memory_usage_graph.set_property("data_array", memory_vector)
 
-    def conn_state_changed(self, ignore1=None):
+    def _refresh_conn(self):
         conn_active = self.conn.is_active()
 
         self.topwin.set_title(
@@ -276,7 +270,7 @@ class vmmHost(vmmGObjectUI):
             self.conn.is_network_capable())
 
         if conn_active and not self.conn.is_network_capable():
-            self.set_net_error_page(
+            self._set_net_error_page(
                 _("Libvirt connection does not support virtual network "
                   "management."))
 
@@ -284,169 +278,64 @@ class vmmHost(vmmGObjectUI):
             uiutil.set_list_selection_by_number(self.widget("net-list"), 0)
             return
 
-        self.set_net_error_page(_("Connection not active."))
+        self._set_net_error_page(_("Connection not active."))
 
-        self.populate_networks()
+        self._populate_networks()
 
-        self.storagelist.close()
-        if self.addnet:
-            self.addnet.close()
-
-    def _overview_name_changed(self, src):
-        src = self.widget("overview-name")
-        self.conn.set_config_pretty_name(src.get_text())
-
-    def toggle_autoconnect(self, src):
-        self.conn.set_autoconnect(src.get_active())
+        self._storagelist.close()
+        if self._addnet:
+            self._addnet.close()
 
 
-    #############################
-    # Virtual Network functions #
-    #############################
+    #####################
+    # UI net populating #
+    #####################
 
-    def delete_network(self, src_ignore):
-        net = self.current_network()
-        if net is None:
-            return
-
-        result = self.err.yes_no(_("Are you sure you want to permanently "
-                                   "delete the network %s?") % net.get_name())
-        if not result:
-            return
-
-        logging.debug("Deleting network '%s'", net.get_name())
-        vmmAsyncJob.simple_async_noshow(net.delete, [], self,
-                            _("Error deleting network '%s'") % net.get_name())
-
-    def start_network(self, src_ignore):
-        net = self.current_network()
-        if net is None:
-            return
-
-        logging.debug("Starting network '%s'", net.get_name())
-        vmmAsyncJob.simple_async_noshow(net.start, [], self,
-                            _("Error starting network '%s'") % net.get_name())
-
-    def stop_network(self, src_ignore):
-        net = self.current_network()
-        if net is None:
-            return
-
-        logging.debug("Stopping network '%s'", net.get_name())
-        self.widget("vf-list").get_model().clear()
-        vmmAsyncJob.simple_async_noshow(net.stop, [], self,
-                            _("Error stopping network '%s'") % net.get_name())
-
-    def add_network(self, src_ignore):
-        logging.debug("Launching 'Add Network'")
-        try:
-            if self.addnet is None:
-                self.addnet = vmmCreateNetwork(self.conn)
-            self.addnet.show(self.topwin)
-        except Exception as e:
-            self.err.show_err(_("Error launching network wizard: %s") % str(e))
-
-    def net_apply(self):
-        net = self.current_network()
-        if net is None:
-            return
-
-        logging.debug("Applying changes for network '%s'", net.get_name())
-        try:
-            if EDIT_NET_AUTOSTART in self.active_edits:
-                auto = self.widget("net-autostart").get_active()
-                net.set_autostart(auto)
-            if EDIT_NET_NAME in self.active_edits:
-                net.define_name(self.widget("net-name").get_text())
-                self.idle_add(self.populate_networks)
-            if EDIT_NET_QOS in self.active_edits:
-                in_qos = self.widget("net-qos-inbound-enable").get_active()
-                out_qos = self.widget("net-qos-outbound-enable").get_active()
-
-                def get_value(name, enabled):
-                    if not enabled:
-                        return None
-                    return self.widget(name).get_text() or None
-
-                args = {}
-                args['inbound_average'] = get_value("qos-inbound-average", in_qos)
-                args['inbound_peak'] = get_value("qos-inbound-peak", in_qos)
-                args['inbound_burst'] = get_value("qos-inbound-burst", in_qos)
-
-                args['outbound_average'] = get_value("qos-outbound-average", out_qos)
-                args['outbound_peak'] = get_value("qos-outbound-peak", out_qos)
-                args['outbound_burst'] = get_value("qos-outbound-burst", out_qos)
-
-                if net.set_qos(**args):
-                    self.err.show_err(
-                        _("Network could not be updated"),
-                        text2=_("This change will take effect when the "
-                                "network is restarted"),
-                        buttons=Gtk.ButtonsType.OK,
-                        dialog_type=Gtk.MessageType.INFO)
-
-
-        except Exception as e:
-            self.err.show_err(_("Error changing network settings: %s") % str(e))
-            return
-        finally:
-            self.disable_net_apply()
-
-    def disable_net_apply(self):
-        for i in EDIT_NET_IDS:
-            if i in self.active_edits:
-                self.active_edits.remove(i)
-        self.widget("net-apply").set_sensitive(False)
-
-    def enable_net_apply(self, *arglist):
-        edittype = arglist[-1]
-        self.widget("net-apply").set_sensitive(True)
-        if edittype not in self.active_edits:
-            self.active_edits.append(edittype)
-
-    def net_autostart_changed(self, src_ignore):
-        self.enable_net_apply(EDIT_NET_AUTOSTART)
-
-    def current_network(self):
+    def _current_network(self):
         connkey = uiutil.get_list_selection(self.widget("net-list"))
         return connkey and self.conn.get_net(connkey)
 
-    def refresh_network(self, net):
-        connkey = net.get_connkey()
-        uilist = self.widget("net-list")
-        sel = uilist.get_selection()
-        model, treeiter = sel.get_selected()
-
-        for row in uilist.get_model():
-            if row[0] == connkey:
-                row[4] = net.is_active()
-
-        if treeiter is not None:
-            if model[treeiter][0] == connkey:
-                self.net_selected(sel)
-
-    def set_net_error_page(self, msg):
-        self.reset_net_state()
+    def _set_net_error_page(self, msg):
         self.widget("network-pages").set_current_page(1)
         self.widget("network-error-label").set_text(msg)
 
-    def net_selected(self, src):
-        model, treeiter = src.get_selected()
-        if treeiter is None:
-            self.set_net_error_page(_("No virtual network selected."))
+    def _refresh_current_network(self):
+        net = self._current_network()
+        if not net:
+            self._set_net_error_page(_("No virtual network selected."))
             return
 
         self.widget("network-pages").set_current_page(0)
-        connkey = model[treeiter][0]
 
         try:
-            net = self.conn.get_net(connkey)
-            self.populate_net_state(net)
+            self._populate_net_state(net)
         except Exception as e:
             logging.exception(e)
-            self.set_net_error_page(_("Error selecting network: %s") % e)
+            self._set_net_error_page(_("Error selecting network: %s") % e)
         finally:
-            self.disable_net_apply()
+            self._disable_net_apply()
+
+    def _populate_networks(self):
+        net_list = self.widget("net-list")
+        curnet = self._current_network()
+
+        model = net_list.get_model()
+        # Prevent events while the model is modified
+        net_list.set_model(None)
+        try:
+            net_list.get_selection().unselect_all()
+            model.clear()
+            for net in self.conn.list_nets():
+                net.disconnect_by_obj(self)
+                net.connect("state-changed", self._net_state_changed_cb)
+                model.append([net.get_connkey(), net.get_name(), "network-idle",
+                              Gtk.IconSize.LARGE_TOOLBAR,
+                              bool(net.is_active())])
+        finally:
+            net_list.set_model(model)
+
+        uiutil.set_list_selection(net_list,
+            curnet and curnet.get_connkey() or None)
 
     def _populate_net_ipv4_state(self, net):
         (netstr,
@@ -474,7 +363,6 @@ class vmmHost(vmmGObjectUI):
         if routevia:
             routevia = routeaddr + ", gateway=" + routevia
             self.widget("net-ipv4-route").set_text(routevia or "")
-
 
     def _populate_net_ipv6_state(self, net):
         (netstr,
@@ -506,20 +394,12 @@ class vmmHost(vmmGObjectUI):
             routevia = routeaddr + ", gateway=" + routevia
             self.widget("net-ipv6-route").set_text(routevia or "")
 
-    def update_qos_widgets(self):
+    def _update_qos_widgets(self):
         enabled = self.widget("net-qos-inbound-enable").get_active()
         self.widget("net-qos-inbound-grid").set_visible(enabled)
 
         enabled = self.widget("net-qos-outbound-enable").get_active()
         self.widget("net-qos-outbound-grid").set_visible(enabled)
-
-    def change_qos_in_enable(self, ignore):
-        self.enable_net_apply(EDIT_NET_QOS)
-        self.update_qos_widgets()
-
-    def change_qos_out_enable(self, ignore):
-        self.enable_net_apply(EDIT_NET_QOS)
-        self.update_qos_widgets()
 
     def _populate_qos_state(self, net):
         qos = net.get_qos()
@@ -527,7 +407,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-qos-inbound-enable").set_active(qos.is_inbound())
         self.widget("net-qos-outbound-enable").set_active(qos.is_outbound())
 
-        self.update_qos_widgets()
+        self._update_qos_widgets()
 
         self.widget("qos-inbound-average").set_text(qos.inbound_average or "")
         self.widget("qos-inbound-peak").set_text(qos.inbound_peak or "")
@@ -565,8 +445,7 @@ class vmmHost(vmmGObjectUI):
 
             vf_list_model.append([vf_name or addrStr])
 
-
-    def populate_net_state(self, net):
+    def _populate_net_state(self, net):
         active = net.is_active()
 
         self.widget("net-details").set_sensitive(True)
@@ -578,8 +457,7 @@ class vmmHost(vmmGObjectUI):
                                        bool(net.get_name_domain()))
 
         state = active and _("Active") or _("Inactive")
-        icon = (active and self.ICON_RUNNING or
-                           self.ICON_SHUTOFF)
+        icon = (active and ICON_RUNNING or ICON_SHUTOFF)
         self.widget("net-state").set_text(state)
         self.widget("net-state-icon").set_from_icon_name(icon,
                                                          Gtk.IconSize.BUTTON)
@@ -598,60 +476,112 @@ class vmmHost(vmmGObjectUI):
         self._populate_sriov_state(net)
 
 
-    def reset_net_state(self):
-        self.widget("net-details").set_sensitive(False)
-        self.widget("net-name").set_text("")
-        self.widget("net-device").set_text("")
-        self.widget("net-state").set_text(_("Inactive"))
-        self.widget("net-state-icon").set_from_icon_name(self.ICON_SHUTOFF,
-                                                         Gtk.IconSize.BUTTON)
-        self.widget("net-start").set_sensitive(False)
-        self.widget("net-stop").set_sensitive(False)
-        self.widget("net-delete").set_sensitive(False)
-        self.widget("net-autostart").set_label(_("On Boot"))
-        self.widget("net-autostart").set_active(False)
-        self.widget("net-ipv4-network").set_text("")
-        self.widget("net-ipv4-dhcp-range").set_text("")
-        self.widget("net-ipv4-route").set_text("")
-        self.widget("net-ipv4-forwarding-icon").set_from_stock(
-                                    Gtk.STOCK_DISCONNECT, Gtk.IconSize.MENU)
-        self.widget("net-ipv4-forwarding").set_text(
-                                    _("Isolated network"))
-        self.widget("net-ipv6-network").set_text("")
-        self.widget("net-ipv6-dhcp-range").set_text("")
-        self.widget("net-ipv6-route").set_text("")
-        self.widget("net-ipv6-forwarding").set_text(
-                                    _("Isolated network"))
-        self.disable_net_apply()
+    #############################
+    # Network lifecycle actions #
+    #############################
 
-    def populate_networks(self, src=None, connkey=None):
-        ignore = src
-        ignore = connkey
+    def _delete_network_cb(self, src):
+        net = self._current_network()
+        if net is None:
+            return
 
-        net_list = self.widget("net-list")
-        curnet = self.current_network()
+        result = self.err.yes_no(_("Are you sure you want to permanently "
+                                   "delete the network %s?") % net.get_name())
+        if not result:
+            return
 
-        model = net_list.get_model()
-        # Prevent events while the model is modified
-        net_list.set_model(None)
+        logging.debug("Deleting network '%s'", net.get_name())
+        vmmAsyncJob.simple_async_noshow(net.delete, [], self,
+                            _("Error deleting network '%s'") % net.get_name())
+
+    def _start_network_cb(self, src):
+        net = self._current_network()
+        if net is None:
+            return
+
+        logging.debug("Starting network '%s'", net.get_name())
+        vmmAsyncJob.simple_async_noshow(net.start, [], self,
+                            _("Error starting network '%s'") % net.get_name())
+
+    def _stop_network_cb(self, src):
+        net = self._current_network()
+        if net is None:
+            return
+
+        logging.debug("Stopping network '%s'", net.get_name())
+        self.widget("vf-list").get_model().clear()
+        vmmAsyncJob.simple_async_noshow(net.stop, [], self,
+                            _("Error stopping network '%s'") % net.get_name())
+
+    def _add_network_cb(self, src):
+        logging.debug("Launching 'Add Network'")
         try:
-            net_list.get_selection().unselect_all()
-            model.clear()
-            for net in self.conn.list_nets():
-                net.disconnect_by_obj(self)
-                net.connect("state-changed", self.refresh_network)
-                model.append([net.get_connkey(), net.get_name(), "network-idle",
-                              Gtk.IconSize.LARGE_TOOLBAR,
-                              bool(net.is_active())])
+            if self._addnet is None:
+                self._addnet = vmmCreateNetwork(self.conn)
+            self._addnet.show(self.topwin)
+        except Exception as e:
+            self.err.show_err(_("Error launching network wizard: %s") % str(e))
+
+
+    ############################
+    # Net apply/config actions #
+    ############################
+
+    def _net_apply(self):
+        net = self._current_network()
+        if net is None:
+            return
+
+        logging.debug("Applying changes for network '%s'", net.get_name())
+        try:
+            if EDIT_NET_AUTOSTART in self._active_edits:
+                auto = self.widget("net-autostart").get_active()
+                net.set_autostart(auto)
+            if EDIT_NET_NAME in self._active_edits:
+                net.define_name(self.widget("net-name").get_text())
+                self.idle_add(self._populate_networks)
+            if EDIT_NET_QOS in self._active_edits:
+                in_qos = self.widget("net-qos-inbound-enable").get_active()
+                out_qos = self.widget("net-qos-outbound-enable").get_active()
+
+                def get_value(name, enabled):
+                    if not enabled:
+                        return None
+                    return self.widget(name).get_text() or None
+
+                args = {}
+                args['inbound_average'] = get_value("qos-inbound-average", in_qos)
+                args['inbound_peak'] = get_value("qos-inbound-peak", in_qos)
+                args['inbound_burst'] = get_value("qos-inbound-burst", in_qos)
+
+                args['outbound_average'] = get_value("qos-outbound-average", out_qos)
+                args['outbound_peak'] = get_value("qos-outbound-peak", out_qos)
+                args['outbound_burst'] = get_value("qos-outbound-burst", out_qos)
+
+                if net.set_qos(**args):
+                    self.err.show_err(
+                        _("Network could not be updated"),
+                        text2=_("This change will take effect when the "
+                                "network is restarted"),
+                        buttons=Gtk.ButtonsType.OK,
+                        dialog_type=Gtk.MessageType.INFO)
+
+        except Exception as e:
+            self.err.show_err(_("Error changing network settings: %s") % str(e))
+            return
         finally:
-            net_list.set_model(model)
+            self._disable_net_apply()
 
-        uiutil.set_list_selection(net_list,
-            curnet and curnet.get_connkey() or None)
+    def _disable_net_apply(self):
+        self._active_edits = set()
+        self.widget("net-apply").set_sensitive(False)
 
+    def _enable_net_apply(self, edittype):
+        self.widget("net-apply").set_sensitive(True)
+        self._active_edits.add(edittype)
 
-    def confirm_changes(self):
-        if not self.active_edits:
+    def _confirm_changes(self):
+        if not self._active_edits:
             return True
 
         if self.err.chkbox_helper(
@@ -662,8 +592,67 @@ class vmmHost(vmmGObjectUI):
                 chktext=_("Don't warn me again."),
                 default=False):
 
-            if all([edit in EDIT_NET_IDS for edit in self.active_edits]):
-                self.net_apply()
+            if all([edit in EDIT_NET_IDS for edit in self._active_edits]):
+                self._net_apply()
 
-        self.active_edits = []
+        self._active_edits = set()
         return True
+
+
+    ################
+    # UI listeners #
+    ################
+
+    def _view_manager_cb(self, src):
+        from .manager import vmmManager
+        vmmManager.get_instance(self).show()
+
+    def _exit_app_cb(self, src):
+        vmmEngine.get_instance().exit_app()
+
+    def _window_resized_cb(self, src, event):
+        if not self.is_visible():
+            return
+        self._window_size = self.topwin.get_size()
+
+    def _overview_name_changed_cb(self, src):
+        src = self.widget("overview-name")
+        self.conn.set_config_pretty_name(src.get_text())
+
+    def _autoconnect_toggled_cb(self, src):
+        self.conn.set_autoconnect(src.get_active())
+
+    def _change_qos_cb(self, src):
+        self._enable_net_apply(EDIT_NET_QOS)
+        self._update_qos_widgets()
+
+    def _page_changed_cb(self, src, child, pagenum):
+        self._confirm_changes()
+        if pagenum == 1:
+            self._populate_networks()
+            self.conn.schedule_priority_tick(pollnet=True)
+        elif pagenum == 2:
+            self._storagelist.refresh_page()
+
+    def _conn_state_changed_cb(self, conn):
+        self._refresh_conn()
+
+    def _conn_resources_sampled_cb(self, conn):
+        self._refresh_resources()
+
+    def _conn_nets_changed_cb(self, src, connkey):
+        self._populate_networks()
+
+    def _net_state_changed_cb(self, net):
+        # Update net state inline in the tree model
+        for row in self.widget("net-list").get_model():
+            if row[0] == net.get_connkey():
+                row[4] = net.is_active()
+
+        # If refreshed network is the current net, refresh the UI
+        curnet = self._current_network()
+        if curnet and curnet.get_connkey() == net.get_connkey():
+            self._refresh_current_network()
+
+    def _net_selected_cb(self, selection):
+        self._refresh_current_network()
