@@ -688,6 +688,8 @@ class vmmDetails(vmmGObjectUI):
         self.fsDetails = None
         self.netlist.cleanup()
         self.netlist = None
+        self.vsockdetails.cleanup()
+        self.vsockdetails = None
 
     def show(self):
         logging.debug("Showing VM details: %s", self.vm)
