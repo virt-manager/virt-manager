@@ -87,26 +87,6 @@ class vmmAddStorage(vmmGObjectUI):
         hd_label = ("<span color='#484848'>%s</span>" % hd_label)
         widget.set_markup(hd_label)
 
-    def _check_default_pool_active(self):
-        default_pool = self.conn.get_default_pool()
-        if default_pool and not default_pool.is_active():
-            res = self.err.yes_no(_("Default pool is not active."),
-                             _("Storage pool '%s' is not active. "
-                               "Would you like to start the pool "
-                               "now?") % default_pool.get_name())
-            if not res:
-                return False
-
-            # Try to start the pool
-            try:
-                default_pool.start()
-                logging.info("Started pool '%s'", default_pool.get_name())
-            except Exception as e:
-                return self.err.show_err(_("Could not start storage_pool "
-                                      "'%s': %s") %
-                                    (default_pool.get_name(), str(e)))
-        return True
-
 
     ##############
     # Public API #
@@ -229,12 +209,6 @@ class vmmAddStorage(vmmGObjectUI):
 
     def validate_storage(self, vmname,
             path=None, device="disk", collidelist=None):
-        if self.is_default_storage():
-            # Make sure default pool is running
-            ret = self._check_default_pool_active()
-            if not ret:
-                return False
-
         if path is None:
             if self.is_default_storage():
                 path = self.get_default_path(vmname, collidelist or [])
