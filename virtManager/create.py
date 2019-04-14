@@ -1757,20 +1757,17 @@ class vmmCreate(vmmGObjectUI):
         storage_enabled = self.widget("enable-storage").get_active()
         try:
             if storage_enabled:
-                disk = self._addstorage.validate_storage(self._guest.name,
-                    path=path)
+                disk = self._addstorage.build_device(
+                        self._guest.name, path=path)
+
+            if disk and self._addstorage.validate_device(disk) is False:
+                return False
         except Exception as e:
             return self.err.val_err(_("Storage parameter error."), e)
-
-        if disk is False:
-            return False
 
         if self._get_config_install_page() == INSTALL_PAGE_ISO:
             # CD/ISO install and no disks implies LiveCD
             self._guest.installer_instance.livecd = not storage_enabled
-
-        if disk and self._addstorage.validate_disk_object(disk) is False:
-            return False
 
         _remove_vmm_device(self._guest, "disk")
 

@@ -207,16 +207,13 @@ class vmmAddStorage(vmmGObjectUI):
     def is_default_storage(self):
         return self.widget("storage-create").get_active()
 
-    def validate_storage(self, vmname,
+    def build_device(self, vmname,
             path=None, device="disk", collidelist=None):
         if path is None:
             if self.is_default_storage():
                 path = self.get_default_path(vmname, collidelist or [])
             else:
                 path = self.widget("storage-entry").get_text().strip()
-
-        if not path and device in ["disk", "lun"]:
-            return self.err.val_err(_("A storage path must be specified."))
 
         disk = virtinst.DeviceDisk(self.conn.get_backend())
         disk.path = path or None
@@ -241,10 +238,14 @@ class vmmAddStorage(vmmGObjectUI):
                 logging.debug("path=%s can not use default prefs format=%s, "
                     "not setting it", disk.path, fmt)
 
-        disk.validate()
         return disk
 
-    def validate_disk_object(self, disk):
+    def validate_device(self, disk):
+        if not disk.path and disk.device in ["disk", "lun"]:
+            return self.err.val_err(_("A storage path must be specified."))
+
+        disk.validate()
+
         isfatal, errmsg = disk.is_size_conflict()
         if not isfatal and errmsg:
             # Fatal errors are reported when setting 'size'

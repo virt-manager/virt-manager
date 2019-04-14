@@ -1209,17 +1209,12 @@ class vmmAddHardware(vmmGObjectUI):
                  for c in self.vm.xmlobj.devices.controller])):
             controller_model = "virtio-scsi"
 
-        collidelist = [d.path for d in self.vm.xmlobj.devices.disk]
         try:
-            disk = self.addstorage.validate_storage(self.vm.get_name(),
+            collidelist = [d.path for d in self.vm.xmlobj.devices.disk]
+
+            disk = self.addstorage.build_device(self.vm.get_name(),
                 collidelist=collidelist, device=device)
-        except Exception as e:
-            return self.err.val_err(_("Storage parameter error."), e)
 
-        if disk is False:
-            return False
-
-        try:
             used = []
             disk.bus = bus
             if cache:
@@ -1244,11 +1239,11 @@ class vmmAddHardware(vmmGObjectUI):
                 disk, controller_model, disks)
 
             disk.generate_target(used, prefer_ctrl)
+
+            if self.addstorage.validate_device(disk) is False:
+                return False
         except Exception as e:
             return self.err.val_err(_("Storage parameter error."), e)
-
-        if self.addstorage.validate_disk_object(disk) is False:
-            return False
 
         return disk
 
