@@ -17,12 +17,14 @@ from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .createpool import vmmCreatePool
 from .createvol import vmmCreateVolume
+from .xmleditor import vmmXMLEditor
 
 
 EDIT_POOL_IDS = (
 EDIT_POOL_NAME,
 EDIT_POOL_AUTOSTART,
-) = list(range(2))
+EDIT_POOL_XML,
+) = list(range(3))
 
 VOL_NUM_COLUMNS = 7
 (VOL_COLUMN_KEY,
@@ -76,6 +78,7 @@ class vmmStorageList(vmmGObjectUI):
         self._addpool = None
         self._addvol = None
         self._volmenu = None
+        self._xmleditor = None
         self.top_box = self.widget("storage-grid")
 
         self.builder.connect_signals({
@@ -129,6 +132,9 @@ class vmmStorageList(vmmGObjectUI):
 
         self._volmenu.destroy()
         self._volmenu = None
+
+        self._xmleditor.cleanup()
+        self._xmleditor = None
 
     def close(self, ignore1=None, ignore2=None):
         if self._addvol:
@@ -232,6 +238,16 @@ class vmmStorageList(vmmGObjectUI):
         pool_list.get_selection().set_select_function(
             (lambda *x: self._confirm_changes()), None)
 
+        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
+                self.widget("pool-details-align"),
+                self.widget("pool-details"))
+        self._xmleditor.connect("changed",
+                lambda s: self._enable_pool_apply(EDIT_POOL_XML))
+        self._xmleditor.connect("xml-requested",
+                self._xmleditor_xml_requested_cb)
+        self._xmleditor.connect("xml-reset",
+                self._xmleditor_xml_reset_cb)
+
 
     ###############
     # Public APIs #
@@ -330,6 +346,8 @@ class vmmStorageList(vmmGObjectUI):
             self.widget("vol-add").set_sensitive(False)
             self.widget("vol-add").set_tooltip_text(
                 _("Pool does not support volume creation"))
+
+        self._xmleditor.set_xml_from_libvirtobject(pool)
 
     def _set_error_page(self, msg):
         self.widget("storage-pages").set_current_page(1)
@@ -567,9 +585,13 @@ class vmmStorageList(vmmGObjectUI):
             if EDIT_POOL_AUTOSTART in self._active_edits:
                 auto = self.widget("pool-autostart").get_active()
                 pool.set_autostart(auto)
+
             if EDIT_POOL_NAME in self._active_edits:
                 pool.define_name(self.widget("pool-name-entry").get_text())
                 self.idle_add(self._populate_pools)
+
+            if EDIT_POOL_XML in self._active_edits:
+                pool.define_xml(self._xmleditor.get_xml())
         except Exception as e:
             self.err.show_err(_("Error changing pool settings: %s") % str(e))
             return
@@ -653,4 +675,10 @@ class vmmStorageList(vmmGObjectUI):
         self._populate_pools()
 
     def _pool_selected_cb(self, selection):
+        self._refresh_current_pool()
+
+    def _xmleditor_xml_requested_cb(self, src):
+        self._refresh_current_pool()
+
+    def _xmleditor_xml_reset_cb(self, src):
         self._refresh_current_pool()
