@@ -1249,20 +1249,13 @@ class vmmAddHardware(vmmGObjectUI):
 
 
     def _validate_page_network(self):
-        nettype = self._netlist.get_network_selection()[0]
         model = uiutil.get_list_selection(self.widget("net-model"))
         mac = None
         if self.widget("mac-address").get_active():
             mac = self.widget("create-mac-address").get_text()
 
-        if not nettype:
-            return self.err.val_err(_("Network selection error."),
-                                    _("A network source must be selected."))
-
-        dev = self._netlist.validate_network(mac, model)
-        if dev is False:
-            return False
-
+        dev = self._netlist.build_device(mac, model)
+        self._netlist.validate_device(dev)
         return dev
 
     def _validate_page_input(self):

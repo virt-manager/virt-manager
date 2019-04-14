@@ -281,6 +281,37 @@ class vmmNetworkList(vmmGObjectUI):
         _add_manual_bridge_row()
         return default
 
+    def _check_network_is_running(self, net):
+        # Make sure VirtualNetwork is running
+        if not net.type == virtinst.DeviceInterface.TYPE_VIRTUAL:
+            return
+        devname = net.source
+
+        netobj = None
+        if net.type == virtinst.DeviceInterface.TYPE_VIRTUAL:
+            for n in self.conn.list_nets():
+                if n.get_name() == devname:
+                    netobj = n
+                    break
+
+        if not netobj or netobj.is_active():
+            return
+
+        res = self.err.yes_no(_("Virtual Network is not active."),
+            _("Virtual Network '%s' is not active. "
+              "Would you like to start the network "
+              "now?") % devname)
+        if not res:
+            return
+
+        # Try to start the network
+        try:
+            netobj.start()
+            logging.info("Started network '%s'", devname)
+        except Exception as e:
+            return self.err.show_err(_("Could not start virtual network "
+                                  "'%s': %s") % (devname, str(e)))
+
 
     ###############
     # Public APIs #
@@ -323,63 +354,34 @@ class vmmNetworkList(vmmGObjectUI):
         return (vport_type, vport_managerid, vport_typeid,
          vport_idver, vport_instid)
 
-    def validate_network(self, macaddr, model=None):
+    def build_device(self, macaddr, model=None):
         nettype, devname, mode, portgroup = self.get_network_selection()
-        if nettype is None:
-            return None
 
-        net = None
+        net = virtinst.DeviceInterface(self.conn.get_backend())
+        net.type = nettype
+        net.source = devname
+        net.macaddr = macaddr
+        net.model = model
+        net.source_mode = mode
+        net.portgroup = portgroup
+        if net.model == "spapr-vlan":
+            net.address.set_addrstr("spapr-vio")
 
-        # Make sure VirtualNetwork is running
-        netobj = None
-        if nettype == virtinst.DeviceInterface.TYPE_VIRTUAL:
-            for net in self.conn.list_nets():
-                if net.get_name() == devname:
-                    netobj = net
-                    break
+        if net.type == "direct":
+            (vport_type, vport_managerid, vport_typeid,
+             vport_idver, vport_instid) = self.get_vport()
 
-        if netobj and not netobj.is_active():
-            res = self.err.yes_no(_("Virtual Network is not active."),
-                _("Virtual Network '%s' is not active. "
-                  "Would you like to start the network "
-                  "now?") % devname)
-            if not res:
-                return False
+            net.virtualport.type = vport_type or None
+            net.virtualport.managerid = vport_managerid or None
+            net.virtualport.typeid = vport_typeid or None
+            net.virtualport.typeidversion = vport_idver or None
+            net.virtualport.instanceid = vport_instid or None
 
-            # Try to start the network
-            try:
-                netobj.start()
-                logging.info("Started network '%s'", devname)
-            except Exception as e:
-                return self.err.show_err(_("Could not start virtual network "
-                                      "'%s': %s") % (devname, str(e)))
-
-        # Create network device
-        try:
-            net = virtinst.DeviceInterface(self.conn.get_backend())
-            net.type = nettype
-            net.source = devname
-            net.macaddr = macaddr
-            net.model = model
-            net.source_mode = mode
-            net.portgroup = portgroup
-            if net.model == "spapr-vlan":
-                net.address.set_addrstr("spapr-vio")
-
-            if net.type == "direct":
-                (vport_type, vport_managerid, vport_typeid,
-                 vport_idver, vport_instid) = self.get_vport()
-
-                net.virtualport.type = vport_type or None
-                net.virtualport.managerid = vport_managerid or None
-                net.virtualport.typeid = vport_typeid or None
-                net.virtualport.typeidversion = vport_idver or None
-                net.virtualport.instanceid = vport_instid or None
-
-            net.validate()
-        except Exception as e:
-            return self.err.val_err(_("Error with network parameters."), e)
         return net
+
+    def validate_device(self, net):
+        self._check_network_is_running(net)
+        net.validate()
 
     def reset_state(self):
         self._repopulate_network_list()

@@ -1815,14 +1815,14 @@ class vmmCreate(vmmGObjectUI):
 
         macaddr = virtinst.DeviceInterface.generate_mac(
             self.conn.get_backend())
-        nic = self._netlist.validate_network(macaddr)
-        if nic is False:
-            return False
+
+        net = self._netlist.build_device(macaddr)
+        self._netlist.validate_device(net)
 
         _remove_vmm_device(self._guest, "interface")
-        if nic:
-            _mark_vmm_device(nic)
-            self._guest.add_device(nic)
+        if net:
+            _mark_vmm_device(net)
+            self._guest.add_device(net)
 
         return True
 
