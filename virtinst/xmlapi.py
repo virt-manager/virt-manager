@@ -279,6 +279,13 @@ def node_is_text(n):
 class _Libxml2API(_XMLBase):
     def __init__(self, xml):
         _XMLBase.__init__(self)
+
+        # Use of gtksourceview in virt-manager changes this libxml
+        # global setting which messes up whitespace after parsing.
+        # We can probably get away with calling this less but it
+        # would take some investigation
+        libxml2.keepBlanksDefault(1)
+
         self._doc = libxml2.parseDoc(xml)
         self._ctx = self._doc.xpathNewContext()
         self._ctx.setContextNode(self._doc.children)

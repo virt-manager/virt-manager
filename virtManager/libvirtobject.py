@@ -347,6 +347,23 @@ class vmmLibvirtObject(vmmGObject):
     def xmlobj(self):
         return self.get_xmlobj()
 
+    def get_xml_to_define(self):
+        """
+        Return the raw inactive XML we would use to alter/define an
+        object. Used by the xmleditor UI
+        """
+        return self._make_xmlobj_to_define().get_xml()
+
+    def define_xml(self, xml):
+        """
+        Define the passed in XML, and log a diff against the current XML.
+        Generally subclasses should use _redefine_xmlobj with higher
+        level wrappers, but this is needed for the XML editor
+        """
+        origxml = self.get_xml_to_define()
+        newxml = xml
+        self._redefine_xml_internal(origxml, newxml)
+
 
     #########################
     # Internal XML routines #
@@ -372,9 +389,6 @@ class vmmLibvirtObject(vmmGObject):
         return self.get_xmlobj(inactive=True)
 
     def _redefine_xml_internal(self, origxml, newxml):
-        """
-        Define the passed newxml. Log a diff against the handed in origxml
-        """
         self.log_redefine_xml_diff(self, origxml, newxml)
 
         if origxml != newxml:
