@@ -1178,13 +1178,7 @@ class vmmDetails(vmmGObjectUI):
         if not self.widget("config-apply").get_sensitive():
             return False
 
-        if not self.err.chkbox_helper(
-                self.config.get_confirm_unapplied,
-                self.config.set_confirm_unapplied,
-                text1=(_("There are unapplied changes. Would you like to apply "
-                    "them now?")),
-                chktext=_("Don't warn me again."),
-                default=False):
+        if not self.err.confirm_unapplied_changes():
             return False
 
         return not self.config_apply(row=row)

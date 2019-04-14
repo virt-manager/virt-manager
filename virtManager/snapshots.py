@@ -358,13 +358,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         if not self._unapplied_changes or not path_selected:
             return True
 
-        if self.err.chkbox_helper(
-                self.config.get_confirm_unapplied,
-                self.config.set_confirm_unapplied,
-                text1=(_("There are unapplied changes. "
-                         "Would you like to apply them now?")),
-                chktext=_("Don't warn me again."),
-                default=False):
+        if self.err.confirm_unapplied_changes():
             self._apply()
 
         return True

@@ -157,6 +157,18 @@ class vmmErrorDialog(vmmGObject):
         buttons = Gtk.ButtonsType.OK
         return self._simple_dialog(dtype, buttons, text1, text2, title)
 
+    def confirm_unapplied_changes(self):
+        """
+        Helper function for confirming whether to apply unapplied changes
+        """
+        return self.chkbox_helper(
+                self.config.get_confirm_unapplied,
+                self.config.set_confirm_unapplied,
+                text1=(_("There are unapplied changes. "
+                         "Would you like to apply them now?")),
+                chktext=_("Don't warn me again."),
+                default=False)
+
 
     ##########################################
     # One shot dialog with a checkbox prompt #

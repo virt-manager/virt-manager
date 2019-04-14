@@ -584,18 +584,8 @@ class vmmStorageList(vmmGObjectUI):
         self.widget("pool-apply").set_sensitive(False)
 
     def _confirm_changes(self):
-        if not self._active_edits:
-            return True
-
-        if self.err.chkbox_helper(
-                self.config.get_confirm_unapplied,
-                self.config.set_confirm_unapplied,
-                text1=(_("There are unapplied changes. "
-                         "Would you like to apply them now?")),
-                chktext=_("Don't warn me again."),
-                default=False):
+        if self._active_edits and self.err.confirm_unapplied_changes():
             self._pool_apply()
-
         self._active_edits = set()
         return True
 
