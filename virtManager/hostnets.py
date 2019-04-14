@@ -15,13 +15,15 @@ from . import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .createnet import vmmCreateNetwork
+from .xmleditor import vmmXMLEditor
 
 
 EDIT_NET_IDS = (
 EDIT_NET_NAME,
 EDIT_NET_AUTOSTART,
 EDIT_NET_QOS,
-) = list(range(3))
+EDIT_NET_XML,
+) = list(range(4))
 
 
 ICON_RUNNING = "state_running"
@@ -35,6 +37,7 @@ class vmmHostNets(vmmGObjectUI):
         self.conn = conn
 
         self._addnet = None
+        self._xmleditor = None
 
         self._active_edits = set()
         self.top_box = self.widget("top-box")
@@ -86,6 +89,9 @@ class vmmHostNets(vmmGObjectUI):
             self._addnet.cleanup()
             self._addnet = None
 
+        self._xmleditor.cleanup()
+        self._xmleditor = None
+
     def close(self, ignore1=None, ignore2=None):
         if self._addnet:
             self._addnet.close()
@@ -131,6 +137,16 @@ class vmmHostNets(vmmGObjectUI):
         vfTextCol.pack_start(vf_txt, True)
         vfTextCol.add_attribute(vf_txt, 'text', 0)
         vf_list.append_column(vfTextCol)
+
+        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
+                self.widget("net-details-align"),
+                self.widget("net-details"))
+        self._xmleditor.connect("changed",
+                lambda s: self._enable_net_apply(EDIT_NET_XML))
+        self._xmleditor.connect("xml-requested",
+                self._xmleditor_xml_requested_cb)
+        self._xmleditor.connect("xml-reset",
+                self._xmleditor_xml_reset_cb)
 
 
     ##############
@@ -353,6 +369,8 @@ class vmmHostNets(vmmGObjectUI):
         self._populate_qos_state(net)
         self._populate_sriov_state(net)
 
+        self._xmleditor.set_xml_from_libvirtobject(net)
+
 
     #############################
     # Network lifecycle actions #
@@ -444,6 +462,9 @@ class vmmHostNets(vmmGObjectUI):
                         buttons=Gtk.ButtonsType.OK,
                         dialog_type=Gtk.MessageType.INFO)
 
+            if EDIT_NET_XML in self._active_edits:
+                net.define_xml(self._xmleditor.get_xml())
+
         except Exception as e:
             self.err.show_err(_("Error changing network settings: %s") % str(e))
             return
@@ -494,4 +515,10 @@ class vmmHostNets(vmmGObjectUI):
             self._refresh_current_network()
 
     def _net_selected_cb(self, selection):
+        self._refresh_current_network()
+
+    def _xmleditor_xml_requested_cb(self, src):
+        self._refresh_current_network()
+
+    def _xmleditor_xml_reset_cb(self, src):
         self._refresh_current_network()
