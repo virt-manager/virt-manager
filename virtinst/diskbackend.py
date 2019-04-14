@@ -17,23 +17,6 @@ import libvirt
 from .storage import StoragePool, StorageVolume
 
 
-def _lookup_pool_by_dirname(conn, path):
-    """
-    Try to find the parent pool for the passed path.
-    If found, and the pool isn't running, attempt to start it up.
-
-    return pool, or None if not found
-    """
-    pool = StoragePool.lookup_pool_by_path(conn, os.path.dirname(path))
-    if not pool:
-        return None
-
-    # Ensure pool is running
-    if pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
-        pool.create(0)
-    return pool
-
-
 def _lookup_vol_by_path(conn, path):
     """
     Try to find a volume matching the full passed path. Call info() on
@@ -96,15 +79,15 @@ def _check_if_path_managed(conn, path):
     if vol:
         return vol, vol.storagePoolLookupByVolume()
 
-    pool = _lookup_pool_by_dirname(conn, path)
+    pool = StoragePool.lookup_pool_by_path(conn, os.path.dirname(path))
     if not pool:
         return None, None
 
     # We have the parent pool, but didn't find a volume on first lookup
     # attempt. Refresh the pool and try again, in case we were just out
-    # of date.
+    # of date or the pool was inactive.
     try:
-        pool.refresh(0)
+        StoragePool.ensure_pool_is_running(pool, refresh=True)
         vol, verr = _lookup_vol_by_path(conn, path)
         if verr:
             try:

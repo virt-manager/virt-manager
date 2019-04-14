@@ -2346,6 +2346,7 @@ class ParserDisk(VirtCLIParser):
                 if poolxml:
                     poolname = poolxml.name
             poolobj = self.guest.conn.storagePoolLookupByName(poolname)
+            StoragePool.ensure_pool_is_running(poolobj)
 
         if volname:
             vol_object = poolobj.storageVolLookupByName(volname)

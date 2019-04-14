@@ -263,6 +263,21 @@ class StoragePool(_StorageObject):
         kwargs["lib_collision"] = False
         return util.generate_name(basename, cb, **kwargs)
 
+    @staticmethod
+    def ensure_pool_is_running(pool_object, refresh=False):
+        """
+        If the passed vmmStoragePool isn't running, start it.
+
+        :param pool_object: vmmStoragePool to check/start
+        :param refresh: If True, run refresh() as well
+        """
+        if pool_object.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
+            logging.debug("starting pool=%s", pool_object.name())
+            pool_object.create(0)
+        if refresh:
+            logging.debug("refreshing pool=%s", pool_object.name())
+            pool_object.refresh(0)
+
 
     ######################
     # Validation helpers #
@@ -535,7 +550,7 @@ class StorageVolume(_StorageObject):
         Finds a name similar (or equal) to passed 'basename' that is not
         in use by another volume. Extra params are passed to generate_name
         """
-        pool_object.refresh(0)
+        StoragePool.ensure_pool_is_running(pool_object, refresh=True)
         return util.generate_name(basename,
                                   pool_object.storageVolLookupByName,
                                   **kwargs)
@@ -565,8 +580,7 @@ class StorageVolume(_StorageObject):
     def _get_pool(self):
         return self._pool
     def _set_pool(self, newpool):
-        if newpool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
-            raise ValueError(_("pool '%s' must be active.") % newpool.name())
+        StoragePool.ensure_pool_is_running(newpool)
         self._pool = newpool
         self._pool_xml = StoragePool(self.conn,
             parsexml=self._pool.XMLDesc(0))

@@ -20,7 +20,7 @@ def _build_pool(conn, meter, path):
     pool = StoragePool.lookup_pool_by_path(conn, path)
     if pool:
         logging.debug("Existing pool '%s' found for %s", pool.name(), path)
-        pool.refresh(0)
+        StoragePool.ensure_pool_is_running(pool, refresh=True)
         return pool
 
     name = StoragePool.find_free_name(conn, "boot-scratch")
