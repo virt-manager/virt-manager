@@ -71,37 +71,45 @@ class vmmStorageList(vmmGObjectUI):
         # Name hint passed to addvol. Set by storagebrowser
         self._name_hint = None
 
-        self._active_edits = []
+        self._active_edits = set()
         self._addpool = None
         self._addvol = None
         self._volmenu = None
         self.top_box = self.widget("storage-grid")
 
         self.builder.connect_signals({
-            "on_pool_add_clicked": self._pool_add,
-            "on_pool_stop_clicked": self._pool_stop,
-            "on_pool_start_clicked": self._pool_start,
-            "on_pool_delete_clicked": self._pool_delete,
-            "on_pool_refresh_clicked": self._pool_refresh,
+            "on_pool_add_clicked": self._pool_add_cb,
+            "on_pool_stop_clicked": self._pool_stop_cb,
+            "on_pool_start_clicked": self._pool_start_cb,
+            "on_pool_delete_clicked": self._pool_delete_cb,
+            "on_pool_refresh_clicked": self._pool_refresh_cb,
             "on_pool_apply_clicked": (lambda *x: self._pool_apply()),
 
-            "on_vol_delete_clicked": self._vol_delete,
-            "on_vol_list_button_press_event": self._vol_popup_menu,
-            "on_vol_list_changed": self._vol_selected,
-            "on_vol_add_clicked": self._vol_add,
+            "on_vol_delete_clicked": self._vol_delete_cb,
+            "on_vol_list_button_press_event": self._vol_popup_menu_cb,
+            "on_vol_list_changed": self._vol_selected_cb,
+            "on_vol_add_clicked": self._vol_add_cb,
 
-            "on_browse_cancel_clicked": self._cancel_clicked,
-            "on_browse_local_clicked": self._browse_local_clicked,
-            "on_choose_volume_clicked": self._choose_volume_clicked,
-            "on_vol_list_row_activated": self._vol_list_row_activated,
+            "on_browse_cancel_clicked": self._cancel_clicked_cb,
+            "on_browse_local_clicked": self._browse_local_clicked_cb,
+            "on_choose_volume_clicked": self._choose_volume_clicked_cb,
+            "on_vol_list_row_activated": self._vol_list_row_activated_cb,
 
             "on_pool_name_changed": (lambda *x:
-                self._enable_pool_apply(x, EDIT_POOL_NAME)),
-            "on_pool_autostart_toggled": self._pool_autostart_changed,
+                self._enable_pool_apply(EDIT_POOL_NAME)),
+            "on_pool_autostart_toggled": self._pool_autostart_changed_cb,
         })
 
         self._init_ui()
+        self._populate_pools()
+        self.conn.connect("pool-added", self._conn_pools_changed_cb)
+        self.conn.connect("pool-removed", self._conn_pools_changed_cb)
+        self.conn.connect("state-changed", self._conn_state_changed_cb)
 
+
+    #######################
+    # Standard UI methods #
+    #######################
 
     def _cleanup(self):
         try:
@@ -130,11 +138,11 @@ class vmmStorageList(vmmGObjectUI):
             self._volmenu.hide()
 
 
-    ##########################
-    # Initialization methods #
-    ##########################
+    ###########
+    # UI init #
+    ###########
 
-    def _cap_sort_func(self, model, iter1, iter2, ignore):
+    def _cap_sort_func_cb(self, model, iter1, iter2):
         def _cmp(a, b):
             return ((a > b) - (a < b))
 
@@ -156,7 +164,7 @@ class vmmStorageList(vmmGObjectUI):
         volCopyImage.set_from_stock(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
         volCopyPath.set_image(volCopyImage)
         volCopyPath.show()
-        volCopyPath.connect("activate", self._vol_copy_path)
+        volCopyPath.connect("activate", self._vol_copy_path_cb)
         self._volmenu.add(volCopyPath)
 
         # Volume list
@@ -179,7 +187,7 @@ class vmmStorageList(vmmGObjectUI):
         volSizeCol.add_attribute(vol_txt2, 'sensitive', VOL_COLUMN_SENSITIVE)
         volSizeCol.set_sort_column_id(VOL_COLUMN_CAPACITY)
         self.widget("vol-list").append_column(volSizeCol)
-        volListModel.set_sort_func(VOL_COLUMN_CAPACITY, self._cap_sort_func)
+        volListModel.set_sort_func(VOL_COLUMN_CAPACITY, self._cap_sort_func_cb)
 
         volFormatCol = Gtk.TreeViewColumn(_("Format"))
         vol_txt3 = Gtk.CellRendererText()
@@ -218,17 +226,9 @@ class vmmStorageList(vmmGObjectUI):
         poolListModel.set_sort_column_id(POOL_COLUMN_LABEL,
             Gtk.SortType.ASCENDING)
 
-        pool_list.get_selection().connect("changed", self._pool_selected)
+        pool_list.get_selection().connect("changed", self._pool_selected_cb)
         pool_list.get_selection().set_select_function(
             (lambda *x: self._confirm_changes()), None)
-
-        # Populate list and connect conn signals
-        self._populate_pools()
-        self.conn.connect("pool-added", self._conn_pool_count_changed)
-        self.conn.connect("pool-removed", self._conn_pool_count_changed)
-        self.conn.connect("state-changed", self._conn_state_changed)
-
-        self._conn_state_changed()
 
 
     ###############
@@ -243,9 +243,25 @@ class vmmStorageList(vmmGObjectUI):
         self._name_hint = val
 
 
-    ####################
-    # Internal helpers #
-    ####################
+    #################
+    # UI populating #
+    #################
+
+    def _refresh_conn_state(self):
+        conn_active = self.conn.is_active()
+        self.widget("pool-add").set_sensitive(conn_active and
+            self.conn.is_storage_capable())
+
+        if conn_active and not self.conn.is_storage_capable():
+            self._set_error_page(
+                _("Libvirt connection does not support storage management."))
+
+        if conn_active:
+            uiutil.set_list_selection_by_number(self.widget("pool-list"), 0)
+            return
+
+        self._set_error_page(_("Connection not active."))
+        self._populate_pools()
 
     def _current_pool(self):
         connkey = uiutil.get_list_selection(self.widget("pool-list"))
@@ -258,19 +274,6 @@ class vmmStorageList(vmmGObjectUI):
 
         connkey = uiutil.get_list_selection(self.widget("vol-list"))
         return connkey and pool.get_volume(connkey)
-
-    def _enable_pool_apply(self, *arglist):
-        edittype = arglist[-1]
-        self.widget("pool-apply").set_sensitive(True)
-        if edittype not in self._active_edits:
-            self._active_edits.append(edittype)
-
-    def _disable_pool_apply(self):
-        for i in EDIT_POOL_IDS:
-            if i in self._active_edits:
-                self._active_edits.remove(i)
-
-        self.widget("pool-apply").set_sensitive(False)
 
     def _update_pool_row(self, connkey):
         for row in self.widget("pool-list").get_model():
@@ -287,33 +290,9 @@ class vmmStorageList(vmmGObjectUI):
         if not curpool or curpool.get_connkey() != connkey:
             return
 
-        # Currently selected pool changed state: force a 'pool_selected' to
-        # update vol list
-        self._pool_selected(self.widget("pool-list").get_selection())
+        self._refresh_current_pool()
 
-    def _reset_pool_state(self):
-        self.widget("pool-details").set_sensitive(False)
-        self.widget("pool-name-entry").set_text("")
-        self.widget("pool-sizes").set_markup("")
-        self.widget("pool-location").set_text("")
-        self.widget("pool-state-icon").set_from_icon_name(
-            ICON_SHUTOFF, Gtk.IconSize.BUTTON)
-        self.widget("pool-state").set_text(_("Inactive"))
-        self.widget("vol-list").get_model().clear()
-        self.widget("pool-autostart").set_label(_("On Boot"))
-        self.widget("pool-autostart").set_active(False)
-
-        self.widget("pool-delete").set_sensitive(False)
-        self.widget("pool-stop").set_sensitive(False)
-        self.widget("pool-start").set_sensitive(False)
-        self.widget("pool-refresh").set_sensitive(False)
-        self.widget("vol-add").set_sensitive(False)
-        self.widget("vol-delete").set_sensitive(False)
-        self.widget("vol-list").set_sensitive(False)
-        self._disable_pool_apply()
-
-    def _populate_pool_state(self, connkey):
-        pool = self.conn.get_pool(connkey)
+    def _populate_pool_state(self, pool):
         auto = pool.get_autostart()
         active = pool.is_active()
 
@@ -350,10 +329,24 @@ class vmmStorageList(vmmGObjectUI):
             self.widget("vol-add").set_tooltip_text(
                 _("Pool does not support volume creation"))
 
-    def _set_storage_error_page(self, msg):
-        self._reset_pool_state()
+    def _set_error_page(self, msg):
         self.widget("storage-pages").set_current_page(1)
         self.widget("storage-error-label").set_text(msg)
+
+    def _refresh_current_pool(self):
+        pool = self._current_pool()
+        if not pool:
+            self._set_error_page(_("No storage pool selected."))
+            return
+
+        self.widget("storage-pages").set_current_page(0)
+
+        try:
+            self._populate_pool_state(pool)
+        except Exception as e:
+            logging.exception(e)
+            self._set_error_page(_("Error selecting pool: %s") % e)
+        self._disable_pool_apply()
 
     def _populate_pools(self):
         pool_list = self.widget("pool-list")
@@ -368,8 +361,8 @@ class vmmStorageList(vmmGObjectUI):
 
             for pool in self.conn.list_pools():
                 pool.disconnect_by_obj(self)
-                pool.connect("state-changed", self._pool_changed)
-                pool.connect("refreshed", self._pool_changed)
+                pool.connect("state-changed", self._pool_changed_cb)
+                pool.connect("refreshed", self._pool_changed_cb)
 
                 name = pool.get_name()
                 typ = StoragePool.get_pool_type_desc(pool.get_type())
@@ -443,134 +436,12 @@ class vmmStorageList(vmmGObjectUI):
             vadj.set_value(vadj.get_upper() * vscroll_percent)
         self.idle_add(_reset_vscroll_position)
 
-    def _confirm_changes(self):
-        if not self._active_edits:
-            return True
 
-        if self.err.chkbox_helper(
-                self.config.get_confirm_unapplied,
-                self.config.set_confirm_unapplied,
-                text1=(_("There are unapplied changes. "
-                         "Would you like to apply them now?")),
-                chktext=_("Don't warn me again."),
-                default=False):
+    ##########################
+    # Pool lifecycle actions #
+    ##########################
 
-            if all([edit in EDIT_POOL_IDS for edit in self._active_edits]):
-                self._pool_apply()
-
-        self._active_edits = []
-        return True
-
-
-    #############
-    # Listeners #
-    #############
-
-    def _browse_local_clicked(self, src):
-        ignore = src
-        self.emit("browse-clicked")
-
-    def _choose_volume_clicked(self, src):
-        ignore = src
-        self.emit("volume-chosen", self._current_vol())
-
-    def _vol_list_row_activated(self, src, treeiter, viewcol):
-        ignore = src
-        ignore = treeiter
-        ignore = viewcol
-        self.emit("volume-chosen", self._current_vol())
-
-    def _pool_selected(self, src):
-        model, treeiter = src.get_selected()
-        if treeiter is None:
-            self._set_storage_error_page(_("No storage pool selected."))
-            return
-
-        self.widget("storage-pages").set_current_page(0)
-        connkey = model[treeiter][0]
-
-        try:
-            self._populate_pool_state(connkey)
-        except Exception as e:
-            logging.exception(e)
-            self._set_storage_error_page(_("Error selecting pool: %s") % e)
-        self._disable_pool_apply()
-
-    def _pool_created(self, src, connkey):
-        # The pool list will have already been updated, since this
-        # signal arrives only after pool-added. So all we do here is
-        # select the pool we just created.
-        ignore = src
-        uiutil.set_list_selection(self.widget("pool-list"), connkey)
-
-    def _vol_created(self, src, pool_connkey, volname):
-        # The vol list will have already been updated, since this
-        # signal arrives only after pool-refreshed. So all we do here is
-        # select the vol we just created.
-        ignore = src
-        pool = self._current_pool()
-        if not pool or pool.get_connkey() != pool_connkey:
-            return
-
-        # Select the new volume
-        uiutil.set_list_selection(self.widget("vol-list"), volname)
-
-    def _pool_autostart_changed(self, src):
-        ignore = src
-        self._enable_pool_apply(EDIT_POOL_AUTOSTART)
-
-    def _vol_selected(self, src):
-        model, treeiter = src.get_selected()
-        self.widget("vol-delete").set_sensitive(bool(treeiter))
-
-        can_choose = bool(treeiter and model[treeiter][VOL_COLUMN_SENSITIVE])
-        self.widget("choose-volume").set_sensitive(can_choose)
-
-    def _vol_popup_menu(self, widget_ignore, event):
-        if event.button != 3:
-            return
-
-        self._volmenu.popup_at_pointer(event)
-
-    def _cancel_clicked(self, src):
-        ignore = src
-        self.emit("cancel-clicked")
-
-
-    ##############################
-    # Connection event listeners #
-    ##############################
-
-    def _conn_state_changed(self, ignore=None):
-        conn_active = self.conn.is_active()
-        self.widget("pool-add").set_sensitive(conn_active and
-            self.conn.is_storage_capable())
-
-        if conn_active and not self.conn.is_storage_capable():
-            self._set_storage_error_page(
-                _("Libvirt connection does not support storage management."))
-
-        if conn_active:
-            uiutil.set_list_selection_by_number(self.widget("pool-list"), 0)
-            return
-
-        self._set_storage_error_page(_("Connection not active."))
-        self._populate_pools()
-
-    def _pool_changed(self, pool):
-        self._update_pool_row(pool.get_connkey())
-
-    def _conn_pool_count_changed(self, src, connkey):
-        ignore = src
-        ignore = connkey
-        self._populate_pools()
-
-
-    #########################
-    # Pool action listeners #
-    #########################
-
-    def _pool_stop(self, src_ignore):
+    def _pool_stop_cb(self, src):
         pool = self._current_pool()
         if pool is None:
             return
@@ -579,8 +450,7 @@ class vmmStorageList(vmmGObjectUI):
         vmmAsyncJob.simple_async_noshow(pool.stop, [], self,
                             _("Error stopping pool '%s'") % pool.get_name())
 
-    def _pool_start(self, src):
-        ignore = src
+    def _pool_start_cb(self, src):
         pool = self._current_pool()
         if pool is None:
             return
@@ -589,20 +459,18 @@ class vmmStorageList(vmmGObjectUI):
         vmmAsyncJob.simple_async_noshow(pool.start, [], self,
                             _("Error starting pool '%s'") % pool.get_name())
 
-    def _pool_add(self, src):
-        ignore = src
+    def _pool_add_cb(self, src):
         logging.debug("Launching 'Add Pool' wizard")
 
         try:
             if self._addpool is None:
                 self._addpool = vmmCreatePool(self.conn)
-                self._addpool.connect("pool-created", self._pool_created)
+                self._addpool.connect("pool-created", self._pool_created_cb)
             self._addpool.show(self.topwin)
         except Exception as e:
             self.err.show_err(_("Error launching pool wizard: %s") % str(e))
 
-    def _pool_delete(self, src):
-        ignore = src
+    def _pool_delete_cb(self, src):
         pool = self._current_pool()
         if pool is None:
             return
@@ -616,8 +484,7 @@ class vmmStorageList(vmmGObjectUI):
         vmmAsyncJob.simple_async_noshow(pool.delete, [], self,
                             _("Error deleting pool '%s'") % pool.get_name())
 
-    def _pool_refresh(self, src):
-        ignore = src
+    def _pool_refresh_cb(self, src):
         if not self._confirm_changes():
             return
 
@@ -628,6 +495,66 @@ class vmmStorageList(vmmGObjectUI):
         logging.debug("Refresh pool '%s'", pool.get_name())
         vmmAsyncJob.simple_async_noshow(pool.refresh, [], self,
                             _("Error refreshing pool '%s'") % pool.get_name())
+
+
+    ###########################
+    # Volume action listeners #
+    ###########################
+
+    def _vol_copy_path_cb(self, src):
+        vol = self._current_vol()
+        if not vol:
+            return
+
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        target_path = vol.get_target_path()
+        if target_path:
+            clipboard.set_text(target_path, -1)
+
+    def _vol_add_cb(self, src):
+        pool = self._current_pool()
+        if pool is None:
+            return
+
+        logging.debug("Launching 'Add Volume' wizard for pool '%s'",
+                      pool.get_name())
+        try:
+            if self._addvol is None:
+                self._addvol = vmmCreateVolume(self.conn, pool)
+                self._addvol.connect("vol-created", self._vol_created_cb)
+            else:
+                self._addvol.set_parent_pool(self.conn, pool)
+            self._addvol.set_modal(self.topwin.get_modal())
+            self._addvol.set_name_hint(self._name_hint)
+            self._addvol.show(self.topwin)
+        except Exception as e:
+            self.err.show_err(_("Error launching volume wizard: %s") % str(e))
+
+    def _vol_delete_cb(self, src):
+        vol = self._current_vol()
+        if vol is None:
+            return
+
+        pool = self._current_pool()
+        result = self.err.yes_no(_("Are you sure you want to permanently "
+                                   "delete the volume %s?") % vol.get_name())
+        if not result:
+            return
+
+        def cb():
+            vol.delete()
+            def idlecb():
+                pool.refresh()
+            self.idle_add(idlecb)
+
+        logging.debug("Deleting volume '%s'", vol.get_name())
+        vmmAsyncJob.simple_async_noshow(cb, [], self,
+                        _("Error deleting volume '%s'") % vol.get_name())
+
+
+    #############################
+    # pool apply/config actions #
+    #############################
 
     def _pool_apply(self):
         pool = self._current_pool()
@@ -648,59 +575,88 @@ class vmmStorageList(vmmGObjectUI):
 
         self._disable_pool_apply()
 
+    def _enable_pool_apply(self, edittype):
+        self._active_edits.add(edittype)
+        self.widget("pool-apply").set_sensitive(True)
 
-    ###########################
-    # Volume action listeners #
-    ###########################
+    def _disable_pool_apply(self):
+        self._active_edits = set()
+        self.widget("pool-apply").set_sensitive(False)
 
-    def _vol_copy_path(self, src):
-        ignore = src
-        vol = self._current_vol()
-        if not vol:
-            return
+    def _confirm_changes(self):
+        if not self._active_edits:
+            return True
 
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        target_path = vol.get_target_path()
-        if target_path:
-            clipboard.set_text(target_path, -1)
+        if self.err.chkbox_helper(
+                self.config.get_confirm_unapplied,
+                self.config.set_confirm_unapplied,
+                text1=(_("There are unapplied changes. "
+                         "Would you like to apply them now?")),
+                chktext=_("Don't warn me again."),
+                default=False):
+            self._pool_apply()
 
-    def _vol_add(self, src):
-        ignore = src
+        self._active_edits = set()
+        return True
+
+
+    #############
+    # Listeners #
+    #############
+
+    def _browse_local_clicked_cb(self, src):
+        self.emit("browse-clicked")
+
+    def _choose_volume_clicked_cb(self, src):
+        self.emit("volume-chosen", self._current_vol())
+
+    def _vol_list_row_activated_cb(self, src, treeiter, viewcol):
+        self.emit("volume-chosen", self._current_vol())
+
+    def _pool_created_cb(self, src, connkey):
+        # The pool list will have already been updated, since this
+        # signal arrives only after pool-added. So all we do here is
+        # select the pool we just created.
+        uiutil.set_list_selection(self.widget("pool-list"), connkey)
+
+    def _vol_created_cb(self, src, pool_connkey, volname):
+        # The vol list will have already been updated, since this
+        # signal arrives only after pool-refreshed. So all we do here is
+        # select the vol we just created.
         pool = self._current_pool()
-        if pool is None:
+        if not pool or pool.get_connkey() != pool_connkey:
             return
 
-        logging.debug("Launching 'Add Volume' wizard for pool '%s'",
-                      pool.get_name())
-        try:
-            if self._addvol is None:
-                self._addvol = vmmCreateVolume(self.conn, pool)
-                self._addvol.connect("vol-created", self._vol_created)
-            else:
-                self._addvol.set_parent_pool(self.conn, pool)
-            self._addvol.set_modal(self.topwin.get_modal())
-            self._addvol.set_name_hint(self._name_hint)
-            self._addvol.show(self.topwin)
-        except Exception as e:
-            self.err.show_err(_("Error launching volume wizard: %s") % str(e))
+        # Select the new volume
+        uiutil.set_list_selection(self.widget("vol-list"), volname)
 
-    def _vol_delete(self, src_ignore):
-        vol = self._current_vol()
-        if vol is None:
+    def _pool_autostart_changed_cb(self, src):
+        self._enable_pool_apply(EDIT_POOL_AUTOSTART)
+
+    def _vol_selected_cb(self, src):
+        model, treeiter = src.get_selected()
+        self.widget("vol-delete").set_sensitive(bool(treeiter))
+
+        can_choose = bool(treeiter and model[treeiter][VOL_COLUMN_SENSITIVE])
+        self.widget("choose-volume").set_sensitive(can_choose)
+
+    def _vol_popup_menu_cb(self, src, event):
+        if event.button != 3:
             return
 
-        pool = self._current_pool()
-        result = self.err.yes_no(_("Are you sure you want to permanently "
-                                   "delete the volume %s?") % vol.get_name())
-        if not result:
-            return
+        self._volmenu.popup_at_pointer(event)
 
-        def cb():
-            vol.delete()
-            def idlecb():
-                pool.refresh()
-            self.idle_add(idlecb)
+    def _cancel_clicked_cb(self, src):
+        self.emit("cancel-clicked")
 
-        logging.debug("Deleting volume '%s'", vol.get_name())
-        vmmAsyncJob.simple_async_noshow(cb, [], self,
-                        _("Error deleting volume '%s'") % vol.get_name())
+    def _pool_changed_cb(self, pool):
+        self._update_pool_row(pool.get_connkey())
+
+    def _conn_state_changed_cb(self, conn):
+        self._refresh_conn_state()
+
+    def _conn_pools_changed_cb(self, src, connkey):
+        self._populate_pools()
+
+    def _pool_selected_cb(self, selection):
+        self._refresh_current_pool()
