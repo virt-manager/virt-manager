@@ -100,8 +100,6 @@ class vmmHost(vmmGObjectUI):
         if not self.is_visible():
             return
 
-        self._confirm_changes()
-
         self.topwin.hide()
         vmmEngine.get_instance().decrement_window_counter()
 
@@ -189,9 +187,6 @@ class vmmHost(vmmGObjectUI):
         self._hostnets.close()
         self._storagelist.close()
 
-    def _confirm_changes(self):
-        return True
-
 
     ################
     # UI listeners #
@@ -217,7 +212,6 @@ class vmmHost(vmmGObjectUI):
         self.conn.set_autoconnect(src.get_active())
 
     def _page_changed_cb(self, src, child, pagenum):
-        self._confirm_changes()
         if pagenum == 1:
             self._hostnets.refresh_page()
         elif pagenum == 2:

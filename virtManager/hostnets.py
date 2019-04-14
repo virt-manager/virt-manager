@@ -450,9 +450,12 @@ class vmmHostNets(vmmGObjectUI):
         self._active_edits.add(edittype)
 
     def _confirm_changes(self):
-        if self._active_edits and self.err.confirm_unapplied_changes():
+        if (self.is_visible() and
+            self._active_edits and
+            self.err.confirm_unapplied_changes()):
             self._net_apply()
-        self._active_edits = set()
+
+        self._disable_net_apply()
         return True
 
 

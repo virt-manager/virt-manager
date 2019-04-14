@@ -485,12 +485,11 @@ class vmmStorageList(vmmGObjectUI):
                             _("Error deleting pool '%s'") % pool.get_name())
 
     def _pool_refresh_cb(self, src):
-        if not self._confirm_changes():
-            return
-
         pool = self._current_pool()
         if pool is None:
             return
+
+        self._confirm_changes()
 
         logging.debug("Refresh pool '%s'", pool.get_name())
         vmmAsyncJob.simple_async_noshow(pool.refresh, [], self,
@@ -584,9 +583,12 @@ class vmmStorageList(vmmGObjectUI):
         self.widget("pool-apply").set_sensitive(False)
 
     def _confirm_changes(self):
-        if self._active_edits and self.err.confirm_unapplied_changes():
+        if (self.is_visible() and
+            self._active_edits and
+            self.err.confirm_unapplied_changes()):
             self._pool_apply()
-        self._active_edits = set()
+
+        self._disable_pool_apply()
         return True
 
 
