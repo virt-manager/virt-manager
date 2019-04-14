@@ -73,7 +73,6 @@ class vmmAddHardware(vmmGObjectUI):
 
         self._storagebrowser = None
 
-        self._dev = None
         self._remove_usb_controller = None
         self._selected_model = None
 
@@ -141,7 +140,6 @@ class vmmAddHardware(vmmGObjectUI):
     def _cleanup(self):
         self.vm = None
         self.conn = None
-        self._dev = None
 
         if self._storagebrowser:
             self._storagebrowser.cleanup()
@@ -734,7 +732,6 @@ class vmmAddHardware(vmmGObjectUI):
     ################
 
     def _hw_selected_cb(self, src):
-        self._dev = None
         self.widget("create-finish").set_sensitive(True)
 
         row = self._get_hw_selection()
@@ -871,11 +868,11 @@ class vmmAddHardware(vmmGObjectUI):
             "version": "tpm-version",
         }
 
-        self._dev = DeviceTpm(self.conn.get_backend())
-        self._dev.type = devtype
+        dev = DeviceTpm(self.conn.get_backend())
+        dev.type = devtype
 
         for param_name, widget_name in tpm_widget_mappings.items():
-            make_visible = self._dev.supports_property(param_name)
+            make_visible = dev.supports_property(param_name)
             uiutil.set_grid_row_visible(self.widget(widget_name + "-label"),
                                            make_visible)
 
@@ -976,17 +973,17 @@ class vmmAddHardware(vmmGObjectUI):
     # Add device methods #
     ######################
 
-    def _setup_device(self, asyncjob):
-        if self._dev.DEVICE_TYPE != "disk":
+    def _setup_device(self, asyncjob, dev):
+        if dev.DEVICE_TYPE != "disk":
             return
 
         poolname = None
-        if (self._dev.wants_storage_creation() and
-            self._dev.get_parent_pool()):
-            poolname = self._dev.get_parent_pool().name()
+        if (dev.wants_storage_creation() and
+            dev.get_parent_pool()):
+            poolname = dev.get_parent_pool().name()
 
-        logging.debug("Running build_storage() for device=%s", self._dev)
-        self._dev.build_storage(meter=asyncjob.get_meter())
+        logging.debug("Running build_storage() for device=%s", dev)
+        dev.build_storage(meter=asyncjob.get_meter())
         logging.debug("build_storage() complete")
 
         if poolname:
@@ -998,8 +995,8 @@ class vmmAddHardware(vmmGObjectUI):
                     "storage creation.", poolname, exc_info=True)
 
 
-    def _add_device(self):
-        xml = self._dev.get_xml()
+    def _add_device(self, dev):
+        xml = dev.get_xml()
         logging.debug("Adding device:\n%s", xml)
 
         if self._remove_usb_controller:
@@ -1015,7 +1012,7 @@ class vmmAddHardware(vmmGObjectUI):
 
             return
 
-        controller = getattr(self._dev, "vmm_controller", None)
+        controller = getattr(dev, "vmm_controller", None)
         if controller is not None:
             logging.debug("Adding controller:\n%s",
                           controller.get_xml())
@@ -1024,7 +1021,7 @@ class vmmAddHardware(vmmGObjectUI):
         try:
             if controller is not None:
                 self.vm.attach_device(controller)
-            self.vm.attach_device(self._dev)
+            self.vm.attach_device(dev)
         except Exception as e:
             logging.debug("Device could not be hotplugged: %s", str(e))
             attach_err = (str(e), "".join(traceback.format_exc()))
@@ -1048,18 +1045,18 @@ class vmmAddHardware(vmmGObjectUI):
         try:
             if controller is not None:
                 self.vm.add_device(controller)
-            self.vm.add_device(self._dev)
+            self.vm.add_device(dev)
         except Exception as e:
             self.err.show_err(_("Error adding device: %s") % str(e))
             return True
 
         return False
 
-    def _finish_cb(self, error, details):
+    def _finish_cb(self, error, details, dev):
         failure = True
         if not error:
             try:
-                failure = self._add_device()
+                failure = self._add_device(dev)
             except Exception as e:
                 failure = True
                 error = _("Unable to add device: %s") % str(e)
@@ -1070,13 +1067,13 @@ class vmmAddHardware(vmmGObjectUI):
 
         self.reset_finish_cursor()
 
-        self._dev = None
         if not failure:
             self.close()
 
     def _finish(self, ignore=None):
         try:
-            if self._validate() is False:
+            dev = self._validate()
+            if not dev:
                 return
         except Exception as e:
             self.err.show_err(
@@ -1084,8 +1081,8 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         self.set_finish_cursor()
-        progWin = vmmAsyncJob(self._setup_device, [],
-                              self._finish_cb, [],
+        progWin = vmmAsyncJob(self._setup_device, [dev],
+                              self._finish_cb, [dev],
                               _("Creating device"),
                               _("Depending on the device, this may take "
                                 "a few minutes to complete."),
@@ -1104,44 +1101,44 @@ class vmmAddHardware(vmmGObjectUI):
         # pylint: disable=assignment-from-no-return
 
         if page_num == PAGE_DISK:
-            ret = self._validate_page_storage()
+            dev = self._validate_page_storage()
         elif page_num == PAGE_CONTROLLER:
-            ret = self._validate_page_controller()
+            dev = self._validate_page_controller()
         elif page_num == PAGE_NETWORK:
-            ret = self._validate_page_network()
+            dev = self._validate_page_network()
         elif page_num == PAGE_INPUT:
-            ret = self._validate_page_input()
+            dev = self._validate_page_input()
         elif page_num == PAGE_GRAPHICS:
-            ret = self._validate_page_graphics()
+            dev = self._validate_page_graphics()
         elif page_num == PAGE_SOUND:
-            ret = self._validate_page_sound()
+            dev = self._validate_page_sound()
         elif page_num == PAGE_HOSTDEV:
-            ret = self._validate_page_hostdev()
+            dev = self._validate_page_hostdev()
         elif page_num == PAGE_CHAR:
-            ret = self._validate_page_char()
+            dev = self._validate_page_char()
         elif page_num == PAGE_VIDEO:
-            ret = self._validate_page_video()
+            dev = self._validate_page_video()
         elif page_num == PAGE_WATCHDOG:
-            ret = self._validate_page_watchdog()
+            dev = self._validate_page_watchdog()
         elif page_num == PAGE_FILESYSTEM:
-            ret = self._validate_page_filesystem()
+            dev = self._validate_page_filesystem()
         elif page_num == PAGE_SMARTCARD:
-            ret = self._validate_page_smartcard()
+            dev = self._validate_page_smartcard()
         elif page_num == PAGE_USBREDIR:
-            ret = self._validate_page_usbredir()
+            dev = self._validate_page_usbredir()
         elif page_num == PAGE_TPM:
-            ret = self._validate_page_tpm()
+            dev = self._validate_page_tpm()
         elif page_num == PAGE_RNG:
-            ret = self._validate_page_rng()
+            dev = self._validate_page_rng()
         elif page_num == PAGE_PANIC:
-            ret = self._validate_page_panic()
+            dev = self._validate_page_panic()
         elif page_num == PAGE_VSOCK:
-            ret = self._validate_page_vsock()
+            dev = self._validate_page_vsock()
 
-        if ret is not False and self._dev:
-            self._dev.set_defaults(self.vm.get_xmlobj())
-            self._dev.validate()
-        return ret
+        if dev:
+            dev.set_defaults(self.vm.get_xmlobj())
+            dev.validate()
+        return dev
 
     def _set_disk_controller(self, disk, controller_model, used_disks):
         # Add a SCSI controller with model virtio-scsi if needed
@@ -1253,8 +1250,7 @@ class vmmAddHardware(vmmGObjectUI):
         if self.addstorage.validate_disk_object(disk) is False:
             return False
 
-        self._dev = disk
-        return True
+        return disk
 
 
     def _validate_page_network(self):
@@ -1268,42 +1264,46 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Network selection error."),
                                     _("A network source must be selected."))
 
-        ret = self._netlist.validate_network(mac, model)
-        if ret is False:
+        dev = self._netlist.validate_network(mac, model)
+        if dev is False:
             return False
 
-        self._dev = ret
+        return dev
 
     def _validate_page_input(self):
         typ, bus = uiutil.get_list_selection(self.widget("input-type"))
-        self._dev = DeviceInput(self.conn.get_backend())
-        self._dev.type = typ
-        self._dev.bus = bus
+        dev = DeviceInput(self.conn.get_backend())
+        dev.type = typ
+        dev.bus = bus
+        return dev
 
     def _validate_page_graphics(self):
         (gtype, port, tlsport, listen,
          addr, passwd, keymap, gl, rendernode) = self._gfxdetails.get_values()
-        self._dev = DeviceGraphics(self.conn.get_backend())
-        self._dev.type = gtype
-        self._dev.passwd = passwd
-        self._dev.gl = gl
-        self._dev.rendernode = rendernode
+        dev = DeviceGraphics(self.conn.get_backend())
+        dev.type = gtype
+        dev.passwd = passwd
+        dev.gl = gl
+        dev.rendernode = rendernode
 
         if not listen or listen == "none":
-            self._dev.listen = "none"
+            dev.listen = "none"
         elif listen == "address":
-            self._dev.listen = addr
-            self._dev.port = port
-            self._dev.tlsPort = tlsport
+            dev.listen = addr
+            dev.port = port
+            dev.tlsPort = tlsport
         else:
             raise ValueError(_("invalid listen type"))
         if keymap:
-            self._dev.keymap = keymap
+            dev.keymap = keymap
+
+        return dev
 
     def _validate_page_sound(self):
         smodel = uiutil.get_list_selection(self.widget("sound-model"))
-        self._dev = DeviceSound(self.conn.get_backend())
-        self._dev.model = smodel
+        dev = DeviceSound(self.conn.get_backend())
+        dev.model = smodel
+        return dev
 
     def _validate_page_hostdev(self):
         nodedev = uiutil.get_list_selection(self.widget("host-device"))
@@ -1326,7 +1326,7 @@ class vmmAddHardware(vmmGObjectUI):
             if not res:
                 return False
         dev.set_from_nodedev(nodedev)
-        self._dev = dev
+        return dev
 
     def _validate_page_char(self):
         char_class = self._get_char_class()
@@ -1346,43 +1346,48 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("char-auto-socket").get_active()):
             source_path = None
 
-        self._dev = char_class(self.conn.get_backend())
-        self._dev.type = devtype
-        if self._dev.supports_property("source_path"):
-            self._dev.source_path = source_path
-        if self._dev.supports_property("source_channel"):
-            self._dev.source_channel = source_channel
-        if self._dev.supports_property("target_name"):
-            self._dev.target_name = target_name
-        if self._dev.supports_property("target_type"):
-            self._dev.target_type = target_type
+        dev = char_class(self.conn.get_backend())
+        dev.type = devtype
+        if dev.supports_property("source_path"):
+            dev.source_path = source_path
+        if dev.supports_property("source_channel"):
+            dev.source_channel = source_channel
+        if dev.supports_property("target_name"):
+            dev.target_name = target_name
+        if dev.supports_property("target_type"):
+            dev.target_type = target_type
+        return dev
 
     def _validate_page_video(self):
         model = uiutil.get_list_selection(self.widget("video-model"))
-        self._dev = DeviceVideo(self.conn.get_backend())
-        self._dev.model = model
+        dev = DeviceVideo(self.conn.get_backend())
+        dev.model = model
+        return dev
 
     def _validate_page_watchdog(self):
         model = uiutil.get_list_selection(self.widget("watchdog-model"))
         action = uiutil.get_list_selection(self.widget("watchdog-action"))
-        self._dev = DeviceWatchdog(self.conn.get_backend())
-        self._dev.model = model
-        self._dev.action = action
+        dev = DeviceWatchdog(self.conn.get_backend())
+        dev.model = model
+        dev.action = action
+        return dev
 
     def _validate_page_filesystem(self):
         if self._fsdetails.validate_page_filesystem() is False:
             return False
-        self._dev = self._fsdetails.get_dev()
+        return self._fsdetails.get_dev()
 
     def _validate_page_smartcard(self):
         mode = uiutil.get_list_selection(self.widget("smartcard-mode"))
-        self._dev = DeviceSmartcard(self.conn.get_backend())
-        self._dev.mode = mode
+        dev = DeviceSmartcard(self.conn.get_backend())
+        dev.mode = mode
+        return dev
 
     def _validate_page_usbredir(self):
         stype = uiutil.get_list_selection(self.widget("usbredir-list"))
-        self._dev = DeviceRedirdev(self.conn.get_backend())
-        self._dev.type = stype
+        dev = DeviceRedirdev(self.conn.get_backend())
+        dev.type = stype
+        return dev
 
     def _validate_page_tpm(self):
         typ = uiutil.get_list_selection(self.widget("tpm-type"))
@@ -1397,21 +1402,24 @@ class vmmAddHardware(vmmGObjectUI):
             "version": version,
         }
 
-        self._dev = DeviceTpm(self.conn.get_backend())
+        dev = DeviceTpm(self.conn.get_backend())
         for param_name, val in value_mappings.items():
-            if self._dev.supports_property(param_name) and val is not None:
-                setattr(self._dev, param_name, val)
+            if dev.supports_property(param_name) and val is not None:
+                setattr(dev, param_name, val)
+        return dev
 
     def _validate_page_panic(self):
         model = uiutil.get_list_selection(self.widget("panic-model"))
-        self._dev = DevicePanic(self.conn.get_backend())
-        self._dev.model = model
+        dev = DevicePanic(self.conn.get_backend())
+        dev.model = model
+        return dev
 
     def _validate_page_vsock(self):
         auto_cid, cid = self._vsockdetails.get_values()
-        self._dev = DeviceVsock(self.conn.get_backend())
-        self._dev.auto_cid = auto_cid
-        self._dev.cid = cid
+        dev = DeviceVsock(self.conn.get_backend())
+        dev.auto_cid = auto_cid
+        dev.cid = cid
+        return dev
 
     def _validate_page_controller(self):
         controller_type = uiutil.get_list_selection(
@@ -1420,23 +1428,24 @@ class vmmAddHardware(vmmGObjectUI):
 
         self._selected_model = model
         if model == "usb3":
-            self._dev = DeviceController.get_usb3_controller(
+            dev = DeviceController.get_usb3_controller(
                     self.conn.get_backend(), self.vm.xmlobj)
             model = None
         else:
-            self._dev = DeviceController(self.conn.get_backend())
+            dev = DeviceController(self.conn.get_backend())
 
         controllers = self.vm.xmlobj.devices.controller
         controller_num = [x for x in controllers if
                 (x.type == controller_type)]
         if len(controller_num) > 0:
             index_new = max([x.index for x in controller_num]) + 1
-            self._dev.index = index_new
+            dev.index = index_new
 
-        self._dev.type = controller_type
+        dev.type = controller_type
 
         if model and model != "none":
-            self._dev.model = model
+            dev.model = model
+        return dev
 
     def _validate_page_rng(self):
         device = self.widget("rng-device").get_text()
@@ -1444,9 +1453,10 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("RNG selection error."),
                                 _("A device must be specified."))
 
-        self._dev = DeviceRng(self.conn.get_backend())
-        self._dev.type = DeviceRng.TYPE_RANDOM
-        self._dev.device = device
+        dev = DeviceRng(self.conn.get_backend())
+        dev.type = DeviceRng.TYPE_RANDOM
+        dev.device = device
+        return dev
 
 
     ####################
