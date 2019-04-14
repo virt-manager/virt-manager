@@ -26,8 +26,7 @@ from .baseclass import vmmGObjectUI
 from .addstorage import vmmAddStorage
 from .vsockdetails import vmmVsockDetails
 
-(PAGE_ERROR,
- PAGE_DISK,
+(PAGE_DISK,
  PAGE_CONTROLLER,
  PAGE_NETWORK,
  PAGE_INPUT,
@@ -43,7 +42,7 @@ from .vsockdetails import vmmVsockDetails
  PAGE_TPM,
  PAGE_RNG,
  PAGE_PANIC,
- PAGE_VSOCK) = range(18)
+ PAGE_VSOCK) = range(17)
 
 
 def _build_combo(combo, values, default_value=None, sort=True):
@@ -101,7 +100,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_create_cancel_clicked": self.close,
             "on_vmm_create_delete_event": self.close,
             "on_create_finish_clicked": self._finish,
-            "on_hw_list_changed": self._hw_selected,
+            "on_hw_list_changed": self._hw_selected_cb,
 
             "on_storage_devtype_changed": self._change_storage_devtype,
 
@@ -165,17 +164,11 @@ class vmmAddHardware(vmmGObjectUI):
     ##########################
 
     def _set_initial_state(self):
-        notebook = self.widget("create-pages")
-        notebook.set_show_tabs(False)
+        self.widget("create-pages").set_show_tabs(False)
+        self.widget("top-pages").set_show_tabs(False)
 
         blue = Gdk.color_parse("#0072A8")
         self.widget("page-title-box").modify_bg(Gtk.StateType.NORMAL, blue)
-
-        # Name, icon name, page number, is sensitive, tooltip, icon size,
-        # device type (serial/parallel)...
-        model = Gtk.ListStore(str, str, int, bool, str, str)
-        hw_list = self.widget("hw-list")
-        hw_list.set_model(model)
 
         hw_col = Gtk.TreeViewColumn(_("Hardware"))
         hw_col.set_spacing(6)
@@ -191,7 +184,7 @@ class vmmAddHardware(vmmGObjectUI):
         hw_col.add_attribute(icon, 'icon-name', 1)
         hw_col.add_attribute(text, 'text', 0)
         hw_col.add_attribute(text, 'sensitive', 3)
-        hw_list.append_column(hw_col)
+        self.widget("hw-list").append_column(hw_col)
 
         # Individual HW page UI
         self.build_disk_bus_combo(self.vm, self.widget("storage-bustype"))
@@ -229,9 +222,10 @@ class vmmAddHardware(vmmGObjectUI):
             storage_tooltip = _("Connection does not support storage"
                                 " management.")
 
-        hwlist = self.widget("hw-list")
-        model = hwlist.get_model()
-        model.clear()
+        # Name, icon name, page number, is sensitive, tooltip, icon size,
+        # device type (serial/parallel)...
+        model = Gtk.ListStore(str, str, int, bool, str, str)
+        self.widget("hw-list").set_model(model)
 
         def add_hw_option(name, icon, page, sensitive, errortxt, devtype=None):
             model.append([name, icon, page, sensitive, errortxt, devtype])
@@ -299,12 +293,11 @@ class vmmAddHardware(vmmGObjectUI):
     def _reset_state(self):
         # Hide all notebook pages, otherwise the wizard window is as large
         # as the largest page
-        notebook = self.widget("create-pages")
-        for page in range(notebook.get_n_pages()):
-            widget = notebook.get_nth_page(page)
+        for page in range(self.widget("create-pages").get_n_pages()):
+            widget = self.widget("create-pages").get_nth_page(page)
             widget.hide()
-        self._set_hw_selection(0)
 
+        self._set_hw_selection(0)
 
         # Storage params
         self.widget("storage-devtype").set_active(0)
@@ -730,30 +723,26 @@ class vmmAddHardware(vmmGObjectUI):
     def _get_hw_selection(self):
         return uiutil.get_list_selected_row(self.widget("hw-list"))
 
+    def _set_error_page(self, msg=None):
+        self.widget("top-pages").set_current_page(1)
+        self.widget("error-label").set_text(msg or "Hardware selection error.")
+        self.widget("create-finish").set_sensitive(False)
+
 
     ################
     # UI listeners #
     ################
 
-    def _hw_selected(self, src=None):
-        ignore = src
+    def _hw_selected_cb(self, src):
         self._dev = None
-        notebook = self.widget("create-pages")
+        self.widget("create-finish").set_sensitive(True)
 
         row = self._get_hw_selection()
-        if not row:
-            self._set_hw_selection(0)
+        if not row or not row[3]:
+            self._set_error_page(row and row[4] or None)
             return
 
         page = row[2]
-        sens = row[3]
-        msg = row[4] or ""
-
-        self.widget("create-finish").set_sensitive(sens)
-
-        if not sens:
-            page = PAGE_ERROR
-            self.widget("hardware-info").set_text(msg)
 
         if page == PAGE_CHAR:
             # Need to do this here, since we share the char page between
@@ -776,12 +765,11 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("controller-type").emit("changed")
 
         self._set_page_title(page)
-        notebook.get_nth_page(page).show()
-        notebook.set_current_page(page)
+        self.widget("create-pages").get_nth_page(page).show()
+        self.widget("create-pages").set_current_page(page)
+        self.widget("top-pages").set_current_page(0)
 
     def _dev_to_title(self, page):
-        if page == PAGE_ERROR:
-            return _("Error")
         if page == PAGE_DISK:
             return _("Storage")
         if page == PAGE_CONTROLLER:
@@ -1114,10 +1102,8 @@ class vmmAddHardware(vmmGObjectUI):
         page_num = self.widget("create-pages").get_current_page()
 
         # pylint: disable=assignment-from-no-return
-        if page_num == PAGE_ERROR:
-            self._dev = None
-            ret = True
-        elif page_num == PAGE_DISK:
+
+        if page_num == PAGE_DISK:
             ret = self._validate_page_storage()
         elif page_num == PAGE_CONTROLLER:
             ret = self._validate_page_controller()
