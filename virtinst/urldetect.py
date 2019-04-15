@@ -356,7 +356,6 @@ class _DistroTree(object):
         like treeinfo, subclasses can override this to set a list
         of manual paths
         """
-        pass
 
     def _detect_version(self):
         """

@@ -550,7 +550,6 @@ class XMLBuilder(object):
         Validate any set values and raise an exception if there's
         a problem
         """
-        pass
 
     def set_defaults(self, guest):
         """

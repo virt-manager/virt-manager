@@ -108,13 +108,11 @@ class _URLFetcher(object):
         """
         Perform any necessary setup
         """
-        pass
 
     def _cleanup(self):
         """
         Perform any necessary cleanup
         """
-        pass
 
     def __del__(self):
         self._cleanup()
