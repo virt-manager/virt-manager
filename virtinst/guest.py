@@ -606,7 +606,7 @@ class Guest(XMLBuilder):
             self.os.loader = capsinfo.loader
         if (not self.emulator and
             not self.os.is_xenpv() and
-            not self.type == "vz"):
+            self.type != "vz"):
             self.emulator = capsinfo.emulator
         if not self.os.machine:
             self.os.machine = Guest.get_recommended_machine(capsinfo)
@@ -614,7 +614,7 @@ class Guest(XMLBuilder):
         if (wants_default_type and
             self.conn.is_qemu() and
             self.os.is_x86() and
-            not self.type == "kvm"):
+            self.type != "kvm"):
             logging.warning("KVM acceleration not available, using '%s'",
                             self.type)
 
