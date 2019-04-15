@@ -25,6 +25,8 @@ from .storagebrowse import vmmStorageBrowser
 from .baseclass import vmmGObjectUI
 from .addstorage import vmmAddStorage
 from .vsockdetails import vmmVsockDetails
+from .xmleditor import vmmXMLEditor
+
 
 (PAGE_DISK,
  PAGE_CONTROLLER,
@@ -94,6 +96,12 @@ class vmmAddHardware(vmmGObjectUI):
         self._vsockdetails = vmmVsockDetails(self.vm, self.builder, self.topwin)
         self.widget("vsock-align").add(self._vsockdetails.top_box)
 
+        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
+                self.widget("create-pages-align"),
+                self.widget("create-pages"))
+        self._xmleditor.connect("xml-requested",
+                self._xmleditor_xml_requested_cb)
+
         self.builder.connect_signals({
             "on_create_cancel_clicked": self.close,
             "on_vmm_create_delete_event": self.close,
@@ -154,6 +162,8 @@ class vmmAddHardware(vmmGObjectUI):
         self.addstorage = None
         self._vsockdetails.cleanup()
         self._vsockdetails = None
+        self._xmleditor.cleanup()
+        self._xmleditor = None
 
 
     ##########################
@@ -1022,6 +1032,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _hw_selected_cb(self, src):
         self.widget("create-finish").set_sensitive(True)
+        self._xmleditor.reset_state()
 
         row = self._get_hw_selection()
         if not row or not row[3]:
@@ -1102,6 +1113,10 @@ class vmmAddHardware(vmmGObjectUI):
         title = self._dev_to_title(page)
         markup = "<span size='large' color='white'>%s</span>" % title
         self.widget("page-title-label").set_markup(markup)
+
+    def _xmleditor_xml_requested_cb(self, src):
+        dev = self._build_device(check_xmleditor=False)
+        self._xmleditor.set_xml(dev and dev.get_xml() or "")
 
 
     #########################
@@ -1359,8 +1374,11 @@ class vmmAddHardware(vmmGObjectUI):
             self.close()
 
     def _finish(self, ignore=None):
+        dev = self._build_device(check_xmleditor=True)
+        if not dev:
+            return
+
         try:
-            dev = self._build_device()
             if self._validate_device(dev) is False:
                 return
         except Exception as e:
@@ -1413,10 +1431,38 @@ class vmmAddHardware(vmmGObjectUI):
         if dev.DEVICE_TYPE == "hostdev":
             self._validate_hostdev_collision(dev)
 
-    def _build_device(self):
-        # pylint: disable=assignment-from-no-return
-        page_num = self.widget("create-pages").get_current_page()
+    def _build_xmleditor_device(self, srcdev):
+        xml = self._xmleditor.get_xml()
+        logging.debug("Using XML from xmleditor:\n%s", xml)
+        devclass = srcdev.__class__
+        dev = devclass(srcdev.conn, parsexml=xml)
 
+        if srcdev.DEVICE_TYPE == "disk":
+            if (srcdev.path == dev.path and
+                srcdev.get_vol_install()):
+                dev.set_vol_install(srcdev.get_vol_install())
+            elif dev.path:
+                # Needed to convince disk.validate() to validate a passed path
+                dev.set_backend_for_existing_path()
+
+        return dev
+
+    def _build_device(self, check_xmleditor):
+        page_num = self.widget("create-pages").get_current_page()
+        try:
+            dev = self._build_device_page(page_num)
+
+            if check_xmleditor and self._xmleditor.is_xml_selected():
+                dev = self._build_xmleditor_device(dev)
+
+            return dev
+        except Exception as e:
+            self.err.show_err(
+                    _("Error building device XML: %s") % str(e))
+            return
+
+    def _build_device_page(self, page_num):
+        # pylint: disable=assignment-from-no-return
         if page_num == PAGE_DISK:
             dev = self._build_storage()
         elif page_num == PAGE_CONTROLLER:
