@@ -3,7 +3,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import functools
 import logging
 import queue
 import threading
@@ -198,7 +197,7 @@ class vmmInspection(vmmGObject):
 
         import guestfs  # pylint: disable=import-error
 
-        g = guestfs.GuestFS(close_on_exit=False)
+        g = guestfs.GuestFS(close_on_exit=False, python_return_dict=True)
         prettyvm = conn.get_uri() + ":" + vm.get_name()
         try:
             g.add_libvirt_dom(vm.get_backend(), readonly=1)
@@ -239,23 +238,16 @@ class vmmInspection(vmmGObject):
 
         # Sort keys by length, shortest first, so that we end up
         # mounting the filesystems in the correct order.
-        mps = list(g.inspect_get_mountpoints(root))
-        def compare(a, b):
-            if len(a[0]) > len(b[0]):
-                return 1
-            elif len(a[0]) == len(b[0]):
-                return 0
-            else:
-                return -1
+        mps = g.inspect_get_mountpoints(root)
 
-        mps.sort(key=functools.cmp_to_key(compare))
-        for mp_dev in mps:
+        mps = sorted(mps.items(), key=lambda k: len(k[0]))
+        for mp, dev in mps:
             try:
-                g.mount_ro(mp_dev[1], mp_dev[0])
+                g.mount_ro(dev, mp)
             except Exception:
                 logging.exception("%s: exception mounting %s on %s "
                                   "(ignored)",
-                                  prettyvm, mp_dev[1], mp_dev[0])
+                                  prettyvm, dev, mp)
 
         filesystems_mounted = True
 
