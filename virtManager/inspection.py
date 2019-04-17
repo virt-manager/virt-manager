@@ -244,12 +244,11 @@ class vmmInspection(vmmGObject):
         for mp, dev in mps:
             try:
                 g.mount_ro(dev, mp)
+                filesystems_mounted = True
             except Exception:
                 logging.exception("%s: exception mounting %s on %s "
                                   "(ignored)",
                                   prettyvm, dev, mp)
-
-        filesystems_mounted = True
 
         icon = None
         apps = None
