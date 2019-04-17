@@ -20,7 +20,7 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <interface type="user">
       <mac address="AA:AA:AA:AA:AA:AA"/>
-      <model type="testmodel"/>
+      <model type="vmxnet3"/>
       <filterref filter="foo"/>
     </interface>
     <interface type="bridge">

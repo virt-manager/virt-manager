@@ -612,7 +612,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev1)
         check("type", "user")
-        check("model", None, "testmodel")
+        check("model", None, "vmxnet3")
         check("source", None, None,)
         check("macaddr", "22:11:11:11:11:11", "AA:AA:AA:AA:AA:AA")
         check("filterref", None, "foo")
