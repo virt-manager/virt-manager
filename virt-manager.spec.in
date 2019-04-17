@@ -57,6 +57,9 @@ Requires: mtools
 Recommends: (libvirt-daemon-kvm or libvirt-daemon-qemu)
 Recommends: libvirt-daemon-config-network
 
+# Optional inspection of guests
+Suggests: python3-libguestfs
+
 BuildRequires: intltool
 BuildRequires: /usr/bin/pod2man
 BuildRequires: python3-devel
