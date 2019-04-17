@@ -40,3 +40,9 @@ On Debian or Ubuntu based distributions, you need to install the
 `gobject-introspection` bindings for some dependencies like `libvirt-glib`
 and `libosinfo`. Look for package names that start with `'gir'`, for example
 `gir1.2-libosinfo-1.0`.
+
+
+## Optional software
+
+`virt-manager` can optionally use [libguestfs](http://libguestfs.org/)
+for inspecting the guests.  For this, `python-libguestfs` >= 1.22 is needed.
