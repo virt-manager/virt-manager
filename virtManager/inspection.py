@@ -228,6 +228,7 @@ class vmmInspection(vmmGObject):
         hostname = g.inspect_get_hostname(root)  # string
         product_name = g.inspect_get_product_name(root)  # string
         product_variant = g.inspect_get_product_variant(root)  # string
+        package_format = g.inspect_get_package_format(root)  # string
 
         # For inspect_list_applications and inspect_get_icon we
         # require that the guest filesystems are mounted.  However
@@ -272,9 +273,9 @@ class vmmInspection(vmmGObject):
         del g
 
         # Log what we found.
-        logging.debug("%s: detected operating system: %s %s %d.%d (%s)",
+        logging.debug("%s: detected operating system: %s %s %d.%d (%s) (%s)",
                       prettyvm, os_type, distro, major_version, minor_version,
-                      product_name)
+                      product_name, package_format)
         logging.debug("hostname: %s", hostname)
         if icon:
             logging.debug("icon: %d bytes", len(icon))
@@ -291,5 +292,6 @@ class vmmInspection(vmmGObject):
         data.product_variant = str(product_variant)
         data.icon = icon
         data.applications = list(apps or [])
+        data.package_format = str(package_format)
 
         return data

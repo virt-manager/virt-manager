@@ -79,6 +79,7 @@ class vmmInspectionData(object):
         self.icon = None
         self.applications = None
         self.errorstr = None
+        self.package_format = None
 
 
 class vmmDomainSnapshot(vmmLibvirtObject):
