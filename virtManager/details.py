@@ -2528,10 +2528,10 @@ class vmmDetails(vmmGObjectUI):
         apps_model.clear()
         for app in apps:
             name = ""
-            if app.name:
-                name = app.name
             if app.display_name:
                 name = app.display_name
+            elif app.name:
+                name = app.name
             version = ""
             if app.epoch > 0:
                 version += str(app.epoch) + ":"
