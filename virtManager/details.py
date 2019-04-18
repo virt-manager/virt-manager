@@ -2528,22 +2528,22 @@ class vmmDetails(vmmGObjectUI):
         apps_model.clear()
         for app in apps:
             name = ""
-            if app["app_name"]:
-                name = app["app_name"]
-            if app["app_display_name"]:
-                name = app["app_display_name"]
+            if app.name:
+                name = app.name
+            if app.display_name:
+                name = app.display_name
             version = ""
-            if app["app_epoch"] > 0:
-                version += str(app["app_epoch"]) + ":"
-            if app["app_version"]:
-                version += app["app_version"]
-            if app["app_release"]:
-                version += "-" + app["app_release"]
+            if app.epoch > 0:
+                version += str(app.epoch) + ":"
+            if app.version:
+                version += app.version
+            if app.release:
+                version += "-" + app.release
             summary = ""
-            if app["app_summary"]:
-                summary = app["app_summary"]
-            elif app["app_description"]:
-                summary = app["app_description"]
+            if app.summary:
+                summary = app.summary
+            elif app.description:
+                summary = app.description
                 pos = summary.find("\n")
                 if pos > -1:
                     summary = _("%(summary)s ...") % {

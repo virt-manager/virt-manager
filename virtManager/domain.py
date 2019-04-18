@@ -67,6 +67,17 @@ def start_job_progress_thread(vm, meter, progtext):
         t.start()
 
 
+class vmmInspectionApplication(object):
+    def __init__(self):
+        self.name = None
+        self.display_name = None
+        self.epoch = None
+        self.version = None
+        self.release = None
+        self.summary = None
+        self.description = None
+
+
 class vmmInspectionData(object):
     def __init__(self):
         self.os_type = None

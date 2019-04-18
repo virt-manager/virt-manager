@@ -9,7 +9,7 @@ import threading
 
 from .baseclass import vmmGObject
 from .connmanager import vmmConnectionManager
-from .domain import vmmInspectionData
+from .domain import vmmInspectionApplication, vmmInspectionData
 
 
 def _inspection_error(_errstr):
@@ -264,7 +264,26 @@ class vmmInspection(vmmGObject):
 
             # Inspection applications.
             try:
-                apps = g.inspect_list_applications(root)
+                gapps = g.inspect_list_applications(root)
+                # applications listing worked, so make apps a real list
+                # (instead of None)
+                apps = []
+                for gapp in gapps:
+                    app = vmmInspectionApplication()
+                    if gapp["app_name"]:
+                        app.name = gapp["app_name"]
+                    if gapp["app_display_name"]:
+                        app.display_name = gapp["app_display_name"]
+                    app.epoch = gapp["app_epoch"]
+                    if gapp["app_version"]:
+                        app.version = gapp["app_version"]
+                    if gapp["app_release"]:
+                        app.release = gapp["app_release"]
+                    if gapp["app_summary"]:
+                        app.summary = gapp["app_summary"]
+                    if gapp["app_description"]:
+                        app.description = gapp["app_description"]
+                    apps.append(app)
             except Exception:
                 logging.exception("%s: exception while listing apps (ignored)",
                                   prettyvm)
