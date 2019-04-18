@@ -7,6 +7,7 @@
 import logging
 
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from virtinst import NodeDevice
 
@@ -107,6 +108,7 @@ class vmmHostNets(vmmGObjectUI):
         netCol = Gtk.TreeViewColumn(_("Networks"))
         netCol.set_spacing(6)
         net_txt = Gtk.CellRendererText()
+        net_txt.set_property("ellipsize", Pango.EllipsizeMode.END)
         net_img = Gtk.CellRendererPixbuf()
         netCol.pack_start(net_img, False)
         netCol.pack_start(net_txt, True)

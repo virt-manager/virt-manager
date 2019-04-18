@@ -7,6 +7,7 @@ import logging
 
 from gi.repository import Gdk
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from virtinst import StoragePool
 from virtinst import DeviceDisk
@@ -216,6 +217,7 @@ class vmmStorageList(vmmGObjectUI):
 
         poolCol = Gtk.TreeViewColumn(_("Storage Pools"))
         pool_txt = Gtk.CellRendererText()
+        pool_txt.set_property("ellipsize", Pango.EllipsizeMode.END)
         pool_per = Gtk.CellRendererText()
         poolCol.pack_start(pool_per, False)
         poolCol.pack_start(pool_txt, True)
