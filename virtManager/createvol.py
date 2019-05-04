@@ -12,8 +12,9 @@ from gi.repository import Gdk
 from virtinst import StorageVolume
 
 from . import uiutil
-from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
+from .baseclass import vmmGObjectUI
+from .xmleditor import vmmXMLEditor
 
 
 class vmmCreateVolume(vmmGObjectUI):
@@ -28,6 +29,12 @@ class vmmCreateVolume(vmmGObjectUI):
         self._parent_pool = parent_pool
         self._name_hint = None
         self._storage_browser = None
+
+        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
+                self.widget("details-box-align"),
+                self.widget("details-box"))
+        self._xmleditor.connect("xml-requested",
+                self._xmleditor_xml_requested_cb)
 
         self.builder.connect_signals({
             "on_vmm_create_vol_delete_event": self.close,
@@ -74,6 +81,8 @@ class vmmCreateVolume(vmmGObjectUI):
     def _cleanup(self):
         self.conn = None
         self._parent_pool = None
+        self._xmleditor.cleanup()
+        self._xmleditor = None
 
         if self._storage_browser:
             self._storage_browser.cleanup()
@@ -111,6 +120,8 @@ class vmmCreateVolume(vmmGObjectUI):
             format_model.append([fmt, fmt])
 
     def _reset_state(self):
+        self._xmleditor.reset_state()
+
         vol = self._make_stub_vol()
 
         hasformat = vol.supports_property("format")
@@ -231,20 +242,22 @@ class vmmCreateVolume(vmmGObjectUI):
     def _show_err(self, info, details=None):
         self.err.show_err(info, details, modal=self.topwin.get_modal())
 
-    def _val_err(self, info, details):
-        return self.err.val_err(info, details, modal=self.topwin.get_modal())
-
 
     ###################
     # Object building #
     ###################
 
-    def _make_stub_vol(self):
-        vol = StorageVolume(self.conn.get_backend())
+    def _make_stub_vol(self, xml=None):
+        vol = StorageVolume(self.conn.get_backend(), parsexml=xml)
         vol.pool = self._parent_pool.get_backend()
         return vol
 
-    def _build_xmlobj(self):
+    def _build_xmlobj_from_xmleditor(self):
+        xml = self._xmleditor.get_xml()
+        logging.debug("Using XML from xmleditor:\n%s", xml)
+        return self._make_stub_vol(xml=xml)
+
+    def _build_xmlobj_from_ui(self):
         name = self.widget("vol-name").get_text()
         suffix = self.widget("vol-name-suffix").get_text()
         volname = name + suffix
@@ -257,18 +270,24 @@ class vmmCreateVolume(vmmGObjectUI):
             if self._can_only_sparse():
                 alloc = 0
 
-        try:
-            vol = self._make_stub_vol()
-            vol.name = volname
-            vol.capacity = (cap * 1024 * 1024 * 1024)
-            vol.allocation = (alloc * 1024 * 1024 * 1024)
-            if backing:
-                vol.backing_store = backing
-            if fmt:
-                vol.format = fmt
-        except ValueError as e:
-            return self._val_err(_("Volume Parameter Error"), e)
+        vol = self._make_stub_vol()
+        vol.name = volname
+        vol.capacity = (cap * 1024 * 1024 * 1024)
+        vol.allocation = (alloc * 1024 * 1024 * 1024)
+        if backing:
+            vol.backing_store = backing
+        if fmt:
+            vol.format = fmt
         return vol
+
+    def _build_xmlobj(self, check_xmleditor):
+        try:
+            xmlobj = self._build_xmlobj_from_ui()
+            if check_xmleditor and self._xmleditor.is_xml_selected():
+                xmlobj = self._build_xmlobj_from_xmleditor()
+            return xmlobj
+        except Exception as e:
+            self.err.show_err(_("Error building XML: %s") % str(e))
 
 
     ##################
@@ -291,7 +310,7 @@ class vmmCreateVolume(vmmGObjectUI):
             self.close()
 
     def _finish(self):
-        vol = self._build_xmlobj()
+        vol = self._build_xmlobj(check_xmleditor=True)
         if not vol:
             return
 
@@ -325,6 +344,10 @@ class vmmCreateVolume(vmmGObjectUI):
     ################
     # UI listeners #
     ################
+
+    def _xmleditor_xml_requested_cb(self, src):
+        xmlobj = self._build_xmlobj(check_xmleditor=False)
+        self._xmleditor.set_xml(xmlobj and xmlobj.get_xml() or "")
 
     def _vol_format_changed_cb(self, src):
         self._show_alloc()
