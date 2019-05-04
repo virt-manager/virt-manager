@@ -146,25 +146,26 @@ class Network(XMLBuilder):
     """
     @staticmethod
     def pretty_forward_desc(mode, dev):
-        if mode or dev:
-            if not mode or mode == "nat":
-                if dev:
-                    desc = _("NAT to %s") % dev
-                else:
-                    desc = _("NAT")
-            elif mode == "route":
-                if dev:
-                    desc = _("Route to %s") % dev
-                else:
-                    desc = _("Routed network")
+        if not mode:
+            return _("Isolated network")
+
+        if mode == "nat":
+            if dev:
+                desc = _("NAT to %s") % dev
             else:
-                if dev:
-                    desc = (_("%(mode)s to %(device)s") %
-                            {"mode": mode, "device": dev})
-                else:
-                    desc = _("%s network") % mode.capitalize()
+                desc = _("NAT")
+        elif mode == "route":
+            if dev:
+                desc = _("Route to %s") % dev
+            else:
+                desc = _("Routed network")
         else:
-            desc = _("Isolated network, internal and host routing only")
+            modestr = mode.capitalize()
+            if dev:
+                desc = (_("%(mode)s to %(device)s") %
+                        {"mode": modestr, "device": dev})
+            else:
+                desc = _("%s network") % modestr
 
         return desc
 

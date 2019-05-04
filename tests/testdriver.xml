@@ -1299,7 +1299,7 @@ ba</description>
 
 <network>
   <name>nat_to_eth0</name>
-  <forward dev='eth0'/>
+  <forward mode='nat' dev='eth0'/>
   <ip address='192.168.100.1' netmask='255.255.255.0'>
     <dhcp>
       <range start='192.168.100.128' end='192.168.100.254'/>
@@ -1338,7 +1338,7 @@ ba</description>
   <uuid>81ff0d90-c91e-6742-64da-4a736edb9a9b</uuid>
   <bridge name="virbr1" stp='off' delay='1'/>
   <domain name="example.com"/>
-  <forward/>
+  <forward mode='nat'/>
   <ip address="192.168.122.1" netmask="255.255.255.0">
     <tftp root="/var/lib/tftproot" />
     <dhcp>
