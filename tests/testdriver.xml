@@ -3491,25 +3491,15 @@ ba</description>
 <interface type='ethernet' name='eth1'>
   <mac address='00:FF:EE:FF:EE:AB'/>
 </interface>
-<interface type='ethernet' name='eth2'>
-  <start mode='hotplug'/>
-  <mac address='00:FF:EE:FF:EE:CD'/>
-</interface>
-
-<interface type='ethernet' name='lo'>
-  <start mode='onboot'/>
-  <protocol family='ipv4'>
-    <ip address='127.0.0.1' prefix='8'/>
-  </protocol>
-</interface>
-
 <interface type='ethernet' name='wlan0'>
   <start mode='none'/>
   <mac address='00:AA:CC:BB:AA:BB'/>
 </interface>
 
 
-<!-- backup bond -->
+<!-- bond example -->
+<interface type="ethernet" name="eth-bond0-1"/>
+<interface type="ethernet" name="eth-bond0-2"/>
 <interface type="bond" name="bond0">
   <start mode="none"/>
   <protocol family="ipv4">
@@ -3522,11 +3512,11 @@ ba</description>
     <interface type="ethernet" name="eth-bond0-2"/>
   </bond>
 </interface>
-<interface type="ethernet" name="eth-bond0-1"/>
-<interface type="ethernet" name="eth-bond0-2"/>
 
 
 <!-- Plain bridge -->
+<interface type="ethernet" name="eth-brplain0"/>
+<interface type="ethernet" name="eth-brplain1"/>
 <interface type="bridge" name="brplain">
   <start mode="onboot"/>
   <mtu size="1500"/>
@@ -3535,9 +3525,6 @@ ba</description>
     <interface type="ethernet" name="eth-brplain1"/>
   </bridge>
 </interface>
-
-<interface type="ethernet" name="eth-brplain0"/>
-<interface type="ethernet" name="eth-brplain1"/>
 
 
 <!-- Empty bridge -->
@@ -3555,82 +3542,13 @@ ba</description>
 </interface>
 
 
-<!-- Bridge using vlan -->
-<interface type="bridge" name="brvlan">
-  <start mode="onboot"/>
-  <protocol family="ipv4">
-    <dhcp/>
-  </protocol>
-  <bridge stp="off">
-    <interface type="vlan" name="eth0.42">
-      <vlan tag="42">
-        <interface  name="eth0"/>
-      </vlan>
-    </interface>
-  </bridge>
-</interface>
-
-<interface type="vlan" name="eth0.42">
-  <start mode="onboot"/>
-  <protocol family="ipv4">
-    <dhcp peerdns="no"/>
-    <ip address='192.168.1.2'/>
-  </protocol>
-  <vlan tag="42">
-    <interface name="eth0"/>
-  </vlan>
-</interface>
-
-
-<!-- Bridge using bond -->
-<interface type="bond" name="bond-brbond">
-  <start mode="none"/>
-  <bond mode="active-backup">
-    <miimon freq="100" updelay="10" carrier="ioctl"/>
-    <interface type="ethernet" name="brbond-eth0"/>
-    <interface type="ethernet" name="brbond-eth1"/>
-  </bond>
-  <protocol family='ipv6'>
-    <ip address='3ffe:ffff:0:5::1' prefix='128'/>
-    <ip address='3ffe:ffff:0:5::3' prefix='128'/>
-    <ip address='3ffe:ffff:0:5::5' prefix='128'/>
-  </protocol>
-</interface>
-<interface type="ethernet" name="eth-bond-brbond0"/>
-<interface type="ethernet" name="eth-bond-brbond1"/>
-
-
-<!-- Multi interface bridge -->
-<interface type="bridge" name="brbond">
-  <start mode="onboot"/>
-  <mtu size="1500"/>
-  <bridge stp="off">
-    <interface type="bond" name="bond-brbond">
-      <start mode="none"/>
-      <bond mode="active-backup">
-        <miimon freq="100" updelay="10" carrier="ioctl"/>
-        <interface type="ethernet" name="brbond-eth0"/>
-        <interface type="ethernet" name="brbond-eth1"/>
-      </bond>
-    </interface>
-  </bridge>
-  <protocol family='ipv4'>
-    <ip address='192.168.0.5' prefix='24'/>
-    <route gateway='192.168.0.1'/>
-  </protocol>
-</interface>
-
-
-<!-- Unused vlan -->
+<!-- vlan example -->
+<interface type="ethernet" name="vlaneth1"/>
 <interface type="vlan" name="vlaneth1.3">
   <start mode="onboot"/>
   <vlan tag="43">
     <interface name="vlaneth1"/>
   </vlan>
 </interface>
-<interface type="ethernet" name="vlaneth1"/>
-
-<!-- Unused interface -->
-<interface type="ethernet" name="unusedeth0"/>
 
 </node>
