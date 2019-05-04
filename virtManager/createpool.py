@@ -15,9 +15,6 @@ from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
 from . import uiutil
 
-PAGE_NAME   = 0
-PAGE_FORMAT = 1
-
 
 class vmmCreatePool(vmmGObjectUI):
     __gsignals__ = {
@@ -31,12 +28,11 @@ class vmmCreatePool(vmmGObjectUI):
         self._pool = None
 
         self.builder.connect_signals({
-            "on_pool_forward_clicked": self.forward,
-            "on_pool_back_clicked": self.back,
             "on_pool_cancel_clicked": self.close,
             "on_vmm_create_pool_delete_event": self.close,
             "on_pool_finish_clicked": self.forward,
-            "on_pool_pages_change_page": self.page_changed,
+            "on_pool_pages_change_page": self._page_changed_cb,
+            "on_pool_type_changed": self._pool_type_changed_cb,
 
             "on_pool_source_button_clicked": self.browse_source_path,
             "on_pool_target_button_clicked": self.browse_target_path,
@@ -48,7 +44,6 @@ class vmmCreatePool(vmmGObjectUI):
         self.bind_escape_key_close()
 
         self.set_initial_state()
-        self.set_page(PAGE_NAME)
 
     def show(self, parent):
         logging.debug("Showing new pool wizard")
@@ -65,16 +60,22 @@ class vmmCreatePool(vmmGObjectUI):
         self.conn = None
         self._pool = None
 
+    def _build_pool_type_list(self):
+        # [pool type, label]
+        model = Gtk.ListStore(str, str)
+        type_list = self.widget("pool-type")
+        type_list.set_model(model)
+        uiutil.init_combo_text_column(type_list, 1)
+
+        for typ in sorted(StoragePool.get_pool_types()):
+            desc = StoragePool.get_pool_type_desc(typ)
+            model.append([typ, "%s: %s" % (typ, desc)])
+
     def set_initial_state(self):
         self.widget("pool-pages").set_show_tabs(False)
 
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
-        type_list = self.widget("pool-type")
-        type_model = Gtk.ListStore(str, str)
-        type_list.set_model(type_model)
-        uiutil.init_combo_text_column(type_list, 1)
 
         format_list = self.widget("pool-format")
         format_model = Gtk.ListStore(str, str)
@@ -99,17 +100,16 @@ class vmmCreatePool(vmmGObjectUI):
         source_list.set_model(source_model)
         source_list.set_entry_text_column(0)
 
-        self.populate_pool_type()
+        self._build_pool_type_list()
+
 
     def reset_state(self):
         self.widget("pool-pages").set_current_page(0)
-        self.widget("pool-forward").show()
-        self.widget("pool-finish").hide()
-        self.widget("pool-back").set_sensitive(False)
 
-        self.widget("pool-name").set_text("")
+        defaultname = StoragePool.find_free_name(
+                self.conn.get_backend(), "pool")
+        self.widget("pool-name").set_text(defaultname)
         self.widget("pool-name").grab_focus()
-        self.widget("pool-type").set_active(0)
         self.widget("pool-target-path").get_child().set_text("")
         self.widget("pool-source-path").get_child().set_text("")
         self.widget("pool-hostname").set_text("")
@@ -119,8 +119,9 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-format").set_active(0)
         self.widget("pool-build").set_sensitive(True)
         self.widget("pool-build").set_active(False)
-        self.widget("pool-details-grid").set_visible(False)
 
+        uiutil.set_list_selection(self.widget("pool-type"), 0)
+        self.show_options_by_pool()
 
     def hostname_changed(self, ignore):
         # If a hostname was entered, try to lookup valid pool sources.
@@ -128,15 +129,6 @@ class vmmCreatePool(vmmGObjectUI):
 
     def iqn_toggled(self, src):
         self.widget("pool-iqn").set_sensitive(src.get_active())
-
-    def populate_pool_type(self):
-        model = self.widget("pool-type").get_model()
-        model.clear()
-        types = StoragePool.get_pool_types()
-        types.sort()
-        for typ in types:
-            model.append([typ, "%s: %s" %
-                         (typ, StoragePool.get_pool_type_desc(typ))])
 
     def populate_pool_sources(self):
         source_list = self.widget("pool-source-path")
@@ -237,6 +229,7 @@ class vmmCreatePool(vmmGObjectUI):
             widget = self.widget(base + "-label")
             uiutil.set_grid_row_visible(widget, do_show)
 
+        self._pool = self._make_stub_pool()
         src = self._pool.supports_property("source_path")
         src_b = src and not self.conn.is_remote()
         tgt = self._pool.supports_property("target_path")
@@ -273,7 +266,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         if tgt:
             self.widget("pool-target-path").get_child().set_text(
-                self._pool.default_target_path())
+                self._pool.default_target_path() or "")
 
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
@@ -367,20 +360,13 @@ class vmmCreatePool(vmmGObjectUI):
 
 
     def forward(self, ignore=None):
-        notebook = self.widget("pool-pages")
         try:
-            if self.validate(notebook.get_current_page()) is not True:
+            if self._validate() is not True:
                 return
-            if notebook.get_current_page() == PAGE_FORMAT:
-                self.finish()
-            else:
-                notebook.next_page()
+            self.finish()
         except Exception as e:
             self.err.show_err(_("Uncaught error validating input: %s") % str(e))
             return
-
-    def back(self, ignore=None):
-        self.widget("pool-pages").prev_page()
 
     def _signal_pool_added(self, src, connkey, created_name):
         ignore = src
@@ -420,28 +406,11 @@ class vmmCreatePool(vmmGObjectUI):
         poolobj.setAutostart(True)
         logging.debug("Pool creation succeeded")
 
-    def set_page(self, page_number):
-        # Update page number
-        page_lbl = ("<span color='#59B0E2'>%s</span>" %
-                    _("Step %(current_page)d of %(max_page)d") %
-                    {'current_page': page_number + 1,
-                     'max_page': PAGE_FORMAT + 1})
-        self.widget("header-pagenum").set_markup(page_lbl)
+    def _page_changed_cb(self, notebook, page, pagenum):
+        pass
 
-        isfirst = (page_number == PAGE_NAME)
-        islast = (page_number == PAGE_FORMAT)
-
-        self.widget("pool-back").set_sensitive(not isfirst)
-        self.widget("pool-finish").set_visible(islast)
-        self.widget("pool-forward").set_visible(not islast)
-        self.widget(islast and "pool-finish" or "pool-forward").grab_focus()
-
-        self.widget("pool-details-grid").set_visible(islast)
-        if islast:
-            self.show_options_by_pool()
-
-    def page_changed(self, notebook_ignore, page_ignore, page_number):
-        self.set_page(page_number)
+    def _pool_type_changed_cb(self, src):
+        self.show_options_by_pool()
 
     def get_pool_to_validate(self):
         """
@@ -463,35 +432,26 @@ class vmmCreatePool(vmmGObjectUI):
     def _make_stub_pool(self):
         pool = StoragePool(self.conn.get_backend())
         pool.type = self.get_config_type()
+        pool.name = self.get_config_name()
         return pool
 
-    def _validate_page_name(self, usepool=None):
-        try:
-            if usepool:
-                self._pool = usepool
-            else:
-                self._pool = self._make_stub_pool()
-
-            name = self.get_config_name()
-            self._pool.validate_name(self._pool.conn, name)
-            self._pool.name = name
-        except ValueError as e:
-            return self.err.val_err(_("Pool Parameter Error"), e)
-
-        return True
-
-    def _validate_page_format(self):
+    def _validate(self):
         target = self.get_config_target_path()
         host = self.get_config_host()
         source = self.get_config_source_path()
         fmt = self.get_config_format()
         iqn = self.get_config_iqn()
         source_name = self.get_config_source_name()
-
-        if not self._validate_page_name(self.get_pool_to_validate()):
-            return
+        name = self.get_config_name()
 
         try:
+            self._pool = self.get_pool_to_validate()
+            if not self._pool:
+                self._pool = self._make_stub_pool()
+
+            self._pool.validate_name(self._pool.conn, name)
+            self._pool.name = name
+
             self._pool.target_path = target
             if host:
                 hostobj = self._pool.hosts.add_new()
@@ -520,12 +480,6 @@ class vmmCreatePool(vmmGObjectUI):
                 return ret
 
         return True
-
-    def validate(self, page):
-        if page == PAGE_NAME:
-            return self._validate_page_name()
-        elif page == PAGE_FORMAT:
-            return self._validate_page_format()
 
     def _browse_file(self, dialog_name, startfolder=None, foldermode=False):
         mode = Gtk.FileChooserAction.OPEN

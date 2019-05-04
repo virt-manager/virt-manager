@@ -22,11 +22,9 @@ class CreatePool(uiutils.UITestCase):
 
         # Create a simple default dir pool
         newname = "a-test-new-pool"
-        forward = win.find("Forward", "push button")
         finish = win.find("Finish", "push button")
         name = win.find("Name:", "text")
         name.text = newname
-        forward.click()
         finish.click()
 
         # Select the new object in the host window, then do
@@ -63,7 +61,6 @@ class CreatePool(uiutils.UITestCase):
         name.text = "a-scsi-pool"
         typ.click()
         win.find_fuzzy("SCSI Host Adapter", "menu item").click()
-        forward.click()
         win.find_fuzzy("Source Path:", "combo").click_combo_entry()
         win.find_fuzzy("host2", "menu item").click()
         finish.click()
@@ -76,7 +73,6 @@ class CreatePool(uiutils.UITestCase):
         name.text = "a-ceph-pool"
         typ.click()
         win.find_fuzzy("RADOS Block", "menu item").click()
-        forward.click()
         win.find_fuzzy("Host Name:", "text").text = "example.com:1234"
         win.find_fuzzy("Source Name:", "text").typeText("frob")
         finish.click()
