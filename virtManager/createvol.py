@@ -113,14 +113,14 @@ class vmmCreateVolume(vmmGObjectUI):
     def _reset_state(self):
         vol = self._make_stub_vol()
 
-        self.widget("vol-name").set_text(self._default_vol_name() or "")
-        self.widget("vol-name").grab_focus()
-        self.widget("vol-name").emit("changed")
-
         hasformat = vol.supports_property("format")
         uiutil.set_grid_row_visible(self.widget("vol-format"), hasformat)
         uiutil.set_list_selection(self.widget("vol-format"),
             self.conn.get_default_storage_format())
+
+        self.widget("vol-name").set_text(self._default_vol_name() or "")
+        self.widget("vol-name").grab_focus()
+        self.widget("vol-name").emit("changed")
 
         default_alloc = 0
         default_cap = 20
@@ -155,15 +155,15 @@ class vmmCreateVolume(vmmGObjectUI):
         return uiutil.get_list_selection(self.widget("vol-format"))
 
     def _default_vol_name(self):
-        if not self._name_hint:
-            return ""
-
+        hint = self._name_hint or "vol"
         suffix = self._default_suffix()
         ret = ""
         try:
             ret = StorageVolume.find_free_name(
                 self._parent_pool.get_backend(),
-                self._name_hint, suffix=suffix)
+                hint, suffix=suffix)
+            if ret and suffix:
+                ret = ret.rsplit(".", 1)[0]
         except Exception:
             logging.exception("Error finding a default vol name")
 
@@ -355,7 +355,6 @@ class vmmCreateVolume(vmmGObjectUI):
         if "." in text:
             suffix = ""
         self.widget("vol-name-suffix").set_text(suffix)
-        self.widget("vol-create").set_sensitive(bool(text))
 
     def _browse_backing_clicked_cb(self, src):
         self._browse_file()
