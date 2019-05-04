@@ -313,18 +313,6 @@ SUPPORT_POOL_METADATA_PREALLOC = _make(
     version="1.0.1")
 
 
-####################
-# Interface checks #
-####################
-
-SUPPORT_INTERFACE_XML_INACTIVE = _make(function="virInterface.XMLDesc",
-    flag="VIR_INTERFACE_XML_INACTIVE",
-    run_args=())
-SUPPORT_INTERFACE_ISACTIVE = _make(
-    function="virInterface.isActive", run_args=())
-
-
-
 ##################
 # Network checks #
 ##################

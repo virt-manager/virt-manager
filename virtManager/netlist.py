@@ -171,7 +171,7 @@ class vmmNetworkList(vmmGObjectUI):
         for iface in self.conn.list_interfaces():
             name = iface.get_name()
             netdevs[name] = NetDev(name, iface.is_bridge(),
-                                   iface.get_slave_names())
+                                   iface.get_interface_names())
         for nodedev in self.conn.filter_nodedevs("net"):
             if nodedev.xmlobj.interface not in netdevs:
                 netdev = NetDev(nodedev.xmlobj.interface, False, [])

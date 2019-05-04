@@ -518,23 +518,6 @@ class vmmConnection(vmmGObject):
 
         return self._get_flags_helper(vm, key, check_func)
 
-    def get_interface_flags(self, iface):
-        key = "interface"
-
-        def check_func():
-            act   = 0
-            inact = 0
-
-            if self.check_support(
-                    self._backend.SUPPORT_INTERFACE_XML_INACTIVE, iface):
-                inact = libvirt.VIR_INTERFACE_XML_INACTIVE
-            else:
-                logging.debug("Interface XML inactive flag not supported.")
-
-            return (inact, act)
-
-        return self._get_flags_helper(iface, key, check_func)
-
     def get_default_pool(self):
         for p in self.list_pools():
             if p.get_name() == "default":
@@ -667,8 +650,6 @@ class vmmConnection(vmmGObject):
         return self._backend.networkDefineXML(xml)
     def define_pool(self, xml):
         return self._backend.storagePoolDefineXML(xml, 0)
-    def define_interface(self, xml):
-        return self._backend.interfaceDefineXML(xml, 0)
 
     def rename_object(self, obj, origxml, newxml, oldconnkey):
         if obj.is_domain():
