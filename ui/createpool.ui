@@ -3,10 +3,10 @@
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkWindow" id="vmm-create-pool">
-    <property name="height_request">350</property>
+    <property name="width_request">400</property>
+    <property name="height_request">400</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Add a New Storage Pool</property>
-    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_create_pool_delete_event" swapped="no"/>
     <child>

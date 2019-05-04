@@ -12,9 +12,10 @@ from gi.repository import Gtk
 
 from virtinst import StoragePool
 
-from .baseclass import vmmGObjectUI
-from .asyncjob import vmmAsyncJob
 from . import uiutil
+from .asyncjob import vmmAsyncJob
+from .baseclass import vmmGObjectUI
+from .xmleditor import vmmXMLEditor
 
 
 class vmmCreatePool(vmmGObjectUI):
@@ -25,6 +26,12 @@ class vmmCreatePool(vmmGObjectUI):
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "createpool.ui", "vmm-create-pool")
         self.conn = conn
+
+        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
+                self.widget("pool-details-align"),
+                self.widget("pool-details"))
+        self._xmleditor.connect("xml-requested",
+                self._xmleditor_xml_requested_cb)
 
         self.builder.connect_signals({
             "on_pool_cancel_clicked": self.close,
@@ -60,6 +67,9 @@ class vmmCreatePool(vmmGObjectUI):
 
     def _cleanup(self):
         self.conn = None
+        self._xmleditor.cleanup()
+        self._xmleditor = None
+
 
     ###########
     # UI init #
@@ -106,6 +116,8 @@ class vmmCreatePool(vmmGObjectUI):
         self._build_pool_type_list()
 
     def _reset_state(self):
+        self._xmleditor.reset_state()
+
         defaultname = StoragePool.find_free_name(
                 self.conn.get_backend(), "pool")
         self.widget("pool-name").set_text(defaultname)
@@ -363,6 +375,11 @@ class vmmCreatePool(vmmGObjectUI):
 
         return pool
 
+    def _build_xmlobj_from_xmleditor(self):
+        xml = self._xmleditor.get_xml()
+        logging.debug("Using XML from xmleditor:\n%s", xml)
+        return StoragePool(self.conn.get_backend(), parsexml=xml)
+
     def _make_stub_pool(self):
         pool = self._get_pool_from_sourcelist()
         if not pool:
@@ -371,7 +388,7 @@ class vmmCreatePool(vmmGObjectUI):
         pool.name = self.widget("pool-name").get_text()
         return pool
 
-    def _build_pool(self):
+    def _build_xmlobj_from_ui(self):
         target = self._get_config_target_path()
         host = self._get_config_host()
         source = self._get_config_source_path()
@@ -379,25 +396,33 @@ class vmmCreatePool(vmmGObjectUI):
         iqn = self._get_config_iqn()
         source_name = self._get_config_source_name()
 
+        pool = self._make_stub_pool()
+
+        pool.target_path = target
+        if host:
+            hostobj = pool.hosts.add_new()
+            hostobj.name = host
+        if source:
+            pool.source_path = source
+        if fmt and pool.supports_property("format"):
+            pool.format = fmt
+        if iqn:
+            pool.iqn = iqn
+        if source_name:
+            pool.source_name = source_name
+        return pool
+
+    def _build_xmlobj(self, check_xmleditor):
         try:
-            pool = self._make_stub_pool()
+            xmlobj = self._build_xmlobj_from_ui()
+            if check_xmleditor and self._xmleditor.is_xml_selected():
+                xmlobj = self._build_xmlobj_from_xmleditor()
+            return xmlobj
+        except Exception as e:
+            self.err.show_err(_("Error building XML: %s") % str(e))
 
-            pool.target_path = target
-            if host:
-                hostobj = pool.hosts.add_new()
-                hostobj.name = host
-            if source:
-                pool.source_path = source
-            if fmt and pool.supports_property("format"):
-                pool.format = fmt
-            if iqn:
-                pool.iqn = iqn
-            if source_name:
-                pool.source_name = source_name
-
-            pool.validate()
-        except ValueError as e:
-            return self.err.val_err(_("Pool Parameter Error"), e)
+    def _validate(self, pool):
+        pool.validate()
 
         buildval = self.widget("pool-build").get_active()
         buildsen = (self.widget("pool-build").get_sensitive() and
@@ -408,8 +433,6 @@ class vmmCreatePool(vmmGObjectUI):
                                     "sure you want to 'build' this pool?"))
             if not ret:
                 return ret
-
-        return pool
 
 
     ##################
@@ -442,14 +465,16 @@ class vmmCreatePool(vmmGObjectUI):
         logging.debug("Pool creation succeeded")
 
     def _finish(self):
+        pool = self._build_xmlobj(check_xmleditor=True)
+        if not pool:
+            return
+
         try:
-            pool = self._build_pool()
-            if not pool:
+            if self._validate(pool) is False:
                 return
         except Exception as e:
-            self.err.show_err(
-                    _("Uncaught error validating input: %s") % str(e))
-            return
+            return self.err.show_err(
+                    _("Error validating pool: %s") % e)
 
         self.reset_finish_cursor()
 
@@ -466,6 +491,10 @@ class vmmCreatePool(vmmGObjectUI):
     ################
     # UI listeners #
     ################
+
+    def _xmleditor_xml_requested_cb(self, src):
+        xmlobj = self._build_xmlobj(check_xmleditor=False)
+        self._xmleditor.set_xml(xmlobj and xmlobj.get_xml() or "")
 
     def _finish_clicked_cb(self, src):
         self._finish()
