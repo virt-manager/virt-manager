@@ -67,14 +67,6 @@ class vmmCreateNetwork(vmmGObjectUI):
             "on_net-dhcpv6-enable_toggled": self.change_dhcpv6_enable,
             "on_net-dhcpv6-start_changed":  self.change_dhcpv6_start,
             "on_net-dhcpv6-end_changed":    self.change_dhcpv6_end,
-
-            "on_net-routev4-enable_toggled":  self.change_routev4_enable,
-            "on_net-routev4-network_changed": self.change_routev4_network,
-            "on_net-routev4-gateway_changed": self.change_routev4_gateway,
-
-            "on_net-routev6-enable_toggled":  self.change_routev6_enable,
-            "on_net-routev6-network_changed": self.change_routev6_network,
-            "on_net-routev6-gateway_changed": self.change_routev6_gateway,
         })
         self.bind_escape_key_close()
 
@@ -143,10 +135,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.widget("net-dhcpv4-enable").set_active(True)
         self.widget("net-dhcpv4-start").set_text("192.168.100.128")
         self.widget("net-dhcpv4-end").set_text("192.168.100.254")
-        self.widget("net-routev4-enable").set_active(False)
-        self.widget("net-routev4-enable").toggled()
-        self.widget("net-routev4-network").set_text("")
-        self.widget("net-routev4-gateway").set_text("")
 
         self.widget("net-ipv6-enable").set_active(False)
         self.widget("net-ipv6-enable").toggled()
@@ -155,10 +143,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.widget("net-dhcpv6-enable").toggled()
         self.widget("net-dhcpv6-start").set_text("")
         self.widget("net-dhcpv6-end").set_text("")
-        self.widget("net-routev6-enable").set_active(False)
-        self.widget("net-routev6-enable").toggled()
-        self.widget("net-routev6-network").set_text("")
-        self.widget("net-routev6-gateway").set_text("")
 
         self.widget("net-enable-ipv6-networking").set_active(False)
 
@@ -222,10 +206,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         return self.widget("net-dhcpv4-enable").get_active()
     def get_config_dhcpv6_enable(self):
         return self.widget("net-dhcpv6-enable").get_active()
-    def get_config_routev4_enable(self):
-        return self.widget("net-routev4-enable").get_active()
-    def get_config_routev6_enable(self):
-        return self.widget("net-routev6-enable").get_active()
 
     def _get_network_helper(self, widgetname):
         widget = self.widget(widgetname)
@@ -259,23 +239,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         mode = uiutil.get_list_selection(
             self.widget("net-forward-mode"), column=1)
         return [name, mode]
-
-    def get_config_routev4_network(self):
-        if not self.get_config_routev4_enable():
-            return None
-        return self.widget("net-routev4-network").get_text()
-    def get_config_routev4_gateway(self):
-        if not self.get_config_routev4_enable():
-            return None
-        return self.widget("net-routev4-gateway").get_text()
-    def get_config_routev6_network(self):
-        if not self.get_config_routev6_enable():
-            return None
-        return self.widget("net-routev6-network").get_text()
-    def get_config_routev6_gateway(self):
-        if not self.get_config_routev6_enable():
-            return None
-        return self.widget("net-routev6-gateway").get_text()
 
 
     ###################
@@ -337,41 +300,6 @@ class vmmCreateNetwork(vmmGObjectUI):
                     (_("The DHCP end address is not with the network %s") %
                      (str(ip))))
 
-        enabled = self.get_config_routev4_enable()
-        if enabled:
-            ntwk = self.get_config_routev4_network()
-            ntwkbad = False
-            gway = self.get_config_routev4_gateway()
-            gwaybad = False
-            if ntwk is None or gway is None:
-                return True
-            if ntwk == "" and gway == "":
-                return True
-            naddr = _make_ipaddr(ntwk)
-            if naddr is None:
-                ntwkbad = True
-            else:
-                if naddr.version != 4:
-                    ntwkbad = True
-                if naddr.prefixlen > 28:
-                    ntwkbad = True
-            gaddr = _make_ipaddr(gway)
-            if gaddr is None:
-                gwaybad = True
-            else:
-                if gaddr.version != 4:
-                    gwaybad = True
-                if gaddr.prefixlen != 32:
-                    gwaybad = True
-                if not ip.overlaps(gaddr):
-                    gwaybad = True
-            if ntwkbad:
-                return self.err.val_err(_("Invalid static route"),
-                            _("The network address is incorrect."))
-            if gwaybad:
-                return self.err.val_err(_("Invalid static route"),
-                            _("The gateway address is incorrect."))
-
         return True
 
     def validate_ipv6(self):
@@ -415,41 +343,6 @@ class vmmCreateNetwork(vmmGObjectUI):
                 return self.err.val_err(_("Invalid DHCPv6 Address"),
                     (_("The DHCPv6 end address is not with the network %s") %
                     (str(ip))))
-
-        enabled = self.get_config_routev6_enable()
-        if enabled:
-            ntwk = self.get_config_routev6_network()
-            ntwkbad = False
-            gway = self.get_config_routev6_gateway()
-            gwaybad = False
-            if ntwk is None or gway is None:
-                return True
-            if ntwk == "" and gway == "":
-                return True
-            naddr = _make_ipaddr(ntwk)
-            if naddr is None:
-                ntwkbad = True
-            else:
-                if naddr.version != 6:
-                    ntwkbad = True
-                if naddr.prefixlen > 64:
-                    ntwkbad = True
-            gaddr = _make_ipaddr(gway)
-            if gaddr is None:
-                gwaybad = True
-            else:
-                if gaddr.version != 6:
-                    gwaybad = True
-                if gaddr.prefixlen != 128:
-                    gwaybad = True
-                if not ip.overlaps(gaddr):
-                    gwaybad = True
-            if ntwkbad:
-                return self.err.val_err(_("Invalid static route"),
-                            _("The network address is incorrect."))
-            if gwaybad:
-                return self.err.val_err(_("Invalid static route"),
-                            _("The gateway address is incorrect."))
 
         return True
 
@@ -540,19 +433,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         enabled = self.get_config_ipv6_enable()
         self.widget("net-ipv6-box").set_visible(enabled)
 
-    def change_routev4_enable(self, ignore):
-        enabled = self.get_config_routev4_enable()
-        ntwk = self.widget("net-routev4-network")
-        gway = self.widget("net-routev4-gateway")
-        uiutil.set_grid_row_visible(ntwk, enabled)
-        uiutil.set_grid_row_visible(gway, enabled)
-    def change_routev6_enable(self, ignore):
-        enabled = self.get_config_routev6_enable()
-        ntwk = self.widget("net-routev6-network")
-        gway = self.widget("net-routev6-gateway")
-        uiutil.set_grid_row_visible(ntwk, enabled)
-        uiutil.set_grid_row_visible(gway, enabled)
-
     def change_dhcpv4_enable(self, ignore):
         enabled = self.get_config_dhcpv4_enable()
         start = self.widget("net-dhcpv4-start")
@@ -623,38 +503,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         )
         self.widget("net-dhcpv4-end").set_text(str(ip.network_address + end))
 
-    def change_routev4_network(self, src):
-        ntwk = self.get_config_routev4_network()
-        ipAddr = self.get_config_ip4()
-        if ipAddr is None or ntwk is None:
-            src.modify_bg(Gtk.StateType.NORMAL, _white)
-            return
-
-        addr = _make_ipaddr(ntwk)
-        color = _green
-        if (addr is None or
-            addr.version != 4 or
-            addr.prefixlen > 28):
-            color = _red
-        src.modify_bg(Gtk.StateType.NORMAL, color)
-
-    def change_routev4_gateway(self, src):
-        gway = self.get_config_routev4_gateway()
-        ipAddr = self.get_config_ip4()
-        if ipAddr is None or gway is None:
-            src.modify_bg(Gtk.StateType.NORMAL, _white)
-            return
-
-        addr = _make_ipaddr(gway)
-        color = _green
-        if (addr is None or
-            addr.version != 4 or
-            not ipAddr.overlaps(addr) or
-            addr.prefixlen != 32):
-            color = _red
-        src.modify_bg(Gtk.StateType.NORMAL, color)
-
-
     def change_ipv6_network(self, src):
         ip = self.get_config_ip6()
 
@@ -682,38 +530,6 @@ class vmmCreateNetwork(vmmGObjectUI):
             str(ip.network_address + start)
         )
         self.widget("net-dhcpv6-end").set_text(str(ip.network_address + end))
-
-    def change_routev6_network(self, src):
-        ntwk = self.get_config_routev6_network()
-        ip = self.get_config_ip6()
-        if ip is None or ntwk is None:
-            src.modify_bg(Gtk.StateType.NORMAL, _white)
-            return
-
-        addr = _make_ipaddr(ntwk)
-        color = _green
-        if (addr is None or
-            addr.version != 6 or
-            addr.prefixlen > 64):
-            color = _red
-        src.modify_bg(Gtk.StateType.NORMAL, color)
-
-    def change_routev6_gateway(self, src):
-        gway = self.get_config_routev6_gateway()
-        ip = self.get_config_ip6()
-        if ip is None or gway is None:
-            src.modify_bg(Gtk.StateType.NORMAL, _white)
-            return
-
-        addr = _make_ipaddr(gway)
-        color = _green
-        if (addr is None or
-            addr.version != 6 or
-            ip.overlaps(addr) or
-            addr.prefixlen != 128):
-            color = _red
-        src.modify_bg(Gtk.StateType.NORMAL, color)
-
 
 
     #########################
@@ -775,24 +591,6 @@ class vmmCreateNetwork(vmmGObjectUI):
                 dhcpobj.end = str(
                     self.get_config_dhcpv6_end().network_address
                 )
-
-        netaddr = _make_ipaddr(self.get_config_routev4_network())
-        gwaddr = _make_ipaddr(self.get_config_routev4_gateway())
-        if netaddr and gwaddr:
-            route = net.routes.add_new()
-            route.family = "ipv4"
-            route.address = netaddr.network_address
-            route.prefix = netaddr.prefixlen
-            route.gateway = gwaddr.network_address
-
-        netaddr = _make_ipaddr(self.get_config_routev6_network())
-        gwaddr = _make_ipaddr(self.get_config_routev6_gateway())
-        if netaddr and gwaddr:
-            route = net.routes.add_new()
-            route.family = "ipv6"
-            route.address = netaddr.network_address
-            route.prefix = netaddr.prefixlen
-            route.gateway = gwaddr.network_address
 
         return net
 
