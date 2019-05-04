@@ -25,29 +25,30 @@ class vmmCreatePool(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "createpool.ui", "vmm-create-pool")
         self.conn = conn
 
-        self._pool = None
-
         self.builder.connect_signals({
             "on_pool_cancel_clicked": self.close,
             "on_vmm_create_pool_delete_event": self.close,
-            "on_pool_finish_clicked": self.forward,
-            "on_pool_pages_change_page": self._page_changed_cb,
+            "on_pool_finish_clicked": self._finish_clicked_cb,
             "on_pool_type_changed": self._pool_type_changed_cb,
 
-            "on_pool_source_button_clicked": self.browse_source_path,
-            "on_pool_target_button_clicked": self.browse_target_path,
+            "on_pool_source_button_clicked": self._browse_source_cb,
+            "on_pool_target_button_clicked": self._browse_target_cb,
 
-            "on_pool_name_activate": self.forward,
-            "on_pool_hostname_activate": self.hostname_changed,
-            "on_pool_iqn_chk_toggled": self.iqn_toggled,
+            "on_pool_hostname_activate": self._hostname_changed_cb,
+            "on_pool_iqn_chk_toggled": self._iqn_toggled_cb,
         })
         self.bind_escape_key_close()
 
-        self.set_initial_state()
+        self._init_ui()
+
+
+    #######################
+    # Standard UI methods #
+    #######################
 
     def show(self, parent):
         logging.debug("Showing new pool wizard")
-        self.reset_state()
+        self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
@@ -58,7 +59,10 @@ class vmmCreatePool(vmmGObjectUI):
 
     def _cleanup(self):
         self.conn = None
-        self._pool = None
+
+    ###########
+    # UI init #
+    ###########
 
     def _build_pool_type_list(self):
         # [pool type, label]
@@ -71,9 +75,7 @@ class vmmCreatePool(vmmGObjectUI):
             desc = StoragePool.get_pool_type_desc(typ)
             model.append([typ, "%s: %s" % (typ, desc)])
 
-    def set_initial_state(self):
-        self.widget("pool-pages").set_show_tabs(False)
-
+    def _init_ui(self):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
@@ -102,10 +104,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         self._build_pool_type_list()
 
-
-    def reset_state(self):
-        self.widget("pool-pages").set_current_page(0)
-
+    def _reset_state(self):
         defaultname = StoragePool.find_free_name(
                 self.conn.get_backend(), "pool")
         self.widget("pool-name").set_text(defaultname)
@@ -121,16 +120,15 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-build").set_active(False)
 
         uiutil.set_list_selection(self.widget("pool-type"), 0)
-        self.show_options_by_pool()
+        self._show_options_by_pool()
 
-    def hostname_changed(self, ignore):
-        # If a hostname was entered, try to lookup valid pool sources.
-        self.populate_pool_sources()
 
-    def iqn_toggled(self, src):
-        self.widget("pool-iqn").set_sensitive(src.get_active())
+    #################
+    # UI populating #
+    #################
 
-    def populate_pool_sources(self):
+    def _populate_pool_sources(self):
+        pooltype = self._get_config_pool_type()
         source_list = self.widget("pool-source-path")
         source_model = source_list.get_model()
         source_model.clear()
@@ -142,27 +140,27 @@ class vmmCreatePool(vmmGObjectUI):
         use_list = source_list
         use_model = source_model
         entry_list = []
-        if self._pool.type == StoragePool.TYPE_SCSI:
-            entry_list = self.list_scsi_adapters()
+        if pooltype == StoragePool.TYPE_SCSI:
+            entry_list = self._list_scsi_adapters()
             use_list = source_list
             use_model = source_model
 
-        elif self._pool.type == StoragePool.TYPE_LOGICAL:
-            pool_list = self.list_pool_sources()
+        elif pooltype == StoragePool.TYPE_LOGICAL:
+            pool_list = self._list_pool_sources(pooltype)
             entry_list = [[p.target_path, p.target_path, p]
                           for p in pool_list]
             use_list = target_list
             use_model = target_model
 
-        elif self._pool.type == StoragePool.TYPE_DISK:
-            entry_list = self.list_disk_devs()
+        elif pooltype == StoragePool.TYPE_DISK:
+            entry_list = self._list_disk_devs()
             use_list = source_list
             use_model = source_model
 
-        elif self._pool.type == StoragePool.TYPE_NETFS:
-            host = self.get_config_host()
+        elif pooltype == StoragePool.TYPE_NETFS:
+            host = self._get_config_host()
             if host:
-                pool_list = self.list_pool_sources(host=host)
+                pool_list = self._list_pool_sources(pooltype, host=host)
                 entry_list = [[p.source_path, p.source_path, p]
                               for p in pool_list]
                 use_list = source_list
@@ -174,7 +172,7 @@ class vmmCreatePool(vmmGObjectUI):
         if entry_list:
             use_list.set_active(0)
 
-    def list_scsi_adapters(self):
+    def _list_scsi_adapters(self):
         scsi_hosts = self.conn.filter_nodedevs("scsi_host")
         host_list = [dev.xmlobj.host for dev in scsi_hosts]
 
@@ -190,7 +188,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         return clean_list
 
-    def list_disk_devs(self):
+    def _list_disk_devs(self):
         devs = self.conn.filter_nodedevs("storage")
         devlist = []
         for dev in devs:
@@ -210,9 +208,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         return clean_list
 
-    def list_pool_sources(self, host=None):
-        pool_type = self._pool.type
-
+    def _list_pool_sources(self, pool_type, host=None):
         plist = []
         try:
             plist = StoragePool.pool_list_from_sources(
@@ -224,28 +220,46 @@ class vmmCreatePool(vmmGObjectUI):
 
         return plist
 
-    def show_options_by_pool(self):
+    def _get_build_default(self, pooltype):
+        """ Return (default value, whether build option can be changed)"""
+        if not pooltype:
+            return (False, False)
+
+        if pooltype in [StoragePool.TYPE_DIR,
+                        StoragePool.TYPE_FS,
+                        StoragePool.TYPE_NETFS]:
+            # Building for these simply entails creating a directory
+            return (True, False)
+        elif pooltype in [StoragePool.TYPE_LOGICAL,
+                          StoragePool.TYPE_DISK]:
+            # This is a dangerous operation, anything (False, True)
+            # should be assumed to be one.
+            return (False, True)
+
+        return (False, False)
+
+    def _show_options_by_pool(self):
         def show_row(base, do_show):
             widget = self.widget(base + "-label")
             uiutil.set_grid_row_visible(widget, do_show)
 
-        self._pool = self._make_stub_pool()
-        src = self._pool.supports_property("source_path")
+        pool = self._make_stub_pool()
+        src = pool.supports_property("source_path")
         src_b = src and not self.conn.is_remote()
-        tgt = self._pool.supports_property("target_path")
+        tgt = pool.supports_property("target_path")
         tgt_b = tgt and not self.conn.is_remote()
-        host = self._pool.supports_property("hosts")
-        fmt = self._pool.supports_property("format")
-        iqn = self._pool.supports_property("iqn")
-        builddef, buildsens = self.get_build_default()
+        host = pool.supports_property("hosts")
+        fmt = pool.supports_property("format")
+        iqn = pool.supports_property("iqn")
+        builddef, buildsens = self._get_build_default(pool.type)
 
         # We don't show source_name for logical pools, since we use
         # pool-sources to avoid the need for it
-        src_name = (self._pool.supports_property("source_name") and
-                    self._pool.type != self._pool.TYPE_LOGICAL)
+        src_name = (pool.supports_property("source_name") and
+                    pool.type != pool.TYPE_LOGICAL)
 
         # Source path browsing is meaningless for net pools
-        if self._pool.type in [StoragePool.TYPE_NETFS,
+        if pool.type in [StoragePool.TYPE_NETFS,
                                StoragePool.TYPE_ISCSI,
                                StoragePool.TYPE_SCSI,
                                StoragePool.TYPE_GLUSTER]:
@@ -266,7 +280,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         if tgt:
             self.widget("pool-target-path").get_child().set_text(
-                self._pool.default_target_path() or "")
+                pool.default_target_path() or "")
 
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
@@ -274,18 +288,19 @@ class vmmCreatePool(vmmGObjectUI):
 
         if src_name:
             self.widget("pool-source-name").set_text(
-                    self._pool.default_source_name())
+                    pool.default_source_name())
 
-        self.populate_pool_sources()
+        self._populate_pool_sources()
 
 
-    def get_config_type(self):
+    ################
+    # UI accessors #
+    ################
+
+    def _get_config_pool_type(self):
         return uiutil.get_list_selection(self.widget("pool-type"))
 
-    def get_config_name(self):
-        return self.widget("pool-name").get_text()
-
-    def get_config_target_path(self):
+    def _get_config_target_path(self):
         src = self.widget("pool-target-path")
         if not src.get_sensitive():
             return None
@@ -295,7 +310,7 @@ class vmmCreatePool(vmmGObjectUI):
             return ret
         return src.get_child().get_text()
 
-    def get_config_source_path(self):
+    def _get_config_source_path(self):
         src = self.widget("pool-source-path")
         if not src.get_sensitive():
             return None
@@ -305,118 +320,36 @@ class vmmCreatePool(vmmGObjectUI):
             return ret
         return src.get_child().get_text().strip()
 
-    def get_config_host(self):
+    def _get_config_host(self):
         host = self.widget("pool-hostname")
         if host.get_sensitive():
             return host.get_text().strip()
         return None
 
-    def get_config_source_name(self):
+    def _get_config_source_name(self):
         name = self.widget("pool-source-name")
         if name.get_sensitive():
             return name.get_text().strip()
         return None
 
-    def get_config_format(self):
+    def _get_config_format(self):
         return uiutil.get_list_selection(self.widget("pool-format"))
 
-    def get_config_iqn(self):
+    def _get_config_iqn(self):
         iqn = self.widget("pool-iqn")
         if iqn.get_sensitive() and iqn.get_visible():
             return iqn.get_text().strip()
         return None
 
-    def get_build_default(self):
-        """ Return (default value, whether build option can be changed)"""
-        if not self._pool:
-            return (False, False)
-        if self._pool.type in [StoragePool.TYPE_DIR,
-                               StoragePool.TYPE_FS,
-                               StoragePool.TYPE_NETFS]:
-            # Building for these simply entails creating a directory
-            return (True, False)
-        elif self._pool.type in [StoragePool.TYPE_LOGICAL,
-                                 StoragePool.TYPE_DISK]:
-            # This is a dangerous operation, anything (False, True)
-            # should be assumed to be one.
-            return (False, True)
-        else:
-            return (False, False)
 
+    ###################
+    # Object building #
+    ###################
 
-    def browse_source_path(self, ignore1=None):
-        source = self._browse_file(_("Choose source path"),
-                                   startfolder="/dev", foldermode=False)
-        if source:
-            self.widget("pool-source-path").get_child().set_text(source)
-
-    def browse_target_path(self, ignore1=None):
-        startfolder = StoragePool.get_default_dir(self.conn.get_backend())
-        target = self._browse_file(_("Choose target directory"),
-                                   startfolder=startfolder,
-                                   foldermode=True)
-        if target:
-            self.widget("pool-target-path").get_child().set_text(target)
-
-
-    def forward(self, ignore=None):
-        try:
-            if self._validate() is not True:
-                return
-            self.finish()
-        except Exception as e:
-            self.err.show_err(_("Uncaught error validating input: %s") % str(e))
-            return
-
-    def _signal_pool_added(self, src, connkey, created_name):
-        ignore = src
-        if connkey == created_name:
-            self.emit("pool-created", connkey)
-
-    def _finish_cb(self, error, details):
-        self.reset_finish_cursor()
-
-        if error:
-            error = _("Error creating pool: %s") % error
-            self.err.show_err(error,
-                              details=details)
-        else:
-            self.conn.connect_once("pool-added", self._signal_pool_added,
-                self._pool.name)
-            self.conn.schedule_priority_tick(pollpool=True)
-            self.close()
-
-    def finish(self):
-        self.reset_finish_cursor()
-
-        build = self.widget("pool-build").get_active()
-        progWin = vmmAsyncJob(self._async_pool_create, [build],
-                              self._finish_cb, [],
-                              _("Creating storage pool..."),
-                              _("Creating the storage pool may take a "
-                                "while..."),
-                              self.topwin)
-        progWin.run()
-
-    def _async_pool_create(self, asyncjob, build):
-        meter = asyncjob.get_meter()
-
-        logging.debug("Starting background pool creation.")
-        poolobj = self._pool.install(create=True, meter=meter, build=build)
-        poolobj.setAutostart(True)
-        logging.debug("Pool creation succeeded")
-
-    def _page_changed_cb(self, notebook, page, pagenum):
-        pass
-
-    def _pool_type_changed_cb(self, src):
-        self.show_options_by_pool()
-
-    def get_pool_to_validate(self):
+    def _get_pool_from_sourcelist(self):
         """
-        Return a pool instance to use for parameter assignment validation.
-        For most pools this will be the one we built after step 1, but for
-        pools we find via FindPoolSources, this will be different
+        If an enumerated pool source was selected, use that as the
+        basis for our pool object
         """
         source_list = self.widget("pool-source-path")
         target_list = self.widget("pool-target-path")
@@ -430,42 +363,38 @@ class vmmCreatePool(vmmGObjectUI):
         return pool
 
     def _make_stub_pool(self):
-        pool = StoragePool(self.conn.get_backend())
-        pool.type = self.get_config_type()
-        pool.name = self.get_config_name()
+        pool = self._get_pool_from_sourcelist()
+        if not pool:
+            pool = StoragePool(self.conn.get_backend())
+        pool.type = self._get_config_pool_type()
+        pool.name = self.widget("pool-name").get_text()
         return pool
 
-    def _validate(self):
-        target = self.get_config_target_path()
-        host = self.get_config_host()
-        source = self.get_config_source_path()
-        fmt = self.get_config_format()
-        iqn = self.get_config_iqn()
-        source_name = self.get_config_source_name()
-        name = self.get_config_name()
+    def _build_pool(self):
+        target = self._get_config_target_path()
+        host = self._get_config_host()
+        source = self._get_config_source_path()
+        fmt = self._get_config_format()
+        iqn = self._get_config_iqn()
+        source_name = self._get_config_source_name()
 
         try:
-            self._pool = self.get_pool_to_validate()
-            if not self._pool:
-                self._pool = self._make_stub_pool()
+            pool = self._make_stub_pool()
 
-            self._pool.validate_name(self._pool.conn, name)
-            self._pool.name = name
-
-            self._pool.target_path = target
+            pool.target_path = target
             if host:
-                hostobj = self._pool.hosts.add_new()
+                hostobj = pool.hosts.add_new()
                 hostobj.name = host
             if source:
-                self._pool.source_path = source
-            if fmt and self._pool.supports_property("format"):
-                self._pool.format = fmt
+                pool.source_path = source
+            if fmt and pool.supports_property("format"):
+                pool.format = fmt
             if iqn:
-                self._pool.iqn = iqn
+                pool.iqn = iqn
             if source_name:
-                self._pool.source_name = source_name
+                pool.source_name = source_name
 
-            self._pool.validate()
+            pool.validate()
         except ValueError as e:
             return self.err.val_err(_("Pool Parameter Error"), e)
 
@@ -479,12 +408,90 @@ class vmmCreatePool(vmmGObjectUI):
             if not ret:
                 return ret
 
-        return True
+        return pool
 
-    def _browse_file(self, dialog_name, startfolder=None, foldermode=False):
-        mode = Gtk.FileChooserAction.OPEN
-        if foldermode:
-            mode = Gtk.FileChooserAction.SELECT_FOLDER
 
-        return self.err.browse_local(self.conn, dialog_name,
-            dialog_type=mode, start_folder=startfolder)
+    ##################
+    # Object install #
+    ##################
+
+    def _pool_added_cb(self, src, connkey, created_name):
+        if connkey == created_name:
+            self.emit("pool-created", connkey)
+
+    def _finish_cb(self, error, details, pool):
+        self.reset_finish_cursor()
+
+        if error:
+            error = _("Error creating pool: %s") % error
+            self.err.show_err(error,
+                              details=details)
+        else:
+            self.conn.connect_once("pool-added", self._pool_added_cb,
+                pool.name)
+            self.conn.schedule_priority_tick(pollpool=True)
+            self.close()
+
+    def _async_pool_create(self, asyncjob, pool, build):
+        meter = asyncjob.get_meter()
+
+        logging.debug("Starting background pool creation.")
+        poolobj = pool.install(create=True, meter=meter, build=build)
+        poolobj.setAutostart(True)
+        logging.debug("Pool creation succeeded")
+
+    def _finish(self):
+        try:
+            pool = self._build_pool()
+            if not pool:
+                return
+        except Exception as e:
+            self.err.show_err(
+                    _("Uncaught error validating input: %s") % str(e))
+            return
+
+        self.reset_finish_cursor()
+
+        build = self.widget("pool-build").get_active()
+        progWin = vmmAsyncJob(self._async_pool_create, [pool, build],
+                              self._finish_cb, [pool],
+                              _("Creating storage pool..."),
+                              _("Creating the storage pool may take a "
+                                "while..."),
+                              self.topwin)
+        progWin.run()
+
+
+    ################
+    # UI listeners #
+    ################
+
+    def _finish_clicked_cb(self, src):
+        self._finish()
+
+    def _pool_type_changed_cb(self, src):
+        self._show_options_by_pool()
+
+    def _browse_source_cb(self, src):
+        source = self.err.browse_local(self.conn,
+                _("Choose source path"),
+                dialog_type=Gtk.FileChooserAction.OPEN,
+                start_folder="/dev")
+        if source:
+            self.widget("pool-source-path").get_child().set_text(source)
+
+    def _browse_target_cb(self, src):
+        startfolder = StoragePool.get_default_dir(self.conn.get_backend())
+        target = self.err.browse_local(self.conn,
+                _("Choose target directory"),
+                dialog_type=Gtk.FileChooserAction.SELECT_FOLDER,
+                start_folder=startfolder)
+        if target:
+            self.widget("pool-target-path").get_child().set_text(target)
+
+    def _hostname_changed_cb(self, src):
+        # If a hostname was entered, try to lookup valid pool sources.
+        self._populate_pool_sources()
+
+    def _iqn_toggled_cb(self, src):
+        self.widget("pool-iqn").set_sensitive(src.get_active())
