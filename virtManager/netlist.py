@@ -481,6 +481,9 @@ class vmmNetworkList(vmmGObjectUI):
         current_label = uiutil.get_list_selection(netlist, column=2)
 
         model = netlist.get_model()
+        if not model:
+            return
+
         try:
             netlist.set_model(None)
             default_idx = self._populate_network_model(model)
