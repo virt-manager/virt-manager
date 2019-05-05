@@ -362,6 +362,8 @@ class DeviceDisk(Device):
         self._set_xmlpath(self.path)
 
     def get_vol_object(self):
+        if not self._storage_backend:
+            return None
         return self._storage_backend.get_vol_object()
     def get_vol_install(self):
         if not self._storage_backend:

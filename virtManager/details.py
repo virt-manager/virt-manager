@@ -5,6 +5,7 @@
 # See the COPYING file in the top-level directory.
 
 import logging
+import re
 import traceback
 
 from gi.repository import Gtk
@@ -25,10 +26,13 @@ from .netlist import vmmNetworkList
 from .oslist import vmmOSList
 from .storagebrowse import vmmStorageBrowser
 from .vsockdetails import vmmVsockDetails
+from .xmleditor import vmmXMLEditor
 
 
 # Parameters that can be edited in the details window
-(EDIT_NAME,
+(EDIT_XML,
+
+ EDIT_NAME,
  EDIT_TITLE,
  EDIT_MACHTYPE,
  EDIT_FIRMWARE,
@@ -100,7 +104,7 @@ from .vsockdetails import vmmVsockDetails
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 58)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 59)
 
 
 # Columns in hw list model
@@ -333,6 +337,33 @@ def _warn_cpu_thread_topo(threads, cpu_model):
     return False
 
 
+def _unindent_device_xml(xml):
+    """
+    The device parsed from a domain will have no indent
+    for the first line, but then <domain> expected indent
+    from the remaining lines. Try to unindent the remaining
+    lines so it looks nice in the XML editor.
+    """
+    lines = xml.splitlines()
+    if not xml.startswith("<") or len(lines) < 2:
+        return xml
+
+    ret = ""
+    unindent = 0
+    for c in lines[1]:
+        if c != " ":
+            break
+        unindent += 1
+
+    unindent = max(0, unindent - 2)
+    ret = lines[0] + "\n"
+    for line in lines[1:]:
+        if re.match(r"^%s *<.*$" % (unindent * " "), line):
+            line = line[unindent:]
+        ret += line + "\n"
+    return ret
+
+
 class vmmDetails(vmmGObjectUI):
     def __init__(self, vm, builder, topwin, is_customize_dialog):
         vmmGObjectUI.__init__(self, "details.ui",
@@ -397,6 +428,16 @@ class vmmDetails(vmmGObjectUI):
             lambda *x: self.enable_apply(x, EDIT_VSOCK_AUTO))
         self.vsockdetails.connect("changed-cid",
             lambda *x: self.enable_apply(x, EDIT_VSOCK_CID))
+
+        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
+                self.widget("hw-panel-align"),
+                self.widget("hw-panel"))
+        self._xmleditor.connect("changed",
+                lambda s: self.enable_apply(EDIT_XML))
+        self._xmleditor.connect("xml-requested",
+                self._xmleditor_xml_requested_cb)
+        self._xmleditor.connect("xml-reset",
+                self._xmleditor_xml_reset_cb)
 
         self.oldhwkey = None
         self.addhwmenu = None
@@ -543,6 +584,8 @@ class vmmDetails(vmmGObjectUI):
         self.netlist = None
         self.vsockdetails.cleanup()
         self.vsockdetails = None
+        self._xmleditor.cleanup()
+        self._xmleditor = None
 
 
     ##########################
@@ -967,6 +1010,10 @@ class vmmDetails(vmmGObjectUI):
 
         try:
             dev = self.get_hw_row()[HW_LIST_COL_DEVICE]
+            if dev:
+                self._xmleditor.set_xml(_unindent_device_xml(dev.get_xml()))
+            else:
+                self._xmleditor.set_xml_from_libvirtobject(self.vm)
 
             if pagetype == HW_LIST_TYPE_GENERAL:
                 self.refresh_overview_page()
@@ -1044,6 +1091,12 @@ class vmmDetails(vmmGObjectUI):
     #############################
     # External action listeners #
     #############################
+
+    def _xmleditor_xml_requested_cb(self, src):
+        self.hw_selected()
+
+    def _xmleditor_xml_reset_cb(self, src):
+        self.hw_selected()
 
     def add_hardware(self, src_ignore):
         try:
@@ -1389,7 +1442,12 @@ class vmmDetails(vmmGObjectUI):
 
         success = False
         try:
-            if pagetype is HW_LIST_TYPE_GENERAL:
+            if self.edited(EDIT_XML):
+                if dev:
+                    success = self._config_device_xml_apply(dev)
+                else:
+                    success = self._config_domain_xml_apply()
+            elif pagetype is HW_LIST_TYPE_GENERAL:
                 success = self.config_overview_apply()
             elif pagetype is HW_LIST_TYPE_OS:
                 success = self.config_os_apply()
@@ -1424,7 +1482,7 @@ class vmmDetails(vmmGObjectUI):
             elif pagetype is HW_LIST_TYPE_VSOCK:
                 success = self.config_vsock_apply(dev)
         except Exception as e:
-            return self.err.show_err(_("Error apply changes: %s") % e)
+            return self.err.show_err(_("Error applying changes: %s") % e)
 
         if success is not False:
             self.disable_apply()
@@ -1443,6 +1501,20 @@ class vmmDetails(vmmGObjectUI):
 
     def edited(self, pagetype):
         return pagetype in self.active_edits
+
+    def _config_domain_xml_apply(self):
+        newxml = self._xmleditor.get_xml()
+        def change_cb():
+            return self.vm.define_xml(newxml)
+        return vmmAddHardware.change_config_helper(
+                change_cb, {}, self.vm, self.err)
+
+    def _config_device_xml_apply(self, devobj):
+        newxml = self._xmleditor.get_xml()
+        def change_cb():
+            return self.vm.replace_device_xml(devobj, newxml)
+        return vmmAddHardware.change_config_helper(
+                change_cb, {}, self.vm, self.err)
 
     def config_overview_apply(self):
         kwargs = {}

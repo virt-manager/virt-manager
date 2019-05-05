@@ -468,6 +468,23 @@ class vmmDomain(vmmLibvirtObject):
 
         self._redefine_xmlobj(xmlobj)
 
+    def replace_device_xml(self, devobj, newxml):
+        """
+        When device XML is editing from the XML editor window.
+        """
+        do_hotplug = False
+        devclass = devobj.__class__
+        newdev = devclass(devobj.conn, parsexml=newxml)
+
+        xmlobj = self._make_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        xmlobj.devices.replace_child(editdev, newdev)
+        self._redefine_xmlobj(xmlobj)
+        return editdev, newdev
+
     def define_cpu(self, vcpus=_SENTINEL, maxvcpus=_SENTINEL,
             model=_SENTINEL, secure=_SENTINEL, sockets=_SENTINEL,
             cores=_SENTINEL, threads=_SENTINEL):
@@ -1603,6 +1620,7 @@ class vmmDomainVirtinst(vmmDomain):
     def __init__(self, conn, backend, key):
         vmmDomain.__init__(self, conn, backend, key)
         self._orig_xml = None
+        self._orig_backend = self._backend
 
         self._refresh_status()
         logging.debug("%s initialized with XML=\n%s", self, self._XMLDesc(0))
@@ -1639,6 +1657,64 @@ class vmmDomainVirtinst(vmmDomain):
     ################
     # XML handling #
     ################
+
+    def _sync_disk_storage_params(self, origdisk, newdisk):
+        """
+        When raw disk XML is edited from the customize wizard, the
+        original DeviceDisk is completely blown away, but that will
+        lose the storage creation info. This syncs that info across
+        to the new DeviceDisk
+        """
+        if origdisk.path != newdisk.path:
+            return
+
+        if origdisk.get_vol_object():
+            logging.debug(
+                    "Syncing vol_object=%s from origdisk=%s to newdisk=%s",
+                    origdisk.get_vol_object(), origdisk, newdisk)
+            newdisk.set_vol_object(origdisk.get_vol_object(),
+                                   origdisk.get_parent_pool())
+        elif origdisk.get_vol_install():
+            logging.debug(
+                    "Syncing vol_install=%s from origdisk=%s to newdisk=%s",
+                    origdisk.get_vol_install(), origdisk, newdisk)
+            newdisk.set_vol_install(origdisk.get_vol_install())
+
+    def _replace_domain_xml(self, newxml):
+        """
+        Blow away the Guest instance we are tracking internally with
+        a new one from the xmleditor UI, and sync over all disk storage
+        info afterwards
+        """
+        newbackend = Guest(self._backend.conn, parsexml=newxml)
+        newbackend.installer_instance = self._backend.installer_instance
+
+        for origdisk in self._backend.devices.disk:
+            for newdisk in newbackend.devices.disk:
+                if origdisk.compare_device(newdisk, newdisk.get_xml_idx()):
+                    self._sync_disk_storage_params(origdisk, newdisk)
+                    break
+
+        self._backend = newbackend
+
+    def replace_device_xml(self, devobj, newxml):
+        """
+        Overwrite vmmDomain's implementation, since we need to wire in
+        syncing disk details.
+        """
+        if self._backend == self._orig_backend:
+            # If the backend hasn't been replace yet, do it, so we don't
+            # have a mix of is_build Guest with XML parsed objects which
+            # might contain dragons
+            self._replace_domain_xml(self._backend.get_xml())
+        editdev, newdev = vmmDomain.replace_device_xml(self, devobj, newxml)
+        if editdev.DEVICE_TYPE == "disk":
+            self._sync_disk_storage_params(editdev, newdev)
+
+    def define_xml(self, xml):
+        origxml = self._backend.get_xml()
+        self._replace_domain_xml(xml)
+        self._redefine_xml_internal(origxml, xml)
 
     def define_name(self, newname):
         # We need to overwrite this, since the implementation for libvirt
