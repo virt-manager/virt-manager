@@ -11,10 +11,10 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from .baseclass import vmmGObject, vmmGObjectUI
-from .details import DETAILS_PAGE_CONSOLE
 from .serialcon import vmmSerialConsole
 from .sshtunnels import ConnectionInfo
 from .viewers import SpiceViewer, VNCViewer, have_spice_gtk
+from .vmwindow import DETAILS_PAGE_CONSOLE
 
 
 # console-pages IDs
@@ -223,7 +223,7 @@ class vmmConsolePages(vmmGObjectUI):
         self._serial_consoles = []
         self._init_menus()
 
-        # Signals are added by vmmDetails. Don't use connect_signals here
+        # Signals are added by vmmVMWindow. Don't use connect_signals here
         # or it changes will be overwritten
 
         self.widget("console-gfx-scroll").connect("size-allocate",
@@ -996,9 +996,9 @@ class vmmConsolePages(vmmGObjectUI):
         src.show_all()
 
 
-    ##########################
-    # API used by vmmDetails #
-    ##########################
+    ###########################
+    # API used by vmmVMWindow #
+    ###########################
 
     def details_viewer_is_visible(self):
         return bool(self._viewer and self._viewer.console_get_visible())

@@ -21,15 +21,15 @@ from virtinst import util
 from . import uiutil
 from .addstorage import vmmAddStorage
 from .asyncjob import vmmAsyncJob
-from .connmanager import vmmConnectionManager
 from .baseclass import vmmGObjectUI
-from .details import vmmDetails
+from .connmanager import vmmConnectionManager
 from .domain import vmmDomainVirtinst
 from .engine import vmmEngine
 from .mediacombo import vmmMediaCombo
 from .netlist import vmmNetworkList
 from .oslist import vmmOSList
 from .storagebrowse import vmmStorageBrowser
+from .vmwindow import vmmVMWindow
 
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20
@@ -2018,10 +2018,10 @@ class vmmCreate(vmmGObjectUI):
             logging.debug("User closed customize window, closing wizard")
             self._close_requested()
 
-        # We specifically don't use vmmDetails.get_instance here since
-        # it's not a top level Details window
+        # We specifically don't use vmmVMWindow.get_instance here since
+        # it's not a top level VM window
         self._cleanup_customize_window()
-        self._customize_window = vmmDetails(virtinst_guest, self.topwin)
+        self._customize_window = vmmVMWindow(virtinst_guest, self.topwin)
         self._customize_window.connect(
                 "customize-finished", start_install_wrapper, guest)
         self._customize_window.connect("closed", config_canceled)
@@ -2045,7 +2045,7 @@ class vmmCreate(vmmGObjectUI):
         self._close()
 
         # Launch details dialog for new VM
-        vmmDetails.get_instance(self, foundvm).show()
+        vmmVMWindow.get_instance(self, foundvm).show()
 
 
     def _start_install(self, guest):

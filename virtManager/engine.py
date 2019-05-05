@@ -476,8 +476,8 @@ class vmmEngine(vmmGObject):
             raise RuntimeError("%s does not have VM '%s'" %
                 (uri, clistr))
 
-        from .details import vmmDetails
-        details = vmmDetails.get_instance(None, vm)
+        from .vmwindow import vmmVMWindow
+        details = vmmVMWindow.get_instance(None, vm)
 
         if page == self.CLI_SHOW_DOMAIN_PERFORMANCE:
             details.activate_performance_page()

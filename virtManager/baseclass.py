@@ -26,7 +26,7 @@ class vmmGObject(GObject.GObject):
     # Singleton reference, if applicable (vmmSystray, vmmInspection, ...)
     _instance = None
 
-    # windowlist mapping, if applicable (vmmDetails, vmmHost, ...)
+    # windowlist mapping, if applicable (vmmVMWindow, vmmHost, ...)
     _instances = None
 
     # This saves a bunch of imports and typing

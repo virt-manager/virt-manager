@@ -327,5 +327,5 @@ class VMActionUI(object):
 
     @staticmethod
     def show(src, vm):
-        from .details import vmmDetails
-        vmmDetails.get_instance(src, vm).show()
+        from .vmwindow import vmmVMWindow
+        vmmVMWindow.get_instance(src, vm).show()
