@@ -144,8 +144,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.widget("net-dhcpv6-start").set_text("")
         self.widget("net-dhcpv6-end").set_text("")
 
-        self.widget("net-enable-ipv6-networking").set_active(False)
-
 
         # Populate physical forward devices
         fw_model = self.widget("net-forward").get_model()
@@ -417,8 +415,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.widget("net-forward").set_sensitive(fwd_sensitive and
                                                 mode != "open")
         self.widget("net-forward-hostdev-table").set_sensitive(is_hostdev)
-        self.widget("net-enable-ipv6-networking-box").set_sensitive(
-            not is_hostdev)
         self.widget("dns-domain-name-box").set_sensitive(not is_hostdev)
 
     def change_forward_mode_type(self, ignore):
@@ -542,9 +538,6 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         net.name = self.widget("net-name").get_text()
         net.domain_name = self.widget("net-domain-name").get_text() or None
-
-        if self.widget("net-enable-ipv6-networking").get_active():
-            net.ipv6 = True
 
         dev, mode = self.get_config_forwarding()
         if mode:
