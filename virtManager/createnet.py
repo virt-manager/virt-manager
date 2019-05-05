@@ -236,117 +236,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         return [dev, mode]
 
 
-    ###################
-    # Page validation #
-    ###################
-
-    def _validate_name(self):
-        try:
-            name = self.widget("net-name").get_text()
-            Network.validate_name(self.conn.get_backend(), name)
-        except Exception as e:
-            return self.err.val_err(_("Invalid network name"), str(e))
-
-        return True
-
-    def _validate_ipv4(self):
-        if not self.get_config_ipv4_enable():
-            return True
-        ip = self.get_config_ip4()
-        if ip is None:
-            return self.err.val_err(_("Invalid Network Address"),
-                    _("The network address could not be understood"))
-
-        if ip.version != 4:
-            return self.err.val_err(_("Invalid Network Address"),
-                    _("The network must be an IPv4 address"))
-
-        if ip.num_addresses < 8:
-            return self.err.val_err(_("Invalid Network Address"),
-                    _("The network must address at least 8 addresses."))
-
-        if ip.prefixlen < 15:
-            return self.err.val_err(_("Invalid Network Address"),
-                    _("The network prefix must be >= 15"))
-
-        if not ip.is_private:
-            res = self.err.yes_no(_("Check Network Address"),
-                    _("The network should normally use a private IPv4 "
-                      "address. Use this non-private address anyway?"))
-            if not res:
-                return False
-
-        enabled = self.get_config_dhcpv4_enable()
-        if enabled:
-            start = self.get_config_dhcpv4_start()
-            end = self.get_config_dhcpv4_end()
-            if start is None:
-                return self.err.val_err(_("Invalid DHCP Address"),
-                    _("The DHCP start address could not be understood"))
-            if end is None:
-                return self.err.val_err(_("Invalid DHCP Address"),
-                    _("The DHCP end address could not be understood"))
-            if not ip.overlaps(start):
-                return self.err.val_err(_("Invalid DHCP Address"),
-                    (_("The DHCP start address is not with the network %s") %
-                     (str(ip))))
-            if not ip.overlaps(end):
-                return self.err.val_err(_("Invalid DHCP Address"),
-                    (_("The DHCP end address is not with the network %s") %
-                     (str(ip))))
-
-        return True
-
-    def _validate_ipv6(self):
-        if not self.get_config_ipv6_enable():
-            return True
-        ip = self.get_config_ip6()
-        if ip is None:
-            return self.err.val_err(_("Invalid Network Address"),
-                    _("The network address could not be understood"))
-
-        if ip.version != 6:
-            return self.err.val_err(_("Invalid Network Address"),
-                    _("The network must be an IPv6 address"))
-
-        if ip.prefixlen != 64:
-            return self.err.val_err(_("Invalid Network Address"),
-                    _("For libvirt, the IPv6 network prefix must be /64"))
-
-        if not ip.is_private:
-            res = self.err.yes_no(_("Check Network Address"),
-                    _("The network should normally use a private IPv6 "
-                      "address. Use this non-private address anyway?"))
-            if not res:
-                return False
-
-        enabled = self.get_config_dhcpv6_enable()
-        if enabled:
-            start = self.get_config_dhcpv6_start()
-            end = self.get_config_dhcpv6_end()
-            if start is None:
-                return self.err.val_err(_("Invalid DHCPv6 Address"),
-                    _("The DHCPv6 start address could not be understood"))
-            if end is None:
-                return self.err.val_err(_("Invalid DHCPv6 Address"),
-                    _("The DHCPv6 end address could not be understood"))
-            if not ip.overlaps(start):
-                return self.err.val_err(_("Invalid DHCPv6 Address"),
-                    (_("The DHCPv6 start address is not with the network %s") %
-                    (str(ip))))
-            if not ip.overlaps(end):
-                return self.err.val_err(_("Invalid DHCPv6 Address"),
-                    (_("The DHCPv6 end address is not with the network %s") %
-                    (str(ip))))
-
-        return True
-
-    def _validate(self):
-        return (self._validate_name() and
-                self._validate_ipv4() and
-                self._validate_ipv6())
-
-
     #############
     # Listeners #
     #############
@@ -532,11 +421,9 @@ class vmmCreateNetwork(vmmGObjectUI):
         net.install()
 
     def finish(self, ignore):
-        if not self._validate():
-            return
-
         try:
             net = self._build_xmlobj()
+            net.validate()
         except Exception as e:
             self.err.show_err(_("Error generating network xml: %s") % str(e))
             return
