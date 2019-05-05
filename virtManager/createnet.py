@@ -53,8 +53,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             "on_create_finish_clicked": self.finish,
 
             "on_net_name_activate": self.forward,
-            "on_net_forward_toggled": self.change_forward_type,
-            "on_net_forward_mode_toggled": self.change_forward_mode_type,
+            "on_net_forward_mode_changed": self._net_forward_mode_changed_cb,
 
             "on_net-ipv4-enable_toggled":  self.change_ipv4_enable,
             "on_net-ipv4-network_changed":  self.change_ipv4_network,
@@ -99,27 +98,29 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
         # [ label, dev name ]
-        pf_list = self.widget("pf-list")
+        pf_list = self.widget("net-hostdevs")
         pf_model = Gtk.ListStore(str, str)
         pf_list.set_model(pf_model)
-        text = uiutil.init_combo_text_column(pf_list, 0)
+        text = uiutil.init_combo_text_column(pf_list, 1)
         text.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
 
         # [ label, dev name ]
-        fw_list = self.widget("net-forward")
+        fw_list = self.widget("net-forward-device")
         fw_model = Gtk.ListStore(str, str)
         fw_list.set_model(fw_model)
-        uiutil.init_combo_text_column(fw_list, 0)
+        uiutil.init_combo_text_column(fw_list, 1)
 
         # [ label, mode ]
         mode_list = self.widget("net-forward-mode")
         mode_model = Gtk.ListStore(str, str)
         mode_list.set_model(mode_model)
-        uiutil.init_combo_text_column(mode_list, 0)
+        uiutil.init_combo_text_column(mode_list, 1)
 
-        mode_model.append([_("NAT"), "nat"])
-        mode_model.append([_("Routed"), "route"])
-        mode_model.append([_("Open"), "open"])
+        mode_model.append(["nat", _("NAT")])
+        mode_model.append(["route", _("Routed")])
+        mode_model.append(["open", _("Open")])
+        mode_model.append(["isolated", _("Isolated")])
+        mode_model.append(["hostdev", _("SR-IOV pool")])
 
     def reset_state(self):
         notebook = self.widget("create-pages")
@@ -146,10 +147,6 @@ class vmmCreateNetwork(vmmGObjectUI):
 
 
         # Populate physical forward devices
-        fw_model = self.widget("net-forward").get_model()
-        fw_model.clear()
-        fw_model.append([_("Any physical device"), None])
-
         devnames = []
         for nodedev in self.conn.filter_nodedevs("net"):
             devnames.append(nodedev.xmlobj.interface)
@@ -157,17 +154,18 @@ class vmmCreateNetwork(vmmGObjectUI):
             if iface.get_name() not in devnames:
                 devnames.append(iface.get_name())
 
+        fw_model = self.widget("net-forward-device").get_model()
+        fw_model.clear()
+        fw_model.append([None, _("Any physical device")])
+
         for name in devnames:
-            fw_model.append([_("Physical device %s") % name, name])
-        self.widget("net-forward").set_active(0)
+            fw_model.append([name, _("Physical device %s") % name])
+        self.widget("net-forward-device").set_active(0)
 
         self.widget("net-forward-mode").set_active(0)
 
 
         # Populate hostdev forward devices
-        pf_model = self.widget("pf-list").get_model()
-        pf_model.clear()
-
         devprettynames = []
         ifnames = []
         for pcidev in self.conn.filter_nodedevs("pci"):
@@ -182,13 +180,14 @@ class vmmCreateNetwork(vmmGObjectUI):
                 devprettynames.append(devprettyname)
                 ifnames.append(ifname)
                 break
-        for devprettyname, ifname in zip(devprettynames, ifnames):
-            pf_model.append([_("%s") % devprettyname, ifname])
-        if len(pf_model) == 0:
-            pf_model.append([_("No available device"), None])
-        self.widget("pf-list").set_active(0)
 
-        self.widget("net-forward-none").set_active(True)
+        pf_model = self.widget("net-hostdevs").get_model()
+        pf_model.clear()
+        for devprettyname, ifname in zip(devprettynames, ifnames):
+            pf_model.append([ifname, devprettyname])
+        if len(pf_model) == 0:
+            pf_model.append([None, _("No available device")])
+        self.widget("net-hostdevs").set_active(0)
 
 
 
@@ -225,18 +224,15 @@ class vmmCreateNetwork(vmmGObjectUI):
         return self._get_network_helper("net-dhcpv6-end")
 
     def get_config_forwarding(self):
-        if self.widget("net-forward-mode-hostdev").get_active():
-            name = uiutil.get_list_selection(self.widget("pf-list"), column=1)
-            mode = "hostdev"
-            return [name, mode]
-
-        if self.widget("net-forward-none").get_active():
+        mode = uiutil.get_list_selection(self.widget("net-forward-mode"))
+        if mode == "isolated":
             return [None, None]
 
-        name = uiutil.get_list_selection(self.widget("net-forward"), column=1)
-        mode = uiutil.get_list_selection(
-            self.widget("net-forward-mode"), column=1)
-        return [name, mode]
+        if mode == "hostdev":
+            dev = uiutil.get_list_selection(self.widget("net-hostdevs"))
+        else:
+            dev = uiutil.get_list_selection(self.widget("net-forward-device"))
+        return [dev, mode]
 
 
     ###################
@@ -400,27 +396,18 @@ class vmmCreateNetwork(vmmGObjectUI):
         if is_last_page:
             self.widget("create-finish").grab_focus()
 
-    def change_forward_type(self, ignore):
-        sriov_capable = bool(len(self.widget("pf-list").get_model()))
-        self.widget("net-forward-mode-hostdev").set_sensitive(sriov_capable)
-        mode = uiutil.get_list_selection(self.widget("net-forward-mode"),
-                                        column=1)
+    def _net_forward_mode_changed_cb(self, src):
+        mode = uiutil.get_list_selection(self.widget("net-forward-mode"))
 
-        is_hostdev = self.widget("net-forward-mode-hostdev").get_active()
-        fwd_sensitive = False
-        if not is_hostdev:
-            fwd_sensitive = not self.widget("net-forward-none").get_active()
+        fw_visible = mode not in ["open", "isolated", "hostdev"]
+        hostdevs_visible = mode in ["hostdev"]
+        dns_sensitive = mode not in ["hostdev"]
 
-        self.widget("net-forward-mode").set_sensitive(fwd_sensitive)
-        self.widget("net-forward").set_sensitive(fwd_sensitive and
-                                                mode != "open")
-        self.widget("net-forward-hostdev-table").set_sensitive(is_hostdev)
-        self.widget("dns-domain-name-box").set_sensitive(not is_hostdev)
-
-    def change_forward_mode_type(self, ignore):
-        mode = uiutil.get_list_selection(self.widget("net-forward-mode"),
-                                        column=1)
-        self.widget("net-forward").set_sensitive(mode != "open")
+        uiutil.set_grid_row_visible(
+            self.widget("net-forward-device"), fw_visible)
+        uiutil.set_grid_row_visible(
+            self.widget("net-hostdevs"), hostdevs_visible)
+        self.widget("dns-domain-name-box").set_sensitive(dns_sensitive)
 
     def change_ipv4_enable(self, ignore):
         enabled = self.get_config_ipv4_enable()
