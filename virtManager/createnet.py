@@ -19,6 +19,7 @@ from virtinst import Network
 from . import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
+from .xmleditor import vmmXMLEditor
 
 _green = Gdk.Color.parse("#c0ffc0")[1]
 _red = Gdk.Color.parse("#ffc0c0")[1]
@@ -39,6 +40,12 @@ class vmmCreateNetwork(vmmGObjectUI):
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "createnet.ui", "vmm-create-net")
         self.conn = conn
+
+        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
+                self.widget("net-details-align"),
+                self.widget("net-details"))
+        self._xmleditor.connect("xml-requested",
+                self._xmleditor_xml_requested_cb)
 
         self.builder.connect_signals({
             "on_create_cancel_clicked": self.close,
@@ -82,6 +89,13 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def _cleanup(self):
         self.conn = None
+        self._xmleditor.cleanup()
+        self._xmleditor = None
+
+
+    ###########
+    # UI init #
+    ###########
 
     def set_initial_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
@@ -113,6 +127,8 @@ class vmmCreateNetwork(vmmGObjectUI):
         mode_model.append(["hostdev", _("SR-IOV pool")])
 
     def reset_state(self):
+        self._xmleditor.reset_state()
+
         basename = "network"
         def cb(n):
             return generatename.check_libvirt_collision(
@@ -369,7 +385,12 @@ class vmmCreateNetwork(vmmGObjectUI):
         raise ValueError(_("Name '%s' already in use by another network." %
                          net.name))
 
-    def _build_xmlobj(self):
+    def _build_xmlobj_from_xmleditor(self):
+        xml = self._xmleditor.get_xml()
+        logging.debug("Using XML from xmleditor:\n%s", xml)
+        return Network(self.conn.get_backend(), parsexml=xml)
+
+    def _build_xmlobj_from_ui(self):
         net = Network(self.conn.get_backend())
 
         net.name = self.widget("net-name").get_text()
@@ -421,6 +442,15 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         return net
 
+    def _build_xmlobj(self, check_xmleditor):
+        try:
+            xmlobj = self._build_xmlobj_from_ui()
+            if check_xmleditor and self._xmleditor.is_xml_selected():
+                xmlobj = self._build_xmlobj_from_xmleditor()
+            return xmlobj
+        except Exception as e:
+            self.err.show_err(_("Error building XML: %s") % str(e))
+
     def _finish_cb(self, error, details):
         self.reset_finish_cursor()
 
@@ -446,12 +476,15 @@ class vmmCreateNetwork(vmmGObjectUI):
             raise
 
     def finish(self, ignore):
+        net = self._build_xmlobj(check_xmleditor=True)
+        if not net:
+            return
+
         try:
-            net = self._build_xmlobj()
             self._validate(net)
         except Exception as e:
-            self.err.show_err(_("Error generating network xml: %s") % str(e))
-            return
+            return self.err.show_err(
+                    _("Error validating network: %s") % e)
 
         self.set_finish_cursor()
         progWin = vmmAsyncJob(self._async_net_create, [net],
@@ -461,3 +494,13 @@ class vmmCreateNetwork(vmmGObjectUI):
                                 "while..."),
                               self.topwin)
         progWin.run()
+
+
+
+    ################
+    # UI listeners #
+    ################
+
+    def _xmleditor_xml_requested_cb(self, src):
+        xmlobj = self._build_xmlobj(check_xmleditor=False)
+        self._xmleditor.set_xml(xmlobj and xmlobj.get_xml() or "")
