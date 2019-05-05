@@ -17,13 +17,6 @@ from . import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 
-(PAGE_NAME,
-PAGE_IPV4,
-PAGE_IPV6,
-PAGE_MISC) = range(4)
-
-PAGE_MAX = PAGE_MISC
-
 _green = Gdk.Color.parse("#c0ffc0")[1]
 _red = Gdk.Color.parse("#ffc0c0")[1]
 _black = Gdk.Color.parse("#000000")[1]
@@ -45,15 +38,12 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.conn = conn
 
         self.builder.connect_signals({
-            "on_create_pages_switch_page": self.page_changed,
             "on_create_cancel_clicked": self.close,
             "on_vmm_create_delete_event": self.close,
-            "on_create_forward_clicked": self.forward,
-            "on_create_back_clicked": self.back,
             "on_create_finish_clicked": self.finish,
 
-            "on_net_name_activate": self.forward,
             "on_net_forward_mode_changed": self._net_forward_mode_changed_cb,
+            "on_net_dns_use_toggled": self._net_dns_use_toggled_cb,
 
             "on_net-ipv4-enable_toggled":  self.change_ipv4_enable,
             "on_net-ipv4-network_changed":  self.change_ipv4_network,
@@ -91,9 +81,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.conn = None
 
     def set_initial_state(self):
-        notebook = self.widget("create-pages")
-        notebook.set_show_tabs(False)
-
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
@@ -123,13 +110,18 @@ class vmmCreateNetwork(vmmGObjectUI):
         mode_model.append(["hostdev", _("SR-IOV pool")])
 
     def reset_state(self):
-        notebook = self.widget("create-pages")
-        notebook.set_current_page(0)
+        default_name = Network.find_free_name(
+                self.conn.get_backend(), "network")
+        self.widget("net-name").set_text(default_name)
 
-        self.page_changed(None, None, 0)
+        self.widget("net-dns-use-netname").set_active(True)
 
-        self.widget("net-name").set_text("")
-        self.widget("net-domain-name").set_text("")
+        self.widget("net-ipv4-expander").set_visible(True)
+        self.widget("net-ipv4-expander").set_expanded(False)
+        self.widget("net-ipv6-expander").set_visible(True)
+        self.widget("net-ipv6-expander").set_expanded(False)
+        self.widget("net-dns-expander").set_visible(True)
+        self.widget("net-dns-expander").set_expanded(False)
 
         self.widget("net-ipv4-enable").set_active(True)
         self.widget("net-ipv4-network").set_text("192.168.100.0/24")
@@ -138,10 +130,8 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.widget("net-dhcpv4-end").set_text("192.168.100.254")
 
         self.widget("net-ipv6-enable").set_active(False)
-        self.widget("net-ipv6-enable").toggled()
         self.widget("net-ipv6-network").set_text("")
         self.widget("net-dhcpv6-enable").set_active(False)
-        self.widget("net-dhcpv6-enable").toggled()
         self.widget("net-dhcpv6-start").set_text("")
         self.widget("net-dhcpv6-end").set_text("")
 
@@ -196,13 +186,24 @@ class vmmCreateNetwork(vmmGObjectUI):
     ##################
 
     def get_config_ipv4_enable(self):
-        return self.widget("net-ipv4-enable").get_active()
+        return (self.widget("net-ipv4-expander").is_visible() and
+                self.widget("net-ipv4-enable").get_active())
     def get_config_ipv6_enable(self):
-        return self.widget("net-ipv6-enable").get_active()
+        return (self.widget("net-ipv6-expander").is_visible() and
+                self.widget("net-ipv6-enable").get_active())
     def get_config_dhcpv4_enable(self):
         return self.widget("net-dhcpv4-enable").get_active()
     def get_config_dhcpv6_enable(self):
         return self.widget("net-dhcpv6-enable").get_active()
+
+    def get_config_domain_name(self):
+        widget = self.widget("net-domain-name")
+        if not widget.is_visible():
+            return None
+
+        if self.widget("net-dns-use-netname").get_active():
+            return self.widget("net-name").get_text()
+        return widget.get_text()
 
     def _get_network_helper(self, widgetname):
         widget = self.widget(widgetname)
@@ -239,7 +240,7 @@ class vmmCreateNetwork(vmmGObjectUI):
     # Page validation #
     ###################
 
-    def validate_name(self):
+    def _validate_name(self):
         try:
             name = self.widget("net-name").get_text()
             Network.validate_name(self.conn.get_backend(), name)
@@ -248,7 +249,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         return True
 
-    def validate_ipv4(self):
+    def _validate_ipv4(self):
         if not self.get_config_ipv4_enable():
             return True
         ip = self.get_config_ip4()
@@ -296,7 +297,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         return True
 
-    def validate_ipv6(self):
+    def _validate_ipv6(self):
         if not self.get_config_ipv6_enable():
             return True
         ip = self.get_config_ip6()
@@ -340,74 +341,33 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         return True
 
-    def validate_miscellaneous(self):
-        return True
-
-    def validate(self, page_num):
-        if page_num == PAGE_NAME:
-            return self.validate_name()
-        elif page_num == PAGE_IPV4:
-            return self.validate_ipv4()
-        elif page_num == PAGE_IPV6:
-            return self.validate_ipv6()
-        elif page_num == PAGE_MISC:
-            return self.validate_miscellaneous()
-        return True
+    def _validate(self):
+        return (self._validate_name() and
+                self._validate_ipv4() and
+                self._validate_ipv6())
 
 
     #############
     # Listeners #
     #############
 
-    def forward(self, ignore=None):
-        notebook = self.widget("create-pages")
-        if self.validate(notebook.get_current_page()) is not True:
-            return
-
-        self.widget("create-forward").grab_focus()
-        notebook.next_page()
-
-    def back(self, ignore=None):
-        notebook = self.widget("create-pages")
-        notebook.prev_page()
-
-    def page_changed(self, ignore1, ignore2, page_number):
-        page_lbl = ("<span color='#59B0E2'>%s</span>" %
-                    _("Step %(current_page)d of %(max_page)d") %
-                    {'current_page': page_number + 1,
-                     'max_page': PAGE_MISC + 1})
-        self.widget("header-pagenum").set_markup(page_lbl)
-
-        if page_number == PAGE_NAME:
-            name_widget = self.widget("net-name")
-            name_widget.set_sensitive(True)
-            name_widget.grab_focus()
-        elif page_number == PAGE_MISC:
-            name = self.widget("net-name").get_text()
-            if self.widget("net-domain-name").get_text() == "":
-                self.widget("net-domain-name").set_text(name)
-
-        self.widget("create-back").set_sensitive(page_number != 0)
-
-        is_last_page = (
-            page_number == (self.widget("create-pages").get_n_pages() - 1))
-        self.widget("create-forward").set_visible(not is_last_page)
-        self.widget("create-finish").set_visible(is_last_page)
-        if is_last_page:
-            self.widget("create-finish").grab_focus()
-
     def _net_forward_mode_changed_cb(self, src):
         mode = uiutil.get_list_selection(self.widget("net-forward-mode"))
 
         fw_visible = mode not in ["open", "isolated", "hostdev"]
-        hostdevs_visible = mode in ["hostdev"]
-        dns_sensitive = mode not in ["hostdev"]
+        is_hostdev = mode in ["hostdev"]
 
         uiutil.set_grid_row_visible(
             self.widget("net-forward-device"), fw_visible)
-        uiutil.set_grid_row_visible(
-            self.widget("net-hostdevs"), hostdevs_visible)
-        self.widget("dns-domain-name-box").set_sensitive(dns_sensitive)
+        uiutil.set_grid_row_visible(self.widget("net-hostdevs"), is_hostdev)
+
+        self.widget("net-ipv4-expander").set_visible(not is_hostdev)
+        self.widget("net-ipv6-expander").set_visible(not is_hostdev)
+        self.widget("net-dns-expander").set_visible(not is_hostdev)
+
+    def _net_dns_use_toggled_cb(self, src):
+        custom = self.widget("net-dns-use-custom").get_active()
+        self.widget("net-domain-name").set_sensitive(custom)
 
     def change_ipv4_enable(self, ignore):
         enabled = self.get_config_ipv4_enable()
@@ -509,7 +469,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         net = Network(self.conn.get_backend())
 
         net.name = self.widget("net-name").get_text()
-        net.domain_name = self.widget("net-domain-name").get_text() or None
+        net.domain_name = self.get_config_domain_name()
 
         dev, mode = self.get_config_forwarding()
         if mode:
@@ -524,8 +484,6 @@ class vmmCreateNetwork(vmmGObjectUI):
             pfobj = net.forward.pf.add_new()
             pfobj.dev = net.forward.dev
             net.forward.dev = None
-            net.domain_name = None
-            net.ipv6 = None
             return net
 
         if self.get_config_ipv4_enable():
@@ -574,7 +532,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         net.install()
 
     def finish(self, ignore):
-        if not self.validate(PAGE_MAX):
+        if not self._validate():
             return
 
         try:

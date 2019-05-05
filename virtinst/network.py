@@ -145,6 +145,11 @@ class Network(XMLBuilder):
     Top level class for <network> object XML
     """
     @staticmethod
+    def find_free_name(conn, basename, **kwargs):
+        cb = conn.networkLookupByName
+        return util.generate_name(basename, cb, **kwargs)
+
+    @staticmethod
     def pretty_forward_desc(mode, dev):
         if not mode:
             return _("Isolated network")

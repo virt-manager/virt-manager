@@ -22,13 +22,9 @@ class CreateNet(uiutils.UITestCase):
 
         # Create a simple default network
         newname = "a-test-new-net"
-        forward = win.find("Forward", "push button")
         finish = win.find("Finish", "push button")
-        name = win.find("Network Name:", "text")
+        name = win.find("Name:", "text")
         name.text = newname
-        forward.click()
-        forward.click()
-        forward.click()
         finish.click()
 
         # Select the new network in the host window, then do
