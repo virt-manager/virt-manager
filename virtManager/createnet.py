@@ -486,14 +486,10 @@ class vmmCreateNetwork(vmmGObjectUI):
             return
 
         valid_ip = (ip.num_addresses >= 8 and ip.is_private)
-        gateway = (ip.prefixlen != 32 and str(ip.network_address + 1) or "")
-        info = (ip.is_private and _("Private") or _("Other/Public"))
         start = int(ip.num_addresses // 2)
         end = int(ip.num_addresses - 2)
 
         src.modify_bg(Gtk.StateType.NORMAL, valid_ip and _green or _red)
-        self.widget("net-info-gateway").set_text(gateway)
-        self.widget("net-info-type").set_text(info)
         self.widget("net-dhcpv4-start").set_text(
             str(ip.network_address + start)
         )
@@ -507,21 +503,10 @@ class vmmCreateNetwork(vmmGObjectUI):
             return
 
         valid_ip = (ip.num_addresses == 64 and ip.is_private)
-        gateway = (ip.prefixlen != 64 and str(ip.network_address + 1) or "")
         start = 256
         end = 512 - 1
-        if ip.is_private:
-            info = _("Private")
-        elif ip.is_reserved:
-            info = _("Reserved")
-        elif ip.is_unspecified:
-            info = _("Unspecified")
-        else:
-            info = _("Other/Public")
 
         src.modify_bg(Gtk.StateType.NORMAL, valid_ip and _green or _red)
-        self.widget("net-info-gateway-ip6").set_text(gateway)
-        self.widget("net-info-type-ip6").set_text(info)
         self.widget("net-dhcpv6-start").set_text(
             str(ip.network_address + start)
         )
