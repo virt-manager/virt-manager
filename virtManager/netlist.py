@@ -485,8 +485,9 @@ class vmmNetworkList(vmmGObjectUI):
             return
 
         try:
-            netlist.set_model(None)
-            default_idx = self._populate_network_model(model)
+            if model:
+                netlist.set_model(None)
+                default_idx = self._populate_network_model(model)
         finally:
             netlist.set_model(model)
 
