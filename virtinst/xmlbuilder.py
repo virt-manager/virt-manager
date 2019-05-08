@@ -709,6 +709,24 @@ class XMLBuilder(object):
         self._xmlstate.xmlapi.node_force_remove(xpath)
         self._set_child_xpaths()
 
+    def replace_child(self, origobj, newobj):
+        """
+        Replace the origobj child with the newobj. For is_build, this
+        replaces the objects, but for !is_build this only replaces the
+        XML and keeps the object references in place. This is hacky and
+        it's fixable but at time or writing it doesn't matter for
+        our usecases.
+        """
+        if not self._xmlstate.is_build:
+            xpath = origobj.get_xml_id()
+            indent = 2 * xpath.count("/")
+            xml = util.xml_indent(newobj.get_xml(), indent).strip()
+            self._xmlstate.xmlapi.node_replace_xml(xpath, xml)
+        else:
+            origidx = origobj.get_xml_idx()
+            self.remove_child(origobj)
+            self.add_child(newobj, idx=origidx)
+
     def _prop_is_unset(self, propname):
         """
         Return True if the property name has never had a value set

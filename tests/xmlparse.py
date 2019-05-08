@@ -1451,3 +1451,31 @@ class XMLParseTest(unittest.TestCase):
             raise AssertionError("Expected parse failure")
         except RuntimeError as e:
             self.assertTrue("'foo'" in str(e))
+
+    def testReplaceChildParse(self):
+        buildfile = "tests/xmlparse-xml/replace-child-build.xml"
+        parsefile = "tests/xmlparse-xml/replace-child-parse.xml"
+
+        def mkdisk(target):
+            disk = virtinst.DeviceDisk(self.conn)
+            disk.device = "cdrom"
+            disk.bus = "scsi"
+            disk.target = target
+            return disk
+
+        guest = virtinst.Guest(self.conn)
+        guest.add_device(mkdisk("sda"))
+        guest.add_device(mkdisk("sdb"))
+        guest.add_device(mkdisk("sdc"))
+        guest.add_device(mkdisk("sdd"))
+        guest.add_device(mkdisk("sde"))
+        guest.add_device(mkdisk("sdf"))
+        guest.devices.replace_child(guest.devices.disk[2], mkdisk("sdz"))
+        guest.set_defaults(guest)
+        utils.diff_compare(guest.get_xml(), buildfile)
+
+        guest = virtinst.Guest(self.conn, parsexml=guest.get_xml())
+        newdisk = virtinst.DeviceDisk(self.conn,
+                parsexml=mkdisk("sdw").get_xml())
+        guest.devices.replace_child(guest.devices.disk[4], newdisk)
+        utils.diff_compare(guest.get_xml(), parsefile)

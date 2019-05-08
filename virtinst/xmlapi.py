@@ -109,6 +109,8 @@ class _XMLBase(object):
         raise NotImplementedError()
     def _node_remove_child(self, parentnode, childnode):
         raise NotImplementedError()
+    def _node_replace_child(self, xpath, newnode):
+        raise NotImplementedError()
     def _node_from_xml(self, xml):
         raise NotImplementedError()
     def _node_has_content(self, node):
@@ -159,6 +161,13 @@ class _XMLBase(object):
         newnode = self._node_from_xml(xml)
         parentnode = self._node_make_stub(xpath)
         self._node_add_child(xpath, parentnode, newnode)
+
+    def node_replace_xml(self, xpath, xml):
+        """
+        Replace the node at xpath with the passed in xml
+        """
+        newnode = self._node_from_xml(xml)
+        self._node_replace_child(xpath, newnode)
 
     def node_force_remove(self, fullxpath):
         """
@@ -389,6 +398,10 @@ class _Libxml2API(_XMLBase):
         parentnode.addChild(libxml2.newText("  "))
         parentnode.addChild(newnode)
         parentnode.addChild(libxml2.newText(endtext))
+
+    def _node_replace_child(self, xpath, newnode):
+        oldnode = self._find(xpath)
+        oldnode.replaceNode(newnode)
 
 
 XMLAPI = _Libxml2API
