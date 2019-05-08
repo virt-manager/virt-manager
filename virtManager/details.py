@@ -108,7 +108,8 @@ from .vsockdetails import vmmVsockDetails
 (HW_LIST_COL_LABEL,
  HW_LIST_COL_ICON_NAME,
  HW_LIST_COL_TYPE,
- HW_LIST_COL_DEVICE) = range(4)
+ HW_LIST_COL_DEVICE,
+ HW_LIST_COL_KEY) = range(5)
 
 # Types for the hw list model: numbers specify what order they will be listed
 (HW_LIST_TYPE_GENERAL,
@@ -605,8 +606,8 @@ class vmmDetails(vmmGObjectUI):
 
     def init_details(self):
         # Hardware list
-        # [ label, icon name, hw type, hw data/class]
-        hw_list_model = Gtk.ListStore(str, str, int, object)
+        # [ label, icon name, hw type, dev xmlobj, unique key (dev or title)]
+        hw_list_model = Gtk.ListStore(str, str, int, object, object)
         self.widget("hw-list").set_model(hw_list_model)
 
         hwCol = Gtk.TreeViewColumn(_("Hardware"))
@@ -889,10 +890,6 @@ class vmmDetails(vmmGObjectUI):
         if event.button != 3:
             return
 
-        devobj = self.get_hw_row()[HW_LIST_COL_DEVICE]
-        if not devobj:
-            return
-
         # force select the list entry before showing popup_menu
         path_tuple = widget.get_path_at_pos(int(event.x), int(event.y))
         if path_tuple is None:
@@ -934,12 +931,12 @@ class vmmDetails(vmmGObjectUI):
         newrow = self.get_hw_row()
         model = self.widget("hw-list").get_model()
 
-        if not newrow or newrow[HW_LIST_COL_DEVICE] == self.oldhwkey:
+        if not newrow or newrow[HW_LIST_COL_KEY] == self.oldhwkey:
             return
 
         oldhwrow = None
         for row in model:
-            if row[HW_LIST_COL_DEVICE] == self.oldhwkey:
+            if row[HW_LIST_COL_KEY] == self.oldhwkey:
                 oldhwrow = row
                 break
 
@@ -947,12 +944,12 @@ class vmmDetails(vmmGObjectUI):
             # Unapplied changes, and syncing them failed
             pageidx = 0
             for idx, row in enumerate(model):
-                if row[HW_LIST_COL_DEVICE] == self.oldhwkey:
+                if row[HW_LIST_COL_KEY] == self.oldhwkey:
                     pageidx = idx
                     break
             self.set_hw_selection(pageidx, disable_apply=False)
         else:
-            self.oldhwkey = newrow[HW_LIST_COL_DEVICE]
+            self.oldhwkey = newrow[HW_LIST_COL_KEY]
             self.hw_selected()
 
     def _disable_device_remove(self, tooltip):
@@ -2619,7 +2616,8 @@ class vmmDetails(vmmGObjectUI):
         hw_entry.insert(HW_LIST_COL_LABEL, title)
         hw_entry.insert(HW_LIST_COL_ICON_NAME, icon_name)
         hw_entry.insert(HW_LIST_COL_TYPE, page_id)
-        hw_entry.insert(HW_LIST_COL_DEVICE, devobj or title)
+        hw_entry.insert(HW_LIST_COL_DEVICE, devobj)
+        hw_entry.insert(HW_LIST_COL_KEY, devobj or title)
         return hw_entry
 
     def populate_hw_list(self):
@@ -2648,7 +2646,7 @@ class vmmDetails(vmmGObjectUI):
         currentDevices = []
 
         def dev_cmp(origdev, newdev):
-            if isinstance(origdev, str):
+            if not origdev:
                 return False
 
             if origdev == newdev:
@@ -2749,7 +2747,7 @@ class vmmDetails(vmmGObjectUI):
             olddev = hw_list_model[i][HW_LIST_COL_DEVICE]
 
             # Existing device, don't remove it
-            if isinstance(olddev, str) or olddev in currentDevices:
+            if not olddev or olddev in currentDevices:
                 continue
 
             hw_list_model.remove(_iter)
