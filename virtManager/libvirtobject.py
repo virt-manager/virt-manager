@@ -371,19 +371,14 @@ class vmmLibvirtObject(vmmGObject):
         """
         return self.get_xmlobj(inactive=True)
 
-    def _redefine_xmlobj(self, xmlobj, origxml=None):
+    def _redefine_xmlobj(self, xmlobj):
         """
         Redefine the passed xmlobj, which should be generated with
         self._make_xmlobj_to_define()
 
         Most subclasses shouldn't touch this, but vmmDomainVirtinst needs to.
-
-        :param origxml: vmmDomainVirtinst uses that field to make sure
-            we detect the actual XML change and log it correctly.
         """
-        if not origxml:
-            origxml = self._make_xmlobj_to_define().get_xml()
-
+        origxml = self._make_xmlobj_to_define().get_xml()
         newxml = xmlobj.get_xml()
         self.log_redefine_xml_diff(self, origxml, newxml)
 
