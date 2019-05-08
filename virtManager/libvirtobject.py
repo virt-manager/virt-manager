@@ -371,15 +371,10 @@ class vmmLibvirtObject(vmmGObject):
         """
         return self.get_xmlobj(inactive=True)
 
-    def _redefine_xmlobj(self, xmlobj):
+    def _redefine_xml_internal(self, origxml, newxml):
         """
-        Redefine the passed xmlobj, which should be generated with
-        self._make_xmlobj_to_define()
-
-        Most subclasses shouldn't touch this, but vmmDomainVirtinst needs to.
+        Define the passed newxml. Log a diff against the handed in origxml
         """
-        origxml = self._make_xmlobj_to_define().get_xml()
-        newxml = xmlobj.get_xml()
         self.log_redefine_xml_diff(self, origxml, newxml)
 
         if origxml != newxml:
@@ -394,3 +389,15 @@ class vmmLibvirtObject(vmmGObject):
         # We force a signal even if XML didn't change, so the details
         # window is correctly refreshed.
         self.idle_emit("state-changed")
+
+    def _redefine_xmlobj(self, xmlobj):
+        """
+        Redefine the passed xmlobj, which should be generated with
+        self._make_xmlobj_to_define() and which has accumulated edits
+        from UI fields.
+
+        Most subclasses shouldn't alter this, but vmmDomainVirtinst needs to.
+        """
+        origxml = self._make_xmlobj_to_define().get_xml()
+        newxml = xmlobj.get_xml()
+        self._redefine_xml_internal(origxml, newxml)
