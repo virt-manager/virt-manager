@@ -1378,58 +1378,54 @@ class vmmDetails(vmmGObjectUI):
 
     def config_apply(self, ignore=None, row=None):
         pagetype = None
-        devobj = None
+        dev = None
 
         if not row:
             row = self.get_hw_row()
         if row:
             pagetype = row[HW_LIST_COL_TYPE]
-            devobj = row[HW_LIST_COL_DEVICE]
+            dev = row[HW_LIST_COL_DEVICE]
 
-        key = devobj
-        ret = False
-
+        success = False
         try:
             if pagetype is HW_LIST_TYPE_GENERAL:
-                ret = self.config_overview_apply()
+                success = self.config_overview_apply()
             elif pagetype is HW_LIST_TYPE_OS:
-                ret = self.config_os_apply()
+                success = self.config_os_apply()
             elif pagetype is HW_LIST_TYPE_CPU:
-                ret = self.config_vcpus_apply()
+                success = self.config_vcpus_apply()
             elif pagetype is HW_LIST_TYPE_MEMORY:
-                ret = self.config_memory_apply()
+                success = self.config_memory_apply()
             elif pagetype is HW_LIST_TYPE_BOOT:
-                ret = self.config_boot_options_apply()
+                success = self.config_boot_options_apply()
             elif pagetype is HW_LIST_TYPE_DISK:
-                ret = self.config_disk_apply(key)
+                success = self.config_disk_apply(dev)
             elif pagetype is HW_LIST_TYPE_NIC:
-                ret = self.config_network_apply(key)
+                success = self.config_network_apply(dev)
             elif pagetype is HW_LIST_TYPE_GRAPHICS:
-                ret = self.config_graphics_apply(key)
+                success = self.config_graphics_apply(dev)
             elif pagetype is HW_LIST_TYPE_SOUND:
-                ret = self.config_sound_apply(key)
+                success = self.config_sound_apply(dev)
             elif pagetype is HW_LIST_TYPE_VIDEO:
-                ret = self.config_video_apply(key)
+                success = self.config_video_apply(dev)
             elif pagetype is HW_LIST_TYPE_WATCHDOG:
-                ret = self.config_watchdog_apply(key)
+                success = self.config_watchdog_apply(dev)
             elif pagetype is HW_LIST_TYPE_SMARTCARD:
-                ret = self.config_smartcard_apply(key)
+                success = self.config_smartcard_apply(dev)
             elif pagetype is HW_LIST_TYPE_CONTROLLER:
-                ret = self.config_controller_apply(key)
+                success = self.config_controller_apply(dev)
             elif pagetype is HW_LIST_TYPE_FILESYSTEM:
-                ret = self.config_filesystem_apply(key)
+                success = self.config_filesystem_apply(dev)
             elif pagetype is HW_LIST_TYPE_HOSTDEV:
-                ret = self.config_hostdev_apply(key)
+                success = self.config_hostdev_apply(dev)
             elif pagetype is HW_LIST_TYPE_TPM:
-                ret = self.config_tpm_apply(key)
+                success = self.config_tpm_apply(dev)
             elif pagetype is HW_LIST_TYPE_VSOCK:
-                ret = self.config_vsock_apply(key)
-            else:
-                ret = False
+                success = self.config_vsock_apply(dev)
         except Exception as e:
             return self.err.show_err(_("Error apply changes: %s") % e)
 
-        if ret is not False:
+        if success is not False:
             self.disable_apply()
         return True
 
