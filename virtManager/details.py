@@ -107,9 +107,8 @@ from .vsockdetails import vmmVsockDetails
 # Columns in hw list model
 (HW_LIST_COL_LABEL,
  HW_LIST_COL_ICON_NAME,
- HW_LIST_COL_ICON_SIZE,
  HW_LIST_COL_TYPE,
- HW_LIST_COL_DEVICE) = range(5)
+ HW_LIST_COL_DEVICE) = range(4)
 
 # Types for the hw list model: numbers specify what order they will be listed
 (HW_LIST_TYPE_GENERAL,
@@ -606,8 +605,8 @@ class vmmDetails(vmmGObjectUI):
 
     def init_details(self):
         # Hardware list
-        # [ label, icon name, icon size, hw type, hw data/class]
-        hw_list_model = Gtk.ListStore(str, str, int, int, object)
+        # [ label, icon name, hw type, hw data/class]
+        hw_list_model = Gtk.ListStore(str, str, int, object)
         self.widget("hw-list").set_model(hw_list_model)
 
         hwCol = Gtk.TreeViewColumn(_("Hardware"))
@@ -615,10 +614,10 @@ class vmmDetails(vmmGObjectUI):
         hwCol.set_min_width(165)
         hw_txt = Gtk.CellRendererText()
         hw_img = Gtk.CellRendererPixbuf()
+        hw_img.set_property("stock-size", Gtk.IconSize.LARGE_TOOLBAR)
         hwCol.pack_start(hw_img, False)
         hwCol.pack_start(hw_txt, True)
         hwCol.add_attribute(hw_txt, 'text', HW_LIST_COL_LABEL)
-        hwCol.add_attribute(hw_img, 'stock-size', HW_LIST_COL_ICON_SIZE)
         hwCol.add_attribute(hw_img, 'icon-name', HW_LIST_COL_ICON_NAME)
         self.widget("hw-list").append_column(hwCol)
 
@@ -2621,7 +2620,6 @@ class vmmDetails(vmmGObjectUI):
 
         def add_hw_list_option(title, page_id, icon_name):
             hw_list_model.append([title, icon_name,
-                                  Gtk.IconSize.LARGE_TOOLBAR,
                                   page_id, title])
 
         add_hw_list_option(_("Overview"), HW_LIST_TYPE_GENERAL, "computer")
@@ -2653,7 +2651,6 @@ class vmmDetails(vmmGObjectUI):
 
         def add_hw_list_option(idx, name, page_id, info, icon_name):
             hw_list_model.insert(idx, [name, icon_name,
-                                       Gtk.IconSize.LARGE_TOOLBAR,
                                        page_id, info])
 
         def update_hwlist(hwtype, dev):
