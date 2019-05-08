@@ -2614,13 +2614,20 @@ class vmmDetails(vmmGObjectUI):
     # Hardware list population #
     ############################
 
+    def _make_hw_list_entry(self, title, page_id, icon_name, devobj=None):
+        hw_entry = []
+        hw_entry.insert(HW_LIST_COL_LABEL, title)
+        hw_entry.insert(HW_LIST_COL_ICON_NAME, icon_name)
+        hw_entry.insert(HW_LIST_COL_TYPE, page_id)
+        hw_entry.insert(HW_LIST_COL_DEVICE, devobj or title)
+        return hw_entry
+
     def populate_hw_list(self):
         hw_list_model = self.widget("hw-list").get_model()
         hw_list_model.clear()
 
-        def add_hw_list_option(title, page_id, icon_name):
-            hw_list_model.append([title, icon_name,
-                                  page_id, title])
+        def add_hw_list_option(*args, **kwargs):
+            hw_list_model.append(self._make_hw_list_entry(*args, **kwargs))
 
         add_hw_list_option(_("Overview"), HW_LIST_TYPE_GENERAL, "computer")
         add_hw_list_option(_("OS information"), HW_LIST_TYPE_OS, "computer")
@@ -2649,10 +2656,6 @@ class vmmDetails(vmmGObjectUI):
 
             return origdev.get_xml_id() == newdev.get_xml_id()
 
-        def add_hw_list_option(idx, name, page_id, info, icon_name):
-            hw_list_model.insert(idx, [name, icon_name,
-                                       page_id, info])
-
         def update_hwlist(hwtype, dev):
             """
             See if passed hw is already in list, and if so, update info.
@@ -2677,7 +2680,8 @@ class vmmDetails(vmmGObjectUI):
                     insertAt += 1
 
             # Add the new HW row
-            add_hw_list_option(insertAt, label, hwtype, dev, icon)
+            hw_entry = self._make_hw_list_entry(label, hwtype, icon, dev)
+            hw_list_model.insert(insertAt, hw_entry)
 
 
         consoles = self.vm.xmlobj.devices.console
