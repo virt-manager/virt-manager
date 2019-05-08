@@ -1047,7 +1047,7 @@ class vmmDetails(vmmGObjectUI):
     def add_hardware(self, src_ignore):
         try:
             if self.addhw is None:
-                self.addhw = vmmAddHardware(self.vm, self.is_customize_dialog)
+                self.addhw = vmmAddHardware(self.vm)
 
             self.addhw.show(self.topwin)
         except Exception as e:

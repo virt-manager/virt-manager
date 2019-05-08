@@ -64,12 +64,11 @@ def _build_combo(combo, values, default_value=None, sort=True):
 
 
 class vmmAddHardware(vmmGObjectUI):
-    def __init__(self, vm, is_customize_dialog):
+    def __init__(self, vm):
         vmmGObjectUI.__init__(self, "addhardware.ui", "vmm-add-hardware")
 
         self.vm = vm
         self.conn = vm.conn
-        self.is_customize_dialog = is_customize_dialog
 
         self._storagebrowser = None
 
