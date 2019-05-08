@@ -1435,3 +1435,10 @@ class XMLParseTest(unittest.TestCase):
             raise AssertionError("Expected ValueError")
         except ValueError:
             pass
+
+    def testXMLRootValidate(self):
+        try:
+            virtinst.DeviceDisk(self.conn, parsexml="<foo/>")
+            raise AssertionError("Expected parse failure")
+        except RuntimeError as e:
+            self.assertTrue("'foo'" in str(e))

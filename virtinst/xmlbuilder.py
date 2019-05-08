@@ -393,6 +393,10 @@ class _XMLState(object):
             logging.debug("Error parsing xml=\n%s", parsexml)
             raise
 
+        if not self.is_build:
+            # Ensure parsexml has the correct root node
+            self.xmlapi.validate_root_name(self._root_name.split(":")[-1])
+
     def set_relative_object_xpath(self, xpath):
         self._relative_object_xpath = xpath or ""
 

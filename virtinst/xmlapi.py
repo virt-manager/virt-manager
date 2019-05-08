@@ -107,6 +107,8 @@ class _XMLBase(object):
         raise NotImplementedError()
     def _node_has_content(self, node):
         raise NotImplementedError()
+    def _node_get_name(self, node):
+        raise NotImplementedError()
     def node_clear(self, xpath):
         raise NotImplementedError()
     def _sanitize_xml(self, xml):
@@ -164,6 +166,14 @@ class _XMLBase(object):
         if parentnode is None or childnode is None:
             return
         self._node_remove_child(parentnode, childnode)
+
+    def validate_root_name(self, expected_root_name):
+        rootname = self._node_get_name(self._find("."))
+        if rootname == expected_root_name:
+            return
+        raise RuntimeError(
+            _("XML did not have expected root element name '%s', found '%s'") %
+            (expected_root_name, rootname))
 
     def _node_set_content(self, xpath, node, setval):
         xpathobj = _XPath(xpath)
@@ -341,6 +351,9 @@ class _Libxml2API(_XMLBase):
 
     def _node_has_content(self, node):
         return node.type == "element" and (node.children or node.properties)
+
+    def _node_get_name(self, node):
+        return node.name
 
     def _node_remove_child(self, parentnode, childnode):
         node = childnode
