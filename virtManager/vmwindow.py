@@ -28,7 +28,7 @@ from .snapshots import vmmSnapshotPage
 
 class vmmVMWindow(vmmGObjectUI):
     __gsignals__ = {
-        "customize-finished": (vmmGObjectUI.RUN_FIRST, None, []),
+        "customize-finished": (vmmGObjectUI.RUN_FIRST, None, [object]),
         "closed": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
@@ -189,7 +189,7 @@ class vmmVMWindow(vmmGObjectUI):
         ignore = src
         if self._details.vmwindow_has_unapplied_changes():
             return
-        self.emit("customize-finished")
+        self.emit("customize-finished", self.vm)
 
     def _vm_removed(self, _conn, connkey):
         if self.vm.get_connkey() == connkey:

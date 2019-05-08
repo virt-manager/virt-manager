@@ -1974,6 +1974,7 @@ class vmmCreate(vmmGObjectUI):
 
         logging.debug("Starting create finish() sequence")
         self._failed_guest = None
+        guest = self._guest
 
         try:
             self.set_finish_cursor()
@@ -1981,14 +1982,14 @@ class vmmCreate(vmmGObjectUI):
             # This encodes all the virtinst defaults up front, so the customize
             # dialog actually shows disk buses, cache values, default devices,
             # etc. Not required for straight start_install but doesn't hurt.
-            self._guest.installer_instance.set_install_defaults(self._guest)
+            guest.installer_instance.set_install_defaults(guest)
 
             if not self.widget("summary-customize").get_active():
-                self._start_install(self._guest)
+                self._start_install(guest)
                 return
 
             logging.debug("User requested 'customize', launching dialog")
-            self._show_customize_dialog()
+            self._show_customize_dialog(self._guest)
         except Exception as e:
             self.reset_finish_cursor()
             self.err.show_err(_("Error starting installation: ") + str(e))
@@ -2003,42 +2004,41 @@ class vmmCreate(vmmGObjectUI):
         self._customize_window = None
         window.cleanup()
 
-    def _show_customize_dialog(self):
-        guest = self._guest
-        virtinst_guest = vmmDomainVirtinst(self.conn, guest, guest.uuid)
+    def _show_customize_dialog(self, origguest):
+        orig_vdomain = vmmDomainVirtinst(self.conn, origguest, origguest.uuid)
 
-        def start_install_wrapper(ignore, guest):
+        def customize_finished_cb(src, vdomain):
             if not self.is_visible():
                 return
             logging.debug("User finished customize dialog, starting install")
             self._failed_guest = None
-            self._start_install(guest)
+            self._start_install(vdomain.get_backend())
 
-        def config_canceled(ignore):
+        def config_canceled_cb(src):
             logging.debug("User closed customize window, closing wizard")
             self._close_requested()
 
         # We specifically don't use vmmVMWindow.get_instance here since
         # it's not a top level VM window
         self._cleanup_customize_window()
-        self._customize_window = vmmVMWindow(virtinst_guest, self.topwin)
+        self._customize_window = vmmVMWindow(orig_vdomain, self.topwin)
         self._customize_window.connect(
-                "customize-finished", start_install_wrapper, guest)
-        self._customize_window.connect("closed", config_canceled)
+                "customize-finished", customize_finished_cb)
+        self._customize_window.connect("closed", config_canceled_cb)
         self._customize_window.show()
 
-    def _install_finished_cb(self, error, details, parentobj):
+    def _install_finished_cb(self, error, details, guest, parentobj):
         self.reset_finish_cursor(parentobj.topwin)
 
         if error:
             error = (_("Unable to complete install: '%s'") % error)
             parentobj.err.show_err(error, details=details)
-            self._failed_guest = self._guest
+            self._failed_guest = guest
             return
 
         foundvm = None
         for vm in self.conn.list_vms():
-            if vm.get_uuid() == self._guest.uuid:
+            if vm.get_uuid() == guest.uuid:
                 foundvm = vm
                 break
 
@@ -2054,7 +2054,7 @@ class vmmCreate(vmmGObjectUI):
         """
         bootstrap_args = {}
         # If creating new container and "container bootstrap" is enabled
-        if (self._guest.os.is_container() and
+        if (guest.os.is_container() and
             self._get_config_oscontainer_bootstrap()):
             bootstrap_arg_keys = {
                 'src': self._get_config_oscontainer_source_url,
@@ -2069,7 +2069,7 @@ class vmmCreate(vmmGObjectUI):
 
         parentobj = self._customize_window or self
         progWin = vmmAsyncJob(self._do_async_install, [guest, bootstrap_args],
-                              self._install_finished_cb, [parentobj],
+                              self._install_finished_cb, [guest, parentobj],
                               _("Creating Virtual Machine"),
                               _("The virtual machine is now being "
                                 "created. Allocation of disk storage "
