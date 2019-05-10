@@ -68,12 +68,12 @@ class XMLParseTest(unittest.TestCase):
         Check expected initial value obj.param == initval, then
         set newval, and make sure it is returned properly
         """
-        curval = virtinst.xmlapi.get_prop(obj, param)
+        curval = virtinst.util.get_prop_path(obj, param)
         self.assertEqual(initval, curval)
 
         for newval in args:
-            virtinst.xmlapi.set_prop(obj, param, newval)
-            curval = virtinst.xmlapi.get_prop(obj, param)
+            virtinst.util.set_prop_path(obj, param, newval)
+            curval = virtinst.util.get_prop_path(obj, param)
             self.assertEqual(newval, curval)
 
     def _make_checker(self, obj):
