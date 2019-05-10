@@ -1237,9 +1237,9 @@ class VirtCLIParser(metaclass=_InitClass):
     def _init_class(cls, **kwargs):
         """This method just terminates the super() chain"""
 
-    def __init__(self, guest, optstr):
-        self.guest = guest
+    def __init__(self, optstr, guest=None):
         self.optstr = optstr
+        self.guest = guest
         self.optdict = _parse_optstr_to_dict(self.optstr,
                 self._virtargs, util.listify(self.remove_first)[:])
 
@@ -1425,9 +1425,9 @@ class ParserUnattended(VirtCLIParser):
         cls.add_arg("product-key", "product_key")
 
 
-def parse_unattended(unattended):
+def parse_unattended(optstr):
     ret = UnattendedData()
-    parser = ParserUnattended(None, unattended)
+    parser = ParserUnattended(optstr)
     parser.parse(ret)
     return ret
 
@@ -1464,8 +1464,8 @@ class ParserCheck(VirtCLIParser):
 
 def parse_check(checks):
     # Overwrite this for each parse
-    for checkstr in util.listify(checks):
-        parser = ParserCheck(None, checkstr)
+    for optstr in util.listify(checks):
+        parser = ParserCheck(optstr)
         parser.parse(get_global_state())
 
 
@@ -1492,9 +1492,8 @@ def parse_location(optstr):
             self.kernel = None
             self.initrd = None
     parsedata = LocationData()
-    if optstr:
-        parser = ParserLocation(None, optstr)
-        parser.parse(parsedata)
+    parser = ParserLocation(optstr or None)
+    parser.parse(parsedata)
 
     return parsedata.location, parsedata.kernel, parsedata.initrd
 
@@ -1544,7 +1543,7 @@ class ParserOSVariant(VirtCLIParser):
 def parse_os_variant(optstr):
     parsedata = OSVariantData()
     if optstr:
-        parser = ParserOSVariant(None, optstr)
+        parser = ParserOSVariant(optstr)
         parser.parse(parsedata)
     return parsedata
 
@@ -3178,7 +3177,7 @@ def parse_option_strings(options, guest, instlist, update=False):
                 optlist = [optlist[-1]]
 
             for optstr in optlist:
-                parserobj = parserclass(guest, optstr)
+                parserobj = parserclass(optstr, guest=guest)
                 parseret = parserobj.parse(inst, validate=not update)
                 ret += util.listify(parseret)
 

@@ -137,7 +137,7 @@ def _find_objects_to_edit(guest, action_name, editval, parserclass):
 
     else:
         # Lookup device by the passed prop string
-        parserobj = parserclass(guest, editval)
+        parserobj = parserclass(editval, guest=guest)
         inst = parserobj.lookup_child_from_option_string()
         if not inst:
             fail(_("No matching objects found for --%s %s") %
