@@ -908,8 +908,6 @@ class _VirtCLIArgumentStatic(object):
         option string until it finds another known argument name:
         everything prior to that argument name is considered part of
         the value of this option, '=' included. Should be used sparingly.
-    @aliases: List of cli aliases. Useful if we want to change a property
-        name on the cli but maintain back compat.
     @is_onoff: The value expected on the cli is on/off or yes/no, convert
         it to true/false.
     @lookup_cb: If specified, use this function for performing match
@@ -921,17 +919,17 @@ class _VirtCLIArgumentStatic(object):
     """
     def __init__(self, cliname, propname,
                  cb=None, can_comma=None,
-                 ignore_default=False, aliases=None, is_onoff=False,
+                 ignore_default=False, is_onoff=False,
                  lookup_cb=-1, find_inst_cb=None):
         self.cliname = cliname
         self.propname = propname
         self.cb = cb
         self.can_comma = can_comma
         self.ignore_default = ignore_default
-        self.aliases = aliases
         self.is_onoff = is_onoff
         self.lookup_cb = lookup_cb
         self.find_inst_cb = find_inst_cb
+        self.aliases = []
 
         if not self.propname and not self.cb:
             raise RuntimeError(
@@ -1150,6 +1148,11 @@ class _InitClass(type):
             raise RuntimeError("_init_class must be a @classmethod")
         self = super().__new__(cls, name, bases, ns)
         self._init_class(**kwargs)  # pylint: disable=protected-access
+
+        # Check for leftover aliases
+        if self.aliases:
+            raise RuntimeError("programming error: class=%s "
+                    "leftover aliases=%s" % (self, self.aliases))
         return self
 
 
@@ -1186,6 +1189,7 @@ class VirtCLIParser(metaclass=_InitClass):
     stub_none = True
     cli_arg_name = None
     _virtargs = []
+    aliases = {}
 
     @classmethod
     def add_arg(cls, *args, **kwargs):
@@ -1196,7 +1200,10 @@ class VirtCLIParser(metaclass=_InitClass):
             cls._virtargs = [_VirtCLIArgumentStatic(
                 "clearxml", None, cb=cls._clearxml_cb, lookup_cb=None,
                 is_onoff=True)]
-        cls._virtargs.append(_VirtCLIArgumentStatic(*args, **kwargs))
+        virtarg = _VirtCLIArgumentStatic(*args, **kwargs)
+        if virtarg.cliname in cls.aliases:
+            virtarg.aliases = util.listify(cls.aliases.pop(virtarg.cliname))
+        cls._virtargs.append(virtarg)
 
     @classmethod
     def cli_flag_name(cls):
@@ -1913,6 +1920,9 @@ class ParserVCPU(VirtCLIParser):
 class ParserBoot(VirtCLIParser):
     cli_arg_name = "boot"
     guest_propname = "os"
+    aliases = {
+        "kernel_args": "extra_args",
+    }
 
     def set_uefi_cb(self, inst, val, virtarg):
         self.guest.set_uefi_path(self.guest.get_uefi_path())
@@ -1981,8 +1991,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("loader_secure", "loader_secure", is_onoff=True)
         cls.add_arg("nvram", "nvram")
         cls.add_arg("nvram_template", "nvram_template")
-        cls.add_arg("kernel_args", "kernel_args",
-                           aliases=["extra_args"], can_comma=True)
+        cls.add_arg("kernel_args", "kernel_args", can_comma=True)
         cls.add_arg("init", "init")
         cls.add_arg("initargs", "initargs", cb=cls.set_initargs_cb)
         cls.add_arg("smbios_mode", "smbios_mode")
@@ -2872,6 +2881,14 @@ class ParserMemdev(VirtCLIParser):
     cli_arg_name = "memdev"
     guest_propname = "devices.memory"
     remove_first = "model"
+    aliases = {
+        "target.size": "target_size",
+        "target.node": "target_node",
+        "target.label_size": "target_label_size",
+        "source.pagesize": "source_pagesize",
+        "source.path": "source_path",
+        "source.nodemask": "source_nodemask",
+    }
 
     def set_target_size(self, inst, val, virtarg):
         util.set_prop_path(inst, virtarg.propname, int(val) * 1024)
@@ -2881,19 +2898,13 @@ class ParserMemdev(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("model", "model")
         cls.add_arg("access", "access")
-        cls.add_arg("target.size", "target.size", cb=cls.set_target_size,
-                aliases=["target_size"])
-        cls.add_arg("target.node", "target.node",
-                aliases=["target_node"])
+        cls.add_arg("target.size", "target.size", cb=cls.set_target_size)
+        cls.add_arg("target.node", "target.node")
         cls.add_arg("target.label_size", "target.label_size",
-                cb=cls.set_target_size,
-                aliases=["target_label_size"])
-        cls.add_arg("source.pagesize", "source.pagesize",
-                aliases=["source_pagesize"])
-        cls.add_arg("source.path", "source.path",
-                aliases=["source_path"])
-        cls.add_arg("source.nodemask", "source.nodemask", can_comma=True,
-                aliases=["source_nodemask"])
+                cb=cls.set_target_size)
+        cls.add_arg("source.pagesize", "source.pagesize")
+        cls.add_arg("source.path", "source.path")
+        cls.add_arg("source.nodemask", "source.nodemask", can_comma=True)
 
 
 ########################
@@ -3048,13 +3059,16 @@ class ParserFilesystem(VirtCLIParser):
     cli_arg_name = "filesystem"
     guest_propname = "devices.filesystem"
     remove_first = ["source", "target"]
+    aliases = {
+        "accessmode": "mode",
+    }
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", "type")
-        cls.add_arg("accessmode", "accessmode", aliases=["mode"])
+        cls.add_arg("accessmode", "accessmode")
         cls.add_arg("source", "source")
         cls.add_arg("target", "target")
 
