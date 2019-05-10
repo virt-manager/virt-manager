@@ -891,10 +891,8 @@ def _on_off_convert(key, val):
 
 
 def _set_attribute(obj, attr, val):
-    if isinstance(obj, dict):
-        obj[attr] = val
-    else:
-        exec("obj." + attr + " = val ")  # pylint: disable=exec-used
+    # pylint: disable=unused-argument
+    exec("obj." + attr + " = val ")  # pylint: disable=exec-used
 
 
 class _VirtCLIArgumentStatic(object):
@@ -1012,7 +1010,7 @@ class _VirtCLIArgument(object):
                                               inst, self.val, self, True)
 
         try:
-            if not isinstance(inst, dict) and self.attrname:
+            if self.attrname:
                 eval("inst." + self.attrname)  # pylint: disable=eval-used
         except AttributeError:
             raise RuntimeError("programming error: obj=%s does not have "
@@ -1496,15 +1494,17 @@ class ParseLocation(VirtCLIParser):
 
 
 def parse_location(optstr):
-    parsedata = collections.OrderedDict()
+    class LocationData:
+        def __init__(self):
+            self.location = None
+            self.kernel = None
+            self.initrd = None
+    parsedata = LocationData()
     if optstr:
         parser = ParseLocation(None, optstr)
         parser.parse(parsedata)
 
-    location = parsedata.get("location")
-    kernel = parsedata.get("kernel")
-    initrd = parsedata.get("initrd")
-    return location, kernel, initrd
+    return parsedata.location, parsedata.kernel, parsedata.initrd
 
 
 ########################
