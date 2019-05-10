@@ -1140,27 +1140,27 @@ def _parse_optstr_to_dict(optstr, virtargs, remove_first):
     return optdict
 
 
-class InitClass(type):
-    """Metaclass for providing the __init_class__ function.
+class _InitClass(type):
+    """Metaclass for providing the _init_class function.
 
     This allows the customisation of class creation. Similar to
-    '__init_subclass__' (see https://www.python.org/dev/peps/pep-0487/).
+    '__init_subclass__' (see https://www.python.org/dev/peps/pep-0487/),
+    but without giving us an explicit dep on python 3.6
 
     """
     def __new__(cls, *args, **kwargs):
         if len(args) != 3:
             return super().__new__(cls, *args)
         name, bases, ns = args
-        init = ns.get('__init_class__')
+        init = ns.get('_init_class')
         if isinstance(init, types.FunctionType):
-            # In case '__init_class__' isn't decorated with @classmethod
-            ns['__init_class__'] = classmethod(init)
+            raise RuntimeError("_init_class must be a @classmethod")
         self = super().__new__(cls, name, bases, ns)
-        self.__init_class__(**kwargs)
+        self._init_class(**kwargs)  # pylint: disable=protected-access
         return self
 
 
-class VirtCLIParser(metaclass=InitClass):
+class VirtCLIParser(metaclass=_InitClass):
     """
     Parse a compound arg string like --option foo=bar,baz=12. This is
     the desired interface to VirtCLIArgument and VirtCLIOptionString.
@@ -1240,7 +1240,7 @@ class VirtCLIParser(metaclass=InitClass):
             VIRT_PARSERS.append(cls)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
+    def _init_class(cls, **kwargs):
         """This method just terminates the super() chain"""
 
     def __init__(self, guest, optstr):
@@ -1423,8 +1423,8 @@ class ParseUnattended(VirtCLIParser):
     cli_arg_name = "unattended"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("profile", "profile")
         cls.add_arg("admin-password", "admin_password")
         cls.add_arg("user-password", "user_password")
@@ -1453,8 +1453,8 @@ class ParseCheck(VirtCLIParser):
     cli_arg_name = "check"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("path_in_use", is_onoff=True,
                     cb=cls.set_cb)
         cls.add_arg("disk_size", is_onoff=True,
@@ -1484,8 +1484,8 @@ class ParseLocation(VirtCLIParser):
     remove_first = "location"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("location", "location", can_comma=True)
         cls.add_arg("kernel", "kernel", can_comma=True)
         cls.add_arg("initrd", "initrd", can_comma=True)
@@ -1540,8 +1540,8 @@ class ParseOSVariant(VirtCLIParser):
     remove_first = "name"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("name", "name")
         cls.add_arg("full_id", "full_id")
         cls.add_arg("install", "install")
@@ -1563,8 +1563,8 @@ class ParserMetadata(VirtCLIParser):
     cli_arg_name = "metadata"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("name", "name", can_comma=True)
         cls.add_arg("title", "title", can_comma=True)
         cls.add_arg("uuid", "uuid")
@@ -1587,8 +1587,8 @@ class ParserEvents(VirtCLIParser):
     cli_arg_name = "events"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("on_poweroff", "on_poweroff")
         cls.add_arg("on_reboot", "on_reboot")
         cls.add_arg("on_crash", "on_crash")
@@ -1605,8 +1605,8 @@ class ParserResource(VirtCLIParser):
     remove_first = "partition"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("partition", "partition")
 
 
@@ -1620,8 +1620,8 @@ class ParserNumatune(VirtCLIParser):
     remove_first = "nodeset"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("nodeset", "memory_nodeset", can_comma=True)
         cls.add_arg("mode", "memory_mode")
 
@@ -1638,8 +1638,8 @@ class ParserMemory(VirtCLIParser):
         setattr(inst, virtarg.cliname, int(val) * 1024)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("memory", "memory", cb=cls.set_memory_cb)
         cls.add_arg("maxmemory", "maxmemory", cb=cls.set_memory_cb)
         cls.add_arg("hugepages", "memoryBacking.hugepages", is_onoff=True)
@@ -1658,8 +1658,8 @@ class ParserMemtune(VirtCLIParser):
     remove_first = "soft_limit"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("hard_limit", "hard_limit")
         cls.add_arg("soft_limit", "soft_limit")
         cls.add_arg("swap_hard_limit", "swap_hard_limit")
@@ -1676,8 +1676,8 @@ class ParserBlkiotune(VirtCLIParser):
     remove_first = "weight"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("weight", "weight")
         cls.add_arg("device_path", "device_path")
         cls.add_arg("device_weight", "device_weight")
@@ -1692,8 +1692,8 @@ class ParserMemoryBacking(VirtCLIParser):
     guest_propname = "memoryBacking"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("hugepages", "hugepages", is_onoff=True)
         cls.add_arg("size", "page_size")
         cls.add_arg("unit", "page_unit")
@@ -1788,8 +1788,8 @@ class ParserCPU(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("model", cb=cls.set_model_cb)
         cls.add_arg("mode", "mode")
         cls.add_arg("match", "match")
@@ -1836,8 +1836,8 @@ class ParserCputune(VirtCLIParser):
         return cb(*args, **kwargs)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         # Options for CPU.vcpus config
         cls.add_arg("vcpupin[0-9]*.vcpu", "vcpu",
                     find_inst_cb=cls.vcpu_find_inst_cb)
@@ -1882,8 +1882,8 @@ class ParserVCPU(VirtCLIParser):
         return ret
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("sockets", "cpu.sockets")
         cls.add_arg("cores", "cpu.cores")
         cls.add_arg("threads", "cpu.threads")
@@ -1939,8 +1939,8 @@ class ParserBoot(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         # UEFI depends on these bits, so set them first
         cls.add_arg("arch", "arch")
         cls.add_arg("bootloader", cb=cls.set_bootloader_cb)
@@ -1983,8 +1983,8 @@ class ParserIdmap(VirtCLIParser):
     guest_propname = "idmap"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("uid_start", "uid_start")
         cls.add_arg("uid_target", "uid_target")
         cls.add_arg("uid_count", "uid_count")
@@ -2002,8 +2002,8 @@ class ParserSecurity(VirtCLIParser):
     guest_propname = "seclabels"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("type", "type")
         cls.add_arg("model", "model")
         cls.add_arg("relabel", "relabel", is_onoff=True)
@@ -2020,8 +2020,8 @@ class ParserFeatures(VirtCLIParser):
     guest_propname = "features"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("acpi", "acpi", is_onoff=True)
         cls.add_arg("apic", "apic", is_onoff=True)
         cls.add_arg("pae", "pae", is_onoff=True)
@@ -2072,8 +2072,8 @@ class ParserClock(VirtCLIParser):
         setattr(timerobj, propname, val)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("offset", "offset")
 
         for _tname in DomainClock.TIMER_NAMES:
@@ -2092,8 +2092,8 @@ class ParserPM(VirtCLIParser):
     guest_propname = "pm"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("suspend_to_mem", "suspend_to_mem", is_onoff=True)
         cls.add_arg("suspend_to_disk", "suspend_to_disk", is_onoff=True)
 
@@ -2135,8 +2135,8 @@ class ParserSysinfo(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         # <sysinfo type='smbios'>
         cls.add_arg("type", "type",
                               cb=cls.set_type_cb, can_comma=True)
@@ -2198,8 +2198,8 @@ class ParserQemuCLI(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("args", cb=cls.args_cb, can_comma=True)
         cls.add_arg("env", cb=cls.env_cb, can_comma=True)
 
@@ -2374,8 +2374,8 @@ class ParserDisk(VirtCLIParser):
         return inst
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         # These are all handled specially in _parse
         cls.add_arg("backing_store", cb=cls.noset_cb)
@@ -2493,8 +2493,8 @@ class ParserNetwork(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", "type", cb=cls.set_type_cb)
         cls.add_arg("trustGuestRxFilters", "trustGuestRxFilters",
@@ -2593,8 +2593,8 @@ class ParserGraphics(VirtCLIParser):
         return ret
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", cb=cls.set_type_cb)
         cls.add_arg("port", "port")
@@ -2645,8 +2645,8 @@ class ParserController(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", "type")
         cls.add_arg("model", "model")
@@ -2668,8 +2668,8 @@ class ParserInput(VirtCLIParser):
     remove_first = "type"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", "type", ignore_default=True)
         cls.add_arg("bus", "bus", ignore_default=True)
@@ -2685,8 +2685,8 @@ class ParserSmartcard(VirtCLIParser):
     remove_first = "mode"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("mode", "mode", ignore_default=True)
         cls.add_arg("type", "type", ignore_default=True)
@@ -2712,8 +2712,8 @@ class ParserRedir(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("bus", "bus", ignore_default=True)
         cls.add_arg("type", "type", ignore_default=True)
@@ -2736,8 +2736,8 @@ class ParserTPM(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", "type")
         cls.add_arg("model", "model")
@@ -2796,8 +2796,8 @@ class ParserRNG(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", "type")
 
@@ -2825,8 +2825,8 @@ class ParserWatchdog(VirtCLIParser):
     remove_first = "model"
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("model", "model", ignore_default=True)
         cls.add_arg("action", "action", ignore_default=True)
@@ -2845,8 +2845,8 @@ class ParserMemdev(VirtCLIParser):
         _set_attribute(inst, virtarg.propname, int(val) * 1024)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("model", "model")
         cls.add_arg("access", "access")
         cls.add_arg("target_size", "target.size", cb=cls.set_target_size)
@@ -2869,8 +2869,8 @@ class ParserMemballoon(VirtCLIParser):
     stub_none = False
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("model", "model")
 
@@ -2899,8 +2899,8 @@ class ParserPanic(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("model", cb=cls.set_model_cb,
                     ignore_default=True)
         cls.add_arg("iobase", "iobase")
@@ -2917,8 +2917,8 @@ class ParserVsock(VirtCLIParser):
     stub_none = False
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("model", "model")
         cls.add_arg("auto_cid", "auto_cid")
@@ -2957,8 +2957,8 @@ class _ParserChar(VirtCLIParser):
         return super()._parse(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         cls.add_arg("char_type", "type")
         cls.add_arg("path", "source_path")
         cls.add_arg("protocol",   "protocol")
@@ -3004,8 +3004,8 @@ class ParserFilesystem(VirtCLIParser):
     remove_first = ["source", "target"]
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", "type")
         cls.add_arg("accessmode", "accessmode", aliases=["mode"])
@@ -3037,8 +3037,8 @@ class ParserVideo(VirtCLIParser):
         return ret
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("model", "model", ignore_default=True)
         cls.add_arg("accel3d", "accel3d", is_onoff=True)
@@ -3072,8 +3072,8 @@ class ParserSound(VirtCLIParser):
         return cb(*args, **kwargs)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("model", "model", ignore_default=True)
         # Options for sound.codecs config
@@ -3109,8 +3109,8 @@ class ParserHostdev(VirtCLIParser):
         return nodedev.compare_to_hostdev(inst)
 
     @classmethod
-    def __init_class__(cls, **kwargs):
-        VirtCLIParser.__init_class__(**kwargs)
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", "type")
         cls.add_arg("name",
