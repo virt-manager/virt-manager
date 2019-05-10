@@ -669,7 +669,6 @@ c.add_invalid("--graphics vnc,keymap=ZZZ")  # Invalid keymap
 c.add_invalid("--graphics vnc,port=-50")  # Invalid port
 c.add_invalid("--graphics spice,tlsport=5")  # Invalid port
 c.add_invalid("--serial unix")  # Unix with no path
-c.add_invalid("--serial null,path=/tmp/foo")  # Path where it doesn't belong
 c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
 c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
 c.add_invalid("--connect %(URI-KVM)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI

@@ -992,7 +992,7 @@ class _VirtCLIArgument(object):
         self.propname = virtarg.propname
         self.cliname = virtarg.cliname
 
-    def parse_param(self, parser, inst, support_cb):
+    def parse_param(self, parser, inst):
         """
         Process the cli param against the pass inst.
 
@@ -1000,8 +1000,6 @@ class _VirtCLIArgument(object):
         specified --disk device=foo, we were instantiated with
         key=device val=foo, so set inst.device = foo
         """
-        if support_cb:
-            support_cb(inst, self)
         if self.val == "default" and self._virtarg.ignore_default:
             return
 
@@ -1183,16 +1181,12 @@ class VirtCLIParser(metaclass=InitClass):
         certain VMs, and --rng none is extended to handle that. --rng none
         can be added to users command lines and it will give the expected
         results regardless of the virt-install version.
-    @support_cb: An extra support check function for further validation.
-        Called before the virtinst object is altered. Take arguments
-        (inst, propname, cliname)
     @cli_arg_name: The command line argument this maps to, so
         "hostdev" for --hostdev
     """
     propname = None
     remove_first = None
     stub_none = True
-    support_cb = None
     cli_arg_name = None
     _virtargs = []
 
@@ -1331,7 +1325,7 @@ class VirtCLIParser(metaclass=InitClass):
         """
         optdict = self.optdict.copy()
         for param in self._optdict_to_param_list(optdict):
-            param.parse_param(self, inst, self.support_cb)
+            param.parse_param(self, inst)
 
         self._check_leftover_opts(optdict)
         return inst
@@ -2934,17 +2928,6 @@ class ParserVsock(VirtCLIParser):
 class _ParserChar(VirtCLIParser):
     remove_first = "char_type"
     stub_none = False
-
-    def support_check(self, inst, virtarg):
-        if not isinstance(virtarg.propname, str):
-            return
-        if not inst.supports_property(virtarg.propname):
-            raise ValueError(_("%(devtype)s type '%(chartype)s' does not "
-                "support '%(optname)s' option.") %
-                {"devtype": inst.DEVICE_TYPE,
-                 "chartype": inst.type,
-                 "optname": virtarg.cliname})
-    support_cb = support_check
 
     def set_host_cb(self, inst, val, virtarg):
         if ("bind_host" not in self.optdict and
