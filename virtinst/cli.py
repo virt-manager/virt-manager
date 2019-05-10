@@ -890,9 +890,8 @@ def _on_off_convert(key, val):
     raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
 
 
-def _set_attribute(obj, attr, val):
-    # pylint: disable=unused-argument
-    exec("obj." + attr + " = val ")  # pylint: disable=exec-used
+def _set_attribute(obj, propname, val):
+    util.set_prop_path(obj, propname, val)
 
 
 class _VirtCLIArgumentStatic(object):
@@ -1009,7 +1008,7 @@ class _VirtCLIArgument(object):
 
         try:
             if self.propname:
-                eval("inst." + self.propname)  # pylint: disable=eval-used
+                util.get_prop_path(inst, self.propname)
         except AttributeError:
             raise RuntimeError("programming error: obj=%s does not have "
                                "member=%s" % (inst, self.propname))
@@ -1045,8 +1044,7 @@ class _VirtCLIArgument(object):
             return self._virtarg.lookup_cb(parser,
                                            inst, self.val, self)
         else:
-            return eval(  # pylint: disable=eval-used
-                "inst." + self.propname) == self.val
+            return util.get_prop_path(inst, self.propname) == self.val
 
 
 def parse_optstr_tuples(optstr):
