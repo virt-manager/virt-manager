@@ -923,14 +923,14 @@ class _VirtCLIArgumentStatic(object):
         DeviceDisk has multiple seclabel children, this provides a hook
         to lookup the specified child object.
     """
-    def __init__(self, cliname, propname=None,
+    def __init__(self, cliname, propname,
                  cb=None, can_comma=None,
                  ignore_default=False, aliases=None,
                  is_list=False, is_onoff=False,
-                 lookup_cb=None, is_novalue=False,
+                 lookup_cb=-1, is_novalue=False,
                  find_inst_cb=None):
-        self.propname = propname
         self.cliname = cliname
+        self.propname = propname
         self.cb = cb
         self.can_comma = can_comma
         self.ignore_default = ignore_default
@@ -945,6 +945,20 @@ class _VirtCLIArgumentStatic(object):
             raise RuntimeError(
                 "programming error: propname or cb must be specified.")
 
+        if not self.propname and self.lookup_cb == -1:
+            raise RuntimeError("programming error: "
+                "cliname=%s propname is None but lookup_cb is not specified. "
+                "Even if a 'cb' is passed, 'propname' is still used for "
+                "device lookup for virt-xml --edit.\n\nIf cb is just "
+                "a convertor function for a single propname, then set "
+                "both propname and cb. If this cliname is truly "
+                "not backed by a single propname, set lookup_cb=None or "
+                "better yet implement a lookup_cb. This message is here "
+                "to ensure propname isn't omitted without understanding "
+                "the distinction." % self.cliname)
+
+        if self.lookup_cb == -1:
+            self.lookup_cb = None
 
     def match_name(self, cliname):
         """
@@ -1195,7 +1209,8 @@ class VirtCLIParser(metaclass=_InitClass):
         """
         if not cls._virtargs:
             cls._virtargs = [_VirtCLIArgumentStatic(
-                "clearxml", cb=cls._clearxml_cb, is_onoff=True)]
+                "clearxml", None, cb=cls._clearxml_cb, lookup_cb=None,
+                is_onoff=True)]
         cls._virtargs.append(_VirtCLIArgumentStatic(*args, **kwargs))
 
     @classmethod
@@ -1449,12 +1464,12 @@ class ParseCheck(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("path_in_use", is_onoff=True,
-                    cb=cls.set_cb)
-        cls.add_arg("disk_size", is_onoff=True,
-                    cb=cls.set_cb)
-        cls.add_arg("path_exists", is_onoff=True,
-                    cb=cls.set_cb)
+        cls.add_arg("path_in_use", None, is_onoff=True,
+                    cb=cls.set_cb, lookup_cb=None)
+        cls.add_arg("disk_size", None, is_onoff=True,
+                    cb=cls.set_cb, lookup_cb=None)
+        cls.add_arg("path_exists", None, is_onoff=True,
+                    cb=cls.set_cb, lookup_cb=None)
         cls.add_arg("all", "all_checks", is_onoff=True)
 
     def set_cb(self, inst, val, virtarg):
@@ -1563,8 +1578,10 @@ class ParserMetadata(VirtCLIParser):
         cls.add_arg("title", "title", can_comma=True)
         cls.add_arg("uuid", "uuid")
         cls.add_arg("description", "description", can_comma=True)
-        cls.add_arg("os_name", cb=cls.set_os_name_cb)
-        cls.add_arg("os_full_id", cb=cls.set_os_full_id_cb)
+        cls.add_arg("os_name", None, lookup_cb=None,
+                cb=cls.set_os_name_cb)
+        cls.add_arg("os_full_id", None, lookup_cb=None,
+                cb=cls.set_os_full_id_cb)
 
     def set_os_name_cb(self, inst, val, virtarg):
         inst.set_os_name(val)
@@ -1784,17 +1801,22 @@ class ParserCPU(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("model", cb=cls.set_model_cb)
+        cls.add_arg("model", "model", cb=cls.set_model_cb)
         cls.add_arg("mode", "mode")
         cls.add_arg("match", "match")
         cls.add_arg("vendor", "vendor")
         cls.add_arg("secure", "secure", is_onoff=True)
 
-        cls.add_arg("force", is_list=True, cb=cls.set_feature_cb)
-        cls.add_arg("require", is_list=True, cb=cls.set_feature_cb)
-        cls.add_arg("optional", is_list=True, cb=cls.set_feature_cb)
-        cls.add_arg("disable", is_list=True, cb=cls.set_feature_cb)
-        cls.add_arg("forbid", is_list=True, cb=cls.set_feature_cb)
+        cls.add_arg("force", None, lookup_cb=None,
+                is_list=True, cb=cls.set_feature_cb)
+        cls.add_arg("require", None, lookup_cb=None,
+                is_list=True, cb=cls.set_feature_cb)
+        cls.add_arg("optional", None, lookup_cb=None,
+                is_list=True, cb=cls.set_feature_cb)
+        cls.add_arg("disable", None, lookup_cb=None,
+                is_list=True, cb=cls.set_feature_cb)
+        cls.add_arg("forbid", None, lookup_cb=None,
+                is_list=True, cb=cls.set_feature_cb)
 
         # Options for CPU.cells config
         cls.add_arg("cell[0-9]*.id", "id",
@@ -1882,10 +1904,10 @@ class ParserVCPU(VirtCLIParser):
         cls.add_arg("cores", "cpu.cores")
         cls.add_arg("threads", "cpu.threads")
 
-        cls.add_arg("vcpus", cb=cls.set_vcpus_cb)
+        cls.add_arg("vcpus", "curvcpus", cb=cls.set_vcpus_cb)
         cls.add_arg("maxvcpus", "vcpus")
 
-        cls.add_arg("cpuset", can_comma=True, cb=cls.set_cpuset_cb)
+        cls.add_arg("cpuset", "cpuset", can_comma=True, cb=cls.set_cpuset_cb)
         cls.add_arg("placement", "vcpu_placement")
 
 
@@ -1937,12 +1959,16 @@ class ParserBoot(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         # UEFI depends on these bits, so set them first
         cls.add_arg("arch", "arch")
-        cls.add_arg("bootloader", cb=cls.set_bootloader_cb)
-        cls.add_arg("domain_type", cb=cls.set_domain_type_cb)
+        cls.add_arg("bootloader", None, lookup_cb=None,
+                cb=cls.set_bootloader_cb)
+        cls.add_arg("domain_type", None, lookup_cb=None,
+                cb=cls.set_domain_type_cb)
+        cls.add_arg("emulator", None, lookup_cb=None,
+                cb=cls.set_emulator_cb)
+        cls.add_arg("uefi", None, lookup_cb=None,
+                cb=cls.set_uefi_cb, is_novalue=True)
         cls.add_arg("os_type", "os_type")
-        cls.add_arg("emulator", cb=cls.set_emulator_cb)
         cls.add_arg("machine", "machine")
-        cls.add_arg("uefi", cb=cls.set_uefi_cb, is_novalue=True)
 
         cls.add_arg("useserial", "useserial", is_onoff=True)
         cls.add_arg("menu", "enable_bootmenu", is_onoff=True)
@@ -1965,7 +1991,8 @@ class ParserBoot(VirtCLIParser):
         # This is simply so the boot options are advertised with --boot help,
         # actual processing is handled by _parse
         for _bootdev in DomainOs.BOOT_DEVICES:
-            cls.add_arg(_bootdev, is_novalue=True, cb=cls.noset_cb)
+            cls.add_arg(_bootdev, None, lookup_cb=None,
+                    is_novalue=True, cb=cls.noset_cb)
 
 
 ###################
@@ -2071,10 +2098,11 @@ class ParserClock(VirtCLIParser):
         cls.add_arg("offset", "offset")
 
         for _tname in DomainClock.TIMER_NAMES:
-            cls.add_arg(_tname + "_present",
-                        is_onoff=True,
-                        cb=cls.set_timer)
-            cls.add_arg(_tname + "_tickpolicy", cb=cls.set_timer)
+            cls.add_arg(_tname + "_present", None, lookup_cb=None,
+                    is_onoff=True,
+                    cb=cls.set_timer)
+            cls.add_arg(_tname + "_tickpolicy", None, lookup_cb=None,
+                    cb=cls.set_timer)
 
 
 ################
@@ -2194,8 +2222,10 @@ class ParserQemuCLI(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("args", cb=cls.args_cb, can_comma=True)
-        cls.add_arg("env", cb=cls.env_cb, can_comma=True)
+        cls.add_arg("args", None, lookup_cb=None,
+                cb=cls.args_cb, can_comma=True)
+        cls.add_arg("env", None, lookup_cb=None,
+                cb=cls.env_cb, can_comma=True)
 
 
 ##########################
@@ -2372,13 +2402,15 @@ class ParserDisk(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         # These are all handled specially in _parse
-        cls.add_arg("backing_store", cb=cls.noset_cb)
-        cls.add_arg("backing_format", cb=cls.noset_cb)
-        cls.add_arg("pool", cb=cls.noset_cb)
-        cls.add_arg("vol", cb=cls.noset_cb)
-        cls.add_arg("size", cb=cls.noset_cb)
-        cls.add_arg("format", cb=cls.noset_cb)
-        cls.add_arg("sparse", cb=cls.noset_cb)
+        cls.add_arg("backing_store", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("backing_format", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("pool", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("vol", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("size", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("format", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("sparse", None, lookup_cb=None, cb=cls.noset_cb)
+
+        # More standard XML props
         cls.add_arg("source_pool", "source_pool")
         cls.add_arg("source_volume", "source_volume")
         cls.add_arg("source_name", "source_name")
@@ -2590,7 +2622,7 @@ class ParserGraphics(VirtCLIParser):
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
-        cls.add_arg("type", cb=cls.set_type_cb)
+        cls.add_arg("type", "type", cb=cls.set_type_cb)
         cls.add_arg("port", "port")
         cls.add_arg("tlsport", "tlsPort")
         cls.add_arg("listen", "listen")
@@ -2602,7 +2634,7 @@ class ParserGraphics(VirtCLIParser):
                                find_inst_cb=cls.listens_find_inst_cb)
         cls.add_arg("listens[0-9]*.socket", "socket",
                                find_inst_cb=cls.listens_find_inst_cb)
-        cls.add_arg("keymap", cb=cls.set_keymap_cb)
+        cls.add_arg("keymap", "keymap", cb=cls.set_keymap_cb)
         cls.add_arg("password", "passwd")
         cls.add_arg("passwordvalidto", "passwdValidTo")
         cls.add_arg("connected", "connected")
@@ -2649,7 +2681,7 @@ class ParserController(VirtCLIParser):
         cls.add_arg("driver_queues", "driver_queues")
         cls.add_arg("maxGrantFrames", "maxGrantFrames")
 
-        cls.add_arg("address", cb=cls.set_server_cb)
+        cls.add_arg("address", None, lookup_cb=None, cb=cls.set_server_cb)
 
 
 ###################
@@ -2712,7 +2744,8 @@ class ParserRedir(VirtCLIParser):
         cls.add_arg("bus", "bus", ignore_default=True)
         cls.add_arg("type", "type", ignore_default=True)
         _add_device_boot_order_arg(cls)
-        cls.add_arg("server", cb=cls.set_server_cb)
+
+        cls.add_arg("server", None, lookup_cb=None, cb=cls.set_server_cb)
 
 
 #################
@@ -2795,13 +2828,19 @@ class ParserRNG(VirtCLIParser):
         _add_device_address_args(cls)
         cls.add_arg("type", "type")
 
-        cls.add_arg("backend_mode", cb=cls.set_backend_cb)
-        cls.add_arg("backend_type", cb=cls.set_backend_cb)
+        cls.add_arg("backend_mode", None, lookup_cb=None,
+                cb=cls.set_backend_cb)
+        cls.add_arg("backend_type", None, lookup_cb=None,
+                cb=cls.set_backend_cb)
 
-        cls.add_arg("backend_host", cb=cls.set_hosts_cb)
-        cls.add_arg("backend_service", cb=cls.set_hosts_cb)
-        cls.add_arg("backend_connect_host", cb=cls.set_hosts_cb)
-        cls.add_arg("backend_connect_service", cb=cls.set_hosts_cb)
+        cls.add_arg("backend_host", None, lookup_cb=None,
+                cb=cls.set_hosts_cb)
+        cls.add_arg("backend_service", None, lookup_cb=None,
+                cb=cls.set_hosts_cb)
+        cls.add_arg("backend_connect_host", None, lookup_cb=None,
+                cb=cls.set_hosts_cb)
+        cls.add_arg("backend_connect_service", None, lookup_cb=None,
+                cb=cls.set_hosts_cb)
 
         cls.add_arg("device", "device")
         cls.add_arg("model", "model")
@@ -2895,7 +2934,7 @@ class ParserPanic(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("model", cb=cls.set_model_cb,
+        cls.add_arg("model", "model", cb=cls.set_model_cb,
                     ignore_default=True)
         cls.add_arg("iobase", "iobase")
 
@@ -2958,9 +2997,12 @@ class _ParserChar(VirtCLIParser):
         cls.add_arg("protocol",   "protocol")
         cls.add_arg("target_type", "target_type")
         cls.add_arg("name", "target_name")
-        cls.add_arg("host", cb=cls.set_host_cb)
-        cls.add_arg("bind_host", cb=cls.set_bind_cb)
-        cls.add_arg("target_address", cb=cls.set_target_cb)
+        cls.add_arg("host", None, lookup_cb=None,
+                cb=cls.set_host_cb)
+        cls.add_arg("bind_host", None, lookup_cb=None,
+                cb=cls.set_bind_cb)
+        cls.add_arg("target_address", None, lookup_cb=None,
+                cb=cls.set_target_cb)
         cls.add_arg("mode", "source_mode")
         cls.add_arg("source.master", "source_master")
         cls.add_arg("source.slave", "source_slave")
@@ -3107,7 +3149,7 @@ class ParserHostdev(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("type", "type")
-        cls.add_arg("name",
+        cls.add_arg("name", None,
                     cb=cls.set_name_cb,
                     lookup_cb=cls.name_lookup_cb)
         cls.add_arg("driver_name", "driver_name")
