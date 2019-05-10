@@ -990,6 +990,7 @@ c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
 c.add_compare("--edit target=hda --disk boot_order=1", "edit-select-disk-bootorder")
+c.add_compare("--edit path=/dev/null --disk path=,target=fdb,boot_order=12", "edit-disk-unset")  # --disk matching, using empty value to unset path
 
 c = vixml.add_category("edit and start selection", "test-state-shutoff --print-diff --start")
 c.add_compare("--define --edit target=vda --disk boot_order=1", "start-select-disk-bootorder")
