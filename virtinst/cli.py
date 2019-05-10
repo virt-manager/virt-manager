@@ -751,7 +751,7 @@ def add_device_options(devg, sound_back_compat=False):
     ParserMemdev.register()
     devg.add_argument("--memdev", action="append",
                     help=_("Configure a guest memory device. Ex:\n"
-                           "--memdev dimm,target_size=1024"))
+                           "--memdev dimm,target.size=1024"))
     ParserVsock.register()
     devg.add_argument("--vsock", action="append",
                     help=_("Configure guest vsock sockets. Ex:\n"
@@ -2881,13 +2881,19 @@ class ParserMemdev(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("model", "model")
         cls.add_arg("access", "access")
-        cls.add_arg("target_size", "target.size", cb=cls.set_target_size)
-        cls.add_arg("target_node", "target.node")
-        cls.add_arg("target_label_size", "target.label_size",
-                    cb=cls.set_target_size)
-        cls.add_arg("source_pagesize", "source.pagesize")
-        cls.add_arg("source_path", "source.path")
-        cls.add_arg("source_nodemask", "source.nodemask", can_comma=True)
+        cls.add_arg("target.size", "target.size", cb=cls.set_target_size,
+                aliases=["target_size"])
+        cls.add_arg("target.node", "target.node",
+                aliases=["target_node"])
+        cls.add_arg("target.label_size", "target.label_size",
+                cb=cls.set_target_size,
+                aliases=["target_label_size"])
+        cls.add_arg("source.pagesize", "source.pagesize",
+                aliases=["source_pagesize"])
+        cls.add_arg("source.path", "source.path",
+                aliases=["source_path"])
+        cls.add_arg("source.nodemask", "source.nodemask", can_comma=True,
+                aliases=["source_nodemask"])
 
 
 ########################
