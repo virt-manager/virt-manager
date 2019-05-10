@@ -914,8 +914,6 @@ class _VirtCLIArgumentStatic(object):
         it to true/false.
     @lookup_cb: If specified, use this function for performing match
         lookups.
-    @is_novalue: If specified, the parameter is not expected in the
-        form FOO=BAR, but just FOO.
     @find_inst_cb: If specified, this can be used to return a different
         'inst' to check and set attributes against. For example,
         DeviceDisk has multiple seclabel children, this provides a hook
@@ -924,8 +922,7 @@ class _VirtCLIArgumentStatic(object):
     def __init__(self, cliname, propname,
                  cb=None, can_comma=None,
                  ignore_default=False, aliases=None, is_onoff=False,
-                 lookup_cb=-1, is_novalue=False,
-                 find_inst_cb=None):
+                 lookup_cb=-1, find_inst_cb=None):
         self.cliname = cliname
         self.propname = propname
         self.cb = cb
@@ -934,7 +931,6 @@ class _VirtCLIArgumentStatic(object):
         self.aliases = aliases
         self.is_onoff = is_onoff
         self.lookup_cb = lookup_cb
-        self.is_novalue = is_novalue
         self.find_inst_cb = find_inst_cb
 
         if not self.propname and not self.cb:
@@ -979,11 +975,13 @@ class _VirtCLIArgument(object):
         Instantiate a VirtCLIArgument with the actual key=val pair
         from the command line.
         """
-        # Sanitize the value
         if val is None:
-            if not virtarg.is_novalue:
-                raise RuntimeError("Option '%s' had no value set." % key)
-            val = ""
+            # When a command line tuple option has no value set, say
+            #   --network bridge=br0,model=virtio
+            # is instead called
+            #   --network bridge=br0,model
+            # We error that 'model' didn't have a value
+            raise RuntimeError("Option '%s' had no value set." % key)
         if val == "":
             val = None
         if virtarg.is_onoff:
@@ -1942,6 +1940,10 @@ class ParserBoot(VirtCLIParser):
         if boot_order:
             inst.bootorder = boot_order
 
+        # Back compat to allow uefi to have no cli value specified
+        if "uefi" in self.optdict:
+            self.optdict["uefi"] = True
+
         return super()._parse(inst)
 
     @classmethod
@@ -1956,7 +1958,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("emulator", None, lookup_cb=None,
                 cb=cls.set_emulator_cb)
         cls.add_arg("uefi", None, lookup_cb=None,
-                cb=cls.set_uefi_cb, is_novalue=True)
+                cb=cls.set_uefi_cb)
         cls.add_arg("os_type", "os_type")
         cls.add_arg("machine", "machine")
 
@@ -1982,7 +1984,7 @@ class ParserBoot(VirtCLIParser):
         # actual processing is handled by _parse
         for _bootdev in DomainOs.BOOT_DEVICES:
             cls.add_arg(_bootdev, None, lookup_cb=None,
-                    is_novalue=True, cb=cls.noset_cb)
+                    cb=cls.noset_cb)
 
 
 ###################
