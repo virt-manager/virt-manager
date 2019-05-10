@@ -717,7 +717,7 @@ c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no seco
 
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_compare("", "noargs-fail", auto_printarg=False)  # No arguments
-c.add_valid("--panic help --disk=?")  # Make sure introspection doesn't blow up
+c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--test-stub-command")  # --test-stub-command
 c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning
 c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error

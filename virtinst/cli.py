@@ -3189,7 +3189,9 @@ def check_option_introspection(options):
     Check if the user requested option introspection with ex: '--disk=?'
     """
     ret = False
-    for parserclass in VIRT_PARSERS:
+    for parserclass in _get_completer_parsers():
+        if not hasattr(options, parserclass.cli_arg_name):
+            continue
         optlist = util.listify(getattr(options, parserclass.cli_arg_name))
         if not optlist:
             continue
