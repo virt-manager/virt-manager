@@ -900,12 +900,12 @@ class _VirtCLIArgumentStatic(object):
     Helper class to hold all of the static data we need for knowing
     how to parse a cli subargument, like --disk path=, or --network mac=.
 
-    @attrname: The virtinst API attribute name the cliargument maps to.
-        If this is a virtinst object method, it will be called.
     @cliname: The command line option name, 'path' for path=FOO
+    @propname: The virtinst API attribute name the cliargument maps to.
+    @cb: Rather than set a virtinst object property directly, use
+        this callback instead. It should have the signature:
+        cb(parser, inst, val, virtarg)
 
-    @cb: Rather than set an attribute directly on the virtinst
-        object, (self, inst, val, virtarg) to this callback to handle it.
     @ignore_default: If the value passed on the cli is 'default', don't
         do anything.
     @can_comma: If True, this option is expected to have embedded commas.
@@ -928,13 +928,13 @@ class _VirtCLIArgumentStatic(object):
         DeviceDisk has multiple seclabel children, this provides a hook
         to lookup the specified child object.
     """
-    def __init__(self, cliname, attrname=None,
+    def __init__(self, cliname, propname=None,
                  cb=None, can_comma=None,
                  ignore_default=False, aliases=None,
                  is_list=False, is_onoff=False,
                  lookup_cb=None, is_novalue=False,
                  find_inst_cb=None):
-        self.attrname = attrname
+        self.propname = propname
         self.cliname = cliname
         self.cb = cb
         self.can_comma = can_comma
@@ -946,9 +946,9 @@ class _VirtCLIArgumentStatic(object):
         self.is_novalue = is_novalue
         self.find_inst_cb = find_inst_cb
 
-        if not self.attrname and not self.cb:
+        if not self.propname and not self.cb:
             raise RuntimeError(
-                "programming error: attrname or cb must be specified.")
+                "programming error: propname or cb must be specified.")
 
 
     def match_name(self, cliname):
@@ -989,7 +989,7 @@ class _VirtCLIArgument(object):
         self._virtarg = virtarg
 
         # For convenience
-        self.attrname = virtarg.attrname
+        self.propname = virtarg.propname
         self.cliname = virtarg.cliname
 
     def parse_param(self, parser, inst, support_cb):
@@ -1010,16 +1010,16 @@ class _VirtCLIArgument(object):
                                               inst, self.val, self, True)
 
         try:
-            if self.attrname:
-                eval("inst." + self.attrname)  # pylint: disable=eval-used
+            if self.propname:
+                eval("inst." + self.propname)  # pylint: disable=eval-used
         except AttributeError:
             raise RuntimeError("programming error: obj=%s does not have "
-                               "member=%s" % (inst, self.attrname))
+                               "member=%s" % (inst, self.propname))
 
         if self._virtarg.cb:
             self._virtarg.cb(parser, inst, self.val, self)
         else:
-            _set_attribute(inst, self.attrname, self.val)
+            _set_attribute(inst, self.propname, self.val)
 
     def lookup_param(self, parser, inst):
         """
@@ -1030,7 +1030,7 @@ class _VirtCLIArgument(object):
         instantiated with key=device val=floppy, so return
         'inst.device == floppy'
         """
-        if not self.attrname and not self._virtarg.lookup_cb:
+        if not self.propname and not self._virtarg.lookup_cb:
             raise RuntimeError(
                 _("Don't know how to match device type '%(device_type)s' "
                   "property '%(property_name)s'") %
@@ -1048,7 +1048,7 @@ class _VirtCLIArgument(object):
                                            inst, self.val, self)
         else:
             return eval(  # pylint: disable=eval-used
-                "inst." + self.attrname) == self.val
+                "inst." + self.propname) == self.val
 
 
 def parse_optstr_tuples(optstr):
@@ -1185,7 +1185,7 @@ class VirtCLIParser(metaclass=InitClass):
         results regardless of the virt-install version.
     @support_cb: An extra support check function for further validation.
         Called before the virtinst object is altered. Take arguments
-        (inst, attrname, cliname)
+        (inst, propname, cliname)
     @cli_arg_name: The command line argument this maps to, so
         "hostdev" for --hostdev
     """
@@ -1856,9 +1856,9 @@ class ParserVCPU(VirtCLIParser):
     remove_first = "vcpus"
 
     def set_vcpus_cb(self, inst, val, virtarg):
-        attrname = (("maxvcpus" in self.optdict) and
+        propname = (("maxvcpus" in self.optdict) and
                     "curvcpus" or "vcpus")
-        setattr(inst, attrname, val)
+        setattr(inst, propname, val)
 
     def set_cpuset_cb(self, inst, val, virtarg):
         if not val:
@@ -2059,7 +2059,7 @@ class ParserClock(VirtCLIParser):
     propname = "clock"
 
     def set_timer(self, inst, val, virtarg):
-        tname, attrname = virtarg.cliname.split("_")
+        tname, propname = virtarg.cliname.split("_")
 
         timerobj = None
         for t in inst.timers:
@@ -2071,7 +2071,7 @@ class ParserClock(VirtCLIParser):
             timerobj = inst.timers.add_new()
             timerobj.name = tname
 
-        setattr(timerobj, attrname, val)
+        setattr(timerobj, propname, val)
 
     @classmethod
     def __init_class__(cls, **kwargs):
@@ -2844,7 +2844,7 @@ class ParserMemdev(VirtCLIParser):
     remove_first = "model"
 
     def set_target_size(self, inst, val, virtarg):
-        _set_attribute(inst, virtarg.attrname, int(val) * 1024)
+        _set_attribute(inst, virtarg.propname, int(val) * 1024)
 
     @classmethod
     def __init_class__(cls, **kwargs):
@@ -2936,9 +2936,9 @@ class _ParserChar(VirtCLIParser):
     stub_none = False
 
     def support_check(self, inst, virtarg):
-        if not isinstance(virtarg.attrname, str):
+        if not isinstance(virtarg.propname, str):
             return
-        if not inst.supports_property(virtarg.attrname):
+        if not inst.supports_property(virtarg.propname):
             raise ValueError(_("%(devtype)s type '%(chartype)s' does not "
                 "support '%(optname)s' option.") %
                 {"devtype": inst.DEVICE_TYPE,
