@@ -223,16 +223,30 @@ class XMLProperty(_XMLPropertyBase):
     def _convert_get_value(self, val):
         # pylint: disable=redefined-variable-type
         if self._is_bool:
-            ret = bool(val)
+            return bool(val)
         elif self._is_int and val is not None:
-            intkwargs = {}
-            if "0x" in str(val):
-                intkwargs["base"] = 16
-            ret = int(val, **intkwargs)
-        elif self._is_yesno and val is not None:
-            ret = bool(val == "yes")
-        elif self._is_onoff and val is not None:
-            ret = bool(val == "on")
+            try:
+                intkwargs = {}
+                if "0x" in str(val):
+                    intkwargs["base"] = 16
+                ret = int(val, **intkwargs)
+            except ValueError as e:
+                logging.debug("Error converting XML value to int: %s", e)
+                ret = val
+        elif self._is_yesno:
+            if val == "yes":
+                ret = True
+            elif val == "no":
+                ret = False
+            else:
+                ret = val
+        elif self._is_onoff:
+            if val == "on":
+                ret = True
+            elif val == "off":
+                ret = False
+            else:
+                ret = val
         else:
             ret = val
         return ret
@@ -240,10 +254,16 @@ class XMLProperty(_XMLPropertyBase):
     def _convert_set_value(self, val):
         if self._do_abspath and val is not None:
             val = os.path.abspath(val)
-        elif self._is_onoff and val is not None:
-            val = bool(val) and "on" or "off"
-        elif self._is_yesno and val is not None:
-            val = bool(val) and "yes" or "no"
+        elif self._is_onoff:
+            if val is True:
+                val = "on"
+            elif val is False:
+                val = "off"
+        elif self._is_yesno:
+            if val is True:
+                val = "yes"
+            elif val is False:
+                val = "no"
         elif self._is_int and val is not None:
             intkwargs = {}
             if "0x" in str(val):

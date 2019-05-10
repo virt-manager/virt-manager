@@ -1504,3 +1504,26 @@ class XMLParseTest(unittest.TestCase):
         guest = virtinst.Guest(self.conn, parsexml=open(infile).read())
 
         utils.diff_compare(guest.get_xml(), outfile)
+
+    def testYesNoUnexpectedParse(self):
+        # Make sure that if we see an unexpected yes/no or on/off value,
+        # we just return it to the user and don't error. Libvirt could
+        # change our assumptions and we shouldn't be too restrictive
+        xml = ("<hostdev managed='foo'>\n  <rom bar='wibble'/>\n"
+            "  <source><address bus='hello'/></source>\n</hostdev>")
+        dev = virtinst.DeviceHostdev(self.conn, parsexml=xml)
+
+        self.assertEqual(dev.managed, "foo")
+        self.assertEqual(dev.rom_bar, "wibble")
+        self.assertEqual(dev.scsi_bus, "hello")
+
+        dev.managed = "test1"
+        dev.rom_bar = "test2"
+        self.assertEqual(dev.managed, "test1")
+        self.assertEqual(dev.rom_bar, "test2")
+
+        try:
+            dev.scsi_bus = "goodbye"
+            raise AssertionError("Expected ValueError")
+        except ValueError:
+            pass
