@@ -910,8 +910,6 @@ class _VirtCLIArgumentStatic(object):
         the value of this option, '=' included. Should be used sparingly.
     @aliases: List of cli aliases. Useful if we want to change a property
         name on the cli but maintain back compat.
-    @is_list: This value should be stored as a list, so multiple instances
-        are appended.
     @is_onoff: The value expected on the cli is on/off or yes/no, convert
         it to true/false.
     @lookup_cb: If specified, use this function for performing match
@@ -925,8 +923,7 @@ class _VirtCLIArgumentStatic(object):
     """
     def __init__(self, cliname, propname,
                  cb=None, can_comma=None,
-                 ignore_default=False, aliases=None,
-                 is_list=False, is_onoff=False,
+                 ignore_default=False, aliases=None, is_onoff=False,
                  lookup_cb=-1, is_novalue=False,
                  find_inst_cb=None):
         self.cliname = cliname
@@ -935,7 +932,6 @@ class _VirtCLIArgumentStatic(object):
         self.can_comma = can_comma
         self.ignore_default = ignore_default
         self.aliases = aliases
-        self.is_list = is_list
         self.is_onoff = is_onoff
         self.lookup_cb = lookup_cb
         self.is_novalue = is_novalue
@@ -1095,16 +1091,6 @@ def _parse_optstr_to_dict(optstr, virtargs, remove_first):
     optdict = collections.OrderedDict()
     opttuples = parse_optstr_tuples(optstr)
 
-    def _add_opt(virtarg, cliname, val):
-        if (cliname not in optdict and
-            virtarg.is_list):
-            optdict[cliname] = []
-
-        if isinstance(optdict.get(cliname), list):
-            optdict[cliname].append(val)
-        else:
-            optdict[cliname] = val
-
     def _lookup_virtarg(cliname):
         for virtarg in virtargs:
             if virtarg.match_name(cliname):
@@ -1141,9 +1127,10 @@ def _parse_optstr_to_dict(optstr, virtargs, remove_first):
 
         if virtarg.can_comma:
             commaopt = _consume_comma_arg([cliname, val])
-            _add_opt(virtarg, commaopt[0], commaopt[1])
-        else:
-            _add_opt(virtarg, cliname, val)
+            cliname = commaopt[0]
+            val = commaopt[1]
+
+        optdict[cliname] = val
 
     return optdict
 
@@ -1779,6 +1766,14 @@ class ParserCPU(VirtCLIParser):
             raise
 
     def _parse(self, inst):
+        # For old CLI compat, --cpu force=foo,force=bar should force
+        # enable 'foo' and 'bar' features, but that doesn't fit with the
+        # CLI parser infrastructure very well.
+        converted = collections.defaultdict(list)
+        for key, value in parse_optstr_tuples(self.optstr):
+            if key in ["force", "require", "optional", "disable", "forbid"]:
+                converted[key].append(value)
+
         # Convert +feature, -feature into expected format
         for key, value in list(self.optdict.items()):
             policy = None
@@ -1792,10 +1787,9 @@ class ParserCPU(VirtCLIParser):
 
             if policy:
                 del(self.optdict[key])
-                if self.optdict.get(policy) is None:
-                    self.optdict[policy] = []
-                self.optdict[policy].append(key[1:])
+                converted[policy].append(key[1:])
 
+        self.optdict.update(converted)
         return super()._parse(inst)
 
     @classmethod
@@ -1807,16 +1801,12 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("vendor", "vendor")
         cls.add_arg("secure", "secure", is_onoff=True)
 
-        cls.add_arg("force", None, lookup_cb=None,
-                is_list=True, cb=cls.set_feature_cb)
-        cls.add_arg("require", None, lookup_cb=None,
-                is_list=True, cb=cls.set_feature_cb)
-        cls.add_arg("optional", None, lookup_cb=None,
-                is_list=True, cb=cls.set_feature_cb)
-        cls.add_arg("disable", None, lookup_cb=None,
-                is_list=True, cb=cls.set_feature_cb)
-        cls.add_arg("forbid", None, lookup_cb=None,
-                is_list=True, cb=cls.set_feature_cb)
+        # These are handled specially in _parse
+        cls.add_arg("force", None, lookup_cb=None, cb=cls.set_feature_cb)
+        cls.add_arg("require", None, lookup_cb=None, cb=cls.set_feature_cb)
+        cls.add_arg("optional", None, lookup_cb=None, cb=cls.set_feature_cb)
+        cls.add_arg("disable", None, lookup_cb=None, cb=cls.set_feature_cb)
+        cls.add_arg("forbid", None, lookup_cb=None, cb=cls.set_feature_cb)
 
         # Options for CPU.cells config
         cls.add_arg("cell[0-9]*.id", "id",
