@@ -1171,6 +1171,10 @@ class VirtCLIParser(metaclass=InitClass):
     crazy stuff.
 
     Class parameters:
+    @guest_propname: The property name in the Guest class that tracks
+        the object type that backs this parser. For example, the --sound
+        option maps to DeviceSound, which on the guest class is at
+        guest.devices.sound, so guest_propname = "devices.sound"
     @remove_first: List of parameters to peel off the front of the
         option string, and store in the optdict. So:
         remove_first=["char_type"] for --serial pty,foo=bar
@@ -1184,7 +1188,7 @@ class VirtCLIParser(metaclass=InitClass):
     @cli_arg_name: The command line argument this maps to, so
         "hostdev" for --hostdev
     """
-    propname = None
+    guest_propname = None
     remove_first = None
     stub_none = True
     cli_arg_name = None
@@ -1218,11 +1222,11 @@ class VirtCLIParser(metaclass=InitClass):
     def lookup_prop(cls, obj):
         """
         For the passed obj, return the equivalent of
-        getattr(obj, cls.propname), but handle '.' in the propname
+        getattr(obj, cls.guest_propname), but handle '.' in the guest_propname
         """
-        if not cls.propname:
+        if not cls.guest_propname:
             return None
-        return util.get_prop_path(obj, cls.propname)
+        return util.get_prop_path(obj, cls.guest_propname)
 
     @classmethod
     def prop_is_list(cls, obj):
@@ -1249,8 +1253,8 @@ class VirtCLIParser(metaclass=InitClass):
         """
         Callback that handles virt-xml clearxml=yes|no magic
         """
-        if not self.propname:
-            raise RuntimeError("Don't know how to clearxml %s" %
+        if not self.guest_propname:
+            raise RuntimeError("Don't know how to clearxml for %s" %
                                self.cli_flag_name())
         if val is not True:
             return
@@ -1266,13 +1270,13 @@ class VirtCLIParser(metaclass=InitClass):
         # end of the domain XML, which gives an ugly diff
         inst.clear(leave_stub=("," in self.optstr))
 
-    def _make_find_inst_cb(self, cliarg, objpropname):
+    def _make_find_inst_cb(self, cliarg, list_propname):
         """
         Create a callback used for find_inst_cb command line lookup.
 
         :param cliarg: The cliarg string that is followed by an index.
             Example, for --disk seclabel[0-9]* mapping, this is 'seclabel'
-        :param objpropname: The property name on the virtinst object that
+        :param list_propname: The property name on the virtinst object that
             this parameter maps too. For the seclabel example, we want
             disk.seclabels, so this value is 'seclabels'
         """
@@ -1284,10 +1288,10 @@ class VirtCLIParser(metaclass=InitClass):
                 num = int(reg.groups()[0])
 
             if can_edit:
-                while len(getattr(inst, objpropname)) < (num + 1):
-                    getattr(inst, objpropname).add_new()
+                while len(getattr(inst, list_propname)) < (num + 1):
+                    getattr(inst, list_propname).add_new()
             try:
-                return getattr(inst, objpropname)[num]
+                return getattr(inst, list_propname)[num]
             except IndexError:
                 if not can_edit:
                     return None
@@ -1338,7 +1342,7 @@ class VirtCLIParser(metaclass=InitClass):
         For virt-xml, 'inst' is the virtinst object we are editing,
         ex. a DeviceDisk from a parsed Guest object.
         For virt-install, 'inst' is None, and we will create a new
-        inst for self.propname, or edit a singleton object in place
+        inst for self.guest_propname, or edit a singleton object in place
         like Guest.features/DomainFeatures
         """
         if not self.optstr:
@@ -1347,7 +1351,7 @@ class VirtCLIParser(metaclass=InitClass):
             return None
 
         new_object = False
-        if self.propname and not inst:
+        if self.guest_propname and not inst:
             inst = self.lookup_prop(self.guest)
             new_object = self.prop_is_list(self.guest)
             if new_object:
@@ -1597,7 +1601,7 @@ class ParserEvents(VirtCLIParser):
 
 class ParserResource(VirtCLIParser):
     cli_arg_name = "resource"
-    propname = "resource"
+    guest_propname = "resource"
     remove_first = "partition"
 
     @classmethod
@@ -1612,7 +1616,7 @@ class ParserResource(VirtCLIParser):
 
 class ParserNumatune(VirtCLIParser):
     cli_arg_name = "numatune"
-    propname = "numatune"
+    guest_propname = "numatune"
     remove_first = "nodeset"
 
     @classmethod
@@ -1650,7 +1654,7 @@ class ParserMemory(VirtCLIParser):
 
 class ParserMemtune(VirtCLIParser):
     cli_arg_name = "memtune"
-    propname = "memtune"
+    guest_propname = "memtune"
     remove_first = "soft_limit"
 
     @classmethod
@@ -1668,7 +1672,7 @@ class ParserMemtune(VirtCLIParser):
 
 class ParserBlkiotune(VirtCLIParser):
     cli_arg_name = "blkiotune"
-    propname = "blkiotune"
+    guest_propname = "blkiotune"
     remove_first = "weight"
 
     @classmethod
@@ -1685,7 +1689,7 @@ class ParserBlkiotune(VirtCLIParser):
 
 class ParserMemoryBacking(VirtCLIParser):
     cli_arg_name = "memorybacking"
-    propname = "memoryBacking"
+    guest_propname = "memoryBacking"
 
     @classmethod
     def __init_class__(cls, **kwargs):
@@ -1706,14 +1710,14 @@ class ParserMemoryBacking(VirtCLIParser):
 
 class ParserCPU(VirtCLIParser):
     cli_arg_name = "cpu"
-    propname = "cpu"
+    guest_propname = "cpu"
     remove_first = "model"
     stub_none = False
 
     def cell_find_inst_cb(self, *args, **kwargs):
         cliarg = "cell"  # cell[0-9]*
-        objpropname = "cells"  # cpu.cells
-        cb = self._make_find_inst_cb(cliarg, objpropname)
+        list_propname = "cells"  # cpu.cells
+        cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
     def sibling_find_inst_cb(self, inst, *args, **kwargs):
@@ -1721,8 +1725,8 @@ class ParserCPU(VirtCLIParser):
         inst = cell
 
         cliarg = "sibling"  # cell[0-9]*.distances.sibling[0-9]*
-        objpropname = "siblings"  # cell.siblings
-        cb = self._make_find_inst_cb(cliarg, objpropname)
+        list_propname = "siblings"  # cell.siblings
+        cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(inst, *args, **kwargs)
 
     def set_model_cb(self, inst, val, virtarg):
@@ -1821,14 +1825,14 @@ class ParserCPU(VirtCLIParser):
 
 class ParserCputune(VirtCLIParser):
     cli_arg_name = "cputune"
-    propname = "cputune"
+    guest_propname = "cputune"
     remove_first = "model"
     stub_none = False
 
     def vcpu_find_inst_cb(self, *args, **kwargs):
         cliarg = "vcpupin"  # vcpupin[0-9]*
-        objpropname = "vcpus"
-        cb = self._make_find_inst_cb(cliarg, objpropname)
+        list_propname = "vcpus"
+        cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
     @classmethod
@@ -1897,7 +1901,7 @@ class ParserVCPU(VirtCLIParser):
 
 class ParserBoot(VirtCLIParser):
     cli_arg_name = "boot"
-    propname = "os"
+    guest_propname = "os"
 
     def set_uefi_cb(self, inst, val, virtarg):
         self.guest.set_uefi_path(self.guest.get_uefi_path())
@@ -1976,7 +1980,7 @@ class ParserBoot(VirtCLIParser):
 
 class ParserIdmap(VirtCLIParser):
     cli_arg_name = "idmap"
-    propname = "idmap"
+    guest_propname = "idmap"
 
     @classmethod
     def __init_class__(cls, **kwargs):
@@ -1995,7 +1999,7 @@ class ParserIdmap(VirtCLIParser):
 
 class ParserSecurity(VirtCLIParser):
     cli_arg_name = "security"
-    propname = "seclabels"
+    guest_propname = "seclabels"
 
     @classmethod
     def __init_class__(cls, **kwargs):
@@ -2013,7 +2017,7 @@ class ParserSecurity(VirtCLIParser):
 
 class ParserFeatures(VirtCLIParser):
     cli_arg_name = "features"
-    propname = "features"
+    guest_propname = "features"
 
     @classmethod
     def __init_class__(cls, **kwargs):
@@ -2050,7 +2054,7 @@ class ParserFeatures(VirtCLIParser):
 
 class ParserClock(VirtCLIParser):
     cli_arg_name = "clock"
-    propname = "clock"
+    guest_propname = "clock"
 
     def set_timer(self, inst, val, virtarg):
         tname, propname = virtarg.cliname.split("_")
@@ -2085,7 +2089,7 @@ class ParserClock(VirtCLIParser):
 
 class ParserPM(VirtCLIParser):
     cli_arg_name = "pm"
-    propname = "pm"
+    guest_propname = "pm"
 
     @classmethod
     def __init_class__(cls, **kwargs):
@@ -2100,7 +2104,7 @@ class ParserPM(VirtCLIParser):
 
 class ParserSysinfo(VirtCLIParser):
     cli_arg_name = "sysinfo"
-    propname = "sysinfo"
+    guest_propname = "sysinfo"
     remove_first = "type"
 
     def set_type_cb(self, inst, val, virtarg):
@@ -2168,7 +2172,7 @@ class ParserSysinfo(VirtCLIParser):
 
 class ParserQemuCLI(VirtCLIParser):
     cli_arg_name = "qemu_commandline"
-    propname = "xmlns_qemu"
+    guest_propname = "xmlns_qemu"
 
     def args_cb(self, inst, val, virtarg):
         for opt in shlex.split(val):
@@ -2269,14 +2273,14 @@ def _generate_new_volume_name(guest, poolobj, fmt):
 
 class ParserDisk(VirtCLIParser):
     cli_arg_name = "disk"
-    propname = "devices.disk"
+    guest_propname = "devices.disk"
     remove_first = "path"
     stub_none = False
 
     def seclabel_find_inst_cb(self, *args, **kwargs):
         cliarg = "seclabel"  # seclabel[0-9]*
-        objpropname = "seclabels"  # disk.seclabels
-        cb = self._make_find_inst_cb(cliarg, objpropname)
+        list_propname = "seclabels"  # disk.seclabels
+        cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
     def _parse(self, inst):
@@ -2445,7 +2449,7 @@ class ParserDisk(VirtCLIParser):
 
 class ParserNetwork(VirtCLIParser):
     cli_arg_name = "network"
-    propname = "devices.interface"
+    guest_propname = "devices.interface"
     remove_first = "type"
     stub_none = False
 
@@ -2534,7 +2538,7 @@ class ParserNetwork(VirtCLIParser):
 
 class ParserGraphics(VirtCLIParser):
     cli_arg_name = "graphics"
-    propname = "devices.graphics"
+    guest_propname = "devices.graphics"
     remove_first = "type"
     stub_none = False
 
@@ -2562,8 +2566,8 @@ class ParserGraphics(VirtCLIParser):
 
     def listens_find_inst_cb(self, *args, **kwargs):
         cliarg = "listens"  # listens[0-9]*
-        objpropname = "listens"  # graphics.listens
-        cb = self._make_find_inst_cb(cliarg, objpropname)
+        list_propname = "listens"  # graphics.listens
+        cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
     def _parse(self, inst):
@@ -2627,7 +2631,7 @@ class ParserGraphics(VirtCLIParser):
 
 class ParserController(VirtCLIParser):
     cli_arg_name = "controller"
-    propname = "devices.controller"
+    guest_propname = "devices.controller"
     remove_first = "type"
 
     def set_server_cb(self, inst, val, virtarg):
@@ -2660,7 +2664,7 @@ class ParserController(VirtCLIParser):
 
 class ParserInput(VirtCLIParser):
     cli_arg_name = "input"
-    propname = "devices.input"
+    guest_propname = "devices.input"
     remove_first = "type"
 
     @classmethod
@@ -2677,7 +2681,7 @@ class ParserInput(VirtCLIParser):
 
 class ParserSmartcard(VirtCLIParser):
     cli_arg_name = "smartcard"
-    propname = "devices.smartcard"
+    guest_propname = "devices.smartcard"
     remove_first = "mode"
 
     @classmethod
@@ -2694,7 +2698,7 @@ class ParserSmartcard(VirtCLIParser):
 
 class ParserRedir(VirtCLIParser):
     cli_arg_name = "redirdev"
-    propname = "devices.redirdev"
+    guest_propname = "devices.redirdev"
     remove_first = "bus"
     stub_none = False
 
@@ -2723,7 +2727,7 @@ class ParserRedir(VirtCLIParser):
 
 class ParserTPM(VirtCLIParser):
     cli_arg_name = "tpm"
-    propname = "devices.tpm"
+    guest_propname = "devices.tpm"
     remove_first = "type"
 
     def _parse(self, inst):
@@ -2747,7 +2751,7 @@ class ParserTPM(VirtCLIParser):
 
 class ParserRNG(VirtCLIParser):
     cli_arg_name = "rng"
-    propname = "devices.rng"
+    guest_propname = "devices.rng"
     remove_first = "type"
     stub_none = False
 
@@ -2817,7 +2821,7 @@ class ParserRNG(VirtCLIParser):
 
 class ParserWatchdog(VirtCLIParser):
     cli_arg_name = "watchdog"
-    propname = "devices.watchdog"
+    guest_propname = "devices.watchdog"
     remove_first = "model"
 
     @classmethod
@@ -2834,7 +2838,7 @@ class ParserWatchdog(VirtCLIParser):
 
 class ParserMemdev(VirtCLIParser):
     cli_arg_name = "memdev"
-    propname = "devices.memory"
+    guest_propname = "devices.memory"
     remove_first = "model"
 
     def set_target_size(self, inst, val, virtarg):
@@ -2860,7 +2864,7 @@ class ParserMemdev(VirtCLIParser):
 
 class ParserMemballoon(VirtCLIParser):
     cli_arg_name = "memballoon"
-    propname = "devices.memballoon"
+    guest_propname = "devices.memballoon"
     remove_first = "model"
     stub_none = False
 
@@ -2877,7 +2881,7 @@ class ParserMemballoon(VirtCLIParser):
 
 class ParserPanic(VirtCLIParser):
     cli_arg_name = "panic"
-    propname = "devices.panic"
+    guest_propname = "devices.panic"
     remove_first = "model"
     compat_mode = False
 
@@ -2908,7 +2912,7 @@ class ParserPanic(VirtCLIParser):
 
 class ParserVsock(VirtCLIParser):
     cli_arg_name = "vsock"
-    propname = "devices.vsock"
+    guest_propname = "devices.vsock"
     remove_first = "model"
     stub_none = False
 
@@ -2972,22 +2976,22 @@ class _ParserChar(VirtCLIParser):
 
 class ParserSerial(_ParserChar):
     cli_arg_name = "serial"
-    propname = "devices.serial"
+    guest_propname = "devices.serial"
 
 
 class ParserParallel(_ParserChar):
     cli_arg_name = "parallel"
-    propname = "devices.parallel"
+    guest_propname = "devices.parallel"
 
 
 class ParserChannel(_ParserChar):
     cli_arg_name = "channel"
-    propname = "devices.channel"
+    guest_propname = "devices.channel"
 
 
 class ParserConsole(_ParserChar):
     cli_arg_name = "console"
-    propname = "devices.console"
+    guest_propname = "devices.console"
 
 
 ########################
@@ -2996,7 +3000,7 @@ class ParserConsole(_ParserChar):
 
 class ParserFilesystem(VirtCLIParser):
     cli_arg_name = "filesystem"
-    propname = "devices.filesystem"
+    guest_propname = "devices.filesystem"
     remove_first = ["source", "target"]
 
     @classmethod
@@ -3015,7 +3019,7 @@ class ParserFilesystem(VirtCLIParser):
 
 class ParserVideo(VirtCLIParser):
     cli_arg_name = "video"
-    propname = "devices.video"
+    guest_propname = "devices.video"
     remove_first = "model"
 
     def _parse(self, inst):
@@ -3051,7 +3055,7 @@ class ParserVideo(VirtCLIParser):
 
 class ParserSound(VirtCLIParser):
     cli_arg_name = "sound"
-    propname = "devices.sound"
+    guest_propname = "devices.sound"
     remove_first = "model"
     stub_none = False
 
@@ -3063,8 +3067,8 @@ class ParserSound(VirtCLIParser):
 
     def codec_find_inst_cb(self, *args, **kwargs):
         cliarg = "codec"  # codec[0-9]*
-        objpropname = "codecs"
-        cb = self._make_find_inst_cb(cliarg, objpropname)
+        list_propname = "codecs"
+        cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
     @classmethod
@@ -3083,7 +3087,7 @@ class ParserSound(VirtCLIParser):
 
 class ParserHostdev(VirtCLIParser):
     cli_arg_name = "hostdev"
-    propname = "devices.hostdev"
+    guest_propname = "devices.hostdev"
     remove_first = "name"
 
     def set_name_cb(self, inst, val, virtarg):

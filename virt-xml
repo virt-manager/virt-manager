@@ -180,7 +180,7 @@ def check_xmlopt_collision(options):
 
 
 def action_edit(guest, options, parserclass):
-    if parserclass.propname:
+    if parserclass.guest_propname:
         inst = _find_objects_to_edit(guest, "edit", options.edit, parserclass)
     else:
         inst = guest
@@ -222,7 +222,7 @@ def action_remove_device(guest, options, parserclass):
 
 
 def action_build_xml(conn, options, parserclass):
-    if not parserclass.propname:
+    if not parserclass.guest_propname:
         fail(_("--build-xml not supported for --%s") %
              parserclass.cli_arg_name)
     if options.os_variant is not None:
@@ -481,7 +481,7 @@ def main(conn=None):
     check_action_collision(options)
     parserclass = check_xmlopt_collision(options)
 
-    if options.update and not parserclass.propname:
+    if options.update and not parserclass.guest_propname:
         fail(_("Don't know how to --update for --%s") %
              (parserclass.cli_arg_name))
 
