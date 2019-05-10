@@ -2982,6 +2982,11 @@ class _ParserChar(VirtCLIParser):
 
     @classmethod
     def _init_class(cls, **kwargs):
+        # _virtargs already populated via subclass creation, so
+        # don't double register options
+        if cls._virtargs:
+            return
+
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("char_type", "type")
         cls.add_arg("path", "source_path")
