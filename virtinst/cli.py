@@ -1207,8 +1207,16 @@ class VirtCLIParser(metaclass=_InitClass):
         """
         Print out all _param names, triggered via ex. --disk help
         """
+        def _sortkey(virtarg):
+            prefix = ""
+            if virtarg.cliname == "clearxml":
+                prefix = "0"
+            if virtarg.cliname.startswith("address."):
+                prefix = "1"
+            return prefix + virtarg.cliname
+
         print("%s options:" % cls.cli_flag_name())
-        for arg in sorted(cls._virtargs, key=lambda p: p.cliname):
+        for arg in sorted(cls._virtargs, key=_sortkey):
             print("  %s" % arg.cliname)
         print("")
 
