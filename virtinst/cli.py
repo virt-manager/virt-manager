@@ -890,10 +890,6 @@ def _on_off_convert(key, val):
     raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
 
 
-def _set_attribute(obj, propname, val):
-    util.set_prop_path(obj, propname, val)
-
-
 class _VirtCLIArgumentStatic(object):
     """
     Helper class to hold all of the static data we need for knowing
@@ -1016,7 +1012,7 @@ class _VirtCLIArgument(object):
         if self._virtarg.cb:
             self._virtarg.cb(parser, inst, self.val, self)
         else:
-            _set_attribute(inst, self.propname, self.val)
+            util.set_prop_path(inst, self.propname, self.val)
 
     def lookup_param(self, parser, inst):
         """
@@ -1633,7 +1629,7 @@ class ParserMemory(VirtCLIParser):
     remove_first = "memory"
 
     def set_memory_cb(self, inst, val, virtarg):
-        setattr(inst, virtarg.cliname, int(val) * 1024)
+        util.set_prop_path(inst, virtarg.cliname, int(val) * 1024)
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -1854,7 +1850,7 @@ class ParserVCPU(VirtCLIParser):
     def set_vcpus_cb(self, inst, val, virtarg):
         propname = (("maxvcpus" in self.optdict) and
                     "curvcpus" or "vcpus")
-        setattr(inst, propname, val)
+        util.set_prop_path(inst, propname, val)
 
     def set_cpuset_cb(self, inst, val, virtarg):
         if not val:
@@ -2067,7 +2063,7 @@ class ParserClock(VirtCLIParser):
             timerobj = inst.timers.add_new()
             timerobj.name = tname
 
-        setattr(timerobj, propname, val)
+        util.set_prop_path(timerobj, propname, val)
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -2770,7 +2766,7 @@ class ParserRNG(VirtCLIParser):
                 namemap["backend_connect_service"] = "connect_service"
 
         if virtarg.cliname in namemap:
-            setattr(inst, namemap[virtarg.cliname], val)
+            util.set_prop_path(inst, namemap[virtarg.cliname], val)
 
     def set_backend_cb(self, inst, val, virtarg):
         if virtarg.cliname == "backend_mode":
@@ -2840,7 +2836,7 @@ class ParserMemdev(VirtCLIParser):
     remove_first = "model"
 
     def set_target_size(self, inst, val, virtarg):
-        _set_attribute(inst, virtarg.propname, int(val) * 1024)
+        util.set_prop_path(inst, virtarg.propname, int(val) * 1024)
 
     @classmethod
     def _init_class(cls, **kwargs):
