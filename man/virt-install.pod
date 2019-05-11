@@ -497,10 +497,10 @@ Some examples:
 
 =over 4
 
-=item B<--boot cdrom,fd,hd,network,menu=on>
+=item B<--boot cdrom,fd,hd,network>
 
 Set the boot device priority as first cdrom, first floppy, first harddisk,
-network PXE boot. Additionally enable BIOS boot menu prompt.
+network PXE boot.
 
 =item B<--boot kernel=KERNEL,initrd=INITRD,kernel_args="console=/dev/ttyS0">
 
@@ -517,7 +517,7 @@ configurations like ARM or PPC
 
 Use BIOSPATH as the virtual machine BIOS.
 
-=item B<--boot menu=on,useserial=on>
+=item B<--boot bootmenu.enable=on,bios.useserial=on>
 
 Enable the bios boot menu, and enable sending bios text output over
 serial console.
@@ -535,7 +535,7 @@ correct UEFI parameters, libvirt needs to be advertising known UEFI binaries
 via domcapabilities XML, so this will likely only work if using properly
 configured distro packages.
 
-=item B<--boot loader=/.../OVMF_CODE.fd,loader_ro=yes,loader_type=pflash,nvram_template=/.../OVMF_VARS.fd,loader_secure=no>
+=item B<--boot loader=/.../OVMF_CODE.fd,loader.readonly=yes,loader.type=pflash,nvram.template=/.../OVMF_VARS.fd,loader_secure=no>
 
 Specify that the virtual machine use the custom OVMF binary as boot firmware,
 mapped as a virtual flash chip. In addition, request that libvirt instantiate

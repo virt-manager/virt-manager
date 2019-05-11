@@ -1970,8 +1970,44 @@ class ParserBoot(VirtCLIParser):
     cli_arg_name = "boot"
     guest_propname = "os"
     aliases = {
-        "kernel_args": "extra_args",
+        "bios.rebootTimeout": "rebootTimeout",
+        "bios.useserial": "useserial",
+        "bootmenu.enable": "menu",
+        "kernel_args": ["extra_args", "cmdline"],
+        "loader.readonly": "loader_ro",
+        "loader.type": "loader_type",
+        "loader.secure": "loader_secure",
+        "nvram.template": "nvram_template",
+        "smbios.mode": "smbios_mode",
     }
+
+    def _convert_boot_order(self, inst):
+        # Build boot order
+        boot_order = []
+        for cliname in list(self.optdict.keys()):
+            if cliname not in inst.BOOT_DEVICES:
+                continue
+
+            del(self.optdict[cliname])
+            if cliname not in boot_order:
+                boot_order.append(cliname)
+
+        if boot_order:
+            inst.bootorder = boot_order
+
+    def _parse(self, inst):
+        self._convert_boot_order(inst)
+
+        # Back compat to allow uefi to have no cli value specified
+        if "uefi" in self.optdict:
+            self.optdict["uefi"] = True
+
+        return super()._parse(inst)
+
+
+    ###################
+    # Option handling #
+    ###################
 
     def set_uefi_cb(self, inst, val, virtarg):
         self.guest.set_uefi_path(self.guest.get_uefi_path())
@@ -1992,26 +2028,6 @@ class ParserBoot(VirtCLIParser):
     def set_emulator_cb(self, inst, val, virtarg):
         self.guest.emulator = val
 
-    def _parse(self, inst):
-        # Build boot order
-        boot_order = []
-        for cliname in list(self.optdict.keys()):
-            if cliname not in inst.BOOT_DEVICES:
-                continue
-
-            del(self.optdict[cliname])
-            if cliname not in boot_order:
-                boot_order.append(cliname)
-
-        if boot_order:
-            inst.bootorder = boot_order
-
-        # Back compat to allow uefi to have no cli value specified
-        if "uefi" in self.optdict:
-            self.optdict["uefi"] = True
-
-        return super()._parse(inst)
-
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -2028,22 +2044,23 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("os_type", "os_type")
         cls.add_arg("machine", "machine")
 
-        cls.add_arg("useserial", "useserial", is_onoff=True)
-        cls.add_arg("menu", "enable_bootmenu", is_onoff=True)
-        cls.add_arg("rebootTimeout", "rebootTimeout")
         cls.add_arg("kernel", "kernel")
         cls.add_arg("initrd", "initrd")
         cls.add_arg("dtb", "dtb")
-        cls.add_arg("loader", "loader")
-        cls.add_arg("loader_ro", "loader_ro", is_onoff=True)
-        cls.add_arg("loader_type", "loader_type")
-        cls.add_arg("loader_secure", "loader_secure", is_onoff=True)
-        cls.add_arg("nvram", "nvram")
-        cls.add_arg("nvram_template", "nvram_template")
         cls.add_arg("kernel_args", "kernel_args", can_comma=True)
+
+        cls.add_arg("bootmenu.enable", "enable_bootmenu", is_onoff=True)
+        cls.add_arg("bios.useserial", "useserial", is_onoff=True)
+        cls.add_arg("bios.rebootTimeout", "rebootTimeout")
         cls.add_arg("init", "init")
         cls.add_arg("initargs", "initargs", cb=cls.set_initargs_cb)
-        cls.add_arg("smbios_mode", "smbios_mode")
+        cls.add_arg("loader", "loader")
+        cls.add_arg("loader.readonly", "loader_ro", is_onoff=True)
+        cls.add_arg("loader.type", "loader_type")
+        cls.add_arg("loader.secure", "loader_secure", is_onoff=True)
+        cls.add_arg("nvram", "nvram")
+        cls.add_arg("nvram.template", "nvram_template")
+        cls.add_arg("smbios.mode", "smbios_mode")
 
         # This is simply so the boot options are advertised with --boot help,
         # actual processing is handled by _parse
