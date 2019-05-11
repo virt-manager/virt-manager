@@ -242,7 +242,7 @@ def _import_file(conn, input_file):
         guest.vcpus = int(vcpus)
 
     if mem:
-        guest.memory = _convert_alloc_val(alloc_mem, mem) * 1024
+        guest.currentMemory = _convert_alloc_val(alloc_mem, mem) * 1024
 
     for dev in ifaces + disks:
         guest.add_device(dev)

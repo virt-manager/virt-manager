@@ -1645,17 +1645,17 @@ class ParserMemory(VirtCLIParser):
     remove_first = "memory"
 
     def set_memory_cb(self, inst, val, virtarg):
-        util.set_prop_path(inst, virtarg.cliname, int(val) * 1024)
+        util.set_prop_path(inst, virtarg.propname, int(val) * 1024)
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("memory", "memory", cb=cls.set_memory_cb)
-        cls.add_arg("maxmemory", "maxmemory", cb=cls.set_memory_cb)
+        cls.add_arg("memory", "currentMemory", cb=cls.set_memory_cb)
+        cls.add_arg("maxmemory", "memory", cb=cls.set_memory_cb)
         cls.add_arg("hugepages", "memoryBacking.hugepages", is_onoff=True)
-        cls.add_arg("hotplugmemorymax", "hotplugmemorymax",
+        cls.add_arg("hotplugmemorymax", "maxMemory",
                     cb=cls.set_memory_cb)
-        cls.add_arg("hotplugmemoryslots", "hotplugmemoryslots")
+        cls.add_arg("hotplugmemoryslots", "maxMemorySlots")
 
 
 #####################

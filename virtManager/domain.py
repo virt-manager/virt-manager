@@ -480,9 +480,9 @@ class vmmDomain(vmmLibvirtObject):
         guest = self._make_xmlobj_to_define()
 
         if memory != _SENTINEL:
-            guest.memory = int(memory)
+            guest.currentMemory = int(memory)
         if maxmem != _SENTINEL:
-            guest.maxmemory = int(maxmem)
+            guest.memory = int(maxmem)
         self._redefine_xmlobj(guest)
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
@@ -1194,9 +1194,9 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().description
 
     def get_memory(self):
-        return int(self.get_xmlobj().memory)
+        return int(self.get_xmlobj().currentMemory)
     def maximum_memory(self):
-        return int(self.get_xmlobj().maxmemory)
+        return int(self.get_xmlobj().memory)
 
     def vcpu_count(self):
         return int(self.get_xmlobj().curvcpus or self.get_xmlobj().vcpus)

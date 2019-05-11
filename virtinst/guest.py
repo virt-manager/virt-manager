@@ -145,7 +145,7 @@ class Guest(XMLBuilder):
     XML_NAME = "domain"
     _XML_PROP_ORDER = [
         "type", "name", "uuid", "title", "description", "_metadata",
-        "hotplugmemorymax", "hotplugmemoryslots", "maxmemory", "_memory",
+        "maxMemory", "maxMemorySlots", "memory", "_currentMemory",
         "blkiotune", "memtune", "memoryBacking",
         "_vcpus", "curvcpus", "vcpu_placement",
         "cpuset", "numatune", "resource", "sysinfo",
@@ -178,20 +178,20 @@ class Guest(XMLBuilder):
 
     name = XMLProperty("./name")
 
-    def _set_memory(self, val):
+    def _set_currentMemory(self, val):
         if val is not None:
             val = int(val)
-            if self.maxmemory is None or self.maxmemory < val:
-                self.maxmemory = val
-        self._memory = val
-    def _get_memory(self):
-        return self._memory
-    _memory = XMLProperty("./currentMemory", is_int=True)
-    memory = property(_get_memory, _set_memory)
+            if self.memory is None or self.memory < val:
+                self.memory = val
+        self._currentMemory = val
+    def _get_currentMemory(self):
+        return self._currentMemory
+    currentMemory = property(_get_currentMemory, _set_currentMemory)
 
-    maxmemory = XMLProperty("./memory", is_int=True)
-    hotplugmemorymax = XMLProperty("./maxMemory", is_int=True)
-    hotplugmemoryslots = XMLProperty("./maxMemory/@slots", is_int=True)
+    _currentMemory = XMLProperty("./currentMemory", is_int=True)
+    memory = XMLProperty("./memory", is_int=True)
+    maxMemory = XMLProperty("./maxMemory", is_int=True)
+    maxMemorySlots = XMLProperty("./maxMemory/@slots", is_int=True)
 
     def _set_vcpus(self, val):
         if val is not None:
@@ -658,8 +658,8 @@ class Guest(XMLBuilder):
     def _set_default_resources(self):
         res = self.osinfo.get_recommended_resources(self)
 
-        if not self.memory and res and res.get('ram') > 0:
-            self.memory = res['ram'] // 1024
+        if not self.currentMemory and res and res.get('ram') > 0:
+            self.currentMemory = res['ram'] // 1024
 
         if not self.vcpus:
             self.vcpus = res.get('n-cpus') if res and res.get('n-cpus') > 0 else 1

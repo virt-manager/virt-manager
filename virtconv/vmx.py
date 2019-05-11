@@ -290,7 +290,7 @@ class vmx_parser(parser_class):
         if vcpus:
             guest.vcpus = int(vcpus)
         if mem:
-            guest.memory = int(mem) * 1024
+            guest.currentMemory = int(mem) * 1024
 
         for dev in ifaces + disks:
             guest.add_device(dev)

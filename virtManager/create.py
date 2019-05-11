@@ -1716,8 +1716,8 @@ class vmmCreate(vmmGObjectUI):
 
         # Memory
         try:
+            self._guest.currentMemory = int(mem) * 1024
             self._guest.memory = int(mem) * 1024
-            self._guest.maxmemory = int(mem) * 1024
         except Exception as e:
             return self.err.val_err(_("Error setting guest memory."), e)
 

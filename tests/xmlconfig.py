@@ -19,8 +19,8 @@ def _make_guest(conn=None, os_variant=None):
 
     g = virtinst.Guest(conn)
     g.name = "TestGuest"
-    g.memory = int(200 * 1024)
-    g.maxmemory = int(400 * 1024)
+    g.currentMemory = int(200 * 1024)
+    g.memory = int(400 * 1024)
 
     if os_variant:
         g.set_os_name(os_variant)
