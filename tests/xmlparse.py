@@ -177,7 +177,7 @@ class XMLParseTest(unittest.TestCase):
         check("hyperv_spinlocks", True, True)
         check("hyperv_spinlocks_retries", 12287, 54321)
         check("vmport", False, True)
-        check("vmcoreinfo", False, True)
+        check("vmcoreinfo", None, True)
         check("kvm_hidden", None, True)
         check("pvspinlock", None, True)
         check("gic_version", None, False)
