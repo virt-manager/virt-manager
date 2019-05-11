@@ -209,18 +209,22 @@ class DomainCpu(XMLBuilder):
         no topology is set
         """
         self.set_topology_defaults()
-        if self.sockets:
+        if self.has_topology():
             return self.sockets * self.cores * self.threads
         return 1
+
+    def has_topology(self):
+        """
+        Return True if any topology info is set
+        """
+        return bool(self.sockets or self.cores or self.threads)
 
     def set_topology_defaults(self, vcpus=None):
         """
         Fill in unset topology values, using the passed vcpus count if
         required
         """
-        if (self.sockets is None and
-            self.cores is None and
-            self.threads is None):
+        if not self.has_topology():
             return
 
         if vcpus is None:

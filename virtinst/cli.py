@@ -1889,16 +1889,6 @@ class ParserVCPU(VirtCLIParser):
         # So instead use newer vcpu placement=
         inst.vcpu_placement = "auto"
 
-    def _parse(self, inst):
-        set_from_top = ("maxvcpus" not in self.optdict and
-                        "vcpus" not in self.optdict)
-
-        ret = super()._parse(inst)
-
-        if set_from_top:
-            inst.vcpus = inst.cpu.vcpus_from_topology()
-        return ret
-
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)

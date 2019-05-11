@@ -621,6 +621,8 @@ class Guest(XMLBuilder):
     def set_defaults(self, _guest):
         if not self.uuid:
             self.uuid = util.generate_uuid(self.conn)
+        if not self.vcpus and self.cpu.has_topology():
+            self.vcpus = self.cpu.vcpus_from_topology()
 
         self.set_capabilities_defaults()
 
