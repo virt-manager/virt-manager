@@ -829,7 +829,7 @@ def add_boot_options(insg):
     ParserIdmap.register()
     insg.add_argument("--idmap", action="append",
         help=_("Enable user namespace for LXC container. Ex:\n"
-               "--idmap uid_start=0,uid_target=1000,uid_count=10"))
+               "--idmap uid.start=0,uid.target=1000,uid.count=10"))
 
 
 def add_disk_option(stog, editexample=False):
@@ -2076,16 +2076,24 @@ class ParserBoot(VirtCLIParser):
 class ParserIdmap(VirtCLIParser):
     cli_arg_name = "idmap"
     guest_propname = "idmap"
+    aliases = {
+        "uid.start": "uid_start",
+        "uid.target": "uid_target",
+        "uid.count": "uid_count",
+        "gid.start": "gid_start",
+        "gid.target": "gid_target",
+        "gid.count": "gid_count",
+    }
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("uid_start", "uid_start")
-        cls.add_arg("uid_target", "uid_target")
-        cls.add_arg("uid_count", "uid_count")
-        cls.add_arg("gid_start", "gid_start")
-        cls.add_arg("gid_target", "gid_target")
-        cls.add_arg("gid_count", "gid_count")
+        cls.add_arg("uid.start", "uid_start")
+        cls.add_arg("uid.target", "uid_target")
+        cls.add_arg("uid.count", "uid_count")
+        cls.add_arg("gid.start", "gid_start")
+        cls.add_arg("gid.target", "gid_target")
+        cls.add_arg("gid.count", "gid_count")
 
 
 ######################
