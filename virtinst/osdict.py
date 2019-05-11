@@ -477,7 +477,6 @@ class _OsVariant(object):
             for r in _OsinfoIter(resources):
                 if r.get_architecture() == arch:
                     ret["ram"] = r.get_ram() * ram_scale
-                    ret["cpu"] = r.get_cpu()
                     ret["n-cpus"] = r.get_n_cpus() * n_cpus_scale
                     ret["storage"] = r.get_storage() * storage_scale
                     break
