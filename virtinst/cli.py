@@ -614,9 +614,7 @@ def add_memory_option(grp, backcompat=False):
     grp.add_argument("--memory", action="append",
         help=_("Configure guest memory allocation. Ex:\n"
                "--memory 1024 (in MiB)\n"
-               "--memory 512,maxmemory=1024\n"
-               "--memory 512,maxmemory=1024,hotplugmemorymax=2048,"
-               "hotplugmemoryslots=2"))
+               "--memory memory=1024,currentMemory=512\n"))
     if backcompat:
         grp.add_argument("-r", "--ram", type=int, dest="oldmemory",
             help=argparse.SUPPRESS)
@@ -1643,19 +1641,60 @@ class ParserNumatune(VirtCLIParser):
 class ParserMemory(VirtCLIParser):
     cli_arg_name = "memory"
     remove_first = "memory"
+    aliases = {
+        "maxMemory.slots": "hotplugmemoryslots",
+        "maxMemory": "hotplugmemorymax",
+    }
+
+    def _convert_old_memory_options(self):
+        """
+        Historically the cli had:
+            memory -> ./currentMemory
+            maxmemory -> ./memory
+        Then later libvirt gained ./maxMemory. So things are quite a mess.
+
+        Try to convert the back compat cases. Basically if new style option
+        currentMemory is specified, interpret currentMemory and memory as
+        the XML values. Otherwise treat memory and maxmemory as the old
+        swapped names.
+        """
+        havecur = "currentMemory" in self.optdict
+        havemax = "maxmemory" in self.optdict
+        havemem = "memory" in self.optdict
+        if havecur:
+            if havemax:
+                self.optdict["memory"] = self.optdict.pop("maxmemory", None)
+        elif havemax:
+            if havemem:
+                self.optdict["currentMemory"] = self.optdict.pop("memory")
+            self.optdict["memory"] = self.optdict.pop("maxmemory")
+        elif havemem:
+            self.optdict["currentMemory"] = self.optdict.pop("memory")
+
+    def _parse(self, inst):
+        self._convert_old_memory_options()
+        return super()._parse(inst)
+
+
+    ###################
+    # Option handling #
+    ###################
 
     def set_memory_cb(self, inst, val, virtarg):
         util.set_prop_path(inst, virtarg.propname, int(val) * 1024)
 
     @classmethod
     def _init_class(cls, **kwargs):
-        VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("memory", "currentMemory", cb=cls.set_memory_cb)
-        cls.add_arg("maxmemory", "memory", cb=cls.set_memory_cb)
+        cls.add_arg("memory", "memory", cb=cls.set_memory_cb)
+        cls.add_arg("currentMemory", "currentMemory", cb=cls.set_memory_cb)
+        cls.add_arg("maxMemory", "maxMemory", cb=cls.set_memory_cb)
+        cls.add_arg("maxMemory.slots", "maxMemorySlots")
+
+        # This is converted into either memory or currentMemory
+        cls.add_arg("maxmemory", None, lookup_cb=None, cb=cls.noset_cb)
+
+        # New memoryBacking properties should be added to the --memorybacking
         cls.add_arg("hugepages", "memoryBacking.hugepages", is_onoff=True)
-        cls.add_arg("hotplugmemorymax", "maxMemory",
-                    cb=cls.set_memory_cb)
-        cls.add_arg("hotplugmemoryslots", "maxMemorySlots")
 
 
 #####################

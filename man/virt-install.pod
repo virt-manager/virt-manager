@@ -95,10 +95,11 @@ running C<virt-install>.
 =item B<--memory> OPTIONS
 
 Memory to allocate for the guest, in MiB. This deprecates the -r/--ram option.
-Sub options are available, like 'maxmemory', 'hugepages', 'hotplugmemorymax'
-and 'hotplugmemoryslots'.  The memory parameter is mapped to <currentMemory> element,
-the 'maxmemory' sub-option is mapped to <memory> element and 'hotplugmemorymax'
-and 'hotplugmemoryslots' are mapped to <maxMemory> element.
+Sub options are available, like 'memory', 'currentMemory', 'maxMemory'
+and 'maxMemory.slots', which all map to the identically named XML values.
+
+Back compat values 'memory' maps to the <currentMemory> element, and maxmemory
+maps to the <memory> element.
 
 To configure memory modules which can be hotunplugged see B<--memdev> description.
 
