@@ -476,9 +476,17 @@ class _OsVariant(object):
             storage_scale = minimum and 2 or 1
             for r in _OsinfoIter(resources):
                 if r.get_architecture() == arch:
-                    ret["ram"] = r.get_ram() * ram_scale
-                    ret["n-cpus"] = r.get_n_cpus() * n_cpus_scale
-                    ret["storage"] = r.get_storage() * storage_scale
+                    ram = r.get_ram()
+                    if ram > 0:
+                        ret["ram"] = ram * ram_scale
+
+                    ncpus = r.get_n_cpus()
+                    if ncpus > 0:
+                        ret["n-cpus"] = r.get_n_cpus() * n_cpus_scale
+
+                    storage = r.get_storage()
+                    if storage > 0:
+                        ret["storage"] = storage * storage_scale
                     break
 
         # libosinfo may miss the recommended resources block for some OS,
