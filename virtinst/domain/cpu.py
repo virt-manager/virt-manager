@@ -170,7 +170,7 @@ class DomainCpu(XMLBuilder):
     features = XMLChildProperty(_CPUFeature)
 
     cells = XMLChildProperty(_CPUCell, relative_xpath="./numa")
-    cache = XMLChildProperty(_CPUCache)
+    cache = XMLChildProperty(_CPUCache, is_single=True)
 
     def copy_host_cpu(self, guest):
         """

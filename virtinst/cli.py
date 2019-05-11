@@ -1765,18 +1765,6 @@ class ParserCPU(VirtCLIParser):
             else:
                 inst.add_feature(feature_name, policy)
 
-    def set_l3_cache_cb(self, inst, val, virtarg, can_edit):
-        cpu = inst
-
-        if can_edit and not cpu.cache:
-            cpu.cache.add_new()
-        try:
-            return cpu.cache[0]
-        except IndexError:
-            if not can_edit:
-                return None
-            raise
-
     def _parse(self, inst):
         # For old CLI compat, --cpu force=foo,force=bar should force
         # enable 'foo' and 'bar' features, but that doesn't fit with the
@@ -1812,6 +1800,8 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("match", "match")
         cls.add_arg("vendor", "vendor")
         cls.add_arg("secure", "secure", is_onoff=True)
+        cls.add_arg("cache.mode", "cache.mode")
+        cls.add_arg("cache.level", "cache.level")
 
         # These are handled specially in _parse
         cls.add_arg("force", None, lookup_cb=None, cb=cls.set_feature_cb)
@@ -1831,10 +1821,6 @@ class ParserCPU(VirtCLIParser):
                     find_inst_cb=cls.sibling_find_inst_cb)
         cls.add_arg("cell[0-9]*.distances.sibling[0-9]*.value", "value",
                     find_inst_cb=cls.sibling_find_inst_cb)
-
-        # Options for CPU.cache
-        cls.add_arg("cache.mode", "mode", find_inst_cb=cls.set_l3_cache_cb)
-        cls.add_arg("cache.level", "level", find_inst_cb=cls.set_l3_cache_cb)
 
 
 #####################
