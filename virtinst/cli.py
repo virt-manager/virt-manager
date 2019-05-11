@@ -1873,14 +1873,14 @@ class ParserVCPU(VirtCLIParser):
 
     def set_vcpus_cb(self, inst, val, virtarg):
         propname = (("maxvcpus" in self.optdict) and
-                    "curvcpus" or "vcpus")
+                    "vcpu_current" or "vcpus")
         util.set_prop_path(inst, propname, val)
 
     def set_cpuset_cb(self, inst, val, virtarg):
         if not val:
             return
         if val != "auto":
-            inst.cpuset = val
+            inst.vcpu_cpuset = val
             return
 
         # Previously we did our own one-time cpuset placement
@@ -1896,10 +1896,11 @@ class ParserVCPU(VirtCLIParser):
         cls.add_arg("cores", "cpu.cores")
         cls.add_arg("threads", "cpu.threads")
 
-        cls.add_arg("vcpus", "curvcpus", cb=cls.set_vcpus_cb)
+        cls.add_arg("vcpus", "vcpu_current", cb=cls.set_vcpus_cb)
         cls.add_arg("maxvcpus", "vcpus")
 
-        cls.add_arg("cpuset", "cpuset", can_comma=True, cb=cls.set_cpuset_cb)
+        cls.add_arg("cpuset", "vcpu_cpuset",
+                can_comma=True, cb=cls.set_cpuset_cb)
         cls.add_arg("placement", "vcpu_placement")
 
 

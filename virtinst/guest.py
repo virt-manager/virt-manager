@@ -147,8 +147,8 @@ class Guest(XMLBuilder):
         "type", "name", "uuid", "title", "description", "_metadata",
         "maxMemory", "maxMemorySlots", "memory", "_currentMemory",
         "blkiotune", "memtune", "memoryBacking",
-        "_vcpus", "curvcpus", "vcpu_placement",
-        "cpuset", "numatune", "resource", "sysinfo",
+        "_vcpus", "vcpu_current", "vcpu_placement",
+        "vcpu_cpuset", "numatune", "resource", "sysinfo",
         "bootloader", "os", "idmap", "features", "cpu", "clock",
         "on_poweroff", "on_reboot", "on_crash",
         "pm", "emulator", "devices", "seclabels"]
@@ -197,17 +197,17 @@ class Guest(XMLBuilder):
         if val is not None:
             val = int(val)
             # Don't force set curvcpus unless already specified
-            if self.curvcpus is not None and self.curvcpus > val:
-                self.curvcpus = val
+            if self.vcpu_current is not None and self.vcpu_current > val:
+                self.vcpu_current = val
         self._vcpus = val
     def _get_vcpus(self):
         return self._vcpus
     _vcpus = XMLProperty("./vcpu", is_int=True)
     vcpus = property(_get_vcpus, _set_vcpus)
 
-    curvcpus = XMLProperty("./vcpu/@current", is_int=True)
+    vcpu_current = XMLProperty("./vcpu/@current", is_int=True)
     vcpu_placement = XMLProperty("./vcpu/@placement")
-    cpuset = XMLProperty("./vcpu/@cpuset")
+    vcpu_cpuset = XMLProperty("./vcpu/@cpuset")
 
     uuid = XMLProperty("./uuid")
     id = XMLProperty("./@id", is_int=True)

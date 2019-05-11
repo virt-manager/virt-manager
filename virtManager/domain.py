@@ -459,7 +459,7 @@ class vmmDomain(vmmLibvirtObject):
         guest = self._make_xmlobj_to_define()
 
         if vcpus != _SENTINEL:
-            guest.curvcpus = int(vcpus)
+            guest.vcpu_current = int(vcpus)
         if maxvcpus != _SENTINEL:
             guest.vcpus = int(maxvcpus)
 
@@ -1199,7 +1199,7 @@ class vmmDomain(vmmLibvirtObject):
         return int(self.get_xmlobj().memory)
 
     def vcpu_count(self):
-        return int(self.get_xmlobj().curvcpus or self.get_xmlobj().vcpus)
+        return int(self.get_xmlobj().vcpu_current or self.get_xmlobj().vcpus)
     def vcpu_max_count(self):
         return int(self.get_xmlobj().vcpus)
 
