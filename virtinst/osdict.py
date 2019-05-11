@@ -498,10 +498,6 @@ class _OsVariant(object):
         read_resource(self._os.get_recommended_resources(),
             False, guest.os.arch)
 
-        # QEMU TCG doesn't gain anything by having extra VCPUs
-        if guest.type == "qemu":
-            ret["n-cpus"] = 1
-
         return ret
 
     def get_network_install_resources(self, guest):

@@ -32,10 +32,6 @@ class TestOSDB(unittest.TestCase):
         res = OSDB.lookup_os("fedora21").get_recommended_resources(guest)
         assert res["n-cpus"] == 2
 
-        guest.type = "qemu"
-        res = OSDB.lookup_os("fedora21").get_recommended_resources(guest)
-        assert res["n-cpus"] == 1
-
     def test_urldetct_matching_distros(self):
         allstores = urldetect.ALLSTORES
 
