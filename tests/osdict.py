@@ -27,10 +27,11 @@ class TestOSDB(unittest.TestCase):
     def test_recommended_resources(self):
         conn = utils.URIs.open_testdefault_cached()
         guest = Guest(conn)
-        assert not OSDB.lookup_os("generic").get_recommended_resources(guest)
+        res = OSDB.lookup_os("generic").get_recommended_resources()
+        self.assertEqual(res.get_recommended_ram(guest.os.arch), None)
 
-        res = OSDB.lookup_os("fedora21").get_recommended_resources(guest)
-        assert res["n-cpus"] == 2
+        res = OSDB.lookup_os("fedora21").get_recommended_resources()
+        self.assertEqual(res.get_recommended_ncpus(guest.os.arch), 2)
 
     def test_urldetct_matching_distros(self):
         allstores = urldetect.ALLSTORES

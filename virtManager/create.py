@@ -1674,23 +1674,24 @@ class vmmCreate(vmmGObjectUI):
             self._addstorage.check_path_search(
                 self, self.conn, path)
 
-        res = self._guest.osinfo.get_recommended_resources(self._guest)
-        logging.debug("Recommended resources for os=%s: %s",
-            self._guest.osinfo.name, res)
+        res = self._guest.osinfo.get_recommended_resources()
+        ram = res.get_recommended_ram(self._guest.os.arch)
+        n_cpus = res.get_recommended_ncpus(self._guest.os.arch)
+        storage = res.get_recommended_storage(self._guest.os.arch)
+        logging.debug("Recommended resources for os=%s: "
+            "ram=%s ncpus=%s storage=%s",
+            self._guest.osinfo.name, ram, n_cpus, storage)
 
         # Change the default values suggested to the user.
         ram_size = DEFAULT_MEM
-        if res and res.get("ram") > 0:
-            ram_size = res["ram"] // (1024 ** 2)
+        if ram:
+            ram_size = ram // (1024 ** 2)
         self.widget("mem").set_value(ram_size)
 
-        n_cpus = 1
-        if res and res.get("n-cpus") > 0:
-            n_cpus = res["n-cpus"]
-        self.widget("cpus").set_value(n_cpus)
+        self.widget("cpus").set_value(n_cpus or 1)
 
-        if res and res.get("storage"):
-            storage_size = int(res["storage"]) // (1024 ** 3)
+        if storage:
+            storage_size = storage // (1024 ** 3)
             self._addstorage.widget("storage-size").set_value(storage_size)
 
         # Stash the installer in the _guest instance so we don't need

@@ -526,12 +526,15 @@ def set_resources_from_osinfo(options, guest):
     if options.disk:
         return
 
-    res = guest.osinfo.get_recommended_resources(guest)
-    if res and res.get('storage') > 0:
-        diskstr = 'size=%d' % (res.get('storage') // (1024 ** 3))
-        logging.debug("Generated default libosinfo '--disk %s'", diskstr)
-        options.disk = [diskstr]
-        cli.ParserDisk(diskstr, guest=guest).parse(None)
+    res = guest.osinfo.get_recommended_resources()
+    storage = res.get_recommended_storage(guest.os.arch)
+    if not storage:
+        return
+
+    diskstr = 'size=%d' % (storage // (1024 ** 3))
+    logging.debug("Generated default libosinfo '--disk %s'", diskstr)
+    options.disk = [diskstr]
+    cli.ParserDisk(diskstr, guest=guest).parse(None)
 
 
 def build_guest_instance(conn, options):

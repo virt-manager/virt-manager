@@ -656,13 +656,16 @@ class Guest(XMLBuilder):
     ########################
 
     def _set_default_resources(self):
-        res = self.osinfo.get_recommended_resources(self)
+        res = self.osinfo.get_recommended_resources()
 
-        if not self.currentMemory and res and res.get('ram') > 0:
-            self.currentMemory = res['ram'] // 1024
+        if not self.currentMemory:
+            ram = res.get_recommended_ram(self.os.arch)
+            if ram:
+                self.currentMemory = ram // 1024
 
         if not self.vcpus:
-            self.vcpus = res.get('n-cpus') if res and res.get('n-cpus') > 0 else 1
+            ncpus = res.get_recommended_ncpus(self.os.arch)
+            self.vcpus = ncpus or 1
 
 
     def _set_default_machine(self):

@@ -515,16 +515,10 @@ class _OsVariant(object):
         devids = ["http://qemu.org/chipset/x86/q35"]
         return bool(self._device_filter(devids=devids))
 
-    def get_recommended_resources(self, guest):
+    def get_recommended_resources(self):
         minimum = self._os and self._os.get_minimum_resources() or None
         recommended = self._os and self._os.get_recommended_resources() or None
-        osresources = _OsResources(minimum, recommended)
-
-        ret = {}
-        ret["ram"] = osresources.get_recommended_ram(guest.os.arch)
-        ret["n-cpus"] = osresources.get_recommended_ncpus(guest.os.arch)
-        ret["storage"] = osresources.get_recommended_storage(guest.os.arch)
-        return {k: v for k, v in ret.items() if v}
+        return _OsResources(minimum, recommended)
 
     def get_network_install_resources(self, guest):
         ret = {}
