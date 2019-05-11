@@ -1926,12 +1926,42 @@ class ParserCputune(VirtCLIParser):
 
 class ParserVCPU(VirtCLIParser):
     cli_arg_name = "vcpus"
-    remove_first = "vcpus"
+    remove_first = "vcpu"
+    aliases = {
+        "vcpu.placement": "placement",
+    }
 
-    def set_vcpus_cb(self, inst, val, virtarg):
-        propname = (("maxvcpus" in self.optdict) and
-                    "vcpu_current" or "vcpus")
-        util.set_prop_path(inst, propname, val)
+    def _convert_old_vcpu_opts(self):
+        havemax = "maxvcpus" in self.optdict
+        havecur = "vcpu.current" in self.optdict
+        havevcp = "vcpu" in self.optdict
+
+        if havecur:
+            if havemax:
+                self.optdict["vcpu"] = self.optdict.pop("maxvcpus")
+        elif havemax:
+            if havevcp:
+                self.optdict["vcpu.current"] = self.optdict.pop("vcpu")
+            self.optdict["vcpu"] = self.optdict.pop("maxvcpus")
+
+    def _add_advertised_aliases(self):
+        # These are essentially aliases for new style options, but we still
+        # want to advertise them in --vcpus=help output because they are
+        # historically commonly used. This should rarely, if ever, be extended
+        if "cpuset" in self.optdict:
+            self.optdict["vcpu.cpuset"] = self.optdict.pop("cpuset")
+        if "vcpus" in self.optdict:
+            self.optdict["vcpu"] = self.optdict.pop("vcpus")
+
+    def _parse(self, inst):
+        self._add_advertised_aliases()
+        self._convert_old_vcpu_opts()
+        return super()._parse(inst)
+
+
+    ###################
+    # Option handling #
+    ###################
 
     def set_cpuset_cb(self, inst, val, virtarg):
         if not val:
@@ -1949,16 +1979,24 @@ class ParserVCPU(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
+        # This is converted into either vcpu.current or vcpu
+        cls.add_arg("maxvcpus", "vcpus", lookup_cb=None, cb=cls.noset_cb)
+        # These are handled in _add_advertised_aliases
+        cls.add_arg("cpuset", "vcpu_cpuset", can_comma=True,
+                lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("vcpus", "vcpus", lookup_cb=None, cb=cls.noset_cb)
+
+        # Further CPU options should be added to --cpu
         cls.add_arg("sockets", "cpu.sockets")
         cls.add_arg("cores", "cpu.cores")
         cls.add_arg("threads", "cpu.threads")
 
-        cls.add_arg("vcpus", "vcpu_current", cb=cls.set_vcpus_cb)
-        cls.add_arg("maxvcpus", "vcpus")
-
-        cls.add_arg("cpuset", "vcpu_cpuset",
+        # <domain><vcpu> options
+        cls.add_arg("vcpu", "vcpus")
+        cls.add_arg("vcpu.current", "vcpu_current")
+        cls.add_arg("vcpu.cpuset", "vcpu_cpuset",
                 can_comma=True, cb=cls.set_cpuset_cb)
-        cls.add_arg("placement", "vcpu_placement")
+        cls.add_arg("vcpu.placement", "vcpu_placement")
 
 
 ##################
