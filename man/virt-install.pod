@@ -247,7 +247,7 @@ may cause issues if migrating the guest to a host without an identical CPU.
 Expose the nearest host CPU model configuration to the guest.
 It is the best CPU which can be used for a guest on any of the hosts.
 
-=item B<--cpu cell0.memory=1234,cell0.cpus=0-3,cell1.memory=5678,cell1.cpus=4-7>
+=item B<--cpu numa.cell0.memory=1234,numa.cell0.cpus=0-3,numa.cell1.memory=5678,numa.cell1.cpus=4-7>
 
 Example of specifying two NUMA cells. This will generate XML like:
 

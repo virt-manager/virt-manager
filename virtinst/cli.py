@@ -1778,6 +1778,50 @@ class ParserCPU(VirtCLIParser):
     guest_propname = "cpu"
     remove_first = "model"
     stub_none = False
+    aliases = {
+        "numa.cell[0-9]*.distances.sibling[0-9]*.id":
+            "cell[0-9]*.distances.sibling[0-9]*.id",
+        "numa.cell[0-9]*.distances.sibling[0-9]*.value":
+            "cell[0-9]*.distances.sibling[0-9]*.value",
+        "numa.cell[0-9]*.id": "cell[0-9]*.id",
+        "numa.cell[0-9]*.cpus": "cell[0-9]*.cpus",
+        "numa.cell[0-9]*.memory": "cell[0-9]*.memory",
+    }
+
+    def _convert_old_feature_options(self):
+        # For old CLI compat, --cpu force=foo,force=bar should force
+        # enable 'foo' and 'bar' features, but that doesn't fit with the
+        # CLI parser infrastructure very well.
+        converted = collections.defaultdict(list)
+        for key, value in parse_optstr_tuples(self.optstr):
+            if key in ["force", "require", "optional", "disable", "forbid"]:
+                converted[key].append(value)
+
+        # Convert +feature, -feature into expected format
+        for key, value in list(self.optdict.items()):
+            policy = None
+            if value or len(key) == 1:
+                continue
+
+            if key.startswith("+"):
+                policy = "force"
+            elif key.startswith("-"):
+                policy = "disable"
+
+            if policy:
+                del(self.optdict[key])
+                converted[policy].append(key[1:])
+
+        self.optdict.update(converted)
+
+    def _parse(self, inst):
+        self._convert_old_feature_options()
+        return super()._parse(inst)
+
+
+    ###################
+    # Option handling #
+    ###################
 
     def cell_find_inst_cb(self, *args, **kwargs):
         cliarg = "cell"  # cell[0-9]*
@@ -1820,33 +1864,6 @@ class ParserCPU(VirtCLIParser):
             else:
                 inst.add_feature(feature_name, policy)
 
-    def _parse(self, inst):
-        # For old CLI compat, --cpu force=foo,force=bar should force
-        # enable 'foo' and 'bar' features, but that doesn't fit with the
-        # CLI parser infrastructure very well.
-        converted = collections.defaultdict(list)
-        for key, value in parse_optstr_tuples(self.optstr):
-            if key in ["force", "require", "optional", "disable", "forbid"]:
-                converted[key].append(value)
-
-        # Convert +feature, -feature into expected format
-        for key, value in list(self.optdict.items()):
-            policy = None
-            if value or len(key) == 1:
-                continue
-
-            if key.startswith("+"):
-                policy = "force"
-            elif key.startswith("-"):
-                policy = "disable"
-
-            if policy:
-                del(self.optdict[key])
-                converted[policy].append(key[1:])
-
-        self.optdict.update(converted)
-        return super()._parse(inst)
-
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -1866,15 +1883,15 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("forbid", None, lookup_cb=None, cb=cls.set_feature_cb)
 
         # Options for CPU.cells config
-        cls.add_arg("cell[0-9]*.id", "id",
+        cls.add_arg("numa.cell[0-9]*.id", "id",
                     find_inst_cb=cls.cell_find_inst_cb)
-        cls.add_arg("cell[0-9]*.cpus", "cpus", can_comma=True,
+        cls.add_arg("numa.cell[0-9]*.cpus", "cpus", can_comma=True,
                     find_inst_cb=cls.cell_find_inst_cb)
-        cls.add_arg("cell[0-9]*.memory", "memory",
+        cls.add_arg("numa.cell[0-9]*.memory", "memory",
                     find_inst_cb=cls.cell_find_inst_cb)
-        cls.add_arg("cell[0-9]*.distances.sibling[0-9]*.id", "id",
+        cls.add_arg("numa.cell[0-9]*.distances.sibling[0-9]*.id", "id",
                     find_inst_cb=cls.sibling_find_inst_cb)
-        cls.add_arg("cell[0-9]*.distances.sibling[0-9]*.value", "value",
+        cls.add_arg("numa.cell[0-9]*.distances.sibling[0-9]*.value", "value",
                     find_inst_cb=cls.sibling_find_inst_cb)
 
 
