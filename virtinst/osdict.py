@@ -93,7 +93,9 @@ class _OsinfoIter:
     def __init__(self, listobj):
         self.current = 0
         self.listobj = listobj
-        self.high = self.listobj.get_length() - 1
+        self.high = -1
+        if self.listobj:
+            self.high = self.listobj.get_length() - 1
 
     def __iter__(self):
         return self
@@ -256,6 +258,56 @@ class _OSDB(object):
 
 
 OSDB = _OSDB()
+
+
+#####################
+# OsResources class #
+#####################
+
+class _OsResources:
+    def __init__(self, minimum, recommended):
+        self._minimum = self._convert_to_dict(minimum)
+        self._recommended = self._convert_to_dict(recommended)
+
+    def _convert_to_dict(self, resources):
+        """
+        Convert an OsResources object to a dictionary for easier
+        lookups. Layout is: {arch: {strkey: value}}
+        """
+        ret = {}
+        for r in _OsinfoIter(resources):
+            vals = {}
+            vals["ram"] = r.get_ram()
+            vals["n-cpus"] = r.get_n_cpus()
+            vals["storage"] = r.get_storage()
+            ret[r.get_architecture()] = vals
+        return ret
+
+    def _get_key(self, resources, key, arch):
+        for checkarch in [arch, "all"]:
+            if checkarch in resources and key in resources[checkarch]:
+                return resources[checkarch][key]
+
+    def _get_recommended_key(self, key, arch):
+        val = self._get_key(self._recommended, key, arch)
+        if val and val > 0:
+            return val
+        # If we are looking for a recommended value, but the OS
+        # DB only has minimum resources tracked, double the minimum
+        # value as an approximation at a 'recommended' value
+        val = self._get_key(self._minimum, key, arch)
+        if val and val > 0:
+            return val * 2
+        return None
+
+    def get_recommended_ram(self, arch):
+        return self._get_recommended_key("ram", arch)
+
+    def get_recommended_ncpus(self, arch):
+        return self._get_recommended_key("n-cpus", arch)
+
+    def get_recommended_storage(self, arch):
+        return self._get_recommended_key("storage", arch)
 
 
 #####################
@@ -464,41 +516,15 @@ class _OsVariant(object):
         return bool(self._device_filter(devids=devids))
 
     def get_recommended_resources(self, guest):
+        minimum = self._os and self._os.get_minimum_resources() or None
+        recommended = self._os and self._os.get_recommended_resources() or None
+        osresources = _OsResources(minimum, recommended)
+
         ret = {}
-        if not self._os:
-            return ret
-
-        def read_resource(resources, minimum, arch):
-            # If we are reading the "minimum" block, allocate more
-            # resources.
-            ram_scale = minimum and 2 or 1
-            n_cpus_scale = minimum and 2 or 1
-            storage_scale = minimum and 2 or 1
-            for r in _OsinfoIter(resources):
-                if r.get_architecture() == arch:
-                    ram = r.get_ram()
-                    if ram > 0:
-                        ret["ram"] = ram * ram_scale
-
-                    ncpus = r.get_n_cpus()
-                    if ncpus > 0:
-                        ret["n-cpus"] = r.get_n_cpus() * n_cpus_scale
-
-                    storage = r.get_storage()
-                    if storage > 0:
-                        ret["storage"] = storage * storage_scale
-                    break
-
-        # libosinfo may miss the recommended resources block for some OS,
-        # in this case read first the minimum resources (if present)
-        # and use them.
-        read_resource(self._os.get_minimum_resources(), True, "all")
-        read_resource(self._os.get_minimum_resources(), True, guest.os.arch)
-        read_resource(self._os.get_recommended_resources(), False, "all")
-        read_resource(self._os.get_recommended_resources(),
-            False, guest.os.arch)
-
-        return ret
+        ret["ram"] = osresources.get_recommended_ram(guest.os.arch)
+        ret["n-cpus"] = osresources.get_recommended_ncpus(guest.os.arch)
+        ret["storage"] = osresources.get_recommended_storage(guest.os.arch)
+        return {k: v for k, v in ret.items() if v}
 
     def get_network_install_resources(self, guest):
         ret = {}
