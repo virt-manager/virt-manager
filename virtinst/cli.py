@@ -1626,12 +1626,16 @@ class ParserNumatune(VirtCLIParser):
     cli_arg_name = "numatune"
     guest_propname = "numatune"
     remove_first = "nodeset"
+    aliases = {
+        "memory.mode": "mode",
+        "memory.nodeset": "nodeset",
+    }
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("nodeset", "memory_nodeset", can_comma=True)
-        cls.add_arg("mode", "memory_mode")
+        cls.add_arg("memory.nodeset", "memory_nodeset", can_comma=True)
+        cls.add_arg("memory.mode", "memory_mode")
 
 
 ####################
