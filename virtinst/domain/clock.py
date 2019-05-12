@@ -18,11 +18,9 @@ class _ClockTimer(XMLBuilder):
 class DomainClock(XMLBuilder):
     XML_NAME = "clock"
 
-    TIMER_NAMES = ["platform", "pit", "rtc", "hpet", "tsc", "kvmclock",
-        "hypervclock"]
-
     offset = XMLProperty("./@offset")
     timers = XMLChildProperty(_ClockTimer)
+
 
     ##################
     # Default config #

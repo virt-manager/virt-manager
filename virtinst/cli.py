@@ -25,7 +25,7 @@ from virtcli import CLIConfig
 from . import util
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
-from .domain import DomainClock, DomainOs
+from .domain import DomainOs
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
 from .unattended import UnattendedData
@@ -2229,14 +2229,40 @@ class ParserClock(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("offset", "offset")
 
-        for _tname in DomainClock.TIMER_NAMES:
-            cls.add_arg(_tname + "_present", None, lookup_cb=None,
-                    is_onoff=True,
+        # Timer convenience helpers
+        cls.add_arg("platform_tickpolicy", None, lookup_cb=None,
                     cb=cls.set_timer)
-            cls.add_arg(_tname + "_tickpolicy", None, lookup_cb=None,
+        cls.add_arg("pit_tickpolicy", None, lookup_cb=None,
                     cb=cls.set_timer)
+        cls.add_arg("rtc_tickpolicy", None, lookup_cb=None,
+                    cb=cls.set_timer)
+        cls.add_arg("hpet_tickpolicy", None, lookup_cb=None,
+                    cb=cls.set_timer)
+        cls.add_arg("tsc_tickpolicy", None, lookup_cb=None,
+                    cb=cls.set_timer)
+        cls.add_arg("kvmclock_tickpolicy", None, lookup_cb=None,
+                    cb=cls.set_timer)
+        cls.add_arg("hypervclock_tickpolicy", None, lookup_cb=None,
+                    cb=cls.set_timer)
+
+        cls.add_arg("platform_present", None, lookup_cb=None, is_onoff=True,
+                    cb=cls.set_timer)
+        cls.add_arg("pit_present", None, lookup_cb=None, is_onoff=True,
+                    cb=cls.set_timer)
+        cls.add_arg("rtc_present", None, lookup_cb=None, is_onoff=True,
+                    cb=cls.set_timer)
+        cls.add_arg("hpet_present", None, lookup_cb=None, is_onoff=True,
+                    cb=cls.set_timer)
+        cls.add_arg("tsc_present", None, lookup_cb=None, is_onoff=True,
+                    cb=cls.set_timer)
+        cls.add_arg("kvmclock_present", None, lookup_cb=None, is_onoff=True,
+                    cb=cls.set_timer)
+        cls.add_arg("hypervclock_present", None, lookup_cb=None, is_onoff=True,
+                    cb=cls.set_timer)
+
+        # Standard XML options
+        cls.add_arg("offset", "offset")
 
 
 ################
