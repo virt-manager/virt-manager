@@ -774,7 +774,7 @@ Which will work for recent QEMU and linux guest OS or LXC containers. For
 QEMU, the target point is just a mounting hint in sysfs, so will not be
 automatically mounted.
 
-The following explicit options can be specified:
+Some example suboptions:
 
 =over 4
 
@@ -783,7 +783,7 @@ The following explicit options can be specified:
 The type or the source directory. Valid values are 'mount' (the default) or
 'template' for OpenVZ templates.
 
-=item B<mode>
+=item B<accessmode> or B<mode>
 
 The access mode for the source directory from the guest OS. Only used with
 QEMU and type=mount. Valid modes are 'passthrough' (the default), 'mapped',
