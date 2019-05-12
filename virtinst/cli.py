@@ -2211,6 +2211,24 @@ class ParserClock(VirtCLIParser):
     cli_arg_name = "clock"
     guest_propname = "clock"
 
+    def _remove_old_options(self):
+        # These _tickpolicy options have never had any effect in libvirt,
+        # even though they aren't explicitly rejected. Make them no-ops
+        self.optdict.pop("platform_tickpolicy", None)
+        self.optdict.pop("hpet_tickpolicy", None)
+        self.optdict.pop("tsc_tickpolicy", None)
+        self.optdict.pop("kvmclock_tickpolicy", None)
+        self.optdict.pop("hypervclock_tickpolicy", None)
+
+    def _parse(self, inst):
+        self._remove_old_options()
+        return super()._parse(inst)
+
+
+    ###################
+    # Option handling #
+    ###################
+
     def set_timer(self, inst, val, virtarg):
         tname, propname = virtarg.cliname.split("_")
 
@@ -2231,21 +2249,10 @@ class ParserClock(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
 
         # Timer convenience helpers
-        cls.add_arg("platform_tickpolicy", None, lookup_cb=None,
-                    cb=cls.set_timer)
         cls.add_arg("pit_tickpolicy", None, lookup_cb=None,
                     cb=cls.set_timer)
         cls.add_arg("rtc_tickpolicy", None, lookup_cb=None,
                     cb=cls.set_timer)
-        cls.add_arg("hpet_tickpolicy", None, lookup_cb=None,
-                    cb=cls.set_timer)
-        cls.add_arg("tsc_tickpolicy", None, lookup_cb=None,
-                    cb=cls.set_timer)
-        cls.add_arg("kvmclock_tickpolicy", None, lookup_cb=None,
-                    cb=cls.set_timer)
-        cls.add_arg("hypervclock_tickpolicy", None, lookup_cb=None,
-                    cb=cls.set_timer)
-
         cls.add_arg("platform_present", None, lookup_cb=None, is_onoff=True,
                     cb=cls.set_timer)
         cls.add_arg("pit_present", None, lookup_cb=None, is_onoff=True,

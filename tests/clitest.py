@@ -955,7 +955,7 @@ c.add_compare("--idmap uid_start=0,uid_target=2000,uid_count=30,gid_start=0,gid_
 c.add_compare("--boot loader=foo.bar,useserial=on,init=/bin/bash", "edit-simple-boot")
 c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "edit-simple-security")
 c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "edit-simple-features")
-c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,rtc_tickpolicy=merge", "edit-simple-clock")
+c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,kvmclock_tickpolicy=foo,rtc_tickpolicy=merge", "edit-simple-clock")
 c.add_compare("--pm suspend_to_mem=yes,suspend_to_disk=no", "edit-simple-pm")
 c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "edit-simple-disk")
 c.add_compare("--disk path=", "edit-simple-disk-remove-path")
