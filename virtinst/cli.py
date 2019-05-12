@@ -2244,11 +2244,19 @@ class ParserClock(VirtCLIParser):
 
         util.set_prop_path(timerobj, propname, val)
 
+    def timer_find_inst_cb(self, *args, **kwargs):
+        cliarg = "timer"  # timer[0-9]*
+        list_propname = "timers"  # clock.timers
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
 
-        # Timer convenience helpers
+        # Timer convenience helpers. It's unclear if we should continue
+        # extending this pattern, or just push users to use finegrained
+        # timer* config
         cls.add_arg("pit_tickpolicy", None, lookup_cb=None,
                     cb=cls.set_timer)
         cls.add_arg("rtc_tickpolicy", None, lookup_cb=None,
@@ -2270,6 +2278,12 @@ class ParserClock(VirtCLIParser):
 
         # Standard XML options
         cls.add_arg("offset", "offset")
+        cls.add_arg("timer[0-9]*.name", "name",
+                    find_inst_cb=cls.timer_find_inst_cb)
+        cls.add_arg("timer[0-9]*.present", "present", is_onoff=True,
+                    find_inst_cb=cls.timer_find_inst_cb)
+        cls.add_arg("timer[0-9]*.tickpolicy", "tickpolicy",
+                    find_inst_cb=cls.timer_find_inst_cb)
 
 
 ################

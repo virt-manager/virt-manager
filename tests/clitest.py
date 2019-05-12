@@ -439,7 +439,7 @@ cache.mode=emulate,cache.level=3 \
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200 \
 --memorybacking size=1,unit='G',nodeset='1,2-5',nosharepages=yes,locked=yes,access_mode=shared,source_type=anonymous \
 --features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234,vmport=off,pmu=off,vmcoreinfo=on \
---clock offset=utc,hpet_present=no,rtc_tickpolicy=merge \
+--clock offset=utc,hpet_present=no,rtc_tickpolicy=merge,timer2.name=hypervclock,timer3.name=pit,timer1.present=yes,timer3.tickpolicy=delay,timer2.present=no \
 --sysinfo type=smbios,bios_vendor="Acme LLC",bios_version=1.2.3,bios_date=01/01/1970,bios_release=10.22 \
 --sysinfo type=smbios,system_manufacturer="Acme Inc.",system_product=Computer,system_version=3.2.1,system_serial=123456789,system_uuid=00000000-1111-2222-3333-444444444444,system_sku=abc-123,system_family=Server \
 --sysinfo type=smbios,baseBoard_manufacturer="Acme Corp.",baseBoard_product=Motherboard,baseBoard_version=A01,baseBoard_serial=1234-5678,baseBoard_asset=Tag,baseBoard_location=Chassis \

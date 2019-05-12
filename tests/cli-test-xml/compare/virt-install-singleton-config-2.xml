@@ -120,7 +120,9 @@
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="merge"/>
-    <timer name="hpet" present="no"/>
+    <timer name="hpet" present="yes"/>
+    <timer name="hypervclock" present="no"/>
+    <timer name="pit" tickpolicy="delay"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>destroy</on_reboot>
@@ -315,7 +317,9 @@
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="merge"/>
-    <timer name="hpet" present="no"/>
+    <timer name="hpet" present="yes"/>
+    <timer name="hypervclock" present="no"/>
+    <timer name="pit" tickpolicy="delay"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
