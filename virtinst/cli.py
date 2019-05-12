@@ -809,7 +809,7 @@ def add_guest_xml_options(geng):
     geng.add_argument("--sysinfo", action="append",
         help=_("Configure SMBIOS System Information. Ex:\n"
                "--sysinfo host\n"
-               "--sysinfo bios_vendor=MyVendor,bios_version=1.2.3,...\n"))
+               "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"))
 
     ParserQemuCLI.register()
     geng.add_argument("--qemu-commandline", action="append",
@@ -2266,6 +2266,42 @@ class ParserSysinfo(VirtCLIParser):
     cli_arg_name = "sysinfo"
     guest_propname = "sysinfo"
     remove_first = "type"
+    aliases = {
+        "bios.vendor": "bios_vendor",
+        "bios.version": "bios_version",
+        "bios.date": "bios_date",
+        "bios.release": "bios_release",
+
+        "system.manufacturer": "system_manufacturer",
+        "system.product": "system_product",
+        "system.version": "system_version",
+        "system.serial": "system_serial",
+        "system.uuid": "system_uuid",
+        "system.sku": "system_sku",
+        "system.family": "system_family",
+
+        "baseBoard.manufacturer": "baseBoard_manufacturer",
+        "baseBoard.product": "baseBoard_product",
+        "baseBoard.version": "baseBoard_version",
+        "baseBoard.serial": "baseBoard_serial",
+        "baseBoard.asset": "baseBoard_asset",
+        "baseBoard.location": "baseBoard_location",
+    }
+
+    def _parse(self, inst):
+        if self.optstr == "host" or self.optstr == "emulate":
+            self.optdict['type'] = self.optstr
+        elif self.optstr:
+            # If any string specified, default to type=smbios otherwise
+            # libvirt errors. User args can still override this though
+            self.optdict['type'] = 'smbios'
+
+        return super()._parse(inst)
+
+
+    ###################
+    # Option handling #
+    ###################
 
     def set_type_cb(self, inst, val, virtarg):
         if val == "host" or val == "emulate":
@@ -2284,46 +2320,34 @@ class ParserSysinfo(VirtCLIParser):
         inst.system_uuid = val
         self.guest.uuid = val
 
-    def _parse(self, inst):
-        if self.optstr == "host" or self.optstr == "emulate":
-            self.optdict['type'] = self.optstr
-        elif self.optstr:
-            # If any string specified, default to type=smbios otherwise
-            # libvirt errors. User args can still override this though
-            self.optdict['type'] = 'smbios'
-
-        return super()._parse(inst)
-
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         # <sysinfo type='smbios'>
-        cls.add_arg("type", "type",
-                              cb=cls.set_type_cb, can_comma=True)
+        cls.add_arg("type", "type", cb=cls.set_type_cb, can_comma=True)
 
         # <bios> type 0 BIOS Information
-        cls.add_arg("bios_vendor", "bios_vendor")
-        cls.add_arg("bios_version", "bios_version")
-        cls.add_arg("bios_date", "bios_date")
-        cls.add_arg("bios_release", "bios_release")
+        cls.add_arg("bios.vendor", "bios_vendor")
+        cls.add_arg("bios.version", "bios_version")
+        cls.add_arg("bios.date", "bios_date")
+        cls.add_arg("bios.release", "bios_release")
 
         # <system> type 1 System Information
-        cls.add_arg("system_manufacturer", "system_manufacturer")
-        cls.add_arg("system_product", "system_product")
-        cls.add_arg("system_version", "system_version")
-        cls.add_arg("system_serial", "system_serial")
-        cls.add_arg("system_uuid", "system_uuid",
-                              cb=cls.set_uuid_cb)
-        cls.add_arg("system_sku", "system_sku")
-        cls.add_arg("system_family", "system_family")
+        cls.add_arg("system.manufacturer", "system_manufacturer")
+        cls.add_arg("system.product", "system_product")
+        cls.add_arg("system.version", "system_version")
+        cls.add_arg("system.serial", "system_serial")
+        cls.add_arg("system.uuid", "system_uuid", cb=cls.set_uuid_cb)
+        cls.add_arg("system.sku", "system_sku")
+        cls.add_arg("system.family", "system_family")
 
         # <baseBoard> type 2 Baseboard (or Module) Information
-        cls.add_arg("baseBoard_manufacturer", "baseBoard_manufacturer")
-        cls.add_arg("baseBoard_product", "baseBoard_product")
-        cls.add_arg("baseBoard_version", "baseBoard_version")
-        cls.add_arg("baseBoard_serial", "baseBoard_serial")
-        cls.add_arg("baseBoard_asset", "baseBoard_asset")
-        cls.add_arg("baseBoard_location", "baseBoard_location")
+        cls.add_arg("baseBoard.manufacturer", "baseBoard_manufacturer")
+        cls.add_arg("baseBoard.product", "baseBoard_product")
+        cls.add_arg("baseBoard.version", "baseBoard_version")
+        cls.add_arg("baseBoard.serial", "baseBoard_serial")
+        cls.add_arg("baseBoard.asset", "baseBoard_asset")
+        cls.add_arg("baseBoard.location", "baseBoard_location")
 
 
 ##############################
