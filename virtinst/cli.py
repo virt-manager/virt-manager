@@ -2210,12 +2210,16 @@ class ParserClock(VirtCLIParser):
 class ParserPM(VirtCLIParser):
     cli_arg_name = "pm"
     guest_propname = "pm"
+    aliases = {
+        "suspend_to_mem.enabled": "suspend_to_mem",
+        "suspend_to_disk.enabled": "suspend_to_disk",
+    }
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("suspend_to_mem", "suspend_to_mem", is_onoff=True)
-        cls.add_arg("suspend_to_disk", "suspend_to_disk", is_onoff=True)
+        cls.add_arg("suspend_to_mem.enabled", "suspend_to_mem", is_onoff=True)
+        cls.add_arg("suspend_to_disk.enabled", "suspend_to_disk", is_onoff=True)
 
 
 #####################

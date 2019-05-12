@@ -352,7 +352,9 @@ Use --clock=? to see a list of all available sub options. Complete details at L<
 
 =item B<--pm> OPTIONS
 
-Configure guest power management features. Example suboptions include suspend_to_mem=on|off and suspend_to_disk=on|off
+Configure guest power management features. Example:
+
+    --pm suspend_to_memi.enabled=on,suspend_to_disk.enabled=off
 
 Use --pm=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsPowerManagement>
 
