@@ -3278,6 +3278,10 @@ class ParserHostdev(VirtCLIParser):
     cli_arg_name = "hostdev"
     guest_propname = "devices.hostdev"
     remove_first = "name"
+    aliases = {
+        "driver.name": "driver_name",
+        "rom.bar": "rom_bar",
+    }
 
     def set_name_cb(self, inst, val, virtarg):
         if inst.type == "net":
@@ -3301,13 +3305,13 @@ class ParserHostdev(VirtCLIParser):
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
+        _add_device_boot_order_arg(cls)
         cls.add_arg("type", "type")
         cls.add_arg("name", None,
                     cb=cls.set_name_cb,
                     lookup_cb=cls.name_lookup_cb)
-        cls.add_arg("driver_name", "driver_name")
-        _add_device_boot_order_arg(cls)
-        cls.add_arg("rom_bar", "rom_bar", is_onoff=True)
+        cls.add_arg("driver.name", "driver_name")
+        cls.add_arg("rom.bar", "rom_bar", is_onoff=True)
 
 
 ###########################
