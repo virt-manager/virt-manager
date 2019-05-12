@@ -752,8 +752,8 @@ def add_device_options(devg, sound_back_compat=False):
     ParserVsock.register()
     devg.add_argument("--vsock", action="append",
                     help=_("Configure guest vsock sockets. Ex:\n"
-                           "--vsock auto_cid=yes\n"
-                           "--vsock cid=7"))
+                           "--vsock cid.auto=yes\n"
+                           "--vsock cid.address=7"))
 
 
 def add_guest_xml_options(geng):
@@ -3089,14 +3089,18 @@ class ParserVsock(VirtCLIParser):
     guest_propname = "devices.vsock"
     remove_first = "model"
     stub_none = False
+    aliases = {
+        "cid.auto": "auto_cid",
+        "cid.address": "cid",
+    }
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
         cls.add_arg("model", "model")
-        cls.add_arg("auto_cid", "auto_cid")
-        cls.add_arg("cid", "cid")
+        cls.add_arg("cid.auto", "auto_cid", is_onoff=True)
+        cls.add_arg("cid.address", "cid")
 
 
 ######################################################

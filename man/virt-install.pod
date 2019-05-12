@@ -1550,6 +1550,14 @@ to configure hotplugmemory and NUMA for a guest.
 
 Use --memdev=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsMemory>.
 
+=item B<--vsock> OPTS
+
+Configure a vsock host/guest interface. A typical configuration would be
+
+  --vsock cid.auto=yes
+
+Use --vsock=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#vsock>.
+
 
 =back
 
