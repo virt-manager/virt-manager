@@ -2242,11 +2242,12 @@ def _add_device_address_args(cls):
 
 
 def _add_device_boot_order_arg(cls):
+    cls.aliases["boot.order"] = "boot_order"
     def set_boot_order_cb(self, inst, val, virtarg):
         val = int(val)
         self.guest.reorder_boot_order(inst, val)
     cls.set_boot_order_cb = set_boot_order_cb
-    cls.add_arg("boot_order", "boot.order", cb=cls.set_boot_order_cb)
+    cls.add_arg("boot.order", "boot.order", cb=cls.set_boot_order_cb)
 
 
 ##################
