@@ -3060,28 +3060,24 @@ class ParserPanic(VirtCLIParser):
     cli_arg_name = "panic"
     guest_propname = "devices.panic"
     remove_first = "model"
-    compat_mode = False
-
-    def set_model_cb(self, inst, val, virtarg):
-        if self.compat_mode and val.startswith("0x"):
-            inst.model = DevicePanic.MODEL_ISA
-            inst.address.iobase = val
-        else:
-            inst.model = val
+    aliases = {
+        "address.iobase": "iobase",
+    }
 
     def _parse(self, inst):
-        if (len(self.optstr.split(",")) == 1 and
-                not self.optstr.startswith("model=")):
-            self.compat_mode = True
+        # Handle old style '--panic 0xFOO' to set the iobase value
+        if (len(self.optdict) == 1 and
+            self.optdict.get("model", "").startswith("0x")):
+            self.optdict["address.iobase"] = self.optdict["model"]
+            self.optdict["model"] = DevicePanic.MODEL_ISA
+
         return super()._parse(inst)
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
-        cls.add_arg("model", "model", cb=cls.set_model_cb,
-                    ignore_default=True)
-        cls.add_arg("iobase", "address.iobase")
+        cls.add_arg("model", "model", ignore_default=True)
 
 
 ###################
