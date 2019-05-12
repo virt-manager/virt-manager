@@ -3209,7 +3209,16 @@ class ParserFilesystem(VirtCLIParser):
 class ParserVideo(VirtCLIParser):
     cli_arg_name = "video"
     guest_propname = "devices.video"
-    remove_first = "model"
+    remove_first = "model.type"
+    aliases = {
+        "model.type": "model",
+        "model.heads": "heads",
+        "model.ram": "ram",
+        "model.vram": "vram",
+        "model.vram64": "vram64",
+        "model.vgamem": "vgamem",
+        "model.acceleration.accel3d": "accel3d",
+    }
 
     def _parse(self, inst):
         ret = super()._parse(inst)
@@ -3229,13 +3238,13 @@ class ParserVideo(VirtCLIParser):
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
-        cls.add_arg("model", "model", ignore_default=True)
-        cls.add_arg("accel3d", "accel3d", is_onoff=True)
-        cls.add_arg("heads", "heads")
-        cls.add_arg("ram", "ram")
-        cls.add_arg("vram", "vram")
-        cls.add_arg("vram64", "vram64")
-        cls.add_arg("vgamem", "vgamem")
+        cls.add_arg("model.type", "model", ignore_default=True)
+        cls.add_arg("model.acceleration.accel3d", "accel3d", is_onoff=True)
+        cls.add_arg("model.heads", "heads")
+        cls.add_arg("model.ram", "ram")
+        cls.add_arg("model.vram", "vram")
+        cls.add_arg("model.vram64", "vram64")
+        cls.add_arg("model.vgamem", "vgamem")
 
 
 ###################
