@@ -648,10 +648,9 @@ def add_gfx_option(devg):
     ParserGraphics.register()
     devg.add_argument("--graphics", action="append",
       help=_("Configure guest display settings. Ex:\n"
-             "--graphics vnc\n"
-             "--graphics spice,port=5901,tlsport=5902\n"
-             "--graphics none\n"
-             "--graphics vnc,password=foobar,port=5910,keymap=ja"))
+             "--graphics spice\n"
+             "--graphics vnc,port=5901,listen=0.0.0.0\n"
+             "--graphics none\n"))
 
 
 def add_net_option(devg):
@@ -2670,6 +2669,45 @@ class ParserGraphics(VirtCLIParser):
     guest_propname = "devices.graphics"
     remove_first = "type"
     stub_none = False
+    aliases = {
+        "tlsPort": "tlsport",
+        "password": "passwd",
+        "passwordValidTo": "passwdValidTo",
+        "image.compression": "image_compression",
+        "streaming.mode": "streaming_mode",
+        "clipboard.copypaste": "clipboard_copypaste",
+        "filetransfer.enable": "filetransfer_enable",
+        "mouse.mode": "mouse_mode",
+        "gl.enable": "gl",
+        "gl.rendernode": "rendernode",
+    }
+
+    def _parse(self, inst):
+        if self.optstr == "none":
+            self.guest.skip_default_graphics = True
+            return
+
+        ret = super()._parse(inst)
+
+        if inst.conn.is_qemu() and inst.gl:
+            if inst.type != "spice":
+                logging.warning("graphics type=%s does not support GL", inst.type)
+            elif not inst.conn.check_support(
+                    inst.conn.SUPPORT_CONN_SPICE_GL):
+                logging.warning("qemu/libvirt version may not support spice GL")
+        if inst.conn.is_qemu() and inst.rendernode:
+            if inst.type != "spice":
+                logging.warning("graphics type=%s does not support rendernode", inst.type)
+            elif not inst.conn.check_support(
+                    inst.conn.SUPPORT_CONN_SPICE_RENDERNODE):
+                logging.warning("qemu/libvirt version may not support rendernode")
+
+        return ret
+
+
+    ###################
+    # Option handling #
+    ###################
 
     def set_keymap_cb(self, inst, val, virtarg):
         from . import hostkeymap
@@ -2699,59 +2737,40 @@ class ParserGraphics(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
-    def _parse(self, inst):
-        if self.optstr == "none":
-            self.guest.skip_default_graphics = True
-            return
-
-        ret = super()._parse(inst)
-
-        if inst.conn.is_qemu() and inst.gl:
-            if inst.type != "spice":
-                logging.warning("graphics type=%s does not support GL", inst.type)
-            elif not inst.conn.check_support(
-                    inst.conn.SUPPORT_CONN_SPICE_GL):
-                logging.warning("qemu/libvirt version may not support spice GL")
-        if inst.conn.is_qemu() and inst.rendernode:
-            if inst.type != "spice":
-                logging.warning("graphics type=%s does not support rendernode", inst.type)
-            elif not inst.conn.check_support(
-                    inst.conn.SUPPORT_CONN_SPICE_RENDERNODE):
-                logging.warning("qemu/libvirt version may not support rendernode")
-
-        return ret
-
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
+
         cls.add_arg("type", "type", cb=cls.set_type_cb)
         cls.add_arg("port", "port")
-        cls.add_arg("tlsport", "tlsPort")
+        cls.add_arg("tlsPort", "tlsPort")
         cls.add_arg("listen", "listen")
-        cls.add_arg("listens[0-9]*.type", "type",
-                               find_inst_cb=cls.listens_find_inst_cb)
-        cls.add_arg("listens[0-9]*.address", "address",
-                               find_inst_cb=cls.listens_find_inst_cb)
-        cls.add_arg("listens[0-9]*.network", "network",
-                               find_inst_cb=cls.listens_find_inst_cb)
-        cls.add_arg("listens[0-9]*.socket", "socket",
-                               find_inst_cb=cls.listens_find_inst_cb)
         cls.add_arg("keymap", "keymap", cb=cls.set_keymap_cb)
         cls.add_arg("password", "passwd")
-        cls.add_arg("passwordvalidto", "passwdValidTo")
+        cls.add_arg("passwordValidTo", "passwdValidTo")
         cls.add_arg("connected", "connected")
         cls.add_arg("defaultMode", "defaultMode")
 
-        cls.add_arg("image_compression", "image_compression")
-        cls.add_arg("streaming_mode", "streaming_mode")
-        cls.add_arg("clipboard_copypaste", "clipboard_copypaste",
+        cls.add_arg("listens[0-9]*.type", "type",
+                    find_inst_cb=cls.listens_find_inst_cb)
+        cls.add_arg("listens[0-9]*.address", "address",
+                    find_inst_cb=cls.listens_find_inst_cb)
+        cls.add_arg("listens[0-9]*.network", "network",
+                    find_inst_cb=cls.listens_find_inst_cb)
+        cls.add_arg("listens[0-9]*.socket", "socket",
+                    find_inst_cb=cls.listens_find_inst_cb)
+
+        cls.add_arg("image.compression", "image_compression")
+        cls.add_arg("streaming.mode", "streaming_mode")
+        cls.add_arg("clipboard.copypaste", "clipboard_copypaste",
                     is_onoff=True)
-        cls.add_arg("mouse_mode", "mouse_mode")
-        cls.add_arg("filetransfer_enable", "filetransfer_enable",
+        cls.add_arg("mouse.mode", "mouse_mode")
+        cls.add_arg("filetransfer.enable", "filetransfer_enable",
                     is_onoff=True)
-        cls.add_arg("gl", "gl", is_onoff=True)
-        cls.add_arg("rendernode", "rendernode")
+
+        cls.add_arg("gl.enable", "gl", is_onoff=True)
+        cls.add_arg("gl.rendernode", "rendernode")
 
 
 ########################

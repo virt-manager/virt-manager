@@ -929,7 +929,7 @@ For example:
 
     --graphics vnc,password=foobar
 
-The supported options are:
+Some supported options are:
 
 =over 4
 
@@ -968,7 +968,7 @@ command 'virsh console NAME' can be used to connect to the serial device.
 Request a permanent, statically assigned port number for the guest
 console. This is used by 'vnc' and 'spice'
 
-=item B<tlsport>
+=item B<tlsPort>
 
 Specify the spice tlsport.
 
@@ -988,27 +988,18 @@ path on the host filesystem.
 
 This is used by 'vnc' and 'spice'
 
-=item B<keymap>
-
-Request that the virtual console be configured to run with a specific
-keyboard layout. If the special value 'local' is specified, virt-install
-will attempt to configure to use the same keymap as the local system. A value
-of 'none' specifically defers to the hypervisor. Default behavior is
-hypervisor specific, but typically is the same as 'local'. This is used
-by 'vnc' and 'spice'.
-
 =item B<password>
 
 Request a console password, required at connection time. Beware, this info may
 end up in virt-install log files, so don't use an important password. This
 is used by 'vnc' and 'spice'
 
-=item B<gl>
+=item B<gl.enable>
 
-Whether to use OpenGl accelerated rendering. Value is 'yes' or 'no'. This is
+Whether to use OpenGL accelerated rendering. Value is 'yes' or 'no'. This is
 used by 'spice'.
 
-=item B<rendernode>
+=item B<gl.rendernode>
 
 DRM render node path to use. This is used when 'gl' is enabled.
 
