@@ -1980,11 +1980,10 @@ class ParserVCPU(VirtCLIParser):
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         # This is converted into either vcpu.current or vcpu
-        cls.add_arg("maxvcpus", "vcpus", lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("maxvcpus", "vcpus", cb=cls.noset_cb)
         # These are handled in _add_advertised_aliases
-        cls.add_arg("cpuset", "vcpu_cpuset", can_comma=True,
-                lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("vcpus", "vcpus", lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("cpuset", "vcpu_cpuset", can_comma=True, cb=cls.noset_cb)
+        cls.add_arg("vcpus", "vcpus", cb=cls.noset_cb)
 
         # Further CPU options should be added to --cpu
         cls.add_arg("sockets", "cpu.sockets")
@@ -2440,14 +2439,56 @@ class ParserDisk(VirtCLIParser):
     guest_propname = "devices.disk"
     remove_first = "path"
     stub_none = False
+    aliases = {
+        "blockio.logical_block_size": "logical_block_size",
+        "blockio.physical_block_size": "physical_block_size",
 
-    def seclabel_find_inst_cb(self, *args, **kwargs):
-        cliarg = "seclabel"  # seclabel[0-9]*
-        list_propname = "seclabels"  # disk.seclabels
-        cb = self._make_find_inst_cb(cliarg, list_propname)
-        return cb(*args, **kwargs)
+        "iotune.read_bytes_sec": "read_bytes_sec",
+        "iotune.write_bytes_sec": "write_bytes_sec",
+        "iotune.total_bytes_sec": "total_bytes_sec",
+        "iotune.read_iops_sec": "read_iops_sec",
+        "iotune.write_iops_sec": "write_iops_sec",
+        "iotune.total_iops_sec": "total_iops_sec",
+
+        "source.pool": "source_pool",
+        "source.volume": "source_volume",
+        "source.name": "source_name",
+        "source.protocol": "source_protocol",
+        "source.host.name": "source_host_name",
+        "source.host.port": "source_host_port",
+        "source.host.socket": "source_host_socket",
+        "source.host.transport": "source_host_transport",
+        "source.startupPolicy": "startup_policy",
+
+        "source.reservations.managed": "reservations.managed",
+        "source.reservations.source.type": "reservations.source.type",
+        "source.reservations.source.path": "reservations.source.path",
+        "source.reservations.source.mode": "reservations.source.mode",
+
+        "snapshot": "snapshot_policy",
+        "target.dev": "target",
+        "target.removable": "removable",
+
+        "driver.discard": "discard",
+        "driver.detect_zeroes": "detect_zeroes",
+        "driver.error_policy": "error_policy",
+        "driver.io": "io",
+        "driver.name": "driver_name",
+        "driver.type": "driver_type",
+    }
+
+    def _add_advertised_aliases(self):
+        # These are essentially aliases for new style options, but we still
+        # want to advertise them in --disk=help output because they are
+        # historically commonly used. This should rarely, if ever, be extended
+        if "bus" in self.optdict:
+            self.optdict["target.bus"] = self.optdict.pop("bus")
+        if "cache" in self.optdict:
+            self.optdict["driver.cache"] = self.optdict.pop("cache")
 
     def _parse(self, inst):
+        self._add_advertised_aliases()
+
         if self.optstr == "none":
             return
 
@@ -2537,6 +2578,17 @@ class ParserDisk(VirtCLIParser):
 
         return inst
 
+
+    ###################
+    # Option handling #
+    ###################
+
+    def seclabel_find_inst_cb(self, *args, **kwargs):
+        cliarg = "seclabel"  # seclabel[0-9]*
+        list_propname = "seclabels"  # disk.seclabels
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -2549,46 +2601,53 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("size", None, lookup_cb=None, cb=cls.noset_cb)
         cls.add_arg("format", None, lookup_cb=None, cb=cls.noset_cb)
         cls.add_arg("sparse", None, lookup_cb=None, cb=cls.noset_cb)
+        # These are handled in _add_advertised_aliases
+        cls.add_arg("bus", "bus", cb=cls.noset_cb)
+        cls.add_arg("cache", "driver_cache", cb=cls.noset_cb)
 
         # More standard XML props
-        cls.add_arg("source_pool", "source_pool")
-        cls.add_arg("source_volume", "source_volume")
-        cls.add_arg("source_name", "source_name")
-        cls.add_arg("source_protocol", "source_protocol")
-        cls.add_arg("source_host_name", "source_host_name")
-        cls.add_arg("source_host_port", "source_host_port")
-        cls.add_arg("source_host_socket", "source_host_socket")
-        cls.add_arg("source_host_transport", "source_host_transport")
+        cls.add_arg("source.pool", "source_pool")
+        cls.add_arg("source.volume", "source_volume")
+        cls.add_arg("source.name", "source_name")
+        cls.add_arg("source.protocol", "source_protocol")
+        cls.add_arg("source.host.name", "source_host_name")
+        cls.add_arg("source.host.port", "source_host_port")
+        cls.add_arg("source.host.socket", "source_host_socket")
+        cls.add_arg("source.host.transport", "source_host_transport")
+        cls.add_arg("source.startupPolicy", "startup_policy")
 
         cls.add_arg("path", "path")
         cls.add_arg("device", "device")
-        cls.add_arg("snapshot_policy", "snapshot_policy")
-        cls.add_arg("bus", "bus")
-        cls.add_arg("removable", "removable", is_onoff=True)
-        cls.add_arg("cache", "driver_cache")
-        cls.add_arg("discard", "driver_discard")
-        cls.add_arg("detect_zeroes", "driver_detect_zeroes")
-        cls.add_arg("driver_name", "driver_name")
-        cls.add_arg("driver_type", "driver_type")
-        cls.add_arg("driver.copy_on_read", "driver_copy_on_read", is_onoff=True)
-        cls.add_arg("io", "driver_io")
-        cls.add_arg("error_policy", "error_policy")
+        cls.add_arg("snapshot", "snapshot_policy")
+        cls.add_arg("sgio", "sgio")
         cls.add_arg("serial", "serial")
-        cls.add_arg("target", "target")
-        cls.add_arg("startup_policy", "startup_policy")
         cls.add_arg("readonly", "read_only", is_onoff=True)
         cls.add_arg("shareable", "shareable", is_onoff=True)
+
+        cls.add_arg("target.bus", "bus")
+        cls.add_arg("target.removable", "removable", is_onoff=True)
+        cls.add_arg("target.dev", "target")
+
+        cls.add_arg("driver.cache", "driver_cache")
+        cls.add_arg("driver.discard", "driver_discard")
+        cls.add_arg("driver.detect_zeroes", "driver_detect_zeroes")
+        cls.add_arg("driver.name", "driver_name")
+        cls.add_arg("driver.type", "driver_type")
+        cls.add_arg("driver.copy_on_read", "driver_copy_on_read", is_onoff=True)
+        cls.add_arg("driver.io", "driver_io")
+        cls.add_arg("driver.error_policy", "error_policy")
+
         _add_device_boot_order_arg(cls)
 
-        cls.add_arg("read_bytes_sec", "iotune_rbs")
-        cls.add_arg("write_bytes_sec", "iotune_wbs")
-        cls.add_arg("total_bytes_sec", "iotune_tbs")
-        cls.add_arg("read_iops_sec", "iotune_ris")
-        cls.add_arg("write_iops_sec", "iotune_wis")
-        cls.add_arg("total_iops_sec", "iotune_tis")
-        cls.add_arg("sgio", "sgio")
-        cls.add_arg("logical_block_size", "logical_block_size")
-        cls.add_arg("physical_block_size", "physical_block_size")
+        cls.add_arg("iotune.read_bytes_sec", "iotune_rbs")
+        cls.add_arg("iotune.write_bytes_sec", "iotune_wbs")
+        cls.add_arg("iotune.total_bytes_sec", "iotune_tbs")
+        cls.add_arg("iotune.read_iops_sec", "iotune_ris")
+        cls.add_arg("iotune.write_iops_sec", "iotune_wis")
+        cls.add_arg("iotune.total_iops_sec", "iotune_tis")
+
+        cls.add_arg("blockio.logical_block_size", "logical_block_size")
+        cls.add_arg("blockio.physical_block_size", "physical_block_size")
 
         # DeviceDisk.seclabels properties
         cls.add_arg("seclabel[0-9]*.model", "model",
@@ -2603,10 +2662,14 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("geometry.secs", "geometry_secs")
         cls.add_arg("geometry.trans", "geometry_trans")
 
-        cls.add_arg("reservations.managed", "reservations_managed")
-        cls.add_arg("reservations.source.type", "reservations_source_type")
-        cls.add_arg("reservations.source.path", "reservations_source_path")
-        cls.add_arg("reservations.source.mode", "reservations_source_mode")
+        cls.add_arg("source.reservations.managed",
+                    "reservations_managed")
+        cls.add_arg("source.reservations.source.type",
+                    "reservations_source_type")
+        cls.add_arg("source.reservations.source.path",
+                    "reservations_source_path")
+        cls.add_arg("source.reservations.source.mode",
+                    "reservations_source_mode")
 
 
 #####################

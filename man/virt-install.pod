@@ -694,7 +694,7 @@ Disk device type. Example values are be 'cdrom', 'disk', 'lun' or 'floppy'. The 
 Guest installation with multiple disks will need this parameter to boot correctly after being installed. A boot.order parameter will take values 1,2,3,... Devices with lower value has higher priority.
 This option applies to other bootable device types as well.
 
-=item B<bus>
+=item B<target.bus> or B<bus>
 
 Disk bus type. Example values are be 'ide', 'sata', 'scsi', 'usb', 'virtio' or 'xen'.
 The default is hypervisor dependent since not all hypervisors support all
@@ -718,28 +718,28 @@ read and write caching. 'directsync' bypasses the host page
 cache. 'unsafe' may cache all content and ignore flush requests from
 the guest.
 
-=item B<discard>
+=item B<driver.discard>
 
 Whether discard (also known as "trim" or "unmap") requests are ignored
 or passed to the filesystem. The value can be either "unmap" (allow
 the discard request to be passed) or "ignore" (ignore the discard
 request). Since 1.0.6 (QEMU and KVM only)
 
-=item B<driver_name>
+=item B<driver.name>
 
 Driver name the hypervisor should use when accessing the specified
 storage. Typically does not need to be set by the user.
 
-=item B<driver_type>
+=item B<driver.type>
 
 Driver format/type the hypervisor should use when accessing the specified
 storage. Typically does not need to be set by the user.
 
-=item B<io>
+=item B<driver.io>
 
 Disk IO backend. Can be either "threads" or "native".
 
-=item B<error_policy>
+=item B<driver.error_policy>
 
 How guest should react if a write error is encountered. Can be one of
 "stop", "ignore", or "enospace"
@@ -750,12 +750,12 @@ Serial number of the emulated disk device. This is used in linux guests
 to set /dev/disk/by-id symlinks. An example serial number might be:
 WD-WMAP9A966149
 
-=item B<startup_policy>
+=item B<source.startupPolicy>
 
 It defines what to do with the disk if the source file is not accessible.  See
 possible values in L<https://www.libvirt.org/formatdomain.html#elementsDisks>, "startupPolicy" attribute of the <disk> element
 
-=item B<snapshot_policy>
+=item B<snapshot>
 
 Defines default behavior of the disk during disk snapshots.  See possible
 values in L<https://www.libvirt.org/formatdomain.html#elementsDisks>,
