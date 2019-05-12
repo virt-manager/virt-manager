@@ -639,38 +639,11 @@ An existing libvirt storage volume to use. This is specified as
 
 =back
 
-Other available options:
+
+
+Options that apply to storage creation:
 
 =over 4
-
-=item B<device>
-
-Disk device type. Value can be 'cdrom', 'disk', 'lun' or 'floppy'. Default is
-'disk'. If a 'cdrom' is specified, and no install method is chosen, the
-cdrom is used as the install media.
-
-=item B<boot.order>
-
-Guest installation with multiple disks will need this parameter to boot correctly after being installed. A boot.order parameter will take values 1,2,3,... Devices with lower value has higher priority.
-
-=item B<bus>
-
-Disk bus type. Value can be 'ide', 'sata', 'scsi', 'usb', 'virtio' or 'xen'.
-The default is hypervisor dependent since not all hypervisors support all
-bus types.
-
-=item B<removable>
-
-Sets the removable flag (/sys/block/$dev/removable on Linux). Only
-used with QEMU and bus=usb. Value can be 'on' or 'off'.
-
-=item B<readonly>
-
-Set drive as readonly (takes 'on' or 'off')
-
-=item B<shareable>
-
-Set drive as shareable (takes 'on' or 'off')
 
 =item B<size>
 
@@ -687,6 +660,14 @@ will be usually balanced by faster install times inside the guest. Thus
 use of this option is recommended to ensure consistently high performance
 and to avoid I/O errors in the guest should the host filesystem fill up.
 
+=item B<format>
+
+Disk image format. For file volumes, this can be 'raw', 'qcow2', 'vmdk', etc. See format types in L<https://libvirt.org/storage.html> for possible values. This is often mapped to the B<driver_type> value as well.
+
+If not specified when creating file images, this will default to 'qcow2'.
+
+If creating storage, this will be the format of the new image. If using an existing image, this overrides libvirt's format auto-detection.
+
 =item B<backing_store>
 
 Path to a disk to use as the backing store for the newly created image.
@@ -694,6 +675,37 @@ Path to a disk to use as the backing store for the newly created image.
 =item B<backing_format>
 
 Disk image format of B<backing_store>
+
+=back
+
+
+
+Some example device configuration suboptions:
+
+=over 4
+
+=item B<device>
+
+Disk device type. Example values are be 'cdrom', 'disk', 'lun' or 'floppy'. The default is 'disk'.
+
+=item B<boot.order>
+
+Guest installation with multiple disks will need this parameter to boot correctly after being installed. A boot.order parameter will take values 1,2,3,... Devices with lower value has higher priority.
+This option applies to other bootable device types as well.
+
+=item B<bus>
+
+Disk bus type. Example values are be 'ide', 'sata', 'scsi', 'usb', 'virtio' or 'xen'.
+The default is hypervisor dependent since not all hypervisors support all
+bus types.
+
+=item B<readonly>
+
+Set drive as readonly (takes 'on' or 'off')
+
+=item B<shareable>
+
+Set drive as shareable (takes 'on' or 'off')
 
 =item B<cache>
 
@@ -711,14 +723,6 @@ Whether discard (also known as "trim" or "unmap") requests are ignored
 or passed to the filesystem. The value can be either "unmap" (allow
 the discard request to be passed) or "ignore" (ignore the discard
 request). Since 1.0.6 (QEMU and KVM only)
-
-=item B<format>
-
-Disk image format. For file volumes, this can be 'raw', 'qcow2', 'vmdk', etc. See format types in L<https://libvirt.org/storage.html> for possible values. This is often mapped to the B<driver_type> value as well.
-
-If not specified when creating file images, this will default to 'qcow2'.
-
-If creating storage, this will be the format of the new image. If using an existing image, this overrides libvirt's format auto-detection.
 
 =item B<driver_name>
 
@@ -762,6 +766,9 @@ See the examples section for some uses. This option deprecates -f/--file,
 -s/--file-size, --nonsparse, and --nodisks.
 
 Use --disk=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsDisks>
+
+
+
 
 =item B<--filesystem>
 
