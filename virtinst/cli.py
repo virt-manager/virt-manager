@@ -2887,6 +2887,11 @@ class ParserTPM(VirtCLIParser):
     cli_arg_name = "tpm"
     guest_propname = "devices.tpm"
     remove_first = "type"
+    aliases = {
+        "backend.type": "type",
+        "backend.version": "version",
+        "backend.device.path": "path",
+    }
 
     def _parse(self, inst):
         if (self.optdict.get("type", "").startswith("/")):
@@ -2897,10 +2902,10 @@ class ParserTPM(VirtCLIParser):
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
-        cls.add_arg("type", "type")
         cls.add_arg("model", "model")
-        cls.add_arg("version", "version")
-        cls.add_arg("path", "device_path")
+        cls.add_arg("backend.type", "type")
+        cls.add_arg("backend.version", "version")
+        cls.add_arg("backend.device.path", "device_path")
 
 
 #################
