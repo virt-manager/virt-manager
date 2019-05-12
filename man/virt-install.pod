@@ -844,7 +844,7 @@ with a name of C<default>. Use a virtual network if the host has dynamic
 networking (eg NetworkManager), or using wireless. The guest will be
 NATed to the LAN by whichever connection is active.
 
-=item type=direct,source=IFACE[,source_mode=MODE]
+=item type=direct,source=IFACE[,source.mode=MODE]
 
 Direct connect to host interface IFACE using macvtap.
 
@@ -869,12 +869,12 @@ Some example suboptions:
 
 =over 4
 
-=item B<model>
+=item B<model.type> or B<model>
 
 Network device model as seen by the guest. Value can be any nic model supported
 by the hypervisor, e.g.: 'e1000', 'rtl8139', 'virtio', ...
 
-=item B<mac>
+=item B<mac.address> or B<mac>
 
 Fixed MAC address for the guest; If this parameter is omitted, or the value
 C<RANDOM> is specified a suitable address will be randomly generated. For
@@ -882,7 +882,7 @@ Xen virtual machines it is required that the first 3 pairs in the MAC address
 be the sequence '00:16:3e', while for QEMU or KVM virtual machines it must
 be '52:54:00'.
 
-=item B<filterref>
+=item B<filterref.filter>
 
 Controlling firewall and network filtering in libvirt. Value can be any nwfilter
 defined by the C<virsh> 'nwfilter' subcommands. Available filters can be listed

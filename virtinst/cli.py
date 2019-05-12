@@ -2681,6 +2681,60 @@ class ParserNetwork(VirtCLIParser):
     guest_propname = "devices.interface"
     remove_first = "type"
     stub_none = False
+    aliases = {
+        "driver.name": "driver_name",
+        "driver.queues": "driver_queues",
+        "filterref.filter": "filterref",
+        "link.state": "link_state",
+        "mac.address": "mac",
+        "model.type": "model",
+        "rom.file": "rom_file",
+        "rom.bar": "rom_bar",
+        "target.dev": "target",
+
+        "source.portgroup": "portgroup",
+        "source.type": "source_type",
+        "source.path": "source_path",
+        "source.mode": "source_mode",
+
+        "virtualport.type": "virtualport_type",
+        "virtualport.parameters.managerid": "virtualport_managerid",
+        "virtualport.parameters.typeid": "virtualport.typeid",
+        "virtualport.parameters.typeidversion": "virtualport.typeidversion",
+        "virtualport.parameters.instanceid": "virtualport.instanceid",
+        "virtualport.parameters.profileid": "virtualport.profileid",
+        "virtualport.parameters.interfaceid": "virtualport_interfaceid",
+    }
+
+    def _add_advertised_aliases(self):
+        # These are essentially aliases for new style options, but we still
+        # want to advertise them in --network=help output because they are
+        # historically commonly used. This should rarely, if ever, be extended
+        if "model" in self.optdict:
+            self.optdict["model.type"] = self.optdict.pop("model")
+        if "mac" in self.optdict:
+            self.optdict["mac.address"] = self.optdict.pop("mac")
+
+    def _parse(self, inst):
+        self._add_advertised_aliases()
+
+        if self.optstr == "none":
+            return
+
+        if "type" not in self.optdict:
+            if "network" in self.optdict:
+                self.optdict["type"] = DeviceInterface.TYPE_VIRTUAL
+                self.optdict["source"] = self.optdict.pop("network")
+            elif "bridge" in self.optdict:
+                self.optdict["type"] = DeviceInterface.TYPE_BRIDGE
+                self.optdict["source"] = self.optdict.pop("bridge")
+
+        return super()._parse(inst)
+
+
+    ###################
+    # Option handling #
+    ###################
 
     def set_mac_cb(self, inst, val, virtarg):
         if val == "RANDOM":
@@ -2707,58 +2761,52 @@ class ParserNetwork(VirtCLIParser):
             val = "down"
         inst.link_state = val
 
-    def _parse(self, inst):
-        if self.optstr == "none":
-            return
-
-        if "type" not in self.optdict:
-            if "network" in self.optdict:
-                self.optdict["type"] = DeviceInterface.TYPE_VIRTUAL
-                self.optdict["source"] = self.optdict.pop("network")
-            elif "bridge" in self.optdict:
-                self.optdict["type"] = DeviceInterface.TYPE_BRIDGE
-                self.optdict["source"] = self.optdict.pop("bridge")
-
-        return super()._parse(inst)
-
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
-        cls.add_arg("type", "type", cb=cls.set_type_cb)
-        cls.add_arg("trustGuestRxFilters", "trustGuestRxFilters",
-                              is_onoff=True)
-        cls.add_arg("source", "source")
-        cls.add_arg("source_mode", "source_mode")
-        cls.add_arg("source_type", "source_type")
-        cls.add_arg("source_path", "source_path")
-        cls.add_arg("portgroup", "portgroup")
-        cls.add_arg("target", "target_dev")
-        cls.add_arg("model", "model")
-        cls.add_arg("mac", "macaddr", cb=cls.set_mac_cb)
-        cls.add_arg("filterref", "filterref")
         _add_device_boot_order_arg(cls)
-        cls.add_arg("link_state", "link_state",
-                              cb=cls.set_link_state)
 
-        cls.add_arg("driver_name", "driver_name")
-        cls.add_arg("driver_queues", "driver_queues")
+        # These are handled in _add_advertised_aliases
+        cls.add_arg("model", "model", cb=cls.noset_cb)
+        cls.add_arg("mac", "macaddr", cb=cls.noset_cb)
 
-        cls.add_arg("rom_file", "rom_file")
-        cls.add_arg("rom_bar", "rom_bar", is_onoff=True)
+        # Standard XML options
+        cls.add_arg("type", "type", cb=cls.set_type_cb)
+        cls.add_arg("trustGuestRxFilters", "trustGuestRxFilters", is_onoff=True)
+        cls.add_arg("source", "source")
+        cls.add_arg("source.mode", "source_mode")
+        cls.add_arg("source.type", "source_type")
+        cls.add_arg("source.path", "source_path")
+        cls.add_arg("source.portgroup", "portgroup")
+        cls.add_arg("target.dev", "target_dev")
+        cls.add_arg("model.type", "model")
+        cls.add_arg("mac.address", "macaddr", cb=cls.set_mac_cb)
+        cls.add_arg("filterref.filter", "filterref")
+        cls.add_arg("link.state", "link_state", cb=cls.set_link_state)
+
+        cls.add_arg("driver.name", "driver_name")
+        cls.add_arg("driver.queues", "driver_queues")
+
+        cls.add_arg("rom.file", "rom_file")
+        cls.add_arg("rom.bar", "rom_bar", is_onoff=True)
 
         cls.add_arg("mtu.size", "mtu_size")
 
-        # For 802.1Qbg
-        cls.add_arg("virtualport_type", "virtualport.type")
-        cls.add_arg("virtualport_managerid", "virtualport.managerid")
-        cls.add_arg("virtualport_typeid", "virtualport.typeid")
-        cls.add_arg("virtualport_typeidversion", "virtualport.typeidversion")
-        cls.add_arg("virtualport_instanceid", "virtualport.instanceid")
-        # For openvswitch & 802.1Qbh
-        cls.add_arg("virtualport_profileid", "virtualport.profileid")
-        # For openvswitch & midonet
-        cls.add_arg("virtualport_interfaceid", "virtualport.interfaceid")
+        cls.add_arg("virtualport.type",
+                    "virtualport.type")
+        cls.add_arg("virtualport.parameters.managerid",
+                    "virtualport.managerid")
+        cls.add_arg("virtualport.parameters.typeid",
+                    "virtualport.typeid")
+        cls.add_arg("virtualport.parameters.typeidversion",
+                    "virtualport.typeidversion")
+        cls.add_arg("virtualport.parameters.instanceid",
+                    "virtualport.instanceid")
+        cls.add_arg("virtualport.parameters.profileid",
+                    "virtualport.profileid")
+        cls.add_arg("virtualport.parameters.interfaceid",
+                    "virtualport.interfaceid")
 
 
 ######################
