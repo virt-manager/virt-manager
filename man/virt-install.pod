@@ -295,15 +295,15 @@ apic, eoi, privnet, and hyperv features. Some examples:
 
 =over 4
 
-=item B<--features eoi=on>
+=item B<--features apic.eoi=on>
 
 Enable APIC PV EOI
 
-=item B<--features hyperv_vapic=on,hyperv_spinlocks=off>
+=item B<--features hyperv.vapic.state=on,hyperv.spinlocks.state=off>
 
 Enable hypver VAPIC, but disable spinlocks
 
-=item B<--features kvm_hidden=on>
+=item B<--features kvm.hidden.state==on>
 
 Allow the KVM hypervisor signature to be hidden from the guest
 
@@ -311,12 +311,12 @@ Allow the KVM hypervisor signature to be hidden from the guest
 
 Notify the guest that the host supports paravirtual spinlocks for example by exposing the pvticketlocks mechanism.
 
-=item B<--features gic_version=2>
+=item B<--features gic.version=2>
 
 This is relevant only for ARM architectures. Possible values are "host" or
 version number.
 
-=item B<--features smm=on>
+=item B<--features smm.state=on>
 
 This enables System Management Mode of hypervisor. Some UEFI firmwares may
 require this feature to be present. (QEMU supports SMM only with q35 machine

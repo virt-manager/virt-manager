@@ -787,7 +787,7 @@ def add_guest_xml_options(geng):
     geng.add_argument("--features", action="append",
         help=_("Set domain <features> XML. Ex:\n"
                "--features acpi=off\n"
-               "--features apic=on,eoi=on"))
+               "--features apic=on,apic.eoi=on"))
 
     ParserClock.register()
     geng.add_argument("--clock", action="append",
@@ -2121,6 +2121,21 @@ class ParserSecurity(VirtCLIParser):
 class ParserFeatures(VirtCLIParser):
     cli_arg_name = "features"
     guest_propname = "features"
+    aliases = {
+        "apic.eoi": "eoi",
+        "pmu.state": "pmu",
+        "vmport.state": "vmport",
+        "kvm.hidden.state": "kvm_hidden",
+        "gic.version": "gic_version",
+        "smm.state": "smm",
+        "vmcoreinfo.state": "vmcoreinfo",
+        "hyperv.reset.state": "hyperv_reset",
+        "hyperv.vapic.state": "hyperv_vapic",
+        "hyperv.relaxed.state": "hyperv_relaxed",
+        "hyperv.spinlocks.state": "hyperv_spinlocks",
+        "hyperv.spinlocks.retries": "hyperv_spinlocks_retries",
+        "hyperv.synic.state": "hyperv_synic",
+    }
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -2131,24 +2146,25 @@ class ParserFeatures(VirtCLIParser):
         cls.add_arg("privnet", "privnet", is_onoff=True)
         cls.add_arg("hap", "hap", is_onoff=True)
         cls.add_arg("viridian", "viridian", is_onoff=True)
-        cls.add_arg("eoi", "eoi", is_onoff=True)
-        cls.add_arg("pmu", "pmu", is_onoff=True)
 
-        cls.add_arg("hyperv_reset", "hyperv_reset", is_onoff=True)
-        cls.add_arg("hyperv_vapic", "hyperv_vapic", is_onoff=True)
-        cls.add_arg("hyperv_relaxed", "hyperv_relaxed", is_onoff=True)
-        cls.add_arg("hyperv_spinlocks", "hyperv_spinlocks", is_onoff=True)
-        cls.add_arg("hyperv_spinlocks_retries", "hyperv_spinlocks_retries")
-        cls.add_arg("hyperv_synic", "hyperv_synic", is_onoff=True)
+        cls.add_arg("apic.eoi", "eoi", is_onoff=True)
+        cls.add_arg("pmu.state", "pmu", is_onoff=True)
 
-        cls.add_arg("vmport", "vmport", is_onoff=True)
-        cls.add_arg("kvm_hidden", "kvm_hidden", is_onoff=True)
-        cls.add_arg("pvspinlock", "pvspinlock", is_onoff=True)
+        cls.add_arg("hyperv.reset.state", "hyperv_reset", is_onoff=True)
+        cls.add_arg("hyperv.vapic.state", "hyperv_vapic", is_onoff=True)
+        cls.add_arg("hyperv.relaxed.state", "hyperv_relaxed", is_onoff=True)
+        cls.add_arg("hyperv.spinlocks.state", "hyperv_spinlocks", is_onoff=True)
+        cls.add_arg("hyperv.spinlocks.retries", "hyperv_spinlocks_retries")
+        cls.add_arg("hyperv.synic.state", "hyperv_synic", is_onoff=True)
 
-        cls.add_arg("gic_version", "gic_version")
+        cls.add_arg("vmport.state", "vmport", is_onoff=True)
+        cls.add_arg("kvm.hidden.state", "kvm_hidden", is_onoff=True)
+        cls.add_arg("pvspinlock.state", "pvspinlock", is_onoff=True)
 
-        cls.add_arg("smm", "smm", is_onoff=True)
-        cls.add_arg("vmcoreinfo", "vmcoreinfo", is_onoff=True)
+        cls.add_arg("gic.version", "gic_version")
+
+        cls.add_arg("smm.state", "smm", is_onoff=True)
+        cls.add_arg("vmcoreinfo.state", "vmcoreinfo", is_onoff=True)
 
 
 ###################
