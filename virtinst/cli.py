@@ -2937,7 +2937,7 @@ class ParserPanic(VirtCLIParser):
     def set_model_cb(self, inst, val, virtarg):
         if self.compat_mode and val.startswith("0x"):
             inst.model = DevicePanic.MODEL_ISA
-            inst.iobase = val
+            inst.address.iobase = val
         else:
             inst.model = val
 
@@ -2950,9 +2950,10 @@ class ParserPanic(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
+        _add_device_address_args(cls)
         cls.add_arg("model", "model", cb=cls.set_model_cb,
                     ignore_default=True)
-        cls.add_arg("iobase", "iobase")
+        cls.add_arg("iobase", "address.iobase")
 
 
 ###################

@@ -41,8 +41,6 @@ class DevicePanic(Device):
         return []
 
     model = XMLProperty("./@model")
-    type = XMLProperty("./address/@type")
-    iobase = XMLProperty("./address/@iobase")
 
 
     ##################
@@ -57,7 +55,7 @@ class DevicePanic(Device):
         return None
 
     def set_defaults(self, guest):
-        if not self.type and self.iobase:
-            self.type = "isa"
+        if not self.address.type and self.address.iobase:
+            self.address.type = "isa"
         if not self.model:
             self.model = self.get_default_model(guest)

@@ -1051,8 +1051,8 @@ class XMLParseTest(unittest.TestCase):
         dev1 = guest.devices.panic[0]
 
         check = self._make_checker(dev1)
-        check("type", "isa", None, "isa")
-        check("iobase", "0x505", None, "0x506")
+        check("address.type", "isa", None, "isa")
+        check("address.iobase", "0x505", None, "0x506")
         self._alter_compare(guest.get_xml(), outfile)
 
     def testQEMUXMLNS(self):
