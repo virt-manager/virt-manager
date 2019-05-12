@@ -1727,13 +1727,17 @@ class ParserBlkiotune(VirtCLIParser):
     cli_arg_name = "blkiotune"
     guest_propname = "blkiotune"
     remove_first = "weight"
+    aliases = {
+        "device.path": "device_path",
+        "device.weight": "device_weight",
+    }
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("weight", "weight")
-        cls.add_arg("device_path", "device_path")
-        cls.add_arg("device_weight", "device_weight")
+        cls.add_arg("device.path", "device_path")
+        cls.add_arg("device.weight", "device_weight")
 
 
 ###########################
