@@ -88,7 +88,8 @@ class DeviceController(Device):
         return ctrl
 
 
-    _XML_PROP_ORDER = ["type", "index", "model", "master_startport", "driver_queues", "maxGrantFrames"]
+    _XML_PROP_ORDER = ["type", "index", "model", "master_startport",
+            "driver_queues", "maxGrantFrames"]
 
     type = XMLProperty("./@type")
     model = XMLProperty("./@model")

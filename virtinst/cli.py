@@ -2781,9 +2781,10 @@ class ParserController(VirtCLIParser):
     cli_arg_name = "controller"
     guest_propname = "devices.controller"
     remove_first = "type"
-
-    def set_server_cb(self, inst, val, virtarg):
-        inst.address.set_addrstr(val)
+    aliases = {
+        "master.startport": "master",
+        "driver.queues": "driver_queues",
+    }
 
     def _parse(self, inst):
         if self.optstr == "usb2":
@@ -2792,6 +2793,14 @@ class ParserController(VirtCLIParser):
             return DeviceController.get_usb3_controller(inst.conn, self.guest)
         return super()._parse(inst)
 
+
+    ###################
+    # Option handling #
+    ###################
+
+    def set_address_cb(self, inst, val, virtarg):
+        inst.address.set_addrstr(val)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -2799,11 +2808,11 @@ class ParserController(VirtCLIParser):
         cls.add_arg("type", "type")
         cls.add_arg("model", "model")
         cls.add_arg("index", "index")
-        cls.add_arg("master", "master_startport")
-        cls.add_arg("driver_queues", "driver_queues")
         cls.add_arg("maxGrantFrames", "maxGrantFrames")
+        cls.add_arg("master.startport", "master_startport")
+        cls.add_arg("driver.queues", "driver_queues")
 
-        cls.add_arg("address", None, lookup_cb=None, cb=cls.set_server_cb)
+        cls.add_arg("address", None, lookup_cb=None, cb=cls.set_address_cb)
 
 
 ###################

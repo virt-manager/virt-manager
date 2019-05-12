@@ -1081,6 +1081,8 @@ Controller also supports the special values B<usb2> and B<usb3> to
 specify which version of the USB controller should be used (version 2
 or 3).
 
+Some example suboptions:
+
 =over 4
 
 =item B<model>
@@ -1100,28 +1102,6 @@ The preferred method for setting this is using the address.* parameters.
 
 A decimal integer describing in which order the bus controller is
 encountered, and to reference the controller bus.
-
-=item B<master>
-
-Applicable to USB companion controllers, to define the master bus startport.
-
-=back
-
-Examples:
-
-=over 4
-
-=item B<--controller usb,model=ich9-ehci1,address=0:0:4.0,index=0>
-
-Adds a ICH9 EHCI1 USB controller on PCI address 0:0:4.0
-
-=item B<--controller usb,model=ich9-uhci2,address=0:0:4.7,index=0,master=2>
-
-Adds a ICH9 UHCI2 USB companion controller for the previous master
-controller, ports start from port number 2.
-
-The parameter multifunction='on' will be added automatically to the
-proper device (if needed).  This applies to all PCI devices.
 
 =back
 
