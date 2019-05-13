@@ -303,7 +303,7 @@ class vmmSerialConsole(vmmGObject):
         devs = self.vm.get_serialcon_devices()
         for dev in devs:
             port = dev.get_xml_idx()
-            path = dev.source_path
+            path = dev.source.path
 
             if port == self.target_port:
                 if path != self.lastpath:

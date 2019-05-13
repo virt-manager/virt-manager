@@ -426,9 +426,9 @@ class Cloner(object):
         # new guest name
         for channel in self._guest.devices.channel:
             if (channel.type == DeviceChannel.TYPE_UNIX and
-                channel.target_name and channel.source_path and
-                channel.target_name in channel.source_path):
-                channel.source_path = None
+                channel.target_name and channel.source.path and
+                channel.target_name in channel.source.path):
+                channel.source.path = None
 
         if self._guest.os.nvram:
             self._prepare_nvram()

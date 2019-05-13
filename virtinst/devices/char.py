@@ -5,7 +5,47 @@
 # See the COPYING file in the top-level directory.
 
 from .device import Device
-from ..xmlbuilder import XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from .. import util
+
+
+def _set_host_helper(obj, hostparam, portparam, val):
+    def parse_host(val):
+        host, ignore, port = (val or "").partition(":")
+        return host or None, port or None
+
+    host, port = parse_host(val)
+    if not host:
+        host = "127.0.0.1"
+    if host:
+        util.set_prop_path(obj, hostparam, host)
+    if port:
+        util.set_prop_path(obj, portparam, port)
+
+
+class CharSource(XMLBuilder):
+    XML_NAME = "source"
+    _XML_PROP_ORDER = ["bind_host", "bind_service",
+                       "mode", "connect_host", "connect_service",
+                       "path", "channel"]
+
+    def set_friendly_connect(self, val):
+        _set_host_helper(self, "connect_host", "connect_service", val)
+    def set_friendly_bind(self, val):
+        _set_host_helper(self, "bind_host", "bind_service", val)
+
+    path = XMLProperty("./@path")
+    channel = XMLProperty("./@channel")
+    master = XMLProperty("./@master")
+    slave = XMLProperty("./@slave")
+    mode = XMLProperty("./@mode")
+
+    # Convenience source helpers for setting connect/bind host and service
+    connect_host = XMLProperty("./../source[@mode='connect']/@host")
+    connect_service = XMLProperty(
+            "./../source[@mode='connect']/@service", is_int=True)
+    bind_host = XMLProperty("./../source[@mode='bind']/@host")
+    bind_service = XMLProperty("./../source[@mode='bind']/@service", is_int=True)
 
 
 class _DeviceChar(Device):
@@ -93,40 +133,14 @@ class _DeviceChar(Device):
 
         return desc
 
-    def _set_host_helper(self, hostparam, portparam, val):
-        def parse_host(val):
-            host, ignore, port = (val or "").partition(":")
-            return host or None, port or None
-
-        host, port = parse_host(val)
-        if not host:
-            host = "127.0.0.1"
-        if host:
-            setattr(self, hostparam, host)
-        if port:
-            setattr(self, portparam, port)
-
-    def set_friendly_connect(self, val):
-        self._set_host_helper("connect_host", "connect_service", val)
-    def set_friendly_bind(self, val):
-        self._set_host_helper("bind_host", "bind_service", val)
     def set_friendly_target(self, val):
-        self._set_host_helper("target_address", "target_port", val)
+        _set_host_helper(self, "target_address", "target_port", val)
 
-
-    _XML_PROP_ORDER = ["type",
-                       "bind_host", "bind_service",
-                       "source_mode", "connect_host", "connect_service",
-                       "source_path", "source_channel",
+    _XML_PROP_ORDER = ["type", "source",
                        "target_type", "target_name", "target_state"]
 
     type = XMLProperty("./@type")
-
-    source_path = XMLProperty("./source/@path")
-    source_channel = XMLProperty("./source/@channel")
-    source_master = XMLProperty("./source/@master")
-    source_slave = XMLProperty("./source/@slave")
-    source_mode = XMLProperty("./source/@mode")
+    source = XMLChildProperty(CharSource, is_single=True)
 
     target_address = XMLProperty("./target/@address")
     target_port = XMLProperty("./target/@port", is_int=True)
@@ -138,27 +152,15 @@ class _DeviceChar(Device):
     log_file = XMLProperty("./log/@file")
     log_append = XMLProperty("./log/@append", is_onoff=True)
 
-    # Convenience source helpers for setting connect/bind host and service
-    connect_host = XMLProperty("./source[@mode='connect']/@host")
-    connect_service = XMLProperty(
-            "./source[@mode='connect']/@service", is_int=True)
-    bind_host = XMLProperty("./source[@mode='bind']/@host")
-    bind_service = XMLProperty("./source[@mode='bind']/@service", is_int=True)
-
-
-    #######################
-    # Remaining XML props #
-    #######################
-
 
     ##################
     # Default config #
     ##################
 
     def set_defaults(self, _guest):
-        if (not self.source_mode and
+        if (not self.source.mode and
             self.type in [self.TYPE_UNIX, self.TYPE_TCP]):
-            self.source_mode = "bind"
+            self.source.mode = "bind"
         if not self.target_type and self.DEVICE_TYPE == "channel":
             self.target_type = "virtio"
         if not self.target_name and self.type == self.TYPE_SPICEVMC:

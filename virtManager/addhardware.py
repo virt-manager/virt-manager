@@ -1337,8 +1337,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         dev = char_class(self.conn.get_backend())
         dev.type = devtype
-        dev.source_path = source_path
-        dev.source_channel = source_channel
+        dev.source.path = source_path
+        dev.source.channel = source_channel
         dev.target_name = target_name
         dev.target_type = target_type
         return dev

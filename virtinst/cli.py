@@ -3334,12 +3334,12 @@ class _ParserChar(VirtCLIParser):
     def set_host_cb(self, inst, val, virtarg):
         if ("bind_host" not in self.optdict and
             self.optdict.get("mode", None) == "bind"):
-            inst.set_friendly_bind(val)
+            inst.source.set_friendly_bind(val)
         else:
-            inst.set_friendly_connect(val)
+            inst.source.set_friendly_connect(val)
 
     def set_bind_cb(self, inst, val, virtarg):
-        inst.set_friendly_bind(val)
+        inst.source.set_friendly_bind(val)
 
     def set_target_cb(self, inst, val, virtarg):
         inst.set_friendly_target(val)
@@ -3363,7 +3363,7 @@ class _ParserChar(VirtCLIParser):
 
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("char_type", "type")
-        cls.add_arg("path", "source_path")
+        cls.add_arg("path", "source.path")
         cls.add_arg("protocol",   "protocol")
         cls.add_arg("target_type", "target_type")
         cls.add_arg("name", "target_name")
@@ -3373,9 +3373,9 @@ class _ParserChar(VirtCLIParser):
                 cb=cls.set_bind_cb)
         cls.add_arg("target_address", None, lookup_cb=None,
                 cb=cls.set_target_cb)
-        cls.add_arg("mode", "source_mode")
-        cls.add_arg("source.master", "source_master")
-        cls.add_arg("source.slave", "source_slave")
+        cls.add_arg("mode", "source.mode")
+        cls.add_arg("source.master", "source.master")
+        cls.add_arg("source.slave", "source.slave")
         cls.add_arg("log.file", "log_file")
         cls.add_arg("log.append", "log_append", is_onoff=True)
 

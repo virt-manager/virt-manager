@@ -517,27 +517,27 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(serial1)
         check("type", "null", "udp")
-        check("bind_host", None, "example.com")
-        check("bind_service", None, 66)
-        check("connect_host", None, "example.com.uk")
-        check("connect_service", None, 77)
+        check("source.bind_host", None, "example.com")
+        check("source.bind_service", None, 66)
+        check("source.connect_host", None, "example.com.uk")
+        check("source.connect_service", None, 77)
 
         check = self._make_checker(serial2)
         check("type", "tcp")
         check("protocol", "telnet", "raw")
-        check("source_mode", "bind", "connect")
+        check("source.mode", "bind", "connect")
 
         check = self._make_checker(parallel1)
-        check("source_mode", "bind")
-        check("source_path", "/tmp/foobar", None)
+        check("source.mode", "bind")
+        check("source.path", "/tmp/foobar", None)
         check("type", "unix", "pty")
 
         check = self._make_checker(parallel2)
         check("type", "udp")
-        check("bind_service", 1111, 1357)
-        check("bind_host", "my.bind.host", "my.foo.host")
-        check("connect_service", 2222, 7777)
-        check("connect_host", "my.source.host", "source.foo.host")
+        check("source.bind_service", 1111, 1357)
+        check("source.bind_host", "my.bind.host", "my.foo.host")
+        check("source.connect_service", 2222, 7777)
+        check("source.connect_host", "my.source.host", "source.foo.host")
 
         check = self._make_checker(console1)
         check("type", "pty")
@@ -545,8 +545,8 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(console2)
         check("type", "file")
-        check("source_path", "/tmp/foo.img", None)
-        check("source_path", None, "/root/foo")
+        check("source.path", "/tmp/foo.img", None)
+        check("source.path", None, "/root/foo")
         check("target_type", "virtio")
         check("target_state", None, "connected")
 
@@ -563,7 +563,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(channel3)
         check("type", "spiceport")
-        check("source_channel", "org.spice-space.webdav.0", "test.1")
+        check("source.channel", "org.spice-space.webdav.0", "test.1")
         check("target_type", "virtio")
         check("target_name", "org.spice-space.webdav.0", "test.2")
         self.assertEqual(channel3.get_xml_id(), "./devices/channel[3]")

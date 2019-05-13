@@ -2388,14 +2388,15 @@ class vmmDetails(vmmGObjectUI):
             return ret
 
         connect_str = build_host_str(
-                chardev.connect_host, chardev.connect_service)
-        bind_str = build_host_str(chardev.bind_host, chardev.bind_service)
+                chardev.source.connect_host, chardev.source.connect_service)
+        bind_str = build_host_str(
+                chardev.source.bind_host, chardev.source.bind_service)
         target_type = show_target_type and chardev.target_type or None
 
         # Device type specific properties, only show if apply to the cur dev
         show_ui("char-source-host", connect_str)
         show_ui("char-bind-host", bind_str)
-        show_ui("char-source-path", chardev.source_path)
+        show_ui("char-source-path", chardev.source.path)
         show_ui("char-target-type", target_type)
         show_ui("char-target-name", chardev.target_name)
         show_ui("char-target-state", chardev.target_state)

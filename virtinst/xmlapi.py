@@ -59,7 +59,13 @@ class _XPath(object):
     """
     def __init__(self, fullxpath):
         self.fullxpath = fullxpath
-        self.segments = [_XPathSegment(s) for s in self.fullxpath.split("/")]
+        self.segments = []
+        for s in self.fullxpath.split("/"):
+            if s == "..":
+                # Resolve and flatten .. in xpaths
+                self.segments = self.segments[:-1]
+                continue
+            self.segments.append(_XPathSegment(s))
 
         self.is_prop = self.segments[-1].is_prop
         self.propname = (self.is_prop and self.segments[-1].nodename or None)
