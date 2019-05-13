@@ -330,7 +330,7 @@ class Cloner(object):
                 vol_install.input_vol = orig_disk.get_vol_object()
                 vol_install.sync_input_vol(only_format=True)
 
-            if self.clone_sparse:
+            if not self.clone_sparse:
                 vol_install.allocation = vol_install.capacity
             vol_install.reflink = self.reflink
             clone_disk.set_vol_install(vol_install)
