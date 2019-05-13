@@ -1035,16 +1035,6 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml(), outfile)
 
-    def testConsoleCompat(self):
-        guest, outfile = self._get_test_content("console-compat")
-
-        dev1 = guest.devices.console[0]
-        check = self._make_checker(dev1)
-        check("source_path", "/dev/pts/4")
-        check("_tty", "/dev/pts/4", "foo", "/dev/pts/4")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
     def testPanicDevice(self):
         guest, outfile = self._get_test_content("change-panic-device")
 

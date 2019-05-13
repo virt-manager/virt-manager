@@ -143,13 +143,12 @@ class _DeviceChar(Device):
     _XML_PROP_ORDER = ["type",
                        "bind_host", "bind_service",
                        "source_mode", "connect_host", "connect_service",
-                       "_source_path", "source_channel",
+                       "source_path", "source_channel",
                        "target_type", "target_name", "target_state"]
 
     type = XMLProperty("./@type")
-    _tty = XMLProperty("./@tty")
 
-    _source_path = XMLProperty("./source/@path")
+    source_path = XMLProperty("./source/@path")
     source_channel = XMLProperty("./source/@channel")
     source_master = XMLProperty("./source/@master")
     source_slave = XMLProperty("./source/@slave")
@@ -164,16 +163,6 @@ class _DeviceChar(Device):
     protocol = XMLProperty("./protocol/@type")
     log_file = XMLProperty("./log/@file")
     log_append = XMLProperty("./log/@append", is_onoff=True)
-
-    # Convenience property to get source_path or tty, for old libvirt compat
-    def _get_source_path(self):
-        source = self._source_path
-        if source is None and self._tty:
-            return self._tty
-        return source
-    def _set_source_path(self, val):
-        self._source_path = val
-    source_path = property(_get_source_path, _set_source_path)
 
     # Convenience source helpers for setting connect/bind host and service
     connect_host = XMLProperty("./source[@mode='connect']/@host")
