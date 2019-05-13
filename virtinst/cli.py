@@ -3364,7 +3364,7 @@ class _ParserChar(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("char_type", "type")
         cls.add_arg("path", "source.path")
-        cls.add_arg("protocol",   "protocol")
+        cls.add_arg("protocol", "source.protocol")
         cls.add_arg("target_type", "target_type")
         cls.add_arg("name", "target_name")
         cls.add_arg("host", None, lookup_cb=None,
@@ -3376,8 +3376,8 @@ class _ParserChar(VirtCLIParser):
         cls.add_arg("mode", "source.mode")
         cls.add_arg("source.master", "source.master")
         cls.add_arg("source.slave", "source.slave")
-        cls.add_arg("log.file", "log_file")
-        cls.add_arg("log.append", "log_append", is_onoff=True)
+        cls.add_arg("log.file", "source.log_file")
+        cls.add_arg("log.append", "source.log_append", is_onoff=True)
 
 
 class ParserSerial(_ParserChar):

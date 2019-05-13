@@ -44,6 +44,14 @@ class CharSource(XMLBuilder):
     slave = XMLProperty("./@slave")
     mode = XMLProperty("./@mode")
 
+    # It's weird to track these properties here, since the XML is set on
+    # the parent, but this is how libvirt does it internally, which means
+    # everything that shares a charsource has these values too.
+    protocol = XMLProperty("./../protocol/@type")
+    log_file = XMLProperty("./../log/@file")
+    log_append = XMLProperty("./../log/@append", is_onoff=True)
+
+
     # Convenience source helpers for setting connect/bind host and service
     connect_host = XMLProperty("./../source[@mode='connect']/@host")
     connect_service = XMLProperty(
@@ -151,10 +159,6 @@ class _DeviceChar(Device):
     target_type = XMLProperty("./target/@type")
     target_name = XMLProperty("./target/@name")
     target_state = XMLProperty("./target/@state")
-
-    protocol = XMLProperty("./protocol/@type")
-    log_file = XMLProperty("./log/@file")
-    log_append = XMLProperty("./log/@append", is_onoff=True)
 
 
     ##################

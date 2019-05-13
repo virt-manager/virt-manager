@@ -524,7 +524,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(serial2)
         check("type", "tcp")
-        check("protocol", "telnet", "raw")
+        check("source.protocol", "telnet", "raw")
         check("source.mode", "bind", "connect")
 
         check = self._make_checker(parallel1)
@@ -980,6 +980,7 @@ class XMLParseTest(unittest.TestCase):
         check("type", "tcp")
         check("source.host", "127.0.0.1")
         check("source.service", 2001)
+        check("source.protocol", "raw", "telnet")
 
         check = self._make_checker(dev4)
         check("type", "unix")
