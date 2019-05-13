@@ -551,11 +551,13 @@ c.add_compare(""" \
 --smartcard passthrough,type=spicevmc \
 --smartcard type=host \
 --smartcard default \
+--smartcard passthrough,type=tcp,source.mode=bind,source.host=1.2.3.4,source.service=5678,protocol.type=telnet
 \
 --redirdev usb,type=spicevmc \
 --redirdev usb,type=tcp,server=localhost:4000 \
 --redirdev usb,type=tcp,server=127.0.0.1:4002,boot_order=3 \
 --redirdev default \
+--redirdev type=unix,source.path=/tmp/foo.socket,log.file=/tmp/123.log
 \
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp \
 \
@@ -574,6 +576,7 @@ c.add_compare(""" \
 --memory 1024 \
 --disk none \
 --graphics spice,gl=yes \
+--rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2 \
 """, "spice-gl")
 
 

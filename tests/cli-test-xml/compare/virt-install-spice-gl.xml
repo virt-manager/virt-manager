@@ -58,7 +58,9 @@
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="spicevmc"/>
     <rng model="virtio">
-      <backend model="random">/dev/urandom</backend>
+      <backend model="egd" type="nmdm">
+        <source master="/dev/foo1" slave="/dev/foo2"/>
+      </backend>
     </rng>
   </devices>
 </domain>

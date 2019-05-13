@@ -246,6 +246,10 @@
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="passthrough" type="host"/>
     <smartcard mode="passthrough" type="spicevmc"/>
+    <smartcard mode="passthrough" type="tcp">
+      <source mode="bind" host="1.2.3.4" service="5678"/>
+      <protocol type="telnet"/>
+    </smartcard>
     <serial type="tcp">
       <source mode="bind" host="127.0.0.1" service="2222"/>
       <protocol type="telnet"/>
@@ -409,6 +413,10 @@
       <boot order="3"/>
     </redirdev>
     <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="unix">
+      <source path="/tmp/foo.socket"/>
+      <log file="/tmp/123.log"/>
+    </redirdev>
     <rng model="virtio">
       <backend model="egd" type="tcp">
         <source host="127.0.0.1" service="8000"/>

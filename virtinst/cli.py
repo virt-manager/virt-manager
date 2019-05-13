@@ -2474,6 +2474,38 @@ def _add_device_boot_order_arg(cls):
     cls.add_arg("boot.order", "boot.order", cb=cls.set_boot_order_cb)
 
 
+def _add_char_source_args(cls, prefix=""):
+    """
+    Add arguments that represent the CharSource object, which is shared
+    among multiple device types
+    """
+    def set_sourcehost_cb(c, inst, val, virtarg):
+        inst.source.set_friendly_host(val)
+
+    def set_bind_cb(c, inst, val, virtarg):
+        inst.source.set_friendly_bind(val)
+
+    def set_connect_cb(c, inst, val, virtarg):
+        inst.source.set_friendly_connect(val)
+
+    def _add_arg(cliname, propname, *args, **kwargs):
+        cls.add_arg(prefix + cliname, propname, *args, **kwargs)
+
+    _add_arg("source.path", "source.path")
+    _add_arg("source.host", "source.host", cb=set_sourcehost_cb)
+    _add_arg("source.service", "source.service")
+    _add_arg("source.bind_host", "source.bind_host", cb=set_bind_cb)
+    _add_arg("source.bind_service", "source.bind_service")
+    _add_arg("source.connect_host", "source.connect_host", cb=set_connect_cb)
+    _add_arg("source.connect_service", "source.connect_service")
+    _add_arg("source.mode", "source.mode")
+    _add_arg("source.master", "source.master")
+    _add_arg("source.slave", "source.slave")
+    _add_arg("protocol.type", "source.protocol")
+    _add_arg("log.file", "source.log_file")
+    _add_arg("log.append", "source.log_append", is_onoff=True)
+
+
 ##################
 # --disk parsing #
 ##################
@@ -3067,6 +3099,7 @@ class ParserSmartcard(VirtCLIParser):
         _add_device_address_args(cls)
         cls.add_arg("mode", "mode", ignore_default=True)
         cls.add_arg("type", "type", ignore_default=True)
+        _add_char_source_args(cls)
 
 
 ######################
@@ -3097,6 +3130,7 @@ class ParserRedir(VirtCLIParser):
         _add_device_boot_order_arg(cls)
 
         cls.add_arg("server", None, lookup_cb=None, cb=cls.set_server_cb)
+        _add_char_source_args(cls)
 
 
 #################
@@ -3188,11 +3222,7 @@ class ParserRNG(VirtCLIParser):
         cls.add_arg("backend.model", "backend_model")
         cls.add_arg("backend.type", "backend_type")
 
-        cls.add_arg("backend.source.mode", "source.mode")
-        cls.add_arg("backend.source.host", "source.host")
-        cls.add_arg("backend.source.service", "source.service")
-        cls.add_arg("backend.source.connect_host", "source.connect_host")
-        cls.add_arg("backend.source.connect_service", "source.connect_service")
+        _add_char_source_args(cls, prefix="backend.")
 
         cls.add_arg("rate.bytes", "rate_bytes")
         cls.add_arg("rate.period", "rate_period")
@@ -3366,12 +3396,6 @@ class _ParserChar(VirtCLIParser):
         else:
             inst.source.set_friendly_connect(val)
 
-    def set_sourcehost_cb(self, inst, val, virtarg):
-        inst.source.set_friendly_host(val)
-
-    def set_bind_cb(self, inst, val, virtarg):
-        inst.source.set_friendly_bind(val)
-
     def set_target_cb(self, inst, val, virtarg):
         inst.set_friendly_target(val)
 
@@ -3392,20 +3416,11 @@ class _ParserChar(VirtCLIParser):
         # Old backcompat argument
         cls.add_arg("host", "source.host", cb=cls.set_host_cb)
 
-        cls.add_arg("source.path", "source.path")
-        cls.add_arg("source.host", "source.host", cb=cls.set_sourcehost_cb)
-        cls.add_arg("source.bind_host", "source.bind_host", cb=cls.set_bind_cb)
-        cls.add_arg("source.mode", "source.mode")
-        cls.add_arg("source.master", "source.master")
-        cls.add_arg("source.slave", "source.slave")
-        cls.add_arg("protocol.type", "source.protocol")
-        cls.add_arg("log.file", "source.log_file")
-        cls.add_arg("log.append", "source.log_append", is_onoff=True)
+        _add_char_source_args(cls)
 
         cls.add_arg("target.address", "target_address", cb=cls.set_target_cb)
         cls.add_arg("target.type", "target_type")
         cls.add_arg("target.name", "target_name")
-
 
 
 class ParserSerial(_ParserChar):
