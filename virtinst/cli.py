@@ -3135,73 +3135,67 @@ class ParserTPM(VirtCLIParser):
 class ParserRNG(VirtCLIParser):
     cli_arg_name = "rng"
     guest_propname = "devices.rng"
-    remove_first = "type"
+    remove_first = "backend.model"
     stub_none = False
+    aliases = {
+        "backend.type": "backend_type",
+        "backend.source.mode": "backend_mode",
+        "backend.source.host": "backend_host",
+        "backend.source.service": "backend_service",
+        "backend.source.connect_host": "backend_connect_host",
+        "backend.source.connect_service": "backend_connect_service",
+        "rate.bytes": "rate_bytes",
+        "rate.period": "rate_period",
+    }
 
-    def set_hosts_cb(self, inst, val, virtarg):
-        namemap = {}
-        inst.backend_type = inst.cli_backend_type
-
-        if inst.cli_backend_mode == "connect":
-            namemap["backend_host"] = "source.connect_host"
-            namemap["backend_service"] = "source.connect_service"
-
-        if inst.cli_backend_mode == "bind":
-            namemap["backend_host"] = "source.bind_host"
-            namemap["backend_service"] = "source.bind_service"
-
-            if inst.cli_backend_type == "udp":
-                namemap["backend_connect_host"] = "source.connect_host"
-                namemap["backend_connect_service"] = "source.connect_service"
-
-        if virtarg.cliname in namemap:
-            util.set_prop_path(inst, namemap[virtarg.cliname], val)
-
-    def set_backend_cb(self, inst, val, virtarg):
-        if virtarg.cliname == "backend_mode":
-            inst.cli_backend_mode = val
-        elif virtarg.cliname == "backend_type":
-            inst.cli_backend_type = val
+    def _add_advertised_aliases(self):
+        # These are essentially aliases for new style options, but we still
+        # want to advertise them in --rng=help output because they are
+        # historically commonly used. This should rarely, if ever, be extended
+        if "type" in self.optdict:
+            self.optdict["backend.model"] = self.optdict.pop("type")
+        if "device" in self.optdict:
+            self.optdict["backend"] = self.optdict.pop("device")
 
     def _parse(self, inst):
         if self.optstr == "none":
             self.guest.skip_default_rng = True
             return
 
-        inst.cli_backend_mode = "connect"
-        inst.cli_backend_type = "udp"
-
-        if self.optdict.get("type", "").startswith("/"):
-            # Allow --rng /dev/random
-            self.optdict["device"] = self.optdict.pop("type")
-            self.optdict["type"] = "random"
+        self._add_advertised_aliases()
+        if self.optdict.get("backend.model", "").startswith("/"):
+            # Handle --rng /path/to/dev
+            self.optdict["backend"] = self.optdict.pop("backend.model")
+            self.optdict["backend.model"] = "random"
 
         return super()._parse(inst)
+
+
+    ###################
+    # Option handling #
+    ###################
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
-        cls.add_arg("type", "backend_model")
+        # These are handled in _add_advertised_aliases
+        cls.add_arg("type", "backend_model", cb=cls.noset_cb)
+        cls.add_arg("device", "device", cb=cls.noset_cb)
 
-        cls.add_arg("backend_mode", None, lookup_cb=None,
-                cb=cls.set_backend_cb)
-        cls.add_arg("backend_type", None, lookup_cb=None,
-                cb=cls.set_backend_cb)
-
-        cls.add_arg("backend_host", None, lookup_cb=None,
-                cb=cls.set_hosts_cb)
-        cls.add_arg("backend_service", None, lookup_cb=None,
-                cb=cls.set_hosts_cb)
-        cls.add_arg("backend_connect_host", None, lookup_cb=None,
-                cb=cls.set_hosts_cb)
-        cls.add_arg("backend_connect_service", None, lookup_cb=None,
-                cb=cls.set_hosts_cb)
-
-        cls.add_arg("device", "device")
         cls.add_arg("model", "model")
-        cls.add_arg("rate_bytes", "rate_bytes")
-        cls.add_arg("rate_period", "rate_period")
+        cls.add_arg("backend", "device")
+        cls.add_arg("backend.model", "backend_model")
+        cls.add_arg("backend.type", "backend_type")
+
+        cls.add_arg("backend.source.mode", "source.mode")
+        cls.add_arg("backend.source.host", "source.host")
+        cls.add_arg("backend.source.service", "source.service")
+        cls.add_arg("backend.source.connect_host", "source.connect_host")
+        cls.add_arg("backend.source.connect_service", "source.connect_service")
+
+        cls.add_arg("rate.bytes", "rate_bytes")
+        cls.add_arg("rate.period", "rate_period")
 
 
 ######################

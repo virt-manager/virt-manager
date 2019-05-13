@@ -411,7 +411,7 @@
     <redirdev bus="usb" type="spicevmc"/>
     <rng model="virtio">
       <backend model="egd" type="tcp">
-        <source mode="connect" host="127.0.0.1" service="8000"/>
+        <source host="127.0.0.1" service="8000"/>
       </backend>
     </rng>
     <panic model="isa">
