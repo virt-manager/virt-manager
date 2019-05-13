@@ -984,8 +984,8 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev1)
         check("bus", "usb", "baz", "usb")
-        check("host", "foo", "bar")
-        check("service", 12, 42)
+        check("source.host", "foo", "bar")
+        check("source.service", 12, 42)
 
         check = self._make_checker(dev2)
         check("type", "tcp", "spicevmc")

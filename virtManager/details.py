@@ -2300,7 +2300,7 @@ class vmmDetails(vmmGObjectUI):
     def refresh_redir_page(self, rd):
         address = None
         if rd.type == 'tcp':
-            address = _("%s:%s") % (rd.host, rd.service)
+            address = _("%s:%s") % (rd.source.host, rd.source.service)
 
         self.widget("redir-title").set_markup(_label_for_device(rd))
         self.widget("redir-type").set_text(rd.pretty_type(rd.type))

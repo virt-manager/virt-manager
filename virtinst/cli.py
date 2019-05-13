@@ -3080,7 +3080,7 @@ class ParserRedir(VirtCLIParser):
     stub_none = False
 
     def set_server_cb(self, inst, val, virtarg):
-        inst.parse_friendly_server(val)
+        inst.source.set_friendly_host(val)
 
     def _parse(self, inst):
         if self.optstr == "none":

@@ -33,7 +33,11 @@ class CharSource(XMLBuilder):
         _set_host_helper(self, "connect_host", "connect_service", val)
     def set_friendly_bind(self, val):
         _set_host_helper(self, "bind_host", "bind_service", val)
+    def set_friendly_host(self, val):
+        _set_host_helper(self, "host", "service", val)
 
+    host = XMLProperty("./@host")
+    service = XMLProperty("./@service", is_int=True)
     path = XMLProperty("./@path")
     channel = XMLProperty("./@channel")
     master = XMLProperty("./@master")
