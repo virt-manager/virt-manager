@@ -38,27 +38,6 @@ class DeviceRng(Device):
         return {"bind": _("Bind"),
                 "connect": _("Connect")}.get(mode) or mode
 
-    def supports_property(self, propname):
-        """
-        Whether the rng dev type supports the passed property name
-        """
-        users = {
-            "type":                  [self.TYPE_EGD, self.TYPE_RANDOM],
-            "model":                 [self.TYPE_EGD, self.TYPE_RANDOM],
-            "bind_host":             [self.TYPE_EGD],
-            "bind_service":          [self.TYPE_EGD],
-            "connect_host":          [self.TYPE_EGD],
-            "connect_service":       [self.TYPE_EGD],
-            "backend_type":          [self.TYPE_EGD],
-            "device":                [self.TYPE_RANDOM],
-            "rate_bytes":            [self.TYPE_EGD, self.TYPE_RANDOM],
-            "rate_period":           [self.TYPE_EGD, self.TYPE_RANDOM],
-        }
-        if users.get(propname):
-            return self.type in users[propname]
-
-        return hasattr(self, propname)
-
     type = XMLProperty("./backend/@model")
     model = XMLProperty("./@model")
 
