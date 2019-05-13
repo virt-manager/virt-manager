@@ -3143,16 +3143,16 @@ class ParserRNG(VirtCLIParser):
         inst.backend_type = inst.cli_backend_type
 
         if inst.cli_backend_mode == "connect":
-            namemap["backend_host"] = "connect_host"
-            namemap["backend_service"] = "connect_service"
+            namemap["backend_host"] = "source.connect_host"
+            namemap["backend_service"] = "source.connect_service"
 
         if inst.cli_backend_mode == "bind":
-            namemap["backend_host"] = "bind_host"
-            namemap["backend_service"] = "bind_service"
+            namemap["backend_host"] = "source.bind_host"
+            namemap["backend_service"] = "source.bind_service"
 
             if inst.cli_backend_type == "udp":
-                namemap["backend_connect_host"] = "connect_host"
-                namemap["backend_connect_service"] = "connect_service"
+                namemap["backend_connect_host"] = "source.connect_host"
+                namemap["backend_connect_service"] = "source.connect_service"
 
         if virtarg.cliname in namemap:
             util.set_prop_path(inst, namemap[virtarg.cliname], val)
@@ -3182,7 +3182,7 @@ class ParserRNG(VirtCLIParser):
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         _add_device_address_args(cls)
-        cls.add_arg("type", "type")
+        cls.add_arg("type", "backend_model")
 
         cls.add_arg("backend_mode", None, lookup_cb=None,
                 cb=cls.set_backend_cb)

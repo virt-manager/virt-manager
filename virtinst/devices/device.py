@@ -144,7 +144,7 @@ class Device(XMLBuilder):
             "smartcard":     ["mode", "xmlindex"],
             "redirdev":      ["bus", "type", "xmlindex"],
             "tpm":           ["type", "xmlindex"],
-            "rng":           ["type", "xmlindex"],
+            "rng":           ["backend_model", "xmlindex"],
             "panic":         ["type", "xmlindex"],
             "vsock":         ["xmlindex"],
         }

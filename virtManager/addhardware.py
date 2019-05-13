@@ -1434,7 +1434,7 @@ class vmmAddHardware(vmmGObjectUI):
     def _build_rng(self):
         device = self.widget("rng-device").get_text()
         dev = DeviceRng(self.conn.get_backend())
-        dev.type = DeviceRng.TYPE_RANDOM
+        dev.backend_model = DeviceRng.TYPE_RANDOM
         dev.device = device
         return dev
 

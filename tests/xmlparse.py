@@ -1010,13 +1010,13 @@ class XMLParseTest(unittest.TestCase):
         dev1 = guest.devices.rng[0]
 
         check = self._make_checker(dev1)
-        check("type", "egd")
+        check("backend_model", "egd")
         check("backend_type", "udp", "udp")
 
-        check("connect_host", "1.2.3.4", "1.2.3.5")
-        check("connect_service", "1234", "1235")
-        check("bind_host", None, None)
-        check("bind_service", "1233", "1236")
+        check("source.connect_host", "1.2.3.4", "1.2.3.5")
+        check("source.connect_service", 1234, 1235)
+        check("source.bind_host", None, None)
+        check("source.bind_service", 1233, 1236)
 
         check("rate_bytes", "1234", "4321")
         check("rate_period", "2000", "2001")
@@ -1029,7 +1029,7 @@ class XMLParseTest(unittest.TestCase):
         dev1 = guest.devices.rng[0]
 
         check = self._make_checker(dev1)
-        check("type", "random", "random")
+        check("backend_model", "random", "random")
         check("model", "virtio", "virtio")
         check("device", "/dev/random", "/dev/hwrng")
 

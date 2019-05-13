@@ -2333,10 +2333,11 @@ class vmmDetails(vmmGObjectUI):
         self.widget("panic-model").set_text(pmodel)
 
     def refresh_rng_page(self, dev):
-        is_random = dev.type == "random"
+        is_random = dev.backend_model == "random"
         uiutil.set_grid_row_visible(self.widget("rng-device"), is_random)
 
-        self.widget("rng-type").set_text(dev.get_pretty_type(dev.type))
+        self.widget("rng-type").set_text(
+                dev.get_pretty_type(dev.backend_model))
         self.widget("rng-device").set_text(dev.device or "")
 
     def refresh_vsock_page(self, dev):

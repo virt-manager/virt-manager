@@ -5,7 +5,8 @@
 # See the COPYING file in the top-level directory.
 
 from .device import Device
-from ..xmlbuilder import XMLProperty
+from .char import CharSource
+from ..xmlbuilder import XMLChildProperty, XMLProperty
 
 
 class DeviceRng(Device):
@@ -13,12 +14,6 @@ class DeviceRng(Device):
 
     TYPE_RANDOM = "random"
     TYPE_EGD = "egd"
-
-    BACKEND_TYPE_UDP = "udp"
-    BACKEND_TYPE_TCP = "tcp"
-
-    BACKEND_MODE_BIND = "bind"
-    BACKEND_MODE_CONNECT = "connect"
 
     @staticmethod
     def get_pretty_type(rng_type):
@@ -38,16 +33,13 @@ class DeviceRng(Device):
         return {"bind": _("Bind"),
                 "connect": _("Connect")}.get(mode) or mode
 
-    type = XMLProperty("./backend/@model")
     model = XMLProperty("./@model")
 
+    backend_model = XMLProperty("./backend/@model")
     backend_type = XMLProperty("./backend/@type")
 
-    bind_host = XMLProperty("./backend/source[@mode='bind']/@host")
-    bind_service = XMLProperty("./backend/source[@mode='bind']/@service")
-
-    connect_host = XMLProperty("./backend/source[@mode='connect']/@host")
-    connect_service = XMLProperty("./backend/source[@mode='connect']/@service")
+    source = XMLChildProperty(CharSource, is_single=True,
+            relative_xpath="./backend")
 
     rate_bytes = XMLProperty("./rate/@bytes")
     rate_period = XMLProperty("./rate/@period")
