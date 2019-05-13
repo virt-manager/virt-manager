@@ -3330,19 +3330,24 @@ class ParserVsock(VirtCLIParser):
 class _ParserChar(VirtCLIParser):
     remove_first = "char_type"
     stub_none = False
+    aliases = {
+        "protocol.type": "protocol",
 
-    def set_host_cb(self, inst, val, virtarg):
-        if ("bind_host" not in self.optdict and
-            self.optdict.get("mode", None) == "bind"):
-            inst.source.set_friendly_bind(val)
-        else:
-            inst.source.set_friendly_connect(val)
+        "target.address": "target_address",
+        "target.type": "target_type",
+        "target.name": "name",
+    }
 
-    def set_bind_cb(self, inst, val, virtarg):
-        inst.source.set_friendly_bind(val)
-
-    def set_target_cb(self, inst, val, virtarg):
-        inst.set_friendly_target(val)
+    def _add_advertised_aliases(self):
+        # These are essentially aliases for new style options, but we still
+        # want to advertise them in --$OPT=help output because they are
+        # historically commonly used. This should rarely, if ever, be extended
+        if "path" in self.optdict:
+            self.optdict["source.path"] = self.optdict.pop("path")
+        if "mode" in self.optdict:
+            self.optdict["source.mode"] = self.optdict.pop("mode")
+        if "bind_host" in self.optdict:
+            self.optdict["source.bind_host"] = self.optdict.pop("bind_host")
 
     def _parse(self, inst):
         if self.optstr == "none" and inst.DEVICE_TYPE == "console":
@@ -3352,7 +3357,29 @@ class _ParserChar(VirtCLIParser):
             self.guest.skip_default_channel = True
             return
 
+        self._add_advertised_aliases()
         return super()._parse(inst)
+
+
+    ###################
+    # Option handling #
+    ###################
+
+    def set_host_cb(self, inst, val, virtarg):
+        if ("source.bind_host" not in self.optdict and
+            self.optdict.get("source.mode", None) == "bind"):
+            inst.source.set_friendly_bind(val)
+        else:
+            inst.source.set_friendly_connect(val)
+
+    def set_sourcehost_cb(self, inst, val, virtarg):
+        inst.source.set_friendly_host(val)
+
+    def set_bind_cb(self, inst, val, virtarg):
+        inst.source.set_friendly_bind(val)
+
+    def set_target_cb(self, inst, val, virtarg):
+        inst.set_friendly_target(val)
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -3363,21 +3390,28 @@ class _ParserChar(VirtCLIParser):
 
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("char_type", "type")
-        cls.add_arg("path", "source.path")
-        cls.add_arg("protocol", "source.protocol")
-        cls.add_arg("target_type", "target_type")
-        cls.add_arg("name", "target_name")
-        cls.add_arg("host", None, lookup_cb=None,
-                cb=cls.set_host_cb)
-        cls.add_arg("bind_host", None, lookup_cb=None,
-                cb=cls.set_bind_cb)
-        cls.add_arg("target_address", None, lookup_cb=None,
-                cb=cls.set_target_cb)
-        cls.add_arg("mode", "source.mode")
+
+        # These are handled in _add_advertised_aliases
+        cls.add_arg("path", "source.path", cb=cls.noset_cb)
+        cls.add_arg("mode", "source.mode", cb=cls.noset_cb)
+        cls.add_arg("bind_host", "source.bind_host", cb=cls.noset_cb)
+        # Old backcompat argument
+        cls.add_arg("host", "source.host", cb=cls.set_host_cb)
+
+        cls.add_arg("source.path", "source.path")
+        cls.add_arg("source.host", "source.host", cb=cls.set_sourcehost_cb)
+        cls.add_arg("source.bind_host", "source.bind_host", cb=cls.set_bind_cb)
+        cls.add_arg("source.mode", "source.mode")
         cls.add_arg("source.master", "source.master")
         cls.add_arg("source.slave", "source.slave")
+        cls.add_arg("protocol.type", "source.protocol")
         cls.add_arg("log.file", "source.log_file")
         cls.add_arg("log.append", "source.log_append", is_onoff=True)
+
+        cls.add_arg("target.address", "target_address", cb=cls.set_target_cb)
+        cls.add_arg("target.type", "target_type")
+        cls.add_arg("target.name", "target_name")
+
 
 
 class ParserSerial(_ParserChar):

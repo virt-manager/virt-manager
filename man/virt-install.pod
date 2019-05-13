@@ -1239,11 +1239,7 @@ devices, this could be /dev/parport0.
 
 Write output to FILENAME.
 
-=item B<--serial pipe,path=PIPEPATH>
-
-Named pipe (see pipe(7))
-
-=item B<--serial tcp,host=HOST:PORT,mode=MODE,protocol=PROTOCOL>
+=item B<--serial tcp,host=HOST:PORT,source.mode=MODE,protocol.type=PROTOCOL>
 
 TCP net console. MODE is either 'bind' (wait for connections on HOST:PORT)
 or 'connect' (send output to HOST:PORT), default is 'bind'. HOST defaults
@@ -1257,12 +1253,12 @@ Wait for connections on any address, port 4567:
 
 Connect to localhost, port 1234:
 
---serial tcp,host=:1234,mode=connect
+--serial tcp,host=:1234,source.mode=connect
 
 Wait for telnet connection on localhost, port 2222. The user could then
 connect interactively to this console via 'telnet localhost 2222':
 
---serial tcp,host=:2222,mode=bind,protocol=telnet
+--serial tcp,host=:2222,source.mode=bind,source.protocol=telnet
 
 =item B<--serial udp,host=CONNECT_HOST:PORT,bind_host=BIND_HOST:BIND_PORT>
 
@@ -1301,12 +1297,12 @@ Some of the types of character device redirection are:
 
 =over 4
 
-=item B<--channel SOURCE,target_type=guestfwd,target_address=HOST:PORT>
+=item B<--channel SOURCE,target.type=guestfwd,target.address=HOST:PORT>
 
 Communication channel using QEMU usermode networking stack. The guest can
 connect to the channel using the specified HOST:PORT combination.
 
-=item B<--channel SOURCE,target_type=virtio[,name=NAME]>
+=item B<--channel SOURCE,target.type=virtio[,target.name=NAME]>
 
 Communication channel using virtio serial (requires 2.6.34 or later host and
 guest). Each instance of a virtio --channel line is exposed in the
@@ -1315,7 +1311,7 @@ can be any string, such as org.linux-kvm.virtioport1.
 If specified, this will be exposed in the guest at
 /sys/class/virtio-ports/vport0p1/NAME
 
-=item B<--channel spicevmc,target_type=virtio[,name=NAME]>
+=item B<--channel spicevmc,target.type=virtio[,target.name=NAME]>
 
 Communication channel for QEMU spice agent, using virtio serial
 (requires 2.6.34 or later host and guest). NAME is optional metadata,
@@ -1337,7 +1333,7 @@ Example:
 
 =over 4
 
-=item B<--console pty,target_type=virtio>
+=item B<--console pty,target.type=virtio>
 
 Connect a virtio console to the guest, redirected to a PTY on the host.
 For supported guests, this exposes /dev/hvc0 in the guest. See
