@@ -2310,13 +2310,8 @@ class vmmDetails(vmmGObjectUI):
             self.widget("redir-address"), bool(address))
 
     def refresh_tpm_page(self, tpmdev):
-        def show_ui(param, val=None):
-            widgetname = "tpm-" + param.replace("_", "-")
-            doshow = tpmdev.supports_property(param)
-
-            if not val and doshow:
-                val = getattr(tpmdev, param)
-
+        def show_ui(widgetname, val):
+            doshow = bool(val)
             uiutil.set_grid_row_visible(self.widget(widgetname), doshow)
             self.widget(widgetname).set_text(val or "-")
 
@@ -2329,8 +2324,8 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("tpm-model"), tpmdev.model)
 
         # Device type specific properties, only show if apply to the cur dev
-        show_ui("device_path")
-        show_ui("version")
+        show_ui("tpm-device-path", tpmdev.device_path)
+        show_ui("tpm-version", tpmdev.version)
 
     def refresh_panic_page(self, dev):
         model = dev.model or "isa"
@@ -2348,42 +2343,12 @@ class vmmDetails(vmmGObjectUI):
         self.vsockdetails.set_dev(dev)
 
     def refresh_char_page(self, chardev):
-        show_target_type = not (chardev.DEVICE_TYPE in
-                                ["serial", "parallel"])
-        show_target_name = chardev.DEVICE_TYPE == "channel"
-
-        def show_ui(widgetname, param, val=None):
-            doshow = chardev.supports_property(param, ro=True)
-
-            # Exception: don't show target type for serial/parallel
-            if (param == "target_type" and not show_target_type):
-                doshow = False
-            if (param == "target_name" and not show_target_name):
-                doshow = False
-
-            if not val and doshow:
-                val = getattr(chardev, param)
-
-            uiutil.set_grid_row_visible(self.widget(widgetname), doshow)
-            self.widget(widgetname).set_text(val or "-")
-
-        def build_host_str(base):
-            if (not chardev.supports_property(base + "_service") or
-                not chardev.supports_property(base + "_service")):
-                return ""
-
-            host = getattr(chardev, base + "_host") or ""
-            port = getattr(chardev, base + "_service") or ""
-
-            ret = str(host)
-            if port:
-                ret += ":%s" % str(port)
-            return ret
-
         char_type = chardev.DEVICE_TYPE.capitalize()
         target_port = chardev.target_port
         dev_type = chardev.type or "pty"
         primary = self.vm.serial_is_console_dup(chardev)
+        show_target_type = not (chardev.DEVICE_TYPE in
+                                ["serial", "parallel"])
 
         typelabel = ""
         if char_type == "serial":
@@ -2409,13 +2374,31 @@ class vmmDetails(vmmGObjectUI):
         self.widget("char-type").set_markup(typelabel)
         self.widget("char-dev-type").set_text(dev_type)
 
+        def show_ui(widgetname, val):
+            doshow = bool(val)
+            uiutil.set_grid_row_visible(self.widget(widgetname), doshow)
+            self.widget(widgetname).set_text(val or "-")
+
+        def build_host_str(host, port):
+            ret = ""
+            if host:
+                ret += host
+            if port:
+                ret += ":%s" % str(port)
+            return ret
+
+        connect_str = build_host_str(
+                chardev.connect_host, chardev.connect_service)
+        bind_str = build_host_str(chardev.bind_host, chardev.bind_service)
+        target_type = show_target_type and chardev.target_type or None
+
         # Device type specific properties, only show if apply to the cur dev
-        show_ui("char-source-host", "connect_host", build_host_str("connect"))
-        show_ui("char-bind-host", "bind_host", build_host_str("bind"))
-        show_ui("char-source-path", "source_path")
-        show_ui("char-target-type", "target_type")
-        show_ui("char-target-name", "target_name")
-        show_ui("char-target-state", "target_state")
+        show_ui("char-source-host", connect_str)
+        show_ui("char-bind-host", bind_str)
+        show_ui("char-source-path", chardev.source_path)
+        show_ui("char-target-type", target_type)
+        show_ui("char-target-name", chardev.target_name)
+        show_ui("char-target-state", chardev.target_state)
 
     def refresh_hostdev_page(self, hostdev):
         rom_bar = hostdev.rom_bar
