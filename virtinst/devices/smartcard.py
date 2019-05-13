@@ -4,8 +4,9 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+from .char import CharSource
 from .device import Device
-from ..xmlbuilder import XMLProperty
+from ..xmlbuilder import XMLChildProperty, XMLProperty
 
 
 class DeviceSmartcard(Device):
@@ -14,6 +15,7 @@ class DeviceSmartcard(Device):
 
     mode = XMLProperty("./@mode")
     type = XMLProperty("./@type")
+    source = XMLChildProperty(CharSource, is_single=True)
 
 
     ##################

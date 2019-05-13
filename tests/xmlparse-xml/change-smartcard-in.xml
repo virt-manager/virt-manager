@@ -54,6 +54,13 @@
     </smartcard>
     <smartcard mode='passthrough' type='spicevmc'>
     </smartcard>
+    <smartcard mode='passthrough' type='tcp'>
+      <source mode='bind' host='127.0.0.1' service='2001'/>
+      <protocol type='raw'/>
+    </smartcard>
+    <smartcard mode='passthrough' type='unix'>
+      <source mode='bind' path='/tmp/smartcard.sock'/>
+    </smartcard>
   </devices>
   <seclabel type='static' model='selinux'>
     <label>foolabel</label>

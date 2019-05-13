@@ -966,6 +966,8 @@ class XMLParseTest(unittest.TestCase):
 
         dev1 = guest.devices.smartcard[0]
         dev2 = guest.devices.smartcard[1]
+        dev3 = guest.devices.smartcard[2]
+        dev4 = guest.devices.smartcard[3]
 
         check = self._make_checker(dev1)
         check("type", None, "tcp")
@@ -973,6 +975,16 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev2)
         check("mode", "passthrough", "host")
         check("type", "spicevmc", None)
+
+        check = self._make_checker(dev3)
+        check("type", "tcp")
+        check("source.host", "127.0.0.1")
+        check("source.service", 2001)
+
+        check = self._make_checker(dev4)
+        check("type", "unix")
+        check("source.path", "/tmp/smartcard.sock")
+        check("source.mode", "bind")
 
         self._alter_compare(guest.get_xml(), outfile)
 
