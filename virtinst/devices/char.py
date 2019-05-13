@@ -184,8 +184,6 @@ class _DeviceChar(Device):
     def set_defaults(self, _guest):
         if not self.source_mode and self.supports_property("source_mode"):
             self.source_mode = "bind"
-        if not self.protocol and self.supports_property("protocol"):
-            self.protocol = "raw"
         if not self.target_type and self.DEVICE_TYPE == "channel":
             self.target_type = "virtio"
         if not self.target_name and self.type == self.TYPE_SPICEVMC:
