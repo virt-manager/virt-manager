@@ -2562,6 +2562,9 @@ class ParserDisk(VirtCLIParser):
         "source.host.socket": "source_host_socket",
         "source.host.transport": "source_host_transport",
         "source.startupPolicy": "startup_policy",
+        "source.seclabel[0-9]*.model": "seclabel[0-9]*.model",
+        "source.seclabel[0-9]*.relabel": "seclabel[0-9]*.relabel",
+        "source.seclabel[0-9]*.label": "seclabel[0-9]*.label",
 
         "source.reservations.managed": "reservations.managed",
         "source.reservations.source.type": "reservations.source.type",
@@ -2718,6 +2721,12 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("source.host.socket", "source_host_socket")
         cls.add_arg("source.host.transport", "source_host_transport")
         cls.add_arg("source.startupPolicy", "startup_policy")
+        cls.add_arg("source.seclabel[0-9]*.model", "model",
+                    find_inst_cb=cls.seclabel_find_inst_cb)
+        cls.add_arg("source.seclabel[0-9]*.relabel", "relabel", is_onoff=True,
+                    find_inst_cb=cls.seclabel_find_inst_cb)
+        cls.add_arg("source.seclabel[0-9]*.label", "label", can_comma=True,
+                    find_inst_cb=cls.seclabel_find_inst_cb)
 
         cls.add_arg("path", "path")
         cls.add_arg("device", "device")
@@ -2751,14 +2760,6 @@ class ParserDisk(VirtCLIParser):
 
         cls.add_arg("blockio.logical_block_size", "logical_block_size")
         cls.add_arg("blockio.physical_block_size", "physical_block_size")
-
-        # DeviceDisk.seclabels properties
-        cls.add_arg("seclabel[0-9]*.model", "model",
-                    find_inst_cb=cls.seclabel_find_inst_cb)
-        cls.add_arg("seclabel[0-9]*.relabel", "relabel", is_onoff=True,
-                    find_inst_cb=cls.seclabel_find_inst_cb)
-        cls.add_arg("seclabel[0-9]*.label", "label", can_comma=True,
-                    find_inst_cb=cls.seclabel_find_inst_cb)
 
         cls.add_arg("geometry.cyls", "geometry_cyls")
         cls.add_arg("geometry.heads", "geometry_heads")
