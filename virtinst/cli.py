@@ -3336,7 +3336,7 @@ class _ParserChar(VirtCLIParser):
             self.optdict.get("mode", None) == "bind"):
             inst.set_friendly_bind(val)
         else:
-            inst.set_friendly_source(val)
+            inst.set_friendly_connect(val)
 
     def set_bind_cb(self, inst, val, virtarg):
         inst.set_friendly_bind(val)

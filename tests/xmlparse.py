@@ -518,9 +518,9 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(serial1)
         check("type", "null", "udp")
         check("bind_host", None, "example.com")
-        check("bind_port", None, 66)
-        check("source_host", None, "example.com.uk")
-        check("source_port", None, 77)
+        check("bind_service", None, 66)
+        check("connect_host", None, "example.com.uk")
+        check("connect_service", None, 77)
 
         check = self._make_checker(serial2)
         check("type", "tcp")
@@ -534,10 +534,10 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(parallel2)
         check("type", "udp")
-        check("bind_port", 1111, 1357)
+        check("bind_service", 1111, 1357)
         check("bind_host", "my.bind.host", "my.foo.host")
-        check("source_port", 2222, 7777)
-        check("source_host", "my.source.host", "source.foo.host")
+        check("connect_service", 2222, 7777)
+        check("connect_host", "my.source.host", "source.foo.host")
 
         check = self._make_checker(console1)
         check("type", "pty")

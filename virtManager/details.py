@@ -2352,8 +2352,7 @@ class vmmDetails(vmmGObjectUI):
                                 ["serial", "parallel"])
         show_target_name = chardev.DEVICE_TYPE == "channel"
 
-        def show_ui(param, val=None):
-            widgetname = "char-" + param.replace("_", "-")
+        def show_ui(widgetname, param, val=None):
             doshow = chardev.supports_property(param, ro=True)
 
             # Exception: don't show target type for serial/parallel
@@ -2369,12 +2368,12 @@ class vmmDetails(vmmGObjectUI):
             self.widget(widgetname).set_text(val or "-")
 
         def build_host_str(base):
-            if (not chardev.supports_property(base + "_host") or
-                not chardev.supports_property(base + "_port")):
+            if (not chardev.supports_property(base + "_service") or
+                not chardev.supports_property(base + "_service")):
                 return ""
 
             host = getattr(chardev, base + "_host") or ""
-            port = getattr(chardev, base + "_port") or ""
+            port = getattr(chardev, base + "_service") or ""
 
             ret = str(host)
             if port:
@@ -2411,12 +2410,12 @@ class vmmDetails(vmmGObjectUI):
         self.widget("char-dev-type").set_text(dev_type)
 
         # Device type specific properties, only show if apply to the cur dev
-        show_ui("source_host", build_host_str("source"))
-        show_ui("bind_host", build_host_str("bind"))
-        show_ui("source_path")
-        show_ui("target_type")
-        show_ui("target_name")
-        show_ui("target_state")
+        show_ui("char-source-host", "connect_host", build_host_str("connect"))
+        show_ui("char-bind-host", "bind_host", build_host_str("bind"))
+        show_ui("char-source-path", "source_path")
+        show_ui("char-target-type", "target_type")
+        show_ui("char-target-name", "target_name")
+        show_ui("char-target-state", "target_state")
 
     def refresh_hostdev_page(self, hostdev):
         rom_bar = hostdev.rom_bar

@@ -99,16 +99,17 @@ class _DeviceChar(Device):
         """
         users = {
             "source_path":      [self.TYPE_FILE, self.TYPE_UNIX,
-                                    self.TYPE_DEV,  self.TYPE_PIPE],
+                                 self.TYPE_DEV,  self.TYPE_PIPE],
             "source_mode":      [self.TYPE_UNIX, self.TYPE_TCP],
-            "source_host":      [self.TYPE_TCP, self.TYPE_UDP],
-            "source_port":      [self.TYPE_TCP, self.TYPE_UDP],
             "source_channel":   [self.TYPE_SPICEPORT],
             "source_master":    [self.TYPE_NMDM],
             "source_slave":     [self.TYPE_NMDM],
             "protocol":         [self.TYPE_TCP],
+
             "bind_host":        [self.TYPE_UDP],
-            "bind_port":        [self.TYPE_UDP],
+            "bind_service":     [self.TYPE_UDP],
+            "connect_host":     [self.TYPE_TCP, self.TYPE_UDP],
+            "connect_service":  [self.TYPE_TCP, self.TYPE_UDP],
         }
 
         if ro:
@@ -131,24 +132,40 @@ class _DeviceChar(Device):
         if port:
             setattr(self, portparam, port)
 
-    def set_friendly_source(self, val):
-        self._set_host_helper("source_host", "source_port", val)
+    def set_friendly_connect(self, val):
+        self._set_host_helper("connect_host", "connect_service", val)
     def set_friendly_bind(self, val):
-        self._set_host_helper("bind_host", "bind_port", val)
+        self._set_host_helper("bind_host", "bind_service", val)
     def set_friendly_target(self, val):
         self._set_host_helper("target_address", "target_port", val)
 
 
     _XML_PROP_ORDER = ["type",
-                       "bind_host", "bind_port",
-                       "source_mode", "source_host", "source_port",
+                       "bind_host", "bind_service",
+                       "source_mode", "connect_host", "connect_service",
                        "_source_path", "source_channel",
                        "target_type", "target_name", "target_state"]
 
     type = XMLProperty("./@type")
     _tty = XMLProperty("./@tty")
-    _source_path = XMLProperty("./source/@path")
 
+    _source_path = XMLProperty("./source/@path")
+    source_channel = XMLProperty("./source/@channel")
+    source_master = XMLProperty("./source/@master")
+    source_slave = XMLProperty("./source/@slave")
+    source_mode = XMLProperty("./source/@mode")
+
+    target_address = XMLProperty("./target/@address")
+    target_port = XMLProperty("./target/@port", is_int=True)
+    target_type = XMLProperty("./target/@type")
+    target_name = XMLProperty("./target/@name")
+    target_state = XMLProperty("./target/@state")
+
+    protocol = XMLProperty("./protocol/@type")
+    log_file = XMLProperty("./log/@file")
+    log_append = XMLProperty("./log/@append", is_onoff=True)
+
+    # Convenience property to get source_path or tty, for old libvirt compat
     def _get_source_path(self):
         source = self._source_path
         if source is None and self._tty:
@@ -158,40 +175,17 @@ class _DeviceChar(Device):
         self._source_path = val
     source_path = property(_get_source_path, _set_source_path)
 
-    source_channel = XMLProperty("./source/@channel")
-    source_master = XMLProperty("./source/@master")
-    source_slave = XMLProperty("./source/@slave")
-
-    target_state = XMLProperty("./target/@state")
-
-
-    ###################
-    # source handling #
-    ###################
-
-    source_mode = XMLProperty("./source/@mode")
-
-    source_host = XMLProperty("./source[@mode='connect']/@host")
-    source_port = XMLProperty(
+    # Convenience source helpers for setting connect/bind host and service
+    connect_host = XMLProperty("./source[@mode='connect']/@host")
+    connect_service = XMLProperty(
             "./source[@mode='connect']/@service", is_int=True)
-
     bind_host = XMLProperty("./source[@mode='bind']/@host")
-    bind_port = XMLProperty("./source[@mode='bind']/@service", is_int=True)
+    bind_service = XMLProperty("./source[@mode='bind']/@service", is_int=True)
 
 
     #######################
     # Remaining XML props #
     #######################
-
-    protocol = XMLProperty("./protocol/@type")
-
-    target_address = XMLProperty("./target/@address")
-    target_port = XMLProperty("./target/@port", is_int=True)
-    target_type = XMLProperty("./target/@type")
-    target_name = XMLProperty("./target/@name")
-
-    log_file = XMLProperty("./log/@file")
-    log_append = XMLProperty("./log/@append", is_onoff=True)
 
 
     ##################
