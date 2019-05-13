@@ -69,7 +69,3 @@ class DeviceTpm(Device):
             self.type = self.TYPE_PASSTHROUGH
         if not self.model:
             self.model = self.MODEL_TIS
-        if not self.version and self.supports_property("version"):
-            self.version = self.VERSION_1_2
-        if not self.device_path and self.supports_property("device_path"):
-            self.device_path = "/dev/tpm0"
