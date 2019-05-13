@@ -93,20 +93,6 @@ class _DeviceChar(Device):
 
         return desc
 
-    def supports_property(self, propname):
-        """
-        Whether the character dev type supports the passed property name
-        """
-        users = {
-            "source_path":      [self.TYPE_FILE, self.TYPE_UNIX,
-                                 self.TYPE_DEV,  self.TYPE_PIPE],
-            "source_channel":   [self.TYPE_SPICEPORT],
-        }
-
-        if users.get(propname):
-            return self.type in users[propname]
-        return hasattr(self, propname)
-
     def _set_host_helper(self, hostparam, portparam, val):
         def parse_host(val):
             host, ignore, port = (val or "").partition(":")

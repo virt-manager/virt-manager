@@ -40,20 +40,6 @@ class DeviceTpm(Device):
             return _("CRB")
         return tpm_model
 
-    def supports_property(self, propname):
-        """
-        Whether the TPM dev type supports the passed property name
-        """
-        users = {
-            "device_path": [self.TYPE_PASSTHROUGH],
-            "version": [self.TYPE_EMULATOR],
-        }
-
-        if users.get(propname):
-            return self.type in users[propname]
-
-        return hasattr(self, propname)
-
     type = XMLProperty("./backend/@type")
     version = XMLProperty("./backend/@version")
     model = XMLProperty("./@model")

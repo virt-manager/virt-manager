@@ -862,18 +862,13 @@ class vmmAddHardware(vmmGObjectUI):
         if devtype is None:
             return
 
-        tpm_widget_mappings = {
-            "device_path": "tpm-device-path",
-            "version": "tpm-version",
-        }
-
         dev = DeviceTpm(self.conn.get_backend())
         dev.type = devtype
 
-        for param_name, widget_name in tpm_widget_mappings.items():
-            make_visible = dev.supports_property(param_name)
-            uiutil.set_grid_row_visible(self.widget(widget_name + "-label"),
-                                           make_visible)
+        uiutil.set_grid_row_visible(self.widget("tpm-device-path-label"),
+                devtype == dev.TYPE_PASSTHROUGH)
+        uiutil.set_grid_row_visible(self.widget("tpm-version-label"),
+                devtype == dev.TYPE_EMULATOR)
 
     def _change_char_auto_socket(self, src):
         if not src.get_visible():
@@ -913,10 +908,14 @@ class vmmAddHardware(vmmGObjectUI):
         iscon = dev.DEVICE_TYPE == "console"
         show_auto = devtype == "unix" and ischan
 
+        supports_path = [dev.TYPE_FILE, dev.TYPE_UNIX,
+                         dev.TYPE_DEV, dev.TYPE_PIPE]
+        supports_channel = [dev.TYPE_SPICEPORT]
+
         uiutil.set_grid_row_visible(self.widget("char-path-label"),
-                dev.supports_property("source_path"))
+                devtype in supports_path)
         uiutil.set_grid_row_visible(self.widget("char-channel-label"),
-                dev.supports_property("source_channel"))
+                devtype in supports_channel)
 
         uiutil.set_grid_row_visible(
             self.widget("char-target-name-label"), ischan)
@@ -1327,24 +1326,21 @@ class vmmAddHardware(vmmGObjectUI):
         target_name = self.widget("char-target-name").get_child().get_text()
         target_type = uiutil.get_list_selection(typebox)
 
+        if not self.widget("char-path").get_visible():
+            source_path = None
+        if not self.widget("char-channel").get_visible():
+            source_channel = None
         if not self.widget("char-target-name").get_visible():
             target_name = None
         if not typebox.get_visible():
             target_type = None
-        if (self.widget("char-auto-socket").get_visible() and
-            self.widget("char-auto-socket").get_active()):
-            source_path = None
 
         dev = char_class(self.conn.get_backend())
         dev.type = devtype
-        if dev.supports_property("source_path"):
-            dev.source_path = source_path
-        if dev.supports_property("source_channel"):
-            dev.source_channel = source_channel
-        if dev.supports_property("target_name"):
-            dev.target_name = target_name
-        if dev.supports_property("target_type"):
-            dev.target_type = target_type
+        dev.source_path = source_path
+        dev.source_channel = source_channel
+        dev.target_name = target_name
+        dev.target_type = target_type
         return dev
 
     def _build_video(self):
@@ -1384,17 +1380,16 @@ class vmmAddHardware(vmmGObjectUI):
         device_path = self.widget("tpm-device-path").get_text()
         version = uiutil.get_list_selection(self.widget("tpm-version"))
 
-        value_mappings = {
-            "type": typ,
-            "model": model,
-            "device_path": device_path,
-            "version": version,
-        }
+        if not self.widget("tpm-device-path").get_visible():
+            device_path = None
+        if not self.widget("tpm-version").get_visible():
+            version = None
 
         dev = DeviceTpm(self.conn.get_backend())
-        for param_name, val in value_mappings.items():
-            if dev.supports_property(param_name) and val is not None:
-                setattr(dev, param_name, val)
+        dev.type = typ
+        dev.model = model
+        dev.device_path = device_path
+        dev.version = version
         return dev
 
     def _build_panic(self):
