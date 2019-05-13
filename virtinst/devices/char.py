@@ -93,27 +93,15 @@ class _DeviceChar(Device):
 
         return desc
 
-    def supports_property(self, propname, ro=False):
+    def supports_property(self, propname):
         """
         Whether the character dev type supports the passed property name
         """
         users = {
             "source_path":      [self.TYPE_FILE, self.TYPE_UNIX,
                                  self.TYPE_DEV,  self.TYPE_PIPE],
-            "source_mode":      [self.TYPE_UNIX, self.TYPE_TCP],
             "source_channel":   [self.TYPE_SPICEPORT],
-            "source_master":    [self.TYPE_NMDM],
-            "source_slave":     [self.TYPE_NMDM],
-            "protocol":         [self.TYPE_TCP],
-
-            "bind_host":        [self.TYPE_UDP],
-            "bind_service":     [self.TYPE_UDP],
-            "connect_host":     [self.TYPE_TCP, self.TYPE_UDP],
-            "connect_service":  [self.TYPE_TCP, self.TYPE_UDP],
         }
-
-        if ro:
-            users["source_path"] += [self.TYPE_PTY]
 
         if users.get(propname):
             return self.type in users[propname]
@@ -182,7 +170,8 @@ class _DeviceChar(Device):
     ##################
 
     def set_defaults(self, _guest):
-        if not self.source_mode and self.supports_property("source_mode"):
+        if (not self.source_mode and
+            self.type in [self.TYPE_UNIX, self.TYPE_TCP]):
             self.source_mode = "bind"
         if not self.target_type and self.DEVICE_TYPE == "channel":
             self.target_type = "virtio"
