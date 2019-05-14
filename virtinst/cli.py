@@ -2441,9 +2441,9 @@ class ParserQemuCLI(VirtCLIParser):
 # Guest <device> parsing #
 ##########################
 
-def _add_device_address_args(cls):
+def _add_common_device_args(cls, boot_order=False):
     """
-    Add DeviceAddress parameters if we are parsing for a device
+    Add common Device parameters, like address.*
     """
     cls.add_arg("address.type", "address.type")
     cls.add_arg("address.domain", "address.domain")
@@ -2464,14 +2464,13 @@ def _add_device_address_args(cls):
     cls.add_arg("address.irq", "address.irq")
     cls.add_arg("address.base", "address.base")
 
-
-def _add_device_boot_order_arg(cls):
-    cls.aliases["boot.order"] = "boot_order"
     def set_boot_order_cb(self, inst, val, virtarg):
         val = int(val)
         self.guest.reorder_boot_order(inst, val)
-    cls.set_boot_order_cb = set_boot_order_cb
-    cls.add_arg("boot.order", "boot.order", cb=cls.set_boot_order_cb)
+
+    if boot_order:
+        cls.aliases["boot.order"] = "boot_order"
+        cls.add_arg("boot.order", "boot.order", cb=set_boot_order_cb)
 
 
 def _add_device_seclabel_args(cls, list_propname, prefix=""):
@@ -2709,7 +2708,8 @@ class ParserDisk(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls, boot_order=True)
+
         # These are all handled specially in _parse
         cls.add_arg("backing_store", None, lookup_cb=None, cb=cls.noset_cb)
         cls.add_arg("backing_format", None, lookup_cb=None, cb=cls.noset_cb)
@@ -2754,8 +2754,6 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("driver.copy_on_read", "driver_copy_on_read", is_onoff=True)
         cls.add_arg("driver.io", "driver_io")
         cls.add_arg("driver.error_policy", "error_policy")
-
-        _add_device_boot_order_arg(cls)
 
         cls.add_arg("iotune.read_bytes_sec", "iotune_rbs")
         cls.add_arg("iotune.write_bytes_sec", "iotune_wbs")
@@ -2874,8 +2872,7 @@ class ParserNetwork(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
-        _add_device_boot_order_arg(cls)
+        _add_common_device_args(cls, boot_order=True)
 
         # These are handled in _add_advertised_aliases
         cls.add_arg("model", "model", cb=cls.noset_cb)
@@ -2999,7 +2996,7 @@ class ParserGraphics(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
 
         cls.add_arg("type", "type", cb=cls.set_type_cb)
         cls.add_arg("port", "port")
@@ -3063,7 +3060,8 @@ class ParserController(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("type", "type")
         cls.add_arg("model", "model")
         cls.add_arg("index", "index")
@@ -3086,7 +3084,8 @@ class ParserInput(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("type", "type", ignore_default=True)
         cls.add_arg("bus", "bus", ignore_default=True)
 
@@ -3109,7 +3108,8 @@ class ParserSmartcard(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("mode", "mode", ignore_default=True)
         cls.add_arg("type", "type", ignore_default=True)
         _add_char_source_args(cls)
@@ -3141,10 +3141,10 @@ class ParserRedir(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls, boot_order=True)
+
         cls.add_arg("bus", "bus", ignore_default=True)
         cls.add_arg("type", "type", ignore_default=True)
-        _add_device_boot_order_arg(cls)
 
         cls.add_arg("server", None, lookup_cb=None, cb=cls.set_server_cb)
         _add_char_source_args(cls)
@@ -3172,7 +3172,8 @@ class ParserTPM(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("model", "model")
         cls.add_arg("backend.type", "type")
         cls.add_arg("backend.version", "version")
@@ -3229,7 +3230,8 @@ class ParserRNG(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         # These are handled in _add_advertised_aliases
         cls.add_arg("type", "backend_model", cb=cls.noset_cb)
         cls.add_arg("device", "device", cb=cls.noset_cb)
@@ -3257,7 +3259,8 @@ class ParserWatchdog(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("model", "model", ignore_default=True)
         cls.add_arg("action", "action", ignore_default=True)
 
@@ -3309,7 +3312,8 @@ class ParserMemballoon(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("model", "model")
 
 
@@ -3337,7 +3341,8 @@ class ParserPanic(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("model", "model", ignore_default=True)
 
 
@@ -3358,7 +3363,8 @@ class ParserVsock(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("model", "model")
         cls.add_arg("cid.auto", "auto_cid", is_onoff=True)
         cls.add_arg("cid.address", "cid")
@@ -3477,7 +3483,8 @@ class ParserFilesystem(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("type", "type")
         cls.add_arg("accessmode", "accessmode")
         cls.add_arg("source", "source")
@@ -3519,7 +3526,8 @@ class ParserVideo(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("model.type", "model", ignore_default=True)
         cls.add_arg("model.acceleration.accel3d", "accel3d", is_onoff=True)
         cls.add_arg("model.heads", "heads")
@@ -3554,11 +3562,11 @@ class ParserSound(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
+        _add_common_device_args(cls)
+
         cls.add_arg("model", "model", ignore_default=True)
-        # Options for sound.codecs config
         cls.add_arg("codec[0-9]*.type", "type",
-                            find_inst_cb=cls.codec_find_inst_cb)
+                    find_inst_cb=cls.codec_find_inst_cb)
 
 
 #####################
@@ -3595,8 +3603,8 @@ class ParserHostdev(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_device_address_args(cls)
-        _add_device_boot_order_arg(cls)
+        _add_common_device_args(cls, boot_order=True)
+
         cls.add_arg("type", "type")
         cls.add_arg("name", None,
                     cb=cls.set_name_cb,
