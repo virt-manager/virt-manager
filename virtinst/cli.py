@@ -1572,6 +1572,8 @@ class ParserMetadata(VirtCLIParser):
         cls.add_arg("name", "name", can_comma=True)
         cls.add_arg("title", "title", can_comma=True)
         cls.add_arg("uuid", "uuid")
+        cls.add_arg("genid", "genid")
+        cls.add_arg("genid_enable", "genid_enable", is_onoff=True)
         cls.add_arg("description", "description", can_comma=True)
         cls.add_arg("os_name", None, lookup_cb=None,
                 cb=cls.set_os_name_cb)

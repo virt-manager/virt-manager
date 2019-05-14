@@ -144,7 +144,8 @@ class Guest(XMLBuilder):
 
     XML_NAME = "domain"
     _XML_PROP_ORDER = [
-        "type", "name", "uuid", "title", "description", "_metadata",
+        "type", "name", "uuid", "genid", "genid_enable",
+        "title", "description", "_metadata",
         "maxMemory", "maxMemorySlots", "memory", "_currentMemory",
         "blkiotune", "memtune", "memoryBacking",
         "_vcpus", "vcpu_current", "vcpu_placement",
@@ -210,6 +211,8 @@ class Guest(XMLBuilder):
     vcpu_cpuset = XMLProperty("./vcpu/@cpuset")
 
     uuid = XMLProperty("./uuid")
+    genid = XMLProperty("./genid")
+    genid_enable = XMLProperty("./genid", is_bool=True)
     id = XMLProperty("./@id", is_int=True)
     type = XMLProperty("./@type")
     bootloader = XMLProperty("./bootloader")
