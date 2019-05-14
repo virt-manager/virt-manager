@@ -6,7 +6,13 @@
 
 from .char import CharSource
 from .device import Device
-from ..xmlbuilder import XMLChildProperty, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+
+
+class _Certificate(XMLBuilder):
+    XML_NAME = "certificate"
+
+    value = XMLProperty("./.")
 
 
 class DeviceSmartcard(Device):
@@ -16,6 +22,9 @@ class DeviceSmartcard(Device):
     mode = XMLProperty("./@mode")
     type = XMLProperty("./@type")
     source = XMLChildProperty(CharSource, is_single=True)
+
+    database = XMLProperty("./database")
+    certificates = XMLChildProperty(_Certificate)
 
 
     ##################

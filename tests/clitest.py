@@ -569,6 +569,7 @@ c.add_compare(""" \
 --smartcard mode=host \
 --smartcard default \
 --smartcard passthrough,type=tcp,source.mode=bind,source.host=1.2.3.4,source.service=5678,protocol.type=telnet
+--smartcard host-certificates,type=spicevmc,database=/fake/path/to/database,certificate0=/path/to/fake/cert0,certificate1=/path/to/fake/cert1,certificate2=/path/to/fake/cert2 \
 \
 --redirdev usb,type=spicevmc \
 --redirdev usb,type=tcp,server=localhost:4000 \

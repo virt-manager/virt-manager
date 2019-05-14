@@ -3100,6 +3100,12 @@ class ParserSmartcard(VirtCLIParser):
     guest_propname = "devices.smartcard"
     remove_first = "mode"
 
+    def certificate_find_inst_cb(self, *args, **kwargs):
+        cliarg = "certificate"  # certificate[0-9]*
+        list_propname = "certificates"
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -3107,6 +3113,10 @@ class ParserSmartcard(VirtCLIParser):
         cls.add_arg("mode", "mode", ignore_default=True)
         cls.add_arg("type", "type", ignore_default=True)
         _add_char_source_args(cls)
+
+        cls.add_arg("database", "database", can_comma=True)
+        cls.add_arg("certificate[0-9]*", "value", can_comma=True,
+                    find_inst_cb=cls.certificate_find_inst_cb)
 
 
 ######################

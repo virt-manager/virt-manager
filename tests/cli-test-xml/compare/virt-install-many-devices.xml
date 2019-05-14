@@ -256,6 +256,12 @@
       <source mode="bind" host="1.2.3.4" service="5678"/>
       <protocol type="telnet"/>
     </smartcard>
+    <smartcard mode="host-certificates" type="spicevmc">
+      <database>/fake/path/to/database</database>
+      <certificate>/path/to/fake/cert0</certificate>
+      <certificate>/path/to/fake/cert1</certificate>
+      <certificate>/path/to/fake/cert2</certificate>
+    </smartcard>
     <serial type="tcp">
       <source mode="bind" host="127.0.0.1" service="2222"/>
       <protocol type="telnet"/>
