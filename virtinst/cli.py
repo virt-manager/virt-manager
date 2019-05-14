@@ -2466,6 +2466,8 @@ def _add_common_device_args(cls, boot_order=False):
     cls.add_arg("address.zpci.uid", "address.zpci_uid")
     cls.add_arg("address.zpci.fid", "address.zpci_fid")
 
+    cls.add_arg("alias.name", "alias.name")
+
     def set_boot_order_cb(self, inst, val, virtarg):
         val = int(val)
         self.guest.reorder_boot_order(inst, val)

@@ -190,6 +190,7 @@
     </controller>
     <controller type="xenbus" index="0" maxGrantFrames="64"/>
     <filesystem type="mount" accessmode="mapped">
+      <alias name="testfsalias"/>
       <source dir="/source"/>
       <target dir="/target"/>
     </filesystem>

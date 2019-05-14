@@ -555,7 +555,7 @@ c.add_compare("""
 --hostdev usb_5_20 --hostdev usb_5_21
 
 
---filesystem /source,/target
+--filesystem /source,/target,alias.name=testfsalias
 --filesystem template_name,/,type=template,mode=passthrough
 --filesystem type=file,source=/tmp/somefile.img,target=/mount/point,accessmode=squash
 
