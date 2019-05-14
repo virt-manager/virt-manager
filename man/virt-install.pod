@@ -142,9 +142,30 @@ Use --resource=? to see a list of all available sub options. Complete details at
 
 =item B<--sysinfo> OPT=VAL,[...]
 
-Configure sysinfo/SMBIOS values exposed to the guest OS. '--sysinfo host' can be used to expose the host's SMBIOS info to the VM, otherwise values can be manually specified.
+Configure sysinfo/SMBIOS values exposed to the VM OS.
 
-Use --sysinfo=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsSysinfo>
+Some examples:
+
+=over 4
+
+=item B<--sysinfo host>
+
+Special type that exposes the host's SMBIOS info into the VM.
+
+=item B<--sysinfo emulate>
+
+Sepcial type where hypervisor will generate SMBIOS info into the VM.
+
+=item B<--sysinfo bios.vendor=custom> or B<--sysinfo smbios,bios.vendor=custom>
+
+The default type is B<smbios> and allows users to specify SMBIOS info manually.
+
+=back
+
+Use --sysinfo=? to see a list of all available sub options.
+
+Complete details at L<https://libvirt.org/formatdomain.html#elementsSysinfo>
+and L<https://libvirt.org/formatdomain.html#elementsOSBIOS> for B<smbios> XML element.
 
 =item B<--qemu-commandline> ARGS
 
