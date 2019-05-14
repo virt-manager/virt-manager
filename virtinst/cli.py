@@ -2069,6 +2069,12 @@ class ParserBoot(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+    def initarg_find_inst_cb(self, *args, **kwargs):
+        cliarg = "initarg"  # initarg[0-9]*
+        list_propname = "initargs"  # os.initargs
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -2105,6 +2111,8 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("bios.rebootTimeout", "rebootTimeout")
         cls.add_arg("init", "init")
         cls.add_arg("initargs", "initargs", cb=cls.set_initargs_cb)
+        cls.add_arg("initarg[0-9]*", "val",
+                    find_inst_cb=cls.initarg_find_inst_cb)
         cls.add_arg("loader", "loader")
         cls.add_arg("loader.readonly", "loader_ro", is_onoff=True)
         cls.add_arg("loader.type", "loader_type")

@@ -409,7 +409,7 @@ c.add_compare("""
 --vcpus 4,cores=2,threads=2,sockets=2 --cpuset=1,3-5
 --cpu host-copy
 --description \"foobar & baz\"
---boot uefi,smbios_mode=emulate,boot1.dev=hd,boot.dev=network
+--boot uefi,smbios_mode=emulate,boot1.dev=hd,boot.dev=network,initarg1=bar=baz,initarg=foo
 --security type=dynamic
 --security type=none,model=dac
 --numatune 1,2,3,5-7,^6
@@ -449,7 +449,7 @@ cell1.distances.sibling1.id=1,cell1.distances.sibling1.value=10,\
 cache.mode=emulate,cache.level=3
 --cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444
---boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3
+--boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3,initargs="foo=bar baz=woo"
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes,baselabel=baselabel
 --numatune 1-3,4,mode=strict
