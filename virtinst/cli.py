@@ -2441,7 +2441,8 @@ class ParserQemuCLI(VirtCLIParser):
 # Guest <device> parsing #
 ##########################
 
-def _add_common_device_args(cls, boot_order=False, boot_loadparm=False):
+def _add_common_device_args(cls,
+        boot_order=False, boot_loadparm=False, virtio_options=False):
     """
     Add common Device parameters, like address.*
     """
@@ -2478,6 +2479,10 @@ def _add_common_device_args(cls, boot_order=False, boot_loadparm=False):
 
     if boot_loadparm:
         cls.add_arg("boot.loadparm", "boot.loadparm")
+
+    if virtio_options:
+        cls.add_arg("driver.ats", "virtio_driver.ats", is_onoff=True)
+        cls.add_arg("driver.iommu", "virtio_driver.iommu", is_onoff=True)
 
 
 def _add_device_seclabel_args(cls, list_propname, prefix=""):
@@ -2715,7 +2720,8 @@ class ParserDisk(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls, boot_order=True, boot_loadparm=True)
+        _add_common_device_args(cls,
+                boot_order=True, boot_loadparm=True, virtio_options=True)
 
         # These are all handled specially in _parse
         cls.add_arg("backing_store", None, lookup_cb=None, cb=cls.noset_cb)
@@ -2879,7 +2885,8 @@ class ParserNetwork(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls, boot_order=True, boot_loadparm=True)
+        _add_common_device_args(cls,
+                boot_order=True, boot_loadparm=True, virtio_options=True)
 
         # These are handled in _add_advertised_aliases
         cls.add_arg("model", "model", cb=cls.noset_cb)
@@ -3067,7 +3074,7 @@ class ParserController(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls)
+        _add_common_device_args(cls, virtio_options=True)
 
         cls.add_arg("type", "type")
         cls.add_arg("model", "model")
@@ -3091,7 +3098,7 @@ class ParserInput(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls)
+        _add_common_device_args(cls, virtio_options=True)
 
         cls.add_arg("type", "type", ignore_default=True)
         cls.add_arg("bus", "bus", ignore_default=True)
@@ -3237,7 +3244,7 @@ class ParserRNG(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls)
+        _add_common_device_args(cls, virtio_options=True)
 
         # These are handled in _add_advertised_aliases
         cls.add_arg("type", "backend_model", cb=cls.noset_cb)
@@ -3321,7 +3328,7 @@ class ParserMemballoon(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls)
+        _add_common_device_args(cls, virtio_options=True)
 
         cls.add_arg("model", "model")
 
@@ -3494,7 +3501,7 @@ class ParserFilesystem(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls)
+        _add_common_device_args(cls, virtio_options=True)
 
         cls.add_arg("type", "type")
         cls.add_arg("accessmode", "accessmode")
@@ -3537,7 +3544,7 @@ class ParserVideo(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls)
+        _add_common_device_args(cls, virtio_options=True)
 
         cls.add_arg("model.type", "model", ignore_default=True)
         cls.add_arg("model.acceleration.accel3d", "accel3d", is_onoff=True)

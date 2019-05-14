@@ -9,6 +9,15 @@
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
+class DeviceVirtioDriver(XMLBuilder):
+    """
+    Represents shared virtio <driver> options
+    """
+    XML_NAME = "driver"
+    ats = XMLProperty("./@ats", is_onoff=True)
+    iommu = XMLProperty("./@iommu", is_onoff=True)
+
+
 class DeviceSeclabel(XMLBuilder):
     """
     Minimal seclabel that's used for device sources.
@@ -118,11 +127,13 @@ class Device(XMLBuilder):
         :param conn: libvirt connection to validate device against
         """
         XMLBuilder.__init__(self, *args, **kwargs)
-        self._XML_PROP_ORDER = self._XML_PROP_ORDER + ["alias", "address"]
+        self._XML_PROP_ORDER = self._XML_PROP_ORDER + [
+                "virtio_driver", "alias", "address"]
 
     alias = XMLChildProperty(DeviceAlias, is_single=True)
     address = XMLChildProperty(DeviceAddress, is_single=True)
     boot = XMLChildProperty(DeviceBoot, is_single=True)
+    virtio_driver = XMLChildProperty(DeviceVirtioDriver, is_single=True)
 
     @property
     def DEVICE_TYPE(self):
