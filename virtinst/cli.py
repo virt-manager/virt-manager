@@ -25,7 +25,6 @@ from virtcli import CLIConfig
 from . import util
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
-from .domain import DomainOs
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
 from .unattended import UnattendedData
@@ -2064,9 +2063,23 @@ class ParserBoot(VirtCLIParser):
     def set_emulator_cb(self, inst, val, virtarg):
         self.guest.emulator = val
 
+    def boot_find_inst_cb(self, *args, **kwargs):
+        cliarg = "boot"  # boot[0-9]*
+        list_propname = "bootdevs"  # os.timers
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
+
+        # This is simply so the boot options are advertised with --boot help,
+        # actual processing is handled by _parse
+        cls.add_arg("hd", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("cdrom", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("fd", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("network", None, lookup_cb=None, cb=cls.noset_cb)
+
         # UEFI depends on these bits, so set them first
         cls.add_arg("arch", "arch")
         cls.add_arg("bootloader", None, lookup_cb=None,
@@ -2085,6 +2098,8 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("dtb", "dtb")
         cls.add_arg("kernel_args", "kernel_args", can_comma=True)
 
+        cls.add_arg("boot[0-9]*.dev", "dev",
+                    find_inst_cb=cls.boot_find_inst_cb)
         cls.add_arg("bootmenu.enable", "enable_bootmenu", is_onoff=True)
         cls.add_arg("bios.useserial", "useserial", is_onoff=True)
         cls.add_arg("bios.rebootTimeout", "rebootTimeout")
@@ -2097,12 +2112,6 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("nvram", "nvram")
         cls.add_arg("nvram.template", "nvram_template")
         cls.add_arg("smbios.mode", "smbios_mode")
-
-        # This is simply so the boot options are advertised with --boot help,
-        # actual processing is handled by _parse
-        for _bootdev in DomainOs.BOOT_DEVICES:
-            cls.add_arg(_bootdev, None, lookup_cb=None,
-                    cb=cls.noset_cb)
 
 
 ###################

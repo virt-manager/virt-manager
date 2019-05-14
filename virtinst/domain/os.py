@@ -69,18 +69,18 @@ class DomainOs(XMLBuilder):
     XML_NAME = "os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader", "loader_ro", "loader_type",
                        "nvram", "nvram_template", "kernel", "initrd",
-                       "kernel_args", "dtb", "_bootdevs", "smbios_mode"]
+                       "kernel_args", "dtb", "bootdevs", "smbios_mode"]
 
     def _get_bootorder(self):
-        return [dev.dev for dev in self._bootdevs]
+        return [dev.dev for dev in self.bootdevs]
     def _set_bootorder(self, newdevs):
-        for dev in self._bootdevs:
+        for dev in self.bootdevs:
             self.remove_child(dev)
 
         for d in newdevs:
-            dev = self._bootdevs.add_new()
+            dev = self.bootdevs.add_new()
             dev.dev = d
-    _bootdevs = XMLChildProperty(_BootDevice)
+    bootdevs = XMLChildProperty(_BootDevice)
     bootorder = property(_get_bootorder, _set_bootorder)
 
     initargs = XMLChildProperty(_InitArg)

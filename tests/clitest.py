@@ -409,7 +409,7 @@ c.add_compare("""
 --vcpus 4,cores=2,threads=2,sockets=2 --cpuset=1,3-5
 --cpu host-copy
 --description \"foobar & baz\"
---boot uefi,smbios_mode=emulate
+--boot uefi,smbios_mode=emulate,boot1.dev=hd,boot.dev=network
 --security type=dynamic
 --security type=none,model=dac
 --numatune 1,2,3,5-7,^6

@@ -22,6 +22,7 @@
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE.fd</loader>
+    <boot dev="network"/>
     <boot dev="hd"/>
     <smbios mode="emulate"/>
   </os>
