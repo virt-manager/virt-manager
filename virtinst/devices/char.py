@@ -4,7 +4,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-from .device import Device
+from .device import Device, DeviceSeclabel
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 from .. import util
 
@@ -35,6 +35,8 @@ class CharSource(XMLBuilder):
         _set_host_helper(self, "bind_host", "bind_service", val)
     def set_friendly_host(self, val):
         _set_host_helper(self, "host", "service", val)
+
+    seclabels = XMLChildProperty(DeviceSeclabel)
 
     host = XMLProperty("./@host")
     service = XMLProperty("./@service", is_int=True)

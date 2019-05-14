@@ -263,7 +263,12 @@
       <source mode="connect" host="0.0.0.0" service="1234"/>
     </parallel>
     <parallel type="unix">
-      <source mode="bind" path="/tmp/foo-socket"/>
+      <source mode="bind" path="/tmp/foo-socket">
+        <seclabel model="none" relabel="no"/>
+        <seclabel model="dac" relabel="yes">
+          <label>foobar</label>
+        </seclabel>
+      </source>
     </parallel>
     <console type="pty">
       <target type="virtio"/>

@@ -519,7 +519,7 @@ c.add_compare(""" \
 --serial tcp,host=:2222,mode=bind,protocol=telnet,log_file=/tmp/foo.log,log_append=yes \
 --serial nmdm,source.master=/dev/foo1,source.slave=/dev/foo2 \
 --parallel udp,host=0.0.0.0:1234,bind_host=127.0.0.1:1234 \
---parallel unix,path=/tmp/foo-socket \
+--parallel unix,path=/tmp/foo-socket,source.seclabel0.model=none,source.seclabel1.model=dac,source.seclabel1.relabel=yes,source.seclabel1.label=foobar,source.seclabel.relabel=no \
 --channel pty,target_type=guestfwd,target_address=127.0.0.1:10000 \
 --channel pty,target_type=virtio,name=org.linux-kvm.port1 \
 --console pty,target_type=virtio \

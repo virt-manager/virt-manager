@@ -1294,10 +1294,10 @@ class VirtCLIParser(metaclass=_InitClass):
                 num = int(reg.groups()[0])
 
             if can_edit:
-                while len(getattr(inst, list_propname)) < (num + 1):
-                    getattr(inst, list_propname).add_new()
+                while len(util.get_prop_path(inst, list_propname)) < (num + 1):
+                    util.get_prop_path(inst, list_propname).add_new()
             try:
-                return getattr(inst, list_propname)[num]
+                return util.get_prop_path(inst, list_propname)[num]
             except IndexError:
                 if not can_edit:
                     return None
@@ -2474,7 +2474,7 @@ def _add_device_boot_order_arg(cls):
     cls.add_arg("boot.order", "boot.order", cb=cls.set_boot_order_cb)
 
 
-def _add_device_seclabel_args(cls, list_propname):
+def _add_device_seclabel_args(cls, list_propname, prefix=""):
     def seclabel_find_inst_cb(c, *args, **kwargs):
         # pylint: disable=protected-access
         cliarg = "seclabel"  # seclabel[0-9]*
@@ -2482,12 +2482,12 @@ def _add_device_seclabel_args(cls, list_propname):
         return cb(*args, **kwargs)
 
     # DeviceDisk.seclabels properties
-    cls.add_arg("source.seclabel[0-9]*.model", "model",
+    cls.add_arg(prefix + "source.seclabel[0-9]*.model", "model",
                 find_inst_cb=seclabel_find_inst_cb)
-    cls.add_arg("source.seclabel[0-9]*.relabel", "relabel", is_onoff=True,
-                find_inst_cb=seclabel_find_inst_cb)
-    cls.add_arg("source.seclabel[0-9]*.label", "label", can_comma=True,
-                find_inst_cb=seclabel_find_inst_cb)
+    cls.add_arg(prefix + "source.seclabel[0-9]*.relabel", "relabel",
+                is_onoff=True, find_inst_cb=seclabel_find_inst_cb)
+    cls.add_arg(prefix + "source.seclabel[0-9]*.label", "label",
+                can_comma=True, find_inst_cb=seclabel_find_inst_cb)
 
 
 def _add_char_source_args(cls, prefix=""):
@@ -2517,6 +2517,7 @@ def _add_char_source_args(cls, prefix=""):
     _add_arg("source.mode", "source.mode")
     _add_arg("source.master", "source.master")
     _add_arg("source.slave", "source.slave")
+    _add_device_seclabel_args(cls, "source.seclabels", prefix=prefix)
     _add_arg("protocol.type", "source.protocol")
     _add_arg("log.file", "source.log_file")
     _add_arg("log.append", "source.log_append", is_onoff=True)
