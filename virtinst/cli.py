@@ -2382,6 +2382,13 @@ class ParserSysinfo(VirtCLIParser):
         inst.system_uuid = val
         self.guest.uuid = val
 
+    def oem_find_inst_cb(self, *args, **kwargs):
+        # pylint: disable=protected-access
+        cliarg = "entry"  # oemStrings.entry[0-9]*
+        list_propname = "oemStrings"  # sysinfo.oemStrings
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -2416,6 +2423,9 @@ class ParserSysinfo(VirtCLIParser):
         cls.add_arg("chassis.serial", "chassis_serial")
         cls.add_arg("chassis.asset", "chassis_asset")
         cls.add_arg("chassis.sku", "chassis_sku")
+
+        cls.add_arg("oemStrings.entry[0-9]", "value", can_comma=True,
+                    find_inst_cb=cls.oem_find_inst_cb)
 
 
 ##############################

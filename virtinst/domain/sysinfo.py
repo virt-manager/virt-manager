@@ -5,7 +5,12 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-from ..xmlbuilder import XMLBuilder, XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+
+
+class _SysinfoEntry(XMLBuilder):
+    XML_NAME = "entry"
+    value = XMLProperty(".")
 
 
 class DomainSysinfo(XMLBuilder):
@@ -21,7 +26,7 @@ class DomainSysinfo(XMLBuilder):
         "baseBoard_manufacturer", "baseBoard_product", "baseBoard_version",
         "baseBoard_serial", "baseBoard_asset", "baseBoard_location",
         "chassis_manufacturer", "chassis_version",
-        "chassis_serial", "chassis_asset", "chassis_sku"]
+        "chassis_serial", "chassis_asset", "chassis_sku", "oemStrings"]
 
     type = XMLProperty("./@type")
 
@@ -51,3 +56,5 @@ class DomainSysinfo(XMLBuilder):
     chassis_serial = XMLProperty("./chassis/entry[@name='serial']")
     chassis_asset = XMLProperty("./chassis/entry[@name='asset']")
     chassis_sku = XMLProperty("./chassis/entry[@name='sku']")
+
+    oemStrings = XMLChildProperty(_SysinfoEntry, relative_xpath="./oemStrings")
