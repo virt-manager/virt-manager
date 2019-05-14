@@ -457,7 +457,7 @@ cache.mode=emulate,cache.level=3
 --numatune 1-3,4,mode=strict
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200
---memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,access_mode=shared,source_type=anonymous,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2
+--memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,discard=yes,allocation.mode=ondemand,access_mode=shared,source_type=anonymous,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2
 --features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=5678,vmport=off,pmu=off,vmcoreinfo=on
 --clock offset=utc,hpet_present=no,rtc_tickpolicy=merge,timer2.name=hypervclock,timer3.name=pit,timer1.present=yes,timer3.tickpolicy=delay,timer2.present=no
 --sysinfo type=smbios,bios_vendor="Acme LLC",bios_version=1.2.3,bios_date=01/01/1970,bios_release=10.22

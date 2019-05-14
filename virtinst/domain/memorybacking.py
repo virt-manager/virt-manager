@@ -30,7 +30,9 @@ class DomainMemoryBacking(XMLBuilder):
     hugepages = XMLProperty("./hugepages", is_bool=True)
     nosharepages = XMLProperty("./nosharepages", is_bool=True)
     locked = XMLProperty("./locked", is_bool=True)
+    discard = XMLProperty("./discard", is_bool=True)
     access_mode = XMLProperty("./access/@mode")
     source_type = XMLProperty("./source/@type")
+    allocation_mode = XMLProperty("./allocation/@mode")
 
     pages = XMLChildProperty(_HugepagesPage, relative_xpath="./hugepages")

@@ -1776,6 +1776,8 @@ class ParserMemoryBacking(VirtCLIParser):
         cls.add_arg("locked", "locked", is_onoff=True)
         cls.add_arg("access.mode", "access_mode")
         cls.add_arg("source.type", "source_type")
+        cls.add_arg("discard", "discard", is_onoff=True)
+        cls.add_arg("allocation.mode", "allocation_mode")
 
 
 #################
