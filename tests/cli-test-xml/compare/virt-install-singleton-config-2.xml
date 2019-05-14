@@ -28,7 +28,8 @@
     <nosharepages/>
     <locked/>
     <hugepages>
-      <page size="1" unit="G" nodeset="0-1"/>
+      <page size="12" unit="G" nodeset="0,1"/>
+      <page size="1234" unit="MB" nodeset="2"/>
     </hugepages>
     <access mode="shared"/>
     <source type="anonymous"/>
@@ -130,6 +131,7 @@
           <sibling id="1" value="10"/>
         </distances>
       </cell>
+      <cell id="2" cpus="4" memory="256"/>
     </numa>
   </cpu>
   <clock offset="utc">
@@ -229,7 +231,8 @@
     <nosharepages/>
     <locked/>
     <hugepages>
-      <page size="1" unit="G" nodeset="0-1"/>
+      <page size="12" unit="G" nodeset="0,1"/>
+      <page size="1234" unit="MB" nodeset="2"/>
     </hugepages>
     <access mode="shared"/>
     <source type="anonymous"/>
@@ -333,6 +336,7 @@
           <sibling id="1" value="10"/>
         </distances>
       </cell>
+      <cell id="2" cpus="4" memory="256"/>
     </numa>
   </cpu>
   <clock offset="utc">

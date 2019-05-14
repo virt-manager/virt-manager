@@ -1748,20 +1748,29 @@ class ParserMemoryBacking(VirtCLIParser):
     cli_arg_name = "memorybacking"
     guest_propname = "memoryBacking"
     aliases = {
-        "hugepages.page.size": "size",
-        "hugepages.page.unit": "unit",
-        "hugepages.page.nodeset": "nodeset",
+        "hugepages.page[0-9]*.size": "size",
+        "hugepages.page[0-9]*.unit": "unit",
+        "hugepages.page[0-9]*.nodeset": "nodeset",
         "access.mode": "access_mode",
         "source.type": "source_type",
     }
+
+    def page_find_inst_cb(self, *args, **kwargs):
+        cliarg = "page"  # page[0-9]*
+        list_propname = "pages"  # memoryBacking.pages
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("hugepages", "hugepages", is_onoff=True)
-        cls.add_arg("hugepages.page.size", "page_size")
-        cls.add_arg("hugepages.page.unit", "page_unit")
-        cls.add_arg("hugepages.page.nodeset", "page_nodeset", can_comma=True)
+        cls.add_arg("hugepages.page[0-9]*.size", "size",
+                    find_inst_cb=cls.page_find_inst_cb)
+        cls.add_arg("hugepages.page[0-9]*.unit", "unit",
+                    find_inst_cb=cls.page_find_inst_cb)
+        cls.add_arg("hugepages.page[0-9]*.nodeset", "nodeset", can_comma=True,
+                    find_inst_cb=cls.page_find_inst_cb)
 
         cls.add_arg("nosharepages", "nosharepages", is_onoff=True)
         cls.add_arg("locked", "locked", is_onoff=True)

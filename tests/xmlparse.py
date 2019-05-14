@@ -232,10 +232,13 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest.memoryBacking)
         check("hugepages", False, True)
-        check("page_size", None, 1)
-        check("page_unit", None, "G")
         check("nosharepages", False, True)
         check("locked", False, True)
+
+        page = guest.memoryBacking.pages.add_new()
+        check = self._make_checker(page)
+        check("size", None, 1)
+        check("unit", None, "G")
 
         self._alter_compare(guest.get_xml(), outfile)
 
