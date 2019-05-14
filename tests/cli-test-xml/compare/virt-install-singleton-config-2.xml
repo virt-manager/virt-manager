@@ -27,12 +27,12 @@
     <nosharepages/>
     <locked/>
     <hugepages>
-      <page size="1" unit="G" nodeset="1,2-5"/>
+      <page size="1" unit="G" nodeset="0-1"/>
     </hugepages>
     <access mode="shared"/>
     <source type="anonymous"/>
   </memoryBacking>
-  <vcpu>4</vcpu>
+  <vcpu>9</vcpu>
   <numatune>
     <memory mode="strict" nodeset="1-3,4"/>
   </numatune>
@@ -84,7 +84,7 @@
     <pmu state="off"/>
     <hyperv>
       <reset state="on"/>
-      <spinlocks state="on" retries="1234"/>
+      <spinlocks state="on" retries="5678"/>
       <synic state="on"/>
     </hyperv>
     <vmport state="off"/>
@@ -93,7 +93,6 @@
   <cpu mode="custom" match="strict">
     <model>foobar</model>
     <vendor>meee</vendor>
-    <topology sockets="2" cores="2" threads="2"/>
     <feature policy="force" name="x2apic"/>
     <feature policy="force" name="x2apicagain"/>
     <feature policy="require" name="reqtest"/>
@@ -139,7 +138,7 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
-    <controller type="virtio-scsi" index="0"/>
+    <controller type="scsi" index="0" model="virtio-scsi"/>
     <filesystem type="mount" accessmode="mapped">
       <source dir="/foo/source"/>
       <target dir="/bar/target"/>
@@ -155,18 +154,10 @@
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
     <input type="tablet" bus="usb"/>
-    <tpm model="tpm-tis">
-      <backend type="passthrough">
-        <device path="/dev/tpm0"/>
-      </backend>
-    </tpm>
     <tpm model="tpm-crb">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
       </backend>
-    </tpm>
-    <tpm model="tpm-crb">
-      <backend type="emulator" version="2.0"/>
     </tpm>
     <graphics type="vnc" port="-1"/>
     <video>
@@ -222,12 +213,12 @@
     <nosharepages/>
     <locked/>
     <hugepages>
-      <page size="1" unit="G" nodeset="1,2-5"/>
+      <page size="1" unit="G" nodeset="0-1"/>
     </hugepages>
     <access mode="shared"/>
     <source type="anonymous"/>
   </memoryBacking>
-  <vcpu>4</vcpu>
+  <vcpu>9</vcpu>
   <numatune>
     <memory mode="strict" nodeset="1-3,4"/>
   </numatune>
@@ -281,7 +272,7 @@
     <pmu state="off"/>
     <hyperv>
       <reset state="on"/>
-      <spinlocks state="on" retries="1234"/>
+      <spinlocks state="on" retries="5678"/>
       <synic state="on"/>
     </hyperv>
     <vmport state="off"/>
@@ -290,7 +281,6 @@
   <cpu mode="custom" match="strict">
     <model>foobar</model>
     <vendor>meee</vendor>
-    <topology sockets="2" cores="2" threads="2"/>
     <feature policy="force" name="x2apic"/>
     <feature policy="force" name="x2apicagain"/>
     <feature policy="require" name="reqtest"/>
@@ -336,7 +326,7 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
-    <controller type="virtio-scsi" index="0"/>
+    <controller type="scsi" index="0" model="virtio-scsi"/>
     <filesystem type="mount" accessmode="mapped">
       <source dir="/foo/source"/>
       <target dir="/bar/target"/>
@@ -352,18 +342,10 @@
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
     <input type="tablet" bus="usb"/>
-    <tpm model="tpm-tis">
-      <backend type="passthrough">
-        <device path="/dev/tpm0"/>
-      </backend>
-    </tpm>
     <tpm model="tpm-crb">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
       </backend>
-    </tpm>
-    <tpm model="tpm-crb">
-      <backend type="emulator" version="2.0"/>
     </tpm>
     <graphics type="vnc" port="-1"/>
     <video>

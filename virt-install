@@ -320,7 +320,7 @@ def validate_required_options(options, guest, installer):
     if not guest.name:
         msg += "\n" + _("--name is required")
 
-    if not guest.memory:
+    if not guest.memory and not guest.cpu.cells:
         msg += "\n" + _("--memory amount in MiB is required")
 
     if (not guest.os.is_container() and

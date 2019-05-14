@@ -40,7 +40,7 @@
       <boot order="2"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2" discard="unmap" detect_zeroes="yes" error_policy="enospace"/>
+      <driver name="qemu" type="qcow2" discard="unmap" detect_zeroes="unmap" error_policy="enospace"/>
       <source file="/dev/default-pool/new1.img"/>
       <target dev="vdb" bus="virtio"/>
       <readonly/>
@@ -51,10 +51,8 @@
       <iotune>
         <read_bytes_sec>1</read_bytes_sec>
         <write_bytes_sec>5</write_bytes_sec>
-        <total_bytes_sec>10</total_bytes_sec>
         <read_iops_sec>2</read_iops_sec>
         <write_iops_sec>6</write_iops_sec>
-        <total_iops_sec>20</total_iops_sec>
       </iotune>
       <geometry cyls="16383" heads="16" secs="63" trans="lba"/>
       <readonly/>
@@ -68,6 +66,10 @@
       <driver name="qemu" type="raw" cache="none" io="native"/>
       <source dev="/iscsi-pool/diskvol1"/>
       <target dev="vdd" bus="virtio"/>
+      <iotune>
+        <total_bytes_sec>10</total_bytes_sec>
+        <total_iops_sec>20</total_iops_sec>
+      </iotune>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
@@ -81,7 +83,7 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
-      <source file="/dev/default-pool/iso-vol"/>
+      <source file="/dev/default-pool/iso-vol" startupPolicy="optional"/>
       <target dev="vdf" bus="virtio"/>
     </disk>
     <disk type="volume" device="disk">
@@ -125,8 +127,8 @@
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
-      <source protocol="qemu">
-        <host transport="nbd" socket="/var/foo/bar/socket"/>
+      <source protocol="nbd">
+        <host transport="unix" socket="/var/foo/bar/socket"/>
       </source>
       <target dev="sdc" bus="usb" removable="on"/>
     </disk>
@@ -139,7 +141,7 @@
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu" type="raw"/>
-      <source protocol="gluster" name="test-volume/some/dir/test-gluster.raw" startupPolicy="optional">
+      <source protocol="gluster" name="test-volume/some/dir/test-gluster.raw">
         <host name="192.168.1.100"/>
       </source>
       <target dev="vdl" bus="virtio"/>
@@ -148,7 +150,6 @@
       <driver name="qemu"/>
       <source dir="/var"/>
       <target dev="fda" bus="fdc"/>
-      <address type="ccw" cssid="0xfe" ssid="0" devno="01"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
@@ -243,8 +244,13 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
     </interface>
+    <interface type="user">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <address type="ccw" cssid="0xfe" ssid="0" devno="01"/>
+    </interface>
     <smartcard mode="passthrough" type="spicevmc"/>
-    <smartcard mode="passthrough" type="host"/>
+    <smartcard mode="host" type="tcp"/>
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="passthrough" type="tcp">
       <source mode="bind" host="1.2.3.4" service="5678"/>
@@ -284,6 +290,9 @@
     </channel>
     <input type="keyboard" bus="usb"/>
     <input type="tablet" bus="usb"/>
+    <tpm model="tpm-crb">
+      <backend type="emulator" version="2.0"/>
+    </tpm>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
       <image compression="off"/>
@@ -293,8 +302,8 @@
       <image compression="off"/>
     </graphics>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
-      <image compression="foo"/>
-      <streaming mode="bar"/>
+      <image compression="glz"/>
+      <streaming mode="filter"/>
       <clipboard copypaste="yes"/>
       <mouse mode="client"/>
       <filetransfer enable="yes"/>
@@ -374,7 +383,6 @@
       <source>
         <address domain="0" bus="21" slot="0" function="3"/>
       </source>
-      <address type="isa" iobase="0x500" irq="5"/>
     </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>

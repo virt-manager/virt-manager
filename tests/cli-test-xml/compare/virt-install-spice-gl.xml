@@ -62,5 +62,8 @@
         <source master="/dev/foo1" slave="/dev/foo2"/>
       </backend>
     </rng>
+    <panic model="isa">
+      <address type="isa" iobase="0x500" irq="5"/>
+    </panic>
   </devices>
 </domain>

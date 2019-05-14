@@ -224,6 +224,20 @@ class Command(object):
 
         utils.diff_compare(output, filename)
 
+        # Define the <domain>s generated for compare output, to ensure
+        # we are generating valid XML
+        if "--print-xml" in self.argv or "--print-step" in self.argv:
+            for domxml in output.split("</domain>"):
+                if "<domain" not in domxml:
+                    continue
+                domxml = domxml + "</domain>"
+                try:
+                    dom = conn.defineXML(domxml)
+                    dom.undefine()
+                except Exception as e:
+                    raise AssertionError("Bad XML:\n%s\n\nError was: %s: %s" %
+                            (domxml, e.__class__.__name__, str(e)))
+
     def _run(self, tests):
         conn = None
         for idx in reversed(range(len(self.argv))):
@@ -392,7 +406,7 @@ c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole 
 # Singleton element test #1, for simpler strings
 c.add_compare(""" \
 --memory 1024 \
---vcpus 4 --cpuset=1,3-5 \
+--vcpus 4,cores=2,threads=2,sockets=2 --cpuset=1,3-5 \
 --cpu host-copy \
 --description \"foobar & baz\" \
 --boot uefi,smbios_mode=emulate \
@@ -424,7 +438,7 @@ c.add_compare(""" \
 # Singleton element test #2, for complex strings
 c.add_compare("""--pxe \
 --memory 512,maxmemory=1024 \
---vcpus 4,cores=2,threads=2,sockets=2 \
+--vcpus 9 \
 --cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee,\
 cell.id=0,cell.cpus=1,2,3,cell.memory=1024,\
 cell1.id=1,cell1.memory=256,cell1.cpus=5-8,\
@@ -441,8 +455,8 @@ cache.mode=emulate,cache.level=3 \
 --numatune 1-3,4,mode=strict \
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40 \
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200 \
---memorybacking size=1,unit='G',nodeset='1,2-5',nosharepages=yes,locked=yes,access_mode=shared,source_type=anonymous \
---features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234,vmport=off,pmu=off,vmcoreinfo=on \
+--memorybacking size=1,unit='G',nodeset=0-1,nosharepages=yes,locked=yes,access_mode=shared,source_type=anonymous \
+--features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=5678,vmport=off,pmu=off,vmcoreinfo=on \
 --clock offset=utc,hpet_present=no,rtc_tickpolicy=merge,timer2.name=hypervclock,timer3.name=pit,timer1.present=yes,timer3.tickpolicy=delay,timer2.present=no \
 --sysinfo type=smbios,bios_vendor="Acme LLC",bios_version=1.2.3,bios_date=01/01/1970,bios_release=10.22 \
 --sysinfo type=smbios,system_manufacturer="Acme Inc.",system_product=Computer,system_version=3.2.1,system_serial=123456789,system_uuid=00000000-1111-2222-3333-444444444444,system_sku=abc-123,system_family=Server \
@@ -452,14 +466,12 @@ cache.mode=emulate,cache.level=3 \
 --events on_poweroff=destroy,on_reboot=restart,on_crash=preserve,on_lockfailure=ignore \
 \
 --controller usb3 \
---controller virtio-scsi \
+--controller scsi,model=virtio-scsi \
 --graphics vnc \
 --filesystem /foo/source,/bar/target \
 --memballoon virtio \
 --watchdog ib700,action=pause \
---tpm passthrough,model=tpm-tis,path=/dev/tpm0 \
 --tpm passthrough,model=tpm-crb,path=/dev/tpm0 \
---tpm emulator,model=tpm-crb,version=2.0 \
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708 \
 --panic iobase=0x506 \
 """, "singleton-config-2")
@@ -472,21 +484,21 @@ c.add_compare(""" \
 --cpu none \
 \
 --disk /dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,boot_order=2 \
---disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap,detect_zeroes=yes \
---disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,total_bytes_sec=10,total_iops_sec=20,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba \
+--disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap,detect_zeroes=unmap \
+--disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba \
 --disk size=1 \
---disk /iscsi-pool/diskvol1 \
+--disk /iscsi-pool/diskvol1,total_bytes_sec=10,total_iops_sec=20 \
 --disk /dev/default-pool/iso-vol,seclabel.model=dac,seclabel1.model=selinux,seclabel1.relabel=no,seclabel0.label=foo,bar,baz \
---disk /dev/default-pool/iso-vol,format=qcow2 \
+--disk /dev/default-pool/iso-vol,format=qcow2,startup_policy=optional \
 --disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1,driver_type=raw \
 --disk pool=rbd-ceph,size=.1 \
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file \
 --disk source_protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi,logical_block_size=512,physical_block_size=512 \
 --disk gluster://192.168.1.100/test-volume/some/dir/test-gluster.qcow2 \
---disk qemu+nbd:///var/foo/bar/socket,bus=usb,removable=on \
+--disk nbd+unix:///var/foo/bar/socket,bus=usb,removable=on \
 --disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo \
---disk vol=gluster-pool/test-gluster.raw,startup_policy=optional \
---disk /var,device=floppy,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01 \
+--disk vol=gluster-pool/test-gluster.raw \
+--disk /var,device=floppy
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk \
 --disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol \
 --disk path=/dev/disk-pool/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client \
@@ -497,12 +509,13 @@ c.add_compare(""" \
 --network type=direct,source=eth5,source_mode=vepa,target=mytap12,virtualport_type=802.1Qbg,virtualport_managerid=12,virtualport_typeid=1193046,virtualport_typeidversion=1,virtualport_instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1,trustGuestRxFilters=yes,mtu.size=1500 \
 --network user,model=virtio,address.type=spapr-vio,address.reg=0x500 \
 --network vhostuser,source_type=unix,source_path=/tmp/vhost1.sock,source_mode=server,model=virtio \
+--network user,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01 \
 \
 --graphics sdl \
 --graphics spice,keymap=none \
 --graphics vnc,port=5950,listen=1.2.3.4,keymap=ja,password=foo \
 --graphics spice,port=5950,tlsport=5950,listen=1.2.3.4,keymap=ja \
---graphics spice,image_compression=foo,streaming_mode=bar,clipboard_copypaste=yes,mouse_mode=client,filetransfer_enable=on \
+--graphics spice,image_compression=glz,streaming_mode=filter,clipboard_copypaste=yes,mouse_mode=client,filetransfer_enable=on \
 --graphics spice,gl=yes,listen=socket \
 --graphics spice,gl=yes,listen=none \
 --graphics spice,gl=yes,listen=none,rendernode=/dev/dri/foo \
@@ -534,7 +547,7 @@ c.add_compare(""" \
 --host-device 001.003 \
 --hostdev 15:0.1 \
 --host-device 2:15:0.2 \
---hostdev 0:15:0.3,address.type=isa,address.iobase=0x500,address.irq=5 \
+--hostdev 0:15:0.3 \
 --host-device 0x0781:0x5151,driver_name=vfio \
 --host-device 04b3:4485 \
 --host-device pci_8086_2829_scsi_host_scsi_device_lun0 \
@@ -553,7 +566,7 @@ c.add_compare(""" \
 --video model=qxl,vgamem=1,ram=2,vram=3,heads=4,accel3d=yes,vram64=65 \
 \
 --smartcard passthrough,type=spicevmc \
---smartcard type=host \
+--smartcard mode=host \
 --smartcard default \
 --smartcard passthrough,type=tcp,source.mode=bind,source.host=1.2.3.4,source.service=5678,protocol.type=telnet
 \
@@ -569,6 +582,8 @@ c.add_compare(""" \
 \
 --vsock cid=17 \
 \
+--tpm emulator,model=tpm-crb,version=2.0 \
+\
 --qemu-commandline env=DISPLAY=:0.1 \
 --qemu-commandline="-display gtk,gl=on" \
 --qemu-commandline="-device vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c" \
@@ -581,6 +596,7 @@ c.add_compare(""" \
 --disk none \
 --graphics spice,gl=yes \
 --rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2 \
+--panic default,,address.type=isa,address.iobase=0x500,address.irq=5 \
 """, "spice-gl")
 
 
@@ -610,8 +626,8 @@ c.add_valid("--security label=foobar.label,a1,z2,b3")  # --security static with 
 c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
 c.add_invalid("--security foobar")  # Busted --security
 c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
-c.add_compare("--memory 1024,hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128", "memory-hotplug")
-c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400", "memory-option-backcompat")
+c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128", "memory-hotplug")
+c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat")
 c.add_compare("--connect " + utils.URIs.kvm_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
 c.add_compare("--connect " + utils.URIs.kvm_rhel, "cpu-rhel7-default")  # default CPU for old QEMU where we cannot use host-model
 

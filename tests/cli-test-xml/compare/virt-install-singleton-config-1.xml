@@ -32,6 +32,7 @@
   <cpu mode="custom" match="exact">
     <model fallback="forbid">Broadwell</model>
     <vendor>Intel</vendor>
+    <topology sockets="2" cores="2" threads="2"/>
     <feature policy="require" name="vme"/>
     <feature policy="require" name="ss"/>
     <feature policy="require" name="f16c"/>
