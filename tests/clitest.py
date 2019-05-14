@@ -500,7 +500,7 @@ c.add_compare("""
 --disk vol=gluster-pool/test-gluster.raw
 --disk /var,device=floppy
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk
---disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol
+--disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol,boot.order=10,boot.loadparm=5
 --disk path=/dev/disk-pool/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client
 
 --network user,mac=12:34:56:78:11:22,portgroup=foo,link_state=down,rom_bar=on,rom_file=/tmp/foo
@@ -509,7 +509,7 @@ c.add_compare("""
 --network type=direct,source=eth5,source_mode=vepa,target=mytap12,virtualport_type=802.1Qbg,virtualport_managerid=12,virtualport_typeid=1193046,virtualport_typeidversion=1,virtualport_instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1,trustGuestRxFilters=yes,mtu.size=1500
 --network user,model=virtio,address.type=spapr-vio,address.reg=0x500
 --network vhostuser,source_type=unix,source_path=/tmp/vhost1.sock,source_mode=server,model=virtio
---network user,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01
+--network user,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01,boot.order=15,boot.loadparm=SYSTEM1
 
 --graphics sdl
 --graphics spice,keymap=none

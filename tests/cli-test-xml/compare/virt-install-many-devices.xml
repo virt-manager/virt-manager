@@ -160,6 +160,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/tmp/brand-new.img"/>
       <target dev="vdn" bus="virtio"/>
+      <boot order="10" loadparm="5"/>
     </disk>
     <disk type="block" device="lun">
       <driver name="qemu" type="raw"/>
@@ -249,6 +250,7 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
       <address type="ccw" cssid="0xfe" ssid="0" devno="01"/>
+      <boot order="15" loadparm="SYSTEM1"/>
     </interface>
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="host" type="tcp"/>

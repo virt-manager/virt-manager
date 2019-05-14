@@ -2441,7 +2441,7 @@ class ParserQemuCLI(VirtCLIParser):
 # Guest <device> parsing #
 ##########################
 
-def _add_common_device_args(cls, boot_order=False):
+def _add_common_device_args(cls, boot_order=False, boot_loadparm=False):
     """
     Add common Device parameters, like address.*
     """
@@ -2475,6 +2475,9 @@ def _add_common_device_args(cls, boot_order=False):
     if boot_order:
         cls.aliases["boot.order"] = "boot_order"
         cls.add_arg("boot.order", "boot.order", cb=set_boot_order_cb)
+
+    if boot_loadparm:
+        cls.add_arg("boot.loadparm", "boot.loadparm")
 
 
 def _add_device_seclabel_args(cls, list_propname, prefix=""):
@@ -2712,7 +2715,7 @@ class ParserDisk(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls, boot_order=True)
+        _add_common_device_args(cls, boot_order=True, boot_loadparm=True)
 
         # These are all handled specially in _parse
         cls.add_arg("backing_store", None, lookup_cb=None, cb=cls.noset_cb)
@@ -2876,7 +2879,7 @@ class ParserNetwork(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls, boot_order=True)
+        _add_common_device_args(cls, boot_order=True, boot_loadparm=True)
 
         # These are handled in _add_advertised_aliases
         cls.add_arg("model", "model", cb=cls.noset_cb)

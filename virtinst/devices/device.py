@@ -27,6 +27,7 @@ class DeviceAlias(XMLBuilder):
 class DeviceBoot(XMLBuilder):
     XML_NAME = "boot"
     order = XMLProperty("./@order", is_int=True)
+    loadparm = XMLProperty("./@loadparm")
 
 
 class DeviceAddress(XMLBuilder):
