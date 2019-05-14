@@ -2474,6 +2474,22 @@ def _add_device_boot_order_arg(cls):
     cls.add_arg("boot.order", "boot.order", cb=cls.set_boot_order_cb)
 
 
+def _add_device_seclabel_args(cls, list_propname):
+    def seclabel_find_inst_cb(c, *args, **kwargs):
+        # pylint: disable=protected-access
+        cliarg = "seclabel"  # seclabel[0-9]*
+        cb = c._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
+    # DeviceDisk.seclabels properties
+    cls.add_arg("source.seclabel[0-9]*.model", "model",
+                find_inst_cb=seclabel_find_inst_cb)
+    cls.add_arg("source.seclabel[0-9]*.relabel", "relabel", is_onoff=True,
+                find_inst_cb=seclabel_find_inst_cb)
+    cls.add_arg("source.seclabel[0-9]*.label", "label", can_comma=True,
+                find_inst_cb=seclabel_find_inst_cb)
+
+
 def _add_char_source_args(cls, prefix=""):
     """
     Add arguments that represent the CharSource object, which is shared
@@ -2689,12 +2705,6 @@ class ParserDisk(VirtCLIParser):
     # Option handling #
     ###################
 
-    def seclabel_find_inst_cb(self, *args, **kwargs):
-        cliarg = "seclabel"  # seclabel[0-9]*
-        list_propname = "seclabels"  # disk.seclabels
-        cb = self._make_find_inst_cb(cliarg, list_propname)
-        return cb(*args, **kwargs)
-
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -2721,12 +2731,7 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("source.host.socket", "source_host_socket")
         cls.add_arg("source.host.transport", "source_host_transport")
         cls.add_arg("source.startupPolicy", "startup_policy")
-        cls.add_arg("source.seclabel[0-9]*.model", "model",
-                    find_inst_cb=cls.seclabel_find_inst_cb)
-        cls.add_arg("source.seclabel[0-9]*.relabel", "relabel", is_onoff=True,
-                    find_inst_cb=cls.seclabel_find_inst_cb)
-        cls.add_arg("source.seclabel[0-9]*.label", "label", can_comma=True,
-                    find_inst_cb=cls.seclabel_find_inst_cb)
+        _add_device_seclabel_args(cls, "seclabels")
 
         cls.add_arg("path", "path")
         cls.add_arg("device", "device")

@@ -9,6 +9,16 @@
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
+class DeviceSeclabel(XMLBuilder):
+    """
+    Minimal seclabel that's used for device sources.
+    """
+    XML_NAME = "seclabel"
+    model = XMLProperty("./@model")
+    relabel = XMLProperty("./@relabel", is_yesno=True)
+    label = XMLProperty("./label")
+
+
 class DeviceAlias(XMLBuilder):
     XML_NAME = "alias"
     name = XMLProperty("./@name")

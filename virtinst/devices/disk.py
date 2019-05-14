@@ -10,7 +10,7 @@ import logging
 
 from .. import diskbackend
 from .. import util
-from .device import Device
+from .device import Device, DeviceSeclabel
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -33,17 +33,6 @@ class _Host(XMLBuilder):
 
     name = XMLProperty("./@name")
     port = XMLProperty("./@port", is_int=True)
-
-
-class _DiskSeclabel(XMLBuilder):
-    """
-    This is for disk source <seclabel>. It's similar to a domain
-    <seclabel> but has fewer options
-    """
-    XML_NAME = "seclabel"
-    model = XMLProperty("./@model")
-    relabel = XMLProperty("./@relabel", is_yesno=True)
-    label = XMLProperty("./label")
 
 
 class DeviceDisk(Device):
@@ -677,7 +666,7 @@ class DeviceDisk(Device):
     iotune_wbs = XMLProperty("./iotune/write_bytes_sec", is_int=True)
     iotune_wis = XMLProperty("./iotune/write_iops_sec", is_int=True)
 
-    seclabels = XMLChildProperty(_DiskSeclabel, relative_xpath="./source")
+    seclabels = XMLChildProperty(DeviceSeclabel, relative_xpath="./source")
 
     geometry_cyls = XMLProperty("./geometry/@cyls", is_int=True)
     geometry_heads = XMLProperty("./geometry/@heads", is_int=True)
