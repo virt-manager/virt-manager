@@ -9,6 +9,12 @@
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu placement="static">4</vcpu>
+  <vcpus>
+    <vcpu id="3" enabled="yes" order="3"/>
+    <vcpu id="2" enabled="yes"/>
+    <vcpu id="0" enabled="no"/>
+    <vcpu id="1" enabled="yes" hotpluggable="no"/>
+  </vcpus>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
   </os>

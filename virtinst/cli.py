@@ -1968,6 +1968,12 @@ class ParserVCPU(VirtCLIParser):
     # Option handling #
     ###################
 
+    def vcpu_find_inst_cb(self, *args, **kwargs):
+        cliarg = "vcpu"  # vcpu[0-9]*
+        list_propname = "vcpulist.vcpu"  # guest.vcpulist.vcpu
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     def set_cpuset_cb(self, inst, val, virtarg):
         if not val:
             return
@@ -2001,6 +2007,16 @@ class ParserVCPU(VirtCLIParser):
         cls.add_arg("vcpu.cpuset", "vcpu_cpuset",
                 can_comma=True, cb=cls.set_cpuset_cb)
         cls.add_arg("vcpu.placement", "vcpu_placement")
+
+        # <domain><vcpus> options
+        cls.add_arg("vcpus.vcpu[0-9]*.id", "id",
+                    find_inst_cb=cls.vcpu_find_inst_cb)
+        cls.add_arg("vcpus.vcpu[0-9]*.enabled", "enabled",
+                    find_inst_cb=cls.vcpu_find_inst_cb, is_onoff=True)
+        cls.add_arg("vcpus.vcpu[0-9]*.hotpluggable", "hotpluggable",
+                    find_inst_cb=cls.vcpu_find_inst_cb, is_onoff=True)
+        cls.add_arg("vcpus.vcpu[0-9]*.order", "order",
+                    find_inst_cb=cls.vcpu_find_inst_cb)
 
 
 ##################

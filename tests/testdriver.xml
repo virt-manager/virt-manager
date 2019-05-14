@@ -132,6 +132,17 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
   <on_reboot>restart</on_reboot>
   <on_crash>destroy</on_crash>
   <vcpu cpuset="1,2,5-9,11,13-14">9</vcpu>
+  <vcpus>
+    <vcpu id='0' enabled='no' hotpluggable='yes' order='1'/>
+    <vcpu id='1' enabled='yes' hotpluggable='no'/>
+    <vcpu id='2' enabled='no' hotpluggable='yes' order='2'/>
+    <vcpu id='3' enabled='yes' hotpluggable='no'/>
+    <vcpu id='4' enabled='no' hotpluggable='yes'/>
+    <vcpu id='5' enabled='yes' hotpluggable='no'/>
+    <vcpu id='6' enabled='no' hotpluggable='yes'/>
+    <vcpu id='7' enabled='yes' hotpluggable='no'/>
+    <vcpu id='8' enabled='yes' hotpluggable='no'/>
+  </vcpus>
   <numatune>
     <memory mode='interleave' placement='auto'/>
   </numatune>

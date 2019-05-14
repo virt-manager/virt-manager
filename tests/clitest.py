@@ -483,7 +483,11 @@ cache.mode=emulate,cache.level=3
 # Device testing #1
 
 c.add_compare("""
---vcpus 4,cores=1,placement=static
+--vcpus 4,cores=1,placement=static,\
+vcpus.vcpu2.id=0,vcpus.vcpu2.enabled=no,\
+vcpus.vcpu3.id=1,vcpus.vcpu3.hotpluggable=no,vcpus.vcpu3.enabled=yes,\
+vcpus.vcpu.id=3,vcpus.vcpu0.enabled=yes,vcpus.vcpu0.order=3,\
+vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --cpu none
 
 --disk /dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,boot_order=2

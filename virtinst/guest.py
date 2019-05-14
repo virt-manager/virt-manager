@@ -149,7 +149,7 @@ class Guest(XMLBuilder):
         "maxMemory", "maxMemorySlots", "memory", "_currentMemory",
         "blkiotune", "memtune", "memoryBacking",
         "_vcpus", "vcpu_current", "vcpu_placement",
-        "vcpu_cpuset", "numatune", "resource", "sysinfo",
+        "vcpu_cpuset", "vcpulist", "numatune", "resource", "sysinfo",
         "bootloader", "os", "idmap", "features", "cpu", "clock",
         "on_poweroff", "on_reboot", "on_crash",
         "pm", "emulator", "devices", "seclabels"]
@@ -225,6 +225,7 @@ class Guest(XMLBuilder):
     on_crash = XMLProperty("./on_crash")
     on_lockfailure = XMLProperty("./on_lockfailure")
 
+    vcpulist = XMLChildProperty(DomainVCPUs, is_single=True)
     seclabels = XMLChildProperty(DomainSeclabel)
     os = XMLChildProperty(DomainOs, is_single=True)
     features = XMLChildProperty(DomainFeatures, is_single=True)
