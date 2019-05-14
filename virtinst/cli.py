@@ -2098,7 +2098,7 @@ class ParserBoot(VirtCLIParser):
 
     def boot_find_inst_cb(self, *args, **kwargs):
         cliarg = "boot"  # boot[0-9]*
-        list_propname = "bootdevs"  # os.timers
+        list_propname = "bootdevs"  # os.bootdevs
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
