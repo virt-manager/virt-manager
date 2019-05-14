@@ -2411,6 +2411,12 @@ class ParserSysinfo(VirtCLIParser):
         cls.add_arg("baseBoard.asset", "baseBoard_asset")
         cls.add_arg("baseBoard.location", "baseBoard_location")
 
+        cls.add_arg("chassis.manufacturer", "chassis_manufacturer")
+        cls.add_arg("chassis.version", "chassis_version")
+        cls.add_arg("chassis.serial", "chassis_serial")
+        cls.add_arg("chassis.asset", "chassis_asset")
+        cls.add_arg("chassis.sku", "chassis_sku")
+
 
 ##############################
 # --qemu-commandline parsing #
