@@ -242,12 +242,13 @@ and 'disable=feature' respectively.
 
 If exact CPU model is specified virt-install will automatically copy CPU
 features available on the host to mitigate recent CPU speculative execution
-side channel security vulnerabilities. This however will have some impact
-on performance and will break migration to hosts without security patches.
-In order to control this behavior there is a B<secure> parameter. Possible
-values are I<on> and I<off>, with I<on> as the default. It is highly
-recommended to leave this enabled and ensure all virtualization hosts have
-fully up to date microcode, kernel & virtualization software installed.
+side channel and Microarchitectural Store Buffer Data security vulnerabilities.
+This however will have some impact on performance and will break migration
+to hosts without security patches. In order to control this behavior there
+is a B<secure> parameter. Possible values are I<on> and I<off>, with I<on>
+as the default. It is highly recommended to leave this enabled and ensure all
+virtualization hosts have fully up to date microcode, kernel & virtualization
+software installed.
 
 Some examples:
 

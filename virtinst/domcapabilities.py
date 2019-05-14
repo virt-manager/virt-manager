@@ -281,7 +281,8 @@ class DomainCapabilities(XMLBuilder):
                 'spec-ctrl',
                 'ssbd',
                 'ibpb',
-                'virt-ssbd']
+                'virt-ssbd',
+                'md-clear']
 
         if self._features:
             return self._features
