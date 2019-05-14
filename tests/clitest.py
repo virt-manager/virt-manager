@@ -602,6 +602,7 @@ c.add_compare("""
 --graphics spice,gl=yes
 --rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
 --panic default,,address.type=isa,address.iobase=0x500,address.irq=5
+--cpu topology.sockets=1,topology.cores=3,topology.threads=2
 """, "spice-gl")
 
 

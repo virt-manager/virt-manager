@@ -1882,6 +1882,10 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("disable", None, lookup_cb=None, cb=cls.set_feature_cb)
         cls.add_arg("forbid", None, lookup_cb=None, cb=cls.set_feature_cb)
 
+        cls.add_arg("topology.sockets", "sockets")
+        cls.add_arg("topology.cores", "cores")
+        cls.add_arg("topology.threads", "threads")
+
         # Options for CPU.cells config
         cls.add_arg("numa.cell[0-9]*.id", "id",
                     find_inst_cb=cls.cell_find_inst_cb)
