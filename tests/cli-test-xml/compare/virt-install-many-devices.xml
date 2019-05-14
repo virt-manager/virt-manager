@@ -266,6 +266,9 @@
       <source mode="bind" host="127.0.0.1" service="2222"/>
       <protocol type="telnet"/>
       <log file="/tmp/foo.log" append="on"/>
+      <target>
+        <model name="pci-serial"/>
+      </target>
     </serial>
     <serial type="nmdm">
       <source master="/dev/foo1" slave="/dev/foo2"/>

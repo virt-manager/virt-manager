@@ -161,6 +161,7 @@ class _DeviceChar(Device):
     target_type = XMLProperty("./target/@type")
     target_name = XMLProperty("./target/@name")
     target_state = XMLProperty("./target/@state")
+    target_model_name = XMLProperty("./target/model/@name")
 
 
     ##################

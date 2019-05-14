@@ -3439,6 +3439,7 @@ class _ParserChar(VirtCLIParser):
         cls.add_arg("target.type", "target_type")
         cls.add_arg("target.name", "target_name")
         cls.add_arg("target.port", "target_port")
+        cls.add_arg("target.model.name", "target_model_name")
 
 
 class ParserSerial(_ParserChar):
