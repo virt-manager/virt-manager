@@ -3292,6 +3292,8 @@ class ParserMemdev(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
+        _add_common_device_args(cls)
+
         cls.add_arg("model", "model")
         cls.add_arg("access", "access")
         cls.add_arg("target.size", "target.size", cb=cls.set_target_size)
@@ -3434,6 +3436,8 @@ class _ParserChar(VirtCLIParser):
             return
 
         VirtCLIParser._init_class(**kwargs)
+        _add_common_device_args(cls)
+
         cls.add_arg("char_type", "type")
 
         # These are handled in _add_advertised_aliases
