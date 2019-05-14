@@ -2463,6 +2463,8 @@ def _add_common_device_args(cls, boot_order=False):
     cls.add_arg("address.iobase", "address.iobase")
     cls.add_arg("address.irq", "address.irq")
     cls.add_arg("address.base", "address.base")
+    cls.add_arg("address.zpci.uid", "address.zpci_uid")
+    cls.add_arg("address.zpci.fid", "address.zpci_fid")
 
     def set_boot_order_cb(self, inst, val, virtarg):
         val = int(val)

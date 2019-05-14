@@ -86,6 +86,8 @@ class DeviceAddress(XMLBuilder):
     slot = XMLProperty("./@slot", is_int=True)
     function = XMLProperty("./@function", is_int=True)
     multifunction = XMLProperty("./@multifunction", is_onoff=True)
+    zpci_uid = XMLProperty("./zpci/@uid")
+    zpci_fid = XMLProperty("./zpci/@fid")
     # type=drive
     controller = XMLProperty("./@controller", is_int=True)
     unit = XMLProperty("./@unit", is_int=True)
