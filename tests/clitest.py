@@ -200,71 +200,75 @@ class Command(object):
         tests.skipTest(skipmsg)
         return True
 
+    def _check_compare_file(self, conn, tests, output):
+        if self._check_support(tests, conn, self.check_version,
+                "Skipping compare check due to lack of support"):
+            return
+
+        # Generate test files that don't exist yet
+        filename = self.compare_file
+        if (utils.clistate.regenerate_output or
+            not os.path.exists(filename)):
+            open(filename, "w").write(output)
+
+        if "--print-diff" in self.argv and output.count("\n") > 3:
+            # 1) Strip header
+            # 2) Simplify context lines to reduce churn when
+            #    libvirt or testdriver changes
+            newlines = []
+            for line in output.splitlines()[3:]:
+                if line.startswith("@@"):
+                    line = "@@"
+                newlines.append(line)
+            output = "\n".join(newlines)
+
+        utils.diff_compare(output, filename)
+
+    def _run(self, tests):
+        conn = None
+        for idx in reversed(range(len(self.argv))):
+            if self.argv[idx] == "--connect":
+                conn = utils.URIs.openconn(self.argv[idx + 1])
+                break
+
+        if not conn and self.need_conn:
+            raise RuntimeError("couldn't parse URI from command %s" %
+                               self.argv)
+
+        if self.skip_cb and self.skip_cb():
+            tests.skipTest("skip_cb: %s" % self.skip_cb())
+            return
+
+        code, output = self._get_output(conn)
+
+        def _raise_error(_msg):
+            raise AssertionError(
+                ("Command was: %s\n" % self.cmdstr) +
+                ("Error code : %d\n" % code) +
+                ("Output was:\n%s" % output) +
+                ("\n\n\nTESTSUITE: " + _msg + "\n"))
+
+
+        if bool(code) == self.check_success:
+            _raise_error("Expected command to %s, but it didn't.\n" %
+                 (self.check_success and "pass" or "fail"))
+
+        if self.grep and self.grep not in output:
+            _raise_error("Didn't find grep=%s" % self.grep)
+        if self.nogrep and self.nogrep in output:
+            _raise_error("Found grep=%s when we shouldn't see it" %
+                    self.nogrep)
+
+        if self.compare_file:
+            self._check_compare_file(conn, tests, output)
+
     def run(self, tests):
         err = None
 
         try:
-            conn = None
-            for idx in reversed(range(len(self.argv))):
-                if self.argv[idx] == "--connect":
-                    conn = utils.URIs.openconn(self.argv[idx + 1])
-                    break
-
-            if not conn and self.need_conn:
-                raise RuntimeError("couldn't parse URI from command %s" %
-                                   self.argv)
-
-            if self.skip_cb and self.skip_cb():
-                tests.skipTest("skip_cb: %s" % self.skip_cb())
-                return
-
-            code, output = self._get_output(conn)
-
-            def _raise_error(_msg):
-                raise AssertionError(
-                    ("Command was: %s\n" % self.cmdstr) +
-                    ("Error code : %d\n" % code) +
-                    ("Output was:\n%s" % output) +
-                    ("\n\n\nTESTSUITE: " + _msg + "\n"))
-
-
-            if bool(code) == self.check_success:
-                _raise_error("Expected command to %s, but it didn't.\n" %
-                     (self.check_success and "pass" or "fail"))
-
-            if self.grep and self.grep not in output:
-                _raise_error("Didn't find grep=%s" % self.grep)
-            if self.nogrep and self.nogrep in output:
-                _raise_error("Found grep=%s when we shouldn't see it" %
-                        self.nogrep)
-
-            if self.compare_file:
-                if self._check_support(tests, conn, self.check_version,
-                        "Skipping compare check due to lack of support"):
-                    return
-
-                # Generate test files that don't exist yet
-                filename = self.compare_file
-                if (utils.clistate.regenerate_output or
-                    not os.path.exists(filename)):
-                    open(filename, "w").write(output)
-
-                if "--print-diff" in self.argv and output.count("\n") > 3:
-                    # 1) Strip header
-                    # 2) Simplify context lines to reduce churn when
-                    #    libvirt or testdriver changes
-                    newlines = []
-                    for line in output.splitlines()[3:]:
-                        if line.startswith("@@"):
-                            line = "@@"
-                        newlines.append(line)
-                    output = "\n".join(newlines)
-
-                utils.diff_compare(output, filename)
-
+            self._run(tests)
         except AssertionError as e:
             err = self.cmdstr + "\n" + str(e)
-
         if err:
             tests.fail(err)
 
