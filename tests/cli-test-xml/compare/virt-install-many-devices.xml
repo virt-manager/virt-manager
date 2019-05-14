@@ -289,6 +289,9 @@
       <target type="guestfwd" address="127.0.0.1" port="10000"/>
     </channel>
     <channel type="pty">
+      <target type="guestfwd" address="127.0.0.1" port="1234"/>
+    </channel>
+    <channel type="pty">
       <target type="virtio" name="org.linux-kvm.port1"/>
     </channel>
     <channel type="spicevmc">
