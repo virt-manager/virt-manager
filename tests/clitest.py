@@ -966,7 +966,7 @@ c.add_invalid("test --edit --boot network,cdrom --define --no-define")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"))  # stdin test
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
-c.add_compare("--build-xml --tpm /dev/tpm", "build-tpm")
+c.add_compare("--build-xml --tpm path=/dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device_path=/dev/sdf,device_weight=200", "build-blkiotune")
 c.add_compare("--build-xml --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10", "build-idmap")
 c.add_compare("4a64cc71-19c4-2fd0-2323-3050941ea3c3 --edit --boot network,cdrom", "edit-bootorder")  # basic bootorder test, also using UUID lookup
@@ -1002,7 +1002,7 @@ c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
 c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "edit-simple-redirdev")
-c.add_compare("--tpm path=/dev/tpm", "edit-simple-tpm", check_version="1.3.5")  # check_version=new graphics listen output
+c.add_compare("--tpm backend.device.path=,backend.type=emulator,backend.version=2.0", "edit-simple-tpm", check_version="1.3.5")  # check_version=new graphics listen output
 c.add_compare("--rng rate_bytes=3333,rate_period=4444", "edit-simple-rng")
 c.add_compare("--watchdog action=reset", "edit-simple-watchdog")
 c.add_compare("--memballoon model=none", "edit-simple-memballoon")
