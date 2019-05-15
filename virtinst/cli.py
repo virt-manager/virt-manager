@@ -471,8 +471,10 @@ def _virtparser_completer(prefix, **kwargs):
     for parserclass in _get_completer_parsers():
         if kwargs['action'].dest == parserclass.cli_arg_name:
             # pylint: disable=protected-access
-            for arg in sorted(parserclass._virtargs, key=lambda p: p.cliname):
-                sub_options.append(arg.cliname + "=")
+            for virtarg in sorted(parserclass._virtargs,
+                                  key=lambda p: p.nonregex_cliname()):
+                sub_options.append(virtarg.nonregex_cliname() + "=")
+
     entered_options = prefix.split(",")
     for option in entered_options:
         pos = option.find("=")
@@ -481,19 +483,24 @@ def _virtparser_completer(prefix, **kwargs):
     return sub_options
 
 
-def _completer_validator(current_input, keyword_to_check_against):
-    entered_options = keyword_to_check_against.split(",")
+def _completer_validator(suboption, current_input):
+    """
+    :param suboption: The virtarg.cliname we are checking for a match
+    :param current_input: The user typed string we are checking against.
+        So if the user types '--disk path=foo,dev<TAB>',
+        current_input=='path=foo,dev'
 
-    # e.g. for: --disk <TAB><TAB>
-    if keyword_to_check_against == "":
+    For debugging here, 'export _ARC_DEBUG=1'. Now exceptions/printing
+    will be shown on stderr
+    """
+    # e.g. for: --disk <TAB><TAB>  (return all suboptions)
+    if current_input == "":
         return True
-    # e.g. for: --disk bu<TAB><TAB> or --disk bus=ide,<TAB><TAB>
-    #                               or --disk bus=ide,pa<TAB><TAB>
-    if (len(entered_options) >= 1 and "=" not in entered_options[-1]):
-        if entered_options[-1] == "":
-            return True
-        else:
-            return current_input.startswith(entered_options[-1])
+
+    # e.g. for: --disk path=foo,<TAB><TAB>  (return all suboptions)
+    #       or: --disk path=foo,de<TAB>TAB> (return all 'de*' options)
+    current_option = current_input.rsplit(",", 1)[-1]
+    return suboption.startswith(current_option)
 
 
 def autocomplete(parser):
@@ -945,6 +952,9 @@ class _VirtCLIArgumentStatic(object):
 
         if self.lookup_cb == -1:
             self.lookup_cb = None
+
+    def nonregex_cliname(self):
+        return self.cliname.replace("[0-9]*", "")
 
     def match_name(self, cliname):
         """

@@ -10,6 +10,8 @@ import os
 
 # Need to do this before any tests or virtinst import
 os.environ["VIRTINST_TEST_SUITE"] = "1"
+# Need to do this before we import argcomplete
+os.environ.pop("_ARC_DEBUG", None)
 
 # pylint: disable=wrong-import-position
 from virtcli import cliconfig

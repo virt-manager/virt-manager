@@ -1180,6 +1180,8 @@ _add_argcomplete_cmd("virt-install --disk ", "driver.copy_on_read=")  # will lis
 _add_argcomplete_cmd("virt-install --disk a", "address.base")
 _add_argcomplete_cmd("virt-install --disk address.u", "address.unit")
 _add_argcomplete_cmd("virt-install --disk address.unit=foo,sg", "sgio")
+_add_argcomplete_cmd("virt-install --disk path=fooo,", "driver.cache")  # will list all --disk subprops
+_add_argcomplete_cmd("virt-install --disk source.seclab", "source.seclabel.relabel")  # completer should strip out regexes from results
 _add_argcomplete_cmd("virt-install --check d", "disk_size")
 _add_argcomplete_cmd("virt-install --location k", "kernel")
 _add_argcomplete_cmd("virt-install --os-variant nam", "name")
