@@ -481,7 +481,17 @@ cache.mode=emulate,cache.level=3
 """, "singleton-config-2")
 
 
-# Device testing #1
+# Test the implied defaults for gl=yes setting virgl=on
+c.add_compare("""
+--memory 1024
+--disk none
+--graphics spice,gl=yes
+--rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
+--panic default,,address.type=isa,address.iobase=0x500,address.irq=5
+--cpu topology.sockets=1,topology.cores=3,topology.threads=2
+""", "singleton-config-3")
+
+
 
 c.add_compare("""
 --vcpus 4,cores=1,placement=static,\
@@ -600,15 +610,6 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --qemu-commandline="-set device.video0.driver=virtio-vga"
 """, "many-devices", check_version="2.0.0")  # check_version=graphics listen=socket support
 
-# Test the implied defaults for gl=yes setting virgl=on
-c.add_compare("""
---memory 1024
---disk none
---graphics spice,gl=yes
---rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
---panic default,,address.type=isa,address.iobase=0x500,address.irq=5
---cpu topology.sockets=1,topology.cores=3,topology.threads=2
-""", "spice-gl")
 
 
 
