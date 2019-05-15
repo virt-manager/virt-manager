@@ -956,14 +956,18 @@ class _VirtCLIArgumentStatic(object):
     def nonregex_cliname(self):
         return self.cliname.replace("[0-9]*", "")
 
-    def match_name(self, cliname):
+    def match_name(self, userstr):
         """
-        Return True if the passed argument name matches this
+        Return True if the passed user string matches this
         VirtCLIArgument. So for an option like --foo bar=X, this
         checks if we are the parser for 'bar'
         """
-        for argname in [self.cliname] + util.listify(self.aliases):
-            if re.match("^%s$" % argname, cliname):
+        for cliname in [self.cliname] + util.listify(self.aliases):
+            if "[" in cliname:
+                ret = re.match("^%s$" % cliname.replace(".", r"\."), userstr)
+            else:
+                ret = (cliname == userstr)
+            if ret:
                 return True
         return False
 
@@ -2914,10 +2918,10 @@ class ParserNetwork(VirtCLIParser):
 
         "virtualport.type": "virtualport_type",
         "virtualport.parameters.managerid": "virtualport_managerid",
-        "virtualport.parameters.typeid": "virtualport.typeid",
-        "virtualport.parameters.typeidversion": "virtualport.typeidversion",
-        "virtualport.parameters.instanceid": "virtualport.instanceid",
-        "virtualport.parameters.profileid": "virtualport.profileid",
+        "virtualport.parameters.typeid": "virtualport_typeid",
+        "virtualport.parameters.typeidversion": "virtualport_typeidversion",
+        "virtualport.parameters.instanceid": "virtualport_instanceid",
+        "virtualport.parameters.profileid": "virtualport_profileid",
         "virtualport.parameters.interfaceid": "virtualport_interfaceid",
     }
 

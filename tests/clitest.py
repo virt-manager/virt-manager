@@ -541,7 +541,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --input type=keyboard,bus=usb
 --input tablet
 
---serial tcp,host=:2222,mode=bind,protocol=telnet,log_file=/tmp/foo.log,log_append=yes,,target.model.name=pci-serial
+--serial tcp,host=:2222,mode=bind,protocol=telnet,log.file=/tmp/foo.log,log.append=yes,,target.model.name=pci-serial
 --serial nmdm,source.master=/dev/foo1,source.slave=/dev/foo2,alias.name=testalias7
 --parallel udp,host=0.0.0.0:1234,bind_host=127.0.0.1:1234
 --parallel unix,path=/tmp/foo-socket,source.seclabel0.model=none,source.seclabel1.model=dac,source.seclabel1.relabel=yes,source.seclabel1.label=foobar,source.seclabel.relabel=no
