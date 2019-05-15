@@ -572,7 +572,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --hostdev 0:15:0.3,address.type=pci,address.zpci.uid=0xffff,address.zpci.fid=0xffffffff
 --host-device 0x0781:0x5151,driver_name=vfio
 --host-device 04b3:4485
---host-device pci_8086_2829_scsi_host_scsi_device_lun0
+--host-device pci_8086_2829_scsi_host_scsi_device_lun0,rom.bar=on
 --hostdev usb_5_20 --hostdev usb_5_21
 
 
@@ -1016,7 +1016,7 @@ c.add_compare("--console name=foo.bar.baz", "edit-simple-console")
 c.add_compare("--filesystem /1/2/3,/4/5/6,mode=mapped", "edit-simple-filesystem")
 c.add_compare("--video cirrus", "edit-simple-video", check_version="1.3.3")  # check_version=video primary= attribute
 c.add_compare("--sound pcspk", "edit-simple-soundhw", check_version="1.3.5")  # check_version=new graphics listen output
-c.add_compare("--host-device 0x04b3:0x4485,driver_name=vfio", "edit-simple-host-device")
+c.add_compare("--host-device 0x04b3:0x4485,driver_name=vfio,type=usb", "edit-simple-host-device")
 
 c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define")
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
@@ -1024,7 +1024,7 @@ c.add_invalid("--edit seclabel2.model=dac --disk /dev/null")  # no match found
 c.add_valid("--edit seclabel.model=dac --disk /dev/null")  # match found
 c.add_compare("--edit 3 --sound pcspk", "edit-pos-num", check_version="1.3.5")  # check_version=new graphics listen output
 c.add_compare("--edit -1 --video qxl", "edit-neg-num", check_version="1.2.11")  # check_version=video ram output change
-c.add_compare("--edit all --host-device driver_name=vfio", "edit-all")
+c.add_compare("--edit all --host-device driver.name=vfio", "edit-all")
 c.add_compare("--edit ich6 --sound pcspk", "edit-select-sound-model", check_version="1.3.5")  # check_version=new graphics listen output
 c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
