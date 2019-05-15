@@ -49,6 +49,7 @@
       <driver name="qemu" type="qcow2" discard="unmap" detect_zeroes="unmap" error_policy="enospace"/>
       <source file="/dev/default-pool/new1.img"/>
       <target dev="vdb" bus="virtio"/>
+      <address type="drive" controller="0" target="2" unit="0"/>
       <readonly/>
     </disk>
     <disk type="file" device="cdrom">
@@ -161,6 +162,7 @@
         <host transport="unix" socket="/var/foo/bar/socket"/>
       </source>
       <target dev="sdac" bus="usb" removable="on"/>
+      <address type="usb" bus="0" port="2"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
@@ -281,6 +283,7 @@
       <source type="unix" path="/tmp/vhost1.sock" mode="server"/>
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
+      <address type="pci" domain="0" bus="0" slot="16" function="0"/>
     </interface>
     <interface type="user">
       <mac address="00:11:22:33:44:55"/>

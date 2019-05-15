@@ -495,7 +495,7 @@ c.add_compare("""
 --panic default,,address.type=isa,address.iobase=0x500,address.irq=5
 --cpu topology.sockets=1,topology.cores=3,topology.threads=2,cell0.cpus=0,cell0.memory=1048576
  --memdev dimm,access=private,target.size=512,target.node=0,source.pagesize=4,source.nodemask=1-2
- --memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3
+ --memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3,address.type=dimm,address.base=0x100000000,address.slot=1
 --vsock auto_cid=on
 
 --sysinfo bios.vendor="Acme LLC",bios.version=1.2.3,bios.date=01/01/1970,bios.release=10.22,system.manufacturer="Acme Inc.",system.product=Computer,system.version=3.2.1,system.serial=123456789,system.uuid=00000000-1111-2222-3333-444444444444,system.sku=abc-123,system.family=Server,baseBoard.manufacturer="Acme Corp.",baseBoard.product=Motherboard,baseBoard.version=A01,baseBoard.serial=1234-5678,baseBoard.asset=Tag,baseBoard.location=Chassis
@@ -512,7 +512,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --cpu none
 
 --disk /dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,boot_order=2
---disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap,detect_zeroes=unmap
+--disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap,detect_zeroes=unmap,address.type=drive,address.controller=0,address.target=2,address.unit=0
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba
 --disk size=1
 --disk /iscsi-pool/diskvol1,total_bytes_sec=10,total_iops_sec=20,bus=scsi,device=lun,sgio=unfiltered
@@ -525,7 +525,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --disk source.protocol=nbd,source.host.transport=unix,source.host.socket=/tmp/socket
 --disk source.protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi,logical_block_size=512,physical_block_size=512,blockio.logical_block_size=512,blockio.physical_block_size=512,target.dev=sdz
 --disk gluster://192.168.1.100/test-volume/some/dir/test-gluster.qcow2
---disk nbd+unix:///var/foo/bar/socket,bus=usb,removable=on
+--disk nbd+unix:///var/foo/bar/socket,bus=usb,removable=on,address.type=usb,address.bus=0,address.port=2
 --disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo
 --disk vol=gluster-pool/test-gluster.raw
 --disk /var,device=floppy,snapshot=no
@@ -539,7 +539,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --network bridge=ovsbr,virtualport.type=openvswitch,virtualport_profileid=demo,virtualport_interfaceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,link.state=yes,driver.name=qemu,driver.queues=3,filterref.filter=filterbar,target.dev=mytargetname,virtualport.parameters.profileid=demo,virtualport.parameters.interfaceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b
 --network type=direct,source=eth5,source_mode=vepa,source.mode=vepa,target=mytap12,virtualport_type=802.1Qbg,virtualport_managerid=12,virtualport_typeid=1193046,virtualport_typeidversion=1,virtualport_instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1,trustGuestRxFilters=yes,mtu.size=1500,virtualport.parameters.managerid=12,virtualport.parameters.typeid=1193046,virtualport.parameters.typeidversion=1,virtualport.parameters.instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1,trustGuestRxFilters=yes,mtu.size=1500
 --network user,model=virtio,address.type=spapr-vio,address.reg=0x500
---network vhostuser,source_type=unix,source_path=/tmp/vhost1.sock,source_mode=server,model=virtio,source.type=unix,source.path=/tmp/vhost1.sock
+--network vhostuser,source_type=unix,source_path=/tmp/vhost1.sock,source_mode=server,model=virtio,source.type=unix,source.path=/tmp/vhost1.sock,address.type=pci,address.bus=0x00,address.slot=0x10,address.function=0x0,address.domain=0x0000
 --network user,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01,boot.order=15,boot.loadparm=SYSTEM1
 
 --graphics sdl
