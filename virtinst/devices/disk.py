@@ -28,11 +28,13 @@ def _qemu_sanitize_drvtype(phystype, fmt):
 
 
 class _Host(XMLBuilder):
-    _XML_PROP_ORDER = ["name", "port"]
+    _XML_PROP_ORDER = ["name", "port", "transport", "socket"]
     XML_NAME = "host"
 
     name = XMLProperty("./@name")
     port = XMLProperty("./@port", is_int=True)
+    transport = XMLProperty("./@transport")
+    socket = XMLProperty("./@socket")
 
 
 class DeviceDisk(Device):

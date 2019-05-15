@@ -2649,10 +2649,10 @@ class ParserDisk(VirtCLIParser):
         "source.volume": "source_volume",
         "source.name": "source_name",
         "source.protocol": "source_protocol",
-        "source.host.name": "source_host_name",
-        "source.host.port": "source_host_port",
-        "source.host.socket": "source_host_socket",
-        "source.host.transport": "source_host_transport",
+        "source.host[0-9]*.name": "source_host_name",
+        "source.host[0-9]*.port": "source_host_port",
+        "source.host[0-9]*.socket": "source_host_socket",
+        "source.host[0-9]*.transport": "source_host_transport",
         "source.startupPolicy": "startup_policy",
         "source.seclabel[0-9]*.model": "seclabel[0-9]*.model",
         "source.seclabel[0-9]*.relabel": "seclabel[0-9]*.relabel",
@@ -2781,6 +2781,12 @@ class ParserDisk(VirtCLIParser):
     # Option handling #
     ###################
 
+    def host_find_inst_cb(self, *args, **kwargs):
+        cliarg = "listens"  # host[0-9]*
+        list_propname = "hosts"  # disk.hosts
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -2804,11 +2810,17 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("source.volume", "source_volume")
         cls.add_arg("source.name", "source_name")
         cls.add_arg("source.protocol", "source_protocol")
-        cls.add_arg("source.host.name", "source_host_name")
-        cls.add_arg("source.host.port", "source_host_port")
-        cls.add_arg("source.host.socket", "source_host_socket")
-        cls.add_arg("source.host.transport", "source_host_transport")
         cls.add_arg("source.startupPolicy", "startup_policy")
+
+        cls.add_arg("source.host[0-9]*.name", "name",
+                    find_inst_cb=cls.host_find_inst_cb)
+        cls.add_arg("source.host[0-9]*.port", "port",
+                    find_inst_cb=cls.host_find_inst_cb)
+        cls.add_arg("source.host[0-9]*.socket", "socket",
+                    find_inst_cb=cls.host_find_inst_cb)
+        cls.add_arg("source.host[0-9]*.transport", "transport",
+                    find_inst_cb=cls.host_find_inst_cb)
+
         _add_device_seclabel_args(cls, "seclabels")
 
         cls.add_arg("path", "path")
