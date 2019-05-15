@@ -102,10 +102,14 @@
     <pmu state="off"/>
     <hyperv>
       <reset state="on"/>
+      <vapic state="on"/>
       <spinlocks state="on" retries="5678"/>
       <synic state="on"/>
     </hyperv>
     <vmport state="off"/>
+    <kvm>
+      <hidden state="off"/>
+    </kvm>
     <vmcoreinfo state="on"/>
   </features>
   <cpu mode="custom" match="strict">
@@ -309,10 +313,14 @@
     <pmu state="off"/>
     <hyperv>
       <reset state="on"/>
+      <vapic state="on"/>
       <spinlocks state="on" retries="5678"/>
       <synic state="on"/>
     </hyperv>
     <vmport state="off"/>
+    <kvm>
+      <hidden state="off"/>
+    </kvm>
     <vmcoreinfo state="on"/>
   </features>
   <cpu mode="custom" match="strict">

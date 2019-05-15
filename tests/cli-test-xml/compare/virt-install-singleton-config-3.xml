@@ -25,8 +25,26 @@
   </os>
   <features>
     <acpi/>
-    <apic/>
+    <apic eoi="off"/>
+    <pae/>
+    <gic version="host"/>
+    <hap/>
+    <viridian/>
+    <pmu state="on"/>
+    <hyperv>
+      <reset state="off"/>
+      <vapic state="off"/>
+      <relaxed state="off"/>
+      <spinlocks state="on" retries="5678"/>
+      <synic state="on"/>
+    </hyperv>
     <vmport state="off"/>
+    <kvm>
+      <hidden state="on"/>
+    </kvm>
+    <pvspinlock state="off"/>
+    <smm state="off"/>
+    <vmcoreinfo state="on"/>
   </features>
   <cpu>
     <topology sockets="1" cores="3" threads="2"/>
