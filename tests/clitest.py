@@ -440,13 +440,13 @@ c.add_compare("""
 c.add_compare("""--pxe
 --memory 512,maxmemory=1024
 --vcpus 9
---cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee,\
+--cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee,mode=custom,\
 cell.id=0,cell.cpus=1,2,3,cell.memory=1024,\
 cell1.id=1,cell1.memory=256,cell1.cpus=5-8,\
 numa.cell2.id=2,numa.cell2.memory=256,numa.cell2.cpus=4,\
 cell0.distances.sibling0.id=0,cell0.distances.sibling0.value=10,\
 cell0.distances.sibling1.id=1,cell0.distances.sibling1.value=21,\
-cell1.distances.sibling0.id=0,cell1.distances.sibling0.value=21,\
+numa.cell1.distances.sibling0.id=0,numa.cell1.distances.sibling0.value=21,\
 cell1.distances.sibling1.id=1,cell1.distances.sibling1.value=10,\
 cache.mode=emulate,cache.level=3
 --cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3
