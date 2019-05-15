@@ -213,8 +213,9 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest.blkiotune)
         check("weight", None, 100, 200)
-        check("device_weight", None, 300)
-        check("device_path", None, "/home/1.img")
+        check = self._make_checker(guest.blkiotune.devices.add_new())
+        check("weight", None, 300)
+        check("path", None, "/home/1.img")
 
         check = self._make_checker(guest.idmap)
         check("uid_start", None, 0)

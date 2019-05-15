@@ -1728,16 +1728,24 @@ class ParserBlkiotune(VirtCLIParser):
     guest_propname = "blkiotune"
     remove_first = "weight"
     aliases = {
-        "device.path": "device_path",
-        "device.weight": "device_weight",
+        "device[0-9]*.path": "device_path",
+        "device[0-9]*.weight": "device_weight",
     }
+
+    def device_find_inst_cb(self, *args, **kwargs):
+        cliarg = "device"  # device[0-9]*
+        list_propname = "devices"  # blkiotune.devices
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
 
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("weight", "weight")
-        cls.add_arg("device.path", "device_path")
-        cls.add_arg("device.weight", "device_weight")
+        cls.add_arg("device[0-9]*.path", "path",
+                    find_inst_cb=cls.device_find_inst_cb)
+        cls.add_arg("device[0-9]*.weight", "weight",
+                    find_inst_cb=cls.device_find_inst_cb)
 
 
 ###########################
