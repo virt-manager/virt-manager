@@ -298,15 +298,11 @@ Configure which of the host's physical CPUs the domain VCPU will be pinned to. E
 
 Use --cputune=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsCPUTuning>
 
-=item B<--security> type=TYPE[,label=LABEL][,relabel=yes|no]
+=item B<--security>/B<--seclabel> type=TYPE[,label=LABEL][,relabel=yes|no],...
 
-Configure domain security driver settings. Type can be either 'static' or
+Configure domain seclabel domain settings. Type can be either 'static' or
 'dynamic'. 'static' configuration requires a security LABEL. Specifying
 LABEL without TYPE implies static configuration.
-
-To have libvirt automatically apply your static label, you must specify
-relabel=yes. Otherwise disk images must be manually labeled by the admin,
-including images that virt-install is asked to create.
 
 Use --security=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#seclabel>
 

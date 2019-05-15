@@ -763,9 +763,9 @@ def add_device_options(devg, sound_back_compat=False):
 
 
 def add_guest_xml_options(geng):
-    ParserSecurity.register()
-    geng.add_argument("--security", action="append",
-        help=_("Set domain security driver configuration."))
+    ParserSeclabel.register()
+    geng.add_argument("--seclabel", "--security", action="append",
+        help=_("Set domain seclabel configuration."))
 
     ParserCputune.register()
     geng.add_argument("--cputune", action="append",
@@ -2256,11 +2256,11 @@ class ParserIdmap(VirtCLIParser):
 
 
 ######################
-# --security parsing #
+# --seclabel parsing #
 ######################
 
-class ParserSecurity(VirtCLIParser):
-    cli_arg_name = "security"
+class ParserSeclabel(VirtCLIParser):
+    cli_arg_name = "seclabel"
     guest_propname = "seclabels"
 
     @classmethod
