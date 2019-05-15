@@ -483,7 +483,7 @@ cache.mode=emulate,cache.level=3
 
 # Test the implied defaults for gl=yes setting virgl=on
 c.add_compare("""
---memory 1024
+--memory hotplugmemorymax=2048,hotplugmemoryslots=2
 --disk none
 --features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host
 --clock rtc_present=no,pit_present=yes,pit_tickpolicy=catchup,tsc_present=no,platform_present=no,hypervclock_present=no,platform_tickpolicy=foo,hpet_tickpolicy=bar,tsc_tickpolicy=wibble,kvmclock_tickpolicy=wobble,hypervclock_tickpolicy=woo
@@ -492,7 +492,9 @@ c.add_compare("""
 --graphics spice,gl=yes
 --rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
 --panic default,,address.type=isa,address.iobase=0x500,address.irq=5
---cpu topology.sockets=1,topology.cores=3,topology.threads=2
+--cpu topology.sockets=1,topology.cores=3,topology.threads=2,cell0.cpus=0,cell0.memory=1048576
+ --memdev dimm,access=private,target.size=512,target.node=0,source.pagesize=4,source.nodemask=1-2
+ --memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3
 --vsock auto_cid=on
 """, "singleton-config-3")
 

@@ -6,8 +6,9 @@
       <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
     </libosinfo:libosinfo>
   </metadata>
-  <memory>1048576</memory>
-  <currentMemory>1048576</currentMemory>
+  <maxMemory slots="2">2097152</maxMemory>
+  <memory>2097152</memory>
+  <currentMemory>2097152</currentMemory>
   <memoryBacking>
     <hugepages/>
     <access mode="shared"/>
@@ -48,6 +49,9 @@
   </features>
   <cpu>
     <topology sockets="1" cores="3" threads="2"/>
+    <numa>
+      <cell cpus="0" memory="1048576"/>
+    </numa>
   </cpu>
   <clock offset="utc">
     <timer name="pit" tickpolicy="catchup" present="yes"/>
@@ -97,6 +101,29 @@
     <panic model="isa">
       <address type="isa" iobase="0x500" irq="5"/>
     </panic>
+    <memory model="dimm" access="private">
+      <source>
+        <pagesize>4</pagesize>
+        <nodemask>1-2</nodemask>
+      </source>
+      <target>
+        <size>524288</size>
+        <node>0</node>
+      </target>
+    </memory>
+    <memory model="nvdimm">
+      <alias name="mymemdev3"/>
+      <source>
+        <path>/path/to/nvdimm</path>
+      </source>
+      <target>
+        <size>524288</size>
+        <node>0</node>
+        <label>
+          <size>131072</size>
+        </label>
+      </target>
+    </memory>
     <vsock model="virtio">
       <cid auto="yes"/>
     </vsock>
