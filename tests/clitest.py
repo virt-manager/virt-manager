@@ -485,6 +485,7 @@ cache.mode=emulate,cache.level=3
 c.add_compare("""
 --memory 1024
 --disk none
+--clock rtc_present=no,pit_present=yes,pit_tickpolicy=catchup,tsc_present=no,platform_present=no,hypervclock_present=no,platform_tickpolicy=foo,hpet_tickpolicy=bar,tsc_tickpolicy=wibble,kvmclock_tickpolicy=wobble,hypervclock_tickpolicy=woo
 --boot bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,smbios.mode=host,bootmenu.enable=yes,loader_ro=yes,loader.type=rom,loader=/tmp/foo
 --memorybacking access.mode=shared,source.type=anonymous,hugepages=on
 --graphics spice,gl=yes

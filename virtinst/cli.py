@@ -2285,12 +2285,18 @@ class ParserClock(VirtCLIParser):
 
     def _remove_old_options(self):
         # These _tickpolicy options have never had any effect in libvirt,
-        # even though they aren't explicitly rejected. Make them no-ops
-        self.optdict.pop("platform_tickpolicy", None)
-        self.optdict.pop("hpet_tickpolicy", None)
-        self.optdict.pop("tsc_tickpolicy", None)
-        self.optdict.pop("kvmclock_tickpolicy", None)
-        self.optdict.pop("hypervclock_tickpolicy", None)
+        # even though they aren't explicitly rejected. Make them no-ops.
+        # Keep them unrolled so we can easily check for code coverage
+        if "platform_tickpolicy" in self.optdict:
+            self.optdict.pop("platform_tickpolicy")
+        if "hpet_tickpolicy" in self.optdict:
+            self.optdict.pop("hpet_tickpolicy")
+        if "tsc_tickpolicy" in self.optdict:
+            self.optdict.pop("tsc_tickpolicy")
+        if "kvmclock_tickpolicy" in self.optdict:
+            self.optdict.pop("kvmclock_tickpolicy")
+        if "hypervclock_tickpolicy" in self.optdict:
+            self.optdict.pop("hypervclock_tickpolicy")
 
     def _parse(self, inst):
         self._remove_old_options()

@@ -32,9 +32,11 @@
     <topology sockets="1" cores="3" threads="2"/>
   </cpu>
   <clock offset="utc">
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="pit" tickpolicy="delay"/>
-    <timer name="hpet" present="no"/>
+    <timer name="pit" tickpolicy="catchup" present="yes"/>
+    <timer name="platform" present="no"/>
+    <timer name="rtc" present="no"/>
+    <timer name="tsc" present="no"/>
+    <timer name="hypervclock" present="no"/>
   </clock>
   <pm>
     <suspend-to-mem enabled="no"/>
