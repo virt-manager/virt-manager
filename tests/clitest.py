@@ -485,6 +485,7 @@ cache.mode=emulate,cache.level=3
 c.add_compare("""
 --memory 1024
 --disk none
+--boot bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,smbios.mode=host,bootmenu.enable=yes,loader_ro=yes,loader.type=rom,loader=/tmp/foo
 --graphics spice,gl=yes
 --rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
 --panic default,,address.type=isa,address.iobase=0x500,address.irq=5
@@ -839,7 +840,7 @@ c.add_compare("--connect %(URI-KVM-ARMV7L)s --disk %(EXISTIMG1)s --import --os-v
 # aarch64 tests
 c.add_compare("--arch aarch64 --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machvirt")
 c.add_compare("--arch aarch64 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machdefault")
-c.add_compare("--arch aarch64 --cdrom %(EXISTIMG2)s --boot loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s --cpu none --events on_crash=preserve,on_reboot=destroy,on_poweroff=restart", "aarch64-cdrom")
+c.add_compare("--arch aarch64 --cdrom %(EXISTIMG2)s --boot loader=CODE.fd,nvram.template=VARS.fd --disk %(EXISTIMG1)s --cpu none --events on_crash=preserve,on_reboot=destroy,on_poweroff=restart", "aarch64-cdrom")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21", "aarch64-kvm-import")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk size=1 --os-variant fedora22 --features gic_version=host --network network=default,address.type=pci --controller type=scsi,model=virtio-scsi,address.type=pci", "aarch64-kvm-gic")
 
@@ -987,7 +988,7 @@ c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "edit-simple-cpu")
 c.add_compare("--numatune 1-5,7,mode=strict", "edit-simple-numatune")
 c.add_compare("--blkiotune weight=500,device_path=/dev/sdf,device_weight=600", "edit-simple-blkiotune")
 c.add_compare("--idmap uid_start=0,uid_target=2000,uid_count=30,gid_start=0,gid_target=3000,gid_count=40", "edit-simple-idmap")
-c.add_compare("--boot loader=foo.bar,useserial=on,init=/bin/bash", "edit-simple-boot")
+c.add_compare("--boot loader=foo.bar,useserial=on,init=/bin/bash,nvram=/test/nvram.img,os_type=hvm,domain_type=test,loader.readonly=on,loader.secure=no,machine=", "edit-simple-boot")
 c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "edit-simple-security")
 c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "edit-simple-features")
 c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,kvmclock_tickpolicy=foo,rtc_tickpolicy=merge", "edit-simple-clock")

@@ -2,7 +2,8 @@
    <os>
      <type arch="i686">hvm</type>
 -    <loader type="rom">/usr/lib/xen/boot/hvmloader</loader>
-+    <loader type="rom">foo.bar</loader>
++    <loader type="rom" readonly="yes" secure="no">foo.bar</loader>
++    <nvram>/test/nvram.img</nvram>
 +    <bios useserial="yes"/>
 +    <init>/bin/bash</init>
    </os>

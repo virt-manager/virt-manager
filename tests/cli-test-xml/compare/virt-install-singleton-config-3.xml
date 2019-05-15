@@ -11,7 +11,12 @@
   <vcpu>6</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
+    <loader readonly="yes" type="rom">/tmp/foo</loader>
+    <cmdline>root=/foo</cmdline>
     <boot dev="hd"/>
+    <smbios mode="host"/>
+    <bootmenu enable="yes"/>
+    <bios useserial="no" rebootTimeout="60"/>
   </os>
   <features>
     <acpi/>
