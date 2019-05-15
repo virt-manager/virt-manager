@@ -1682,7 +1682,7 @@ booting from PXE, using VNC server/viewer, with virtio-scsi disk
        --name demo \
        --memory 500 \
        --disk path=/dev/HostVG/DemoVM,bus=scsi \
-       --controller virtio-scsi \
+       --controller scsi,model=virtio-scsi \
        --network network=default \
        --virt-type qemu \
        --graphics vnc \

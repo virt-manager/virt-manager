@@ -112,7 +112,7 @@ class TestXMLMisc(unittest.TestCase):
         self.assertEqual("hdc", disk.generate_target(["hdb", "sda"]))
         self.assertEqual("hdb", disk.generate_target(["hda", "hdd"]))
 
-        disk.bus = "virtio-scsi"
+        disk.bus = "scsi"
         self.assertEqual("sdb",
             disk.generate_target(["sda", "sdg", "sdi"], 0))
         self.assertEqual("sdh", disk.generate_target(["sda", "sdg"], 1))
