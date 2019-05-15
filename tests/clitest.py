@@ -111,6 +111,7 @@ class Command(object):
         self.need_conn = True
         self.skip_cb = None
         self.check_version = None
+        self.check_version_define = None
         self.grep = None
         self.nogrep = None
 
@@ -198,14 +199,15 @@ class Command(object):
             return
 
         tests.skipTest(skipmsg)
-        return True
 
     def _check_compare_file(self, conn, tests, output):
-        if self._check_support(tests, conn, self.check_version,
-                "Skipping compare check due to lack of support"):
-            return
-
         # Generate test files that don't exist yet
+        def do_check(check):
+            self._check_support(tests, conn, check,
+                "Skipping compare check due to lack of support")
+
+        do_check(self.check_version)
+
         filename = self.compare_file
         if (utils.clistate.regenerate_output or
             not os.path.exists(filename)):
@@ -223,6 +225,8 @@ class Command(object):
             output = "\n".join(newlines)
 
         utils.diff_compare(output, filename)
+
+        do_check(self.check_version_define)
 
         # Define the <domain>s generated for compare output, to ensure
         # we are generating valid XML
@@ -350,7 +354,7 @@ class App(object):
 
     def _add(self, catname, testargs, valid, compfile,
              skip_cb=None, check_version=None, input_file=None,
-             auto_printarg=True, grep=None):
+             auto_printarg=True, grep=None, check_version_define=None):
 
         category = self.categories[catname]
         args = category.default_args + " " + testargs
@@ -368,6 +372,7 @@ class App(object):
         cmd.check_version = (check_version or
                              category.check_version or
                              self.check_version)
+        cmd.check_version_define = check_version_define
         cmd.input_file = input_file
         cmd.grep = grep
         self.cmds.append(cmd)
@@ -499,7 +504,7 @@ c.add_compare("""
 --vsock auto_cid=on
 
 --sysinfo bios.vendor="Acme LLC",bios.version=1.2.3,bios.date=01/01/1970,bios.release=10.22,system.manufacturer="Acme Inc.",system.product=Computer,system.version=3.2.1,system.serial=123456789,system.uuid=00000000-1111-2222-3333-444444444444,system.sku=abc-123,system.family=Server,baseBoard.manufacturer="Acme Corp.",baseBoard.product=Motherboard,baseBoard.version=A01,baseBoard.serial=1234-5678,baseBoard.asset=Tag,baseBoard.location=Chassis
-""", "singleton-config-3")
+""", "singleton-config-3", check_version_define="5.3.0")
 
 
 
@@ -624,7 +629,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --qemu-commandline="-display gtk,gl=on"
 --qemu-commandline="-device vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c"
 --qemu-commandline="-set device.video0.driver=virtio-vga"
-""", "many-devices", check_version="2.0.0")  # check_version=graphics listen=socket support
+""", "many-devices", check_version_define="5.3.0")
 
 
 
@@ -654,8 +659,8 @@ c.add_valid("--security label=foobar.label,a1,z2,b3")  # --security static with 
 c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
 c.add_invalid("--security foobar")  # Busted --security
 c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
-c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3", "memory-hotplug")
-c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat")
+c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3", "memory-hotplug", check_version="5.3.0")
+c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat", check_version="5.3.0")
 c.add_compare("--connect " + utils.URIs.kvm_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
 c.add_compare("--connect " + utils.URIs.kvm_rhel, "cpu-rhel7-default")  # default CPU for old QEMU where we cannot use host-model
 
@@ -873,7 +878,7 @@ c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-headless")
 c = vinst.add_category("kvm-graphics", "--os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-graphics")
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-graphics")
-c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-graphics", check_version="5.3.0")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-graphics", check_version="5.3.0", )
 c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-graphics")
 c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-graphics")
 
@@ -898,7 +903,7 @@ c.add_compare("--init /usr/bin/httpd", "manual-init")
 c = vinst.add_category("xen", "--noautoconsole --connect " + utils.URIs.xen)
 c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none")  # Xen PV install headless
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
-c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64", "xen-pv")  # Xen PV
+c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64", "xen-pv", check_version="5.3.0")  # Xen PV
 c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
 
 

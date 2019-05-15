@@ -62,7 +62,8 @@
     </libosinfo:libosinfo>
   </metadata>
   <genid>e90ff655-47a5-4484-9f9c-79a683c2a2e2</genid>
-  <maxMemory slots='16' unit='KiB'>1099511627776</maxMemory>
+  <!-- requires libvirt 5.3.0+ -->
+  <!-- <maxMemory slots='16' unit='KiB'>1099511627776</maxMemory> -->
   <blkiotune>
     <weight>100</weight>
     <device>
@@ -137,6 +138,8 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
   <on_reboot>restart</on_reboot>
   <on_crash>destroy</on_crash>
   <vcpu cpuset="1,2,5-9,11,13-14">9</vcpu>
+  <!-- Requires libvirt 5.3.0+ -->
+  <!--
   <vcpus>
     <vcpu id='0' enabled='no' hotpluggable='yes' order='1'/>
     <vcpu id='1' enabled='yes' hotpluggable='no'/>
@@ -148,6 +151,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <vcpu id='7' enabled='yes' hotpluggable='no'/>
     <vcpu id='8' enabled='yes' hotpluggable='no'/>
   </vcpus>
+  -->
   <numatune>
     <memory mode='interleave' placement='auto'/>
   </numatune>
@@ -602,6 +606,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     </vsock>
 
     <!-- memory devices -->
+    <!-- These are rejected by the test driver for libvirt < 5.3.0
     <memory model='nvdimm' access='private'>
       <source>
         <path>/tmp/nvdimm</path>
@@ -623,6 +628,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       </target>
       <address type='dimm' slot='1'/>
     </memory>
+    -->
 
     <!-- hub devices -->
     <hub type='usb'/>

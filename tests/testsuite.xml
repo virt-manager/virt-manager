@@ -79,7 +79,8 @@
       <libosinfo:os id="http://fedoraproject.org/fedora/27"/>
     </libosinfo:libosinfo>
   </metadata>
-  <maxMemory slots='16' unit='KiB'>1099511627776</maxMemory>
+  <!-- Requires libvirt 5.3.0+ -->
+  <!-- <maxMemory slots='16' unit='KiB'>1099511627776</maxMemory> -->
   <blkiotune>
     <weight>100</weight>
     <device>
@@ -298,6 +299,7 @@
       <cid address='5'/>
     </vsock>
 
+    <!-- These are rejected by the test driver for libvirt < 5.3.0
     <memory model='nvdimm' access='private'>
       <source>
         <path>/tmp/nvdimm</path>
@@ -308,6 +310,7 @@
       </target>
       <address type='dimm' slot='0'/>
     </memory>
+    -->
 
     <hub type='usb'/>
 

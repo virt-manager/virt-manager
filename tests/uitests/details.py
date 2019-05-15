@@ -136,7 +136,6 @@ class Details(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
         # CPU topology
-        tab.find("Topology", "toggle button").click_expander()
         tab.find_fuzzy("Manually set", "check").click()
         tab.find("Sockets:", "spin button").typeText("8")
         tab.find("Cores:", "spin button").typeText("2")
