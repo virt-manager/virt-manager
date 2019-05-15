@@ -486,6 +486,7 @@ c.add_compare("""
 --memory 1024
 --disk none
 --boot bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,smbios.mode=host,bootmenu.enable=yes,loader_ro=yes,loader.type=rom,loader=/tmp/foo
+--memorybacking access.mode=shared,source.type=anonymous,hugepages=on
 --graphics spice,gl=yes
 --rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
 --panic default,,address.type=isa,address.iobase=0x500,address.irq=5
