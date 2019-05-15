@@ -496,6 +496,8 @@ c.add_compare("""
  --memdev dimm,access=private,target.size=512,target.node=0,source.pagesize=4,source.nodemask=1-2
  --memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3
 --vsock auto_cid=on
+
+--sysinfo bios.vendor="Acme LLC",bios.version=1.2.3,bios.date=01/01/1970,bios.release=10.22,system.manufacturer="Acme Inc.",system.product=Computer,system.version=3.2.1,system.serial=123456789,system.uuid=00000000-1111-2222-3333-444444444444,system.sku=abc-123,system.family=Server,baseBoard.manufacturer="Acme Corp.",baseBoard.product=Motherboard,baseBoard.version=A01,baseBoard.serial=1234-5678,baseBoard.asset=Tag,baseBoard.location=Chassis
 """, "singleton-config-3")
 
 

@@ -15,12 +15,37 @@
     <source type="anonymous"/>
   </memoryBacking>
   <vcpu>6</vcpu>
+  <sysinfo type="smbios">
+    <bios>
+      <entry name="vendor">Acme LLC</entry>
+      <entry name="version">1.2.3</entry>
+      <entry name="date">01/01/1970</entry>
+      <entry name="release">10.22</entry>
+    </bios>
+    <system>
+      <entry name="manufacturer">Acme Inc.</entry>
+      <entry name="product">Computer</entry>
+      <entry name="version">3.2.1</entry>
+      <entry name="serial">123456789</entry>
+      <entry name="uuid">00000000-1111-2222-3333-444444444444</entry>
+      <entry name="sku">abc-123</entry>
+      <entry name="family">Server</entry>
+    </system>
+    <baseBoard>
+      <entry name="manufacturer">Acme Corp.</entry>
+      <entry name="product">Motherboard</entry>
+      <entry name="version">A01</entry>
+      <entry name="serial">1234-5678</entry>
+      <entry name="asset">Tag</entry>
+      <entry name="location">Chassis</entry>
+    </baseBoard>
+  </sysinfo>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
     <loader readonly="yes" type="rom">/tmp/foo</loader>
     <cmdline>root=/foo</cmdline>
     <boot dev="hd"/>
-    <smbios mode="host"/>
+    <smbios mode="sysinfo"/>
     <bootmenu enable="yes"/>
     <bios useserial="no" rebootTimeout="60"/>
   </os>
