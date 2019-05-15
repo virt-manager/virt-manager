@@ -2799,7 +2799,6 @@ class ParserDisk(VirtCLIParser):
             else:
                 fail(_("Unknown '%s' value '%s'") % ("perms", val))
 
-        has_path = "path" in self.optdict
         backing_store = self.optdict.pop("backing_store", None)
         backing_format = self.optdict.pop("backing_format", None)
         poolname = self.optdict.pop("pool", None)
@@ -2808,17 +2807,6 @@ class ParserDisk(VirtCLIParser):
         fmt = self.optdict.pop("format", None)
         sparse = _on_off_convert("sparse", self.optdict.pop("sparse", "yes"))
         convert_perms(self.optdict.pop("perms", None))
-        has_type_volume = ("source_pool" in self.optdict or
-                           "source_volume" in self.optdict)
-        has_type_network = ("source_protocol" in self.optdict)
-
-        optcount = sum([bool(p) for p in [has_path, poolname, volname,
-                                          has_type_volume, has_type_network]])
-        if optcount > 1:
-            fail(_("Cannot specify more than 1 storage path"))
-        if optcount == 0 and size:
-            # Saw something like --disk size=X, have it imply pool=default
-            poolname = "default"
 
         if volname:
             if volname.count("/") != 1:
@@ -2829,6 +2817,14 @@ class ParserDisk(VirtCLIParser):
                           poolname, volname)
 
         super()._parse(inst)
+
+        if (size and
+            not volname and
+            not poolname and
+            not inst.path and
+            inst.type == inst.TYPE_FILE):
+            # Saw something like --disk size=X, have it imply pool=default
+            poolname = "default"
 
         # Generate and fill in the disk source info
         newvolname = None
