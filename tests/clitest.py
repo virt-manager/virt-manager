@@ -483,6 +483,7 @@ cache.mode=emulate,cache.level=3
 
 # Test the implied defaults for gl=yes setting virgl=on
 c.add_compare("""
+--vcpus 4,vcpu.placement=auto
 --memory hotplugmemorymax=2048,hotplugmemoryslots=2
 --disk none
 --features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host
@@ -503,7 +504,7 @@ c.add_compare("""
 
 
 c.add_compare("""
---vcpus 4,cores=1,placement=static,\
+--vcpus vcpus=4,cores=1,placement=static,\
 vcpus.vcpu2.id=0,vcpus.vcpu2.enabled=no,\
 vcpus.vcpu3.id=1,vcpus.vcpu3.hotpluggable=no,vcpus.vcpu3.enabled=yes,\
 vcpus.vcpu.id=3,vcpus.vcpu0.enabled=yes,vcpus.vcpu0.order=3,\
@@ -595,6 +596,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 --video cirrus
 --video model=qxl,vgamem=1,ram=2,vram=3,heads=4,accel3d=yes,vram64=65
+--video model=qxl,model.vgamem=1,model.ram=2,model.vram=3,model.heads=4,model.acceleration.accel3d=yes,model.vram64=65
 
 --smartcard passthrough,type=spicevmc
 --smartcard mode=host
