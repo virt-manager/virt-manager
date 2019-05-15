@@ -893,6 +893,32 @@ def _on_off_convert(key, val):
     raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
 
 
+class _SuboptCheckerClass:
+    """
+    Used by the test suite to ensure we actually test all cli suboptions
+    """
+    def __init__(self):
+        self._all = set()
+        self._seen = set()
+
+    def add_all(self, name):
+        if name.startswith("--unattended"):
+            # Hack, we don't have any test suite coverage of the
+            # unattended option. This should change soon but until then
+            # disable the test suite failue
+            return
+        self._all.add(name)
+
+    def add_seen(self, name):
+        self._seen.add(name)
+
+    def get_unseen(self):
+        return self._all - self._seen
+
+
+_SuboptChecker = _SuboptCheckerClass()
+
+
 class _VirtCLIArgumentStatic(object):
     """
     Helper class to hold all of the static data we need for knowing
@@ -920,7 +946,7 @@ class _VirtCLIArgumentStatic(object):
         DeviceDisk has multiple seclabel children, this provides a hook
         to lookup the specified child object.
     """
-    def __init__(self, cliname, propname,
+    def __init__(self, cliname, propname, parent_cliname,
                  cb=None, can_comma=None,
                  ignore_default=False, is_onoff=False,
                  lookup_cb=-1, find_inst_cb=None):
@@ -932,7 +958,8 @@ class _VirtCLIArgumentStatic(object):
         self.is_onoff = is_onoff
         self.lookup_cb = lookup_cb
         self.find_inst_cb = find_inst_cb
-        self.aliases = []
+        self._parent_cliname = parent_cliname
+        self._aliases = []
 
         if not self.propname and not self.cb:
             raise RuntimeError(
@@ -952,6 +979,17 @@ class _VirtCLIArgumentStatic(object):
 
         if self.lookup_cb == -1:
             self.lookup_cb = None
+        _SuboptChecker.add_all(self._testsuite_argcheck_name(self.cliname))
+
+    def _testsuite_argcheck_name(self, cliname):
+        if not self._parent_cliname:
+            return "sharedoption %s" % cliname
+        return "--%s %s" % (self._parent_cliname, cliname)
+
+    def set_aliases(self, aliases):
+        self._aliases = aliases
+        for alias in self._aliases:
+            _SuboptChecker.add_all(self._testsuite_argcheck_name(alias))
 
     def nonregex_cliname(self):
         return self.cliname.replace("[0-9]*", "")
@@ -962,12 +1000,13 @@ class _VirtCLIArgumentStatic(object):
         VirtCLIArgument. So for an option like --foo bar=X, this
         checks if we are the parser for 'bar'
         """
-        for cliname in [self.cliname] + util.listify(self.aliases):
+        for cliname in [self.cliname] + util.listify(self._aliases):
             if "[" in cliname:
                 ret = re.match("^%s$" % cliname.replace(".", r"\."), userstr)
             else:
                 ret = (cliname == userstr)
             if ret:
+                _SuboptChecker.add_seen(self._testsuite_argcheck_name(cliname))
                 return True
         return False
 
@@ -1202,17 +1241,29 @@ class VirtCLIParser(metaclass=_InitClass):
     aliases = {}
 
     @classmethod
-    def add_arg(cls, *args, **kwargs):
+    def add_arg(cls, cliname, propname, *args, **kwargs):
         """
         Add a VirtCLIArgument for this class.
+
+        :param skip_testsuite_tracking: Special argument handled here. If True,
+            if means the argument is shared among multiple cli commands.
+            Don't insist that each instance has full testsuite coverage.
         """
         if not cls._virtargs:
-            cls._virtargs = [_VirtCLIArgumentStatic(
-                "clearxml", None, cb=cls._clearxml_cb, lookup_cb=None,
-                is_onoff=True)]
-        virtarg = _VirtCLIArgumentStatic(*args, **kwargs)
+            clearxmlvirtarg = _VirtCLIArgumentStatic(
+                "clearxml", None, None,
+                cb=cls._clearxml_cb, lookup_cb=None,
+                is_onoff=True)
+            cls._virtargs = [clearxmlvirtarg]
+
+        parent_cliname = cls.cli_arg_name
+        if kwargs.pop("skip_testsuite_tracking", False):
+            parent_cliname = None
+
+        virtarg = _VirtCLIArgumentStatic(cliname, propname, parent_cliname,
+                *args, **kwargs)
         if virtarg.cliname in cls.aliases:
-            virtarg.aliases = util.listify(cls.aliases.pop(virtarg.cliname))
+            virtarg.set_aliases(util.listify(cls.aliases.pop(virtarg.cliname)))
         cls._virtargs.append(virtarg)
 
     @classmethod
@@ -1260,7 +1311,7 @@ class VirtCLIParser(metaclass=_InitClass):
 
     @classmethod
     def _init_class(cls, **kwargs):
-        """This method just terminates the super() chain"""
+        """This method also terminates the super() chain"""
 
     def __init__(self, optstr, guest=None):
         self.optstr = optstr
@@ -2538,28 +2589,32 @@ def _add_common_device_args(cls,
     """
     Add common Device parameters, like address.*
     """
-    cls.add_arg("address.type", "address.type")
-    cls.add_arg("address.domain", "address.domain")
-    cls.add_arg("address.bus", "address.bus")
-    cls.add_arg("address.slot", "address.slot")
-    cls.add_arg("address.multifunction", "address.multifunction",
-                is_onoff=True)
-    cls.add_arg("address.function", "address.function")
-    cls.add_arg("address.controller", "address.controller")
-    cls.add_arg("address.unit", "address.unit")
-    cls.add_arg("address.port", "address.port")
-    cls.add_arg("address.target", "address.target")
-    cls.add_arg("address.reg", "address.reg")
-    cls.add_arg("address.cssid", "address.cssid")
-    cls.add_arg("address.ssid", "address.ssid")
-    cls.add_arg("address.devno", "address.devno")
-    cls.add_arg("address.iobase", "address.iobase")
-    cls.add_arg("address.irq", "address.irq")
-    cls.add_arg("address.base", "address.base")
-    cls.add_arg("address.zpci.uid", "address.zpci_uid")
-    cls.add_arg("address.zpci.fid", "address.zpci_fid")
+    def _add_arg(*args, **kwargs):
+        kwargs["skip_testsuite_tracking"] = True
+        cls.add_arg(*args, **kwargs)
 
-    cls.add_arg("alias.name", "alias.name")
+    _add_arg("address.type", "address.type")
+    _add_arg("address.domain", "address.domain")
+    _add_arg("address.bus", "address.bus")
+    _add_arg("address.slot", "address.slot")
+    _add_arg("address.multifunction", "address.multifunction",
+                is_onoff=True)
+    _add_arg("address.function", "address.function")
+    _add_arg("address.controller", "address.controller")
+    _add_arg("address.unit", "address.unit")
+    _add_arg("address.port", "address.port")
+    _add_arg("address.target", "address.target")
+    _add_arg("address.reg", "address.reg")
+    _add_arg("address.cssid", "address.cssid")
+    _add_arg("address.ssid", "address.ssid")
+    _add_arg("address.devno", "address.devno")
+    _add_arg("address.iobase", "address.iobase")
+    _add_arg("address.irq", "address.irq")
+    _add_arg("address.base", "address.base")
+    _add_arg("address.zpci.uid", "address.zpci_uid")
+    _add_arg("address.zpci.fid", "address.zpci_fid")
+
+    _add_arg("alias.name", "alias.name")
 
     def set_boot_order_cb(self, inst, val, virtarg):
         val = int(val)
@@ -2567,14 +2622,14 @@ def _add_common_device_args(cls,
 
     if boot_order:
         cls.aliases["boot.order"] = "boot_order"
-        cls.add_arg("boot.order", "boot.order", cb=set_boot_order_cb)
+        _add_arg("boot.order", "boot.order", cb=set_boot_order_cb)
 
     if boot_loadparm:
-        cls.add_arg("boot.loadparm", "boot.loadparm")
+        _add_arg("boot.loadparm", "boot.loadparm")
 
     if virtio_options:
-        cls.add_arg("driver.ats", "virtio_driver.ats", is_onoff=True)
-        cls.add_arg("driver.iommu", "virtio_driver.iommu", is_onoff=True)
+        _add_arg("driver.ats", "virtio_driver.ats", is_onoff=True)
+        _add_arg("driver.iommu", "virtio_driver.iommu", is_onoff=True)
 
 
 def _add_device_seclabel_args(cls, list_propname, prefix=""):
@@ -2584,12 +2639,16 @@ def _add_device_seclabel_args(cls, list_propname, prefix=""):
         cb = c._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+    def _add_arg(*args, **kwargs):
+        kwargs["skip_testsuite_tracking"] = True
+        cls.add_arg(*args, **kwargs)
+
     # DeviceDisk.seclabels properties
-    cls.add_arg(prefix + "source.seclabel[0-9]*.model", "model",
+    _add_arg(prefix + "source.seclabel[0-9]*.model", "model",
                 find_inst_cb=seclabel_find_inst_cb)
-    cls.add_arg(prefix + "source.seclabel[0-9]*.relabel", "relabel",
+    _add_arg(prefix + "source.seclabel[0-9]*.relabel", "relabel",
                 is_onoff=True, find_inst_cb=seclabel_find_inst_cb)
-    cls.add_arg(prefix + "source.seclabel[0-9]*.label", "label",
+    _add_arg(prefix + "source.seclabel[0-9]*.label", "label",
                 can_comma=True, find_inst_cb=seclabel_find_inst_cb)
 
 
@@ -2608,6 +2667,7 @@ def _add_char_source_args(cls, prefix=""):
         inst.source.set_friendly_connect(val)
 
     def _add_arg(cliname, propname, *args, **kwargs):
+        kwargs["skip_testsuite_tracking"] = True
         cls.add_arg(prefix + cliname, propname, *args, **kwargs)
 
     _add_arg("source.path", "source.path")
