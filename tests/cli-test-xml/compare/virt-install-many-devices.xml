@@ -52,7 +52,7 @@
       <readonly/>
     </disk>
     <disk type="file" device="cdrom">
-      <target dev="sda" bus="sata"/>
+      <target dev="sdaa" bus="sata"/>
       <driver copy_on_read="on"/>
       <iotune>
         <read_bytes_sec>1</read_bytes_sec>
@@ -68,10 +68,10 @@
       <source file="/var/lib/libvirt/images/foobar.qcow2"/>
       <target dev="vdc" bus="virtio"/>
     </disk>
-    <disk type="block" device="disk">
-      <driver name="qemu" type="raw" cache="none" io="native"/>
+    <disk type="block" device="lun" sgio="unfiltered">
+      <driver name="qemu" type="raw"/>
       <source dev="/iscsi-pool/diskvol1"/>
-      <target dev="vdd" bus="virtio"/>
+      <target dev="sdab" bus="scsi"/>
       <iotune>
         <total_bytes_sec>10</total_bytes_sec>
         <total_iops_sec>20</total_iops_sec>
@@ -85,20 +85,30 @@
         </seclabel>
         <seclabel model="selinux" relabel="no"/>
       </source>
-      <target dev="vde" bus="virtio"/>
+      <target dev="vdd" bus="virtio"/>
+      <iotune>
+        <read_bytes_sec>1</read_bytes_sec>
+        <write_bytes_sec>5</write_bytes_sec>
+        <read_iops_sec>2</read_iops_sec>
+        <write_iops_sec>6</write_iops_sec>
+      </iotune>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
       <source file="/dev/default-pool/iso-vol" startupPolicy="optional"/>
-      <target dev="vdf" bus="virtio"/>
+      <target dev="vde" bus="virtio"/>
+      <iotune>
+        <total_bytes_sec>10</total_bytes_sec>
+        <total_iops_sec>20</total_iops_sec>
+      </iotune>
     </disk>
     <disk type="volume" device="disk">
       <driver name="qemu" type="raw"/>
       <source volume="some-rbd-vol" pool="rbd-ceph"/>
-      <target dev="vdg" bus="virtio"/>
+      <target dev="vdf" bus="virtio"/>
     </disk>
     <disk type="network" device="disk">
-      <driver name="qemu" type="raw"/>
+      <driver name="qemu" type="raw" discard="unmap" detect_zeroes="unmap" io="native" error_policy="stop"/>
       <auth username="admin">
         <secret type="ceph" uuid="f65cc5a8-b77b-4254-9030-d50a528fb456"/>
       </auth>
@@ -107,12 +117,19 @@
         <host name="ceph-mon-2.example.com" port="6789"/>
         <host name="ceph-mon-3.example.com" port="6789"/>
       </source>
-      <target dev="vdh" bus="virtio"/>
+      <target dev="vdg" bus="virtio"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
       <source protocol="http" name="/path/to/my/file">
         <host name="example.com" port="8000"/>
+      </source>
+      <target dev="vdh" bus="virtio"/>
+    </disk>
+    <disk type="network" device="disk">
+      <driver name="qemu"/>
+      <source protocol="http" name="/path/to/my/file">
+        <host name="exampl2.com" port="8000"/>
       </source>
       <target dev="vdi" bus="virtio"/>
     </disk>
@@ -121,7 +138,14 @@
       <source protocol="nbd">
         <host transport="unix" socket="/tmp/socket"/>
       </source>
-      <target dev="sdb" bus="scsi"/>
+      <target dev="vdj" bus="virtio"/>
+    </disk>
+    <disk type="network" device="disk">
+      <driver name="qemu"/>
+      <source protocol="nbd">
+        <host transport="unix" socket="/tmp/socket"/>
+      </source>
+      <target dev="sdz" bus="scsi"/>
       <blockio logical_block_size="512" physical_block_size="512"/>
     </disk>
     <disk type="network" device="disk">
@@ -129,30 +153,30 @@
       <source protocol="gluster" name="test-volume/some/dir/test-gluster.qcow2">
         <host name="192.168.1.100"/>
       </source>
-      <target dev="vdj" bus="virtio"/>
+      <target dev="vdk" bus="virtio"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
       <source protocol="nbd">
         <host transport="unix" socket="/var/foo/bar/socket"/>
       </source>
-      <target dev="sdc" bus="usb" removable="on"/>
+      <target dev="sdac" bus="usb" removable="on"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
       <source protocol="http" name="my/path">
         <host name="1:2:3:4:1:2:3:4" port="5522"/>
       </source>
-      <target dev="vdk" bus="virtio"/>
+      <target dev="vdl" bus="virtio"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu" type="raw"/>
       <source protocol="gluster" name="test-volume/some/dir/test-gluster.raw">
         <host name="192.168.1.100"/>
       </source>
-      <target dev="vdl" bus="virtio"/>
+      <target dev="vdm" bus="virtio"/>
     </disk>
-    <disk type="dir" device="floppy">
+    <disk type="dir" device="floppy" snapshot="no">
       <driver name="qemu"/>
       <source dir="/var"/>
       <target dev="fda" bus="fdc"/>
@@ -160,7 +184,7 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/new2.img"/>
-      <target dev="vdm" bus="virtio"/>
+      <target dev="sdad" bus="usb" removable="on"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
@@ -175,7 +199,7 @@
           <source type="unix" path="/var/run/test/pr-helper0.sock" mode="client"/>
         </reservations>
       </source>
-      <target dev="sdd" bus="scsi"/>
+      <target dev="sdae" bus="scsi"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
