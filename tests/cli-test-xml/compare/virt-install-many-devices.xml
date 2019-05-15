@@ -317,6 +317,10 @@
       <source mode="bind" host="127.0.0.1" service="1234"/>
       <source mode="connect" host="0.0.0.0" service="1234"/>
     </parallel>
+    <parallel type="udp">
+      <source mode="bind" host="127.0.0.1" service="7777"/>
+      <source mode="connect" host="127.0.0.2" service="8888"/>
+    </parallel>
     <parallel type="unix">
       <source mode="bind" path="/tmp/foo-socket">
         <seclabel model="none" relabel="no"/>
@@ -336,6 +340,9 @@
     </channel>
     <channel type="pty">
       <target type="virtio" name="org.linux-kvm.port1"/>
+    </channel>
+    <channel type="pty">
+      <target type="virtio" name="org.linux-kvm.port2"/>
     </channel>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
