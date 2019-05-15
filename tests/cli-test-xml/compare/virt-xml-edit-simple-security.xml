@@ -1,11 +1,13 @@
-       <address type="isa" iobase="0x505"/>
-     </panic>
+       <cid auto="no" address="5"/>
+     </vsock>
    </devices>
 -  <seclabel type="dynamic" model="selinux" relabel="yes"/>
 +  <seclabel type="dynamic" model="selinux" relabel="yes">
 +    <label>foo,bar,baz,UNKNOWN=val</label>
 +  </seclabel>
- </domain>
+   <keywrap>
+     <cipher name="dea" state="on"/>
+   </keywrap>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the domain is fully powered off.

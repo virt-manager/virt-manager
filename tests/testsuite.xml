@@ -79,8 +79,7 @@
       <libosinfo:os id="http://fedoraproject.org/fedora/27"/>
     </libosinfo:libosinfo>
   </metadata>
-  <currentMemory>204800</currentMemory>
-  <memory>409600</memory>
+  <maxMemory slots='16' unit='KiB'>1099511627776</maxMemory>
   <blkiotune>
     <weight>100</weight>
     <device>
@@ -92,6 +91,11 @@
     <hugepages/>
   </memoryBacking>
   <uuid>12345678-12F4-1234-1234-123456789012</uuid>
+  <iothreads>4</iothreads>
+  <iothreadids>
+    <iothread id='5'/>
+    <iothread id='6'/>
+  </iothreadids>
   <os>
     <type arch='i686'>hvm</type>
     <loader>/usr/lib/xen/boot/hvmloader</loader>
@@ -181,6 +185,12 @@
     <controller type='scsi' index='9' model='virtio-scsi'/>
     <controller type='usb'/>
 
+    <lease>
+      <lockspace>somearea</lockspace>
+      <key>thequickbrownfoxjumpedoverthelazydog</key>
+      <target path='/some/lease/path' offset='1024'/>
+    </lease>
+
     <interface type='network'>
       <source network='default'/>
       <mac address='22:22:33:54:32:10'/>
@@ -254,6 +264,11 @@
       <protocol type='raw'/>
     </redirdev>
 
+    <redirfilter>
+      <usbdev class='0x08' vendor='0x15E1' product='0x2007' version='1.10' allow='yes'/>
+      <usbdev class='-1' vendor='-1' product='-1' version='-1' allow='no'/>
+    </redirfilter>
+
     <filesystem>
       <driver type='handle'/>
       <source dir='/foo/bar'/>
@@ -278,9 +293,52 @@
     </panic>
 
     <memballoon model='virtio'/>
+
+    <vsock model='virtio'>
+      <cid address='5'/>
+    </vsock>
+
+    <memory model='nvdimm' access='private'>
+      <source>
+        <path>/tmp/nvdimm</path>
+      </source>
+      <target>
+        <size unit='KiB'>523264</size>
+        <node>0</node>
+      </target>
+      <address type='dimm' slot='0'/>
+    </memory>
+
+    <hub type='usb'/>
+
+    <iommu model='intel'>
+      <driver intremap='off' iotlb='on'/>
+    </iommu>
+
+    <shmem name='shmem0'>
+      <model type='ivshmem'/>
+      <size unit='M'>4</size>
+    </shmem>
+
+    <nvram>
+      <address type='spapr-vio' reg='0x4000'/>
+    </nvram>
+
   </devices>
 
   <seclabel model='selinux' type='dynamic'/>
+
+  <keywrap>
+    <cipher name='dea' state='on'/>
+  </keywrap>
+
+  <launchSecurity type='sev'>
+    <cbitpos>47</cbitpos>
+    <reducedPhysBits>1</reducedPhysBits>
+    <policy>0x0001</policy>
+    <dhCert>AQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAA</dhCert>
+    <session>IHAVENOIDEABUTJUSTPROVIDINGASTRING</session>
+  </launchSecurity>
 </domain>
 
 

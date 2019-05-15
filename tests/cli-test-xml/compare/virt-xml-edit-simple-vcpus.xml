@@ -3,9 +3,9 @@
    </memoryBacking>
 -  <vcpu placement="static" cpuset="1-2,5-9,11,13-14">9</vcpu>
 +  <vcpu placement="static" cpuset="1-2,5-9,11,13-14" current="10">20</vcpu>
-   <numatune>
-     <memory mode="interleave" placement="auto"/>
-   </numatune>
+   <iothreads>4</iothreads>
+   <iothreadids>
+     <iothread id="5"/>
 @@
        <cell id="2" cpus="2" memory="1048576" unit="KiB"/>
        <cell id="3" cpus="3" memory="1048576" unit="KiB"/>

@@ -1,8 +1,8 @@
-       <libosinfo:os id="http://fedoraproject.org/fedora/27"/>
      </libosinfo:libosinfo>
    </metadata>
--  <memory unit="KiB">409600</memory>
--  <currentMemory unit="KiB">204800</currentMemory>
+   <maxMemory slots="16" unit="KiB">1099511627776</maxMemory>
+-  <memory unit="KiB">4717568</memory>
+-  <currentMemory unit="KiB">4717568</currentMemory>
 +  <memory unit="KiB">1024000</memory>
 +  <currentMemory unit="KiB">512000</currentMemory>
    <blkiotune>
@@ -17,8 +17,8 @@
 -  </memoryBacking>
 +  <memoryBacking/>
    <vcpu placement="static" cpuset="1-2,5-9,11,13-14">9</vcpu>
-   <numatune>
-     <memory mode="interleave" placement="auto"/>
+   <iothreads>4</iothreads>
+   <iothreadids>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the domain is fully powered off.

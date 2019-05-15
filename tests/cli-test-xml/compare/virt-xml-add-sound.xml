@@ -1,10 +1,10 @@
-     <panic>
-       <address type="isa" iobase="0x505"/>
-     </panic>
+     <vsock model="virtio">
+       <cid auto="no" address="5"/>
+     </vsock>
 +    <sound model="pcspk"/>
    </devices>
    <seclabel type="dynamic" model="selinux" relabel="yes"/>
- </domain>
+   <keywrap>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the domain is fully powered off.

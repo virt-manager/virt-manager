@@ -1,6 +1,6 @@
-     <panic>
-       <address type="isa" iobase="0x505"/>
-     </panic>
+     <vsock model="virtio">
+       <cid auto="no" address="5"/>
+     </vsock>
 +    <hostdev mode="subsystem" type="usb" managed="yes">
 +      <source>
 +        <vendor id="0x04b3"/>
@@ -9,7 +9,7 @@
 +    </hostdev>
    </devices>
    <seclabel type="dynamic" model="selinux" relabel="yes"/>
- </domain>
+   <keywrap>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the domain is fully powered off.

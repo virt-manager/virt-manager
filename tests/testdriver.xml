@@ -62,8 +62,7 @@
     </libosinfo:libosinfo>
   </metadata>
   <genid>e90ff655-47a5-4484-9f9c-79a683c2a2e2</genid>
-  <currentMemory>204800</currentMemory>
-  <memory>409600</memory>
+  <maxMemory slots='16' unit='KiB'>1099511627776</maxMemory>
   <blkiotune>
     <weight>100</weight>
     <device>
@@ -100,6 +99,11 @@
       <entry name='location'>Upside down</entry>
     </baseBoard>
   </sysinfo>
+  <iothreads>4</iothreads>
+  <iothreadids>
+    <iothread id='5'/>
+    <iothread id='6'/>
+  </iothreadids>
   <os>
     <type arch='i686'>hvm</type>
     <loader readonly='yes' type='pflash'>/usr/share/edk2/ovmf/OVMF_CODE.fd</loader>
@@ -122,6 +126,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <vapic state='on'/>
       <spinlocks state='on' retries='12287'/>
     </hyperv>
+    <ioapic driver='qemu'/>
   </features>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
@@ -162,6 +167,11 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <feature policy="require" name="ds_cpl"/>
     <feature policy="require" name="xtpr"/>
     <feature policy="require" name="acpi"/>
+    <topology sockets='9' cores='1' threads='1'/>
+    <numa>
+      <cell id='0' cpus='0-4' memory='219136' unit='KiB'/>
+      <cell id='1' cpus='5-8' memory='219136' unit='KiB'/>
+    </numa>
   </cpu>
 
   <pm>
@@ -307,6 +317,14 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <controller type='scsi' index='9' model='virtio-scsi'/>
     <controller type='scsi' model='virtio-scsi'/>
     <controller type='usb'/>
+
+
+    <!-- leases -->
+    <lease>
+      <lockspace>somearea</lockspace>
+      <key>thequickbrownfoxjumpedoverthelazydog</key>
+      <target path='/some/lease/path' offset='1024'/>
+    </lease>
 
 
     <!-- interfaces -->
@@ -582,12 +600,69 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <vsock model='virtio'>
       <cid address='5'/>
     </vsock>
+
+    <!-- memory devices -->
+    <memory model='nvdimm' access='private'>
+      <source>
+        <path>/tmp/nvdimm</path>
+      </source>
+      <target>
+        <size unit='KiB'>523264</size>
+        <node>0</node>
+      </target>
+      <address type='dimm' slot='0'/>
+    </memory>
+    <memory model='dimm'>
+      <source>
+        <nodemask>1-3</nodemask>
+        <pagesize unit='KiB'>2048</pagesize>
+      </source>
+      <target>
+        <size unit='KiB'>524287</size>
+        <node>0</node>
+      </target>
+      <address type='dimm' slot='1'/>
+    </memory>
+
+    <!-- hub devices -->
+    <hub type='usb'/>
+    <hub type='usb'/>
+
+    <!-- iommu device -->
+    <iommu model='intel'>
+      <driver intremap='on' iotlb='on'/>
+    </iommu>
+
+    <!-- shmem devices -->
+    <shmem name='shmem0'>
+      <model type='ivshmem'/>
+      <size unit='M'>4</size>
+    </shmem>
+    <shmem name='shmem7'>
+      <model type='ivshmem'/>
+      <size unit='M'>8192</size>
+      <server path='/tmp/shmem7-sock'/>
+      <msi vectors='32' ioeventfd='on'/>
+    </shmem>
+
   </devices>
 
   <seclabel model='selinux' type='dynamic' relabel='yes'/>
   <seclabel model='dac' type='static' relabel='yes'>
     <label type='qemu'>107:107</label>
   </seclabel>
+
+  <keywrap>
+    <cipher name='dea' state='on'/>
+  </keywrap>
+
+  <launchSecurity type='sev'>
+    <cbitpos>47</cbitpos>
+    <reducedPhysBits>1</reducedPhysBits>
+    <policy>0x0001</policy>
+    <dhCert>AQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAA</dhCert>
+    <session>IHAVENOIDEABUTJUSTPROVIDINGASTRING</session>
+  </launchSecurity>
 </domain>
 
 

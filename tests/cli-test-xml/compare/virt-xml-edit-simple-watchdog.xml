@@ -1,6 +1,6 @@
-       <source mode="connect" host="localhost" service="4000"/>
-       <protocol type="raw"/>
-     </redirdev>
+       <usbdev allow="no"/>
+     </redirfilter>
+     <hub type="usb"/>
 -    <watchdog model="ib700" action="poweroff"/>
 +    <watchdog model="ib700" action="reset"/>
      <memballoon model="virtio"/>

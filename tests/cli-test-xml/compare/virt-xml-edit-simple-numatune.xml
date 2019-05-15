@@ -1,5 +1,5 @@
-   </memoryBacking>
-   <vcpu placement="static" cpuset="1-2,5-9,11,13-14">9</vcpu>
+     <iothread id="2"/>
+   </iothreadids>
    <numatune>
 -    <memory mode="interleave" placement="auto"/>
 +    <memory mode="strict" placement="auto" nodeset="1-5,7"/>
