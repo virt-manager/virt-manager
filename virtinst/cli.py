@@ -2996,12 +2996,7 @@ class ParserNetwork(VirtCLIParser):
         if "mac" in self.optdict:
             self.optdict["mac.address"] = self.optdict.pop("mac")
 
-    def _parse(self, inst):
-        self._add_advertised_aliases()
-
-        if self.optstr == "none":
-            return
-
+        # Back compat with old style network= and bridge=
         if "type" not in self.optdict:
             if "network" in self.optdict:
                 self.optdict["type"] = DeviceInterface.TYPE_VIRTUAL
@@ -3009,6 +3004,16 @@ class ParserNetwork(VirtCLIParser):
             elif "bridge" in self.optdict:
                 self.optdict["type"] = DeviceInterface.TYPE_BRIDGE
                 self.optdict["source"] = self.optdict.pop("bridge")
+        else:
+            self.optdict.pop("network", None)
+            self.optdict.pop("bridge", None)
+
+
+    def _parse(self, inst):
+        self._add_advertised_aliases()
+
+        if self.optstr == "none":
+            return
 
         return super()._parse(inst)
 
@@ -3051,6 +3056,8 @@ class ParserNetwork(VirtCLIParser):
         # These are handled in _add_advertised_aliases
         cls.add_arg("model", "model", cb=cls.noset_cb)
         cls.add_arg("mac", "macaddr", cb=cls.noset_cb)
+        cls.add_arg("network", "source", cb=cls.noset_cb)
+        cls.add_arg("bridge", "source", cb=cls.noset_cb)
 
         # Standard XML options
         cls.add_arg("type", "type", cb=cls.set_type_cb)
