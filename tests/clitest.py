@@ -490,6 +490,7 @@ c.add_compare("""
 --rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
 --panic default,,address.type=isa,address.iobase=0x500,address.irq=5
 --cpu topology.sockets=1,topology.cores=3,topology.threads=2
+--vsock auto_cid=on
 """, "singleton-config-3")
 
 
@@ -1003,6 +1004,7 @@ c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
 c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "edit-simple-redirdev")
 c.add_compare("--tpm backend.device.path=,backend.type=emulator,backend.version=2.0", "edit-simple-tpm", check_version="1.3.5")  # check_version=new graphics listen output
+c.add_compare("--vsock model=virtio,cid.address=,cid.auto=on", "edit-simple-vsock")
 c.add_compare("--rng rate_bytes=3333,rate_period=4444", "edit-simple-rng")
 c.add_compare("--watchdog action=reset", "edit-simple-watchdog")
 c.add_compare("--memballoon model=none", "edit-simple-memballoon")

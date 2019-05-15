@@ -1,0 +1,11 @@
+       <driver intremap="off" iotlb="on"/>
+     </iommu>
+     <vsock model="virtio">
+-      <cid auto="no" address="5"/>
++      <cid auto="yes"/>
+     </vsock>
+   </devices>
+   <seclabel type="dynamic" model="selinux" relabel="yes"/>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the domain is fully powered off.

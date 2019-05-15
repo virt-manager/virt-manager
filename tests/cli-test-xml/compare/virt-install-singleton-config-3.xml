@@ -72,5 +72,8 @@
     <panic model="isa">
       <address type="isa" iobase="0x500" irq="5"/>
     </panic>
+    <vsock model="virtio">
+      <cid auto="yes"/>
+    </vsock>
   </devices>
 </domain>
