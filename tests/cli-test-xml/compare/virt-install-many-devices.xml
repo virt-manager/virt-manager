@@ -496,9 +496,7 @@
       <log file="/tmp/123.log"/>
     </redirdev>
     <rng model="virtio">
-      <backend model="egd" type="tcp">
-        <source host="127.0.0.1" service="8000"/>
-      </backend>
+      <backend model="random">/dev/urandom</backend>
     </rng>
     <panic model="isa">
       <address type="isa" iobase="507"/>

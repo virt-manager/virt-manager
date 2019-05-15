@@ -476,7 +476,7 @@ cache.mode=emulate,cache.level=3
 --memballoon virtio
 --watchdog ib700,action=pause
 --tpm passthrough,model=tpm-crb,path=/dev/tpm0
---rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708
+--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
 --panic iobase=0x506
 """, "singleton-config-2")
 
@@ -491,7 +491,7 @@ c.add_compare("""
 --boot bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,smbios.mode=host,bootmenu.enable=yes,loader_ro=yes,loader.type=rom,loader=/tmp/foo
 --memorybacking access.mode=shared,source.type=anonymous,hugepages=on
 --graphics spice,gl=yes
---rng egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
+--rng type=egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
 --panic default,,address.type=isa,address.iobase=0x500,address.irq=5
 --cpu topology.sockets=1,topology.cores=3,topology.threads=2,cell0.cpus=0,cell0.memory=1048576
  --memdev dimm,access=private,target.size=512,target.node=0,source.pagesize=4,source.nodemask=1-2
@@ -610,7 +610,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --redirdev default
 --redirdev type=unix,source.path=/tmp/foo.socket,log.file=/tmp/123.log
 
---rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp
+--rng device=/dev/urandom,backend.protocol.type=,backend.log.file=,backend.log.append=
 
 --panic iobase=507
 
@@ -1017,7 +1017,7 @@ c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
 c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "edit-simple-redirdev")
 c.add_compare("--tpm backend.device.path=,backend.type=emulator,backend.version=2.0", "edit-simple-tpm", check_version="1.3.5")  # check_version=new graphics listen output
 c.add_compare("--vsock model=virtio,cid.address=,cid.auto=on", "edit-simple-vsock")
-c.add_compare("--rng rate_bytes=3333,rate_period=4444", "edit-simple-rng")
+c.add_compare("--rng rate_bytes=3333,rate_period=4444,backend.source.connect_host=,backend.source.connect_service=,backend.source.host=,backend.source.service=,backend.source.bind_host=,backend.source.bind_service=,backend.source.mode=,backend.type=unix,backend.source.mode=connect,backend.source.path=/tmp/unix,backend.source.seclabel.model=dac,backend.source.seclabel.label=foo,backend.source.seclabel.relabel=yes", "edit-simple-rng")
 c.add_compare("--watchdog action=reset", "edit-simple-watchdog")
 c.add_compare("--memballoon model=none", "edit-simple-memballoon")
 c.add_compare("--serial pty", "edit-simple-serial")

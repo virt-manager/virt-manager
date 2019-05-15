@@ -15,10 +15,9 @@ def _set_host_helper(obj, hostparam, portparam, val):
         return host or None, port or None
 
     host, port = parse_host(val)
-    if not host:
+    if port and not host:
         host = "127.0.0.1"
-    if host:
-        util.set_prop_path(obj, hostparam, host)
+    util.set_prop_path(obj, hostparam, host)
     if port:
         util.set_prop_path(obj, portparam, port)
 

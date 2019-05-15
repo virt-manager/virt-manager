@@ -193,6 +193,7 @@
         <source mode="bind" host="127.0.0.1" service="8000"/>
         <source mode="connect" host="foo" service="708"/>
       </backend>
+      <rate bytes="1234" period="1000"/>
     </rng>
     <panic model="isa">
       <address type="isa" iobase="0x506"/>
@@ -404,6 +405,7 @@
         <source mode="bind" host="127.0.0.1" service="8000"/>
         <source mode="connect" host="foo" service="708"/>
       </backend>
+      <rate bytes="1234" period="1000"/>
     </rng>
     <panic model="isa">
       <address type="isa" iobase="0x506"/>

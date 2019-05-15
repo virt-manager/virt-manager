@@ -2,10 +2,18 @@
      <memballoon model="virtio"/>
      <rng model="virtio">
 -      <rate bytes="1234" period="2000"/>
+-      <backend model="egd" type="tcp">
+-        <source mode="connect" host="1.2.3.4" service="1234"/>
 +      <rate bytes="3333" period="4444"/>
-       <backend model="egd" type="tcp">
-         <source mode="connect" host="1.2.3.4" service="1234"/>
++      <backend model="egd" type="unix">
++        <source mode="connect" path="/tmp/unix">
++          <seclabel model="dac" relabel="yes">
++            <label>foo</label>
++          </seclabel>
++        </source>
          <protocol type="raw"/>
+       </backend>
+     </rng>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the domain is fully powered off.
