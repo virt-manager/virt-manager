@@ -355,9 +355,13 @@
       <mouse mode="client"/>
       <filetransfer enable="yes"/>
     </graphics>
-    <graphics type="spice">
+    <graphics type="spice" tlsPort="6000" passwd="testpass" passwdValidTo="2010-04-09T15:51:01" defaultMode="insecure">
       <gl enable="yes" rendernode="/dev/dri/by-path/pci-0000:00:02.0-render"/>
-      <image compression="off"/>
+      <image compression="glz"/>
+      <streaming mode="filter"/>
+      <clipboard copypaste="yes"/>
+      <mouse mode="client"/>
+      <filetransfer enable="yes"/>
       <listen type="socket"/>
     </graphics>
     <graphics type="spice">
@@ -366,11 +370,11 @@
       <listen type="none"/>
     </graphics>
     <graphics type="spice">
-      <gl enable="yes" rendernode="/dev/dri/foo"/>
+      <gl enable="yes" rendernode="/dev/dri/foo2"/>
       <image compression="off"/>
       <listen type="none"/>
     </graphics>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes" connected="disconnect">
       <image compression="off"/>
       <listen type="address" address="1.2.3.4"/>
     </graphics>
