@@ -523,7 +523,7 @@ class _OsVariant(object):
     def get_network_install_resources(self, guest):
         ret = {}
 
-        if not self._os:
+        if not hasattr(self._os, "get_network_install_resources"):
             return ret
 
         resources = self._os.get_network_install_resources()
