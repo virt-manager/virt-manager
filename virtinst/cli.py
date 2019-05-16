@@ -905,7 +905,7 @@ class _SuboptCheckerClass:
         if name.startswith("--unattended"):
             # Hack, we don't have any test suite coverage of the
             # unattended option. This should change soon but until then
-            # disable the test suite failue
+            # disable the test suite failure
             return
         self._all.add(name)
 
@@ -970,7 +970,7 @@ class _VirtCLIArgumentStatic(object):
                 "cliname=%s propname is None but lookup_cb is not specified. "
                 "Even if a 'cb' is passed, 'propname' is still used for "
                 "device lookup for virt-xml --edit.\n\nIf cb is just "
-                "a convertor function for a single propname, then set "
+                "a converter function for a single propname, then set "
                 "both propname and cb. If this cliname is truly "
                 "not backed by a single propname, set lookup_cb=None or "
                 "better yet implement a lookup_cb. This message is here "

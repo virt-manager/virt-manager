@@ -204,7 +204,7 @@ class URLTests(unittest.TestCase):
 
         # Non-existent cdrom fails
         try:
-            installer = Installer(hvmguest.conn, cdrom="/i/dont/exist/foobar")
+            installer = Installer(hvmguest.conn, cdrom="/not/exist/foobar")
             self.assertEqual(None, installer.detect_distro(hvmguest))
             raise AssertionError("Expected cdrom failure")
         except ValueError as e:
