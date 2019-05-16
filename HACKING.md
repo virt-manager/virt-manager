@@ -4,18 +4,17 @@ The following commands will be useful for anyone writing patches:
 ```sh
 ./setup.py test      # Run local unit test suite
 ./setup.py pylint    # Run a pylint script against the codebase
-./setup.py codespell # Run a codespell script against the codebase
 ```
 
-Any patches shouldn't change the output of 'test', 'pylint' or 'codespell'. The
-'pylint' requires [`pylint`](https://github.com/PyCQA/pylint) and
-[`pycodestyle`](https://github.com/pycqa/pycodestyle) to be installed. The
-'codespell' requires
-[`codespell`](https://github.com/codespell-project/codespell) to be installed.
+Any patches shouldn't change the output of 'test' or 'pylint'. The
+'pylint' command requires [`pylint`](https://github.com/PyCQA/pylint) and
+[`pycodestyle`](https://github.com/pycqa/pycodestyle) to be installed. If
+[`codespell`](https://github.com/codespell-project/codespell) is installed,
+it will be invoked as well.
 
-Our pylint script uses a blacklist rather than a whitelist approach,
-so it could throw some false positives or useless messages. If you think
-your patch exposes one of these, bring it up on the mailing list.
+These commands may report false positives, if you think your changes expose
+one, please mention it with your patch submission and maintainers will
+help you sort it out.
 
 'test*' have a `--debug` option if you are hitting problems.
 For more options, use `./setup.py test --help`.

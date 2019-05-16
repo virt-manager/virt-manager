@@ -568,32 +568,6 @@ class TestDist(TestBaseCommand):
         TestBaseCommand.run(self)
 
 
-class CheckSpell(distutils.core.Command):
-    user_options = []
-    description = "Check code for common misspellings"
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        try:
-            import codespell_lib
-        except ImportError:
-            raise ImportError('codespell is not installed')
-
-        files = ["setup.py", "virt-install", "virt-clone",
-                 "virt-convert", "virt-xml", "virt-manager",
-                 "virtcli", "virtinst", "virtconv", "virtManager",
-                 "tests"]
-        # pylint: disable=protected-access
-        codespell_lib._codespell.main(
-            '-I', 'tests/codespell_dict.txt',
-            '--skip', '*.pyc,*.zip,*.vmdk,*.iso,*.xml', *files)
-
-
 class CheckPylint(distutils.core.Command):
     user_options = [
         ("jobs=", "j", "use multiple processes to speed up Pylint"),
@@ -615,6 +589,18 @@ class CheckPylint(distutils.core.Command):
                  "virt-convert", "virt-xml", "virt-manager",
                  "virtcli", "virtinst", "virtconv", "virtManager",
                  "tests"]
+
+        try:
+            import codespell_lib
+            # pylint: disable=protected-access
+            print("running codespell")
+            codespell_lib._codespell.main(
+                '-I', 'tests/codespell_dict.txt',
+                '--skip', '*.pyc,*.zip,*.vmdk,*.iso,*.xml', *files)
+        except ImportError:
+            print("codespell is not installed. skipping...")
+        except Exception as e:
+            print("Error running codespell: %s" % e)
 
         output_format = sys.stdout.isatty() and "colorized" or "text"
 
@@ -709,7 +695,6 @@ distutils.core.setup(
         'configure': configure,
 
         'pylint': CheckPylint,
-        'codespell': CheckSpell,
         'rpm': my_rpm,
         'test': TestCommand,
         'test_ui': TestUI,
