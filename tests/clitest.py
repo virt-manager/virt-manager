@@ -98,27 +98,77 @@ def missing_isoinfo():
 # Test class helpers #
 ######################
 
+class SkipChecks:
+    """
+    Class to track all 'skip' style checks we might do. All checks
+    can be callable functions, or version strings to check against libvirt
+
+    :param prerun_check: If check resolves, skip before running the command
+    :param precompare_check: If check resolves, skip after running the command
+        but before comparing output
+    :param predefine_check: If check resolves, skip after comparing output
+        but before defining it
+    """
+    def __init__(self, parent_skip_checks,
+                 precompare_check=None,
+                 predefine_check=None,
+                 prerun_check=None):
+        p = parent_skip_checks
+
+        self.precompare_check = precompare_check or (p and p.precompare_check)
+        self.predefine_check = predefine_check or (
+                p and p.predefine_check)
+        self.prerun_check = prerun_check or (p and p.prerun_check)
+
+    def _check(self, conn, check):
+        if check is None:
+            return
+
+        if callable(check):
+            msg = check()
+            skip = bool(msg)
+        else:
+            skip = not conn._check_version(check)  # pylint: disable=protected-access
+            msg = "Skipping check due to version < %s" % check
+
+        if skip:
+            raise unittest.case.SkipTest(msg)
+
+    def prerun_skip(self, conn):
+        self._check(conn, self.prerun_check)
+
+    def precompare_skip(self, conn):
+        self._check(conn, self.precompare_check)
+
+    def predefine_skip(self, conn):
+        self._check(conn, self.predefine_check)
+
+
 class Command(object):
     """
     Instance of a single cli command to test
     """
-    def __init__(self, cmd):
+    def __init__(self, cmd, input_file=None, need_conn=True, grep=None,
+                 nogrep=None, skip_checks=None, compare_file=None, env=None,
+                 check_success=True, **kwargs):
+        # Options that alter what command we run
         self.cmdstr = cmd % test_files
-        self.check_success = True
-        self.compare_file = None
-        self.input_file = None
-
-        self.need_conn = True
-        self.skip_cb = None
-        self.check_version = None
-        self.check_version_define = None
-        self.grep = None
-        self.nogrep = None
-
         app, opts = self.cmdstr.split(" ", 1)
         self.app = app
         self.argv = [os.path.abspath(app)] + shlex.split(opts)
-        self.env = None
+        self.env = env
+        self.input_file = input_file
+        self.need_conn = need_conn
+
+        # Options that alter the results we check for
+        self.check_success = check_success
+        self.compare_file = compare_file
+        self.grep = grep
+        self.nogrep = nogrep
+
+        # Options that determine when we skip tests
+        self.skip_checks = SkipChecks(skip_checks, **kwargs)
+
 
     def _launch_command(self, conn):
         logging.debug(self.cmdstr)
@@ -189,25 +239,10 @@ class Command(object):
         except Exception as e:
             return (-1, "".join(traceback.format_exc()) + str(e))
 
-    def _check_support(self, tests, conn, check, skipmsg):
-        if check is None:
-            return
-        if conn is None:
-            raise RuntimeError("skip check is not None, but conn is None")
-        # pylint: disable=protected-access
-        if conn._check_version(check):
-            return
+    def _check_compare_file(self, conn, output):
+        self.skip_checks.precompare_skip(conn)
 
-        tests.skipTest(skipmsg)
-
-    def _check_compare_file(self, conn, tests, output):
         # Generate test files that don't exist yet
-        def do_check(check):
-            self._check_support(tests, conn, check,
-                "Skipping compare check due to lack of support")
-
-        do_check(self.check_version)
-
         filename = self.compare_file
         if (utils.clistate.regenerate_output or
             not os.path.exists(filename)):
@@ -226,7 +261,7 @@ class Command(object):
 
         utils.diff_compare(output, filename)
 
-        do_check(self.check_version_define)
+        self.skip_checks.predefine_skip(conn)
 
         # Define the <domain>s generated for compare output, to ensure
         # we are generating valid XML
@@ -242,7 +277,7 @@ class Command(object):
                     raise AssertionError("Bad XML:\n%s\n\nError was: %s: %s" %
                             (domxml, e.__class__.__name__, str(e)))
 
-    def _run(self, tests):
+    def _run(self):
         conn = None
         for idx in reversed(range(len(self.argv))):
             if self.argv[idx] == "--connect":
@@ -253,10 +288,7 @@ class Command(object):
             raise RuntimeError("couldn't parse URI from command %s" %
                                self.argv)
 
-        if self.skip_cb and self.skip_cb():
-            tests.skipTest("skip_cb: %s" % self.skip_cb())
-            return
-
+        self.skip_checks.prerun_skip(conn)
         code, output = self._get_output(conn)
 
         def _raise_error(_msg):
@@ -278,13 +310,13 @@ class Command(object):
                     self.nogrep)
 
         if self.compare_file:
-            self._check_compare_file(conn, tests, output)
+            self._check_compare_file(conn, output)
 
     def run(self, tests):
         err = None
 
         try:
-            self._run(tests)
+            self._run()
         except AssertionError as e:
             err = self.cmdstr + "\n" + str(e)
         if err:
@@ -292,13 +324,18 @@ class Command(object):
 
 
 class _CategoryProxy(object):
-    def __init__(self, app, name, default_args, skip_cb, check_version):
+    """
+    Category of an App. Let's us register chunks of suboptions per logical
+    grouping of tests. So we may have a virt-install 'storage' group which
+    specifies default install options like --pxe but leaves storage
+    specification up to each individual test.
+    """
+    def __init__(self, app, name, default_args, **kwargs):
         self._app = app
         self._name = name
 
         self.default_args = default_args
-        self.skip_cb = skip_cb
-        self.check_version = check_version
+        self.skip_checks = SkipChecks(self._app.skip_checks, **kwargs)
 
     def add_valid(self, *args, **kwargs):
         return self._app.add_valid(self._name, *args, **kwargs)
@@ -309,11 +346,14 @@ class _CategoryProxy(object):
 
 
 class App(object):
-    def __init__(self, appname, uri=None, check_version=None):
+    """
+    Represents a top level app test suite, like virt-install or virt-xml
+    """
+    def __init__(self, appname, uri=None, **kwargs):
         self.appname = appname
         self.categories = {}
         self.cmds = []
-        self.check_version = check_version
+        self.skip_checks = SkipChecks(None, **kwargs)
         self.uri = uri
 
     def _default_args(self, cli, iscompare, auto_printarg):
@@ -345,45 +385,35 @@ class App(object):
         return args
 
 
-    def add_category(self, catname, default_args,
-                     skip_cb=None, check_version=None):
-        obj = _CategoryProxy(self, catname, default_args,
-                             skip_cb, check_version)
+    def add_category(self, catname, default_args, *args, **kwargs):
+        obj = _CategoryProxy(self, catname, default_args, *args, **kwargs)
         self.categories[catname] = obj
         return obj
 
-    def _add(self, catname, testargs, valid, compfile,
-             skip_cb=None, check_version=None, input_file=None,
-             auto_printarg=True, grep=None, check_version_define=None):
-
+    def _add(self, catname, testargs, compbase, **kwargs):
         category = self.categories[catname]
         args = category.default_args + " " + testargs
-        args = (self._default_args(args, bool(compfile), auto_printarg) +
-            " " + args)
-        cmdstr = "./%s %s" % (self.appname, args)
+        defargs = self._default_args(
+                args, bool(compbase), bool(kwargs.pop("auto_printarg", True)))
+        cmdstr = "./%s %s %s" % (self.appname, args, defargs)
 
-        cmd = Command(cmdstr)
-        cmd.check_success = valid
-        if compfile:
-            compfile = os.path.basename(self.appname) + "-" + compfile
+        kwargs["skip_checks"] = category.skip_checks
+        if compbase:
             compare_XMLDIR = "%s/compare" % XMLDIR
-            cmd.compare_file = "%s/%s.xml" % (compare_XMLDIR, compfile)
-        cmd.skip_cb = skip_cb or category.skip_cb
-        cmd.check_version = (check_version or
-                             category.check_version or
-                             self.check_version)
-        cmd.check_version_define = check_version_define
-        cmd.input_file = input_file
-        cmd.grep = grep
+            kwargs["compare_file"] = "%s/%s-%s.xml" % (
+                    compare_XMLDIR, os.path.basename(self.appname), compbase)
+
+        cmd = Command(cmdstr, **kwargs)
         self.cmds.append(cmd)
 
     def add_valid(self, cat, args, **kwargs):
-        self._add(cat, args, True, None, **kwargs)
+        self._add(cat, args, None, check_success=True, **kwargs)
     def add_invalid(self, cat, args, **kwargs):
-        self._add(cat, args, False, None, **kwargs)
-    def add_compare(self, cat, args, compfile, **kwargs):
-        self._add(cat, args, not compfile.endswith("-fail"),
-                  compfile, **kwargs)
+        self._add(cat, args, None, check_success=False, **kwargs)
+    def add_compare(self, cat, args, compbase, **kwargs):
+        self._add(cat, args, compbase,
+                  check_success=not compbase.endswith("-fail"),
+                  **kwargs)
 
 
 
@@ -406,7 +436,7 @@ vinst = App("virt-install")
 # virt-install verbose XML comparison tests #
 #############################################
 
-c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole --os-variant fedora-unknown", skip_cb=has_old_osinfo)
+c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole --os-variant fedora-unknown", prerun_check=has_old_osinfo)
 
 # Singleton element test #1, for simpler strings
 c.add_compare("""
@@ -504,7 +534,7 @@ c.add_compare("""
 --vsock auto_cid=on
 
 --sysinfo bios.vendor="Acme LLC",bios.version=1.2.3,bios.date=01/01/1970,bios.release=10.22,system.manufacturer="Acme Inc.",system.product=Computer,system.version=3.2.1,system.serial=123456789,system.uuid=00000000-1111-2222-3333-444444444444,system.sku=abc-123,system.family=Server,baseBoard.manufacturer="Acme Corp.",baseBoard.product=Motherboard,baseBoard.version=A01,baseBoard.serial=1234-5678,baseBoard.asset=Tag,baseBoard.location=Chassis
-""", "singleton-config-3", check_version_define="5.3.0")
+""", "singleton-config-3", predefine_check="5.3.0")
 
 
 
@@ -629,7 +659,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --qemu-commandline="-display gtk,gl=on"
 --qemu-commandline="-device vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c"
 --qemu-commandline="-set device.video0.driver=virtio-vga"
-""", "many-devices", check_version_define="5.3.0")
+""", "many-devices", predefine_check="5.3.0")
 
 
 
@@ -659,10 +689,10 @@ c.add_valid("--security label=foobar.label,a1,z2,b3")  # --security static with 
 c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
 c.add_invalid("--security foobar")  # Busted --security
 c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
-c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3", "memory-hotplug", check_version="5.3.0")
-c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat", check_version="5.3.0")
+c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3", "memory-hotplug", precompare_check="5.3.0")
+c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat", precompare_check="5.3.0")
 c.add_compare("--connect " + utils.URIs.kvm_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
-c.add_compare("--connect " + utils.URIs.kvm_rhel, "cpu-rhel7-default", check_version="5.1.0")  # default CPU for old QEMU where we cannot use host-model
+c.add_compare("--connect " + utils.URIs.kvm_rhel, "cpu-rhel7-default", precompare_check="5.1.0")  # default CPU for old QEMU where we cannot use host-model
 
 
 
@@ -802,12 +832,12 @@ c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage wi
 ###########################
 
 c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --noautoconsole")
-c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none", "kvm-fedoralatest-url", skip_cb=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
+c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none", "kvm-fedoralatest-url", prerun_check=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s", "test-url-detection")  # --test-media-detection
-c.add_compare("--os-variant full_id=http://fedoraproject.org/fedora/20 --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", skip_cb=has_old_osinfo)  # Quiet URL install should make no noise
+c.add_compare("--os-variant full_id=http://fedoraproject.org/fedora/20 --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet", "qemu-plain")  # plain qemu
-c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64", skip_cb=has_old_osinfo)  # 32 on 64
+c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
 
 # ppc64 tests
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")
@@ -815,30 +845,30 @@ c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fed
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20 --panic default", "ppc64le-kvm-import")
 
 # s390x tests
-c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom", skip_cb=has_old_osinfo)
+c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom", prerun_check=has_old_osinfo)
 c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.kvm_s390x_KVMIBM + " --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --watchdog diag288,action=reset --panic default --graphics vnc", "s390x-cdrom-KVMIBM")
 
 # qemu:///session tests
-c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", skip_cb=has_old_osinfo)
+c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", prerun_check=has_old_osinfo)
 
 # misc KVM config tests
-c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", skip_cb=missing_isoinfo)  # --location with an unknown ISO but manually specified kernel paths
-c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", skip_cb=missing_isoinfo)  # Using --location iso mounting
+c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_isoinfo)  # --location with an unknown ISO but manually specified kernel paths
+c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", prerun_check=missing_isoinfo)  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel5.4", "kvm-rhel5")  # RHEL5 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7", skip_cb=has_old_osinfo)  # RHEL7 defaults
-c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", skip_cb=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7", prerun_check=has_old_osinfo)  # RHEL7 defaults
+c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", prerun_check=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
 c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --cpu host-copy --disk none --pxe", "kvm-hostcopy-fallback")  # No domcaps so need to use capabilities for CPU host-copy
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", skip_cb=has_old_osinfo)  # Centos 7 defaults
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", skip_cb=has_old_osinfo)  # Centos 7 defaults
-c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10", "kvm-win10", skip_cb=has_old_osinfo)  # win10 defaults
-c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi", skip_cb=has_old_osinfo)  # no HYPER-V with UEFI
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
+c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10", "kvm-win10", prerun_check=has_old_osinfo)  # win10 defaults
+c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi", prerun_check=has_old_osinfo)  # no HYPER-V with UEFI
 c.add_compare("--arch i686 --boot uefi --pxe --disk none", "kvm-i686-uefi")  # i686 uefi
 c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
 c.add_compare("--disk size=20 --os-variant solaris10", "solaris10-defaults")  # test solaris OS defaults, triggers a couple specific code paths
 c.add_compare("--disk size=1 --os-variant openbsd4.9", "openbsd-defaults")  # triggers net fallback scenario
-c.add_compare("--connect " + utils.URIs.kvm_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", skip_cb=has_old_osinfo)
+c.add_compare("--connect " + utils.URIs.kvm_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", prerun_check=has_old_osinfo)
 
 c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
@@ -850,7 +880,7 @@ c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_
 c.add_compare("--boot uefi --disk none", "boot-uefi")
 
 
-c = vinst.add_category("kvm-arm", "--connect %(URI-KVM)s --noautoconsole", check_version="3.3.0")  # required qemu-xhci from libvirt 3.3.0
+c = vinst.add_category("kvm-arm", "--connect %(URI-KVM)s --noautoconsole", precompare_check="3.3.0")  # required qemu-xhci from libvirt 3.3.0
 # armv7l tests
 c.add_compare("--arch armv7l --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain")
 c.add_compare("--arch armv7l --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --nographics --os-variant fedora20", "arm-virt-f20")
@@ -869,7 +899,7 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --disk size=1 --os-variant fedora22
 c = vinst.add_category("kvm-headless", "--os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-headless")
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-headless")
-c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-headless", check_version="5.3.0")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-headless", precompare_check="5.3.0")
 c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-headless")
 c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-headless")
 
@@ -878,7 +908,7 @@ c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-headless")
 c = vinst.add_category("kvm-graphics", "--os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-graphics")
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-graphics")
-c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-graphics", check_version="5.3.0", )
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-graphics", precompare_check="5.3.0", )
 c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-graphics")
 c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-graphics")
 
@@ -903,7 +933,7 @@ c.add_compare("--init /usr/bin/httpd", "manual-init")
 c = vinst.add_category("xen", "--noautoconsole --connect " + utils.URIs.xen)
 c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none")  # Xen PV install headless
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
-c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64", "xen-pv", check_version="5.3.0")  # Xen PV
+c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64", "xen-pv", precompare_check="5.3.0")  # Xen PV
 c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
 
 
@@ -967,7 +997,7 @@ c.add_valid("--pxe --nographics --transient", grep="testsuite console command: [
 # virt-xml tests #
 ##################
 
-vixml = App("virt-xml", check_version="1.2.2")  # check_version for  input type=keyboard output change
+vixml = App("virt-xml")
 c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--sound=? --tpm=?")  # basic introspection test
@@ -1016,13 +1046,13 @@ c.add_compare("--pm suspend_to_mem.enabled=yes,suspend_to_disk.enabled=no", "edi
 c.add_compare("--disk /dev/zero,perms=ro,source.startupPolicy=optional", "edit-simple-disk")
 c.add_compare("--disk path=", "edit-simple-disk-remove-path")
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "edit-simple-network")
-c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics", check_version="1.3.5")  # check_version=new graphics listen output
-c.add_compare("--graphics listen=none", "edit-graphics-listen-none", check_version="2.0.0")  # check_version=graphics listen=none support
+c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics")
+c.add_compare("--graphics listen=none", "edit-graphics-listen-none")
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--controller index=15,model=lsilogic", "edit-simple-controller")
 c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
 c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "edit-simple-redirdev")
-c.add_compare("--tpm backend.device.path=,backend.type=emulator,backend.version=2.0", "edit-simple-tpm", check_version="1.3.5")  # check_version=new graphics listen output
+c.add_compare("--tpm backend.device.path=,backend.type=emulator,backend.version=2.0", "edit-simple-tpm")
 c.add_compare("--vsock model=virtio,cid.address=,cid.auto=on", "edit-simple-vsock")
 c.add_compare("--rng rate_bytes=3333,rate_period=4444,backend.source.connect_host=,backend.source.connect_service=,backend.source.host=,backend.source.service=,backend.source.bind_host=,backend.source.bind_service=,backend.source.mode=,backend.type=unix,backend.source.mode=connect,backend.source.path=/tmp/unix,backend.source.seclabel.model=dac,backend.source.seclabel.label=foo,backend.source.seclabel.relabel=yes", "edit-simple-rng")
 c.add_compare("--watchdog action=reset", "edit-simple-watchdog")
@@ -1032,18 +1062,18 @@ c.add_compare("--parallel unix,path=/some/other/log", "edit-simple-parallel")
 c.add_compare("--channel null", "edit-simple-channel")
 c.add_compare("--console name=foo.bar.baz", "edit-simple-console")
 c.add_compare("--filesystem /1/2/3,/4/5/6,mode=mapped", "edit-simple-filesystem")
-c.add_compare("--video cirrus", "edit-simple-video", check_version="1.3.3")  # check_version=video primary= attribute
-c.add_compare("--sound pcspk", "edit-simple-soundhw", check_version="1.3.5")  # check_version=new graphics listen output
+c.add_compare("--video cirrus", "edit-simple-video")
+c.add_compare("--sound pcspk", "edit-simple-soundhw")
 c.add_compare("--host-device 0x04b3:0x4485,driver_name=vfio,type=usb", "edit-simple-host-device")
 
 c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define")
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
 c.add_invalid("--edit seclabel2.model=dac --disk /dev/null")  # no match found
 c.add_valid("--edit seclabel.model=dac --disk /dev/null")  # match found
-c.add_compare("--edit 3 --sound pcspk", "edit-pos-num", check_version="1.3.5")  # check_version=new graphics listen output
-c.add_compare("--edit -1 --video qxl", "edit-neg-num", check_version="1.2.11")  # check_version=video ram output change
+c.add_compare("--edit 3 --sound pcspk", "edit-pos-num")
+c.add_compare("--edit -1 --video qxl", "edit-neg-num")
 c.add_compare("--edit all --host-device driver.name=vfio", "edit-all")
-c.add_compare("--edit ich6 --sound pcspk", "edit-select-sound-model", check_version="1.3.5")  # check_version=new graphics listen output
+c.add_compare("--edit ich6 --sound pcspk", "edit-select-sound-model")
 c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
@@ -1065,7 +1095,7 @@ c.add_compare("--edit --disk path=/foo/bar,size=2,target=fda,bus=fdc,device=flop
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
 c.add_compare("--edit --video clearxml=yes,model=virtio,accel3d=yes", "edit-video-virtio")
-c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl", check_version="2.0.0")  # check_version=graphics listen=none support
+c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl")
 
 c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define")
 c.add_valid("--add-device --security model=dac")  # --add-device works for seclabel
@@ -1077,11 +1107,11 @@ c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-di
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "add-disk-notarget")  # filling in acceptable target
 c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-storage")
 c.add_compare("--add-device --disk size=.01", "add-disk-default-storage")
-c.add_compare("--remove-device --sound ich6", "remove-sound-model", check_version="1.3.5")  # check_version=new graphics listen output
+c.add_compare("--remove-device --sound ich6", "remove-sound-model")
 c.add_compare("--remove-device --disk 3", "remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
-c.add_compare("--remove-device --video all", "remove-video-all", check_version="1.3.3")  # check_version=video primary= attribute
-c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name", check_version="1.2.11")  # check_version=video ram output change
+c.add_compare("--remove-device --video all", "remove-video-all")
+c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name")
 
 c = vixml.add_category("add/rm devices and start", "test-state-shutoff --print-diff --start")
 c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
@@ -1117,8 +1147,8 @@ c.add_invalid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto fl
 
 
 c = vclon.add_category("misc", "")
-c.add_compare("--connect %(URI-KVM)s -o test-clone --auto-clone --clone-running", "clone-auto1", check_version="1.2.15")
-c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", check_version="1.2.15")
+c.add_compare("--connect %(URI-KVM)s -o test-clone --auto-clone --clone-running", "clone-auto1")
+c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2")
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("--original-xml " + _CLONE_MANAGED + " --auto-clone")  # Auto flag w/ managed storage
 c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage
@@ -1186,17 +1216,15 @@ def _add_argcomplete_cmd(line, grep, nogrep=None):
         "COMP_LINE": line,
         "_ARGCOMPLETE_COMP_WORDBREAKS": "\"'><;|&(:",
     }
-    cmd = Command(line)
-    cmd.grep = grep
-    if nogrep:
-        cmd.nogrep = nogrep
-    cmd.env = env
-    cmd.need_conn = False
+
     def have_argcomplete():
         if not argcomplete:
             return "argcomplete not installed"
-    cmd.skip_cb = have_argcomplete
+
+    cmd = Command(line, grep=grep, nogrep=nogrep, env=env, need_conn=False,
+            prerun_check=have_argcomplete)
     ARGCOMPLETE_CMDS.append(cmd)
+
 
 _add_argcomplete_cmd("virt-install --di", "--disk")
 _add_argcomplete_cmd("virt-install --disk ", "driver.copy_on_read=")  # will list all --disk subprops
