@@ -1,13 +1,9 @@
 # Virtual Machine Manager
 
-This application provides a graphical tool for managing virtual machines
-via the [libvirt](https://libvirt.org) library.
-
-The front end of the application uses the GTK / Glade libraries for
-all user interaction components. The back end uses libvirt for managing
-Qemu/KVM and Xen virtual machines, as well as LXC containers. The UI is
-primarily tested with KVM, but is intended to be reasonably portable to any
-virtualization backend libvirt supports.
+`virt-manager` is a graphical tool for managing virtual machines
+via [libvirt](https://libvirt.org). Most usage is with QEMU/KVM
+virtual machines, but Xen and libvirt LXC containers are well
+supported. Common operations for any libvirt driver should work.
 
 Several command line tools are also provided:
 
@@ -17,7 +13,12 @@ Several command line tools are also provided:
  - `virt-convert`: Convert VMX or OVF configs to libvirt virtual machines
 
 For dependency info and installation instructions, see the
-[INSTALL.md](INSTALL.md) file.
+[INSTALL.md](INSTALL.md) file. If you just want to quickly test the
+code from a git checkout, you can launch any of the commands like:
+
+```sh
+./virt-manager --debug ...
+```
 
 ## Contact
 
@@ -26,8 +27,8 @@ For dependency info and installation instructions, see the
    mailing list.
  - For IRC we use #virt on OFTC.
  - For bug reporting info, see
-   [BugReporting](https://virt-manager.org/page/BugReporting).
+   [virt-manager bug reporting](https://virt-manager.org/bugs).
  - There are further project details on the
    [virt-manager](https://virt-manager.org/) website.
- - See the [HACKING.md](HACKING.md) file for info about submitting patches or
+ - See the [CONTRIBUTING.md](CONTRIBUTING.md) file for info about submitting patches or
    contributing translations.
