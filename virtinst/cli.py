@@ -3205,6 +3205,7 @@ class ParserGraphics(VirtCLIParser):
         cls.add_arg("mouse.mode", "mouse_mode")
         cls.add_arg("filetransfer.enable", "filetransfer_enable",
                     is_onoff=True)
+        cls.add_arg("zlib.compression", "zlib_compression")
 
         cls.add_arg("gl.enable", "gl", is_onoff=True)
         cls.add_arg("gl.rendernode", "rendernode")

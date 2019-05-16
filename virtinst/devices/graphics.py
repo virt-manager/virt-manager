@@ -193,6 +193,7 @@ class DeviceGraphics(Device):
     filetransfer_enable = XMLProperty("./filetransfer/@enable", is_yesno=True)
     gl = XMLProperty("./gl/@enable", is_yesno=True)
     rendernode = XMLProperty("./gl/@rendernode")
+    zlib_compression = XMLProperty("./zlib/@compression")
 
 
     ##################
