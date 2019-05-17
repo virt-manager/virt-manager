@@ -2912,6 +2912,7 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("snapshot", "snapshot_policy")
         cls.add_arg("sgio", "sgio")
         cls.add_arg("serial", "serial")
+        cls.add_arg("wwn", "wwn")
         cls.add_arg("readonly", "read_only", is_onoff=True)
         cls.add_arg("shareable", "shareable", is_onoff=True)
 

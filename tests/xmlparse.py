@@ -377,6 +377,7 @@ class XMLParseTest(unittest.TestCase):
         check("driver_name", None, "test")
         check("driver_type", None, "raw")
         check("serial", "WD-WMAP9A966149", "frob")
+        check("wwn", None, "123456789abcdefa")
         check("bus", "ide", "usb")
         check("removable", None, False, True)
 

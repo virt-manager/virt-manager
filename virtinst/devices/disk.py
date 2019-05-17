@@ -657,6 +657,7 @@ class DeviceDisk(Device):
 
     error_policy = XMLProperty("./driver/@error_policy")
     serial = XMLProperty("./serial")
+    wwn = XMLProperty("./wwn")
     startup_policy = XMLProperty("./source/@startupPolicy")
     logical_block_size = XMLProperty("./blockio/@logical_block_size")
     physical_block_size = XMLProperty("./blockio/@physical_block_size")

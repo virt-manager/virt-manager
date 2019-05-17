@@ -546,7 +546,7 @@ vcpus.vcpu.id=3,vcpus.vcpu0.enabled=yes,vcpus.vcpu0.order=3,\
 vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --cpu none
 
---disk /dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,boot_order=2
+--disk /dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,wwn=123456789abcdefa,boot_order=2
 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap,detect_zeroes=unmap,address.type=drive,address.controller=0,address.target=2,address.unit=0
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba
 --disk size=1
