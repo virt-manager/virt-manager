@@ -631,7 +631,8 @@ class vmmAddHardware(vmmGObjectUI):
         values = []
         for t in DeviceTpm.VERSIONS:
             values.append([t, t])
-        _build_combo(self.widget("tpm-version"), values)
+        _build_combo(self.widget("tpm-version"), values,
+                default_value=DeviceTpm.VERSION_2_0)
 
     @staticmethod
     def _get_tpm_model_list(vm, tpmversion):
