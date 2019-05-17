@@ -1643,6 +1643,8 @@
                                   <object class="GtkComboBox" id="cpu-model">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="hexpand">True</property>
                                     <property name="has_entry">True</property>
                                     <signal name="changed" handler="on_cpu_model_changed" swapped="no"/>
                                     <child internal-child="entry">
