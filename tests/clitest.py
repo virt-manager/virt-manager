@@ -550,7 +550,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap,detect_zeroes=unmap,address.type=drive,address.controller=0,address.target=2,address.unit=0
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba
 --disk size=1
---disk /iscsi-pool/diskvol1,total_bytes_sec=10,total_iops_sec=20,bus=scsi,device=lun,sgio=unfiltered
+--disk /iscsi-pool/diskvol1,total_bytes_sec=10,total_iops_sec=20,bus=scsi,device=lun,sgio=unfiltered,rawio=yes
 --disk /dev/default-pool/iso-vol,seclabel.model=dac,seclabel1.model=selinux,seclabel1.relabel=no,seclabel0.label=foo,bar,baz,iotune.read_bytes_sec=1,iotune.read_iops_sec=2,iotune.write_bytes_sec=5,iotune.write_iops_sec=6
 --disk /dev/default-pool/iso-vol,format=qcow2,startup_policy=optional,iotune.total_bytes_sec=10,iotune.total_iops_sec=20,
 --disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1,driver_type=raw

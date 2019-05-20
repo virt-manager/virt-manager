@@ -403,6 +403,7 @@ class XMLParseTest(unittest.TestCase):
         check("type", "block")
         check("device", "lun")
         check("sgio", None, "unfiltered")
+        check("rawio", None, "yes")
 
         disk = _get_disk("sda")
         check = self._make_checker(disk)

@@ -643,6 +643,7 @@ class DeviceDisk(Device):
     driver_copy_on_read = XMLProperty("./driver/@copy_on_read", is_onoff=True)
 
     sgio = XMLProperty("./@sgio")
+    rawio = XMLProperty("./@rawio")
 
     bus = XMLProperty("./target/@bus")
     target = XMLProperty("./target/@dev")
