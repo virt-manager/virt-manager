@@ -148,7 +148,7 @@ class vmmCreatePool(vmmGObjectUI):
         elif pooltype == StoragePool.TYPE_LOGICAL:
             pool_list = self._list_pool_sources(pooltype)
             entry_list = [[p.target_path, p.target_path, p]
-                          for p in pool_list]
+                          for p in pool_list if p.target_path]
             use_list = target_list
             use_model = target_model
 
@@ -288,7 +288,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         if src_name:
             self.widget("pool-source-name").set_text(
-                    pool.default_source_name())
+                    pool.default_source_name() or "")
 
         self._populate_pool_sources()
 
