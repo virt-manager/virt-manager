@@ -14,6 +14,8 @@
   </features>
   <cpu mode="custom" match="exact">
     <model>qemu64</model>
+    <feature policy="require" name="spec-ctrl"/>
+    <feature policy="require" name="ssbd"/>
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
@@ -61,6 +63,8 @@
   </features>
   <cpu mode="custom" match="exact">
     <model>qemu64</model>
+    <feature policy="require" name="spec-ctrl"/>
+    <feature policy="require" name="ssbd"/>
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>

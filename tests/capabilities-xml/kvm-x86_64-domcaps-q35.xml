@@ -20,7 +20,7 @@
   <cpu>
     <mode name='host-passthrough' supported='yes'/>
     <mode name='host-model' supported='yes'>
-      <model fallback='forbid'>Skylake-Client</model>
+      <model fallback='forbid'>Skylake-Client-IBRS</model>
       <vendor>Intel</vendor>
       <feature policy='require' name='ss'/>
       <feature policy='require' name='vmx'/>
@@ -28,6 +28,7 @@
       <feature policy='require' name='tsc_adjust'/>
       <feature policy='require' name='clflushopt'/>
       <feature policy='require' name='xsaves'/>
+      <feature policy='require' name='ssbd'/>
       <feature policy='require' name='pdpe1gb'/>
       <feature policy='require' name='invtsc'/>
     </mode>
