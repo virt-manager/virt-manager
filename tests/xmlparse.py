@@ -1479,3 +1479,25 @@ class XMLParseTest(unittest.TestCase):
                 parsexml=mkdisk("sdw").get_xml())
         guest.devices.replace_child(guest.devices.disk[4], newdisk)
         utils.diff_compare(guest.get_xml(), parsefile)
+
+    def testDiskRevalidate(self):
+        """
+        Test that calling validate() on parsed disk XML doesn't attempt
+        to verify the path exists. Assume it's a working config
+        """
+        xml = ("<disk type='file' device='disk'>"
+            "<source file='/A/B/C/D/NOPE'/>"
+            "</disk>")
+        disk = virtinst.DeviceDisk(self.conn, parsexml=xml)
+        disk.validate()
+        disk.is_size_conflict()
+        disk.build_storage(None)
+        self.assertEqual(getattr(disk, "_storage_backend"), None)
+
+        disk.set_backend_for_existing_path()
+        self.assertEqual(bool(getattr(disk, "_storage_backend")), True)
+        try:
+            disk.validate()
+            raise AssertionError("expected disk validate failure")
+        except ValueError:
+            pass

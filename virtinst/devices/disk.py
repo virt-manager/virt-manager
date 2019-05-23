@@ -386,6 +386,14 @@ class DeviceDisk(Device):
         self._set_xmlpath(self.path)
     path = property(_get_path, _set_path)
 
+    def set_backend_for_existing_path(self):
+        # This is an entry point for parsexml Disk instances to request
+        # a _storage_backend to be initialized from the XML path. That
+        # will cause validate() to actually validate the path exists.
+        # We need this so addhw XML editing will still validate the disk path
+        if not self._storage_backend:
+            self._set_default_storage_backend()
+
     def set_vol_object(self, vol_object, parent_pool):
         logging.debug("disk.set_vol_object: volxml=\n%s",
             vol_object.XMLDesc(0))
@@ -797,7 +805,8 @@ class DeviceDisk(Device):
         If storage doesn't exist (a non-existent file 'path', or 'vol_install'
         was specified), we create it.
         """
-        if not self._storage_backend.will_create_storage():
+        if (not self._storage_backend or
+            not self._storage_backend.will_create_storage()):
             return
 
         meter = util.ensure_meter(meter)
@@ -819,6 +828,8 @@ class DeviceDisk(Device):
         Non fatal conflicts (sparse disk exceeds available space) will
         return (False, "description of collision")
         """
+        if not self._storage_backend:
+            return (False, None)
         return self._storage_backend.is_size_conflict()
 
     def is_conflict_disk(self, conn=None):
