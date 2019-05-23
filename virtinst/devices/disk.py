@@ -782,11 +782,6 @@ class DeviceDisk(Device):
 
             return
 
-        if (self.type == DeviceDisk.TYPE_DIR and
-            not self.is_floppy()):
-            raise ValueError(_("The path '%s' must be a file or a "
-                               "device, not a directory") % self.path)
-
         if not self._storage_backend:
             return
 

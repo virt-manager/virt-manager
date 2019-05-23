@@ -736,7 +736,6 @@ c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000")  # Fail if ful
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s")  # Colliding storage without --force
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt")  # Colliding storage with --prompt should still fail
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk /dev/default-pool/backingl3.img")  # Colliding storage via backing store
-c.add_invalid("--disk /var,device=cdrom")  # Dir without floppy
 c.add_invalid("--disk %(EXISTIMG1)s,driver_name=foobar,driver_type=foobaz")  # Unknown driver name and type options (as of 1.0.0)
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=rbd-ceph,source_volume=vol1")  # Collision with existing VM, via source pool/volume
 c.add_invalid("--disk source.pool=default-pool,source.volume=idontexist")  # trying to lookup non-existent volume, hit specific error code
