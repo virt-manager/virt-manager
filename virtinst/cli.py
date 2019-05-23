@@ -3502,6 +3502,7 @@ class ParserMemballoon(VirtCLIParser):
         _add_common_device_args(cls, virtio_options=True)
 
         cls.add_arg("model", "model")
+        cls.add_arg("autodeflate", "autodeflate", is_onoff=True)
 
 
 ###################

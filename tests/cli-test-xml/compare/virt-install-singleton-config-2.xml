@@ -187,7 +187,9 @@
       <model type="qxl"/>
     </video>
     <watchdog model="ib700" action="pause"/>
-    <memballoon model="virtio"/>
+    <memballoon model="virtio">
+      <autodeflate>on</autodeflate>
+    </memballoon>
     <rng model="virtio">
       <backend model="egd" type="udp">
         <source mode="bind" host="127.0.0.1" service="8000"/>
@@ -399,7 +401,9 @@
       <model type="qxl"/>
     </video>
     <watchdog model="ib700" action="pause"/>
-    <memballoon model="virtio"/>
+    <memballoon model="virtio">
+      <autodeflate>on</autodeflate>
+    </memballoon>
     <rng model="virtio">
       <backend model="egd" type="udp">
         <source mode="bind" host="127.0.0.1" service="8000"/>

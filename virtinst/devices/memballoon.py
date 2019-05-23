@@ -13,6 +13,7 @@ class DeviceMemballoon(Device):
     XML_NAME = "memballoon"
 
     model = XMLProperty("./@model")
+    autodeflate = XMLProperty("./autodeflate", is_onoff=True)
 
 
     ##################
