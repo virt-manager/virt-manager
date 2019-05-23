@@ -3,6 +3,8 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="top-box">
+    <property name="width_request">400</property>
+    <property name="height_request">400</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">3</property>
@@ -124,6 +126,11 @@
                             <property name="halign">start</property>
                             <property name="label">label</property>
                             <property name="selectable">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-device-atkobject">
+                                <property name="AtkObject::accessible-name">net-device</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -1060,6 +1067,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="top-box-atkobject">
+        <property name="AtkObject::accessible-name">network-grid</property>
+      </object>
     </child>
   </object>
 </interface>

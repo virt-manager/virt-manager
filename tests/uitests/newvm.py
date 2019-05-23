@@ -426,3 +426,87 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
+
+
+    def testNewVMCustomizeXMLEdit(self):
+        """
+        Test new VM with raw XML editing via customize wizard
+        """
+        newvm = self._open_create_wizard()
+
+        # Create a custom named VM, using CDROM media, and default storage
+        vmname = "fooxmleditvm"
+        newvm.find_fuzzy("Local install media", "radio").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        existpath = "/dev/default-pool/testvol1.img"
+        newvm.find("media-entry").text = existpath
+        uiutils.check_in_loop(
+                lambda: newvm.find("oslist-entry").text == "None detected")
+        newvm.find_fuzzy("Automatically detect", "check").click()
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Forward", "button").click()
+        newvm.find_fuzzy("Customize", "check").click()
+        newvm.find_fuzzy("Name", "text").text = vmname
+        newvm.find_fuzzy("Finish", "button").click()
+
+        # Change a VM setting and verify it
+        win = self.app.root.find_fuzzy("%s on" % vmname, "frame")
+        xmleditor = win.find("XML editor")
+        finish = win.find("config-apply")
+        win.find_fuzzy("Boot", "table cell").click()
+        tab = win.find("boot-tab")
+        self.assertEqual(
+                tab.find("Enable boot menu", "check box").checked, False)
+        win.find("XML", "page tab").click()
+        xmleditor.text = xmleditor.text.replace(
+                "<os>", "<os><bootmenu enable='yes'/>")
+        finish.click()
+        win.find("Details", "page tab").click()
+        self.assertEqual(
+                tab.find("Enable boot menu", "check box").checked, True)
+
+        # Change a device setting with the XML editor
+        win.find_fuzzy("NIC", "table cell").click()
+        tab = win.find("network-tab")
+        win.find("XML", "page tab").click()
+        oldbrname = "brplain"
+        newbrname = "BRFAKE"
+        xmleditor.text = xmleditor.text.replace(oldbrname, newbrname)
+        finish.click()
+
+        # Finish install.
+        win.find_fuzzy("Begin Installation", "button").click()
+        uiutils.check_in_loop(lambda: win.dead)
+        win = self.app.root.find_fuzzy("%s on" % vmname, "frame")
+        win.find("Details", "radio button").click()
+
+        # Verify VM change stuck
+        win.find_fuzzy("Boot", "table cell").click()
+        tab = win.find("boot-tab")
+        self.assertEqual(
+                tab.find("Enable boot menu", "check box").checked, True)
+
+        # Verify device change stuck
+        win.find_fuzzy("NIC", "table cell").click()
+        tab = win.find("network-tab")
+        self.assertEqual(
+                tab.find("Bridge name:", "text").text, newbrname)
+
+        # Verify install media is handled correctly after XML customize
+        win.find_fuzzy("IDE CDROM 1", "table cell").click()
+        tab = win.find("disk-tab")
+        self.assertEqual(tab.find("media-entry").text, existpath)
+        win.find("Shut Down", "push button").click()
+        run = win.find("Run", "push button")
+        uiutils.check_in_loop(lambda: run.sensitive)
+        self.assertEqual(tab.find("media-entry").text, "")
+
+        # Verify default disk storage was actually created. This has some
+        # special handling in domain.py
+        tab.find("Browse", "push button").click()
+        browsewin = self.app.root.find(
+                "Choose Storage Volume", "frame")
+        browsewin.find("%s.qcow2" % vmname, "table cell")

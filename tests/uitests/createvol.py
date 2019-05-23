@@ -9,23 +9,29 @@ class CreateVol(uiutils.UITestCase):
     UI tests for the createvol wizard
     """
 
+    def _open_create_win(self, hostwin):
+        hostwin.find("vol-new", "push button").click()
+        win = self.app.root.find(
+                "Add a Storage Volume", "frame")
+        uiutils.check_in_loop(lambda: win.active)
+        return win
+
+
     ##############
     # Test cases #
     ##############
 
     def testCreateVol(self):
-        # Open the createnet dialog
         hostwin = self._open_host_window("Storage")
         poolcell = hostwin.find("default-pool", "table cell")
         poolcell.click()
-        hostwin.find("vol-new", "push button").click()
-        win = self.app.root.find(
-                "Add a Storage Volume", "frame")
+        win = self._open_create_win(hostwin)
 
         # Create a default qcow2 volume
-        newname = "a-newvol"
         finish = win.find("Finish", "push button")
         name = win.find("Name:", "text")
+        self.assertEqual(name.text, "vol")
+        newname = "a-newvol"
         name.text = newname
         win.find("Max Capacity:", "spin button").text = "10.5"
         finish.click()
@@ -43,8 +49,7 @@ class CreateVol(uiutils.UITestCase):
 
 
         # Create a raw volume too
-        hostwin.find("vol-new", "push button").click()
-        uiutils.check_in_loop(lambda: win.active)
+        win = self._open_create_win(hostwin)
         newname = "a-newvol.raw"
         name.text = newname
         combo = win.find("Format:", "combo box")
@@ -58,3 +63,31 @@ class CreateVol(uiutils.UITestCase):
         hostwin.keyCombo("<ctrl>w")
         uiutils.check_in_loop(lambda: not hostwin.showing and
                 not hostwin.active)
+
+
+    def testCreateVolXMLEditor(self):
+        hostwin = self._open_host_window("Storage")
+        poolcell = hostwin.find("default-pool", "table cell")
+        poolcell.click()
+        win = self._open_create_win(hostwin)
+        finish = win.find("Finish", "push button")
+        name = win.find("Name:", "text")
+        vollist = hostwin.find("vol-list", "table")
+
+        # Create a new obj with XML edited name, verify it worked
+        tmpname = "objtmpname"
+        newname = "aafroofroo"
+        name.text = tmpname
+        win.find("XML", "page tab").click()
+        xmleditor = win.find("XML editor")
+        xmleditor.text = xmleditor.text.replace(
+                ">%s.qcow2<" % tmpname, ">%s<" % newname)
+        finish.click()
+        uiutils.check_in_loop(lambda: hostwin.active)
+        vollist.find(newname)
+
+        # Do standard xmleditor tests
+        win = self._open_create_win(hostwin)
+        self._test_xmleditor_interactions(win, finish)
+        win.find("Cancel", "push button").click()
+        uiutils.check_in_loop(lambda: not win.visible)

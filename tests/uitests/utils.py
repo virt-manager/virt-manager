@@ -96,7 +96,7 @@ class UITestCase(unittest.TestCase):
             check_in_loop(lambda: run.sensitive)
         return win
 
-    def _walkUIList(self, win, lst, error_cb):
+    def _walkUIList(self, win, lst, error_cb, reverse=False):
         """
         Toggle down through a UI list like addhardware, net/storage/iface
         lists, and ensure an error isn't raised.
@@ -104,6 +104,8 @@ class UITestCase(unittest.TestCase):
         # Walk the lst UI and find all labelled table cells, these are
         # the actual list entries
         all_cells = lst.findChildren(lambda w: w.roleName == "table cell")
+        if reverse:
+            all_cells.reverse()
         all_cells[0].click()
         cells_per_selection = len([c for c in all_cells if c.focused])
 
@@ -118,7 +120,7 @@ class UITestCase(unittest.TestCase):
                     continue
 
             self.assertTrue(cell.state_selected)
-            dogtail.rawinput.pressKey("Down")
+            dogtail.rawinput.pressKey(reverse and "Up" or "Down")
 
             if not win.active:
                 # Should mean an error dialog popped up
@@ -133,6 +135,36 @@ class UITestCase(unittest.TestCase):
                 self.assertTrue(cell.state_selected)
             else:
                 self.assertTrue(not cell.state_selected)
+
+    def _test_xmleditor_interactions(self, win, finish):
+        """
+        Helper to test some common XML editor interactions
+        """
+        # Click the tab, make a bogus XML edit
+        win.find("XML", "page tab").click()
+        xmleditor = win.find("XML editor")
+        xmleditor.text = xmleditor.text.replace("<", "<FOO", 1)
+
+        # Trying to click away should warn that there's unapplied changes
+        win.find("Details", "page tab").click()
+        alert = self.app.root.find("vmm dialog")
+        alert.find_fuzzy("changes will be lost")
+
+        # Select 'No', meaning don't abandon changes
+        alert.find("No", "push button").click()
+        check_in_loop(lambda: xmleditor.showing)
+
+        # Click the finish button, but our bogus change should trigger error
+        finish.click()
+        alert = self.app.root.find("vmm dialog")
+        alert.find_fuzzy("(xmlParseDoc|tag mismatch)")
+        alert.find("Close", "push button").click()
+
+        # Try unapplied changes again, this time abandon our changes
+        win.find("Details", "page tab").click()
+        alert = self.app.root.find("vmm dialog")
+        alert.find("Yes", "push button").click()
+        check_in_loop(lambda: not xmleditor.showing)
 
 
 class _FuzzyPredicate(dogtail.predicate.Predicate):

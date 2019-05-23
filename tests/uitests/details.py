@@ -46,6 +46,10 @@ class Details(uiutils.UITestCase):
         lst = win.find("hw-list", "table")
         self._walkUIList(win, lst, lambda: False)
 
+        # Select XML editor, and reverse walk the list
+        win.find("XML", "page tab").click()
+        self._walkUIList(win, lst, lambda: False, reverse=True)
+
     def _testRename(self, origname, newname):
         win = self._open_details_window(origname)
 
@@ -465,7 +469,6 @@ class Details(uiutils.UITestCase):
         tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
         self.assertTrue(share.checked)
 
-
         # VM State change doesn't refresh UI
         share.click()
         self._start_vm(win)
@@ -479,3 +482,33 @@ class Details(uiutils.UITestCase):
         self.assertTrue(share.checked)
         self._stop_vm(win)
         self.assertTrue(not share.checked)
+
+    def testDetailsXMLEdit(self):
+        """
+        Test XML editing interaction
+        """
+        win = self._open_details_window(vmname="test-clone-simple")
+        finish = win.find("config-apply")
+        xmleditor = win.find("XML editor")
+
+        # Edit vcpu count and verify it's reflected in CPU page
+        tab = self._select_hw(win, "CPUs", "cpu-tab")
+        win.find("XML", "page tab").click()
+        xmleditor.text = xmleditor.text.replace(">5</vcpu", ">8</vcpu")
+        finish.click()
+        win.find("Details", "page tab").click()
+        self.assertEqual(
+                tab.find("Current allocation:", "spin button").text, "8")
+
+        # Make some disk edits
+        tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
+        win.find("XML", "page tab").click()
+        origpath = "/dev/default-pool/test-clone-simple.img"
+        newpath = "/path/FOOBAR"
+        xmleditor.text = xmleditor.text.replace(origpath, newpath)
+        finish.click()
+        win.find("Details", "page tab").click()
+        self.assertTrue(win.find("disk-source-path").text, newpath)
+
+        # Do standard xmleditor tests
+        self._test_xmleditor_interactions(win, finish)

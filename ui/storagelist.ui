@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkImage" id="image3">
@@ -344,6 +344,11 @@
                             <property name="halign">start</property>
                             <property name="label">label</property>
                             <property name="selectable">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="pool-location-atkobject">
+                                <property name="AtkObject::accessible-name">pool-location</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -654,6 +659,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="storage-grid-atkobject">
+        <property name="AtkObject::accessible-name">storage-grid</property>
+      </object>
     </child>
   </object>
 </interface>
