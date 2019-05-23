@@ -164,6 +164,8 @@ class vmmVMWindow(vmmGObjectUI):
         self.console = None
         self.snapshots.cleanup()
         self.snapshots = None
+        self._details.cleanup()
+        self._details = None
         self._shutdownmenu.destroy()
         self._shutdownmenu = None
         self._vmmenu.destroy()
