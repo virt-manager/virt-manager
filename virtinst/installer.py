@@ -50,8 +50,8 @@ class Installer(object):
         self._install_bootdev = install_bootdev
         self._install_kernel = None
         self._install_initrd = None
-        self._install_cdrom_device = None
-        self._install_floppy_device = None
+        self._install_cdrom_device_added = False
+        self._install_floppy_device = False
         self._unattended_files = []
         self._defaults_are_set = False
         self._unattended_data = None
@@ -85,7 +85,7 @@ class Installer(object):
         return self._cdrom
 
     def _add_install_cdrom_device(self, guest):
-        if self._install_cdrom_device:
+        if self._install_cdrom_device_added:
             return
         if not bool(self._cdrom_path()):
             return
@@ -95,26 +95,29 @@ class Installer(object):
         dev.path = self._cdrom_path()
         dev.sync_path_props()
         dev.validate()
-        self._install_cdrom_device = dev
+        self._install_cdrom_device_added = True
 
         # Insert the CDROM before any other CDROM, so boot=cdrom picks
         # it as the priority
         for idx, disk in enumerate(guest.devices.disk):
             if disk.is_cdrom():
-                guest.devices.add_child(self._install_cdrom_device, idx=idx)
+                guest.devices.add_child(dev, idx=idx)
                 return
-        guest.add_device(self._install_cdrom_device)
+        guest.add_device(dev)
 
     def _remove_install_cdrom_media(self, guest):
-        if not self._install_cdrom_device:
+        if not self._install_cdrom_device_added:
             return
         if self.livecd:
             return
         if guest.osinfo.is_windows():
             # Keep media attached for windows which has a multi stage install
             return
-        self._install_cdrom_device.path = None
-        self._install_cdrom_device.sync_path_props()
+        for disk in guest.devices.disk:
+            if disk.is_cdrom() and disk.path == self._cdrom_path():
+                disk.path = None
+                disk.sync_path_props()
+                break
 
     def _add_install_floppy_device(self, guest, location):
         if self._install_floppy_device:
