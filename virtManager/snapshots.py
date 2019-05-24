@@ -29,6 +29,30 @@ mimemap = {
 }
 
 
+def _make_screenshot_pixbuf(mime, sdata):
+    loader = GdkPixbuf.PixbufLoader.new_with_mime_type(mime)
+    loader.write(sdata)
+    pixbuf = loader.get_pixbuf()
+    loader.close()
+
+    maxsize = 450
+    def _scale(big, small, maxsize):
+        if big <= maxsize:
+            return big, small
+        factor = float(maxsize) / float(big)
+        return maxsize, int(factor * float(small))
+
+    width = pixbuf.get_width()
+    height = pixbuf.get_height()
+    if width > height:
+        width, height = _scale(width, height, maxsize)
+    else:
+        height, width = _scale(height, width, maxsize)
+
+    return pixbuf.scale_simple(width, height,
+                               GdkPixbuf.InterpType.BILINEAR)
+
+
 def _mime_to_ext(val, reverse=False):
     for m, e in mimemap.items():
         if val == m and not reverse:
@@ -40,6 +64,226 @@ def _mime_to_ext(val, reverse=False):
                   reverse and "mime" or "extension")
 
 
+class vmmSnapshotNew(vmmGObjectUI):
+    __gsignals__ = {
+        "snapshot-created": (vmmGObjectUI.RUN_FIRST, None, [str]),
+    }
+
+    def __init__(self, vm):
+        vmmGObjectUI.__init__(self, "snapshotsnew.ui", "snapshot-new")
+        self.vm = vm
+
+        self._init_ui()
+
+        self.builder.connect_signals({
+            "on_snapshot_new_delete_event": self.close,
+            "on_snapshot_new_cancel_clicked": self.close,
+            "on_snapshot_new_name_changed": self._name_changed_cb,
+            "on_snapshot_new_name_activate": self._ok_clicked_cb,
+            "on_snapshot_new_ok_clicked": self._ok_clicked_cb,
+        })
+        self.bind_escape_key_close()
+
+
+    #######################
+    # Standard UI methods #
+    #######################
+
+    def show(self, parent):
+        logging.debug("Showing new snapshot wizard")
+        self._reset_state()
+        self.topwin.set_transient_for(parent)
+        self.topwin.present()
+
+    def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing new snapshot wizard")
+        self.topwin.hide()
+        return 1
+
+    def _cleanup(self):
+        self.vm = None
+
+
+    ###########
+    # UI init #
+    ###########
+
+    def _init_ui(self):
+        blue = Gdk.color_parse("#0072A8")
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
+
+        buf = Gtk.TextBuffer()
+        self.widget("snapshot-new-description").set_buffer(buf)
+
+    def _reset_state(self):
+        collidelist = [s.get_xmlobj().name for s in self.vm.list_snapshots()]
+        default_name = DomainSnapshot.find_free_name(
+            self.vm.get_backend(), collidelist)
+
+        self.widget("snapshot-new-name").set_text(default_name)
+        self.widget("snapshot-new-name").emit("changed")
+        self.widget("snapshot-new-description").get_buffer().set_text("")
+        self.widget("snapshot-new-ok").grab_focus()
+        self.widget("snapshot-new-status-text").set_text(self.vm.run_status())
+        self.widget("snapshot-new-status-icon").set_from_icon_name(
+            self.vm.run_status_icon_name(), Gtk.IconSize.BUTTON)
+
+        sn = self._get_screenshot()
+        uiutil.set_grid_row_visible(
+            self.widget("snapshot-new-screenshot"), bool(sn))
+        if sn:
+            self.widget("snapshot-new-screenshot").set_from_pixbuf(sn)
+
+        self.widget("snapshot-new-name").grab_focus()
+
+
+    ###################
+    # Create handling #
+    ###################
+
+    def _take_screenshot(self):
+        stream = None
+        try:
+            stream = self.vm.conn.get_backend().newStream(0)
+            screen = 0
+            flags = 0
+            mime = self.vm.get_backend().screenshot(stream, screen, flags)
+
+            ret = io.BytesIO()
+            def _write_cb(_stream, data, userdata):
+                ignore = stream
+                ignore = userdata
+                ret.write(data)
+
+            stream.recvAll(_write_cb, None)
+            return mime, ret.getvalue()
+        finally:
+            try:
+                if stream:
+                    stream.finish()
+            except Exception:
+                pass
+
+    def _get_screenshot(self):
+        if not self.vm.is_active():
+            logging.debug("Skipping screenshot since VM is not active")
+            return
+        if not self.vm.xmlobj.devices.graphics:
+            logging.debug("Skipping screenshot since VM has no graphics")
+            return
+
+        try:
+            # Perform two screenshots, because qemu + qxl has a bug where
+            # screenshot generally only shows the data from the previous
+            # screenshot request:
+            # https://bugs.launchpad.net/qemu/+bug/1314293
+            self._take_screenshot()
+            mime, sdata = self._take_screenshot()
+        except Exception:
+            logging.exception("Error taking screenshot")
+            return
+
+        ext = _mime_to_ext(mime)
+        if not ext:
+            return
+
+        newpix = _make_screenshot_pixbuf(mime, sdata)
+        setattr(newpix, "vmm_mimetype", mime)
+        setattr(newpix, "vmm_sndata", sdata)
+        return newpix
+
+    def _new_finish_cb(self, error, details, newname):
+        self.reset_finish_cursor()
+
+        if error is not None:
+            error = _("Error creating snapshot: %s") % error
+            self.err.show_err(error, details=details)
+            return
+        self.emit("snapshot-created", newname)
+
+    def _validate_new_snapshot(self):
+        name = self.widget("snapshot-new-name").get_text()
+        desc = self.widget("snapshot-new-description"
+                           ).get_buffer().get_property("text")
+
+        try:
+            newsnap = DomainSnapshot(self.vm.conn.get_backend())
+            newsnap.name = name
+            newsnap.description = desc or None
+            newsnap.validate()
+            newsnap.get_xml()
+            return newsnap
+        except Exception as e:
+            return self.err.val_err(_("Error validating snapshot: %s") % e)
+
+    def _get_screenshot_data_for_save(self):
+        snwidget = self.widget("snapshot-new-screenshot")
+        if not snwidget.is_visible():
+            return None, None
+
+        sn = snwidget.get_pixbuf()
+        if not sn:
+            return None, None
+
+        mime = getattr(sn, "vmm_mimetype", None)
+        sndata = getattr(sn, "vmm_sndata", None)
+        return mime, sndata
+
+    def _do_create_snapshot(self, asyncjob, xml, name, mime, sndata):
+        ignore = asyncjob
+
+        self.vm.create_snapshot(xml)
+
+        try:
+            cachedir = self.vm.get_cache_dir()
+            basesn = os.path.join(cachedir, "snap-screenshot-%s" % name)
+
+            # Remove any pre-existing screenshots so we don't show stale data
+            for ext in list(mimemap.values()):
+                p = basesn + "." + ext
+                if os.path.exists(basesn + "." + ext):
+                    os.unlink(p)
+
+            if not mime or not sndata:
+                return
+
+            filename = basesn + "." + _mime_to_ext(mime)
+            logging.debug("Writing screenshot to %s", filename)
+            open(filename, "wb").write(sndata)
+        except Exception:
+            logging.exception("Error saving screenshot")
+
+    def _create_new_snapshot(self):
+        snap = self._validate_new_snapshot()
+        if not snap:
+            return
+
+        xml = snap.get_xml()
+        name = snap.name
+        mime, sndata = self._get_screenshot_data_for_save()
+        self.close()
+
+        self.set_finish_cursor()
+        progWin = vmmAsyncJob(
+                    self._do_create_snapshot, [xml, name, mime, sndata],
+                    self._new_finish_cb, [name],
+                    _("Creating snapshot"),
+                    _("Creating virtual machine snapshot"),
+                    self.topwin)
+        progWin.run()
+
+
+    ################
+    # UI listeners #
+    ################
+
+    def _name_changed_cb(self, src):
+        self.widget("snapshot-new-ok").set_sensitive(bool(src.get_text()))
+
+    def _ok_clicked_cb(self, src):
+        return self._create_new_snapshot()
+
+
 class vmmSnapshotPage(vmmGObjectUI):
     def __init__(self, vm, builder, topwin):
         vmmGObjectUI.__init__(self, "snapshots.ui",
@@ -49,14 +293,10 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self._initial_populate = False
         self._unapplied_changes = False
+        self._snapshot_new = None
 
         self._snapmenu = None
         self._init_ui()
-
-        self._snapshot_new = self.widget("snapshot-new")
-        self._snapshot_new.set_transient_for(self.topwin)
-        self.bind_escape_key_close_helper(self._snapshot_new,
-                                          self._snapshot_new_close)
 
         self.builder.connect_signals({
             "on_snapshot_add_clicked": self._on_add_clicked,
@@ -67,13 +307,6 @@ class vmmSnapshotPage(vmmGObjectUI):
             "on_snapshot_list_button_press_event": self._popup_snapshot_menu,
             "on_snapshot_refresh_clicked": self._on_refresh_clicked,
             "on_snapshot_list_row_activated": self._on_start_clicked,
-
-            # 'Create' dialog
-            "on_snapshot_new_delete_event": self._snapshot_new_close,
-            "on_snapshot_new_ok_clicked": self._on_new_ok_clicked,
-            "on_snapshot_new_cancel_clicked": self._snapshot_new_close,
-            "on_snapshot_new_name_changed": self._snapshot_new_name_changed,
-            "on_snapshot_new_name_activate": self._on_new_ok_clicked,
         })
 
         self.top_box = self.widget("snapshot-top-box")
@@ -83,30 +316,26 @@ class vmmSnapshotPage(vmmGObjectUI):
         selection.set_mode(Gtk.SelectionMode.MULTIPLE)
         selection.set_select_function(self._confirm_changes, None)
 
+
     ##############
     # Init stuff #
     ##############
 
     def _cleanup(self):
         self.vm = None
-
-        self._snapshot_new.destroy()
-        self._snapshot_new = None
         self._snapmenu = None
+
+        if self._snapshot_new:
+            self._snapshot_new.cleanup()
+            self._snapshot_new = None
 
     def _init_ui(self):
         # pylint: disable=redefined-variable-type
-        blue = Gdk.color_parse("#0072A8")
-        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
         self.widget("snapshot-notebook").set_show_tabs(False)
 
         buf = Gtk.TextBuffer()
         buf.connect("changed", self._description_changed)
         self.widget("snapshot-description").set_buffer(buf)
-
-        buf = Gtk.TextBuffer()
-        self.widget("snapshot-new-description").set_buffer(buf)
 
         # [name, row label, tooltip, icon name, sortname, current]
         model = Gtk.ListStore(str, str, str, str, str, bool)
@@ -254,29 +483,6 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self._initial_populate = True
 
-    def _make_screenshot_pixbuf(self, mime, sdata):
-        loader = GdkPixbuf.PixbufLoader.new_with_mime_type(mime)
-        loader.write(sdata)
-        pixbuf = loader.get_pixbuf()
-        loader.close()
-
-        maxsize = 450
-        def _scale(big, small, maxsize):
-            if big <= maxsize:
-                return big, small
-            factor = float(maxsize) / float(big)
-            return maxsize, int(factor * float(small))
-
-        width = pixbuf.get_width()
-        height = pixbuf.get_height()
-        if width > height:
-            width, height = _scale(width, height, maxsize)
-        else:
-            height, width = _scale(height, width, maxsize)
-
-        return pixbuf.scale_simple(width, height,
-                                   GdkPixbuf.InterpType.BILINEAR)
-
     def _read_screenshot_file(self, name):
         if not name:
             return
@@ -291,7 +497,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         mime = _mime_to_ext(os.path.splitext(filename)[1][1:], reverse=True)
         if not mime:
             return
-        return self._make_screenshot_pixbuf(mime, open(filename, "rb").read())
+        return _make_screenshot_pixbuf(mime, open(filename, "rb").read())
 
     def _set_snapshot_state(self, snap=None):
         self.widget("snapshot-notebook").set_current_page(0)
@@ -363,164 +569,6 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         return True
 
-    ##################
-    # 'New' handling #
-    ##################
-
-    def _take_screenshot(self):
-        stream = None
-        try:
-            stream = self.vm.conn.get_backend().newStream(0)
-            screen = 0
-            flags = 0
-            mime = self.vm.get_backend().screenshot(stream, screen, flags)
-
-            ret = io.BytesIO()
-            def _write_cb(_stream, data, userdata):
-                ignore = stream
-                ignore = userdata
-                ret.write(data)
-
-            stream.recvAll(_write_cb, None)
-            return mime, ret.getvalue()
-        finally:
-            try:
-                if stream:
-                    stream.finish()
-            except Exception:
-                pass
-
-    def _get_screenshot(self):
-        if not self.vm.is_active():
-            logging.debug("Skipping screenshot since VM is not active")
-            return
-        if not self.vm.xmlobj.devices.graphics:
-            logging.debug("Skipping screenshot since VM has no graphics")
-            return
-
-        try:
-            # Perform two screenshots, because qemu + qxl has a bug where
-            # screenshot generally only shows the data from the previous
-            # screenshot request:
-            # https://bugs.launchpad.net/qemu/+bug/1314293
-            self._take_screenshot()
-            mime, sdata = self._take_screenshot()
-        except Exception:
-            logging.exception("Error taking screenshot")
-            return
-
-        ext = _mime_to_ext(mime)
-        if not ext:
-            return
-
-        newpix = self._make_screenshot_pixbuf(mime, sdata)
-        setattr(newpix, "vmm_mimetype", mime)
-        setattr(newpix, "vmm_sndata", sdata)
-        return newpix
-
-    def _reset_new_state(self):
-        collidelist = [s.get_xmlobj().name for s in self.vm.list_snapshots()]
-        default_name = DomainSnapshot.find_free_name(
-            self.vm.get_backend(), collidelist)
-
-        self.widget("snapshot-new-name").set_text(default_name)
-        self.widget("snapshot-new-name").emit("changed")
-        self.widget("snapshot-new-description").get_buffer().set_text("")
-        self.widget("snapshot-new-ok").grab_focus()
-        self.widget("snapshot-new-status-text").set_text(self.vm.run_status())
-        self.widget("snapshot-new-status-icon").set_from_icon_name(
-            self.vm.run_status_icon_name(), Gtk.IconSize.BUTTON)
-
-        sn = self._get_screenshot()
-        uiutil.set_grid_row_visible(
-            self.widget("snapshot-new-screenshot"), bool(sn))
-        if sn:
-            self.widget("snapshot-new-screenshot").set_from_pixbuf(sn)
-
-
-    def _snapshot_new_name_changed(self, src):
-        self.widget("snapshot-new-ok").set_sensitive(bool(src.get_text()))
-
-    def _new_finish_cb(self, error, details, newname):
-        self.reset_finish_cursor()
-
-        if error is not None:
-            error = _("Error creating snapshot: %s") % error
-            self.err.show_err(error, details=details)
-            return
-        self._refresh_snapshots(newname)
-
-    def _validate_new_snapshot(self):
-        name = self.widget("snapshot-new-name").get_text()
-        desc = self.widget("snapshot-new-description"
-                           ).get_buffer().get_property("text")
-
-        try:
-            newsnap = DomainSnapshot(self.vm.conn.get_backend())
-            newsnap.name = name
-            newsnap.description = desc or None
-            newsnap.validate()
-            newsnap.get_xml()
-            return newsnap
-        except Exception as e:
-            return self.err.val_err(_("Error validating snapshot: %s") % e)
-
-    def _get_screenshot_data_for_save(self):
-        snwidget = self.widget("snapshot-new-screenshot")
-        if not snwidget.is_visible():
-            return None, None
-
-        sn = snwidget.get_pixbuf()
-        if not sn:
-            return None, None
-
-        mime = getattr(sn, "vmm_mimetype", None)
-        sndata = getattr(sn, "vmm_sndata", None)
-        return mime, sndata
-
-    def _do_create_snapshot(self, asyncjob, xml, name, mime, sndata):
-        ignore = asyncjob
-
-        self.vm.create_snapshot(xml)
-
-        try:
-            cachedir = self.vm.get_cache_dir()
-            basesn = os.path.join(cachedir, "snap-screenshot-%s" % name)
-
-            # Remove any pre-existing screenshots so we don't show stale data
-            for ext in list(mimemap.values()):
-                p = basesn + "." + ext
-                if os.path.exists(basesn + "." + ext):
-                    os.unlink(p)
-
-            if not mime or not sndata:
-                return
-
-            filename = basesn + "." + _mime_to_ext(mime)
-            logging.debug("Writing screenshot to %s", filename)
-            open(filename, "wb").write(sndata)
-        except Exception:
-            logging.exception("Error saving screenshot")
-
-    def _create_new_snapshot(self):
-        snap = self._validate_new_snapshot()
-        if not snap:
-            return
-
-        xml = snap.get_xml()
-        name = snap.name
-        mime, sndata = self._get_screenshot_data_for_save()
-        self._snapshot_new_close()
-
-        self.set_finish_cursor()
-        progWin = vmmAsyncJob(
-                    self._do_create_snapshot, [xml, name, mime, sndata],
-                    self._new_finish_cb, [name],
-                    _("Creating snapshot"),
-                    _("Creating virtual machine snapshot"),
-                    self.topwin)
-        progWin.run()
-
     def _apply(self):
         snaps = self._get_selected_snapshots()
         if not snaps or len(snaps) > 1:
@@ -554,10 +602,9 @@ class vmmSnapshotPage(vmmGObjectUI):
             return
         self._snapmenu.popup_at_pointer(event)
 
-    def _snapshot_new_close(self, *args, **kwargs):
-        ignore = args
-        ignore = kwargs
-        self._snapshot_new.hide()
+    def close(self, ignore1=None, ignore2=None):
+        if self._snapshot_new:
+            self._snapshot_new.close()
         return 1
 
     def _description_changed(self, ignore):
@@ -574,15 +621,15 @@ class vmmSnapshotPage(vmmGObjectUI):
         self._apply()
         self._refresh_snapshots()
 
-    def _on_new_ok_clicked(self, ignore):
-        return self._create_new_snapshot()
+    def _snapshot_created_cb(self, src, newname):
+        self._refresh_snapshots(newname)
 
     def _on_add_clicked(self, ignore):
-        if self._snapshot_new.is_visible():
-            return
-        self._reset_new_state()
-        self._snapshot_new.show()
-        self.widget("snapshot-new-name").grab_focus()
+        if not self._snapshot_new:
+            self._snapshot_new = vmmSnapshotNew(self.vm)
+            self._snapshot_new.connect("snapshot-created",
+                    self._snapshot_created_cb)
+        self._snapshot_new.show(self.topwin)
 
     def _on_refresh_clicked(self, ignore):
         self._refresh_snapshots()
