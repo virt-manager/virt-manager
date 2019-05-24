@@ -368,6 +368,8 @@ class vmmConfig(object):
     def on_libguestfs_inspect_vms_changed(self, cb):
         return self.conf.notify_add("/enable-libguestfs-vm-inspection", cb)
     def get_libguestfs_inspect_vms(self):
+        if self.test_first_run:
+            return False
         return self.conf.get("/enable-libguestfs-vm-inspection")
     def set_libguestfs_inspect_vms(self, val):
         self.conf.set("/enable-libguestfs-vm-inspection", val)
