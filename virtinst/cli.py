@@ -3503,6 +3503,7 @@ class ParserMemballoon(VirtCLIParser):
 
         cls.add_arg("model", "model")
         cls.add_arg("autodeflate", "autodeflate", is_onoff=True)
+        cls.add_arg("stats.period", "stats_period")
 
 
 ###################

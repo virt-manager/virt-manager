@@ -508,7 +508,7 @@ cache.mode=emulate,cache.level=3
 --controller scsi,model=virtio-scsi
 --graphics vnc
 --filesystem /foo/source,/bar/target
---memballoon virtio,autodeflate=on
+--memballoon virtio,autodeflate=on,stats.period=10
 --watchdog ib700,action=pause
 --tpm passthrough,model=tpm-crb,path=/dev/tpm0
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
