@@ -306,6 +306,16 @@ LABEL without TYPE implies static configuration.
 
 Use --security=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#seclabel>
 
+
+=item B<--iothreads> OPTIONS
+
+Specify domain <iothreads> XML. For example, to configure <iothreads>4</iothreads>, do:
+
+  --iothreads 4
+
+Use --iothreads=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsIOThreadsAllocation>
+
+
 =item B<--features> FEAT=on|off,...
 
 Set elements in the guests <features> XML on or off. Examples include acpi,
