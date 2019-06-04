@@ -763,6 +763,10 @@ def add_device_options(devg, sound_back_compat=False):
 
 
 def add_guest_xml_options(geng):
+    ParserIOThreads.register()
+    geng.add_argument("--iothreads", action="append",
+        help=_("Set domain <iothreads> configuration."))
+
     ParserSeclabel.register()
     geng.add_argument("--seclabel", "--security", action="append",
         help=_("Set domain seclabel configuration."))
@@ -2008,6 +2012,22 @@ class ParserCputune(VirtCLIParser):
                     find_inst_cb=cls.vcpu_find_inst_cb)
         cls.add_arg("vcpupin[0-9]*.cpuset", "cpuset", can_comma=True,
                     find_inst_cb=cls.vcpu_find_inst_cb)
+
+
+#######################
+# --iothreads parsing #
+#######################
+
+class ParserIOThreads(VirtCLIParser):
+    cli_arg_name = "iothreads"
+    guest_propname = "iothreads"
+    remove_first = "iothreads"
+
+    @classmethod
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
+        # Options for IOThreads config
+        cls.add_arg("iothreads", "iothreads")
 
 
 ###################

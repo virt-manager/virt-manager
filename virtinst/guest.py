@@ -145,7 +145,7 @@ class Guest(XMLBuilder):
     XML_NAME = "domain"
     _XML_PROP_ORDER = [
         "type", "name", "uuid", "genid", "genid_enable",
-        "title", "description", "_metadata",
+        "title", "description", "_metadata", "iothreads",
         "maxMemory", "maxMemorySlots", "memory", "_currentMemory",
         "blkiotune", "memtune", "memoryBacking",
         "_vcpus", "vcpu_current", "vcpu_placement",
@@ -178,6 +178,8 @@ class Guest(XMLBuilder):
     ######################
 
     name = XMLProperty("./name")
+
+    iothreads = XMLProperty("./iothreads", is_int=True)
 
     def _set_currentMemory(self, val):
         if val is not None:
