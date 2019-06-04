@@ -765,7 +765,7 @@ def add_device_options(devg, sound_back_compat=False):
 def add_guest_xml_options(geng):
     ParserIOThreads.register()
     geng.add_argument("--iothreads", action="append",
-        help=_("Set domain <iothreads> configuration."))
+        help=_("Set domain <iothreads> and <iothreadids> configuration."))
 
     ParserSeclabel.register()
     geng.add_argument("--seclabel", "--security", action="append",
