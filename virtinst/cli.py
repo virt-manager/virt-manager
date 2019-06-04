@@ -2023,11 +2023,19 @@ class ParserIOThreads(VirtCLIParser):
     guest_propname = "iothreads"
     remove_first = "iothreads"
 
+    def iothreads_find_inst_cb(self, *args, **kwargs):
+        cliarg = "iothread"  # iothreads[0-9]*
+        list_propname = "iothreadids"
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         # Options for IOThreads config
         cls.add_arg("iothreads", "iothreads")
+        cls.add_arg("iothreadids.iothread[0-9]*.id", "id",
+                find_inst_cb=cls.iothreads_find_inst_cb)
 
 
 ###################

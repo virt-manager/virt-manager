@@ -63,6 +63,13 @@ class _DomainDevices(XMLBuilder):
         return retlist
 
 
+class _IOThreadID(XMLBuilder):
+    XML_NAME = "iothread"
+    _XML_PROP_ORDER = ["id"]
+
+    id = XMLProperty("./@id", is_int=True)
+
+
 class Guest(XMLBuilder):
     @staticmethod
     def check_vm_collision(conn, name, do_remove):
@@ -145,7 +152,7 @@ class Guest(XMLBuilder):
     XML_NAME = "domain"
     _XML_PROP_ORDER = [
         "type", "name", "uuid", "genid", "genid_enable",
-        "title", "description", "_metadata", "iothreads",
+        "title", "description", "_metadata", "iothreads", "iothreadids",
         "maxMemory", "maxMemorySlots", "memory", "_currentMemory",
         "blkiotune", "memtune", "memoryBacking",
         "_vcpus", "vcpu_current", "vcpu_placement",
@@ -180,6 +187,7 @@ class Guest(XMLBuilder):
     name = XMLProperty("./name")
 
     iothreads = XMLProperty("./iothreads", is_int=True)
+    iothreadids = XMLChildProperty(_IOThreadID, relative_xpath="./iothreadids")
 
     def _set_currentMemory(self, val):
         if val is not None:
