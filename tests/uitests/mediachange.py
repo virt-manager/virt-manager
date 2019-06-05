@@ -38,14 +38,14 @@ class MediaChange(uiutils.UITestCase):
         entry.text = "/dev/fdb"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
-        self.assertTrue(entry.text == "Floppy_install_label (/dev/fdb)")
+        self.assertEqual(entry.text, "Floppy_install_label (/dev/fdb)")
 
         # Specify manual path
         path = "/tmp/aaaaaaaaaaaaaaaaaaaaaaa.img"
         entry.text = path
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
-        self.assertTrue(entry.text == path)
+        self.assertEqual(entry.text, path)
 
         # Go to Floppy 2, make sure previous path is in recent list
         hw.find("Floppy 2", "table cell").click()
