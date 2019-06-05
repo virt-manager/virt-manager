@@ -97,27 +97,20 @@ class TestNodeDev(unittest.TestCase):
         self.assertEqual(obj.is_pci_bridge(), True)
 
 
-    def testUSBDevDevice1(self):
+    def testUSBDevDevice(self):
         devname = "usb_device_781_5151_2004453082054CA1BEEE"
-        vals = {"name": "usb_device_781_5151_2004453082054CA1BEEE",
-                "parent": "usb_device_1d6b_2_0000_00_1a_7",
-                "device_type": NodeDevice.CAPABILITY_TYPE_USBDEV,
-                "bus": "1", "device": "4", "product_id": '0x5151',
-                "vendor_id": '0x0781',
-                "vendor_name": "SanDisk Corp.",
-                "product_name": "Cruzer Micro 256/512MB Flash Drive"}
-        self._testCompare(devname, vals)
+        dev = self._nodeDevFromName(devname)
+        self.assertEqual(dev.pretty_name(),
+                "001:004 SanDisk Corp. Cruzer Micro 256/512MB Flash Drive")
 
-    def testUSBDevDevice2(self):
         devname = "usb_device_483_2016_noserial"
-        vals = {"name": "usb_device_483_2016_noserial",
-                "parent": "usb_device_1d6b_1_0000_00_1a_0",
-                "device_type": NodeDevice.CAPABILITY_TYPE_USBDEV,
-                "bus": "3", "device": "2", "product_id": '0x2016',
-                "vendor_id": '0x0483',
-                "vendor_name": "SGS Thomson Microelectronics",
-                "product_name": "Fingerprint Reader"}
-        self._testCompare(devname, vals)
+        dev = self._nodeDevFromName(devname)
+        self.assertEqual(dev.pretty_name(),
+                "003:002 SGS Thomson Microelectronics Fingerprint Reader")
+
+        devname = "usb_device_1d6b_1_0000_00_1a_0"
+        dev = self._nodeDevFromName(devname)
+        self.assertTrue(dev.is_usb_linux_root_hub())
 
     def testStorageDevice1(self):
         devname = "storage_serial_SATA_WDC_WD1600AAJS__WD_WCAP95119685"

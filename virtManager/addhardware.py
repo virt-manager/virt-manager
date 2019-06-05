@@ -536,7 +536,7 @@ class vmmAddHardware(vmmGObjectUI):
         devs = self.conn.filter_nodedevs(devtype)
         netdevs = self.conn.filter_nodedevs("net")
         for dev in devs:
-            if devtype == "usb_device" and dev.xmlobj.is_linux_root_hub():
+            if dev.xmlobj.is_usb_linux_root_hub():
                 continue
             if dev.xmlobj.is_pci_bridge():
                 continue
