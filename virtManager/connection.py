@@ -619,21 +619,6 @@ class vmmConnection(vmmGObject):
 
         return retdevs
 
-    def get_nodedev_count(self, devtype, vendor, product):
-        count = 0
-        devs = self.filter_nodedevs(devtype)
-
-        for dev in devs:
-            if (vendor == dev.xmlobj.vendor_id and
-                product == dev.xmlobj.product_id):
-                count += 1
-
-        logging.debug("There are %d node devices with "
-                      "vendorId: %s, productId: %s",
-                       count, vendor, product)
-
-        return count
-
 
     ###################################
     # Libvirt object creation methods #

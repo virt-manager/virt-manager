@@ -225,6 +225,8 @@ class vmmDomain(vmmLibvirtObject):
                   "To fix this, remove and reattach the USB device "
                   "to your guest using the 'Add Hardware' wizard.")
 
+        usb_nodedevs = self.conn.filter_nodedevs("usb_device")
+
         for hostdev in self.xmlobj.devices.hostdev:
             devtype = hostdev.type
 
@@ -236,13 +238,15 @@ class vmmDomain(vmmLibvirtObject):
             bus = hostdev.bus
             device = hostdev.device
 
-            if vendor and product:
-                count = self.conn.get_nodedev_count("usb_device",
-                                                      vendor,
-                                                      product)
-                if count > 1 and not (bus and device):
-                    prettyname = "%s %s" % (vendor, product)
-                    ret.append(error % prettyname)
+            if not vendor or not product:
+                continue
+
+            count = len([d for d in usb_nodedevs if
+                         (d.xmlobj.vendor_id == vendor and
+                          d.xmlobj.product_id == product)])
+            if count > 1 and not (bus and device):
+                prettyname = "%s %s" % (vendor, product)
+                ret.append(error % prettyname)
 
 
     ###########################
