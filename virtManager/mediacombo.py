@@ -90,7 +90,7 @@ class vmmMediaCombo(vmmGObjectUI):
 
     def _make_nodedev_rows(self, media_type):
         rows = []
-        for nodedev in self.conn.filter_nodedevs(devtype="storage"):
+        for nodedev in self.conn.filter_nodedevs("storage"):
             if not (nodedev.xmlobj.device_type == "storage" and
                     nodedev.xmlobj.drive_type in ["cdrom", "floppy"]):
                 continue

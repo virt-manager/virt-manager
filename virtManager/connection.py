@@ -595,7 +595,7 @@ class vmmConnection(vmmGObject):
     # nodedev helper functions #
     ############################
 
-    def filter_nodedevs(self, devtype=None, devcap=None):
+    def filter_nodedevs(self, devtype):
         retdevs = []
         for dev in self.list_nodedevs():
             try:
@@ -610,13 +610,7 @@ class vmmConnection(vmmGObject):
             if devtype and xmlobj.device_type != devtype:
                 continue
 
-            if devcap:
-                if (not hasattr(xmlobj, "capability_type") or
-                    xmlobj.capability_type != devcap):
-                    continue
-
             retdevs.append(dev)
-
         return retdevs
 
 
