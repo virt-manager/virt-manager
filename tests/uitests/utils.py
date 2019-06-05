@@ -13,9 +13,16 @@ import unittest
 from gi.repository import Gio
 from gi.repository import Gdk
 import pyatspi
-import dogtail.tree
+import dogtail.utils
 
 import tests
+
+if not dogtail.utils.isA11yEnabled():
+    print("Enabling gsettings accessibility")
+    dogtail.utils.enableA11y()
+
+# This will trigger an error if accessibility isn't enabled
+import dogtail.tree  # pylint: disable=wrong-import-order,ungrouped-imports
 
 
 class UITestCase(unittest.TestCase):
