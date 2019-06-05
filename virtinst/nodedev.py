@@ -97,16 +97,6 @@ class NodeDevice(XMLBuilder):
     name = XMLProperty("./name")
     parent = XMLProperty("./parent")
     device_type = XMLProperty("./capability/@type")
-    devnodes = XMLChildProperty(DevNode)
-
-    def get_devnode(self, parent="by-path"):
-        for d in self.devnodes:
-            paths = d.path.split(os.sep)
-            if len(paths) > 2 and paths[-2] == parent:
-                return d
-        if len(self.devnodes) > 0:
-            return self.devnodes[0]
-        return None
 
     def compare_to_hostdev(self, hostdev):
         if self.device_type == "pci":
@@ -184,6 +174,11 @@ class NodeDevice(XMLBuilder):
         if self.device_type == "usb_device":
             return self._usb_pretty_name()
 
+        if self.device_type == "drm":
+            parent = NodeDevice.lookupNodedevFromString(
+                    self.conn, self.parent)
+            return "%s (%s)" % (parent.pretty_name(), self._drm_type)
+
         return self.name
 
 
@@ -199,6 +194,9 @@ class NodeDevice(XMLBuilder):
     def is_usb_linux_root_hub(self):
         return (self.vendor_id == "0x1d6b" and
                 self.product_id in ["0x0001", "0x0002", "0x0003"])
+
+    def is_drm_render(self):
+        return self.device_type == "drm" and self._drm_type == "render"
 
 
     ##################
@@ -237,14 +235,18 @@ class NodeDevice(XMLBuilder):
             "./capability/capability[@type='removable']/media_available",
             is_int=True)
 
+    # type='drm' options
+    _drm_type = XMLProperty("./capability/type")
+    devnodes = XMLChildProperty(DevNode)
 
-class DRMDevice(NodeDevice):
-    drm_type = XMLProperty("./capability/type")
-
-    def drm_pretty_name(self, conn):
-        parent = NodeDevice.lookupNodedevFromString(conn, self.parent)
-
-        return "%s (%s)" % (parent.pretty_name(), self.drm_type)
+    def get_devnode(self, parent="by-path"):
+        for d in self.devnodes:
+            paths = d.path.split(os.sep)
+            if len(paths) > 2 and paths[-2] == parent:
+                return d
+        if len(self.devnodes) > 0:
+            return self.devnodes[0]
+        return None
 
 
 def _AddressStringToHostdev(conn, addrstr):
@@ -313,7 +315,4 @@ def _AddressStringToNodedev(conn, addrstr):
 
 
 def _typeToDeviceClass(t):
-    if t == NodeDevice.CAPABILITY_TYPE_DRM:
-        return DRMDevice
-    else:
-        return NodeDevice
+    return NodeDevice

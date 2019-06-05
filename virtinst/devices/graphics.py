@@ -259,8 +259,7 @@ class DeviceGraphics(Device):
         if not self.rendernode and self.conn.check_support(
                 self.conn.SUPPORT_CONN_SPICE_RENDERNODE):
             for nodedev in self.conn.fetch_all_nodedevs():
-                if (nodedev.device_type != 'drm' or
-                    nodedev.drm_type != 'render'):
+                if not nodedev.is_drm_render():
                     continue
                 self.rendernode = nodedev.get_devnode().path
                 break

@@ -106,12 +106,10 @@ class vmmGraphicsDetails(vmmGObjectUI):
         devs = self.conn.filter_nodedevs("drm")
         for i in devs:
             drm = i.xmlobj
-            if drm.drm_type != 'render':
+            if not drm.is_drm_render():
                 continue
             rendernode = drm.get_devnode().path
-
-            model.append([rendernode,
-                          i.xmlobj.drm_pretty_name(self.conn.get_backend())])
+            model.append([rendernode, i.xmlobj.pretty_name()])
 
     def _get_config_graphics_ports(self):
         port = uiutil.spin_get_helper(self.widget("graphics-port"))
