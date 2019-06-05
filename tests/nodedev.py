@@ -119,31 +119,17 @@ class TestNodeDev(unittest.TestCase):
         self.assertEqual(dev.bus, "0")
         self.assertEqual(dev.target, "0")
 
-    def testStorageDevice1(self):
+    def testStorageDevice(self):
         devname = "storage_serial_SATA_WDC_WD1600AAJS__WD_WCAP95119685"
-        vals = {"name": "storage_serial_SATA_WDC_WD1600AAJS__WD_WCAP95119685",
-                "parent": "pci_8086_27c0_scsi_host_scsi_device_lun0",
-                "devnodes": [
-                    {"path": "/dev/sda", "node_type": "dev"}
-                ],
-                "device_type": NodeDevice.CAPABILITY_TYPE_STORAGE,
-                "block": "/dev/sda", "bus": "scsi", "drive_type": "disk",
-                "model": "WDC WD1600AAJS-2", "vendor": "ATA",
-                "size": 160041885696, "removable": False,
-                "hotpluggable": False, "media_available": None,
-                "media_size": None, "media_label": None}
-        self._testCompare(devname, vals)
+        dev = self._nodeDevFromName(devname)
+        self.assertEqual(dev.block, "/dev/sda")
+        self.assertEqual(dev.drive_type, "disk")
+        self.assertEqual(dev.media_available, None)
 
-    def testStorageDevice2(self):
-        devname = "storage_serial_SanDisk_Cruzer_Micro_2004453082054CA1BEEE_0_0"
-        vals = {"name": "storage_serial_SanDisk_Cruzer_Micro_2004453082054CA1BEEE_0_0",
-                "parent": "usb_device_781_5151_2004453082054CA1BEEE_if0_scsi_host_0_scsi_device_lun0",
-                "device_type": NodeDevice.CAPABILITY_TYPE_STORAGE,
-                "block": "/dev/sdb", "bus": "usb", "drive_type": "disk",
-                "model": "Cruzer Micro", "vendor": "SanDisk", "size": None,
-                "removable": True, "hotpluggable": True,
-                "media_available": True, "media_size": 12345678}
-        self._testCompare(devname, vals)
+        devname = "storage_model_DVDRAM_GSA_U1200N"
+        dev = self._nodeDevFromName(devname)
+        self.assertEqual(dev.media_label, "Fedora12_media")
+        self.assertEqual(dev.media_available, 1)
 
     def testSCSIBus(self):
         devname = "pci_8086_2829_scsi_host_1"

@@ -169,20 +169,22 @@ class NodeDevice(XMLBuilder):
 
         :returns: Device description string
         """
-        ret = self.name
         if self.device_type == "net":
             if self.interface:
-                ret = _("Interface %s") % self.interface
+                return _("Interface %s") % self.interface
+            return self.name
+
         if self.device_type == "pci":
             devstr = "%.4X:%.2X:%.2X:%X" % (int(self.domain),
                                             int(self.bus),
                                             int(self.slot),
                                             int(self.function))
-            ret = "%s %s %s" % (devstr, self._vendor_name, self._product_name)
+            return "%s %s %s" % (devstr,
+                    self._vendor_name, self._product_name)
         if self.device_type == "usb_device":
-            ret = self._usb_pretty_name()
+            return self._usb_pretty_name()
 
-        return ret
+        return self.name
 
 
     ########################
@@ -225,51 +227,15 @@ class NodeDevice(XMLBuilder):
     target = XMLProperty("./capability/target")
     lun = XMLProperty("./capability/lun")
 
-
-class StorageDevice(NodeDevice):
+    # type='storage' options
     block = XMLProperty("./capability/block")
-    bus = XMLProperty("./capability/bus")
     drive_type = XMLProperty("./capability/drive_type")
-    size = XMLProperty("./capability/size", is_int=True)
 
-    model = XMLProperty("./capability/model")
-    vendor = XMLProperty("./capability/vendor")
-
-    hotpluggable = XMLProperty(
-        "./capability/capability[@type='hotpluggable']", is_bool=True)
-    removable = XMLProperty(
-        "./capability/capability[@type='removable']", is_bool=True)
-
-    media_size = XMLProperty(
-        "./capability/capability[@type='removable']/media_size", is_int=True)
     media_label = XMLProperty(
         "./capability/capability[@type='removable']/media_label")
-    _media_available = XMLProperty(
+    media_available = XMLProperty(
             "./capability/capability[@type='removable']/media_available",
             is_int=True)
-    def _get_media_available(self):
-        m = self._media_available
-        if m is None:
-            return None
-        return bool(m)
-    def _set_media_available(self, val):
-        self._media_available = val
-    media_available = property(_get_media_available, _set_media_available)
-
-    def pretty_name(self):
-        desc = ""
-        if self.drive_type:
-            desc = self.drive_type
-
-        if self.block:
-            desc = ": ".join((desc, self.block))
-        elif self.model:
-            desc = ": ".join((desc, self.model))
-        else:
-            desc = ": ".join((desc, self.name))
-        return desc
-
-
 
 
 class SCSIBus(NodeDevice):
@@ -359,9 +325,7 @@ def _AddressStringToNodedev(conn, addrstr):
 
 
 def _typeToDeviceClass(t):
-    if t == NodeDevice.CAPABILITY_TYPE_STORAGE:
-        return StorageDevice
-    elif t == NodeDevice.CAPABILITY_TYPE_SCSIBUS:
+    if t == NodeDevice.CAPABILITY_TYPE_SCSIBUS:
         return SCSIBus
     elif t == NodeDevice.CAPABILITY_TYPE_DRM:
         return DRMDevice
