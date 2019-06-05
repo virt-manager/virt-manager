@@ -87,6 +87,11 @@
                             <property name="halign">start</property>
                             <property name="label">&lt;span color='#59B0E2'&gt;Step foo of bar&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="header-pagenum-atkobject">
+                                <property name="AtkObject::accessible-name">pagenum-label</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">True</property>
