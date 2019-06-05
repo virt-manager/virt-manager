@@ -109,6 +109,10 @@ class NodeDevice(XMLBuilder):
             return self.devnodes[0]
         return None
 
+    def compare_to_hostdev(self, hostdev):
+        ignore = hostdev
+        return False
+
     def pretty_name(self):
         """
         Use device information to attempt to print a human readable device
@@ -116,24 +120,19 @@ class NodeDevice(XMLBuilder):
 
         :returns: Device description string
         """
-        return self.name
+        ret = self.name
+        if self.device_type == "net":
+            if self.interface:
+                ret = _("Interface %s") % self.interface
+        return ret
 
-    def compare_to_hostdev(self, hostdev):
-        ignore = hostdev
-        return False
 
+    ##################
+    # XML properties #
+    ##################
 
-class NetDevice(NodeDevice):
+    # type='net' options
     interface = XMLProperty("./capability/interface")
-    address = XMLProperty("./capability/address")
-    capability_type = XMLProperty("./capability/capability/@type")
-
-    def pretty_name(self):
-        desc = self.name
-        if self.interface:
-            desc = _("Interface %s") % self.interface
-
-        return desc
 
 
 class PCIDevice(NodeDevice):
@@ -374,9 +373,7 @@ def _AddressStringToNodedev(conn, addrstr):
 
 
 def _typeToDeviceClass(t):
-    if t == NodeDevice.CAPABILITY_TYPE_NET:
-        return NetDevice
-    elif t == NodeDevice.CAPABILITY_TYPE_PCI:
+    if t == NodeDevice.CAPABILITY_TYPE_PCI:
         return PCIDevice
     elif t == NodeDevice.CAPABILITY_TYPE_USBDEV:
         return USBDevice

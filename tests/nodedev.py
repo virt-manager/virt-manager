@@ -67,22 +67,16 @@ class TestNodeDev(unittest.TestCase):
         dev = NodeDevice.parse(self.conn, funky_chars_xml)
         self.assertEqual(dev.name, "L3B2616")
         self.assertEqual(dev.device_type, "LENOVO")
+        self.assertEqual(dev.pretty_name(), dev.name)
 
-    def testNetDevice1(self):
+    def testNetDevice(self):
         devname = "net_00_1c_25_10_b1_e4"
-        vals = {"name": "net_00_1c_25_10_b1_e4", "parent": "pci_8086_1049",
-                "device_type": NodeDevice.CAPABILITY_TYPE_NET,
-                "interface": "eth0", "address": "00:1c:25:10:b1:e4",
-                "capability_type": "80203"}
-        self._testCompare(devname, vals)
-
-    def testNetDevice2(self):
-        devname = "net_00_1c_bf_04_29_a4"
-        vals = {"name": "net_00_1c_bf_04_29_a4", "parent": "pci_8086_4227",
-                "device_type": NodeDevice.CAPABILITY_TYPE_NET,
-                "interface": "wlan0", "address": "00:1c:bf:04:29:a4",
-                "capability_type": "80211"}
-        self._testCompare(devname, vals)
+        dev = self._nodeDevFromName(devname)
+        self.assertEqual(dev.name, devname)
+        self.assertEqual(dev.parent, "pci_8086_1049")
+        self.assertEqual(dev.device_type, "net")
+        self.assertEqual(dev.interface, "eth0")
+        self.assertEqual(dev.pretty_name(), "Interface eth0")
 
     def testPCIDevice1(self):
         devname = "pci_1180_592"
