@@ -66,6 +66,7 @@ class CreateVol(uiutils.UITestCase):
 
 
     def testCreateVolXMLEditor(self):
+        self.app.open(xmleditor_enabled=True)
         hostwin = self._open_host_window("Storage")
         poolcell = hostwin.find("default-pool", "table cell")
         poolcell.click()

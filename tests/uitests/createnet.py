@@ -59,6 +59,7 @@ class CreateNet(uiutils.UITestCase):
 
 
     def testCreateNetXMLEditor(self):
+        self.app.open(xmleditor_enabled=True)
         hostwin = self._open_host_window("Virtual Networks")
         win = self._open_create_win(hostwin)
         name = win.find("Name:", "text")

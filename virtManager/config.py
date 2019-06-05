@@ -169,6 +169,8 @@ class vmmConfig(object):
         self.conf = _SettingsWrapper("org.virt-manager.virt-manager")
 
         self.CLITestOptions = CLITestOptions
+        if self.CLITestOptions.xmleditor_enabled:
+            self.set_xmleditor_enabled(True)
 
         # We don't create it straight away, since we don't want
         # to block the app pending user authorization to access
@@ -363,6 +365,16 @@ class vmmConfig(object):
         return self.conf.get("/system-tray")
     def set_view_system_tray(self, val):
         self.conf.set("/system-tray", val)
+
+
+    # XML editor enabled
+    def on_xmleditor_enabled_changed(self, cb):
+        return self.conf.notify_add("/xmleditor-enabled", cb)
+    def get_xmleditor_enabled(self):
+        return self.conf.get("/xmleditor-enabled")
+    def set_xmleditor_enabled(self, val):
+        self.conf.set("/xmleditor-enabled", val)
+
 
     # Libguestfs VM inspection
     def on_libguestfs_inspect_vms_changed(self, cb):

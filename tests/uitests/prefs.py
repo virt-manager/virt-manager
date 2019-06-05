@@ -55,3 +55,34 @@ class VMMPrefs(uiutils.UITestCase):
 
         win.find_fuzzy("Close", "push button").click()
         uiutils.check_in_loop(lambda: win.visible is False)
+
+
+    def testPrefsXMLEditor(self):
+        managerwin = self.app.topwin
+        detailswin = self._open_details_window(vmname="test-clone-simple")
+        finish = detailswin.find("config-apply")
+        xmleditor = detailswin.find("XML editor")
+
+        detailswin.find("XML", "page tab").click()
+        warnlabel = detailswin.find_fuzzy("XML editing is disabled")
+        self.assertTrue(warnlabel.visible)
+        origtext = xmleditor.text
+        xmleditor.typeText("1234abcd")
+        self.assertEqual(xmleditor.text, origtext)
+
+        managerwin.click()
+        managerwin.find("Edit", "menu").click()
+        managerwin.find("Preferences", "menu item").click()
+        prefswin = self.app.root.find_fuzzy("Preferences", "frame")
+        prefswin.find_fuzzy("Enable XML").click()
+        prefswin.find_fuzzy("Close", "push button").click()
+        uiutils.check_in_loop(lambda: prefswin.visible is False)
+
+        managerwin.keyCombo("<alt>F4")
+        detailswin.click()
+        xmleditor.text = xmleditor.text.replace(">",
+            "><title>FOOTITLE</title>", 1)
+        finish.click()
+        detailswin.find("Details", "page tab").click()
+        uiutils.check_in_loop(lambda:
+                detailswin.find("Title:", "text").text == "FOOTITLE")

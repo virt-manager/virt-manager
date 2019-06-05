@@ -444,7 +444,7 @@ class VMMDogtailApp(object):
         return bool(self._proc and self._proc.poll() is None)
 
     def open(self, extra_opts=None, check_already_running=True, use_uri=True,
-            window_name=None):
+            window_name=None, xmleditor_enabled=False):
         extra_opts = extra_opts or []
 
         if tests.utils.clistate.debug:
@@ -460,9 +460,12 @@ class VMMDogtailApp(object):
             cmd += ["-m", "coverage", "run", "--append",
                     "--omit", "/usr/*"]
         cmd += [os.path.join(os.getcwd(), "virt-manager"),
-                "--test-first-run", "--no-fork"]
+                "--test-first-run",
+                "--no-fork"]
         if use_uri:
             cmd += ["--connect", self.uri]
+        if xmleditor_enabled:
+            cmd += ["--test-options=xmleditor-enabled"]
         cmd += extra_opts
 
         if check_already_running:

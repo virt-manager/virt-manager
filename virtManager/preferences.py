@@ -36,6 +36,7 @@ class vmmPreferences(vmmGObjectUI):
         self._orig_libguestfs_val = None
 
         self.refresh_view_system_tray()
+        self.refresh_xmleditor()
         self.refresh_libguestfs()
         self.refresh_update_interval()
         self.refresh_console_accels()
@@ -65,6 +66,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_close_clicked": self.close,
 
             "on_prefs_system_tray_toggled": self.change_view_system_tray,
+            "on_prefs_xmleditor_toggled": self.change_xmleditor,
             "on_prefs_libguestfs_toggled": self.change_libguestfs,
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
             "on_prefs_console_accels_toggled": self.change_console_accels,
@@ -202,6 +204,10 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_view_system_tray(self):
         val = self.config.get_view_system_tray()
         self.widget("prefs-system-tray").set_active(bool(val))
+
+    def refresh_xmleditor(self):
+        val = self.config.get_xmleditor_enabled()
+        self.widget("prefs-xmleditor").set_active(bool(val))
 
     def refresh_libguestfs(self):
         val = self.config.get_libguestfs_inspect_vms()
@@ -364,6 +370,8 @@ class vmmPreferences(vmmGObjectUI):
 
     def change_view_system_tray(self, src):
         self.config.set_view_system_tray(src.get_active())
+    def change_xmleditor(self, src):
+        self.config.set_xmleditor_enabled(src.get_active())
     def change_libguestfs(self, src):
         val = src.get_active()
         self.config.set_libguestfs_inspect_vms(val)

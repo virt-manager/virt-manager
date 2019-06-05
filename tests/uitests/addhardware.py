@@ -660,6 +660,7 @@ class AddHardware(uiutils.UITestCase):
         """
         Test XML editor integration
         """
+        self.app.open(xmleditor_enabled=True)
         details = self._open_details_window()
         win = self._open_addhw_window(details)
         finish = win.find("Finish", "push button")

@@ -89,6 +89,7 @@ class CreatePool(uiutils.UITestCase):
 
 
     def testCreatePoolXMLEditor(self):
+        self.app.open(xmleditor_enabled=True)
         hostwin = self._open_host_window("Storage")
         win = self._open_create_win(hostwin)
         finish = win.find("Finish", "push button")

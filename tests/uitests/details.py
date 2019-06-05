@@ -487,6 +487,7 @@ class Details(uiutils.UITestCase):
         """
         Test XML editing interaction
         """
+        self.app.open(xmleditor_enabled=True)
         win = self._open_details_window(vmname="test-clone-simple")
         finish = win.find("config-apply")
         xmleditor = win.find("XML editor")

@@ -192,6 +192,7 @@ class CLITestOptionsClass:
         self.leak_debug = _get("leak-debug")
         self.old_poll = _get("old-poll")
         self.no_events = _get("no-events")
+        self.xmleditor_enabled = _get("xmleditor-enabled")
 
         if opts:
             print("Unknown --test-options keys: %s" % opts)

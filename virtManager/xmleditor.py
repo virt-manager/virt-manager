@@ -6,6 +6,7 @@ import gi
 gi.require_version('GtkSource', '4')
 from gi.repository import GtkSource
 
+from . import uiutil
 from .baseclass import vmmGObjectUI
 
 _PAGE_DETAILS = 0
@@ -33,6 +34,10 @@ class vmmXMLEditor(vmmGObjectUI):
         self._srcbuf = None
         self._init_ui()
 
+        self.add_gsettings_handle(
+            self.config.on_xmleditor_enabled_changed(
+                self._xmleditor_enabled_changed_cb))
+
 
     def _cleanup(self):
         pass
@@ -41,6 +46,12 @@ class vmmXMLEditor(vmmGObjectUI):
     ###########
     # UI init #
     ###########
+
+    def _set_xmleditor_enabled_from_config(self):
+        enabled = self.config.get_xmleditor_enabled()
+        self._srcview.set_editable(enabled)
+        uiutil.set_grid_row_visible(self.widget("xml-warning-box"),
+                not enabled)
 
     def _init_ui(self):
         self._srcview = GtkSource.View()
@@ -63,6 +74,7 @@ class vmmXMLEditor(vmmGObjectUI):
 
         self._srcview.show_all()
         self.widget("xml-scroll").add(self._srcview)
+        self._set_xmleditor_enabled_from_config()
 
 
     ####################
@@ -178,3 +190,6 @@ class vmmXMLEditor(vmmGObjectUI):
 
     def _after_page_changed_cb(self, notebook, gparam):
         self._curpage = notebook.get_current_page()
+
+    def _xmleditor_enabled_changed_cb(self):
+        self._set_xmleditor_enabled_from_config()

@@ -432,6 +432,7 @@ class NewVM(uiutils.UITestCase):
         """
         Test new VM with raw XML editing via customize wizard
         """
+        self.app.open(xmleditor_enabled=True)
         newvm = self._open_create_wizard()
 
         # Create a custom named VM, using CDROM media, and default storage

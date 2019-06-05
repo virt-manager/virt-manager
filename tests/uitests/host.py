@@ -30,6 +30,7 @@ class Host(uiutils.UITestCase):
         """
         Test edits to net config
         """
+        self.app.open(xmleditor_enabled=True)
         win = self._open_host_window("Virtual Networks").find("network-grid")
         finish = win.find("Apply", "push button")
 
@@ -69,6 +70,7 @@ class Host(uiutils.UITestCase):
         """
         Test edits to pool config
         """
+        self.app.open(xmleditor_enabled=True)
         win = self._open_host_window("Storage").find("storage-grid")
         finish = win.find("Apply", "push button")
 
