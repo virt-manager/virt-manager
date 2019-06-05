@@ -220,6 +220,11 @@ class NodeDevice(XMLBuilder):
     product_id = XMLProperty("./capability/product/@id")
     vendor_id = XMLProperty("./capability/vendor/@id")
 
+    # type='scsi' options
+    host = XMLProperty("./capability/host")
+    target = XMLProperty("./capability/target")
+    lun = XMLProperty("./capability/lun")
+
 
 class StorageDevice(NodeDevice):
     block = XMLProperty("./capability/block")
@@ -265,12 +270,6 @@ class StorageDevice(NodeDevice):
         return desc
 
 
-class SCSIDevice(NodeDevice):
-    host = XMLProperty("./capability/host")
-    bus = XMLProperty("./capability/bus")
-    target = XMLProperty("./capability/target")
-    lun = XMLProperty("./capability/lun")
-    type = XMLProperty("./capability/type")
 
 
 class SCSIBus(NodeDevice):
@@ -364,8 +363,6 @@ def _typeToDeviceClass(t):
         return StorageDevice
     elif t == NodeDevice.CAPABILITY_TYPE_SCSIBUS:
         return SCSIBus
-    elif t == NodeDevice.CAPABILITY_TYPE_SCSIDEV:
-        return SCSIDevice
     elif t == NodeDevice.CAPABILITY_TYPE_DRM:
         return DRMDevice
     else:

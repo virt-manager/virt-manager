@@ -112,6 +112,13 @@ class TestNodeDev(unittest.TestCase):
         dev = self._nodeDevFromName(devname)
         self.assertTrue(dev.is_usb_linux_root_hub())
 
+    def testSCSIDevice(self):
+        devname = "pci_8086_2829_scsi_host_scsi_device_lun0"
+        dev = self._nodeDevFromName(devname)
+        self.assertEqual(dev.host, "0")
+        self.assertEqual(dev.bus, "0")
+        self.assertEqual(dev.target, "0")
+
     def testStorageDevice1(self):
         devname = "storage_serial_SATA_WDC_WD1600AAJS__WD_WCAP95119685"
         vals = {"name": "storage_serial_SATA_WDC_WD1600AAJS__WD_WCAP95119685",
@@ -152,14 +159,6 @@ class TestNodeDev(unittest.TestCase):
                 "device_type": NodeDevice.CAPABILITY_TYPE_SCSIBUS,
                 "host": "4", "fc_host": True, "vport_ops": True,
                 "wwnn": "20000000c9848141", "wwpn": "10000000c9848141"}
-        self._testCompare(devname, vals)
-
-    def testSCSIDevice(self):
-        devname = "pci_8086_2829_scsi_host_scsi_device_lun0"
-        vals = {"name": "pci_8086_2829_scsi_host_scsi_device_lun0",
-                "parent": "pci_8086_2829_scsi_host",
-                "host": "0", "bus": "0", "target": "0", "lun": "0",
-                "type": "disk"}
         self._testCompare(devname, vals)
 
     def testDRMDevice(self):
