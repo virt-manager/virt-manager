@@ -14,35 +14,11 @@ from virtinst import DeviceHostdev
 
 from tests import utils
 
-unknown_xml = """
-<device>
-  <name>foodevice</name>
-  <parent>computer</parent>
-  <capability type='frobtype'>
-    <hardware>
-      <vendor>LENOVO</vendor>
-    </hardware>
-  </capability>
-</device>
-"""
-
 # Requires XML_SANITIZE to parse correctly, see bug 1184131
 funky_chars_xml = """
 <device>
-  <name>computer</name>
-  <capability type='system'>
-    <hardware>
-      <vendor>LENOVOá</vendor>
-      <version>ThinkPad T61</version>
-      <serial>L3B2616</serial>
-      <uuid>97e80381-494f-11cb-8e0e-cbc168f7d753</uuid>
-    </hardware>
-    <firmware>
-      <vendor>LENOVO</vendor>
-      <version>7LET51WW (1.21 )</version>
-      <release_date>08/22/2007</release_date>
-    </firmware>
-  </capability>
+  <name>L3B2616</name>
+  <capability type='LENOVOá'/>
 </device>
 """
 
@@ -57,7 +33,7 @@ class TestNodeDev(unittest.TestCase):
         xml = node.XMLDesc(0)
         return NodeDevice.parse(self.conn, xml)
 
-    def _testCompare(self, devname, vals, devxml=None):
+    def _testCompare(self, devname, vals):
         def _compare(dev, vals, root=""):
             for attr in list(vals.keys()):
                 expect = vals[attr]
@@ -71,10 +47,7 @@ class TestNodeDev(unittest.TestCase):
                             "expect=%s\nactual=%s" % (devname, root, attr, expect, actual))
                     self.assertEqual(vals[attr], getattr(dev, attr))
 
-        if devxml:
-            dev = NodeDevice.parse(self.conn, devxml)
-        else:
-            dev = self._nodeDevFromName(devname)
+        dev = self._nodeDevFromName(devname)
 
         _compare(dev, vals)
         return dev
@@ -89,26 +62,11 @@ class TestNodeDev(unittest.TestCase):
         dev.set_defaults(Guest(self.conn))
         utils.diff_compare(dev.get_xml() + "\n", devfile)
 
-    def testSystemDevice(self):
-        devname = "computer"
-        vals = {"hw_vendor": "LENOVO", "hw_version": "ThinkPad T61",
-                "hw_serial": "L3B2616",
-                "hw_uuid": "97e80381-494f-11cb-8e0e-cbc168f7d753",
-                "fw_vendor": "LENOVO", "fw_version": "7LET51WW (1.21 )",
-                "fw_date": "08/22/2007",
-                "device_type": NodeDevice.CAPABILITY_TYPE_SYSTEM,
-                "name": "computer", "parent": None}
-        self._testCompare(devname, vals)
-
     def testFunkyChars(self):
-        vals = {"hw_vendor": "LENOVO", "hw_version": "ThinkPad T61",
-                "hw_serial": "L3B2616",
-                "hw_uuid": "97e80381-494f-11cb-8e0e-cbc168f7d753",
-                "fw_vendor": "LENOVO", "fw_version": "7LET51WW (1.21 )",
-                "fw_date": "08/22/2007",
-                "device_type": NodeDevice.CAPABILITY_TYPE_SYSTEM,
-                "name": "computer", "parent": None}
-        self._testCompare(None, vals, funky_chars_xml)
+        # Ensure parsing doesn't fail
+        dev = NodeDevice.parse(self.conn, funky_chars_xml)
+        self.assertEqual(dev.name, "L3B2616")
+        self.assertEqual(dev.device_type, "LENOVO")
 
     def testNetDevice1(self):
         devname = "net_00_1c_25_10_b1_e4"
@@ -242,12 +200,8 @@ class TestNodeDev(unittest.TestCase):
         self.assertEqual(dev.drm_pretty_name(self.conn),
                          "0000:00:02:0 Intel Corporation HD Graphics 530 (render)")
 
-    def testUnknownDevice(self):
-        vals = {"name": "foodevice", "parent": "computer",
-                "device_type": "frobtype"}
-        self._testCompare(None, vals, devxml=unknown_xml)
 
-        # NodeDevice 2 Device XML tests
+    # NodeDevice 2 Device XML tests
     def testNodeDev2USB1(self):
         nodename = "usb_device_781_5151_2004453082054CA1BEEE"
         devfile = "usbdev1.xml"

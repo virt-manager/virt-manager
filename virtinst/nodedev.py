@@ -33,7 +33,6 @@ class DevNode(XMLBuilder):
 
 
 class NodeDevice(XMLBuilder):
-    CAPABILITY_TYPE_SYSTEM = "system"
     CAPABILITY_TYPE_NET = "net"
     CAPABILITY_TYPE_PCI = "pci"
     CAPABILITY_TYPE_USBDEV = "usb_device"
@@ -122,26 +121,6 @@ class NodeDevice(XMLBuilder):
     def compare_to_hostdev(self, hostdev):
         ignore = hostdev
         return False
-
-
-class SystemDevice(NodeDevice):
-    hw_vendor = XMLProperty("./capability/hardware/vendor")
-    hw_version = XMLProperty("./capability/hardware/version")
-    hw_serial = XMLProperty("./capability/hardware/serial")
-    hw_uuid = XMLProperty("./capability/hardware/uuid")
-
-    fw_vendor = XMLProperty("./capability/firmware/vendor")
-    fw_version = XMLProperty("./capability/firmware/version")
-    fw_date = XMLProperty("./capability/firmware/release_date")
-
-    def pretty_name(self):
-        desc = _("System")
-        if self.hw_vendor:
-            desc += ": %s" % self.hw_vendor
-            if self.hw_version:
-                desc += " %s" % self.hw_version
-
-        return desc
 
 
 class NetDevice(NodeDevice):
@@ -395,9 +374,7 @@ def _AddressStringToNodedev(conn, addrstr):
 
 
 def _typeToDeviceClass(t):
-    if t == NodeDevice.CAPABILITY_TYPE_SYSTEM:
-        return SystemDevice
-    elif t == NodeDevice.CAPABILITY_TYPE_NET:
+    if t == NodeDevice.CAPABILITY_TYPE_NET:
         return NetDevice
     elif t == NodeDevice.CAPABILITY_TYPE_PCI:
         return PCIDevice
