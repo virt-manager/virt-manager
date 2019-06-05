@@ -433,11 +433,6 @@ class _OsVariant(object):
     def is_windows(self):
         return self._family in ['win9x', 'winnt', 'win16']
 
-    def broken_x2apic(self):
-        # x2apic breaks networking in solaris10
-        # https://bugs.launchpad.net/bugs/1395217
-        return self.name in ('solaris10', 'solaris11')
-
     def broken_uefi_with_hyperv(self):
         # Some windows versions are broken with hyperv enlightenments + UEFI
         # https://bugzilla.redhat.com/show_bug.cgi?id=1185253

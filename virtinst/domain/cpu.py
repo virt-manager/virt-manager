@@ -324,6 +324,3 @@ class DomainCpu(XMLBuilder):
 
         elif guest.os.is_x86() and guest.type == "kvm":
             self._set_cpu_x86_kvm_default(guest)
-
-            if guest.osinfo.broken_x2apic():
-                self.add_feature("x2apic", policy="disable")
