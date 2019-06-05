@@ -75,19 +75,6 @@ class NodeDevice(XMLBuilder):
             raise
 
 
-    @staticmethod
-    def parse(conn, xml):
-        tmpdev = NodeDevice(conn, parsexml=xml, allow_node_instantiate=True)
-        cls = _typeToDeviceClass(tmpdev.device_type)
-        return cls(conn, parsexml=xml, allow_node_instantiate=True)
-
-    def __init__(self, *args, **kwargs):
-        instantiate = kwargs.pop("allow_node_instantiate", False)
-        if self.__class__ is NodeDevice and not instantiate:
-            raise RuntimeError("Can not instantiate NodeDevice directly")
-
-        XMLBuilder.__init__(self, *args, **kwargs)
-
     XML_NAME = "device"
 
     # Libvirt can generate bogus 'system' XML:
@@ -312,7 +299,3 @@ def _AddressStringToNodedev(conn, addrstr):
     elif count < 1:
         raise ValueError(_("Did not find a matching node device for '%s'") %
                          addrstr)
-
-
-def _typeToDeviceClass(t):
-    return NodeDevice

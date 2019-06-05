@@ -261,7 +261,7 @@ class VirtinstConnection(object):
     def _fetch_all_nodedevs_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_nodedevs(
             self, {}, lambda obj, ignore: obj)
-        return [NodeDevice.parse(weakref.ref(self), obj.XMLDesc(0))
+        return [NodeDevice(weakref.ref(self), obj.XMLDesc(0))
                 for obj in ret]
 
     def fetch_all_nodedevs(self):

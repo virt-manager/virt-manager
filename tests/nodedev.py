@@ -31,26 +31,7 @@ class TestNodeDev(unittest.TestCase):
     def _nodeDevFromName(self, devname):
         node = self.conn.nodeDeviceLookupByName(devname)
         xml = node.XMLDesc(0)
-        return NodeDevice.parse(self.conn, xml)
-
-    def _testCompare(self, devname, vals):
-        def _compare(dev, vals, root=""):
-            for attr in list(vals.keys()):
-                expect = vals[attr]
-                actual = getattr(dev, attr)
-                if isinstance(expect, list):
-                    for adev, exp in zip(actual, expect):
-                        _compare(adev, exp, attr + ".")
-                else:
-                    if expect != actual:
-                        raise AssertionError("devname=%s attribute=%s%s did not match:\n"
-                            "expect=%s\nactual=%s" % (devname, root, attr, expect, actual))
-                    self.assertEqual(vals[attr], getattr(dev, attr))
-
-        dev = self._nodeDevFromName(devname)
-
-        _compare(dev, vals)
-        return dev
+        return NodeDevice(self.conn, xml)
 
     def _testNode2DeviceCompare(self, nodename, devfile, nodedev=None):
         devfile = os.path.join("tests/nodedev-xml/devxml", devfile)
@@ -64,7 +45,7 @@ class TestNodeDev(unittest.TestCase):
 
     def testFunkyChars(self):
         # Ensure parsing doesn't fail
-        dev = NodeDevice.parse(self.conn, funky_chars_xml)
+        dev = NodeDevice(self.conn, funky_chars_xml)
         self.assertEqual(dev.name, "L3B2616")
         self.assertEqual(dev.device_type, "LENOVO")
         self.assertEqual(dev.pretty_name(), dev.name)

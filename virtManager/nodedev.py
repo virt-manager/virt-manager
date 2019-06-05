@@ -9,13 +9,9 @@ from virtinst import NodeDevice
 from .libvirtobject import vmmLibvirtObject
 
 
-def _parse_convert(conn, parsexml=None):
-    return NodeDevice.parse(conn, parsexml)
-
-
 class vmmNodeDevice(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
-        vmmLibvirtObject.__init__(self, conn, backend, key, _parse_convert)
+        vmmLibvirtObject.__init__(self, conn, backend, key, NodeDevice)
 
     def _conn_tick_poll_param(self):
         return "pollnodedev"
