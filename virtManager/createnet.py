@@ -159,7 +159,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         devprettynames = []
         ifnames = []
         for pcidev in self.conn.filter_nodedevs("pci"):
-            if pcidev.xmlobj.capability_type != "virt_functions":
+            if not pcidev.xmlobj.is_pci_sriov():
                 continue
             devdesc = pcidev.xmlobj.pretty_name()
             for netdev in self.conn.filter_nodedevs("net"):

@@ -538,8 +538,7 @@ class vmmAddHardware(vmmGObjectUI):
         for dev in devs:
             if devtype == "usb_device" and dev.xmlobj.is_linux_root_hub():
                 continue
-            if (devtype == "pci" and
-                dev.xmlobj.capability_type == "pci-bridge"):
+            if dev.xmlobj.is_pci_bridge():
                 continue
             prettyname = dev.xmlobj.pretty_name()
 

@@ -110,7 +110,15 @@ class NodeDevice(XMLBuilder):
         return None
 
     def compare_to_hostdev(self, hostdev):
-        ignore = hostdev
+        if self.device_type == "pci":
+            if hostdev.type != self.device_type:
+                return False
+
+            return (_compare_int(self.domain, hostdev.domain) and
+                _compare_int(self.bus, hostdev.bus) and
+                _compare_int(self.slot, hostdev.slot) and
+                _compare_int(self.function, hostdev.function))
+
         return False
 
     def pretty_name(self):
@@ -124,7 +132,23 @@ class NodeDevice(XMLBuilder):
         if self.device_type == "net":
             if self.interface:
                 ret = _("Interface %s") % self.interface
+        if self.device_type == "pci":
+            devstr = "%.4X:%.2X:%.2X:%X" % (int(self.domain),
+                                            int(self.bus),
+                                            int(self.slot),
+                                            int(self.function))
+            ret = "%s %s %s" % (devstr, self._vendor_name, self._product_name)
         return ret
+
+
+    ########################
+    # XML helper functions #
+    ########################
+
+    def is_pci_sriov(self):
+        return self._capability_type == "virt_functions"
+    def is_pci_bridge(self):
+        return self._capability_type == "pci-bridge"
 
 
     ##################
@@ -134,38 +158,15 @@ class NodeDevice(XMLBuilder):
     # type='net' options
     interface = XMLProperty("./capability/interface")
 
-
-class PCIDevice(NodeDevice):
+    # type='pci' options
     domain = XMLProperty("./capability/domain")
     bus = XMLProperty("./capability/bus")
     slot = XMLProperty("./capability/slot")
     function = XMLProperty("./capability/function")
+    _product_name = XMLProperty("./capability/product")
+    _vendor_name = XMLProperty("./capability/vendor")
+    _capability_type = XMLProperty("./capability/capability/@type")
 
-    product_name = XMLProperty("./capability/product")
-    product_id = XMLProperty("./capability/product/@id")
-    vendor_name = XMLProperty("./capability/vendor")
-    vendor_id = XMLProperty("./capability/vendor/@id")
-
-    capability_type = XMLProperty("./capability/capability/@type")
-
-    iommu_group = XMLProperty("./capability/iommuGroup/@number", is_int=True)
-
-    def pretty_name(self):
-        devstr = "%.4X:%.2X:%.2X:%X" % (int(self.domain),
-                                        int(self.bus),
-                                        int(self.slot),
-                                        int(self.function))
-
-        return "%s %s %s" % (devstr, self.vendor_name, self.product_name)
-
-    def compare_to_hostdev(self, hostdev):
-        if hostdev.type != self.device_type:
-            return False
-
-        return (_compare_int(self.domain, hostdev.domain) and
-            _compare_int(self.bus, hostdev.bus) and
-            _compare_int(self.slot, hostdev.slot) and
-            _compare_int(self.function, hostdev.function))
 
 
 class USBDevice(NodeDevice):
@@ -373,9 +374,7 @@ def _AddressStringToNodedev(conn, addrstr):
 
 
 def _typeToDeviceClass(t):
-    if t == NodeDevice.CAPABILITY_TYPE_PCI:
-        return PCIDevice
-    elif t == NodeDevice.CAPABILITY_TYPE_USBDEV:
+    if t == NodeDevice.CAPABILITY_TYPE_USBDEV:
         return USBDevice
     elif t == NodeDevice.CAPABILITY_TYPE_USBBUS:
         return USBBus

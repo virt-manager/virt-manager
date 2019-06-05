@@ -78,25 +78,24 @@ class TestNodeDev(unittest.TestCase):
         self.assertEqual(dev.interface, "eth0")
         self.assertEqual(dev.pretty_name(), "Interface eth0")
 
-    def testPCIDevice1(self):
+    def testPCIDevice(self):
         devname = "pci_1180_592"
-        vals = {"name": "pci_1180_592", "parent": "pci_8086_2448",
-                "device_type": NodeDevice.CAPABILITY_TYPE_PCI,
-                "domain": "0", "bus": "21", "slot": "0", "function": "4",
-                "product_id": "0x0592", "vendor_id": "0x1180",
-                "product_name": "R5C592 Memory Stick Bus Host Adapter",
-                "vendor_name": "Ricoh Co Ltd"}
-        self._testCompare(devname, vals)
+        dev = self._nodeDevFromName(devname)
+        self.assertEqual(dev.pretty_name(),
+            "0000:15:00:4 Ricoh Co Ltd R5C592 Memory Stick Bus Host Adapter")
 
-    def testPCIDevice2(self):
         devname = "pci_8086_1049"
-        vals = {"name": "pci_8086_1049", "parent": "computer",
-                "device_type": NodeDevice.CAPABILITY_TYPE_PCI,
-                "domain": "0", "bus": "0", "slot": "25", "function": "0",
-                "product_id": "0x1049", "vendor_id": "0x8086",
-                "product_name": "82566MM Gigabit Network Connection",
-                "vendor_name": "Intel Corporation"}
-        self._testCompare(devname, vals)
+        dev = self._nodeDevFromName(devname)
+        self.assertEqual(dev.pretty_name(),
+            "0000:00:19:0 Intel Corporation 82566MM Gigabit Network Connection")
+
+        nodename = "pci_8086_10fb"
+        obj = self._nodeDevFromName(nodename)
+        self.assertEqual(obj.is_pci_sriov(), True)
+        nodename = "pci_8086_2448"
+        obj = self._nodeDevFromName(nodename)
+        self.assertEqual(obj.is_pci_bridge(), True)
+
 
     def testUSBDevDevice1(self):
         devname = "usb_device_781_5151_2004453082054CA1BEEE"
@@ -212,16 +211,6 @@ class TestNodeDev(unittest.TestCase):
         nodename = "pci_1180_592"
         devfile = "pcidev.xml"
         self._testNode2DeviceCompare(nodename, devfile)
-
-    def testPCIParse(self):
-        nodename = "pci_1180_476"
-        obj = self._nodeDevFromName(nodename)
-        self.assertEqual(obj.iommu_group, 3)
-
-    def testNodeDevSRIOV(self):
-        nodename = "pci_8086_10fb"
-        obj = self._nodeDevFromName(nodename)
-        self.assertEqual(obj.capability_type, "virt_functions")
 
     def testNodeDevFail(self):
         nodename = "usb_device_1d6b_1_0000_00_1d_1_if0"
