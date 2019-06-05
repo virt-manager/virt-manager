@@ -172,14 +172,14 @@ class vmmEngine(vmmGObject):
                         bus, 0, None,
                         "org.freedesktop.systemd1", unitpath,
                         "org.freedesktop.systemd1.Unit", None)
-                if not self.config.test_first_run:
+                if not self.config.CLITestOptions.first_run:
                     unit.Start("(s)", "fail")
                     time.sleep(2)
                     libvirtd_active = True
         except Exception:
             logging.exception("Error starting libvirtd")
 
-        if self.config.test_first_run:
+        if self.config.CLITestOptions.first_run:
             logging.debug("--test-first-run, using uri=None to trigger error")
             tryuri = None
         else:
@@ -432,7 +432,7 @@ class vmmEngine(vmmGObject):
                 self.emit("app-closing")
                 self.cleanup()
 
-                if self.config.test_leak_debug:
+                if self.config.CLITestOptions.leak_debug:
                     objs = self.config.get_objects()
                     # Engine will always appear to leak
                     objs.remove(self.object_key)

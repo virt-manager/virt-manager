@@ -160,15 +160,15 @@ class vmmConfig(object):
     def is_initialized(cls):
         return bool(cls._instance)
 
-    def __init__(self, CLIConfig, test_first_run):
+    def __init__(self, CLIConfig, CLITestOptions):
         self.appname = "virt-manager"
         self.appversion = CLIConfig.version
         self.conf_dir = "/org/virt-manager/%s/" % self.appname
         self.ui_dir = CLIConfig.ui_dir
-        self.test_first_run = bool(test_first_run)
-        self.test_leak_debug = False
 
         self.conf = _SettingsWrapper("org.virt-manager.virt-manager")
+
+        self.CLITestOptions = CLITestOptions
 
         # We don't create it straight away, since we don't want
         # to block the app pending user authorization to access
@@ -368,7 +368,7 @@ class vmmConfig(object):
     def on_libguestfs_inspect_vms_changed(self, cb):
         return self.conf.notify_add("/enable-libguestfs-vm-inspection", cb)
     def get_libguestfs_inspect_vms(self):
-        if self.test_first_run:
+        if self.CLITestOptions.first_run:
             return False
         return self.conf.get("/enable-libguestfs-vm-inspection")
     def set_libguestfs_inspect_vms(self, val):

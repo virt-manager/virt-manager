@@ -27,11 +27,6 @@ from .statsmanager import vmmStatsManager
 from .storagepool import vmmStoragePool
 
 
-# debugging helper to turn off events
-# Can be enabled with virt-manager --test-no-events
-FORCE_DISABLE_EVENTS = False
-
-
 class _ObjectList(vmmGObject):
     """
     Class that wraps our internal list of libvirt objects
@@ -819,9 +814,12 @@ class vmmConnection(vmmGObject):
                 self._backend.SUPPORT_CONN_WORKING_XEN_EVENTS):
             return
 
+        def _check_events_disabled():
+            if self.config.CLITestOptions.no_events:
+                raise RuntimeError("events disabled via cli")
+
         try:
-            if FORCE_DISABLE_EVENTS:
-                raise RuntimeError("FORCE_DISABLE_EVENTS = True")
+            _check_events_disabled()
 
             self._domain_cb_ids.append(
                 self.get_backend().domainEventRegisterAny(
@@ -855,8 +853,7 @@ class vmmConnection(vmmGObject):
                               self._domain_agent_lifecycle_event)
 
         try:
-            if FORCE_DISABLE_EVENTS:
-                raise RuntimeError("FORCE_DISABLE_EVENTS = True")
+            _check_events_disabled()
 
             eventid = getattr(libvirt, "VIR_NETWORK_EVENT_ID_LIFECYCLE", 0)
             self._network_cb_ids.append(
@@ -869,8 +866,7 @@ class vmmConnection(vmmGObject):
             logging.debug("Error registering network events: %s", e)
 
         try:
-            if FORCE_DISABLE_EVENTS:
-                raise RuntimeError("FORCE_DISABLE_EVENTS = True")
+            _check_events_disabled()
 
             eventid = getattr(libvirt,
                               "VIR_STORAGE_POOL_EVENT_ID_LIFECYCLE", 0)
@@ -889,8 +885,7 @@ class vmmConnection(vmmGObject):
             logging.debug("Error registering storage pool events: %s", e)
 
         try:
-            if FORCE_DISABLE_EVENTS:
-                raise RuntimeError("FORCE_DISABLE_EVENTS = True")
+            _check_events_disabled()
 
             eventid = getattr(libvirt, "VIR_NODE_DEVICE_EVENT_ID_LIFECYCLE", 0)
             updateid = getattr(libvirt, "VIR_NODE_DEVICE_EVENT_ID_UPDATE", 1)
@@ -956,7 +951,7 @@ class vmmConnection(vmmGObject):
         self._objects = _ObjectList()
 
         closeret = self._backend.close()
-        if closeret == 1 and self.config.test_leak_debug:
+        if closeret == 1 and self.config.CLITestOptions.leak_debug:
             logging.debug("LEAK: conn close() returned 1, "
                     "meaning refs may have leaked.")
 
