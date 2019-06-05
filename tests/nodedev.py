@@ -138,15 +138,6 @@ class TestNodeDev(unittest.TestCase):
                 "media_available": True, "media_size": 12345678}
         self._testCompare(devname, vals)
 
-    def testUSBBus(self):
-        devname = "usb_device_1d6b_1_0000_00_1d_1_if0"
-        vals = {"name": "usb_device_1d6b_1_0000_00_1d_1_if0",
-                "parent": "usb_device_1d6b_1_0000_00_1d_1",
-                "device_type": NodeDevice.CAPABILITY_TYPE_USBBUS,
-                "number": "0", "classval": "9", "subclass": "0",
-                "protocol": "0"}
-        self._testCompare(devname, vals)
-
     def testSCSIBus(self):
         devname = "pci_8086_2829_scsi_host_1"
         vals = {"name": "pci_8086_2829_scsi_host_1",

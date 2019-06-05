@@ -36,7 +36,6 @@ class NodeDevice(XMLBuilder):
     CAPABILITY_TYPE_NET = "net"
     CAPABILITY_TYPE_PCI = "pci"
     CAPABILITY_TYPE_USBDEV = "usb_device"
-    CAPABILITY_TYPE_USBBUS = "usb"
     CAPABILITY_TYPE_STORAGE = "storage"
     CAPABILITY_TYPE_SCSIBUS = "scsi_host"
     CAPABILITY_TYPE_SCSIDEV = "scsi"
@@ -266,13 +265,6 @@ class StorageDevice(NodeDevice):
         return desc
 
 
-class USBBus(NodeDevice):
-    number = XMLProperty("./capability/number")
-    classval = XMLProperty("./capability/class")
-    subclass = XMLProperty("./capability/subclass")
-    protocol = XMLProperty("./capability/protocol")
-
-
 class SCSIDevice(NodeDevice):
     host = XMLProperty("./capability/host")
     bus = XMLProperty("./capability/bus")
@@ -368,9 +360,7 @@ def _AddressStringToNodedev(conn, addrstr):
 
 
 def _typeToDeviceClass(t):
-    if t == NodeDevice.CAPABILITY_TYPE_USBBUS:
-        return USBBus
-    elif t == NodeDevice.CAPABILITY_TYPE_STORAGE:
+    if t == NodeDevice.CAPABILITY_TYPE_STORAGE:
         return StorageDevice
     elif t == NodeDevice.CAPABILITY_TYPE_SCSIBUS:
         return SCSIBus
