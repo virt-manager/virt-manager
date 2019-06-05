@@ -7,7 +7,6 @@
 # See the COPYING file in the top-level directory.
 #
 
-from distutils.spawn import find_executable
 import logging
 import os
 import re
@@ -143,7 +142,7 @@ def _find_input(input_file, parser, print_cb):
                 binname = "xz"
                 pkg = "xz"
                 cmd = ["tar", "Jxf", input_file, "-C", tempdir]
-            if not find_executable(binname):
+            if not shutil.which(binname):
                 raise RuntimeError(_("%s appears to be an archive, "
                     "but '%s' is not installed. "
                     "Please either install '%s', or extract the archive "
@@ -252,7 +251,7 @@ class VirtConverter(object):
             executable = "/usr/bin/qemu-img"
         else:
             for binname in binnames:
-                executable = find_executable(binname)
+                executable = shutil.which(binname)
                 if executable:
                     break
 
@@ -262,7 +261,7 @@ class VirtConverter(object):
         base = os.path.basename(absin)
         ext = os.path.splitext(base)[1]
         if (ext and ext[1:] == "gz"):
-            if not find_executable("gzip"):
+            if not shutil.which("gzip"):
                 raise RuntimeError("'gzip' is needed to decompress the file, "
                     "but not found.")
             decompress_cmd = ["gzip", "-d", absin]

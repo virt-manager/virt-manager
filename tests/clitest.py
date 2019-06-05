@@ -4,7 +4,6 @@
 # See the COPYING file in the top-level directory.
 
 import atexit
-from distutils.spawn import find_executable
 import io
 import logging
 import os
@@ -29,7 +28,7 @@ os.environ["DISPLAY"] = ":3.4"
 TMP_IMAGE_DIR = "/tmp/__virtinst_cli_"
 XMLDIR = "tests/cli-test-xml"
 OLD_OSINFO = utils.has_old_osinfo()
-HAS_ISOINFO = find_executable("isoinfo")
+HAS_ISOINFO = shutil.which("isoinfo")
 
 # Images that will be created by virt-install/virt-clone, and removed before
 # each run
