@@ -271,16 +271,8 @@ class VMMDogtailNode(dogtail.tree.Node):
         screen, helps reduce some test flakiness
         """
         # pylint: disable=arguments-differ
-        loops = 10
-        for idx in range(10):
-            try:
-                dogtail.tree.Node.click(self, *args, **kwargs)
-                return
-            except ValueError as e:
-                if "mouse event at negative coordinates" in str(e):
-                    if idx + 1 == loops:
-                        raise
-                    time.sleep(.1)
+        check_in_loop(lambda: self.onscreen)
+        dogtail.tree.Node.click(self, *args, **kwargs)
 
     def bring_on_screen(self, key_name="Down", max_tries=100):
         """
