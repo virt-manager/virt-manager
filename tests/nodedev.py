@@ -133,19 +133,8 @@ class TestNodeDev(unittest.TestCase):
 
     def testSCSIBus(self):
         devname = "pci_8086_2829_scsi_host_1"
-        vals = {"name": "pci_8086_2829_scsi_host_1",
-                "parent": "pci_8086_2829",
-                "device_type": NodeDevice.CAPABILITY_TYPE_SCSIBUS,
-                "host": "2"}
-        self._testCompare(devname, vals)
-
-    def testNPIV(self):
-        devname = "pci_10df_fe00_0_scsi_host"
-        vals = {"name": "pci_10df_fe00_0_scsi_host",
-                "device_type": NodeDevice.CAPABILITY_TYPE_SCSIBUS,
-                "host": "4", "fc_host": True, "vport_ops": True,
-                "wwnn": "20000000c9848141", "wwpn": "10000000c9848141"}
-        self._testCompare(devname, vals)
+        dev = self._nodeDevFromName(devname)
+        self.assertEqual(dev.host, "2")
 
     def testDRMDevice(self):
         devname = "drm_renderD129"

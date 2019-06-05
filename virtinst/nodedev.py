@@ -238,18 +238,6 @@ class NodeDevice(XMLBuilder):
             is_int=True)
 
 
-class SCSIBus(NodeDevice):
-    host = XMLProperty("./capability/host")
-
-    vport_ops = XMLProperty(
-        "./capability/capability[@type='vport_ops']", is_bool=True)
-
-    fc_host = XMLProperty(
-        "./capability/capability[@type='fc_host']", is_bool=True)
-    wwnn = XMLProperty("./capability/capability[@type='fc_host']/wwnn")
-    wwpn = XMLProperty("./capability/capability[@type='fc_host']/wwpn")
-
-
 class DRMDevice(NodeDevice):
     drm_type = XMLProperty("./capability/type")
 
@@ -325,9 +313,7 @@ def _AddressStringToNodedev(conn, addrstr):
 
 
 def _typeToDeviceClass(t):
-    if t == NodeDevice.CAPABILITY_TYPE_SCSIBUS:
-        return SCSIBus
-    elif t == NodeDevice.CAPABILITY_TYPE_DRM:
+    if t == NodeDevice.CAPABILITY_TYPE_DRM:
         return DRMDevice
     else:
         return NodeDevice
