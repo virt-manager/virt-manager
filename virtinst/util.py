@@ -23,18 +23,6 @@ def listify(l):
         return l
 
 
-def xml_indent(xmlstr, level):
-    """
-    Indent the passed str the specified number of spaces
-    """
-    xml = ""
-    if not xmlstr:
-        return xml
-    if not level:
-        return xmlstr
-    return "\n".join((" " * level + l) for l in xmlstr.splitlines())
-
-
 def vm_uuid_collision(conn, uuid):
     """
     Check if passed UUID string is in use by another guest of the connection

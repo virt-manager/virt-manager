@@ -10,7 +10,8 @@ import collections
 import logging
 import os
 import re
-import string  # pylint: disable=deprecated-module
+import string
+import textwrap
 
 from .xmlapi import XMLAPI
 from . import util
@@ -691,7 +692,7 @@ class XMLBuilder(object):
             use_xpath = obj._xmlstate.abs_xpath().rsplit("/", 1)[0]
             indent = 2 * obj._xmlstate.abs_xpath().count("/")
             self._xmlstate.xmlapi.node_add_xml(
-                    util.xml_indent(xml, indent), use_xpath)
+                    textwrap.indent(xml, indent * " "), use_xpath)
         obj._parse_with_children(None, self._xmlstate)
 
     def remove_child(self, obj):
@@ -720,7 +721,7 @@ class XMLBuilder(object):
         if not self._xmlstate.is_build:
             xpath = origobj.get_xml_id()
             indent = 2 * xpath.count("/")
-            xml = util.xml_indent(newobj.get_xml(), indent).strip()
+            xml = textwrap.indent(newobj.get_xml(), indent * " ").strip()
             self._xmlstate.xmlapi.node_replace_xml(xpath, xml)
         else:
             origidx = origobj.get_xml_idx()

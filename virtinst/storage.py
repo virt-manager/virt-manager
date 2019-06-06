@@ -146,8 +146,7 @@ class StoragePool(_StorageObject):
         for source in sources.sources:
             source_xml = source.get_xml()
 
-            pool_xml = "<pool>\n%s\n</pool>" % (
-                util.xml_indent(source_xml, 2))
+            pool_xml = "<pool>\n%s\n</pool>" % source_xml
             parseobj = StoragePool(conn, parsexml=pool_xml)
             parseobj.type = pool_type
 
