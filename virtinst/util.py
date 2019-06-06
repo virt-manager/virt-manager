@@ -5,9 +5,7 @@
 # See the COPYING file in the top-level directory.
 #
 
-import logging
 import os
-import random
 import sys
 
 import libvirt
@@ -20,14 +18,6 @@ def listify(l):
         return [l]
     else:
         return l
-
-
-def vm_uuid_collision(conn, uuid):
-    """
-    Check if passed UUID string is in use by another guest of the connection
-    Returns true/false
-    """
-    return libvirt_collision(conn.lookupByUUIDString, uuid)
 
 
 def libvirt_collision(collision_cb, val):
@@ -112,29 +102,6 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
             return tryname
 
     raise ValueError(_("Name generation range exceeded."))
-
-
-
-def generate_uuid(conn):
-    for ignore in range(256):
-        uuid = randomUUID(conn)
-        if not vm_uuid_collision(conn, uuid):
-            return uuid
-
-    logging.error("Failed to generate non-conflicting UUID")
-
-
-
-def randomUUID(conn):
-    if conn.fake_conn_predictable():
-        # Testing hack
-        return "00000000-1111-2222-3333-444444444444"
-
-    u = [random.randint(0, 255) for ignore in range(0, 16)]
-    u[6] = (u[6] & 0x0F) | (4 << 4)
-    u[8] = (u[8] & 0x3F) | (2 << 6)
-    return "-".join(["%02x" * 4, "%02x" * 2, "%02x" * 2, "%02x" * 2,
-                     "%02x" * 6]) % tuple(u)
 
 
 def xml_escape(xml):

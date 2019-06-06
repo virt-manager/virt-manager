@@ -7,6 +7,7 @@
 # See the COPYING file in the top-level directory.
 
 import logging
+import random
 
 import libvirt
 
@@ -113,6 +114,27 @@ class Guest(XMLBuilder):
         except Exception:
             return
         raise ValueError(_("Guest name '%s' is already in use.") % name)
+
+    @staticmethod
+    def generate_uuid(conn):
+        def _randomUUID():
+            if conn.fake_conn_predictable():
+                # Testing hack
+                return "00000000-1111-2222-3333-444444444444"
+
+            u = [random.randint(0, 255) for ignore in range(0, 16)]
+            u[6] = (u[6] & 0x0F) | (4 << 4)
+            u[8] = (u[8] & 0x3F) | (2 << 6)
+
+            return "-".join(["%02x" * 4, "%02x" * 2, "%02x" * 2, "%02x" * 2,
+                             "%02x" * 6]) % tuple(u)
+
+        for ignore in range(256):
+            uuid = _randomUUID()
+            if not util.libvirt_collision(conn.lookupByUUID, uuid):
+                return uuid
+
+        logging.error("Failed to generate non-conflicting UUID")
 
     @staticmethod
     def get_recommended_machine(capsinfo):
@@ -634,7 +656,7 @@ class Guest(XMLBuilder):
 
     def set_defaults(self, _guest):
         if not self.uuid:
-            self.uuid = util.generate_uuid(self.conn)
+            self.uuid = Guest.generate_uuid(self.conn)
         if not self.vcpus and self.cpu.has_topology():
             self.vcpus = self.cpu.vcpus_from_topology()
 

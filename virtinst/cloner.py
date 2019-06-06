@@ -62,7 +62,7 @@ class Cloner(object):
                               self.CLONE_POLICY_NO_EMPTYMEDIA]
 
         # Generate a random UUID at the start
-        self.clone_uuid = util.generate_uuid(conn)
+        self.clone_uuid = Guest.generate_uuid(conn)
 
 
     ##############
