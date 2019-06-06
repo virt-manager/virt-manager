@@ -8,7 +8,6 @@ import logging
 import os
 import random
 
-from .. import util
 from .device import Device
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
@@ -274,7 +273,6 @@ class DeviceInterface(Device):
         if not self.macaddr:
             return
 
-        util.validate_macaddr(self.macaddr)
         self.is_conflict_net(self.conn, self.macaddr)
 
     def set_default_source(self):

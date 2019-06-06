@@ -8,7 +8,6 @@
 import logging
 import os
 import random
-import re
 import sys
 
 import libvirt
@@ -60,19 +59,6 @@ def validate_name(name_type, val):
         raise ValueError(
             _("%s name '%s' can not contain '%s' character.") %
             (name_type, val, c))
-
-
-def validate_macaddr(val):
-    if val is None:
-        return
-
-    if not isinstance(val, str):
-        raise ValueError(_("MAC address must be a string."))
-
-    form = re.match("^([0-9a-fA-F]{1,2}:){5}[0-9a-fA-F]{1,2}$", val)
-    if form is None:
-        raise ValueError(_("MAC address must be of the format "
-                           "AA:BB:CC:DD:EE:FF, was '%s'") % val)
 
 
 def generate_name(base, collision_cb, suffix="", lib_collision=True,
