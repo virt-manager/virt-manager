@@ -15,7 +15,7 @@ from .devices import DeviceDisk
 from .domain import DomainOs
 from .osdict import OSDB, OsMedia
 from .installertreemedia import InstallerTreeMedia
-from .floppyinject import perform_floppy_injections
+from .cdrominject import perform_cdrom_injections
 from . import unattended
 from . import util
 
@@ -51,7 +51,7 @@ class Installer(object):
         self._install_kernel = None
         self._install_initrd = None
         self._install_cdrom_device_added = False
-        self._install_floppy_device = False
+        self._unattended_install_cdrom_device = None
         self._unattended_files = []
         self._defaults_are_set = False
         self._unattended_data = None
@@ -119,25 +119,25 @@ class Installer(object):
                 disk.sync_path_props()
                 break
 
-    def _add_install_floppy_device(self, guest, location):
-        if self._install_floppy_device:
+    def _add_unattended_install_cdrom_device(self, guest, location):
+        if self._unattended_install_cdrom_device:
             return
         dev = DeviceDisk(self.conn)
-        dev.device = dev.DEVICE_FLOPPY
+        dev.device = dev.DEVICE_CDROM
         dev.path = location
         dev.sync_path_props()
         dev.validate()
         dev.set_defaults(guest)
-        self._install_floppy_device = dev
-        guest.add_device(self._install_floppy_device)
+        self._unattended_install_cdrom_device = dev
+        guest.add_device(self._unattended_install_cdrom_device)
 
-    def _remove_install_floppy_device(self, guest):
+    def _remove_unattended_install_cdrom_device(self, guest):
         dummy = guest
-        if not self._install_floppy_device:
+        if not self._unattended_install_cdrom_device:
             return
 
-        self._install_floppy_device.path = None
-        self._install_floppy_device.sync_path_props()
+        self._unattended_install_cdrom_device.path = None
+        self._unattended_install_cdrom_device.sync_path_props()
 
     def _cleanup_unattended_files(self):
         dirs = []
@@ -236,10 +236,10 @@ class Installer(object):
             logging.debug("Generated script contents:\n%s",
                     open(path).read())
 
-            floppy = perform_floppy_injections([path], util.get_cache_dir())
-            self._add_install_floppy_device(guest, floppy)
+            iso = perform_cdrom_injections([path], util.get_cache_dir())
+            self._add_unattended_install_cdrom_device(guest, iso)
 
-            self._unattended_files.extend([path, floppy])
+            self._unattended_files.extend([path, iso])
 
     def _cleanup(self, guest):
         if self._treemedia:
@@ -388,7 +388,7 @@ class Installer(object):
             return ret
         finally:
             self._remove_install_cdrom_media(guest)
-            self._remove_install_floppy_device(guest)
+            self._remove_unattended_install_cdrom_device(guest)
             self._finish_get_install_xml(guest, data)
 
     def _build_xml(self, guest, meter):

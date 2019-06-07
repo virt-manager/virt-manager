@@ -252,7 +252,7 @@ def prepare_install_script(guest, unattended_data, url=None, os_media=None):
 
     # For all tree based installations we're going to perform initrd injection
     # and install the systems via network.
-    injection_method = "floppy" if guest.osinfo.is_windows() else "initrd"
+    injection_method = "cdrom" if guest.osinfo.is_windows() else "initrd"
     script.set_preferred_injection_method(injection_method)
 
     installationsource = _get_installation_source(os_media)

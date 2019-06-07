@@ -6,11 +6,12 @@
 
 import logging
 import os
+import shutil
 import subprocess
 import tempfile
 
 
-def perform_floppy_injections(injections, scratchdir):
+def perform_cdrom_injections(injections, scratchdir):
     """
     Insert files into the root directory of a floppy
     """
@@ -20,17 +21,24 @@ def perform_floppy_injections(injections, scratchdir):
     tempdir = tempfile.mkdtemp(dir=scratchdir)
     os.chmod(tempdir, 0o775)
 
-    img = os.path.join(tempdir, "unattended.img")
+    tempfiles = []
+    iso = os.path.join(tempdir, "unattended.iso")
+    for filename in injections:
+        shutil.copy(filename, tempdir)
 
-    cmd = ["mkfs.msdos", "-C", img, "1440"]
+    tempfiles = os.listdir(tempdir)
+
+    cmd = ["mkisofs",
+           "-o", iso,
+           "-J",
+           "-input-charset", "utf8",
+           "-rational-rock",
+           tempdir]
     logging.debug("Running mkisofs: %s", cmd)
     output = subprocess.check_output(cmd)
     logging.debug("cmd output: %s", output)
 
-    for filename in injections:
-        logging.debug("Copying %s to the floppy.", filename)
-        cmd = ["mcopy", "-i", img, filename, "::"]
-        output = subprocess.check_output(cmd)
-        logging.debug("cmd output: %s", output)
+    for f in tempfiles:
+        os.unlink(os.path.join(tempdir, f))
 
-    return img
+    return iso
