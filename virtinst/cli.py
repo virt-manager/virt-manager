@@ -22,7 +22,7 @@ import libvirt
 
 from virtcli import CLIConfig
 
-from . import util
+from . import xmlutil
 from .connection import VirtinstConnection
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
@@ -1002,7 +1002,7 @@ class _VirtCLIArgumentStatic(object):
         VirtCLIArgument. So for an option like --foo bar=X, this
         checks if we are the parser for 'bar'
         """
-        for cliname in [self.cliname] + util.listify(self._aliases):
+        for cliname in [self.cliname] + xmlutil.listify(self._aliases):
             if "[" in cliname:
                 ret = re.match("^%s$" % cliname.replace(".", r"\."), userstr)
             else:
@@ -1061,7 +1061,7 @@ class _VirtCLIArgument(object):
 
         try:
             if self.propname:
-                util.get_prop_path(inst, self.propname)
+                xmlutil.get_prop_path(inst, self.propname)
         except AttributeError:
             raise RuntimeError("programming error: obj=%s does not have "
                                "member=%s" % (inst, self.propname))
@@ -1069,7 +1069,7 @@ class _VirtCLIArgument(object):
         if self._virtarg.cb:
             self._virtarg.cb(parser, inst, self.val, self)
         else:
-            util.set_prop_path(inst, self.propname, self.val)
+            xmlutil.set_prop_path(inst, self.propname, self.val)
 
     def lookup_param(self, parser, inst):
         """
@@ -1097,7 +1097,7 @@ class _VirtCLIArgument(object):
             return self._virtarg.lookup_cb(parser,
                                            inst, self.val, self)
         else:
-            return util.get_prop_path(inst, self.propname) == self.val
+            return xmlutil.get_prop_path(inst, self.propname) == self.val
 
 
 def parse_optstr_tuples(optstr):
@@ -1265,7 +1265,7 @@ class VirtCLIParser(metaclass=_InitClass):
         virtarg = _VirtCLIArgumentStatic(cliname, propname, parent_cliname,
                 *args, **kwargs)
         if virtarg.cliname in cls.aliases:
-            virtarg.set_aliases(util.listify(cls.aliases.pop(virtarg.cliname)))
+            virtarg.set_aliases(xmlutil.listify(cls.aliases.pop(virtarg.cliname)))
         cls._virtargs.append(virtarg)
 
     @classmethod
@@ -1298,7 +1298,7 @@ class VirtCLIParser(metaclass=_InitClass):
         """
         if not cls.guest_propname:
             return None
-        return util.get_prop_path(obj, cls.guest_propname)
+        return xmlutil.get_prop_path(obj, cls.guest_propname)
 
     @classmethod
     def prop_is_list(cls, obj):
@@ -1319,7 +1319,7 @@ class VirtCLIParser(metaclass=_InitClass):
         self.optstr = optstr
         self.guest = guest
         self.optdict = _parse_optstr_to_dict(self.optstr,
-                self._virtargs, util.listify(self.remove_first)[:])
+                self._virtargs, xmlutil.listify(self.remove_first)[:])
 
     def _clearxml_cb(self, inst, val, virtarg):
         """
@@ -1360,10 +1360,10 @@ class VirtCLIParser(metaclass=_InitClass):
                 num = int(reg.groups()[0])
 
             if can_edit:
-                while len(util.get_prop_path(inst, list_propname)) < (num + 1):
-                    util.get_prop_path(inst, list_propname).add_new()
+                while len(xmlutil.get_prop_path(inst, list_propname)) < (num + 1):
+                    xmlutil.get_prop_path(inst, list_propname).add_new()
             try:
-                return util.get_prop_path(inst, list_propname)[num]
+                return xmlutil.get_prop_path(inst, list_propname)[num]
             except IndexError:
                 if not can_edit:
                     return None
@@ -1433,7 +1433,7 @@ class VirtCLIParser(metaclass=_InitClass):
         try:
             objs = self._parse(inst is None and self.guest or inst)
             if new_object:
-                for obj in util.listify(objs):
+                for obj in xmlutil.listify(objs):
                     if validate:
                         obj.validate()
 
@@ -1442,7 +1442,7 @@ class VirtCLIParser(metaclass=_InitClass):
                     else:
                         self.guest.add_child(obj)
 
-            ret += util.listify(objs)
+            ret += xmlutil.listify(objs)
         except Exception as e:
             logging.debug("Exception parsing inst=%s optstr=%s",
                           inst, self.optstr, exc_info=True)
@@ -1460,7 +1460,7 @@ class VirtCLIParser(metaclass=_InitClass):
         Used only by virt-xml --edit lookups
         """
         ret = []
-        objlist = util.listify(self.lookup_prop(self.guest))
+        objlist = xmlutil.listify(self.lookup_prop(self.guest))
 
         try:
             for inst in objlist:
@@ -1542,7 +1542,7 @@ class ParserCheck(VirtCLIParser):
 
 def parse_check(checks):
     # Overwrite this for each parse
-    for optstr in util.listify(checks):
+    for optstr in xmlutil.listify(checks):
         parser = ParserCheck(optstr)
         parser.parse(get_global_state())
 
@@ -1752,7 +1752,7 @@ class ParserMemory(VirtCLIParser):
     ###################
 
     def set_memory_cb(self, inst, val, virtarg):
-        util.set_prop_path(inst, virtarg.propname, int(val) * 1024)
+        xmlutil.set_prop_path(inst, virtarg.propname, int(val) * 1024)
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -1937,7 +1937,7 @@ class ParserCPU(VirtCLIParser):
 
     def set_feature_cb(self, inst, val, virtarg):
         policy = virtarg.cliname
-        for feature_name in util.listify(val):
+        for feature_name in xmlutil.listify(val):
             featureobj = None
 
             for f in inst.features:
@@ -2398,7 +2398,7 @@ class ParserClock(VirtCLIParser):
             timerobj = inst.timers.add_new()
             timerobj.name = tname
 
-        util.set_prop_path(timerobj, propname, val)
+        xmlutil.set_prop_path(timerobj, propname, val)
 
     def timer_find_inst_cb(self, *args, **kwargs):
         cliarg = "timer"  # timer[0-9]*
@@ -3492,7 +3492,7 @@ class ParserMemdev(VirtCLIParser):
     }
 
     def set_target_size(self, inst, val, virtarg):
-        util.set_prop_path(inst, virtarg.propname, int(val) * 1024)
+        xmlutil.set_prop_path(inst, virtarg.propname, int(val) * 1024)
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -3839,13 +3839,13 @@ def parse_option_strings(options, guest, instlist, update=False):
 
     @update: If we are updating an existing guest, like from virt-xml
     """
-    instlist = util.listify(instlist)
+    instlist = xmlutil.listify(instlist)
     if not instlist:
         instlist = [None]
 
     ret = []
     for parserclass in VIRT_PARSERS:
-        optlist = util.listify(getattr(options, parserclass.cli_arg_name))
+        optlist = xmlutil.listify(getattr(options, parserclass.cli_arg_name))
         if not optlist:
             continue
 
@@ -3858,7 +3858,7 @@ def parse_option_strings(options, guest, instlist, update=False):
             for optstr in optlist:
                 parserobj = parserclass(optstr, guest=guest)
                 parseret = parserobj.parse(inst, validate=not update)
-                ret += util.listify(parseret)
+                ret += xmlutil.listify(parseret)
 
     return ret
 
@@ -3871,7 +3871,7 @@ def check_option_introspection(options):
     for parserclass in _get_completer_parsers():
         if not hasattr(options, parserclass.cli_arg_name):
             continue
-        optlist = util.listify(getattr(options, parserclass.cli_arg_name))
+        optlist = xmlutil.listify(getattr(options, parserclass.cli_arg_name))
         if not optlist:
             continue
 

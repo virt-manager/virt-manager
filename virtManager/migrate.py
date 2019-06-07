@@ -11,7 +11,7 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from virtinst import util
+from virtinst import xmlutil
 
 from . import uiutil
 from .asyncjob import vmmAsyncJob
@@ -154,7 +154,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def _reset_state(self):
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
-                     (_("Migrate"), util.xml_escape(self.vm.get_name())))
+                     (_("Migrate"), xmlutil.xml_escape(self.vm.get_name())))
         self.widget("header-label").set_markup(title_str)
 
         self.widget("migrate-advanced-expander").set_expanded(False)

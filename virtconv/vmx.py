@@ -14,7 +14,7 @@ import re
 import shlex
 
 import virtinst
-from virtinst import util
+from virtinst import xmlutil
 
 from .formats import parser_class
 
@@ -260,7 +260,7 @@ class vmx_parser(parser_class):
         def _find_keys(prefixes):
             ret = []
             for key, value in config.items():
-                for p in util.listify(prefixes):
+                for p in xmlutil.listify(prefixes):
                     if key.startswith(p):
                         ret.append((key, value))
                         break

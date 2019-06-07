@@ -11,7 +11,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
-from virtinst import util
+from virtinst import xmlutil
 
 from . import vmmenu
 from . import uiutil
@@ -583,7 +583,7 @@ class vmmManager(vmmGObjectUI):
         return hint
 
     def _build_conn_markup(self, conn, name):
-        name = util.xml_escape(name)
+        name = xmlutil.xml_escape(name)
         text = name
         if conn.is_disconnected():
             text += " - " + _("Not Connected")
@@ -601,7 +601,7 @@ class vmmManager(vmmGObjectUI):
 
     def _build_vm_markup(self, name, status):
         domtext     = ("<span size='smaller' weight='bold'>%s</span>" %
-                       util.xml_escape(name))
+                       xmlutil.xml_escape(name))
         statetext   = "<span size='smaller'>%s</span>" % status
         return domtext + "\n" + statetext
 
@@ -629,7 +629,7 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_SORT_KEY, name)
         row.insert(ROW_MARKUP, markup)
         row.insert(ROW_STATUS_ICON, status_icon)
-        row.insert(ROW_HINT, util.xml_escape(hint))
+        row.insert(ROW_HINT, xmlutil.xml_escape(hint))
         row.insert(ROW_IS_CONN, bool(conn))
         row.insert(ROW_IS_CONN_CONNECTED,
                    bool(conn) and not conn.is_disconnected())
@@ -701,7 +701,7 @@ class vmmManager(vmmGObjectUI):
             row[ROW_MARKUP] = self._build_vm_markup(name, status)
 
             desc = vm.get_description()
-            row[ROW_HINT] = util.xml_escape(desc)
+            row[ROW_HINT] = xmlutil.xml_escape(desc)
         except Exception as e:
             if vm.conn.support.is_libvirt_error_no_domain(e):
                 return
@@ -906,7 +906,7 @@ class vmmManager(vmmGObjectUI):
             widgn = "menu_view_stats_memory"
             do_enable = self.config.get_stats_enable_memory_poll()
 
-        for w in util.listify(widgn):
+        for w in xmlutil.listify(widgn):
             widget = self.widget(w)
             tool_text = ""
 

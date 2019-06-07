@@ -9,7 +9,7 @@ import logging
 from gi.repository import Gio
 from gi.repository import Gtk
 
-from virtinst import util
+from virtinst import xmlutil
 
 from . import vmmenu
 from .baseclass import vmmGObject
@@ -227,7 +227,7 @@ class vmmSystray(vmmGObject):
         menu_item = Gtk.MenuItem.new_with_label(conn.get_pretty_desc())
         if conn.is_active():
             label = menu_item.get_child()
-            markup = "<b>%s</b>" % util.xml_escape(conn.get_pretty_desc())
+            markup = "<b>%s</b>" % xmlutil.xml_escape(conn.get_pretty_desc())
             label.set_markup(markup)
 
         menu = Gtk.Menu()

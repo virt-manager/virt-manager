@@ -16,7 +16,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from virtinst import DomainSnapshot
-from virtinst import util
+from virtinst import xmlutil
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
@@ -460,8 +460,8 @@ class vmmSnapshotPage(vmmGObjectUI):
                 sortname = "1%s" % name
 
             label = "%s\n<span size='small'>%s: %s%s</span>" % (
-                (util.xml_escape(name), _("VM State"),
-                 util.xml_escape(state), external))
+                (xmlutil.xml_escape(name), _("VM State"),
+                 xmlutil.xml_escape(state), external))
             model.append([name, label, desc, snap.run_status_icon_name(),
                           sortname, snap.is_current()])
 
@@ -517,7 +517,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         title = ""
         if name:
-            title = "<b>Snapshot '%s':</b>" % util.xml_escape(name)
+            title = "<b>Snapshot '%s':</b>" % xmlutil.xml_escape(name)
 
         uiutil.set_grid_row_visible(
             self.widget("snapshot-is-current"), is_current)

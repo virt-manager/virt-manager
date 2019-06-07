@@ -15,7 +15,7 @@ import libvirt
 
 from . import generatename
 from . import progress
-from . import util
+from . import xmlutil
 from .guest import Guest
 from .devices import DeviceInterface
 from .devices import DeviceDisk
@@ -114,7 +114,7 @@ class Cloner(object):
     # Paths to use for the new disk locations
     def set_clone_paths(self, paths):
         disklist = []
-        for path in util.listify(paths):
+        for path in xmlutil.listify(paths):
             try:
                 device = DeviceDisk.DEVICE_DISK
                 if not path:
@@ -149,7 +149,7 @@ class Cloner(object):
 
     # MAC address for the new guest clone
     def set_clone_macs(self, mac):
-        maclist = util.listify(mac)
+        maclist = xmlutil.listify(mac)
         for m in maclist:
             DeviceInterface.is_conflict_net(self.conn, m)
         self._clone_macs = maclist

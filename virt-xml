@@ -15,7 +15,7 @@ import libvirt
 
 import virtinst
 from virtinst import cli
-from virtinst import util
+from virtinst import xmlutil
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
@@ -105,7 +105,7 @@ def get_domain_and_guest(conn, domstr):
 ################
 
 def _find_objects_to_edit(guest, action_name, editval, parserclass):
-    objlist = util.listify(parserclass.lookup_prop(guest))
+    objlist = xmlutil.listify(parserclass.lookup_prop(guest))
     idx = None
 
     if editval is None:
@@ -199,7 +199,7 @@ def action_add_device(guest, options, parserclass):
         fail(_("Cannot use --add-device with --%s") % parserclass.cli_arg_name)
     set_os_variant(options, guest)
     devs = cli.parse_option_strings(options, guest, None)
-    devs = util.listify(devs)
+    devs = xmlutil.listify(devs)
     for dev in devs:
         dev.set_defaults(guest)
     return devs
@@ -215,7 +215,7 @@ def action_remove_device(guest, options, parserclass):
     devs = _find_objects_to_edit(guest, "remove-device",
         getattr(options, parserclass.cli_arg_name)[-1], parserclass)
 
-    devs = util.listify(devs)
+    devs = xmlutil.listify(devs)
     for dev in devs:
         guest.remove_device(dev)
     return devs
@@ -236,7 +236,7 @@ def action_build_xml(conn, options, parserclass):
         inst = inst.__class__(conn)
 
     devs = cli.parse_option_strings(options, guest, inst)
-    devs = util.listify(devs)
+    devs = xmlutil.listify(devs)
     for dev in devs:
         dev.set_defaults(guest)
     return devs

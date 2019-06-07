@@ -105,11 +105,11 @@ def convert_old_init(options):
 
 
 def _do_convert_old_disks(options):
-    paths = virtinst.util.listify(options.file_paths)
-    sizes = virtinst.util.listify(options.disksize)
+    paths = virtinst.xmlutil.listify(options.file_paths)
+    sizes = virtinst.xmlutil.listify(options.disksize)
 
     def padlist(l, padsize):
-        l = virtinst.util.listify(l)
+        l = virtinst.xmlutil.listify(l)
         l.extend((padsize - len(l)) * [None])
         return l
 
@@ -198,9 +198,9 @@ def convert_old_networks(options):
             fail(_("Cannot use --nonetworks with --network"))
         options.network = ["none"]
 
-    macs = virtinst.util.listify(options.mac)
-    networks = virtinst.util.listify(options.network)
-    bridges = virtinst.util.listify(options.bridge)
+    macs = virtinst.xmlutil.listify(options.mac)
+    networks = virtinst.xmlutil.listify(options.network)
+    bridges = virtinst.xmlutil.listify(options.bridge)
 
     if bridges and networks:
         fail(_("Cannot mix both --bridge and --network arguments"))
@@ -210,7 +210,7 @@ def convert_old_networks(options):
         networks = ["bridge:" + b for b in bridges]
 
     def padlist(l, padsize):
-        l = virtinst.util.listify(l)
+        l = virtinst.xmlutil.listify(l)
         l.extend((padsize - len(l)) * [None])
         return l
 

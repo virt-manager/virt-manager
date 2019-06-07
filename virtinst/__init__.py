@@ -42,7 +42,7 @@ _setup_i18n()
 _set_libvirt_error_handler()
 
 
-from virtinst import util
+from virtinst import xmlutil
 from virtinst.uri import URI
 from virtinst.osdict import OSDB
 

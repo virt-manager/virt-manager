@@ -6,7 +6,7 @@
 
 import libxml2
 
-from . import util
+from . import xmlutil
 
 # pylint: disable=protected-access
 
@@ -320,7 +320,7 @@ class _Libxml2API(_XMLBase):
         return node.content
     def _node_set_text(self, node, setval):
         if setval is not None:
-            setval = util.xml_escape(setval)
+            setval = xmlutil.xml_escape(setval)
         node.setContent(setval)
 
     def _node_get_property(self, node, propname):
@@ -334,7 +334,7 @@ class _Libxml2API(_XMLBase):
                 prop.unlinkNode()
                 prop.freeNode()
         else:
-            node.setProp(propname, util.xml_escape(setval))
+            node.setProp(propname, xmlutil.xml_escape(setval))
 
     def _node_new(self, xpathseg, parentnode):
         newnode = libxml2.newNode(xpathseg.nodename)
@@ -344,7 +344,7 @@ class _Libxml2API(_XMLBase):
         def _find_parent_ns():
             parent = parentnode
             while parent:
-                for ns in util.listify(parent.nsDefs()):
+                for ns in xmlutil.listify(parent.nsDefs()):
                     if ns.name == xpathseg.nsname:
                         return ns
                 parent = parent.get_parent()

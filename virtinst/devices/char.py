@@ -6,7 +6,7 @@
 
 from .device import Device, DeviceSeclabel
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
-from .. import util
+from .. import xmlutil
 
 
 def _set_host_helper(obj, hostparam, portparam, val):
@@ -17,9 +17,9 @@ def _set_host_helper(obj, hostparam, portparam, val):
     host, port = parse_host(val)
     if port and not host:
         host = "127.0.0.1"
-    util.set_prop_path(obj, hostparam, host)
+    xmlutil.set_prop_path(obj, hostparam, host)
     if port:
-        util.set_prop_path(obj, portparam, port)
+        xmlutil.set_prop_path(obj, portparam, port)
 
 
 class CharSource(XMLBuilder):

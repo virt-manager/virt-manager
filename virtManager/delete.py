@@ -14,7 +14,7 @@ from gi.repository import Gdk
 from gi.repository import Pango
 
 import virtinst
-from virtinst import util
+from virtinst import xmlutil
 
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
@@ -93,7 +93,7 @@ class vmmDeleteDialog(vmmGObjectUI):
     def reset_state(self):
         # Set VM name in title'
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
-                     (_("Delete"), util.xml_escape(self.vm.get_name())))
+                     (_("Delete"), xmlutil.xml_escape(self.vm.get_name())))
         self.widget("header-label").set_markup(title_str)
 
         self.topwin.resize(1, 1)

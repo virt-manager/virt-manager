@@ -14,7 +14,7 @@ import string
 import textwrap
 
 from .xmlapi import XMLAPI
-from . import util
+from . import xmlutil
 
 
 # pylint: disable=protected-access
@@ -653,7 +653,7 @@ class XMLBuilder(object):
         if relative_object_xpath != -1:
             self._xmlstate.set_relative_object_xpath(relative_object_xpath)
         for propname in self._all_child_props():
-            for p in util.listify(getattr(self, propname, [])):
+            for p in xmlutil.listify(getattr(self, propname, [])):
                 p._set_xpaths(self._xmlstate.abs_xpath())
 
     def _set_child_xpaths(self):
@@ -664,7 +664,7 @@ class XMLBuilder(object):
         """
         typecount = {}
         for propname, xmlprop in self._all_child_props().items():
-            for obj in util.listify(getattr(self, propname)):
+            for obj in xmlutil.listify(getattr(self, propname)):
                 idxstr = ""
                 if not xmlprop.is_single:
                     class_type = obj.__class__
@@ -683,7 +683,7 @@ class XMLBuilder(object):
         """
         self._xmlstate.parse(*args, **kwargs)
         for propname in self._all_child_props():
-            for p in util.listify(getattr(self, propname, [])):
+            for p in xmlutil.listify(getattr(self, propname, [])):
                 p._parse_with_children(None, self._xmlstate)
 
     def add_child(self, obj, idx=None):
@@ -793,5 +793,5 @@ class XMLBuilder(object):
             if key in xmlprops:
                 xmlprops[key]._set_xml(self, self._propstore[key])
             elif key in childprops:
-                for obj in util.listify(getattr(self, key)):
+                for obj in xmlutil.listify(getattr(self, key)):
                     obj._add_parse_bits(self._xmlstate.xmlapi)
