@@ -141,6 +141,7 @@ class Installer(object):
 
     def _cleanup_unattended_files(self):
         for f in self._unattended_files:
+            logging.debug("Removing %s", str(f))
             os.unlink(f)
 
     def _build_boot_order(self, guest, bootdev):
