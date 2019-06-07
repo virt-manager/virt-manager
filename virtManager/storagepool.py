@@ -9,9 +9,16 @@ import time
 
 from virtinst import pollhelpers
 from virtinst import StoragePool, StorageVolume
-from virtinst import util
 
 from .libvirtobject import vmmLibvirtObject
+
+
+def _pretty_bytes(val):
+    val = int(val)
+    if val > (1024 * 1024 * 1024):
+        return "%2.2f GiB" % (val / (1024.0 * 1024.0 * 1024.0))
+    else:
+        return "%2.2f MiB" % (val / (1024.0 * 1024.0))
 
 
 class vmmStorageVolume(vmmLibvirtObject):
@@ -78,9 +85,9 @@ class vmmStorageVolume(vmmLibvirtObject):
         return self.get_xmlobj().allocation
 
     def get_pretty_capacity(self):
-        return util.pretty_bytes(self.get_capacity())
+        return _pretty_bytes(self.get_capacity())
     def get_pretty_allocation(self):
-        return util.pretty_bytes(self.get_allocation())
+        return _pretty_bytes(self.get_allocation())
 
     def get_pretty_name(self, pooltype):
         name = self.get_name()
@@ -255,8 +262,8 @@ class vmmStoragePool(vmmLibvirtObject):
         return self.get_xmlobj().capacity
 
     def get_pretty_allocation(self):
-        return util.pretty_bytes(self.get_allocation())
+        return _pretty_bytes(self.get_allocation())
     def get_pretty_available(self):
-        return util.pretty_bytes(self.get_available())
+        return _pretty_bytes(self.get_available())
     def get_pretty_capacity(self):
-        return util.pretty_bytes(self.get_capacity())
+        return _pretty_bytes(self.get_capacity())

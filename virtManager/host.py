@@ -6,8 +6,7 @@
 
 import logging
 
-from virtinst import util
-
+from . import uiutil
 from .baseclass import vmmGObjectUI
 from .engine import vmmEngine
 from .graphwidgets import Sparkline
@@ -157,8 +156,8 @@ class vmmHost(vmmGObjectUI):
     ######################
 
     def _refresh_resources(self):
-        vm_memory = util.pretty_mem(self.conn.stats_memory())
-        host_memory = util.pretty_mem(self.conn.host_memory_size())
+        vm_memory = uiutil.pretty_mem(self.conn.stats_memory())
+        host_memory = uiutil.pretty_mem(self.conn.host_memory_size())
 
         cpu_vector = self.conn.host_cpu_time_vector()
         memory_vector = self.conn.stats_memory_vector()

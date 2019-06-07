@@ -167,3 +167,11 @@ def init_combo_text_column(combo, col):
         combo.add_attribute(text, 'text', col)
         return text
     return None
+
+
+def pretty_mem(val):
+    val = int(val)
+    if val > (10 * 1024 * 1024):
+        return "%2.2f GiB" % (val / (1024.0 * 1024.0))
+    else:
+        return "%2.0f MiB" % (val / 1024.0)

@@ -119,22 +119,6 @@ def xml_escape(xml):
     return xml
 
 
-def pretty_mem(val):
-    val = int(val)
-    if val > (10 * 1024 * 1024):
-        return "%2.2f GiB" % (val / (1024.0 * 1024.0))
-    else:
-        return "%2.0f MiB" % (val / 1024.0)
-
-
-def pretty_bytes(val):
-    val = int(val)
-    if val > (1024 * 1024 * 1024):
-        return "%2.2f GiB" % (val / (1024.0 * 1024.0 * 1024.0))
-    else:
-        return "%2.2f MiB" % (val / (1024.0 * 1024.0))
-
-
 def get_cache_dir():
     ret = ""
     try:

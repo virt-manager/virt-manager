@@ -12,7 +12,6 @@ from gi.repository import Gtk
 import libvirt
 
 import virtinst
-from virtinst import util
 
 from . import uiutil
 from .addhardware import vmmAddHardware
@@ -2056,8 +2055,8 @@ class vmmDetails(vmmGObjectUI):
             cur_vm_memory = self.vm.stats_memory()
             vm_memory = self.vm.maximum_memory()
             mem_txt = _("%(current-memory)s of %(total-memory)s") % {
-                "current-memory": util.pretty_mem(cur_vm_memory),
-                "total-memory": util.pretty_mem(vm_memory)
+                "current-memory": uiutil.pretty_mem(cur_vm_memory),
+                "total-memory": uiutil.pretty_mem(vm_memory)
             }
 
         if self.config.get_stats_enable_disk_poll():
