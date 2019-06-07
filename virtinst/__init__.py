@@ -3,6 +3,9 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import gi
+gi.require_version('Libosinfo', '1.0')
+
 from virtcli import CLIConfig as _CLIConfig
 
 

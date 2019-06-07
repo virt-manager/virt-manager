@@ -10,8 +10,6 @@ import logging
 import os
 import tempfile
 
-import gi
-gi.require_version('Libosinfo', '1.0')
 from gi.repository import Libosinfo
 from gi.repository import Gio
 from gi.repository import GLib
