@@ -21,7 +21,23 @@ def _setup_i18n():
     gettext.install("virt-manager", _CLIConfig.gettext_dir)
     gettext.bindtextdomain("virt-manager", _CLIConfig.gettext_dir)
 
+
+def _set_libvirt_error_handler():
+    """
+    Ignore libvirt error reporting, we just use exceptions
+    """
+    import libvirt
+
+    def libvirt_callback(userdata, err):
+        ignore = userdata
+        ignore = err
+    ctx = None
+    libvirt.registerErrorHandler(libvirt_callback, ctx)
+
+
 _setup_i18n()
+_set_libvirt_error_handler()
+
 
 from virtinst import util
 from virtinst.uri import URI

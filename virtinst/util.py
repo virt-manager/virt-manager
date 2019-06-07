@@ -162,16 +162,6 @@ def get_cache_dir():
     return os.path.join(ret, "virt-manager")
 
 
-def register_libvirt_error_handler():
-    """
-    Ignore libvirt error reporting, we just use exceptions
-    """
-    def libvirt_callback(userdata, err):
-        ignore = userdata
-        ignore = err
-    libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
-
-
 def ensure_meter(meter):
     if meter:
         return meter

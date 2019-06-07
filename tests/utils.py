@@ -103,7 +103,6 @@ class _URIs(object):
         generally every test uses a fresh virConnect, or undoes the
         persistent changes it makes.
         """
-        virtinst.util.register_libvirt_error_handler()
         is_testdriver_xml = "/testdriver.xml" in uri
 
         if not (is_testdriver_xml and self._testdriver_error):

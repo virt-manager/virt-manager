@@ -185,8 +185,6 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     if streamHandler:
         rootLogger.addHandler(streamHandler)
 
-    util.register_libvirt_error_handler()
-
     # Log uncaught exceptions
     def exception_log(typ, val, tb):
         logging.debug("Uncaught exception:\n%s",
