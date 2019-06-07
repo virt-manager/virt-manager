@@ -11,12 +11,22 @@ import libvirt
 
 from . import pollhelpers
 from . import support
-from . import util
 from . import Capabilities
 from .guest import Guest
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
 from .uri import URI, MagicURI
+
+
+def _real_local_libvirt_version():
+    """
+    Lookup the local libvirt library version, but cache the value since
+    it never changes.
+    """
+    key = "__virtinst_cached_getVersion"
+    if not hasattr(libvirt, key):
+        setattr(libvirt, key, libvirt.getVersion())
+    return getattr(libvirt, key)
 
 
 class VirtinstConnection(object):
@@ -26,6 +36,10 @@ class VirtinstConnection(object):
     - lookup for API feature support
     - simplified API wrappers that handle new and old ways of doing things
     """
+    @staticmethod
+    def libvirt_new_enough_for_virtmanager(version):
+        return _real_local_libvirt_version() >= version
+
     def __init__(self, uri):
         _initial_uri = uri or ""
 
@@ -294,13 +308,13 @@ class VirtinstConnection(object):
         if self._fake_libvirt_version is not None:
             return self._fake_libvirt_version
         # This handles caching for us
-        return util.local_libvirt_version()
+        return _real_local_libvirt_version()
 
     def daemon_version(self):
         if self._fake_libvirt_version is not None:
             return self._fake_libvirt_version
         if not self.is_remote():
-            return self.local_libvirt_version()
+            return _real_local_libvirt_version()
 
         if self._daemon_version is None:
             self._daemon_version = 0

@@ -17,7 +17,7 @@ import gi
 gi.require_version('LibvirtGLib', '1.0')
 from gi.repository import LibvirtGLib
 
-from virtinst import util
+from virtinst import VirtinstConnection
 from virtinst import cli
 from virtcli import CLIConfig
 
@@ -258,7 +258,7 @@ def main():
                   Gtk.get_minor_version(),
                   Gtk.get_micro_version())
 
-    if not util.local_libvirt_version() >= 6000:
+    if not VirtinstConnection.libvirt_new_enough_for_virtmanager(6000):
         # We need this version for threaded virConnect access
         _show_startup_error(
                 _("virt-manager requires libvirt 0.6.0 or later."), "")
