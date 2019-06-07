@@ -13,6 +13,7 @@ import os
 
 import libvirt
 
+from . import generatename
 from . import progress
 from . import util
 from .guest import Guest
@@ -492,7 +493,7 @@ class Cloner(object):
             clonebase = newname
 
         clonebase = os.path.join(dirname, clonebase)
-        return util.generate_name(
+        return generatename.generate_name(
                     clonebase,
                     lambda p: DeviceDisk.path_definitely_exists(self.conn, p),
                     suffix,
@@ -512,7 +513,7 @@ class Cloner(object):
             basename = basename.replace(match.group(), "")
 
         basename = basename + "-clone"
-        return util.generate_name(basename,
+        return generatename.generate_name(basename,
                                   self.conn.lookupByName,
                                   sep="", start_num=start_num)
 

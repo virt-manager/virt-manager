@@ -16,7 +16,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 import virtinst
-from virtinst import util
+import virtinst.generatename
 
 from . import uiutil
 from .addstorage import vmmAddStorage
@@ -1494,7 +1494,7 @@ class vmmCreate(vmmGObjectUI):
             basename += "-%s" % _pretty_arch(self._guest.os.arch)
             force_num = False
 
-        return util.generate_name(basename,
+        return virtinst.generatename.generate_name(basename,
             self.conn.get_backend().lookupByName,
             start_num=force_num and 1 or 2, force_num=force_num,
             sep=not force_num and "-" or "",

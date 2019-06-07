@@ -6,7 +6,7 @@
 
 import libvirt
 
-from . import util
+from . import generatename
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -19,7 +19,7 @@ class _SnapshotDisk(XMLBuilder):
 class DomainSnapshot(XMLBuilder):
     @staticmethod
     def find_free_name(vm, collidelist):
-        return util.generate_name("snapshot", vm.snapshotLookupByName,
+        return generatename.generate_name("snapshot", vm.snapshotLookupByName,
                                   sep="", start_num=1, force_num=True,
                                   collidelist=collidelist)
 

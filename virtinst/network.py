@@ -11,7 +11,7 @@ import logging
 
 import libvirt
 
-from . import util
+from . import generatename
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -147,7 +147,7 @@ class Network(XMLBuilder):
     @staticmethod
     def find_free_name(conn, basename, **kwargs):
         cb = conn.networkLookupByName
-        return util.generate_name(basename, cb, **kwargs)
+        return generatename.generate_name(basename, cb, **kwargs)
 
     @staticmethod
     def pretty_forward_desc(mode, dev):

@@ -13,7 +13,7 @@ import libvirt
 
 from virtcli import CLIConfig
 
-from . import util
+from . import generatename
 from .devices import *  # pylint: disable=wildcard-import
 from .domain import *  # pylint: disable=wildcard-import
 from .domcapabilities import DomainCapabilities
@@ -131,7 +131,7 @@ class Guest(XMLBuilder):
 
         for ignore in range(256):
             uuid = _randomUUID()
-            if not util.libvirt_collision(conn.lookupByUUID, uuid):
+            if not generatename.libvirt_collision(conn.lookupByUUID, uuid):
                 return uuid
 
         logging.error("Failed to generate non-conflicting UUID")

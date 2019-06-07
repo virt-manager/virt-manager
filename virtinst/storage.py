@@ -10,8 +10,8 @@ import threading
 
 import libvirt
 
+from . import generatename
 from . import progress
-from . import util
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -261,7 +261,7 @@ class StoragePool(_StorageObject):
             return False
 
         kwargs["lib_collision"] = False
-        return util.generate_name(basename, cb, **kwargs)
+        return generatename.generate_name(basename, cb, **kwargs)
 
     @staticmethod
     def ensure_pool_is_running(pool_object, refresh=False):
@@ -551,7 +551,7 @@ class StorageVolume(_StorageObject):
         in use by another volume. Extra params are passed to generate_name
         """
         StoragePool.ensure_pool_is_running(pool_object, refresh=True)
-        return util.generate_name(basename,
+        return generatename.generate_name(basename,
                                   pool_object.storageVolLookupByName,
                                   **kwargs)
 
