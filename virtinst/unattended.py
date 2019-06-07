@@ -14,8 +14,6 @@ from gi.repository import Libosinfo
 from gi.repository import Gio
 from gi.repository import GLib
 
-from . import util
-
 
 def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     """
@@ -262,8 +260,8 @@ def prepare_install_script(guest, unattended_data, url=None, os_media=None):
     return script
 
 
-def generate_install_script(script):
-    scratch = tempfile.mktemp(dir=util.get_cache_dir())
+def generate_install_script(guest, script):
+    scratch = tempfile.mktemp(dir=guest.conn.get_app_cache_dir())
     if not os.path.exists(scratch):
         os.makedirs(scratch, 0o751)
 

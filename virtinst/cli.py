@@ -23,6 +23,7 @@ import libvirt
 from virtcli import CLIConfig
 
 from . import util
+from .connection import VirtinstConnection
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
 from .nodedev import NodeDevice
@@ -125,7 +126,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     vi_dir = None
     logfile = None
     if not in_testsuite():
-        vi_dir = util.get_cache_dir()
+        vi_dir = VirtinstConnection.get_app_cache_dir()
         logfile = os.path.join(vi_dir, appname + ".log")
 
     try:
@@ -210,8 +211,6 @@ def in_testsuite():
 ##############################
 
 def getConnection(uri):
-    from .connection import VirtinstConnection
-
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
     conn = VirtinstConnection(uri)
     conn.open(_openauth_cb, None)

@@ -11,7 +11,6 @@ import logging
 
 from . import progress
 from . import unattended
-from . import util
 from .devices import DeviceDisk
 from .domain import DomainOs
 from .osdict import OSDB, OsMedia
@@ -230,12 +229,13 @@ class Installer(object):
             osmedia = OsMedia(osguess[1])
             script = unattended.prepare_install_script(
                     guest, self._unattended_data, self.cdrom, osmedia)
-            path, _ = unattended.generate_install_script(script)
+            path, _ = unattended.generate_install_script(guest, script)
             logging.debug("Generated unattended script: %s", path)
             logging.debug("Generated script contents:\n%s",
                     open(path).read())
 
-            iso = perform_cdrom_injections([path], util.get_cache_dir())
+            iso = perform_cdrom_injections([path],
+                    guest.conn.get_app_cache_dir())
             self._add_unattended_install_cdrom_device(guest, iso)
 
             self._unattended_files.extend([path, iso])

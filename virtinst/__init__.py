@@ -3,13 +3,13 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+# pylint: disable=wrong-import-position
+
 import gi
 gi.require_version('Libosinfo', '1.0')
 
 from virtcli import CLIConfig as _CLIConfig
 
-
-# pylint: disable=wrong-import-position
 
 def _setup_i18n():
     import gettext

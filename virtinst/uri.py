@@ -9,8 +9,6 @@ import logging
 import re
 import urllib.parse
 
-from .cli import parse_optstr_tuples
-
 
 def sanitize_xml_for_test_define(xml):
     import difflib
@@ -128,6 +126,8 @@ class MagicURI(object):
     def __init__(self, uri):
         if not self.uri_is_magic(uri):
             raise RuntimeError("uri=%s is not virtinst magic URI" % uri)
+
+        from .cli import parse_optstr_tuples
 
         uri = uri.replace(self.VIRTINST_URI_MAGIC_PREFIX, "")
         ret = uri.split(",", 1)

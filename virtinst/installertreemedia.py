@@ -11,7 +11,6 @@ from . import progress
 from . import unattended
 from . import urldetect
 from . import urlfetcher
-from . import util
 from .devices import DeviceDisk
 from .initrdinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
@@ -87,7 +86,8 @@ class InstallerTreeMedia(object):
         Determine the scratchdir for this URI, create it if necessary.
         scratchdir is the directory that's accessible by VMs
         """
-        user_scratchdir = os.path.join(util.get_cache_dir(), "boot")
+        user_scratchdir = os.path.join(
+                guest.conn.get_app_cache_dir(), "boot")
         system_scratchdir = InstallerTreeMedia.get_system_scratchdir(guest)
 
         # If we are a session URI, or we don't have access to the system
@@ -218,7 +218,7 @@ class InstallerTreeMedia(object):
             location = self.location if self._media_type == MEDIA_URL else None
             script = unattended.prepare_install_script(
                     guest, self._unattended_data, location, cache.os_media)
-            path, cmdline = unattended.generate_install_script(script)
+            path, cmdline = unattended.generate_install_script(guest, script)
 
             logging.debug("Generated unattended cmdline: %s", cmdline)
             logging.debug("Generated unattended script: %s", path)

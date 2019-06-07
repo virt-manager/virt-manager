@@ -14,7 +14,6 @@ import libvirt
 
 import virtinst
 from virtinst import pollhelpers
-from virtinst import util
 
 from . import connectauth
 from .baseclass import vmmGObject
@@ -356,7 +355,7 @@ class vmmConnection(vmmGObject):
 
     def get_cache_dir(self):
         uri = self.get_uri().replace("/", "_")
-        ret = os.path.join(util.get_cache_dir(), uri)
+        ret = os.path.join(self._backend.get_app_cache_dir(), uri)
         if not os.path.exists(ret):
             os.makedirs(ret, 0o755)
         return ret

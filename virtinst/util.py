@@ -5,8 +5,6 @@
 # See the COPYING file in the top-level directory.
 #
 
-import os
-
 import libvirt
 
 
@@ -116,22 +114,6 @@ def xml_escape(xml):
     xml = xml.replace("<", "&lt;")
     xml = xml.replace(">", "&gt;")
     return xml
-
-
-def get_cache_dir():
-    ret = ""
-    try:
-        # We don't want to depend on glib for virt-install
-        from gi.repository import GLib
-        ret = GLib.get_user_cache_dir()
-    except ImportError:
-        pass
-
-    if not ret:
-        ret = os.environ.get("XDG_CACHE_HOME")
-    if not ret:
-        ret = os.path.expanduser("~/.cache")
-    return os.path.join(ret, "virt-manager")
 
 
 def get_prop_path(obj, prop_path):
