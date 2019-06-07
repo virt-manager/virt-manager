@@ -68,6 +68,8 @@ class VirtinstConnection(object):
         self.cb_fetch_all_nodedevs = None
         self.cb_cache_new_pool = None
 
+        self.support = support.SupportCache()
+
 
     ##############
     # Properties #
@@ -378,15 +380,16 @@ class VirtinstConnection(object):
     # Support check helpers #
     #########################
 
-    for _supportname in [_supportname for _supportname in dir(support) if
+    for _supportname in [_supportname for _supportname in
+                         dir(support.SupportCache) if
                          _supportname.startswith("SUPPORT_")]:
-        locals()[_supportname] = getattr(support, _supportname)
+        locals()[_supportname] = getattr(support.SupportCache, _supportname)
 
 
     def check_support(self, features, data=None):
         def _check_support(key):
             if key not in self._support_cache:
-                self._support_cache[key] = support.check_support(
+                self._support_cache[key] = self.support.check_support(
                     self, key, data or self)
             return self._support_cache[key]
 
@@ -399,7 +402,7 @@ class VirtinstConnection(object):
     def _check_version(self, version):
         # Entry point for the test suite to do simple version checks,
         # actual code should only use check_support
-        return support.check_version(self, version)
+        return self.support.check_version(self, version)
 
     def support_remote_url_install(self):
         if self._magic_uri:

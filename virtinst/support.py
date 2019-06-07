@@ -68,12 +68,12 @@ def _split_function_name(function):
 
 
 def _check_function(function, flag, run_args, data):
+    # Make sure function is present in either libvirt module or
+    # object_name class
     object_name, function_name = _split_function_name(function)
     if not function_name:
         return None
 
-    # Make sure function is present in either libvirt module or
-    # object_name class
     flag_tuple = ()
 
     if not _has_command(function_name, objname=object_name):
@@ -197,153 +197,145 @@ class _SupportCheck(object):
         return True
 
 
-_support_id = 0
-_support_objs = []
+_SUPPORT_ID = 0
+_SUPPORT_OBJS = []
 
 
 def _make(*args, **kwargs):
-    global _support_id
-    _support_id += 1
+    global _SUPPORT_ID
+    _SUPPORT_ID += 1
     obj = _SupportCheck(*args, **kwargs)
-    _support_objs.append(obj)
-    return _support_id
+    _SUPPORT_OBJS.append(obj)
+    return _SUPPORT_ID
 
 
-
-SUPPORT_CONN_STORAGE = _make(
-    function="virConnect.listStoragePools", run_args=())
-SUPPORT_CONN_NODEDEV = _make(
-    function="virConnect.listDevices", run_args=(None, 0))
-SUPPORT_CONN_NETWORK = _make(function="virConnect.listNetworks", run_args=())
-SUPPORT_CONN_INTERFACE = _make(
-    function="virConnect.listInterfaces", run_args=())
-SUPPORT_CONN_STREAM = _make(function="virConnect.newStream", run_args=(0,))
-SUPPORT_CONN_LISTALLDOMAINS = _make(
-    function="virConnect.listAllDomains", run_args=())
-SUPPORT_CONN_LISTALLNETWORKS = _make(
-    function="virConnect.listAllNetworks", run_args=())
-SUPPORT_CONN_LISTALLSTORAGEPOOLS = _make(
-    function="virConnect.listAllStoragePools", run_args=())
-SUPPORT_CONN_LISTALLINTERFACES = _make(
-    function="virConnect.listAllInterfaces", run_args=())
-SUPPORT_CONN_LISTALLDEVICES = _make(
-    function="virConnect.listAllDevices", run_args=())
-SUPPORT_CONN_WORKING_XEN_EVENTS = _make(hv_version={"xen": "4.0.0", "all": 0})
-# This is an arbitrary check to say whether it's a good idea to
-# default to qcow2. It might be fine for xen or qemu older than the versions
-# here, but until someone tests things I'm going to be a bit conservative.
-SUPPORT_CONN_DEFAULT_QCOW2 = _make(hv_version={"qemu": "1.2.0", "test": 0})
-SUPPORT_CONN_AUTOSOCKET = _make(hv_libvirt_version={"qemu": "1.0.6"})
-SUPPORT_CONN_PM_DISABLE = _make(hv_version={"qemu": "1.2.0", "test": 0})
-SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS = _make(
-    version="1.1.0", hv_version={"qemu": "1.2.0", "test": 0})
-SUPPORT_CONN_HYPERV_VAPIC = _make(
-    version="1.1.0", hv_version={"qemu": "1.1.0", "test": 0})
-SUPPORT_CONN_HYPERV_CLOCK = _make(
-    version="1.2.2", hv_version={"qemu": "1.5.3", "test": 0})
-SUPPORT_CONN_DOMAIN_CAPABILITIES = _make(
-    function="virConnect.getDomainCapabilities",
-    run_args=(None, None, None, None))
-SUPPORT_CONN_DOMAIN_RESET = _make(version="0.9.7", hv_version={"qemu": 0})
-SUPPORT_CONN_VMPORT = _make(
-    version="1.2.16", hv_version={"qemu": "2.2.0", "test": 0})
-SUPPORT_CONN_MEM_STATS_PERIOD = _make(
-    function="virDomain.setMemoryStatsPeriod",
-    version="1.1.1", hv_version={"qemu": 0})
-# spice GL is actually enabled with libvirt 1.3.3, but 3.1.0 is the
-# first version that sorts out the qemu:///system + cgroup issues
-SUPPORT_CONN_SPICE_GL = _make(version="3.1.0",
-    hv_version={"qemu": "2.6.0", "test": 0})
-SUPPORT_CONN_SPICE_RENDERNODE = _make(version="3.1.0",
-    hv_version={"qemu": "2.9.0", "test": 0})
-SUPPORT_CONN_VIDEO_VIRTIO_ACCEL3D = _make(version="1.3.0",
-    hv_version={"qemu": "2.5.0", "test": 0})
-SUPPORT_CONN_GRAPHICS_LISTEN_NONE = _make(version="2.0.0")
-SUPPORT_CONN_RNG_URANDOM = _make(version="1.3.4")
-SUPPORT_CONN_USB3_PORTS = _make(version="1.3.5")
-SUPPORT_CONN_MACHVIRT_PCI_DEFAULT = _make(version="3.0.0")
-SUPPORT_CONN_QEMU_XHCI = _make(version="3.3.0", hv_version={"qemu": "2.9.0"})
-SUPPORT_CONN_VNC_NONE_AUTH = _make(hv_version={"qemu": "2.9.0"})
-SUPPORT_CONN_DEVICE_BOOT_ORDER = _make(hv_version={"qemu": 0, "test": 0})
-SUPPORT_CONN_RISCV_VIRT_PCI_DEFAULT = _make(version="5.3.0", hv_version={"qemu": "4.0.0"})
-
-# We choose qemu 2.11.0 as the first version to target for q35 default.
-# That's not really based on anything except reasonably modern at the
-# time of these patches.
-SUPPORT_QEMU_Q35_DEFAULT = _make(hv_version={"qemu": "2.11.0", "test": "0"})
-
-# This is for disk <driver name=qemu>. xen supports this, but it's
-# limited to arbitrary new enough xen, since I know libxl can handle it
-# but I don't think the old xend driver does.
-SUPPORT_CONN_DISK_DRIVER_NAME_QEMU = _make(
-    hv_version={"qemu": 0, "xen": "4.2.0"},
-    hv_libvirt_version={"qemu": 0, "xen": "1.1.0"})
-
-
-#################
-# Domain checks #
-#################
-
-SUPPORT_DOMAIN_XML_INACTIVE = _make(function="virDomain.XMLDesc", run_args=(),
-    flag="VIR_DOMAIN_XML_INACTIVE")
-SUPPORT_DOMAIN_XML_SECURE = _make(function="virDomain.XMLDesc", run_args=(),
-    flag="VIR_DOMAIN_XML_SECURE")
-SUPPORT_DOMAIN_MANAGED_SAVE = _make(
-    function="virDomain.hasManagedSaveImage",
-    run_args=(0,))
-SUPPORT_DOMAIN_JOB_INFO = _make(function="virDomain.jobInfo", run_args=())
-SUPPORT_DOMAIN_LIST_SNAPSHOTS = _make(
-    function="virDomain.listAllSnapshots", run_args=())
-SUPPORT_DOMAIN_MEMORY_STATS = _make(
-    function="virDomain.memoryStats", run_args=())
-SUPPORT_DOMAIN_STATE = _make(function="virDomain.state", run_args=())
-SUPPORT_DOMAIN_OPEN_GRAPHICS = _make(function="virDomain.openGraphicsFD",
-    version="1.2.8", hv_version={"qemu": 0})
-
-
-###############
-# Pool checks #
-###############
-
-SUPPORT_POOL_ISACTIVE = _make(function="virStoragePool.isActive", run_args=())
-SUPPORT_POOL_LISTALLVOLUMES = _make(
-    function="virStoragePool.listAllVolumes", run_args=())
-SUPPORT_POOL_METADATA_PREALLOC = _make(
-    flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA",
-    version="1.0.1")
-
-
-##################
-# Network checks #
-##################
-
-SUPPORT_NET_ISACTIVE = _make(function="virNetwork.isActive", run_args=())
-
-
-def check_support(virtconn, feature, data=None):
+class SupportCache:
     """
-    Attempt to determine if a specific libvirt feature is support given
-    the passed connection.
-
-    :param virtconn: Libvirt connection to check feature on
-    :param feature: Feature type to check support for
-    :type feature: One of the SUPPORT_* flags
-    :param data: Option libvirt object to use in feature checking
-    :type data: Could be virDomain, virNetwork, virStoragePool, hv name, etc
-
-    :returns: True if feature is supported, False otherwise
+    Class containing all support checks and access APIs
     """
-    if "VirtinstConnection" in repr(data):
-        data = data.get_conn_for_api_arg()
 
-    sobj = _support_objs[feature - 1]
-    return sobj.check_support(virtconn, data)
+    SUPPORT_CONN_STORAGE = _make(
+        function="virConnect.listStoragePools", run_args=())
+    SUPPORT_CONN_NODEDEV = _make(
+        function="virConnect.listDevices", run_args=(None, 0))
+    SUPPORT_CONN_NETWORK = _make(function="virConnect.listNetworks", run_args=())
+    SUPPORT_CONN_INTERFACE = _make(
+        function="virConnect.listInterfaces", run_args=())
+    SUPPORT_CONN_STREAM = _make(function="virConnect.newStream", run_args=(0,))
+    SUPPORT_CONN_LISTALLDOMAINS = _make(
+        function="virConnect.listAllDomains", run_args=())
+    SUPPORT_CONN_LISTALLNETWORKS = _make(
+        function="virConnect.listAllNetworks", run_args=())
+    SUPPORT_CONN_LISTALLSTORAGEPOOLS = _make(
+        function="virConnect.listAllStoragePools", run_args=())
+    SUPPORT_CONN_LISTALLINTERFACES = _make(
+        function="virConnect.listAllInterfaces", run_args=())
+    SUPPORT_CONN_LISTALLDEVICES = _make(
+        function="virConnect.listAllDevices", run_args=())
+    SUPPORT_CONN_WORKING_XEN_EVENTS = _make(hv_version={"xen": "4.0.0", "all": 0})
+    # This is an arbitrary check to say whether it's a good idea to
+    # default to qcow2. It might be fine for xen or qemu older than the versions
+    # here, but until someone tests things I'm going to be a bit conservative.
+    SUPPORT_CONN_DEFAULT_QCOW2 = _make(hv_version={"qemu": "1.2.0", "test": 0})
+    SUPPORT_CONN_AUTOSOCKET = _make(hv_libvirt_version={"qemu": "1.0.6"})
+    SUPPORT_CONN_PM_DISABLE = _make(hv_version={"qemu": "1.2.0", "test": 0})
+    SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS = _make(
+        version="1.1.0", hv_version={"qemu": "1.2.0", "test": 0})
+    SUPPORT_CONN_HYPERV_VAPIC = _make(
+        version="1.1.0", hv_version={"qemu": "1.1.0", "test": 0})
+    SUPPORT_CONN_HYPERV_CLOCK = _make(
+        version="1.2.2", hv_version={"qemu": "1.5.3", "test": 0})
+    SUPPORT_CONN_DOMAIN_CAPABILITIES = _make(
+        function="virConnect.getDomainCapabilities",
+        run_args=(None, None, None, None))
+    SUPPORT_CONN_DOMAIN_RESET = _make(version="0.9.7", hv_version={"qemu": 0})
+    SUPPORT_CONN_VMPORT = _make(
+        version="1.2.16", hv_version={"qemu": "2.2.0", "test": 0})
+    SUPPORT_CONN_MEM_STATS_PERIOD = _make(
+        function="virDomain.setMemoryStatsPeriod",
+        version="1.1.1", hv_version={"qemu": 0})
+    # spice GL is actually enabled with libvirt 1.3.3, but 3.1.0 is the
+    # first version that sorts out the qemu:///system + cgroup issues
+    SUPPORT_CONN_SPICE_GL = _make(version="3.1.0",
+        hv_version={"qemu": "2.6.0", "test": 0})
+    SUPPORT_CONN_SPICE_RENDERNODE = _make(version="3.1.0",
+        hv_version={"qemu": "2.9.0", "test": 0})
+    SUPPORT_CONN_VIDEO_VIRTIO_ACCEL3D = _make(version="1.3.0",
+        hv_version={"qemu": "2.5.0", "test": 0})
+    SUPPORT_CONN_GRAPHICS_LISTEN_NONE = _make(version="2.0.0")
+    SUPPORT_CONN_RNG_URANDOM = _make(version="1.3.4")
+    SUPPORT_CONN_USB3_PORTS = _make(version="1.3.5")
+    SUPPORT_CONN_MACHVIRT_PCI_DEFAULT = _make(version="3.0.0")
+    SUPPORT_CONN_QEMU_XHCI = _make(version="3.3.0", hv_version={"qemu": "2.9.0"})
+    SUPPORT_CONN_VNC_NONE_AUTH = _make(hv_version={"qemu": "2.9.0"})
+    SUPPORT_CONN_DEVICE_BOOT_ORDER = _make(hv_version={"qemu": 0, "test": 0})
+    SUPPORT_CONN_RISCV_VIRT_PCI_DEFAULT = _make(version="5.3.0", hv_version={"qemu": "4.0.0"})
+
+    # We choose qemu 2.11.0 as the first version to target for q35 default.
+    # That's not really based on anything except reasonably modern at the
+    # time of these patches.
+    SUPPORT_QEMU_Q35_DEFAULT = _make(hv_version={"qemu": "2.11.0", "test": "0"})
+
+    # This is for disk <driver name=qemu>. xen supports this, but it's
+    # limited to arbitrary new enough xen, since I know libxl can handle it
+    # but I don't think the old xend driver does.
+    SUPPORT_CONN_DISK_DRIVER_NAME_QEMU = _make(
+        hv_version={"qemu": 0, "xen": "4.2.0"},
+        hv_libvirt_version={"qemu": 0, "xen": "1.1.0"})
+
+    # Domain checks
+    SUPPORT_DOMAIN_XML_INACTIVE = _make(function="virDomain.XMLDesc", run_args=(),
+        flag="VIR_DOMAIN_XML_INACTIVE")
+    SUPPORT_DOMAIN_XML_SECURE = _make(function="virDomain.XMLDesc", run_args=(),
+        flag="VIR_DOMAIN_XML_SECURE")
+    SUPPORT_DOMAIN_MANAGED_SAVE = _make(
+        function="virDomain.hasManagedSaveImage",
+        run_args=(0,))
+    SUPPORT_DOMAIN_JOB_INFO = _make(function="virDomain.jobInfo", run_args=())
+    SUPPORT_DOMAIN_LIST_SNAPSHOTS = _make(
+        function="virDomain.listAllSnapshots", run_args=())
+    SUPPORT_DOMAIN_MEMORY_STATS = _make(
+        function="virDomain.memoryStats", run_args=())
+    SUPPORT_DOMAIN_STATE = _make(function="virDomain.state", run_args=())
+    SUPPORT_DOMAIN_OPEN_GRAPHICS = _make(function="virDomain.openGraphicsFD",
+        version="1.2.8", hv_version={"qemu": 0})
+
+    # Pool checks
+    SUPPORT_POOL_ISACTIVE = _make(function="virStoragePool.isActive", run_args=())
+    SUPPORT_POOL_LISTALLVOLUMES = _make(
+        function="virStoragePool.listAllVolumes", run_args=())
+    SUPPORT_POOL_METADATA_PREALLOC = _make(
+        flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA",
+        version="1.0.1")
+
+    # Network checks
+    SUPPORT_NET_ISACTIVE = _make(function="virNetwork.isActive", run_args=())
 
 
-def check_version(virtconn, version):
-    """
-    Check libvirt version. Useful for the test suite so we don't need
-    to keep adding new support checks.
-    """
-    sobj = _SupportCheck(version=version)
-    return sobj.check_support(virtconn, None)
+    def check_support(self, virtconn, feature, data=None):
+        """
+        Attempt to determine if a specific libvirt feature is support given
+        the passed connection.
+
+        :param virtconn: Libvirt connection to check feature on
+        :param feature: Feature type to check support for
+        :type feature: One of the SUPPORT_* flags
+        :param data: Option libvirt object to use in feature checking
+        :type data: Could be virDomain, virNetwork, virStoragePool, hv name, etc
+
+        :returns: True if feature is supported, False otherwise
+        """
+        if "VirtinstConnection" in repr(data):
+            data = data.get_conn_for_api_arg()
+
+        sobj = _SUPPORT_OBJS[feature - 1]
+        return sobj.check_support(virtconn, data)
+
+
+    def check_version(self, virtconn, version):
+        """
+        Check libvirt version. Useful for the test suite so we don't need
+        to keep adding new support checks.
+        """
+        sobj = _SupportCheck(version=version)
+        return sobj.check_support(virtconn, None)
