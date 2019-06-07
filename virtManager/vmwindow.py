@@ -9,10 +9,6 @@ import logging
 from gi.repository import Gdk
 from gi.repository import Gtk
 
-import libvirt
-
-from virtinst import util
-
 from . import vmmenu
 from .baseclass import vmmGObjectUI
 from .details import vmmDetails
@@ -561,8 +557,8 @@ class vmmVMWindow(vmmGObjectUI):
         try:
             if self.is_visible():
                 self.vm.ensure_latest_xml()
-        except libvirt.libvirtError as e:
-            if util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+        except Exception as e:
+            if self.conn.support.is_libvirt_error_no_domain(e):
                 self.close()
                 return
             raise

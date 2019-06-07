@@ -228,3 +228,10 @@ class TestXMLMisc(unittest.TestCase):
         randommac = virtinst.DeviceInterface.generate_mac(realconn)
         self.assertTrue(randommac != testmac)
         self.assertTrue(len(randommac) == len(testmac))
+
+    def test_support_misc(self):
+        try:
+            self.conn.lookupByName("foobar-idontexist")
+        except Exception as e:
+            if not self.conn.support.is_libvirt_error_no_domain(e):
+                raise

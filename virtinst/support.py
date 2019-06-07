@@ -235,6 +235,18 @@ class SupportCache:
     Class containing all support checks and access APIs, and support for
     caching returned results
     """
+
+    @staticmethod
+    def is_libvirt_error_no_domain(err):
+        """
+        Small helper to check if the passed exception is a libvirt error
+        with code VIR_ERR_NO_DOMAIN
+        """
+        if not isinstance(err, libvirt.libvirtError):
+            return False
+        return err.get_error_code() == libvirt.VIR_ERR_NO_DOMAIN
+
+
     def __init__(self, virtconn):
         self._cache = {}
         self._virtconn = virtconn

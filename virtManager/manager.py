@@ -11,8 +11,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
-import libvirt
-
 from virtinst import util
 
 from . import vmmenu
@@ -704,8 +702,8 @@ class vmmManager(vmmGObjectUI):
 
             desc = vm.get_description()
             row[ROW_HINT] = util.xml_escape(desc)
-        except libvirt.libvirtError as e:
-            if util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+        except Exception as e:
+            if vm.conn.support.is_libvirt_error_no_domain(e):
                 return
             raise
 

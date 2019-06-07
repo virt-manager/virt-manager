@@ -14,7 +14,6 @@ import libvirt
 from virtinst import DomainCapabilities
 from virtinst import DomainSnapshot
 from virtinst import Guest
-from virtinst import util
 from virtinst import DeviceController
 from virtinst import DeviceDisk
 
@@ -1343,10 +1342,10 @@ class vmmDomain(vmmLibvirtObject):
         if self._has_managed_save is None:
             try:
                 self._has_managed_save = self._backend.hasManagedSaveImage(0)
-            except libvirt.libvirtError as e:
-                if not util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
-                    raise
-                return False
+            except Exception as e:
+                if self.conn.support.is_libvirt_error_no_domain(e):
+                    return False
+                raise
 
         return self._has_managed_save
 
