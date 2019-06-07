@@ -8,6 +8,7 @@
 
 import logging
 import os
+import tempfile
 
 import gi
 gi.require_version('Libosinfo', '1.0')
@@ -264,7 +265,7 @@ def prepare_install_script(guest, unattended_data, url=None, os_media=None):
 
 
 def generate_install_script(script):
-    scratch = os.path.join(util.get_cache_dir(), "unattended")
+    scratch = tempfile.mktemp(dir=util.get_cache_dir())
     if not os.path.exists(scratch):
         os.makedirs(scratch, 0o751)
 
