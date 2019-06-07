@@ -208,9 +208,18 @@ class InstallerTreeMedia(object):
 
     def cleanup(self, guest):
         ignore = guest
+        dirs = []
         for f in self._tmpfiles:
+            dirname = os.path.dirname(f)
+            if dirname not in dirs:
+                dirs.append(dirname)
             logging.debug("Removing %s", str(f))
             os.unlink(f)
+
+        for d in dirs:
+            if not os.listdir(d):
+                logging.debug("Removing %s", d)
+                os.rmdir(d)
 
         for vol in self._tmpvols:
             logging.debug("Removing volume '%s'", vol.name())

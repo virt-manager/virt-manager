@@ -140,9 +140,19 @@ class Installer(object):
         self._install_floppy_device.sync_path_props()
 
     def _cleanup_unattended_files(self):
+        dirs = []
         for f in self._unattended_files:
+            dirname = os.path.dirname(f)
+            if dirname not in dirs:
+                dirs.append(dirname)
+
             logging.debug("Removing %s", str(f))
             os.unlink(f)
+
+        for d in dirs:
+            if not os.listdir(d):
+                logging.debug("Removing %s", str(d))
+                os.rmdir(d)
 
     def _build_boot_order(self, guest, bootdev):
         bootorder = [bootdev]
