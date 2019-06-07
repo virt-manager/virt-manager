@@ -70,19 +70,15 @@ class InstallerTreeMedia(object):
                 (str(path), e))
 
     @staticmethod
-    def get_system_scratchdir(hvtype):
+    def get_system_scratchdir(guest):
         """
         Return the tmpdir that's accessible by VMs on system libvirt URIs
         """
-        if "VIRTINST_TEST_SUITE" in os.environ:
-            return os.getcwd()
-
-        if hvtype == "test":
+        if guest.conn.is_test():
             return "/tmp"
-        elif hvtype == "xen":
+        elif guest.conn.is_xen():
             return "/var/lib/xen"
-        else:
-            return "/var/lib/libvirt/boot"
+        return "/var/lib/libvirt/boot"
 
     @staticmethod
     def make_scratchdir(guest):
@@ -90,18 +86,19 @@ class InstallerTreeMedia(object):
         Determine the scratchdir for this URI, create it if necessary.
         scratchdir is the directory that's accessible by VMs
         """
-        scratch = None
-        if not guest.conn.is_session_uri():
-            scratch = InstallerTreeMedia.get_system_scratchdir(guest.type)
+        user_scratchdir = os.path.join(util.get_cache_dir(), "boot")
+        system_scratchdir = InstallerTreeMedia.get_system_scratchdir(guest)
 
-        if (not scratch or
-            not os.path.exists(scratch) or
-            not os.access(scratch, os.W_OK)):
-            scratch = os.path.join(util.get_cache_dir(), "boot")
-            if not os.path.exists(scratch):
-                os.makedirs(scratch, 0o751)
+        # If we are a session URI, or we don't have access to the system
+        # scratchdir, make sure the session scratchdir exists and use that.
+        if (guest.conn.is_session_uri() or
+            not os.path.exists(system_scratchdir) or
+            not os.access(system_scratchdir, os.W_OK)):
+            if not os.path.exists(user_scratchdir):
+                os.makedirs(user_scratchdir, 0o751)
+            return user_scratchdir
 
-        return scratch
+        return system_scratchdir
 
     def __init__(self, conn, location, location_kernel, location_initrd):
         self.conn = conn
@@ -195,9 +192,9 @@ class InstallerTreeMedia(object):
                                   self.initrd_injections,
                                   fetcher.scratchdir)
 
+        system_scratchdir = InstallerTreeMedia.get_system_scratchdir(guest)
         kernel, initrd, tmpvols = upload_kernel_initrd(
-                guest.conn, fetcher.scratchdir,
-                InstallerTreeMedia.get_system_scratchdir(guest.type),
+                guest.conn, fetcher.scratchdir, system_scratchdir,
                 fetcher.meter, kernel, initrd)
         self._tmpvols += tmpvols
 
