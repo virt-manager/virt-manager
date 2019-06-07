@@ -57,7 +57,6 @@ class VirtinstConnection(object):
         self._uriobj = URI(self._uri)
         self._caps = None
 
-        self._support_cache = {}
         self._fetch_cache = {}
 
         # These let virt-manager register a callback which provides its
@@ -68,7 +67,7 @@ class VirtinstConnection(object):
         self.cb_fetch_all_nodedevs = None
         self.cb_cache_new_pool = None
 
-        self.support = support.SupportCache()
+        self.support = support.SupportCache(weakref.proxy(self))
 
 
     ##############
@@ -78,6 +77,9 @@ class VirtinstConnection(object):
     def __getattr__(self, attr):
         if attr in self.__dict__:
             return self.__dict__[attr]
+
+        if attr.startswith("SUPPORT_"):
+            return getattr(self.support, attr.split("_", 1)[1].lower())
 
         # Proxy virConnect API calls
         libvirtconn = self.__dict__.get("_libvirtconn")
@@ -380,29 +382,12 @@ class VirtinstConnection(object):
     # Support check helpers #
     #########################
 
-    for _supportname in [_supportname for _supportname in
-                         dir(support.SupportCache) if
-                         _supportname.startswith("SUPPORT_")]:
-        locals()[_supportname] = getattr(support.SupportCache, _supportname)
-
-
     def check_support(self, features, data=None):
-        def _check_support(key):
-            if key not in self._support_cache:
-                self._support_cache[key] = self.support.check_support(
-                    self, key, data or self)
-            return self._support_cache[key]
-
         for f in util.listify(features):
             # 'and' condition over the feature list
-            if not _check_support(f):
+            if not f(data):
                 return False
         return True
-
-    def _check_version(self, version):
-        # Entry point for the test suite to do simple version checks,
-        # actual code should only use check_support
-        return self.support.check_version(self, version)
 
     def support_remote_url_install(self):
         if self._magic_uri:

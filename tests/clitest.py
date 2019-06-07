@@ -127,7 +127,7 @@ class SkipChecks:
             msg = check()
             skip = bool(msg)
         else:
-            skip = not conn._check_version(check)  # pylint: disable=protected-access
+            skip = not conn.support._check_version(check)  # pylint: disable=protected-access
             msg = "Skipping check due to version < %s" % check
 
         if skip:

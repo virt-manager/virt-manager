@@ -426,11 +426,11 @@ class vmmConnection(vmmGObject):
     # API support helpers #
     #######################
 
-    for _supportname in [_supportname for _supportname in
-                         dir(virtinst.VirtinstConnection) if
-                         _supportname.startswith("SUPPORT_")]:
-        locals()[_supportname] = getattr(virtinst.VirtinstConnection,
-                                         _supportname)
+    def __getattr__(self, attr):
+        if attr.startswith("SUPPORT_"):
+            return getattr(self._backend.support, attr.split("_", 1)[1].lower())
+        raise AttributeError
+
     def check_support(self, *args):
         # pylint: disable=no-value-for-parameter
         return self._backend.check_support(*args)
