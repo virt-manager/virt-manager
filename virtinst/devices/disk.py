@@ -707,12 +707,9 @@ class DeviceDisk(Device):
             path = self._build_url_from_network_source()
 
         if typ == DeviceDisk.TYPE_VOLUME:
-            conn = self.conn
-            if "weakref" in str(type(conn)):
-                conn = conn()
-
             try:
-                parent_pool = conn.storagePoolLookupByName(self.source_pool)
+                parent_pool = self.conn.storagePoolLookupByName(
+                    self.source_pool)
                 vol_object = parent_pool.storageVolLookupByName(
                     self.source_volume)
             except Exception as e:

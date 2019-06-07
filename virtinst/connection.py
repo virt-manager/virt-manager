@@ -162,7 +162,7 @@ class VirtinstConnection(object):
     def _fetch_all_domains_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_vms(
             self, {}, lambda obj, ignore: obj)
-        return [Guest(weakref.ref(self), parsexml=obj.XMLDesc(0))
+        return [Guest(weakref.proxy(self), parsexml=obj.XMLDesc(0))
                 for obj in ret]
 
     def fetch_all_domains(self):
@@ -178,7 +178,7 @@ class VirtinstConnection(object):
         return self._fetch_cache[key][:]
 
     def _build_pool_raw(self, poolobj):
-        return StoragePool(weakref.ref(self),
+        return StoragePool(weakref.proxy(self),
                            parsexml=poolobj.XMLDesc(0))
 
     def _fetch_all_pools_raw(self):
@@ -210,7 +210,7 @@ class VirtinstConnection(object):
         for vol in vols:
             try:
                 xml = vol.XMLDesc(0)
-                ret.append(StorageVolume(weakref.ref(self), parsexml=xml))
+                ret.append(StorageVolume(weakref.proxy(self), parsexml=xml))
             except Exception as e:
                 logging.debug("Fetching volume XML failed: %s", e)
         return ret
@@ -261,7 +261,7 @@ class VirtinstConnection(object):
     def _fetch_all_nodedevs_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_nodedevs(
             self, {}, lambda obj, ignore: obj)
-        return [NodeDevice(weakref.ref(self), obj.XMLDesc(0))
+        return [NodeDevice(weakref.proxy(self), obj.XMLDesc(0))
                 for obj in ret]
 
     def fetch_all_nodedevs(self):
