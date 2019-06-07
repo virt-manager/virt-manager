@@ -518,3 +518,16 @@ def format_number(number, SI=0, space=' '):
         fmt = '%.0f%s%s'
 
     return(fmt % (float(number or 0), space, symbols[depth]))
+
+
+# virtinst additions
+def make_meter(quiet):
+    if quiet:
+        return BaseMeter()
+    return TextMeter(fo=sys.stdout)
+
+
+def ensure_meter(meter):
+    if meter:
+        return meter
+    return make_meter(quiet=True)

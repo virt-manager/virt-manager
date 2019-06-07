@@ -13,6 +13,7 @@ import os
 
 import libvirt
 
+from . import progress
 from . import util
 from .guest import Guest
 from .devices import DeviceInterface
@@ -443,7 +444,7 @@ class Cloner(object):
         the new clone xml.
         """
         logging.debug("Starting duplicate.")
-        meter = util.ensure_meter(meter)
+        meter = progress.ensure_meter(meter)
 
         dom = None
         try:

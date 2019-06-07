@@ -9,13 +9,14 @@
 import os
 import logging
 
+from . import progress
+from . import unattended
+from . import util
 from .devices import DeviceDisk
 from .domain import DomainOs
 from .osdict import OSDB, OsMedia
 from .installertreemedia import InstallerTreeMedia
 from .cdrominject import perform_cdrom_injections
-from . import unattended
-from . import util
 
 
 class Installer(object):
@@ -432,7 +433,7 @@ class Installer(object):
         :param doboot: Boot guest even if it has no install phase
         """
         meter_label = _("Creating domain...")
-        meter = util.ensure_meter(meter)
+        meter = progress.ensure_meter(meter)
         meter.start(size=None, text=meter_label)
         needs_boot = doboot or self.has_install_phase()
 

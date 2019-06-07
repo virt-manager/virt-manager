@@ -12,9 +12,9 @@ import unittest
 
 from tests import utils
 
+import virtinst.progress
 from virtinst import Installer
 from virtinst import Guest
-from virtinst import util
 
 
 class _URLTestData(object):
@@ -64,7 +64,7 @@ hvmguest.os.os_type = "hvm"
 xenguest = Guest(testconn)
 xenguest.os.os_type = "xen"
 
-meter = util.make_meter(quiet=not utils.clistate.debug)
+meter = virtinst.progress.make_meter(quiet=not utils.clistate.debug)
 
 if utils.clistate.url_skip_libosinfo:
     os.environ["VIRTINST_TEST_SUITE_FORCE_LIBOSINFO"] = "0"

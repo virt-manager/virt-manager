@@ -9,7 +9,7 @@
 import logging
 
 from .. import diskbackend
-from .. import util
+from .. import progress
 from .device import Device, DeviceSeclabel
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
@@ -800,7 +800,7 @@ class DeviceDisk(Device):
             not self._storage_backend.will_create_storage()):
             return
 
-        meter = util.ensure_meter(meter)
+        meter = progress.ensure_meter(meter)
         vol_object = self._storage_backend.create(meter)
         self.storage_was_created = True
         if not vol_object:

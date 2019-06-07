@@ -7,6 +7,7 @@
 import logging
 import os
 
+from . import progress
 from . import unattended
 from . import urldetect
 from . import urlfetcher
@@ -136,7 +137,7 @@ class InstallerTreeMedia(object):
     ########################
 
     def _get_fetcher(self, guest, meter):
-        meter = util.ensure_meter(meter)
+        meter = progress.ensure_meter(meter)
 
         if not self._cached_fetcher:
             scratchdir = InstallerTreeMedia.make_scratchdir(guest)

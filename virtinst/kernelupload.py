@@ -7,7 +7,7 @@
 import logging
 import os
 
-from . import util
+from . import progress
 from .devices import DeviceDisk
 from .storage import StoragePool, StorageVolume
 
@@ -51,7 +51,7 @@ def _upload_file(conn, meter, destpool, src):
                 break
             data = data[ret:]
 
-    meter = util.ensure_meter(meter)
+    meter = progress.ensure_meter(meter)
 
     # Build placeholder volume
     size = os.path.getsize(src)

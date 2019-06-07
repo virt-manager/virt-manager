@@ -6,7 +6,6 @@
 #
 
 import os
-import sys
 
 import libvirt
 
@@ -133,19 +132,6 @@ def get_cache_dir():
     if not ret:
         ret = os.path.expanduser("~/.cache")
     return os.path.join(ret, "virt-manager")
-
-
-def ensure_meter(meter):
-    if meter:
-        return meter
-    return make_meter(quiet=True)
-
-
-def make_meter(quiet):
-    from virtinst import progress
-    if quiet:
-        return progress.BaseMeter()
-    return progress.TextMeter(fo=sys.stdout)
 
 
 def get_prop_path(obj, prop_path):

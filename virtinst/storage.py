@@ -10,8 +10,9 @@ import threading
 
 import libvirt
 
-from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from . import progress
 from . import util
+from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 _DEFAULT_DEV_TARGET = "/dev"
@@ -490,7 +491,7 @@ class StoragePool(_StorageObject):
         logging.debug("Creating storage pool '%s' with xml:\n%s",
                       self.name, xml)
 
-        meter = util.ensure_meter(meter)
+        meter = progress.ensure_meter(meter)
 
         try:
             pool = self.conn.storagePoolDefineXML(xml, 0)
@@ -749,7 +750,7 @@ class StorageVolume(_StorageObject):
                              args=(meter,))
         t.setDaemon(True)
 
-        meter = util.ensure_meter(meter)
+        meter = progress.ensure_meter(meter)
 
         cloneflags = 0
         createflags = 0

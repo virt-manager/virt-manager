@@ -451,8 +451,9 @@ def get_console_cb(guest):
 
 
 def get_meter():
+    import virtinst.progress
     quiet = (get_global_state().quiet or in_testsuite())
-    return util.make_meter(quiet=quiet)
+    return virtinst.progress.make_meter(quiet=quiet)
 
 
 ###########################
