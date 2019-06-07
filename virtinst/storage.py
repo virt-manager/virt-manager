@@ -285,7 +285,7 @@ class StoragePool(_StorageObject):
 
     @staticmethod
     def validate_name(conn, name):
-        util.validate_name(_("Storage object"), name)
+        XMLBuilder.validate_generic_name(_("Storage object"), name)
 
         try:
             conn.storagePoolLookupByName(name)
@@ -624,7 +624,7 @@ class StorageVolume(_StorageObject):
 
     @staticmethod
     def validate_name(pool, name):
-        util.validate_name(_("Storage object"), name)
+        XMLBuilder.validate_generic_name(_("Storage object"), name)
 
         try:
             pool.storageVolLookupByName(name)

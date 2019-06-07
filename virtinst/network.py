@@ -194,7 +194,7 @@ class Network(XMLBuilder):
 
     @staticmethod
     def validate_name(conn, name):
-        util.validate_name(_("Network"), name)
+        XMLBuilder.validate_generic_name(_("Network"), name)
 
         try:
             conn.networkLookupByName(name)

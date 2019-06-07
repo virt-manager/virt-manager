@@ -33,21 +33,6 @@ def libvirt_collision(collision_cb, val):
     return check
 
 
-def validate_name(name_type, val):
-    # Rather than try and match libvirt's regex, just forbid things we
-    # know don't work
-    forbid = [" "]
-    if not val:
-        raise ValueError(
-            _("A name must be specified for the %s") % name_type)
-    for c in forbid:
-        if c not in val:
-            continue
-        raise ValueError(
-            _("%s name '%s' can not contain '%s' character.") %
-            (name_type, val, c))
-
-
 def generate_name(base, collision_cb, suffix="", lib_collision=True,
                   start_num=1, sep="-", force_num=False, collidelist=None):
     """

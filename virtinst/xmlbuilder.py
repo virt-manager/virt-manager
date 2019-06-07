@@ -449,6 +449,21 @@ class XMLBuilder(object):
     def register_namespace(nsname, uri):
         XMLAPI.register_namespace(nsname, uri)
 
+    @staticmethod
+    def validate_generic_name(name_label, val):
+        # Rather than try and match libvirt's regex, just forbid things we
+        # know don't work
+        forbid = [" "]
+        if not val:
+            raise ValueError(
+                _("A name must be specified for the %s") % name_label)
+        for c in forbid:
+            if c not in val:
+                continue
+            raise ValueError(
+                _("%s name '%s' can not contain '%s' character.") %
+                (name_label, val, c))
+
 
     def __init__(self, conn, parsexml=None,
                  parentxmlstate=None, relative_object_xpath=None):

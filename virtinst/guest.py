@@ -105,7 +105,7 @@ class Guest(XMLBuilder):
     @staticmethod
     def validate_name(conn, name, check_collision=True, validate=True):
         if validate:
-            util.validate_name(_("Guest"), name)
+            XMLBuilder.validate_generic_name(_("Guest"), name)
         if not check_collision:
             return
 
