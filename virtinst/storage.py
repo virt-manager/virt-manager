@@ -136,8 +136,8 @@ class StoragePool(_StorageObject):
 
         try:
             xml = conn.findStoragePoolSources(pool_type, source_xml, 0)
-        except libvirt.libvirtError as e:
-            if util.is_error_nosupport(e):
+        except Exception as e:
+            if conn.support.is_error_nosupport(e):
                 return []
             raise
 

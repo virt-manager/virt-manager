@@ -8,8 +8,6 @@
 
 import libvirt
 
-from . import util
-
 
 # Check that command is present in the python bindings, and return the
 # the requested function
@@ -44,7 +42,7 @@ def _try_command(func, run_args, check_all_error=False):
     try:
         func(*run_args)
     except libvirt.libvirtError as e:
-        if util.is_error_nosupport(e):
+        if SupportCache.is_error_nosupport(e):
             return False
 
         if check_all_error:
@@ -245,6 +243,24 @@ class SupportCache:
         if not isinstance(err, libvirt.libvirtError):
             return False
         return err.get_error_code() == libvirt.VIR_ERR_NO_DOMAIN
+
+    @staticmethod
+    def is_error_nosupport(err):
+        """
+        Check if passed exception indicates that the called libvirt command isn't
+        supported
+
+        :param err: Exception raised from command call
+        :returns: True if command isn't supported, False if we can't determine
+        """
+        if not isinstance(err, libvirt.libvirtError):
+            return False
+
+        if (err.get_error_code() == libvirt.VIR_ERR_RPC or
+            err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT):
+            return True
+
+        return False
 
 
     def __init__(self, virtconn):

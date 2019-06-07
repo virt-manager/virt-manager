@@ -9,8 +9,6 @@ import time
 
 import libvirt
 
-from virtinst import util
-
 from .baseclass import vmmGObject
 
 
@@ -204,7 +202,7 @@ class vmmStatsManager(vmmGObject):
                 tx = io[4]
                 return rx, tx
         except libvirt.libvirtError as err:
-            if util.is_error_nosupport(err):
+            if vm.conn.support.is_error_nosupport(err):
                 logging.debug("conn does not support interfaceStats")
                 self._net_stats_supported = False
                 return 0, 0
@@ -264,7 +262,7 @@ class vmmStatsManager(vmmGObject):
                 wr = io[3]
                 return rd, wr
         except libvirt.libvirtError as err:
-            if util.is_error_nosupport(err):
+            if vm.conn.support.is_error_nosupport(err):
                 logging.debug("conn does not support blockStats")
                 self._disk_stats_supported = False
                 return 0, 0
@@ -353,7 +351,7 @@ class vmmStatsManager(vmmGObject):
             totalmem = stats.get("actual", 1)
             curmem = max(0, totalmem - stats.get("unused", totalmem))
         except libvirt.libvirtError as err:
-            if util.is_error_nosupport(err):
+            if vm.conn.support.is_error_nosupport(err):
                 logging.debug("conn does not support memoryStats")
                 self._mem_stats_supported = False
             else:
@@ -418,7 +416,7 @@ class vmmStatsManager(vmmGObject):
                 domallstats["virt-manager.timestamp"] = timestamp
                 ret[dom.UUIDString()] = domallstats
         except libvirt.libvirtError as err:
-            if util.is_error_nosupport(err):
+            if conn.support.is_error_nosupport(err):
                 logging.debug("conn does not support getAllDomainStats()")
                 self._all_stats_supported = False
             else:

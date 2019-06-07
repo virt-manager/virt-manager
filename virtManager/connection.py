@@ -1002,7 +1002,7 @@ class vmmConnection(vmmGObject):
             self._backend.setKeepAlive(20, 1)
         except Exception as e:
             if (not isinstance(e, AttributeError) and
-                not util.is_error_nosupport(e)):
+                not self.support.is_error_nosupport(e)):
                 raise
             logging.debug("Connection doesn't support KeepAlive, "
                 "skipping")

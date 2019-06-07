@@ -119,24 +119,6 @@ def xml_escape(xml):
     return xml
 
 
-def is_error_nosupport(err):
-    """
-    Check if passed exception indicates that the called libvirt command isn't
-    supported
-
-    :param err: Exception raised from command call
-    :returns: True if command isn't supported, False if we can't determine
-    """
-    if not isinstance(err, libvirt.libvirtError):
-        return False
-
-    if (err.get_error_code() == libvirt.VIR_ERR_RPC or
-        err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT):
-        return True
-
-    return False
-
-
 def local_libvirt_version():
     """
     Lookup the local libvirt library version, but cache the value since

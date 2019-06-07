@@ -9,8 +9,6 @@
 import os
 import logging
 
-import libvirt
-
 from .devices import DeviceDisk
 from .domain import DomainOs
 from .osdict import OSDB, OsMedia
@@ -464,12 +462,11 @@ class Installer(object):
         """
         try:
             domain.setAutostart(True)
-        except libvirt.libvirtError as e:
-            if util.is_error_nosupport(e):
-                logging.warning("Could not set autostart flag: libvirt "
-                             "connection does not support autostart.")
-            else:
-                raise e
+        except Exception as e:
+            if not self.conn.support.is_error_nosupport(e):
+                raise
+            logging.warning("Could not set autostart flag: libvirt "
+                            "connection does not support autostart.")
 
 
     ######################
