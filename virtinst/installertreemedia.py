@@ -69,6 +69,40 @@ class InstallerTreeMedia(object):
             raise ValueError(_("Validating install media '%s' failed: %s") %
                 (str(path), e))
 
+    @staticmethod
+    def get_system_scratchdir(hvtype):
+        """
+        Return the tmpdir that's accessible by VMs on system libvirt URIs
+        """
+        if "VIRTINST_TEST_SUITE" in os.environ:
+            return os.getcwd()
+
+        if hvtype == "test":
+            return "/tmp"
+        elif hvtype == "xen":
+            return "/var/lib/xen"
+        else:
+            return "/var/lib/libvirt/boot"
+
+    @staticmethod
+    def make_scratchdir(guest):
+        """
+        Determine the scratchdir for this URI, create it if necessary.
+        scratchdir is the directory that's accessible by VMs
+        """
+        scratch = None
+        if not guest.conn.is_session_uri():
+            scratch = InstallerTreeMedia.get_system_scratchdir(guest.type)
+
+        if (not scratch or
+            not os.path.exists(scratch) or
+            not os.access(scratch, os.W_OK)):
+            scratch = os.path.join(util.get_cache_dir(), "boot")
+            if not os.path.exists(scratch):
+                os.makedirs(scratch, 0o751)
+
+        return scratch
+
     def __init__(self, conn, location, location_kernel, location_initrd):
         self.conn = conn
         self.location = location
@@ -108,7 +142,7 @@ class InstallerTreeMedia(object):
         meter = util.ensure_meter(meter)
 
         if not self._cached_fetcher:
-            scratchdir = util.make_scratchdir(guest)
+            scratchdir = InstallerTreeMedia.make_scratchdir(guest)
 
             self._cached_fetcher = urlfetcher.fetcherForURI(
                 self.location, scratchdir, meter)
@@ -163,7 +197,7 @@ class InstallerTreeMedia(object):
 
         kernel, initrd, tmpvols = upload_kernel_initrd(
                 guest.conn, fetcher.scratchdir,
-                util.get_system_scratchdir(guest.type),
+                InstallerTreeMedia.get_system_scratchdir(guest.type),
                 fetcher.meter, kernel, initrd)
         self._tmpvols += tmpvols
 

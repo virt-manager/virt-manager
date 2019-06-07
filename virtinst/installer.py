@@ -312,7 +312,7 @@ class Installer(object):
         """
         search_paths = []
         if self._treemedia:
-            search_paths.append(util.make_scratchdir(guest))
+            search_paths.append(InstallerTreeMedia.make_scratchdir(guest))
         if self._cdrom_path():
             search_paths.append(self._cdrom_path())
         return search_paths

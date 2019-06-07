@@ -153,33 +153,6 @@ def local_libvirt_version():
     return getattr(libvirt, key)
 
 
-def get_system_scratchdir(hvtype):
-    if "VIRTINST_TEST_SUITE" in os.environ:
-        return os.getcwd()
-
-    if hvtype == "test":
-        return "/tmp"
-    elif hvtype == "xen":
-        return "/var/lib/xen"
-    else:
-        return "/var/lib/libvirt/boot"
-
-
-def make_scratchdir(guest):
-    scratch = None
-    if not guest.conn.is_session_uri():
-        scratch = get_system_scratchdir(guest.type)
-
-    if (not scratch or
-        not os.path.exists(scratch) or
-        not os.access(scratch, os.W_OK)):
-        scratch = os.path.join(get_cache_dir(), "boot")
-        if not os.path.exists(scratch):
-            os.makedirs(scratch, 0o751)
-
-    return scratch
-
-
 def pretty_mem(val):
     val = int(val)
     if val > (10 * 1024 * 1024):
