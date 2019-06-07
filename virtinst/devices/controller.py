@@ -79,9 +79,9 @@ class DeviceController(Device):
         ctrl = DeviceController(conn)
         ctrl.type = "usb"
         ctrl.model = "nec-xhci"
-        if conn.check_support(conn.SUPPORT_CONN_QEMU_XHCI):
+        if conn.support.conn_qemu_xhci():
             ctrl.model = "qemu-xhci"
-        if conn.check_support(conn.SUPPORT_CONN_USB3_PORTS):
+        if conn.support.conn_usb3_ports():
             # 15 is the max ports qemu supports, might as well
             # Add as many as possible
             ctrl.ports = 15

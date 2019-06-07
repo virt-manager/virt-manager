@@ -370,7 +370,7 @@ class vmmConnection(vmmGObject):
         if fmt != "qcow2":
             return fmt
 
-        if self.check_support(self._backend.SUPPORT_CONN_DEFAULT_QCOW2):
+        if self.support.conn_default_qcow2():
             return fmt
         return None
 
@@ -426,19 +426,13 @@ class vmmConnection(vmmGObject):
     # API support helpers #
     #######################
 
-    def __getattr__(self, attr):
-        if attr.startswith("SUPPORT_"):
-            return getattr(self._backend.support, attr.split("_", 1)[1].lower())
-        raise AttributeError
-
-    def check_support(self, *args):
-        # pylint: disable=no-value-for-parameter
-        return self._backend.check_support(*args)
+    @property
+    def support(self):
+        return self._backend.support
 
     def is_storage_capable(self):
         if self._storage_capable is None:
-            self._storage_capable = self.check_support(
-                                        self._backend.SUPPORT_CONN_STORAGE)
+            self._storage_capable = self.support.conn_storage()
             if self._storage_capable is False:
                 logging.debug("Connection doesn't seem to support storage "
                               "APIs. Skipping all storage polling.")
@@ -447,8 +441,7 @@ class vmmConnection(vmmGObject):
 
     def is_network_capable(self):
         if self._network_capable is None:
-            self._network_capable = self.check_support(
-                                       self._backend.SUPPORT_CONN_NETWORK)
+            self._network_capable = self.support.conn_network()
             if self._network_capable is False:
                 logging.debug("Connection doesn't seem to support network "
                               "APIs. Skipping all network polling.")
@@ -457,8 +450,7 @@ class vmmConnection(vmmGObject):
 
     def is_interface_capable(self):
         if self._interface_capable is None:
-            self._interface_capable = self.check_support(
-                                       self._backend.SUPPORT_CONN_INTERFACE)
+            self._interface_capable = self.support.conn_interface()
             if self._interface_capable is False:
                 logging.debug("Connection doesn't seem to support interface "
                               "APIs. Skipping all interface polling.")
@@ -467,8 +459,7 @@ class vmmConnection(vmmGObject):
 
     def is_nodedev_capable(self):
         if self._nodedev_capable is None:
-            self._nodedev_capable = self.check_support(
-                                            self._backend.SUPPORT_CONN_NODEDEV)
+            self._nodedev_capable = self.support.conn_nodedev()
         return self._nodedev_capable
 
     def _get_flags_helper(self, obj, key, check_func):
@@ -496,14 +487,12 @@ class vmmConnection(vmmGObject):
             act   = 0
             inact = 0
 
-            if self.check_support(
-                    self._backend.SUPPORT_DOMAIN_XML_INACTIVE, vm):
+            if self.support.domain_xml_inactive(vm):
                 inact = libvirt.VIR_DOMAIN_XML_INACTIVE
             else:
                 logging.debug("Domain XML inactive flag not supported.")
 
-            if self.check_support(
-                    self._backend.SUPPORT_DOMAIN_XML_SECURE, vm):
+            if self.support.domain_xml_secure(vm):
                 inact |= libvirt.VIR_DOMAIN_XML_SECURE
                 act = libvirt.VIR_DOMAIN_XML_SECURE
             else:
@@ -789,8 +778,7 @@ class vmmConnection(vmmGObject):
             self.idle_add(obj.recache_from_event_loop)
 
     def _add_conn_events(self):
-        if not self.check_support(
-                self._backend.SUPPORT_CONN_WORKING_XEN_EVENTS):
+        if not self.support.conn_working_xen_events():
             return
 
         def _check_events_disabled():

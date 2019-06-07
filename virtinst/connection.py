@@ -78,9 +78,6 @@ class VirtinstConnection(object):
         if attr in self.__dict__:
             return self.__dict__[attr]
 
-        if attr.startswith("SUPPORT_"):
-            return getattr(self.support, attr.split("_", 1)[1].lower())
-
         # Proxy virConnect API calls
         libvirtconn = self.__dict__.get("_libvirtconn")
         return getattr(libvirtconn, attr)
@@ -382,14 +379,7 @@ class VirtinstConnection(object):
     # Support check helpers #
     #########################
 
-    def check_support(self, features, data=None):
-        for f in util.listify(features):
-            # 'and' condition over the feature list
-            if not f(data):
-                return False
-        return True
-
     def support_remote_url_install(self):
         if self._magic_uri:
             return False
-        return self.check_support(self.SUPPORT_CONN_STREAM)
+        return self.support.conn_stream()

@@ -27,7 +27,7 @@ class DomainPm(XMLBuilder):
         # We've been disabling this in virt-manager for a while, but lets
         # do it here too for consistency.
         if (guest.os.is_x86() and
-            self.conn.check_support(self.conn.SUPPORT_CONN_PM_DISABLE)):
+            self.conn.support.conn_pm_disable()):
             if self.suspend_to_mem is None:
                 self.suspend_to_mem = False
             if self.suspend_to_disk is None:

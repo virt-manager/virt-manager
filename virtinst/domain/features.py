@@ -72,7 +72,7 @@ class DomainFeatures(XMLBuilder):
                 self.pae = capsinfo.guest.supports_pae()
 
         if (guest.hyperv_supported() and
-            self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_VAPIC)):
+            self.conn.support.conn_hyperv_vapic()):
             if self.hyperv_relaxed is None:
                 self.hyperv_relaxed = True
             if self.hyperv_vapic is None:

@@ -715,7 +715,7 @@ class Guest(XMLBuilder):
         if (self.os.is_x86() and
             self.conn.is_qemu() and
             "q35" in capsinfo.machines and
-            self.conn.check_support(self.conn.SUPPORT_QEMU_Q35_DEFAULT) and
+            self.conn.support.qemu_q35_default() and
             self.osinfo.supports_chipset_q35()):
             self.os.machine = "q35"
             return
@@ -815,7 +815,7 @@ class Guest(XMLBuilder):
         if not self.conn.is_qemu() and not self.conn.is_test():
             return
 
-        qemu_usb3 = self.conn.check_support(self.conn.SUPPORT_CONN_QEMU_XHCI)
+        qemu_usb3 = self.conn.support.conn_qemu_xhci()
         usb2 = False
         usb3 = False
         if self.os.is_x86():
@@ -824,16 +824,14 @@ class Guest(XMLBuilder):
         elif self.os.is_arm_machvirt():
             # For machvirt, we always assume OS supports usb3
             if (qemu_usb3 and
-                self.conn.check_support(
-                        self.conn.SUPPORT_CONN_MACHVIRT_PCI_DEFAULT)):
+                self.conn.support.conn_machvirt_pci_default()):
                 usb3 = True
         elif self.os.is_riscv_virt():
             # For RISC-V we can assume the guest OS supports USB3, but we
             # have to make sure libvirt and QEMU are new enough to be using
             # PCI by default
             if (qemu_usb3 and
-                self.conn.check_support(
-                        self.conn.SUPPORT_CONN_RISCV_VIRT_PCI_DEFAULT)):
+                self.conn.support.conn_riscv_virt_pci_default()):
                 usb3 = True
         elif self.os.is_pseries():
             # For pseries, we always assume OS supports usb3
@@ -859,7 +857,7 @@ class Guest(XMLBuilder):
 
         if (self.conn.is_qemu() and
             self._supports_virtioserial() and
-            self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
+            self.conn.support.conn_autosocket()):
             dev = DeviceChannel(self.conn)
             dev.type = "unix"
             dev.target_type = "virtio"
@@ -891,7 +889,7 @@ class Guest(XMLBuilder):
 
         if (self.conn.is_qemu() and
             self.osinfo.supports_virtiorng() and
-            self.conn.check_support(self.conn.SUPPORT_CONN_RNG_URANDOM)):
+            self.conn.support.conn_rng_urandom()):
             dev = DeviceRng(self.conn)
             dev.type = "random"
             dev.device = "/dev/urandom"
@@ -967,7 +965,7 @@ class Guest(XMLBuilder):
 
         if (self.features.vmport is None and
             self.os.is_x86() and
-            self.conn.check_support(self.conn.SUPPORT_CONN_VMPORT)):
+            self.conn.support.conn_vmport()):
             self.features.vmport = False
 
         self._add_spice_channels()

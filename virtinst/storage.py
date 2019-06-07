@@ -167,7 +167,7 @@ class StoragePool(_StorageObject):
         """
         Helper to build the 'default' storage pool
         """
-        if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
+        if not conn.support.conn_storage():
             return
 
         pool = None
@@ -212,7 +212,7 @@ class StoragePool(_StorageObject):
         """
         path = _get_default_pool_path(conn)
         if (not conn.is_remote() and
-            not conn.check_support(conn.SUPPORT_CONN_STORAGE)):
+            not conn.support.conn_storage()):
             if build and not os.path.exists(path):
                 os.makedirs(path)
             return path
@@ -238,7 +238,7 @@ class StoragePool(_StorageObject):
 
         :returns: virStoragePool object if found, None otherwise
         """
-        if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
+        if not conn.support.conn_storage():
             return None
 
         for pool in conn.fetch_all_pools():
@@ -719,8 +719,7 @@ class StorageVolume(_StorageObject):
         if not self.format and self.file_type == self.TYPE_FILE:
             self.format = "raw"
         if self._prop_is_unset("lazy_refcounts") and self.format == "qcow2":
-            self.lazy_refcounts = self.conn.check_support(
-                self.conn.SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS)
+            self.lazy_refcounts = self.conn.support.conn_qcow2_lazy_refcounts()
 
         if self._pool_xml.type == StoragePool.TYPE_LOGICAL:
             if self.allocation != self.capacity:
@@ -757,8 +756,7 @@ class StorageVolume(_StorageObject):
         if (self.format == "qcow2" and
             not self.backing_store and
             not self.conn.is_really_test() and
-            self.conn.check_support(
-                self.conn.SUPPORT_POOL_METADATA_PREALLOC, self.pool)):
+            self.conn.support.pool_metadata_prealloc(self.pool)):
             createflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
             if self.capacity == self.allocation:
                 # For cloning, this flag will make libvirt+qemu-img preallocate

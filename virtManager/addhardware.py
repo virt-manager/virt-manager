@@ -324,7 +324,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         # RNG params
         default_rng = "/dev/random"
-        if self.conn.check_support(self.conn.SUPPORT_CONN_RNG_URANDOM):
+        if self.conn.support.conn_rng_urandom():
             default_rng = "/dev/urandom"
         self.widget("rng-device").set_text(default_rng)
 

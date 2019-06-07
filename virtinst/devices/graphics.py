@@ -180,8 +180,7 @@ class DeviceGraphics(Device):
         self.autoport = None
         self.socket = None
 
-        if self.conn.check_support(
-                self.conn.SUPPORT_CONN_GRAPHICS_LISTEN_NONE):
+        if self.conn.support.conn_graphics_listen_none():
             obj = self.listens.add_new()
             obj.type = "none"
 
@@ -250,14 +249,12 @@ class DeviceGraphics(Device):
         return None
 
     def _default_spice_gl(self, _guest):
-        if not self.conn.check_support(
-                self.conn.SUPPORT_CONN_SPICE_GL):
+        if not self.conn.support.conn_spice_gl():
             raise ValueError(_("Host does not support spice GL"))
 
         # If spice GL but rendernode wasn't specified, hardcode
         # the first one
-        if not self.rendernode and self.conn.check_support(
-                self.conn.SUPPORT_CONN_SPICE_RENDERNODE):
+        if not self.rendernode and self.conn.support.conn_spice_rendernode():
             for nodedev in self.conn.fetch_all_nodedevs():
                 if not nodedev.is_drm_render():
                     continue

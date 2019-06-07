@@ -219,10 +219,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
             opengl_warning = ""
             rendernode_warning = ""
-            opengl_supported = self.conn.check_support(
-                    self.conn.SUPPORT_CONN_SPICE_GL)
-            rendernode_supported = self.conn.check_support(
-                    self.conn.SUPPORT_CONN_SPICE_RENDERNODE)
+            opengl_supported = self.conn.support.conn_spice_gl()
+            rendernode_supported = self.conn.support.conn_spice_rendernode()
 
             # * If spicegl isn't supported, show a warning icon and
             #     and desensitive everything

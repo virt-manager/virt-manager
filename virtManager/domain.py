@@ -191,10 +191,8 @@ class vmmDomain(vmmLibvirtObject):
         vmmLibvirtObject._cleanup(self)
 
     def _init_libvirt_state(self):
-        self.managedsave_supported = self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_MANAGED_SAVE, self._backend)
-        self._domain_state_supported = self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_STATE, self._backend)
+        self.managedsave_supported = self.conn.support.domain_managed_save(self._backend)
+        self._domain_state_supported = self.conn.support.domain_state(self._backend)
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -307,13 +305,11 @@ class vmmDomain(vmmLibvirtObject):
     ##################
 
     def _get_getjobinfo_supported(self):
-        return self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_JOB_INFO, self._backend)
+        return self.conn.support.domain_job_info(self._backend)
     getjobinfo_supported = property(_get_getjobinfo_supported)
 
     def snapshots_supported(self):
-        if not self.conn.check_support(
-                self.conn.SUPPORT_DOMAIN_LIST_SNAPSHOTS, self._backend):
+        if not self.conn.support.domain_list_snapshots(self._backend):
             return _("Libvirt connection does not support snapshots.")
 
         if self.list_snapshots():
@@ -1037,7 +1033,7 @@ class vmmDomain(vmmLibvirtObject):
         graphics = self.xmlobj.devices.graphics[0]
         if (graphics.type == "vnc" and
                 graphics.get_first_listen_type() == "none" and
-                not self.conn.SUPPORT_CONN_VNC_NONE_AUTH):
+                not self.conn.support.conn_vnc_none_auth()):
             flags = libvirt.VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH
 
         return self._backend.openGraphicsFD(0, flags)
@@ -1244,7 +1240,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def can_use_device_boot_order(self):
         # Return 'True' if guest can use new style boot device ordering
-        return self.conn.check_support(self.conn.SUPPORT_CONN_DEVICE_BOOT_ORDER)
+        return self.conn.support.conn_device_boot_order()
 
     def get_bootable_devices(self):
         # redirdev can also be marked bootable, but it should be rarely

@@ -37,10 +37,8 @@ class XMLParseTest(unittest.TestCase):
         actualXML = guest.get_xml()
         utils.diff_compare(actualXML, expect_out=expectXML)
 
-    def _alter_compare(self, actualXML, outfile, support_check=None):
+    def _alter_compare(self, actualXML, outfile):
         utils.diff_compare(actualXML, outfile)
-        if (support_check and not self.conn.check_support(support_check)):
-            return
         utils.test_create(self.conn, actualXML)
 
     def testRoundTrip(self):

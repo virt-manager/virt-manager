@@ -330,8 +330,7 @@ class vmmStatsManager(vmmGObject):
     def _set_mem_stats_period(self, vm):
         # QEMU requires to explicitly enable memory stats polling per VM
         # if we want fine grained memory stats
-        if not vm.conn.check_support(
-                vm.conn.SUPPORT_CONN_MEM_STATS_PERIOD):
+        if not vm.conn.support.conn_mem_stats_period():
             return
 
         # Only works for virtio balloon

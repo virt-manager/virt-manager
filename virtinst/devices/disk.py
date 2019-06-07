@@ -437,8 +437,7 @@ class DeviceDisk(Device):
         # If type block, use name=phy. Otherwise do the same as qemu
         if self.conn.is_xen() and self.type == self.TYPE_BLOCK:
             return self.DRIVER_NAME_PHY
-        if self.conn.check_support(
-                self.conn.SUPPORT_CONN_DISK_DRIVER_NAME_QEMU):
+        if self.conn.support.conn_disk_driver_name_qemu():
             return self.DRIVER_NAME_QEMU
         return None
 

@@ -123,7 +123,7 @@ def manage_path(conn, path):
     """
     If path is not managed, try to create a storage pool to probe the path
     """
-    if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
+    if not conn.support.conn_storage():
         return None, None
     if not path:
         return None, None

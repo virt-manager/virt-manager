@@ -87,8 +87,7 @@ class VMShutdownMenu(_VMMenu):
 
             if name == "reset":
                 child.set_tooltip_text(None)
-                if vm and not vm.conn.check_support(
-                        vm.conn.SUPPORT_CONN_DOMAIN_RESET):
+                if vm and not vm.conn.support.conn_domain_reset():
                     child.set_tooltip_text(_("Hypervisor does not support "
                         "domain reset."))
                     child.set_sensitive(False)

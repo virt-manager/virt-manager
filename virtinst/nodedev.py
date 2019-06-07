@@ -58,7 +58,7 @@ class NodeDevice(XMLBuilder):
 
         :returns: NodeDevice instance
         """
-        if not conn.check_support(conn.SUPPORT_CONN_NODEDEV):
+        if not conn.support.conn_nodedev():
             raise ValueError(_("Connection does not support host device "
                                "enumeration."))
 

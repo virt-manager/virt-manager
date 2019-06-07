@@ -141,8 +141,7 @@ class DomainCapabilities(XMLBuilder):
     @staticmethod
     def build_from_params(conn, emulator, arch, machine, hvtype):
         xml = None
-        if conn.check_support(
-                conn.SUPPORT_CONN_DOMAIN_CAPABILITIES):
+        if conn.support.conn_domain_capabilities():
             try:
                 xml = conn.getDomainCapabilities(emulator, arch,
                     machine, hvtype)

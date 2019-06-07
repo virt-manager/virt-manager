@@ -135,8 +135,7 @@ class Viewer(vmmGObject):
             # fixed: https://bugzilla.redhat.com/show_bug.cgi?id=1334071
             return None
 
-        if not self._vm.conn.check_support(
-                self._vm.conn.SUPPORT_DOMAIN_OPEN_GRAPHICS):
+        if not self._vm.conn.support.domain_open_graphics():
             return None
 
         return self._vm.open_graphics_fd()

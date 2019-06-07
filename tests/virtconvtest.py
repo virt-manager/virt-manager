@@ -41,7 +41,7 @@ class TestVirtConv(unittest.TestCase):
         if outbuf.getvalue():
             out_expect += ("\n\n" + outbuf.getvalue().replace(base_dir, ""))
 
-        if not conn.check_support(conn.SUPPORT_CONN_VMPORT):
+        if not conn.support.conn_vmport():
             self.skipTest("Not comparing XML because vmport isn't supported")
 
         utils.diff_compare(out_expect, out_path)

@@ -64,7 +64,7 @@ class DomainClock(XMLBuilder):
         hpet.present = False
 
         if (guest.hyperv_supported() and
-            self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK)):
+            self.conn.support.conn_hyperv_clock()):
             hyperv = self.timers.add_new()
             hyperv.name = "hypervclock"
             hyperv.present = True

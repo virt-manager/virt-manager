@@ -2720,7 +2720,7 @@ def _add_char_source_args(cls, prefix=""):
 ##################
 
 def _default_image_file_format(conn):
-    if conn.check_support(conn.SUPPORT_CONN_DEFAULT_QCOW2):
+    if conn.support.conn_default_qcow2():
         return "qcow2"
     return "raw"
 
@@ -3160,14 +3160,12 @@ class ParserGraphics(VirtCLIParser):
         if inst.conn.is_qemu() and inst.gl:
             if inst.type != "spice":
                 logging.warning("graphics type=%s does not support GL", inst.type)
-            elif not inst.conn.check_support(
-                    inst.conn.SUPPORT_CONN_SPICE_GL):
+            elif not inst.conn.support.conn_spice_gl():
                 logging.warning("qemu/libvirt version may not support spice GL")
         if inst.conn.is_qemu() and inst.rendernode:
             if inst.type != "spice":
                 logging.warning("graphics type=%s does not support rendernode", inst.type)
-            elif not inst.conn.check_support(
-                    inst.conn.SUPPORT_CONN_SPICE_RENDERNODE):
+            elif not inst.conn.support.conn_spice_rendernode():
                 logging.warning("qemu/libvirt version may not support rendernode")
 
         return ret
@@ -3735,8 +3733,7 @@ class ParserVideo(VirtCLIParser):
             if inst.model != "virtio":
                 logging.warning("video model=%s does not support accel3d",
                     inst.model)
-            elif not inst.conn.check_support(
-                    inst.conn.SUPPORT_CONN_VIDEO_VIRTIO_ACCEL3D):
+            elif not inst.conn.support.conn_video_virtio_accel_3d():
                 logging.warning("qemu/libvirt version may not support "
                              "virtio accel3d")
 
