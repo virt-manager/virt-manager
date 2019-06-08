@@ -12,6 +12,8 @@ import tempfile
 
 
 def _run_inject_commands(initrd, tempdir):
+    logging.debug("Appending to the initrd.")
+
     find_proc = subprocess.Popen(['find', '.', '-print0'],
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -53,10 +55,14 @@ def perform_initrd_injections(initrd, injections, scratchdir):
         os.chmod(tempdir, 0o775)
 
         for filename in injections:
-            logging.debug("Copying %s to the initrd.", filename)
-            shutil.copy(filename, tempdir)
+            if type(filename) is tuple:
+                filename, dst = filename
+            else:
+                dst = os.path.basename(filename)
 
-        logging.debug("Appending to the initrd.")
+            logging.debug("Injecting src=%s dst=%s", filename, dst)
+            shutil.copy(filename, os.path.join(tempdir, dst))
+
         _run_inject_commands(initrd, tempdir)
     finally:
         shutil.rmtree(tempdir)

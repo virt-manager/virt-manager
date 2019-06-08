@@ -7,7 +7,6 @@
 # See the COPYING file in the top-level directory.
 
 import logging
-import os
 import tempfile
 
 from gi.repository import Libosinfo
@@ -260,12 +259,12 @@ def prepare_install_script(guest, unattended_data, url=None, os_media=None):
 
 
 def generate_install_script(guest, script):
-    scratch = tempfile.mktemp(dir=guest.conn.get_app_cache_dir())
-    if not os.path.exists(scratch):
-        os.makedirs(scratch, 0o751)
+    scratch = guest.conn.get_app_cache_dir()
+    fileobj = tempfile.NamedTemporaryFile(
+        dir=scratch, prefix="virtinst-unattended-script", delete=False)
+    scriptpath = fileobj.name
 
     content = script.generate()
-    scriptpath = os.path.join(scratch, script.get_expected_filename())
     open(scriptpath, "w").write(content)
 
     logging.debug("Generated unattended script: %s", scriptpath)

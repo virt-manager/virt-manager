@@ -11,23 +11,7 @@ import subprocess
 import tempfile
 
 
-def perform_cdrom_injections(injections, scratchdir):
-    """
-    Insert files into the root directory of a floppy
-    """
-    if not injections:
-        return
-
-    tempdir = tempfile.mkdtemp(dir=scratchdir)
-    os.chmod(tempdir, 0o775)
-
-    tempfiles = []
-    iso = os.path.join(tempdir, "unattended.iso")
-    for filename in injections:
-        shutil.copy(filename, tempdir)
-
-    tempfiles = os.listdir(tempdir)
-
+def _run_iso_commands(iso, tempdir):
     cmd = ["mkisofs",
            "-o", iso,
            "-J",
@@ -35,10 +19,36 @@ def perform_cdrom_injections(injections, scratchdir):
            "-rational-rock",
            tempdir]
     logging.debug("Running mkisofs: %s", cmd)
-    output = subprocess.check_output(cmd)
+    output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
     logging.debug("cmd output: %s", output)
 
-    for f in tempfiles:
-        os.unlink(os.path.join(tempdir, f))
+
+def perform_cdrom_injections(injections, scratchdir):
+    """
+    Insert files into the root directory of a floppy
+    """
+    if not injections:
+        return
+
+    fileobj = tempfile.NamedTemporaryFile(
+        dir=scratchdir, prefix="virtinst-unattended-iso", delete=False)
+    iso = fileobj.name
+
+    tempdir = tempfile.mkdtemp(dir=scratchdir)
+    try:
+        os.chmod(tempdir, 0o775)
+
+        for filename in injections:
+            if type(filename) is tuple:
+                filename, dst = filename
+            else:
+                dst = os.path.basename(filename)
+
+            logging.debug("Injecting src=%s dst=%s", filename, dst)
+            shutil.copy(filename, os.path.join(tempdir, dst))
+
+        _run_iso_commands(iso, tempdir)
+    finally:
+        shutil.rmtree(tempdir)
 
     return iso

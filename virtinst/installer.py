@@ -50,7 +50,7 @@ class Installer(object):
         self._install_initrd = None
         self._install_cdrom_device_added = False
         self._unattended_install_cdrom_device = None
-        self._unattended_files = []
+        self._tmpfiles = []
         self._defaults_are_set = False
         self._unattended_data = None
 
@@ -137,21 +137,6 @@ class Installer(object):
         self._unattended_install_cdrom_device.path = None
         self._unattended_install_cdrom_device.sync_path_props()
 
-    def _cleanup_unattended_files(self):
-        dirs = []
-        for f in self._unattended_files:
-            dirname = os.path.dirname(f)
-            if dirname not in dirs:
-                dirs.append(dirname)
-
-            logging.debug("Removing %s", str(f))
-            os.unlink(f)
-
-        for d in dirs:
-            if not os.listdir(d):
-                logging.debug("Removing %s", str(d))
-                os.rmdir(d)
-
     def _build_boot_order(self, guest, bootdev):
         bootorder = [bootdev]
 
@@ -224,13 +209,14 @@ class Installer(object):
         osmedia = OsMedia(osguess[1])
         script = unattended.prepare_install_script(
                 guest, self._unattended_data, self.cdrom, osmedia)
+        expected_filename = script.get_expected_filename()
         scriptpath = unattended.generate_install_script(guest, script)
 
-        iso = perform_cdrom_injections([scriptpath],
+        iso = perform_cdrom_injections([(scriptpath, expected_filename)],
                 guest.conn.get_app_cache_dir())
         self._add_unattended_install_cdrom_device(guest, iso)
 
-        self._unattended_files.extend([scriptpath, iso])
+        self._tmpfiles.extend([scriptpath, iso])
 
     def _prepare(self, guest, meter):
         if self._treemedia:
@@ -245,8 +231,10 @@ class Installer(object):
     def _cleanup(self, guest):
         if self._treemedia:
             self._treemedia.cleanup(guest)
-        elif self._unattended_files:
-            self._cleanup_unattended_files()
+
+        for f in self._tmpfiles:
+            logging.debug("Removing %s", str(f))
+            os.unlink(f)
 
     def _get_postinstall_bootdev(self, guest):
         if self.cdrom and self.livecd:

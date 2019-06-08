@@ -211,11 +211,12 @@ class InstallerTreeMedia(object):
         location = self.location if self._media_type == MEDIA_URL else None
         script = unattended.prepare_install_script(
                 guest, self._unattended_data, location, cache.os_media)
+        expected_filename = script.get_expected_filename()
         scriptpath = unattended.generate_install_script(guest, script)
         unattended_cmdline = script.generate_cmdline()
         logging.debug("Generated unattended cmdline: %s", unattended_cmdline)
 
-        self.initrd_injections.append(scriptpath)
+        self.initrd_injections.append((scriptpath, expected_filename))
         self._tmpfiles.append(scriptpath)
         return unattended_cmdline
 
@@ -244,18 +245,9 @@ class InstallerTreeMedia(object):
 
     def cleanup(self, guest):
         ignore = guest
-        dirs = []
         for f in self._tmpfiles:
-            dirname = os.path.dirname(f)
-            if dirname not in dirs:
-                dirs.append(dirname)
             logging.debug("Removing %s", str(f))
             os.unlink(f)
-
-        for d in dirs:
-            if not os.listdir(d):
-                logging.debug("Removing %s", d)
-                os.rmdir(d)
 
         for vol in self._tmpvols:
             logging.debug("Removing volume '%s'", vol.name())
