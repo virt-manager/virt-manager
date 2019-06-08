@@ -50,6 +50,7 @@ iso_links = [
     "/tmp/fake-fedora17-tree.iso",
     "/tmp/fake-centos65-label.iso",
     "/tmp/fake-no-osinfo.iso",
+    "/tmp/fake-win7.iso",
 ]
 
 exist_files = exist_images
@@ -78,6 +79,7 @@ test_files = {
     'ISOTREE': iso_links[0],
     'ISOLABEL': iso_links[1],
     'ISO-NO-OS': iso_links[2],
+    'ISO-WIN7': iso_links[3],
     'TREEDIR': "%s/fakefedoratree" % XMLDIR,
     'COLLIDE': "/dev/default-pool/collidevol1.img",
 }
@@ -786,6 +788,7 @@ c.add_compare("--location ftp://example.com", "fake-ftp")  # fake ftp:// install
 c.add_compare("--location https://foobar.com", "fake-http")  # fake https:// install using urlfetcher.py mocking
 c.add_compare("--connect %(URI-KVM)s --os-variant fedora26,install=location", "osinfo-url")  # getting URL from osinfo
 c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=desktop,admin-password=foobar", "osinfo-url-unattended")  # unattended install for fedora, using initrd injection
+c.add_compare("--connect %(URI-KVM)s --os-variant win7 --cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended")  # unattended install for win7
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--livecd")  # LiveCD with no media

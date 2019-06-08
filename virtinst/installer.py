@@ -129,6 +129,12 @@ class Installer(object):
         self._unattended_install_cdrom_device = dev
         guest.add_device(self._unattended_install_cdrom_device)
 
+        if self.conn.in_testsuite():
+            # pylint: disable=protected-access
+            # Hack to set just the XML path differently for the test suite.
+            # Setting this via regular 'path' will error that it doesn't exist
+            dev._source_file = "/TESTSUITE_UNATTENDED_ISO"
+
     def _remove_unattended_install_cdrom_device(self, guest):
         dummy = guest
         if not self._unattended_install_cdrom_device:
