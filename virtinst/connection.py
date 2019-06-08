@@ -415,6 +415,8 @@ class VirtinstConnection(object):
     #########################
 
     def support_remote_url_install(self):
+        if self.in_testsuite():
+            return True
         if self._magic_uri:
             return False
         return self.support.conn_stream()

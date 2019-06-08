@@ -37,13 +37,33 @@ def _build_pool(conn, meter, path):
     return ret
 
 
+class _MockStream:
+    _data_size = None
+
+    def send(self, data):
+        if self._data_size is None:
+            self._data_size = len(data)
+
+        block_size = 1024
+        ret = min(self._data_size, block_size)
+        self._data_size = max(0, self._data_size - block_size)
+        return ret
+
+    def finish(self):
+        pass
+
+
 def _upload_file(conn, meter, destpool, src):
     """
     Helper for uploading a file to a pool, via libvirt. Used for
     kernel/initrd upload when we can't access the system scratchdir
     """
     # Build stream object
-    stream = conn.newStream(0)
+    if conn.in_testsuite():
+        stream = _MockStream()
+    else:
+        stream = conn.newStream(0)
+
     def safe_send(data):
         while True:
             ret = stream.send(data)
@@ -77,7 +97,8 @@ def _upload_file(conn, meter, destpool, src):
         offset = 0
         length = size
         flags = 0
-        vol.upload(stream, offset, length, flags)
+        if not conn.in_testsuite():
+            vol.upload(stream, offset, length, flags)
 
         # Open source file
         fileobj = open(src, "rb")
