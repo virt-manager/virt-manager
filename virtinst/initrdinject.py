@@ -11,21 +11,7 @@ import subprocess
 import tempfile
 
 
-def perform_initrd_injections(initrd, injections, scratchdir):
-    """
-    Insert files into the root directory of the initial ram disk
-    """
-    if not injections:
-        return
-
-    tempdir = tempfile.mkdtemp(dir=scratchdir)
-    os.chmod(tempdir, 0o775)
-
-    for filename in injections:
-        logging.debug("Copying %s to the initrd.", filename)
-        shutil.copy(filename, tempdir)
-
-    logging.debug("Appending to the initrd.")
+def _run_inject_commands(initrd, tempdir):
     find_proc = subprocess.Popen(['find', '.', '-print0'],
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -43,7 +29,6 @@ def perform_initrd_injections(initrd, injections, scratchdir):
     find_proc.wait()
     gzip_proc.wait()
     f.close()
-    shutil.rmtree(tempdir)
 
     finderr = find_proc.stderr.read()
     cpioerr = cpio_proc.stderr.read()
@@ -54,3 +39,24 @@ def perform_initrd_injections(initrd, injections, scratchdir):
         logging.debug("cpio stderr=%s", cpioerr)
     if gziperr:
         logging.debug("gzip stderr=%s", gziperr)
+
+
+def perform_initrd_injections(initrd, injections, scratchdir):
+    """
+    Insert files into the root directory of the initial ram disk
+    """
+    if not injections:
+        return
+
+    tempdir = tempfile.mkdtemp(dir=scratchdir)
+    try:
+        os.chmod(tempdir, 0o775)
+
+        for filename in injections:
+            logging.debug("Copying %s to the initrd.", filename)
+            shutil.copy(filename, tempdir)
+
+        logging.debug("Appending to the initrd.")
+        _run_inject_commands(initrd, tempdir)
+    finally:
+        shutil.rmtree(tempdir)
