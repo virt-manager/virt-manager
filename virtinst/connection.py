@@ -419,4 +419,6 @@ class VirtinstConnection(object):
             return True
         if self._magic_uri:
             return False
+        if self.is_test():
+            return False
         return self.support.conn_stream()
