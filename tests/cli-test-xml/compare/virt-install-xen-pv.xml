@@ -24,7 +24,7 @@
     </disk>
     <controller type="xenbus" index="0" maxGrantFrames="64"/>
     <interface type="bridge">
-      <source bridge="eth0"/>
+      <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
     </interface>
     <console type="pty"/>
@@ -54,7 +54,7 @@
     </disk>
     <controller type="xenbus" index="0" maxGrantFrames="64"/>
     <interface type="bridge">
-      <source bridge="eth0"/>
+      <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
     </interface>
     <console type="pty"/>

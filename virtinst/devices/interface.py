@@ -89,7 +89,7 @@ def _default_source(conn):
     if not conn.is_remote():
         ret = _default_bridge()
         if conn.in_testsuite():
-            ret = "eth0"
+            ret = "testsuitebr0"
         if ret:
             return ["bridge", ret]
     return ["network", "default"]
