@@ -546,25 +546,20 @@ class _OsVariant(object):
             return None
 
         # Red Hat distros
-        if self.name.endswith("-unknown"):
-            return "inst.repo"
-
         try:
             version = float(self.version)
         except Exception:
-            return None
+            # Can hit this for -rawhide or -unknown
+            version = 999
 
-        if self.distro in ["centos", "rhel"]:
-            if version < 7:
-                return "method"
-            return "inst.repo"
+        if self.distro in ["centos", "rhel"] and version < 7:
+            return "method"
 
-        if self.distro in ["fedora"]:
-            if version < 19:
-                return "method"
-            return "inst.repo"
+        if self.distro in ["fedora"] and version < 19:
+            return "method"
 
-        return None
+        return "inst.repo"
+
 
     def get_location(self, arch):
         treelist = []
