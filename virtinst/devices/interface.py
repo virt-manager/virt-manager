@@ -62,13 +62,7 @@ def _default_route():
     return None
 
 
-def _default_bridge(conn):
-    if "VIRTINST_TEST_SUITE" in os.environ:
-        return "eth0"
-
-    if conn.is_remote():
-        return None
-
+def _default_bridge():
     dev = _default_route()
     if not dev:
         return None
@@ -91,10 +85,13 @@ def _default_bridge(conn):
     return None
 
 
-def _default_network(conn):
-    ret = _default_bridge(conn)
-    if ret:
-        return ["bridge", ret]
+def _default_source(conn):
+    if not conn.is_remote():
+        ret = _default_bridge()
+        if conn.in_testsuite():
+            ret = "eth0"
+        if ret:
+            return ["bridge", ret]
     return ["network", "default"]
 
 
@@ -279,7 +276,7 @@ class DeviceInterface(Device):
         if (self.conn.is_qemu_session() or self.conn.is_test()):
             self.type = self.TYPE_USER
         else:
-            self.type, self.source = _default_network(self.conn)
+            self.type, self.source = _default_source(self.conn)
 
 
     ##################
@@ -310,7 +307,9 @@ class DeviceInterface(Device):
         if not self.macaddr:
             self.macaddr = self.generate_mac(self.conn)
         if self.type == self.TYPE_BRIDGE and not self.bridge:
-            self.bridge = _default_bridge(self.conn)
+            srctype, br = _default_source(self.conn)
+            if srctype == self.TYPE_BRIDGE:
+                self.bridge = br
         if self.type == self.TYPE_DIRECT and not self.source_mode:
             self.source_mode = "vepa"
         if not self.model:
