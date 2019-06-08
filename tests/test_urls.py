@@ -16,6 +16,9 @@ import virtinst.progress
 from virtinst import Installer
 from virtinst import Guest
 
+# These are all functional tests
+os.environ.pop("VIRTINST_TEST_SUITE", None)
+
 
 class _URLTestData(object):
     """
@@ -182,8 +185,6 @@ def _testURL(testdata):
 
 
 def _testURLWrapper(testdata):
-    os.environ.pop("VIRTINST_TEST_SUITE", None)
-
     sys.stdout.write("\nTesting %-25s " % testdata.name)
     sys.stdout.flush()
 

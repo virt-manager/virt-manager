@@ -3,6 +3,8 @@
 #
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
+#
+# Backends for the various URL types we support (http, https, ftp, local)
 
 import ftplib
 import io
@@ -15,9 +17,74 @@ import urllib
 import requests
 
 
-###########################################################################
-# Backends for the various URL types we support (http, https, ftp, local) #
-###########################################################################
+##############################
+# Mocking for the test suite #
+##############################
+
+def _in_testsuite():
+    return "VIRTINST_TEST_SUITE" in os.environ
+
+
+def _make_mock_url(url, filesyntax):
+    if url.endswith("treeinfo"):
+        # If the url is requesting treeinfo, give a fake treeinfo from
+        # our testsuite data
+        fn = ("%s/../tests/cli-test-xml/fakerhel6tree/.treeinfo" %
+                os.path.abspath(os.path.dirname(__file__)))
+        abspath = os.path.abspath(fn)
+    else:
+        # Otherwise just copy this file
+        abspath = os.path.abspath(__file__)
+
+    if filesyntax:
+        return "file://" + abspath
+    return abspath
+
+
+class _MockRequestsResponse:
+    def __init__(self, url):
+        fn = _make_mock_url(url, filesyntax=False)
+        self._content = open(fn).read()
+        self.headers = {'content-length': len(self._content)}
+
+    def raise_for_status(self):
+        pass
+    def iter_content(self, *args, **kwargs):
+        dummy = args
+        dummy = kwargs
+        return [self._content.encode("utf-8")]
+
+
+class _MockRequestsSession:
+    def close(self):
+        pass
+    def head(self, url, *args, **kwargs):
+        dummy = args
+        dummy = kwargs
+        return _MockRequestsResponse(url)
+    def get(self, url, *args, **kwargs):
+        dummy = args
+        dummy = kwargs
+        return _MockRequestsResponse(url)
+
+
+class _MockFTPSession:
+    def connect(self, *args, **kwargs):
+        pass
+    def login(self, *args, **kwargs):
+        pass
+    def voidcmd(self, *args, **kwargs):
+        pass
+    def quit(self, *args, **kwargs):
+        pass
+    def size(self, url):
+        path = _make_mock_url(url, filesyntax=False)
+        return os.path.getsize(path)
+
+
+###########################
+# Fetcher implementations #
+###########################
 
 class _URLFetcher(object):
     """
@@ -168,7 +235,10 @@ class _HTTPURLFetcher(_URLFetcher):
     _session = None
 
     def _prepare(self):
-        self._session = requests.Session()
+        if _in_testsuite():
+            self._session = _MockRequestsSession()
+        else:
+            self._session = requests.Session()
 
     def _cleanup(self):
         if self._session:
@@ -227,7 +297,10 @@ class _FTPURLFetcher(_URLFetcher):
 
         try:
             parsed = urllib.parse.urlparse(self.location)
-            self._ftp = ftplib.FTP()
+            if _in_testsuite():
+                self._ftp = _MockFTPSession()
+            else:
+                self._ftp = ftplib.FTP()
             username = urllib.parse.unquote(parsed.username or '')
             password = urllib.parse.unquote(parsed.password or '')
             self._ftp.connect(parsed.hostname, parsed.port or 0)
@@ -242,6 +315,8 @@ class _FTPURLFetcher(_URLFetcher):
         """
         Use urllib and ftplib to grab the file
         """
+        if _in_testsuite():
+            url = _make_mock_url(url, filesyntax=True)
         request = urllib.request.Request(url)
         urlobj = urllib.request.urlopen(request)
         size = self._ftp.size(urllib.parse.urlparse(url)[2])

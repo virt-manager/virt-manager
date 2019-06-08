@@ -8,9 +8,14 @@
 
 import datetime
 import logging
+import os
 import re
 
 from gi.repository import Libosinfo
+
+
+def _in_testsuite():
+    return "VIRTINST_TEST_SUITE" in os.environ
 
 
 ###################
@@ -234,6 +239,12 @@ class _OSDB(object):
     def guess_os_by_tree(self, location):
         if location.startswith("/"):
             location = "file://" + location
+
+        if _in_testsuite() and not location.startswith("file:"):
+            # We have mock network tests, but we don't want to pass the
+            # fake URL to libosinfo because it slows down the testcase
+            return None
+
         try:
             tree = Libosinfo.Tree.create_from_location(location, None)
         except Exception as e:

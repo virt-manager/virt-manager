@@ -782,6 +782,8 @@ c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --print-step 2")
 c.add_valid("--pxe --autostart")  # --autostart flag
 c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
 c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
+c.add_compare("--location ftp://example.com", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
+c.add_compare("--location https://foobar.com", "fake-http")  # fake https:// install using urlfetcher.py mocking
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--livecd")  # LiveCD with no media
