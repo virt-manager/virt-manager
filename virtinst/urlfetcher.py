@@ -43,6 +43,7 @@ def _make_mock_url(url, filesyntax):
 
 class _MockRequestsResponse:
     def __init__(self, url):
+        logging.debug("mocking requests session for url=%s", url)
         fn = _make_mock_url(url, filesyntax=False)
         self._content = open(fn).read()
         self.headers = {'content-length': len(self._content)}

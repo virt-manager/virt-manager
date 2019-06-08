@@ -347,13 +347,13 @@ class _OsVariant(object):
     # Internal helper APIs #
     ########################
 
-    def _is_related_to(self, related_os_list, os=None,
+    def _is_related_to(self, related_os_list, osobj=None,
             check_derives=True, check_upgrades=True, check_clones=True):
-        os = os or self._os
-        if not os:
+        osobj = osobj or self._os
+        if not osobj:
             return False
 
-        if os.get_short_id() in related_os_list:
+        if osobj.get_short_id() in related_os_list:
             return True
 
         check_list = []
@@ -363,18 +363,18 @@ class _OsVariant(object):
                     check_list.append(obj)
 
         if check_derives:
-            _extend(os.get_related(
+            _extend(osobj.get_related(
                 Libosinfo.ProductRelationship.DERIVES_FROM).get_elements())
         if check_clones:
-            _extend(os.get_related(
+            _extend(osobj.get_related(
                 Libosinfo.ProductRelationship.CLONES).get_elements())
         if check_upgrades:
-            _extend(os.get_related(
+            _extend(osobj.get_related(
                 Libosinfo.ProductRelationship.UPGRADES).get_elements())
 
         for checkobj in check_list:
             if (checkobj.get_short_id() in related_os_list or
-                self._is_related_to(related_os_list, os=checkobj,
+                self._is_related_to(related_os_list, osobj=checkobj,
                     check_upgrades=check_upgrades,
                     check_derives=check_derives,
                     check_clones=check_clones)):
