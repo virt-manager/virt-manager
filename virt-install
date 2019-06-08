@@ -455,15 +455,17 @@ def build_installer(options, guest):
                 options.cdrom = None
             options.os_variant.install = "location"
 
+    INSTALL_VALUES = ["location"]
+    if options.os_variant.install not in INSTALL_VALUES + [None]:
+        fail(_("Unknown --os-variant install value '%s'. Must be one of: %s") %
+                (options.os_variant.install, ", ".join(INSTALL_VALUES)))
+
     if options.os_variant.install == "location":
         if not options.location:
             location = guest.osinfo.get_location(guest.os.arch)
             logging.debug(
                     "Generated default libosinfo '--location %s'", location)
             options.location = location
-    elif options.os_variant.install:
-        fail(_("Unknown --os-variant install=%s") %
-                options.os_variant.install)
 
     if options.location:
         (location,

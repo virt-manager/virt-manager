@@ -784,6 +784,8 @@ c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
 c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_compare("--location ftp://example.com", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
 c.add_compare("--location https://foobar.com", "fake-http")  # fake https:// install using urlfetcher.py mocking
+c.add_compare("--connect %(URI-KVM)s --os-variant fedora26,install=location", "osinfo-url")  # getting URL from osinfo
+c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=desktop,admin-password=foobar", "osinfo-url-unattended")  # unattended install for fedora, using initrd injection
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--livecd")  # LiveCD with no media
@@ -792,8 +794,9 @@ c.add_invalid("--pxe --boot menu=foobar")
 c.add_invalid("--cdrom %(EXISTIMG1)s --extra-args console=ttyS0")  # cdrom fail w/ extra-args
 c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img,kernel_args='foo bar' --initrd-inject virt-install")  # initrd-inject with manual kernel/initrd
 c.add_invalid("--disk none --location kernel=/dev/null,initrd=/dev/null")  # --location with manual kernel/initrd, but not URL
-c.add_invalid("--os-variant winxp,install=location")  # no URL for winxp
-c.add_invalid("--os-variant fedora28,install=fribber")  # unknown install= value
+c.add_invalid("--os-variant winxp,install=location", grep="does not have a URL location")  # no URL for winxp
+c.add_invalid("--os-variant fedora28,install=fribber", grep="Unknown --os-variant install value")  # unknown install= value
+c.add_invalid("--arch i686 --os-variant fedora26,install=location", grep="does not have a URL location for the i686")  # there's no URL for i686
 
 c = vinst.add_category("single-disk-install", "--nographics --noautoconsole --disk %(EXISTIMG1)s")
 c.add_valid("--hvm --import")  # FV Import install
