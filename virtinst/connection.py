@@ -57,6 +57,10 @@ class VirtinstConnection(object):
             ret = os.path.expanduser("~/.cache")
         return os.path.join(ret, "virt-manager")
 
+    @staticmethod
+    def in_testsuite():
+        return "VIRTINST_TEST_SUITE" in os.environ
+
     def __init__(self, uri):
         _initial_uri = uri or ""
 

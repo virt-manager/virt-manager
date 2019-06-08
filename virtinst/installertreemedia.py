@@ -74,9 +74,7 @@ class InstallerTreeMedia(object):
         """
         Return the tmpdir that's accessible by VMs on system libvirt URIs
         """
-        if guest.conn.is_test():
-            return "/tmp"
-        elif guest.conn.is_xen():
+        if guest.conn.is_xen():
             return "/var/lib/xen"
         return "/var/lib/libvirt/boot"
 

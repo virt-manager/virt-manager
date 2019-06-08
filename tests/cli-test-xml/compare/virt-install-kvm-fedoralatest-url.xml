@@ -11,8 +11,8 @@
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <kernel>/tmp/virtinst-vmlinuz.</kernel>
-    <initrd>/tmp/virtinst-initrd.img.</initrd>
+    <kernel>/TESTSUITE_KERNEL_PATH</kernel>
+    <initrd>/TESTSUITE_INITRD_PATH</initrd>
     <cmdline>console=ttyS0 method=tests/cli-test-xml/fakefedoratree</cmdline>
   </os>
   <features>

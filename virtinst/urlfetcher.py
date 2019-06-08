@@ -211,13 +211,9 @@ class _URLFetcher(object):
         prefix = "virtinst-" + os.path.basename(filename) + "."
 
         # pylint: disable=redefined-variable-type
-        if "VIRTINST_TEST_SUITE" in os.environ:
-            fn = os.path.join("/tmp", prefix)
-            fileobj = open(fn, "wb")
-        else:
-            fileobj = tempfile.NamedTemporaryFile(
-                dir=self.scratchdir, prefix=prefix, delete=False)
-            fn = fileobj.name
+        fileobj = tempfile.NamedTemporaryFile(
+            dir=self.scratchdir, prefix=prefix, delete=False)
+        fn = fileobj.name
 
         self._grabURL(filename, fileobj)
         logging.debug("Saved file to %s", fn)

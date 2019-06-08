@@ -181,9 +181,11 @@ class Installer(object):
         guest.on_reboot = "destroy"
 
         if self._install_kernel:
-            guest.os.kernel = self._install_kernel
+            guest.os.kernel = (self.conn.in_testsuite() and
+                    "/TESTSUITE_KERNEL_PATH" or self._install_kernel)
         if self._install_initrd:
-            guest.os.initrd = self._install_initrd
+            guest.os.initrd = (self.conn.in_testsuite() and
+                    "/TESTSUITE_INITRD_PATH" or self._install_initrd)
         if self.extra_args:
             guest.os.kernel_args = " ".join(self.extra_args)
 
