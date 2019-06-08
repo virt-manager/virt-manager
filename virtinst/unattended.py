@@ -6,12 +6,14 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import getpass
+import locale
 import logging
+import os
+import pwd
 import tempfile
 
 from gi.repository import Libosinfo
-from gi.repository import Gio
-from gi.repository import GLib
 
 
 def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
@@ -20,33 +22,20 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     """
     def get_timezone():
         TZ_FILE = "/etc/localtime"
-        localtime = Gio.File.new_for_path(TZ_FILE)
-        if not localtime.query_exists():
-            return None
-        info = localtime.query_info(
-            Gio.FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET,
-            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS)
-        if not info:
-            return None
-        target = info.get_symlink_target()
-        if not target:
-            return None
-        tokens = target.split("zoneinfo/")
-        if not tokens or len(tokens) < 2:
+        linkpath = os.path.realpath(TZ_FILE)
+        tokens = linkpath.split("zoneinfo/")
+        if len(tokens) < 2:
             return None
         return tokens[1]
 
     def get_language():
-        names = GLib.get_language_names()
-        if not names or len(names) < 2:
-            return None
-        return names[1]
+        return locale.getlocale()[0]
 
     config = Libosinfo.InstallConfig()
 
     # Set user login and name based on the one from the system
-    config.set_user_login(GLib.get_user_name())
-    config.set_user_realname(GLib.get_real_name())
+    config.set_user_login(getpass.getuser())
+    config.set_user_realname(pwd.getpwnam(getpass.getuser()).pw_gecos)
 
     # Set user-password.
     # In case it's required and not passed, just raise a RuntimeError.
