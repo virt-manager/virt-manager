@@ -193,28 +193,24 @@ class TestXMLMisc(unittest.TestCase):
         g._metadata.libosinfo.os_id = "http://example.com/idontexit"  # pylint: disable=protected-access
         self.assertEqual(g.osinfo.name, "generic")
 
+    @utils.run_without_testsuite_hacks
     def test_dir_searchable(self):
         # Normally the dir searchable test is skipped in the unittest,
         # but let's contrive an example that should trigger all the code
         # to ensure it isn't horribly broken
         from virtinst import diskbackend
-        oldtest = os.environ.pop("VIRTINST_TEST_SUITE")
-        try:
-            uid = -1
-            username = "fakeuser-zzzz"
-            with tempfile.TemporaryDirectory() as tmpdir:
-                fixlist = diskbackend.is_path_searchable(tmpdir, uid, username)
-                self.assertTrue(bool(fixlist))
-                errdict = diskbackend.set_dirs_searchable(fixlist, username)
-                self.assertTrue(not bool(errdict))
+        uid = -1
+        username = "fakeuser-zzzz"
+        with tempfile.TemporaryDirectory() as tmpdir:
+            fixlist = diskbackend.is_path_searchable(tmpdir, uid, username)
+            self.assertTrue(bool(fixlist))
+            errdict = diskbackend.set_dirs_searchable(fixlist, username)
+            self.assertTrue(not bool(errdict))
 
-
-            import getpass
-            fixlist = diskbackend.is_path_searchable(
-                    os.getcwd(), os.getuid(), getpass.getuser())
-            self.assertTrue(not bool(fixlist))
-        finally:
-            os.environ["VIRTINST_TEST_SUITE"] = oldtest
+        import getpass
+        fixlist = diskbackend.is_path_searchable(
+                os.getcwd(), os.getuid(), getpass.getuser())
+        self.assertTrue(not bool(fixlist))
 
     def test_nonpredicatble_generate(self):
         realconn = virtinst.cli.getConnection("test:///default")

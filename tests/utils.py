@@ -225,3 +225,17 @@ def diff_compare(actual_out, filename=None, expect_out=None):
                                         tofile="Generated Output"))
     if diff:
         raise AssertionError("Conversion outputs did not match.\n%s" % diff)
+
+
+def run_without_testsuite_hacks(cb):
+    """
+    Decorator for unsetting the test suite env variable
+    """
+    def wrapper_cb(*args, **kwargs):
+        origval = os.environ.pop("VIRTINST_TEST_SUITE", None)
+        try:
+            return cb(*args, **kwargs)
+        finally:
+            if origval:
+                os.environ["VIRTINST_TEST_SUITE"] = origval
+    return wrapper_cb

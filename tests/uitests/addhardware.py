@@ -144,15 +144,12 @@ class AddHardware(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: not addhw.showing)
         uiutils.check_in_loop(lambda: details.active)
 
+    @tests.utils.run_without_testsuite_hacks
     def testQemuSearchCheck(self):
-        os.environ.pop("VIRTINST_TEST_SUITE")
-        try:
-            with tempfile.TemporaryDirectory() as tmpdir:
-                with tempfile.NamedTemporaryFile(dir=tmpdir) as tmpfile:
-                    os.chmod(tmpdir, 0o700)
-                    self._testQemuSearchCheck(tmpfile.name)
-        finally:
-            os.environ["VIRTINST_TEST_SUITE"] = "1"
+        with tempfile.TemporaryDirectory() as tmpdir:
+            with tempfile.NamedTemporaryFile(dir=tmpdir) as tmpfile:
+                os.chmod(tmpdir, 0o700)
+                self._testQemuSearchCheck(tmpfile.name)
 
     def testAddDisks(self):
         """
