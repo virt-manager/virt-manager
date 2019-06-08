@@ -217,9 +217,8 @@ class OSInstallScript:
     def set_config(self, config):
         self._config = config
 
-    def generate_output(self, output_dir):
-        self._script.generate_output(
-                self._osobj.get_handle(), self._config, output_dir)
+    def generate(self):
+        return self._script.generate(self._osobj.get_handle(), self._config)
 
     def generate_cmdline(self):
         return self._script.generate_command_line(
@@ -265,8 +264,11 @@ def generate_install_script(guest, script):
     if not os.path.exists(scratch):
         os.makedirs(scratch, 0o751)
 
-    script.generate_output(Gio.File.new_for_path(scratch))
-    path = os.path.join(scratch, script.get_expected_filename())
-    cmdline = script.generate_cmdline()
+    content = script.generate()
+    scriptpath = os.path.join(scratch, script.get_expected_filename())
+    open(scriptpath, "w").write(content)
 
-    return path, cmdline
+    logging.debug("Generated unattended script: %s", scriptpath)
+    logging.debug("Generated script contents:\n%s", content)
+
+    return scriptpath

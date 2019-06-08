@@ -219,6 +219,19 @@ class Installer(object):
     # Internal API overrides #
     ##########################
 
+    def _prepare_unattended_data(self, guest):
+        osguess = OSDB.guess_os_by_iso(self.cdrom)
+        osmedia = OsMedia(osguess[1])
+        script = unattended.prepare_install_script(
+                guest, self._unattended_data, self.cdrom, osmedia)
+        scriptpath = unattended.generate_install_script(guest, script)
+
+        iso = perform_cdrom_injections([scriptpath],
+                guest.conn.get_app_cache_dir())
+        self._add_unattended_install_cdrom_device(guest, iso)
+
+        self._unattended_files.extend([scriptpath, iso])
+
     def _prepare(self, guest, meter):
         if self._treemedia:
             k, i, a = self._treemedia.prepare(guest, meter)
@@ -227,20 +240,7 @@ class Installer(object):
             if a and "VIRTINST_INITRD_TEST" not in os.environ:
                 self.extra_args.append(a)
         elif self._unattended_data:
-            osguess = OSDB.guess_os_by_iso(self.cdrom)
-            osmedia = OsMedia(osguess[1])
-            script = unattended.prepare_install_script(
-                    guest, self._unattended_data, self.cdrom, osmedia)
-            path, _ = unattended.generate_install_script(guest, script)
-            logging.debug("Generated unattended script: %s", path)
-            logging.debug("Generated script contents:\n%s",
-                    open(path).read())
-
-            iso = perform_cdrom_injections([path],
-                    guest.conn.get_app_cache_dir())
-            self._add_unattended_install_cdrom_device(guest, iso)
-
-            self._unattended_files.extend([path, iso])
+            self._prepare_unattended_data(guest)
 
     def _cleanup(self, guest):
         if self._treemedia:

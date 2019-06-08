@@ -207,26 +207,25 @@ class InstallerTreeMedia(object):
     def set_unattended_data(self, unattended_data):
         self._unattended_data = unattended_data
 
+    def _prepare_unattended_data(self, guest, cache):
+        location = self.location if self._media_type == MEDIA_URL else None
+        script = unattended.prepare_install_script(
+                guest, self._unattended_data, location, cache.os_media)
+        scriptpath = unattended.generate_install_script(guest, script)
+        unattended_cmdline = script.generate_cmdline()
+        logging.debug("Generated unattended cmdline: %s", unattended_cmdline)
+
+        self.initrd_injections.append(scriptpath)
+        self._tmpfiles.append(scriptpath)
+        return unattended_cmdline
+
     def prepare(self, guest, meter):
-        unattended_cmdline = None
         fetcher = self._get_fetcher(guest, meter)
         cache = self._get_cached_data(guest, fetcher)
 
+        unattended_cmdline = None
         if self._unattended_data:
-            location = self.location if self._media_type == MEDIA_URL else None
-            script = unattended.prepare_install_script(
-                    guest, self._unattended_data, location, cache.os_media)
-            path, unattended_cmdline = unattended.generate_install_script(
-                    guest, script)
-
-            logging.debug("Generated unattended cmdline: %s",
-                    unattended_cmdline)
-            logging.debug("Generated unattended script: %s", path)
-            logging.debug("Generated script contents:\n%s",
-                    open(path).read())
-
-            self.initrd_injections.append(path)
-            self._tmpfiles.append(path)
+            unattended_cmdline = self._prepare_unattended_data(guest, cache)
 
         k, i, a = self._prepare_kernel_url(guest, fetcher)
 
