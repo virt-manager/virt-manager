@@ -13,7 +13,7 @@
     <type arch="x86_64" machine="q35">hvm</type>
     <kernel>/TESTSUITE_KERNEL_PATH</kernel>
     <initrd>/TESTSUITE_INITRD_PATH</initrd>
-    <cmdline>ks=file:/fedora.ks method=http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/26/Server/x86_64/os/</cmdline>
+    <cmdline>ks=file:/fedora.ks inst.repo=http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/26/Server/x86_64/os/</cmdline>
   </os>
   <features>
     <acpi/>

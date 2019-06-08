@@ -208,7 +208,7 @@ class InstallerTreeMedia(object):
         self._unattended_data = unattended_data
 
     def prepare(self, guest, meter):
-        cmdline = None
+        unattended_cmdline = None
         fetcher = self._get_fetcher(guest, meter)
         cache = self._get_cached_data(guest, fetcher)
 
@@ -216,9 +216,11 @@ class InstallerTreeMedia(object):
             location = self.location if self._media_type == MEDIA_URL else None
             script = unattended.prepare_install_script(
                     guest, self._unattended_data, location, cache.os_media)
-            path, cmdline = unattended.generate_install_script(guest, script)
+            path, unattended_cmdline = unattended.generate_install_script(
+                    guest, script)
 
-            logging.debug("Generated unattended cmdline: %s", cmdline)
+            logging.debug("Generated unattended cmdline: %s",
+                    unattended_cmdline)
             logging.debug("Generated unattended script: %s", path)
             logging.debug("Generated script contents:\n%s",
                     open(path).read())
@@ -231,8 +233,13 @@ class InstallerTreeMedia(object):
         # If a cmdline was set due to unattended installation, prepend the
         # unattended kernel cmdline to the args returned by
         # _prepare_kernel_url()
-        if cmdline:
-            a = "%s %s" % (cmdline, a)
+        if unattended_cmdline:
+            if self.location in a and self.location in unattended_cmdline:
+                # Latest libosinfo will handle the URL arg by itself,
+                # don't double it up
+                a = unattended_cmdline
+            else:
+                a = "%s %s" % (unattended_cmdline, a)
 
         return k, i, a
 
