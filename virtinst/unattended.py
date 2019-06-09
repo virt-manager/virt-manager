@@ -212,6 +212,20 @@ class OSInstallScript:
         return self._script.generate_command_line(
                 self._osobj.get_handle(), self._config)
 
+    def write(self, guest):
+        scratch = guest.conn.get_app_cache_dir()
+        fileobj = tempfile.NamedTemporaryFile(
+            dir=scratch, prefix="virtinst-unattended-script", delete=False)
+        scriptpath = fileobj.name
+
+        content = self.generate()
+        open(scriptpath, "w").write(content)
+
+        logging.debug("Generated unattended script: %s", scriptpath)
+        logging.debug("Generated script contents:\n%s", content)
+
+        return scriptpath
+
 
 class UnattendedData():
     profile = None
@@ -289,18 +303,3 @@ def prepare_install_script(guest, unattended_data, url, os_media):
             guest.os.arch, guest.name, url)
     script.set_config(config)
     return script
-
-
-def generate_install_script(guest, script):
-    scratch = guest.conn.get_app_cache_dir()
-    fileobj = tempfile.NamedTemporaryFile(
-        dir=scratch, prefix="virtinst-unattended-script", delete=False)
-    scriptpath = fileobj.name
-
-    content = script.generate()
-    open(scriptpath, "w").write(content)
-
-    logging.debug("Generated unattended script: %s", scriptpath)
-    logging.debug("Generated script contents:\n%s", content)
-
-    return scriptpath

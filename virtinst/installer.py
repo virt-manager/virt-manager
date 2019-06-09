@@ -210,28 +210,46 @@ class Installer(object):
     # Internal API overrides #
     ##########################
 
-    def _prepare_unattended_data(self, guest):
-        osmedia = OSDB.guess_os_by_iso(self.cdrom)[1]
-        script = unattended.prepare_install_script(
-                guest, self._unattended_data, self.cdrom, osmedia)
+    def _prepare_unattended_data(self, guest, script):
         expected_filename = script.get_expected_filename()
-        scriptpath = unattended.generate_install_script(guest, script)
+        unattended_cmdline = script.generate_cmdline()
+        logging.debug("Generated unattended cmdline: %s", unattended_cmdline)
+
+        scriptpath = script.write(guest)
+        self._tmpfiles.append(scriptpath)
 
         iso = perform_cdrom_injections([(scriptpath, expected_filename)],
                 guest.conn.get_app_cache_dir())
+        self._tmpfiles.append(iso)
         self._add_unattended_install_cdrom_device(guest, iso)
 
-        self._tmpfiles.extend([scriptpath, iso])
+    def _prepare_unattended_script(self, guest, meter):
+        if self._treemedia:
+            url = self._treemedia.url()
+            os_media = self._treemedia.get_os_media(guest, meter)
+        else:
+            url = None
+            osguess = OSDB.guess_os_by_iso(self.cdrom)
+            os_media = osguess[1] if osguess else None
+
+        return unattended.prepare_install_script(
+                guest, self._unattended_data, url, os_media)
 
     def _prepare(self, guest, meter):
+        unattended_script = None
+        if self._unattended_data:
+            unattended_script = self._prepare_unattended_script(guest, meter)
+
         if self._treemedia:
-            k, i, a = self._treemedia.prepare(guest, meter)
+            k, i, a = self._treemedia.prepare(guest, meter,
+                    unattended_script)
             self._install_kernel = k
             self._install_initrd = i
             if a and "VIRTINST_INITRD_TEST" not in os.environ:
                 self.extra_args.append(a)
-        elif self._unattended_data:
-            self._prepare_unattended_data(guest)
+
+        elif unattended_script:
+            self._prepare_unattended_data(guest, unattended_script)
 
     def _cleanup(self, guest):
         if self._treemedia:
@@ -349,10 +367,7 @@ class Installer(object):
         return ret
 
     def set_unattended_data(self, unattended_data):
-        if self._treemedia:
-            self._treemedia.set_unattended_data(unattended_data)
-        else:
-            self._unattended_data = unattended_data
+        self._unattended_data = unattended_data
 
 
     ##########################

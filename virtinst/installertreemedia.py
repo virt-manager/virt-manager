@@ -8,7 +8,6 @@ import logging
 import os
 
 from . import progress
-from . import unattended
 from . import urldetect
 from . import urlfetcher
 from .devices import DeviceDisk
@@ -112,8 +111,6 @@ class InstallerTreeMedia(object):
         self._tmpfiles = []
         self._tmpvols = []
 
-        self._unattended_data = None
-
         self._media_type = MEDIA_ISO
         if (not self.conn.is_remote() and
             os.path.exists(self.location) and
@@ -205,29 +202,23 @@ class InstallerTreeMedia(object):
     # Public API #
     ##############
 
-    def set_unattended_data(self, unattended_data):
-        self._unattended_data = unattended_data
-
-    def _prepare_unattended_data(self, guest, cache):
-        location = self.location if self._media_type == MEDIA_URL else None
-        script = unattended.prepare_install_script(
-                guest, self._unattended_data, location, cache.os_media)
-        expected_filename = script.get_expected_filename()
-        scriptpath = unattended.generate_install_script(guest, script)
+    def _prepare_unattended_data(self, guest, script):
         unattended_cmdline = script.generate_cmdline()
         logging.debug("Generated unattended cmdline: %s", unattended_cmdline)
 
-        self.initrd_injections.append((scriptpath, expected_filename))
+        expected_filename = script.get_expected_filename()
+        scriptpath = script.write(guest)
         self._tmpfiles.append(scriptpath)
+        self.initrd_injections.append((scriptpath, expected_filename))
         return unattended_cmdline
 
-    def prepare(self, guest, meter):
+    def prepare(self, guest, meter, unattended_script):
         fetcher = self._get_fetcher(guest, meter)
-        cache = self._get_cached_data(guest, fetcher)
 
         unattended_cmdline = None
-        if self._unattended_data:
-            unattended_cmdline = self._prepare_unattended_data(guest, cache)
+        if unattended_script:
+            unattended_cmdline = self._prepare_unattended_data(
+                    guest, unattended_script)
 
         k, i, a = self._prepare_kernel_url(guest, fetcher)
 
@@ -261,17 +252,25 @@ class InstallerTreeMedia(object):
         if self._media_type in [MEDIA_ISO]:
             return self.location
 
+    def url(self):
+        if self._media_type in [MEDIA_URL]:
+            return self.location
+
     def detect_distro(self, guest):
         fetcher = self._get_fetcher(guest, None)
         cache = self._get_cached_data(guest, fetcher)
         return cache.os_variant
 
+    def get_os_media(self, guest, meter):
+        fetcher = self._get_fetcher(guest, meter)
+        cache = self._get_cached_data(guest, fetcher)
+        return cache.os_media
+
     def requires_internet(self, guest, meter):
         if self._media_type in [MEDIA_URL, MEDIA_DIR]:
             return True
 
-        fetcher = self._get_fetcher(guest, meter)
-        cache = self._get_cached_data(guest, fetcher)
-        if cache.os_media:
-            return cache.os_media.is_netinst()
+        os_media = self.get_os_media(guest, meter)
+        if os_media:
+            return os_media.is_netinst()
         return False

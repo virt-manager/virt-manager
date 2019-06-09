@@ -158,7 +158,7 @@ def _testGuest(testdata, guest):
     fetcher.acquireFile = fakeAcquireFile
 
     # Fetch regular kernel
-    kernel, initrd, kernelargs = treemedia.prepare(guest, meter)
+    kernel, initrd, kernelargs = treemedia.prepare(guest, meter, None)
     dummy = initrd
     if testdata.kernelregex and not re.match(testdata.kernelregex, kernel):
         raise AssertionError("kernel=%s but testdata.kernelregex='%s'" %
