@@ -12,7 +12,7 @@ from . import unattended
 from . import urldetect
 from . import urlfetcher
 from .devices import DeviceDisk
-from .initrdinject import perform_initrd_injections
+from .installerinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
 from .osdict import OSDB
 

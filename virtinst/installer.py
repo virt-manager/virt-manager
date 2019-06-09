@@ -15,7 +15,7 @@ from .devices import DeviceDisk
 from .domain import DomainOs
 from .osdict import OSDB
 from .installertreemedia import InstallerTreeMedia
-from .cdrominject import perform_cdrom_injections
+from .installerinject import perform_cdrom_injections
 
 
 class Installer(object):

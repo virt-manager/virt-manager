@@ -11,7 +11,7 @@ import subprocess
 import tempfile
 
 
-def _run_inject_commands(initrd, tempdir):
+def _run_initrd_commands(initrd, tempdir):
     logging.debug("Appending to the initrd.")
 
     find_proc = subprocess.Popen(['find', '.', '-print0'],
@@ -43,10 +43,19 @@ def _run_inject_commands(initrd, tempdir):
         logging.debug("gzip stderr=%s", gziperr)
 
 
-def perform_initrd_injections(initrd, injections, scratchdir):
-    """
-    Insert files into the root directory of the initial ram disk
-    """
+def _run_iso_commands(iso, tempdir):
+    cmd = ["mkisofs",
+           "-o", iso,
+           "-J",
+           "-input-charset", "utf8",
+           "-rational-rock",
+           tempdir]
+    logging.debug("Running mkisofs: %s", cmd)
+    output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+    logging.debug("cmd output: %s", output)
+
+
+def _perform_generic_injections(injections, scratchdir, media, cb):
     if not injections:
         return
 
@@ -60,9 +69,36 @@ def perform_initrd_injections(initrd, injections, scratchdir):
             else:
                 dst = os.path.basename(filename)
 
-            logging.debug("Injecting src=%s dst=%s", filename, dst)
+            logging.debug("Injecting src=%s dst=%s into media=%s",
+                    filename, dst, media)
             shutil.copy(filename, os.path.join(tempdir, dst))
 
-        _run_inject_commands(initrd, tempdir)
+        return cb(media, tempdir)
     finally:
         shutil.rmtree(tempdir)
+
+
+def perform_initrd_injections(initrd, injections, scratchdir):
+    """
+    Insert files into the root directory of the initial ram disk
+    """
+    _perform_generic_injections(injections, scratchdir, initrd,
+            _run_initrd_commands)
+
+
+def perform_cdrom_injections(injections, scratchdir):
+    """
+    Insert files into the root directory of a generated cdrom
+    """
+    fileobj = tempfile.NamedTemporaryFile(
+        dir=scratchdir, prefix="virtinst-unattended-iso", delete=False)
+    iso = fileobj.name
+
+    try:
+        _perform_generic_injections(injections, scratchdir, iso,
+            _run_iso_commands)
+    except Exception:
+        os.unlink(iso)
+        raise
+
+    return iso
