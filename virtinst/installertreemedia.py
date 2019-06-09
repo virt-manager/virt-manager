@@ -273,5 +273,5 @@ class InstallerTreeMedia(object):
         fetcher = self._get_fetcher(guest, meter)
         cache = self._get_cached_data(guest, fetcher)
         if cache.os_media:
-            return cache.os_media.requires_internet()
+            return cache.os_media.is_netinst()
         return False

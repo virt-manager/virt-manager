@@ -69,27 +69,6 @@ class TestOSDB(unittest.TestCase):
         except RuntimeError as e:
             assert str(e).endswith("URL location")
 
-    def test_get_script(self):
-        dos = OSDB.lookup_os("msdos6.22")
-        winxp = OSDB.lookup_os("winxp")
-
-        # No install scripts at all
-        try:
-            dos.get_install_script("desktop")
-            raise AssertionError("Expected failure")
-        except RuntimeError as e:
-            assert "does not support unattended installation." in str(e)
-
-        # No profile foobar
-        try:
-            winxp.get_install_script("foobar")
-            raise AssertionError("Expected failure")
-        except RuntimeError as e:
-            assert "foobar" in str(e)
-
-        script = winxp.get_install_script("desktop")
-        self.assertTrue(bool(script))
-
     def test_prepare_install_script(self):
         from virtinst import unattended
 
@@ -105,7 +84,7 @@ class TestOSDB(unittest.TestCase):
         u.user_password = "foouser"
 
         try:
-            script = unattended.prepare_install_script(g, u)
+            script = unattended.prepare_install_script(g, u, None, None)
             dummy = script
         except RuntimeError as e:
             if "libosinfo is too old" not in str(e):

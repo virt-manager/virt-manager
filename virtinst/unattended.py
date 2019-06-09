@@ -220,17 +220,61 @@ class UnattendedData():
     product_key = None
 
 
-def prepare_install_script(guest, unattended_data, url=None, os_media=None):
-    # This is ugly, but that's only the current way to deal with netinstall
-    # medias.
+def _lookup_rawscript(guest, profile, os_media):
+    script_list = []
+
+    if os_media:
+        if not os_media.supports_installer_script():
+            # This is a specific annotation for media like livecds that
+            # don't support unattended installs
+            raise RuntimeError(
+                _("OS '%s' media does not support unattended "
+                  "installation") % (guest.osinfo.name))
+
+        # In case we're dealing with a media installation, let's try to get
+        # the installer scripts from the media, in case any is set.
+        script_list = os_media.get_install_script_list()
+
+    if not script_list:
+        script_list = guest.osinfo.get_install_script_list()
+    if not script_list:
+        raise RuntimeError(
+            _("OS '%s' does not support unattended installation.") %
+            guest.osinfo.name)
+
+    rawscripts = []
+    profile_names = set()
+    for script in script_list:
+        profile_names.add(script.get_profile())
+        if script.get_profile() == profile:
+            rawscripts.append(script)
+
+    if not rawscripts:
+        raise RuntimeError(
+            _("OS '%s' does not support unattended installation for "
+              "the '%s' profile. Available profiles: %s") %
+            (guest.osinfo.name, profile, ", ".join(list(profile_names))))
+
+    logging.debug("Install script found for profile '%s'", profile)
+
+    # Some OSes (as Windows) have more than one installer script,
+    # depending on the OS version and profile chosen, to be used to
+    # perform the unattended installation. Let's just deal with
+    # multiple installer scripts when its actually needed, though.
+    return rawscripts[0]
+
+
+def prepare_install_script(guest, unattended_data, url, os_media):
     def _get_installation_source(os_media):
+        # This is ugly, but that's only the current way to deal with
+        # netinstall medias.
         if not os_media:
             return "network"
+        if os_media.is_netinst():
+            return "network"
+        return "media"
 
-        return "network" if os_media.requires_internet() else "media"
-
-    rawscript = guest.osinfo.get_install_script(unattended_data.profile,
-            os_media)
+    rawscript = _lookup_rawscript(guest, unattended_data.profile, os_media)
     script = OSInstallScript(rawscript, guest.osinfo)
 
     # For all tree based installations we're going to perform initrd injection

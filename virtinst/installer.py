@@ -13,7 +13,7 @@ from . import progress
 from . import unattended
 from .devices import DeviceDisk
 from .domain import DomainOs
-from .osdict import OSDB, OsMedia
+from .osdict import OSDB
 from .installertreemedia import InstallerTreeMedia
 from .cdrominject import perform_cdrom_injections
 
@@ -211,8 +211,7 @@ class Installer(object):
     ##########################
 
     def _prepare_unattended_data(self, guest):
-        osguess = OSDB.guess_os_by_iso(self.cdrom)
-        osmedia = OsMedia(osguess[1])
+        osmedia = OSDB.guess_os_by_iso(self.cdrom)[1]
         script = unattended.prepare_install_script(
                 guest, self._unattended_data, self.cdrom, osmedia)
         expected_filename = script.get_expected_filename()

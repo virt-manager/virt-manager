@@ -8,7 +8,7 @@ import configparser
 import logging
 import re
 
-from .osdict import OSDB, OsMedia
+from .osdict import OSDB
 
 
 ###############################################
@@ -386,7 +386,7 @@ class _DistroTree(object):
         """
         Return an OsMedia wrapper around the detected libosinfo media object
         """
-        return OsMedia(self.cache.libosinfo_mediaobj)
+        return self.cache.libosinfo_mediaobj
 
 
 class _FedoraDistro(_DistroTree):

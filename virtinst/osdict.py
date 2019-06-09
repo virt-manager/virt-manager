@@ -234,7 +234,7 @@ class _OSDB(object):
 
         if not self._os_loader.get_db().identify_media(media):
             return None
-        return media.get_os().get_short_id(), media
+        return media.get_os().get_short_id(), _OsMedia(media)
 
     def guess_os_by_tree(self, location):
         if location.startswith("/"):
@@ -587,74 +587,29 @@ class _OsVariant(object):
             _("OS '%s' does not have a URL location for the %s architecture") %
             (self.name, arch))
 
-    def get_install_script(self, profile, os_media=None):
-        def _get_install_script(script_list):
-            if not script_list:
-                raise RuntimeError(
-                    _("OS '%s' does not support unattended installation.") %
-                    self.name)
-
-            installscripts = []
-            profile_names = set()
-            for script in script_list:
-                profile_names.add(script.get_profile())
-                if script.get_profile() == profile:
-                    installscripts.append(script)
-
-            if not installscripts:
-                raise RuntimeError(
-                    _("OS '%s' does not support unattended installation for "
-                      "the '%s' profile. Available profiles: %s") %
-                    (self.name, profile, ", ".join(list(profile_names))))
-
-            logging.debug("Install script found for profile '%s'", profile)
-
-            # Some OSes (as Windows) have more than one installer script,
-            # depending on the OS version and profile chosen, to be used to
-            # perform the unattended installation. Let's just deal with
-            # multiple installer scripts when its actually needed, though.
-            return installscripts[0]
-
-        script_list = []
-
-        # In case we're dealing with a media installation, let's try to get
-        # the installer scripts from the media, in case any is set.
-        media = os_media.osinfo_media if os_media else None
-        if media:
-            if not media.supports_installer_script():
-                raise RuntimeError(
-                    _("OS '%s' media does not support unattended "
-                      "installation") % (self.name))
-
-            script_list = list(_OsinfoIter(media.get_install_script_list()))
-
-            # In case some script is set, but not one matching the specified
-            # profile, let's just error out as trying to use the OS' installer
-            # is too much error prone.
-            # However, if no script is found, let's just follow with the
-            # current code path and get the script from the installer, as some
-            # OSes only have the installer scripts set to the Libosinfo.Os
-            # itself.
-            if script_list:
-                installscript = _get_install_script(script_list)
-                return installscript
-
-        if self._os:
-            script_list = list(_OsinfoIter(self._os.get_install_script_list()))
-
-        installscript = _get_install_script(script_list)
-        return installscript
+    def get_install_script_list(self):
+        if not self._os:
+            return []
+        return list(_OsinfoIter(self._os.get_install_script_list()))
 
 
-class OsMedia(object):
+class _OsMedia(object):
     def __init__(self, osinfo_media):
-        self.osinfo_media = osinfo_media
+        self._media = osinfo_media
 
-    def requires_internet(self):
-        if self.osinfo_media:
-            variants = list(_OsinfoIter(self.osinfo_media.get_os_variants()))
-            for variant in variants:
-                if "netinst" in variant.get_id():
-                    return True
-            return False
-        return True
+    def get_kernel_path(self):
+        return self._media.get_kernel_path()
+    def get_initrd_path(self):
+        return self._media.get_initrd_path()
+    def supports_installer_script(self):
+        return self._media.supports_installer_script()
+
+    def is_netinst(self):
+        variants = list(_OsinfoIter(self._media.get_os_variants()))
+        for variant in variants:
+            if "netinst" in variant.get_id():
+                return True
+        return False
+
+    def get_install_script_list(self):
+        return list(_OsinfoIter(self._media.get_install_script_list()))
