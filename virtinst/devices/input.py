@@ -20,16 +20,6 @@ class DeviceInput(Device):
     BUS_VIRTIO = "virtio"
     BUS_XEN = "xen"
 
-    @staticmethod
-    def pretty_name(typ, bus):
-        if typ == "tablet" and bus == "usb":
-            return _("EvTouch USB Graphics Tablet")
-
-        if bus in ["usb", "ps2"]:
-            return _("Generic") + (" %s %s" %
-                (bus.upper(), str(typ).capitalize()))
-        return "%s %s" % (str(bus).capitalize(), str(typ).capitalize())
-
 
     type = XMLProperty("./@type")
     bus = XMLProperty("./@bus")

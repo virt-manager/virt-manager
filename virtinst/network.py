@@ -7,11 +7,6 @@
 Classes for building and installing libvirt <network> XML
 """
 
-import logging
-
-import libvirt
-
-from . import generatename
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -77,9 +72,6 @@ class _NetworkForward(XMLBuilder):
     pf = XMLChildProperty(_NetworkForwardPf)
     vfs = XMLChildProperty(_NetworkForwardAddress)
 
-    def pretty_desc(self):
-        return Network.pretty_forward_desc(self.mode, self.dev)
-
 
 class _NetworkBandwidth(XMLBuilder):
     XML_NAME = "bandwidth"
@@ -93,45 +85,6 @@ class _NetworkBandwidth(XMLBuilder):
     outbound_peak = XMLProperty("./outbound/@peak")
     outbound_burst = XMLProperty("./outbound/@burst")
 
-    def is_inbound(self):
-        return bool(self.inbound_average or self.inbound_peak or
-                    self.inbound_burst or self.inbound_floor)
-
-    def is_outbound(self):
-        return bool(self.outbound_average or self.outbound_peak or
-                    self.outbound_burst)
-
-    def pretty_desc(self, inbound=True, outbound=True):
-        items_in = [(self.inbound_average, _("Average"), "KiB/s"),
-                    (self.inbound_peak, _("Peak"), "KiB"),
-                    (self.inbound_burst, _("Burst"), "KiB/s"),
-                    (self.inbound_floor, _("Floor"), "KiB/s")]
-
-        items_out = [(self.outbound_average, _("Average"), "KiB/s"),
-                     (self.outbound_peak, _("Peak"), "KiB"),
-                     (self.outbound_burst, _("Burst"), "KiB/s")]
-
-        def stringify_items(items):
-            return ", ".join(["%s: %s %s" % (desc, val, unit)
-                              for val, desc, unit in items if val])
-
-        ret = ""
-        show_name = inbound and outbound
-
-        if inbound:
-            if show_name:
-                ret += _("Inbound: ")
-            ret += stringify_items(items_in)
-
-        if outbound:
-            if ret:
-                ret += "\n"
-            if show_name:
-                ret += _("Outbound: ")
-            ret += stringify_items(items_out)
-
-        return ret
-
 
 class _NetworkPortgroup(XMLBuilder):
     XML_NAME = "portgroup"
@@ -144,70 +97,6 @@ class Network(XMLBuilder):
     """
     Top level class for <network> object XML
     """
-    @staticmethod
-    def find_free_name(conn, basename, **kwargs):
-        cb = conn.networkLookupByName
-        return generatename.generate_name(basename, cb, **kwargs)
-
-    @staticmethod
-    def pretty_forward_desc(mode, dev):
-        if not mode:
-            return _("Isolated network")
-
-        if mode == "nat":
-            if dev:
-                desc = _("NAT to %s") % dev
-            else:
-                desc = _("NAT")
-        elif mode == "route":
-            if dev:
-                desc = _("Route to %s") % dev
-            else:
-                desc = _("Routed network")
-        else:
-            modestr = mode.capitalize()
-            if dev:
-                desc = (_("%(mode)s to %(device)s") %
-                        {"mode": modestr, "device": dev})
-            else:
-                desc = _("%s network") % modestr
-
-        return desc
-
-
-    ###################
-    # Helper routines #
-    ###################
-
-    def can_pxe(self):
-        forward = self.forward.mode
-        if forward and forward != "nat":
-            return True
-        for ip in self.ips:
-            if ip.bootp_file:
-                return True
-        return False
-
-    ######################
-    # Validation helpers #
-    ######################
-
-    @staticmethod
-    def validate_name(conn, name):
-        XMLBuilder.validate_generic_name(_("Network"), name)
-
-        try:
-            conn.networkLookupByName(name)
-        except libvirt.libvirtError:
-            return
-        raise ValueError(_("Name '%s' already in use by another network." %
-                         name))
-
-
-    ##################
-    # XML properties #
-    ##################
-
     XML_NAME = "network"
     _XML_PROP_ORDER = ["ipv6", "name", "uuid", "forward", "virtualport_type",
                        "bridge", "stp", "delay", "domain_name",
@@ -235,23 +124,15 @@ class Network(XMLBuilder):
     bandwidth = XMLChildProperty(_NetworkBandwidth, is_single=True)
 
 
-    ##################
-    # build routines #
-    ##################
+    ###################
+    # Helper routines #
+    ###################
 
-    def install(self, start=True, autostart=True):
-        xml = self.get_xml()
-        logging.debug("Creating virtual network '%s' with xml:\n%s",
-                      self.name, xml)
-
-        net = self.conn.networkDefineXML(xml)
-        try:
-            if start:
-                net.create()
-            if autostart:
-                net.setAutostart(autostart)
-        except Exception:
-            net.undefine()
-            raise
-
-        return net
+    def can_pxe(self):
+        forward = self.forward.mode
+        if forward and forward != "nat":
+            return True
+        for ip in self.ips:
+            if ip.bootp_file:
+                return True
+        return False

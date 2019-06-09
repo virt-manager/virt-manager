@@ -48,7 +48,6 @@ class TestNodeDev(unittest.TestCase):
         dev = NodeDevice(self.conn, funky_chars_xml)
         self.assertEqual(dev.name, "L3B2616")
         self.assertEqual(dev.device_type, "LENOVO")
-        self.assertEqual(dev.pretty_name(), dev.name)
 
     def testNetDevice(self):
         devname = "net_00_1c_25_10_b1_e4"
@@ -57,19 +56,8 @@ class TestNodeDev(unittest.TestCase):
         self.assertEqual(dev.parent, "pci_8086_1049")
         self.assertEqual(dev.device_type, "net")
         self.assertEqual(dev.interface, "eth0")
-        self.assertEqual(dev.pretty_name(), "Interface eth0")
 
     def testPCIDevice(self):
-        devname = "pci_1180_592"
-        dev = self._nodeDevFromName(devname)
-        self.assertEqual(dev.pretty_name(),
-            "0000:15:00:4 Ricoh Co Ltd R5C592 Memory Stick Bus Host Adapter")
-
-        devname = "pci_8086_1049"
-        dev = self._nodeDevFromName(devname)
-        self.assertEqual(dev.pretty_name(),
-            "0000:00:19:0 Intel Corporation 82566MM Gigabit Network Connection")
-
         nodename = "pci_8086_10fb"
         obj = self._nodeDevFromName(nodename)
         self.assertEqual(obj.is_pci_sriov(), True)
@@ -81,13 +69,8 @@ class TestNodeDev(unittest.TestCase):
     def testUSBDevDevice(self):
         devname = "usb_device_781_5151_2004453082054CA1BEEE"
         dev = self._nodeDevFromName(devname)
-        self.assertEqual(dev.pretty_name(),
-                "001:004 SanDisk Corp. Cruzer Micro 256/512MB Flash Drive")
-
-        devname = "usb_device_483_2016_noserial"
-        dev = self._nodeDevFromName(devname)
-        self.assertEqual(dev.pretty_name(),
-                "003:002 SGS Thomson Microelectronics Fingerprint Reader")
+        self.assertEqual(dev.vendor_name, "SanDisk Corp.")
+        self.assertEqual(dev.product_name, "Cruzer Micro 256/512MB Flash Drive")
 
         devname = "usb_device_1d6b_1_0000_00_1a_0"
         dev = self._nodeDevFromName(devname)
@@ -126,8 +109,6 @@ class TestNodeDev(unittest.TestCase):
                 "/dev/dri/by-path/pci-0000:00:02.0-render")
         self.assertEqual(dev.devnodes[1].node_type, "link")
         self.assertEqual(dev.is_drm_render(), True)
-        self.assertEqual(dev.pretty_name(),
-                "0000:00:02:0 Intel Corporation HD Graphics 530 (render)")
 
 
     # NodeDevice 2 Device XML tests

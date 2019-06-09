@@ -125,8 +125,6 @@ class vmmNetwork(vmmLibvirtObject):
         return self.get_xmlobj().ipv6
     def get_ipv4_forward_mode(self):
         return self.get_xmlobj().forward.mode
-    def pretty_forward_mode(self):
-        return self.get_xmlobj().forward.pretty_desc()
     def get_qos(self):
         return self.get_xmlobj().bandwidth
 
@@ -200,3 +198,30 @@ class vmmNetwork(vmmLibvirtObject):
                 pf_name = xmlobj.forward.pf[0].dev
                 vfs = xmlobj.forward.vfs
         return (ret, pf_name, vfs)
+
+    def pretty_forward_mode(self):
+        mode = self.xmlobj.forward.mode
+        dev = self.xmlobj.forward.dev
+
+        if not mode:
+            return _("Isolated network")
+
+        if mode == "nat":
+            if dev:
+                desc = _("NAT to %s") % dev
+            else:
+                desc = _("NAT")
+        elif mode == "route":
+            if dev:
+                desc = _("Route to %s") % dev
+            else:
+                desc = _("Routed network")
+        else:
+            modestr = mode.capitalize()
+            if dev:
+                desc = (_("%(mode)s to %(device)s") %
+                        {"mode": modestr, "device": dev})
+            else:
+                desc = _("%s network") % modestr
+
+        return desc

@@ -106,68 +106,6 @@ class NodeDevice(XMLBuilder):
 
         return False
 
-    def _usb_pretty_name(self):
-        # Hypervisor may return a rather sparse structure, missing
-        # some ol all stringular descriptions of the device altogether.
-        # Do our best to help user identify the device.
-
-        # Certain devices pad their vendor with trailing spaces,
-        # such as "LENOVO       ". It does not look well.
-        product = str(self._product_name).strip()
-        vendor = str(self._vendor_name).strip()
-
-        if product == "":
-            product = str(self.product_id)
-            if vendor == "":
-                # No stringular descriptions altogether
-                vendor = str(self.vendor_id)
-                devstr = "%s:%s" % (vendor, product)
-            else:
-                # Only the vendor is known
-                devstr = "%s %s" % (vendor, product)
-        else:
-            if vendor == "":
-                # Sometimes vendor is left out empty, but product is
-                # already descriptive enough or contains the vendor string:
-                # "Lenovo USB Laser Mouse"
-                devstr = product
-            else:
-                # We know everything. Perfect.
-                devstr = "%s %s" % (vendor, product)
-
-        busstr = "%.3d:%.3d" % (int(self.bus), int(self.device))
-        desc = "%s %s" % (busstr, devstr)
-        return desc
-
-    def pretty_name(self):
-        """
-        Use device information to attempt to print a human readable device
-        name.
-
-        :returns: Device description string
-        """
-        if self.device_type == "net":
-            if self.interface:
-                return _("Interface %s") % self.interface
-            return self.name
-
-        if self.device_type == "pci":
-            devstr = "%.4X:%.2X:%.2X:%X" % (int(self.domain),
-                                            int(self.bus),
-                                            int(self.slot),
-                                            int(self.function))
-            return "%s %s %s" % (devstr,
-                    self._vendor_name, self._product_name)
-        if self.device_type == "usb_device":
-            return self._usb_pretty_name()
-
-        if self.device_type == "drm":
-            parent = NodeDevice.lookupNodedevFromString(
-                    self.conn, self.parent)
-            return "%s (%s)" % (parent.pretty_name(), self._drm_type)
-
-        return self.name
-
 
     ########################
     # XML helper functions #
@@ -183,7 +121,7 @@ class NodeDevice(XMLBuilder):
                 self.product_id in ["0x0001", "0x0002", "0x0003"])
 
     def is_drm_render(self):
-        return self.device_type == "drm" and self._drm_type == "render"
+        return self.device_type == "drm" and self.drm_type == "render"
 
 
     ##################
@@ -198,8 +136,8 @@ class NodeDevice(XMLBuilder):
     bus = XMLProperty("./capability/bus")
     slot = XMLProperty("./capability/slot")
     function = XMLProperty("./capability/function")
-    _product_name = XMLProperty("./capability/product")
-    _vendor_name = XMLProperty("./capability/vendor")
+    product_name = XMLProperty("./capability/product")
+    vendor_name = XMLProperty("./capability/vendor")
     _capability_type = XMLProperty("./capability/capability/@type")
 
     # type='usb' options
@@ -223,7 +161,7 @@ class NodeDevice(XMLBuilder):
             is_int=True)
 
     # type='drm' options
-    _drm_type = XMLProperty("./capability/type")
+    drm_type = XMLProperty("./capability/type")
     devnodes = XMLChildProperty(DevNode)
 
     def get_devnode(self, parent="by-path"):

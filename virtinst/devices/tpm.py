@@ -24,22 +24,6 @@ class DeviceTpm(Device):
     MODEL_CRB = "tpm-crb"
     MODELS = [MODEL_TIS, MODEL_CRB]
 
-    @staticmethod
-    def get_pretty_type(tpm_type):
-        if tpm_type == DeviceTpm.TYPE_PASSTHROUGH:
-            return _("Passthrough device")
-        if tpm_type == DeviceTpm.TYPE_EMULATOR:
-            return _("Emulated device")
-        return tpm_type
-
-    @staticmethod
-    def get_pretty_model(tpm_model):
-        if tpm_model == DeviceTpm.MODEL_TIS:
-            return _("TIS")
-        if tpm_model == DeviceTpm.MODEL_CRB:
-            return _("CRB")
-        return tpm_model
-
     type = XMLProperty("./backend/@type")
     version = XMLProperty("./backend/@version")
     model = XMLProperty("./@model")

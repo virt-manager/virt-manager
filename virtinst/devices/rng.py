@@ -15,24 +15,6 @@ class DeviceRng(Device):
     TYPE_RANDOM = "random"
     TYPE_EGD = "egd"
 
-    @staticmethod
-    def get_pretty_type(rng_type):
-        if rng_type == DeviceRng.TYPE_RANDOM:
-            return _("Random")
-        if rng_type == DeviceRng.TYPE_EGD:
-            return _("Entropy Gathering Daemon")
-        return rng_type
-
-    @staticmethod
-    def get_pretty_backend_type(backend_type):
-        return {"udp": "UDP",
-                "tcp": "TCP"}.get(backend_type) or backend_type
-
-    @staticmethod
-    def get_pretty_mode(mode):
-        return {"bind": _("Bind"),
-                "connect": _("Connect")}.get(mode) or mode
-
     model = XMLProperty("./@model")
 
     backend_model = XMLProperty("./backend/@model")

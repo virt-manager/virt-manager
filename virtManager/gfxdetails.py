@@ -55,6 +55,20 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.vm = None
         self.conn = None
 
+
+    #####################
+    # Pretty UI helpers #
+    #####################
+
+    @staticmethod
+    def graphics_pretty_type_simple(gtype):
+        if (gtype in [virtinst.DeviceGraphics.TYPE_VNC,
+                      virtinst.DeviceGraphics.TYPE_SDL,
+                      virtinst.DeviceGraphics.TYPE_RDP]):
+            return str(gtype).upper()
+        return str(gtype).capitalize()
+
+
     ##########################
     # Initialization methods #
     ##########################
@@ -109,7 +123,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
             if not drm.is_drm_render():
                 continue
             rendernode = drm.get_devnode().path
-            model.append([rendernode, i.xmlobj.pretty_name()])
+            model.append([rendernode, i.pretty_name()])
 
     def _get_config_graphics_ports(self):
         port = uiutil.spin_get_helper(self.widget("graphics-port"))
@@ -193,8 +207,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
         is_vnc = (gtype == "vnc")
         is_sdl = (gtype == "sdl")
         is_spice = (gtype == "spice")
-        title = (_("%(graphicstype)s Server") %
-                  {"graphicstype": gfx.pretty_type_simple(gtype)})
+        pretty_type = vmmGraphicsDetails.graphics_pretty_type_simple(gtype)
+        title = (_("%(graphicstype)s Server") % {"graphicstype": pretty_type})
 
         if is_vnc or is_spice:
             use_passwd = gfx.passwd is not None

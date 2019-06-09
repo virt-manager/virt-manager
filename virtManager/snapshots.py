@@ -16,6 +16,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from virtinst import DomainSnapshot
+from virtinst import generatename
 from virtinst import xmlutil
 
 from . import uiutil
@@ -117,8 +118,11 @@ class vmmSnapshotNew(vmmGObjectUI):
 
     def _reset_state(self):
         collidelist = [s.get_xmlobj().name for s in self.vm.list_snapshots()]
-        default_name = DomainSnapshot.find_free_name(
-            self.vm.get_backend(), collidelist)
+        basename = "snapshot"
+        cb = self.vm.get_backend().snapshotLookupByName
+        default_name = generatename.generate_name(
+                basename, cb, sep="", start_num=1, force_num=True,
+                collidelist=collidelist)
 
         self.widget("snapshot-new-name").set_text(default_name)
         self.widget("snapshot-new-name").emit("changed")
@@ -210,8 +214,8 @@ class vmmSnapshotNew(vmmGObjectUI):
             newsnap = DomainSnapshot(self.vm.conn.get_backend())
             newsnap.name = name
             newsnap.description = desc or None
-            newsnap.validate()
             newsnap.get_xml()
+            newsnap.validate_generic_name(_("Snapshot"), newsnap.name)
             return newsnap
         except Exception as e:
             return self.err.val_err(_("Error validating snapshot: %s") % e)

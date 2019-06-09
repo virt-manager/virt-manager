@@ -11,20 +11,6 @@ from ..xmlbuilder import XMLProperty
 class DeviceVideo(Device):
     XML_NAME = "video"
 
-    @staticmethod
-    def get_recommended_models(guest):
-        if guest.conn.is_xen():
-            return ["xen", "vga"]
-        if guest.conn.is_qemu() or guest.conn.is_test():
-            return ["vga", "qxl", "virtio"]
-        return []
-
-    @staticmethod
-    def pretty_model(model):
-        if model in ["qxl", "vmvga", "vga"]:
-            return model.upper()
-        return model.capitalize()
-
     _XML_PROP_ORDER = ["model", "vram", "heads", "vgamem"]
     model = XMLProperty("./model/@type")
     vram = XMLProperty("./model/@vram", is_int=True)

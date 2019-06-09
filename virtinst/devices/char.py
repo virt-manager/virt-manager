@@ -90,62 +90,6 @@ class _DeviceChar(Device):
                      CHANNEL_NAME_LIBGUESTFS,
                      CHANNEL_NAME_SPICE_WEBDAV]
 
-    @classmethod
-    def get_recommended_types(cls, _guest):
-        if cls.XML_NAME == "console":
-            return [cls.TYPE_PTY]
-
-        ret = [cls.TYPE_PTY, cls.TYPE_FILE, cls.TYPE_UNIX]
-        if cls.XML_NAME == "channel":
-            ret = [cls.TYPE_SPICEVMC, cls.TYPE_SPICEPORT] + ret
-        return ret
-
-    @staticmethod
-    def pretty_channel_name(val):
-        if val == _DeviceChar.CHANNEL_NAME_SPICE:
-            return "spice"
-        if val == _DeviceChar.CHANNEL_NAME_QEMUGA:
-            return "qemu-ga"
-        if val == _DeviceChar.CHANNEL_NAME_LIBGUESTFS:
-            return "libguestfs"
-        if val == _DeviceChar.CHANNEL_NAME_SPICE_WEBDAV:
-            return "spice-webdav"
-        return None
-
-    @staticmethod
-    def pretty_type(ctype):
-        """
-        Return a human readable description of the passed char type
-        """
-        desc = ""
-
-        if ctype == _DeviceChar.TYPE_PTY:
-            desc = _("Pseudo TTY")
-        elif ctype == _DeviceChar.TYPE_DEV:
-            desc = _("Physical host character device")
-        elif ctype == _DeviceChar.TYPE_STDIO:
-            desc = _("Standard input/output")
-        elif ctype == _DeviceChar.TYPE_PIPE:
-            desc = _("Named pipe")
-        elif ctype == _DeviceChar.TYPE_FILE:
-            desc = _("Output to a file")
-        elif ctype == _DeviceChar.TYPE_VC:
-            desc = _("Virtual console")
-        elif ctype == _DeviceChar.TYPE_NULL:
-            desc = _("Null device")
-        elif ctype == _DeviceChar.TYPE_TCP:
-            desc = _("TCP net console")
-        elif ctype == _DeviceChar.TYPE_UDP:
-            desc = _("UDP net console")
-        elif ctype == _DeviceChar.TYPE_UNIX:
-            desc = _("Unix socket")
-        elif ctype == _DeviceChar.TYPE_SPICEVMC:
-            desc = _("Spice agent")
-        elif ctype == _DeviceChar.TYPE_SPICEPORT:
-            desc = _("Spice port")
-
-        return desc
-
     def set_friendly_target(self, val):
         _set_host_helper(self, "target_address", "target_port", val)
 

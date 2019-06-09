@@ -275,8 +275,15 @@ class vmmHostNets(vmmGObjectUI):
     def _populate_qos_state(self, net):
         qos = net.get_qos()
 
-        self.widget("net-qos-inbound-enable").set_active(qos.is_inbound())
-        self.widget("net-qos-outbound-enable").set_active(qos.is_outbound())
+        def is_inbound():
+            return bool(qos.inbound_average or qos.inbound_peak or
+                        qos.inbound_burst or qos.inbound_floor)
+        def is_outbound():
+            return bool(qos.outbound_average or qos.outbound_peak or
+                        qos.outbound_burst)
+
+        self.widget("net-qos-inbound-enable").set_active(is_inbound())
+        self.widget("net-qos-outbound-enable").set_active(is_outbound())
 
         self._update_qos_widgets()
 

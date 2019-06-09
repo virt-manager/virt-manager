@@ -12,14 +12,6 @@ from ..xmlbuilder import XMLChildProperty, XMLProperty
 class DeviceRedirdev(Device):
     XML_NAME = "redirdev"
 
-    @staticmethod
-    def pretty_type(typ):
-        if typ == "tcp":
-            return "TCP"
-        if typ == "spicevmc":
-            return "SpiceVMC"
-        return typ and typ.capitalize()
-
     _XML_PROP_ORDER = ["bus", "type", "source"]
 
     bus = XMLProperty("./@bus")

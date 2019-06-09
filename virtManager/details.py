@@ -173,7 +173,7 @@ def _label_for_device(dev):
     devtype = dev.DEVICE_TYPE
 
     if devtype == "disk":
-        busstr = virtinst.DeviceDisk.pretty_disk_bus(dev.bus) or ""
+        busstr = vmmAddHardware.disk_pretty_bus(dev.bus) or ""
 
         if dev.device == "floppy":
             devstr = _("Floppy")
@@ -220,28 +220,30 @@ def _label_for_device(dev):
 
     if devtype == "channel":
         label = _("Channel")
-        name = dev.pretty_channel_name(dev.target_name)
+        name = vmmAddHardware.char_pretty_channel_name(dev.target_name)
         if not name:
-            name = dev.pretty_type(dev.type)
+            name = vmmAddHardware.char_pretty_type(dev.type)
         if name:
             label += " %s" % name
         return label
 
     if devtype == "graphics":
-        return _("Display %s") % dev.pretty_type_simple(dev.type)
+        pretty = vmmGraphicsDetails.graphics_pretty_type_simple(dev.type)
+        return _("Display %s") % pretty
     if devtype == "redirdev":
         return _("%s Redirector %s") % (dev.bus.upper(),
                 dev.get_xml_idx() + 1)
     if devtype == "hostdev":
-        return dev.pretty_name()
+        return vmmAddHardware.hostdev_pretty_name(dev)
     if devtype == "sound":
         return _("Sound %s") % dev.model
     if devtype == "video":
-        return _("Video %s") % dev.pretty_model(dev.model)
+        return _("Video %s") % vmmAddHardware.video_pretty_model(dev.model)
     if devtype == "filesystem":
         return _("Filesystem %s") % dev.target[:8]
     if devtype == "controller":
-        return _("Controller %s %s") % (dev.pretty_desc(), dev.index)
+        return _("Controller %s %s") % (
+                vmmAddHardware.controller_pretty_desc(dev), dev.index)
     if devtype == "rng":
         label = _("RNG")
         if dev.device:
@@ -2269,7 +2271,7 @@ class vmmDetails(vmmGObjectUI):
         self.netlist.set_dev(net)
 
     def refresh_input_page(self, inp):
-        dev = inp.pretty_name(inp.type, inp.bus)
+        dev = vmmAddHardware.input_pretty_name(inp.type, inp.bus)
 
         mode = None
         if inp.type == "tablet":
@@ -2302,7 +2304,8 @@ class vmmDetails(vmmGObjectUI):
             address = _("%s:%s") % (rd.source.host, rd.source.service)
 
         self.widget("redir-title").set_markup(_label_for_device(rd))
-        self.widget("redir-type").set_text(rd.pretty_type(rd.type))
+        self.widget("redir-type").set_text(
+                vmmAddHardware.redirdev_pretty_type(rd.type))
 
         self.widget("redir-address").set_text(address or "")
         uiutil.set_grid_row_visible(
@@ -2316,7 +2319,7 @@ class vmmDetails(vmmGObjectUI):
 
         dev_type = tpmdev.type
         self.widget("tpm-dev-type").set_text(
-                virtinst.DeviceTpm.get_pretty_type(dev_type))
+                vmmAddHardware.tpm_pretty_type(dev_type))
 
         vmmAddHardware.populate_tpm_model_combo(
             self.vm, self.widget("tpm-model"), tpmdev.version)
@@ -2328,7 +2331,7 @@ class vmmDetails(vmmGObjectUI):
 
     def refresh_panic_page(self, dev):
         model = dev.model or "isa"
-        pmodel = virtinst.DevicePanic.get_pretty_model(model)
+        pmodel = vmmAddHardware.panic_pretty_model(model)
         self.widget("panic-model").set_text(pmodel)
 
     def refresh_rng_page(self, dev):
@@ -2336,7 +2339,7 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(self.widget("rng-device"), is_random)
 
         self.widget("rng-type").set_text(
-                dev.get_pretty_type(dev.backend_model))
+                vmmAddHardware.rng_pretty_type(dev.backend_model))
         self.widget("rng-device").set_text(dev.device or "")
 
     def refresh_vsock_page(self, dev):
@@ -2413,13 +2416,13 @@ class vmmDetails(vmmGObjectUI):
         nodedev = None
         for trydev in self.vm.conn.filter_nodedevs(devtype):
             if trydev.xmlobj.compare_to_hostdev(hostdev):
-                nodedev = trydev.xmlobj
+                nodedev = trydev
 
         pretty_name = None
         if nodedev:
             pretty_name = nodedev.pretty_name()
         if not pretty_name:
-            pretty_name = hostdev.pretty_name()
+            pretty_name = vmmAddHardware.hostdev_pretty_name(hostdev)
 
         uiutil.set_grid_row_visible(
             self.widget("hostdev-rombar"), hostdev.type == "pci")
@@ -2499,7 +2502,7 @@ class vmmDetails(vmmGObjectUI):
                         _("Cannot remove controller while devices are attached."))
                     break
 
-        type_label = controller.pretty_desc()
+        type_label = vmmAddHardware.controller_pretty_desc(controller)
         self.widget("controller-type").set_text(type_label)
 
         combo = self.widget("controller-model")

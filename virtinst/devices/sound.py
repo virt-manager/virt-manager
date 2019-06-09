@@ -20,18 +20,6 @@ class _Codec(XMLBuilder):
 class DeviceSound(Device):
     XML_NAME = "sound"
 
-    @staticmethod
-    def get_recommended_models(_guest):
-        return ["ich6", "ich9", "ac97"]
-
-    @staticmethod
-    def pretty_model(model):
-        ret = model.upper()
-        if model in ["ich6", "ich9"]:
-            ret = "HDA (%s)" % model.upper()
-        return ret
-
-
     model = XMLProperty("./@model")
     codecs = XMLChildProperty(_Codec)
 

@@ -72,15 +72,6 @@ class DeviceGraphics(Device):
 
         return sort_list
 
-    @staticmethod
-    def pretty_type_simple(gtype):
-        if (gtype in [DeviceGraphics.TYPE_VNC,
-                      DeviceGraphics.TYPE_SDL,
-                      DeviceGraphics.TYPE_RDP]):
-            return str(gtype).upper()
-
-        return str(gtype).capitalize()
-
     def __init__(self, *args, **kwargs):
         Device.__init__(self, *args, **kwargs)
 

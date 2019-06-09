@@ -11,6 +11,9 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
 
+import libvirt
+
+from virtinst import generatename
 from virtinst import Network
 
 from . import uiutil
@@ -110,8 +113,9 @@ class vmmCreateNetwork(vmmGObjectUI):
         mode_model.append(["hostdev", _("SR-IOV pool")])
 
     def reset_state(self):
-        default_name = Network.find_free_name(
-                self.conn.get_backend(), "network")
+        basename = "network"
+        default_name = generatename.generate_name(
+                basename, self.conn.get_backend().networkLookupByName)
         self.widget("net-name").set_text(default_name)
 
         self.widget("net-dns-use-netname").set_active(True)
@@ -161,7 +165,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         for pcidev in self.conn.filter_nodedevs("pci"):
             if not pcidev.xmlobj.is_pci_sriov():
                 continue
-            devdesc = pcidev.xmlobj.pretty_name()
+            devdesc = pcidev.pretty_name()
             for netdev in self.conn.filter_nodedevs("net"):
                 if pcidev.xmlobj.name != netdev.xmlobj.parent:
                     continue
@@ -353,6 +357,15 @@ class vmmCreateNetwork(vmmGObjectUI):
     # XML build and install #
     #########################
 
+    def _validate(self, net):
+        net.validate_generic_name(_("Network"), net.name)
+
+        try:
+            net.conn.networkLookupByName(net.name)
+        except libvirt.libvirtError:
+            return
+        raise ValueError(_("Name '%s' already in use by another network." %
+                         net.name))
 
     def _build_xmlobj(self):
         net = Network(self.conn.get_backend())
@@ -418,12 +431,22 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def _async_net_create(self, asyncjob, net):
         ignore = asyncjob
-        net.install()
+        xml = net.get_xml()
+        logging.debug("Creating virtual network '%s' with xml:\n%s",
+                      net.name, xml)
+
+        netobj = self.conn.get_backend().networkDefineXML(xml)
+        try:
+            netobj.create()
+            netobj.setAutostart(True)
+        except Exception:
+            netobj.undefine()
+            raise
 
     def finish(self, ignore):
         try:
             net = self._build_xmlobj()
-            net.validate()
+            self._validate(net)
         except Exception as e:
             self.err.show_err(_("Error generating network xml: %s") % str(e))
             return
