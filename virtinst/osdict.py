@@ -526,20 +526,13 @@ class _OsVariant(object):
         recommended = self._os and self._os.get_recommended_resources() or None
         return _OsResources(minimum, recommended)
 
-    def get_network_install_resources(self, guest):
-        ret = {}
-
-        if not hasattr(self._os, "get_network_install_resources"):
-            return ret
-
-        resources = self._os.get_network_install_resources()
-        for r in _OsinfoIter(resources):
-            arch = r.get_architecture()
-            if arch == guest.os.arch or arch == "all":
-                ret["ram"] = r.get_ram()
-                break
-
-        return ret
+    def get_network_install_required_ram(self, guest):
+        if hasattr(self._os, "get_network_install_resources"):
+            resources = self._os.get_network_install_resources()
+            for r in _OsinfoIter(resources):
+                arch = r.get_architecture()
+                if arch == guest.os.arch or arch == "all":
+                    return r.get_ram()
 
     def get_kernel_url_arg(self):
         """

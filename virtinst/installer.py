@@ -198,12 +198,12 @@ class Installer(object):
         if not self._treemedia.requires_internet(guest, meter):
             return
 
-        res = guest.osinfo.get_network_install_resources(guest)
-        if (res and res.get("ram") > 0 and
-            res["ram"] // 1024 > guest.currentMemory):
+        ram = guest.osinfo.get_network_install_required_ram(guest)
+        ram = (ram or 0) // 1024
+        if ram > guest.currentMemory:
             logging.debug("Setting ram from libosinfo network-install "
-                          "resources: '%d'", res["ram"] // 1024)
-            guest.currentMemory = res["ram"] // 1024
+                          "resources to %s", ram)
+            guest.currentMemory = ram
 
 
     ##########################

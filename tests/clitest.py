@@ -789,6 +789,7 @@ c.add_compare("--location https://foobar.com", "fake-http")  # fake https:// ins
 c.add_compare("--connect %(URI-KVM)s --os-variant fedora26,install=location", "osinfo-url")  # getting URL from osinfo
 c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=desktop,admin-password=foobar", "osinfo-url-unattended")  # unattended install for fedora, using initrd injection
 c.add_compare("--connect %(URI-KVM)s --os-variant win7 --cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended")  # unattended install for win7
+c.add_compare("--connect %(URI-KVM)s --os-variant silverblue29 --location http://example.com", "network-install-resources")  # triggering network-install resources override
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--livecd")  # LiveCD with no media
