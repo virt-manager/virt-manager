@@ -39,3 +39,5 @@ signal.signal(signal.SIGINT, signal.getsignal(signal.SIGINT))
 
 # Needed so labels are matched in english
 os.environ['LANG'] = 'en_US.UTF-8'
+
+os.environ.pop("VIRTINST_TEST_SUITE", None)

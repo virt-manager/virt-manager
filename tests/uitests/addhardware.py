@@ -144,7 +144,6 @@ class AddHardware(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: not addhw.showing)
         uiutils.check_in_loop(lambda: details.active)
 
-    @tests.utils.run_without_testsuite_hacks
     def testQemuSearchCheck(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             with tempfile.NamedTemporaryFile(dir=tmpdir) as tmpfile:

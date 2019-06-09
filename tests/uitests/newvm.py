@@ -22,18 +22,6 @@ class NewVM(uiutils.UITestCase):
         self.app.root.find("New", "push button").click()
         return self.app.root.find("New VM", "frame")
 
-    def _do_simple_import(self, newvm):
-        # Create default PXE VM
-        newvm.find_fuzzy("Import", "radio").click()
-        newvm.find_fuzzy(None,
-            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
-        self.forward(newvm)
-        newvm.find("oslist-entry").text = "generic"
-        newvm.find("oslist-popover").find_fuzzy("generic").click()
-        self.forward(newvm)
-        self.forward(newvm)
-        newvm.find_fuzzy("Finish", "button").click()
-
     def forward(self, newvm, check=True):
         pagenumlabel = newvm.find("pagenum-label")
         oldtext = pagenumlabel.text
@@ -280,7 +268,21 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("ppc64", "menu item").click()
         newvm.find_fuzzy("pseries", "menu item")
 
-        self._do_simple_import(newvm)
+        # Create default PXE VM
+        newvm.find_fuzzy("Import", "radio").click()
+        newvm.find_fuzzy(None,
+            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
+        self.forward(newvm)
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm, check=False)
+
+        # Path permission check
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("No", "push button").click()
+
+        self.forward(newvm)
+        newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("generic-ppc64 on", "frame")
         self.assertFalse(newvm.showing)
@@ -325,6 +327,10 @@ class NewVM(uiutils.UITestCase):
         # Disk collision box pops up, hit ok
         alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy("Yes", "push button").click()
+
+        # Path permission check
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("No", "push button").click()
 
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
@@ -410,4 +416,13 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Xen Type", "combo").click()
         newvm.find_fuzzy("paravirt", "menu item").click()
 
-        self._do_simple_import(newvm)
+        # Create default PXE VM
+        newvm.find_fuzzy("Import", "radio").click()
+        newvm.find_fuzzy(None,
+            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
+        self.forward(newvm)
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+        newvm.find_fuzzy("Finish", "button").click()
