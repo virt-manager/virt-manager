@@ -24,6 +24,9 @@ class TestOSDB(unittest.TestCase):
                 "should never be extended, since it is only for back "
                 "compat with pre-libosinfo osdict.py"))
 
+    def test_list_os(self):
+        OSDB.list_os()
+
     def test_recommended_resources(self):
         conn = utils.URIs.open_testdefault_cached()
         guest = Guest(conn)
