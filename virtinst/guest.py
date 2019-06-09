@@ -293,7 +293,7 @@ class Guest(XMLBuilder):
                         "find any libosinfo object matching that", os_id)
 
         if not self.__osinfo:
-            self.set_os_name("generic")
+            self._set_os_obj(OSDB.lookup_os("generic"))
         return self.__osinfo
     osinfo = property(_get_osinfo)
 
@@ -412,24 +412,26 @@ class Guest(XMLBuilder):
                 # we found a hole so we can stop here
                 break
 
+    def _set_os_obj(self, obj):
+        self.__osinfo = obj
+        self._metadata.libosinfo.os_id = obj.full_id
+
     def set_os_name(self, name):
         obj = OSDB.lookup_os(name)
         if obj is None:
             raise ValueError(_("Unknown OS name '%s'. "
                     "See `osinfo-query os` for valid values.") % name)
 
-        logging.debug("Setting Guest osinfo %s", obj)
-        self.__osinfo = obj
-        self._metadata.libosinfo.os_id = self.__osinfo.full_id
+        logging.debug("Setting Guest osinfo name %s", obj)
+        self._set_os_obj(obj)
 
     def set_os_full_id(self, full_id):
         obj = OSDB.lookup_os_by_full_id(full_id)
         if obj is None:
             raise ValueError(_("Unknown libosinfo ID '%s'") % full_id)
 
-        logging.debug("Setting Guest osinfo %s", obj)
-        self.__osinfo = obj
-        self._metadata.libosinfo.os_id = self.__osinfo.full_id
+        logging.debug("Setting Guest osinfo full_id %s", obj)
+        self._set_os_obj(obj)
 
     def _supports_virtio(self, os_support):
         if not self.conn.is_qemu():
