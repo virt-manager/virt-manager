@@ -21,7 +21,7 @@ class DomainSeclabel(XMLBuilder):
     MODEL_NONE = "none"
 
     XML_NAME = "seclabel"
-    _XML_PROP_ORDER = ["type", "model", "relabel", "label", "imagelabel"]
+    _XML_PROP_ORDER = ["type", "model", "relabel", "label"]
 
     def _guess_secmodel(self):
         caps_models = [x.model for x in self.conn.caps.host.secmodels]
@@ -29,29 +29,21 @@ class DomainSeclabel(XMLBuilder):
         # We always want the testSecurity model when running tests
         if self.MODEL_TEST in caps_models:
             return self.MODEL_TEST
-        if not self.label and not self.imagelabel:
+        if not self.label:
             return caps_models and caps_models[0] or None
 
-        lab_len = imglab_len = None
+        lab_len = None
         if self.label:
             lab_len = min(3, len(self.label.split(':')))
-        if self.imagelabel:
-            imglab_len = min(3, len(self.imagelabel.split(':')))
-        if lab_len and imglab_len and lab_len != imglab_len:
-            raise ValueError(_("Label and Imagelabel are incompatible"))
 
-        lab_len = lab_len or imglab_len
         if lab_len == 3:
             return self.MODEL_SELINUX
         elif lab_len == 2:
             return self.MODEL_DAC
-        else:
-            raise ValueError(_("Unknown model type for label '%s'") % self.label)
     model = XMLProperty("./@model")
     type = XMLProperty("./@type")
 
     label = XMLProperty("./label")
-    imagelabel = XMLProperty("./imagelabel")
     baselabel = XMLProperty("./baselabel")
     relabel = XMLProperty("./@relabel", is_yesno=True)
 

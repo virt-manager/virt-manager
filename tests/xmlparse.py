@@ -248,7 +248,6 @@ class XMLParseTest(unittest.TestCase):
         check("type", "static", "none")
         check("model", "selinux", "apparmor")
         check("label", "foolabel", "barlabel")
-        check("imagelabel", "imagelabel", "fooimage")
         check("baselabel", None, "baselabel")
         check("relabel", None, False)
 
