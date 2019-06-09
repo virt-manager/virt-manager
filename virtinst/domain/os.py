@@ -48,8 +48,6 @@ class DomainOs(XMLBuilder):
         return self.arch == "aarch64"
     def is_arm(self):
         return self.is_arm32() or self.is_arm64()
-    def is_arm_vexpress(self):
-        return self.is_arm() and str(self.machine).startswith("vexpress-")
     def is_arm_machvirt(self):
         return self.is_arm() and str(self.machine).startswith("virt")
 

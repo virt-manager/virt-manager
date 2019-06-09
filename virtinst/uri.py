@@ -124,8 +124,7 @@ class MagicURI(object):
         return uri.startswith(MagicURI.VIRTINST_URI_MAGIC_PREFIX)
 
     def __init__(self, uri):
-        if not self.uri_is_magic(uri):
-            raise RuntimeError("uri=%s is not virtinst magic URI" % uri)
+        assert self.uri_is_magic(uri)
 
         from .cli import parse_optstr_tuples
 
@@ -165,8 +164,7 @@ class MagicURI(object):
         if self.libvirt_version:
             self.libvirt_version = int(self.libvirt_version)
 
-        if opts:
-            raise RuntimeError("Unhandled virtinst test uri options %s" % opts)
+        assert not opts
 
 
     ##############

@@ -210,6 +210,9 @@
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
     <baselabel>baselabel</baselabel>
   </seclabel>
+  <seclabel type="dynamic" model="dac">
+    <label>012:345</label>
+  </seclabel>
   <on_lockfailure>ignore</on_lockfailure>
   <cputune>
     <vcpupin vcpu="0" cpuset="0-3"/>
@@ -428,6 +431,9 @@
   <seclabel type="static" model="selinux" relabel="yes">
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
     <baselabel>baselabel</baselabel>
+  </seclabel>
+  <seclabel type="dynamic" model="dac">
+    <label>012:345</label>
   </seclabel>
   <on_lockfailure>ignore</on_lockfailure>
   <cputune>

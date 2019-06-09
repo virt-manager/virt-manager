@@ -305,6 +305,9 @@ class XMLParseTest(unittest.TestCase):
         check("dtb", None, "/baz.dtb")
         check("kernel_args", None, "ks=foo.ks")
 
+        guest.os.set_initargs_string("foo bar")
+        guest.os.set_initargs_string("baz wibble")
+
         self._alter_compare(guest.get_xml(), outfile)
 
     def testAlterBootKernel(self):
@@ -1293,10 +1296,6 @@ class XMLParseTest(unittest.TestCase):
         check("macaddr", None, "52:54:00:69:eb:FF")
         check("virtualport_type", None, "openvswitch")
 
-        check = self._make_checker(net.forward)
-        check("mode", "nat", "route")
-        check("dev", None, "eth22")
-
         check = self._make_checker(net.bandwidth)
         check("inbound_average", "1000", "3000")
         check("inbound_peak", "5000", "4000")
@@ -1315,9 +1314,16 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(net.ips[0])
         check("address", "192.168.7.1", "192.168.8.1")
         check("netmask", "255.255.255.0", "255.255.254.0")
+        self.assertEqual(net.can_pxe(), False)
         check("tftp", None, "/var/lib/tftproot")
         check("bootp_file", None, "pxeboot.img")
         check("bootp_server", None, "1.2.3.4")
+        self.assertEqual(net.can_pxe(), True)
+
+        check = self._make_checker(net.forward)
+        check("mode", "nat", "route")
+        check("dev", None, "eth22")
+        self.assertEqual(net.can_pxe(), True)
 
         check = self._make_checker(net.ips[0].ranges[0])
         check("start", "192.168.7.128", "192.168.8.128")

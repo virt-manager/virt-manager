@@ -58,10 +58,6 @@ class NodeDevice(XMLBuilder):
 
         :returns: NodeDevice instance
         """
-        if not conn.support.conn_nodedev():
-            raise ValueError(_("Connection does not support host device "
-                               "enumeration."))
-
         # First try and see if this is a libvirt nodedev name
         for nodedev in conn.fetch_all_nodedevs():
             if nodedev.name == idstring:
@@ -171,7 +167,6 @@ class NodeDevice(XMLBuilder):
                 return d
         if len(self.devnodes) > 0:
             return self.devnodes[0]
-        return None
 
 
 def _AddressStringToHostdev(conn, addrstr):

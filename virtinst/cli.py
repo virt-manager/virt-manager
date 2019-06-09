@@ -3525,7 +3525,7 @@ class ParserMemballoon(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         _add_common_device_args(cls, virtio_options=True)
 
-        cls.add_arg("model", "model")
+        cls.add_arg("model", "model", ignore_default=True)
         cls.add_arg("autodeflate", "autodeflate", is_onoff=True)
         cls.add_arg("stats.period", "stats_period")
 
@@ -3578,7 +3578,7 @@ class ParserVsock(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         _add_common_device_args(cls)
 
-        cls.add_arg("model", "model")
+        cls.add_arg("model", "model", ignore_default=True)
         cls.add_arg("cid.auto", "auto_cid", is_onoff=True)
         cls.add_arg("cid.address", "cid")
 

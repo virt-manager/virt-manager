@@ -65,6 +65,7 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
     if not force_num:
         numrange = [None] + numrange
 
+    ret = None
     for i in numrange:
         tryname = base
         if i is not None:
@@ -72,6 +73,8 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
         tryname += suffix
 
         if not collide(tryname):
-            return tryname
+            ret = tryname
+            break
 
-    raise ValueError(_("Name generation range exceeded."))
+    assert ret
+    return ret

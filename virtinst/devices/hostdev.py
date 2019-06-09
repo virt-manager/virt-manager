@@ -13,12 +13,6 @@ class DeviceHostdev(Device):
     XML_NAME = "hostdev"
 
     def set_from_nodedev(self, nodedev):
-        """
-        @use_full_usb: If set, and nodedev is USB, specify both
-            vendor and product. Used if user requests bus/add on virt-install
-            command line, or if virt-manager detects a dup USB device
-            and we need to differentiate
-        """
         if nodedev.device_type == NodeDevice.CAPABILITY_TYPE_PCI:
             self.type = "pci"
             self.domain = nodedev.domain
@@ -32,17 +26,11 @@ class DeviceHostdev(Device):
             self.product = nodedev.product_id
 
             count = 0
-
             for dev in self.conn.fetch_all_nodedevs():
                 if (dev.device_type == NodeDevice.CAPABILITY_TYPE_USBDEV and
                     dev.vendor_id == self.vendor and
                     dev.product_id == self.product):
                     count += 1
-
-            if not count:
-                raise RuntimeError(_("Could not find USB device "
-                                     "(vendorId: %s, productId: %s)")
-                                   % (self.vendor, self.product))
 
             if count > 1:
                 self.bus = nodedev.bus
@@ -114,5 +102,3 @@ class DeviceHostdev(Device):
             self.managed = self.conn.is_xen() and "no" or "yes"
         if not self.mode:
             self.mode = "subsystem"
-        if self.type == "pci" and not self.domain:
-            self.domain = "0x0"

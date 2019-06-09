@@ -88,6 +88,9 @@
     <rng model="virtio">
       <backend model="random">/dev/random</backend>
     </rng>
+    <vsock model="virtio">
+      <cid auto="yes"/>
+    </vsock>
   </devices>
   <seclabel type="dynamic" model="selinux"/>
   <seclabel type="none" model="dac"/>

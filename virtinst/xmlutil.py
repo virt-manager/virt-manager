@@ -19,14 +19,12 @@ def xml_escape(xml):
     """
     Replaces chars ' " < > & with xml safe counterparts
     """
-    if xml is None:
-        return None
-
-    xml = xml.replace("&", "&amp;")
-    xml = xml.replace("'", "&apos;")
-    xml = xml.replace("\"", "&quot;")
-    xml = xml.replace("<", "&lt;")
-    xml = xml.replace(">", "&gt;")
+    if xml:
+        xml = xml.replace("&", "&amp;")
+        xml = xml.replace("'", "&apos;")
+        xml = xml.replace("\"", "&quot;")
+        xml = xml.replace("<", "&lt;")
+        xml = xml.replace(">", "&gt;")
     return xml
 
 

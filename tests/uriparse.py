@@ -7,6 +7,8 @@ import unittest
 
 from virtinst import URI
 
+import tests
+
 
 class TestURI(unittest.TestCase):
     """
@@ -53,3 +55,9 @@ class TestURI(unittest.TestCase):
             "qemu+ssh://user%40domain.org@hostname/system",
             scheme="qemu", path="/system", transport="ssh",
             hostname="hostname", username="user@domain.org")
+
+    def test_magicuri_connver(self):
+        uri = tests.utils.URIs.test_default + ",connver=1,libver=2"
+        conn = tests.utils.URIs.openconn(uri)
+        self.assertEqual(conn.conn_version(), 1)
+        self.assertEqual(conn.local_libvirt_version(), 2)

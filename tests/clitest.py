@@ -470,6 +470,7 @@ c.add_compare("""
 --watchdog default
 --tpm /dev/tpm0
 --rng /dev/random
+--vsock default
 """, "singleton-config-1")
 
 # Singleton element test #2, for complex strings
@@ -491,6 +492,7 @@ cache.mode=emulate,cache.level=3
 --boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3,initargs="foo=bar baz=woo"
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
 --seclabel type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes,baselabel=baselabel
+--seclabel type=dynamic,label=012:345
 --numatune 1-3,4,mode=strict
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200
@@ -534,6 +536,7 @@ c.add_compare("""
  --memdev dimm,access=private,target.size=512,target.node=0,source.pagesize=4,source.nodemask=1-2
  --memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3,address.type=dimm,address.base=0x100000000,address.slot=1
 --vsock auto_cid=on
+--memballoon default
 
 --sysinfo bios.vendor="Acme LLC",bios.version=1.2.3,bios.date=01/01/1970,bios.release=10.22,system.manufacturer="Acme Inc.",system.product=Computer,system.version=3.2.1,system.serial=123456789,system.uuid=00000000-1111-2222-3333-444444444444,system.sku=abc-123,system.family=Server,baseBoard.manufacturer="Acme Corp.",baseBoard.product=Motherboard,baseBoard.version=A01,baseBoard.serial=1234-5678,baseBoard.asset=Tag,baseBoard.location=Chassis
 """, "singleton-config-3", predefine_check="5.3.0")
@@ -600,6 +603,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 --input type=keyboard,bus=usb
 --input tablet
+--input mouse
 
 --serial tcp,host=:2222,mode=bind,protocol=telnet,log.file=/tmp/foo.log,log.append=yes,,target.model.name=pci-serial
 --serial nmdm,source.master=/dev/foo1,source.slave=/dev/foo2,alias.name=testalias7
@@ -898,7 +902,7 @@ c.add_compare("--connect %(URI-KVM-ARMV7L)s --disk %(EXISTIMG1)s --import --os-v
 c.add_compare("--arch aarch64 --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machvirt")
 c.add_compare("--arch aarch64 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machdefault")
 c.add_compare("--arch aarch64 --cdrom %(EXISTIMG2)s --boot loader=CODE.fd,nvram.template=VARS.fd --disk %(EXISTIMG1)s --cpu none --events on_crash=preserve,on_reboot=destroy,on_poweroff=restart", "aarch64-cdrom")
-c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21", "aarch64-kvm-import")
+c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21 --panic default", "aarch64-kvm-import")  # the --panic is a no-op
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk size=1 --os-variant fedora22 --features gic_version=host --network network=default,address.type=pci --controller type=scsi,model=virtio-scsi,address.type=pci", "aarch64-kvm-gic")
 
 
@@ -926,6 +930,7 @@ c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-graphics")
 ######################
 
 c = vinst.add_category("lxc", "--name foolxc --memory 64 --noautoconsole --connect " + utils.URIs.lxc)
+c.add_invalid("--filesystem /,not/abs")  # filesystem target is not absolute
 c.add_compare("", "default")
 c.add_compare("--os-variant fedora27", "default-f27")
 c.add_compare("--filesystem /source,/", "fs-default")
@@ -940,7 +945,7 @@ c.add_compare("--init /usr/bin/httpd", "manual-init")
 c = vinst.add_category("xen", "--noautoconsole --connect " + utils.URIs.xen)
 c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none")  # Xen PV install headless
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
-c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64", "xen-pv", precompare_check="5.3.0")  # Xen PV
+c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64 --input default", "xen-pv", precompare_check="5.3.0")  # Xen PV
 c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
 
 

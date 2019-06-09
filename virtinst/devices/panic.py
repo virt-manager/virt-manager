@@ -46,4 +46,4 @@ class DevicePanic(Device):
         if not self.address.type and self.address.iobase:
             self.address.type = "isa"
         if not self.model:
-            self.model = self.get_default_model(guest)
+            self.model = DevicePanic.get_default_model(guest)

@@ -109,6 +109,7 @@ class TestNodeDev(unittest.TestCase):
                 "/dev/dri/by-path/pci-0000:00:02.0-render")
         self.assertEqual(dev.devnodes[1].node_type, "link")
         self.assertEqual(dev.is_drm_render(), True)
+        self.assertTrue(dev.get_devnode("frob"))
 
 
     # NodeDevice 2 Device XML tests

@@ -476,7 +476,7 @@ class TestBaseCommand(distutils.core.Command):
         err = int(bool(len(result.failures) > 0 or
                        len(result.errors) > 0))
         if cov and not err:
-            cov.report(show_missing=False)
+            cov.report(show_missing=False, skip_covered=True)
         sys.exit(err)
 
 

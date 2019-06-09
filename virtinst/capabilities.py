@@ -220,22 +220,6 @@ class Capabilities(XMLBuilder):
     guests = XMLChildProperty(_CapsGuest)
 
 
-    ###################
-    # Private helpers #
-    ###################
-
-    def _is_xen(self):
-        for g in self.guests:
-            if g.os_type != "xen":
-                continue
-
-            for d in g.domains:
-                if d.hypervisor_type == "xen":
-                    return True
-
-        return False
-
-
     ############################
     # Public XML building APIs #
     ############################

@@ -170,17 +170,8 @@ class _URIs(object):
             self._testdriver_default = self.openconn(self.test_default)
         return self._testdriver_default
 
-    def _make_uri(self, base, connver=None, libver=None):
-        if connver:
-            base += ",connver=%s" % connver
-        if libver:
-            base += ",libver=%s" % libver
-        return base
-
-    def open_kvm(self, connver=None, libver=None):
-        return self.openconn(self._make_uri(self.kvm, connver, libver))
-    def open_kvm_rhel(self, connver=None):
-        return self.openconn(self._make_uri(self.kvm_rhel, connver))
+    def open_kvm(self):
+        return self.openconn(self.kvm)
     def open_test_remote(self):
         return self.openconn(self.test_remote)
 

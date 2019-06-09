@@ -118,6 +118,7 @@
     </video>
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="spicevmc"/>
+    <memballoon model="virtio"/>
     <rng model="virtio">
       <backend model="egd" type="nmdm">
         <source master="/dev/foo1" slave="/dev/foo2"/>
