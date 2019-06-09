@@ -1448,12 +1448,42 @@ class XMLParseTest(unittest.TestCase):
         except ValueError:
             pass
 
-    def testXMLRootValidate(self):
+    def testXMLCoverage(self):
         try:
+            # Ensure we validate root element
             virtinst.DeviceDisk(self.conn, parsexml="<foo/>")
             raise AssertionError("Expected parse failure")
         except RuntimeError as e:
             self.assertTrue("'foo'" in str(e))
+
+        try:
+            # Ensure we validate root element
+            virtinst.DeviceDisk(self.conn, parsexml=-1)
+            raise AssertionError("Expected parse failure")
+        except Exception as e:
+            self.assertTrue("xmlParseDoc" in str(e))
+
+        try:
+            from virtinst import xmlutil
+            xmlutil.raise_programming_error(True, "for coverage")
+            raise AssertionError("We shouldn't get here")
+        except RuntimeError:
+            pass
+
+        try:
+            virtinst.DeviceDisk.validate_generic_name("objtype", None)
+            raise AssertionError("We shouldn't get here")
+        except ValueError:
+            pass
+        try:
+            virtinst.DeviceDisk.validate_generic_name("objtype", "foo bar")
+            raise AssertionError("We shouldn't get here")
+        except ValueError:
+            pass
+
+        # Test property __repr__ for code coverage
+        assert str(virtinst.DeviceDisk.address)
+        assert str(virtinst.DeviceDisk.driver_cache)
 
     def testReplaceChildParse(self):
         buildfile = "tests/xmlparse-xml/replace-child-build.xml"

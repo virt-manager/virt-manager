@@ -57,3 +57,11 @@ def set_prop_path(obj, prop_path, value):
         parent = getattr(parent, piece)
 
     return setattr(parent, pieces[-1], value)
+
+
+def raise_programming_error(cond, msg):
+    """
+    Small helper to raise a consistent error message for coding issues
+    """
+    if cond:
+        raise RuntimeError("programming error: %s" % msg)

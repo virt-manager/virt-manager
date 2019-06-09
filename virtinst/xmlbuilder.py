@@ -192,8 +192,8 @@ class XMLProperty(_XMLPropertyBase):
         :param do_abspath: If True, run os.path.abspath on the passed value
         """
         self._xpath = xpath
-        if not self._xpath:
-            raise RuntimeError("XMLProperty: xpath must be passed.")
+        xmlutil.raise_programming_error(not self._xpath,
+                "XMLProperty: xpath must be passed.")
 
         self._is_bool = is_bool
         self._is_int = is_int
@@ -201,10 +201,11 @@ class XMLProperty(_XMLPropertyBase):
         self._is_onoff = is_onoff
         self._do_abspath = do_abspath
 
-        if sum([int(bool(i)) for i in
+        conflicts = sum([int(bool(i)) for i in
                 [self._is_bool, self._is_int,
-                 self._is_yesno, self._is_onoff]]) > 1:
-            raise RuntimeError("Conflict property converter options.")
+                 self._is_yesno, self._is_onoff]])
+        xmlutil.raise_programming_error(conflicts > 1,
+                "Conflict property converter options.")
 
         self._is_tracked = False
         if _trackprops:
@@ -405,8 +406,6 @@ class _XMLState(object):
         self._parent_xpath = xpath or ""
 
     def _join_xpath(self, x1, x2):
-        if x1.endswith("/"):
-            x1 = x1[:-1]
         if x2.startswith("."):
             x2 = x2[1:]
         return x1 + x2
@@ -478,11 +477,7 @@ class XMLBuilder(object):
         self.conn = conn
 
         if self._XML_SANITIZE:
-            if hasattr(parsexml, 'decode'):
-                parsexml = parsexml.decode("ascii", "ignore").encode("ascii")
-            else:
-                parsexml = parsexml.encode("ascii", "ignore").decode("ascii")
-
+            parsexml = parsexml.encode("ascii", "ignore").decode("ascii")
             parsexml = "".join([c for c in parsexml if c in string.printable])
 
         self._propstore = collections.OrderedDict()
@@ -502,15 +497,16 @@ class XMLBuilder(object):
         xmlprops = self._all_xml_props()
         childprops = self._all_child_props()
         for key in self._XML_PROP_ORDER:
-            if key not in xmlprops and key not in childprops:
-                raise RuntimeError("programming error: key '%s' must be "
-                                   "xml prop or child prop" % key)
+            xmlutil.raise_programming_error(
+                key not in xmlprops and key not in childprops,
+                "key '%s' must be xml prop or child prop" % key)
 
         childclasses = []
         for childprop in childprops.values():
-            if childprop.child_class in childclasses:
-                raise RuntimeError("programming error: can't register "
-                        "duplicate child_classs=%s" % childprop.child_class)
+            xmlutil.raise_programming_error(
+                childprop.child_class in childclasses,
+                "can't register duplicate child_class=%s" %
+                childprop.child_class)
             childclasses.append(childprop.child_class)
 
         setattr(self.__class__, cachekey, True)
@@ -636,14 +632,16 @@ class XMLBuilder(object):
 
     def _find_child_prop(self, child_class):
         xmlprops = self._all_child_props()
+        ret = None
         for xmlprop in list(xmlprops.values()):
             if xmlprop.is_single:
                 continue
             if child_class is xmlprop.child_class:
-                return xmlprop
-        raise RuntimeError("programming error: "
-                           "Didn't find child property for child_class=%s" %
-                           child_class)
+                ret = xmlprop
+                break
+        xmlutil.raise_programming_error(not ret,
+                "Didn't find child property for child_class=%s" % child_class)
+        return ret
 
     def _set_xpaths(self, parent_xpath, relative_object_xpath=-1):
         """

@@ -224,8 +224,7 @@ class _XMLBase(object):
         xpathobj = _XPath(fullxpath)
         parentxpath = "."
         parentnode = self._find(parentxpath)
-        if parentnode is None:
-            raise RuntimeError("programming error: "
+        xmlutil.raise_programming_error(not parentnode,
                 "Did not find XML root node for xpath=%s" % fullxpath)
 
         for xpathseg in xpathobj.segments[1:]:
@@ -287,15 +286,15 @@ class _Libxml2API(_XMLBase):
             self._ctx.xpathRegisterNs(key, val)
 
     def __del__(self):
+        if not hasattr(self, "_doc"):
+            # Incase we error when parsing the doc
+            return
         self._doc.freeDoc()
         self._doc = None
         self._ctx.xpathFreeContext()
         self._ctx = None
 
     def _sanitize_xml(self, xml):
-        # Strip starting <?...> line
-        if xml.startswith("<?"):
-            ignore, xml = xml.split("\n", 1)
         if not xml.endswith("\n") and "\n" in xml:
             xml += "\n"
         return xml
