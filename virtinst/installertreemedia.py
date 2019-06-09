@@ -118,6 +118,7 @@ class InstallerTreeMedia(object):
         if (not self.conn.is_remote() and
             os.path.exists(self.location) and
             os.path.isdir(self.location)):
+            self.location = os.path.abspath(self.location)
             self._media_type = MEDIA_DIR
         elif _is_url(self.location):
             self._media_type = MEDIA_URL

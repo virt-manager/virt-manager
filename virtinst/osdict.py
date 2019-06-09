@@ -248,7 +248,8 @@ class _OSDB(object):
         try:
             tree = Libosinfo.Tree.create_from_location(location, None)
         except Exception as e:
-            logging.debug("Error creating libosinfo tree object: %s", str(e))
+            logging.debug("Error creating libosinfo tree object for "
+                "location=%s : %s", location, str(e))
             return None
 
         osobj, treeobj = self._os_loader.get_db().guess_os_from_tree(tree)
