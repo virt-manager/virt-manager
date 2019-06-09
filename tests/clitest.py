@@ -1055,7 +1055,7 @@ c.add_compare("--qemu-commandline='-foo bar,baz=\"wib wob\"'", "edit-simple-qemu
 c.add_compare("--memory 500,maxmemory=1000,hugepages=off", "edit-simple-memory")
 c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "edit-simple-vcpus")
 c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "edit-simple-cpu")
-c.add_compare("--numatune memory.nodeset=1-5,7,memory.mode=strict", "edit-simple-numatune")
+c.add_compare("--numatune memory.nodeset=1-5,7,memory.mode=strict,memory.placement=auto", "edit-simple-numatune")
 c.add_compare("--blkiotune weight=500,device_path=/dev/sdf,device_weight=600", "edit-simple-blkiotune")
 c.add_compare("--idmap uid_start=0,uid_target=2000,uid_count=30,gid_start=0,gid_target=3000,gid_count=40", "edit-simple-idmap")
 c.add_compare("--boot loader=foo.bar,useserial=on,init=/bin/bash,nvram=/test/nvram.img,os_type=hvm,domain_type=test,loader.readonly=on,loader.secure=no,machine=", "edit-simple-boot")

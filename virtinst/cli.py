@@ -1703,6 +1703,7 @@ class ParserNumatune(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("memory.nodeset", "memory_nodeset", can_comma=True)
         cls.add_arg("memory.mode", "memory_mode")
+        cls.add_arg("memory.placement", "memory_placement")
 
 
 ####################
