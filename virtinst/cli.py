@@ -298,6 +298,16 @@ def set_prompt(prompt):
         logging.warning("--prompt mode is no longer supported.")
 
 
+def check_path_search(conn, path):
+    searchdata = DeviceDisk.check_path_search(conn, path)
+    if not searchdata.fixlist:
+        return
+    logging.warning(_("%s may not be accessible by the hypervisor. "
+        "You will need to grant the '%s' user search permissions for "
+        "the following directories: %s"),
+        path, searchdata.user, searchdata.fixlist)
+
+
 def validate_disk(dev, warn_overwrite=False):
     def _optional_fail(msg, checkname, warn_on_skip=True):
         do_check = get_global_state().get_validation_check(checkname)
@@ -343,19 +353,10 @@ def validate_disk(dev, warn_overwrite=False):
         if not isfatal and errmsg:
             _optional_fail(errmsg, "disk_size", warn_on_skip=False)
 
-    def check_path_search(dev):
-        searchdata = dev.check_path_search(dev.conn, dev.path)
-        if not searchdata.fixlist:
-            return
-        logging.warning(_("%s may not be accessible by the hypervisor. "
-            "You will need to grant the '%s' user search permissions for "
-            "the following directories: %s"),
-            dev.path, searchdata.user, searchdata.fixlist)
-
     check_path_exists(dev)
     check_inuse_conflict(dev)
     check_size_conflict(dev)
-    check_path_search(dev)
+    check_path_search(dev.conn, dev.path)
 
 
 def _run_console(domain, args):

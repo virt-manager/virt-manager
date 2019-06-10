@@ -573,6 +573,8 @@ def build_guest_instance(conn, options):
 
     if installer:
         installer.set_install_defaults(guest)
+        for path in installer.get_search_paths(guest):
+            cli.check_path_search(guest.conn, path)
 
     # cli specific disk validation
     for disk in guest.devices.disk:
