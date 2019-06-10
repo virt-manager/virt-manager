@@ -519,18 +519,26 @@ def build_installer(options, guest):
 def set_resources_from_osinfo(options, guest):
     if guest.os.is_container():
         return
-    if options.disk:
-        return
+
+    # We need to do this upfront, so we don't incorrectly set guest.vcpus
+    guest.sync_vcpus_topology()
 
     res = guest.osinfo.get_recommended_resources()
     storage = res.get_recommended_storage(guest.os.arch)
-    if not storage:
-        return
+    ram = res.get_recommended_ram(guest.os.arch)
+    ncpus = res.get_recommended_ncpus(guest.os.arch)
 
-    diskstr = 'size=%d' % (storage // (1024 ** 3))
-    logging.debug("Generated default libosinfo '--disk %s'", diskstr)
-    options.disk = [diskstr]
-    cli.ParserDisk(diskstr, guest=guest).parse(None)
+    if ram and not guest.currentMemory:
+        guest.currentMemory = ram // 1024
+
+    if ncpus and not guest.vcpus:
+        guest.vcpus = ncpus
+
+    if storage and not options.disk:
+        diskstr = 'size=%d' % (storage // (1024 ** 3))
+        logging.debug("Generated default libosinfo '--disk %s'", diskstr)
+        options.disk = [diskstr]
+        cli.ParserDisk(diskstr, guest=guest).parse(None)
 
 
 def build_guest_instance(conn, options):
