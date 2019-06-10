@@ -211,13 +211,19 @@ class _URLFetcher(object):
         prefix = "virtinst-" + os.path.basename(filename) + "."
 
         # pylint: disable=redefined-variable-type
-        fileobj = tempfile.NamedTemporaryFile(
-            dir=self.scratchdir, prefix=prefix, delete=False)
-        fn = fileobj.name
+        fn = None
+        try:
+            fileobj = tempfile.NamedTemporaryFile(
+                dir=self.scratchdir, prefix=prefix, delete=False)
+            fn = fileobj.name
 
-        self._grabURL(filename, fileobj)
-        logging.debug("Saved file to %s", fn)
-        return fn
+            self._grabURL(filename, fileobj)
+            logging.debug("Saved file to %s", fn)
+            return fn
+        except:  # noqa
+            if fn and os.path.exists(fn):
+                os.unlink(fn)
+            raise
 
     def acquireFileContent(self, filename):
         """
