@@ -68,25 +68,3 @@ class TestOSDB(unittest.TestCase):
             raise AssertionError("Expected failure")
         except RuntimeError as e:
             assert str(e).endswith("URL location")
-
-    def test_prepare_install_script(self):
-        from virtinst import unattended
-
-        conn = utils.URIs.open_testdriver_cached()
-        g = Guest(conn)
-        g.set_os_name("fedora26")
-        g.set_capabilities_defaults()
-        g.name = "foo-vm"
-
-        u = unattended.UnattendedData()
-        u.profile = "desktop"
-        u.admin_password = "fooadmin"
-        u.user_password = "foouser"
-
-        try:
-            script = unattended.prepare_install_script(g, u, None, None)
-            dummy = script
-        except RuntimeError as e:
-            if "libosinfo is too old" not in str(e):
-                raise
-            self.skipTest(str(e))

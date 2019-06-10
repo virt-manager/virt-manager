@@ -18,6 +18,8 @@ try:
 except ImportError:
     argcomplete = None
 
+from virtinst import unattended
+
 from tests import virtinstall, virtclone, virtconvert, virtxml
 from tests import utils
 
@@ -28,6 +30,7 @@ os.environ["DISPLAY"] = ":3.4"
 TMP_IMAGE_DIR = "/tmp/__virtinst_cli_"
 XMLDIR = "tests/cli-test-xml"
 OLD_OSINFO = utils.has_old_osinfo()
+NO_OSINFO_UNATTEND = not unattended.OSInstallScript.have_new_libosinfo()
 HAS_ISOINFO = shutil.which("isoinfo")
 
 # Images that will be created by virt-install/virt-clone, and removed before
@@ -93,6 +96,11 @@ def has_old_osinfo():
 def missing_isoinfo():
     if not HAS_ISOINFO:
         return "isoinfo not installed"
+
+
+def no_osinfo_unattend_cb():
+    if NO_OSINFO_UNATTEND:
+        return "osinfo is too old for unattended testing"
 
 
 ######################
@@ -791,9 +799,9 @@ c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_compare("--location ftp://example.com", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
 c.add_compare("--location https://foobar.com", "fake-http")  # fake https:// install using urlfetcher.py mocking
 c.add_compare("--connect %(URI-KVM)s --os-variant fedora26,install=location", "osinfo-url")  # getting URL from osinfo
-c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=desktop,admin-password=foobar", "osinfo-url-unattended")  # unattended install for fedora, using initrd injection
-c.add_compare("--connect %(URI-KVM)s --os-variant win7 --cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended")  # unattended install for win7
-c.add_compare("--connect %(URI-KVM)s --os-variant silverblue29 --location http://example.com", "network-install-resources")  # triggering network-install resources override
+c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=desktop,admin-password=foobar", "osinfo-url-unattended", prerun_check=no_osinfo_unattend_cb)  # unattended install for fedora, using initrd injection
+c.add_compare("--connect %(URI-KVM)s --os-variant win7 --cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended", prerun_check=no_osinfo_unattend_cb)  # unattended install for win7
+c.add_compare("--connect %(URI-KVM)s --os-variant silverblue29 --location http://example.com", "network-install-resources", prerun_check=no_osinfo_unattend_cb)  # triggering network-install resources override
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--livecd")  # LiveCD with no media

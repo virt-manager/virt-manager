@@ -128,7 +128,14 @@ class OSInstallScript:
     """
     @staticmethod
     def have_new_libosinfo():
-        return hasattr(Libosinfo.InstallConfig, "set_installation_url")
+        from .osdict import OSDB
+
+        win7 = OSDB.lookup_os("win7")
+        for script in win7.get_install_script_list():
+            if (Libosinfo.InstallScriptInjectionMethod.CDROM &
+                script.get_injection_methods()):
+                return True
+        return False
 
     def __init__(self, script, osobj):
         self._script = script
@@ -136,8 +143,8 @@ class OSInstallScript:
         self._config = None
 
         if not OSInstallScript.have_new_libosinfo():
-            raise RuntimeError(_("libosinfo is too old to support unattended "
-                "installs."))
+            raise RuntimeError(_("libosinfo or osinfo-db is too old to "
+                "support unattended installs."))
 
     def get_expected_filename(self):
         return self._script.get_expected_filename()
