@@ -44,13 +44,13 @@ def _run_initrd_commands(initrd, tempdir):
 
 
 def _run_iso_commands(iso, tempdir):
-    cmd = ["mkisofs",
+    cmd = ["genisoimage",
            "-o", iso,
            "-J",
            "-input-charset", "utf8",
            "-rational-rock",
            tempdir]
-    logging.debug("Running mkisofs: %s", cmd)
+    logging.debug("Running iso build command: %s", cmd)
     output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
     logging.debug("cmd output: %s", output)
 
