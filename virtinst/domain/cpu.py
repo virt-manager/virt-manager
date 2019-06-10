@@ -208,10 +208,7 @@ class DomainCpu(XMLBuilder):
         Determine the CPU count represented by topology, or 1 if
         no topology is set
         """
-        self.set_topology_defaults()
-        if self.has_topology():
-            return self.sockets * self.cores * self.threads
-        return 1
+        return (self.sockets or 1) * (self.cores or 1) * (self.threads or 1)
 
     def has_topology(self):
         """
@@ -219,14 +216,11 @@ class DomainCpu(XMLBuilder):
         """
         return bool(self.sockets or self.cores or self.threads)
 
-    def set_topology_defaults(self, vcpus=None):
+    def set_topology_defaults(self, vcpus):
         """
         Fill in unset topology values, using the passed vcpus count if
         required
         """
-        if not self.has_topology():
-            return
-
         if vcpus is None:
             if self.sockets is None:
                 self.sockets = 1
@@ -306,8 +300,6 @@ class DomainCpu(XMLBuilder):
             self._validate_default_host_model_only(guest)
 
     def set_defaults(self, guest):
-        self.set_topology_defaults(guest.vcpus)
-
         if not self.conn.is_test() and not self.conn.is_qemu():
             return
         if (self.get_xml().strip() or

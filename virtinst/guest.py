@@ -657,14 +657,25 @@ class Guest(XMLBuilder):
             logging.warning("KVM acceleration not available, using '%s'",
                             self.type)
 
-    def set_defaults(self, _guest):
-        if not self.uuid:
-            self.uuid = Guest.generate_uuid(self.conn)
-        if not self.vcpus and self.cpu.has_topology():
+    def sync_vcpus_topology(self):
+        """
+        <cpu> topology count and <vcpus> always need to match. Handle
+        the syncing here since we are less constrained then doing it
+        in CPU set_defaults
+        """
+        if not self.cpu.has_topology():
+            return
+        if not self.vcpus:
             self.vcpus = self.cpu.vcpus_from_topology()
+        self.cpu.set_topology_defaults(self.vcpus)
 
+    def set_defaults(self, _guest):
         self.set_capabilities_defaults()
 
+        if not self.uuid:
+            self.uuid = Guest.generate_uuid(self.conn)
+
+        self.sync_vcpus_topology()
         self._set_default_resources()
         self._set_default_machine()
         self._set_default_uefi()
