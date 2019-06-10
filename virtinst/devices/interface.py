@@ -169,9 +169,7 @@ class DeviceInterface(Device):
             return self.bridge
         if self.type == self.TYPE_DIRECT:
             return self.source_dev
-        if self.type == self.TYPE_USER or self.type == self.TYPE_ETHERNET:
-            return None
-        return self.network or self.bridge or self.source_dev
+        return None
     def _set_source(self, newsource):
         """
         Convenience function, try to set the relevant <source> value
@@ -275,7 +273,5 @@ class DeviceInterface(Device):
             srctype, br = _default_source(self.conn)
             if srctype == self.TYPE_BRIDGE:
                 self.bridge = br
-        if self.type == self.TYPE_DIRECT and not self.source_mode:
-            self.source_mode = "vepa"
         if not self.model:
             self.model = self.default_model(guest)

@@ -213,16 +213,20 @@ class TestXMLMisc(unittest.TestCase):
         self.assertTrue(not bool(fixlist))
 
     def test_nonpredicatble_generate(self):
-        realconn = virtinst.cli.getConnection("test:///default")
+        kvm_uri = utils.URIs.kvm.replace(",predictable", "")
+        kvmconn = virtinst.cli.getConnection(kvm_uri)
+        testconn = virtinst.cli.getConnection("test:///default")
 
         testuuid = virtinst.Guest.generate_uuid(self.conn)
-        randomuuid = virtinst.Guest.generate_uuid(realconn)
+        randomuuid = virtinst.Guest.generate_uuid(testconn)
         self.assertTrue(randomuuid != testuuid)
         self.assertTrue(len(randomuuid) == len(testuuid))
 
         testmac = virtinst.DeviceInterface.generate_mac(self.conn)
-        randommac = virtinst.DeviceInterface.generate_mac(realconn)
+        randommac = virtinst.DeviceInterface.generate_mac(testconn)
+        qemumac = virtinst.DeviceInterface.generate_mac(kvmconn)
         self.assertTrue(randommac != testmac)
+        self.assertTrue(qemumac != testmac)
         self.assertTrue(len(randommac) == len(testmac))
 
     def test_support_misc(self):
