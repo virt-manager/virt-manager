@@ -12,7 +12,8 @@ Configuration variables that can be set at build time
 import os
 import sys
 
-if sys.version_info.major != 3 or sys.version_info.minor < 4:
+if (sys.version_info.major != 3 or
+    sys.version_info.minor < 4):  # pragma: no cover
     print("python 3.4 or later is required, your's is %s" %
             sys.version_info)
     sys.exit(1)
@@ -24,7 +25,7 @@ _filepath = os.path.abspath(__file__)
 _srcdir = os.path.abspath(os.path.join(os.path.dirname(_filepath), ".."))
 _cfgpath = os.path.join(os.path.dirname(_filepath), "cli.cfg")
 if os.path.exists(_cfgpath):
-    _cfg.read(_cfgpath)
+    _cfg.read(_cfgpath)  # pragma: no cover
 
 _istest = "VIRTINST_TEST_SUITE" in os.environ
 _running_from_srcdir = os.path.exists(
@@ -35,7 +36,7 @@ def _split_list(commastr):
     return [d for d in commastr.split(",") if d]
 
 
-def _get_param(name, default):
+def _get_param(name, default):  # pragma: no cover
     if _istest:
         return default
     try:
@@ -53,7 +54,7 @@ def _setup_gsettings_path(schemadir):
     import shutil
 
     exe = shutil.which("glib-compile-schemas")
-    if not exe:
+    if not exe:  # pragma: no cover
         raise RuntimeError("You must install glib-compile-schemas to run "
             "virt-manager from git.")
     subprocess.check_call([exe, "--strict", schemadir])
@@ -87,7 +88,7 @@ class _CLIConfig(object):
             self.icon_dir = os.path.join(_srcdir, "data")
             self.gsettings_dir = self.icon_dir
             _setup_gsettings_path(self.gsettings_dir)
-        else:
+        else:  # pragma: no cover
             self.ui_dir = os.path.join(prefix, "share", "virt-manager", "ui")
             self.icon_dir = os.path.join(prefix, "share", "virt-manager",
                 "icons")

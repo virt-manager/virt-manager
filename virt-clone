@@ -38,7 +38,7 @@ def get_original_guest(guest_name, origfile, design):
         try:
             design.original_xml = origxml
             return
-        except (ValueError, RuntimeError) as e:
+        except (ValueError, RuntimeError) as e:  # pragma: no cover
             fail(e)
 
     if not guest_name:
@@ -153,9 +153,7 @@ def main(conn=None):
     cli.convert_old_force(options)
     cli.parse_check(options.check)
     cli.set_prompt(options.prompt)
-
-    if conn is None:
-        conn = cli.getConnection(options.connect)
+    conn = cli.getConnection(options.connect, conn=conn)
 
     if (options.new_diskfile is None and
         options.auto_clone is False and
@@ -203,7 +201,7 @@ def main(conn=None):
     logging.debug("end clone")
     return 0
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     try:
         sys.exit(main())
     except SystemExit as sys_e:

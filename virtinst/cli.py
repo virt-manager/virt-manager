@@ -210,7 +210,11 @@ def in_testsuite():
 # Libvirt connection helpers #
 ##############################
 
-def getConnection(uri):
+def getConnection(uri, conn=None):
+    if conn:
+        # preopened connection passed in via test suite
+        return conn
+
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
     conn = VirtinstConnection(uri)
     conn.open(_openauth_cb, None)

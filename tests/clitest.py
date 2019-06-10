@@ -450,6 +450,7 @@ c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole 
 # Singleton element test #1, for simpler strings
 c.add_compare("""
 --memory 1024
+--uuid 12345678-12F4-1234-1234-123456789AFA
 --vcpus 4,cores=2,threads=2,sockets=2 --cpuset=1,3-5
 --cpu host-copy
 --description \"foobar & baz\"
@@ -1175,18 +1176,20 @@ c = vclon.add_category("remote", "--connect %(URI-TEST-REMOTE)s")
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("--original-xml " + _CLONE_MANAGED + " --auto-clone")  # Auto flag w/ managed storage
 c.add_invalid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage, which is invalid for remote connection
+c.add_invalid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage, which is invalid for remote connection
 
 
 c = vclon.add_category("misc", "")
 c.add_compare("--connect %(URI-KVM)s -o test-clone --auto-clone --clone-running", "clone-auto1")
 c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2")
-c.add_valid("-o test --auto-clone")  # Auto flag, no storage
+c.add_valid("-o test --auto-clone --uuid 12345678-12F4-1234-1234-123456789AFA --reflink --mac 12:34:56:1A:B2:C3")  # Auto flag, no storage
 c.add_valid("--original-xml " + _CLONE_MANAGED + " --auto-clone")  # Auto flag w/ managed storage
 c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --clone-running")  # Auto flag, actual VM, skip state check
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s")  # Preserve data shouldn't complain about existing volume
 c.add_valid("-n clonetest --original-xml " + _CLONE_UNMANAGED + " --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
 c.add_invalid("--auto-clone")  # Just the auto flag
+c.add_invalid("-o test --file foo")  # Didn't specify new name
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-many-devices --auto-clone")  # VM is running, but --clone-running isn't passed
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s --clone-running")  # Should complain about overwriting existing file
 
@@ -1225,6 +1228,7 @@ _VMX_IMG = "%s/tests/virtconv-files/vmx_input/test1.vmx" % os.getcwd()
 
 vconv = App("virt-convert")
 c = vconv.add_category("misc", "--connect %(URI-KVM)s --dry")
+c.add_valid(_VMX_IMG + " --disk-format qcow2")  # hits some more code paths than print-xml
 c.add_invalid(_VMX_IMG + " --input-format foo")  # invalid input format
 c.add_invalid("%(EXISTIMG1)s")  # invalid input file
 

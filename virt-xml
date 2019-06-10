@@ -466,8 +466,7 @@ def main(conn=None):
     if options.confirm and not options.print_xml:
         options.print_diff = True
 
-    if conn is None:
-        conn = cli.getConnection(options.connect)
+    conn = cli.getConnection(options.connect, conn)
 
     domain = None
     active_xmlobj = None
@@ -525,7 +524,7 @@ def main(conn=None):
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     try:
         sys.exit(main())
     except SystemExit as sys_e:
