@@ -1269,12 +1269,8 @@ _add_argcomplete_cmd("virt-install --location k", "kernel")
 _add_argcomplete_cmd("virt-install --os-variant nam", "name")
 _add_argcomplete_cmd("virt-install --test-stub", None,
         nogrep="--test-stub-command")
-_add_argcomplete_cmd("virt-install --un", "--unattended")
 _add_argcomplete_cmd("virt-install --unattended ", "profile=")  # will list all --unattended subprops
-_add_argcomplete_cmd("virt-install --unattended p", "profile=")
 _add_argcomplete_cmd("virt-install --unattended a", "admin-password=")
-_add_argcomplete_cmd("virt-install --unattended u", "user-password=")
-_add_argcomplete_cmd("virt-install --unattended prod", "product-key")
 _add_argcomplete_cmd("virt-clone --preserve", "--preserve-data")
 _add_argcomplete_cmd("virt-xml --sound mode", "model")
 _add_argcomplete_cmd("virt-convert --dest", "--destination")
