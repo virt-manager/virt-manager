@@ -54,6 +54,7 @@ iso_links = [
     "/tmp/fake-centos65-label.iso",
     "/tmp/fake-no-osinfo.iso",
     "/tmp/fake-win7.iso",
+    "/tmp/fake-f26-netinst.iso",
 ]
 
 exist_files = exist_images
@@ -83,6 +84,7 @@ test_files = {
     'ISOLABEL': iso_links[1],
     'ISO-NO-OS': iso_links[2],
     'ISO-WIN7': iso_links[3],
+    'ISO-F26-NETINST': iso_links[4],
     'TREEDIR': "%s/fakefedoratree" % XMLDIR,
     'COLLIDE': "/dev/default-pool/collidevol1.img",
 }
@@ -802,7 +804,9 @@ c.add_compare("--location https://foobar.com", "fake-http")  # fake https:// ins
 c.add_compare("--connect %(URI-KVM)s --os-variant fedora26,install=location", "osinfo-url")  # getting URL from osinfo
 c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=desktop,admin-password=foobar", "osinfo-url-unattended", prerun_check=no_osinfo_unattend_cb)  # unattended install for fedora, using initrd injection
 c.add_compare("--connect %(URI-KVM)s --os-variant win7 --cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended", prerun_check=no_osinfo_unattend_cb)  # unattended install for win7
+c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=jeos,admin-password=123456 --cdrom %(ISO-F26-NETINST)s", "osinfo-netinst-unattended", prerun_check=no_osinfo_unattend_cb)  # triggering the special netinst checking code
 c.add_compare("--connect %(URI-KVM)s --os-variant silverblue29 --location http://example.com", "network-install-resources", prerun_check=no_osinfo_unattend_cb)  # triggering network-install resources override
+c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--livecd")  # LiveCD with no media
