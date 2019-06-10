@@ -35,11 +35,11 @@ def _run_initrd_commands(initrd, tempdir):
     finderr = find_proc.stderr.read()
     cpioerr = cpio_proc.stderr.read()
     gziperr = gzip_proc.stderr.read()
-    if finderr:
+    if finderr:  # pragma: no cover
         logging.debug("find stderr=%s", finderr)
-    if cpioerr:
+    if cpioerr:  # pragma: no cover
         logging.debug("cpio stderr=%s", cpioerr)
-    if gziperr:
+    if gziperr:  # pragma: no cover
         logging.debug("gzip stderr=%s", gziperr)
 
 
@@ -97,7 +97,7 @@ def perform_cdrom_injections(injections, scratchdir):
     try:
         _perform_generic_injections(injections, scratchdir, iso,
             _run_iso_commands)
-    except Exception:
+    except Exception:  # pragma: no cover
         os.unlink(iso)
         raise
 

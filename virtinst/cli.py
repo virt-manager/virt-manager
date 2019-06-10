@@ -88,14 +88,14 @@ class VirtHelpFormatter(argparse.RawDescriptionHelpFormatter):
                 self, *args, **kwargs)
 
         if len(kwargs) != 0 and len(args) != 2:
-            return return_default()
+            return return_default()  # pragma: no cover
 
         try:
             text = args[0]
             if "\n" in text:
                 return text.splitlines()
             return return_default()
-        except Exception:
+        except Exception:  # pragma: no cover
             return return_default()
 
 
@@ -123,13 +123,13 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     _reset_global_state()
     get_global_state().quiet = do_quiet
 
-    vi_dir = None
-    logfile = None
-    if not in_testsuite():
-        vi_dir = VirtinstConnection.get_app_cache_dir()
-        logfile = os.path.join(vi_dir, appname + ".log")
+    vi_dir = VirtinstConnection.get_app_cache_dir()
+    logfile = os.path.join(vi_dir, appname + ".log")
+    if in_testsuite():
+        vi_dir = None
+        logfile = None
 
-    try:
+    try:  # pragma: no cover
         if vi_dir and not os.access(vi_dir, os.W_OK):
             if os.path.exists(vi_dir):
                 raise RuntimeError("No write access to directory %s" % vi_dir)
@@ -144,10 +144,9 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
             os.path.exists(logfile) and
             not os.access(logfile, os.W_OK)):
             raise RuntimeError("No write access to logfile %s" % logfile)
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         logging.warning("Error setting up logfile: %s", e)
         logfile = None
-
 
     dateFormat = "%a, %d %b %Y %H:%M:%S"
     fileFormat = ("[%(asctime)s " + appname + " %(process)d] "
@@ -174,20 +173,21 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
         streamHandler.setFormatter(logging.Formatter(fileFormat,
                                                      dateFormat))
     elif cli_app or not logfile:
+        # Have cli tools show WARN/ERROR by default
         if get_global_state().quiet:
             level = logging.ERROR
         else:
             level = logging.WARN
         streamHandler.setLevel(level)
         streamHandler.setFormatter(logging.Formatter(streamErrorFormat))
-    else:
+    else:  # pragma: no cover
         streamHandler = None
 
     if streamHandler:
         rootLogger.addHandler(streamHandler)
 
     # Log uncaught exceptions
-    def exception_log(typ, val, tb):
+    def exception_log(typ, val, tb):  # pragma: no cover
         logging.debug("Uncaught exception:\n%s",
                       "".join(traceback.format_exception(typ, val, tb)))
         if not debug_stdout:
@@ -272,11 +272,6 @@ def _fail_exit():
     sys.exit(1)
 
 
-def nice_exit():
-    print_stdout(_("Exiting at user request."))
-    sys.exit(0)
-
-
 def virsh_start_cmd(guest):
     return ("virsh --connect %s start %s" % (guest.conn.uri, guest.name))
 
@@ -305,7 +300,7 @@ def check_path_search(conn, path):
     logging.warning(_("%s may not be accessible by the hypervisor. "
         "You will need to grant the '%s' user search permissions for "
         "the following directories: %s"),
-        path, searchdata.user, searchdata.fixlist)
+        path, searchdata.user, searchdata.fixlist)  # pragma: no cover
 
 
 def validate_disk(dev, warn_overwrite=False):
@@ -370,8 +365,9 @@ def _run_console(domain, args):
     if child:
         return child
 
-    os.execvp(args[0], args)
-    os._exit(1)  # pylint: disable=protected-access
+    os.execvp(args[0], args)  # pragma: no cover
+    # pylint: disable=protected-access
+    os._exit(1)  # pragma no cover
 
 
 def _gfx_console(guest, domain):
@@ -413,7 +409,7 @@ def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
     # If we connected the console, wait for it to finish
     try:
         os.waitpid(child, 0)
-    except OSError as e:
+    except OSError as e:  # pragma: no cover
         logging.debug("waitpid error: %s", e)
 
     if destroy_on_exit and domain.isActive():
@@ -971,11 +967,12 @@ class _VirtCLIArgumentStatic(object):
         self._aliases = []
 
         if not self.propname and not self.cb:
-            raise RuntimeError(
+            raise RuntimeError(  # pragma: no cover
                 "programming error: propname or cb must be specified.")
 
         if not self.propname and self.lookup_cb == -1:
-            raise RuntimeError("programming error: "
+            raise RuntimeError(  # pragma: no cover
+                "programming error: "
                 "cliname=%s propname is None but lookup_cb is not specified. "
                 "Even if a 'cb' is passed, 'propname' is still used for "
                 "device lookup for virt-xml --edit.\n\nIf cb is just "
@@ -1069,7 +1066,7 @@ class _VirtCLIArgument(object):
         try:
             if self.propname:
                 xmlutil.get_prop_path(inst, self.propname)
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             raise RuntimeError("programming error: obj=%s does not have "
                                "member=%s" % (inst, self.propname))
 
@@ -1199,17 +1196,19 @@ class _InitClass(type):
     """
     def __new__(cls, *args, **kwargs):
         if len(args) != 3:
-            return super().__new__(cls, *args)
+            return super().__new__(cls, *args)  # pragma: no cover
         name, bases, ns = args
         init = ns.get('_init_class')
         if isinstance(init, types.FunctionType):
-            raise RuntimeError("_init_class must be a @classmethod")
+            raise RuntimeError(  # pragma: no cover
+                    "_init_class must be a @classmethod")
         self = super().__new__(cls, name, bases, ns)
         self._init_class(**kwargs)  # pylint: disable=protected-access
 
         # Check for leftover aliases
         if self.aliases:
-            raise RuntimeError("programming error: class=%s "
+            raise RuntimeError(  # pragma: no cover
+                    "programming error: class=%s "
                     "leftover aliases=%s" % (self, self.aliases))
         return self
 
@@ -2094,8 +2093,6 @@ class ParserVCPU(VirtCLIParser):
         return cb(*args, **kwargs)
 
     def set_cpuset_cb(self, inst, val, virtarg):
-        if not val:
-            return
         if val != "auto":
             inst.vcpu_cpuset = val
             return
@@ -2190,10 +2187,6 @@ class ParserBoot(VirtCLIParser):
 
     def set_initargs_cb(self, inst, val, virtarg):
         inst.set_initargs_string(val)
-
-    def set_smbios_mode_cb(self, inst, val, virtarg):
-        inst.smbios_mode = val
-        self.optdict["smbios_mode"] = val
 
     def set_bootloader_cb(self, inst, val, virtarg):
         self.guest.bootloader = val
@@ -2728,7 +2721,7 @@ def _add_char_source_args(cls, prefix=""):
 def _default_image_file_format(conn):
     if conn.support.conn_default_qcow2():
         return "qcow2"
-    return "raw"
+    return "raw"  # pragma: no cover
 
 
 def _get_default_image_format(conn, poolobj):

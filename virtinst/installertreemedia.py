@@ -93,10 +93,10 @@ class InstallerTreeMedia(object):
             not os.path.exists(system_scratchdir) or
             not os.access(system_scratchdir, os.W_OK)):
             if not os.path.exists(user_scratchdir):
-                os.makedirs(user_scratchdir, 0o751)
+                os.makedirs(user_scratchdir, 0o751)  # pragma: no cover
             return user_scratchdir
 
-        return system_scratchdir
+        return system_scratchdir  # pragma: no cover
 
     def __init__(self, conn, location, location_kernel, location_initrd):
         self.conn = conn
@@ -171,7 +171,8 @@ class InstallerTreeMedia(object):
             for kpath, ipath in cache.kernel_pairs:
                 if fetcher.hasFile(kpath) and fetcher.hasFile(ipath):
                     return kpath, ipath
-            raise RuntimeError(_("Couldn't find kernel for install tree."))
+            raise RuntimeError(  # pragma: no cover
+                    _("Couldn't find kernel for install tree."))
 
         kernelpath, initrdpath = _check_kernel_pairs()
         kernel = fetcher.acquireFile(kernelpath)

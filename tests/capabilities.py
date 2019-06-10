@@ -48,6 +48,10 @@ class TestCapabilities(unittest.TestCase):
         test_utils(caps_with_kvm, True, True)
         test_utils(caps_no_kvm, True, False)
 
+        # Small test for extra unittest coverage
+        with self.assertRaises(ValueError):
+            caps_empty.guest_lookup(os_type="linux")
+
     def testCapsNuma(self):
         cells = self._buildCaps("lxc.xml").host.topology.cells
         self.assertEqual(len(cells), 1)

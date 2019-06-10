@@ -425,7 +425,7 @@ class Installer(object):
         # Handle undefining the VM if the initial startup fails
         try:
             domain.create()
-        except Exception:
+        except Exception:  # pragma: no cover
             try:
                 domain.undefine()
             except Exception:
@@ -464,7 +464,7 @@ class Installer(object):
         try:
             logging.debug("XML fetched from libvirt object:\n%s",
                           domain.XMLDesc(0))
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             logging.debug("Error fetching XML from libvirt object: %s", e)
         return domain
 
@@ -474,7 +474,7 @@ class Installer(object):
         """
         try:
             domain.setAutostart(True)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             if not self.conn.support.is_error_nosupport(e):
                 raise
             logging.warning("Could not set autostart flag: libvirt "
@@ -542,11 +542,13 @@ class Installer(object):
 
                 if disk.get_vol_object():
                     disk.get_vol_object().delete()
-                else:
+                else:  # pragma: no cover
+                    # This case technically shouldn't happen here, but
+                    # it's here incase future assumptions change
                     os.unlink(disk.path)
 
                 meter.end(0)
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 logging.debug("Failed to remove disk '%s'",
                     name, exc_info=True)
                 logging.error("Failed to remove disk '%s': %s", name, e)

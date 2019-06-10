@@ -17,7 +17,7 @@ def _setup_i18n():
 
     try:
         locale.setlocale(locale.LC_ALL, '')
-    except Exception:
+    except Exception:  # pragma: no cover
         # Can happen if user passed a bogus LANG
         pass
 

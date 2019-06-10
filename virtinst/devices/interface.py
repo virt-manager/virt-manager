@@ -41,13 +41,13 @@ def _random_mac(conn):
 
 def _default_route():
     route_file = "/proc/net/route"
-    if not os.path.exists(route_file):
+    if not os.path.exists(route_file):  # pragma: no cover
         logging.debug("route_file=%s does not exist", route_file)
         return None
 
     for line in open(route_file):
         info = line.split()
-        if len(info) != 11:
+        if len(info) != 11:  # pragma: no cover
             logging.debug("Unexpected field count=%s when parsing %s",
                           len(info), route_file)
             break
@@ -59,29 +59,29 @@ def _default_route():
         except ValueError:
             continue
 
-    return None
+    return None  # pragma: no cover
 
 
 def _default_bridge():
     dev = _default_route()
     if not dev:
-        return None
+        return None  # pragma: no cover
 
     # New style peth0 == phys dev, eth0 == bridge, eth0 == default route
     if os.path.exists("/sys/class/net/%s/bridge" % dev):
-        return dev
+        return dev  # pragma: no cover
 
     # Old style, peth0 == phys dev, eth0 == netloop, xenbr0 == bridge,
     # vif0.0 == netloop enslaved, eth0 == default route
     try:
         defn = int(dev[-1])
-    except Exception:
+    except Exception:  # pragma: no cover
         defn = -1
 
     if (defn >= 0 and
         os.path.exists("/sys/class/net/peth%d/brport" % defn) and
         os.path.exists("/sys/class/net/xenbr%d/bridge" % defn)):
-        return "xenbr%d"
+        return "xenbr%d"  # pragma: no cover
     return None
 
 
@@ -132,11 +132,12 @@ class DeviceInterface(Device):
             try:
                 DeviceInterface.is_conflict_net(conn, mac)
                 return mac
-            except RuntimeError:
+            except RuntimeError:  # pragma: no cover
                 continue
 
-        logging.debug("Failed to generate non-conflicting MAC")
-        return None
+        logging.debug(  # pragma: no cover
+                "Failed to generate non-conflicting MAC")
+        return None  # pragma: no cover
 
     @staticmethod
     def is_conflict_net(conn, searchmac):

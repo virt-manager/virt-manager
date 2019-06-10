@@ -73,7 +73,7 @@ class _CapsHost(XMLBuilder):
                     label = baselabel.content
                     break
             if not label:
-                continue
+                continue  # pragma: no cover
 
             # XML we are looking at is like:
             #
@@ -87,10 +87,10 @@ class _CapsHost(XMLBuilder):
                 uid = int(label.split(":")[0].replace("+", ""))
                 user = pwd.getpwuid(uid)[0]
                 return user, uid
-            except Exception:
+            except Exception:  # pragma: no cover
                 logging.debug("Exception parsing qemu dac baselabel=%s",
                     label, exc_info=True)
-        return None, None
+        return None, None  # pragma: no cover
 
 
 ################################
@@ -158,13 +158,9 @@ class _CapsGuest(XMLBuilder):
         """
         Return True if kvm guests can be installed
         """
-        if self.os_type != "hvm":
-            return False
-
         for d in self.domains:
             if d.hypervisor_type == "kvm":
                 return True
-
         return False
 
     def supports_pae(self):
@@ -225,9 +221,6 @@ class Capabilities(XMLBuilder):
     ############################
 
     def _guestForOSType(self, os_type, arch):
-        if self.host is None:
-            return None
-
         archs = [arch]
         if arch is None:
             archs = [self.host.cpu.arch, None]

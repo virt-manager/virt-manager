@@ -109,7 +109,8 @@ def _version_str_to_int(verstr):
         return 0
 
     if verstr.count(".") != 2:
-        raise RuntimeError("programming error: version string '%s' needs "
+        raise RuntimeError(  # pragma: no cover
+            "programming error: version string '%s' needs "
             "two '.' in it.")
 
     return ((int(verstr.split(".")[0]) * 1000000) +
@@ -156,7 +157,8 @@ class _SupportCheck(object):
         for vstr in versions:
             v = _version_str_to_int(vstr)
             if vstr is not None and v != 0 and v < 7003:
-                raise RuntimeError("programming error: Cannot enforce "
+                raise RuntimeError(  # pragma: no cover
+                    "programming error: Cannot enforce "
                     "support checks for libvirt versions less than 0.7.3, "
                     "since required APIs were not available. ver=%s" % vstr)
 

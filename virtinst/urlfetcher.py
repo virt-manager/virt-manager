@@ -221,9 +221,9 @@ class _URLFetcher(object):
             logging.debug("Saved file to %s", fn)
             return fn
         except:  # noqa
-            if fn and os.path.exists(fn):
-                os.unlink(fn)
-            raise
+            if fn and os.path.exists(fn):  # pragma: no cover
+                os.unlink(fn)  # pragma: no cover
+            raise  # pragma: no cover
 
     def acquireFileContent(self, filename):
         """
@@ -247,7 +247,7 @@ class _HTTPURLFetcher(_URLFetcher):
         if self._session:
             try:
                 self._session.close()
-            except Exception:
+            except Exception:  # pragma: no cover
                 logging.debug("Error closing requests.session", exc_info=True)
         self._session = None
 
@@ -261,7 +261,7 @@ class _HTTPURLFetcher(_URLFetcher):
         try:
             response = self._session.head(url, allow_redirects=True)
             response.raise_for_status()
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             logging.debug("HTTP hasFile request failed: %s", str(e))
             return False
         return True
@@ -274,7 +274,7 @@ class _HTTPURLFetcher(_URLFetcher):
         response.raise_for_status()
         try:
             size = int(response.headers.get('content-length'))
-        except Exception:
+        except Exception:  # pragma: no cover
             size = None
         return response, size
 
@@ -296,7 +296,7 @@ class _FTPURLFetcher(_URLFetcher):
 
     def _prepare(self):
         if self._ftp:
-            return
+            return  # pragma: no cover
 
         try:
             parsed = urllib.parse.urlparse(self.location)
@@ -310,7 +310,7 @@ class _FTPURLFetcher(_URLFetcher):
             self._ftp.login(username, password)
             # Force binary mode
             self._ftp.voidcmd("TYPE I")
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             raise ValueError(_("Opening URL %s failed: %s.") %
                               (self.location, str(e)))
 
@@ -328,11 +328,11 @@ class _FTPURLFetcher(_URLFetcher):
 
     def _cleanup(self):
         if not self._ftp:
-            return
+            return  # pragma: no cover
 
         try:
             self._ftp.quit()
-        except Exception:
+        except Exception:  # pragma: no cover
             logging.debug("Error quitting ftp connection", exc_info=True)
 
         self._ftp = None
@@ -347,7 +347,7 @@ class _FTPURLFetcher(_URLFetcher):
             except ftplib.all_errors:
                 # If it's a dir
                 self._ftp.cwd(path)
-        except ftplib.all_errors as e:
+        except ftplib.all_errors as e:  # pragma: no cover
             logging.debug("FTP hasFile: couldn't access %s: %s",
                           url, str(e))
             return False
