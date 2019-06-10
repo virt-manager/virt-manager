@@ -224,11 +224,12 @@ class Installer(object):
         self._add_unattended_install_cdrom_device(guest, iso)
 
     def _prepare_unattended_script(self, guest, meter):
+        url = None
         if self._treemedia:
-            url = self._treemedia.url()
+            if self._treemedia.is_network_url():
+                url = self.location
             os_media = self._treemedia.get_os_media(guest, meter)
         else:
-            url = None
             osguess = OSDB.guess_os_by_iso(self.cdrom)
             os_media = osguess[1] if osguess else None
 

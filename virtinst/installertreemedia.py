@@ -214,8 +214,8 @@ class InstallerTreeMedia(object):
         if unattended_script:
             kernel_args = self._prepare_unattended_data(
                     guest, unattended_script)
-        elif self.url() and cache.kernel_url_arg:
-            kernel_args = "%s=%s" % (cache.kernel_url_arg, self.url())
+        elif self.is_network_url() and cache.kernel_url_arg:
+            kernel_args = "%s=%s" % (cache.kernel_url_arg, self.location)
 
         kernel, initrd = self._prepare_kernel_url(guest, cache, fetcher)
         return kernel, initrd, kernel_args or ""
@@ -237,7 +237,7 @@ class InstallerTreeMedia(object):
         if self._media_type in [MEDIA_ISO]:
             return self.location
 
-    def url(self):
+    def is_network_url(self):
         if self._media_type in [MEDIA_URL]:
             return self.location
 
