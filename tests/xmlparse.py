@@ -766,6 +766,9 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml(), outfile)
 
+        # Call this for code coverage
+        self.assertTrue(bool(virtinst.DeviceGraphics.valid_keymaps()))
+
     def testAlterHostdevs(self):
         infile  = "tests/xmlparse-xml/change-hostdevs-in.xml"
         outfile = "tests/xmlparse-xml/change-hostdevs-out.xml"

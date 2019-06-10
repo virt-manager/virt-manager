@@ -52,8 +52,6 @@ class DeviceGraphics(Device):
     CHANNEL_TYPE_RECORD   = "record"
 
     KEYMAP_LOCAL = "local"
-    KEYMAP_DEFAULT = "default"
-    _special_keymaps = [KEYMAP_LOCAL, KEYMAP_DEFAULT]
 
     @staticmethod
     def valid_keymaps():
@@ -89,10 +87,7 @@ class DeviceGraphics(Device):
         return self._local_keymap
 
     def _set_keymap(self, val):
-        if val == self.KEYMAP_DEFAULT:
-            # Leave it up to the hypervisor
-            val = None
-        elif val == self.KEYMAP_LOCAL:
+        if val == self.KEYMAP_LOCAL:
             val = self._get_local_keymap()
         self._keymap = val
     def _get_keymap(self):
