@@ -767,20 +767,6 @@ class _UbuntuDistro(_DebianDistro):
     _debname = "ubuntu"
 
 
-class _ALTLinuxDistro(_DistroTree):
-    PRETTY_NAME = "ALT Linux"
-    matching_distros = ["altlinux"]
-
-    def _set_manual_kernel_paths(self):
-        self._kernel_paths = [
-                ("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
-
-    @classmethod
-    def is_valid(cls, cache):
-        # altlinux doesn't have installable URLs, so this is just for ISO
-        return cache.content_regex(".disk/info", ".*ALT .*")
-
-
 class _MandrivaDistro(_DistroTree):
     # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
     PRETTY_NAME = "Mandriva/Mageia"
