@@ -306,6 +306,16 @@ def do_test_media_detection(conn, options):
 # General option validation #
 #############################
 
+def storage_specified(options, guest):
+    if guest.os.is_container():
+        return True
+    return options.disk or options.filesystem
+
+
+def memory_specified(guest):
+    return guest.memory or guest.currentMemory or guest.cpu.cells
+
+
 def validate_required_options(options, guest, installer):
     # Required config. Don't error right away if nothing is specified,
     # aggregate the errors to help first time users get it right
@@ -314,11 +324,10 @@ def validate_required_options(options, guest, installer):
     if not guest.name:
         msg += "\n" + _("--name is required")
 
-    if not guest.memory and not guest.cpu.cells:
+    if not memory_specified(guest):
         msg += "\n" + _("--memory amount in MiB is required")
 
-    if (not guest.os.is_container() and
-        not (options.disk or options.filesystem)):
+    if not storage_specified(options, guest):
         msg += "\n" + (
             _("--disk storage must be specified (override with --disk none)"))
 
@@ -520,21 +529,21 @@ def set_resources_from_osinfo(options, guest):
     if guest.os.is_container():
         return
 
-    # We need to do this upfront, so we don't incorrectly set guest.vcpus
-    guest.sync_vcpus_topology()
-
     res = guest.osinfo.get_recommended_resources()
     storage = res.get_recommended_storage(guest.os.arch)
     ram = res.get_recommended_ram(guest.os.arch)
     ncpus = res.get_recommended_ncpus(guest.os.arch)
 
-    if ram and not guest.currentMemory:
+    if ram and not memory_specified(guest):
         guest.currentMemory = ram // 1024
 
-    if ncpus and not guest.vcpus:
-        guest.vcpus = ncpus
+    if ncpus:
+        # We need to do this upfront, so we don't incorrectly set guest.vcpus
+        guest.sync_vcpus_topology()
+        if not guest.vcpus:
+            guest.vcpus = ncpus
 
-    if storage and not options.disk:
+    if storage and not storage_specified(options, guest):
         diskstr = 'size=%d' % (storage // (1024 ** 3))
         logging.debug("Generated default libosinfo '--disk %s'", diskstr)
         options.disk = [diskstr]

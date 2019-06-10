@@ -90,7 +90,6 @@
     <type arch="x86_64" machine="q35">hvm</type>
     <loader>/foo/bar</loader>
     <boot dev="network"/>
-    <boot dev="hd"/>
     <smbios mode="sysinfo"/>
     <bootmenu enable="no"/>
     <bios rebootTimeout="3"/>
@@ -160,11 +159,6 @@
   </pm>
   <devices>
     <emulator>/new/emu</emulator>
-    <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
-      <source file="/var/lib/libvirt/images/foobar.qcow2"/>
-      <target dev="vda" bus="virtio"/>
-    </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
     <controller type="scsi" index="0" model="virtio-scsi"/>
     <filesystem type="mount" accessmode="mapped">
@@ -382,11 +376,6 @@
   </pm>
   <devices>
     <emulator>/new/emu</emulator>
-    <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
-      <source file="/var/lib/libvirt/images/foobar.qcow2"/>
-      <target dev="vda" bus="virtio"/>
-    </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
     <controller type="scsi" index="0" model="virtio-scsi"/>
     <filesystem type="mount" accessmode="mapped">
