@@ -166,9 +166,7 @@ class InstallerTreeMedia(object):
                     os_media)
         return self._cached_data
 
-    def _prepare_kernel_url(self, guest, fetcher):
-        cache = self._get_cached_data(guest, fetcher)
-
+    def _prepare_kernel_url(self, guest, cache, fetcher):
         def _check_kernel_pairs():
             for kpath, ipath in cache.kernel_pairs:
                 if fetcher.hasFile(kpath) and fetcher.hasFile(ipath):
@@ -181,10 +179,6 @@ class InstallerTreeMedia(object):
         initrd = fetcher.acquireFile(initrdpath)
         self._tmpfiles.append(initrd)
 
-        args = ""
-        if not self.location.startswith("/") and cache.kernel_url_arg:
-            args += "%s=%s" % (cache.kernel_url_arg, self.location)
-
         perform_initrd_injections(initrd,
                                   self.initrd_injections,
                                   fetcher.scratchdir)
@@ -195,7 +189,7 @@ class InstallerTreeMedia(object):
                 fetcher.meter, kernel, initrd)
         self._tmpvols += tmpvols
 
-        return kernel, initrd, args
+        return kernel, initrd
 
 
     ##############
@@ -214,26 +208,17 @@ class InstallerTreeMedia(object):
 
     def prepare(self, guest, meter, unattended_script):
         fetcher = self._get_fetcher(guest, meter)
+        cache = self._get_cached_data(guest, fetcher)
 
-        unattended_cmdline = None
+        kernel_args = ""
         if unattended_script:
-            unattended_cmdline = self._prepare_unattended_data(
+            kernel_args = self._prepare_unattended_data(
                     guest, unattended_script)
+        elif self.url() and cache.kernel_url_arg:
+            kernel_args = "%s=%s" % (cache.kernel_url_arg, self.url())
 
-        k, i, a = self._prepare_kernel_url(guest, fetcher)
-
-        # If a cmdline was set due to unattended installation, prepend the
-        # unattended kernel cmdline to the args returned by
-        # _prepare_kernel_url()
-        if unattended_cmdline:
-            if self.location in a and self.location in unattended_cmdline:
-                # Latest libosinfo will handle the URL arg by itself,
-                # don't double it up
-                a = unattended_cmdline
-            else:
-                a = "%s %s" % (unattended_cmdline, a)
-
-        return k, i, a
+        kernel, initrd = self._prepare_kernel_url(guest, cache, fetcher)
+        return kernel, initrd, kernel_args or ""
 
     def cleanup(self, guest):
         ignore = guest
