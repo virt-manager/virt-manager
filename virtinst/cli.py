@@ -3732,19 +3732,6 @@ class ParserVideo(VirtCLIParser):
         "model.acceleration.accel3d": "accel3d",
     }
 
-    def _parse(self, inst):
-        ret = super()._parse(inst)
-
-        if inst.conn.is_qemu() and inst.accel3d:
-            if inst.model != "virtio":
-                logging.warning("video model=%s does not support accel3d",
-                    inst.model)
-            elif not inst.conn.support.conn_video_virtio_accel_3d():
-                logging.warning("qemu/libvirt version may not support "
-                             "virtio accel3d")
-
-        return ret
-
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
