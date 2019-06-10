@@ -767,24 +767,19 @@ class _UbuntuDistro(_DebianDistro):
     _debname = "ubuntu"
 
 
-class _MandrivaDistro(_DistroTree):
-    # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
-    PRETTY_NAME = "Mandriva/Mageia"
-    matching_distros = ["mandriva", "mes"]
+class _MageiaDistro(_DistroTree):
+    # https://distro.ibiblio.org/mageia/distrib/cauldron/x86_64/
+    PRETTY_NAME = "Mageia"
+    matching_distros = ["mageia"]
 
     @classmethod
     def is_valid(cls, cache):
-        return cache.content_regex("VERSION", ".*(Mandriva|Mageia).*")
+        return cache.content_regex("VERSION", ".*Mageia.*")
 
     def _set_manual_kernel_paths(self):
-        # At least Mageia 5 uses arch in the names
         self._kernel_paths += [
             ("isolinux/%s/vmlinuz" % self.arch,
              "isolinux/%s/all.rdz" % self.arch)]
-
-        # Kernels for HVM: valid for releases 2007.1, 2008.*, 2009.0
-        self._kernel_paths += [
-            ("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
 
 
 class _GenericTreeinfoDistro(_DistroTree):
