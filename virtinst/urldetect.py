@@ -493,7 +493,7 @@ class _SuseDistro(_RHELDistro):
         if not cache.suse_content:
             return False
         for regex in cls._suse_regex:
-            if re.match(regex, cache.suse_content.product_name):
+            if re.match(regex, cache.suse_content.product_name or ""):
                 return True
         return False
 
