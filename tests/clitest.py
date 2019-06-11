@@ -367,7 +367,7 @@ class App(object):
         self.skip_checks = SkipChecks(None, **kwargs)
         self.uri = uri
 
-    def _default_args(self, cli, iscompare, auto_printarg):
+    def _default_args(self, cli, iscompare):
         args = ""
         if not iscompare:
             args = "--debug"
@@ -380,7 +380,7 @@ class App(object):
             if "--ram " not in cli:
                 args += " --ram 64"
 
-        if iscompare and auto_printarg:
+        if iscompare:
             if self.appname == "virt-install":
                 if ("--print-xml" not in cli and
                     "--print-step" not in cli and
@@ -402,9 +402,16 @@ class App(object):
     def _add(self, catname, testargs, compbase, **kwargs):
         category = self.categories[catname]
         args = category.default_args + " " + testargs
-        defargs = self._default_args(
-                args, bool(compbase), bool(kwargs.pop("auto_printarg", True)))
-        cmdstr = "./%s %s %s" % (self.appname, args, defargs)
+
+        use_default_args = kwargs.pop("use_default_args", True)
+        if use_default_args:
+            args = category.default_args + " " + testargs
+            defargs = self._default_args(args, bool(compbase))
+            args += " " + defargs
+        else:
+            args = testargs
+
+        cmdstr = "./%s %s" % (self.appname, args)
 
         kwargs["skip_checks"] = category.skip_checks
         if compbase:
@@ -826,7 +833,7 @@ c.add_compare("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --vcpus cores=
 c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no second XML step
 
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
-c.add_compare("", "noargs-fail", auto_printarg=False)  # No arguments
+c.add_compare("--connect %s" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--test-stub-command")  # --test-stub-command
 c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning
