@@ -809,16 +809,6 @@ c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_compare("--location ftp://example.com", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
 c.add_compare("--location https://foobar.com", "fake-http")  # fake https:// install using urlfetcher.py mocking
 c.add_compare("--connect %(URI-KVM)s --os-variant fedora26,install=location", "osinfo-url")  # getting URL from osinfo
-c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=desktop,admin-password=foobar,user-password=blah,product-key=1234", "osinfo-url-unattended", prerun_check=no_osinfo_unattend_cb)  # unattended install for fedora, using initrd injection
-c.add_compare("--connect %(URI-KVM)s --os-variant win7 --cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended", prerun_check=no_osinfo_unattend_cb)  # unattended install for win7
-c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=jeos,admin-password=123456 --cdrom %(ISO-F26-NETINST)s", "osinfo-netinst-unattended", prerun_check=no_osinfo_unattend_cb)  # triggering the special netinst checking code
-c.add_compare("--connect %(URI-KVM)s --os-variant silverblue29 --location http://example.com", "network-install-resources", prerun_check=no_osinfo_unattend_cb)  # triggering network-install resources override
-c.add_invalid("--connect %(URI-KVM)s --os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
-c.add_invalid("--connect %(URI-KVM)s --os-variant debian9 --unattended profile=desktop,admin-password=foobar --location http://example.foo", grep="user-password")  # will trigger user-password required error
-c.add_invalid("--connect %(URI-KVM)s --os-variant debian9 --unattended profile=FRIBBER,admin-password=foobar --location http://example.foo", grep="Available profiles")  # will trigger unknown profile error
-c.add_invalid("--connect %(URI-KVM)s --os-variant fedora29 --unattended profile=desktop,admin-password=foobar --cdrom %(ISO-F29-LIVE)s", grep="media does not support")  # live media doesn't support installscript
-c.add_invalid("--connect %(URI-KVM)s --os-variant msdos --unattended profile=desktop --location http://example.com")  # msdos doesn't support unattended install
-c.add_invalid("--connect %(URI-KVM)s --os-variant winxp --unattended profile=desktop --cdrom %(ISO-WIN7)s")  # winxp doesn't support expected injection method 'cdrom'
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--livecd")  # LiveCD with no media
@@ -850,6 +840,26 @@ c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error
 c.add_invalid("--nodisks --pxe --name test")  # Colliding name
 c.add_compare("--cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
 c.add_valid("--connect %s --pxe --disk size=1" % utils.URIs.test_defaultpool_collision)  # testdriver already has a pool using the 'default' path, make sure we don't error
+
+
+####################
+# Unattended tests #
+####################
+
+c = vinst.add_category("unattended-install", "--connect %(URI-KVM)s --nographics --noautoconsole --disk none", prerun_check=no_osinfo_unattend_cb)
+c.add_compare("--os-variant fedora26 --unattended profile=desktop,admin-password=foobar,user-password=blah,product-key=1234", "osinfo-url-unattended")  # unattended install for fedora, using initrd injection
+c.add_compare("--os-variant win7 --cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended")  # unattended install for win7
+c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password=123456 --cdrom %(ISO-F26-NETINST)s", "osinfo-netinst-unattended")  # triggering the special netinst checking code
+c.add_compare("--os-variant silverblue29 --location http://example.com", "network-install-resources")  # triggering network-install resources override
+c.add_valid("--os-variant fedora26 --unattended", grep="Using unattended profile 'desktop'")  # filling in default 'desktop' profile
+c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
+c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
+c.add_invalid("--os-variant debian9 --unattended profile=desktop,admin-password=foobar --location http://example.foo", grep="user-password")  # will trigger user-password required error
+c.add_invalid("--os-variant debian9 --unattended profile=FRIBBER,admin-password=foobar --location http://example.foo", grep="Available profiles")  # will trigger unknown profile error
+c.add_invalid("--os-variant fedora29 --unattended profile=desktop,admin-password=foobar --cdrom %(ISO-F29-LIVE)s", grep="media does not support")  # live media doesn't support installscript
+c.add_invalid("--os-variant msdos --unattended profile=desktop --location http://example.com")  # msdos doesn't support unattended install
+c.add_invalid(" --os-variant winxp --unattended profile=desktop --cdrom %(ISO-WIN7)s")  # winxp doesn't support expected injection method 'cdrom'
+
 
 
 #############################

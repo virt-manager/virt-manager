@@ -1511,6 +1511,10 @@ class ParserUnattended(VirtCLIParser):
 
 def parse_unattended(optstr):
     ret = UnattendedData()
+    if optstr == 1:
+        # This means bare --unattended, so there's nothing to parse
+        return ret
+
     parser = ParserUnattended(optstr)
     parser.parse(ret)
     return ret

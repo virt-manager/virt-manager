@@ -844,7 +844,7 @@ def parse_args():
                            "booted from --location"))
     insg.add_argument("--initrd-inject", action="append",
                     help=_("Add given file to root of initrd from --location"))
-    insg.add_argument("--unattended",
+    insg.add_argument("--unattended", nargs="?", const=1,
                     help=_("Perform a unattended installation"))
 
     # Takes a URL and just prints to stdout the detected distro name

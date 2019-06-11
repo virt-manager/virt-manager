@@ -210,6 +210,29 @@ class UnattendedData():
     product_key = None
 
 
+def _make_scriptmap(script_list):
+    """
+    Generate a mapping of profile name -> [list, of, rawscripts]
+    """
+    script_map = {}
+    for script in script_list:
+        profile = script.get_profile()
+        if profile not in script_map:
+            script_map[profile] = []
+        script_map[profile].append(script)
+    return script_map
+
+
+def _find_default_profile(profile_names):
+    profile_prefs = ["desktop"]
+    found = None
+    for p in profile_prefs:
+        if p in profile_names:
+            found = p
+            break
+    return found or profile_names[0]
+
+
 def _lookup_rawscript(guest, profile, os_media):
     script_list = []
 
@@ -232,18 +255,19 @@ def _lookup_rawscript(guest, profile, os_media):
             _("OS '%s' does not support unattended installation.") %
             guest.osinfo.name)
 
-    rawscripts = []
-    profile_names = set()
-    for script in script_list:
-        profile_names.add(script.get_profile())
-        if script.get_profile() == profile:
-            rawscripts.append(script)
-
-    if not rawscripts:
-        raise RuntimeError(
-            _("OS '%s' does not support unattended installation for "
-              "the '%s' profile. Available profiles: %s") %
-            (guest.osinfo.name, profile, ", ".join(list(profile_names))))
+    script_map = _make_scriptmap(script_list)
+    profile_names = list(sorted(script_map.keys()))
+    if profile:
+        rawscripts = script_map.get(profile, [])
+        if not rawscripts:
+            raise RuntimeError(
+                _("OS '%s' does not support unattended installation for "
+                  "the '%s' profile. Available profiles: %s") %
+                (guest.osinfo.name, profile, ", ".join(profile_names)))
+    else:
+        profile = _find_default_profile(profile_names)
+        logging.warning(_("Using unattended profile '%s'"), profile)
+        rawscripts = script_map[profile]
 
     # Some OSes (as Windows) have more than one installer script,
     # depending on the OS version and profile chosen, to be used to
