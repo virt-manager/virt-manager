@@ -117,12 +117,10 @@ class vmmSnapshotNew(vmmGObjectUI):
         self.widget("snapshot-new-description").set_buffer(buf)
 
     def _reset_state(self):
-        collidelist = [s.get_xmlobj().name for s in self.vm.list_snapshots()]
         basename = "snapshot"
         cb = self.vm.get_backend().snapshotLookupByName
         default_name = generatename.generate_name(
-                basename, cb, sep="", start_num=1, force_num=True,
-                collidelist=collidelist)
+                basename, cb, sep="", start_num=1, force_num=True)
 
         self.widget("snapshot-new-name").set_text(default_name)
         self.widget("snapshot-new-name").emit("changed")

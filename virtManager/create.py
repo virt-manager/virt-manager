@@ -1497,8 +1497,7 @@ class vmmCreate(vmmGObjectUI):
         return virtinst.generatename.generate_name(basename,
             self.conn.get_backend().lookupByName,
             start_num=force_num and 1 or 2, force_num=force_num,
-            sep=not force_num and "-" or "",
-            collidelist=[vm.get_name() for vm in self.conn.list_vms()])
+            sep=not force_num and "-" or "")
 
 
     def _validate_install_page(self):
