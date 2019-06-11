@@ -535,11 +535,29 @@ class StorageVolume(_StorageObject):
         return "." + fmt
 
     @staticmethod
-    def find_free_name(pool_object, basename, **kwargs):
+    def find_free_name(conn, pool_object, basename, collideguest=None, **kwargs):
         """
         Finds a name similar (or equal) to passed 'basename' that is not
         in use by another volume. Extra params are passed to generate_name
+
+        :param collideguest: Guest object. If specified, also check to
+        ensure we don't collide with any disk paths there
         """
+        collidelist = []
+        if collideguest:
+            pooltarget = None
+            poolname = pool_object.name()
+            for poolxml in conn.fetch_all_pools():
+                if poolxml.name == poolname:
+                    pooltarget = poolxml.target_path
+                    break
+
+            for disk in collideguest.devices.disk:
+                if (pooltarget and disk.path and
+                    os.path.dirname(disk.path) == pooltarget):
+                    collidelist.append(os.path.basename(disk.path))
+
+        kwargs["collidelist"] = collidelist
         StoragePool.ensure_pool_is_running(pool_object, refresh=True)
         return generatename.generate_name(basename,
                                   pool_object.storageVolLookupByName,

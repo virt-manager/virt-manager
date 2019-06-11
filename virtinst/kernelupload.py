@@ -76,7 +76,7 @@ def _upload_file(conn, meter, destpool, src):
     # Build placeholder volume
     size = os.path.getsize(src)
     basename = os.path.basename(src)
-    name = StorageVolume.find_free_name(destpool, basename)
+    name = StorageVolume.find_free_name(conn, destpool, basename)
     if name != basename:
         logging.debug("Generated non-colliding volume name %s", name)
 

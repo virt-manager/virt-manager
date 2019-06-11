@@ -1524,10 +1524,8 @@ class vmmAddHardware(vmmGObjectUI):
                  for c in self.vm.xmlobj.devices.controller])):
             controller_model = "virtio-scsi"
 
-        collidelist = [d.path for d in self.vm.xmlobj.devices.disk]
-
         disk = self.addstorage.build_device(self.vm.get_name(),
-            collidelist=collidelist, device=device)
+            collideguest=self.vm.xmlobj, device=device)
 
         used = []
         disk.bus = bus

@@ -142,7 +142,7 @@ class vmmAddStorage(vmmGObjectUI):
             use_storage.set_sensitive(True)
         storage_area.set_tooltip_text(storage_tooltip or "")
 
-    def get_default_path(self, name, collidelist=None):
+    def get_default_path(self, name, collideguest=None):
         pool = self.conn.get_default_pool()
         if not pool:
             return
@@ -151,15 +151,9 @@ class vmmAddStorage(vmmGObjectUI):
         suffix = virtinst.StorageVolume.get_file_extension_for_format(fmt)
         suffix = suffix or ".img"
 
-        # Sanitize collidelist to work with the collision checker
-        newcollidelist = []
-        for c in (collidelist or []):
-            if c and os.path.dirname(c) == pool.get_target_path():
-                newcollidelist.append(os.path.basename(c))
-
         path = virtinst.StorageVolume.find_free_name(
-            pool.get_backend(), name,
-            suffix=suffix, collidelist=newcollidelist)
+            self.conn.get_backend(), pool.get_backend(), name,
+            suffix=suffix, collideguest=collideguest)
 
         return os.path.join(pool.xmlobj.target_path, path)
 
@@ -167,10 +161,10 @@ class vmmAddStorage(vmmGObjectUI):
         return self.widget("storage-create").get_active()
 
     def build_device(self, vmname,
-            path=None, device="disk", collidelist=None):
+            path=None, device="disk", collideguest=None):
         if path is None:
             if self.is_default_storage():
-                path = self.get_default_path(vmname, collidelist or [])
+                path = self.get_default_path(vmname, collideguest=collideguest)
             else:
                 path = self.widget("storage-entry").get_text().strip()
 

@@ -160,6 +160,7 @@ class vmmCreateVolume(vmmGObjectUI):
         ret = ""
         try:
             ret = StorageVolume.find_free_name(
+                self.conn.get_backend(),
                 self._parent_pool.get_backend(),
                 hint, suffix=suffix)
             if ret and suffix:
