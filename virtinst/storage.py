@@ -48,11 +48,43 @@ class _StorageObject(XMLBuilder):
                                    is_single=True)
 
 
-def _get_default_pool_path(conn):
+def _preferred_default_pool_path(conn):
     path = "/var/lib/libvirt/images"
     if conn.is_session_uri():
         path = os.path.expanduser("~/.local/share/libvirt/images")
     return path
+
+
+def _lookup_poolxml_by_path(conn, path):
+    for poolxml in conn.fetch_all_pools():
+        xml_path = poolxml.target_path
+        if xml_path is not None and os.path.abspath(xml_path) == path:
+            return poolxml
+    return None
+
+
+def _lookup_default_pool(conn):
+    """
+    Helper to lookup the default pool. It will return one of
+    * The pool named 'default'
+    * If that doesn't exist, the pool pointing to the default path
+    * Otherwise None
+    """
+    name = "default"
+    path = _preferred_default_pool_path(conn)
+
+    poolxml = None
+    for trypool in conn.fetch_all_pools():
+        if trypool.name == name:
+            poolxml = trypool
+            break
+    else:
+        poolxml = _lookup_poolxml_by_path(conn, path)
+
+    if poolxml:
+        logging.debug("Found default pool name=%s target=%s",
+                poolxml.name, poolxml.target_path)
+    return poolxml
 
 
 class _EnumerateSource(XMLBuilder):
@@ -166,31 +198,16 @@ class StoragePool(_StorageObject):
     @staticmethod
     def build_default_pool(conn):
         """
-        Helper to build the 'default' storage pool
+        Attempt to lookup the 'default' pool, but if it doesn't exist,
+        create it
         """
-        if not conn.support.conn_storage():
-            return
-
-        pool = None
-        name = "default"
-        path = _get_default_pool_path(conn)
-        if conn.is_session_uri() and not os.path.exists(path):
-            os.makedirs(path)
-
-        try:
-            pool = conn.storagePoolLookupByName(name)
-        except libvirt.libvirtError:
-            # Try default pool path when "default" name fails
-            pool = StoragePool.lookup_pool_by_path(conn, path)
-
-        if pool:
-            # This is a libvirt pool object so create a StoragePool from it
-            poolxml = StoragePool(conn, parsexml=pool.XMLDesc(0))
-            logging.debug("Using default pool name=%s target=%s",
-                    poolxml.name, poolxml.target_path)
+        poolxml = _lookup_default_pool(conn)
+        if poolxml:
             return poolxml
 
         try:
+            name = "default"
+            path = _preferred_default_pool_path(conn)
             logging.debug("Attempting to build default pool with target '%s'",
                           path)
             defpool = StoragePool(conn)
@@ -211,7 +228,7 @@ class StoragePool(_StorageObject):
         report that. If there's no default pool, return the dir we would
         use for the default.
         """
-        path = _get_default_pool_path(conn)
+        path = _preferred_default_pool_path(conn)
         if (not conn.is_remote() and
             not conn.support.conn_storage()):
             if build and not os.path.exists(path):
@@ -227,7 +244,7 @@ class StoragePool(_StorageObject):
 
         if build:
             return StoragePool.build_default_pool(conn).target_path
-        return _get_default_pool_path(conn)
+        return _preferred_default_pool_path(conn)
 
 
     @staticmethod
@@ -239,14 +256,10 @@ class StoragePool(_StorageObject):
 
         :returns: virStoragePool object if found, None otherwise
         """
-        if not conn.support.conn_storage():
+        poolxml = _lookup_poolxml_by_path(conn, path)
+        if not poolxml:
             return None
-
-        for pool in conn.fetch_all_pools():
-            xml_path = pool.target_path
-            if xml_path is not None and os.path.abspath(xml_path) == path:
-                return conn.storagePoolLookupByName(pool.name)
-        return None
+        return conn.storagePoolLookupByName(poolxml.name)
 
     @staticmethod
     def find_free_name(conn, basename, **kwargs):
