@@ -84,7 +84,7 @@ class Installer(object):
 
     def _add_install_cdrom_device(self, guest):
         if self._install_cdrom_device_added:
-            return
+            return  # pragma: no cover
         if not bool(self._cdrom_path()):
             return
 
@@ -106,8 +106,6 @@ class Installer(object):
     def _remove_install_cdrom_media(self, guest):
         if not self._install_cdrom_device_added:
             return
-        if self.livecd:
-            return
         if guest.osinfo.is_windows():
             # Keep media attached for windows which has a multi stage install
             return
@@ -119,7 +117,7 @@ class Installer(object):
 
     def _add_unattended_install_cdrom_device(self, guest, location):
         if self._unattended_install_cdrom_device:
-            return
+            return  # pragma: no cover
         dev = DeviceDisk(self.conn)
         dev.device = dev.DEVICE_CDROM
         dev.path = location
@@ -505,10 +503,8 @@ class Installer(object):
                     dev.build_storage(meter)
 
             install_xml, final_xml = self._build_xml(guest, meter)
-            if return_xml:
+            if dry or return_xml:
                 return (install_xml, final_xml)
-            if dry:
-                return
 
             domain = self._create_guest(
                     guest, meter, install_xml, final_xml,

@@ -18,7 +18,7 @@ def _build_pool(conn, meter, path):
     a scratchdir pool for volume upload
     """
     pool = StoragePool.lookup_pool_by_path(conn, path)
-    if pool:
+    if pool:  # pragma: no cover
         logging.debug("Existing pool '%s' found for %s", pool.name(), path)
         StoragePool.ensure_pool_is_running(pool, refresh=True)
         return pool
@@ -44,7 +44,7 @@ class _MockStream:
         if self._data_size is None:
             self._data_size = len(data)
 
-        block_size = 1024
+        block_size = 128
         ret = min(self._data_size, block_size)
         self._data_size = max(0, self._data_size - block_size)
         return ret
@@ -62,7 +62,7 @@ def _upload_file(conn, meter, destpool, src):
     if conn.in_testsuite():
         stream = _MockStream()
     else:
-        stream = conn.newStream(0)
+        stream = conn.newStream(0)  # pragma: no cover
 
     def safe_send(data):
         while True:
@@ -77,8 +77,7 @@ def _upload_file(conn, meter, destpool, src):
     size = os.path.getsize(src)
     basename = os.path.basename(src)
     name = StorageVolume.find_free_name(conn, destpool, basename)
-    if name != basename:
-        logging.debug("Generated non-colliding volume name %s", name)
+    logging.debug("Generated volume name %s", name)
 
     vol_install = DeviceDisk.build_vol_install(conn, name, destpool,
                     (float(size) / 1024.0 / 1024.0 / 1024.0), True)
@@ -90,7 +89,8 @@ def _upload_file(conn, meter, destpool, src):
     disk.build_storage(meter)
     vol = disk.get_vol_object()
     if not vol:
-        raise RuntimeError("Failed to lookup scratch media volume")
+        raise RuntimeError(  # pragma: no cover
+                "Failed to lookup scratch media volume")
 
     try:
         # Register upload
@@ -98,7 +98,7 @@ def _upload_file(conn, meter, destpool, src):
         length = size
         flags = 0
         if not conn.in_testsuite():
-            vol.upload(stream, offset, length, flags)
+            vol.upload(stream, offset, length, flags)  # pragma: no cover
 
         # Open source file
         fileobj = open(src, "rb")
@@ -121,7 +121,7 @@ def _upload_file(conn, meter, destpool, src):
         # Cleanup
         stream.finish()
         meter.end(size)
-    except Exception:
+    except Exception:  # pragma: no cover
         vol.delete(0)
         raise
 
@@ -139,13 +139,13 @@ def upload_kernel_initrd(conn, scratchdir, system_scratchdir,
         (conn.is_session_uri() or scratchdir == system_scratchdir)):
         # We have access to system scratchdir, don't jump through hoops
         logging.debug("Have access to preferred scratchdir so"
-                      " nothing to upload")
-        return kernel, initrd, tmpvols
+                    " nothing to upload")  # pragma: no cover
+        return kernel, initrd, tmpvols  # pragma: no cover
 
     if not conn.support_remote_url_install():
         # Needed for the test_urls suite
-        logging.debug("Media upload not supported")
-        return kernel, initrd, tmpvols
+        logging.debug("Media upload not supported")  # pragma: no cover
+        return kernel, initrd, tmpvols  # pragma: no cover
 
     # Build pool
     logging.debug("Uploading kernel/initrd media")

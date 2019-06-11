@@ -828,6 +828,8 @@ c.add_valid("--paravirt --import")  # PV Import install
 c.add_valid("--paravirt --print-xml")  # print single XML, implied import install
 c.add_compare("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
 c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no second XML step
+c.add_invalid("--location kernel=foo,initrd=bar")  # location kernel/initrd without any url
+c.add_invalid("--location http://example.com,kernel=foo")  # location without kernel+initrd specified as pair
 
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_compare("--connect %s" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
@@ -870,6 +872,7 @@ c = vinst.add_category("remote", "--connect %(URI-TEST-REMOTE)s --nographics --n
 c.add_valid("--nodisks --pxe")  # Simple pxe nodisks
 c.add_valid("--pxe --disk /foo/bar/baz,size=.01")  # Creating any random path on the remote host
 c.add_valid("--pxe --disk /dev/zde")  # /dev file that we just pass through to the remote VM
+c.add_valid("--cdrom %(EXISTIMG1)s --disk none --livecd --dry")  # remote cdrom install
 c.add_invalid("--pxe --disk /foo/bar/baz")  # File that doesn't exist after auto storage setup
 c.add_invalid("--nodisks --location /tmp")  # Use of --location
 c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage without size argument
@@ -883,7 +886,7 @@ c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage wi
 c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --noautoconsole")
 c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none", "kvm-fedoralatest-url", prerun_check=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s", "test-url-detection")  # --test-media-detection
-c.add_compare("--os-variant full_id=http://fedoraproject.org/fedora/20 --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
+c.add_compare("--os-variant full_id=http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
@@ -1004,6 +1007,8 @@ c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm
 
 c = vinst.add_category("vz", "--noautoconsole --connect " + utils.URIs.vz)
 c.add_valid("--container")  # validate the special define+start logic
+c.add_valid("--hvm --cdrom %(EXISTIMG1)s --disk none")  # hit more install vz logic
+c.add_valid("--hvm --import --disk %(EXISTIMG1)s --noreboot")  # hit more install vz logic
 c.add_invalid("--container --transient")  # doesn't support --transient
 c.add_compare("""
 --container
