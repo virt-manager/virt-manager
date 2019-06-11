@@ -981,7 +981,7 @@ class vmmDomain(vmmLibvirtObject):
                 self._backend.setVcpus(vcpus)
 
         if memory != _SENTINEL:
-            logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'",
+            logging.debug("Hotplugging curmem=%s maxmem=%s for VM '%s'",
                          memory, maxmem, self.get_name())
 
             actual_cur = self.get_memory()

@@ -93,10 +93,10 @@ class Guest(XMLBuilder):
         try:
             logging.debug("Explicitly replacing guest '%s'", name)
             if vm.ID() != -1:
-                logging.info("Destroying guest '%s'", name)
+                logging.debug("Destroying guest '%s'", name)
                 vm.destroy()
 
-            logging.info("Undefining guest '%s'", name)
+            logging.debug("Undefining guest '%s'", name)
             vm.undefine()
         except libvirt.libvirtError as e:
             raise RuntimeError(_("Could not remove old vm '%s': %s") %
