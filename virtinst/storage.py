@@ -222,32 +222,6 @@ class StoragePool(_StorageObject):
                 (path, str(e)))
 
     @staticmethod
-    def get_default_dir(conn, build=False):
-        """
-        Return the default storage dir. If there's a 'default' pool,
-        report that. If there's no default pool, return the dir we would
-        use for the default.
-        """
-        path = _preferred_default_pool_path(conn)
-        if (not conn.is_remote() and
-            not conn.support.conn_storage()):
-            if build and not os.path.exists(path):
-                os.makedirs(path)
-            return path
-
-        try:
-            for pool in conn.fetch_all_pools():
-                if pool.name == "default":
-                    return pool.target_path
-        except Exception:
-            pass
-
-        if build:
-            return StoragePool.build_default_pool(conn).target_path
-        return _preferred_default_pool_path(conn)
-
-
-    @staticmethod
     def lookup_pool_by_path(conn, path):
         """
         Return the first pool with matching matching target path.

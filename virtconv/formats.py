@@ -287,7 +287,8 @@ class VirtConverter(object):
             disk_format = None
 
         if destdir is None:
-            destdir = StoragePool.get_default_dir(self.conn, build=not dry)
+            poolxml = StoragePool.build_default_pool(self.conn)
+            destdir = poolxml.target_path
 
         guest = self.get_guest()
         for disk in guest.devices.disk:
