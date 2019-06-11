@@ -377,8 +377,6 @@ class App(object):
             args += " --connect %s" % uri
 
         if self.appname in ["virt-install"]:
-            if "--name " not in cli:
-                args += " --name foobar"
             if "--ram " not in cli:
                 args += " --ram 64"
 

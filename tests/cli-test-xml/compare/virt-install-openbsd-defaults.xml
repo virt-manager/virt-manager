@@ -1,5 +1,5 @@
 <domain type="kvm">
-  <name>foobar</name>
+  <name>openbsd4.9</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
@@ -31,7 +31,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/var/lib/libvirt/images/foobar.qcow2"/>
+      <source file="/var/lib/libvirt/images/None.qcow2"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>

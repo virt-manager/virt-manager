@@ -1,5 +1,5 @@
 <domain type="kvm">
-  <name>foobar</name>
+  <name>fedora21</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
@@ -34,7 +34,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/tmp/.local/share/libvirt/images/foobar.qcow2"/>
+      <source file="/tmp/.local/share/libvirt/images/None.qcow2"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">
@@ -72,7 +72,7 @@
   </devices>
 </domain>
 <domain type="kvm">
-  <name>foobar</name>
+  <name>fedora21</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
@@ -105,7 +105,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/tmp/.local/share/libvirt/images/foobar.qcow2"/>
+      <source file="/tmp/.local/share/libvirt/images/None.qcow2"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">

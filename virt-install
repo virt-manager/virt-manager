@@ -321,9 +321,6 @@ def validate_required_options(options, guest, installer):
     # aggregate the errors to help first time users get it right
     msg = ""
 
-    if not guest.name:
-        msg += "\n" + _("--name is required")
-
     if not memory_specified(guest):
         msg += "\n" + _("--memory amount in MiB is required")
 
@@ -525,7 +522,13 @@ def build_installer(options, guest):
     return installer
 
 
-def set_resources_from_osinfo(options, guest):
+def set_cli_defaults(options, guest):
+    if not guest.name:
+        default_name = virtinst.Guest.generate_name(guest)
+        cli.print_stdout(_("Using default --name {vm_name}").format(
+            vm_name=default_name))
+        guest.name = default_name
+
     if guest.os.is_container():
         return
 
@@ -580,7 +583,7 @@ def build_guest_instance(conn, options):
     # we are operating on any arch/os/type values passed in with --boot
     guest.set_capabilities_defaults()
     installer = build_installer(options, guest)
-    set_resources_from_osinfo(options, guest)
+    set_cli_defaults(options, guest)
 
     if installer:
         installer.set_install_defaults(guest)

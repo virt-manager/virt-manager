@@ -146,6 +146,9 @@ class Guest(XMLBuilder):
 
         force_num = False
         basename = guest.osinfo.name
+        if basename.endswith("-unknown"):
+            basename = basename.rsplit("-", 1)[0]
+
         if guest.osinfo.name == "generic":
             force_num = True
             if guest.os.is_container():
