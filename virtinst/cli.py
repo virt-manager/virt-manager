@@ -825,6 +825,12 @@ def add_guest_xml_options(geng):
                "--qemu-commandline='-display gtk,gl=on'\n"
                "--qemu-commandline env=DISPLAY=:0.1"))
 
+    ParserLaunchSecurity.register()
+    geng.add_argument("--launchSecurity", "--launchsecurity", action="append",
+        help=_("Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
+               "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert=BASE64CERT\n"
+               "--launchSecurity sev"))
+
 
 def add_boot_options(insg):
     ParserBoot.register()
@@ -3826,6 +3832,26 @@ class ParserHostdev(VirtCLIParser):
                     lookup_cb=cls.name_lookup_cb)
         cls.add_arg("driver.name", "driver_name")
         cls.add_arg("rom.bar", "rom_bar", is_onoff=True)
+
+
+#############################
+# --launchSecurity parsing #
+#############################
+
+class ParserLaunchSecurity(VirtCLIParser):
+    cli_arg_name = "launchSecurity"
+    guest_propname = "launchSecurity"
+    remove_first = "type"
+
+    @classmethod
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
+        cls.add_arg("type", "type")
+        cls.add_arg("cbitpos", "cbitpos")
+        cls.add_arg("reducedPhysBits", "reducedPhysBits")
+        cls.add_arg("policy", "policy")
+        cls.add_arg("session", "session")
+        cls.add_arg("dhCert", "dhCert")
 
 
 ###########################

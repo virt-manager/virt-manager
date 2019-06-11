@@ -895,6 +895,12 @@ c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm")  # Invalid
 c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch/virt combo
 c.add_invalid("--disk none --location nfs:example.com/fake --nonetworks")  # Using --location nfs, no longer supported
 
+
+c = vinst.add_category("kvm-x86_64-launch-security", "--disk none --noautoconsole")
+c.add_compare("--boot uefi --machine q35 --launchSecurity type=sev,reducedPhysBits=1,policy=0x0001,cbitpos=47,dhCert=BASE64CERT,session=BASE64SESSION --connect " + utils.URIs.kvm_amd_sev, "x86_64-launch-security-sev-full")  # Full cmdline
+c.add_invalid("--launchSecurity policy=0x0001 --connect " + utils.URIs.kvm_amd_sev)  # Missing launchSecurity 'type'
+
+
 c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_q35)
 c.add_compare("--boot uefi --disk none", "boot-uefi")
 

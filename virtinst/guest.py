@@ -181,7 +181,7 @@ class Guest(XMLBuilder):
         "vcpu_cpuset", "vcpulist", "numatune", "resource", "sysinfo",
         "bootloader", "os", "idmap", "features", "cpu", "clock",
         "on_poweroff", "on_reboot", "on_crash",
-        "pm", "emulator", "devices", "seclabels"]
+        "pm", "emulator", "devices", "launchSecurity", "seclabels"]
 
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
@@ -272,6 +272,7 @@ class Guest(XMLBuilder):
     idmap = XMLChildProperty(DomainIdmap, is_single=True)
     resource = XMLChildProperty(DomainResource, is_single=True)
     sysinfo = XMLChildProperty(DomainSysinfo, is_single=True)
+    launchSecurity = XMLChildProperty(DomainLaunchSecurity, is_single=True)
     _metadata = XMLChildProperty(DomainMetadata, is_single=True)
 
     xmlns_qemu = XMLChildProperty(DomainXMLNSQemu, is_single=True)
