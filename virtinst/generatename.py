@@ -25,7 +25,7 @@ def libvirt_collision(collision_cb, val):
 
 
 def generate_name(base, collision_cb, suffix="", lib_collision=True,
-                  start_num=1, sep="-", force_num=False, collidelist=None):
+                  start_num=1, sep="-", force_num=False):
     """
     Generate a new name from the passed base string, verifying it doesn't
     collide with the collision callback.
@@ -48,18 +48,14 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
     :param sep: The separator to use between the basename and the
         generated number (default is "-")
     :param force_num: Force the generated name to always end with a number
-    :param collidelist: An extra list of names to check for collision
     """
-    collidelist = collidelist or []
     base = str(base)
 
     def collide(n):
-        if n in collidelist:
-            return True
         if lib_collision:
-            return libvirt_collision(collision_cb, tryname)
+            return libvirt_collision(collision_cb, n)
         else:
-            return collision_cb(tryname)
+            return collision_cb(n)
 
     numrange = list(range(start_num, start_num + 100000))
     if not force_num:

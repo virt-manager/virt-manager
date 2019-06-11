@@ -557,11 +557,13 @@ class StorageVolume(_StorageObject):
                     os.path.dirname(disk.path) == pooltarget):
                     collidelist.append(os.path.basename(disk.path))
 
-        kwargs["collidelist"] = collidelist
+        def cb(tryname):
+            if tryname in collidelist:
+                return True
+            return pool_object.storageVolLookupByName(tryname)
+
         StoragePool.ensure_pool_is_running(pool_object, refresh=True)
-        return generatename.generate_name(basename,
-                                  pool_object.storageVolLookupByName,
-                                  **kwargs)
+        return generatename.generate_name(basename, cb, **kwargs)
 
     TYPE_FILE = getattr(libvirt, "VIR_STORAGE_VOL_FILE", 0)
     TYPE_BLOCK = getattr(libvirt, "VIR_STORAGE_VOL_BLOCK", 1)
