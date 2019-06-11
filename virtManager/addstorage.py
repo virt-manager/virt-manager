@@ -39,47 +39,26 @@ class vmmAddStorage(vmmGObjectUI):
     # Initialization methods #
     ##########################
 
-    def _get_default_dir(self):
-        return virtinst.StoragePool.get_default_dir(self.conn.get_backend())
-
-    def _get_ideal_path_info(self, name):
-        path = self._get_default_dir()
-        fmt = self.conn.get_default_storage_format()
-        suffix = virtinst.StorageVolume.get_file_extension_for_format(fmt)
-        return (path, name, suffix or ".img")
-
-    def _get_ideal_path(self, name):
-        target, name, suffix = self._get_ideal_path_info(name)
-        return os.path.join(target, name) + suffix
-
     def _host_disk_space(self):
-        pool = self.conn.get_default_pool()
-        path = self._get_default_dir()
-
-        avail = 0
-        if pool and pool.is_active():
-            # Rate limit this, since it can be spammed at dialog startup time
-            if pool.secs_since_last_refresh() > 10:
-                pool.refresh()
-            avail = int(pool.get_available())
-
-        elif not self.conn.is_remote() and os.path.exists(path):
-            vfs = os.statvfs(os.path.dirname(path))
-            avail = vfs.f_frsize * vfs.f_bavail
-
-        return float(avail / 1024.0 / 1024.0 / 1024.0)
-
+        try:
+            pool = self.conn.get_default_pool()
+            if pool and pool.is_active():
+                # Rate limit this, since it can be spammed at dialog startup time
+                if pool.secs_since_last_refresh() > 10:
+                    pool.refresh()
+                avail = int(pool.get_available())
+                return float(avail / 1024.0 / 1024.0 / 1024.0)
+        except Exception:
+            logging.exception("Error determining host disk space")
+        return -1
 
     def _update_host_space(self):
         widget = self.widget("phys-hd-label")
-        try:
-            max_storage = self._host_disk_space()
-        except Exception:
-            logging.exception("Error determining host disk space")
-            widget.set_markup("")
-            return
+        max_storage = self._host_disk_space()
 
         def pretty_storage(size):
+            if size == -1:
+                return "Unknown GiB"
             return "%.1f GiB" % float(size)
 
         hd_label = (_("%s available in the default location") %
@@ -164,45 +143,25 @@ class vmmAddStorage(vmmGObjectUI):
         storage_area.set_tooltip_text(storage_tooltip or "")
 
     def get_default_path(self, name, collidelist=None):
-        collidelist = collidelist or []
         pool = self.conn.get_default_pool()
-
-        default_dir = self._get_default_dir()
-
-        def path_exists(p):
-            return os.path.exists(p) or p in collidelist
-
         if not pool:
-            # Use old generating method
-            origf = os.path.join(default_dir, name + ".img")
-            f = origf
+            return
 
-            n = 1
-            while path_exists(f) and n < 100:
-                f = os.path.join(default_dir, name +
-                                 "-" + str(n) + ".img")
-                n += 1
+        fmt = self.conn.get_default_storage_format()
+        suffix = virtinst.StorageVolume.get_file_extension_for_format(fmt)
+        suffix = suffix or ".img"
 
-            if path_exists(f):
-                f = origf
+        # Sanitize collidelist to work with the collision checker
+        newcollidelist = []
+        for c in (collidelist or []):
+            if c and os.path.dirname(c) == pool.get_target_path():
+                newcollidelist.append(os.path.basename(c))
 
-            path = f
-        else:
-            target, ignore, suffix = self._get_ideal_path_info(name)
+        path = virtinst.StorageVolume.find_free_name(
+            pool.get_backend(), name,
+            suffix=suffix, collidelist=newcollidelist)
 
-            # Sanitize collidelist to work with the collision checker
-            newcollidelist = []
-            for c in collidelist:
-                if c and os.path.dirname(c) == pool.get_target_path():
-                    newcollidelist.append(os.path.basename(c))
-
-            path = virtinst.StorageVolume.find_free_name(
-                pool.get_backend(), name,
-                suffix=suffix, collidelist=newcollidelist)
-
-            path = os.path.join(target, path)
-
-        return path
+        return os.path.join(pool.xmlobj.target_path, path)
 
     def is_default_storage(self):
         return self.widget("storage-create").get_active()
