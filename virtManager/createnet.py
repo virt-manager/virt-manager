@@ -114,8 +114,10 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def reset_state(self):
         basename = "network"
-        default_name = generatename.generate_name(
-                basename, self.conn.get_backend().networkLookupByName)
+        def cb(n):
+            return generatename.check_libvirt_collision(
+                self.conn.get_backend().networkLookupByName, n)
+        default_name = generatename.generate_name(basename, cb)
         self.widget("net-name").set_text(default_name)
 
         self.widget("net-dns-use-netname").set_active(True)

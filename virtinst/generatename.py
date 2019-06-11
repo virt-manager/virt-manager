@@ -8,7 +8,7 @@
 import libvirt
 
 
-def libvirt_collision(collision_cb, val):
+def check_libvirt_collision(collision_cb, val):
     """
     Run the passed collision function with val as the only argument:
     If libvirtError is raised, return False
@@ -24,7 +24,7 @@ def libvirt_collision(collision_cb, val):
     return check
 
 
-def generate_name(base, collision_cb, suffix="", lib_collision=True,
+def generate_name(base, collision_cb, suffix="",
                   start_num=1, sep="-", force_num=False):
     """
     Generate a new name from the passed base string, verifying it doesn't
@@ -42,20 +42,12 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
     :param base: The base string to use for the name (e.g. "my-orig-vm-clone")
     :param collision_cb: A callback function to check for collision,
         receives the generated name as its only arg
-    :param lib_collision: If true, the collision_cb is not a boolean function,
-        and instead throws a libvirt error on failure
     :param start_num: The number to start at for generating non colliding names
     :param sep: The separator to use between the basename and the
         generated number (default is "-")
     :param force_num: Force the generated name to always end with a number
     """
     base = str(base)
-
-    def collide(n):
-        if lib_collision:
-            return libvirt_collision(collision_cb, n)
-        else:
-            return collision_cb(n)
 
     numrange = list(range(start_num, start_num + 100000))
     if not force_num:
@@ -68,7 +60,7 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
             tryname += ("%s%d" % (sep, i))
         tryname += suffix
 
-        if not collide(tryname):
+        if not collision_cb(tryname):
             ret = tryname
             break
 

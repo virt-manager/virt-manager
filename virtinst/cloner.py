@@ -493,11 +493,9 @@ class Cloner(object):
             clonebase = newname
 
         clonebase = os.path.join(dirname, clonebase)
-        return generatename.generate_name(
-                    clonebase,
-                    lambda p: DeviceDisk.path_definitely_exists(self.conn, p),
-                    suffix,
-                    lib_collision=False)
+        def cb(p):
+            return DeviceDisk.path_definitely_exists(self.conn, p)
+        return generatename.generate_name(clonebase, cb, suffix=suffix)
 
     def generate_clone_name(self):
         # If the orig name is "foo-clone", we don't want the clone to be
@@ -512,9 +510,11 @@ class Cloner(object):
                 start_num = int(str(num_match.group()))
             basename = basename.replace(match.group(), "")
 
+        def cb(n):
+            return generatename.check_libvirt_collision(
+                self.conn.lookupByName, n)
         basename = basename + "-clone"
-        return generatename.generate_name(basename,
-                                  self.conn.lookupByName,
+        return generatename.generate_name(basename, cb,
                                   sep="", start_num=start_num)
 
 

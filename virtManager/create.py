@@ -1494,8 +1494,10 @@ class vmmCreate(vmmGObjectUI):
             basename += "-%s" % _pretty_arch(self._guest.os.arch)
             force_num = False
 
-        return virtinst.generatename.generate_name(basename,
-            self.conn.get_backend().lookupByName,
+        def cb(n):
+            return virtinst.generatename.check_libvirt_collision(
+                self.conn.get_backend().lookupByName, n)
+        return virtinst.generatename.generate_name(basename, cb,
             start_num=force_num and 1 or 2, force_num=force_num,
             sep=not force_num and "-" or "")
 

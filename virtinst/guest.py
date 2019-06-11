@@ -131,7 +131,8 @@ class Guest(XMLBuilder):
 
         for ignore in range(256):
             uuid = _randomUUID()
-            if not generatename.libvirt_collision(conn.lookupByUUID, uuid):
+            if not generatename.check_libvirt_collision(
+                    conn.lookupByUUID, uuid):
                 return uuid
 
         logging.error("Failed to generate non-conflicting UUID")

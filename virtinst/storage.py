@@ -248,8 +248,6 @@ class StoragePool(_StorageObject):
                 if pool.name == name:
                     return True
             return False
-
-        kwargs["lib_collision"] = False
         return generatename.generate_name(basename, cb, **kwargs)
 
     @staticmethod
@@ -560,7 +558,8 @@ class StorageVolume(_StorageObject):
         def cb(tryname):
             if tryname in collidelist:
                 return True
-            return pool_object.storageVolLookupByName(tryname)
+            return generatename.check_libvirt_collision(
+                pool_object.storageVolLookupByName, tryname)
 
         StoragePool.ensure_pool_is_running(pool_object, refresh=True)
         return generatename.generate_name(basename, cb, **kwargs)

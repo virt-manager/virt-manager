@@ -118,7 +118,9 @@ class vmmSnapshotNew(vmmGObjectUI):
 
     def _reset_state(self):
         basename = "snapshot"
-        cb = self.vm.get_backend().snapshotLookupByName
+        def cb(n):
+            return generatename.check_libvirt_collision(
+                self.vm.get_backend().snapshotLookupByName, n)
         default_name = generatename.generate_name(
                 basename, cb, sep="", start_num=1, force_num=True)
 
