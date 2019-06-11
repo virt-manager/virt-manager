@@ -5,6 +5,7 @@
 # See the COPYING file in the top-level directory.
 
 import logging
+import os
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -481,7 +482,11 @@ class vmmCreatePool(vmmGObjectUI):
             self.widget("pool-source-path").get_child().set_text(source)
 
     def _browse_target_cb(self, src):
-        startfolder = StoragePool.get_default_dir(self.conn.get_backend())
+        current = self.widget("pool-target-path").get_child().get_text()
+        startfolder = None
+        if current:
+            startfolder = os.path.dirname(current)
+
         target = self.err.browse_local(self.conn,
                 _("Choose target directory"),
                 dialog_type=Gtk.FileChooserAction.SELECT_FOLDER,

@@ -313,7 +313,8 @@ class StoragePool(_StorageObject):
         if (self.type == self.TYPE_DIR or
             self.type == self.TYPE_NETFS or
             self.type == self.TYPE_FS):
-            return os.path.join(self.get_default_dir(self.conn), self.name)
+            return os.path.join(
+                    _preferred_default_pool_path(self.conn), self.name)
         if self.type == self.TYPE_LOGICAL:
             name = self.name
             if self.source_name:
