@@ -234,6 +234,9 @@ class Installer(object):
                 url = self.location
             os_media = self._treemedia.get_os_media(guest, meter)
         else:
+            if self.conn.is_remote():
+                raise RuntimeError("Unattended method=cdrom installs are "
+                        "not yet supported for remote connections.")
             osguess = OSDB.guess_os_by_iso(self.cdrom)
             os_media = osguess[1] if osguess else None
 

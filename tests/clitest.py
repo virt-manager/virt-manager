@@ -860,7 +860,8 @@ c.add_invalid("--os-variant debian9 --unattended profile=desktop,admin-password=
 c.add_invalid("--os-variant debian9 --unattended profile=FRIBBER,admin-password=foobar --location http://example.foo", grep="Available profiles")  # will trigger unknown profile error
 c.add_invalid("--os-variant fedora29 --unattended profile=desktop,admin-password=foobar --cdrom %(ISO-F29-LIVE)s", grep="media does not support")  # live media doesn't support installscript
 c.add_invalid("--os-variant msdos --unattended profile=desktop --location http://example.com")  # msdos doesn't support unattended install
-c.add_invalid(" --os-variant winxp --unattended profile=desktop --cdrom %(ISO-WIN7)s")  # winxp doesn't support expected injection method 'cdrom'
+c.add_invalid("--os-variant winxp --unattended profile=desktop --cdrom %(ISO-WIN7)s")  # winxp doesn't support expected injection method 'cdrom'
+c.add_invalid("--connect %(URI-TEST-REMOTE)s --os-variant win7 --cdrom %(EXISTIMG1)s --unattended")  # --unattended method=cdrom rejected for remote connections
 
 
 
