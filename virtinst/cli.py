@@ -912,11 +912,6 @@ class _SuboptCheckerClass:
         self._seen = set()
 
     def add_all(self, name):
-        if name.startswith("--unattended"):
-            # Hack, we don't have any test suite coverage of the
-            # unattended option. This should change soon but until then
-            # disable the test suite failure
-            return
         self._all.add(name)
 
     def add_seen(self, name):

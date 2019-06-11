@@ -24,9 +24,8 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
         TZ_FILE = "/etc/localtime"
         linkpath = os.path.realpath(TZ_FILE)
         tokens = linkpath.split("zoneinfo/")
-        if len(tokens) < 2:
-            return None
-        return tokens[1]
+        if len(tokens) > 1:
+            return tokens[1]
 
     def get_language():
         return locale.getlocale()[0]
@@ -77,15 +76,11 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     timezone = get_timezone()
     if timezone:
         config.set_l10n_timezone(timezone)
-    else:
-        logging.warning(
-            _("'America/New_York' timezone will be used for this "
-              "unattended installation."))
 
     # Try to guess to language and keyboard layout from the system's
     # language.
     #
-    # This method has flows as it's quite common to have language and
+    # This method has flaws as it's quite common to have language and
     # keyboard layout not matching. Otherwise, there's no easy way to guess
     # the keyboard layout without relying on a set of APIs of an specific
     # Desktop Environment.
@@ -93,10 +88,6 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     if language:
         config.set_l10n_language(language)
         config.set_l10n_keyboard(language)
-    else:
-        logging.warning(
-            _("'en_US' will be used as both language and keyboard layout "
-              "for unattended installation."))
 
     if url:
         config.set_installation_url(url)  # pylint: disable=no-member
@@ -135,68 +126,46 @@ class OSInstallScript:
             if (Libosinfo.InstallScriptInjectionMethod.CDROM &
                 script.get_injection_methods()):
                 return True
-        return False
+        return False  # pragma: no cover
 
     def __init__(self, script, osobj):
         self._script = script
         self._osobj = osobj
         self._config = None
 
-        if not OSInstallScript.have_new_libosinfo():
+        if not OSInstallScript.have_new_libosinfo():  # pragma: no cover
             raise RuntimeError(_("libosinfo or osinfo-db is too old to "
                 "support unattended installs."))
 
     def get_expected_filename(self):
         return self._script.get_expected_filename()
 
-    def set_preferred_injection_method(self, method):
-        def nick_to_value(method):
-            injection_methods = [
-                    Libosinfo.InstallScriptInjectionMethod.CDROM,
-                    Libosinfo.InstallScriptInjectionMethod.DISK,
-                    Libosinfo.InstallScriptInjectionMethod.FLOPPY,
-                    Libosinfo.InstallScriptInjectionMethod.INITRD,
-                    Libosinfo.InstallScriptInjectionMethod.WEB]
+    def set_preferred_injection_method(self, namestr):
+        # If we ever make this user configurable, this will need to be smarter
+        names = {
+            "cdrom": Libosinfo.InstallScriptInjectionMethod.CDROM,
+            "initrd": Libosinfo.InstallScriptInjectionMethod.INITRD,
+        }
 
-            for m in injection_methods:
-                # pylint: disable=no-member
-                if method == m.value_nicks[0]:
-                    return m
-
-            raise RuntimeError(
-                _("%s is a non-valid injection method in libosinfo.") % method)
-
-        injection_method = nick_to_value(method)
+        logging.debug("Using '%s' injection method", namestr)
+        injection_method = names[namestr]
         supported_injection_methods = self._script.get_injection_methods()
         if (injection_method & supported_injection_methods == 0):
             raise RuntimeError(
-                _("OS '%s' unattended install is not supported") %
-                self._osobj.name)
+                _("OS '%s' does not support required injection method '%s'") %
+                (self._osobj.name, namestr))
 
-        logging.debug("Using '%s' injection method", method)
         self._script.set_preferred_injection_method(injection_method)
 
-    def set_installation_source(self, source):
-        def nick_to_value(source):
-            # This requires quite new libosinfo as of Mar 2019, disable
-            # pylint errors here.
-            # pylint: disable=no-member
-            installation_sources = [
-                    Libosinfo.InstallScriptInstallationSource.MEDIA,
-                    Libosinfo.InstallScriptInstallationSource.NETWORK]
+    def set_installation_source(self, namestr):
+        # If we ever make this user configurable, this will need to be smarter
+        names = {
+            "media": Libosinfo.InstallScriptInstallationSource.MEDIA,
+            "network": Libosinfo.InstallScriptInstallationSource.NETWORK,
+        }
 
-            for s in installation_sources:
-                if source == s.value_nick:
-                    return s
-
-            raise RuntimeError(
-                _("%s is a non-valid installation source in libosinfo.") %
-                source)
-
-        installation_source = nick_to_value(source)
-
-        logging.debug("Using '%s' installation source", source)
-        self._script.set_installation_source(installation_source)
+        logging.debug("Using '%s' installation source", namestr)
+        self._script.set_installation_source(names[namestr])
 
     def _requires_param(self, config_param):
         param = self._script.get_config_param(config_param)
@@ -276,13 +245,14 @@ def _lookup_rawscript(guest, profile, os_media):
               "the '%s' profile. Available profiles: %s") %
             (guest.osinfo.name, profile, ", ".join(list(profile_names))))
 
-    logging.debug("Install script found for profile '%s'", profile)
-
     # Some OSes (as Windows) have more than one installer script,
     # depending on the OS version and profile chosen, to be used to
     # perform the unattended installation. Let's just deal with
     # multiple installer scripts when its actually needed, though.
-    return rawscripts[0]
+    usescript = rawscripts[0]
+    logging.debug("Install script found for profile '%s': %s",
+            profile, usescript.get_id())
+    return usescript
 
 
 def prepare_install_script(guest, unattended_data, url, os_media):
