@@ -56,21 +56,13 @@ class Installer(object):
         self._defaults_are_set = False
         self._unattended_data = None
 
-        if location_kernel or location_initrd:
-            if not location:
-                raise ValueError(_("location kernel/initrd may only "
-                    "be specified with a location URL/path"))
-            if not (location_kernel and location_initrd):
-                raise ValueError(_("location kernel/initrd must be "
-                    "be specified as a pair"))
-
-        self._cdrom = None
         self._treemedia = None
+        self._cdrom = None
         if cdrom:
             cdrom = InstallerTreeMedia.validate_path(self.conn, cdrom)
             self._cdrom = cdrom
             self._install_bootdev = "cdrom"
-        elif location:
+        elif location or location_kernel or location_initrd:
             self._treemedia = InstallerTreeMedia(self.conn, location,
                     location_kernel, location_initrd)
         elif install_kernel or install_initrd:

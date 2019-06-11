@@ -105,6 +105,14 @@ class InstallerTreeMedia(object):
         self._location_initrd = location_initrd
         self.initrd_injections = []
 
+        if location_kernel or location_initrd:
+            if not location:
+                raise ValueError(_("location kernel/initrd may only "
+                    "be specified with a location URL/path"))
+            if not (location_kernel and location_initrd):
+                raise ValueError(_("location kernel/initrd must be "
+                    "be specified as a pair"))
+
         self._cached_fetcher = None
         self._cached_data = None
 
