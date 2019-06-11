@@ -344,6 +344,8 @@ class Installer(object):
             return False
         return bool(self._cdrom or
                     self._install_bootdev or
+                    self._install_kernel or
+                    self._install_initrd or
                     self._treemedia)
 
     def detect_distro(self, guest):
