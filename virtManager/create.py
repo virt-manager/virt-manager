@@ -1271,7 +1271,8 @@ class vmmCreate(vmmGObjectUI):
                 fs_dir = [os.environ['HOME'],
                           '.local/share/libvirt/filesystems/']
 
-            fs = fs_dir + [self._generate_default_name(None)]
+            default_name = virtinst.Guest.generate_name(self._guest)
+            fs = fs_dir + [default_name]
             self.widget("install-oscontainer-fs").set_text(os.path.join(*fs))
 
 
@@ -1479,29 +1480,6 @@ class vmmCreate(vmmGObjectUI):
             return False
         return True
 
-    def _generate_default_name(self, osobj):
-        force_num = False
-        if self._guest.os.is_container():
-            basename = "container"
-            force_num = True
-        elif not osobj:
-            basename = "vm"
-            force_num = True
-        else:
-            basename = osobj.name
-
-        if self._guest.os.arch != self.conn.caps.host.cpu.arch:
-            basename += "-%s" % _pretty_arch(self._guest.os.arch)
-            force_num = False
-
-        def cb(n):
-            return virtinst.generatename.check_libvirt_collision(
-                self.conn.get_backend().lookupByName, n)
-        return virtinst.generatename.generate_name(basename, cb,
-            start_num=force_num and 1 or 2, force_num=force_num,
-            sep=not force_num and "-" or "")
-
-
     def _validate_install_page(self):
         instmethod = self._get_config_install_page()
         installer = None
@@ -1658,7 +1636,7 @@ class vmmCreate(vmmGObjectUI):
             self._guest.os.kernel_args = kargs
 
         try:
-            name = self._generate_default_name(self._guest.osinfo)
+            name = virtinst.Guest.generate_name(self._guest)
             self.widget("create-vm-name").set_text(name)
             self._guest.validate_name(self._guest.conn, name)
             self._guest.name = name

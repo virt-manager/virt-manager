@@ -111,7 +111,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         # Delete it from the VM window
-        vmwindow = self.app.root.find_fuzzy("generic on", "frame")
+        vmwindow = self.app.root.find_fuzzy("vm1 on", "frame")
         vmwindow.find("Virtual Machine", "menu").click()
         vmwindow.find("Delete", "menu item").click()
 
@@ -284,7 +284,7 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
 
-        self.app.root.find_fuzzy("generic-ppc64 on", "frame")
+        self.app.root.find_fuzzy("vm-ppc64 on", "frame")
         self.assertFalse(newvm.showing)
 
 
@@ -336,7 +336,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         time.sleep(1)
-        self.app.root.find_fuzzy("generic on", "frame")
+        self.app.root.find_fuzzy("vm1 on", "frame")
         self.assertFalse(newvm.showing)
 
 

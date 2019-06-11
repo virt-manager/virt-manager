@@ -138,6 +138,34 @@ class Guest(XMLBuilder):
         logging.error("Failed to generate non-conflicting UUID")
 
     @staticmethod
+    def generate_name(guest):
+        def _pretty_arch(_a):
+            if _a == "armv7l":
+                return "arm"
+            return _a
+
+        force_num = False
+        basename = guest.osinfo.name
+        if guest.osinfo.name == "generic":
+            force_num = True
+            if guest.os.is_container():
+                basename = "container"
+            else:
+                basename = "vm"
+
+        if guest.os.arch != guest.conn.caps.host.cpu.arch:
+            basename += "-%s" % _pretty_arch(guest.os.arch)
+            force_num = False
+
+        def cb(n):
+            return generatename.check_libvirt_collision(
+                guest.conn.lookupByName, n)
+        return generatename.generate_name(basename, cb,
+            start_num=force_num and 1 or 2, force_num=force_num,
+            sep=not force_num and "-" or "")
+
+
+    @staticmethod
     def get_recommended_machine(capsinfo):
         """
         Return the recommended machine type for the passed capsinfo.
