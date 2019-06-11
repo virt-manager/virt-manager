@@ -1432,15 +1432,15 @@ class VirtCLIParser(metaclass=_InitClass):
         ret = []
         try:
             objs = self._parse(inst is None and self.guest or inst)
-            if new_object:
-                for obj in xmlutil.listify(objs):
-                    if validate:
-                        obj.validate()
-
-                    if isinstance(obj, Device):
-                        self.guest.add_device(obj)
-                    else:
-                        self.guest.add_child(obj)
+            for obj in xmlutil.listify(objs):
+                if validate and hasattr(obj, "validate"):
+                    obj.validate()
+                if not new_object:
+                    continue
+                if isinstance(obj, Device):
+                    self.guest.add_device(obj)
+                else:
+                    self.guest.add_child(obj)
 
             ret += xmlutil.listify(objs)
         except Exception as e:
