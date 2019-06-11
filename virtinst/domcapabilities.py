@@ -77,6 +77,7 @@ def _make_capsblock(xml_root_name):
 
 class _SEV(XMLBuilder):
     XML_NAME = "sev"
+    supported = XMLProperty("./@supported", is_yesno=True)
     cbitpos = XMLProperty("./cbitpos", is_int=True)
     reducedPhysBits = XMLProperty("./reducedPhysBits", is_int=True)
 
@@ -315,6 +316,13 @@ class DomainCapabilities(XMLBuilder):
 
         return self._features
 
+    def supports_sev_launch_security(self):
+        """
+        Returns False if either libvirt doesn't advertise support for SEV at
+        all (< libvirt-4.5.0) or if it explicitly advertises it as unsupported
+        on the platform
+        """
+        return bool(self.features.sev.supported)
 
     XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)

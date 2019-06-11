@@ -901,6 +901,9 @@ c.add_compare("--boot uefi --machine q35 --launchSecurity type=sev,reducedPhysBi
 c.add_compare("--boot uefi --machine q35 --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, "x86_64-launch-security-sev")  # Fill in platform data from domcaps
 c.add_valid("--boot uefi --machine q35 --launchSecurity sev,reducedPhysBits=1,cbitpos=47 --connect " + utils.URIs.kvm_amd_sev)  # Default policy == 0x0003 will be used
 c.add_invalid("--launchSecurity policy=0x0001 --connect " + utils.URIs.kvm_amd_sev)  # Missing launchSecurity 'type'
+c.add_invalid("--launchSecurity sev --connect " + utils.URIs.kvm_amd_sev)  # Fail if loader isn't UEFI
+c.add_invalid("--boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev)  # Fail if machine type isn't Q35
+c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_q35)  # Fail with no SEV capabilities
 
 
 c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_q35)
