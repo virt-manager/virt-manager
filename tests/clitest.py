@@ -834,6 +834,8 @@ c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no seco
 
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_compare("--connect %s" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
+c.add_compare("--connect %s --os-variant fedora26" % (utils.URIs.test_suite), "osvariant-noargs-fail", use_default_args=False)  # No arguments
+c.add_compare("--connect %s --os-variant fedora26 --pxe --print-xml" % (utils.URIs.test_suite), "osvariant-defaults-pxe", use_default_args=False)  # No arguments
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--test-stub-command")  # --test-stub-command
 c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning

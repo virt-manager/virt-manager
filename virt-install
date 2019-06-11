@@ -538,17 +538,25 @@ def set_cli_defaults(options, guest):
     ncpus = res.get_recommended_ncpus(guest.os.arch)
 
     if ram and not memory_specified(guest):
+        mbram = str(ram / (1024 * 1024)).rstrip("0").rstrip(".")
+        cli.print_stdout(
+            _("Using {os_name} default --memory {megabytes}").format(
+            os_name=guest.osinfo.name, megabytes=mbram))
         guest.currentMemory = ram // 1024
 
     if ncpus:
         # We need to do this upfront, so we don't incorrectly set guest.vcpus
         guest.sync_vcpus_topology()
         if not guest.vcpus:
+            # I don't think we need to print anything here as this was never
+            # a required value.
             guest.vcpus = ncpus
 
     if storage and not storage_specified(options, guest):
         diskstr = 'size=%d' % (storage // (1024 ** 3))
-        logging.debug("Generated default libosinfo '--disk %s'", diskstr)
+        cli.print_stdout(
+            _("Using {os_name} default --disk {disk_options}".format(
+            os_name=guest.osinfo.name, disk_options=diskstr)))
         options.disk = [diskstr]
         cli.ParserDisk(diskstr, guest=guest).parse(None)
 

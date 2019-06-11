@@ -263,6 +263,7 @@ def fail(msg, do_exit=True):
 
 
 def print_stdout(msg, do_force=False):
+    logging.debug(msg)
     if do_force or not get_global_state().quiet:
         print(msg)
 
