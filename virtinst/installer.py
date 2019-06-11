@@ -30,13 +30,15 @@ class Installer(object):
     :param location: An install tree URI, local directory, or ISO/CDROM path.
         Largely handled by installtreemedia helper class. Maps to virt-install
         --location
-    :param install_bootdev: The VM bootdev to use (HD, NETWORK, CDROM, FLOPPY)
     :param location_kernel: URL pointing to a kernel to fetch, or a relative
         path to indicate where the kernel is stored in location
     :param location_initrd: location_kernel, but pointing to an initrd
+    :param install_kernel: Kernel to install off of
+    :param install initrd: Initrd to install off of
     """
     def __init__(self, conn, cdrom=None, location=None, install_bootdev=None,
-            location_kernel=None, location_initrd=None):
+            location_kernel=None, location_initrd=None,
+            install_kernel=None, install_initrd=None):
         self.conn = conn
 
         self.livecd = False
@@ -68,9 +70,13 @@ class Installer(object):
             cdrom = InstallerTreeMedia.validate_path(self.conn, cdrom)
             self._cdrom = cdrom
             self._install_bootdev = "cdrom"
-        if location:
+        elif location:
             self._treemedia = InstallerTreeMedia(self.conn, location,
                     location_kernel, location_initrd)
+        elif install_kernel or install_initrd:
+            self._install_kernel = os.path.realpath(install_kernel)
+            self._install_initrd = os.path.realpath(install_initrd)
+            self._install_bootdev = None
 
 
     ###################

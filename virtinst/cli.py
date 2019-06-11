@@ -1557,6 +1557,35 @@ def parse_check(checks):
         parser.parse(get_global_state())
 
 
+#####################
+# --install parsing #
+#####################
+
+class ParserInstall(VirtCLIParser):
+    cli_arg_name = "install"
+
+    @classmethod
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
+        cls.add_arg("bootdev", "bootdev", can_comma=True)
+        cls.add_arg("kernel", "kernel", can_comma=True)
+        cls.add_arg("initrd", "initrd", can_comma=True)
+
+
+class InstallData:
+    def __init__(self):
+        self.bootdev = None
+        self.kernel = None
+        self.initrd = None
+
+
+def parse_install(optstr):
+    installdata = InstallData()
+    parser = ParserInstall(optstr or None)
+    parser.parse(installdata)
+    return installdata
+
+
 ######################
 # --location parsing #
 ######################

@@ -421,8 +421,14 @@ def build_installer(options, guest):
     location_kernel = None
     location_initrd = None
     install_bootdev = None
+    installdata = None
+    install_kernel = None
+    install_initrd = None
 
     has_installer = True
+
+    if options.install:
+        installdata = cli.parse_install(options.install)
 
     if options.unattended:
         if options.os_variant.is_none or options.os_variant.is_auto:
@@ -453,6 +459,10 @@ def build_installer(options, guest):
         cdrom = options.cdrom
     elif options.pxe:
         install_bootdev = "network"
+    elif installdata:
+        install_bootdev = installdata.bootdev
+        install_kernel = installdata.kernel
+        install_initrd = installdata.initrd
     elif (guest.os.is_container() or
           options.import_install or
           options.xmlonly or
@@ -470,7 +480,9 @@ def build_installer(options, guest):
             location=location,
             location_kernel=location_kernel,
             location_initrd=location_initrd,
-            install_bootdev=install_bootdev)
+            install_bootdev=install_bootdev,
+            install_kernel=install_kernel,
+            install_initrd=install_initrd)
     if cdrom and options.livecd:
         installer.livecd = True
     if options.unattended:
@@ -823,7 +835,9 @@ def parse_args():
     insg.add_argument("--initrd-inject", action="append",
                     help=_("Add given file to root of initrd from --location"))
     insg.add_argument("--unattended", nargs="?", const=1,
-                    help=_("Perform a unattended installation"))
+                    help=_("Perform an unattended installation"))
+    insg.add_argument("--install",
+            help=_("Specify fine grained install options"))
 
     # Takes a URL and just prints to stdout the detected distro name
     insg.add_argument("--test-media-detection", help=argparse.SUPPRESS)
