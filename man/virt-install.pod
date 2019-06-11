@@ -386,7 +386,26 @@ Configure guest power management features. Example:
 
 Use --pm=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsPowerManagement>
 
+=item B<--launch-security> TYPE[,OPTS]
 
+Enable launch security for the guest, e.g. AMD SEV.
+
+Use --launch-security=? to see a list of all available sub options. Complete
+details at L<https://libvirt.org/formatdomain.html#launchSecurity>. Example
+invocations:
+    # This will use a default policy 0x03
+    # No dhCert provided, so no data can be exchanged with the SEV firmware
+    --launchSecurity sev
+
+    # Explicit policy 0x01 - disables debugging, allows guest key sharing
+    --launchSecurity sev,policy=0x01
+
+    # Provide the session blob obtained from the SEV firmware
+    # Provide dhCert to open a secure communication channel with SEV firmware
+    --launchSecurity sev,session=BASE64SESSIONSTRING,dhCert=BASE64DHCERTSTRING
+
+SEV has further implications on usage of virtio devices, so refer to EXAMPLES
+section to see a full invocation of virt-install with --launchSecurity.
 
 =back
 
@@ -1763,6 +1782,28 @@ Start serial QEMU ARM VM, which requires specifying a manual kernel.
        --disk /home/user/VMs/myarmdisk.img \
        --boot kernel=/tmp/my-arm-kernel,initrd=/tmp/my-arm-initrd,dtb=/tmp/my-arm-dtb,kernel_args="console=ttyAMA0 rw root=/dev/mmcblk0p3" \
        --graphics none
+
+Start an SEV launch security VM with 4GB RAM, 4GB+256MiB of hard_limit, with a
+couple of virtio devices:
+
+Note: The IOMMU flag needs to be turned on with driver.iommu for virtio
+devices. Usage of --memtune is currently required because of SEV limitations,
+refer to libvirt docs for a detailed explanation.
+
+  # virt-install \
+       --name foo \
+       --memory 4096 \
+       --boot uefi \
+       --machine q35 \
+       --memtune hard_limit=4563402 \
+       --disk size=15,target.bus=scsi \
+       --import \
+       --controller type=scsi,model=virtio-scsi,driver.iommu=on \
+       --controller type=virtio-serial,driver.iommu=on \
+       --network network=default,model=virtio,driver.iommu=on \
+       --rng driver,iommu=on \
+       --memballoon driver.iommu=on \
+       --launchSecurity sev
 
 =head1 BUGS
 
