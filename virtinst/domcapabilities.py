@@ -71,6 +71,16 @@ def _make_capsblock(xml_root_name):
     return TmpClass
 
 
+################################
+# SEV launch security handling #
+################################
+
+class _SEV(XMLBuilder):
+    XML_NAME = "sev"
+    cbitpos = XMLProperty("./cbitpos", is_int=True)
+    reducedPhysBits = XMLProperty("./reducedPhysBits", is_int=True)
+
+
 #############################
 # Misc toplevel XML classes #
 #############################
@@ -89,6 +99,7 @@ class _Devices(_CapsBlock):
 class _Features(_CapsBlock):
     XML_NAME = "features"
     gic = XMLChildProperty(_make_capsblock("gic"), is_single=True)
+    sev = XMLChildProperty(_SEV, is_single=True)
 
 
 ###############

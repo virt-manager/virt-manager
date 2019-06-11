@@ -24,7 +24,9 @@ class DomainLaunchSecurity(XMLBuilder):
         if not self.type:
             raise RuntimeError(_("Missing mandatory attribute 'type'"))
 
-    def _set_defaults_sev(self):
+    def _set_defaults_sev(self, guest):
+        domcaps = guest.lookup_domcaps()
+
         # 'policy' is a mandatory 4-byte argument for the SEV firmware,
         # if missing, let's use 0x03 which, according to the table at
         # https://libvirt.org/formatdomain.html#launchSecurity:
@@ -33,6 +35,11 @@ class DomainLaunchSecurity(XMLBuilder):
         if self.policy is None:
             self.policy = "0x03"
 
+        if self.cbitpos is None:
+            self.cbitpos = domcaps.features.sev.cbitpos
+        if self.reducedPhysBits is None:
+            self.reducedPhysBits = domcaps.features.sev.reducedPhysBits
+
     def set_defaults(self, guest):
         if self.is_sev():
-            return self._set_defaults_sev()
+            return self._set_defaults_sev(guest)
