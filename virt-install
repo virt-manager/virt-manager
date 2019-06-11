@@ -393,28 +393,6 @@ def _show_nographics_warnings(options, guest, installer):
             "see text install output from the guest."))
         return
 
-    serial_arg = "console=ttyS0"
-    serial_arm_arg = "console=ttyAMA0"
-    hvc_arg = "console=hvc0"
-
-    console_type = serial_arg
-    if guest.os.is_arm():
-        console_type = serial_arm_arg
-    if guest.devices.console[0].target_type in ["virtio", "xen"]:
-        console_type = hvc_arg
-    if guest.os.is_ppc64() or guest.os.is_arm_machvirt() or guest.os.is_s390x():
-        # Later arm/ppc/s390x kernels figure out console= automatically, so
-        # don't warn about it.
-        return
-
-    for args in (options.extra_args or []):
-        if console_type in (args or ""):
-            return
-
-    logging.warning(_("Did not find '%(console_string)s' in --extra-args, "
-        "which is likely required to see text install output from the "
-        "guest."), {"console_string": console_type})
-
 
 def show_warnings(options, guest, installer):
     if options.pxe and not supports_pxe(guest):
