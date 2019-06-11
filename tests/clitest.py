@@ -898,6 +898,7 @@ c.add_invalid("--disk none --location nfs:example.com/fake --nonetworks")  # Usi
 
 c = vinst.add_category("kvm-x86_64-launch-security", "--disk none --noautoconsole")
 c.add_compare("--boot uefi --machine q35 --launchSecurity type=sev,reducedPhysBits=1,policy=0x0001,cbitpos=47,dhCert=BASE64CERT,session=BASE64SESSION --connect " + utils.URIs.kvm_amd_sev, "x86_64-launch-security-sev-full")  # Full cmdline
+c.add_valid("--boot uefi --machine q35 --launchSecurity sev,reducedPhysBits=1,cbitpos=47 --connect " + utils.URIs.kvm_amd_sev)  # Default policy == 0x0003 will be used
 c.add_invalid("--launchSecurity policy=0x0001 --connect " + utils.URIs.kvm_amd_sev)  # Missing launchSecurity 'type'
 
 

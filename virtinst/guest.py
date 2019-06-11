@@ -684,6 +684,7 @@ class Guest(XMLBuilder):
             seclabel.set_defaults(self)
         self.pm.set_defaults(self)
         self.os.set_defaults(self)
+        self.launchSecurity.set_defaults(self)
 
         for dev in self.devices.get_all():
             dev.set_defaults(self)
