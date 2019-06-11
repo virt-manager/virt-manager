@@ -196,7 +196,7 @@ class StoragePool(_StorageObject):
         return ret
 
     @staticmethod
-    def build_default_pool(conn):
+    def build_default_pool(conn, build=True):
         """
         Attempt to lookup the 'default' pool, but if it doesn't exist,
         create it
@@ -204,6 +204,8 @@ class StoragePool(_StorageObject):
         poolxml = _lookup_default_pool(conn)
         if poolxml:
             return poolxml
+        if not build:
+            return None
 
         try:
             name = "default"

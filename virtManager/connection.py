@@ -502,9 +502,12 @@ class vmmConnection(vmmGObject):
         return self._get_flags_helper(vm, key, check_func)
 
     def get_default_pool(self):
-        for p in self.list_pools():
-            if p.get_name() == "default":
-                return p
+        poolxml = virtinst.StoragePool.build_default_pool(
+                self.get_backend(), build=False)
+        if poolxml:
+            for p in self.list_pools():
+                if p.get_name() == poolxml.name:
+                    return p
         return None
 
     def get_vol_by_path(self, path):
