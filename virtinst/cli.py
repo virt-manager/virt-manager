@@ -2179,7 +2179,7 @@ class ParserBoot(VirtCLIParser):
         "bios.rebootTimeout": "rebootTimeout",
         "bios.useserial": "useserial",
         "bootmenu.enable": "menu",
-        "kernel_args": ["extra_args", "cmdline"],
+        "cmdline": ["extra_args", "kernel_args"],
         "loader.readonly": "loader_ro",
         "loader.type": "loader_type",
         "loader.secure": "loader_secure",
@@ -2269,7 +2269,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("kernel", "kernel")
         cls.add_arg("initrd", "initrd")
         cls.add_arg("dtb", "dtb")
-        cls.add_arg("kernel_args", "kernel_args", can_comma=True)
+        cls.add_arg("cmdline", "kernel_args", can_comma=True)
 
         cls.add_arg("boot[0-9]*.dev", "dev",
                     find_inst_cb=cls.boot_find_inst_cb)
