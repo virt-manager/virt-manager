@@ -341,7 +341,7 @@ _cdrom_location_man_page = _("See the man page for examples of "
     "using --location with CDROM media")
 
 
-def check_option_collisions(options, guest, installer):
+def check_option_collisions(options, guest):
     if options.noreboot and options.transient:
         fail(_("--noreboot and --transient can not be specified together"))
 
@@ -353,20 +353,6 @@ def check_option_collisions(options, guest, installer):
     if guest.os.is_container() and install_specified(options):
         fail(_("Install methods (%s) cannot be specified for "
                "container guests") % install_methods)
-
-    cdrom_err = ""
-    if installer.cdrom:
-        cdrom_err = " " + _cdrom_location_man_page
-    if not options.location and options.extra_args:
-        fail(_("--extra-args only work if specified with --location.") +
-             cdrom_err)
-    if not options.location and options.initrd_inject:
-        fail(_("--initrd-inject only works if specified with --location.") +
-             cdrom_err)
-
-    if options.unattended:
-        if options.initrd_inject or options.extra_args:
-            fail(_("--unattended does not support --initrd-inject nor --extra-args."))
 
 
 def _show_nographics_warnings(options, guest, installer):
@@ -494,18 +480,16 @@ def build_installer(options, guest):
             install_kernel=install_kernel,
             install_initrd=install_initrd,
             install_kernel_args=install_kernel_args)
+
     if cdrom and options.livecd:
         installer.livecd = True
     if options.unattended:
         unattended_data = cli.parse_unattended(options.unattended)
-        options.unattended = None
-
         installer.set_unattended_data(unattended_data)
-    else:
-        if extra_args:
-            installer.extra_args = extra_args
-        if options.initrd_inject:
-            installer.set_initrd_injections(options.initrd_inject)
+    if extra_args:
+        installer.set_extra_args(extra_args)
+    if options.initrd_inject:
+        installer.set_initrd_injections(options.initrd_inject)
     if options.autostart:
         installer.autostart = True
 
@@ -604,7 +588,7 @@ def build_guest_instance(conn, options):
         cli.validate_disk(disk)
 
     validate_required_options(options, guest, installer)
-    check_option_collisions(options, guest, installer)
+    check_option_collisions(options, guest)
     show_warnings(options, guest, installer)
 
     return guest, installer

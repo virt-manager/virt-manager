@@ -100,15 +100,16 @@ class InstallerTreeMedia(object):
         return system_scratchdir  # pragma: no cover
 
     def __init__(self, conn, location, location_kernel, location_initrd,
-                install_kernel, install_initrd):
+                install_kernel, install_initrd, install_kernel_args):
         self.conn = conn
         self.location = location
         self._location_kernel = location_kernel
         self._location_initrd = location_initrd
         self._install_kernel = install_kernel
         self._install_initrd = install_initrd
-
-        self.initrd_injections = []
+        self._install_kernel_args = install_kernel_args
+        self._initrd_injections = []
+        self._extra_args = []
 
         if location_kernel or location_initrd:
             if not location:
@@ -211,7 +212,7 @@ class InstallerTreeMedia(object):
         self._tmpfiles.append(initrd)
 
         perform_initrd_injections(initrd,
-                                  self.initrd_injections,
+                                  self._initrd_injections,
                                   fetcher.scratchdir)
 
         system_scratchdir = InstallerTreeMedia.get_system_scratchdir(guest)
@@ -228,28 +229,37 @@ class InstallerTreeMedia(object):
     ##############
 
     def _prepare_unattended_data(self, guest, script):
-        unattended_cmdline = script.generate_cmdline()
-        logging.debug("Generated unattended cmdline: %s", unattended_cmdline)
-
+        if not script:
+            return
         expected_filename = script.get_expected_filename()
         scriptpath = script.write(guest)
         self._tmpfiles.append(scriptpath)
-        self.initrd_injections.append((scriptpath, expected_filename))
-        return unattended_cmdline
+        self._initrd_injections.append((scriptpath, expected_filename))
+
+    def _prepare_kernel_args(self, cache, unattended_script):
+        install_args = None
+        if unattended_script:
+            install_args = unattended_script.generate_cmdline()
+            logging.debug("Generated unattended cmdline: %s", install_args)
+        elif self.is_network_url() and cache.kernel_url_arg:
+            install_args = "%s=%s" % (cache.kernel_url_arg, self.location)
+
+        if install_args:
+            self._extra_args.append(install_args)
+
+        if self._install_kernel_args:
+            return self._install_kernel_args
+        return " ".join(self._extra_args)
 
     def prepare(self, guest, meter, unattended_script):
         fetcher = self._get_fetcher(guest, meter)
         cache = self._get_cached_data(guest, fetcher)
 
-        kernel_args = ""
-        if unattended_script:
-            kernel_args = self._prepare_unattended_data(
-                    guest, unattended_script)
-        elif self.is_network_url() and cache.kernel_url_arg:
-            kernel_args = "%s=%s" % (cache.kernel_url_arg, self.location)
+        self._prepare_unattended_data(guest, unattended_script)
+        kernel_args = self._prepare_kernel_args(cache, unattended_script)
 
         kernel, initrd = self._prepare_kernel_url(guest, cache, fetcher)
-        return kernel, initrd, kernel_args or ""
+        return kernel, initrd, kernel_args
 
     def cleanup(self, guest):
         ignore = guest
@@ -263,6 +273,12 @@ class InstallerTreeMedia(object):
 
         self._tmpvols = []
         self._tmpfiles = []
+
+    def set_initrd_injections(self, initrd_injections):
+        self._initrd_injections = initrd_injections
+
+    def set_extra_args(self, extra_args):
+        self._extra_args = extra_args
 
     def cdrom_path(self):
         if self._media_type in [MEDIA_ISO]:

@@ -1595,7 +1595,7 @@ class vmmCreate(vmmGObjectUI):
         # Validate media location
         try:
             if extra:
-                installer.extra_args = [extra]
+                installer.set_extra_args([extra])
             if init:
                 self._guest.os.init = init
 

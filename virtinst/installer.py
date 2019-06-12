@@ -36,7 +36,7 @@ class Installer(object):
     :param install_kernel: Kernel to install off of
     :param install_initrd: Initrd to install off of
     :param install_kernel_args: Kernel args <cmdline> to use. This overwrites
-        whatever the installer might request, unlink extra_args which will
+        whatever the installer might request, unlike extra_args which will
         append arguments.
     """
     def __init__(self, conn, cdrom=None, location=None, install_bootdev=None,
@@ -45,13 +45,11 @@ class Installer(object):
         self.conn = conn
 
         self.livecd = False
-        self.extra_args = []
 
         # Entry point for virt-manager 'Customize' wizard to change autostart
         self.autostart = False
 
         self._install_bootdev = install_bootdev
-        self._install_kernel_args = install_kernel_args
         self._install_cdrom_device_added = False
         self._unattended_install_cdrom_device = None
         self._tmpfiles = []
@@ -69,7 +67,7 @@ class Installer(object):
               install_kernel or install_initrd):
             self._treemedia = InstallerTreeMedia(self.conn, location,
                     location_kernel, location_initrd,
-                    install_kernel, install_initrd)
+                    install_kernel, install_initrd, install_kernel_args)
 
 
     ###################
@@ -164,20 +162,14 @@ class Installer(object):
             return
 
         kernel, initrd, kernel_args = self._treemedia_bootconfig
-        if kernel_args:
-            self.extra_args.append(kernel_args)
-
         if kernel:
             guest.os.kernel = (self.conn.in_testsuite() and
                     "/TESTSUITE_KERNEL_PATH" or kernel)
         if initrd:
             guest.os.initrd = (self.conn.in_testsuite() and
                     "/TESTSUITE_INITRD_PATH" or initrd)
-
-        if self._install_kernel_args:
-            guest.os.kernel_args = self._install_kernel_args
-        elif self.extra_args:
-            guest.os.kernel_args = " ".join(self.extra_args)
+        if kernel_args:
+            guest.os.kernel_args = kernel_args
 
     def _alter_bootconfig(self, guest):
         """
@@ -302,8 +294,16 @@ class Installer(object):
         return self._cdrom
 
     def set_initrd_injections(self, initrd_injections):
-        if self._treemedia:
-            self._treemedia.initrd_injections = initrd_injections
+        if not self._treemedia:
+            raise RuntimeError("Install method does not support "
+                    "initrd injections.")
+        self._treemedia.set_initrd_injections(initrd_injections)
+
+    def set_extra_args(self, extra_args):
+        if not self._treemedia:
+            raise RuntimeError("Kernel arguments are only supported with "
+                    "location or kernel installs.")
+        self._treemedia.set_extra_args(extra_args)
 
     def set_install_defaults(self, guest):
         """
