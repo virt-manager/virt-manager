@@ -233,7 +233,7 @@ def _find_default_profile(profile_names):
     return found or profile_names[0]
 
 
-def _lookup_rawscript(guest, profile, os_media):
+def _lookup_rawscript(osinfo, profile, os_media):
     script_list = []
 
     if os_media:
@@ -242,18 +242,18 @@ def _lookup_rawscript(guest, profile, os_media):
             # don't support unattended installs
             raise RuntimeError(
                 _("OS '%s' media does not support unattended "
-                  "installation") % (guest.osinfo.name))
+                  "installation") % (osinfo.name))
 
         # In case we're dealing with a media installation, let's try to get
         # the installer scripts from the media, in case any is set.
         script_list = os_media.get_install_script_list()
 
     if not script_list:
-        script_list = guest.osinfo.get_install_script_list()
+        script_list = osinfo.get_install_script_list()
     if not script_list:
         raise RuntimeError(
             _("OS '%s' does not support unattended installation.") %
-            guest.osinfo.name)
+            osinfo.name)
 
     script_map = _make_scriptmap(script_list)
     profile_names = list(sorted(script_map.keys()))
@@ -263,7 +263,7 @@ def _lookup_rawscript(guest, profile, os_media):
             raise RuntimeError(
                 _("OS '%s' does not support unattended installation for "
                   "the '%s' profile. Available profiles: %s") %
-                (guest.osinfo.name, profile, ", ".join(profile_names)))
+                (osinfo.name, profile, ", ".join(profile_names)))
     else:
         profile = _find_default_profile(profile_names)
         logging.warning(_("Using unattended profile '%s'"), profile)
@@ -279,7 +279,8 @@ def _lookup_rawscript(guest, profile, os_media):
     return usescript
 
 
-def prepare_install_script(guest, unattended_data, url, os_media):
+def prepare_install_script(guest, unattended_data,
+        url, os_media, injection_method):
     def _get_installation_source(os_media):
         # This is ugly, but that's only the current way to deal with
         # netinstall medias.
@@ -289,12 +290,10 @@ def prepare_install_script(guest, unattended_data, url, os_media):
             return "network"
         return "media"
 
-    rawscript = _lookup_rawscript(guest, unattended_data.profile, os_media)
+    rawscript = _lookup_rawscript(guest.osinfo,
+            unattended_data.profile, os_media)
     script = OSInstallScript(rawscript, guest.osinfo)
 
-    # For all tree based installations we're going to perform initrd injection
-    # and install the systems via network.
-    injection_method = "cdrom" if guest.osinfo.is_windows() else "initrd"
     script.set_preferred_injection_method(injection_method)
 
     installationsource = _get_installation_source(os_media)

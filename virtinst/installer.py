@@ -230,15 +230,21 @@ class Installer(object):
             if self._treemedia.is_network_url():
                 url = self.location
             os_media = self._treemedia.get_os_media(guest, meter)
+            injection_method = "initrd"
         else:
             if self.conn.is_remote():
                 raise RuntimeError("Unattended method=cdrom installs are "
                         "not yet supported for remote connections.")
+            if not guest.osinfo.is_windows():
+                logging.warning("Attempting unattended method=cdrom injection "
+                        "for a non-windows OS. If this doesn't work, try "
+                        "passing install media to --location")
             osguess = OSDB.guess_os_by_iso(self.cdrom)
             os_media = osguess[1] if osguess else None
+            injection_method = "cdrom"
 
         return unattended.prepare_install_script(
-                guest, self._unattended_data, url, os_media)
+                guest, self._unattended_data, url, os_media, injection_method)
 
     def _prepare(self, guest, meter):
         unattended_script = None
