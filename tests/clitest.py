@@ -909,8 +909,8 @@ c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob
 c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", prerun_check=missing_isoinfo)  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
 c.add_compare("--disk %(EXISTIMG1)s --install bootdev=network --os-variant rhel5.4", "kvm-rhel5")  # RHEL5 defaults
-c.add_compare("--disk %(EXISTIMG1)s --install kernel=./foo,initrd=./bar --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7", prerun_check=has_old_osinfo)  # RHEL7 defaults
+c.add_compare("--disk %(EXISTIMG1)s --install kernel=./foo,initrd=./bar,kernel_args='foo bar' --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
+c.add_compare("--disk %(EXISTIMG1)s --location https://example.com --install kernel_args='test overwrite',kernel_args_overwrite=yes --os-variant rhel7.0", "kvm-rhel7", prerun_check=has_old_osinfo)  # RHEL7 defaults
 c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", prerun_check=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
 c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --cpu host-copy --disk none --pxe", "kvm-hostcopy-fallback")  # No domcaps so need to use capabilities for CPU host-copy
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
@@ -1304,6 +1304,7 @@ _add_argcomplete_cmd("virt-install --disk path=fooo,", "driver.cache")  # will l
 _add_argcomplete_cmd("virt-install --disk source.seclab", "source.seclabel.relabel")  # completer should strip out regexes from results
 _add_argcomplete_cmd("virt-install --check d", "disk_size")
 _add_argcomplete_cmd("virt-install --location k", "kernel")
+_add_argcomplete_cmd("virt-install --install i", "initrd")
 _add_argcomplete_cmd("virt-install --os-variant nam", "name")
 _add_argcomplete_cmd("virt-install --test-stub", None,
         nogrep="--test-stub-command")

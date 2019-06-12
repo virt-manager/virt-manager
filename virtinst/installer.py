@@ -34,11 +34,14 @@ class Installer(object):
         path to indicate where the kernel is stored in location
     :param location_initrd: location_kernel, but pointing to an initrd
     :param install_kernel: Kernel to install off of
-    :param install initrd: Initrd to install off of
+    :param install_initrd: Initrd to install off of
+    :param install_kernel_args: Kernel args <cmdline> to use. This overwrites
+        whatever the installer might request, unlink extra_args which will
+        append arguments.
     """
     def __init__(self, conn, cdrom=None, location=None, install_bootdev=None,
             location_kernel=None, location_initrd=None,
-            install_kernel=None, install_initrd=None):
+            install_kernel=None, install_initrd=None, install_kernel_args=None):
         self.conn = conn
 
         self.livecd = False
@@ -50,6 +53,7 @@ class Installer(object):
         self._install_bootdev = install_bootdev
         self._install_kernel = None
         self._install_initrd = None
+        self._install_kernel_args = install_kernel_args
         self._install_cdrom_device_added = False
         self._unattended_install_cdrom_device = None
         self._tmpfiles = []
@@ -173,7 +177,10 @@ class Installer(object):
         if self._install_initrd:
             guest.os.initrd = (self.conn.in_testsuite() and
                     "/TESTSUITE_INITRD_PATH" or self._install_initrd)
-        if self.extra_args:
+
+        if self._install_kernel_args:
+            guest.os.kernel_args = self._install_kernel_args
+        elif self.extra_args:
             guest.os.kernel_args = " ".join(self.extra_args)
 
         bootdev = self._install_bootdev
@@ -245,7 +252,7 @@ class Installer(object):
                     unattended_script)
             self._install_kernel = k
             self._install_initrd = i
-            if a and "VIRTINST_INITRD_TEST" not in os.environ:
+            if a:
                 self.extra_args.append(a)
 
         elif unattended_script:

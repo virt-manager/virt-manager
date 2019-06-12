@@ -424,6 +424,7 @@ def build_installer(options, guest):
     installdata = None
     install_kernel = None
     install_initrd = None
+    install_kernel_args = None
 
     has_installer = True
 
@@ -451,6 +452,18 @@ def build_installer(options, guest):
                     "Generated default libosinfo '--location %s'", location)
             options.location = location
 
+    extra_args = options.extra_args
+    if installdata:
+        install_bootdev = installdata.bootdev
+        install_kernel = installdata.kernel
+        install_initrd = installdata.initrd
+        install_kernel_args = installdata.kernel_args
+        if installdata.kernel_args:
+            if installdata.kernel_args_overwrite:
+                install_kernel_args = installdata.kernel_args
+            else:
+                extra_args = [installdata.kernel_args]
+
     if options.location:
         (location,
          location_kernel,
@@ -459,14 +472,11 @@ def build_installer(options, guest):
         cdrom = options.cdrom
     elif options.pxe:
         install_bootdev = "network"
-    elif installdata:
-        install_bootdev = installdata.bootdev
-        install_kernel = installdata.kernel
-        install_initrd = installdata.initrd
     elif (guest.os.is_container() or
           options.import_install or
           options.xmlonly or
-          options.boot):
+          options.boot or
+          installdata):
         pass
     else:
         has_installer = False
@@ -482,7 +492,8 @@ def build_installer(options, guest):
             location_initrd=location_initrd,
             install_bootdev=install_bootdev,
             install_kernel=install_kernel,
-            install_initrd=install_initrd)
+            install_initrd=install_initrd,
+            install_kernel_args=install_kernel_args)
     if cdrom and options.livecd:
         installer.livecd = True
     if options.unattended:
@@ -491,8 +502,8 @@ def build_installer(options, guest):
 
         installer.set_unattended_data(unattended_data)
     else:
-        if options.extra_args:
-            installer.extra_args = options.extra_args
+        if extra_args:
+            installer.extra_args = extra_args
         if options.initrd_inject:
             installer.set_initrd_injections(options.initrd_inject)
     if options.autostart:

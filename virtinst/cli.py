@@ -463,7 +463,7 @@ def get_meter():
 
 def _get_completer_parsers():
     return VIRT_PARSERS + [ParserCheck, ParserLocation, ParserOSVariant,
-            ParserUnattended]
+            ParserUnattended, ParserInstall]
 
 
 def _virtparser_completer(prefix, **kwargs):
@@ -1570,6 +1570,9 @@ class ParserInstall(VirtCLIParser):
         cls.add_arg("bootdev", "bootdev", can_comma=True)
         cls.add_arg("kernel", "kernel", can_comma=True)
         cls.add_arg("initrd", "initrd", can_comma=True)
+        cls.add_arg("kernel_args", "kernel_args", can_comma=True)
+        cls.add_arg("kernel_args_overwrite", "kernel_args_overwrite",
+                is_onoff=True)
 
 
 class InstallData:
@@ -1577,6 +1580,8 @@ class InstallData:
         self.bootdev = None
         self.kernel = None
         self.initrd = None
+        self.kernel_args = None
+        self.kernel_args_overwrite = None
 
 
 def parse_install(optstr):
