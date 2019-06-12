@@ -3,6 +3,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import os
 import unittest
 
 from virtinst import Guest
@@ -68,3 +69,28 @@ class TestOSDB(unittest.TestCase):
             raise AssertionError("Expected failure")
         except RuntimeError as e:
             assert str(e).endswith("URL location")
+
+        # Trigger an error path for code coverage
+        self.assertEqual(OSDB.guess_os_by_tree(os.getcwd()), None)
+
+    def test_kernel_url(self):
+        def _c(name):
+            osobj = OSDB.lookup_os(name)
+            if not osobj:
+                self.skipTest("osinfo-db doesn't have '%s'" % name)
+            return osobj.get_kernel_url_arg()
+
+        self.assertEqual(_c("rhel7-unknown"), "inst.repo")
+        self.assertEqual(_c("rhel6-unknown"), "method")
+        self.assertEqual(_c("fedora-rawhide"), "inst.repo")
+        self.assertEqual(_c("fedora20"), "inst.repo")
+        self.assertEqual(_c("generic"), None)
+        self.assertEqual(_c("win10"), None)
+        self.assertEqual(_c("sle15"), "install")
+
+    def test_related_to(self):
+        # pylint: disable=protected-access
+        win10 = OSDB.lookup_os("win10")
+        self.assertTrue(win10._is_related_to("winxp"))
+        self.assertTrue(win10._is_related_to("win10"))
+        self.assertTrue(win10._is_related_to("fedora26") is False)

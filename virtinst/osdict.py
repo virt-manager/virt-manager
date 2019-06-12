@@ -233,7 +233,7 @@ class _OSDB(object):
             return None
 
         if not self._os_loader.get_db().identify_media(media):
-            return None
+            return None  # pragma: no cover
         return media.get_os().get_short_id(), _OsMedia(media)
 
     def guess_os_by_tree(self, location):
@@ -254,7 +254,7 @@ class _OSDB(object):
 
         osobj, treeobj = self._os_loader.get_db().guess_os_from_tree(tree)
         if not osobj:
-            return None
+            return None  # pragma: no cover
         return osobj.get_short_id(), treeobj
 
     def list_os(self):
@@ -552,7 +552,10 @@ class _OsVariant(object):
 
         # Red Hat distros
         try:
-            version = float(self.version)
+            if re.match(r"[0-9]+-unknown", self.version):
+                version = float(self.version.split("-")[0])
+            else:
+                version = float(self.version)
         except Exception:
             # Can hit this for -rawhide or -unknown
             version = 999
@@ -589,7 +592,7 @@ class _OsVariant(object):
 
     def get_install_script_list(self):
         if not self._os:
-            return []
+            return []  # pragma: no cover
         return list(_OsinfoIter(self._os.get_install_script_list()))
 
 
