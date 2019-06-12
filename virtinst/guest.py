@@ -884,9 +884,6 @@ class Guest(XMLBuilder):
             return
         if self.devices.channel:
             return
-        if self.os.is_s390x():
-            # Not wanted for s390 apparently
-            return
 
         if (self.conn.is_qemu() and
             self._supports_virtioserial() and

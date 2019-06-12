@@ -37,6 +37,10 @@
     <console type="pty">
       <target type="sclp"/>
     </console>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
     <rng model="virtio">
       <backend model="random">/dev/urandom</backend>
     </rng>
