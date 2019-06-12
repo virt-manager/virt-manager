@@ -6,7 +6,8 @@
   <os>
     <type arch="i686" machine="pc">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</loader>
-    <boot dev="network"/>
+    <kernel>/TESTSUITE_KERNEL_PATH</kernel>
+    <initrd>/TESTSUITE_INITRD_PATH</initrd>
   </os>
   <features>
     <acpi/>
@@ -62,7 +63,7 @@
   <os>
     <type arch="i686" machine="pc">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</loader>
-    <boot dev="network"/>
+    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>

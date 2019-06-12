@@ -19,7 +19,8 @@ from .osdict import OSDB
 # Enum of the various install media types we can have
 (MEDIA_DIR,
  MEDIA_ISO,
- MEDIA_URL) = range(1, 4)
+ MEDIA_URL,
+ MEDIA_KERNEL) = range(1, 5)
 
 
 def _is_url(url):
@@ -98,11 +99,15 @@ class InstallerTreeMedia(object):
 
         return system_scratchdir  # pragma: no cover
 
-    def __init__(self, conn, location, location_kernel, location_initrd):
+    def __init__(self, conn, location, location_kernel, location_initrd,
+                install_kernel, install_initrd):
         self.conn = conn
         self.location = location
         self._location_kernel = location_kernel
         self._location_initrd = location_initrd
+        self._install_kernel = install_kernel
+        self._install_initrd = install_initrd
+
         self.initrd_injections = []
 
         if location_kernel or location_initrd:
@@ -119,16 +124,21 @@ class InstallerTreeMedia(object):
         self._tmpfiles = []
         self._tmpvols = []
 
-        self._media_type = MEDIA_ISO
-        if (not self.conn.is_remote() and
-            os.path.exists(self.location) and
-            os.path.isdir(self.location)):
+        if self._install_kernel or self._install_initrd:
+            self._media_type = MEDIA_KERNEL
+        elif (not self.conn.is_remote() and
+              os.path.exists(self.location) and
+              os.path.isdir(self.location)):
             self.location = os.path.abspath(self.location)
             self._media_type = MEDIA_DIR
         elif _is_url(self.location):
             self._media_type = MEDIA_URL
+        else:
+            self._media_type = MEDIA_ISO
 
-        if self.conn.is_remote() and not self._media_type == MEDIA_URL:
+        if (self.conn.is_remote() and
+                not self._media_type == MEDIA_URL and
+            not self._media_type == MEDIA_KERNEL):
             raise ValueError(_("Cannot access install tree on remote "
                 "connection: %s") % self.location)
 
@@ -146,32 +156,44 @@ class InstallerTreeMedia(object):
         if not self._cached_fetcher:
             scratchdir = InstallerTreeMedia.make_scratchdir(guest)
 
-            self._cached_fetcher = urlfetcher.fetcherForURI(
-                self.location, scratchdir, meter)
+            if self._media_type == MEDIA_KERNEL:
+                self._cached_fetcher = urlfetcher.DirectFetcher(
+                    None, scratchdir, meter)
+            else:
+                self._cached_fetcher = urlfetcher.fetcherForURI(
+                    self.location, scratchdir, meter)
 
         self._cached_fetcher.meter = meter
         return self._cached_fetcher
 
     def _get_cached_data(self, guest, fetcher):
-        if not self._cached_data:
-            has_location_kernel = bool(
-                    self._location_kernel and self._location_initrd)
+        if self._cached_data:
+            return self._cached_data
+
+        store = None
+        os_variant = None
+        os_media = None
+        kernel_paths = []
+        has_location_kernel = bool(
+                self._location_kernel and self._location_initrd)
+
+        if self._media_type == MEDIA_KERNEL:
+            kernel_paths = [
+                    (self._install_kernel, self._install_initrd)]
+        else:
             store = urldetect.getDistroStore(guest, fetcher,
                     skip_error=has_location_kernel)
 
-            os_variant = None
-            os_media = None
-            kernel_paths = []
-            if store:
-                kernel_paths = store.get_kernel_paths()
-                os_variant = store.get_osdict_info()
-                os_media = store.get_os_media()
-            if has_location_kernel:
-                kernel_paths = [
-                        (self._location_kernel, self._location_initrd)]
+        if store:
+            kernel_paths = store.get_kernel_paths()
+            os_variant = store.get_osdict_info()
+            os_media = store.get_os_media()
+        if has_location_kernel:
+            kernel_paths = [
+                    (self._location_kernel, self._location_initrd)]
 
-            self._cached_data = _LocationData(os_variant, kernel_paths,
-                    os_media)
+        self._cached_data = _LocationData(os_variant, kernel_paths,
+                os_media)
         return self._cached_data
 
     def _prepare_kernel_url(self, guest, cache, fetcher):

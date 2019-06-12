@@ -119,12 +119,15 @@ class _URLFetcher(object):
             return self.location
         return os.path.join(self.location, filename)
 
-    def _grabURL(self, filename, fileobj):
+    def _grabURL(self, filename, fileobj, fullurl=None):
         """
         Download the filename from self.location, and write contents to
         fileobj
         """
-        url = self._make_full_url(filename)
+        if fullurl:
+            url = fullurl
+        else:
+            url = self._make_full_url(filename)
 
         try:
             urlobj, size = self._grabber(url)
@@ -203,7 +206,7 @@ class _URLFetcher(object):
         logging.debug("hasFile(%s) returning %s", url, ret)
         return ret
 
-    def acquireFile(self, filename):
+    def acquireFile(self, filename, fullurl=None):
         """
         Grab the passed filename from self.location and save it to
         a temporary file, returning the temp filename
@@ -217,7 +220,7 @@ class _URLFetcher(object):
                 dir=self.scratchdir, prefix=prefix, delete=False)
             fn = fileobj.name
 
-            self._grabURL(filename, fileobj)
+            self._grabURL(filename, fileobj, fullurl=fullurl)
             logging.debug("Saved file to %s", fn)
             return fn
         except:  # noqa
@@ -401,15 +404,33 @@ class _ISOURLFetcher(_URLFetcher):
         return url.encode("ascii") in self._cache_file_list
 
 
-def fetcherForURI(uri, *args, **kwargs):
+class DirectFetcher(_URLFetcher):
+    def _make_full_url(self, filename):
+        return filename
+
+    def acquireFile(self, filename, fullurl=None):
+        fullurl = filename
+        filename = os.path.basename(filename)
+        fetcher = fetcherForURI(fullurl, self.scratchdir, self.meter, direct=True)
+        return fetcher.acquireFile(filename, fullurl)  # pylint: disable=protected-access
+
+    def _hasFile(self, url):
+        return True
+
+    def _grabber(self, url):
+        raise RuntimeError(  # pragma: no cover
+                "DirectFetcher shouldn't be used for file access.")
+
+
+def fetcherForURI(uri, scratchdir, meter, direct=False):
     if uri.startswith("http://") or uri.startswith("https://"):
         fclass = _HTTPURLFetcher
     elif uri.startswith("ftp://"):
         fclass = _FTPURLFetcher
-    elif os.path.isdir(uri):
+    elif direct or os.path.isdir(uri):
         # Pointing to a local tree
         fclass = _LocalURLFetcher
     else:
         # Pointing to a path (e.g. iso), or a block device (e.g. /dev/cdrom)
         fclass = _ISOURLFetcher
-    return fclass(uri, *args, **kwargs)
+    return fclass(uri, scratchdir, meter)

@@ -51,8 +51,6 @@ class Installer(object):
         self.autostart = False
 
         self._install_bootdev = install_bootdev
-        self._install_kernel = None
-        self._install_initrd = None
         self._install_kernel_args = install_kernel_args
         self._install_cdrom_device_added = False
         self._unattended_install_cdrom_device = None
@@ -61,18 +59,17 @@ class Installer(object):
         self._unattended_data = None
 
         self._treemedia = None
+        self._treemedia_bootconfig = None
         self._cdrom = None
         if cdrom:
             cdrom = InstallerTreeMedia.validate_path(self.conn, cdrom)
             self._cdrom = cdrom
             self._install_bootdev = "cdrom"
-        elif location or location_kernel or location_initrd:
+        elif (location or location_kernel or location_initrd or
+              install_kernel or install_initrd):
             self._treemedia = InstallerTreeMedia(self.conn, location,
-                    location_kernel, location_initrd)
-        elif install_kernel or install_initrd:
-            self._install_kernel = os.path.realpath(install_kernel)
-            self._install_initrd = os.path.realpath(install_initrd)
-            self._install_bootdev = None
+                    location_kernel, location_initrd,
+                    install_kernel, install_initrd)
 
 
     ###################
@@ -162,6 +159,26 @@ class Installer(object):
             not guest.os.kernel and
             not any([d.boot.order for d in guest.devices.get_all()]))
 
+    def _alter_treemedia_bootconfig(self, guest):
+        if not self._treemedia:
+            return
+
+        kernel, initrd, kernel_args = self._treemedia_bootconfig
+        if kernel_args:
+            self.extra_args.append(kernel_args)
+
+        if kernel:
+            guest.os.kernel = (self.conn.in_testsuite() and
+                    "/TESTSUITE_KERNEL_PATH" or kernel)
+        if initrd:
+            guest.os.initrd = (self.conn.in_testsuite() and
+                    "/TESTSUITE_INITRD_PATH" or initrd)
+
+        if self._install_kernel_args:
+            guest.os.kernel_args = self._install_kernel_args
+        elif self.extra_args:
+            guest.os.kernel_args = " ".join(self.extra_args)
+
     def _alter_bootconfig(self, guest):
         """
         Generate the portion of the guest xml that determines boot devices
@@ -170,18 +187,7 @@ class Installer(object):
         :param guest: Guest instance we are installing
         """
         guest.on_reboot = "destroy"
-
-        if self._install_kernel:
-            guest.os.kernel = (self.conn.in_testsuite() and
-                    "/TESTSUITE_KERNEL_PATH" or self._install_kernel)
-        if self._install_initrd:
-            guest.os.initrd = (self.conn.in_testsuite() and
-                    "/TESTSUITE_INITRD_PATH" or self._install_initrd)
-
-        if self._install_kernel_args:
-            guest.os.kernel_args = self._install_kernel_args
-        elif self.extra_args:
-            guest.os.kernel_args = " ".join(self.extra_args)
+        self._alter_treemedia_bootconfig(guest)
 
         bootdev = self._install_bootdev
         if bootdev and self._can_set_guest_bootorder(guest):
@@ -248,12 +254,8 @@ class Installer(object):
             unattended_script = self._prepare_unattended_script(guest, meter)
 
         if self._treemedia:
-            k, i, a = self._treemedia.prepare(guest, meter,
+            self._treemedia_bootconfig = self._treemedia.prepare(guest, meter,
                     unattended_script)
-            self._install_kernel = k
-            self._install_initrd = i
-            if a:
-                self.extra_args.append(a)
 
         elif unattended_script:
             self._prepare_unattended_data(guest, unattended_script)
@@ -346,8 +348,6 @@ class Installer(object):
             return False
         return bool(self._cdrom or
                     self._install_bootdev or
-                    self._install_kernel or
-                    self._install_initrd or
                     self._treemedia)
 
     def detect_distro(self, guest):
