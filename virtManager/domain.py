@@ -540,6 +540,7 @@ class vmmDomain(vmmLibvirtObject):
             else:
                 # Implies UEFI
                 guest.set_uefi_path(loader)
+                guest.disable_hyperv_for_uefi()
 
         if nvram != _SENTINEL:
             guest.os.nvram = nvram

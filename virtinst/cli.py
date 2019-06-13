@@ -2223,6 +2223,8 @@ class ParserBoot(VirtCLIParser):
 
     def set_uefi_cb(self, inst, val, virtarg):
         self.guest.set_uefi_path(self.guest.get_uefi_path())
+        if self.editing:
+            self.guest.disable_hyperv_for_uefi()
 
     def set_initargs_cb(self, inst, val, virtarg):
         inst.set_initargs_string(val)
