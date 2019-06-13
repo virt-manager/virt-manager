@@ -59,6 +59,7 @@ class VMMPrefs(uiutils.UITestCase):
 
     def testPrefsXMLEditor(self):
         managerwin = self.app.topwin
+        uiutils.drag(managerwin, 0, 200)
         detailswin = self._open_details_window(vmname="test-clone-simple")
         finish = detailswin.find("config-apply")
         xmleditor = detailswin.find("XML editor")
@@ -70,6 +71,7 @@ class VMMPrefs(uiutils.UITestCase):
         xmleditor.typeText("1234abcd")
         self.assertEqual(xmleditor.text, origtext)
 
+        managerwin.grabFocus()
         managerwin.click()
         managerwin.find("Edit", "menu").click()
         managerwin.find("Preferences", "menu item").click()

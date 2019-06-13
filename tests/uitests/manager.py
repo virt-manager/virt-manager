@@ -1,8 +1,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import dogtail.rawinput
-
 from tests.uitests import utils as uiutils
 
 
@@ -106,10 +104,7 @@ class Manager(uiutils.UITestCase):
             """
             Drag a window so it's not obscuring the manager window
             """
-            win.click()
-            clickX = win.position[0] + win.size[0] / 2
-            clickY = win.position[1] + 10
-            dogtail.rawinput.drag((clickX, clickY), (1000, 1000))
+            uiutils.drag(win, 1000, 1000)
 
         manager = self.app.topwin
 

@@ -243,6 +243,16 @@ def check_in_loop(func, timeout=2):
         time.sleep(interval)
 
 
+def drag(win, x, y):
+    """
+    Drag a window to the x/y coordinates
+    """
+    win.click()
+    clickX = win.position[0] + win.size[0] / 2
+    clickY = win.position[1] + 10
+    dogtail.rawinput.drag((clickX, clickY), (x, y))
+
+
 class VMMDogtailNode(dogtail.tree.Node):
     """
     Our extensions to the dogtail node wrapper class.
