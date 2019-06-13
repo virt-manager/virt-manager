@@ -3576,6 +3576,12 @@ class ParserMemballoon(VirtCLIParser):
         cls.add_arg("autodeflate", "autodeflate", is_onoff=True)
         cls.add_arg("stats.period", "stats_period")
 
+    def _parse(self, inst):
+        if self.optstr == "none":
+            self.guest.disable_default_memballoon = True
+
+        return super()._parse(inst)
+
 
 ###################
 # --panic parsing #
