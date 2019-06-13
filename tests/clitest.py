@@ -795,7 +795,7 @@ c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machi
 
 c = vinst.add_category("nodisk-install", "--nographics --noautoconsole --nodisks")
 c.add_valid("--hvm --cdrom %(EXISTIMG1)s")  # Simple cdrom install
-c.add_valid("--wait 0 --os-variant winxp --cdrom %(EXISTIMG1)s")  # Windows (2 stage) install
+c.add_valid("--os-variant winxp --cdrom %(EXISTIMG1)s")  # Windows (2 stage) install
 c.add_valid("--pxe --virt-type test")  # Explicit virt-type
 c.add_valid("--arch i686 --pxe")  # Explicitly fullvirt + arch
 c.add_valid("--location location=%(TREEDIR)s")  # Directory tree URL install
@@ -804,8 +804,8 @@ c.add_valid("--hvm --location %(TREEDIR)s --extra-args console=ttyS0")  # Direct
 c.add_valid("--paravirt --location %(TREEDIR)s")  # Paravirt location
 c.add_valid("--paravirt --location %(TREEDIR)s --os-variant none")  # Paravirt location with --os-variant none
 c.add_valid("--location %(TREEDIR)s --os-variant fedora12")  # URL install with manual os-variant
-c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0")  # HVM windows install with disk
-c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --print-step 2")  # HVM windows install, print 3rd stage XML
+c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3")  # HVM windows install with disk
+c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --print-step 2")  # HVM windows install, print 3rd stage XML
 c.add_valid("--pxe --autostart")  # --autostart flag
 c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
 c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
@@ -831,7 +831,11 @@ c.add_valid("--hvm --import")  # FV Import install
 c.add_valid("--hvm --import --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
 c.add_valid("--paravirt --import")  # PV Import install
 c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import install
-c.add_compare("-c %(EXISTIMG2)s --os-variant win2k3 --wait 0 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
+c.add_compare("-c %(EXISTIMG2)s --os-variant win2k3 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
+c.add_invalid("--hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
+c.add_invalid("--hvm --import --wait 0", grep="exceeded specified time limit")  # --wait 0, but test suite hack
+c.add_invalid("--hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
+c.add_invalid("--connect test:///default --name foo --ram 64 --disk none --sdl --hvm --import", use_default_args=False, grep="exceeded specified time limit")  # --sdl doesn't have a console callback, triggers implicit --wait -1
 c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no second XML step
 c.add_invalid("--paravirt --import --print-xml 7")  # Invalid --print-xml arg
 c.add_invalid("--location kernel=foo,initrd=bar")  # location kernel/initrd without any url
@@ -894,7 +898,7 @@ c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --noautoconsole")
 c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none --boot cmdline='foo bar baz'", "kvm-fedoralatest-url", prerun_check=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s --arch x86_64 --hvm", "test-url-detection")  # --test-media-detection
 c.add_compare("--os-variant full_id=http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
-c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
+c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
 
@@ -1061,7 +1065,6 @@ c.add_valid("--nographics --cdrom %(EXISTIMG1)s")  # console warning about cdrom
 c.add_valid("--nographics --console none --location %(TREEDIR)s")  # console warning about nographics + --console none
 c.add_valid("--nographics --console none --location %(TREEDIR)s")  # console warning about nographics + --console none
 c.add_valid("--nographics --location %(TREEDIR)s")  # console warning about nographics + missing extra args
-c.add_invalid("--pxe --noautoconsole --wait 1", grep="Installation has exceeded specified time limit")  # --wait 1 is converted to 1 second if we are in the test suite, so this should actually touch the wait machinery. however in this case it exits with failure
 c.add_valid("--pxe --nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling
 
 
