@@ -14,6 +14,7 @@ import libvirt
 from virtcli import CLIConfig
 
 from . import generatename
+from . import xmlutil
 from .devices import *  # pylint: disable=wildcard-import
 from .domain import *  # pylint: disable=wildcard-import
 from .domcapabilities import DomainCapabilities
@@ -229,6 +230,7 @@ class Guest(XMLBuilder):
         self.skip_default_rng = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
 
+        self.skip_default_osinfo = False
         self.__osinfo = None
         self._capsinfo = None
         self._domcaps = None
@@ -326,7 +328,13 @@ class Guest(XMLBuilder):
                         "find any libosinfo object matching that", os_id)
 
         if not self.__osinfo:
-            self._set_os_obj(OSDB.lookup_os("generic"))
+            # If you hit this error, it means some part of the cli
+            # tried to access osinfo before we can depend on it being
+            # available. Try moving whatever bits need osinfo to be
+            # triggered via set_defaults
+            xmlutil.raise_programming_error(self.skip_default_osinfo,
+                    "osinfo is accessed before it has been set.")
+            self.set_default_os_name()
         return self.__osinfo
     osinfo = property(_get_osinfo)
 
@@ -465,6 +473,9 @@ class Guest(XMLBuilder):
 
         logging.debug("Setting Guest osinfo full_id %s", obj)
         self._set_os_obj(obj)
+
+    def set_default_os_name(self):
+        self.set_os_name("generic")
 
     def _supports_virtio(self, os_support):
         if not self.conn.is_qemu():
