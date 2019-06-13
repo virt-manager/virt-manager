@@ -1321,9 +1321,10 @@ class VirtCLIParser(metaclass=_InitClass):
     def _init_class(cls, **kwargs):
         """This method also terminates the super() chain"""
 
-    def __init__(self, optstr, guest=None):
+    def __init__(self, optstr, guest=None, editing=None):
         self.optstr = optstr
         self.guest = guest
+        self.editing = editing
         self.optdict = _parse_optstr_to_dict(self.optstr,
                 self._virtargs, xmlutil.listify(self.remove_first)[:])
 
@@ -1412,7 +1413,7 @@ class VirtCLIParser(metaclass=_InitClass):
         self._check_leftover_opts(optdict)
         return inst
 
-    def parse(self, inst, validate=True):
+    def parse(self, inst):
         """
         Main entry point. Iterate over self._virtargs, and serialize
         self.optdict into 'inst'.
@@ -1439,7 +1440,7 @@ class VirtCLIParser(metaclass=_InitClass):
         try:
             objs = self._parse(inst is None and self.guest or inst)
             for obj in xmlutil.listify(objs):
-                if validate and hasattr(obj, "validate"):
+                if not self.editing and hasattr(obj, "validate"):
                     obj.validate()
                 if not new_object:
                     continue
@@ -3871,13 +3872,13 @@ class ParserLaunchSecurity(VirtCLIParser):
 # Public virt parser APIs #
 ###########################
 
-def parse_option_strings(options, guest, instlist, update=False):
+def parse_option_strings(options, guest, instlist, editing=False):
     """
     Iterate over VIRT_PARSERS, and launch the associated parser
     function for every value that was filled in on 'options', which
     came from argparse/the command line.
 
-    @update: If we are updating an existing guest, like from virt-xml
+    @editing: If we are updating an existing guest, like from virt-xml
     """
     instlist = xmlutil.listify(instlist)
     if not instlist:
@@ -3896,8 +3897,8 @@ def parse_option_strings(options, guest, instlist, update=False):
                 optlist = [optlist[-1]]
 
             for optstr in optlist:
-                parserobj = parserclass(optstr, guest=guest)
-                parseret = parserobj.parse(inst, validate=not update)
+                parserobj = parserclass(optstr, guest=guest, editing=editing)
+                parseret = parserobj.parse(inst)
                 ret += xmlutil.listify(parseret)
 
     return ret

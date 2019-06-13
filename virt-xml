@@ -191,7 +191,7 @@ def action_edit(guest, options, parserclass):
     if options.os_variant is not None:
         fail(_("--os-variant is not supported with --edit"))
 
-    return cli.parse_option_strings(options, guest, inst, update=True)
+    return cli.parse_option_strings(options, guest, inst, editing=True)
 
 
 def action_add_device(guest, options, parserclass):
