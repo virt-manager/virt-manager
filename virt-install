@@ -342,9 +342,6 @@ _cdrom_location_man_page = _("See the man page for examples of "
 
 
 def check_option_collisions(options, guest):
-    if options.noreboot and options.transient:
-        fail(_("--noreboot and --transient can not be specified together"))
-
     # Install collisions
     if sum([bool(l) for l in all_install_options(options)]) > 1:
         fail(_("Only one install method can be used (%(methods)s)") %
