@@ -46,6 +46,7 @@
       <model type="virtio"/>
     </video>
     <watchdog model="diag288" action="reset"/>
+    <memballoon model="virtio"/>
     <rng model="virtio">
       <backend model="random">/dev/urandom</backend>
     </rng>

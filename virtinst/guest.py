@@ -735,6 +735,7 @@ class Guest(XMLBuilder):
         self._add_default_usb_controller()
         self._add_default_channels()
         self._add_default_rng()
+        self._add_default_memballoon()
 
         self.clock.set_defaults(self)
         self.cpu.set_defaults(self)
@@ -944,6 +945,37 @@ class Guest(XMLBuilder):
             dev = DeviceRng(self.conn)
             dev.type = "random"
             dev.device = "/dev/urandom"
+            self.add_device(dev)
+
+    def _add_default_memballoon(self):
+        if self.devices.memballoon:
+            return
+        if not self.conn.is_qemu():
+            return
+
+        # For most QEMU guests, libvirt will automatically add a memballoon
+        # device, which means that if the user has explicitly asked for it
+        # *not* to be present then we still need to create the device and
+        # set the model to "none" to let libvirt know
+        if self.disable_default_memballoon:
+            dev = DeviceMemballoon(self.conn)
+            dev.model = "none"
+            self.add_device(dev)
+            return
+
+        # We know for certain that a memballoon is good to have with these
+        # machine types; for other machine types, we leave the decision up
+        # to libvirt
+        if not (self.os.is_x86() or
+                self.os.is_arm_machvirt() or
+                self.os.is_riscv_virt() or
+                self.os.is_s390x() or
+                self.os.is_pseries()):
+            return
+
+        if self.osinfo.supports_virtioballoon():
+            dev = DeviceMemballoon(self.conn)
+            dev.model = "virtio"
             self.add_device(dev)
 
     def _add_implied_controllers(self):
