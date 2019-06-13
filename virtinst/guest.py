@@ -708,6 +708,9 @@ class Guest(XMLBuilder):
             self.uuid = Guest.generate_uuid(self.conn)
 
         self.sync_vcpus_topology()
+        if not self.vcpus:
+            self.vcpus = 1
+
         self._set_default_machine()
         self._set_default_uefi()
 
