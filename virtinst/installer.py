@@ -38,23 +38,26 @@ class Installer(object):
     :param install_kernel_args: Kernel args <cmdline> to use. This overwrites
         whatever the installer might request, unlike extra_args which will
         append arguments.
+    :param no_install: If True, this installer specifically does not have
+        an install phase. We are just using it to create the initial XML.
     """
     def __init__(self, conn, cdrom=None, location=None, install_bootdev=None,
             location_kernel=None, location_initrd=None,
-            install_kernel=None, install_initrd=None, install_kernel_args=None):
+            install_kernel=None, install_initrd=None, install_kernel_args=None,
+            no_install=None):
         self.conn = conn
-
-        self.livecd = False
 
         # Entry point for virt-manager 'Customize' wizard to change autostart
         self.autostart = False
 
-        self._install_bootdev = install_bootdev
         self._install_cdrom_device_added = False
         self._unattended_install_cdrom_device = None
         self._tmpfiles = []
         self._defaults_are_set = False
         self._unattended_data = None
+
+        self._install_bootdev = install_bootdev
+        self._no_install = no_install
 
         self._treemedia = None
         self._treemedia_bootconfig = None
@@ -267,7 +270,7 @@ class Installer(object):
             os.unlink(f)
 
     def _get_postinstall_bootdev(self, guest):
-        if self.cdrom and self.livecd:
+        if self.cdrom and self._no_install:
             return DomainOs.BOOT_DEVICE_CDROM
 
         if self._install_bootdev:
@@ -350,11 +353,20 @@ class Installer(object):
         into the guest. Things like LiveCDs, Import, or a manually specified
         bootorder do not have an install phase.
         """
-        if self.cdrom and self.livecd:
+        if self._no_install:
             return False
         return bool(self._cdrom or
                     self._install_bootdev or
                     self._treemedia)
+
+    def options_specified(self):
+        """
+        Return True if some explicit install option was actually passed in
+        Validate that some install option was actually passed in.
+        """
+        if self._no_install:
+            return True
+        return self.has_install_phase()
 
     def detect_distro(self, guest):
         """

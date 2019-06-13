@@ -307,7 +307,7 @@ def validate_required_options(options, guest, installer):
         msg += "\n" + (
             _("--disk storage must be specified (override with --disk none)"))
 
-    if not installer:
+    if not guest.os.is_container() and not installer.options_specified():
         msg += "\n" + (
             _("An install method must be specified\n(%(methods)s)") %
             {"methods": INSTALL_METHODS})
@@ -377,8 +377,6 @@ def build_installer(options, guest):
     install_initrd = None
     install_kernel_args = None
 
-    has_installer = True
-
     if options.install:
         installdata = cli.parse_install(options.install)
 
@@ -415,26 +413,23 @@ def build_installer(options, guest):
             else:
                 extra_args = [installdata.kernel_args]
 
+    no_install = None
     if options.location:
         (location,
          location_kernel,
          location_initrd) = cli.parse_location(options.location)
     elif options.cdrom:
         cdrom = options.cdrom
+        if options.livecd:
+            no_install = True
     elif options.pxe:
         install_bootdev = "network"
-    elif (guest.os.is_container() or
-          options.import_install or
-          options.xmlonly or
-          options.boot or
-          installdata):
+    elif installdata:
         pass
-    else:
-        has_installer = False
-
-    if not has_installer:
-        # This triggers an error in validate_required_options
-        return None
+    elif (options.import_install or
+          options.xmlonly or
+          options.boot):
+        no_install = True
 
     installer = virtinst.Installer(guest.conn,
             cdrom=cdrom,
@@ -444,10 +439,9 @@ def build_installer(options, guest):
             install_bootdev=install_bootdev,
             install_kernel=install_kernel,
             install_initrd=install_initrd,
-            install_kernel_args=install_kernel_args)
+            install_kernel_args=install_kernel_args,
+            no_install=no_install)
 
-    if cdrom and options.livecd:
-        installer.livecd = True
     if options.unattended:
         unattended_data = cli.parse_unattended(options.unattended)
         installer.set_unattended_data(unattended_data)
@@ -543,10 +537,9 @@ def build_guest_instance(conn, options):
     installer = build_installer(options, guest)
     set_cli_defaults(options, guest)
 
-    if installer:
-        installer.set_install_defaults(guest)
-        for path in installer.get_search_paths(guest):
-            cli.check_path_search(guest.conn, path)
+    installer.set_install_defaults(guest)
+    for path in installer.get_search_paths(guest):
+        cli.check_path_search(guest.conn, path)
 
     # cli specific disk validation
     for disk in guest.devices.disk:
