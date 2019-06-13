@@ -709,6 +709,9 @@ class Guest(XMLBuilder):
 
         self.sync_vcpus_topology()
         if not self.vcpus:
+            # Typically if omitted libvirt will fill this value in for us
+            # However if user specified cpuset= or placement=, libvirt
+            # will error if <vcpus>X is also unset. So keep this for safety
             self.vcpus = 1
 
         self._set_default_machine()
