@@ -22,16 +22,7 @@ from virtinst.cli import fail, print_stdout, print_stderr
 # Validation utility helpers #
 ##############################
 
-install_methods = "--location URL, --cdrom CD/ISO, --pxe, --import, --boot hd|cdrom|..."
-
-
-def all_install_options(options):
-    return [options.pxe, options.cdrom, options.location,
-            options.import_install]
-
-
-def install_specified(options):
-    return any([bool(o) for o in all_install_options(options)])
+INSTALL_METHODS = "--location URL, --cdrom CD/ISO, --pxe, --import, --boot hd|cdrom|..."
 
 
 def supports_pxe(guest):
@@ -331,7 +322,7 @@ def validate_required_options(options, guest, installer):
     if not installer:
         msg += "\n" + (
             _("An install method must be specified\n(%(methods)s)") %
-            {"methods": install_methods})
+            {"methods": INSTALL_METHODS})
 
     if msg:
         fail(msg)
@@ -339,17 +330,6 @@ def validate_required_options(options, guest, installer):
 
 _cdrom_location_man_page = _("See the man page for examples of "
     "using --location with CDROM media")
-
-
-def check_option_collisions(options, guest):
-    # Install collisions
-    if sum([bool(l) for l in all_install_options(options)]) > 1:
-        fail(_("Only one install method can be used (%(methods)s)") %
-             {"methods": install_methods})
-
-    if guest.os.is_container() and install_specified(options):
-        fail(_("Install methods (%s) cannot be specified for "
-               "container guests") % install_methods)
 
 
 def _show_nographics_warnings(options, guest, installer):
@@ -585,7 +565,6 @@ def build_guest_instance(conn, options):
         cli.validate_disk(disk)
 
     validate_required_options(options, guest, installer)
-    check_option_collisions(options, guest)
     show_warnings(options, guest, installer)
 
     return guest, installer
@@ -941,6 +920,7 @@ def set_test_stub_options(options):  # pragma: no cover
     if not options.test_stub_command:
         return
 
+    options.import_install = True
     if not options.connect:
         options.connect = "test:///default"
     if not options.name:
@@ -949,8 +929,6 @@ def set_test_stub_options(options):  # pragma: no cover
         options.memory = "256"
     if not options.disk:
         options.disk = "none"
-    if not install_specified(options):
-        options.import_install = True
     if not options.graphics:
         options.graphics = "none"
     if not options.os_variant:
