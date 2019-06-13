@@ -703,10 +703,11 @@ c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-se
 ####################################################
 
 c = vinst.add_category("cpuram", "--hvm --nographics --noautoconsole --nodisks --pxe")
-c.add_valid("--connect " + utils.URIs.xen + " --vcpus 4 --cpuset=auto")  # cpuset=auto but xen doesn't support it
 c.add_valid("--ram 4000000")  # Ram overcommit
 c.add_valid("--vcpus sockets=2,threads=2")  # Topology only
+c.add_valid("--cpuset 1,2,3")  # cpuset backcompat with no --vcpus specfied
 c.add_valid("--cpu somemodel")  # Simple --cpu
+c.add_valid("--noapic --noacpi")  # feature backcompat
 c.add_valid("--security label=foobar.label,relabel=yes")  # --security implicit static
 c.add_valid("--security label=foobar.label,a1,z2,b3,type=static,relabel=no")  # static with commas 1
 c.add_valid("--security label=foobar.label,a1,z2,b3")  # --security static with commas 2
@@ -763,6 +764,7 @@ c.add_invalid("--disk %(EXISTIMG1)s,driver_name=foobar,driver_type=foobaz")  # U
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=rbd-ceph,source_volume=vol1")  # Collision with existing VM, via source pool/volume
 c.add_invalid("--disk source.pool=default-pool,source.volume=idontexist")  # trying to lookup non-existent volume, hit specific error code
 c.add_invalid("--disk size=1 --security model=foo,type=bar")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
+c.add_invalid("--disk size=1 --file foobar")  # --disk and --file collision
 
 
 
@@ -778,6 +780,7 @@ c.add_invalid("--host-device 300:400")  # Parseable hostdev, but unknown digits
 c.add_invalid("--graphics vnc,keymap=ZZZ")  # Invalid keymap
 c.add_invalid("--graphics vnc,port=-50")  # Invalid port
 c.add_invalid("--graphics spice,tlsport=5")  # Invalid port
+c.add_invalid("--vnc --sdl")  # Multi graphics collision
 c.add_invalid("--serial unix")  # Unix with no path
 c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
 c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
@@ -820,14 +823,17 @@ c.add_invalid("--disk none --location kernel=/dev/null,initrd=/dev/null")  # --l
 c.add_invalid("--os-variant winxp,install=location", grep="does not have a URL location")  # no URL for winxp
 c.add_invalid("--os-variant fedora28,install=fribber", grep="Unknown --os-variant install value")  # unknown install= value
 c.add_invalid("--arch i686 --os-variant fedora26,install=location", grep="does not have a URL location for the i686")  # there's no URL for i686
+c.add_invalid("-c foo --cdrom bar", grep="Cannot specify both -c")  # check for ambiguous -c and --cdrom collision
+c.add_invalid("-c qemu:///system", grep="looks like a libvirt URI")  # error for the ambiguous -c vs --connect
 
 c = vinst.add_category("single-disk-install", "--nographics --noautoconsole --disk %(EXISTIMG1)s")
 c.add_valid("--hvm --import")  # FV Import install
 c.add_valid("--hvm --import --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
 c.add_valid("--paravirt --import")  # PV Import install
-c.add_valid("--paravirt --print-xml")  # print single XML, implied import install
-c.add_compare("--cdrom %(EXISTIMG2)s --os-variant win2k3 --wait 0 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
+c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import install
+c.add_compare("-c %(EXISTIMG2)s --os-variant win2k3 --wait 0 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
 c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no second XML step
+c.add_invalid("--paravirt --import --print-xml 7")  # Invalid --print-xml arg
 c.add_invalid("--location kernel=foo,initrd=bar")  # location kernel/initrd without any url
 c.add_invalid("--location http://example.com,kernel=foo")  # location without kernel+initrd specified as pair
 
@@ -836,11 +842,11 @@ c.add_compare("--connect %s" % (utils.URIs.test_suite), "noargs-fail", use_defau
 c.add_compare("--connect %s --os-variant fedora26" % (utils.URIs.test_suite), "osvariant-noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26 --pxe --print-xml" % (utils.URIs.test_suite), "osvariant-defaults-pxe", use_default_args=False)  # No arguments
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
-c.add_valid("--test-stub-command")  # --test-stub-command
+c.add_valid("--connect test:///default --test-stub-command", use_default_args=False)  # --test-stub-command
 c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning
 c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error
 c.add_invalid("--nodisks --pxe --name test")  # Colliding name
-c.add_compare("--cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
+c.add_compare("--os-type linux --cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
 c.add_valid("--connect %s --pxe --disk size=1" % utils.URIs.test_defaultpool_collision)  # testdriver already has a pool using the 'default' path, make sure we don't error
 
 
@@ -886,7 +892,7 @@ c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage wi
 
 c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --noautoconsole")
 c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none --boot cmdline='foo bar baz'", "kvm-fedoralatest-url", prerun_check=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
-c.add_compare("--test-media-detection %(TREEDIR)s", "test-url-detection")  # --test-media-detection
+c.add_compare("--test-media-detection %(TREEDIR)s --arch x86_64 --hvm", "test-url-detection")  # --test-media-detection
 c.add_compare("--os-variant full_id=http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet", "qemu-plain")  # plain qemu
@@ -1010,7 +1016,7 @@ c = vinst.add_category("vz", "--noautoconsole --connect " + utils.URIs.vz)
 c.add_valid("--container")  # validate the special define+start logic
 c.add_valid("--hvm --cdrom %(EXISTIMG1)s --disk none")  # hit more install vz logic
 c.add_valid("--hvm --import --disk %(EXISTIMG1)s --noreboot")  # hit more install vz logic
-c.add_invalid("--container --transient")  # doesn't support --transient
+c.add_invalid("--container --transient")  # vz doesn't support --transient
 c.add_compare("""
 --container
 --filesystem type=template,source=centos-7-x86_64,target="/"

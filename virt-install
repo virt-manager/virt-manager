@@ -38,9 +38,8 @@ def supports_pxe(guest):
         try:
             netobj = nic.conn.networkLookupByName(nic.source)
             xmlobj = virtinst.Network(nic.conn, parsexml=netobj.XMLDesc(0))
-            if xmlobj.can_pxe():
-                return True
-        except Exception:
+            return xmlobj.can_pxe()
+        except Exception:  # pragma: no cover
             logging.debug("Error checking if PXE supported", exc_info=True)
             return True
 
@@ -53,19 +52,9 @@ def check_cdrom_option_error(options):
 
     if options.cdrom_short:
         if "://" in options.cdrom_short:
-            fail("-c specified with what looks like a URI. Did you mean "
-                 "to use --connect? If not, use --cdrom instead")
+            fail("-c specified with what looks like a libvirt URI. "
+                 "Did you mean to use --connect? If not, use --cdrom instead")
         options.cdrom = options.cdrom_short
-
-    if not options.cdrom:
-        return
-
-    # Catch a strangely common error of users passing -vcpus=2 instead of
-    # --vcpus=2. The single dash happens to map to enough shortened options
-    # that things can fail weirdly if --paravirt is also specified.
-    for vcpu in [o for o in sys.argv if o.startswith("-vcpu")]:
-        if options.cdrom == vcpu[3:]:
-            fail("You specified -vcpus, you want --vcpus")
 
 
 #################################
@@ -173,9 +162,10 @@ def convert_old_memory(options):
 def convert_old_cpuset(options):
     if not options.cpuset:
         return
-    if not options.vcpus:
-        options.vcpus = [""]
-    options.vcpus[-1] += ",cpuset=%s" % options.cpuset
+
+    newvcpus = options.vcpus or []
+    newvcpus.append(",cpuset=%s" % options.cpuset)
+    options.vcpus = newvcpus
     logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus[-1])
 
 
@@ -265,15 +255,13 @@ def convert_old_features(options):
     if options.features:
         return
 
-    opts = ""
+    opts = []
     if options.noacpi:
-        opts += "acpi=off"
+        opts.append("acpi=off")
     if options.noapic:
-        if opts:
-            opts += ","
-        opts += "apic=off"
+        opts.append("apic=off")
     if opts:
-        options.features = [opts]
+        options.features = [",".join(opts)]
 
 
 ##################################
@@ -907,7 +895,7 @@ def _destroy_on_exit(domain):
     try:
         isactive = bool(domain and domain.isActive())
         if isactive:
-            domain.destroy()
+            domain.destroy()  # pragma: no cover
     except libvirt.libvirtError as e:  # pragma: no cover
         if e.get_error_code() != libvirt.VIR_ERR_NO_DOMAIN:
             logging.debug("Error invoking atexit destroy_on_exit",
