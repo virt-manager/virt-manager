@@ -1185,6 +1185,7 @@ c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-sele
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
 c.add_compare("--edit target=hda --disk boot_order=1", "edit-select-disk-bootorder")
 c.add_compare("--edit path=/dev/null --disk path=,target=fdb,boot_order=12", "edit-disk-unset")  # --disk matching, using empty value to unset path
+c.add_compare("--edit --memballoon none", "edit-disable-memballoon")
 
 c = vixml.add_category("edit and start selection", "test-state-shutoff --print-diff --start")
 c.add_compare("--define --edit target=vda --disk boot_order=1", "start-select-disk-bootorder")
@@ -1218,6 +1219,7 @@ c.add_compare("--remove-device --disk 3", "remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all")
 c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name")
+c.add_compare("--remove-device --memballoon all", "remove-memballoon")
 
 c = vixml.add_category("add/rm devices and start", "test-state-shutoff --print-diff --start")
 c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
