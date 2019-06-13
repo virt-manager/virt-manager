@@ -509,6 +509,12 @@ class _OsVariant(object):
                   "http://pcisig.com/pci/1af4/1044"]
         return bool(self._device_filter(devids=devids))
 
+    def supports_virtioballoon(self):
+        # virtio-balloon and virtio1.0-balloon
+        devids = ["http://pcisig.com/pci/1af4/1002",
+                  "http://pcisig.com/pci/1af4/1045"]
+        return bool(self._device_filter(devids=devids))
+
     def supports_virtioserial(self):
         devids = ["http://pcisig.com/pci/1af4/1003",
                   "http://pcisig.com/pci/1af4/1043"]
