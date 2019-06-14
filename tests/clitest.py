@@ -825,6 +825,7 @@ c.add_invalid("--arch i686 --install fedora26", grep="does not have a URL locati
 c.add_invalid("-c foo --cdrom bar", grep="Cannot specify both -c")  # check for ambiguous -c and --cdrom collision
 c.add_invalid("-c qemu:///system", grep="looks like a libvirt URI")  # error for the ambiguous -c vs --connect
 c.add_invalid("--location /", grep="Error validating install location")  # detect_distro failure
+c.add_invalid("--os-variant foo://bar", grep="Unknown libosinfo ID")  # bad full id
 
 c = vinst.add_category("single-disk-install", "--nographics --noautoconsole --disk %(EXISTIMG1)s")
 c.add_valid("--hvm --import")  # FV Import install
@@ -897,7 +898,7 @@ c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage wi
 c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --noautoconsole")
 c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none --boot cmdline='foo bar baz'", "kvm-fedoralatest-url", prerun_check=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s --arch x86_64 --hvm", "test-url-detection")  # --test-media-detection
-c.add_compare("--os-variant full_id=http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
+c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
@@ -1202,7 +1203,7 @@ c = vixml.add_category("add/rm devices OS KVM", "--connect %(URI-KVM)s test --pr
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "kvm-add-disk-os-from-xml")  # Guest OS (none) from XML
 c.add_compare("--add-device --disk %(EXISTIMG1)s --os-variant fedora28", "kvm-add-disk-os-from-cmdline")  # Guest OS (fedora) provided on command line
 c.add_compare("--add-device --network default", "kvm-add-network-os-from-xml")  # Guest OS information taken from the guest XML
-c.add_compare("--add-device --network default --os-variant full_id=http://fedoraproject.org/fedora/28", "kvm-add-network-os-from-cmdline")  # Guest OS information provided on the command line
+c.add_compare("--add-device --network default --os-variant http://fedoraproject.org/fedora/28", "kvm-add-network-os-from-cmdline")  # Guest OS information provided on the command line
 
 
 
@@ -1314,7 +1315,6 @@ _add_argcomplete_cmd("virt-install --disk source.seclab", "source.seclabel.relab
 _add_argcomplete_cmd("virt-install --check d", "disk_size")
 _add_argcomplete_cmd("virt-install --location k", "kernel")
 _add_argcomplete_cmd("virt-install --install i", "initrd")
-_add_argcomplete_cmd("virt-install --os-variant nam", "name")
 _add_argcomplete_cmd("virt-install --test-stub", None,
         nogrep="--test-stub-command")
 _add_argcomplete_cmd("virt-install --unattended ", "profile=")  # will list all --unattended subprops

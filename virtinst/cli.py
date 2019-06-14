@@ -27,6 +27,7 @@ from .connection import VirtinstConnection
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
 from .nodedev import NodeDevice
+from .osdict import OSDB
 from .storage import StoragePool, StorageVolume
 from .unattended import UnattendedData
 
@@ -462,7 +463,7 @@ def get_meter():
 ###########################
 
 def _get_completer_parsers():
-    return VIRT_PARSERS + [ParserCheck, ParserLocation, ParserOSVariant,
+    return VIRT_PARSERS + [ParserCheck, ParserLocation,
             ParserUnattended, ParserInstall]
 
 
@@ -1586,10 +1587,12 @@ class InstallData:
         self.kernel_args = None
         self.kernel_args_overwrite = None
         self.os = None
+        self.is_set = False
 
 
 def parse_install(optstr):
     installdata = InstallData()
+    installdata.is_set = bool(optstr)
     parser = ParserInstall(optstr or None)
     parser.parse(installdata)
     return installdata
@@ -1629,56 +1632,42 @@ def parse_location(optstr):
 ########################
 
 class OSVariantData(object):
-    def __init__(self):
+    def __init__(self, os_variant):
+        self._rawstr = os_variant
+        self._default_auto = True
         self._name = None
-        self.full_id = None
-        self.is_none = False
-        self._explicit_auto = False
-        self.default_auto = False
+        if not self._rawstr:
+            return
 
-    def _set_name(self, val):
-        if val == "auto":
-            self._explicit_auto = True
-        elif val == "none":
-            self.is_none = True
+        self._default_auto = False
+        if self.is_none or self.is_auto:
+            return
+        if "://" in self._rawstr:
+            osobj = OSDB.lookup_os_by_full_id(self._rawstr, raise_error=True)
         else:
-            self._name = val
-    def _get_name(self):
-        return self._name
-    name = property(_get_name, _set_name)
+            osobj = OSDB.lookup_os(self._rawstr, raise_error=True)
+        self._name = osobj.name
+
+    def set_installdata_name(self, name):
+        # osname set via --install os=X, but if --os-variant also
+        # explicitly set, we don't want to overwrite it
+        if self._default_auto:
+            self._default_auto = False
+            self._name = name
 
     @property
+    def is_none(self):
+        return self._rawstr == "none"
+    @property
     def is_auto(self):
-        if self._name:
-            return False
-        return self._explicit_auto or self.default_auto
-
-    def set_os_name(self, guest):
-        if self.full_id:
-            guest.set_os_full_id(self.full_id)
-        elif self.name:
-            guest.set_os_name(self.name)
-
-
-class ParserOSVariant(VirtCLIParser):
-    cli_arg_name = "os_variant"
-    remove_first = "name"
-
-    @classmethod
-    def _init_class(cls, **kwargs):
-        VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("name", "name")
-        cls.add_arg("full_id", "full_id")
+        return self._rawstr == "auto" or self._default_auto
+    @property
+    def name(self):
+        return self._name
 
 
 def parse_os_variant(optstr):
-    parsedata = OSVariantData()
-    if optstr:
-        parser = ParserOSVariant(optstr)
-        parser.parse(parsedata)
-    else:
-        parsedata.default_auto = True
-    return parsedata
+    return OSVariantData(optstr)
 
 
 ######################
@@ -1706,7 +1695,8 @@ class ParserMetadata(VirtCLIParser):
         inst.set_os_name(val)
 
     def set_os_full_id_cb(self, inst, val, virtarg):
-        inst.set_os_full_id(val)
+        osobj = OSDB.lookup_os_by_full_id(val, raise_error=True)
+        inst.set_os_name(osobj.name)
 
 
 ####################

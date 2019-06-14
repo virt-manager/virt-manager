@@ -360,48 +360,35 @@ def show_warnings(options, guest, installer, osdata):
 # Guest building helpers #
 ##########################
 
-def get_location_for_os(guest, osname, osdata):
+def get_location_for_os(guest, osname):
     osinfo = virtinst.OSDB.lookup_os(osname, raise_error=True)
     location = osinfo.get_location(guest.os.arch)
     print_stdout(_("Using {osname} --location {url}").format(
         osname=osname, url=location))
-    if osdata.default_auto:
-        osdata.default_auto = False
-        osdata.name = osname
     return location
 
 
-def build_installer(options, guest, osdata):
+def build_installer(options, guest, installdata):
     cdrom = None
     location = None
     location_kernel = None
     location_initrd = None
-    install_bootdev = None
-    installdata = None
-    install_kernel = None
-    install_initrd = None
-    install_kernel_args = None
-    install_os = None
-
-    if options.install:
-        installdata = cli.parse_install(options.install)
-
     extra_args = options.extra_args
-    if installdata:
-        install_bootdev = installdata.bootdev
-        install_kernel = installdata.kernel
-        install_initrd = installdata.initrd
-        install_kernel_args = installdata.kernel_args
-        install_os = installdata.os
-        if installdata.kernel_args:
-            if installdata.kernel_args_overwrite:
-                install_kernel_args = installdata.kernel_args
-            else:
-                extra_args = [installdata.kernel_args]
+
+    install_bootdev = installdata.bootdev
+    install_kernel = installdata.kernel
+    install_initrd = installdata.initrd
+    install_kernel_args = installdata.kernel_args
+    install_os = installdata.os
+    if installdata.kernel_args:
+        if installdata.kernel_args_overwrite:
+            install_kernel_args = installdata.kernel_args
+        else:
+            extra_args = [installdata.kernel_args]
 
     no_install = None
     if install_os:
-        location = get_location_for_os(guest, install_os, osdata)
+        location = get_location_for_os(guest, install_os)
     elif options.location:
         (location,
          location_kernel,
@@ -412,7 +399,7 @@ def build_installer(options, guest, osdata):
             no_install = True
     elif options.pxe:
         install_bootdev = "network"
-    elif installdata:
+    elif installdata.is_set:
         pass
     elif (options.import_install or
           options.xmlonly or
@@ -510,8 +497,11 @@ def installer_detect_distro(guest, installer, osdata):
     try:
         # This also validates the install location
         autodistro = installer.detect_distro(guest)
-        if osdata.is_auto and autodistro:
-            guest.set_os_name(autodistro)
+        name = osdata.name
+        if osdata.is_auto:
+            name = autodistro
+        if name:
+            guest.set_os_name(name)
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
 
@@ -530,12 +520,14 @@ def build_guest_instance(conn, options):
     # we are operating on any arch/os/type values passed in with --boot
     guest.set_capabilities_defaults()
 
-    osdata = cli.parse_os_variant(options.os_variant)
-    installer = build_installer(options, guest, osdata)
+    installdata = cli.parse_install(options.install)
+    installer = build_installer(options, guest, installdata)
 
-    # Set osname after
+    # Set guest osname, from commandline or detected from media
+    osdata = cli.parse_os_variant(options.os_variant)
+    if installdata.os:
+        osdata.set_installdata_name(installdata.os)
     guest.set_default_os_name()
-    osdata.set_os_name(guest)
     installer_detect_distro(guest, installer, osdata)
 
     set_cli_defaults(options, guest)

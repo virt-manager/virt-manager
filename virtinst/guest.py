@@ -462,14 +462,6 @@ class Guest(XMLBuilder):
         logging.debug("Setting Guest osinfo name %s", obj)
         self._set_os_obj(obj)
 
-    def set_os_full_id(self, full_id):
-        obj = OSDB.lookup_os_by_full_id(full_id)
-        if obj is None:
-            raise ValueError(_("Unknown libosinfo ID '%s'") % full_id)
-
-        logging.debug("Setting Guest osinfo full_id %s", obj)
-        self._set_os_obj(obj)
-
     def set_default_os_name(self):
         self.set_os_name("generic")
 

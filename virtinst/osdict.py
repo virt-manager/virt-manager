@@ -210,10 +210,12 @@ class _OSDB(object):
     # Public APIs #
     ###############
 
-    def lookup_os_by_full_id(self, full_id):
+    def lookup_os_by_full_id(self, full_id, raise_error=False):
         for osobj in self._all_variants.values():
             if osobj.full_id == full_id:
                 return osobj
+        if raise_error:
+            raise ValueError(_("Unknown libosinfo ID '%s'") % full_id)
 
     def lookup_os(self, key, raise_error=False):
         if key in self._aliases:
