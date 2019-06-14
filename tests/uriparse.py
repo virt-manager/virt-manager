@@ -61,3 +61,30 @@ class TestURI(unittest.TestCase):
         conn = tests.utils.URIs.openconn(uri)
         self.assertEqual(conn.conn_version(), 1)
         self.assertEqual(conn.local_libvirt_version(), 2)
+
+        conn = tests.utils.URIs.open_testdefault_cached()
+        # Add some support tests with it
+        with self.assertRaises(ValueError) as cm:
+            conn.support.domain_xml_inactive("foo")
+        self.assertTrue("must be of type <class 'libvirt.virDomain'>" in
+                str(cm.exception))
+
+        # pylint: disable=protected-access
+        from virtinst import support
+        def _run(**kwargs):
+            check = support._SupportCheck(**kwargs)
+            return check(conn)
+
+        self.assertFalse(_run(function="virNope.Foo"))
+        self.assertFalse(_run(function="virDomain.IDontExist"))
+        self.assertTrue(_run(function="virDomain.isActive"))
+        self.assertFalse(_run(function="virConnect.getVersion",
+            flag="SOME_FLAG_DOESNT_EXIST"))
+        self.assertFalse(_run(version="1000.0.0"))
+        self.assertFalse(_run(hv_version={"test": "1000.0.0"}))
+        self.assertFalse(_run(hv_libvirt_version={"test": "1000.0.0"}))
+        self.assertFalse(_run(hv_libvirt_version={"qemu": "1.2.3"}))
+        self.assertTrue(_run(hv_libvirt_version={"qemu": "1.2.3", "all": 0}))
+
+        dom = conn.lookupByName("test")
+        self.assertTrue(conn.support.domain_xml_inactive(dom))
