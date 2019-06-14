@@ -148,13 +148,9 @@ class TestClone(unittest.TestCase):
         self._clone("skip", disks=disks, skip_list=skip_list)
 
     def testCloneFullPool(self):
-        try:
+        with self.assertRaises(Exception):
             self._clone("fullpool",
                     disks=["/full-pool/test.img"], compare=False)
-        except Exception:
-            return
-
-        raise AssertionError("Expected exception, but none raised.")
 
     def testCloneNvramAuto(self):
         self._clone("nvram-auto")

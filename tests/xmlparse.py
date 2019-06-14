@@ -1445,44 +1445,29 @@ class XMLParseTest(unittest.TestCase):
         self.assertEqual(dev.managed, "test1")
         self.assertEqual(dev.rom_bar, "test2")
 
-        try:
+        with self.assertRaises(ValueError):
             dev.scsi_bus = "goodbye"
-            raise AssertionError("Expected ValueError")
-        except ValueError:
-            pass
 
     def testXMLCoverage(self):
-        try:
+        with self.assertRaises(RuntimeError) as cm:
             # Ensure we validate root element
             virtinst.DeviceDisk(self.conn, parsexml="<foo/>")
-            raise AssertionError("Expected parse failure")
-        except RuntimeError as e:
-            self.assertTrue("'foo'" in str(e))
+        self.assertTrue("'foo'" in str(cm.exception))
 
-        try:
+        with self.assertRaises(Exception) as cm:
             # Ensure we validate root element
             virtinst.DeviceDisk(self.conn, parsexml=-1)
-            raise AssertionError("Expected parse failure")
-        except Exception as e:
-            self.assertTrue("xmlParseDoc" in str(e))
+        self.assertTrue("xmlParseDoc" in str(cm.exception))
 
-        try:
+        with self.assertRaises(RuntimeError):
             from virtinst import xmlutil
             xmlutil.raise_programming_error(True, "for coverage")
-            raise AssertionError("We shouldn't get here")
-        except RuntimeError:
-            pass
 
-        try:
+        with self.assertRaises(ValueError):
             virtinst.DeviceDisk.validate_generic_name("objtype", None)
-            raise AssertionError("We shouldn't get here")
-        except ValueError:
-            pass
-        try:
+
+        with self.assertRaises(ValueError):
             virtinst.DeviceDisk.validate_generic_name("objtype", "foo bar")
-            raise AssertionError("We shouldn't get here")
-        except ValueError:
-            pass
 
         # Test property __repr__ for code coverage
         assert str(virtinst.DeviceDisk.address)
@@ -1532,8 +1517,6 @@ class XMLParseTest(unittest.TestCase):
 
         disk.set_backend_for_existing_path()
         self.assertEqual(bool(getattr(disk, "_storage_backend")), True)
-        try:
+
+        with self.assertRaises(ValueError):
             disk.validate()
-            raise AssertionError("expected disk validate failure")
-        except ValueError:
-            pass

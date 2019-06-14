@@ -196,20 +196,16 @@ class URLTests(unittest.TestCase):
     def test001BadURL(self):
         badurl = "http://aksdkakskdfa-idontexist.com/foo/tree"
 
-        try:
+        with self.assertRaises(ValueError) as cm:
             installer = Installer(hvmguest.conn, location=badurl)
             installer.detect_distro(hvmguest)
-            raise AssertionError("Expected URL failure")
-        except ValueError as e:
-            self.assertTrue("maybe you mistyped" in str(e))
+        self.assertTrue("maybe you mistyped" in str(cm.exception))
 
         # Non-existent cdrom fails
-        try:
+        with self.assertRaises(ValueError) as cm:
             installer = Installer(hvmguest.conn, cdrom="/not/exist/foobar")
             self.assertEqual(None, installer.detect_distro(hvmguest))
-            raise AssertionError("Expected cdrom failure")
-        except ValueError as e:
-            self.assertTrue("non-existent path" in str(e))
+        self.assertTrue("non-existent path" in str(cm.exception))
 
         # Ensure existing but non-distro file doesn't error
         installer = Installer(hvmguest.conn, cdrom="/dev/null")
