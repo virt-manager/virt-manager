@@ -7,7 +7,6 @@
 
 import difflib
 import logging
-import os
 import re
 import sys
 
@@ -28,11 +27,7 @@ def prompt_yes_or_no(msg):
         printmsg = msg + " (y/n): "
         sys.stdout.write(printmsg)
         sys.stdout.flush()
-
-        if "VIRTINST_TEST_SUITE" in os.environ:
-            inp = "yes"
-        else:
-            inp = sys.stdin.readline().lower().strip()
+        inp = sys.stdin.readline().lower().strip()
 
         if inp in ["y", "yes"]:
             return True
@@ -319,8 +314,9 @@ def update_changes(domain, devs, action, confirm):
         except libvirt.libvirtError as e:
             fail(_("Error attempting device %s: %s") % (action, e))
 
-        print_stdout(_("Device %s successful.") % action)
-        if confirm:
+        # Test driver doesn't support device hotplug so we can't reach this
+        print_stdout(_("Device %s successful.") % action)  # pragma: no cover
+        if confirm:  # pragma: no cover
             print_stdout("")
 
 
@@ -508,7 +504,7 @@ def main(conn=None):
             if dom and options.start:
                 try:
                     dom.create()
-                except libvirt.libvirtError as e:
+                except libvirt.libvirtError as e:  # pragma: no cover
                     fail(_("Failed starting domain '%s': %s") % (inactive_xmlobj.name, e))
                 print_stdout(_("Domain '%s' started successfully.") %
                              inactive_xmlobj.name)

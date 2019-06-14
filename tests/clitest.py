@@ -163,7 +163,7 @@ class Command(object):
     """
     def __init__(self, cmd, input_file=None, need_conn=True, grep=None,
                  nogrep=None, skip_checks=None, compare_file=None, env=None,
-                 check_success=True, **kwargs):
+                 check_success=True, input_text=None, **kwargs):
         # Options that alter what command we run
         self.cmdstr = cmd % test_files
         app, opts = self.cmdstr.split(" ", 1)
@@ -171,6 +171,7 @@ class Command(object):
         self.argv = [os.path.abspath(app)] + shlex.split(opts)
         self.env = env
         self.input_file = input_file
+        self.input_text = input_text
         self.need_conn = need_conn
 
         # Options that alter the results we check for
@@ -205,6 +206,11 @@ class Command(object):
             sys.argv = self.argv
             if self.input_file:
                 sys.stdin = open(self.input_file)
+            elif self.input_text:
+                sys.stdin = io.StringIO(self.input_text + "\n")
+            else:
+                sys.stdin = io.StringIO()
+                sys.stdin.close()
 
             exc = ""
             try:
@@ -1079,15 +1085,31 @@ c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--sound=? --tpm=?")  # basic introspection test
 c.add_valid("test-state-shutoff --edit --update --boot menu=on")  # --update with inactive VM, should work but warn
-c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start")
+c.add_valid("test-for-virtxml --edit --graphics password=foo --update --confirm", input_text="no\nno\n")  # prompt exiting
+c.add_valid("test-for-virtxml --edit --cpu host-passthrough --no-define --start --confirm", input_text="no")  # transient prompt exiting
+c.add_valid("test-for-virtxml --edit --metadata name=test-for-virtxml")  # 'no diff' code path
+c.add_invalid("test --edit 2 --events on_poweroff=destroy", grep="'--edit 2' doesn't make sense with --events")
+c.add_invalid("test --os-variant fedora26 --edit --cpu host-passthrough", grep="--os-variant is not supported")
+c.add_invalid("test-for-virtxml --os-variant fedora26 --remove-device --disk 1", grep="--os-variant is not supported")
+c.add_invalid("--build-xml --os-variant fedora26 --disk path=foo", grep="--os-variant is not supported")
+c.add_invalid("domain-idontexist --cpu host-passthrough --start", grep="Could not find domain")
+c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start", grep="Either update or start")
+c.add_invalid("test --edit --update --events on_poweroff=destroy", grep="Don't know how to --update for --events")
+c.add_invalid("--edit --cpu host-passthrough --confirm", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"), grep="Can't use --confirm with stdin")
+c.add_invalid("--edit --cpu host-passthrough --update", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"), grep="Can't use --update with stdin")
+c.add_invalid("--edit --cpu host-passthrough", grep="A domain must be specified")
+c.add_invalid("test-state-shutoff --cpu mode=idontexist --start --edit --no-define --confirm", grep="Failed starting domain", input_text="yes")
+c.add_invalid("test --cpu host-passthrough", grep="One of --edit, ")  # conflicting --edit options
+c.add_invalid("test --edit --add-device --disk path=foo", grep="Conflicting options --edit, --add-device")
+c.add_invalid("test --edit 0 --disk path=", grep="Invalid --edit option '0'")
 c.add_invalid("test --edit --hostdev driver_name=vfio")  # Guest has no hostdev to edit
 c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
 c.add_invalid("test --edit")  # specified no edit option
 c.add_invalid("test --edit 2 --cpu host-passthrough")  # specifying --edit number where it doesn't make sense
 c.add_invalid("test-for-virtxml --edit 5 --tpm /dev/tpm")  # device edit out of range
-c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --update")  # test driver doesn't support attachdevice...
-c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update")  # test driver doesn't support detachdevice...
-c.add_invalid("test-for-virtxml --edit --graphics password=foo --update")  # test driver doesn't support updatdevice...
+c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --update --confirm", input_text="yes")  # test driver doesn't support attachdevice...
+c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update --confirm", input_text="foo\nyes\n")  # test driver doesn't support detachdevice...
+c.add_invalid("test-for-virtxml --edit --graphics password=foo --update --confirm", input_text="yes")  # test driver doesn't support updatdevice...
 c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
 c.add_invalid("test --edit --boot network,cdrom --define --no-define")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
@@ -1097,7 +1119,7 @@ c.add_compare("--build-xml --tpm path=/dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.weight=200", "build-blkiotune")
 c.add_compare("--build-xml --idmap uid.start=0,uid.target=1000,uid.count=10,gid.start=0,gid.target=1000,gid.count=10", "build-idmap")
 c.add_compare("4a64cc71-19c4-2fd0-2323-3050941ea3c3 --edit --boot network,cdrom", "edit-bootorder")  # basic bootorder test, also using UUID lookup
-c.add_compare("--confirm 1 --edit --cpu host-passthrough", "prompt-response")  # prompt response, also using domid lookup
+c.add_compare("--confirm 1 --edit --cpu host-passthrough", "prompt-response", input_text="yes")  # prompt response, also using domid lookup
 c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(XMLDIR + "/virtxml-qemu-commandline-clear.xml"))
 c.add_compare("--connect %(URI-KVM)s test-hyperv-uefi --edit --boot uefi", "hyperv-uefi-collision")
 
