@@ -210,8 +210,8 @@ class Installer(object):
         ram = guest.osinfo.get_network_install_required_ram(guest)
         ram = (ram or 0) // 1024
         if ram > guest.currentMemory:
-            logging.debug("Setting ram from libosinfo network-install "
-                          "resources to %s", ram)
+            logging.warning(_("Overriding memory to %s MiB needed for %s "
+                "network install."), ram // 1024, guest.osinfo.name)
             guest.currentMemory = ram
 
 
