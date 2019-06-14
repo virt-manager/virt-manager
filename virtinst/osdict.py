@@ -307,6 +307,11 @@ class _OsResources:
             if checkarch in resources and key in resources[checkarch]:
                 return resources[checkarch][key]
 
+    def _get_minimum_key(self, key, arch):
+        val = self._get_key(self._minimum, key, arch)
+        if val and val > 0:
+            return val
+
     def _get_recommended_key(self, key, arch):
         val = self._get_key(self._recommended, key, arch)
         if val and val > 0:
@@ -314,10 +319,15 @@ class _OsResources:
         # If we are looking for a recommended value, but the OS
         # DB only has minimum resources tracked, double the minimum
         # value as an approximation at a 'recommended' value
-        val = self._get_key(self._minimum, key, arch)
-        if val and val > 0:
+        val = self._get_minimum_key(key, arch)
+        if val:
+            logging.debug("No recommended value found for key='%s', "
+                    "using minimum=%s * 2", key, val)
             return val * 2
         return None
+
+    def get_minimum_ram(self, arch):
+        return self._get_minimum_key("ram", arch)
 
     def get_recommended_ram(self, arch):
         return self._get_recommended_key("ram", arch)

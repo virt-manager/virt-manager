@@ -339,6 +339,23 @@ def _show_nographics_warnings(options, guest, installer):
         return
 
 
+def _show_memory_warnings(guest):
+    if not guest.currentMemory:
+        return
+
+    res = guest.osinfo.get_recommended_resources()
+    rammb = guest.currentMemory // 1024
+    minram = (res.get_minimum_ram(guest.os.arch) or 0)
+    if minram:
+        if (minram // 1024) > guest.currentMemory:
+            logging.warning(_("Requested memory %s MiB is less than the "
+                "recommended %s MiB for OS %s"), rammb,
+                minram // (1024 * 1024), guest.osinfo.name)
+    elif rammb < 17:
+        logging.warning(_("Requested memory %s MiB is abnormally low. "
+            "Were you trying to specify GiB?"), rammb)
+
+
 def show_warnings(options, guest, installer, osdata):
     if options.pxe and not supports_pxe(guest):
         logging.warning(_("The guest's network configuration does not support "
@@ -353,6 +370,7 @@ def show_warnings(options, guest, installer, osdata):
         logging.warning(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
 
+    _show_memory_warnings(guest)
     _show_nographics_warnings(options, guest, installer)
 
 

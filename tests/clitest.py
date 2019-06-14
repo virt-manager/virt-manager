@@ -795,7 +795,8 @@ c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machi
 
 c = vinst.add_category("nodisk-install", "--nographics --noautoconsole --nodisks")
 c.add_valid("--hvm --cdrom %(EXISTIMG1)s")  # Simple cdrom install
-c.add_valid("--os-variant winxp --cdrom %(EXISTIMG1)s")  # Windows (2 stage) install
+c.add_valid("--pxe --ram 16", grep="Requested memory 16 MiB is abnormally low")  # catch low memory error
+c.add_valid("--os-variant winxp --ram 32 --cdrom %(EXISTIMG1)s", grep="32 MiB is less than the recommended 64 MiB")  # Windows. Catch memory warning
 c.add_valid("--pxe --virt-type test")  # Explicit virt-type
 c.add_valid("--arch i686 --pxe")  # Explicitly fullvirt + arch
 c.add_valid("--location location=%(TREEDIR)s")  # Directory tree URL install
