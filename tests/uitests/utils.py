@@ -468,7 +468,8 @@ class VMMDogtailApp(object):
         cmd = [sys.executable]
         if tests.utils.clistate.use_coverage:
             cmd += ["-m", "coverage", "run", "--append",
-                    "--omit", "/usr/*"]
+                    "--omit", "/usr/*",
+                    "--omit", "*/virtinst/*"]
         cmd += [os.path.join(os.getcwd(), "virt-manager"),
                 "--test-first-run",
                 "--no-fork"]
