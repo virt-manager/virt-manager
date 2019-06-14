@@ -241,13 +241,9 @@ def action_build_xml(conn, options, parserclass):
 def setup_device(dev):
     if getattr(dev, "DEVICE_TYPE", None) != "disk":
         return
-    if getattr(dev, "virt_xml_setup", None) is True:
-        return
 
     logging.debug("Doing setup for disk=%s", dev)
-
     dev.build_storage(cli.get_meter())
-    dev.virt_xml_setup = True
 
 
 def define_changes(conn, inactive_xmlobj, devs, action, confirm):
