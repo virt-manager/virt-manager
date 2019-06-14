@@ -811,7 +811,7 @@ c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
 c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_compare("--location ftp://example.com", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
 c.add_compare("--location https://foobar.com", "fake-http")  # fake https:// install using urlfetcher.py mocking
-c.add_compare("--connect %(URI-KVM)s --os-variant fedora26,install=location", "osinfo-url")  # getting URL from osinfo
+c.add_compare("--connect %(URI-KVM)s --install fedora26", "osinfo-url")  # getting URL from osinfo
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--livecd")  # LiveCD with no media
@@ -820,11 +820,11 @@ c.add_invalid("--pxe --boot menu=foobar")
 c.add_invalid("--cdrom %(EXISTIMG1)s --extra-args console=ttyS0")  # cdrom fail w/ extra-args
 c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img,kernel_args='foo bar' --initrd-inject virt-install")  # initrd-inject with manual kernel/initrd
 c.add_invalid("--disk none --location kernel=/dev/null,initrd=/dev/null")  # --location with manual kernel/initrd, but not URL
-c.add_invalid("--os-variant winxp,install=location", grep="does not have a URL location")  # no URL for winxp
-c.add_invalid("--os-variant fedora28,install=fribber", grep="Unknown --os-variant install value")  # unknown install= value
-c.add_invalid("--arch i686 --os-variant fedora26,install=location", grep="does not have a URL location for the i686")  # there's no URL for i686
+c.add_invalid("--install winxp", grep="does not have a URL location")  # no URL for winxp
+c.add_invalid("--arch i686 --install fedora26", grep="does not have a URL location for the i686")  # there's no URL for i686
 c.add_invalid("-c foo --cdrom bar", grep="Cannot specify both -c")  # check for ambiguous -c and --cdrom collision
 c.add_invalid("-c qemu:///system", grep="looks like a libvirt URI")  # error for the ambiguous -c vs --connect
+c.add_invalid("--location /", grep="Error validating install location")  # detect_distro failure
 
 c = vinst.add_category("single-disk-install", "--nographics --noautoconsole --disk %(EXISTIMG1)s")
 c.add_valid("--hvm --import")  # FV Import install
@@ -859,11 +859,11 @@ c.add_valid("--connect %s --pxe --disk size=1" % utils.URIs.test_defaultpool_col
 ####################
 
 c = vinst.add_category("unattended-install", "--connect %(URI-KVM)s --nographics --noautoconsole --disk none", prerun_check=no_osinfo_unattend_cb)
-c.add_compare("--os-variant fedora26 --unattended profile=desktop,admin-password=foobar,user-password=blah,product-key=1234", "osinfo-url-unattended")  # unattended install for fedora, using initrd injection
-c.add_compare("--os-variant win7 --cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended")  # unattended install for win7
-c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password=123456 --cdrom %(ISO-F26-NETINST)s", "osinfo-netinst-unattended")  # triggering the special netinst checking code
+c.add_compare("--install fedora26 --unattended profile=desktop,admin-password=foobar,user-password=blah,product-key=1234", "osinfo-url-unattended")  # unattended install for fedora, using initrd injection
+c.add_compare("--cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended")  # unattended install for win7
+c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password=123456 --location %(ISO-F26-NETINST)s", "osinfo-netinst-unattended")  # triggering the special netinst checking code
 c.add_compare("--os-variant silverblue29 --location http://example.com", "network-install-resources")  # triggering network-install resources override
-c.add_valid("--os-variant fedora26 --unattended", grep="Using unattended profile 'desktop'")  # filling in default 'desktop' profile
+c.add_valid("--pxe --os-variant fedora26 --unattended", grep="Using unattended profile 'desktop'")  # filling in default 'desktop' profile
 c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
 c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
 c.add_invalid("--os-variant debian9 --unattended profile=desktop,admin-password=foobar --location http://example.foo", grep="user-password")  # will trigger user-password required error

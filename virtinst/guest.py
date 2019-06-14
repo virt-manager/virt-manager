@@ -458,11 +458,7 @@ class Guest(XMLBuilder):
         self._metadata.libosinfo.os_id = obj.full_id
 
     def set_os_name(self, name):
-        obj = OSDB.lookup_os(name)
-        if obj is None:
-            raise ValueError(_("Unknown OS name '%s'. "
-                    "See `osinfo-query os` for valid values.") % name)
-
+        obj = OSDB.lookup_os(name, raise_error=True)
         logging.debug("Setting Guest osinfo name %s", obj)
         self._set_os_obj(obj)
 

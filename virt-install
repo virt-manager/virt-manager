@@ -140,14 +140,8 @@ def convert_old_disks(options):
 
 
 def convert_old_os_options(options):
-    # Default to distro autodetection
-    distkey = "auto"
-    if options.os_variant:
-        distkey = options.os_variant
-    elif options.old_os_type:
-        distkey = options.old_os_type
-
-    options.os_variant = distkey
+    if not options.os_variant and options.old_os_type:
+        options.os_variant = options.old_os_type
     del(options.old_os_type)
 
 
@@ -366,6 +360,17 @@ def show_warnings(options, guest, installer, osdata):
 # Guest building helpers #
 ##########################
 
+def get_location_for_os(guest, osname, osdata):
+    osinfo = virtinst.OSDB.lookup_os(osname, raise_error=True)
+    location = osinfo.get_location(guest.os.arch)
+    print_stdout(_("Using {osname} --location {url}").format(
+        osname=osname, url=location))
+    if osdata.default_auto:
+        osdata.default_auto = False
+        osdata.name = osname
+    return location
+
+
 def build_installer(options, guest, osdata):
     cdrom = None
     location = None
@@ -376,30 +381,10 @@ def build_installer(options, guest, osdata):
     install_kernel = None
     install_initrd = None
     install_kernel_args = None
+    install_os = None
 
     if options.install:
         installdata = cli.parse_install(options.install)
-
-    if options.unattended:
-        if osdata.is_none or osdata.is_auto:
-            fail(_("--unattended requires an explicit --os-variant"))
-        if not guest.osinfo.is_windows():
-            if options.cdrom:
-                options.location = options.cdrom
-                options.cdrom = None
-            osdata.install = "location"
-
-    INSTALL_VALUES = ["location"]
-    if osdata.install not in INSTALL_VALUES + [None]:
-        fail(_("Unknown --os-variant install value '%s'. Must be one of: %s") %
-                (osdata.install, ", ".join(INSTALL_VALUES)))
-
-    if osdata.install == "location":
-        if not options.location:
-            location = guest.osinfo.get_location(guest.os.arch)
-            logging.debug(
-                    "Generated default libosinfo '--location %s'", location)
-            options.location = location
 
     extra_args = options.extra_args
     if installdata:
@@ -407,6 +392,7 @@ def build_installer(options, guest, osdata):
         install_kernel = installdata.kernel
         install_initrd = installdata.initrd
         install_kernel_args = installdata.kernel_args
+        install_os = installdata.os
         if installdata.kernel_args:
             if installdata.kernel_args_overwrite:
                 install_kernel_args = installdata.kernel_args
@@ -414,7 +400,9 @@ def build_installer(options, guest, osdata):
                 extra_args = [installdata.kernel_args]
 
     no_install = None
-    if options.location:
+    if install_os:
+        location = get_location_for_os(guest, install_os, osdata)
+    elif options.location:
         (location,
          location_kernel,
          location_initrd) = cli.parse_location(options.location)
@@ -542,13 +530,12 @@ def build_guest_instance(conn, options):
     # we are operating on any arch/os/type values passed in with --boot
     guest.set_capabilities_defaults()
 
-    # If explicit os-variant requested, set it early since it will
-    # provide more defaults in the future
     osdata = cli.parse_os_variant(options.os_variant)
+    installer = build_installer(options, guest, osdata)
+
+    # Set osname after
     guest.set_default_os_name()
     osdata.set_os_name(guest)
-
-    installer = build_installer(options, guest, osdata)
     installer_detect_distro(guest, installer, osdata)
 
     set_cli_defaults(options, guest)

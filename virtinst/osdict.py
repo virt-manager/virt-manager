@@ -215,7 +215,7 @@ class _OSDB(object):
             if osobj.full_id == full_id:
                 return osobj
 
-    def lookup_os(self, key):
+    def lookup_os(self, key, raise_error=False):
         if key in self._aliases:
             alias = self._aliases[key]
             # Added 2018-10-02. Maybe remove aliases in a year
@@ -223,7 +223,12 @@ class _OSDB(object):
                 _("OS name '%s' is deprecated, using '%s' instead. "
                   "This alias will be removed in the future."), key, alias)
             key = alias
-        return self._all_variants.get(key)
+
+        ret = self._all_variants.get(key)
+        if ret is None and raise_error:
+            raise ValueError(_("Unknown OS name '%s'. "
+                    "See `osinfo-query os` for valid values.") % key)
+        return ret
 
     def guess_os_by_iso(self, location):
         try:

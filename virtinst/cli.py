@@ -1564,6 +1564,7 @@ def parse_check(checks):
 
 class ParserInstall(VirtCLIParser):
     cli_arg_name = "install"
+    remove_first = "os"
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -1574,6 +1575,7 @@ class ParserInstall(VirtCLIParser):
         cls.add_arg("kernel_args", "kernel_args", can_comma=True)
         cls.add_arg("kernel_args_overwrite", "kernel_args_overwrite",
                 is_onoff=True)
+        cls.add_arg("os", "os")
 
 
 class InstallData:
@@ -1583,6 +1585,7 @@ class InstallData:
         self.initrd = None
         self.kernel_args = None
         self.kernel_args_overwrite = None
+        self.os = None
 
 
 def parse_install(optstr):
@@ -1630,12 +1633,12 @@ class OSVariantData(object):
         self._name = None
         self.full_id = None
         self.is_none = False
-        self.is_auto = False
-        self.install = None
+        self._explicit_auto = False
+        self.default_auto = False
 
     def _set_name(self, val):
         if val == "auto":
-            self.is_auto = True
+            self._explicit_auto = True
         elif val == "none":
             self.is_none = True
         else:
@@ -1643,6 +1646,12 @@ class OSVariantData(object):
     def _get_name(self):
         return self._name
     name = property(_get_name, _set_name)
+
+    @property
+    def is_auto(self):
+        if self._name:
+            return False
+        return self._explicit_auto or self.default_auto
 
     def set_os_name(self, guest):
         if self.full_id:
@@ -1660,7 +1669,6 @@ class ParserOSVariant(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("name", "name")
         cls.add_arg("full_id", "full_id")
-        cls.add_arg("install", "install")
 
 
 def parse_os_variant(optstr):
@@ -1668,6 +1676,8 @@ def parse_os_variant(optstr):
     if optstr:
         parser = ParserOSVariant(optstr)
         parser.parse(parsedata)
+    else:
+        parsedata.default_auto = True
     return parsedata
 
 
