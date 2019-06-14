@@ -211,13 +211,12 @@ class _URLFetcher(object):
         Grab the passed filename from self.location and save it to
         a temporary file, returning the temp filename
         """
-        prefix = "virtinst-" + os.path.basename(filename) + "."
-
         # pylint: disable=redefined-variable-type
         fn = None
         try:
             fileobj = tempfile.NamedTemporaryFile(
-                dir=self.scratchdir, prefix=prefix, delete=False)
+                prefix="virtinst-", suffix="-" + os.path.basename(filename),
+                dir=self.scratchdir, delete=False)
             fn = fileobj.name
 
             self._grabURL(filename, fileobj, fullurl=fullurl)

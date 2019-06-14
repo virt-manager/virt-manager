@@ -228,11 +228,11 @@ class InstallerTreeMedia(object):
     # Public API #
     ##############
 
-    def _prepare_unattended_data(self, guest, script):
+    def _prepare_unattended_data(self, script):
         if not script:
             return
         expected_filename = script.get_expected_filename()
-        scriptpath = script.write(guest)
+        scriptpath = script.write()
         self._tmpfiles.append(scriptpath)
         self._initrd_injections.append((scriptpath, expected_filename))
 
@@ -255,7 +255,7 @@ class InstallerTreeMedia(object):
         fetcher = self._get_fetcher(guest, meter)
         cache = self._get_cached_data(guest, fetcher)
 
-        self._prepare_unattended_data(guest, unattended_script)
+        self._prepare_unattended_data(unattended_script)
         kernel_args = self._prepare_kernel_args(cache, unattended_script)
 
         kernel, initrd = self._prepare_kernel_url(guest, cache, fetcher)

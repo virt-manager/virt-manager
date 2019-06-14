@@ -91,7 +91,8 @@ def perform_cdrom_injections(injections, scratchdir):
     Insert files into the root directory of a generated cdrom
     """
     fileobj = tempfile.NamedTemporaryFile(
-        dir=scratchdir, prefix="virtinst-unattended-iso", delete=False)
+        prefix="virtinst-", suffix="-unattended.iso",
+        dir=scratchdir, delete=False)
     iso = fileobj.name
 
     try:

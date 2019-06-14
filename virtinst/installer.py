@@ -18,6 +18,11 @@ from .installertreemedia import InstallerTreeMedia
 from .installerinject import perform_cdrom_injections
 
 
+def _make_testsuite_path(path):
+    return os.path.join("/VIRTINST-TESTSUITE",
+            os.path.basename(path).split("-", 2)[-1])
+
+
 class Installer(object):
     """
     Class for kicking off VM installs. The VM is set up separately in a Guest
@@ -131,7 +136,7 @@ class Installer(object):
             # pylint: disable=protected-access
             # Hack to set just the XML path differently for the test suite.
             # Setting this via regular 'path' will error that it doesn't exist
-            dev._source_file = "/TESTSUITE_UNATTENDED_ISO"
+            dev._source_file = _make_testsuite_path(location)
 
     def _remove_unattended_install_cdrom_device(self, guest):
         dummy = guest
@@ -167,10 +172,10 @@ class Installer(object):
         kernel, initrd, kernel_args = self._treemedia_bootconfig
         if kernel:
             guest.os.kernel = (self.conn.in_testsuite() and
-                    "/TESTSUITE_KERNEL_PATH" or kernel)
+                    _make_testsuite_path(kernel) or kernel)
         if initrd:
             guest.os.initrd = (self.conn.in_testsuite() and
-                    "/TESTSUITE_INITRD_PATH" or initrd)
+                    _make_testsuite_path(initrd) or initrd)
         if kernel_args:
             guest.os.kernel_args = kernel_args
 
@@ -219,11 +224,11 @@ class Installer(object):
         unattended_cmdline = script.generate_cmdline()
         logging.debug("Generated unattended cmdline: %s", unattended_cmdline)
 
-        scriptpath = script.write(guest)
+        scriptpath = script.write()
         self._tmpfiles.append(scriptpath)
 
         iso = perform_cdrom_injections([(scriptpath, expected_filename)],
-                guest.conn.get_app_cache_dir())
+                InstallerTreeMedia.make_scratchdir(guest))
         self._tmpfiles.append(iso)
         self._add_unattended_install_cdrom_device(guest, iso)
 

@@ -7,8 +7,8 @@
   <os>
     <type arch="i686" machine="pc">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</loader>
-    <kernel>/TESTSUITE_KERNEL_PATH</kernel>
-    <initrd>/TESTSUITE_INITRD_PATH</initrd>
+    <kernel>/VIRTINST-TESTSUITE/httpkernel</kernel>
+    <initrd>/VIRTINST-TESTSUITE/ftpinitrd</initrd>
   </os>
   <features>
     <acpi/>

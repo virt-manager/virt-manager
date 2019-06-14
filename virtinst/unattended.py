@@ -188,10 +188,9 @@ class OSInstallScript:
         return self._script.generate_command_line(
                 self._osobj.get_handle(), self._config)
 
-    def write(self, guest):
-        scratch = guest.conn.get_app_cache_dir()
+    def write(self):
         fileobj = tempfile.NamedTemporaryFile(
-            dir=scratch, prefix="virtinst-unattended-script", delete=False)
+            prefix="virtinst-unattended-script", delete=False)
         scriptpath = fileobj.name
 
         content = self.generate()
