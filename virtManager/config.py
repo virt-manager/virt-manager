@@ -160,11 +160,11 @@ class vmmConfig(object):
     def is_initialized(cls):
         return bool(cls._instance)
 
-    def __init__(self, CLIConfig, CLITestOptions):
+    def __init__(self, BuildConfig, CLITestOptions):
         self.appname = "virt-manager"
-        self.appversion = CLIConfig.version
+        self.appversion = BuildConfig.version
         self.conf_dir = "/org/virt-manager/%s/" % self.appname
-        self.ui_dir = CLIConfig.ui_dir
+        self.ui_dir = BuildConfig.ui_dir
 
         self.conf = _SettingsWrapper("org.virt-manager.virt-manager")
 
@@ -177,8 +177,8 @@ class vmmConfig(object):
         # the keyring
         self.keyring = None
 
-        self.default_graphics_from_config = CLIConfig.default_graphics
-        self.default_hvs = CLIConfig.default_hvs
+        self.default_graphics_from_config = BuildConfig.default_graphics
+        self.default_hvs = BuildConfig.default_hvs
 
         self.default_storage_format_from_config = "qcow2"
         self.default_console_resizeguest = 0

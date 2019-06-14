@@ -75,7 +75,6 @@ class TestDist(unittest.TestCase):
         files = ["virt-install", "virt-clone", "virt-convert"]
         files += _find_py("virtinst")
         files += _find_py("virtconv")
-        files += _find_py("virtcli")
 
         self._check_modules(files)
 

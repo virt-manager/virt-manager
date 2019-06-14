@@ -14,9 +14,9 @@ os.environ["VIRTINST_TEST_SUITE"] = "1"
 os.environ.pop("_ARC_DEBUG", None)
 
 # pylint: disable=wrong-import-position
-from virtcli import cliconfig
+from virtinst import buildconfig
 # This sets all the cli bits back to their defaults
-imp.reload(cliconfig)
+imp.reload(buildconfig)
 
 from tests import utils
 

@@ -17,9 +17,9 @@ import gi
 gi.require_version('LibvirtGLib', '1.0')
 from gi.repository import LibvirtGLib
 
+from virtinst import BuildConfig
 from virtinst import VirtinstConnection
 from virtinst import cli
-from virtcli import CLIConfig
 
 # This is massively heavy handed, but I can't figure out any way to shut
 # up the slew of gtk deprecation warnings that clog up our very useful
@@ -90,6 +90,21 @@ def _import_gtk(leftovers):
     return leftovers
 
 
+def _setup_gsettings_path(schemadir):
+    """
+    If running from the virt-manager.git srcdir, compile our gsettings
+    schema and use it directly
+    """
+    import subprocess
+    import shutil
+
+    exe = shutil.which("glib-compile-schemas")
+    if not exe:  # pragma: no cover
+        raise RuntimeError("You must install glib-compile-schemas to run "
+            "virt-manager from git.")
+    subprocess.check_call([exe, "--strict", schemadir])
+
+
 def drop_tty():
     # We fork and setsid so that we drop the controlling
     # tty. This prevents libvirt's SSH tunnels from prompting
@@ -118,7 +133,7 @@ def parse_commandline():
     parser = argparse.ArgumentParser(usage="virt-manager [options]",
                                      epilog=epilog)
     parser.add_argument('--version', action='version',
-                        version=CLIConfig.version)
+                        version=BuildConfig.version)
     parser.set_defaults(domain=None)
 
     # Trace every libvirt API call to debug output
@@ -205,8 +220,11 @@ def main():
     cli.setupLogging("virt-manager", options.debug, False, False)
 
     import virtManager
-    logging.debug("virt-manager version: %s", CLIConfig.version)
+    logging.debug("virt-manager version: %s", BuildConfig.version)
     logging.debug("virtManager import: %s", str(virtManager))
+
+    if BuildConfig.running_from_srcdir:
+        _setup_gsettings_path(BuildConfig.gsettings_dir)
 
     if options.trace_libvirt:
         logging.debug("Libvirt tracing requested")
@@ -227,7 +245,7 @@ def main():
         CLITestOptions.old_poll = True
 
     # With F27 gnome+wayland we need to set these before GTK import
-    os.environ["GSETTINGS_SCHEMA_DIR"] = CLIConfig.gsettings_dir
+    os.environ["GSETTINGS_SCHEMA_DIR"] = BuildConfig.gsettings_dir
     if CLITestOptions.first_run:
         os.environ["GSETTINGS_BACKEND"] = "memory"
 
@@ -266,11 +284,11 @@ def main():
         return
 
     # Prime the vmmConfig cache
-    virtManager.config.vmmConfig.get_instance(CLIConfig, CLITestOptions)
+    virtManager.config.vmmConfig.get_instance(BuildConfig, CLITestOptions)
 
     # Add our icon dir to icon theme
     icon_theme = Gtk.IconTheme.get_default()
-    icon_theme.prepend_search_path(CLIConfig.icon_dir)
+    icon_theme.prepend_search_path(BuildConfig.icon_dir)
 
     from virtManager.engine import vmmEngine
 

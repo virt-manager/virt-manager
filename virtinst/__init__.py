@@ -8,7 +8,7 @@
 import gi
 gi.require_version('Libosinfo', '1.0')
 
-from virtcli import CLIConfig as _CLIConfig
+from virtinst.buildconfig import BuildConfig
 
 
 def _setup_i18n():
@@ -21,8 +21,8 @@ def _setup_i18n():
         # Can happen if user passed a bogus LANG
         pass
 
-    gettext.install("virt-manager", _CLIConfig.gettext_dir)
-    gettext.bindtextdomain("virt-manager", _CLIConfig.gettext_dir)
+    gettext.install("virt-manager", BuildConfig.gettext_dir)
+    gettext.bindtextdomain("virt-manager", BuildConfig.gettext_dir)
 
 
 def _set_libvirt_error_handler():

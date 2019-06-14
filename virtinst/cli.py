@@ -20,9 +20,8 @@ import types
 
 import libvirt
 
-from virtcli import CLIConfig
-
 from . import xmlutil
+from .buildconfig import BuildConfig
 from .connection import VirtinstConnection
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
@@ -111,7 +110,7 @@ def setupParser(usage, description, introspection_epilog=False):
         formatter_class=VirtHelpFormatter,
         epilog=epilog)
     parser.add_argument('--version', action='version',
-                        version=CLIConfig.version)
+                        version=BuildConfig.version)
 
     return parser
 

@@ -11,10 +11,9 @@ import random
 
 import libvirt
 
-from virtcli import CLIConfig
-
 from . import generatename
 from . import xmlutil
+from .buildconfig import BuildConfig
 from .devices import *  # pylint: disable=wildcard-import
 from .domain import *  # pylint: disable=wildcard-import
 from .domcapabilities import DomainCapabilities
@@ -220,7 +219,7 @@ class Guest(XMLBuilder):
         XMLBuilder.__init__(self, *args, **kwargs)
 
         # Allow virt-manager to override the default graphics type
-        self.default_graphics_type = CLIConfig.default_graphics
+        self.default_graphics_type = BuildConfig.default_graphics
 
         self.skip_default_console = False
         self.skip_default_channel = False

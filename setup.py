@@ -4,10 +4,15 @@
 # See the COPYING file in the top-level directory.
 
 
+import sys
+if sys.version_info.major < 3:
+    print("virt-manager is python3 only. Run this as ./setup.py")
+    sys.exit(1)
+
 import glob
 import fnmatch
 import os
-import sys
+import re
 import unittest
 
 import distutils
@@ -21,13 +26,25 @@ import distutils.log
 import distutils.sysconfig
 
 
-if sys.version_info.major < 3:
-    print("virt-manager is python3 only. Run this as ./setup.py")
-    sys.exit(1)
-
-from virtcli import CLIConfig
-
 sysprefix = distutils.sysconfig.get_config_var("prefix")
+
+
+def _parse_version():
+    # We do these tricks to not mess up code coverage testing. Switching
+    # to pytest will let use drop these
+    path = os.path.join(os.path.dirname(__file__),
+            "virtinst", "buildconfig.py")
+    content = open(path).read()
+    match = re.search(r"^__version__ = \".*\"$", content, re.MULTILINE)
+    return str(match.group(0)).split()[-1].strip("\"")
+
+
+def _get_buildconfig():
+    from virtinst import BuildConfig
+    return BuildConfig
+
+
+VERSION = _parse_version()
 
 
 # pylint: disable=attribute-defined-outside-init
@@ -54,7 +71,6 @@ def _generate_potfiles_in():
 
     potfiles = "\n".join(scripts) + "\n\n"
     potfiles += "\n".join(find("virtManager", "*.py")) + "\n\n"
-    potfiles += "\n".join(find("virtcli", "*.py")) + "\n\n"
     potfiles += "\n".join(find("virtconv", "*.py")) + "\n\n"
     potfiles += "\n".join(find("virtinst", "*.py")) + "\n\n"
 
@@ -164,12 +180,13 @@ class my_build(distutils.command.build.build):
     def _make_bin_wrappers(self):
         cmds = ["virt-manager", "virt-install", "virt-clone",
                 "virt-convert", "virt-xml"]
+        BuildConfig = _get_buildconfig()
 
         if not os.path.exists("build"):
             os.mkdir("build")
 
         for app in cmds:
-            sharepath = os.path.join(CLIConfig.prefix,
+            sharepath = os.path.join(BuildConfig.prefix,
                 "share", "virt-manager", app)
 
             wrapper = "#!/bin/sh\n\n"
@@ -181,6 +198,7 @@ class my_build(distutils.command.build.build):
 
 
     def _make_man_pages(self):
+        BuildConfig = _get_buildconfig()
         for path in glob.glob("man/*.pod"):
             base = os.path.basename(path)
             appname = os.path.splitext(base)[0]
@@ -191,7 +209,7 @@ class my_build(distutils.command.build.build):
             ret = os.system('pod2man '
                             '--center "Virtual Machine Manager" '
                             '--release %s --name %s '
-                            '< %s > %s' % (CLIConfig.version,
+                            '< %s > %s' % (BuildConfig.version,
                                            appname.upper(),
                                            path, newpath))
             if ret != 0:
@@ -263,19 +281,20 @@ class my_install(distutils.command.install.install):
     Error if we weren't 'configure'd with the correct install prefix
     """
     def finalize_options(self):
+        BuildConfig = _get_buildconfig()
         if self.prefix is None:
-            if CLIConfig.prefix != sysprefix:
+            if BuildConfig.prefix != sysprefix:
                 print("Using configured prefix=%s instead of sysprefix=%s" % (
-                    CLIConfig.prefix, sysprefix))
-                self.prefix = CLIConfig.prefix
+                    BuildConfig.prefix, sysprefix))
+                self.prefix = BuildConfig.prefix
             else:
                 print("Using sysprefix=%s" % sysprefix)
                 self.prefix = sysprefix
 
-        elif self.prefix != CLIConfig.prefix:
+        elif self.prefix != BuildConfig.prefix:
             print("Install prefix=%s doesn't match configure prefix=%s\n"
                   "Pass matching --prefix to 'setup.py configure'" %
-                  (self.prefix, CLIConfig.prefix))
+                  (self.prefix, BuildConfig.prefix))
             sys.exit(1)
 
         distutils.command.install.install.finalize_options(self)
@@ -301,10 +320,11 @@ class my_sdist(distutils.command.sdist.sdist):
     description = "Update virt-manager.spec; build sdist-tarball."
 
     def run(self):
+        BuildConfig = _get_buildconfig()
         f1 = open('virt-manager.spec.in', 'r')
         f2 = open('virt-manager.spec', 'w')
         for line in f1:
-            f2.write(line.replace('@VERSION@', CLIConfig.version))
+            f2.write(line.replace('@VERSION@', BuildConfig.version))
         f1.close()
         f2.close()
 
@@ -328,9 +348,10 @@ class my_rpm(distutils.core.Command):
         """
         Run sdist, then 'rpmbuild' the tar.gz
         """
+        BuildConfig = _get_buildconfig()
         self.run_command('sdist')
         os.system('rpmbuild -ta --clean dist/virt-manager-%s.tar.gz' %
-                  CLIConfig.version)
+                  BuildConfig.version)
 
 
 class configure(distutils.core.Command):
@@ -355,6 +376,7 @@ class configure(distutils.core.Command):
 
 
     def run(self):
+        BuildConfig = _get_buildconfig()
         template = ""
         template += "[config]\n"
         template += "prefix = %s\n" % self.prefix
@@ -363,8 +385,8 @@ class configure(distutils.core.Command):
         if self.default_hvs is not None:
             template += "default_hvs = %s\n" % self.default_hvs
 
-        open(CLIConfig.cfgpath, "w").write(template)
-        print("Generated %s" % CLIConfig.cfgpath)
+        open(BuildConfig.cfgpath, "w").write(template)
+        print("Generated %s" % BuildConfig.cfgpath)
 
 
 class TestBaseCommand(distutils.core.Command):
@@ -587,7 +609,7 @@ class CheckPylint(distutils.core.Command):
 
         files = ["setup.py", "virt-install", "virt-clone",
                  "virt-convert", "virt-xml", "virt-manager",
-                 "virtcli", "virtinst", "virtconv", "virtManager",
+                 "virtinst", "virtconv", "virtManager",
                  "tests"]
 
         try:
@@ -639,7 +661,7 @@ class VMMDistribution(distutils.dist.Distribution):
 
 distutils.core.setup(
     name="virt-manager",
-    version=CLIConfig.version,
+    version=VERSION,
     author="Cole Robinson",
     author_email="virt-tools-list@redhat.com",
     url="http://virt-manager.org",
@@ -675,9 +697,8 @@ distutils.core.setup(
 
         ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
 
-        ("share/virt-manager/virtcli",
-         glob.glob("virtcli/*.py") + glob.glob("virtcli/cli.cfg")),
-        ("share/virt-manager/virtinst", glob.glob("virtinst/*.py")),
+        ("share/virt-manager/virtinst",
+            glob.glob("virtinst/*.py") + glob.glob("virtinst/build.cfg")),
         ("share/virt-manager/virtinst/devices", glob.glob("virtinst/devices/*.py")),
         ("share/virt-manager/virtinst/domain", glob.glob("virtinst/domain/*.py")),
         ("share/virt-manager/virtconv", glob.glob("virtconv/*.py")),

@@ -23,7 +23,7 @@ import configparser
 _cfg = configparser.ConfigParser()
 _filepath = os.path.abspath(__file__)
 _srcdir = os.path.abspath(os.path.join(os.path.dirname(_filepath), ".."))
-_cfgpath = os.path.join(os.path.dirname(_filepath), "cli.cfg")
+_cfgpath = os.path.join(os.path.dirname(_filepath), "build.cfg")
 if os.path.exists(_cfgpath):
     _cfg.read(_cfgpath)  # pragma: no cover
 
@@ -45,25 +45,10 @@ def _get_param(name, default):  # pragma: no cover
         return default
 
 
-def _setup_gsettings_path(schemadir):
-    """
-    If running from the virt-manager.git srcdir, compile our gsettings
-    schema and use it directly
-    """
-    import subprocess
-    import shutil
-
-    exe = shutil.which("glib-compile-schemas")
-    if not exe:  # pragma: no cover
-        raise RuntimeError("You must install glib-compile-schemas to run "
-            "virt-manager from git.")
-    subprocess.check_call([exe, "--strict", schemadir])
-
-
 __version__ = "2.1.0"
 
 
-class _CLIConfig(object):
+class _BuildConfig(object):
     def __init__(self):
         self.cfgpath = _cfgpath
         self.version = __version__
@@ -76,18 +61,18 @@ class _CLIConfig(object):
         self.ui_dir = None
         self.icon_dir = None
         self.gsettings_dir = None
-        self.set_paths_by_prefix(_get_param("prefix", "/usr"),
-            check_source_dir=True)
+        self.running_from_srcdir = _running_from_srcdir
+        self._set_paths_by_prefix(_get_param("prefix", "/usr"))
 
-    def set_paths_by_prefix(self, prefix, check_source_dir=False):
+
+    def _set_paths_by_prefix(self, prefix):
         self.prefix = prefix
         self.gettext_dir = os.path.join(prefix, "share", "locale")
 
-        if _running_from_srcdir and check_source_dir:
+        if self.running_from_srcdir:
             self.ui_dir = os.path.join(_srcdir, "ui")
             self.icon_dir = os.path.join(_srcdir, "data")
             self.gsettings_dir = self.icon_dir
-            _setup_gsettings_path(self.gsettings_dir)
         else:  # pragma: no cover
             self.ui_dir = os.path.join(prefix, "share", "virt-manager", "ui")
             self.icon_dir = os.path.join(prefix, "share", "virt-manager",
@@ -96,4 +81,4 @@ class _CLIConfig(object):
                 "glib-2.0", "schemas")
 
 
-CLIConfig = _CLIConfig()
+BuildConfig = _BuildConfig()
