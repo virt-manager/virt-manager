@@ -960,9 +960,11 @@ class Guest(XMLBuilder):
         for chn in self.devices.channel:
             if chn.type == chn.TYPE_SPICEVMC:
                 return
-        if not self._supports_virtioserial():
-            return
 
+        # We explicitly don't check for virtioserial support here.
+        # We did that for a while, which excluded windows, and
+        # we received some complaints.
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1660123
         dev = DeviceChannel(self.conn)
         dev.type = DeviceChannel.TYPE_SPICEVMC
         dev.set_defaults(self)
