@@ -1255,13 +1255,15 @@ c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --a
 c.add_valid("-o test --auto-clone --uuid 12345678-12F4-1234-1234-123456789AFA --reflink --mac 12:34:56:1A:B2:C3")  # Auto flag, no storage
 c.add_valid("--original-xml " + _CLONE_MANAGED + " --auto-clone")  # Auto flag w/ managed storage
 c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage
-c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --clone-running")  # Auto flag, actual VM, skip state check
+c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --clone-running --nonsparse")  # Auto flag, actual VM, skip state check
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s")  # Preserve data shouldn't complain about existing volume
 c.add_valid("-n clonetest --original-xml " + _CLONE_UNMANAGED + " --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
 c.add_invalid("--auto-clone")  # Just the auto flag
 c.add_invalid("-o test --file foo")  # Didn't specify new name
+c.add_invalid("-o test --auto-clone -n test")  # new name raises error
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-many-devices --auto-clone")  # VM is running, but --clone-running isn't passed
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s --clone-running")  # Should complain about overwriting existing file
+c.add_invalid("--connect %(URI-TEST-REMOTE)s -o test-clone-simple --auto-clone --file /dev/default-pool/testvol9.img --check all=off", grep="Clone onto existing storage volume")  # hit a specific error message
 
 
 c = vclon.add_category("general", "-n clonetest")

@@ -33,5 +33,11 @@
       <source path="/tmp/foo.log"/>
       <target port="0"/>
     </parallel>
+    <graphics type="vnc" port="-1">
+      <listen type="address"/>
+    </graphics>
+    <video>
+      <model type="cirrus" vram="16384" heads="1" primary="yes"/>
+    </video>
   </devices>
 </domain>

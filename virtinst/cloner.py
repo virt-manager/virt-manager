@@ -59,9 +59,10 @@ class Cloner(object):
 
         # Default clone policy for back compat: don't clone readonly,
         # shareable, or empty disks
-        self._clone_policy = [self.CLONE_POLICY_NO_READONLY,
-                              self.CLONE_POLICY_NO_SHAREABLE,
-                              self.CLONE_POLICY_NO_EMPTYMEDIA]
+        self._clone_policy = []
+        self.clone_policy = [self.CLONE_POLICY_NO_READONLY,
+                             self.CLONE_POLICY_NO_SHAREABLE,
+                             self.CLONE_POLICY_NO_EMPTYMEDIA]
 
         # Generate a random UUID at the start
         self.clone_uuid = Guest.generate_uuid(conn)
@@ -81,8 +82,6 @@ class Cloner(object):
 
     # XML of the original guest
     def set_original_xml(self, val):
-        if not isinstance(val, str):
-            raise ValueError(_("Original xml must be a string."))
         self._original_xml = val
         self._original_guest = Guest(self.conn,
                                      parsexml=self._original_xml).name
@@ -215,8 +214,6 @@ class Cloner(object):
     # List of policy rules for determining which vm disks to clone.
     # See CLONE_POLICY_*
     def set_clone_policy(self, policy_list):
-        if not isinstance(policy_list, list):
-            raise ValueError(_("Cloning policy must be a list of rules."))
         self._clone_policy = policy_list
     def get_clone_policy(self):
         return self._clone_policy
@@ -497,17 +494,20 @@ class Cloner(object):
             return DeviceDisk.path_definitely_exists(self.conn, p)
         return generatename.generate_name(clonebase, cb, suffix=suffix)
 
-    def generate_clone_name(self):
+    def generate_clone_name(self, basename=None):
         # If the orig name is "foo-clone", we don't want the clone to be
         # "foo-clone-clone", we want "foo-clone1"
-        basename = self.original_guest
+        if not basename:
+            basename = self.original_guest
 
         match = re.search("-clone[1-9]*$", basename)
         start_num = 1
+        force_num = False
         if match:
             num_match = re.search("[1-9]+$", match.group())
             if num_match:
-                start_num = int(str(num_match.group()))
+                start_num = int(str(num_match.group())) + 1
+                force_num = True
             basename = basename.replace(match.group(), "")
 
         def cb(n):
@@ -515,8 +515,7 @@ class Cloner(object):
                 self.conn.lookupByName, n)
         basename = basename + "-clone"
         return generatename.generate_name(basename, cb,
-                                  sep="", start_num=start_num)
-
+                sep="", start_num=start_num, force_num=force_num)
 
 
     ############################
@@ -568,9 +567,6 @@ class Cloner(object):
     # if it should be cloned
     # Cloning policy based on 'clone_policy', 'force_target' and 'skip_target'
     def _do_we_clone_device(self, disk):
-        if not disk.target:
-            raise ValueError(_("XML has no 'dev' attribute in disk target"))
-
         if disk.target in self.skip_target:
             return False
 

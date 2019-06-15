@@ -52,10 +52,20 @@ class TestClone(unittest.TestCase):
             conn = utils.URIs.open_testdriver_cached()
         cloneobj = Cloner(conn)
         cloneobj.original_xml = in_content
-        for force in force_list or []:
+
+        force_list = force_list or []
+        for force in force_list:
             cloneobj.force_target = force
-        for skip in skip_list or []:
+        self.assertEqual(cloneobj.force_target, force_list)
+        cloneobj.force_target = force_list
+        self.assertEqual(cloneobj.force_target, force_list)
+
+        skip_list = skip_list or []
+        for skip in skip_list:
             cloneobj.skip_target = skip
+        self.assertEqual(cloneobj.skip_target, skip_list)
+        cloneobj.skip_target = skip_list
+        self.assertEqual(cloneobj.skip_target, skip_list)
 
         cloneobj = self._default_clone_values(cloneobj, disks)
 
@@ -70,9 +80,14 @@ class TestClone(unittest.TestCase):
     def _default_clone_values(self, cloneobj, disks=None):
         """Sets default values for the cloned VM."""
         cloneobj.clone_name = "clone-new"
-        cloneobj.clone_uuid = "12345678-1234-1234-1234-123456789012"
 
-        cloneobj.clone_macs = ["22:23:45:67:89:00", "22:23:45:67:89:01"]
+        uuid = "12345678-1234-1234-1234-123456789012"
+        cloneobj.clone_uuid = uuid
+        self.assertEqual(cloneobj.clone_uuid, uuid)
+
+        macs = ["22:23:45:67:89:00", "22:23:45:67:89:01"]
+        cloneobj.clone_macs = macs
+        self.assertEqual(cloneobj.clone_macs, macs)
 
         if disks is None:
             disks = ["/dev/disk-pool/disk-vol1", "/tmp/clone2.img",
@@ -80,6 +95,7 @@ class TestClone(unittest.TestCase):
                      "/tmp/clone5.img", None]
 
         cloneobj.clone_paths = disks
+        self.assertEqual(cloneobj.clone_paths, disks)
         return cloneobj
 
     def _clone_compare(self, cloneobj, outbase, clone_disks_file=None):
@@ -166,3 +182,30 @@ class TestClone(unittest.TestCase):
 
     def testCloneChannelSource(self):
         self._clone("channel-source")
+
+    def testCloneMisc(self):
+        conn = utils.URIs.open_testdriver_cached()
+
+        with self.assertRaises(RuntimeError) as err:
+            cloner = Cloner(conn)
+            # Add this bit here for coverage testing
+            cloner.clone_xml = None
+            cloner.setup_original()
+        self.assertTrue("Original guest name or xml" in str(err.exception))
+
+        with self.assertRaises(RuntimeError) as err:
+            cloner = Cloner(conn)
+            cloner.original_guest = "test-snapshots"
+            cloner.setup_original()
+        self.assertTrue("paused or shutoff" in str(err.exception))
+
+        with self.assertRaises(ValueError) as err:
+            cloner = Cloner(conn)
+            cloner.original_guest = "test-clone-simple"
+            cloner.setup_original()
+            cloner.setup_clone()
+        self.assertTrue("More disks to clone" in str(err.exception))
+
+        cloner = Cloner(conn)
+        self.assertEqual(
+                cloner.generate_clone_name("test-clone5"), "test-clone6")
