@@ -458,9 +458,12 @@ class DeviceDisk(Device):
                     self.source_name = self.source_name[1:]
 
     def _set_source_network_from_storage(self, volxml, poolxml):
-        self.source_protocol = poolxml.type
-        logging.debug("disk.set_vol_object: poolxml=\n%s",
-                      dir(poolxml))
+        is_iscsi_direct = poolxml.type == "iscsi-direct"
+        protocol = poolxml.type
+        if is_iscsi_direct:
+            protocol = "iscsi"
+
+        self.source_protocol = protocol
         if poolxml.auth_type:
             self.auth_username = poolxml.auth_username
             self.auth_secret_type = poolxml.auth_type
@@ -474,14 +477,22 @@ class DeviceDisk(Device):
                 obj.port = host.port
 
         path = ""
-        if poolxml.source_name:
-            path += poolxml.source_name
-            if poolxml.source_path:
-                path += poolxml.source_path
-            if not path.endswith('/'):
-                path += "/"
-        path += volxml.name
-        self.source_name = path
+        if is_iscsi_direct:
+            # Vol path is like this:
+            # ip-10.66.144.87:3260-iscsi-iqn.2017-12.com.virttest:emulated-iscsi-noauth.target2-lun-1
+            # Always seems to have -iscsi- embedded in it
+            if "-iscsi-iqn." in volxml.target_path:
+                path = volxml.target_path.split("-iscsi-", 1)[-1]
+        else:
+            if poolxml.source_name:
+                path += poolxml.source_name
+                if poolxml.source_path:
+                    path += poolxml.source_path
+                if not path.endswith('/'):
+                    path += "/"
+            path += volxml.name
+        self.source_name = path or None
+
         self.type = "network"
 
     def _set_network_source_from_backend(self):

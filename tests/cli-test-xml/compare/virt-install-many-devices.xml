@@ -204,6 +204,13 @@
       </source>
       <target dev="sdae" bus="scsi"/>
     </disk>
+    <disk type="network" device="disk">
+      <driver name="qemu"/>
+      <source protocol="iscsi" name="iqn.2017-12.com.virttest:emulated-iscsi-noauth.target2-lun-1">
+        <host name="10.66.144.87"/>
+      </source>
+      <target dev="vdo" bus="virtio"/>
+    </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
     </controller>
