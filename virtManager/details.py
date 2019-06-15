@@ -1791,6 +1791,8 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_NET_MAC):
             kwargs["macaddr"] = self.widget("network-mac-entry").get_text()
+            virtinst.DeviceInterface.is_conflict_net(
+                    self.conn.get_backend(), kwargs["macaddr"])
 
         if self.edited(EDIT_NET_LINKSTATE):
             kwargs["linkstate"] = self.widget("network-link-state-checkbox").get_active()
