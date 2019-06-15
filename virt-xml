@@ -217,14 +217,13 @@ def action_remove_device(guest, options, parserclass):
     return devs
 
 
-def action_build_xml(conn, options, parserclass):
+def action_build_xml(conn, options, parserclass, guest):
     if not parserclass.guest_propname:
         fail(_("--build-xml not supported for --%s") %
              parserclass.cli_arg_name)
     if options.os_variant is not None:
         fail(_("--os-variant is not supported with --build-xml"))
 
-    guest = virtinst.Guest(conn)
     inst = parserclass.lookup_prop(guest)
     if parserclass.prop_is_list(guest):
         inst = inst.new()
@@ -374,7 +373,8 @@ def parse_args():
         help=_("Add specified device. Example:\n"
         "--add-device --disk ..."))
     actg.add_argument("--build-xml", action="store_true",
-        help=_("Just output the built device XML, no domain required."))
+        help=_("Output built device XML. Domain is optional but "
+               "recommended to ensure optimal defaults."))
 
     outg = parser.add_argument_group(_("Output options"))
     outg.add_argument("--update", action="store_true",
@@ -467,8 +467,9 @@ def main(conn=None):
     if options.domain:
         domain, inactive_xmlobj, active_xmlobj = get_domain_and_guest(
             conn, options.domain)
-    elif not options.build_xml:
-        inactive_xmlobj = virtinst.Guest(conn, options.stdinxml)
+    else:
+        inactive_xmlobj = virtinst.Guest(conn,
+                parsexml=options.stdinxml)
 
     check_action_collision(options)
     parserclass = check_xmlopt_collision(options)
@@ -478,7 +479,7 @@ def main(conn=None):
              (parserclass.cli_arg_name))
 
     if options.build_xml:
-        devs = action_build_xml(conn, options, parserclass)
+        devs = action_build_xml(conn, options, parserclass, inactive_xmlobj)
         for dev in devs:
             # pylint: disable=no-member
             print_stdout(dev.get_xml())

@@ -1119,6 +1119,8 @@ c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm path=/dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.weight=200", "build-blkiotune")
 c.add_compare("--build-xml --idmap uid.start=0,uid.target=1000,uid.count=10,gid.start=0,gid.target=1000,gid.count=10", "build-idmap")
+c.add_compare("--connect %(URI-KVM)s --build-xml --disk %(EXISTIMG1)s", "build-disk-plain")
+c.add_compare("--connect %(URI-KVM)s test-many-devices --build-xml --disk %(EXISTIMG1)s", "build-disk-domain")
 c.add_compare("4a64cc71-19c4-2fd0-2323-3050941ea3c3 --edit --boot network,cdrom", "edit-bootorder")  # basic bootorder test, also using UUID lookup
 c.add_compare("--confirm 1 --edit --cpu host-passthrough", "prompt-response", input_text="yes")  # prompt response, also using domid lookup
 c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(XMLDIR + "/virtxml-qemu-commandline-clear.xml"))

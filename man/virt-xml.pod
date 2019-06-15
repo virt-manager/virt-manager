@@ -17,7 +17,7 @@ Each B<virt-xml> invocation requires 3 things: name of an existing domain to alt
 --add-device: Append a new device definition to the XML
 --remove-device: Remove an existing device definition
 --edit: Edit an existing XML block
---build-xml: Just build the requested XML block and print it (no domain or input XML are required here).
+--build-xml: Just build the requested XML block and print it. No domain or input are required here, but it's recommended to provide them, so virt-xml can fill in optimal defaults.
 
 An XML change is one instance of any of the XML options provided by virt-xml, for example --disk or --boot.
 
@@ -117,6 +117,8 @@ This option will error if specified with a non-device XML option (see --edit sec
 =item B<--build-xml>
 
 Just build the specified XML, and print it to stdout. No input domain or input XML is required. Example: '--build-xml --disk DISK-OPTIONS' will just print the new <disk> device.
+
+However if the generated XML is targeted for a specific domain, it's recommended to pass it to virt-xml, so the tool can set optimal defaults.
 
 This option will error if specified with an XML option that does not map cleanly to a specific XML block, like --vcpus or --memory.
 
