@@ -483,6 +483,23 @@ class Details(uiutils.UITestCase):
         self._stop_vm(win)
         self.assertTrue(not share.checked)
 
+        # Unapplied changes should warn when switching to XML tab
+        tab = self._select_hw(win, "Overview", "overview-tab")
+        tab.find("Description:", "text").text = "hey new description"
+        win.find("XML", "page tab").click()
+        alert = self.app.root.find("vmm dialog")
+        alert.find_fuzzy("changes will be lost")
+
+        # Select 'No', meaning don't abandon changes
+        alert.find("No", "push button").click()
+        uiutils.check_in_loop(lambda: tab.showing)
+
+        # Try unapplied changes again, this time abandon our changes
+        win.find("XML", "page tab").click()
+        alert = self.app.root.find("vmm dialog")
+        alert.find("Yes", "push button").click()
+        uiutils.check_in_loop(lambda: not tab.showing)
+
     def testDetailsXMLEdit(self):
         """
         Test XML editing interaction

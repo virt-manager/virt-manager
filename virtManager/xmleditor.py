@@ -34,6 +34,8 @@ class vmmXMLEditor(vmmGObjectUI):
         self._srcbuf = None
         self._init_ui()
 
+        self.details_changed = False
+
         self.add_gsettings_handle(
             self.config.on_xmleditor_enabled_changed(
                 self._xmleditor_enabled_changed_cb))
@@ -81,10 +83,10 @@ class vmmXMLEditor(vmmGObjectUI):
     # Internal helpers #
     ####################
 
-    def _reselect_xml_page(self):
+    def _reselect_page(self, pagenum):
         # Setting _curpage first will shortcircuit our page changed callback
-        self._curpage = _PAGE_XML
-        self.widget("xml-notebook").set_current_page(_PAGE_XML)
+        self._curpage = pagenum
+        self.widget("xml-notebook").set_current_page(pagenum)
 
     def _reset_xml(self):
         self.set_xml("")
@@ -97,6 +99,32 @@ class vmmXMLEditor(vmmGObjectUI):
         startiter = self._srcbuff.get_start_iter()
         startiter.forward_line()
         self._srcbuff.place_cursor(startiter)
+
+    def _detials_unapplied_changes(self):
+        if not self.details_changed:
+            return False
+
+        ret = self.err.yes_no(
+                _("There are unapplied changes."),
+                _("Your changes will be lost if you leave this tab. "
+                    "Really leave this tab?"))
+        if ret:
+            self.details_changed = False
+
+        return not ret
+
+    def _xml_unapplied_changes(self):
+        if self._srcxml == self.get_xml():
+            return False
+
+        ret = self.err.yes_no(
+                _("There are unapplied changes."),
+                _("Your XML changes will be lost if you leave this tab. "
+                  "Really leave this tab?"))
+
+        return not ret
+
+
 
 
     ##############
@@ -159,34 +187,26 @@ class vmmXMLEditor(vmmGObjectUI):
     def _before_page_changed_cb(self, notebook, widget, pagenum):
         if self._curpage == pagenum:
             return
+        prevpage = self._curpage
         self._curpage = pagenum
 
-        # If the XML page is clicked, emit xml-requested signal which
-        # expects the user to call set_xml/set_libvirtobject. This saves
-        # having to fetch inactive XML up front, and gives users like
-        # a hook to actually serialize the final XML to return
         if pagenum == _PAGE_XML:
-            self.emit("xml-requested")
-            return
-
-        # If the details page is selected from the XML page, and the user
-        # edited the XML, we need to warn that leaving this screen will
-        # invalidate the changes.
-        if self._srcxml == self.get_xml():
-            return
-
-        ret = self.err.yes_no(
-                _("There are unapplied changes."),
-                _("Your XML changes will be lost if you leave this tab. "
-                  "Really leave this tab?"))
-        if ret:
-            self._reset_xml()
-            return
+            if not self._detials_unapplied_changes():
+                # If the XML page is clicked, emit xml-requested signal which
+                # expects the user to call set_xml/set_libvirtobject. This saves
+                # having to fetch inactive XML up front, and gives users like
+                # a hook to actually serialize the final XML to return
+                self.emit("xml-requested")
+                return
+        else:
+            if not self._xml_unapplied_changes():
+                self._reset_xml()
+                return
 
         # I can't find anyway to make the notebook stay on the current page
         # So set an idle callback to switch back to the XML page. It causes
         # a visual UI blip unfortunately
-        self.idle_add(self._reselect_xml_page)
+        self.idle_add(self._reselect_page, prevpage)
 
     def _after_page_changed_cb(self, notebook, gparam):
         self._curpage = notebook.get_current_page()

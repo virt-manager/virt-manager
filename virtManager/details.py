@@ -1194,6 +1194,7 @@ class vmmDetails(vmmGObjectUI):
         self.active_edits = []
         self.widget("config-apply").set_sensitive(False)
         self.widget("config-cancel").set_sensitive(False)
+        self._xmleditor.details_changed = False
 
     def enable_apply(self, *arglist):
         edittype = arglist[-1]
@@ -1201,6 +1202,8 @@ class vmmDetails(vmmGObjectUI):
         self.widget("config-cancel").set_sensitive(True)
         if edittype not in self.active_edits:
             self.active_edits.append(edittype)
+        if edittype != EDIT_XML:
+            self._xmleditor.details_changed = True
 
     # Idmap
     def config_idmap_enable(self, src):

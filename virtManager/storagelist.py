@@ -601,10 +601,12 @@ class vmmStorageList(vmmGObjectUI):
     def _enable_pool_apply(self, edittype):
         self._active_edits.add(edittype)
         self.widget("pool-apply").set_sensitive(True)
+        self._xmleditor.details_changed = True
 
     def _disable_pool_apply(self):
         self._active_edits = set()
         self.widget("pool-apply").set_sensitive(False)
+        self._xmleditor.details_changed = False
 
     def _confirm_changes(self):
         if (self.is_visible() and

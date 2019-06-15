@@ -474,10 +474,12 @@ class vmmHostNets(vmmGObjectUI):
     def _disable_net_apply(self):
         self._active_edits = set()
         self.widget("net-apply").set_sensitive(False)
+        self._xmleditor.details_changed = False
 
     def _enable_net_apply(self, edittype):
         self.widget("net-apply").set_sensitive(True)
         self._active_edits.add(edittype)
+        self._xmleditor.details_changed = True
 
     def _confirm_changes(self):
         if (self.is_visible() and
