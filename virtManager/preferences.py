@@ -14,6 +14,7 @@ from virtinst import DomainCpu
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .inspection import vmmInspection
+from .systray import vmmSystray
 
 
 class vmmPreferences(vmmGObjectUI):
@@ -202,7 +203,12 @@ class vmmPreferences(vmmGObjectUI):
     #########################
 
     def refresh_view_system_tray(self):
+        errmsg = vmmSystray.systray_disabled_message()
         val = self.config.get_view_system_tray()
+        if errmsg:
+            val = False
+        self.widget("prefs-system-tray").set_sensitive(not bool(errmsg))
+        self.widget("prefs-system-tray").set_tooltip_text(errmsg)
         self.widget("prefs-system-tray").set_active(bool(val))
 
     def refresh_xmleditor(self):
