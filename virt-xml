@@ -59,6 +59,13 @@ def set_os_variant(options, guest):
         guest.set_os_name(osdata.name)
 
 
+def get_xmldesc(domain, inactive=False):
+    flags = libvirt.VIR_DOMAIN_XML_SECURE
+    if inactive:
+        flags |= libvirt.VIR_DOMAIN_XML_INACTIVE
+    return domain.XMLDesc(flags)
+
+
 def get_domain_and_guest(conn, domstr):
     try:
         int(domstr)
@@ -87,11 +94,11 @@ def get_domain_and_guest(conn, domstr):
 
     state = domain.info()[0]
     active_xmlobj = None
-    inactive_xmlobj = virtinst.Guest(conn, parsexml=domain.XMLDesc(0))
+    inactive_xmlobj = virtinst.Guest(conn, parsexml=get_xmldesc(domain))
     if state != libvirt.VIR_DOMAIN_SHUTOFF:
         active_xmlobj = inactive_xmlobj
         inactive_xmlobj = virtinst.Guest(conn,
-                parsexml=domain.XMLDesc(libvirt.VIR_DOMAIN_XML_INACTIVE))
+                parsexml=get_xmldesc(domain, inactive=True))
 
     return (domain, inactive_xmlobj, active_xmlobj)
 
