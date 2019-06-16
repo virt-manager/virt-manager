@@ -861,6 +861,7 @@ class vmmCloneVM(vmmGObjectUI):
                 self.idle_add(pool.refresh)
             except Exception:
                 logging.debug("Error looking up pool=%s for refresh after "
+                        "VM clone.", poolname, exc_info=True)
 
     def change_storage_browse(self, ignore):
         def callback(src_ignore, txt):
