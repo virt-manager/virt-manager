@@ -582,7 +582,10 @@ class Guest(XMLBuilder):
             "secboot" in self.os.loader):
             self.features.smm = True
             self.os.loader_secure = True
-            self.os.machine = "q35"
+            if self.os.machine and "q35" not in self.os.machine:
+                logging.warning("Changing machine type from '%s' to 'q35' "
+                        "which is required for UEFI secure boot.")
+                self.os.machine = "q35"
 
     def disable_hyperv_for_uefi(self):
         # UEFI doesn't work with hyperv bits for some OS
