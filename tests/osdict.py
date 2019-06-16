@@ -38,7 +38,8 @@ class TestOSDB(unittest.TestCase):
         self.assertEqual(res.get_recommended_ncpus(guest.os.arch), 2)
 
     def test_urldetct_matching_distros(self):
-        allstores = urldetect.ALLSTORES
+        # pylint: disable=protected-access
+        allstores = urldetect._build_distro_list(OSDB.lookup_os("generic"))
 
         seen_distro = []
         for store in allstores:

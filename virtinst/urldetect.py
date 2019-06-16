@@ -820,19 +820,22 @@ class _LibosinfoDistro(_DistroTree):
         ]
 
 
-# Build list of all *Distro classes
-def _make_all_stores():
-    allstores = []
-    for obj in list(globals().values()):
-        if (isinstance(obj, type) and
-            issubclass(obj, _DistroTree) and
-            obj.PRETTY_NAME):
-            allstores.append(obj)
-    return allstores
-
-
 def _build_distro_list(osobj):
-    allstores = ALLSTORES[:]
+    allstores = [
+        # Libosinfo takes priority
+        _LibosinfoDistro,
+        _FedoraDistro,
+        _RHELDistro,
+        _CentOSDistro,
+        _SLESDistro,
+        _SLEDDistro,
+        _OpensuseDistro,
+        _DebianDistro,
+        _UbuntuDistro,
+        _MageiaDistro,
+        # Always stick GenericDistro at the end, since it's a catchall
+        _GenericTreeinfoDistro,
+    ]
 
     # If user manually specified an os_distro, bump its URL class
     # to the top of the list
@@ -852,14 +855,6 @@ def _build_distro_list(osobj):
         else:
             logging.debug("No matching store found, not prioritizing anything")
 
-    # Always stick Libosinfo first, it takes priority
-    allstores.remove(_LibosinfoDistro)
-    allstores.insert(0, _LibosinfoDistro)
-
-    # Always stick GenericDistro at the end, since it's a catchall
-    allstores.remove(_GenericTreeinfoDistro)
-    allstores.append(_GenericTreeinfoDistro)
-
     import os
     force_libosinfo = os.environ.get("VIRTINST_TEST_SUITE_FORCE_LIBOSINFO")
     if force_libosinfo:
@@ -869,6 +864,3 @@ def _build_distro_list(osobj):
             allstores.remove(_LibosinfoDistro)
 
     return allstores
-
-
-ALLSTORES = _make_all_stores()
