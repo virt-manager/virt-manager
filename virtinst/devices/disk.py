@@ -505,7 +505,7 @@ class DeviceDisk(Device):
             self._set_source_network_from_url(self._storage_backend.get_path())
 
     def _build_url_from_network_source(self):
-        ret = self.source_protocol
+        ret = self.source_protocol or "unknown"
         if self.source_host_transport:
             ret += "+%s" % self.source_host_transport
         ret += "://"
