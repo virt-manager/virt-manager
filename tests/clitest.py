@@ -1085,7 +1085,7 @@ vixml = App("virt-xml")
 c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--sound=? --tpm=?")  # basic introspection test
-c.add_valid("test-state-shutoff --edit --update --boot menu=on")  # --update with inactive VM, should work but warn
+c.add_valid("test-state-shutoff --edit --update --boot menu=on", grep="The VM is not running")  # --update with inactive VM, should work but warn
 c.add_valid("test-for-virtxml --edit --graphics password=foo --update --confirm", input_text="no\nno\n")  # prompt exiting
 c.add_valid("test-for-virtxml --edit --cpu host-passthrough --no-define --start --confirm", input_text="no")  # transient prompt exiting
 c.add_valid("test-for-virtxml --edit --metadata name=test-for-virtxml", grep="requested changes will have no effect")
@@ -1093,8 +1093,8 @@ c.add_invalid("test --edit 2 --events on_poweroff=destroy", grep="'--edit 2' doe
 c.add_invalid("test --os-variant fedora26 --edit --cpu host-passthrough", grep="--os-variant is not supported")
 c.add_invalid("test-for-virtxml --os-variant fedora26 --remove-device --disk 1", grep="--os-variant is not supported")
 c.add_invalid("--build-xml --os-variant fedora26 --disk path=foo", grep="--os-variant is not supported")
-c.add_invalid("domain-idontexist --cpu host-passthrough --start", grep="Could not find domain")
-c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start", grep="Either update or start")
+c.add_invalid("domain-idontexist --edit --cpu host-passthrough --start", grep="Could not find domain")
+c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start", grep="Cannot mix --update")
 c.add_invalid("test --edit --update --events on_poweroff=destroy", grep="Don't know how to --update for --events")
 c.add_invalid("--edit --cpu host-passthrough --confirm", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"), grep="Can't use --confirm with stdin")
 c.add_invalid("--edit --cpu host-passthrough --update", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"), grep="Can't use --update with stdin")

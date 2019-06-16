@@ -436,9 +436,6 @@ def main(conn=None):
         options.quiet = False
     cli.setupLogging("virt-xml", options.debug, options.quiet)
 
-    if options.update and options.start:
-        fail(_("Either update or start a domain"))
-
     if cli.check_option_introspection(options):
         return 0
 
@@ -453,6 +450,10 @@ def main(conn=None):
         else:
             fail(_("A domain must be specified"))
 
+    # Default to --define, unless:
+    #  --no-define explicitly specified
+    #  --print-* option is used
+    #  XML input came from stdin
     if not options.print_xml and not options.print_diff:
         if options.stdinxml:
             if not options.define:
@@ -463,6 +464,21 @@ def main(conn=None):
     if options.confirm and not options.print_xml:
         options.print_diff = True
 
+    # Ensure only one of these actions wash specified
+    #   --edit
+    #   --remove-device
+    #   --add-device
+    #   --build-xml
+    check_action_collision(options)
+
+    # Ensure there wasn't more than one device/xml config option
+    # specified. So reject '--disk X --network X'
+    parserclass = check_xmlopt_collision(options)
+
+    if options.update and not parserclass.guest_propname:
+        fail(_("Don't know how to --update for --%s") %
+             (parserclass.cli_arg_name))
+
     conn = cli.getConnection(options.connect, conn)
 
     domain = None
@@ -472,15 +488,8 @@ def main(conn=None):
         domain, inactive_xmlobj, active_xmlobj = get_domain_and_guest(
             conn, options.domain)
     else:
-        inactive_xmlobj = virtinst.Guest(conn,
-                parsexml=options.stdinxml)
-
-    check_action_collision(options)
-    parserclass = check_xmlopt_collision(options)
-
-    if options.update and not parserclass.guest_propname:
-        fail(_("Don't know how to --update for --%s") %
-             (parserclass.cli_arg_name))
+        inactive_xmlobj = virtinst.Guest(conn, parsexml=options.stdinxml)
+    vm_is_running = bool(active_xmlobj)
 
     if options.build_xml:
         devs = action_build_xml(conn, options, parserclass, inactive_xmlobj)
@@ -489,35 +498,48 @@ def main(conn=None):
             print_stdout(dev.get_xml())
         return 0
 
+    performed_update = False
     if options.update:
-        if active_xmlobj:
+        if options.update and options.start:
+            fail(_("Cannot mix --update and --start"))
+
+        if vm_is_running:
             devs, action = prepare_changes(active_xmlobj, options, parserclass)
             update_changes(domain, devs, action, options.confirm)
+            performed_update = True
         else:
             logging.warning(
                 _("The VM is not running, --update is inapplicable."))
+        if not options.define:
+            # --update and --no-define passed, so we are done
+            # It's hard to hit this case with the test suite
+            return 0  # pragma: no cover
 
-    if options.define or options.start:
-        devs, action = prepare_changes(inactive_xmlobj, options, parserclass)
-        if options.define:
-            dom = define_changes(conn, inactive_xmlobj,
-                                 devs, action, options.confirm)
-            if dom and options.start:
-                try:
-                    dom.create()
-                except libvirt.libvirtError as e:  # pragma: no cover
-                    fail(_("Failed starting domain '%s': %s") % (inactive_xmlobj.name, e))
-                print_stdout(_("Domain '%s' started successfully.") %
-                             inactive_xmlobj.name)
-            elif not options.update and active_xmlobj and dom:
-                print_stdout(
-                    _("Changes will take effect after the domain is fully powered off."))
-        else:
-            dom = start_domain_transient(conn, inactive_xmlobj, devs,
-                                         action, options.confirm)
+    devs, action = prepare_changes(inactive_xmlobj, options, parserclass)
+    if not options.define:
+        if options.start:
+            start_domain_transient(conn, inactive_xmlobj, devs,
+                                   action, options.confirm)
+        return 0
 
-    if not options.update and not options.define and not options.start:
-        prepare_changes(inactive_xmlobj, options, parserclass)
+    dom = define_changes(conn, inactive_xmlobj,
+                         devs, action, options.confirm)
+    if not dom:
+        # --confirm user said 'no'
+        return 0
+
+    if options.start:
+        try:
+            dom.create()
+        except libvirt.libvirtError as e:  # pragma: no cover
+            fail(_("Failed starting domain '%s': %s") % (
+                inactive_xmlobj.name, e))
+        print_stdout(_("Domain '%s' started successfully.") %
+                     inactive_xmlobj.name)
+
+    elif vm_is_running and not performed_update:
+        print_stdout(
+            _("Changes will take effect after the domain is fully powered off."))
 
     return 0
 
