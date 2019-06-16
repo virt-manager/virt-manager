@@ -65,6 +65,7 @@ class VMMPrefs(uiutils.UITestCase):
         xmleditor = detailswin.find("XML editor")
 
         detailswin.find("XML", "page tab").click()
+        uiutils.drag(detailswin, 400, 400)
         warnlabel = detailswin.find_fuzzy("XML editing is disabled")
         self.assertTrue(warnlabel.visible)
         origtext = xmleditor.text
