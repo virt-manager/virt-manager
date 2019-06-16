@@ -2278,6 +2278,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("dtb", "dtb")
         cls.add_arg("cmdline", "kernel_args", can_comma=True)
 
+        cls.add_arg("firmware", "firmware")
         cls.add_arg("boot[0-9]*.dev", "dev",
                     find_inst_cb=cls.boot_find_inst_cb)
         cls.add_arg("bootmenu.enable", "enable_bootmenu", is_onoff=True)

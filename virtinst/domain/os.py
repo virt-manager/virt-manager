@@ -110,6 +110,7 @@ class DomainOs(XMLBuilder):
     arch = XMLProperty("./type/@arch")
     machine = XMLProperty("./type/@machine")
     os_type = XMLProperty("./type")
+    firmware = XMLProperty("./@firmware")
 
 
     ##################
