@@ -2221,8 +2221,13 @@ class ParserBoot(VirtCLIParser):
     ###################
 
     def set_uefi_cb(self, inst, val, virtarg):
-        self.guest.set_uefi_path(self.guest.get_uefi_path())
-        if self.editing:
+        if not self.editing:
+            # From virt-install, we just set this flag, and set_defaults()
+            # will fill in everything for us, otherwise we have a circular
+            # dep on determining arch/machine info
+            self.guest.uefi_requested = True
+        else:
+            self.guest.set_uefi_path(self.guest.get_uefi_path())
             self.guest.disable_hyperv_for_uefi()
 
     def set_initargs_cb(self, inst, val, virtarg):

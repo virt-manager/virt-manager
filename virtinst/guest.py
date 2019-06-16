@@ -230,6 +230,7 @@ class Guest(XMLBuilder):
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
 
         self.skip_default_osinfo = False
+        self.uefi_requested = False
         self.__osinfo = None
         self._capsinfo = None
         self._domcaps = None
@@ -773,15 +774,19 @@ class Guest(XMLBuilder):
 
 
     def _set_default_uefi(self):
-        if (self.prefers_uefi() and
+        use_default_uefi = (self.prefers_uefi() and
             not self.os.kernel and
             not self.os.loader and
             self.os.loader_ro is None and
-            self.os.nvram is None):
+            self.os.nvram is None)
+
+        if use_default_uefi or self.uefi_requested:
             try:
                 path = self.get_uefi_path()
                 self.set_uefi_path(path)
             except RuntimeError as e:
+                if self.uefi_requested:
+                    raise
                 logging.debug("Error setting UEFI default",
                     exc_info=True)
                 logging.warning("Couldn't configure UEFI: %s", e)
