@@ -120,7 +120,7 @@ class _DistroCache(object):
         try:
             return [(_get_treeinfo_path("kernel"),
                      _get_treeinfo_path("initrd"))]
-        except Exception:
+        except Exception:  # pragma: no cover
             logging.debug("Failed to parse treeinfo kernel/initrd",
                     exc_info=True)
             return []
@@ -402,7 +402,7 @@ class _FedoraDistro(_DistroTree):
         latest_variant = "fedora-unknown"
 
         verstr = self.cache.treeinfo_version
-        if not verstr:
+        if not verstr:  # pragma: no cover
             logging.debug("No treeinfo version? Assume latest_variant=%s",
                     latest_variant)
             return latest_variant
@@ -418,9 +418,10 @@ class _FedoraDistro(_DistroTree):
         if OSDB.lookup_os(variant):
             return variant
 
-        logging.debug("variant=%s from treeinfo version=%s not found, "
+        logging.debug(  # pragma: no cover
+                "variant=%s from treeinfo version=%s not found, "
                 "using latest_variant=%s", variant, verstr, latest_variant)
-        return latest_variant
+        return latest_variant  # pragma: no cover
 
 
 class _RHELDistro(_DistroTree):

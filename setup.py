@@ -408,6 +408,7 @@ class TestBaseCommand(distutils.core.Command):
         self.coverage = 0
         self.only = None
         self._testfiles = []
+        self._clistate = {}
         self._dir = os.getcwd()
         self.testfile = None
         self._force_verbose = False
@@ -454,6 +455,8 @@ class TestBaseCommand(distutils.core.Command):
                 self.regenerate_output)
         testsmodule.utils.clistate.use_coverage = bool(cov)
         testsmodule.utils.clistate.debug = bool(self.debug)
+        for key, val in self._clistate.items():
+            setattr(testsmodule.utils.clistate, key, val)
         testsmodule.setup_logging()
         testsmodule.setup_cli_imports()
 
@@ -566,11 +569,12 @@ class TestURLFetch(TestBaseCommand):
 
     def run(self):
         self._testfiles = ["tests.test_urls"]
-        from tests.utils import clistate
-        clistate.url_iso_only = bool(self.iso_only)
-        clistate.url_only = bool(self.url_only)
-        clistate.url_skip_libosinfo = bool(self.skip_libosinfo)
-        clistate.url_force_libosinfo = bool(self.force_libosinfo)
+        self._clistate = {
+            "url_iso_only": bool(self.iso_only),
+            "url_only": bool(self.url_only),
+            "url_skip_libosinfo": bool(self.skip_libosinfo),
+            "url_force_libosinfo": bool(self.force_libosinfo),
+        }
         TestBaseCommand.run(self)
 
 
