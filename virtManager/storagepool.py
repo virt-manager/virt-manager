@@ -195,7 +195,7 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def refresh_pool_cache_from_event_loop(self, _from_object_init=False):
         if not _from_object_init:
-            self.ensure_latest_xml()
+            self.recache_from_event_loop()
         self._update_volumes(force=True)
         self.idle_emit("refreshed")
         self._last_refresh_time = time.time()
