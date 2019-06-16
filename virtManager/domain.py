@@ -252,11 +252,6 @@ class vmmDomain(vmmLibvirtObject):
                 self._status_reason = self._backend.state()[1]
         return self._status_reason
 
-    def get_cloning(self):
-        return self.cloning
-    def set_cloning(self, val):
-        self.cloning = bool(val)
-
     # If manual shutdown or destroy specified, make sure we don't continue
     # install process
     def get_install_abort(self):
@@ -1281,9 +1276,6 @@ class vmmDomain(vmmLibvirtObject):
 
     @vmmLibvirtObject.lifecycle_action
     def startup(self):
-        if self.get_cloning():
-            raise RuntimeError(_("Cannot start guest while cloning "
-                                 "operation in progress"))
         self._backend.create()
 
     @vmmLibvirtObject.lifecycle_action
@@ -1316,9 +1308,6 @@ class vmmDomain(vmmLibvirtObject):
 
     @vmmLibvirtObject.lifecycle_action
     def resume(self):
-        if self.get_cloning():
-            raise RuntimeError(_("Cannot resume guest while cloning "
-                                 "operation in progress"))
         self._backend.resume()
 
     @vmmLibvirtObject.lifecycle_action

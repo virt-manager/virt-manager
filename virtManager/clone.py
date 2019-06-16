@@ -838,35 +838,29 @@ class vmmCloneVM(vmmGObjectUI):
         progWin.run()
 
     def _async_clone(self, asyncjob):
-        try:
-            self.vm.set_cloning(True)
-            meter = asyncjob.get_meter()
+        meter = asyncjob.get_meter()
 
-            refresh_pools = []
-            for disk in self.clone_design.clone_disks:
-                if not disk.wants_storage_creation():
-                    continue
+        refresh_pools = []
+        for disk in self.clone_design.clone_disks:
+            if not disk.wants_storage_creation():
+                continue
 
-                pool = disk.get_parent_pool()
-                if not pool:
-                    continue
+            pool = disk.get_parent_pool()
+            if not pool:
+                continue
 
-                poolname = pool.name()
-                if poolname not in refresh_pools:
-                    refresh_pools.append(poolname)
+            poolname = pool.name()
+            if poolname not in refresh_pools:
+                refresh_pools.append(poolname)
 
-            self.clone_design.start_duplicate(meter)
+        self.clone_design.start_duplicate(meter)
 
-            for poolname in refresh_pools:
-                try:
-                    pool = self.conn.get_pool(poolname)
-                    self.idle_add(pool.refresh)
-                except Exception:
-                    logging.debug("Error looking up pool=%s for refresh after "
-                        "VM clone.", poolname, exc_info=True)
-
-        finally:
-            self.vm.set_cloning(False)
+        for poolname in refresh_pools:
+            try:
+                pool = self.conn.get_pool(poolname)
+                self.idle_add(pool.refresh)
+            except Exception:
+                logging.debug("Error looking up pool=%s for refresh after "
 
     def change_storage_browse(self, ignore):
         def callback(src_ignore, txt):
