@@ -1086,6 +1086,7 @@ c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--sound=? --tpm=?")  # basic introspection test
 c.add_valid("test-state-shutoff --edit --update --boot menu=on", grep="The VM is not running")  # --update with inactive VM, should work but warn
+c.add_valid("test-state-shutoff --edit --boot menu=on", grep="XML did not change after domain define")  # menu=on is discarded because <bootloader> is specified
 c.add_valid("test-for-virtxml --edit --graphics password=foo --update --confirm", input_text="no\nno\n")  # prompt exiting
 c.add_valid("test-for-virtxml --edit --cpu host-passthrough --no-define --start --confirm", input_text="no")  # transient prompt exiting
 c.add_valid("test-for-virtxml --edit --metadata name=test-for-virtxml", grep="requested changes will have no effect")

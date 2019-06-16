@@ -103,6 +103,12 @@ def get_domain_and_guest(conn, domstr):
     return (domain, inactive_xmlobj, active_xmlobj)
 
 
+def defined_xml_is_unchanged(conn, domain, original_xml):
+    rawxml = get_xmldesc(domain, inactive=True)
+    new_xml = virtinst.Guest(conn, parsexml=rawxml)
+    return new_xml != original_xml
+
+
 ################
 # Change logic #
 ################
@@ -522,6 +528,7 @@ def main(conn=None):
             # It's hard to hit this case with the test suite
             return 0  # pragma: no cover
 
+    original_xml = inactive_xmlobj.get_xml()
     devs, action = prepare_changes(inactive_xmlobj, options, parserclass)
     if not options.define:
         if options.start:
@@ -547,6 +554,9 @@ def main(conn=None):
     elif vm_is_running and not performed_update:
         print_stdout(
             _("Changes will take effect after the domain is fully powered off."))
+    elif defined_xml_is_unchanged(conn, domain, original_xml):
+        logging.warning(_("XML did not change after domain define. You may "
+            "have changed a value that libvirt is setting by default."))
 
     return 0
 
