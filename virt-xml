@@ -333,6 +333,10 @@ def prepare_changes(xmlobj, options, parserclass):
     newxml = xmlobj.get_xml()
     diff = get_diff(origxml, newxml)
 
+    if not diff:
+        logging.warning(_("No XML diff was generated. The requested "
+            "changes will have no effect."))
+
     if options.print_diff:
         if diff:
             print_stdout(diff)

@@ -1088,7 +1088,7 @@ c.add_valid("--sound=? --tpm=?")  # basic introspection test
 c.add_valid("test-state-shutoff --edit --update --boot menu=on")  # --update with inactive VM, should work but warn
 c.add_valid("test-for-virtxml --edit --graphics password=foo --update --confirm", input_text="no\nno\n")  # prompt exiting
 c.add_valid("test-for-virtxml --edit --cpu host-passthrough --no-define --start --confirm", input_text="no")  # transient prompt exiting
-c.add_valid("test-for-virtxml --edit --metadata name=test-for-virtxml")  # 'no diff' code path
+c.add_valid("test-for-virtxml --edit --metadata name=test-for-virtxml", grep="requested changes will have no effect")
 c.add_invalid("test --edit 2 --events on_poweroff=destroy", grep="'--edit 2' doesn't make sense with --events")
 c.add_invalid("test --os-variant fedora26 --edit --cpu host-passthrough", grep="--os-variant is not supported")
 c.add_invalid("test-for-virtxml --os-variant fedora26 --remove-device --disk 1", grep="--os-variant is not supported")
