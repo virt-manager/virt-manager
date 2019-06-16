@@ -1240,6 +1240,7 @@ c.add_compare("--add-device --network default --os-variant http://fedoraproject.
 _CLONE_UNMANAGED = "%s/clone-disk.xml" % XMLDIR
 _CLONE_MANAGED = "%s/clone-disk-managed.xml" % XMLDIR
 _CLONE_NOEXIST = "%s/clone-disk-noexist.xml" % XMLDIR
+_CLONE_NVRAM = "%s/clone-nvram-auto.xml" % XMLDIR
 
 vclon = App("virt-clone")
 c = vclon.add_category("remote", "--connect %(URI-TEST-REMOTE)s")
@@ -1252,6 +1253,7 @@ c.add_invalid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto fl
 c = vclon.add_category("misc", "")
 c.add_compare("--connect %(URI-KVM)s -o test-clone --auto-clone --clone-running", "clone-auto1")
 c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2")
+c.add_valid("--connect %(URI-KVM)s --original-xml " + _CLONE_NVRAM + " --auto-clone --clone-running")  # hits a particular nvram code path
 c.add_valid("-o test --auto-clone --uuid 12345678-12F4-1234-1234-123456789AFA --reflink --mac 12:34:56:1A:B2:C3")  # Auto flag, no storage
 c.add_valid("--original-xml " + _CLONE_MANAGED + " --auto-clone")  # Auto flag w/ managed storage
 c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage
