@@ -1273,6 +1273,7 @@ c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("-o test --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # Nodisk, but with spurious files passed
 c.add_valid("-o test --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --prompt")  # Working scenario w/ prompt shouldn't ask anything
 c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # XML File with 2 disks
+c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --skip-copy=hda")  # XML w/ disks, skipping one disk target
 c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --file virt-install --file %(EXISTIMG1)s --preserve")  # XML w/ disks, overwriting existing files with --preserve
 c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --file %(NEWCLONEIMG3)s --force-copy=hdc")  # XML w/ disks, force copy a readonly target
 c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media

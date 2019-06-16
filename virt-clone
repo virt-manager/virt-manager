@@ -113,6 +113,10 @@ def parse_args():
     stog.add_argument("--force-copy", dest="target", action="append",
                     help=_("Force to copy devices (eg, if 'hdc' is a "
                            "readonly cdrom device, --force-copy=hdc)"))
+    stog.add_argument("--skip-copy", action="append",
+                    help=_("Skip copy of the device target. (eg, if 'vda' is a "
+                           "disk you don't want to copy and use the same path "
+                           "in the new VM, use --skip-copy=vda)"))
     stog.add_argument("--nonsparse", action="store_false", dest="sparse",
                     default=True,
                     help=_("Do not use a sparse file for the clone's "
@@ -176,6 +180,8 @@ def main(conn=None):
         design.reflink = True
     for i in options.target or []:
         design.force_target = i
+    for i in options.skip_copy or []:
+        design.skip_target = i
     design.clone_sparse = options.sparse
     design.preserve = options.preserve
 
