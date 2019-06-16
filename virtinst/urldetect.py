@@ -516,10 +516,13 @@ class _SuseDistro(_RHELDistro):
                 ("boot/%s/vmlinuz-xen" % tree_arch,
                  "boot/%s/initrd-xen" % tree_arch))
 
-        if (tree_arch == "s390x" and
-            str(self._os_variant).startswith(("sles11", "sled11"))):
-            self._kernel_paths.append(
-                ("boot/s390x/vmrdr.ikr", "boot/s390x/initrd"))
+        if str(self._os_variant).startswith(("sles11", "sled11")):
+            if tree_arch == "s390x":
+                self._kernel_paths.append(
+                    ("boot/s390x/vmrdr.ikr", "boot/s390x/initrd"))
+            if tree_arch == "ppc64":
+                self._kernel_paths.append(
+                    ("suseboot/linux64", "suseboot/initrd64"))
 
         # Tested with SLES 12 for ppc64le, all s390x
         self._kernel_paths.append(
