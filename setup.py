@@ -12,7 +12,6 @@ if sys.version_info.major < 3:
 import glob
 import fnmatch
 import os
-import re
 import unittest
 
 import distutils
@@ -29,22 +28,25 @@ import distutils.sysconfig
 sysprefix = distutils.sysconfig.get_config_var("prefix")
 
 
-def _parse_version():
-    # We do these tricks to not mess up code coverage testing. Switching
-    # to pytest will let use drop these
-    path = os.path.join(os.path.dirname(__file__),
-            "virtinst", "buildconfig.py")
-    content = open(path).read()
-    match = re.search(r"^__version__ = \".*\"$", content, re.MULTILINE)
-    return str(match.group(0)).split()[-1].strip("\"")
+def _import_buildconfig():
+    # A bit of crazyness to import the buildconfig file without importing
+    # the rest of virtinst, so the build process doesn't require all the
+    # runtime deps to be installed
+    import warnings
+
+    # 'imp' is deprecated. We use it elsewhere though too. Deal with using
+    # the modern replacement when we replace all usage
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
+        import imp
+        buildconfig = imp.load_source('buildconfig', 'virtinst/buildconfig.py')
+        if "libvirt" in sys.modules:
+            raise RuntimeError("Found libvirt in sys.modules. setup.py should "
+                    "not import virtinst.")
+        return buildconfig.BuildConfig
 
 
-def _get_buildconfig():
-    from virtinst import BuildConfig
-    return BuildConfig
-
-
-VERSION = _parse_version()
+BuildConfig = _import_buildconfig()
 
 
 # pylint: disable=attribute-defined-outside-init
@@ -180,8 +182,6 @@ class my_build(distutils.command.build.build):
     def _make_bin_wrappers(self):
         cmds = ["virt-manager", "virt-install", "virt-clone",
                 "virt-convert", "virt-xml"]
-        BuildConfig = _get_buildconfig()
-
         if not os.path.exists("build"):
             os.mkdir("build")
 
@@ -198,7 +198,6 @@ class my_build(distutils.command.build.build):
 
 
     def _make_man_pages(self):
-        BuildConfig = _get_buildconfig()
         for path in glob.glob("man/*.pod"):
             base = os.path.basename(path)
             appname = os.path.splitext(base)[0]
@@ -281,7 +280,6 @@ class my_install(distutils.command.install.install):
     Error if we weren't 'configure'd with the correct install prefix
     """
     def finalize_options(self):
-        BuildConfig = _get_buildconfig()
         if self.prefix is None:
             if BuildConfig.prefix != sysprefix:
                 print("Using configured prefix=%s instead of sysprefix=%s" % (
@@ -320,7 +318,6 @@ class my_sdist(distutils.command.sdist.sdist):
     description = "Update virt-manager.spec; build sdist-tarball."
 
     def run(self):
-        BuildConfig = _get_buildconfig()
         f1 = open('virt-manager.spec.in', 'r')
         f2 = open('virt-manager.spec', 'w')
         for line in f1:
@@ -348,7 +345,6 @@ class my_rpm(distutils.core.Command):
         """
         Run sdist, then 'rpmbuild' the tar.gz
         """
-        BuildConfig = _get_buildconfig()
         self.run_command('sdist')
         os.system('rpmbuild -ta --clean dist/virt-manager-%s.tar.gz' %
                   BuildConfig.version)
@@ -376,7 +372,6 @@ class configure(distutils.core.Command):
 
 
     def run(self):
-        BuildConfig = _get_buildconfig()
         template = ""
         template += "[config]\n"
         template += "prefix = %s\n" % self.prefix
@@ -665,7 +660,7 @@ class VMMDistribution(distutils.dist.Distribution):
 
 distutils.core.setup(
     name="virt-manager",
-    version=VERSION,
+    version=BuildConfig.version,
     author="Cole Robinson",
     author_email="virt-tools-list@redhat.com",
     url="http://virt-manager.org",
