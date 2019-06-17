@@ -103,12 +103,12 @@ def is_virt_bootstrap_installed():
 # Main class #
 ##############
 
-class vmmCreate(vmmGObjectUI):
+class vmmCreateVM(vmmGObjectUI):
     @classmethod
     def show_instance(cls, parentobj, uri=None):
         try:
             if not cls._instance:
-                cls._instance = vmmCreate()
+                cls._instance = vmmCreateVM()
             cls._instance.show(parentobj and parentobj.topwin or None, uri=uri)
         except Exception as e:
             if not parentobj:
@@ -117,7 +117,7 @@ class vmmCreate(vmmGObjectUI):
                     _("Error launching create dialog: %s") % str(e))
 
     def __init__(self):
-        vmmGObjectUI.__init__(self, "create.ui", "vmm-create")
+        vmmGObjectUI.__init__(self, "createvm.ui", "vmm-create")
         self._cleanup_on_app_close()
 
         self.conn = None

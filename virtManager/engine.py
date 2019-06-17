@@ -506,8 +506,8 @@ class vmmEngine(vmmGObject):
             manager.set_initial_selection(uri)
             manager.show()
         elif show_window == self.CLI_SHOW_DOMAIN_CREATOR:
-            from .create import vmmCreate
-            vmmCreate.show_instance(None, uri)
+            from .createvm import vmmCreateVM
+            vmmCreateVM.show_instance(None, uri)
         elif show_window == self.CLI_SHOW_HOST_SUMMARY:
             from .host import vmmHost
             vmmHost.show_instance(None, self._connobjs[uri])

@@ -453,9 +453,9 @@ class vmmManager(vmmGObjectUI):
         vmmConnect.get_instance(self).show(self.topwin)
 
     def new_vm(self, _src):
-        from .create import vmmCreate
+        from .createvm import vmmCreateVM
         conn = self.current_conn()
-        vmmCreate.show_instance(self, conn and conn.get_uri() or None)
+        vmmCreateVM.show_instance(self, conn and conn.get_uri() or None)
 
     def show_about(self, _src):
         from .about import vmmAbout
