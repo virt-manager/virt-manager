@@ -9,8 +9,6 @@ import logging
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from virtinst import NodeDevice
-
 from . import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
@@ -107,19 +105,6 @@ class vmmHostNets(vmmGObjectUI):
         netCol.add_attribute(net_img, 'stock-size', 3)
         self.widget("net-list").append_column(netCol)
         netListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-
-        # Virtual Function list
-        # [vf-name]
-        vf_list = self.widget("vf-list")
-        vf_list_model = Gtk.ListStore(str)
-        vf_list.set_model(vf_list_model)
-        vf_list.set_headers_visible(False)
-
-        vfTextCol = Gtk.TreeViewColumn()
-        vf_txt = Gtk.CellRendererText()
-        vfTextCol.pack_start(vf_txt, True)
-        vfTextCol.add_attribute(vf_txt, 'text', 0)
-        vf_list.append_column(vfTextCol)
 
         self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
                 self.widget("net-details-align"),
@@ -264,34 +249,6 @@ class vmmHostNets(vmmGObjectUI):
             routevia = routeaddr + ", gateway=" + routevia
             self.widget("net-ipv6-route").set_text(routevia or "")
 
-    def _populate_sriov_state(self, net):
-        (is_vf_pool, pf_name, vfs) = net.get_sriov_vf_networks()
-
-        self.widget("net-sriov-expander").set_visible(is_vf_pool)
-        if not pf_name:
-            self.widget("pf-name").set_text("N/A")
-            return
-
-        self.widget("pf-name").set_text(pf_name)
-
-        vf_list_model = self.widget("vf-list").get_model()
-        vf_list_model.clear()
-        for vf in vfs:
-            addrStr = "%x:%x:%x.%x" % (vf.domain, vf.bus, vf.slot, vf.function)
-            pcidev = NodeDevice.lookupNodedevFromString(self.conn.get_backend(),
-                                                        addrStr)
-
-            vf_name = None
-
-            netdevs = self.conn.filter_nodedevs("net")
-            for netdev in netdevs:
-                logging.debug(netdev.xmlobj.parent)
-                if pcidev.name == netdev.xmlobj.parent:
-                    vf_name = netdev.xmlobj.interface
-                    break
-
-            vf_list_model.append([vf_name or addrStr])
-
     def _populate_net_state(self, net):
         active = net.is_active()
 
@@ -319,7 +276,6 @@ class vmmHostNets(vmmGObjectUI):
 
         self._populate_net_ipv4_state(net)
         self._populate_net_ipv6_state(net)
-        self._populate_sriov_state(net)
 
         self._xmleditor.set_xml_from_libvirtobject(net)
 
@@ -357,7 +313,6 @@ class vmmHostNets(vmmGObjectUI):
             return
 
         logging.debug("Stopping network '%s'", net.get_name())
-        self.widget("vf-list").get_model().clear()
         vmmAsyncJob.simple_async_noshow(net.stop, [], self,
                             _("Error stopping network '%s'") % net.get_name())
 

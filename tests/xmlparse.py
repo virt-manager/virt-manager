@@ -1385,13 +1385,6 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(net.forward.pf[0])
         check("dev", "eth3")
 
-        check = self._make_checker(net.forward.vfs[0])
-        check("type", "pci")
-        check("domain", 0x0000)
-        check("bus", 0x03)
-        check("slot", 0x10)
-        check("function", 0x0)
-
         utils.diff_compare(net.get_xml(), outfile)
         utils.test_create(self.conn, net.get_xml(), "networkDefineXML")
 

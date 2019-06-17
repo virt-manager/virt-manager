@@ -176,18 +176,6 @@ class vmmNetwork(vmmLibvirtObject):
         ret = self._get_network("ipv6")
         return ret + [self._get_static_route("ipv6")]
 
-    def get_sriov_vf_networks(self):
-        xmlobj = self.get_xmlobj()
-        pf_name = None
-        vfs = None
-        ret = False
-        if xmlobj.forward.mode == "hostdev":
-            ret = True
-            if xmlobj.forward.pf:
-                pf_name = xmlobj.forward.pf[0].dev
-                vfs = xmlobj.forward.vfs
-        return (ret, pf_name, vfs)
-
     def pretty_forward_mode(self):
         mode = self.xmlobj.forward.mode
         dev = self.xmlobj.forward.dev
