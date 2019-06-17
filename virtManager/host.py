@@ -11,7 +11,7 @@ from .baseclass import vmmGObjectUI
 from .engine import vmmEngine
 from .graphwidgets import Sparkline
 from .hostnets import vmmHostNets
-from .storagelist import vmmStorageList
+from .hoststorage import vmmHostStorage
 
 
 class vmmHost(vmmGObjectUI):
@@ -132,7 +132,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-align").add(self._hostnets.top_box)
 
     def _init_storage_state(self):
-        self._storagelist = vmmStorageList(self.conn, self.builder, self.topwin)
+        self._storagelist = vmmHostStorage(self.conn, self.builder, self.topwin)
         self.widget("storage-align").add(self._storagelist.top_box)
 
     def _init_conn_state(self):

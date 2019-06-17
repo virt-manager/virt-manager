@@ -54,7 +54,7 @@ def _get_pool_size_percent(pool):
     return "<span size='small' color='#484848'>%s%%</span>" % int(per)
 
 
-class vmmStorageList(vmmGObjectUI):
+class vmmHostStorage(vmmGObjectUI):
     __gsignals__ = {
         "browse-clicked": (vmmGObjectUI.RUN_FIRST, None, []),
         "volume-chosen": (vmmGObjectUI.RUN_FIRST, None, [object]),
@@ -62,7 +62,7 @@ class vmmStorageList(vmmGObjectUI):
     }
 
     def __init__(self, conn, builder, topwin, vol_sensitive_cb=None):
-        vmmGObjectUI.__init__(self, "storagelist.ui",
+        vmmGObjectUI.__init__(self, "hoststorage.ui",
                               None, builder=builder, topwin=topwin)
         self.conn = conn
 

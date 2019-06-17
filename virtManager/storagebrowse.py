@@ -8,7 +8,7 @@ from virtinst import log
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
-from .storagelist import vmmStorageList
+from .hoststorage import vmmHostStorage
 
 
 class vmmStorageBrowser(vmmGObjectUI):
@@ -22,7 +22,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         # Passed to browse_local
         self._browse_reason = None
 
-        self.storagelist = vmmStorageList(self.conn, self.builder, self.topwin,
+        self.storagelist = vmmHostStorage(self.conn, self.builder, self.topwin,
             self._vol_sensitive_cb)
         self._init_ui()
 
