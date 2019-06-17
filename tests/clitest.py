@@ -844,6 +844,7 @@ c.add_compare("-c %(EXISTIMG2)s --os-variant win2k3 --vcpus cores=4 --controller
 c.add_invalid("--hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
 c.add_invalid("--hvm --import --wait 0", grep="exceeded specified time limit")  # --wait 0, but test suite hack
 c.add_invalid("--hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
+c.add_invalid("--hvm --import --wait", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
 c.add_invalid("--connect test:///default --name foo --ram 64 --disk none --sdl --hvm --import", use_default_args=False, grep="exceeded specified time limit")  # --sdl doesn't have a console callback, triggers implicit --wait -1
 c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no second XML step
 c.add_invalid("--paravirt --import --print-xml 7")  # Invalid --print-xml arg

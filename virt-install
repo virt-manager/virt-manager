@@ -900,7 +900,7 @@ def parse_args():
     misc.add_argument("--destroy-on-exit", action="store_true", default=False,
                       help=_("Force power off the domain when the console "
                              "viewer is closed."))
-    misc.add_argument("--wait", type=int,
+    misc.add_argument("--wait", type=int, const=-1, nargs="?",
                       help=_("Minutes to wait for install to complete."))
 
     cli.add_misc_options(misc, prompt=True, printxml=True, printstep=True,
