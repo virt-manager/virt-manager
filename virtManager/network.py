@@ -106,15 +106,6 @@ class vmmNetwork(vmmLibvirtObject):
             self.refresh_dhcp_leases()
         return self._leases
 
-    def set_qos(self, **kwargs):
-        xmlobj = self._make_xmlobj_to_define()
-        q = xmlobj.bandwidth
-        for key, val in kwargs.items():
-            setattr(q, key, val)
-
-        self._redefine_xmlobj(xmlobj)
-        return self.is_active()
-
     def get_uuid(self):
         return self.get_xmlobj().uuid
     def get_bridge_device(self):
@@ -125,8 +116,6 @@ class vmmNetwork(vmmLibvirtObject):
         return self.get_xmlobj().ipv6
     def get_ipv4_forward_mode(self):
         return self.get_xmlobj().forward.mode
-    def get_qos(self):
-        return self.get_xmlobj().bandwidth
 
     def can_pxe(self):
         return self.get_xmlobj().can_pxe()

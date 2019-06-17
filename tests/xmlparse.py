@@ -1299,15 +1299,6 @@ class XMLParseTest(unittest.TestCase):
         check("macaddr", None, "52:54:00:69:eb:FF")
         check("virtualport_type", None, "openvswitch")
 
-        check = self._make_checker(net.bandwidth)
-        check("inbound_average", "1000", "3000")
-        check("inbound_peak", "5000", "4000")
-        check("inbound_burst", "5120", "5220")
-        check("inbound_floor", None, None)
-        check("outbound_average", "1000", "2000")
-        check("outbound_peak", "5000", "3000")
-        check("outbound_burst", "5120", "5120")
-
         self.assertEqual(len(net.portgroups), 2)
         check = self._make_checker(net.portgroups[0])
         check("name", "engineering", "foo")

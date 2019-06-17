@@ -73,19 +73,6 @@ class _NetworkForward(XMLBuilder):
     vfs = XMLChildProperty(_NetworkForwardAddress)
 
 
-class _NetworkBandwidth(XMLBuilder):
-    XML_NAME = "bandwidth"
-
-    inbound_average = XMLProperty("./inbound/@average")
-    inbound_peak = XMLProperty("./inbound/@peak")
-    inbound_burst = XMLProperty("./inbound/@burst")
-    inbound_floor = XMLProperty("./inbound/@floor")
-
-    outbound_average = XMLProperty("./outbound/@average")
-    outbound_peak = XMLProperty("./outbound/@peak")
-    outbound_burst = XMLProperty("./outbound/@burst")
-
-
 class _NetworkPortgroup(XMLBuilder):
     XML_NAME = "portgroup"
 
@@ -100,7 +87,7 @@ class Network(XMLBuilder):
     XML_NAME = "network"
     _XML_PROP_ORDER = ["ipv6", "name", "uuid", "forward", "virtualport_type",
                        "bridge", "stp", "delay", "domain_name",
-                       "macaddr", "ips", "routes", "bandwidth"]
+                       "macaddr", "ips", "routes"]
 
     ipv6 = XMLProperty("./@ipv6", is_yesno=True)
     name = XMLProperty("./name")
@@ -121,7 +108,6 @@ class Network(XMLBuilder):
     portgroups = XMLChildProperty(_NetworkPortgroup)
     ips = XMLChildProperty(_NetworkIP)
     routes = XMLChildProperty(_NetworkRoute)
-    bandwidth = XMLChildProperty(_NetworkBandwidth, is_single=True)
 
 
     ###################
