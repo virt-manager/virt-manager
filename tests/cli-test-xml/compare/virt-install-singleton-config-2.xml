@@ -44,6 +44,7 @@
   <vcpu>9</vcpu>
   <numatune>
     <memory mode="strict" nodeset="1-3,4"/>
+    <memnode cellid="1" mode="strict" nodeset="2"/>
   </numatune>
   <resource>
     <partition>/virtualmachines/production</partition>
@@ -258,6 +259,7 @@
   <vcpu>9</vcpu>
   <numatune>
     <memory mode="strict" nodeset="1-3,4"/>
+    <memnode cellid="1" mode="strict" nodeset="2"/>
   </numatune>
   <resource>
     <partition>/virtualmachines/production</partition>

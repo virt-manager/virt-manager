@@ -517,7 +517,8 @@ cache.mode=emulate,cache.level=3
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
 --seclabel type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes,baselabel=baselabel
 --seclabel type=dynamic,label=012:345
---numatune 1-3,4,mode=strict
+--numatune 1-3,4,mode=strict,\
+memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200
 --memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,discard=yes,allocation.mode=immediate,access_mode=shared,source_type=file,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2

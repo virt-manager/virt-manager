@@ -1747,12 +1747,25 @@ class ParserNumatune(VirtCLIParser):
         "memory.nodeset": "nodeset",
     }
 
+    def memnode_find_inst_cb(self, *args, **kwargs):
+        cliarg = "memnode"  # memnode[0-9]*
+        list_propname = "memnode"
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("memory.nodeset", "memory_nodeset", can_comma=True)
         cls.add_arg("memory.mode", "memory_mode")
         cls.add_arg("memory.placement", "memory_placement")
+
+        cls.add_arg("memnode[0-9]*.cellid", "cellid", can_comma=True,
+                find_inst_cb=cls.memnode_find_inst_cb)
+        cls.add_arg("memnode[0-9]*.mode", "mode",
+                find_inst_cb=cls.memnode_find_inst_cb)
+        cls.add_arg("memnode[0-9]*.nodeset", "nodeset", can_comma=True,
+                find_inst_cb=cls.memnode_find_inst_cb)
 
 
 ####################
