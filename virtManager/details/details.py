@@ -14,19 +14,19 @@ import libvirt
 import virtinst
 from virtinst import log
 
-from . import uiutil
-from .addhardware import vmmAddHardware
-from .baseclass import vmmGObjectUI
-from .device.addstorage import vmmAddStorage
-from .device.fsdetails import vmmFSDetails
-from .device.gfxdetails import vmmGraphicsDetails
-from .device.mediacombo import vmmMediaCombo
-from .device.netlist import vmmNetworkList
-from .device.vsockdetails import vmmVsockDetails
-from .graphwidgets import Sparkline
-from .oslist import vmmOSList
-from .storagebrowse import vmmStorageBrowser
-from .xmleditor import vmmXMLEditor
+from .. import uiutil
+from ..addhardware import vmmAddHardware
+from ..baseclass import vmmGObjectUI
+from ..device.addstorage import vmmAddStorage
+from ..device.fsdetails import vmmFSDetails
+from ..device.gfxdetails import vmmGraphicsDetails
+from ..device.mediacombo import vmmMediaCombo
+from ..device.netlist import vmmNetworkList
+from ..device.vsockdetails import vmmVsockDetails
+from ..graphwidgets import Sparkline
+from ..oslist import vmmOSList
+from ..storagebrowse import vmmStorageBrowser
+from ..xmleditor import vmmXMLEditor
 
 
 # Parameters that can be edited in the details window
@@ -1147,7 +1147,7 @@ class vmmDetails(vmmGObjectUI):
         return key
 
     def inspection_refresh(self, _src):
-        from .inspection import vmmInspection
+        from ..inspection import vmmInspection
         inspection = vmmInspection.get_instance()
         if inspection:
             inspection.vm_refresh(self.vm)

@@ -22,7 +22,7 @@ from gi.repository import Vte
 
 import libvirt
 
-from .baseclass import vmmGObject
+from ..baseclass import vmmGObject
 
 
 class ConsoleConnection(vmmGObject):

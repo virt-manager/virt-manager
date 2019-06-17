@@ -10,11 +10,11 @@ from gi.repository import Gdk
 
 from virtinst import log
 
-from .baseclass import vmmGObject, vmmGObjectUI
 from .serialcon import vmmSerialConsole
 from .sshtunnels import ConnectionInfo
 from .viewers import SpiceViewer, VNCViewer, have_spice_gtk
-from .vmwindow import DETAILS_PAGE_CONSOLE
+from ..baseclass import vmmGObject, vmmGObjectUI
+from ..vmwindow import DETAILS_PAGE_CONSOLE
 
 
 # console-pages IDs
@@ -947,7 +947,7 @@ class vmmConsolePages(vmmGObjectUI):
                          radio=False, sensitive=False)
             return
 
-        from .device.gfxdetails import vmmGraphicsDetails
+        from ..device.gfxdetails import vmmGraphicsDetails
 
         active = (self.widget("console-pages").get_current_page() !=
                 _CONSOLE_PAGE_SERIAL)

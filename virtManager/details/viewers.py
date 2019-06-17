@@ -23,8 +23,8 @@ except (ValueError, ImportError):
 
 from virtinst import log
 
-from .baseclass import vmmGObject
 from .sshtunnels import SSHTunnels
+from ..baseclass import vmmGObject
 
 
 ##################################

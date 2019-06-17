@@ -13,7 +13,7 @@ import ipaddress
 
 from virtinst import log
 
-from .baseclass import vmmGObject
+from ..baseclass import vmmGObject
 
 
 class ConnectionInfo(object):

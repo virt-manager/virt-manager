@@ -11,9 +11,9 @@ from virtinst import log
 
 from . import vmmenu
 from .baseclass import vmmGObjectUI
-from .details import vmmDetails
 from .engine import vmmEngine
-from .snapshots import vmmSnapshotPage
+from .details.details import vmmDetails
+from .details.snapshots import vmmSnapshotPage
 
 
 # Main tab pages
@@ -69,7 +69,7 @@ class vmmVMWindow(vmmGObjectUI):
 
         self.ignoreDetails = False
 
-        from .console import vmmConsolePages
+        from .details.console import vmmConsolePages
         self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
         self.snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
         self.widget("snapshot-placeholder").add(self.snapshots.top_box)
