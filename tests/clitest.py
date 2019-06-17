@@ -837,6 +837,7 @@ c.add_invalid("--os-variant foo://bar", grep="Unknown libosinfo ID")  # bad full
 
 c = vinst.add_category("single-disk-install", "--nographics --noautoconsole --disk %(EXISTIMG1)s")
 c.add_valid("--hvm --import")  # FV Import install
+c.add_valid("--hvm --install no_install=yes")  # import install equivalent
 c.add_valid("--hvm --import --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
 c.add_valid("--paravirt --import")  # PV Import install
 c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import install
@@ -1019,6 +1020,7 @@ c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics n
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64 --input default", "xen-pv", precompare_check="5.3.0")  # Xen PV
 c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
+c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --install no_install=yes --hvm", "xen-hvm")  # Ensure --livecd and --install no_install are essentially identical
 
 
 

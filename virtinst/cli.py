@@ -1579,6 +1579,7 @@ class ParserInstall(VirtCLIParser):
         cls.add_arg("kernel_args_overwrite", "kernel_args_overwrite",
                 is_onoff=True)
         cls.add_arg("os", "os")
+        cls.add_arg("no_install", "no_install", is_onoff=True)
 
 
 class InstallData:
@@ -1590,6 +1591,7 @@ class InstallData:
         self.kernel_args_overwrite = None
         self.os = None
         self.is_set = False
+        self.no_install = None
 
 
 def parse_install(optstr):

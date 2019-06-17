@@ -398,13 +398,13 @@ def build_installer(options, guest, installdata):
     install_initrd = installdata.initrd
     install_kernel_args = installdata.kernel_args
     install_os = installdata.os
+    no_install = installdata.no_install
     if installdata.kernel_args:
         if installdata.kernel_args_overwrite:
             install_kernel_args = installdata.kernel_args
         else:
             extra_args = [installdata.kernel_args]
 
-    no_install = None
     if install_os:
         location = get_location_for_os(guest, install_os)
     elif options.location:
