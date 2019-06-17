@@ -7,7 +7,6 @@
 
 import argparse
 import atexit
-import logging
 import sys
 import time
 
@@ -15,6 +14,7 @@ import libvirt
 
 import virtinst
 from virtinst import cli
+from virtinst import log
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
@@ -40,7 +40,7 @@ def supports_pxe(guest):
             xmlobj = virtinst.Network(nic.conn, parsexml=netobj.XMLDesc(0))
             return xmlobj.can_pxe()
         except Exception:  # pragma: no cover
-            logging.debug("Error checking if PXE supported", exc_info=True)
+            log.debug("Error checking if PXE supported", exc_info=True)
             return True
 
     return False
@@ -81,7 +81,7 @@ def convert_old_init(options):
     if not options.boot:
         options.boot = [""]
     options.boot[-1] += ",init=%s" % options.init
-    logging.debug("Converted old --init to --boot %s", options.boot[-1])
+    log.debug("Converted old --init to --boot %s", options.boot[-1])
 
 
 def _do_convert_old_disks(options):
@@ -109,7 +109,7 @@ def _do_convert_old_disks(options):
             if optstr:
                 optstr += ","
             optstr += "sparse=no"
-        logging.debug("Converted to new style: --disk %s", optstr)
+        log.debug("Converted to new style: --disk %s", optstr)
         opts.append(optstr)
 
     options.disk = opts
@@ -136,7 +136,7 @@ def convert_old_disks(options):
     del(options.disksize)
     del(options.sparse)
     del(options.nodisks)
-    logging.debug("Distilled --disk options: %s", options.disk)
+    log.debug("Distilled --disk options: %s", options.disk)
 
 
 def convert_old_os_options(options):
@@ -160,7 +160,7 @@ def convert_old_cpuset(options):
     newvcpus = options.vcpus or []
     newvcpus.append(",cpuset=%s" % options.cpuset)
     options.vcpus = newvcpus
-    logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus[-1])
+    log.debug("Generated compat cpuset: --vcpus %s", options.vcpus[-1])
 
 
 def convert_old_networks(options):
@@ -204,7 +204,7 @@ def convert_old_networks(options):
     del(options.nonetworks)
 
     options.network = networks
-    logging.debug("Distilled --network options: %s", options.network)
+    log.debug("Distilled --network options: %s", options.network)
 
 
 def convert_old_graphics(options):
@@ -241,7 +241,7 @@ def convert_old_graphics(options):
     if keymap:
         optstr += ",keymap=%s" % keymap
 
-    logging.debug("--graphics compat generated: %s", optstr)
+    log.debug("--graphics compat generated: %s", optstr)
     options.graphics = [optstr]
 
 
@@ -321,7 +321,7 @@ def _show_nographics_warnings(options, guest, installer):
         return
 
     if installer.cdrom:
-        logging.warning(_("CDROM media does not print to the text console "
+        log.warning(_("CDROM media does not print to the text console "
             "by default, so you likely will not see text install output. "
             "You might want to use --location.") + " " +
             _cdrom_location_man_page)
@@ -334,7 +334,7 @@ def _show_nographics_warnings(options, guest, installer):
     # they likely won't see any output.
 
     if not guest.devices.console:
-        logging.warning(_("No --console device added, you likely will not "
+        log.warning(_("No --console device added, you likely will not "
             "see text install output from the guest."))
         return
 
@@ -348,17 +348,17 @@ def _show_memory_warnings(guest):
     minram = (res.get_minimum_ram(guest.os.arch) or 0)
     if minram:
         if (minram // 1024) > guest.currentMemory:
-            logging.warning(_("Requested memory %s MiB is less than the "
+            log.warning(_("Requested memory %s MiB is less than the "
                 "recommended %s MiB for OS %s"), rammb,
                 minram // (1024 * 1024), guest.osinfo.name)
     elif rammb < 17:
-        logging.warning(_("Requested memory %s MiB is abnormally low. "
+        log.warning(_("Requested memory %s MiB is abnormally low. "
             "Were you trying to specify GiB?"), rammb)
 
 
 def show_warnings(options, guest, installer, osdata):
     if options.pxe and not supports_pxe(guest):
-        logging.warning(_("The guest's network configuration does not support "
+        log.warning(_("The guest's network configuration does not support "
                        "PXE"))
 
     # Limit it to hvm x86 guests which presently our defaults
@@ -367,7 +367,7 @@ def show_warnings(options, guest, installer, osdata):
         not osdata.is_none and
         not osdata.name == "generic" and
         guest.os.is_x86() and guest.os.is_hvm()):
-        logging.warning(_("No operating system detected, VM performance may "
+        log.warning(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
 
     _show_memory_warnings(guest)
@@ -630,13 +630,13 @@ def start_install(guest, installer, options):
         if not conscb and options.wait is None:
             # If there isn't any console to actually connect up,
             # default to --wait -1 to get similarish behavior
-            logging.warning(_("No console to launch for the guest, "
+            log.warning(_("No console to launch for the guest, "
                 "defaulting to --wait -1"))
             options.wait = -1
 
     waithandler = WaitHandler(options.wait)
     meter = cli.get_meter()
-    logging.debug("Guest.has_install_phase: %s",
+    log.debug("Guest.has_install_phase: %s",
                   installer.has_install_phase())
 
     # we've got everything -- try to start the install
@@ -671,7 +671,7 @@ def start_install(guest, installer, options):
                         options.destroy_on_exit)
 
     except KeyboardInterrupt:  # pragma: no cover
-        logging.debug("", exc_info=True)
+        log.debug("", exc_info=True)
         print_stderr(_("Domain install interrupted."))
         raise
     except Exception as e:
@@ -694,7 +694,7 @@ def check_domain(installer, domain, conscb, transient, waithandler):
         try:
             dominfo = domain.info()
             state = dominfo[0]
-            logging.debug("Domain state after install: %s", state)
+            log.debug("Domain state after install: %s", state)
 
             if state == libvirt.VIR_DOMAIN_CRASHED:
                 fail(_("Domain has crashed."))  # pragma: no cover
@@ -702,7 +702,7 @@ def check_domain(installer, domain, conscb, transient, waithandler):
             return not domain.isActive()
         except libvirt.libvirtError as e:
             if transient and e.get_error_code() == libvirt.VIR_ERR_NO_DOMAIN:
-                logging.debug("transient VM shutdown and disappeared.")
+                log.debug("transient VM shutdown and disappeared.")
                 return True
             raise  # pragma: no cover
 
@@ -923,7 +923,7 @@ def _destroy_on_exit(domain):
             domain.destroy()  # pragma: no cover
     except libvirt.libvirtError as e:  # pragma: no cover
         if e.get_error_code() != libvirt.VIR_ERR_NO_DOMAIN:
-            logging.debug("Error invoking atexit destroy_on_exit",
+            log.debug("Error invoking atexit destroy_on_exit",
                     exc_info=True)
 
 
@@ -998,7 +998,7 @@ if __name__ == "__main__":  # pragma: no cover
     except SystemExit as sys_e:
         sys.exit(sys_e.code)
     except KeyboardInterrupt:
-        logging.debug("", exc_info=True)
+        log.debug("", exc_info=True)
         print_stderr(_("Installation aborted at user request"))
     except Exception as main_e:
         fail(main_e)

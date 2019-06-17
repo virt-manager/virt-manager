@@ -3,9 +3,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import queue
 import threading
+
+from virtinst import log
 
 from .baseclass import vmmGObject
 from .connmanager import vmmConnectionManager
@@ -34,13 +35,13 @@ class vmmInspection(vmmGObject):
         if cls._libguestfs_installed is None:
             try:
                 import guestfs as ignore  # pylint: disable=import-error
-                logging.debug("python guestfs is installed")
+                log.debug("python guestfs is installed")
                 cls._libguestfs_installed = True
             except ImportError:
-                logging.debug("python guestfs is not installed")
+                log.debug("python guestfs is not installed")
                 cls._libguestfs_installed = False
             except Exception:
-                logging.debug("error importing guestfs",
+                log.debug("error importing guestfs",
                         exc_info=True)
                 cls._libguestfs_installed = False
         return cls._libguestfs_installed
@@ -56,7 +57,7 @@ class vmmInspection(vmmGObject):
         self._cached_data = {}
 
         val = self.config.get_libguestfs_inspect_vms()
-        logging.debug("libguestfs gsetting enabled=%s", str(val))
+        log.debug("libguestfs gsetting enabled=%s", str(val))
         if not val:
             return
 
@@ -85,7 +86,7 @@ class vmmInspection(vmmGObject):
     # Called by the main thread whenever a VM is added to vmlist.
     def _vm_added(self, conn, connkey):
         if connkey.startswith("guestfs-"):
-            logging.debug("ignore libvirt/guestfs temporary VM %s",
+            log.debug("ignore libvirt/guestfs temporary VM %s",
                           connkey)
             return
 
@@ -93,7 +94,7 @@ class vmmInspection(vmmGObject):
         self._q.put(obj)
 
     def vm_refresh(self, vm):
-        logging.debug("Refresh requested for vm=%s", vm.get_name())
+        log.debug("Refresh requested for vm=%s", vm.get_name())
         obj = ("vm_refresh", vm.conn.get_uri(), vm.get_name(), vm.get_uuid())
         self._q.put(obj)
 
@@ -116,7 +117,7 @@ class vmmInspection(vmmGObject):
         while True:
             obj = self._q.get()
             if obj is None:
-                logging.debug("libguestfs queue obj=None, exiting thread")
+                log.debug("libguestfs queue obj=None, exiting thread")
                 return
             self._process_queue_item(obj)
             self._q.task_done()
@@ -173,7 +174,7 @@ class vmmInspection(vmmGObject):
         if vmuuid in self._cached_data:
             data = self._cached_data.get(vmuuid)
             if vm.inspection != data:
-                logging.debug("Found cached data for %s", prettyvm)
+                log.debug("Found cached data for %s", prettyvm)
                 _set_vm_inspection_data(data)
             return
 
@@ -181,7 +182,7 @@ class vmmInspection(vmmGObject):
             data = self._inspect_vm(conn, vm)
         except Exception as e:
             data = _inspection_error(_("Error inspection VM: %s") % str(e))
-            logging.exception("%s: exception while processing", prettyvm)
+            log.exception("%s: exception while processing", prettyvm)
 
         _set_vm_inspection_data(data)
 
@@ -203,17 +204,17 @@ class vmmInspection(vmmGObject):
             g.add_libvirt_dom(vm.get_backend(), readonly=1)
             g.launch()
         except Exception as e:
-            logging.debug("%s: Error launching libguestfs appliance: %s",
+            log.debug("%s: Error launching libguestfs appliance: %s",
                     prettyvm, str(e))
             return _inspection_error(
                     _("Error launching libguestfs appliance: %s") % str(e))
 
-        logging.debug("%s: inspection appliance connected", prettyvm)
+        log.debug("%s: inspection appliance connected", prettyvm)
 
         # Inspect the operating system.
         roots = g.inspect_os()
         if len(roots) == 0:
-            logging.debug("%s: no operating systems found", prettyvm)
+            log.debug("%s: no operating systems found", prettyvm)
             return _inspection_error(
                     _("Inspection found no operating systems."))
 
@@ -247,7 +248,7 @@ class vmmInspection(vmmGObject):
                 g.mount_ro(dev, mp)
                 filesystems_mounted = True
             except Exception:
-                logging.exception("%s: exception mounting %s on %s "
+                log.exception("%s: exception mounting %s on %s "
                                   "(ignored)",
                                   prettyvm, dev, mp)
 
@@ -285,21 +286,21 @@ class vmmInspection(vmmGObject):
                         app.description = gapp["app2_description"]
                     apps.append(app)
             except Exception:
-                logging.exception("%s: exception while listing apps (ignored)",
+                log.exception("%s: exception while listing apps (ignored)",
                                   prettyvm)
 
         # Force the libguestfs handle to close right now.
         del g
 
         # Log what we found.
-        logging.debug("%s: detected operating system: %s %s %d.%d (%s) (%s)",
+        log.debug("%s: detected operating system: %s %s %d.%d (%s) (%s)",
                       prettyvm, os_type, distro, major_version, minor_version,
                       product_name, package_format)
-        logging.debug("hostname: %s", hostname)
+        log.debug("hostname: %s", hostname)
         if icon:
-            logging.debug("icon: %d bytes", len(icon))
+            log.debug("icon: %d bytes", len(icon))
         if apps:
-            logging.debug("# apps: %d", len(apps))
+            log.debug("# apps: %d", len(apps))
 
         data = vmmInspectionData()
         data.os_type = str(os_type)

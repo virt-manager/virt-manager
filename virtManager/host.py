@@ -4,7 +4,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
+from virtinst import log
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
@@ -84,7 +84,7 @@ class vmmHost(vmmGObjectUI):
     #######################
 
     def show(self):
-        logging.debug("Showing host details: %s", self.conn)
+        log.debug("Showing host details: %s", self.conn)
         vis = self.is_visible()
         self.topwin.present()
         if vis:
@@ -95,7 +95,7 @@ class vmmHost(vmmGObjectUI):
     def close(self, src=None, event=None):
         dummy = src
         dummy = event
-        logging.debug("Closing host window for %s", self.conn)
+        log.debug("Closing host window for %s", self.conn)
         if not self.is_visible():
             return
 

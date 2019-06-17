@@ -4,10 +4,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
 from gi.repository import Gdk
 from gi.repository import Gtk
+
+from virtinst import log
 
 from . import vmmenu
 from .baseclass import vmmGObjectUI
@@ -174,7 +174,7 @@ class vmmVMWindow(vmmGObjectUI):
         self.vm = None
 
     def show(self):
-        logging.debug("Showing VM details: %s", self.vm)
+        log.debug("Showing VM details: %s", self.vm)
         vis = self.is_visible()
         self.topwin.present()
         if vis:
@@ -194,15 +194,15 @@ class vmmVMWindow(vmmGObjectUI):
             self.cleanup()
 
     def _customize_cancel(self):
-        logging.debug("Asking to cancel customization")
+        log.debug("Asking to cancel customization")
 
         result = self.err.yes_no(
             _("This will abort the installation. Are you sure?"))
         if not result:
-            logging.debug("Customize cancel aborted")
+            log.debug("Customize cancel aborted")
             return
 
-        logging.debug("Canceling customization")
+        log.debug("Canceling customization")
         return self._close()
 
     def _customize_cancel_clicked(self, src):
@@ -214,7 +214,7 @@ class vmmVMWindow(vmmGObjectUI):
 
     def close(self, ignore1=None, ignore2=None):
         if self.is_visible():
-            logging.debug("Closing VM details: %s", self.vm)
+            log.debug("Closing VM details: %s", self.vm)
         return self._close()
 
     def _close(self):
@@ -230,7 +230,7 @@ class vmmVMWindow(vmmGObjectUI):
             try:
                 self.console.details_close_viewer()
             except Exception:
-                logging.error("Failure when disconnecting from desktop server")
+                log.error("Failure when disconnecting from desktop server")
 
         self.emit("closed")
         vmmEngine.get_instance().decrement_window_counter()
@@ -535,7 +535,7 @@ class vmmVMWindow(vmmGObjectUI):
             browse_reason=self.config.CONFIG_DIR_SCREENSHOT,
             default_name=default)
         if not path:
-            logging.debug("No screenshot path given, skipping save.")
+            log.debug("No screenshot path given, skipping save.")
             return
 
         filename = path

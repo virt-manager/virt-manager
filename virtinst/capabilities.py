@@ -6,10 +6,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import pwd
 
 from .domain import DomainCpu
+from .logger import log
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -88,7 +88,7 @@ class _CapsHost(XMLBuilder):
                 user = pwd.getpwuid(uid)[0]
                 return user, uid
             except Exception:  # pragma: no cover
-                logging.debug("Exception parsing qemu dac baselabel=%s",
+                log.debug("Exception parsing qemu dac baselabel=%s",
                     label, exc_info=True)
         return None, None  # pragma: no cover
 

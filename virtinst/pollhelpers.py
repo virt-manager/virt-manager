@@ -5,7 +5,7 @@
 # See the COPYING file in the top-level directory.
 #
 
-import logging
+from .logger import log
 
 
 # Debugging helper to force old style polling
@@ -24,7 +24,7 @@ def _new_poll_helper(origmap, typename, listfunc, buildfunc):
     try:
         objs = listfunc()
     except Exception as e:
-        logging.debug("Unable to list all %ss: %s", typename, e)
+        log.debug("Unable to list all %ss: %s", typename, e)
 
     for obj in objs:
         connkey = obj.name()
@@ -64,11 +64,11 @@ def _old_poll_helper(origmap, typename,
     try:
         newActiveNames = active_list()
     except Exception as e:
-        logging.debug("Unable to list active %ss: %s", typename, e)
+        log.debug("Unable to list active %ss: %s", typename, e)
     try:
         newInactiveNames = inactive_list()
     except Exception as e:
-        logging.debug("Unable to list inactive %ss: %s", typename, e)
+        log.debug("Unable to list inactive %ss: %s", typename, e)
 
     def check_obj(name):
         obj = None
@@ -78,7 +78,7 @@ def _old_poll_helper(origmap, typename,
             try:
                 obj = lookup_func(name)
             except Exception as e:
-                logging.debug("Could not fetch %s '%s': %s",
+                log.debug("Could not fetch %s '%s': %s",
                               typename, connkey, e)
                 return
 
@@ -94,7 +94,7 @@ def _old_poll_helper(origmap, typename,
         try:
             check_obj(name)
         except Exception:
-            logging.exception("Couldn't fetch %s '%s'", typename, name)
+            log.exception("Couldn't fetch %s '%s'", typename, name)
 
     return (list(origmap.values()), list(new.values()), list(current.values()))
 
@@ -201,12 +201,12 @@ def _old_fetch_vms(backend, origmap, build_func):
     try:
         newActiveIDs = backend.listDomainsID()
     except Exception as e:
-        logging.debug("Unable to list active domains: %s", e)
+        log.debug("Unable to list active domains: %s", e)
 
     try:
         newInactiveNames = backend.listDefinedDomains()
     except Exception as e:
-        logging.exception("Unable to list inactive domains: %s", e)
+        log.exception("Unable to list inactive domains: %s", e)
 
     def add_vm(vm):
         connkey = vm.get_name()
@@ -237,7 +237,7 @@ def _old_fetch_vms(backend, origmap, build_func):
 
                 check_new(vm, connkey)
             except Exception:
-                logging.exception("Couldn't fetch domain id '%s'", _id)
+                log.exception("Couldn't fetch domain id '%s'", _id)
 
 
     for name in newInactiveNames:
@@ -253,7 +253,7 @@ def _old_fetch_vms(backend, origmap, build_func):
 
                 check_new(vm, connkey)
             except Exception:
-                logging.exception("Couldn't fetch domain '%s'", name)
+                log.exception("Couldn't fetch domain '%s'", name)
 
     return (list(origmap.values()), list(new.values()), list(current.values()))
 

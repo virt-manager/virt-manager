@@ -4,7 +4,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
+from ..logger import log
 
 from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
@@ -152,7 +152,7 @@ class DomainCpu(XMLBuilder):
                     break
 
     def set_model(self, guest, val):
-        logging.debug("setting cpu model %s", val)
+        log.debug("setting cpu model %s", val)
         if val:
             self.mode = "custom"
             if not self.match:
@@ -179,7 +179,7 @@ class DomainCpu(XMLBuilder):
         """
         domcaps = guest.lookup_domcaps()
         if domcaps.supports_safe_host_model():
-            logging.debug("Using domcaps for host-copy")
+            log.debug("Using domcaps for host-copy")
             cpu = domcaps.cpu.get_mode("host-model")
             model = cpu.models[0].model
             fallback = cpu.models[0].fallback
@@ -284,7 +284,7 @@ class DomainCpu(XMLBuilder):
         if cpu_model and cpu_model.usable != "no":
             return
 
-        logging.debug("Host capabilities CPU '%s' is not supported "
+        log.debug("Host capabilities CPU '%s' is not supported "
             "according to domain capabilities. Unsetting CPU model",
             self.model)
         self.model = None

@@ -5,7 +5,6 @@
 
 import atexit
 import io
-import logging
 import os
 import shlex
 import shutil
@@ -18,6 +17,7 @@ try:
 except ImportError:
     argcomplete = None
 
+from virtinst import log
 from virtinst import unattended
 
 from tests import virtinstall, virtclone, virtconvert, virtxml
@@ -185,7 +185,7 @@ class Command(object):
 
 
     def _launch_command(self, conn):
-        logging.debug(self.cmdstr)
+        log.debug(self.cmdstr)
 
         app = self.argv[0]
 
@@ -253,7 +253,7 @@ class Command(object):
 
             code, output = self._launch_command(conn)
 
-            logging.debug("%s\n", output)
+            log.debug("%s\n", output)
             return code, output
         except Exception as e:
             return (-1, "".join(traceback.format_exc()) + str(e))

@@ -8,12 +8,13 @@
 
 import getpass
 import locale
-import logging
 import os
 import pwd
 import tempfile
 
 from gi.repository import Libosinfo
+
+from .logger import log
 
 
 def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
@@ -95,20 +96,20 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     if unattended_data.product_key:
         config.set_reg_product_key(unattended_data.product_key)
 
-    logging.debug("InstallScriptConfig created with the following params:")
-    logging.debug("username: %s", config.get_user_login())
-    logging.debug("realname: %s", config.get_user_realname())
-    logging.debug("user password: %s", config.get_user_password())
-    logging.debug("admin password: %s", config.get_admin_password())
-    logging.debug("target disk: %s", config.get_target_disk())
-    logging.debug("hardware arch: %s", config.get_hardware_arch())
-    logging.debug("hostname: %s", config.get_hostname())
-    logging.debug("timezone: %s", config.get_l10n_timezone())
-    logging.debug("language: %s", config.get_l10n_language())
-    logging.debug("keyboard: %s", config.get_l10n_keyboard())
-    logging.debug("url: %s",
+    log.debug("InstallScriptConfig created with the following params:")
+    log.debug("username: %s", config.get_user_login())
+    log.debug("realname: %s", config.get_user_realname())
+    log.debug("user password: %s", config.get_user_password())
+    log.debug("admin password: %s", config.get_admin_password())
+    log.debug("target disk: %s", config.get_target_disk())
+    log.debug("hardware arch: %s", config.get_hardware_arch())
+    log.debug("hostname: %s", config.get_hostname())
+    log.debug("timezone: %s", config.get_l10n_timezone())
+    log.debug("language: %s", config.get_l10n_language())
+    log.debug("keyboard: %s", config.get_l10n_keyboard())
+    log.debug("url: %s",
             config.get_installation_url())  # pylint: disable=no-member
-    logging.debug("product-key: %s", config.get_reg_product_key())
+    log.debug("product-key: %s", config.get_reg_product_key())
 
     return config
 
@@ -147,7 +148,7 @@ class OSInstallScript:
             "initrd": Libosinfo.InstallScriptInjectionMethod.INITRD,
         }
 
-        logging.debug("Using '%s' injection method", namestr)
+        log.debug("Using '%s' injection method", namestr)
         injection_method = names[namestr]
         supported_injection_methods = self._script.get_injection_methods()
         if (injection_method & supported_injection_methods == 0):
@@ -164,7 +165,7 @@ class OSInstallScript:
             "network": Libosinfo.InstallScriptInstallationSource.NETWORK,
         }
 
-        logging.debug("Using '%s' installation source", namestr)
+        log.debug("Using '%s' installation source", namestr)
         self._script.set_installation_source(names[namestr])
 
     def _requires_param(self, config_param):
@@ -196,8 +197,8 @@ class OSInstallScript:
         content = self.generate()
         open(scriptpath, "w").write(content)
 
-        logging.debug("Generated unattended script: %s", scriptpath)
-        logging.debug("Generated script contents:\n%s", content)
+        log.debug("Generated unattended script: %s", scriptpath)
+        log.debug("Generated script contents:\n%s", content)
 
         return scriptpath
 
@@ -265,7 +266,7 @@ def _lookup_rawscript(osinfo, profile, os_media):
                 (osinfo.name, profile, ", ".join(profile_names)))
     else:
         profile = _find_default_profile(profile_names)
-        logging.warning(_("Using unattended profile '%s'"), profile)
+        log.warning(_("Using unattended profile '%s'"), profile)
         rawscripts = script_map[profile]
 
     # Some OSes (as Windows) have more than one installer script,
@@ -273,7 +274,7 @@ def _lookup_rawscript(osinfo, profile, os_media):
     # perform the unattended installation. Let's just deal with
     # multiple installer scripts when its actually needed, though.
     usescript = rawscripts[0]
-    logging.debug("Install script found for profile '%s': %s",
+    log.debug("Install script found for profile '%s': %s",
             profile, usescript.get_id())
     return usescript
 

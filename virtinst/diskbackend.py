@@ -6,7 +6,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import re
 import stat
@@ -14,6 +13,7 @@ import subprocess
 
 import libvirt
 
+from .logger import log
 from .storage import StoragePool, StorageVolume
 
 
@@ -139,7 +139,7 @@ def manage_path(conn, path):
     if not poolname:
         poolname = "dirpool"
     poolname = StoragePool.find_free_name(conn, poolname)
-    logging.debug("Attempting to build pool=%s target=%s", poolname, dirname)
+    log.debug("Attempting to build pool=%s target=%s", poolname, dirname)
 
     poolxml = StoragePool(conn)
     poolxml.name = poolname
@@ -252,16 +252,16 @@ def _fix_perms_acl(dirname, username):
                             stderr=subprocess.PIPE)
     out, err = proc.communicate()
 
-    logging.debug("Ran command '%s'", cmd)
+    log.debug("Ran command '%s'", cmd)
     if out or err:
-        logging.debug("out=%s\nerr=%s", out, err)
+        log.debug("out=%s\nerr=%s", out, err)
 
     if proc.returncode != 0:
         raise ValueError(err)
 
 
 def _fix_perms_chmod(dirname):
-    logging.debug("Setting +x on %s", dirname)
+    log.debug("Setting +x on %s", dirname)
     mode = os.stat(dirname).st_mode
     newmode = mode | stat.S_IXOTH
     os.chmod(dirname, newmode)
@@ -281,8 +281,8 @@ def set_dirs_searchable(dirlist, username):
                 _fix_perms_acl(dirname, username)
                 continue
             except Exception as e:
-                logging.debug("setfacl failed: %s", e)
-                logging.debug("trying chmod")
+                log.debug("setfacl failed: %s", e)
+                log.debug("trying chmod")
                 useacl = False
 
         try:
@@ -324,11 +324,11 @@ def _is_dir_searchable(dirname, uid, username):
                                 stderr=subprocess.PIPE)
         out, err = proc.communicate()
     except OSError:
-        logging.debug("Didn't find the getfacl command.")
+        log.debug("Didn't find the getfacl command.")
         return False
 
     if proc.returncode != 0:
-        logging.debug("Cmd '%s' failed: %s", cmd, err)
+        log.debug("Cmd '%s' failed: %s", cmd, err)
         return False
 
     pattern = "user:%s:..x" % username
@@ -475,7 +475,7 @@ class _StorageCreator(_StorageBase):
         if err:
             raise ValueError(msg)
         if msg:
-            logging.warning(msg)
+            log.warning(msg)
 
     def will_create_storage(self):
         return True
@@ -544,10 +544,10 @@ class CloneStorageCreator(_StorageCreator):
         if self._input_path == "/dev/null":
             # Not really sure why this check is here,
             # but keeping for compat
-            logging.debug("Source dev was /dev/null. Skipping")
+            log.debug("Source dev was /dev/null. Skipping")
             return
         if self._input_path == self._output_path:
-            logging.debug("Source and destination are the same. Skipping.")
+            log.debug("Source and destination are the same. Skipping.")
             return
 
         # If a destination file exists and sparse flag is True,
@@ -568,7 +568,7 @@ class CloneStorageCreator(_StorageCreator):
             clone_block_size = 1024 * 1024 * 10
             sparse = False
 
-        logging.debug("Local Cloning %s to %s, sparse=%s, block_size=%s",
+        log.debug("Local Cloning %s to %s, sparse=%s, block_size=%s",
                       self._input_path, self._output_path,
                       sparse, clone_block_size)
 

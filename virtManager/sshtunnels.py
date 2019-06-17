@@ -4,13 +4,14 @@
 # See the COPYING file in the top-level directory.
 
 import functools
-import logging
 import os
 import queue
 import socket
 import signal
 import threading
 import ipaddress
+
+from virtinst import log
 
 from .baseclass import vmmGObject
 
@@ -150,7 +151,7 @@ class _Tunnel(object):
             return
         self._closed = True
 
-        logging.debug("Close tunnel PID=%s ERRFD=%s",
+        log.debug("Close tunnel PID=%s ERRFD=%s",
                       self._pid, self._errfd and self._errfd.fileno() or None)
 
         # Since this is a socket object, the file descriptor is closed
@@ -197,7 +198,7 @@ class _Tunnel(object):
 
         self._errfd = errfds[0]
         self._errfd.setblocking(0)
-        logging.debug("Opened tunnel PID=%d ERRFD=%d",
+        log.debug("Opened tunnel PID=%d ERRFD=%d",
                       pid, self._errfd.fileno())
 
         self._pid = pid
@@ -249,7 +250,7 @@ def _make_ssh_command(ginfo):
     argv.append("'%s'" % nc_cmd)
 
     argv_str = functools.reduce(lambda x, y: x + " " + y, argv[1:])
-    logging.debug("Pre-generated ssh command for ginfo: %s", argv_str)
+    log.debug("Pre-generated ssh command for ginfo: %s", argv_str)
     return argv
 
 
@@ -273,7 +274,7 @@ class SSHTunnels(object):
         _tunnel_scheduler.schedule(self._lock, t.open, self._sshcommand, sshfd)
 
         retfd = os.dup(viewerfd.fileno())
-        logging.debug("Generated tunnel fd=%s for viewer", retfd)
+        log.debug("Generated tunnel fd=%s for viewer", retfd)
         return retfd
 
     def close_all(self):

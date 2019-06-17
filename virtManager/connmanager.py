@@ -3,7 +3,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
+from virtinst import log
 
 from .baseclass import vmmGObject
 from .connection import vmmConnection
@@ -41,7 +41,7 @@ class vmmConnectionManager(vmmGObject):
                 self.emit("conn-removed", uri)
                 conn.cleanup()
             except Exception:
-                logging.exception("Error cleaning up conn=%s", uri)
+                log.exception("Error cleaning up conn=%s", uri)
         self._conns = {}
 
     @property

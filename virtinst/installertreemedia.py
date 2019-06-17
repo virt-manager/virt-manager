@@ -4,7 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 
 from . import progress
@@ -13,6 +12,7 @@ from . import urlfetcher
 from .devices import DeviceDisk
 from .installerinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
+from .logger import log
 from .osdict import OSDB
 
 
@@ -59,9 +59,9 @@ class InstallerTreeMedia(object):
             dev.validate()
             return dev.path
         except Exception as e:
-            logging.debug("Error validating install location", exc_info=True)
+            log.debug("Error validating install location", exc_info=True)
             if path.startswith("nfs:"):
-                logging.warning("NFS URL installs are no longer supported. "
+                log.warning("NFS URL installs are no longer supported. "
                     "Access your install media over an alternate transport "
                     "like HTTP, or manually mount the NFS share and install "
                     "from the local directory mount point.")
@@ -240,7 +240,7 @@ class InstallerTreeMedia(object):
         install_args = None
         if unattended_script:
             install_args = unattended_script.generate_cmdline()
-            logging.debug("Generated unattended cmdline: %s", install_args)
+            log.debug("Generated unattended cmdline: %s", install_args)
         elif self.is_network_url() and cache.kernel_url_arg:
             install_args = "%s=%s" % (cache.kernel_url_arg, self.location)
 
@@ -264,11 +264,11 @@ class InstallerTreeMedia(object):
     def cleanup(self, guest):
         ignore = guest
         for f in self._tmpfiles:
-            logging.debug("Removing %s", str(f))
+            log.debug("Removing %s", str(f))
             os.unlink(f)
 
         for vol in self._tmpvols:
-            logging.debug("Removing volume '%s'", vol.name())
+            log.debug("Removing volume '%s'", vol.name())
             vol.delete(0)
 
         self._tmpvols = []

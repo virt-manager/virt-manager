@@ -4,15 +4,16 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import shutil
 import subprocess
 import tempfile
 
+from .logger import log
+
 
 def _run_initrd_commands(initrd, tempdir):
-    logging.debug("Appending to the initrd.")
+    log.debug("Appending to the initrd.")
 
     find_proc = subprocess.Popen(['find', '.', '-print0'],
                                  stdout=subprocess.PIPE,
@@ -36,11 +37,11 @@ def _run_initrd_commands(initrd, tempdir):
     cpioerr = cpio_proc.stderr.read()
     gziperr = gzip_proc.stderr.read()
     if finderr:  # pragma: no cover
-        logging.debug("find stderr=%s", finderr)
+        log.debug("find stderr=%s", finderr)
     if cpioerr:  # pragma: no cover
-        logging.debug("cpio stderr=%s", cpioerr)
+        log.debug("cpio stderr=%s", cpioerr)
     if gziperr:  # pragma: no cover
-        logging.debug("gzip stderr=%s", gziperr)
+        log.debug("gzip stderr=%s", gziperr)
 
 
 def _run_iso_commands(iso, tempdir):
@@ -50,9 +51,9 @@ def _run_iso_commands(iso, tempdir):
            "-input-charset", "utf8",
            "-rational-rock",
            tempdir]
-    logging.debug("Running iso build command: %s", cmd)
+    log.debug("Running iso build command: %s", cmd)
     output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-    logging.debug("cmd output: %s", output)
+    log.debug("cmd output: %s", output)
 
 
 def _perform_generic_injections(injections, scratchdir, media, cb):
@@ -69,7 +70,7 @@ def _perform_generic_injections(injections, scratchdir, media, cb):
             else:
                 dst = os.path.basename(filename)
 
-            logging.debug("Injecting src=%s dst=%s into media=%s",
+            log.debug("Injecting src=%s dst=%s into media=%s",
                     filename, dst, media)
             shutil.copy(filename, os.path.join(tempdir, dst))
 

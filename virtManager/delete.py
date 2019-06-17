@@ -7,13 +7,13 @@
 import os
 import stat
 import traceback
-import logging
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
 
 import virtinst
+from virtinst import log
 from virtinst import xmlutil
 
 from .asyncjob import vmmAsyncJob
@@ -63,14 +63,14 @@ class vmmDeleteDialog(vmmGObjectUI):
         prepare_storage_list(self.widget("delete-storage-list"))
 
     def show(self, parent, vm):
-        logging.debug("Showing delete wizard")
+        log.debug("Showing delete wizard")
         self._set_vm(vm)
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing delete wizard")
+        log.debug("Closing delete wizard")
         self.topwin.hide()
         self._set_vm(None)
         return 1
@@ -170,7 +170,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         try:
             if vm.is_active():
-                logging.debug("Forcing VM '%s' power off.", vm.get_name())
+                log.debug("Forcing VM '%s' power off.", vm.get_name())
                 vm.destroy()
 
             conn = vm.conn.get_backend()
@@ -178,7 +178,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
             for path in paths:
                 try:
-                    logging.debug("Deleting path: %s", path)
+                    log.debug("Deleting path: %s", path)
                     meter.start(text=_("Deleting path '%s'") % path)
                     self._async_delete_path(conn, path, meter)
                 except Exception as e:
@@ -187,7 +187,7 @@ class vmmDeleteDialog(vmmGObjectUI):
                 meter.end(0)
 
             if undefine:
-                logging.debug("Removing VM '%s'", vm.get_name())
+                log.debug("Removing VM '%s'", vm.get_name())
                 vm.delete()
 
         except Exception as e:
@@ -225,7 +225,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         try:
             vol = conn.storageVolLookupByPath(path)
         except Exception:
-            logging.debug("Path '%s' is not managed. Deleting locally", path)
+            log.debug("Path '%s' is not managed. Deleting locally", path)
 
         if vol:
             vol.delete(0)
@@ -398,6 +398,6 @@ def do_we_default(conn, vm_name, vol, path, ro, shared, is_media):
             info = append_str(info, _("Storage is in use by the following "
                                       "virtual machines:\n- %s " % namestr))
     except Exception as e:
-        logging.exception("Failed checking disk conflict: %s", str(e))
+        log.exception("Failed checking disk conflict: %s", str(e))
 
     return (not info, info)

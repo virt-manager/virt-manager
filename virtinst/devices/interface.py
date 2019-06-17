@@ -4,11 +4,11 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import random
 
 from .device import Device
+from ..logger import log
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -42,13 +42,13 @@ def _random_mac(conn):
 def _default_route():
     route_file = "/proc/net/route"
     if not os.path.exists(route_file):  # pragma: no cover
-        logging.debug("route_file=%s does not exist", route_file)
+        log.debug("route_file=%s does not exist", route_file)
         return None
 
     for line in open(route_file):
         info = line.split()
         if len(info) != 11:  # pragma: no cover
-            logging.debug("Unexpected field count=%s when parsing %s",
+            log.debug("Unexpected field count=%s when parsing %s",
                           len(info), route_file)
             break
 
@@ -135,7 +135,7 @@ class DeviceInterface(Device):
             except RuntimeError:  # pragma: no cover
                 continue
 
-        logging.debug(  # pragma: no cover
+        log.debug(  # pragma: no cover
                 "Failed to generate non-conflicting MAC")
         return None  # pragma: no cover
 

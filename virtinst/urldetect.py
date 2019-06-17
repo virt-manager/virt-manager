@@ -5,9 +5,9 @@
 # See the COPYING file in the top-level directory.
 
 import configparser
-import logging
 import re
 
+from .logger import log
 from .osdict import OSDB
 
 
@@ -39,7 +39,7 @@ class _DistroCache(object):
                 content = self._fetcher.acquireFileContent(path)
             except ValueError:
                 content = None
-                logging.debug("Failed to acquire file=%s", path)
+                log.debug("Failed to acquire file=%s", path)
             self._filecache[path] = content
         return self._filecache[path]
 
@@ -68,15 +68,15 @@ class _DistroCache(object):
         treeinfo.read_string(treeinfostr)
         self.treeinfo_family = treeinfo.get("general", "family")
         self._treeinfo = treeinfo
-        logging.debug("treeinfo family=%s", self.treeinfo_family)
+        log.debug("treeinfo family=%s", self.treeinfo_family)
 
         if self._treeinfo.has_option("general", "version"):
             self.treeinfo_version = self._treeinfo.get("general", "version")
-            logging.debug("Found treeinfo version=%s", self.treeinfo_version)
+            log.debug("Found treeinfo version=%s", self.treeinfo_version)
 
         if self._treeinfo.has_option("general", "name"):
             self.treeinfo_name = self._treeinfo.get("general", "name")
-            logging.debug("Found treeinfo name=%s", self.treeinfo_name)
+            log.debug("Found treeinfo name=%s", self.treeinfo_name)
 
         return self._treeinfo
 
@@ -87,7 +87,7 @@ class _DistroCache(object):
         ret = bool(re.match(famregex, self.treeinfo_family))
         self.treeinfo_matched = ret
         if not ret:
-            logging.debug("Didn't match treeinfo family regex=%s", famregex)
+            log.debug("Didn't match treeinfo family regex=%s", famregex)
         return ret
 
     def content_regex(self, filename, regex):
@@ -102,7 +102,7 @@ class _DistroCache(object):
             if re.match(regex, line):
                 return True
 
-        logging.debug("found filename=%s but regex=%s didn't match",
+        log.debug("found filename=%s but regex=%s didn't match",
                 filename, regex)
         return False
 
@@ -121,7 +121,7 @@ class _DistroCache(object):
             return [(_get_treeinfo_path("kernel"),
                      _get_treeinfo_path("initrd"))]
         except Exception:  # pragma: no cover
-            logging.debug("Failed to parse treeinfo kernel/initrd",
+            log.debug("Failed to parse treeinfo kernel/initrd",
                     exc_info=True)
             return []
 
@@ -141,7 +141,7 @@ class _DistroCache(object):
             version = _safeint(verstr.split(".")[0])
             update = _safeint(verstr.split(".")[1])
 
-        logging.debug("converted verstr=%s to version=%s update=%s",
+        log.debug("converted verstr=%s to version=%s update=%s",
                 verstr, version, update)
         return version, update
 
@@ -158,7 +158,7 @@ class _DistroCache(object):
             not self.libosinfo_mediaobj.get_initrd_path()):
             # This can happen if the media is live media, or just
             # with incomplete libosinfo data
-            logging.debug("libosinfo didn't report any media kernel/initrd "
+            log.debug("libosinfo didn't report any media kernel/initrd "
                           "path for detected os_variant=%s",
                           self.libosinfo_mediaobj)
             return False
@@ -187,12 +187,12 @@ class _SUSEContent(object):
                 if line.startswith(prefix + " "):
                     self.content_dict[prefix] = line.split(" ", 1)[1]
 
-            logging.debug("SUSE content dict: %s", str(self.content_dict))
+            log.debug("SUSE content dict: %s", str(self.content_dict))
 
         self.tree_arch = self._get_tree_arch()
         self.product_name = self._get_product_name()
         self.product_version = self._get_product_version()
-        logging.debug("SUSE content product_name=%s product_version=%s "
+        log.debug("SUSE content product_name=%s product_version=%s "
             "tree_arch=%s", self.product_name, self.product_version,
             self.tree_arch)
 
@@ -238,7 +238,7 @@ class _SUSEContent(object):
         elif "," in self.content_dict.get("DISTRO", ""):
             product_name = self.content_dict["DISTRO"].rsplit(",", 1)[1]
 
-        logging.debug("SUSE content product_name=%s", product_name)
+        log.debug("SUSE content product_name=%s", product_name)
         return product_name
 
     def _get_product_version(self):
@@ -278,7 +278,7 @@ class _SUSEContent(object):
 
 
 def getDistroStore(guest, fetcher, skip_error):
-    logging.debug("Finding distro store for location=%s", fetcher.location)
+    log.debug("Finding distro store for location=%s", fetcher.location)
 
     arch = guest.os.arch
     _type = guest.os.os_type
@@ -291,7 +291,7 @@ def getDistroStore(guest, fetcher, skip_error):
             continue
 
         store = sclass(fetcher.location, arch, _type, cache)
-        logging.debug("Detected class=%s osvariant=%s",
+        log.debug("Detected class=%s osvariant=%s",
                       store.__class__.__name__, store.get_osdict_info())
         return store
 
@@ -338,7 +338,7 @@ class _DistroTree(object):
             self._os_variant = self._detect_version()
 
         if self._os_variant and not OSDB.lookup_os(self._os_variant):
-            logging.debug("Detected os_variant as %s, which is not "
+            log.debug("Detected os_variant as %s, which is not "
                           "in osdict.",
                           self._os_variant)
             self._os_variant = None
@@ -361,7 +361,7 @@ class _DistroTree(object):
         """
         Hook for subclasses to detect media os variant.
         """
-        logging.debug("%s does not implement any osdict detection", self)
+        log.debug("%s does not implement any osdict detection", self)
         return None
 
 
@@ -403,13 +403,13 @@ class _FedoraDistro(_DistroTree):
 
         verstr = self.cache.treeinfo_version
         if not verstr:  # pragma: no cover
-            logging.debug("No treeinfo version? Assume latest_variant=%s",
+            log.debug("No treeinfo version? Assume latest_variant=%s",
                     latest_variant)
             return latest_variant
 
         # rawhide trees changed to use version=Rawhide in Apr 2016
         if verstr in ["development", "rawhide", "Rawhide"]:
-            logging.debug("treeinfo version=%s, using latest_variant=%s",
+            log.debug("treeinfo version=%s, using latest_variant=%s",
                     verstr, latest_variant)
             return latest_variant
 
@@ -418,7 +418,7 @@ class _FedoraDistro(_DistroTree):
         if OSDB.lookup_os(variant):
             return variant
 
-        logging.debug(  # pragma: no cover
+        log.debug(  # pragma: no cover
                 "variant=%s from treeinfo version=%s not found, "
                 "using latest_variant=%s", variant, verstr, latest_variant)
         return latest_variant  # pragma: no cover
@@ -439,7 +439,7 @@ class _RHELDistro(_DistroTree):
 
     def _detect_version(self):
         if not self.cache.treeinfo_version:
-            logging.debug("No treeinfo version? Not setting an os_variant")
+            log.debug("No treeinfo version? Not setting an os_variant")
             return
 
         version, update = self.cache.split_version()
@@ -488,7 +488,7 @@ class _SuseDistro(_RHELDistro):
             try:
                 cache.suse_content = _SUSEContent(content_str)
             except Exception as e:
-                logging.debug("Error parsing SUSE content file: %s", str(e))
+                log.debug("Error parsing SUSE content file: %s", str(e))
                 return False
 
         if not cache.suse_content:
@@ -674,7 +674,7 @@ class _DebianDistro(_DistroTree):
             arch = re.findall(pattern, self.uri)
             if not arch:
                 continue
-            logging.debug("Found pattern=%s treearch=%s in uri",
+            log.debug("Found pattern=%s treearch=%s in uri",
                 pattern, arch[0])
             return arch[0]
 
@@ -682,14 +682,14 @@ class _DebianDistro(_DistroTree):
         # in the URI name for --location $ISO mounts
         for arch in ["i386", "amd64", "x86_64", "arm64"]:
             if arch in self.uri:
-                logging.debug("Found treearch=%s in uri", arch)
+                log.debug("Found treearch=%s in uri", arch)
                 if arch == "x86_64":
                     arch = "amd64"
                 return arch
 
         # Otherwise default to i386
         arch = "i386"
-        logging.debug("No treearch found in uri, defaulting to arch=%s", arch)
+        log.debug("No treearch found in uri, defaulting to arch=%s", arch)
         return arch
 
     def _set_url_paths(self):
@@ -745,7 +745,7 @@ class _DebianDistro(_DistroTree):
         oses = [n for n in OSDB.list_os() if n.name.startswith(self._debname)]
 
         if self.cache.debian_media_type == "daily":
-            logging.debug("Appears to be debian 'daily' URL, using latest "
+            log.debug("Appears to be debian 'daily' URL, using latest "
                 "debian OS")
             return oses[0].name
 
@@ -760,7 +760,7 @@ class _DebianDistro(_DistroTree):
                 codename = osobj.label.split()[1].lower()
 
             if ("/%s/" % codename) in self.uri:
-                logging.debug("Found codename=%s in the URL string", codename)
+                log.debug("Found codename=%s in the URL string", codename)
                 return osobj.name
 
 
@@ -841,7 +841,7 @@ def _build_distro_list(osobj):
     # If user manually specified an os_distro, bump its URL class
     # to the top of the list
     if osobj.distro:
-        logging.debug("variant=%s has distro=%s, looking for matching "
+        log.debug("variant=%s has distro=%s, looking for matching "
                       "distro store to prioritize",
                       osobj.name, osobj.distro)
         found_store = None
@@ -850,11 +850,11 @@ def _build_distro_list(osobj):
                 found_store = store
 
         if found_store:
-            logging.debug("Prioritizing distro store=%s", found_store)
+            log.debug("Prioritizing distro store=%s", found_store)
             allstores.remove(found_store)
             allstores.insert(0, found_store)
         else:
-            logging.debug("No matching store found, not prioritizing anything")
+            log.debug("No matching store found, not prioritizing anything")
 
     import os
     force_libosinfo = os.environ.get("VIRTINST_TEST_SUITE_FORCE_LIBOSINFO")

@@ -8,13 +8,14 @@
 
 import ftplib
 import io
-import logging
 import os
 import subprocess
 import tempfile
 import urllib
 
 import requests
+
+from .logger import log
 
 
 ##############################
@@ -43,7 +44,7 @@ def _make_mock_url(url, filesyntax):
 
 class _MockRequestsResponse:
     def __init__(self, url):
-        logging.debug("mocking requests session for url=%s", url)
+        log.debug("mocking requests session for url=%s", url)
         fn = _make_mock_url(url, filesyntax=False)
         self._content = open(fn).read()
         self.headers = {'content-length': len(self._content)}
@@ -100,7 +101,7 @@ class _URLFetcher(object):
         self.scratchdir = scratchdir
         self.meter = meter
 
-        logging.debug("Using scratchdir=%s", scratchdir)
+        log.debug("Using scratchdir=%s", scratchdir)
         self._prepare()
 
 
@@ -135,7 +136,7 @@ class _URLFetcher(object):
             raise ValueError(_("Couldn't acquire file %s: %s") %
                                (url, str(e)))
 
-        logging.debug("Fetching URI: %s", url)
+        log.debug("Fetching URI: %s", url)
         self.meter.start(
             text=_("Retrieving file %s...") % os.path.basename(filename),
             size=size)
@@ -203,7 +204,7 @@ class _URLFetcher(object):
         """
         url = self._make_full_url(filename)
         ret = self._hasFile(url)
-        logging.debug("hasFile(%s) returning %s", url, ret)
+        log.debug("hasFile(%s) returning %s", url, ret)
         return ret
 
     def acquireFile(self, filename, fullurl=None):
@@ -220,7 +221,7 @@ class _URLFetcher(object):
             fn = fileobj.name
 
             self._grabURL(filename, fileobj, fullurl=fullurl)
-            logging.debug("Saved file to %s", fn)
+            log.debug("Saved file to %s", fn)
             return fn
         except:  # noqa
             if fn and os.path.exists(fn):  # pragma: no cover
@@ -250,7 +251,7 @@ class _HTTPURLFetcher(_URLFetcher):
             try:
                 self._session.close()
             except Exception:  # pragma: no cover
-                logging.debug("Error closing requests.session", exc_info=True)
+                log.debug("Error closing requests.session", exc_info=True)
         self._session = None
 
     def can_access(self):
@@ -264,7 +265,7 @@ class _HTTPURLFetcher(_URLFetcher):
             response = self._session.head(url, allow_redirects=True)
             response.raise_for_status()
         except Exception as e:  # pragma: no cover
-            logging.debug("HTTP hasFile request failed: %s", str(e))
+            log.debug("HTTP hasFile request failed: %s", str(e))
             return False
         return True
 
@@ -335,7 +336,7 @@ class _FTPURLFetcher(_URLFetcher):
         try:
             self._ftp.quit()
         except Exception:  # pragma: no cover
-            logging.debug("Error quitting ftp connection", exc_info=True)
+            log.debug("Error quitting ftp connection", exc_info=True)
 
         self._ftp = None
 
@@ -350,7 +351,7 @@ class _FTPURLFetcher(_URLFetcher):
                 # If it's a dir
                 self._ftp.cwd(path)
         except ftplib.all_errors as e:  # pragma: no cover
-            logging.debug("FTP hasFile: couldn't access %s: %s",
+            log.debug("FTP hasFile: couldn't access %s: %s",
                           url, str(e))
             return False
 
@@ -383,7 +384,7 @@ class _ISOURLFetcher(_URLFetcher):
 
         cmd = ["isoinfo", "-J", "-i", self.location, "-x", url]
 
-        logging.debug("Running isoinfo: %s", cmd)
+        log.debug("Running isoinfo: %s", cmd)
         output = subprocess.check_output(cmd)
 
         return io.BytesIO(output), len(output)
@@ -395,7 +396,7 @@ class _ISOURLFetcher(_URLFetcher):
         if not self._cache_file_list:
             cmd = ["isoinfo", "-J", "-i", self.location, "-f"]
 
-            logging.debug("Running isoinfo: %s", cmd)
+            log.debug("Running isoinfo: %s", cmd)
             output = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
 
             self._cache_file_list = output.splitlines(False)

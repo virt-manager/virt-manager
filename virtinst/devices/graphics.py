@@ -4,10 +4,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 
 from .device import Device
+from ..logger import log
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -218,9 +218,9 @@ class DeviceGraphics(Device):
 
     def _default_type(self, guest):
         gtype = guest.default_graphics_type
-        logging.debug("Using default_graphics=%s", gtype)
+        log.debug("Using default_graphics=%s", gtype)
         if gtype == "spice" and not self._spice_supported():
-            logging.debug("spice requested but HV doesn't support it. "
+            log.debug("spice requested but HV doesn't support it. "
                           "Using vnc.")
             gtype = "vnc"
         return gtype
@@ -229,7 +229,7 @@ class DeviceGraphics(Device):
         if self.type != "spice":
             return None
         if not self.conn.is_remote():
-            logging.debug("Local connection, disabling spice image "
+            log.debug("Local connection, disabling spice image "
                 "compression.")
             return "off"
         return None

@@ -4,9 +4,9 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import time
 
+from virtinst import log
 from virtinst import pollhelpers
 from virtinst import StoragePool, StorageVolume
 
@@ -39,7 +39,7 @@ class vmmStorageVolume(vmmLibvirtObject):
         try:
             return self._backend.XMLDesc(flags)
         except Exception as e:
-            logging.debug("XMLDesc for vol=%s failed: %s",
+            log.debug("XMLDesc for vol=%s failed: %s",
                 self._backend.key(), e)
             raise
 

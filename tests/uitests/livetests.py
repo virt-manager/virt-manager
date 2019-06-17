@@ -1,10 +1,11 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 
 import libvirt
+
+from virtinst import log
 
 from tests.uitests import utils as uiutils
 
@@ -231,4 +232,4 @@ class Console(uiutils.UITestCase):
                 pool.destroy()
                 pool.undefine()
             except Exception:
-                logging.debug("Error cleaning up pool", exc_info=True)
+                log.debug("Error cleaning up pool", exc_info=True)

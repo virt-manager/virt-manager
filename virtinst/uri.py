@@ -5,9 +5,10 @@
 # See the COPYING file in the top-level directory.
 #
 
-import logging
 import re
 import urllib.parse
+
+from .logger import log
 
 
 def sanitize_xml_for_test_define(xml):
@@ -23,7 +24,7 @@ def sanitize_xml_for_test_define(xml):
     diff = "\n".join(difflib.unified_diff(orig.split("\n"),
                                           xml.split("\n")))
     if diff:
-        logging.debug("virtinst test sanitizing diff\n:%s", diff)
+        log.debug("virtinst test sanitizing diff\n:%s", diff)
     return xml
 
 

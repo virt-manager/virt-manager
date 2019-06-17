@@ -5,7 +5,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import socket
 
 from gi.repository import Gdk
@@ -21,6 +20,8 @@ try:
     have_spice_gtk = True
 except (ValueError, ImportError):
     have_spice_gtk = False
+
+from virtinst import log
 
 from .baseclass import vmmGObject
 from .sshtunnels import SSHTunnels
@@ -329,7 +330,7 @@ class VNCViewer(Viewer):
         self.emit("size-allocate", None)
 
     def _auth_failure_cb(self, ignore, msg):
-        logging.debug("VNC auth failure. msg=%s", msg)
+        log.debug("VNC auth failure. msg=%s", msg)
         self.emit("auth-error", msg, True)
 
     def _auth_credential(self, src_ignore, credList):
@@ -353,7 +354,7 @@ class VNCViewer(Viewer):
         withUsername = False
         withPassword = False
         for cred in values:
-            logging.debug("Got credential request %s", cred)
+            log.debug("Got credential request %s", cred)
             if cred == GtkVnc.DisplayCredential.PASSWORD:
                 withPassword = True
             elif cred == GtkVnc.DisplayCredential.USERNAME:
@@ -398,14 +399,14 @@ class VNCViewer(Viewer):
             try:
                 keys = [int(k) for k in keys.split(',')]
             except Exception:
-                logging.debug("Error in grab_keys configuration in Gsettings",
+                log.debug("Error in grab_keys configuration in Gsettings",
                               exc_info=True)
                 return
 
             seq = GtkVnc.GrabSequence.new(keys)
             self._display.set_grab_keys(seq)
         except Exception as e:
-            logging.debug("Error when getting the grab keys combination: %s",
+            log.debug("Error when getting the grab keys combination: %s",
                           str(e))
 
     def _send_keys(self, keys):
@@ -449,11 +450,11 @@ class VNCViewer(Viewer):
         host, port, ignore = self._ginfo.get_conn_host()
 
         if not self._ginfo.gsocket:
-            logging.debug("VNC connecting to host=%s port=%s", host, port)
+            log.debug("VNC connecting to host=%s port=%s", host, port)
             self._display.open_host(host, port)
             return
 
-        logging.debug("VNC connecting to socket=%s", self._ginfo.gsocket)
+        log.debug("VNC connecting to socket=%s", self._ginfo.gsocket)
         try:
             sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             sock.connect(self._ginfo.gsocket)
@@ -538,7 +539,7 @@ class SpiceViewer(Viewer):
                 gtk_session.set_property("auto-usbredir", True)
         except Exception:
             self._usbdev_manager = None
-            logging.debug("Error initializing spice usb device manager",
+            log.debug("Error initializing spice usb device manager",
                 exc_info=True)
 
 
@@ -553,11 +554,11 @@ class SpiceViewer(Viewer):
             self._emit_disconnected()
         elif event == SpiceClientGLib.ChannelEvent.ERROR_AUTH:
             if not self._spice_session.get_property("password"):
-                logging.debug("Spice channel received ERROR_AUTH, but no "
+                log.debug("Spice channel received ERROR_AUTH, but no "
                     "password set, assuming it wants credentials.")
                 self.emit("need-auth", True, False)
             else:
-                logging.debug("Spice channel received ERROR_AUTH, but a "
+                log.debug("Spice channel received ERROR_AUTH, but a "
                     "password is already set. Assuming authentication failed.")
                 self.emit("auth-error", channel.get_error().message, False)
         elif "ERROR" in str(event):
@@ -568,7 +569,7 @@ class SpiceViewer(Viewer):
             error = None
             if channel.get_error():
                 error = channel.get_error().message
-            logging.debug("Spice channel event=%s message=%s", event, error)
+            log.debug("Spice channel event=%s message=%s", event, error)
 
             msg = _("Encountered SPICE %(error-name)s") % {
                 "error-name": event.value_nick}
@@ -589,7 +590,7 @@ class SpiceViewer(Viewer):
             # are still rolling in
             return
 
-        logging.debug("Requesting fd for channel: %s", channel)
+        log.debug("Requesting fd for channel: %s", channel)
         channel.connect_after("channel-event", self._fd_channel_event_cb)
 
         fd = self._get_fd_for_open()
@@ -614,7 +615,7 @@ class SpiceViewer(Viewer):
             channel_id = channel.get_property("channel-id")
 
             if channel_id != 0:
-                logging.debug("Spice multi-head unsupported")
+                log.debug("Spice multi-head unsupported")
                 return
 
             self._display_channel = channel
@@ -664,14 +665,14 @@ class SpiceViewer(Viewer):
             try:
                 keys = [int(k) for k in keys.split(',')]
             except Exception:
-                logging.debug("Error in grab_keys configuration in Gsettings",
+                log.debug("Error in grab_keys configuration in Gsettings",
                               exc_info=True)
                 return
 
             seq = SpiceClientGtk.GrabSequence.new(keys)
             self._display.set_grab_keys(seq)
         except Exception as e:
-            logging.debug("Error when getting the grab keys combination: %s",
+            log.debug("Error when getting the grab keys combination: %s",
                           str(e))
 
     def _send_keys(self, keys):
@@ -698,7 +699,7 @@ class SpiceViewer(Viewer):
         host, port, tlsport = self._ginfo.get_conn_host()
         self._create_spice_session()
 
-        logging.debug("Spice connecting to host=%s port=%s tlsport=%s",
+        log.debug("Spice connecting to host=%s port=%s tlsport=%s",
             host, port, tlsport)
         self._spice_session.set_property("host", str(host))
         if port:

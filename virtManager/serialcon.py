@@ -4,20 +4,20 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
+# pylint: disable=wrong-import-order,ungrouped-imports
 import gi
 from gi.repository import Gdk
 from gi.repository import Gtk
 
+from virtinst import log
+
 # We can use either 2.91 or 2.90. This is just to silence runtime warnings
-# pylint: disable=wrong-import-position
 try:
     gi.require_version("Vte", "2.91")
-    logging.debug("Using VTE API 2.91")
+    log.debug("Using VTE API 2.91")
 except ValueError:
     gi.require_version("Vte", "2.90")
-    logging.debug("Using VTE API 2.90")
+    log.debug("Using VTE API 2.90")
 from gi.repository import Vte
 
 import libvirt
@@ -49,7 +49,7 @@ class ConsoleConnection(vmmGObject):
 
         if (events & libvirt.VIR_EVENT_HANDLE_ERROR or
             events & libvirt.VIR_EVENT_HANDLE_HANGUP):
-            logging.debug("Received stream ERROR/HANGUP, closing console")
+            log.debug("Received stream ERROR/HANGUP, closing console")
             self.close()
             return
 
@@ -57,7 +57,7 @@ class ConsoleConnection(vmmGObject):
             try:
                 got = self.stream.recv(1024 * 100)
             except Exception:
-                logging.exception("Error receiving stream data")
+                log.exception("Error receiving stream data")
                 self.close()
                 return
 
@@ -65,7 +65,7 @@ class ConsoleConnection(vmmGObject):
                 # This is basically EAGAIN
                 return
             if len(got) == 0:
-                logging.debug("Received EOF from stream, closing")
+                log.debug("Received EOF from stream, closing")
                 self.close()
                 return
 
@@ -80,7 +80,7 @@ class ConsoleConnection(vmmGObject):
             try:
                 done = self.stream.send(self.terminalToStream.encode())
             except Exception:
-                logging.exception("Error sending stream data")
+                log.exception("Error sending stream data")
                 self.close()
                 return
 
@@ -104,7 +104,7 @@ class ConsoleConnection(vmmGObject):
             self.close()
 
         name = dev and dev.alias.name or None
-        logging.debug("Opening console stream for dev=%s alias=%s",
+        log.debug("Opening console stream for dev=%s alias=%s",
                       dev, name)
         # libxl doesn't set aliases, their open_console just defaults to
         # opening the first console device, so don't force prescence of
@@ -125,11 +125,11 @@ class ConsoleConnection(vmmGObject):
             try:
                 self.stream.eventRemoveCallback()
             except Exception:
-                logging.exception("Error removing stream callback")
+                log.exception("Error removing stream callback")
             try:
                 self.stream.finish()
             except Exception:
-                logging.exception("Error finishing stream")
+                log.exception("Error finishing stream")
 
         self.stream = None
 
@@ -284,7 +284,7 @@ class vmmSerialConsole(vmmGObject):
             self.box.set_current_page(0)
             return True
         except Exception as e:
-            logging.exception("Error opening serial console")
+            log.exception("Error opening serial console")
             self.show_error(_("Error connecting to text console: %s") % e)
             try:
                 self.console.close()
@@ -307,12 +307,12 @@ class vmmSerialConsole(vmmGObject):
 
             if port == self.target_port:
                 if path != self.lastpath:
-                    logging.debug("Serial console '%s' path changed to %s",
+                    log.debug("Serial console '%s' path changed to %s",
                                   self.target_port, path)
                 self.lastpath = path
                 return dev
 
-        logging.debug("No devices found for serial target port '%s'",
+        log.debug("No devices found for serial target port '%s'",
                       self.target_port)
         self.lastpath = None
         return None

@@ -5,8 +5,8 @@
 # See the COPYING file in the top-level directory.
 
 import ipaddress
-import logging
 
+from virtinst import log
 from virtinst import Network
 
 from .libvirtobject import vmmLibvirtObject
@@ -98,7 +98,7 @@ class vmmNetwork(vmmLibvirtObject):
         try:
             self._leases = self._backend.DHCPLeases()
         except Exception as e:
-            logging.debug("Error getting %s DHCP leases: %s", self, str(e))
+            log.debug("Error getting %s DHCP leases: %s", self, str(e))
             self._leases = []
 
     def get_dhcp_leases(self):

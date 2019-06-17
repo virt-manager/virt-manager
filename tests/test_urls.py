@@ -3,7 +3,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import re
 import sys
@@ -15,6 +14,7 @@ from tests import utils
 import virtinst.progress
 from virtinst import Installer
 from virtinst import Guest
+from virtinst import log
 
 # These are all functional tests
 os.environ.pop("VIRTINST_TEST_SUITE", None)
@@ -153,7 +153,7 @@ def _testGuest(testdata, guest):
     treemedia = installer._treemedia  # pylint: disable=protected-access
     fetcher = treemedia._cached_fetcher  # pylint: disable=protected-access
     def fakeAcquireFile(filename):
-        logging.debug("Fake acquiring %s", filename)
+        log.debug("Fake acquiring %s", filename)
         return filename
     fetcher.acquireFile = fakeAcquireFile
 

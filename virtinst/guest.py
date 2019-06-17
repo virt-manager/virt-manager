@@ -6,7 +6,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import random
 
 import libvirt
@@ -17,6 +16,7 @@ from .buildconfig import BuildConfig
 from .devices import *  # pylint: disable=wildcard-import
 from .domain import *  # pylint: disable=wildcard-import
 from .domcapabilities import DomainCapabilities
+from .logger import log
 from .osdict import OSDB
 from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
@@ -91,12 +91,12 @@ class Guest(XMLBuilder):
             raise RuntimeError(_("Domain named %s already exists!") % name)
 
         try:
-            logging.debug("Explicitly replacing guest '%s'", name)
+            log.debug("Explicitly replacing guest '%s'", name)
             if vm.ID() != -1:
-                logging.debug("Destroying guest '%s'", name)
+                log.debug("Destroying guest '%s'", name)
                 vm.destroy()
 
-            logging.debug("Undefining guest '%s'", name)
+            log.debug("Undefining guest '%s'", name)
             vm.undefine()
         except libvirt.libvirtError as e:
             raise RuntimeError(_("Could not remove old vm '%s': %s") %
@@ -135,7 +135,7 @@ class Guest(XMLBuilder):
                     conn.lookupByUUID, uuid):
                 return uuid
 
-        logging.error("Failed to generate non-conflicting UUID")
+        log.error("Failed to generate non-conflicting UUID")
 
     @staticmethod
     def generate_name(guest):
@@ -324,7 +324,7 @@ class Guest(XMLBuilder):
         if os_id:
             self.__osinfo = OSDB.lookup_os_by_full_id(os_id)
             if not self.__osinfo:
-                logging.debug("XML had libosinfo os id=%s but we didn't "
+                log.debug("XML had libosinfo os id=%s but we didn't "
                         "find any libosinfo object matching that", os_id)
 
         if not self.__osinfo:
@@ -459,7 +459,7 @@ class Guest(XMLBuilder):
 
     def set_os_name(self, name):
         obj = OSDB.lookup_os(name, raise_error=True)
-        logging.debug("Setting Guest osinfo name %s", obj)
+        log.debug("Setting Guest osinfo name %s", obj)
         self._set_os_obj(obj)
 
     def set_default_os_name(self):
@@ -584,7 +584,7 @@ class Guest(XMLBuilder):
             self.features.smm = True
             self.os.loader_secure = True
             if self.os.machine and "q35" not in self.os.machine:
-                logging.warning("Changing machine type from '%s' to 'q35' "
+                log.warning("Changing machine type from '%s' to 'q35' "
                         "which is required for UEFI secure boot.")
                 self.os.machine = "q35"
 
@@ -696,7 +696,7 @@ class Guest(XMLBuilder):
             self.conn.is_qemu() and
             self.os.is_x86() and
             self.type != "kvm"):
-            logging.warning("KVM acceleration not available, using '%s'",
+            log.warning("KVM acceleration not available, using '%s'",
                             self.type)
 
     def sync_vcpus_topology(self):
@@ -787,10 +787,10 @@ class Guest(XMLBuilder):
             except RuntimeError as e:
                 if self.uefi_requested:
                     raise
-                logging.debug("Error setting UEFI default",
+                log.debug("Error setting UEFI default",
                     exc_info=True)
-                logging.warning("Couldn't configure UEFI: %s", e)
-                logging.warning("Your VM may not boot successfully.")
+                log.warning("Couldn't configure UEFI: %s", e)
+                log.warning("Your VM may not boot successfully.")
 
     def _usb_disabled(self):
         controllers = [c for c in self.devices.controller if

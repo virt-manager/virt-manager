@@ -6,7 +6,6 @@
 # See the COPYING file in the top-level directory.
 
 import difflib
-import logging
 import re
 import sys
 
@@ -14,6 +13,7 @@ import libvirt
 
 import virtinst
 from virtinst import cli
+from virtinst import log
 from virtinst import xmlutil
 from virtinst.cli import fail, print_stdout, print_stderr
 
@@ -44,9 +44,9 @@ def get_diff(origxml, newxml):
                                        tofile="Altered XML"))
 
     if ret:
-        logging.debug("XML diff:\n%s", ret)
+        log.debug("XML diff:\n%s", ret)
     else:
-        logging.debug("No XML diff, didn't generate any change.")
+        log.debug("No XML diff, didn't generate any change.")
     return ret
 
 
@@ -82,7 +82,7 @@ def get_domain_and_guest(conn, domstr):
             domain = conn.lookupByName(domstr)
         except Exception:
             # In case the VM has a UUID or ID for a name
-            logging.debug("Error looking up domain by name", exc_info=True)
+            log.debug("Error looking up domain by name", exc_info=True)
             if isint:
                 domain = conn.lookupByID(int(domstr))
             elif isuuid:
@@ -254,7 +254,7 @@ def setup_device(dev):
     if getattr(dev, "DEVICE_TYPE", None) != "disk":
         return
 
-    logging.debug("Doing setup for disk=%s", dev)
+    log.debug("Doing setup for disk=%s", dev)
     dev.build_storage(cli.get_meter())
 
 
@@ -347,7 +347,7 @@ def prepare_changes(xmlobj, options, parserclass):
     diff = get_diff(origxml, newxml)
 
     if not diff:
-        logging.warning(_("No XML diff was generated. The requested "
+        log.warning(_("No XML diff was generated. The requested "
             "changes will have no effect."))
 
     if options.print_diff:
@@ -521,7 +521,7 @@ def main(conn=None):
             update_changes(domain, devs, action, options.confirm)
             performed_update = True
         else:
-            logging.warning(
+            log.warning(
                 _("The VM is not running, --update is inapplicable."))
         if not options.define:
             # --update and --no-define passed, so we are done
@@ -555,7 +555,7 @@ def main(conn=None):
         print_stdout(
             _("Changes will take effect after the domain is fully powered off."))
     elif defined_xml_is_unchanged(conn, domain, original_xml):
-        logging.warning(_("XML did not change after domain define. You may "
+        log.warning(_("XML did not change after domain define. You may "
             "have changed a value that libvirt is setting by default."))
 
     return 0
@@ -567,7 +567,7 @@ if __name__ == "__main__":  # pragma: no cover
     except SystemExit as sys_e:
         sys.exit(sys_e.code)
     except KeyboardInterrupt:
-        logging.debug("", exc_info=True)
+        log.debug("", exc_info=True)
         print_stderr(_("Aborted at user request"))
     except Exception as main_e:
         fail(main_e)

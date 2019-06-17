@@ -5,13 +5,13 @@
 # See the COPYING file in the top-level directory.
 
 import os
-import logging
 
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 
 from virtinst import DomainCpu
+from virtinst import log
 
 from .inspection import vmmInspection
 from .keyring import vmmKeyring, vmmSecret
@@ -642,7 +642,7 @@ class vmmConfig(object):
                 _type == self.CONFIG_DIR_FLOPPY_MEDIA):
                 path = os.getcwd()
 
-        logging.debug("directory for type=%s returning=%s", _type, path)
+        log.debug("directory for type=%s returning=%s", _type, path)
         return path
 
     def set_default_directory(self, folder, _type):
@@ -650,7 +650,7 @@ class vmmConfig(object):
         if not key:
             return
 
-        logging.debug("saving directory for type=%s to %s", key, folder)
+        log.debug("saving directory for type=%s to %s", key, folder)
         self.conf.set("/paths/%s-default" % key, folder)
 
     # Keyring / VNC password dealings

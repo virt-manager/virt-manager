@@ -1,11 +1,11 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import traceback
 import unittest
 
 import virtinst
+from virtinst import log
 
 
 _do_skip = None
@@ -28,7 +28,7 @@ class CheckPropsTest(unittest.TestCase):
                 _do_skip = bool(
                         result.errors or result.failures or result.skipped)
             except Exception:
-                logging.debug("unittest skip hack failed", exc_info=True)
+                log.debug("unittest skip hack failed", exc_info=True)
 
         if _do_skip:
             self.skipTest("skipping as other tests failed/skipped")

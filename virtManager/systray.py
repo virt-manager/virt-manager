@@ -4,12 +4,12 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 
 from gi.repository import Gio
 from gi.repository import Gtk
 
+from virtinst import log
 from virtinst import xmlutil
 
 from . import vmmenu
@@ -61,18 +61,18 @@ def _has_appindicator_dbus():
             return True
         return False
     except Exception:
-        logging.exception("Error checking for appindicator dbus")
+        log.exception("Error checking for appindicator dbus")
         return False
 
 
 _USING_APPINDICATOR = False
 if AppIndicator3:
     if not _has_appindicator_dbus():
-        logging.debug("AppIndicator3 is available, but didn't "
+        log.debug("AppIndicator3 is available, but didn't "
                               "find any dbus watcher.")
     else:
         _USING_APPINDICATOR = True
-        logging.debug("Using AppIndicator3 for systray")
+        log.debug("Using AppIndicator3 for systray")
 
 
 ###########################
@@ -210,7 +210,7 @@ class vmmSystray(vmmGObject):
 
     def _show_systray_changed_cb(self):
         do_show = self.config.get_view_system_tray()
-        logging.debug("Showing systray: %s", do_show)
+        log.debug("Showing systray: %s", do_show)
 
         if do_show:
             self._show_systray()

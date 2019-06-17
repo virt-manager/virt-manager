@@ -4,9 +4,9 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 
+from .logger import log
 from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
@@ -66,7 +66,7 @@ class NodeDevice(XMLBuilder):
         try:
             return _AddressStringToNodedev(conn, idstring)
         except Exception:
-            logging.debug("Error looking up nodedev from idstring=%s",
+            log.debug("Error looking up nodedev from idstring=%s",
                 idstring, exc_info=True)
             raise
 
@@ -206,7 +206,7 @@ def _AddressStringToHostdev(conn, addrstr):
         else:
             raise RuntimeError("Unknown address type")
     except Exception:
-        logging.debug("Error parsing node device string.", exc_info=True)
+        log.debug("Error parsing node device string.", exc_info=True)
         raise
 
     return hostdev

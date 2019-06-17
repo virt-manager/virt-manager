@@ -4,10 +4,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
 from gi.repository import Gtk
 from gi.repository import Pango
+
+from virtinst import log
 
 from . import uiutil
 from .asyncjob import vmmAsyncJob
@@ -166,7 +166,7 @@ class vmmHostNets(vmmGObjectUI):
         try:
             self._populate_net_state(net)
         except Exception as e:
-            logging.exception(e)
+            log.exception(e)
             self._set_error_page(_("Error selecting network: %s") % e)
         self._disable_net_apply()
 
@@ -294,7 +294,7 @@ class vmmHostNets(vmmGObjectUI):
         if not result:
             return
 
-        logging.debug("Deleting network '%s'", net.get_name())
+        log.debug("Deleting network '%s'", net.get_name())
         vmmAsyncJob.simple_async_noshow(net.delete, [], self,
                             _("Error deleting network '%s'") % net.get_name())
 
@@ -303,7 +303,7 @@ class vmmHostNets(vmmGObjectUI):
         if net is None:
             return
 
-        logging.debug("Starting network '%s'", net.get_name())
+        log.debug("Starting network '%s'", net.get_name())
         vmmAsyncJob.simple_async_noshow(net.start, [], self,
                             _("Error starting network '%s'") % net.get_name())
 
@@ -312,12 +312,12 @@ class vmmHostNets(vmmGObjectUI):
         if net is None:
             return
 
-        logging.debug("Stopping network '%s'", net.get_name())
+        log.debug("Stopping network '%s'", net.get_name())
         vmmAsyncJob.simple_async_noshow(net.stop, [], self,
                             _("Error stopping network '%s'") % net.get_name())
 
     def _add_network_cb(self, src):
-        logging.debug("Launching 'Add Network'")
+        log.debug("Launching 'Add Network'")
         try:
             if self._addnet is None:
                 self._addnet = vmmCreateNetwork(self.conn)
@@ -335,7 +335,7 @@ class vmmHostNets(vmmGObjectUI):
         if net is None:
             return
 
-        logging.debug("Applying changes for network '%s'", net.get_name())
+        log.debug("Applying changes for network '%s'", net.get_name())
         try:
             if EDIT_NET_AUTOSTART in self._active_edits:
                 auto = self.widget("net-autostart").get_active()

@@ -4,10 +4,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
 from gi.repository import Gio
 from gi.repository import GLib
+
+from virtinst import log
 
 
 class vmmSecret(object):
@@ -42,9 +42,9 @@ class vmmKeyring(object):
                                 "/org/freedesktop/secrets/aliases/default",
                                 "org.freedesktop.Secret.Collection", None)
 
-            logging.debug("Using keyring session %s", self._session)
+            log.debug("Using keyring session %s", self._session)
         except Exception:
-            logging.exception("Error determining keyring")
+            log.exception("Error determining keyring")
 
 
     ##############
@@ -70,7 +70,7 @@ class vmmKeyring(object):
                                               props, params, replace)[0]
             ret = int(_id.rsplit("/")[-1])
         except Exception:
-            logging.exception("Failed to add keyring secret")
+            log.exception("Failed to add keyring secret")
 
         return ret
 
@@ -82,7 +82,7 @@ class vmmKeyring(object):
                                            "org.freedesktop.Secret.Item", None)
             iface.Delete("(s)", "/")
         except Exception:
-            logging.exception("Failed to delete keyring secret")
+            log.exception("Failed to delete keyring secret")
 
     def get_secret(self, _id):
         ret = None
@@ -106,6 +106,6 @@ class vmmKeyring(object):
 
             ret = vmmSecret(label, secret, attrs)
         except Exception:
-            logging.exception("Failed to get keyring secret id=%s", _id)
+            log.exception("Failed to get keyring secret id=%s", _id)
 
         return ret

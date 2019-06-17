@@ -5,7 +5,6 @@
 # See the COPYING file in the top-level directory.
 
 import collections
-import logging
 import os
 import re
 import time
@@ -16,6 +15,8 @@ from gi.repository import Gtk
 
 import libvirt
 
+from virtinst import log
+
 from .baseclass import vmmGObjectUI
 from . import uiutil
 
@@ -25,7 +26,7 @@ def do_we_have_session():
     try:
         bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
     except Exception:
-        logging.exception("Error getting system bus handle")
+        log.exception("Error getting system bus handle")
         return
 
     # Check systemd
@@ -36,10 +37,10 @@ def do_we_have_session():
                         "org.freedesktop.login1.Manager", None)
 
         ret = manager.GetSessionByPID("(u)", pid)
-        logging.debug("Found login1 session=%s", ret)
+        log.debug("Found login1 session=%s", ret)
         return True
     except Exception:
-        logging.exception("Couldn't connect to logind")
+        log.exception("Couldn't connect to logind")
 
     return False
 
@@ -126,7 +127,7 @@ def creds_dialog(creds, cbdata):
             dialogobj = _vmmConnectAuth(creds)
             ret = dialogobj.run()
         except Exception:
-            logging.exception("Error from creds dialog")
+            log.exception("Error from creds dialog")
             ret = -1
         retipc.append(ret)
 
@@ -148,7 +149,7 @@ def connect_error(conn, errmsg, tb, warnconsole):
     show_errmsg = True
 
     if conn.is_remote():
-        logging.debug("connect_error: conn transport=%s",
+        log.debug("connect_error: conn transport=%s",
             conn.get_uri_transport())
         if re.search(r"nc: .* -- 'U'", tb):
             hint += _("The remote host requires a version of netcat/nc "

@@ -4,7 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import traceback
 
 from gi.repository import Gtk
@@ -15,6 +14,7 @@ from virtinst import (DeviceChannel, DeviceConsole,
         DeviceInput, DeviceInterface, DevicePanic, DeviceParallel,
         DeviceRedirdev, DeviceRng, DeviceSerial, DeviceSmartcard,
         DeviceSound, DeviceTpm, DeviceVideo, DeviceVsock, DeviceWatchdog)
+from virtinst import log
 
 from . import uiutil
 from .fsdetails import vmmFSDetails
@@ -127,7 +127,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._set_initial_state()
 
     def show(self, parent):
-        logging.debug("Showing addhw")
+        log.debug("Showing addhw")
         self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
@@ -137,7 +137,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def close(self, ignore1=None, ignore2=None):
         if self.is_visible():
-            logging.debug("Closing addhw")
+            log.debug("Closing addhw")
             self.topwin.hide()
         if self._storagebrowser:
             self._storagebrowser.close()
@@ -385,7 +385,7 @@ class vmmAddHardware(vmmGObjectUI):
                 vm.hotplug(**hotplug_args)
         except Exception as e:
             did_hotplug = True
-            logging.debug("Hotplug failed: %s", str(e))
+            log.debug("Hotplug failed: %s", str(e))
             hotplug_err = ((str(e), "".join(traceback.format_exc())))
 
         if did_hotplug and not hotplug_err:
@@ -1285,22 +1285,22 @@ class vmmAddHardware(vmmGObjectUI):
             dev.get_parent_pool()):
             poolname = dev.get_parent_pool().name()
 
-        logging.debug("Running build_storage() for device=%s", dev)
+        log.debug("Running build_storage() for device=%s", dev)
         dev.build_storage(meter=asyncjob.get_meter())
-        logging.debug("build_storage() complete")
+        log.debug("build_storage() complete")
 
         if poolname:
             try:
                 pool = self.conn.get_pool(poolname)
                 self.idle_add(pool.refresh)
             except Exception:
-                logging.debug("Error looking up pool=%s for refresh after "
+                log.debug("Error looking up pool=%s for refresh after "
                     "storage creation.", poolname, exc_info=True)
 
 
     def _add_device(self, dev):
         xml = dev.get_xml()
-        logging.debug("Adding device:\n%s", xml)
+        log.debug("Adding device:\n%s", xml)
 
         if self._remove_usb_controller:
             kwargs = {}
@@ -1317,7 +1317,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         controller = getattr(dev, "vmm_controller", None)
         if controller is not None:
-            logging.debug("Adding controller:\n%s",
+            log.debug("Adding controller:\n%s",
                           controller.get_xml())
         # Hotplug device
         attach_err = False
@@ -1326,7 +1326,7 @@ class vmmAddHardware(vmmGObjectUI):
                 self.vm.attach_device(controller)
             self.vm.attach_device(dev)
         except Exception as e:
-            logging.debug("Device could not be hotplugged: %s", str(e))
+            log.debug("Device could not be hotplugged: %s", str(e))
             attach_err = (str(e), "".join(traceback.format_exc()))
 
         if attach_err:
@@ -1433,7 +1433,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _build_xmleditor_device(self, srcdev):
         xml = self._xmleditor.get_xml()
-        logging.debug("Using XML from xmleditor:\n%s", xml)
+        log.debug("Using XML from xmleditor:\n%s", xml)
         devclass = srcdev.__class__
         dev = devclass(srcdev.conn, parsexml=xml)
 

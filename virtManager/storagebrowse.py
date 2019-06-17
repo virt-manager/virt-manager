@@ -4,7 +4,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
+from virtinst import log
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
@@ -33,7 +33,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
 
     def show(self, parent):
-        logging.debug("Showing storage browser")
+        log.debug("Showing storage browser")
         if not self._first_run:
             self._first_run = True
             pool = self.conn.get_default_pool()
@@ -46,7 +46,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def close(self, ignore1=None, ignore2=None):
         if self.is_visible():
-            logging.debug("Closing storage browser")
+            log.debug("Closing storage browser")
             self.topwin.hide()
         self.storagelist.close()
         return 1
@@ -116,7 +116,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def _volume_chosen(self, src, volume):
         ignore = src
-        logging.debug("Chosen volume XML:\n%s", volume.xmlobj.get_xml())
+        log.debug("Chosen volume XML:\n%s", volume.xmlobj.get_xml())
         self._finish(volume.get_target_path())
 
     def _vol_sensitive_cb(self, fmt):
@@ -145,7 +145,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             dialog_type=dialog_type, browse_reason=self._browse_reason,
             dialog_name=dialog_name, choose_button=choose_button)
         if filename:
-            logging.debug("Browse local chose path=%s", filename)
+            log.debug("Browse local chose path=%s", filename)
             self._finish(filename)
 
     def _finish(self, path):

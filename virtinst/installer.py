@@ -7,7 +7,7 @@
 # See the COPYING file in the top-level directory.
 
 import os
-import logging
+from .logger import log
 
 from . import progress
 from . import unattended
@@ -210,7 +210,7 @@ class Installer(object):
         ram = guest.osinfo.get_network_install_required_ram(guest)
         ram = (ram or 0) // 1024
         if ram > guest.currentMemory:
-            logging.warning(_("Overriding memory to %s MiB needed for %s "
+            log.warning(_("Overriding memory to %s MiB needed for %s "
                 "network install."), ram // 1024, guest.osinfo.name)
             guest.currentMemory = ram
 
@@ -222,7 +222,7 @@ class Installer(object):
     def _prepare_unattended_data(self, guest, script):
         expected_filename = script.get_expected_filename()
         unattended_cmdline = script.generate_cmdline()
-        logging.debug("Generated unattended cmdline: %s", unattended_cmdline)
+        log.debug("Generated unattended cmdline: %s", unattended_cmdline)
 
         scriptpath = script.write()
         self._tmpfiles.append(scriptpath)
@@ -244,7 +244,7 @@ class Installer(object):
                 raise RuntimeError("Unattended method=cdrom installs are "
                         "not yet supported for remote connections.")
             if not guest.osinfo.is_windows():
-                logging.warning("Attempting unattended method=cdrom injection "
+                log.warning("Attempting unattended method=cdrom injection "
                         "for a non-windows OS. If this doesn't work, try "
                         "passing install media to --location")
             osguess = OSDB.guess_os_by_iso(self.cdrom)
@@ -271,7 +271,7 @@ class Installer(object):
             self._treemedia.cleanup(guest)
 
         for f in self._tmpfiles:
-            logging.debug("Removing %s", str(f))
+            log.debug("Removing %s", str(f))
             os.unlink(f)
 
     def _get_postinstall_bootdev(self, guest):
@@ -386,16 +386,16 @@ class Installer(object):
             ret = self._treemedia.detect_distro(guest)
         elif self.cdrom:
             if guest.conn.is_remote():
-                logging.debug("Can't detect distro for cdrom "
+                log.debug("Can't detect distro for cdrom "
                     "remote connection.")
             else:
                 osguess = OSDB.guess_os_by_iso(self.cdrom)
                 if osguess:
                     ret = osguess[0]
         else:
-            logging.debug("No media for distro detection.")
+            log.debug("No media for distro detection.")
 
-        logging.debug("installer.detect_distro returned=%s", ret)
+        log.debug("installer.detect_distro returned=%s", ret)
         return ret
 
     def set_unattended_data(self, unattended_data):
@@ -438,9 +438,9 @@ class Installer(object):
             install_xml = self._get_install_xml(guest, meter)
         final_xml = guest.get_xml()
 
-        logging.debug("Generated install XML: %s",
+        log.debug("Generated install XML: %s",
             (install_xml and ("\n" + install_xml) or "None required"))
-        logging.debug("Generated boot XML: \n%s", final_xml)
+        log.debug("Generated boot XML: \n%s", final_xml)
 
         return install_xml, final_xml
 
@@ -493,10 +493,10 @@ class Installer(object):
                 domain = self.conn.defineXML(final_xml)
 
         try:
-            logging.debug("XML fetched from libvirt object:\n%s",
+            log.debug("XML fetched from libvirt object:\n%s",
                           domain.XMLDesc(0))
         except Exception as e:  # pragma: no cover
-            logging.debug("Error fetching XML from libvirt object: %s", e)
+            log.debug("Error fetching XML from libvirt object: %s", e)
         return domain
 
     def _flag_autostart(self, domain):
@@ -508,7 +508,7 @@ class Installer(object):
         except Exception as e:  # pragma: no cover
             if not self.conn.support.is_error_nosupport(e):
                 raise
-            logging.warning("Could not set autostart flag: libvirt "
+            log.warning("Could not set autostart flag: libvirt "
                             "connection does not support autostart.")
 
 
@@ -562,7 +562,7 @@ class Installer(object):
             return
 
         for disk in clean_disks:
-            logging.debug("Removing created disk path=%s vol_object=%s",
+            log.debug("Removing created disk path=%s vol_object=%s",
                 disk.path, disk.get_vol_object())
             name = os.path.basename(disk.path)
 
@@ -578,6 +578,6 @@ class Installer(object):
 
                 meter.end(0)
             except Exception as e:  # pragma: no cover
-                logging.debug("Failed to remove disk '%s'",
+                log.debug("Failed to remove disk '%s'",
                     name, exc_info=True)
-                logging.error("Failed to remove disk '%s': %s", name, e)
+                log.error("Failed to remove disk '%s': %s", name, e)

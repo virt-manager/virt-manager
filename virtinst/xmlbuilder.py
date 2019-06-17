@@ -7,12 +7,12 @@
 # See the COPYING file in the top-level directory.
 
 import collections
-import logging
 import os
 import re
 import string
 import textwrap
 
+from .logger import log
 from .xmlapi import XMLAPI
 from . import xmlutil
 
@@ -233,7 +233,7 @@ class XMLProperty(_XMLPropertyBase):
                     intkwargs["base"] = 16
                 ret = int(val, **intkwargs)
             except ValueError as e:
-                logging.debug("Error converting XML value to int: %s", e)
+                log.debug("Error converting XML value to int: %s", e)
                 ret = val
         elif self._is_yesno:
             if val == "yes":
@@ -392,7 +392,7 @@ class _XMLState(object):
         try:
             self.xmlapi = XMLAPI(parsexml)
         except Exception:
-            logging.debug("Error parsing xml=\n%s", parsexml)
+            log.debug("Error parsing xml=\n%s", parsexml)
             raise
 
         if not self.is_build:

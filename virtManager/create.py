@@ -5,7 +5,6 @@
 # See the COPYING file in the top-level directory.
 
 import io
-import logging
 import pkgutil
 import os
 import threading
@@ -17,6 +16,7 @@ from gi.repository import Pango
 
 import virtinst
 import virtinst.generatename
+from virtinst import log
 
 from . import uiutil
 from .addstorage import vmmAddStorage
@@ -194,7 +194,7 @@ class vmmCreate(vmmGObjectUI):
     ###########################
 
     def show(self, parent, uri):
-        logging.debug("Showing new vm wizard")
+        log.debug("Showing new vm wizard")
 
         if not self.is_visible():
             self._reset_state(uri)
@@ -205,7 +205,7 @@ class vmmCreate(vmmGObjectUI):
 
     def _close(self, ignore1=None, ignore2=None):
         if self.is_visible():
-            logging.debug("Closing new vm wizard")
+            log.debug("Closing new vm wizard")
             vmmEngine.get_instance().decrement_window_counter()
 
         self.topwin.hide()
@@ -430,10 +430,10 @@ class vmmCreate(vmmGObjectUI):
             try:
                 guest.set_uefi_path(guest.get_uefi_path())
                 installable_arch = True
-                logging.debug("UEFI found, setting it as default.")
+                log.debug("UEFI found, setting it as default.")
             except Exception as e:
                 installable_arch = False
-                logging.debug("Error checking for UEFI default", exc_info=True)
+                log.debug("Error checking for UEFI default", exc_info=True)
                 msg = _("Failed to setup UEFI: %s\n"
                         "Install options are limited.") % e
                 self._show_arch_warning(msg)
@@ -659,7 +659,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             self._populate_conn_state()
         except Exception as e:
-            logging.exception("Error setting create wizard conn state.")
+            log.exception("Error setting create wizard conn state.")
             return self._show_startup_error(str(e))
 
 
@@ -686,7 +686,7 @@ class vmmCreate(vmmGObjectUI):
                 return
 
         self._capsinfo = capsinfo
-        logging.debug("Guest type set to os_type=%s, arch=%s, dom_type=%s",
+        log.debug("Guest type set to os_type=%s, arch=%s, dom_type=%s",
                       self._capsinfo.os_type,
                       self._capsinfo.arch,
                       self._capsinfo.hypervisor_type)
@@ -1080,7 +1080,7 @@ class vmmCreate(vmmGObjectUI):
 
             def _cleanup_disks_finished(error, details):
                 if error:
-                    logging.debug("Error cleaning up disk images:"
+                    log.debug("Error cleaning up disk images:"
                         "\nerror=%s\ndetails=%s", error, details)
                 self.idle_add(self._close)
 
@@ -1221,7 +1221,7 @@ class vmmCreate(vmmGObjectUI):
             path, ignore = self._get_storage_path(newname, do_log=False)
             self._populate_summary_storage(path=path)
         except Exception:
-            logging.debug("Error generating storage path on name change "
+            log.debug("Error generating storage path on name change "
                 "for name=%s", newname, exc_info=True)
 
 
@@ -1657,7 +1657,7 @@ class vmmCreate(vmmGObjectUI):
         ram = res.get_recommended_ram(self._guest.os.arch)
         n_cpus = res.get_recommended_ncpus(self._guest.os.arch)
         storage = res.get_recommended_storage(self._guest.os.arch)
-        logging.debug("Recommended resources for os=%s: "
+        log.debug("Recommended resources for os=%s: "
             "ram=%s ncpus=%s storage=%s",
             self._guest.osinfo.name, ram, n_cpus, storage)
 
@@ -1720,12 +1720,12 @@ class vmmCreate(vmmGObjectUI):
                 path = failed_disk.path
                 path_already_created = failed_disk.storage_was_created
                 if do_log:
-                    logging.debug("Reusing failed disk path=%s "
+                    log.debug("Reusing failed disk path=%s "
                         "already_created=%s", path, path_already_created)
             else:
                 path = self._addstorage.get_default_path(vmname)
                 if do_log:
-                    logging.debug("Default storage path is: %s", path)
+                    log.debug("Default storage path is: %s", path)
 
         return path, path_already_created
 
@@ -1771,7 +1771,7 @@ class vmmCreate(vmmGObjectUI):
             except Exception as e:
                 return self.err.val_err(_("Invalid guest name"), str(e))
             if self._is_default_storage():
-                logging.debug("User changed VM name and using default "
+                log.debug("User changed VM name and using default "
                     "storage, re-validating with new default storage path.")
                 # User changed the name and we are using default storage
                 # which depends on the VM name. Revalidate things
@@ -1840,7 +1840,7 @@ class vmmCreate(vmmGObjectUI):
     def _do_start_detect_os(self, cdrom, location, forward_after_finish):
         self._detect_os_in_progress = False
 
-        logging.debug("Starting OS detection thread for cdrom=%s location=%s",
+        log.debug("Starting OS detection thread for cdrom=%s location=%s",
                 cdrom, location)
         self.widget("create-forward").set_sensitive(False)
 
@@ -1891,7 +1891,7 @@ class vmmCreate(vmmGObjectUI):
             distro = installer.detect_distro(self._guest)
             thread_results.set_distro(distro)
         except Exception:
-            logging.exception("Error detecting distro.")
+            log.exception("Error detecting distro.")
             thread_results.set_failed()
 
     def _report_detect_os_progress(self, idx, thread_results,
@@ -1916,11 +1916,11 @@ class vmmCreate(vmmGObjectUI):
             distro = thread_results.get_distro()
         except Exception:
             distro = None
-            logging.exception("Error in distro detect timeout")
+            log.exception("Error in distro detect timeout")
 
         spin = self.widget("install-detect-os-spinner")
         spin.stop()
-        logging.debug("Finished UI OS detection.")
+        log.debug("Finished UI OS detection.")
 
         self.widget("create-forward").set_sensitive(True)
         self._os_already_detected_for_media = True
@@ -1951,7 +1951,7 @@ class vmmCreate(vmmGObjectUI):
         if self._validate(page) is not True:
             return False
 
-        logging.debug("Starting create finish() sequence")
+        log.debug("Starting create finish() sequence")
         self._failed_guest = None
         guest = self._guest
 
@@ -1967,7 +1967,7 @@ class vmmCreate(vmmGObjectUI):
                 self._start_install(guest)
                 return
 
-            logging.debug("User requested 'customize', launching dialog")
+            log.debug("User requested 'customize', launching dialog")
             self._show_customize_dialog(self._guest)
         except Exception as e:
             self.reset_finish_cursor()
@@ -1989,12 +1989,12 @@ class vmmCreate(vmmGObjectUI):
         def customize_finished_cb(src, vdomain):
             if not self.is_visible():
                 return
-            logging.debug("User finished customize dialog, starting install")
+            log.debug("User finished customize dialog, starting install")
             self._failed_guest = None
             self._start_install(vdomain.get_backend())
 
         def config_canceled_cb(src):
-            logging.debug("User closed customize window, closing wizard")
+            log.debug("User closed customize window, closing wizard")
             self._close_requested()
 
         # We specifically don't use vmmVMWindow.get_instance here since
@@ -2085,9 +2085,9 @@ class vmmCreate(vmmGObjectUI):
             if poolname not in refresh_pools:
                 refresh_pools.append(poolname)
 
-        logging.debug("Starting background install process")
+        log.debug("Starting background install process")
         guest.installer_instance.start_install(guest, meter=meter)
-        logging.debug("Install completed")
+        log.debug("Install completed")
 
         # Wait for VM to show up
         self.conn.schedule_priority_tick(pollvm=True)
@@ -2127,7 +2127,7 @@ class vmmCreate(vmmGObjectUI):
                 pool = self.conn.get_pool(poolname)
                 self.idle_add(pool.refresh)
             except Exception:
-                logging.debug("Error looking up pool=%s for refresh after "
+                log.debug("Error looking up pool=%s for refresh after "
                     "VM creation.", poolname, exc_info=True)
 
 
@@ -2137,19 +2137,19 @@ class vmmCreate(vmmGObjectUI):
         to change, so we can restart it as needed
         """
         if vm.is_crashed():
-            logging.debug("VM crashed, cancelling install plans.")
+            log.debug("VM crashed, cancelling install plans.")
             return True
 
         if not vm.is_shutoff():
             return
 
         if vm.get_install_abort():
-            logging.debug("User manually shutdown VM, not restarting "
+            log.debug("User manually shutdown VM, not restarting "
                           "guest after install.")
             return True
 
         try:
-            logging.debug("Install should be completed, starting VM.")
+            log.debug("Install should be completed, starting VM.")
             vm.startup()
         except Exception as e:
             self.err.show_err(_("Error continue install: %s") % str(e))
@@ -2162,6 +2162,7 @@ class vmmCreate(vmmGObjectUI):
         Call bootstrap method from virtBootstrap and show logger messages
         as state/details.
         """
+        import logging
         import virtBootstrap
 
         meter.start(text=_("Bootstraping container"), size=100)
@@ -2199,7 +2200,7 @@ class vmmCreate(vmmGObjectUI):
             kwargs['password'] = bootstrap_args['passwd']
         if bootstrap_args['root_password']:
             kwargs['root_password'] = bootstrap_args['root_password']
-        logging.debug('Start container bootstrap')
+        log.debug('Start container bootstrap')
         try:
             virtBootstrap.bootstrap(**kwargs)
             # Success - uncheck the 'install-oscontainer-bootstrap' checkbox

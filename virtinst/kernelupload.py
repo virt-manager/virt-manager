@@ -4,10 +4,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 
 from . import progress
+from .logger import log
 from .devices import DeviceDisk
 from .storage import StoragePool, StorageVolume
 
@@ -19,12 +19,12 @@ def _build_pool(conn, meter, path):
     """
     pool = StoragePool.lookup_pool_by_path(conn, path)
     if pool:  # pragma: no cover
-        logging.debug("Existing pool '%s' found for %s", pool.name(), path)
+        log.debug("Existing pool '%s' found for %s", pool.name(), path)
         StoragePool.ensure_pool_is_running(pool, refresh=True)
         return pool
 
     name = StoragePool.find_free_name(conn, "boot-scratch")
-    logging.debug("Building storage pool: path=%s name=%s", path, name)
+    log.debug("Building storage pool: path=%s name=%s", path, name)
     poolbuild = StoragePool(conn)
     poolbuild.type = poolbuild.TYPE_DIR
     poolbuild.name = name
@@ -77,7 +77,7 @@ def _upload_file(conn, meter, destpool, src):
     size = os.path.getsize(src)
     basename = os.path.basename(src)
     name = StorageVolume.find_free_name(conn, destpool, basename)
-    logging.debug("Generated volume name %s", name)
+    log.debug("Generated volume name %s", name)
 
     vol_install = DeviceDisk.build_vol_install(conn, name, destpool,
                     (float(size) / 1024.0 / 1024.0 / 1024.0), True)
@@ -138,17 +138,17 @@ def upload_kernel_initrd(conn, scratchdir, system_scratchdir,
     if (not conn.is_remote() and
         (conn.is_session_uri() or scratchdir == system_scratchdir)):
         # We have access to system scratchdir, don't jump through hoops
-        logging.debug("Have access to preferred scratchdir so"
+        log.debug("Have access to preferred scratchdir so"
                     " nothing to upload")  # pragma: no cover
         return kernel, initrd, tmpvols  # pragma: no cover
 
     if not conn.support_remote_url_install():
         # Needed for the test_urls suite
-        logging.debug("Media upload not supported")  # pragma: no cover
+        log.debug("Media upload not supported")  # pragma: no cover
         return kernel, initrd, tmpvols  # pragma: no cover
 
     # Build pool
-    logging.debug("Uploading kernel/initrd media")
+    log.debug("Uploading kernel/initrd media")
     pool = _build_pool(conn, meter, system_scratchdir)
 
     kvol = _upload_file(conn, meter, pool, kernel)

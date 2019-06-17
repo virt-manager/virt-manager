@@ -3,12 +3,13 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 
 from gi.repository import Gtk
 
 import virtinst
+from virtinst import log
+
 from . import uiutil
 from .baseclass import vmmGObjectUI
 
@@ -49,7 +50,7 @@ class vmmAddStorage(vmmGObjectUI):
                 avail = int(pool.get_available())
                 return float(avail / 1024.0 / 1024.0 / 1024.0)
         except Exception:
-            logging.exception("Error determining host disk space")
+            log.exception("Error determining host disk space")
         return -1
 
     def _update_host_space(self):
@@ -85,7 +86,7 @@ class vmmAddStorage(vmmGObjectUI):
         if not broken_paths:
             return
 
-        logging.debug("No search access for dirs: %s", broken_paths)
+        log.debug("No search access for dirs: %s", broken_paths)
         resp, chkres = src.err.warn_chkbox(
                         _("The emulator may not have search permissions "
                           "for the path '%s'.") % path,
@@ -98,7 +99,7 @@ class vmmAddStorage(vmmGObjectUI):
         if not resp:
             return
 
-        logging.debug("Attempting to correct permission issues.")
+        log.debug("Attempting to correct permission issues.")
         errors = virtinst.DeviceDisk.fix_path_search(
                 conn.get_backend(), searchdata)
         if not errors:
@@ -113,7 +114,7 @@ class vmmAddStorage(vmmGObjectUI):
             details += "%s : %s\n" % (p, error)
         details += "\nIt is very likely the VM will fail to start up."
 
-        logging.debug("Permission errors:\n%s", details)
+        log.debug("Permission errors:\n%s", details)
 
         ignore, chkres = src.err.err_chkbox(errmsg, details,
                              _("Don't ask about these directories again."))
@@ -184,11 +185,11 @@ class vmmAddStorage(vmmGObjectUI):
 
             fmt = self.conn.get_default_storage_format()
             if disk.get_vol_install().supports_property("format"):
-                logging.debug("Using default prefs format=%s for path=%s",
+                log.debug("Using default prefs format=%s for path=%s",
                     fmt, disk.path)
                 disk.get_vol_install().format = fmt
             else:
-                logging.debug("path=%s can not use default prefs format=%s, "
+                log.debug("path=%s can not use default prefs format=%s, "
                     "not setting it", disk.path, fmt)
 
         return disk

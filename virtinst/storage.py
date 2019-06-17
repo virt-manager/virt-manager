@@ -5,13 +5,13 @@
 # See the COPYING file in the top-level directory.
 
 import os
-import logging
 import threading
 
 import libvirt
 
 from . import generatename
 from . import progress
+from .logger import log
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -82,7 +82,7 @@ def _lookup_default_pool(conn):
         poolxml = _lookup_poolxml_by_path(conn, path)
 
     if poolxml:
-        logging.debug("Found default pool name=%s target=%s",
+        log.debug("Found default pool name=%s target=%s",
                 poolxml.name, poolxml.target_path)
     return poolxml
 
@@ -210,7 +210,7 @@ class StoragePool(_StorageObject):
         try:
             name = "default"
             path = _preferred_default_pool_path(conn)
-            logging.debug("Attempting to build default pool with target '%s'",
+            log.debug("Attempting to build default pool with target '%s'",
                           path)
             defpool = StoragePool(conn)
             defpool.type = defpool.TYPE_DIR
@@ -259,10 +259,10 @@ class StoragePool(_StorageObject):
         :param refresh: If True, run refresh() as well
         """
         if pool_object.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
-            logging.debug("starting pool=%s", pool_object.name())
+            log.debug("starting pool=%s", pool_object.name())
             pool_object.create(0)
         if refresh:
-            logging.debug("refreshing pool=%s", pool_object.name())
+            log.debug("refreshing pool=%s", pool_object.name())
             pool_object.refresh(0)
 
 
@@ -476,7 +476,7 @@ class StoragePool(_StorageObject):
                                "formatting disk device."))
 
         xml = self.get_xml()
-        logging.debug("Creating storage pool '%s' with xml:\n%s",
+        log.debug("Creating storage pool '%s' with xml:\n%s",
                       self.name, xml)
 
         meter = progress.ensure_meter(meter)
@@ -510,7 +510,7 @@ class StoragePool(_StorageObject):
             try:
                 pool.undefine()
             except Exception as e:
-                logging.debug("Error cleaning up pool after failure: %s",
+                log.debug("Error cleaning up pool after failure: %s",
                               str(e))
             raise RuntimeError(errmsg)
 
@@ -677,27 +677,27 @@ class StorageVolume(_StorageObject):
 
 
     def _detect_backing_store_format(self):
-        logging.debug("Attempting to detect format for backing_store=%s",
+        log.debug("Attempting to detect format for backing_store=%s",
                 self.backing_store)
         from . import diskbackend
         vol, pool = diskbackend.manage_path(self.conn, self.backing_store)
 
         if not vol:
-            logging.debug("Didn't find any volume for backing_store")
+            log.debug("Didn't find any volume for backing_store")
             return None
 
         # Only set backing format for volumes that support
         # the 'format' parameter as we know it, like qcow2 etc.
         volxml = StorageVolume(self.conn, vol.XMLDesc(0))
         volxml.pool = pool
-        logging.debug("Found backing store volume XML:\n%s",
+        log.debug("Found backing store volume XML:\n%s",
                 volxml.get_xml())
 
         if volxml.supports_property("format"):
-            logging.debug("Returning format=%s", volxml.format)
+            log.debug("Returning format=%s", volxml.format)
             return volxml.format
 
-        logging.debug("backing_store volume doesn't appear to have "
+        log.debug("backing_store volume doesn't appear to have "
             "a file format we can specify, returning None")
         return None
 
@@ -733,7 +733,7 @@ class StorageVolume(_StorageObject):
 
         if self._pool_xml.type == StoragePool.TYPE_LOGICAL:
             if self.allocation != self.capacity:
-                logging.warning(_("Sparse logical volumes are not supported, "
+                log.warning(_("Sparse logical volumes are not supported, "
                                "setting allocation equal to capacity"))
                 self.allocation = self.capacity
 
@@ -741,7 +741,7 @@ class StorageVolume(_StorageObject):
         if isfatal:
             raise ValueError(errmsg)
         if errmsg:
-            logging.warning(errmsg)
+            log.warning(errmsg)
 
     def install(self, meter=None):
         """
@@ -751,7 +751,7 @@ class StorageVolume(_StorageObject):
             self.backing_format = self._detect_backing_store_format()
 
         xml = self.get_xml()
-        logging.debug("Creating storage volume '%s' with xml:\n%s",
+        log.debug("Creating storage volume '%s' with xml:\n%s",
                       self.name, xml)
 
         t = threading.Thread(target=self._progress_thread,
@@ -786,17 +786,17 @@ class StorageVolume(_StorageObject):
             if self.input_vol:
                 vol = self.pool.createXMLFrom(xml, self.input_vol, cloneflags)
             else:
-                logging.debug("Using vol create flags=%s", createflags)
+                log.debug("Using vol create flags=%s", createflags)
                 vol = self.pool.createXML(xml, createflags)
 
             self._install_finished.set()
             t.join()
             meter.end(self.capacity)
-            logging.debug("Storage volume '%s' install complete.",
+            log.debug("Storage volume '%s' install complete.",
                           self.name)
             return vol
         except Exception as e:
-            logging.debug("Error creating storage volume", exc_info=True)
+            log.debug("Error creating storage volume", exc_info=True)
             raise RuntimeError("Couldn't create storage volume "
                                "'%s': '%s'" % (self.name, str(e)))
 
@@ -816,7 +816,7 @@ class StorageVolume(_StorageObject):
                     break
 
         if vol is None:
-            logging.debug("Couldn't lookup storage volume in prog thread.")
+            log.debug("Couldn't lookup storage volume in prog thread.")
             return
 
         while True:

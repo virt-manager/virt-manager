@@ -5,7 +5,6 @@
 # See the COPYING file in the top-level directory.
 
 import ipaddress
-import logging
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -14,6 +13,7 @@ from gi.repository import Pango
 import libvirt
 
 from virtinst import generatename
+from virtinst import log
 from virtinst import Network
 
 from . import uiutil
@@ -77,13 +77,13 @@ class vmmCreateNetwork(vmmGObjectUI):
     ####################
 
     def show(self, parent):
-        logging.debug("Showing new network wizard")
+        log.debug("Showing new network wizard")
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing new network wizard")
+        log.debug("Closing new network wizard")
         self.topwin.hide()
         return 1
 
@@ -387,7 +387,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def _build_xmlobj_from_xmleditor(self):
         xml = self._xmleditor.get_xml()
-        logging.debug("Using XML from xmleditor:\n%s", xml)
+        log.debug("Using XML from xmleditor:\n%s", xml)
         return Network(self.conn.get_backend(), parsexml=xml)
 
     def _build_xmlobj_from_ui(self):
@@ -464,7 +464,7 @@ class vmmCreateNetwork(vmmGObjectUI):
     def _async_net_create(self, asyncjob, net):
         ignore = asyncjob
         xml = net.get_xml()
-        logging.debug("Creating virtual network '%s' with xml:\n%s",
+        log.debug("Creating virtual network '%s' with xml:\n%s",
                       net.name, xml)
 
         netobj = self.conn.get_backend().networkDefineXML(xml)

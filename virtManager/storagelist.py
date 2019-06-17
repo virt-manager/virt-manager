@@ -3,14 +3,13 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from virtinst import StoragePool
 from virtinst import DeviceDisk
+from virtinst import log
+from virtinst import StoragePool
 
 from . import uiutil
 from .asyncjob import vmmAsyncJob
@@ -364,7 +363,7 @@ class vmmStorageList(vmmGObjectUI):
         try:
             self._populate_pool_state(pool)
         except Exception as e:
-            logging.exception(e)
+            log.exception(e)
             self._set_error_page(_("Error selecting pool: %s") % e)
         self._disable_pool_apply()
 
@@ -422,7 +421,7 @@ class vmmStorageList(vmmGObjectUI):
                 sizestr = vol.get_pretty_capacity()
                 fmt = vol.get_format() or ""
             except Exception:
-                logging.debug("Error getting volume info for '%s', "
+                log.debug("Error getting volume info for '%s', "
                               "hiding it", key, exc_info=True)
                 continue
 
@@ -435,7 +434,7 @@ class vmmStorageList(vmmGObjectUI):
                     if not namestr:
                         namestr = None
             except Exception:
-                logging.exception("Failed to determine if storage volume in "
+                log.exception("Failed to determine if storage volume in "
                                   "use.")
 
             sensitive = True
@@ -466,7 +465,7 @@ class vmmStorageList(vmmGObjectUI):
         if pool is None:
             return
 
-        logging.debug("Stopping pool '%s'", pool.get_name())
+        log.debug("Stopping pool '%s'", pool.get_name())
         vmmAsyncJob.simple_async_noshow(pool.stop, [], self,
                             _("Error stopping pool '%s'") % pool.get_name())
 
@@ -475,12 +474,12 @@ class vmmStorageList(vmmGObjectUI):
         if pool is None:
             return
 
-        logging.debug("Starting pool '%s'", pool.get_name())
+        log.debug("Starting pool '%s'", pool.get_name())
         vmmAsyncJob.simple_async_noshow(pool.start, [], self,
                             _("Error starting pool '%s'") % pool.get_name())
 
     def _pool_add_cb(self, src):
-        logging.debug("Launching 'Add Pool' wizard")
+        log.debug("Launching 'Add Pool' wizard")
 
         try:
             if self._addpool is None:
@@ -500,7 +499,7 @@ class vmmStorageList(vmmGObjectUI):
         if not result:
             return
 
-        logging.debug("Deleting pool '%s'", pool.get_name())
+        log.debug("Deleting pool '%s'", pool.get_name())
         vmmAsyncJob.simple_async_noshow(pool.delete, [], self,
                             _("Error deleting pool '%s'") % pool.get_name())
 
@@ -511,7 +510,7 @@ class vmmStorageList(vmmGObjectUI):
 
         self._confirm_changes()
 
-        logging.debug("Refresh pool '%s'", pool.get_name())
+        log.debug("Refresh pool '%s'", pool.get_name())
         vmmAsyncJob.simple_async_noshow(pool.refresh, [], self,
                             _("Error refreshing pool '%s'") % pool.get_name())
 
@@ -535,7 +534,7 @@ class vmmStorageList(vmmGObjectUI):
         if pool is None:
             return
 
-        logging.debug("Launching 'Add Volume' wizard for pool '%s'",
+        log.debug("Launching 'Add Volume' wizard for pool '%s'",
                       pool.get_name())
         try:
             if self._addvol is None:
@@ -566,7 +565,7 @@ class vmmStorageList(vmmGObjectUI):
                 pool.refresh()
             self.idle_add(idlecb)
 
-        logging.debug("Deleting volume '%s'", vol.get_name())
+        log.debug("Deleting volume '%s'", vol.get_name())
         vmmAsyncJob.simple_async_noshow(cb, [], self,
                         _("Error deleting volume '%s'") % vol.get_name())
 
@@ -580,7 +579,7 @@ class vmmStorageList(vmmGObjectUI):
         if pool is None:
             return
 
-        logging.debug("Applying changes for pool '%s'", pool.get_name())
+        log.debug("Applying changes for pool '%s'", pool.get_name())
         try:
             if EDIT_POOL_AUTOSTART in self._active_edits:
                 auto = self.widget("pool-autostart").get_active()

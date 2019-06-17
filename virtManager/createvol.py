@@ -4,11 +4,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+from virtinst import log
 from virtinst import StorageVolume
 
 from . import uiutil
@@ -61,17 +60,17 @@ class vmmCreateVolume(vmmGObjectUI):
         try:
             parent_xml = self._parent_pool.xmlobj.get_xml()
         except Exception:
-            logging.debug("Error getting parent_pool xml", exc_info=True)
+            log.debug("Error getting parent_pool xml", exc_info=True)
             parent_xml = None
 
-        logging.debug("Showing new volume wizard for parent_pool=\n%s",
+        log.debug("Showing new volume wizard for parent_pool=\n%s",
             parent_xml)
         self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing new volume wizard")
+        log.debug("Closing new volume wizard")
         self.topwin.hide()
         if self._storage_browser:
             self._storage_browser.close()
@@ -177,7 +176,7 @@ class vmmCreateVolume(vmmGObjectUI):
             if ret and suffix:
                 ret = ret.rsplit(".", 1)[0]
         except Exception:
-            logging.exception("Error finding a default vol name")
+            log.exception("Error finding a default vol name")
 
         return ret
 
@@ -254,7 +253,7 @@ class vmmCreateVolume(vmmGObjectUI):
 
     def _build_xmlobj_from_xmleditor(self):
         xml = self._xmleditor.get_xml()
-        logging.debug("Using XML from xmleditor:\n%s", xml)
+        log.debug("Using XML from xmleditor:\n%s", xml)
         return self._make_stub_vol(xml=xml)
 
     def _build_xmlobj_from_ui(self):
@@ -336,9 +335,9 @@ class vmmCreateVolume(vmmGObjectUI):
         vol.pool = newpool
 
         meter = asyncjob.get_meter()
-        logging.debug("Starting background vol creation.")
+        log.debug("Starting background vol creation.")
         vol.install(meter=meter)
-        logging.debug("vol creation complete.")
+        log.debug("vol creation complete.")
 
 
     ################

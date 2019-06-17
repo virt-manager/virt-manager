@@ -3,11 +3,12 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import sys
 import traceback
 
 from gi.repository import Gtk
+
+from virtinst import log
 
 from .baseclass import vmmGObject
 
@@ -80,7 +81,7 @@ class vmmErrorDialog(vmmGObject):
                 if details.startswith(summary):
                     det = details[len(summary):].strip()
                 debugmsg += "\ndetails=%s" % det
-            logging.debug(debugmsg)
+            log.debug(debugmsg)
 
         # Make sure we have consistent details for error dialogs
         if (dialog_type == Gtk.MessageType.ERROR and summary not in details):
@@ -124,7 +125,7 @@ class vmmErrorDialog(vmmGObject):
             logtext += " %s" % text2
 
         if isinstance(text1, Exception) or isinstance(text2, Exception):
-            logging.exception(logtext)
+            log.exception(logtext)
         else:
             self._logtrace(logtext)
 

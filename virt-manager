@@ -7,7 +7,6 @@
 # See the COPYING file in the top-level directory.
 
 import argparse
-import logging
 import os
 import signal
 import sys
@@ -20,6 +19,7 @@ from gi.repository import LibvirtGLib
 from virtinst import BuildConfig
 from virtinst import VirtinstConnection
 from virtinst import cli
+from virtinst import log
 
 # This is massively heavy handed, but I can't figure out any way to shut
 # up the slew of gtk deprecation warnings that clog up our very useful
@@ -36,7 +36,7 @@ except (ValueError, AttributeError):
 
 
 def _show_startup_error(msg, details):
-    logging.debug("Error starting virt-manager: %s\n%s", msg, details,
+    log.debug("Error starting virt-manager: %s\n%s", msg, details,
                   exc_info=True)
     from virtManager.error import vmmErrorDialog
     err = vmmErrorDialog.get_instance()
@@ -81,7 +81,7 @@ def _import_gtk(leftovers):
         msg = str(e)
         if display:
             msg += ": Could not open display: %s" % display
-        logging.debug("".join(traceback.format_exc()))
+        log.debug("".join(traceback.format_exc()))
         print(msg)
         sys.exit(1)
     finally:
@@ -220,14 +220,14 @@ def main():
     cli.setupLogging("virt-manager", options.debug, False, False)
 
     import virtManager
-    logging.debug("virt-manager version: %s", BuildConfig.version)
-    logging.debug("virtManager import: %s", str(virtManager))
+    log.debug("virt-manager version: %s", BuildConfig.version)
+    log.debug("virtManager import: %s", str(virtManager))
 
     if BuildConfig.running_from_srcdir:
         _setup_gsettings_path(BuildConfig.gsettings_dir)
 
     if options.trace_libvirt:
-        logging.debug("Libvirt tracing requested")
+        log.debug("Libvirt tracing requested")
         import virtManager.module_trace
         import libvirt
         virtManager.module_trace.wrap_module(libvirt,
@@ -268,11 +268,11 @@ def main():
     if leftovers:
         raise RuntimeError("Unhandled command line options '%s'" % leftovers)
 
-    logging.debug("PyGObject version: %d.%d.%d",
+    log.debug("PyGObject version: %d.%d.%d",
                   gi.version_info[0],
                   gi.version_info[1],
                   gi.version_info[2])
-    logging.debug("GTK version: %d.%d.%d",
+    log.debug("GTK version: %d.%d.%d",
                   Gtk.get_major_version(),
                   Gtk.get_minor_version(),
                   Gtk.get_micro_version())
@@ -333,7 +333,7 @@ def main():
     from gi.repository import GLib
     def _sigint_handler(user_data):
         ignore = user_data
-        logging.debug("Received KeyboardInterrupt. Exiting application.")
+        log.debug("Received KeyboardInterrupt. Exiting application.")
         engine.exit_app()
     GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGINT,
                          _sigint_handler, None)
@@ -345,7 +345,7 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        logging.debug("Received KeyboardInterrupt. Exiting application.")
+        log.debug("Received KeyboardInterrupt. Exiting application.")
     except Exception as run_e:
         if "Gtk" not in globals():
             raise

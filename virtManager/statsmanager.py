@@ -3,11 +3,12 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import re
 import time
 
 import libvirt
+
+from virtinst import log
 
 from .baseclass import vmmGObject
 
@@ -203,17 +204,17 @@ class vmmStatsManager(vmmGObject):
                 return rx, tx
         except libvirt.libvirtError as err:
             if vm.conn.support.is_error_nosupport(err):
-                logging.debug("conn does not support interfaceStats")
+                log.debug("conn does not support interfaceStats")
                 self._net_stats_supported = False
                 return 0, 0
 
-            logging.debug("Error in interfaceStats for '%s' dev '%s': %s",
+            log.debug("Error in interfaceStats for '%s' dev '%s': %s",
                           vm.get_name(), dev, err)
             if vm.is_active():
-                logging.debug("Adding %s to skip list", dev)
+                log.debug("Adding %s to skip list", dev)
                 statslist.stats_net_skip.append(dev)
             else:
-                logging.debug("Aren't running, don't add to skiplist")
+                log.debug("Aren't running, don't add to skiplist")
 
         return 0, 0
 
@@ -263,17 +264,17 @@ class vmmStatsManager(vmmGObject):
                 return rd, wr
         except libvirt.libvirtError as err:
             if vm.conn.support.is_error_nosupport(err):
-                logging.debug("conn does not support blockStats")
+                log.debug("conn does not support blockStats")
                 self._disk_stats_supported = False
                 return 0, 0
 
-            logging.debug("Error in blockStats for '%s' dev '%s': %s",
+            log.debug("Error in blockStats for '%s' dev '%s': %s",
                           vm.get_name(), dev, err)
             if vm.is_active():
-                logging.debug("Adding %s to skip list", dev)
+                log.debug("Adding %s to skip list", dev)
                 statslist.stats_disk_skip.append(dev)
             else:
-                logging.debug("Aren't running, don't add to skiplist")
+                log.debug("Aren't running, don't add to skiplist")
 
         return 0, 0
 
@@ -304,7 +305,7 @@ class vmmStatsManager(vmmGObject):
                     wr = io[3]
                     return rd, wr
             except libvirt.libvirtError as e:
-                logging.debug("LXC style disk stats not supported: %s", e)
+                log.debug("LXC style disk stats not supported: %s", e)
                 self._disk_stats_lxc_supported = False
 
         for disk in vm.get_disk_devices_norefresh():
@@ -341,7 +342,7 @@ class vmmStatsManager(vmmGObject):
             vm.get_backend().setMemoryStatsPeriod(secs,
                 libvirt.VIR_DOMAIN_AFFECT_LIVE)
         except Exception as e:
-            logging.debug("Error setting memstats period: %s", e)
+            log.debug("Error setting memstats period: %s", e)
 
     def _old_mem_stats_helper(self, vm):
         totalmem = 1
@@ -352,10 +353,10 @@ class vmmStatsManager(vmmGObject):
             curmem = max(0, totalmem - stats.get("unused", totalmem))
         except libvirt.libvirtError as err:
             if vm.conn.support.is_error_nosupport(err):
-                logging.debug("conn does not support memoryStats")
+                log.debug("conn does not support memoryStats")
                 self._mem_stats_supported = False
             else:
-                logging.debug("Error reading mem stats: %s", err)
+                log.debug("Error reading mem stats: %s", err)
 
         return totalmem, curmem
 
@@ -417,10 +418,10 @@ class vmmStatsManager(vmmGObject):
                 ret[dom.UUIDString()] = domallstats
         except libvirt.libvirtError as err:
             if conn.support.is_error_nosupport(err):
-                logging.debug("conn does not support getAllDomainStats()")
+                log.debug("conn does not support getAllDomainStats()")
                 self._all_stats_supported = False
             else:
-                logging.debug("Error call getAllDomainStats(): %s", err)
+                log.debug("Error call getAllDomainStats(): %s", err)
         return ret
 
 

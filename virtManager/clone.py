@@ -4,7 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 
 from gi.repository import Gtk
@@ -13,6 +12,7 @@ from gi.repository import Gdk
 import virtinst
 from virtinst import Cloner
 from virtinst import DeviceInterface
+from virtinst import log
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
@@ -174,7 +174,7 @@ class vmmCloneVM(vmmGObjectUI):
         return None
 
     def show(self, parent, vm):
-        logging.debug("Showing clone wizard")
+        log.debug("Showing clone wizard")
         self._set_vm(vm)
         self.reset_state()
         self.topwin.set_transient_for(parent)
@@ -182,7 +182,7 @@ class vmmCloneVM(vmmGObjectUI):
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing clone wizard")
+        log.debug("Closing clone wizard")
         self.change_mac_close()
         self.change_storage_close()
         self.topwin.hide()
@@ -415,7 +415,7 @@ class vmmCloneVM(vmmGObjectUI):
                 cd.skip_target = skip_targets
                 cd.setup_original()
             except Exception as e:
-                logging.exception("Disk target '%s' caused clone error",
+                log.exception("Disk target '%s' caused clone error",
                                   force_target)
                 storage_add(str(e))
                 continue
@@ -436,13 +436,13 @@ class vmmCloneVM(vmmGObjectUI):
                 # Generate disk path, make sure that works
                 clone_path = self.generate_clone_path_name(path)
 
-                logging.debug("Original path: %s\nGenerated clone path: %s",
+                log.debug("Original path: %s\nGenerated clone path: %s",
                               path, clone_path)
 
                 cd.clone_paths = clone_path
                 size = cd.original_disks[0].get_size()
             except Exception as e:
-                logging.exception("Error setting generated path '%s'",
+                log.exception("Error setting generated path '%s'",
                                   clone_path)
                 storage_add(str(e))
 
@@ -479,7 +479,7 @@ class vmmCloneVM(vmmGObjectUI):
                 newpath = self.generate_clone_path_name(origpath, newname)
                 row[STORAGE_INFO_NEW_PATH] = newpath
             except Exception as e:
-                logging.debug("Generating new path from clone name failed: %s",
+                log.debug("Generating new path from clone name failed: %s",
                               str(e))
 
     def build_storage_entry(self, disk, storage_box):
@@ -603,7 +603,7 @@ class vmmCloneVM(vmmGObjectUI):
             self.clone_design.clone_paths = new_disks
         except Exception as e:
             # Just log the error and go on. The UI will fail later if needed
-            logging.debug("Error setting clone_paths: %s", str(e))
+            log.debug("Error setting clone_paths: %s", str(e))
 
         # If any storage cannot be cloned or shared, don't allow cloning
         clone = True
@@ -860,7 +860,7 @@ class vmmCloneVM(vmmGObjectUI):
                 pool = self.conn.get_pool(poolname)
                 self.idle_add(pool.refresh)
             except Exception:
-                logging.debug("Error looking up pool=%s for refresh after "
+                log.debug("Error looking up pool=%s for refresh after "
                         "VM clone.", poolname, exc_info=True)
 
     def change_storage_browse(self, ignore):

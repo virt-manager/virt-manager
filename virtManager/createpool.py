@@ -4,12 +4,12 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 
 from gi.repository import Gdk
 from gi.repository import Gtk
 
+from virtinst import log
 from virtinst import StoragePool
 
 from . import uiutil
@@ -55,13 +55,13 @@ class vmmCreatePool(vmmGObjectUI):
     #######################
 
     def show(self, parent):
-        logging.debug("Showing new pool wizard")
+        log.debug("Showing new pool wizard")
         self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing new pool wizard")
+        log.debug("Closing new pool wizard")
         self.topwin.hide()
         return 1
 
@@ -195,7 +195,7 @@ class vmmCreatePool(vmmGObjectUI):
                                                 pool_type,
                                                 host=host)
         except Exception:
-            logging.exception("Pool enumeration failed")
+            log.exception("Pool enumeration failed")
 
         return plist
 
@@ -343,7 +343,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def _build_xmlobj_from_xmleditor(self):
         xml = self._xmleditor.get_xml()
-        logging.debug("Using XML from xmleditor:\n%s", xml)
+        log.debug("Using XML from xmleditor:\n%s", xml)
         return StoragePool(self.conn.get_backend(), parsexml=xml)
 
     def _make_stub_pool(self):
@@ -425,10 +425,10 @@ class vmmCreatePool(vmmGObjectUI):
     def _async_pool_create(self, asyncjob, pool, build):
         meter = asyncjob.get_meter()
 
-        logging.debug("Starting background pool creation.")
+        log.debug("Starting background pool creation.")
         poolobj = pool.install(create=True, meter=meter, build=build)
         poolobj.setAutostart(True)
-        logging.debug("Pool creation succeeded")
+        log.debug("Pool creation succeeded")
 
     def _finish(self):
         pool = self._build_xmlobj(check_xmleditor=True)

@@ -64,3 +64,5 @@ from virtinst.cloner import Cloner
 from virtinst.snapshot import DomainSnapshot
 
 from virtinst.connection import VirtinstConnection
+
+from virtinst.logger import log

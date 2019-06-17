@@ -4,7 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import re
 import traceback
 
@@ -13,6 +12,7 @@ from gi.repository import Gtk
 import libvirt
 
 import virtinst
+from virtinst import log
 
 from . import uiutil
 from .addhardware import vmmAddHardware
@@ -692,7 +692,7 @@ class vmmDetails(vmmGObjectUI):
 
             machines = capsinfo.machines[:]
         except Exception:
-            logging.exception("Error determining machine list")
+            log.exception("Error determining machine list")
 
         show_machine = (arch not in ["i686", "x86_64"])
         uiutil.set_grid_row_visible(self.widget("machine-type-title"),
@@ -1923,7 +1923,7 @@ class vmmDetails(vmmGObjectUI):
 
     # Device removal
     def remove_device(self, devobj):
-        logging.debug("Removing device: %s", devobj)
+        log.debug("Removing device: %s", devobj)
 
         if not self.err.chkbox_helper(self.config.get_confirm_removedev,
                 self.config.set_confirm_removedev,
@@ -1943,7 +1943,7 @@ class vmmDetails(vmmGObjectUI):
             if self.vm.is_active():
                 self.vm.detach_device(devobj)
         except Exception as e:
-            logging.debug("Device could not be hotUNplugged: %s", str(e))
+            log.debug("Device could not be hotUNplugged: %s", str(e))
             detach_err = (str(e), "".join(traceback.format_exc()))
 
         if not detach_err:

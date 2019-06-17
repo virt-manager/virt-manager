@@ -4,11 +4,12 @@
 # See the COPYING file in the top-level directory.
 
 import collections
-import logging
 
 from gi.repository import Gtk
 
 import virtinst
+from virtinst import log
+
 from . import uiutil
 from .baseclass import vmmGObjectUI
 
@@ -307,7 +308,7 @@ class vmmNetworkList(vmmGObjectUI):
         # Try to start the network
         try:
             netobj.start()
-            logging.debug("Started network '%s'", devname)
+            log.debug("Started network '%s'", devname)
         except Exception as e:
             return self.err.show_err(_("Could not start virtual network "
                                   "'%s': %s") % (devname, str(e)))

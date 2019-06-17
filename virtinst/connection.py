@@ -4,7 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import weakref
 
@@ -14,6 +13,7 @@ from . import pollhelpers
 from . import support
 from . import Capabilities
 from .guest import Guest
+from .logger import log
 from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
 from .uri import URI, MagicURI
@@ -248,7 +248,7 @@ class VirtinstConnection(object):
                 xml = vol.XMLDesc(0)
                 ret.append(StorageVolume(weakref.proxy(self), parsexml=xml))
             except Exception as e:
-                logging.debug("Fetching volume XML failed: %s", e)
+                log.debug("Fetching volume XML failed: %s", e)
         return ret
 
     def _fetch_all_vols_raw(self):
@@ -342,7 +342,7 @@ class VirtinstConnection(object):
             try:
                 self._daemon_version = self._libvirtconn.getLibVersion()
             except Exception:
-                logging.debug("Error calling getLibVersion", exc_info=True)
+                log.debug("Error calling getLibVersion", exc_info=True)
         return self._daemon_version
 
     def conn_version(self):
@@ -354,7 +354,7 @@ class VirtinstConnection(object):
             try:
                 self._conn_version = self._libvirtconn.getVersion()
             except Exception:
-                logging.debug("Error calling getVersion", exc_info=True)
+                log.debug("Error calling getVersion", exc_info=True)
         return self._conn_version
 
 

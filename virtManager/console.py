@@ -5,10 +5,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
 from gi.repository import Gtk
 from gi.repository import Gdk
+
+from virtinst import log
 
 from .baseclass import vmmGObject, vmmGObjectUI
 from .serialcon import vmmSerialConsole
@@ -690,17 +690,17 @@ class vmmConsolePages(vmmGObjectUI):
         except Exception as e:
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
-            logging.exception("Getting graphics console failed: %s", str(e))
+            log.exception("Getting graphics console failed: %s", str(e))
             return
 
         if ginfo is None:
-            logging.debug("No graphics configured for guest")
+            log.debug("No graphics configured for guest")
             self._activate_unavailable_page(
                 _("Graphical console not configured for guest"))
             return
 
         if ginfo.gtype not in self.config.embeddable_graphics():
-            logging.debug("Don't know how to show graphics type '%s' "
+            log.debug("Don't know how to show graphics type '%s' "
                           "disabling console page", ginfo.gtype)
 
             msg = (_("Cannot display graphical console type '%s'")
@@ -712,7 +712,7 @@ class vmmConsolePages(vmmGObjectUI):
         self._activate_unavailable_page(
             _("Connecting to graphical console for guest"))
 
-        logging.debug("Starting connect process for %s", ginfo.logstring())
+        log.debug("Starting connect process for %s", ginfo.logstring())
         try:
             if ginfo.gtype == "vnc":
                 viewer_class = VNCViewer
@@ -731,7 +731,7 @@ class vmmConsolePages(vmmGObjectUI):
 
             self._viewer.console_open()
         except Exception as e:
-            logging.exception("Error connection to graphical console")
+            log.exception("Error connection to graphical console")
             self._activate_unavailable_page(
                     _("Error connecting to graphical console") + ":\n%s" % e)
 
@@ -818,7 +818,7 @@ class vmmConsolePages(vmmGObjectUI):
         if errdetails:
             msg += "\n" + errdetails
         if ssherr:
-            logging.debug("SSH tunnel error output: %s", ssherr)
+            log.debug("SSH tunnel error output: %s", ssherr)
             msg += "\n\n"
             msg += _("SSH tunnel error output: %s") % ssherr
 
@@ -826,7 +826,7 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _viewer_disconnected(self, ignore, errdetails, ssherr):
         self._activate_unavailable_page(_("Viewer disconnected."))
-        logging.debug("Viewer disconnected")
+        log.debug("Viewer disconnected")
 
         # Make sure modifiers are set correctly
         self._viewer_focus_changed()
@@ -835,7 +835,7 @@ class vmmConsolePages(vmmGObjectUI):
         self._refresh_resizeguest_from_settings()
 
     def _viewer_connected(self, ignore):
-        logging.debug("Viewer connected")
+        log.debug("Viewer connected")
         self._activate_viewer_page()
 
         # Make sure modifiers are set correctly

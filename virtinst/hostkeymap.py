@@ -5,9 +5,10 @@
 # See the COPYING file in the top-level directory.
 #
 
-import logging
 import os
 import re
+
+from .logger import log
 
 
 _ETC_VCONSOLE = "/etc/vconsole.conf"
@@ -105,20 +106,20 @@ def _default_keymap():
             kt = cb(f)
             f.close()
             if kt:
-                logging.debug("Found keymap=%s in %s", kt, path)
+                log.debug("Found keymap=%s in %s", kt, path)
                 break
-            logging.debug("Didn't find keymap in '%s'", path)
+            log.debug("Didn't find keymap in '%s'", path)
         except Exception as e:
-            logging.debug("Error parsing '%s': %s", path, str(e))
+            log.debug("Error parsing '%s': %s", path, str(e))
 
     if kt is None:
-        logging.debug("Did not parse any usable keymapping.")
+        log.debug("Did not parse any usable keymapping.")
         return default
 
     kt = kt.lower()
     keymap = sanitize_keymap(kt)
     if not keymap:
-        logging.debug("Didn't match keymap '%s' in keytable!", kt)
+        log.debug("Didn't match keymap '%s' in keytable!", kt)
         return default
     return keymap
 

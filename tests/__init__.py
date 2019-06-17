@@ -5,7 +5,6 @@
 
 import atexit
 import imp
-import logging
 import os
 
 # Need to do this before any tests or virtinst import
@@ -15,6 +14,7 @@ os.environ.pop("_ARC_DEBUG", None)
 
 # pylint: disable=wrong-import-position
 from virtinst import buildconfig
+from virtinst import log
 # This sets all the cli bits back to their defaults
 imp.reload(buildconfig)
 
@@ -27,6 +27,7 @@ virtxml = None
 
 
 def setup_logging():
+    import logging
     rootLogger = logging.getLogger()
     for handler in rootLogger.handlers:
         rootLogger.removeHandler(handler)

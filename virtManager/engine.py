@@ -4,7 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import queue
 import threading
@@ -13,6 +12,8 @@ import time
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
+
+from virtinst import log
 
 from .baseclass import vmmGObject
 from .connect import vmmConnect
@@ -109,9 +110,9 @@ class vmmEngine(vmmGObject):
 
         uris = list(self._connobjs.keys())
         if not uris:
-            logging.debug("No stored URIs found.")
+            log.debug("No stored URIs found.")
         else:
-            logging.debug("Loading stored URIs:\n%s",
+            log.debug("Loading stored URIs:\n%s",
                 "  \n".join(sorted(uris)))
 
         if not skip_autostart:
@@ -132,7 +133,7 @@ class vmmEngine(vmmGObject):
         """
         manager = self._get_manager()
 
-        logging.debug("Trying to start libvirtd through systemd")
+        log.debug("Trying to start libvirtd through systemd")
         unitname = "libvirtd.service"
         libvirtd_installed = False
         libvirtd_active = False
@@ -146,10 +147,10 @@ class vmmEngine(vmmGObject):
                                      "/org/freedesktop/systemd1",
                                      "org.freedesktop.systemd1.Manager", None)
             units = systemd.ListUnits()
-            logging.debug("Successfully listed units via systemd")
+            log.debug("Successfully listed units via systemd")
         except Exception:
             units = []
-            logging.exception("Couldn't connect to systemd")
+            log.exception("Couldn't connect to systemd")
             libvirtd_installed = os.path.exists("/var/run/libvirt")
             libvirtd_active = os.path.exists("/var/run/libvirt/libvirt-sock")
 
@@ -162,7 +163,7 @@ class vmmEngine(vmmGObject):
             unitpath = unitinfo[6]
             break
 
-        logging.debug("libvirtd_installed=%s libvirtd_active=%s unitpath=%s",
+        log.debug("libvirtd_installed=%s libvirtd_active=%s unitpath=%s",
                 libvirtd_installed, libvirtd_active, unitpath)
 
         # If it's not running, try to start it
@@ -177,14 +178,14 @@ class vmmEngine(vmmGObject):
                     time.sleep(2)
                     libvirtd_active = True
         except Exception:
-            logging.exception("Error starting libvirtd")
+            log.exception("Error starting libvirtd")
 
         if self.config.CLITestOptions.first_run:
-            logging.debug("--test-first-run, using uri=None to trigger error")
+            log.debug("--test-first-run, using uri=None to trigger error")
             tryuri = None
         else:
             tryuri = vmmConnect.default_uri()
-            logging.debug("Probed default URI=%s", tryuri)
+            log.debug("Probed default URI=%s", tryuri)
 
         # Manager fail message
         msg = ""
@@ -249,7 +250,7 @@ class vmmEngine(vmmGObject):
             # Explicitly ignore connection errors, we've done that
             # for a while and it can be noisy
             if ConnectError is not None:
-                logging.debug("Autostart connection error: %s",
+                log.debug("Autostart connection error: %s",
                               ConnectError.details)
             add_next_to_queue()
 
@@ -281,7 +282,7 @@ class vmmEngine(vmmGObject):
         Invoked after application.run()
         """
         if not self._application.get_windows():
-            logging.debug("Initial gtkapplication activated")
+            log.debug("Initial gtkapplication activated")
             self._application.add_window(Gtk.Window())
 
     def _init_gtk_application(self):
@@ -314,7 +315,7 @@ class vmmEngine(vmmGObject):
         self._application.activate_action("cli_command", data)
 
         if is_remote:
-            logging.debug("Connected to remote app instance.")
+            log.debug("Connected to remote app instance.")
             return
 
         self._application.run(None)
@@ -341,7 +342,7 @@ class vmmEngine(vmmGObject):
     def _add_obj_to_tick_queue(self, obj, isprio, **kwargs):
         if self._tick_queue.full():
             if not self._tick_thread_slow:
-                logging.debug("Tick is slow, not running at requested rate.")
+                log.debug("Tick is slow, not running at requested rate.")
                 self._tick_thread_slow = True
             return
 
@@ -369,7 +370,7 @@ class vmmEngine(vmmGObject):
                 # Don't attempt to show any UI error here, since it
                 # can cause dialogs to appear from nowhere if say
                 # libvirtd is shut down
-                logging.debug("Error polling connection %s",
+                log.debug("Error polling connection %s",
                         conn.get_uri(), exc_info=True)
 
             # Need to clear reference to make leak check happy
@@ -387,14 +388,14 @@ class vmmEngine(vmmGObject):
         Public function, called by toplevel windows
         """
         self._window_count += 1
-        logging.debug("window counter incremented to %s", self._window_count)
+        log.debug("window counter incremented to %s", self._window_count)
 
     def decrement_window_counter(self):
         """
         Public function, called by toplevel windows
         """
         self._window_count -= 1
-        logging.debug("window counter decremented to %s", self._window_count)
+        log.debug("window counter decremented to %s", self._window_count)
 
         self._exit_app_if_no_windows()
 
@@ -414,7 +415,7 @@ class vmmEngine(vmmGObject):
         if self._exiting:
             return
         if self._can_exit():
-            logging.debug("No windows found, requesting app exit")
+            log.debug("No windows found, requesting app exit")
             self.exit_app()
 
     def exit_app(self):
@@ -438,9 +439,9 @@ class vmmEngine(vmmGObject):
                     objs.remove(self.object_key)
 
                     for name in objs:
-                        logging.debug("LEAK: %s", name)
+                        log.debug("LEAK: %s", name)
 
-                logging.debug("Exiting app normally.")
+                log.debug("Exiting app normally.")
             finally:
                 self._application.quit()
 
@@ -499,7 +500,7 @@ class vmmEngine(vmmGObject):
 
     @_show_startup_error
     def _launch_cli_window(self, uri, show_window, clistr):
-        logging.debug("Launching requested window '%s'", show_window)
+        log.debug("Launching requested window '%s'", show_window)
         if show_window == self.CLI_SHOW_MANAGER:
             manager = self._get_manager()
             manager.set_initial_selection(uri)
@@ -532,10 +533,10 @@ class vmmEngine(vmmGObject):
         show_window = variant[1] or self.CLI_SHOW_MANAGER
         domain = variant[2]
 
-        logging.debug("processing cli command uri=%s show_window=%s domain=%s",
+        log.debug("processing cli command uri=%s show_window=%s domain=%s",
             uri, show_window, domain)
         if not uri:
-            logging.debug("No cli action requested, launching default window")
+            log.debug("No cli action requested, launching default window")
             self._get_manager().show()
             return
 
@@ -549,7 +550,7 @@ class vmmEngine(vmmGObject):
         def _open_completed(_c, ConnectError):
             if ConnectError:
                 if conn_is_new:
-                    logging.debug("Removing failed uri=%s", uri)
+                    log.debug("Removing failed uri=%s", uri)
                     vmmConnectionManager.get_instance().remove_conn(uri)
                 self._handle_conn_error(conn, ConnectError)
             else:

@@ -3,10 +3,12 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import re
 
 import libvirt
+
+from virtinst import log
+
 
 if not hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED"):
     setattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7)
@@ -84,7 +86,7 @@ class _LibvirtEnumMap(object):
         elif status == libvirt.VIR_DOMAIN_PMSUSPENDED:
             return _("Suspended")
 
-        logging.debug("Unknown status %s, returning 'Unknown'", status)
+        log.debug("Unknown status %s, returning 'Unknown'", status)
         return _("Unknown")
 
     @staticmethod
@@ -142,11 +144,11 @@ class _LibvirtEnumMap(object):
         for key in [a for a in dir(libvirt) if re.match(regex, a)]:
             val = getattr(libvirt, key)
             if type(val) is not int:
-                logging.debug("libvirt regex=%s key=%s val=%s "
+                log.debug("libvirt regex=%s key=%s val=%s "
                     "isn't an integer", regex, key, val)
                 continue
             if val in ret:
-                logging.debug("libvirt regex=%s key=%s val=%s is already "
+                log.debug("libvirt regex=%s key=%s val=%s is already "
                     "in dict as key=%s", regex, key, val, regex[val])
                 continue
             ret[val] = key

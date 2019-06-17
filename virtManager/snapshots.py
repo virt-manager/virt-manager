@@ -7,7 +7,6 @@
 import datetime
 import glob
 import io
-import logging
 import os
 
 from gi.repository import Gdk
@@ -17,6 +16,7 @@ from gi.repository import Pango
 
 from virtinst import DomainSnapshot
 from virtinst import generatename
+from virtinst import log
 from virtinst import xmlutil
 
 from . import uiutil
@@ -60,7 +60,7 @@ def _mime_to_ext(val, reverse=False):
             return e
         if val == e and reverse:
             return m
-    logging.debug("Don't know how to convert %s=%s to %s",
+    log.debug("Don't know how to convert %s=%s to %s",
                   reverse and "extension" or "mime", val,
                   reverse and "mime" or "extension")
 
@@ -91,13 +91,13 @@ class vmmSnapshotNew(vmmGObjectUI):
     #######################
 
     def show(self, parent):
-        logging.debug("Showing new snapshot wizard")
+        log.debug("Showing new snapshot wizard")
         self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing new snapshot wizard")
+        log.debug("Closing new snapshot wizard")
         self.topwin.hide()
         return 1
 
@@ -170,10 +170,10 @@ class vmmSnapshotNew(vmmGObjectUI):
 
     def _get_screenshot(self):
         if not self.vm.is_active():
-            logging.debug("Skipping screenshot since VM is not active")
+            log.debug("Skipping screenshot since VM is not active")
             return
         if not self.vm.xmlobj.devices.graphics:
-            logging.debug("Skipping screenshot since VM has no graphics")
+            log.debug("Skipping screenshot since VM has no graphics")
             return
 
         try:
@@ -184,7 +184,7 @@ class vmmSnapshotNew(vmmGObjectUI):
             self._take_screenshot()
             mime, sdata = self._take_screenshot()
         except Exception:
-            logging.exception("Error taking screenshot")
+            log.exception("Error taking screenshot")
             return
 
         ext = _mime_to_ext(mime)
@@ -252,10 +252,10 @@ class vmmSnapshotNew(vmmGObjectUI):
                 return
 
             filename = basesn + "." + _mime_to_ext(mime)
-            logging.debug("Writing screenshot to %s", filename)
+            log.debug("Writing screenshot to %s", filename)
             open(filename, "wb").write(sndata)
         except Exception:
-            logging.exception("Error saving screenshot")
+            log.exception("Error saving screenshot")
 
     def _create_new_snapshot(self):
         snap = self._validate_new_snapshot()
@@ -443,7 +443,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         try:
             snapshots = self.vm.list_snapshots()
         except Exception as e:
-            logging.exception(e)
+            log.exception(e)
             self._set_error_page(_("Error refreshing snapshot list: %s") %
                                 str(e))
             return
@@ -656,7 +656,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         if not result:
             return
 
-        logging.debug("Running snapshot '%s'", snap.get_name())
+        log.debug("Running snapshot '%s'", snap.get_name())
         vmmAsyncJob.simple_async(self.vm.revert_to_snapshot,
                             [snap], self,
                             _("Running snapshot"),
@@ -676,7 +676,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             return
 
         for snap in snaps:
-            logging.debug("Deleting snapshot '%s'", snap.get_name())
+            log.debug("Deleting snapshot '%s'", snap.get_name())
             vmmAsyncJob.simple_async(snap.delete, [], self,
                             _("Deleting snapshot"),
                             _("Deleting snapshot '%s'") % snap.get_name(),
@@ -700,5 +700,5 @@ class vmmSnapshotPage(vmmGObjectUI):
         try:
             self._set_snapshot_state(snap[0])
         except Exception as e:
-            logging.exception(e)
+            log.exception(e)
             self._set_error_page(_("Error selecting snapshot: %s") % str(e))

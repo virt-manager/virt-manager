@@ -6,13 +6,13 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import re
 import xml.etree.ElementTree as ET
 
 import libvirt
 
 from .domain import DomainCpu
+from .logger import log
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -158,7 +158,7 @@ class DomainCapabilities(XMLBuilder):
                 xml = conn.getDomainCapabilities(emulator, arch,
                     machine, hvtype)
             except Exception:
-                logging.debug("Error fetching domcapabilities XML",
+                log.debug("Error fetching domcapabilities XML",
                     exc_info=True)
 
         if not xml:
@@ -271,7 +271,7 @@ class DomainCapabilities(XMLBuilder):
 
     def _get_expanded_cpu(self, mode):
         cpuXML = self._convert_mode_to_cpu(mode.get_xml())
-        logging.debug("CPU XML for security flag baseline: %s", cpuXML)
+        log.debug("CPU XML for security flag baseline: %s", cpuXML)
 
         try:
             expandedXML = self.conn.baselineHypervisorCPU(
@@ -281,7 +281,7 @@ class DomainCapabilities(XMLBuilder):
             expandedXML = self.conn.baselineCPU([cpuXML],
                     libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
 
-        logging.debug("Expanded CPU XML: %s", expandedXML)
+        log.debug("Expanded CPU XML: %s", expandedXML)
 
         return DomainCpu(self.conn, expandedXML)
 
@@ -307,7 +307,7 @@ class DomainCapabilities(XMLBuilder):
             try:
                 cpu = self._get_expanded_cpu(m)
             except libvirt.libvirtError as e:
-                logging.warning(_("Failed to get expanded CPU XML: %s"), e)
+                log.warning(_("Failed to get expanded CPU XML: %s"), e)
                 break
 
             for feature in cpu.features:

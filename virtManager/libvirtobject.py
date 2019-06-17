@@ -4,7 +4,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
+from virtinst import log
 
 from .baseclass import vmmGObject
 
@@ -45,7 +45,7 @@ class vmmLibvirtObject(vmmGObject):
     @staticmethod
     def log_redefine_xml_diff(obj, origxml, newxml):
         if origxml == newxml:
-            logging.debug("Redefine requested for %s, but XML didn't change!",
+            log.debug("Redefine requested for %s, but XML didn't change!",
                           obj)
             return
 
@@ -54,7 +54,7 @@ class vmmLibvirtObject(vmmGObject):
                                             newxml.splitlines(1),
                                             fromfile="Original XML",
                                             tofile="New XML"))
-        logging.debug("Redefining %s with XML diff:\n%s", obj, diff)
+        log.debug("Redefining %s with XML diff:\n%s", obj, diff)
 
     @staticmethod
     def lifecycle_action(fn):
@@ -121,7 +121,7 @@ class vmmLibvirtObject(vmmGObject):
         if xmlobj.name == newname:
             return
 
-        logging.debug("Changing %s name from %s to %s",
+        log.debug("Changing %s name from %s to %s",
                       self, oldname, newname)
         origxml = xmlobj.get_xml()
         xmlobj.name = newname
@@ -192,7 +192,7 @@ class vmmLibvirtObject(vmmGObject):
         try:
             self._init_libvirt_state()
         except Exception:
-            logging.debug("Error initializing libvirt state for %s", self,
+            log.debug("Error initializing libvirt state for %s", self,
                 exc_info=True)
             initialize_failed = True
 
@@ -276,11 +276,11 @@ class vmmLibvirtObject(vmmGObject):
         except Exception as e:
             # If we hit an exception here, it's often that the object
             # disappeared, so request the poll loop to be updated
-            logging.debug("Error refreshing %s from events: %s", self, e)
+            log.debug("Error refreshing %s from events: %s", self, e)
             poll_param = self._conn_tick_poll_param()
             if poll_param:
                 kwargs = {"force": True, poll_param: True}
-                logging.debug("Scheduling priority tick with: %s", kwargs)
+                log.debug("Scheduling priority tick with: %s", kwargs)
                 self.conn.schedule_priority_tick(**kwargs)
 
     def ensure_latest_xml(self, nosignal=False):

@@ -6,7 +6,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
+from ..logger import log
 
 from .. import diskbackend
 from .. import progress
@@ -221,7 +221,7 @@ class DeviceDisk(Device):
                 "path '%s'. Use libvirt APIs to manage the parent directory "
                 "as a pool first.") % volname)
 
-        logging.debug("Creating volume '%s' on pool '%s'",
+        log.debug("Creating volume '%s' on pool '%s'",
                       volname, poolobj.name())
 
         cap = (size * 1024 * 1024 * 1024)
@@ -347,15 +347,15 @@ class DeviceDisk(Device):
             self._set_default_storage_backend()
 
     def set_vol_object(self, vol_object, parent_pool):
-        logging.debug("disk.set_vol_object: volxml=\n%s",
+        log.debug("disk.set_vol_object: volxml=\n%s",
             vol_object.XMLDesc(0))
-        logging.debug("disk.set_vol_object: poolxml=\n%s",
+        log.debug("disk.set_vol_object: poolxml=\n%s",
             parent_pool.XMLDesc(0))
         self._change_backend(None, vol_object, parent_pool)
         self._set_xmlpath(self.path)
 
     def set_vol_install(self, vol_install):
-        logging.debug("disk.set_vol_install: name=%s poolxml=\n%s",
+        log.debug("disk.set_vol_install: name=%s poolxml=\n%s",
             vol_install.name, vol_install.pool.XMLDesc(0))
         self._storage_backend = diskbackend.ManagedStorageCreator(
             self.conn, vol_install)
@@ -678,7 +678,7 @@ class DeviceDisk(Device):
                     self.source_volume)
             except Exception as e:
                 self._source_volume_err = str(e)
-                logging.debug("Error fetching source pool=%s vol=%s",
+                log.debug("Error fetching source pool=%s vol=%s",
                     self.source_pool, self.source_volume, exc_info=True)
 
         if vol_object is None and path is None:

@@ -8,12 +8,12 @@
 #
 
 import collections
-import logging
 import os
 import re
 import shlex
 
 import virtinst
+from virtinst import log
 from virtinst import xmlutil
 
 from .formats import parser_class
@@ -92,10 +92,10 @@ def parse_vmdk(filename):
     # Detect if passed file is a descriptor file
     # Assume descriptor isn't larger than 10K
     if not os.path.exists(filename):
-        logging.debug("VMDK file '%s' doesn't exist", filename)
+        log.debug("VMDK file '%s' doesn't exist", filename)
         return
     if os.path.getsize(filename) > (10 * 1024):
-        logging.debug("VMDK file '%s' too big to be a descriptor", filename)
+        log.debug("VMDK file '%s' too big to be a descriptor", filename)
         return
 
     f = open(filename, "r")
@@ -105,7 +105,7 @@ def parse_vmdk(filename):
     try:
         vmdkfile = _VMXFile(content)
     except Exception:
-        logging.exception("%s looked like a vmdk file, but parsing failed",
+        log.exception("%s looked like a vmdk file, but parsing failed",
                           filename)
         return
 
@@ -202,7 +202,7 @@ def parse_disk_entry(conn, disks, fullkey, value, topdir):
             # See if the filename is actually a VMDK descriptor file
             newpath = parse_vmdk(os.path.join(topdir, disk.path))
             if newpath:
-                logging.debug("VMDK file parsed path %s->%s",
+                log.debug("VMDK file parsed path %s->%s",
                     disk.path, newpath)
                 disk.path = newpath
 
@@ -243,7 +243,7 @@ class vmx_parser(parser_class):
         infile = open(input_file, "r")
         contents = infile.readlines()
         infile.close()
-        logging.debug("Importing VMX file:\n%s", "".join(contents))
+        log.debug("Importing VMX file:\n%s", "".join(contents))
 
         vmxfile = _VMXFile(contents)
         config = vmxfile.pairs()

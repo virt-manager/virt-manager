@@ -4,7 +4,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
+from virtinst import log
 
 from .baseclass import vmmGObjectUI
 
@@ -30,13 +30,13 @@ class vmmAbout(vmmGObjectUI):
         })
 
     def show(self, parent):
-        logging.debug("Showing about")
+        log.debug("Showing about")
         self.topwin.set_version(self.config.get_appversion())
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing about")
+        log.debug("Closing about")
         self.topwin.hide()
         return 1
 

@@ -5,11 +5,11 @@
 
 import unittest
 import os
-import logging
 
 from tests import utils
 
 from virtinst import Cloner
+from virtinst import log
 
 ORIG_NAME  = "clone-orig"
 CLONE_NAME = "clone-new"
@@ -140,7 +140,7 @@ class TestClone(unittest.TestCase):
                                  "when it shouldn't.")
         except (ValueError, RuntimeError) as e:
             # Exception expected
-            logging.debug("Received expected exception: %s", str(e))
+            log.debug("Received expected exception: %s", str(e))
 
     def testCloneStorageManaged(self):
         disks = ["%s/new1.img" % POOL1, "%s/new2.img" % DISKPOOL]

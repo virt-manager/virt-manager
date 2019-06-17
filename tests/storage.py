@@ -3,11 +3,11 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import unittest
 
 from virtinst import StoragePool, StorageVolume
+from virtinst import log
 
 from tests import utils
 
@@ -67,7 +67,7 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
 
     # Format here depends on libvirt-1.2.0 and later
     if clone_vol and conn.local_libvirt_version() < 1002000:
-        logging.debug("skip clone compare")
+        log.debug("skip clone compare")
         return
 
     alloc = 5 * 1024 * 1024 * 1024

@@ -5,13 +5,12 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-
 import argparse
-import logging
 import sys
 
 from virtinst import cli
 from virtinst import Cloner
+from virtinst import log
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
@@ -20,7 +19,7 @@ def get_clone_name(new_name, auto_clone, design):
     if not new_name and auto_clone:
         # Generate a name to use
         new_name = design.generate_clone_name()
-        logging.debug("Auto-generated clone name '%s'", new_name)
+        log.debug("Auto-generated clone name '%s'", new_name)
 
     if not new_name:
         fail(_("A name is required for the new virtual machine,"
@@ -204,7 +203,7 @@ def main(conn=None):
 
     print_stdout("")
     print_stdout(_("Clone '%s' created successfully.") % design.clone_name)
-    logging.debug("end clone")
+    log.debug("end clone")
     return 0
 
 if __name__ == "__main__":  # pragma: no cover

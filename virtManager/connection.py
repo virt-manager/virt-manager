@@ -4,7 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import threading
 import time
@@ -13,6 +12,7 @@ import traceback
 import libvirt
 
 import virtinst
+from virtinst import log
 from virtinst import pollhelpers
 
 from . import connectauth
@@ -285,7 +285,7 @@ class vmmConnection(vmmGObject):
                     try:
                         ret.append(vol.get_xmlobj(refresh_if_nec=False))
                     except Exception as e:
-                        logging.debug("Fetching volume XML failed: %s", e)
+                        log.debug("Fetching volume XML failed: %s", e)
             return ret
         self._backend.cb_fetch_all_vols = fetch_all_vols
 
@@ -433,7 +433,7 @@ class vmmConnection(vmmGObject):
         if self._storage_capable is None:
             self._storage_capable = self.support.conn_storage()
             if self._storage_capable is False:
-                logging.debug("Connection doesn't seem to support storage "
+                log.debug("Connection doesn't seem to support storage "
                               "APIs. Skipping all storage polling.")
 
         return self._storage_capable
@@ -442,7 +442,7 @@ class vmmConnection(vmmGObject):
         if self._network_capable is None:
             self._network_capable = self.support.conn_network()
             if self._network_capable is False:
-                logging.debug("Connection doesn't seem to support network "
+                log.debug("Connection doesn't seem to support network "
                               "APIs. Skipping all network polling.")
 
         return self._network_capable
@@ -451,7 +451,7 @@ class vmmConnection(vmmGObject):
         if self._interface_capable is None:
             self._interface_capable = self.support.conn_interface()
             if self._interface_capable is False:
-                logging.debug("Connection doesn't seem to support interface "
+                log.debug("Connection doesn't seem to support interface "
                               "APIs. Skipping all interface polling.")
 
         return self._interface_capable
@@ -489,13 +489,13 @@ class vmmConnection(vmmGObject):
             if self.support.domain_xml_inactive(vm):
                 inact = libvirt.VIR_DOMAIN_XML_INACTIVE
             else:
-                logging.debug("Domain XML inactive flag not supported.")
+                log.debug("Domain XML inactive flag not supported.")
 
             if self.support.domain_xml_secure(vm):
                 inact |= libvirt.VIR_DOMAIN_XML_SECURE
                 act = libvirt.VIR_DOMAIN_XML_SECURE
             else:
-                logging.debug("Domain XML secure flag not supported.")
+                log.debug("Domain XML secure flag not supported.")
 
             return inact, act
 
@@ -518,7 +518,7 @@ class vmmConnection(vmmGObject):
                         return vol
                 except Exception as e:
                     # Errors can happen if the volume disappeared, bug 1092739
-                    logging.debug("Error looking up volume from path=%s: %s",
+                    log.debug("Error looking up volume from path=%s: %s",
                         path, e)
         return None
 
@@ -530,7 +530,7 @@ class vmmConnection(vmmGObject):
     def _change_state(self, newstate):
         if self._state != newstate:
             self._state = newstate
-            logging.debug("conn=%s changed to state=%s",
+            log.debug("conn=%s changed to state=%s",
                 self.get_uri(), self.get_state_text())
             self.emit("state-changed")
 
@@ -595,7 +595,7 @@ class vmmConnection(vmmGObject):
                 # Libvirt nodedev XML fetching can be busted
                 # https://bugzilla.redhat.com/show_bug.cgi?id=1225771
                 if e.get_error_code() != libvirt.VIR_ERR_NO_NODE_DEVICE:
-                    logging.debug("Error fetching nodedev XML", exc_info=True)
+                    log.debug("Error fetching nodedev XML", exc_info=True)
                 continue
 
             if devtype and xmlobj.device_type != devtype:
@@ -636,11 +636,11 @@ class vmmConnection(vmmGObject):
             newobj = define_cb(newxml)
         except Exception as renameerr:
             try:
-                logging.debug("Error defining new name %s XML",
+                log.debug("Error defining new name %s XML",
                     obj.class_name(), exc_info=True)
                 newobj = define_cb(origxml)
             except Exception as fixerr:
-                logging.debug("Failed to redefine original %s!",
+                log.debug("Failed to redefine original %s!",
                     obj.class_name(), exc_info=True)
                 raise RuntimeError(
                     _("%s rename failed. Attempting to recover also "
@@ -674,7 +674,7 @@ class vmmConnection(vmmGObject):
         eventstr = args.pop(-1)
 
         name = domain.name()
-        logging.debug("domain xmlmisc event: domain=%s event=%s args=%s",
+        log.debug("domain xmlmisc event: domain=%s event=%s args=%s",
                 name, eventstr, args)
         obj = self.get_vm(name)
         if not obj:
@@ -687,7 +687,7 @@ class vmmConnection(vmmGObject):
         ignore = userdata
 
         name = domain.name()
-        logging.debug("domain lifecycle event: domain=%s %s", name,
+        log.debug("domain lifecycle event: domain=%s %s", name,
                 LibvirtEnumMap.domain_lifecycle_str(state, reason))
 
         obj = self.get_vm(name)
@@ -702,7 +702,7 @@ class vmmConnection(vmmGObject):
         ignore = userdata
 
         name = domain.name()
-        logging.debug("domain agent lifecycle event: domain=%s %s", name,
+        log.debug("domain agent lifecycle event: domain=%s %s", name,
                 LibvirtEnumMap.domain_agent_lifecycle_str(state, reason))
 
         obj = self.get_vm(name)
@@ -717,7 +717,7 @@ class vmmConnection(vmmGObject):
         ignore = userdata
 
         name = network.name()
-        logging.debug("network lifecycle event: network=%s %s",
+        log.debug("network lifecycle event: network=%s %s",
                 name, LibvirtEnumMap.network_lifecycle_str(state, reason))
         obj = self.get_net(name)
 
@@ -732,7 +732,7 @@ class vmmConnection(vmmGObject):
         ignore = userdata
 
         name = pool.name()
-        logging.debug("storage pool lifecycle event: pool=%s %s",
+        log.debug("storage pool lifecycle event: pool=%s %s",
             name, LibvirtEnumMap.storage_lifecycle_str(state, reason))
 
         obj = self.get_pool(name)
@@ -747,7 +747,7 @@ class vmmConnection(vmmGObject):
         ignore = userdata
 
         name = pool.name()
-        logging.debug("storage pool refresh event: pool=%s", name)
+        log.debug("storage pool refresh event: pool=%s", name)
 
         obj = self.get_pool(name)
 
@@ -762,7 +762,7 @@ class vmmConnection(vmmGObject):
         ignore = userdata
 
         name = dev.name()
-        logging.debug("node device lifecycle event: nodedev=%s %s",
+        log.debug("node device lifecycle event: nodedev=%s %s",
             name, LibvirtEnumMap.nodedev_lifecycle_str(state, reason))
 
         self.schedule_priority_tick(pollnodedev=True, force=True)
@@ -772,7 +772,7 @@ class vmmConnection(vmmGObject):
         ignore = userdata
 
         name = dev.name()
-        logging.debug("node device update event: nodedev=%s", name)
+        log.debug("node device update event: nodedev=%s", name)
 
         obj = self.get_nodedev(name)
 
@@ -795,10 +795,10 @@ class vmmConnection(vmmGObject):
                 None, libvirt.VIR_DOMAIN_EVENT_ID_LIFECYCLE,
                 self._domain_lifecycle_event, None))
             self.using_domain_events = True
-            logging.debug("Using domain events")
+            log.debug("Using domain events")
         except Exception as e:
             self.using_domain_events = False
-            logging.debug("Error registering domain events: %s", e)
+            log.debug("Error registering domain events: %s", e)
 
         def _add_domain_xml_event(eventname, eventval, cb=None):
             if not self.using_domain_events:
@@ -811,7 +811,7 @@ class vmmConnection(vmmGObject):
                     self.get_backend().domainEventRegisterAny(
                     None, eventid, cb, eventname))
             except Exception as e:
-                logging.debug("Error registering %s event: %s",
+                log.debug("Error registering %s event: %s",
                     eventname, e)
 
         _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_BALLOON_CHANGE", 13)
@@ -829,10 +829,10 @@ class vmmConnection(vmmGObject):
                 self.get_backend().networkEventRegisterAny(
                 None, eventid, self._network_lifecycle_event, None))
             self.using_network_events = True
-            logging.debug("Using network events")
+            log.debug("Using network events")
         except Exception as e:
             self.using_network_events = False
-            logging.debug("Error registering network events: %s", e)
+            log.debug("Error registering network events: %s", e)
 
         try:
             _check_events_disabled()
@@ -848,10 +848,10 @@ class vmmConnection(vmmGObject):
                 self.get_backend().storagePoolEventRegisterAny(
                 None, refreshid, self._storage_pool_refresh_event, None))
             self.using_storage_pool_events = True
-            logging.debug("Using storage pool events")
+            log.debug("Using storage pool events")
         except Exception as e:
             self.using_storage_pool_events = False
-            logging.debug("Error registering storage pool events: %s", e)
+            log.debug("Error registering storage pool events: %s", e)
 
         try:
             _check_events_disabled()
@@ -866,10 +866,10 @@ class vmmConnection(vmmGObject):
                 None, updateid, self._node_device_update_event, None))
 
             self.using_node_device_events = True
-            logging.debug("Using node device events")
+            log.debug("Using node device events")
         except Exception as e:
             self.using_network_events = False
-            logging.debug("Error registering node device events: %s", e)
+            log.debug("Error registering node device events: %s", e)
 
 
     ######################################
@@ -882,7 +882,7 @@ class vmmConnection(vmmGObject):
 
     def close(self):
         if not self.is_disconnected():
-            logging.debug("conn.close() uri=%s", self.get_uri())
+            log.debug("conn.close() uri=%s", self.get_uri())
         self._closing = True
 
         try:
@@ -896,7 +896,7 @@ class vmmConnection(vmmGObject):
                 for eid in self._node_device_cb_ids:
                     self._backend.nodeDeviceEventDeregisterAny(eid)
         except Exception:
-            logging.debug("Failed to deregister events in conn cleanup",
+            log.debug("Failed to deregister events in conn cleanup",
                 exc_info=True)
         finally:
             self._domain_cb_ids = []
@@ -915,13 +915,13 @@ class vmmConnection(vmmGObject):
                 self._remove_object_signal(obj)
                 obj.cleanup()
             except Exception as e:
-                logging.debug("Failed to cleanup %s: %s", obj, e)
+                log.debug("Failed to cleanup %s: %s", obj, e)
         self._objects.cleanup()
         self._objects = _ObjectList()
 
         closeret = self._backend.close()
         if closeret == 1 and self.config.CLITestOptions.leak_debug:
-            logging.debug("LEAK: conn close() returned 1, "
+            log.debug("LEAK: conn close() returned 1, "
                     "meaning refs may have leaked.")
 
         self._change_state(self._STATE_DISCONNECTED)
@@ -943,7 +943,7 @@ class vmmConnection(vmmGObject):
 
         self._change_state(self._STATE_CONNECTING)
 
-        logging.debug("Scheduling background open thread for %s",
+        log.debug("Scheduling background open thread for %s",
                       self.get_uri())
         self._start_thread(self._open_thread, "Connect %s" % self.get_uri())
 
@@ -966,12 +966,12 @@ class vmmConnection(vmmGObject):
 
         if (libvirt_error_code ==
             getattr(libvirt, "VIR_ERR_AUTH_CANCELLED", None)):
-            logging.debug("User cancelled auth, not raising any error.")
+            log.debug("User cancelled auth, not raising any error.")
             return False, None
 
         if (libvirt_error_code == libvirt.VIR_ERR_AUTH_FAILED and
             "not authorized" in libvirt_error_message.lower()):
-            logging.debug("Looks like we might have failed policykit "
+            log.debug("Looks like we might have failed policykit "
                           "auth. Checking to see if we have a valid "
                           "console session")
             if (not self.is_remote() and
@@ -983,12 +983,12 @@ class vmmConnection(vmmGObject):
         return False, ConnectError
 
     def _populate_initial_state(self):
-        logging.debug("libvirt version=%s",
+        log.debug("libvirt version=%s",
                       self._backend.local_libvirt_version())
-        logging.debug("daemon version=%s",
+        log.debug("daemon version=%s",
                       self._backend.daemon_version())
-        logging.debug("conn version=%s", self._backend.conn_version())
-        logging.debug("%s capabilities:\n%s",
+        log.debug("conn version=%s", self._backend.conn_version())
+        log.debug("%s capabilities:\n%s",
                       self.get_uri(), self.caps.get_xml())
 
         # Try to create the default storage pool
@@ -996,7 +996,7 @@ class vmmConnection(vmmGObject):
         try:
             virtinst.StoragePool.build_default_pool(self.get_backend())
         except Exception as e:
-            logging.debug("Building default pool failed: %s", str(e))
+            log.debug("Building default pool failed: %s", str(e))
 
         self._add_conn_events()
 
@@ -1006,7 +1006,7 @@ class vmmConnection(vmmGObject):
             if (not isinstance(e, AttributeError) and
                 not self.support.is_error_nosupport(e)):
                 raise
-            logging.debug("Connection doesn't support KeepAlive, "
+            log.debug("Connection doesn't support KeepAlive, "
                 "skipping")
 
         # The initial tick will set up a threading event that will only
@@ -1077,11 +1077,11 @@ class vmmConnection(vmmGObject):
                 name = str(obj)
 
             if not self._objects.remove(obj):
-                logging.debug("Requested removal of %s=%s, but it's "
+                log.debug("Requested removal of %s=%s, but it's "
                     "not in our object list.", class_name, name)
                 continue
 
-            logging.debug("%s=%s removed", class_name, name)
+            log.debug("%s=%s removed", class_name, name)
             self._remove_object_signal(obj)
             obj.cleanup()
 
@@ -1093,24 +1093,24 @@ class vmmConnection(vmmGObject):
             class_name = obj.class_name()
 
             if initialize_failed:
-                logging.debug("Blacklisting %s=%s", class_name, obj.get_name())
+                log.debug("Blacklisting %s=%s", class_name, obj.get_name())
                 count = self._objects.add_blacklist(obj)
                 if count <= _ObjectList.BLACKLIST_COUNT:
-                    logging.debug("Object added in blacklist, count=%d", count)
+                    log.debug("Object added in blacklist, count=%d", count)
                 else:
-                    logging.debug("Object already blacklisted?")
+                    log.debug("Object already blacklisted?")
                 return
             else:
                 self._objects.remove_blacklist(obj)
 
             if not self._objects.add(obj):
-                logging.debug("New %s=%s requested, but it's already tracked.",
+                log.debug("New %s=%s requested, but it's already tracked.",
                     class_name, obj.get_name())
                 return
 
             if not obj.is_nodedev():
                 # Skip nodedev logging since it's noisy and not interesting
-                logging.debug("%s=%s status=%s added", class_name,
+                log.debug("%s=%s status=%s added", class_name,
                     obj.get_name(), obj.run_status())
             if obj.is_domain():
                 self.emit("vm-added", obj.get_connkey())
@@ -1277,13 +1277,13 @@ class vmmConnection(vmmGObject):
 
                 obj.tick(stats_update=stats_update)
             except Exception as e:
-                logging.exception("Tick for %s failed", obj)
+                log.exception("Tick for %s failed", obj)
                 if (isinstance(e, libvirt.libvirtError) and
                     (getattr(e, "get_error_code")() ==
                      libvirt.VIR_ERR_SYSTEM_ERROR)):
                     # Try a simple getInfo call to see if conn was dropped
                     self._backend.getInfo()
-                    logging.debug("vm tick raised system error but "
+                    log.debug("vm tick raised system error but "
                                   "connection doesn't seem to have dropped. "
                                   "Ignoring.")
 
@@ -1382,13 +1382,13 @@ class vmmConnection(vmmGObject):
             dom = e.get_error_domain()
             code = e.get_error_code()
 
-        logging.debug("Error polling connection %s",
+        log.debug("Error polling connection %s",
             self.get_uri(), exc_info=True)
 
         if (dom in [from_remote, from_rpc] and
             code in [sys_error, internal_error]):
             e = None
-            logging.debug("Not showing user error since libvirtd "
+            log.debug("Not showing user error since libvirtd "
                 "appears to have stopped.")
 
         self._schedule_close()

@@ -7,13 +7,13 @@
 # See the COPYING file in the top-level directory.
 #
 
-import logging
 import os
 import re
 import shutil
 import subprocess
 import tempfile
 
+from virtinst import log
 from virtinst import StoragePool
 
 
@@ -74,15 +74,15 @@ def _run_cmd(cmd):
     """
     Return the exit status and output to stdout and stderr.
     """
-    logging.debug("Running command: %s", " ".join(cmd))
+    log.debug("Running command: %s", " ".join(cmd))
     proc = subprocess.Popen(cmd, stderr=subprocess.PIPE,
                             stdout=subprocess.PIPE,
                             close_fds=True)
     stdout, stderr = proc.communicate()
     ret = proc.wait()
 
-    logging.debug("stdout=%s", stdout)
-    logging.debug("stderr=%s", stderr)
+    log.debug("stdout=%s", stdout)
+    log.debug("stderr=%s", stderr)
 
     if ret == 0:
         return
@@ -199,7 +199,7 @@ class VirtConverter(object):
             parser = _find_parser_by_name(input_name)
 
         input_file = os.path.abspath(input_file)
-        logging.debug("converter __init__ with input=%s parser=%s",
+        log.debug("converter __init__ with input=%s parser=%s",
             input_file, parser)
 
         (self._input_file,
@@ -207,7 +207,7 @@ class VirtConverter(object):
          self._force_clean) = _find_input(input_file, parser, self.print_cb)
         self._top_dir = os.path.dirname(os.path.abspath(self._input_file))
 
-        logging.debug("converter not input_file=%s parser=%s",
+        log.debug("converter not input_file=%s parser=%s",
             self._input_file, self.parser)
 
         self._guest = self.parser.export_libvirt(self.conn,
@@ -296,7 +296,7 @@ class VirtConverter(object):
                 continue
 
             if disk_format and disk.driver_type == disk_format:
-                logging.debug("path=%s is already in requested format=%s",
+                log.debug("path=%s is already in requested format=%s",
                     disk.path, disk_format)
                 disk_format = None
 

@@ -7,11 +7,12 @@
 # See the COPYING file in the top-level directory.
 
 import datetime
-import logging
 import os
 import re
 
 from gi.repository import Libosinfo
+
+from .logger import log
 
 
 def _in_testsuite():
@@ -221,7 +222,7 @@ class _OSDB(object):
         if key in self._aliases:
             alias = self._aliases[key]
             # Added 2018-10-02. Maybe remove aliases in a year
-            logging.warning(
+            log.warning(
                 _("OS name '%s' is deprecated, using '%s' instead. "
                   "This alias will be removed in the future."), key, alias)
             key = alias
@@ -236,7 +237,7 @@ class _OSDB(object):
         try:
             media = Libosinfo.Media.create_from_location(location, None)
         except Exception as e:
-            logging.debug("Error creating libosinfo media object: %s", str(e))
+            log.debug("Error creating libosinfo media object: %s", str(e))
             return None
 
         if not self._os_loader.get_db().identify_media(media):
@@ -255,7 +256,7 @@ class _OSDB(object):
         try:
             tree = Libosinfo.Tree.create_from_location(location, None)
         except Exception as e:
-            logging.debug("Error creating libosinfo tree object for "
+            log.debug("Error creating libosinfo tree object for "
                 "location=%s : %s", location, str(e))
             return None
 
@@ -321,7 +322,7 @@ class _OsResources:
         # value as an approximation at a 'recommended' value
         val = self._get_minimum_key(key, arch)
         if val:
-            logging.debug("No recommended value found for key='%s', "
+            log.debug("No recommended value found for key='%s', "
                     "using minimum=%s * 2", key, val)
             return val * 2
         return None

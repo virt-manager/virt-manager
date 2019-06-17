@@ -4,18 +4,18 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import time
 import threading
 
 import libvirt
 
+from virtinst import DeviceController
+from virtinst import DeviceDisk
 from virtinst import DomainCapabilities
 from virtinst import DomainSnapshot
 from virtinst import Guest
-from virtinst import DeviceController
-from virtinst import DeviceDisk
+from virtinst import log
 
 from .libvirtobject import vmmLibvirtObject
 from .libvirtenummap import LibvirtEnumMap
@@ -52,7 +52,7 @@ def start_job_progress_thread(vm, meter, progtext):
                 progress = data_total - data_remaining
                 meter.update(progress)
             except Exception:
-                logging.exception("Error calling jobinfo")
+                log.exception("Error calling jobinfo")
                 return False
 
         return True
@@ -154,7 +154,7 @@ class vmmDomainSnapshot(vmmLibvirtObject):
     def run_status_icon_name(self):
         status = self._state_str_to_int()
         if status not in LibvirtEnumMap.VM_STATUS_ICONS:
-            logging.debug("Unknown status %d, using NOSTATE", status)
+            log.debug("Unknown status %d, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
         return LibvirtEnumMap.VM_STATUS_ICONS[status]
 
@@ -338,7 +338,7 @@ class vmmDomain(vmmLibvirtObject):
         # attempt may result in a lookup failure. If device is present
         # in the active XML, assume all is good.
         if self.get_xmlobj().find_device(origdev):
-            logging.debug("Device in active config but not inactive config.")
+            log.debug("Device in active config but not inactive config.")
             return
 
         raise RuntimeError(_("Could not find specified device in the "
@@ -386,7 +386,7 @@ class vmmDomain(vmmLibvirtObject):
                 try:
                     new_nvram.get_vol_object().delete(0)
                 except Exception as warn:
-                    logging.debug("rename failed and new nvram was not "
+                    log.debug("rename failed and new nvram was not "
                                   "removed: '%s'", warn)
             raise error
 
@@ -394,7 +394,7 @@ class vmmDomain(vmmLibvirtObject):
             try:
                 old_nvram.get_vol_object().delete(0)
             except Exception as warn:
-                logging.debug("old nvram file was not removed: '%s'", warn)
+                log.debug("old nvram file was not removed: '%s'", warn)
 
             self.define_overview(nvram=new_nvram.path)
 
@@ -916,7 +916,7 @@ class vmmDomain(vmmLibvirtObject):
             return
 
         devxml = devobj.get_xml()
-        logging.debug("attach_device with xml=\n%s", devxml)
+        log.debug("attach_device with xml=\n%s", devxml)
         self._backend.attachDevice(devxml)
 
     def detach_device(self, devobj):
@@ -927,7 +927,7 @@ class vmmDomain(vmmLibvirtObject):
             return
 
         devxml = devobj.get_xml()
-        logging.debug("detach_device with xml=\n%s", devxml)
+        log.debug("detach_device with xml=\n%s", devxml)
         self._backend.detachDevice(devxml)
 
     def _update_device(self, devobj, flags=None):
@@ -935,7 +935,7 @@ class vmmDomain(vmmLibvirtObject):
             flags = getattr(libvirt, "VIR_DOMAIN_DEVICE_MODIFY_LIVE", 1)
 
         xml = devobj.get_xml()
-        logging.debug("update_device with xml=\n%s", xml)
+        log.debug("update_device with xml=\n%s", xml)
         self._backend.updateDeviceFlags(xml, flags)
 
     def hotplug(self, vcpus=_SENTINEL, memory=_SENTINEL, maxmem=_SENTINEL,
@@ -961,7 +961,7 @@ class vmmDomain(vmmLibvirtObject):
                 self._backend.setVcpus(vcpus)
 
         if memory != _SENTINEL:
-            logging.debug("Hotplugging curmem=%s maxmem=%s for VM '%s'",
+            log.debug("Hotplugging curmem=%s maxmem=%s for VM '%s'",
                          memory, maxmem, self.get_name())
 
             actual_cur = self.get_memory()
@@ -1053,7 +1053,7 @@ class vmmDomain(vmmLibvirtObject):
         if redefine:
             flags = (flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE)
         else:
-            logging.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
+            log.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
         self._backend.snapshotCreateXML(xml, flags)
 
     def refresh_interface_addresses(self, iface):
@@ -1082,11 +1082,11 @@ class vmmDomain(vmmLibvirtObject):
         self._ip_cache["arp"] = self._get_interface_addresses(arp_flag)
 
     def _get_interface_addresses(self, source):
-        logging.debug("Calling interfaceAddresses source=%s", source)
+        log.debug("Calling interfaceAddresses source=%s", source)
         try:
             return self._backend.interfaceAddresses(source)
         except Exception as e:
-            logging.debug("interfaceAddresses failed: %s", str(e))
+            log.debug("interfaceAddresses failed: %s", str(e))
         return {}
 
     def get_interface_addresses(self, iface):
@@ -1302,7 +1302,7 @@ class vmmDomain(vmmLibvirtObject):
         try:
             self._backend.undefineFlags(flags)
         except libvirt.libvirtError:
-            logging.exception("libvirt undefineFlags failed, "
+            log.exception("libvirt undefineFlags failed, "
                               "falling back to old style")
             self._backend.undefine()
 
@@ -1359,7 +1359,7 @@ class vmmDomain(vmmLibvirtObject):
             flags |= libvirt.VIR_MIGRATE_UNSAFE
 
         libvirt_destconn = destconn.get_backend().get_conn_for_api_arg()
-        logging.debug("Migrating: conn=%s flags=%s uri=%s tunnel=%s "
+        log.debug("Migrating: conn=%s flags=%s uri=%s tunnel=%s "
             "unsafe=%s temporary=%s",
             destconn, flags, dest_uri, tunnel, unsafe, temporary)
 
@@ -1475,7 +1475,7 @@ class vmmDomain(vmmLibvirtObject):
     def run_status_icon_name(self):
         status = self.status()
         if status not in LibvirtEnumMap.VM_STATUS_ICONS:
-            logging.debug("Unknown status %s, using NOSTATE", status)
+            log.debug("Unknown status %s, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
         return LibvirtEnumMap.VM_STATUS_ICONS[status]
 
@@ -1573,7 +1573,7 @@ class vmmDomainVirtinst(vmmDomain):
         self._orig_backend = self._backend
 
         self._refresh_status()
-        logging.debug("%s initialized with XML=\n%s", self, self._XMLDesc(0))
+        log.debug("%s initialized with XML=\n%s", self, self._XMLDesc(0))
 
     def get_name(self):
         return self._backend.name
@@ -1619,13 +1619,13 @@ class vmmDomainVirtinst(vmmDomain):
             return
 
         if origdisk.get_vol_object():
-            logging.debug(
+            log.debug(
                     "Syncing vol_object=%s from origdisk=%s to newdisk=%s",
                     origdisk.get_vol_object(), origdisk, newdisk)
             newdisk.set_vol_object(origdisk.get_vol_object(),
                                    origdisk.get_parent_pool())
         elif origdisk.get_vol_install():
-            logging.debug(
+            log.debug(
                     "Syncing vol_install=%s from origdisk=%s to newdisk=%s",
                     origdisk.get_vol_install(), origdisk, newdisk)
             newdisk.set_vol_install(origdisk.get_vol_install())

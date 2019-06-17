@@ -8,13 +8,13 @@
 # python class or module. The trace output is logged using the regular
 # logging infrastructure. Invoke this with virt-manager --trace-libvirt
 
-import logging
 import re
 import threading
 import time
 import traceback
-
 from types import FunctionType
+
+from virtinst import log
 
 
 CHECK_MAINLOOP = False
@@ -42,7 +42,7 @@ def generate_wrapper(origfunc, name):
             tb = ""
             if is_main_thread:
                 tb = "\n%s" % "".join(traceback.format_stack())
-            logging.debug("TRACE %s: thread=%s: %s %s %s%s",
+            log.debug("TRACE %s: thread=%s: %s %s %s%s",
                           time.time(), threadname, name, args, kwargs, tb)
         return origfunc(*args, **kwargs)
 
@@ -51,7 +51,7 @@ def generate_wrapper(origfunc, name):
 
 def wrap_func(module, funcobj):
     name = funcobj.__name__
-    logging.debug("wrapfunc %s %s", funcobj, name)
+    log.debug("wrapfunc %s %s", funcobj, name)
 
     newfunc = generate_wrapper(funcobj, name)
     setattr(module, name, newfunc)
@@ -60,14 +60,14 @@ def wrap_func(module, funcobj):
 def wrap_method(classobj, methodobj):
     name = methodobj.__name__
     fullname = classobj.__name__ + "." + name
-    logging.debug("wrapmeth %s", fullname)
+    log.debug("wrapmeth %s", fullname)
 
     newfunc = generate_wrapper(methodobj, fullname)
     setattr(classobj, name, newfunc)
 
 
 def wrap_class(classobj):
-    logging.debug("wrapclas %s %s", classobj, classobj.__name__)
+    log.debug("wrapclas %s %s", classobj, classobj.__name__)
 
     for name in dir(classobj):
         obj = getattr(classobj, name)

@@ -1,7 +1,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
 import os
 import re
 import time
@@ -14,6 +13,8 @@ from gi.repository import Gio
 from gi.repository import Gdk
 import pyatspi
 import dogtail.utils
+
+from virtinst import log
 
 import tests
 
@@ -223,7 +224,7 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
                 return
             return True
         except Exception as e:
-            logging.debug(
+            log.debug(
                     "got predicate exception name=%s role=%s labeller=%s: %s",
                     self._name, self._roleName, self._labeller_text, e)
 
@@ -495,7 +496,7 @@ class VMMDogtailApp(object):
         try:
             self._proc.send_signal(signal.SIGINT)
         except Exception:
-            logging.debug("Error terminating process", exc_info=True)
+            log.debug("Error terminating process", exc_info=True)
             self._proc = None
             return
 
@@ -506,7 +507,7 @@ class VMMDogtailApp(object):
                 self._proc = None
                 return
 
-        logging.warning("App didn't exit gracefully from SIGINT. Killing...")
+        log.warning("App didn't exit gracefully from SIGINT. Killing...")
         try:
             self._proc.kill()
         finally:

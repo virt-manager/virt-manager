@@ -6,10 +6,11 @@
 
 import glob
 import os
-import logging
 import urllib.parse
 
 from gi.repository import Gtk
+
+from virtinst import log
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
@@ -77,17 +78,17 @@ class vmmConnect(vmmGObjectUI):
         return None
 
     def cancel(self, ignore1=None, ignore2=None):
-        logging.debug("Cancelling open connection")
+        log.debug("Cancelling open connection")
         self.close()
         return 1
 
     def close(self, ignore1=None, ignore2=None):
-        logging.debug("Closing open connection")
+        log.debug("Closing open connection")
         self.topwin.hide()
 
 
     def show(self, parent):
-        logging.debug("Showing open connection")
+        log.debug("Showing open connection")
         if self.is_visible():
             self.topwin.present()
             return
@@ -273,7 +274,7 @@ class vmmConnect(vmmGObjectUI):
         else:
             uri = self.widget("uri-entry").get_text()
 
-        logging.debug("Generate URI=%s, auto=%s", uri, auto)
+        log.debug("Generate URI=%s, auto=%s", uri, auto)
 
         conn = vmmConnectionManager.get_instance().add_conn(uri)
         conn.set_autoconnect(auto)

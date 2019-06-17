@@ -4,13 +4,12 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import logging
-
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
+from virtinst import log
 from virtinst import xmlutil
 
 from . import vmmenu
@@ -69,7 +68,7 @@ def _get_inspection_icon_pixbuf(vm, w, h):
         pb.close()
         return pb.get_pixbuf()
     except Exception:
-        logging.exception("Error loading inspection icon data")
+        log.exception("Error loading inspection icon data")
         vm.inspection.icon = None
         return None
 
@@ -182,7 +181,7 @@ class vmmManager(vmmGObjectUI):
         if vis:
             return
 
-        logging.debug("Showing manager")
+        log.debug("Showing manager")
         if self.prev_position:
             self.topwin.move(*self.prev_position)
             self.prev_position = None
@@ -193,7 +192,7 @@ class vmmManager(vmmGObjectUI):
         if not self.is_visible():
             return
 
-        logging.debug("Closing manager")
+        log.debug("Closing manager")
         self.prev_position = self.topwin.get_position()
         self.topwin.hide()
         vmmEngine.get_instance().decrement_window_counter()

@@ -8,8 +8,6 @@
 
 import argparse
 import collections
-import logging
-import logging.handlers
 import os
 import re
 import shlex
@@ -25,6 +23,7 @@ from .buildconfig import BuildConfig
 from .connection import VirtinstConnection
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
+from .logger import log
 from .nodedev import NodeDevice
 from .osdict import OSDB
 from .storage import StoragePool, StorageVolume
@@ -116,6 +115,7 @@ def setupParser(usage, description, introspection_epilog=False):
 
 
 def earlyLogging():
+    import logging
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
 
@@ -145,7 +145,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
             not os.access(logfile, os.W_OK)):
             raise RuntimeError("No write access to logfile %s" % logfile)
     except Exception as e:  # pragma: no cover
-        logging.warning("Error setting up logfile: %s", e)
+        log.warning("Error setting up logfile: %s", e)
         logfile = None
 
     dateFormat = "%a, %d %b %Y %H:%M:%S"
@@ -153,19 +153,24 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
                   "%(levelname)s (%(module)s:%(lineno)d) %(message)s")
     streamErrorFormat = "%(levelname)-8s %(message)s"
 
+    import logging
+    import logging.handlers
     rootLogger = logging.getLogger()
 
     # Undo early logging
     for handler in rootLogger.handlers:
         rootLogger.removeHandler(handler)
+    # Undo any logging on our log handler. Needed for test suite
+    for handler in log.handlers:
+        log.removeHandler(handler)
 
-    rootLogger.setLevel(logging.DEBUG)
+    log.setLevel(logging.DEBUG)
     if logfile:
         fileHandler = logging.handlers.RotatingFileHandler(
             logfile, "ae", 1024 * 1024, 5)
         fileHandler.setFormatter(
             logging.Formatter(fileFormat, dateFormat))
-        rootLogger.addHandler(fileHandler)
+        log.addHandler(fileHandler)
 
     streamHandler = logging.StreamHandler(sys.stderr)
     if debug_stdout:
@@ -184,11 +189,11 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
         streamHandler = None
 
     if streamHandler:
-        rootLogger.addHandler(streamHandler)
+        log.addHandler(streamHandler)
 
     # Log uncaught exceptions
     def exception_log(typ, val, tb):  # pragma: no cover
-        logging.debug("Uncaught exception:\n%s",
+        log.debug("Uncaught exception:\n%s",
                       "".join(traceback.format_exception(typ, val, tb)))
         if not debug_stdout:
             # If we are already logging to stdout, don't double print
@@ -196,10 +201,8 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
             sys.__excepthook__(typ, val, tb)
     sys.excepthook = exception_log
 
-    logging.getLogger("requests").setLevel(logging.ERROR)
-
     # Log the app command string
-    logging.debug("Launched with command line: %s", " ".join(sys.argv))
+    log.debug("Launched with command line: %s", " ".join(sys.argv))
 
 
 def in_testsuite():
@@ -215,10 +218,10 @@ def getConnection(uri, conn=None):
         # preopened connection passed in via test suite
         return conn
 
-    logging.debug("Requesting libvirt URI %s", (uri or "default"))
+    log.debug("Requesting libvirt URI %s", (uri or "default"))
     conn = VirtinstConnection(uri)
     conn.open(_openauth_cb, None)
-    logging.debug("Received libvirt URI %s", conn.uri)
+    log.debug("Received libvirt URI %s", conn.uri)
 
     return conn
 
@@ -230,9 +233,9 @@ def _openauth_cb(creds, _cbdata):
         noecho = credtype in [
                 libvirt.VIR_CRED_PASSPHRASE, libvirt.VIR_CRED_NOECHOPROMPT]
         if not prompt:
-            logging.error("No prompt for auth credtype=%s", credtype)
+            log.error("No prompt for auth credtype=%s", credtype)
             return -1
-        logging.debug("openauth_cb prompt=%s", prompt)
+        log.debug("openauth_cb prompt=%s", prompt)
 
         prompt += ": "
         if noecho:
@@ -254,22 +257,22 @@ def fail(msg, do_exit=True):
     """
     Convenience function when failing in cli app
     """
-    logging.debug("".join(traceback.format_stack()))
-    logging.error(msg)
+    log.debug("".join(traceback.format_stack()))
+    log.error(msg)
     if sys.exc_info()[0] is not None:
-        logging.debug("", exc_info=True)
+        log.debug("", exc_info=True)
     if do_exit:
         _fail_exit()
 
 
 def print_stdout(msg, do_force=False):
-    logging.debug(msg)
+    log.debug(msg)
     if do_force or not get_global_state().quiet:
         print(msg)
 
 
 def print_stderr(msg):
-    logging.debug(msg)
+    log.debug(msg)
     print(msg, file=sys.stderr)
 
 
@@ -295,14 +298,14 @@ def install_fail(guest):
 def set_prompt(prompt):
     # Set whether we allow prompts, or fail if a prompt pops up
     if prompt:
-        logging.warning("--prompt mode is no longer supported.")
+        log.warning("--prompt mode is no longer supported.")
 
 
 def check_path_search(conn, path):
     searchdata = DeviceDisk.check_path_search(conn, path)
     if not searchdata.fixlist:
         return
-    logging.warning(_("%s may not be accessible by the hypervisor. "
+    log.warning(_("%s may not be accessible by the hypervisor. "
         "You will need to grant the '%s' user search permissions for "
         "the following directories: %s"),
         path, searchdata.user, searchdata.fixlist)  # pragma: no cover
@@ -315,10 +318,10 @@ def validate_disk(dev, warn_overwrite=False):
             fail(msg + (_(" (Use --check %s=off or "
                 "--check all=off to override)") % checkname))
 
-        logging.debug("Skipping --check %s error condition '%s'",
+        log.debug("Skipping --check %s error condition '%s'",
             checkname, msg)
         if warn_on_skip:
-            logging.warning(msg)
+            log.warning(msg)
 
     def check_path_exists(dev):
         """
@@ -361,7 +364,7 @@ def validate_disk(dev, warn_overwrite=False):
 
 def _run_console(domain, args):
     ignore = domain
-    logging.debug("Running: %s", " ".join(args))
+    log.debug("Running: %s", " ".join(args))
     if in_testsuite():
         print_stdout("testsuite console command: %s" % args)
         args = ["/bin/true"]
@@ -385,7 +388,7 @@ def _gfx_console(guest, domain):
     if guest.has_gl() or guest.has_listen_none():
         args.append("--attach")
 
-    logging.debug("Launching virt-viewer for graphics type '%s'",
+    log.debug("Launching virt-viewer for graphics type '%s'",
         guest.devices.graphics[0].type)
     return _run_console(domain, args)
 
@@ -395,7 +398,7 @@ def _txt_console(guest, domain):
             "--connect", guest.conn.uri,
             "console", guest.name]
 
-    logging.debug("Connecting to text console")
+    log.debug("Connecting to text console")
     return _run_console(domain, args)
 
 
@@ -415,10 +418,10 @@ def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
     try:
         os.waitpid(child, 0)
     except OSError as e:  # pragma: no cover
-        logging.debug("waitpid error: %s", e)
+        log.debug("waitpid error: %s", e)
 
     if destroy_on_exit and domain.isActive():
-        logging.debug("console exited and destroy_on_exit passed, destroying")
+        log.debug("console exited and destroy_on_exit passed, destroying")
         domain.destroy()
 
 
@@ -431,20 +434,20 @@ def get_console_cb(guest):
     if gtype not in ["default",
             DeviceGraphics.TYPE_VNC,
             DeviceGraphics.TYPE_SPICE]:
-        logging.debug("No viewer to launch for graphics type '%s'", gtype)
+        log.debug("No viewer to launch for graphics type '%s'", gtype)
         return
 
     if not in_testsuite():
         try:
             subprocess.check_output(["virt-viewer", "--version"])
         except OSError:
-            logging.warning(_("Unable to connect to graphical console: "
+            log.warning(_("Unable to connect to graphical console: "
                            "virt-viewer not installed. Please install "
                            "the 'virt-viewer' package."))
             return None
 
         if not os.environ.get("DISPLAY", ""):
-            logging.warning(_("Graphics requested but DISPLAY is not set. "
+            log.warning(_("Graphics requested but DISPLAY is not set. "
                            "Not running virt-viewer."))
             return None
 
@@ -1451,7 +1454,7 @@ class VirtCLIParser(metaclass=_InitClass):
 
             ret += xmlutil.listify(objs)
         except Exception as e:
-            logging.debug("Exception parsing inst=%s optstr=%s",
+            log.debug("Exception parsing inst=%s optstr=%s",
                           inst, self.optstr, exc_info=True)
             fail(_("Error: %(cli_flag_name)s %(options)s: %(err)s") %
                     {"cli_flag_name": self.cli_flag_name(),
@@ -1482,7 +1485,7 @@ class VirtCLIParser(metaclass=_InitClass):
                     ret.append(inst)
                 self._check_leftover_opts(optdict)
         except Exception as e:
-            logging.debug("Exception parsing inst=%s optstr=%s",
+            log.debug("Exception parsing inst=%s optstr=%s",
                           inst, self.optstr, exc_info=True)
             fail(_("Error: %(cli_flag_name)s %(options)s: %(err)s") %
                     {"cli_flag_name": self.cli_flag_name(),
@@ -2881,7 +2884,7 @@ class ParserDisk(VirtCLIParser):
                 raise ValueError(_("Storage volume must be specified as "
                                    "vol=poolname/volname"))
             poolname, volname = volname.split("/")
-            logging.debug("Parsed --disk volume as: pool=%s vol=%s",
+            log.debug("Parsed --disk volume as: pool=%s vol=%s",
                           poolname, volname)
 
         super()._parse(inst)
@@ -3198,14 +3201,14 @@ class ParserGraphics(VirtCLIParser):
 
         if inst.conn.is_qemu() and inst.gl:
             if inst.type != "spice":
-                logging.warning("graphics type=%s does not support GL", inst.type)
+                log.warning("graphics type=%s does not support GL", inst.type)
             elif not inst.conn.support.conn_spice_gl():
-                logging.warning("qemu/libvirt version may not support spice GL")
+                log.warning("qemu/libvirt version may not support spice GL")
         if inst.conn.is_qemu() and inst.rendernode:
             if inst.type != "spice":
-                logging.warning("graphics type=%s does not support rendernode", inst.type)
+                log.warning("graphics type=%s does not support rendernode", inst.type)
             elif not inst.conn.support.conn_spice_rendernode():
-                logging.warning("qemu/libvirt version may not support rendernode")
+                log.warning("qemu/libvirt version may not support rendernode")
 
         return ret
 
