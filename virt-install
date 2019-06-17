@@ -811,8 +811,7 @@ def parse_args():
                     help=_("Boot from the network using the PXE protocol"))
     insg.add_argument("--import", action="store_true", dest="import_install",
                     help=_("Build guest around an existing disk image"))
-    insg.add_argument("--livecd", action="store_true",
-                    help=_("Treat the CD-ROM media as a Live CD"))
+    insg.add_argument("--livecd", action="store_true", help=argparse.SUPPRESS)
     insg.add_argument("-x", "--extra-args", action="append",
                     help=_("Additional arguments to pass to the install kernel "
                            "booted from --location"))

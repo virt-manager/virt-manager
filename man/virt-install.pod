@@ -28,14 +28,17 @@ an existing disk image (thus skipping the install phase) are also supported.
 
 Given suitable command line arguments, C<virt-install> is capable of running
 completely unattended, with the guest 'kickstarting' itself too. This allows
-for easy automation of guest installs.
+for easy automation of guest installs. This can be done manually, or more
+simply with the --unattended option.
 
 Many arguments have sub options, specified like opt1=foo,opt2=bar, etc. Try
 --option=? to see a complete list of sub options associated with that
 argument, example: virt-install --disk=?
 
-Most options are not required. Minimum requirements are --name, --memory,
-guest storage (--disk or --filesystem), and an install option.
+Most options are not required. If a suitable --os-variant value is specified
+or detected, all defaults will be filled in and reported in the terminal
+output. If an --os-variant is not specified. minimum required options, --memory,
+guest storage (--disk or --filesystem), and an install method choice.
 
 
 =head1 CONNECTING TO LIBVIRT
@@ -413,17 +416,13 @@ section to see a full invocation of virt-install with --launchSecurity.
 
 =over 4
 
-=item B<-c> OPTIONS
-
-=item B<--cdrom> OPTIONS
+=item B<-c>, B<--cdrom> PATH
 
 ISO file or CDROM device to use for VM install media. After install,
 the the virtual CDROM device will remain attached to the VM, but with
 the ISO or host path media ejected.
 
-=item B<-l> LOCATION
-
-=item B<--location> OPTIONS
+=item B<-l>, B<--location> OPTIONS
 
 Distribution tree installation source. virt-install can recognize
 certain distribution trees and fetches a bootable kernel/initrd pair to
@@ -431,7 +430,8 @@ launch the install.
 
 --location allows things like --extra-args for kernel arguments,
 and using --initrd-inject. If you want to use those options with CDROM media,
-you can pass the ISO to --location as well.
+you can pass the ISO to --location as well which works for some, but not
+all, CDROM media.
 
 The C<LOCATION> can take one of the following forms:
 
@@ -490,8 +490,8 @@ my-unknown.iso, with a kernel at 'kernel/fookernel' and initrd at
 
 =item B<--pxe>
 
-Use the PXE boot protocol to load the initial ramdisk and kernel for starting
-the guest installation process.
+Install from PXE. This just tells the VM to boot off the network
+for the first boot.
 
 =item B<--import>
 
@@ -499,15 +499,7 @@ Skip the OS installation process, and build a guest around an existing
 disk image. The device used for booting is the first device specified via
 C<--disk> or C<--filesystem>.
 
-=item B<--livecd>
-
-Specify that the installation media is a live CD and thus the guest
-needs to be configured to boot off the CDROM device permanently. It
-may be desirable to also use the C<--disk none> flag in combination.
-
-=item B<-x> EXTRA
-
-=item B<--extra-args> OPTIONS
+=item B<-x>, B<--extra-args> KERNELARGS
 
 Additional kernel command line arguments to pass to the installer when
 performing a guest install from C<--location>. One common usage is specifying
@@ -521,6 +513,120 @@ used to run an automated install without requiring a network hosted kickstart
 file:
 
 --initrd-inject=/path/to/my.ks --extra-args "ks=file:/my.ks"
+
+
+
+=item B<--install>
+
+This is a larger entry point for various types of install operations. The
+command has multiple subarguments, similar to --disk and friends. This
+option is strictly for VM install operations, essentially configuring the
+first boot.
+
+The simplest usage to ex: install fedora29 is:
+
+  --install fedora29
+
+And virt-install will fetch a --location URL from libosinfo, and populate
+defaults from there.
+
+Available suboptions:
+
+=over 4
+
+=item B<os=>
+
+This is os install option described above. The explicit way to specify that
+would be B<--install os=fedora29>. os= is the default option if none is
+specified
+
+=item B<kernel=>, B<initrd=>
+
+Specify a kernel and initrd pair to use as install media. They are copied
+into a temporary location before booting the VM, so they can be combined
+with --initrd-inject and your source media will not be altered. Media
+will be uploaded to a remote connection if required.
+
+Example case using local filesystem paths:
+  --install kernel=/path/to/kernel,initrd=/path/to/initrd
+
+Example using network paths. Kernel/initrd will be downloaded locally first,
+then passed to the VM as local filesystem paths
+  --install kernel=https://127.0.0.1/tree/kernel,initrd=https://127.0.0.1/tree/initrd
+
+Note, these are just for install time booting. If you want to set the kernel
+used for permanent VM booting, use the B<--boot> option.
+
+=item B<kernel_args=>, B<kernel_args_overwrite=yes|no>
+
+Specify install time kernel arguments (libvirt <cmdline> XML). These can
+be combine with ex: kernel/initrd options, or B<--location> media. By
+default, kernel_args is just like --extra-args, and will _append_ to
+the arguments that virt-install will try to set by default for most
+--location installs. If you want to override the virt-install default,
+additionally specify kernel_args_overwrite=yes
+
+=item B<bootdev=>
+
+Specify the install bootdev (hd, cdrom, floppy, network) to boot off of
+for the install phase. This maps to libvirt <os><boot dev=X> XML.
+
+If you want to install off a cdrom or network, it's probably simpler
+and more backwards compatible to just use B<--cdrom> or B<--pxe>, but
+this options gives fine grained control over the install process if
+needed.
+
+=item B<no_install=yes|no>
+
+Tell virt-install that there isn't actually any install happening,
+and you just want to create the VM. B<--import> is just an alias
+for this, as is specifying B<--boot> without any other install
+options. The deprecated B<--live> option is the same as
+'--cdrom $ISO --install no_install=yes'
+
+=back
+
+
+
+=item B<--unattended> [OPTIONS]
+
+Perform an unattended install using libosinfo's install script support.
+This is essentially a database of auto install scripts for various
+distros: Red Hat kickstarts, Debian installer scripting, Windows
+unattended installs, and potentially others. The simplest invocation
+is to combine it with --install like:
+
+  --install fedora29 --unattended
+
+A Windows install will look like
+
+  --cdrom /path/to/my/windows.iso --unattended
+
+Sub options are:
+
+=over 4
+
+=item B<profile=>
+
+Choose which libosinfo unattended profile to use. Most distros have
+a 'desktop' and a 'jeos' profile. virt-install will default to 'desktop'
+if this is unspecified.
+
+=item B<admin-password=>
+
+Set the VM OS admin/root password
+
+=item B<user-password=>
+
+Set the VM user password. The username is your current host username
+
+=item B<product-key=>
+
+Set a Windows product key
+
+=back
+
+
 
 =item B<--boot> BOOTOPTS
 
@@ -1644,12 +1750,15 @@ completed.
 
 =item B<--wait> WAIT
 
-Amount of time to wait (in minutes) for a VM to complete its install.
+Configure how virt-install will wait for the install to complete.
 Without this option, virt-install will wait for the console to close (not
 necessarily indicating the guest has shutdown), or in the case of
---noautoconsole, simply kick off the install and exit. Any negative
-value will make virt-install wait indefinitely, If the time limit is exceeded,
-virt-install simply exits, leaving the virtual machine in its current state.
+--noautoconsole, simply kick off the install and exit.
+
+Bare '--wait' or any negative value will make virt-install wait indefinitely.
+Any positive number is the number of minutes virt-install will wait. If the
+time limit is exceeded, virt-install simply exits, leaving the virtual machine
+in its current state.
 
 =item B<--dry-run>
 
@@ -1680,89 +1789,48 @@ C<~/.cache/virt-manager/virt-install.log> even if this parameter is omitted.
 
 =head1 EXAMPLES
 
-Install a Fedora 29 KVM guest with virtio accelerated disk/network,
-creating a new 10GiB qcow2 file, installing from media in the hosts
-CDROM drive. This will use Spice graphics by default, and launch autolaunch
-a graphical client.
+The simplest invocation to interactively install a Fedora 29 KVM VM
+with recommended defaults. L<virt-viewer(1)> will be launched to
+graphically interact with the VM install
+
+  # sudo virt-install --install fedora29
+
+Similar, but use libosinfo's unattended install support, which will
+perform the fedora29 install automatically without user intervention:
+
+  # sudo virt-install --install fedora29 --unattended
+
+Install a Windows 10 VM, using 40GiB storage in the default location
+and 4096MiB of ram, and ensure we are connecting to the system libvirtd
+instance:
+
+  # virt-install \
+      --connect qemu:///system \
+      --name my-win10-vm \
+      --memory 4096 \
+      --disk size=40 \
+      --os-variant win10 \
+      --cdrom /path/to/my/win10.iso
+
+Install a CentOS 7 KVM from a URL, with recommended device defaults and
+default required storag,e but specifically request VNC graphics instead
+of the default SPICE, and request 8 virtual CPUs and 8192 MiB of memory:
 
   # virt-install \
        --connect qemu:///system \
-       --virt-type kvm \
-       --name demo \
-       --memory 500 \
-       --disk size=10 \
-       --cdrom /dev/cdrom \
-       --os-variant fedora29
-
-Install a Fedora 9 plain QEMU guest, using LVM partition, virtual networking,
-booting from PXE, using VNC server/viewer, with virtio-scsi disk
-
-  # virt-install \
-       --connect qemu:///system \
-       --name demo \
-       --memory 500 \
-       --disk path=/dev/HostVG/DemoVM,bus=scsi \
-       --controller scsi,model=virtio-scsi \
-       --network network=default \
-       --virt-type qemu \
+       --memory 8192 \
+       --vcpus 8 \
        --graphics vnc \
-       --os-variant fedora9
+       --os-variant centos7.0 \
+       --location http://mirror.centos.org/centos-7/7/os/x86_64/
 
-Run a Live CD image under Xen fullyvirt, in diskless environment
-
-  # virt-install \
-       --hvm \
-       --name demo \
-       --memory 500 \
-       --disk none \
-       --livecd \
-       --graphics vnc \
-       --cdrom /root/fedora7live.iso
-
-Run /usr/bin/httpd in a linux container guest (LXC). Resource usage is capped
-at 512 MiB of ram and 2 host cpus:
+Create a VM around an existing debian9 disk image:
 
   # virt-install \
-        --connect lxc:/// \
-        --name httpd_guest \
-        --memory 512 \
-        --vcpus 2 \
-        --init /usr/bin/httpd
-
-Start a linux container guest(LXC) with a private root filesystem,
-using /bin/sh as init.
-Container's root will be under host dir /home/LXC.
-The host dir "/home/test" will be mounted at
-"/mnt" dir inside container:
-
-  # virt-install \
-        --connect lxc:/// \
-        --name container \
-        --memory 128 \
-        --filesystem /home/LXC,/ \
-        --filesystem /home/test,/mnt \
-        --init /bin/sh
-
-Install a paravirtualized Xen guest, 500 MiB of RAM, a 5 GiB of disk, and
-Fedora Core 6 from a web server, in text-only mode, with old style --file
-options:
-
-  # virt-install \
-       --paravirt \
-       --name demo \
-       --memory 500 \
-       --disk /var/lib/xen/images/demo.img,size=6 \
-       --graphics none \
-       --location https://download.fedora.redhat.com/pub/fedora/linux/core/6/x86_64/os/
-
-Create a guest from an existing disk image 'mydisk.img' using defaults for
-the rest of the options.
-
-  # virt-install \
-       --name demo \
+       --import \
        --memory 512 \
-       --disk /home/user/VMs/mydisk.img \
-       --import
+       --disk /home/user/VMs/my-debian9.img \
+       --os-variant debian9
 
 Start serial QEMU ARM VM, which requires specifying a manual kernel.
 
