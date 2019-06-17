@@ -32,7 +32,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/var/lib/libvirt/images/None.qcow2"/>
+      <source file="/var/lib/libvirt/images/disk.qcow2"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>

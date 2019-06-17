@@ -23,7 +23,7 @@
     <emulator>/usr/bin/qemu-system-aarch64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/var/lib/libvirt/images/None.qcow2"/>
+      <source file="/var/lib/libvirt/images/disk.qcow2"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <controller type="scsi" index="0" model="virtio-scsi">

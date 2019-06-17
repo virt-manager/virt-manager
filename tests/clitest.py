@@ -842,6 +842,7 @@ c.add_valid("--hvm --import --prompt --force")  # Working scenario w/ prompt sho
 c.add_valid("--paravirt --import")  # PV Import install
 c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import install
 c.add_compare("-c %(EXISTIMG2)s --os-variant win2k3 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
+c.add_compare("--connect %(URI-KVM)s --install fedora26 --disk size=20", "osinfo-url-with-disk")  # filling in defaults, but with disk specified
 c.add_invalid("--hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
 c.add_invalid("--hvm --import --wait 0", grep="exceeded specified time limit")  # --wait 0, but test suite hack
 c.add_invalid("--hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack

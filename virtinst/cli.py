@@ -2787,7 +2787,8 @@ def _get_default_image_format(conn, poolobj):
 def _generate_new_volume_name(guest, poolobj, fmt):
     ext = StorageVolume.get_file_extension_for_format(fmt)
     return StorageVolume.find_free_name(
-        guest.conn, poolobj, guest.name, suffix=ext, collideguest=guest)
+        guest.conn, poolobj, guest.name or "disk",
+        suffix=ext, collideguest=guest)
 
 
 class ParserDisk(VirtCLIParser):
