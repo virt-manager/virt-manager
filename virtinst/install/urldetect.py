@@ -7,8 +7,8 @@
 import configparser
 import re
 
-from .logger import log
-from .osdict import OSDB
+from ..logger import log
+from ..osdict import OSDB
 
 
 ###############################################
@@ -187,8 +187,7 @@ class _SUSEContent(object):
                 if line.startswith(prefix + " "):
                     self.content_dict[prefix] = line.split(" ", 1)[1]
 
-            log.debug("SUSE content dict: %s", str(self.content_dict))
-
+        log.debug("SUSE content dict: %s", self.content_dict)
         self.tree_arch = self._get_tree_arch()
         self.product_name = self._get_product_name()
         self.product_version = self._get_product_version()

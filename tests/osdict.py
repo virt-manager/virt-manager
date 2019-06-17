@@ -8,7 +8,7 @@ import unittest
 
 from virtinst import Guest
 from virtinst import OSDB
-from virtinst import urldetect
+from virtinst.install import urldetect
 
 from tests import utils
 

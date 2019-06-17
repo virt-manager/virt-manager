@@ -6,10 +6,10 @@
 
 import os
 
-from . import progress
-from .logger import log
-from .devices import DeviceDisk
-from .storage import StoragePool, StorageVolume
+from .. import progress
+from ..devices import DeviceDisk
+from ..logger import log
+from ..storage import StoragePool, StorageVolume
 
 
 def _build_pool(conn, meter, path):

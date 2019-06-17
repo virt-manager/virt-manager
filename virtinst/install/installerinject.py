@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import tempfile
 
-from .logger import log
+from ..logger import log
 
 
 def _run_initrd_commands(initrd, tempdir):

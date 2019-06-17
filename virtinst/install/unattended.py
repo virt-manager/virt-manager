@@ -14,7 +14,7 @@ import tempfile
 
 from gi.repository import Libosinfo
 
-from .logger import log
+from ..logger import log
 
 
 def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
@@ -120,7 +120,7 @@ class OSInstallScript:
     """
     @staticmethod
     def have_new_libosinfo():
-        from .osdict import OSDB
+        from ..osdict import OSDB
 
         win7 = OSDB.lookup_os("win7")
         for script in win7.get_install_script_list():

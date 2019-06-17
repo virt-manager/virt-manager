@@ -27,7 +27,7 @@ from .logger import log
 from .nodedev import NodeDevice
 from .osdict import OSDB
 from .storage import StoragePool, StorageVolume
-from .unattended import UnattendedData
+from .install.unattended import UnattendedData
 
 
 ##########################

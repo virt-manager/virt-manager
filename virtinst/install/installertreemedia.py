@@ -6,14 +6,14 @@
 
 import os
 
-from . import progress
 from . import urldetect
 from . import urlfetcher
-from .devices import DeviceDisk
 from .installerinject import perform_initrd_injections
 from .kernelupload import upload_kernel_initrd
-from .logger import log
-from .osdict import OSDB
+from .. import progress
+from ..devices import DeviceDisk
+from ..logger import log
+from ..osdict import OSDB
 
 
 # Enum of the various install media types we can have

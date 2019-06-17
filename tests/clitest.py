@@ -18,7 +18,7 @@ except ImportError:
     argcomplete = None
 
 from virtinst import log
-from virtinst import unattended
+from virtinst.install import unattended
 
 from tests import virtinstall, virtclone, virtconvert, virtxml
 from tests import utils

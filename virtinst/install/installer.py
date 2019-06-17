@@ -7,15 +7,15 @@
 # See the COPYING file in the top-level directory.
 
 import os
-from .logger import log
 
-from . import progress
 from . import unattended
-from .devices import DeviceDisk
-from .domain import DomainOs
-from .osdict import OSDB
 from .installertreemedia import InstallerTreeMedia
 from .installerinject import perform_cdrom_injections
+from ..domain import DomainOs
+from ..devices import DeviceDisk
+from ..osdict import OSDB
+from ..logger import log
+from .. import progress
 
 
 def _make_testsuite_path(path):
