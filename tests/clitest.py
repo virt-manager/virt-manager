@@ -1074,9 +1074,8 @@ c.add_valid("--pxe --destroy-on-exit", grep="Restarting guest.\n")  # destroy-on
 c.add_valid("--pxe --transient --destroy-on-exit", grep="Domain creation completed.")  # destroy-on-exit + transient
 c.add_valid("--pxe --graphics vnc --noreboot", grep="testsuite console command: ['virt-viewer'")  # mock virt-viewer waiting, with noreboot magic
 c.add_valid("--nographics --cdrom %(EXISTIMG1)s")  # console warning about cdrom + nographics
-c.add_valid("--nographics --console none --location %(TREEDIR)s")  # console warning about nographics + --console none
-c.add_valid("--nographics --console none --location %(TREEDIR)s")  # console warning about nographics + --console none
-c.add_valid("--nographics --location %(TREEDIR)s")  # console warning about nographics + missing extra args
+c.add_valid("--nographics --console none --location %(TREEDIR)s", grep="No --console device added")  # console warning about nographics + --console none
+c.add_valid("--nographics --console none --location %(TREEDIR)s", grep="Directory tree installs typically")  # warning about directory trees not working well
 c.add_valid("--pxe --nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling
 
 

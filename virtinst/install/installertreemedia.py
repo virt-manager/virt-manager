@@ -248,8 +248,15 @@ class InstallerTreeMedia(object):
             self._extra_args.append(install_args)
 
         if self._install_kernel_args:
-            return self._install_kernel_args
-        return " ".join(self._extra_args)
+            ret = self._install_kernel_args
+        else:
+            ret = " ".join(self._extra_args)
+
+        if self._media_type == MEDIA_DIR and not ret:
+            log.warning(_("Directory tree installs typically do not work "
+                "unless extra kernel args are passed to point the "
+                "installer at a network accessible install tree."))
+        return ret
 
     def prepare(self, guest, meter, unattended_script):
         fetcher = self._get_fetcher(guest, meter)
