@@ -139,11 +139,19 @@ If the specified domain is running, attempt to alter the running VM configuratio
 
 Keep in mind, most XML properties and devices do not support live update operations, so don't expect it to succeed in all cases.
 
-Note that --update implies --define: it can't be used in isolation.
+By default this also implies B<--define>.
 
 =item B<--define>
 
 Define the requested XML change. This is typically the default if no output option is specified, but if a --print option is specified, --define is required to force the change.
+
+=item B<--no-define>
+
+Explicitly do not define the XML. For example if you only want to alter the runtime state of a VM, combine this with B<--update>.
+
+=item B<--start>
+
+Start the VM after performing the requeseted changes. If combined with --no-define, this will create transient VM boot with the requested changes.
 
 =item B<--print-diff>
 
@@ -204,9 +212,19 @@ variants.
 
 =item B<--cpu>
 
-=item B<--security>
+=item B<--iothreads>
+
+=item B<--seclabel>
+
+=item B<--cputune>
 
 =item B<--numatune>
+
+=item B<--memtune>
+
+=item B<--blkiotune>
+
+=item B<--memorybacking>
 
 =item B<--features>
 
@@ -214,9 +232,19 @@ variants.
 
 =item B<--pm>
 
+=item B<--events>
+
+=item B<--resources>
+
+=item B<--sysinfo>
+
+=item B<--qemu-commandline>
+
+=item B<--launchSecurity>
+
 =item B<--boot>
 
-=item B<--filesystem>
+=item B<--idmap>
 
 =item B<--controller>
 
@@ -231,6 +259,8 @@ variants.
 =item B<--console>
 
 =item B<--hostdev>
+
+=item B<--filesystem>
 
 =item B<--sound>
 
@@ -251,8 +281,6 @@ variants.
 =item B<--panic>
 
 =item B<--memdev>
-
-=item B<--qemu-commandline>
 
 These options alter the XML for a single class of XML elements. More complete documentation is found in L<virt-install(1)>.
 
@@ -379,6 +407,9 @@ Add qemu command line passthrough:
 
   # virt-xml f25 --edit --confirm --qemu-commandline="-device FOO"
 
+Use boot device 'network' for a single transient boot:
+
+  # virt-xml myvm --no-define --start --edit --boot network
 
 =head1 CAVEATS
 
