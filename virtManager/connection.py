@@ -17,13 +17,13 @@ from virtinst import pollhelpers
 
 from . import connectauth
 from .baseclass import vmmGObject
-from .domain import vmmDomain
-from .interface import vmmInterface
 from .libvirtenummap import LibvirtEnumMap
-from .network import vmmNetwork
-from .nodedev import vmmNodeDevice
+from .object.domain import vmmDomain
+from .object.interface import vmmInterface
+from .object.network import vmmNetwork
+from .object.nodedev import vmmNodeDevice
+from .object.storagepool import vmmStoragePool
 from .statsmanager import vmmStatsManager
-from .storagepool import vmmStoragePool
 
 
 class _ObjectList(vmmGObject):

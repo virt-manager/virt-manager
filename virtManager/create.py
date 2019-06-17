@@ -23,10 +23,10 @@ from .addstorage import vmmAddStorage
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager
-from .domain import vmmDomainVirtinst
 from .engine import vmmEngine
 from .mediacombo import vmmMediaCombo
 from .netlist import vmmNetworkList
+from .object.domain import vmmDomainVirtinst
 from .oslist import vmmOSList
 from .storagebrowse import vmmStorageBrowser
 from .vmwindow import vmmVMWindow

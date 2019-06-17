@@ -17,7 +17,7 @@ from . import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager
-from .domain import vmmDomain
+from .object.domain import vmmDomain
 
 
 NUM_COLS = 3
