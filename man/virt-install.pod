@@ -1161,6 +1161,13 @@ is to launch L<virt-viewer(1)> to display the graphical console, or to run the
 C<virsh> C<console> command to display the text console. Use of this parameter
 will disable this behaviour.
 
+Note, virt-install exits quickly when this option is specified. If your
+command requested a multistep install, like --cdrom or --location, after
+the install phase is complete the VM will be shutoff, regardless of
+whether a reboot was requested in the VM. If you want the VM to be
+rebooted, virt-install must remain running. You can use '--wait' to keep
+virt-install alive even if --noautoconsole is specified.
+
 =back
 
 
