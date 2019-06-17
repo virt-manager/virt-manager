@@ -10,8 +10,8 @@ from gi.repository import Gtk
 import virtinst
 from virtinst import log
 
-from . import uiutil
-from .baseclass import vmmGObjectUI
+from .. import uiutil
+from ..baseclass import vmmGObjectUI
 
 
 class vmmAddStorage(vmmGObjectUI):

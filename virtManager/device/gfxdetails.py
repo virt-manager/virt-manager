@@ -8,8 +8,9 @@
 from gi.repository import Gtk
 
 import virtinst
-from . import uiutil
-from .baseclass import vmmGObjectUI
+
+from .. import uiutil
+from ..baseclass import vmmGObjectUI
 
 
 class vmmGraphicsDetails(vmmGObjectUI):

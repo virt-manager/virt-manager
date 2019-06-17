@@ -947,7 +947,7 @@ class vmmConsolePages(vmmGObjectUI):
                          radio=False, sensitive=False)
             return
 
-        from .gfxdetails import vmmGraphicsDetails
+        from .device.gfxdetails import vmmGraphicsDetails
 
         active = (self.widget("console-pages").get_current_page() !=
                 _CONSOLE_PAGE_SERIAL)

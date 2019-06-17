@@ -17,14 +17,14 @@ from virtinst import (DeviceChannel, DeviceConsole,
 from virtinst import log
 
 from . import uiutil
-from .fsdetails import vmmFSDetails
-from .gfxdetails import vmmGraphicsDetails
-from .netlist import vmmNetworkList
 from .asyncjob import vmmAsyncJob
-from .storagebrowse import vmmStorageBrowser
 from .baseclass import vmmGObjectUI
-from .addstorage import vmmAddStorage
-from .vsockdetails import vmmVsockDetails
+from .device.addstorage import vmmAddStorage
+from .device.fsdetails import vmmFSDetails
+from .device.gfxdetails import vmmGraphicsDetails
+from .device.netlist import vmmNetworkList
+from .device.vsockdetails import vmmVsockDetails
+from .storagebrowse import vmmStorageBrowser
 from .xmleditor import vmmXMLEditor
 
 

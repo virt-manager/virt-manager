@@ -16,16 +16,16 @@ from virtinst import log
 
 from . import uiutil
 from .addhardware import vmmAddHardware
-from .addstorage import vmmAddStorage
 from .baseclass import vmmGObjectUI
-from .fsdetails import vmmFSDetails
-from .gfxdetails import vmmGraphicsDetails
+from .device.addstorage import vmmAddStorage
+from .device.fsdetails import vmmFSDetails
+from .device.gfxdetails import vmmGraphicsDetails
+from .device.mediacombo import vmmMediaCombo
+from .device.netlist import vmmNetworkList
+from .device.vsockdetails import vmmVsockDetails
 from .graphwidgets import Sparkline
-from .mediacombo import vmmMediaCombo
-from .netlist import vmmNetworkList
 from .oslist import vmmOSList
 from .storagebrowse import vmmStorageBrowser
-from .vsockdetails import vmmVsockDetails
 from .xmleditor import vmmXMLEditor
 
 

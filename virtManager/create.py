@@ -19,13 +19,13 @@ import virtinst.generatename
 from virtinst import log
 
 from . import uiutil
-from .addstorage import vmmAddStorage
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager
+from .device.addstorage import vmmAddStorage
+from .device.mediacombo import vmmMediaCombo
+from .device.netlist import vmmNetworkList
 from .engine import vmmEngine
-from .mediacombo import vmmMediaCombo
-from .netlist import vmmNetworkList
 from .object.domain import vmmDomainVirtinst
 from .oslist import vmmOSList
 from .storagebrowse import vmmStorageBrowser

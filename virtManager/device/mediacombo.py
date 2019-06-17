@@ -5,8 +5,8 @@
 
 from gi.repository import Gtk
 
-from . import uiutil
-from .baseclass import vmmGObject, vmmGObjectUI
+from .. import uiutil
+from ..baseclass import vmmGObject, vmmGObjectUI
 
 
 class vmmMediaCombo(vmmGObjectUI):
