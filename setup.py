@@ -663,6 +663,16 @@ class VMMDistribution(distutils.dist.Distribution):
         distutils.dist.Distribution.__init__(self, *args, **kwargs)
 
 
+def _py_files(directory):
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        dummy = directories
+        for filename in filenames:
+            if filename.endswith(".py"):
+                paths.append(os.path.join('..', path, filename))
+    return paths
+
+
 distutils.core.setup(
     name="virt-manager",
     version=VERSION,
@@ -699,13 +709,10 @@ distutils.core.setup(
             "man/virt-xml.1"
         ]),
 
-        ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
-
+        ("share/virt-manager/virtManager", _py_files("virtManager")),
         ("share/virt-manager/virtinst",
-            glob.glob("virtinst/*.py") + glob.glob("virtinst/build.cfg")),
-        ("share/virt-manager/virtinst/devices", glob.glob("virtinst/devices/*.py")),
-        ("share/virt-manager/virtinst/domain", glob.glob("virtinst/domain/*.py")),
-        ("share/virt-manager/virtconv", glob.glob("virtconv/*.py")),
+            _py_files("virtinst") + glob.glob("virtinst/build.cfg")),
+        ("share/virt-manager/virtconv", _py_files("virtconv")),
     ],
 
     cmdclass={
