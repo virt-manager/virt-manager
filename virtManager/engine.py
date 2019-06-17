@@ -16,7 +16,7 @@ from gi.repository import Gtk
 from virtinst import log
 
 from .baseclass import vmmGObject
-from .connect import vmmConnect
+from .createconn import vmmCreateConn
 from .connmanager import vmmConnectionManager
 from .inspection import vmmInspection
 from .systray import vmmSystray
@@ -184,7 +184,7 @@ class vmmEngine(vmmGObject):
             log.debug("--test-first-run, using uri=None to trigger error")
             tryuri = None
         else:
-            tryuri = vmmConnect.default_uri()
+            tryuri = vmmCreateConn.default_uri()
             log.debug("Probed default URI=%s", tryuri)
 
         # Manager fail message

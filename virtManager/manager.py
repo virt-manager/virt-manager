@@ -449,8 +449,8 @@ class vmmManager(vmmGObjectUI):
         vmmEngine.get_instance().exit_app()
 
     def open_newconn(self, _src):
-        from .connect import vmmConnect
-        vmmConnect.get_instance(self).show(self.topwin)
+        from .createconn import vmmCreateConn
+        vmmCreateConn.get_instance(self).show(self.topwin)
 
     def new_vm(self, _src):
         from .createvm import vmmCreateVM

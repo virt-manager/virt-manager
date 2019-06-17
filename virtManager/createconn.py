@@ -25,12 +25,12 @@ HV_VZ,
 HV_CUSTOM) = range(7)
 
 
-class vmmConnect(vmmGObjectUI):
+class vmmCreateConn(vmmGObjectUI):
     @classmethod
     def get_instance(cls, parentobj):
         try:
             if not cls._instance:
-                cls._instance = vmmConnect()
+                cls._instance = vmmCreateConn()
             return cls._instance
         except Exception as e:
             parentobj.err.show_err(
@@ -41,7 +41,7 @@ class vmmConnect(vmmGObjectUI):
         return bool(cls._instance)
 
     def __init__(self):
-        vmmGObjectUI.__init__(self, "connect.ui", "vmm-open-connection")
+        vmmGObjectUI.__init__(self, "createconn.ui", "vmm-open-connection")
         self._cleanup_on_app_close()
 
         self.builder.connect_signals({
