@@ -138,7 +138,7 @@ class TestStorage(unittest.TestCase):
         poolobj = createPool(self.conn,
                              StoragePool.TYPE_LOGICAL,
                              "pool-logical",
-                             target_path="/dev/pool-logical")
+                             source_name="pool-logical")
         invol = createVol(self.conn, poolobj)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "input", input_vol=invol)

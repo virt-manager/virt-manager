@@ -153,7 +153,6 @@
                         <property name="halign">end</property>
                         <property name="label" translatable="yes">Tar_get Path:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">pool-target-path</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -193,7 +192,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label">sourcep:</property>
+                        <property name="label">_sourcep:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">pool-source-path</property>
                       </object>
@@ -232,23 +231,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="pool-target-path">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_entry">True</property>
-                        <child internal-child="entry">
-                          <object class="GtkEntry">
-                            <property name="can_focus">True</property>
-                            <property name="width_chars">25</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="pool-source-button">
                         <property name="label" translatable="yes">Bro_wse</property>
                         <property name="visible">True</property>
@@ -272,6 +254,11 @@
                           <object class="GtkEntry">
                             <property name="can_focus">True</property>
                             <property name="width_chars">25</property>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pool-source-path-atkobject">
+                            <property name="AtkObject::accessible-name">pool-source-path</property>
                           </object>
                         </child>
                       </object>
@@ -312,22 +299,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Source N_ame:</property>
+                        <property name="label">sourcen_a:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">pool-source-name</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">6</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="pool-source-name">
-                        <property name="can_focus">True</property>
-                        <property name="width_chars">25</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
                         <property name="top_attach">6</property>
                       </packing>
                     </child>
@@ -422,6 +399,42 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="pool-target-path">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="pool-source-name">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_entry">True</property>
+                        <child internal-child="entry">
+                          <object class="GtkEntry" id="pool-source-name-text">
+                            <property name="can_focus">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="pool-source-name-text-atkobject">
+                                <property name="AtkObject::accessible-name">pool-source-name-text</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pool-source-name-atkobject">
+                            <property name="AtkObject::accessible-name">pool-source-name</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">6</property>
                       </packing>
                     </child>
                     <child>

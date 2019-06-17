@@ -21,7 +21,7 @@ class CreatePool(uiutils.UITestCase):
     # Test cases #
     ##############
 
-    def testCreatePool(self):
+    def testCreatePools(self):
         hostwin = self._open_host_window("Storage")
         win = self._open_create_win(hostwin)
 
@@ -58,6 +58,21 @@ class CreatePool(uiutils.UITestCase):
         # Ensure it's gone
         uiutils.check_in_loop(lambda: cell.dead)
 
+        # Test a logical pool
+        win = self._open_create_win(hostwin)
+        typ = win.find("Type:", "combo box")
+        newname = "a-lvm-pool"
+        name.text = "a-lvm-pool"
+        typ.click()
+        win.find_fuzzy("LVM", "menu item").click()
+        srcname = win.find_fuzzy("Volgroup", "combo")
+        srcnametext = win.find_fuzzy("pool-source-name-text")
+        uiutils.check_in_loop(lambda: srcnametext.text == "testvg1")
+        srcname.click_combo_entry()
+        win.find_fuzzy("testvg2", "menu item").click()
+        finish.click()
+        hostwin.find(newname, "table cell")
+
         # Test a scsi pool
         win = self._open_create_win(hostwin)
         typ = win.find("Type:", "combo box")
@@ -65,7 +80,7 @@ class CreatePool(uiutils.UITestCase):
         name.text = "a-scsi-pool"
         typ.click()
         win.find_fuzzy("SCSI Host Adapter", "menu item").click()
-        win.find_fuzzy("Source Path:", "combo").click_combo_entry()
+        win.find_fuzzy("Source Adapter:", "combo").click_combo_entry()
         win.find_fuzzy("host2", "menu item").click()
         finish.click()
         hostwin.find(newname, "table cell")
@@ -77,7 +92,7 @@ class CreatePool(uiutils.UITestCase):
         typ.click()
         win.find_fuzzy("RADOS Block", "menu item").click()
         win.find_fuzzy("Host Name:", "text").text = "example.com:1234"
-        win.find_fuzzy("Source Name:", "text").typeText("frob")
+        win.find_fuzzy("pool-source-name-text", "text").typeText("frob")
         finish.click()
         hostwin.find(newname, "table cell")
 

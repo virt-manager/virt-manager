@@ -98,17 +98,15 @@ class vmmCreatePool(vmmGObjectUI):
         for f in ["auto"]:
             format_model.append([f, f])
 
-        # Target path combo box entry
-        target_list = self.widget("pool-target-path")
-        # target_path, Label, pool class instance
-        target_model = Gtk.ListStore(str, str)
-        target_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-        target_list.set_model(target_model)
-        target_list.set_entry_text_column(0)
+        combo = self.widget("pool-source-name")
+        # [name, label]
+        model = Gtk.ListStore(str, str)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+        combo.set_model(model)
+        combo.set_entry_text_column(0)
 
-        # Source path combo box entry
         source_list = self.widget("pool-source-path")
-        # source_path, Label, pool class instance
+        # [source_path, label]
         source_model = Gtk.ListStore(str, str)
         source_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         source_list.set_model(source_model)
@@ -123,7 +121,7 @@ class vmmCreatePool(vmmGObjectUI):
                 self.conn.get_backend(), "pool")
         self.widget("pool-name").set_text(defaultname)
         self.widget("pool-name").grab_focus()
-        self.widget("pool-target-path").get_child().set_text("")
+        self.widget("pool-target-path").set_text("")
         self.widget("pool-source-path").get_child().set_text("")
         self.widget("pool-hostname").set_text("")
         self.widget("pool-iqn-chk").set_active(False)
@@ -144,32 +142,26 @@ class vmmCreatePool(vmmGObjectUI):
     def _populate_pool_sources(self):
         pooltype = self._get_config_pool_type()
         source_list = self.widget("pool-source-path")
-        source_model = source_list.get_model()
-        source_model.clear()
+        source_list.get_model().clear()
 
-        target_list = self.widget("pool-target-path")
-        target_model = target_list.get_model()
-        target_model.clear()
+        name_list = self.widget("pool-source-name")
+        name_list.get_model().clear()
 
-        use_list = source_list
-        use_model = source_model
-        entry_list = []
         if pooltype == StoragePool.TYPE_SCSI:
             host_list = self._list_scsi_adapters()
             entry_list = [[h, h] for h in host_list]
             use_list = source_list
-            use_model = source_model
 
         elif pooltype == StoragePool.TYPE_LOGICAL:
             vglist = self._list_pool_sources(pooltype)
-            target_paths = ["/dev/%s" % vgname for vgname in vglist]
-            entry_list = [[t, t] for t in target_paths]
-            use_list = target_list
-            use_model = target_model
+            entry_list = [[v, v] for v in vglist]
+            use_list = name_list
+
+        else:
+            return
 
         for e in entry_list:
-            use_model.append(e)
-
+            use_list.get_model().append(e)
         if entry_list:
             use_list.set_active(0)
 
@@ -198,8 +190,7 @@ class vmmCreatePool(vmmGObjectUI):
                         StoragePool.TYPE_NETFS]:
             # Building for these simply entails creating a directory
             return (True, False)
-        elif pooltype in [StoragePool.TYPE_LOGICAL,
-                          StoragePool.TYPE_DISK]:
+        elif pooltype in [StoragePool.TYPE_DISK]:
             # This is a dangerous operation, anything (False, True)
             # should be assumed to be one.
             return (False, True)
@@ -221,10 +212,9 @@ class vmmCreatePool(vmmGObjectUI):
         iqn = pool.supports_iqn()
         builddef, buildsens = self._get_build_default(pool.type)
 
-        # We don't show source_name for logical pools, since we use
-        # pool-sources to avoid the need for it
-        src_name = (pool.supports_source_name() and
-                    pool.type != pool.TYPE_LOGICAL)
+        src_name = pool.supports_source_name()
+        is_lvm = pool.type == StoragePool.TYPE_LOGICAL
+        is_scsi = pool.type == StoragePool.TYPE_SCSI
 
         # Source path browsing is meaningless for net pools
         if pool.type in [StoragePool.TYPE_NETFS,
@@ -241,13 +231,18 @@ class vmmCreatePool(vmmGObjectUI):
         show_row("pool-iqn", iqn)
         show_row("pool-source-name", src_name)
 
+        self.widget("pool-source-name-label").set_label(
+                is_lvm and _("Volg_roup Name:") or _("Sou_rce Name:"))
+
+        src_label = _("_Source Path:")
         if iqn:
-            self.widget("pool-source-label").set_label(_("_Source IQN:"))
-        else:
-            self.widget("pool-source-label").set_label(_("_Source Path:"))
+            src_label = _("_Source IQN:")
+        elif is_scsi:
+            src_label = _("_Source Adapter:")
+        self.widget("pool-source-label").set_text(src_label)
 
         if tgt:
-            self.widget("pool-target-path").get_child().set_text(
+            self.widget("pool-target-path").set_text(
                 pool.default_target_path() or "")
 
         self.widget("pool-target-button").set_sensitive(tgt_b)
@@ -255,7 +250,7 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-build").set_active(builddef)
 
         if src_name:
-            self.widget("pool-source-name").set_text(
+            self.widget("pool-source-name").get_child().set_text(
                     pool.default_source_name() or "")
 
         self._populate_pool_sources()
@@ -275,13 +270,13 @@ class vmmCreatePool(vmmGObjectUI):
         ret = uiutil.get_list_selection(widget, column=column)
         if ret is not None:
             return ret
-        return src.get_child().get_text().strip()
+        return widget_name.get_child().get_text().strip()
 
     def _get_config_pool_type(self):
         return uiutil.get_list_selection(self.widget("pool-type"))
 
     def _get_config_target_path(self):
-        return self._get_visible_text("pool-target-path", column=1)
+        return self._get_visible_text("pool-target-path")
 
     def _get_config_source_path(self):
         return self._get_visible_text("pool-source-path", column=1)
@@ -290,7 +285,7 @@ class vmmCreatePool(vmmGObjectUI):
         return self._get_visible_text("pool-hostname")
 
     def _get_config_source_name(self):
-        return self._get_visible_text("pool-source-name")
+        return self._get_visible_text("pool-source-name", column=1)
 
     def _get_config_format(self):
         return uiutil.get_list_selection(self.widget("pool-format"))
@@ -447,7 +442,7 @@ class vmmCreatePool(vmmGObjectUI):
                 dialog_type=Gtk.FileChooserAction.SELECT_FOLDER,
                 start_folder=startfolder)
         if target:
-            self.widget("pool-target-path").get_child().set_text(target)
+            self.widget("pool-target-path").set_text(target)
 
     def _hostname_changed_cb(self, src):
         # If a hostname was entered, try to lookup valid pool sources.

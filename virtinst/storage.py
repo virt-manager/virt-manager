@@ -16,7 +16,6 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 _DEFAULT_DEV_TARGET = "/dev"
-_DEFAULT_LVM_TARGET_BASE = "/dev/"
 _DEFAULT_SCSI_TARGET = "/dev/disk/by-path"
 _DEFAULT_MPATH_TARGET = "/dev/mapper"
 
@@ -233,11 +232,6 @@ class StoragePool(_StorageObject):
             self.type == self.TYPE_FS):
             return os.path.join(
                     _preferred_default_pool_path(self.conn), self.name)
-        if self.type == self.TYPE_LOGICAL:
-            name = self.name
-            if self.source_name:
-                name = self.source_name
-            return _DEFAULT_LVM_TARGET_BASE + name
         if self.type == self.TYPE_DISK:
             return _DEFAULT_DEV_TARGET
         if self.type == self.TYPE_ISCSI or self.type == self.TYPE_SCSI:
@@ -268,14 +262,6 @@ class StoragePool(_StorageObject):
             return "rbd"
         if self.type == StoragePool.TYPE_GLUSTER:
             return "gv0"
-
-        if ("target_path" in self._propstore and
-            self.target_path and
-            self.target_path.startswith(_DEFAULT_LVM_TARGET_BASE)):
-            # If there is a target path, parse it for an expected VG
-            # location, and pull the name from there
-            vg = self.target_path[len(_DEFAULT_LVM_TARGET_BASE):]
-            return vg.split("/", 1)[0]
 
 
     ##############
@@ -323,7 +309,7 @@ class StoragePool(_StorageObject):
     def supports_target_path(self):
         return self.type in [
                 self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,
-                self.TYPE_LOGICAL, self.TYPE_DISK, self.TYPE_ISCSI,
+                self.TYPE_DISK, self.TYPE_ISCSI,
                 self.TYPE_SCSI, self.TYPE_MPATH]
 
     def supports_source_name(self):
@@ -333,7 +319,7 @@ class StoragePool(_StorageObject):
 
     def supports_source_path(self):
         return self.type in [
-                self.TYPE_FS, self.TYPE_NETFS, self.TYPE_LOGICAL,
+                self.TYPE_FS, self.TYPE_NETFS,
                 self.TYPE_DISK, self.TYPE_ISCSI, self.TYPE_SCSI,
                 self.TYPE_GLUSTER]
 
