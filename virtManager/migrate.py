@@ -13,7 +13,7 @@ from gi.repository import Pango
 from virtinst import log
 from virtinst import xmlutil
 
-from . import uiutil
+from .lib import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager

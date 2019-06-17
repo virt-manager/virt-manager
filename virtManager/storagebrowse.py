@@ -6,7 +6,7 @@
 
 from virtinst import log
 
-from . import uiutil
+from .lib import uiutil
 from .baseclass import vmmGObjectUI
 from .hoststorage import vmmHostStorage
 

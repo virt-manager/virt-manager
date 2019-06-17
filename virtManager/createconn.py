@@ -12,7 +12,7 @@ from gi.repository import Gtk
 
 from virtinst import log
 
-from . import uiutil
+from .lib import uiutil
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager
 

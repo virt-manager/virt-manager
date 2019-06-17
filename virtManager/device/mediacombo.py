@@ -5,7 +5,7 @@
 
 from gi.repository import Gtk
 
-from .. import uiutil
+from ..lib import uiutil
 from ..baseclass import vmmGObject, vmmGObjectUI
 
 

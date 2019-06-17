@@ -228,9 +228,9 @@ def main():
 
     if options.trace_libvirt:
         log.debug("Libvirt tracing requested")
-        import virtManager.module_trace
+        from virtManager.lib import module_trace
         import libvirt
-        virtManager.module_trace.wrap_module(libvirt,
+        module_trace.wrap_module(libvirt,
                 mainloop=(options.trace_libvirt == "mainloop"),
                 regex=None)
 

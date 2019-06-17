@@ -17,7 +17,7 @@ import libvirt
 
 from virtinst import log
 
-from .baseclass import vmmGObjectUI
+from ..baseclass import vmmGObjectUI
 from . import uiutil
 
 

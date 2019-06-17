@@ -9,7 +9,7 @@ from gi.repository import Gtk
 
 from virtinst import DeviceFilesystem
 
-from .. import uiutil
+from ..lib import uiutil
 from ..baseclass import vmmGObjectUI
 from ..storagebrowse import vmmStorageBrowser
 

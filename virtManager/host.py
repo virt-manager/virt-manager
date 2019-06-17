@@ -6,10 +6,10 @@
 
 from virtinst import log
 
-from . import uiutil
+from .lib import uiutil
 from .baseclass import vmmGObjectUI
 from .engine import vmmEngine
-from .graphwidgets import Sparkline
+from .lib.graphwidgets import Sparkline
 from .hostnets import vmmHostNets
 from .hoststorage import vmmHostStorage
 

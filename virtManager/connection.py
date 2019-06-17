@@ -15,15 +15,15 @@ import virtinst
 from virtinst import log
 from virtinst import pollhelpers
 
-from . import connectauth
+from .lib import connectauth
 from .baseclass import vmmGObject
-from .libvirtenummap import LibvirtEnumMap
+from .lib.libvirtenummap import LibvirtEnumMap
 from .object.domain import vmmDomain
 from .object.interface import vmmInterface
 from .object.network import vmmNetwork
 from .object.nodedev import vmmNodeDevice
 from .object.storagepool import vmmStoragePool
-from .statsmanager import vmmStatsManager
+from .lib.statsmanager import vmmStatsManager
 
 
 class _ObjectList(vmmGObject):

@@ -18,7 +18,7 @@ from virtinst import xmlutil
 
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
-from . import uiutil
+from .lib import uiutil
 
 STORAGE_ROW_CONFIRM = 0
 STORAGE_ROW_CANT_DELETE = 1

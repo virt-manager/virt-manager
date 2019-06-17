@@ -14,7 +14,7 @@ from virtinst import Cloner
 from virtinst import DeviceInterface
 from virtinst import log
 
-from . import uiutil
+from .lib import uiutil
 from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
 from .storagebrowse import vmmStorageBrowser

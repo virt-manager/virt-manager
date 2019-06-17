@@ -13,8 +13,8 @@ from gi.repository import Gtk
 from virtinst import DomainCpu
 from virtinst import log
 
-from .inspection import vmmInspection
-from .keyring import vmmKeyring, vmmSecret
+from .lib.inspection import vmmInspection
+from .lib.keyring import vmmKeyring, vmmSecret
 
 
 class _SettingsWrapper(object):

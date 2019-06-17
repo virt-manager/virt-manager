@@ -9,7 +9,7 @@ from gi.repository import Gtk
 
 import virtinst
 
-from .. import uiutil
+from ..lib import uiutil
 from ..baseclass import vmmGObjectUI
 
 

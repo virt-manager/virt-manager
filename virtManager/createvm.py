@@ -18,7 +18,7 @@ import virtinst
 import virtinst.generatename
 from virtinst import log
 
-from . import uiutil
+from .lib import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager

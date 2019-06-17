@@ -6,7 +6,7 @@ import gi
 gi.require_version('GtkSource', '4')
 from gi.repository import GtkSource
 
-from . import uiutil
+from .lib import uiutil
 from .baseclass import vmmGObjectUI
 
 _PAGE_DETAILS = 0

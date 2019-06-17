@@ -8,9 +8,9 @@ import threading
 
 from virtinst import log
 
-from .baseclass import vmmGObject
-from .connmanager import vmmConnectionManager
-from .object.domain import vmmInspectionApplication, vmmInspectionData
+from ..baseclass import vmmGObject
+from ..connmanager import vmmConnectionManager
+from ..object.domain import vmmInspectionApplication, vmmInspectionData
 
 
 def _inspection_error(_errstr):

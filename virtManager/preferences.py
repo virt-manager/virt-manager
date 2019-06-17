@@ -10,9 +10,9 @@ from gi.repository import Gdk
 from virtinst import DomainCpu
 from virtinst import log
 
-from . import uiutil
+from .lib import uiutil
 from .baseclass import vmmGObjectUI
-from .inspection import vmmInspection
+from .lib.inspection import vmmInspection
 from .systray import vmmSystray
 
 

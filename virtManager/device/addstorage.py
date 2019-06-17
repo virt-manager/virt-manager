@@ -10,7 +10,7 @@ from gi.repository import Gtk
 import virtinst
 from virtinst import log
 
-from .. import uiutil
+from ..lib import uiutil
 from ..baseclass import vmmGObjectUI
 
 

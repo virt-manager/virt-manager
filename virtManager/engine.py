@@ -18,7 +18,7 @@ from virtinst import log
 from .baseclass import vmmGObject
 from .createconn import vmmCreateConn
 from .connmanager import vmmConnectionManager
-from .inspection import vmmInspection
+from .lib.inspection import vmmInspection
 from .systray import vmmSystray
 
 (PRIO_HIGH,

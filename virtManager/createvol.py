@@ -10,7 +10,7 @@ from gi.repository import Gdk
 from virtinst import log
 from virtinst import StorageVolume
 
-from . import uiutil
+from .lib import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .xmleditor import vmmXMLEditor

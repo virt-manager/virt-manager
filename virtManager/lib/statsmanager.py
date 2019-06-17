@@ -10,7 +10,7 @@ import libvirt
 
 from virtinst import log
 
-from .baseclass import vmmGObject
+from ..baseclass import vmmGObject
 
 
 class _VMStatsRecord(object):

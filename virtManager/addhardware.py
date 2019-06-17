@@ -16,7 +16,7 @@ from virtinst import (DeviceChannel, DeviceConsole,
         DeviceSound, DeviceTpm, DeviceVideo, DeviceVsock, DeviceWatchdog)
 from virtinst import log
 
-from . import uiutil
+from .lib import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .device.addstorage import vmmAddStorage

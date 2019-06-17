@@ -13,11 +13,11 @@ from virtinst import log
 from virtinst import xmlutil
 
 from . import vmmenu
-from . import uiutil
+from .lib import uiutil
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager
 from .engine import vmmEngine
-from .graphwidgets import CellRendererSparkline
+from .lib.graphwidgets import CellRendererSparkline
 
 # Number of data points for performance graphs
 GRAPH_LEN = 40

@@ -18,7 +18,7 @@ from virtinst import Guest
 from virtinst import log
 
 from .libvirtobject import vmmLibvirtObject
-from ..libvirtenummap import LibvirtEnumMap
+from ..lib.libvirtenummap import LibvirtEnumMap
 
 
 class _SENTINEL(object):
