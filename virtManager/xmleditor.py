@@ -1,9 +1,16 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+# pylint: disable=wrong-import-order,ungrouped-imports
 import gi
 
-gi.require_version('GtkSource', '4')
+# We can use either gtksourceview3 or gtksourceview4
+try:
+    gi.require_version("GtkSource", "4.0")
+    log.debug("Using GtkSource 4.0")
+except ValueError:
+    gi.require_version("GtkSource", "3.0")
+    log.debug("Using GtkSource 3.0")
 from gi.repository import GtkSource
 
 from .lib import uiutil
