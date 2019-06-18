@@ -35,6 +35,9 @@ Requires: libvirt-glib >= 0.0.9
 Requires: gtk-vnc2
 Requires: spice-gtk3
 
+# We can work with gtksourceview 3 or gtksourceview4, pick the latest one
+Requires: gtksourceview4
+
 # virt-manager is one of those apps that people will often install onto
 # a headless machine for use over SSH. This means the virt-manager dep
 # chain needs to provide everything we need to get a usable app experience.

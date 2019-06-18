@@ -35,6 +35,7 @@ Minimum version requirements of major components:
    - libvirt-python >= 0.6.0
    - pygobject3 >= 3.22
    - libosinfo >= 0.2.10
+   - gtksourceview >= 3
 
 On Debian or Ubuntu based distributions, you need to install the
 `gobject-introspection` bindings for some dependencies like `libvirt-glib`
