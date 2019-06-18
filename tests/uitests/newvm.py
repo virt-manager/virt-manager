@@ -105,9 +105,14 @@ class NewVM(uiutils.UITestCase):
         self.sleep(.2)
         uiutils.check_in_loop(lambda: "Generic" in osentry.text)
 
+        # The sleeps shouldn't be required, but this test continues to be
+        # flakey, so this is an attempt to fix it.
         self.forward(newvm)
+        self.sleep(.5)
         self.forward(newvm)
+        self.sleep(.5)
         self.forward(newvm)
+        self.sleep(.5)
         newvm.find_fuzzy("Finish", "button").click()
 
         # Delete it from the VM window
