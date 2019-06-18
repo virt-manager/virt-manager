@@ -4,10 +4,12 @@
 # pylint: disable=wrong-import-order,ungrouped-imports
 import gi
 
+from virtinst import log
+
 # We can use either gtksourceview3 or gtksourceview4
 try:
-    gi.require_version("GtkSource", "4.0")
-    log.debug("Using GtkSource 4.0")
+    gi.require_version("GtkSource", "4")
+    log.debug("Using GtkSource 4")
 except ValueError:
     gi.require_version("GtkSource", "3.0")
     log.debug("Using GtkSource 3.0")
