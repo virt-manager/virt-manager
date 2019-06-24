@@ -6,7 +6,6 @@
 import os
 import re
 import sys
-import traceback
 import unittest
 
 from tests import utils
@@ -128,11 +127,11 @@ def _testGuest(testdata, guest):
     installer = Installer(guest.conn, location=url)
     try:
         detected_distro = installer.detect_distro(guest)
-    except Exception:
-        raise AssertionError("\nFailed in installer detect_distro():\n"
+    except Exception as e:
+        msg = ("\nFailed in installer detect_distro():\n"
             "name   = %s\n"
-            "url    = %s\n\n%s" %
-            (distname, url, "".join(traceback.format_exc())))
+            "url    = %s\n\n%s" % (distname, url, str(e)))
+        raise type(e)(msg).with_traceback(sys.exc_info()[2]) from None
 
     # Make sure the stores are reporting correct distro name/variant
     if checkdistro != detected_distro:
@@ -178,17 +177,13 @@ def _testURL(testdata):
     """
     Test that our URL detection logic works for grabbing kernels
     """
+    sys.stdout.write("\nTesting %-25s " % testdata.name)
+    sys.stdout.flush()
+
     testdata.detectdistro = _sanitize_osdict_name(testdata.detectdistro)
     _testGuest(testdata, hvmguest)
     if testdata.testxen:
         _testGuest(testdata, xenguest)
-
-
-def _testURLWrapper(testdata):
-    sys.stdout.write("\nTesting %-25s " % testdata.name)
-    sys.stdout.flush()
-
-    return _testURL(testdata)
 
 
 # Register tests to be picked up by unittest
@@ -240,8 +235,8 @@ def _make_tests():
 
     for key, testdata in sorted(urls.items()):
         def _make_wrapper(d):
-            return lambda _self: _testURLWrapper(d)
-        setattr(URLTests, "testURL%s" % key.replace("-", "_"),
-                _make_wrapper(testdata))
+            return lambda _self: _testURL(d)
+        methodname = "testURL%s" % key.replace("-", "_")
+        setattr(URLTests, methodname, _make_wrapper(testdata))
 
 _make_tests()
