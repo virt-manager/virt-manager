@@ -16,6 +16,7 @@ from ..devices import DeviceDisk
 from ..osdict import OSDB
 from ..logger import log
 from .. import progress
+from .cloudinit import create_metadata, create_userdata
 
 
 def _make_testsuite_path(path):
@@ -60,6 +61,7 @@ class Installer(object):
         self._tmpfiles = []
         self._defaults_are_set = False
         self._unattended_data = None
+        self._cloudinit_data = None
 
         self._install_bootdev = install_bootdev
         self._no_install = no_install
@@ -279,6 +281,9 @@ class Installer(object):
         elif unattended_scripts:
             self._prepare_unattended_data(guest, meter, unattended_scripts)
 
+        elif self._cloudinit_data:
+            self._install_cloudinit(guest)
+
     def _cleanup(self, guest):
         if self._treemedia:
             self._treemedia.cleanup(guest)
@@ -413,6 +418,18 @@ class Installer(object):
 
     def set_unattended_data(self, unattended_data):
         self._unattended_data = unattended_data
+
+    def set_cloudinit_data(self, cloudinit_data):
+        self._cloudinit_data = cloudinit_data
+
+    def _install_cloudinit(self, guest):
+        metadata = create_metadata(guest.conn.get_app_cache_dir())
+        userdata = create_userdata(guest.conn.get_app_cache_dir(), self._cloudinit_data)
+
+        iso = perform_cdrom_injections([(metadata, "meta-data"), (userdata, "user-data")],
+                guest.conn.get_app_cache_dir(), cloudinit=True)
+        self._tmpfiles.append(iso)
+        self._add_unattended_install_cdrom_device(guest, iso)
 
 
     ##########################

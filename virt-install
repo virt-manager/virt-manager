@@ -456,6 +456,9 @@ def build_installer(options, guest, installdata):
         installer.set_initrd_injections(options.initrd_inject)
     if options.autostart:
         installer.autostart = True
+    if options.cloud_init:
+        cloudinit_data = cli.parse_cloud_init(options.cloud_init)
+        installer.set_cloudinit_data(cloudinit_data)
 
     return installer
 
@@ -842,6 +845,8 @@ def parse_args():
                     help=_("Perform an unattended installation"))
     insg.add_argument("--install",
             help=_("Specify fine grained install options"))
+    insg.add_argument("--cloud-init", nargs="?", const=1,
+                    help=_("Perform a cloud image installation, configuring cloud-init"))
 
     # Takes a URL and just prints to stdout the detected distro name
     insg.add_argument("--test-media-detection", help=argparse.SUPPRESS)

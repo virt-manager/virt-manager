@@ -44,19 +44,21 @@ def _run_initrd_commands(initrd, tempdir):
         log.debug("gzip stderr=%s", gziperr)
 
 
-def _run_iso_commands(iso, tempdir):
+def _run_iso_commands(iso, tempdir, cloudinit=False):
     cmd = ["genisoimage",
            "-o", iso,
            "-J",
            "-input-charset", "utf8",
-           "-rational-rock",
-           tempdir]
+           "-rational-rock"]
+    if cloudinit:
+        cmd.extend(["-V", "cidata"])
+    cmd.append(tempdir)
     log.debug("Running iso build command: %s", cmd)
     output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
     log.debug("cmd output: %s", output)
 
 
-def _perform_generic_injections(injections, scratchdir, media, cb):
+def _perform_generic_injections(injections, scratchdir, media, cb, cloudinit=False):
     if not injections:
         return
 
@@ -74,20 +76,20 @@ def _perform_generic_injections(injections, scratchdir, media, cb):
                     filename, dst, media)
             shutil.copy(filename, os.path.join(tempdir, dst))
 
-        return cb(media, tempdir)
+        return cb(media, tempdir, cloudinit)
     finally:
         shutil.rmtree(tempdir)
 
 
-def perform_initrd_injections(initrd, injections, scratchdir):
+def perform_initrd_injections(initrd, injections, scratchdir, cloudinit=False):
     """
     Insert files into the root directory of the initial ram disk
     """
     _perform_generic_injections(injections, scratchdir, initrd,
-            _run_initrd_commands)
+            _run_initrd_commands, cloudinit)
 
 
-def perform_cdrom_injections(injections, scratchdir):
+def perform_cdrom_injections(injections, scratchdir, cloudinit=False):
     """
     Insert files into the root directory of a generated cdrom
     """
@@ -98,7 +100,7 @@ def perform_cdrom_injections(injections, scratchdir):
 
     try:
         _perform_generic_injections(injections, scratchdir, iso,
-            _run_iso_commands)
+            _run_iso_commands, cloudinit)
     except Exception:  # pragma: no cover
         os.unlink(iso)
         raise
