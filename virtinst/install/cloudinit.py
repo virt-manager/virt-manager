@@ -29,19 +29,26 @@ def create_metadata(scratchdir, hostname=None):
 
 
 def create_userdata(scratchdir, cloudinit_data, username=None, password=None):
-    if not password:
-        password = ""
-        for dummy in range(16):
-            password += random.choice(string.ascii_letters + string.digits)
     content = "#cloud-config\n"
     if username:
         content += "name: %s\n" % username
-    if cloudinit_data.root_password == "generate":
-        pass
-    else:
+    if password:
         content += "password: %s\n" % password
-        log.debug("Generated password for first boot: \n%s", password)
+
+    rootpass = cloudinit_data.root_password
+    if rootpass == "generate":
+        rootpass = ""
+        for dummy in range(16):
+            rootpass += random.choice(string.ascii_letters + string.digits)
+        log.warning("Generated password for first boot: %s", rootpass)
         time.sleep(20)
+
+    if rootpass:
+        content += "chpasswd:\n"
+        content += "  list: |\n"
+        content += "    root:%s\n" % rootpass
+        content += "  expire: True\n"
+
     content += "runcmd:\n"
     content += "- [ sudo, touch, /etc/cloud/cloud-init.disabled ]\n"
     log.debug("Generated cloud-init userdata:\n%s", content)

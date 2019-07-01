@@ -1632,7 +1632,9 @@ class ParserCloudInit(VirtCLIParser):
 def parse_cloud_init(optstr):
     ret = CloudInitData()
     if optstr == 1:
-        # This means bare --cloud-init, so there's nothing to parse
+        # This means bare --cloud-init, so there's nothing to parse.
+        log.warning("Defaulting to --cloud-init root-password=generate")
+        ret.root_password = "generate"
         return ret
 
     parser = ParserCloudInit(optstr)
