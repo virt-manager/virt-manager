@@ -27,7 +27,12 @@ def _lookup_vol_by_path(conn, path):
         vol.info()
         return vol, None
     except libvirt.libvirtError as e:
-        if (hasattr(libvirt, "VIR_ERR_NO_STORAGE_VOL") and
+        # test_urls trigger empty errors here, because python
+        # garbage collection kicks in after the failure but before
+        # we read the error code, and libvirt virStoragePoolFree
+        # public entry point clears the cached error. So ignore
+        # an empty error code
+        if (e.get_error_code() and
             e.get_error_code() != libvirt.VIR_ERR_NO_STORAGE_VOL):
             raise
         return None, e
