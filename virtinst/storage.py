@@ -286,25 +286,21 @@ class StoragePool(_StorageObject):
     source_path = property(_get_source, _set_source)
 
     def default_source_name(self):
-        srcname = None
-
         if not self.supports_source_name():
-            srcname = None
-        elif self.type == StoragePool.TYPE_NETFS:
-            srcname = self.name
-        elif self.type == StoragePool.TYPE_RBD:
-            srcname = "rbd"
-        elif self.type == StoragePool.TYPE_GLUSTER:
-            srcname = "gv0"
-        elif ("target_path" in self._propstore and
-                self.target_path and
-                self.target_path.startswith(_DEFAULT_LVM_TARGET_BASE)):
+            return None
+
+        if self.type == StoragePool.TYPE_RBD:
+            return "rbd"
+        if self.type == StoragePool.TYPE_GLUSTER:
+            return "gv0"
+
+        if ("target_path" in self._propstore and
+            self.target_path and
+            self.target_path.startswith(_DEFAULT_LVM_TARGET_BASE)):
             # If there is a target path, parse it for an expected VG
             # location, and pull the name from there
             vg = self.target_path[len(_DEFAULT_LVM_TARGET_BASE):]
-            srcname = vg.split("/", 1)[0]
-
-        return srcname
+            return vg.split("/", 1)[0]
 
 
     ##############

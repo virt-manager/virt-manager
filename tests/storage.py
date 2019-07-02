@@ -36,8 +36,9 @@ def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
         pool_inst.target_path = target_path or "/some/target/path"
     if fmt and pool_inst.supports_format():
         pool_inst.format = fmt
-    if source_name and pool_inst.supports_source_name():
-        pool_inst.source_name = source_name
+    if pool_inst.supports_source_name():
+        pool_inst.source_name = (source_name or
+                pool_inst.default_source_name())
     if iqn and pool_inst.supports_iqn():
         pool_inst.iqn = iqn
 
@@ -159,7 +160,7 @@ class TestStorage(unittest.TestCase):
     def testDiskPool(self):
         poolobj = createPool(self.conn,
                              StoragePool.TYPE_DISK,
-                             "pool-disk", fmt="dos")
+                             "pool-disk", fmt="auto")
         invol = createVol(self.conn, poolobj)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "input", input_vol=invol)
@@ -184,6 +185,11 @@ class TestStorage(unittest.TestCase):
     def testGlusterPool(self):
         poolobj = createPool(self.conn,
                 StoragePool.TYPE_GLUSTER, "pool-gluster")
+        removePool(poolobj)
+
+    def testRBDPool(self):
+        poolobj = createPool(self.conn,
+                StoragePool.TYPE_RBD, "pool-rbd")
         removePool(poolobj)
 
     def testMisc(self):
