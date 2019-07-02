@@ -15,6 +15,7 @@ from virtinst import StoragePool
 from .lib import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
+from .object.storagepool import vmmStoragePool
 from .xmleditor import vmmXMLEditor
 
 
@@ -82,8 +83,8 @@ class vmmCreatePool(vmmGObjectUI):
         type_list.set_model(model)
         uiutil.init_combo_text_column(type_list, 1)
 
-        for typ in sorted(StoragePool.get_pool_types()):
-            desc = StoragePool.get_pool_type_desc(typ)
+        for typ in vmmStoragePool.list_types():
+            desc = vmmStoragePool.pretty_type(typ)
             model.append([typ, "%s: %s" % (typ, desc)])
 
     def _init_ui(self):

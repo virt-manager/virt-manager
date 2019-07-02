@@ -108,7 +108,6 @@ class StoragePool(_StorageObject):
     """
     Base class for building and installing libvirt storage pool xml
     """
-    # @group Types: TYPE_*
     TYPE_DIR     = "dir"
     TYPE_FS      = "fs"
     TYPE_NETFS   = "netfs"
@@ -121,35 +120,6 @@ class StoragePool(_StorageObject):
     TYPE_RBD     = "rbd"
     TYPE_SHEEPDOG = "sheepdog"
     TYPE_ZFS     = "zfs"
-
-    # Pool type descriptions for use in higher level programs
-    _descs = {}
-    _descs[TYPE_DIR]     = _("Filesystem Directory")
-    _descs[TYPE_FS]      = _("Pre-Formatted Block Device")
-    _descs[TYPE_NETFS]   = _("Network Exported Directory")
-    _descs[TYPE_LOGICAL] = _("LVM Volume Group")
-    _descs[TYPE_DISK]    = _("Physical Disk Device")
-    _descs[TYPE_ISCSI]   = _("iSCSI Target")
-    _descs[TYPE_SCSI]    = _("SCSI Host Adapter")
-    _descs[TYPE_MPATH]   = _("Multipath Device Enumerator")
-    _descs[TYPE_GLUSTER] = _("Gluster Filesystem")
-    _descs[TYPE_RBD]     = _("RADOS Block Device/Ceph")
-    _descs[TYPE_SHEEPDOG] = _("Sheepdog Filesystem")
-    _descs[TYPE_ZFS]     = _("ZFS Pool")
-
-    @staticmethod
-    def get_pool_types():
-        """
-        Return list of appropriate pool types
-        """
-        return list(StoragePool._descs.keys())
-
-    @staticmethod
-    def get_pool_type_desc(pool_type):
-        """
-        Return human readable description for passed pool type
-        """
-        return StoragePool._descs.get(pool_type, "%s pool" % pool_type)
 
     @staticmethod
     def pool_list_from_sources(conn, pool_type, host=None):

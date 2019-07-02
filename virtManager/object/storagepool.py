@@ -21,6 +21,22 @@ def _pretty_bytes(val):
         return "%2.2f MiB" % (val / (1024.0 * 1024.0))
 
 
+POOL_TYPE_DESCS = {
+    StoragePool.TYPE_DIR: _("Filesystem Directory"),
+    StoragePool.TYPE_FS: _("Pre-Formatted Block Device"),
+    StoragePool.TYPE_NETFS: _("Network Exported Directory"),
+    StoragePool.TYPE_LOGICAL: _("LVM Volume Group"),
+    StoragePool.TYPE_DISK: _("Physical Disk Device"),
+    StoragePool.TYPE_ISCSI: _("iSCSI Target"),
+    StoragePool.TYPE_SCSI: _("SCSI Host Adapter"),
+    StoragePool.TYPE_MPATH: _("Multipath Device Enumerator"),
+    StoragePool.TYPE_GLUSTER: _("Gluster Filesystem"),
+    StoragePool.TYPE_RBD: _("RADOS Block Device/Ceph"),
+    StoragePool.TYPE_SHEEPDOG: _("Sheepdog Filesystem"),
+    StoragePool.TYPE_ZFS: _("ZFS Pool"),
+}
+
+
 class vmmStorageVolume(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, StorageVolume)
@@ -104,6 +120,14 @@ class vmmStoragePool(vmmLibvirtObject):
     __gsignals__ = {
         "refreshed": (vmmLibvirtObject.RUN_FIRST, None, [])
     }
+
+    @staticmethod
+    def pretty_type(pool_type):
+        return POOL_TYPE_DESCS.get(pool_type, "%s pool" % pool_type)
+
+    @staticmethod
+    def list_types():
+        return sorted(list(POOL_TYPE_DESCS.keys()))
 
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, StoragePool)

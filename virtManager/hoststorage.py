@@ -9,13 +9,13 @@ from gi.repository import Pango
 
 from virtinst import DeviceDisk
 from virtinst import log
-from virtinst import StoragePool
 
 from .lib import uiutil
 from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .createpool import vmmCreatePool
 from .createvol import vmmCreateVolume
+from .object.storagepool import vmmStoragePool
 from .xmleditor import vmmXMLEditor
 
 
@@ -384,7 +384,7 @@ class vmmHostStorage(vmmGObjectUI):
                 pool.connect("refreshed", self._pool_changed_cb)
 
                 name = pool.get_name()
-                typ = StoragePool.get_pool_type_desc(pool.get_type())
+                typ = vmmStoragePool.pretty_type(pool.get_type())
                 label = "%s\n<span size='small'>%s</span>" % (name, typ)
 
                 row = [None] * POOL_NUM_COLUMNS
