@@ -1362,6 +1362,25 @@ _add_argcomplete_cmd("virt-xml --sound mode", "model")
 _add_argcomplete_cmd("virt-convert --dest", "--destination")
 
 
+##############
+# Misc tests #
+##############
+
+
+class CLIMiscTests(unittest.TestCase):
+    @utils.run_without_testsuite_hacks
+    def test_virtinstall_no_testsuite(self):
+        """
+        Run virt-install stub command without the testsuite hacks, to test
+        some code paths like proper logging etc.
+        """
+        cmd = Command(
+                "virt-install --connect %s "
+                "--test-stub-command --noautoconsole" %
+                (utils.URIs.test_suite))
+        cmd.run(self)
+
+
 #########################
 # Test runner functions #
 #########################
