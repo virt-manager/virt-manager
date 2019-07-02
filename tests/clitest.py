@@ -653,6 +653,9 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --host-device 04b3:4485
 --host-device pci_8086_2829_scsi_host_scsi_device_lun0,rom.bar=on
 --hostdev usb_5_20 --hostdev usb_5_21
+--hostdev wlan0,type=net
+--hostdev /dev/vdz,type=storage
+--hostdev /dev/pty7,type=misc
 
 
 --filesystem /source,/target,alias.name=testfsalias,driver.ats=on,driver.iommu=off
@@ -913,7 +916,7 @@ c.add_compare("--test-media-detection %(TREEDIR)s --arch x86_64 --hvm", "test-ur
 c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet", "qemu-plain")  # plain qemu
-c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
+c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
 
 # ppc64 tests
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")

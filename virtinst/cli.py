@@ -3216,20 +3216,7 @@ class ParserGraphics(VirtCLIParser):
             self.guest.skip_default_graphics = True
             return
 
-        ret = super()._parse(inst)
-
-        if inst.conn.is_qemu() and inst.gl:
-            if inst.type != "spice":
-                log.warning("graphics type=%s does not support GL", inst.type)
-            elif not inst.conn.support.conn_spice_gl():
-                log.warning("qemu/libvirt version may not support spice GL")
-        if inst.conn.is_qemu() and inst.rendernode:
-            if inst.type != "spice":
-                log.warning("graphics type=%s does not support rendernode", inst.type)
-            elif not inst.conn.support.conn_spice_rendernode():
-                log.warning("qemu/libvirt version may not support rendernode")
-
-        return ret
+        return super()._parse(inst)
 
 
     ###################
