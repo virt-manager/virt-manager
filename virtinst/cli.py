@@ -11,7 +11,7 @@ import collections
 import os
 import re
 import shlex
-import subprocess
+import shutil
 import sys
 import traceback
 import types
@@ -28,6 +28,9 @@ from .nodedev import NodeDevice
 from .osdict import OSDB
 from .storage import StoragePool, StorageVolume
 from .install.unattended import UnattendedData
+
+
+HAS_VIRTVIEWER = shutil.which("virt-viewer")
 
 
 ##########################
@@ -226,7 +229,7 @@ def getConnection(uri, conn=None):
     return conn
 
 
-def _openauth_cb(creds, _cbdata):
+def _openauth_cb(creds, _cbdata):  # pragma: no cover
     for cred in creds:
         # Libvirt virConnectCredential
         credtype, prompt, _challenge, _defresult, _result = cred
@@ -375,7 +378,7 @@ def _run_console(domain, args):
 
     os.execvp(args[0], args)  # pragma: no cover
     # pylint: disable=protected-access
-    os._exit(1)  # pragma no cover
+    os._exit(1)  # pragma: no cover
 
 
 def _gfx_console(guest, domain):
@@ -437,19 +440,17 @@ def get_console_cb(guest):
         log.debug("No viewer to launch for graphics type '%s'", gtype)
         return
 
-    if not in_testsuite():
-        try:
-            subprocess.check_output(["virt-viewer", "--version"])
-        except OSError:
-            log.warning(_("Unable to connect to graphical console: "
-                           "virt-viewer not installed. Please install "
-                           "the 'virt-viewer' package."))
-            return None
+    if not HAS_VIRTVIEWER and not in_testsuite():  # pragma: no cover
+        log.warning(_("Unable to connect to graphical console: "
+                       "virt-viewer not installed. Please install "
+                       "the 'virt-viewer' package."))
+        return None
 
-        if not os.environ.get("DISPLAY", ""):
-            log.warning(_("Graphics requested but DISPLAY is not set. "
-                           "Not running virt-viewer."))
-            return None
+    if (not os.environ.get("DISPLAY", "") and
+        not in_testsuite()):  # pragma: no cover
+        log.warning(_("Graphics requested but DISPLAY is not set. "
+                       "Not running virt-viewer."))
+        return None
 
     return _gfx_console
 
@@ -1064,7 +1065,8 @@ class _VirtCLIArgument(object):
 
         if self._virtarg.find_inst_cb:
             inst = self._virtarg.find_inst_cb(parser,
-                                              inst, self.val, self, True)
+                                              inst, self.val, self,
+                                              can_edit=True)
 
         try:
             if self.propname:
@@ -1096,7 +1098,8 @@ class _VirtCLIArgument(object):
 
         if self._virtarg.find_inst_cb:
             inst = self._virtarg.find_inst_cb(parser,
-                                              inst, self.val, self, False)
+                                              inst, self.val, self,
+                                              can_edit=False)
             if not inst:
                 return False
 
