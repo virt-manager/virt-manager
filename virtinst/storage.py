@@ -63,30 +63,6 @@ def _lookup_poolxml_by_path(conn, path):
     return None
 
 
-def _lookup_default_pool(conn):
-    """
-    Helper to lookup the default pool. It will return one of
-    * The pool named 'default'
-    * If that doesn't exist, the pool pointing to the default path
-    * Otherwise None
-    """
-    name = "default"
-    path = _preferred_default_pool_path(conn)
-
-    poolxml = None
-    for trypool in conn.fetch_all_pools():
-        if trypool.name == name:
-            poolxml = trypool
-            break
-    else:
-        poolxml = _lookup_poolxml_by_path(conn, path)
-
-    if poolxml:
-        log.debug("Found default pool name=%s target=%s",
-                poolxml.name, poolxml.target_path)
-    return poolxml
-
-
 class _EnumerateSource(XMLBuilder):
     XML_NAME = "source"
 
@@ -166,16 +142,38 @@ class StoragePool(_StorageObject):
         return ret
 
     @staticmethod
-    def build_default_pool(conn, build=True):
+    def lookup_default_pool(conn):
+        """
+        Helper to lookup the default pool. It will return one of
+        * The pool named 'default'
+        * If that doesn't exist, the pool pointing to the default path
+        * Otherwise None
+        """
+        name = "default"
+        path = _preferred_default_pool_path(conn)
+
+        poolxml = None
+        for trypool in conn.fetch_all_pools():
+            if trypool.name == name:
+                poolxml = trypool
+                break
+        else:
+            poolxml = _lookup_poolxml_by_path(conn, path)
+
+        if poolxml:
+            log.debug("Found default pool name=%s target=%s",
+                    poolxml.name, poolxml.target_path)
+        return poolxml
+
+    @staticmethod
+    def build_default_pool(conn):
         """
         Attempt to lookup the 'default' pool, but if it doesn't exist,
         create it
         """
-        poolxml = _lookup_default_pool(conn)
+        poolxml = StoragePool.lookup_default_pool(conn)
         if poolxml:
             return poolxml
-        if not build:
-            return None
 
         try:
             name = "default"
