@@ -142,7 +142,7 @@ class StoragePool(_StorageObject):
         except Exception as e:
             if conn.support.is_error_nosupport(e):
                 return []
-            raise
+            raise  # pragma: no cover
 
         ret = []
         sources = _EnumerateSources(conn, xml)
@@ -188,7 +188,7 @@ class StoragePool(_StorageObject):
             defpool.target_path = path
             defpool.install(build=True, create=True, autostart=True)
             return defpool
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             raise RuntimeError(
                 _("Couldn't create default storage pool '%s': %s") %
                 (path, str(e)))
@@ -249,7 +249,7 @@ class StoragePool(_StorageObject):
         except libvirt.libvirtError:
             return
         raise ValueError(_("Name '%s' already in use by another pool." %
-                            name))
+                         name))  # pragma: no cover
 
     def default_target_path(self):
         if not self.supports_target_path():
@@ -441,29 +441,29 @@ class StoragePool(_StorageObject):
 
         try:
             pool = self.conn.storagePoolDefineXML(xml, 0)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             raise RuntimeError(_("Could not define storage pool: %s") % str(e))
 
         errmsg = None
         if build:
             try:
                 pool.build(libvirt.VIR_STORAGE_POOL_BUILD_NEW)
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 errmsg = _("Could not build storage pool: %s") % str(e)
 
         if create and not errmsg:
             try:
                 pool.create(0)
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 errmsg = _("Could not start storage pool: %s") % str(e)
 
         if autostart and not errmsg:
             try:
                 pool.setAutostart(True)
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 errmsg = _("Could not set pool autostart flag: %s") % str(e)
 
-        if errmsg:
+        if errmsg:  # pragma: no cover
             # Try and clean up the leftover pool
             try:
                 pool.undefine()
@@ -556,13 +556,6 @@ class StorageVolume(_StorageObject):
     def _get_input_vol(self):
         return self._input_vol
     def _set_input_vol(self, vol):
-        if vol is None:
-            self._input_vol = None
-            return
-
-        if not isinstance(vol, libvirt.virStorageVol):
-            raise ValueError(_("input_vol must be a virStorageVol"))
-
         self._input_vol = vol
     input_vol = property(_get_input_vol, _set_input_vol)
 
@@ -598,10 +591,10 @@ class StorageVolume(_StorageObject):
         except libvirt.libvirtError:
             return
         raise ValueError(_("Name '%s' already in use by another volume." %
-                            name))
+                         name))  # pragma: no cover
 
     def _get_vol_type(self):
-        if self.type:
+        if self.type:  # pragma: no cover
             if self.type == "file":
                 return self.TYPE_FILE
             elif self.type == "block":
@@ -640,7 +633,7 @@ class StorageVolume(_StorageObject):
         from . import diskbackend
         vol, pool = diskbackend.manage_path(self.conn, self.backing_store)
 
-        if not vol:
+        if not vol:  # pragma: no cover
             log.debug("Didn't find any volume for backing_store")
             return None
 
@@ -651,13 +644,13 @@ class StorageVolume(_StorageObject):
         log.debug("Found backing store volume XML:\n%s",
                 volxml.get_xml())
 
-        if volxml.supports_format():
-            log.debug("Returning format=%s", volxml.format)
-            return volxml.format
+        if not volxml.supports_format():  # pragma: no cover
+            log.debug("backing_store volume doesn't appear to have "
+                "a file format we can specify, returning None")
+            return None
 
-        log.debug("backing_store volume doesn't appear to have "
-            "a file format we can specify, returning None")
-        return None
+        log.debug("Returning format=%s", volxml.format)
+        return volxml.format
 
 
     ######################
@@ -718,7 +711,6 @@ class StorageVolume(_StorageObject):
         createflags = 0
         if (self.format == "qcow2" and
             not self.backing_store and
-            not self.conn.is_really_test() and
             self.conn.support.pool_metadata_prealloc(self.pool)):
             createflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
             if self.capacity == self.allocation:
@@ -736,6 +728,11 @@ class StorageVolume(_StorageObject):
             meter.start(size=self.capacity,
                         text=_("Allocating '%s'") % self.name)
 
+            if self.conn.is_really_test():
+                # Test suite doesn't support any flags, so reset them
+                createflags = 0
+                cloneflags = 0
+
             if self.input_vol:
                 vol = self.pool.createXMLFrom(xml, self.input_vol, cloneflags)
             else:
@@ -745,8 +742,7 @@ class StorageVolume(_StorageObject):
             self._install_finished.set()
             t.join()
             meter.end(self.capacity)
-            log.debug("Storage volume '%s' install complete.",
-                          self.name)
+            log.debug("Storage volume '%s' install complete.", self.name)
             return vol
         except Exception as e:
             log.debug("Error creating storage volume", exc_info=True)
@@ -762,8 +758,8 @@ class StorageVolume(_StorageObject):
             try:
                 if not vol:
                     vol = self.pool.storageVolLookupByName(self.name)
-                vol.info()
-                break
+                vol.info()  # pragma: no cover
+                break  # pragma: no cover
             except Exception:
                 if self._install_finished.wait(.2):
                     break
@@ -772,7 +768,7 @@ class StorageVolume(_StorageObject):
             log.debug("Couldn't lookup storage volume in prog thread.")
             return
 
-        while True:
+        while True:  # pragma: no cover
             ignore, ignore, alloc = vol.info()
             meter.update(alloc)
             if self._install_finished.wait(1):

@@ -211,6 +211,11 @@
       </source>
       <target dev="vdo" bus="virtio"/>
     </disk>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="raw"/>
+      <source file="/var/lib/libvirt/images/disk.img"/>
+      <target dev="vdp" bus="virtio"/>
+    </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
     </controller>

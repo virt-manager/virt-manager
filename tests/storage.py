@@ -186,6 +186,31 @@ class TestStorage(unittest.TestCase):
                 StoragePool.TYPE_GLUSTER, "pool-gluster")
         removePool(poolobj)
 
+    def testMisc(self):
+        # Misc coverage testing
+        vol = StorageVolume(self.conn)
+        self.assertTrue(vol.is_size_conflict()[0] is False)
+
+        fullconn = utils.URIs.open_testdriver_cached()
+        glusterpool = fullconn.storagePoolLookupByName("gluster-pool")
+        diskpool = fullconn.storagePoolLookupByName("disk-pool")
+
+        glustervol = StorageVolume(fullconn)
+        glustervol.pool = glusterpool
+        self.assertTrue(glustervol.supports_format() is True)
+
+        diskvol = StorageVolume(fullconn)
+        diskvol.pool = diskpool
+        self.assertTrue(diskvol.supports_format() is False)
+
+        glusterpool.destroy()
+        StoragePool.ensure_pool_is_running(glusterpool)
+
+        # Check pool collision detection
+        self.assertEqual(
+                StoragePool.find_free_name(fullconn, "gluster-pool"),
+                "gluster-pool-1")
+
 
     ##############################
     # Tests for pool-sources API #
