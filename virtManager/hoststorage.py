@@ -341,7 +341,8 @@ class vmmHostStorage(vmmGObjectUI):
         self.widget("vol-add").set_tooltip_text(_("Create new volume"))
         self.widget("vol-delete").set_sensitive(False)
 
-        if active and not pool.supports_volume_creation():
+        if (active and
+            not vmmStoragePool.supports_volume_creation(pool.get_type())):
             self.widget("vol-add").set_sensitive(False)
             self.widget("vol-add").set_tooltip_text(
                 _("Pool does not support volume creation"))

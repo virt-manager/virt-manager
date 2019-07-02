@@ -122,6 +122,27 @@ class vmmStoragePool(vmmLibvirtObject):
     }
 
     @staticmethod
+    def supports_volume_creation(pool_type, clone=False):
+        """
+        Returns if pool supports volume creation.  If @clone is set to True
+        returns if pool supports volume cloning (virVolCreateXMLFrom).
+        """
+        supported = [
+            StoragePool.TYPE_DIR,
+            StoragePool.TYPE_FS,
+            StoragePool.TYPE_NETFS,
+            StoragePool.TYPE_DISK,
+            StoragePool.TYPE_LOGICAL,
+            StoragePool.TYPE_RBD,
+        ]
+        if not clone:
+            supported.extend([
+                StoragePool.TYPE_SHEEPDOG,
+                StoragePool.TYPE_ZFS,
+            ])
+        return pool_type in supported
+
+    @staticmethod
     def pretty_type(pool_type):
         return POOL_TYPE_DESCS.get(pool_type, "%s pool" % pool_type)
 
@@ -268,8 +289,6 @@ class vmmStoragePool(vmmLibvirtObject):
     def can_change_alloc(self):
         typ = self.get_type()
         return (typ in [StoragePool.TYPE_LOGICAL, StoragePool.TYPE_ZFS])
-    def supports_volume_creation(self, clone=False):
-        return self.get_xmlobj().supports_volume_creation(clone=clone)
 
     def get_type(self):
         return self.get_xmlobj().type

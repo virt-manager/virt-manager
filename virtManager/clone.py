@@ -18,6 +18,7 @@ from .lib import uiutil
 from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
 from .storagebrowse import vmmStorageBrowser
+from .object.storagepool import vmmStoragePool
 
 STORAGE_COMBO_CLONE = 0
 STORAGE_COMBO_SHARE = 1
@@ -66,7 +67,8 @@ def can_we_clone(conn, vol, path):
 
     else:
         pool = vol.get_parent_pool()
-        if not pool.supports_volume_creation(clone=True):
+        if not vmmStoragePool.supports_volume_creation(
+                pool.get_type(), clone=True):
             msg = _("Cannot clone %s storage pool.") % pool.get_type()
 
     if msg:
