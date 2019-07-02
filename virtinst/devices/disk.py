@@ -239,7 +239,7 @@ class DeviceDisk(Device):
         volinst.backing_format = backing_format
 
         if fmt:
-            if not volinst.supports_property("format"):
+            if not volinst.supports_format():
                 raise ValueError(_("Format attribute not supported for this "
                                    "volume type"))
             volinst.format = fmt

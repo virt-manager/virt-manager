@@ -459,7 +459,7 @@ class _StorageCreator(_StorageBase):
 
     def get_driver_type(self):
         if self._vol_install:
-            if self._vol_install.supports_property("format"):
+            if self._vol_install.supports_format():
                 return self._vol_install.format
         return "raw"
 

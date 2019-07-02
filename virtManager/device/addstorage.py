@@ -184,7 +184,7 @@ class vmmAddStorage(vmmGObjectUI):
             disk.set_vol_install(vol_install)
 
             fmt = self.conn.get_default_storage_format()
-            if disk.get_vol_install().supports_property("format"):
+            if disk.get_vol_install().supports_format():
                 log.debug("Using default prefs format=%s for path=%s",
                     fmt, disk.path)
                 disk.get_vol_install().format = fmt

@@ -123,7 +123,7 @@ class vmmCreateVolume(vmmGObjectUI):
 
         vol = self._make_stub_vol()
 
-        hasformat = vol.supports_property("format")
+        hasformat = vol.supports_format()
         uiutil.set_grid_row_visible(self.widget("vol-format"), hasformat)
         uiutil.set_list_selection(self.widget("vol-format"),
             self.conn.get_default_storage_format())

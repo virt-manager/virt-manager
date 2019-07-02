@@ -643,7 +643,7 @@ class StorageVolume(_StorageObject):
         log.debug("Found backing store volume XML:\n%s",
                 volxml.get_xml())
 
-        if volxml.supports_property("format"):
+        if volxml.supports_format():
             log.debug("Returning format=%s", volxml.format)
             return volxml.format
 
@@ -656,17 +656,12 @@ class StorageVolume(_StorageObject):
     # Public API helpers #
     ######################
 
-    def _supports_format(self):
+    def supports_format(self):
         if self.file_type == self.TYPE_FILE:
             return True
         if self._pool_xml.type == StoragePool.TYPE_GLUSTER:
             return True
         return False
-
-    def supports_property(self, propname):
-        if propname == "format":
-            return self._supports_format()
-        return hasattr(self, propname)
 
 
     ##################
