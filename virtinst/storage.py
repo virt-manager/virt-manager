@@ -408,13 +408,6 @@ class StoragePool(_StorageObject):
         if not self.format and self.supports_format():
             self.format = "auto"
 
-        if self.supports_hosts() and not self.hosts:
-            raise RuntimeError(_("Hostname is required"))
-        if (self.supports_source_path() and
-            self.type != self.TYPE_LOGICAL and
-            not self.source_path):
-            raise RuntimeError(_("Source path is required"))
-
         if (self.type == self.TYPE_DISK and self.format == "auto"):
             # There is no explicit "auto" type for disk pools, but leaving out
             # the format type seems to do the job for existing formatted disks
@@ -424,15 +417,6 @@ class StoragePool(_StorageObject):
         """
         Install storage pool xml.
         """
-        if (self.type == self.TYPE_LOGICAL and
-            build and not self.source_path):
-            raise ValueError(_("Must explicitly specify source path if "
-                               "building pool"))
-        if (self.type == self.TYPE_DISK and
-            build and self.format == "auto"):
-            raise ValueError(_("Must explicitly specify disk format if "
-                               "formatting disk device."))
-
         xml = self.get_xml()
         log.debug("Creating storage pool '%s' with xml:\n%s",
                       self.name, xml)
