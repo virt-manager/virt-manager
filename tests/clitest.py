@@ -851,10 +851,10 @@ c.add_valid("--hvm --install no_install=yes")  # import install equivalent
 c.add_valid("--hvm --import --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
 c.add_valid("--paravirt --import")  # PV Import install
 c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import install
+c.add_valid("--hvm --import --wait 0", grep="Treating --wait 0 as --noautoconsole")  # --wait 0 is the same as --noautoconsole
 c.add_compare("-c %(EXISTIMG2)s --os-variant win2k3 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--connect %(URI-KVM)s --install fedora26 --disk size=20", "osinfo-url-with-disk")  # filling in defaults, but with disk specified
 c.add_invalid("--hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
-c.add_invalid("--hvm --import --wait 0", grep="exceeded specified time limit")  # --wait 0, but test suite hack
 c.add_invalid("--hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
 c.add_invalid("--hvm --import --wait", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
 c.add_invalid("--connect test:///default --name foo --ram 64 --disk none --sdl --hvm --import", use_default_args=False, grep="exceeded specified time limit")  # --sdl doesn't have a console callback, triggers implicit --wait -1

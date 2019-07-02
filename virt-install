@@ -258,6 +258,14 @@ def convert_old_features(options):
         options.features = [",".join(opts)]
 
 
+def convert_wait_zero(options):
+    # Historical back compat, --wait 0 is identical to --noautoconsole
+    if options.wait == 0:
+        log.warning("Treating --wait 0 as --noautoconsole")
+        options.autoconsole = False
+        options.wait = None
+
+
 ##################################
 # Install media setup/validation #
 ##################################
@@ -972,6 +980,7 @@ def main(conn=None):
     convert_old_features(options)
     convert_old_cpuset(options)
     convert_old_init(options)
+    convert_wait_zero(options)
     set_test_stub_options(options)
     convert_old_os_options(options)
 
