@@ -27,18 +27,18 @@ def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
     pool_inst.name = poolname
     pool_inst.type = ptype
 
-    if pool_inst.supports_property("hosts"):
+    if pool_inst.supports_hosts():
         hostobj = pool_inst.hosts.add_new()
         hostobj.name = "some.random.hostname"
-    if pool_inst.supports_property("source_path"):
+    if pool_inst.supports_source_path():
         pool_inst.source_path = source_path or "/some/source/path"
-    if pool_inst.supports_property("target_path"):
+    if pool_inst.supports_target_path():
         pool_inst.target_path = target_path or "/some/target/path"
-    if fmt and pool_inst.supports_property("format"):
+    if fmt and pool_inst.supports_format():
         pool_inst.format = fmt
-    if source_name and pool_inst.supports_property("source_name"):
+    if source_name and pool_inst.supports_source_name():
         pool_inst.source_name = source_name
-    if iqn and pool_inst.supports_property("iqn"):
+    if iqn and pool_inst.supports_iqn():
         pool_inst.iqn = iqn
 
     return poolCompare(pool_inst)

@@ -224,18 +224,18 @@ class vmmCreatePool(vmmGObjectUI):
             uiutil.set_grid_row_visible(widget, do_show)
 
         pool = self._make_stub_pool()
-        src = pool.supports_property("source_path")
+        src = pool.supports_source_path()
         src_b = src and not self.conn.is_remote()
-        tgt = pool.supports_property("target_path")
+        tgt = pool.supports_target_path()
         tgt_b = tgt and not self.conn.is_remote()
-        host = pool.supports_property("hosts")
-        fmt = pool.supports_property("format")
-        iqn = pool.supports_property("iqn")
+        host = pool.supports_hosts()
+        fmt = pool.supports_format()
+        iqn = pool.supports_iqn()
         builddef, buildsens = self._get_build_default(pool.type)
 
         # We don't show source_name for logical pools, since we use
         # pool-sources to avoid the need for it
-        src_name = (pool.supports_property("source_name") and
+        src_name = (pool.supports_source_name() and
                     pool.type != pool.TYPE_LOGICAL)
 
         # Source path browsing is meaningless for net pools
@@ -371,7 +371,7 @@ class vmmCreatePool(vmmGObjectUI):
             hostobj.name = host
         if source:
             pool.source_path = source
-        if fmt and pool.supports_property("format"):
+        if fmt and pool.supports_format():
             pool.format = fmt
         if iqn:
             pool.iqn = iqn

@@ -252,7 +252,7 @@ class StoragePool(_StorageObject):
                             name))
 
     def default_target_path(self):
-        if not self.supports_property("target_path"):
+        if not self.supports_target_path():
             return None
         if (self.type == self.TYPE_DIR or
             self.type == self.TYPE_NETFS or
@@ -290,7 +290,7 @@ class StoragePool(_StorageObject):
     def default_source_name(self):
         srcname = None
 
-        if not self.supports_property("source_name"):
+        if not self.supports_source_name():
             srcname = None
         elif self.type == StoragePool.TYPE_NETFS:
             srcname = self.name
@@ -351,25 +351,33 @@ class StoragePool(_StorageObject):
     # Public API helpers #
     ######################
 
-    def supports_property(self, propname):
-        users = {
-            "source_path": [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_LOGICAL,
-                            self.TYPE_DISK, self.TYPE_ISCSI, self.TYPE_SCSI,
-                            self.TYPE_GLUSTER],
-            "source_name": [self.TYPE_LOGICAL, self.TYPE_GLUSTER,
-                            self.TYPE_RBD, self.TYPE_SHEEPDOG, self.TYPE_ZFS],
-            "hosts": [self.TYPE_NETFS, self.TYPE_ISCSI, self.TYPE_GLUSTER,
-                     self.TYPE_RBD, self.TYPE_SHEEPDOG],
-            "format": [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_DISK],
-            "iqn": [self.TYPE_ISCSI],
-            "target_path": [self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,
-                             self.TYPE_LOGICAL, self.TYPE_DISK, self.TYPE_ISCSI,
-                             self.TYPE_SCSI, self.TYPE_MPATH]
-        }
+    def supports_target_path(self):
+        return self.type in [
+                self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,
+                self.TYPE_LOGICAL, self.TYPE_DISK, self.TYPE_ISCSI,
+                self.TYPE_SCSI, self.TYPE_MPATH]
 
-        if users.get(propname):
-            return self.type in users[propname]
-        return hasattr(self, propname)
+    def supports_source_name(self):
+        return self.type in [self.TYPE_LOGICAL, self.TYPE_GLUSTER,
+            self.TYPE_RBD, self.TYPE_SHEEPDOG, self.TYPE_ZFS]
+
+
+    def supports_source_path(self):
+        return self.type in [
+                self.TYPE_FS, self.TYPE_NETFS, self.TYPE_LOGICAL,
+                self.TYPE_DISK, self.TYPE_ISCSI, self.TYPE_SCSI,
+                self.TYPE_GLUSTER]
+
+    def supports_hosts(self):
+        return self.type in [
+                self.TYPE_NETFS, self.TYPE_ISCSI, self.TYPE_GLUSTER,
+                self.TYPE_RBD, self.TYPE_SHEEPDOG]
+
+    def supports_format(self):
+        return self.type in [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_DISK]
+
+    def supports_iqn(self):
+        return self.type in [self.TYPE_ISCSI]
 
     def get_disk_type(self):
         if (self.type == StoragePool.TYPE_DISK or
@@ -397,12 +405,12 @@ class StoragePool(_StorageObject):
             self.target_path = self.default_target_path()
         if not self.source_name:
             self.source_name = self.default_source_name()
-        if not self.format and self.supports_property("format"):
+        if not self.format and self.supports_format():
             self.format = "auto"
 
-        if self.supports_property("hosts") and not self.hosts:
+        if self.supports_hosts() and not self.hosts:
             raise RuntimeError(_("Hostname is required"))
-        if (self.supports_property("source_path") and
+        if (self.supports_source_path() and
             self.type != self.TYPE_LOGICAL and
             not self.source_path):
             raise RuntimeError(_("Source path is required"))
