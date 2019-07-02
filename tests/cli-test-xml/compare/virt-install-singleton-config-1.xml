@@ -25,7 +25,7 @@
     <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE.fd</loader>
     <boot dev="network"/>
     <boot dev="hd"/>
-    <smbios mode="emulate"/>
+    <smbios mode="host"/>
     <initarg>foo</initarg>
     <initarg>bar=baz</initarg>
   </os>

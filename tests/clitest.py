@@ -479,6 +479,7 @@ c.add_compare("""
 --resource /virtualmachines/production
 --events on_crash=restart
 --metadata genid_enable=yes
+--sysinfo host
 
 --disk none
 --console none
@@ -547,7 +548,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 
 # Test the implied defaults for gl=yes setting virgl=on
 c.add_compare("""
---vcpus 4,vcpu.placement=auto
+--vcpus vcpu.current=3,maxvcpus=4,vcpu.placement=auto
 --memory hotplugmemorymax=2048,hotplugmemoryslots=2
 --disk none
 --features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host
@@ -593,7 +594,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --disk nbd+unix:///var/foo/bar/socket,bus=usb,removable=on,address.type=usb,address.bus=0,address.port=2
 --disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo
 --disk vol=gluster-pool/test-gluster.raw
---disk /var,device=floppy,snapshot=no
+--disk /var,device=floppy,snapshot=no,perms=rw
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk,bus=usb,target.removable=yes
 --disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol,boot.order=10,boot.loadparm=5
 --disk path=/dev/disk-pool/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client,\
@@ -604,7 +605,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --network bridge=foobar,model=virtio,driver_name=qemu,driver_queues=3,filterref=foobar,rom.bar=off,rom.file=/some/rom,source.portgroup=foo
 --network bridge=ovsbr,virtualport.type=openvswitch,virtualport_profileid=demo,virtualport_interfaceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,link.state=yes,driver.name=qemu,driver.queues=3,filterref.filter=filterbar,target.dev=mytargetname,virtualport.parameters.profileid=demo,virtualport.parameters.interfaceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b
 --network type=direct,source=eth5,source_mode=vepa,source.mode=vepa,target=mytap12,virtualport_type=802.1Qbg,virtualport_managerid=12,virtualport_typeid=1193046,virtualport_typeidversion=1,virtualport_instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1,trustGuestRxFilters=yes,mtu.size=1500,virtualport.parameters.managerid=12,virtualport.parameters.typeid=1193046,virtualport.parameters.typeidversion=1,virtualport.parameters.instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1,trustGuestRxFilters=yes,mtu.size=1500
---network user,model=virtio,address.type=spapr-vio,address.reg=0x500
+--network user,model=virtio,address.type=spapr-vio,address.reg=0x500,link.state=no
 --network vhostuser,source_type=unix,source_path=/tmp/vhost1.sock,source_mode=server,model=virtio,source.type=unix,source.path=/tmp/vhost1.sock,address.type=pci,address.bus=0x00,address.slot=0x10,address.function=0x0,address.domain=0x0000
 --network user,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01,boot.order=15,boot.loadparm=SYSTEM1
 
@@ -624,7 +625,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0,address.multifunction=on
 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master.startport=2
 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4
---controller scsi,model=virtio-scsi,driver_queues=4,driver.queues=4
+--controller scsi,,model=virtio-scsi,driver_queues=4,driver.queues=4
 --controller xenbus,maxGrantFrames=64
 
 --input type=keyboard,bus=usb
@@ -694,6 +695,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --qemu-commandline="-display gtk,gl=on"
 --qemu-commandline="-device vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c"
 --qemu-commandline="-set device.video0.driver=virtio-vga"
+--qemu-commandline args="-foo bar"
 """, "many-devices", predefine_check="5.3.0")
 
 
@@ -762,6 +764,9 @@ c.add_invalid("--file %(NEWIMG1)s")  # Nonexisting file, no size
 c.add_invalid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Too many IDE
 c.add_invalid("--disk pool=foopool,size=.0001")  # Specify a nonexistent pool
 c.add_invalid("--disk vol=default-pool/foovol")  # Specify a nonexistent volume
+c.add_invalid("--disk vol=default-pool-no-slash")  # Wrong vol= format
+c.add_invalid("--disk perms=badformat")  # Wrong perms= format
+c.add_invalid("--disk size=badformat")  # Wrong size= format
 c.add_invalid("--disk pool=default-pool")  # Specify a pool with no size
 c.add_invalid("--disk path=%(EXISTIMG1)s,perms=ro,size=.0001,cache=FOOBAR")  # Unknown cache type
 c.add_invalid("--disk path=/dev/foo/bar/baz,format=qcow2,size=.0000001")  # Unmanaged file using non-raw format
@@ -797,6 +802,7 @@ c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd withou
 c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
 c.add_invalid("--connect %(URI-KVM)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
 c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machine=pc
+c.add_invalid("--graphics type=vnc,keymap", grep="Option 'keymap' had no value set.")
 
 
 
@@ -1075,6 +1081,7 @@ c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent 
 
 c = vinst.add_category("console-tests", "--nodisks")
 c.add_valid("--pxe", grep="testsuite console command: ['virt-viewer'")  # mock default graphics+virt-viewer usage
+c.add_valid("--pxe --graphics spice,gl=on", grep="--attach")  # using virt-viewer --attach option for gl
 c.add_valid("--pxe --destroy-on-exit", grep="Restarting guest.\n")  # destroy-on-exit
 c.add_valid("--pxe --transient --destroy-on-exit", grep="Domain creation completed.")  # destroy-on-exit + transient
 c.add_valid("--pxe --graphics vnc --noreboot", grep="testsuite console command: ['virt-viewer'")  # mock virt-viewer waiting, with noreboot magic
@@ -1118,15 +1125,16 @@ c.add_invalid("test --edit 2 --cpu host-passthrough")  # specifying --edit numbe
 c.add_invalid("test-for-virtxml --edit 5 --tpm /dev/tpm")  # device edit out of range
 c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --update --confirm", input_text="yes")  # test driver doesn't support attachdevice...
 c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update --confirm", input_text="foo\nyes\n")  # test driver doesn't support detachdevice...
-c.add_invalid("test-for-virtxml --edit --graphics password=foo --update --confirm", input_text="yes")  # test driver doesn't support updatdevice...
+c.add_invalid("test-for-virtxml --edit --graphics password=foo,keymap= --update --confirm", input_text="yes")  # test driver doesn't support updatdevice...
 c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
+c.add_invalid("test-state-shutoff --edit sparse=no --disk path=blah", grep="Don't know how to match device type 'disk' property 'sparse'")
 c.add_invalid("test --edit --boot network,cdrom --define --no-define")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"))  # stdin test
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm path=/dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.weight=200", "build-blkiotune")
-c.add_compare("--build-xml --idmap uid.start=0,uid.target=1000,uid.count=10,gid.start=0,gid.target=1000,gid.count=10", "build-idmap")
+c.add_compare("--build-xml --idmap clearxml=no,uid.start=0,uid.target=1000,uid.count=10,gid.start=0,gid.target=1000,gid.count=10", "build-idmap")
 c.add_compare("--connect %(URI-KVM)s --build-xml --disk %(EXISTIMG1)s", "build-disk-plain")
 c.add_compare("--connect %(URI-KVM)s test-many-devices --build-xml --disk %(EXISTIMG1)s", "build-disk-domain")
 c.add_compare("4a64cc71-19c4-2fd0-2323-3050941ea3c3 --edit --boot network,cdrom", "edit-bootorder")  # basic bootorder test, also using UUID lookup

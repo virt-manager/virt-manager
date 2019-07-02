@@ -1124,9 +1124,6 @@ def parse_optstr_tuples(optstr):
     ret = []
 
     for opt in list(argsplitter):
-        if not opt:
-            continue
-
         if "=" in opt:
             cliname, val = opt.split("=", 1)
         else:
@@ -1309,7 +1306,7 @@ class VirtCLIParser(metaclass=_InitClass):
         getattr(obj, cls.guest_propname), but handle '.' in the guest_propname
         """
         if not cls.guest_propname:
-            return None
+            return None  # pragma: no cover
         return xmlutil.get_prop_path(obj, cls.guest_propname)
 
     @classmethod
@@ -1380,7 +1377,7 @@ class VirtCLIParser(metaclass=_InitClass):
             except IndexError:
                 if not can_edit:
                     return None
-                raise
+                raise  # pragma: no cover
         return cb
 
     def _optdict_to_param_list(self, optdict):
@@ -1953,7 +1950,9 @@ class ParserCPU(VirtCLIParser):
         for key, value in list(self.optdict.items()):
             policy = None
             if value or len(key) == 1:
-                continue
+                # We definitely hit this case, but coverage doesn't notice
+                # for some reason
+                continue  # pragma: no cover
 
             if key.startswith("+"):
                 policy = "force"
@@ -2575,11 +2574,11 @@ class ParserSysinfo(VirtCLIParser):
     def set_type_cb(self, inst, val, virtarg):
         if val == "host" or val == "emulate":
             self.guest.os.smbios_mode = val
-        elif val == "smbios":
+            return
+
+        if val == "smbios":
             self.guest.os.smbios_mode = "sysinfo"
-            inst.type = val
-        else:
-            inst.type = val
+        inst.type = val
 
     def set_uuid_cb(self, inst, val, virtarg):
         # If a uuid is supplied it must match the guest UUID. This would be

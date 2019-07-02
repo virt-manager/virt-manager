@@ -286,6 +286,7 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
       <address type="spapr-vio" reg="0x500"/>
+      <link state="down"/>
     </interface>
     <interface type="vhostuser">
       <source type="unix" path="/tmp/vhost1.sock" mode="server"/>
@@ -502,6 +503,21 @@
         <address bus="1" device="21"/>
       </source>
     </hostdev>
+    <hostdev mode="capabilities" type="net" managed="yes">
+      <source>
+        <interface>wlan0</interface>
+      </source>
+    </hostdev>
+    <hostdev mode="capabilities" type="storage" managed="yes">
+      <source>
+        <block>/dev/vdz</block>
+      </source>
+    </hostdev>
+    <hostdev mode="capabilities" type="misc" managed="yes">
+      <source>
+        <char>/dev/pty7</char>
+      </source>
+    </hostdev>
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="tcp">
       <source host="localhost" service="4000"/>
@@ -533,6 +549,8 @@
     <qemu:arg value="vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c"/>
     <qemu:arg value="-set"/>
     <qemu:arg value="device.video0.driver=virtio-vga"/>
+    <qemu:arg value="-foo"/>
+    <qemu:arg value="bar"/>
     <qemu:env name="DISPLAY" value=":0.1"/>
   </qemu:commandline>
 </domain>
