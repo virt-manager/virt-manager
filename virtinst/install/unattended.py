@@ -39,23 +39,21 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
 
     # Set user-password.
     # In case it's required and not passed, just raise a RuntimeError.
-    if script.requires_user_password() and not unattended_data.user_password:
+    if (script.requires_user_password() and
+        not unattended_data.get_user_password()):
         raise RuntimeError(
             _("%s requires the user-password to be set.") %
             osobj.name)
-    config.set_user_password(
-        unattended_data.user_password if unattended_data.user_password
-        else "")
+    config.set_user_password(unattended_data.get_user_password() or "")
 
     # Set the admin-password:
     # In case it's required and not passed, just raise a RuntimeError.
-    if script.requires_admin_password() and not unattended_data.admin_password:
+    if (script.requires_admin_password() and
+        not unattended_data.get_admin_password()):
         raise RuntimeError(
             _("%s requires the admin-password to be set.") %
             osobj.name)
-    config.set_admin_password(
-        unattended_data.admin_password if unattended_data.admin_password
-        else "")
+    config.set_admin_password(unattended_data.get_admin_password() or "")
 
     # Set the target disk.
     # virtiodisk is the preferred way, in case it's supported, otherwise
@@ -205,9 +203,21 @@ class OSInstallScript:
 
 class UnattendedData():
     profile = None
-    admin_password = None
-    user_password = None
+    admin_password_file = None
+    user_password_file = None
     product_key = None
+
+    def _get_password(self, pwdfile):
+        with open(pwdfile, "r") as fobj:
+            return fobj.readline().rstrip("\n\r")
+
+    def get_user_password(self):
+        if self.user_password_file:
+            return self._get_password(self.user_password_file)
+
+    def get_admin_password(self):
+        if self.admin_password_file:
+            return self._get_password(self.admin_password_file)
 
 
 def _make_scriptmap(script_list):

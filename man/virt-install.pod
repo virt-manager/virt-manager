@@ -612,13 +612,23 @@ Choose which libosinfo unattended profile to use. Most distros have
 a 'desktop' and a 'jeos' profile. virt-install will default to 'desktop'
 if this is unspecified.
 
-=item B<admin-password=>
+=item B<admin-password-file=>
 
-Set the VM OS admin/root password
+A file used to set the VM OS admin/root password from. This option can
+be used either as "admin-password-file=/path/to/password-file" or as
+"admin-password-file=/dev/fd/n", being n the file descriptor of the
+password-file.
+Note that only the first line of the file will be considered, including
+any whitespace characters and excluding new-line.
 
-=item B<user-password=>
+=item B<user-password-file=>
 
-Set the VM user password. The username is your current host username
+A file used to set the VM user password. This option can be used either as
+"user-password-file=/path/to/password-file" or as
+"user-password-file=/dev/fd/n", being n the file descriptor of the
+password-file. The username is your current host username.
+Note that only the first line of the file will be considered, including
+any whitespace characters and excluding new-line.
 
 =item B<product-key=>
 

@@ -89,6 +89,8 @@ test_files = {
     'ISO-F29-LIVE': iso_links[5],
     'TREEDIR': "%s/fakefedoratree" % XMLDIR,
     'COLLIDE': "/dev/default-pool/collidevol1.img",
+    'ADMIN-PASSWORD-FILE': "%s/admin-password.txt" % XMLDIR,
+    'USER-PASSWORD-FILE': "%s/user-password.txt" % XMLDIR,
 }
 
 
@@ -881,20 +883,19 @@ c.add_valid("--connect %s --pxe --disk size=1" % utils.URIs.test_defaultpool_col
 ####################
 
 c = vinst.add_category("unattended-install", "--connect %(URI-KVM)s --nographics --noautoconsole --disk none", prerun_check=no_osinfo_unattend_cb)
-c.add_compare("--install fedora26 --unattended profile=desktop,admin-password=foobar,user-password=blah,product-key=1234", "osinfo-url-unattended")  # unattended install for fedora, using initrd injection
-c.add_compare("--cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password=foobar", "osinfo-win7-unattended")  # unattended install for win7
-c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password=123456 --location %(ISO-F26-NETINST)s", "osinfo-netinst-unattended")  # triggering the special netinst checking code
+c.add_compare("--install fedora26 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s,user-password-file=%(USER-PASSWORD-FILE)s,product-key=1234", "osinfo-url-unattended")  # unattended install for fedora, using initrd injection
+c.add_compare("--cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s", "osinfo-win7-unattended")  # unattended install for win7
+c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location %(ISO-F26-NETINST)s", "osinfo-netinst-unattended")  # triggering the special netinst checking code
 c.add_compare("--os-variant silverblue29 --location http://example.com", "network-install-resources")  # triggering network-install resources override
 c.add_valid("--pxe --os-variant fedora26 --unattended", grep="Using unattended profile 'desktop'")  # filling in default 'desktop' profile
 c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
 c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
-c.add_invalid("--os-variant debian9 --unattended profile=desktop,admin-password=foobar --location http://example.foo", grep="user-password")  # will trigger user-password required error
-c.add_invalid("--os-variant debian9 --unattended profile=FRIBBER,admin-password=foobar --location http://example.foo", grep="Available profiles")  # will trigger unknown profile error
-c.add_invalid("--os-variant fedora29 --unattended profile=desktop,admin-password=foobar --cdrom %(ISO-F29-LIVE)s", grep="media does not support")  # live media doesn't support installscript
+c.add_invalid("--os-variant debian9 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location http://example.foo", grep="user-password")  # will trigger user-password required error
+c.add_invalid("--os-variant debian9 --unattended profile=FRIBBER,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location http://example.foo", grep="Available profiles")  # will trigger unknown profile error
+c.add_invalid("--os-variant fedora29 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s --cdrom %(ISO-F29-LIVE)s", grep="media does not support")  # live media doesn't support installscript
 c.add_invalid("--os-variant msdos --unattended profile=desktop --location http://example.com")  # msdos doesn't support unattended install
 c.add_invalid("--os-variant winxp --unattended profile=desktop --cdrom %(ISO-WIN7)s")  # winxp doesn't support expected injection method 'cdrom'
 c.add_invalid("--connect %(URI-TEST-REMOTE)s --os-variant win7 --cdrom %(EXISTIMG1)s --unattended")  # --unattended method=cdrom rejected for remote connections
-
 
 
 #############################
@@ -1367,7 +1368,7 @@ _add_argcomplete_cmd("virt-install --install i", "initrd")
 _add_argcomplete_cmd("virt-install --test-stub", None,
         nogrep="--test-stub-command")
 _add_argcomplete_cmd("virt-install --unattended ", "profile=")  # will list all --unattended subprops
-_add_argcomplete_cmd("virt-install --unattended a", "admin-password=")
+_add_argcomplete_cmd("virt-install --unattended a", "admin-password-file=")
 _add_argcomplete_cmd("virt-clone --preserve", "--preserve-data")
 _add_argcomplete_cmd("virt-xml --sound mode", "model")
 _add_argcomplete_cmd("virt-convert --dest", "--destination")

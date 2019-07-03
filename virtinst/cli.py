@@ -1508,8 +1508,8 @@ class ParserUnattended(VirtCLIParser):
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("profile", "profile")
-        cls.add_arg("admin-password", "admin_password")
-        cls.add_arg("user-password", "user_password")
+        cls.add_arg("admin-password-file", "admin_password_file")
+        cls.add_arg("user-password-file", "user_password_file")
         cls.add_arg("product-key", "product_key")
 
 
