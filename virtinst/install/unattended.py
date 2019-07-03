@@ -97,8 +97,6 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     log.debug("InstallScriptConfig created with the following params:")
     log.debug("username: %s", config.get_user_login())
     log.debug("realname: %s", config.get_user_realname())
-    log.debug("user password: %s", config.get_user_password())
-    log.debug("admin password: %s", config.get_admin_password())
     log.debug("target disk: %s", config.get_target_disk())
     log.debug("hardware arch: %s", config.get_hardware_arch())
     log.debug("hostname: %s", config.get_hostname())
@@ -187,6 +185,26 @@ class OSInstallScript:
         return self._script.generate_command_line(
                 self._osobj.get_handle(), self._config)
 
+    def _generate_debug(self):
+        config = Libosinfo.InstallConfig()
+
+        config.set_user_login(self._config.get_user_login())
+        config.set_user_realname(self._config.get_user_realname())
+        config.set_user_password("[SCRUBBLED]")
+        config.set_admin_password("[SCRUBBLED]")
+        config.set_target_disk(self._config.get_target_disk())
+        config.set_hardware_arch(self._config.get_hardware_arch())
+        config.set_hostname(self._config.get_hostname())
+        config.set_l10n_timezone(self._config.get_l10n_timezone())
+        config.set_l10n_language(self._config.get_l10n_language())
+        config.set_l10n_keyboard(self._config.get_l10n_keyboard())
+        if self._config.get_installation_url():  # pylint: disable=no-member
+            config.set_installation_url(self._config.get_installation_url())  # pylint: disable=no-member
+        if self._config.get_reg_product_key():
+            config.set_reg_product_key(self._config.get_reg_product_key())
+
+        return self._script.generate(self._osobj.get_handle(), config)
+
     def write(self):
         fileobj = tempfile.NamedTemporaryFile(
             prefix="virtinst-unattended-script", delete=False)
@@ -195,8 +213,10 @@ class OSInstallScript:
         content = self.generate()
         open(scriptpath, "w").write(content)
 
+        debug_content = self._generate_debug()
+
         log.debug("Generated unattended script: %s", scriptpath)
-        log.debug("Generated script contents:\n%s", content)
+        log.debug("Generated script contents:\n%s", debug_content)
 
         return scriptpath
 
