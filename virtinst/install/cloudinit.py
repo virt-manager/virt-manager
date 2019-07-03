@@ -10,31 +10,21 @@ class CloudInitData():
     root_password = None
 
 
-def create_metadata(scratchdir, hostname=None):
-    if hostname:
-        instance = hostname
-    else:
-        hostname = instance = "localhost"
-    content = 'instance-id: %s\n' % instance
-    content += 'hostname: %s\n' % hostname
-    log.debug("Generated cloud-init metadata:\n%s", content)
-
+def create_metadata(scratchdir):
     fileobj = tempfile.NamedTemporaryFile(
             prefix="virtinst-", suffix="-metadata",
             dir=scratchdir, delete=False)
     filename = fileobj.name
 
+    content = ""
     with open(filename, "w") as f:
         f.write(content)
+    log.debug("Generated cloud-init metadata\n%s", content)
     return filename
 
 
-def create_userdata(scratchdir, cloudinit_data, username=None, password=None):
+def create_userdata(scratchdir, cloudinit_data):
     content = "#cloud-config\n"
-    if username:
-        content += "name: %s\n" % username
-    if password:
-        content += "password: %s\n" % password
 
     rootpass = cloudinit_data.root_password
     if rootpass == "generate":
