@@ -223,34 +223,7 @@ class TestStorage(unittest.TestCase):
                 StoragePool.find_free_name(fullconn, "gluster-pool"),
                 "gluster-pool-1")
 
-
-    ##############################
-    # Tests for pool-sources API #
-    ##############################
-
-    def _enumerateCompare(self, name, pool_list):
-        for pool in pool_list:
-            pool.name = name + str(pool_list.index(pool))
-            poolobj = poolCompare(pool)
-            removePool(poolobj)
-
     def testEnumerateLogical(self):
-        name = "pool-logical-list"
         lst = StoragePool.pool_list_from_sources(self.conn,
                                                  StoragePool.TYPE_LOGICAL)
-        self._enumerateCompare(name, lst)
-
-    def testEnumerateNetFS(self):
-        name = "pool-netfs-list"
-        host = "example.com"
-        lst = StoragePool.pool_list_from_sources(self.conn,
-                                                 StoragePool.TYPE_NETFS,
-                                                 host=host)
-        self._enumerateCompare(name, lst)
-
-    def testEnumerateiSCSI(self):
-        host = "example.com"
-        lst = StoragePool.pool_list_from_sources(self.conn,
-                                                 StoragePool.TYPE_ISCSI,
-                                                 host=host)
-        self.assertTrue(len(lst) == 0)
+        self.assertEqual(lst, ["testvg1", "testvg2"])

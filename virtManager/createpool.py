@@ -101,7 +101,7 @@ class vmmCreatePool(vmmGObjectUI):
         # Target path combo box entry
         target_list = self.widget("pool-target-path")
         # target_path, Label, pool class instance
-        target_model = Gtk.ListStore(str, str, object)
+        target_model = Gtk.ListStore(str, str)
         target_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         target_list.set_model(target_model)
         target_list.set_entry_text_column(0)
@@ -109,7 +109,7 @@ class vmmCreatePool(vmmGObjectUI):
         # Source path combo box entry
         source_list = self.widget("pool-source-path")
         # source_path, Label, pool class instance
-        source_model = Gtk.ListStore(str, str, object)
+        source_model = Gtk.ListStore(str, str)
         source_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         source_list.set_model(source_model)
         source_list.set_entry_text_column(0)
@@ -155,14 +155,15 @@ class vmmCreatePool(vmmGObjectUI):
         use_model = source_model
         entry_list = []
         if pooltype == StoragePool.TYPE_SCSI:
-            entry_list = self._list_scsi_adapters()
+            host_list = self._list_scsi_adapters()
+            entry_list = [[h, h] for h in host_list]
             use_list = source_list
             use_model = source_model
 
         elif pooltype == StoragePool.TYPE_LOGICAL:
-            pool_list = self._list_pool_sources(pooltype)
-            entry_list = [[p.target_path, p.target_path, p]
-                          for p in pool_list if p.target_path]
+            vglist = self._list_pool_sources(pooltype)
+            target_paths = ["/dev/%s" % vgname for vgname in vglist]
+            entry_list = [[t, t] for t in target_paths]
             use_list = target_list
             use_model = target_model
 
@@ -175,26 +176,13 @@ class vmmCreatePool(vmmGObjectUI):
     def _list_scsi_adapters(self):
         scsi_hosts = self.conn.filter_nodedevs("scsi_host")
         host_list = [dev.xmlobj.host for dev in scsi_hosts]
+        return ["host%s" % h for h in host_list]
 
-        clean_list = []
-        for h in host_list:
-            name = "host%s" % h
-            tmppool = self._make_stub_pool()
-            tmppool.source_path = name
-
-            entry = [name, name, tmppool]
-            if name not in [l[0] for l in clean_list]:
-                clean_list.append(entry)
-
-        return clean_list
-
-    def _list_pool_sources(self, pool_type, host=None):
+    def _list_pool_sources(self, pool_type):
         plist = []
         try:
             plist = StoragePool.pool_list_from_sources(
-                                                self.conn.get_backend(),
-                                                pool_type,
-                                                host=host)
+                    self.conn.get_backend(), pool_type)
         except Exception:
             log.exception("Pool enumeration failed")
 
@@ -315,31 +303,13 @@ class vmmCreatePool(vmmGObjectUI):
     # Object building #
     ###################
 
-    def _get_pool_from_sourcelist(self):
-        """
-        If an enumerated pool source was selected, use that as the
-        basis for our pool object
-        """
-        source_list = self.widget("pool-source-path")
-        target_list = self.widget("pool-target-path")
-
-        pool = uiutil.get_list_selection(source_list, column=2,
-                                         check_entry=False)
-        if pool is None:
-            pool = uiutil.get_list_selection(target_list, column=2,
-                                             check_entry=False)
-
-        return pool
-
     def _build_xmlobj_from_xmleditor(self):
         xml = self._xmleditor.get_xml()
         log.debug("Using XML from xmleditor:\n%s", xml)
         return StoragePool(self.conn.get_backend(), parsexml=xml)
 
     def _make_stub_pool(self):
-        pool = self._get_pool_from_sourcelist()
-        if not pool:
-            pool = StoragePool(self.conn.get_backend())
+        pool = StoragePool(self.conn.get_backend())
         pool.type = self._get_config_pool_type()
         pool.name = self.widget("pool-name").get_text()
         return pool

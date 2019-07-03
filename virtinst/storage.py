@@ -63,15 +63,6 @@ def _lookup_poolxml_by_path(conn, path):
     return None
 
 
-class _EnumerateSource(XMLBuilder):
-    XML_NAME = "source"
-
-
-class _EnumerateSources(XMLBuilder):
-    XML_NAME = "sources"
-    sources = XMLChildProperty(_EnumerateSource)
-
-
 class _Host(XMLBuilder):
     _XML_PROP_ORDER = ["name", "port"]
     XML_NAME = "host"
@@ -98,47 +89,32 @@ class StoragePool(_StorageObject):
     TYPE_ZFS     = "zfs"
 
     @staticmethod
-    def pool_list_from_sources(conn, pool_type, host=None):
+    def pool_list_from_sources(conn, pool_type):
         """
         Return a list of StoragePool instances built from libvirt's pool
         source enumeration (if supported).
 
         :param conn: Libvirt connection
-        :param name: Name for the new pool
         :param pool_type: Pool type string from I{Types}
-        :param host: Option host string to poll for sources
         """
-        if host:
-            source_xml = "<source><host name='%s'/></source>" % host
-        else:
-            source_xml = "<source/>"
+        source_xml = "<source/>"
 
         try:
             xml = conn.findStoragePoolSources(pool_type, source_xml, 0)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             if conn.support.is_error_nosupport(e):
                 return []
-            raise  # pragma: no cover
+            raise
 
-        ret = []
-        sources = _EnumerateSources(conn, xml)
-        for source in sources.sources:
-            source_xml = source.get_xml()
+        log.debug("Libvirt returned pool sources XML:\n%s", xml)
 
-            pool_xml = "<pool>\n%s\n</pool>" % source_xml
-            parseobj = StoragePool(conn, parsexml=pool_xml)
-            parseobj.type = pool_type
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(xml)
 
-            obj = StoragePool(conn)
-            obj.type = pool_type
-            obj.source_path = parseobj.source_path
-            for h in parseobj.hosts:
-                parseobj.remove_child(h)
-                obj.add_child(h)
-            obj.source_name = parseobj.source_name
-            obj.format = parseobj.format
+        # We implicitly only support this for pool TYPE_LOGICAL
+        ret = [e.text for e in root.findall("./source/name")]
 
-            ret.append(obj)
+        log.debug("Sources returning: %s", ret)
         return ret
 
     @staticmethod
