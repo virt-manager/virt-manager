@@ -6,6 +6,7 @@ from ..logger import log
 
 
 class CloudInitData():
+    disable = None
     root_password = None
 
 
@@ -49,10 +50,10 @@ def create_userdata(scratchdir, cloudinit_data, username=None, password=None):
         content += "    root:%s\n" % rootpass
         content += "  expire: True\n"
 
-    content += "runcmd:\n"
-    content += "- [ sudo, touch, /etc/cloud/cloud-init.disabled ]\n"
+    if cloudinit_data.disable:
+        content += "runcmd:\n"
+        content += "- [ sudo, touch, /etc/cloud/cloud-init.disabled ]\n"
     log.debug("Generated cloud-init userdata:\n%s", content)
-
 
     fileobj = tempfile.NamedTemporaryFile(
             prefix="virtinst-", suffix="-userdata",
