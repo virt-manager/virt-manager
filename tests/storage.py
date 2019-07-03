@@ -33,7 +33,8 @@ def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
     if pool_inst.supports_source_path():
         pool_inst.source_path = source_path or "/some/source/path"
     if pool_inst.supports_target_path():
-        pool_inst.target_path = target_path or "/some/target/path"
+        pool_inst.target_path = (target_path or
+                pool_inst.default_target_path())
     if fmt and pool_inst.supports_format():
         pool_inst.format = fmt
     if pool_inst.supports_source_name():
@@ -160,7 +161,8 @@ class TestStorage(unittest.TestCase):
     def testDiskPool(self):
         poolobj = createPool(self.conn,
                              StoragePool.TYPE_DISK,
-                             "pool-disk", fmt="auto")
+                             "pool-disk", fmt="auto",
+                             target_path="/some/target/path")
         invol = createVol(self.conn, poolobj)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "input", input_vol=invol)
@@ -208,6 +210,10 @@ class TestStorage(unittest.TestCase):
         diskvol = StorageVolume(fullconn)
         diskvol.pool = diskpool
         self.assertTrue(diskvol.supports_format() is False)
+
+        diskpoolxml = StoragePool(fullconn)
+        diskpoolxml.type = "disk"
+        self.assertEqual(diskpoolxml.default_target_path(), "/dev")
 
         glusterpool.destroy()
         StoragePool.ensure_pool_is_running(glusterpool)

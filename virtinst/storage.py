@@ -268,7 +268,6 @@ class StoragePool(_StorageObject):
             return _DEFAULT_SCSI_TARGET
         if self.type == self.TYPE_MPATH:
             return _DEFAULT_MPATH_TARGET
-        raise RuntimeError("No default target_path for type=%s" % self.type)
 
     def _type_to_source_prop(self):
         if (self.type == self.TYPE_NETFS or
