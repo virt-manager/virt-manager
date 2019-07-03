@@ -277,49 +277,38 @@ class vmmCreatePool(vmmGObjectUI):
     # UI accessors #
     ################
 
-    def _get_config_pool_type(self):
-        return uiutil.get_list_selection(self.widget("pool-type"))
-
-    def _get_config_target_path(self):
-        src = self.widget("pool-target-path")
-        if not src.get_sensitive():
+    def _get_visible_text(self, widget_name, column=None):
+        widget = self.widget(widget_name)
+        if not widget.get_sensitive() or not widget.get_visible():
             return None
+        if column is None:
+            return widget.get_text().strip()
 
-        ret = uiutil.get_list_selection(src, column=1)
-        if ret is not None:
-            return ret
-        return src.get_child().get_text()
-
-    def _get_config_source_path(self):
-        src = self.widget("pool-source-path")
-        if not src.get_sensitive():
-            return None
-
-        ret = uiutil.get_list_selection(src, column=1)
+        ret = uiutil.get_list_selection(widget, column=column)
         if ret is not None:
             return ret
         return src.get_child().get_text().strip()
 
+    def _get_config_pool_type(self):
+        return uiutil.get_list_selection(self.widget("pool-type"))
+
+    def _get_config_target_path(self):
+        return self._get_visible_text("pool-target-path", column=1)
+
+    def _get_config_source_path(self):
+        return self._get_visible_text("pool-source-path", column=1)
+
     def _get_config_host(self):
-        host = self.widget("pool-hostname")
-        if host.get_sensitive():
-            return host.get_text().strip()
-        return None
+        return self._get_visible_text("pool-hostname")
 
     def _get_config_source_name(self):
-        name = self.widget("pool-source-name")
-        if name.get_sensitive():
-            return name.get_text().strip()
-        return None
+        return self._get_visible_text("pool-source-name")
 
     def _get_config_format(self):
         return uiutil.get_list_selection(self.widget("pool-format"))
 
     def _get_config_iqn(self):
-        iqn = self.widget("pool-iqn")
-        if iqn.get_sensitive() and iqn.get_visible():
-            return iqn.get_text().strip()
-        return None
+        return self._get_visible_text("pool-iqn")
 
 
     ###################
@@ -478,7 +467,7 @@ class vmmCreatePool(vmmGObjectUI):
             self.widget("pool-source-path").get_child().set_text(source)
 
     def _browse_target_cb(self, src):
-        current = self.widget("pool-target-path").get_child().get_text()
+        current = self._get_config_target_path()
         startfolder = None
         if current:
             startfolder = os.path.dirname(current)
