@@ -211,10 +211,6 @@ class TestStorage(unittest.TestCase):
         diskvol.pool = diskpool
         self.assertTrue(diskvol.supports_format() is False)
 
-        diskpoolxml = StoragePool(fullconn)
-        diskpoolxml.type = "disk"
-        self.assertEqual(diskpoolxml.default_target_path(), "/dev")
-
         glusterpool.destroy()
         StoragePool.ensure_pool_is_running(glusterpool)
 

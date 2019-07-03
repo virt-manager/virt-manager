@@ -43,7 +43,6 @@ class vmmCreatePool(vmmGObjectUI):
             "on_pool_source_button_clicked": self._browse_source_cb,
             "on_pool_target_button_clicked": self._browse_target_cb,
 
-            "on_pool_hostname_activate": self._hostname_changed_cb,
             "on_pool_iqn_chk_toggled": self._iqn_toggled_cb,
         })
         self.bind_escape_key_close()
@@ -175,16 +174,13 @@ class vmmCreatePool(vmmGObjectUI):
         try:
             plist = StoragePool.pool_list_from_sources(
                     self.conn.get_backend(), pool_type)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Pool enumeration failed")
 
         return plist
 
     def _get_build_default(self, pooltype):
         """ Return (default value, whether build option can be changed)"""
-        if not pooltype:
-            return (False, False)
-
         if pooltype in [StoragePool.TYPE_DIR,
                         StoragePool.TYPE_FS,
                         StoragePool.TYPE_NETFS]:
@@ -240,6 +236,7 @@ class vmmCreatePool(vmmGObjectUI):
         elif is_scsi:
             src_label = _("_Source Adapter:")
         self.widget("pool-source-label").set_text(src_label)
+        self.widget("pool-source-label").set_use_underline(True)
 
         if tgt:
             self.widget("pool-target-path").set_text(
@@ -267,10 +264,7 @@ class vmmCreatePool(vmmGObjectUI):
         if column is None:
             return widget.get_text().strip()
 
-        ret = uiutil.get_list_selection(widget, column=column)
-        if ret is not None:
-            return ret
-        return widget_name.get_child().get_text().strip()
+        return uiutil.get_list_selection(widget, column=column)
 
     def _get_config_pool_type(self):
         return uiutil.get_list_selection(self.widget("pool-type"))
@@ -393,9 +387,8 @@ class vmmCreatePool(vmmGObjectUI):
         try:
             if self._validate(pool) is False:
                 return
-        except Exception as e:
-            return self.err.show_err(
-                    _("Error validating pool: %s") % e)
+        except Exception as e:  # pragma: no cover
+            return self.err.show_err(_("Error validating pool: %s") % e)
 
         self.reset_finish_cursor()
 
@@ -443,10 +436,6 @@ class vmmCreatePool(vmmGObjectUI):
                 start_folder=startfolder)
         if target:
             self.widget("pool-target-path").set_text(target)
-
-    def _hostname_changed_cb(self, src):
-        # If a hostname was entered, try to lookup valid pool sources.
-        self._populate_pool_sources()
 
     def _iqn_toggled_cb(self, src):
         self.widget("pool-iqn").set_sensitive(src.get_active())

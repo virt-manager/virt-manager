@@ -24,10 +24,20 @@ class CreatePool(uiutils.UITestCase):
     def testCreatePools(self):
         hostwin = self._open_host_window("Storage")
         win = self._open_create_win(hostwin)
-
-        # Create a simple default dir pool
         finish = win.find("Finish", "push button")
         name = win.find("Name:", "text")
+
+        def _browse_local_path(winlabel, usepath):
+            chooser = self.app.root.find(winlabel, "file chooser")
+            # Enter the filename and select it
+            chooser.find(usepath, "table cell").click()
+            obutton = chooser.find("Open", "push button")
+            uiutils.check_in_loop(lambda: obutton.sensitive)
+            obutton.click()
+            uiutils.check_in_loop(lambda: not chooser.showing)
+            uiutils.check_in_loop(lambda: win.active)
+
+        # Create a simple default dir pool
         self.assertEqual(name.text, "pool")
         newname = "a-test-new-pool"
         name.text = newname
@@ -57,6 +67,39 @@ class CreatePool(uiutils.UITestCase):
 
         # Ensure it's gone
         uiutils.check_in_loop(lambda: cell.dead)
+
+        # Test a disk pool
+        win = self._open_create_win(hostwin)
+        typ = win.find("Type:", "combo box")
+        newname = "a-disk-pool"
+        name.text = "a-disk-pool"
+        typ.click()
+        win.find_fuzzy("Physical Disk", "menu item").click()
+        win.find("source-browse").click()
+        _browse_local_path("Choose source path", "console")
+        finish.click()
+        hostwin.find(newname, "table cell")
+
+        # Test a iscsi pool
+        win = self._open_create_win(hostwin)
+        typ = win.find("Type:", "combo box")
+        newname = "a-iscsi-pool"
+        name.text = "a-iscsi-pool"
+        typ.click()
+        win.find_fuzzy("iSCSI", "menu item").click()
+        win.find("target-browse").click()
+        _browse_local_path("Choose target directory", "by-path")
+        finish.click()
+        # Catch example error
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("source host name", "label")
+        alert.find("Close", "push button").click()
+        win.find("Host Name:", "text").text = "example.com"
+        win.find("pool-source-path-text").text = "foo-iqn"
+        win.find_fuzzy("Initiator IQN:", "check").click()
+        win.find("iqn-text", "text").text = "initiator-foo"
+        finish.click()
+        hostwin.find(newname, "table cell")
 
         # Test a logical pool
         win = self._open_create_win(hostwin)

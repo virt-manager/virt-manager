@@ -372,7 +372,7 @@ class XMLParseTest(unittest.TestCase):
 
         disk = _get_disk("hda")
         check = self._make_checker(disk)
-        check("path", "/tmp/test.img", "/dev/null")
+        check("path", "/tmp/test.img", "/dev/foo/null")
         disk.sync_path_props()
         check("driver_name", None, "test")
         check("driver_type", None, "raw")

@@ -133,6 +133,11 @@
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">25</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="pool-iqn-atkobject">
+                                <property name="AtkObject::accessible-name">iqn-text</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -192,7 +197,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label">_sourcep:</property>
+                        <property name="label">_Sourcep:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">pool-source-path</property>
                       </object>
@@ -224,6 +229,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_pool_target_button_clicked" swapped="no"/>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pool-target-button-atkobject">
+                            <property name="AtkObject::accessible-name">target-browse</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -239,6 +249,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_pool_source_button_clicked" swapped="no"/>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pool-source-button-atkobject">
+                            <property name="AtkObject::accessible-name">source-browse</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -254,6 +269,11 @@
                           <object class="GtkEntry">
                             <property name="can_focus">True</property>
                             <property name="width_chars">25</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject">
+                                <property name="AtkObject::accessible-name">pool-source-path-text</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child internal-child="accessible">
@@ -273,7 +293,6 @@
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="width_chars">25</property>
-                        <signal name="activate" handler="on_pool_hostname_activate" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

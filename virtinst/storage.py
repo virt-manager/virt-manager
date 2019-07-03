@@ -232,8 +232,6 @@ class StoragePool(_StorageObject):
             self.type == self.TYPE_FS):
             return os.path.join(
                     _preferred_default_pool_path(self.conn), self.name)
-        if self.type == self.TYPE_DISK:
-            return _DEFAULT_DEV_TARGET
         if self.type == self.TYPE_ISCSI or self.type == self.TYPE_SCSI:
             return _DEFAULT_SCSI_TARGET
         if self.type == self.TYPE_MPATH:
@@ -309,7 +307,7 @@ class StoragePool(_StorageObject):
     def supports_target_path(self):
         return self.type in [
                 self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,
-                self.TYPE_DISK, self.TYPE_ISCSI,
+                self.TYPE_ISCSI,
                 self.TYPE_SCSI, self.TYPE_MPATH]
 
     def supports_source_name(self):
@@ -357,7 +355,12 @@ class StoragePool(_StorageObject):
         self.validate_name(self.conn, self.name)
 
         if not self.target_path:
-            self.target_path = self.default_target_path()
+            if self.type == self.TYPE_DISK:
+                # disk is a bit special, in that it demands a target path,
+                # but basically can't handle anything other than /dev
+                self.target_path = _DEFAULT_DEV_TARGET
+            else:
+                self.target_path = self.default_target_path()
         if not self.source_name:
             self.source_name = self.default_source_name()
         if not self.format and self.supports_format():
