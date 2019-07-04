@@ -1,5 +1,12 @@
 # Virtual Machine Manager News
 
+## Release 2.2.1 (July 03, 2019)
+- CVE-2019-10183: Replace --unattended user-password and admin-password with
+  user-password-file and admin-password-file (Fabiano Fidêncio)
+- Consistent --memballoon default across non-x86 (Andrea Bolognani)
+- virt-install: add --numatune memnode.* (Athina Plaskasoviti)
+- Drop hard dep on gtksourceview4, gtksourceview3 is fine as well
+
 ## Release 2.2.0 (June 17, 2019)
 - libvirt XML viewing and editing UI for new and existing domain, pools,
   volumes, networks

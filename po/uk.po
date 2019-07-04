@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-17 01:31-0400\n"
-"PO-Revision-Date: 2019-06-14 02:12+0000\n"
+"POT-Creation-Date: 2019-07-03 20:25-0400\n"
+"PO-Revision-Date: 2019-06-18 04:21+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/virt-manager/"
 "language/uk/)\n"
@@ -66,17 +66,17 @@ msgstr ""
 "Можна використовувати лише один з параметрів VNC, SDL, --graphics або --"
 "nographics"
 
-#: ../virt-install:298
+#: ../virt-install:306
 msgid "--memory amount in MiB is required"
 msgstr "--memory потрібен об’єм пам’яті у МіБ"
 
-#: ../virt-install:302
+#: ../virt-install:310
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 "Слід вказати «--disk сховище» (скасувати цей параметр можна за допомогою --"
 "disk none)"
 
-#: ../virt-install:306
+#: ../virt-install:314
 msgid ""
 "An install method must be specified\n"
 "(%(methods)s)"
@@ -84,13 +84,13 @@ msgstr ""
 "Слід вказати спосіб встановлення\n"
 "(%(methods)s)"
 
-#: ../virt-install:313
+#: ../virt-install:321
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
 "Докладні приклади використання --location для носіїв даних типу CDROM можна "
 "знайти на сторінці довідника (man)."
 
-#: ../virt-install:324
+#: ../virt-install:332
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -99,7 +99,7 @@ msgstr ""
 "ймовірно, ви не побачите у консолі текстового супроводу встановлення. Вам "
 "варто скористатися параметром --location."
 
-#: ../virt-install:337
+#: ../virt-install:345
 msgid ""
 "No --console device added, you likely will not see text install output from "
 "the guest."
@@ -108,22 +108,24 @@ msgstr ""
 "супроводу встановлення гостьової системи."
 
 #. 1024) > guest.currentMemory:
-#: ../virt-install:351
+#: ../virt-install:359
 #, c-format
 msgid "Requested memory %s MiB is less than the recommended %s MiB for OS %s"
-msgstr ""
+msgstr "Запит на пам'ять у %s МіБ є меншим за рекомендовані %s МіБ для ОС %s"
 
-#: ../virt-install:355
+#: ../virt-install:363
 #, c-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
 msgstr ""
+"Запит на пам'ять у %s МіБ є надзвичайно низьким. Можливо, ви хотіли вказати "
+"розмір у ГіБ?"
 
-#: ../virt-install:361
+#: ../virt-install:369
 msgid "The guest's network configuration does not support PXE"
 msgstr "Налаштуваннями мережі гостьової системи не підтримується PXE"
 
-#: ../virt-install:370
+#: ../virt-install:378
 msgid ""
 "No operating system detected, VM performance may suffer. Specify an OS with "
 "--os-variant for optimal results."
@@ -132,42 +134,42 @@ msgstr ""
 "знижено. Щоб отримати оптимальні результати, вкажіть операційну систему за "
 "допомогою параметра --os-variant."
 
-#: ../virt-install:384
+#: ../virt-install:392
 msgid "Using {osname} --location {url}"
 msgstr "Використовуємо {osname} --location {url}"
 
-#: ../virt-install:454
+#: ../virt-install:462
 msgid "Using default --name {vm_name}"
 msgstr "Використовуємо типове значення --name {vm_name}"
 
-#: ../virt-install:469
+#: ../virt-install:477
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr "Використовуємо типове для {os_name} значення --memory {megabytes}"
 
-#: ../virt-install:484
+#: ../virt-install:492
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr "Використовуємо типове для {os_name} значення --disk {disk_options}"
 
-#: ../virt-install:524
+#: ../virt-install:532
 #, c-format
 msgid "Error validating install location: %s"
 msgstr "Помилка під час перевірки місця встановлення: %s"
 
-#: ../virt-install:605
+#: ../virt-install:613
 #, c-format
 msgid " %d minutes"
 msgstr " %d хвилин"
 
-#: ../virt-install:608
+#: ../virt-install:616
 msgid "Waiting%(time_string)s for installation to complete."
 msgstr "Очікуємо%(time_string)s на завершення встановлення."
 
-#: ../virt-install:633
+#: ../virt-install:641
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 "Немає консолі для запуску гостьової системи. Використовуємо типове --wait -1"
 
-#: ../virt-install:643
+#: ../virt-install:651
 msgid ""
 "\n"
 "Starting install..."
@@ -175,11 +177,11 @@ msgstr ""
 "\n"
 "Починаємо встановлення…"
 
-#: ../virt-install:661
+#: ../virt-install:669
 msgid "Domain creation completed."
 msgstr "Створення домену завершено."
 
-#: ../virt-install:665
+#: ../virt-install:673
 #, c-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -188,19 +190,19 @@ msgstr ""
 "Ви можете перезавантажити ваш домен такою командою:\n"
 "  %s"
 
-#: ../virt-install:668
+#: ../virt-install:676
 msgid "Restarting guest."
 msgstr "Перезапускаємо гостьову систему."
 
-#: ../virt-install:675
+#: ../virt-install:683
 msgid "Domain install interrupted."
 msgstr "Встановлення домену перервано."
 
-#: ../virt-install:700
+#: ../virt-install:708
 msgid "Domain has crashed."
 msgstr "Домен завершив роботу у аварійному режимі."
 
-#: ../virt-install:730
+#: ../virt-install:738
 msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
@@ -208,54 +210,54 @@ msgstr ""
 "Встановлення домену ще не завершено. Ви можете повторно з’єднатися з \n"
 "консоллю, щоб завершити процедуру встановлення."
 
-#: ../virt-install:734
+#: ../virt-install:742
 msgid "Domain installation still in progress."
 msgstr "Встановлення домену ще не завершено."
 
-#: ../virt-install:740
+#: ../virt-install:748
 msgid "Domain has shutdown. Continuing."
 msgstr "Роботу домену завершено. Продовжуємо."
 
-#: ../virt-install:746
+#: ../virt-install:754
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
 "Час встановлення перевищив вказане обмеження за часом. Завершуємо роботу "
 "програми."
 
-#: ../virt-install:763
+#: ../virt-install:771
 msgid "Dry run completed successfully"
 msgstr "Під час тестового запуску помилок не виявлено"
 
-#: ../virt-install:767
+#: ../virt-install:775
 #, c-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr "Невідомий запит кроку XML «%s», має бути 1, 2 або all"
 
-#: ../virt-install:774
+#: ../virt-install:782
 msgid "Requested installation does not have XML step 2"
 msgstr "У вказаному встановленні немає кроку 2 XML"
 
-#: ../virt-install:791
+#: ../virt-install:799
 msgid "Create a new virtual machine from specified install media."
 msgstr "Створити віртуальну машину на основі вказаного носія для встановлення."
 
-#: ../virt-install:795 ../virt-clone:93
+#: ../virt-install:803 ../virt-clone:93
 msgid "General Options"
 msgstr "Загальні параметри"
 
-#: ../virt-install:797
+#: ../virt-install:805
 msgid "Name of the guest instance"
 msgstr "Назва екземпляра гостьової системи"
 
-#: ../virt-install:804
+#: ../virt-install:812
 msgid "Installation Method Options"
 msgstr "Параметри способу встановлення"
 
-#: ../virt-install:806
+#: ../virt-install:814
 msgid "CD-ROM installation media"
 msgstr "Носій CD-ROM для встановлення"
 
-#: ../virt-install:808
+#: ../virt-install:816
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
@@ -263,91 +265,91 @@ msgstr ""
 "Адреса встановлення дистрибутива, наприклад https://вузол/шлях. Приклади для "
 "окремих дистрибутивів можна знайти на сторінці підручника."
 
-#: ../virt-install:811
+#: ../virt-install:819
 msgid "Boot from the network using the PXE protocol"
 msgstr "Завантажити з мережі за допомогою протоколу PXE"
 
-#: ../virt-install:813
+#: ../virt-install:821
 msgid "Build guest around an existing disk image"
 msgstr "Побудувати гостьову систему на основі вже створеного образу диска"
 
-#: ../virt-install:816
+#: ../virt-install:824
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 "Додаткові параметри, які слід передати ядру встановлення, що "
 "завантажуватиметься з --location"
 
-#: ../virt-install:819
+#: ../virt-install:827
 msgid "Add given file to root of initrd from --location"
 msgstr "Додати вказаний файл до кореневого каталогу initrd з --location"
 
-#: ../virt-install:821
+#: ../virt-install:829
 msgid "Perform an unattended installation"
 msgstr "Виконати автоматичне встановлення"
 
-#: ../virt-install:823
+#: ../virt-install:831
 msgid "Specify fine grained install options"
 msgstr "Вказати точні параметри встановлення"
 
-#: ../virt-install:837
+#: ../virt-install:845
 msgid "Device Options"
 msgstr "Параметри пристрою"
 
-#: ../virt-install:867
+#: ../virt-install:875
 msgid "Guest Configuration Options"
 msgstr "Параметри налаштування гостьової системи"
 
-#: ../virt-install:871
+#: ../virt-install:879
 msgid "Virtualization Platform Options"
 msgstr "Параметри платформи віртуалізації"
 
-#: ../virt-install:875
+#: ../virt-install:883
 msgid "This guest should be a fully virtualized guest"
 msgstr ""
 "Ця гостьова система має бути повністю віртуалізованою гостьовою системою"
 
-#: ../virt-install:878
+#: ../virt-install:886
 msgid "This guest should be a paravirtualized guest"
 msgstr "Ця гостьова система має бути паравіртуалізованою гостьовою системою"
 
-#: ../virt-install:881
+#: ../virt-install:889
 msgid "This guest should be a container guest"
 msgstr "Ця гостьова система має бути гостьовою системою у контейнері"
 
-#: ../virt-install:883
+#: ../virt-install:891
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Назва гіпервізора, яку слід використовувати (kvm, qemu, xen…)"
 
-#: ../virt-install:884
+#: ../virt-install:892
 msgid "The CPU architecture to simulate"
 msgstr "Архітектура процесора, яку слід імітувати"
 
-#: ../virt-install:885
+#: ../virt-install:893
 msgid "The machine type to emulate"
 msgstr "Тип архітектури, який слід імітувати"
 
-#: ../virt-install:894 ../virt-clone:135 ../virt-xml:431
+#: ../virt-install:902 ../virt-clone:135 ../virt-xml:431
 msgid "Miscellaneous Options"
 msgstr "Інші параметри"
 
-#: ../virt-install:896
+#: ../virt-install:904
 msgid "Have domain autostart on host boot up."
 msgstr "Автоматично запускати домен після запуску основної системи."
 
-#: ../virt-install:898
+#: ../virt-install:906
 msgid "Create a transient domain."
 msgstr "Створити перехідний домен."
 
-#: ../virt-install:900
+#: ../virt-install:908
 msgid "Force power off the domain when the console viewer is closed."
 msgstr "Примусово вимкнути домен після закриття консольного засобу перегляду."
 
-#: ../virt-install:903
+#: ../virt-install:911
 msgid "Minutes to wait for install to complete."
 msgstr "Час у хвилинах, протягом якого слід чекати на завершення встановлення."
 
-#: ../virt-install:1001 ../virt-clone:215
+#: ../virt-install:1010 ../virt-clone:215
 msgid "Installation aborted at user request"
 msgstr "Встановлення перервано на вимогу користувача"
 
@@ -434,6 +436,9 @@ msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
+"Пропустити копіювання призначення пристрою. (наприклад, якщо «vda» є диском, "
+"вам не потрібно копіювати і використовувати той самий шлях у новій ВМ — "
+"просто скористайтеся --skip-copy=vda)"
 
 #: ../virt-clone:121
 msgid "Do not use a sparse file for the clone's disk image"
@@ -651,6 +656,7 @@ msgstr "Для пристрою успішно виконано дію %s."
 #: ../virt-xml:350
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
+"Немає різниці у XML. Зміни, на які надійшов запит, ні на що не вплинуть."
 
 #: ../virt-xml:369
 msgid "Edit libvirt XML using command line options."
@@ -703,6 +709,8 @@ msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
+"Вивести зібраний XML пристрою. Домен можна не вказувати, але рекомендуємо "
+"його вказати, щоб забезпечити оптимальні типові параметри."
 
 #: ../virt-xml:396
 msgid "Output options"
@@ -773,7 +781,7 @@ msgstr "Спосіб використання --update для --%s невідо�
 
 #: ../virt-xml:517
 msgid "Cannot mix --update and --start"
-msgstr ""
+msgstr "Не можна одночасно вказувати --update і --start"
 
 #: ../virt-xml:525
 msgid "The VM is not running, --update is inapplicable."
@@ -789,6 +797,8 @@ msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
+"XML не змінено після визначення домену. Ймовірно, ви змінили значення так, "
+"що воно збіглося із типовим значенням у libvirt."
 
 #: ../virtManager/about.py:21
 #, python-format
@@ -1048,7 +1058,7 @@ msgstr "Графічний USB-планшет EvTouch"
 msgid "Generic"
 msgstr "Типовий"
 
-#: ../virtManager/addhardware.py:724 ../virtManager/clone.py:104
+#: ../virtManager/addhardware.py:724 ../virtManager/clone.py:106
 msgid "Disk device"
 msgstr "Дисковий пристрій"
 
@@ -1201,15 +1211,15 @@ msgstr "Обробка…"
 msgid "Completed"
 msgstr "Завершено"
 
-#: ../virtManager/clone.py:52
+#: ../virtManager/clone.py:53
 msgid "No storage to clone."
 msgstr "Немає сховища даних для клонування."
 
-#: ../virtManager/clone.py:57
+#: ../virtManager/clone.py:58
 msgid "Cannot clone unmanaged remote storage."
 msgstr "Неможливо клонувати некероване віддалене сховище."
 
-#: ../virtManager/clone.py:60
+#: ../virtManager/clone.py:61
 msgid ""
 "Block devices to clone must be libvirt\n"
 "managed storage volumes."
@@ -1217,83 +1227,83 @@ msgstr ""
 "Блокові пристрої для клонування мають бути\n"
 "керованими томами сховищ libvirt."
 
-#: ../virtManager/clone.py:63 ../virtManager/delete.py:357
+#: ../virtManager/clone.py:64 ../virtManager/delete.py:357
 msgid "No write access to parent directory."
 msgstr "Немає доступу до запису до каталогу вищого рівня."
 
-#: ../virtManager/clone.py:65 ../virtManager/delete.py:355
+#: ../virtManager/clone.py:66 ../virtManager/delete.py:355
 msgid "Path does not exist."
 msgstr "Шляху не існує."
 
-#: ../virtManager/clone.py:70
+#: ../virtManager/clone.py:72
 #, python-format
 msgid "Cannot clone %s storage pool."
 msgstr "Неможливо клонувати буфер сховища даних %s."
 
-#: ../virtManager/clone.py:94
+#: ../virtManager/clone.py:96
 msgid "Removable"
 msgstr "Портативний пристрій"
 
-#: ../virtManager/clone.py:97
+#: ../virtManager/clone.py:99
 msgid "Read Only"
 msgstr "Лише для читання"
 
-#: ../virtManager/clone.py:99
+#: ../virtManager/clone.py:101
 msgid "No write access"
 msgstr "Без доступу до запису"
 
-#: ../virtManager/clone.py:108
+#: ../virtManager/clone.py:110
 msgid "Shareable"
 msgstr "Загальне"
 
-#: ../virtManager/clone.py:126
+#: ../virtManager/clone.py:128
 #, python-format
 msgid "Error launching clone dialog: %s"
 msgstr "Помилка під час спроби запусти діалогове вікно клонування: %s"
 
-#: ../virtManager/clone.py:294 ../virtManager/clone.py:550
+#: ../virtManager/clone.py:296 ../virtManager/clone.py:552
 msgid "Details..."
 msgstr "Подробиці…"
 
-#: ../virtManager/clone.py:322
+#: ../virtManager/clone.py:324
 msgid "Usermode"
 msgstr "Режим користувача"
 
-#: ../virtManager/clone.py:338
+#: ../virtManager/clone.py:340
 msgid "Virtual Network"
 msgstr "Віртуальна мережа"
 
-#: ../virtManager/clone.py:411
+#: ../virtManager/clone.py:413
 msgid "Nothing to clone."
 msgstr "Нічого клонувати."
 
-#: ../virtManager/clone.py:542
+#: ../virtManager/clone.py:544
 msgid "Clone this disk"
 msgstr "Клонувати цей диск"
 
-#: ../virtManager/clone.py:546
+#: ../virtManager/clone.py:548
 #, python-format
 msgid "Share disk with %s"
 msgstr "Спільний диск з %s"
 
-#: ../virtManager/clone.py:558
+#: ../virtManager/clone.py:560
 msgid "Storage cannot be shared or cloned."
 msgstr "Сховище даних не може бути спільним або клонованим."
 
-#: ../virtManager/clone.py:616
+#: ../virtManager/clone.py:618
 msgid "One or more disks cannot be cloned or shared."
 msgstr "Один або декілька дисків не можуть бути клонованими або спільними."
 
-#: ../virtManager/clone.py:701
+#: ../virtManager/clone.py:703
 #, python-format
 msgid "Error changing MAC address: %s"
 msgstr "Помилка під час спроби зміни MAC-адреси: %s"
 
-#: ../virtManager/clone.py:727
+#: ../virtManager/clone.py:729
 msgid "Cloning will overwrite the existing file"
 msgstr "Клонування призведе до перезапису вже створеного файла"
 
-#: ../virtManager/clone.py:729
+#: ../virtManager/clone.py:731
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -1301,16 +1311,16 @@ msgstr ""
 "Використання вже створеного образу призведе до перезапису даних у каталозі "
 "шляху під час клонування. Ви справді бажаєте скористатися цим каталогом?"
 
-#: ../virtManager/clone.py:741
+#: ../virtManager/clone.py:743
 #, python-format
 msgid "Error changing storage path: %s"
 msgstr "Помилка під час спроби зміни шляху до сховища даних: %s"
 
-#: ../virtManager/clone.py:793
+#: ../virtManager/clone.py:795
 msgid "Skipping disks may cause data to be overwritten."
 msgstr "Пропускання дисків може призвести до перезапису даних."
 
-#: ../virtManager/clone.py:794
+#: ../virtManager/clone.py:796
 #, python-format
 msgid ""
 "The following disk devices will not be cloned:\n"
@@ -1324,22 +1334,22 @@ msgstr ""
 "Запуск нової гостьової системи може призвести до перезапису даних на образах "
 "цих дисків."
 
-#: ../virtManager/clone.py:811
+#: ../virtManager/clone.py:813
 #, python-format
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "Помилка під час створення клону віртуальної машини «%s»: %s"
 
-#: ../virtManager/clone.py:824 ../virtManager/migrate.py:387
+#: ../virtManager/clone.py:826 ../virtManager/migrate.py:387
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "Під час перевірки джерела даних сталася невідома помилка: %s"
 
-#: ../virtManager/clone.py:829
+#: ../virtManager/clone.py:831
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "Створення клону віртуальної машини «%s»"
 
-#: ../virtManager/clone.py:833 ../virtManager/delete.py:158
+#: ../virtManager/clone.py:835 ../virtManager/delete.py:158
 msgid " and selected storage (this may take a while)"
 msgstr " та вибраного сховища (дія може тривати певний час)"
 
@@ -1375,22 +1385,22 @@ msgstr "Визначення тому каталогу"
 msgid "User session"
 msgstr "Сеанс користувача"
 
-#: ../virtManager/connection.py:546 ../virtManager/migrate.py:303
+#: ../virtManager/connection.py:545 ../virtManager/migrate.py:303
 msgid "Disconnected"
 msgstr "Роз'єднано"
 
-#: ../virtManager/connection.py:548
+#: ../virtManager/connection.py:547
 msgid "Connecting"
 msgstr "Виконується з'єднання"
 
-#: ../virtManager/connection.py:550 ../virtManager/hostnets.py:263
+#: ../virtManager/connection.py:549 ../virtManager/hostnets.py:263
 #: ../virtManager/hoststorage.py:329 ../virtManager/object/libvirtobject.py:216
 #: ../ui/hoststorage.ui.h:11
 msgid "Active"
 msgstr "Активний"
 
 #. Machine settings
-#: ../virtManager/connection.py:552 ../virtManager/details/details.py:1420
+#: ../virtManager/connection.py:551 ../virtManager/details/details.py:1420
 #: ../virtManager/details/details.py:2013
 #: ../virtManager/details/details.py:2029
 #: ../virtManager/details/details.py:2275
@@ -1400,7 +1410,7 @@ msgstr "Активний"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: ../virtManager/connection.py:646
+#: ../virtManager/connection.py:645
 #, python-format
 msgid ""
 "%s rename failed. Attempting to recover also failed.\n"
@@ -1475,7 +1485,7 @@ msgstr "Немає доступних пристроїв"
 msgid "Name '%s' already in use by another network."
 msgstr "Назву «%s» вже використано для іншої мережі."
 
-#: ../virtManager/createnet.py:452 ../virtManager/createpool.py:388
+#: ../virtManager/createnet.py:452 ../virtManager/createpool.py:337
 #: ../virtManager/createvol.py:289
 #, python-format
 msgid "Error building XML: %s"
@@ -1499,15 +1509,29 @@ msgstr "Створюємо віртуальну мережу…"
 msgid "Creating the virtual network may take a while..."
 msgstr "Створення віртуальної мережі може тривати певний час…"
 
-#: ../virtManager/createpool.py:256
-msgid "_Source IQN:"
-msgstr "IQN _джерела:"
+#: ../virtManager/createpool.py:231
+msgid "Volg_roup Name:"
+msgstr ""
 
-#: ../virtManager/createpool.py:258
+#: ../virtManager/createpool.py:231
+#, fuzzy
+msgid "Sou_rce Name:"
+msgstr "Н_азва джерела:"
+
+#: ../virtManager/createpool.py:233
 msgid "_Source Path:"
 msgstr "_Шлях до джерела:"
 
-#: ../virtManager/createpool.py:397
+#: ../virtManager/createpool.py:235
+msgid "_Source IQN:"
+msgstr "IQN _джерела:"
+
+#: ../virtManager/createpool.py:237
+#, fuzzy
+msgid "_Source Adapter:"
+msgstr "_Шлях до джерела:"
+
+#: ../virtManager/createpool.py:346
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
@@ -1515,29 +1539,30 @@ msgstr ""
 "Побудова резерву цього типу призведе до форматування пристрою. Ви справді "
 "бажаєте побудувати це резервне сховище?"
 
-#: ../virtManager/createpool.py:416
+#: ../virtManager/createpool.py:365
 #, python-format
 msgid "Error creating pool: %s"
 msgstr "Помилка створення резерву: %s"
 
-#: ../virtManager/createpool.py:443
+#. pragma: no cover
+#: ../virtManager/createpool.py:391
 #, python-format
 msgid "Error validating pool: %s"
 msgstr "Помилка під час перевірки буфера: %s"
 
-#: ../virtManager/createpool.py:450
+#: ../virtManager/createpool.py:398
 msgid "Creating storage pool..."
 msgstr "Створення резервного сховища…"
 
-#: ../virtManager/createpool.py:451
+#: ../virtManager/createpool.py:399
 msgid "Creating the storage pool may take a while..."
 msgstr "Створення резервного сховища може тривати певний час…"
 
-#: ../virtManager/createpool.py:473
+#: ../virtManager/createpool.py:421
 msgid "Choose source path"
 msgstr "Виберіть каталог джерела"
 
-#: ../virtManager/createpool.py:486
+#: ../virtManager/createpool.py:434
 msgid "Choose target directory"
 msgstr "Виберіть каталог призначення"
 
@@ -2931,66 +2956,66 @@ msgstr "%s вільно / <i>%s використано</i>"
 msgid "Create new volume"
 msgstr "Створення нового тому"
 
-#: ../virtManager/hoststorage.py:347
+#: ../virtManager/hoststorage.py:348
 msgid "Pool does not support volume creation"
 msgstr "У буфері даних не передбачено створення томів"
 
-#: ../virtManager/hoststorage.py:358
+#: ../virtManager/hoststorage.py:359
 msgid "No storage pool selected."
 msgstr "Не вибрано резервного сховища."
 
-#: ../virtManager/hoststorage.py:367
+#: ../virtManager/hoststorage.py:368
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "Помилка під час вибору резервного сховища: %s"
 
-#: ../virtManager/hoststorage.py:470
+#: ../virtManager/hoststorage.py:471
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "Помилка під час завершення роботи буфера «%s»"
 
-#: ../virtManager/hoststorage.py:479
+#: ../virtManager/hoststorage.py:480
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "Помилка під час спроби запуску буфера «%s»"
 
-#: ../virtManager/hoststorage.py:490
+#: ../virtManager/hoststorage.py:491
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr ""
 "Помилка під час спроби запуску майстра створення резервного сховища: %s"
 
-#: ../virtManager/hoststorage.py:497
+#: ../virtManager/hoststorage.py:498
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Ви справді бажаєте остаточно вилучити резерв %s?"
 
-#: ../virtManager/hoststorage.py:504
+#: ../virtManager/hoststorage.py:505
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "Помилка під час спроби вилучення резерву «%s»"
 
-#: ../virtManager/hoststorage.py:515
+#: ../virtManager/hoststorage.py:516
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Помилка під час оновлення буфера «%s»"
 
-#: ../virtManager/hoststorage.py:549
+#: ../virtManager/hoststorage.py:550
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Помилка під час запуску майстра обробки томів: %s"
 
-#: ../virtManager/hoststorage.py:557
+#: ../virtManager/hoststorage.py:558
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Ви справді бажаєте остаточно вилучити том %s?"
 
-#: ../virtManager/hoststorage.py:570
+#: ../virtManager/hoststorage.py:571
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "Помилка під час спроби вилучення тому «%s»"
 
-#: ../virtManager/hoststorage.py:595
+#: ../virtManager/hoststorage.py:596
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Помилка під час спроби змінити параметри резервного сховища: %s"
@@ -3395,6 +3420,54 @@ msgstr "Мережа %s"
 msgid "Interface %s"
 msgstr "Інтерфейс %s"
 
+#: ../virtManager/object/storagepool.py:25
+msgid "Filesystem Directory"
+msgstr "Каталог файлової системи"
+
+#: ../virtManager/object/storagepool.py:26
+msgid "Pre-Formatted Block Device"
+msgstr "Попередньо форматований блоковий пристрій"
+
+#: ../virtManager/object/storagepool.py:27
+msgid "Network Exported Directory"
+msgstr "Каталог, експортований з мережі"
+
+#: ../virtManager/object/storagepool.py:28
+msgid "LVM Volume Group"
+msgstr "Група томів LVM"
+
+#: ../virtManager/object/storagepool.py:29
+msgid "Physical Disk Device"
+msgstr "Пристрій — фізичний диск"
+
+#: ../virtManager/object/storagepool.py:30
+msgid "iSCSI Target"
+msgstr "Призначення iSCSI"
+
+#: ../virtManager/object/storagepool.py:31
+msgid "SCSI Host Adapter"
+msgstr "SCSI-адаптер основного каналу"
+
+#: ../virtManager/object/storagepool.py:32
+msgid "Multipath Device Enumerator"
+msgstr "Реєстратор пристроїв з багатьма шляхами"
+
+#: ../virtManager/object/storagepool.py:33
+msgid "Gluster Filesystem"
+msgstr "Файлова система Gluster"
+
+#: ../virtManager/object/storagepool.py:34
+msgid "RADOS Block Device/Ceph"
+msgstr "Блоковий пристрій RADOS/Ceph"
+
+#: ../virtManager/object/storagepool.py:35
+msgid "Sheepdog Filesystem"
+msgstr "Файлова система Sheepdog"
+
+#: ../virtManager/object/storagepool.py:36
+msgid "ZFS Pool"
+msgstr "Буфер ZFS"
+
 #: ../virtManager/oslist.py:26
 msgid "Type to start searching..."
 msgstr "Введіть щось, щоб розпочати пошук…"
@@ -3696,15 +3769,17 @@ msgstr "Збереження знімка вікна віртуальної ма
 msgid "PNG files"
 msgstr "файли PNG"
 
-#: ../virtManager/xmleditor.py:108 ../virtManager/xmleditor.py:121
+#: ../virtManager/xmleditor.py:117 ../virtManager/xmleditor.py:130
 msgid "There are unapplied changes."
 msgstr "Деякі зміни не було застосовано."
 
-#: ../virtManager/xmleditor.py:109
+#: ../virtManager/xmleditor.py:118
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
+"Внесені вами зміни буде втрачено, якщо ви закриєте цю вкладку. Ви справді "
+"хочете її закрити?"
 
-#: ../virtManager/xmleditor.py:122
+#: ../virtManager/xmleditor.py:131
 msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
@@ -3821,19 +3896,19 @@ msgstr ""
 "Основна система не підтримує домени типу %(domain)s%(machine)s для типу "
 "віртуалізації «%(virttype)s», архітектура «%(arch)s»"
 
-#: ../virtinst/cli.py:102
+#: ../virtinst/cli.py:105
 msgid "See man page for examples and full option syntax."
 msgstr ""
 "Докладний опис синтаксису параметрів можна знайти на сторінці довідника "
 "(man)."
 
-#: ../virtinst/cli.py:104
+#: ../virtinst/cli.py:107
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 "Щоб ознайомитися зі списком додаткових параметрів, скористайтеся командами "
 "«--параметр=?» або «--параметр help»"
 
-#: ../virtinst/cli.py:291
+#: ../virtinst/cli.py:294
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -3846,7 +3921,7 @@ msgstr ""
 "  %s\n"
 "Якщо це не так, будь ласка, перезапустіть процес встановлення."
 
-#: ../virtinst/cli.py:308
+#: ../virtinst/cli.py:311
 #, python-format
 msgid ""
 "%s may not be accessible by the hypervisor. You will need to grant the '%s' "
@@ -3855,21 +3930,22 @@ msgstr ""
 "%s може бути недоступний гіпервізору. Вам слід надати користувачу «%s» права "
 "доступу для пошуку у таких каталогах: %s"
 
-#: ../virtinst/cli.py:318
+#: ../virtinst/cli.py:321
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr " (Скористайтеся --check %s=off або --check all=off, щоб перевизначити)"
 
-#: ../virtinst/cli.py:335
+#: ../virtinst/cli.py:338
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Вже вказану адресу «%s» буде перезаписано"
 
-#: ../virtinst/cli.py:346
+#: ../virtinst/cli.py:349
 #, python-format
 msgid "Disk %s is already in use by other guests %s."
 msgstr "Диск %s вже використовується іншими гостьовими системами %s."
 
+#. pragma: no cover
 #: ../virtinst/cli.py:444
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
@@ -3878,44 +3954,45 @@ msgstr ""
 "Не вдалося встановити з’єднання з графічною консоллю: virt-viewer не "
 "встановлено. Будь ласка, встановіть пакунок «virt-viewer»."
 
-#: ../virtinst/cli.py:450
+#. pragma: no cover
+#: ../virtinst/cli.py:451
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Графічний режим, запит щодо якого було надіслано за допомогою DISPLAY, не "
 "встановлено. virt-viewer не запущено."
 
-#: ../virtinst/cli.py:546 ../virtinst/cli.py:549
+#: ../virtinst/cli.py:547 ../virtinst/cli.py:550
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Встановити з’єднання з гіпервізором за адресою libvirt"
 
-#: ../virtinst/cli.py:565
+#: ../virtinst/cli.py:566
 msgid "Don't automatically try to connect to the guest console"
 msgstr ""
 "Не виконувати автоматичних спроб встановлення з’єднання з консоллю гостьової "
 "системи"
 
-#: ../virtinst/cli.py:569
+#: ../virtinst/cli.py:570
 msgid "Don't boot guest after completing install."
 msgstr "Не завантажувати гостьову систему після завершення встановлення."
 
-#: ../virtinst/cli.py:573
+#: ../virtinst/cli.py:574
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "Не перевіряти збіг назв, перезаписувати усі гостьові системи з назвами, які "
 "збігаються з новими."
 
-#: ../virtinst/cli.py:580
+#: ../virtinst/cli.py:581
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "Вивести створений XML домену замість створення гостьової системи."
 
-#: ../virtinst/cli.py:599
+#: ../virtinst/cli.py:600
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "Виконати процедуру встановлення, але не створювати пристроїв і не визначати "
 "гостьову систему."
 
-#: ../virtinst/cli.py:604
+#: ../virtinst/cli.py:605
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
@@ -3925,15 +4002,15 @@ msgstr ""
 "--check path_in_use=off\n"
 "--check all=off"
 
-#: ../virtinst/cli.py:608
+#: ../virtinst/cli.py:609
 msgid "Suppress non-error output"
 msgstr "Придушити повідомлення не про помилки"
 
-#: ../virtinst/cli.py:610
+#: ../virtinst/cli.py:611
 msgid "Print debugging information"
 msgstr "Вивести діагностичні дані"
 
-#: ../virtinst/cli.py:616
+#: ../virtinst/cli.py:617
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -3943,7 +4020,7 @@ msgstr ""
 "--metadata name=foo,title=\"Заголовок\",uuid=...\n"
 "--metadata description=\"Довгий опис\""
 
-#: ../virtinst/cli.py:624
+#: ../virtinst/cli.py:625
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
@@ -3953,7 +4030,7 @@ msgstr ""
 "--memory 1024 (у МіБ)\n"
 "--memory memory=1024,currentMemory=512\n"
 
-#: ../virtinst/cli.py:637
+#: ../virtinst/cli.py:638
 msgid ""
 "Number of vcpus to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -3966,7 +4043,7 @@ msgstr ""
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2,"
 
-#: ../virtinst/cli.py:646
+#: ../virtinst/cli.py:647
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -3976,7 +4053,7 @@ msgstr ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 
-#: ../virtinst/cli.py:659
+#: ../virtinst/cli.py:660
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -3988,7 +4065,7 @@ msgstr ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 
-#: ../virtinst/cli.py:668
+#: ../virtinst/cli.py:669
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -4004,7 +4081,7 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: ../virtinst/cli.py:679
+#: ../virtinst/cli.py:680
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -4014,7 +4091,7 @@ msgstr ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 
-#: ../virtinst/cli.py:684
+#: ../virtinst/cli.py:685
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
@@ -4024,31 +4101,31 @@ msgstr ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
-#: ../virtinst/cli.py:689
+#: ../virtinst/cli.py:690
 msgid "Configure a guest serial device"
 msgstr "Налаштувати послідовний пристрій гостьової системи"
 
-#: ../virtinst/cli.py:692
+#: ../virtinst/cli.py:693
 msgid "Configure a guest parallel device"
 msgstr "Налаштувати паралельний пристрій гостьової системи"
 
-#: ../virtinst/cli.py:695
+#: ../virtinst/cli.py:696
 msgid "Configure a guest communication channel"
 msgstr "Налаштувати канал обміну даними гостьової системи"
 
-#: ../virtinst/cli.py:698
+#: ../virtinst/cli.py:699
 msgid "Configure a text console connection between the guest and host"
 msgstr ""
 "Налаштувати з’єднання за допомогою текстової консолі між гостьовою і "
 "основною системами"
 
-#: ../virtinst/cli.py:702
+#: ../virtinst/cli.py:703
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Налаштувати фізичні пристрої USB, PCI тощо основної системи, які буде надано "
 "у спільне користування гостьовій системі."
 
-#: ../virtinst/cli.py:710
+#: ../virtinst/cli.py:711
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -4058,19 +4135,19 @@ msgstr ""
 "--filesystem /мій/початковий/каталог,/каталог/у/гостьовій\n"
 "--filesystem template_name,/,type=template"
 
-#: ../virtinst/cli.py:718
+#: ../virtinst/cli.py:719
 msgid "Configure guest sound device emulation"
 msgstr "Налаштувати емуляцію звукового пристрою у гостьовій системі"
 
-#: ../virtinst/cli.py:729
+#: ../virtinst/cli.py:730
 msgid "Configure a guest watchdog device"
 msgstr "Налаштувати пристрій спостереження гостьової системи"
 
-#: ../virtinst/cli.py:732
+#: ../virtinst/cli.py:733
 msgid "Configure guest video hardware."
 msgstr "Налаштувати графічну підсистему гостьової системи."
 
-#: ../virtinst/cli.py:735
+#: ../virtinst/cli.py:736
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -4078,7 +4155,7 @@ msgstr ""
 "Налаштувати пристрій читання карток гостьової системи. Приклад:\n"
 "--smartcard mode=passthrough"
 
-#: ../virtinst/cli.py:739
+#: ../virtinst/cli.py:740
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -4086,7 +4163,7 @@ msgstr ""
 "Налаштувати пристрій переспрямування гостьової системи. Приклад:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: ../virtinst/cli.py:743
+#: ../virtinst/cli.py:744
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -4094,7 +4171,7 @@ msgstr ""
 "Налаштувати пристрій резервної пам’яті. Приклад:\n"
 "--memballoon model=virtio"
 
-#: ../virtinst/cli.py:747
+#: ../virtinst/cli.py:748
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -4102,7 +4179,7 @@ msgstr ""
 "Налаштувати пристрій TPM гостьової системи. Приклад:\n"
 "--tpm /dev/tpm"
 
-#: ../virtinst/cli.py:751
+#: ../virtinst/cli.py:752
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
@@ -4111,7 +4188,7 @@ msgstr ""
 "Приклад:\n"
 "--rng /dev/urandom"
 
-#: ../virtinst/cli.py:755
+#: ../virtinst/cli.py:756
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -4119,7 +4196,7 @@ msgstr ""
 "Налаштувати гостьовий пристрій для паніки. Приклад:\n"
 "--panic default"
 
-#: ../virtinst/cli.py:759
+#: ../virtinst/cli.py:760
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
@@ -4127,7 +4204,7 @@ msgstr ""
 "Налаштувати пристрій пам’яті гостьової системи . Приклад:\n"
 "--memdev dimm,target.size=1024"
 
-#: ../virtinst/cli.py:763
+#: ../virtinst/cli.py:764
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
@@ -4137,31 +4214,31 @@ msgstr ""
 "--vsock auto.cid=yes\n"
 "--vsock cid.address=7"
 
-#: ../virtinst/cli.py:771
+#: ../virtinst/cli.py:772
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr "Встановити домен <iothreads> та налаштування <iothreadids>."
 
-#: ../virtinst/cli.py:775
+#: ../virtinst/cli.py:776
 msgid "Set domain seclabel configuration."
 msgstr "Встановити налаштування seclabel домену."
 
-#: ../virtinst/cli.py:779
+#: ../virtinst/cli.py:780
 msgid "Tune CPU parameters for the domain process."
 msgstr "Скоригувати параметри процесора для процесу домену."
 
-#: ../virtinst/cli.py:783
+#: ../virtinst/cli.py:784
 msgid "Tune NUMA policy for the domain process."
 msgstr "Змінити правила NUMA для процесу домену."
 
-#: ../virtinst/cli.py:787
+#: ../virtinst/cli.py:788
 msgid "Tune memory policy for the domain process."
 msgstr "Скоригувати правила роботи з пам’яттю для процесу домену."
 
-#: ../virtinst/cli.py:791
+#: ../virtinst/cli.py:792
 msgid "Tune blkio policy for the domain process."
 msgstr "Скоригувати правила blkio для процесу у домені."
 
-#: ../virtinst/cli.py:795
+#: ../virtinst/cli.py:796
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -4169,7 +4246,7 @@ msgstr ""
 "Встановити правила резервування пам’яті для процесу домену. Приклад:\n"
 "--memorybacking hugepages=on"
 
-#: ../virtinst/cli.py:800
+#: ../virtinst/cli.py:801
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -4179,7 +4256,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 
-#: ../virtinst/cli.py:806
+#: ../virtinst/cli.py:807
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -4187,19 +4264,19 @@ msgstr ""
 "Встановити теґ XML <clock> домену. Приклад:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: ../virtinst/cli.py:811
+#: ../virtinst/cli.py:812
 msgid "Configure VM power management features"
 msgstr "Налаштувати можливості з керування живленням ВМ"
 
-#: ../virtinst/cli.py:815
+#: ../virtinst/cli.py:816
 msgid "Configure VM lifecycle management policy"
 msgstr "Налаштувати правила керування робочим циклом ВМ"
 
-#: ../virtinst/cli.py:819
+#: ../virtinst/cli.py:820
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "Налаштувати розподіл ресурсів ВМ (cgroup-и)"
 
-#: ../virtinst/cli.py:823
+#: ../virtinst/cli.py:824
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
@@ -4209,7 +4286,7 @@ msgstr ""
 "--sysinfo host\n"
 "--sysinfo bios_vendor=MyVendor,bios.version=1.2.3,...\n"
 
-#: ../virtinst/cli.py:829
+#: ../virtinst/cli.py:830
 msgid ""
 "Pass arguments directly to the qemu emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
@@ -4219,7 +4296,7 @@ msgstr ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
-#: ../virtinst/cli.py:835
+#: ../virtinst/cli.py:836
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -4232,7 +4309,7 @@ msgstr ""
 "dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
-#: ../virtinst/cli.py:843
+#: ../virtinst/cli.py:844
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -4242,7 +4319,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (для контейнерів)"
 
-#: ../virtinst/cli.py:849
+#: ../virtinst/cli.py:850
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
@@ -4250,7 +4327,7 @@ msgstr ""
 "Увімкнути простір назв користувача для контейнера LXC. Приклад:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 
-#: ../virtinst/cli.py:859
+#: ../virtinst/cli.py:860
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -4264,19 +4341,19 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: ../virtinst/cli.py:867
+#: ../virtinst/cli.py:868
 msgid "OS options"
 msgstr "Параметри ОС"
 
-#: ../virtinst/cli.py:870
+#: ../virtinst/cli.py:871
 msgid "The OS being installed in the guest."
 msgstr "Операційна система, яка встановлюється на гостьовій системі."
 
-#: ../virtinst/cli.py:872
+#: ../virtinst/cli.py:873
 msgid "The OS installed in the guest."
 msgstr "Операційна система, встановлена на гостьовій системі."
 
-#: ../virtinst/cli.py:874
+#: ../virtinst/cli.py:875
 msgid ""
 "This is used for deciding optimal defaults like virtio.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -4287,12 +4364,12 @@ msgstr ""
 "Приклади значень: fedora29, rhel7.0, win10, ...\n"
 "Щоб ознайомитися із повним списком, скористайтеся командою «osinfo-query os»."
 
-#: ../virtinst/cli.py:906
+#: ../virtinst/cli.py:907
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s повинен мати значення «yes» або «no»"
 
-#: ../virtinst/cli.py:1092
+#: ../virtinst/cli.py:1094
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -4311,22 +4388,22 @@ msgstr "Невідомі параметри %s: %s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Помилка: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: ../virtinst/cli.py:2861
+#: ../virtinst/cli.py:2876
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Неналежне значення «size»: %s"
 
-#: ../virtinst/cli.py:2874
+#: ../virtinst/cli.py:2889
 #, python-format
 msgid "Unknown '%s' value '%s'"
 msgstr "Невідоме значення «%s» «%s»"
 
-#: ../virtinst/cli.py:2887
+#: ../virtinst/cli.py:2902
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Том сховища даних слід вказувати так vol=назва_резервного_сховища/назва_тому"
 
-#: ../virtinst/cli.py:3236
+#: ../virtinst/cli.py:3238
 #, python-format
 msgid "Didn't match keymap '%s' in keytable!"
 msgstr "У таблиці розкладок не знайдено відповідної розкладки «%s»!"
@@ -4475,29 +4552,29 @@ msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr ""
 "Вказаною вами MAC-адресою, «%s», вже користується інша віртуальна машина."
 
-#: ../virtinst/diskbackend.py:103
+#: ../virtinst/diskbackend.py:108
 #, python-format
 msgid "Cannot use storage %(path)s: %(err)s"
 msgstr "Неможливо використати сховище даних %(path)s: %(err)s"
 
 #. Trying to change perms on vfat at least doesn't work
 #. but also doesn't seem to error. Try and detect that
-#: ../virtinst/diskbackend.py:271
+#: ../virtinst/diskbackend.py:276
 #, python-format
 msgid "Permissions on '%s' did not stick"
 msgstr "Права доступу до «%s» не було застосовано"
 
-#: ../virtinst/diskbackend.py:463
+#: ../virtinst/diskbackend.py:468
 #, python-format
 msgid "Cannot create storage for %s device."
 msgstr "Не вдалося створити сховище даних для пристрою %s."
 
-#: ../virtinst/diskbackend.py:471
+#: ../virtinst/diskbackend.py:476
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr "для неіснуючого диска «%s» слід вказати параметр розміру (size)"
 
-#: ../virtinst/diskbackend.py:519
+#: ../virtinst/diskbackend.py:524
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
@@ -4505,21 +4582,21 @@ msgstr ""
 "На файловій системі недостатньо вільного місця для повного розміщення "
 "розрідженого файла під час роботи гостьової системи."
 
-#: ../virtinst/diskbackend.py:524
+#: ../virtinst/diskbackend.py:529
 msgid "There is not enough free space to create the disk."
 msgstr "Для створення цього диска недостатньо вільного місця."
 
-#: ../virtinst/diskbackend.py:528
+#: ../virtinst/diskbackend.py:533
 #, python-format
 msgid " %d M requested > %d M available"
 msgstr " запит: %d МБ > доступно: %d МБ"
 
-#: ../virtinst/diskbackend.py:533
+#: ../virtinst/diskbackend.py:538
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "Клонування %(srcfile)s"
 
-#: ../virtinst/diskbackend.py:603
+#: ../virtinst/diskbackend.py:608
 #, python-format
 msgid "Error cloning diskimage %s to %s: %s"
 msgstr "Помилка під час клонування образу диска %s до %s: %s"
@@ -4579,16 +4656,16 @@ msgstr "Гостьова система"
 msgid "Guest name '%s' is already in use."
 msgstr "Назву гостьової системи, «%s», вже використано."
 
-#: ../virtinst/guest.py:548
+#: ../virtinst/guest.py:549
 msgid "Libvirt version does not support UEFI."
 msgstr "У версії libvirt не передбачено підтримки UEFI."
 
-#: ../virtinst/guest.py:552
+#: ../virtinst/guest.py:553
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "Спосіб налаштовування UEFI для архітектури «%s» є невідомим"
 
-#: ../virtinst/guest.py:557
+#: ../virtinst/guest.py:558
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
@@ -4598,6 +4675,8 @@ msgstr ""
 #, python-format
 msgid "Overriding memory to %s MiB needed for %s network install."
 msgstr ""
+"Перевизначаємо обсяг пам'яті на %s МіБ, які потрібні для встановлення %s за "
+"допомогою мережі."
 
 #: ../virtinst/install/installer.py:477
 msgid "Creating domain..."
@@ -4643,13 +4722,16 @@ msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
 msgstr ""
+"Встановлення дерева каталогів типово не працює, якщо ядру не передано "
+"додаткових аргументів, які вкажуть засобу встановлення доступну з мережі "
+"ієрархію каталогів для встановлення."
 
 #: ../virtinst/install/kernelupload.py:109
 #, python-format
 msgid "Transferring %s"
 msgstr "Передавання %s"
 
-#: ../virtinst/install/unattended.py:44
+#: ../virtinst/install/unattended.py:45
 #, python-format
 msgid "%s requires the user-password to be set."
 msgstr "%s потребує встановлення пароля користувача."
@@ -4660,28 +4742,28 @@ msgid "%s requires the admin-password to be set."
 msgstr "%s потребує встановлення пароля адміністратора."
 
 #. pragma: no cover
-#: ../virtinst/install/unattended.py:138
+#: ../virtinst/install/unattended.py:134
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
 msgstr ""
 "libosinfo або osinfo-db є надто застарілими, щоб ви могли скористатися "
 "автоматичним встановленням."
 
-#: ../virtinst/install/unattended.py:156
+#: ../virtinst/install/unattended.py:152
 #, python-format
 msgid "OS '%s' does not support required injection method '%s'"
 msgstr "Для ОС «%s» не передбачено підтримки способу ін'єкції «%s»"
 
-#: ../virtinst/install/unattended.py:244
+#: ../virtinst/install/unattended.py:274
 #, python-format
 msgid "OS '%s' media does not support unattended installation"
 msgstr "На носіях ОС «%s» не передбачено підтримки автоматичного встановлення"
 
-#: ../virtinst/install/unattended.py:255
+#: ../virtinst/install/unattended.py:285
 #, python-format
 msgid "OS '%s' does not support unattended installation."
 msgstr "Для ОС «%s» не передбачено підтримки автоматичного встановлення."
 
-#: ../virtinst/install/unattended.py:264
+#: ../virtinst/install/unattended.py:294
 #, python-format
 msgid ""
 "OS '%s' does not support unattended installation for the '%s' profile. "
@@ -4690,7 +4772,7 @@ msgstr ""
 "Для ОС «%s» не передбачено підтримки автоматичного встановлення для профілю "
 "«%s». Доступні профілі: %s"
 
-#: ../virtinst/install/unattended.py:269
+#: ../virtinst/install/unattended.py:299
 #, python-format
 msgid "Using unattended profile '%s'"
 msgstr "Використовуємо автоматизований профіль «%s»"
@@ -4760,127 +4842,60 @@ msgstr ""
 "Невідома назва операційної системи — «%s». Зі списком коректних значень "
 "можна ознайомитися за допомогою команди «osinfo-query os»."
 
-#: ../virtinst/osdict.py:597
+#: ../virtinst/osdict.py:603
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "У ОС «%s» немає місця URL"
 
-#: ../virtinst/osdict.py:608
+#: ../virtinst/osdict.py:614
 #, python-format
 msgid "OS '%s' does not have a URL location for the %s architecture"
 msgstr "Для ОС «%s» не має місця URL для архітектури %s"
 
-#: ../virtinst/storage.py:127
-msgid "Filesystem Directory"
-msgstr "Каталог файлової системи"
-
-#: ../virtinst/storage.py:128
-msgid "Pre-Formatted Block Device"
-msgstr "Попередньо форматований блоковий пристрій"
-
-#: ../virtinst/storage.py:129
-msgid "Network Exported Directory"
-msgstr "Каталог, експортований з мережі"
-
-#: ../virtinst/storage.py:130
-msgid "LVM Volume Group"
-msgstr "Група томів LVM"
-
-#: ../virtinst/storage.py:131
-msgid "Physical Disk Device"
-msgstr "Пристрій — фізичний диск"
-
-#: ../virtinst/storage.py:132
-msgid "iSCSI Target"
-msgstr "Призначення iSCSI"
-
-#: ../virtinst/storage.py:133
-msgid "SCSI Host Adapter"
-msgstr "SCSI-адаптер основного каналу"
-
-#: ../virtinst/storage.py:134
-msgid "Multipath Device Enumerator"
-msgstr "Реєстратор пристроїв з багатьма шляхами"
-
-#: ../virtinst/storage.py:135
-msgid "Gluster Filesystem"
-msgstr "Файлова система Gluster"
-
-#: ../virtinst/storage.py:136
-msgid "RADOS Block Device/Ceph"
-msgstr "Блоковий пристрій RADOS/Ceph"
-
-#: ../virtinst/storage.py:137
-msgid "Sheepdog Filesystem"
-msgstr "Файлова система Sheepdog"
-
-#: ../virtinst/storage.py:138
-msgid "ZFS Pool"
-msgstr "Буфер ZFS"
-
-#: ../virtinst/storage.py:223
+#: ../virtinst/storage.py:166
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "Не вдалося створити типове резервне сховище даних «%s»: %s"
 
-#: ../virtinst/storage.py:275 ../virtinst/storage.py:636
+#: ../virtinst/storage.py:218 ../virtinst/storage.py:529
 msgid "Storage object"
 msgstr "Об’єкт сховища даних"
 
-#: ../virtinst/storage.py:281
+#: ../virtinst/storage.py:224
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "Назву «%s» вже використано для іншого резервного сховища."
 
-#: ../virtinst/storage.py:454
-msgid "Hostname is required"
-msgstr "Слід вказати назву вузла"
-
-#: ../virtinst/storage.py:458
-msgid "Source path is required"
-msgstr "Слід вказати шлях до джерела"
-
-#: ../virtinst/storage.py:471
-msgid "Must explicitly specify source path if building pool"
-msgstr ""
-"У разі побудови резервного сховища даних слід явно вказати шлях до каталогу "
-"джерела даних"
-
-#: ../virtinst/storage.py:475
-msgid "Must explicitly specify disk format if formatting disk device."
-msgstr ""
-"У разі форматування дискового пристрою слід явним чином вказати формат диска."
-
-#: ../virtinst/storage.py:487
+#. pragma: no cover
+#: ../virtinst/storage.py:387
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "Не вдалося визначити резервного сховища даних: %s"
 
-#: ../virtinst/storage.py:494
+#. pragma: no cover
+#: ../virtinst/storage.py:394
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "Не вдалося побудувати резервне сховище даних: %s"
 
-#: ../virtinst/storage.py:500
+#. pragma: no cover
+#: ../virtinst/storage.py:400
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "Не вдалося запустити резервне сховище даних: %s"
 
-#: ../virtinst/storage.py:506
+#. pragma: no cover
+#: ../virtinst/storage.py:406
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "Не вдалося встановити прапорець автозапуску буфера: %s"
 
-#: ../virtinst/storage.py:606
-msgid "input_vol must be a virStorageVol"
-msgstr "input_vol має бути virStorageVol"
-
-#: ../virtinst/storage.py:642
+#: ../virtinst/storage.py:535
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "Назву «%s» вже використано для іншого тому."
 
-#: ../virtinst/storage.py:736
+#: ../virtinst/storage.py:624
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
@@ -4888,12 +4903,12 @@ msgstr ""
 "Підтримки розріджених логічних томів не передбачено, встановлюємо розподіл, "
 "відповідний до місткості"
 
-#: ../virtinst/storage.py:784
+#: ../virtinst/storage.py:671
 #, python-format
 msgid "Allocating '%s'"
 msgstr "Розміщення «%s»"
 
-#: ../virtinst/storage.py:843
+#: ../virtinst/storage.py:734
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
@@ -4902,7 +4917,7 @@ msgstr ""
 "На резервному сховищі даних недостатньо місця для створення тому. (Для "
 "розміщення потрібно %d МБ > доступно %d МБ)"
 
-#: ../virtinst/storage.py:849
+#: ../virtinst/storage.py:740
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -5012,7 +5027,7 @@ msgstr "Сталі _резервування:"
 msgid "<b>Ad_vanced options</b>"
 msgstr "<b>Д_одаткові параметри</b>"
 
-#: ../ui/addhardware.ui.h:10 ../ui/createpool.ui.h:12 ../ui/fsdetails.ui.h:4
+#: ../ui/addhardware.ui.h:10 ../ui/createpool.ui.h:11 ../ui/fsdetails.ui.h:4
 #: ../ui/gfxdetails.ui.h:2 ../ui/netlist.ui.h:10
 msgid "_Type:"
 msgstr "_Тип:"
@@ -5053,7 +5068,7 @@ msgstr "_Тип пристрою:"
 msgid "T_ype:"
 msgstr "Т_ип:"
 
-#: ../ui/addhardware.ui.h:20 ../ui/createnet.ui.h:6 ../ui/createpool.ui.h:11
+#: ../ui/addhardware.ui.h:20 ../ui/createnet.ui.h:6 ../ui/createpool.ui.h:10
 #: ../ui/createvol.ui.h:4 ../ui/details.ui.h:4 ../ui/host.ui.h:5
 #: ../ui/snapshotsnew.ui.h:3
 msgid "_Name:"
@@ -5095,7 +5110,7 @@ msgstr "rng"
 msgid "panic"
 msgstr "паніка"
 
-#: ../ui/addhardware.ui.h:30 ../ui/createnet.ui.h:19 ../ui/createpool.ui.h:13
+#: ../ui/addhardware.ui.h:30 ../ui/createnet.ui.h:19 ../ui/createpool.ui.h:12
 #: ../ui/createvm.ui.h:77 ../ui/createvol.ui.h:15 ../ui/snapshotsnew.ui.h:7
 msgid "_Finish"
 msgstr "_Завершити"
@@ -5392,10 +5407,6 @@ msgstr "В_ибрати"
 #: ../ui/createpool.ui.h:9
 msgid "Bro_wse"
 msgstr "Ви_брати"
-
-#: ../ui/createpool.ui.h:10
-msgid "Source N_ame:"
-msgstr "Н_азва джерела:"
 
 #: ../ui/createvm.ui.h:1
 msgid "New VM"
@@ -7087,41 +7098,21 @@ msgstr ""
 msgid "_XML"
 msgstr "_XML"
 
-#~ msgid "Treat the CD-ROM media as a Live CD"
-#~ msgstr "Вважати носій CD-ROM носієм компакт-диска портативної системи"
+#~ msgid "Hostname is required"
+#~ msgstr "Слід вказати назву вузла"
 
-#~ msgid "Network could not be updated"
-#~ msgstr "Не вдалося оновити мережу"
+#~ msgid "Source path is required"
+#~ msgstr "Слід вказати шлях до джерела"
 
-#~ msgid "This change will take effect when the network is restarted"
-#~ msgstr "Ця зміна набуде чинності після перезапуску мережі"
+#~ msgid "Must explicitly specify source path if building pool"
+#~ msgstr ""
+#~ "У разі побудови резервного сховища даних слід явно вказати шлях до "
+#~ "каталогу джерела даних"
 
-#~ msgid "Enable i_nbound QoS"
-#~ msgstr "Увімкнути в_хідний QoS"
+#~ msgid "Must explicitly specify disk format if formatting disk device."
+#~ msgstr ""
+#~ "У разі форматування дискового пристрою слід явним чином вказати формат "
+#~ "диска."
 
-#~ msgid "Average (KiB/sec):"
-#~ msgstr "У середньому (КіБ/с):"
-
-#~ msgid "Burst (KiB):"
-#~ msgstr "Пакет (КіБ):"
-
-#~ msgid "Peak (KiB/sec):"
-#~ msgstr "Пік (КіБ/с):"
-
-#~ msgid "Enable ou_tbound QoS"
-#~ msgstr "Увімкнути в_ихідний QoS"
-
-#~ msgid "Burst (KiB/sec):"
-#~ msgstr "Пакет (КіБ/с):"
-
-#~ msgid "<b>_QoS configuration</b>"
-#~ msgstr "<b>Нала_штування QoS</b>"
-
-#~ msgid "Physical Function:"
-#~ msgstr "Фізична функція:"
-
-#~ msgid "Virtual Functions:"
-#~ msgstr "Віртуальні функції:"
-
-#~ msgid "<b>_SR-IOV information</b>"
-#~ msgstr "<b>Дані щодо _SR-IOV</b>"
+#~ msgid "input_vol must be a virStorageVol"
+#~ msgstr "input_vol має бути virStorageVol"
