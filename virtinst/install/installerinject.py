@@ -93,8 +93,12 @@ def perform_cdrom_injections(injections, scratchdir, cloudinit=False):
     """
     Insert files into the root directory of a generated cdrom
     """
+    if cloudinit:
+        iso_suffix = "-cloudinit.iso"
+    else:
+        iso_suffix = "-unattended.iso"
     fileobj = tempfile.NamedTemporaryFile(
-        prefix="virtinst-", suffix="-unattended.iso",
+        prefix="virtinst-", suffix=iso_suffix,
         dir=scratchdir, delete=False)
     iso = fileobj.name
 
