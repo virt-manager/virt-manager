@@ -586,7 +586,8 @@ class Guest(XMLBuilder):
             self.os.loader_secure = True
             if self.os.machine and "q35" not in self.os.machine:
                 log.warning("Changing machine type from '%s' to 'q35' "
-                        "which is required for UEFI secure boot.")
+                        "which is required for UEFI secure boot.",
+                        self.os.machine)
                 self.os.machine = "q35"
 
     def disable_hyperv_for_uefi(self):
