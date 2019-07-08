@@ -58,7 +58,7 @@ def _run_iso_commands(iso, tempdir, cloudinit=False):
     log.debug("cmd output: %s", output)
 
 
-def _perform_generic_injections(injections, scratchdir, media, cb, cloudinit=False):
+def _perform_generic_injections(injections, scratchdir, media, cb, **kwargs):
     if not injections:
         return
 
@@ -76,17 +76,17 @@ def _perform_generic_injections(injections, scratchdir, media, cb, cloudinit=Fal
                     filename, dst, media)
             shutil.copy(filename, os.path.join(tempdir, dst))
 
-        return cb(media, tempdir, cloudinit)
+        return cb(media, tempdir, **kwargs)
     finally:
         shutil.rmtree(tempdir)
 
 
-def perform_initrd_injections(initrd, injections, scratchdir, cloudinit=False):
+def perform_initrd_injections(initrd, injections, scratchdir):
     """
     Insert files into the root directory of the initial ram disk
     """
     _perform_generic_injections(injections, scratchdir, initrd,
-            _run_initrd_commands, cloudinit)
+            _run_initrd_commands)
 
 
 def perform_cdrom_injections(injections, scratchdir, cloudinit=False):
@@ -100,7 +100,7 @@ def perform_cdrom_injections(injections, scratchdir, cloudinit=False):
 
     try:
         _perform_generic_injections(injections, scratchdir, iso,
-            _run_iso_commands, cloudinit)
+            _run_iso_commands, cloudinit=cloudinit)
     except Exception:  # pragma: no cover
         os.unlink(iso)
         raise
