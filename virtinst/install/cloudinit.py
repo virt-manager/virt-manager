@@ -1,7 +1,6 @@
 import tempfile
 import random
 import string
-import time
 from ..logger import log
 
 
@@ -32,7 +31,6 @@ def create_userdata(scratchdir, cloudinit_data):
         for dummy in range(16):
             rootpass += random.choice(string.ascii_letters + string.digits)
         log.warning("Generated password for first boot: %s", rootpass)
-        time.sleep(20)
 
     if rootpass:
         content += "chpasswd:\n"

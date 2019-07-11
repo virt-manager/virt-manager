@@ -873,6 +873,9 @@ c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_compare("--connect %s" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26" % (utils.URIs.test_suite), "osvariant-noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26 --pxe --print-xml" % (utils.URIs.test_suite), "osvariant-defaults-pxe", use_default_args=False)  # No arguments
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", "cloud-init-default")  # default --cloud-init behavior is root-password=generate,disable=yes
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password=generate,disable=no", "cloud-init-options")  # --cloud-init options
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password=a1b2c3d4,disable=no", "cloud-init-options")  #--cloud-init-options
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--connect test:///default --test-stub-command", use_default_args=False)  # --test-stub-command
 c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning
