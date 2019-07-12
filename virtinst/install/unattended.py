@@ -125,9 +125,10 @@ class OSInstallScript:
                 return True
         return False  # pragma: no cover
 
-    def __init__(self, script, osobj):
+    def __init__(self, script, osobj, osinfomediaobj):
         self._script = script
         self._osobj = osobj
+        self._osinfomediaobj = osinfomediaobj
         self._config = None
 
         if not OSInstallScript.have_new_libosinfo():  # pragma: no cover
@@ -316,7 +317,9 @@ def prepare_install_script(guest, unattended_data,
 
     rawscript = _lookup_rawscript(guest.osinfo,
             unattended_data.profile, os_media)
-    script = OSInstallScript(rawscript, guest.osinfo)
+
+    osinfomediaobj = os_media.get_osinfo_media() if os_media else None
+    script = OSInstallScript(rawscript, guest.osinfo, osinfomediaobj)
 
     script.set_preferred_injection_method(injection_method)
 
