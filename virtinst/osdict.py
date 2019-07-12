@@ -640,3 +640,6 @@ class _OsMedia(object):
 
     def get_install_script_list(self):
         return list(_OsinfoIter(self._media.get_install_script_list()))
+
+    def get_osinfo_media(self):
+        return self._media
