@@ -561,8 +561,9 @@ class Guest(XMLBuilder):
         return path
 
     def is_uefi(self):
-        return bool(self.os.loader and
-                    self.os.loader_type == "pflash")
+        if self.os.loader and self.os.loader_type == "pflash":
+            return True
+        return self.os.firmware == "efi"
 
     def set_uefi_path(self, path):
         """
@@ -781,11 +782,13 @@ class Guest(XMLBuilder):
             not self.os.kernel and
             not self.os.loader and
             self.os.loader_ro is None and
-            self.os.nvram is None)
+            self.os.nvram is None and
+            self.os.firmware is None)
 
         if use_default_uefi or self.uefi_requested:
             try:
                 path = self.get_uefi_path()
+                log.debug("Setting UEFI path=%s", path)
                 self.set_uefi_path(path)
             except RuntimeError as e:
                 if self.uefi_requested:
