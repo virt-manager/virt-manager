@@ -315,11 +315,7 @@ def _lookup_rawscript(osinfo, profile, os_media):
 def prepare_install_script(guest, unattended_data,
         url, os_media, injection_method):
     def _get_installation_source(os_media):
-        # This is ugly, but that's only the current way to deal with
-        # netinstall medias.
         if not os_media:
-            return "network"
-        if os_media.is_netinst():
             return "network"
         return "media"
 
