@@ -180,9 +180,17 @@ class OSInstallScript:
         self._config = config
 
     def generate(self):
+        if self._osinfomediaobj:
+            return self._script.generate_for_media(
+                    self._osinfomediaobj, self._config)
+
         return self._script.generate(self._osobj.get_handle(), self._config)
 
     def generate_cmdline(self):
+        if self._osinfomediaobj:
+            return self._script.generate_command_line_for_media(
+                    self._osinfomediaobj, self._config)
+
         return self._script.generate_command_line(
                 self._osobj.get_handle(), self._config)
 
