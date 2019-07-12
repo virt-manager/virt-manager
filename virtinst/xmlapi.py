@@ -294,7 +294,7 @@ class _Libxml2API(_XMLBase):
 
     def __del__(self):
         if not hasattr(self, "_doc"):
-            # Incase we error when parsing the doc
+            # In case we error when parsing the doc
             return
         self._doc.freeDoc()
         self._doc = None

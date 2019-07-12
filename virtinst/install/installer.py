@@ -573,7 +573,7 @@ class Installer(object):
                     disk.get_vol_object().delete()
                 else:  # pragma: no cover
                     # This case technically shouldn't happen here, but
-                    # it's here incase future assumptions change
+                    # it's here in case future assumptions change
                     os.unlink(disk.path)
 
                 meter.end(0)

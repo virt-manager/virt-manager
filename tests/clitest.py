@@ -721,7 +721,7 @@ c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-se
 c = vinst.add_category("cpuram", "--hvm --nographics --noautoconsole --nodisks --pxe")
 c.add_valid("--ram 4000000")  # Ram overcommit
 c.add_valid("--vcpus sockets=2,threads=2")  # Topology only
-c.add_valid("--cpuset 1,2,3")  # cpuset backcompat with no --vcpus specfied
+c.add_valid("--cpuset 1,2,3")  # cpuset backcompat with no --vcpus specified
 c.add_valid("--cpu somemodel")  # Simple --cpu
 c.add_valid("--noapic --noacpi")  # feature backcompat
 c.add_valid("--security label=foobar.label,relabel=yes")  # --security implicit static
