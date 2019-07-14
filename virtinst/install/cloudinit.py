@@ -7,6 +7,19 @@ from ..logger import log
 class CloudInitData():
     disable = None
     root_password = None
+    generated_root_password = None
+
+    def generate_password(self):
+        self.generated_root_password = ""
+        for dummy in range(16):
+            self.generated_root_password += random.choice(string.ascii_letters + string.digits)
+        return self.generated_root_password
+
+    def get_root_password(self):
+        if self.root_password == "generate":
+            return self.generate_password()
+        else:
+            return self.root_password
 
 
 def create_metadata(scratchdir):
@@ -25,13 +38,7 @@ def create_metadata(scratchdir):
 def create_userdata(scratchdir, cloudinit_data):
     content = "#cloud-config\n"
 
-    rootpass = cloudinit_data.root_password
-    if rootpass == "generate":
-        rootpass = ""
-        for dummy in range(16):
-            rootpass += random.choice(string.ascii_letters + string.digits)
-        log.warning("Generated password for first boot: %s", rootpass)
-
+    rootpass = cloudinit_data.get_root_password()
     if rootpass:
         content += "chpasswd:\n"
         content += "  list: |\n"
