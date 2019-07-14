@@ -150,6 +150,9 @@
     <timer name="hpet" present="yes"/>
     <timer name="hypervclock" present="no"/>
     <timer name="pit" tickpolicy="delay"/>
+    <timer name="rtc" track="wall"/>
+    <timer name="tsc" frequency="10"/>
+    <timer name="tsc" mode="emulate"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>destroy</on_reboot>
@@ -368,6 +371,9 @@
     <timer name="hpet" present="yes"/>
     <timer name="hypervclock" present="no"/>
     <timer name="pit" tickpolicy="delay"/>
+    <timer name="rtc" track="wall"/>
+    <timer name="tsc" frequency="10"/>
+    <timer name="tsc" mode="emulate"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>

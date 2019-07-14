@@ -13,6 +13,9 @@ class _ClockTimer(XMLBuilder):
     name = XMLProperty("./@name")
     present = XMLProperty("./@present", is_yesno=True)
     tickpolicy = XMLProperty("./@tickpolicy")
+    track = XMLProperty("./@track")
+    mode = XMLProperty("./@mode")
+    frequency = XMLProperty("./@frequency", is_int=True)
 
 
 class DomainClock(XMLBuilder):
