@@ -32,13 +32,15 @@ def setup_logging():
     for handler in rootLogger.handlers:
         rootLogger.removeHandler(handler)
 
-    logging.basicConfig(level=logging.DEBUG,
-                        format="%(levelname)-8s %(message)s")
-
+    fmt = "%(levelname)-8s %(message)s"
+    streamHandler = logging.StreamHandler()
+    streamHandler.setFormatter(logging.Formatter(fmt))
     if utils.clistate.debug:
-        rootLogger.setLevel(logging.DEBUG)
+        streamHandler.setLevel(logging.DEBUG)
     else:
-        rootLogger.setLevel(logging.ERROR)
+        streamHandler.setLevel(logging.ERROR)
+    log.addHandler(streamHandler)
+    log.setLevel(logging.DEBUG)
 
 
 def setup_cli_imports():
