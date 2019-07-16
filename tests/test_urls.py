@@ -106,7 +106,8 @@ def _skipmsg(testdata):
         "opensuse12" in distname or
         "opensuse13" in distname or
         "opensuseleap-42" in distname or
-        "generic" in distname):
+        "generic" in distname or
+        testdata.url.startswith("ftp:/")):
         return "skipping known busted libosinfo URL tests"
 
 
