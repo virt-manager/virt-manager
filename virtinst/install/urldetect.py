@@ -32,6 +32,7 @@ class _DistroCache(object):
 
         self.libosinfo_os_variant = None
         self.libosinfo_mediaobj = None
+        self.libosinfo_treeobj = None
 
     def acquire_file_content(self, path):
         if path not in self._filecache:
@@ -168,7 +169,8 @@ class _DistroCache(object):
         ret = OSDB.guess_os_by_tree(self._fetcher.location)
         if not ret:
             return False
-        self.libosinfo_os_variant = ret[0]
+
+        self.libosinfo_os_variant, self.libosinfo_treeobj = ret
         self.treeinfo_matched = True
         return True
 
