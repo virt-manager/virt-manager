@@ -7,6 +7,7 @@ from ..logger import log
 class CloudInitData():
     disable = None
     root_password = None
+    root_password_file = None
     generated_root_password = None
 
     def generate_password(self):
@@ -15,9 +16,15 @@ class CloudInitData():
             self.generated_root_password += random.choice(string.ascii_letters + string.digits)
         return self.generated_root_password
 
+    def _get_password(self, pwdfile):
+        with open(pwdfile, "r") as fobj:
+            return fobj.readline().rstrip("\n\r")
+
     def get_root_password(self):
         if self.root_password == "generate":
             return self.generate_password()
+        elif self.root_password_file:
+            return self._get_password(self.root_password_file)
         else:
             return self.root_password
 
