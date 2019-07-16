@@ -389,6 +389,12 @@ class _DistroTree(object):
         """
         return self.cache.libosinfo_mediaobj
 
+    def get_os_tree(self):
+        """
+        Return an OsTree wrapper around the detected libosinfo media object
+        """
+        return self.cache.libosinfo_treeobj
+
 
 class _FedoraDistro(_DistroTree):
     PRETTY_NAME = "Fedora"
