@@ -234,10 +234,12 @@ class Installer(object):
 
     def _prepare_unattended_script(self, guest, meter):
         url = None
+        os_tree = None
         if self._treemedia:
             if self._treemedia.is_network_url():
                 url = self.location
             os_media = self._treemedia.get_os_media(guest, meter)
+            os_tree = self._treemedia.get_os_tree(guest, meter)
             injection_method = "initrd"
         else:
             if self.conn.is_remote():
@@ -252,7 +254,8 @@ class Installer(object):
             injection_method = "cdrom"
 
         return unattended.prepare_install_script(
-                guest, self._unattended_data, url, os_media, injection_method)
+                guest, self._unattended_data, url,
+                os_media, os_tree, injection_method)
 
     def _prepare(self, guest, meter):
         unattended_script = None

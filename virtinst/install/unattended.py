@@ -313,7 +313,7 @@ def _lookup_rawscript(osinfo, profile, os_media):
 
 
 def prepare_install_script(guest, unattended_data,
-        url, os_media, injection_method):
+        url, os_media, os_tree, injection_method):
     def _get_installation_source(os_media):
         if not os_media:
             return "network"
