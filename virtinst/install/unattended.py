@@ -125,10 +125,11 @@ class OSInstallScript:
                 return True
         return False  # pragma: no cover
 
-    def __init__(self, script, osobj, osinfomediaobj):
+    def __init__(self, script, osobj, osinfomediaobj, osinfotreeobj):
         self._script = script
         self._osobj = osobj
         self._osinfomediaobj = osinfomediaobj
+        self._osinfotreeobj = osinfotreeobj
         self._config = None
 
         if not OSInstallScript.have_new_libosinfo():  # pragma: no cover
@@ -183,6 +184,11 @@ class OSInstallScript:
         if self._osinfomediaobj:
             return self._script.generate_for_media(
                     self._osinfomediaobj, self._config)
+        if hasattr(self._script, "generate_for_tree") and self._osinfotreeobj:
+            # osinfo_install_script_generate_for_tree() is part of
+            # libosinfo 1.6.0
+            return self._script.generate_for_tree(
+                    self._osinfotreeobj, self._config)
 
         return self._script.generate(self._osobj.get_handle(), self._config)
 
@@ -190,7 +196,12 @@ class OSInstallScript:
         if self._osinfomediaobj:
             return self._script.generate_command_line_for_media(
                     self._osinfomediaobj, self._config)
-
+        if (hasattr(self._script, "generate_command_line_for_tree") and
+                self._osinfotreeobj):
+            # osinfo_install_script_generate_command_line_for_tree() is part of
+            # libosinfo 1.6.0
+            return self._script.generate_command_line_for_tree(
+                    self._osinfotreeobj, self._config)
         return self._script.generate_command_line(
                 self._osobj.get_handle(), self._config)
 
@@ -323,7 +334,9 @@ def prepare_install_script(guest, unattended_data,
             unattended_data.profile, os_media)
 
     osinfomediaobj = os_media.get_osinfo_media() if os_media else None
-    script = OSInstallScript(rawscript, guest.osinfo, osinfomediaobj)
+    osinfotreeobj = os_tree.get_osinfo_tree() if os_tree else None
+    script = OSInstallScript(
+            rawscript, guest.osinfo, osinfomediaobj, osinfotreeobj)
 
     script.set_preferred_injection_method(injection_method)
 
