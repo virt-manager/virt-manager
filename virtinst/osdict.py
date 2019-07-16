@@ -260,10 +260,17 @@ class _OSDB(object):
                 "location=%s : %s", location, str(e))
             return None
 
-        osobj, treeobj = self._os_loader.get_db().guess_os_from_tree(tree)
-        if not osobj:
-            return None  # pragma: no cover
-        return osobj.get_short_id(), _OsTree(treeobj)
+        db = self._os_loader.get_db()
+        if hasattr(db, "identify_tree"):
+            # osinfo_db_identify_tree is part of libosinfo 1.6.0
+            if not db.identify_tree(tree):
+                return None  # pragma: no cover
+            return tree.get_os().get_short_id(), _OsTree(tree)
+        else:
+            osobj, treeobj = self._os_loader.get_db().guess_os_from_tree(tree)
+            if not osobj:
+                return None  # pragma: no cover
+            return osobj.get_short_id(), _OsTree(treeobj)
 
     def list_os(self):
         """
