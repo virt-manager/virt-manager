@@ -263,7 +263,7 @@ class _OSDB(object):
         osobj, treeobj = self._os_loader.get_db().guess_os_from_tree(tree)
         if not osobj:
             return None  # pragma: no cover
-        return osobj.get_short_id(), treeobj
+        return osobj.get_short_id(), _OsTree(treeobj)
 
     def list_os(self):
         """
