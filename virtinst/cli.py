@@ -1626,7 +1626,7 @@ class ParserCloudInit(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        cls.add_arg("root-password", "root_password")
+        cls.add_arg("root-password-generate", "root_password_generate", is_onoff=True)
         cls.add_arg("root-password-file", "root_password_file")
         cls.add_arg("disable", "disable", is_onoff=True)
 
@@ -1635,8 +1635,8 @@ def parse_cloud_init(optstr):
     ret = CloudInitData()
     if optstr == 1:
         # This means bare --cloud-init, so there's nothing to parse.
-        log.warning("Defaulting to --cloud-init root-password=generate,disable=yes")
-        ret.root_password = "generate"
+        log.warning("Defaulting to --cloud-init root-password-generate=yes,disable=yes")
+        ret.root_password_generate = True
         ret.disable = True
         return ret
 

@@ -6,7 +6,7 @@ from ..logger import log
 
 class CloudInitData():
     disable = None
-    root_password = None
+    root_password_generate = None
     root_password_file = None
     generated_root_password = None
 
@@ -21,12 +21,10 @@ class CloudInitData():
             return fobj.readline().rstrip("\n\r")
 
     def get_root_password(self):
-        if self.root_password == "generate":
+        if self.root_password_generate:
             return self.generate_password()
         elif self.root_password_file:
             return self._get_password(self.root_password_file)
-        else:
-            return self.root_password
 
 
 def create_metadata(scratchdir):
