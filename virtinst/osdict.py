@@ -643,3 +643,11 @@ class _OsMedia(object):
 
     def get_osinfo_media(self):
         return self._media
+
+
+class _OsTree(object):
+    def __init__(self, osinfo_tree):
+        self._tree = osinfo_tree
+
+    def get_osinfo_tree(self):
+        return self._tree
