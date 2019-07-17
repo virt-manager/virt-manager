@@ -49,18 +49,9 @@ exist_images = [
     TMP_IMAGE_DIR + "exist2.img",
 ]
 
-iso_links = [
-    "/tmp/fake-fedora17-tree.iso",
-    "/tmp/fake-centos65-label.iso",
-    "/tmp/fake-no-osinfo.iso",
-    "/tmp/fake-win7.iso",
-    "/tmp/fake-f26-netinst.iso",
-    "/tmp/fake-f29-live.iso",
-]
-
 exist_files = exist_images
 new_files   = new_images
-clean_files = (new_images + exist_images + iso_links)
+clean_files = (new_images + exist_images)
 
 test_files = {
     'URI-TEST-FULL': utils.URIs.test_full,
@@ -81,12 +72,12 @@ test_files = {
     'EXISTIMG2': "/dev/default-pool/testvol2.img",
     'EXISTIMG3': exist_images[0],
     'EXISTIMG4': exist_images[1],
-    'ISOTREE': iso_links[0],
-    'ISOLABEL': iso_links[1],
-    'ISO-NO-OS': iso_links[2],
-    'ISO-WIN7': iso_links[3],
-    'ISO-F26-NETINST': iso_links[4],
-    'ISO-F29-LIVE': iso_links[5],
+    'ISOTREE': "%s/fake-fedora17-tree.iso" % XMLDIR,
+    'ISOLABEL': "%s/fake-centos65-label.iso" % XMLDIR,
+    'ISO-NO-OS': "%s/fake-no-osinfo.iso" % XMLDIR,
+    'ISO-WIN7': "%s/fake-win7.iso" % XMLDIR,
+    'ISO-F26-NETINST': "%s/fake-f26-netinst.iso" % XMLDIR,
+    'ISO-F29-LIVE': "%s/fake-f29-live.iso" % XMLDIR,
     'TREEDIR': "%s/fakefedoratree" % XMLDIR,
     'COLLIDE': "/dev/default-pool/collidevol1.img",
     'ADMIN-PASSWORD-FILE': "%s/admin-password.txt" % XMLDIR,
@@ -1408,9 +1399,6 @@ def setup():
     """
     Create initial test files/dirs
     """
-    for i in iso_links:
-        src = "%s/%s" % (os.path.abspath(XMLDIR), os.path.basename(i))
-        os.symlink(src, i)
     for i in exist_files:
         open(i, "a")
 

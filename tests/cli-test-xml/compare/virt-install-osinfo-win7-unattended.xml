@@ -38,7 +38,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
-      <source file="/tmp/fake-win7.iso"/>
+      <source file="tests/cli-test-xml/fake-win7.iso"/>
       <target dev="sda" bus="sata"/>
       <readonly/>
     </disk>
@@ -105,7 +105,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
-      <source file="/tmp/fake-win7.iso"/>
+      <source file="tests/cli-test-xml/fake-win7.iso"/>
       <target dev="sda" bus="sata"/>
       <readonly/>
     </disk>
