@@ -1420,8 +1420,8 @@ def cleanup():
     Cleanup temporary files used for testing
     """
     for i in clean_files:
-        os.system("chmod 777 %s > /dev/null 2>&1" % i)
-        os.system("rm -rf %s > /dev/null 2>&1" % i)
+        if os.path.exists(i):
+            os.unlink(i)
 
 
 class CLITests(unittest.TestCase):

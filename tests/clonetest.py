@@ -35,7 +35,7 @@ class TestClone(unittest.TestCase):
 
     def setUp(self):
         for f in local_files:
-            os.system("touch %s" % f)
+            open(f, "w").write("")
 
     def tearDown(self):
         for f in local_files:
