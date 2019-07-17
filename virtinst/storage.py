@@ -419,6 +419,31 @@ class StoragePool(_StorageObject):
         return pool
 
 
+def _progress_thread(volname, pool, meter, event):
+    vol = None
+    if not meter:
+        return
+
+    while True:
+        try:
+            if not vol:
+                vol = pool.storageVolLookupByName(volname)
+            vol.info()  # pragma: no cover
+            break  # pragma: no cover
+        except Exception:
+            if event.wait(.2):
+                break
+
+    if vol is None:
+        log.debug("Couldn't lookup storage volume in prog thread.")
+        return
+
+    while True:  # pragma: no cover
+        ignore, ignore, alloc = vol.info()
+        meter.update(alloc)
+        if event.wait(1):
+            break
+
 
 class StorageVolume(_StorageObject):
     """
@@ -478,8 +503,6 @@ class StorageVolume(_StorageObject):
         self._pool = None
         self._pool_xml = None
         self._reflink = False
-
-        self._install_finished = threading.Event()
 
 
     ######################
@@ -642,13 +665,6 @@ class StorageVolume(_StorageObject):
         log.debug("Creating storage volume '%s' with xml:\n%s",
                       self.name, xml)
 
-        t = threading.Thread(target=self._progress_thread,
-                             name="Checking storage allocation",
-                             args=(meter,))
-        t.setDaemon(True)
-
-        meter = progress.ensure_meter(meter)
-
         cloneflags = 0
         createflags = 0
         if (self.format == "qcow2" and
@@ -664,8 +680,14 @@ class StorageVolume(_StorageObject):
             cloneflags |= getattr(libvirt,
                 "VIR_STORAGE_VOL_CREATE_REFLINK", 1)
 
+        event = threading.Event()
+        meter = progress.ensure_meter(meter)
+        t = threading.Thread(target=_progress_thread,
+                             name="Checking storage allocation",
+                             args=(self.name, self.pool, meter, event))
+        t.setDaemon(True)
+
         try:
-            self._install_finished.clear()
             t.start()
             meter.start(size=self.capacity,
                         text=_("Allocating '%s'") % self.name)
@@ -681,8 +703,6 @@ class StorageVolume(_StorageObject):
                 log.debug("Using vol create flags=%s", createflags)
                 vol = self.pool.createXML(xml, createflags)
 
-            self._install_finished.set()
-            t.join()
             meter.end(self.capacity)
             log.debug("Storage volume '%s' install complete.", self.name)
             return vol
@@ -690,32 +710,9 @@ class StorageVolume(_StorageObject):
             log.debug("Error creating storage volume", exc_info=True)
             raise RuntimeError("Couldn't create storage volume "
                                "'%s': '%s'" % (self.name, str(e)))
-
-    def _progress_thread(self, meter):
-        vol = None
-        if not meter:
-            return
-
-        while True:
-            try:
-                if not vol:
-                    vol = self.pool.storageVolLookupByName(self.name)
-                vol.info()  # pragma: no cover
-                break  # pragma: no cover
-            except Exception:
-                if self._install_finished.wait(.2):
-                    break
-
-        if vol is None:
-            log.debug("Couldn't lookup storage volume in prog thread.")
-            return
-
-        while True:  # pragma: no cover
-            ignore, ignore, alloc = vol.info()
-            meter.update(alloc)
-            if self._install_finished.wait(1):
-                break
-
+        finally:
+            event.set()
+            t.join()
 
     def is_size_conflict(self):
         """
