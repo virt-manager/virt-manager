@@ -511,6 +511,7 @@ cache.mode=emulate,cache.level=3
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
 --seclabel type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes,baselabel=baselabel
 --seclabel type=dynamic,label=012:345
+--keywrap cipher0.name=aes,cipher0.state=on
 --numatune 1-3,4,mode=strict,\
 memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40

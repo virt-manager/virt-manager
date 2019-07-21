@@ -16,6 +16,7 @@ from .os import DomainOs
 from .pm import DomainPm
 from .resource import DomainResource
 from .seclabel import DomainSeclabel
+from .keywrap import DomainKeyWrap
 from .sysinfo import DomainSysinfo
 from .vcpus import DomainVCPUs
 from .xmlnsqemu import DomainXMLNSQemu

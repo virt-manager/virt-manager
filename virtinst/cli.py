@@ -775,6 +775,10 @@ def add_guest_xml_options(geng):
     geng.add_argument("--seclabel", "--security", action="append",
         help=_("Set domain seclabel configuration."))
 
+    ParserKeyWrap.register()
+    geng.add_argument("--keywrap", action="append",
+        help=_("Set guest to perform the S390 cryptographic key management operations."))
+
     ParserCputune.register()
     geng.add_argument("--cputune", action="append",
         help=_("Tune CPU parameters for the domain process."))
@@ -2365,6 +2369,29 @@ class ParserSeclabel(VirtCLIParser):
         cls.add_arg("relabel", "relabel", is_onoff=True)
         cls.add_arg("label", "label", can_comma=True)
         cls.add_arg("baselabel", "baselabel", can_comma=True)
+
+
+######################
+# --keywrap parsing  #
+######################
+
+class ParserKeyWrap(VirtCLIParser):
+    cli_arg_name = "keywrap"
+    guest_propname = "keywrap"
+
+    def cipher_find_inst_cb(self, *args, **kwargs):
+        cliarg = "cipher"  # keywrap[0-9]*
+        list_propname = "cipher"
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
+    @classmethod
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
+        cls.add_arg("cipher[0-9]*.name", "name", can_comma=True,
+                find_inst_cb=cls.cipher_find_inst_cb)
+        cls.add_arg("cipher[0-9]*.state", "state", can_comma=True,
+                find_inst_cb=cls.cipher_find_inst_cb)
 
 
 ######################
