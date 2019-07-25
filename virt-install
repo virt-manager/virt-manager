@@ -610,7 +610,7 @@ class WaitHandler:
         self._start_time = time.time()
 
     def get_time_string(self):
-        timestr = _(" %d minutes") % self._wait_secs
+        timestr = _(" %d minutes") % self._wait_mins
         if self._wait_forever:
             timestr = ""
         ret = _("Waiting%(time_string)s for installation to complete.") % {
