@@ -14,6 +14,10 @@ class _BlkiotuneDevice(XMLBuilder):
 
     path = XMLProperty("./path")
     weight = XMLProperty("./weight")
+    read_bytes_sec = XMLProperty("./read_bytes_sec", is_int=True)
+    write_bytes_sec = XMLProperty("./write_bytes_sec", is_int=True)
+    read_iops_sec = XMLProperty("./read_iops_sec", is_int=True)
+    write_iops_sec = XMLProperty("./write_iops_sec", is_int=True)
 
 
 class DomainBlkiotune(XMLBuilder):

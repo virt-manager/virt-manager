@@ -515,7 +515,7 @@ cache.mode=emulate,cache.level=3
 --numatune 1-3,4,mode=strict,\
 memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40
---blkiotune weight=100,device_path=/home/test/1.img,device_weight=200
+--blkiotune weight=100,device_path=/home/test/1.img,device_weight=200,read_bytes_sec=10000,write_bytes_sec=10000,read_iops_sec=20000,write_iops_sec=20000
 --memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,discard=yes,allocation.mode=immediate,access_mode=shared,source_type=file,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2
 --features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=5678,vmport=off,pmu=off,vmcoreinfo=on,kvm_hidden=off,hyperv_vapic=on
 --clock offset=utc,hpet_present=no,rtc_tickpolicy=merge,timer2.name=hypervclock,timer3.name=pit,timer1.present=yes,timer3.tickpolicy=delay,timer2.present=no,timer4.name=rtc,timer5.name=tsc,timer6.name=tsc,timer4.track=wall,timer5.frequency=10,timer6.mode=emulate
@@ -1128,7 +1128,7 @@ c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"))  # stdin test
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm path=/dev/tpm", "build-tpm")
-c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.weight=200", "build-blkiotune")
+c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.weight=200,device0.read_bytes_sec=10000,device0.write_bytes_sec=10000,device0.read_iops_sec=20000,device0.write_iops_sec=20000", "build-blkiotune")
 c.add_compare("--build-xml --idmap clearxml=no,uid.start=0,uid.target=1000,uid.count=10,gid.start=0,gid.target=1000,gid.count=10", "build-idmap")
 c.add_compare("--connect %(URI-KVM)s --build-xml --disk %(EXISTIMG1)s", "build-disk-plain")
 c.add_compare("--connect %(URI-KVM)s test-many-devices --build-xml --disk %(EXISTIMG1)s", "build-disk-domain")

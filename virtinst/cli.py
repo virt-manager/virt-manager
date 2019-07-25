@@ -1864,6 +1864,10 @@ class ParserBlkiotune(VirtCLIParser):
     aliases = {
         "device[0-9]*.path": "device_path",
         "device[0-9]*.weight": "device_weight",
+        "device[0-9]*.read_bytes_sec": "read_bytes_sec",
+        "device[0-9]*.write_bytes_sec": "write_bytes_sec",
+        "device[0-9]*.read_iops_sec": "read_iops_sec",
+        "device[0-9]*.write_iops_sec": "write_iops_sec",
     }
 
     def device_find_inst_cb(self, *args, **kwargs):
@@ -1879,6 +1883,14 @@ class ParserBlkiotune(VirtCLIParser):
         cls.add_arg("device[0-9]*.path", "path",
                     find_inst_cb=cls.device_find_inst_cb)
         cls.add_arg("device[0-9]*.weight", "weight",
+                    find_inst_cb=cls.device_find_inst_cb)
+        cls.add_arg("device[0-9]*.read_bytes_sec", "read_bytes_sec",
+                    find_inst_cb=cls.device_find_inst_cb)
+        cls.add_arg("device[0-9]*.write_bytes_sec", "write_bytes_sec",
+                    find_inst_cb=cls.device_find_inst_cb)
+        cls.add_arg("device[0-9]*.read_iops_sec", "read_iops_sec",
+                    find_inst_cb=cls.device_find_inst_cb)
+        cls.add_arg("device[0-9]*.write_iops_sec", "write_iops_sec",
                     find_inst_cb=cls.device_find_inst_cb)
 
 
