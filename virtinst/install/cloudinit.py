@@ -48,7 +48,11 @@ def create_userdata(scratchdir, cloudinit_data):
         content += "chpasswd:\n"
         content += "  list: |\n"
         content += "    root:%s\n" % rootpass
+
+    if cloudinit_data.root_password_generate:
         content += "  expire: True\n"
+    elif cloudinit_data.root_password_file:
+        content += "  expire: False\n"
 
     if cloudinit_data.disable:
         content += "runcmd:\n"
