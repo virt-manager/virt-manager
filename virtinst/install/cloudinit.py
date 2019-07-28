@@ -1,6 +1,7 @@
 import tempfile
 import random
 import string
+import re
 from ..logger import log
 
 
@@ -57,7 +58,9 @@ def create_userdata(scratchdir, cloudinit_data):
     if cloudinit_data.disable:
         content += "runcmd:\n"
         content += "- [ sudo, touch, /etc/cloud/cloud-init.disabled ]\n"
-    log.debug("Generated cloud-init userdata:\n%s", content)
+
+    log.debug("Generated cloud-init userdata: \n%s",
+            re.sub(r"root:(.*)", 'root:[SCRUBBLED]', content))
 
     fileobj = tempfile.NamedTemporaryFile(
             prefix="virtinst-", suffix="-userdata",
