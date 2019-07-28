@@ -310,6 +310,13 @@ LABEL without TYPE implies static configuration.
 Use --security=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#seclabel>
 
 
+=item B<--keywrap> OPTIONS
+
+Specify domain <keywrap> XML, used for S390 cryptographic key management operations.
+
+Use --keywrap=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#keywrap>
+
+
 =item B<--iothreads> OPTIONS
 
 Specify domain <iothreads> and/or <iothreadids> XML. For example, to configure <iothreads>4</iothreads>, do:

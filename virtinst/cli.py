@@ -777,7 +777,8 @@ def add_guest_xml_options(geng):
 
     ParserKeyWrap.register()
     geng.add_argument("--keywrap", action="append",
-        help=_("Set guest to perform the S390 cryptographic key management operations."))
+        help=_("Set guest to perform the S390 cryptographic "
+               "key management operations."))
 
     ParserCputune.register()
     geng.add_argument("--cputune", action="append",
