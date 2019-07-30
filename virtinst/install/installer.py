@@ -219,7 +219,7 @@ class Installer(object):
     # Internal API overrides #
     ##########################
 
-    def _prepare_unattended_data(self, guest, scripts):
+    def _prepare_unattended_data(self, guest, meter, scripts):
         injections = []
         for script in scripts:
             expected_filename = script.get_expected_filename()
@@ -229,6 +229,13 @@ class Installer(object):
             scriptpath = script.write()
             self._tmpfiles.append(scriptpath)
             injections.append((scriptpath, expected_filename))
+
+        drivers_location = guest.osinfo.get_pre_installable_drivers_location(
+                guest.os.arch)
+        drivers = unattended.download_drivers(drivers_location,
+                InstallerTreeMedia.make_scratchdir(guest), meter)
+        if drivers:
+            injections.extend(drivers)
 
         iso = perform_cdrom_injections(injections,
                 InstallerTreeMedia.make_scratchdir(guest))
@@ -270,7 +277,7 @@ class Installer(object):
                     unattended_scripts)
 
         elif unattended_scripts:
-            self._prepare_unattended_data(guest, unattended_scripts)
+            self._prepare_unattended_data(guest, meter, unattended_scripts)
 
     def _cleanup(self, guest):
         if self._treemedia:
