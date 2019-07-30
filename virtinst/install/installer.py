@@ -219,20 +219,23 @@ class Installer(object):
     # Internal API overrides #
     ##########################
 
-    def _prepare_unattended_data(self, guest, script):
-        expected_filename = script.get_expected_filename()
-        unattended_cmdline = script.generate_cmdline()
-        log.debug("Generated unattended cmdline: %s", unattended_cmdline)
+    def _prepare_unattended_data(self, guest, scripts):
+        injections = []
+        for script in scripts:
+            expected_filename = script.get_expected_filename()
+            unattended_cmdline = script.generate_cmdline()
+            log.debug("Generated unattended cmdline: %s", unattended_cmdline)
 
-        scriptpath = script.write()
-        self._tmpfiles.append(scriptpath)
+            scriptpath = script.write()
+            self._tmpfiles.append(scriptpath)
+            injections.append((scriptpath, expected_filename))
 
-        iso = perform_cdrom_injections([(scriptpath, expected_filename)],
+        iso = perform_cdrom_injections(injections,
                 InstallerTreeMedia.make_scratchdir(guest))
         self._tmpfiles.append(iso)
         self._add_unattended_install_cdrom_device(guest, iso)
 
-    def _prepare_unattended_script(self, guest, meter):
+    def _prepare_unattended_scripts(self, guest, meter):
         url = None
         os_tree = None
         if self._treemedia:
@@ -253,21 +256,21 @@ class Installer(object):
             os_media = osguess[1] if osguess else None
             injection_method = "cdrom"
 
-        return unattended.prepare_install_script(
+        return unattended.prepare_install_scripts(
                 guest, self._unattended_data, url,
                 os_media, os_tree, injection_method)
 
     def _prepare(self, guest, meter):
-        unattended_script = None
+        unattended_scripts = None
         if self._unattended_data:
-            unattended_script = self._prepare_unattended_script(guest, meter)
+            unattended_scripts = self._prepare_unattended_scripts(guest, meter)
 
         if self._treemedia:
             self._treemedia_bootconfig = self._treemedia.prepare(guest, meter,
-                    unattended_script)
+                    unattended_scripts)
 
-        elif unattended_script:
-            self._prepare_unattended_data(guest, unattended_script)
+        elif unattended_scripts:
+            self._prepare_unattended_data(guest, unattended_scripts)
 
     def _cleanup(self, guest):
         if self._treemedia:

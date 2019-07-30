@@ -282,7 +282,7 @@ def _find_default_profile(profile_names):
     return found or profile_names[0]
 
 
-def _lookup_rawscript(osinfo, profile, os_media):
+def _lookup_rawscripts(osinfo, profile, os_media):
     script_list = []
 
     if os_media:
@@ -320,35 +320,41 @@ def _lookup_rawscript(osinfo, profile, os_media):
 
     # Some OSes (as Windows) have more than one installer script,
     # depending on the OS version and profile chosen, to be used to
-    # perform the unattended installation. Let's just deal with
-    # multiple installer scripts when its actually needed, though.
-    usescript = rawscripts[0]
-    log.debug("Install script found for profile '%s': %s",
-            profile, usescript.get_id())
-    return usescript
+    # perform the unattended installation.
+    ids = []
+    for rawscript in rawscripts:
+        ids.append(rawscript.get_id())
+
+    log.debug("Install scripts found for profile '%s': %s",
+            profile, ", ".join(ids))
+    return rawscripts
 
 
-def prepare_install_script(guest, unattended_data,
+def prepare_install_scripts(guest, unattended_data,
         url, os_media, os_tree, injection_method):
     def _get_installation_source(os_media):
         if not os_media:
             return "network"
         return "media"
 
-    rawscript = _lookup_rawscript(guest.osinfo,
+    scripts = []
+    rawscripts = _lookup_rawscripts(guest.osinfo,
             unattended_data.profile, os_media)
 
     osinfomediaobj = os_media.get_osinfo_media() if os_media else None
     osinfotreeobj = os_tree.get_osinfo_tree() if os_tree else None
-    script = OSInstallScript(
-            rawscript, guest.osinfo, osinfomediaobj, osinfotreeobj)
 
-    script.set_preferred_injection_method(injection_method)
+    for rawscript in rawscripts:
+        script = OSInstallScript(
+                rawscript, guest.osinfo, osinfomediaobj, osinfotreeobj)
 
-    installationsource = _get_installation_source(os_media)
-    script.set_installation_source(installationsource)
+        script.set_preferred_injection_method(injection_method)
 
-    config = _make_installconfig(script, guest.osinfo, unattended_data,
-            guest.os.arch, guest.name, url)
-    script.set_config(config)
-    return script
+        installationsource = _get_installation_source(os_media)
+        script.set_installation_source(installationsource)
+
+        config = _make_installconfig(script, guest.osinfo, unattended_data,
+                guest.os.arch, guest.name, url)
+        script.set_config(config)
+        scripts.append(script)
+    return scripts

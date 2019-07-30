@@ -231,18 +231,26 @@ class InstallerTreeMedia(object):
     # Public API #
     ##############
 
-    def _prepare_unattended_data(self, script):
-        if not script:
+    def _prepare_unattended_data(self, scripts):
+        if not scripts:
             return
-        expected_filename = script.get_expected_filename()
-        scriptpath = script.write()
-        self._tmpfiles.append(scriptpath)
-        self._initrd_injections.append((scriptpath, expected_filename))
 
-    def _prepare_kernel_args(self, cache, unattended_script):
+        for script in scripts:
+            expected_filename = script.get_expected_filename()
+            scriptpath = script.write()
+            self._tmpfiles.append(scriptpath)
+            self._initrd_injections.append((scriptpath, expected_filename))
+
+    def _prepare_kernel_args(self, cache, unattended_scripts):
         install_args = None
-        if unattended_script:
-            install_args = unattended_script.generate_cmdline()
+        if unattended_scripts:
+            args = []
+            for unattended_script in unattended_scripts:
+                cmdline = unattended_script.generate_cmdline()
+                if not cmdline:
+                    continue
+                args.append(cmdline)
+            install_args = (" ").join(args)
             log.debug("Generated unattended cmdline: %s", install_args)
         elif self.is_network_url() and cache.kernel_url_arg:
             install_args = "%s=%s" % (cache.kernel_url_arg, self.location)
@@ -261,12 +269,12 @@ class InstallerTreeMedia(object):
                 "installer at a network accessible install tree."))
         return ret
 
-    def prepare(self, guest, meter, unattended_script):
+    def prepare(self, guest, meter, unattended_scripts):
         fetcher = self._get_fetcher(guest, meter)
         cache = self._get_cached_data(guest, fetcher)
 
-        self._prepare_unattended_data(unattended_script)
-        kernel_args = self._prepare_kernel_args(cache, unattended_script)
+        self._prepare_unattended_data(unattended_scripts)
+        kernel_args = self._prepare_kernel_args(cache, unattended_scripts)
 
         kernel, initrd = self._prepare_kernel_url(guest, cache, fetcher)
         return kernel, initrd, kernel_args
