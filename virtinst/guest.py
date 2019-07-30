@@ -235,6 +235,7 @@ class Guest(XMLBuilder):
         self.__osinfo = None
         self._capsinfo = None
         self._domcaps = None
+        self._extra_drivers = None
 
 
     ######################
@@ -754,6 +755,9 @@ class Guest(XMLBuilder):
 
         self._add_implied_controllers()
         self._add_spice_devices()
+
+    def add_extra_drivers(self, extra_drivers):
+        self._extra_drivers = extra_drivers
 
 
     ########################
