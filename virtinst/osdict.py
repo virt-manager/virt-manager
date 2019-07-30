@@ -646,6 +646,39 @@ class _OsVariant(object):
             return []  # pragma: no cover
         return list(_OsinfoIter(self._os.get_install_script_list()))
 
+    def _get_installable_drivers(self, arch):
+        if not self._os:
+            return []
+
+        installable_drivers = []
+        device_drivers = list(_OsinfoIter(self._os.get_device_drivers()))
+        for device_driver in device_drivers:
+            if arch != "all" and device_driver.get_architecture() != arch:
+                continue
+
+            installable_drivers.append(device_driver)
+        return installable_drivers
+
+    def _get_pre_installable_drivers(self, arch):
+        installable_drivers = self._get_installable_drivers(arch)
+        pre_inst_drivers = []
+        for driver in installable_drivers:
+            if not driver.get_pre_installable():
+                continue
+
+            pre_inst_drivers.append(driver)
+        return pre_inst_drivers
+
+    def _get_post_installable_drivers(self, arch):
+        installable_drivers = self._get_installable_drivers(arch)
+        post_inst_drivers = []
+        for driver in installable_drivers:
+            if driver.get_pre_installable():
+                continue
+
+            post_inst_drivers.append(driver)
+        return post_inst_drivers
+
 
 class _OsMedia(object):
     def __init__(self, osinfo_media):
