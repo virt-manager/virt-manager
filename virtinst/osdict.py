@@ -620,7 +620,6 @@ class _OsVariant(object):
 
         return "inst.repo"
 
-
     def get_location(self, arch):
         treelist = []
         if self._os:
