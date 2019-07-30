@@ -15,6 +15,8 @@ import tempfile
 
 from gi.repository import Libosinfo
 
+from . import urlfetcher
+from .. import progress
 from ..logger import log
 
 
@@ -365,3 +367,18 @@ def prepare_install_scripts(guest, unattended_data,
         script.set_config(config)
         scripts.append(script)
     return scripts
+
+
+def download_drivers(locations, scratchdir, meter):
+    meter = progress.ensure_meter(meter)
+    fetcher = urlfetcher.DirectFetcher(None, scratchdir, meter)
+    fetcher.meter = meter
+
+    drivers = []
+
+    for location in locations:
+        filename = location.rsplit('/', 1)[1]
+        driver = fetcher.acquireFile(location)
+        drivers.append((driver, filename))
+
+    return drivers
