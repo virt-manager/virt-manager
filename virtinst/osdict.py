@@ -679,6 +679,25 @@ class _OsVariant(object):
             post_inst_drivers.append(driver)
         return post_inst_drivers
 
+    def _get_drivers_location(self, drivers):
+        locations = []
+        for driver in drivers:
+            filenames = driver.get_files()
+            for filename in filenames:
+                location = os.path.join(driver.get_location(), filename)
+                locations.append(location)
+        return locations
+
+    def get_pre_installable_drivers_location(self, arch):
+        pre_inst_drivers = self._get_pre_installable_drivers(arch)
+
+        return self._get_drivers_location(pre_inst_drivers)
+
+    def get_post_installable_drivers_location(self, arch):
+        post_inst_drivers = self._get_post_installable_drivers(arch)
+
+        return self._get_drivers_location(post_inst_drivers)
+
 
 class _OsMedia(object):
     def __init__(self, osinfo_media):
