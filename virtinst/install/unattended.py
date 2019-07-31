@@ -103,8 +103,9 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     log.debug("timezone: %s", config.get_l10n_timezone())
     log.debug("language: %s", config.get_l10n_language())
     log.debug("keyboard: %s", config.get_l10n_keyboard())
-    log.debug("url: %s",
-            config.get_installation_url())  # pylint: disable=no-member
+    if hasattr(config, "get_installation_url"):
+        log.debug("url: %s",
+                config.get_installation_url())  # pylint: disable=no-member
     log.debug("product-key: %s", config.get_reg_product_key())
 
     return config
@@ -124,6 +125,10 @@ class OSInstallScript:
                 script.get_injection_methods()):
                 return True
         return False  # pragma: no cover
+
+    @staticmethod
+    def have_libosinfo_installation_url():
+        return hasattr(Libosinfo.InstallConfig, "set_installation_url")
 
     def __init__(self, script, osobj, osinfomediaobj, osinfotreeobj):
         self._script = script
