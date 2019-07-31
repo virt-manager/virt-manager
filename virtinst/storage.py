@@ -422,7 +422,7 @@ class StoragePool(_StorageObject):
 def _progress_thread(volname, pool, meter, event):
     vol = None
     if not meter:
-        return
+        return  # pragma: no cover
 
     while True:
         try:
