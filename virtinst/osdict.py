@@ -201,7 +201,8 @@ class _OSDB(object):
             oslist = db.get_os_list()
             for o in _OsinfoIter(oslist):
                 osi = _OsVariant(o)
-                allvariants[osi.name] = osi
+                for name in osi.get_short_ids():
+                    allvariants[name] = osi
 
             self.__all_variants = allvariants
         return self.__all_variants
@@ -219,7 +220,7 @@ class _OSDB(object):
             raise ValueError(_("Unknown libosinfo ID '%s'") % full_id)
 
     def lookup_os(self, key, raise_error=False):
-        if key in self._aliases:
+        if key not in self._all_variants and key in self._aliases:
             alias = self._aliases[key]
             # Added 2018-10-02. Maybe remove aliases in a year
             log.warning(
@@ -278,8 +279,8 @@ class _OSDB(object):
         """
         sortmap = {}
 
-        for name, osobj in self._all_variants.items():
-            sortmap[name] = osobj
+        for osobj in self._all_variants.values():
+            sortmap[osobj.name] = osobj
 
         return _sort(sortmap)
 
@@ -356,8 +357,15 @@ class _OsVariant(object):
         self._os = o
         self._family = self._os and self._os.get_family() or None
 
+        self._short_ids = ["generic"]
+        if self._os:
+            if hasattr(self._os, "get_short_id_list"):
+                self._short_ids = self._os.get_short_id_list()
+            else:
+                self._short_ids = [self._os.get_short_id()]
+        self.name = self._short_ids[0]
+
         self.full_id = self._os and self._os.get_id() or None
-        self.name = self._os and self._os.get_short_id() or "generic"
         self.label = self._os and self._os.get_name() or "Generic default"
         self.codename = self._os and self._os.get_codename() or ""
         self.distro = self._os and self._os.get_distro() or ""
@@ -469,6 +477,9 @@ class _OsVariant(object):
 
     def is_windows(self):
         return self._family in ['win9x', 'winnt', 'win16']
+
+    def get_short_ids(self):
+        return self._short_ids[:]
 
     def broken_uefi_with_hyperv(self):
         # Some windows versions are broken with hyperv enlightenments + UEFI

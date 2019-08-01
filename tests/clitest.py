@@ -18,6 +18,7 @@ except ImportError:
     argcomplete = None
 
 from virtinst import log
+from virtinst import OSDB
 from virtinst.install import unattended
 
 from tests import virtinstall, virtclone, virtconvert, virtxml
@@ -849,6 +850,7 @@ c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import inst
 c.add_valid("--hvm --import --wait 0", grep="Treating --wait 0 as --noautoconsole")  # --wait 0 is the same as --noautoconsole
 c.add_compare("-c %(EXISTIMG2)s --os-variant win2k3 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--connect %(URI-KVM)s --install fedora26 --disk size=20", "osinfo-url-with-disk")  # filling in defaults, but with disk specified
+c.add_compare("--connect %(URI-KVM)s --pxe --os-variant debianbuster --disk none", "osinfo-multiple-short-id", prerun_check=lambda: not OSDB.lookup_os("debianbuster"))  # test plumbing for multiple short ids
 c.add_invalid("--hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
 c.add_invalid("--hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
 c.add_invalid("--hvm --import --wait", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
