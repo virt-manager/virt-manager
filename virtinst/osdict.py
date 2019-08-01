@@ -19,6 +19,16 @@ def _in_testsuite():
     return "VIRTINST_TEST_SUITE" in os.environ
 
 
+def _media_create_from_location(location):
+    if not hasattr(Libosinfo.Media, "create_from_location_with_flags"):
+        return Libosinfo.Media.create_from_location(location, None)
+
+    # We prefer this API, because by default it will not
+    # reject non-bootable media, like debian s390x
+    # pylint: disable=no-member
+    return Libosinfo.Media.create_from_location_with_flags(location, None, 0)
+
+
 ###################
 # Sorting helpers #
 ###################
@@ -236,7 +246,7 @@ class _OSDB(object):
 
     def guess_os_by_iso(self, location):
         try:
-            media = Libosinfo.Media.create_from_location(location, None)
+            media = _media_create_from_location(location)
         except Exception as e:
             log.debug("Error creating libosinfo media object: %s", str(e))
             return None
