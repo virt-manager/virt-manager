@@ -94,6 +94,9 @@
   <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
     <loader>/foo/bar</loader>
+    <initdir>/my/custom/cwd</initdir>
+    <inituser>tester</inituser>
+    <initgroup>1000</initgroup>
     <boot dev="network"/>
     <smbios mode="sysinfo"/>
     <bootmenu enable="no"/>
@@ -319,6 +322,9 @@
   <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
     <loader>/foo/bar</loader>
+    <initdir>/my/custom/cwd</initdir>
+    <inituser>tester</inituser>
+    <initgroup>1000</initgroup>
     <boot dev="cdrom"/>
     <boot dev="fd"/>
     <boot dev="hd"/>

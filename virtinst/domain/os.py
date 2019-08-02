@@ -67,6 +67,7 @@ class DomainOs(XMLBuilder):
     XML_NAME = "os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader", "loader_ro", "loader_type",
                        "nvram", "nvram_template", "kernel", "initrd",
+                       "initdir", "inituser", "initgroup",
                        "kernel_args", "dtb", "bootdevs", "smbios_mode"]
 
     def _get_bootorder(self):
@@ -100,6 +101,9 @@ class DomainOs(XMLBuilder):
     kernel_args = XMLProperty("./cmdline")
 
     init = XMLProperty("./init")
+    initdir = XMLProperty("./initdir")
+    inituser = XMLProperty("./inituser")
+    initgroup = XMLProperty("./initgroup")
     loader = XMLProperty("./loader")
     loader_ro = XMLProperty("./loader/@readonly", is_yesno=True)
     loader_type = XMLProperty("./loader/@type")

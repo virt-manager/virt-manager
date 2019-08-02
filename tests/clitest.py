@@ -508,7 +508,7 @@ cache.mode=emulate,cache.level=3
 --cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3
 --iothreads iothreads=2,iothreadids.iothread1.id=1,iothreadids.iothread2.id=2
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444,genid=e9392370-2917-565e-692b-d057f46512d6
---boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3,initargs="foo=bar baz=woo",firmware=efi
+--boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3,initargs="foo=bar baz=woo",initdir=/my/custom/cwd,inituser=tester,initgroup=1000,firmware=efi
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
 --seclabel type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes,baselabel=baselabel
 --seclabel type=dynamic,label=012:345

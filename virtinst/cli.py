@@ -2330,6 +2330,9 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("initargs", "initargs", cb=cls.set_initargs_cb)
         cls.add_arg("initarg[0-9]*", "val",
                     find_inst_cb=cls.initarg_find_inst_cb)
+        cls.add_arg("initdir", "initdir")
+        cls.add_arg("inituser", "inituser")
+        cls.add_arg("initgroup", "initgroup")
         cls.add_arg("loader", "loader")
         cls.add_arg("loader.readonly", "loader_ro", is_onoff=True)
         cls.add_arg("loader.type", "loader_type")
