@@ -10,6 +10,7 @@ class CloudInitData():
     root_password_generate = None
     root_password_file = None
     generated_root_password = None
+    ssh_key = None
 
     def generate_password(self):
         self.generated_root_password = ""
@@ -26,6 +27,10 @@ class CloudInitData():
             return self.generate_password()
         elif self.root_password_file:
             return self._get_password(self.root_password_file)
+
+    def get_ssh_key(self):
+        if self.ssh_key:
+            return self._get_password(self.ssh_key)
 
 
 def create_metadata(scratchdir):
@@ -44,8 +49,8 @@ def create_metadata(scratchdir):
 def create_userdata(scratchdir, cloudinit_data):
     content = "#cloud-config\n"
 
-    rootpass = cloudinit_data.get_root_password()
-    if rootpass:
+    if cloudinit_data.root_password_generate or cloudinit_data.root_password_file:
+        rootpass = cloudinit_data.get_root_password()
         content += "chpasswd:\n"
         content += "  list: |\n"
         content += "    root:%s\n" % rootpass
@@ -54,6 +59,13 @@ def create_userdata(scratchdir, cloudinit_data):
         content += "  expire: True\n"
     elif cloudinit_data.root_password_file:
         content += "  expire: False\n"
+
+    if cloudinit_data.ssh_key:
+        rootpass = cloudinit_data.get_ssh_key()
+        content += "users:\n"
+        content += "  - name: root\n"
+        content += "    ssh-authorized-keys:\n"
+        content += "      - %s\n" % rootpass
 
     if cloudinit_data.disable:
         content += "runcmd:\n"
