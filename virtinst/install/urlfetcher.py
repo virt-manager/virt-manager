@@ -411,7 +411,8 @@ class DirectFetcher(_URLFetcher):
         return filename
 
     def acquireFile(self, filename, fullurl=None):
-        fullurl = filename
+        if not fullurl:
+            fullurl = filename
         filename = os.path.basename(filename)
         fetcher = fetcherForURI(fullurl, self.scratchdir, self.meter, direct=True)
         return fetcher.acquireFile(filename, fullurl)  # pylint: disable=protected-access
