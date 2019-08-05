@@ -156,6 +156,7 @@ class _URLFetcher(object):
             fileobj.write(buff)
             total += len(buff)
             self.meter.update(total)
+        fileobj.flush()
         return total
 
     def _grabber(self, url):
@@ -291,6 +292,7 @@ class _HTTPURLFetcher(_URLFetcher):
             fileobj.write(data)
             total += len(data)
             self.meter.update(total)
+        fileobj.flush()
         return total
 
 
