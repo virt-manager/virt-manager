@@ -95,3 +95,12 @@ class TestOSDB(unittest.TestCase):
         self.assertTrue(win10._is_related_to("winxp"))
         self.assertTrue(win10._is_related_to("win10"))
         self.assertTrue(win10._is_related_to("fedora26") is False)
+
+    def test_drivers(self):
+        win7 = OSDB.lookup_os("win7")
+        generic = OSDB.lookup_os("generic")
+        self.assertFalse(generic.supports_unattended_drivers("x86_64"))
+        self.assertTrue(win7.supports_unattended_drivers("x86_64"))
+        self.assertFalse(win7.supports_unattended_drivers("fakearch"))
+        self.assertTrue(win7.get_pre_installable_drivers_location("x86_64"))
+        self.assertTrue(win7.get_post_installable_drivers_location("x86_64"))
