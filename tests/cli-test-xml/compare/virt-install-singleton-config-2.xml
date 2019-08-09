@@ -224,6 +224,9 @@
   <on_lockfailure>ignore</on_lockfailure>
   <cputune>
     <vcpupin vcpu="0" cpuset="0-3"/>
+    <cachetune vcpus="0-3">
+      <cache level="3" id="0" type="both" size="3" unit="MiB"/>
+    </cachetune>
   </cputune>
 </domain>
 <domain type="kvm">
@@ -455,5 +458,8 @@
   <on_lockfailure>ignore</on_lockfailure>
   <cputune>
     <vcpupin vcpu="0" cpuset="0-3"/>
+    <cachetune vcpus="0-3">
+      <cache level="3" id="0" type="both" size="3" unit="MiB"/>
+    </cachetune>
   </cputune>
 </domain>
