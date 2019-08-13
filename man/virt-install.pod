@@ -396,11 +396,11 @@ Configure guest power management features. Example:
 
 Use --pm=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsPowerManagement>
 
-=item B<--launch-security> TYPE[,OPTS]
+=item B<--launchSecurity> TYPE[,OPTS]
 
 Enable launch security for the guest, e.g. AMD SEV.
 
-Use --launch-security=? to see a list of all available sub options. Complete
+Use --launchSecurity=? to see a list of all available sub options. Complete
 details at L<https://libvirt.org/formatdomain.html#launchSecurity>. Example
 invocations:
     # This will use a default policy 0x03
@@ -1884,7 +1884,7 @@ refer to libvirt docs for a detailed explanation.
        --controller type=scsi,model=virtio-scsi,driver.iommu=on \
        --controller type=virtio-serial,driver.iommu=on \
        --network network=default,model=virtio,driver.iommu=on \
-       --rng driver,iommu=on \
+       --rng /dev/random,driver.iommu=on \
        --memballoon driver.iommu=on \
        --launchSecurity sev
 
