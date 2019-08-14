@@ -9,6 +9,7 @@ import argparse
 import atexit
 import sys
 import time
+import select
 
 import libvirt
 
@@ -676,6 +677,15 @@ def start_install(guest, installer, options):
 
         if options.destroy_on_exit:
             atexit.register(_destroy_on_exit, domain)
+
+        passwd = installer.get_generated_password()
+        if options.cloud_init and passwd:  # pragma: no cover
+            print_stdout(_("Password for first login is: %s") % passwd, do_log=False)
+            print_stdout(
+                _("Installation will continue in 10 seconds "
+                "(press Enter to skip)"))
+            timeout = 10
+            select.select([sys.stdin], [], [], timeout)
 
         cli.connect_console(guest, domain, conscb,
                 waithandler.wait_for_console_to_exit,

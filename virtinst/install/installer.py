@@ -431,6 +431,10 @@ class Installer(object):
         self._tmpfiles.append(iso)
         self._add_unattended_install_cdrom_device(guest, iso)
 
+    def get_generated_password(self):
+        if self._cloudinit_data:
+            return self._cloudinit_data.generate_password()
+
 
     ##########################
     # guest install handling #
