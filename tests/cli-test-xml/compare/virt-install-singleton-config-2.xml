@@ -227,6 +227,9 @@
     <cachetune vcpus="0-3">
       <cache level="3" id="0" type="both" size="3" unit="MiB"/>
     </cachetune>
+    <memorytune vcpus="0-3">
+      <node id="0" bandwidth="60"/>
+    </memorytune>
   </cputune>
 </domain>
 <domain type="kvm">
@@ -461,5 +464,8 @@
     <cachetune vcpus="0-3">
       <cache level="3" id="0" type="both" size="3" unit="MiB"/>
     </cachetune>
+    <memorytune vcpus="0-3">
+      <node id="0" bandwidth="60"/>
+    </memorytune>
   </cputune>
 </domain>

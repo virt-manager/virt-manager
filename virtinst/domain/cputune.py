@@ -42,12 +42,34 @@ class _CacheTuneCPU(XMLBuilder):
     caches = XMLChildProperty(_CacheCPU)
 
 
+class _NodeCPU(XMLBuilder):
+    """
+    Class for generating <memorytune> child <node> XML
+    """
+    XML_NAME = "node"
+    _XML_PROP_ORDER = ["id", "bandwidth"]
+
+    id = XMLProperty("./@id", is_int=True)
+    bandwidth = XMLProperty("./@bandwidth", is_int=True)
+
+
+class _MemoryTuneCPU(XMLBuilder):
+    """
+    Class for generating <cputune> child <memorytune> XML
+    """
+    XML_NAME = "memorytune"
+
+    vcpus = XMLProperty("./@vcpus")
+    nodes = XMLChildProperty(_NodeCPU)
+
+
 class DomainCputune(XMLBuilder):
     """
     Class for generating <cpu> XML
     """
     XML_NAME = "cputune"
-    _XML_PROP_ORDER = ["vcpus", "cachetune"]
+    _XML_PROP_ORDER = ["vcpus", "cachetune", "memorytune"]
 
     vcpus = XMLChildProperty(_VCPUPin)
     cachetune = XMLChildProperty(_CacheTuneCPU)
+    memorytune = XMLChildProperty(_MemoryTuneCPU)
