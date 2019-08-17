@@ -16,6 +16,9 @@ class _ClockTimer(XMLBuilder):
     track = XMLProperty("./@track")
     mode = XMLProperty("./@mode")
     frequency = XMLProperty("./@frequency", is_int=True)
+    threshold = XMLProperty("./catchup/@threshold", is_int=True)
+    slew = XMLProperty("./catchup/@slew", is_int=True)
+    limit = XMLProperty("./catchup/@limit", is_int=True)
 
 
 class DomainClock(XMLBuilder):

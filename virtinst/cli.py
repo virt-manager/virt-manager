@@ -2604,6 +2604,12 @@ class ParserClock(VirtCLIParser):
                     find_inst_cb=cls.timer_find_inst_cb)
         cls.add_arg("timer[0-9]*.frequency", "frequency",
                     find_inst_cb=cls.timer_find_inst_cb)
+        cls.add_arg("timer[0-9]*.catchup.threshold", "threshold",
+                    find_inst_cb=cls.timer_find_inst_cb)
+        cls.add_arg("timer[0-9]*.catchup.slew", "slew",
+                    find_inst_cb=cls.timer_find_inst_cb)
+        cls.add_arg("timer[0-9]*.catchup.limit", "limit",
+                    find_inst_cb=cls.timer_find_inst_cb)
 
 
 ################
