@@ -6,6 +6,7 @@
       <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
     </libosinfo:libosinfo>
   </metadata>
+  <iothreads>5</iothreads>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu placement="static">4</vcpu>
@@ -38,7 +39,7 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu" type="raw" cache="writeback" io="threads"/>
+      <driver name="qemu" type="raw" cache="writeback" io="threads" iothread="3"/>
       <source file="/dev/default-pool/UPPER"/>
       <target dev="vda" bus="virtio"/>
       <serial>WD-WMAP9A966149</serial>

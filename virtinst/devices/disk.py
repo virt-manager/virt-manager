@@ -627,6 +627,7 @@ class DeviceDisk(Device):
     driver_discard = XMLProperty("./driver/@discard")
     driver_detect_zeroes = XMLProperty("./driver/@detect_zeroes")
     driver_io = XMLProperty("./driver/@io")
+    driver_iothread = XMLProperty("./driver/@iothread", is_int=True)
 
     error_policy = XMLProperty("./driver/@error_policy")
     serial = XMLProperty("./serial")
