@@ -3429,6 +3429,7 @@ class ParserController(VirtCLIParser):
         cls.add_arg("index", "index")
         cls.add_arg("maxGrantFrames", "maxGrantFrames")
         cls.add_arg("master.startport", "master_startport")
+        cls.add_arg("driver.iothread", "driver_iothread")
         cls.add_arg("driver.queues", "driver_queues")
 
         cls.add_arg("address", None, lookup_cb=None, cb=cls.set_address_cb)
