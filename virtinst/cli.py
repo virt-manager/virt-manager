@@ -3542,6 +3542,7 @@ class ParserTPM(VirtCLIParser):
         cls.add_arg("backend.type", "type")
         cls.add_arg("backend.version", "version")
         cls.add_arg("backend.device.path", "device_path")
+        cls.add_arg("backend.encryption.secret", "encryption_secret")
 
 
 #################

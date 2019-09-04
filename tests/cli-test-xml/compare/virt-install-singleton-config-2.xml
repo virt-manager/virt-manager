@@ -193,6 +193,7 @@
     <tpm model="tpm-crb">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
+        <encryption secret="11111111-2222-3333-4444-5555555555"/>
       </backend>
     </tpm>
     <graphics type="vnc" port="-1"/>
@@ -433,6 +434,7 @@
     <tpm model="tpm-crb">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
+        <encryption secret="11111111-2222-3333-4444-5555555555"/>
       </backend>
     </tpm>
     <graphics type="vnc" port="-1"/>

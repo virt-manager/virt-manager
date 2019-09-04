@@ -535,7 +535,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --filesystem /foo/source,/bar/target
 --memballoon virtio,autodeflate=on,stats.period=10
 --watchdog ib700,action=pause
---tpm passthrough,model=tpm-crb,path=/dev/tpm0
+--tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
 --panic iobase=0x506
 """, "singleton-config-2")

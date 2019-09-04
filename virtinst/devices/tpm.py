@@ -28,6 +28,7 @@ class DeviceTpm(Device):
     version = XMLProperty("./backend/@version")
     model = XMLProperty("./@model")
     device_path = XMLProperty("./backend/device/@path")
+    encryption_secret = XMLProperty("./backend/encryption/@secret")
 
 
     ##################
