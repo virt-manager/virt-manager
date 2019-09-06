@@ -620,7 +620,36 @@ class _OsVariant(object):
 
         return "inst.repo"
 
-    def get_location(self, arch):
+    def _get_generic_location(self, treelist, arch, profile):
+        if not hasattr(Libosinfo.Tree, "get_os_variants"):
+            for tree in treelist:
+                if tree.get_architecture() == arch:
+                    return tree.get_url()
+            return None
+
+        fallback_tree = None
+        if not profile:
+            profile = "Everything"
+
+        for tree in treelist:
+            if tree.get_architecture() != arch:
+                continue
+
+            variant_list = tree.get_os_variants()
+            if variant_list.get_length() == 0:
+                return tree.get_url()
+
+            fallback_tree = tree
+            for i in range(variant_list.get_length()):
+                variant = variant_list.get_nth(i)
+                if profile in variant.get_name():
+                    return tree.get_url()
+
+        if fallback_tree:
+            return fallback_tree.get_url()
+        return None
+
+    def get_location(self, arch, profile=None):
         treelist = []
         if self._os:
             treelist = list(_OsinfoIter(self._os.get_tree_list()))
@@ -632,10 +661,11 @@ class _OsVariant(object):
         # Some distros have more than one URL for a specific architecture,
         # which is the case for Fedora and different variants (Server,
         # Workstation). Later on, we'll have to differentiate that and return
-        # the right one.
-        for tree in treelist:
-            if tree.get_architecture() == arch:
-                return tree.get_url()
+        # the right one. However, for now, let's just rely on returning the
+        # most generic tree possible.
+        location = self._get_generic_location(treelist, arch, profile)
+        if location:
+            return location
 
         raise RuntimeError(
             _("OS '%s' does not have a URL location for the %s architecture") %

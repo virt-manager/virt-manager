@@ -52,10 +52,14 @@ class TestOSDB(unittest.TestCase):
 
     def test_tree_url(self):
         f26 = OSDB.lookup_os("fedora26")
+        f29 = OSDB.lookup_os("fedora29")
         winxp = OSDB.lookup_os("winxp")
 
         # Valid tree URL
         assert "fedoraproject.org" in f26.get_location("x86_64")
+
+        # Most generic tree URL
+        assert "Everything" in f29.get_location("x86_64")
 
         # Has tree URLs, but none for arch
         try:
