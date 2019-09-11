@@ -628,7 +628,11 @@ class _OsVariant(object):
             return None
 
         fallback_tree = None
-        if not profile:
+        if profile == "jeos":
+            profile = "Server"
+        elif profile == "desktop":
+            profile = "Workstation"
+        elif not profile:
             profile = "Everything"
 
         for tree in treelist:

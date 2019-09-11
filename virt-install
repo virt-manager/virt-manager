@@ -386,9 +386,9 @@ def show_warnings(options, guest, installer, osdata):
 # Guest building helpers #
 ##########################
 
-def get_location_for_os(guest, osname):
+def get_location_for_os(guest, osname, profile=None):
     osinfo = virtinst.OSDB.lookup_os(osname, raise_error=True)
-    location = osinfo.get_location(guest.os.arch)
+    location = osinfo.get_location(guest.os.arch, profile)
     print_stdout(_("Using {osname} --location {url}").format(
         osname=osname, url=location))
     return location
@@ -399,6 +399,7 @@ def build_installer(options, guest, installdata):
     location = None
     location_kernel = None
     location_initrd = None
+    unattended_data = None
     extra_args = options.extra_args
 
     install_bootdev = installdata.bootdev
@@ -413,8 +414,12 @@ def build_installer(options, guest, installdata):
         else:
             extra_args = [installdata.kernel_args]
 
+    if options.unattended:
+        unattended_data = cli.parse_unattended(options.unattended)
+
     if install_os:
-        location = get_location_for_os(guest, install_os)
+        profile = unattended_data.profile if unattended_data else None
+        location = get_location_for_os(guest, install_os, profile)
     elif options.location:
         (location,
          location_kernel,
@@ -443,8 +448,7 @@ def build_installer(options, guest, installdata):
             install_kernel_args=install_kernel_args,
             no_install=no_install)
 
-    if options.unattended:
-        unattended_data = cli.parse_unattended(options.unattended)
+    if unattended_data:
         installer.set_unattended_data(unattended_data)
     if extra_args:
         installer.set_extra_args(extra_args)

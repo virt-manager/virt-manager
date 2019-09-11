@@ -61,6 +61,10 @@ class TestOSDB(unittest.TestCase):
         # Most generic tree URL
         assert "Everything" in f29.get_location("x86_64")
 
+        # Specific tree
+        assert "Server" in f29.get_location("x86_64", "jeos")
+        assert "Workstation" in f29.get_location("x86_64", "desktop")
+
         # Has tree URLs, but none for arch
         try:
             f26.get_location("ia64")
