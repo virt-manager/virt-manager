@@ -737,6 +737,11 @@ class _OsVariant(object):
             return True
         return False
 
+    def supports_unattended_agents(self, arch):
+        if self._get_post_installable_drivers(arch):
+            return True
+        return False
+
 
 class _OsMedia(object):
     def __init__(self, osinfo_media):
