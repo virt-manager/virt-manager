@@ -365,11 +365,13 @@ class _LocalURLFetcher(_URLFetcher):
     For grabbing files from a local directory
     """
     def _hasFile(self, url):
-        return os.path.exists(url)
+        parsed = urllib.parse.urlparse(url)
+        return os.path.exists(parsed.path)
 
     def _grabber(self, url):
-        urlobj = open(url, "rb")
-        size = os.path.getsize(url)
+        parsed = urllib.parse.urlparse(url)
+        urlobj = open(parsed.path, "rb")
+        size = os.path.getsize(parsed.path)
         return urlobj, size
 
 
