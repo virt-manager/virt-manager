@@ -733,8 +733,7 @@ class _OsVariant(object):
         return self._get_drivers_location(post_inst_drivers)
 
     def supports_unattended_drivers(self, arch):
-        if (self._get_pre_installable_drivers(arch) and
-            self._get_post_installable_drivers(arch)):
+        if self._get_pre_installable_drivers(arch):
             return True
         return False
 
