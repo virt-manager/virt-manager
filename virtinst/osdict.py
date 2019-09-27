@@ -732,6 +732,13 @@ class _OsVariant(object):
 
         return self._get_drivers_location(post_inst_drivers)
 
+    def get_pre_installable_devices(self, arch):
+        drivers = self._get_pre_installable_drivers(arch)
+        devices = []
+        for driver in drivers:
+            devices += list(_OsinfoIter(driver.get_devices()))
+        return devices
+
     def supports_unattended_drivers(self, arch):
         if self._get_pre_installable_drivers(arch):
             return True
