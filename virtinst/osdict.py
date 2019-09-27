@@ -576,7 +576,8 @@ class _OsVariant(object):
 
     def supports_chipset_q35(self, extra_devs=None):
         # For our purposes, check for the union of q35 + virtio1.0 support
-        if self.supports_virtionet() and not self.supports_virtio1():
+        if (self.supports_virtionet(extra_devs=extra_devs) and
+            not self.supports_virtio1(extra_devs=extra_devs)):
             return False
         devids = ["http://qemu.org/chipset/x86/q35"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
