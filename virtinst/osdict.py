@@ -431,7 +431,7 @@ class _OsVariant(object):
             return []
         return list(_OsinfoIter(self._os.get_all_devices()))
 
-    def _device_filter(self, devids=None, cls=None):
+    def _device_filter(self, devids=None, cls=None, extra_devs=None):
         ret = []
         devids = devids or []
         for dev in self._get_all_devices():
@@ -440,6 +440,13 @@ class _OsVariant(object):
             if cls and not re.match(cls, dev.get_class()):
                 continue
             ret.append(dev.get_name())
+
+        extra_devs = extra_devs or []
+        for dev in extra_devs:
+            if dev.get_id() not in devids:
+                continue
+            ret.append(dev.get_name())
+
         return ret
 
 
