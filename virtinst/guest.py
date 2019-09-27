@@ -487,13 +487,13 @@ class Guest(XMLBuilder):
         return False
 
     def supports_virtionet(self):
-        return self._supports_virtio(self.osinfo.supports_virtionet())
+        return self._supports_virtio(self.osinfo.supports_virtionet(self._extra_drivers))
     def supports_virtiodisk(self):
-        return self._supports_virtio(self.osinfo.supports_virtiodisk())
+        return self._supports_virtio(self.osinfo.supports_virtiodisk(self._extra_drivers))
     def supports_virtioscsi(self):
-        return self._supports_virtio(self.osinfo.supports_virtioscsi())
+        return self._supports_virtio(self.osinfo.supports_virtioscsi(self._extra_drivers))
     def _supports_virtioserial(self):
-        return self._supports_virtio(self.osinfo.supports_virtioserial())
+        return self._supports_virtio(self.osinfo.supports_virtioserial(self._extra_drivers))
 
 
     ###############################
@@ -838,7 +838,7 @@ class Guest(XMLBuilder):
             self.add_device(dev)
 
         # s390x guests need VirtIO input devices
-        if self.os.is_s390x() and self.osinfo.supports_virtioinput():
+        if self.os.is_s390x() and self.osinfo.supports_virtioinput(self._extra_drivers):
             dev = DeviceInput(self.conn)
             dev.type = "tablet"
             dev.bus = "virtio"
@@ -945,7 +945,7 @@ class Guest(XMLBuilder):
             return
 
         if (self.conn.is_qemu() and
-            self.osinfo.supports_virtiorng() and
+            self.osinfo.supports_virtiorng(self._extra_drivers) and
             self.conn.support.conn_rng_urandom()):
             dev = DeviceRng(self.conn)
             dev.type = "random"
@@ -978,7 +978,7 @@ class Guest(XMLBuilder):
                 self.os.is_pseries()):
             return
 
-        if self.osinfo.supports_virtioballoon():
+        if self.osinfo.supports_virtioballoon(self._extra_drivers):
             dev = DeviceMemballoon(self.conn)
             dev.model = "virtio"
             self.add_device(dev)
