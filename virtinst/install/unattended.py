@@ -10,6 +10,7 @@ import getpass
 import locale
 import os
 import pwd
+import re
 import tempfile
 
 from gi.repository import Libosinfo
@@ -68,6 +69,12 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
 
     # Set hardware architecture and hostname
     config.set_hardware_arch(arch)
+
+    # Some installations will bail if the Computer's name contains one of the
+    # following characters: "[{|}~[\\]^':; <=>?@!\"#$%`()+/.,*&]".
+    # In order to take a safer path, let's ensure that we never set those,
+    # replacing them by "-".
+    hostname = re.sub("[{|}~[\\]^':; <=>?@!\"#$%`()+/.,*&]", "-", hostname)
     config.set_hostname(hostname)
 
     # Try to guess the timezone from '/etc/localtime', in case it's not
