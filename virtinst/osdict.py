@@ -512,7 +512,7 @@ class _OsVariant(object):
     def supported_netmodels(self):
         return self._device_filter(cls="net")
 
-    def supports_usbtablet(self):
+    def supports_usbtablet(self, extra_devs=None):
         # If no OS specified, still default to tablet
         if not self._os:
             return True
@@ -520,37 +520,37 @@ class _OsVariant(object):
         devids = ["http://usb.org/usb/80ee/0021"]
         return bool(self._device_filter(devids=devids))
 
-    def supports_virtiodisk(self):
+    def supports_virtiodisk(self, extra_devs=None):
         # virtio-block and virtio1.0-block
         devids = ["http://pcisig.com/pci/1af4/1001",
                   "http://pcisig.com/pci/1af4/1042"]
         return bool(self._device_filter(devids=devids))
 
-    def supports_virtioscsi(self):
+    def supports_virtioscsi(self, extra_devs=None):
         # virtio-scsi and virtio1.0-scsi
         devids = ["http://pcisig.com/pci/1af4/1004",
                   "http://pcisig.com/pci/1af4/1048"]
         return bool(self._device_filter(devids=devids))
 
-    def supports_virtionet(self):
+    def supports_virtionet(self, extra_devs=None):
         # virtio-net and virtio1.0-net
         devids = ["http://pcisig.com/pci/1af4/1000",
                   "http://pcisig.com/pci/1af4/1041"]
         return bool(self._device_filter(devids=devids))
 
-    def supports_virtiorng(self):
+    def supports_virtiorng(self, extra_devs=None):
         # virtio-rng and virtio1.0-rng
         devids = ["http://pcisig.com/pci/1af4/1005",
                   "http://pcisig.com/pci/1af4/1044"]
         return bool(self._device_filter(devids=devids))
 
-    def supports_virtioballoon(self):
+    def supports_virtioballoon(self, extra_devs=None):
         # virtio-balloon and virtio1.0-balloon
         devids = ["http://pcisig.com/pci/1af4/1002",
                   "http://pcisig.com/pci/1af4/1045"]
         return bool(self._device_filter(devids=devids))
 
-    def supports_virtioserial(self):
+    def supports_virtioserial(self, extra_devs=None):
         devids = ["http://pcisig.com/pci/1af4/1003",
                   "http://pcisig.com/pci/1af4/1043"]
         if self._device_filter(devids=devids):
@@ -559,22 +559,22 @@ class _OsVariant(object):
         # Remove this hack after 6 months or so
         return self._is_related_to("rhel6.0")
 
-    def supports_virtioinput(self):
+    def supports_virtioinput(self, extra_devs=None):
         # virtio1.0-input
         devids = ["http://pcisig.com/pci/1af4/1052"]
         return bool(self._device_filter(devids=devids))
 
-    def supports_usb3(self):
+    def supports_usb3(self, extra_devs=None):
         # qemu-xhci
         devids = ["http://pcisig.com/pci/1b36/0004"]
         return bool(self._device_filter(devids=devids))
 
-    def supports_virtio1(self):
+    def supports_virtio1(self, extra_devs=None):
         # Use virtio1.0-net device as a proxy for virtio1.0 as a whole
         devids = ["http://pcisig.com/pci/1af4/1041"]
         return bool(self._device_filter(devids=devids))
 
-    def supports_chipset_q35(self):
+    def supports_chipset_q35(self, extra_devs=None):
         # For our purposes, check for the union of q35 + virtio1.0 support
         if self.supports_virtionet() and not self.supports_virtio1():
             return False
