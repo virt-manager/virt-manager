@@ -663,7 +663,7 @@ class vmmAddHardware(vmmGObjectUI):
         if guest.conn.is_xen():
             return ["xen", "vga"]
         if guest.conn.is_qemu() or guest.conn.is_test():
-            return ["vga", "qxl", "virtio"]
+            return ["vga", "bochs", "qxl", "virtio"]
         return []
 
     @staticmethod
