@@ -376,9 +376,14 @@ def download_drivers(locations, scratchdir, meter):
 
     drivers = []
 
-    for location in locations:
-        filename = location.rsplit('/', 1)[1]
-        driver = fetcher.acquireFile(location)
-        drivers.append((driver, filename))
+    try:
+        for location in locations:
+            filename = location.rsplit('/', 1)[1]
+            driver = fetcher.acquireFile(location)
+            drivers.append((driver, filename))
+    except Exception:  # pragma: no cover
+        for driverpair in drivers:
+            os.unlink(driverpair[0])
+        raise
 
     return drivers

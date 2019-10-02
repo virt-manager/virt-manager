@@ -234,8 +234,8 @@ class Installer(object):
                 guest.os.arch)
         drivers = unattended.download_drivers(drivers_location,
                 InstallerTreeMedia.make_scratchdir(guest), meter)
-        if drivers:
-            injections.extend(drivers)
+        injections.extend(drivers)
+        self._tmpfiles.extend([driverpair[0] for driverpair in drivers])
 
         iso = perform_cdrom_injections(injections,
                 InstallerTreeMedia.make_scratchdir(guest))
