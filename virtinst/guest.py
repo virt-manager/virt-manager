@@ -543,8 +543,6 @@ class Guest(XMLBuilder):
         """
         If UEFI firmware path is found, return it, otherwise raise an error
         """
-        if not self.os.arch:
-            self.set_capabilities_defaults()
         domcaps = self.lookup_domcaps()
 
         if not domcaps.supports_uefi_xml():
