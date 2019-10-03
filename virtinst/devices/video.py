@@ -39,6 +39,9 @@ class DeviceVideo(Device):
             if guest.has_gl():
                 return "virtio"
             return "qxl"
+        if (guest.is_uefi() and
+            guest.lookup_domcaps().supports_video_bochs()):
+            return "bochs"
         if guest.conn.is_qemu():
             return "qxl"
         return "vga"
