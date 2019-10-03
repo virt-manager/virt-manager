@@ -325,6 +325,14 @@ class DomainCapabilities(XMLBuilder):
         """
         return bool(self.features.sev.supported)
 
+    def supports_video_bochs(self):
+        """
+        Returns False if either libvirt or qemu do not have support to bochs
+        video type.
+        """
+        models = self.devices.video.get_enum("modelType").get_values()
+        return bool("bochs" in models)
+
     XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
     cpu = XMLChildProperty(_CPU, is_single=True)
