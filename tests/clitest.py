@@ -101,6 +101,14 @@ def no_osinfo_unattend_cb():
         return "osinfo is too old for unattended testing"
 
 
+def no_osinfo_unattended_win_drivers_cb():
+    win7 = OSDB.lookup_os("win7")
+    devs = win7.get_pre_installable_devices("x86_64")
+    devids = [d.get_id() for d in devs]
+    if "http://pcisig.com/pci/1af4/1005" not in devids:
+        return "osinfo is too old for this win7 unattended test"
+
+
 ######################
 # Test class helpers #
 ######################
@@ -880,7 +888,7 @@ c.add_valid("--connect %s --pxe --disk size=1" % utils.URIs.test_defaultpool_col
 
 c = vinst.add_category("unattended-install", "--connect %(URI-KVM)s --nographics --noautoconsole --disk none", prerun_check=no_osinfo_unattend_cb)
 c.add_compare("--install fedora26 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s,user-password-file=%(USER-PASSWORD-FILE)s,product-key=1234", "osinfo-url-unattended", prerun_check=lambda: not unattended.OSInstallScript.have_libosinfo_installation_url())  # unattended install for fedora, using initrd injection
-c.add_compare("--cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s", "osinfo-win7-unattended")  # unattended install for win7
+c.add_compare("--cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s", "osinfo-win7-unattended", prerun_check=no_osinfo_unattended_win_drivers_cb)  # unattended install for win7
 c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location %(ISO-F26-NETINST)s", "osinfo-netinst-unattended")  # triggering the special netinst checking code
 c.add_compare("--os-variant silverblue29 --location http://example.com", "network-install-resources")  # triggering network-install resources override
 c.add_valid("--pxe --os-variant fedora26 --unattended", grep="Using unattended profile 'desktop'")  # filling in default 'desktop' profile
