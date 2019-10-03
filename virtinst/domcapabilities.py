@@ -95,6 +95,7 @@ class _Devices(_CapsBlock):
     XML_NAME = "devices"
     hostdev = XMLChildProperty(_make_capsblock("hostdev"), is_single=True)
     disk = XMLChildProperty(_make_capsblock("disk"), is_single=True)
+    video = XMLChildProperty(_make_capsblock("video"), is_single=True)
 
 
 class _Features(_CapsBlock):
