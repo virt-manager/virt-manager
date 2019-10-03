@@ -27,6 +27,8 @@ class DeviceVideo(Device):
 
     @staticmethod
     def default_model(guest):
+        if not guest.os.is_hvm():
+            return None
         if guest.os.is_pseries():
             return "vga"
         if guest.os.is_arm_machvirt() or guest.os.is_riscv_virt():
@@ -37,11 +39,9 @@ class DeviceVideo(Device):
             if guest.has_gl():
                 return "virtio"
             return "qxl"
-        if guest.os.is_hvm():
-            if guest.conn.is_qemu():
-                return "qxl"
-            return "vga"
-        return None
+        if guest.conn.is_qemu():
+            return "qxl"
+        return "vga"
 
     def set_defaults(self, guest):
         if not self.model:
