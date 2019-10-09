@@ -374,7 +374,11 @@ class vmmConsolePages(vmmGObjectUI):
         if is_resizeguest:
             # With resize guest, we don't want to maintain aspect ratio,
             # since the guest can resize to arbitrary resolutions.
-            self._viewer.console_set_size_request(req.width, req.height)
+            # self._viewer.console_set_size_request(req.width, req.height)
+            viewer_alloc = Gdk.Rectangle()
+            viewer_alloc.width = req.width
+            viewer_alloc.height = req.height
+            self._viewer.console_size_allocate(viewer_alloc)
             return
 
         if not is_scale:
