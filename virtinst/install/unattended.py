@@ -34,6 +34,46 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     def get_language():
         return locale.getlocale()[0]
 
+    def is_user_login_safe(login, is_windows):
+        linux_forbidden_login_names = [
+            "root",
+        ]
+
+        # Please, take a look at:
+        # https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
+        # Expect this to be a mess as not all names are present in the link
+        # above and some of the names present in the link above actually work.
+        windows_forbidden_login_names = [
+            "con",
+            "prn",
+            "nul",
+            "com1",
+            "com2",
+            "com3",
+            "com4",
+            "com5",
+            "com6",
+            "com7",
+            "com8",
+            "com9",
+            "lpt",
+            "lpt1",
+            "lpt2",
+            "lpt3",
+            "lpt4",
+            "lpt5",
+            "lpt6",
+            "lpt7",
+            "lpt8",
+            "lpt9",
+            # This one is not explicitly mentioned, but you cannot set it.
+            "administrator",
+        ]
+
+        if is_windows:
+            return login not in windows_forbidden_login_names
+        return login not in linux_forbidden_login_names
+
     config = Libosinfo.InstallConfig()
 
     # Set user login and name
@@ -41,6 +81,10 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     # and realname. Otherwise, fallback fto the one from the system
     login = unattended_data.user_login or getpass.getuser()
     login = login.lower()
+    if not is_user_login_safe(login, osobj.is_windows()):
+        raise RuntimeError(
+            _("%s cannot use '%s' as user-login.") % (login, osobj.name))
+
     realname = unattended_data.user_login or pwd.getpwnam(login).pw_gecos
     config.set_user_login(login)
     config.set_user_realname(realname)
