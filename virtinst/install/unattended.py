@@ -36,9 +36,14 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
 
     config = Libosinfo.InstallConfig()
 
-    # Set user login and name based on the one from the system
-    config.set_user_login(getpass.getuser())
-    config.set_user_realname(pwd.getpwnam(getpass.getuser()).pw_gecos)
+    # Set user login and name
+    # In case it's specified via command-line, use the specified one as login
+    # and realname. Otherwise, fallback fto the one from the system
+    login = unattended_data.user_login or getpass.getuser()
+    login = login.lower()
+    realname = unattended_data.user_login or pwd.getpwnam(login).pw_gecos
+    config.set_user_login(login)
+    config.set_user_realname(realname)
 
     # Set user-password.
     # In case it's required and not passed, just raise a RuntimeError.
@@ -252,6 +257,7 @@ class OSInstallScript:
 class UnattendedData():
     profile = None
     admin_password_file = None
+    user_login = None
     user_password_file = None
     product_key = None
 

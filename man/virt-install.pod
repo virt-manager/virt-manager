@@ -628,12 +628,18 @@ password-file.
 Note that only the first line of the file will be considered, including
 any whitespace characters and excluding new-line.
 
+=item B<user-login=>
+
+The user login name to be used in th VM. virt-install will default to your
+current host username if this is unspecified.
+
 =item B<user-password-file=>
 
 A file used to set the VM user password. This option can be used either as
 "user-password-file=/path/to/password-file" or as
 "user-password-file=/dev/fd/n", being n the file descriptor of the
-password-file. The username is your current host username.
+password-file. The username is either the user-login specified or your current
+host username.
 Note that only the first line of the file will be considered, including
 any whitespace characters and excluding new-line.
 
