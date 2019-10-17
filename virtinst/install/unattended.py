@@ -34,6 +34,9 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     def get_language():
         return locale.getlocale()[0]
 
+    def is_user_login_safe(login):
+        return login != "root"
+
     config = Libosinfo.InstallConfig()
 
     # Set user login and name
@@ -41,6 +44,10 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     # and realname. Otherwise, fallback fto the one from the system
     login = unattended_data.user_login or getpass.getuser()
     login = login.lower()
+    if not is_user_login_safe(login):
+        raise RuntimeError(
+            _("%s cannot use '%s' as user-login.") % (login, osobj.name))
+
     realname = unattended_data.user_login or pwd.getpwnam(login).pw_gecos
     config.set_user_login(login)
     config.set_user_realname(realname)
