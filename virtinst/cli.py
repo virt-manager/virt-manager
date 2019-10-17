@@ -1514,6 +1514,7 @@ class ParserUnattended(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("profile", "profile")
         cls.add_arg("admin-password-file", "admin_password_file")
+        cls.add_arg("user-login", "user_login")
         cls.add_arg("user-password-file", "user_password_file")
         cls.add_arg("product-key", "product_key")
 
