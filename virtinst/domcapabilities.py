@@ -278,7 +278,7 @@ class DomainCapabilities(XMLBuilder):
             expandedXML = self.conn.baselineHypervisorCPU(
                     self.path, self.arch, self.machine, self.domain, [cpuXML],
                     libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
-        except libvirt.libvirtError:
+        except (libvirt.libvirtError, AttributeError):
             expandedXML = self.conn.baselineCPU([cpuXML],
                     libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
 
