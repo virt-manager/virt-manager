@@ -388,7 +388,7 @@
       <target dev="vdb" bus="virtio"/>
       <boot order="3"/>
     </disk>
-    <disk type="block" device="cdrom">
+    <disk type="file" device="cdrom">
       <target dev="hdc" bus="ide"/>
       <readonly/>
       <boot order="1"/>

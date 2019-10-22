@@ -225,7 +225,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     </disk>
 
     <!-- bus scsi -->
-    <disk type='block' device='cdrom'>
+    <disk type='file' device='cdrom'>
       <target dev='sdb' bus='scsi'/>
       <address type='drive' controller='5'/>
     </disk>
@@ -773,7 +773,7 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
       <target dev='sda' bus='scsi'/>
       <readonly/>
     </disk>
-    <disk type='block' device='cdrom'>
+    <disk type='file' device='cdrom'>
       <target dev='sdb' bus='scsi'/>
     </disk>
     <disk type='block' device='disk'>
