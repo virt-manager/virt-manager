@@ -990,13 +990,6 @@ class vmmConnection(vmmGObject):
         log.debug("%s capabilities:\n%s",
                       self.get_uri(), self.caps.get_xml())
 
-        # Try to create the default storage pool
-        # We want this before events setup to save some needless polling
-        try:
-            virtinst.StoragePool.build_default_pool(self.get_backend())
-        except Exception as e:
-            log.debug("Building default pool failed: %s", str(e))
-
         self._add_conn_events()
 
         try:
@@ -1024,6 +1017,14 @@ class vmmConnection(vmmGObject):
         self._init_object_event.wait()
         self._init_object_event = None
         self._init_object_count = None
+
+        # Try to create the default storage pool
+        # We need this after events setup so we can determine if the default
+        # pool already exists
+        try:
+            virtinst.StoragePool.build_default_pool(self.get_backend())
+        except Exception as e:
+            log.debug("Building default pool failed: %s", str(e))
 
     def _open_thread(self):
         ConnectError = None
