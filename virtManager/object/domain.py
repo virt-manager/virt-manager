@@ -12,7 +12,6 @@ import libvirt
 
 from virtinst import DeviceController
 from virtinst import DeviceDisk
-from virtinst import DomainCapabilities
 from virtinst import DomainSnapshot
 from virtinst import Guest
 from virtinst import log
@@ -311,8 +310,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def get_domain_capabilities(self):
         if not self._domain_caps:
-            self._domain_caps = DomainCapabilities.build_from_guest(
-                self.get_xmlobj())
+            self._domain_caps = self.get_xmlobj().lookup_domcaps()
         return self._domain_caps
 
 

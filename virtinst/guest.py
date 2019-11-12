@@ -641,6 +641,10 @@ class Guest(XMLBuilder):
     def lookup_domcaps(self):
         # We need to regenerate domcaps cache if any of these values change
         def _compare(domcaps):
+            if self.type == "test":
+                # Test driver doesn't support domcaps. We kinda fake it in
+                # some cases, but it screws up the checking here for parsed XML
+                return True
             if self.os.machine and self.os.machine != domcaps.machine:
                 return False
             if self.type and self.type != domcaps.domain:
