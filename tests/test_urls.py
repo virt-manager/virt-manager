@@ -118,6 +118,7 @@ def _testGuest(testdata, guest):
     checkdistro = testdata.detectdistro
 
     guest.os.arch = arch
+    guest.set_os_name("generic")
     if testdata.testshortcircuit:
         guest.set_os_name(checkdistro)
 
