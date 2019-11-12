@@ -296,7 +296,7 @@ class DomainCapabilities(XMLBuilder):
                 'virt-ssbd',
                 'md-clear']
 
-        if self._features:
+        if self._features is not None:
             return self._features
 
         self._features = []
