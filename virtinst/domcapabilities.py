@@ -272,7 +272,7 @@ class DomainCapabilities(XMLBuilder):
 
     def _get_expanded_cpu(self, mode):
         cpuXML = self._convert_mode_to_cpu(mode.get_xml())
-        log.debug("CPU XML for security flag baseline: %s", cpuXML)
+        log.debug("Generated CPU XML for security flag baseline:\n%s", cpuXML)
 
         try:
             expandedXML = self.conn.baselineHypervisorCPU(
@@ -281,8 +281,6 @@ class DomainCapabilities(XMLBuilder):
         except (libvirt.libvirtError, AttributeError):
             expandedXML = self.conn.baselineCPU([cpuXML],
                     libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
-
-        log.debug("Expanded CPU XML: %s", expandedXML)
 
         return DomainCpu(self.conn, expandedXML)
 
@@ -315,6 +313,7 @@ class DomainCapabilities(XMLBuilder):
                 if feature.name in sec_features:
                     self._features.append(feature.name)
 
+        log.debug("Found host-model security features: %s", self._features)
         return self._features
 
     def supports_sev_launch_security(self):
