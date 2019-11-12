@@ -107,7 +107,8 @@ class Details(uiutils.UITestCase):
         # Memory balloon
         tab = self._select_hw(win, "Memory", "memory-tab")
         tab.find("Current allocation:", "spin button").text = "300"
-        tab.find("Maximum allocation:", "spin button").text = "800"
+        # Newer libvirt rejects this hotplug operation for test driver
+        # tab.find("Maximum allocation:", "spin button").text = "800"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
