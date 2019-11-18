@@ -531,13 +531,16 @@ def set_explicit_guest_options(options, guest):
 
 def installer_detect_distro(guest, installer, osdata):
     try:
+        # OS name has to be set firstly whenever --os-variant is passed,
+        # otherwise it won't be respected when the installer creates the
+        # Distro Store.
+        if osdata.name:
+            guest.set_os_name(osdata.name)
+
         # This also validates the install location
         autodistro = installer.detect_distro(guest)
-        name = osdata.name
-        if osdata.is_auto:
-            name = autodistro
-        if name:
-            guest.set_os_name(name)
+        if osdata.is_auto and autodistro:
+            guest.set_os_name(autodistro)
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
 
