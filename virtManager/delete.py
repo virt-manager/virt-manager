@@ -110,8 +110,9 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.widget("delete-remove-storage").set_active(True)
         self.widget("delete-remove-storage").toggled()
 
+        diskdatas = _build_diskdata_for_vm(self.vm)
         _populate_storage_list(self.widget("delete-storage-list"),
-                               self.vm, self.vm.conn)
+                               self.vm, self.vm.conn, diskdatas)
 
 
     ################
@@ -256,20 +257,58 @@ class vmmDeleteDialog(vmmGObjectUI):
 # UI init helpers #
 ###################
 
-def _populate_storage_list(storage_list, vm, conn):
+class _DiskData:
+    """
+    Helper class to contain all info we need to decide whether we
+    should default to deleting a path
+    """
+    @staticmethod
+    def from_disk(disk):
+        """
+        Build _DiskData from a DeviceDisk object
+        """
+        return _DiskData(
+                disk.target,
+                disk.path,
+                disk.read_only,
+                disk.shareable,
+                disk.device in ["cdrom", "floppy"])
+
+    def __init__(self, label, path, ro, shared, is_media):
+        self.label = label
+        self.path = path
+        self.ro = ro
+        self.shared = shared
+        self.is_media = is_media
+
+
+def _build_diskdata_for_vm(vm):
+    """
+    Return a list of _DiskData for all VM resources the app attempts to delete
+    """
+    diskdatas = []
+    for disk in vm.xmlobj.devices.disk:
+        diskdatas.append(_DiskData.from_disk(disk))
+
+    diskdatas.append(
+            _DiskData("kernel", vm.get_xmlobj().os.kernel, True, False, True))
+    diskdatas.append(
+            _DiskData("initrd", vm.get_xmlobj().os.initrd, True, False, True))
+    diskdatas.append(
+            _DiskData("dtb", vm.get_xmlobj().os.dtb, True, False, True))
+
+    return diskdatas
+
+
+def _populate_storage_list(storage_list, vm, conn, diskdatas):
+    """
+    Fill in the storage list UI from the passed list of _DiskData
+    """
     model = storage_list.get_model()
     model.clear()
 
-    diskdata = [(d.target, d.path, d.read_only, d.shareable,
-                 d.device in ["cdrom", "floppy"]) for
-                d in vm.xmlobj.devices.disk]
-
-    diskdata.append(("kernel", vm.get_xmlobj().os.kernel, True, False, True))
-    diskdata.append(("initrd", vm.get_xmlobj().os.initrd, True, False, True))
-    diskdata.append(("dtb", vm.get_xmlobj().os.dtb, True, False, True))
-
-    for target, path, ro, shared, is_media in diskdata:
-        if not path:
+    for diskdata in diskdatas:
+        if not diskdata.path:
             continue
 
         # There are a few pieces here
@@ -284,12 +323,12 @@ def _populate_storage_list(storage_list, vm, conn):
 
         default = False
         definfo = None
-        vol = conn.get_vol_by_path(path)
-        can_del, delinfo = _can_delete(conn, vol, path)
+        vol = conn.get_vol_by_path(diskdata.path)
+        can_del, delinfo = _can_delete(conn, vol, diskdata.path)
 
         if can_del:
             default, definfo = _do_we_default(conn, vm.get_name(), vol,
-                                              path, ro, shared, is_media)
+                                              diskdata)
 
         info = None
         if not can_del:
@@ -300,7 +339,7 @@ def _populate_storage_list(storage_list, vm, conn):
         icon = Gtk.STOCK_DIALOG_WARNING
         icon_size = Gtk.IconSize.LARGE_TOOLBAR
 
-        row = [default, not can_del, path, target,
+        row = [default, not can_del, diskdata.path, diskdata.label,
                bool(info), icon, icon_size, info]
         model.append(row)
 
@@ -387,7 +426,7 @@ def _can_delete(conn, vol, path):
     return (ret, msg)
 
 
-def _do_we_default(conn, vm_name, vol, path, ro, shared, is_media):
+def _do_we_default(conn, vm_name, vol, diskdata):
     """ Returns (do we delete by default?, info string if not)"""
     info = ""
 
@@ -399,19 +438,20 @@ def _do_we_default(conn, vm_name, vol, path, ro, shared, is_media):
         str1 += str2
         return str1
 
-    if ro:
+    if diskdata.ro:
         info = append_str(info, _("Storage is read-only."))
-    elif not vol and not os.access(path, os.W_OK):
+    elif not vol and not os.access(diskdata.path, os.W_OK):
         info = append_str(info, _("No write access to path."))
 
-    if shared:
+    if diskdata.shared:
         info = append_str(info, _("Storage is marked as shareable."))
 
-    if not info and is_media:
+    if not info and diskdata.is_media:
         info = append_str(info, _("Storage is a media device."))
 
     try:
-        names = virtinst.DeviceDisk.path_in_use_by(conn.get_backend(), path)
+        names = virtinst.DeviceDisk.path_in_use_by(conn.get_backend(),
+                diskdata.path)
 
         if len(names) > 1:
             namestr = ""
