@@ -241,7 +241,12 @@ class InstallerTreeMedia(object):
             self._tmpfiles.append(scriptpath)
             self._initrd_injections.append((scriptpath, expected_filename))
 
-    def _prepare_kernel_args(self, cache, unattended_scripts):
+    def _prepare_kernel_url_arg(self, guest, cache):
+        os_variant = cache.os_variant or guest.osinfo.name
+        osobj = OSDB.lookup_os(os_variant)
+        return osobj.get_kernel_url_arg()
+
+    def _prepare_kernel_args(self, guest, cache, unattended_scripts):
         install_args = None
         if unattended_scripts:
             args = []
@@ -252,8 +257,10 @@ class InstallerTreeMedia(object):
                 args.append(cmdline)
             install_args = (" ").join(args)
             log.debug("Generated unattended cmdline: %s", install_args)
-        elif self.is_network_url() and cache.kernel_url_arg:
-            install_args = "%s=%s" % (cache.kernel_url_arg, self.location)
+        elif self.is_network_url():
+            kernel_url_arg = self._prepare_kernel_url_arg(guest, cache)
+            if kernel_url_arg:
+                install_args = "%s=%s" % (kernel_url_arg, self.location)
 
         if install_args:
             self._extra_args.append(install_args)
@@ -274,7 +281,7 @@ class InstallerTreeMedia(object):
         cache = self._get_cached_data(guest, fetcher)
 
         self._prepare_unattended_data(unattended_scripts)
-        kernel_args = self._prepare_kernel_args(cache, unattended_scripts)
+        kernel_args = self._prepare_kernel_args(guest, cache, unattended_scripts)
 
         kernel, initrd = self._prepare_kernel_url(guest, cache, fetcher)
         return kernel, initrd, kernel_args
