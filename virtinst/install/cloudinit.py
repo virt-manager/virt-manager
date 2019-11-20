@@ -46,7 +46,7 @@ def create_metadata(scratchdir):
     return filename
 
 
-def create_userdata(scratchdir, cloudinit_data):
+def _create_userdata_content(cloudinit_data):
     content = "#cloud-config\n"
 
     if cloudinit_data.root_password_generate or cloudinit_data.root_password_file:
@@ -73,6 +73,11 @@ def create_userdata(scratchdir, cloudinit_data):
 
     log.debug("Generated cloud-init userdata: \n%s",
             re.sub(r"root:(.*)", 'root:[SCRUBBLED]', content))
+    return content
+
+
+def create_userdata(scratchdir, cloudinit_data):
+    content = _create_userdata_content(cloudinit_data)
 
     fileobj = tempfile.NamedTemporaryFile(
             prefix="virtinst-", suffix="-userdata",
