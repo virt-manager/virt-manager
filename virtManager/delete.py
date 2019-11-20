@@ -48,8 +48,8 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.builder.connect_signals({
             "on_vmm_delete_delete_event": self.close,
             "on_delete_cancel_clicked": self.close,
-            "on_delete_ok_clicked": self.finish,
-            "on_delete_remove_storage_toggled": self.toggle_remove_storage,
+            "on_delete_ok_clicked": self._finish_clicked_cb,
+            "on_delete_remove_storage_toggled": self._toggle_remove_storage,
         })
         self.bind_escape_key_close()
         self._cleanup_on_app_close()
@@ -60,12 +60,12 @@ class vmmDeleteDialog(vmmGObjectUI):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
-        prepare_storage_list(self.widget("delete-storage-list"))
+        _prepare_storage_list(self.widget("delete-storage-list"))
 
     def show(self, parent, vm):
         log.debug("Showing delete wizard")
         self._set_vm(vm)
-        self.reset_state()
+        self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
@@ -78,9 +78,11 @@ class vmmDeleteDialog(vmmGObjectUI):
     def _cleanup(self):
         pass
 
-    def _vm_removed(self, _conn, connkey):
-        if self.vm.get_connkey() == connkey:
-            self.close()
+
+
+    ##########################
+    # Initialization methods #
+    ##########################
 
     def _set_vm(self, newvm):
         oldvm = self.vm
@@ -90,7 +92,7 @@ class vmmDeleteDialog(vmmGObjectUI):
             newvm.conn.connect("vm-removed", self._vm_removed)
         self.vm = newvm
 
-    def reset_state(self):
+    def _reset_state(self):
         # Set VM name in title'
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
                      (_("Delete"), xmlutil.xml_escape(self.vm.get_name())))
@@ -108,15 +110,32 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.widget("delete-remove-storage").set_active(True)
         self.widget("delete-remove-storage").toggled()
 
-        populate_storage_list(self.widget("delete-storage-list"),
-                              self.vm, self.vm.conn)
+        _populate_storage_list(self.widget("delete-storage-list"),
+                               self.vm, self.vm.conn)
 
-    def toggle_remove_storage(self, src):
+
+    ################
+    # UI listeners #
+    ################
+
+    def _finish_clicked_cb(self, src):
+        self._finish()
+
+    def _vm_removed(self, _conn, connkey):
+        if self.vm.get_connkey() == connkey:
+            self.close()
+
+    def _toggle_remove_storage(self, src):
         dodel = src.get_active()
         uiutil.set_grid_row_visible(
             self.widget("delete-storage-scroll"), dodel)
 
-    def get_paths_to_delete(self):
+
+    #########################
+    # finish/delete methods #
+    #########################
+
+    def _get_paths_to_delete(self):
         del_list = self.widget("delete-storage-list")
         model = del_list.get_model()
 
@@ -128,7 +147,7 @@ class vmmDeleteDialog(vmmGObjectUI):
                     paths.append(row[STORAGE_ROW_PATH])
         return paths
 
-    def _finish_cb(self, error, details):
+    def _delete_finished_cb(self, error, details):
         self.reset_finish_cursor()
 
         if error is not None:
@@ -136,8 +155,8 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         self.close()
 
-    def finish(self, src_ignore):
-        devs = self.get_paths_to_delete()
+    def _finish(self):
+        devs = self._get_paths_to_delete()
 
         if devs:
             title = _("Are you sure you want to delete the storage?")
@@ -158,7 +177,7 @@ class vmmDeleteDialog(vmmGObjectUI):
             text = title + _(" and selected storage (this may take a while)")
 
         progWin = vmmAsyncJob(self._async_delete, [self.vm, devs],
-                              self._finish_cb, [],
+                              self._delete_finished_cb, [],
                               title, text, self.topwin)
         progWin.run()
         self._set_vm(None)
@@ -233,7 +252,11 @@ class vmmDeleteDialog(vmmGObjectUI):
             os.unlink(path)
 
 
-def populate_storage_list(storage_list, vm, conn):
+###################
+# UI init helpers #
+###################
+
+def _populate_storage_list(storage_list, vm, conn):
     model = storage_list.get_model()
     model.clear()
 
@@ -262,11 +285,11 @@ def populate_storage_list(storage_list, vm, conn):
         default = False
         definfo = None
         vol = conn.get_vol_by_path(path)
-        can_del, delinfo = can_delete(conn, vol, path)
+        can_del, delinfo = _can_delete(conn, vol, path)
 
         if can_del:
-            default, definfo = do_we_default(conn, vm.get_name(), vol,
-                                             path, ro, shared, is_media)
+            default, definfo = _do_we_default(conn, vm.get_name(), vol,
+                                              path, ro, shared, is_media)
 
         info = None
         if not can_del:
@@ -282,7 +305,7 @@ def populate_storage_list(storage_list, vm, conn):
         model.append(row)
 
 
-def prepare_storage_list(storage_list):
+def _prepare_storage_list(storage_list):
     # Checkbox, deleteable?, storage path, target (hda), icon stock,
     # icon size, tooltip
     model = Gtk.ListStore(bool, bool, str, str, bool, str, int, str)
@@ -302,7 +325,7 @@ def prepare_storage_list(storage_list):
     storage_list.append_column(infoCol)
 
     chkbox = Gtk.CellRendererToggle()
-    chkbox.connect('toggled', storage_item_toggled, storage_list)
+    chkbox.connect('toggled', _storage_item_toggled, storage_list)
     confirmCol.pack_start(chkbox, False)
     confirmCol.add_attribute(chkbox, 'active', STORAGE_ROW_CONFIRM)
     confirmCol.add_attribute(chkbox, 'inconsistent',
@@ -329,14 +352,14 @@ def prepare_storage_list(storage_list):
     infoCol.set_sort_column_id(STORAGE_ROW_ICON)
 
 
-def storage_item_toggled(src, index, storage_list):
+def _storage_item_toggled(src, index, storage_list):
     active = src.get_active()
 
     model = storage_list.get_model()
     model[index][STORAGE_ROW_CONFIRM] = not active
 
 
-def can_delete(conn, vol, path):
+def _can_delete(conn, vol, path):
     """Is the passed path even deleteable"""
     ret = True
     msg = None
@@ -364,7 +387,7 @@ def can_delete(conn, vol, path):
     return (ret, msg)
 
 
-def do_we_default(conn, vm_name, vol, path, ro, shared, is_media):
+def _do_we_default(conn, vm_name, vol, path, ro, shared, is_media):
     """ Returns (do we delete by default?, info string if not)"""
     info = ""
 
