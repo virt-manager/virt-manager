@@ -1631,6 +1631,7 @@ class ParserCloudInit(VirtCLIParser):
         cls.add_arg("root-password-file", "root_password_file")
         cls.add_arg("disable", "disable", is_onoff=True)
         cls.add_arg("ssh-key", "ssh_key")
+        cls.add_arg("user-data", "user_data")
 
 
 def parse_cloud_init(optstr):

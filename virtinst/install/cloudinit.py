@@ -11,6 +11,7 @@ class CloudInitData():
     root_password_file = None
     generated_root_password = None
     ssh_key = None
+    user_data = None
 
     def _generate_password(self):
         self.generated_root_password = ""
@@ -50,6 +51,11 @@ def create_metadata(scratchdir):
 
 
 def _create_userdata_content(cloudinit_data):
+    if cloudinit_data.user_data:
+        log.debug("Using user-data content from path=%s",
+                cloudinit_data.user_data)
+        return open(cloudinit_data.user_data).read()
+
     content = "#cloud-config\n"
 
     if cloudinit_data.root_password_generate or cloudinit_data.root_password_file:

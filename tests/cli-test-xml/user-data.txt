@@ -1,0 +1,6 @@
+#cloud-config
+password: atomic
+chpasswd: {expire: False}
+ssh_pwauth: True
+ssh_authorized_keys:
+  - ssh-rsa AAA...SDvZ user1@domain.com
