@@ -1255,6 +1255,7 @@ class VirtCLIParser(metaclass=_InitClass):
     cli_arg_name = None
     _virtargs = []
     aliases = {}
+    supports_clearxml = True
 
     @classmethod
     def add_arg(cls, cliname, propname, *args, **kwargs):
@@ -1266,11 +1267,13 @@ class VirtCLIParser(metaclass=_InitClass):
             Don't insist that each instance has full testsuite coverage.
         """
         if not cls._virtargs:
-            clearxmlvirtarg = _VirtCLIArgumentStatic(
-                "clearxml", None, None,
-                cb=cls._clearxml_cb, lookup_cb=None,
-                is_onoff=True)
-            cls._virtargs = [clearxmlvirtarg]
+            cls._virtargs = []
+            if cls.supports_clearxml:
+                clearxmlvirtarg = _VirtCLIArgumentStatic(
+                    "clearxml", None, None,
+                    cb=cls._clearxml_cb, lookup_cb=None,
+                    is_onoff=True)
+                cls._virtargs.append(clearxmlvirtarg)
 
         parent_cliname = cls.cli_arg_name
         if kwargs.pop("skip_testsuite_tracking", False):
@@ -1508,6 +1511,7 @@ class VirtCLIParser(metaclass=_InitClass):
 
 class ParserUnattended(VirtCLIParser):
     cli_arg_name = "unattended"
+    supports_clearxml = False
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -1543,6 +1547,7 @@ def convert_old_force(options):
 
 class ParserCheck(VirtCLIParser):
     cli_arg_name = "check"
+    supports_clearxml = False
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -1574,6 +1579,7 @@ def parse_check(checks):
 class ParserInstall(VirtCLIParser):
     cli_arg_name = "install"
     remove_first = "os"
+    supports_clearxml = False
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -1615,6 +1621,7 @@ def parse_install(optstr):
 class ParserLocation(VirtCLIParser):
     cli_arg_name = "location"
     remove_first = "location"
+    supports_clearxml = False
 
     @classmethod
     def _init_class(cls, **kwargs):
