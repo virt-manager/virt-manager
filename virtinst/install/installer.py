@@ -433,7 +433,7 @@ class Installer(object):
 
     def get_generated_password(self):
         if self._cloudinit_data:
-            return self._cloudinit_data.generate_password()
+            return self._cloudinit_data.get_password_if_generated()
 
 
     ##########################

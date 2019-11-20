@@ -12,7 +12,7 @@ class CloudInitData():
     generated_root_password = None
     ssh_key = None
 
-    def generate_password(self):
+    def _generate_password(self):
         self.generated_root_password = ""
         for dummy in range(16):
             self.generated_root_password += random.choice(string.ascii_letters + string.digits)
@@ -22,11 +22,14 @@ class CloudInitData():
         with open(pwdfile, "r") as fobj:
             return fobj.readline().rstrip("\n\r")
 
-    def get_root_password(self):
+    def get_password_if_generated(self):
         if self.root_password_generate:
-            return self.generate_password()
-        elif self.root_password_file:
+            return self._generate_password()
+
+    def get_root_password(self):
+        if self.root_password_file:
             return self._get_password(self.root_password_file)
+        return self.get_password_if_generated()
 
     def get_ssh_key(self):
         if self.ssh_key:
