@@ -85,6 +85,7 @@ test_files = {
     'USER-PASSWORD-FILE': "%s/user-password.txt" % XMLDIR,
     'SSH-KEY-FILE': "%s/ssh-key.txt" % XMLDIR,
     'USER-DATA-FILE': "%s/user-data.txt" % XMLDIR,
+    'META-DATA-FILE': "%s/meta-data.txt" % XMLDIR,
 }
 
 
@@ -879,7 +880,7 @@ c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", "cloud-
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no", "cloud-init-options")  # --cloud-init root-password-generate
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-file=%(ADMIN-PASSWORD-FILE)s,disable=no", "cloud-init-options")  # --cloud-init root-password-file
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init ssh-key=%(SSH-KEY-FILE)s", "cloud-init-options")  # --cloud-init ssh-key
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(USER-DATA-FILE)s", "cloud-init-options")  # --cloud-init user-data=
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(USER-DATA-FILE)s,meta-data=%(META-DATA-FILE)s", "cloud-init-options")  # --cloud-init user-data=,meta-data=
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--connect test:///default --test-stub-command", use_default_args=False)  # --test-stub-command
 c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning

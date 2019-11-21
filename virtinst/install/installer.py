@@ -423,10 +423,13 @@ class Installer(object):
         self._cloudinit_data = cloudinit_data
 
     def _install_cloudinit(self, guest):
-        metadata = create_metadata(guest.conn.get_app_cache_dir())
-        userdata = create_userdata(guest.conn.get_app_cache_dir(), self._cloudinit_data)
+        metadata = create_metadata(guest.conn.get_app_cache_dir(),
+                self._cloudinit_data)
+        userdata = create_userdata(guest.conn.get_app_cache_dir(),
+                self._cloudinit_data)
 
-        iso = perform_cdrom_injections([(metadata, "meta-data"), (userdata, "user-data")],
+        iso = perform_cdrom_injections(
+                [(metadata, "meta-data"), (userdata, "user-data")],
                 guest.conn.get_app_cache_dir(), cloudinit=True)
         self._tmpfiles.append(iso)
         self._add_unattended_install_cdrom_device(guest, iso)

@@ -12,6 +12,7 @@ class CloudInitData():
     generated_root_password = None
     ssh_key = None
     user_data = None
+    meta_data = None
 
     def _generate_password(self):
         self.generated_root_password = ""
@@ -37,16 +38,20 @@ class CloudInitData():
             return self._get_password(self.ssh_key)
 
 
-def create_metadata(scratchdir):
+def create_metadata(scratchdir, cloudinit_data):
+    content = ""
+    if cloudinit_data.meta_data:
+        log.debug("Using meta-data content from path=%s",
+                cloudinit_data.meta_data)
+        content = open(cloudinit_data.meta_data).read()
+
     fileobj = tempfile.NamedTemporaryFile(
             prefix="virtinst-", suffix="-metadata",
             dir=scratchdir, delete=False)
     filename = fileobj.name
 
-    content = ""
     with open(filename, "w") as f:
         f.write(content)
-    log.debug("Generated cloud-init metadata\n%s", content)
     return filename
 
 
