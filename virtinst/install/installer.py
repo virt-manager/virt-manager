@@ -364,7 +364,9 @@ class Installer(object):
         for to perform this install.
         """
         search_paths = []
-        if self._treemedia:
+        if (self._treemedia or
+            self._cloudinit_data or
+            self._unattended_data):
             search_paths.append(InstallerTreeMedia.make_scratchdir(guest))
         if self._cdrom_path():
             search_paths.append(self._cdrom_path())
@@ -424,13 +426,15 @@ class Installer(object):
 
     def _install_cloudinit(self, guest):
         filepairs = cloudinit.create_files(
-                guest.conn.get_app_cache_dir(),
+                InstallerTreeMedia.make_scratchdir(guest),
                 self._cloudinit_data)
         for filepair in filepairs:
             self._tmpfiles.append(filepair[0])
 
         iso = perform_cdrom_injections(
-                filepairs, guest.conn.get_app_cache_dir(), cloudinit=True)
+                filepairs,
+                InstallerTreeMedia.make_scratchdir(guest),
+                cloudinit=True)
         self._tmpfiles.append(iso)
         self._add_unattended_install_cdrom_device(guest, iso)
 
