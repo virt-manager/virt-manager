@@ -1,7 +1,9 @@
-import tempfile
+import os
 import random
-import string
 import re
+import string
+import tempfile
+
 from ..logger import log
 
 
@@ -38,21 +40,13 @@ class CloudInitData():
             return self._get_password(self.ssh_key)
 
 
-def create_metadata(scratchdir, cloudinit_data):
+def _create_metadata_content(cloudinit_data):
     content = ""
     if cloudinit_data.meta_data:
         log.debug("Using meta-data content from path=%s",
                 cloudinit_data.meta_data)
         content = open(cloudinit_data.meta_data).read()
-
-    fileobj = tempfile.NamedTemporaryFile(
-            prefix="virtinst-", suffix="-metadata",
-            dir=scratchdir, delete=False)
-    filename = fileobj.name
-
-    with open(filename, "w") as f:
-        f.write(content)
-    return filename
+    return content
 
 
 def _create_userdata_content(cloudinit_data):
@@ -90,14 +84,24 @@ def _create_userdata_content(cloudinit_data):
     return content
 
 
-def create_userdata(scratchdir, cloudinit_data):
-    content = _create_userdata_content(cloudinit_data)
+def create_files(scratchdir, cloudinit_data):
+    metadata = _create_metadata_content(cloudinit_data)
+    userdata = _create_userdata_content(cloudinit_data)
 
-    fileobj = tempfile.NamedTemporaryFile(
-            prefix="virtinst-", suffix="-userdata",
-            dir=scratchdir, delete=False)
-    filename = fileobj.name
+    filepairs = []
+    try:
+        for content, destfile in [(metadata, "meta-data"),
+                                  (userdata, "user-data")]:
+            fileobj = tempfile.NamedTemporaryFile(
+                    prefix="virtinst-", suffix=("-%s" % destfile),
+                    dir=scratchdir, delete=False)
+            filename = fileobj.name
+            filepairs.append((filename, destfile))
 
-    with open(filename, "w+") as f:
-        f.write(content)
-    return filename
+            with open(filename, "w+") as f:
+                f.write(content)
+    except Exception:  # pragma: no cover
+        for filepair in filepairs:
+            os.unlink(filepair[0])
+
+    return filepairs
