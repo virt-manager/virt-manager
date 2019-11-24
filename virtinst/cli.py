@@ -393,8 +393,6 @@ def _gfx_console(guest, domain):
     if guest.has_gl() or guest.has_listen_none():
         args.append("--attach")
 
-    log.debug("Launching virt-viewer for graphics type '%s'",
-        guest.devices.graphics[0].type)
     return _run_console(domain, args)
 
 
@@ -403,7 +401,6 @@ def _txt_console(guest, domain):
             "--connect", guest.conn.uri,
             "console", guest.name]
 
-    log.debug("Connecting to text console")
     return _run_console(domain, args)
 
 
@@ -428,33 +425,6 @@ def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
     if destroy_on_exit and domain.isActive():
         log.debug("console exited and destroy_on_exit passed, destroying")
         domain.destroy()
-
-
-def get_console_cb(guest):
-    gdevs = guest.devices.graphics
-    if not gdevs:
-        return _txt_console
-
-    gtype = gdevs[0].type
-    if gtype not in ["default",
-            DeviceGraphics.TYPE_VNC,
-            DeviceGraphics.TYPE_SPICE]:
-        log.debug("No viewer to launch for graphics type '%s'", gtype)
-        return
-
-    if not HAS_VIRTVIEWER and not in_testsuite():  # pragma: no cover
-        log.warning(_("Unable to connect to graphical console: "
-                       "virt-viewer not installed. Please install "
-                       "the 'virt-viewer' package."))
-        return None
-
-    if (not os.environ.get("DISPLAY", "") and
-        not in_testsuite()):  # pragma: no cover
-        log.warning(_("Graphics requested but DISPLAY is not set. "
-                       "Not running virt-viewer."))
-        return None
-
-    return _gfx_console
 
 
 def get_meter():
@@ -563,8 +533,8 @@ def add_misc_options(grp, prompt=False, replace=False,
                         default=False, help=argparse.SUPPRESS)
 
     if noautoconsole:
-        grp.add_argument("--noautoconsole", action="store_false",
-            dest="autoconsole", default=True,
+        grp.add_argument("--noautoconsole", action="store_const",
+            dest="autoconsole", const="none", default="default",
             help=_("Don't automatically try to connect to the guest console"))
 
     if noreboot:
@@ -1726,18 +1696,66 @@ def parse_os_variant(optstr):
 # --noautoconsole parsing #
 ###########################
 
+def _determine_default_autoconsole_type(guest):
+    """
+    Determine the default console for the passed guest config
+
+    :returns: 'text', 'graphical', or None
+    """
+    gdevs = guest.devices.graphics
+    if not gdevs:
+        return "text"
+
+    gtype = gdevs[0].type
+    if gtype not in ["default",
+            DeviceGraphics.TYPE_VNC,
+            DeviceGraphics.TYPE_SPICE]:
+        log.debug("No viewer to launch for graphics type '%s'", gtype)
+        return None
+
+    if not HAS_VIRTVIEWER and not in_testsuite():  # pragma: no cover
+        log.warning(_("Unable to connect to graphical console: "
+                       "virt-viewer not installed. Please install "
+                       "the 'virt-viewer' package."))
+        return None
+
+    if (not os.environ.get("DISPLAY", "") and
+        not in_testsuite()):  # pragma: no cover
+        log.warning(_("Graphics requested but DISPLAY is not set. "
+                       "Not running virt-viewer."))
+        return None
+
+    return "graphical"
+
+
 class _AutoconsoleData(object):
-    def __init__(self, autoconsole):
+    def __init__(self, autoconsole, guest):
         self._autoconsole = autoconsole
+        if self._autoconsole not in ["none", "default", "text", "graphical"]:
+            fail(_("Unknown autoconsole type '%s'") % self._autoconsole)
 
-    def is_none(self):
-        return self._autoconsole is False
+        self._is_default = self._autoconsole == "default"
+        if self._is_default:
+            default = _determine_default_autoconsole_type(guest)
+            self._autoconsole = default or "none"
+
+    def is_text(self):
+        return self._autoconsole == "text"
+    def is_graphical(self):
+        return self._autoconsole == "graphical"
     def is_default(self):
-        return self._autoconsole is True
+        return self._is_default
+
+    def get_console_cb(self):
+        if self.is_graphical():
+            return _gfx_console
+        if self.is_text():
+            return _txt_console
+        return None
 
 
-def parse_autoconsole(optstr):
-    return _AutoconsoleData(optstr)
+def parse_autoconsole(options, guest):
+    return _AutoconsoleData(options.autoconsole, guest)
 
 
 ######################

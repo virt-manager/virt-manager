@@ -263,7 +263,7 @@ def convert_wait_zero(options):
     # Historical back compat, --wait 0 is identical to --noautoconsole
     if options.wait == 0:
         log.warning("Treating --wait 0 as --noautoconsole")
-        options.autoconsole = False
+        options.autoconsole = "none"
         options.wait = None
 
 
@@ -319,18 +319,16 @@ def validate_required_options(options, guest, installer):
         fail(msg)
 
 
-def show_console_warnings(options, guest, installer):
-    if guest.devices.graphics:
+def show_console_warnings(installer, autoconsole):
+    if not installer.cdrom:
         return
-    if not options.autoconsole:
+    if not autoconsole.is_text():
         return
-
-    if installer.cdrom:
-        log.warning(_("CDROM media does not print to the text console "
-            "by default, so you likely will not see text install output. "
-            "You might want to use --location.") + " " +
-            _("See the man page for examples of "
-              "using --location with CDROM media"))
+    log.warning(_("CDROM media does not print to the text console "
+        "by default, so you likely will not see text install output. "
+        "You might want to use --location.") + " " +
+        _("See the man page for examples of "
+          "using --location with CDROM media"))
 
 
 def _show_memory_warnings(guest):
@@ -633,18 +631,17 @@ class WaitHandler:
 
 
 def start_install(guest, installer, options):
-    show_console_warnings(options, guest, installer)
-    autoconsole = cli.parse_autoconsole(options.autoconsole)
+    autoconsole = cli.parse_autoconsole(options, guest)
+    show_console_warnings(installer, autoconsole)
+    conscb = autoconsole.get_console_cb()
 
-    conscb = None
-    if autoconsole.is_default():
-        conscb = cli.get_console_cb(guest)
-        if not conscb and options.wait is None:
-            # If there isn't any console to actually connect up,
-            # default to --wait -1 to get similarish behavior
-            log.warning(_("No console to launch for the guest, "
-                "defaulting to --wait -1"))
-            options.wait = -1
+    conscb = autoconsole.get_console_cb()
+    if autoconsole.is_default() and not conscb and options.wait is None:
+        # If there isn't any console to actually connect up,
+        # default to --wait -1 to get similarish behavior
+        log.warning(_("No console to launch for the guest, "
+            "defaulting to --wait -1"))
+        options.wait = -1
 
     waithandler = WaitHandler(options.wait)
     meter = cli.get_meter()
