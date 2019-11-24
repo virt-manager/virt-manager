@@ -1722,6 +1722,24 @@ def parse_os_variant(optstr):
     return OSVariantData(optstr)
 
 
+###########################
+# --noautoconsole parsing #
+###########################
+
+class _AutoconsoleData(object):
+    def __init__(self, autoconsole):
+        self._autoconsole = autoconsole
+
+    def is_none(self):
+        return self._autoconsole is False
+    def is_default(self):
+        return self._autoconsole is True
+
+
+def parse_autoconsole(optstr):
+    return _AutoconsoleData(optstr)
+
+
 ######################
 # --metadata parsing #
 ######################

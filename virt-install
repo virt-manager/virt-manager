@@ -634,9 +634,10 @@ class WaitHandler:
 
 def start_install(guest, installer, options):
     show_console_warnings(options, guest, installer)
+    autoconsole = cli.parse_autoconsole(options.autoconsole)
 
     conscb = None
-    if options.autoconsole:
+    if autoconsole.is_default():
         conscb = cli.get_console_cb(guest)
         if not conscb and options.wait is None:
             # If there isn't any console to actually connect up,

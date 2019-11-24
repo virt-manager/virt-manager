@@ -77,6 +77,15 @@ def parse_args():
 # Functional handlers #
 #######################
 
+def start_convert(guest, installer, options):
+    autoconsole = cli.parse_autoconsole(options.autoconsole)
+    if autoconsole.is_default():
+        conscb = cli.get_console_cb(guest)
+    print_stdout(_("Creating guest '%s'.") % guest.name)
+    domain = installer.start_install(guest)
+    cli.connect_console(guest, domain, conscb, True, False)
+
+
 def main(conn=None):
     cli.earlyLogging()
     options = parse_args()
@@ -86,7 +95,6 @@ def main(conn=None):
     if options.xmlonly:
         options.dry = True
         options.quiet = True
-        options.autoconsole = False
 
     print_cb = print_stdout
     if options.quiet:
@@ -102,17 +110,11 @@ def main(conn=None):
         installer = Installer(guest.conn)
         installer.set_install_defaults(guest)
 
-        conscb = None
-        if options.autoconsole:
-            conscb = cli.get_console_cb(guest) or None
-
         if options.xmlonly:
             print_stdout(installer.start_install(guest, return_xml=True)[1],
                 do_force=True)
         elif not options.dry or cli.in_testsuite():
-            print_stdout(_("Creating guest '%s'.") % guest.name)
-            domain = installer.start_install(guest)
-            cli.connect_console(guest, domain, conscb, True, False)
+            start_convert(guest, installer, options)
     except Exception:  # pragma: no cover
         converter.cleanup()
         raise
