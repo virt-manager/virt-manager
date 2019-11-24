@@ -319,7 +319,7 @@ def validate_required_options(options, guest, installer):
         fail(msg)
 
 
-def _show_nographics_warnings(options, guest, installer):
+def show_console_warnings(options, guest, installer):
     if guest.devices.graphics:
         return
     if not options.autoconsole:
@@ -350,7 +350,7 @@ def _show_memory_warnings(guest):
             "Were you trying to specify GiB?"), rammb)
 
 
-def show_warnings(options, guest, installer, osdata):
+def show_guest_warnings(options, guest, osdata):
     if options.pxe and not supports_pxe(guest):
         log.warning(_("The guest's network configuration does not support "
                        "PXE"))
@@ -365,7 +365,6 @@ def show_warnings(options, guest, installer, osdata):
             "suffer. Specify an OS with --os-variant for optimal results."))
 
     _show_memory_warnings(guest)
-    _show_nographics_warnings(options, guest, installer)
 
 
 ##########################
@@ -568,7 +567,7 @@ def build_guest_instance(conn, options):
         cli.validate_disk(disk)
 
     validate_required_options(options, guest, installer)
-    show_warnings(options, guest, installer, osdata)
+    show_guest_warnings(options, guest, osdata)
 
     return guest, installer
 
@@ -634,6 +633,8 @@ class WaitHandler:
 
 
 def start_install(guest, installer, options):
+    show_console_warnings(options, guest, installer)
+
     conscb = None
     if options.autoconsole:
         conscb = cli.get_console_cb(guest)
