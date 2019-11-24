@@ -319,10 +319,6 @@ def validate_required_options(options, guest, installer):
         fail(msg)
 
 
-_cdrom_location_man_page = _("See the man page for examples of "
-    "using --location with CDROM media")
-
-
 def _show_nographics_warnings(options, guest, installer):
     if guest.devices.graphics:
         return
@@ -333,19 +329,8 @@ def _show_nographics_warnings(options, guest, installer):
         log.warning(_("CDROM media does not print to the text console "
             "by default, so you likely will not see text install output. "
             "You might want to use --location.") + " " +
-            _cdrom_location_man_page)
-        return
-
-    if not options.location:
-        return
-
-    # Trying --location --nographics with console connect. Warn if
-    # they likely won't see any output.
-
-    if not guest.devices.console:
-        log.warning(_("No --console device added, you likely will not "
-            "see text install output from the guest."))
-        return
+            _("See the man page for examples of "
+              "using --location with CDROM media"))
 
 
 def _show_memory_warnings(guest):
