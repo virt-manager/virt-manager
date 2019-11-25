@@ -651,6 +651,63 @@ Set a Windows product key
 =back
 
 
+=item B<--cloud-init>
+
+Pass cloud-init metadata to the VM. A cloud-init NoCloud ISO file is generated,
+and attached to the VM as a CDROM device. The device is only attached for the
+first boot. This option is particularly useful for distro cloud images, which
+have locked login accounts by default; --cloud-init provides the means to
+initialize those login accounts, like setting a root password.
+
+The simplest invocation is just plain B<--cloud-init> with no suboptions;
+this maps to `--cloud-init root-password-generate=on,disable=on`. See those
+suboptions for explanation of how they work.
+
+Use --cloud-init=? to see a list of all available sub options.
+
+Sub options are:
+
+=over 4
+
+=item B<root-password-generate=on>
+
+Generate a new root password for the VM. When used, virt-install will
+print the generated password to the console, and pause for 10 seconds
+to give the user a chance to notice it and copy it.
+
+=item B<disable=on>
+
+Disable cloud-init in the VM for subsequent boots. Without this,
+cloud-init may reset auth on each boot.
+
+=item B<root-password-file=>
+
+A file used to set the VM root password from. This option can
+be used either as "root-password-file=/path/to/password-file" or as
+"root-password-file=/dev/fd/n", being n the file descriptor of the
+password-file.
+Note that only the first line of the file will be considered, including
+any whitespace characters and excluding new-line.
+
+=item B<meta-data=>
+
+Specify a cloud-init meta-data file to add directly to the iso. All other
+meta-data configuration options on the --cloud-init command line are ignored.
+
+=item B<user-data=>
+
+Specify a cloud-init user-data file to add directly to the iso. All other
+user-data configuration options on the --cloud-init command line are ignored.
+
+=item B<ssh-key=>
+
+Specify a public key to inject into the guest, providing ssh access to the
+unprivileged account. Example: ssh-key=/home/user/.ssh/id_rsa.pub
+
+=back
+
+
+
 
 =item B<--boot> BOOTOPTS
 
