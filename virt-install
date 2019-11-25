@@ -675,6 +675,8 @@ def start_install(guest, installer, options):
 
     domain = None
     try:
+        _print_cloudinit_passwd(installer)
+
         waithandler.start()
 
         domain = installer.start_install(guest, meter=meter,
@@ -683,8 +685,6 @@ def start_install(guest, installer, options):
 
         if options.destroy_on_exit:
             atexit.register(_destroy_on_exit, domain)
-
-        _print_cloudinit_passwd(installer)
 
         cli.connect_console(guest, domain, conscb,
                 waithandler.wait_for_console_to_exit,
