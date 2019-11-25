@@ -1701,12 +1701,16 @@ def parse_os_variant(optstr):
 # --noautoconsole parsing #
 ###########################
 
-def _determine_default_autoconsole_type(guest):
+def _determine_default_autoconsole_type(guest, installer):
     """
     Determine the default console for the passed guest config
 
     :returns: 'text', 'graphical', or None
     """
+    if installer.has_cloudinit():
+        log.info("--cloud-init specified, defaulting to --autoconsole text")
+        return "text"
+
     gdevs = guest.devices.graphics
     if not gdevs:
         return "text"
@@ -1734,14 +1738,14 @@ def _determine_default_autoconsole_type(guest):
 
 
 class _AutoconsoleData(object):
-    def __init__(self, autoconsole, guest):
+    def __init__(self, autoconsole, guest, installer):
         self._autoconsole = autoconsole
         if self._autoconsole not in ["none", "default", "text", "graphical"]:
             fail(_("Unknown autoconsole type '%s'") % self._autoconsole)
 
         self._is_default = self._autoconsole == "default"
         if self._is_default:
-            default = _determine_default_autoconsole_type(guest)
+            default = _determine_default_autoconsole_type(guest, installer)
             self._autoconsole = default or "none"
 
     def is_text(self):
@@ -1759,8 +1763,8 @@ class _AutoconsoleData(object):
         return None
 
 
-def parse_autoconsole(options, guest):
-    return _AutoconsoleData(options.autoconsole, guest)
+def parse_autoconsole(options, guest, installer):
+    return _AutoconsoleData(options.autoconsole, guest, installer)
 
 
 ######################

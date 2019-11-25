@@ -78,7 +78,7 @@ def parse_args():
 #######################
 
 def start_convert(guest, installer, options):
-    autoconsole = cli.parse_autoconsole(options, guest)
+    autoconsole = cli.parse_autoconsole(options, guest, installer)
     conscb = autoconsole.get_console_cb()
     print_stdout(_("Creating guest '%s'.") % guest.name)
     domain = installer.start_install(guest)

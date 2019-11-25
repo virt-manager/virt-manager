@@ -655,9 +655,8 @@ def _print_cloudinit_passwd(installer):
 
 
 def start_install(guest, installer, options):
-    autoconsole = cli.parse_autoconsole(options, guest)
+    autoconsole = cli.parse_autoconsole(options, guest, installer)
     show_console_warnings(installer, autoconsole)
-    conscb = autoconsole.get_console_cb()
 
     conscb = autoconsole.get_console_cb()
     if autoconsole.is_default() and not conscb and options.wait is None:
