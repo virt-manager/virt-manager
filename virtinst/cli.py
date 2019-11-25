@@ -1507,8 +1507,8 @@ def parse_unattended(optstr):
         return ret
 
     parser = ParserUnattended(optstr)
-    parser.parse(ret)
-    return ret
+    if parser.parse(ret):
+        return ret
 
 
 ###################
@@ -1620,8 +1620,8 @@ def parse_cloud_init(optstr):
         return ret
 
     parser = ParserCloudInit(optstr)
-    parser.parse(ret)
-    return ret
+    if parser.parse(ret):
+        return ret
 
 
 ######################
