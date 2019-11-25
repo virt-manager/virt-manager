@@ -879,6 +879,7 @@ c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-pass
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-file=%(ADMIN-PASSWORD-FILE)s,disable=no", "cloud-init-options")  # --cloud-init root-password-file
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt", "cloud-init-options")  # --cloud-init ssh-key
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt", "cloud-init-options")  # --cloud-init user-data=,meta-data=
+c.add_valid("--connect %(URI-KVM)s --disk %(EXISTIMG1)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--connect test:///default --test-stub-command", use_default_args=False)  # --test-stub-command
 c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning

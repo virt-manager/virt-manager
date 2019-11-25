@@ -630,6 +630,30 @@ class WaitHandler:
         return (time_elapsed >= self._wait_secs) or cli.in_testsuite()
 
 
+def _print_cloudinit_passwd(installer):
+    passwd = installer.get_generated_password()
+    if not passwd:
+        return
+
+    print_stdout(_("Password for first root login is: %s") % passwd,
+            do_force=True, do_log=False)
+
+    stdins = [sys.stdin]
+    timeout = 10
+    if sys.stdin.closed or not sys.stdin.isatty():
+        if not cli.in_testsuite():  # pragma: no cover
+            return
+        stdins = []
+        timeout = .0001
+
+    sys.stdout.write(
+        _("Installation will continue in 10 seconds "
+          "(press Enter to skip)..."))
+    sys.stdout.flush()
+
+    select.select(stdins, [], [], timeout)
+
+
 def start_install(guest, installer, options):
     autoconsole = cli.parse_autoconsole(options, guest)
     show_console_warnings(installer, autoconsole)
@@ -645,8 +669,7 @@ def start_install(guest, installer, options):
 
     waithandler = WaitHandler(options.wait)
     meter = cli.get_meter()
-    log.debug("Guest.has_install_phase: %s",
-                  installer.has_install_phase())
+    log.debug("Guest.has_install_phase: %s", installer.has_install_phase())
 
     # we've got everything -- try to start the install
     print_stdout(_("\nStarting install..."))
@@ -662,14 +685,7 @@ def start_install(guest, installer, options):
         if options.destroy_on_exit:
             atexit.register(_destroy_on_exit, domain)
 
-        passwd = installer.get_generated_password()
-        if options.cloud_init and passwd:  # pragma: no cover
-            print_stdout(_("Password for first login is: %s") % passwd, do_log=False)
-            print_stdout(
-                _("Installation will continue in 10 seconds "
-                "(press Enter to skip)"))
-            timeout = 10
-            select.select([sys.stdin], [], [], timeout)
+        _print_cloudinit_passwd(installer)
 
         cli.connect_console(guest, domain, conscb,
                 waithandler.wait_for_console_to_exit,
