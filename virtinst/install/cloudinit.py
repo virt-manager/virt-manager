@@ -22,9 +22,11 @@ class CloudInitData():
     meta_data = None
 
     def _generate_password(self):
-        self.generated_root_password = ""
-        for dummy in range(16):
-            self.generated_root_password += random.choice(string.ascii_letters + string.digits)
+        if not self.generated_root_password:
+            self.generated_root_password = ""
+            for dummy in range(16):
+                self.generated_root_password += random.choice(
+                        string.ascii_letters + string.digits)
         return self.generated_root_password
 
     def _get_password(self, pwdfile):
