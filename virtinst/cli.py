@@ -533,8 +533,13 @@ def add_misc_options(grp, prompt=False, replace=False,
                         default=False, help=argparse.SUPPRESS)
 
     if noautoconsole:
-        grp.add_argument("--noautoconsole", action="store_const",
-            dest="autoconsole", const="none", default="default",
+        grp.add_argument("--autoconsole", default="default",
+            help=_("Configure guest console auto connect. Example:\n"
+                   "--autoconsole text\n"
+                   "--autoconsole graphical\n"
+                   "--autoconsole none"))
+        grp.add_argument("--noautoconsole", dest="autoconsole",
+            action="store_const", const="none",
             help=_("Don't automatically try to connect to the guest console"))
 
     if noreboot:

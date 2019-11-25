@@ -928,7 +928,7 @@ c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage wi
 # QEMU/KVM specific tests #
 ###########################
 
-c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --noautoconsole")
+c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --autoconsole none")
 c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none --boot cmdline='foo bar baz'", "kvm-fedoralatest-url", prerun_check=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s --arch x86_64 --hvm", "test-url-detection")  # --test-media-detection
 c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
@@ -1101,6 +1101,9 @@ c.add_valid("--pxe --graphics vnc --noreboot", grep="testsuite console command: 
 c.add_valid("--nographics --cdrom %(EXISTIMG1)s")  # console warning about cdrom + nographics
 c.add_valid("--nographics --console none --location %(TREEDIR)s", grep="Directory tree installs typically")  # warning about directory trees not working well
 c.add_valid("--pxe --nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling
+c.add_valid("--pxe --nographics --autoconsole graphical", grep="testsuite console command: ['virt-viewer'")  # force --autoconsole graphical
+c.add_valid("--pxe --autoconsole text", grep="testsuite console command: ['virsh'")  # force --autoconsole text
+c.add_invalid("--pxe --autoconsole badval")  # bad --autoconsole value
 
 
 ##################
