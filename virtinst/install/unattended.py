@@ -42,15 +42,22 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     # Set user login and name
     # In case it's specified via command-line, use the specified one as login
     # and realname. Otherwise, fallback fto the one from the system
-    login = unattended_data.user_login or getpass.getuser()
-    login = login.lower()
-    if not is_user_login_safe(login):
-        raise RuntimeError(
-            _("%s cannot use '%s' as user-login.") % (osobj.name, login))
+    login = unattended_data.user_login
+    realname = unattended_data.user_login
+    if not login:
+        hostuser = getpass.getuser()
+        if is_user_login_safe(hostuser):
+            login = getpass.getuser()
+            realname = pwd.getpwnam(login).pw_gecos
 
-    realname = unattended_data.user_login or pwd.getpwnam(login).pw_gecos
-    config.set_user_login(login)
-    config.set_user_realname(realname)
+    if login:
+        login = login.lower()
+        if not is_user_login_safe(login):
+            raise RuntimeError(
+                _("%s cannot use '%s' as user-login.") % (osobj.name, login))
+
+        config.set_user_login(login)
+        config.set_user_realname(realname)
 
     # Set user-password.
     # In case it's required and not passed, just raise a RuntimeError.
