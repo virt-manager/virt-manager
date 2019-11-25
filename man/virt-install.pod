@@ -1235,12 +1235,35 @@ Use --graphics=? to see a list of all available sub options. Complete details at
 
 This deprecates the following options: --vnc, --vncport, --vnclisten, -k/--keymap, --sdl, --nographics
 
+
+=item B<--autoconsole> OPTIONS
+
+Configure what interactive console virt-install will launch for the VM. This
+option is not required; the default behavior is adaptive and dependent on
+how the VM is configured. But you can use this option to override the default
+choice.
+
+=over 4
+
+=item B<--autoconsole graphical>
+
+Use the graphical L<virt-viewer(1)> as the interactive console
+
+=item B<--autoconsole text>
+
+Use the text mode B<virsh console> as the interactive console.
+
+=item B<--autoconsole none>
+
+This is the same as B<--noautoconsole>
+
+=back
+
+
 =item B<--noautoconsole>
 
-Don't automatically try to connect to the guest console. The default behaviour
-is to launch L<virt-viewer(1)> to display the graphical console, or to run the
-C<virsh> C<console> command to display the text console. Use of this parameter
-will disable this behaviour.
+Don't automatically try to connect to the guest console. Same as
+B<--autoconsole none>
 
 Note, virt-install exits quickly when this option is specified. If your
 command requested a multistep install, like --cdrom or --location, after
