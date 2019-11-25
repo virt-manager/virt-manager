@@ -46,7 +46,7 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     login = login.lower()
     if not is_user_login_safe(login):
         raise RuntimeError(
-            _("%s cannot use '%s' as user-login.") % (login, osobj.name))
+            _("%s cannot use '%s' as user-login.") % (osobj.name, login))
 
     realname = unattended_data.user_login or pwd.getpwnam(login).pw_gecos
     config.set_user_login(login)
