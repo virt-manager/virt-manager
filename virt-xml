@@ -105,8 +105,8 @@ def get_domain_and_guest(conn, domstr):
 
 def defined_xml_is_unchanged(conn, domain, original_xml):
     rawxml = get_xmldesc(domain, inactive=True)
-    new_xml = virtinst.Guest(conn, parsexml=rawxml)
-    return new_xml != original_xml
+    new_xml = virtinst.Guest(conn, parsexml=rawxml).get_xml()
+    return new_xml == original_xml
 
 
 ################
