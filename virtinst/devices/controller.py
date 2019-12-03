@@ -77,12 +77,3 @@ class DeviceController(Device):
     driver_queues = XMLProperty("./driver/@queues", is_int=True)
 
     master_startport = XMLProperty("./master/@startport", is_int=True)
-
-
-    ##################
-    # Default config #
-    ##################
-
-    def set_defaults(self, _guest):
-        if self.index is None:
-            self.index = 0

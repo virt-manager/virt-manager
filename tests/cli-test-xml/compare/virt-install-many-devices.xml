@@ -232,10 +232,10 @@
       <master startport="4"/>
       <address type="pci" domain="0" bus="0" slot="4" function="2"/>
     </controller>
-    <controller type="scsi" index="0" model="virtio-scsi">
+    <controller type="scsi" model="virtio-scsi">
       <driver queues="4" iothread="2"/>
     </controller>
-    <controller type="xenbus" index="0" maxGrantFrames="64"/>
+    <controller type="xenbus" maxGrantFrames="64"/>
     <filesystem type="mount" accessmode="mapped">
       <driver ats="on" iommu="off"/>
       <alias name="testfsalias"/>

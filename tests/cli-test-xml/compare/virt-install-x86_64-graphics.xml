@@ -34,7 +34,7 @@
       <source file="/dev/default-pool/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
     </disk>
-    <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
+    <controller type="usb" model="qemu-xhci" ports="15"/>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>

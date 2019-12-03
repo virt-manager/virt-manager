@@ -36,14 +36,14 @@
       <source file="/tmp/testfile"/>
       <target dev="hda" bus="ide"/>
     </disk>
-    <controller type="usb" index="0" model="ich9-ehci1"/>
-    <controller type="usb" index="0" model="ich9-uhci1">
+    <controller type="usb" model="ich9-ehci1"/>
+    <controller type="usb" model="ich9-uhci1">
       <master startport="0"/>
     </controller>
-    <controller type="usb" index="0" model="ich9-uhci2">
+    <controller type="usb" model="ich9-uhci2">
       <master startport="2"/>
     </controller>
-    <controller type="usb" index="0" model="ich9-uhci3">
+    <controller type="usb" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
     <interface type="bridge">

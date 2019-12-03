@@ -26,10 +26,10 @@
       <source file="/var/lib/libvirt/images/disk.qcow2"/>
       <target dev="vda" bus="virtio"/>
     </disk>
-    <controller type="scsi" index="0" model="virtio-scsi">
+    <controller type="scsi" model="virtio-scsi">
       <address type="pci"/>
     </controller>
-    <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
+    <controller type="usb" model="qemu-xhci" ports="15"/>
     <interface type="network">
       <source network="default"/>
       <mac address="00:11:22:33:44:55"/>

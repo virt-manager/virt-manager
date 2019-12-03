@@ -28,8 +28,8 @@
       <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
-    <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
-    <controller type="scsi" index="0" model="virtio-scsi"/>
+    <controller type="usb" model="qemu-xhci" ports="15"/>
+    <controller type="scsi" model="virtio-scsi"/>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
@@ -69,8 +69,8 @@
       <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
-    <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
-    <controller type="scsi" index="0" model="virtio-scsi"/>
+    <controller type="usb" model="qemu-xhci" ports="15"/>
+    <controller type="scsi" model="virtio-scsi"/>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
