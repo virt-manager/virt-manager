@@ -116,7 +116,7 @@ class vmmCreateConn(vmmGObjectUI):
         _add_hv_row(HV_QEMU, "qemu", "QEMU/KVM")
         _add_hv_row(HV_QEMU_SESSION, "qemu", "QEMU/KVM " + _("user session"))
         _add_hv_row(HV_XEN, "xen", "Xen")
-        _add_hv_row(HV_LXC, "lxc", "LXC (" + _("Linux Containers") + ")")
+        _add_hv_row(HV_LXC, "lxc", "Libvirt-LXC (" + _("Linux Containers") + ")")
         _add_hv_row(HV_BHYVE, "bhyve", "Bhyve")
         _add_hv_row(HV_VZ, "vz", "Virtuozzo")
         _add_hv_row(-1, None, "")
