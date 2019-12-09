@@ -156,6 +156,11 @@ class vmmDomainSnapshot(vmmLibvirtObject):
             log.debug("Unknown status %d, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
         return LibvirtEnumMap.VM_STATUS_ICONS[status]
+    def is_running(self):
+        """
+        Captured state is a running domain.
+        """
+        return self._state_str_to_int() in [libvirt.VIR_DOMAIN_RUNNING]
 
     def is_current(self):
         return self._backend.isCurrent()
@@ -1044,7 +1049,14 @@ class vmmDomain(vmmLibvirtObject):
 
     @vmmLibvirtObject.lifecycle_action
     def revert_to_snapshot(self, snap):
+        # no use trying to set the guest time if is going to be switched off
+        # after reverting to the snapshot
+        target_run_state = snap.is_running()
         self._backend.revertToSnapshot(snap.get_backend())
+        # looking at the domain state after revert will always come back as
+        # paused, so look at the snapshot state instead
+        if target_run_state == libvirt.VIR_DOMAIN_RUNNING:
+            self._set_time()
 
     def create_snapshot(self, xml, redefine=False):
         flags = 0
@@ -1369,6 +1381,7 @@ class vmmDomain(vmmLibvirtObject):
     @vmmLibvirtObject.lifecycle_action
     def resume(self):
         self._backend.resume()
+        self._set_time()
 
     @vmmLibvirtObject.lifecycle_action
     def save(self, meter=None):
