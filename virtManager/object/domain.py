@@ -1137,6 +1137,34 @@ class vmmDomain(vmmLibvirtObject):
     def refresh_snapshots(self):
         self._snapshot_list = None
 
+    def _set_time(self):
+        """
+        Try to set VM time to the current value. This is typically useful when
+        clock wasn't running on the VM for some time (e.g. during suspension or
+        migration), especially if the time delay exceeds NTP tolerance.
+        It is not guaranteed that the time is actually set (it depends on guest
+        environment, especially QEMU agent presence) or that the set time is
+        very precise (NTP in the guest should take care of it if needed).
+
+        Heavily based on
+        https://github.com/openstack/nova/commit/414df1e56ea9df700756a1732125e06c5d97d792.
+        """
+        # retry an arbitrary number of times to give the agent some time to
+        # come back online after e.g. resuming the domain
+        attempt = 1
+        while attempt < 5:
+            t = time.time()
+            seconds = int(t)
+            nseconds = int((t - seconds) * 10 ** 9)
+            try:
+                self._backend.setTime(time={"seconds": seconds,
+                                            "nseconds": nseconds})
+                log.debug("Successfully set guest time")
+            except Exception as e:
+                log.debug("Failed to set time: %s", e)
+
+            attempt += 1
+
 
     ########################
     # XML Parsing routines #
@@ -1274,7 +1302,10 @@ class vmmDomain(vmmLibvirtObject):
 
     @vmmLibvirtObject.lifecycle_action
     def startup(self):
+        sync_time = self.has_managed_save()
         self._backend.create()
+        if sync_time:
+            self._set_time()
 
     @vmmLibvirtObject.lifecycle_action
     def suspend(self):
