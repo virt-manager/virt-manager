@@ -1054,15 +1054,28 @@ class vmmDomain(vmmLibvirtObject):
             log.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
         self._backend.snapshotCreateXML(xml, flags)
 
-    def refresh_interface_addresses(self, iface):
-        def agent_ready():
-            for dev in self.xmlobj.devices.channel:
-                if (dev.type == "unix" and
-                    dev.target_name == dev.CHANNEL_NAME_QEMUGA and
-                    dev.target_state == "connected"):
-                    return True
-            return False
+    def _get_agent(self):
+        """
+        Return agent channel object if it is defined.
+        """
+        for dev in self.xmlobj.devices.channel:
+            if (dev.type == "unix" and
+                dev.target_name == dev.CHANNEL_NAME_QEMUGA):
+                return dev
+        return None
 
+    def _agent_ready(self):
+        """
+        Return connected state of an agent.
+        """
+        # we need to get a fresh agent channel object on each call so it
+        # reflects the current state
+        dev = self._get_agent()
+        if dev and dev.target_state == "connected":
+            return True
+        return False
+
+    def refresh_interface_addresses(self, iface):
         self._ip_cache = {"qemuga": {}, "arp": {}}
         if iface.type == "network":
             net = self.conn.get_net(iface.source)
@@ -1071,7 +1084,7 @@ class vmmDomain(vmmLibvirtObject):
         if not self.is_active():
             return
 
-        if agent_ready():
+        if self._agent_ready():
             self._ip_cache["qemuga"] = self._get_interface_addresses(
                 libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT)
 
@@ -1154,21 +1167,34 @@ class vmmDomain(vmmLibvirtObject):
         if not self.conn.is_qemu() and not self.conn.is_test():
             return
 
-        # retry an arbitrary number of times to give the agent some time to
-        # come back online after e.g. resuming the domain
-        attempt = 1
-        while attempt < 5:
-            t = time.time()
-            seconds = int(t)
-            nseconds = int((t - seconds) * 10 ** 9)
-            try:
-                self._backend.setTime(time={"seconds": seconds,
-                                            "nseconds": nseconds})
-                log.debug("Successfully set guest time")
-            except Exception as e:
-                log.debug("Failed to set time: %s", e)
+        if self.conn.is_qemu():
+            # For qemu, only run the API if the VM has the qemu guest agent in
+            # the XML.
+            if not self._get_agent():
+                return
 
-            attempt += 1
+            # wait for agent to come online
+            maxwait = 5
+            sleep = 0.5
+            for _ in range(0, int(maxwait / sleep)):
+                if self._agent_ready():
+                    break
+                log.debug("Waiting for qemu guest agent to come online...")
+                time.sleep(sleep)
+            else:
+                if not self._agent_ready():
+                    log.debug("Giving up on qemu guest agent for time sync")
+                    return
+
+        t = time.time()
+        seconds = int(t)
+        nseconds = int((t - seconds) * 10 ** 9)
+        try:
+            self._backend.setTime(time={"seconds": seconds,
+                                        "nseconds": nseconds})
+            log.debug("Successfully set guest time")
+        except Exception as e:
+            log.debug("Failed to set time: %s", e)
 
 
     ########################
