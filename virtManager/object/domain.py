@@ -1149,6 +1149,11 @@ class vmmDomain(vmmLibvirtObject):
         Heavily based on
         https://github.com/openstack/nova/commit/414df1e56ea9df700756a1732125e06c5d97d792.
         """
+        # Only run the API for qemu and test drivers, they are the only ones
+        # that support it. This will save spamming logs with error output.
+        if not self.conn.is_qemu() and not self.conn.is_test():
+            return
+
         # retry an arbitrary number of times to give the agent some time to
         # come back online after e.g. resuming the domain
         attempt = 1
