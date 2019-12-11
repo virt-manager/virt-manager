@@ -21,6 +21,7 @@ from virtinst import log
 from virtinst import OSDB
 from virtinst.install import unattended
 
+from tests import setup_logging
 from tests import virtinstall, virtclone, virtconvert, virtxml
 from tests import utils
 
@@ -244,6 +245,8 @@ class Command(object):
             sys.argv = oldargv
             if oldenv:
                 os.environ = oldenv
+            # Reset logging
+            setup_logging()
 
 
     def _get_output(self, conn):

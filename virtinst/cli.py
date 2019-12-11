@@ -23,7 +23,7 @@ from .buildconfig import BuildConfig
 from .connection import VirtinstConnection
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
-from .logger import log
+from .logger import log, reset_logging
 from .nodedev import NodeDevice
 from .osdict import OSDB
 from .storage import StoragePool, StorageVolume
@@ -119,6 +119,7 @@ def setupParser(usage, description, introspection_epilog=False):
 
 
 def earlyLogging():
+    reset_logging()
     import logging
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
@@ -159,14 +160,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 
     import logging
     import logging.handlers
-    rootLogger = logging.getLogger()
-
-    # Undo early logging
-    for handler in rootLogger.handlers:
-        rootLogger.removeHandler(handler)
-    # Undo any logging on our log handler. Needed for test suite
-    for handler in log.handlers:
-        log.removeHandler(handler)
+    reset_logging()
 
     log.setLevel(logging.DEBUG)
     if logfile:

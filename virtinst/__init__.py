@@ -65,4 +65,4 @@ from virtinst.snapshot import DomainSnapshot
 
 from virtinst.connection import VirtinstConnection
 
-from virtinst.logger import log
+from virtinst.logger import log, reset_logging

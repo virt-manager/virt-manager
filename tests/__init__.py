@@ -14,7 +14,7 @@ os.environ.pop("_ARC_DEBUG", None)
 
 # pylint: disable=wrong-import-position
 from virtinst import buildconfig
-from virtinst import log
+from virtinst import log, reset_logging
 # This sets all the cli bits back to their defaults
 imp.reload(buildconfig)
 
@@ -28,9 +28,7 @@ virtxml = None
 
 def setup_logging():
     import logging
-    rootLogger = logging.getLogger()
-    for handler in rootLogger.handlers:
-        rootLogger.removeHandler(handler)
+    reset_logging()
 
     fmt = "%(levelname)-8s %(message)s"
     streamHandler = logging.StreamHandler()
