@@ -366,15 +366,19 @@ def _run_console(domain, args):
     log.debug("Running: %s", " ".join(args))
     if in_testsuite():
         print_stdout("testsuite console command: %s" % args)
-        args = ["/bin/true"]
+        args = ["/bin/test"]
 
     child = os.fork()
     if child:
         return child
 
-    os.execvp(args[0], args)  # pragma: no cover
     # pylint: disable=protected-access
-    os._exit(1)  # pragma: no cover
+    try:  # pragma: no cover
+        os.execvp(args[0], args)
+    except Exception as e:
+        print("Error launching %s: %s" % (args, e))
+    finally:
+        os._exit(1)  # pragma: no cover
 
 
 def _gfx_console(guest, domain):
