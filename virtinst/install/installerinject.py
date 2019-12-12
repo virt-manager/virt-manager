@@ -45,7 +45,15 @@ def _run_initrd_commands(initrd, tempdir):
 
 
 def _run_iso_commands(iso, tempdir, cloudinit=False):
-    cmd = ["genisoimage",
+    # Some distros do not link mkisofs to genisoimage (or vice-versa). As a
+    # result of this, we have to actually check for both programs and use the
+    # most appropriate one.
+    programs = ["genisoimage", "mkisofs"]
+    for program in programs:
+        if shutil.which(program):
+            break
+
+    cmd = [program,
            "-o", iso,
            "-J",
            "-input-charset", "utf8",
