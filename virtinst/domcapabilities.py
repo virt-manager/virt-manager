@@ -177,9 +177,11 @@ class DomainCapabilities(XMLBuilder):
     # validate anything the user explicitly enters.
     _uefi_arch_patterns = {
         "i686": [
+            r".*edk2-i386-.*\.fd",  # upstream qemu
             r".*ovmf-ia32.*",  # fedora, gerd's firmware repo
         ],
         "x86_64": [
+            r".*edk2-x86_64-.*\.fd",  # upstream qemu
             r".*OVMF_CODE\.fd",  # RHEL
             r".*ovmf-x64/OVMF.*\.fd",  # gerd's firmware repo
             r".*ovmf-x86_64-.*",  # SUSE
@@ -189,9 +191,11 @@ class DomainCapabilities(XMLBuilder):
             r".*AAVMF_CODE\.fd",  # RHEL
             r".*aarch64/QEMU_EFI.*",  # gerd's firmware repo
             r".*aarch64.*",  # generic attempt at a catchall
+            r".*edk2-aarch64-code\.fd",  # upstream qemu
         ],
         "armv7l": [
             r".*arm/QEMU_EFI.*",  # fedora, gerd's firmware repo
+            r".*edk2-arm-code\.fd"  # upstream qemu
         ],
     }
 
