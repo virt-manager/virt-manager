@@ -1109,7 +1109,10 @@ class vmmDetails(vmmGObjectUI):
                                str(e)))
 
     def remove_disk(self, disk):
-        self.remove_device(disk)
+        from ..delete import vmmDeleteDialog
+        dialog = vmmDeleteDialog()
+        dialog.set_disk(disk)
+        dialog.show(self.topwin, self.vm)
 
     def remove_xml_dev(self, src_ignore):
         devobj = self.get_hw_row()[HW_LIST_COL_DEVICE]

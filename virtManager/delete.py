@@ -31,6 +31,8 @@ STORAGE_ROW_TOOLTIP = 7
 
 
 class vmmDeleteDialog(vmmGObjectUI):
+
+    disk = None
     @classmethod
     def show_instance(cls, parentobj, vm):
         try:
@@ -75,6 +77,9 @@ class vmmDeleteDialog(vmmGObjectUI):
         self._set_vm(None)
         return 1
 
+    def set_disk(self, disk):
+        self.disk = disk
+
     def _cleanup(self):
         pass
 
@@ -93,9 +98,14 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.vm = newvm
 
     def _reset_state(self):
-        # Set VM name in title'
+        # Set VM name or disk.target in title'
+        if self.disk:
+            text = self.disk.target
+        else:
+            text = self.vm.get_name()
+
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
-                     (_("Delete"), xmlutil.xml_escape(self.vm.get_name())))
+                     (_("Delete"), xmlutil.xml_escape(text)))
         self.widget("header-label").set_markup(title_str)
 
         self.topwin.resize(1, 1)
@@ -109,8 +119,10 @@ class vmmDeleteDialog(vmmGObjectUI):
         # Enable storage removal by default
         self.widget("delete-remove-storage").set_active(True)
         self.widget("delete-remove-storage").toggled()
-
-        diskdatas = _build_diskdata_for_vm(self.vm)
+        if self.disk:
+            diskdatas =[_DiskData.from_disk(self.disk),]
+        else:
+            diskdatas = _build_diskdata_for_vm(self.vm)
         _populate_storage_list(self.widget("delete-storage-list"),
                                self.vm, self.vm.conn, diskdatas)
 
@@ -172,10 +184,15 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         self.set_finish_cursor()
 
-        title = _("Deleting virtual machine '%s'") % self.vm.get_name()
-        text = title
-        if devs:
-            text = title + _(" and selected storage (this may take a while)")
+        if self.disk:
+            title = _("Deleting the selected storage")
+            text = _('%s') % self.disk.target
+        else:
+            title = _("Deleting virtual machine '%s'") % self.vm.get_name()
+            text = title
+            if devs:
+                text = title + _(" and selected storage (this may take a while)")
+
 
         progWin = vmmAsyncJob(self._async_delete, [self.vm, devs],
                               self._delete_finished_cb, [],
@@ -195,18 +212,20 @@ class vmmDeleteDialog(vmmGObjectUI):
 
             conn = vm.conn.get_backend()
             meter = asyncjob.get_meter()
+            if not paths and self.disk:
+                vm.remove_device(self.disk)
 
             for path in paths:
                 try:
                     log.debug("Deleting path: %s", path)
                     meter.start(text=_("Deleting path '%s'") % path)
-                    self._async_delete_path(conn, path, meter)
+                    self._async_delete_dev(vm, conn, path, meter)
                 except Exception as e:
                     storage_errors.append((str(e),
                                           "".join(traceback.format_exc())))
                 meter.end(0)
 
-            if undefine:
+            if undefine and not self.disk:
                 log.debug("Removing VM '%s'", vm.get_name())
                 vm.delete()
 
@@ -239,7 +258,7 @@ class vmmDeleteDialog(vmmGObjectUI):
             asyncjob.set_error(error, details)
         vm.conn.schedule_priority_tick(pollvm=True)
 
-    def _async_delete_path(self, conn, path, ignore):
+    def _async_delete_dev(self, vm, conn, path, ignore):
         vol = None
 
         try:
@@ -251,6 +270,14 @@ class vmmDeleteDialog(vmmGObjectUI):
             vol.delete(0)
         else:
             os.unlink(path)
+        self._async_delete_xmldev(vm, path, ignore)
+
+    def _async_delete_xmldev(self, vm, path, ignore):
+        for d in vm.xmlobj.devices.disk:
+            if d.path == path:
+                dev = d
+                break
+        vm.remove_device(dev)
 
 
 ###################
