@@ -1108,9 +1108,15 @@ class vmmDetails(vmmGObjectUI):
             self.err.show_err((_("Error launching hardware dialog: %s") %
                                str(e)))
 
+    def remove_disk(self, disk):
+        self.remove_device(disk)
+
     def remove_xml_dev(self, src_ignore):
         devobj = self.get_hw_row()[HW_LIST_COL_DEVICE]
-        self.remove_device(devobj)
+        if devobj.DEVICE_TYPE == "disk":
+            self.remove_disk(devobj)
+        else:
+            self.remove_device(devobj)
 
 
     ############################
