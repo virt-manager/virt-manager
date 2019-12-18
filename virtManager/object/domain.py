@@ -1051,11 +1051,11 @@ class vmmDomain(vmmLibvirtObject):
     def revert_to_snapshot(self, snap):
         # no use trying to set the guest time if is going to be switched off
         # after reverting to the snapshot
-        target_run_state = snap.is_running()
+        will_be_running = snap.is_running()
         self._backend.revertToSnapshot(snap.get_backend())
         # looking at the domain state after revert will always come back as
         # paused, so look at the snapshot state instead
-        if target_run_state == libvirt.VIR_DOMAIN_RUNNING:
+        if will_be_running:
             self._set_time()
 
     def create_snapshot(self, xml, redefine=False):
