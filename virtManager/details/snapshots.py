@@ -656,6 +656,20 @@ class vmmSnapshotPage(vmmGObjectUI):
         if not result:
             return
 
+        if self.vm.has_managed_save() and not snap.has_run_state():
+            result = self.err.ok_cancel(
+                _("Saved state will be removed to avoid filesystem corruption"),
+                _("Snapshot '%s' contains only disk and no memory state. "
+                  "Restoring the snapshot would leave the existing saved state "
+                  "in place, effectively switching a disk underneath a running "
+                  "system. Running the domain afterwards would likely result in "
+                  "extensive filesystem corruption. Therefore the saved state "
+                  "will be removed before restoring the snapshot."
+                  ) % snap.get_name())
+            if not result:
+                return
+            self.vm.remove_saved_image()
+
         log.debug("Running snapshot '%s'", snap.get_name())
         vmmAsyncJob.simple_async(self.vm.revert_to_snapshot,
                             [snap], self,

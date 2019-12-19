@@ -161,6 +161,12 @@ class vmmDomainSnapshot(vmmLibvirtObject):
         Captured state is a running domain.
         """
         return self._state_str_to_int() in [libvirt.VIR_DOMAIN_RUNNING]
+    def has_run_state(self):
+        """
+        Captured state contains run state in addition to disk state.
+        """
+        return self._state_str_to_int() in [libvirt.VIR_DOMAIN_RUNNING,
+                                            libvirt.VIR_DOMAIN_PAUSED]
 
     def is_current(self):
         return self._backend.isCurrent()
