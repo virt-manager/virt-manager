@@ -112,7 +112,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.widget("delete-cancel").grab_focus()
 
         # Show warning message if VM is running
-        vm_active = self.vm.is_active()
+        vm_active = self.vm.is_active() and not self.disk
         uiutil.set_grid_row_visible(
             self.widget("delete-warn-running-vm-box"), vm_active)
 
