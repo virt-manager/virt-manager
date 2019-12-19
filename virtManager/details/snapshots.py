@@ -633,6 +633,17 @@ class vmmSnapshotPage(vmmGObjectUI):
             self._snapshot_new = vmmSnapshotNew(self.vm)
             self._snapshot_new.connect("snapshot-created",
                     self._snapshot_created_cb)
+        if self.vm.has_managed_save():
+            result = self.err.ok_cancel(
+                _("Saved memory state will not be part of the snapshot"),
+                _("The domain is currently saved. Due to technical "
+                  "limitations that saved memory state will not become part "
+                  "of the snapshot. Running it later will be the same as "
+                  "having forced the system off mid-flight. It is "
+                  "recommended to snapshot either the running or shut down "
+                  "system instead."))
+            if not result:
+                return
         self._snapshot_new.show(self.topwin)
 
     def _on_refresh_clicked(self, ignore):
