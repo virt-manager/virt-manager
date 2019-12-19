@@ -1107,6 +1107,12 @@ class vmmDetails(vmmGObjectUI):
         except Exception as e:
             self.err.show_err((_("Error launching hardware dialog: %s") %
                                str(e)))
+    def remove_non_disk(self, devobj):
+        if not self.err.chkbox_helper(self.config.get_confirm_removedev,
+                self.config.set_confirm_removedev,
+                text1=(_("Are you sure you want to remove this device?"))):
+            return
+        self.remove_device(devobj)
 
     def remove_disk(self, disk):
         from ..delete import vmmDeleteDialog
@@ -1119,7 +1125,7 @@ class vmmDetails(vmmGObjectUI):
         if devobj.DEVICE_TYPE == "disk":
             self.remove_disk(devobj)
         else:
-            self.remove_device(devobj)
+            self.remove_non_disk(devobj)
 
 
     ############################
@@ -1933,11 +1939,6 @@ class vmmDetails(vmmGObjectUI):
     # Device removal
     def remove_device(self, devobj):
         log.debug("Removing device: %s", devobj)
-
-        if not self.err.chkbox_helper(self.config.get_confirm_removedev,
-                self.config.set_confirm_removedev,
-                text1=(_("Are you sure you want to remove this device?"))):
-            return
 
         # Define the change
         try:
