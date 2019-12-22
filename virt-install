@@ -727,7 +727,6 @@ def check_domain(installer, domain, conscb, transient, waithandler):
         try:
             dominfo = domain.info()
             state = dominfo[0]
-            log.debug("Domain state after install: %s", state)
 
             if state == libvirt.VIR_DOMAIN_CRASHED:
                 fail(_("Domain has crashed."))  # pragma: no cover
@@ -769,7 +768,7 @@ def check_domain(installer, domain, conscb, transient, waithandler):
 
     # Wait loop
     while True:
-        if not domain.isActive():  # pragma: no cover
+        if check_domain_inactive():
             print_stdout(_("Domain has shutdown. Continuing."))
             break
 
