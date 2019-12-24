@@ -3836,9 +3836,10 @@ class ParserVsock(VirtCLIParser):
 ######################################################
 
 class _ParserChar(VirtCLIParser):
-    remove_first = "char_type"
+    remove_first = "type"
     stub_none = False
     aliases = {
+        "type": "char_type",
         "protocol.type": "protocol",
 
         "target.address": "target_address",
@@ -3893,7 +3894,7 @@ class _ParserChar(VirtCLIParser):
         VirtCLIParser._init_class(**kwargs)
         _add_common_device_args(cls)
 
-        cls.add_arg("char_type", "type")
+        cls.add_arg("type", "type")
 
         # These are handled in _add_advertised_aliases
         cls.add_arg("path", "source.path", cb=cls.noset_cb)

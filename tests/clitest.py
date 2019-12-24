@@ -641,9 +641,9 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --input tablet
 --input mouse
 
---serial tcp,host=:2222,mode=bind,protocol=telnet,log.file=/tmp/foo.log,log.append=yes,,target.model.name=pci-serial
+--serial char_type=tcp,host=:2222,mode=bind,protocol=telnet,log.file=/tmp/foo.log,log.append=yes,,target.model.name=pci-serial
 --serial nmdm,source.master=/dev/foo1,source.slave=/dev/foo2,alias.name=testalias7
---parallel udp,host=0.0.0.0:1234,bind_host=127.0.0.1:1234
+--parallel type=udp,host=0.0.0.0:1234,bind_host=127.0.0.1:1234
 --parallel udp,source.connect_host=127.0.0.2,source.connect_service=8888,source.bind_host=127.0.0.1,source.bind_service=7777
 --parallel unix,path=/tmp/foo-socket,source.seclabel0.model=none,source.seclabel1.model=dac,source.seclabel1.relabel=yes,source.seclabel1.label=foobar,source.seclabel.relabel=no
 --channel pty,target_type=guestfwd,target_address=127.0.0.1:10000
