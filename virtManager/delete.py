@@ -66,6 +66,9 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _get_title_text(self, devs):
         raise NotImplementedError
 
+    def _vm_active_status(self):
+        raise NotImplementedError
+
     def _init_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
@@ -115,7 +118,7 @@ class _vmmDeleteBase(vmmGObjectUI):
         self.widget("delete-cancel").grab_focus()
 
         # Show warning message if VM is running
-        vm_active = self.vm.is_active() and not self.disk
+        vm_active = self._vm_active_status()
         uiutil.set_grid_row_visible(
             self.widget("delete-warn-running-vm-box"), vm_active)
 
@@ -288,6 +291,10 @@ class vmmDeleteDialog(_vmmDeleteBase):
             text = title
         return [title, text]
 
+    def _vm_active_status(self):
+        vm_active = self.vm.is_active()
+        return vm_active
+
 
 class vmmDeleteStorage(_vmmDeleteBase):
     def __init__(self, disk):
@@ -304,6 +311,9 @@ class vmmDeleteStorage(_vmmDeleteBase):
         title = _("Deleting the selected storage")
         text = _('%s') % self.disk.target
         return [title, text]
+
+    def _vm_active_status(self):
+        return False
 
 
 ###################
