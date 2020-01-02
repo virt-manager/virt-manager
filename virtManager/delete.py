@@ -69,6 +69,9 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _vm_active_status(self):
         raise NotImplementedError
 
+    def _delete_vm(self, vm):
+        raise NotImplementedError
+
     def _init_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
@@ -197,7 +200,6 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _async_delete(self, asyncjob, vm, paths):
         storage_errors = []
         details = ""
-        undefine = vm.is_persistent()
 
         try:
             if vm.is_active():
@@ -219,10 +221,7 @@ class _vmmDeleteBase(vmmGObjectUI):
                                           "".join(traceback.format_exc())))
                 meter.end(0)
 
-            if undefine and not self.disk:
-                log.debug("Removing VM '%s'", vm.get_name())
-                vm.delete()
-
+            self._delete_vm(vm)
         except Exception as e:
             error = (_("Error deleting virtual machine '%s': %s") %
                       (vm.get_name(), str(e)))
@@ -295,6 +294,11 @@ class vmmDeleteDialog(_vmmDeleteBase):
         vm_active = self.vm.is_active()
         return vm_active
 
+    def _delete_vm(self, vm):
+        if vm.is_persistent():
+            log.debug("Removing VM '%s'", vm.get_name())
+            vm.delete()
+
 
 class vmmDeleteStorage(_vmmDeleteBase):
     def __init__(self, disk):
@@ -314,6 +318,9 @@ class vmmDeleteStorage(_vmmDeleteBase):
 
     def _vm_active_status(self):
         return False
+
+    def _delete_vm(self, vm):
+        pass
 
 
 ###################
