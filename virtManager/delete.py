@@ -73,6 +73,21 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _delete_vm(self, vm, undefine):
         raise NotImplementedError
 
+    def _delete_disks(self, vm, paths, conn, meter):
+        storage_errors = []
+        if not paths:
+            return
+        for path in paths:
+            try:
+                log.debug("Deleting path: %s", path)
+                meter.start(text=_("Deleting path '%s'") % path)
+                self._async_delete_dev(vm, conn, path, meter)
+            except Exception as e:
+                storage_errors.append((str(e),
+                                          "".join(traceback.format_exc())))
+            meter.end(0)
+        return storage_errors
+
     def _init_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
@@ -198,7 +213,6 @@ class _vmmDeleteBase(vmmGObjectUI):
         self._set_vm(None)
 
     def _async_delete(self, asyncjob, vm, paths):
-        storage_errors = []
         details = ""
         undefine = vm.is_persistent()
 
@@ -209,25 +223,13 @@ class _vmmDeleteBase(vmmGObjectUI):
 
             conn = vm.conn.get_backend()
             meter = asyncjob.get_meter()
-            if not paths and self.disk:
-                vm.remove_device(self.disk)
-
-            for path in paths:
-                try:
-                    log.debug("Deleting path: %s", path)
-                    meter.start(text=_("Deleting path '%s'") % path)
-                    self._async_delete_dev(vm, conn, path, meter)
-                except Exception as e:
-                    storage_errors.append((str(e),
-                                          "".join(traceback.format_exc())))
-                meter.end(0)
+            storage_errors = self._delete_disks(vm, paths, conn, meter)
             self._delete_vm(vm, undefine)
 
         except Exception as e:
             error = (_("Error deleting virtual machine '%s': %s") %
                       (vm.get_name(), str(e)))
             details = "".join(traceback.format_exc())
-
 
         storage_errstr = ""
         for errinfo in storage_errors:
@@ -325,6 +327,13 @@ class vmmDeleteStorage(_vmmDeleteBase):
 
     def _delete_vm(self, vm, undefine):
         pass
+
+    def _delete_disks(self, vm, paths, conn, meter):
+        storage_errors = []
+        vm.remove_device(self.disk)
+        if paths:
+            super()._delete_disks(vm, paths, conn, meter)
+        return storage_errors
 
 ###################
 # UI init helpers #
