@@ -1115,9 +1115,8 @@ class vmmDetails(vmmGObjectUI):
         self.remove_device(devobj)
 
     def remove_disk(self, disk):
-        from ..delete import vmmDeleteDialog
-        dialog = vmmDeleteDialog()
-        dialog.set_disk(disk)
+        from ..delete import vmmDeleteStorage
+        dialog = vmmDeleteStorage(disk)
         dialog.show(self.topwin, self.vm)
 
     def remove_xml_dev(self, src_ignore):

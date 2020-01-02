@@ -30,7 +30,7 @@ STORAGE_ROW_ICON_SIZE = 6
 STORAGE_ROW_TOOLTIP = 7
 
 
-class vmmDeleteDialog(vmmGObjectUI):
+class _vmmDeleteBase(vmmGObjectUI):
 
     disk = None
     @classmethod
@@ -58,6 +58,9 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         self._init_state()
 
+    def _get_dialog_title(self):
+        raise NotImplementedError
+
     def _init_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
@@ -77,8 +80,6 @@ class vmmDeleteDialog(vmmGObjectUI):
         self._set_vm(None)
         return 1
 
-    def set_disk(self, disk):
-        self.disk = disk
 
     def _cleanup(self):
         pass
@@ -99,10 +100,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
     def _reset_state(self):
         # Set VM name or disk.target in title'
-        if self.disk:
-            text = self.disk.target
-        else:
-            text = self.vm.get_name()
+        text = self._get_dialog_title()
 
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
                      (_("Delete"), xmlutil.xml_escape(text)))
@@ -280,6 +278,23 @@ class vmmDeleteDialog(vmmGObjectUI):
                 dev = d
                 break
         vm.remove_device(dev)
+
+
+class vmmDeleteDialog(_vmmDeleteBase):
+
+    def _get_dialog_title(self):
+        return self.vm.get_name()
+
+
+class vmmDeleteStorage(_vmmDeleteBase):
+
+    disk = None
+    def __init__(self, disk):
+        _vmmDeleteBase.__init__(self)
+        self.disk = disk
+
+    def _get_dialog_title(self):
+        return self.disk.target
 
 
 ###################
