@@ -63,6 +63,9 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _get_disk_datas(self):
         raise NotImplementedError
 
+    def _get_title_text(self, devs):
+        raise NotImplementedError
+
     def _init_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
@@ -180,18 +183,7 @@ class _vmmDeleteBase(vmmGObjectUI):
                 return
 
         self.set_finish_cursor()
-
-        if self.disk:
-            title = _("Deleting the selected storage")
-            text = _('%s') % self.disk.target
-        elif devs:
-            title = _("Deleting virtual machine '%s' and selected storage "
-                      "(this may take a while)") % self.vm.get_name()
-            text = title
-        else:
-            title = _("Deleting virtual machine '%s'") % self.vm.get_name()
-            text = title
-
+        title, text = self._get_title_text(devs)
 
         progWin = vmmAsyncJob(self._async_delete, [self.vm, devs],
                               self._delete_finished_cb, [],
@@ -286,6 +278,16 @@ class vmmDeleteDialog(_vmmDeleteBase):
     def _get_disk_datas(self):
         return _build_diskdata_for_vm(self.vm)
 
+    def _get_title_text(self, devs):
+        if devs:
+            title = _("Deleting virtual machine '%s' and selected storage "
+                      "(this may take a while)") % self.vm.get_name()
+            text = title
+        else:
+            title = _("Deleting virtual machine '%s'") % self.vm.get_name()
+            text = title
+        return [title, text]
+
 
 class vmmDeleteStorage(_vmmDeleteBase):
     def __init__(self, disk):
@@ -297,6 +299,11 @@ class vmmDeleteStorage(_vmmDeleteBase):
 
     def _get_disk_datas(self):
         return [_DiskData.from_disk(self.disk)]
+
+    def _get_title_text(self, devs):
+        title = _("Deleting the selected storage")
+        text = _('%s') % self.disk.target
+        return [title, text]
 
 
 ###################
