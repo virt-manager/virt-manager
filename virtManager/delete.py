@@ -60,6 +60,9 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _get_dialog_title(self):
         raise NotImplementedError
 
+    def _get_disk_datas(self):
+        raise NotImplementedError
+
     def _init_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
@@ -116,10 +119,7 @@ class _vmmDeleteBase(vmmGObjectUI):
         # Enable storage removal by default
         self.widget("delete-remove-storage").set_active(True)
         self.widget("delete-remove-storage").toggled()
-        if self.disk:
-            diskdatas = [_DiskData.from_disk(self.disk)]
-        else:
-            diskdatas = _build_diskdata_for_vm(self.vm)
+        diskdatas = self._get_disk_datas()
         _populate_storage_list(self.widget("delete-storage-list"),
                                self.vm, self.vm.conn, diskdatas)
 
@@ -283,6 +283,9 @@ class vmmDeleteDialog(_vmmDeleteBase):
     def _get_dialog_title(self):
         return self.vm.get_name()
 
+    def _get_disk_datas(self):
+        return _build_diskdata_for_vm(self.vm)
+
 
 class vmmDeleteStorage(_vmmDeleteBase):
     def __init__(self, disk):
@@ -291,6 +294,9 @@ class vmmDeleteStorage(_vmmDeleteBase):
 
     def _get_dialog_title(self):
         return self.disk.target
+
+    def _get_disk_datas(self):
+        return [_DiskData.from_disk(self.disk)]
 
 
 ###################
