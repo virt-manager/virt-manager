@@ -1284,6 +1284,12 @@ class vmmDomain(vmmLibvirtObject):
         """
         self._set_time_thread.start()
 
+    def _cancel_set_time(self):
+        """
+        Cancel a running guest time setting operation
+        """
+        self._set_time_thread.stop()
+
 
     ########################
     # XML Parsing routines #
@@ -1401,21 +1407,25 @@ class vmmDomain(vmmLibvirtObject):
 
     @vmmLibvirtObject.lifecycle_action
     def shutdown(self):
+        self._cancel_set_time()
         self._install_abort = True
         self._backend.shutdown()
 
     @vmmLibvirtObject.lifecycle_action
     def reboot(self):
+        self._cancel_set_time()
         self._install_abort = True
         self._backend.reboot(0)
 
     @vmmLibvirtObject.lifecycle_action
     def destroy(self):
+        self._cancel_set_time()
         self._install_abort = True
         self._backend.destroy()
 
     @vmmLibvirtObject.lifecycle_action
     def reset(self):
+        self._cancel_set_time()
         self._install_abort = True
         self._backend.reset(0)
 
@@ -1428,6 +1438,7 @@ class vmmDomain(vmmLibvirtObject):
 
     @vmmLibvirtObject.lifecycle_action
     def suspend(self):
+        self._cancel_set_time()
         self._backend.suspend()
 
     @vmmLibvirtObject.lifecycle_action
@@ -1461,6 +1472,7 @@ class vmmDomain(vmmLibvirtObject):
 
     @vmmLibvirtObject.lifecycle_action
     def save(self, meter=None):
+        self._cancel_set_time()
         self._install_abort = True
 
         if meter:
@@ -1491,6 +1503,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def migrate(self, destconn, dest_uri=None,
             tunnel=False, unsafe=False, temporary=False, meter=None):
+        self._cancel_set_time()
         self._install_abort = True
 
         flags = 0
