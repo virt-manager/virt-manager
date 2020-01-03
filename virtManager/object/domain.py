@@ -191,6 +191,8 @@ class _vmmDomainSetTimeThread(vmmGObject):
         self._do_cancel = threading.Event()
         self._do_cancel.clear()
         self._thread = None
+        self._maxwait = 5
+        self._sleep = 0.5
 
     def start(self):
         """
@@ -239,17 +241,15 @@ class _vmmDomainSetTimeThread(vmmGObject):
             # Setting time of a qemu domain can only work if an agent is
             # defined and online. We only get here if one is defined. So wait
             # for it to come online now.
-            maxwait = 5
-            sleep = 0.5
             waited = 0
-            while waited < maxwait and not self._domain.agent_ready():
+            while waited < self._maxwait and not self._domain.agent_ready():
                 log.debug("Waiting for qemu guest agent to come online...")
 
                 # sleep some time and potentially abort
-                if self._do_cancel.wait(sleep):
+                if self._do_cancel.wait(self._sleep):
                     return
 
-                waited += sleep
+                waited += self._sleep
 
             if not self._domain.agent_ready():
                 log.debug("Giving up on qemu guest agent for time sync")
