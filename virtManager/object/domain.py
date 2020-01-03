@@ -17,6 +17,7 @@ from virtinst import Guest
 from virtinst import log
 
 from .libvirtobject import vmmLibvirtObject
+from ..baseclass import vmmGObject
 from ..lib.libvirtenummap import LibvirtEnumMap
 
 
@@ -179,6 +180,42 @@ class vmmDomainSnapshot(vmmLibvirtObject):
         return False
 
 
+class _vmmDomainSetTimeThread(vmmGObject):
+    def __init__(self, domain):
+        vmmGObject.__init__(self)
+        self._domain = domain
+
+    def start(self):
+        # Only run the API for qemu and test drivers, they are the only ones
+        # that support it. This will save spamming logs with error output.
+        if not self._domain.conn.is_qemu() and not self._domain.conn.is_test():
+            return
+
+        if self._domain.conn.is_qemu():
+            # For qemu, only run the API if the VM has the qemu guest agent in
+            # the XML.
+            if not self._domain.has_agent():
+                return
+
+            # wait for agent to come online
+            maxwait = 5
+            sleep = 0.5
+            for _ in range(0, int(maxwait / sleep)):
+                if self._domain.agent_ready():
+                    break
+                log.debug("Waiting for qemu guest agent to come online...")
+                time.sleep(sleep)
+            else:
+                if not self._domain.agent_ready():
+                    log.debug("Giving up on qemu guest agent for time sync")
+                    return
+
+        self._domain.set_time()
+
+    def _cleanup(self):
+        pass
+
+
 class vmmDomain(vmmLibvirtObject):
     """
     Class wrapping virDomain libvirt objects. Is also extended to be
@@ -208,6 +245,7 @@ class vmmDomain(vmmLibvirtObject):
         self._domain_state_supported = False
 
         self.inspection = vmmInspectionData()
+        self._set_time_thread = _vmmDomainSetTimeThread(self)
 
     def _cleanup(self):
         for snap in self._snapshot_list or []:
@@ -1062,7 +1100,7 @@ class vmmDomain(vmmLibvirtObject):
         # looking at the domain state after revert will always come back as
         # paused, so look at the snapshot state instead
         if will_be_running:
-            self._set_time()
+            self._async_set_time()
 
     def create_snapshot(self, xml, redefine=False):
         flags = 0
@@ -1082,7 +1120,13 @@ class vmmDomain(vmmLibvirtObject):
                 return dev
         return None
 
-    def _agent_ready(self):
+    def has_agent(self):
+        """
+        Return True if domain has a guest agent defined.
+        """
+        return self._get_agent() is not None
+
+    def agent_ready(self):
         """
         Return connected state of an agent.
         """
@@ -1100,7 +1144,7 @@ class vmmDomain(vmmLibvirtObject):
         if not self.is_active():
             return
 
-        if self._agent_ready():
+        if self.agent_ready():
             self._ip_cache["qemuga"] = self._get_interface_addresses(
                 libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT)
 
@@ -1166,7 +1210,7 @@ class vmmDomain(vmmLibvirtObject):
     def refresh_snapshots(self):
         self._snapshot_list = None
 
-    def _set_time(self):
+    def set_time(self):
         """
         Try to set VM time to the current value. This is typically useful when
         clock wasn't running on the VM for some time (e.g. during suspension or
@@ -1178,30 +1222,6 @@ class vmmDomain(vmmLibvirtObject):
         Heavily based on
         https://github.com/openstack/nova/commit/414df1e56ea9df700756a1732125e06c5d97d792.
         """
-        # Only run the API for qemu and test drivers, they are the only ones
-        # that support it. This will save spamming logs with error output.
-        if not self.conn.is_qemu() and not self.conn.is_test():
-            return
-
-        if self.conn.is_qemu():
-            # For qemu, only run the API if the VM has the qemu guest agent in
-            # the XML.
-            if not self._get_agent():
-                return
-
-            # wait for agent to come online
-            maxwait = 5
-            sleep = 0.5
-            for _ in range(0, int(maxwait / sleep)):
-                if self._agent_ready():
-                    break
-                log.debug("Waiting for qemu guest agent to come online...")
-                time.sleep(sleep)
-            else:
-                if not self._agent_ready():
-                    log.debug("Giving up on qemu guest agent for time sync")
-                    return
-
         t = time.time()
         seconds = int(t)
         nseconds = int((t - seconds) * 10 ** 9)
@@ -1211,6 +1231,13 @@ class vmmDomain(vmmLibvirtObject):
             log.debug("Successfully set guest time")
         except Exception as e:
             log.debug("Failed to set time: %s", e)
+
+    def _async_set_time(self):
+        """
+        Asynchronously try to set guest time and maybe wait for a guest agent
+        to come online using a separate thread.
+        """
+        self._set_time_thread.start()
 
 
     ########################
@@ -1352,7 +1379,7 @@ class vmmDomain(vmmLibvirtObject):
         sync_time = self.has_managed_save()
         self._backend.create()
         if sync_time:
-            self._set_time()
+            self._async_set_time()
 
     @vmmLibvirtObject.lifecycle_action
     def suspend(self):
@@ -1385,7 +1412,7 @@ class vmmDomain(vmmLibvirtObject):
     @vmmLibvirtObject.lifecycle_action
     def resume(self):
         self._backend.resume()
-        self._set_time()
+        self._async_set_time()
 
     @vmmLibvirtObject.lifecycle_action
     def save(self, meter=None):
