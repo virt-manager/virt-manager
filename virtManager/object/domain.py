@@ -181,39 +181,84 @@ class vmmDomainSnapshot(vmmLibvirtObject):
 
 
 class _vmmDomainSetTimeThread(vmmGObject):
+    """
+    A separate thread handling time setting operations as not to block the main
+    UI.
+    """
     def __init__(self, domain):
         vmmGObject.__init__(self)
         self._domain = domain
+        self._do_cancel = threading.Event()
+        self._do_cancel.clear()
+        self._thread = None
 
     def start(self):
+        """
+        Start time setting thread if setting time is supported by the
+        connection. Stop the old thread first. May block until the old thread
+        terminates.
+        """
+        self.stop()
+
         # Only run the API for qemu and test drivers, they are the only ones
         # that support it. This will save spamming logs with error output.
         if not self._domain.conn.is_qemu() and not self._domain.conn.is_test():
             return
 
-        if self._domain.conn.is_qemu():
-            # For qemu, only run the API if the VM has the qemu guest agent in
-            # the XML.
-            if not self._domain.has_agent():
-                return
+        # For qemu, only run the API if the VM has the qemu guest agent in
+        # the XML.
+        if self._domain.conn.is_qemu() and not self._domain.has_agent():
+            return
 
-            # wait for agent to come online
+        log.debug("Starting time setting thread")
+        self._thread = threading.Thread(name='settime thread',
+                                        target=self._do_loop)
+        self._thread.start()
+
+    def stop(self):
+        """
+        Signal running thread to terminate and wait for it to do so.
+        """
+        if not self._thread:
+            return
+
+        log.debug("Stopping time setting thread")
+        self._do_cancel.set()
+        # thread may be in a loop waiting for an agent to come online or just
+        # waiting for a set time operation to finish
+        self._thread.join()
+        self._thread = None
+        self._do_cancel.clear()
+
+    def _do_loop(self):
+        """
+        Run the domain's set time operation. Potentially wait for a guest agent
+        to come online beforehand.
+        """
+        if self._domain.conn.is_qemu():
+            # Setting time of a qemu domain can only work if an agent is
+            # defined and online. We only get here if one is defined. So wait
+            # for it to come online now.
             maxwait = 5
             sleep = 0.5
-            for _ in range(0, int(maxwait / sleep)):
-                if self._domain.agent_ready():
-                    break
+            waited = 0
+            while waited < maxwait and not self._domain.agent_ready():
                 log.debug("Waiting for qemu guest agent to come online...")
-                time.sleep(sleep)
-            else:
-                if not self._domain.agent_ready():
-                    log.debug("Giving up on qemu guest agent for time sync")
+
+                # sleep some time and potentially abort
+                if self._do_cancel.wait(sleep):
                     return
+
+                waited += sleep
+
+            if not self._domain.agent_ready():
+                log.debug("Giving up on qemu guest agent for time sync")
+                return
 
         self._domain.set_time()
 
     def _cleanup(self):
-        pass
+        self.stop()
 
 
 class vmmDomain(vmmLibvirtObject):
