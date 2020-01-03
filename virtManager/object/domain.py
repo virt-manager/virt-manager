@@ -191,7 +191,7 @@ class _vmmDomainSetTimeThread(vmmGObject):
         self._do_cancel = threading.Event()
         self._do_cancel.clear()
         self._thread = None
-        self._maxwait = 5
+        self._maxwait = 30
         self._sleep = 0.5
 
     def start(self):
