@@ -1089,9 +1089,7 @@ class vmmDomain(vmmLibvirtObject):
         # we need to get a fresh agent channel object on each call so it
         # reflects the current state
         dev = self._get_agent()
-        if dev and dev.target_state == "connected":
-            return True
-        return False
+        return dev and dev.target_state == "connected"
 
     def refresh_interface_addresses(self, iface):
         self._ip_cache = {"qemuga": {}, "arp": {}}
