@@ -187,11 +187,13 @@ class vmmDeleteDialog(vmmGObjectUI):
         if self.disk:
             title = _("Deleting the selected storage")
             text = _('%s') % self.disk.target
+        elif devs:
+            title = _("Deleting virtual machine '%s' and selected storage "
+                      "(this may take a while)") % self.vm.get_name()
+            text = title
         else:
             title = _("Deleting virtual machine '%s'") % self.vm.get_name()
             text = title
-            if devs:
-                text = title + _(" and selected storage (this may take a while)")
 
 
         progWin = vmmAsyncJob(self._async_delete, [self.vm, devs],
