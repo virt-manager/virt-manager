@@ -55,7 +55,7 @@ _desktop_files = [
     ("share/applications", ["data/virt-manager.desktop.in"]),
 ]
 _appdata_files = [
-    ("share/appdata", ["data/virt-manager.appdata.xml.in"]),
+    ("share/metainfo", ["data/virt-manager.appdata.xml.in"]),
 ]
 
 
