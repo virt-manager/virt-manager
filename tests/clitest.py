@@ -1029,11 +1029,11 @@ c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-graphics")
 # LXC specific tests #
 ######################
 
-c = vinst.add_category("lxc", "--name foolxc --memory 64 --noautoconsole --connect " + utils.URIs.lxc)
+c = vinst.add_category("lxc", "--name foolxc --noautoconsole --connect " + utils.URIs.lxc)
 c.add_invalid("--filesystem /,not/abs")  # filesystem target is not absolute
 c.add_compare("", "default")
 c.add_compare("--os-variant fedora27", "default-f27")
-c.add_compare("--filesystem /source,/", "fs-default")
+c.add_compare("--filesystem /source,/ --memory 128", "fs-default")
 c.add_compare("--init /usr/bin/httpd", "manual-init")
 
 

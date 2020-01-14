@@ -454,6 +454,11 @@ def set_cli_defaults(options, guest):
         guest.name = default_name
 
     if guest.os.is_container():
+        if not memory_specified(guest):
+            # LXC doesn't even do anything with memory settings, but libvirt
+            # XML requires it anyways. Fill in 64 MiB
+            log.debug("Setting container default --memory 64")
+            guest.currentMemory = 64 // 1024
         return
 
     if (options.unattended and
