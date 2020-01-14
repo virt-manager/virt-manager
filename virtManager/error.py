@@ -15,6 +15,11 @@ from .baseclass import vmmGObject
 
 def _launch_dialog(dialog, primary_text, secondary_text, title,
                    widget=None, modal=True):
+    if primary_text and len(primary_text) > 512:
+        primary_text = primary_text[:512] + "..."
+    if secondary_text and len(secondary_text) > 512:
+        secondary_text = secondary_text[:512] + "..."
+
     dialog.set_property("text", primary_text)
     dialog.format_secondary_text(secondary_text or None)
     dialog.set_title(title)
