@@ -243,7 +243,8 @@ class _vmmDomainSetTimeThread(vmmGObject):
             # for it to come online now.
             waited = 0
             while waited < self._maxwait and not self._domain.agent_ready():
-                log.debug("Waiting for qemu guest agent to come online...")
+                if waited == 0:
+                    log.debug("Waiting for qemu guest agent to come online...")
 
                 # sleep some time and potentially abort
                 if self._do_cancel.wait(self._sleep):
