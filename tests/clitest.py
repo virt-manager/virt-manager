@@ -391,7 +391,9 @@ class App(object):
             args += " --connect %s" % uri
 
         if self.appname in ["virt-install"]:
-            if "--ram " not in cli:
+            # Excluding 'lxc' is a hack. We need to remove this, but it
+            # will take some work
+            if "--ram " not in cli and "lxc" not in cli:
                 args += " --ram 64"
 
         if iscompare:
