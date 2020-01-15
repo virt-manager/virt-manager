@@ -171,6 +171,10 @@ class vmmGObject(GObject.GObject):
         """
         GObject emit() wrapper to simplify callers
         """
+        if not self._is_main_thread():
+            log.error("emitting signal from non-main thread. This is a bug "
+                    "please report it. thread=%s self=%s signal=%s",
+                    self._thread_name(), self, signal_name)
         return GObject.GObject.emit(self, signal_name, *args)
 
     def add_gsettings_handle(self, handle):
@@ -206,6 +210,12 @@ class vmmGObject(GObject.GObject):
             args=args or [], kwargs=kwargs or {})
         t.daemon = True
         t.start()
+
+    def _thread_name(self):
+        return threading.current_thread().name
+
+    def _is_main_thread(self):
+        return self._thread_name() == "MainThread"
 
 
     ##############################
