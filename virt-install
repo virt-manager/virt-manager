@@ -773,7 +773,7 @@ def check_domain(installer, domain, conscb, transient, waithandler):
 
     # Wait loop
     while True:
-        if check_domain_inactive():
+        if check_domain_inactive():  # pragma: no cover
             print_stdout(_("Domain has shutdown. Continuing."))
             break
 

@@ -375,7 +375,7 @@ def _run_console(domain, args):
     # pylint: disable=protected-access
     try:  # pragma: no cover
         os.execvp(args[0], args)
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         print("Error launching %s: %s" % (args, e))
     finally:
         os._exit(1)  # pragma: no cover
