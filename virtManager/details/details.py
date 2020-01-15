@@ -2027,8 +2027,11 @@ class vmmDetails(vmmGObjectUI):
 
         # Firmware
         domcaps = self.vm.get_domain_capabilities()
-        firmware = domcaps.label_for_firmware_path(
-            self.vm.get_xmlobj().os.loader)
+        if self.vm.get_xmlobj().is_uefi():
+            firmware = 'UEFI'
+        else:
+            firmware = domcaps.label_for_firmware_path(
+                self.vm.get_xmlobj().os.loader)
         if self.widget("overview-firmware").is_visible():
             uiutil.set_list_selection(
                 self.widget("overview-firmware"), firmware)
