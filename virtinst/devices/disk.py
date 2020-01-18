@@ -6,6 +6,8 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import os
+
 from ..logger import log
 
 from .. import diskbackend
@@ -112,6 +114,8 @@ class DeviceDisk(Device):
         searchdata = SearchData()
         if path is None:
             return searchdata
+
+        path = os.path.abspath(path)
         if conn.is_remote():
             return searchdata
         if not conn.is_qemu_system():
