@@ -86,6 +86,9 @@ class _vmmDeleteBase(vmmGObjectUI):
             meter.end(0)
         return storage_errors
 
+    def _destroy_vm(self, vm):
+        raise NotImplementedError
+
     def _init_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
@@ -213,11 +216,8 @@ class _vmmDeleteBase(vmmGObjectUI):
 
     def _async_delete(self, asyncjob, vm, paths):
         details = ""
-
         try:
-            if vm.is_active():
-                log.debug("Forcing VM '%s' power off.", vm.get_name())
-                vm.destroy()
+            self._destroy_vm(vm)
 
             conn = vm.conn.get_backend()
             meter = asyncjob.get_meter()
@@ -300,6 +300,11 @@ class vmmDeleteDialog(_vmmDeleteBase):
             log.debug("Removing VM '%s'", vm.get_name())
             vm.delete()
 
+    def _destroy_vm(self, vm):
+        if vm.is_active():
+            log.debug("Forcing VM '%s' power off.", vm.get_name())
+            vm.destroy()
+
 
 class vmmDeleteStorage(_vmmDeleteBase):
     def __init__(self, disk):
@@ -329,6 +334,9 @@ class vmmDeleteStorage(_vmmDeleteBase):
         if paths:
             super()._delete_disks(vm, paths, conn, meter)
         return storage_errors
+
+    def _destroy_vm(self, vm):
+        pass
 
 
 ###################
