@@ -70,7 +70,7 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _vm_active_status(self):
         raise NotImplementedError
 
-    def _delete_vm(self, vm, undefine):
+    def _delete_vm(self, vm):
         raise NotImplementedError
 
     def _delete_disks(self, vm, paths, conn, meter):
@@ -87,6 +87,9 @@ class _vmmDeleteBase(vmmGObjectUI):
                                           "".join(traceback.format_exc())))
             meter.end(0)
         return storage_errors
+
+    def _destroy_vm(self, vm):
+        raise NotImplementedError
 
     def _init_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
@@ -214,17 +217,12 @@ class _vmmDeleteBase(vmmGObjectUI):
 
     def _async_delete(self, asyncjob, vm, paths):
         details = ""
-        undefine = vm.is_persistent()
-
         try:
-            if vm.is_active():
-                log.debug("Forcing VM '%s' power off.", vm.get_name())
-                vm.destroy()
-
+            self._destroy_vm(vm)
             conn = vm.conn.get_backend()
             meter = asyncjob.get_meter()
             storage_errors = self._delete_disks(vm, paths, conn, meter)
-            self._delete_vm(vm, undefine)
+            self._delete_vm(vm)
 
         except Exception as e:
             error = (_("Error deleting virtual machine '%s': %s") %
@@ -298,10 +296,16 @@ class vmmDeleteDialog(_vmmDeleteBase):
         vm_active = self.vm.is_active()
         return vm_active
 
-    def _delete_vm(self, vm, undefine):
+    def _delete_vm(self, vm):
+        undefine = vm.is_persistent()
         if undefine:
             log.debug("Removing VM '%s'", vm.get_name())
             vm.delete()
+
+    def _destroy_vm(self, vm):
+        if vm.is_active():
+            log.debug("Forcing VM '%s' power off.", vm.get_name())
+            vm.destroy()
 
 
 class vmmDeleteStorage(_vmmDeleteBase):
@@ -325,7 +329,7 @@ class vmmDeleteStorage(_vmmDeleteBase):
     def _vm_active_status(self):
         return False
 
-    def _delete_vm(self, vm, undefine):
+    def _delete_vm(self, vm):
         pass
 
     def _delete_disks(self, vm, paths, conn, meter):
@@ -335,6 +339,8 @@ class vmmDeleteStorage(_vmmDeleteBase):
             super()._delete_disks(vm, paths, conn, meter)
         return storage_errors
 
+    def _destroy_vm(self, vm):
+        pass
 ###################
 # UI init helpers #
 ###################
