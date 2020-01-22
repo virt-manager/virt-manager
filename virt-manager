@@ -144,9 +144,6 @@ def parse_commandline():
     # PackageKit integration
     parser.add_argument("--test-first-run",
         help=argparse.SUPPRESS, action="store_true")
-    # Force use of old style libvirt polling APIs
-    parser.add_argument("--test-old-poll",
-        help=argparse.SUPPRESS, action="store_true")
     # Force disable use of libvirt object events
     parser.add_argument("--test-no-events",
         help=argparse.SUPPRESS, action="store_true")
@@ -205,7 +202,6 @@ class CLITestOptionsClass:
 
         self.first_run = _get("first-run")
         self.leak_debug = _get("leak-debug")
-        self.old_poll = _get("old-poll")
         self.no_events = _get("no-events")
         self.xmleditor_enabled = _get("xmleditor-enabled")
 
@@ -241,8 +237,6 @@ def main():
         CLITestOptions.leak_debug = True
     if options.test_no_events:
         CLITestOptions.no_events = True
-    if options.test_old_poll:
-        CLITestOptions.old_poll = True
 
     # With F27 gnome+wayland we need to set these before GTK import
     os.environ["GSETTINGS_SCHEMA_DIR"] = BuildConfig.gsettings_dir
@@ -293,9 +287,6 @@ def main():
     from virtManager.engine import vmmEngine
 
     Gtk.Window.set_default_icon_name("virt-manager")
-
-    import virtinst.pollhelpers
-    virtinst.pollhelpers.FORCE_OLD_POLL = CLITestOptions.old_poll
 
     show_window = None
     domain = None

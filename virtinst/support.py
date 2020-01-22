@@ -228,9 +228,9 @@ class SupportCache:
         self._virtconn = virtconn
 
     conn_domain = _make(
-        function="virConnect.listDomainsID", run_args=())
+        function="virConnect.listAllDomains", run_args=())
     conn_storage = _make(
-        function="virConnect.listStoragePools", run_args=())
+        function="virConnect.listAllStoragePools", run_args=())
     conn_nodedev = _make(
         function="virConnect.listDevices", run_args=(None, 0))
     conn_network = _make(
@@ -239,16 +239,6 @@ class SupportCache:
         function="virConnect.listInterfaces", run_args=())
 
     conn_stream = _make(function="virConnect.newStream", run_args=(0,))
-    conn_listalldomains = _make(
-        function="virConnect.listAllDomains", run_args=())
-    conn_listallnetworks = _make(
-        function="virConnect.listAllNetworks", run_args=())
-    conn_listallstoragepools = _make(
-        function="virConnect.listAllStoragePools", run_args=())
-    conn_listallinterfaces = _make(
-        function="virConnect.listAllInterfaces", run_args=())
-    conn_listalldevices = _make(
-        function="virConnect.listAllDevices", run_args=())
     conn_working_xen_events = _make(hv_version={"xen": "4.0.0", "all": 0})
     # This is an arbitrary check to say whether it's a good idea to
     # default to qcow2. It might be fine for xen or qemu older than the versions
@@ -319,8 +309,6 @@ class SupportCache:
 
     # Pool checks
     pool_isactive = _make(function="virStoragePool.isActive", run_args=())
-    pool_listallvolumes = _make(
-        function="virStoragePool.listAllVolumes", run_args=())
     pool_metadata_prealloc = _make(
         flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA",
         version="1.0.1")
