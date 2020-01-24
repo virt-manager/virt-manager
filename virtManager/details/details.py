@@ -1801,8 +1801,7 @@ class vmmDetails(vmmGObjectUI):
                                           kwargs, self.vm, self.err,
                                           devobj=devobj)
 
-    # Device removal
-    def remove_device(self, devobj):
+    def remove_devobj_internal(self, devobj):
         log.debug("Removing device: %s", devobj)
 
         # Define the change
@@ -1822,8 +1821,7 @@ class vmmDetails(vmmGObjectUI):
             detach_err = (str(e), "".join(traceback.format_exc()))
 
         if not detach_err:
-            self.disable_apply()
-            return
+            return True
 
         self.err.show_err(
             _("Device could not be removed from the running machine"),
@@ -1832,6 +1830,12 @@ class vmmDetails(vmmGObjectUI):
                     "shutdown."),
             buttons=Gtk.ButtonsType.OK,
             dialog_type=Gtk.MessageType.INFO)
+
+    # Device removal
+    def remove_device(self, devobj):
+        success = self.remove_devobj_internal(devobj)
+        if success:
+            self.disable_apply()
 
     #######################
     # vmwindow Public API #
