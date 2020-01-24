@@ -69,11 +69,10 @@ def _generate_potfiles_in():
         return ret
 
     scripts = ["virt-manager", "virt-install",
-               "virt-clone", "virt-convert", "virt-xml"]
+               "virt-clone", "virt-xml"]
 
     potfiles = "\n".join(scripts) + "\n\n"
     potfiles += "\n".join(find("virtManager", "*.py")) + "\n\n"
-    potfiles += "\n".join(find("virtconv", "*.py")) + "\n\n"
     potfiles += "\n".join(find("virtinst", "*.py")) + "\n\n"
 
     for ignore, filelist in _desktop_files + _appdata_files:
@@ -181,7 +180,7 @@ class my_build(distutils.command.build.build):
 
     def _make_bin_wrappers(self):
         cmds = ["virt-manager", "virt-install", "virt-clone",
-                "virt-convert", "virt-xml"]
+                "virt-xml"]
         if not os.path.exists("build"):
             os.mkdir("build")
 
@@ -237,7 +236,7 @@ class my_build(distutils.command.build.build):
 
 
     def _make_bash_completion_files(self):
-        scripts = ["virt-install", "virt-clone", "virt-convert", "virt-xml"]
+        scripts = ["virt-install", "virt-clone", "virt-xml"]
         srcfile = "data/bash-completion.sh.in"
         builddir = "build/bash-completion/"
         if not os.path.exists(builddir):
@@ -607,8 +606,8 @@ class CheckPylint(distutils.core.Command):
         import pycodestyle
 
         files = ["setup.py", "virt-install", "virt-clone",
-                 "virt-convert", "virt-xml", "virt-manager",
-                 "virtinst", "virtconv", "virtManager",
+                 "virt-xml", "virt-manager",
+                 "virtinst", "virtManager",
                  "tests"]
 
         try:
@@ -671,7 +670,6 @@ distutils.core.setup(
         "build/virt-manager",
         "build/virt-clone",
         "build/virt-install",
-        "build/virt-convert",
         "build/virt-xml"]),
 
     data_files=[
@@ -679,7 +677,6 @@ distutils.core.setup(
             "virt-manager",
             "virt-install",
             "virt-clone",
-            "virt-convert",
             "virt-xml",
         ]),
         ("share/glib-2.0/schemas",
@@ -690,7 +687,6 @@ distutils.core.setup(
             "man/virt-manager.1",
             "man/virt-install.1",
             "man/virt-clone.1",
-            "man/virt-convert.1",
             "man/virt-xml.1"
         ]),
 
@@ -711,8 +707,6 @@ distutils.core.setup(
             glob.glob("virtinst/domain/*.py")),
         ("share/virt-manager/virtinst/install",
             glob.glob("virtinst/install/*.py")),
-        ("share/virt-manager/virtconv",
-            glob.glob("virtconv/*.py")),
     ],
 
     cmdclass={

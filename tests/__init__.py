@@ -22,7 +22,6 @@ from tests import utils
 
 virtinstall = None
 virtclone = None
-virtconvert = None
 virtxml = None
 
 
@@ -55,10 +54,8 @@ def setup_cli_imports():
 
     global virtinstall
     global virtclone
-    global virtconvert
     global virtxml
     atexit.register(_cleanup_imports_cb)
     virtinstall = _import("virtinstall", "virt-install")
     virtclone = _import("virtclone", "virt-clone")
-    virtconvert = _import("virtconvert", "virt-convert")
     virtxml = _import("virtxml", "virt-xml")

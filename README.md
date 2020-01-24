@@ -10,7 +10,6 @@ Several command line tools are also provided:
  - `virt-install`: Create new libvirt virtual machines
  - `virt-clone`: Duplicate existing libvirt virtual machines
  - `virt-xml`: Edit existing libvirt virtual machines/manipulate libvirt XML
- - `virt-convert`: Convert VMX or OVF configs to libvirt virtual machines
 
 For dependency info and installation instructions, see the
 [INSTALL.md](INSTALL.md) file. If you just want to quickly test the

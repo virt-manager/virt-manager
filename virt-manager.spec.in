@@ -8,8 +8,6 @@
 # https://fedoraproject.org/wiki/Changes/Avoid_usr_bin_python_in_RPM_Build#Python_bytecompilation
 %global __python %{__python3}
 
-%bcond_with virtconvert
-
 %global with_guestfs               0
 %global default_hvs                "qemu,xen,lxc"
 
@@ -100,9 +98,6 @@ Requires: libvirt-client
 Provides: virt-install
 Provides: virt-clone
 Provides: virt-xml
-%if %{with virtconvert}
-Provides: virt-convert
-%endif
 
 %description -n virt-install
 Package includes several command line utilities, including virt-install
@@ -128,11 +123,6 @@ machine).
     --no-update-icon-cache --no-compile-schemas \
     install -O1 --root=%{buildroot}
 %find_lang %{name}
-
-%if %{without virtconvert}
-find %{buildroot} -name virt-convert\* -delete
-rm -rf %{buildroot}/%{_datadir}/%{name}/virtconv
-%endif
 
 # Replace '#!/usr/bin/env python3' with '#!/usr/bin/python3'
 # The format is ideal for upstream, but not a distro. See:
@@ -163,9 +153,6 @@ done
 %files common -f %{name}.lang
 %dir %{_datadir}/%{name}
 
-%if %{with virtconvert}
-%{_datadir}/%{name}/virtconv
-%endif
 %{_datadir}/%{name}/virtinst
 
 
@@ -185,10 +172,3 @@ done
 %{_bindir}/virt-install
 %{_bindir}/virt-clone
 %{_bindir}/virt-xml
-
-%if %{with virtconvert}
-%{_bindir}/virt-convert
-%{_datadir}/bash-completion/completions/virt-convert
-%{_datadir}/%{name}/virt-convert
-%{_mandir}/man1/virt-convert.1*
-%endif

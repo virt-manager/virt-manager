@@ -22,7 +22,7 @@ from virtinst import OSDB
 from virtinst.install import unattended
 
 from tests import setup_logging
-from tests import virtinstall, virtclone, virtconvert, virtxml
+from tests import virtinstall, virtclone, virtxml
 from tests import utils
 
 os.environ["LANG"] = "en_US.UTF-8"
@@ -222,8 +222,6 @@ class Command(object):
                     ret = virtinstall.main(conn=conn)
                 elif "virt-clone" in app:
                     ret = virtclone.main(conn=conn)
-                elif "virt-convert" in app:
-                    ret = virtconvert.main(conn=conn)
                 elif "virt-xml" in app:
                     ret = virtxml.main(conn=conn)
             except SystemExit as sys_e:
@@ -1334,23 +1332,6 @@ c.add_valid("--original-xml " + _CLONE_MANAGED + " --auto-clone --force-copy fda
 
 
 
-######################
-# virt-convert tests #
-######################
-
-_OVF_IMG = "%s/tests/virtconv-files/ovf_input/test1.ovf" % os.getcwd()
-_VMX_IMG = "%s/tests/virtconv-files/vmx_input/test1.vmx" % os.getcwd()
-
-vconv = App("virt-convert")
-c = vconv.add_category("misc", "--connect %(URI-KVM)s --dry")
-c.add_valid(_VMX_IMG + " --disk-format qcow2")  # hits some more code paths than print-xml
-c.add_invalid(_VMX_IMG + " --input-format foo")  # invalid input format
-c.add_invalid("%(EXISTIMG1)s")  # invalid input file
-
-c.add_compare(_VMX_IMG + " --disk-format qcow2 --print-xml", "vmx-compare")
-c.add_compare(_OVF_IMG + " --disk-format none --destination /tmp --print-xml", "ovf-compare")
-
-
 #################################
 # argparse/autocomplete testing #
 #################################
@@ -1392,7 +1373,6 @@ _add_argcomplete_cmd("virt-install --unattended ", "profile=")  # will list all 
 _add_argcomplete_cmd("virt-install --unattended a", "admin-password-file=")
 _add_argcomplete_cmd("virt-clone --preserve", "--preserve-data")
 _add_argcomplete_cmd("virt-xml --sound mode", "model")
-_add_argcomplete_cmd("virt-convert --dest", "--destination")
 
 
 ##############
@@ -1461,7 +1441,6 @@ def maketest(cmd):
 _cmdlist = []
 _cmdlist += vinst.cmds
 _cmdlist += vclon.cmds
-_cmdlist += vconv.cmds
 _cmdlist += vixml.cmds
 _cmdlist += ARGCOMPLETE_CMDS
 
