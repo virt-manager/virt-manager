@@ -178,11 +178,6 @@ class vmmConnection(vmmGObject):
         self._init_object_count = None
         self._init_object_event = None
 
-        self._network_capable = None
-        self._storage_capable = None
-        self._interface_capable = None
-        self._nodedev_capable = None
-
         self.using_domain_events = False
         self._domain_cb_ids = []
         self.using_network_events = False
@@ -428,38 +423,6 @@ class vmmConnection(vmmGObject):
     @property
     def support(self):
         return self._backend.support
-
-    def is_storage_capable(self):
-        if self._storage_capable is None:
-            self._storage_capable = self.support.conn_storage()
-            if self._storage_capable is False:
-                log.debug("Connection doesn't seem to support storage "
-                              "APIs. Skipping all storage polling.")
-
-        return self._storage_capable
-
-    def is_network_capable(self):
-        if self._network_capable is None:
-            self._network_capable = self.support.conn_network()
-            if self._network_capable is False:
-                log.debug("Connection doesn't seem to support network "
-                              "APIs. Skipping all network polling.")
-
-        return self._network_capable
-
-    def is_interface_capable(self):
-        if self._interface_capable is None:
-            self._interface_capable = self.support.conn_interface()
-            if self._interface_capable is False:
-                log.debug("Connection doesn't seem to support interface "
-                              "APIs. Skipping all interface polling.")
-
-        return self._interface_capable
-
-    def is_nodedev_capable(self):
-        if self._nodedev_capable is None:
-            self._nodedev_capable = self.support.conn_nodedev()
-        return self._nodedev_capable
 
     def _get_flags_helper(self, obj, key, check_func):
         ignore = obj
@@ -982,13 +945,19 @@ class vmmConnection(vmmGObject):
         return False, ConnectError
 
     def _populate_initial_state(self):
-        log.debug("libvirt version=%s",
-                      self._backend.local_libvirt_version())
-        log.debug("daemon version=%s",
-                      self._backend.daemon_version())
+        log.debug("libvirt version=%s", self._backend.local_libvirt_version())
+        log.debug("daemon version=%s", self._backend.daemon_version())
         log.debug("conn version=%s", self._backend.conn_version())
-        log.debug("%s capabilities:\n%s",
-                      self.get_uri(), self.caps.get_xml())
+        log.debug("%s capabilities:\n%s", self.get_uri(), self.caps.get_xml())
+
+        if not self.support.conn_storage():
+            log.debug("Connection doesn't seem to support storage APIs.")
+        if not self.support.conn_network():
+            log.debug("Connection doesn't seem to support network APIs.")
+        if not self.support.conn_interface():
+            log.debug("Connection doesn't seem to support interface APIs.")
+        if not self.support.conn_nodedev():
+            log.debug("Connection doesn't seem to support nodedev APIs.")
 
         self._add_conn_events()
 
@@ -998,8 +967,7 @@ class vmmConnection(vmmGObject):
             if (not isinstance(e, AttributeError) and
                 not self.support.is_error_nosupport(e)):
                 raise
-            log.debug("Connection doesn't support KeepAlive, "
-                "skipping")
+            log.debug("Connection doesn't support KeepAlive, skipping")
 
         # The initial tick will set up a threading event that will only
         # trigger after all the polled libvirt objects are fully initialized.
@@ -1130,28 +1098,28 @@ class vmmConnection(vmmGObject):
 
     def _update_nets(self, dopoll):
         keymap = dict((o.get_connkey(), o) for o in self.list_nets())
-        if not dopoll or not self.is_network_capable():
+        if not dopoll or not self.support.conn_network():
             return [], [], list(keymap.values())
         return pollhelpers.fetch_nets(self._backend, keymap,
                     (lambda obj, key: vmmNetwork(self, obj, key)))
 
     def _update_pools(self, dopoll):
         keymap = dict((o.get_connkey(), o) for o in self.list_pools())
-        if not dopoll or not self.is_storage_capable():
+        if not dopoll or not self.support.conn_storage():
             return [], [], list(keymap.values())
         return pollhelpers.fetch_pools(self._backend, keymap,
                     (lambda obj, key: vmmStoragePool(self, obj, key)))
 
     def _update_interfaces(self, dopoll):
         keymap = dict((o.get_connkey(), o) for o in self.list_interfaces())
-        if not dopoll or not self.is_interface_capable():
+        if not dopoll or not self.support.conn_interface():
             return [], [], list(keymap.values())
         return pollhelpers.fetch_interfaces(self._backend, keymap,
                     (lambda obj, key: vmmInterface(self, obj, key)))
 
     def _update_nodedevs(self, dopoll):
         keymap = dict((o.get_connkey(), o) for o in self.list_nodedevs())
-        if not dopoll or not self.is_nodedev_capable():
+        if not dopoll or not self.support.conn_nodedev():
             return [], [], list(keymap.values())
         return pollhelpers.fetch_nodedevs(self._backend, keymap,
                     (lambda obj, key: vmmNodeDevice(self, obj, key)))

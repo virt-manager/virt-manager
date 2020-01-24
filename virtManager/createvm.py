@@ -414,7 +414,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         # Helper state
         is_local = not self.conn.is_remote()
-        is_storage_capable = self.conn.is_storage_capable()
+        is_storage_capable = self.conn.support.conn_storage()
         can_storage = (is_local or is_storage_capable)
         is_pv = guest.os.is_xenpv()
         is_container = self.conn.is_container()

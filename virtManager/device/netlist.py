@@ -388,8 +388,8 @@ class vmmNetworkList(vmmGObjectUI):
         self._repopulate_network_list()
 
         net_err = None
-        if (not self.conn.is_nodedev_capable() or
-            not self.conn.is_interface_capable()):
+        if (not self.conn.support.conn_nodedev() or
+            not self.conn.support.conn_interface()):
             net_err = _("Libvirt version does not support "
                         "physical interface listing.")
 

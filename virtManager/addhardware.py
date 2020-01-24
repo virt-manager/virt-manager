@@ -221,9 +221,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Available HW options
         is_local = not self.conn.is_remote()
-        is_storage_capable = self.conn.is_storage_capable()
-
-        have_storage = (is_local or is_storage_capable)
+        have_storage = (is_local or self.conn.support.conn_storage())
         storage_tooltip = None
         if not have_storage:
             storage_tooltip = _("Connection does not support storage"
@@ -263,11 +261,11 @@ class vmmAddHardware(vmmGObjectUI):
                       _("Not supported for this guest type."),
                       "channel")
         add_hw_option(_("USB Host Device"), "system-run", PAGE_HOSTDEV,
-                      self.conn.is_nodedev_capable(),
+                      self.conn.support.conn_nodedev(),
                       _("Connection does not support host device enumeration"),
                       "usb")
 
-        nodedev_enabled = self.conn.is_nodedev_capable()
+        nodedev_enabled = self.conn.support.conn_nodedev()
         nodedev_errstr = _("Connection does not support "
             "host device enumeration")
         if self.vm.is_container():

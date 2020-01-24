@@ -267,9 +267,9 @@ class vmmHostStorage(vmmGObjectUI):
     def _refresh_conn_state(self):
         conn_active = self.conn.is_active()
         self.widget("pool-add").set_sensitive(conn_active and
-            self.conn.is_storage_capable())
+            self.conn.support.conn_storage())
 
-        if conn_active and not self.conn.is_storage_capable():
+        if conn_active and not self.conn.support.conn_storage():
             self._set_error_page(
                 _("Libvirt connection does not support storage management."))
 

@@ -133,9 +133,9 @@ class vmmHostNets(vmmGObjectUI):
     def _refresh_conn_state(self):
         conn_active = self.conn.is_active()
         self.widget("net-add").set_sensitive(conn_active and
-            self.conn.is_network_capable())
+            self.conn.support.conn_network())
 
-        if conn_active and not self.conn.is_network_capable():
+        if conn_active and not self.conn.support.conn_network():
             self._set_error_page(
                 _("Libvirt connection does not support virtual network "
                   "management."))

@@ -132,7 +132,7 @@ class vmmAddStorage(vmmGObjectUI):
         storage_tooltip = None
 
         can_storage = (not self.conn.is_remote() or
-                       self.conn.is_storage_capable())
+                       self.conn.support.conn_storage())
         use_storage = self.widget("storage-select")
         storage_area = self.widget("storage-box")
 
