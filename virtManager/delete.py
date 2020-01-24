@@ -359,7 +359,7 @@ class vmmDeleteStorage(_vmmDeleteBase):
 
     def _delete_disks(self, vm, paths, conn, meter):
         storage_errors = []
-        vm.remove_device(self.disk)
+        vmmDeleteStorage.remove_devobj_internal(vm, self.err, self.disk)
         if paths:
             super()._delete_disks(vm, paths, conn, meter)
         return storage_errors
