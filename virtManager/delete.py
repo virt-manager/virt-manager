@@ -305,6 +305,37 @@ class vmmDeleteDialog(_vmmDeleteBase):
 
 
 class vmmDeleteStorage(_vmmDeleteBase):
+    @staticmethod
+    def remove_devobj_internal(vm, err, devobj):
+        log.debug("Removing device: %s", devobj)
+
+        # Define the change
+        try:
+            vm.remove_device(devobj)
+        except Exception as e:
+            err.show_err(_("Error Removing Device: %s") % str(e))
+            return
+
+        # Try to hot remove
+        detach_err = ()
+        try:
+            if vm.is_active():
+                vm.detach_device(devobj)
+        except Exception as e:
+            log.debug("Device could not be hotUNplugged: %s", str(e))
+            detach_err = (str(e), "".join(traceback.format_exc()))
+
+        if not detach_err:
+            return True
+
+        err.show_err(
+            _("Device could not be removed from the running machine"),
+            details=(detach_err[0] + "\n\n" + detach_err[1]),
+            text2=_("This change will take effect after the next guest "
+                    "shutdown."),
+            buttons=Gtk.ButtonsType.OK,
+            dialog_type=Gtk.MessageType.INFO)
+
     def __init__(self, disk):
         _vmmDeleteBase.__init__(self)
         self.disk = disk
