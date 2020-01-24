@@ -73,8 +73,6 @@ class _vmmDeleteBase(vmmGObjectUI):
 
     def _delete_disks(self, vm, paths, conn, meter):
         storage_errors = []
-        if not paths:
-            return
         for path in paths:
             try:
                 log.debug("Deleting path: %s", path)
