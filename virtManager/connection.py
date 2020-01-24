@@ -1100,40 +1100,35 @@ class vmmConnection(vmmGObject):
                 if self._init_object_count <= 0:
                     self._init_object_event.set()
 
-    def _update_nets(self, dopoll):
+    def _update_nets(self,):
         keymap = dict((o.get_connkey(), o) for o in self.list_nets())
-        if not dopoll or not self.support.conn_network():
-            return [], [], list(keymap.values())
-        return pollhelpers.fetch_nets(self._backend, keymap,
-                    (lambda obj, key: vmmNetwork(self, obj, key)))
+        def cb(obj, key):
+            return vmmNetwork(self, obj, key)
+        return pollhelpers.fetch_nets(self._backend, keymap, cb)
 
-    def _update_pools(self, dopoll):
+    def _update_pools(self):
         keymap = dict((o.get_connkey(), o) for o in self.list_pools())
-        if not dopoll or not self.support.conn_storage():
-            return [], [], list(keymap.values())
-        return pollhelpers.fetch_pools(self._backend, keymap,
-                    (lambda obj, key: vmmStoragePool(self, obj, key)))
+        def cb(obj, key):
+            return vmmStoragePool(self, obj, key)
+        return pollhelpers.fetch_pools(self._backend, keymap, cb)
 
-    def _update_interfaces(self, dopoll):
+    def _update_interfaces(self):
         keymap = dict((o.get_connkey(), o) for o in self.list_interfaces())
-        if not dopoll or not self.support.conn_interface():
-            return [], [], list(keymap.values())
-        return pollhelpers.fetch_interfaces(self._backend, keymap,
-                    (lambda obj, key: vmmInterface(self, obj, key)))
+        def cb(obj, key):
+            return vmmInterface(self, obj, key)
+        return pollhelpers.fetch_interfaces(self._backend, keymap, cb)
 
-    def _update_nodedevs(self, dopoll):
+    def _update_nodedevs(self):
         keymap = dict((o.get_connkey(), o) for o in self.list_nodedevs())
-        if not dopoll or not self.support.conn_nodedev():
-            return [], [], list(keymap.values())
-        return pollhelpers.fetch_nodedevs(self._backend, keymap,
-                    (lambda obj, key: vmmNodeDevice(self, obj, key)))
+        def cb(obj, key):
+            return vmmNodeDevice(self, obj, key)
+        return pollhelpers.fetch_nodedevs(self._backend, keymap, cb)
 
-    def _update_vms(self, dopoll):
+    def _update_vms(self):
         keymap = dict((o.get_connkey(), o) for o in self.list_vms())
-        if not dopoll:
-            return [], [], list(keymap.values())
-        return pollhelpers.fetch_vms(self._backend, keymap,
-                    (lambda obj, key: vmmDomain(self, obj, key)))
+        def cb(obj, key):
+            return vmmDomain(self, obj, key)
+        return pollhelpers.fetch_vms(self._backend, keymap, cb)
 
     def _poll(self, initial_poll,
             pollvm, pollnet, pollpool, polliface, pollnodedev):
@@ -1144,8 +1139,11 @@ class vmmConnection(vmmGObject):
         gone_objects = []
         preexisting_objects = []
 
-        def _process_objects(polloutput):
-            gone, new, master = polloutput
+        def _process_objects(pollcb, dopoll):
+            if not dopoll:
+                return []
+
+            gone, new, master = pollcb()
 
             if initial_poll:
                 self._init_object_count += len(new)
@@ -1155,11 +1153,11 @@ class vmmConnection(vmmGObject):
             new = [n for n in new if not self._objects.in_blacklist(n)]
             return new
 
-        new_vms = _process_objects(self._update_vms(pollvm))
-        new_nets = _process_objects(self._update_nets(pollnet))
-        new_pools = _process_objects(self._update_pools(pollpool))
-        new_ifaces = _process_objects(self._update_interfaces(polliface))
-        new_nodedevs = _process_objects(self._update_nodedevs(pollnodedev))
+        new_vms = _process_objects(self._update_vms, pollvm)
+        new_nets = _process_objects(self._update_nets, pollnet)
+        new_pools = _process_objects(self._update_pools, pollpool)
+        new_ifaces = _process_objects(self._update_interfaces, polliface)
+        new_nodedevs = _process_objects(self._update_nodedevs, pollnodedev)
 
         # Kick off one thread per object type to handle the initial
         # XML fetching. Going any more fine grained then this probably

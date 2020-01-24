@@ -8,7 +8,7 @@
 from .logger import log
 
 
-def _new_poll_helper(origmap, typename, listfunc, buildfunc):
+def _new_poll_helper(origmap, typename, list_cb, build_cb, support_cb):
     """
     Helper for new style listAll* APIs
     """
@@ -17,7 +17,8 @@ def _new_poll_helper(origmap, typename, listfunc, buildfunc):
     objs = []
 
     try:
-        objs = listfunc()
+        if support_cb():
+            objs = list_cb()
     except Exception as e:
         log.debug("Unable to list all %ss: %s", typename, e)
 
@@ -26,7 +27,7 @@ def _new_poll_helper(origmap, typename, listfunc, buildfunc):
 
         if connkey not in origmap:
             # Object is brand new this period
-            current[connkey] = buildfunc(obj, connkey)
+            current[connkey] = build_cb(obj, connkey)
             new[connkey] = current[connkey]
         else:
             # Previously known object
@@ -36,37 +37,43 @@ def _new_poll_helper(origmap, typename, listfunc, buildfunc):
     return (list(origmap.values()), list(new.values()), list(current.values()))
 
 
-def fetch_nets(backend, origmap, build_func):
+def fetch_nets(backend, origmap, build_cb):
     name = "network"
-    return _new_poll_helper(origmap, name,
-                            backend.listAllNetworks, build_func)
+    list_cb = backend.listAllNetworks
+    support_cb = backend.support.conn_network
+    return _new_poll_helper(origmap, name, list_cb, build_cb, support_cb)
 
 
-def fetch_pools(backend, origmap, build_func):
+def fetch_pools(backend, origmap, build_cb):
     name = "pool"
-    return _new_poll_helper(origmap, name,
-                            backend.listAllStoragePools, build_func)
+    list_cb = backend.listAllStoragePools
+    support_cb = backend.support.conn_storage
+    return _new_poll_helper(origmap, name, list_cb, build_cb, support_cb)
 
 
-def fetch_volumes(backend, pool, origmap, build_func):
+def fetch_volumes(backend, pool, origmap, build_cb):
     name = "volume"
-    return _new_poll_helper(origmap, name,
-                            pool.listAllVolumes, build_func)
+    list_cb = pool.listAllVolumes
+    support_cb = backend.support.conn_storage
+    return _new_poll_helper(origmap, name, list_cb, build_cb, support_cb)
 
 
-def fetch_interfaces(backend, origmap, build_func):
+def fetch_interfaces(backend, origmap, build_cb):
     name = "interface"
-    return _new_poll_helper(origmap, name,
-                            backend.listAllInterfaces, build_func)
+    list_cb = backend.listAllInterfaces
+    support_cb = backend.support.conn_interface
+    return _new_poll_helper(origmap, name, list_cb, build_cb, support_cb)
 
 
-def fetch_nodedevs(backend, origmap, build_func):
+def fetch_nodedevs(backend, origmap, build_cb):
     name = "nodedev"
-    return _new_poll_helper(origmap, name,
-                            backend.listAllDevices, build_func)
+    list_cb = backend.listAllDevices
+    support_cb = backend.support.conn_nodedev
+    return _new_poll_helper(origmap, name, list_cb, build_cb, support_cb)
 
 
-def fetch_vms(backend, origmap, build_func):
+def fetch_vms(backend, origmap, build_cb):
     name = "domain"
-    return _new_poll_helper(origmap, name,
-                            backend.listAllDomains, build_func)
+    list_cb = backend.listAllDomains
+    support_cb = backend.support.conn_domain
+    return _new_poll_helper(origmap, name, list_cb, build_cb, support_cb)

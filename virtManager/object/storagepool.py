@@ -271,9 +271,10 @@ class vmmStoragePool(vmmLibvirtObject):
             return
 
         keymap = dict((o.get_connkey(), o) for o in self._volumes or [])
+        def cb(obj, key):
+            return vmmStorageVolume(self.conn, obj, key)
         (ignore, ignore, allvols) = pollhelpers.fetch_volumes(
-            self.conn.get_backend(), self.get_backend(), keymap,
-            lambda obj, key: vmmStorageVolume(self.conn, obj, key))
+            self.conn.get_backend(), self.get_backend(), keymap, cb)
         self._volumes = allvols
 
 
