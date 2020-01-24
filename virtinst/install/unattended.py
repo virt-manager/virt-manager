@@ -119,6 +119,9 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     if url:
         config.set_installation_url(url)  # pylint: disable=no-member
 
+    if unattended_data.reg_login:
+        config.set_reg_login(unattended_data.reg_login)
+
     if unattended_data.product_key:
         config.set_reg_product_key(unattended_data.product_key)
 
@@ -134,6 +137,7 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     if hasattr(config, "get_installation_url"):
         log.debug("url: %s",
                 config.get_installation_url())  # pylint: disable=no-member
+    log.debug("reg-login %s", config.get_reg_login())
     log.debug("product-key: %s", config.get_reg_product_key())
 
     return config
@@ -274,6 +278,7 @@ class UnattendedData():
     user_login = None
     user_password_file = None
     product_key = None
+    reg_login = None
 
     def _get_password(self, pwdfile):
         with open(pwdfile, "r") as fobj:
