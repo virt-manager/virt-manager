@@ -21,7 +21,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
         "changed-type": (vmmGObjectUI.RUN_FIRST, None, []),
         "changed-listen": (vmmGObjectUI.RUN_FIRST, None, []),
         "changed-address": (vmmGObjectUI.RUN_FIRST, None, []),
-        "changed-keymap": (vmmGObjectUI.RUN_FIRST, None, []),
         "changed-opengl": (vmmGObjectUI.RUN_FIRST, None, []),
         "changed-rendernode": (vmmGObjectUI.RUN_FIRST, None, []),
     }
@@ -44,7 +43,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
             "on_graphics_address_changed": lambda ignore: self.emit("changed-address"),
             "on_graphics_tlsport_changed": lambda ignore: self.emit("changed-tlsport"),
             "on_graphics_port_changed": lambda ignore: self.emit("changed-port"),
-            "on_graphics_keymap_changed": lambda ignore: self.emit("changed-keymap"),
             "on_graphics_opengl_toggled": self._change_opengl,
             "on_graphics_rendernode_changed": lambda ignore: self.emit("changed-rendernode")
         })
@@ -100,18 +98,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
         model.append(["127.0.0.1", _("Localhost only")])
         model.append(["0.0.0.0", _("All interfaces")])
 
-        # Keymap
-        combo = self.widget("graphics-keymap")
-        model = Gtk.ListStore(str, str)
-        combo.set_model(model)
-        uiutil.init_combo_text_column(combo, 1)
-
-        model.append(["auto", _("Auto")])
-        model.append([virtinst.DeviceGraphics.KEYMAP_LOCAL,
-                      _("Copy local keymap")])
-        for k in virtinst.DeviceGraphics.valid_keymaps():
-            model.append([k, k])
-
         # Host GPU rendernode
         combo = self.widget("graphics-rendernode")
         model = Gtk.ListStore(str, str)
@@ -152,7 +138,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-type").set_active(0)
         self.widget("graphics-listen-type").set_active(0)
         self.widget("graphics-address").set_active(0)
-        self.widget("graphics-keymap").set_active(0)
 
         # Select last entry in the list, which should be a rendernode path
         rendermodel = self.widget("graphics-rendernode").get_model()
@@ -170,9 +155,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
         port, tlsport = self._get_config_graphics_ports()
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
         addr = uiutil.get_list_selection(self.widget("graphics-address"))
-        keymap = uiutil.get_list_selection(self.widget("graphics-keymap"))
-        if keymap == "auto":
-            keymap = None
 
         passwd = self.widget("graphics-password").get_text()
         if not self.widget("graphics-password-chk").get_active():
@@ -181,7 +163,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         gl = self.widget("graphics-opengl").get_active()
         rendernode = uiutil.get_list_selection(self.widget("graphics-rendernode"))
 
-        return gtype, port, tlsport, listen, addr, passwd, keymap, gl, rendernode
+        return gtype, port, tlsport, listen, addr, passwd, gl, rendernode
 
     def set_dev(self, gfx):
         self.reset_state()
@@ -222,8 +204,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
                 uiutil.set_list_selection(self.widget("graphics-listen-type"), 'address')
                 uiutil.set_list_selection(
                     self.widget("graphics-address"), gfx.listen)
-            uiutil.set_list_selection(
-                self.widget("graphics-keymap"), gfx.keymap or None)
 
             self.widget("graphics-password").set_text(gfx.passwd or "")
             self.widget("graphics-password-chk").set_active(use_passwd)
@@ -312,14 +292,14 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
     def _show_rows_from_type(self):
         hide_all = ["graphics-xauth", "graphics-display", "graphics-address",
-            "graphics-password-box", "graphics-keymap", "graphics-port-box",
+            "graphics-password-box", "graphics-port-box",
             "graphics-tlsport-box", "graphics-opengl-box"]
 
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
 
         sdl_rows = ["graphics-xauth", "graphics-display"]
-        vnc_rows = ["graphics-password-box", "graphics-keymap"]
+        vnc_rows = ["graphics-password-box"]
         if listen == 'address':
             vnc_rows.extend(["graphics-port-box", "graphics-address"])
         spice_rows = vnc_rows[:]

@@ -51,8 +51,6 @@ class DeviceGraphics(Device):
     CHANNEL_TYPE_PLAYBACK = "playback"
     CHANNEL_TYPE_RECORD   = "record"
 
-    KEYMAP_LOCAL = "local"
-
     @staticmethod
     def valid_keymaps():
         """

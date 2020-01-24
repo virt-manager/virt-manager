@@ -236,41 +236,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="label12">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">end</property>
-        <property name="label" translatable="yes">Ke_ymap:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">graphics-keymap</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">6</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkComboBox" id="graphics-keymap">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="hexpand">False</property>
-        <property name="has_entry">True</property>
-        <signal name="changed" handler="on_graphics_keymap_changed" swapped="no"/>
-        <child internal-child="entry">
-          <object class="GtkEntry" id="combobox-entry">
-            <property name="can_focus">True</property>
-            <property name="halign">start</property>
-            <property name="hexpand">False</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">6</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkBox" id="graphics-port-box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

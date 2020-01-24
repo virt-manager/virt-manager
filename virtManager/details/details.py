@@ -80,7 +80,6 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_GFX_PASSWD,
  EDIT_GFX_TYPE,
- EDIT_GFX_KEYMAP,
  EDIT_GFX_LISTEN,
  EDIT_GFX_ADDRESS,
  EDIT_GFX_TLSPORT,
@@ -104,7 +103,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 59)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 58)
 
 
 # Columns in hw list model
@@ -408,8 +407,6 @@ class vmmDetails(vmmGObjectUI):
             lambda *x: self.enable_apply(x, EDIT_GFX_LISTEN))
         self.gfxdetails.connect("changed-address",
             lambda *x: self.enable_apply(x, EDIT_GFX_ADDRESS))
-        self.gfxdetails.connect("changed-keymap",
-            lambda *x: self.enable_apply(x, EDIT_GFX_KEYMAP))
         self.gfxdetails.connect("changed-password",
             lambda *x: self.enable_apply(x, EDIT_GFX_PASSWD))
 
@@ -1820,7 +1817,7 @@ class vmmDetails(vmmGObjectUI):
 
     def config_graphics_apply(self, devobj):
         (gtype, port, tlsport, listen,
-         addr, passwd, keymap, gl, rendernode) = self.gfxdetails.get_values()
+         addr, passwd, gl, rendernode) = self.gfxdetails.get_values()
 
         kwargs = {}
 
@@ -1830,8 +1827,6 @@ class vmmDetails(vmmGObjectUI):
             kwargs["listen"] = listen
         if self.edited(EDIT_GFX_ADDRESS) or self.edited(EDIT_GFX_LISTEN):
             kwargs["addr"] = addr
-        if self.edited(EDIT_GFX_KEYMAP):
-            kwargs["keymap"] = keymap
         if self.edited(EDIT_GFX_PORT) or self.edited(EDIT_GFX_LISTEN):
             kwargs["port"] = port
         if self.edited(EDIT_GFX_OPENGL):

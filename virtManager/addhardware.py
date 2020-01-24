@@ -1615,7 +1615,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _build_graphics(self):
         (gtype, port, tlsport, listen,
-         addr, passwd, keymap, gl, rendernode) = self._gfxdetails.get_values()
+         addr, passwd, gl, rendernode) = self._gfxdetails.get_values()
         dev = DeviceGraphics(self.conn.get_backend())
         dev.type = gtype
         dev.passwd = passwd
@@ -1630,8 +1630,6 @@ class vmmAddHardware(vmmGObjectUI):
             dev.tlsPort = tlsport
         else:
             raise ValueError(_("invalid listen type"))
-        if keymap:
-            dev.keymap = keymap
 
         return dev
 

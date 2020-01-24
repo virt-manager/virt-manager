@@ -362,10 +362,6 @@ class AddHardware(uiutils.UITestCase):
         passwd.typeText(newpass)
         tab.find("Show password", "check").click()
         self.assertEqual(passwd.text, newpass)
-        tab.find("Keymap:", "combo box").click()
-        self.pressKey("Down")
-        self.pressKey("Down")
-        self.pressKey("Down")
         finish.click()
 
         # Catch a port error
