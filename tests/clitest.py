@@ -804,7 +804,6 @@ c.add_invalid("--connect %(URI-TEST-FULL)s --host-device 1d6b:2")  # multiple US
 c.add_invalid("--connect %(URI-TEST-FULL)s --host-device pci_8086_2850_scsi_host_scsi_host")  # Unsupported hostdev type
 c.add_invalid("--host-device foobarhostdev")  # Unknown hostdev
 c.add_invalid("--host-device 300:400")  # Parseable hostdev, but unknown digits
-c.add_invalid("--graphics vnc,keymap=ZZZ")  # Invalid keymap
 c.add_invalid("--graphics vnc,port=-50")  # Invalid port
 c.add_invalid("--graphics spice,tlsport=5")  # Invalid port
 c.add_invalid("--vnc --sdl")  # Multi graphics collision

@@ -3415,20 +3415,12 @@ class ParserGraphics(VirtCLIParser):
     ###################
 
     def set_keymap_cb(self, inst, val, virtarg):
-        from . import hostkeymap
-
         if not val:
             val = None
         elif val.lower() == "local":
             val = DeviceGraphics.KEYMAP_LOCAL
         elif val.lower() == "none":
             val = None
-        else:
-            use_keymap = hostkeymap.sanitize_keymap(val)
-            if not use_keymap:
-                raise ValueError(
-                    _("Didn't match keymap '%s' in keytable!") % val)
-            val = use_keymap
         inst.keymap = val
 
     def set_type_cb(self, inst, val, virtarg):
