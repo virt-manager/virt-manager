@@ -1801,21 +1801,21 @@ class vmmDetails(vmmGObjectUI):
                                           kwargs, self.vm, self.err,
                                           devobj=devobj)
 
-    def remove_devobj_internal(self, devobj):
+    def remove_devobj_internal(self, vm, err, devobj):
         log.debug("Removing device: %s", devobj)
 
         # Define the change
         try:
-            self.vm.remove_device(devobj)
+            vm.remove_device(devobj)
         except Exception as e:
-            self.err.show_err(_("Error Removing Device: %s") % str(e))
+            err.show_err(_("Error Removing Device: %s") % str(e))
             return
 
         # Try to hot remove
         detach_err = ()
         try:
-            if self.vm.is_active():
-                self.vm.detach_device(devobj)
+            if vm.is_active():
+                vm.detach_device(devobj)
         except Exception as e:
             log.debug("Device could not be hotUNplugged: %s", str(e))
             detach_err = (str(e), "".join(traceback.format_exc()))
@@ -1823,7 +1823,7 @@ class vmmDetails(vmmGObjectUI):
         if not detach_err:
             return True
 
-        self.err.show_err(
+        err.show_err(
             _("Device could not be removed from the running machine"),
             details=(detach_err[0] + "\n\n" + detach_err[1]),
             text2=_("This change will take effect after the next guest "
@@ -1833,7 +1833,7 @@ class vmmDetails(vmmGObjectUI):
 
     # Device removal
     def remove_device(self, devobj):
-        success = self.remove_devobj_internal(devobj)
+        success = self.remove_devobj_internal(self.vm, self.err, devobj)
         if success:
             self.disable_apply()
 
