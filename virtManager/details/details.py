@@ -27,6 +27,7 @@ from ..lib.graphwidgets import Sparkline
 from ..oslist import vmmOSList
 from ..storagebrowse import vmmStorageBrowser
 from ..xmleditor import vmmXMLEditor
+from ..delete import vmmDeleteStorage
 
 
 # Parameters that can be edited in the details window
@@ -1109,7 +1110,6 @@ class vmmDetails(vmmGObjectUI):
         self.remove_device(devobj)
 
     def remove_disk(self, disk):
-        from ..delete import vmmDeleteStorage
         dialog = vmmDeleteStorage(disk)
         dialog.show(self.topwin, self.vm)
 
@@ -1925,39 +1925,9 @@ class vmmDetails(vmmGObjectUI):
                                           kwargs, self.vm, self.err,
                                           devobj=devobj)
 
-    def remove_devobj_internal(self, vm, err, devobj):
-        log.debug("Removing device: %s", devobj)
-
-        # Define the change
-        try:
-            vm.remove_device(devobj)
-        except Exception as e:
-            err.show_err(_("Error Removing Device: %s") % str(e))
-            return
-
-        # Try to hot remove
-        detach_err = ()
-        try:
-            if vm.is_active():
-                vm.detach_device(devobj)
-        except Exception as e:
-            log.debug("Device could not be hotUNplugged: %s", str(e))
-            detach_err = (str(e), "".join(traceback.format_exc()))
-
-        if not detach_err:
-            return True
-
-        err.show_err(
-            _("Device could not be removed from the running machine"),
-            details=(detach_err[0] + "\n\n" + detach_err[1]),
-            text2=_("This change will take effect after the next guest "
-                    "shutdown."),
-            buttons=Gtk.ButtonsType.OK,
-            dialog_type=Gtk.MessageType.INFO)
-
     # Device removal
     def remove_device(self, devobj):
-        success = self.remove_devobj_internal(self.vm, self.err, devobj)
+        success = vmmDeleteStorage.remove_devobj_internal(self.vm, self.err, devobj)
         if success:
             self.disable_apply()
 
