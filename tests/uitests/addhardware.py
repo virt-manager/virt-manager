@@ -377,8 +377,6 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Graphics", "graphics-tab")
         tab.find("Type:", "combo box").click_combo_entry()
         tab.find_fuzzy("Spice", "menu item").click()
-        tab.find("graphics-tlsport-auto", "check").click()
-        tab.find("graphics-tlsport", "spin button").text = "5999"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 

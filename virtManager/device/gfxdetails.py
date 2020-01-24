@@ -17,7 +17,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
     __gsignals__ = {
         "changed-password": (vmmGObjectUI.RUN_FIRST, None, []),
         "changed-port": (vmmGObjectUI.RUN_FIRST, None, []),
-        "changed-tlsport": (vmmGObjectUI.RUN_FIRST, None, []),
         "changed-type": (vmmGObjectUI.RUN_FIRST, None, []),
         "changed-listen": (vmmGObjectUI.RUN_FIRST, None, []),
         "changed-address": (vmmGObjectUI.RUN_FIRST, None, []),
@@ -34,14 +33,12 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.builder.connect_signals({
             "on_graphics_type_changed": self._change_graphics_type,
             "on_graphics_port_auto_toggled": self._change_port_auto,
-            "on_graphics_tlsport_auto_toggled": self._change_tlsport_auto,
             "on_graphics_use_password": self._change_password_chk,
             "on_graphics_show_password": self._show_password_chk,
 
             "on_graphics_listen_type_changed": self._change_graphics_listen,
             "on_graphics_password_changed": lambda ignore: self.emit("changed-password"),
             "on_graphics_address_changed": lambda ignore: self.emit("changed-address"),
-            "on_graphics_tlsport_changed": lambda ignore: self.emit("changed-tlsport"),
             "on_graphics_port_changed": lambda ignore: self.emit("changed-port"),
             "on_graphics_opengl_toggled": self._change_opengl,
             "on_graphics_rendernode_changed": lambda ignore: self.emit("changed-rendernode")
@@ -114,17 +111,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
     def _get_config_graphics_ports(self):
         port = uiutil.spin_get_helper(self.widget("graphics-port"))
-        tlsport = uiutil.spin_get_helper(self.widget("graphics-tlsport"))
-        gtype = uiutil.get_list_selection(self.widget("graphics-type"))
-
         if self.widget("graphics-port-auto").get_active():
             port = -1
-        if self.widget("graphics-tlsport-auto").get_active():
-            tlsport = -1
-
-        if gtype != "spice":
-            tlsport = None
-        return port, tlsport
+        return port
 
 
     ##############
@@ -145,14 +134,13 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
         self._change_ports()
         self.widget("graphics-port-auto").set_active(True)
-        self.widget("graphics-tlsport-auto").set_active(True)
         self.widget("graphics-password").set_text("")
         self.widget("graphics-password").set_sensitive(False)
         self.widget("graphics-password-chk").set_active(False)
 
     def get_values(self):
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
-        port, tlsport = self._get_config_graphics_ports()
+        port = self._get_config_graphics_ports()
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
         addr = uiutil.get_list_selection(self.widget("graphics-address"))
 
@@ -163,7 +151,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         gl = self.widget("graphics-opengl").get_active()
         rendernode = uiutil.get_list_selection(self.widget("graphics-rendernode"))
 
-        return gtype, port, tlsport, listen, addr, passwd, gl, rendernode
+        return gtype, port, listen, addr, passwd, gl, rendernode
 
     def set_dev(self, gfx):
         self.reset_state()
@@ -210,8 +198,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
             self.widget("graphics-password").set_sensitive(use_passwd)
 
         if is_spice:
-            set_port("graphics-tlsport", gfx.tlsPort)
-
             opengl_warning = ""
             rendernode_warning = ""
             opengl_supported = self.conn.support.conn_spice_gl()
@@ -292,8 +278,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
     def _show_rows_from_type(self):
         hide_all = ["graphics-xauth", "graphics-display", "graphics-address",
-            "graphics-password-box", "graphics-port-box",
-            "graphics-tlsport-box", "graphics-opengl-box"]
+            "graphics-password-box", "graphics-port-box", "graphics-opengl-box"]
 
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
@@ -303,8 +288,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
         if listen == 'address':
             vnc_rows.extend(["graphics-port-box", "graphics-address"])
         spice_rows = vnc_rows[:]
-        if listen == 'address':
-            spice_rows.extend(["graphics-tlsport-box"])
         spice_rows.extend(["graphics-opengl-box"])
 
         rows = []
@@ -337,19 +320,11 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self._change_ports()
         self.emit("changed-port")
 
-    def _change_tlsport_auto(self, ignore):
-        self.widget("graphics-tlsport-auto").set_inconsistent(False)
-        self._change_ports()
-        self.emit("changed-tlsport")
-
     def _change_ports(self):
         is_auto = (self.widget("graphics-port-auto").get_active() or
             self.widget("graphics-port-auto").get_inconsistent())
-        is_tlsauto = (self.widget("graphics-tlsport-auto").get_active() or
-            self.widget("graphics-tlsport-auto").get_inconsistent())
 
         self.widget("graphics-port").set_visible(not is_auto)
-        self.widget("graphics-tlsport").set_visible(not is_tlsauto)
 
     def _change_password_chk(self, ignore=None):
         if self.widget("graphics-password-chk").get_active():

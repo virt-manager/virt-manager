@@ -82,7 +82,6 @@ from ..xmleditor import vmmXMLEditor
  EDIT_GFX_TYPE,
  EDIT_GFX_LISTEN,
  EDIT_GFX_ADDRESS,
- EDIT_GFX_TLSPORT,
  EDIT_GFX_PORT,
  EDIT_GFX_OPENGL,
  EDIT_GFX_RENDERNODE,
@@ -103,7 +102,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 58)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 57)
 
 
 # Columns in hw list model
@@ -401,8 +400,6 @@ class vmmDetails(vmmGObjectUI):
             lambda *x: self.enable_apply(x, EDIT_GFX_OPENGL))
         self.gfxdetails.connect("changed-rendernode",
             lambda *x: self.enable_apply(x, EDIT_GFX_RENDERNODE))
-        self.gfxdetails.connect("changed-tlsport",
-            lambda *x: self.enable_apply(x, EDIT_GFX_TLSPORT))
         self.gfxdetails.connect("changed-listen",
             lambda *x: self.enable_apply(x, EDIT_GFX_LISTEN))
         self.gfxdetails.connect("changed-address",
@@ -1816,7 +1813,7 @@ class vmmDetails(vmmGObjectUI):
                                           devobj=devobj)
 
     def config_graphics_apply(self, devobj):
-        (gtype, port, tlsport, listen,
+        (gtype, port, listen,
          addr, passwd, gl, rendernode) = self.gfxdetails.get_values()
 
         kwargs = {}
@@ -1831,8 +1828,6 @@ class vmmDetails(vmmGObjectUI):
             kwargs["port"] = port
         if self.edited(EDIT_GFX_OPENGL):
             kwargs["gl"] = gl
-        if self.edited(EDIT_GFX_TLSPORT) or self.edited(EDIT_GFX_LISTEN):
-            kwargs["tlsport"] = tlsport
         if self.edited(EDIT_GFX_RENDERNODE):
             kwargs["rendernode"] = rendernode
         if self.edited(EDIT_GFX_TYPE):

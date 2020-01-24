@@ -774,7 +774,7 @@ class vmmDomain(vmmLibvirtObject):
             self._redefine_xmlobj(xmlobj)
 
     def define_graphics(self, devobj, do_hotplug,
-            listen=_SENTINEL, addr=_SENTINEL, port=_SENTINEL, tlsport=_SENTINEL,
+            listen=_SENTINEL, addr=_SENTINEL, port=_SENTINEL,
             passwd=_SENTINEL, gtype=_SENTINEL,
             gl=_SENTINEL, rendernode=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
@@ -789,8 +789,6 @@ class vmmDomain(vmmLibvirtObject):
                 editdev.listen = addr
         if port != _SENTINEL:
             editdev.port = port
-        if tlsport != _SENTINEL:
-            editdev.tlsPort = tlsport
         if passwd != _SENTINEL:
             editdev.passwd = passwd
         if gtype != _SENTINEL:

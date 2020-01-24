@@ -1614,7 +1614,7 @@ class vmmAddHardware(vmmGObjectUI):
         return dev
 
     def _build_graphics(self):
-        (gtype, port, tlsport, listen,
+        (gtype, port, listen,
          addr, passwd, gl, rendernode) = self._gfxdetails.get_values()
         dev = DeviceGraphics(self.conn.get_backend())
         dev.type = gtype
@@ -1627,7 +1627,6 @@ class vmmAddHardware(vmmGObjectUI):
         elif listen == "address":
             dev.listen = addr
             dev.port = port
-            dev.tlsPort = tlsport
         else:
             raise ValueError(_("invalid listen type"))
 
