@@ -51,47 +51,11 @@ class DeviceGraphics(Device):
     CHANNEL_TYPE_PLAYBACK = "playback"
     CHANNEL_TYPE_RECORD   = "record"
 
-    @staticmethod
-    def valid_keymaps():
-        """
-        Return a list of valid keymap values.
-        """
-        from .. import hostkeymap
-
-        orig_list = list(hostkeymap.keytable.values())
-        sort_list = []
-
-        orig_list.sort()
-        for k in orig_list:
-            if k not in sort_list:
-                sort_list.append(k)
-
-        return sort_list
-
-    def __init__(self, *args, **kwargs):
-        Device.__init__(self, *args, **kwargs)
-
-        self._local_keymap = -1
-
-
     _XML_PROP_ORDER = ["type", "gl", "_port", "_tlsPort", "autoport",
-                       "_keymap", "_listen",
+                       "keymap", "_listen",
                        "passwd", "display", "xauth"]
 
-    def _get_local_keymap(self):
-        if self._local_keymap == -1:
-            from .. import hostkeymap
-            self._local_keymap = hostkeymap.default_keymap()
-        return self._local_keymap
-
-    def _set_keymap(self, val):
-        if val == self.KEYMAP_LOCAL:
-            val = self._get_local_keymap()
-        self._keymap = val
-    def _get_keymap(self):
-        return self._keymap
-    _keymap = XMLProperty("./@keymap")
-    keymap = property(_get_keymap, _set_keymap)
+    keymap = XMLProperty("./@keymap")
 
     def _set_port(self, val):
         val = _validate_port("Port", val)

@@ -3418,7 +3418,8 @@ class ParserGraphics(VirtCLIParser):
         if not val:
             val = None
         elif val.lower() == "local":
-            val = DeviceGraphics.KEYMAP_LOCAL
+            log.debug("keymap=local is no longer implemented. Using None.")
+            val = None
         elif val.lower() == "none":
             val = None
         inst.keymap = val
