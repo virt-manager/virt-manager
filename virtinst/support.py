@@ -227,13 +227,17 @@ class SupportCache:
         self._cache = {}
         self._virtconn = virtconn
 
+    conn_domain = _make(
+        function="virConnect.listDomainsID", run_args=())
     conn_storage = _make(
         function="virConnect.listStoragePools", run_args=())
     conn_nodedev = _make(
         function="virConnect.listDevices", run_args=(None, 0))
-    conn_network = _make(function="virConnect.listNetworks", run_args=())
+    conn_network = _make(
+        function="virConnect.listNetworks", run_args=())
     conn_interface = _make(
         function="virConnect.listInterfaces", run_args=())
+
     conn_stream = _make(function="virConnect.newStream", run_args=(0,))
     conn_listalldomains = _make(
         function="virConnect.listAllDomains", run_args=())

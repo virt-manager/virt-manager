@@ -950,6 +950,10 @@ class vmmConnection(vmmGObject):
         log.debug("conn version=%s", self._backend.conn_version())
         log.debug("%s capabilities:\n%s", self.get_uri(), self.caps.get_xml())
 
+        if not self.support.conn_domain():
+            raise RuntimeError("Connection does not support required "
+                    "domain listing APIs")
+
         if not self.support.conn_storage():
             log.debug("Connection doesn't seem to support storage APIs.")
         if not self.support.conn_network():
